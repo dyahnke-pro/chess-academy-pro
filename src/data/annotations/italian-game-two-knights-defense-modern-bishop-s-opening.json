@@ -1269,6 +1269,10 @@
               "square": "e4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Continue developing and improving piece placement",
+            "Look for tactical opportunities"
           ]
         },
         {
@@ -1320,6 +1324,10 @@
               "square": "c6",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Continue developing and improving piece placement",
+            "Look for tactical opportunities"
           ]
         },
         {
@@ -1371,6 +1379,10 @@
               "square": "g5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Continue developing and improving piece placement",
+            "Look for tactical opportunities"
           ]
         },
         {
@@ -1422,6 +1434,10 @@
               "square": "a5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Continue developing and improving piece placement",
+            "Look for tactical opportunities"
           ]
         },
         {
@@ -1473,6 +1489,10 @@
               "square": "c6",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Continue developing and improving piece placement",
+            "Look for tactical opportunities"
           ]
         },
         {
@@ -1524,6 +1544,10 @@
               "square": "h6",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Continue developing and improving piece placement",
+            "Look for tactical opportunities"
           ]
         },
         {
@@ -1575,6 +1599,10 @@
               "square": "e5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Continue developing and improving piece placement",
+            "Look for tactical opportunities"
           ]
         },
         {
@@ -1626,6 +1654,10 @@
               "square": "f3",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Continue developing and improving piece placement",
+            "Look for tactical opportunities"
           ]
         },
         {
@@ -1678,6 +1710,10 @@
               "square": "d4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Continue developing and improving piece placement",
+            "Look for tactical opportunities"
           ]
         },
         {
@@ -1729,6 +1765,10 @@
               "square": "g4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Continue developing and improving piece placement",
+            "Look for tactical opportunities"
           ]
         }
       ]
@@ -2056,7 +2096,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "e5",
@@ -2069,7 +2113,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e5."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e5.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -2086,6 +2134,10 @@
               "square": "f3",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
           ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
@@ -2105,6 +2157,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Black's knight to c6 improves piece coordination and flexibility."
         },
         {
@@ -2123,6 +2179,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Bishop to c4 controls the key diagonal and keeps White's pieces active."
         },
         {
@@ -2140,6 +2200,10 @@
               "square": "f6",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
           ],
           "shortNarration": "Black's knight on f6 improves piece coordination and flexibility."
         },
@@ -2160,6 +2224,10 @@
             }
           ],
           "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to g5 improves coordination and flexibility."
         },
         {
@@ -2204,7 +2272,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a central pawn on e5."
+          "pawnStructure": "Black has a central pawn on e5.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
         },
         {
           "san": "Bf1",
@@ -2253,6 +2325,10 @@
           ],
           "highlights": [],
           "pawnStructure": "White has a strong central pawn duo on d5 and d2, doubled pawns on the d-file.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ],
           "shortNarration": "c3 supports d4, a key central advance."
         },
         {
@@ -2306,6 +2382,10 @@
               "square": "g5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
           ],
           "shortNarration": "Black captures on g5, removing the knight; White's queen now eyes multiple targets from g5."
         },
@@ -2361,7 +2441,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a strong central pawn duo on d4 and d2, doubled pawns on the d-file, isolated pawn on d and d."
+          "pawnStructure": "White has a strong central pawn duo on d4 and d2, doubled pawns on the d-file, isolated pawn on d and d.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Rb8",
@@ -2414,6 +2498,10 @@
               "square": "f4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {

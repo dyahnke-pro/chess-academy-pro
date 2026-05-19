@@ -2526,7 +2526,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -2539,7 +2543,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -2557,6 +2565,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -2570,7 +2582,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -2583,7 +2599,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -2601,7 +2621,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -2620,6 +2644,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White removes the d4 pawn, planting a knight on the powerful central outpost controlling key squares."
         },
         {
@@ -2669,7 +2697,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "Be3",
@@ -2719,6 +2751,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
           "shortNarration": "Knight to b3 improves piece coordination and flexibility."
         },
         {
@@ -2768,6 +2804,10 @@
               "square": "e6",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
           ],
           "shortNarration": "Black's bishop on e6 controls key diagonal squares and maintains active piece play."
         },
@@ -2823,7 +2863,11 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "b5",
@@ -2862,7 +2906,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d6 and e5."
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Na4",
@@ -2917,6 +2965,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "White wins the knight on b6, improving piece coordination and flexibility."
         },
         {
@@ -2970,6 +3022,10 @@
               "square": "c7",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Black's queen on c7 eyes multiple targets."
         },
@@ -3025,6 +3081,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Knight to c4 reaches a central outpost controlling key squares."
         },
         {
@@ -3057,7 +3117,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -3070,7 +3134,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -3088,6 +3156,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -3101,7 +3173,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -3114,7 +3190,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -3132,7 +3212,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -3151,6 +3235,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White exchanges on d4, planting a knight on that central outpost controlling key squares."
         },
         {
@@ -3200,7 +3288,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "Be2",
@@ -3250,6 +3342,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
           "shortNarration": "Knight to b3 improves piece coordination and flexibility."
         },
         {
@@ -3302,6 +3398,10 @@
               "square": "g8",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
           ]
         },
         {
@@ -3357,6 +3457,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Queen to d2 eyes multiple targets from an influential central square."
         },
         {
@@ -3405,6 +3509,10 @@
               "square": "c7",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Black's queen on c7 eyes multiple targets from an influential post."
         },
@@ -3456,6 +3564,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Rook to d1 pressures Black's position on the open d-file."
         }
       ]
@@ -3475,7 +3587,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -3488,7 +3604,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -3506,6 +3626,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -3519,7 +3643,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -3532,7 +3660,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -3550,7 +3682,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -3569,6 +3705,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White removes the d4 pawn, planting the knight on d4 as a powerful central outpost controlling key squares."
         },
         {
@@ -3618,7 +3758,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "Bg5",
@@ -3663,7 +3807,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "Be7",
@@ -3716,6 +3864,10 @@
               "square": "c7",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
           ],
           "shortNarration": "Black's queen on c7 eyes multiple targets."
         },
@@ -3771,6 +3923,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Bishop to d3 controls key diagonal squares and maintains active piece play."
         },
         {
@@ -3819,6 +3975,10 @@
               "square": "b7",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {
@@ -3869,6 +4029,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Knight to a4 improves piece coordination and flexibility."
         },
         {
@@ -3917,7 +4081,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e6 and e5, doubled pawns on the e-file."
+          "pawnStructure": "Black has a strong central pawn duo on e6 and e5, doubled pawns on the e-file.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "fxe5",
@@ -3972,6 +4140,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e5, isolated pawn on e.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "White exchanges on e7, removing Black's bishop that controlled key diagonal squares."
         },
         {
@@ -4009,7 +4181,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -4022,7 +4198,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -4040,6 +4220,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -4053,7 +4237,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -4066,7 +4254,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -4084,7 +4276,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -4103,6 +4299,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White exchanges on d4, removing Black's pawn and planting a knight on the d4 outpost."
         },
         {
@@ -4152,7 +4352,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "Bg5",
@@ -4197,7 +4401,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "Qb6",
@@ -4251,6 +4459,10 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
           "shortNarration": "Black captures on b2, the queen now eyes multiple targets from an influential post."
         },
         {
@@ -4300,7 +4512,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on e5, isolated pawn on a and c."
+          "pawnStructure": "White has a central pawn on e5, isolated pawn on a and c.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "dxe5",
@@ -4354,6 +4570,10 @@
               "square": "d7",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Knight to d7 improves Black's piece coordination and flexibility."
         },
@@ -4410,6 +4630,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e5, isolated pawn on e and c.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Rook to d1 pressures the d-file, targeting Black's center."
         },
         {
@@ -4463,6 +4687,10 @@
               "square": "e5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Black removes the e5 pawn, and the queen lands on e5 eyeing multiple targets."
         },
@@ -4519,6 +4747,10 @@
             }
           ],
           "pawnStructure": "isolated pawn on c.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "White takes on c5, removing Black's bishop and planting a knight on the powerful central outpost c5."
         },
         {
@@ -4556,7 +4788,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -4569,7 +4805,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -4587,6 +4827,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -4600,7 +4844,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -4613,7 +4861,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -4631,7 +4883,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -4650,6 +4906,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White wins the d4 pawn, planting a knight on d4 that controls key central squares."
         },
         {
@@ -4699,7 +4959,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "f3",
@@ -4745,6 +5009,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
           "shortNarration": "Knight to b3 improves piece coordination and flexibility."
         },
         {
@@ -4798,6 +5066,10 @@
               "square": "e7",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
           ],
           "shortNarration": "Black's bishop on e7 controls key diagonal squares and maintains active piece play."
         },
@@ -4853,7 +5125,11 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "b5",
@@ -4892,7 +5168,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d6 and e5."
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Na4",
@@ -4947,6 +5227,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "White wins the knight on b6, improving piece coordination and flexibility."
         },
         {
@@ -5000,6 +5284,10 @@
               "square": "c8",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Black activates the rook on c8, improving piece coordination."
         },
@@ -5055,6 +5343,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Knight to c4 reaches a central outpost controlling key squares."
         },
         {
@@ -5087,7 +5379,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -5100,7 +5396,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -5118,6 +5418,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -5131,7 +5435,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -5144,7 +5452,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -5162,7 +5474,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -5181,6 +5497,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White wins the d4 pawn, and the knight lands on d4 as a powerful central outpost controlling key squares."
         },
         {
@@ -5230,7 +5550,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "Bc4",
@@ -5281,6 +5605,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
           "shortNarration": "Bishop to b3 controls key diagonal squares and maintains active piece play."
         },
         {
@@ -5328,6 +5656,10 @@
               "square": "e7",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
           ],
           "shortNarration": "Black's bishop on e7 controls key diagonal squares and maintains active piece play."
         },
@@ -5384,6 +5716,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Queen to g3 eyes multiple targets from an influential diagonal."
         },
         {
@@ -5437,6 +5773,10 @@
               "square": "c6",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Black removes the knight on c6, queen takes on c6 eyeing multiple targets."
         },
@@ -5492,6 +5832,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Bishop to g5 pins the knight and controls key diagonal squares."
         },
         {
@@ -5545,6 +5889,10 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Black activates the rook to c8, improving piece coordination."
         },
         {
@@ -5595,6 +5943,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Queen to h4 eyes multiple targets."
         }
       ]
@@ -5614,7 +5966,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -5627,7 +5983,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -5645,6 +6005,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -5658,7 +6022,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -5671,7 +6039,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -5689,7 +6061,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -5708,6 +6084,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White wins the pawn on d4, and the knight reaches a powerful central outpost controlling key squares."
         },
         {
@@ -5757,7 +6137,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "g3",
@@ -5802,6 +6186,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
           "shortNarration": "Knight to e2 improves coordination and flexibility."
         },
         {
@@ -5854,6 +6242,10 @@
               "square": "g8",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
           ]
         },
         {
@@ -5897,7 +6289,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Bb7",
@@ -5950,6 +6346,10 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Black's knight on d5 controls key squares after capturing White's knight."
         },
         {
@@ -5999,7 +6399,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on d5."
+          "pawnStructure": "White has a central pawn on d5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "bxc4",
@@ -6053,6 +6457,10 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Bishop to g5 controls key diagonal squares and keeps Black's pieces active."
         },
         {
@@ -6090,7 +6498,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -6103,7 +6515,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -6121,6 +6537,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -6134,7 +6554,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -6147,7 +6571,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -6165,7 +6593,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -6184,6 +6616,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White wins the pawn on d4, planting a knight on that central outpost controlling key squares."
         },
         {
@@ -6233,7 +6669,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "Be3",
@@ -6288,6 +6728,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
           "shortNarration": "Bishop to g5 controls key diagonal squares and maintains active piece play."
         },
         {
@@ -6332,7 +6776,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "Bg3",
@@ -6386,6 +6834,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Bishop to e2 controls key diagonal squares and keeps active piece play."
         },
         {
@@ -6436,7 +6888,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -6449,7 +6905,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -6467,6 +6927,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -6480,7 +6944,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -6493,7 +6961,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -6511,7 +6983,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -6530,6 +7006,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White takes on d4, planting a knight on that central outpost controlling key squares."
         },
         {
@@ -6579,7 +7059,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ]
         },
         {
           "san": "a4",
@@ -6629,6 +7113,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
           "shortNarration": "Bishop to e2 controls key diagonal squares and maintains active piece play."
         },
         {
@@ -6677,6 +7165,10 @@
               "square": "e7",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
           ],
           "shortNarration": "Bishop to e7 controls key diagonal squares and maintains active piece play."
         },
@@ -6731,6 +7223,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Bishop e3 controls key diagonal squares and keeps White's pieces active."
         },
         {
@@ -6785,6 +7281,10 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Black's bishop on d5 controls key diagonals after the exchange, keeping active piece play."
         },
         {
@@ -6834,7 +7334,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on d5."
+          "pawnStructure": "White has a central pawn on d5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "a5",
@@ -6878,6 +7382,10 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Black's knight to d3 improves piece coordination and flexibility."
         },
         {
@@ -6915,7 +7423,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -6928,7 +7440,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -6946,6 +7462,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -6959,7 +7479,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -6972,7 +7496,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -6990,7 +7518,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -7009,6 +7541,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White captures on d4, removing Black's pawn and planting a knight on a powerful central outpost controlling key squares."
         },
         {
@@ -7058,7 +7594,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
         },
         {
           "san": "Be2",
@@ -7107,7 +7647,11 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
         },
         {
           "san": "Be7",
@@ -7159,6 +7703,10 @@
               "square": "g8",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
           ]
         },
         {
@@ -7207,7 +7755,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "exf4",
@@ -7260,6 +7812,10 @@
               "square": "c6",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {
@@ -7308,7 +7864,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a central pawn on d5."
+          "pawnStructure": "White has a central pawn on d5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Nb4",
@@ -7360,6 +7920,10 @@
               "square": "d5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Black wins the d5 pawn, and the knight lands on d5 as a powerful central outpost controlling key squares."
         },
@@ -7413,7 +7977,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a solid pawn structure with good central presence."
+          "pawnStructure": "White has a solid pawn structure with good central presence.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Bb4",
@@ -7461,6 +8029,10 @@
               "square": "c5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Bishop to c5 blocks check, controls the key diagonal, and keeps active piece play."
         },
@@ -7516,7 +8088,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -7529,7 +8105,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -7547,6 +8127,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -7560,7 +8144,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -7573,7 +8161,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -7591,7 +8183,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -7610,6 +8206,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White takes on d4, planting the knight on a powerful central outpost controlling key squares."
         },
         {
@@ -7659,7 +8259,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
         },
         {
           "san": "Be3",
@@ -7708,6 +8312,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ],
           "shortNarration": "Knight to b3 improves piece coordination and flexibility."
         },
         {
@@ -7756,6 +8364,10 @@
               "square": "e7",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
           ],
           "shortNarration": "Black's bishop to e7 controls key diagonal squares and maintains active piece play."
         },
@@ -7809,7 +8421,11 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "b5",
@@ -7848,7 +8464,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d6 and e5."
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Na4",
@@ -7901,6 +8521,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "White takes on b6, removing the knight to improve piece coordination and flexibility."
         },
         {
@@ -7952,6 +8576,10 @@
               "square": "c7",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Black's queen on c7 eyes the c2 and e5 squares."
         },
@@ -8005,7 +8633,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "d5",
@@ -8053,6 +8685,10 @@
               "square": "d5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {
@@ -8090,7 +8726,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -8103,7 +8743,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -8121,6 +8765,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -8134,7 +8782,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -8147,7 +8799,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -8165,7 +8821,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -8184,6 +8844,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White removes the d4 pawn, planting a knight on d4 that controls key central squares."
         },
         {
@@ -8233,7 +8897,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
         },
         {
           "san": "Bg5",
@@ -8278,7 +8946,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
         },
         {
           "san": "Be7",
@@ -8329,6 +9001,10 @@
               "square": "c7",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
           ],
           "shortNarration": "Black's queen on c7 eyes multiple targets from an influential outpost."
         },
@@ -8382,7 +9058,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "b5",
@@ -8429,6 +9109,10 @@
               "square": "b7",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {
@@ -8483,7 +9167,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a central pawn on d5."
+          "pawnStructure": "White has a central pawn on d5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Bxd5",
@@ -8535,6 +9223,10 @@
               "square": "f3",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {
@@ -8589,6 +9281,10 @@
             }
           ],
           "pawnStructure": "doubled pawns on the f-file.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Knight to f5 seizes a central outpost, controlling key squares."
         },
         {
@@ -8642,6 +9338,10 @@
               "square": "h8",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {
@@ -8678,7 +9378,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -8691,7 +9395,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -8709,6 +9417,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -8722,7 +9434,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -8735,7 +9451,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -8753,7 +9473,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -8772,6 +9496,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White removes the d4 pawn, planting a knight on that central outpost controlling key squares."
         },
         {
@@ -8821,7 +9549,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
         },
         {
           "san": "Bg5",
@@ -8865,7 +9597,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
         },
         {
           "san": "Qb6",
@@ -8917,6 +9653,10 @@
               "square": "b2",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
           ]
         },
         {
@@ -8965,7 +9705,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a central pawn on e5, isolated pawn on a and c."
+          "pawnStructure": "White has a central pawn on e5, isolated pawn on a and c.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "dxe5",
@@ -9019,6 +9763,10 @@
               "square": "d7",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {
@@ -9072,7 +9820,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e5."
+          "pawnStructure": "White has a central pawn on e5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Bxc3",
@@ -9124,6 +9876,10 @@
               "square": "c3",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Black's capture on c3 removes White's queen, gives check, and posts the queen on c3 eyeing multiple targets."
         },
@@ -9177,7 +9933,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e5."
+          "pawnStructure": "White has a central pawn on e5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "O-O",
@@ -9213,7 +9973,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -9226,7 +9990,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -9244,6 +10012,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -9257,7 +10029,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -9270,7 +10046,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -9288,7 +10068,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -9307,6 +10091,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White exchanges on d4, removing Black's pawn and planting a knight on the powerful d4 outpost."
         },
         {
@@ -9356,7 +10144,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ]
         },
         {
           "san": "Be3",
@@ -9405,6 +10197,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
+          ],
           "shortNarration": "Knight to b3 improves piece coordination and flexibility."
         },
         {
@@ -9453,6 +10249,10 @@
               "square": "e6",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Look for tactical opportunities to exploit the opponent's inaccuracy",
+            "Maintain piece pressure while avoiding counter-tactics"
           ],
           "shortNarration": "Black's bishop on e6 controls key diagonal squares and maintains active piece play."
         },
@@ -9507,7 +10307,11 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "b5",
@@ -9546,7 +10350,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d6 and e5."
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Na4",
@@ -9600,7 +10408,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Qxb6",
@@ -9653,6 +10465,10 @@
               "square": "c8",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {
@@ -9706,6 +10522,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Knight to c4 reaches a central outpost controlling key squares."
         },
         {
@@ -9753,6 +10573,10 @@
               "square": "h5",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         },
         {
@@ -9805,7 +10629,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Qxd6",
@@ -9858,6 +10686,10 @@
               "square": "f4",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ]
         }
       ]
@@ -9877,7 +10709,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -9890,7 +10726,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -9908,6 +10748,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -9921,7 +10765,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -9934,7 +10782,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -9952,7 +10804,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -9971,6 +10827,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White removes the d4 pawn, planting a knight on that central outpost controlling key squares."
         },
         {
@@ -10020,7 +10880,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Be alert to the opponent's active ideas in this position",
+            "Maintain solid piece coordination to neutralize threats"
+          ]
         },
         {
           "san": "Be3",
@@ -10070,6 +10934,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Be alert to the opponent's active ideas in this position",
+            "Maintain solid piece coordination to neutralize threats"
+          ],
           "shortNarration": "White's knight on b3 threatens to jump to c5, targeting d7 and e6."
         },
         {
@@ -10119,6 +10987,10 @@
               "square": "g8",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Be alert to the opponent's active ideas in this position",
+            "Maintain solid piece coordination to neutralize threats"
           ]
         },
         {
@@ -10173,7 +11045,11 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
-          "pawnStructure": "White has a central pawn on e4."
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Nbd7",
@@ -10217,7 +11093,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d6 and e5."
+          "pawnStructure": "Black has a strong central pawn duo on d6 and e5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "g5",
@@ -10267,6 +11147,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Knight to d5 threatens a fork on c7 or e7 — Black must avoid the trap."
         },
         {
@@ -10318,6 +11202,10 @@
           ],
           "highlights": [],
           "pawnStructure": "Black has a strong central pawn duo on d6 and e5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Black's f5 pawn push threatens to open lines against White's king."
         },
         {
@@ -10355,7 +11243,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -10368,7 +11260,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -10386,6 +11282,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -10399,7 +11299,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -10412,7 +11316,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -10430,7 +11338,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -10449,6 +11361,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White takes on d4, removing the pawn and planting a knight on the powerful central outpost d4."
         },
         {
@@ -10498,7 +11414,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Be alert to the opponent's active ideas in this position",
+            "Maintain solid piece coordination to neutralize threats"
+          ]
         },
         {
           "san": "Be2",
@@ -10548,6 +11468,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Be alert to the opponent's active ideas in this position",
+            "Maintain solid piece coordination to neutralize threats"
+          ],
           "shortNarration": "Knight to b3 threatens the c5 pawn and eyes the d4 outpost."
         },
         {
@@ -10600,6 +11524,10 @@
               "square": "g8",
               "color": "rgba(0, 180, 80, 0.3)"
             }
+          ],
+          "plans": [
+            "Be alert to the opponent's active ideas in this position",
+            "Maintain solid piece coordination to neutralize threats"
           ]
         },
         {
@@ -10655,6 +11583,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Knight to d5 reaches a powerful central outpost controlling key squares."
         },
         {
@@ -10709,6 +11641,10 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Black's Nd7 sets a trap — White must avoid losing material to a discovered attack."
         },
         {
@@ -10755,6 +11691,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on d5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Knight to c1 improves coordination and flexibility."
         },
         {
@@ -10808,6 +11748,10 @@
               "square": "d3",
               "color": "rgba(255, 255, 0, 0.4)"
             }
+          ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
           ],
           "shortNarration": "Black exchanges on d3, removing White's knight and improving Black's piece coordination."
         },
@@ -10864,6 +11808,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on d5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Queen to g4 threatens mate on g7 and pins the f6-knight to the king."
         },
         {
@@ -10918,6 +11866,10 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Black exchanges on g5, removing White's bishop — White's king now hangs on the open h-file."
         },
         {
@@ -10955,7 +11907,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d2."
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "c5",
@@ -10968,7 +11924,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d7 and e7."
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e7.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nf3",
@@ -10986,6 +11946,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "Knight to f3 improves piece coordination and flexibility."
         },
         {
@@ -10999,7 +11963,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "d4",
@@ -11012,7 +11980,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d4 and e4."
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "cxd4",
@@ -11030,7 +12002,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6 and d4, doubled pawns on the d-file.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
         },
         {
           "san": "Nxd4",
@@ -11049,6 +12025,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
           "shortNarration": "White removes the d4 pawn, planting a knight on d4 to control key squares."
         },
         {
@@ -11098,7 +12078,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d6."
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d6.",
+          "plans": [
+            "Be alert to the opponent's active ideas in this position",
+            "Maintain solid piece coordination to neutralize threats"
+          ]
         },
         {
           "san": "Bg5",
@@ -11144,6 +12128,10 @@
           ],
           "highlights": [],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Be alert to the opponent's active ideas in this position",
+            "Maintain solid piece coordination to neutralize threats"
+          ],
           "shortNarration": "f4 opens a line for the rook and threatens g5, but Black must watch for a potential e5 break."
         },
         {
@@ -11198,6 +12186,10 @@
               "color": "rgba(0, 180, 80, 0.3)"
             }
           ],
+          "plans": [
+            "Be alert to the opponent's active ideas in this position",
+            "Maintain solid piece coordination to neutralize threats"
+          ],
           "shortNarration": "Black's queen on c7 eyes multiple targets from a natural square."
         },
         {
@@ -11247,6 +12239,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Bishop to d3 — Black must watch for hidden tactical threats along the diagonal."
         },
         {
@@ -11300,6 +12296,10 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Black's bishop to e7 controls key diagonal squares and maintains active piece play."
         },
         {
@@ -11350,6 +12350,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "The knight on d5 controls key central squares from a powerful outpost."
         },
         {
@@ -11400,7 +12404,11 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ],
-          "pawnStructure": "Black has a strong central pawn duo on d5 and e5."
+          "pawnStructure": "Black has a strong central pawn duo on d5 and e5.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "fxe5",
@@ -11456,6 +12464,10 @@
             }
           ],
           "pawnStructure": "White has a central pawn on e5, isolated pawn on e.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
           "shortNarration": "Queen to g4 eyes multiple targets."
         },
         {
@@ -11505,7 +12517,11 @@
             }
           ],
           "highlights": [],
-          "pawnStructure": "Black has a central pawn on d5, isolated pawn on d."
+          "pawnStructure": "Black has a central pawn on d5, isolated pawn on d.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ]
         },
         {
           "san": "Nf5",
