@@ -23,73 +23,97 @@ import { mkdir, writeFile, rm } from 'node:fs/promises';
 
 const OUT_DIR = 'docs/audit-runs/2026-05-19-chess-books-raw';
 
+// Each entry tries a CHAIN of search queries until one returns
+// a result matching the author regex. The wider the chain, the more
+// likely to find the book — but also more chance of picking the
+// wrong edition. Author regex is the safety net.
 const BOOKS = [
   {
     slug: 'capablanca-chess-fundamentals',
-    searchTerms: ['Chess Fundamentals'],
+    queryChain: ['Chess Fundamentals Capablanca', 'Capablanca chess', 'Capablanca'],
+    titleMatch: /chess.*fundamentals|fundamentals.*chess/i,
     authorMatch: /capablanca/i,
     focus: 'positional principles, endgame technique',
   },
   {
     slug: 'capablanca-my-chess-career',
-    searchTerms: ['My Chess Career'],
+    queryChain: ['My Chess Career Capablanca', 'Capablanca career', 'Capablanca'],
+    titleMatch: /chess career|my chess/i,
     authorMatch: /capablanca/i,
     focus: 'annotated games, attacking + positional play',
   },
   {
     slug: 'emanuel-lasker-common-sense-in-chess',
-    searchTerms: ['Common Sense in Chess'],
+    queryChain: ['Common Sense in Chess', 'Lasker chess', 'Emanuel Lasker'],
+    titleMatch: /common.*sense.*chess/i,
     authorMatch: /^(?!.*edward).*lasker/i,
     focus: 'opening principles, middlegame strategy',
   },
   {
     slug: 'edward-lasker-chess-strategy',
-    searchTerms: ['Chess Strategy'],
-    authorMatch: /edward.*lasker/i,
+    queryChain: ['Edward Lasker Chess Strategy', 'Chess Strategy', 'Edward Lasker'],
+    titleMatch: /chess.*strategy/i,
+    authorMatch: /edward.*lasker|lasker.*edward/i,
     focus: 'opening systems, planning',
   },
   {
     slug: 'mason-principles-of-chess',
-    searchTerms: ['Principles of Chess'],
+    queryChain: ['Mason Principles Chess', 'James Mason chess', 'Mason chess'],
+    titleMatch: /principles.*chess|chess.*practice/i,
     authorMatch: /mason/i,
     focus: 'classical positional principles',
   },
   {
     slug: 'pillsbury-chess-career',
-    searchTerms: ['Pillsbury'],
+    queryChain: ['Pillsbury chess', "Pillsbury's chess career", 'Sergeant chess'],
+    titleMatch: /pillsbury/i,
     authorMatch: /sergeant|pillsbury/i,
     focus: 'attacking play, sacrificial themes',
   },
   {
     slug: 'staunton-chess-players-handbook',
-    searchTerms: ["Chess Player's Handbook"],
+    queryChain: ["Chess Player's Handbook", 'Staunton chess', 'Staunton'],
+    titleMatch: /chess.*player.*handbook|handbook.*chess/i,
     authorMatch: /staunton/i,
     focus: 'classical opening theory',
   },
   {
-    slug: 'morphy-paul-chess-of-paul-morphy',
-    searchTerms: ['Morphy', 'chess'],
-    authorMatch: /morphy|lange/i,
+    slug: 'morphy-games-of-chess',
+    queryChain: ['Morphy chess games', 'Paul Morphy', 'Morphy'],
+    titleMatch: /morphy|chess/i,
+    authorMatch: /morphy|lange|maroczy/i,
     focus: 'attacking play, romantic era',
   },
 ];
 
-async function searchGutendex(terms, authorMatch) {
-  const query = terms.join(' ');
+async function searchGutendexOnce(query, authorMatch, titleMatch) {
   const url = `https://gutendex.com/books?search=${encodeURIComponent(query)}&languages=en`;
   const r = await fetch(url, { headers: { 'user-agent': 'chess-academy-pro/1.0' } });
   if (!r.ok) throw new Error(`gutendex ${r.status}`);
   const data = await r.json();
-  if (!data.results || data.results.length === 0) return null;
-  // Match results by author
+  if (!data.results || data.results.length === 0) return { matches: [], total: 0 };
   const matches = data.results.filter(b => {
     const authors = (b.authors || []).map(a => a.name).join(' ');
-    return authorMatch.test(authors);
+    const title = b.title || '';
+    const authorOk = authorMatch.test(authors);
+    const titleOk = !titleMatch || titleMatch.test(title);
+    return authorOk && titleOk;
   });
-  if (matches.length === 0) return null;
-  // Sort by download count (popularity proxy)
   matches.sort((a, b) => (b.download_count || 0) - (a.download_count || 0));
-  return matches[0];
+  return { matches, total: data.results.length };
+}
+
+async function searchGutendex(queryChain, authorMatch, titleMatch) {
+  for (const query of queryChain) {
+    console.log(`  trying query: "${query}"`);
+    const { matches, total } = await searchGutendexOnce(query, authorMatch, titleMatch);
+    if (matches.length > 0) {
+      console.log(`  ${matches.length}/${total} results matched author+title`);
+      return matches[0];
+    }
+    console.log(`  ${total} raw results, 0 matched filters`);
+  }
+  return null;
 }
 
 function pickTextUrl(formats) {
@@ -106,10 +130,10 @@ function pickTextUrl(formats) {
 }
 
 async function fetchBookText(book) {
-  console.log(`\n[${book.slug}] searching "${book.searchTerms.join(' / ')}" by ${book.authorMatch}`);
-  const match = await searchGutendex(book.searchTerms, book.authorMatch);
+  console.log(`\n[${book.slug}]`);
+  const match = await searchGutendex(book.queryChain, book.authorMatch, book.titleMatch);
   if (!match) {
-    console.log(`  NO MATCH FOUND on gutendex`);
+    console.log(`  NO MATCH FOUND on gutendex after ${book.queryChain.length} queries`);
     return null;
   }
   const authors = (match.authors || []).map(a => a.name).join('; ');
@@ -152,7 +176,7 @@ async function main() {
         gutenbergId: result.match.id,
         title: result.match.title,
         authors: result.authors,
-        searchTerms: book.searchTerms,
+        queryChain: book.queryChain,
         focus: book.focus,
         textUrl: result.textUrl,
         bytes: result.text.length,
