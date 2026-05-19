@@ -214,29 +214,29 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
     const deepseekEnvKey = getDeepseekKey();
 
     const profile = await db.profiles.get('main');
-    // Anthropic is the primary on every surface as of 2026-05-14
-    // (David's call) — Sonnet/Haiku produce noticeably better chess
-    // pedagogy than DeepSeek. The fallback chain below auto-retries
-    // on DeepSeek if Anthropic 401s/429s on this single call. The
+    // DeepSeek is the primary as of 2026-05-19 (David's call: "switch
+    // to deepseek tokens"). Previously Anthropic-first since 2026-05-14
+    // for pedagogy reasons. The fallback chain below auto-retries on
+    // Anthropic if DeepSeek 401s/429s on this single call. The
     // dead-state cooldown above means subsequent calls within the
-    // next 60s skip Anthropic entirely if we just saw it fail —
-    // avoids paying the failed-primary latency on every coach
-    // interaction during an extended outage.
-    // A user with ONLY a DeepSeek key still gets DeepSeek.
+    // next 60s skip DeepSeek entirely if we just saw it fail — avoids
+    // paying the failed-primary latency on every coach interaction
+    // during an extended outage. A user with ONLY an Anthropic key
+    // still gets Anthropic.
     const anthropicReachable = !!anthropicEnvKey && !isProviderInCooldown('anthropic');
     const deepseekReachable = !!deepseekEnvKey && !isProviderInCooldown('deepseek');
-    const provider: AiProvider = anthropicReachable
-      ? 'anthropic'
-      : (deepseekReachable
-          ? 'deepseek'
+    const provider: AiProvider = deepseekReachable
+      ? 'deepseek'
+      : (anthropicReachable
+          ? 'anthropic'
           // Both keys absent OR both in cooldown — fall through to
           // whichever key exists (try-anyway over no-coach), then to
           // profile preference. Cooldown lifts on its own after 60s.
-          : (anthropicEnvKey
-              ? 'anthropic'
-              : (deepseekEnvKey
-                  ? 'deepseek'
-                  : (profile?.preferences.aiProvider ?? 'anthropic'))));
+          : (deepseekEnvKey
+              ? 'deepseek'
+              : (anthropicEnvKey
+                  ? 'anthropic'
+                  : (profile?.preferences.aiProvider ?? 'deepseek'))));
 
     const preferredModel = profile?.preferences.preferredModel;
 

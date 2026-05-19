@@ -74,13 +74,17 @@ const BATCH_GAME_LIMIT = 100;
  *  The bands target *player moves* (= half the UCI PV length since
  *  every player move alternates with an engine reply). Stockfish
  *  often returns a 10-12 move PV; we trim to the band's MAX. */
-interface DepthBand { min: number; max: number; label: string; }
+export interface DepthBand { min: number; max: number; label: string; }
 const RATING_BANDS: { upTo: number; band: DepthBand }[] = [
   { upTo: 1200, band: { min: 1, max: 3, label: 'beginner (1-3)' } },
   { upTo: 1700, band: { min: 4, max: 6, label: 'intermediate (4-6)' } },
   { upTo: Infinity, band: { min: 6, max: 10, label: 'advanced (6+)' } },
 ];
-function pvBandForRating(rating: number): DepthBand {
+/** Pick the PV band (in PLAYER-moves) for a given puzzle-rating.
+ *  Exported for unit testing — see `mistakePuzzleService.bands.test.ts`.
+ *  Band boundaries are inclusive on the upper edge: 1200 → beginner,
+ *  1201 → intermediate, 1700 → intermediate, 1701 → advanced. */
+export function pvBandForRating(rating: number): DepthBand {
   for (const { upTo, band } of RATING_BANDS) {
     if (rating <= upTo) return band;
   }

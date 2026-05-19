@@ -482,19 +482,22 @@ spine; don't reinvent it.
   `generateOpeningFromDbNarration` is the entry point. The LLM never
   emits move sequences, FENs, or schema structure — only prose.
   `chess.js` computes FENs from DB-sourced SANs deterministically.
-- **Provider routing: Anthropic-first, DeepSeek fallback.** As of
-  2026-05-14 (David's call) Anthropic (Sonnet/Haiku) is the primary
-  on every surface because the pedagogy quality is noticeably better
-  than DeepSeek. The spine's `resolveProviderName()` defaults to
-  `'anthropic'`; `getProviderConfig()` in `coachApi.ts` prefers the
-  Anthropic env key when present. On 401/429/quota errors the
-  existing fallback chain at `coachApi.ts:782`
-  (`getFallbackConfig`) transparently retries the request on
-  DeepSeek — no surface code needs to handle this. A user with ONLY
-  a DeepSeek key still gets DeepSeek. Surfaces should NOT pin
-  either provider via `providerOverride` — let the spine pick and
-  the coachApi layer handle the fallback. Pinning either provider
-  defeats the auto-fallback.
+- **Provider routing: DeepSeek-first, Anthropic fallback.** Flipped
+  to DeepSeek-primary 2026-05-19 (David's call: "switch to deepseek
+  tokens"). Prior 2026-05-14 directive had Anthropic primary for
+  pedagogy quality; if David ever flips back, swap the defaults in
+  `resolveProviderName()` (coachService.ts) and `getProviderConfig()`
+  (coachApi.ts) — both are one-line flips. The spine's
+  `resolveProviderName()` defaults to `'deepseek'`;
+  `getProviderConfig()` in `coachApi.ts` prefers the DeepSeek env
+  key when present. On 401/429/quota errors the existing fallback
+  chain at `coachApi.ts:782` (`getFallbackConfig`) transparently
+  retries the request on the OTHER provider — no surface code needs
+  to handle this. A user with ONLY one provider's key still gets
+  that provider. Surfaces should NOT pin either provider via
+  `providerOverride` — let the spine pick and the coachApi layer
+  handle the fallback. Pinning either provider defeats the
+  auto-fallback.
 - **Tool-use fallback chain stays intact**: Anthropic tool-use →
   DeepSeek tool-use → text-mode → DB-only synthesis. Every layer
   is required. Anthropic does the heavy lifting now; DeepSeek

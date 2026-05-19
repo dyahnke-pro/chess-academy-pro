@@ -121,24 +121,30 @@ export function MyMistakesPage(): JSX.Element {
     void loadData();
   }, [loadData]);
 
-  const searchQ = searchQuery.trim().toLowerCase();
+  // Normalize for fuzzy substring match: lowercase, DROP apostrophes
+  // entirely (so "Queen's" → "queens"), replace other punctuation
+  // and whitespace with a single space, collapse. Lets the student
+  // type "queens gambit" and hit "Queen's Gambit Declined", "caro
+  // kann" → "Caro-Kann", "kings indian" → "King's Indian". The
+  // apostrophe carve-out matters — replacing it with a space would
+  // turn "Queen's" into "queen s" which "queens" doesn't substring-
+  // match, defeating the whole point.
+  const norm = (s: string): string => s.toLowerCase().replace(/'/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+  const searchQ = norm(searchQuery);
   const filtered = puzzles.filter((p) => {
     if (phaseTab !== 'all' && p.gamePhase !== phaseTab) return false;
     if (classFilter !== 'all' && p.classification !== classFilter) return false;
     if (sourceFilter !== 'all' && p.sourceMode !== sourceFilter) return false;
     if (statusFilter !== 'all' && p.status !== statusFilter) return false;
     if (openingFilter !== null && p.openingName !== openingFilter) return false;
-    // Smart-search: OR-match across opponent name + tactic label.
-    // Empty query = no filter.
+    // Smart-search: OR-match across opponent name + tactic label +
+    // opening. Empty query = no filter.
     if (searchQ) {
-      const oppMatch = p.opponentName?.toLowerCase().includes(searchQ) ?? false;
+      const oppMatch = p.opponentName ? norm(p.opponentName).includes(searchQ) : false;
       const tacticMatch = p.tacticType
-        ? tacticTypeLabel(p.tacticType).toLowerCase().includes(searchQ)
+        ? norm(tacticTypeLabel(p.tacticType)).includes(searchQ)
         : false;
-      // Opening name as a bonus match — searching "italian" should
-      // also surface Italian-Game puzzles even if the opponent name
-      // and tactic don't contain "italian".
-      const openingMatch = p.openingName?.toLowerCase().includes(searchQ) ?? false;
+      const openingMatch = p.openingName ? norm(p.openingName).includes(searchQ) : false;
       if (!oppMatch && !tacticMatch && !openingMatch) return false;
     }
     return true;
