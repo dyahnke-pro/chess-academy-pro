@@ -258,6 +258,13 @@ function findNamedLineReferences(text) {
  * for clear contradictions (no future-tense / drift sensitivity yet).
  */
 function runContentChecks(file, openingId, sublineLabel, idx, san, expectedPiece, expectedSquare, fieldName, text, findings) {
+  // plans[] / alternatives[] describe FUTURE-tense follow-up moves
+  // by nature ("Rook moves to e1 AFTER Nf4"). Subject-of-move
+  // detectors aren't applicable — the plan talks about a future
+  // piece move, not the current ply's SAN. Skip these field types.
+  if (fieldName && (fieldName.startsWith('plans') || fieldName.startsWith('alternatives'))) {
+    return;
+  }
   const subjectPiece = findSubjectPiece(text);
   if (subjectPiece && subjectPiece !== expectedPiece) {
     findings.push({

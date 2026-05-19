@@ -1,24 +1,13 @@
 {
-  "generatedAt": "2026-05-19T01:18:18.690Z",
+  "generatedAt": "2026-05-19T03:06:59.820Z",
   "totalFiles": 1892,
   "totalEntries": 31226,
-  "totalFindings": 43,
+  "totalFindings": 7,
   "byKind": {
-    "repeated-narration": 36,
     "piece-mismatch-subject": 5,
     "square-mismatch-subject": 2
   },
   "findings": [
-    {
-      "file": "src/data/annotations/benoni-defense-classical-variation-czerniak-defense-tal-line.json",
-      "openingId": "benoni-defense-classical-variation-czerniak-defense-tal-line",
-      "subline": "main",
-      "ply": 17,
-      "san": "O-O",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Continuing Benoni Defense Classical Variation Czerniak Defense Tal Line: O-O is a known theory move in this line."
-    },
     {
       "file": "src/data/annotations/blackmar-diemer-gambit-lemberger-countergambit-endgame-variation.json",
       "openingId": "blackmar-diemer-gambit-lemberger-countergambit-endgame-variation",
@@ -57,96 +46,6 @@
       "evidence": "The Catalan! White fianchettoes the bishop to g2, creating long-term pressure on the light squares."
     },
     {
-      "file": "src/data/annotations/catalan-opening.json",
-      "openingId": "catalan-opening",
-      "subline": "Closed Catalan Patience",
-      "ply": 20,
-      "san": "Nxe4",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Nxe4 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/danish-gambit.json",
-      "openingId": "danish-gambit",
-      "subline": "Schlechter Defense: Best Response",
-      "ply": 19,
-      "san": "Nxd5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Nxd5 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/danish-gambit.json",
-      "openingId": "danish-gambit",
-      "subline": "Sorensen Defense: d5 Before Taking Both Pawns",
-      "ply": 19,
-      "san": "Bxf3",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Bxf3 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/danish-gambit.json",
-      "openingId": "danish-gambit",
-      "subline": "Two Knights Defense: Black Returns Pawn Wisely",
-      "ply": 17,
-      "san": "Nxc3",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Nxc3 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/danish-gambit.json",
-      "openingId": "danish-gambit",
-      "subline": "Two Knights Defense: Black Returns Pawn Wisely",
-      "ply": 19,
-      "san": "Bxc3",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Bxc3 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/englund-gambit.json",
-      "openingId": "englund-gambit",
-      "subline": "Simple Refutation: e4 Center",
-      "ply": 9,
-      "san": "Nxe5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Nxe5 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/four-knights-game.json",
-      "openingId": "four-knights-game",
-      "subline": "Halloween Gambit Refutation",
-      "ply": 8,
-      "san": "Nxe5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Nxe5 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/italian-game-evans-gambit.json",
-      "openingId": "italian-game-evans-gambit",
-      "subline": "Evans Declined Preparation",
-      "ply": 15,
-      "san": "Nxc4",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Nxc4 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/italian-game-evans-gambit.json",
-      "openingId": "italian-game-evans-gambit",
-      "subline": "Evans Gambit: Lasker Defence",
-      "ply": 16,
-      "san": "dxe5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "dxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
-    },
-    {
       "file": "src/data/annotations/italian-game.json",
       "openingId": "italian-game",
       "subline": "Ponziani Opening",
@@ -160,116 +59,6 @@
       "evidence": "Black trades knights, letting White develop the bishop with tempo."
     },
     {
-      "file": "src/data/annotations/king-s-indian-attack.json",
-      "openingId": "king-s-indian-attack",
-      "subline": "Premature e4 Rush",
-      "ply": 15,
-      "san": "dxe4",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "dxe4 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/king-s-indian-defense-fianchetto-variation-double-fianchetto-attack.json",
-      "openingId": "king-s-indian-defense-fianchetto-variation-double-fianchetto-attack",
-      "subline": "main",
-      "ply": 11,
-      "san": "O-O",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: O-O is a known theory move in this line."
-    },
-    {
-      "file": "src/data/annotations/king-s-indian-defense-fianchetto-variation-hungarian-variation.json",
-      "openingId": "king-s-indian-defense-fianchetto-variation-hungarian-variation",
-      "subline": "main",
-      "ply": 11,
-      "san": "O-O",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Continuing Kings Indian Defense Fianchetto Variation Hungarian Variation: O-O is a known theory move in this line."
-    },
-    {
-      "file": "src/data/annotations/king-s-indian-defense-fianchetto-variation-yugoslav-variation-exchange-line.json",
-      "openingId": "king-s-indian-defense-fianchetto-variation-yugoslav-variation-exchange-line",
-      "subline": "main",
-      "ply": 16,
-      "san": "dxc5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: dxc5 is a known theory move in this line."
-    },
-    {
-      "file": "src/data/annotations/king-s-indian-defense.json",
-      "openingId": "king-s-indian-defense",
-      "subline": "Ignoring the Queenside",
-      "ply": 28,
-      "san": "cxd6",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "cxd6 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/king-s-indian-defense.json",
-      "openingId": "king-s-indian-defense",
-      "subline": "Premature ...f5 Without Ne7",
-      "ply": 24,
-      "san": "gxf5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "gxf5 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/neo-gr-nfeld-defense-classical-variation.json",
-      "openingId": "neo-gr-nfeld-defense-classical-variation",
-      "subline": "main",
-      "ply": 9,
-      "san": "O-O",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Continuing Neo Gr Nfeld Defense Classical Variation: O-O is a known theory move in this line."
-    },
-    {
-      "file": "src/data/annotations/polish-opening-rooks-swap-line.json",
-      "openingId": "polish-opening-rooks-swap-line",
-      "subline": "main",
-      "ply": 9,
-      "san": "axb5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Continuing Polish Opening Rooks Swap Line: axb5 is a known theory move in this line."
-    },
-    {
-      "file": "src/data/annotations/ruy-lopez-closed-chigorin-defense-panov-system.json",
-      "openingId": "ruy-lopez-closed-chigorin-defense-panov-system",
-      "subline": "main",
-      "ply": 25,
-      "san": "cxd4",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: cxd4 is a known theory move in this line."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-alapin-variation-smith-morra-declined.json",
-      "openingId": "sicilian-defense-alapin-variation-smith-morra-declined",
-      "subline": "Alapin: 2...d5 (Central Counter)",
-      "ply": 17,
-      "san": "cxd4",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-alapin-variation-smith-morra-declined.json",
-      "openingId": "sicilian-defense-alapin-variation-smith-morra-declined",
-      "subline": "Alapin: 2...e6 (Solid)",
-      "ply": 17,
-      "san": "cxd4",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
-    },
-    {
       "file": "src/data/annotations/sicilian-defense-alapin-variation-smith-morra-declined.json",
       "openingId": "sicilian-defense-alapin-variation-smith-morra-declined",
       "subline": "Alapin: 2...g6 (Fianchetto)",
@@ -280,106 +69,6 @@
       "textPiece": "bishop",
       "expectedPiece": "pawn",
       "evidence": "The Alapin: 2...g6 (Fianchetto) is an important variation of the Sicilian: Alapin. The fianchetto approach — Black develops the bishop on g7 aiming at the d4 pawn."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-alapin-variation-smith-morra-declined.json",
-      "openingId": "sicilian-defense-alapin-variation-smith-morra-declined",
-      "subline": "Alapin: 2...g6 (Fianchetto)",
-      "ply": 7,
-      "san": "cxd4",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-alapin-variation-smith-morra-declined.json",
-      "openingId": "sicilian-defense-alapin-variation-smith-morra-declined",
-      "subline": "Alapin: 2...Nf6 3.e5 Nd5 4.Nf3 Nc6",
-      "ply": 15,
-      "san": "cxd4",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "cxd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-alapin-variation-smith-morra-declined.json",
-      "openingId": "sicilian-defense-alapin-variation-smith-morra-declined",
-      "subline": "Alapin: Don't Play ...e5",
-      "ply": 9,
-      "san": "cxd4",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "cxd4 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-alapin-variation-smith-morra-declined.json",
-      "openingId": "sicilian-defense-alapin-variation-smith-morra-declined",
-      "subline": "Alapin: Don't Play ...e5",
-      "ply": 17,
-      "san": "dxe5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "dxe5 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-alapin-variation-smith-morra-declined.json",
-      "openingId": "sicilian-defense-alapin-variation-smith-morra-declined",
-      "subline": "Alapin: White's Space Advantage",
-      "ply": 9,
-      "san": "cxd4",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "cxd4 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-alapin-variation-smith-morra-declined.json",
-      "openingId": "sicilian-defense-alapin-variation-smith-morra-declined",
-      "subline": "Alapin: White's Space Advantage",
-      "ply": 21,
-      "san": "dxe5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "dxe5 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json",
-      "openingId": "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation",
-      "subline": "Weak d6 Pawn Under Siege",
-      "ply": 20,
-      "san": "Bxf6",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Bxf6 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json",
-      "openingId": "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation",
-      "subline": "White's d5 Knight Dominance",
-      "ply": 20,
-      "san": "Bxf6",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Bxf6 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json",
-      "openingId": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense",
-      "subline": "Chicago Defense: Black Neutralizes",
-      "ply": 28,
-      "san": "Nxe5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Nxe5 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json",
-      "openingId": "sicilian-defense-smith-morra-gambit-accepted-chicago-defense",
-      "subline": "Smith-Morra: Taylor Defense",
-      "ply": 25,
-      "san": "exd5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "exd5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
     },
     {
       "file": "src/data/annotations/trompowsky-attack.json",
@@ -404,56 +93,6 @@
       "textSquare": "g5",
       "expectedSquare": "d4",
       "evidence": "This is the Trompowsky Attack, an aggressive system where White develops the bishop to g5 on move 2, avoiding the main lines of the Queen's Gambit. White plays 1.d4, claiming the center."
-    },
-    {
-      "file": "src/data/annotations/vienna-game-vienna-gambit.json",
-      "openingId": "vienna-game-vienna-gambit",
-      "subline": "Hamppe-Allgaier: Black Gets Counterplay",
-      "ply": 15,
-      "san": "dxe5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "dxe5 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/vienna-game-vienna-gambit.json",
-      "openingId": "vienna-game-vienna-gambit",
-      "subline": "Vienna Gambit: Pierce Gambit",
-      "ply": 15,
-      "san": "dxe5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "dxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
-    },
-    {
-      "file": "src/data/annotations/vienna-game-vienna-gambit.json",
-      "openingId": "vienna-game-vienna-gambit",
-      "subline": "Vienna Gambit: Qe7 Variation",
-      "ply": 19,
-      "san": "dxe5",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "dxe5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity."
-    },
-    {
-      "file": "src/data/annotations/vienna-game-vienna-gambit.json",
-      "openingId": "vienna-game-vienna-gambit",
-      "subline": "Vienna Game: Black Avoids f4 with d5",
-      "ply": 23,
-      "san": "Bxf3",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Bxf3 — this capture changes the character of the position. Be alert."
-    },
-    {
-      "file": "src/data/annotations/vienna-game-vienna-gambit.json",
-      "openingId": "vienna-game-vienna-gambit",
-      "subline": "Vienna Game: Black Avoids f4 with d5",
-      "ply": 25,
-      "san": "Qxf3",
-      "kind": "repeated-narration",
-      "severity": "p1",
-      "evidence": "Qxf3 — this capture changes the character of the position. Be alert."
     }
   ]
 }
