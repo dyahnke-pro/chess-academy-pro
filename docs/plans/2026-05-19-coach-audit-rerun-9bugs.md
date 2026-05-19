@@ -105,16 +105,23 @@ If the session compacts mid-work, the load-bearing context is:
 
 ## Status
 
-| Bug | Status |
-|---|---|
-| D | pending |
-| C | pending |
-| I | pending |
-| A | pending — decision needed (A-1) |
-| F | pending |
-| E | pending |
-| G | pending |
-| B | pending |
-| H | pending |
+| Bug | Status | Notes |
+|---|---|---|
+| C | **done** | Picker quality — TEACHABLE filter + F1 scoring (commit e22d4f7) |
+| D — Layer 1 | **done** | resolveOpeningEntry stopword/length guard (e22d4f7) |
+| D — Layer 2 | deferred | Chip structured payload — Layer 1 covers the visible failure modes; defer until probes show Layer 2 is still needed |
+| I | **done** | Verbosity guidelines (not numeric caps) + scaffolding strip in sanitizeCoachText (e22d4f7) |
+| F | **done** | Sentence-splitter regex rewritten — no more "Nb4" → "knight to b" (7b758c4) |
+| E | **done** | arrowClaimValidator promoted from audit-only to synthesizer (63c9a3b) |
+| G | **done** | BOARD_ARROW_OPTIONS centralized in useBoardTheme (63c9a3b) |
+| B | **done** | "not in the app" prompt rule added (b49ff9a) |
+| H | **done** | Pre-flight log message softened (b49ff9a) |
+| A | pending — decision needed (A-1) | Brief-cap state-changing content protection. Pre-discussion lean: option 2 (enforce "Setting the board to {name}" sentence at every verbosity). David to confirm. |
 
-Audit loop: not yet enhanced. Will run after all 9 fixes land.
+Tests added in this round: 26 regressions (14 for Bug D, 3 for Bug C,
+17 for Bug I, 5 for Bug F, 5 for Bug E). All green.
+
+## Audit loop enhancement
+
+Not yet enhanced. Will run after the loop audit script enhancements
+land per §"Loop audit enhancement" above.
