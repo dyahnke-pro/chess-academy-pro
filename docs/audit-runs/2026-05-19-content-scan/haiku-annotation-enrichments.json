@@ -2439,12 +2439,1612 @@
       "ply": 25,
       "san": "cxd4",
       "annotation": "White recaptures with the c-pawn, keeping the d4 outpost centralized and maintaining flexibility for the rooks. The pawn on d4 now anchors White's space advantage in the middlegame."
+    },
+    "ruy-lopez-closed-keres-defense.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The e4 pawn claims the center and opens lines for the queen and light-squared bishop, establishing the foundation for the Ruy Lopez."
+    },
+    "ruy-lopez-closed-martinez-variation.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central e-pawn stake immediately contests the d5 and f5 squares, the foundational move of all classical chess openings."
+    },
+    "ruy-lopez-closed-smyslov-breyer-zaitsev-hybrid.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central break e4 seizes space and opens lines for the queen and bishop, establishing the foundation for White's typical kingside attacking setup in the Ruy Lopez."
+    },
+    "ruy-lopez-closed-suetin-variation.json::__main__::14": {
+      "ply": 15,
+      "san": "c3",
+      "annotation": "White reinforces the center and prepares to advance d4 without allowing Black counterplay on c3. This prophylactic move blocks Black's natural queenside expansion."
+    },
+    "ruy-lopez-closed-suetin-variation.json::__main__::15": {
+      "ply": 16,
+      "san": "O-O",
+      "annotation": "Black castles kingside to secure the king before White's central breakthrough. This move completes Black's setup and prepares to reposition the knight from f6."
+    },
+    "ruy-lopez-closed-suetin-variation.json::__main__::16": {
+      "ply": 17,
+      "san": "a3",
+      "annotation": "White prevents Black's pawn from reaching a3 and fixes Black's queenside pawns. The move prepares b4 to gain space and open lines on the queenside."
+    },
+    "ruy-lopez-closed-trajkovic-counterattack.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central pawn push controls d5 and e5, seizing space and preparing rapid piece development from their natural squares."
+    },
+    "ruy-lopez-marshall-attack-main-line.json::__main__::11": {
+      "ply": 12,
+      "san": "b5",
+      "annotation": "Black strikes at the bishop on a4, forcing it to choose: retreat or trade. This pawn thrust is the Marshall's signature—it opens lines on the queenside and gives Black active counterplay before White consolidates."
+    },
+    "ruy-lopez-open-breslau-variation.json::__main__::21": {
+      "ply": 22,
+      "san": "Nxe5",
+      "annotation": "Capturing on e5 eliminates Black's centralized knight and forces a recapture, clarifying the pawn structure after White's earlier e4–e5 advance."
+    },
+    "ruy-lopez-open-motzko-attack-nenarokov-variation.json::__main__::13": {
+      "ply": 14,
+      "san": "d5",
+      "annotation": "The d5 push breaks Black's center and forces a choice: if Black recaptures on d5, White regains the e4 knight with tempo, and if Black ignores it, White dominates the middle with a pawn on d5."
+    },
+    "ruy-lopez.json::Berlin Endgame Grind::7": {
+      "ply": 8,
+      "san": "Nxe4",
+      "annotation": "Black sacrifices the e-pawn to activate the knight on e4, attacking f2 and forcing White to reckon with piece safety rather than material count."
+    },
+    "ruy-lopez.json::Berlin Endgame Grind::10": {
+      "ply": 11,
+      "san": "Bxc6",
+      "annotation": "White eliminates Black's knight on c6, the defender of the center. This exchange clears the way for White's pawn advance and leaves Black with a damaged pawn structure."
+    },
+    "ruy-lopez.json::Berlin Endgame Grind::11": {
+      "ply": 12,
+      "san": "dxc6",
+      "annotation": "Black recaptures, creating doubled c-pawns and a weakened queenside. White now has space and a superior pawn majority in the center."
+    },
+    "ruy-lopez.json::Berlin Endgame Grind::12": {
+      "ply": 13,
+      "san": "dxe5",
+      "annotation": "White pushes through the center, dominating the d5 and e5 squares. This pawn controls the critical dark squares and cramps Black's knight."
+    },
+    "ruy-lopez.json::Berlin Endgame Grind::14": {
+      "ply": 15,
+      "san": "Qxd8+",
+      "annotation": "White forces the king to move with check. Trading queens shifts the game into an endgame where White's pawn structure and piece activity offer a long-term edge."
+    },
+    "ruy-lopez.json::Berlin Endgame Grind::15": {
+      "ply": 16,
+      "san": "Kxd8",
+      "annotation": "Black's king moves to d8, landing on a square attacked by White's e5 pawn. White now enjoys a clear strategic advantage with space and pawn control in a simplified endgame."
+    },
+    "scandinavian-defense-classical-variation.json::__main__::1": {
+      "ply": 2,
+      "san": "d5",
+      "annotation": "Black strikes at the center immediately, challenging your e4 pawn and seizing space on d5. This classical counterattack forces you to decide how to maintain central control."
+    },
+    "scandinavian-defense-gubinsky-melts-defense.json::__main__::1": {
+      "ply": 2,
+      "san": "d5",
+      "annotation": "Black immediately challenges your center pawn, striking at e4 before you consolidate. This d5 thrust forces you to decide whether to hold the pawn or trade—a defining moment in the Scandinavian."
+    },
+    "scandinavian-defense-icelandic-palme-gambit.json::__main__::4": {
+      "ply": 5,
+      "san": "c4",
+      "annotation": "Pushing c4 supports the d5 pawn and prepares to build a strong pawn center while keeping Black's pieces restricted."
+    },
+    "scandinavian-defense-icelandic-palme-gambit.json::__main__::5": {
+      "ply": 6,
+      "san": "e6",
+      "annotation": "Playing e6 challenges the d5 pawn directly and prepares to develop the bishop to e7, fighting for central control."
+    },
+    "scandinavian-defense-richter-variation.json::__main__::1": {
+      "ply": 2,
+      "san": "d5",
+      "annotation": "Black immediately contests your central pawn, forcing you to decide whether to capture on d5 or maintain tension in the center."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Main Line with d5::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center with a pawn break, forcing Black to decide whether to hold e5 or trade. This gambit move demands an immediate response."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Main Line with d5::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black accepts the pawn, releasing central tension. White's next move will quickly develop attacking pieces into the weakened center."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Main Line with d5::8": {
+      "ply": 9,
+      "san": "e5",
+      "annotation": "White's pawn advances and attacks the knight on f6, gaining space and forcing it to move. This tempo gain supports White's lead in piece development."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Main Line with d5::9": {
+      "ply": 10,
+      "san": "d5",
+      "annotation": "Black counterattacks the e5 pawn and opens lines toward White's king. This central break fights back against White's space advantage."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Ng4 Retreat Variation::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White breaks the symmetry by striking at e5 with a central pawn. This gambit move invites Black to capture, aiming for rapid piece development and open lines after the likely recapture."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Ng4 Retreat Variation::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black accepts the gambit, removing White's dangerous d4 pawn. The d4 square now becomes contested—Black has gained material but White maintains compensatory initiative in development."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Ng4 Retreat Variation::8": {
+      "ply": 9,
+      "san": "e5",
+      "annotation": "White's e5 pawn advances, pinning the knight on f6 and forcing Black into a cramped position. This move preserves White's space advantage while keeping Black's pieces constrained."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Ng4 Retreat Variation::13": {
+      "ply": 14,
+      "san": "d5",
+      "annotation": "Black counterattacks with d5, challenging White's advanced e5 pawn and opening lines for the king on e7. This break attempts to generate counterplay before White's bishop on f7 becomes overwhelming."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Bc5 Line::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens lines toward Black's kingside and attacks e5, forcing Black to make a central decision. This pawn break is the gambit's defining moment."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Bc5 Line::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black captures and opens the e-file, but allows White's bishop on c1 to aim at f4 and beyond with tempo. The recapture accepts tactical complications."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Bc5 Line::10": {
+      "ply": 11,
+      "san": "e5",
+      "annotation": "White pushes e5 to drive the f6 knight away and create a passed pawn that pressures Black's kingside. This advance threatens both e6 and f6."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Bc5 Line::11": {
+      "ply": 12,
+      "san": "d5",
+      "annotation": "Black counterattacks the center with d5, challenging White's space advantage and opening the queen and bishop toward a5. This blocks e5 and forces White to justify the aggressive setup."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Dubois-Reti Defense::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "The d4 thrust opens lines toward Black's king and forces an immediate central decision. Black must either capture or defend the e5 pawn against a dangerous double attack."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Dubois-Reti Defense::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black recaptures on d4, accepting White's gambit. This removes White's menacing pawn but leaves Black's knight on c6 exposed to Nxd4, which forks queen and rook."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Haxo Gambit with c3::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center and invites Black's e-pawn to capture, committing to the gambit plan where piece activity compensates for the sacrificed pawn."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Haxo Gambit with c3::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black accepts the gambit. White now has a central pawn on e4 and an open d-file, giving rapid development chances in exchange for the pawn."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Haxo Gambit with c3::22": {
+      "ply": 23,
+      "san": "e5",
+      "annotation": "Black advances the d-pawn to challenge White's e4 outpost and free the queen's bishop from its confinement on c6."
+    },
+    "scotch-game-scotch-gambit.json::Scotch Gambit: Haxo Gambit with c3::23": {
+      "ply": 24,
+      "san": "dxe5",
+      "annotation": "White recaptures and maintains the e5 pawn, keeping Black's f-bishop restricted and blocking Black's kingside counterplay."
+    },
+    "scotch-game-scotch-gambit.json::Black Equalizes with Precise d5 and Ne4::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black captures the center pawn and opens lines for both bishops. White must now decide between recapturing immediately or seizing space with Bc4."
+    },
+    "scotch-game-scotch-gambit.json::Black Equalizes with Precise d5 and Ne4::12": {
+      "ply": 13,
+      "san": "Nxd4",
+      "annotation": "Black's knight lands on d4 with tempo, attacking the queen and forcing White to make a critical choice: retreat or trade pieces in a position where Black's e4-knight becomes a menace."
+    },
+    "scotch-game-scotch-gambit.json::Black Equalizes with Precise d5 and Ne4::14": {
+      "ply": 15,
+      "san": "Nxc6",
+      "annotation": "White removes Black's centralized knight but allows bxc6, which opens the b-file and gives Black's rook pressure against White's exposed queenside structure."
+    },
+    "scotch-game-scotch-gambit.json::Black Equalizes with Precise d5 and Ne4::15": {
+      "ply": 16,
+      "san": "bxc6",
+      "annotation": "Black recaptures with the pawn, locking White's bishop on b5 outside the game and securing a solid d5 outpost for counterplay against the e5 pawn."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Black Knows Theory::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black's capture opens the d-file and releases tension, but White's next moves will exploit the exposed king on e8 and weak dark squares."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Black Knows Theory::12": {
+      "ply": 13,
+      "san": "exf6",
+      "annotation": "This pawn sacrifice on f6 rips open Black's kingside, forcing the queen's hand and exposing the king to a decisive attack along the long diagonal."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Black Knows Theory::13": {
+      "ply": 14,
+      "san": "dxc4",
+      "annotation": "Black recaptures on c4, but the e5 pawn is gone and White's bishop pair now dominates the light-squared complex around Black's exposed king."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Black Knows Theory::14": {
+      "ply": 15,
+      "san": "fxg7",
+      "annotation": "The pawn advances to g7, threatening promotion and keeping Black's king boxed in; Black must address both the pawn and White's mating threats immediately."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Black Knows Theory::23": {
+      "ply": 24,
+      "san": "Qxe4",
+      "annotation": "White's queen recapture on e4 centralizes with check, forcing the king to move and consolidating control of critical squares for the mating net."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Black Knows Theory::24": {
+      "ply": 25,
+      "san": "Nxd4",
+      "annotation": "Black's knight blocks the check but sits on d4 where it blocks escape routes and remains vulnerable to being trapped or exchanged with advantage."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Black Knows Theory::25": {
+      "ply": 26,
+      "san": "Qxg2+",
+      "annotation": "Black's queen invades g2 with check, desperately seeking counterplay, but the king has f1 and the attack collapses without further support."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Black Knows Theory::26": {
+      "ply": 27,
+      "san": "Kxg2",
+      "annotation": "White's king captures and walks toward safety; the g7 pawn is unstoppable and Black's pieces cannot coordinate a back-rank defense in time."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Black Knows Theory::27": {
+      "ply": 28,
+      "san": "Nxd4",
+      "annotation": "White recaptures on d4, centralizing the knight and opening the e-file for the rook—critical for the attacking line ahead."
+    },
+    "scotch-game-scotch-gambit.json::Max Lange Attack: Black Knows Theory::28": {
+      "ply": 29,
+      "san": "Rxe6+",
+      "annotation": "The rook seizes the bishop on e6 with check, forcing Black's king to move and exposing it to the advanced pawn on g7."
+    },
+    "scotch-game-scotch-gambit.json::4...Bb4+ System Equalizes::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black's pawn captures on d4, opening the e-file and creating tactical tension. White's queen and rook now aim down the center—expect tactical complications ahead."
+    },
+    "scotch-game-scotch-gambit.json::4...Bb4+ System Equalizes::9": {
+      "ply": 10,
+      "san": "dxc3",
+      "annotation": "White recaptures on c3 with the d-pawn, doubling pawns but controlling the center and preparing to address Black's bishop on b4. The pawn structure becomes strained."
+    },
+    "scotch-game-scotch-gambit.json::4...Bb4+ System Equalizes::10": {
+      "ply": 11,
+      "san": "bxc3",
+      "annotation": "Black recaptures with the b-pawn, accepting doubled c-pawns in exchange for tempo and piece activity. White's center is solidly held despite the doubled structure."
+    },
+    "scotch-game-scotch-gambit.json::4...Bb4+ System Equalizes::14": {
+      "ply": 15,
+      "san": "exd6",
+      "annotation": "White's pawn captures on d6, penetrating deep into Black's position and forcing Black's queen or rook to recapture. This advanced pawn becomes a critical weakness or tactical asset."
+    },
+    "scotch-game-scotch-gambit.json::4...Bb4+ System Equalizes::15": {
+      "ply": 16,
+      "san": "Qxd6",
+      "annotation": "Black's queen seizes the d6 pawn, centralizing while defending. The queen now guards critical squares but stands exposed in the middle of the board."
+    },
+    "scotch-game-scotch-gambit.json::4...Bb4+ System Equalizes::20": {
+      "ply": 21,
+      "san": "Bxf7+",
+      "annotation": "White's bishop captures on f7 with check, ripping open Black's kingside and forcing the king to move. This attack exploits Black's weak dark squares around the king."
+    },
+    "scotch-game-scotch-gambit.json::4...Bb4+ System Equalizes::21": {
+      "ply": 22,
+      "san": "Rxf7",
+      "annotation": "Black's rook recaptures on f7, blocking the check but abandoning the back rank. White's queen now dominates the 7th rank with devastating attacking potential."
+    },
+    "scotch-game-scotch-gambit.json::4...Bb4+ System Equalizes::22": {
+      "ply": 23,
+      "san": "Qxf7+",
+      "annotation": "White's queen captures on f7 with check, delivering a crushing blow. Black's king is driven to h7 or h8 with no safe escape—White's attack cascades toward mate."
+    },
+    "scotch-game-scotch-gambit.json::4...Bb4+ System Equalizes::23": {
+      "ply": 24,
+      "san": "Kxf7",
+      "annotation": "Black's king is drawn into the center after capturing on f7. White's queen and bishop pair will dominate the exposed king position in the coming assault."
+    },
+    "scotch-game-scotch-gambit.json::4...Bb4+ System Equalizes::25": {
+      "ply": 26,
+      "san": "Nxe5",
+      "annotation": "The knight blocks Black's escape to e6 while centralizing itself. This move forces Black's queen into an awkward defensive role against multiple threats."
+    },
+    "scotch-game.json::Scotch: Mieses Variation (4...Nf6)::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center decisively, forcing Black to choose between capturing and allowing a strong pawn duo on d4 and e4."
+    },
+    "scotch-game.json::Scotch: Mieses Variation (4...Nf6)::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black recaptures to maintain material balance, but White regains the initiative with Nxd4, centralizing the knight with tempo."
+    },
+    "scotch-game.json::Scotch: Mieses Variation (4...Nf6)::10": {
+      "ply": 11,
+      "san": "e5",
+      "annotation": "White advances e5 to drive the knight from f6, a key defender that would otherwise support Black's queenside counterplay and piece coordination."
+    },
+    "scotch-game.json::Scotch Gambit::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White strikes at e5 with a pawn, forcing Black to decide whether to defend or trade. This gambit move opens lines toward Black's king and frees the d-file for White's rooks."
+    },
+    "scotch-game.json::Scotch Gambit::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black accepts the pawn sacrifice, removing White's aggressive d4 pawn. Now White can develop with tempo by attacking Black's pieces or reopening the center with a strong follow-up."
+    },
+    "scotch-game.json::Scotch Gambit::8": {
+      "ply": 9,
+      "san": "e5",
+      "annotation": "White advances e5, attacking both Black knights and seizing space. The knights must move, giving White time to consolidate and prepare Nxd4 or develop an initiative."
+    },
+    "scotch-game.json::Scotch Gambit::9": {
+      "ply": 10,
+      "san": "d5",
+      "annotation": "Black pushes d5 to challenge White's center and free the Nc6. This counterattack opens the c-file and fights for equality in the position."
+    },
+    "scotch-game.json::Scotch: Schmidt Variation::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center aggressively, creating tension that forces Black to decide whether to hold the e5 pawn or trade pawns and develop."
+    },
+    "scotch-game.json::Scotch: Schmidt Variation::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black recaptures toward the center, maintaining material balance while keeping the d4 square occupied and prepared for piece development."
+    },
+    "scotch-game.json::Scotch: Schmidt Variation::13": {
+      "ply": 14,
+      "san": "d5",
+      "annotation": "White thrusts a pawn past Black's knight on f6, attacking the d5 square and forcing Black to recapture, which breaks up the pawn structure."
+    },
+    "scotch-game.json::Scotch: Schmidt Variation::14": {
+      "ply": 15,
+      "san": "exd5",
+      "annotation": "Black regains the pawn but accepts an isolated d-pawn, a structural weakness that White can target with pieces in the endgame or middlegame."
+    },
+    "scotch-game.json::Scotch: Schmidt Variation::15": {
+      "ply": 16,
+      "san": "cxd5",
+      "annotation": "Black's c-pawn recapture leaves White with the d5 square as an outpost, ideal for placing a knight that Black's pieces cannot easily dislodge."
+    },
+    "scotch-game.json::Scotch: Göring Gambit::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White sacrifices the d-pawn to open lines and expose Black's king. The e4 pawn now anchors White's control of the center while piece activity compensates for the material."
+    },
+    "scotch-game.json::Scotch: Göring Gambit::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black accepts the gambit, capturing toward the center. White's next moves will rapidly develop with threats, exploiting the weakened dark squares around Black's king."
+    },
+    "scotch-game.json::Scotch: Göring Gambit::16": {
+      "ply": 17,
+      "san": "e5",
+      "annotation": "White pushes e5 to lock the knight on f6 and claim space. This advance cuts off Black's knight retreat and forces a choice: stay pinned or reposition."
+    },
+    "scotch-game.json::Scotch: Steinitz Trap::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black captures the central pawn, opening the e-file and releasing tension. This allows White to recapture with the knight, seizing the d4 square with a tempo on the c6 knight."
+    },
+    "scotch-game.json::Scotch: Steinitz Trap::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "annotation": "The knight recapture centralizes a piece while attacking c6, forcing Black's knight to make a decision. White now has space and a strong pawn on e4."
+    },
+    "scotch-game.json::Scotch: Steinitz Trap::11": {
+      "ply": 12,
+      "san": "Qxe4",
+      "annotation": "Black's queen captures on e4, but this move walks into a knight fork: Nc5 threatens both queen and b7, winning material or forcing Black into a defensive bind."
+    },
+    "scotch-game.json::Scotch Four Knights Equalizer::5": {
+      "ply": 6,
+      "san": "exd4",
+      "annotation": "Black captures on d4, opening the e-file and accepting a pawn trade that eases White's central pressure while inviting the knight fork on d4."
+    },
+    "scotch-game.json::Scotch Four Knights Equalizer::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "annotation": "The knight recaptures, seizing the d4 outpost and forcing Black's king to remain in the center while White develops with tempo threats."
+    },
+    "scotch-game.json::Scotch Four Knights Equalizer::10": {
+      "ply": 11,
+      "san": "Nxc6",
+      "annotation": "White exchanges one of Black's defenders and doubles the c-file, creating structural pressure that limits Black's kingside castling safety."
+    },
+    "scotch-game.json::Scotch Four Knights Equalizer::11": {
+      "ply": 12,
+      "san": "bxc6",
+      "annotation": "Black recaptures with the bishop, creating an isolated c6 pawn that becomes a long-term weakness and restricts Black's pieces."
+    },
+    "scotch-game.json::Scotch Four Knights Equalizer::14": {
+      "ply": 15,
+      "san": "exd5",
+      "annotation": "White pushes the d-pawn to d5, attacking c6 and forcing Black to make a critical decision about the pawn structure."
+    },
+    "scotch-game.json::Scotch Four Knights Equalizer::15": {
+      "ply": 16,
+      "san": "cxd5",
+      "annotation": "Black captures on d5, accepting a d-pawn on an active central square that gives White space and attacking chances."
+    },
+    "semi-slav-defense-botvinnik-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "e6",
+      "annotation": "Black solidifies the center while keeping the c6-pawn protected; e6 prepares to develop the light-squared bishop to e7, a hallmark of the Botvinnik setup."
+    },
+    "semi-slav-defense-chigorin-defense.json::__main__::7": {
+      "ply": 8,
+      "san": "e6",
+      "annotation": "Black supports the center from e6, preparing to challenge White's c4 pawn while keeping the d5 square defended. This solid setup avoids immediate tactical complications."
+    },
+    "semi-slav-defense-meran-variation-old-variation.json::__main__::3": {
+      "ply": 4,
+      "san": "c6",
+      "annotation": "Black supports the d5 pawn and prepares the characteristic Meran setup. This move allows Black to develop with ...a6 and ...b5 while keeping the center stable."
+    },
+    "semi-slav-defense-meran-variation-old-variation.json::__main__::17": {
+      "ply": 18,
+      "san": "c5",
+      "annotation": "Black strikes at White's center with a pawn break, attacking the d4 square and opening lines for the pieces. This advance is the thematic counterattack that justifies Black's solid setup."
+    },
+    "semi-slav-defense-meran-variation-rabinovich-variation.json::__main__::0": {
+      "ply": 1,
+      "san": "d4",
+      "annotation": "The queen's pawn move stakes the center and opens lines for the bishop on c1 and queen on d1, establishing the positional foundation of the Meran system."
+    },
+    "semi-slav-defense-meran-variation-rabinovich-variation.json::__main__::19": {
+      "ply": 20,
+      "san": "cxd4",
+      "annotation": "Recapturing on d4 with the c-file pawn centralizes White's material while keeping the c-file open for future rook activity and maintaining pressure against Black's exposed queenside."
+    },
+    "semi-slav-defense-meran-variation-reynolds-variation.json::__main__::1": {
+      "ply": 2,
+      "san": "d5",
+      "annotation": "Black stakes a claim in the center while keeping the c-file open for the bishop—a hallmark of the Semi-Slav that avoids the ...c6 pawn block of the Slav proper."
+    },
+    "semi-slav-defense-meran-variation-wade-variation-kaidanov-gambit.json::__main__::24": {
+      "ply": 25,
+      "san": "Nxd4",
+      "annotation": "Recapturing on d4 with the knight restores material balance while keeping the e5 pawn advanced and cramping Black's pieces. This centralization prepares White's kingside pressure."
+    },
+    "semi-slav-defense-meran-variation-wade-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "e6",
+      "annotation": "Black reinforces the center and prepares queenside development. The e6 square stabilizes the d5 pawn, making it harder for White to challenge with c5 or gain space."
+    },
+    "semi-slav-defense-normal-variation.json::__main__::12": {
+      "ply": 13,
+      "san": "Bb2",
+      "annotation": "Bb2 pins the knight on f3 to your king, pressuring the center and preparing to support the d4 pawn's defense along the long diagonal."
+    },
+    "semi-slav-defense-normal-variation.json::__main__::13": {
+      "ply": 14,
+      "san": "O-O",
+      "annotation": "Castling kingside removes Black's king from the center before the position opens, ensuring safety while keeping the bishop pair intact."
+    },
+    "semi-slav-defense-normal-variation.json::__main__::14": {
+      "ply": 15,
+      "san": "Be2",
+      "annotation": "Be2 completes the setup, placing the bishop on a flexible square where it supports d4 and can later reroute to contest Black's pieces if needed."
+    },
+    "semi-slav-defense-noteboom-variation-anti-noteboom-variation-belyavsky-line.json::__main__::7": {
+      "ply": 8,
+      "san": "dxc4",
+      "annotation": "Black captures on c4, fixing White's d-pawn as a target while keeping the c6-pawn flexible. This move defines the Anti-Noteboom setup, where Black avoids d4 immediately."
+    },
+    "semi-slav-defense-quiet-variation.json::__main__::7": {
+      "ply": 8,
+      "san": "e6",
+      "annotation": "Black supports the d5 pawn and prepares to reroute the knight via e6, avoiding early exchanges that would ease White's position."
+    },
+    "semi-slav-defense-quiet-variation.json::__main__::9": {
+      "ply": 10,
+      "san": "Nbd7",
+      "annotation": "The knight heads to d7, where it reinforces d5 and can later jump to f6 or c5 depending on how White continues the setup."
+    },
+    "semi-slav-defense-stoltz-variation-shabalov-attack.json::__main__::7": {
+      "ply": 8,
+      "san": "e6",
+      "annotation": "Black shores up the e5 square and prepares to complete the typical Semi-Slav setup with Be7, preventing White's immediate d5 advance from achieving its full strategic bite."
+    },
+    "sicilian-defense-alapin-variation-barmen-defense-endgame-variation.json::__main__::17": {
+      "ply": 18,
+      "san": "Nxd4",
+      "annotation": "Recapturing on d4 with the knight restores material balance and centralizes the piece, while White's doubled f-pawns become a long-term weakness in this endgame."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 (Central Counter)::3": {
+      "ply": 4,
+      "san": "d5",
+      "annotation": "Black immediately contests your center pawn. By striking at e4 with the c-pawn already advanced, Black aims to dissolve White's spatial grip before it solidifies."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 (Central Counter)::4": {
+      "ply": 5,
+      "san": "exd5",
+      "annotation": "Recapturing with the e-pawn maintains a strong d5 outpost and opens the e-file for your pieces. This pawn on d5 becomes a concrete achievement in the Alapin's fight for space."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 (Central Counter)::6": {
+      "ply": 7,
+      "san": "d4",
+      "annotation": "Pushing the d-pawn supports your spatial advantage and prepares to develop with tempo. The d4 square becomes a natural home for your knights and bishops."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 (Central Counter)::15": {
+      "ply": 16,
+      "san": "cxd4",
+      "annotation": "Recapturing toward the center with your queenside pawn keeps the d4 square defended and connected to your remaining pawn structure. This maintains flexibility for your pieces."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...d5 (Central Counter)::16": {
+      "ply": 17,
+      "san": "cxd4",
+      "annotation": "Black recaptures and centralizes a pawn on d4, creating a natural outpost for the queen and knight. This pawn becomes a target for your bishop pair."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 (Solid)::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White establishes a classical pawn duo on d4 and e4, forcing Black to decide whether to challenge or accept a space disadvantage."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 (Solid)::5": {
+      "ply": 6,
+      "san": "d5",
+      "annotation": "Black mirrors the tension by advancing to d5, directly confronting White's center and testing whether the e4 pawn can hold its ground."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 (Solid)::6": {
+      "ply": 7,
+      "san": "e5",
+      "annotation": "White advances e5, gaining space and preventing Black's pieces from comfortable square access while locking the pawn structure."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 (Solid)::15": {
+      "ply": 16,
+      "san": "cxd4",
+      "annotation": "Recapturing with the c-pawn opens the c-file and prepares to pressure Black's queenside, where the undefended knight on c6 may become a target."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...e6 (Solid)::16": {
+      "ply": 17,
+      "san": "cxd4",
+      "annotation": "Black recaptures symmetrically but leaves the d4 pawn as a potential outpost for White's pieces, especially the centralized knights."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 (Fianchetto)::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center with a second pawn, challenging Black's c5 foothold and preparing to occupy d4 with force."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 (Fianchetto)::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black accepts the pawn trade, but now White recaptures and secures a strong d4 outpost in the Smith-Morra structure."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 (Fianchetto)::6": {
+      "ply": 7,
+      "san": "cxd4",
+      "annotation": "White maintains the d4 pawn after recapture, solidifying a space advantage and preventing Black's light-squared bishop from sitting comfortably on the long diagonal."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 (Fianchetto)::7": {
+      "ply": 8,
+      "san": "d5",
+      "annotation": "Black pushes d5 to challenge White's e4 pawn directly and claim space, but walks into White's thematic kingside kingside pressure with the g6 fianchetto weakening e5."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...g6 (Fianchetto)::8": {
+      "ply": 9,
+      "san": "e5",
+      "annotation": "White fixes the e5 square as an outpost, preparing to reroute a knight there while Black's fianchettoed bishop on g7 now lacks control of this critical square."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 3.e5 Nd5 4.Nf3 Nc6::4": {
+      "ply": 5,
+      "san": "e5",
+      "annotation": "White pushes forward to attack Black's knight and gain space on e5, forcing a decision: retreat or exchange."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 3.e5 Nd5 4.Nf3 Nc6::11": {
+      "ply": 12,
+      "san": "d5",
+      "annotation": "Black strikes back with d5, challenging White's center and opening lines for the light-squared bishop on c8."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 3.e5 Nd5 4.Nf3 Nc6::12": {
+      "ply": 13,
+      "san": "d4",
+      "annotation": "White meets the challenge head-on, maintaining tension and preventing Black from consolidating the d5–c5 pawn duo."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 3.e5 Nd5 4.Nf3 Nc6::13": {
+      "ply": 14,
+      "san": "cxd4",
+      "annotation": "Black captures on d4, accepting the central trade and opening the c-file where the c6 knight can later reposition."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: 2...Nf6 3.e5 Nd5 4.Nf3 Nc6::14": {
+      "ply": 15,
+      "san": "cxd4",
+      "annotation": "White recaptures with the c-pawn, keeping the d4 strongpoint and preparing to develop the bishop from c1."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: White's Space Advantage::7": {
+      "ply": 8,
+      "san": "cxd4",
+      "annotation": "Black captures on d4, but White's space advantage on e5 persists. The center remains tense with White maintaining pressure on Black's knight."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: White's Space Advantage::8": {
+      "ply": 9,
+      "san": "cxd4",
+      "annotation": "White recaptures, cementing the d4 pawn as a strong outpost. This pawn structure supports White's spatial control and restricts Black's pieces."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: White's Space Advantage::17": {
+      "ply": 18,
+      "san": "Nxc3",
+      "annotation": "Black removes White's bishop pair by capturing on c3. This reduces White's long-diagonal control, a key asset in this spatial advantage position."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: White's Space Advantage::18": {
+      "ply": 19,
+      "san": "bxc3",
+      "annotation": "White recaptures with the b-pawn, accepting a doubled c-file weakness but keeping Black's pieces restricted by the central tension."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: White's Space Advantage::19": {
+      "ply": 20,
+      "san": "dxe5",
+      "annotation": "White captures the e5 pawn, finally resolving the central tension and gaining material. Black's queen-side development lags significantly."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: White's Space Advantage::20": {
+      "ply": 21,
+      "san": "dxe5",
+      "annotation": "Black recaptures, but White's kingside castling and Black's exposed king create tactical imbalance in White's favor."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: Don't Play ...e5::7": {
+      "ply": 8,
+      "san": "cxd4",
+      "annotation": "Black recaptures on d4, accepting a doubled c-pawn structure. White's e5 pawn now cramps Black's pieces and controls key central squares."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: Don't Play ...e5::8": {
+      "ply": 9,
+      "san": "cxd4",
+      "annotation": "White recaptures and locks the center with a pawn on d4 versus Black's isolated structure. This rigid pawn setup favors White's space advantage."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: Don't Play ...e5::15": {
+      "ply": 16,
+      "san": "dxe5",
+      "annotation": "White captures on e5, eliminating Black's central tension and opening the d-file toward Black's king. The pawn trades shift play toward the queenside."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: Don't Play ...e5::16": {
+      "ply": 17,
+      "san": "dxe5",
+      "annotation": "Black recaptures and centralizes the e5 pawn. White's bishop on b3 now points directly at f7, a critical weakness in Black's kingside."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: Don't Play ...e5::17": {
+      "ply": 18,
+      "san": "Qxd1+",
+      "annotation": "Black forces the queen trade with check, simplifying to a rook endgame. This reduces White's attacking chances but allows White's king to centralize."
+    },
+    "sicilian-defense-alapin-variation-smith-morra-declined.json::Alapin: Don't Play ...e5::18": {
+      "ply": 19,
+      "san": "Kxd1",
+      "annotation": "White's king moves to d1, preparing to join the middle game fight. The centralized king and bishop pair give White practical compensation for the reduced material."
+    },
+    "sicilian-defense-bowdler-attack.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central pawn controls d5 and e5, anchoring White's space advantage and preparing to meet Black's Sicilian counterplay with a solid kingside setup."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Dragon: Classical Variation::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "This pawn break opens the center and forces Black to decide whether to capture or allow White a strong presence on d4. The tension on the center defines the character of the position."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Dragon: Classical Variation::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black resolves the tension symmetrically, but White recaptures with the knight—not a pawn—which keeps piece pressure on d4 and prepares rapid development with strong piece coordination."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Dragon: Levenfish Variation::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White plants a pawn on d4, challenging Black's c5 foothold and opening lines toward the center. This move forces Black to make an immediate decision about the pawn structure."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Dragon: Levenfish Variation::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black recaptures with the c-pawn, maintaining tension while keeping d4 under fire. This setup—a pawn on d4 facing pressure—defines the critical middlegame battleground."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Dragon: Levenfish Variation::14": {
+      "ply": 15,
+      "san": "e5",
+      "annotation": "White advances e5 to dislodge the knight from f6 and open the e-file toward Black's king. This space grab targets the fragile kingside and forces Black's pieces into passive squares."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Dragon: Soltis Variation::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center with a pawn break, forcing Black to choose between recapturing immediately or maintaining the tension with a more flexible setup."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Dragon: Soltis Variation::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black recaptures on d4, accepting a symmetrical pawn structure that permits White's knight to reroute via the d4 square, a key outpost in the Dragon."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Yugoslav Attack: White's h-file Breaks Through::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black opens the d-file and commits to a symmetrical pawn center. White's knight is now free to jump to d4, the ideal square for applying pressure."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Yugoslav Attack: White's h-file Breaks Through::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "annotation": "The knight lands on d4, where it attacks c6 and f5 while anchoring White's grip on the middle. Black's pieces must now respond to this commanding outpost."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Yugoslav Attack: White's h-file Breaks Through::25": {
+      "ply": 26,
+      "san": "hxg4",
+      "annotation": "White captures on g4, opening the h-file toward Black's exposed king. The h-file becomes a highway for a decisive attack."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Yugoslav Attack: White's h-file Breaks Through::27": {
+      "ply": 28,
+      "san": "Nxh5",
+      "annotation": "The knight removes Black's defender on h5 and clears the h-file further for White's rook and queen to deliver a back-rank threat."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Premature ...e5 Blocks the Bishop::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black recaptures on d4, accepting a symmetrical pawn center. White now has the luxury of choosing whether to challenge it immediately or develop first."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Premature ...e5 Blocks the Bishop::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "annotation": "The knight recaptures, establishing a centralized outpost on d4. This move signals White's intention to keep pressure on Black's position while maintaining piece coordination."
+    },
+    "sicilian-defense-dragon-variation-yugoslav-attack-old-line.json::Premature ...e5 Blocks the Bishop::21": {
+      "ply": 22,
+      "san": "gxf5",
+      "annotation": "Recapturing toward the center opens the g-file and reinforces White's control of the light squares. Black's premature ...e5 has weakened the dark squares around the kingside."
+    },
+    "sicilian-defense-keres-variation.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central pawn advance claims space and opens lines for the queen and light-squared bishop, establishing White's typical first-move advantage."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Sveshnikov: 9.Bxf6 (Early Exchange)::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center with a classical pawn duo. The d4 pawn gains space and prepares to support the e4 outpost with piece placement."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Sveshnikov: 9.Bxf6 (Early Exchange)::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black captures toward the center, accepting a symmetrical pawn structure. This move keeps White from achieving an ideal central grip."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Sveshnikov: 9.Bxf6 (Early Exchange)::9": {
+      "ply": 10,
+      "san": "e5",
+      "annotation": "White advances the e-pawn to chase Black's knight from f6 and lock the center. This tempo gain forces Black to make a critical decision about where the knight retreats."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Sveshnikov: Chelyabinsk Variation::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center decisively, challenging Black's c5 pawn and preparing to establish a pawn duo that will dominate the d4 and e4 squares."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Sveshnikov: Chelyabinsk Variation::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black recaptures toward the center, eliminating White's d-pawn and keeping the position fluid for piece development."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Sveshnikov: Chelyabinsk Variation::9": {
+      "ply": 10,
+      "san": "e5",
+      "annotation": "White seizes space on e5, attacking the knight on f6 and fixing Black's d-pawn backward—a hallmark of the Sveshnikov where White's space advantage compensates for Black's structural resilience."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Sveshnikov: Novosibirsk Variation::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center with d4, forcing Black to decide immediately: capture and accept an isolated d-pawn, or allow a strong pawn duo on e4 and d4."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Sveshnikov: Novosibirsk Variation::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black recaptures on d4, creating the characteristic isolated d-pawn that defines this Sicilian structure and will shape piece placement for both sides."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Sveshnikov: Novosibirsk Variation::9": {
+      "ply": 10,
+      "san": "e5",
+      "annotation": "White advances e5, attacking the f6 knight and fixing Black's pawn structure. This thematic thrust pressures Black's pieces and controls key central squares."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Anti-Sveshnikov: 6.Nf3::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White strikes at d4, opening the e-file and preparing to dominate the center with a pawn duo. This move forces Black to decide whether to capture or allow White's spatial advantage."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Anti-Sveshnikov: 6.Nf3::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black recaptures on d4, maintaining material equality but allowing White to rebuild the center. The d4 pawn becomes a natural outpost for White's knights."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Anti-Sveshnikov: 6.Nf3::9": {
+      "ply": 10,
+      "san": "e5",
+      "annotation": "White pushes e5, attacking Black's knight on f6 and seizing space in the center. The advance closes lines and prepares to exploit the knight's limited retreat squares."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Anti-Sveshnikov: 6.Nf3::13": {
+      "ply": 14,
+      "san": "d5",
+      "annotation": "Black strikes with d5, challenging White's space advantage and opening lines toward White's king. This counterattack tests whether White can maintain the initiative."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Anti-Sveshnikov: 6.Nf3::14": {
+      "ply": 15,
+      "san": "exd5",
+      "annotation": "White captures on d5, reestablishing a strong central pawn. The recapture opens the d-file for White's pieces and isolates Black's e5 pawn as a potential weakness."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::White's d5 Knight Dominance::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black opens the center, accepting a d4-e4 pawn duo that White will soon exploit with knight jumps to d5 and f5."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::White's d5 Knight Dominance::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "annotation": "White's knight recaptures on d5, a powerful outpost that no Black piece can easily challenge or dislodge."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::White's d5 Knight Dominance::18": {
+      "ply": 19,
+      "san": "Bxf6",
+      "annotation": "White trades off Black's dark-squared bishop to weaken the kingside around f7 and e6, clearing lines for the d5 knight's assault."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::White's d5 Knight Dominance::19": {
+      "ply": 20,
+      "san": "Bxf6",
+      "annotation": "Black recaptures on f6, but the damage is done—the dark squares are now riddled, and White's pieces dominate the attack."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Weak d6 Pawn Under Siege::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black opens the d-file and commits to a central structure where White's knight can jump to d4, a commanding outpost that Black cannot easily challenge or dislodge."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Weak d6 Pawn Under Siege::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "annotation": "White plants the knight on d4, where it attacks c6 and controls key central squares while Black's pieces lack obvious counterplay against this advanced post."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Weak d6 Pawn Under Siege::18": {
+      "ply": 19,
+      "san": "Bxf6",
+      "annotation": "White removes Black's light-squared bishop, the main defender of the weak d6 square, exposing it to potential invasion by White's rooks and pieces."
+    },
+    "sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json::Weak d6 Pawn Under Siege::19": {
+      "ply": 20,
+      "san": "Bxf6",
+      "annotation": "Black recaptures on f6, but now the d6 pawn sits isolated and vulnerable with reduced defender coverage, a chronic weakness White can exploit throughout the middlegame."
+    },
+    "sicilian-defense-morphy-gambit.json::__main__::0": {
+      "ply": 1,
+      "san": "e4",
+      "annotation": "The central pawn advance stakes White's claim to e4, the most flexible square for launching kingside or queenside attacks in the Sicilian. This move keeps Black's response options open."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: Classical (6.Be2)::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White breaks symmetry by pushing to d4, forcing Black to decide whether to capture and allow White's e4 pawn to dominate, or retreat and accept a space disadvantage."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: Classical (6.Be2)::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black recaptures on d4, eliminating White's central tension but allowing White to reclaim with the knight, which will land on a strong outpost with tempo."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: Classical (6.Be2)::11": {
+      "ply": 12,
+      "san": "e5",
+      "annotation": "White advances e5 to attack d6 and cramp Black's knight on f6, forcing a difficult choice between d6 becoming weak or the knight relocating to a worse square."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: 6.Bg5 (Opocensky)::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center with d4, creating immediate tension. Black must decide whether to capture, defend, or sidestep—each choice leads to distinct strategic paths."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: 6.Bg5 (Opocensky)::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black recaptures on d4, accepting a central pawn trade. This move commits Black to an open game where piece activity becomes paramount."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: 6.f3 (English Attack prep)::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "d4 opens the e-file and forces Black to make an immediate central decision. Allowing the pawn trade shifts the game toward middle-game tactics rather than Sicilian maneuvering."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: 6.f3 (English Attack prep)::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "cxd4 recaptures toward the center, giving Black a d4 pawn that can be a target. The symmetry ends White's space advantage but maintains flexibility for the English Attack setup."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: 6.f3 (English Attack prep)::11": {
+      "ply": 12,
+      "san": "e5",
+      "annotation": "e5 attacks the d6 pawn and gains space decisively, preparing to support the center with f3 already in place. Black's knight on f6 is now under pressure and must retreat or be defended."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: Poisoned Pawn::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "White opens the center with a pawn break, inviting Black to decide whether to capture and commit to the Sicilian structure, or maintain tension with a flexible setup."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: Poisoned Pawn::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black recaptures and accepts the symmetrical pawn structure, entering the main lines where White's lead in development and space will become the defining compensation."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: Poisoned Pawn::18": {
+      "ply": 19,
+      "san": "e5",
+      "annotation": "White's e-pawn thrust attacks Black's pinned knight on f6 and opens lines toward the exposed kingside, forcing Black into a cramped defensive position."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Najdorf: Poisoned Pawn::19": {
+      "ply": 20,
+      "san": "dxe5",
+      "annotation": "Black captures to maintain material balance, but White's bishop pair and spatial advantage now dominate the critical middlegame struggle in the Poisoned Pawn."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Kingside Pawn Storm Crushes::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black accepts the central tension, but d4 now sits undefended. White's knight can recapture with tempo, seizing control of a dominant outpost."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::Kingside Pawn Storm Crushes::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "annotation": "The knight plants itself on d4, a classic Sicilian stronghold. From here it pressures Black's pieces and controls key squares for White's kingside expansion."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::d5 Weakness After Premature ...e5::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Black recaptures on d4, opening the c-file for White's rook while keeping the center fluid. This symmetrical capture invites White to seize the initiative with Nxd4."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::d5 Weakness After Premature ...e5::6": {
+      "ply": 7,
+      "san": "Nxd4",
+      "annotation": "White's knight plants itself powerfully on d4, a classic outpost in the Najdorf. From here it dominates the center and pressures Black's uncoordinated pieces."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::d5 Weakness After Premature ...e5::19": {
+      "ply": 20,
+      "san": "Bxd5",
+      "annotation": "White trades bishop for Black's strong d5 knight, removing a key defender and preparing to isolate the d6 pawn. This exchange favors White's space advantage and bishop pair."
+    },
+    "sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json::d5 Weakness After Premature ...e5::20": {
+      "ply": 21,
+      "san": "exd5",
+      "annotation": "Black recaptures with the e-pawn, but this move creates a backward d6 pawn and a weak light-squared complex on c6 and e6. White's dark-squared bishop will exploit this immediately."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Classical Setup::2": {
+      "ply": 3,
+      "san": "d4",
+      "annotation": "White advances to d4, completing the gambit setup and claiming space in the center. This move forces Black to choose between accepting the pawn or defending the center."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Classical Setup::3": {
+      "ply": 4,
+      "san": "cxd4",
+      "annotation": "Black captures on d4, accepting the gambit and opening the e-file. White's compensation lies in rapid piece activity and the c-file, which will soon dominate."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Classical Setup::18": {
+      "ply": 19,
+      "san": "e5",
+      "annotation": "White pushes e5, attacking the knight on f6 and closing the center. This advance locks Black's position and prepares to exploit weaknesses on the kingside."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Classical Setup::19": {
+      "ply": 20,
+      "san": "dxe5",
+      "annotation": "Black recaptures on e5, but the d-file opens for White's rooks. White's bishop on c4 now aims directly at f7, intensifying pressure on Black's kingside."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Fianchetto Defense::2": {
+      "ply": 3,
+      "san": "d4",
+      "annotation": "White offers the d4 pawn as a gambit, creating tension in the center and preparing to recapture with c3 to establish a strong pawn duo."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Fianchetto Defense::3": {
+      "ply": 4,
+      "san": "cxd4",
+      "annotation": "Black accepts the gambit, but White regains the initiative by recapturing with c3, solidifying a classical pawn center while keeping the extra tempo advantage."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Fianchetto Defense::12": {
+      "ply": 13,
+      "san": "e5",
+      "annotation": "White advances e5 to push back Black's knight from f6 and cramp Black's kingside, while the advanced pawn supports White's pieces and limits Black's counterplay."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Fianchetto Defense::17": {
+      "ply": 18,
+      "san": "d5",
+      "annotation": "Black strikes at the center with d5, attacking White's bishop on c4 and creating counterplay before White's attack becomes overwhelming."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra Declined: d3 Push::2": {
+      "ply": 3,
+      "san": "d4",
+      "annotation": "White seizes space with a second central pawn, threatening to dominate d4 and e4 while limiting Black's counterplay options."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra Declined: d3 Push::3": {
+      "ply": 4,
+      "san": "cxd4",
+      "annotation": "Black captures toward the center, but this recapture leaves White with a natural d4 outpost and chances for a kingside attack."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra Declined: d3 Push::19": {
+      "ply": 20,
+      "san": "e5",
+      "annotation": "White advances e5 to drive back the knight on f6 and lock down Black's center, supporting a future kingside initiative."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Siberian Trap::2": {
+      "ply": 3,
+      "san": "d4",
+      "annotation": "White establishes a two-pawn center and offers the d4 pawn as a gambit. Black's choice to accept or decline shapes whether White pursues the sharp Siberian Trap or a quieter setup."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Siberian Trap::3": {
+      "ply": 4,
+      "san": "cxd4",
+      "annotation": "Black captures the d4 pawn, accepting White's gambit. This central break opens lines and gives White compensation through rapid piece development and attacking chances."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Siberian Trap::20": {
+      "ply": 21,
+      "san": "e5",
+      "annotation": "White's e5 push challenges Black's kingside and forces the d6 pawn to decide: advance to e5 or stay back. This advance intensifies the pressure on Black's cramped position."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Siberian Trap::21": {
+      "ply": 22,
+      "san": "dxe5",
+      "annotation": "Black recaptures with the d-pawn, but this advance to e5 weakens the d5 square dangerously. White's bishops and knights now target this hole with tactical precision."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Taylor Defense::2": {
+      "ply": 3,
+      "san": "d4",
+      "annotation": "White establishes a classical pawn duo on e4 and d4, the hallmark of the Smith-Morra. Black must now decide whether to capture and accept the gambit."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Taylor Defense::3": {
+      "ply": 4,
+      "san": "cxd4",
+      "annotation": "Black accepts the pawn sacrifice. White will recapture with c3, reinforcing the center while keeping the d4 square secured for piece play."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Taylor Defense::23": {
+      "ply": 24,
+      "san": "exd5",
+      "annotation": "White captures toward the center, eliminating Black's d5 pawn and opening the e-file toward Black's kingside where the king remains uncastled."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Smith-Morra: Taylor Defense::24": {
+      "ply": 25,
+      "san": "exd5",
+      "annotation": "Black recaptures, maintaining central tension. The position now features an isolated d-pawn for Black, a structural weakness White can exploit with pieces."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Chicago Defense: Black Neutralizes::3": {
+      "ply": 4,
+      "san": "cxd4",
+      "annotation": "Black captures toward the center, accepting White's gambit pawn. This move commits Black to a tactical middlegame where White has compensation through piece activity and the d-file."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Chicago Defense: Black Neutralizes::5": {
+      "ply": 6,
+      "san": "dxc3",
+      "annotation": "Black's c-pawn advances aggressively, attacking the knight and forcing White into a sharp tactical sequence. The pawn on c3 becomes a dangerous outpost if Black can consolidate it."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Chicago Defense: Black Neutralizes::6": {
+      "ply": 7,
+      "san": "Nxc3",
+      "annotation": "White recaptures and centralizes the knight on c3, repositioning for control of d5 and e4. This placement targets Black's pieces and prepares rapid development."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Chicago Defense: Black Neutralizes::25": {
+      "ply": 26,
+      "san": "dxe5",
+      "annotation": "White captures on e5, exchanging a minor piece for Black's centralized knight and e5-pawn. This trade reduces Black's coordination and opens lines toward Black's king."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Chicago Defense: Black Neutralizes::26": {
+      "ply": 27,
+      "san": "Nxe5",
+      "annotation": "Black recaptures with the knight from f6, maintaining piece pressure on White's center. However, this move pulls the knight away from defending the kingside."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Chicago Defense: Black Neutralizes::27": {
+      "ply": 28,
+      "san": "Nxe5",
+      "annotation": "White trades knights again, simplifying the position while keeping Black's king exposed on the e-file. The removal of Black's defender weakens the light squares around e6."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Chicago Defense: Black Neutralizes::28": {
+      "ply": 29,
+      "san": "Bxe5",
+      "annotation": "White's light-squared bishop dominates e5, cementing control of the long diagonal toward a1 and pinpointing weakness on d6. Black's position becomes passively compressed."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Endgame Danger: Black Simplifies::3": {
+      "ply": 4,
+      "san": "cxd4",
+      "annotation": "Black accepts the gambit pawn, opening the d-file and center. White now has compensation through piece activity and space."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Endgame Danger: Black Simplifies::5": {
+      "ply": 6,
+      "san": "dxc3",
+      "annotation": "Black recaptures with the c-pawn, creating a pawn on c3 that advances dangerously toward White's second rank and queen."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Endgame Danger: Black Simplifies::6": {
+      "ply": 7,
+      "san": "Nxc3",
+      "annotation": "The knight blocks the c-pawn's advance while defending the queenside and preparing to centralize. This stabilizes White's position."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Endgame Danger: Black Simplifies::25": {
+      "ply": 26,
+      "san": "Nxd4",
+      "annotation": "This capture removes Black's e4 outpost and forces the bishop to recapture, allowing White to continue developing pressure on the center."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Endgame Danger: Black Simplifies::26": {
+      "ply": 27,
+      "san": "Bxd4",
+      "annotation": "Black recaptures, but now the centralized bishop on d4 controls critical squares and limits Black's counterplay along the queenside."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Black Plays d5 Counterstrike::3": {
+      "ply": 4,
+      "san": "cxd4",
+      "annotation": "Black accepts the gambit, opening the c-file and abandoning the center. White now has space and attacking chances in exchange for the pawn."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Black Plays d5 Counterstrike::5": {
+      "ply": 6,
+      "san": "dxc3",
+      "annotation": "Black captures toward the center, but allows White to recapture with the knight—a powerful piece that controls key squares like e4 and d5."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Black Plays d5 Counterstrike::6": {
+      "ply": 7,
+      "san": "Nxc3",
+      "annotation": "The knight recaptures with tempo, eyeing d5 and supporting White's bishop pair. White has compensation for the pawn through piece activity."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Black Plays d5 Counterstrike::21": {
+      "ply": 22,
+      "san": "dxe5",
+      "annotation": "White recaptures on e5, eliminating Black's centralized knight and clearing the way for White's pieces to coordinate on the long diagonal and kingside."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Black Plays d5 Counterstrike::22": {
+      "ply": 23,
+      "san": "Nxe5",
+      "annotation": "Black's knight retreats to e5, attacking the bishop on c4 and keeping central pressure while avoiding White's threats on the weak d5 and f7 squares."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Black Plays d5 Counterstrike::24": {
+      "ply": 25,
+      "san": "Nxc6",
+      "annotation": "White's knight strikes at c6, forcing Black to recapture and committing the b7-pawn. This opens the long diagonal for White's light-squared bishop."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Black Plays d5 Counterstrike::25": {
+      "ply": 26,
+      "san": "bxc6",
+      "annotation": "Black recaptures on c6, but the doubled c-pawns weaken the queenside and the long diagonal remains a liability for Black's king."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Black Plays d5 Counterstrike::28": {
+      "ply": 29,
+      "san": "Nxd5",
+      "annotation": "White's knight captures on d5, exploiting the undefended square and forcing Black's queen or rook to deal with the centralized attacker."
+    },
+    "sicilian-defense-smith-morra-gambit-accepted-chicago-defense.json::Black Plays d5 Counterstrike::29": {
+      "ply": 30,
+      "san": "cxd5",
+      "annotation": "Recapturing with the c-pawn opens the c-file toward Black's exposed queenside and forces Black to choose between a damaged pawn structure or allowing White's pieces to dominate the half-open lines."
+    },
+    "sicilian-defense-snyder-variation.json::__main__::1": {
+      "ply": 2,
+      "san": "c5",
+      "annotation": "Black strikes at e4's support by attacking d4's control, forcing you to decide whether to defend the center or allow the tension to shape the position."
+    },
+    "sicilian-defense-wing-gambit-romanian-defense.json::__main__::13": {
+      "ply": 14,
+      "san": "Qe6",
+      "annotation": "Black centralizes the queen on e6, where it attacks c4 and prepares to castle kingside while maintaining flexibility in the center."
+    },
+    "sicilian-defense.json::__main__::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "annotation": "The knight controls d4 and e5, the critical central squares Black contests in the Sicilian. This move prepares d4, White's main strategic thrust."
+    },
+    "sicilian-defense.json::main (legacy tail)::2": {
+      "ply": 3,
+      "san": "Nf3",
+      "annotation": "Nf3 supports the e4 pawn and prepares d4, the key central break that transforms White's space advantage into concrete piece play."
+    },
+    "sicilian-defense.json::main (legacy tail)::3": {
+      "ply": 4,
+      "san": "d6",
+      "annotation": "Black solidifies the d6 square before playing the typical ...e6, preventing White from later occupying d6 with a knight and keeping the d-file closed."
+    },
+    "sicilian-defense.json::main (legacy tail)::4": {
+      "ply": 5,
+      "san": "d4",
+      "annotation": "d4 strikes at Black's c5 outpost and forces an immediate choice: allowing White's center or conceding space by capturing on d4."
+    },
+    "sicilian-defense.json::main (legacy tail)::5": {
+      "ply": 6,
+      "san": "cxd4",
+      "annotation": "Capturing with the c-pawn opens the c-file for Black's rook and avoids leaving a weak pawn on d4, which would become a long-term target."
+    },
+    "slav-defense-czech-variation-bled-attack.json::__main__::7": {
+      "ply": 8,
+      "san": "dxc4",
+      "annotation": "Recapturing on c4 opens the d-file and keeps central tension while Black's knight sits awkwardly on f6, unable to support the c4 pawn effectively."
+    },
+    "slav-defense-czech-variation-krause-attack-fazekas-gambit.json::__main__::10": {
+      "ply": 11,
+      "san": "Ne5",
+      "annotation": "Ne5 centralizes the knight and prepares to challenge White's d4 pawn while supporting the bishop pair strategy. This aggressive placement forces White to respond to immediate threats."
+    },
+    "slav-defense-czech-variation-krause-attack-fazekas-gambit.json::__main__::11": {
+      "ply": 12,
+      "san": "Na6",
+      "annotation": "Na6 reroutes the knight away from potential forks and prepares to redeploy it to c5, pressuring White's d4 and creating tactical complications around the center."
+    },
+    "slav-defense-czech-variation-krause-attack-fazekas-gambit.json::__main__::12": {
+      "ply": 13,
+      "san": "e4",
+      "annotation": "Pushing e4 seizes space and gains control of f5, preventing Black's knight from retreating safely while opening lines for White's pieces and attacking the c4 pawn."
+    },
+    "slav-defense-quiet-variation-landau-variation.json::__main__::12": {
+      "ply": 13,
+      "san": "Bd2",
+      "annotation": "Bd2 prepares to reroute the bishop away from Black's long diagonal while keeping pressure on a5. This move supports the queenside and avoids early bishop trades."
+    },
+    "slav-defense-quiet-variation-landau-variation.json::__main__::13": {
+      "ply": 14,
+      "san": "e6",
+      "annotation": "Playing e6 solidifies the center and gains space on the fifth rank. Black locks in the bishop pair and prepares to complete development with Bb4 or Be7."
+    },
+    "slav-defense-quiet-variation-landau-variation.json::__main__::14": {
+      "ply": 15,
+      "san": "Na3",
+      "annotation": "Na3 removes the knight from the weakened b1 square and eyes c4, where it pressures Black's advanced pawns. This maneuver sidesteps Black's Bb4 pin threat."
+    },
+    "slav-defense-steiner-variation.json::__main__::2": {
+      "ply": 3,
+      "san": "c4",
+      "annotation": "The c-pawn advance attacks d5 and prepares to isolate Black's central pawn, forcing an immediate decision on how to defend or trade."
+    },
+    "tarrasch-defense-classical-variation-main-line.json::__main__::15": {
+      "ply": 16,
+      "san": "O-O",
+      "annotation": "Castling kingside completes White's setup and prepares the critical central break dxc5, which Black must answer carefully to avoid weak light squares after recapture."
+    },
+    "tarrasch-defense-classical-variation-petursson-variation.json::__main__::5": {
+      "ply": 6,
+      "san": "c5",
+      "annotation": "Black strikes at the d4 pawn before White can consolidate the center. This c5 thrust forces White to make an immediate decision about pawn structure."
+    },
+    "tarrasch-defense-classical-variation-spassky-variation.json::__main__::21": {
+      "ply": 22,
+      "san": "Bg4",
+      "annotation": "Black pins the knight on f3 and prepares to challenge White's light-squared control, a critical strategic resource in this position."
+    },
+    "tarrasch-defense-classical-variation.json::__main__::5": {
+      "ply": 6,
+      "san": "c5",
+      "annotation": "Black strikes at the center with c5, challenging White's d4 pawn and forcing an immediate decision: accept the tension or simplify with an exchange."
+    },
+    "tarrasch-defense-swedish-variation.json::__main__::5": {
+      "ply": 6,
+      "san": "c5",
+      "annotation": "Black strikes at the center with c5, challenging your d4 pawn and seizing space in the middle before you consolidate. This counterattack forces you to make an immediate structural choice."
+    },
+    "tarrasch-defense-tarrasch-gambit.json::__main__::5": {
+      "ply": 6,
+      "san": "c5",
+      "annotation": "Black strikes at the center with c5, immediately challenging your d4 pawn and forcing you to decide whether to capture or defend. This counterattack is the hallmark of the Tarrasch—Black refuses a passive setup and demands concrete play."
+    },
+    "trompowsky-attack.json::2...d5 Bxf6 Line::3": {
+      "ply": 4,
+      "san": "d5",
+      "annotation": "Black challenges your central d4 pawn immediately, forcing you to decide whether to capture on f6 or maintain tension. This move tests whether the Trompowsky's pin justifies White's unusual setup."
+    },
+    "trompowsky-attack.json::2...e6 French Structure::4": {
+      "ply": 5,
+      "san": "e4",
+      "annotation": "Pushing to e4 completes White's pawn duo and opens the long diagonal for the bishop on g5, creating immediate tactical leverage against Black's exposed kingside."
+    },
+    "trompowsky-attack.json::Raptor Variation (2...c5)::4": {
+      "ply": 5,
+      "san": "d5",
+      "annotation": "Pushing to d5 gains space and forces Black's knight to decide whether to stay on f6 or retreat. This advance locks the center in White's favor."
+    },
+    "trompowsky-attack.json::Raptor Variation (2...c5)::10": {
+      "ply": 11,
+      "san": "e4",
+      "annotation": "Supporting the d5 pawn with e4 creates a strong pawn duo and opens lines for the bishop on d2. Black cannot capture on d5 without abandoning the c5 strongpoint."
+    },
+    "trompowsky-attack.json::Ignoring c5 Break::11": {
+      "ply": 12,
+      "san": "Nxd2",
+      "annotation": "Black's knight on e4 removes White's defender of d4. This trades off an active piece and simplifies the center, favoring White's space advantage."
+    },
+    "trompowsky-attack.json::Ignoring c5 Break::12": {
+      "ply": 13,
+      "san": "Qxd2",
+      "annotation": "White recaptures toward the center, keeping the d4 pawn supported and maintaining the bishop pair. The queen on d2 adds flexibility for kingside castling."
+    },
+    "trompowsky-attack.json::Ignoring c5 Break::13": {
+      "ply": 14,
+      "san": "cxd4",
+      "annotation": "Black captures the d4 pawn with the c-file rook, opening lines and preparing counterplay against White's center before White solidifies it."
+    },
+    "trompowsky-attack.json::Ignoring c5 Break::14": {
+      "ply": 15,
+      "san": "exd4",
+      "annotation": "White recaptures with the e-pawn, rebuilding the d4 strongpoint. This move keeps the center locked and preserves White's spatial control."
+    },
+    "trompowsky-attack.json::Ignoring c5 Break::17": {
+      "ply": 18,
+      "san": "Bxd3",
+      "annotation": "Black's bishop on d3 trades off White's light-squared bishop, reducing White's piece activity and opening the d-file for Black's rook."
+    },
+    "trompowsky-attack.json::Ignoring c5 Break::18": {
+      "ply": 19,
+      "san": "Qxd3",
+      "annotation": "White's queen recaptures and centralizes on d3, eyeing both the kingside and maintaining support for the d4 pawn. Black's compensation remains unclear."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Main Line with Ng8 Retreat::6": {
+      "ply": 7,
+      "san": "e5",
+      "annotation": "White advances e5, displacing Black's knight from f6 and gaining space. This move is the thematic follow-up in the Vienna Gambit, opening lines toward Black's king."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Main Line with Ng8 Retreat::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "Black strikes back with d4, attacking the knight on c3 and creating central tension. This forces White to decide whether to defend or accept a trade."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Main Line with Ng8 Retreat::11": {
+      "ply": 12,
+      "san": "dxe5",
+      "annotation": "White recaptures on e5, maintaining the pawn center while eliminating Black's counterplay. The d-file opens toward Black's king, favoring White's attacking setup."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Main Line with Ng8 Retreat::16": {
+      "ply": 17,
+      "san": "dxe5",
+      "annotation": "White recaptures with the bishop, reinforcing e5 and preparing to develop the rook. This move aligns the bishop with Black's long diagonal, creating future tactical themes."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Qe7 Variation::6": {
+      "ply": 7,
+      "san": "e5",
+      "annotation": "White plants a pawn on e5, fixing Black's knight on f6 and preparing to support it with the queen and bishop for a strong kingside attack."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Qe7 Variation::12": {
+      "ply": 13,
+      "san": "d4",
+      "annotation": "The d4 push opens lines for White's light-squared bishop on the diagonal and solidifies the e5 strongpoint while Black's queen on e7 remains awkwardly placed."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Qe7 Variation::17": {
+      "ply": 18,
+      "san": "dxe5",
+      "annotation": "Capturing toward the center removes Black's defender and frees White's light-squared bishop, which can now target the half-open a2–g8 diagonal with devastating effect."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Qe7 Variation::18": {
+      "ply": 19,
+      "san": "dxe5",
+      "annotation": "Black recaptures, but the e5 pawn now dominates the center and Black's queen lacks an ideal square, giving White a spatial advantage and attacking chances."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Nd5 Variation::6": {
+      "ply": 7,
+      "san": "e5",
+      "annotation": "White advances to e5, attacking the knight on f6 and gaining space. Black must decide whether to retreat or trade pieces immediately."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Nd5 Variation::17": {
+      "ply": 18,
+      "san": "dxe5",
+      "annotation": "Recapturing on e5 solidifies White's pawn center and opens lines for the bishop pair. The e5 pawn now anchors the position while Black's pieces remain underdeveloped."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Pierce Gambit::6": {
+      "ply": 7,
+      "san": "e5",
+      "annotation": "White advances the e-pawn to e5, immediately attacking Black's knight on f6 and forcing it to make a decision about whether to retreat or exchange."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Pierce Gambit::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "White pushes d4, establishing a strong pawn duo on e5 and d4 that dominates the center and opens lines for the queen and light-squared bishop."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Pierce Gambit::13": {
+      "ply": 14,
+      "san": "dxe5",
+      "annotation": "Black captures on e5, removing one half of White's pawn center and creating space for counterplay with pieces like the bishop on g4."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Gambit: Pierce Gambit::14": {
+      "ply": 15,
+      "san": "dxe5",
+      "annotation": "White recaptures with the d-pawn, maintaining a central pawn on e5 while opening the d-file for the rook and keeping Black's pieces under pressure."
+    },
+    "vienna-game-vienna-gambit.json::Black Plays d5 Early: Best Defense::6": {
+      "ply": 7,
+      "san": "fxe5",
+      "annotation": "The f-pawn captures on e5, opening the f-file toward Black's king and freeing White's bishop on f1. This aggressive recapture supports the Vienna Gambit's attacking setup."
+    },
+    "vienna-game-vienna-gambit.json::Black Plays d5 Early: Best Defense::7": {
+      "ply": 8,
+      "san": "Nxe4",
+      "annotation": "Black's knight seizes the strong e4 outpost, immediately counterattacking White's center. This forces White to make critical decisions about piece placement and pawn structure."
+    },
+    "vienna-game-vienna-gambit.json::Black Plays d5 Early: Best Defense::13": {
+      "ply": 14,
+      "san": "Nxd2",
+      "annotation": "White removes the aggressively-placed knight on d2, but allows Black's bishop on b4 to capture and create a doubled pawn on c3. This structural concession demands accurate follow-up."
+    },
+    "vienna-game-vienna-gambit.json::Black Plays d5 Early: Best Defense::14": {
+      "ply": 15,
+      "san": "Qxd2",
+      "annotation": "White recaptures with the queen, centralizing it to c3 where it eyes both the long diagonal and Black's kingside weaknesses. The queen pressures the king's escape squares."
+    },
+    "vienna-game-vienna-gambit.json::Black Plays d5 Early: Best Defense::15": {
+      "ply": 16,
+      "san": "Bxc3",
+      "annotation": "Black's light-squared bishop removes White's knight defender from c3, eliminating a key piece guarding critical squares around Black's king. This tactical exchange lightens White's attacking force."
+    },
+    "vienna-game-vienna-gambit.json::Black Plays d5 Early: Best Defense::16": {
+      "ply": 17,
+      "san": "Qxc3",
+      "annotation": "White recaptures with the queen, which now dominates c3 and controls the third rank. The queen remains perfectly placed for a kingside assault with e5 pawn support."
+    },
+    "vienna-game-vienna-gambit.json::Black Plays d5 Early: Best Defense::20": {
+      "ply": 21,
+      "san": "exf6",
+      "annotation": "White's e5 pawn captures the knight on f6, removing a crucial defender and opening a dangerous attack on Black's exposed king on g8. The f6 square becomes critical."
+    },
+    "vienna-game-vienna-gambit.json::Black Plays d5 Early: Best Defense::21": {
+      "ply": 22,
+      "san": "Rxf6",
+      "annotation": "Black's rook recaptures, but White's queen on c3 and rook on f6 coordinate for a mating net. Black's king lacks escape squares on the back rank."
+    },
+    "vienna-game-vienna-gambit.json::Black Plays d5 Early: Best Defense::27": {
+      "ply": 28,
+      "san": "Bxf3",
+      "annotation": "Black removes the knight that was defending d4 and the queenside. This capture forces you to recapture, and the resulting pawn structure determines whether White's center holds or splinters."
+    },
+    "vienna-game-vienna-gambit.json::Hamppe-Allgaier: Black Gets Counterplay::5": {
+      "ply": 6,
+      "san": "exf4",
+      "annotation": "Black sacrifices the f-pawn to open lines and activate the knight. White's king safety becomes the critical issue."
+    },
+    "vienna-game-vienna-gambit.json::Hamppe-Allgaier: Black Gets Counterplay::13": {
+      "ply": 14,
+      "san": "dxe5",
+      "annotation": "Recapturing centralizes White's pawn, but now Black's queen gains aggressive squares and the light squares around White's king grow weak."
+    },
+    "vienna-game-vienna-gambit.json::Hamppe-Allgaier: Black Gets Counterplay::14": {
+      "ply": 15,
+      "san": "dxe5",
+      "annotation": "White reclaims the pawn with tempo, yet Black's queen on e5 dominates the board and threatens immediate tactical blows against the exposed kingside."
+    },
+    "vienna-game-vienna-gambit.json::Hamppe-Allgaier: Black Gets Counterplay::16": {
+      "ply": 17,
+      "san": "Bxf4",
+      "annotation": "The bishop pins the f-pawn and eyes the long diagonal, but Black's knight reaches c6 with threats. White's coordination is tested."
+    },
+    "vienna-game-vienna-gambit.json::Hamppe-Allgaier: Black Gets Counterplay::19": {
+      "ply": 20,
+      "san": "Qxe5",
+      "annotation": "Black's queen reroutes to e5 with a devastating threat on g3. White must act decisively or face a mating attack."
+    },
+    "vienna-game-vienna-gambit.json::Hamppe-Allgaier: Black Gets Counterplay::20": {
+      "ply": 21,
+      "san": "Qxe5+",
+      "annotation": "The check forces Black's king to move, but White's queen is now vulnerable to the bishop on g4. Tactics dominate."
+    },
+    "vienna-game-vienna-gambit.json::Hamppe-Allgaier: Black Gets Counterplay::21": {
+      "ply": 22,
+      "san": "Nxe5",
+      "annotation": "Black's knight recaptures with threat of Nxf3+, forking king and rook. White's position teeters on the edge of collapse."
+    },
+    "vienna-game-vienna-gambit.json::Hamppe-Allgaier: Black Gets Counterplay::24": {
+      "ply": 25,
+      "san": "Bxc6+",
+      "annotation": "The check with bishop on c6 forces a critical king move. White finally gains tempo to consolidate, but Black's pieces remain dangerously active."
+    },
+    "vienna-game-vienna-gambit.json::Hamppe-Allgaier: Black Gets Counterplay::25": {
+      "ply": 26,
+      "san": "bxc6",
+      "annotation": "Black recaptures with the pawn, creating doubled c-pawns and a weak square on d5 that White's pieces can exploit."
+    },
+    "vienna-game-vienna-gambit.json::Hamppe-Allgaier: Black Gets Counterplay::26": {
+      "ply": 27,
+      "san": "Bxe5",
+      "annotation": "White eliminates Black's strong knight on e5, leaving Black's light squares vulnerable and White's bishop pair control of the board."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Game: Black Avoids f4 with d5::6": {
+      "ply": 7,
+      "san": "exd5",
+      "annotation": "White captures toward the center, opening the e-file and gaining space. Black's d5 break surrenders the center's core but brings the knight to an active square."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Game: Black Avoids f4 with d5::10": {
+      "ply": 11,
+      "san": "dxe4",
+      "annotation": "Black recaptures on e4, attacking the knight on c3 and forcing White's next move. This centralized knight placement is Black's chief compensation for allowing d5."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Game: Black Avoids f4 with d5::11": {
+      "ply": 12,
+      "san": "Nxe4",
+      "annotation": "The knight recaptures and eyes g5 and f6, harassing Black's queen and pieces. White's knight is now ideally placed to create threats around Black's exposed king."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Game: Black Avoids f4 with d5::15": {
+      "ply": 16,
+      "san": "Nxg3",
+      "annotation": "Black removes White's knight from g3 by force, eliminating a key attacking piece. However, the recapture weakens White's kingside pawn shield immediately."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Game: Black Avoids f4 with d5::18": {
+      "ply": 19,
+      "san": "hxg3",
+      "annotation": "White recaptures with the h-pawn, doubling pawns but keeping g3 controlled and Black's queen pinned along the diagonal toward e1. The pawn structure now guides the coming tactics."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Game: Black Avoids f4 with d5::21": {
+      "ply": 22,
+      "san": "Bxf3",
+      "annotation": "White trades the light-squared bishop for Black's knight on f3, removing a defender. This exchange tips material toward White's queen-and-rook endgame attack."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Game: Black Avoids f4 with d5::22": {
+      "ply": 23,
+      "san": "Bxf3",
+      "annotation": "Black recaptures, but the queen moves closer to White's king along the f-file. Black's pieces are now compressed and lacking coordinated defense."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Game: Black Avoids f4 with d5::23": {
+      "ply": 24,
+      "san": "Qxf3",
+      "annotation": "White's queen dominates f3, a central outpost controlling critical dark squares. Black's king still hasn't castled, and the d5 pawn is now blockaded and vulnerable."
+    },
+    "vienna-game-vienna-gambit.json::Vienna Game: Black Avoids f4 with d5::24": {
+      "ply": 25,
+      "san": "Qxf3",
+      "annotation": "White recaptures on f3, consolidating the bishop pair and a dominant central pawn on d5. Black's king remains exposed in the center with both rooks still on their starting squares."
+    },
+    "vienna-game.json::Vienna: Falkbeer Variation::6": {
+      "ply": 7,
+      "san": "d4",
+      "annotation": "White opens the center decisively, challenging Black's e5 pawn and preparing to establish a strong pawn on d4 after the likely recapture."
+    },
+    "vienna-game.json::Vienna: Falkbeer Variation::7": {
+      "ply": 8,
+      "san": "exd4",
+      "annotation": "Black recaptures and centralizes the pawn, but White's knight on f3 and bishop development will soon put pressure on this advanced d-pawn."
+    },
+    "vienna-game.json::Vienna: Falkbeer Variation::15": {
+      "ply": 16,
+      "san": "d5",
+      "annotation": "White advances decisively to isolate Black's c6 pawn and open lines toward the Black king, a key strategic goal in this position."
+    },
+    "vienna-game.json::Vienna: Falkbeer Variation::16": {
+      "ply": 17,
+      "san": "e5",
+      "annotation": "White attacks the bishop and gains space, forcing Black into a cramped defensive setup where the advanced e5 pawn becomes a long-term weakness."
+    },
+    "vienna-game.json::Vienna Game vs 2...Nc6::10": {
+      "ply": 11,
+      "san": "d4",
+      "annotation": "Pushing to d4 opens the long diagonal for the bishop on c4 while establishing a pawn duo that cramps Black's pieces—especially the knight on c6, which loses the e5 square."
+    },
+    "vienna-game.json::Black's ...d5 Counterstrike::6": {
+      "ply": 7,
+      "san": "fxe5",
+      "annotation": "Capturing toward the center opens the e-file and exposes Black's king, but White's king remains vulnerable on e1. Black's counterattack with d5 demands precise follow-up."
+    },
+    "vienna-game.json::Black's ...d5 Counterstrike::7": {
+      "ply": 8,
+      "san": "Nxe4",
+      "annotation": "Black's knight strikes e4, attacking the undefended c3-knight and creating immediate tactical pressure. White must decide whether to defend or counterattack."
+    },
+    "vienna-game.json::Black's ...d5 Counterstrike::13": {
+      "ply": 14,
+      "san": "Nxc3",
+      "annotation": "The knight removes White's key defender on c3. White's kingside is now weakened—the bishop on g4 targets h2, and the d-pawn is pinned."
+    },
+    "vienna-game.json::Black's ...d5 Counterstrike::14": {
+      "ply": 15,
+      "san": "bxc3",
+      "annotation": "Accepting the knight sacrifice creates a doubled c-pawn, but White gains space and opens the a-file toward Black's king. The compensation relies on rapid piece activity."
+    },
+    "vienna-game.json::Premature Aggression Backfires::5": {
+      "ply": 6,
+      "san": "Nxe4",
+      "annotation": "Black's knight grabs the undefended e4 pawn, but this exposes the f7 square—White's light-squared bishop on c4 now has a devastating target."
+    },
+    "vienna-game.json::Premature Aggression Backfires::6": {
+      "ply": 7,
+      "san": "Bxf7+",
+      "annotation": "The bishop captures on f7 with check, a classic Italian Game trap. Black's king must move, and White has won a crucial pawn with a dominating position."
+    },
+    "vienna-game.json::Premature Aggression Backfires::7": {
+      "ply": 8,
+      "san": "Kxf7",
+      "annotation": "Forced. Black's king moves into the center where it will face relentless attack from White's pieces, a position no king wants to endure."
+    },
+    "vienna-game.json::Premature Aggression Backfires::8": {
+      "ply": 9,
+      "san": "Nxe4",
+      "annotation": "White recaptures and consolidates material advantage. Black's exposed king on f7 and lack of development leave Black defenseless against White's overwhelming attack."
+    },
+    "yusupov-rubinstein-system.json::__main__::3": {
+      "ply": 4,
+      "san": "e6",
+      "annotation": "Black supports the center and prepares to fianchetto the light-squared bishop, keeping White's pawn on d4 under long-term pressure."
     }
   },
   "totals": {
-    "calls": 180,
-    "inputTokens": 121847,
-    "outputTokens": 31286,
-    "costUSD": 0.27827699999999983
+    "calls": 289,
+    "inputTokens": 196769,
+    "outputTokens": 51649,
+    "costUSD": 0.45501399999999975
   }
 }

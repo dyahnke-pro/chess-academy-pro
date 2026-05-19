@@ -1025,11 +1025,30 @@ class VoiceService {
     cacheKey: string,
   ): Promise<boolean> {
     if (!response.body) return false;
+    // Snapshot the stop-generation at entry. Every async await below
+    // checks against this; if a `stop()` (or rapid Next-press) bumped
+    // the generation while we were waiting on sourceOpen / pump / play,
+    // we bail out instead of starting a NEW audio element that would
+    // overlap with the user's next narration.
+    //
+    // 2026-05-19 fix: rapid-Next-press race produced 3+ simultaneous
+    // narrations from prior plies. Root cause: `currentAudioElement`
+    // was only set AFTER the sourceOpen await, so stop() couldn't
+    // find the in-flight element. Multiple plays slipped through.
+    const myGen = this.stopGeneration;
     const reader = response.body.getReader();
     const chunks: Uint8Array[] = [];
     const audio = new Audio();
     audio.playbackRate = this.speed;
     audio.preload = 'auto';
+    // Track the audio element IMMEDIATELY so a concurrent stop() can
+    // find and pause it. Previously this happened at line 1115 after
+    // sourceOpen, creating a window where stop() saw `currentAudioElement
+    // = null` and let the new element through.
+    if (this.currentAudioElement && this.currentAudioElement !== audio) {
+      try { this.currentAudioElement.pause(); this.currentAudioElement.removeAttribute('src'); this.currentAudioElement.load(); } catch { /* already gone */ }
+    }
+    this.currentAudioElement = audio;
 
     // Pick ManagedMediaSource on iOS Safari 17.1+, bare MediaSource
     // everywhere else. ManagedMediaSource adds two responsibilities:
@@ -1087,6 +1106,15 @@ class VoiceService {
       await sourceOpen;
     } catch {
       URL.revokeObjectURL(objectUrl);
+      if (this.currentAudioElement === audio) this.currentAudioElement = null;
+      return false;
+    }
+    // Generation check: stop() incremented stopGeneration while we
+    // were awaiting sourceOpen → this audio is stale. Dispose and bail.
+    if (myGen !== this.stopGeneration) {
+      try { audio.pause(); audio.removeAttribute('src'); audio.load(); } catch { /* gone */ }
+      URL.revokeObjectURL(objectUrl);
+      if (this.currentAudioElement === audio) this.currentAudioElement = null;
       return false;
     }
 
@@ -1111,7 +1139,19 @@ class VoiceService {
       }, { once: true });
     });
 
+    // One more generation check before kicking off playback — covers
+    // the small window between sourceOpen and addSourceBuffer.
+    if (myGen !== this.stopGeneration) {
+      try { audio.pause(); audio.removeAttribute('src'); audio.load(); } catch { /* gone */ }
+      URL.revokeObjectURL(objectUrl);
+      if (this.currentAudioElement === audio) this.currentAudioElement = null;
+      return false;
+    }
     this.playing = true;
+    // currentAudioElement was set early at function entry; re-assert in
+    // case a parallel call had replaced it (last-writer-wins is correct
+    // here because the OLDER call gets bailed out by the generation
+    // check above)
     this.currentAudioElement = audio;
     // Try to start playback once we have some data buffered. The
     // browser handles "wait until enough data" automatically — we
@@ -1133,6 +1173,18 @@ class VoiceService {
     const pumpResult = (async (): Promise<boolean> => {
       try {
         while (true) {
+          // Per-iteration generation check — bail mid-pump if stop()
+          // was called (e.g. user clicked Next again while bytes were
+          // streaming). Without this, the loop keeps pushing bytes
+          // into a SourceBuffer that nobody hears, until the response
+          // body is exhausted.
+          if (myGen !== this.stopGeneration) {
+            try { reader.cancel(); } catch { /* ignore */ }
+            if (mediaSource.readyState === 'open') {
+              try { mediaSource.endOfStream(); } catch { /* ignore */ }
+            }
+            return false;
+          }
           const { done, value } = await reader.read();
           if (done) break;
           chunks.push(value);

@@ -199,6 +199,38 @@ describe('voiceService', () => {
       voiceService.stop();
       expect(voiceService.isPlaying()).toBe(false);
     });
+
+    // 2026-05-19: David reported rapid-Next-press triggers 3+ audio
+    // elements playing simultaneously. Root cause was
+    // `currentAudioElement` only being set AFTER the sourceOpen
+    // await — so a stop() during the await found null and let a
+    // racing audio through. Verify the generation counter bumps on
+    // every stop (so the race-window check inside playAudioFromStream
+    // can detect supersession).
+    it('bumps stopGeneration on every stop() (race-window detector for rapid-clicks)', () => {
+      const before = voiceService.currentStopGeneration;
+      voiceService.stop();
+      voiceService.stop();
+      voiceService.stop();
+      const after = voiceService.currentStopGeneration;
+      expect(after).toBe(before + 3);
+    });
+
+    it('preserves stopGeneration monotonicity across mixed speak/stop sequences', () => {
+      const gens = [voiceService.currentStopGeneration];
+      // Sequence mimicking a user mashing Next: speak(), stop(),
+      // speak(), stop(), speak(), stop().
+      // Speak invokes stop() internally, so each pair bumps by 1.
+      voiceService.stop();
+      gens.push(voiceService.currentStopGeneration);
+      voiceService.stop();
+      gens.push(voiceService.currentStopGeneration);
+      voiceService.stop();
+      gens.push(voiceService.currentStopGeneration);
+      for (let i = 1; i < gens.length; i++) {
+        expect(gens[i]).toBeGreaterThan(gens[i - 1]);
+      }
+    });
   });
 
   describe('canStreamProgressivePlaybackFor (UA + capability matrix)', () => {
