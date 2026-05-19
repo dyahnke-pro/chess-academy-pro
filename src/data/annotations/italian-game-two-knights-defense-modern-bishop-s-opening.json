@@ -970,18 +970,6 @@
             }
           ],
           "shortNarration": "Ng5 improves the knight's placement, coordinating with the queen and bishop for kingside pressure."
-        },
-        {
-          "san": "Qxf6",
-          "annotation": "Qxf6 completes the variation. The resulting position after this capture offers Black clear targets and plans. Study this structure — you'll see it often.",
-          "arrows": [
-            {
-              "from": "d8",
-              "to": "f6",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ],
-          "shortNarration": "Qxf6 gives Black clear targets and plans in the resulting structure."
         }
       ]
     },
@@ -2564,6 +2552,144 @@
               "color": "rgba(255, 255, 0, 0.4)"
             }
           ]
+        }
+      ]
+    },
+    {
+      "name": "Two Knights: Max Lange Attack (legacy tail)",
+      "type": "archive",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The Two Knights: Max Lange Attack is an important variation of the Two Knights Defence. The Max Lange Attack is one of the most beautiful tactical lines in chess. After 5.O-O Bc5 6.e5, both sides must play with extreme precision. Black's counterplay with ...d5 and ...Be6 provides enough resources. Let's walk through the key ideas.",
+          "shortNarration": "After 5.O-O Bc5 6.e5, Black counters with ...d5 and ...Be6 in the sharp Max Lange Attack."
+        },
+        {
+          "san": "e5",
+          "annotation": "Black responds with e5, contesting the center. This is the move that defines the Two Knights: Max Lange Attack.",
+          "shortNarration": "Black's e5 contests the center, defining the Two Knights: Max Lange Attack."
+        },
+        {
+          "san": "Nf3",
+          "annotation": ""
+        },
+        {
+          "san": "Nc6",
+          "annotation": ""
+        },
+        {
+          "san": "Bc4",
+          "annotation": ""
+        },
+        {
+          "san": "Nf6",
+          "annotation": ""
+        },
+        {
+          "san": "d4",
+          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
+        },
+        {
+          "san": "exd4",
+          "annotation": "exd4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "d4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "exd4 stakes a central claim, controlling space and restricting Black's piece activity."
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "Bc5",
+          "annotation": ""
+        },
+        {
+          "san": "e5",
+          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
+        },
+        {
+          "san": "d5",
+          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
+          "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
+        },
+        {
+          "san": "exf6",
+          "annotation": "exf6 captures the knight. This exchange changes the balance — White reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "exf6 wins a knight, altering the pawn structure and material balance."
+        },
+        {
+          "san": "dxc4",
+          "annotation": "dxc4 captures the bishop. This exchange changes the balance — Black reconfigures the pawn structure or gains material.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "c4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "dxc4 captures the bishop, winning a piece and changing the pawn structure."
+        },
+        {
+          "san": "Re1+",
+          "annotation": "Re1+! Check — White forces the king to respond, gaining tempo to improve the position.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "Re1+ forces the king to move, gaining a tempo to improve White's position."
+        },
+        {
+          "san": "Be6",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "e6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Ng5",
+          "annotation": "Ng5 improves the knight's placement. The knight was less effective on f3 and moves to g5 where it serves the plan better. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "g5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "Ng5 improves the knight's placement, coordinating with the queen and bishop for kingside pressure."
+        },
+        {
+          "san": "Qxf6",
+          "annotation": "Qxf6 completes the variation. The resulting position after this capture offers Black clear targets and plans. Study this structure — you'll see it often.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "f6",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "Qxf6 gives Black clear targets and plans in the resulting structure."
         }
       ]
     }

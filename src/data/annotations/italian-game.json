@@ -5908,68 +5908,6 @@
             }
           ],
           "shortNarration": "Black's bishop on e6 controls key diagonal squares and maintains active piece play."
-        },
-        {
-          "san": "Nxd4",
-          "annotation": "White wins the piece on d4, removing Black's pawn. The knight reaches a powerful central outpost on d4, controlling multiple key squares.",
-          "arrows": [
-            {
-              "from": "f3",
-              "to": "d4",
-              "color": "rgba(255, 50, 50, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "d4",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "pawnStructure": "White has a solid pawn structure with good central presence.",
-          "plans": [
-            "Convert the positional advantages into concrete gains",
-            "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "shortNarration": "White wins the pawn on d4, and the knight reaches a powerful central outpost controlling key squares."
-        },
-        {
-          "san": "Nxd4",
-          "annotation": "Black removes the defender on d4, removing White's knight. The knight reaches a powerful central outpost on d4, controlling multiple key squares.",
-          "arrows": [
-            {
-              "from": "c6",
-              "to": "d4",
-              "color": "rgba(255, 50, 50, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "d4",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "shortNarration": "Black removes the defender on d4, winning the knight and gaining a powerful central outpost."
-        },
-        {
-          "san": "Qxd4",
-          "annotation": "White wins the piece on d4, removing Black's knight. The queen takes up an influential position on d4, eyeing multiple targets.",
-          "arrows": [
-            {
-              "from": "d1",
-              "to": "d4",
-              "color": "rgba(255, 50, 50, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "d4",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "alternatives": [
-            "White had other options here, but this move best maintains the initiative."
-          ],
-          "shortNarration": "White wins the knight on d4, and the queen on d4 eyes multiple targets."
         }
       ]
     },
@@ -9950,6 +9888,430 @@
           ],
           "pawnStructure": "Black has a central pawn on e6, isolated pawn on e.",
           "shortNarration": "Black captures on e6 — White must avoid the hidden threat of ...Qh4+ and ...Bxg2."
+        }
+      ]
+    },
+    {
+      "name": "Italian: Two Knights with d4 (legacy tail)",
+      "type": "archive",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on e4 and d2.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and e5.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "Nf3",
+          "annotation": "White places the knight on the active f3 square. The knight on f3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
+          "shortNarration": "Knight to f3 improves piece coordination and flexibility."
+        },
+        {
+          "san": "Nc6",
+          "annotation": "Black deploys the knight to c6. The knight on c6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
+          "shortNarration": "Black's knight to c6 improves piece coordination and flexibility."
+        },
+        {
+          "san": "Bc4",
+          "annotation": "White deploys the bishop to c4. The bishop on c4 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
+          "alternatives": [
+            "The bishop could go to other squares, but c4 maximizes its influence on the k..."
+          ],
+          "shortNarration": "Bishop to c4 controls key diagonal squares and maintains active piece play."
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black brings the knight to its natural square on f6. The knight on f6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ],
+          "shortNarration": "Knight to f6 improves Black's piece coordination and flexibility."
+        },
+        {
+          "san": "d4",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d4 and e4.",
+          "plans": [
+            "Complete piece development and prepare castling",
+            "Fight for central control with pawns and pieces"
+          ]
+        },
+        {
+          "san": "exd4",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e5",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "Black has a strong central pawn duo on d7 and d4, doubled pawns on the d-file."
+        },
+        {
+          "san": "O-O",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "alternatives": [
+            "White had other options here, but this move best maintains the initiative."
+          ]
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "Black removes the defender on e4, removing White's pawn. The knight reaches a powerful central outpost on e4, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
+          "shortNarration": "Black trades off the e4 pawn, planting a knight on e4 to control key central squares."
+        },
+        {
+          "san": "Re1",
+          "annotation": "White activates the rook on e1. The rook takes up a powerful position on the e-file, pressuring Black's position.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e1",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "shortNarration": "White's rook on e1 pressures the e-file, targeting Black's pawn on e6."
+        },
+        {
+          "san": "d5",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d5 and d4, doubled pawns on the d-file."
+        },
+        {
+          "san": "Bxd5",
+          "annotation": "White exchanges on d5, removing Black's pawn. The bishop on d5 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a solid pawn structure with good central presence.",
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
+          "alternatives": [
+            "The bishop could go to other squares, but d5 maximizes its influence on the k..."
+          ],
+          "shortNarration": "White's pawn trade on d5 leaves the bishop on d5 controlling key diagonals with active piece play."
+        },
+        {
+          "san": "Qxd5",
+          "annotation": "Black takes on d5, removing White's bishop. The queen takes up an influential position on d5, eyeing multiple targets.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "d5",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "shortNarration": "Black captures on d5, removing White's bishop, and the queen on d5 eyes multiple targets."
+        },
+        {
+          "san": "Nc3",
+          "annotation": "White develops the knight to c3. The knight on c3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "c3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "shortNarration": "Knight to c3 improves piece coordination and flexibility."
+        },
+        {
+          "san": "Qa5",
+          "annotation": "Black deploys the queen to a5. The queen takes up an influential position on a5, eyeing multiple targets.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "a5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "a5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Improve piece placement and prepare the middlegame plan",
+            "Look for pawn breaks to open lines for the active pieces"
+          ],
+          "shortNarration": "Black's queen on a5 eyes multiple targets."
+        },
+        {
+          "san": "Nxe4",
+          "annotation": "White wins the piece on e4, removing Black's knight. The knight reaches a powerful central outpost on e4, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "alternatives": [
+            "A different knight move was possible, but e4 offers the best combination of a..."
+          ],
+          "shortNarration": "White wins the knight on e4, removing Black's powerful central outpost controlling key squares."
+        },
+        {
+          "san": "Be6",
+          "annotation": "Black moves the bishop to e6. The bishop on e6 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "e6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e6",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "shortNarration": "Black's bishop on e6 controls key diagonal squares and maintains active piece play."
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "White wins the piece on d4, removing Black's pawn. The knight reaches a powerful central outpost on d4, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a solid pawn structure with good central presence.",
+          "plans": [
+            "Convert the positional advantages into concrete gains",
+            "Coordinate pieces for maximum effectiveness in the coming exchanges"
+          ],
+          "shortNarration": "White wins the pawn on d4, and the knight reaches a powerful central outpost controlling key squares."
+        },
+        {
+          "san": "Nxd4",
+          "annotation": "Black removes the defender on d4, removing White's knight. The knight reaches a powerful central outpost on d4, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "shortNarration": "Black removes the defender on d4, winning the knight and gaining a powerful central outpost."
+        },
+        {
+          "san": "Qxd4",
+          "annotation": "White wins the piece on d4, removing Black's knight. The queen takes up an influential position on d4, eyeing multiple targets.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "d4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "alternatives": [
+            "White had other options here, but this move best maintains the initiative."
+          ],
+          "shortNarration": "White wins the knight on d4, and the queen on d4 eyes multiple targets."
         }
       ]
     }
