@@ -40,6 +40,7 @@ import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
 import { buildOpeningDbEntries } from './openingDbGrounding';
+import { getOpeningMasterContext, formatBestCounterAsNarration, formatRepGameRef } from './bestCounterService';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -909,6 +910,15 @@ export interface MasterGroundingOptions {
   /** Force the grounding pipeline ON regardless of intent detection.
    *  Used by integration tests; production surfaces leave undefined. */
   forceEngage?: boolean;
+  /** Canonical opening ID the user is studying (e.g. 'italian-game',
+   *  'pro-carlsen-catalan'). When set, the grounding pipeline injects
+   *  pre-baked best-counter stats + a representative master game from
+   *  src/services/bestCounterService so the coach has instant
+   *  concept-level narration material per CLAUDE.md narration rule
+   *  ('name the concept every time'). Surfaces that don't know the
+   *  current openingId leave undefined — the live master-play
+   *  context still grounds based on currentFen. */
+  openingId?: string;
 }
 
 /** Move-question intent patterns. The detector matches the last user
