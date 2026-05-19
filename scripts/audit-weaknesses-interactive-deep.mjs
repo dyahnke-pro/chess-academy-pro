@@ -32,7 +32,8 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
-import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
+import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -136,12 +137,21 @@ async function main() {
     if (m.type() === 'error') {
       const txt = m.text();
       // Filter known harmless noise: failed audit-stream POSTs
-      // when the endpoint isn't running locally, and Stockfish
-      // worker init noise during cold-start in the audit context.
+      // when the endpoint isn't running locally or the audit
+      // browser doesn't have the right secret in localStorage.
+      // The text is just "Failed to load resource: net::ERR_FAILED"
+      // — the URL is in m.location().url, so we check both.
       if (txt.includes('/api/audit-stream')) return;
-      if (txt.toLowerCase().includes('failed to load resource') && txt.includes('audit-stream')) return;
+      const loc = m.location?.()?.url ?? '';
+      if (loc.includes('/api/audit-stream')) return;
+      if (/Failed to load resource/i.test(txt) && /audit-stream/.test(loc)) return;
       consoleErrors.push(txt);
     }
+  });
+  // Failed network requests also fire on response codes (401/403);
+  // suppress audit-stream noise the same way.
+  page.on('requestfailed', (req) => {
+    if (req.url().includes('/api/audit-stream')) return;
   });
   page.on('pageerror', (e) => pageErrors.push(String(e)));
 
@@ -195,66 +205,21 @@ async function main() {
   }
 
   // ─── Fixture import: David's real account data ───────────────
-  // Audit-reports/.fixtures/david-games.json is exported once via
-  // a DevTools snippet against his real browser. When present, the
-  // audit imports it into the headless browser's IDB so scenarios
-  // run against POPULATED real data instead of synthetic seeds.
-  // See docs comment at top + scripts/devtools-export-dexie.js.
+  // See scripts/audit-lib/fixture-loader.mjs for the shared helper.
+  // When the fixture file is present, scenarios run against
+  // POPULATED real data instead of synthetic seeds.
   let fixtureLoaded = false;
-  try {
-    await stat(FIXTURE_PATH);
-    const fixtureRaw = await readFile(FIXTURE_PATH, 'utf-8');
-    const fixture = JSON.parse(fixtureRaw);
-    await scenario('fixture-load-real-account-data', async () => {
-      const result = await page.evaluate(async (data) => {
-        const STORES = Object.keys(data.stores ?? {});
-        if (STORES.length === 0) return { wrote: 0, stores: 0 };
-        return await new Promise((resolve, reject) => {
-          const req = indexedDB.open('ChessAcademyDB');
-          req.onerror = () => reject(new Error('open failed'));
-          req.onsuccess = () => {
-            const db = req.result;
-            // Only target stores that exist in the schema — silently
-            // drop unknown ones so a fixture exported from a newer
-            // schema doesn't crash the older audit browser.
-            const present = STORES.filter((s) => db.objectStoreNames.contains(s));
-            if (present.length === 0) {
-              db.close();
-              resolve({ wrote: 0, stores: 0, skipped: STORES });
-              return;
-            }
-            const tx = db.transaction(present, 'readwrite');
-            const counts = {};
-            for (const s of present) {
-              const rows = data.stores[s];
-              counts[s] = Array.isArray(rows) ? rows.length : 0;
-              if (Array.isArray(rows)) {
-                const store = tx.objectStore(s);
-                for (const r of rows) store.put(r);
-              }
-            }
-            tx.oncomplete = () => {
-              db.close();
-              const total = Object.values(counts).reduce((a, b) => a + b, 0);
-              resolve({ wrote: total, stores: present.length, perStore: counts });
-            };
-            tx.onerror = () => { db.close(); reject(new Error('fixture put failed')); };
-          };
-        });
-      }, fixture);
-      // Reload so React picks up the imported data.
-      await page.goto(`${BASE_URL}/weaknesses`, { timeout: 60_000 });
-      await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 60_000 });
-      fixtureLoaded = true;
-      return `imported ${result.wrote} rows into ${result.stores} stores (${JSON.stringify(result.perStore).slice(0, 200)})`;
-    });
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      console.log(`  - fixture-load: ${FIXTURE_PATH} not found, using synthetic seed`);
-    } else {
-      console.log(`  - fixture-load: ${err.message}, falling back to synthetic seed`);
+  await scenario('fixture-load-real-account-data', async () => {
+    const result = await loadFixtureIntoIDB(page, FIXTURE_PATH);
+    if (!result.loaded) {
+      return `synthetic seed (${result.reason})`;
     }
-  }
+    // Reload so React picks up the imported data.
+    await page.goto(`${BASE_URL}/weaknesses`, { timeout: 60_000 });
+    await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 60_000 });
+    fixtureLoaded = true;
+    return `imported ${result.wrote} rows into ${result.stores} stores (${JSON.stringify(result.perStore).slice(0, 200)})`;
+  });
 
   // ─── Header controls ─────────────────────────────────────────
   await scenario('header-back-btn-visible', async () => {
@@ -430,9 +395,15 @@ async function main() {
     if (!/\/weaknesses(?!\/)/.test(page.url())) {
       throw new Error(`expected /weaknesses, got ${new URL(page.url()).pathname}`);
     }
+    // With real-account data (882 games) the analytics fetch on
+    // re-mount takes longer than the 5s default. game-insights-page
+    // only renders AFTER the loading skeleton clears — wait for it
+    // so we don't false-fail by checking mistakes-tab while the
+    // insights-loading state is still on screen.
+    await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 30_000 });
     const ok = await page
       .locator('[data-testid="mistakes-tab"]')
-      .waitFor({ timeout: 5_000 })
+      .waitFor({ timeout: 10_000 })
       .then(() => true)
       .catch(() => false);
     if (!ok) throw new Error('mistakes-tab not restored');
@@ -442,7 +413,7 @@ async function main() {
   // ─── Re-touch the search bar after restore ───────────────────
   await scenario('post-restore-search-still-works', async () => {
     const input = page.locator('[data-testid="search-input"]');
-    if (!(await input.isVisible())) throw new Error('search-input gone');
+    await input.waitFor({ timeout: 10_000 });
     await input.click();
     await input.fill(cfg.searchQuery.split(' ').reverse().join(' '));
     await input.fill('');
