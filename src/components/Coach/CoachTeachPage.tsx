@@ -856,6 +856,45 @@ export function CoachTeachPage(): JSX.Element {
       if (recentUserInputsRef.current.length > 3) recentUserInputsRef.current.shift();
     }
 
+    // Audit-instrumentation phase-5 (2026-05-19): classify the user's
+    // ask when it's a future-moves / positional-ideas question — the
+    // shape that hits stockfish_eval + lookup_master_play. Lets us
+    // pivot the audit log by question type and see whether the brain
+    // answers these well (e.g. cites grounded data vs invents lines).
+    {
+      const lowered = trimmedText.toLowerCase();
+      const futureMoves =
+        /\b(best move|best response|what should i play|what should i do|what would you play|what now|what.s next|continuation|continue with|best continuation|best line|what move)\b/.test(lowered);
+      const positionalIdeas =
+        /\b(plan|plans|strategy|positional|maneuver|idea|ideas|what.s the (point|plan|idea)|long.term|long term|midgame plan|middlegame plan|pawn structure|piece activity)\b/.test(lowered);
+      if (futureMoves || positionalIdeas) {
+        void logAppAudit({
+          kind: 'followup-context-check',
+          category: 'subsystem',
+          source: 'CoachTeachPage.questionClassifier',
+          summary:
+            `coach question: ${futureMoves ? 'future-moves ' : ''}${positionalIdeas ? 'positional-ideas ' : ''}` +
+            `"${trimmedText.slice(0, 50)}" — expecting Stockfish + master-play grounding`,
+          details: JSON.stringify({
+            currentInput: trimmedText,
+            classifications: {
+              futureMoves,
+              positionalIdeas,
+            },
+            walkthroughOpening: walkthrough.tree?.openingName ?? null,
+            currentFen: gameRef.current.fen,
+            // These are the audit kinds we expect to see fire downstream
+            // on this turn — if the brain replied without one of them
+            // the grounding pipeline missed.
+            expectedAudits: [
+              'coach-brain-tool-called (stockfish_eval)',
+              futureMoves ? 'master-play-prefetch / master-play-lookup' : null,
+            ].filter(Boolean),
+          }),
+        });
+      }
+    }
+
     // Audit-instrumentation phase-3: followup-context-check. Short
     // followups (< 5 words) after a state-changing prior turn often
     // expose context-loss bugs (e.g. user types "which is most
