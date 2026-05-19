@@ -221,6 +221,27 @@ const GENERIC_ANNOTATION_PATTERNS: RegExp[] = [
 
   // ─── "calm move ignores Black's material gain" stub ─────────────────
   /\bThis calm move ignores (?:Black|White)['’]s material gain and focuses on rapid piece coordination\b/i,
+
+  // ─── Round 3 of offline-generator template suppression (2026-05-19) ──
+  //
+  // Offline annotation scan caught 790 instances of three template
+  // classes across 1,893 annotation files. Two were already suppressed
+  // ("this capture changes the character", "Central pawns control space").
+  // This third class — "Continuing <Opening Name>: <SAN> is a known
+  // theory move in this line." — was slipping through (~296 instances)
+  // and displaying raw on the annotation card.
+  //
+  // The offline generator falls back to this stub on every move that
+  // doesn't have a hand-authored entry. ~7-10 instances per long subline
+  // means the user sees the same wording across many plies.
+  /\bContinuing\s+[A-Z][\w\s'-]+:\s+[A-Za-z][\w+#=!?-]*\s+is a known theory move in this line\b/i,
+  // Same fallback variant without the "Continuing" prefix
+  /\b[A-Za-z][\w+#=!?-]*\s+is a known theory move in this line\b/i,
+  // ─── Sister fallback: 'stakes a claim in the center' first sentence ───
+  // Second sentence ("Central pawns control space...") is already
+  // suppressed above; the first sentence on its own showed up in
+  // some annotations.
+  /\b[A-Za-z][\w+#=!?-]*\s+stakes a claim in the center\b/i,
 ];
 
 /**
