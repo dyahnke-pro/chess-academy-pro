@@ -245,4 +245,59 @@ describe('applyBriefVoiceCap', () => {
     const r = applyBriefVoiceCap('  hello world  ', 'brief');
     expect(r.originalLength).toBe(15);
   });
+
+  describe('Bug F regression — sentence splitter must not eat digits before periods', () => {
+    // Live audit 2026-05-19: the previous regex
+    // `/[^.!?\n]+(?<!\d)[.!?]?/g` backtracked when the SAN-disambiguation
+    // lookbehind failed, dropping the digit from any SAN ending in
+    // [1-8] followed by a period. Combined with the join-with-space,
+    // the digit AND the period vanished from spoken output.
+
+    it('"Nb4. Your opponent..." keeps the 4 and the period boundary', () => {
+      // From audit Finding 179 (spoken "Well played, knight to b Your
+      // opponent r" with the 4 silently dropped).
+      const input = 'Well played, knight to b4. Your opponent responds with h5. Now we continue.';
+      const r = applyBriefVoiceCap(input, 'brief');
+      expect(r.text).toContain('knight to b4');
+      expect(r.text).not.toMatch(/knight to b\s+Your/);
+    });
+
+    it('"Nbd7. Nbd7..." does NOT collapse into "Nbd Nbd7"', () => {
+      // From audit Finding 217 (spoken "Correct, Nbd Nbd7 gets the
+      // knight..." — the leading "Nbd7" lost its 7 AND its period).
+      const input = 'Correct, Nbd7. Nbd7 gets the knight into the game. The knight is well-placed.';
+      const r = applyBriefVoiceCap(input, 'brief');
+      // The leading "Nbd7" must keep its 7.
+      expect(r.text).toMatch(/Correct,\s+Nbd7\b/);
+      // Must NOT have the truncated "Nbd " (with space, no digit).
+      expect(r.text).not.toMatch(/\bNbd Nbd7\b/);
+    });
+
+    it('"cxd5. The position..." keeps the 5', () => {
+      // From audit Finding 283 — "That's it! c-pawn takes d The position..."
+      const input = "That's it. cxd5 picks up material. The position keeps getting better.";
+      const r = applyBriefVoiceCap(input, 'brief');
+      expect(r.text).toContain('cxd5');
+      expect(r.text).not.toMatch(/cxd\s/);
+    });
+
+    it('"f3.f4 then..." does NOT split on SAN-disambiguation periods', () => {
+      // SAN disambiguation: "f3." in opening notation isn't a sentence
+      // end. Splitter must skip it and keep the following text.
+      const input = 'After 1.e4 e5 2.Nf3 Nc6 3.Bc4 we reach the Italian Game. This is sharp.';
+      const r = applyBriefVoiceCap(input, 'brief');
+      // The early-out should fire (2 actual sentences within word
+      // budget) and return the input unchanged.
+      expect(r.truncated).toBe(false);
+      expect(r.text).toContain('Nf3 Nc6');
+    });
+
+    it('joined sentences preserve their own terminators (no run-on speech)', () => {
+      const input = 'First sentence. Second sentence. Third sentence. Fourth sentence.';
+      const r = applyBriefVoiceCap(input, 'brief');
+      expect(r.truncated).toBe(true);
+      // Both kept sentences should still have their terminators.
+      expect(r.text).toMatch(/First sentence\..+Second sentence\./);
+    });
+  });
 });
