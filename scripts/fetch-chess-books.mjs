@@ -1,189 +1,150 @@
 #!/usr/bin/env node
 /**
- * Fetches public-domain chess instruction books from Project Gutenberg
- * by SEARCHING the catalog — no hardcoded IDs (the previous version
- * had memory-guessed IDs that turned out to be unrelated books).
+ * Fetches the seven public-domain chess instruction / history books
+ * verified to exist on Project Gutenberg (per the list-gutendex-chess
+ * diagnostic). IDs are hardcoded after manual review — no more guessing.
  *
- * Uses gutendex.com, a stable open JSON API mirror of Gutenberg's
- * catalog (https://gutendex.com/). Searches by author+title, picks
- * the best match, fetches the .txt body from Gutenberg.
- *
- * Run on David's laptop:
+ * Run on David's laptop (gutenberg.org is sandbox-blocked):
  *   node scripts/fetch-chess-books.mjs
  *
  * Output:
  *   docs/audit-runs/2026-05-19-chess-books-raw/<slug>.txt
  *   docs/audit-runs/2026-05-19-chess-books-raw/manifest.json
- *
- * The script LOGS each match — verify the fetched title/author
- * before relying on the content.
  */
 
 import { mkdir, writeFile, rm } from 'node:fs/promises';
 
 const OUT_DIR = 'docs/audit-runs/2026-05-19-chess-books-raw';
 
-// Each entry tries a CHAIN of search queries until one returns
-// a result matching the author regex. The wider the chain, the more
-// likely to find the book — but also more chance of picking the
-// wrong edition. Author regex is the safety net.
 const BOOKS = [
   {
+    id: 33870,
     slug: 'capablanca-chess-fundamentals',
-    queryChain: ['Chess Fundamentals Capablanca', 'Capablanca chess', 'Capablanca'],
-    titleMatch: /chess.*fundamentals|fundamentals.*chess/i,
-    authorMatch: /capablanca/i,
-    focus: 'positional principles, endgame technique',
+    expectedTitleRe: /chess.*fundamentals/i,
+    expectedAuthorRe: /capablanca/i,
+    focus: 'positional principles, endgame technique, pawn structures',
   },
   {
-    slug: 'capablanca-my-chess-career',
-    queryChain: ['My Chess Career Capablanca', 'Capablanca career', 'Capablanca'],
-    titleMatch: /chess career|my chess/i,
-    authorMatch: /capablanca/i,
-    focus: 'annotated games, attacking + positional play',
-  },
-  {
-    slug: 'emanuel-lasker-common-sense-in-chess',
-    queryChain: ['Common Sense in Chess', 'Lasker chess', 'Emanuel Lasker'],
-    titleMatch: /common.*sense.*chess/i,
-    authorMatch: /^(?!.*edward).*lasker/i,
-    focus: 'opening principles, middlegame strategy',
-  },
-  {
+    id: 5614,
     slug: 'edward-lasker-chess-strategy',
-    queryChain: ['Edward Lasker Chess Strategy', 'Chess Strategy', 'Edward Lasker'],
-    titleMatch: /chess.*strategy/i,
-    authorMatch: /edward.*lasker|lasker.*edward/i,
-    focus: 'opening systems, planning',
+    expectedTitleRe: /chess.*strategy/i,
+    expectedAuthorRe: /edward.*lasker|lasker.*edward/i,
+    focus: 'opening systems, planning, classical principles',
   },
   {
-    slug: 'mason-principles-of-chess',
-    queryChain: ['Mason Principles Chess', 'James Mason chess', 'Mason chess'],
-    titleMatch: /principles.*chess|chess.*practice/i,
-    authorMatch: /mason/i,
-    focus: 'classical positional principles',
+    id: 16377,
+    slug: 'staunton-blue-book-of-chess',
+    expectedTitleRe: /blue.*book.*chess/i,
+    expectedAuthorRe: /staunton/i,
+    focus: 'classical opening analysis, rudiments of play',
   },
   {
-    slug: 'pillsbury-chess-career',
-    queryChain: ['Pillsbury chess', "Pillsbury's chess career", 'Sergeant chess'],
-    titleMatch: /pillsbury/i,
-    authorMatch: /sergeant|pillsbury/i,
-    focus: 'attacking play, sacrificial themes',
+    id: 4913,
+    slug: 'edward-lasker-chess-and-checkers',
+    expectedTitleRe: /chess.*checkers/i,
+    expectedAuthorRe: /edward.*lasker|lasker.*edward/i,
+    focus: 'mastership progression, beginner-to-advanced theory',
   },
   {
-    slug: 'staunton-chess-players-handbook',
-    queryChain: ["Chess Player's Handbook", 'Staunton chess', 'Staunton'],
-    titleMatch: /chess.*player.*handbook|handbook.*chess/i,
-    authorMatch: /staunton/i,
-    focus: 'classical opening theory',
+    id: 55278,
+    slug: 'young-chess-generalship',
+    expectedTitleRe: /chess.*generalship/i,
+    expectedAuthorRe: /young/i,
+    focus: 'middlegame planning, strategic principles',
   },
   {
-    slug: 'morphy-games-of-chess',
-    queryChain: ['Morphy chess games', 'Paul Morphy', 'Morphy'],
-    titleMatch: /morphy|chess/i,
-    authorMatch: /morphy|lange|maroczy/i,
-    focus: 'attacking play, romantic era',
+    id: 34180,
+    slug: 'edge-paul-morphy-exploits',
+    expectedTitleRe: /morphy/i,
+    expectedAuthorRe: /edge/i,
+    focus: 'attacking play, romantic era game collection',
+  },
+  {
+    id: 4902,
+    slug: 'bird-chess-history-reminiscences',
+    expectedTitleRe: /chess.*history|history.*chess/i,
+    expectedAuthorRe: /bird/i,
+    focus: 'historical context for opening + style attribution',
   },
 ];
 
-async function searchGutendexOnce(query, authorMatch, titleMatch) {
-  const url = `https://gutendex.com/books?search=${encodeURIComponent(query)}&languages=en`;
-  const r = await fetch(url, { headers: { 'user-agent': 'chess-academy-pro/1.0' } });
-  if (!r.ok) throw new Error(`gutendex ${r.status}`);
-  const data = await r.json();
-  if (!data.results || data.results.length === 0) return { matches: [], total: 0 };
-  const matches = data.results.filter(b => {
-    const authors = (b.authors || []).map(a => a.name).join(' ');
-    const title = b.title || '';
-    const authorOk = authorMatch.test(authors);
-    const titleOk = !titleMatch || titleMatch.test(title);
-    return authorOk && titleOk;
-  });
-  matches.sort((a, b) => (b.download_count || 0) - (a.download_count || 0));
-  return { matches, total: data.results.length };
+async function fetchWithTimeout(url, ms = 30000) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms);
+  try {
+    return await fetch(url, {
+      signal: ctrl.signal,
+      headers: { 'user-agent': 'chess-academy-pro/1.0' },
+    });
+  } finally {
+    clearTimeout(t);
+  }
 }
 
-async function searchGutendex(queryChain, authorMatch, titleMatch) {
-  for (const query of queryChain) {
-    console.log(`  trying query: "${query}"`);
-    const { matches, total } = await searchGutendexOnce(query, authorMatch, titleMatch);
-    if (matches.length > 0) {
-      console.log(`  ${matches.length}/${total} results matched author+title`);
-      return matches[0];
-    }
-    console.log(`  ${total} raw results, 0 matched filters`);
+async function fetchBook(book) {
+  // Pull metadata first to verify author + title match
+  const metaUrl = `https://gutendex.com/books/${book.id}`;
+  console.log(`\n[${book.slug}] verifying #${book.id}`);
+  const mr = await fetchWithTimeout(metaUrl);
+  if (!mr.ok) {
+    console.log(`  metadata fetch ${mr.status}`);
+    return { ...book, status: 'meta-fail' };
   }
-  return null;
-}
-
-function pickTextUrl(formats) {
-  // Gutenberg formats include text/plain in multiple encodings.
-  // Prefer plain UTF-8.
-  const keys = Object.keys(formats);
-  const utf8 = keys.find(k => k === 'text/plain; charset=utf-8');
-  if (utf8) return formats[utf8];
-  const ascii = keys.find(k => k === 'text/plain; charset=us-ascii');
-  if (ascii) return formats[ascii];
-  const plain = keys.find(k => k.startsWith('text/plain'));
-  if (plain) return formats[plain];
-  return null;
-}
-
-async function fetchBookText(book) {
-  console.log(`\n[${book.slug}]`);
-  const match = await searchGutendex(book.queryChain, book.authorMatch, book.titleMatch);
-  if (!match) {
-    console.log(`  NO MATCH FOUND on gutendex after ${book.queryChain.length} queries`);
-    return null;
+  const meta = await mr.json();
+  const authors = (meta.authors || []).map(a => a.name).join('; ');
+  console.log(`  title: "${meta.title}"`);
+  console.log(`  authors: ${authors}`);
+  if (!book.expectedTitleRe.test(meta.title || '')) {
+    console.log(`  TITLE MISMATCH expected ${book.expectedTitleRe} got "${meta.title}"`);
+    return { ...book, status: 'title-mismatch', actualTitle: meta.title };
   }
-  const authors = (match.authors || []).map(a => a.name).join('; ');
-  console.log(`  MATCH: #${match.id} "${match.title}" — ${authors}`);
-  console.log(`  downloads: ${match.download_count}, subjects: ${(match.subjects || []).slice(0, 3).join(' / ')}`);
-  const textUrl = pickTextUrl(match.formats || {});
-  if (!textUrl) {
-    console.log(`  NO PLAIN-TEXT FORMAT on this book`);
-    return null;
+  if (!book.expectedAuthorRe.test(authors)) {
+    console.log(`  AUTHOR MISMATCH expected ${book.expectedAuthorRe} got "${authors}"`);
+    return { ...book, status: 'author-mismatch', actualAuthors: authors };
   }
-  const tr = await fetch(textUrl, { headers: { 'user-agent': 'chess-academy-pro/1.0' } });
+  // Pull the plain-text body
+  const formats = meta.formats || {};
+  const textKey = Object.keys(formats).find(k =>
+    k === 'text/plain; charset=utf-8' ||
+    k === 'text/plain; charset=us-ascii' ||
+    k.startsWith('text/plain')
+  );
+  if (!textKey) {
+    console.log(`  NO PLAIN-TEXT FORMAT`);
+    return { ...book, status: 'no-text-format' };
+  }
+  const textUrl = formats[textKey];
+  const tr = await fetchWithTimeout(textUrl, 60000);
   if (!tr.ok) {
-    console.log(`  fetch ${textUrl} -> ${tr.status}`);
-    return null;
+    console.log(`  body fetch ${tr.status}`);
+    return { ...book, status: 'body-fetch-fail' };
   }
   const text = await tr.text();
   console.log(`  fetched ${(text.length / 1024).toFixed(0)}KB`);
-  return { match, textUrl, text, authors };
+  const path = `${OUT_DIR}/${book.slug}.txt`;
+  await writeFile(path, text, 'utf-8');
+  return {
+    slug: book.slug,
+    gutenbergId: book.id,
+    title: meta.title,
+    authors,
+    focus: book.focus,
+    subjects: (meta.subjects || []).slice(0, 5),
+    bytes: text.length,
+    path: path.replace(`${OUT_DIR}/`, ''),
+    textUrl,
+    status: 'fetched',
+  };
 }
 
 async function main() {
-  // Wipe the previous wrong fetch
-  try {
-    await rm(OUT_DIR, { recursive: true, force: true });
-  } catch {}
+  await rm(OUT_DIR, { recursive: true, force: true });
   await mkdir(OUT_DIR, { recursive: true });
-  console.log(`Fetching chess books via gutendex.com search → ${OUT_DIR}/`);
+  console.log(`Fetching ${BOOKS.length} verified chess books from Gutenberg → ${OUT_DIR}/`);
   const manifest = [];
   for (const book of BOOKS) {
     try {
-      const result = await fetchBookText(book);
-      if (!result) {
-        manifest.push({ ...book, status: 'no-match' });
-        continue;
-      }
-      const path = `${OUT_DIR}/${book.slug}.txt`;
-      await writeFile(path, result.text, 'utf-8');
-      manifest.push({
-        slug: book.slug,
-        gutenbergId: result.match.id,
-        title: result.match.title,
-        authors: result.authors,
-        queryChain: book.queryChain,
-        focus: book.focus,
-        textUrl: result.textUrl,
-        bytes: result.text.length,
-        path: path.replace(`${OUT_DIR}/`, ''),
-        subjects: (result.match.subjects || []).slice(0, 5),
-        status: 'fetched',
-      });
+      manifest.push(await fetchBook(book));
     } catch (e) {
       console.log(`  ERROR: ${e.message}`);
       manifest.push({ ...book, status: 'error', error: e.message });
@@ -196,10 +157,10 @@ async function main() {
   console.log(`\n=== SUMMARY ===`);
   const ok = manifest.filter(b => b.status === 'fetched');
   console.log(`fetched: ${ok.length}/${BOOKS.length}`);
-  for (const b of ok) console.log(`  #${b.gutenbergId.toString().padEnd(6)} ${b.title} — ${b.authors}`);
+  for (const b of ok) console.log(`  #${String(b.gutenbergId).padEnd(6)} ${b.title} — ${b.authors}`);
   const failed = manifest.filter(b => b.status !== 'fetched');
   if (failed.length) {
-    console.log(`\nNOT fetched (re-check on gutenberg.org and update searchTerms/authorMatch):`);
+    console.log(`\nNOT fetched:`);
     for (const b of failed) console.log(`  ${b.slug}: ${b.status}`);
   }
   console.log(`\nManifest at ${OUT_DIR}/manifest.json`);
