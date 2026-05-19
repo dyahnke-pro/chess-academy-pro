@@ -1,0 +1,296 @@
+{
+  "generatedAt": "2026-05-19T15:16:06.007Z",
+  "validatedCount": 0,
+  "rejectedCount": 8,
+  "games": [],
+  "rejected": [
+    {
+      "openingId": "pro-carlsen-catalan",
+      "gi": 0,
+      "game": {
+        "white": "Magnus Carlsen",
+        "black": "Vishy Anand",
+        "whiteElo": 2882,
+        "blackElo": 2817,
+        "result": "1-0",
+        "year": 2013,
+        "event": "World Chess Championship, Chennai",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 e3 a6 Ne5 b5 a4 Bb7 axb5 axb5 Rxa8 Bxa8 Nxc4 Nbd7 Qe2 c6 Rd1 Rc8 Bf4 Nh5 Be4 Nf6 Bf3 Ne8 Nd6 Bf8 Nf5 exf5 Bxf5 Ndf6 Bxf6 Nxf6 Qxe7 Qxe7 Bxe7 Rxc4 Bf6 g6 Be5 Ne8 Bf4 Rc6 Kf1 Kg7 Ke2 Rf6 Bg5 Rf5 Bd2 Kf6 e4 Rxf2 Kxf2 Nd6 exd5 cxd5 Rc1 Nf5 Rc5 Nxd4 Rxd5 Nxb2 Rd6 Ke5 Rxf6 Kxf6 a5 Kf5 a4 Ke5 a3 Kf4 a2 Kf3 a1=Q Nxa1 Kf2 Nc2 Ke2 Nxa1 Kd2 Nc2 Kc3 Kb1 Kc4 Ka2 Kd4 Kb3 Ke4 Kc3 Kf4 Kd3 Kg4 Kc3 Kxh4 Kb3 Kg4 Kc3 h4 gxh4 Kxh4 Kd4 g5 Ke5 g4 Kf4 g3 Kg5 g2 Kf4 g1=Q Ke3 Qg4 Kd3 Qd4 Kc2 Qe3 Kb2 Qe2 Kc3 Qd3 Kb4 Qd4 Kc2 Qe3 Kb2 Qe2 Kc3 Qd3 Kb4 Qd4 Ka3 Qc3 Ka2 Qa1",
+        "overview": "This game from the 2013 World Championship shows Carlsen's mastery of the Catalan with 7.e3. After the early trade on c4, White obtains a favorable pawn structure and piece placement, and Anand struggles with coordination. Carlsen's strategic understanding translates into a dominant endgame advantage that he converts methodically.",
+        "criticalMoments": [
+          {
+            "moveNumber": 18,
+            "color": "white",
+            "fen": "r1b1kbnr/pppppppp/8/8/2BPN3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1",
+            "annotation": "After Ne5, Carlsen centralizes the knight aggressively. This advance creates immediate threats and restricts Black's pieces, especially the bishop on e7.",
+            "concept": "Central control and piece activity"
+          },
+          {
+            "moveNumber": 32,
+            "color": "white",
+            "fen": "8/8/4B1k1/3P4/8/4K3/8/8 w - - 0 1",
+            "annotation": "With the queens off and a far-advanced passed d-pawn, Carlsen's superior piece coordination becomes decisive. The bishop on e5 and active king dominate Black's remnants.",
+            "concept": "Endgame conversion with material advantage"
+          }
+        ],
+        "middlegameTheme": "Positional pressure and centralization",
+        "lessonSummary": "The Catalan 7.e3 line allows White to maintain spatial advantage and piece activity, culminating in a superior endgame where better coordination overwhelms the opponent."
+      },
+      "errors": [
+        "illegal move 28 'Rc8': Invalid move: Rc8"
+      ]
+    },
+    {
+      "openingId": "pro-carlsen-catalan",
+      "gi": 1,
+      "game": {
+        "white": "Magnus Carlsen",
+        "black": "Judit Polgar",
+        "whiteElo": 2870,
+        "blackElo": 2735,
+        "result": "1-0",
+        "year": 2011,
+        "event": "Bazna King's Tournament",
+        "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 e3 a6 Ne5 b5 a4 Bb7 axb5 axb5 Rxa8 Bxa8 Nxc4 Nbd7 Qe2 c6 Rd1 Rc8 Bf4 Nh5 Be4 Nf6 Bf3 Ne8 Nd6 Bf8 Nf5 exf5 Bxf5 Ndf6 Bxf6 Nxf6 Qxe7 c5 dxc5 Qxe7 Bxe7 Rc7 Rd8 Kg7 Bf6 Kxf6 Rd7 Rxd7 cxd7 Ne4 d8=Q Nxd2 Qd5 Kf6 Qf3 Ke5 Qe3 Kf5 Qe1 Ne4 Qe3 Nf6 Kf1 Nh5 Qe5 Kg4 h3 Kxh3 Qh5 Kg2 Qxh5 gxh5 Ke2 h4 gxh4 Nf4 Kxf4 Kf3 h5 Kg3 h4 Kxh4 Kf2 Kg2 Kg4 Kg1 Kf3 Kh2 Kg4 Kg1 Kf3 Kh1",
+        "overview": "Another version of the same Catalan structure where Carlsen systematically outplays Polgar. The move 13.Nd6 is a key strategic blow, and after the exchange on e7, White's active pieces and pawn majority secure a winning position.",
+        "criticalMoments": [
+          {
+            "moveNumber": 26,
+            "color": "white",
+            "fen": "7b/1r3ppk/2p2n2/3Q4/2N5/4P1P1/PP3P1P/R4RK1 w - - 0 1",
+            "annotation": "White's queen on d5 dominates the position, and the threat of back-rank tactics forces Black into a difficult defensive posture. Carlsen's superior piece coordination is evident.",
+            "concept": "Dominant queen placement"
+          },
+          {
+            "moveNumber": 35,
+            "color": "white",
+            "fen": "8/3P2pk/8/3Q4/8/4PK2/PP3P1P/8 w - - 0 1",
+            "annotation": "The d7 pawn is unstoppable, and despite Black's attempts at counterplay, White's advanced passed pawn and active pieces guarantee victory.",
+            "concept": "Passed pawn in the endgame"
+          }
+        ],
+        "middlegameTheme": "Conversion of strategic advantage to material gain",
+        "lessonSummary": "In the Catalan with 7.e3, precise piece placement (especially Nd6) combined with pawn breaks allows White to achieve a dominant position that easily translates to victory."
+      },
+      "errors": [
+        "illegal move 28 'Rc8': Invalid move: Rc8"
+      ]
+    },
+    {
+      "openingId": "pro-hikaru-najdorf",
+      "gi": 0,
+      "game": {
+        "white": "Hikaru Nakamura",
+        "black": "Giri Anish",
+        "whiteElo": 2786,
+        "blackElo": 2764,
+        "result": "1-0",
+        "year": 2013,
+        "event": "Tata Steel Chess 2013",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 g4 b5 g5 b4 Ne2 Ne8 f4 exf4 Bxf4 a5 Kb1 Ra7 Nd5 Bxd5 exd5 Nxd5 Bxd5 Qxd5 Qxd5 Bxd5 Rxd5 Nf6 Rd4 Rb7 Re4 Rc8 Bd4 Rc1 Kxc1 Ra1 Kb2 Rxa2 Kxa2 a4 Nd1 axb3 cxb3 Kf8 Kb2 Ke7 Kc3 Ke6 b4 Kd5 b5 Kd4 b6 Nxe4 Kxe4 Kxd4 b7 c5 b8=Q c4",
+        "overview": "A classical treatment of the Najdorf by Nakamura, showing how White can generate kingside attacking chances with g4-g5 and f4, while maintaining central control. Nakamura's handling of the subsequent endgame demonstrates the practical benefits of White's space advantage.",
+        "criticalMoments": [
+          {
+            "moveNumber": 18,
+            "color": "white",
+            "fen": "r1bqk2r/pppp1ppp/2n1bn2/4p3/3P4/2N1PBN1/PPP2PPP/R2QK2R w KQkq - 0 1",
+            "annotation": "g4 initiates White's kingside pawn storm, immediately creating space and attacking prospects. This move exemplifies Nakamura's aggressive style in the Najdorf.",
+            "concept": "Kingside pawn storm"
+          },
+          {
+            "moveNumber": 28,
+            "color": "white",
+            "fen": "5k2/1b3bp1/3p1n2/rp1P1p2/R3P2P/1PN2B1K/1P3PP1/6k1 w - - 0 1",
+            "annotation": "After methodical consolidation and the bishop pair advantage, Nakamura converts the position into a winning endgame by forcing the exchange of pieces and converting the extra pawn.",
+            "concept": "Endgame conversion"
+          }
+        ],
+        "middlegameTheme": "Kingside attack with central control",
+        "lessonSummary": "The Najdorf rewards White for active piece placement and space gain on the kingside, particularly when combined with careful central management and endgame technique."
+      },
+      "errors": [
+        "illegal move 33 'Nd5': Invalid move: Nd5"
+      ]
+    },
+    {
+      "openingId": "pro-hikaru-najdorf",
+      "gi": 1,
+      "game": {
+        "white": "Hikaru Nakamura",
+        "black": "Radjabov Teimour",
+        "whiteElo": 2790,
+        "blackElo": 2763,
+        "result": "1-0",
+        "year": 2014,
+        "event": "World Rapid Championship 2014",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 Kb1 b5 a3 Ra7 Nd4 Rc7 Nxe6 fxe6 e5 dxe5 Qxd7 Qxd7 Rxd7 Rc1 Rxc7 Rxc7 Rd1 e4 fxe4 Nxe4 Bf4 Nc5 Bxc7 Nxa6 Bf4 Nb4 axb4 a5 bxa5 Kf7 a6 Ke6 Be3 Kd5 Kc2 Kc4 Kd2 Kb3 Kd3 Ka2 Bd4 Kb1 Kd2 Ka2 a7 Kb1 Be3 Ka1 a8=Q",
+        "overview": "Nakamura demonstrates a sharp tactical approach, launching a kingside attack and sacrificing material for a rapid attack. The game showcases Nakamura's rapid-play strength in forcing concrete tactical complications.",
+        "criticalMoments": [
+          {
+            "moveNumber": 14,
+            "color": "white",
+            "fen": "r2qkb1r/pp2pppp/2np1n2/4p3/3P4/2N1PBN1/PPP2PPP/R2QK2R w KQkq - 0 1",
+            "annotation": "Nxe6 is a strong tactical blow, forcing Black to recapture and committing to damage to the pawn structure. This demonstrates the dynamic nature of Nakamura's attacking setup.",
+            "concept": "Tactical piece sacrifice"
+          },
+          {
+            "moveNumber": 20,
+            "color": "white",
+            "fen": "r4k1r/2r3pp/p1q1p3/1p6/3P4/2N1PBN1/PPP2PPP/1R1QK2R w K - 0 1",
+            "annotation": "Rxd7 removes the key defender, and after the forcing sequence White's attack overwhelms Black's kingside defenses despite material imbalances.",
+            "concept": "Removing the defender"
+          }
+        ],
+        "middlegameTheme": "Tactical attack and queen trade",
+        "lessonSummary": "In rapid chess, Nakamura's Najdorf approach prioritizes concrete tactical complications and forcing play rather than positional maneuvering, a hallmark of his style."
+      },
+      "errors": [
+        "illegal move 29 'e5': Invalid move: e5"
+      ]
+    },
+    {
+      "openingId": "pro-caruana-ruy-lopez",
+      "gi": 0,
+      "game": {
+        "white": "Fabiano Caruana",
+        "black": "Anand Viswanathan",
+        "whiteElo": 2795,
+        "blackElo": 2817,
+        "result": "1-0",
+        "year": 2012,
+        "event": "London Chess Classic",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Na5 Bc2 c5 d4 Qc7 Nbd2 cxd4 cxd4 exd4 Nxd4 Nxd4 Qxd4 Nxc2 Qxc2 Be6 Nc4 Rfc8 Qd2 Rac8 Rae1 Bf8 Nxd6 Rxc3 Nxc8 Rxd2 Nxb5 Rc2 Rxe6 fxe6 Nxa6 Rc2 Rf1 h6 Nc5 Rc2 Nd7 Nxe6 Rc6 Nf4 Rc1 Rxc1",
+        "overview": "This game demonstrates Caruana's sophisticated handling of the Anti-Marshall where White avoids 8.a4 in favor of the slower 8.h3 setup. Caruana methodically improves his position with d4 and Nbd2, exploiting Black's lag in development to achieve a dominant position.",
+        "criticalMoments": [
+          {
+            "moveNumber": 15,
+            "color": "white",
+            "fen": "r1b1k2r/pp2bppp/2np1n2/1p6/3PP3/1BP2N1P/PP2BPPP/RNBQ1RK1 w kq - 2 15",
+            "annotation": "Caruana plays the thematic d4, breaking open the center and exposing the coordination issues in Black's pieces. This move capitalizes on White's superior piece placement.",
+            "concept": "Central breakthrough in Anti-Marshall"
+          },
+          {
+            "moveNumber": 29,
+            "color": "white",
+            "fen": "6k1/5ppp/4n3/1N3P2/8/2B1R2P/P4PPK/6r1 w - - 5 29",
+            "annotation": "White has achieved a decisive advantage through superior piece coordination. The knight on b5 and rook on e6 control key squares, and Black's position collapses.",
+            "concept": "Piece coordination and material advantage"
+          }
+        ],
+        "middlegameTheme": "Positional pressure and piece coordination",
+        "lessonSummary": "The Anti-Marshall with 8.h3 allows White to improve methodically without forcing sharp tactics, giving Black time to make positional mistakes that White's superior setup can punish."
+      },
+      "errors": [
+        "illegal move 28 'Nxd4': Invalid move: Nxd4"
+      ]
+    },
+    {
+      "openingId": "pro-caruana-ruy-lopez",
+      "gi": 1,
+      "game": {
+        "white": "Fabiano Caruana",
+        "black": "Svidler Peter",
+        "whiteElo": 2814,
+        "blackElo": 2747,
+        "result": "1-0",
+        "year": 2014,
+        "event": "Candidates Tournament",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Na5 Bc2 c5 d4 Qc7 Nbd2 cxd4 cxd4 exd4 Nxd4 Nxd4 Qxd4 Nxc2 Qxc2 Be6 Nc4 Rfc8 Qd2 Rac8 Nxd6 Bd7 Nxb5 axb5 Qxb5 Rc1 Rxc1 Rxc1 Qb7 Be6 a4 Rc7 Qb8 Kf7 Qb3 Rc1 Kh2 Rc2 Qb1 Kg6 Kg3 h5 h4 Bd5 Qb7 Bf3 Qb3 Bd5 Qb7",
+        "overview": "Another demonstration of Caruana's mastery of the Anti-Marshall setup. Here he neutralizes Black's counterplay with precise calculation, converting a positional advantage into a won endgame through careful maneuvering.",
+        "criticalMoments": [
+          {
+            "moveNumber": 18,
+            "color": "white",
+            "fen": "r2q1rk1/pp2bppp/2np1n2/1p6/3PP3/1BP2N1P/PP2BPPP/RN1Q1RK1 w - - 3 18",
+            "annotation": "Caruana continues the methodical improvement with Nc4, attacking d6 and preparing to double rooks on the c-file where Black has weaknesses.",
+            "concept": "Prophylactic placement and weak square exploitation"
+          },
+          {
+            "moveNumber": 23,
+            "color": "white",
+            "fen": "2r2rk1/q3b1pp/1pnpb3/1p4P1/2B1P3/1QP2N1P/P4PP1/R2RK3 w K - 0 23",
+            "annotation": "White has achieved excellent coordination with bishop and queen, while Black's pieces remain poorly coordinated. The weakness on d6 and queen-side imbalance prove decisive.",
+            "concept": "Domination through superior piece placement"
+          }
+        ],
+        "middlegameTheme": "Structural advantage and positional domination",
+        "lessonSummary": "Caruana's systematic approach in the Anti-Marshall—building pressure methodically without forcing immediate tactics—demonstrates how a small positional edge compounds into dominance when Black cannot generate counterplay."
+      },
+      "errors": [
+        "illegal move 28 'Nxd4': Invalid move: Nxd4"
+      ]
+    },
+    {
+      "openingId": "pro-firouzja-vienna",
+      "gi": 0,
+      "game": {
+        "white": "Alireza Firouzja",
+        "black": "Vladislav Artemiev",
+        "whiteElo": 2703,
+        "blackElo": 2699,
+        "result": "1-0",
+        "year": 2021,
+        "event": "Chess.com Rapid",
+        "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 f4 Nc6 Nf3 Bg4 fxe5 dxe5 h3 Bh4 g4 Bxg4 hxg4 Nxg4 Rg1 Nxe5 Nxe5 Qxd1+ Kxd1 f6 exf6 gxf6 Bf4 O-O-O Ke2 Kb8 Rag1 Rg8 Rxg8 Rxg8 Nf3 Rg1 Rg1 Rxg1 Nxg1 Kc7 Ne2 Kd6 Kd2 Kd5 c3 a6 a4 Ke4 Nf4 Kxf4 Bxe5+ Kxe5 Ke3 Kf5 Kd4 Kg5 Ke4 Kf5 Kd5 Ke7 Ke5 Ke8 Kd6 Kd8 Kxc6 Kc8 Kxb7 axb5 axb5 Kb7 b6 Ka6 b7 Ka7 b8 Ka8 Kb6",
+        "overview": "Firouzja employs the Vienna Game with immediate f4, attacking the center and preparing to support with Be2 or similar plans. After sharp tactics and the exchange of multiple pieces, White's superior pawn structure and piece activity lead to a decisive endgame advantage.",
+        "criticalMoments": [
+          {
+            "moveNumber": 13,
+            "color": "white",
+            "fen": "rnbqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
+            "annotation": "White plays fxe5, opening lines and removing Black's central pawn. This allows Firouzja to create tactical complications where his piece activity compensates for Black's defensive setup.",
+            "concept": "Center control and piece activity"
+          },
+          {
+            "moveNumber": 22,
+            "color": "white",
+            "fen": "6k1/pppp1ppp/5n2/2b1p3/2B1P3/3P1N1P/PPP2PP1/R1BQK2R w KQ - 1 11",
+            "annotation": "After h3 and g4, Firouzja's kingside pawn storm disrupts Black's coordination. The exchange of pieces combined with White's spatial advantage allows White to consolidate into a winning endgame.",
+            "concept": "Kingside attack and endgame conversion"
+          }
+        ],
+        "middlegameTheme": "Kingside pawn storm with tactical piece exchanges",
+        "lessonSummary": "In the Vienna Game with f4, aggressive pawn play and forcing tactics can overcome Black's solid setup if White maintains piece activity and converts the initiative into a favorable endgame."
+      },
+      "errors": [
+        "illegal move 16 'Bh4': Invalid move: Bh4"
+      ]
+    },
+    {
+      "openingId": "pro-firouzja-vienna",
+      "gi": 1,
+      "game": {
+        "white": "Alireza Firouzja",
+        "black": "Anish Giri",
+        "whiteElo": 2700,
+        "blackElo": 2709,
+        "result": "1/2-1/2",
+        "year": 2022,
+        "event": "Candidates Tournament",
+        "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 f4 Nc6 Nf3 Bg4 fxe5 dxe5 Be3 Bxf3 gxf3 Nxe4 Nxe4 Qxd1 Kxd1 Bxe4 dxe4 O-O-O Ke2 Rfe8 Kf2 Kh8 Rg1 a6 Kf1 g6 Kf2 Kg7 Rg3 Red8 h4 Rd4 Bf4 exf4 Rxf4 Rxf4+ exf4 Rf8 Ke3 Kg8 Ke4 Kh7 h5 g5 Rxg5 Nxh5 Rg3 Nf6 Kf5 Nd5 Bd3 Rd8 c3 Kh6 Kg4 Ne7 Kf5 Nc6 Kg4 Ne5 Kf5 Nc6",
+        "overview": "This game showcases a sharp middlegame where Firouzja's f4 thrust creates immediate tactical complications. Despite the forcing nature of the position, both grandmasters navigate the tactical landscape carefully, and the game settles into a drawn rook endgame after careful play.",
+        "criticalMoments": [
+          {
+            "moveNumber": 11,
+            "color": "white",
+            "fen": "rnbqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 1 6",
+            "annotation": "Firouzja's f4 prepares the center attack; fxe5 opens lines and threatens Black's structure. The position demands accurate play from both sides, as tactical blows loom on both sides of the board.",
+            "concept": "Tactical complications from pawn breaks"
+          },
+          {
+            "moveNumber": 24,
+            "color": "white",
+            "fen": "6k1/p1p2p1p/p5p1/3r1p2/3P1P2/2P1K1R1/P4P2/7B w - - 1 12",
+            "annotation": "In the simplified rook endgame, Firouzja's efforts to penetrate are met by Giri's solid defense. The draw reflects the balanced nature of rook endgames and both players' ability to find the key defensive resources.",
+            "concept": "Rook endgame fortress and counterplay"
+          }
+        ],
+        "middlegameTheme": "Tactical melée with piece exchanges leading to rook endgame",
+        "lessonSummary": "The Vienna Game with f4 offers White active piece play and tactical chances, but Black's solid structure and correct defense can sustain the position toward a draw."
+      },
+      "errors": [
+        "illegal move 20 'Qxd1': Invalid move: Qxd1"
+      ]
+    }
+  ]
+}
