@@ -69,6 +69,12 @@ interface StaticModeProps {
   showLastMoveHighlight?: boolean;
   /** Highlight the king square red when the side-to-move is in check. Default true. */
   showCheckHighlight?: boolean;
+  /** Per-surface override for the rank/file coordinate ribbon.
+   *  Defaults to the user's global `settings.showCoordinates`
+   *  preference. The Find-the-Square drill toggles this on the
+   *  surface as a training aid (David's spec 2026-05-19) without
+   *  changing the saved global preference. */
+  showCoordinates?: boolean;
 }
 
 export type ConsistentChessboardProps = ControlledModeProps | StaticModeProps;
@@ -132,6 +138,7 @@ function StaticBoard({
   enableMoveSound = true,
   showLastMoveHighlight = true,
   showCheckHighlight = true,
+  showCoordinates,
 }: StaticModeProps): JSX.Element {
   const theme = useBoardTheme();
   const { settings } = useSettings();
@@ -208,7 +215,7 @@ function StaticBoard({
           allowDragging: dragAllowed,
           dragActivationDistance: 5,
           animationDurationInMs: effectiveAnimationMs,
-          showNotation: settings.showCoordinates,
+          showNotation: showCoordinates ?? settings.showCoordinates,
           darkSquareStyle: theme.darkSquareStyle,
           lightSquareStyle: theme.lightSquareStyle,
           squareStyles: mergedSquareStyles,

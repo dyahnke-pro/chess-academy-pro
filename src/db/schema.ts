@@ -20,6 +20,7 @@ import type {
   OpeningNarration,
   EndgameProgressRecord,
   SrsOpeningCard,
+  FindSquareAttempt,
 } from '../types';
 import type { WalkthroughTree } from '../types/walkthroughTree';
 
@@ -59,6 +60,7 @@ class ChessAcademyDB extends Dexie {
   cachedOpenings!: EntityTable<CachedOpening, 'normalizedName'>;
   endgameProgress!: EntityTable<EndgameProgressRecord, 'id'>;
   srsOpeningCards!: EntityTable<SrsOpeningCard, 'id'>;
+  findSquareAttempts!: EntityTable<FindSquareAttempt, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -606,6 +608,36 @@ class ChessAcademyDB extends Dexie {
         for (const p of KID_PIECES) seeded[p] = DEFAULT_RATING;
         profile.kidRatingByPiece = seeded;
       });
+    });
+
+    // v27: find-the-square drill attempts. One row per click in the
+    // Find-the-Square drill (board-vision practice — David's spec
+    // 2026-05-19). The `target` index lets /weaknesses aggregate a
+    // per-square heatmap ("you're slow on g5, b3, e6"); `timestamp`
+    // supports recency-weighted scoring; `correct` lets the streak/
+    // accuracy roll-up skip the wrong attempts.
+    this.version(27).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelGames: 'id, openingId',
+      middlegamePlans: 'id, openingId',
+      generatedContent: 'id, openingId, type, generatedAt',
+      openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
+      classifiedTactics: 'id, sourceGameId, tacticType, playerColor, createdAt',
+      setupPuzzles: 'id, tacticType, difficulty, srsDueDate, status, sourceGameId',
+      openingNarrations: 'id, openingName, variation, moveSan, fen, approved',
+      cachedOpenings: 'normalizedName, eco, generatedAt',
+      endgameProgress: 'id, lessonId, lastPlayedAt',
+      srsOpeningCards: 'id, openingId, nextReviewAt, [openingId+nextReviewAt]',
+      findSquareAttempts: 'id, timestamp, target, correct, color',
+    }).upgrade(async () => {
+      // Brand-new store; no migration.
     });
   }
 }

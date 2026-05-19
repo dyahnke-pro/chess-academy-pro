@@ -324,6 +324,10 @@ export type AuditKind =
   // absent).
   | 'coach-opening-auto-detected'
   | 'coach-opening-teaching-active'
+  // Find-the-Square drill (David's 2026-05-19 spec). Fires once per
+  // round start with the target list — pair with downstream
+  // findSquareAttempts rows in Dexie to reconstruct per-round timing.
+  | 'find-square-round-start'
   // Diagnostic audits added to identify root causes for user-reported
   // bugs WITHOUT guessing the fix. Each one captures the inputs that
   // would otherwise require speculation. Once the audit log shows the

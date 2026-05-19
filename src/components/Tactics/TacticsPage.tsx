@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair } from 'lucide-react';
+import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair, MapPin } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PuzzleQuickSettings } from './PuzzleQuickSettings';
@@ -51,6 +51,7 @@ const FIXED_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ s
 const BOTTOM_BUTTONS: { key: string; label: string; icon: React.ComponentType<{ size?: number; className?: string }>; route: string; color: string; bgColor: string; rgb: string }[] = [
   { key: 'my-weaknesses', label: 'My Weaknesses', icon: Crosshair, route: '/tactics/weakness-themes', color: 'text-rose-400', bgColor: 'bg-rose-500/10', rgb: '244, 63, 94' },
   { key: 'my mistakes', label: 'My Mistakes', icon: AlertTriangle, route: '/tactics/mistakes', color: 'text-red-400', bgColor: 'bg-red-500/10', rgb: '239, 68, 68' },
+  { key: 'find-the-square', label: 'Find the Square', icon: MapPin, route: '/tactics/find-square', color: 'text-cyan-400', bgColor: 'bg-cyan-500/10', rgb: '34, 211, 238' },
 ];
 
 function neonBorderStyle(rgb: string, gS: number): React.CSSProperties {

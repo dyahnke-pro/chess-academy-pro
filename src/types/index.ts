@@ -100,6 +100,49 @@ export interface MistakePuzzle {
   solveTimes?: number[];
 }
 
+// ─── Find-the-Square (board-vision drill) ──────────────────────────────────
+
+/** A single click during the Find-the-Square drill. David's spec
+ *  2026-05-19: blank board, single pawn (a2 white / h7 black) shows
+ *  the student's color, target square pops up, user clicks. Each
+ *  click is logged — timing + correctness feed the /weaknesses
+ *  aggregator as "blind squares" insights ("you're slow on g5, b3").
+ *
+ *  No adaptive tier system: every round is a random square. Sequence
+ *  mode grows the per-round chain length as streak holds (2 → 3 → 4
+ *  → 5); single mode is one square per round always. */
+export interface FindSquareAttempt {
+  id: string;
+  timestamp: number;
+  /** Student's playing color — drives pawn placement (a2 for white,
+   *  h7 for black) and board orientation (pawn always at bottom). */
+  color: 'white' | 'black';
+  /** The square that was prompted (algebraic SAN, e.g. "h7"). */
+  target: string;
+  /** The square the student actually clicked. Equals `target` when
+   *  `correct` is true. */
+  clicked: string;
+  correct: boolean;
+  /** Time from target-shown to click in ms. */
+  durationMs: number;
+  /** Whether the rank/file coordinate ribbon was visible on the board
+   *  when the student clicked. Surface toggle, persisted per-profile. */
+  coordsShown: boolean;
+  /** Voice mode = the coach spoke the target audibly instead of (or
+   *  in addition to) showing it as text. */
+  voiceMode: boolean;
+  /** "single" = one square per round. "sequence" = N squares chained;
+   *  the student must click them in order. */
+  mode: 'single' | 'sequence';
+  /** When mode === 'sequence', the total length of this round's
+   *  sequence. Grows with streak: 2 → 3 → 4 → 5. */
+  sequenceLength?: number;
+  /** 0-based index within the sequence this attempt covers. */
+  sequenceIndex?: number;
+  /** Streak count at the START of this attempt (before grading). */
+  streakBefore: number;
+}
+
 // ─── Opening Annotations ────────────────────────────────────────────────────
 
 export interface AnnotationArrow {
