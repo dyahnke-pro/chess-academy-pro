@@ -305,12 +305,46 @@ export function sanitizeForTTS(text: string): string {
   out = out.replace(CASTLE_QUEEN_RE, 'castle queenside');
   out = out.replace(CASTLE_KING_RE, 'castle kingside');
   // Pawn captures: "exd5" → "e-pawn takes d5"
-  out = out.replace(PAWN_CAPTURE_RE, (_, file: string, dest: string) => `${file}-pawn takes ${dest}`);
-  // Piece SAN: "Nxf7" → "knight takes f7", "Bc4" → "bishop to c4"
-  out = out.replace(SAN_MOVE_RE, (_, piece: string, capture: string, dest: string) => {
-    const name = PIECE_LETTER_NAMES[piece] ?? piece;
-    return capture === 'x' ? `${name} takes ${dest}` : `${name} to ${dest}`;
+  const pawnExpansions: Array<{ san: string; spoken: string }> = [];
+  out = out.replace(PAWN_CAPTURE_RE, (san: string, file: string, dest: string) => {
+    const spoken = `${file}-pawn takes ${dest}`;
+    pawnExpansions.push({ san, spoken });
+    return spoken;
   });
+  // Piece SAN: "Nxf7" → "knight takes f7", "Bc4" → "bishop to c4"
+  const pieceExpansions: Array<{ san: string; spoken: string }> = [];
+  out = out.replace(SAN_MOVE_RE, (san: string, piece: string, capture: string, dest: string) => {
+    const name = PIECE_LETTER_NAMES[piece] ?? piece;
+    const spoken = capture === 'x' ? `${name} takes ${dest}` : `${name} to ${dest}`;
+    pieceExpansions.push({ san, spoken });
+    return spoken;
+  });
+  // Audit-instrumentation phase-1: log every SAN→speech expansion
+  // pair so Bug F-style regressions ("Nb4" → "knight to b") surface
+  // the moment they happen, not after the user reports them. Only
+  // emits when at least one expansion fired (no audit noise on plain
+  // prose). Dynamic import to avoid a top-level cycle.
+  if (pawnExpansions.length + pieceExpansions.length > 0) {
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'san-to-speech',
+        category: 'subsystem',
+        source: 'sanitizeForTTS',
+        summary:
+          `expanded ${pieceExpansions.length + pawnExpansions.length} SAN token(s): ` +
+          [...pieceExpansions, ...pawnExpansions]
+            .slice(0, 4)
+            .map(({ san, spoken }) => `${san}→"${spoken}"`)
+            .join(', '),
+        details: JSON.stringify({
+          pieceExpansions,
+          pawnExpansions,
+          inputPreview: text.slice(0, 200),
+          outputPreview: out.slice(0, 200),
+        }),
+      });
+    }).catch(() => undefined);
+  }
   return normalizePieceShorthand(out);
 }
 
