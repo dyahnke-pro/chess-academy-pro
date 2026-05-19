@@ -2945,8 +2945,8 @@
         },
         {
           "san": "Nxd2",
-          "annotation": "Black exchanges knights. After this trade, White gets to develop the bishop with tempo.",
-          "shortNarration": "Black trades knights, letting White develop the bishop with tempo."
+          "annotation": "Black recaptures on d2 with the knight, simplifying the position. The trade relieves pressure on Black's structure but cedes a tempo White will use to complete development.",
+          "shortNarration": "Black recaptures on d2 with the knight, simplifying. A tempo concession that hands White smooth development."
         },
         {
           "san": "Bxd2",

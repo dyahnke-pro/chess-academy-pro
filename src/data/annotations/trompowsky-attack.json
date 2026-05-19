@@ -3,7 +3,7 @@
   "moveAnnotations": [
     {
       "san": "d4",
-      "annotation": "This is the Trompowsky Attack, an aggressive system where White develops the bishop to g5 on move 2, avoiding the main lines of the Queen's Gambit. White plays 1.d4, claiming the center.",
+      "annotation": "White plays 1.d4, the queen's pawn opening. In the Trompowsky, the bishop will swing to g5 on move 2 to pin Black's Nf6 before White even develops the king's knight.",
       "pawnStructure": "A single central pawn on d4 controls e5 and c5. White keeps the c-pawn and e-pawn flexible for now.",
       "plans": [
         "Follow up with Bg5 to enter the Trompowsky Attack",
