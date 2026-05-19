@@ -22,6 +22,11 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+// SANDBOX_CHROMIUM_ARGS available but kept off until the brain-on
+// scenarios (5 narration probes) are restructured to verify the
+// real LLM behavior. Today's run shows brain reachable + responses
+// flowing but reply text doesn't match the tactic-name regex —
+// scenario-level work needed in a separate PR.
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';

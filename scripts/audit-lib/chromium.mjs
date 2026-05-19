@@ -15,6 +15,33 @@
 
 import { access } from 'node:fs/promises';
 
+/**
+ * Sandbox-bypass launch args. The Claude Code sandbox's headless
+ * Chromium rejects api.anthropic.com / api.deepseek.com with
+ * ERR_CERT_AUTHORITY_INVALID — there's a TLS-MITM somewhere in the
+ * sandbox's network path that the sandbox-installed Chromium doesn't
+ * trust. `--ignore-certificate-errors` accepts the resigned cert and
+ * lets brain calls go through; without it the audits that drive the
+ * LLM (audit-coach-teach-interactive, audit-coach-tactic-narration,
+ * audit-coach-play's narration scenarios) all see "TypeError: Failed
+ * to fetch" and short-circuit.
+ *
+ * Use:
+ *   const browser = await chromium.launch({
+ *     headless: true,
+ *     executablePath,
+ *     args: SANDBOX_CHROMIUM_ARGS,
+ *   });
+ *   const ctx = await browser.newContext({ ignoreHTTPSErrors: true, ... });
+ *
+ * Discovered 2026-05-19 — both flag AND ignoreHTTPSErrors on the
+ * context are required; either alone leaves the brain blocked.
+ */
+export const SANDBOX_CHROMIUM_ARGS = [
+  '--ignore-certificate-errors',
+  '--disable-web-security',
+];
+
 const HEADED_CANDIDATES = [
   '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
 ];

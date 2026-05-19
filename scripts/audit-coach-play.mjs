@@ -302,15 +302,20 @@ async function main() {
 
   await record('move-3-Bc4', async () => {
     await tryMove('f1', 'c4').catch(() => undefined);
-  }, MOVE_SETTLE_MS);
+  }, MOVE_SETTLE_MS, [
+    // By move 3 (e4 e5 Nc3 Nc6 Bc4) the position is clearly Italian/
+    // Vienna shape and the opening trie matches. Auto-detect runs
+    // every move where detectOpening() returns a hit. Originally
+    // pinned to move-4-Nf3 but that move occasionally fails silently
+    // when Stockfish hasn't returned its move-3 reply by the next
+    // click — move-3-Bc4 is the more deterministic anchor (the
+    // white-side build is fully under the test's control).
+    { kind: 'coach-opening-auto-detected', match: 'presence', op: 'present', why: 'auto-detect fires when openings trie matches the position (Italian shape)' },
+  ]);
 
   await record('move-4-Nf3', async () => {
     await tryMove('g1', 'f3').catch(() => undefined);
-  }, MOVE_SETTLE_MS, [
-    // By move 4 with Italian/Vienna shape, opening auto-detect should
-    // have fired at least once.
-    { kind: 'coach-opening-auto-detected', match: 'presence', op: 'present', why: 'auto-detect runs every move; Italian shape recognizable by move 4' },
-  ]);
+  }, MOVE_SETTLE_MS);
 
   // ── Memory-mirror contract guard (regression test for the
   //    audit-found bug class: GameChatPanel fast-paths used to write

@@ -24,6 +24,10 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+// SANDBOX_CHROMIUM_ARGS workaround exists but this script has
+// scenario-level issues (welcome-line testid changed; coach-response
+// wait pattern broken) that surface once brain is unblocked. Keep
+// the sandbox-skip guard until those are fixed in a separate PR.
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
