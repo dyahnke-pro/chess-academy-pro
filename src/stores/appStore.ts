@@ -39,6 +39,18 @@ function persistPuzzleShowTacticName(profile: UserProfile | null, on: boolean): 
   });
 }
 
+/** Puzzle timer toggle — counts up from 0 on each new puzzle.
+ *  Mirrored to profile.preferences so the choice sticks. */
+function persistPuzzleTimerOn(profile: UserProfile | null, on: boolean): void {
+  if (!profile) return;
+  profile.preferences.puzzleTimerOn = on;
+  void db.profiles.update(profile.id, {
+    preferences: { ...profile.preferences, puzzleTimerOn: on },
+  }).catch((err: unknown) => {
+    console.warn('[appStore] persistPuzzleTimerOn failed:', err);
+  });
+}
+
 interface AppState {
   // Auth / Profile
   activeProfile: UserProfile | null;
@@ -65,6 +77,8 @@ interface AppState {
   /** Show the named tactic above each mistake puzzle. Toggleable
    *  by the student via the eye-icon button next to the chip. */
   puzzleShowTacticName: boolean;
+  /** Show an elapsed-time badge on each puzzle. */
+  puzzleTimerOn: boolean;
 
   // Background analysis
   backgroundAnalysisRunning: boolean;
@@ -131,6 +145,8 @@ interface AppActions {
   toggleCoachTips: () => void;
   togglePuzzleShowTacticName: () => void;
   setPuzzleShowTacticName: (on: boolean) => void;
+  togglePuzzleTimer: () => void;
+  setPuzzleTimerOn: (on: boolean) => void;
   setBackgroundAnalysis: (running: boolean, progress?: string | null) => void;
   setCoachDrawerOpen: (open: boolean) => void;
   setCoachDrawerInitialMessage: (msg: string | null, modality?: 'voice' | 'text') => void;
@@ -162,6 +178,7 @@ const DEFAULT_STATE: AppState = {
   coachVoiceOn: true,
   coachTipsOn: false,
   puzzleShowTacticName: true,
+  puzzleTimerOn: true,
   backgroundAnalysisRunning: false,
   backgroundAnalysisProgress: null,
   coachDrawerOpen: false,
@@ -188,10 +205,13 @@ export const useAppStore = create<AppState & AppActions>()(
       const nextVoiceOn = typeof persisted === 'boolean' ? persisted : true;
       const persistedTacticName = profile?.preferences.puzzleShowTacticName;
       const nextPuzzleShowTacticName = typeof persistedTacticName === 'boolean' ? persistedTacticName : true;
+      const persistedTimer = profile?.preferences.puzzleTimerOn;
+      const nextPuzzleTimerOn = typeof persistedTimer === 'boolean' ? persistedTimer : true;
       set({
         activeProfile: profile,
         coachVoiceOn: nextVoiceOn,
         puzzleShowTacticName: nextPuzzleShowTacticName,
+        puzzleTimerOn: nextPuzzleTimerOn,
       });
     },
 
@@ -242,6 +262,17 @@ export const useAppStore = create<AppState & AppActions>()(
     setPuzzleShowTacticName: (on) => set((state) => {
       persistPuzzleShowTacticName(state.activeProfile, on);
       return { puzzleShowTacticName: on };
+    }),
+
+    togglePuzzleTimer: () => set((state) => {
+      const next = !state.puzzleTimerOn;
+      persistPuzzleTimerOn(state.activeProfile, next);
+      return { puzzleTimerOn: next };
+    }),
+
+    setPuzzleTimerOn: (on) => set((state) => {
+      persistPuzzleTimerOn(state.activeProfile, on);
+      return { puzzleTimerOn: on };
     }),
 
     setBackgroundAnalysis: (running, progress) =>

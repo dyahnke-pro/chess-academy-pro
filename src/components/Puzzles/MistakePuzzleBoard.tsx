@@ -145,6 +145,38 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
   const activeProfile = useAppStore((s) => s.activeProfile);
   const puzzleShowTacticName = useAppStore((s) => s.puzzleShowTacticName);
   const togglePuzzleShowTacticName = useAppStore((s) => s.togglePuzzleShowTacticName);
+  const puzzleTimerOn = useAppStore((s) => s.puzzleTimerOn);
+  // Elapsed-time counter for this puzzle. Starts ticking when state
+  // transitions to 'playing' (after the replay context clears).
+  // Freezes on 'correct' / 'incorrect'. Resets on puzzle change.
+  const [elapsedMs, setElapsedMs] = useState(0);
+  const elapsedStartRef = useRef<number | null>(null);
+  useEffect(() => {
+    // Reset when puzzle changes.
+    setElapsedMs(0);
+    elapsedStartRef.current = null;
+  }, [puzzle.id]);
+  useEffect(() => {
+    if (!puzzleTimerOn) return;
+    if (state !== 'playing') {
+      // Freeze on non-playing states (replay / correct / incorrect /
+      // loading). Resume on next play.
+      elapsedStartRef.current = null;
+      return;
+    }
+    if (elapsedStartRef.current == null) {
+      elapsedStartRef.current = performance.now() - elapsedMs;
+    }
+    const id = setInterval(() => {
+      if (elapsedStartRef.current != null) {
+        setElapsedMs(performance.now() - elapsedStartRef.current);
+      }
+    }, 250);
+    return () => clearInterval(id);
+    // elapsedMs intentionally omitted — would reset the interval on
+    // every tick.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, puzzleTimerOn]);
   const [whyLoading, setWhyLoading] = useState(false);
   const [wrongAttemptCount, setWrongAttemptCount] = useState(0);
   // Coach chat — visible after the puzzle is solved (state === 'correct').
@@ -718,6 +750,23 @@ export function MistakePuzzleBoard({ puzzle, onComplete, skipReplayContext = fal
           <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded bg-theme-surface text-theme-text-muted border border-theme-border" data-testid="opening-name">
             <BookOpen size={10} />
             {puzzle.openingName}
+          </span>
+        )}
+        {/* Elapsed-time badge — toggleable via /tactics Quick
+            Settings (puzzleTimerOn). Resets per puzzle, freezes on
+            correct/incorrect/replay states. */}
+        {puzzleTimerOn && (
+          <span
+            className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded bg-theme-surface text-theme-text-muted border border-theme-border tabular-nums"
+            data-testid="puzzle-elapsed-timer"
+          >
+            <Clock size={10} />
+            {(() => {
+              const totalSec = Math.floor(elapsedMs / 1000);
+              const m = Math.floor(totalSec / 60);
+              const s = totalSec % 60;
+              return `${m}:${s.toString().padStart(2, '0')}`;
+            })()}
           </span>
         )}
         {/* Tactic-name chip — surfaces the named pattern (Skewer /

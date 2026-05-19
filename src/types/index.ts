@@ -512,6 +512,10 @@ export interface UserPreferences {
    *  student can find the tactic blind. Toggle lives next to the
    *  chip itself. Defaults to true (named-tactic shown). */
   puzzleShowTacticName?: boolean;
+  /** Show an elapsed-time badge on each puzzle. Counts up from 0
+   *  on every new puzzle. Toggle lives in the /tactics Quick
+   *  Settings panel. Defaults to true (timer on). */
+  puzzleTimerOn?: boolean;
   dailySessionMinutes: number;
   aiProvider: AiProvider;
   apiKeyEncrypted: string | null;

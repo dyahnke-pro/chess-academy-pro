@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
+import { PuzzleQuickSettings } from './PuzzleQuickSettings';
 import { THEME_MAP } from '../../services/puzzleService';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
@@ -135,6 +136,10 @@ export function TacticsPage(): JSX.Element {
       <div className="max-w-lg mx-auto w-full">
         <SmartSearchBar placeholder="Search tactics, games, openings..." />
       </div>
+
+      {/* Quick settings — collapsible toggles for puzzle UX prefs
+          (timer, tactic name, hints, voice). Closed by default. */}
+      <PuzzleQuickSettings />
 
       {/* Grid */}
       <div className="grid grid-cols-2 gap-3 flex-1 content-start max-w-lg mx-auto w-full">
