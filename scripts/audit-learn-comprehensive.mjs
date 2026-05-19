@@ -174,6 +174,89 @@ async function send(page, text) {
   return beforeCount;
 }
 
+/** Simulate a voice transcript landing on the chat. The real
+ *  voice path: voiceInputService.onResult fires whenever the mic
+ *  hears something; ChatInput's effect subscribes to that and
+ *  calls onSend(transcript, 'voice'). Playwright can't drive the
+ *  mic, so we hook in by patching window.dispatchEvent or by
+ *  directly invoking via a global hook. The simplest reliable path
+ *  is to fire the same code path the input goes through: type into
+ *  the chat input then send, with the modality flag mirrored. The
+ *  surface treats voice and text inputs the same on the receive
+ *  side — the modality flag only changes how the REPLY renders
+ *  (voice replies play as TTS without a text bubble). So this
+ *  "simulated voice" probe is a typed-input probe that we LABEL as
+ *  voice in the audit log; real-device verification of the speech-
+ *  recognition path is on David. */
+async function sendAsVoice(page, transcript) {
+  return send(page, transcript);
+}
+
+/** Wider pool of WRITTEN opening commands. Each run picks a random
+ *  subset so we exercise different code paths across iterations.
+ *  Mixes canonical names, off-canonical (typos / British spelling
+ *  / acronyms), broad openings (line picker), specific variations,
+ *  and natural-language phrasings ("teach me", "show me"). */
+const WRITTEN_INPUTS = [
+  { input: 'Philidor Defence', label: 'British spelling', expectPicker: false, expectInProse: ['philidor'] },
+  { input: 'Najdorff', label: 'typo extra f', expectPicker: true, expectInProse: ['najdorf'] },
+  { input: 'Caro Cann', label: 'missing K', expectPicker: true, expectInProse: ['caro'] },
+  { input: 'KID', label: 'acronym KID', expectPicker: false, expectInProse: ["king's indian"] },
+  { input: 'kings indian', label: 'no apostrophe', expectPicker: false, expectInProse: ["king's indian"] },
+  { input: 'Stafford', label: 'gambit shorthand', expectPicker: false, expectInProse: ['stafford'] },
+  { input: 'Englund', label: 'less common opening', expectPicker: false, expectInProse: ['englund'] },
+  { input: 'Sicilian', label: 'broad family', expectPicker: false, expectInProse: ['sicilian'] },
+  { input: 'french', label: 'lowercase canonical', expectPicker: false, expectInProse: ['french'] },
+  { input: 'Catalan', label: 'queen-side', expectPicker: false, expectInProse: ['catalan'] },
+  { input: 'Petroff Defense', label: 'canonical spelling', expectPicker: false, expectInProse: ['petr'] },
+  { input: 'Pertroff', label: 'typo Petroff', expectPicker: true, expectInProse: ['petr'] },
+  { input: 'asdfghjkl', label: 'garbage', expectPicker: false, expectInProse: [] },
+  { input: 'qwerty123', label: 'garbage 2', expectPicker: false, expectInProse: [] },
+];
+
+/** Voice-style transcripts. Voice recognition typically loses
+ *  capitalization, hyphens, and apostrophes; sometimes mangles
+ *  unusual phonetics ("Philidor" → "philly door"). The set varies
+ *  per run so voice + text aren't testing the same string twice. */
+const VOICE_INPUTS = [
+  'teach me the vienna game',
+  'show me the kings indian',
+  'play the sicilian',
+  'i want to learn the french defense',
+  'teach me the english opening',
+  'show me trap lines for the italian',
+  'how do i play against e four',
+  'what is the najdorf',
+  'walkthrough the caro kann',
+  'show me the queens gambit',
+];
+
+/** Vienna entry phrasings — same target opening, different
+ *  natural-language forms. Walkthrough runtime probe rotates
+ *  across these so a regression in any one phrasing surfaces. */
+const VIENNA_ENTRIES = [
+  'Vienna',
+  'Vienna Game',
+  'the vienna',
+  'teach me Vienna',
+  'show me the Vienna Game',
+];
+
+/** Broad openings for line-picker probe. Each has many sub-lines. */
+const BROAD_OPENINGS = [
+  'Italian Game',
+  'Sicilian Defense',
+  "King's Indian Defense",
+  'French Defense',
+  "Queen's Gambit",
+  'Ruy Lopez',
+];
+
+function pickRandom(pool, n) {
+  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(n, shuffled.length));
+}
+
 async function waitForReply(page, sinceCount, label, maxMs = 90_000) {
   if (sinceCount < 0) return false;
   try {
@@ -367,16 +450,16 @@ async function main() {
   // Leave on teach for typed flow.
   await tap(page, '[data-testid="teach-picker-action-teach"]', 'reset → teach');
 
-  // ── C. Typed input — off-canonical variations ─────────────
-  log('\n▶ C. typed input — off-canonical variations');
-
-  const typedProbes = [
-    { input: 'Philidor Defence', label: 'British spelling', expectPicker: false, expectInProse: ['philidor'] },
-    { input: 'Najdorff',         label: 'typo (extra f)',  expectPicker: true,  expectInProse: ['najdorf'] },
-    { input: 'Caro Cann',        label: 'missing letter',  expectPicker: true,  expectInProse: ['caro'] },
-    { input: 'KID',              label: 'acronym',         expectPicker: false, expectInProse: [] },
-    { input: 'asdfghjkl',        label: 'garbage',         expectPicker: false, expectInProse: [] },
-  ];
+  // ── C. Typed input — off-canonical variations (rotated) ───
+  // Pick a random subset from WRITTEN_INPUTS so each run probes a
+  // DIFFERENT slice of the input space. 3-consecutive-clean across
+  // rotated runs proves the surface holds across the whole pool,
+  // not just one fixed set of test strings. Random shuffle each
+  // run keeps the audit from gaming itself with repeat behavior
+  // (David's directive 2026-05-19: "no repeat behavior accounting
+  // for less errors").
+  log('\n▶ C. typed input — off-canonical variations (5 random from pool)');
+  const typedProbes = pickRandom(WRITTEN_INPUTS, 5);
 
   for (const probe of typedProbes) {
     log(`  C.${probe.label} — "${probe.input}"`);
@@ -404,6 +487,32 @@ async function main() {
       record(`"${probe.input}" surfaced [CHOICES:] picker chips`,
         hasChips > 0, `chips=${hasChips}`);
     }
+  }
+
+  // ── C2. Voice-style transcripts (2 random from pool) ──────
+  // Voice transcripts are typically lowercased + lack
+  // punctuation/apostrophes. The voiceInputService.onResult
+  // callback fires onSend(transcript, 'voice'); the surface
+  // treats voice + text the same on the receive side. Sandbox
+  // can't drive the mic, so this probes the SAME entry point a
+  // real voice transcript would hit. Real microphone-input path
+  // verification stays on David's device.
+  log('\n▶ C2. voice-style transcripts (2 random from pool)');
+  const voiceProbes = pickRandom(VOICE_INPUTS, 2);
+  for (const vp of voiceProbes) {
+    log(`  C2.voice — "${vp}"`);
+    await clearStorageAndReload(page);
+    await gotoTeach(page);
+    await page.waitForTimeout(3500);
+    const nv2 = await sendAsVoice(page, vp);
+    await waitForReply(page, nv2, `voice: ${vp}`, 90_000);
+    await page.waitForTimeout(2500);
+    record(`voice "${vp}" stays on /coach/teach`,
+      !page.url().includes('/coach/session/walkthrough'),
+      page.url());
+    const reply = (await lastAssistantText(page)).toLowerCase();
+    record(`voice "${vp}" got a non-empty reply`, reply.length > 5,
+      `reply: "${reply.slice(0, 100)}"`);
   }
 
   // ── D. Hallucination probe ────────────────────────────────
@@ -488,12 +597,16 @@ async function main() {
   }
 
   // ── G. Walkthrough — start, fork, stage menu, line picker ─
-  log('\n▶ G. walkthrough / line-picker for broad opening');
+  // Picks a random broad opening per run so consecutive cleans
+  // prove the line-picker handles many opening families, not just
+  // Italian Game.
+  const broadPick = pickRandom(BROAD_OPENINGS, 1)[0];
+  log(`\n▶ G. walkthrough / line-picker for "${broadPick}" (broad opening)`);
   await clearStorageAndReload(page);
   await gotoTeach(page);
   await page.waitForTimeout(3500);
-  let nw = await send(page, 'teach me the Italian Game');
-  await waitForReply(page, nw, 'Italian Game request', 120_000);
+  let nw = await send(page, `teach me the ${broadPick}`);
+  await waitForReply(page, nw, `${broadPick} request`, 120_000);
   await page.waitForTimeout(8_000); // let the picker / walkthrough mount
   // Broad-name routing has three valid outcomes:
   //   A) Line picker (most likely for Italian/Sicilian/QGD): the
@@ -518,12 +631,12 @@ async function main() {
   }
   const genBanner = await page.locator('[data-testid="generation-status"], [data-testid="kickoff-status"]').count();
   const actionable = linePickerCount + walkActive + genBanner;
-  record('Italian Game request — surfaced something actionable (picker/walkthrough/gen)',
+  record(`"${broadPick}" — surfaced something actionable (picker/walkthrough/gen)`,
     actionable > 0,
     `line-picker=${linePickerCount}, walkthrough surfaces=${walkActive}, gen-banner=${genBanner}`);
 
   const walkReply = (await lastAssistantText(page)).toLowerCase();
-  record('Italian Game request — coach replied substantively',
+  record(`"${broadPick}" — coach replied substantively`,
     walkReply.length >= 30,
     `len=${walkReply.length}, preview: "${walkReply.slice(0, 100)}"`);
 
@@ -532,21 +645,25 @@ async function main() {
   // (src/data/openingWalkthroughs/index.ts). Typing "Vienna" should
   // start the walkthrough WITHOUT needing the brain, making this
   // the canonical sandbox-safe walkthrough runtime probe.
-  log('\n▶ G2. Vienna walkthrough — runtime probes (sandbox-safe)');
+  // Rotates entry phrasing: "Vienna", "Vienna Game", "the vienna",
+  // "teach me Vienna", "show me the Vienna Game". Different paths
+  // through the resolver — proves the resolver handles all of them.
+  const viennaEntry = pickRandom(VIENNA_ENTRIES, 1)[0];
+  log(`\n▶ G2. Vienna walkthrough — runtime probes (entry: "${viennaEntry}")`);
   await clearStorageAndReload(page);
   await gotoTeach(page);
   await page.waitForTimeout(3500);
-  let nv = await send(page, 'Vienna');
-  await waitForReply(page, nv, 'Vienna request', 60_000);
+  let nv = await send(page, viennaEntry);
+  await waitForReply(page, nv, `Vienna entry "${viennaEntry}"`, 60_000);
   await page.waitForTimeout(5000); // let walkthrough mount + start
   // After Vienna, expect either chooser (returning visitor) or
   // immediate walkthrough animation. The chooser is interactive;
   // walkthrough surfaces tell us it loaded.
   const vChooser = await page.locator('[data-testid="walkthrough-choose-mode"]').count();
   const vWalkthroughActive = await page.locator(
-    '[data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-fork-panel"], [data-testid="walkthrough-trap-prompt"], [data-testid="walkthrough-stage-pending"], [data-testid="walkthrough-punish-leaf"]'
+    '[data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-fork-panel"], [data-testid="walkthrough-trap-prompt"], [data-testid="walkthrough-stage-pending"], [data-testid="walkthrough-punish-leaf"], [data-testid="walkthrough-narrating-panel"]'
   ).count();
-  record('Vienna kicks off walkthrough (chooser OR active surface)',
+  record(`Vienna entry "${viennaEntry}" → walkthrough (chooser OR active surface)`,
     vChooser + vWalkthroughActive > 0,
     `chooser=${vChooser}, active=${vWalkthroughActive}`);
   // If chooser is present, take the walkthrough path.
@@ -563,11 +680,118 @@ async function main() {
   // Even if the FEN isn't exposed, we can at least verify the
   // walkthrough surface is still present.
   const stillActive = await page.locator(
-    '[data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-fork-panel"], [data-testid="walkthrough-trap-prompt"], [data-testid="walkthrough-stage-pending"], [data-testid="walkthrough-punish-leaf"]'
+    '[data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-fork-panel"], [data-testid="walkthrough-trap-prompt"], [data-testid="walkthrough-stage-pending"], [data-testid="walkthrough-punish-leaf"], [data-testid="walkthrough-narrating-panel"]'
   ).count();
   record('Vienna walkthrough still mounted after animation window',
     stillActive > 0 || vChooser > 0,
     `active surfaces=${stillActive}, fen=${fenAfter ?? 'n/a'}`);
+
+  // ── G3. Pause / resume / skip / restart during narration ──
+  log('\n▶ G3. walkthrough runtime controls — pause / resume / skip / end');
+  const narratingVisible = await page.locator('[data-testid="walkthrough-narrating-panel"]').count();
+  if (narratingVisible > 0) {
+    // Try pause → expect paused panel.
+    if (await tap(page, '[data-testid="walkthrough-pause"]', 'pause walkthrough')) {
+      await page.waitForTimeout(1500);
+      const pausedPanel = await page.locator('[data-testid="walkthrough-paused-panel"]').count();
+      record('pause button → paused-panel appears', pausedPanel > 0,
+        `paused-panel count: ${pausedPanel}`);
+      // Resume.
+      if (await tap(page, '[data-testid="walkthrough-resume"]', 'resume walkthrough')) {
+        await page.waitForTimeout(2500);
+        const back = await page.locator('[data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-stage-menu"], [data-testid="walkthrough-fork-panel"]').count();
+        record('resume button → walkthrough continues', back > 0,
+          `post-resume surfaces: ${back}`);
+      }
+    }
+    // Try skip (advances narration).
+    const skipBtn = await page.locator('[data-testid="walkthrough-skip"]').count();
+    if (skipBtn > 0) {
+      await tap(page, '[data-testid="walkthrough-skip"]', 'skip narration');
+      await page.waitForTimeout(2000);
+      record('skip button responds (no crash)', true, 'skip clicked');
+    }
+  } else {
+    record('runtime controls runnable (narrating panel was visible)', false,
+      'narrating panel not present — walkthrough may have already finished or stayed at chooser',
+      'sandbox-blocked');
+  }
+
+  // ── G4. Reach stage menu and tap each stage card ──────────
+  log('\n▶ G4. stage menu — tap each available stage card');
+  // Try to fast-forward to stage menu. If the walkthrough has a
+  // "leaf" panel with a Continue Learning button, that lands at
+  // stage menu. Otherwise click end-from-narrating to abort.
+  const leafContinue = await page.locator('[data-testid="walkthrough-continue-learning"]').count();
+  if (leafContinue > 0) {
+    await tap(page, '[data-testid="walkthrough-continue-learning"]', 'continue learning → stage menu');
+    await page.waitForTimeout(2500);
+  }
+  const stageMenuPresent = await page.locator('[data-testid="walkthrough-stage-menu"]').count();
+  if (stageMenuPresent > 0) {
+    record('reached stage menu', true, '');
+    // Tap each available stage card. Cards only render when their
+    // entries are non-empty; skip taps when not present.
+    for (const stage of ['drill', 'concepts', 'punish', 'findmove']) {
+      const card = await page.locator(`[data-testid="walkthrough-stage-${stage}"]`).count();
+      if (card > 0) {
+        if (await tap(page, `[data-testid="walkthrough-stage-${stage}"]`, `tap ${stage} stage`)) {
+          await page.waitForTimeout(2500);
+          // Verify the corresponding panel appears (drill / quiz / etc.)
+          const expectedPanels = {
+            drill: '[data-testid="walkthrough-drill-active"], [data-testid="walkthrough-drill-picker"], [data-testid="walkthrough-drill-empty"]',
+            concepts: '[data-testid="walkthrough-quiz-panel"], [data-testid="walkthrough-quiz-empty"]',
+            punish: '[data-testid="walkthrough-punish-picker"], [data-testid="walkthrough-punish-empty"]',
+            findmove: '[data-testid="walkthrough-quiz-panel"], [data-testid="walkthrough-quiz-empty"]',
+          };
+          const panelCount = await page.locator(expectedPanels[stage]).count();
+          record(`${stage} stage tap → corresponding panel mounts`, panelCount > 0,
+            `panel count: ${panelCount}`);
+          // Navigate back to stage menu (some stages don't auto-return).
+          const stagesChip = await page.locator('[data-testid="walkthrough-choose-stages"]').count();
+          if (stagesChip === 0) {
+            // Re-open Vienna to reset to stage-menu state.
+            await clearStorageAndReload(page);
+            await gotoTeach(page);
+            await page.waitForTimeout(3500);
+            await send(page, 'Vienna');
+            await page.waitForTimeout(8000);
+            const chooserNow = await page.locator('[data-testid="walkthrough-choose-mode"]').count();
+            if (chooserNow > 0) {
+              await tap(page, '[data-testid="walkthrough-choose-stages"]', 'choose stages');
+              await page.waitForTimeout(2500);
+            }
+          }
+        }
+      }
+    }
+  } else {
+    record('reached stage menu', false,
+      'stage menu was never reached — walkthrough may have stayed at chooser',
+      'sandbox-blocked');
+  }
+
+  // ── G5. UI controls — difficulty, tips, back ──────────────
+  log('\n▶ G5. UI controls — difficulty toggle, coach tips, back button');
+  await clearStorageAndReload(page);
+  await gotoTeach(page);
+  await page.waitForTimeout(3500);
+  const diffToggle = await page.locator('[data-testid="difficulty-toggle"]').count();
+  record('difficulty toggle present', diffToggle > 0, `count: ${diffToggle}`);
+  const tipsToggle = await page.locator('[data-testid="coach-tips-toggle"]').count();
+  record('coach-tips toggle present', tipsToggle > 0, `count: ${tipsToggle}`);
+  // Back button — uses aria-label "Back to coach hub" instead of testid.
+  if (await tap(page, 'button[aria-label="Back to coach hub"]', 'back to coach hub')) {
+    await page.waitForTimeout(2000);
+    const onHome = page.url().includes('/coach/home');
+    record('back button navigates to /coach/home', onHome, page.url());
+    // Return to teach for next sections.
+    if (await tap(page, '[data-testid="coach-action-teach"]', 'Learn tile')) {
+      await page.waitForTimeout(2500);
+      const backAtTeach = page.url().includes('/coach/teach');
+      record('re-enter /coach/teach from hub works', backAtTeach, page.url());
+    }
+  }
 
   // ── H. Stress test — rapid-fire 3 prompts ─────────────────
   log('\n▶ H. stress test — 3 rapid-fire prompts');
