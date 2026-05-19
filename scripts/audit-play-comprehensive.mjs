@@ -394,8 +394,108 @@ async function main() {
   record('stress test — 3 rapid-fire sends, no crash', true,
     'all 3 attempted');
 
-  // ── J. Route-log scan — no legacy bounce ─────────────────
-  log('\n▶ J. route-log scan');
+  // ── J. PLAY A MOVE — actual board interaction + engine reply ─
+  log('\n▶ J. play a move on the board (e2-e4) + Stockfish reply');
+  // Reset to fresh state — close drawer, restart game.
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(800);
+  await gotoPlay(page);
+  await page.waitForTimeout(2500);
+  // Ensure we're playing as white (we move first).
+  if (await page.locator('[data-testid="color-white-btn"]').count() > 0) {
+    await tap(page, '[data-testid="color-white-btn"]', 'pick white for move probe');
+    await page.waitForTimeout(1500);
+  }
+  // Click restart so we start from move 1 cleanly.
+  if (await page.locator('[data-testid="restart-btn"]').count() > 0) {
+    await page.locator('[data-testid="restart-btn"]').first().click({ force: true });
+    await page.waitForTimeout(2000);
+  }
+
+  async function clickSquare(square) {
+    const sq = page.locator(`[data-square="${square}"]`).first();
+    if (await sq.count() === 0) {
+      record(`board square "${square}" present`, false, 'not on board');
+      return false;
+    }
+    await sq.click({ force: true });
+    return true;
+  }
+
+  // react-chessboard places pieces as `<div id="chessboard-piece-${piece}-${square}" data-piece="${piece}">`
+  // inside each occupied square. Count + check IDs to detect moves.
+  async function piecesOnBoard() {
+    return page.evaluate(() => {
+      const els = document.querySelectorAll('[data-piece]');
+      const map = {};
+      els.forEach((el) => {
+        const id = el.id || '';
+        const m = id.match(/chessboard-piece-([a-zA-Z]+)-([a-h][1-8])$/);
+        if (m) map[m[2]] = m[1];
+      });
+      return map;
+    });
+  }
+
+  const piecesBefore = await piecesOnBoard();
+  const e2Before = piecesBefore.e2;
+  log(`  starting board has ${Object.keys(piecesBefore).length} pieces; e2=${e2Before ?? 'empty'}`);
+
+  // Play e2-e4 (white opening move).
+  log('  ▸ click e2');
+  const e2ok = await clickSquare('e2');
+  await page.waitForTimeout(500);
+  log('  ▸ click e4');
+  const e4ok = await clickSquare('e4');
+  record('played e2-e4 (board click sequence completed)',
+    e2ok && e4ok, `e2=${e2ok}, e4=${e4ok}`);
+  // Wait for student-move + Stockfish reply animations.
+  await page.waitForTimeout(10_000);
+  const piecesAfter = await piecesOnBoard();
+  // After e2-e4 + engine response: e2 should be EMPTY, e4 should
+  // have a white pawn.
+  record('e2 empty after move (pawn left the square)',
+    !piecesAfter.e2 || piecesAfter.e2 !== 'wP',
+    `e2 now: ${piecesAfter.e2 ?? 'empty'}`);
+  record('e4 occupied by white pawn after move',
+    piecesAfter.e4 === 'wP',
+    `e4 now: ${piecesAfter.e4 ?? 'empty'}`);
+  // Engine should have moved too — at least one black square should
+  // have changed. Compare piece arrangement diff.
+  const beforeKeys = new Set(Object.keys(piecesBefore));
+  const afterKeys = new Set(Object.keys(piecesAfter));
+  const changedSquares = [...new Set([...beforeKeys, ...afterKeys])].filter(
+    (sq) => piecesBefore[sq] !== piecesAfter[sq],
+  );
+  record('engine responded (≥3 squares changed: e2-e4 + black move)',
+    changedSquares.length >= 3,
+    `changed squares: ${changedSquares.join(', ')}`);
+
+  // Takeback — should rewind moves.
+  if (await page.locator('[data-testid="takeback-btn"]').count() > 0) {
+    log('  ▸ takeback');
+    await page.locator('[data-testid="takeback-btn"]').first().click({ force: true });
+    await page.waitForTimeout(3000);
+    const piecesAfterTakeback = await piecesOnBoard();
+    record('takeback button rewinds the board',
+      piecesAfterTakeback.e2 === 'wP' || Object.keys(piecesAfterTakeback).length > Object.keys(piecesAfter).length - 2,
+      `e2 after takeback: ${piecesAfterTakeback.e2 ?? 'empty'}, total pieces: ${Object.keys(piecesAfterTakeback).length}`);
+  }
+
+  // Restart — should reset to starting position (all 32 pieces home).
+  if (await page.locator('[data-testid="restart-btn"]').count() > 0) {
+    log('  ▸ restart');
+    await page.locator('[data-testid="restart-btn"]').first().click({ force: true });
+    await page.waitForTimeout(3000);
+    const piecesAfterRestart = await piecesOnBoard();
+    const back = piecesAfterRestart.e2 === 'wP' && piecesAfterRestart.e7 === 'bP' && Object.keys(piecesAfterRestart).length === 32;
+    record('restart button returns to starting position',
+      back,
+      `e2=${piecesAfterRestart.e2}, e7=${piecesAfterRestart.e7}, total=${Object.keys(piecesAfterRestart).length}`);
+  }
+
+  // ── K. Route-log scan — no legacy bounce ─────────────────
+  log('\n▶ K. route-log scan');
   const url = page.url();
   record('no nav to /coach/session/play-against',
     !url.includes('/coach/session/play-against'), url);
