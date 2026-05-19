@@ -5,6 +5,36 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { SYSTEM_PROMPT, buildChessContextMessage, getVerbosityInstruction } from './coachPrompts';
 import { recordApiUsage } from './coachCostService';
+
+/** Audit-instrumentation phase-1 (2026-05-19): emit a per-LLM-call
+ *  token usage event so per-turn cost trends are visible in the
+ *  audit log without scraping provider invoices. Paired with every
+ *  recordApiUsage call so the local cost dashboard and the audit
+ *  stream stay in sync. */
+function emitLlmTokenUsage(
+  task: string,
+  model: string,
+  provider: 'deepseek' | 'anthropic',
+  promptTokens: number,
+  completionTokens: number,
+  finishReason: string | null = null,
+): void {
+  void logAppAudit({
+    kind: 'llm-token-usage',
+    category: 'subsystem',
+    source: `coachApi.${provider}`,
+    summary: `task=${task} model=${model} provider=${provider} in=${promptTokens} out=${completionTokens}`,
+    details: JSON.stringify({
+      task,
+      model,
+      provider,
+      promptTokens,
+      completionTokens,
+      totalTokens: promptTokens + completionTokens,
+      finishReason,
+    }),
+  });
+}
 import { lookupMasterPlay } from './masterPlayLookup';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
@@ -470,6 +500,7 @@ async function callDeepSeek(
 
   if (response.usage) {
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
+    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null);
   }
   const choice = response.choices[0];
   // DeepSeek-reasoner emits `reasoning_content` separately from
@@ -528,6 +559,7 @@ async function callAnthropicStream(
     finalMsg.usage.input_tokens,
     finalMsg.usage.output_tokens,
   );
+  emitLlmTokenUsage('stream', model, 'anthropic', finalMsg.usage.input_tokens, finalMsg.usage.output_tokens, finalMsg.stop_reason ?? null);
   return fullText;
 }
 
@@ -552,6 +584,7 @@ async function callAnthropic(
   });
 
   void recordApiUsage(task, model, response.usage.input_tokens, response.usage.output_tokens);
+  emitLlmTokenUsage(task, model, 'anthropic', response.usage.input_tokens, response.usage.output_tokens, response.stop_reason ?? null);
   const content = response.content[0];
   return content.type === 'text' ? content.text : '';
 }
@@ -606,6 +639,7 @@ export async function callAnthropicWithTool(
     tool_choice: { type: 'tool', name: toolName },
   });
   void recordApiUsage(task, model, response.usage.input_tokens, response.usage.output_tokens);
+  emitLlmTokenUsage(task, model, 'anthropic', response.usage.input_tokens, response.usage.output_tokens, response.stop_reason ?? null);
   for (const block of response.content) {
     if (block.type === 'tool_use' && block.name === toolName) {
       return block.input;
@@ -716,6 +750,7 @@ export async function callDeepseekWithTool(
   });
   if (response.usage) {
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
+    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null);
   }
   const choice = response.choices[0];
   const toolCall = choice?.message?.tool_calls?.[0];
