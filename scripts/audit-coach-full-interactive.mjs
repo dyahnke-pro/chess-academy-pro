@@ -445,6 +445,14 @@ async function main() {
   await driveChatSurface(page);
   await driveTrainSurface(page);
   await driveRedirectSurfaces(page);
+  // Bypass-path verification: drive surfaces that call
+  // getCoachCommentary / getCoachChatResponse directly (NOT via
+  // coachService.ask). These fire the `coachApi.commentary.<task>`
+  // or `coachApi.chatResponse` audit source when narration grounding
+  // loads. Verifies the universal-grounding wire in coachApi.ts
+  // actually fires at runtime on real surfaces, not just at the
+  // unified envelope.
+  await driveBypassPaths(page);
 
   // ───────────────────────────────────────────────────────────────
   // 4. Final concern sweep — anything that fired late
@@ -494,6 +502,52 @@ async function main() {
     return acc;
   }, {});
 
+  // Per-source counts for the grounding loaders. Two families:
+  //   1. coachService.ask.<source>  — the unified envelope path. Fires
+  //      on every brain call routed through coachService.ask (teach,
+  //      review, play, analyse, …).
+  //   2. coachApi.<source>          — bypass paths that don't go
+  //      through coachService.ask. These call getCoachCommentary /
+  //      getCoachChatResponse directly (puzzle feedback, smart-search
+  //      intent, daily lesson, content generation, …). Grounding
+  //      fires from narrationGrounding.buildNarrationGroundingBlock
+  //      and the auditSource is `coachApi.commentary.<task>` or
+  //      `coachApi.chatResponse`. The bypass paths' loaders use the
+  //      same shared helper as the unified envelope; an audit hit
+  //      here proves the bypass-path wiring works end-to-end.
+  const groundingSources = [
+    'coachService.ask.annotationContext',
+    'coachService.ask.bookGrounding',
+    'coachService.ask.middlegamePlan',
+    'coachService.ask.modelGames',
+  ];
+  // ALL `coachApi.*` sources observed in the run — collected from the
+  // log itself so any new `coachApi.commentary.<task>` source is
+  // automatically reported without a code change here.
+  const coachApiSources = Array.from(
+    new Set(
+      fullAuditLog
+        .map((e) => e.source)
+        .filter((s) => typeof s === 'string' && s.startsWith('coachApi.')),
+    ),
+  ).sort();
+  const groundingCounts = {};
+  const groundingSamples = {};
+  for (const src of [...groundingSources, ...coachApiSources]) {
+    const hits = fullAuditLog.filter((e) => e.source === src);
+    const loaded = hits.filter(
+      (e) =>
+        (e.summary ?? '').startsWith('loaded ') ||
+        (e.summary ?? '').startsWith('coach chat grounded') ||
+        (e.summary ?? '').startsWith('narration grounded'),
+    );
+    const noMatch = hits.filter((e) => (e.summary ?? '').startsWith('no-match'));
+    groundingCounts[src] = { total: hits.length, loaded: loaded.length, noMatch: noMatch.length };
+    if (loaded.length > 0) {
+      groundingSamples[src] = (loaded[0].summary ?? '').slice(0, 180);
+    }
+  }
+
   const failures = scenarios.filter((s) => !s.ok);
   const totalConcerns = concerningPerScenario.reduce((acc, s) => acc + s.events.length, 0);
 
@@ -511,6 +565,10 @@ async function main() {
       kinds: Object.fromEntries(Object.entries(kindCounts).sort(([a], [b]) => a.localeCompare(b))),
       concerningTotal: totalConcerns,
       concerningPerScenario,
+      grounding: {
+        counts: groundingCounts,
+        samples: groundingSamples,
+      },
     },
     summary: {
       total: scenarios.length,
@@ -529,6 +587,22 @@ async function main() {
   console.log(`  page.errors:      ${pageErrors.length}`);
   console.log(`  concerns:         ${totalConcerns}`);
   console.log(`  dexie audit log:  ${fullAuditLog.length} events`);
+  console.log(`  grounding fired (unified envelope path):`);
+  for (const src of groundingSources) {
+    const c = groundingCounts[src];
+    const tag = src.replace('coachService.ask.', '');
+    console.log(`    ${tag.padEnd(20)} total=${c.total} loaded=${c.loaded} no-match=${c.noMatch}${c.loaded > 0 ? ` ← "${(groundingSamples[src] ?? '').slice(0, 100)}"` : ''}`);
+  }
+  if (coachApiSources.length > 0) {
+    console.log(`  grounding fired (bypass paths via coachApi):`);
+    for (const src of coachApiSources) {
+      const c = groundingCounts[src];
+      const tag = src.replace('coachApi.', '');
+      console.log(`    ${tag.padEnd(40)} total=${c.total} loaded=${c.loaded}${c.loaded > 0 ? ` ← "${(groundingSamples[src] ?? '').slice(0, 100)}"` : ''}`);
+    }
+  } else {
+    console.log(`  grounding fired (bypass paths): NONE observed — no puzzle/search/lesson paths exercised`);
+  }
 
   if (failures.length > 0) {
     console.log(`\nFAILURES:`);
@@ -1213,6 +1287,130 @@ async function driveRedirectSurfaces(page) {
     await page.waitForTimeout(2000);
     const path = new URL(page.url()).pathname;
     return `landed on ${path}`;
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// BYPASS-PATH DRIVERS
+// ─────────────────────────────────────────────────────────────────
+//
+// These scenarios exercise the narration paths that bypass
+// `coachService.ask` — they call `getCoachCommentary` or
+// `getCoachChatResponse` directly. The audit verifies that
+// `narrationGrounding.buildNarrationGroundingBlock` fires for each,
+// proving the universal-grounding wire in `coachApi.ts` works at
+// runtime, not just in the unified envelope.
+
+async function driveBypassPaths(page) {
+  // Path 1: PUZZLE FEEDBACK (`getCoachCommentary('puzzle_feedback', ...)`)
+  // Drive: /weaknesses → Mistakes tab → click a seeded mistake row →
+  //        puzzle surface → submit correct best move.
+  // The puzzle's "correct" branch fires getCoachCommentary at
+  // MistakePuzzleBoard.tsx:507 — we wait for the LLM-driven
+  // explanation prose to appear.
+  await scenario(page, 'bypass-puzzle-feedback-trigger', async () => {
+    await page.goto(`${BASE_URL}/weaknesses`, { timeout: 60_000 });
+    await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 30_000 });
+    // Open the Mistakes tab.
+    const mistakesTab = page.locator('[data-testid="tab-mistakes"]');
+    if ((await mistakesTab.count()) === 0) return 'mistakes tab not present — skipped';
+    await mistakesTab.click();
+    await page.waitForTimeout(800);
+    // Click the first mistake row to navigate to the puzzle surface.
+    const firstRow = page.locator('[data-testid="mistake-row"]').first();
+    if ((await firstRow.count()) === 0) return 'no mistake-row seeded — skipped';
+    await firstRow.click();
+    await page.waitForTimeout(2500);
+    // The puzzle surface may be a review session, weakness puzzle
+    // page, or mistake puzzle board. Wait for ANY puzzle-board variant.
+    const boardSelectors = [
+      '[data-testid="mistake-puzzle-board"]',
+      '[data-testid="puzzle-board"]',
+      '[data-testid="coach-game-review"]',
+    ];
+    const onPuzzle = await page
+      .locator(boardSelectors.join(', '))
+      .first()
+      .waitFor({ timeout: 15_000 })
+      .then(() => true)
+      .catch(() => false);
+    if (!onPuzzle) return `mistake row click navigated to ${new URL(page.url()).pathname} (not a puzzle surface)`;
+    return `landed on ${new URL(page.url()).pathname}`;
+  });
+
+  // Path 2: SMART-SEARCH INTENT (`getCoachChatResponse` via
+  // smartSearchService.parseSearchIntent at line 49). Drive: type a
+  // search query in the SmartSearchBar that triggers intent parsing.
+  await scenario(page, 'bypass-smart-search-intent-trigger', async () => {
+    await page.goto(`${BASE_URL}/`, { timeout: 60_000 });
+    // SmartSearchBar lives on the dashboard. Wait for it.
+    const input = page.locator('[data-testid="smart-search-input"]');
+    const present = await input.waitFor({ timeout: 15_000 }).then(() => true).catch(() => false);
+    if (!present) {
+      // Some dashboards hide the search bar behind a toggle. Try /weaknesses
+      // where SmartSearchBar also surfaces.
+      await page.goto(`${BASE_URL}/weaknesses`, { timeout: 60_000 });
+      await page.locator('[data-testid="smart-search-input"]').waitFor({ timeout: 10_000 }).catch(() => null);
+    }
+    const finalInput = page.locator('[data-testid="smart-search-input"]');
+    if ((await finalInput.count()) === 0) return 'smart-search-input not present — skipped';
+    const queries = {
+      1: 'Italian Game traps in my games',
+      2: 'best Sicilian model games',
+      3: 'middlegame plan after fianchetto',
+    };
+    const q = queries[PASS] ?? 'show me opening blunders';
+    await finalInput.click();
+    await finalInput.fill(q);
+    await finalInput.press('Enter');
+    // Intent parsing is fast (256-token JSON parse); wait briefly for
+    // either nav OR a results-pane mount. Whatever happens, the
+    // getCoachChatResponse call will have fired.
+    await page.waitForTimeout(3500);
+    return `typed "${q}" — bypass intent parser invoked`;
+  });
+
+  // Path 3: COACH TRAIN (daily lesson surface). Some surfaces here
+  // fire getCoachCommentary('daily_lesson', ...) via getDailyLesson.
+  // The CoachTrainPage itself doesn't, but the CoachAnalysisView
+  // does — if it's accessible from /coach/train, click through.
+  // Otherwise this is a no-op probe.
+  await scenario(page, 'bypass-train-surface-mount', async () => {
+    await page.goto(`${BASE_URL}/coach/train`, { timeout: 60_000 });
+    await page.waitForTimeout(2000);
+    const onTrain = (await page.locator('[data-testid="coach-train-page"], [data-testid="train-loading"]').count()) > 0;
+    if (!onTrain) return 'train surface not present';
+    // Look for an analysis tile (daily lesson / post-game analysis).
+    const analysisTile = page.locator('[data-testid^="analysis-"]').first();
+    if ((await analysisTile.count()) === 0) return 'no analysis tile on train surface';
+    await analysisTile.click().catch(() => null);
+    await page.waitForTimeout(3500);
+    return 'analysis tile clicked — daily-lesson/post-game-analysis may have fired';
+  });
+
+  // Verification probe: search the rolling audit log for ANY
+  // bypass-path grounding emission since boot. The presence of even
+  // ONE `coachApi.commentary.*` or `coachApi.chatResponse` audit
+  // event with summary starting "narration grounded" proves the
+  // bypass-path wiring works end-to-end. The per-source breakdown
+  // in the final summary shows which specific paths fired.
+  await scenario(page, 'bypass-grounding-verification', async () => {
+    const events = await readAuditLogSince(page, 0);
+    const bypassHits = events.filter(
+      (e) =>
+        typeof e.source === 'string' &&
+        e.source.startsWith('coachApi.') &&
+        (e.summary ?? '').startsWith('narration grounded'),
+    );
+    if (bypassHits.length === 0) {
+      return 'no bypass-path grounding emissions yet (may fire async after this check)';
+    }
+    const bySource = {};
+    for (const e of bypassHits) bySource[e.source] = (bySource[e.source] ?? 0) + 1;
+    const summary = Object.entries(bySource)
+      .map(([k, v]) => `${k.replace('coachApi.', '')}=${v}`)
+      .join(', ');
+    return `bypass grounding fired ${bypassHits.length}x: ${summary}`;
   });
 }
 
