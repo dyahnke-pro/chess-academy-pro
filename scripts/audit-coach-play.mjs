@@ -33,7 +33,7 @@
  *   AUDIT_SMOKE_HEADED=1 node scripts/audit-coach-play.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -58,8 +58,9 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[coach-play] chromium = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({
+    ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditCoachPlayBot/1.0 (chromium)',

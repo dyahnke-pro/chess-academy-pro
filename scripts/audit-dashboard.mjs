@@ -33,7 +33,7 @@
  *   AUDIT_SMOKE_HEADED=1 node scripts/audit-dashboard.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -49,6 +49,12 @@ const OUT_DIR = `audit-reports/dashboard-${stamp}`;
 const BOOT_TIMEOUT_MS = 30_000;
 const SHORT_SETTLE_MS = 2500;
 const NAV_SETTLE_MS = 1500;
+// Vite's dev server compiles lazy route chunks on-demand, so the FIRST
+// hit to /coach/home, /tactics, etc. in a sandbox localhost run takes
+// ~6-16s (vs instant on a prod CDN). The 6s nav poll is fine against
+// prod but trips on cold dev compiles (audit 2026-05-20: coach 5.9s,
+// tactics 6.3s — both just over). Give sandbox runs a generous budget.
+const NAV_POLL_MS = process.env.AUDIT_SANDBOX === '1' ? 25_000 : 6_000;
 
 async function main() {
   await mkdir(OUT_DIR, { recursive: true });
@@ -58,8 +64,9 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[dashboard] chromium = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({
+    ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditDashboardBot/1.0 (chromium)',
@@ -257,7 +264,7 @@ async function main() {
       for (let attempt = 0; attempt < 2; attempt++) {
         await btn.click().catch(() => undefined);
         const t0 = Date.now();
-        while (Date.now() - t0 < 6000) {
+        while (Date.now() - t0 < NAV_POLL_MS) {
           if (tile.route.test(page.url())) return;
           await page.waitForTimeout(200);
         }
@@ -272,7 +279,11 @@ async function main() {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
     await page.locator('[data-testid="import-games-btn"]').waitFor({ timeout: 8000 });
     await page.locator('[data-testid="import-games-btn"]').click();
-    await page.waitForTimeout(1200);
+    const t0 = Date.now();
+    while (Date.now() - t0 < NAV_POLL_MS) {
+      if (/\/games\/import$/.test(page.url())) break;
+      await page.waitForTimeout(200);
+    }
   }, NAV_SETTLE_MS, [
     { kind: 'url-matches', value: /\/games\/import$/, label: 'Import Games → /games/import' },
   ]);
