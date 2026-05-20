@@ -3,9 +3,9 @@
   "moveAnnotations": [
     {
       "san": "e4",
-      "annotation": "The Ruy Lopez, the king of openings — analyzed by the Spanish priest Ruy López de Segura in 1561 and never refuted since. It begins quietly: 1.e4 stakes a claim in the center and frees the f1-bishop, the piece that will define everything to come.",
-      "narration": "The Ruy Lopez. It begins with one pawn on e4 — and the bishop it sets free.",
-      "shortNarration": "1.e4 — the Ruy Lopez begins.",
+      "annotation": "For four centuries the Ruy Lopez has asked one question: who controls e5? Every move ahead is about that pawn and the light squares around it.",
+      "narration": "For four centuries the Ruy Lopez asks one question — who controls e5? Everything ahead is about that pawn and the squares around it.",
+      "shortNarration": "The Ruy Lopez — a four-century fight for control of e5.",
       "highlights": [
         {
           "square": "e4",
@@ -27,8 +27,7 @@
     },
     {
       "san": "e5",
-      "annotation": "Black answers symmetrically, planting a pawn on e5. That pawn is the hinge of the whole opening — White will spend the next dozen moves pressuring it, and Black defending it.",
-      "shortNarration": "Black claims the center with e5 — the pawn the whole opening will revolve around.",
+      "annotation": "Black stakes an equal claim in the center.",
       "highlights": [
         {
           "square": "e5",
@@ -46,9 +45,7 @@
     },
     {
       "san": "Nf3",
-      "annotation": "2.Nf3 develops and attacks e5 in one stroke. No wasted motion — the knight does a job the moment it lands.",
-      "narration": "Nf3 develops and attacks e5 at once.",
-      "shortNarration": "Nf3 — develop and hit e5.",
+      "annotation": "White opens the long fight for the e5-square.",
       "arrows": [
         {
           "from": "f3",
@@ -65,8 +62,8 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Black defends e5 with the knight. Now the e5-pawn is guarded — and that defender, the c6-knight, becomes White’s real target.",
-      "narration": "Nc6 guards e5. Remember the defender on c6.",
+      "annotation": "The knight on c6 is the sole defender of e5 — and in the Ruy it is the defender, not the pawn, that becomes the target.",
+      "narration": "The knight on c6 is the only thing defending e5 — and in the Ruy, the defender is the target, not the pawn.",
       "arrows": [
         {
           "from": "c6",
@@ -83,13 +80,14 @@
           "square": "c6",
           "color": "rgba(255,150,40,0.35)"
         }
-      ]
+      ],
+      "shortNarration": "c6 is e5’s only defender — the Ruy’s real target."
     },
     {
       "san": "Bb5",
-      "annotation": "3.Bb5 — the move that names the opening. It does not win the e5-pawn (a later ...a6 and ...b5 chase the bishop away). It poses a question: the bishop pins the knight that defends e5 to the larger story of the game. The Ruy is not a threat, it is pressure that never lets go.",
-      "narration": "Bb5 — the Spanish move. Not a threat, but a question aimed at the defender of e5.",
-      "shortNarration": "Bb5 pins the c6-knight, the defender of e5.",
+      "annotation": "The Spanish idea in a single move: do not attack the pawn, attack its defender. Patient, indirect pressure that never wins e5 by force but makes it a burden to hold.",
+      "narration": "The Spanish idea in one move — don’t attack the pawn, attack its defender. Indirect pressure that makes e5 a burden to hold.",
+      "shortNarration": "Attack the defender, not the pawn — the soul of the Ruy.",
       "arrows": [
         {
           "from": "b5",
@@ -114,8 +112,7 @@
     },
     {
       "san": "a6",
-      "annotation": "Morphy’s move. Black questions the bishop immediately — retreat, or trade on c6? It commits Black to nothing and gains the tempo-rich ...b5 ideas.",
-      "narration": "a6 questions the bishop — retreat or trade?",
+      "annotation": "Black questions the bishop: retreat, or trade on c6?",
       "highlights": [
         {
           "square": "b5",
@@ -125,8 +122,8 @@
     },
     {
       "san": "Ba4",
-      "annotation": "4.Ba4 keeps the pin alive on the a4-e8 diagonal. The bishop steps back but still stares down at c6 — the pressure on the defender is intact.",
-      "narration": "Ba4 keeps the bishop on the diagonal, eyeing c6.",
+      "annotation": "The bishop keeps the a4-e8 diagonal, still trained on c6. The pin is the pressure — while it lasts, e5 is never fully Black’s.",
+      "narration": "The bishop holds the a4 to e8 diagonal, still aimed at c6. The pin is the pressure: while it lasts, e5 is never fully Black’s.",
       "arrows": [
         {
           "from": "a4",
@@ -139,13 +136,12 @@
           "square": "c6",
           "color": "rgba(80,140,255,0.30)"
         }
-      ]
+      ],
+      "shortNarration": "The pin on the diagonal keeps the pressure on e5."
     },
     {
       "san": "Nf6",
-      "annotation": "Black develops with tempo, hitting the e4-pawn. The race is on: both sides develop while needling each other’s center.",
-      "narration": "Nf6 develops and attacks e4.",
-      "shortNarration": "Nf6 hits e4.",
+      "annotation": "Black counterpunches against e4.",
       "arrows": [
         {
           "from": "f6",
@@ -162,9 +158,7 @@
     },
     {
       "san": "O-O",
-      "annotation": "5.O-O. White castles into safety and, crucially, sidesteps the threat to e4 — the rook will soon defend it from e1. The slow game has begun: no knockout, just steady accumulation.",
-      "narration": "White castles — king safe, and the e4-pawn will be backed up next.",
-      "shortNarration": "O-O — king to safety.",
+      "annotation": "White’s king steps into safety.",
       "highlights": [
         {
           "square": "g1",
@@ -174,14 +168,13 @@
     },
     {
       "san": "Be7",
-      "annotation": "Black develops modestly and prepares to castle. No fireworks — both sides are building.",
-      "shortNarration": "Be7 prepares to castle."
+      "annotation": "Black completes the kingside and prepares to castle."
     },
     {
       "san": "Re1",
-      "annotation": "6.Re1 quietly defends e4 and seizes the half-open e-file the moment it opens. Every piece in the Ruy points at the center before it points anywhere else.",
-      "narration": "Re1 backs up e4 and claims the e-file.",
-      "shortNarration": "Re1 defends e4.",
+      "annotation": "The rook claims the e-file behind e4. In the Ruy, every piece aims at the center before it aims anywhere else.",
+      "narration": "The rook takes the e-file behind e4. In the Ruy, every piece aims at the center before anywhere else.",
+      "shortNarration": "Re1 — Spanish pieces aim at the center first.",
       "arrows": [
         {
           "from": "e1",
@@ -198,8 +191,7 @@
     },
     {
       "san": "b5",
-      "annotation": "Black gains queenside space and shoves the bishop again. The bishop must move — but it has a beautiful destination.",
-      "narration": "b5 gains space and chases the bishop once more.",
+      "annotation": "Black gains queenside space and pushes the bishop along.",
       "highlights": [
         {
           "square": "a4",
@@ -209,9 +201,9 @@
     },
     {
       "san": "Bb3",
-      "annotation": "7.Bb3 — the Spanish bishop reaches its home. From here it rakes the a2-g8 diagonal straight at f7, the soft spot in front of Black’s king. This relocation, b5-a4-b3, is the signature route of the whole opening.",
-      "narration": "Bb3 — the Spanish bishop finds its diagonal, aiming at f7.",
-      "shortNarration": "Bb3 eyes f7 down the a2-g8 diagonal.",
+      "annotation": "The Spanish bishop finds its true home on the a2-g8 diagonal, boring in on f7 — the softest square in front of Black’s king. This diagonal will matter all game.",
+      "narration": "Now the bishop finds its home on the a2 to g8 diagonal, boring in on f7 — the softest square by Black’s king. This diagonal matters all game.",
+      "shortNarration": "Bb3 takes the a2-g8 diagonal, aimed at f7.",
       "arrows": [
         {
           "from": "b3",
@@ -232,8 +224,7 @@
     },
     {
       "san": "d6",
-      "annotation": "Black reinforces e5 and opens a path for the light-squared bishop. The center pawn is now solidly held — White must work to break it.",
-      "narration": "d6 props up e5.",
+      "annotation": "Black braces the e5-pawn.",
       "highlights": [
         {
           "square": "e5",
@@ -243,9 +234,9 @@
     },
     {
       "san": "c3",
-      "annotation": "8.c3 looks humble but does two big jobs: it prepares the d4 advance to build a full center, and it carves out c2 as a retreat for the bishop. Quiet moves with deep purpose — the essence of the Ruy.",
-      "narration": "c3 prepares d4 and clears c2 for the bishop.",
-      "shortNarration": "c3 — prepare d4, open c2 for the bishop.",
+      "annotation": "A quiet move with a deep plan: c3 readies the d4 break and opens c2 so the bishop can swing behind the center. The Ruy is built on preparation, not threats.",
+      "narration": "A quiet move, a deep plan: c3 readies d4 and opens c2 for the bishop to swing behind the center. The Ruy is built on preparation, not threats.",
+      "shortNarration": "c3 readies d4 and clears c2 — preparation over threats.",
       "highlights": [
         {
           "square": "d4",
@@ -263,14 +254,13 @@
     },
     {
       "san": "O-O",
-      "annotation": "Black tucks the king away. Both kings are safe; now the real maneuvering begins.",
-      "shortNarration": "Black castles."
+      "annotation": "Both kings are safe; the long maneuvering begins."
     },
     {
       "san": "h3",
-      "annotation": "9.h3 — pure prophylaxis. It denies Black the ...Bg4 pin on the f3-knight, so that when White plays d4 the knight is never tied down. Capablanca preached exactly this: prevent the opponent’s plan before pursuing your own.",
-      "narration": "h3 stops the Bg4 pin before White commits to d4.",
-      "shortNarration": "h3 prevents ...Bg4.",
+      "annotation": "Prophylaxis: before committing to d4, White denies Black the ...Bg4 pin. Prevent the opponent’s plan before pursuing your own.",
+      "narration": "Prophylaxis — before committing to d4, White takes away the Bg4 pin. Stop the opponent’s plan before pursuing your own.",
+      "shortNarration": "h3 first — deny the pin, then push d4.",
       "highlights": [
         {
           "square": "g4",
@@ -280,9 +270,9 @@
     },
     {
       "san": "Nb8",
-      "annotation": "The famous Breyer paradox: Black undevelops the knight, sending it back to b8 so it can reroute to d7. From d7 it supports e5 and the ...c5 break without blocking the c-pawn or the bishop’s diagonal. Strange to the eye, profound in logic.",
-      "narration": "Nb8 — the Breyer retreat. The knight goes back to come forward better, heading for d7.",
-      "shortNarration": "Nb8 — the Breyer reroute toward d7.",
+      "annotation": "The famous Breyer retreat. The knight steps back to reroute through d7, where it braces e5 and the ...c5 break without blocking the bishop. Strange to the eye, pure logic beneath.",
+      "narration": "The famous Breyer retreat. The knight goes back to reroute through d7 — bracing e5 and the c5 break without blocking the bishop. Odd to the eye, pure logic beneath.",
+      "shortNarration": "The Breyer reroute — back to b8 to come forward better via d7.",
       "arrows": [
         {
           "from": "b8",
@@ -299,9 +289,9 @@
     },
     {
       "san": "d4",
-      "annotation": "10.d4 — at last. After eight preparatory moves White strikes the center, challenging e5 with full force. This is the payoff of c3, Re1, and h3 — the break arrives when every piece is ready.",
-      "narration": "d4 — the prepared central strike against e5.",
-      "shortNarration": "d4 hits the center.",
+      "annotation": "After eight moves of preparation the central break lands. The struggle now turns on d4 and e5 — the squares this whole opening has circled.",
+      "narration": "After eight moves of preparation, the break lands. The fight now turns on d4 and e5 — the squares the whole opening has circled.",
+      "shortNarration": "d4 — the prepared break; the fight is over d4 and e5.",
       "highlights": [
         {
           "square": "d4",
@@ -319,8 +309,7 @@
     },
     {
       "san": "Nbd7",
-      "annotation": "The knight completes its journey to d7, eyeing f8 and c5. Black’s setup is fully harmonious now — every piece has a job.",
-      "narration": "Nbd7 finishes the Breyer reroute.",
+      "annotation": "The knight completes the Breyer route to d7.",
       "arrows": [
         {
           "from": "d7",
@@ -331,9 +320,9 @@
     },
     {
       "san": "Nbd2",
-      "annotation": "11.Nbd2 begins White’s own knight pilgrimage: b1-d2-f1-g3, marching toward the kingside where the attack will live. The Ruy is a game of slow, purposeful journeys.",
-      "narration": "Nbd2 starts the knight’s march toward g3.",
-      "shortNarration": "Nbd2 — knight heads for f1 and g3.",
+      "annotation": "The knight begins a long march — d2, f1, then g3 — toward the kingside, where White’s attack will be built. Patience, paid back over the long haul.",
+      "narration": "The knight sets off on a long march — d2, f1, then g3 — toward the kingside, where the attack will be built.",
+      "shortNarration": "The knight sets off for g3 and the kingside.",
       "arrows": [
         {
           "from": "d2",
@@ -355,9 +344,9 @@
     },
     {
       "san": "Bb7",
-      "annotation": "Black fianchettoes the bishop to the long diagonal. Capablanca singled this out in Chess Fundamentals: “the Bishop at Kt 2 exerts great pressure along the long diagonal,” and once the king has castled behind it, “the position of the Bishop and Pawns in front of the King is one of great defensive strength.” Attack and shelter in a single move.",
-      "narration": "Bb7 — the bishop takes the long diagonal. Capablanca called this the bishop’s maximum strength: pressure on the long diagonal, and a fortress in front of the king.",
-      "shortNarration": "Bb7 — Capablanca’s long-diagonal bishop.",
+      "annotation": "Capablanca singled out this bishop: on the long diagonal it “exerts great pressure,” and with the king castled behind it, bishop and pawns form “great defensive strength.” Attack and shelter in one move.",
+      "narration": "Capablanca singled out this bishop: on the long diagonal it exerts great pressure, and with the king castled behind it, bishop and pawns are great defensive strength. Attack and shelter at once.",
+      "shortNarration": "Capablanca’s bishop — pressure on the long diagonal, a fortress for the king.",
       "arrows": [
         {
           "from": "b7",
@@ -377,9 +366,9 @@
     },
     {
       "san": "Bc2",
-      "annotation": "12.Bc2 completes the bishop’s grand tour, b5-a4-b3-c2. For now its own e4-pawn blocks the view, but the bishop is loaded behind it: the instant the center opens, this piece fires straight down the b1-h7 diagonal at Black’s king.",
-      "narration": "Bc2 finishes the bishop’s journey. It hides behind the e4-pawn now, but it’s aimed at h7 the moment the center cracks.",
-      "shortNarration": "Bc2 — latent battery toward h7.",
+      "annotation": "The bishop completes its tour to c2 — hidden behind the e4-pawn, but loaded. The instant the center opens it fires down the b1-h7 diagonal at the king.",
+      "narration": "The bishop finishes its tour to c2 — hidden behind the e4-pawn, but loaded. The instant the center opens, it fires down the b1 to h7 diagonal at the king.",
+      "shortNarration": "Bc2 — a loaded battery aimed at h7 once the center opens.",
       "arrows": [
         {
           "from": "c2",
@@ -403,8 +392,7 @@
     },
     {
       "san": "Re8",
-      "annotation": "Black’s rook swings to e8, adding a third attacker to the e-file tension. Both armies are fully mobilized.",
-      "shortNarration": "Re8 reinforces the e-file.",
+      "annotation": "Black adds a rook to the central tension.",
       "arrows": [
         {
           "from": "e8",
@@ -415,8 +403,7 @@
     },
     {
       "san": "Nf1",
-      "annotation": "13.Nf1 — the knight continues its route, vacating d2 so the queen and other pieces breathe, and heading for g3.",
-      "narration": "Nf1 — the knight presses on toward g3.",
+      "annotation": "The knight presses on along its route to g3.",
       "arrows": [
         {
           "from": "f1",
@@ -433,8 +420,7 @@
     },
     {
       "san": "Bf8",
-      "annotation": "Black regroups the bishop to f8, preparing the ...g6 and ...Bg7 fianchetto — the most resilient defensive shell in the closed Ruy.",
-      "narration": "Bf8 — preparing to fianchetto the bishop to g7.",
+      "annotation": "Black regroups, preparing the g7 fianchetto.",
       "arrows": [
         {
           "from": "f8",
@@ -451,8 +437,7 @@
     },
     {
       "san": "Bg5",
-      "annotation": "14.Bg5 develops with a pin-like nudge against f6, provoking a slight loosening of Black’s kingside before the structure sets.",
-      "narration": "Bg5 leans on the f6-knight.",
+      "annotation": "White provokes a slight loosening of Black’s kingside.",
       "arrows": [
         {
           "from": "g5",
@@ -469,9 +454,9 @@
     },
     {
       "san": "g6",
-      "annotation": "Black plays ...g6 to complete the fianchetto and blunt the b1-h7 diagonal — exactly the structure Capablanca praised: bishop and pawns forming a fortress in front of the king.",
-      "narration": "g6 builds the fianchetto wall and shuts the diagonal to h7.",
-      "shortNarration": "g6 — the fianchetto shell.",
+      "annotation": "Black raises the fianchetto wall. The g6-pawn shuts the diagonal to h7 and fights White’s knight for f5 — the outpost both sides have maneuvered around.",
+      "narration": "Black raises the fianchetto wall. The g6-pawn shuts the diagonal to h7 and fights for f5 — the outpost both sides have been circling.",
+      "shortNarration": "g6 — the fianchetto wall, and the fight for f5.",
       "highlights": [
         {
           "square": "f5",
@@ -489,9 +474,9 @@
     },
     {
       "san": "Ng3",
-      "annotation": "15.Ng3 — the knight reaches its destination after four moves of travel. From g3 it eyes f5 and h5, the outpost squares of the kingside attack White has been building toward all along.",
-      "narration": "Ng3 arrives — the knight eyes the f5 and h5 outposts.",
-      "shortNarration": "Ng3 — the knight reaches the kingside.",
+      "annotation": "Lasker warned that in the Ruy a knight on f5 “cannot be repelled.” That is exactly where this knight is bound — f5, the heart of White’s kingside play.",
+      "narration": "Lasker warned that in the Ruy, a knight on f5 cannot be repelled. That is exactly where this knight is bound — f5, the heart of White’s kingside play.",
+      "shortNarration": "The knight heads for f5 — Lasker’s square that “cannot be repelled.”",
       "arrows": [
         {
           "from": "g3",
@@ -522,9 +507,9 @@
     },
     {
       "san": "Bg7",
-      "annotation": "And Black completes the fianchetto. The position is the quintessential closed Ruy: White with space and a kingside buildup, Black coiled and resilient behind the long-diagonal bishop. This is where the Ruy’s real, deep middlegame begins — not a knockout, but a lasting edge to be converted over the long haul.",
-      "narration": "Bg7 completes the fianchetto. White has space and a kingside plan; Black is coiled behind the long-diagonal bishop. The slow Spanish battle is set.",
-      "shortNarration": "Bg7 — the closed Ruy is set.",
+      "annotation": "The fianchetto is complete — the closed Ruy in full. White has space and a knight bound for f5; Black sits coiled behind the long-diagonal bishop Capablanca praised. No knockout — a slow squeeze over many moves.",
+      "narration": "The fianchetto is complete — the closed Ruy in full. White has space and a knight bound for f5; Black is coiled behind the long-diagonal bishop. Not a knockout — a slow squeeze over many moves.",
+      "shortNarration": "The closed Ruy is set — space and the f5 plan against a coiled fortress.",
       "arrows": [
         {
           "from": "g7",
