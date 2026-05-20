@@ -19,7 +19,7 @@ import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { BookPagesSection } from './BookPagesSection';
 import { LessonPlayer } from './LessonPlayer';
-import { getLessonScript } from '../../data/lessons';
+import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
 import { SidelineExplainer } from './SidelineExplainer';
@@ -369,6 +369,13 @@ export function OpeningDetailPage(): JSX.Element {
     const lesson = getLessonScript(opening.id);
     if (lesson) {
       return <LessonPlayer script={lesson} onExit={handleExit} />;
+    }
+  }
+  if (viewMode === 'variation-walkthrough') {
+    const variationName = opening.variations?.[activeVariationIndex]?.name;
+    const vlesson = getVariationLessonScript(opening.id, variationName);
+    if (vlesson) {
+      return <LessonPlayer script={vlesson} onExit={handleExit} />;
     }
   }
   if (viewMode === 'walkthrough' || viewMode === 'variation-walkthrough') {

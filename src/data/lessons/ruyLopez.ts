@@ -121,8 +121,8 @@ export const RUY_LOPEZ_LESSON: LessonScript = {
       id: 'capablanca-bishop',
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Be7', 'Re1', 'b5', 'Bb3', 'd6', 'c3', 'O-O', 'h3', 'Nb8', 'd4', 'Nbd7', 'Nbd2', 'Bb7'],
       arrows: [{ from: 'b7', to: 'e4', color: ATK }],
-      say: "Black's knight finishes its journey, White's queenside knight begins one of its own, and Black fianchettoes the bishop. Now listen to José Capablanca, world champion, on exactly this bishop. He said it exerts great pressure along the long diagonal, and once the king has castled behind it, the bishop and pawns are of great defensive strength. Attack and shelter, in a single piece.",
-      sayShort: "Capablanca: the long-diagonal bishop is both great pressure and a fortress for the king.",
+      say: "Black's knight finishes its journey, White's queen-knight sets off on one of its own, and Black fianchettoes the queen's bishop to b7. Capablanca prized this diagonal: from b7 the bishop exerts great pressure down the long light squares, bearing straight at e4 and the heart of White's center.",
+      sayShort: "Bb7 — Capablanca's long-diagonal bishop, bearing down on e4.",
     },
     {
       id: 'loaded-battery',
@@ -137,8 +137,8 @@ export const RUY_LOPEZ_LESSON: LessonScript = {
       moves: M,
       arrows: [{ from: 'g3', to: 'f5', color: INTENT }],
       highlights: [{ square: 'f5', color: KEY }],
-      say: "White's knight marches to the kingside, eyeing one square above all others: f5. Black throws up a wall to keep it out. And here is Emanuel Lasker on why this fight matters: he warned that in the Ruy Lopez a knight settling at f5 cannot be repelled. That is the prize. White spends the whole middlegame trying to land a knight there; Black spends it denying that square.",
-      sayShort: "Lasker: a knight on f5 cannot be repelled. White hunts that square; Black denies it.",
+      say: "White's knight marches to the kingside, eyeing one square above all others: f5. Black answers with g6 and Bg7 — and now Capablanca's other half appears: the king's bishop sits on g7 with the king castled safely behind it, the great defensive strength he paired with the diagonal pressure. But that wall does more than shelter — it fights for f5. Lasker warned that in the Ruy Lopez a knight settling on f5 cannot be repelled. That is the prize the whole middlegame revolves around: White hunting the square, Black denying it.",
+      sayShort: "Bg7 is Capablanca's fortress; and Lasker's f5 — a knight there can't be repelled — is the prize.",
     },
     {
       id: 'branch-berlin',
