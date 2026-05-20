@@ -493,7 +493,17 @@ async function loadOpeningNarrations(): Promise<void> {
  * trapLines/warningLines/variations/explanation updates without
  * losing drill progress. See `reconcileProRepertoires` for details.
  */
-export async function seedDatabase(): Promise<void> {
+// Singleton guard. App.tsx's boot effect can fire seedDatabase()
+// multiple times (React 18 strict-mode double-invoke + re-renders).
+// Concurrent runs raced their bulkPut writes on db.openings — the
+// large loadEcoData() write starved loadRepertoireData()'s write,
+// which hung forever, so the 40 repertoire openings never landed
+// and every /openings/<id> showed "Opening not found" for fresh
+// users. Collapsing concurrent calls onto one in-flight promise
+// fixes the race. (David 2026-05-20.)
+let seedInFlight: Promise<void> | null = null;
+
+async function runSeedOnce(): Promise<void> {
   if (!(await isDatabaseSeeded())) {
     await loadEcoData();
     await loadRepertoireData();
@@ -514,4 +524,13 @@ export async function seedDatabase(): Promise<void> {
   // updates to pro-repertoires.json reach them without wiping
   // drill/SRS/favorites/woodpecker progress.
   await reconcileProRepertoires();
+}
+
+export function seedDatabase(): Promise<void> {
+  // Reuse the in-flight promise so concurrent callers share one run.
+  if (seedInFlight) return seedInFlight;
+  seedInFlight = runSeedOnce().finally(() => {
+    seedInFlight = null;
+  });
+  return seedInFlight;
 }

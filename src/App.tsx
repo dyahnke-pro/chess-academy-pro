@@ -191,8 +191,10 @@ export function App(): JSX.Element {
         }
         setOnboardingSkipped(true);
 
-        // Seed data in background (no-op if already seeded)
-        void seedDatabase();
+        // Seed data in background (no-op if already seeded).
+        // seedDatabase is single-flight guarded so the strict-mode
+        // double-invoke + re-renders can't race the bulkPut writes.
+        void seedDatabase().catch((e: unknown) => console.error('[seed] failed:', e));
         void seedPuzzles();
 
         // Biweekly chess.com / lichess auto-import. Fire-and-forget,
