@@ -1371,6 +1371,14 @@ export async function getCoachChatResponse(
   // FOR REFERENCE only — the coach answers naturally, not as a lecture.
   // Gated off kid surfaces (skipPersonality) per the kid contract.
   const lessonReferenceBlock = skipPersonality ? '' : buildLessonReferenceBlock(allMessagesText);
+  if (lessonReferenceBlock) {
+    void logAppAudit({
+      kind: 'book-grounding-injected',
+      category: 'subsystem',
+      source: 'coachApi.lessonReference',
+      summary: `master-class reference injected (${lessonReferenceBlock.length} chars)`,
+    });
+  }
 
   const buildSystemPromptFor = (extraAddendum: string = ''): string => {
     return buildSystemPromptWithVerbosity(

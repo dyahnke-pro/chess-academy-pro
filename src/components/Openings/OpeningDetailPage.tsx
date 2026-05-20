@@ -437,6 +437,22 @@ export function OpeningDetailPage(): JSX.Element {
 
   // Learn mode (main line or variation)
   if (viewMode === 'learn' || viewMode === 'variation-learn') {
+    // When a master class exists for this line, Learn plays it (the
+    // authored chapter) instead of the generic LLM move-narrator drill.
+    const learnLesson = viewMode === 'variation-learn'
+      ? getVariationLessonScript(opening.id, opening.variations?.[activeVariationIndex]?.name)
+      : getLessonScript(opening.id);
+    if (learnLesson) {
+      return (
+        <LessonPlayer
+          script={learnLesson}
+          onExit={handleExit}
+          onComplete={viewMode === 'variation-learn'
+            ? () => { void markLineDiscovered(opening.id, activeVariationIndex).then(() => loadOpening()); }
+            : undefined}
+        />
+      );
+    }
     return (
       <DrillMode
         opening={opening}
