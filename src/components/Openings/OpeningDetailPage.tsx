@@ -18,6 +18,8 @@ import { MiddlegamePractice } from './MiddlegamePractice';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { BookPagesSection } from './BookPagesSection';
+import { LessonPlayer } from './LessonPlayer';
+import { getLessonScript } from '../../data/lessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
 import { SidelineExplainer } from './SidelineExplainer';
@@ -363,6 +365,12 @@ export function OpeningDetailPage(): JSX.Element {
   }
 
   // Walkthrough mode (main line or variation)
+  if (viewMode === 'walkthrough') {
+    const lesson = getLessonScript(opening.id);
+    if (lesson) {
+      return <LessonPlayer script={lesson} onExit={handleExit} />;
+    }
+  }
   if (viewMode === 'walkthrough' || viewMode === 'variation-walkthrough') {
     return (
       <WalkthroughMode

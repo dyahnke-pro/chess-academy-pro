@@ -182,6 +182,45 @@ export interface OpeningMoveAnnotation {
   evaluation?: number;
 }
 
+// ─── Lesson Scripts (story-first master class) ────────────────────────────
+
+/**
+ * A LessonScript is a STORY-FIRST teaching unit: the narration is the
+ * spine, and the board obeys it. Each beat shows a position (reached by
+ * playing `moves` from the start), draws optional arrows / highlights,
+ * and speaks `say`. Because every beat is an independent position
+ * snapshot, the script can move pieces, rewind to an earlier position,
+ * or branch to a sideline and come back — things a PGN-locked
+ * walkthrough cannot do. Played by useStrictNarration (voice-gated).
+ */
+export interface LessonBeat {
+  id: string;
+  /** SAN moves from the start position that produce the shown position.
+   *  A beat may rewind (fewer moves than the previous beat) or branch
+   *  (a different line) — that's the whole point. */
+  moves: string[];
+  /** Spoken + displayed narration for this beat. The story, not the move. */
+  say: string;
+  /** Shorter spoken form for fast playback tiers. */
+  sayShort?: string;
+  /** Piece-vision / threat / intent arrows. Never drawn from a pawn. */
+  arrows?: AnnotationArrow[];
+  /** Key-square / pawn-idea / target highlights. */
+  highlights?: AnnotationHighlight[];
+  /** Board orientation for this beat (defaults to the script's side). */
+  orientation?: 'white' | 'black';
+}
+
+export interface LessonScript {
+  openingId: string;
+  title: string;
+  /** Approximate spoken length, minutes. Keep opening classes ≤ 15. */
+  minutes: number;
+  /** Default board orientation. */
+  orientation: 'white' | 'black';
+  beats: LessonBeat[];
+}
+
 // ─── Common Mistakes ──────────────────────────────────────────────────────
 
 export interface CommonMistake {
