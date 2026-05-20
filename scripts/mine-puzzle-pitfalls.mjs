@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Mine puzzles.json for opening-tagged tactical strikes that
+ * Mine puzzles.json for opening-tagged PITFALLS (student blunders, opponent punishes) that
  * materially advantage the student. Builds candidate TrapLine
  * entries per opening, fully chess.js + Stockfish gated.
  *
@@ -28,7 +28,7 @@
  *   7. Cap at top 5 per opening, ranked by puzzle popularity +
  *      decisive margin
  *
- * Output: audit-reports/staged/mined-traps-batch-1.json
+ * Output: audit-reports/staged/mined-pitfalls-batch-1.json
  *         (NOT src/data/*; David's go-ahead required for merge)
  */
 
@@ -39,9 +39,10 @@ import { spawn } from 'node:child_process';
 const STOCKFISH = '/usr/games/stockfish';
 const SF_DEPTH = 14;
 const SF_CONCURRENCY = 6;
-const MIN_DECISIVE_CP = 150;  // accurate trap: student wins >= 1.5 pawns
+const MIN_DECISIVE_CP = 150;  // pitfall: student loses by >= this magnitude       // student must be ≥ +3.0 at end
 const CAP_PER_OPENING = 10;
 const STAGING_DIR = 'audit-reports/staged';
+const PITFALL_MODE = true;
 mkdirSync(STAGING_DIR, { recursive: true });
 
 const puzzles = JSON.parse(readFileSync('src/data/puzzles.json', 'utf-8'));
@@ -231,7 +232,7 @@ async function main() {
       const finalLastMover = recon.plyCount % 2 === 1
         ? startSide
         : (startSide === 'white' ? 'black' : 'white');
-      if (finalLastMover !== studentColor) continue;
+      if (finalLastMover === studentColor) continue; // pitfall: opponent delivers the punishment
       candidates.push({
         openingId: opId,
         studentColor,
@@ -273,10 +274,10 @@ async function main() {
     if (evaluated % 50 === 0) process.stdout.write(`  ${evaluated}/${trimmed.length}\n`);
     let decisive = false;
     let kind = null;
-    if (studentEval?.type === 'mate' && studentEval.value > 0) {
-      decisive = true; kind = `mate-in-${studentEval.value}`;
-    } else if (studentEval?.type === 'cp' && studentEval.value >= MIN_DECISIVE_CP) {
-      decisive = true; kind = `+${studentEval.value}cp`;
+    if (studentEval?.type === 'mate' && studentEval.value < 0) {
+      decisive = true; kind = `mated-in-${-studentEval.value}`;
+    } else if (studentEval?.type === 'cp' && studentEval.value <= -MIN_DECISIVE_CP) {
+      decisive = true; kind = `${studentEval.value}cp`;
     }
     return { ...c, studentEval, decisive, kind };
   }, SF_CONCURRENCY);
@@ -324,7 +325,7 @@ async function main() {
     },
     byOpening: byOpFinal,
   };
-  const outPath = `${STAGING_DIR}/mined-traps-batch-1.json`;
+  const outPath = `${STAGING_DIR}/mined-pitfalls-batch-1.json`;
   writeFileSync(outPath, JSON.stringify(out, null, 2));
   console.log(`\nStaging: ${outPath}`);
 
