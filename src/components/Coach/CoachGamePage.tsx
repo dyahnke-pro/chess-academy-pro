@@ -1002,21 +1002,22 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     if (!intent) return;
     const playedMoves = gameState.moves.map((m) => m.san);
     if (playedMoves.length === 0) return;
-    const entry = resolveOpeningEntry(intent.name);
-    if (!entry || entry.moves.length === 0) return;
-    // Use the LONGEST canonical PGN under intent.name as the book —
-    // gives the player the most theory before being called off-book.
-    const allEntries = (() => {
-      try {
-        // findShortestCanonicalPgn isn't quite right here; we want the
-        // deepest version of the user's declared opening. resolveOpeningEntry
-        // returns the deepest match by default (longest PGN preferred on
-        // exact-name ties), so entry.moves IS the deep book.
-        return entry.moves;
-      } catch {
-        return entry.moves;
-      }
-    })();
+    // Prefer the EXACT line the student launched (e.g. from the openings
+    // Play tab, which passes the variation's own PGN) so a specific
+    // subline is tracked precisely instead of collapsing to the opening's
+    // main line. Fall back to resolving the declared name.
+    let allEntries: string[];
+    let canonicalName: string;
+    if (intent.pgn && intent.pgn.trim()) {
+      allEntries = intent.pgn.trim().split(/\s+/).filter(Boolean);
+      canonicalName = intent.name;
+    } else {
+      const entry = resolveOpeningEntry(intent.name);
+      if (!entry || entry.moves.length === 0) return;
+      allEntries = entry.moves;
+      canonicalName = entry.canonicalName;
+    }
+    if (allEntries.length === 0) return;
     // Replay user's path against the book PGN. First divergence wins.
     let divergenceIdx = -1;
     for (let i = 0; i < playedMoves.length; i += 1) {
@@ -1047,14 +1048,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       const studentMoved = whoMoved.toLowerCase() === intent.color;
       const verb = studentMoved ? 'You' : whoMoved;
       const msg = studentMoved
-        ? `Heads up — ${verb} just left ${entry.canonicalName} theory. The book here was ${dotted}${bookSan}, you played ${dotted}${movedSan}. Out of book.`
-        : `${verb} deviated from the book ${entry.canonicalName} line at ${dotted}${movedSan} (theory was ${dotted}${bookSan}). You're on your own from here.`;
+        ? `Heads up — ${verb} just left ${canonicalName} theory. The book here was ${dotted}${bookSan}, you played ${dotted}${movedSan}. Out of book.`
+        : `${verb} deviated from the book ${canonicalName} line at ${dotted}${movedSan} (theory was ${dotted}${bookSan}). You're on your own from here.`;
       gameChatRef.current?.injectAssistantMessage(msg);
       void logAppAudit({
         kind: 'coach-surface-migrated',
         category: 'subsystem',
         source: 'CoachGamePage.planTracker',
-        summary: `off-book warning fired at ply ${divergenceIdx + 1} for "${entry.canonicalName}"`,
+        summary: `off-book warning fired at ply ${divergenceIdx + 1} for "${canonicalName}"`,
         details: `played=${movedSan}, book=${bookSan}, studentMoved=${studentMoved}`,
       });
     }

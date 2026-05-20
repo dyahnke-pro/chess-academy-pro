@@ -43,6 +43,7 @@ import {
 } from '../../services/srsOpeningService';
 import { narrateOpeningSection } from '../../services/openingSectionNarrator';
 import { useStarAnimationStore } from '../../stores/starAnimationStore';
+import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import type { OpeningRecord, ModelGame, MiddlegamePlan } from '../../types';
 import {
   ArrowLeft,
@@ -249,9 +250,23 @@ export function OpeningDetailPage(): JSX.Element {
   }, []);
 
   const handleStartVariationPlay = useCallback((index: number): void => {
-    setActiveVariationIndex(index);
-    setViewMode('variation-play');
-  }, []);
+    // Play uses the SAME room as Play with Coach: declare the line as the
+    // intended opening and hand off to /coach/play. The user plays the
+    // line from move 1 against the coach (not an autoplay), and the coach's
+    // plan-tracker follows whether they stay on book.
+    const v = opening?.variations?.[index];
+    const name = v ? v.name : opening?.name ?? '';
+    const color = opening?.color ?? 'white';
+    const pgn = v ? v.pgn : opening?.pgn;
+    if (!name) return;
+    useCoachMemoryStore.getState().setIntendedOpening({
+      name,
+      color,
+      capturedFromSurface: 'openings-play',
+      pgn,
+    });
+    void navigate(`/coach/play?side=${color}`);
+  }, [opening, navigate]);
 
   const handleStartTrapLineAction = useCallback((index: number, action: 'learn' | 'practice' | 'play' | 'walkthrough'): void => {
     setActiveTrapLineIndex(index);
@@ -729,7 +744,17 @@ export function OpeningDetailPage(): JSX.Element {
           Practice
         </button>
         <button
-          onClick={() => setViewMode('play')}
+          onClick={() => {
+            // Same room as Play with Coach — declare the main line and hand
+            // off to /coach/play to play it from move 1 against the coach.
+            useCoachMemoryStore.getState().setIntendedOpening({
+              name: opening.name,
+              color: opening.color,
+              capturedFromSurface: 'openings-play',
+              pgn: opening.pgn,
+            });
+            void navigate(`/coach/play?side=${opening.color}`);
+          }}
           className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-xs hover:bg-theme-border transition-colors opening-action-glow opening-action-glow-play"
           data-testid="play-btn"
         >

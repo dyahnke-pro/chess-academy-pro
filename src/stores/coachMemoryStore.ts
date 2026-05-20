@@ -34,6 +34,11 @@ export interface IntendedOpening {
   color: 'white' | 'black';
   setAt: number;
   capturedFromSurface: string;
+  /** Optional exact line (space-separated SAN) the student launched. When
+   *  present, the plan-tracker follows THIS line rather than resolving the
+   *  name — so a specific subline (e.g. the Breyer) is tracked precisely
+   *  instead of collapsing to the opening's main line. */
+  pgn?: string;
 }
 
 /** Unified coach conversation entry. Populated by WO-LIVE-COACH-01.
@@ -314,6 +319,7 @@ export const useCoachMemoryStore = create<CoachMemoryState & CoachMemoryActions>
         color: next.color,
         capturedFromSurface: next.capturedFromSurface,
         setAt: next.setAt ?? Date.now(),
+        ...(next.pgn ? { pgn: next.pgn } : {}),
       };
       set({ intendedOpening: withTs });
       void logAppAudit({
