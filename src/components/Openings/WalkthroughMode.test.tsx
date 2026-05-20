@@ -227,32 +227,28 @@ describe('WalkthroughMode', () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<WalkthroughMode opening={testOpening} onExit={onExit} />);
 
-    // Go forward to move 1
+    // Go forward to ply 1 (e4) — chess move 1.
     await user.click(screen.getByTestId('nav-next'));
     await waitFor(() => {
-      expect(screen.getByText('Move 1 / 3')).toBeInTheDocument();
+      expect(screen.getByTestId('annotation-move-label')).toHaveTextContent('1. e4');
     });
+    expect(screen.getByText('Move 1 / 2')).toBeInTheDocument();
 
-    // Go forward to move 2
+    // Go forward to ply 2 (e5).
     await user.click(screen.getByTestId('nav-next'));
-    await waitFor(() => {
-      expect(screen.getByText('Move 2 / 3')).toBeInTheDocument();
-    });
 
-    // Go back to move 1
+    // Go back — should return to ply 1 (e4).
     await user.click(screen.getByTestId('nav-prev'));
     await waitFor(() => {
-      expect(screen.getByText('Move 1 / 3')).toBeInTheDocument();
+      expect(screen.getByTestId('annotation-move-label')).toHaveTextContent('1. e4');
     });
-
-    // Annotation should show e4 (move at index 0)
-    expect(screen.getByTestId('annotation-move-label')).toHaveTextContent('1. e4');
+    expect(screen.getByText('Move 1 / 2')).toBeInTheDocument();
   });
 
   it('shows progress indicator', async () => {
     render(<WalkthroughMode opening={testOpening} onExit={onExit} />);
 
-    expect(screen.getByText('Move 0 / 3')).toBeInTheDocument();
+    expect(screen.getByText('Move 0 / 2')).toBeInTheDocument();
     expect(screen.getByTestId('walkthrough-progress')).toBeInTheDocument();
   });
 
@@ -299,18 +295,18 @@ describe('WalkthroughMode', () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
     render(<WalkthroughMode opening={testOpening} onExit={onExit} />);
 
-    // Jump to last
+    // Jump to last (ply 3, Nf3 — chess move 2).
     await user.click(screen.getByTestId('nav-last'));
 
     await waitFor(() => {
-      expect(screen.getByText('Move 3 / 3')).toBeInTheDocument();
+      expect(screen.getByText('Move 2 / 2')).toBeInTheDocument();
     });
 
-    // Jump to first
+    // Jump to first (overview).
     await user.click(screen.getByTestId('nav-first'));
 
     await waitFor(() => {
-      expect(screen.getByText('Move 0 / 3')).toBeInTheDocument();
+      expect(screen.getByText('Move 0 / 2')).toBeInTheDocument();
     });
   });
 

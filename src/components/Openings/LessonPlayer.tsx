@@ -62,8 +62,11 @@ export function LessonPlayer({ script, onExit }: LessonPlayerProps): JSX.Element
 
   const squareStyles: Record<string, CSSProperties> = {};
   for (const h of beat.highlights ?? []) {
+    // Use the `background` shorthand (not `backgroundColor`) so it doesn't
+    // conflict with the board's base `background` style on the same square
+    // (React warns about mixing shorthand/non-shorthand on rerender).
     squareStyles[h.square] = {
-      backgroundColor: h.color ?? 'rgba(255,214,0,0.88)',
+      background: h.color ?? 'rgba(255,214,0,0.88)',
     };
   }
 
