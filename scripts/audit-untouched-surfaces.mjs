@@ -21,7 +21,7 @@
  *   AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-untouched-surfaces.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -44,8 +44,9 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[untouched-surfaces] chromium = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({
+    ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditUntouchedBot/1.0 (chromium)',

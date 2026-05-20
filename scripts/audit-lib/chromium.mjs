@@ -42,6 +42,29 @@ export const SANDBOX_CHROMIUM_ARGS = [
   '--disable-web-security',
 ];
 
+/**
+ * Opt-in sandbox bypass. The args above accept the sandbox's TLS-MITM
+ * cert and let outbound brain/Lichess calls through — but they also
+ * weaken the browser (real cert problems get ignored, web security
+ * off), which is WRONG for the strict prod audit the GitHub Action
+ * runs against chess-academy-pro.vercel.app. So gate them on an
+ * explicit `AUDIT_SANDBOX=1` env flag: set it when running against a
+ * localhost dev server inside the Claude Code sandbox; leave it unset
+ * on the runner so prod audits stay honest.
+ *
+ * Without this gate, sandbox localhost runs got spurious nav failures:
+ * the cert errors interfered with lazy-route chunk loads, so clicking
+ * the Coach / Tactics dashboard tiles "didn't navigate" (audit
+ * 2026-05-20). With the flag set, the same clicks navigate cleanly.
+ */
+export function sandboxLaunchArgs() {
+  return process.env.AUDIT_SANDBOX === '1' ? SANDBOX_CHROMIUM_ARGS : [];
+}
+
+export function sandboxContextOptions() {
+  return process.env.AUDIT_SANDBOX === '1' ? { ignoreHTTPSErrors: true } : {};
+}
+
 const HEADED_CANDIDATES = [
   '/opt/pw-browsers/chromium-1194/chrome-linux/chrome',
 ];

@@ -1,0 +1,121 @@
+name: Post-deploy Playwright audit (prod)
+
+# Implements gate G1/G2 (CLAUDE.md §NON-NEGOTIABLE GATES) automatically.
+#
+# The Claude Code sandbox CANNOT reach chess-academy-pro.vercel.app
+# (host_not_allowed / 403), so post-deploy prod audits can't run from a
+# session. This runner CAN reach prod, so it does the job David wants on
+# every push to main:
+#   1. Compute the short SHA of the commit that just landed.
+#   2. Wait until Vercel actually serves THAT build (poll the live bundle
+#      for the __BUILD_ID__ stamp — never audit a stale alias).
+#   3. Drive the audit scripts against the live prod URL.
+#   4. Pull the live audit-stream buffer (gate G2).
+#   5. Upload all reports as an artifact.
+#
+# Localhost catches code regressions; THIS catches deploy-pipeline
+# regressions (wrong bundle aliased, env vars scoped wrong, CDN stale).
+
+on:
+  push:
+    branches: [main]
+    # Skip pure non-runtime changes that can't regress a surface.
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.github/**'
+  workflow_dispatch:
+    inputs:
+      scripts:
+        description: 'Space-separated audit script basenames (no path). Default: core set.'
+        required: false
+        default: ''
+
+# A newer push supersedes an in-flight audit of an older build.
+concurrency:
+  group: post-deploy-audit
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      PROD_URL: https://chess-academy-pro.vercel.app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --prefer-offline
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Resolve short SHA
+        id: sha
+        run: echo "short=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for prod to serve this build
+        env:
+          EXPECTED_SHA: ${{ steps.sha.outputs.short }}
+          TIMEOUT_MS: '900000'
+          INTERVAL_MS: '15000'
+        run: node scripts/wait-for-prod-build.mjs
+
+      - name: Run audit scripts against prod
+        id: run
+        env:
+          AUDIT_SMOKE_URL: https://chess-academy-pro.vercel.app
+          INPUT_SCRIPTS: ${{ github.event.inputs.scripts }}
+        run: |
+          set +e
+          SCRIPTS="$INPUT_SCRIPTS"
+          if [ -z "$SCRIPTS" ]; then
+            # Core set: covers Watch/Learn/Practice/Play (openings-ui),
+            # the coach grounding pipeline, live coach play, the dashboard,
+            # and the otherwise-untouched coach surfaces.
+            SCRIPTS="audit-openings-ui.mjs audit-coach-master-integration.mjs audit-coach-play.mjs audit-dashboard.mjs audit-untouched-surfaces.mjs"
+          fi
+          FAILED=""
+          for s in $SCRIPTS; do
+            echo "::group::$s"
+            node "scripts/$s"
+            code=$?
+            echo "::endgroup::"
+            if [ "$code" -ne 0 ]; then
+              echo "::error::$s exited $code"
+              FAILED="$FAILED $s"
+            fi
+          done
+          if [ -n "$FAILED" ]; then
+            echo "failed=$FAILED" >> "$GITHUB_OUTPUT"
+            echo "Audit failures:$FAILED"
+            exit 1
+          fi
+          echo "All audit scripts green."
+
+      - name: Pull live audit-stream (gate G2)
+        if: always()
+        env:
+          AUDIT_STREAM_SECRET: ${{ secrets.AUDIT_STREAM_SECRET }}
+          OUT_FILE: audit-reports/audit-stream-pull.json
+        run: node scripts/pull-audit-stream.mjs
+
+      - name: Upload audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-reports-${{ steps.sha.outputs.short }}
+          path: audit-reports/
+          if-no-files-found: warn
+          retention-days: 14

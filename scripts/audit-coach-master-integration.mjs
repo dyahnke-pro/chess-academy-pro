@@ -39,7 +39,7 @@
  * Report: `audit-reports/coach-master-integration-<iso>/report.json`.
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { attachAuditStreamTracker, attributeScenarioEvents, readAllPageAudits } from './audit-lib/event-attribution.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -99,8 +99,9 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[master-integration] chromium = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({
+    ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditCoachMasterIntegrationBot/1.0 (chromium)',
