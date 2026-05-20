@@ -34,6 +34,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -200,6 +201,21 @@ async function main() {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
     await page.getByText('Chess Academy Pro', { exact: true }).first().waitFor({ timeout: BOOT_TIMEOUT_MS });
   }, 6000);
+
+  // ── Fixture: David's real account data (when present) ──────────
+  // See scripts/audit-lib/fixture-loader.mjs. Audits run against
+  // POPULATED data instead of an empty profile when the fixture
+  // file exists at audit-reports/.fixtures/david-games.json.
+  await record('fixture-load', async () => {
+    const result = await loadFixtureIntoIDB(page);
+    if (result.loaded) {
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+      await page.getByText('Chess Academy Pro', { exact: true }).first().waitFor({ timeout: BOOT_TIMEOUT_MS });
+      console.log(`  fixture: ${result.wrote} rows / ${result.stores} stores`);
+    } else {
+      console.log(`  fixture: skipped (${result.reason})`);
+    }
+  }, 4000);
 
   await record('coach-hub', async () => {
     await page.getByRole('link', { name: 'Coach' }).first().click();

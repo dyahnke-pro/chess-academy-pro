@@ -483,34 +483,6 @@ async function main() {
     return acc;
   }, {});
 
-  // Per-source counts for the four new grounding loaders. This is the
-  // observability signal that proves the coach LLM brain is actually
-  // receiving curated content (annotations / book passages /
-  // middlegame plans / model games) — not just that brain calls are
-  // happening at all. Surfaces over time of which loaders fire vs
-  // which surfaces remain ungrounded.
-  const groundingSources = [
-    'coachService.ask.annotationContext',
-    'coachService.ask.bookGrounding',
-    'coachService.ask.middlegamePlan',
-    'coachService.ask.modelGames',
-  ];
-  const groundingCounts = {};
-  const groundingSamples = {};
-  for (const src of groundingSources) {
-    const hits = fullAuditLog.filter((e) => e.source === src);
-    const loaded = hits.filter(
-      (e) =>
-        (e.summary ?? '').startsWith('loaded ') ||
-        (e.summary ?? '').startsWith('coach chat grounded'),
-    );
-    const noMatch = hits.filter((e) => (e.summary ?? '').startsWith('no-match'));
-    groundingCounts[src] = { total: hits.length, loaded: loaded.length, noMatch: noMatch.length };
-    if (loaded.length > 0) {
-      groundingSamples[src] = (loaded[0].summary ?? '').slice(0, 180);
-    }
-  }
-
   const failures = scenarios.filter((s) => !s.ok);
   const totalConcerns = concerningPerScenario.reduce((acc, s) => acc + s.events.length, 0);
 
@@ -528,10 +500,6 @@ async function main() {
       kinds: Object.fromEntries(Object.entries(kindCounts).sort(([a], [b]) => a.localeCompare(b))),
       concerningTotal: totalConcerns,
       concerningPerScenario,
-      grounding: {
-        counts: groundingCounts,
-        samples: groundingSamples,
-      },
     },
     summary: {
       total: scenarios.length,
@@ -550,12 +518,6 @@ async function main() {
   console.log(`  page.errors:      ${pageErrors.length}`);
   console.log(`  concerns:         ${totalConcerns}`);
   console.log(`  dexie audit log:  ${fullAuditLog.length} events`);
-  console.log(`  grounding fired:`);
-  for (const src of groundingSources) {
-    const c = groundingCounts[src];
-    const tag = src.replace('coachService.ask.', '');
-    console.log(`    ${tag.padEnd(20)} total=${c.total} loaded=${c.loaded} no-match=${c.noMatch}${c.loaded > 0 ? ` ← "${(groundingSamples[src] ?? '').slice(0, 100)}"` : ''}`);
-  }
 
   if (failures.length > 0) {
     console.log(`\nFAILURES:`);

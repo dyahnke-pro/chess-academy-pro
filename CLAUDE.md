@@ -1244,20 +1244,31 @@ into any audit script:
 import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 // ...after page.goto + first locator.waitFor settle:
 const fixture = await loadFixtureIntoIDB(page);
-console.log(`[fixture] ${fixture.loaded ? `${fixture.wrote} rows / ${fixture.stores.length} stores` : `skipped (${fixture.skipped})`}`);
+console.log(`[fixture] ${fixture.loaded ? `${fixture.wrote} rows / ${fixture.stores} stores` : `skipped (${fixture.reason})`}`);
 ```
 
-Behavior contract:
+Behavior contract (return shape — `loadFixtureIntoIDB(page, [path])`):
 
 - **Missing file** (cold-clone, fresh contributor, fixture refresh
-  pending) → returns `{ loaded: false, skipped: 'fixture-missing' }`
+  pending) → returns `{ loaded: false, path, reason: 'fixture file not found' }`
   with no side effects. The audit proceeds against whatever the
-  app seeds on its own. **Never fail the audit for fixture-missing**
+  app seeds on its own. **Never fail the audit for a missing fixture**
   — it's expected anytime the env doesn't have the file yet.
 - **Present file** → bulk-puts every row from `parsed.stores[name]`
   into the matching object store. Idempotent (primary-key
-  overwrite). Returns `{ loaded: true, wrote, stores, perStore }`
-  so the audit can log how much real data populated which stores.
+  overwrite). Returns `{ loaded: true, path, wrote, stores, perStore, skipped }`
+  where `wrote` = total rows, `stores` = COUNT of stores written
+  (a number, not an array), `perStore` = `{ storeName: rowCount }`,
+  and `skipped` = array of store names the audit browser's schema
+  didn't recognize (newer-fixture-vs-older-schema safety).
+- There's also `loadFixtureAndReload(page, reloadUrl, mountTestId,
+  [path])` — same load, then `page.goto(reloadUrl)` + waits for
+  `[data-testid="<mountTestId>"]` so React picks up the imported
+  rows. Use it when the surface caches its Dexie read on mount.
+- Refresh the fixture by pasting `scripts/devtools-export-dexie.js`
+  into the prod app's DevTools console (signed in), then dropping
+  the downloaded `david-games.json` at
+  `audit-reports/.fixtures/david-games.json`.
 
 Where this matters most:
 - `audit-weaknesses-interactive.mjs` — without fixture, /weaknesses
@@ -1274,17 +1285,15 @@ pattern above into `main()` between `await page.goto(...)` and the
 first scenario. Always log the result so failures can be tied back
 to "audit ran against empty IDB" vs "audit found real bug."
 
-The DevTools snippet to refresh the fixture (paste into the prod
-app's browser console):
-
-```js
-const Dexie = (await import('https://unpkg.com/dexie@4.3.0/dist/dexie.min.mjs')).default;
-// open the live app's db, export every store, download as JSON
-// ...full snippet in audit-reports/.fixtures/refresh-snippet.txt
-```
-
-(Snippet text changes with Dexie versions; pull the canonical copy
-from David or from a recent fixture-refresh commit.)
+The DevTools snippet to refresh the fixture lives at
+`scripts/devtools-export-dexie.js` — the canonical, committed
+copy. Paste the whole file into the prod app's browser console
+(signed into David's account); it whitelists the useful stores
+(games, mistakePuzzles, classifiedTactics, setupPuzzles, profiles,
+openings, openingWeakSpots, flashcards — deliberately SKIPS the
+huge LLM-cache blobs in openingNarrations/cachedOpenings and the
+audit-log noise in meta) and downloads `david-games.json`. Drop
+that download at `audit-reports/.fixtures/david-games.json`.
 
 ### Standard post-deploy audit ritual
 
