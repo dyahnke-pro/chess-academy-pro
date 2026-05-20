@@ -36,6 +36,7 @@ interface LineEntry {
   name: string;
   pgn: string;
   explanation?: string;
+  setupFen?: string;
 }
 
 interface OpeningEntry {
@@ -45,9 +46,17 @@ interface OpeningEntry {
   warningLines?: LineEntry[];
 }
 
-function evaluate(pgn: string, studentColor: 'white' | 'black') {
-  const chess = new Chess();
-  chess.loadPgn(pgn);
+function evaluate(pgn: string, studentColor: 'white' | 'black', setupFen?: string) {
+  const chess = setupFen ? new Chess(setupFen) : new Chess();
+  if (setupFen) {
+    // Mined lines store bare SAN tokens FROM a mid-game setupFen, not a
+    // full PGN from move 1 — play them token-by-token.
+    for (const tok of pgn.trim().split(/\s+/).filter(Boolean)) {
+      chess.move(tok.replace(/^\d+\.+/, '').replace(/[+#!?]+$/, ''));
+    }
+  } else {
+    chess.loadPgn(pgn);
+  }
   const board = chess.board();
   const studentChar = studentColor === 'white' ? 'w' : 'b';
   let studentMat = 0;
@@ -81,7 +90,7 @@ describe('trap / warning orientation contract', () => {
         const key = `${op.id}::${t.name}`;
         const kind = classifications[key];
         if (kind !== 'trap') continue;
-        const { materialDelta, mateOn } = evaluate(t.pgn, op.color);
+        const { materialDelta, mateOn } = evaluate(t.pgn, op.color, t.setupFen);
         if (mateOn === 'opponent') continue; // student delivered mate — line is correct
         if (materialDelta < -1) {
           offenders.push(`${key} → student ${materialDelta} material (kind=trap)`);
@@ -95,12 +104,18 @@ describe('trap / warning orientation contract', () => {
     const offenders: string[] = [];
     for (const op of openings) {
       for (const w of op.warningLines ?? []) {
-        const { materialDelta, mateOn } = evaluate(w.pgn, op.color);
+        const { materialDelta, mateOn } = evaluate(w.pgn, op.color, w.setupFen);
         if (mateOn === 'opponent') {
           offenders.push(`${op.id}::${w.name} → student delivered mate (warning shouldn't reward student)`);
           continue;
         }
-        if (materialDelta > 2) {
+        // Mined (setupFen) lines start mid-combination, so material
+        // count at the final ply is non-quiescent and unreliable (a
+        // student can be +material yet dead lost to an attack). Those
+        // are gated by the Stockfish eval audit instead; the terminal
+        // mate check above still applies. Only material-judge the
+        // quiescent hand-authored lines here.
+        if (!w.setupFen && materialDelta > 2) {
           offenders.push(`${op.id}::${w.name} → student +${materialDelta} material (warning should show student losing)`);
         }
       }
@@ -116,7 +131,7 @@ describe('trap / warning orientation contract', () => {
         ...(op.warningLines ?? []).map((t) => ({ ...t, role: 'warningLines' })),
       ];
       for (const entry of all) {
-        const { mateOn } = evaluate(entry.pgn, op.color);
+        const { mateOn } = evaluate(entry.pgn, op.color, entry.setupFen);
         if (mateOn === 'student') {
           // A warning showing the student getting mated IS instructive
           // ("if you fall into this, you get mated"), so we allow it

@@ -39,6 +39,7 @@ const PIECE_VALUES: Record<string, number> = {
 interface LineEntry {
   name: string;
   pgn: string;
+  setupFen?: string;
 }
 
 interface RepertoireEntry {
@@ -88,11 +89,20 @@ function evaluateLine(
   pgn: string,
   studentColor: 'white' | 'black',
   role: 'trap' | 'warning',
+  setupFen?: string,
 ): EvalResult {
-  const chess = new Chess();
+  const chess = setupFen ? new Chess(setupFen) : new Chess();
   const flags: string[] = [];
   try {
-    chess.loadPgn(pgn);
+    if (setupFen) {
+      // Mined lines store bare SAN FROM a mid-game setupFen — play
+      // them token-by-token rather than as a full PGN from move 1.
+      for (const tok of pgn.trim().split(/\s+/).filter(Boolean)) {
+        chess.move(tok.replace(/^\d+\.+/, '').replace(/[+#!?]+$/, ''));
+      }
+    } else {
+      chess.loadPgn(pgn);
+    }
   } catch (err) {
     const msg = (err as Error)?.message ?? '';
     flags.push(`PGN_PARSE_ERROR: ${msg.slice(0, 100)}`);
@@ -128,20 +138,28 @@ function evaluateLine(
     : null;
   const dbAnchorPly = longestDbAnchorPly(pgn);
 
+  // Mined lines start FROM a mid-combination setupFen, so two of the
+  // crude proxies below are provably invalid on them: (1) material
+  // count at a non-quiescent ply lies (e.g. +4 material while −509cp
+  // because the opponent has a crushing attack), and (2) DB-prefix
+  // anchoring can't match a PGN that begins mid-game. Those lines are
+  // gated by the Stockfish eval audit (scripts/audit-traps-stockfish.mjs)
+  // instead. Mate detection IS terminal/quiescent, so the mate-based
+  // orientation checks still apply to mined lines.
   if (role === 'warning') {
     if (mateOn === 'opponent') {
       flags.push('TOOTHLESS_WARNING');
-    } else if (materialDelta > 2) {
+    } else if (!setupFen && materialDelta > 2) {
       flags.push('TOOTHLESS_WARNING');
     }
   } else if (mateOn === 'student') {
     flags.push('INVERTED_MATE');
-  } else if (mateOn !== 'opponent') {
+  } else if (mateOn !== 'opponent' && !setupFen) {
     if (materialDelta < -1) flags.push('INVERTED_MATERIAL');
     else if (materialDelta < 3) flags.push('WEAK_TRAP');
     if (lastMoverIs === 'opponent') flags.push('STUDENT_NOT_PUNISHER');
   }
-  if (dbAnchorPly < 6) flags.push('PGN_NOT_IN_DB');
+  if (!setupFen && dbAnchorPly < 6) flags.push('PGN_NOT_IN_DB');
 
   return { flags: [...new Set(flags)], materialDelta, lastMoverIs, dbAnchorPly };
 }
@@ -156,7 +174,7 @@ describe('repertoire.json trap/warning orientation contract', () => {
       ];
       for (const { role, line } of lines) {
         const key = `${op.id}::${role}::${line.name}`;
-        const { flags } = evaluateLine(line.pgn, op.color, role);
+        const { flags } = evaluateLine(line.pgn, op.color, role, line.setupFen);
         if (flags.length === 0) {
           // Resolved — must NOT still be on the allowlist (forces cleanup).
           if (baseline[key]) {
@@ -188,7 +206,7 @@ describe('repertoire.json trap/warning orientation contract', () => {
         ...(op.warningLines ?? []).map((l) => ({ role: 'warning' as const, line: l })),
       ];
       for (const { role, line } of lines) {
-        const { flags } = evaluateLine(line.pgn, op.color, role);
+        const { flags } = evaluateLine(line.pgn, op.color, role, line.setupFen);
         if (flags.some((f) => f.startsWith('PGN_PARSE_ERROR'))) {
           broken.push(`${op.id}::${role}::${line.name}: ${flags.join(', ')}`);
         }
