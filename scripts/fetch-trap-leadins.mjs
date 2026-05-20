@@ -19,32 +19,29 @@
  * Output writes back to src/data/repertoire.json — pgn becomes
  * walk-from-start, setupFen removed.
  *
- * Run on David's laptop:
- *   export LICHESS_TOKEN=lip_... (same one from earlier)
+ * Run on David's laptop (no token needed — /api/puzzle and
+ * /game/export are public; an invalid token actually 401s game
+ * export, so we run anonymous):
  *   node scripts/fetch-trap-leadins.mjs
  *
- * ~129 traps × 2 API calls × 1.5s delay = ~6.5 min.
+ * ~955 lines × 2 public API calls × 2s delay ≈ 60 min.
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 
-const TOKEN = process.env.LICHESS_TOKEN;
-if (!TOKEN) {
-  console.error('LICHESS_TOKEN env var required.');
-  console.error('Use the same token from the master-games fetch.');
-  process.exit(1);
-}
+// No token needed — /api/puzzle and /game/export are public.
 
-const DELAY_MS = 1500;
+// Anonymous rate-friendly delay. Both endpoints below are PUBLIC —
+// /api/puzzle and /game/export need no auth. Sending an invalid
+// Bearer token makes /game/export 401 (the puzzle API ignores it,
+// game export validates it), so we send NO auth header and run
+// anonymously. 2s spacing keeps us under Lichess's anon limits.
+const DELAY_MS = 2000;
 
-function authHeaders(extra = {}) {
-  return {
-    authorization: `Bearer ${TOKEN}`,
-    'user-agent': 'chess-academy-pro/1.0 (trap-leadin-fetcher)',
-    ...extra,
-  };
-}
+const PUBLIC_HEADERS = {
+  'user-agent': 'chess-academy-pro/1.0 (trap-leadin-fetcher)',
+};
 
 function positionKey(fen) {
   return fen.split(' ').slice(0, 4).join(' ');
@@ -52,7 +49,7 @@ function positionKey(fen) {
 
 async function fetchPuzzleMeta(puzzleId) {
   const r = await fetch(`https://lichess.org/api/puzzle/${puzzleId}`, {
-    headers: authHeaders({ accept: 'application/json' }),
+    headers: { ...PUBLIC_HEADERS, accept: 'application/json' },
   });
   if (!r.ok) throw new Error(`puzzle API HTTP ${r.status}`);
   return await r.json();
@@ -60,7 +57,7 @@ async function fetchPuzzleMeta(puzzleId) {
 
 async function fetchGamePgn(gameId) {
   const r = await fetch(`https://lichess.org/game/export/${gameId}?moves=true&clocks=false&evals=false&opening=false`, {
-    headers: authHeaders({ accept: 'application/x-chess-pgn' }),
+    headers: { ...PUBLIC_HEADERS, accept: 'application/x-chess-pgn' },
   });
   if (!r.ok) throw new Error(`game export HTTP ${r.status}`);
   return await r.text();
