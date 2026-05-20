@@ -1341,28 +1341,27 @@ export async function getCoachChatResponse(
       });
   const bookGroundingBlock = narrationGrounding.block;
 
-  // Verified trap/pitfall puzzle library. When the student names an
-  // opening AND the turn looks puzzle/trap-shaped, inject the
-  // Stockfish-verified lines for that opening so the coach hands out
-  // a REAL verified puzzle instead of inventing a position/solution.
+  // Verified trap/pitfall puzzle library. Inject the Stockfish-verified
+  // lines whenever the student names an opening we have lines for — so the
+  // coach always has the REAL verified traps as reference and never invents
+  // a position/solution. (Capped at 4 lines, so it stays lean.) Previously
+  // gated to puzzle/trap-shaped turns only; widened so the trap reference
+  // is available like the book + lesson references — David 2026-05-20.
   // Gated off kid surfaces (skipPersonality). See verifiedLineLibrary.
   let verifiedPuzzleBlock = '';
   if (!skipPersonality) {
-    const lo = allMessagesText.toLowerCase();
-    const puzzleIntent = /\b(puzzle|trap|pitfall|tactic|drill|test me|quiz|win material|punish)\b/.test(lo);
-    if (puzzleIntent) {
-      // The library fuzzy-matches an opening name inside the message
-      // text, so passing the raw text hits when the opening is named.
-      const block = buildVerifiedPuzzleContext(allMessagesText);
-      if (block) {
-        verifiedPuzzleBlock = block;
-        void logAppAudit({
-          kind: 'book-grounding-injected',
-          category: 'subsystem',
-          source: 'coachApi.verifiedPuzzleLibrary',
-          summary: `verified trap/pitfall puzzle context injected (${block.length} chars)`,
-        });
-      }
+    // The library fuzzy-matches an opening name inside the message text,
+    // so passing the raw text hits (and returns '') when no opening with
+    // verified lines is named.
+    const block = buildVerifiedPuzzleContext(allMessagesText);
+    if (block) {
+      verifiedPuzzleBlock = block;
+      void logAppAudit({
+        kind: 'book-grounding-injected',
+        category: 'subsystem',
+        source: 'coachApi.verifiedPuzzleLibrary',
+        summary: `verified trap/pitfall puzzle context injected (${block.length} chars)`,
+      });
     }
   }
 

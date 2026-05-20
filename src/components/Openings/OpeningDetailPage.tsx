@@ -34,6 +34,7 @@ import {
   getLinesPerfected,
   getTotalLines,
   toggleFavorite,
+  markLineDiscovered,
 } from '../../services/openingService';
 import {
   enrollOpening,
@@ -375,7 +376,16 @@ export function OpeningDetailPage(): JSX.Element {
     const variationName = opening.variations?.[activeVariationIndex]?.name;
     const vlesson = getVariationLessonScript(opening.id, variationName);
     if (vlesson) {
-      return <LessonPlayer script={vlesson} onExit={handleExit} />;
+      return (
+        <LessonPlayer
+          script={vlesson}
+          onExit={handleExit}
+          onComplete={() => {
+            // Watching the subline's master class through marks it Learned.
+            void markLineDiscovered(opening.id, activeVariationIndex).then(() => loadOpening());
+          }}
+        />
+      );
     }
   }
   if (viewMode === 'walkthrough' || viewMode === 'variation-walkthrough') {

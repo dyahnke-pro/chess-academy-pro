@@ -10,6 +10,9 @@ import type { LessonScript } from '../../types';
 interface LessonPlayerProps {
   script: LessonScript;
   onExit: () => void;
+  /** Fired once when the student reaches the final beat (lesson watched
+   *  through). The host uses it to mark the line "Learned". */
+  onComplete?: () => void;
 }
 
 function fenForMoves(moves: string[]): string {
@@ -34,7 +37,7 @@ function moveSquares(prefix: string[], move: string): { from: string; to: string
  * via the voice-gated useStrictNarration runtime. Used by the openings
  * walkthrough surface whenever a LessonScript exists for the opening.
  */
-export function LessonPlayer({ script, onExit }: LessonPlayerProps): JSX.Element {
+export function LessonPlayer({ script, onExit, onComplete }: LessonPlayerProps): JSX.Element {
   const { settings } = useSettings();
   const voiceEnabled = settings.voiceEnabled;
 
@@ -82,6 +85,15 @@ export function LessonPlayer({ script, onExit }: LessonPlayerProps): JSX.Element
 
   const idx = beatIndex;
   const beat = beats[idx];
+
+  // Fire onComplete once when the student reaches the final beat.
+  const completedRef = useRef(false);
+  useEffect(() => {
+    if (!completedRef.current && idx >= beats.length - 1) {
+      completedRef.current = true;
+      onComplete?.();
+    }
+  }, [idx, beats.length, onComplete]);
 
   // Play this beat's moves ONE AT A TIME from the longest common prefix
   // with the previously-shown line — a linear path the eye can follow,
