@@ -42,6 +42,7 @@ import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
 import { buildOpeningDbEntries } from './openingDbGrounding';
 import { buildNarrationGroundingBlock } from './narrationGrounding';
+import { buildLessonReferenceBlock } from '../data/lessons';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -1365,6 +1366,13 @@ export async function getCoachChatResponse(
     }
   }
 
+  // Master-class reference: when the student names an opening (or subline)
+  // we've built a verified master class for, hand the coach those teaching
+  // ideas as reference so its answers stay consistent with the lessons.
+  // FOR REFERENCE only — the coach answers naturally, not as a lecture.
+  // Gated off kid surfaces (skipPersonality) per the kid contract.
+  const lessonReferenceBlock = skipPersonality ? '' : buildLessonReferenceBlock(allMessagesText);
+
   const buildSystemPromptFor = (extraAddendum: string = ''): string => {
     return buildSystemPromptWithVerbosity(
       SYSTEM_PROMPT,
@@ -1375,6 +1383,7 @@ export async function getCoachChatResponse(
         groundingBlock,
         bookGroundingBlock,
         verifiedPuzzleBlock,
+        lessonReferenceBlock,
         systemPromptAddition,
         extraAddendum,
       ]

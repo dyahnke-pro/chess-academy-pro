@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess, type Square } from 'chess.js';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
+import { buildLessonReferenceBlock } from './index';
 
 const lessons = [RUY_LOPEZ_LESSON, ...Object.values(RUY_VARIATION_LESSONS)];
 
@@ -39,6 +40,21 @@ function sees(c: Chess, from: string, to: string): boolean {
     default: return false; // pawns never get arrows
   }
 }
+
+describe('coach lesson-reference block', () => {
+  it('surfaces the named subline + main opening when asked', () => {
+    const blk = buildLessonReferenceBlock('Can you explain the Berlin Defense?');
+    expect(blk).toContain('MASTER-CLASS REFERENCE');
+    expect(blk).toContain('Berlin');
+    expect(blk).toContain('A Master Class'); // main Ruy lesson too
+  });
+  it('returns empty for openings we have no master class for', () => {
+    expect(buildLessonReferenceBlock('how do I play the Najdorf Sicilian')).toBe('');
+  });
+  it('returns empty for empty input', () => {
+    expect(buildLessonReferenceBlock('')).toBe('');
+  });
+});
 
 describe('Ruy master-class integrity', () => {
   for (const lesson of lessons) {
