@@ -781,7 +781,7 @@ function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): stri
  *  not contradict" closer that anchors the brain to G3-bounded
  *  vocabulary. Returns empty string when no windowed moves are
  *  present so a position past the book adds zero tokens. */
-function formatAnnotationContextSubBlock(
+export function formatAnnotationContextSubBlock(
   ctx: NonNullable<LiveState['annotationContext']>,
 ): string {
   if (!ctx.moves.length) return '';
@@ -816,7 +816,7 @@ function formatAnnotationContextSubBlock(
  *  cite "Morphy vs Duke of Brunswick 1858" with the actual
  *  positional context, not invented prose. Empty string when zero
  *  games shipped so the block adds zero tokens. */
-function formatModelGamesSubBlock(
+export function formatModelGamesSubBlock(
   ctx: NonNullable<LiveState['modelGames']>,
 ): string {
   if (!ctx.games.length) return '';
@@ -847,7 +847,7 @@ function formatModelGamesSubBlock(
  *  plan?" / "what should I play next?" questions. Returns empty
  *  string when the plan carries no content (extremely rare —
  *  the curated source has ≥1 theme on every entry). */
-function formatMiddlegamePlanSubBlock(
+export function formatMiddlegamePlanSubBlock(
   plan: NonNullable<LiveState['middlegamePlan']>,
 ): string {
   if (!plan.title) return '';
@@ -892,7 +892,7 @@ function formatMiddlegamePlanSubBlock(
  *  leading bullet so the indentation matches the lichessSnapshot /
  *  annotationContext / tactics sub-blocks. Returns empty string when
  *  source count is 0 so a no-match call adds zero tokens. */
-function formatBookGroundingSubBlock(
+export function formatBookGroundingSubBlock(
   grounding: NonNullable<LiveState['bookGrounding']>,
 ): string {
   if (!grounding.block || grounding.sourceCount === 0) return '';

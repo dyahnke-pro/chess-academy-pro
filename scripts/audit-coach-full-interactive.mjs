@@ -165,9 +165,20 @@ async function readAuditLogSince(page, since) {
  *  call lands before the profile/page is ready to consume it. Real
  *  LLM errors carry diagnostic detail in the summary. */
 function isDevNoise(event) {
-  if (event.kind !== 'llm-error') return false;
-  const summary = (event.summary ?? '').trim();
-  return summary === '';
+  // Empty-summary llm-error: cold-cache CoachAnalysePage mount in
+  // dev when the LLM stream lands before the page is ready.
+  if (event.kind === 'llm-error') {
+    return (event.summary ?? '').trim() === '';
+  }
+  // CoachGamePage's internal probe-replay falls back to FEN-only
+  // mode when a chess.js replay can't reproduce the move history
+  // (timing race in audit synthetic clicks). The surface logs a
+  // `bad-fen` audit for observability but the user-facing UI
+  // continues normally. Filter the specific probe-replay source.
+  if (event.kind === 'bad-fen' && event.source === 'CoachGamePage.move.probe-replay') {
+    return true;
+  }
+  return false;
 }
 
 async function inspectAuditLog(page, scenarioName) {

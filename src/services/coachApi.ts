@@ -40,7 +40,7 @@ import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
 import { buildOpeningDbEntries } from './openingDbGrounding';
-import { buildCoachChatContext } from './chessConceptService';
+import { buildNarrationGroundingBlock } from './narrationGrounding';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -1314,21 +1314,30 @@ export async function getCoachChatResponse(
   // language tone that violates the kid-safety prompt. Surfaces that
   // pass `skipPersonality: true` (kid path via `getKidLlmResponse`)
   // get NO book grounding. CLAUDE.md kid §3 + §17.
-  const latestUserMsg = (() => {
-    for (let i = messages.length - 1; i >= 0; i -= 1) {
-      if (messages[i].role === 'user') return messages[i].content;
-    }
-    return '';
-  })();
-  const bookGroundingBlock = skipPersonality ? '' : buildCoachChatContext(latestUserMsg);
-  if (bookGroundingBlock) {
-    void logAppAudit({
-      kind: 'book-grounding-injected',
-      category: 'subsystem',
-      source: 'coachApi.bookGrounding',
-      summary: `coach chat grounded with book passages (${bookGroundingBlock.length} chars)`,
-    });
-  }
+  // Universal narration grounding: same loader stack `coachService.ask`
+  // runs (annotation / book passages / middlegame plan / model games).
+  // The legacy `buildCoachChatContext` covered only chess-concepts
+  // passages — this expansion folds in the other three curated
+  // sources so bypass paths (voice mic, puzzle feedback, smart search,
+  // walkthrough LLM narrator, content generation, …) all ship with
+  // the same shape of grounding the unified envelope already provides.
+  // Skipped on kid surfaces per CLAUDE.md kid §3.
+  const allMessagesText = messages.map((m) => m.content).join(' ');
+  const narrationGrounding = skipPersonality
+    ? { block: '', loadedCount: 0, loaded: { annotation: false, bookPassages: false, middlegamePlan: false, modelGames: false } }
+    : await buildNarrationGroundingBlock({
+        askText: allMessagesText,
+        // No reliable opening name or moveHistory in raw message text;
+        // the bookGrounding loader detects opening via concept scan
+        // on askText, and the annotation/plan/game loaders skip
+        // gracefully when nothing resolves. Bypass paths that DO have
+        // moveHistory (e.g. coachMoveCommentary, walkthroughLlmNarrator)
+        // already route via coachService.ask so the unified path handles
+        // them with full context.
+        moveHistory: [],
+        auditSource: 'coachApi.chatResponse',
+      });
+  const bookGroundingBlock = narrationGrounding.block;
 
   const buildSystemPromptFor = (extraAddendum: string = ''): string => {
     return buildSystemPromptWithVerbosity(
@@ -1502,7 +1511,32 @@ export async function getCoachCommentary(
   const config = await getProviderConfig();
   if (!config) return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
 
-  const systemPrompt = buildSystemPromptWithVerbosity(SYSTEM_PROMPT, verbosity);
+  // Universal narration grounding: pull the four curated sources
+  // (annotations / classical book passages / middlegame plans /
+  // model games) into the system prompt so this bypass path gets
+  // the same opening-book context `coachService.ask` injects via
+  // its envelope. Without this, every getCoachCommentary call —
+  // puzzle feedback, post-game analysis, daily lesson, weekly
+  // report, content-generation prose, lesson narration — shipped
+  // book-blind. See `src/services/narrationGrounding.ts`.
+  const groundingMoveHistory = (() => {
+    if (!context.pgn) return [];
+    return context.pgn
+      .replace(/\d+\.+/g, ' ')
+      .split(/\s+/)
+      .filter((t) => t && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t));
+  })();
+  const grounding = await buildNarrationGroundingBlock({
+    askText: context.additionalContext ?? '',
+    openingName: context.openingName,
+    moveHistory: groundingMoveHistory,
+    auditSource: `coachApi.commentary.${task}`,
+  });
+  const systemPrompt = buildSystemPromptWithVerbosity(
+    SYSTEM_PROMPT,
+    verbosity,
+    grounding.block || undefined,
+  );
   const userMessage = buildChessContextMessage(context);
 
   try {
