@@ -38,6 +38,7 @@ function emitLlmTokenUsage(
 import { lookupMasterPlay } from './masterPlayLookup';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
+import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
 import { buildOpeningDbEntries } from './openingDbGrounding';
 import { buildNarrationGroundingBlock } from './narrationGrounding';
@@ -1339,6 +1340,31 @@ export async function getCoachChatResponse(
       });
   const bookGroundingBlock = narrationGrounding.block;
 
+  // Verified trap/pitfall puzzle library. When the student names an
+  // opening AND the turn looks puzzle/trap-shaped, inject the
+  // Stockfish-verified lines for that opening so the coach hands out
+  // a REAL verified puzzle instead of inventing a position/solution.
+  // Gated off kid surfaces (skipPersonality). See verifiedLineLibrary.
+  let verifiedPuzzleBlock = '';
+  if (!skipPersonality) {
+    const lo = allMessagesText.toLowerCase();
+    const puzzleIntent = /\b(puzzle|trap|pitfall|tactic|drill|test me|quiz|win material|punish)\b/.test(lo);
+    if (puzzleIntent) {
+      // The library fuzzy-matches an opening name inside the message
+      // text, so passing the raw text hits when the opening is named.
+      const block = buildVerifiedPuzzleContext(allMessagesText);
+      if (block) {
+        verifiedPuzzleBlock = block;
+        void logAppAudit({
+          kind: 'book-grounding-injected',
+          category: 'subsystem',
+          source: 'coachApi.verifiedPuzzleLibrary',
+          summary: `verified trap/pitfall puzzle context injected (${block.length} chars)`,
+        });
+      }
+    }
+  }
+
   const buildSystemPromptFor = (extraAddendum: string = ''): string => {
     return buildSystemPromptWithVerbosity(
       SYSTEM_PROMPT,
@@ -1348,6 +1374,7 @@ export async function getCoachChatResponse(
         responseLengthAddition,
         groundingBlock,
         bookGroundingBlock,
+        verifiedPuzzleBlock,
         systemPromptAddition,
         extraAddendum,
       ]

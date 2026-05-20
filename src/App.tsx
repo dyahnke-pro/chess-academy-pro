@@ -4,6 +4,7 @@ import { useAppStore } from './stores/appStore';
 import { getOrCreateMainProfile } from './services/dbService';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
+import { seedVerifiedLibraryNote } from './services/coachMemoryService';
 import { seedPuzzles } from './services/puzzleService';
 import { runAutoImportIfDue } from './services/autoImportScheduler';
 import { getSharedAudioContext } from './services/audioContextManager';
@@ -195,6 +196,7 @@ export function App(): JSX.Element {
         // seedDatabase is single-flight guarded so the strict-mode
         // double-invoke + re-renders can't race the bulkPut writes.
         void seedDatabase().catch((e: unknown) => console.error('[seed] failed:', e));
+        void seedVerifiedLibraryNote();
         void seedPuzzles();
 
         // Biweekly chess.com / lichess auto-import. Fire-and-forget,
