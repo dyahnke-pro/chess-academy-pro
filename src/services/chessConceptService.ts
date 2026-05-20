@@ -335,3 +335,70 @@ export function getCoverageSummary(): {
     totalPassages: DATA.totalTaggedPassages,
   };
 }
+
+// ─── Middlegame & Endgame "From the Books" ──────────────────────────────────
+//
+// The Understand zone surfaces opening-specific book pages
+// (getOpeningBookPages). David also wants the middlegame and endgame
+// literature there. The 56-concept taxonomy already carries book
+// passages tagged to middlegame concepts (positional play, pawn
+// structures, tactics, attacking plans) and endgame patterns
+// (opposition, Lucena, rook on the 7th, two bishops, B-vs-N). This
+// surfaces the ones relevant to a given opening, with a small universal
+// fallback so the section is never empty for an opening that resolves.
+
+export interface ConceptBookItem {
+  conceptId: string;
+  name: string;
+  passage: BookPassage;
+}
+
+export interface ConceptBookGroup {
+  /** "Middlegame" or "Endgame". */
+  label: string;
+  items: ConceptBookItem[];
+}
+
+const MIDDLEGAME_TYPES = new Set(['positional', 'plan', 'pawn-structure', 'tactic']);
+const ENDGAME_TYPES = new Set(['endgame']);
+// Universal, book-backed fallbacks so each group renders something
+// useful even when the opening text names no specific concept.
+const MIDDLEGAME_DEFAULTS = ['pos-center', 'pos-development', 'pos-king-safety', 'pos-open-file'];
+const ENDGAME_DEFAULTS = ['end-opposition', 'end-rook-7th', 'end-two-bishops'];
+const MAX_PER_GROUP = 4;
+
+function pickConceptItems(
+  detected: string[],
+  types: Set<string>,
+  defaults: string[],
+): ConceptBookItem[] {
+  const items: ConceptBookItem[] = [];
+  const seen = new Set<string>();
+  const consider = (id: string, requireType: boolean): void => {
+    if (items.length >= MAX_PER_GROUP || seen.has(id)) return;
+    const c = CONCEPT_BY_ID.get(id);
+    if (!c || c.passages.length === 0) return;
+    if (requireType && !types.has(c.type)) return;
+    seen.add(id);
+    items.push({ conceptId: id, name: c.name, passage: c.passages[0] });
+  };
+  // Opening-relevant detections first, then universal fallbacks fill.
+  for (const id of detected) consider(id, true);
+  for (const id of defaults) consider(id, false);
+  return items;
+}
+
+/**
+ * Group book-backed middlegame and endgame concept passages relevant
+ * to `text` (an opening's name + overview + key ideas + plan prose).
+ * Returns [] only when nothing resolves at all.
+ */
+export function getConceptBookGroups(text: string): ConceptBookGroup[] {
+  const detected = detectConceptsInText(text);
+  const middlegame = pickConceptItems(detected, MIDDLEGAME_TYPES, MIDDLEGAME_DEFAULTS);
+  const endgame = pickConceptItems(detected, ENDGAME_TYPES, ENDGAME_DEFAULTS);
+  const groups: ConceptBookGroup[] = [];
+  if (middlegame.length > 0) groups.push({ label: 'Middlegame', items: middlegame });
+  if (endgame.length > 0) groups.push({ label: 'Endgame', items: endgame });
+  return groups;
+}

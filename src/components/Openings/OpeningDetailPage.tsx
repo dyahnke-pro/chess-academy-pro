@@ -18,6 +18,7 @@ import { MiddlegamePractice } from './MiddlegamePractice';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { BookPagesSection } from './BookPagesSection';
+import { ConceptBookSection } from './ConceptBookSection';
 import { MiddlegameTheorySection } from './MiddlegameTheorySection';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
@@ -884,6 +885,20 @@ export function OpeningDetailPage(): JSX.Element {
           <NarrationButton sectionId="book-pages" text={text} />
         )}
         onActivate={(text) => toggleNarration('book-pages', text)}
+      />
+
+      {/* Middlegame & Endgame from the books — the public-domain concept
+          literature (positional play, pawn structures, tactics, endgame
+          patterns) relevant to this opening, so the Understand zone
+          carries middlegame + endgame reading, not just the opening. */}
+      <ConceptBookSection
+        openingName={opening.name}
+        overview={opening.overview}
+        keyIdeas={opening.keyIdeas}
+        renderNarrationButton={(text) => (
+          <NarrationButton sectionId="concept-book-pages" text={text} />
+        )}
+        onActivate={(text) => toggleNarration('concept-book-pages', text)}
       />
 
       {/* ═══ ZONE 3 — MASTER ═══════════════════════════════════════════
