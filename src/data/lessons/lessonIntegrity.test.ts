@@ -3,8 +3,6 @@ import { Chess, type Square } from 'chess.js';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 
-const INTENT = 'rgba(150,90,220,0.9)'; // aspirational arrows — line may be blocked
-
 const lessons = [RUY_LOPEZ_LESSON, ...Object.values(RUY_VARIATION_LESSONS)];
 
 function fileRank(sq: string): [number, number] {
@@ -57,9 +55,9 @@ describe('Ruy master-class integrity', () => {
             const pc = c.get(a.from as Square);
             expect(pc, `arrow origin ${a.from} empty in ${beat.id}`).toBeTruthy();
             expect(pc?.type, `pawn arrow from ${a.from} in ${beat.id}`).not.toBe('p');
-            if (a.color !== INTENT) {
-              expect(sees(c, a.from, a.to), `blocked/invalid vision arrow ${a.from}->${a.to} in ${beat.id}`).toBe(true);
-            }
+            // Every arrow is green (a clear sight-line) — no aspirational
+            // blocked arrows. Enforce line of sight for all of them.
+            expect(sees(c, a.from, a.to), `blocked/invalid arrow ${a.from}->${a.to} in ${beat.id}`).toBe(true);
           }
         });
       }

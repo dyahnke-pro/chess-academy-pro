@@ -2,9 +2,9 @@ import type { LessonScript } from '../../types';
 
 // Arrow colors — arrows are reserved for PIECES (vision / threat /
 // intent), never pawns. Pawn ideas use highlights instead.
-const ATK = 'rgba(220,70,40,0.9)';
-const VIS = 'rgba(60,120,220,0.85)';
-const INTENT = 'rgba(150,90,220,0.9)';
+const ATK = 'rgba(40,185,95,0.92)';
+const VIS = 'rgba(40,185,95,0.92)';
+const INTENT = 'rgba(40,185,95,0.92)';
 // Highlight colors. KEY = a strong, near-solid yellow that fills the
 // whole coveted square (David 2026-05-20: "yellow filling the entire
 // square"). SOFT = subtle blue for secondary context squares.
@@ -127,7 +127,6 @@ export const RUY_LOPEZ_LESSON: LessonScript = {
     {
       id: 'loaded-battery',
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Be7', 'Re1', 'b5', 'Bb3', 'd6', 'c3', 'O-O', 'h3', 'Nb8', 'd4', 'Nbd7', 'Nbd2', 'Bb7', 'Bc2'],
-      arrows: [{ from: 'c2', to: 'h7', color: INTENT }],
       highlights: [{ square: 'h7', color: KEY }],
       say: "The bishop completes its grand tour and points like a loaded gun toward h7, near Black's king. For now its own pawn blocks the view. But the instant the center cracks open, this is the piece that attacks the king. White has spent twelve moves quietly aiming it.",
       sayShort: 'The bishop is loaded toward h7 — primed for when the center opens.',

@@ -2,9 +2,9 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 
 // Arrows are reserved for PIECES (vision / threat / intent), never pawns.
 // Pawn ideas + key squares use highlights.
-const ATK = 'rgba(220,70,40,0.9)';
-const VIS = 'rgba(60,120,220,0.85)';
-const INTENT = 'rgba(150,90,220,0.9)';
+const ATK = 'rgba(40,185,95,0.92)';
+const VIS = 'rgba(40,185,95,0.92)';
+const INTENT = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
 
@@ -175,7 +175,7 @@ const CHIGORIN: LessonScript = {
     b({ id: 'c2', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Na5 Bc2 c5',
       say: "The bishop steps back to c2 — still alive, still aiming at the black king down the b1-h7 diagonal. Black gains queenside space with c5, claiming the centre and the d4-square. This is the classic Ruy tension: White's kingside chances against Black's queenside play.",
       sayShort: 'Bc2 keeps the diagonal; Black grabs queenside space with c5.',
-      arrows: [A('c2', 'h7', INTENT)], highlights: [H('h7', SOFT), H('c5', SOFT)] }),
+      highlights: [H('h7', KEY), H('c5', SOFT)] }),
     b({ id: 'c3', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Na5 Bc2 c5 d4 Qc7 Nbd2 Nc6 d5 Nd8 Nf1',
       say: "White builds and pushes d5, clamping the centre. Now the wings divide cleanly: White will play for f5 and a kingside attack, Black for a5-a4 and the half-open b-file. The offside a5-knight reroutes back through c6 and d8 toward better squares — every piece on a long journey, the hallmark of the closed Ruy.",
       sayShort: 'd5 locks the centre; opposite-wing plans — White kingside, Black queenside.',
@@ -201,7 +201,7 @@ const ZAITSEV: LessonScript = {
     b({ id: 'z3', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Bb7 d4 Re8 Nbd2 Bf8 a4 h6 Bc2 exd4 cxd4 Nb4 Bb1 c5 d5 Nd7 Ra3',
       say: "The play turns concrete fast: Black releases the tension, jumps the knight to b4 to harass the bishop, and strikes with c5. White clamps with d5 and unveils the signature Zaitsev idea — the rook lift Ra3, swinging across the third rank toward the kingside. A tense, theory-heavy battle where a single tempo decides the evaluation.",
       sayShort: 'The Ra3 rook-lift swings toward the king — sharp, precise, theory-heavy.',
-      arrows: [A('a3', 'g3', INTENT)], highlights: [H('d5', KEY)] }),
+      highlights: [H('d5', KEY), H('g3', SOFT)] }),
   ],
 };
 

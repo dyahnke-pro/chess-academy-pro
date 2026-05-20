@@ -139,7 +139,7 @@ export function LessonPlayer({ script, onExit }: LessonPlayerProps): JSX.Element
       ? (beat.arrows ?? []).map((a) => ({
           startSquare: a.from,
           endSquare: a.to,
-          color: a.color ?? 'rgba(60,120,220,0.85)',
+          color: a.color ?? 'rgba(40,185,95,0.92)',
         }))
       : []),
   ];
