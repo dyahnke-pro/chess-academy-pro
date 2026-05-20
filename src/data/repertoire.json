@@ -838,11 +838,6 @@
     ],
     "warningLines": [
       {
-        "name": "Premature Sacrifice Without Follow-up",
-        "pgn": "e4 e5 f4 exf4 Nf3 g5 Bc4 g4",
-        "explanation": "Playing Bxf7+ without the Muzio's full development lead is a common mistake. After Kxf7 Ne5+ Ke8, White has won a pawn but the attack sputters — there aren't enough pieces in the attack to create real threats. Black develops calmly and the extra piece starts to matter. Only sacrifice when you have concrete follow-up and sufficient piece activity to maintain pressure."
-      },
-      {
         "name": "Pitfall: fork #1",
         "pgn": "b3 Qe4+ Be2 Qxf4",
         "setupFen": "rnb1k2r/pp2bppp/2p5/3q4/3P1B2/5N2/PPP3PP/R2QKB1R w KQkq - 0 9",
@@ -1339,14 +1334,6 @@
         "source": "lichess-puzzle:0Ewhe",
         "verifiedEval": "+436cp",
         "sourceGameUrl": "https://lichess.org/lAeda8g0"
-      },
-      {
-        "name": "Fork #6",
-        "pgn": "Rxd7 Qe1+ Rd1 Qxe3+ Kb1 Qb6",
-        "setupFen": "Q1b2r1k/p2np2p/5bp1/q7/5P2/4B3/PPP3PP/2KR1B1R w - - 1 17",
-        "explanation": "Fork: Stockfish confirms the student wins +158cp after this sequence. Themes: fork. From a real Lichess game (rating 2294).",
-        "source": "lichess-puzzle:00sJb",
-        "verifiedEval": "+158cp"
       }
     ],
     "warningLines": [
@@ -1758,12 +1745,6 @@
     ],
     "warningLines": [
       {
-        "name": "Tarrasch Passive Setup",
-        "pgn": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 Be7 Nf3 O-O O-O a6 a3 b5 dxc5 Nxc5 Bc2 Bb7",
-        "explanation": "In the Tarrasch, delaying the ...f6 break too long allows White to consolidate with Nf3, O-O, and piece coordination behind the e5 pawn. Black's position becomes cramped without the liberating pawn breaks, and the b7 bishop is blocked by the d5 pawn. The correct plan requires urgency — play ...cxd4 followed by ...f6 before White fully develops, or Black risks a slow squeeze in a cramped position.",
-        "shortExplanation": "Delaying ...f6 lets White consolidate behind e5; ...cxd4 + ...f6 must come before slow White development crushes you."
-      },
-      {
         "name": "Pitfall: pin #1",
         "pgn": "Qxh1 Bxh7+ Kh8 Be4+",
         "setupFen": "r4rk1/pbp2ppp/1pq1p2R/8/2P4P/P2B4/2PKN3/6QR b - - 2 18",
@@ -2083,14 +2064,6 @@
         "sourceGameUrl": "https://lichess.org/zuYRRJsM"
       },
       {
-        "name": "Tactic #5",
-        "pgn": "Bxg5 hxg5 Nxg5 Nf6",
-        "setupFen": "r1bq1rk1/ppp1npb1/7p/3Pp1pn/4P2B/1BN2N2/PPP3PP/R2Q1RK1 w - - 0 13",
-        "explanation": "Tactic: Stockfish confirms the student wins +150cp after this sequence. Themes: . From a real Lichess game (rating 2459).",
-        "source": "lichess-puzzle:05iTc",
-        "verifiedEval": "+150cp"
-      },
-      {
         "name": "Tactic #6",
         "pgn": "Be4 Nxc3 Bxb7 Nxd1",
         "setupFen": "rn1qk2r/1bp1ppbp/pp4p1/3nP3/3P4/2NB1N2/PPP3PP/R1BQ1RK1 w kq - 1 10",
@@ -2100,12 +2073,6 @@
       }
     ],
     "warningLines": [
-      {
-        "name": "150 Attack h4-h5 Storm",
-        "pgn": "e4 d6 d4 Nf6 Nc3 g6 Be3 Bg7 Qd2 O-O Bh6 Bxh6 Qxh6 e5 d5 Nbd7 O-O-O Nc5 f3 a6 Kb1 b5 h4 Bd7 h5 b4",
-        "explanation": "In the 150 Attack, ...e5 instead of the standard ...c5 counterattack is rarely seen in masters — and lethal when it happens. Without the dark-squared bishop already traded and without immediate queenside counterplay, Black has no defenders on the kingside dark squares. The h5xg6 capture followed by Qxg6+ creates mating threats nearly impossible to parry. The lesson: in the 150 Attack with Black, ...c5 (not ...e5) is the only viable counterpunch.",
-        "shortExplanation": "In the 150 Attack, ...e5 instead of ...c5 is fatal — White's h4-h5 storm overwhelms the dark squares with no defenders."
-      },
       {
         "name": "Pitfall: kingside attack #1",
         "pgn": "g6 Nxg6 hxg6 Qxg6+ Kh8 Qh5+ Kg7 gxf5",
@@ -2384,14 +2351,7 @@
       }
     ],
     "trapLines": [],
-    "warningLines": [
-      {
-        "name": "Four Pawns Steamroll",
-        "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 g6 Nc3 Bg7 c5 Nd5 Bc4 Nxc3 bxc3 O-O Nf3",
-        "explanation": "If Black plays passively with ...g6 in the Four Pawns Attack, White's c5 push restricts Black's pieces. The Nd5 retreat under Bc4 attack forces the Nxc3 trade, giving White doubled c-pawns but a powerful central pawn duo. Black manages to castle but the position favors White's space advantage. The lesson: Black must challenge the f4-e5 chain with active moves like ...Nc6 and ...Bb4, not passive fianchetto development.",
-        "shortExplanation": "Four Pawns Steamroll: passive ...g6 lets White push c5 and dominate; demand active ...Nc6/...Bb4 instead."
-      }
-    ]
+    "warningLines": []
   },
   {
     "id": "philidor-defence",
@@ -2497,11 +2457,6 @@
       }
     ],
     "warningLines": [
-      {
-        "name": "Early exd4 Mistake",
-        "pgn": "e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7 Bf4 O-O Qd2 Re8 O-O-O Bf8 f3 a6 g4 b5 g5",
-        "explanation": "Capturing ...exd4 early gives White a strong center and attacking chances with the bishop pair and open lines. White can castle queenside and launch a kingside pawn storm with g4-g5-h4, exploiting the fact that Black's pieces are passively placed. The Hanham with ...Nbd7 is preferred precisely because it avoids giving White this open game. Once White achieves g5, the knight on f6 is driven away and the kingside attack becomes overwhelming."
-      },
       {
         "name": "Cramped Position Danger",
         "pgn": "e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O Re1 c6 a4 h6 b3 Re8 Bb2 Bf8 Qd2 Qc7 Rad1 a5 d5 c5 Nh4 Nb6 Bb5 Bd7 Bxd7 Qxd7 Nf5 Kh7",
@@ -3599,11 +3554,6 @@
     ],
     "warningLines": [
       {
-        "name": "Premature ...Bf5 Before ...c6",
-        "pgn": "d4 d5 c4 c6 Nf3 Bf5 cxd5 cxd5 Qb3 Qb6",
-        "explanation": "Playing ...Bf5 before completing development can be premature. White plays Qb3 hitting b7 and d5, and after the queen exchange, White has a pleasant endgame advantage with better pawn structure."
-      },
-      {
         "name": "Early ...dxc4 Without Development",
         "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 e4 b5 e5 Nd5 a4 e6 axb5 Nxc3 bxc3 cxb5 Ng5 Be7 Qh5 O-O Bxc4 bxc4",
         "explanation": "Grabbing the c4 pawn too early with ...dxc4 and trying to hold it with ...b5 is a classic mistake in the Slav. White responds with e4 and e5, seizing a massive central space advantage and driving Black's knight away. After a4 undermines the b5 pawn chain, White recovers the material with interest while maintaining a crushing center. The Ng5 and Qh5 combination creates direct threats against f7 and the kingside, leaving Black struggling to survive despite nominally equal material. The lesson: never play ...dxc4 and ...b5 without first developing the light-squared bishop."
@@ -4199,14 +4149,6 @@
         "explanation": "Snatching on c3 and grabbing the rook with ...Bxa1? lets White trap the bishop in the corner with a winning attack.",
         "source": "authored-verified",
         "verifiedEval": "-653cp"
-      },
-      {
-        "name": "Pitfall: discovered attack #1",
-        "pgn": "Bxe5 dxe5 Rc8 Rxd8",
-        "setupFen": "r2q1rk1/p3ppbp/6p1/nP2Nb2/3P1N2/2Q5/PP3PPP/2KR1B1R b - - 2 15",
-        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -101cp. The opponent punishes with discovered attack. Themes: discoveredAttack. From a real Lichess game (rating 1205).",
-        "source": "lichess-puzzle:0Bc3T",
-        "verifiedEval": "-101cp"
       }
     ]
   },
@@ -4320,11 +4262,6 @@
       }
     ],
     "warningLines": [
-      {
-        "name": "Allowing White's e4 Break Unchallenged",
-        "pgn": "d4 f5 c4 Nf6 Nc3 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nc6 d5 Na5",
-        "explanation": "When Black neglects the center and allows White to consolidate with d5 followed by piece exchanges, the Dutch structure's weaknesses become exposed. The e4 square falls to White, the c6 pawn is weak, and Black's pieces lack coordination. The fundamental rule of the Dutch is to maintain tension in the center and never allow White a free hand to reorganize. If White achieves e4 without Black having counterplay on the f-file or the kingside, the opening has failed strategically."
-      },
       {
         "name": "Pitfall: pin #1",
         "pgn": "Rf7 Bxg6 hxg6 Qxg6+ Rg7 Bxg7 Bxg7 Ng5",
@@ -4492,14 +4429,6 @@
         "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -247cp. The opponent punishes with sacrifice. Themes: sacrifice. From a real Lichess game (rating 2372).",
         "source": "lichess-puzzle:0Bd7R",
         "verifiedEval": "-247cp"
-      },
-      {
-        "name": "Pitfall: tactic #4",
-        "pgn": "Nxe4 Qd3 d5 Bxd5",
-        "setupFen": "r1b2rk1/ppqp1p2/2n2npp/4p3/2B1P3/2B2N2/P1P2PPP/1R1Q1RK1 b - - 1 15",
-        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -182cp. The opponent punishes with tactic. Themes: . From a real Lichess game (rating 2114).",
-        "source": "lichess-puzzle:0JqTP",
-        "verifiedEval": "-182cp"
       },
       {
         "name": "Pitfall: fork #5",
@@ -5179,11 +5108,6 @@
     ],
     "warningLines": [
       {
-        "name": "Premature c5 Leak",
-        "pgn": "Nf3 d5 c4 d4 g3 c5 Bg2 Nc6 O-O e5 d3 Bd6 Nbd2 Nge7 Ne1 O-O f4 f6 Nc2 Be6 a3 a5 b3 Qd7 Bb2 Rab8",
-        "explanation": "If White allows Black to consolidate with c5 and e5, the center becomes a fortress that the flanking bishops cannot penetrate. The d4 pawn, normally a weakness, becomes the anchor of a powerful pawn chain. White's g2 bishop is completely blocked and the dark-squared bishop has no targets. This is the nightmare scenario for the hypermodern player, showing why early undermining with e3 is essential."
-      },
-      {
         "name": "Pitfall: sacrifice #1",
         "pgn": "Ne1 Bxf2+ Rxf2 Ne3 Nb3 Nxd1",
         "setupFen": "r1bqk2r/ppp2ppp/2n5/2bpp3/6n1/3P1NP1/PPPNPPBP/R1BQ1RK1 w kq - 6 7",
@@ -5484,11 +5408,6 @@
       }
     ],
     "warningLines": [
-      {
-        "name": "Kingside Diagonal Weakness",
-        "pgn": "f4 d5 Nf3 Nf6 e3 g6 Be2 Bg7 O-O O-O d3 c5 c3 Qb6 Qe1 Bf5 Qg3 Nc6 Na3 Nd4 Nxd4 cxd4 cxd4 Qxd4 Nc2 Qb6 Rb1 Rac8",
-        "explanation": "The f4 pawn creates a permanent weakness along the a7-g1 diagonal and exposes the e3 square. If Black plays actively with ...Qb6 targeting b2 and d4, White can face serious structural problems. The dark squares around the king become chronically weak after f4, and a well-timed ...d4 break can exploit this. White must keep the center stable and avoid opening lines toward the king prematurely."
-      },
       {
         "name": "Pitfall: kingside attack #1",
         "pgn": "cxb7 Rxg2+ Kh1 fxe2",

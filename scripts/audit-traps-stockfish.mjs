@@ -124,8 +124,10 @@ function classify(entry, studentEval) {
   return { status: 'BROKEN', reason: 'eval-favors-opponent', evalDesc: `${cp}cp` };
 }
 
-function parsePgnToFinalFen(pgn) {
-  const c = new Chess();
+function parsePgnToFinalFen(pgn, setupFen) {
+  // Mined entries store moves FROM a middlegame setupFen, not from
+  // the start position — seed chess.js accordingly.
+  const c = setupFen ? new Chess(setupFen) : new Chess();
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
   for (const tok of tokens) {
     try {
@@ -193,6 +195,7 @@ function collectEntries() {
         kind: classifications[key]?.kind ?? null,
         name: t.name,
         pgn: t.pgn,
+        setupFen: t.setupFen,
       });
     }
     for (const w of op.warningLines ?? []) {
@@ -205,6 +208,29 @@ function collectEntries() {
         kind: 'warning',
         name: w.name,
         pgn: w.pgn,
+        setupFen: w.setupFen,
+      });
+    }
+  }
+
+  // gambits.json — the Gambits tab (12 entries). Same schema as
+  // repertoire; render through the same OpeningDetailPage.
+  let gambits = [];
+  try { gambits = JSON.parse(readFileSync('src/data/gambits.json', 'utf-8')); } catch {}
+  const gambitArr = Array.isArray(gambits) ? gambits : Object.values(gambits);
+  for (const op of gambitArr) {
+    for (const t of op.trapLines ?? []) {
+      entries.push({
+        source: 'gambits', openingId: op.id, openingName: op.name,
+        studentColor: op.color, role: 'trap', kind: null,
+        name: t.name, pgn: t.pgn, setupFen: t.setupFen,
+      });
+    }
+    for (const w of op.warningLines ?? []) {
+      entries.push({
+        source: 'gambits', openingId: op.id, openingName: op.name,
+        studentColor: op.color, role: 'warning', kind: 'warning',
+        name: w.name, pgn: w.pgn, setupFen: w.setupFen,
       });
     }
   }
@@ -212,12 +238,25 @@ function collectEntries() {
 }
 
 async function processEntry(entry) {
-  const parsed = parsePgnToFinalFen(entry.pgn);
+  const parsed = parsePgnToFinalFen(entry.pgn, entry.setupFen);
   if (!parsed.fen) {
     return { ...entry, status: 'BROKEN', reason: 'pgn-parse-error', detail: parsed.error };
   }
-  const rawEval = await evaluateFen(parsed.fen);
-  const studentEval = evalFromStudentPerspective(rawEval, parsed.sideToMove, entry.studentColor);
+  // Terminal checkmate: Stockfish returns no usable eval for a mated
+  // position, so score it directly. The side-to-move is the LOSER.
+  // A trap that ends in mate-by-student is a perfect trap; the prior
+  // bug flagged these BROKEN. (Kieninger Trap, Légal's Mate, etc.)
+  const terminal = new Chess(parsed.fen);
+  let studentEval, rawEval;
+  if (terminal.isCheckmate()) {
+    const loser = parsed.sideToMove; // side to move is checkmated
+    const studentWins = loser !== entry.studentColor;
+    studentEval = { type: 'mate', value: studentWins ? 1 : -1 };
+    rawEval = studentEval;
+  } else {
+    rawEval = await evaluateFen(parsed.fen);
+    studentEval = evalFromStudentPerspective(rawEval, parsed.sideToMove, entry.studentColor);
+  }
   const verdict = classify(entry, studentEval);
   return {
     ...entry,

@@ -741,18 +741,7 @@
         }
       ],
       "trapLines": [],
-      "warningLines": [
-        {
-          "name": "Fantasy Variation e5 Trap",
-          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Bb4+",
-          "explanation": "Cautionary tale: the natural-looking 3…dxe4 in the Fantasy is a structural disaster. After fxe4 e5, White has a powerful e4–d4 pawn duo AND the half-open f-file aimed at f7. Black's classical equalisation methods (…Bg4, …Nf6) all run into tactical issues with the f-file pressure. Always play 3…e6 keeping things solid — accept that the Fantasy is the only line where Black has to play defensively."
-        },
-        {
-          "name": "Advance Variation Qb6 Fork",
-          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 O-O cxd4 Nxd4",
-          "explanation": "A common Caro-Kann punishment of White's casual Advance play. After Black's standard setup (…c5 + …cxd4 + …Bf5), the …Qb6 fork hits b2 and d4 simultaneously. If White hasn't played Nc3 OR doesn't have an immediate defence ready, the b2-pawn falls. White must play this line very precisely — and most don't."
-        }
-      ]
+      "warningLines": []
     },
     {
       "id": "pro-gothamchess-scandinavian",

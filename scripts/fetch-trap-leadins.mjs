@@ -111,15 +111,20 @@ function validateFullPgn(pgn, expectedFinalFen) {
 const repertoire = JSON.parse(readFileSync('src/data/repertoire.json', 'utf-8'));
 const repArr = Array.isArray(repertoire) ? repertoire : Object.values(repertoire);
 
-// Collect all mined traps that need lead-ins
+// Collect all mined traps AND pitfalls that need lead-ins. `list`
+// is 'trapLines' or 'warningLines'; the rewrite path is identical
+// (both are OpeningVariation entries with setupFen + a lichess
+// puzzle source).
 const targets = [];
 for (let oi = 0; oi < repArr.length; oi += 1) {
   const op = repArr[oi];
-  if (!Array.isArray(op.trapLines)) continue;
-  for (let ti = 0; ti < op.trapLines.length; ti += 1) {
-    const trap = op.trapLines[ti];
-    if (trap.setupFen && trap.source?.startsWith('lichess-puzzle:')) {
-      targets.push({ oi, ti, openingId: op.id, trap });
+  for (const list of ['trapLines', 'warningLines']) {
+    if (!Array.isArray(op[list])) continue;
+    for (let ti = 0; ti < op[list].length; ti += 1) {
+      const entry = op[list][ti];
+      if (entry.setupFen && entry.source?.startsWith('lichess-puzzle:')) {
+        targets.push({ oi, list, ti, openingId: op.id, trap: entry });
+      }
     }
   }
 }
@@ -132,7 +137,7 @@ let kept = 0;
 let errors = 0;
 let processed = 0;
 
-for (const { oi, ti, openingId, trap } of targets) {
+for (const { oi, list, ti, openingId, trap } of targets) {
   processed += 1;
   const puzzleId = trap.source.split(':')[1];
   process.stdout.write(`[${processed}/${targets.length}] ${openingId} puzzle=${puzzleId} ... `);
@@ -177,13 +182,13 @@ for (const { oi, ti, openingId, trap } of targets) {
       continue;
     }
 
-    // Rewrite in place
-    repArr[oi].trapLines[ti] = {
+    // Rewrite in place (trapLines or warningLines)
+    repArr[oi][list][ti] = {
       ...trap,
       pgn: fullPgn,
       sourceGameUrl: `https://lichess.org/${gameId}`,
     };
-    delete repArr[oi].trapLines[ti].setupFen;
+    delete repArr[oi][list][ti].setupFen;
     console.log(`✓ lead-in ${matchPly} plies, full ${leadInTokens.length + trap.pgn.split(/\s+/).filter(Boolean).length} plies`);
     rewritten += 1;
   } catch (e) {
