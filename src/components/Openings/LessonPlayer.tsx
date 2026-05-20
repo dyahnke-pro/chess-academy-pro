@@ -57,8 +57,7 @@ export function LessonPlayer({ script, onExit }: LessonPlayerProps): JSX.Element
   const squareStyles: Record<string, CSSProperties> = {};
   for (const h of beat.highlights ?? []) {
     squareStyles[h.square] = {
-      backgroundColor: h.color ?? 'rgba(255,235,0,0.42)',
-      borderRadius: '4px',
+      backgroundColor: h.color ?? 'rgba(255,214,0,0.88)',
     };
   }
 

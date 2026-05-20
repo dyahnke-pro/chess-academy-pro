@@ -9,7 +9,7 @@
       "highlights": [
         {
           "square": "e4",
-          "color": "rgba(255,235,0,0.45)"
+          "color": "rgba(255,214,0,0.88)"
         },
         {
           "square": "d5",
@@ -31,15 +31,15 @@
       "highlights": [
         {
           "square": "e5",
-          "color": "rgba(255,235,0,0.45)"
+          "color": "rgba(255,214,0,0.88)"
         },
         {
           "square": "d4",
-          "color": "rgba(255,235,0,0.42)"
+          "color": "rgba(255,214,0,0.88)"
         },
         {
           "square": "f4",
-          "color": "rgba(255,235,0,0.42)"
+          "color": "rgba(255,214,0,0.88)"
         }
       ]
     },
@@ -85,9 +85,9 @@
     },
     {
       "san": "Bb5",
-      "annotation": "The Spanish idea in a single move: do not attack the pawn, attack its defender. Patient, indirect pressure that never wins e5 by force but makes it a burden to hold.",
-      "narration": "The Spanish idea in one move — don’t attack the pawn, attack its defender. Indirect pressure that makes e5 a burden to hold.",
-      "shortNarration": "Attack the defender, not the pawn — the soul of the Ruy.",
+      "annotation": "White does not attack the pawn — White attacks its defender. And if nobody guards e5, why not just win it? Because it is poisoned: after Bxc6 dxc6 Nxe5, Black plays a queen fork (…Qd4 or …Qg5) and wins the pawn straight back. So the pressure is positional and permanent, never a one-move threat.",
+      "narration": "White attacks the defender, not the pawn. And e5 is poisoned — grab it and Black forks it back with the queen. The pressure is permanent, not a threat.",
+      "shortNarration": "Attack the defender, not the pawn — and e5 is poisoned: a queen fork wins it back.",
       "arrows": [
         {
           "from": "b5",
@@ -98,11 +98,11 @@
       "highlights": [
         {
           "square": "c6",
-          "color": "rgba(255,235,0,0.45)"
+          "color": "rgba(255,214,0,0.88)"
         },
         {
           "square": "e5",
-          "color": "rgba(80,140,255,0.30)"
+          "color": "rgba(255,214,0,0.88)"
         }
       ],
       "plans": [
@@ -158,13 +158,15 @@
     },
     {
       "san": "O-O",
-      "annotation": "White’s king steps into safety.",
+      "annotation": "White castles — and notice he leaves the e4-pawn hanging to Black’s knight. That is deliberate. If Black takes it, that is the Open Ruy: White strikes back with d4, tears the center open, and his lead in development pays for the pawn. e4 is bait.",
       "highlights": [
         {
-          "square": "g1",
-          "color": "rgba(80,140,255,0.30)"
+          "square": "e4",
+          "color": "rgba(255,214,0,0.88)"
         }
-      ]
+      ],
+      "narration": "White castles and leaves e4 hanging on purpose. Take it, and White strikes with d4 — the Open Ruy, where development pays for the pawn.",
+      "shortNarration": "White leaves e4 as bait — taking it invites d4 and the Open Ruy."
     },
     {
       "san": "Be7",
@@ -195,7 +197,7 @@
       "highlights": [
         {
           "square": "a4",
-          "color": "rgba(255,235,0,0.42)"
+          "color": "rgba(255,214,0,0.88)"
         }
       ]
     },
@@ -214,7 +216,7 @@
       "highlights": [
         {
           "square": "f7",
-          "color": "rgba(255,235,0,0.45)"
+          "color": "rgba(255,214,0,0.88)"
         }
       ],
       "plans": [
@@ -240,7 +242,7 @@
       "highlights": [
         {
           "square": "d4",
-          "color": "rgba(255,235,0,0.45)"
+          "color": "rgba(255,214,0,0.88)"
         },
         {
           "square": "c2",
@@ -283,7 +285,7 @@
       "highlights": [
         {
           "square": "d7",
-          "color": "rgba(255,235,0,0.45)"
+          "color": "rgba(255,214,0,0.88)"
         }
       ]
     },
@@ -295,7 +297,7 @@
       "highlights": [
         {
           "square": "d4",
-          "color": "rgba(255,235,0,0.45)"
+          "color": "rgba(255,214,0,0.88)"
         },
         {
           "square": "e5",
@@ -379,7 +381,7 @@
       "highlights": [
         {
           "square": "h7",
-          "color": "rgba(255,235,0,0.45)"
+          "color": "rgba(255,214,0,0.88)"
         },
         {
           "square": "e4",
@@ -468,7 +470,7 @@
         },
         {
           "square": "h5",
-          "color": "rgba(255,235,0,0.42)"
+          "color": "rgba(255,214,0,0.88)"
         }
       ]
     },
@@ -493,7 +495,7 @@
       "highlights": [
         {
           "square": "f5",
-          "color": "rgba(255,235,0,0.45)"
+          "color": "rgba(255,214,0,0.88)"
         },
         {
           "square": "h5",

@@ -5,9 +5,11 @@ import type { LessonScript } from '../../types';
 const ATK = 'rgba(220,70,40,0.9)';
 const VIS = 'rgba(60,120,220,0.85)';
 const INTENT = 'rgba(150,90,220,0.9)';
-// Highlight colors.
-const KEY = 'rgba(255,235,0,0.42)';
-const SOFT = 'rgba(80,140,255,0.30)';
+// Highlight colors. KEY = a strong, near-solid yellow that fills the
+// whole coveted square (David 2026-05-20: "yellow filling the entire
+// square"). SOFT = subtle blue for secondary context squares.
+const KEY = 'rgba(255,214,0,0.88)';
+const SOFT = 'rgba(80,140,255,0.32)';
 
 const M = 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Nb8 d4 Nbd7 Nbd2 Bb7 Bc2 Re8 Nf1 Bf8 Bg5 g6 Ng3 Bg7'.split(' ');
 
@@ -48,8 +50,9 @@ export const RUY_LOPEZ_LESSON: LessonScript = {
       id: 'attack-defender',
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'],
       arrows: [{ from: 'b5', to: 'c6', color: ATK }],
-      say: "White does not attack the pawn. White attacks its defender. That is the soul of the Spanish: patient, indirect pressure. White will never win e5 by force — White will simply make it exhausting for Black to hold.",
-      sayShort: "The soul of the Ruy: attack the defender, not the pawn.",
+      highlights: [{ square: 'e5', color: KEY }],
+      say: "White does not attack the pawn. White attacks its defender. And here is the question every beginner asks: if nobody is guarding e5, why doesn't White just win it? Because it's poisoned. Try it — bishop takes c6, pawn recaptures, knight grabs e5. Now Black plays a queen check that forks the king and the stranded knight, and wins the pawn straight back. So White will never take e5 by force. The pressure is positional, patient, permanent — White simply makes that pawn a burden to hold.",
+      sayShort: "The soul of the Ruy: attack the defender, not the pawn. And e5 is poisoned — grabbing it loses to a queen fork.",
     },
     {
       id: 'demo-exchange',
@@ -64,6 +67,13 @@ export const RUY_LOPEZ_LESSON: LessonScript = {
       arrows: [{ from: 'a4', to: 'c6', color: ATK }],
       say: "So let's rewind. Black pokes the bishop, asking it to decide — and the bishop slides back but never leaves the diagonal. It still stares straight at c6. White keeps the bishop and the pressure. The pin lives.",
       sayShort: 'The bishop retreats but stays on the diagonal — the pressure on c6 lives.',
+    },
+    {
+      id: 'e4-bait',
+      moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O'],
+      highlights: [{ square: 'e4', color: KEY }],
+      say: "And now the mirror image. Black's knight attacks White's e4-pawn — and White just castles, leaving it hanging. Why so calm? Because if Black grabs it, that's the Open Ruy Lopez: White answers by striking the center with d4, rips the position open, and his huge lead in development more than pays for a single pawn. The e4-pawn is bait. White is happy to offer it for a roaring initiative — which is exactly why most of the time Black declines and keeps things solid.",
+      sayShort: "White leaves e4 hanging on purpose — taking it is the Open Ruy, where White's d4 and fast development pay for the pawn.",
     },
     {
       id: 'develop',
