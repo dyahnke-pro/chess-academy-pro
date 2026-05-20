@@ -28,7 +28,7 @@ function fenForMoves(moves: string[]): string {
  */
 export function LessonPlayer({ script, onExit }: LessonPlayerProps): JSX.Element {
   const { settings } = useSettings();
-  const voiceEnabled = settings.coachNarration !== 'silent';
+  const voiceEnabled = settings.voiceEnabled;
   const [beatIndex, setBeatIndex] = useState(0);
 
   const beats = script.beats;
