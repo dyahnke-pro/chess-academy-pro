@@ -218,6 +218,7 @@ async function requestLlmNarrations(
     'Cite concrete squares, files, diagonals, or pieces. Do NOT say "develops naturally", "heads toward the critical moment", "position is roughly equal", or any generic filler. If the move is a standard developing move, explain WHY that particular square matters in THIS opening (the curator context tells you).',
     'For moves tagged [skip], return an empty string in that slot.',
     'Return a JSON array of strings, exactly one entry per move in order. No markdown, no prose before or after.',
+    'VOICE RULES (locked 2026-05-19): Confident + declarative. Concrete piece names + squares, not pronouns. Tactical verbs that match the action — threatens, pressures, kicks, blunts, outposts, hammers, undermines. Cite by SAN in prose. BANNED: "powerful", "devastating", "the secret of", "essential to remember", "we will see", "let me show you", "for example consider".',
   ].join(' ');
 
   // Build a curator-framing block IF the caller supplied context. The

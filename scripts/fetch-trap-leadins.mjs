@@ -1,0 +1,211 @@
+#!/usr/bin/env node
+/**
+ * For each mined trap in repertoire.json with setupFen + a
+ * lichess-puzzle source, fetch the source game's leading moves
+ * from Lichess so we can rebuild the PGN as walk-from-move-1.
+ *
+ * David's directive: "remember to walk through the opening to get
+ * to the trap line. i really like that feature."
+ *
+ * Pipeline per trap:
+ *   1. Extract puzzle ID from trap.source (e.g. 'lichess-puzzle:abc12')
+ *   2. GET https://lichess.org/api/puzzle/<id> → gives game.id
+ *   3. GET https://lichess.org/game/export/<gameId>?moves=1 → full game PGN
+ *   4. Walk the game PGN move-by-move; find the ply where the FEN
+ *      matches trap.setupFen (modulo move counters)
+ *   5. Take the lead-in (moves 1..matchPly) + append trap.pgn
+ *   6. chess.js validates the reconstruction end-to-end
+ *
+ * Output writes back to src/data/repertoire.json — pgn becomes
+ * walk-from-start, setupFen removed.
+ *
+ * Run on David's laptop:
+ *   export LICHESS_TOKEN=lip_... (same one from earlier)
+ *   node scripts/fetch-trap-leadins.mjs
+ *
+ * ~129 traps × 2 API calls × 1.5s delay = ~6.5 min.
+ */
+
+import { readFileSync, writeFileSync } from 'node:fs';
+import { Chess } from 'chess.js';
+
+const TOKEN = process.env.LICHESS_TOKEN;
+if (!TOKEN) {
+  console.error('LICHESS_TOKEN env var required.');
+  console.error('Use the same token from the master-games fetch.');
+  process.exit(1);
+}
+
+const DELAY_MS = 1500;
+
+function authHeaders(extra = {}) {
+  return {
+    authorization: `Bearer ${TOKEN}`,
+    'user-agent': 'chess-academy-pro/1.0 (trap-leadin-fetcher)',
+    ...extra,
+  };
+}
+
+function positionKey(fen) {
+  return fen.split(' ').slice(0, 4).join(' ');
+}
+
+async function fetchPuzzleMeta(puzzleId) {
+  const r = await fetch(`https://lichess.org/api/puzzle/${puzzleId}`, {
+    headers: authHeaders({ accept: 'application/json' }),
+  });
+  if (!r.ok) throw new Error(`puzzle API HTTP ${r.status}`);
+  return await r.json();
+}
+
+async function fetchGamePgn(gameId) {
+  const r = await fetch(`https://lichess.org/game/export/${gameId}?moves=true&clocks=false&evals=false&opening=false`, {
+    headers: authHeaders({ accept: 'application/x-chess-pgn' }),
+  });
+  if (!r.ok) throw new Error(`game export HTTP ${r.status}`);
+  return await r.text();
+}
+
+function extractMovesFromPgn(rawPgn) {
+  const movesSection = rawPgn.split('\n\n').slice(1).join('\n\n').trim();
+  return movesSection
+    .replace(/\{[^}]*\}/g, '')
+    .replace(/\d+\.{1,3}/g, '')
+    .replace(/\b(1-0|0-1|1\/2-1\/2|\*)\b/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Walk a PGN, return ply index where position matches setupFen
+function findLeadInPly(gameMoves, setupFen) {
+  const targetKey = positionKey(setupFen);
+  const c = new Chess();
+  if (positionKey(c.fen()) === targetKey) return 0;
+  const tokens = gameMoves.trim().split(/\s+/).filter(Boolean);
+  for (let i = 0; i < tokens.length; i += 1) {
+    try {
+      c.move(tokens[i].replace(/[+#!?]+$/, ''));
+      if (positionKey(c.fen()) === targetKey) return i + 1;
+    } catch {
+      return -1;
+    }
+  }
+  return -1;
+}
+
+function validateFullPgn(pgn, expectedFinalFen) {
+  const c = new Chess();
+  for (const tok of pgn.trim().split(/\s+/).filter(Boolean)) {
+    try {
+      c.move(tok.replace(/[+#!?]+$/, ''));
+    } catch (e) {
+      return { ok: false, reason: `illegal: ${tok}` };
+    }
+  }
+  if (positionKey(c.fen()) !== positionKey(expectedFinalFen)) {
+    return { ok: false, reason: 'final position mismatch' };
+  }
+  return { ok: true };
+}
+
+const repertoire = JSON.parse(readFileSync('src/data/repertoire.json', 'utf-8'));
+const repArr = Array.isArray(repertoire) ? repertoire : Object.values(repertoire);
+
+// Collect all mined traps that need lead-ins
+const targets = [];
+for (let oi = 0; oi < repArr.length; oi += 1) {
+  const op = repArr[oi];
+  if (!Array.isArray(op.trapLines)) continue;
+  for (let ti = 0; ti < op.trapLines.length; ti += 1) {
+    const trap = op.trapLines[ti];
+    if (trap.setupFen && trap.source?.startsWith('lichess-puzzle:')) {
+      targets.push({ oi, ti, openingId: op.id, trap });
+    }
+  }
+}
+
+console.log(`Mined traps to convert: ${targets.length}`);
+console.log(`Estimated runtime: ~${Math.ceil(targets.length * 2 * DELAY_MS / 60000)} min\n`);
+
+let rewritten = 0;
+let kept = 0;
+let errors = 0;
+let processed = 0;
+
+for (const { oi, ti, openingId, trap } of targets) {
+  processed += 1;
+  const puzzleId = trap.source.split(':')[1];
+  process.stdout.write(`[${processed}/${targets.length}] ${openingId} puzzle=${puzzleId} ... `);
+
+  try {
+    const meta = await fetchPuzzleMeta(puzzleId);
+    const gameId = meta.game?.id;
+    if (!gameId) {
+      console.log('no game id');
+      kept += 1;
+      continue;
+    }
+    await new Promise((r) => setTimeout(r, DELAY_MS));
+
+    const gamePgn = await fetchGamePgn(gameId);
+    const gameMoves = extractMovesFromPgn(gamePgn);
+
+    const matchPly = findLeadInPly(gameMoves, trap.setupFen);
+    if (matchPly < 0) {
+      console.log('setupFen not found in game');
+      kept += 1;
+      await new Promise((r) => setTimeout(r, DELAY_MS));
+      continue;
+    }
+
+    const leadInTokens = gameMoves.trim().split(/\s+/).filter(Boolean).slice(0, matchPly);
+    const leadIn = leadInTokens.join(' ');
+    const fullPgn = `${leadIn} ${trap.pgn}`.trim();
+
+    // Re-derive expected final FEN
+    const c = new Chess(trap.setupFen);
+    for (const tok of trap.pgn.trim().split(/\s+/).filter(Boolean)) {
+      c.move(tok.replace(/[+#!?]+$/, ''));
+    }
+    const expectedFinalFen = c.fen();
+
+    const valid = validateFullPgn(fullPgn, expectedFinalFen);
+    if (!valid.ok) {
+      console.log(`validation failed: ${valid.reason}`);
+      errors += 1;
+      await new Promise((r) => setTimeout(r, DELAY_MS));
+      continue;
+    }
+
+    // Rewrite in place
+    repArr[oi].trapLines[ti] = {
+      ...trap,
+      pgn: fullPgn,
+      sourceGameUrl: `https://lichess.org/${gameId}`,
+    };
+    delete repArr[oi].trapLines[ti].setupFen;
+    console.log(`✓ lead-in ${matchPly} plies, full ${leadInTokens.length + trap.pgn.split(/\s+/).filter(Boolean).length} plies`);
+    rewritten += 1;
+  } catch (e) {
+    console.log(`error: ${e.message}`);
+    errors += 1;
+  }
+
+  // Save progress every 10 traps so a network error doesn't lose work
+  if (processed % 10 === 0) {
+    const out = Array.isArray(repertoire) ? repArr : Object.fromEntries(repArr.map((o, i) => [i, o]));
+    writeFileSync('src/data/repertoire.json', JSON.stringify(out, null, 2) + '\n');
+    console.log(`  (progress saved at ${processed})`);
+  }
+
+  await new Promise((r) => setTimeout(r, DELAY_MS));
+}
+
+const output = Array.isArray(repertoire) ? repArr : Object.fromEntries(repArr.map((o, i) => [i, o]));
+writeFileSync('src/data/repertoire.json', JSON.stringify(output, null, 2) + '\n');
+
+console.log('\n=== TRAP LEAD-IN FETCH SUMMARY ===');
+console.log(`Rewritten (walk-from-move-1):  ${rewritten}`);
+console.log(`Kept setupFen:                  ${kept}`);
+console.log(`Errors:                         ${errors}`);
+console.log('Wrote src/data/repertoire.json');
