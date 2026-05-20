@@ -141,7 +141,7 @@
     },
     {
       "san": "Nf6",
-      "annotation": "Black counterpunches against e4.",
+      "annotation": "Black develops the knight and strikes at e4 with tempo. This is the question that shapes the next few moves: does White stop to defend the pawn, or wave it forward as bait? Watch what White chooses.",
       "arrows": [
         {
           "from": "f6",
@@ -152,9 +152,11 @@
       "highlights": [
         {
           "square": "e4",
-          "color": "rgba(255,150,40,0.35)"
+          "color": "rgba(255,214,0,0.88)"
         }
-      ]
+      ],
+      "narration": "Black develops and hits e4 with tempo — posing the real question. Does White defend the pawn, or offer it as bait? Watch what he chooses.",
+      "shortNarration": "Nf6 attacks e4 with tempo — defend it, or offer it?"
     },
     {
       "san": "O-O",
