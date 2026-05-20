@@ -137,3 +137,64 @@ describe('resolveMiddlegameSessionWithFallback', () => {
     expect(session).toBeNull();
   });
 });
+
+describe('Ruy Lopez variation middlegame plans', () => {
+  const RUY_VARIATION_PLAN_IDS = [
+    'mp-ruylopez-marshall',
+    'mp-ruylopez-berlin',
+    'mp-ruylopez-open',
+    'mp-ruylopez-exchange',
+  ];
+
+  for (const id of RUY_VARIATION_PLAN_IDS) {
+    it(`${id}: every playable line is legal, annotated, and arrow-consistent`, async () => {
+      const { Chess } = await import('chess.js');
+      const plans = (await import('../data/middlegame-plans.json')).default as Array<{
+        id: string;
+        openingId: string;
+        criticalPositionFen: string;
+        playableLines: Array<{
+          fen: string;
+          moves: string[];
+          annotations: string[];
+          arrows?: Array<Array<{ from: string; to: string }>>;
+        }>;
+      }>;
+      const plan = plans.find((p) => p.id === id);
+      expect(plan, `plan ${id} missing`).toBeTruthy();
+      expect(plan!.openingId).toBe('ruy-lopez');
+      expect(plan!.playableLines.length).toBeGreaterThan(0);
+
+      for (const line of plan!.playableLines) {
+        expect(line.annotations.length).toBe(line.moves.length);
+        const c = new Chess(line.fen);
+        line.moves.forEach((san, i) => {
+          const mv = c.move(san); // chess.js throws on an illegal move, failing the test
+          const arrow = line.arrows?.[i]?.[0];
+          if (arrow) {
+            expect(arrow.from).toBe(mv.from);
+            expect(arrow.to).toBe(mv.to);
+          }
+        });
+      }
+    });
+  }
+
+  it('each Ruy variation plan builds a white-oriented middlegame session', async () => {
+    const plans = (await import('../data/middlegame-plans.json')).default as Array<{
+      id: string;
+    }>;
+    for (const id of RUY_VARIATION_PLAN_IDS) {
+      const plan = plans.find((p) => p.id === id);
+      // sessionFromPlan takes the canonical MiddlegamePlan shape; the JSON
+      // row satisfies it. Cast through unknown since the JSON import is
+      // typed loosely.
+      const session = sessionFromPlan(plan as unknown as Parameters<typeof sessionFromPlan>[0], {
+        orientation: 'white',
+      });
+      expect(session, `session for ${id}`).not.toBeNull();
+      expect(session!.steps.length, `steps for ${id}`).toBeGreaterThan(0);
+      expect(session!.orientation).toBe('white');
+    }
+  });
+});
