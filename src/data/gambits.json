@@ -50,8 +50,90 @@
         "explanation": "After 4.h4 g4 5.Ne5, White's knight on e5 dominates the center. The Nxg4 + Nxf6+ sequence recovers the pawn while damaging Black's kingside. After 17.d4, White has central pawns + open lines; Black has the queen-side pawn structure and must defend accurately."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Mate in Two #1",
+        "pgn": "Bc6 Qc8+ Ke7 Nf5#",
+        "setupFen": "rn2kb1r/pQ1b1ppp/5n2/3p4/4P2N/3P4/PPP4P/RNB1KB1q b Qkq - 0 10",
+        "explanation": "Mate in Two: Stockfish confirms the student wins (mate). From a real Lichess game (rating 1436).",
+        "source": "lichess-puzzle:0IkvQ",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Tactic #2",
+        "pgn": "Nd5 Qh5+ g6 fxg6",
+        "setupFen": "r1bqkb1r/ppp3pp/2n2n2/4PP2/3Pp3/2N5/PPP3PP/R1BQKB1R b KQkq - 0 8",
+        "explanation": "Tactic: Stockfish confirms the student wins (383cp). From a real Lichess game (rating 1227).",
+        "source": "lichess-puzzle:08J1X",
+        "verifiedEval": "383cp"
+      },
+      {
+        "name": "Fork #3",
+        "pgn": "Bxf4 Ne7+ Kh8 Nxg6+",
+        "setupFen": "r4rk1/ppp2ppp/3p2q1/3N2b1/2BPPRb1/6P1/PPP4P/4RQK1 b - - 4 17",
+        "explanation": "Fork: Stockfish confirms the student wins (528cp). From a real Lichess game (rating 1117).",
+        "source": "lichess-puzzle:0MwR1",
+        "verifiedEval": "528cp"
+      },
+      {
+        "name": "Kingside Attack #4",
+        "pgn": "Nh7 Qxf7+ Kxf7 Rde4 Bd6 Be7",
+        "setupFen": "rnb3k1/ppbp1qp1/2p2np1/6B1/3R4/2N2Q2/PPP3PP/4R1K1 b - - 5 17",
+        "explanation": "Kingside Attack: Stockfish confirms the student wins (190cp). From a real Lichess game (rating 3002).",
+        "source": "lichess-puzzle:0Nns6",
+        "verifiedEval": "190cp"
+      },
+      {
+        "name": "Sacrifice #5",
+        "pgn": "Ke6 Qg4+ Kxe5 Bxf4+",
+        "setupFen": "r1bq2nr/pppp1kpp/8/2b1N3/3nPp2/8/PPP3PP/RNBQK2R b KQ - 1 7",
+        "explanation": "Sacrifice: Stockfish confirms the student wins (317cp). From a real Lichess game (rating 1996).",
+        "source": "lichess-puzzle:0542a",
+        "verifiedEval": "317cp"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: mate in three #1",
+        "pgn": "Nxb6 Re8+ Be6 Rxe6+ Kf4 Bg5#",
+        "setupFen": "r4k2/pp3p1p/1q3b2/3N4/2Bn4/3PK3/PPP3rP/R2QR3 w - - 6 19",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end mated-in-1. From a real Lichess game (rating 1911).",
+        "source": "lichess-puzzle:0M4wO",
+        "verifiedEval": "mated-in-1"
+      },
+      {
+        "name": "Pitfall: fork #2",
+        "pgn": "b3 Qe4+ Be2 Qxf4",
+        "setupFen": "rnb1k2r/pp2bppp/2p5/3q4/3P1B2/5N2/PPP3PP/R2QKB1R w KQkq - 0 9",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -419cp. From a real Lichess game (rating 1763).",
+        "source": "lichess-puzzle:0Iwbx",
+        "verifiedEval": "-419cp"
+      },
+      {
+        "name": "Pitfall: fork #3",
+        "pgn": "O-O Qd4+ Kh1 Qxc4",
+        "setupFen": "r1bqkb1r/p1p2ppp/1p3n2/4p3/2B1P3/5Q2/PPPP2PP/RNB1K2R w KQkq - 0 8",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -460cp. From a real Lichess game (rating 1592).",
+        "source": "lichess-puzzle:0AjWE",
+        "verifiedEval": "-460cp"
+      },
+      {
+        "name": "Pitfall: mate in two #4",
+        "pgn": "Kf2 Bc5+ Qxc5 Qxe2#",
+        "setupFen": "2k2b2/1pp2p1p/p7/4QPpq/2b2p2/8/PPP1B1PP/R1Br1K1R w - - 4 18",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end mated-in-1. From a real Lichess game (rating 1901).",
+        "source": "lichess-puzzle:0N2xy",
+        "verifiedEval": "mated-in-1"
+      },
+      {
+        "name": "Pitfall: fork #5",
+        "pgn": "Rxf3 Qe1+ Rf1 Bxd4+ cxd4 Qxa5",
+        "setupFen": "2k4r/1p2q1b1/p1pr3p/Q5p1/3P1p2/1PP2b2/P5PP/RNB2RK1 w - - 0 17",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -525cp. From a real Lichess game (rating 2122).",
+        "source": "lichess-puzzle:0AWYq",
+        "verifiedEval": "-525cp"
+      }
+    ]
   },
   {
     "id": "gambit-evans-gambit",
@@ -104,8 +186,66 @@
         "explanation": "The Waller Attack — after Black retreats Bc5 (instead of Ba5), White builds the same big center and develops Nc3. The Bg4 pin tries to slow White's attack but White has Qa4 / Qb3 ready to trade the bishop or chase it away while maintaining the kingside pressure."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Kingside Attack #1",
+        "pgn": "Bg5 Rxe8+ Qxe8 Bxg5",
+        "setupFen": "r2qr1k1/ppp1bppp/1nnp4/5P2/6P1/1BP5/P4P1P/RNBQR1K1 b - - 4 15",
+        "explanation": "Kingside Attack: Stockfish confirms the student wins (360cp). From a real Lichess game (rating 1468).",
+        "source": "lichess-puzzle:0DgYW",
+        "verifiedEval": "360cp"
+      },
+      {
+        "name": "Mate in Two #2",
+        "pgn": "g6 Bf7+ Kf8 Qh6#",
+        "setupFen": "r1bqk2r/ppp1n1pp/2np4/4N2Q/2BP4/N7/P4PPP/R3K2R b KQkq - 1 12",
+        "explanation": "Mate in Two: Stockfish confirms the student wins (mate). From a real Lichess game (rating 1670).",
+        "source": "lichess-puzzle:0EVg0",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Mating Strike #3",
+        "pgn": "axb5 Qa8+ Kd7 Bxb5+ c6 Bxc6+ bxc6 Qxc6#",
+        "setupFen": "2kr2nr/1pp1q2p/p2b2p1/1N1P1b2/2BPp3/Q7/PB3PPP/4R1K1 b - - 1 17",
+        "explanation": "Mating Strike: Stockfish confirms the student wins (mate). From a real Lichess game (rating 2230).",
+        "source": "lichess-puzzle:02ouU",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Trapped Piece #4",
+        "pgn": "Nc3 Qd3 Ne2+ Qxe2",
+        "setupFen": "r2q1rk1/ppp2ppp/2n5/3pP3/3PnB2/5P2/P1B2P1P/R2Q1RK1 b - - 0 15",
+        "explanation": "Trapped Piece: Stockfish confirms the student wins (302cp). From a real Lichess game (rating 1576).",
+        "source": "lichess-puzzle:08chX",
+        "verifiedEval": "302cp"
+      },
+      {
+        "name": "Kingside Attack #5",
+        "pgn": "dxc4 Qxf7+ Kh8 Qh5 h6 Nf7+",
+        "setupFen": "r1bqr1k1/ppp1nppp/2n5/b2p2N1/2BPP3/B4Q2/P4PPP/RN3RK1 b - - 1 11",
+        "explanation": "Kingside Attack: Stockfish confirms the student wins (451cp). From a real Lichess game (rating 1857).",
+        "source": "lichess-puzzle:0A1Jy",
+        "verifiedEval": "451cp"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: fork #1",
+        "pgn": "Nxc3 Bxc3 Rxc3 Ne2+ Kf1 Nxc3",
+        "setupFen": "r5k1/ppp1B1pp/6r1/b5N1/3nP3/2p5/P4PPP/RNR3K1 w - - 1 17",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -376cp. From a real Lichess game (rating 1338).",
+        "source": "lichess-puzzle:0EXif",
+        "verifiedEval": "-376cp"
+      },
+      {
+        "name": "Pitfall: sacrifice #2",
+        "pgn": "Qxh6 Rxg2+ Kxg2 Bh3+",
+        "setupFen": "2kr2r1/pppb1pQ1/7p/8/2B1n2q/2P1B3/P4PPP/RN2R1K1 w - - 5 17",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -519cp. From a real Lichess game (rating 2082).",
+        "source": "lichess-puzzle:077SA",
+        "verifiedEval": "-519cp"
+      }
+    ]
   },
   {
     "id": "scotch-gambit",
@@ -158,8 +298,90 @@
         "explanation": "The Haxo Gambit sacrifices the c3 pawn against Black's Bc5. The stunning Bxf7+ followed by Qd5+ chases Black's king back to e8 with no castling rights and a wandering knight on c3 to recapture. White's lead in development plus the lost castling rights provide ample compensation."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Trapped Piece #1",
+        "pgn": "Nh6 Nd2 Qxa1 Qxa1",
+        "setupFen": "r1b1k1nr/pppp1ppp/8/4P3/8/2Q5/P1P1KPPP/RNq2B1R b kq - 3 11",
+        "explanation": "Trapped Piece: Stockfish confirms the student wins (503cp). From a real Lichess game (rating 1531).",
+        "source": "lichess-puzzle:09IR3",
+        "verifiedEval": "503cp"
+      },
+      {
+        "name": "Kingside Attack #2",
+        "pgn": "Bg4 Rxe8+ Qxe8 Qxf6",
+        "setupFen": "r1bqr1k1/ppp2p2/2np1n1p/6p1/8/2NB1QB1/PPP2PPP/R3R1K1 b - - 7 15",
+        "explanation": "Kingside Attack: Stockfish confirms the student wins (471cp). From a real Lichess game (rating 1394).",
+        "source": "lichess-puzzle:08zQG",
+        "verifiedEval": "471cp"
+      },
+      {
+        "name": "Mate in Three #3",
+        "pgn": "exd4 Qg4+ Qxg4 Rxe8+ Bf8 Rxf8#",
+        "setupFen": "r1b1r1k1/p1pq1p1p/2pb1p1B/4p3/3N4/5Q2/PP3PPP/R3R1K1 b - - 5 17",
+        "explanation": "Mate in Three: Stockfish confirms the student wins (mate). From a real Lichess game (rating 2377).",
+        "source": "lichess-puzzle:0AeID",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Pin #4",
+        "pgn": "a6 Be6 Bd6 Nxd6",
+        "setupFen": "r2k3r/pppbn1pp/5p2/1Nb1p3/2B1P3/8/PPP2PPP/R1BR2K1 b - - 7 11",
+        "explanation": "Pin: Stockfish confirms the student wins (331cp). From a real Lichess game (rating 1537).",
+        "source": "lichess-puzzle:0F84a",
+        "verifiedEval": "331cp"
+      },
+      {
+        "name": "Discovered Attack #5",
+        "pgn": "Qxb1+ Kd2 Nh6 Rxb1",
+        "setupFen": "r1b1k1nr/pppp1ppp/2N5/8/2B1P3/4PQ2/P1P3PP/qN2K2R b Kkq - 1 9",
+        "explanation": "Discovered Attack: Stockfish confirms the student wins (306cp). From a real Lichess game (rating 1933).",
+        "source": "lichess-puzzle:0CuYW",
+        "verifiedEval": "306cp"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: fork #1",
+        "pgn": "cxd4 Bxe2 Qxe2 Qxd4+ Qe3 Qxa1",
+        "setupFen": "r2q1rk1/p1p1bppp/8/1bp1PP2/3p4/2P2R2/P1P1N1PP/R1BQ2K1 w - - 0 17",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -385cp. From a real Lichess game (rating 1478).",
+        "source": "lichess-puzzle:0BhOT",
+        "verifiedEval": "-385cp"
+      },
+      {
+        "name": "Pitfall: pin #2",
+        "pgn": "Kd2 Qb2+ Kd1 Bxc3",
+        "setupFen": "N1bk3r/pp1p1ppp/8/4P3/1b6/q1B2Q2/P4PPP/R3KB1R w KQ - 1 14",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -494cp. From a real Lichess game (rating 1712).",
+        "source": "lichess-puzzle:06ABV",
+        "verifiedEval": "-494cp"
+      },
+      {
+        "name": "Pitfall: hanging piece #3",
+        "pgn": "Bxg7 Kxg7 Qg4+ Ng5 f4 d5",
+        "setupFen": "r1bq1rk1/p1pp1ppp/2p5/8/2B1n3/2B5/PPP2PPP/R2Q1RK1 w - - 0 12",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -275cp. From a real Lichess game (rating 1974).",
+        "source": "lichess-puzzle:0HSvH",
+        "verifiedEval": "-275cp"
+      },
+      {
+        "name": "Pitfall: queenside attack #4",
+        "pgn": "Kb1 Qa5 c3 Qa4 Kc1 Qb3 Kd2 Qxb2+ Ke3 Qxe2+",
+        "setupFen": "2b2kn1/2pp1p1Q/1p6/2qNn3/4P3/8/rPP1B1PP/2KR1R2 w - - 0 18",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -653cp. From a real Lichess game (rating 2269).",
+        "source": "lichess-puzzle:0K8PB",
+        "verifiedEval": "-653cp"
+      },
+      {
+        "name": "Pitfall: sacrifice #5",
+        "pgn": "c3 Rxg2+ Kxg2 Rg8+",
+        "setupFen": "r5r1/ppk1qp1p/3p4/2pP4/3n1P2/8/PPP3PP/R1BQ1RK1 w - - 1 18",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -541cp. From a real Lichess game (rating 2067).",
+        "source": "lichess-puzzle:0Ef6N",
+        "verifiedEval": "-541cp"
+      }
+    ]
   },
   {
     "id": "vienna-gambit",
@@ -212,8 +434,90 @@
         "explanation": "The Pierce Gambit transposes to the main Vienna Gambit position after 5.Nf3. From here White can choose between d4 / Bc4 / Bd3 setups; the Pierce specifically delays the bishop development to keep more flexibility."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Pin #1",
+        "pgn": "Nf6 Re1 Qxe1+ Nxe1",
+        "setupFen": "rn2k1nr/ppp1qppp/3b4/8/2Q2p2/2N2N2/PPPP2PP/R1B2RK1 b kq - 0 10",
+        "explanation": "Pin: Stockfish confirms the student wins (409cp). From a real Lichess game (rating 1447).",
+        "source": "lichess-puzzle:0BLgI",
+        "verifiedEval": "409cp"
+      },
+      {
+        "name": "Fork #2",
+        "pgn": "Bxe4 Bxe4 Nxe4 Qd5 Nd7 Qxe4",
+        "setupFen": "rn1qr1k1/pbp2pp1/1p1p1n1p/1P2p3/2P1P3/P2B1N2/1BP2PPP/R2Q1RK1 b - - 2 11",
+        "explanation": "Fork: Stockfish confirms the student wins (285cp). From a real Lichess game (rating 1390).",
+        "source": "lichess-puzzle:0Ii0m",
+        "verifiedEval": "285cp"
+      },
+      {
+        "name": "Deflection #3",
+        "pgn": "c6 Qe5+ Be7 Qxg7 Bf6 Nxf6+ Qxf6 Bh6 Qxg7 Bxg7",
+        "setupFen": "rnbqkbnr/1ppp1ppp/p7/3N3Q/3PP3/8/PPP3B1/R1B3KR b kq - 4 10",
+        "explanation": "Deflection: Stockfish confirms the student wins (346cp). From a real Lichess game (rating 2789).",
+        "source": "lichess-puzzle:0MIWi",
+        "verifiedEval": "346cp"
+      },
+      {
+        "name": "Mate in Two #4",
+        "pgn": "Bxf6 Qxe8+ Kg7 h6#",
+        "setupFen": "r1b1r1k1/pppp1p1p/5Np1/4b1BP/8/P7/1PP1Q2P/1R2KBq1 b - - 1 17",
+        "explanation": "Mate in Two: Stockfish confirms the student wins (mate). From a real Lichess game (rating 1462).",
+        "source": "lichess-puzzle:0Facz",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Fork #5",
+        "pgn": "Nhg4 Nd5 Nxe4 Ne7+ Kh8 Nxc8",
+        "setupFen": "r1q2rk1/bpp2ppp/p2p1n1n/P7/1P2B3/2NQ4/1BP2PPP/R4RK1 b - - 3 19",
+        "explanation": "Fork: Stockfish confirms the student wins (192cp). From a real Lichess game (rating 2339).",
+        "source": "lichess-puzzle:07tRI",
+        "verifiedEval": "192cp"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: discovered attack #1",
+        "pgn": "Na4 Nd4 Qd1 Qxa4",
+        "setupFen": "r3k2r/pppq1ppp/2np1n2/2b1p3/2B1PP2/2NP1Q1P/PPP3P1/R1B1K2R w KQkq - 1 9",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -396cp. From a real Lichess game (rating 1409).",
+        "source": "lichess-puzzle:0FV0p",
+        "verifiedEval": "-396cp"
+      },
+      {
+        "name": "Pitfall: pin #2",
+        "pgn": "Kf2 Qxd5 Qxd5 Bxe3+ Kxe3 Nxd5+",
+        "setupFen": "r1b1k2r/pppp1ppp/8/2bNq3/5n2/4BN2/PPP1K1PP/R2Q1B1R w kq - 4 12",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -290cp. From a real Lichess game (rating 2205).",
+        "source": "lichess-puzzle:0FuWz",
+        "verifiedEval": "-290cp"
+      },
+      {
+        "name": "Pitfall: discovered attack #3",
+        "pgn": "Nh4 Bxf2+ Kxf2 Nxd5+",
+        "setupFen": "r2qkr2/1pp3p1/p1np1nb1/2bNp1B1/2B5/P2P1N1P/1PP2P2/R2QK2R w KQq - 3 13",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -473cp. From a real Lichess game (rating 2156).",
+        "source": "lichess-puzzle:0Intz",
+        "verifiedEval": "-473cp"
+      },
+      {
+        "name": "Pitfall: double check #4",
+        "pgn": "Bxf8 Nxd3+ Kd2 Nxf4",
+        "setupFen": "r4rk1/ppp2ppp/4q3/4n3/5Q2/B2P2P1/P1P4P/R3KR2 w Q - 0 18",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -695cp. From a real Lichess game (rating 1246).",
+        "source": "lichess-puzzle:0PWJd",
+        "verifiedEval": "-695cp"
+      },
+      {
+        "name": "Pitfall: tactic #5",
+        "pgn": "Ncxe4 Qe7 Qe2 Nd4 Nxf6+ gxf6",
+        "setupFen": "r1bqk2r/pppp2pp/2n2n2/2b3N1/4pP2/2N5/PPPP2PP/R1BQKB1R w KQkq - 2 8",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -259cp. From a real Lichess game (rating 2546).",
+        "source": "lichess-puzzle:0Ds5S",
+        "verifiedEval": "-259cp"
+      }
+    ]
   },
   {
     "id": "danish-gambit",
@@ -266,8 +570,82 @@
         "explanation": "Same starting position as the main Danish Gambit accepted. The Lindehn approach features a slower buildup with Qb3 + e5 — playing for the long-term initiative rather than immediate sacrificial blows."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Removing the Defender #1",
+        "pgn": "a6 Qxc5 dxc5 Rxd8 Rfxd8 Bxe7",
+        "setupFen": "1r1q1rk1/ppp1npp1/3pb2p/1Qb5/4P2B/2N2N2/PP3PPP/3R1RK1 b - - 4 14",
+        "explanation": "Removing the Defender: Stockfish confirms the student wins (280cp). From a real Lichess game (rating 1764).",
+        "source": "lichess-puzzle:0NRcg",
+        "verifiedEval": "280cp"
+      },
+      {
+        "name": "Pin #2",
+        "pgn": "Qxe4 Qxe4+ Nxe4 Re1 O-O Rxe4",
+        "setupFen": "rnb1k2r/ppppqppp/5n2/8/2B1P3/2B5/P3QPPP/2KR2NR b kq - 0 9",
+        "explanation": "Pin: Stockfish confirms the student wins (201cp). From a real Lichess game (rating 1765).",
+        "source": "lichess-puzzle:07VLd",
+        "verifiedEval": "201cp"
+      },
+      {
+        "name": "Tactic #3",
+        "pgn": "Qg4 Ng5 Bxh2+ Kh1",
+        "setupFen": "r1b2k1r/p1bp2p1/1pn4p/2p2q2/4N2N/1Q6/PP3PPP/R1B1R1K1 b - - 3 15",
+        "explanation": "Tactic: Stockfish confirms the student wins (721cp). From a real Lichess game (rating 2486).",
+        "source": "lichess-puzzle:03Idr",
+        "verifiedEval": "721cp"
+      },
+      {
+        "name": "Sacrifice #4",
+        "pgn": "Qf6 Bh7+ Kxh7 Bg5+ Kg8 Bxf6",
+        "setupFen": "rnbq1rk1/pppp1pp1/7B/7Q/8/P1nB4/5PPP/R3K1NR b KQ - 0 11",
+        "explanation": "Sacrifice: Stockfish confirms the student wins (390cp). From a real Lichess game (rating 2222).",
+        "source": "lichess-puzzle:0FwNv",
+        "verifiedEval": "390cp"
+      },
+      {
+        "name": "Tactic #5",
+        "pgn": "d5 exd6 Ne6 Bxe6 Bxe6 Qxb4",
+        "setupFen": "rnbqk2r/pp1p1ppp/2p5/4P1n1/1bBQ3P/8/PB3PP1/RN3KNR b kq - 1 10",
+        "explanation": "Tactic: Stockfish confirms the student wins (289cp). From a real Lichess game (rating 2226).",
+        "source": "lichess-puzzle:066Be",
+        "verifiedEval": "289cp"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: hanging piece #1",
+        "pgn": "Bxf7+ Kxf7 Qh5+ Ke6 Qf5+ Kd6 Nd2 Ba6",
+        "setupFen": "r1bqk1nr/p2p1ppp/2p5/4b3/2B1P3/8/PP3PPP/RNBQK2R w KQkq - 0 9",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -202cp. From a real Lichess game (rating 2154).",
+        "source": "lichess-puzzle:0Ljdd",
+        "verifiedEval": "-202cp"
+      },
+      {
+        "name": "Pitfall: tactic #2",
+        "pgn": "Nxe4 Nxe4 Qxe4 Bc4",
+        "setupFen": "r2qr1k1/p5pp/2p1bn2/n7/Q3p3/2N5/PP2NPPP/R1B2RK1 w - - 2 15",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -311cp. From a real Lichess game (rating 1933).",
+        "source": "lichess-puzzle:0FX0H",
+        "verifiedEval": "-311cp"
+      },
+      {
+        "name": "Pitfall: fork #3",
+        "pgn": "Nh4 Nc2+ Kd2 Qxf2+ Qe2 Qxe2+",
+        "setupFen": "r1b1k2r/pppp1ppp/2n5/4Pq2/1n1P4/2N2NP1/PP3P1P/R2QKB1R w KQkq - 1 11",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -344cp. From a real Lichess game (rating 1798).",
+        "source": "lichess-puzzle:0Aspe",
+        "verifiedEval": "-344cp"
+      },
+      {
+        "name": "Pitfall: mate in one #4",
+        "pgn": "Nxa8 Qxf2#",
+        "setupFen": "rnbk3r/ppNp1pp1/7p/2b5/2B1P3/5N2/Pq3PPP/R2QK2R w KQ - 1 11",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end mated-in-1. From a real Lichess game (rating 1090).",
+        "source": "lichess-puzzle:0HjZR",
+        "verifiedEval": "mated-in-1"
+      }
+    ]
   },
   {
     "id": "smith-morra-gambit",
@@ -320,8 +698,90 @@
         "explanation": "The Taylor Defense with a6 and Nge7 is a common amateur setup. White plays Bg5 to create a pin, and after the bishop retreat dance Bh4 + Bb3 keeps the bishop active — Black's b5 expansion needs to be met carefully but White's piece coordination remains intact."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Mate in Three #1",
+        "pgn": "Qf8 Bb5+ axb5 Rxc8+ Rxc8 Qd7#",
+        "setupFen": "r1b1k2r/1p4Qp/p2qppp1/8/2B3n1/8/PP3PPP/2RR2K1 b kq - 1 19",
+        "explanation": "Mate in Three: Stockfish confirms the student wins (mate). From a real Lichess game (rating 2211).",
+        "source": "lichess-puzzle:0LqFe",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Fork #2",
+        "pgn": "Rc8 Qxc8 Qxc8 Nxe7+ Kg7 Nxc8",
+        "setupFen": "r2q1rk1/pp2pp1p/3pn1p1/3N4/2Q5/8/PP3PPP/R2R2K1 b - - 2 18",
+        "explanation": "Fork: Stockfish confirms the student wins (380cp). From a real Lichess game (rating 1532).",
+        "source": "lichess-puzzle:096U9",
+        "verifiedEval": "380cp"
+      },
+      {
+        "name": "Fork #3",
+        "pgn": "Rad8 Nxf7 Nd4 Nxh6+ gxh6 Qg4+ Kh7 Qxh4",
+        "setupFen": "r4rk1/5pp1/pqnNp2p/1p6/5P1b/1B5P/PP2Q1P1/2R2R1K b - - 0 19",
+        "explanation": "Fork: Stockfish confirms the student wins (203cp). From a real Lichess game (rating 2069).",
+        "source": "lichess-puzzle:02vZm",
+        "verifiedEval": "203cp"
+      },
+      {
+        "name": "F-pawn Strike #4",
+        "pgn": "Nf6 Qxf7+ Qxf7 Nxf7",
+        "setupFen": "r3k1nr/1bq2ppp/p2p4/1p2p1NQ/3nP3/1BN4P/PP3PP1/R2R2K1 b kq - 2 15",
+        "explanation": "F-pawn Strike: Stockfish confirms the student wins (201cp). From a real Lichess game (rating 2380).",
+        "source": "lichess-puzzle:00TEQ",
+        "verifiedEval": "201cp"
+      },
+      {
+        "name": "Tactic #5",
+        "pgn": "Nxf3+ Qxf3 O-O Bg5 Nc6 Bxd8",
+        "setupFen": "r1bqk2r/pp1pnpbp/3P2p1/4n3/8/1B3N2/PP3PPP/R1BQ1RK1 b kq - 0 11",
+        "explanation": "Tactic: Stockfish confirms the student wins (448cp). From a real Lichess game (rating 2192).",
+        "source": "lichess-puzzle:0EjDq",
+        "verifiedEval": "448cp"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: kingside attack #1",
+        "pgn": "Nd5 Ng4 Bf4 Bxf2+ Rxf2 Qxf2+",
+        "setupFen": "r1b2rk1/pp1p1ppp/1bn2n2/8/2B1P2q/1NN5/PP3PPP/R1BQ1RK1 w - - 9 11",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -366cp. From a real Lichess game (rating 2317).",
+        "source": "lichess-puzzle:03uVM",
+        "verifiedEval": "-366cp"
+      },
+      {
+        "name": "Pitfall: removing the defender #2",
+        "pgn": "Bxb5 Rxc3 Rxc3 Bxb5",
+        "setupFen": "2rq1rk1/3bbpp1/3ppn1p/np6/4P3/PPN1BN1P/4BPP1/2RQ1RK1 w - - 0 16",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -245cp. From a real Lichess game (rating 1800).",
+        "source": "lichess-puzzle:0JTrY",
+        "verifiedEval": "-245cp"
+      },
+      {
+        "name": "Pitfall: hanging piece #3",
+        "pgn": "Nxa8 Qxa1+ Rd1 Qc3",
+        "setupFen": "r6r/ppNkp2p/2np2pB/2nRp3/4P3/2q4P/P3QPP1/R5K1 w - - 2 18",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -357cp. From a real Lichess game (rating 1708).",
+        "source": "lichess-puzzle:05VYE",
+        "verifiedEval": "-357cp"
+      },
+      {
+        "name": "Pitfall: tactic #4",
+        "pgn": "Bxd5 Qxd5 Qxd5 Nxd5",
+        "setupFen": "r1bq1rk1/1p2npp1/p1n4p/3p4/P1B4B/2P2N1P/5PP1/R2Q1RK1 w - - 0 14",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -535cp. From a real Lichess game (rating 1502).",
+        "source": "lichess-puzzle:08Tii",
+        "verifiedEval": "-535cp"
+      },
+      {
+        "name": "Pitfall: mate in one #5",
+        "pgn": "Qxf2 Bxa3#",
+        "setupFen": "r1b1k2r/1p1p1ppp/pqn1p3/4P3/1b2N3/P4N2/2PBQnPP/2KR1B1R w kq - 0 14",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end mated-in-1. From a real Lichess game (rating 1270).",
+        "source": "lichess-puzzle:0H149",
+        "verifiedEval": "mated-in-1"
+      }
+    ]
   },
   {
     "id": "stafford-gambit",
@@ -374,7 +834,48 @@
         "explanation": "After 5.e5, Black plays Ne4 — the centralized knight controls key squares and supports the typical Bxf2+ tactical resources. Black's piece activity continues to compensate for the pawn deficit."
       }
     ],
-    "trapLines": [],
+    "trapLines": [
+      {
+        "name": "Mate in Two #1",
+        "pgn": "h3 Bxc3+ Qxc3 Qd1#",
+        "setupFen": "r2qk2r/ppp2pp1/2p2n2/7p/3bP1b1/2N3Q1/PPP2PPP/R1B1KB1R w KQkq - 0 9",
+        "explanation": "Mate in Two: Stockfish confirms the student wins (mate). From a real Lichess game (rating 1476).",
+        "source": "lichess-puzzle:01EUl",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Fork #2",
+        "pgn": "Qe5 Qxf2+ Kxf2 Ng4+ Kg3 Nxe5",
+        "setupFen": "rnb3k1/p1p3pp/1q3n2/7Q/2P5/3P4/PP3RPP/R1B3K1 w - - 3 15",
+        "explanation": "Fork: Stockfish confirms the student wins (567cp). From a real Lichess game (rating 1753).",
+        "source": "lichess-puzzle:0Gdmy",
+        "verifiedEval": "567cp"
+      },
+      {
+        "name": "Discovered Attack #3",
+        "pgn": "Qf8 Rxe5+ fxe5 Qxf8",
+        "setupFen": "rnb5/pp2rQpk/3q3p/2pPN3/5P2/8/PPP3PP/R3KB1R w KQ - 1 16",
+        "explanation": "Discovered Attack: Stockfish confirms the student wins (417cp). From a real Lichess game (rating 1219).",
+        "source": "lichess-puzzle:0FqPd",
+        "verifiedEval": "417cp"
+      },
+      {
+        "name": "Fork #4",
+        "pgn": "Nc3 Qh4+ g3 Qxc4",
+        "setupFen": "rnb1kbr1/pppp1Npp/5q2/2n5/2B5/5P2/PPPP2PP/RNBQK2R w KQq - 1 7",
+        "explanation": "Fork: Stockfish confirms the student wins (173cp). From a real Lichess game (rating 1599).",
+        "source": "lichess-puzzle:04NEq",
+        "verifiedEval": "173cp"
+      },
+      {
+        "name": "Sacrifice #5",
+        "pgn": "Bxd8 Bxf2+ Ke2 Bg4+ Kd3 Ne5+ Kxe4 f5+ Kd5 Rxd8",
+        "setupFen": "r1bqk2r/ppp2ppp/2np4/2b3B1/4n3/1NN5/PPP2PPP/R2QKB1R w KQkq - 0 8",
+        "explanation": "Sacrifice: Stockfish confirms the student wins (402cp). From a real Lichess game (rating 2797).",
+        "source": "lichess-puzzle:09DMC",
+        "verifiedEval": "402cp"
+      }
+    ],
     "warningLines": [
       {
         "name": "White Plays d3-Be2-O-O Accurately",
@@ -390,6 +891,22 @@
         "name": "Aggressive e5 Refutation",
         "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6",
         "explanation": "White's aggressive 5.e5 pushes Black's knight back immediately. From here White plans d3 + d4 to firmly grip the center; Black has no counterplay and is simply worse — this is the clearest refutation of the Stafford."
+      },
+      {
+        "name": "Pitfall: pin #1",
+        "pgn": "Qe7 Nf5+ Bxf5 Rxe7",
+        "setupFen": "r4r2/ppq2pkp/2n1b1p1/3p2Q1/2pP3N/2P1R3/PP3PPP/R4BK1 b - - 7 19",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -460cp. From a real Lichess game (rating 1541).",
+        "source": "lichess-puzzle:0Deuc",
+        "verifiedEval": "-460cp"
+      },
+      {
+        "name": "Pitfall: discovered attack #2",
+        "pgn": "Bxg5 Qd5+ Kf8 fxg5+",
+        "setupFen": "r1bq2kr/ppppb1pp/2n5/6B1/4PP2/8/PPP3PP/R2Q1RK1 b - - 0 12",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -770cp. From a real Lichess game (rating 1509).",
+        "source": "lichess-puzzle:08FKT",
+        "verifiedEval": "-770cp"
       }
     ]
   },
@@ -444,8 +961,26 @@
         "explanation": "Named after Spassky's brilliant games. The Re4 defense places the rook actively to block the attack, but Black responds with Bf5 to attack the rook — shifting the bishop to gain time and continuing the kingside pressure."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Mate in Two #1",
+        "pgn": "Nxd6 Qxe1+ Qxe1 Rxe1#",
+        "setupFen": "r1b1r1k1/4qppp/p2n4/1ppn4/4N3/2PP4/PPB2PPP/R1BQR1K1 w - - 0 19",
+        "explanation": "Mate in Two: Stockfish confirms the student wins (mate). From a real Lichess game (rating 682).",
+        "source": "lichess-puzzle:0JqYd",
+        "verifiedEval": "mate"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: mate in one #1",
+        "pgn": "Rxf7 Re8#",
+        "setupFen": "r1b2rk1/2p2Qpp/p7/1p6/7q/1BPP3P/PP3nPb/RNB1RK2 b - - 0 17",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end mated-in-1. From a real Lichess game (rating 712).",
+        "source": "lichess-puzzle:0Cuip",
+        "verifiedEval": "mated-in-1"
+      }
+    ]
   },
   {
     "id": "englund-gambit",
@@ -498,8 +1033,90 @@
         "explanation": "The d6 trick involves Black delaying development to recover the pawn through piece exchanges. After Nxe5 Qxe5, Black has regained material equality. The Bg4 pin creates tactical ideas and after the complex sequence, Black reaches a roughly equal endgame. Not the most ambitious but practical."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Fork #1",
+        "pgn": "Rf1 Qxf1+ Bxf1 Nf2+ Kg1 Nxg4",
+        "setupFen": "1k1n1b1r/ppp5/3p3p/8/2B1n1Q1/4P3/PPP2qPP/R1B1R2K w - - 2 19",
+        "explanation": "Fork: Stockfish confirms the student wins (370cp). From a real Lichess game (rating 1640).",
+        "source": "lichess-puzzle:0G0L9",
+        "verifiedEval": "370cp"
+      },
+      {
+        "name": "Tactic #2",
+        "pgn": "Bxc7 d6 Bxd6 Qxd6 Qxd6 Bxd6",
+        "setupFen": "r1b1kb1r/ppppq1p1/2n2n1p/8/5B2/2P2N2/PP2PPPP/RN1QKB1R w KQkq - 0 7",
+        "explanation": "Tactic: Stockfish confirms the student wins (220cp). From a real Lichess game (rating 1625).",
+        "source": "lichess-puzzle:0J0rA",
+        "verifiedEval": "220cp"
+      },
+      {
+        "name": "Discovered Attack #3",
+        "pgn": "Qxd6 Nf3+ Ke2 Qxb7 Kxf3 c5+",
+        "setupFen": "r3k2r/pB2qppp/2pp4/4n3/1B6/4P1Pb/PPPQ1P1P/R3K2R w KQkq - 0 15",
+        "explanation": "Discovered Attack: Stockfish confirms the student wins (280cp). From a real Lichess game (rating 2230).",
+        "source": "lichess-puzzle:01n09",
+        "verifiedEval": "280cp"
+      },
+      {
+        "name": "Tactic #4",
+        "pgn": "Bd3 Qf5 Bxe4 dxe4 Nd2 Qxf4",
+        "setupFen": "2kr1bnr/1ppq1ppp/p7/3pP3/3PbB2/2P2N2/PP3PPP/R2QKB1R w KQ - 3 11",
+        "explanation": "Tactic: Stockfish confirms the student wins (275cp). From a real Lichess game (rating 2376).",
+        "source": "lichess-puzzle:0HgO8",
+        "verifiedEval": "275cp"
+      },
+      {
+        "name": "Kingside Attack #5",
+        "pgn": "hxg4 Bh2+ Kf1 fxg4",
+        "setupFen": "r4rk1/p1p3pp/2pb4/5p2/6nq/2N1PQ1P/PPP2PP1/R1B1R1K1 w - - 1 14",
+        "explanation": "Kingside Attack: Stockfish confirms the student wins (354cp). From a real Lichess game (rating 2714).",
+        "source": "lichess-puzzle:0HIWV",
+        "verifiedEval": "354cp"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: trapped piece #1",
+        "pgn": "Qxd4 Be3 Qxe4 Qxe4",
+        "setupFen": "r3k2r/pp1b1ppp/nq1p4/4p3/1PPNB3/P6P/2Q2PP1/2B2RK1 b kq - 0 15",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -417cp. From a real Lichess game (rating 2041).",
+        "source": "lichess-puzzle:0MeVD",
+        "verifiedEval": "-417cp"
+      },
+      {
+        "name": "Pitfall: skewer #2",
+        "pgn": "Bb7 b4 Qc6 Bf3 Qc4 Bxb7 Rab8 Bf3",
+        "setupFen": "r1b2rk1/p1pp2pp/1p1b4/2q2p2/5P2/4P3/PPPBB1PP/R2Q1RK1 b - - 1 14",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -507cp. From a real Lichess game (rating 1838).",
+        "source": "lichess-puzzle:06f2z",
+        "verifiedEval": "-507cp"
+      },
+      {
+        "name": "Pitfall: mate in two #3",
+        "pgn": "Qb5 Nxf6+ gxf6 Qxh7#",
+        "setupFen": "r4rk1/ppp2ppp/3pbn2/6N1/4N2Q/3qP3/P4PPP/3RK2R b K - 3 17",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end mated-in-1. From a real Lichess game (rating 1210).",
+        "source": "lichess-puzzle:0Ixuv",
+        "verifiedEval": "mated-in-1"
+      },
+      {
+        "name": "Pitfall: tactic #4",
+        "pgn": "Bxc3 Qxc3 Qxc3+ Nxc3",
+        "setupFen": "r1b1k1nr/pppp1ppp/2n5/4P1N1/1b3B2/2P5/Pq1QPPPP/RN2KB1R b KQkq - 0 7",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -469cp. From a real Lichess game (rating 1237).",
+        "source": "lichess-puzzle:02Aqe",
+        "verifiedEval": "-469cp"
+      },
+      {
+        "name": "Pitfall: fork #5",
+        "pgn": "Qe6 d5 Qe5 dxc6",
+        "setupFen": "r3r1k1/ppp2ppp/2nn1q2/8/3P4/P1P1P1P1/2Q3BP/R1B1KR2 b Q - 4 16",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -328cp. From a real Lichess game (rating 1395).",
+        "source": "lichess-puzzle:00O8m",
+        "verifiedEval": "-328cp"
+      }
+    ]
   },
   {
     "id": "gambit-budapest-gambit",
@@ -547,8 +1164,74 @@
         "explanation": "When White blocks Bb4+ with Nc3 instead of Nbd2, Black trades the dark-squared bishop and saddles White with doubled c-pawns. After Qe7 and the f6 break, Black regains the gambit pawn with the better structure. The doubled pawns and Black's active pieces give real practical chances despite the slight material deficit being equalized."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Smothered Mate #1",
+        "pgn": "a3 Nd3#",
+        "setupFen": "r1b1k2r/ppppqppp/2n5/4n3/1bP5/2N2N1P/PP1BPPP1/R2QKB1R w KQkq - 0 8",
+        "explanation": "Smothered Mate: Stockfish confirms the student wins (mate). From a real Lichess game (rating 1460).",
+        "source": "lichess-puzzle:0GSYx",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Smothered Mate #2",
+        "pgn": "Nf3 Nd3#",
+        "setupFen": "r1b1k2r/ppppqppp/8/4n3/1bP5/1P5P/P2NPPP1/R2QKBNR w KQkq - 3 9",
+        "explanation": "Smothered Mate: Stockfish confirms the student wins (mate). From a real Lichess game (rating 1422).",
+        "source": "lichess-puzzle:03sho",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Trapped Piece #3",
+        "pgn": "Nc3 Bd6 Qxd6 Qxd6",
+        "setupFen": "r1b1kb1r/ppQ2ppp/1n3q2/3p4/8/1P2P3/P3BPPP/RNB2RK1 w kq - 1 12",
+        "explanation": "Trapped Piece: Stockfish confirms the student wins (338cp). From a real Lichess game (rating 1344).",
+        "source": "lichess-puzzle:0Adsy",
+        "verifiedEval": "338cp"
+      },
+      {
+        "name": "Mate in One #4",
+        "pgn": "Nf3 Qf2#",
+        "setupFen": "rnb1k2r/1pp2ppp/p2p4/3Pp3/2P1P1nq/2NB4/PP4PP/R1BQ1KNR w kq - 3 9",
+        "explanation": "Mate in One: Stockfish confirms the student wins (mate). From a real Lichess game (rating 1121).",
+        "source": "lichess-puzzle:0FAku",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Mate in One #5",
+        "pgn": "a3 Na2#",
+        "setupFen": "2kr3r/ppp4p/5p2/6p1/1nP1b3/4PN2/PP2BPPP/2KR3R w - - 0 18",
+        "explanation": "Mate in One: Stockfish confirms the student wins (mate). From a real Lichess game (rating 927).",
+        "source": "lichess-puzzle:07ym2",
+        "verifiedEval": "mate"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: tactic #1",
+        "pgn": "Bxc3+ bxc3 Qxf2+ Qxf2 Nxf2 O-O",
+        "setupFen": "rnb2rk1/pppp2pp/5q2/3Np3/1bP3n1/2NBP1P1/PP2QP1P/R1B1K2R b KQ - 2 12",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -293cp. From a real Lichess game (rating 2498).",
+        "source": "lichess-puzzle:07wvy",
+        "verifiedEval": "-293cp"
+      },
+      {
+        "name": "Pitfall: fork #2",
+        "pgn": "O-O Ne7+ Kh8 Bxg7+",
+        "setupFen": "r3k2r/ppp2ppp/2qpb3/2bN4/4P3/1QB5/PP3PPP/R4RK1 b kq - 0 15",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -460cp. From a real Lichess game (rating 2061).",
+        "source": "lichess-puzzle:0B6zI",
+        "verifiedEval": "-460cp"
+      },
+      {
+        "name": "Pitfall: mate in two #3",
+        "pgn": "Nxe5 Qh5+ Kg7 Qh7#",
+        "setupFen": "r1bq1r1k/ppp5/2np4/2bNP3/2P5/3B4/PP3PPP/R2Q1RK1 b - - 0 17",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end mated-in-1. From a real Lichess game (rating 1280).",
+        "source": "lichess-puzzle:06Kq4",
+        "verifiedEval": "mated-in-1"
+      }
+    ]
   },
   {
     "id": "albin-countergambit",
@@ -591,8 +1274,58 @@
         "explanation": "White fianchettos to handle the d4 pawn in a more positional way. Black develops naturally with Bg4, Qd7, and Nge7. The fianchetto bishop on g2 is strong but Black's centralized pieces and the cramping d4 pawn provide counterplay. The game becomes a slow positional battle over the d-file and queenside."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Fork #1",
+        "pgn": "f3 Rxd2 Rxd2 Bxc3 Rad1 Bxd2",
+        "setupFen": "1r1r2k1/p4ppp/2p2b2/2p5/2P3b1/1PN3P1/P2BPP1P/R2R2K1 w - - 3 19",
+        "explanation": "Fork: Stockfish confirms the student wins (315cp). From a real Lichess game (rating 1834).",
+        "source": "lichess-puzzle:0BYfa",
+        "verifiedEval": "315cp"
+      },
+      {
+        "name": "Pin #2",
+        "pgn": "Be4 Nd3+ Kf1 Nxf4",
+        "setupFen": "2kr2nr/ppp1qppp/8/4n3/Q1Pp1B2/P2B1P2/1P3PPP/R3K2R w KQ - 0 12",
+        "explanation": "Pin: Stockfish confirms the student wins (307cp). From a real Lichess game (rating 1663).",
+        "source": "lichess-puzzle:06LZ3",
+        "verifiedEval": "307cp"
+      },
+      {
+        "name": "Fork #3",
+        "pgn": "exd3 Qxf3+ Kxf3 Nd4+ Kg2 Nxb5",
+        "setupFen": "3r1rk1/ppp2ppp/2n2q2/1QP5/8/P2p1NP1/1P2PPKP/3R1R2 w - - 0 18",
+        "explanation": "Fork: Stockfish confirms the student wins (402cp). From a real Lichess game (rating 1722).",
+        "source": "lichess-puzzle:08MTm",
+        "verifiedEval": "402cp"
+      },
+      {
+        "name": "Smothered Mate #4",
+        "pgn": "Bxd4 Nd3#",
+        "setupFen": "r1b1k1nr/1pp1qppp/1p6/4n3/1P1p4/P4N2/1B1NPPPP/R2QKB1R w KQkq - 0 11",
+        "explanation": "Smothered Mate: Stockfish confirms the student wins (mate). From a real Lichess game (rating 1256).",
+        "source": "lichess-puzzle:07Qdz",
+        "verifiedEval": "mate"
+      },
+      {
+        "name": "Kingside Attack #5",
+        "pgn": "dxc6 Nxf3+ Qxf3 Bxf3",
+        "setupFen": "r2qk2r/1p3ppp/8/2pPPn2/1pPn2b1/3Q1NP1/PP3PBP/RN3RK1 w kq c6 0 14",
+        "explanation": "Kingside Attack: Stockfish confirms the student wins (533cp). From a real Lichess game (rating 1248).",
+        "source": "lichess-puzzle:00tZP",
+        "verifiedEval": "533cp"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: tactic #1",
+        "pgn": "Qd7 Qxd7+ Bxd7 Bxc4",
+        "setupFen": "r2qkb1r/ppp2ppp/4b3/8/Q1n5/4PN2/PP2B1PP/R1B2RK1 b kq - 1 12",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -426cp. From a real Lichess game (rating 1323).",
+        "source": "lichess-puzzle:03LVu",
+        "verifiedEval": "-426cp"
+      }
+    ]
   },
   {
     "id": "gambit-benko-gambit",
@@ -635,7 +1368,33 @@
         "explanation": "A modern move order where Black plays g6 before Bxa6. This can transpose to the main lines but gives Black some flexibility. The key ideas remain the same — fianchetto, trade the light-squared bishop, and apply pressure on the a and b files with rooks."
       }
     ],
-    "trapLines": [],
-    "warningLines": []
+    "trapLines": [
+      {
+        "name": "Pin #1",
+        "pgn": "Bd2 Rxd2 Qxd2 Bb4 Qxb4 Qxb4+",
+        "setupFen": "2b2rk1/3pbppp/3r4/q7/2p5/6P1/PPQ1PPBP/R1B1K2R w KQ - 2 16",
+        "explanation": "Pin: Stockfish confirms the student wins (596cp). From a real Lichess game (rating 1338).",
+        "source": "lichess-puzzle:01xVK",
+        "verifiedEval": "596cp"
+      }
+    ],
+    "warningLines": [
+      {
+        "name": "Pitfall: fork #1",
+        "pgn": "bxa2 b4 Qd8 Nc7+ Qxc7 Rxc7",
+        "setupFen": "rnb1kb1r/p2ppp1p/6p1/qP1N4/8/1pR5/PP2PPPP/3QKBNR b Kkq - 1 10",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -413cp. From a real Lichess game (rating 2044).",
+        "source": "lichess-puzzle:05GUn",
+        "verifiedEval": "-413cp"
+      },
+      {
+        "name": "Pitfall: fork #2",
+        "pgn": "Nbxc4 Bxc4 Nxc4 Qa4+ Bd7 Qxc4",
+        "setupFen": "r1bqk2r/p3ppbp/1n1p2p1/2pPn3/2P1P3/2NB4/P1QBNPPP/1R2K2R b Kkq - 6 12",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -332cp. From a real Lichess game (rating 1525).",
+        "source": "lichess-puzzle:07Ihz",
+        "verifiedEval": "-332cp"
+      }
+    ]
   }
 ]

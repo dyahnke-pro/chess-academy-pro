@@ -108,22 +108,35 @@ function validateFullPgn(pgn, expectedFinalFen) {
   return { ok: true };
 }
 
-const repertoire = JSON.parse(readFileSync('src/data/repertoire.json', 'utf-8'));
-const repArr = Array.isArray(repertoire) ? repertoire : Object.values(repertoire);
+// Process all three opening-data files. Each mined trap/pitfall in
+// any of them carries setupFen + a lichess-puzzle source; the lead-in
+// rewrite is identical regardless of file.
+const FILES = [
+  { path: 'src/data/repertoire.json', accessor: 'array' },
+  { path: 'src/data/gambits.json', accessor: 'array' },
+  { path: 'src/data/pro-repertoires.json', accessor: 'openings' },
+];
+const docs = FILES.map((f) => {
+  const raw = JSON.parse(readFileSync(f.path, 'utf-8'));
+  const arr = f.accessor === 'openings' ? (raw.openings ?? []) : (Array.isArray(raw) ? raw : Object.values(raw));
+  return { ...f, raw, arr };
+});
+function saveAll() {
+  for (const d of docs) writeFileSync(d.path, JSON.stringify(d.raw, null, 2) + '\n');
+}
 
-// Collect all mined traps AND pitfalls that need lead-ins. `list`
-// is 'trapLines' or 'warningLines'; the rewrite path is identical
-// (both are OpeningVariation entries with setupFen + a lichess
-// puzzle source).
 const targets = [];
-for (let oi = 0; oi < repArr.length; oi += 1) {
-  const op = repArr[oi];
-  for (const list of ['trapLines', 'warningLines']) {
-    if (!Array.isArray(op[list])) continue;
-    for (let ti = 0; ti < op[list].length; ti += 1) {
-      const entry = op[list][ti];
-      if (entry.setupFen && entry.source?.startsWith('lichess-puzzle:')) {
-        targets.push({ oi, list, ti, openingId: op.id, trap: entry });
+for (let fi = 0; fi < docs.length; fi += 1) {
+  const arr = docs[fi].arr;
+  for (let oi = 0; oi < arr.length; oi += 1) {
+    const op = arr[oi];
+    for (const list of ['trapLines', 'warningLines']) {
+      if (!Array.isArray(op[list])) continue;
+      for (let ti = 0; ti < op[list].length; ti += 1) {
+        const entry = op[list][ti];
+        if (entry.setupFen && entry.source?.startsWith('lichess-puzzle:')) {
+          targets.push({ fi, oi, list, ti, openingId: op.id, trap: entry });
+        }
       }
     }
   }
@@ -137,7 +150,7 @@ let kept = 0;
 let errors = 0;
 let processed = 0;
 
-for (const { oi, list, ti, openingId, trap } of targets) {
+for (const { fi, oi, list, ti, openingId, trap } of targets) {
   processed += 1;
   const puzzleId = trap.source.split(':')[1];
   process.stdout.write(`[${processed}/${targets.length}] ${openingId} puzzle=${puzzleId} ... `);
@@ -182,13 +195,13 @@ for (const { oi, list, ti, openingId, trap } of targets) {
       continue;
     }
 
-    // Rewrite in place (trapLines or warningLines)
-    repArr[oi][list][ti] = {
+    // Rewrite in place (trapLines or warningLines, in its file)
+    docs[fi].arr[oi][list][ti] = {
       ...trap,
       pgn: fullPgn,
       sourceGameUrl: `https://lichess.org/${gameId}`,
     };
-    delete repArr[oi][list][ti].setupFen;
+    delete docs[fi].arr[oi][list][ti].setupFen;
     console.log(`✓ lead-in ${matchPly} plies, full ${leadInTokens.length + trap.pgn.split(/\s+/).filter(Boolean).length} plies`);
     rewritten += 1;
   } catch (e) {
@@ -196,18 +209,16 @@ for (const { oi, list, ti, openingId, trap } of targets) {
     errors += 1;
   }
 
-  // Save progress every 10 traps so a network error doesn't lose work
+  // Save progress every 10 entries so a network error doesn't lose work
   if (processed % 10 === 0) {
-    const out = Array.isArray(repertoire) ? repArr : Object.fromEntries(repArr.map((o, i) => [i, o]));
-    writeFileSync('src/data/repertoire.json', JSON.stringify(out, null, 2) + '\n');
+    saveAll();
     console.log(`  (progress saved at ${processed})`);
   }
 
   await new Promise((r) => setTimeout(r, DELAY_MS));
 }
 
-const output = Array.isArray(repertoire) ? repArr : Object.fromEntries(repArr.map((o, i) => [i, o]));
-writeFileSync('src/data/repertoire.json', JSON.stringify(output, null, 2) + '\n');
+saveAll();
 
 console.log('\n=== TRAP LEAD-IN FETCH SUMMARY ===');
 console.log(`Rewritten (walk-from-move-1):  ${rewritten}`);
