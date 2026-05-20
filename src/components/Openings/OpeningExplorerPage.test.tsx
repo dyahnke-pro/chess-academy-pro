@@ -92,6 +92,10 @@ vi.mock('../../services/openingService', () => ({
 
 vi.mock('../../services/dataLoader', () => ({
   seedDatabase: vi.fn().mockResolvedValue(undefined),
+  // The "All Openings" tab awaits whenFullySeeded() before reading
+  // the ECO catalog (the heavy backfill now streams in behind the
+  // critical repertoire seed). Resolve immediately in tests.
+  whenFullySeeded: vi.fn().mockResolvedValue(undefined),
 }));
 
 vi.mock('../../services/coachApi', () => ({

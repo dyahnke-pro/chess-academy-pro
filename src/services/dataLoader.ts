@@ -502,11 +502,20 @@ async function loadOpeningNarrations(): Promise<void> {
 // users. Collapsing concurrent calls onto one in-flight promise
 // fixes the race. (David 2026-05-20.)
 let seedInFlight: Promise<void> | null = null;
+// The heavy backfill (ECO 3641-set + pro + gambits + model games +
+// plans + flashcards + narrations) runs detached from the critical
+// seed so /openings paints fast. Tracked separately so it's still
+// single-flight and so the "All" tab can await it. (David 2026-05-20:
+// fix the ~40s "Loading openings…" first-run wait.)
+let deferredSeedInFlight: Promise<void> | null = null;
 
-async function runSeedOnce(): Promise<void> {
-  if (!(await isDatabaseSeeded())) {
+/** Run the heavy, non-critical backfill. Idempotent (bulkPut upserts).
+ *  markDatabaseSeeded fires only at the END so a reload mid-backfill
+ *  safely re-seeds rather than skipping the unfinished tables. */
+function startDeferredSeed(): Promise<void> {
+  if (deferredSeedInFlight) return deferredSeedInFlight;
+  deferredSeedInFlight = (async () => {
     await loadEcoData();
-    await loadRepertoireData();
     await loadProRepertoireData();
     await loadGambitData();
     await loadModelGamesData();
@@ -517,6 +526,22 @@ async function runSeedOnce(): Promise<void> {
     // Fresh seed already used the current JSON — mark the revision
     // so the reconcile path no-ops on the next boot.
     await db.meta.put({ key: PRO_REVISION_KEY, value: PRO_DATA_REVISION });
+  })().finally(() => {
+    deferredSeedInFlight = null;
+  });
+  return deferredSeedInFlight;
+}
+
+async function runSeedOnce(): Promise<void> {
+  if (!(await isDatabaseSeeded())) {
+    // Critical path: the 40 repertoire openings power the default
+    // /openings "Most Common" tab. Load them FIRST so the explorer
+    // renders in <1s instead of blocking ~40s on the full ECO
+    // backfill. The remaining tables stream in behind via
+    // startDeferredSeed (detached — we don't await it here, so
+    // `seedDatabase()` resolves as soon as the common tab can paint).
+    await loadRepertoireData();
+    void startDeferredSeed();
     return;
   }
 
@@ -528,9 +553,23 @@ async function runSeedOnce(): Promise<void> {
 
 export function seedDatabase(): Promise<void> {
   // Reuse the in-flight promise so concurrent callers share one run.
+  // Resolves after the CRITICAL seed (repertoire) — the heavy ECO/pro/
+  // gambit/model-game backfill continues detached. Callers that need
+  // the full ECO set (the "All" tab) await `whenFullySeeded()`.
   if (seedInFlight) return seedInFlight;
   seedInFlight = runSeedOnce().finally(() => {
     seedInFlight = null;
   });
   return seedInFlight;
+}
+
+/** Resolves when the heavy backfill (ECO 3641-set powering the "All"
+ *  tab, pro repertoires, gambits, model games, middlegame plans) has
+ *  fully landed. The default "Most Common" tab only needs
+ *  `seedDatabase()`; surfaces that read the full ECO catalog should
+ *  await this. Resolves immediately when the backfill is already done
+ *  (deferredSeedInFlight cleared) — including for already-seeded
+ *  returning users, where runSeedOnce never starts a deferred run. */
+export function whenFullySeeded(): Promise<void> {
+  return deferredSeedInFlight ?? Promise.resolve();
 }
