@@ -355,6 +355,14 @@ class VoiceService {
    *  currentSource — the two playback paths never share an Audio
    *  pipeline. stop() must clear whichever one is live. */
   private currentAudioElement: HTMLAudioElement | null = null;
+  /** A single, reused <audio> element for streaming Polly playback.
+   *  iOS only "unlocks" an audio element for programmatic play() after
+   *  it has played once inside a user gesture. Creating a fresh element
+   *  per utterance (as we used to) meant auto-advancing lessons —
+   *  where every beat after the first fires from a timer, not a tap —
+   *  were silently blocked. Reusing one element keeps the unlock the
+   *  first gesture earned, so the lecture keeps speaking on its own. */
+  private streamAudioEl: HTMLAudioElement | null = null;
   private abortController: AbortController | null = null;
   private playing = false;
   /** Monotonic counter incremented on every `stop()`. Speech chains
@@ -1116,7 +1124,13 @@ class VoiceService {
     const myGen = this.stopGeneration;
     const reader = response.body.getReader();
     const chunks: Uint8Array[] = [];
-    const audio = new Audio();
+    // Reuse the single persistent element so the iOS gesture-unlock
+    // earned by the first utterance carries to timer-driven ones (e.g.
+    // an auto-advancing master class). Reset any prior stream on it
+    // before attaching a new MediaSource.
+    const audio = this.streamAudioEl ?? new Audio();
+    this.streamAudioEl = audio;
+    try { audio.pause(); audio.removeAttribute('src'); audio.load(); } catch { /* fresh element */ }
     audio.playbackRate = this.speed;
     audio.preload = 'auto';
     // Track the audio element IMMEDIATELY so a concurrent stop() can
