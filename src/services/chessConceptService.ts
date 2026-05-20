@@ -1,4 +1,5 @@
 import conceptsData from '../data/chess-concepts.json';
+import bookPagesData from '../data/opening-book-pages.json';
 
 /**
  * Wired surface: book-passage grounding for narration + coach chat.
@@ -133,6 +134,37 @@ export function getOpeningPassages(name: string): BookPassage[] {
   const id = resolveOpeningIdFromName(name);
   if (!id) return [];
   return DATA.openings[id] ?? [];
+}
+
+/** A fuller multi-paragraph "book page" about an opening, mined from
+ *  the 7 Gutenberg classics for the Understand tab's reading panel.
+ *  Longer than a tagged BookPassage (≈90-550 words). */
+export interface BookPage {
+  bookSlug: string;
+  bookTitle: string;
+  author: string;
+  gutenbergId: number;
+  chapter: string | null;
+  section: string | null;
+  text: string;
+  wordCount: number;
+}
+
+interface BookPagesBundle {
+  generatedAt: string;
+  sources: { slug: string; gutenbergId: number; title: string; author: string }[];
+  pages: Record<string, BookPage[]>;
+}
+
+const BOOK_PAGES = bookPagesData as unknown as BookPagesBundle;
+
+/** Full book pages discussing a named opening, mined from the public-
+ *  domain classics. Returns [] when the opening doesn't resolve or no
+ *  page mentions it. Ordered best-first (build-time ranked). */
+export function getOpeningBookPages(name: string): BookPage[] {
+  const id = resolveOpeningIdFromName(name);
+  if (!id) return [];
+  return BOOK_PAGES.pages[id] ?? [];
 }
 
 /** Returns the static modern opening definition for a named opening.

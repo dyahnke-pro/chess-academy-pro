@@ -8,9 +8,14 @@
       "shortNarration": "1.e4 — the Ruy Lopez begins.",
       "arrows": [
         {
-          "from": "e2",
-          "to": "e4",
-          "color": "rgba(0,180,80,0.85)"
+          "from": "e4",
+          "to": "d5",
+          "color": "rgba(60,120,220,0.85)"
+        },
+        {
+          "from": "e4",
+          "to": "f5",
+          "color": "rgba(60,120,220,0.85)"
         }
       ],
       "highlights": [
@@ -38,9 +43,14 @@
       "shortNarration": "Black claims the center with e5 — the pawn the whole opening will revolve around.",
       "arrows": [
         {
-          "from": "e7",
-          "to": "e5",
-          "color": "rgba(0,180,80,0.85)"
+          "from": "e5",
+          "to": "d4",
+          "color": "rgba(60,120,220,0.85)"
+        },
+        {
+          "from": "e5",
+          "to": "f4",
+          "color": "rgba(60,120,220,0.85)"
         }
       ],
       "highlights": [
@@ -56,11 +66,6 @@
       "narration": "Nf3 develops and attacks e5 at once.",
       "shortNarration": "Nf3 — develop and hit e5.",
       "arrows": [
-        {
-          "from": "g1",
-          "to": "f3",
-          "color": "rgba(0,180,80,0.85)"
-        },
         {
           "from": "f3",
           "to": "e5",
@@ -79,11 +84,6 @@
       "annotation": "Black defends e5 with the knight. Now the e5-pawn is guarded — and that defender, the c6-knight, becomes White’s real target.",
       "narration": "Nc6 guards e5. Remember the defender on c6.",
       "arrows": [
-        {
-          "from": "b8",
-          "to": "c6",
-          "color": "rgba(0,180,80,0.85)"
-        },
         {
           "from": "c6",
           "to": "e5",
@@ -107,11 +107,6 @@
       "narration": "Bb5 — the Spanish move. Not a threat, but a question aimed at the defender of e5.",
       "shortNarration": "Bb5 pins the c6-knight, the defender of e5.",
       "arrows": [
-        {
-          "from": "f1",
-          "to": "b5",
-          "color": "rgba(0,180,80,0.85)"
-        },
         {
           "from": "b5",
           "to": "c6",
@@ -139,11 +134,6 @@
       "narration": "a6 questions the bishop — retreat or trade?",
       "arrows": [
         {
-          "from": "a7",
-          "to": "a6",
-          "color": "rgba(0,180,80,0.85)"
-        },
-        {
           "from": "a6",
           "to": "b5",
           "color": "rgba(220,70,40,0.9)"
@@ -162,14 +152,9 @@
       "narration": "Ba4 keeps the bishop on the diagonal, eyeing c6.",
       "arrows": [
         {
-          "from": "b5",
-          "to": "a4",
-          "color": "rgba(0,180,80,0.85)"
-        },
-        {
           "from": "a4",
           "to": "c6",
-          "color": "rgba(60,120,220,0.85)"
+          "color": "rgba(220,70,40,0.9)"
         }
       ],
       "highlights": [
@@ -185,11 +170,6 @@
       "narration": "Nf6 develops and attacks e4.",
       "shortNarration": "Nf6 hits e4.",
       "arrows": [
-        {
-          "from": "g8",
-          "to": "f6",
-          "color": "rgba(0,180,80,0.85)"
-        },
         {
           "from": "f6",
           "to": "e4",
@@ -208,13 +188,6 @@
       "annotation": "5.O-O. White castles into safety and, crucially, sidesteps the threat to e4 — the rook will soon defend it from e1. The slow game has begun: no knockout, just steady accumulation.",
       "narration": "White castles — king safe, and the e4-pawn will be backed up next.",
       "shortNarration": "O-O — king to safety.",
-      "arrows": [
-        {
-          "from": "e1",
-          "to": "g1",
-          "color": "rgba(0,180,80,0.85)"
-        }
-      ],
       "highlights": [
         {
           "square": "g1",
@@ -225,14 +198,7 @@
     {
       "san": "Be7",
       "annotation": "Black develops modestly and prepares to castle. No fireworks — both sides are building.",
-      "shortNarration": "Be7 prepares to castle.",
-      "arrows": [
-        {
-          "from": "f8",
-          "to": "e7",
-          "color": "rgba(0,180,80,0.85)"
-        }
-      ]
+      "shortNarration": "Be7 prepares to castle."
     },
     {
       "san": "Re1",
@@ -240,11 +206,6 @@
       "narration": "Re1 backs up e4 and claims the e-file.",
       "shortNarration": "Re1 defends e4.",
       "arrows": [
-        {
-          "from": "f1",
-          "to": "e1",
-          "color": "rgba(0,180,80,0.85)"
-        },
         {
           "from": "e1",
           "to": "e4",
@@ -264,11 +225,6 @@
       "narration": "b5 gains space and chases the bishop once more.",
       "arrows": [
         {
-          "from": "b7",
-          "to": "b5",
-          "color": "rgba(0,180,80,0.85)"
-        },
-        {
           "from": "b5",
           "to": "a4",
           "color": "rgba(220,70,40,0.9)"
@@ -281,11 +237,6 @@
       "narration": "Bb3 — the Spanish bishop finds its diagonal, aiming at f7.",
       "shortNarration": "Bb3 eyes f7 down the a2-g8 diagonal.",
       "arrows": [
-        {
-          "from": "a4",
-          "to": "b3",
-          "color": "rgba(0,180,80,0.85)"
-        },
         {
           "from": "b3",
           "to": "f7",
@@ -309,11 +260,6 @@
       "narration": "d6 props up e5.",
       "arrows": [
         {
-          "from": "d7",
-          "to": "d6",
-          "color": "rgba(0,180,80,0.85)"
-        },
-        {
           "from": "d6",
           "to": "e5",
           "color": "rgba(60,120,220,0.85)"
@@ -333,9 +279,9 @@
       "shortNarration": "c3 — prepare d4, open c2 for the bishop.",
       "arrows": [
         {
-          "from": "c2",
-          "to": "c3",
-          "color": "rgba(0,180,80,0.85)"
+          "from": "d2",
+          "to": "d4",
+          "color": "rgba(150,90,220,0.9)"
         }
       ],
       "highlights": [
@@ -356,14 +302,7 @@
     {
       "san": "O-O",
       "annotation": "Black tucks the king away. Both kings are safe; now the real maneuvering begins.",
-      "shortNarration": "Black castles.",
-      "arrows": [
-        {
-          "from": "e8",
-          "to": "g8",
-          "color": "rgba(0,180,80,0.85)"
-        }
-      ]
+      "shortNarration": "Black castles."
     },
     {
       "san": "h3",
@@ -372,9 +311,9 @@
       "shortNarration": "h3 prevents ...Bg4.",
       "arrows": [
         {
-          "from": "h2",
-          "to": "h3",
-          "color": "rgba(0,180,80,0.85)"
+          "from": "h3",
+          "to": "g4",
+          "color": "rgba(60,120,220,0.85)"
         }
       ],
       "highlights": [
@@ -391,14 +330,9 @@
       "shortNarration": "Nb8 — the Breyer reroute toward d7.",
       "arrows": [
         {
-          "from": "c6",
-          "to": "b8",
-          "color": "rgba(0,180,80,0.85)"
-        },
-        {
           "from": "b8",
           "to": "d7",
-          "color": "rgba(60,120,220,0.85)"
+          "color": "rgba(150,90,220,0.9)"
         }
       ],
       "highlights": [
@@ -414,11 +348,6 @@
       "narration": "d4 — the prepared central strike against e5.",
       "shortNarration": "d4 hits the center.",
       "arrows": [
-        {
-          "from": "d2",
-          "to": "d4",
-          "color": "rgba(0,180,80,0.85)"
-        },
         {
           "from": "d4",
           "to": "e5",
@@ -446,9 +375,9 @@
       "narration": "Nbd7 finishes the Breyer reroute.",
       "arrows": [
         {
-          "from": "b8",
-          "to": "d7",
-          "color": "rgba(0,180,80,0.85)"
+          "from": "d7",
+          "to": "e5",
+          "color": "rgba(60,120,220,0.85)"
         }
       ]
     },
@@ -459,15 +388,9 @@
       "shortNarration": "Nbd2 — knight heads for f1 and g3.",
       "arrows": [
         {
-          "from": "b1",
-          "to": "d2",
-          "color": "rgba(0,180,80,0.85)"
-        },
-        {
           "from": "d2",
           "to": "f1",
-          "color": "rgba(60,120,220,0.85)",
-          "delay": 1.2
+          "color": "rgba(150,90,220,0.9)"
         }
       ],
       "highlights": [
@@ -488,11 +411,6 @@
       "narration": "Bb7 — the bishop takes the long diagonal. Capablanca called this the bishop’s maximum strength: pressure on the long diagonal, and a fortress in front of the king.",
       "shortNarration": "Bb7 — Capablanca’s long-diagonal bishop.",
       "arrows": [
-        {
-          "from": "c8",
-          "to": "b7",
-          "color": "rgba(0,180,80,0.85)"
-        },
         {
           "from": "b7",
           "to": "e4",
@@ -516,9 +434,9 @@
       "shortNarration": "Bc2 — latent battery toward h7.",
       "arrows": [
         {
-          "from": "b3",
-          "to": "c2",
-          "color": "rgba(0,180,80,0.85)"
+          "from": "c2",
+          "to": "h7",
+          "color": "rgba(150,90,220,0.9)"
         }
       ],
       "highlights": [
@@ -541,9 +459,9 @@
       "shortNarration": "Re8 reinforces the e-file.",
       "arrows": [
         {
-          "from": "f8",
-          "to": "e8",
-          "color": "rgba(0,180,80,0.85)"
+          "from": "e8",
+          "to": "e4",
+          "color": "rgba(60,120,220,0.85)"
         }
       ]
     },
@@ -553,15 +471,9 @@
       "narration": "Nf1 — the knight presses on toward g3.",
       "arrows": [
         {
-          "from": "d2",
-          "to": "f1",
-          "color": "rgba(0,180,80,0.85)"
-        },
-        {
           "from": "f1",
           "to": "g3",
-          "color": "rgba(60,120,220,0.85)",
-          "delay": 1
+          "color": "rgba(150,90,220,0.9)"
         }
       ],
       "highlights": [
@@ -577,15 +489,9 @@
       "narration": "Bf8 — preparing to fianchetto the bishop to g7.",
       "arrows": [
         {
-          "from": "e7",
-          "to": "f8",
-          "color": "rgba(0,180,80,0.85)"
-        },
-        {
           "from": "f8",
           "to": "g7",
-          "color": "rgba(60,120,220,0.85)",
-          "delay": 1
+          "color": "rgba(150,90,220,0.9)"
         }
       ],
       "highlights": [
@@ -600,11 +506,6 @@
       "annotation": "14.Bg5 develops with a pin-like nudge against f6, provoking a slight loosening of Black’s kingside before the structure sets.",
       "narration": "Bg5 leans on the f6-knight.",
       "arrows": [
-        {
-          "from": "c1",
-          "to": "g5",
-          "color": "rgba(0,180,80,0.85)"
-        },
         {
           "from": "g5",
           "to": "f6",
@@ -625,9 +526,14 @@
       "shortNarration": "g6 — the fianchetto shell.",
       "arrows": [
         {
-          "from": "g7",
-          "to": "g6",
-          "color": "rgba(0,180,80,0.85)"
+          "from": "g6",
+          "to": "f5",
+          "color": "rgba(60,120,220,0.85)"
+        },
+        {
+          "from": "g6",
+          "to": "h5",
+          "color": "rgba(60,120,220,0.85)"
         }
       ],
       "highlights": [
@@ -648,14 +554,15 @@
       "shortNarration": "Ng3 — the knight reaches the kingside.",
       "arrows": [
         {
-          "from": "f1",
-          "to": "g3",
-          "color": "rgba(0,180,80,0.85)"
+          "from": "g3",
+          "to": "f5",
+          "color": "rgba(150,90,220,0.9)"
         },
         {
           "from": "g3",
-          "to": "f5",
-          "color": "rgba(220,70,40,0.9)"
+          "to": "h5",
+          "color": "rgba(150,90,220,0.9)",
+          "delay": 1
         }
       ],
       "highlights": [
@@ -680,14 +587,9 @@
       "shortNarration": "Bg7 — the closed Ruy is set.",
       "arrows": [
         {
-          "from": "f8",
-          "to": "g7",
-          "color": "rgba(0,180,80,0.85)"
-        },
-        {
           "from": "g7",
           "to": "e5",
-          "color": "rgba(60,120,220,0.85)"
+          "color": "rgba(150,90,220,0.9)"
         }
       ],
       "highlights": [

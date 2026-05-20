@@ -17,6 +17,7 @@ import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
+import { BookPagesSection } from './BookPagesSection';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
 import { SidelineExplainer } from './SidelineExplainer';
@@ -805,6 +806,17 @@ export function OpeningDetailPage(): JSX.Element {
           <NarrationButton sectionId="classic-wisdom" text={text} />
         )}
         onActivate={(text) => toggleNarration('classic-wisdom', text)}
+      />
+
+      {/* From the Books — fuller multi-paragraph pages mined from the
+          7 public-domain classics that discuss this opening. Renders
+          nothing when no page mentions it. */}
+      <BookPagesSection
+        openingName={opening.name}
+        renderNarrationButton={(text) => (
+          <NarrationButton sectionId="book-pages" text={text} />
+        )}
+        onActivate={(text) => toggleNarration('book-pages', text)}
       />
 
       {/* ═══ ZONE 3 — MASTER ═══════════════════════════════════════════
