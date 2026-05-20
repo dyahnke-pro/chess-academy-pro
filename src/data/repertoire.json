@@ -1458,6 +1458,13 @@
         "name": "Premature ...f5 Without Preparation",
         "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Be6 Be2 Bg5 O-O f5 exf5 Bxf5 Bg4 Nd4 Bxf5 Nxf5 Qg4 Nd4 Nce3",
         "explanation": "While ...f5 is Black's key break, playing it without proper preparation can backfire spectacularly. White responds with Bg4 challenging the bishop, and after exchanges the queen lands on g4 with strong pressure while Nce3 reinforcement dominates the light squares. The ...f5 break requires first playing ...Bg5 to vacate f6 and ...Rb8 for queenside play before launching forward."
+      },
+      {
+        "name": "Premature d5 Push",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 d5 exd5 Nxd5 Nxd5 Qxd5 Qxd5",
+        "explanation": "6...d5? overextends; White's exchanges leave Black with a shattered center.",
+        "source": "authored-verified",
+        "verifiedEval": "-720cp"
       }
     ]
   },
@@ -2757,7 +2764,15 @@
         "explanation": "Instead of the standard Bg5, White develops the bishop to f4 early, avoiding the main theoretical lines of the QGD. This sidesteps the Tartakower and Lasker variations entirely. If Black challenges with ...Bd6, the retreat to g3 maintains the bishop and after c5 dxc5, White enjoys a comfortable IQP position with active pieces and clear attacking prospects against Black's king."
       }
     ],
-    "trapLines": [],
+    "trapLines": [
+      {
+        "name": "QGA b5 Overextension",
+        "pgn": "d4 d5 c4 dxc4 e3 b5 a4 c6 axb5 cxb5 Qf3",
+        "explanation": "Black tries to hold the gambit pawn with ...b5?; White's a4 break rips open the queenside and wins material.",
+        "source": "authored-verified",
+        "verifiedEval": "367cp"
+      }
+    ],
     "warningLines": [
       {
         "name": "Pitfall: tactic #1",
@@ -2766,6 +2781,13 @@
         "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -280cp. The opponent punishes with tactic. Themes: . From a real Lichess game (rating 1118).",
         "source": "lichess-puzzle:0Cxzd",
         "verifiedEval": "-280cp"
+      },
+      {
+        "name": "Elephant Trap",
+        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 Nxd5 Nxd5 Bxd8 Bb4+ Qd2 Bxd2+ Kxd2 Kxd8",
+        "explanation": "White's tempting 6.Nxd5?? loses a piece to 6...Nxd5 7.Bxd8 Bb4+ winning the bishop back with interest.",
+        "source": "authored-verified",
+        "verifiedEval": "-341cp"
       }
     ]
   },
@@ -4170,7 +4192,15 @@
         "explanation": "The Taimanov with f3 builds a strong pawn center and supports e4 permanently. The bishop goes to c4 targeting f7, and White castles with a powerful setup. Black must counter with ...Na5 attacking the Bc4, and the ...Be6-a2 maneuver creates tactical complications. The f3 pawn shore up the center but weakens the kingside slightly, giving Black long-term counterplay targets."
       }
     ],
-    "warningLines": []
+    "warningLines": [
+      {
+        "name": "Premature Center Grab",
+        "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 cxd4 cxd4 Bxd4 Nxd4 Qxd4 Bxf7+ Kxf7 Qxd4",
+        "explanation": "Snatching on c3 and grabbing the rook with ...Bxa1? lets White trap the bishop in the corner with a winning attack.",
+        "source": "authored-verified",
+        "verifiedEval": "-653cp"
+      }
+    ]
   },
   {
     "id": "dutch-defence",
@@ -4729,6 +4759,13 @@
         "source": "lichess-puzzle:0Adsy",
         "verifiedEval": "+338cp",
         "sourceGameUrl": "https://lichess.org/h4RDH2r1"
+      },
+      {
+        "name": "Kieninger Trap",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 axb4 Nd3#",
+        "explanation": "The famous Budapest trap. After 8.axb4?? Nd3 is smothered mate — the knight on d3 mates with the b4-pawn and e5-knight covering escape squares.",
+        "source": "authored-verified",
+        "verifiedEval": "mate (white mated)"
       }
     ],
     "warningLines": [
@@ -4747,6 +4784,13 @@
         "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -460cp. The opponent punishes with fork. Themes: fork. From a real Lichess game (rating 2061).",
         "source": "lichess-puzzle:0B6zI",
         "verifiedEval": "-460cp"
+      },
+      {
+        "name": "Fajarowicz Overreach",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ne4 Nf3 Nc6 Nbd2 Nxd2 Bxd2 Qe7 a3 Qxe5 Nxe5 Nxe5",
+        "explanation": "3...Ne4 (Fajarowicz) is greedy. After accurate development White consolidates the extra pawn and Black has nothing.",
+        "source": "authored-verified",
+        "verifiedEval": "-619cp"
       }
     ]
   },
@@ -5741,6 +5785,13 @@
         "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -519cp. The opponent punishes with sacrifice. Themes: attraction, kingsideAttack, sacrifice. From a real Lichess game (rating 2082).",
         "source": "lichess-puzzle:077SA",
         "verifiedEval": "-519cp"
+      },
+      {
+        "name": "Declining Into Passivity",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 a5 Ba7 b5 axb5 Bxb5 Nge7 O-O O-O d4",
+        "explanation": "Declining with 4...Bb6 and drifting lets White's a4-a5 harass the bishop and seize a dominant center.",
+        "source": "authored-verified",
+        "verifiedEval": "-183cp"
       }
     ]
   }
