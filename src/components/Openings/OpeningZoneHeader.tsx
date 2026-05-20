@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react';
+import { Volume2, Square as StopIcon, type LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 /**
@@ -25,6 +25,14 @@ interface OpeningZoneHeaderProps {
   color: 'cyan' | 'blue' | 'emerald' | 'amber' | 'slate';
   /** Optional right-aligned slot (counts, badges, etc.). */
   aside?: ReactNode;
+  /** When provided, the whole header becomes a button that fires this
+   *  on tap — used to start TTS narration of the zone's content.
+   *  A speaker affordance renders on the right (David 2026-05-20:
+   *  "I can't click on Understand to listen"). */
+  onActivate?: () => void;
+  /** True while the zone's narration is actively playing — flips the
+   *  speaker icon to a "playing" state. */
+  isActive?: boolean;
 }
 
 const COLOR_CLASSES: Record<OpeningZoneHeaderProps['color'], {
@@ -71,27 +79,50 @@ export function OpeningZoneHeader({
   icon: Icon,
   color,
   aside,
+  onActivate,
+  isActive,
 }: OpeningZoneHeaderProps): JSX.Element {
   const c = COLOR_CLASSES[color];
-  return (
-    <div
-      className={`mt-6 mb-3 rounded-xl border ${c.border} ${c.bg} px-3 py-2.5`}
-      data-testid={`opening-zone-${color}`}
-    >
-      <div className="flex items-center gap-3">
-        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${c.iconBg}`}>
-          <Icon size={16} className={c.text} />
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <h2 className={`text-xs font-bold uppercase tracking-wider ${c.text}`}>
-              {title}
-            </h2>
-          </div>
-          <p className="text-xs text-theme-text-muted leading-snug mt-0.5">{tagline}</p>
-        </div>
-        {aside ? <div className="shrink-0">{aside}</div> : null}
+  const clickable = Boolean(onActivate);
+  const inner = (
+    <div className="flex items-center gap-3">
+      <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${c.iconBg}`}>
+        <Icon size={16} className={c.text} />
       </div>
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <h2 className={`text-xs font-bold uppercase tracking-wider ${c.text}`}>
+            {title}
+          </h2>
+        </div>
+        <p className="text-xs text-theme-text-muted leading-snug mt-0.5">{tagline}</p>
+      </div>
+      {aside ? <div className="shrink-0">{aside}</div> : null}
+      {clickable ? (
+        <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${c.iconBg}`}>
+          {isActive ? <StopIcon size={13} className={c.text} /> : <Volume2 size={13} className={c.text} />}
+        </div>
+      ) : null}
+    </div>
+  );
+
+  const base = `mt-6 mb-3 rounded-xl border ${c.border} ${c.bg} px-3 py-2.5`;
+  if (clickable) {
+    return (
+      <button
+        type="button"
+        onClick={() => onActivate?.()}
+        className={`${base} w-full text-left transition-colors hover:brightness-125`}
+        data-testid={`opening-zone-${color}`}
+        aria-label={isActive ? `Stop ${title} narration` : `Listen to ${title}`}
+      >
+        {inner}
+      </button>
+    );
+  }
+  return (
+    <div className={base} data-testid={`opening-zone-${color}`}>
+      {inner}
     </div>
   );
 }

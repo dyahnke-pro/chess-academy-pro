@@ -30,17 +30,19 @@ export const BOARD_ARROW_OPTIONS = {
   color: '#ffaa00',
   secondaryColor: '#0088ff',
   tertiaryColor: '#9933cc',
-  /** Lower denominator = thicker arrow. 5 (library default) was the
-   *  pre-fix skinny one; 3.5 is the new default — readable from
-   *  across the room without overwhelming the pieces. */
-  arrowWidthDenominator: 3.5,
+  /** Lower denominator = thicker arrow. David's call 2026-05-20:
+   *  the fat 3.5 arrows on the opening tab were too heavy and not
+   *  transparent enough — revert to the old skinny library-default
+   *  width (5) so arrows read as a light overlay, not a slab. */
+  arrowWidthDenominator: 5,
   arrowLengthReducerDenominator: 8,
   sameTargetArrowLengthReducerDenominator: 4,
   activeArrowWidthMultiplier: 1.2,
-  /** Opaque enough to read on every square color, transparent enough
-   *  to see the pieces beneath when an arrow crosses one. */
-  opacity: 0.9,
-  activeOpacity: 1,
+  /** Transparent enough to see the pieces + squares beneath. David
+   *  2026-05-20: bump transparency back down so arrows don't mask
+   *  the position. */
+  opacity: 0.65,
+  activeOpacity: 0.85,
   arrowStartOffset: 0.2,
 };
 

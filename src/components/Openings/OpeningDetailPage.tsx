@@ -21,6 +21,7 @@ import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
 import { SidelineExplainer } from './SidelineExplainer';
 import commonMistakesData from '../../data/common-mistakes.json';
+import middlegamePlansData from '../../data/middlegame-plans.json';
 import checkpointQuizzesData from '../../data/checkpoint-quizzes.json';
 import type { CommonMistake, CheckpointQuizItem } from '../../types';
 import {
@@ -567,6 +568,11 @@ export function OpeningDetailPage(): JSX.Element {
 
   // Data lookups for new features
   const mistakes = (commonMistakesData as Record<string, CommonMistake[]>)[opening.id] ?? [];
+  // Middlegame plans for this opening — used for the Master zone's
+  // "listen" narration (plan titles + overviews).
+  const openingPlans = (middlegamePlansData as MiddlegamePlan[]).filter(
+    (p) => p.openingId === opening.id,
+  );
   const quizzes = (checkpointQuizzesData as Record<string, CheckpointQuizItem[]>)[opening.id] ?? [];
   const currentQuiz: CheckpointQuizItem | null = quizzes[quizIndex] as CheckpointQuizItem | undefined ?? null;
 
@@ -747,6 +753,16 @@ export function OpeningDetailPage(): JSX.Element {
         icon={BookOpen}
         title="Understand"
         tagline="What this opening is and what masters have said about it."
+        isActive={narratingSection === 'understand-zone'}
+        onActivate={() => {
+          const parts = [
+            opening.overview,
+            opening.keyIdeas && opening.keyIdeas.length > 0
+              ? `Key ideas. ${opening.keyIdeas.join('. ')}`
+              : '',
+          ].filter(Boolean);
+          if (parts.length > 0) toggleNarration('understand-zone', parts.join('. '));
+        }}
       />
 
       {/* Overview */}
@@ -788,6 +804,7 @@ export function OpeningDetailPage(): JSX.Element {
         renderNarrationButton={(text) => (
           <NarrationButton sectionId="classic-wisdom" text={text} />
         )}
+        onActivate={(text) => toggleNarration('classic-wisdom', text)}
       />
 
       {/* ═══ ZONE 3 — MASTER ═══════════════════════════════════════════
@@ -798,6 +815,14 @@ export function OpeningDetailPage(): JSX.Element {
         icon={GraduationCap}
         title="Master"
         tagline="Test what you grasped. See the plans. Study one complete game."
+        isActive={narratingSection === 'master-zone'}
+        onActivate={() => {
+          if (openingPlans.length === 0) return;
+          const text = openingPlans
+            .map((p) => `${p.title}. ${p.overview}`)
+            .join('. ');
+          toggleNarration('master-zone', text);
+        }}
       />
 
       {/* Checkpoint Quiz — after Key Ideas */}
@@ -848,12 +873,14 @@ export function OpeningDetailPage(): JSX.Element {
         }
       />
 
-      {/* Traps */}
+      {/* Traps — the Weapons zone card. Outlined green to match the
+          zone header; the card title is dropped because the zone
+          header already reads "Weapons" (David 2026-05-20). */}
       {opening.traps && opening.traps.length > 0 && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4">
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-emerald-500/30">
           <div className="flex items-center gap-2 mb-2">
-            <Target size={14} className="text-green-500" />
-            <h3 className="text-sm font-semibold text-theme-text">Traps & Pitfalls</h3>
+            <Target size={14} className="text-emerald-500" />
+            <h3 className="text-sm font-semibold text-theme-text">Weapons</h3>
             <NarrationButton
               sectionId="traps"
               text={opening.traps.join('. ')}
@@ -959,9 +986,10 @@ export function OpeningDetailPage(): JSX.Element {
         }
       />
 
-      {/* Warnings */}
+      {/* Warnings — Pitfalls zone card, amber outline to match the
+          zone header (David 2026-05-20). */}
       {opening.warnings && opening.warnings.length > 0 && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4">
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-amber-500/30">
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle size={14} className="text-amber-500" />
             <h3 className="text-sm font-semibold text-theme-text">Watch Out For</h3>
@@ -1053,12 +1081,15 @@ export function OpeningDetailPage(): JSX.Element {
       )}
 
       {/* Common Mistakes — Pitfalls zone tail (moved from above
-          Traps section so the teaching arc reads Weapons → Pitfalls). */}
+          Traps section so the teaching arc reads Weapons → Pitfalls).
+          Amber-outlined to match the zone (David 2026-05-20). */}
       {mistakes.length > 0 && (
-        <CommonMistakesSection
-          mistakes={mistakes}
-          boardOrientation={opening.color}
-        />
+        <div className="rounded-xl border border-amber-500/30">
+          <CommonMistakesSection
+            mistakes={mistakes}
+            boardOrientation={opening.color}
+          />
+        </div>
       )}
 
       {/* ═══ ZONE 6 — DEPTH ════════════════════════════════════════════

@@ -9,6 +9,9 @@ interface ClassicWisdomSectionProps {
    *  hookup), so we accept it as a render-prop rather than reimplement.
    *  Section still renders fine without one. */
   renderNarrationButton?: (text: string) => ReactNode;
+  /** When provided, clicking the card header triggers narration of
+   *  the wisdom text. Receives the full text to speak. */
+  onActivate?: (text: string) => void;
 }
 
 /**
@@ -30,7 +33,7 @@ interface ClassicWisdomSectionProps {
  * (unknown opening) — guarantees consistency across the 40-strong
  * opening taxonomy.
  */
-export function ClassicWisdomSection({ openingName, renderNarrationButton }: ClassicWisdomSectionProps): ReactNode {
+export function ClassicWisdomSection({ openingName, renderNarrationButton, onActivate }: ClassicWisdomSectionProps): ReactNode {
   const passages = useMemo(() => getOpeningPassages(openingName).slice(0, 2), [openingName]);
   const definition = useMemo(() => getOpeningDefinition(openingName), [openingName]);
 
@@ -44,7 +47,16 @@ export function ClassicWisdomSection({ openingName, renderNarrationButton }: Cla
 
   return (
     <div className="bg-theme-surface rounded-xl p-4 mb-4" data-testid="classic-wisdom-section">
-      <div className="flex items-center gap-2 mb-3">
+      {/* Header doubles as the listen affordance — clicking anywhere
+          on the title row triggers narration (David 2026-05-20:
+          "I can't click on wisdom to listen"). The renderNarrationButton
+          slot still renders the explicit speaker icon. */}
+      <div
+        className="flex items-center gap-2 mb-3 cursor-pointer"
+        onClick={() => onActivate?.(allText)}
+        role={onActivate ? 'button' : undefined}
+        data-testid="classic-wisdom-header"
+      >
         <BookMarked size={14} className="text-amber-400" />
         <h3 className="text-sm font-semibold text-theme-text">Classic Wisdom</h3>
         {renderNarrationButton?.(allText)}
