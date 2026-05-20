@@ -11,7 +11,8 @@ coverage
 playwright-report
 test-results
 *.tsbuildinfo
-.claude/
+.claude/*
+!.claude/settings.json
 public/stockfish/*.js
 public/stockfish/*.wasm
 # WO-STOCKFISH-SWAP — lila-bridge.worker.js is source-controlled

@@ -549,6 +549,15 @@ async function runSeedOnce(): Promise<void> {
   // updates to pro-repertoires.json reach them without wiping
   // drill/SRS/favorites/woodpecker progress.
   await reconcileProRepertoires();
+
+  // Middlegame plans are seeded ONCE in the first-install deferred
+  // backfill, so already-seeded users never picked up plan JSON
+  // updates (new openings' plans, added theory). bulkPut upserts by
+  // id — cheap (~240 small records), carries no user progress — so
+  // re-running it every boot is safe and keeps the Middlegame Theory /
+  // Plans sections current. (David 2026-05-20: added Ruy variation
+  // plans weren't reaching the device.)
+  await loadMiddlegamePlansData();
 }
 
 export function seedDatabase(): Promise<void> {

@@ -14,6 +14,7 @@
 // See docs/sandbox-playwright-setup.md for the wider sandbox runbook.
 
 import { access } from 'node:fs/promises';
+import './env.mjs'; // populate process.env from .env.local on local runs (no-op in the web env)
 
 /**
  * Sandbox-bypass launch args. The Claude Code sandbox's headless
