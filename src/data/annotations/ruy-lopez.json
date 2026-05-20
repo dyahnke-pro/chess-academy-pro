@@ -6,18 +6,6 @@
       "annotation": "The Ruy Lopez, the king of openings — analyzed by the Spanish priest Ruy López de Segura in 1561 and never refuted since. It begins quietly: 1.e4 stakes a claim in the center and frees the f1-bishop, the piece that will define everything to come.",
       "narration": "The Ruy Lopez. It begins with one pawn on e4 — and the bishop it sets free.",
       "shortNarration": "1.e4 — the Ruy Lopez begins.",
-      "arrows": [
-        {
-          "from": "e4",
-          "to": "d5",
-          "color": "rgba(60,120,220,0.85)"
-        },
-        {
-          "from": "e4",
-          "to": "f5",
-          "color": "rgba(60,120,220,0.85)"
-        }
-      ],
       "highlights": [
         {
           "square": "e4",
@@ -41,22 +29,18 @@
       "san": "e5",
       "annotation": "Black answers symmetrically, planting a pawn on e5. That pawn is the hinge of the whole opening — White will spend the next dozen moves pressuring it, and Black defending it.",
       "shortNarration": "Black claims the center with e5 — the pawn the whole opening will revolve around.",
-      "arrows": [
-        {
-          "from": "e5",
-          "to": "d4",
-          "color": "rgba(60,120,220,0.85)"
-        },
-        {
-          "from": "e5",
-          "to": "f4",
-          "color": "rgba(60,120,220,0.85)"
-        }
-      ],
       "highlights": [
         {
           "square": "e5",
           "color": "rgba(255,235,0,0.45)"
+        },
+        {
+          "square": "d4",
+          "color": "rgba(255,235,0,0.42)"
+        },
+        {
+          "square": "f4",
+          "color": "rgba(255,235,0,0.42)"
         }
       ]
     },
@@ -132,13 +116,6 @@
       "san": "a6",
       "annotation": "Morphy’s move. Black questions the bishop immediately — retreat, or trade on c6? It commits Black to nothing and gains the tempo-rich ...b5 ideas.",
       "narration": "a6 questions the bishop — retreat or trade?",
-      "arrows": [
-        {
-          "from": "a6",
-          "to": "b5",
-          "color": "rgba(220,70,40,0.9)"
-        }
-      ],
       "highlights": [
         {
           "square": "b5",
@@ -223,11 +200,10 @@
       "san": "b5",
       "annotation": "Black gains queenside space and shoves the bishop again. The bishop must move — but it has a beautiful destination.",
       "narration": "b5 gains space and chases the bishop once more.",
-      "arrows": [
+      "highlights": [
         {
-          "from": "b5",
-          "to": "a4",
-          "color": "rgba(220,70,40,0.9)"
+          "square": "a4",
+          "color": "rgba(255,235,0,0.42)"
         }
       ]
     },
@@ -258,13 +234,6 @@
       "san": "d6",
       "annotation": "Black reinforces e5 and opens a path for the light-squared bishop. The center pawn is now solidly held — White must work to break it.",
       "narration": "d6 props up e5.",
-      "arrows": [
-        {
-          "from": "d6",
-          "to": "e5",
-          "color": "rgba(60,120,220,0.85)"
-        }
-      ],
       "highlights": [
         {
           "square": "e5",
@@ -277,13 +246,6 @@
       "annotation": "8.c3 looks humble but does two big jobs: it prepares the d4 advance to build a full center, and it carves out c2 as a retreat for the bishop. Quiet moves with deep purpose — the essence of the Ruy.",
       "narration": "c3 prepares d4 and clears c2 for the bishop.",
       "shortNarration": "c3 — prepare d4, open c2 for the bishop.",
-      "arrows": [
-        {
-          "from": "d2",
-          "to": "d4",
-          "color": "rgba(150,90,220,0.9)"
-        }
-      ],
       "highlights": [
         {
           "square": "d4",
@@ -309,13 +271,6 @@
       "annotation": "9.h3 — pure prophylaxis. It denies Black the ...Bg4 pin on the f3-knight, so that when White plays d4 the knight is never tied down. Capablanca preached exactly this: prevent the opponent’s plan before pursuing your own.",
       "narration": "h3 stops the Bg4 pin before White commits to d4.",
       "shortNarration": "h3 prevents ...Bg4.",
-      "arrows": [
-        {
-          "from": "h3",
-          "to": "g4",
-          "color": "rgba(60,120,220,0.85)"
-        }
-      ],
       "highlights": [
         {
           "square": "g4",
@@ -347,13 +302,6 @@
       "annotation": "10.d4 — at last. After eight preparatory moves White strikes the center, challenging e5 with full force. This is the payoff of c3, Re1, and h3 — the break arrives when every piece is ready.",
       "narration": "d4 — the prepared central strike against e5.",
       "shortNarration": "d4 hits the center.",
-      "arrows": [
-        {
-          "from": "d4",
-          "to": "e5",
-          "color": "rgba(220,70,40,0.9)"
-        }
-      ],
       "highlights": [
         {
           "square": "d4",
@@ -524,18 +472,6 @@
       "annotation": "Black plays ...g6 to complete the fianchetto and blunt the b1-h7 diagonal — exactly the structure Capablanca praised: bishop and pawns forming a fortress in front of the king.",
       "narration": "g6 builds the fianchetto wall and shuts the diagonal to h7.",
       "shortNarration": "g6 — the fianchetto shell.",
-      "arrows": [
-        {
-          "from": "g6",
-          "to": "f5",
-          "color": "rgba(60,120,220,0.85)"
-        },
-        {
-          "from": "g6",
-          "to": "h5",
-          "color": "rgba(60,120,220,0.85)"
-        }
-      ],
       "highlights": [
         {
           "square": "f5",
@@ -544,6 +480,10 @@
         {
           "square": "h6",
           "color": "rgba(80,140,255,0.30)"
+        },
+        {
+          "square": "h5",
+          "color": "rgba(255,235,0,0.42)"
         }
       ]
     },
