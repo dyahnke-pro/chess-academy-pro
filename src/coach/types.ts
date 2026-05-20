@@ -159,6 +159,131 @@ export interface LiveState {
    *  contains. It must not invent tactics that didn't appear in the
    *  pre-computed scan. */
   tactics?: TacticsLiveContext;
+  /** Curated per-move annotation context drawn from the 1893
+   *  opening-book JSONs in `src/data/annotations/`. Populated by
+   *  `coachService.ask` when `lichessSnapshot.name` is known and a
+   *  matching annotation file exists. Surfaces may pre-populate this
+   *  field to skip the auto-lookup (e.g. when they already loaded
+   *  annotations for an in-flight walkthrough).
+   *
+   *  G3 contract: the brain riffs on this text rather than inventing
+   *  plans, alternatives, or pawn-structure claims that aren't
+   *  anchored in the curated source. */
+  annotationContext?: LiveAnnotationContext;
+  /** Classical-book passages drawn from `src/data/chess-concepts.json`
+   *  (664 passages from 7 Gutenberg classics: Capablanca, Lasker,
+   *  Staunton, Young, Edge, Bird). Populated by `coachService.ask`
+   *  from the user's ask text + opening name. Quiet when no concepts
+   *  matched. */
+  bookGrounding?: LiveBookGrounding;
+  /** Named strategic plan for the current opening, drawn from
+   *  `src/data/middlegame-plans.json` (180 curated plans). Populated
+   *  when the opening is recognized AND has a registered plan.
+   *  Carries title + overview + strategic themes + pawn breaks +
+   *  piece maneuvers — the brain has the structural plan available
+   *  even mid-opening. Quiet when no plan exists for the opening. */
+  middlegamePlan?: LiveMiddlegamePlan;
+  /** Curated pro/master games for the current opening, drawn from
+   *  `src/data/model-games.json` (~121 games). Up to 2 highest-rated
+   *  examples shipped per call. The brain can cite "Morphy's Opera
+   *  game" or "Carlsen vs Anand 2014" by name + year + critical
+   *  moments instead of fabricating game citations. Quiet when no
+   *  curated games are registered for the opening. */
+  modelGames?: LiveModelGameContext;
+}
+
+/** Pre-formatted classical-book grounding block. The text is built
+ *  by `chessConceptService.buildCoachChatContext` (and friends) — it
+ *  arrives shaped for direct paste into the system prompt with its
+ *  own header / footer. Stored alongside `sourceCount` for audit
+ *  observability so the wired audit can verify book passages
+ *  actually shipped without re-parsing the formatted block. */
+export interface LiveBookGrounding {
+  /** The pre-formatted block, ready to inject into the envelope.
+   *  Starts with `═══ REFERENCE FROM CHESS CLASSICS ═══` and ends
+   *  with `═════════════════════════════════════`. */
+  block: string;
+  /** Number of passages folded into the block — typically 1-3
+   *  (one opening + up to three concept passages). 0 means nothing
+   *  matched; the loader returns null in that case rather than
+   *  shipping an empty block. */
+  sourceCount: number;
+}
+
+/** Strategic plan context for the current opening, drawn from
+ *  `src/data/middlegame-plans.json`. See `LiveState.middlegamePlan`. */
+export interface LiveMiddlegamePlan {
+  id: string;
+  openingId: string;
+  title: string;
+  overview: string;
+  criticalPositionFen: string | null;
+  strategicThemes: string[];
+  pawnBreaks: Array<{ move: string; explanation: string }>;
+  pieceManeuvers: Array<{ piece: string; route: string; explanation: string }>;
+  endgameTransitions: string[];
+}
+
+/** Curated model-games context for the current opening, drawn from
+ *  `src/data/model-games.json`. See `LiveState.modelGames`. */
+export interface LiveModelGameContext {
+  openingId: string;
+  openingName: string;
+  /** Total games available for this opening; capped at 2 in the
+   *  shipped array but reported in full so the brain knows there's
+   *  more if needed. */
+  totalAvailable: number;
+  games: Array<{
+    id: string;
+    white: string;
+    black: string;
+    result: string;
+    year: number;
+    event: string;
+    overview: string;
+    /** First ~25 plies of the game's PGN — enough to identify the
+     *  line and the early structure. Brain can call lichess_master_games
+     *  if it needs deeper detail. */
+    pgnPrefix: string;
+    criticalMoments: Array<{
+      moveNumber: number;
+      annotation: string;
+      concept: string;
+    }>;
+  }>;
+}
+
+/** Curated opening-book context attached to the envelope's live
+ *  state. Each entry is the per-ply annotation lifted from
+ *  `src/data/annotations/<id>.json`, windowed around the current ply
+ *  (one prior ply for context + lookahead up to 6 moves total). See
+ *  `src/coach/sources/annotationContext.ts`. */
+export interface LiveAnnotationContext {
+  /** Lichess-style opening name (e.g. "Italian Game"). Stays as
+   *  displayed for prose grounding. */
+  openingName: string;
+  /** Annotation file ID after slug + alias resolution
+   *  (e.g. "italian-game"). */
+  openingId: string;
+  /** Concatenated SAN PGN of all moves played so far. */
+  pgnSoFar: string;
+  /** Ply count at the moment the envelope was built (= moveHistory
+   *  length). The brain uses this to locate "now" inside the window. */
+  currentPly: number;
+  /** Total annotated entries for this opening — useful for the brain
+   *  to gauge how deep the book context goes vs how far past book the
+   *  current position is. */
+  totalAnnotated: number;
+  /** Per-ply windowed annotations. */
+  moves: Array<{
+    ply: number;
+    san: string;
+    annotation: string;
+    shortNarration?: string;
+    plans?: string[];
+    alternatives?: string[];
+    pawnStructure?: string;
+  }>;
 }
 
 /** Pre-computed tactical context attached to the envelope's live

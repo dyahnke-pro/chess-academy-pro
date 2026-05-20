@@ -531,6 +531,21 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       surface: 'review',
       fen: fenForQ,
       moveHistory: moves.slice(0, Math.max(0, moveIdx + 1)).map((m) => m.san),
+      // Thread the opening name into lichessSnapshot so the
+      // book-context loader in coachService.ask pulls the curated
+      // annotation passages for this opening — the review-ask
+      // narration gets Capablanca/Lasker-grounded instead of
+      // freestyle. The other lichessSnapshot fields stay empty
+      // (the brain has lichess_opening_lookup if it needs depth).
+      lichessSnapshot: openingName
+        ? {
+            eco: '',
+            name: openingName,
+            topAmateurMoves: [],
+            topMasterMoves: [],
+            topMasterGames: [],
+          }
+        : undefined,
       userJustDid: question,
       currentRoute: '/coach/play',
       tactics: reviewTactics,

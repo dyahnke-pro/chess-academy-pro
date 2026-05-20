@@ -111,6 +111,13 @@ export function CoachAnalysePage(): JSX.Element {
         analyseStudentRating,
       );
       let explanation = '';
+      // Thread the on-board move history when present so the book-
+      // context loader in coachService.ask can ground the analysis
+      // narration in the curated opening annotations. When the user
+      // loaded a bare FEN (no moves played), history is empty and the
+      // loader will try opening-detection from the FEN's position
+      // pattern via lichessSnapshot — falls back gracefully.
+      const analyseHistory = game.history.length > 0 ? game.history : undefined;
       const result = await coachService.ask(
         {
           surface: 'standalone-chat',
@@ -120,6 +127,7 @@ export function CoachAnalysePage(): JSX.Element {
             fen,
             evalCp: sfAnalysis.isMate ? undefined : sfAnalysis.evaluation,
             evalMateIn: sfAnalysis.mateIn ?? undefined,
+            moveHistory: analyseHistory,
             userJustDid: 'Loaded a position into Analyse',
             tactics: analyseTactics,
           },
@@ -202,6 +210,11 @@ export function CoachAnalysePage(): JSX.Element {
       followStudentRating,
     );
     let response = '';
+    // Same shape as the analyse-position call above — thread the
+    // on-board move history when present so the book-context loader
+    // gets an opening to anchor against. Follow-up questions inherit
+    // whatever board state the user has built up since loading.
+    const followHistory = game.history.length > 0 ? game.history : undefined;
     const result = await coachService.ask(
       {
         surface: 'standalone-chat',
@@ -211,6 +224,7 @@ export function CoachAnalysePage(): JSX.Element {
           fen: game.fen,
           evalCp: analysis && !analysis.isMate ? analysis.evaluation : undefined,
           evalMateIn: analysis?.mateIn ?? undefined,
+          moveHistory: followHistory,
           userJustDid: `Asked: "${question.slice(0, 60)}"`,
           tactics: followTactics,
         },

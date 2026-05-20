@@ -302,15 +302,30 @@ export async function generateNarrativeSummary(
   // same shape as /coach/teach and /coach/play. GAME_POST_REVIEW_ADDITION
   // threads as systemPromptAddition. Empty string on provider error
   // preserves the legacy "graceful blank" contract.
-  const finalFen = (() => {
+  // Extract both the final FEN and the SAN history from the PGN so
+  // the brain envelope can carry moveHistory + opening grounding
+  // alongside the asked text. The annotation-context loader in
+  // coachService.ask keys off moveHistory.length > 0 (or
+  // lichessSnapshot.name) to pull the matching opening-book passages,
+  // so without these the post-game summary fires book-blind.
+  const { finalFen, moveHistory } = (() => {
     try {
       const chess = new Chess();
       chess.loadPgn(pgn);
-      return chess.fen();
+      return { finalFen: chess.fen(), moveHistory: chess.history() };
     } catch {
-      return undefined;
+      return { finalFen: undefined as string | undefined, moveHistory: [] as string[] };
     }
   })();
+  const reviewLichessSnapshot = openingName
+    ? {
+        eco: '',
+        name: openingName,
+        topAmateurMoves: [],
+        topMasterMoves: [],
+        topMasterGames: [],
+      }
+    : undefined;
   // Defense-in-depth: even with suppressSurfaceMode the brain occasionally
   // emits `[[ACTION:...]]` / `[BOARD:...]` markers (seen in prod on the
   // Review summary card — chesscom-971406909 leaked a raw
@@ -334,6 +349,8 @@ export async function generateNarrativeSummary(
       liveState: {
         surface: 'review',
         fen: finalFen,
+        moveHistory,
+        lichessSnapshot: reviewLichessSnapshot,
         userJustDid: 'Reviewing the completed game',
         whoseTurn: finalFen?.split(' ')[1] === 'b' ? 'black' : 'white',
       },
@@ -442,6 +459,28 @@ Do not include any other text outside the JSON.${analysisContext}`,
   // so it ends up in the user message via buildChessContextMessage —
   // identical wire shape as the legacy getCoachCommentary call.
   const userMessage = buildChessContextMessage(context);
+  // Pull moveHistory + opening grounding into liveState so the
+  // book-context loader has something to anchor on. Without this
+  // the intro/closing call fires book-blind and the narration
+  // misses the curated Capablanca/Lasker passages we pre-loaded.
+  const { segmentsHistory } = (() => {
+    try {
+      const chess = new Chess();
+      chess.loadPgn(pgn);
+      return { segmentsHistory: chess.history() };
+    } catch {
+      return { segmentsHistory: [] as string[] };
+    }
+  })();
+  const segmentsLichessSnapshot = openingName
+    ? {
+        eco: '',
+        name: openingName,
+        topAmateurMoves: [],
+        topMasterMoves: [],
+        topMasterGames: [],
+      }
+    : undefined;
   let raw = '';
   try {
     const spineAnswer = await coachService.ask(
@@ -451,6 +490,8 @@ Do not include any other text outside the JSON.${analysisContext}`,
         liveState: {
           surface: 'review',
           fen: context.fen,
+          moveHistory: segmentsHistory,
+          lichessSnapshot: segmentsLichessSnapshot,
           userJustDid: 'Generating intro/closing narration for the review',
         },
       },
@@ -864,9 +905,28 @@ export async function generateReviewNarration(params: {
   // Per-ply segments are now built deterministically from the engine
   // annotations — no LLM round-trip. The intro LLM call still rides
   // the unified envelope so it picks up memory + live-state context.
+  // Thread moveHistory + opening grounding so the book-context loader
+  // pulls the curated annotation passages for this opening into the
+  // envelope — the intro narration becomes Capablanca/Lasker-grounded
+  // instead of LLM-freestyle.
+  const introMoveHistory = moves
+    .slice(0, usableCount)
+    .map((m) => m.san)
+    .filter((san): san is string => typeof san === 'string' && san.length > 0);
+  const introLichessSnapshot = openingName
+    ? {
+        eco: '',
+        name: openingName,
+        topAmateurMoves: [],
+        topMasterMoves: [],
+        topMasterGames: [],
+      }
+    : undefined;
   const reviewLiveState = {
     surface: 'review' as const,
     fen: fenChain[fenChain.length - 1]?.fenAfter,
+    moveHistory: introMoveHistory,
+    lichessSnapshot: introLichessSnapshot,
     userJustDid: 'Opening review of the completed game (prep scan)',
   };
   // Silent mode: skip the LLM intro entirely (speakInternal silences

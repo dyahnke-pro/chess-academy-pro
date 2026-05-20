@@ -705,6 +705,22 @@ function formatLiveStateBlock(state: LiveState): string {
   if (state.tactics) {
     parts.push(formatTacticsSubBlock(state.tactics));
   }
+  if (state.annotationContext) {
+    const block = formatAnnotationContextSubBlock(state.annotationContext);
+    if (block) parts.push(block);
+  }
+  if (state.bookGrounding) {
+    const block = formatBookGroundingSubBlock(state.bookGrounding);
+    if (block) parts.push(block);
+  }
+  if (state.middlegamePlan) {
+    const block = formatMiddlegamePlanSubBlock(state.middlegamePlan);
+    if (block) parts.push(block);
+  }
+  if (state.modelGames) {
+    const block = formatModelGamesSubBlock(state.modelGames);
+    if (block) parts.push(block);
+  }
   if (state.moveHistory && state.moveHistory.length > 0) {
     parts.push(`- Move history: ${state.moveHistory.join(' ')}`);
   }
@@ -757,6 +773,136 @@ function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): stri
     `    NAME the pattern in prose (fork / pin / skewer / back rank / removal of guard / overloaded / discovered attack / etc.). For depth ≥ 2, walk the line: "if you play X, opponent has Y in N." NEVER invent a tactic that isn't in this block. NEVER claim a tactic at greater depth than ${tactics.lookaheadDepth}. The student is intermediate-or-stronger if lookahead ≥ 3 — push them to calculate the full sequence.`,
   );
   return lines.join('\n');
+}
+
+/** Render the curated opening-book annotation context as a sub-block
+ *  under [Live state]. Mirrors the `lichessSnapshot` / tactics
+ *  pattern — pre-fetched ground truth with an explicit "USE THIS, do
+ *  not contradict" closer that anchors the brain to G3-bounded
+ *  vocabulary. Returns empty string when no windowed moves are
+ *  present so a position past the book adds zero tokens. */
+function formatAnnotationContextSubBlock(
+  ctx: NonNullable<LiveState['annotationContext']>,
+): string {
+  if (!ctx.moves.length) return '';
+  const lines: string[] = ['- Opening book (PRE-LOADED curated annotations):'];
+  lines.push(
+    `    Source: ${ctx.openingName} (id ${ctx.openingId}, ${ctx.totalAnnotated} annotated plies total). Current ply: ${ctx.currentPly}.`,
+  );
+  for (const m of ctx.moves) {
+    const heading = `    Ply ${m.ply} (${m.san}):`;
+    lines.push(heading);
+    if (m.annotation) lines.push(`      ${m.annotation}`);
+    if (m.shortNarration && m.shortNarration !== m.annotation) {
+      lines.push(`      Short: ${m.shortNarration}`);
+    }
+    if (m.pawnStructure) lines.push(`      Structure: ${m.pawnStructure}`);
+    if (m.plans && m.plans.length > 0) {
+      lines.push(`      Plans: ${m.plans.map((p) => `• ${p}`).join(' ')}`);
+    }
+    if (m.alternatives && m.alternatives.length > 0) {
+      lines.push(`      Alternatives: ${m.alternatives.map((a) => `• ${a}`).join(' ')}`);
+    }
+  }
+  lines.push(
+    `    USE this text as authoritative book grounding. RIFF on it — do not contradict its plans / structure / alternatives. When the current position is past the windowed plies (current ply ${ctx.currentPly} > last entry above), draw on the trajectory rather than inventing fresh book moves. NEVER invent alternative lines the book doesn't list.`,
+  );
+  return lines.join('\n');
+}
+
+/** Render the curated model-games block as a sub-block under
+ *  [Live state]. Each shipped game carries player + result + year +
+ *  event + overview + early-PGN + critical moments — the brain can
+ *  cite "Morphy vs Duke of Brunswick 1858" with the actual
+ *  positional context, not invented prose. Empty string when zero
+ *  games shipped so the block adds zero tokens. */
+function formatModelGamesSubBlock(
+  ctx: NonNullable<LiveState['modelGames']>,
+): string {
+  if (!ctx.games.length) return '';
+  const lines: string[] = [
+    `- Curated model games (PRE-LOADED, ${ctx.games.length}/${ctx.totalAvailable} for ${ctx.openingName}):`,
+  ];
+  for (const g of ctx.games) {
+    lines.push(`    [${g.id}] ${g.white} vs ${g.black} (${g.event}, ${g.year}) — ${g.result}`);
+    if (g.overview) lines.push(`      ${g.overview}`);
+    if (g.pgnPrefix) lines.push(`      Opening PGN: ${g.pgnPrefix}`);
+    if (g.criticalMoments.length > 0) {
+      lines.push(`      Critical moments:`);
+      for (const m of g.criticalMoments) {
+        lines.push(`        • Move ${m.moveNumber} (${m.concept}) — ${m.annotation}`);
+      }
+    }
+  }
+  lines.push(
+    `    CITE these games by name + year when teaching the opening. Reference the critical moments and concepts shown above. NEVER fabricate "Carlsen vs X 2020" / "Morphy vs Y" — if the game isn't in this block, you can't cite it. Use lichess_master_games if the student asks for a specific year/player combo you don't have.`,
+  );
+  return lines.join('\n');
+}
+
+/** Render the named middlegame plan for the current opening as a
+ *  sub-block under [Live state]. Each plan covers title + overview +
+ *  strategic themes + pawn breaks + piece maneuvers + endgame
+ *  transitions — the brain's structural compass for "what's the
+ *  plan?" / "what should I play next?" questions. Returns empty
+ *  string when the plan carries no content (extremely rare —
+ *  the curated source has ≥1 theme on every entry). */
+function formatMiddlegamePlanSubBlock(
+  plan: NonNullable<LiveState['middlegamePlan']>,
+): string {
+  if (!plan.title) return '';
+  const lines: string[] = [
+    `- Middlegame plan (PRE-LOADED, curated, id=${plan.id}):`,
+    `    Opening: ${plan.openingId}. Plan title: "${plan.title}".`,
+  ];
+  if (plan.overview) lines.push(`    Overview: ${plan.overview}`);
+  if (plan.criticalPositionFen) {
+    lines.push(`    Critical position FEN: ${plan.criticalPositionFen}`);
+  }
+  if (plan.strategicThemes.length > 0) {
+    lines.push(`    Strategic themes (${plan.strategicThemes.length}):`);
+    for (const t of plan.strategicThemes) lines.push(`      • ${t}`);
+  }
+  if (plan.pawnBreaks.length > 0) {
+    lines.push(`    Pawn breaks (${plan.pawnBreaks.length}):`);
+    for (const b of plan.pawnBreaks) {
+      lines.push(`      • ${b.move} — ${b.explanation}`);
+    }
+  }
+  if (plan.pieceManeuvers.length > 0) {
+    lines.push(`    Piece maneuvers (${plan.pieceManeuvers.length}):`);
+    for (const m of plan.pieceManeuvers) {
+      lines.push(`      • ${m.piece} ${m.route} — ${m.explanation}`);
+    }
+  }
+  if (plan.endgameTransitions.length > 0) {
+    lines.push(`    Endgame transitions:`);
+    for (const e of plan.endgameTransitions) lines.push(`      • ${e}`);
+  }
+  lines.push(
+    `    USE this plan to answer "what should I play next" / "what's the strategic idea". RIFF on the themes — don't contradict them. When recommending a pawn break or maneuver, prefer one from this list.`,
+  );
+  return lines.join('\n');
+}
+
+/** Render the classical-book grounding block as a sub-block under
+ *  [Live state]. The block text is already pre-formatted by
+ *  `chessConceptService.buildCoachChatContext` (header + passages +
+ *  footer), so we mostly pass it through. Wrapped with a single
+ *  leading bullet so the indentation matches the lichessSnapshot /
+ *  annotationContext / tactics sub-blocks. Returns empty string when
+ *  source count is 0 so a no-match call adds zero tokens. */
+function formatBookGroundingSubBlock(
+  grounding: NonNullable<LiveState['bookGrounding']>,
+): string {
+  if (!grounding.block || grounding.sourceCount === 0) return '';
+  // Indent the multi-line block under the bullet for visual
+  // alignment with siblings. Block already has its own header/footer.
+  const indented = grounding.block
+    .split('\n')
+    .map((l) => `    ${l}`)
+    .join('\n');
+  return `- Classical chess-book grounding (PRE-LOADED, ${grounding.sourceCount} passage${grounding.sourceCount === 1 ? '' : 's'} from Capablanca / Lasker / Staunton / Young / Edge / Bird):\n${indented}\n    USE these passages to shape your prose. DO NOT quote verbatim, DO NOT contradict the ideas, DO NOT cite an author the block doesn't include. When the topic is outside the book corpus, fall back to your own knowledge — but if the block IS present, anchor your reply in it.`;
 }
 
 function pieceFullName(piece: string): string {

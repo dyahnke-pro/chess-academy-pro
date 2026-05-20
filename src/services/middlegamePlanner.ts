@@ -22,29 +22,20 @@ import { buildSession } from './walkthroughAdapter';
 import { stockfishEngine } from './stockfishEngine';
 import { getCoachChatResponse } from './coachApi';
 import type { WalkthroughSession } from '../types/walkthrough';
-import type { AnnotationArrow, OpeningMoveAnnotation } from '../types';
+import type { OpeningMoveAnnotation } from '../types';
 
 const STANDARD_START_FEN =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 const FALLBACK_MAX_PLIES = 10;
 const FALLBACK_DEPTH = 18;
 
-interface PlayableLine {
-  fen: string;
-  moves: string[];
-  annotations: string[];
-  arrows?: AnnotationArrow[][];
-  title?: string;
-}
-
-interface MiddlegamePlan {
-  id: string;
-  openingId: string;
-  criticalPositionFen: string;
-  title: string;
-  overview: string;
-  playableLines?: PlayableLine[];
-}
+// The JSON carries the FULL `MiddlegamePlan` shape (pawnBreaks +
+// pieceManeuvers + strategicThemes + endgameTransitions). The planner
+// historically used a narrowed local interface that hid those fields
+// from downstream consumers — broadened to expose them so the coach
+// envelope can ground the brain in the full plan. Defined alongside
+// the existing canonical type in `src/types/index.ts:245`.
+import type { MiddlegamePlan } from '../types';
 
 const PLANS = middlegamePlans as unknown as MiddlegamePlan[];
 

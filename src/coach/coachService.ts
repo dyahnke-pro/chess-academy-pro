@@ -28,6 +28,10 @@
  */
 import { logAppAudit } from '../services/appAuditor';
 import { assembleEnvelope } from './envelope';
+import { loadAnnotationContextForLive } from './sources/annotationContext';
+import { loadBookGroundingForLive } from './sources/bookGrounding';
+import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
+import { loadModelGamesForLive } from './sources/modelGames';
 import { deepseekProvider } from './providers/deepseek';
 import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
@@ -346,6 +350,186 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // user's raw text. This entry point only sees messages that the
   // surface chose to forward (real LLM round-trips), so router
   // bypass-LLM logic at this layer was dead code.
+
+  // Auto-load curated opening-book annotations whenever the surface
+  // didn't pre-populate annotationContext but has either a
+  // lichessSnapshot opening name OR a move history we can detect an
+  // opening from. Brings the 1893 curated annotation files under
+  // `src/data/annotations/` into the brain's [Live state] block as
+  // authoritative grounding for every surface that touches a
+  // recognizable opening (teach, play, review, analyse, …). Surfaces
+  // that already loaded annotations (e.g. via walkthrough) can
+  // short-circuit by setting `liveState.annotationContext` themselves
+  // — we don't overwrite. Silent on lookup miss.
+  const hasOpeningSignal =
+    !!input.liveState.lichessSnapshot?.name ||
+    (input.liveState.moveHistory?.length ?? 0) > 0;
+  if (!input.liveState.annotationContext && hasOpeningSignal) {
+    try {
+      const ctx = await loadAnnotationContextForLive({
+        openingName: input.liveState.lichessSnapshot?.name,
+        moveHistory: input.liveState.moveHistory ?? [],
+      });
+      if (ctx) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, annotationContext: ctx },
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.annotationContext',
+          summary: `loaded annotation ctx: ${ctx.openingName} (id=${ctx.openingId}, ${ctx.moves.length}/${ctx.totalAnnotated} plies windowed at ply ${ctx.currentPly})`,
+        });
+      } else {
+        // Audit no-match for observability — the loader was reached
+        // but no annotation file matched the resolved opening. Helps
+        // identify openings that need authored annotations.
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.annotationContext',
+          summary: `no-match: openingName="${input.liveState.lichessSnapshot?.name ?? '?'}" histLen=${input.liveState.moveHistory?.length ?? 0}`,
+        });
+      }
+    } catch (err) {
+      // Annotation lookup failures must NEVER block the brain call —
+      // the surface has the existing FEN/eval/tactics grounding and
+      // can answer without book context.
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.annotationContext',
+        summary: `book ctx load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
+
+  // Middlegame plan from middlegame-plans.json (180 curated plans).
+  // Gates on opening recognition (via lichessSnapshot.name OR
+  // moveHistory-based detection) AND a matching plan registered for
+  // that opening. Quiet when no plan exists. Carries title +
+  // overview + strategic themes + pawn breaks + maneuvers into the
+  // envelope so "what's the plan here?" gets the curated answer.
+  if (!input.liveState.middlegamePlan && hasOpeningSignal) {
+    try {
+      const plan = loadMiddlegamePlanForLive({
+        openingName: input.liveState.lichessSnapshot?.name,
+        moveHistory: input.liveState.moveHistory ?? [],
+      });
+      if (plan) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, middlegamePlan: plan },
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.middlegamePlan',
+          summary: `loaded plan "${plan.title}" (id=${plan.id}, themes=${plan.strategicThemes.length}, breaks=${plan.pawnBreaks.length}, maneuvers=${plan.pieceManeuvers.length}) for opening=${plan.openingId}`,
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.middlegamePlan',
+          summary: `no-match: openingName="${input.liveState.lichessSnapshot?.name ?? '?'}" histLen=${input.liveState.moveHistory?.length ?? 0}`,
+        });
+      }
+    } catch (err) {
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.middlegamePlan',
+        summary: `plan load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
+
+  // Model games from model-games.json (~121 curated pro/master
+  // games keyed by opening). Up to 2 highest-rated examples shipped
+  // per call, with overview + early-PGN + critical moments. The
+  // brain can cite "Morphy vs Duke of Brunswick 1858" or "Carlsen
+  // vs Anand 2014" by name+year instead of fabricating game refs.
+  if (!input.liveState.modelGames && hasOpeningSignal) {
+    try {
+      const games = loadModelGamesForLive({
+        openingName: input.liveState.lichessSnapshot?.name,
+        moveHistory: input.liveState.moveHistory ?? [],
+      });
+      if (games) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, modelGames: games },
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.modelGames',
+          summary: `loaded ${games.games.length}/${games.totalAvailable} model game(s) for ${games.openingName} (id=${games.openingId})`,
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.modelGames',
+          summary: `no-match: openingName="${input.liveState.lichessSnapshot?.name ?? '?'}" histLen=${input.liveState.moveHistory?.length ?? 0}`,
+        });
+      }
+    } catch (err) {
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.modelGames',
+        summary: `model games load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
+
+  // Book grounding from chess-concepts.json (Capablanca/Lasker/etc).
+  // Same shape as annotation context — pre-loaded grounding into the
+  // envelope, gated on something to match against. Uses the user's
+  // ask text PLUS the opening name (when available) to drive concept
+  // detection and opening-passage lookup. Skipped silently when no
+  // concept matched. Independent of annotationContext: a position
+  // can have either, both, or neither depending on what corpus
+  // covers it.
+  if (!input.liveState.bookGrounding) {
+    try {
+      const grounding = loadBookGroundingForLive({
+        askText: input.ask,
+        openingName: input.liveState.lichessSnapshot?.name ?? null,
+      });
+      if (grounding) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, bookGrounding: grounding },
+        };
+        void logAppAudit({
+          kind: 'book-grounding-injected',
+          category: 'subsystem',
+          source: 'coachService.ask.bookGrounding',
+          summary: `loaded ${grounding.sourceCount} classical passage(s) (${grounding.block.length} chars) for ask="${input.ask.slice(0, 60)}"`,
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.bookGrounding',
+          summary: `no-match: askLen=${input.ask.length} openingName="${input.liveState.lichessSnapshot?.name ?? '?'}"`,
+        });
+      }
+    } catch (err) {
+      // Book lookup failures must NEVER block the call. Existing
+      // grounding (annotations, lichess, tactics) carries the brain.
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.bookGrounding',
+        summary: `book grounding load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
 
   const envelope = assembleEnvelope({
     identity: options.identity,
