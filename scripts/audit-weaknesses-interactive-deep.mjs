@@ -1101,6 +1101,37 @@ async function main() {
     if (ERROR_EXACT.has(e.kind)) return true;
     return ERROR_SUBSTRINGS.some((sub) => e.kind.includes(sub));
   });
+  // Partition by source: downstream = bugs in OTHER surfaces' code
+  // paths that the audit happened to surface (coach brain claim-
+  // validator trips, master-play fallbacks, etc.). Source-based
+  // filter, NOT route — route reads as /weaknesses at log-time even
+  // when the underlying bug is in the coach brain because the page
+  // is at /weaknesses when the brain is invoked.
+  //
+  // In-scope = audit error kinds whose `source` belongs to a
+  // /weaknesses-owned module (GameInsightsPage*, GamesDrilldown*,
+  // weakness-report-*, OpeningDrilldown*). Everything else (coachApi,
+  // coachService, coach-brain, review*, etc.) is downstream —
+  // owned by another audit script.
+  const DOWNSTREAM_SOURCE_PATTERNS = [
+    /^coachApi\./,
+    /^coachService\./,
+    /^coach-brain/,
+    /^coachGameReview/i,
+    /^CoachGameReview/,
+    /^CoachReviewSessionPage/,
+    /^ReviewSummaryCard/,
+    /^masterPlayWatcher/,
+    /^stockfishEngine/,
+    /^review-/,
+  ];
+  const isDownstream = (e) => {
+    const src = e.source ?? '';
+    return DOWNSTREAM_SOURCE_PATTERNS.some((rx) => rx.test(src));
+  };
+  const isInScope = (e) => !isDownstream(e);
+  const inScopeErrors = errorKinds.filter(isInScope);
+  const downstreamErrors = errorKinds.filter(isDownstream);
   const report = {
     pass: PASS,
     base: BASE_URL,
@@ -1114,10 +1145,14 @@ async function main() {
       dexieRollingTotal: dexieAuditEntries.length,
       kinds: Object.fromEntries(Object.entries(kindCounts).sort(([a], [b]) => a.localeCompare(b))),
       errorKindCount: errorKinds.length,
+      inScopeErrorCount: inScopeErrors.length,
+      downstreamErrorCount: downstreamErrors.length,
       errorKindSample: errorKinds.slice(0, 10).map((e) => ({
         kind: e.kind,
         source: e.source,
         summary: e.summary,
+        route: e.route,
+        inScope: isInScope(e),
       })),
     },
     summary: {
@@ -1137,11 +1172,18 @@ async function main() {
   console.log(`  pageerrors:       ${pageErrors.length}`);
   console.log(`  dexie audits:     ${dexieAuditEntries.length}`);
   console.log(`  stream POSTs:     ${auditEvents.length}`);
-  console.log(`  audit error kinds: ${errorKinds.length}`);
-  if (errorKinds.length > 0) {
-    console.log(`\nAUDIT ERROR KINDS (first 5):`);
-    for (const e of errorKinds.slice(0, 5)) {
-      console.log(`  - ${e.kind} (${e.source}): ${e.summary?.slice(0, 120) ?? ''}`);
+  console.log(`  in-scope errors:  ${inScopeErrors.length}`);
+  console.log(`  downstream errors: ${downstreamErrors.length}`);
+  if (inScopeErrors.length > 0) {
+    console.log(`\nIN-SCOPE ERROR KINDS (/weaknesses) — these fail the audit:`);
+    for (const e of inScopeErrors.slice(0, 5)) {
+      console.log(`  - ${e.kind} (${e.source}) @ ${e.route}: ${e.summary?.slice(0, 100) ?? ''}`);
+    }
+  }
+  if (downstreamErrors.length > 0) {
+    console.log(`\nDOWNSTREAM ERROR KINDS (other surfaces, informational):`);
+    for (const e of downstreamErrors.slice(0, 5)) {
+      console.log(`  - ${e.kind} (${e.source}) @ ${e.route}: ${e.summary?.slice(0, 100) ?? ''}`);
     }
   }
   if (failures.length > 0) {
@@ -1160,7 +1202,7 @@ async function main() {
   }
 
   await browser.close();
-  const passClean = failures.length === 0 && pageErrors.length === 0 && errorKinds.length === 0;
+  const passClean = failures.length === 0 && pageErrors.length === 0 && inScopeErrors.length === 0;
   process.exit(passClean ? 0 : 1);
 }
 
