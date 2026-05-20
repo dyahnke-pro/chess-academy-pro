@@ -5,11 +5,43 @@ import { Chess } from 'chess.js';
 import { db } from '../db/schema';
 import { SYSTEM_PROMPT, buildChessContextMessage, getVerbosityInstruction } from './coachPrompts';
 import { recordApiUsage } from './coachCostService';
+
+/** Audit-instrumentation phase-1 (2026-05-19): emit a per-LLM-call
+ *  token usage event so per-turn cost trends are visible in the
+ *  audit log without scraping provider invoices. Paired with every
+ *  recordApiUsage call so the local cost dashboard and the audit
+ *  stream stay in sync. */
+function emitLlmTokenUsage(
+  task: string,
+  model: string,
+  provider: 'deepseek' | 'anthropic',
+  promptTokens: number,
+  completionTokens: number,
+  finishReason: string | null = null,
+): void {
+  void logAppAudit({
+    kind: 'llm-token-usage',
+    category: 'subsystem',
+    source: `coachApi.${provider}`,
+    summary: `task=${task} model=${model} provider=${provider} in=${promptTokens} out=${completionTokens}`,
+    details: JSON.stringify({
+      task,
+      model,
+      provider,
+      promptTokens,
+      completionTokens,
+      totalTokens: promptTokens + completionTokens,
+      finishReason,
+    }),
+  });
+}
 import { lookupMasterPlay } from './masterPlayLookup';
 import { validateClaims, type ClaimValidationResult } from './claimValidator';
 import { logAppAudit } from './appAuditor';
+import { buildVerifiedPuzzleContext } from './verifiedLineLibrary';
 import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './masterPlayTypes';
 import { buildOpeningDbEntries } from './openingDbGrounding';
+import { buildNarrationGroundingBlock } from './narrationGrounding';
 import type { CoachTask, CoachContext, CoachVerbosity, AiProvider } from '../types';
 
 // WO-COACH-MASTER-INTEGRATION audit bridge — installs window.__masterPlayAudit
@@ -214,29 +246,59 @@ async function getProviderConfig(): Promise<ProviderConfig | null> {
     const deepseekEnvKey = getDeepseekKey();
 
     const profile = await db.profiles.get('main');
-    // Anthropic is the primary on every surface as of 2026-05-14
-    // (David's call) — Sonnet/Haiku produce noticeably better chess
-    // pedagogy than DeepSeek. The fallback chain below auto-retries
-    // on DeepSeek if Anthropic 401s/429s on this single call. The
+
+    // Audit-mode provider override (2026-05-19): the Playwright loop
+    // audit re-runs the coach dozens of times per scenario and David
+    // doesn't want to burn Anthropic API tokens on test traffic.
+    // When the audit script (or any caller) sets `auditForceProvider`
+    // in Dexie's `meta` table to 'deepseek' or 'anthropic',
+    // `getProviderConfig` honors it for the duration of the override.
+    // Real user settings are untouched — this is a per-tab / per-test
+    // override that the audit script clears at teardown. Less critical
+    // now that the prod default is also DeepSeek (see note below), but
+    // retained as belt-and-suspenders so the audit pins the provider
+    // regardless of cooldowns / key availability.
+    const auditOverrideRecord = await db.meta.get('auditForceProvider');
+    const auditOverride =
+      auditOverrideRecord?.value === 'deepseek' || auditOverrideRecord?.value === 'anthropic'
+        ? (auditOverrideRecord.value as AiProvider)
+        : null;
+
+    // DeepSeek is the primary as of 2026-05-19 (David's call: "switch
+    // to deepseek tokens"). Previously Anthropic-first since 2026-05-14
+    // for pedagogy reasons. The fallback chain below auto-retries on
+    // Anthropic if DeepSeek 401s/429s on this single call. The
     // dead-state cooldown above means subsequent calls within the
-    // next 60s skip Anthropic entirely if we just saw it fail —
-    // avoids paying the failed-primary latency on every coach
-    // interaction during an extended outage.
-    // A user with ONLY a DeepSeek key still gets DeepSeek.
+    // next 60s skip DeepSeek entirely if we just saw it fail — avoids
+    // paying the failed-primary latency on every coach interaction
+    // during an extended outage. A user with ONLY an Anthropic key
+    // still gets Anthropic.
     const anthropicReachable = !!anthropicEnvKey && !isProviderInCooldown('anthropic');
     const deepseekReachable = !!deepseekEnvKey && !isProviderInCooldown('deepseek');
-    const provider: AiProvider = anthropicReachable
-      ? 'anthropic'
+    const provider: AiProvider = auditOverride
+      ? auditOverride
       : (deepseekReachable
           ? 'deepseek'
-          // Both keys absent OR both in cooldown — fall through to
-          // whichever key exists (try-anyway over no-coach), then to
-          // profile preference. Cooldown lifts on its own after 60s.
-          : (anthropicEnvKey
+          : (anthropicReachable
               ? 'anthropic'
+              // Both keys absent OR both in cooldown — fall through to
+              // whichever key exists (try-anyway over no-coach), then to
+              // profile preference. Cooldown lifts on its own after 60s.
               : (deepseekEnvKey
                   ? 'deepseek'
-                  : (profile?.preferences.aiProvider ?? 'anthropic'))));
+                  : (anthropicEnvKey
+                      ? 'anthropic'
+                      : (profile?.preferences.aiProvider ?? 'deepseek')))));
+
+    if (auditOverride) {
+      void logAppAudit({
+        kind: 'coach-llm-model-selected',
+        category: 'subsystem',
+        source: 'coachApi.getProviderConfig.auditOverride',
+        summary: `audit-mode override forcing provider=${provider}`,
+        details: JSON.stringify({ override: auditOverride, willPick: provider }),
+      });
+    }
 
     const preferredModel = profile?.preferences.preferredModel;
 
@@ -470,6 +532,7 @@ async function callDeepSeek(
 
   if (response.usage) {
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
+    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null);
   }
   const choice = response.choices[0];
   // DeepSeek-reasoner emits `reasoning_content` separately from
@@ -528,6 +591,7 @@ async function callAnthropicStream(
     finalMsg.usage.input_tokens,
     finalMsg.usage.output_tokens,
   );
+  emitLlmTokenUsage('stream', model, 'anthropic', finalMsg.usage.input_tokens, finalMsg.usage.output_tokens, finalMsg.stop_reason ?? null);
   return fullText;
 }
 
@@ -552,6 +616,7 @@ async function callAnthropic(
   });
 
   void recordApiUsage(task, model, response.usage.input_tokens, response.usage.output_tokens);
+  emitLlmTokenUsage(task, model, 'anthropic', response.usage.input_tokens, response.usage.output_tokens, response.stop_reason ?? null);
   const content = response.content[0];
   return content.type === 'text' ? content.text : '';
 }
@@ -606,6 +671,7 @@ export async function callAnthropicWithTool(
     tool_choice: { type: 'tool', name: toolName },
   });
   void recordApiUsage(task, model, response.usage.input_tokens, response.usage.output_tokens);
+  emitLlmTokenUsage(task, model, 'anthropic', response.usage.input_tokens, response.usage.output_tokens, response.stop_reason ?? null);
   for (const block of response.content) {
     if (block.type === 'tool_use' && block.name === toolName) {
       return block.input;
@@ -716,6 +782,7 @@ export async function callDeepseekWithTool(
   });
   if (response.usage) {
     void recordApiUsage(task, model, response.usage.prompt_tokens, response.usage.completion_tokens);
+    emitLlmTokenUsage(task, model, 'deepseek', response.usage.prompt_tokens, response.usage.completion_tokens, response.choices[0]?.finish_reason ?? null);
   }
   const choice = response.choices[0];
   const toolCall = choice?.message?.tool_calls?.[0];
@@ -844,6 +911,15 @@ export interface MasterGroundingOptions {
   /** Force the grounding pipeline ON regardless of intent detection.
    *  Used by integration tests; production surfaces leave undefined. */
   forceEngage?: boolean;
+  /** Canonical opening ID the user is studying (e.g. 'italian-game',
+   *  'pro-carlsen-catalan'). When set, the grounding pipeline injects
+   *  pre-baked best-counter stats + a representative master game from
+   *  src/services/bestCounterService so the coach has instant
+   *  concept-level narration material per CLAUDE.md narration rule
+   *  ('name the concept every time'). Surfaces that don't know the
+   *  current openingId leave undefined — the live master-play
+   *  context still grounds based on currentFen. */
+  openingId?: string;
 }
 
 /** Move-question intent patterns. The detector matches the last user
@@ -1226,6 +1302,69 @@ export async function getCoachChatResponse(
     ? renderMasterPlayContextBlock(masterPlayContext)
     : '';
 
+  // Book grounding — pulls relevant passages from the 7 Gutenberg
+  // classics for any opening / concept named in the latest user
+  // message. Empty string when nothing matched; otherwise a compact
+  // reference block keyed off the same opening/concept vocabulary
+  // the narration generator uses. The brain grounds its prose in
+  // Capablanca / Lasker / Staunton rather than inventing stock
+  // explanations. See chessConceptService.ts for the data shape.
+  //
+  // KID CONTRACT — book grounding is GATED on `skipPersonality === false`.
+  // Pre-1929 chess prose can carry archaic phrasings, SAN, and adult
+  // language tone that violates the kid-safety prompt. Surfaces that
+  // pass `skipPersonality: true` (kid path via `getKidLlmResponse`)
+  // get NO book grounding. CLAUDE.md kid §3 + §17.
+  // Universal narration grounding: same loader stack `coachService.ask`
+  // runs (annotation / book passages / middlegame plan / model games).
+  // The legacy `buildCoachChatContext` covered only chess-concepts
+  // passages — this expansion folds in the other three curated
+  // sources so bypass paths (voice mic, puzzle feedback, smart search,
+  // walkthrough LLM narrator, content generation, …) all ship with
+  // the same shape of grounding the unified envelope already provides.
+  // Skipped on kid surfaces per CLAUDE.md kid §3.
+  const allMessagesText = messages.map((m) => m.content).join(' ');
+  const narrationGrounding = skipPersonality
+    ? { block: '', loadedCount: 0, loaded: { annotation: false, bookPassages: false, middlegamePlan: false, modelGames: false } }
+    : await buildNarrationGroundingBlock({
+        askText: allMessagesText,
+        // No reliable opening name or moveHistory in raw message text;
+        // the bookGrounding loader detects opening via concept scan
+        // on askText, and the annotation/plan/game loaders skip
+        // gracefully when nothing resolves. Bypass paths that DO have
+        // moveHistory (e.g. coachMoveCommentary, walkthroughLlmNarrator)
+        // already route via coachService.ask so the unified path handles
+        // them with full context.
+        moveHistory: [],
+        auditSource: 'coachApi.chatResponse',
+      });
+  const bookGroundingBlock = narrationGrounding.block;
+
+  // Verified trap/pitfall puzzle library. When the student names an
+  // opening AND the turn looks puzzle/trap-shaped, inject the
+  // Stockfish-verified lines for that opening so the coach hands out
+  // a REAL verified puzzle instead of inventing a position/solution.
+  // Gated off kid surfaces (skipPersonality). See verifiedLineLibrary.
+  let verifiedPuzzleBlock = '';
+  if (!skipPersonality) {
+    const lo = allMessagesText.toLowerCase();
+    const puzzleIntent = /\b(puzzle|trap|pitfall|tactic|drill|test me|quiz|win material|punish)\b/.test(lo);
+    if (puzzleIntent) {
+      // The library fuzzy-matches an opening name inside the message
+      // text, so passing the raw text hits when the opening is named.
+      const block = buildVerifiedPuzzleContext(allMessagesText);
+      if (block) {
+        verifiedPuzzleBlock = block;
+        void logAppAudit({
+          kind: 'book-grounding-injected',
+          category: 'subsystem',
+          source: 'coachApi.verifiedPuzzleLibrary',
+          summary: `verified trap/pitfall puzzle context injected (${block.length} chars)`,
+        });
+      }
+    }
+  }
+
   const buildSystemPromptFor = (extraAddendum: string = ''): string => {
     return buildSystemPromptWithVerbosity(
       SYSTEM_PROMPT,
@@ -1234,6 +1373,8 @@ export async function getCoachChatResponse(
         personalityAddition,
         responseLengthAddition,
         groundingBlock,
+        bookGroundingBlock,
+        verifiedPuzzleBlock,
         systemPromptAddition,
         extraAddendum,
       ]
@@ -1397,7 +1538,32 @@ export async function getCoachCommentary(
   const config = await getProviderConfig();
   if (!config) return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
 
-  const systemPrompt = buildSystemPromptWithVerbosity(SYSTEM_PROMPT, verbosity);
+  // Universal narration grounding: pull the four curated sources
+  // (annotations / classical book passages / middlegame plans /
+  // model games) into the system prompt so this bypass path gets
+  // the same opening-book context `coachService.ask` injects via
+  // its envelope. Without this, every getCoachCommentary call —
+  // puzzle feedback, post-game analysis, daily lesson, weekly
+  // report, content-generation prose, lesson narration — shipped
+  // book-blind. See `src/services/narrationGrounding.ts`.
+  const groundingMoveHistory = (() => {
+    if (!context.pgn) return [];
+    return context.pgn
+      .replace(/\d+\.+/g, ' ')
+      .split(/\s+/)
+      .filter((t) => t && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t));
+  })();
+  const grounding = await buildNarrationGroundingBlock({
+    askText: context.additionalContext ?? '',
+    openingName: context.openingName,
+    moveHistory: groundingMoveHistory,
+    auditSource: `coachApi.commentary.${task}`,
+  });
+  const systemPrompt = buildSystemPromptWithVerbosity(
+    SYSTEM_PROMPT,
+    verbosity,
+    grounding.block || undefined,
+  );
   const userMessage = buildChessContextMessage(context);
 
   try {

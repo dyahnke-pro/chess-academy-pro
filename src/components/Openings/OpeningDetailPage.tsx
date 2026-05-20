@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { sanitizeForTTS } from '../../services/voiceService';
+import { sanitizeForTTS, voiceService } from '../../services/voiceService';
 import { generateWalkthroughNarrations } from '../../services/walkthroughLlmNarrator';
 import { DrillMode } from './DrillMode';
 import { PracticeMode } from './PracticeMode';
@@ -16,9 +16,12 @@ import { MiddlegamePlansSection } from './MiddlegamePlansSection';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { CheckpointQuiz } from './CheckpointQuiz';
+import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { CommonMistakesSection } from './CommonMistakesSection';
+import { OpeningZoneHeader } from './OpeningZoneHeader';
 import { SidelineExplainer } from './SidelineExplainer';
 import commonMistakesData from '../../data/common-mistakes.json';
+import middlegamePlansData from '../../data/middlegame-plans.json';
 import checkpointQuizzesData from '../../data/checkpoint-quizzes.json';
 import type { CommonMistake, CheckpointQuizItem } from '../../types';
 import {
@@ -53,6 +56,8 @@ import {
   Volume2,
   Square as StopIcon,
   Crosshair,
+  GitBranch,
+  GraduationCap,
   Heart,
   PlayCircle,
   Loader2,
@@ -84,9 +89,12 @@ type ViewMode =
   | 'middlegame-plan'
   | 'middlegame-practice';
 
-function computeFenFromPgn(pgn: string): string {
+function computeFenFromPgn(pgn: string, setupFen?: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
-  const chess = new Chess();
+  // setupFen optional: puzzle-derived trap lines start from a
+  // middlegame position rather than move 1. See OpeningVariation
+  // type comment in src/types/index.ts.
+  const chess = setupFen ? new Chess(setupFen) : new Chess();
   for (const san of tokens) {
     try {
       chess.move(san);
@@ -110,7 +118,6 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeTrapLineIndex, setActiveTrapLineIndex] = useState(-1);
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
   const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [quizIndex, setQuizIndex] = useState(0);
@@ -163,10 +170,9 @@ export function OpeningDetailPage(): JSX.Element {
     }
   }, [opening, srsEnrolled, srsBusy]);
 
-  // Cleanup speech on unmount
   useEffect(() => {
     return () => {
-      window.speechSynthesis.cancel();
+      voiceService.stop();
     };
   }, []);
 
@@ -271,22 +277,10 @@ export function OpeningDetailPage(): JSX.Element {
       setNarratingSection(null);
       return;
     }
-    // Sanitize chess notation + piece-letter shorthand before the Web
-    // Speech engine sees it. Raw SpeechSynthesisUtterance bypasses
-    // voiceService, so we normalise here instead.
-    const utterance = new SpeechSynthesisUtterance(sanitizeForTTS(text));
-    utterance.rate = 0.95;
-    utterance.onend = () => {
-      setNarratingSection(null);
-      utteranceRef.current = null;
-    };
-    utterance.onerror = () => {
-      setNarratingSection(null);
-      utteranceRef.current = null;
-    };
-    utteranceRef.current = utterance;
     setNarratingSection(sectionId);
-    window.speechSynthesis.speak(utterance);
+    void voiceService.speakForced(sanitizeForTTS(text)).finally(() => {
+      setNarratingSection((current) => (current === sectionId ? null : current));
+    });
   }, []);
 
   const toggleNarration = useCallback((
@@ -295,17 +289,14 @@ export function OpeningDetailPage(): JSX.Element {
     options?: { kind?: 'traps' | 'warnings'; bullets?: string[] | null },
   ): void => {
     if (narratingSection === sectionId || loadingSection === sectionId) {
-      // Stop (or cancel an in-flight fetch)
-      window.speechSynthesis.cancel();
+      voiceService.stop();
       narrationRequestToken.current += 1;
       setNarratingSection(null);
       setLoadingSection(null);
-      utteranceRef.current = null;
       return;
     }
 
-    // Stop any current narration
-    window.speechSynthesis.cancel();
+    voiceService.stop();
     narrationRequestToken.current += 1;
     const token = narrationRequestToken.current;
 
@@ -340,18 +331,18 @@ export function OpeningDetailPage(): JSX.Element {
   // Precompute variation FENs for thumbnails
   const variationFens = useMemo((): string[] => {
     if (!opening?.variations) return [];
-    return opening.variations.map((v) => computeFenFromPgn(v.pgn));
+    return opening.variations.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
   }, [opening?.variations]);
 
   // Precompute trap/warning line FENs for thumbnails
   const trapLineFens = useMemo((): string[] => {
     if (!opening?.trapLines) return [];
-    return opening.trapLines.map((v) => computeFenFromPgn(v.pgn));
+    return opening.trapLines.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
   }, [opening?.trapLines]);
 
   const warningLineFens = useMemo((): string[] => {
     if (!opening?.warningLines) return [];
-    return opening.warningLines.map((v) => computeFenFromPgn(v.pgn));
+    return opening.warningLines.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
   }, [opening?.warningLines]);
 
   if (loading) {
@@ -577,6 +568,11 @@ export function OpeningDetailPage(): JSX.Element {
 
   // Data lookups for new features
   const mistakes = (commonMistakesData as Record<string, CommonMistake[]>)[opening.id] ?? [];
+  // Middlegame plans for this opening — used for the Master zone's
+  // "listen" narration (plan titles + overviews).
+  const openingPlans = (middlegamePlansData as MiddlegamePlan[]).filter(
+    (p) => p.openingId === opening.id,
+  );
   const quizzes = (checkpointQuizzesData as Record<string, CheckpointQuizItem[]>)[opening.id] ?? [];
   const currentQuiz: CheckpointQuizItem | null = quizzes[quizIndex] as CheckpointQuizItem | undefined ?? null;
 
@@ -747,6 +743,28 @@ export function OpeningDetailPage(): JSX.Element {
         </p>
       )}
 
+      {/* ═══ ZONE 2 — UNDERSTAND ═══════════════════════════════════════
+          "Here's what this opening IS and what masters have said
+          about it." Contains: Overview + Key Ideas + Classic Wisdom.
+          See docs/plans/2026-05-19-narration-tone-rewrite.md for the
+          full teaching arc design. */}
+      <OpeningZoneHeader
+        color="cyan"
+        icon={BookOpen}
+        title="Understand"
+        tagline="What this opening is and what masters have said about it."
+        isActive={narratingSection === 'understand-zone'}
+        onActivate={() => {
+          const parts = [
+            opening.overview,
+            opening.keyIdeas && opening.keyIdeas.length > 0
+              ? `Key ideas. ${opening.keyIdeas.join('. ')}`
+              : '',
+          ].filter(Boolean);
+          if (parts.length > 0) toggleNarration('understand-zone', parts.join('. '));
+        }}
+      />
+
       {/* Overview */}
       {opening.overview && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4">
@@ -778,6 +796,35 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
+      {/* Classic Wisdom — passages from Capablanca / Lasker / Staunton /
+          Young / Edge / Bird (Project Gutenberg, public domain) that
+          mention this opening. Renders nothing if no passages matched. */}
+      <ClassicWisdomSection
+        openingName={opening.name}
+        renderNarrationButton={(text) => (
+          <NarrationButton sectionId="classic-wisdom" text={text} />
+        )}
+        onActivate={(text) => toggleNarration('classic-wisdom', text)}
+      />
+
+      {/* ═══ ZONE 3 — MASTER ═══════════════════════════════════════════
+          "Test what you grasped. See the plans. Study one complete
+          game." Contains: Quiz + Middlegame Plans + Model Games. */}
+      <OpeningZoneHeader
+        color="blue"
+        icon={GraduationCap}
+        title="Master"
+        tagline="Test what you grasped. See the plans. Study one complete game."
+        isActive={narratingSection === 'master-zone'}
+        onActivate={() => {
+          if (openingPlans.length === 0) return;
+          const text = openingPlans
+            .map((p) => `${p.title}. ${p.overview}`)
+            .join('. ');
+          toggleNarration('master-zone', text);
+        }}
+      />
+
       {/* Checkpoint Quiz — after Key Ideas */}
       {currentQuiz && !quizCompleted && (
         <CheckpointQuiz
@@ -807,20 +854,33 @@ export function OpeningDetailPage(): JSX.Element {
         onSelectGame={handleSelectModelGame}
       />
 
-      {/* Common Mistakes */}
-      {mistakes.length > 0 && (
-        <CommonMistakesSection
-          mistakes={mistakes}
-          boardOrientation={opening.color}
-        />
-      )}
+      {/* ═══ ZONE 4 — WEAPONS ══════════════════════════════════════════
+          "Sharp lines where YOU win material. Drill these." Contains:
+          Trap Lines + Trap Bullets. (Common Mistakes moved to Zone 5
+          Pitfalls below — they describe what NOT to do, not what to
+          weaponize.) */}
+      <OpeningZoneHeader
+        color="emerald"
+        icon={Crosshair}
+        title="Weapons"
+        tagline="Sharp lines where YOU win material. Drill these."
+        aside={
+          opening.trapLines && opening.trapLines.length > 0 ? (
+            <span className="text-xs font-semibold text-emerald-400">
+              {opening.trapLines.length} lines
+            </span>
+          ) : undefined
+        }
+      />
 
-      {/* Traps */}
+      {/* Traps — the Weapons zone card. Outlined green to match the
+          zone header; the card title is dropped because the zone
+          header already reads "Weapons" (David 2026-05-20). */}
       {opening.traps && opening.traps.length > 0 && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4">
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-emerald-500/30">
           <div className="flex items-center gap-2 mb-2">
-            <Target size={14} className="text-green-500" />
-            <h3 className="text-sm font-semibold text-theme-text">Traps & Pitfalls</h3>
+            <Target size={14} className="text-emerald-500" />
+            <h3 className="text-sm font-semibold text-theme-text">Weapons</h3>
             <NarrationButton
               sectionId="traps"
               text={opening.traps.join('. ')}
@@ -908,9 +968,28 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
-      {/* Warnings */}
+      {/* ═══ ZONE 5 — PITFALLS ═════════════════════════════════════════
+          "Don't fall into these. Avoid these moves." Contains:
+          Warning Lines (specific PGNs that punish the student) +
+          Common Mistakes (move-by-move corrections). */}
+      <OpeningZoneHeader
+        color="amber"
+        icon={AlertTriangle}
+        title="Pitfalls"
+        tagline="Don't fall into these. Avoid these moves."
+        aside={
+          (opening.warningLines?.length ?? 0) + mistakes.length > 0 ? (
+            <span className="text-xs font-semibold text-amber-400">
+              {(opening.warningLines?.length ?? 0) + mistakes.length} items
+            </span>
+          ) : undefined
+        }
+      />
+
+      {/* Warnings — Pitfalls zone card, amber outline to match the
+          zone header (David 2026-05-20). */}
       {opening.warnings && opening.warnings.length > 0 && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4">
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-amber-500/30">
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle size={14} className="text-amber-500" />
             <h3 className="text-sm font-semibold text-theme-text">Watch Out For</h3>
@@ -1001,12 +1080,41 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
-      {/* Variations (lines) */}
+      {/* Common Mistakes — Pitfalls zone tail (moved from above
+          Traps section so the teaching arc reads Weapons → Pitfalls).
+          Amber-outlined to match the zone (David 2026-05-20). */}
+      {mistakes.length > 0 && (
+        <div className="rounded-xl border border-amber-500/30">
+          <CommonMistakesSection
+            mistakes={mistakes}
+            boardOrientation={opening.color}
+          />
+        </div>
+      )}
+
+      {/* ═══ ZONE 6 — VARIATIONS ═══════════════════════════════════════
+          The named sub-line list. The zone header is the ONLY header
+          for this block — the inner card's redundant "Lines (N)"
+          title was dropped so Depth + sublines read as one unit
+          (David 2026-05-20: "depth variations are separated"). */}
+      <OpeningZoneHeader
+        color="slate"
+        icon={GitBranch}
+        title="Variations"
+        tagline="Every named sub-line. Browse them to go deeper."
+        aside={
+          opening.variations && opening.variations.length > 0 ? (
+            <span className="text-xs font-semibold text-slate-400">
+              {opening.variations.length} lines
+            </span>
+          ) : undefined
+        }
+      />
+
+      {/* Variations (lines) — no inner header; the zone header above
+          is the single title for this section. */}
       {opening.variations && opening.variations.length > 0 && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4">
-          <h3 className="text-sm font-semibold text-theme-text mb-3">
-            Lines ({opening.variations.length})
-          </h3>
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-slate-500/30">
           <div className="space-y-1">
             {opening.variations.map((variation, i) => {
               const isDiscovered = opening.linesDiscovered?.includes(i) ?? false;

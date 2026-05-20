@@ -1,0 +1,44 @@
+{
+  "openingId": "benoni-defence",
+  "fromPgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6",
+  "depth": 10,
+  "games": [
+    {
+      "id": "hOrznatU",
+      "white": "Keymer, Vincent",
+      "whiteRating": 2738,
+      "black": "Carlsen, M.",
+      "blackRating": 2830,
+      "winner": "black",
+      "year": 2024,
+      "month": "2024-03",
+      "url": "https://lichess.org/hOrznatU",
+      "pgn": "[Event \"GRENKE Chess Classic 2024\"]\n[Site \"Karlsruhe GER\"]\n[Date \"2024.03.28\"]\n[Round \"5.2\"]\n[White \"Keymer, Vincent\"]\n[Black \"Carlsen, M.\"]\n[Result \"0-1\"]\n[GameId \"hOrznatU\"]\n[WhiteElo \"2738\"]\n[BlackElo \"2830\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A61\"]\n[Opening \"Benoni Defense\"]\n[Termination \"Unknown\"]\n\n1. d4 Nf6 2. c4 e6 3. Nc3 c5 4. d5 exd5 5. cxd5 d6 6. Nf3 g6 7. Bf4 Bg7 8. Qa4+ Bd7 9. Qb3 b5 10. Bxd6 Qb6 11. Be5 O-O 12. e3 c4 13. Qd1 b4 14. Nb1 Bb5 15. a4 Ba6 16. Nbd2 Rc8 17. Rc1 c3 18. bxc3 Bxf1 19. Kxf1 Nbd7 20. Bxf6 Nxf6 21. cxb4 Qa6+ 22. b5 Rxc1 23. Qxc1 Qxa4 24. g3 Qxb5+ 25. Kg2 Qxd5 26. Qc4 a5 27. Ra1 Qxc4 28. Nxc4 a4 29. Nb6 Nd5 30. Rxa4 Nxb6 31. Rb4 Nd5 32. Rb7 h6 33. Rd7 Nc3 34. Rd2 Bf6 35. h4 Ra2 36. Rxa2 Nxa2 37. Ne1 Nb4 38. Nf3 Bc3 39. Ng1 Kg7 40. Kf3 Kf6 41. Ne2 Be5 42. Ng1 Ke6 43. Ne2 Kd5 44. Ng1 Nd3 45. Ke2 Nc1+ 46. Kd2 Na2 47. Kd3 Nc3 48. Nf3 Ne4 49. Ke2 Bg7 50. Ne1 Kc4 51. Kf3 Nc3 52. Kg2 Nd5 53. Kf1 Bc3 54. Nf3 Kd3 55. Ng1 Nf6 56. Nh3 Be5 57. Ng1 Ne4 58. Kg2 f5 59. Nh3 g5 60. hxg5 hxg5 61. f4 g4 62. fxe5 gxh3+ 63. Kxh3 Ng5+ 64. Kh4 Nf3+ 65. Kh5 Nxe5 66. Kg5 Ke4 0-1\n\n\n"
+    },
+    {
+      "id": "y7snSUrH",
+      "white": "So, W.",
+      "whiteRating": 2752,
+      "black": "Nakamura, Hi",
+      "blackRating": 2788,
+      "winner": null,
+      "year": 2023,
+      "month": "2023-12",
+      "url": "https://lichess.org/y7snSUrH",
+      "pgn": "[Event \"CCT Final Playoff 2023\"]\n[Site \"Toronto CAN\"]\n[Date \"2023.12.09\"]\n[Round \"1.2\"]\n[White \"So, W.\"]\n[Black \"Nakamura, Hi\"]\n[Result \"1/2-1/2\"]\n[GameId \"y7snSUrH\"]\n[WhiteElo \"2752\"]\n[BlackElo \"2788\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A65\"]\n[Opening \"Benoni Defense: King's Pawn Line\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 c5 3. d5 e6 4. Nc3 exd5 5. cxd5 d6 6. e4 a6 7. a4 g6 8. h3 Bg7 9. Bd3 O-O 10. Nf3 Nbd7 11. O-O Nh5 12. Bg5 Qc7 13. Nd2 Rb8 14. a5 Ne5 15. Be2 f5 16. Bxh5 gxh5 17. Qxh5 b5 18. Bh6 Nd3 19. f4 fxe4 20. Ndxe4 Bf5 21. Bxg7 Qxg7 22. Nxd6 Bg6 23. Qg4 Qd4+ 24. Kh2 Nxf4 25. Rae1 Nd3 26. Re4 Qg7 27. Nf5 Bxf5 28. Rxf5 Qxg4 29. Rxg4+ Kh8 30. Rxf8+ Rxf8 31. Ne4 c4 32. d6 Rd8 33. Nf6 Ne5 34. Rg3 Ng6 35. Ne4 Kg7 36. Rg5 Kf7 37. Rh5 Ke6 38. Nc5+ Kf6 39. Ne4+ Kg7 40. Rc5 Nf4 41. Rc6 Kf7 42. Rxa6 Ke6 43. Rb6 Ke5 44. Ng5 Rd7 45. Rxb5+ Kxd6 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "u5A3k7ZK",
+      "white": "So, W.",
+      "whiteRating": 2767,
+      "black": "Mamedyarov, S.",
+      "blackRating": 2767,
+      "winner": "white",
+      "year": 2019,
+      "month": "2019-10",
+      "url": "https://lichess.org/u5A3k7ZK",
+      "pgn": "[Event \"chess.com Speed 2019\"]\n[Site \"chess.com INT\"]\n[Date \"2019.10.02\"]\n[Round \"1.22\"]\n[White \"So, W.\"]\n[Black \"Mamedyarov, S.\"]\n[Result \"1-0\"]\n[GameId \"u5A3k7ZK\"]\n[WhiteElo \"2767\"]\n[BlackElo \"2767\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A61\"]\n[Opening \"Benoni Defense\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 c5 3. d5 e6 4. Nc3 exd5 5. cxd5 d6 6. Nf3 g6 7. Bf4 Bg7 8. e3 O-O 9. h3 a6 10. a4 Re8 11. Nd2 Nh5 12. Bh2 Nd7 13. Be2 Be5 14. Bxh5 gxh5 15. Qxh5 Bxh2 16. Rxh2 Ne5 17. Kf1 Ng6 18. Nde4 Re5 19. Qe2 Bf5 20. Ng3 Bd7 21. a5 Qh4 22. Qd2 Rae8 23. Kg1 h5 24. Nge2 Rg5 25. f4 Rf5 26. e4 Rxf4 27. g3 1-0\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:48:49.773Z"
+}

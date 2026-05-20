@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black commits to the King's Indian Defense setup, preparing to fianchetto the dark-squared bishop and fight for control of the long diagonal. This move is the hallmark of the King's Indian - Black is willing to allow us a strong pawn center in exchange for piece activity and long-term counterplay against our kingside. Our opponent is essentially betting that the fianchettoed bishop on g7 will become a powerful attacking piece, especially if we castle kingside and allow Black to build pressure along the h8-a1 diagonal. We should recognize that Black is planning a setup that often leads to sharp, tactical middlegames where both sides will be attacking on opposite flanks.",
-      "shortNarration": "Black fianchettoes the bishop to g7, betting on counterplay against our kingside after we castle short."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto to g7, betting on counterplay against our kingside after we castle short."
     },
     {
       "san": "Nc3",

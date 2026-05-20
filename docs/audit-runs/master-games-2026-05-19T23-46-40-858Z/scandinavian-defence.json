@@ -1,0 +1,44 @@
+{
+  "openingId": "scandinavian-defence",
+  "fromPgn": "e4 d5 exd5 Qxd5 Nc3 Qa5",
+  "depth": 6,
+  "games": [
+    {
+      "id": "qGeCrW3o",
+      "white": "Caruana, F.",
+      "whiteRating": 2805,
+      "black": "Carlsen, M.",
+      "blackRating": 2876,
+      "winner": null,
+      "year": 2015,
+      "month": "2015-06",
+      "url": "https://lichess.org/qGeCrW3o",
+      "pgn": "[Event \"3rd Norway Blitz 2015\"]\n[Site \"Stavanger NOR\"]\n[Date \"2015.06.15\"]\n[Round \"3.4\"]\n[White \"Caruana, F.\"]\n[Black \"Carlsen, M.\"]\n[Result \"1/2-1/2\"]\n[GameId \"qGeCrW3o\"]\n[WhiteElo \"2805\"]\n[BlackElo \"2876\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B01\"]\n[Opening \"Scandinavian Defense: Main Line\"]\n[Termination \"Normal\"]\n\n1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. Nf3 Nf6 5. d4 c6 6. Bc4 Bg4 7. h3 Bxf3 8. Qxf3 e6 9. Bd2 Qc7 10. O-O-O Nbd7 11. Ne4 Nxe4 12. Qxe4 Bd6 13. Kb1 Nf6 14. Qf3 O-O 15. Bd3 a5 16. h4 Nd5 17. h5 Rfd8 18. Qe4 Nf6 19. Qe2 Bf4 20. Bxf4 Qxf4 21. g3 Qg5 22. c3 h6 23. Bc2 Kf8 24. Rde1 c5 25. dxc5 Qxc5 26. Rd1 b5 27. Rxd8+ Rxd8 28. Rd1 Rc8 29. a3 Qxh5 30. Qxh5 Nxh5 31. Rd7 b4 32. cxb4 axb4 33. axb4 Nf6 34. Rb7 Nd5 35. b5 Nb4 36. Be4 Rc4 37. Bg2 Rd4 38. Rc7 Rd1+ 39. Rc1 Rxc1+ 40. Kxc1 Ke7 41. Kd2 Kd6 42. b6 h5 43. f4 f6 44. Kc3 Nc6 45. b7 Nb8 46. Kd4 Nd7 47. b4 Kc7 48. Bf3 g6 49. Be4 g5 50. fxg5 fxg5 51. Bf3 h4 52. g4 h3 53. b5 h2 54. Bh1 Nf6 55. Ke5 Nxg4+ 56. Kxe6 Nf2 57. Bg2 Nd1 58. Ke5 Kb8 59. Ke4 Nf2+ 60. Kf5 h1=Q 61. Bxh1 Nxh1 62. Kxg5 Kxb7 63. b6 Kxb6 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "06wNUWaA",
+      "white": "Firouzja, Alireza",
+      "whiteRating": 2759,
+      "black": "Carlsen, M.",
+      "blackRating": 2847,
+      "winner": "white",
+      "year": 2021,
+      "month": "2021-08",
+      "url": "https://lichess.org/06wNUWaA",
+      "pgn": "[Event \"Aimchess US Rapid Prelim\"]\n[Site \"chess24.com INT\"]\n[Date \"2021.08.28\"]\n[Round \"4.3\"]\n[White \"Firouzja, Alireza\"]\n[Black \"Carlsen, M.\"]\n[Result \"1-0\"]\n[GameId \"06wNUWaA\"]\n[WhiteElo \"2759\"]\n[BlackElo \"2847\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B01\"]\n[Opening \"Scandinavian Defense: Classical Variation\"]\n[Termination \"Normal\"]\n\n1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 6. Ne5 c6 7. Bc4 e6 8. g4 Bg6 9. h4 Nbd7 10. Nxd7 Nxd7 11. h5 Be4 12. O-O Bd5 13. Nxd5 cxd5 14. Bd3 Bd6 15. Qf3 O-O-O 16. Be3 g6 17. h6 Rhf8 18. a3 f5 19. c4 e5 20. b4 Qc7 21. c5 Be7 22. Bb5 e4 23. Qh3 f4 24. Bd2 Bg5 25. c6 Nf6 26. cxb7+ Qxb7 27. Rac1+ Kb8 28. Bc6 Qe7 29. Rc5 e3 30. fxe3 fxe3 31. Be1 Ne4 32. Qh2+ Kc8 33. Bd7+ Kxd7 34. Rc7+ Ke6 35. Qe5# 1-0\n\n\n"
+    },
+    {
+      "id": "K3TNuDAQ",
+      "white": "Dominguez Perez, L.",
+      "whiteRating": 2758,
+      "black": "Carlsen, M.",
+      "blackRating": 2847,
+      "winner": null,
+      "year": 2021,
+      "month": "2021-08",
+      "url": "https://lichess.org/K3TNuDAQ",
+      "pgn": "[Event \"Aimchess US Rapid Prelim\"]\n[Site \"chess24.com INT\"]\n[Date \"2021.08.29\"]\n[Round \"8.5\"]\n[White \"Dominguez Perez, L.\"]\n[Black \"Carlsen, M.\"]\n[Result \"1/2-1/2\"]\n[GameId \"K3TNuDAQ\"]\n[WhiteElo \"2758\"]\n[BlackElo \"2847\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B01\"]\n[Opening \"Scandinavian Defense: Classical Variation\"]\n[Termination \"Normal\"]\n\n1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. d4 Nf6 5. Nf3 Bf5 6. Bd2 c6 7. Bc4 Nbd7 8. Qe2 Qc7 9. O-O-O e6 10. Nh4 Bg6 11. Nxg6 hxg6 12. d5 cxd5 13. Nxd5 Nxd5 14. Bxd5 O-O-O 15. Bf3 Bd6 16. g3 Ne5 17. Bc3 Nxf3 18. Qxf3 f5 19. Qe3 e5 20. Qxa7 Qc6 21. Qa8+ Kd7 22. Qa5 Ke6 23. Rhe1 Bc7 24. Qb4 Rxd1+ 25. Rxd1 Rxh2 26. Qf8 Rh1 27. Be1 Qe4 28. Qxg7 Rxe1 29. Qxg6+ Ke7 30. Qg7+ Ke6 31. Qd7+ Kf6 32. Qxc7 Rxd1+ 33. Kxd1 Qd5+ 34. Kc1 Qh1+ 35. Kd2 Qd5+ 36. Kc3 Qf3+ 37. Kb4 Qxf2 38. Qd6+ Kg5 39. Qxe5 Qxc2 40. Qf4+ Kg6 41. Qd4 Kg5 42. a4 Qe4 43. Qxe4 fxe4 44. Kc3 Kg4 45. Kd2 Kf3 46. Ke1 Kxg3 47. b4 Kf4 48. a5 Ke5 49. b5 Kd5 50. a6 bxa6 51. bxa6 Kc6 52. Ke2 Kb6 53. Ke3 Kxa6 54. Kxe4 1/2-1/2\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:47:48.812Z"
+}

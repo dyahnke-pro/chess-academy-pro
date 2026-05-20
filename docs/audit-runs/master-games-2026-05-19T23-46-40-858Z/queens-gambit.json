@@ -1,0 +1,44 @@
+{
+  "openingId": "queens-gambit",
+  "fromPgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7",
+  "depth": 8,
+  "games": [
+    {
+      "id": "87iVR0xv",
+      "white": "So, W.",
+      "whiteRating": 2812,
+      "black": "Kramnik, V.",
+      "blackRating": 2808,
+      "winner": null,
+      "year": 2017,
+      "month": "2017-07",
+      "url": "https://lichess.org/87iVR0xv",
+      "pgn": "[Event \"GCT Blitz YourNextMove\"]\n[Site \"Leuven BEL\"]\n[Date \"2017.07.02\"]\n[Round \"12.2\"]\n[White \"So, W.\"]\n[Black \"Kramnik, V.\"]\n[Result \"1/2-1/2\"]\n[GameId \"87iVR0xv\"]\n[WhiteElo \"2812\"]\n[BlackElo \"2808\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"D55\"]\n[Opening \"Queen's Gambit Declined: Neo-Orthodox Variation, Main Line\"]\n[Termination \"Normal\"]\n\n1. c4 e6 2. Nc3 d5 3. d4 Nf6 4. Bg5 Be7 5. e3 h6 6. Bh4 O-O 7. Nf3 Nbd7 8. Rc1 c5 9. dxc5 Nxc5 10. cxd5 g5 11. Bg3 Nxd5 12. Nxd5 Qxd5 13. Qxd5 exd5 14. Be5 Bf5 15. Be2 Rac8 16. O-O Bd3 17. Bxd3 Nxd3 18. Rcd1 Nxe5 19. Nxe5 Rc2 20. Rxd5 Rxb2 21. Rd7 Bf6 22. Nc4 Rxa2 23. Rxb7 Rd8 24. h3 a5 25. Ra7 a4 26. Rb1 Bg7 27. g4 Bf8 28. Kg2 a3 29. Rb3 Rc2 30. Nxa3 Bxa3 31. Raxa3 Rdd2 32. Rb6 Rxf2+ 33. Kg3 Kg7 34. Raa6 Rg2+ 35. Kf3 Rcf2+ 36. Ke4 Rg3 37. Rxh6 Rff3 38. Rh5 Rxe3+ 39. Kd4 Rd3+ 40. Kc4 Rc3+ 41. Kd4 Rcd3+ 42. Kc4 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "G2rC8V4M",
+      "white": "Mamedyarov, S.",
+      "whiteRating": 2808,
+      "black": "Kramnik, V.",
+      "blackRating": 2792,
+      "winner": "black",
+      "year": 2018,
+      "month": "2018-06",
+      "url": "https://lichess.org/G2rC8V4M",
+      "pgn": "[Event \"GCT Blitz Paris 2018\"]\n[Site \"Paris FRA\"]\n[Date \"2018.06.23\"]\n[Round \"2.4\"]\n[White \"Mamedyarov, S.\"]\n[Black \"Kramnik, V.\"]\n[Result \"0-1\"]\n[GameId \"G2rC8V4M\"]\n[WhiteElo \"2808\"]\n[BlackElo \"2792\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"D53\"]\n[Opening \"Queen's Gambit Declined\"]\n[Termination \"Normal\"]\n\n1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bg5 Be7 5. e3 Nbd7 6. Qc2 h6 7. Bh4 c5 8. dxc5 O-O 9. Rd1 Nxc5 10. Nf3 Bd7 11. Ne5 Rc8 12. Be2 Nfe4 13. Bxe7 Qxe7 14. Nxe4 dxe4 15. Nxd7 Nxd7 16. Qxe4 Qb4+ 17. Kf1 Rfd8 18. b3 Nf6 19. Qc2 Rxd1+ 20. Qxd1 Qa5 21. Bf3 Rd8 22. Qb1 Rd2 23. g3 g5 24. h3 Rxa2 25. Kg2 Qd2 26. Rf1 b6 27. Qc1 a5 28. c5 bxc5 29. Qxc5 Kg7 30. Qc1 Nd7 31. Qxd2 Rxd2 32. Rd1 Rxd1 33. Bxd1 Nc5 34. Bc2 e5 35. f4 exf4 36. exf4 gxf4 37. gxf4 Ne6 38. Kg3 Kf6 39. Kg4 Nd4 40. Bd1 Kg6 41. Kh4 Nf5+ 0-1\n\n\n"
+    },
+    {
+      "id": "mbFAORpx",
+      "white": "So, W.",
+      "whiteRating": 2770,
+      "black": "Kramnik, Vladimir",
+      "blackRating": 2812,
+      "winner": null,
+      "year": 2016,
+      "month": "2016-06",
+      "url": "https://lichess.org/mbFAORpx",
+      "pgn": "[Event \"GCT Rapid YourNextMove\"]\n[Site \"Leuven BEL\"]\n[Date \"2016.06.17\"]\n[Round \"2.2\"]\n[White \"So, W.\"]\n[Black \"Kramnik, Vladimir\"]\n[Result \"1/2-1/2\"]\n[GameId \"mbFAORpx\"]\n[WhiteElo \"2770\"]\n[BlackElo \"2812\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"D53\"]\n[Opening \"Queen's Gambit Declined\"]\n[Termination \"Normal\"]\n\n1. c4 e6 2. Nc3 d5 3. d4 Nf6 4. Bg5 Be7 5. e3 Nbd7 6. Nf3 h6 7. Bh4 O-O 8. Qc2 c5 9. Rd1 Qa5 10. cxd5 Nxd5 11. Bxe7 Nxe7 12. Be2 Nf6 13. O-O cxd4 14. Rxd4 Nc6 15. Rd2 Bd7 16. Rfd1 Rfd8 17. Qb3 Rab8 18. a3 a6 19. Bd3 Be8 20. Bb1 Rxd2 21. Nxd2 Ne5 22. Nc4 Nxc4 23. Qxc4 Bc6 24. Qd4 Rc8 25. h3 Qh5 26. Rd2 Qg5 27. f3 e5 28. Qd3 e4 29. fxe4 Re8 30. Qd4 Nd7 31. Rf2 Ne5 32. Ba2 Rd8 33. Nd5 Bxd5 34. exd5 Rd6 35. Bb1 g6 36. Be4 Qe7 37. Bf3 Rd8 38. Bg4 Qc7 39. Rf1 h5 40. Be2 Qd6 41. e4 Rc8 42. Bd3 Kg7 43. Qe3 b5 44. Kh1 Rc7 45. Qf4 f6 46. Qd2 Qc5 47. Bb1 g5 48. Qe2 h4 49. Bd3 1/2-1/2\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:48:02.338Z"
+}

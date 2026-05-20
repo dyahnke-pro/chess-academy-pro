@@ -33,27 +33,27 @@
     },
     {
       "san": "a4",
-      "annotation": "Continuing Polish Opening Rooks Swap Line: a4 is a known theory move in this line.",
+      "annotation": "White advances the a-pawn to support the b5 outpost and threaten Black's a6 pawn, forcing a critical decision on whether to allow further queenside pressure.",
       "shortNarration": "a4 is theory in the Polish Opening Rooks Swap line."
     },
     {
       "san": "axb5",
-      "annotation": "Continuing Polish Opening Rooks Swap Line: axb5 is a known theory move in this line.",
+      "annotation": "Black captures on b5, accepting the trade and simplifying the queenside while keeping the position structurally balanced.",
       "shortNarration": "axb5 is the theory move in the Polish Opening Rooks Swap line."
     },
     {
       "san": "axb5",
-      "annotation": "Continuing Polish Opening Rooks Swap Line: axb5 is a known theory move in this line.",
+      "annotation": "White recaptures with the a-pawn, maintaining a strong pawn on b5 and controlling key central files while keeping material equal.",
       "shortNarration": "axb5 is the theory move in the Polish Opening Rooks Swap Line."
     },
     {
       "san": "Rxa1",
-      "annotation": "Continuing Polish Opening Rooks Swap Line: Rxa1 is a known theory move in this line.",
+      "annotation": "Black exchanges rooks immediately, eliminating White's potential attacking piece and steering toward a quieter position with queens still on.",
       "shortNarration": "Rxa1 is the theory move in this Polish Opening line."
     },
     {
       "san": "Bxa1",
-      "annotation": "Continuing Polish Opening Rooks Swap Line: Bxa1 is a known theory move in this line.",
+      "annotation": "White recaptures with the bishop, placing it actively on a1 and completing the characteristic rook trade that defines this line's strategic framework.",
       "shortNarration": "Bxa1 is the theory move in the Polish Opening Rooks Swap Line."
     }
   ]

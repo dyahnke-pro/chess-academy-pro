@@ -184,7 +184,12 @@ export function AppLayout(): JSX.Element {
   void coachDrawerOpen;
 
   return (
-    <div className="flex flex-col min-h-dvh" style={{ background: 'var(--color-bg)' }}>
+    <div
+      className="flex flex-col min-h-dvh"
+      style={{ background: 'var(--color-bg)' }}
+      data-testid="app-layout"
+      data-profile-loaded={activeProfile ? 'true' : 'false'}
+    >
       <OfflineBanner />
 
       {bgAnalysisRunning && (

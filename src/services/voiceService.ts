@@ -9,7 +9,59 @@ import { stripCoachMarkup, formatForSpeech } from './sanitizeCoachText';
 import { db } from '../db/schema';
 import type { CoachPersonality } from '../coach/types';
 import { useAppStore } from '../stores/appStore';
-import { resolveCoachNarration } from '../utils/coachNarration';
+import { resolveCoachNarration, applyBriefVoiceCap } from '../utils/coachNarration';
+
+/** Shape of `window.ManagedMediaSource` on iOS Safari 17.1+. Not in
+ *  lib.dom.d.ts yet, so we describe just the surface we use:
+ *  constructor + static `isTypeSupported`, plus the two new
+ *  lifecycle events on instances. The runtime object extends
+ *  `MediaSource`, so we narrow to that for everything else. */
+interface ManagedMediaSourceCtor {
+  new (): MediaSource;
+  isTypeSupported(type: string): boolean;
+}
+
+export function getManagedMediaSource(): ManagedMediaSourceCtor | null {
+  if (typeof window === 'undefined') return null;
+  const mms = (window as unknown as { ManagedMediaSource?: ManagedMediaSourceCtor }).ManagedMediaSource;
+  return mms ?? null;
+}
+
+/** Pure decision function — does the runtime support progressive
+ *  MP3 streaming? Extracted from the class so unit tests can probe
+ *  every UA + capability combination without spinning a VoiceService.
+ *
+ *  Decision order (mirrors what the platform actually exposes):
+ *    1. ManagedMediaSource present (iOS 17.1+): ask its
+ *       `isTypeSupported` — that's the only path to streaming on iOS.
+ *    2. No MediaSource at all (old Chrome / Firefox / Safari): false.
+ *    3. iOS UA + no ManagedMediaSource (iOS < 17.1): false. The bare
+ *       MediaSource on iOS is restricted in ways that break our
+ *       pipeline.
+ *    4. Everything else (desktop Chrome / Firefox / Safari + Android
+ *       Chrome / Firefox / Samsung Internet): ask MediaSource's
+ *       `isTypeSupported`. Android Chrome has supported audio/mpeg
+ *       in MediaSource since ~Chrome 30, so this returns true on any
+ *       modern Android device. */
+export function canStreamProgressivePlaybackFor(
+  hasMediaSource: boolean,
+  mediaSourceIsTypeSupported: (type: string) => boolean,
+  managedMediaSource: ManagedMediaSourceCtor | null,
+  userAgent: string,
+  hasTouchAndMac: boolean,
+): boolean {
+  if (managedMediaSource) {
+    try { return managedMediaSource.isTypeSupported('audio/mpeg'); } catch { return false; }
+  }
+  if (!hasMediaSource) return false;
+  const isIos = /iPhone|iPad|iPod/.test(userAgent) || (userAgent.includes('Mac') && hasTouchAndMac);
+  if (isIos) return false;
+  try {
+    return mediaSourceIsTypeSupported('audio/mpeg');
+  } catch {
+    return false;
+  }
+}
 
 // WO-COACH-PERSONALITY-VOICE — voice and personality are orthogonal
 // dials. Each personality has a default voice (the one that matches
@@ -253,17 +305,56 @@ export function sanitizeForTTS(text: string): string {
   out = out.replace(CASTLE_QUEEN_RE, 'castle queenside');
   out = out.replace(CASTLE_KING_RE, 'castle kingside');
   // Pawn captures: "exd5" → "e-pawn takes d5"
-  out = out.replace(PAWN_CAPTURE_RE, (_, file: string, dest: string) => `${file}-pawn takes ${dest}`);
-  // Piece SAN: "Nxf7" → "knight takes f7", "Bc4" → "bishop to c4"
-  out = out.replace(SAN_MOVE_RE, (_, piece: string, capture: string, dest: string) => {
-    const name = PIECE_LETTER_NAMES[piece] ?? piece;
-    return capture === 'x' ? `${name} takes ${dest}` : `${name} to ${dest}`;
+  const pawnExpansions: Array<{ san: string; spoken: string }> = [];
+  out = out.replace(PAWN_CAPTURE_RE, (san: string, file: string, dest: string) => {
+    const spoken = `${file}-pawn takes ${dest}`;
+    pawnExpansions.push({ san, spoken });
+    return spoken;
   });
+  // Piece SAN: "Nxf7" → "knight takes f7", "Bc4" → "bishop to c4"
+  const pieceExpansions: Array<{ san: string; spoken: string }> = [];
+  out = out.replace(SAN_MOVE_RE, (san: string, piece: string, capture: string, dest: string) => {
+    const name = PIECE_LETTER_NAMES[piece] ?? piece;
+    const spoken = capture === 'x' ? `${name} takes ${dest}` : `${name} to ${dest}`;
+    pieceExpansions.push({ san, spoken });
+    return spoken;
+  });
+  // Audit-instrumentation phase-1: log every SAN→speech expansion
+  // pair so Bug F-style regressions ("Nb4" → "knight to b") surface
+  // the moment they happen, not after the user reports them. Only
+  // emits when at least one expansion fired (no audit noise on plain
+  // prose). Dynamic import to avoid a top-level cycle.
+  if (pawnExpansions.length + pieceExpansions.length > 0) {
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'san-to-speech',
+        category: 'subsystem',
+        source: 'sanitizeForTTS',
+        summary:
+          `expanded ${pieceExpansions.length + pawnExpansions.length} SAN token(s): ` +
+          [...pieceExpansions, ...pawnExpansions]
+            .slice(0, 4)
+            .map(({ san, spoken }) => `${san}→"${spoken}"`)
+            .join(', '),
+        details: JSON.stringify({
+          pieceExpansions,
+          pawnExpansions,
+          inputPreview: text.slice(0, 200),
+          outputPreview: out.slice(0, 200),
+        }),
+      });
+    }).catch(() => undefined);
+  }
   return normalizePieceShorthand(out);
 }
 
 class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
+  /** Set when the streaming-progressive-playback path (MediaSource +
+   *  HTMLAudioElement) is in flight. Mutually exclusive with
+   *  currentSource — the two playback paths never share an Audio
+   *  pipeline. stop() must clear whichever one is live. */
+  private currentAudioElement: HTMLAudioElement | null = null;
   private abortController: AbortController | null = null;
   private playing = false;
   /** Monotonic counter incremented on every `stop()`. Speech chains
@@ -532,84 +623,14 @@ class VoiceService {
   }
 
   /** Speak using the personality's SECONDARY voice — for short tactic
-   *  alerts / interjections that should cut through main narration
-   *  with a different timbre. WO-VOICE-LAYER-01 (b). Falls back to
-   *  the primary speak path if no prefs are loaded. */
-  async speakAlert(text: string): Promise<void> {
-    this.logSpeakInvoked('speakAlert', text);
-    // WO-VOICE-LAYER-01 (b) was originally meant to give tactic alerts
-    // a different timbre via a SECONDARY voice. Production audit
-    // (build 06b6d5d) showed users hearing "two voices" — the regular
-    // coach voice AND the alert voice — which reads as a second
-    // character chiming in rather than a coach with a single voice.
-    // Drop the secondary-voice override; alerts now use the same
-    // primary personality voice as everything else. The
-    // PERSONALITY_SECONDARY_VOICE_DEFAULTS map + supporting state
-    // is left in place in case we revisit this with a clearer UX
-    // signal (e.g. a distinct chime *before* the alert plays).
-    return this.speakInternal(sanitizeForTTS(text), false, { useSecondary: false });
-  }
-
-  /** Low-latency speak for training modes — skips Polly/voice-packs and DB reads.
-   *  Uses cached preferences (from warmup) and goes straight to Web Speech API. */
-  async speakFast(text: string): Promise<void> {
-    this.logSpeakInvoked('speakFast', text);
-    // Mirror the speakInternal Coach Narration = "silent" gate. speakFast
-    // bypasses speakInternal for low-latency drills, so we re-check the
-    // setting here to keep the Silent promise consistent.
-    if (resolveCoachNarration(useAppStore.getState().activeProfile?.preferences) === 'silent') return;
-    if (this.cachedPrefs && !this.cachedPrefs.voiceEnabled) return;
-
-    // Stop any in-flight speech without going through the full stop() chain
-    if (speechService.isSpeaking) {
-      speechService.stop();
-    }
-
-    const speed = this.cachedPrefs?.voiceSpeed ?? this.speed;
-    if (this.cachedPrefs?.systemVoiceURI) {
-      speechService.setVoice(this.cachedPrefs.systemVoiceURI);
-    }
-    if (WEB_SPEECH_FALLBACK_ENABLED) {
-      await speechService.speak(sanitizeForTTS(text), { ...WEB_SPEECH_FALLBACK, rate: speed });
-    }
-  }
-
-  /** Speak regardless of the voiceEnabled preference.
-   *  Used by the voice-chat mic where the user explicitly opted into voice. */
+   *  Speak regardless of the voiceEnabled preference.
+   *  Used by streaming sentence chains, walkthroughs, voice-chat mic
+   *  responses, and any callsite where the user has explicitly opted
+   *  into the voice flow. Honors the Coach Narration = "silent" gate
+   *  via speakInternal — silent always wins over force. */
   async speakForced(text: string): Promise<void> {
     this.logSpeakInvoked('speakForced', text);
     return this.speakInternal(sanitizeForTTS(text), true);
-  }
-
-  /** Polly-only speakForced. Identical to speakForced but skips the
-   *  Web Speech fallback when Polly transiently fails. Used by the
-   *  /coach/teach streaming sentence chain so a brief Polly cooldown
-   *  doesn't cause the iOS Safari speech-synth tail to overlap with
-   *  the next Polly sentence — the production audit (build 30fe8c8)
-   *  showed `tts-concurrent-speak prevTier=web-speech` 4× in one
-   *  session, which the user heard as "two voices." With this method,
-   *  a sentence whose Polly call fails is simply skipped audibly
-   *  (still rendered in chat); Polly recovers naturally after the
-   *  15s cooldown for the next sentence. Single-engine consistency,
-   *  no cancel-tail race. */
-  async speakForcedPollyOnly(text: string): Promise<void> {
-    this.logSpeakInvoked('speakForcedPollyOnly', text);
-    return this.speakInternal(sanitizeForTTS(text), true, { noFallback: true });
-  }
-
-  /** Queue a sentence without stopping current speech. For streaming voice responses. */
-  speakQueuedForced(text: string): void {
-    this.logSpeakInvoked('speakQueuedForced', text);
-    // Mirror the speakInternal Coach Narration = "silent" gate. This
-    // path goes straight to speechService.queue, so we re-check here.
-    if (resolveCoachNarration(useAppStore.getState().activeProfile?.preferences) === 'silent') return;
-    if (this.cachedPrefs?.systemVoiceURI) {
-      speechService.setVoice(this.cachedPrefs.systemVoiceURI);
-    }
-    const speed = this.cachedPrefs?.voiceSpeed ?? this.speed;
-    if (WEB_SPEECH_FALLBACK_ENABLED) {
-      speechService.queue(sanitizeForTTS(text), { rate: speed, pitch: 0.78 });
-    }
   }
 
   private async speakInternal(
@@ -629,7 +650,8 @@ class VoiceService {
     // "Silent" promise is incomplete. Logged as `voice-speak-silenced`
     // so audit traces still show the attempt was suppressed by policy.
     const narrationPrefs = useAppStore.getState().activeProfile?.preferences;
-    if (resolveCoachNarration(narrationPrefs) === 'silent') {
+    const narrationVerbosity = resolveCoachNarration(narrationPrefs);
+    if (narrationVerbosity === 'silent') {
       void import('./appAuditor').then(({ logAppAudit }) => {
         void logAppAudit({
           kind: 'voice-speak-silenced',
@@ -640,6 +662,40 @@ class VoiceService {
         });
       }).catch(() => undefined);
       return;
+    }
+
+    // Verbosity hard-cap (Phase C of streaming-TTS standardization,
+    // 2026-05-18). When the user set Coach Narration = "brief", clip
+    // the spoken text to ≤2 sentences / ≤30 words even if the LLM
+    // ignored the corresponding prompt rule (which production audit
+    // caught it doing — 497-char responses on "short"). The chat
+    // bubble still shows the full prose; only the VOICE respects
+    // the brief budget. Audit when truncation fires so we observe
+    // how often the brain violates the cap in prod.
+    if (narrationVerbosity === 'brief') {
+      const cap = applyBriefVoiceCap(text, 'brief');
+      if (cap.truncated) {
+        void import('./appAuditor').then(({ logAppAudit }) => {
+          void logAppAudit({
+            kind: 'voice-speak-invoked',
+            category: 'subsystem',
+            source: 'voiceService.speakInternal.briefCap',
+            summary: `brief-cap applied: ${cap.originalLength}→${cap.text.length} chars`,
+            // Audit-instrumentation phase-1 (2026-05-19, Bug I): log
+            // the FULL original text and the FULL clipped output so
+            // we can review exactly what got lost without re-running
+            // the surface. The previous 80-char preview hid the
+            // critical end of long responses.
+            details: JSON.stringify({
+              originalLength: cap.originalLength,
+              clippedLength: cap.text.length,
+              fullOriginal: text,
+              fullClipped: cap.text,
+            }),
+          });
+        }).catch(() => undefined);
+      }
+      text = cap.text;
     }
     // Audit-driven (build 6459def+ Findings 5, 7): the streaming
     // sentence dispatchers can split text like "X . . . " into
@@ -827,6 +883,25 @@ class VoiceService {
     if (prefs.systemVoiceURI) {
       speechService.setVoice(prefs.systemVoiceURI);
     }
+    // Audit-instrumentation phase-1 (2026-05-19): explicit
+    // voice-fallover event when Polly fails over to Web Speech. The
+    // existing polly-fallback event only fires on `noFallback`
+    // skips; this catches the in-flow demotion that today is silent
+    // unless someone reads the lastTier change.
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'voice-fallover',
+        category: 'subsystem',
+        source: 'voiceService.speakInternal',
+        summary: `Polly failed → Web Speech for "${text.slice(0, 40)}"`,
+        details: JSON.stringify({
+          fromTier: 'polly',
+          toTier: 'web-speech',
+          textLength: text.length,
+          textPreview: text.slice(0, 120),
+        }),
+      });
+    }).catch(() => undefined);
     await this.speakFallback(text);
     this.lastTier = 'web-speech';
     this.lastSpeakDiagnostic.tier = 'web-speech';
@@ -880,6 +955,21 @@ class VoiceService {
         // Already stopped
       }
       this.currentSource = null;
+    }
+    if (this.currentAudioElement) {
+      // Streaming-playback path — pause + drop the source. The
+      // associated MediaSource + object URL revoke on the 'ended' /
+      // 'error' handlers inside playAudioFromStream; we trigger
+      // 'pause' here so a stop() mid-stream doesn't keep the
+      // browser decoding the rest of the buffered MP3.
+      try {
+        this.currentAudioElement.pause();
+        this.currentAudioElement.removeAttribute('src');
+        this.currentAudioElement.load();
+      } catch {
+        // Already disposed
+      }
+      this.currentAudioElement = null;
     }
     this.playing = false;
     // Only call cancel() when something is actually speaking — avoids the
@@ -966,37 +1056,309 @@ class VoiceService {
     }
   }
 
+  /** Progressive MP3 playback supported here? Delegates to the pure
+   *  helper `canStreamProgressivePlaybackFor` so the decision logic
+   *  can be unit-tested across UA + capability combinations without
+   *  instantiating a VoiceService. */
+  private canStreamProgressivePlayback(): boolean {
+    if (typeof window === 'undefined') return false;
+    const hasMS = typeof window.MediaSource !== 'undefined';
+    return canStreamProgressivePlaybackFor(
+      hasMS,
+      hasMS ? (t) => window.MediaSource.isTypeSupported(t) : () => false,
+      getManagedMediaSource(),
+      navigator.userAgent,
+      'ontouchend' in document,
+    );
+  }
+
+  /** Stream Polly's MP3 chunks into a `<audio>` element via
+   *  MediaSource so playback starts AS chunks arrive instead of
+   *  after the full body downloads. Phase A.5 of the streaming-TTS
+   *  standardization (CLAUDE.md G4). PR #615 streamed the response
+   *  server-side; this is the client consumer that actually delivers
+   *  the latency win.
+   *
+   *  Also accumulates chunks into a Uint8Array for caching — when
+   *  the stream completes we write the combined buffer to the LRU
+   *  so the NEXT speak of the same text hits cache and plays
+   *  instantly via the existing playAudioBuffer path. */
+  private async playAudioFromStream(
+    response: Response,
+    cacheKey: string,
+  ): Promise<boolean> {
+    if (!response.body) return false;
+    // Snapshot the stop-generation at entry. Every async await below
+    // checks against this; if a `stop()` (or rapid Next-press) bumped
+    // the generation while we were waiting on sourceOpen / pump / play,
+    // we bail out instead of starting a NEW audio element that would
+    // overlap with the user's next narration.
+    //
+    // 2026-05-19 fix: rapid-Next-press race produced 3+ simultaneous
+    // narrations from prior plies. Root cause: `currentAudioElement`
+    // was only set AFTER the sourceOpen await, so stop() couldn't
+    // find the in-flight element. Multiple plays slipped through.
+    const myGen = this.stopGeneration;
+    const reader = response.body.getReader();
+    const chunks: Uint8Array[] = [];
+    const audio = new Audio();
+    audio.playbackRate = this.speed;
+    audio.preload = 'auto';
+    // Track the audio element IMMEDIATELY so a concurrent stop() can
+    // find and pause it. Previously this happened at line 1115 after
+    // sourceOpen, creating a window where stop() saw `currentAudioElement
+    // = null` and let the new element through.
+    if (this.currentAudioElement && this.currentAudioElement !== audio) {
+      try { this.currentAudioElement.pause(); this.currentAudioElement.removeAttribute('src'); this.currentAudioElement.load(); } catch { /* already gone */ }
+    }
+    this.currentAudioElement = audio;
+
+    // Pick ManagedMediaSource on iOS Safari 17.1+, bare MediaSource
+    // everywhere else. ManagedMediaSource adds two responsibilities:
+    //   1. The audio element MUST disable remote playback before the
+    //      MediaSource is wired up, or AirPlay routing tears the
+    //      stream down on init.
+    //   2. We can only `appendBuffer` while the source is in its
+    //      "streaming" state; the platform fires `endstreaming` when
+    //      memory pressure / buffer fill says back off, and
+    //      `startstreaming` when it's safe to resume. Standard
+    //      MediaSource has no such gate — appends are always allowed.
+    const MMS = getManagedMediaSource();
+    const usingManagedMediaSource = MMS !== null;
+    const mediaSource: MediaSource = usingManagedMediaSource ? new MMS() : new MediaSource();
+    if (usingManagedMediaSource) {
+      // `disableRemotePlayback` is on HTMLMediaElement but the type
+      // isn't always present in lib.dom; cast through `unknown`.
+      (audio as unknown as { disableRemotePlayback: boolean }).disableRemotePlayback = true;
+    }
+    const objectUrl = URL.createObjectURL(mediaSource);
+    audio.src = objectUrl;
+
+    // ManagedMediaSource streaming-permission gate. Starts true; the
+    // platform fires `endstreaming` to ask us to stop appending and
+    // `startstreaming` to resume. `appendPermitted` is the latest
+    // boolean; `whenPermitted` is a promise the pump can await when
+    // the gate is closed. On non-iOS this gate stays open forever.
+    let appendPermitted = true;
+    let whenPermitted: Promise<void> = Promise.resolve();
+    let resolveWhenPermitted: (() => void) | null = null;
+    if (usingManagedMediaSource) {
+      mediaSource.addEventListener('endstreaming', () => {
+        if (!appendPermitted) return;
+        appendPermitted = false;
+        whenPermitted = new Promise<void>((resolve) => {
+          resolveWhenPermitted = resolve;
+        });
+      });
+      mediaSource.addEventListener('startstreaming', () => {
+        if (appendPermitted) return;
+        appendPermitted = true;
+        if (resolveWhenPermitted) {
+          resolveWhenPermitted();
+          resolveWhenPermitted = null;
+        }
+      });
+    }
+
+    const sourceOpen = new Promise<void>((resolve, reject) => {
+      mediaSource.addEventListener('sourceopen', () => resolve(), { once: true });
+      mediaSource.addEventListener('error', () => reject(new Error('MediaSource error')), { once: true });
+    });
+
+    try {
+      await sourceOpen;
+    } catch {
+      URL.revokeObjectURL(objectUrl);
+      if (this.currentAudioElement === audio) this.currentAudioElement = null;
+      return false;
+    }
+    // Generation check: stop() incremented stopGeneration while we
+    // were awaiting sourceOpen → this audio is stale. Dispose and bail.
+    if (myGen !== this.stopGeneration) {
+      try { audio.pause(); audio.removeAttribute('src'); audio.load(); } catch { /* gone */ }
+      URL.revokeObjectURL(objectUrl);
+      if (this.currentAudioElement === audio) this.currentAudioElement = null;
+      return false;
+    }
+
+    const sourceBuffer = mediaSource.addSourceBuffer('audio/mpeg');
+    sourceBuffer.mode = 'sequence';
+
+    const ended = new Promise<void>((resolve) => {
+      const onEnded = (): void => {
+        this.playing = false;
+        this.currentAudioElement = null;
+        URL.revokeObjectURL(objectUrl);
+        resolve();
+      };
+      audio.addEventListener('ended', onEnded, { once: true });
+      audio.addEventListener('error', () => {
+        // Audio decode failed mid-stream. Stop playback, resolve so
+        // the awaiter unblocks; the cache write below will not fire.
+        this.playing = false;
+        this.currentAudioElement = null;
+        URL.revokeObjectURL(objectUrl);
+        resolve();
+      }, { once: true });
+    });
+
+    // One more generation check before kicking off playback — covers
+    // the small window between sourceOpen and addSourceBuffer.
+    if (myGen !== this.stopGeneration) {
+      try { audio.pause(); audio.removeAttribute('src'); audio.load(); } catch { /* gone */ }
+      URL.revokeObjectURL(objectUrl);
+      if (this.currentAudioElement === audio) this.currentAudioElement = null;
+      return false;
+    }
+    this.playing = true;
+    // currentAudioElement was set early at function entry; re-assert in
+    // case a parallel call had replaced it (last-writer-wins is correct
+    // here because the OLDER call gets bailed out by the generation
+    // check above)
+    this.currentAudioElement = audio;
+    // Try to start playback once we have some data buffered. The
+    // browser handles "wait until enough data" automatically — we
+    // just call play() and let the audio element begin when ready.
+    const playStartPromise = audio.play().catch((err: unknown) => {
+      // Autoplay restriction (no user gesture). Log + resolve so the
+      // pump below still runs and caches the data for a later
+      // user-gestured replay.
+      this.lastSpeakDiagnostic.error = `audio.play rejected: ${err instanceof Error ? err.message : String(err)}`;
+      return undefined;
+    });
+
+    // Pump response body → SourceBuffer. Append serially because
+    // appendBuffer is async (fires 'updateend') and overlapping
+    // appends throw InvalidStateError. On ManagedMediaSource the
+    // gate may close mid-pump (memory pressure) — we await
+    // `whenPermitted` before each append so the platform stays in
+    // charge of when bytes go in.
+    const pumpResult = (async (): Promise<boolean> => {
+      try {
+        while (true) {
+          // Per-iteration generation check — bail mid-pump if stop()
+          // was called (e.g. user clicked Next again while bytes were
+          // streaming). Without this, the loop keeps pushing bytes
+          // into a SourceBuffer that nobody hears, until the response
+          // body is exhausted.
+          if (myGen !== this.stopGeneration) {
+            try { reader.cancel(); } catch { /* ignore */ }
+            if (mediaSource.readyState === 'open') {
+              try { mediaSource.endOfStream(); } catch { /* ignore */ }
+            }
+            return false;
+          }
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          if (!appendPermitted) await whenPermitted;
+          await new Promise<void>((resolve, reject) => {
+            const onEnd = (): void => {
+              sourceBuffer.removeEventListener('updateend', onEnd);
+              resolve();
+            };
+            const onErr = (): void => {
+              sourceBuffer.removeEventListener('error', onErr);
+              reject(new Error('sourceBuffer error'));
+            };
+            sourceBuffer.addEventListener('updateend', onEnd, { once: true });
+            sourceBuffer.addEventListener('error', onErr, { once: true });
+            sourceBuffer.appendBuffer(value);
+          });
+        }
+        if (mediaSource.readyState === 'open') {
+          mediaSource.endOfStream();
+        }
+        return true;
+      } catch {
+        if (mediaSource.readyState === 'open') {
+          try { mediaSource.endOfStream('decode'); } catch { /* ignore */ }
+        }
+        return false;
+      }
+    })();
+
+    await playStartPromise;
+    const pumpOk = await pumpResult;
+    await ended;
+
+    // Cache the full audio for next speak of the same text. Only
+    // when the pump completed cleanly — partial streams cached as
+    // valid would replay broken on the next call.
+    if (pumpOk && chunks.length > 0) {
+      const totalLen = chunks.reduce((n, c) => n + c.byteLength, 0);
+      const combined = new Uint8Array(totalLen);
+      let offset = 0;
+      for (const c of chunks) {
+        combined.set(c, offset);
+        offset += c.byteLength;
+      }
+      // Slice to ArrayBuffer (combined.buffer may be a shared
+      // ArrayBuffer view; .slice() gives us a standalone copy).
+      this.setAudioCacheEntry(cacheKey, combined.buffer.slice(combined.byteOffset, combined.byteOffset + combined.byteLength));
+    }
+    return true;
+  }
+
   private async speakPolly(text: string, voice: string, style?: string): Promise<boolean> {
     this.lastSpeakDiagnostic.pollyAttempted = true;
     try {
       // Cache key includes style so a style change doesn't return
       // a stale audio buffer from an earlier prosody setting.
       const key = this.pollyKey(text, voice) + (style ? `|${style}` : '');
-      let arrayBuffer = this.touchAudioCacheEntry(key);
+      const cachedBuffer = this.touchAudioCacheEntry(key);
 
-      if (!arrayBuffer) {
-        this.abortController = new AbortController();
-        const timeoutSignal = AbortSignal.timeout(10_000);
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        const combinedSignal = AbortSignal.any
-          ? AbortSignal.any([this.abortController.signal, timeoutSignal])
-          : this.abortController.signal;
-        const url = getTtsUrl(text, voice, true, style);
-        const response = await fetch(url, { signal: combinedSignal });
-        this.lastSpeakDiagnostic.pollyStatus = response.status;
-        this.lastSpeakDiagnostic.pollyOk = response.ok;
-        if (!response.ok) {
-          this.coolDownPolly(`API error ${response.status}`);
-          this.lastSpeakDiagnostic.error = `Polly /api/tts returned ${response.status}`;
+      // Cache hit → play the buffered audio directly (no streaming,
+      // no fetch). This stays on the existing decodeAudioData path
+      // because we already have the complete MP3 in memory.
+      if (cachedBuffer) {
+        this.lastSpeakDiagnostic.pollyOk = true;
+        this.lastSpeakDiagnostic.pollyStatus = 200;
+        const played = await this.playAudioBuffer(cachedBuffer.slice(0));
+        if (!played) {
+          this.lastSpeakDiagnostic.error = 'AudioContext suspended (need user gesture)';
           return false;
         }
-        arrayBuffer = await response.arrayBuffer();
-        this.abortController = null;
-        this.setAudioCacheEntry(key, arrayBuffer);
-      } else {
-        this.lastSpeakDiagnostic.pollyOk = true;
-        this.lastSpeakDiagnostic.pollyStatus = 200; // cache hit
+        return true;
       }
+
+      // Cache miss → fetch from /api/tts.
+      this.abortController = new AbortController();
+      const timeoutSignal = AbortSignal.timeout(10_000);
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      const combinedSignal = AbortSignal.any
+        ? AbortSignal.any([this.abortController.signal, timeoutSignal])
+        : this.abortController.signal;
+      const url = getTtsUrl(text, voice, true, style);
+      const response = await fetch(url, { signal: combinedSignal });
+      this.lastSpeakDiagnostic.pollyStatus = response.status;
+      this.lastSpeakDiagnostic.pollyOk = response.ok;
+      if (!response.ok) {
+        this.coolDownPolly(`API error ${response.status}`);
+        this.lastSpeakDiagnostic.error = `Polly /api/tts returned ${response.status}`;
+        return false;
+      }
+
+      // Progressive playback path (streaming-TTS standardization,
+      // CLAUDE.md G4). MediaSource (desktop + Android) and
+      // ManagedMediaSource (iOS Safari 17.1+) both start playing as
+      // soon as ~5KB is buffered instead of waiting for the full
+      // download. Falls back to the arrayBuffer path only on old
+      // iOS that has neither.
+      if (this.canStreamProgressivePlayback()) {
+        this.abortController = null;
+        const ok = await this.playAudioFromStream(response, key);
+        return ok;
+      }
+
+      // Fallback: buffer the full MP3 then decode + play. Same path
+      // as before A.5 — what iOS Safari and any client without
+      // MediaSource support runs on. Server is still streaming the
+      // body (PR #615); the win is partial but real (synthesis-
+      // time and transit-time overlap even when the client buffers).
+      const arrayBuffer = await response.arrayBuffer();
+      this.abortController = null;
+      this.setAudioCacheEntry(key, arrayBuffer);
 
       const played = await this.playAudioBuffer(arrayBuffer.slice(0));
       if (!played) {

@@ -1,0 +1,1007 @@
+{
+  "round": 4,
+  "generatedAt": "2026-05-19T14:58:10.711Z",
+  "inProgress": false,
+  "openingsCompleted": 10,
+  "totalFindings": 15,
+  "totalConsoleErrors": 0,
+  "results": [
+    {
+      "round": 4,
+      "openingId": "italian-game",
+      "name": "Italian Game",
+      "color": "white",
+      "startedAt": "2026-05-19T14:45:48.988Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Italia Game",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Italian",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Italia Game",
+            "Italian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": [
+            "P6 learn: learn-btn click did not mount learn-mode"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/italian-game"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": [],
+          "skipped": "no prior opening"
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo"
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 803
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 46164566,
+        "heapAfterBytes": 99578013,
+        "growthBytes": 53413447
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "finishedAt": "2026-05-19T14:46:37.797Z"
+    },
+    {
+      "round": 4,
+      "openingId": "ruy-lopez",
+      "name": "Ruy Lopez",
+      "color": "white",
+      "startedAt": "2026-05-19T14:46:37.797Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Ruy opez",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Ruy",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Ruy opez",
+            "Ruy"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": [
+            "P6 learn: learn-btn click did not mount learn-mode"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/ruy-lopez"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo"
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 643
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 99578013,
+        "heapAfterBytes": 50328333,
+        "growthBytes": -49249680
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "finishedAt": "2026-05-19T14:48:00.355Z"
+    },
+    {
+      "round": 4,
+      "openingId": "scotch-game",
+      "name": "Scotch Game",
+      "color": "white",
+      "startedAt": "2026-05-19T14:48:00.356Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Scotc Game",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Scotch",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Scotc Game",
+            "Scotch"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": [
+            "P6 learn: learn-btn click did not mount learn-mode"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/scotch-game"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo"
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 698
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 50328333,
+        "heapAfterBytes": 52012550,
+        "growthBytes": 1684217
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "finishedAt": "2026-05-19T14:49:22.849Z"
+    },
+    {
+      "round": 4,
+      "openingId": "vienna-game",
+      "name": "Vienna Game",
+      "color": "white",
+      "startedAt": "2026-05-19T14:49:22.850Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Vienn Game",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Vienna",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Vienn Game",
+            "Vienna"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": [
+            "P6 learn: learn-btn click did not mount learn-mode"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/vienna-game"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo"
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 713
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 52012550,
+        "heapAfterBytes": 52662266,
+        "growthBytes": 649716
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "finishedAt": "2026-05-19T14:50:45.405Z"
+    },
+    {
+      "round": 4,
+      "openingId": "kings-gambit",
+      "name": "King's Gambit",
+      "color": "white",
+      "startedAt": "2026-05-19T14:50:45.405Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Kings Gambit",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "King'sGambit",
+              "cardCount": 1,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "King's",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Kings Gambit",
+            "King'sGambit",
+            "King's"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": [
+            "P6 learn: learn-btn click did not mount learn-mode"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/kings-gambit"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo"
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 639
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 52662266,
+        "heapAfterBytes": 53376720,
+        "growthBytes": 714454
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "finishedAt": "2026-05-19T14:52:08.628Z"
+    },
+    {
+      "round": 4,
+      "openingId": "four-knights-game",
+      "name": "Four Knights Game",
+      "color": "white",
+      "startedAt": "2026-05-19T14:52:08.630Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Four Knihts Game",
+              "cardCount": 40,
+              "dropdownCount": 0,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Four",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Four Knihts Game",
+            "Four"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": [
+            "P6 learn: learn-btn click did not mount learn-mode"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/four-knights-game"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo"
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 688
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 53376720,
+        "heapAfterBytes": 54735395,
+        "growthBytes": 1358675
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "finishedAt": "2026-05-19T14:53:30.853Z"
+    },
+    {
+      "round": 4,
+      "openingId": "sicilian-najdorf",
+      "name": "Sicilian: Najdorf",
+      "color": "black",
+      "startedAt": "2026-05-19T14:53:30.853Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Najdorf",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Najdorf",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": [
+            "P6 learn: learn-btn click did not mount learn-mode"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/sicilian-najdorf"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo"
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 749
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 54735395,
+        "heapAfterBytes": 56002635,
+        "growthBytes": 1267240
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "finishedAt": "2026-05-19T14:54:53.948Z"
+    },
+    {
+      "round": 4,
+      "openingId": "sicilian-dragon",
+      "name": "Sicilian: Dragon",
+      "color": "black",
+      "startedAt": "2026-05-19T14:54:53.948Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Dragon",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Dragon",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": [
+            "P6 learn: learn-btn click did not mount learn-mode"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/sicilian-dragon"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo"
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 728
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 56002635,
+        "heapAfterBytes": 57515125,
+        "growthBytes": 1512490
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "finishedAt": "2026-05-19T14:56:16.401Z"
+    },
+    {
+      "round": 4,
+      "openingId": "sicilian-sveshnikov",
+      "name": "Sicilian: Sveshnikov",
+      "color": "black",
+      "startedAt": "2026-05-19T14:56:16.402Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian: veshnikov",
+              "cardCount": 1,
+              "dropdownCount": 1,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian: veshnikov",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": [
+            "P6 learn: learn-btn click did not mount learn-mode"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [],
+          "endedOn": "http://localhost:5174/openings/sicilian-sveshnikov"
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": []
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [],
+          "cacheState": {
+            "available": false
+          },
+          "skipped": "master-play-watcher hook not exposed"
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": []
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo"
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 696
+      },
+      "memorySnapshot": {
+        "heapBeforeBytes": 57515125,
+        "heapAfterBytes": 57616837,
+        "growthBytes": 101712
+      },
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "finishedAt": "2026-05-19T14:57:38.629Z"
+    },
+    {
+      "round": 4,
+      "openingId": "sicilian-alapin",
+      "name": "Sicilian: Alapin",
+      "color": "black",
+      "startedAt": "2026-05-19T14:57:38.630Z",
+      "probes": {
+        "offCanonical": {
+          "kind": "off-canonical",
+          "inputs": [
+            {
+              "v": "Sicilian Alapin",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            },
+            {
+              "v": "Sicilian",
+              "cardCount": 0,
+              "dropdownCount": 8,
+              "noResultsVisible": 0
+            }
+          ],
+          "findings": [],
+          "attemptedVariants": [
+            "Sicilian Alapin",
+            "Sicilian"
+          ]
+        },
+        "pickBeforeLoad": {
+          "kind": "pick-before-load",
+          "findings": [],
+          "skipped": "no variations or traps"
+        },
+        "outOfOrder": {
+          "kind": "out-of-order",
+          "findings": []
+        },
+        "chatPivot": {
+          "kind": "mode-switch",
+          "findings": [
+            "P6 learn: learn-btn click did not mount learn-mode"
+          ]
+        },
+        "rapidBack": {
+          "kind": "rapid-back",
+          "findings": [
+            "P7: error page.waitForTimeout: Target page, context or browser has been closed"
+          ]
+        },
+        "zoom": {
+          "kind": "zoom",
+          "findings": [
+            "P8: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "fenVerify": {
+          "kind": "fen-verify",
+          "findings": [
+            "P9: error page.goto: Target page, context or browser has been closed"
+          ],
+          "plies": []
+        },
+        "masterPlayCache": {
+          "kind": "master-play-cache",
+          "findings": [
+            "P10: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "crossPollution": {
+          "kind": "cross-pollution",
+          "findings": [
+            "P11: error page.goto: Target page, context or browser has been closed"
+          ]
+        },
+        "coldCache": {
+          "kind": "cold-cache",
+          "skipped": "not in this round sample"
+        },
+        "firstTimeUser": {
+          "kind": "first-time-user",
+          "skipped": "not in this round sample"
+        }
+      },
+      "consoleErrors": [],
+      "consoleWarnings": [
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo",
+        "[CoachAPI] anthropic failed, trying fallback... Cu: Connection error.\n    at gl.makeRequest (http://localhost:5174/assets/index-DtCp0cpe.js:81:4474)\n    at async tK (http://localhost:5174/assets/index-DtCp0cpe.js:664:29067)\n    at async _N (http://lo"
+      ],
+      "auditEvents": [],
+      "perfMetrics": {
+        "detailMountMs": 664
+      },
+      "memorySnapshot": null,
+      "a11yViolations": [],
+      "errorBoundaryTrips": 0,
+      "finishedAt": "2026-05-19T14:58:10.625Z"
+    }
+  ]
+}

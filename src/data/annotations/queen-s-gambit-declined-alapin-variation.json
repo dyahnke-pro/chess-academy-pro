@@ -19,7 +19,7 @@
     {
       "san": "b6",
       "annotation": "Black plays the Queen's Indian Defense setup, preparing to fianchetto the light-squared bishop on b7 where it will exert powerful pressure along the long diagonal toward our king. This move supports an eventual c5 advance to challenge our pawn center and avoids the main lines of the Queen's Gambit Declined where Black's light-squared bishop often becomes problematic. Black is essentially saying 'I'll develop my pieces actively rather than trying to hold the center with pawns immediately.' However, this does leave Black's kingside development slightly delayed, and we need to be ready to take advantage of this tempo.",
-      "shortNarration": "Black fianchettoes the bishop to b7, pressuring the long diagonal and preparing c5, but delays kingside development."
+      "shortNarration": "Black plays b6, preparing the bishop fianchetto to b7, pressuring the long diagonal and preparing c5, but delays kingside development."
     },
     {
       "san": "Nc3",

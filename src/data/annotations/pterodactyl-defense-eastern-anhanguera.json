@@ -23,17 +23,17 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Pterodactyl Defense Eastern Anhanguera: Nc3 is a known theory move in this line.",
+      "annotation": "Nc3 supports the d4 pawn and prepares f4, a key plan to reinforce White's central space advantage before Black can consolidate with d6.",
       "shortNarration": "Nc3 is the main line against the Pterodactyl Defense Eastern Anhanguera."
     },
     {
       "san": "c5",
-      "annotation": "Continuing Pterodactyl Defense Eastern Anhanguera: c5 is a known theory move in this line.",
+      "annotation": "Black strikes at d4 immediately with c5, the typical counterattack in this structure. White must now decide whether to maintain the pawn or trade it away.",
       "shortNarration": "c5 is the Pterodactyl Defense Eastern Anhanguera, a theory move challenging White's center."
     },
     {
       "san": "Be3",
-      "annotation": "Continuing Pterodactyl Defense Eastern Anhanguera: Be3 is a known theory move in this line.",
+      "annotation": "Be3 keeps d4 defended and readies the kingside. This flexible setup preserves White's option to advance f4 or meet d6 depending on Black's next move.",
       "shortNarration": "Be3 is the theory move in the Pterodactyl Defense Eastern Anhanguera."
     }
   ]

@@ -7,7 +7,7 @@ import {
   searchOpenings,
   toggleFavorite,
 } from '../../services/openingService';
-import { seedDatabase } from '../../services/dataLoader';
+import { seedDatabase, whenFullySeeded } from '../../services/dataLoader';
 import { db } from '../../db/schema';
 import { OpeningCard } from './OpeningCard';
 import type { OpeningRecord, SmartSearchResult } from '../../types';
@@ -90,6 +90,12 @@ export function OpeningExplorerPage(): JSX.Element {
     if (tab !== 'all' || Object.keys(ecoGroups).length > 0) return;
     setAllLoading(true);
     async function loadAll(): Promise<void> {
+      // The full 3641-entry ECO catalog now seeds in the background
+      // (dataLoader.startDeferredSeed) so the default "Most Common"
+      // tab can paint instantly. Wait for that backfill before
+      // reading per-letter groups, else a fresh user lands on a blank
+      // "All" tab until the seed silently finishes.
+      await whenFullySeeded();
       const groups: Record<string, OpeningRecord[]> = {};
       for (const letter of ECO_LETTERS) {
         groups[letter] = await getOpeningsByEcoLetter(letter);

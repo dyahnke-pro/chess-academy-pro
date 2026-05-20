@@ -42,6 +42,7 @@ import {
 } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
 import { logAppAudit } from './appAuditor';
+import { buildOpeningNarrationContext } from './chessConceptService';
 import type {
   WalkthroughTree,
   WalkthroughTreeNode,
@@ -446,7 +447,20 @@ export async function getCachedOpening(
   try {
     const normalized = normalizeOpeningName(name);
     const cached = await db.cachedOpenings.get(normalized);
-    if (!cached) return null;
+    if (!cached) {
+      // Audit-instrumentation phase-1 (2026-05-19): per-cache-lookup
+      // hit/miss event. Generation is the most expensive operation in
+      // the app; cache hit rate matters. Without this audit we can't
+      // see how often a "lesson" call is fresh gen vs cached.
+      void logAppAudit({
+        kind: 'opening-cache-miss',
+        category: 'subsystem',
+        source: 'openingGenerator.getCachedOpening',
+        summary: `cache miss: "${name}" → fresh generation`,
+        details: JSON.stringify({ name, normalized }),
+      });
+      return null;
+    }
     // Sanity-check the cached tree before returning. If illegal SANs
     // were saved before the tree-legality gate existed, evict the
     // record so the next request goes through fresh generation.
@@ -460,9 +474,30 @@ export async function getCachedOpening(
         summary: `evicting broken cached tree for "${name}" — ${errors.length} legality errors`,
         details: errors.slice(0, 3).map((e) => e.message).join('; '),
       });
+      void logAppAudit({
+        kind: 'opening-cache-invalidated',
+        category: 'subsystem',
+        source: 'openingGenerator.getCachedOpening',
+        summary: `cache invalidated: "${name}" — broken tree evicted`,
+        details: JSON.stringify({ name, normalized, errorCount: errors.length }),
+      });
       await db.cachedOpenings.delete(normalized);
       return null;
     }
+    void logAppAudit({
+      kind: 'opening-cache-hit',
+      category: 'subsystem',
+      source: 'openingGenerator.getCachedOpening',
+      summary: `cache hit: "${name}" (${cached.tree.openingName}, generated ${new Date(cached.generatedAt).toISOString().slice(0, 10)})`,
+      details: JSON.stringify({
+        name,
+        normalized,
+        cachedName: cached.tree.openingName,
+        cachedEco: cached.eco,
+        generatedAt: cached.generatedAt,
+        ageMs: Date.now() - cached.generatedAt,
+      }),
+    });
     return cached.tree;
   } catch {
     return null;
@@ -1816,6 +1851,13 @@ async function generateOpeningFromDbNarration(
     : `a walkthrough of "${entry.canonicalName}".`;
   const systemPrompt = `You are an expert chess coach narrating ${lessonFraming} Output ONLY a JSON object matching the schema. The move sequence and positions are PROVIDED — do NOT invent or alter them. Your only job is to write short coach commentary plus optional visualization arrows.
 
+VOICE RULES (locked 2026-05-19):
+- Confident + declarative. Name what's happening. No "you might consider", no "this could be", no marketing voice.
+- Specific chess detail. Name squares, piece routes, named patterns. "the c3-knight reroutes via d2 to f1-g3" not "the knight goes to a good square".
+- Tactical verbs that match the action — threatens / pressures / kicks / blunts / outposts / hammers / undermines.
+- Cite by SAN inside prose. "After Bxc3 bxc3 Black has doubled c-pawns" not "the bishop trade gives doubled pawns".
+- BANNED: "powerful", "devastating", "the secret of", "key to success", "essential to remember", "we will see", "let me show you".
+
 For each move in the line, return:
 - text: ONE sentence (max ${pace === 'tour' ? 12 : 25} words) explaining the IDEA behind the move. First-person, second-person, conversational. Mention the SAN or its spoken form somewhere. ${pace === 'tour' ? 'TOUR MODE: keep narrations TIGHT — the student wants a quick playthrough, not a lecture.' : ''}Examples:
   - "1.e4 grabs the center and frees the king's bishop and queen."
@@ -1845,7 +1887,20 @@ ${branches.length > 0 ? `- branchIdeas: ONE sentence (max 20 words) for EACH bra
       (a) THREATS — squares the moved piece NOW attacks/pressures (Bc4 → f7), or
       (b) LOOK-AHEAD — the next critical square on the line you're walking (Re1 → e8 if the rook is going to lift, Nc3 → d5 if the knight is heading to d5 next).
     Do NOT draw the move's own from→to (the board animates that). Skip arrows when nothing useful to show.
-  Example: for "English Attack" with extension "Ng4 Bg5 Qa5+", emit 3 idea objects narrating those three plies.` : ''}`;
+  Example: for "English Attack" with extension "Ng4 Bg5 Qa5+", emit 3 idea objects narrating those three plies.` : ''}
+
+${(() => {
+  const block = buildOpeningNarrationContext(entry.canonicalName);
+  if (block) {
+    void logAppAudit({
+      kind: 'book-grounding-injected',
+      category: 'subsystem',
+      source: 'openingGenerator.bookGrounding',
+      summary: `narration grounded with book passages for "${entry.canonicalName}" (${block.length} chars)`,
+    });
+  }
+  return block;
+})()}`;
   const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
 Student plays: ${studentSide}
 Total moves in spine: ${positions.length}

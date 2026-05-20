@@ -28,6 +28,10 @@
  */
 import { logAppAudit } from '../services/appAuditor';
 import { assembleEnvelope } from './envelope';
+import { loadAnnotationContextForLive } from './sources/annotationContext';
+import { loadBookGroundingForLive } from './sources/bookGrounding';
+import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
+import { loadModelGamesForLive } from './sources/modelGames';
 import { deepseekProvider } from './providers/deepseek';
 import { anthropicProvider } from './providers/anthropic';
 import { COACH_TOOLS, getTool, getToolDefinitions } from './tools/registry';
@@ -46,9 +50,10 @@ import type {
 
 /** Read provider name from `import.meta.env.COACH_PROVIDER`, falling
  *  back to `process.env.COACH_PROVIDER` (Node test envs), default
- *  'anthropic'. Anthropic is the primary; on auth/quota error the
- *  coachApi layer transparently retries on DeepSeek via the existing
- *  fallback chain at `coachApi.ts:782` (`getFallbackConfig`). The
+ *  'deepseek'. David's call 2026-05-19: flip from Anthropic-first
+ *  back to DeepSeek-first to spend DeepSeek tokens. On auth/quota
+ *  error the coachApi layer transparently retries on Anthropic via
+ *  the existing fallback chain (`getFallbackConfig`). The
  *  constitution requires this be a one-line flip. */
 function resolveProviderName(): ProviderName {
   // Vite-style env (browser builds).
@@ -61,8 +66,8 @@ function resolveProviderName(): ProviderName {
   const fromProcess = typeof process !== 'undefined' && process.env
     ? process.env.COACH_PROVIDER
     : undefined;
-  const raw = (fromVite ?? fromProcess ?? 'anthropic').toLowerCase();
-  return raw === 'deepseek' ? 'deepseek' : 'anthropic';
+  const raw = (fromVite ?? fromProcess ?? 'deepseek').toLowerCase();
+  return raw === 'anthropic' ? 'anthropic' : 'deepseek';
 }
 
 function pickProvider(name: ProviderName): Provider {
@@ -346,6 +351,186 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   // surface chose to forward (real LLM round-trips), so router
   // bypass-LLM logic at this layer was dead code.
 
+  // Auto-load curated opening-book annotations whenever the surface
+  // didn't pre-populate annotationContext but has either a
+  // lichessSnapshot opening name OR a move history we can detect an
+  // opening from. Brings the 1893 curated annotation files under
+  // `src/data/annotations/` into the brain's [Live state] block as
+  // authoritative grounding for every surface that touches a
+  // recognizable opening (teach, play, review, analyse, …). Surfaces
+  // that already loaded annotations (e.g. via walkthrough) can
+  // short-circuit by setting `liveState.annotationContext` themselves
+  // — we don't overwrite. Silent on lookup miss.
+  const hasOpeningSignal =
+    !!input.liveState.lichessSnapshot?.name ||
+    (input.liveState.moveHistory?.length ?? 0) > 0;
+  if (!input.liveState.annotationContext && hasOpeningSignal) {
+    try {
+      const ctx = await loadAnnotationContextForLive({
+        openingName: input.liveState.lichessSnapshot?.name,
+        moveHistory: input.liveState.moveHistory ?? [],
+      });
+      if (ctx) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, annotationContext: ctx },
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.annotationContext',
+          summary: `loaded annotation ctx: ${ctx.openingName} (id=${ctx.openingId}, ${ctx.moves.length}/${ctx.totalAnnotated} plies windowed at ply ${ctx.currentPly})`,
+        });
+      } else {
+        // Audit no-match for observability — the loader was reached
+        // but no annotation file matched the resolved opening. Helps
+        // identify openings that need authored annotations.
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.annotationContext',
+          summary: `no-match: openingName="${input.liveState.lichessSnapshot?.name ?? '?'}" histLen=${input.liveState.moveHistory?.length ?? 0}`,
+        });
+      }
+    } catch (err) {
+      // Annotation lookup failures must NEVER block the brain call —
+      // the surface has the existing FEN/eval/tactics grounding and
+      // can answer without book context.
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.annotationContext',
+        summary: `book ctx load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
+
+  // Middlegame plan from middlegame-plans.json (180 curated plans).
+  // Gates on opening recognition (via lichessSnapshot.name OR
+  // moveHistory-based detection) AND a matching plan registered for
+  // that opening. Quiet when no plan exists. Carries title +
+  // overview + strategic themes + pawn breaks + maneuvers into the
+  // envelope so "what's the plan here?" gets the curated answer.
+  if (!input.liveState.middlegamePlan && hasOpeningSignal) {
+    try {
+      const plan = loadMiddlegamePlanForLive({
+        openingName: input.liveState.lichessSnapshot?.name,
+        moveHistory: input.liveState.moveHistory ?? [],
+      });
+      if (plan) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, middlegamePlan: plan },
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.middlegamePlan',
+          summary: `loaded plan "${plan.title}" (id=${plan.id}, themes=${plan.strategicThemes.length}, breaks=${plan.pawnBreaks.length}, maneuvers=${plan.pieceManeuvers.length}) for opening=${plan.openingId}`,
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.middlegamePlan',
+          summary: `no-match: openingName="${input.liveState.lichessSnapshot?.name ?? '?'}" histLen=${input.liveState.moveHistory?.length ?? 0}`,
+        });
+      }
+    } catch (err) {
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.middlegamePlan',
+        summary: `plan load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
+
+  // Model games from model-games.json (~121 curated pro/master
+  // games keyed by opening). Up to 2 highest-rated examples shipped
+  // per call, with overview + early-PGN + critical moments. The
+  // brain can cite "Morphy vs Duke of Brunswick 1858" or "Carlsen
+  // vs Anand 2014" by name+year instead of fabricating game refs.
+  if (!input.liveState.modelGames && hasOpeningSignal) {
+    try {
+      const games = loadModelGamesForLive({
+        openingName: input.liveState.lichessSnapshot?.name,
+        moveHistory: input.liveState.moveHistory ?? [],
+      });
+      if (games) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, modelGames: games },
+        };
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.modelGames',
+          summary: `loaded ${games.games.length}/${games.totalAvailable} model game(s) for ${games.openingName} (id=${games.openingId})`,
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.modelGames',
+          summary: `no-match: openingName="${input.liveState.lichessSnapshot?.name ?? '?'}" histLen=${input.liveState.moveHistory?.length ?? 0}`,
+        });
+      }
+    } catch (err) {
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.modelGames',
+        summary: `model games load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
+
+  // Book grounding from chess-concepts.json (Capablanca/Lasker/etc).
+  // Same shape as annotation context — pre-loaded grounding into the
+  // envelope, gated on something to match against. Uses the user's
+  // ask text PLUS the opening name (when available) to drive concept
+  // detection and opening-passage lookup. Skipped silently when no
+  // concept matched. Independent of annotationContext: a position
+  // can have either, both, or neither depending on what corpus
+  // covers it.
+  if (!input.liveState.bookGrounding) {
+    try {
+      const grounding = loadBookGroundingForLive({
+        askText: input.ask,
+        openingName: input.liveState.lichessSnapshot?.name ?? null,
+      });
+      if (grounding) {
+        input = {
+          ...input,
+          liveState: { ...input.liveState, bookGrounding: grounding },
+        };
+        void logAppAudit({
+          kind: 'book-grounding-injected',
+          category: 'subsystem',
+          source: 'coachService.ask.bookGrounding',
+          summary: `loaded ${grounding.sourceCount} classical passage(s) (${grounding.block.length} chars) for ask="${input.ask.slice(0, 60)}"`,
+        });
+      } else {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'coachService.ask.bookGrounding',
+          summary: `no-match: askLen=${input.ask.length} openingName="${input.liveState.lichessSnapshot?.name ?? '?'}"`,
+        });
+      }
+    } catch (err) {
+      // Book lookup failures must NEVER block the call. Existing
+      // grounding (annotations, lichess, tactics) carries the brain.
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.ask.bookGrounding',
+        summary: `book grounding load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
+      });
+    }
+  }
+
   const envelope = assembleEnvelope({
     identity: options.identity,
     personality: options.personality,
@@ -413,6 +598,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   });
 
   const dispatchedIds: string[] = [];
+  const dispatchedToolNames: string[] = [];
   // Cap multi-turn tool loops so a misbehaving brain can't loop forever.
   const maxRoundTrips = Math.max(1, options.maxToolRoundTrips ?? 1);
 
@@ -560,14 +746,22 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
     }
 
     const dispatchOne = async (call: typeof lastResponse.toolCalls[number]): Promise<void> => {
-       
+
       const tool = getTool(call.name);
       // Existence already verified above; non-null assertion is safe
       // here because unknown tools were filtered out.
       if (!tool) return;
+      // Audit-instrumentation phase-7 (2026-05-19): tool-call latency.
+      // We log every tool call's existence + result, but until now had
+      // no time-to-result data. Slow tools (Lichess API timeout, hung
+      // Stockfish, slow DB query) are real UX bugs and we couldn't see
+      // them from the audit alone.
+      const startedAt = Date.now();
       try {
         const result = await tool.execute(call.args, ctx);
+        const latencyMs = Date.now() - startedAt;
         dispatchedIds.push(call.id);
+        dispatchedToolNames.push(call.name);
         toolResults.push({
           name: call.name,
           ok: result.ok,
@@ -586,13 +780,14 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           kind: 'coach-brain-tool-called',
           category: 'subsystem',
           source: 'coachService.ask',
-          summary: `${call.name} ${result.ok ? 'ok' : 'error'}${summarySuffix}`,
+          summary: `${call.name} ${result.ok ? 'ok' : 'error'} latency=${latencyMs}ms${summarySuffix}`,
           details: JSON.stringify({
             id: call.id,
             name: call.name,
             ok: result.ok,
             error: result.error,
             preview: resultPreview ?? null,
+            latencyMs,
           }),
         });
         // Dedicated tool-call-error trail — captures full error text +
@@ -617,11 +812,12 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
           });
         }
       } catch (err) {
+        const latencyMs = Date.now() - startedAt;
         void logAppAudit({
           kind: 'coach-brain-tool-threw',
           category: 'subsystem',
           source: 'coachService.ask',
-          summary: `${call.name} threw`,
+          summary: `${call.name} threw after ${latencyMs}ms`,
           details: err instanceof Error ? err.message : String(err),
         });
         void logAppAudit({
@@ -635,6 +831,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             args: call.args,
             error: err instanceof Error ? err.message : String(err),
             stack: err instanceof Error ? err.stack : undefined,
+            latencyMs,
           }),
         });
         toolResults.push({
@@ -752,6 +949,7 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
   return {
     text: lastResponse.text,
     toolCallIds: dispatchedIds,
+    dispatchedToolNames,
     provider: provider.name,
   };
 }

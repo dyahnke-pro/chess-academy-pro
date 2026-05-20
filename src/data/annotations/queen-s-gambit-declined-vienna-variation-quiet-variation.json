@@ -33,17 +33,17 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Queens Gambit Declined Vienna Variation Quiet Variation: Nc3 is a known theory move in this line.",
+      "annotation": "Nc3 adds control over d5 and e4, reinforcing White's central grip while preparing to develop the light-squared bishop.",
       "shortNarration": "Nc3 is the standard theory move in the Queen's Gambit Declined Vienna Variation."
     },
     {
       "san": "dxc4",
-      "annotation": "Continuing Queens Gambit Declined Vienna Variation Quiet Variation: dxc4 is a known theory move in this line.",
+      "annotation": "Black captures on c4, accepting the gambit pawn and creating space for the light-squared bishop's development on the long diagonal.",
       "shortNarration": "dxc4 is the theory move in the Queen's Gambit Declined Vienna Variation Quiet Variation."
     },
     {
       "san": "e3",
-      "annotation": "Continuing Queens Gambit Declined Vienna Variation Quiet Variation: e3 is a known theory move in this line.",
+      "annotation": "E3 supports the d4 center and prepares Bxc4, which will regain the pawn while placing the bishop on an active square targeting f7.",
       "shortNarration": "e3 is the quiet theory move in the Queen's Gambit Declined Vienna Variation."
     }
   ]

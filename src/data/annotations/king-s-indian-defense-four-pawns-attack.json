@@ -43,17 +43,17 @@
     },
     {
       "san": "Be2",
-      "annotation": "Continuing Kings Indian Defense Four Pawns Attack: Be2 is a known theory move in this line.",
+      "annotation": "Be2 keeps the position flexible, avoiding early commitments on d3 or f4 while maintaining control of the long diagonal and preparing to support the e4 pawn.",
       "shortNarration": "Be2 is a standard Four Pawns Attack move, developing the bishop and preparing kingside castling."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Kings Indian Defense Four Pawns Attack: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside removes Black's king to safety and connects the rooks, essential before White's pawn storm intensifies on the kingside.",
       "shortNarration": "Kings Indian Four Pawns Attack: O-O is the theoretical move."
     },
     {
       "san": "f4",
-      "annotation": "Continuing Kings Indian Defense Four Pawns Attack: f4 is a known theory move in this line.",
+      "annotation": "The f4 thrust defines the Four Pawns Attack: White establishes a pawn chain (e4–d4–c4) and threatens to open lines against Black's fianchettoed bishop on g7.",
       "shortNarration": "f4 is theory in the Four Pawns Attack, pushing White's center."
     }
   ]

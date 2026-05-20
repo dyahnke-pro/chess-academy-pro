@@ -1,0 +1,44 @@
+{
+  "openingId": "sicilian-sveshnikov",
+  "fromPgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5",
+  "depth": 10,
+  "games": [
+    {
+      "id": "gnCbmvaX",
+      "white": "Caruana, F.",
+      "whiteRating": 2832,
+      "black": "Carlsen, M.",
+      "blackRating": 2835,
+      "winner": null,
+      "year": 2018,
+      "month": "2018-11",
+      "url": "https://lichess.org/gnCbmvaX",
+      "pgn": "[Event \"WCh 2018\"]\n[Site \"London ENG\"]\n[Date \"2018.11.19\"]\n[Round \"8\"]\n[White \"Caruana, F.\"]\n[Black \"Carlsen, M.\"]\n[Result \"1/2-1/2\"]\n[GameId \"gnCbmvaX\"]\n[WhiteElo \"2832\"]\n[BlackElo \"2835\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B33\"]\n[Opening \"Sicilian Defense: Lasker-Pelikan Variation\"]\n[Termination \"Normal\"]\n\n1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e5 6. Ndb5 d6 7. Nd5 Nxd5 8. exd5 Nb8 9. a4 Be7 10. Be2 O-O 11. O-O Nd7 12. Bd2 f5 13. a5 a6 14. Na3 e4 15. Nc4 Ne5 16. Nb6 Rb8 17. f4 exf3 18. Bxf3 g5 19. c4 f4 20. Bc3 Bf5 21. c5 Nxf3+ 22. Qxf3 dxc5 23. Rad1 Bd6 24. h3 Qe8 25. Nc4 Qg6 26. Nxd6 Qxd6 27. h4 gxh4 28. Qxf4 Qxf4 29. Rxf4 h5 30. Re1 Bg4 31. Rf6 Rxf6 32. Bxf6 Kf7 33. Bxh4 Re8 34. Rf1+ Kg8 35. Rf6 Re2 36. Rg6+ Kf8 37. d6 Rd2 38. Rg5 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "9hRmnVXz",
+      "white": "Caruana, F.",
+      "whiteRating": 2832,
+      "black": "Carlsen, M.",
+      "blackRating": 2835,
+      "winner": null,
+      "year": 2018,
+      "month": "2018-11",
+      "url": "https://lichess.org/9hRmnVXz",
+      "pgn": "[Event \"WCh 2018\"]\n[Site \"London ENG\"]\n[Date \"2018.11.22\"]\n[Round \"10\"]\n[White \"Caruana, F.\"]\n[Black \"Carlsen, M.\"]\n[Result \"1/2-1/2\"]\n[GameId \"9hRmnVXz\"]\n[WhiteElo \"2832\"]\n[BlackElo \"2835\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B33\"]\n[Opening \"Sicilian Defense: Lasker-Pelikan Variation\"]\n[Termination \"Normal\"]\n\n1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e5 6. Ndb5 d6 7. Nd5 Nxd5 8. exd5 Nb8 9. a4 Be7 10. Be2 O-O 11. O-O Nd7 12. b4 a6 13. Na3 a5 14. bxa5 Rxa5 15. Nc4 Ra8 16. Be3 f5 17. a5 f4 18. Bb6 Qe8 19. Ra3 Qg6 20. Bc7 e4 21. Kh1 b5 22. Nb6 Nxb6 23. Bxb6 Qg5 24. g3 b4 25. Rb3 Bh3 26. Rg1 f3 27. Bf1 Bxf1 28. Qxf1 Qxd5 29. Rxb4 Qe6 30. Rb5 Bd8 31. Qe1 Bxb6 32. axb6 Rab8 33. Qe3 Qc4 34. Rb2 Rb7 35. Rd1 Qe2 36. Re1 Qxe3 37. Rxe3 d5 38. h4 Rc8 39. Ra3 Kf7 40. Kh2 Ke6 41. g4 Rc6 42. Ra6 Ke5 43. Kg3 h6 44. h5 Kd4 45. Rb5 Rd6 46. Ra4+ Ke5 47. Rab4 Ke6 48. c4 dxc4 49. Rxc4 Rdxb6 50. Rxe4+ Kf7 51. Rf5+ Rf6 52. Rxf6+ Kxf6 53. Kxf3 Kf7 54. Kg3 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "oI7SdvND",
+      "white": "Caruana, F.",
+      "whiteRating": 2832,
+      "black": "Carlsen, M.",
+      "blackRating": 2835,
+      "winner": "black",
+      "year": 2018,
+      "month": "2018-11",
+      "url": "https://lichess.org/oI7SdvND",
+      "pgn": "[Event \"WCh Rapid TB 2018\"]\n[Site \"London ENG\"]\n[Date \"2018.11.28\"]\n[Round \"2\"]\n[White \"Caruana, F.\"]\n[Black \"Carlsen, M.\"]\n[Result \"0-1\"]\n[GameId \"oI7SdvND\"]\n[WhiteElo \"2832\"]\n[BlackElo \"2835\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B33\"]\n[Opening \"Sicilian Defense: Lasker-Pelikan Variation\"]\n[Termination \"Normal\"]\n\n1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 e5 6. Ndb5 d6 7. Nd5 Nxd5 8. exd5 Ne7 9. c4 Ng6 10. Qa4 Bd7 11. Qb4 Qb8 12. h4 h5 13. Be3 a6 14. Nc3 a5 15. Qb3 a4 16. Qd1 Be7 17. g3 Qc8 18. Be2 Bg4 19. Rc1 Bxe2 20. Qxe2 Qf5 21. c5 O-O 22. c6 bxc6 23. dxc6 Rfc8 24. Qc4 Bd8 25. Nd5 e4 26. c7 Bxc7 27. Nxc7 Ne5 28. Nd5 Kh7 0-1\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:47:28.565Z"
+}

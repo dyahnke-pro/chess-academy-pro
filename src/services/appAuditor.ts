@@ -324,6 +324,10 @@ export type AuditKind =
   // absent).
   | 'coach-opening-auto-detected'
   | 'coach-opening-teaching-active'
+  // Find-the-Square drill (David's 2026-05-19 spec). Fires once per
+  // round start with the target list — pair with downstream
+  // findSquareAttempts rows in Dexie to reconstruct per-round timing.
+  | 'find-square-round-start'
   // Diagnostic audits added to identify root causes for user-reported
   // bugs WITHOUT guessing the fix. Each one captures the inputs that
   // would otherwise require speculation. Once the audit log shows the
@@ -539,6 +543,14 @@ export type AuditKind =
   //   coach served the stock "I can't verify which moves are sound"
   //   response. Last-line G3 protection.
   | 'master-play-enforcement-fallback'
+  // Book grounding (chess-concepts.json — 7 Gutenberg classics).
+  //   Fires whenever the coach OR the opening narrator injects a
+  //   passage from Capablanca / Lasker / Staunton / Young / Edge /
+  //   Bird into the LLM's system prompt. The audit's summary names
+  //   the surface (`coachApi.bookGrounding` /
+  //   `openingGenerator.bookGrounding`) and char count. Used to
+  //   confirm the wiring is live + measure injection frequency.
+  | 'book-grounding-injected'
   // Opening-play opponent move source trail. Fired by
   //   `coachGameEngine.getAdaptiveMove` for every move the opponent
   //   makes once past the canonical repertoire line. The `source`
@@ -567,7 +579,79 @@ export type AuditKind =
   //   brain calls) and hard errors.
   | 'opening-play-eval-updated'
   | 'opening-play-eval-prefetch-dropped'
-  | 'opening-play-eval-error';
+  | 'opening-play-eval-error'
+  // Audit-instrumentation phase-1 (2026-05-19): new event kinds added
+  // alongside the audit fixes for the 9-bug rerun. Each one closes a
+  // visibility gap surfaced while triaging the live audit log.
+  //
+  // chip-tap-resolved: emitted on every chip / picker-tile tap.
+  //   Carries the chip text, the resolved opening name, and the
+  //   resolution path (alias / fuzzy / canonical / context-aware /
+  //   conversational). Was buried inside `coach-surface-migrated`
+  //   before; standalone kind makes it queryable.
+  | 'chip-tap-resolved'
+  // user-retry-detected: when the same user types two semantically
+  //   similar inputs within a short window, the previous turn
+  //   probably mis-resolved. Surfaces the "I wanted the danish
+  //   gambit" → second-try pattern from the live audit.
+  | 'user-retry-detected'
+  // followup-context-check: short follow-ups (< 5 words) after a
+  //   state-changing turn. Compares the prior opening on the board
+  //   against the opening the brain's reply assumes. Mismatch =
+  //   context lost across turns.
+  | 'followup-context-check'
+  // scaffolding-stripped: every time sanitizeCoachText strips an
+  //   opener like "Great question — " from the LLM response. Tracks
+  //   the rate at which the LLM ignores the no-filler ban.
+  | 'scaffolding-stripped'
+  // san-to-speech: every sanitizeForTTS call that mutated SAN tokens
+  //   into spoken text. Captures the SAN inputs and the rendered
+  //   spoken outputs so bugs like Bug F's "Nb4 → knight to b" surface
+  //   the moment they happen, not after the user reports them.
+  | 'san-to-speech'
+  // verbosity-response-length: per-turn rolling p50/p90 of response
+  //   length per verbosity tier. When `brief` is averaging 250+ chars
+  //   the LLM is ignoring the prompt and we know to strengthen rules.
+  | 'verbosity-response-length'
+  // voice-fallover: Polly → Web Speech / native voice transition.
+  //   Today this is silent except for tts-failure entries; explicit
+  //   kind makes the rate observable directly.
+  | 'voice-fallover'
+  // opening-cache: hit / miss / invalidated for the Dexie
+  //   cachedOpenings store. Generation is the most expensive
+  //   operation in the app; cache hit rate matters.
+  | 'opening-cache-hit'
+  | 'opening-cache-miss'
+  | 'opening-cache-invalidated'
+  // llm-token-usage: per LLM call — input tokens, output tokens,
+  //   model, provider. Per-turn cost trend without reading invoices.
+  | 'llm-token-usage'
+  // audit-stream-truncated: emitted when the rolling 1000-entry
+  //   buffer drops an event. Lets exports flag "you're looking at a
+  //   partial view."
+  | 'audit-stream-truncated'
+  // audit-stream-post-failed: rollup event emitted every N audit-stream
+  //   POST failures (or every M minutes) so we can tell "no events
+  //   fired" from "the stream is broken" when the live-watch feed
+  //   goes quiet.
+  | 'audit-stream-post-failed'
+  // app-foreground / app-background: visibilitychange + pageshow/pagehide
+  //   lifecycle events. Real-device audits need these to correlate
+  //   "Bluetooth disconnect / ringer-switch wiped the speech queue"
+  //   with the surface state at the moment it happened.
+  | 'app-foreground'
+  | 'app-background'
+  // sw-lifecycle: service worker install / activate / update /
+  //   skip-waiting events. Today these are silent and "is the new
+  //   bundle live?" requires reading the network panel.
+  | 'sw-lifecycle'
+  // pwa lifecycle events: pwa-install / notification-permission /
+  //   share-target invocation — Capacitor / PWA lifecycle that today
+  //   is silent.
+  | 'pwa-install-prompt'
+  | 'pwa-installed'
+  | 'notification-permission-changed'
+  | 'share-target-invoked';
 
 export interface AuditEntry {
   timestamp: number;
@@ -590,6 +674,20 @@ export interface AuditEntry {
    *  Production reports answer "which build was the user on?" by
    *  reading this field instead of guessing from timestamps. */
   buildId?: string;
+  /** Audit-instrumentation phase-1 (2026-05-19): correlates every
+   *  event that fires inside one conversational turn — user message
+   *  → brain ask → tool calls → answer → voice → chips. Optional
+   *  because not every event is part of a turn (boot-time, route
+   *  changes, surface mounts). Callers that know they're inside a
+   *  turn pass `turnId`; deeper non-turn-aware callers omit it.
+   *  Tying events by turnId makes 300-event audit logs pivotable. */
+  turnId?: string;
+  /** Audit-instrumentation phase-1: auto-stamped by `logAppAudit`
+   *  from a per-tab session identifier set at app boot. Lets us tell
+   *  "all 300 events in one continuous session" vs "300 events
+   *  scattered across 7 app launches" — important context when
+   *  reading historical exports. */
+  sessionId?: string;
 }
 
 /** Build identifier injected at vite-build time. Falls back to
@@ -598,10 +696,77 @@ export interface AuditEntry {
  *  display the running bundle hash without rummaging in audit rows. */
 export function getBuildId(): string {
   try {
-     
+
     return typeof __BUILD_ID__ !== 'undefined' ? __BUILD_ID__ : 'unknown';
   } catch {
     return 'unknown';
+  }
+}
+
+/** Per-tab session identifier set once at module load (= app boot in
+ *  practice, since the JS bundle re-evaluates on every reload). Every
+ *  audit event auto-stamps this so a 300-event export can be sliced
+ *  into "events from one continuous session" buckets without guessing
+ *  from timestamps. Cleared by full page reload (intentionally —
+ *  reload starts a new session). */
+const SESSION_ID: string = (() => {
+  try {
+    // Web Crypto preferred for unguessable session IDs; fall back to
+    // Math.random in non-browser test contexts.
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+  } catch {
+    /* fall through to fallback */
+  }
+  return `s-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+})();
+/** Exported so debug surfaces / about-this-app screens can display the
+ *  current session id (matches the field stamped on each event). */
+export function getSessionId(): string {
+  return SESSION_ID;
+}
+
+/** Monotonic per-tab turn counter. The chat surface bumps this once
+ *  at the start of every `handleSubmit` to get a fresh turn id, then
+ *  threads the id through every audit event in that turn. Stays in
+ *  this module so multiple surfaces (CoachTeachPage, CoachGamePage,
+ *  CoachReviewPage, etc.) can share the counter without coordinating
+ *  through Zustand or React state. */
+let nextTurnSeq = 0;
+export function mintTurnId(prefix: string = 't'): string {
+  nextTurnSeq += 1;
+  return `${prefix}-${SESSION_ID.slice(0, 8)}-${nextTurnSeq}`;
+}
+
+/** Module-global "current turn id" — when a surface sets this at the
+ *  start of a turn, every `logAppAudit` fire from any module during
+ *  that turn picks it up automatically. Saves plumbing the turn id
+ *  through every helper / service / hook. Cleared when the surface
+ *  calls `clearCurrentTurnId()` at turn end.
+ *
+ *  Single-threaded by design: chat surfaces gate `handleSubmit` on a
+ *  busy flag, so only one turn is "current" per surface at a time.
+ *  If two surfaces overlap (unusual but possible during cross-surface
+ *  voice fallover), the most recent caller wins — which is correct
+ *  for the dominant audit consumer (the active surface). */
+let currentTurnId: string | null = null;
+export function setCurrentTurnId(id: string | null): void {
+  currentTurnId = id;
+}
+export function getCurrentTurnId(): string | null {
+  return currentTurnId;
+}
+/** Run a callback with a turn id auto-stamped on every audit event
+ *  fired from any code reached during the callback. Restores the
+ *  previous turn id afterwards so nested calls behave sensibly. */
+export async function runInTurn<T>(turnId: string, fn: () => Promise<T>): Promise<T> {
+  const prev = currentTurnId;
+  currentTurnId = turnId;
+  try {
+    return await fn();
+  } finally {
+    currentTurnId = prev;
   }
 }
 
@@ -630,12 +795,38 @@ export async function logAppAudit(
     timestamp: Date.now(),
     route: typeof window !== 'undefined' ? window.location?.pathname : undefined,
     buildId: getBuildId(),
+    // sessionId is auto-stamped here — callers never pass it. Stays
+    // stable for the lifetime of the JS module (per-tab session).
+    sessionId: SESSION_ID,
+    // turnId — caller-passed wins; otherwise inherit the current
+    // turn id set by the surface (via setCurrentTurnId / runInTurn).
+    turnId: entry.turnId ?? currentTurnId ?? undefined,
   };
   const next = auditWriteChain.then(async () => {
     try {
       const current = await readLog();
       current.push(filled);
       const trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
+      // Audit-instrumentation phase-1 (2026-05-19): when the rolling
+      // buffer drops entries, emit a marker so exports flag "you're
+      // looking at a partial view". Only emit when DROP transitions
+      // (no marker for every new entry past the cap — that'd flood).
+      const dropped = current.length - trimmed.length;
+      if (dropped > 0 && filled.kind !== 'audit-stream-truncated') {
+        // Append the truncation marker directly to the trimmed array
+        // so it survives this write and lands AFTER the entries that
+        // displaced the dropped ones. Avoids recursive logAppAudit
+        // calls (would re-enter the chain).
+        trimmed.push({
+          timestamp: Date.now(),
+          kind: 'audit-stream-truncated',
+          category: 'subsystem',
+          source: 'appAuditor.rollingBuffer',
+          summary: `${dropped} oldest entries dropped (cap ${APP_AUDIT_LOG_MAX_ENTRIES})`,
+          buildId: getBuildId(),
+          sessionId: SESSION_ID,
+        });
+      }
       await db.meta.put({
         key: APP_AUDIT_LOG_META_KEY,
         value: JSON.stringify(trimmed),
@@ -792,8 +983,22 @@ export function isAuditStreamConfigHydrated(): boolean {
 const PREHYDRATE_QUEUE_LIMIT = 100;
 const preHydrationQueue: AuditEntry[] = [];
 
+/** Track audit-stream POST failures for the audit-stream-post-failed
+ *  rollup. Per-call logging would recurse infinitely (the failure
+ *  audit itself would try to stream). Instead we count failures and
+ *  emit a single rollup event every N failures or every M minutes —
+ *  whichever comes first. */
+let streamPostFailureCount = 0;
+let streamPostFailureLastReport = 0;
+const STREAM_FAILURE_REPORT_THRESHOLD = 5;
+const STREAM_FAILURE_REPORT_INTERVAL_MS = 60_000;
+
 async function streamAuditEntry(entry: AuditEntry): Promise<void> {
   if (typeof window === 'undefined') return;
+  // Never recurse: the rollup event itself is part of the stream;
+  // skipping it here prevents an infinite loop when the network is
+  // genuinely broken.
+  if (entry.kind === 'audit-stream-post-failed') return;
   const cfg = cachedStreamConfig;
   if (!cfg) {
     // Boot window: hydration hasn't completed yet. Queue for replay
@@ -806,19 +1011,77 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
     return;
   }
   try {
-    await fetch(cfg.url, {
+    // keepalive bypasses the browser's per-origin connection pool
+    // queue. Without it, an audit emitted during a fast user action
+    // (tile click + immediate navigation) gets serialized behind
+    // dozens of other queued fetches (asset loads, HMR pings) and
+    // shows up on the wire 10+ seconds late. Playwright audit
+    // scripts that attribute per-scenario events miss it entirely —
+    // the audit-coach-play 2026-05-19 flake was traced to this
+    // exact pattern: coach-hub-tile-clicked fired during the
+    // coach-play-render scenario but the POST hit the wire during
+    // move-3-Bc4 ~14s later. keepalive sends the request
+    // immediately on a dedicated connection and lets it outlive
+    // the page if needed.
+    const response = await fetch(cfg.url, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
         'x-audit-secret': cfg.secret,
       },
       body: JSON.stringify(entry),
+      keepalive: true,
       // Best-effort: don't block on slow networks.
       signal: AbortSignal.timeout(4000),
     });
-  } catch {
-    /* silent — the local Dexie log is still the source of truth */
+    // Audit-instrumentation phase-7 (2026-05-19): audit-stream POST
+    // health. Previously we silently swallowed every failure mode
+    // (network down, server 500, secret invalid). If the live-watch
+    // feed went silent the only way to tell "no events fired" from
+    // "stream is broken" was to read this file. Track non-2xx and
+    // network errors; emit a rollup every N or every M minutes.
+    if (!response.ok) {
+      streamPostFailureCount += 1;
+      maybeEmitStreamFailureRollup(response.status, null);
+    }
+  } catch (err) {
+    streamPostFailureCount += 1;
+    maybeEmitStreamFailureRollup(null, err);
   }
+}
+
+/** Emit a rolled-up `audit-stream-post-failed` event when failure
+ *  count crosses the threshold or enough time has passed. Resets the
+ *  counter on emit. Best-effort — failures here are themselves
+ *  silent (we'd be back to the original problem). */
+function maybeEmitStreamFailureRollup(
+  lastStatus: number | null,
+  lastError: unknown,
+): void {
+  const now = Date.now();
+  const shouldEmit =
+    streamPostFailureCount >= STREAM_FAILURE_REPORT_THRESHOLD ||
+    (streamPostFailureCount > 0 && now - streamPostFailureLastReport >= STREAM_FAILURE_REPORT_INTERVAL_MS);
+  if (!shouldEmit) return;
+  streamPostFailureLastReport = now;
+  const count = streamPostFailureCount;
+  streamPostFailureCount = 0;
+  // Use logAppAudit so the failure rollup itself is in the local log
+  // and reaches the stream on the next successful POST. The early
+  // return at the top of streamAuditEntry breaks the recursion.
+  void logAppAudit({
+    kind: 'audit-stream-post-failed',
+    category: 'subsystem',
+    source: 'appAuditor.streamAuditEntry',
+    summary: `${count} audit-stream POST(s) failed in the last ${STREAM_FAILURE_REPORT_INTERVAL_MS / 1000}s`,
+    details: JSON.stringify({
+      failureCount: count,
+      lastStatus,
+      lastError: lastError instanceof Error
+        ? { message: lastError.message, name: lastError.name }
+        : (lastError == null ? null : String(lastError)),
+    }),
+  });
 }
 
 /** Flush any audits queued during the boot window. Called from
@@ -897,10 +1160,20 @@ export function installConsoleBackdoor(): void {
     },
     clear: async (): Promise<void> => {
       await clearAppAuditLog();
-       
+
       console.log('[appAuditor] cleared');
     },
     count: () => -1,
+    // Hydration signal exposed for Playwright audit scripts. The
+    // pre-hydration queue (line 782-806) buffers audits emitted
+    // before `loadAuditStreamConfig()` resolves; once it fires
+    // the queue flushes in one burst. Audit scripts that record
+    // per-scenario need to wait for hydration before starting
+    // captures, else the boot-window burst lands in some random
+    // later scenario's window and breaks attribution. Confirmed
+    // root cause of audit-coach-play's flaky failures 2026-05-19.
+    isStreamHydrated: () => streamConfigHydrated,
+    pendingStreamBufferSize: () => preHydrationQueue.length,
   };
   (window as unknown as { __AUDIT__: typeof api }).__AUDIT__ = api;
 }
@@ -1016,6 +1289,18 @@ export function installGlobalErrorHooks(): () => void {
     const reason = event.reason as unknown;
     const message = reason instanceof Error ? reason.message : String(reason);
     const stack = reason instanceof Error ? reason.stack : undefined;
+    // Suppress the iOS-Safari `/sw.js load failed` transient class.
+    // VitePWA's auto-injected registration races the page load on
+    // cold-start; if the SW request hits a network blip or a CDN
+    // cache miss the registration promise rejects. The browser
+    // RETRIES on next visit and the SW activates fine — the audit
+    // log just sees the rejection. Caught in 2026-05-18 audit
+    // finding 195. Marking handled so it doesn't noise the
+    // unhandled-rejection counter.
+    if (/sw\.js[^a-zA-Z0-9]*(load failed|fetch.*failed|request.*failed|registration failed|FetchEvent failed)/i.test(message)) {
+      event.preventDefault();
+      return;
+    }
     emitWithRateLimit({
       kind: 'unhandled-rejection',
       category: 'runtime',
@@ -1028,9 +1313,115 @@ export function installGlobalErrorHooks(): () => void {
   window.addEventListener('error', onError);
   window.addEventListener('unhandledrejection', onRejection);
 
+  // Audit-instrumentation phase-7 (2026-05-19): app foreground /
+  // background lifecycle. Real-device audits need these so we can
+  // correlate "voice queue wiped" / "AVAudioSession route changed"
+  // with the surface state when it happened. visibilitychange covers
+  // the modern path; pageshow/pagehide are the fallback for older
+  // Safari / Capacitor.
+  const onVisibilityChange = (): void => {
+    const visible = document.visibilityState === 'visible';
+    void logAppAudit({
+      kind: visible ? 'app-foreground' : 'app-background',
+      category: 'subsystem',
+      source: 'window.visibilitychange',
+      summary: `visibility=${document.visibilityState}`,
+      details: JSON.stringify({
+        visibilityState: document.visibilityState,
+        hidden: document.hidden,
+      }),
+    });
+  };
+  const onPageHide = (e: PageTransitionEvent): void => {
+    void logAppAudit({
+      kind: 'app-background',
+      category: 'subsystem',
+      source: 'window.pagehide',
+      summary: `pagehide persisted=${e.persisted}`,
+      details: JSON.stringify({ persisted: e.persisted }),
+    });
+  };
+  const onPageShow = (e: PageTransitionEvent): void => {
+    void logAppAudit({
+      kind: 'app-foreground',
+      category: 'subsystem',
+      source: 'window.pageshow',
+      summary: `pageshow persisted=${e.persisted}`,
+      details: JSON.stringify({ persisted: e.persisted }),
+    });
+  };
+  document.addEventListener('visibilitychange', onVisibilityChange);
+  window.addEventListener('pagehide', onPageHide);
+  window.addEventListener('pageshow', onPageShow);
+
+  // Service worker lifecycle. Each event tells us a different part
+  // of the PWA refresh story — "is the new bundle live?" answers come
+  // from `updatefound` + `controllerchange`.
+  const swListeners: Array<() => void> = [];
+  if ('serviceWorker' in navigator) {
+    const onControllerChange = (): void => {
+      void logAppAudit({
+        kind: 'sw-lifecycle',
+        category: 'subsystem',
+        source: 'navigator.serviceWorker.controllerchange',
+        summary: 'service worker controllerchange — new bundle taking over',
+        details: JSON.stringify({
+          newScriptURL: navigator.serviceWorker.controller?.scriptURL ?? null,
+        }),
+      });
+    };
+    navigator.serviceWorker.addEventListener('controllerchange', onControllerChange);
+    swListeners.push(() => navigator.serviceWorker.removeEventListener('controllerchange', onControllerChange));
+
+    // Watch updatefound on each registration. We can't catch the
+    // initial `install` from here (that fires inside the SW script
+    // itself), but we can observe every UPDATE that the browser
+    // detects post-boot.
+    void navigator.serviceWorker.getRegistrations().then((regs) => {
+      for (const reg of regs) {
+        const onUpdateFound = (): void => {
+          const installing = reg.installing;
+          void logAppAudit({
+            kind: 'sw-lifecycle',
+            category: 'subsystem',
+            source: 'serviceWorker.updatefound',
+            summary: `service worker update detected (scope ${reg.scope})`,
+            details: JSON.stringify({
+              scope: reg.scope,
+              installingState: installing?.state ?? null,
+              scriptURL: installing?.scriptURL ?? null,
+            }),
+          });
+          if (installing) {
+            const onStateChange = (): void => {
+              void logAppAudit({
+                kind: 'sw-lifecycle',
+                category: 'subsystem',
+                source: 'serviceWorker.statechange',
+                summary: `service worker state → ${installing.state}`,
+                details: JSON.stringify({
+                  scope: reg.scope,
+                  state: installing.state,
+                  scriptURL: installing.scriptURL,
+                }),
+              });
+            };
+            installing.addEventListener('statechange', onStateChange);
+          }
+        };
+        reg.addEventListener('updatefound', onUpdateFound);
+        swListeners.push(() => reg.removeEventListener('updatefound', onUpdateFound));
+      }
+    }).catch(() => undefined);
+  }
+
   return () => {
     window.removeEventListener('error', onError);
     window.removeEventListener('unhandledrejection', onRejection);
+    document.removeEventListener('visibilitychange', onVisibilityChange);
+    window.removeEventListener('pagehide', onPageHide);
+    window.removeEventListener('pageshow', onPageShow);
+    for (const cleanup of swListeners) cleanup();
     bursts.clear();
   };
 }

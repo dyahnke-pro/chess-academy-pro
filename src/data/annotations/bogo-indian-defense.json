@@ -28,7 +28,7 @@
     },
     {
       "san": "Bb4+",
-      "annotation": "Continuing Bogo Indian Defense: Bb4+ is a known theory move in this line.",
+      "annotation": "The bishop check on b4 forces White to clarify the queenside immediately: blocking with the knight commits it to c3, or playing c-pawn pushes open the center before development is complete.",
       "shortNarration": "Bb4+ pins the knight, pressuring White's center and preparing to trade bishop for knight."
     }
   ]

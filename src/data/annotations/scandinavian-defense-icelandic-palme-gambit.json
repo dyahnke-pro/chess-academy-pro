@@ -23,12 +23,12 @@
     },
     {
       "san": "c4",
-      "annotation": "Continuing Scandinavian Defense Icelandic Palme Gambit: c4 is a known theory move in this line.",
+      "annotation": "Pushing c4 supports the d5 pawn and prepares to build a strong pawn center while keeping Black's pieces restricted.",
       "shortNarration": "c4 is theory in the Icelandic Palme Gambit, pressuring Black's center."
     },
     {
       "san": "e6",
-      "annotation": "Continuing Scandinavian Defense Icelandic Palme Gambit: e6 is a known theory move in this line.",
+      "annotation": "Playing e6 challenges the d5 pawn directly and prepares to develop the bishop to e7, fighting for central control.",
       "shortNarration": "e6 is the theory move in the Icelandic Palme Gambit."
     }
   ]

@@ -81,6 +81,19 @@ function isTeachableEntry(e: OpeningEntry): boolean {
   return !getTerminalShortPgns().has(e.pgn);
 }
 
+/** Public re-export of the teachable-entry test. Other modules — the
+ *  fuzzy matcher in particular — need the same "this entry is rich
+ *  enough to teach" decision so the picker can include the canonical
+ *  bare parent (e.g. "Danish Gambit," 5 plies but with rich sub-
+ *  variation children) alongside its named sub-variations. Audit
+ *  2026-05-19 (Bug C): the fuzzy matcher was using a stricter
+ *  ply-count-only filter that hid "Danish Gambit" from the picker
+ *  while keeping its sub-variations, so the user who typed "danish
+ *  gambit" got a picker missing the canonical parent. */
+export function isTeachable(e: OpeningEntry): boolean {
+  return isTeachableEntry(e);
+}
+
 function buildTrie(entries: OpeningEntry[]): TrieNode {
   const root: TrieNode = { children: new Map(), opening: null };
 
@@ -200,9 +213,48 @@ function tokensMatchTarget(query: string, target: string): boolean {
   const tNorm = normalizeNameForMatch(target);
   const qTokens = qNorm.split(' ').filter((t) => t.length >= 3);
   if (qTokens.length === 0) return false;
+  // Reject token sets composed entirely of stopwords / common chat
+  // noise — see RESOLVER_STOPWORDS for the rationale.
+  if (qTokens.every((t) => RESOLVER_STOPWORDS.has(t))) return false;
   const tTokens = new Set(tNorm.split(' '));
   return qTokens.every((t) => tTokens.has(t));
 }
+
+/** Short tokens that should NEVER be allowed to canonicalize to an
+ *  opening name via substring / token-set match. Audit 2026-05-19
+ *  (Bug D): `resolveOpeningEntry("it")` returned `Italian Game` via
+ *  substring match at score 1.00, because chip text "Walk me through
+ *  it" got TEACH_PATTERN-captured as `requestedName = "it"`. Any
+ *  conversational pronoun / particle / common verb that happens to
+ *  appear as a substring of an opening name would have done the
+ *  same. The exact-match path is unaffected: a user who literally
+ *  types one of these still gets exact-match behavior (which returns
+ *  null for these since none are themselves opening names). */
+const RESOLVER_STOPWORDS = new Set([
+  // Pronouns
+  'it', 'its', 'he', 'she', 'we', 'us', 'you', 'they', 'them', 'this', 'that',
+  // Articles + particles
+  'the', 'a', 'an', 'of', 'to', 'in', 'on', 'at', 'by', 'for', 'with', 'as',
+  // Verbs
+  'is', 'am', 'are', 'was', 'were', 'be', 'do', 'did', 'does', 'has', 'had',
+  // Conjunctions
+  'and', 'or', 'but', 'if', 'so',
+  // Common chat noise
+  'yes', 'no', 'ok', 'okay', 'sure', 'maybe', 'please',
+  // Question words
+  'how', 'why', 'what', 'who', 'when', 'where',
+  // Adverbs / spatial
+  'more', 'less', 'next', 'back', 'here', 'now', 'too',
+  // Common short conversational verbs
+  'go', 'see', 'try', 'get', 'put', 'use', 'show', 'tell', 'ask', 'say', 'let',
+]);
+
+/** Below this query length we refuse substring + token-set matches.
+ *  The shortest legitimate opening name in the Lichess DB is 4 chars
+ *  ("Pirc", "Slav", "Reti"), so anything shorter is conversational
+ *  text — never an opening name. Exact + prefix match still run for
+ *  short queries (alias map covers "kid", "qgd", etc. there). */
+const RESOLVER_MIN_FUZZY_LEN = 4;
 
 /** Aliases for acronyms + common alt-names the DB doesn't index.
  *  Keys are lowercase normalized inputs; values are canonical names
@@ -325,7 +377,60 @@ export function findShortestCanonicalPgn(canonicalName: string): string | null {
   // No sub-variations to surface as forks — use the longest same-
   // name PGN so the walkthrough extends to whatever depth the DB
   // (canonical or extended) carries.
-  return matches.reduce((a, b) => (a.pgn.length > b.pgn.length ? a : b)).pgn;
+  const longestSameName = matches.reduce((a, b) =>
+    a.pgn.length > b.pgn.length ? a : b,
+  );
+  const longestPlies = longestSameName.pgn.split(/\s+/).filter(Boolean).length;
+  // Cross-name extension: when the same-name spine ends short of
+  // middlegame depth, the DB sometimes carries the SAME line under a
+  // different (more-specific) name with extra plies. E.g.
+  //   "Vienna Game: Frankenstein-Dracula Variation"       → 6 plies
+  //   "Vienna Game: Stanley Variation,
+  //                 Frankenstein-Dracula Variation"       → 20 plies
+  // Both have identical PGN prefixes; the longer one is literally
+  // the canonical line continued. The user typed the shorter
+  // variation name and expects the walkthrough to reach the
+  // middlegame — let the deeper continuation drive the spine. Bound:
+  // the candidate's PGN MUST start with the same-name longest's PGN
+  // (so we never break out of the named position).
+  if (longestPlies < SPINE_EXTENSION_THRESHOLD) {
+    const extended = findLongestPgnExtending(longestSameName.pgn);
+    if (extended && extended !== longestSameName.pgn) {
+      return extended;
+    }
+  }
+  return longestSameName.pgn;
+}
+
+/** Ply count below which `findShortestCanonicalPgn` looks for a
+ *  cross-name PGN extension. 10 covers most middlegame transitions. */
+const SPINE_EXTENSION_THRESHOLD = 10;
+/** Hard cap on the extended-spine length. ~20 plies is comfortably
+ *  in the middlegame for any opening and keeps the walkthrough
+ *  tractable. */
+const SPINE_EXTENSION_MAX_PLIES = 20;
+
+/** Find the longest DB PGN that has `basePgn` as a (strict or equal)
+ *  prefix. Used by `findShortestCanonicalPgn` to extend thin named
+ *  variations into the middlegame using DB entries stored under
+ *  different (more-specific) names. Returns null when no entry
+ *  extends the base, or when the extension cap is already at the
+ *  threshold (same as the base, no real extension). */
+function findLongestPgnExtending(basePgn: string): string | null {
+  const entries = openingsData;
+  const basePrefix = basePgn + ' ';
+  let best: { pgn: string; plies: number } | null = null;
+  for (const e of entries) {
+    if (e.pgn !== basePgn && !e.pgn.startsWith(basePrefix)) continue;
+    const plies = e.pgn.split(/\s+/).filter(Boolean).length;
+    if (!best || plies > best.plies) best = { pgn: e.pgn, plies };
+  }
+  if (!best) return null;
+  // Cap at SPINE_EXTENSION_MAX_PLIES so the walkthrough doesn't grow
+  // unbounded for openings the DB carries to 25-30 plies.
+  if (best.plies <= SPINE_EXTENSION_MAX_PLIES) return best.pgn;
+  const capped = best.pgn.split(/\s+/).filter(Boolean).slice(0, SPINE_EXTENSION_MAX_PLIES).join(' ');
+  return capped;
 }
 
 /** Resolve a user-typed opening name against the Lichess DB and
@@ -381,6 +486,21 @@ export function resolveOpeningEntry(
   // 1. Exact match (case + diacritic + apostrophe + hyphen insensitive).
   const exact = entries.filter((e) => normalizeNameForMatch(e.name) === queryNorm);
   if (exact.length > 0) return emit(pick(exact));
+
+  // Guard against the Bug D failure mode: queries this short or this
+  // common are chat noise, not opening names. Without this guard,
+  // `resolveOpeningEntry("it")` returns `Italian Game` (prefix match)
+  // at score 1.00 — chip text "Walk me through it" got TEACH_PATTERN-
+  // captured as `requestedName = "it"` and silently bounced the
+  // student to a wholly unrelated opening. Anything below this gate
+  // falls through to the brain path, where the conversation context
+  // can resolve the antecedent. Exact match above is intentionally
+  // preserved: a user who literally types one of these still hits
+  // null (none are themselves canonical opening names), but aliases
+  // resolved earlier ("kid" → "King's Indian Defense") expanded long
+  // before we got here, so the alias path is unaffected.
+  if (queryNorm.length < RESOLVER_MIN_FUZZY_LEN) return null;
+  if (RESOLVER_STOPWORDS.has(queryNorm)) return null;
 
   // 2. Prefix match (normalized) — "Kings Indian" → "King's Indian Defense".
   const prefix = entries.filter((e) =>

@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Our opponent commits to the King's Indian Defense setup, preparing to fianchetto their dark-squared bishop on g7 where it will pressure our entire queenside and central pawn structure. This move signals Black's intention to play for dynamic counterplay rather than immediate central occupation - they're willing to allow us more space in exchange for active piece play. The g6 move also prepares ...Bg7, which will create tactical threats along the long diagonal and support a future ...f5 pawn break. Black is essentially saying they're comfortable playing with less space if they can generate piece activity and kingside attacking chances.",
-      "shortNarration": "Black fianchettoes the bishop on g7 to pressure the queenside and center, preparing counterplay with ...f5."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto on g7 to pressure the queenside and center, preparing counterplay with ...f5."
     },
     {
       "san": "Nc3",

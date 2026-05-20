@@ -1,0 +1,44 @@
+{
+  "openingId": "kings-gambit",
+  "fromPgn": "e4 e5 f4 exf4 Nf3 d5",
+  "depth": 6,
+  "games": [
+    {
+      "id": "uldGpuyI",
+      "white": "Carlsen, M.",
+      "whiteRating": 2876,
+      "black": "Aronian, L.",
+      "blackRating": 2780,
+      "winner": null,
+      "year": 2015,
+      "month": "2015-06",
+      "url": "https://lichess.org/uldGpuyI",
+      "pgn": "[Event \"3rd Norway Blitz 2015\"]\n[Site \"Stavanger NOR\"]\n[Date \"2015.06.15\"]\n[Round \"5.5\"]\n[White \"Carlsen, M.\"]\n[Black \"Aronian, L.\"]\n[Result \"1/2-1/2\"]\n[GameId \"uldGpuyI\"]\n[WhiteElo \"2876\"]\n[BlackElo \"2780\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C36\"]\n[Opening \"King's Gambit Accepted: Abbazia Defense\"]\n[Termination \"Normal\"]\n\n1. e4 e5 2. f4 exf4 3. Nf3 d5 4. exd5 Nf6 5. Bc4 Nxd5 6. O-O Be7 7. Nc3 Be6 8. Qe2 Nc6 9. d4 O-O 10. Nxd5 Bxd5 11. Bxd5 Qxd5 12. Bxf4 Bd6 13. Qd2 Rae8 14. Bxd6 Qxd6 15. Rae1 Re7 16. d5 Ne5 17. Nxe5 Rxe5 18. Rxe5 Qxe5 19. c4 Re8 20. Qf2 f6 21. b3 b6 22. h3 Kf7 23. Rd1 h5 24. c5 Rd8 25. d6 Rd7 26. b4 bxc5 27. bxc5 cxd6 28. c6 Rc7 29. Rc1 Qd5 30. Qc2 Qc5+ 31. Qxc5 dxc5 32. Rxc5 g6 33. Kf2 Ke6 34. Ra5 Kd6 35. Ke3 h4 36. Kf4 Rxc6 37. Rxa7 Rc4+ 38. Kf3 g5 39. Ra6+ Ke5 40. Ra5+ Ke6 41. Ra6+ Kf5 42. Ra5+ Ke6 43. Ra6+ 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "ZsJXLdvq",
+      "white": "Nakamura, Hikaru",
+      "whiteRating": 2758,
+      "black": "Adams, Michael",
+      "blackRating": 2734,
+      "winner": "white",
+      "year": 2011,
+      "month": "2011-12",
+      "url": "https://lichess.org/ZsJXLdvq",
+      "pgn": "[Event \"London Classic 3rd\"]\n[Site \"London\"]\n[Date \"2011.12.12\"]\n[Round \"9\"]\n[White \"Nakamura, Hikaru\"]\n[Black \"Adams, Michael\"]\n[Result \"1-0\"]\n[GameId \"ZsJXLdvq\"]\n[WhiteElo \"2758\"]\n[BlackElo \"2734\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C36\"]\n[Opening \"King's Gambit Accepted: Abbazia Defense\"]\n[Termination \"Unknown\"]\n\n1. e4 e5 2. f4 exf4 3. Nf3 d5 4. exd5 Nf6 5. Bc4 Nxd5 6. O-O Be6 7. Bb3 c5 8. Kh1 Nc6 9. d4 c4 10. Ba4 Bd6 11. b3 c3 12. Qd3 O-O 13. Bxc6 bxc6 14. Nxc3 Re8 15. Nxd5 Bxd5 16. c4 Be4 17. Qc3 a5 18. a3 f6 19. Bb2 Ra7 20. Rad1 Rae7 21. b4 axb4 22. axb4 Kh8 23. Qb3 Rb7 24. Bc3 Qb8 25. b5 cxb5 26. c5 b4 27. Bd2 Bf8 28. Rde1 g5 29. Qc4 g4 30. Nh4 f3 31. d5 fxg2+ 32. Nxg2 Bf3 33. Kg1 Rc8 34. c6 Rb5 35. Nf4 Bc5+ 36. Be3 Bxe3+ 37. Rxe3 Qb6 38. Re1 b3 39. Qc3 Rf8 40. Ne6 b2 41. c7 1-0\n\n\n"
+    },
+    {
+      "id": "xhspMEQu",
+      "white": "Rapport, R.",
+      "whiteRating": 2736,
+      "black": "Gelfand, B.",
+      "blackRating": 2676,
+      "winner": null,
+      "year": 2019,
+      "month": "2019-05",
+      "url": "https://lichess.org/xhspMEQu",
+      "pgn": "[Event \"IMSA World Masters Rapid\"]\n[Site \"Hengshui CHN\"]\n[Date \"2019.05.15\"]\n[Round \"6.4\"]\n[White \"Rapport, R.\"]\n[Black \"Gelfand, B.\"]\n[Result \"1/2-1/2\"]\n[GameId \"xhspMEQu\"]\n[WhiteElo \"2736\"]\n[BlackElo \"2676\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C36\"]\n[Opening \"King's Gambit Accepted: Abbazia Defense\"]\n[Termination \"Normal\"]\n\n1. e4 e5 2. f4 exf4 3. Nf3 d5 4. exd5 Nf6 5. Be2 Nxd5 6. c4 Nf6 7. d4 Bd6 8. c5 Be7 9. Nc3 O-O 10. Bxf4 Be6 11. O-O Nc6 12. Qd2 Nd5 13. Bg3 a6 14. Kh1 Qd7 15. Rad1 Rad8 16. a3 f5 17. b4 Nxc3 18. Qxc3 Bd5 19. a4 f4 20. Bf2 Bf6 21. Bd3 Qf7 22. b5 axb5 23. axb5 Ne7 24. Qc2 Qh5 25. Bc4 Bxc4 26. Qxc4+ Qd5 27. Nd2 Ra8 28. Rfe1 Ra2 29. Qd3 Qf7 30. Ne4 Nd5 31. Ra1 Rxa1 32. Rxa1 Qe6 33. Re1 Qf5 34. Qb3 Kh8 35. b6 cxb6 36. Nd6 Qh5 37. cxb6 h6 38. h3 f3 39. Qxf3 Qxf3 40. gxf3 Nxb6 41. Rb1 Nd5 42. Rxb7 Ra8 43. Ne4 Ra3 44. Nxf6 Nxf6 45. Kg2 Nd5 46. Rb5 Nf4+ 47. Kg3 Ne2+ 48. Kg4 Rd3 49. Rd5 Kg8 50. h4 g6 51. Rd7 h5+ 52. Kg5 Rxf3 53. Be1 Rf7 54. Rd6 Kh7 55. Rxg6 Rf1 56. Re6 Rxe1 57. Re7+ Kg8 58. Kh6 Rd1 59. Rxe2 Rxd4 60. Kxh5 Rd7 61. Rg2+ Rg7 62. Rxg7+ Kxg7 1/2-1/2\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:47:01.495Z"
+}

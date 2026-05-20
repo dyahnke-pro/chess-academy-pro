@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Our opponent is signaling their intention to fianchetto the king's bishop, preparing the characteristic King's Indian Defense setup with Bg7. This move supports a future f5 pawn break while preparing to castle kingside safely, though it does create some weaknesses around the dark squares near Black's king. The g6 move also opens up tactical possibilities for us later - the weakened f6 and h6 squares could become targets if we can arrange pieces to exploit them. Black is choosing a hypermodern approach, allowing us to occupy the center with pawns while planning to challenge it later with piece pressure and pawn breaks like e5 or f5.",
-      "shortNarration": "Black fianchettoes the king's bishop with g6, preparing Bg7 and a King's Indian setup — weakens f6 and h6 squares for future tactical exploitation."
+      "shortNarration": "Black plays g6, preparing the king's bishop fianchetto with g6, preparing Bg7 and a King's Indian setup — weakens f6 and h6 squares for future tactical exploitation."
     },
     {
       "san": "Nc3",

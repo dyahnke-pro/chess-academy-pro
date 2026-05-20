@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black commits to the King's Indian Defense setup by preparing to fianchetto the king's bishop on g7, where it will become a powerful long-range piece aimed at our center. This move signals Black's intention to castle kingside quickly and launch a counterattack against our pawn center later in the game. The pawn on g6 also provides the h7 square as a retreat for the knight if it gets attacked, maintaining flexibility in Black's piece coordination. Black is essentially accepting that we'll build a strong pawn center with d4, c4, and e4, but planning to undermine it with moves like ...e5, ...f5, or ...c5 later.",
-      "shortNarration": "Black fianchettoes the king's bishop on g7, aiming at the center and preparing kingside castling with a flexible knight retreat to h7."
+      "shortNarration": "Black plays g6, preparing the king's bishop fianchetto on g7, aiming at the center and preparing kingside castling with a flexible knight retreat to h7."
     },
     {
       "san": "Nc3",

@@ -42,7 +42,16 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   const playerRating = activeProfile?.currentRating ?? 1420;
   const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
   const targetStrength = getTargetStrength(playerRating, difficulty);
-  const playerColor = opening.color;
+  // When playing out a specific position (quiz "test yourself",
+  // trap position, etc.) the player controls whichever side is to
+  // move in that FEN — not always the opening's color. David
+  // 2026-05-20: "test yourself plays as black" was because a
+  // white-repertoire quiz position with black-to-move still forced
+  // playerColor = white. Derive from the startFen when present.
+  const startFenSide: 'white' | 'black' | null = startFen
+    ? (startFen.split(' ')[1] === 'b' ? 'black' : 'white')
+    : null;
+  const playerColor = startFenSide ?? opening.color;
   const activePgn = customLine ? customLine.pgn : opening.pgn;
   const displayName = customLine ? `${opening.name}: ${customLine.name}` : opening.name;
 
@@ -85,10 +94,12 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   const [moveHistory, setMoveHistory] = useState<Array<{ fen: string; from: string; to: string }>>([]);
   const [viewedMoveIndex, setViewedMoveIndex] = useState<number | null>(null);
 
-  // Parse expected opening moves
+  // Parse expected opening moves. Puzzle-derived trap lines may
+  // start from a middlegame setupFen (see OpeningVariation type).
+  const setupFen = customLine?.setupFen;
   const openingMoves = useMemo((): Array<{ san: string; from: string; to: string }> => {
     const tokens = activePgn.trim().split(/\s+/).filter(Boolean);
-    const chess = new Chess();
+    const chess = setupFen ? new Chess(setupFen) : new Chess();
     const moves: Array<{ san: string; from: string; to: string }> = [];
     for (const san of tokens) {
       try {
@@ -99,7 +110,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       }
     }
     return moves;
-  }, [activePgn]);
+  }, [activePgn, setupFen]);
 
   const openingPhaseLength = openingMoves.length;
 

@@ -28,7 +28,7 @@
     },
     {
       "san": "g6",
-      "annotation": "Continuing English Opening Kings English Variation Taimanov Variation: g6 is a known theory move in this line.",
+      "annotation": "Black fianchettoes the kingside bishop, planning to control the long diagonal and pressure White's center from afar.",
       "shortNarration": "g6 is a known theory move in the English Opening Kings English Taimanov Variation."
     },
     {
@@ -38,7 +38,7 @@
     },
     {
       "san": "Bg7",
-      "annotation": "Continuing English Opening Kings English Variation Taimanov Variation: Bg7 is a known theory move in this line.",
+      "annotation": "The bishop lands on g7, where it eyes the long diagonal toward a1 and supports Black's pawn on e5 indirectly.",
       "shortNarration": "Bg7 is a known theory move in the English Opening's Taimanov Variation."
     }
   ]

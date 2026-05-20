@@ -1,0 +1,1883 @@
+{
+  "generatedAt": "2026-05-19T03:03:53.526Z",
+  "totalFindings": 239,
+  "byKind": {
+    "variation-no-subline": 200,
+    "no-annotation-file": 39
+  },
+  "findings": [
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "italian-game",
+      "annoFile": "src/data/annotations/italian-game.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Giuoco Piano: Main Line with Nc3"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "four-knights-game",
+      "annoFile": "src/data/annotations/four-knights-game.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Belgrade Gambit: 4.d4 exd4 5.Nd5"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "sicilian-alapin",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Alapin: 2...Nf6 Main Line (Endgame)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "sicilian-alapin",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Alapin: 2...d5 Central Counter (IQP Play)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "sicilian-alapin",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Alapin: 2...e6 Solid (French Structure)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "sicilian-alapin",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Alapin: 2...g6 Fianchetto"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "sicilian-alapin",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.Nf3 (Alt Move Order)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "sicilian-alapin",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Alapin: 2...d5 3.exd5 Qxd5 4.d4 Nc6 (with ...e5)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "sicilian-alapin",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Alapin: 2...Nf6 3.e5 Nd5 4.d4 cxd4 5.cxd4 d6 (IQP Accepted)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "sicilian-alapin",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Alapin: 2...d5 3.exd5 Nf6 (Knight Recapture)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "french-defence",
+      "annoFile": "src/data/annotations/french-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Advance: Milner-Barry Gambit"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "caro-kann",
+      "annoFile": "src/data/annotations/caro-kann-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Classical Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "caro-kann",
+      "annoFile": "src/data/annotations/caro-kann-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Advance Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "caro-kann",
+      "annoFile": "src/data/annotations/caro-kann-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Two Knights Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "caro-kann",
+      "annoFile": "src/data/annotations/caro-kann-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Panov-Botvinnik Attack"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "caro-kann",
+      "annoFile": "src/data/annotations/caro-kann-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Fantasy Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "caro-kann",
+      "annoFile": "src/data/annotations/caro-kann-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Short Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "caro-kann",
+      "annoFile": "src/data/annotations/caro-kann-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Exchange Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "caro-kann",
+      "annoFile": "src/data/annotations/caro-kann-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Tartakower/Breyer Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "pirc-defence",
+      "annoFile": "src/data/annotations/pirc-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Austrian Attack"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "pirc-defence",
+      "annoFile": "src/data/annotations/pirc-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Classical System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "pirc-defence",
+      "annoFile": "src/data/annotations/pirc-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "150 Attack"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "pirc-defence",
+      "annoFile": "src/data/annotations/pirc-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Byrne Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "pirc-defence",
+      "annoFile": "src/data/annotations/pirc-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Lion Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "pirc-defence",
+      "annoFile": "src/data/annotations/pirc-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Fianchetto System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "pirc-defence",
+      "annoFile": "src/data/annotations/pirc-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Czech Defence"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "pirc-defence",
+      "annoFile": "src/data/annotations/pirc-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Austrian Attack with e5 c5"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "scandinavian-defence",
+      "annoFile": "src/data/annotations/scandinavian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Qa5 Main Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "scandinavian-defence",
+      "annoFile": "src/data/annotations/scandinavian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Nf6 Modern Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "scandinavian-defence",
+      "annoFile": "src/data/annotations/scandinavian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Icelandic Gambit"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "scandinavian-defence",
+      "annoFile": "src/data/annotations/scandinavian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Qd6 Tiviakov Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "scandinavian-defence",
+      "annoFile": "src/data/annotations/scandinavian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Portuguese Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "scandinavian-defence",
+      "annoFile": "src/data/annotations/scandinavian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Gubinsky-Melts (3...Qd8)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "scandinavian-defence",
+      "annoFile": "src/data/annotations/scandinavian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Qa5 with Bd2 Main Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "alekhine-defence",
+      "annoFile": "src/data/annotations/alekhine-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Four Pawns Attack"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "alekhine-defence",
+      "annoFile": "src/data/annotations/alekhine-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Modern Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "alekhine-defence",
+      "annoFile": "src/data/annotations/alekhine-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Exchange Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "alekhine-defence",
+      "annoFile": "src/data/annotations/alekhine-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Two Pawns Attack"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "alekhine-defence",
+      "annoFile": "src/data/annotations/alekhine-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Chase Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "alekhine-defence",
+      "annoFile": "src/data/annotations/alekhine-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Scandinavian Transposition"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "alekhine-defence",
+      "annoFile": "src/data/annotations/alekhine-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Voronezh Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "catalan-opening",
+      "annoFile": "src/data/annotations/catalan-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Closed Catalan: ...c6 System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qgd",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Orthodox Defense Main Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qgd",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Tartakower Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qgd",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Lasker Defense"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qgd",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Exchange Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qgd",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Ragozin Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qgd",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Vienna Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qgd",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Cambridge Springs"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qgd",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bf4 QGD"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qga",
+      "annoFile": "src/data/annotations/queen-s-gambit-accepted.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Classical e3 Bxc4 c5 Main Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qga",
+      "annoFile": "src/data/annotations/queen-s-gambit-accepted.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Smyslov Variation 3...a6"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qga",
+      "annoFile": "src/data/annotations/queen-s-gambit-accepted.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Sadler Variation ...Bg4"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qga",
+      "annoFile": "src/data/annotations/queen-s-gambit-accepted.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Central Variation 3.e4"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qga",
+      "annoFile": "src/data/annotations/queen-s-gambit-accepted.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Alekhine Variation 4.Nc3"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qga",
+      "annoFile": "src/data/annotations/queen-s-gambit-accepted.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Modern Tabiya with Rd1"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "qga",
+      "annoFile": "src/data/annotations/queen-s-gambit-accepted.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Janowski Variation ...Qd5"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "slav-defence",
+      "annoFile": "src/data/annotations/slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Main Line (a4 Bf5)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "slav-defence",
+      "annoFile": "src/data/annotations/slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Exchange Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "slav-defence",
+      "annoFile": "src/data/annotations/slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Chebanenko Variation (4...a6)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "slav-defence",
+      "annoFile": "src/data/annotations/slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Quiet Variation (4.e3)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "slav-defence",
+      "annoFile": "src/data/annotations/slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Geller Gambit"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "slav-defence",
+      "annoFile": "src/data/annotations/slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Schlechter Variation (...g6 Fianchetto)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "slav-defence",
+      "annoFile": "src/data/annotations/slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Winawer Countergambit (...e5!?)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "slav-defence",
+      "annoFile": "src/data/annotations/slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Modern Qc2/Qb3 Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "semi-slav",
+      "annoFile": "src/data/annotations/semi-slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Meran Variation Deeper"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "semi-slav",
+      "annoFile": "src/data/annotations/semi-slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Botvinnik Variation Deep"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "semi-slav",
+      "annoFile": "src/data/annotations/semi-slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Anti-Meran Bd3 Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "semi-slav",
+      "annoFile": "src/data/annotations/semi-slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Stoltz Qc2 Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "semi-slav",
+      "annoFile": "src/data/annotations/semi-slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Moscow Variation Bxf6"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "semi-slav",
+      "annoFile": "src/data/annotations/semi-slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Reynolds Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "semi-slav",
+      "annoFile": "src/data/annotations/semi-slav-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Romih ...Bd6 System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "nimzo-indian",
+      "annoFile": "src/data/annotations/nimzo-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Classical Variation (4.Qc2)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "nimzo-indian",
+      "annoFile": "src/data/annotations/nimzo-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Rubinstein System (4.e3)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "nimzo-indian",
+      "annoFile": "src/data/annotations/nimzo-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Huebner Variation (4.e3 c5)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "nimzo-indian",
+      "annoFile": "src/data/annotations/nimzo-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Leningrad Variation (4.Bg5)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "nimzo-indian",
+      "annoFile": "src/data/annotations/nimzo-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Kasparov Variation (4.Nf3)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "nimzo-indian",
+      "annoFile": "src/data/annotations/nimzo-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Saemisch Variation (4.a3)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "nimzo-indian",
+      "annoFile": "src/data/annotations/nimzo-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "4.f3 (Aggressive Center)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "nimzo-indian",
+      "annoFile": "src/data/annotations/nimzo-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Fischer Variation (4.e3 b6)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "grunfeld-defence",
+      "annoFile": "src/data/annotations/gr-nfeld-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Exchange Variation: Main Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "grunfeld-defence",
+      "annoFile": "src/data/annotations/gr-nfeld-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Exchange: Be3 Qa5 Qd2 with Rc1"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "grunfeld-defence",
+      "annoFile": "src/data/annotations/gr-nfeld-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Russian System (Qb3)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "grunfeld-defence",
+      "annoFile": "src/data/annotations/gr-nfeld-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Fianchetto Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "grunfeld-defence",
+      "annoFile": "src/data/annotations/gr-nfeld-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bc4 Classical"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "grunfeld-defence",
+      "annoFile": "src/data/annotations/gr-nfeld-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Neo-Grünfeld (g3 without Nc3)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "grunfeld-defence",
+      "annoFile": "src/data/annotations/gr-nfeld-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Exchange: Nf3 c5 Rb1 (Modern)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "grunfeld-defence",
+      "annoFile": "src/data/annotations/gr-nfeld-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Taimanov Variation (f3)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "dutch-defence",
+      "annoFile": "src/data/annotations/dutch-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Leningrad g6 Main Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "dutch-defence",
+      "annoFile": "src/data/annotations/dutch-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Stonewall d5 e6 Bd6"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "dutch-defence",
+      "annoFile": "src/data/annotations/dutch-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Classical Be7 Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "dutch-defence",
+      "annoFile": "src/data/annotations/dutch-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Anti-Dutch 2.Bg5 Response"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "dutch-defence",
+      "annoFile": "src/data/annotations/dutch-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Leningrad e5 Break"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "dutch-defence",
+      "annoFile": "src/data/annotations/dutch-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Ilyin-Zhenevsky System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "dutch-defence",
+      "annoFile": "src/data/annotations/dutch-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Hopton Attack Response"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benoni-defence",
+      "annoFile": "src/data/annotations/benoni-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Modern Main Line (Nd2/f3) with ...b5 Race"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benoni-defence",
+      "annoFile": "src/data/annotations/benoni-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Fianchetto Variation (g3/Bg2)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benoni-defence",
+      "annoFile": "src/data/annotations/benoni-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Classical Variation (Bf4 — d6 Pressure)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benoni-defence",
+      "annoFile": "src/data/annotations/benoni-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Taimanov Variation (f4/Bb5+)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benoni-defence",
+      "annoFile": "src/data/annotations/benoni-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Four Pawns Attack (...Ng4 Counter)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benoni-defence",
+      "annoFile": "src/data/annotations/benoni-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Czech Benoni (...e5 Closed Center)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benoni-defence",
+      "annoFile": "src/data/annotations/benoni-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Snake Benoni (...Bd7-a4 Maneuver)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benko-gambit",
+      "annoFile": "src/data/annotations/benko-gambit-accepted-central-storming-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Fianchetto Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benko-gambit",
+      "annoFile": "src/data/annotations/benko-gambit-accepted-central-storming-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "King Walk Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benko-gambit",
+      "annoFile": "src/data/annotations/benko-gambit-accepted-central-storming-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Benko Declined: Nf3 System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benko-gambit",
+      "annoFile": "src/data/annotations/benko-gambit-accepted-central-storming-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Zaitsev Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benko-gambit",
+      "annoFile": "src/data/annotations/benko-gambit-accepted-central-storming-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Half-Accepted"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benko-gambit",
+      "annoFile": "src/data/annotations/benko-gambit-accepted-central-storming-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Fully Accepted: Main Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "benko-gambit",
+      "annoFile": "src/data/annotations/benko-gambit-accepted-central-storming-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Modern 5.f3 System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "queens-indian",
+      "annoFile": "src/data/annotations/queen-s-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Queen's Indian: Fianchetto Variation (Deep)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "queens-indian",
+      "annoFile": "src/data/annotations/queen-s-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Queen's Indian: Petrosian Variation (a3)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "queens-indian",
+      "annoFile": "src/data/annotations/queen-s-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Queen's Indian: Kasparov Variation (Nc3/a3)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "queens-indian",
+      "annoFile": "src/data/annotations/queen-s-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Queen's Indian: Nimzowitsch Variation (...Bb4+)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "queens-indian",
+      "annoFile": "src/data/annotations/queen-s-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Queen's Indian: Classical Variation (...Be7)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "queens-indian",
+      "annoFile": "src/data/annotations/queen-s-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Queen's Indian: Miles Variation (...Ba6)"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "queens-indian",
+      "annoFile": "src/data/annotations/queen-s-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Queen's Indian: 4.e3 System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: Adler Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: Fajarowicz Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: Rubinstein Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: Main Bf4 Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: Alekhine Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: Alekhine Variation with Bc5"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: 3...Ne4 Trappy Line"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "old-indian-defence",
+      "annoFile": "src/data/annotations/old-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Old Indian: Czech Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "old-indian-defence",
+      "annoFile": "src/data/annotations/old-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Old Indian: Janowski Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "old-indian-defence",
+      "annoFile": "src/data/annotations/old-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Old Indian: Tartakower Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "old-indian-defence",
+      "annoFile": "src/data/annotations/old-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Old Indian: Ukrainian Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "old-indian-defence",
+      "annoFile": "src/data/annotations/old-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Old Indian: Main Line with d5"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "old-indian-defence",
+      "annoFile": "src/data/annotations/old-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Old Indian: Seirawan System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "old-indian-defence",
+      "annoFile": "src/data/annotations/old-indian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Old Indian: Be2 Development"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "english-opening",
+      "annoFile": "src/data/annotations/english-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Mikenas Attack"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "english-opening",
+      "annoFile": "src/data/annotations/english-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bremen System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "english-opening",
+      "annoFile": "src/data/annotations/english-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Ultra-Symmetrical Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "reti-opening",
+      "annoFile": "src/data/annotations/r-ti-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Reti: KIA Setup g3 Bg2 d3 e4"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "reti-opening",
+      "annoFile": "src/data/annotations/r-ti-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Reti: Advance c4 d4"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "reti-opening",
+      "annoFile": "src/data/annotations/r-ti-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Reti: Accepted dxc4 Bxc4"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "reti-opening",
+      "annoFile": "src/data/annotations/r-ti-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Reti: LSB Fianchetto"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "reti-opening",
+      "annoFile": "src/data/annotations/r-ti-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Reti: Nimzo-English Hybrid"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "reti-opening",
+      "annoFile": "src/data/annotations/r-ti-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Reti: Reti Gambit"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "reti-opening",
+      "annoFile": "src/data/annotations/r-ti-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Reti: Anti-Slav"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "reti-opening",
+      "annoFile": "src/data/annotations/r-ti-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Reti: Reversed Benoni"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "kings-indian-attack",
+      "annoFile": "src/data/annotations/king-s-indian-attack.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "KIA vs QGD-Style Response"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "kings-indian-attack",
+      "annoFile": "src/data/annotations/king-s-indian-attack.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "KIA vs KID-Style Response"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "kings-indian-attack",
+      "annoFile": "src/data/annotations/king-s-indian-attack.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "KIA: e5 Wedge System"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "birds-opening",
+      "annoFile": "src/data/annotations/bird-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bird's: Leningrad Formation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "birds-opening",
+      "annoFile": "src/data/annotations/bird-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bird's: From's Gambit Accepted"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "birds-opening",
+      "annoFile": "src/data/annotations/bird-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bird's: Nimzo-Larsen Hybrid"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "birds-opening",
+      "annoFile": "src/data/annotations/bird-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bird's: Stonewall Formation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "birds-opening",
+      "annoFile": "src/data/annotations/bird-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bird's: Swiss Gambit"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "birds-opening",
+      "annoFile": "src/data/annotations/bird-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bird's: From's Gambit Declined"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "birds-opening",
+      "annoFile": "src/data/annotations/bird-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bird's: Williams Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "two-knights-defence",
+      "annoFile": "src/data/annotations/italian-game-two-knights-defense-modern-bishop-s-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Two Knights: Italian Two Knights d4"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "two-knights-defence",
+      "annoFile": "src/data/annotations/italian-game-two-knights-defense-modern-bishop-s-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Two Knights: Fried Liver Defence 5...Na5"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "two-knights-defence",
+      "annoFile": "src/data/annotations/italian-game-two-knights-defense-modern-bishop-s-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Two Knights: Quiet Italian d3 with ...Be7"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "two-knights-defence",
+      "annoFile": "src/data/annotations/italian-game-two-knights-defense-modern-bishop-s-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Two Knights: Ulvestad Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "two-knights-defence",
+      "annoFile": "src/data/annotations/italian-game-two-knights-defense-modern-bishop-s-opening.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Two Knights: 4.d3 Main Line with ...Be7"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "evans-gambit",
+      "annoFile": "src/data/annotations/italian-game-evans-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Evans Gambit: Morphy Attack"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "evans-gambit",
+      "annoFile": "src/data/annotations/italian-game-evans-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Evans Gambit: Anderssen Variation"
+    },
+    {
+      "file": "src/data/repertoire.json",
+      "openingId": "evans-gambit",
+      "annoFile": "src/data/annotations/italian-game-evans-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Evans Gambit: Main Line with Qb3"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-naroditsky-fantasy-caro",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6 "
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-naroditsky-kid",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-naroditsky-grunfeld",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-naroditsky-semi-slav",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 h6 Bxf6 Qxf6 e3 Nd7 Bd3 dxc4 "
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-gothamchess-london",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Bd3 b6 O-"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-gothamchess-caro-kann",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 B"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-gothamchess-scandinavian",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-gothamchess-qgd",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bf4 O-O e3 c5 dxc5 Bxc5 Qc2 Nc6 "
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-gothamchess-fantasy-caro",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-gothamchess-milner-barry",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 "
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-gothamchess-anti-sicilian",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Rossolimo 3.Bb5 e6"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-gothamchess-anti-sicilian",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Rossolimo 3.Bb5 g6"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-gothamchess-anti-sicilian",
+      "annoFile": "src/data/annotations/sicilian-defense-alapin-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Accelerated Pawn Storm (Carlsen-inspired)"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-carlsen-catalan",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qx"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-carlsen-english",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3 O-O"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-carlsen-qgd",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 e6 Nc3 d5 Nf3 Be7 Bf4 O-O e3 Nbd7 c5 Nh5 Bd3 Nxf4 "
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-carlsen-london-d4",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 Nf3 d5 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Bd3 b6 O-"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-hikaru-kia",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3 O-O Nbd2 c5 e4 Nc6 Re1 b5 e5"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-hikaru-london",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 c4 Qc2 Bf5 Qc1 e6 Nbd"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-hikaru-kid",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-hikaru-nimzo",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 "
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-hikaru-benko",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 "
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-hikaru-english",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3 O-O"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-caruana-qgd",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 e6 Nc3 d5 Nf3 Be7 Bf4 O-O e3 Nbd7 Be2 c5 dxc5 Nxc5"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-caruana-nimzo",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 c5 dxc5"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-caruana-catalan",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qx"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-firouzja-rossolimo",
+      "annoFile": "src/data/annotations/sicilian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "3...g6 Main Line"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-firouzja-rossolimo",
+      "annoFile": "src/data/annotations/sicilian-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "3...e6 Variation"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-firouzja-grunfeld",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Rb1 O-"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-firouzja-kid",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-dubov-italian",
+      "annoFile": "src/data/annotations/pro-dubov-italian.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Main Line (Dubov vs Karjakin 2020)"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-dubov-italian",
+      "annoFile": "src/data/annotations/pro-dubov-italian.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Black Declines Gambit with ...Bb6"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-dubov-italian",
+      "annoFile": "src/data/annotations/pro-dubov-italian.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Bc5xb4 (Pure Evans Gambit transposition)"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-dubov-catalan",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 Qxc4 b5 Q"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-dubov-tarrasch-french",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 cxd4 cxd4 f6 e"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-dubov-tarrasch-defense",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 d5 c4 e6 Nc3 c5 cxd5 exd5 Nf3 Nc6 g3 Nf6 Bg2 Be7 O-O O-O "
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-dubov-benoni",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 c5 d5 e6 Nc3 exd5 cxd5 d6 e4 g6 Nf3 Bg7 Be2 O-O O-"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-dubov-dutch",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 Nc6 d5 Ne5 Nxe"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-gukesh-catalan",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-praggnanandhaa-catalan",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-niemann-grunfeld",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 g6 Nc3 d5"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-ericrosen-london",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 d5 Bf4 Nf6 Nf3 e6 e3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6 O-"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-ericrosen-englund",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 e5"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-annacramling-qgd",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 "
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-annacramling-london",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 d5 Bf4 Nf6 e3 e6 Nf3 Be7 Bd3"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-annacramling-cow",
+      "annoFile": "src/data/annotations/pro-annacramling-cow.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Standard Cow vs 1.e4"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-annacramling-cow",
+      "annoFile": "src/data/annotations/pro-annacramling-cow.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Cow vs 1.d4"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-annacramling-cow",
+      "annoFile": "src/data/annotations/pro-annacramling-cow.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Aggressive Cow with ...g6"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-chesswithakeem-caro-kann",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 B"
+    },
+    {
+      "file": "src/data/pro-repertoires.json",
+      "openingId": "pro-samayraina-nimzo",
+      "kind": "no-annotation-file",
+      "severity": "p1",
+      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-kings-gambit",
+      "annoFile": "src/data/annotations/king-s-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "King's Gambit Accepted: Knight Gambit Main Line"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-kings-gambit",
+      "annoFile": "src/data/annotations/king-s-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "King's Gambit Accepted: Bishop Gambit (Fischer's Favorite)"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-kings-gambit",
+      "annoFile": "src/data/annotations/king-s-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "King's Gambit Declined: Classical with Bc5"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-kings-gambit",
+      "annoFile": "src/data/annotations/king-s-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Falkbeer Countergambit"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-kings-gambit",
+      "annoFile": "src/data/annotations/king-s-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "King's Gambit Accepted: Kieseritzky Gambit"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-evans-gambit",
+      "annoFile": "src/data/annotations/italian-game-evans-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Evans Gambit: Normal Variation with d5 Push"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-evans-gambit",
+      "annoFile": "src/data/annotations/italian-game-evans-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Evans Gambit: Slow Variation with Be7 Retreat"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-evans-gambit",
+      "annoFile": "src/data/annotations/italian-game-evans-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Evans Gambit Declined: Bb6 System"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-evans-gambit",
+      "annoFile": "src/data/annotations/italian-game-evans-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Evans Gambit: Compromised Defense (dxc3)"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-evans-gambit",
+      "annoFile": "src/data/annotations/italian-game-evans-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Evans Gambit: Waller Attack with Qb3"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "smith-morra-gambit",
+      "annoFile": "src/data/annotations/sicilian-defense-smith-morra-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Smith-Morra: Classical Setup"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "smith-morra-gambit",
+      "annoFile": "src/data/annotations/sicilian-defense-smith-morra-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Smith-Morra: Fianchetto Defense"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "smith-morra-gambit",
+      "annoFile": "src/data/annotations/sicilian-defense-smith-morra-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Smith-Morra Declined: d3 Push"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "smith-morra-gambit",
+      "annoFile": "src/data/annotations/sicilian-defense-smith-morra-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Smith-Morra: Siberian Trap"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "smith-morra-gambit",
+      "annoFile": "src/data/annotations/sicilian-defense-smith-morra-gambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Smith-Morra: Taylor Defense"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "marshall-attack",
+      "annoFile": "src/data/annotations/ruy-lopez-marshall-attack.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Marshall Attack: Classical Main Line"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "marshall-attack",
+      "annoFile": "src/data/annotations/ruy-lopez-marshall-attack.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Marshall Attack: Bf5 Modern Setup"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "marshall-attack",
+      "annoFile": "src/data/annotations/ruy-lopez-marshall-attack.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Marshall Attack: Re6 Rook Lift"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "marshall-attack",
+      "annoFile": "src/data/annotations/ruy-lopez-marshall-attack.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Marshall Attack: d5-d4 Pawn Storm"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "marshall-attack",
+      "annoFile": "src/data/annotations/ruy-lopez-marshall-attack.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Marshall Attack: Spassky Variation"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: Alekhine Variation (Bf4)"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: Rubinstein Variation (Nd2)"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: Adler Variation (Nf3 Bc5)"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-budapest-gambit",
+      "annoFile": "src/data/annotations/indian-defense-budapest-defense.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Budapest Gambit: Bb4+ vs Nc3 (Doubled Pawns)"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "albin-countergambit",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined-albin-countergambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Albin Countergambit: Lasker Trap"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "albin-countergambit",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined-albin-countergambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Albin Countergambit: Normal Development (Nf3 System)"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "albin-countergambit",
+      "annoFile": "src/data/annotations/queen-s-gambit-declined-albin-countergambit.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Albin Countergambit: Fianchetto System"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-benko-gambit",
+      "annoFile": "src/data/annotations/benko-gambit-accepted-central-storming-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Benko Gambit: Fully Accepted (King Walk)"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-benko-gambit",
+      "annoFile": "src/data/annotations/benko-gambit-accepted-central-storming-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Benko Gambit: Fianchetto System"
+    },
+    {
+      "file": "src/data/gambits.json",
+      "openingId": "gambit-benko-gambit",
+      "annoFile": "src/data/annotations/benko-gambit-accepted-central-storming-variation.json",
+      "kind": "variation-no-subline",
+      "severity": "p1",
+      "variationName": "Benko Gambit: Modern with bxa6 g6"
+    }
+  ]
+}

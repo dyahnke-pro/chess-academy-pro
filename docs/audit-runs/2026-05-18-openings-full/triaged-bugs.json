@@ -1,0 +1,354 @@
+{
+  "real": [
+    {
+      "opening": "pro-carlsen-catalan",
+      "subline": "var:Open Catalan Main Line",
+      "ply": 5,
+      "expectedSan": "g3",
+      "capturedText": "The Catalan! White fianchettoes the bishop to g2, creating long-term pressure on the light squares.",
+      "files": [
+        "src/data/annotations/catalan-opening.json"
+      ],
+      "kind": "piece-mismatch-subject"
+    },
+    {
+      "opening": "gambit-evans-gambit",
+      "subline": "var:Evans Gambit: Slow Variation with Be7 Retreat",
+      "ply": 17,
+      "expectedSan": "e5",
+      "capturedText": "Black responds with e5, contesting the center. This is the move that defines the Evans Gambit: Compromised Defence.",
+      "files": [
+        "src/data/annotations/danish-gambit.json",
+        "src/data/annotations/englund-gambit.json",
+        "src/data/annotations/four-knights-game.json",
+        "src/data/annotations/italian-game-evans-gambit-morphy-attack.json",
+        "src/data/annotations/italian-game-evans-gambit.json",
+        "src/data/annotations/italian-game-two-knights-defense-modern-bishop-s-opening.json",
+        "src/data/annotations/italian-game.json",
+        "src/data/annotations/king-s-gambit-accepted-greco-gambit.json",
+        "src/data/annotations/king-s-gambit.json",
+        "src/data/annotations/petrov-s-defense-stafford-gambit.json",
+        "src/data/annotations/scotch-game-scotch-gambit.json",
+        "src/data/annotations/scotch-game.json",
+        "src/data/annotations/vienna-game-vienna-gambit.json",
+        "src/data/annotations/vienna-game.json",
+        "src/data/annotations-bundle.json"
+      ],
+      "kind": "color-mismatch"
+    },
+    {
+      "opening": "gambit-evans-gambit",
+      "subline": "var:Evans Gambit: Compromised Defense (dxc3)",
+      "ply": 17,
+      "expectedSan": "e5",
+      "capturedText": "Black responds with e5, contesting the center. This is the move that defines the Evans Gambit: Stone-Ware Variation.",
+      "files": [
+        "src/data/annotations/danish-gambit.json",
+        "src/data/annotations/englund-gambit.json",
+        "src/data/annotations/four-knights-game.json",
+        "src/data/annotations/italian-game-evans-gambit-morphy-attack.json",
+        "src/data/annotations/italian-game-evans-gambit.json",
+        "src/data/annotations/italian-game-two-knights-defense-modern-bishop-s-opening.json",
+        "src/data/annotations/italian-game.json",
+        "src/data/annotations/king-s-gambit-accepted-greco-gambit.json",
+        "src/data/annotations/king-s-gambit.json",
+        "src/data/annotations/petrov-s-defense-stafford-gambit.json",
+        "src/data/annotations/scotch-game-scotch-gambit.json",
+        "src/data/annotations/scotch-game.json",
+        "src/data/annotations/vienna-game-vienna-gambit.json",
+        "src/data/annotations/vienna-game.json",
+        "src/data/annotations-bundle.json"
+      ],
+      "kind": "color-mismatch"
+    },
+    {
+      "opening": "pro-firouzja-vienna",
+      "subline": "var:Vienna Gambit",
+      "ply": 15,
+      "expectedSan": "bxc3",
+      "capturedText": "White develops the king's knight to its ideal square, completing the basic piece development and preparing to castle.",
+      "files": [
+        "src/data/annotations/vienna-game.json"
+      ],
+      "kind": "qualifier-mismatch"
+    }
+  ],
+  "falsePositive": [
+    {
+      "opening": "ruy-lopez",
+      "subline": "var:Closed Ruy Lopez (Zaitsev)",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "Knight develops, attacking e5.",
+      "files": [
+        "src/data/annotations/ruy-lopez.json"
+      ]
+    },
+    {
+      "opening": "ruy-lopez",
+      "subline": "warn:Marshall Attack Danger",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "White develops the knight, attacking e5.",
+      "files": [
+        "src/data/annotations/ruy-lopez.json"
+      ]
+    },
+    {
+      "opening": "french-defence",
+      "subline": "var:Advance: Milner-Barry Gambit",
+      "ply": 6,
+      "expectedSan": "c5",
+      "capturedText": "Black immediately strikes at the base of White's pawn chain. This is the standard counterplay — attacking d4 to undermine the e5 pawn.",
+      "files": [
+        "src/data/annotations/french-defense.json",
+        "src/data/annotations-bundle.json"
+      ]
+    },
+    {
+      "opening": "french-defence",
+      "subline": "var:Advance: Milner-Barry Gambit",
+      "ply": 14,
+      "expectedSan": "Bd7",
+      "capturedText": "Black develops the bishop, preparing to bring the knight to e7 and castle. A solid but slightly passive choice.",
+      "files": [
+        "src/data/annotations/french-defense.json"
+      ]
+    },
+    {
+      "opening": "kings-indian-defence",
+      "subline": "main",
+      "ply": 4,
+      "expectedSan": "g6",
+      "capturedText": "Black plays g6, the King's Indian setup. The g6 pawn prepares the fianchetto of the dark-squared bishop to g7, where it will become Black's most powerful piece — controlling the lo",
+      "files": [
+        "src/data/annotations/king-s-indian-defense.json"
+      ]
+    },
+    {
+      "opening": "scotch-game",
+      "subline": "main",
+      "ply": 7,
+      "expectedSan": "Nxd4",
+      "capturedText": "White recaptures Nxd4, placing the knight on the dominant central square. The Nd4 controls c6, e6, f5, b5, and c2 — it's the most powerful piece on the board. White can later jump ",
+      "files": [
+        "src/data/annotations/scotch-game.json",
+        "src/data/annotations/sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json"
+      ]
+    },
+    {
+      "opening": "pro-naroditsky-scotch",
+      "subline": "main",
+      "ply": 7,
+      "expectedSan": "Nxd4",
+      "capturedText": "White recaptures Nxd4, placing the knight on the dominant central square. The Nd4 controls c6, e6, f5, b5, and c2 — it's the most powerful piece on the board. White can later jump ",
+      "files": [
+        "src/data/annotations/scotch-game.json",
+        "src/data/annotations/sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json"
+      ]
+    },
+    {
+      "opening": "pro-naroditsky-scotch",
+      "subline": "var:4...Nf6 Schmidt Variation",
+      "ply": 1,
+      "expectedSan": "e4",
+      "capturedText": "The Scotch: Mieses Variation (4...Nf6) is an important variation of the Scotch Game. Black plays 4...Nf6 immediately attacking e4. After 5.Nxc6 bxc6, Black has doubled pawns but ac",
+      "files": [
+        "src/data/annotations/scotch-game.json"
+      ]
+    },
+    {
+      "opening": "pro-carlsen-catalan",
+      "subline": "main",
+      "ply": 5,
+      "expectedSan": "g3",
+      "capturedText": "White plays g3, the defining move of the Catalan. Instead of developing the bishop to d3 or e2, White prepares to fianchetto it to g2 — the most powerful square available. The Bg2 ",
+      "files": [
+        "src/data/annotations/catalan-opening.json"
+      ]
+    },
+    {
+      "opening": "pro-caruana-ruy-lopez",
+      "subline": "var:Marshall Attack Main Line",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "White develops the knight, attacking e5.",
+      "files": [
+        "src/data/annotations/ruy-lopez.json"
+      ]
+    },
+    {
+      "opening": "pro-caruana-ruy-lopez",
+      "subline": "trap:Premature ...d5 Without h3",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "White develops the knight, attacking e5.",
+      "files": [
+        "src/data/annotations/ruy-lopez.json"
+      ]
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "main",
+      "ply": 5,
+      "expectedSan": "Bf4",
+      "capturedText": "Now we play Bf4, the London signature move. By waiting until move 3, we've ensured Black has already committed their knight to f6, making it harder for them to harass our bishop wi",
+      "files": [
+        "src/data/annotations/london-system.json"
+      ]
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "main",
+      "ply": 16,
+      "expectedSan": "b6",
+      "capturedText": "Black prepares to fianchetto the light-squared bishop to b7, where it will pressure e4 and the long diagonal. A solid queenside development plan.",
+      "files": [
+        "src/data/annotations/london-system.json",
+        "src/data/annotations-bundle.json"
+      ]
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "var:Standard Setup vs d5",
+      "ply": 5,
+      "expectedSan": "Bf4",
+      "capturedText": "Now we play Bf4, the London signature move. By waiting until move 3, we've ensured Black has already committed their knight to f6, making it harder for them to harass our bishop wi",
+      "files": [
+        "src/data/annotations/london-system.json"
+      ]
+    },
+    {
+      "opening": "pro-gothamchess-london",
+      "subline": "var:Standard Setup vs d5",
+      "ply": 16,
+      "expectedSan": "b6",
+      "capturedText": "Black prepares to fianchetto the light-squared bishop to b7, where it will pressure e4 and the long diagonal. A solid queenside development plan.",
+      "files": [
+        "src/data/annotations/london-system.json",
+        "src/data/annotations-bundle.json"
+      ]
+    },
+    {
+      "opening": "pro-praggnanandhaa-ruy-lopez",
+      "subline": "var:Anti-Marshall 8.c3",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "White develops the knight, attacking e5.",
+      "files": [
+        "src/data/annotations/ruy-lopez.json"
+      ]
+    },
+    {
+      "opening": "pro-dubov-sveshnikov",
+      "subline": "var:Main Line with c4",
+      "ply": 8,
+      "expectedSan": "Nf6",
+      "capturedText": "Black develops to f6, attacking e4. Combined with ...Nc6, this prepares the trademark Sveshnikov move ...e5.",
+      "files": [
+        "src/data/annotations/sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json"
+      ]
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:Main Line 9.exd5 Nxd5",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "White develops the knight, attacking e5.",
+      "files": [
+        "src/data/annotations/ruy-lopez.json"
+      ]
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:8.h3 Anti-Marshall",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "Knight develops, attacking e5.",
+      "files": [
+        "src/data/annotations/ruy-lopez.json"
+      ]
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:8.h3 Anti-Marshall",
+      "ply": 21,
+      "expectedSan": "Ba2",
+      "capturedText": "The bishop retreats to a2, staying on the a2-g8 diagonal while giving the knight c4 access.",
+      "files": [
+        "src/data/annotations/ruy-lopez.json"
+      ]
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "trap:Marshall d5 Prevented",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "White develops the knight, attacking e5.",
+      "files": [
+        "src/data/annotations/ruy-lopez.json"
+      ]
+    },
+    {
+      "opening": "scotch-gambit",
+      "subline": "main",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "White develops the knight to its best square, attacking e5 and preparing kingside castling. This sets up the key decision on move 3: the Scotch Gambit with d4. The knight on f3 wil",
+      "files": [
+        "src/data/annotations/scotch-game-scotch-gambit.json",
+        "src/data/annotations-bundle.json"
+      ]
+    },
+    {
+      "opening": "scotch-gambit",
+      "subline": "var:Scotch Gambit: Dubois-Reti Defense",
+      "ply": 1,
+      "expectedSan": "e4",
+      "capturedText": "The Scotch Gambit: Dubois-Reti Defense is an important variation of the Scotch Gambit. Black plays 4...Bc5 and 6...dxc3 to grab pawns. White sacrifices the c-pawn for rapid develop",
+      "files": [
+        "src/data/annotations/scotch-game-scotch-gambit.json"
+      ]
+    },
+    {
+      "opening": "pro-hikaru-najdorf",
+      "subline": "main",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "White develops the knight toward d4. Standard Open Sicilian preparation.",
+      "files": [
+        "src/data/annotations/sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json"
+      ]
+    },
+    {
+      "opening": "pro-hikaru-najdorf",
+      "subline": "var:English Attack 6.Be3",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "White develops the knight toward d4. Standard Open Sicilian preparation.",
+      "files": [
+        "src/data/annotations/sicilian-defense-najdorf-variation-opocensky-variation-traditional-line.json"
+      ]
+    },
+    {
+      "opening": "pro-dubov-sveshnikov",
+      "subline": "var:Main Line with c4",
+      "ply": 3,
+      "expectedSan": "Nf3",
+      "capturedText": "White develops the knight toward d4, preparing the Open Sicilian.",
+      "files": [
+        "src/data/annotations/sicilian-defense-lasker-pelikan-variation-sveshnikov-variation-chelyabinsk-variation.json"
+      ]
+    },
+    {
+      "opening": "pro-niemann-anti-marshall",
+      "subline": "var:8.h3 Anti-Marshall",
+      "ply": 20,
+      "expectedSan": "Na5",
+      "capturedText": "Black reroutes the knight toward c4 via a5, targeting the weak b3 bishop.",
+      "files": [
+        "src/data/annotations/ruy-lopez.json"
+      ]
+    }
+  ]
+}

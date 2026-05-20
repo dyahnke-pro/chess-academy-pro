@@ -37,10 +37,10 @@ import {
 import {
   getOpeningMoves,
   findLinePickerOptions,
-  resolveOpeningEntry,
   findOpeningByPgnPrefix,
   type LinePickerOption,
 } from '../../services/openingDetectionService';
+import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import {
   getCompletedStages,
@@ -52,7 +52,8 @@ import { DifficultyToggle } from './DifficultyToggle';
 import type { CoachDifficulty } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
-import { logAppAudit } from '../../services/appAuditor';
+import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
+import { resolveCoachNarration } from '../../utils/coachNarration';
 import { sanitizeCoachText, sanitizeCoachStream, formatForSpeech, SENTENCE_END_RE } from '../../services/sanitizeCoachText';
 import { parseBoardTags } from '../../services/boardAnnotationService';
 import { voiceService } from '../../services/voiceService';
@@ -60,10 +61,16 @@ import { useAppStore } from '../../stores/appStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { useSettings } from '../../hooks/useSettings';
 import { db } from '../../db/schema';
+import { getFavoriteOpenings } from '../../services/openingService';
+import type { OpeningRecord } from '../../types';
 import { analyzeRecentGames, gameNeedsAnalysis } from '../../services/gameAnalysisService';
 import type { LiveState } from '../../coach/types';
 import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from '../../types';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import { validateTacticClaims } from '../../services/tacticClaimValidator';
+import { validateArrowClaims, synthesizeMissingArrows } from '../../services/arrowClaimValidator';
+import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { withTimeout } from '../../coach/withTimeout';
 
@@ -75,6 +82,56 @@ const SUGGESTIONS = [
   'Show me the Italian Game main line',
   'How do I attack a castled king?',
   'What is the Sicilian Defense and why play it?',
+];
+
+/** Action modes the picker offers above the chat input. Each maps to
+ *  a typed-input phrasing that `handleSubmit`'s STAGE_PATTERNS regexes
+ *  recognize — tapping a mode + opening combination becomes the same
+ *  text input the user could have typed by hand, so the picker is
+ *  purely additive UI and never bypasses the normal routing. */
+const PICKER_ACTIONS = [
+  {
+    id: 'teach',
+    label: 'Teach me',
+    description: 'Walk through the opening from move 1 with voice narration.',
+    buildInput: (opening: string) => opening,
+  },
+  {
+    id: 'drill',
+    label: 'Drill',
+    description: 'Practice the moves on the board, ply by ply.',
+    buildInput: (opening: string) => `drill ${opening}`,
+  },
+  {
+    id: 'quiz',
+    label: 'Quiz me on',
+    description: 'Multiple-choice questions on the key ideas.',
+    buildInput: (opening: string) => `quiz me on ${opening}`,
+  },
+  {
+    id: 'trap',
+    label: 'Trap lines for',
+    description: 'Common opponent slips and how to punish them.',
+    buildInput: (opening: string) => `punish lines for ${opening}`,
+  },
+  {
+    id: 'play',
+    label: 'Play',
+    description: 'Live game vs the coach starting from this opening.',
+    buildInput: (opening: string) => `play it for real ${opening}`,
+  },
+] as const;
+type PickerActionId = (typeof PICKER_ACTIONS)[number]['id'];
+
+/** Fallback openings shown when the student has no favorites yet —
+ *  a curated mix of the most-asked-about ones across both colors. */
+const FALLBACK_OPENING_NAMES: string[] = [
+  'Sicilian Defense',
+  'Italian Game',
+  'Caro-Kann Defense',
+  'French Defense',
+  "Queen's Gambit",
+  'Vienna Game',
 ];
 
 /** A deep-dive entry point pulled from the walkthrough tree. Every
@@ -235,6 +292,35 @@ export function CoachTeachPage(): JSX.Element {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  // Brain-emitted answer chips. Set when the streaming response
+  // contains a `[CHOICES: A | B | C]` marker (typically because
+  // the brain is asking a disambiguation question — e.g.
+  // "Did you mean Najdorf or Dragon?"). Tapping a chip submits
+  // the chosen text and clears the chips so the next turn starts
+  // fresh. null = no choices on offer.
+  const [coachChoices, setCoachChoices] = useState<string[] | null>(null);
+  // Picker state — drives the starter chips shown above the chat
+  // input while the transcript is empty. `pickerAction` is the
+  // currently-selected mode (Teach / Drill / Quiz / Trap / Play);
+  // tapping an opening chip combines the action with the opening
+  // and submits via the normal handleSubmit path so the picker is
+  // purely additive UI.
+  const [pickerAction, setPickerAction] = useState<PickerActionId>('teach');
+  const [favoriteOpenings, setFavoriteOpenings] = useState<OpeningRecord[]>([]);
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const rows = await getFavoriteOpenings();
+        if (!cancelled) setFavoriteOpenings(rows);
+      } catch {
+        if (!cancelled) setFavoriteOpenings([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const [linePicker, setLinePicker] = useState<{
     canonicalName: string;
     options: LinePickerOption[];
@@ -292,6 +378,18 @@ export function CoachTeachPage(): JSX.Element {
   // the student played e4; this ref is the fix.
   const gameRef = useRef(game);
   gameRef.current = game;
+  // Audit-instrumentation phase-3 (2026-05-19): track recent user
+  // messages so handleSubmit can detect "retry" patterns — the same
+  // user typing two semantically similar inputs in a row, signal
+  // that the prior turn's resolution didn't satisfy them. Surfaces
+  // the "I wanted the danish gambit" → re-tap pattern from the live
+  // audit log. Capped at the last 3 entries to bound memory.
+  const recentUserInputsRef = useRef<Array<{ text: string; at: number }>>([]);
+  // Rolling response-length tracking per verbosity tier — when the
+  // brain's responses at `brief` average > prompt budget, that's the
+  // signal we need to tighten the rules. Capped at 20 entries per
+  // tier (rolling). Computed p50/p90 on every emit.
+  const responseLengthsRef = useRef<Record<string, number[]>>({});
   // liveFenRef is the SYNCHRONOUS source of truth for the FEN — written
   // by every successful handler (handlePlayMove, handleTakeBack,
   // handleSetBoardPosition, handleResetBoard) immediately after the
@@ -352,6 +450,10 @@ export function CoachTeachPage(): JSX.Element {
             fen,
             evalCp: a.isMate ? 0 : a.evaluation,
             mateIn: a.mateIn,
+            // Capture the full StockfishAnalysis so handleSubmit can
+            // pre-compute the tactical context block (forks/pins/
+            // threats/opportunities) without re-querying the engine.
+            analysis: a,
           };
         } catch {
           // Stockfish hiccup — leave the bar at the last known value
@@ -481,7 +583,12 @@ export function CoachTeachPage(): JSX.Element {
   // production audit (build 4e628e5). We only surface the eval when
   // its FEN matches the FEN we're asking about, so a one-ply-stale
   // eval doesn't get misattributed to the new position.
-  const latestEvalRef = useRef<{ fen: string; evalCp: number; mateIn: number | null } | null>(null);
+  const latestEvalRef = useRef<{
+    fen: string;
+    evalCp: number;
+    mateIn: number | null;
+    analysis: StockfishAnalysis | null;
+  } | null>(null);
   // Pre-fetched Lichess explorer snapshot for the current FEN. Same
   // pattern as the eval bar — the surface fires the expensive request
   // BEFORE the brain has to ask for it, then injects the compact
@@ -649,6 +756,47 @@ export function CoachTeachPage(): JSX.Element {
     [walkthrough],
   );
 
+  // Coach asks the student whether they want to play the line out
+  // themselves the first time they reach the leaf of a given opening.
+  // Conversational prompt that matches the user's path into the
+  // lesson (typed chat → walkthrough plays → coach asks at the end).
+  // Tracks per-opening so re-visits / backtrack→leaf cycles don't
+  // re-ask. The "Play this line out yourself" button at the leaf
+  // panel is the one-click action that closes the loop.
+  const playOutPromptedFor = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    const openingName = walkthrough.tree?.openingName;
+    if (walkthrough.phase !== 'leaf' || !openingName) return;
+    if (playOutPromptedFor.current.has(openingName)) return;
+    playOutPromptedFor.current.add(openingName);
+    const msg = `That's the canonical line into the middlegame for the ${openingName}. Want to play it out yourself against me? Tap "Play this line out yourself" — or keep learning with quizzes and drills if you'd rather lock it in first.`;
+    const id = `play-out-prompt-${Date.now()}`;
+    setMessages((prev) => [
+      ...prev,
+      { id, role: 'assistant', content: msg, timestamp: Date.now() },
+    ]);
+    useCoachMemoryStore.getState().appendConversationMessage({
+      surface: 'chat-teach',
+      role: 'coach',
+      text: msg,
+      fen: gameRef.current.fen,
+      trigger: null,
+    });
+    // Speak a tight summary — the full sentence above is long for
+    // voice. The position changing in the student's favor IS the
+    // acknowledgment (per CLAUDE.md narration rules); voice carries
+    // only the ask itself.
+    void voiceService
+      .speakForced(`Want to play this line out yourself? Or keep learning?`)
+      .catch(() => undefined);
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachTeachPage.leafPlayOutPrompt',
+      summary: `leaf reached — asked student to play out "${openingName}"`,
+    });
+  }, [walkthrough.phase, walkthrough.tree?.openingName]);
+
   const handleSubmit = useCallback(async (
     text: string,
     opts?: {
@@ -665,6 +813,121 @@ export function CoachTeachPage(): JSX.Element {
     },
   ): Promise<void> => {
     if (!text.trim() || busy) return;
+    // Audit-instrumentation phase-1 (2026-05-19): mint a turn id and
+    // make it the module-default for the duration of this handleSubmit.
+    // Every logAppAudit call from any code reached during this turn
+    // (chat surface, brain, tools, voice service, etc.) auto-stamps
+    // the id, so the audit log is pivotable by turn.
+    const turnAuditId = mintTurnId('teach');
+    setCurrentTurnId(turnAuditId);
+
+    // Audit-instrumentation phase-3: user-retry detection. Compare
+    // this input against the previous user input. When the two share
+    // a major content token AND the previous turn isn't very old,
+    // emit a `user-retry-detected` event — signal the prior turn's
+    // resolution probably missed what they wanted.
+    const trimmedText = text.trim();
+    {
+      const prev = recentUserInputsRef.current[recentUserInputsRef.current.length - 1];
+      if (prev && Date.now() - prev.at < 5 * 60_000) {
+        const norm = (s: string) =>
+          s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+        const prevTokens = new Set(norm(prev.text).split(' ').filter((t) => t.length >= 4));
+        const currTokens = norm(trimmedText).split(' ').filter((t) => t.length >= 4);
+        const shared = currTokens.filter((t) => prevTokens.has(t));
+        if (shared.length >= 1 && shared.length / Math.max(currTokens.length, 1) >= 0.4) {
+          void logAppAudit({
+            kind: 'user-retry-detected',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.retryDetector',
+            summary: `user retry: "${trimmedText.slice(0, 50)}" follows "${prev.text.slice(0, 50)}" (shared tokens: ${shared.join(', ')})`,
+            details: JSON.stringify({
+              currentInput: trimmedText,
+              previousInput: prev.text,
+              previousAt: prev.at,
+              gapMs: Date.now() - prev.at,
+              sharedTokens: shared,
+            }),
+          });
+        }
+      }
+      // Track current input for the NEXT retry check. Cap at 3 entries.
+      recentUserInputsRef.current.push({ text: trimmedText, at: Date.now() });
+      if (recentUserInputsRef.current.length > 3) recentUserInputsRef.current.shift();
+    }
+
+    // Audit-instrumentation phase-5 (2026-05-19): classify the user's
+    // ask when it's a future-moves / positional-ideas question — the
+    // shape that hits stockfish_eval + lookup_master_play. Lets us
+    // pivot the audit log by question type and see whether the brain
+    // answers these well (e.g. cites grounded data vs invents lines).
+    {
+      const lowered = trimmedText.toLowerCase();
+      const futureMoves =
+        /\b(best move|best response|what should i play|what should i do|what would you play|what now|what.s next|continuation|continue with|best continuation|best line|what move)\b/.test(lowered);
+      const positionalIdeas =
+        /\b(plan|plans|strategy|positional|maneuver|idea|ideas|what.s the (point|plan|idea)|long.term|long term|midgame plan|middlegame plan|pawn structure|piece activity)\b/.test(lowered);
+      if (futureMoves || positionalIdeas) {
+        void logAppAudit({
+          kind: 'followup-context-check',
+          category: 'subsystem',
+          source: 'CoachTeachPage.questionClassifier',
+          summary:
+            `coach question: ${futureMoves ? 'future-moves ' : ''}${positionalIdeas ? 'positional-ideas ' : ''}` +
+            `"${trimmedText.slice(0, 50)}" — expecting Stockfish + master-play grounding`,
+          details: JSON.stringify({
+            currentInput: trimmedText,
+            classifications: {
+              futureMoves,
+              positionalIdeas,
+            },
+            walkthroughOpening: walkthrough.tree?.openingName ?? null,
+            currentFen: gameRef.current.fen,
+            // These are the audit kinds we expect to see fire downstream
+            // on this turn — if the brain replied without one of them
+            // the grounding pipeline missed.
+            expectedAudits: [
+              'coach-brain-tool-called (stockfish_eval)',
+              futureMoves ? 'master-play-prefetch / master-play-lookup' : null,
+            ].filter(Boolean),
+          }),
+        });
+      }
+    }
+
+    // Audit-instrumentation phase-3: followup-context-check. Short
+    // followups (< 5 words) after a state-changing prior turn often
+    // expose context-loss bugs (e.g. user types "which is most
+    // aggressive?" right after the coach set the board to Danish
+    // Gambit; if the brain replies about a different opening, the
+    // context was lost). Captures the prior opening on the board so
+    // post-turn analysis can compare against the brain's reply.
+    {
+      const wordCount = trimmedText.split(/\s+/).length;
+      const prior = recentUserInputsRef.current[recentUserInputsRef.current.length - 2];
+      if (wordCount < 5 && prior) {
+        void logAppAudit({
+          kind: 'followup-context-check',
+          category: 'subsystem',
+          source: 'CoachTeachPage.handleSubmit.followupDetector',
+          summary: `short follow-up (${wordCount} words): "${trimmedText}" — expecting context: ${walkthrough.tree?.openingName ?? '(none)'}`,
+          details: JSON.stringify({
+            currentInput: trimmedText,
+            wordCount,
+            walkthroughOpening: walkthrough.tree?.openingName ?? null,
+            priorInput: prior.text,
+            currentFen: gameRef.current.fen,
+          }),
+        });
+      }
+    }
+
+    // Any new turn invalidates an outstanding [CHOICES:] prompt —
+    // the brain's previous question has been answered (or
+    // superseded), so clear the chips before the new response
+    // streams. tryExtractChoicesMarker re-sets them if the new
+    // response is itself another disambiguation.
+    setCoachChoices(null);
     // If a walkthrough is mid-narration when the student types a
     // question, pause it so voice doesn't talk over the coach's
     // reply. The student can hit Resume on the walkthrough panel
@@ -823,26 +1086,114 @@ export function CoachTeachPage(): JSX.Element {
         // verb, > 60 chars, or end with ?/.).
         requestedName = workingInput;
       }
-      // Tier 0: canonicalize the user's request against the Lichess
-      // DB BEFORE any routing tiers run. The user's word: "tie the
-      // user's request to the FIRST opening — so the LLM can match
-      // the request to an opening before even getting started."
-      // Without this, typos like "phillador" → cache miss; bare
-      // shorthand like "najdorf" → cache key on shorthand instead of
-      // canonical "Sicilian Defense: Najdorf Variation". Static
-      // registry queries (e.g. "Vienna") and unmatchable typos still
-      // fall through with the original name — DB resolution only
-      // kicks in when there's a confident match.
+      // Tier 0: fuzzy-match the user's request against the Lichess
+      // DB BEFORE any routing tiers run. Three outcomes:
+      //
+      //   - autoAccept: top candidate is dominant (score ≥ 0.92, gap
+      //     ≥ 0.15 to runner-up). Canonicalize requestedName to it
+      //     and continue through the routing tiers.
+      //   - candidates without autoAccept: emit a "did you mean..."
+      //     coach message with [CHOICES: ...] picker chips so the
+      //     student taps a canonical answer. Short-circuit — no
+      //     further tier runs.
+      //   - no candidates: leave requestedName as the user typed.
+      //     Tier 2.5 pre-flight rejection will catch it and drop to
+      //     brain handling.
+      //
+      // David's wide-berth rule (2026-05-19): when in doubt, ASK —
+      // never silently pick. The matcher's auto-accept gate is the
+      // tight cutoff that decides "ask" vs "go."
       if (requestedName) {
-        const dbEntry = resolveOpeningEntry(requestedName);
-        if (dbEntry && dbEntry.canonicalName !== requestedName) {
+        const fuzzy = fuzzyMatchOpening(requestedName);
+        if (fuzzy.autoAccept && fuzzy.candidates[0]) {
+          const top = fuzzy.candidates[0];
+          if (top.canonicalName !== requestedName) {
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.surfaceRouting',
+              summary: `canonicalized "${requestedName}" → "${top.canonicalName}" (fuzzy/${top.source}, score=${top.score.toFixed(2)})`,
+            });
+            requestedName = top.canonicalName;
+          }
+        } else if (fuzzy.candidates.length > 0) {
+          // Ambiguous — surface the picker. Append the user's ask
+          // first so the transcript shows what they typed.
+          //
+          // Audit-instrumentation phase-1: capture every candidate
+          // score, not just the names. Lets us see whether the
+          // runner-up gap was tight (close call — maybe retune
+          // AUTO_ACCEPT_GAP) or wide (clear "did you mean…" case).
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.fuzzyPickerScores',
+            summary:
+              `fuzzy candidates for "${fuzzy.query}": ` +
+              fuzzy.candidates
+                .map((c) => `${c.canonicalName} (${c.score.toFixed(2)})`)
+                .join(' | '),
+            details: JSON.stringify({
+              query: fuzzy.query,
+              candidates: fuzzy.candidates.map((c) => ({
+                canonicalName: c.canonicalName,
+                eco: c.eco,
+                score: c.score,
+                source: c.source,
+              })),
+              autoAcceptThreshold: 0.92,
+              autoAcceptGapThreshold: 0.15,
+              autoAccepted: fuzzy.autoAccept,
+              topScore: fuzzy.candidates[0]?.score ?? null,
+              runnerUpScore: fuzzy.candidates[1]?.score ?? null,
+              gap: fuzzy.candidates.length >= 2
+                ? (fuzzy.candidates[0].score - fuzzy.candidates[1].score)
+                : null,
+            }),
+          });
+          const ambiguousTurnId = `t-${Date.now()}-fuzzy-picker`;
+          setMessages((prev) => [...prev, {
+            id: `${ambiguousTurnId}-u`,
+            role: 'user',
+            content: text,
+            timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'user',
+            text,
+            fen: opts?.fenOverride ?? gameRef.current.fen,
+            trigger: null,
+          });
+          const topNames = fuzzy.candidates.map((c) => c.canonicalName);
+          // Inline [CHOICES:] marker — the choices extractor on the
+          // next user turn won't see this (it scans the brain
+          // stream, not chat history), so we set the picker state
+          // directly here.
+          const prose = topNames.length === 1
+            ? `I don't have an exact match for "${fuzzy.query}". Did you mean ${topNames[0]}?`
+            : `I don't have an exact match for "${fuzzy.query}". Did you mean one of these?`;
+          setMessages((prev) => [...prev, {
+            id: `${ambiguousTurnId}-c`,
+            role: 'assistant',
+            content: prose,
+            timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'coach',
+            text: prose,
+            fen: opts?.fenOverride ?? gameRef.current.fen,
+            trigger: null,
+          });
+          setCoachChoices(topNames);
           void logAppAudit({
             kind: 'coach-surface-migrated',
             category: 'subsystem',
             source: 'CoachTeachPage.handleSubmit.surfaceRouting',
-            summary: `canonicalized "${requestedName}" → "${dbEntry.canonicalName}" via Lichess DB`,
+            summary: `fuzzy ambiguity for "${fuzzy.query}" — surfacing picker (${topNames.length} options): ${topNames.join(' | ')}`,
           });
-          requestedName = dbEntry.canonicalName;
+          return;
         }
       }
       // Cache key includes face-mode + tour-mode prefixes so the
@@ -1080,7 +1431,7 @@ export function CoachTeachPage(): JSX.Element {
             kind: 'coach-surface-migrated',
             category: 'subsystem',
             source: 'CoachTeachPage.handleSubmit.surfaceRouting',
-            summary: `pre-flight rejected non-opening: "${text.slice(0, 60)}"`,
+            summary: `pre-flight: input doesn't resolve to an opening — routing to brain (conversational): "${text.slice(0, 60)}"`,
           });
           // Don't take over the chat flow — fall through to the
           // brain so the user gets a normal coach reply. Setting
@@ -1302,21 +1653,59 @@ export function CoachTeachPage(): JSX.Element {
     // rambling-by-multiple-markers is not the goal.
     let voiceRawBuffer = '';
     let voiceSpokenForTurn = false;
+    let choicesExtractedForTurn = false;
     /** `[VOICE: summary]` — captures inner content lazily so the
      *  marker closes on the first `]` rather than greedily consuming
      *  past it. Multi-line content allowed because the summary itself
      *  may span 3-4 sentences (positional, structural, plan). */
     const VOICE_MARKER_RE = /\[VOICE:\s*([\s\S]*?)\]/g;
+    /** `[CHOICES: A | B | C]` — answer chips the brain offers when
+     *  asking a discrete question. Same lazy-close shape as the
+     *  voice marker so a `]` mid-prose can't accidentally swallow
+     *  the rest of the stream. */
+    const CHOICES_MARKER_RE = /\[CHOICES:\s*([\s\S]*?)\]/g;
+    /** Pull chips out of the raw stream once per turn. Same one-shot
+     *  pattern as voice: scan the buffer for a closed `[CHOICES:]`
+     *  block, split on `|`, trim, surface as picker state. Subsequent
+     *  markers in the same turn are ignored. */
+    const tryExtractChoicesMarker = (): void => {
+      if (choicesExtractedForTurn) return;
+      CHOICES_MARKER_RE.lastIndex = 0;
+      const match = CHOICES_MARKER_RE.exec(voiceRawBuffer);
+      if (!match) return;
+      const inner = match[1].trim();
+      if (!inner) return;
+      choicesExtractedForTurn = true;
+      const items = inner
+        .split('|')
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0)
+        .slice(0, 6); // hard cap so a runaway brain can't overflow
+      if (items.length === 0) return;
+      setCoachChoices(items);
+      void logAppAudit({
+        kind: 'coach-voice-marker-extracted',
+        category: 'subsystem',
+        source: 'CoachTeachPage.tryExtractChoicesMarker',
+        summary: `extracted [CHOICES: ...] (${items.length} options)`,
+        details: JSON.stringify({ count: items.length, preview: items.slice(0, 4) }),
+      });
+    };
     let lastQueuedSentence = '';
+    /** Track every line we hand to TTS so the Bug A2 post-process can
+     *  check whether the LLM honored the "Setting the board to {name}."
+     *  prompt rule on state-changing turns. */
+    const spokenForTurn: string[] = [];
     const queueSpeak = (raw: string): void => {
       const sentence = formatForSpeech(raw);
       if (!sentence) return;
       if (sentence === lastQueuedSentence) return;
       lastQueuedSentence = sentence;
+      spokenForTurn.push(sentence);
       speechChainRef.current = speechChainRef.current
         .then(() => {
           if (turnAbortRef.aborted) return;
-          return voiceService.speakForcedPollyOnly(sentence);
+          return voiceService.speakForced(sentence);
         })
         .catch(() => undefined);
     };
@@ -1404,6 +1793,30 @@ export function CoachTeachPage(): JSX.Element {
       lichessRef && lichessRef.fen === fen
         ? { lichessSnapshot: lichessRef.snapshot }
         : undefined;
+    // Tactical context (Phase 1+2 of WO-COACH-TACTICAL-AWARENESS):
+    // pre-compute named tactics in the live FEN + threats and
+    // opportunities scanned through Stockfish's PV up to the
+    // rating-adaptive lookahead depth (4 plies for intermediate
+    // students per David's call). The brain's tactical vocabulary
+    // is bounded by this block — G3 contract identical to the
+    // master-play / opening-name grounding pattern. Only attaches
+    // when we have a fresh analysis for this exact FEN; stale evals
+    // would mislead the scan.
+    const cachedAnalysis =
+      latestEvalRef.current && latestEvalRef.current.fen === fen
+        ? latestEvalRef.current.analysis
+        : null;
+    const studentColor = fenTurn === 'white' ? 'w' : 'b';
+    // Rating proxy = puzzleRating (1200 fresh, drifts up/down with
+    // adaptive puzzles). Drives lookahead depth via
+    // `getTacticLookahead` — 4 plies once the student crosses 1400.
+    const studentRating = activeProfile?.puzzleRating ?? 1200;
+    const tacticsForAsk = buildTacticsLiveContext(
+      fen,
+      cachedAnalysis,
+      studentColor,
+      studentRating,
+    );
     const liveState: LiveState = {
       surface: 'teach',
       currentRoute: '/coach/teach',
@@ -1415,9 +1828,16 @@ export function CoachTeachPage(): JSX.Element {
       // when it was Black's turn but the position needed White's
       // response, then chess.js rejected it 5 trips in a row.
       whoseTurn: fenTurn,
+      tactics: tacticsForAsk,
       ...(evalForAsk ?? {}),
       ...(lichessForAsk ?? {}),
     };
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachTeachPage.buildLiveTactics',
+      summary: `tactics ctx: immediate=${tacticsForAsk.immediate.length} hanging=${tacticsForAsk.hanging.length} threats=${tacticsForAsk.threats.length} opps=${tacticsForAsk.opportunities.length} depth=${tacticsForAsk.lookaheadDepth}`,
+    });
 
     void logAppAudit({
       kind: 'coach-surface-migrated',
@@ -1548,11 +1968,93 @@ export function CoachTeachPage(): JSX.Element {
               walkthrough.start(tree);
               return { ok: true };
             }
-            const params = new URLSearchParams();
-            params.set('subject', opening);
-            if (orientation) params.set('orientation', orientation);
-            void navigate(`/coach/session/walkthrough?${params.toString()}`);
-            return { ok: true };
+            // No static / cached tree — generate in-place via the
+            // canonical DB-narration path, exactly like the URL-param
+            // kickoff at line ~1300. Previously this branch bounced
+            // the user to /coach/session/walkthrough (the legacy
+            // stripped-down surface); production audit (David,
+            // 2026-05-19) confirmed the boomerang fired when the
+            // brain tool emitted start_walkthrough for an opening
+            // outside the static registry and uncached.
+            const ackBuilding = `Putting together ${lessonLabel(opening)} — this takes about a minute. The first time only; after this it'll be instant.`;
+            const brainTurnId = `brain-walk-${Date.now()}`;
+            setMessages((prev) => [...prev, {
+              id: `${brainTurnId}-c`,
+              role: 'assistant',
+              content: ackBuilding,
+              timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach',
+              role: 'coach',
+              text: ackBuilding,
+              fen: gameRef.current.fen,
+              trigger: null,
+            });
+            setBusy(true);
+            setGenerationStatus({ openingName: opening, startedAt: Date.now() });
+            // Pre-flip the board to the brain's requested side (or
+            // the heuristic) BEFORE the LLM finishes — same trick
+            // as the URL-param kickoff to avoid the 30-60s
+            // wrong-orientation flash.
+            const requestedSide =
+              orientation === 'white' || orientation === 'black'
+                ? orientation
+                : inferStudentSide(opening);
+            if (requestedSide !== playerColor) {
+              setPlayerColor(requestedSide);
+              game.setOrientation(requestedSide);
+            }
+            // Silence the brain's [VOICE:] preamble so we don't get
+            // a "two voices" overlap when the generated walkthrough
+            // starts narrating. Same guard as the cached-tree path
+            // above.
+            voiceService.stop();
+            turnAbortRef.aborted = true;
+            try {
+              const genResult = await generateOpening(opening, {
+                mode: 'learn',
+                pace,
+              });
+              if (genResult.ok && genResult.tree) {
+                await cacheOpening(opening, genResult.tree);
+                void writeSharedCache(opening, genResult.tree);
+                const successAck = `Ready — let's walk through the ${genResult.tree.openingName}.`;
+                setMessages((prev) => [...prev, {
+                  id: `${brainTurnId}-c2`,
+                  role: 'assistant',
+                  content: successAck,
+                  timestamp: Date.now(),
+                }]);
+                useCoachMemoryStore.getState().appendConversationMessage({
+                  surface: 'chat-teach',
+                  role: 'coach',
+                  text: successAck,
+                  fen: gameRef.current.fen,
+                  trigger: null,
+                });
+                walkthrough.start(genResult.tree);
+                if (pace !== 'tour') {
+                  void generateMissingStagesInBackground(
+                    genResult.tree.openingName,
+                    genResult.tree,
+                    handleStageMerged,
+                  );
+                }
+                return { ok: true };
+              }
+              const errAck = `I couldn't build the ${lessonLabel(opening)} walkthrough this time. Try again or pick a different opening.`;
+              setMessages((prev) => [...prev, {
+                id: `${brainTurnId}-err`,
+                role: 'assistant',
+                content: errAck,
+                timestamp: Date.now(),
+              }]);
+              return { ok: false };
+            } finally {
+              setBusy(false);
+              setGenerationStatus(null);
+            }
           },
           onChunk: (chunk: string) => {
             // Two streams off each delta:
@@ -1564,6 +2066,7 @@ export function CoachTeachPage(): JSX.Element {
             //      double-show in the transcript.
             voiceRawBuffer += chunk;
             tryExtractVoiceMarker();
+            tryExtractChoicesMarker();
             markupBuffer += chunk;
             const { safe, pending } = sanitizeCoachStream(markupBuffer);
             markupBuffer = pending;
@@ -1592,6 +2095,121 @@ export function CoachTeachPage(): JSX.Element {
       // to emit `[VOICE: ...]` entirely, speak the first sentence of
       // the final response so the student isn't left in silence.
       tryExtractVoiceMarker();
+      tryExtractChoicesMarker();
+
+      // Audit-instrumentation phase-3: verbosity response-length
+      // distribution. Tracks the rolling p50/p90 per verbosity tier.
+      // When the cap fires often or p50 drifts above the prompt budget
+      // we know the brain is ignoring the rule and we tighten.
+      {
+        const verbosity = resolveCoachNarration(activeProfile?.preferences) ?? 'full';
+        const lengths = responseLengthsRef.current[verbosity] ?? [];
+        lengths.push(result.text.length);
+        if (lengths.length > 20) lengths.shift();
+        responseLengthsRef.current[verbosity] = lengths;
+        const sorted = [...lengths].sort((a, b) => a - b);
+        const p = (q: number): number => {
+          if (sorted.length === 0) return 0;
+          const idx = Math.min(sorted.length - 1, Math.floor(q * sorted.length));
+          return sorted[idx];
+        };
+        const p50 = p(0.5);
+        const p90 = p(0.9);
+        void logAppAudit({
+          kind: 'verbosity-response-length',
+          category: 'subsystem',
+          source: 'CoachTeachPage.responseLengthTracker',
+          summary: `verbosity=${verbosity} length=${result.text.length}c rolling[n=${lengths.length}] p50=${p50} p90=${p90}`,
+          details: JSON.stringify({
+            verbosity,
+            currentLength: result.text.length,
+            rollingCount: lengths.length,
+            p50,
+            p90,
+            min: sorted[0],
+            max: sorted[sorted.length - 1],
+          }),
+        });
+      }
+
+      // Bug A2 enforcement audit (2026-05-19): when the brain called a
+      // state-changing tool (set_board_position / start_walkthrough_for_opening)
+      // its [VOICE:] block was supposed to begin with "Setting the
+      // board to {name}." (or "Starting the {name} walkthrough.") so
+      // the spoken signal matches the visual signal. Audit the
+      // violations so we can observe how often the LLM ignores the
+      // prompt rule. Active prepend is a follow-up — see
+      // docs/plans/2026-05-19-coach-audit-rerun-9bugs.md (Bug A).
+      const stateChangingTools = result.dispatchedToolNames.filter((n) =>
+        n === 'set_board_position' || n === 'start_walkthrough_for_opening',
+      );
+      if (stateChangingTools.length > 0 && spokenForTurn.length > 0) {
+        const firstSpoken = spokenForTurn[0].toLowerCase();
+        const announcedBoard =
+          firstSpoken.startsWith('setting the board') ||
+          firstSpoken.startsWith('starting the ') ||
+          firstSpoken.startsWith("let's set the board") ||
+          firstSpoken.startsWith("i'm setting the board");
+        if (!announcedBoard) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.setBoardSentenceValidator',
+            summary:
+              `state-changing tools fired (${stateChangingTools.join(', ')}) ` +
+              `but voice did NOT begin with "Setting the board to…": "${spokenForTurn[0].slice(0, 60)}"`,
+            details: JSON.stringify({
+              tools: stateChangingTools,
+              firstSpoken: spokenForTurn[0].slice(0, 200),
+              allSpokenForTurn: spokenForTurn.map((s) => s.slice(0, 80)),
+            }),
+            fen,
+          });
+        }
+      }
+
+      // Bug A spoken-vs-displayed divergence audit (audit-improvement
+      // #1 from the 2026-05-19 discussion). Compares what the LLM
+      // SPOKE (first voice line) against what the BOARD now shows
+      // (walkthrough opening name) — when they don't both reference
+      // the same opening, the student hears one thing and sees
+      // another. Audit-only first cut; the data tells us how often
+      // it happens before we decide on active fix-up.
+      if (spokenForTurn.length > 0) {
+        const boardOpeningName =
+          walkthrough.tree?.openingName ?? null;
+        if (boardOpeningName) {
+          // Normalize for substring containment: drop punctuation,
+          // lower-case. The spoken text mentions the opening name if
+          // any meaningful token from the name appears in the voice.
+          const norm = (s: string) =>
+            s.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+          const spokenNorm = norm(spokenForTurn.join(' '));
+          const nameTokens = norm(boardOpeningName)
+            .split(' ')
+            .filter((t) => t.length >= 4); // ≥4 chars per Bug D guard
+          const mentionedOnVoice =
+            nameTokens.length === 0 ||
+            nameTokens.some((t) => spokenNorm.includes(t));
+          if (!mentionedOnVoice) {
+            void logAppAudit({
+              kind: 'claim-validator-trip',
+              category: 'subsystem',
+              source: 'CoachTeachPage.voiceDisplayedDivergence',
+              summary:
+                `voice did NOT mention the board opening "${boardOpeningName}" — ` +
+                `student hears one thing, sees another. ` +
+                `Spoken: "${spokenForTurn[0].slice(0, 60)}"`,
+              details: JSON.stringify({
+                boardOpeningName,
+                spokenPreview: spokenForTurn[0].slice(0, 200),
+                allSpokenForTurn: spokenForTurn.map((s) => s.slice(0, 80)),
+              }),
+              fen,
+            });
+          }
+        }
+      }
       if (!voiceSpokenForTurn) {
         const finalText = sanitizeCoachText(result.text);
         const firstSentenceMatch = SENTENCE_END_RE.exec(finalText);
@@ -1654,6 +2272,90 @@ export function CoachTeachPage(): JSX.Element {
       // unsanitized text would teach the LLM that markup is normal.
       const finalText = sanitizeCoachText(result.text);
       if (finalText) {
+        // G3 enforcement (Phase 2.5 of WO-COACH-TACTICAL-AWARENESS):
+        // scan the response for tactic vocabulary against the bounded
+        // context we sent in the envelope. Audit-only for now — log
+        // violations so we can observe how often the brain invents
+        // tactics in prod. Future iteration: trigger a regen with a
+        // strengthened addendum (mirrors the master-play claim
+        // validator's regen pattern).
+        const validation = validateTacticClaims(finalText, tacticsForAsk);
+        if (validation.violations.length > 0) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.tacticClaimValidator',
+            summary: `out-of-vocab tactics: ${validation.violations.map((v) => v.type).join(', ')}`,
+            details: JSON.stringify({
+              violations: validation.violations,
+              tacticContext: {
+                immediateTypes: tacticsForAsk.immediate.map((t) => t.type),
+                threatTypes: tacticsForAsk.threats.map((t) => t.type),
+                opportunityTypes: tacticsForAsk.opportunities.map((t) => t.type),
+                hangingCount: tacticsForAsk.hanging.length,
+                lookaheadDepth: tacticsForAsk.lookaheadDepth,
+              },
+            }),
+            fen,
+          });
+        }
+        // Arrow-claim validator (Phase D of streaming-TTS standardization,
+        // 2026-05-18). Scans the response for SAN-shaped move
+        // mentions that don't have a matching [BOARD: arrow:from-to:color]
+        // marker. The TEACH_MODE_ADDITION block has a NON-NEGOTIABLE
+        // rule requiring arrows on every step-by-step move; this is
+        // the observability layer that catches violations the prompt
+        // missed (David's audit caught the brain shipping 5 coach
+        // moves without arrows in a Vienna walkthrough).
+        //
+        // ENFORCEMENT (Bug E, 2026-05-19): when violations exist,
+        // synthesize the missing arrows by replaying the SANs through
+        // chess.js at the current FEN and emit `[BOARD: arrow:from-to:color]`
+        // markers. The synthesized markers are re-parsed below so the
+        // board renders the arrows the LLM forgot — closes the G6
+        // loop without an extra LLM round-trip.
+        const arrowValidation = validateArrowClaims(finalText);
+        if (arrowValidation.violations.length > 0) {
+          const synthesis = synthesizeMissingArrows(
+            finalText,
+            fen,
+            arrowValidation.violations,
+            Chess,
+            'green',
+          );
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachTeachPage.arrowClaimValidator',
+            summary:
+              `coach mentioned SAN without arrow: ${arrowValidation.violations.map((v) => v.san).join(', ')} ` +
+              `· synthesized ${synthesis.synthesized.length}/${arrowValidation.violations.length}`,
+            details: JSON.stringify({
+              violations: arrowValidation.violations,
+              mentionedSans: arrowValidation.mentionedSans,
+              arrowMarkerCount: arrowValidation.arrowMarkers.length,
+              synthesized: synthesis.synthesized,
+              failedToSynthesize: synthesis.failed,
+            }),
+            fen,
+          });
+          // Parse the synthesized arrows out of the augmented text and
+          // merge them onto the board. The original arrows (from any
+          // LLM-emitted markers) were already set above; append the
+          // new ones without clobbering. Display text (`finalText`)
+          // stays as the LLM wrote it — the brackets get stripped by
+          // sanitizeCoachText on the way into the chat bubble.
+          if (synthesis.synthesized.length > 0) {
+            const synthBoard = parseBoardTags(synthesis.text);
+            const synthArrows: BoardArrow[] = [];
+            for (const cmd of synthBoard.commands) {
+              if (cmd.type === 'arrow' && cmd.arrows) synthArrows.push(...cmd.arrows);
+            }
+            if (synthArrows.length > 0) {
+              setArrows((prev) => [...prev, ...synthArrows]);
+            }
+          }
+        }
         setMessages((prev) => [...prev, {
           id: `${turnId}-c`,
           role: 'assistant',
@@ -1710,6 +2412,10 @@ export function CoachTeachPage(): JSX.Element {
       setStreaming(null);
       setBusy(false);
       setKickoffStatus(null);
+      // Audit-instrumentation phase-1: clear the per-turn id so
+      // out-of-turn events (route changes, background tasks) don't
+      // get mis-tagged with the just-finished turn.
+      setCurrentTurnId(null);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- tracked for dedicated audit; current deps cover the live callers.
   }, [busy, activeProfile, handlePlayMove, handleTakeBack, handleSetBoardPosition, handleResetBoard, navigate, kickoffStatus, walkthrough]);
@@ -1825,7 +2531,7 @@ export function CoachTeachPage(): JSX.Element {
         trigger: null,
       });
       voiceService.stop();
-      speechChainRef.current = Promise.resolve(voiceService.speakForcedPollyOnly(welcomeLine))
+      speechChainRef.current = Promise.resolve(voiceService.speakForced(welcomeLine))
         .catch(() => undefined);
     })();
 
@@ -2172,6 +2878,33 @@ export function CoachTeachPage(): JSX.Element {
             onSend={(text) => void handleSubmit(text)}
             disabled={busy}
             placeholder={busy ? 'Coach is typing…' : 'Ask your coach…'}
+            coachChoices={coachChoices}
+            onPickCoachChoice={(choice) => {
+              // Audit-instrumentation phase-1: log every chip tap as
+              // its own event kind so the audit log can answer "what
+              // did the user actually tap, and where did it route?"
+              // without spelunking through coach-surface-migrated
+              // events for the resolution outcome.
+              void logAppAudit({
+                kind: 'chip-tap-resolved',
+                category: 'subsystem',
+                source: 'CoachTeachPage.coachChoiceChip',
+                summary: `chip tap: "${choice.slice(0, 60)}" → routed through handleSubmit`,
+                details: JSON.stringify({
+                  chipText: choice,
+                  source: 'coach-choice-chip',
+                  // Context the resolver will see when handleSubmit
+                  // runs: current FEN, walkthrough's opening, intended
+                  // opening. Lets us replay the resolution if the
+                  // outcome surprises us.
+                  contextFen: gameRef.current.fen,
+                  walkthroughOpening: walkthrough.tree?.openingName ?? null,
+                }),
+                fen: gameRef.current.fen,
+              });
+              setCoachChoices(null);
+              void handleSubmit(choice);
+            }}
           />
         </div>
 
@@ -2244,6 +2977,27 @@ export function CoachTeachPage(): JSX.Element {
                   <button
                     key={opt.fullName}
                     onClick={() => {
+                      // Audit-instrumentation phase-1: every line-
+                      // picker tile tap as chip-tap-resolved with the
+                      // canonical destination opening + mode.
+                      void logAppAudit({
+                        kind: 'chip-tap-resolved',
+                        category: 'subsystem',
+                        source: 'CoachTeachPage.linePickerTile',
+                        summary: `picker tile tap: "${opt.fullName}" mode=${linePickerMode}`,
+                        details: JSON.stringify({
+                          chipText: opt.fullName,
+                          source: 'line-picker-tile',
+                          mode: linePickerMode,
+                          eco: opt.eco,
+                          style: opt.style,
+                          studentSide: opt.studentSide,
+                          leadingSide: opt.leadingSide,
+                          pickerCanonicalName: linePicker.canonicalName,
+                          contextFen: gameRef.current.fen,
+                        }),
+                        fen: gameRef.current.fen,
+                      });
                       setLinePicker(null);
                       // FACE mode submits a "Face: X" prefix that
                       // handleSubmit recognizes and routes to a
@@ -2402,22 +3156,122 @@ export function CoachTeachPage(): JSX.Element {
             </div>
           ))}
 
-          {messages.length === 0 && !streaming && !kickoffStatus && (
-            <div className="text-xs space-y-2" style={{ color: 'var(--color-text-muted)' }}>
-              <div>Ask your coach to teach you anything chess. Try:</div>
-              {SUGGESTIONS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => void handleSubmit(s)}
-                  className="block w-full text-left px-2 py-1.5 rounded-md border text-xs hover:bg-theme-bg"
-                  style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-                  data-testid={`teach-suggestion-${s.slice(0, 12).replace(/\W+/g, '-').toLowerCase()}`}
+          {messages.length <= 1 && !streaming && !kickoffStatus && !linePicker && !walkthrough.isActive && (() => {
+            const activeAction =
+              PICKER_ACTIONS.find((a) => a.id === pickerAction) ?? PICKER_ACTIONS[0];
+            const openingNames =
+              favoriteOpenings.length > 0
+                ? favoriteOpenings.slice(0, 8).map((o) => o.name)
+                : FALLBACK_OPENING_NAMES;
+            const openingsSourceLabel =
+              favoriteOpenings.length > 0
+                ? 'Your favorited openings'
+                : 'Popular openings';
+            return (
+              <div
+                className="space-y-3"
+                data-testid="teach-picker"
+                style={{ color: 'var(--color-text)' }}
+              >
+                <div className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                  Pick what you want to do, then tap an opening.
+                </div>
+                {/* Action chips */}
+                <div
+                  className="flex flex-wrap gap-1.5"
+                  data-testid="teach-picker-actions"
+                  role="radiogroup"
+                  aria-label="Pick a lesson type"
                 >
-                  "{s}"
-                </button>
-              ))}
-            </div>
-          )}
+                  {PICKER_ACTIONS.map((a) => {
+                    const selected = a.id === pickerAction;
+                    return (
+                      <button
+                        key={a.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={selected}
+                        onClick={() => setPickerAction(a.id)}
+                        className="px-2.5 py-1.5 rounded-full border text-xs font-semibold transition-colors"
+                        style={{
+                          borderColor: selected
+                            ? 'var(--color-accent, #06b6d4)'
+                            : 'var(--color-border)',
+                          backgroundColor: selected
+                            ? 'var(--color-accent, #06b6d4)'
+                            : 'transparent',
+                          color: selected
+                            ? 'var(--color-bg)'
+                            : 'var(--color-text)',
+                        }}
+                        data-testid={`teach-picker-action-${a.id}`}
+                      >
+                        {a.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                {/* Description of what the selected action does. */}
+                <div
+                  className="text-xs italic px-1"
+                  style={{ color: 'var(--color-text-muted)' }}
+                  data-testid="teach-picker-description"
+                >
+                  {activeAction.description}
+                </div>
+                {/* Opening chips — favorites if any, fallback popular otherwise. */}
+                <div
+                  className="text-[11px] font-medium uppercase tracking-wide px-1"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
+                  {openingsSourceLabel}
+                </div>
+                <div
+                  className="flex flex-wrap gap-1.5"
+                  data-testid="teach-picker-openings"
+                >
+                  {openingNames.map((name) => (
+                    <button
+                      key={name}
+                      type="button"
+                      onClick={() => void handleSubmit(activeAction.buildInput(name))}
+                      className="px-2.5 py-1.5 rounded-md border text-xs hover:opacity-80 transition-opacity"
+                      style={{
+                        borderColor: 'var(--color-border)',
+                        color: 'var(--color-text)',
+                      }}
+                      data-testid={`teach-picker-opening-${name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
+                    >
+                      {name}
+                    </button>
+                  ))}
+                </div>
+                {/* Free-form starter examples — kept compact under the picker
+                    so the user knows they can also just type a question. */}
+                <details
+                  className="text-xs"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
+                  <summary className="cursor-pointer select-none">
+                    Or ask a free-form question…
+                  </summary>
+                  <div className="mt-2 space-y-1.5">
+                    {SUGGESTIONS.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => void handleSubmit(s)}
+                        className="block w-full text-left px-2 py-1.5 rounded-md border text-xs hover:bg-theme-bg"
+                        style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                        data-testid={`teach-suggestion-${s.slice(0, 12).replace(/\W+/g, '-').toLowerCase()}`}
+                      >
+                        "{s}"
+                      </button>
+                    ))}
+                  </div>
+                </details>
+              </div>
+            );
+          })()}
 
           {/* Rolodex Start button (WO-ROLODEX-PLUMBING-01 item 3a).
               When the page was opened via `?opening=<name>`, the
@@ -3020,6 +3874,20 @@ function WalkthroughControls({
               Continue learning
             </button>
           )}
+          {tree && (
+            <button
+              onClick={() => {
+                walkthrough.stop();
+                void navigate(`/coach/play?opening=${encodeURIComponent(tree.openingName)}`);
+              }}
+              className="w-full flex items-center justify-center gap-2 px-3 py-3 rounded-lg bg-theme-accent text-theme-bg text-sm font-semibold min-h-[48px] transition-colors"
+              style={goldGlowStrongStyle}
+              data-testid="walkthrough-leaf-play-real"
+            >
+              <ChevronRight size={16} />
+              Play this line out yourself
+            </button>
+          )}
           {tree && extractDeepDiveOptions(tree).length > 0 && (
             <>
               <div className="text-xs font-medium text-theme-text-muted px-1 pt-1">
@@ -3087,8 +3955,41 @@ function WalkthroughControls({
     const findMoveCount = tree?.findMove?.length ?? 0;
     const drillCount = tree?.drill?.length ?? 0;
     const punishCount = tree?.punish?.length ?? 0;
+    const pendingJump = walkthrough.pendingStageJump;
+    const pendingLabel: Record<string, string> = {
+      punish: 'trap lines',
+      findMove: 'find-the-move puzzles',
+      concepts: 'quiz questions',
+      drill: 'drill lines',
+    };
     return (
       <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-stage-menu">
+        {pendingJump && (
+          <div
+            className="rounded-lg border border-theme-border bg-theme-surface/80 px-3 py-3 flex items-center gap-3"
+            data-testid="walkthrough-stage-pending"
+            data-pending-stage={pendingJump}
+          >
+            <Loader2 size={16} className="animate-spin shrink-0 text-theme-accent" />
+            <div className="flex-1 min-w-0">
+              <div className="text-sm font-semibold text-theme-text">
+                Loading {pendingLabel[pendingJump] ?? pendingJump}…
+              </div>
+              <div className="text-[11px] text-theme-text-muted leading-snug">
+                Hang tight — your pick will open the moment they finish generating.
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => walkthrough.cancelPendingStageJump()}
+              className="text-xs text-theme-text-muted hover:text-theme-text px-2 py-1 rounded-md hover:bg-theme-bg transition-colors shrink-0"
+              data-testid="walkthrough-stage-pending-cancel"
+              aria-label="Cancel and pick a different stage"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
         <div className="text-xs font-medium text-theme-text-muted px-1">
           What's next?
         </div>

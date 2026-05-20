@@ -5,6 +5,26 @@ const ALLOWED_ORIGINS = [
   'https://chess-academy-pro.vercel.app',
 ];
 
+/** Local-dev origins. Always allowed on every environment, even
+ *  prod — because `vite dev` proxies `/api/*` to the deployed
+ *  prod endpoint, and the request arrives at prod with an
+ *  `Origin: http://localhost:5173` header. If the prod allowlist
+ *  doesn't include localhost, every dev session 403s its way
+ *  through Polly and voice is dead in dev (and interactive
+ *  audits can't verify TTS fires).
+ *
+ *  Risk: a malicious page could spoof `Origin: http://localhost…`
+ *  to consume Polly tokens. Bounded by the per-IP rate limit
+ *  (600 req/hr at `isRateLimited`) which caps cost-amplification
+ *  to an acceptable ceiling. David's call (2026-05-19): trade
+ *  this tiny security ceiling for working dev voice. */
+const LOCAL_DEV_ORIGINS = [
+  'http://localhost:5173',
+  'http://localhost:4173',
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:4173',
+];
+
 /** Vercel preview deployments use auto-generated subdomains under
  *  the project's vercel.app namespace. Allowlist them so the voice
  *  service can reach Polly during PR-preview testing — without this
@@ -17,6 +37,7 @@ const PREVIEW_ORIGIN_RE = /^https:\/\/chess-academy-pro(?:-git-[a-z0-9-]+)?-dyah
 
 function isAllowedOrigin(origin: string): boolean {
   if (ALLOWED_ORIGINS.includes(origin)) return true;
+  if (LOCAL_DEV_ORIGINS.includes(origin)) return true;
   if (PREVIEW_ORIGIN_RE.test(origin)) return true;
   return false;
 }
@@ -250,14 +271,31 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
       return new Response('No audio returned', { status: 500, headers: cors });
     }
 
-    const audioBytes = await result.AudioStream.transformToByteArray();
-
-    return new Response(audioBytes, {
+    // Stream the Polly MP3 bytes through to the client instead of
+    // buffering the full response in memory. Polly synthesizes a
+    // sentence-length clip in ~600-1500ms; with the prior
+    // `transformToByteArray()` we waited the FULL synthesis time
+    // before sending a single byte. Piping the SDK's web
+    // ReadableStream directly into the Response means the first
+    // chunk hits the client as soon as Polly produces it, cutting
+    // perceived latency by half on typical 1-2 sentence narrations.
+    //
+    // Production audit (2026-05-18, David's report): voice lag was
+    // showing as multi-second waits between brain answer and Polly
+    // playback — the inventory traced it to this buffer. Streaming
+    // the response is part 1 of the fix; the client-side progressive
+    // decoder lands in a follow-up so audio plays AS chunks arrive,
+    // not after the full body downloads.
+    //
+    // No Content-Length header — body is now chunked transfer.
+    // Cache-Control still 24h so repeat narrations on the same text
+    // (cached by the client's LRU) skip Polly entirely.
+    const audioStream = result.AudioStream as unknown as ReadableStream<Uint8Array>;
+    return new Response(audioStream, {
       status: 200,
       headers: {
         ...cors,
         'Content-Type': 'audio/mpeg',
-        'Content-Length': String(audioBytes.length),
         'Cache-Control': 'public, max-age=86400',
       },
     });

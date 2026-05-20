@@ -48,12 +48,12 @@ describe('CoachHomePage', () => {
     expect(card).toHaveTextContent('Game Insights');
   });
 
-  it('shows secondary actions: Training Plan, Analyse, Review', () => {
+  it('shows secondary actions: Endgame, Analyse, Review', () => {
     render(<CoachHomePage />);
 
-    const plan = screen.getByTestId('coach-action-plan');
-    expect(plan).toBeInTheDocument();
-    expect(plan).toHaveTextContent('Training Plan');
+    const endgame = screen.getByTestId('coach-action-endgame');
+    expect(endgame).toBeInTheDocument();
+    expect(endgame).toHaveTextContent('Endgame');
 
     const analyse = screen.getByTestId('coach-action-analyse');
     expect(analyse).toBeInTheDocument();
@@ -69,11 +69,11 @@ describe('CoachHomePage', () => {
     expect(screen.queryByTestId('coach-action-chat')).not.toBeInTheDocument();
   });
 
-  it('shows the Endgame tile as a primary (col-span-2 layout)', () => {
+  it('shows the Training Plan tile as a primary (col-span-2 layout)', () => {
     render(<CoachHomePage />);
-    const tile = screen.getByTestId('coach-action-endgame');
+    const tile = screen.getByTestId('coach-action-plan');
     expect(tile).toBeInTheDocument();
-    expect(tile).toHaveTextContent('Endgame');
+    expect(tile).toHaveTextContent('Training Plan');
     // The wide-primary variant uses col-span-2 to peer visually
     // with the Learn/Play pair above.
     expect(tile.className).toMatch(/col-span-2/);

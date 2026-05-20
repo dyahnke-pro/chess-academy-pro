@@ -48,37 +48,37 @@
     },
     {
       "san": "d6",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: d6 is a known theory move in this line.",
+      "annotation": "Black plants the pawn on d6, supporting the long diagonal fianchetto setup while keeping central flexibility. This move keeps pieces coordinated without committing to e5 immediately.",
       "shortNarration": "d6 is theory in the Kings Indian Fianchetto Yugoslav Exchange."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: O-O is a known theory move in this line.",
+      "annotation": "White castles kingside to safety, completing piece development before engaging in the center. The rook on f1 prepares to pressure Black's position along open files.",
       "shortNarration": "O-O is the theory move in the KID Fianchetto Yugoslav Exchange."
     },
     {
       "san": "c5",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: c5 is a known theory move in this line.",
+      "annotation": "Black strikes at the center with c5, the thematic break in this structure. This challenges White's d4 pawn and opens lines for Black's pieces to become active.",
       "shortNarration": "c5 is the theory move in the KID Fianchetto Yugoslav Exchange."
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: Nc3 is a known theory move in this line.",
+      "annotation": "White adds support to the d4 pawn and controls key central squares. The knight on c3 also eyes d5 and e4 as springboards for tactics.",
       "shortNarration": "Nc3 is the main line in the KID Fianchetto Yugoslav Exchange."
     },
     {
       "san": "Nc6",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: Nc6 is a known theory move in this line.",
+      "annotation": "Black develops the queenside knight to a natural square, eyeing e5 and d4. This move prepares to contest White's center while maintaining piece harmony.",
       "shortNarration": "Nc6 is theory in the KID Fianchetto Yugoslav Exchange — Black develops and eyes d4."
     },
     {
       "san": "dxc5",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: dxc5 is a known theory move in this line.",
+      "annotation": "White captures on c5, removing Black's central tension. This exchange isolates Black's d6 pawn and gives White spatial control in the center.",
       "shortNarration": "dxc5 is the theory move in the Kings Indian Fianchetto Yugoslav Exchange line."
     },
     {
       "san": "dxc5",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Yugoslav Variation Exchange Line: dxc5 is a known theory move in this line.",
+      "annotation": "Black recaptures, maintaining material balance while accepting a slightly passive pawn structure. The d6 square becomes a potential outpost for White's pieces.",
       "shortNarration": "dxc5 is theory in the KID Fianchetto Yugoslav Exchange — Black recaptures with the bishop."
     }
   ]

@@ -28,27 +28,27 @@
     },
     {
       "san": "e5",
-      "annotation": "Continuing Hungarian Opening Asten Gambit: e5 is a known theory move in this line.",
+      "annotation": "Black challenges the d4 pawn immediately, seeking counterplay in the center before White consolidates the fianchetto setup.",
       "shortNarration": "e5 is theory in the Hungarian Opening Asten Gambit."
     },
     {
       "san": "dxe5",
-      "annotation": "Continuing Hungarian Opening Asten Gambit: dxe5 is a known theory move in this line.",
+      "annotation": "Capturing on e5 secures the pawn and opens lines for White's pieces, especially the bishop aimed at the long diagonal.",
       "shortNarration": "dxe5 is the theory move in the Hungarian Opening Asten Gambit."
     },
     {
       "san": "d4",
-      "annotation": "Continuing Hungarian Opening Asten Gambit: d4 is a known theory move in this line.",
+      "annotation": "Pushing the d-pawn creates a strong central presence on e5 and d4, while the d4 square becomes a natural outpost for White's knight.",
       "shortNarration": "d4 is the theory move in the Hungarian Opening Asten Gambit."
     },
     {
       "san": "Ne4",
-      "annotation": "Continuing Hungarian Opening Asten Gambit: Ne4 is a known theory move in this line.",
+      "annotation": "The knight lands on e4, a dominant square where it attacks multiple targets and forces Black to address the immediate pressure.",
       "shortNarration": "Ne4 is theory in the Hungarian Opening Asten Gambit."
     },
     {
       "san": "f5",
-      "annotation": "Continuing Hungarian Opening Asten Gambit: f5 is a known theory move in this line.",
+      "annotation": "Black counterattacks by supporting the d-pawn and preparing to challenge White's e5 strongpoint with concrete threats.",
       "shortNarration": "f5 is theory in the Hungarian Opening Asten Gambit."
     }
   ]

@@ -1,0 +1,10 @@
+{
+  "id": "pirc-defence",
+  "status": "fetched",
+  "wikipediaTitle": "Pirc Defence",
+  "extract": "The Pirc Defence ( PEERTS) is a chess opening characterised by the moves:\n\n1. e4 d6\nIt is named after the Slovenian grandmaster Vasja Pirc or alternatively after Soviet master Anatoly Ufimtsev as the Ufimtsev Defence. Black allows White to establish a centre with pawns on d4 and e4, but plans to undermine it later. It can lead to both sharp and solid games. Black should remain cautious about playing too passively. Play most often continues with 2...Nf6 3.Nc3, and Black often then plays 3...g6 then 4...Bg7. Sometimes, only the line 2.d4 Nf6 3.Nc3 is classified as part of the opening, or even only lines with 3...g6. Third move alternatives for Black include 3...c6 (the Czech Defence), 3...e5, and 3...Nbd7 (supporting 4...e5).\nTranspositional opportunities to and from other openings are common. The main line of the Pirc Defence is closely related to the Modern Defence, the primary difference being that Black delays developing the knight to f6 in the Modern. The main line is also similar to the King's Indian Defence, with the difference being that that White has not played c4 before playing Nc3. All 3 setups involve allowing White to occupy the center with pawns on e4 and d4, in hypermodern fashion.",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Pirc_Defence",
+  "pageId": 498009,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:35:39.656Z"
+}

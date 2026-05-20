@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { InsightsDonutChart } from './InsightsDonutChart';
 import { InsightsBarChart } from './InsightsBarChart';
+import { InsightsSection } from './InsightsSection';
 import { StrengthsCard } from './StrengthsCard';
 import { OpeningDrilldown } from './OpeningDrilldown';
 import { HeatmapGrid, type HeatmapRow } from './HeatmapGrid';
 import { winRateColor } from './heatmapScales';
 import { openingProficiencyMatrix, type OpeningProficiencyRow } from '../../services/analyticsService';
 import { encodeFilters, type StatFilter } from '../../services/gameFilterService';
+import { winRateTokens, drillAccuracyTokens } from '../../services/severityScale';
 import type { OpeningInsights, OpeningAggregateStats } from '../../types';
 
 interface OpeningsTabProps {
@@ -46,7 +48,7 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
   return (
     <div data-testid="openings-tab">
       {/* Repertoire Coverage */}
-      <Section title="Repertoire Coverage">
+      <InsightsSection title="Repertoire Coverage">
         <div className="flex items-center gap-5 py-3.5">
           <InsightsDonutChart data={coverageData} centerValue={`${coveragePct}%`} centerLabel="In Book" />
           <div className="flex flex-col gap-1.5 flex-1">
@@ -59,39 +61,44 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
             ))}
           </div>
         </div>
-      </Section>
+      </InsightsSection>
 
       {/* Most Played as White */}
       {data.mostPlayedWhite.length > 0 && (
-        <Section title="Most Played as White">
+        <InsightsSection title="Most Played as White">
           {data.mostPlayedWhite.map((o) => (
             <OpeningRow key={o.eco ?? o.name} opening={o} onClick={() => setDrilldownOpening(o)} />
           ))}
-        </Section>
+        </InsightsSection>
       )}
 
       {/* Most Played as Black */}
       {data.mostPlayedBlack.length > 0 && (
-        <Section title="Most Played as Black">
+        <InsightsSection title="Most Played as Black">
           {data.mostPlayedBlack.map((o) => (
             <OpeningRow key={o.eco ?? o.name} opening={o} onClick={() => setDrilldownOpening(o)} />
           ))}
-        </Section>
+        </InsightsSection>
       )}
 
-      {/* Win Rate by Opening */}
+      {/* Win Rate by Opening — every bar tappable, drops the user
+          into that opening's drilldown (David's "click anything"
+          rule). Severity tokens replace the inline color ladder so
+          critical-tier openings glow + show ‼. */}
       {data.winRateByOpening.length > 0 && (
-        <Section title="Win Rate by Opening (3+ games)">
+        <InsightsSection title="Win Rate by Opening (3+ games)" urgent={data.winRateByOpening.some((o) => o.winRate < 25)}>
           <InsightsBarChart
             data={data.winRateByOpening.map((o) => ({
               label: o.name.length > 12 ? o.name.slice(0, 12) + '…' : o.name,
               value: o.winRate,
-              color: o.winRate >= 60 ? 'var(--color-success)' : o.winRate >= 40 ? '#f59e0b' : 'var(--color-error)',
+              severity: winRateTokens(o.winRate).tier,
               suffix: '%',
+              onClick: () => setDrilldownOpening(o),
+              testId: `win-rate-row-${o.eco ?? o.name}`,
             }))}
             maxValue={100}
           />
-        </Section>
+        </InsightsSection>
       )}
 
       {/* Best / worst results vs. opening — explicit callouts so the
@@ -100,65 +107,108 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
           OpeningDrilldown for that opening. Defensive `?.` on the
           arrays so older test fixtures (pre PR #514) don't crash. */}
       {(data.bestResults?.length ?? 0) > 0 && (
-        <Section title="Best results against (3+ games)">
+        <InsightsSection title="Best results against (3+ games)">
           {(data.bestResults ?? []).map((o) => (
             <OpeningRow key={`best-${o.eco ?? o.name}`} opening={o} onClick={() => setDrilldownOpening(o)} />
           ))}
-        </Section>
+        </InsightsSection>
       )}
 
       {(data.worstResults?.length ?? 0) > 0 && (
-        <Section title="Worst results against (3+ games)">
+        <InsightsSection
+          title="Worst results against (3+ games)"
+          urgent={(data.worstResults ?? []).some((o) => o.winRate < 25)}
+        >
           {(data.worstResults ?? []).map((o) => (
             <OpeningRow key={`worst-${o.eco ?? o.name}`} opening={o} onClick={() => setDrilldownOpening(o)} />
           ))}
-        </Section>
+        </InsightsSection>
       )}
 
-      {/* Drill Accuracy */}
+      {/* Drill Accuracy — bars are clickable so the user can jump
+          straight into that opening's drill history. Severity uses
+          the drill-accuracy ladder (70/50/30/20) rather than the
+          looser win-rate one. */}
       {data.drillAccuracyByOpening.length > 0 && (
-        <Section title="Drill Accuracy">
+        <InsightsSection
+          title="Drill Accuracy"
+          urgent={data.drillAccuracyByOpening.some((o) => o.accuracy < 30)}
+        >
           <InsightsBarChart
             data={data.drillAccuracyByOpening.map((o) => ({
               label: o.name.length > 12 ? o.name.slice(0, 12) + '…' : o.name,
               value: o.accuracy,
-              color: o.accuracy >= 70 ? 'var(--color-success)' : o.accuracy >= 50 ? '#f59e0b' : 'var(--color-error)',
+              severity: drillAccuracyTokens(o.accuracy).tier,
               suffix: '%',
+              onClick: () => {
+                // Drill rows don't carry an ECO code (the analytics
+                // groups by name only). The filter still requires
+                // eco; passing null routes the drilldown to a
+                // name-match instead of an ECO lookup.
+                const filters: StatFilter[] = [{
+                  source: 'opening',
+                  eco: null,
+                  label: `${o.name} — drill accuracy ${o.accuracy}%`,
+                }];
+                void navigate(`/weaknesses/games?f=${encodeFilters(filters)}`);
+              },
+              testId: `drill-accuracy-row-${o.name}`,
             }))}
             maxValue={100}
           />
-        </Section>
+        </InsightsSection>
       )}
 
       {/* Opening proficiency matrix — answers "what works for you"
           in a single heatmap: rows are your top openings, columns
           split White / Black / Combined performance. Hidden until
-          we have at least one row with ≥3 games. */}
+          we have at least one row with ≥3 games. Row labels are
+          clickable (opens drilldown for the opening); individual
+          cells are also clickable (opens filtered games list). */}
       {matrix && matrix.length > 0 && (
-        <Section title="Proficiency matrix">
-          <p className="text-[10px] -mt-1 mb-2" style={{ color: 'var(--color-text-muted)' }}>
-            Win-rate per opening, split by color. Greener = stronger.
+        <InsightsSection
+          title="Proficiency matrix"
+          urgent={matrix.some((row) => row.combined.winRatePct < 25 && row.combined.games >= 3)}
+        >
+          <p className="text-[10px] -mt-1 mb-2 text-center md:text-left" style={{ color: 'var(--color-text-muted)' }}>
+            Win-rate per opening, split by color. Tap a name to drill in; tap a cell to see those games.
           </p>
           <HeatmapGrid
             columns={['As White', 'As Black', 'Combined']}
             rows={matrix.map((row): HeatmapRow => ({
               label: row.name,
               sublabel: row.eco ?? undefined,
+              // Tapping the row label opens the games list filtered
+              // by this opening across BOTH colors — useful when the
+              // user wants every game in this opening, not just one
+              // color slice. Cells (next column) keep the per-color
+              // filter behavior.
+              onLabelClick: () => {
+                const filters: StatFilter[] = [{
+                  source: 'opening',
+                  eco: row.eco,
+                  label: `${row.name} (${row.combined.games} games)`,
+                }];
+                void navigate(`/weaknesses/games?f=${encodeFilters(filters)}`);
+              },
               cells: [
                 {
                   value: row.asWhite ? row.asWhite.winRatePct : null,
                   display: row.asWhite ? `${row.asWhite.winRatePct}%` : '—',
                   hint: row.asWhite ? `${row.asWhite.games} game${row.asWhite.games === 1 ? '' : 's'} as White` : 'No games as White',
+                  severity: row.asWhite ? winRateTokens(row.asWhite.winRatePct).tier : undefined,
                 },
                 {
                   value: row.asBlack ? row.asBlack.winRatePct : null,
                   display: row.asBlack ? `${row.asBlack.winRatePct}%` : '—',
                   hint: row.asBlack ? `${row.asBlack.games} game${row.asBlack.games === 1 ? '' : 's'} as Black` : 'No games as Black',
+                  severity: row.asBlack ? winRateTokens(row.asBlack.winRatePct).tier : undefined,
                 },
                 {
                   value: row.combined.winRatePct,
                   display: `${row.combined.winRatePct}%`,
                   hint: `${row.combined.games} game${row.combined.games === 1 ? '' : 's'} total`,
+                  severity: winRateTokens(row.combined.winRatePct).tier,
                 },
               ],
             }))}
@@ -180,7 +230,7 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
               void navigate(`/weaknesses/games?f=${encodeFilters(filters)}`);
             }}
           />
-        </Section>
+        </InsightsSection>
       )}
 
       <StrengthsCard strengths={data.strengths} />
@@ -190,39 +240,39 @@ export function OpeningsTab({ data }: OpeningsTabProps): JSX.Element {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function Section({ title, children }: { title: string; children: React.ReactNode }): JSX.Element {
-  return (
-    <div className="pt-4">
-      <h3
-        className="text-[10px] font-bold uppercase tracking-wider pb-2 border-b"
-        style={{ color: 'var(--color-text-muted)', borderColor: 'var(--color-border)' }}
-      >
-        {title}
-      </h3>
-      {children}
-    </div>
-  );
-}
-
 function OpeningRow({ opening, onClick }: { opening: OpeningAggregateStats; onClick: () => void }): JSX.Element {
-  const winColor = opening.winRate >= 60 ? 'var(--color-success)' : opening.winRate >= 40 ? '#f59e0b' : 'var(--color-error)';
+  const tokens = winRateTokens(opening.winRate);
+  // Critical and severe tiers pulse / glow so a really lacking stat
+  // jumps off the screen.
+  const isUrgent = tokens.tier === 'severe' || tokens.tier === 'critical';
 
   return (
     <button
       onClick={onClick}
-      className="flex items-center justify-between w-full py-2 border-b text-sm hover:opacity-80 transition-opacity"
+      className={`flex items-center justify-between w-full py-2 border-b text-sm hover:opacity-80 transition-opacity ${tokens.animationClass}`}
       style={{ borderColor: 'color-mix(in srgb, var(--color-border) 50%, transparent)' }}
       data-testid="opening-row"
     >
-      <span style={{ color: 'var(--color-text)' }}>
-        {opening.name}
+      <span className="inline-flex items-center gap-1.5" style={{ color: 'var(--color-text)' }}>
+        {isUrgent && (
+          <span
+            aria-label={tokens.ariaLabel}
+            title={tokens.ariaLabel}
+            style={{ color: tokens.color, textShadow: tokens.glow }}
+          >
+            {tokens.icon}
+          </span>
+        )}
+        <span>{opening.name}</span>
         {opening.eco && (
           <span className="text-[11px] ml-1" style={{ color: 'var(--color-text-muted)' }}>{opening.eco}</span>
         )}
       </span>
       <span className="font-semibold text-xs" style={{ color: 'var(--color-text-muted)' }}>
         {opening.games} gm{' '}
-        <span style={{ color: winColor }}>{opening.winRate}%</span>
+        <span style={{ color: tokens.color, textShadow: isUrgent ? tokens.glow : undefined }}>
+          {opening.winRate}%
+        </span>
         <span className="ml-1" style={{ color: 'var(--color-text-muted)' }}>›</span>
       </span>
     </button>

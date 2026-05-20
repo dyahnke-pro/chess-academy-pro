@@ -68,7 +68,7 @@
     },
     {
       "san": "d5",
-      "annotation": "Continuing Ruy Lopez Open Motzko Attack Nenarokov Variation: d5 is a known theory move in this line.",
+      "annotation": "The d5 push breaks Black's center and forces a choice: if Black recaptures on d5, White regains the e4 knight with tempo, and if Black ignores it, White dominates the middle with a pawn on d5.",
       "shortNarration": "d5 is the theory move in the Ruy Lopez Open Motzko Attack Nenarokov Variation."
     },
     {

@@ -32,6 +32,7 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
+import { attachAuditStreamTracker, attributeScenarioEvents } from './audit-lib/event-attribution.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -179,7 +180,11 @@ async function main() {
 
   const page = await ctx.newPage();
 
+  // Network-arrival capture stays as a backup / cross-check; the
+  // canonical attribution path is __AUDIT__.dump() + timestamp
+  // filter, via attributeScenarioEvents().
   const captured = [];
+  const auditTracker = attachAuditStreamTracker(page, STREAM_URL);
   page.on('request', (req) => {
     const u = req.url();
     if (u === STREAM_URL && req.method() === 'POST') {
@@ -219,7 +224,12 @@ async function main() {
     } catch {
       /* ignore */
     }
-    const fresh = captured.slice(before);
+    // Per-scenario attribution via in-page Dexie log + timestamp
+    // filter (not network-arrival order). See event-attribution.mjs
+    // for the rationale: audit-stream POSTs serialize behind asset
+    // loads and arrive out-of-order, so captured.slice(before)
+    // misattributes events fired by the action into LATER scenarios.
+    const fresh = await attributeScenarioEvents(page, auditTracker, { t0 });
     const kinds = fresh.reduce((acc, e) => {
       const k = String(e.kind ?? 'unknown');
       acc[k] = (acc[k] ?? 0) + 1;

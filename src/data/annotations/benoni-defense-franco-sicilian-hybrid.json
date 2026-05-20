@@ -49,7 +49,7 @@
     {
       "san": "g6",
       "annotation": "Black begins their kingside development with the typical Benoni fianchetto setup, preparing to develop the dark-squared bishop to g7 where it will eye our pawn center. This move also provides additional support for a future f7-f5 pawn break, which is one of Black's main sources of counterplay in this structure. The fianchetto development is logical because the bishop on g7 will put pressure on our central pawns and potentially support piece activity along the long diagonal. However, this move does create some weakening around Black's king, particularly on the dark squares like f6 and h6, which we might be able to exploit later with moves like Bh6 or a knight invasion.",
-      "shortNarration": "Black fianchettoes the bishop to g7, pressuring the center and supporting f5, but weakens dark squares like f6 and h6."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto to g7, pressuring the center and supporting f5, but weakens dark squares like f6 and h6."
     },
     {
       "san": "e4",

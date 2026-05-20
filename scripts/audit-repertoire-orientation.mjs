@@ -38,6 +38,23 @@ async function main() {
   const db = JSON.parse(
     await readFile('src/data/openings-lichess.json', 'utf8'),
   );
+  // Sidecar classifications (added 2026-05-18 to handle sacrificial-
+  // attack trap lines like Fried Liver / Muzio / Allgaier where the
+  // student is correctly DOWN material but has positional / king-
+  // safety / initiative compensation. Treat these as `kind: mistake`
+  // — they don't expect material +3 at end). Mirrors the pattern from
+  // src/data/trap-line-classifications.json which keys against
+  // pro-repertoires.json. Missing/unreadable sidecar is fine — every
+  // entry defaults to `kind: trap` as before.
+  let kindOverrides = {};
+  try {
+    const sidecar = JSON.parse(
+      await readFile('src/data/repertoire-trap-classifications.json', 'utf8'),
+    );
+    kindOverrides = sidecar?.classifications ?? {};
+  } catch {
+    // No sidecar present — keep all defaults.
+  }
   const dbArr = Array.isArray(db) ? db : Object.values(db);
   const dbPgns = new Set(dbArr.filter((e) => e?.pgn).map((e) => e.pgn));
 
@@ -98,7 +115,12 @@ async function main() {
 
   const results = [];
   for (const e of entries) {
-    const kind = e.role === 'warning' ? 'warning' : 'trap';
+    // Sidecar can override the default `trap` kind for sacrificial-
+    // attack lines that don't expect +3 material at end.
+    const sidecarKey = `${e.openingId}::${e.name}`;
+    const kind = e.role === 'warning'
+      ? 'warning'
+      : (kindOverrides[sidecarKey] ?? 'trap');
 
     const chess = new Chess();
     let parseError = null;
@@ -166,16 +188,26 @@ async function main() {
       } else if (mateOn === 'opponent') {
         // student delivered mate — fine
       } else {
-        if (materialDelta < -1) {
-          flags.push(
-            `INVERTED_MATERIAL: student is down ${Math.abs(materialDelta)} in material (kind=trap, expected ≥ +3)`,
-          );
-        } else if (materialDelta < 3) {
-          flags.push(
-            `WEAK_TRAP: student only ${materialDelta >= 0 ? '+' : ''}${materialDelta} material, no mate (kind=trap, expected ≥ +3 or mate)`,
-          );
+        // `mistake` and `theme` kinds don't expect +3 material — the
+        // win is positional/structural. Only flag actual inversions
+        // (student materially worse). `trap` still requires +3 or mate.
+        if (kind === 'trap') {
+          if (materialDelta < -1) {
+            flags.push(
+              `INVERTED_MATERIAL: student is down ${Math.abs(materialDelta)} in material (kind=trap, expected ≥ +3)`,
+            );
+          } else if (materialDelta < 3) {
+            flags.push(
+              `WEAK_TRAP: student only ${materialDelta >= 0 ? '+' : ''}${materialDelta} material, no mate (kind=trap, expected ≥ +3 or mate)`,
+            );
+          }
         }
-        if (lastMoverIs === 'opponent') {
+        // `mistake` and `theme` deliberately skip the material check —
+        // these classifications cover sacrificial-attack lines (Fried
+        // Liver, Muzio, Allgaier, Greek gift) where the win is
+        // positional / king-safety / initiative and can't be measured
+        // by piece count alone. Trust the curator's classification.
+        if (lastMoverIs === 'opponent' && kind === 'trap') {
           flags.push(
             `STUDENT_NOT_PUNISHER: trap PGN ends with opponent move (last SAN: ${lastMove?.san ?? '?'}); student never plays the punishment in this line`,
           );

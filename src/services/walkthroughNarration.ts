@@ -157,6 +157,92 @@ const GENERIC_ANNOTATION_PATTERNS: RegExp[] = [
   // ─── Generic "improving coordination / winning material" stubs ──────
   /\bimproving piece coordination and maintaining pressure\b/i,
   /\bwinning material or improving the position\b/i,
+
+  // ─── Offline-generator templates with HARDCODED piece names ─────────
+  //
+  // 2026-05-18 deep-walk audit caught 81 instances where the curated
+  // annotation file embeds these templates with a piece name that
+  // DOESN'T match the move actually played on that ply. Examples:
+  //   - "White moves the bishop to e3."  played as g4 (pawn)
+  //   - "Black develops the queen to h4." played as Ne7 (knight)
+  //   - "White moves the queen to f2."    played as Re1 (rook)
+  // The template's hardcoded piece is a relic of the offline generator
+  // walking the wrong PGN — the generator filled in piece + square
+  // from a different line's ply N. Catching the templated phrasing
+  // suppresses the wrong content so the LLM enricher can replace it.
+  /\b(?:The |White's |Black's )?(?:queen|rook|bishop|knight|king)\s+takes up an influential position on [a-h][1-8](?:,\s*eyeing multiple targets)?\b/i,
+  /\b(?:The |White's |Black's )?(?:queen|rook|bishop|knight)\s+on [a-h][1-8] controls key (?:diagonal|file|rank|square) squares\b/i,
+  /\b(?:The |White's |Black's )?(?:queen|rook|bishop|knight)\s+on [a-h][1-8] (?:controls key diagonal squares and )?maintains active piece play\b/i,
+  /\b(?:White|Black)\s+moves the (?:queen|rook|bishop|knight) to [a-h][1-8]\.\s*The (?:queen|rook|bishop|knight)/i,
+  /\b(?:White|Black)\s+takes on [a-h][1-8],\s*removing (?:White's|Black's) (?:queen|rook|bishop|knight)\b/i,
+  /\b(?:White|Black)\s+wins the piece on [a-h][1-8],\s*removing (?:White's|Black's) (?:queen|rook|bishop|knight)\b/i,
+  /\bThis also (?:gives|delivers) check, disrupting the opponent's coordination\b/i,
+  /\bThe rook takes up a powerful position on the [a-h][-\s]?file, pressuring (?:White|Black)'s position\b/i,
+
+  // ─── Offline-generator "thematic exchange" filler ───────────────────
+  // "fxe5 captures the pawn. This exchange is thematic in the X — it
+  //  defines the resulting pawn structure and piece activity."
+  // The first sentence is templated SAN narration, the second is
+  // boilerplate. Both lifted from the offline generator template pool.
+  /\b[A-Za-z][\w+#=!?-]*\s+captures the pawn\.\s+This exchange is thematic in the\b/i,
+  /\bThis exchange is thematic in the .{1,80}—\s*it defines the resulting pawn structure and piece activity\b/i,
+
+  // ─── "Bishop on safe square / preparing to castle" template ─────────
+  // Generated on plies that aren't bishop moves — the template carried
+  // over from the wrong ply during offline generation.
+  /\b(?:Black|White) develops the bishop to a safe square, preparing to castle (?:king|queen)side\.\s*The bishop on [a-h][1-8] is somewhat passive but solid\b/i,
+  /\bthis move completes (?:Black|White)[’']s basic development and prepares to challenge (?:White|Black)[’']s central control\b/i,
+
+  // ─── Round 2 of offline-generator template suppression ──────────────
+  //
+  // Sentence-frequency scan of the 628-subline deep-walk audit caught
+  // more templates appearing 5-69× across distinct sublines — clear
+  // signature of a generator filling these into many positions
+  // regardless of the actual move/idea.
+  /\bThe knight reaches a powerful central outpost on [a-h][1-8],\s*controlling multiple key squares\b/i,
+  /\bThe rook takes up a powerful position on the [a-h][-\s]?file,\s*pressuring (?:White|Black)['’]s position\b/i,
+  /\bThe (?:knight|bishop|rook|queen) on [a-h][1-8] (?:controls|maintains)\b.{0,80}(?:active piece play|key (?:diagonal|central|file) squares)\b/i,
+  /^\s*This is a key positional idea\.?\s*$/i,
+  /\bFrom here,\s*understanding the strategic plans\s*[—–-]\s*piece placement,\s*pawn breaks,\s*and targets\s*[—–-]\s*is essential\b/i,
+
+  // ─── "completes the variation" / "resulting position offers" template ─
+  // Used in Milner-Barry, French, Italian openings on consecutive plies
+  // with IDENTICAL text — the generator filled the same sentence on
+  // ply N and ply N+1 (audit 2026-05-18: Milner-Barry / Black Declines
+  // with Bd7 / plies 14+15).
+  /\b[A-Za-z][\w+#=!?-]*\s+completes the variation\.\s+The resulting position after this capture offers (?:Black|White) clear targets and plans\b/i,
+  /\bStudy this structure\s*[—–-]\s*you[’']ll see it often in (?:Milner-Barry|French|Italian)/i,
+
+  // ─── "natural square" + "active piece play" stub combo ───────────────
+  // "black brings the bishop to its natural square on a5. the bishop on a5
+  //  controls key diagonal squares and maintains active piece play."
+  /\b(?:White|Black|white|black)\s+brings the (?:bishop|knight|rook|queen) to its natural square on [a-h][1-8]\b/i,
+  /\b(?:White|Black|white|black)\s+deploys the (?:bishop|knight|rook|queen) to [a-h][1-8]\b/i,
+
+  // ─── "calm move ignores Black's material gain" stub ─────────────────
+  /\bThis calm move ignores (?:Black|White)['’]s material gain and focuses on rapid piece coordination\b/i,
+
+  // ─── Round 3 of offline-generator template suppression (2026-05-19) ──
+  //
+  // Offline annotation scan caught 790 instances of three template
+  // classes across 1,893 annotation files. Two were already suppressed
+  // ("this capture changes the character", "Central pawns control space").
+  // This third class — "Continuing <Opening Name>: <SAN> is a known
+  // theory move in this line." — was slipping through (~296 instances)
+  // and displaying raw on the annotation card.
+  //
+  // The offline generator falls back to this stub on every move that
+  // doesn't have a hand-authored entry. ~7-10 instances per long subline
+  // means the user sees the same wording across many plies.
+  /\bContinuing\s+[A-Z][\w\s'-]+:\s+[A-Za-z][\w+#=!?-]*\s+is a known theory move in this line\b/i,
+  // Same fallback variant without the "Continuing" prefix
+  /\b[A-Za-z][\w+#=!?-]*\s+is a known theory move in this line\b/i,
+  // NOTE: "stakes a claim in the center" pattern was REJECTED — it
+  // appears in 144+ legitimate hand-authored annotations as natural
+  // chess metaphor (e.g. "Black stakes a claim in the center with
+  // e5"). The original template's second sentence
+  // ("Central pawns control space...") is already suppressed above
+  // and catches the formulaic instances on its own.
 ];
 
 /**

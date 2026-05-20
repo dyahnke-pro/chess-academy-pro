@@ -397,7 +397,11 @@ export function CoachChatPage(): JSX.Element {
   }, [activeProfile, hydrated, searchParams, setSearchParams, handleSend]);
 
   return (
-    <div className="flex flex-col h-[calc(100dvh-4rem)] pb-16 md:pb-0 max-w-2xl mx-auto w-full" data-testid="coach-chat-page">
+    <div
+      className="flex flex-col h-[calc(100dvh-4rem)] pb-16 md:pb-0 max-w-2xl mx-auto w-full"
+      data-testid="coach-chat-page"
+      data-hydrated={hydrated ? 'true' : 'false'}
+    >
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-theme-border">
         <button

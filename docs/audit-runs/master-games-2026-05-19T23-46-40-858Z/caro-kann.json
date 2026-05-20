@@ -1,0 +1,44 @@
+{
+  "openingId": "caro-kann",
+  "fromPgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5",
+  "depth": 8,
+  "games": [
+    {
+      "id": "4vjGgx3t",
+      "white": "Anand, Viswanathan",
+      "whiteRating": 2775,
+      "black": "Carlsen, Magnus",
+      "blackRating": 2870,
+      "winner": null,
+      "year": 2013,
+      "month": "2013-11",
+      "url": "https://lichess.org/4vjGgx3t",
+      "pgn": "[Event \"World Championship\"]\n[Site \"Chennai\"]\n[Date \"2013.11.10\"]\n[Round \"2\"]\n[White \"Anand, Viswanathan\"]\n[Black \"Carlsen, Magnus\"]\n[Result \"1/2-1/2\"]\n[GameId \"4vjGgx3t\"]\n[WhiteElo \"2775\"]\n[BlackElo \"2870\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B18\"]\n[Opening \"Caro-Kann Defense: Classical Variation, Main Line\"]\n[Termination \"Normal\"]\n\n1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 e6 8. Ne5 Bh7 9. Bd3 Bxd3 10. Qxd3 Nd7 11. f4 Bb4+ 12. c3 Be7 13. Bd2 Ngf6 14. O-O-O O-O 15. Ne4 Nxe4 16. Qxe4 Nxe5 17. fxe5 Qd5 18. Qxd5 cxd5 19. h5 b5 20. Rh3 a5 21. Rf1 Rac8 22. Rg3 Kh7 23. Rgf3 Kg8 24. Rg3 Kh7 25. Rgf3 Kg8 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "l0GOEDHp",
+      "white": "Caruana, Fabiano",
+      "whiteRating": 2835,
+      "black": "So, Wesley",
+      "blackRating": 2770,
+      "winner": "white",
+      "year": 2020,
+      "month": "2020-06",
+      "url": "https://lichess.org/l0GOEDHp",
+      "pgn": "[Event \"Clutch-ch June\"]\n[Site \"Lichess.org INT\"]\n[Date \"2020.06.12\"]\n[Round \"2.10\"]\n[White \"Caruana, Fabiano\"]\n[Black \"So, Wesley\"]\n[Result \"1-0\"]\n[GameId \"l0GOEDHp\"]\n[WhiteElo \"2835\"]\n[BlackElo \"2770\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B19\"]\n[Opening \"Caro-Kann Defense: Classical Variation\"]\n[Termination \"Normal\"]\n\n1. e4 c6 2. d4 d5 3. Nd2 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. Bd3 Bxd3 9. Qxd3 e6 10. Bd2 Ngf6 11. O-O-O Be7 12. Kb1 O-O 13. Ne4 Nxe4 14. Qxe4 Nf6 15. Qe2 Qd5 16. Ne5 Qe4 17. Be3 Nd5 18. Qd3 Qxd3 19. Rxd3 Nxe3 20. fxe3 h5 21. Rb3 Bd6 22. Nc4 Bg3 23. Rh3 Bf2 24. Rxb7 Rfb8 25. Rxb8+ Rxb8 26. Ne5 1-0\n\n\n"
+    },
+    {
+      "id": "5KVwagdf",
+      "white": "Kasparov, Garry",
+      "whiteRating": 2847,
+      "black": "Anand, Viswanathan",
+      "blackRating": 2753,
+      "winner": "white",
+      "year": 2003,
+      "month": "2003-03",
+      "url": "https://lichess.org/5KVwagdf",
+      "pgn": "[Event \"Linares 20th\"]\n[Site \"Linares\"]\n[Date \"2003.03.01\"]\n[Round \"7\"]\n[White \"Kasparov, Garry\"]\n[Black \"Anand, Viswanathan\"]\n[Result \"1-0\"]\n[GameId \"5KVwagdf\"]\n[WhiteElo \"2847\"]\n[BlackElo \"2753\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B19\"]\n[Opening \"Caro-Kann Defense: Classical Variation, Spassky Variation\"]\n[Termination \"Unknown\"]\n\n1. e4 c6 2. d4 d5 3. Nd2 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h6 7. Nf3 Nd7 8. h5 Bh7 9. Bd3 Bxd3 10. Qxd3 Ngf6 11. Bf4 e6 12. O-O-O Be7 13. Kb1 O-O 14. Ne4 Nxe4 15. Qxe4 Nf6 16. Qe2 Qd5 17. Ne5 Qe4 18. Qxe4 Nxe4 19. Rhe1 Nf6 20. g4 Rfd8 21. Be3 Bd6 22. f3 Rac8 23. c4 a5 24. a4 Nd7 25. Bd2 Bc7 26. Bc3 Nxe5 27. dxe5 c5 28. Kc2 Rxd1 29. Kxd1 Rd8+ 30. Ke2 Rd7 31. f4 Bd8 32. f5 Bg5 33. f6 b6 34. Ra1 Rd8 35. Ra3 gxf6 36. Rb3 Bf4 37. Rxb6 Bxe5 38. Bxe5 fxe5 39. Rb5 Rd4 40. Rxc5 Rxg4 41. b3 Rg3 42. Rxe5 Rxb3 43. Rxa5 f5 44. Ra8+ Kg7 45. c5 Rc3 46. Rc8 Ra3 47. c6 Rxa4 48. Re8 Rc4 49. Rxe6 f4 50. Rg6+ Kh7 51. Kd3 Rc5 52. Kd4 Rc1 53. Ke4 Rc4+ 54. Kd5 Rc3 55. Kd4 Rc1 56. Ke4 Rc4+ 57. Kf3 Kh8 58. Rxh6+ Kg7 59. Rd6 Kh7 60. Kg4 Kg7 61. Rd7+ Kf6 62. c7 1-0\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:47:42.064Z"
+}

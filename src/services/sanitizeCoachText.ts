@@ -37,6 +37,67 @@ const DOUBLE_MARKUP_RE = /\[\[[A-Z][A-Z0-9_]*(?::[\s\S]*?)?\]\]/g;
  *  because legacy tags didn't support nested `]`. */
 const SINGLE_MARKUP_RE = /\[[A-Z][A-Z0-9_]+:[^\]]*\]/g;
 
+/** Conversational scaffolding the LLM tacks onto the front of
+ *  responses despite explicit prompt bans. Audit 2026-05-19 (Bug I):
+ *  every brief-mode response opened with "Great question" or "Let me
+ *  show you" or similar filler, then the cap clipped the END off —
+ *  losing the actual chess content. Strip these so the user never
+ *  sees or hears the filler.
+ *
+ *  Patterns are case-insensitive, anchored to the start of the
+ *  response. Any em-dash / colon / comma / period separator gets
+ *  consumed along with the phrase. Longer phrases are listed first
+ *  so "Great question —" matches before "Great". */
+const SCAFFOLDING_PREFIXES: RegExp[] = [
+  /^great question[\s,.\-—:!?]+/i,
+  /^good question[\s,.\-—:!?]+/i,
+  /^excellent question[\s,.\-—:!?]+/i,
+  /^that'?s a great question[\s,.\-—:!?]+/i,
+  /^interesting question[\s,.\-—:!?]+/i,
+  /^nice question[\s,.\-—:!?]+/i,
+  /^great[\s,.\-—:!?]+(?=[a-z])/i,
+  /^excellent[\s,.\-—:!?]+(?=[a-z])/i,
+  /^perfect[\s,.\-—:!?]+(?=[a-z])/i,
+  /^nice[\s,.\-—:!?]+(?=[a-z])/i,
+  /^awesome[\s,.\-—:!?]+(?=[a-z])/i,
+  /^well done[\s,.\-—:!?]+/i,
+  /^let me (show|explain|tell|walk)[^.!?\n]+[.!?]\s+/i,
+  /^let'?s see[\s,.\-—:!?]+/i,
+  /^so[\s,.\-—:!?]+(?=[a-z])/i,
+  /^okay[\s,.\-—:!?]+(?=[a-z])/i,
+  /^alright[\s,.\-—:!?]+(?=[a-z])/i,
+  /^i think[\s,.\-—:!?]+/i,
+  /^now[\s,.\-—:!?]+(?=[a-z])/i,
+];
+
+/** Strip scaffolding from the head of a response. Idempotent — runs
+ *  multiple passes to handle stacked filler like "Great — well done,
+ *  let me show you…". Exposed for callers that want to observe
+ *  whether stripping fired (the chat surface emits an audit event
+ *  when it does, so we can watch how often the LLM ignores the ban). */
+export function stripScaffolding(text: string): {
+  text: string;
+  strippedCount: number;
+  stripped: string[];
+} {
+  let out = text.trimStart();
+  const stripped: string[] = [];
+  for (let pass = 0; pass < 6; pass++) {
+    let matched = false;
+    for (const re of SCAFFOLDING_PREFIXES) {
+      const m = re.exec(out);
+      if (m) {
+        stripped.push(m[0].trim());
+        out = out.slice(m[0].length).trimStart();
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) break;
+  }
+  return { text: out, strippedCount: stripped.length, stripped };
+}
+
 /** Internal: strip markup AND collapse the runs of internal
  *  whitespace stripped tags leave behind (e.g. "X  Y" → "X Y"), but
  *  preserve a trailing space if the caller is mid-stream (don't trim
@@ -54,10 +115,43 @@ function stripMarkup(text: string): string {
 
 /** Strip directive markup from a complete string AND trim the ends.
  *  Use this for full chat-bubble text and for the final flush of a
- *  streaming buffer. Pure function. */
+ *  streaming buffer. Pure function.
+ *
+ *  Also strips conversational scaffolding ("Great question —", "Let
+ *  me show you…", etc.) from the head — see SCAFFOLDING_PREFIXES.
+ *  The prompt bans these at every verbosity, but the LLM ignores the
+ *  ban; this strip is the enforcement so the user never sees the
+ *  filler in the chat bubble or hears it via the voice fallback.
+ *
+ *  When stripping happens, fires a `scaffolding-stripped` audit so we
+ *  can observe how often the LLM ignores the prompt ban — feedback
+ *  signal for prompt tuning. The audit is best-effort (import is
+ *  dynamic to avoid a top-level dep cycle); failures are silent. */
 export function sanitizeCoachText(text: string | null | undefined): string {
   if (!text) return '';
-  return stripMarkup(text).trim();
+  const noMarkup = stripMarkup(text).trim();
+  const { text: noScaffolding, strippedCount, stripped } = stripScaffolding(noMarkup);
+  if (strippedCount > 0) {
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'scaffolding-stripped',
+        category: 'subsystem',
+        source: 'sanitizeCoachText',
+        summary: `stripped ${strippedCount} scaffolding opener(s): ${stripped.map((p) => `"${p.slice(0, 30)}"`).join(', ')}`,
+        details: JSON.stringify({
+          strippedCount,
+          strippedPhrases: stripped,
+          originalLength: noMarkup.length,
+          cleanedLength: noScaffolding.length,
+          // Cap the previews so massive responses don't bloat the audit
+          // log — first 120 chars on each side gives enough context.
+          originalPreview: noMarkup.slice(0, 120),
+          cleanedPreview: noScaffolding.slice(0, 120),
+        }),
+      });
+    }).catch(() => undefined);
+  }
+  return noScaffolding;
 }
 
 /** Defense-in-depth markup strip exposed for the TTS pipeline. Same

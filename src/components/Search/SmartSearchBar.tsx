@@ -196,12 +196,15 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
         inputRef.current?.blur();
         void navigate(`/coach/session/play-against?${params.toString()}`);
       } else if (intent.kind === 'walkthrough' && intent.subject) {
-        params.set('subject', intent.subject);
+        // Walkthroughs always start on /coach/teach (the canonical
+        // Learn-with-Coach surface). The legacy /coach/session/walkthrough
+        // page is gone — CoachSessionPage redirects it to here.
+        params.set('opening', intent.subject);
         voiceInputService.stopListening();
         clear();
         setShowDropdown(false);
         inputRef.current?.blur();
-        void navigate(`/coach/session/walkthrough?${params.toString()}`);
+        void navigate(`/coach/teach?${params.toString()}`);
       } else if (intent.kind === 'continue-middlegame') {
         if (intent.subject) params.set('subject', intent.subject);
         voiceInputService.stopListening();
@@ -403,9 +406,11 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
       params.set('difficulty', agentIntent.difficulty ?? 'auto');
       void navigate(`/coach/session/play-against?${params.toString()}`);
     } else if (agentIntent.kind === 'walkthrough') {
-      if (agentIntent.subject) params.set('subject', agentIntent.subject);
+      // Always route to /coach/teach — see the note on the parallel
+      // dropdown handler above.
+      if (agentIntent.subject) params.set('opening', agentIntent.subject);
       void navigate(
-        `/coach/session/walkthrough${params.toString() ? `?${params.toString()}` : ''}`,
+        `/coach/teach${params.toString() ? `?${params.toString()}` : ''}`,
       );
     } else if (agentIntent.kind === 'puzzle') {
       if (agentIntent.theme) params.set('theme', agentIntent.theme);

@@ -73,57 +73,57 @@
     },
     {
       "san": "c3",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: c3 is a known theory move in this line.",
+      "annotation": "White reinforces the center with c3, preparing d4 while preventing Black's knight from landing on d4. This solid pawn structure supports the e4 outpost.",
       "shortNarration": "c3 in the Ruy Lopez Chigorin Panov System prepares d4, challenging Black's center."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: O-O is a known theory move in this line.",
+      "annotation": "Black castles kingside to complete piece development and secure the king. This prepares the rook on f8 to potentially contest the e-file.",
       "shortNarration": "O-O is the standard theory move in the Ruy Lopez Closed Chigorin Panov System."
     },
     {
       "san": "h3",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: h3 is a known theory move in this line.",
+      "annotation": "White gains space on the kingside and prevents Black's knight from jumping to g4, which could harass the f3-knight and bishop on c1.",
       "shortNarration": "h3 is theory in the Ruy Lopez Closed Chigorin Panov System."
     },
     {
       "san": "Na5",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: Na5 is a known theory move in this line.",
+      "annotation": "Black's knight retreats to a5, pressuring the bishop on b3 and forcing White to decide whether to retreat or allow the knight to reach c4.",
       "shortNarration": "Na5 is theory in the Ruy Lopez Closed Chigorin Panov System."
     },
     {
       "san": "Bc2",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: Bc2 is a known theory move in this line.",
+      "annotation": "The bishop slides to c2, stepping aside from pressure while maintaining central influence and preparing to support the queenside with rook maneuvers.",
       "shortNarration": "Bc2 is the standard Ruy Lopez Chigorin Panov move, defending the knight and preparing d4."
     },
     {
       "san": "c5",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: c5 is a known theory move in this line.",
+      "annotation": "Black strikes at d4, seeking to open lines and reduce White's space advantage. This move forces White into concrete calculation.",
       "shortNarration": "c5 is the standard Chigorin move, challenging White's center and preparing d5."
     },
     {
       "san": "d4",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: d4 is a known theory move in this line.",
+      "annotation": "White captures and opens the center immediately. The d4 pawn now attacks e5, and White gains space to coordinate pieces toward the center and Black's exposed king.",
       "shortNarration": "d4 is the theory move in the Ruy Lopez Closed Chigorin Panov System."
     },
     {
       "san": "Qc7",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: Qc7 is a known theory move in this line.",
+      "annotation": "Black's queen reaches c7 to support the weak d6-pawn and eye the a5-knight's defensive role. This centralizes Black's major piece before recapturing on d4.",
       "shortNarration": "Qc7 is the theory move in the Ruy Lopez Closed Chigorin Panov System."
     },
     {
       "san": "Nbd2",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: Nbd2 is a known theory move in this line.",
+      "annotation": "The knight from b1 completes development while keeping pressure on Black's scattered pieces on a5 and c5. This flexible setup prepares to support the center or shift to the kingside.",
       "shortNarration": "Nbd2 is theory in the Ruy Lopez Chigorin Panov System."
     },
     {
       "san": "cxd4",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: cxd4 is a known theory move in this line.",
+      "annotation": "Black resolves the tension on d4, trading pawns to ease cramped piece placement. Accepting the recapture on d4 avoids allowing White to establish a strong pawn center unopposed.",
       "shortNarration": "cxd4 is the theory move in the Ruy Lopez Closed Chigorin Panov System."
     },
     {
       "san": "cxd4",
-      "annotation": "Continuing Ruy Lopez Closed Chigorin Defense Panov System: cxd4 is a known theory move in this line.",
+      "annotation": "White recaptures with the c-pawn, keeping the d4 outpost centralized and maintaining flexibility for the rooks. The pawn on d4 now anchors White's space advantage in the middlegame.",
       "shortNarration": "cxd4 is theory in the Ruy Lopez Closed Chigorin Panov System."
     }
   ]

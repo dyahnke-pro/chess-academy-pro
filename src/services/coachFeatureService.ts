@@ -13,7 +13,8 @@ import {
 import { getThemeSkills } from './puzzleService';
 import { logAppAudit } from './appAuditor';
 import { sanitizeCoachStream, sanitizeCoachText, unwrapSpineError } from './sanitizeCoachText';
-import type { BadHabit, CoachContext, UserProfile } from '../types';
+import { resolveCoachNarration } from '../utils/coachNarration';
+import type { BadHabit, CoachContext, UserProfile, CoachNarration } from '../types';
 
 // ─── Bad Habit Detection ────────────────────────────────────────────────────
 
@@ -211,6 +212,9 @@ export async function generateNarrativeSummary(
   playerRating: number,
   onStream?: (chunk: string) => void,
   moveData?: NarrativeMoveData[],
+  /** Verbosity override for tests. Production reads the user's
+   *  `coachNarration` profile setting (Settings → Coach). */
+  verbosityOverride?: CoachNarration,
 ): Promise<string> {
   // No per-move analysis → bail out with the graceful fallback.
   // Writing prose from nothing is exactly the hallucination path
@@ -219,6 +223,29 @@ export async function generateNarrativeSummary(
     onStream?.(NARRATIVE_SUMMARY_NO_DATA);
     return NARRATIVE_SUMMARY_NO_DATA;
   }
+
+  // Verbosity tie-in (Bug D-2, David's 2026-05-19 directive on /
+  // weaknesses): the recap honors the user's coachNarration setting.
+  // silent → no recap at all (short stub); brief → 1-2 sentences;
+  // full → the existing 2-4 moments / ~180 words. Drives both the
+  // prompt's word/moment budget AND the max_tokens ceiling so the
+  // generated text matches what's promised AND what the user pays
+  // for downstream.
+  const profile = await db.profiles.get('main').catch(() => null);
+  const verbosity: CoachNarration = verbosityOverride ?? resolveCoachNarration(profile?.preferences);
+  if (verbosity === 'silent') {
+    const stub = 'Game complete. Open Full Review for analysis.';
+    onStream?.(stub);
+    return stub;
+  }
+  // briefRules / fullRules are appended to GAME_POST_REVIEW_ADDITION
+  // so the spine prompt's grounding rules stay untouched. The verbosity
+  // delta is the LAST text the LLM reads, so it overrides the default
+  // 2-4 moments / 180 words ceiling baked into the addition.
+  const verbosityRules = verbosity === 'brief'
+    ? `\n\nVERBOSITY OVERRIDE — BRIEF: the student set Coach Narration to "Brief". Identify ONE moment only. Keep the entire summary to 1-2 short sentences (< 40 words total). Skip the "next-game tip" sentence. If you find yourself writing a second moment, STOP.`
+    : '';  // full → no override (existing GAME_POST_REVIEW_ADDITION rules apply)
+  const verbosityMaxTokens = verbosity === 'brief' ? 200 : 800;
 
   // Count errors across ALL student (non-coach) moves for the tone guide.
   let blunderCount = 0;
@@ -275,15 +302,30 @@ export async function generateNarrativeSummary(
   // same shape as /coach/teach and /coach/play. GAME_POST_REVIEW_ADDITION
   // threads as systemPromptAddition. Empty string on provider error
   // preserves the legacy "graceful blank" contract.
-  const finalFen = (() => {
+  // Extract both the final FEN and the SAN history from the PGN so
+  // the brain envelope can carry moveHistory + opening grounding
+  // alongside the asked text. The annotation-context loader in
+  // coachService.ask keys off moveHistory.length > 0 (or
+  // lichessSnapshot.name) to pull the matching opening-book passages,
+  // so without these the post-game summary fires book-blind.
+  const { finalFen, moveHistory } = (() => {
     try {
       const chess = new Chess();
       chess.loadPgn(pgn);
-      return chess.fen();
+      return { finalFen: chess.fen(), moveHistory: chess.history() };
     } catch {
-      return undefined;
+      return { finalFen: undefined as string | undefined, moveHistory: [] as string[] };
     }
   })();
+  const reviewLichessSnapshot = openingName
+    ? {
+        eco: '',
+        name: openingName,
+        topAmateurMoves: [],
+        topMasterMoves: [],
+        topMasterGames: [],
+      }
+    : undefined;
   // Defense-in-depth: even with suppressSurfaceMode the brain occasionally
   // emits `[[ACTION:...]]` / `[BOARD:...]` markers (seen in prod on the
   // Review summary card — chesscom-971406909 leaked a raw
@@ -307,6 +349,8 @@ export async function generateNarrativeSummary(
       liveState: {
         surface: 'review',
         fen: finalFen,
+        moveHistory,
+        lichessSnapshot: reviewLichessSnapshot,
         userJustDid: 'Reviewing the completed game',
         whoseTurn: finalFen?.split(' ')[1] === 'b' ? 'black' : 'white',
       },
@@ -316,9 +360,15 @@ export async function generateNarrativeSummary(
       // envelope doesn't push deepseek-reasoner into empty-content.
       // See the segments call below for the full rationale.
       task: 'chat_response',
-      maxTokens: 800,
+      // Verbosity-driven cap. Brief mode pulls the ceiling down so
+      // the brain doesn't generate 800 tokens we then truncate to
+      // 1-2 sentences. Full mode keeps the existing budget.
+      maxTokens: verbosityMaxTokens,
       maxToolRoundTrips: 1,
-      systemPromptAddition: GAME_POST_REVIEW_ADDITION,
+      // Appending verbosity rules AFTER the base addition so the
+      // override is the last instruction the brain reads. Empty
+      // string for full mode is a no-op.
+      systemPromptAddition: GAME_POST_REVIEW_ADDITION + verbosityRules,
       // GAME_POST_REVIEW_ADDITION wants grounded prose; surface block's
       // [VOICE:] / [BOARD:] marker mandate would leak markers into the
       // streamed summary card. Memory + live-state still inject.
@@ -409,6 +459,28 @@ Do not include any other text outside the JSON.${analysisContext}`,
   // so it ends up in the user message via buildChessContextMessage —
   // identical wire shape as the legacy getCoachCommentary call.
   const userMessage = buildChessContextMessage(context);
+  // Pull moveHistory + opening grounding into liveState so the
+  // book-context loader has something to anchor on. Without this
+  // the intro/closing call fires book-blind and the narration
+  // misses the curated Capablanca/Lasker passages we pre-loaded.
+  const { segmentsHistory } = (() => {
+    try {
+      const chess = new Chess();
+      chess.loadPgn(pgn);
+      return { segmentsHistory: chess.history() };
+    } catch {
+      return { segmentsHistory: [] as string[] };
+    }
+  })();
+  const segmentsLichessSnapshot = openingName
+    ? {
+        eco: '',
+        name: openingName,
+        topAmateurMoves: [],
+        topMasterMoves: [],
+        topMasterGames: [],
+      }
+    : undefined;
   let raw = '';
   try {
     const spineAnswer = await coachService.ask(
@@ -418,6 +490,8 @@ Do not include any other text outside the JSON.${analysisContext}`,
         liveState: {
           surface: 'review',
           fen: context.fen,
+          moveHistory: segmentsHistory,
+          lichessSnapshot: segmentsLichessSnapshot,
           userJustDid: 'Generating intro/closing narration for the review',
         },
       },
@@ -831,9 +905,28 @@ export async function generateReviewNarration(params: {
   // Per-ply segments are now built deterministically from the engine
   // annotations — no LLM round-trip. The intro LLM call still rides
   // the unified envelope so it picks up memory + live-state context.
+  // Thread moveHistory + opening grounding so the book-context loader
+  // pulls the curated annotation passages for this opening into the
+  // envelope — the intro narration becomes Capablanca/Lasker-grounded
+  // instead of LLM-freestyle.
+  const introMoveHistory = moves
+    .slice(0, usableCount)
+    .map((m) => m.san)
+    .filter((san): san is string => typeof san === 'string' && san.length > 0);
+  const introLichessSnapshot = openingName
+    ? {
+        eco: '',
+        name: openingName,
+        topAmateurMoves: [],
+        topMasterMoves: [],
+        topMasterGames: [],
+      }
+    : undefined;
   const reviewLiveState = {
     surface: 'review' as const,
     fen: fenChain[fenChain.length - 1]?.fenAfter,
+    moveHistory: introMoveHistory,
+    lichessSnapshot: introLichessSnapshot,
     userJustDid: 'Opening review of the completed game (prep scan)',
   };
   // Silent mode: skip the LLM intro entirely (speakInternal silences

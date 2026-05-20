@@ -2,17 +2,49 @@
 // Every board in the app must derive its colors, piece set, glow, animations,
 // and border from this hook so the look stays identical across screens.
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useSettings } from './useSettings';
 import { useBoardGlow } from './useBoardGlow';
 import { getBoardColor, type BoardColorScheme } from '../services/boardColorService';
-import { buildPieceRenderer } from '../services/pieceSetService';
+import { buildPieceRenderer, preloadPieceSet } from '../services/pieceSetService';
 import { buildPieceGlowFilter } from '../utils/neonColors';
 
 /** Standard animation duration (ms) for piece movement. */
 export const BOARD_ANIMATION_MS = 200;
 /** Standard animation duration for demonstration boards (slightly longer for clarity). */
 export const BOARD_DEMO_ANIMATION_MS = 400;
+
+/** Centralized arrow styling for react-chessboard's `arrowOptions`
+ *  prop. The library defaults to `arrowWidthDenominator: 5` (arrow
+ *  width = squareWidth / 5) — too skinny on the lesson surfaces
+ *  where coach-drawn arrows are the focal point. David's audit
+ *  2026-05-19 (Bug G) called out /coach/teach specifically; bumping
+ *  the width to squareWidth / 3.5 here lifts every board's arrows
+ *  to the same thickness so the visual signature is consistent
+ *  app-wide. Colors stay overridable per-arrow via the LLM's
+ *  `[BOARD: arrow:from-to:color]` markers — only the default + the
+ *  width/opacity defaults are pinned here. */
+export const BOARD_ARROW_OPTIONS = {
+  /** Default color when an arrow doesn't specify one. The LLM almost
+   *  always specifies; this is the fallback. */
+  color: '#ffaa00',
+  secondaryColor: '#0088ff',
+  tertiaryColor: '#9933cc',
+  /** Lower denominator = thicker arrow. David's call 2026-05-20:
+   *  the fat 3.5 arrows on the opening tab were too heavy and not
+   *  transparent enough — revert to the old skinny library-default
+   *  width (5) so arrows read as a light overlay, not a slab. */
+  arrowWidthDenominator: 5,
+  arrowLengthReducerDenominator: 8,
+  sameTargetArrowLengthReducerDenominator: 4,
+  activeArrowWidthMultiplier: 1.2,
+  /** Transparent enough to see the pieces + squares beneath. David
+   *  2026-05-20: bump transparency back down so arrows don't mask
+   *  the position. */
+  opacity: 0.65,
+  activeOpacity: 0.85,
+  arrowStartOffset: 0.2,
+};
 
 export interface BoardTheme {
   scheme: BoardColorScheme;
@@ -59,6 +91,18 @@ export function useBoardTheme(): BoardTheme {
     () => buildPieceRenderer(settings.pieceSet, pieceFilters),
     [settings.pieceSet, pieceFilters],
   );
+
+  // Warm the browser cache with every piece SVG for the active set
+  // the moment any board mounts (or the set changes). Without this
+  // the first board render can race the CDN cold-start and show the
+  // alt-text fallback ("bR" / "wP" text labels in place of pieces)
+  // until the user closes + reopens the app. Audit (2026-05-18,
+  // David's report): the alt-text bug is intermittent and per-set;
+  // preloading eliminates the race for the active set. Idempotent —
+  // `preloadPieceSet` no-ops on the second call for the same set.
+  useEffect(() => {
+    preloadPieceSet(settings.pieceSet);
+  }, [settings.pieceSet]);
 
   const darkSquareStyle = useMemo(
     () => ({ backgroundColor: scheme.darkSquare }),

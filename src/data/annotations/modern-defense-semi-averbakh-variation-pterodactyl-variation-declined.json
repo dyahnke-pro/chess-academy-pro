@@ -9,7 +9,7 @@
     {
       "san": "g6",
       "annotation": "Black chooses the Modern Defense, a hypermodern opening that allows us to occupy the center while preparing to undermine it later with moves like ...d6, ...Bg7, and potentially ...c5. This move prepares to fianchetto the dark-squared bishop on g7, where it will exert long-range pressure on our central pawns and the long diagonal. Black is essentially saying 'go ahead and take the center, I'll attack it from the flanks and try to prove it's overextended.' We should continue developing while maintaining our central advantage and looking for ways to prevent Black from achieving the ...d6, ...e6, ...f5 pawn breaks that could give counterplay.",
-      "shortNarration": "Black fianchettoes the bishop on g7 to pressure the center from the flank — we develop and prevent ...d6, ...e6, ...f5 breaks."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto on g7 to pressure the center from the flank — we develop and prevent ...d6, ...e6, ...f5 breaks."
     },
     {
       "san": "d4",

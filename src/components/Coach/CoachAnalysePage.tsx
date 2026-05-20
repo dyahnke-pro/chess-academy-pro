@@ -7,6 +7,7 @@ import { ChatInput } from './ChatInput';
 import { useChessGame } from '../../hooks/useChessGame';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import { useAppStore } from '../../stores/appStore';
+import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { coachService } from '../../coach/coachService';
 import { voiceService } from '../../services/voiceService';
@@ -95,7 +96,28 @@ export function CoachAnalysePage(): JSX.Element {
         `Explain the position in 4-6 sentences: who's better, why, key plans for both sides, what to watch for.`,
       ].join('\n');
 
+      // Tactical context — /coach/analyse already has the
+      // sfAnalysis in scope (it ran Stockfish to power the explain
+      // call), so we can attach the full forward-PV scan, not just
+      // the immediate + hanging detection. This is the analyse
+      // surface's primary job — name the tactics in the position.
+      const analyseStudentColor = fen.split(' ')[1] === 'b' ? 'b' : 'w';
+      const analyseStudentRating =
+        useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+      const analyseTactics = buildTacticsLiveContext(
+        fen,
+        sfAnalysis,
+        analyseStudentColor,
+        analyseStudentRating,
+      );
       let explanation = '';
+      // Thread the on-board move history when present so the book-
+      // context loader in coachService.ask can ground the analysis
+      // narration in the curated opening annotations. When the user
+      // loaded a bare FEN (no moves played), history is empty and the
+      // loader will try opening-detection from the FEN's position
+      // pattern via lichessSnapshot — falls back gracefully.
+      const analyseHistory = game.history.length > 0 ? game.history : undefined;
       const result = await coachService.ask(
         {
           surface: 'standalone-chat',
@@ -105,7 +127,9 @@ export function CoachAnalysePage(): JSX.Element {
             fen,
             evalCp: sfAnalysis.isMate ? undefined : sfAnalysis.evaluation,
             evalMateIn: sfAnalysis.mateIn ?? undefined,
+            moveHistory: analyseHistory,
             userJustDid: 'Loaded a position into Analyse',
+            tactics: analyseTactics,
           },
         },
         {
@@ -172,7 +196,25 @@ export function CoachAnalysePage(): JSX.Element {
       `Answer in 2-4 sentences. Stay grounded in the position.`,
     ].join('\n');
 
+    // Tactical context for the follow-up ask — same pattern as the
+    // initial explain call above. `analysis` is the cached SF result
+    // from when the user loaded this position; it powers the forward
+    // PV scan.
+    const followStudentColor = game.fen.split(' ')[1] === 'b' ? 'b' : 'w';
+    const followStudentRating =
+      useAppStore.getState().activeProfile?.puzzleRating ?? 1200;
+    const followTactics = buildTacticsLiveContext(
+      game.fen,
+      analysis ?? null,
+      followStudentColor,
+      followStudentRating,
+    );
     let response = '';
+    // Same shape as the analyse-position call above — thread the
+    // on-board move history when present so the book-context loader
+    // gets an opening to anchor against. Follow-up questions inherit
+    // whatever board state the user has built up since loading.
+    const followHistory = game.history.length > 0 ? game.history : undefined;
     const result = await coachService.ask(
       {
         surface: 'standalone-chat',
@@ -182,7 +224,9 @@ export function CoachAnalysePage(): JSX.Element {
           fen: game.fen,
           evalCp: analysis && !analysis.isMate ? analysis.evaluation : undefined,
           evalMateIn: analysis?.mateIn ?? undefined,
+          moveHistory: followHistory,
           userJustDid: `Asked: "${question.slice(0, 60)}"`,
+          tactics: followTactics,
         },
       },
       {

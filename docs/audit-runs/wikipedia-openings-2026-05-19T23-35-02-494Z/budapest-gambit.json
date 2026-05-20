@@ -1,0 +1,10 @@
+{
+  "id": "budapest-gambit",
+  "status": "fetched",
+  "wikipediaTitle": "Budapest Gambit",
+  "extract": "The Budapest Gambit (or Budapest Defence) is a chess opening that begins with the moves:\n\n1. d4 Nf6\n2. c4 e5\nBlack sacrifices a pawn in return for active play. After being introduced by the Hungarian master Geza Maroczy in an off-hand game in 1896, the Budapest Gambit received attention from leading players after a win as Black by Milan Vidmar over Akiba Rubinstein in 1918. It enjoyed some popularity in the early 1920s, but since then it has rarely been played at the top level.\nAfter 3...Ng4 intending to recapture the pawn on e5, White has three main replies. 4.Nf3 sees White seeking to return the pawn for quick development. The Alekhine Variation 4.e4 attempts to establish a strong pawn centre and space advantage. The Rubinstein Variation 4.Bf4 leads to an important choice for White, after 4...Nc6 5.Nf3 Bb4+, between 6.Nbd2 and 6.Nc3. The reply 6.Nbd2 leads to a positional game in which White often enjoys the bishop pair, while 6.Nc3 keeps the material advantage of a pawn but allows Black to weaken White's pawn structure with ...Bxc3+.\nIn the less common Fajarowicz Variation (3...Ne4), Black forgoes regaining the pawn in favour of quickly generating tactical threats connected with ...Bb4+ as well as the f2-square. \n\n",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Budapest_Gambit",
+  "pageId": 1630627,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:35:14.981Z"
+}

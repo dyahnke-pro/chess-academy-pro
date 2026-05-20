@@ -1,0 +1,10 @@
+{
+  "id": "english-opening",
+  "status": "fetched",
+  "wikipediaTitle": "English Opening",
+  "extract": "The English Opening is a chess opening that begins with the move:\n\n1. c4\nA flank opening, it is the fourth most popular and, according to various databases, one of the four most successful of White's twenty possible first moves. White begins the fight for the centre by staking a claim to the d5-square from the wing, in hypermodern style. Although many lines of the English have a distinct character, the opening is often used as a transpositional device in much the same way, though to a lesser extent, as the Zukertort Opening (1.Nf3). In particular, transpositions to the King's Indian Defence and Queen's Gambit Declined are common, among others. This allows players to avoid certain responses to 1.d4 if they desire to, such as the Nimzo-Indian and Grünfeld. The opening is considered reliable and flexible.\nThe two most common independent lines that usually start with 1.c4 are the Symmetrical Variation (1.c4 c5) and the Reversed Sicilian (1.c4 e5). Another notable independent line that does not derive from either of those is the Mikėnas-Carls Variation (1.c4 Nf6 2.Nc3 e6 3.e4). Other common independent lines, such as the Neo-Catalan, Anglo-Grünfeld, and Nimzo-English, generally parallel the development of their 1.d4 counterparts well into the game, hence their names. The Botvinnik System (White plays c4, Nc3, d3, e4, g3, Bg2, and Ne2 in some order), which can be played against a variety of Black defenses, is also classified as an English.\nIn the Encyclopaedia of Chess Openings, the opening is found in codes A10–A39. The opening was employed by Ding Liren in the twelfth game of the World Chess Championship 2024 against Gukesh Dommaraju, resulting in a win for Ding, one of his most famous games. He also used it to achieve a win in the fourth game of the World Chess Championship 2023 against Ian Nepomniachtchi.",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/English_Opening",
+  "pageId": 498039,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:35:21.141Z"
+}

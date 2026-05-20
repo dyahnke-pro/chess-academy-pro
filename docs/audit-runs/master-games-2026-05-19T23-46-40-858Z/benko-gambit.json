@@ -1,0 +1,44 @@
+{
+  "openingId": "benko-gambit",
+  "fromPgn": "d4 Nf6 c4 c5 d5 b5",
+  "depth": 6,
+  "games": [
+    {
+      "id": "ZiXqZje1",
+      "white": "Gelfand, B.",
+      "whiteRating": 2761,
+      "black": "Carlsen, M.",
+      "blackRating": 2872,
+      "winner": "black",
+      "year": 2014,
+      "month": "2014-02",
+      "url": "https://lichess.org/ZiXqZje1",
+      "pgn": "[Event \"Zurich CC Rapid 2014\"]\n[Site \"Zurich SUI\"]\n[Date \"2014.02.04\"]\n[Round \"1.1\"]\n[White \"Gelfand, B.\"]\n[Black \"Carlsen, M.\"]\n[Result \"0-1\"]\n[GameId \"ZiXqZje1\"]\n[WhiteElo \"2761\"]\n[BlackElo \"2872\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A58\"]\n[Opening \"Benko Gambit Accepted: Fully Accepted Variation\"]\n[Termination \"Unknown\"]\n\n1. d4 Nf6 2. c4 c5 3. d5 b5 4. cxb5 a6 5. bxa6 g6 6. Nc3 Bg7 7. e4 O-O 8. Nf3 Qa5 9. Bd3 Nxd5 10. exd5 Bxc3+ 11. bxc3 Qxc3+ 12. Qd2 Qxa1 13. O-O Bxa6 14. Bb2 Qxa2 15. Ra1 Qb3 16. Be4 d6 17. Rb1 f6 18. Bxf6 Qc4 19. Bb2 Qxe4 20. Re1 Qd3 21. Qxd3 Bxd3 22. Rxe7 Rxf3 23. gxf3 Na6 0-1\n\n\n"
+    },
+    {
+      "id": "kR4mY2Xe",
+      "white": "Carlsen, Magnus",
+      "whiteRating": 2837,
+      "black": "Bologan, Viktor",
+      "blackRating": 2732,
+      "winner": "white",
+      "year": 2012,
+      "month": "2012-07",
+      "url": "https://lichess.org/kR4mY2Xe",
+      "pgn": "[Event \"Biel GM 45th\"]\n[Site \"Biel\"]\n[Date \"2012.07.31\"]\n[Round \"8\"]\n[White \"Carlsen, Magnus\"]\n[Black \"Bologan, Viktor\"]\n[Result \"1-0\"]\n[GameId \"kR4mY2Xe\"]\n[WhiteElo \"2837\"]\n[BlackElo \"2732\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A59\"]\n[Opening \"Benko Gambit Accepted: King Walk Variation\"]\n[Termination \"Unknown\"]\n\n1. d4 Nf6 2. c4 c5 3. d5 b5 4. cxb5 a6 5. bxa6 g6 6. Nc3 Bxa6 7. e4 Bxf1 8. Kxf1 d6 9. Nf3 Bg7 10. g3 O-O 11. Kg2 Nbd7 12. Qe2 Qb6 13. a4 Rfb8 14. Nb5 Ne8 15. Bg5 Qd8 16. Ra3 Nb6 17. b3 Qd7 18. Ra2 f6 19. Bc1 f5 20. exf5 gxf5 21. Rd1 Nf6 22. Qe6+ Qxe6 23. dxe6 Ne4 24. Nh4 c4 25. bxc4 Nxc4 26. Nc7 Nc3 27. Nxa8 Nxa2 28. Nc7 Nc3 29. Rd3 Rc8 30. Nb5 Nxb5 31. axb5 Rc5 32. Rb3 Na5 33. Rb1 Bd4 34. b6 Nb7 35. Rb4 Bxf2 36. Kxf2 Rc2+ 37. Kf3 Rxc1 38. Nxf5 Rf1+ 39. Kg4 Nc5 40. b7 1-0\n\n\n"
+    },
+    {
+      "id": "N9sx7pSk",
+      "white": "Kramnik, Vladimir",
+      "whiteRating": 2807,
+      "black": "Topalov, Veselin",
+      "blackRating": 2743,
+      "winner": "white",
+      "year": 2003,
+      "month": "2003-01",
+      "url": "https://lichess.org/N9sx7pSk",
+      "pgn": "[Event \"Corus\"]\n[Site \"Wijk aan Zee\"]\n[Date \"2003.01.23\"]\n[Round \"10\"]\n[White \"Kramnik, Vladimir\"]\n[Black \"Topalov, Veselin\"]\n[Result \"1-0\"]\n[GameId \"N9sx7pSk\"]\n[WhiteElo \"2807\"]\n[BlackElo \"2743\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A58\"]\n[Opening \"Benko Gambit Accepted: Fully Accepted Variation\"]\n[Termination \"Unknown\"]\n\n1. d4 Nf6 2. c4 c5 3. d5 b5 4. cxb5 a6 5. bxa6 g6 6. Nc3 Bxa6 7. g3 d6 8. Bg2 Nbd7 9. Nf3 Bg7 10. Rb1 O-O 11. O-O Qa5 12. Bd2 Rfb8 13. Qc2 Ne8 14. Rfe1 Nc7 15. a4 Qb6 16. b3 Bxc3 17. Bxc3 Nxd5 18. Ne5 Nxe5 19. Bxd5 Bb7 20. Bxb7 Rxb7 21. Bxe5 dxe5 22. Rec1 f6 23. Qe4 Kg7 24. Rc3 Rab8 25. Qc2 Qe6 26. a5 Kf7 27. Ra1 Rxb3 28. Rxb3 Qxb3 29. Qxc5 Qb2 30. Qc4+ Kg7 31. Qa2 Qxa2 32. Rxa2 Ra8 33. a6 Ra7 34. Kg2 Kf7 35. Kf3 Ke6 36. g4 Kd6 37. h4 h6 38. g5 hxg5 39. hxg5 f5 40. e4 e6 41. Ra5 Kc7 42. Ke3 Kb8 43. Rxe5 Rxa6 44. Rc5 Kb7 45. Kf4 Kb6 46. Rc8 fxe4 47. Kxe4 Kb7 48. Rg8 Kc6 49. Rxg6 Kd6 50. f4 Ra4+ 51. Kf3 Ke7 52. Rg7+ Kf8 53. Rb7 Rc4 54. g6 Rc1 55. Kg4 Rc5 56. Rf7+ Ke8 57. f5 1-0\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:48:56.522Z"
+}

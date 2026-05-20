@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black signals the intention to fianchetto the king's bishop, preparing the modern Grünfeld Defense setup. This move controls the h5 square and prepares to develop the bishop to g7, where it will exert tremendous pressure along the long diagonal toward our queenside. Our opponent is choosing a hypermodern approach, allowing us to occupy the center with pawns while planning to attack it later with pieces. This is the defining characteristic of the Grünfeld—Black invites White to build a big center, then tries to prove it's overextended.",
-      "shortNarration": "Black fianchettoes the king's bishop to g7, pressuring the long diagonal and inviting White to overextend in the center."
+      "shortNarration": "Black plays g6, preparing the king's bishop fianchetto to g7, pressuring the long diagonal and inviting White to overextend in the center."
     },
     {
       "san": "Nc3",

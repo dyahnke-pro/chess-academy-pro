@@ -10,9 +10,19 @@ interface ChatInputProps {
   onSend: (text: string, modality?: 'voice' | 'text') => void;
   disabled?: boolean;
   placeholder?: string;
+  /** Brain-emitted answer chips rendered above the input. When the
+   *  coach asks a discrete question ("Did you mean Najdorf or
+   *  Dragon?"), it emits a `[CHOICES: Najdorf | Dragon]` marker;
+   *  CoachTeachPage parses that marker and feeds the inner items
+   *  here. Tap a chip → autofill + send + clear. */
+  coachChoices?: string[] | null;
+  /** Called when the user taps a coach-choice chip. Surface clears
+   *  its coachChoices state and submits the chosen text through
+   *  onSend. */
+  onPickCoachChoice?: (choice: string) => void;
 }
 
-export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JSX.Element {
+export function ChatInput({ onSend, disabled, placeholder, coachChoices, onPickCoachChoice }: ChatInputProps): JSX.Element {
   const [text, setText] = useState('');
   const [listening, setListening] = useState(false);
   const [micError, setMicError] = useState<string | null>(null);
@@ -117,6 +127,21 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
     handleSend();
   }, [handleSend]);
 
+  const handlePickChoice = useCallback(
+    (choice: string) => {
+      // Default: just send the choice as text. Surface can override
+      // via onPickCoachChoice to also clear its coachChoices state
+      // (which prevents the chips from re-rendering on the next
+      // turn while the assistant is still composing).
+      if (onPickCoachChoice) {
+        onPickCoachChoice(choice);
+      } else {
+        onSend(choice, 'text');
+      }
+    },
+    [onPickCoachChoice, onSend],
+  );
+
   return (
     <div className="relative">
       {micError && (
@@ -126,6 +151,28 @@ export function ChatInput({ onSend, disabled, placeholder }: ChatInputProps): JS
           role="alert"
         >
           {micError}
+        </div>
+      )}
+      {coachChoices && coachChoices.length > 0 && (
+        <div
+          className="flex flex-wrap gap-2 px-3 pt-2 pb-1 border-t border-theme-border bg-theme-bg"
+          data-testid="coach-choice-chips"
+          role="group"
+          aria-label="Coach is asking — tap an answer"
+        >
+          {coachChoices.map((choice, i) => (
+            <button
+              key={`choice-${i}-${choice}`}
+              type="button"
+              onClick={() => handlePickChoice(choice)}
+              disabled={disabled}
+              className="px-3 py-1.5 rounded-full border-2 border-theme-accent/40 bg-theme-accent/10 text-sm text-theme-text hover:bg-theme-accent/20 hover:border-theme-accent disabled:opacity-50 transition-colors min-h-[36px]"
+              data-testid={`coach-choice-chip-${i}`}
+              data-choice={choice}
+            >
+              {choice}
+            </button>
+          ))}
         </div>
       )}
     <form

@@ -1,0 +1,2082 @@
+{
+  "generatedAt": "2026-05-19T18:14:03.392Z",
+  "openings": [
+    {
+      "id": "pro-naroditsky-w-nf3-nf6-c4-g6-nc3-bg7",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "A05",
+      "name": "Daniel Naroditsky as White: Zukertort Opening",
+      "pgn": "Nf3 Nf6 c4 g6 Nc3 Bg7 e4 O-O d4 c5 Be2 cxd4 Nxd4 Nc6",
+      "color": "white",
+      "totalGamesPlayed": 6,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "Nf3 Nf6 c4 g6 Nc3 Bg7",
+      "canonicalOpeningName": "Zukertort Opening",
+      "canonicalEcoPgn": "Nf3 Nf6",
+      "variations": [
+        {
+          "name": "Zukertort Opening",
+          "eco": "A05",
+          "pgn": "Nf3 Nf6 c4 g6 Nc3 Bg7 e4 O-O d4 d6",
+          "gamesPlayed": 2,
+          "wins": 2,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-naroditsky-w-e4-e5-nf3-nc6-bb5-a6",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "C70",
+      "name": "Daniel Naroditsky as White: Ruy Lopez: Morphy Defense, Classical Defense Deferred",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Bc5 c3 Nge7 d4 exd4 cxd4 Bb4+",
+      "color": "white",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 2,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 a6",
+      "canonicalOpeningName": "Ruy Lopez: Morphy Defense, Classical Defense Deferred",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Bc5",
+      "variations": [
+        {
+          "name": "Ruy Lopez: Morphy Defense, Tarrasch Variation",
+          "eco": "C77",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 Nc3 Bc5",
+          "gamesPlayed": 3,
+          "wins": 1,
+          "draws": 2,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-naroditsky-w-d4-nf6-nc3-g6-e4-d6",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "A45",
+      "name": "Daniel Naroditsky as White: Indian Defense",
+      "pgn": "d4 Nf6 Nc3 g6 e4 d6 f4 Bg7 Bd3 O-O Nf3 c5 dxc5 Nc6",
+      "color": "white",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "d4 Nf6 Nc3 g6 e4 d6",
+      "canonicalOpeningName": "Indian Defense",
+      "canonicalEcoPgn": "d4 Nf6",
+      "variations": [
+        {
+          "name": "Indian Defense — 4.Bd3 line",
+          "eco": "A45",
+          "pgn": "d4 Nf6 Nc3 g6 e4 d6 Bd3 Bg7 Nf3 O-O O-O Bg4 h3 Bxf3",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Indian Defense — 4.f4 line",
+          "eco": "A45",
+          "pgn": "d4 Nf6 Nc3 g6 e4 d6 f4 Bg7 Bd3 O-O Nf3 c5 dxc5 dxc5",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Indian Defense — 4.Be2 line",
+          "eco": "A45",
+          "pgn": "d4 Nf6 Nc3 g6 e4 d6 Be2 Bg7 Nf3 O-O O-O Nc6 a4 e5",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-naroditsky-b-b3-d5-bb2-bf5-g3-e6",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "A01",
+      "name": "Daniel Naroditsky as Black: Nimzo-Larsen Attack: Classical Variation",
+      "pgn": "b3 d5 Bb2 Bf5 g3 e6 Bg2 Nf6 Nf3 h6 O-O Be7 d4 O-O",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 1,
+        "losses": 1
+      },
+      "firstMovesSignature": "b3 d5 Bb2 Bf5 g3 e6",
+      "canonicalOpeningName": "Nimzo-Larsen Attack: Classical Variation",
+      "canonicalEcoPgn": "b3 d5",
+      "variations": [
+        {
+          "name": "Nimzo-Larsen Attack: Classical Variation — 5...h6 line",
+          "eco": "A01",
+          "pgn": "b3 d5 Bb2 Bf5 g3 e6 Bg2 Nf6 Nf3 h6 O-O Be7 d3 O-O",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 1,
+          "losses": 0
+        },
+        {
+          "name": "Nimzo-Larsen Attack: Classical Variation — 5...Be4 line",
+          "eco": "A01",
+          "pgn": "b3 d5 Bb2 Bf5 g3 e6 Bg2 Nf6 Nf3 Be4 O-O Bxf3 Bxf3 Be7",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Nimzo-Larsen Attack: Classical Variation — 5...h6 line",
+          "eco": "A01",
+          "pgn": "b3 d5 Bb2 Bf5 g3 e6 Bg2 Nf6 Nf3 h6 O-O Be7 c4 Bh7",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-naroditsky-b-d4-nf6-c4-g6-nc3-bg7",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "E73",
+      "name": "Daniel Naroditsky as Black: King's Indian Defense: Semi-Averbakh System",
+      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Be3 Nc6 d5 Ne5",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 1,
+        "losses": 1
+      },
+      "firstMovesSignature": "d4 Nf6 c4 g6 Nc3 Bg7",
+      "canonicalOpeningName": "King's Indian Defense: Semi-Averbakh System",
+      "canonicalEcoPgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Be3",
+      "variations": [
+        {
+          "name": "King's Indian Defense: Semi-Averbakh System",
+          "eco": "E73",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Be3 e5 d5 Na6",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 1,
+          "losses": 0
+        },
+        {
+          "name": "King's Indian Defense: Normal Variation, Rare Defenses",
+          "eco": "E90",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Bd3 e5 d5 a5",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-naroditsky-b-e4-c5-nc3-d6-nf3-nc6",
+      "playerId": "naroditsky",
+      "playerDisplay": "Daniel Naroditsky",
+      "eco": "B23",
+      "name": "Daniel Naroditsky as Black: Sicilian Defense: Closed",
+      "pgn": "e4 c5 Nc3 d6 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb3 Nf6 Bg5 h6",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c5 Nc3 d6 Nf3 Nc6",
+      "canonicalOpeningName": "Sicilian Defense: Closed",
+      "canonicalEcoPgn": "e4 c5 Nc3",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Closed — 4.d4 line",
+          "eco": "B23",
+          "pgn": "e4 c5 Nc3 d6 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb3 h6 Bc4 Nf6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: Closed — 4.Bb5 line",
+          "eco": "B23",
+          "pgn": "e4 c5 Nc3 d6 Nf3 Nc6 Bb5 Bd7 d4 cxd4 Nxd4 e5 Nf5 Nf6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-gothamchess-w-e4-c5-a3-g6-nc3-bg7",
+      "playerId": "gothamchess",
+      "playerDisplay": "Levy Rozman (GothamChess)",
+      "eco": "B20",
+      "name": "Levy Rozman (GothamChess) as White: Sicilian Defense: Mengarini Variation",
+      "pgn": "e4 c5 a3 g6 Nc3 Bg7 Bc4 Nc6 d3 e6 Ba2 Nge7 Bd2 d5",
+      "color": "white",
+      "totalGamesPlayed": 9,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 2,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 c5 a3 g6 Nc3 Bg7",
+      "canonicalOpeningName": "Sicilian Defense: Mengarini Variation",
+      "canonicalEcoPgn": "e4 c5 a3",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Mengarini Variation",
+          "eco": "B20",
+          "pgn": "e4 c5 a3 g6 Nc3 Bg7 Bc4 e6 d3 Ne7",
+          "gamesPlayed": 3,
+          "wins": 1,
+          "draws": 1,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-gothamchess-w-e4-e5-nf3-nc6-c3-d5",
+      "playerId": "gothamchess",
+      "playerDisplay": "Levy Rozman (GothamChess)",
+      "eco": "C44",
+      "name": "Levy Rozman (GothamChess) as White: Ponziani Opening: Caro Gambit",
+      "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Bd7 exd5 Nd4 Qd1 Nxf3+ Qxf3 Nf6",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 c3 d5",
+      "canonicalOpeningName": "Ponziani Opening: Caro Gambit",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Bd7",
+      "variations": [
+        {
+          "name": "Ponziani Opening: Steinitz Variation",
+          "eco": "C44",
+          "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 f6 d4 exd4 Nxd4 Ne7 Bb5 Bd7",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Ponziani Opening",
+          "eco": "C44",
+          "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 dxe4 Nxe5 Qd5 Nxc6 bxc6 Bc4 Qd6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-gothamchess-w-e4-c5-a3-nf6-e5-nd5",
+      "playerId": "gothamchess",
+      "playerDisplay": "Levy Rozman (GothamChess)",
+      "eco": "B20",
+      "name": "Levy Rozman (GothamChess) as White: Sicilian Defense: Mengarini Variation",
+      "pgn": "e4 c5 a3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 e6 O-O d6 exd6 Bxd6",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c5 a3 Nf6 e5 Nd5",
+      "canonicalOpeningName": "Sicilian Defense: Mengarini Variation",
+      "canonicalEcoPgn": "e4 c5 a3",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Mengarini Variation — 4...d6 line",
+          "eco": "B20",
+          "pgn": "e4 c5 a3 Nf6 e5 Nd5 Nf3 d6 exd6 e6 Bc4 Bxd6 O-O O-O",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: Mengarini Variation — 4...Nc6 line",
+          "eco": "B20",
+          "pgn": "e4 c5 a3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nc7 O-O d5 exd6 Qxd6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-gothamchess-b-e4-d5-exd5-qxd5-nc3-qa5",
+      "playerId": "gothamchess",
+      "playerDisplay": "Levy Rozman (GothamChess)",
+      "eco": "B01",
+      "name": "Levy Rozman (GothamChess) as Black: Scandinavian Defense: Main Line, Mieses Variation",
+      "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Bc4 Bg4 f3 Bd7 Ne2 b5",
+      "color": "black",
+      "totalGamesPlayed": 27,
+      "recordInLine": {
+        "wins": 17,
+        "draws": 0,
+        "losses": 10
+      },
+      "firstMovesSignature": "e4 d5 exd5 Qxd5 Nc3 Qa5",
+      "canonicalOpeningName": "Scandinavian Defense: Main Line, Mieses Variation",
+      "canonicalEcoPgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6",
+      "variations": [
+        {
+          "name": "Scandinavian Defense: Classical Variation — 6.Bc4 line",
+          "eco": "B01",
+          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6",
+          "gamesPlayed": 5,
+          "wins": 4,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Scandinavian Defense: Classical Variation — 6.Ne5 line",
+          "eco": "B01",
+          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Ne5 c6",
+          "gamesPlayed": 4,
+          "wins": 2,
+          "draws": 0,
+          "losses": 2
+        },
+        {
+          "name": "Scandinavian Defense: Classical Variation — 6.Bd2 line",
+          "eco": "B01",
+          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bd2 e6",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-gothamchess-b-e4-d5-exd5-qxd5-nf3-bg4",
+      "playerId": "gothamchess",
+      "playerDisplay": "Levy Rozman (GothamChess)",
+      "eco": "B01",
+      "name": "Levy Rozman (GothamChess) as Black: Scandinavian Defense: Mieses-Kotroc Variation",
+      "pgn": "e4 d5 exd5 Qxd5 Nf3 Bg4 Be2 Nc6 d3 O-O-O Nc3 Qh5 Be3 e5",
+      "color": "black",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 1,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 d5 exd5 Qxd5 Nf3 Bg4",
+      "canonicalOpeningName": "Scandinavian Defense: Mieses-Kotroc Variation",
+      "canonicalEcoPgn": "e4 d5 exd5 Qxd5",
+      "variations": [
+        {
+          "name": "Scandinavian Defense: Mieses-Kotroc Variation",
+          "eco": "B01",
+          "pgn": "e4 d5 exd5 Qxd5 Nf3 Bg4 Be2 Nc6 d4 O-O-O",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 1,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-carlsen-w-e4-c5-nf3-d6-d4-cxd4",
+      "playerId": "carlsen",
+      "playerDisplay": "Magnus Carlsen",
+      "eco": "B54",
+      "name": "Magnus Carlsen as White: Sicilian Defense: Modern Variations, Main Line",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Qe2 Nc6 Nxc6 bxc6 Nc3 Qc7",
+      "color": "white",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 1,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 d4 cxd4",
+      "canonicalOpeningName": "Sicilian Defense: Modern Variations, Main Line",
+      "canonicalEcoPgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Najdorf Variation",
+          "eco": "B90",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+          "gamesPlayed": 2,
+          "wins": 0,
+          "draws": 1,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-carlsen-w-e4-c5-nc3-nc6-g3-g6",
+      "playerId": "carlsen",
+      "playerDisplay": "Magnus Carlsen",
+      "eco": "B26",
+      "name": "Magnus Carlsen as White: Sicilian Defense: Closed",
+      "pgn": "e4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 Be3 Nf6 Nge2 Ng4",
+      "color": "white",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 1,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c5 Nc3 Nc6 g3 g6",
+      "canonicalOpeningName": "Sicilian Defense: Closed",
+      "canonicalEcoPgn": "e4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 d3 d6 Be3",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Closed",
+          "eco": "B24",
+          "pgn": "e4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 Nge2 d6",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-carlsen-w-e4-e5-nf3-nc6-bc4-nf6",
+      "playerId": "carlsen",
+      "playerDisplay": "Magnus Carlsen",
+      "eco": "C58",
+      "name": "Magnus Carlsen as White: Italian Game: Two Knights Defense, Polerio Defense, Bishop Check Line",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6",
+      "color": "white",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Nf6",
+      "canonicalOpeningName": "Italian Game: Two Knights Defense, Polerio Defense, Bishop Check Line",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+",
+      "variations": [
+        {
+          "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening",
+          "eco": "C55",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 c3 h6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Italian Game: Giuoco Pianissimo, Normal — 5.O-O line",
+          "eco": "C50",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 O-O d6 c3 O-O h3 a5",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Italian Game: Giuoco Pianissimo, Normal — 5.Nc3 line",
+          "eco": "C50",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 Nc3 a6 a4 h6 Be3 Bxe3",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-carlsen-b-e4-c5-nf3-e6-c3-d5",
+      "playerId": "carlsen",
+      "playerDisplay": "Magnus Carlsen",
+      "eco": "B40",
+      "name": "Magnus Carlsen as Black: Sicilian Defense: Delayed Alapin Variation, with e6",
+      "pgn": "e4 c5 Nf3 e6 c3 d5 exd5 exd5 d4 Nc6 Bb5 Nf6 O-O Be7",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 c3 d5",
+      "canonicalOpeningName": "Sicilian Defense: Delayed Alapin Variation, with e6",
+      "canonicalEcoPgn": "e4 c5 Nf3 e6 c3",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Delayed Alapin Variation, with e6 — 4.e5 line",
+          "eco": "B40",
+          "pgn": "e4 c5 Nf3 e6 c3 d5 e5 Nc6 d4 Bd7 Be2 cxd4 cxd4 Nge7",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: Delayed Alapin Variation, with e6 — 4.e5 line",
+          "eco": "B40",
+          "pgn": "e4 c5 Nf3 e6 c3 d5 e5 Nc6 g3 Nge7 Bg2 Nf5 d3 Be7",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: Delayed Alapin Variation, with e6 — 4.exd5 line",
+          "eco": "B40",
+          "pgn": "e4 c5 Nf3 e6 c3 d5 exd5 exd5 d4 Nc6 Bb5 Bd6 O-O Nf6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-carlsen-b-e4-nf6-e5-nd5-d4-d6",
+      "playerId": "carlsen",
+      "playerDisplay": "Magnus Carlsen",
+      "eco": "B04",
+      "name": "Magnus Carlsen as Black: Alekhine Defense: Modern Variation, Larsen Variation",
+      "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 Nxe5 c6 Be2 Bf5 O-O Nd7",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 Nf6 e5 Nd5 d4 d6",
+      "canonicalOpeningName": "Alekhine Defense: Modern Variation, Larsen Variation",
+      "canonicalEcoPgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5",
+      "variations": [
+        {
+          "name": "Alekhine Defense: Four Pawns Attack, Cambridge Gambit",
+          "eco": "B03",
+          "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 g5",
+          "gamesPlayed": 2,
+          "wins": 2,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-hikaru-w-e4-e5-nc3-nc6-bc4-nf6",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "C28",
+      "name": "Hikaru Nakamura as White: Vienna Game: Stanley Variation, Three Knights Variation",
+      "pgn": "e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 h3 O-O Nge2 Na5 Ng3 c6",
+      "color": "white",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 e5 Nc3 Nc6 Bc4 Nf6",
+      "canonicalOpeningName": "Vienna Game: Stanley Variation, Three Knights Variation",
+      "canonicalEcoPgn": "e4 e5 Nc3 Nc6 Bc4 Nf6",
+      "variations": [
+        {
+          "name": "Bishop's Opening: Vienna Hybrid, Hromádka Variation",
+          "eco": "C28",
+          "pgn": "e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bb4 Ne2 d5",
+          "gamesPlayed": 4,
+          "wins": 1,
+          "draws": 0,
+          "losses": 3
+        },
+        {
+          "name": "Vienna Game: Stanley Variation, Three Knights Variation",
+          "eco": "C28",
+          "pgn": "e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 h3 d6",
+          "gamesPlayed": 2,
+          "wins": 2,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-hikaru-w-b3-d5-bb2-c5-nf3-f6",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "A01",
+      "name": "Hikaru Nakamura as White: Nimzo-Larsen Attack: Classical Variation",
+      "pgn": "b3 d5 Bb2 c5 Nf3 f6 e3 e5 c4 d4 exd4 cxd4 Bd3 Nc6",
+      "color": "white",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "b3 d5 Bb2 c5 Nf3 f6",
+      "canonicalOpeningName": "Nimzo-Larsen Attack: Classical Variation",
+      "canonicalEcoPgn": "b3 d5",
+      "variations": [
+        {
+          "name": "Nimzo-Larsen Attack: Classical Variation",
+          "eco": "A01",
+          "pgn": "b3 d5 Bb2 c5 Nf3 f6 c4 d4 e3 e5",
+          "gamesPlayed": 3,
+          "wins": 1,
+          "draws": 0,
+          "losses": 2
+        }
+      ]
+    },
+    {
+      "id": "pro-hikaru-w-nf3-nf6-b3-g6-bb2-bg7",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "A05",
+      "name": "Hikaru Nakamura as White: Zukertort Opening: Nimzo-Larsen Variation",
+      "pgn": "Nf3 Nf6 b3 g6 Bb2 Bg7 d4 b6 e3 Bb7 c4 O-O Be2 e6",
+      "color": "white",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "Nf3 Nf6 b3 g6 Bb2 Bg7",
+      "canonicalOpeningName": "Zukertort Opening: Nimzo-Larsen Variation",
+      "canonicalEcoPgn": "Nf3 Nf6 b3",
+      "variations": [
+        {
+          "name": "Zukertort Opening: Nimzo-Larsen Variation",
+          "eco": "A05",
+          "pgn": "Nf3 Nf6 b3 g6 Bb2 Bg7 d4 O-O e3 d6",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-hikaru-b-nf3-g6-g3-bg7-bg2-d6",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "A04",
+      "name": "Hikaru Nakamura as Black: Zukertort Opening: Kingside Fianchetto",
+      "pgn": "Nf3 g6 g3 Bg7 Bg2 d6 O-O Bd7 e4 Qc8 d4 Nc6 Re1 Bh3",
+      "color": "black",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 6,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "Nf3 g6 g3 Bg7 Bg2 d6",
+      "canonicalOpeningName": "Zukertort Opening: Kingside Fianchetto",
+      "canonicalEcoPgn": "Nf3 g6",
+      "variations": [
+        {
+          "name": "Zukertort Opening: Kingside Fianchetto",
+          "eco": "A04",
+          "pgn": "Nf3 g6 g3 Bg7 Bg2 d6 O-O Bd7 d4 Qc8",
+          "gamesPlayed": 4,
+          "wins": 3,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-hikaru-b-e4-g6-d4-bg7-nf3-c6",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "B06",
+      "name": "Hikaru Nakamura as Black: Modern Defense",
+      "pgn": "e4 g6 d4 Bg7 Nf3 c6 Bc4 d5 Bb3 Bg4 h3 Bxf3 Qxf3 e6",
+      "color": "black",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 1,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 g6 d4 Bg7 Nf3 c6",
+      "canonicalOpeningName": "Modern Defense",
+      "canonicalEcoPgn": "e4 g6 d4 Bg7",
+      "variations": [
+        {
+          "name": "Modern Defense",
+          "eco": "B06",
+          "pgn": "e4 g6 d4 Bg7 Nf3 c6 Nc3 d5 h3 dxe4",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 1,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-hikaru-b-e4-g6-d4-bg7-nc3-c6",
+      "playerId": "hikaru",
+      "playerDisplay": "Hikaru Nakamura",
+      "eco": "B06",
+      "name": "Hikaru Nakamura as Black: Modern Defense: Standard Line",
+      "pgn": "e4 g6 d4 Bg7 Nc3 c6 h3 d5 e5 a6 f4 f6 Be3 Nd7",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 g6 d4 Bg7 Nc3 c6",
+      "canonicalOpeningName": "Modern Defense: Standard Line",
+      "canonicalEcoPgn": "e4 g6 d4 Bg7 Nc3",
+      "variations": [
+        {
+          "name": "Modern Defense: Gurgenidze Defense",
+          "eco": "B06",
+          "pgn": "e4 g6 d4 Bg7 Nc3 c6 f4 d5 e5 h5 Nf3 Bg4 h3 Bxf3",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Modern Defense: Standard Line — 4.Be3 line",
+          "eco": "B06",
+          "pgn": "e4 g6 d4 Bg7 Nc3 c6 Be3 d5 Nf3 Nf6 e5 Ne4 Bd3 Nxc3",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Modern Defense: Standard Line — 4.Nf3 line",
+          "eco": "B06",
+          "pgn": "e4 g6 d4 Bg7 Nc3 c6 Nf3 d5 h3 dxe4 Nxe4 Nf6 Nxf6+ exf6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-caruana-w-d4-g6-nf3-bg7-g3-d6",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "A40",
+      "name": "Fabiano Caruana as White: Queen's Pawn Game: Modern Defense",
+      "pgn": "d4 g6 Nf3 Bg7 g3 d6 Bg2 Bd7 O-O Qc8 c4 Bh3 Nc3 h5",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 0,
+        "draws": 0,
+        "losses": 3
+      },
+      "firstMovesSignature": "d4 g6 Nf3 Bg7 g3 d6",
+      "canonicalOpeningName": "Queen's Pawn Game: Modern Defense",
+      "canonicalEcoPgn": "d4 g6",
+      "variations": [
+        {
+          "name": "Queen's Pawn Game: Modern Defense",
+          "eco": "A40",
+          "pgn": "d4 g6 Nf3 Bg7 g3 d6 Bg2 Nc6 O-O Bd7",
+          "gamesPlayed": 2,
+          "wins": 0,
+          "draws": 0,
+          "losses": 2
+        }
+      ]
+    },
+    {
+      "id": "pro-caruana-w-d4-e6-nf3-nf6-g3-d5",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "A40",
+      "name": "Fabiano Caruana as White: Horwitz Defense",
+      "pgn": "d4 e6 Nf3 Nf6 g3 d5 Bg2 Be7 O-O O-O c4 c6 Qc2 b6",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "d4 e6 Nf3 Nf6 g3 d5",
+      "canonicalOpeningName": "Horwitz Defense",
+      "canonicalEcoPgn": "d4 e6",
+      "variations": []
+    },
+    {
+      "id": "pro-caruana-w-e4-c5-nf3-e6-d4-cxd4",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "B42",
+      "name": "Fabiano Caruana as White: Sicilian Defense: Kan Variation, Polugaevsky Variation",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3 Bc5 Nb3 Ba7 O-O Ne7",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 1,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 d4 cxd4",
+      "canonicalOpeningName": "Sicilian Defense: Kan Variation, Polugaevsky Variation",
+      "canonicalEcoPgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3 Bc5",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Kan Variation, Wing Attack",
+          "eco": "B43",
+          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3 b5 Bd3 Bb7 O-O Nc6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: Taimanov Variation",
+          "eco": "B45",
+          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Bc5 Ndb5 Nf6 Be3 Bb4",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-caruana-b-e4-g6-d4-bg7-nc3-d6",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "B06",
+      "name": "Fabiano Caruana as Black: Modern Defense: Two Knights Variation",
+      "pgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3 Nd7 Bc4 e6 O-O Ne7 Be3 a6",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 g6 d4 Bg7 Nc3 d6",
+      "canonicalOpeningName": "Modern Defense: Two Knights Variation",
+      "canonicalEcoPgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3",
+      "variations": [
+        {
+          "name": "Modern Defense: Two Knights Variation — 4...b6 line",
+          "eco": "B06",
+          "pgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3 b6 Bd3 e6 Qe2 Bb7 O-O Nd7",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Modern Defense: Two Knights Variation — 4...Nd7 line",
+          "eco": "B06",
+          "pgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3 Nd7 Be2 e6 O-O Ne7 Be3 b6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Modern Defense: Two Knights Variation — 4...Nd7 line",
+          "eco": "B06",
+          "pgn": "e4 g6 d4 Bg7 Nc3 d6 Nf3 Nd7 Be3 a6 a4 b6 Bd3 Bb7",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-caruana-b-e4-e5-nf3-nc6-bb5-a6",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "C78",
+      "name": "Fabiano Caruana as Black: Ruy Lopez: Morphy Defense, Neo-Arkhangelsk Variation",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Bc5 c3 b5 Bb3 d6",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 0,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 a6",
+      "canonicalOpeningName": "Ruy Lopez: Morphy Defense, Neo-Arkhangelsk Variation",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Bc5",
+      "variations": [
+        {
+          "name": "Ruy Lopez: Morphy Defense",
+          "eco": "C78",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O b5 Bb3 Bc5 c3 d6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Ruy Lopez: Morphy Defense, Neo-Arkhangelsk Variation",
+          "eco": "C78",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Bc5 d3 d6 Be3 Bxe3",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Ruy Lopez: Morphy Defense, Classical Defense Deferred",
+          "eco": "C70",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Bc5 c3 Nge7 O-O Ng6 d4 Ba7",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-caruana-b-e4-c5-nf3-nc6-d4-cxd4",
+      "playerId": "caruana",
+      "playerDisplay": "Fabiano Caruana",
+      "eco": "B33",
+      "name": "Fabiano Caruana as Black: Sicilian Defense: Lasker-Pelikan Variation",
+      "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c5 Nf3 Nc6 d4 cxd4",
+      "canonicalOpeningName": "Sicilian Defense: Lasker-Pelikan Variation",
+      "canonicalEcoPgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Lasker-Pelikan Variation",
+          "eco": "B33",
+          "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Nd5 Nxd5",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-firouzja-w-e4-e5-nf3-nc6-bb5-a6",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "C77",
+      "name": "Alireza Firouzja as White: Ruy Lopez: Morphy Defense, Bayreuth Variation",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 Bxc6 dxc6 d3 Nd7 Nc3 Bd6",
+      "color": "white",
+      "totalGamesPlayed": 10,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 2,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 a6",
+      "canonicalOpeningName": "Ruy Lopez: Morphy Defense, Bayreuth Variation",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 Bxc6",
+      "variations": [
+        {
+          "name": "Ruy Lopez: Open",
+          "eco": "C80",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 1,
+          "losses": 0
+        },
+        {
+          "name": "Ruy Lopez: Morphy Defense, Anderssen Variation — 5...Bc5 line",
+          "eco": "C77",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 d3 Bc5",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Ruy Lopez: Morphy Defense, Anderssen Variation — 5...d6 line",
+          "eco": "C77",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 d3 d6",
+          "gamesPlayed": 2,
+          "wins": 2,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-firouzja-w-e4-c5-nf3-d6-d4-cxd4",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "B94",
+      "name": "Alireza Firouzja as White: Sicilian Defense: Najdorf Variation",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 Nbd7 Bc4 Qb6",
+      "color": "white",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 1,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 d4 cxd4",
+      "canonicalOpeningName": "Sicilian Defense: Najdorf Variation",
+      "canonicalEcoPgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Classical Variation",
+          "eco": "B56",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6",
+          "gamesPlayed": 2,
+          "wins": 2,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-firouzja-w-e4-c5-nf3-e6-g3-nc6",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "B40",
+      "name": "Alireza Firouzja as White: Sicilian Defense: French Variation",
+      "pgn": "e4 c5 Nf3 e6 g3 Nc6 Bg2 b5 O-O Bb7 Re1 Nge7 c3 d5",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 g3 Nc6",
+      "canonicalOpeningName": "Sicilian Defense: French Variation",
+      "canonicalEcoPgn": "e4 c5 Nf3 e6",
+      "variations": [
+        {
+          "name": "Sicilian Defense: French Variation — 5...d5 line",
+          "eco": "B40",
+          "pgn": "e4 c5 Nf3 e6 g3 Nc6 Bg2 Nf6 Qe2 d5 d3 Be7 O-O O-O",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: French Variation — 5...d6 line",
+          "eco": "B40",
+          "pgn": "e4 c5 Nf3 e6 g3 Nc6 Bg2 Nf6 Qe2 d6 O-O Be7 c3 e5",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-firouzja-b-e4-e5-nf3-nc6-bb5-nf6",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "C67",
+      "name": "Alireza Firouzja as Black: Ruy Lopez: Open Berlin Defense, l'Hermet Variation",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 dxe5 Nxb5 a4 Nbd4",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 2,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 Nf6",
+      "canonicalOpeningName": "Ruy Lopez: Open Berlin Defense, l'Hermet Variation",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 dxe5",
+      "variations": [
+        {
+          "name": "Ruy Lopez: Berlin Defense, Rio Gambit Accepted",
+          "eco": "C67",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 Re1 Nd6 Nxe5 Be7 Bf1 Nxe5",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 1,
+          "losses": 0
+        },
+        {
+          "name": "Ruy Lopez: Berlin Defense, l'Hermet Variation",
+          "eco": "C67",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Ruy Lopez: Berlin Defense",
+          "eco": "C65",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 Bxc6 dxc6 d3 Bd6 O-O Nd7 Nbd2 f6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-firouzja-b-e4-c5-nf3-d6-d4-cxd4",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "B96",
+      "name": "Alireza Firouzja as Black: Sicilian Defense: Najdorf Variation",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 h6",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 d4 cxd4",
+      "canonicalOpeningName": "Sicilian Defense: Najdorf Variation",
+      "canonicalEcoPgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Prins Variation",
+          "eco": "B54",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 f3 e5 Nb3 a5 Bb5+ Nc6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: Najdorf Variation, English Attack",
+          "eco": "B90",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: Najdorf Variation",
+          "eco": "B96",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Nbd7",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-firouzja-b-e4-c5-nf3-d6-bb5--nd7",
+      "playerId": "firouzja",
+      "playerDisplay": "Alireza Firouzja",
+      "eco": "B51",
+      "name": "Alireza Firouzja as Black: Sicilian Defense: Moscow Variation",
+      "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bd3 Ngf6 Re1 e6 a4 b6",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 Bb5+ Nd7",
+      "canonicalOpeningName": "Sicilian Defense: Moscow Variation",
+      "canonicalEcoPgn": "e4 c5 Nf3 d6 Bb5+",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Moscow Variation — 4.d4 line",
+          "eco": "B51",
+          "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 d4 cxd4 Qxd4 a6 Be2 Ngf6 c4 e6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: Moscow Variation — 4.O-O line",
+          "eco": "B51",
+          "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bd3 Ngf6 Re1 e6 Bf1 b6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-dubov-w-d4-nf6-nf3-d5-c4-e6",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "A46",
+      "name": "Daniil Dubov as White: Indian Defense: Knights Variation",
+      "pgn": "d4 Nf6 Nf3 d5 c4 e6 g3 h6 Bg2 Bd6 O-O O-O Qc2 Nc6",
+      "color": "white",
+      "totalGamesPlayed": 6,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 1,
+        "losses": 2
+      },
+      "firstMovesSignature": "d4 Nf6 Nf3 d5 c4 e6",
+      "canonicalOpeningName": "Indian Defense: Knights Variation",
+      "canonicalEcoPgn": "d4 Nf6 Nf3",
+      "variations": [
+        {
+          "name": "Indian Defense: Knights Variation — 4...Bb4+ line",
+          "eco": "A46",
+          "pgn": "d4 Nf6 Nf3 d5 c4 e6 g3 Bb4+ Bd2 Be7 Bg2 O-O O-O Nbd7",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Indian Defense: Knights Variation — 4...Bb4+ line",
+          "eco": "A46",
+          "pgn": "d4 Nf6 Nf3 d5 c4 e6 g3 Bb4+ Nbd2 dxc4 Bg2 b5 Ne5 Nd5",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Indian Defense: Knights Variation — 4...dxc4 line",
+          "eco": "A46",
+          "pgn": "d4 Nf6 Nf3 d5 c4 e6 g3 dxc4 Bg2 Bb4+ Nbd2 O-O Qc2 b5",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 1,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-dubov-w-e4-e5-nf3-nc6-bc4-nf6",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "C55",
+      "name": "Daniil Dubov as White: Italian Game: Two Knights Defense, Modern Bishop's Opening",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 h6 h3 d6 a4 Be7 Nc3 O-O",
+      "color": "white",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 0,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Nf6",
+      "canonicalOpeningName": "Italian Game: Two Knights Defense, Modern Bishop's Opening",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3",
+      "variations": [
+        {
+          "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening",
+          "eco": "C55",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 h6 c3 d6 a4 g6 a5 a6",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Italian Game: Giuoco Pianissimo, Normal — 5.c3 line",
+          "eco": "C50",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 c3 d6 Bg5 h6 Bh4 a5",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Italian Game: Giuoco Pianissimo, Normal — 5.Nc3 line",
+          "eco": "C50",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 Nc3 h6 Be3 Be7 a4 Bb4",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-dubov-w-e4-c6-d4-d5-e5-bf5",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "B12",
+      "name": "Daniil Dubov as White: Caro-Kann Defense: Advance Variation, Short Variation",
+      "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 h6 Nbd2 Ne7 Nf1 Nd7",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c6 d4 d5 e5 Bf5",
+      "canonicalOpeningName": "Caro-Kann Defense: Advance Variation, Short Variation",
+      "canonicalEcoPgn": "e4 c6 d4 d5 e5 Bf5 Nf3",
+      "variations": [
+        {
+          "name": "Caro-Kann Defense: Advance Variation, Short Variation — 5...Ne7 line",
+          "eco": "B12",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Ne7 Nbd2 Ng6 Nf1 f6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Caro-Kann Defense: Advance Variation, Short Variation — 5...Nd7 line",
+          "eco": "B12",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7 Nbd2 Ne7 O-O h6",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-dubov-b-e4-e5-nf3-nc6-bb5-a6",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "C88",
+      "name": "Daniil Dubov as Black: Ruy Lopez: Closed",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O",
+      "color": "black",
+      "totalGamesPlayed": 8,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 5
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 a6",
+      "canonicalOpeningName": "Ruy Lopez: Closed",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O",
+      "variations": [
+        {
+          "name": "Ruy Lopez: Exchange Variation, Bronstein Variation",
+          "eco": "C69",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O Qd6",
+          "gamesPlayed": 2,
+          "wins": 0,
+          "draws": 0,
+          "losses": 2
+        }
+      ]
+    },
+    {
+      "id": "pro-dubov-b-e4-e5-nf3-nc6-bc4-nf6",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "C55",
+      "name": "Daniil Dubov as Black: Italian Game: Two Knights Defense, Modern Bishop's Opening",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O a4 d6 Re1 Be6",
+      "color": "black",
+      "totalGamesPlayed": 7,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 1,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Nf6",
+      "canonicalOpeningName": "Italian Game: Two Knights Defense, Modern Bishop's Opening",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7",
+      "variations": [
+        {
+          "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening",
+          "eco": "C55",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 Nc3 O-O",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 1,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-dubov-b-e4-c5-nf3-d6-d4-cxd4",
+      "playerId": "dubov",
+      "playerDisplay": "Daniil Dubov",
+      "eco": "B60",
+      "name": "Daniil Dubov as Black: Sicilian Defense: Richter-Rauzer Variation, Modern Variation",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 Bd7 Nxc6 Bxc6",
+      "color": "black",
+      "totalGamesPlayed": 6,
+      "recordInLine": {
+        "wins": 5,
+        "draws": 1,
+        "losses": 0
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 d4 cxd4",
+      "canonicalOpeningName": "Sicilian Defense: Richter-Rauzer Variation, Modern Variation",
+      "canonicalEcoPgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bg5 Bd7",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Dragon Variation",
+          "eco": "B70",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6",
+          "gamesPlayed": 3,
+          "wins": 3,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-praggnanandhaa-w-e4-e5-nf3-nc6-bc4-nf6",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "C55",
+      "name": "Rameshbabu Praggnanandhaa as White: Italian Game: Two Knights Defense",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 c3 h6 d3 d6 O-O Be7 b4 O-O",
+      "color": "white",
+      "totalGamesPlayed": 8,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 1,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Nf6",
+      "canonicalOpeningName": "Italian Game: Two Knights Defense",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bc4 Nf6",
+      "variations": [
+        {
+          "name": "Italian Game: Two Knights Defense, Polerio Defense",
+          "eco": "C58",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening",
+          "eco": "C55",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 Nc3 O-O",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 1,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-praggnanandhaa-w-e4-c5-nf3-e6-d4-cxd4",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "B46",
+      "name": "Rameshbabu Praggnanandhaa as White: Sicilian Defense: Taimanov Variation",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 a6 Be2 Nf6 O-O Be7",
+      "color": "white",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 d4 cxd4",
+      "canonicalOpeningName": "Sicilian Defense: Taimanov Variation",
+      "canonicalEcoPgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 a6",
+      "variations": [
+        {
+          "name": "Sicilian Defense: French Variation, Normal",
+          "eco": "B40",
+          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6",
+          "gamesPlayed": 3,
+          "wins": 1,
+          "draws": 0,
+          "losses": 2
+        }
+      ]
+    },
+    {
+      "id": "pro-praggnanandhaa-w-e4-e5-nf3-nc6-bb5-nf6",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "C67",
+      "name": "Rameshbabu Praggnanandhaa as White: Ruy Lopez: Berlin Defense, l'Hermet Variation",
+      "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5",
+      "color": "white",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bb5 Nf6",
+      "canonicalOpeningName": "Ruy Lopez: Berlin Defense, l'Hermet Variation",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6",
+      "variations": [
+        {
+          "name": "Ruy Lopez: Berlin Defense, Anti-Berlin Variation",
+          "eco": "C65",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 Be3 Bd6 Nc3 O-O",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-praggnanandhaa-b-e4-e6-d4-d5-e5-c5",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "C02",
+      "name": "Rameshbabu Praggnanandhaa as Black: French Defense: Advance Variation, Paulsen Attack",
+      "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Be2 cxd4 cxd4 Nh6",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 1,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 e6 d4 d5 e5 c5",
+      "canonicalOpeningName": "French Defense: Advance Variation, Paulsen Attack",
+      "canonicalEcoPgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3",
+      "variations": [
+        {
+          "name": "French Defense: Advance Variation, Euwe Variation",
+          "eco": "C02",
+          "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Bd7",
+          "gamesPlayed": 2,
+          "wins": 0,
+          "draws": 1,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-praggnanandhaa-b-d4-nf6-c4-g6-nc3-bg7",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "E81",
+      "name": "Rameshbabu Praggnanandhaa as Black: King's Indian Defense: Sämisch Variation, Bobotsov-Korchnoi-Petrosian Variation",
+      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Nge2 c5 d5 e6",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 0
+      },
+      "firstMovesSignature": "d4 Nf6 c4 g6 Nc3 Bg7",
+      "canonicalOpeningName": "King's Indian Defense: Sämisch Variation, Bobotsov-Korchnoi-Petrosian Variation",
+      "canonicalEcoPgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Nge2",
+      "variations": [
+        {
+          "name": "King's Indian Defense: Normal Variation, Standard Development",
+          "eco": "E73",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O",
+          "gamesPlayed": 2,
+          "wins": 2,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-praggnanandhaa-b-nf3-nf6-g3-g6-bg2-bg7",
+      "playerId": "praggnanandhaa",
+      "playerDisplay": "Rameshbabu Praggnanandhaa",
+      "eco": "A05",
+      "name": "Rameshbabu Praggnanandhaa as Black: King's Indian Attack: Symmetrical Defense",
+      "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d4 d6 c4 Nbd7 Nc3 e5",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 1,
+        "losses": 1
+      },
+      "firstMovesSignature": "Nf3 Nf6 g3 g6 Bg2 Bg7",
+      "canonicalOpeningName": "King's Indian Attack: Symmetrical Defense",
+      "canonicalEcoPgn": "Nf3 Nf6 g3 g6",
+      "variations": [
+        {
+          "name": "King's Indian Attack: Symmetrical Defense — 6.Nc3 line",
+          "eco": "A05",
+          "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d4 d6 Nc3 Nbd7 Qd3 c5",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "King's Indian Attack: Symmetrical Defense — 6.Nbd2 line",
+          "eco": "A05",
+          "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d4 d6 Nbd2 a5 a4 Nc6",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 1,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-niemann-w-e4-e5-nf3-nc6-bc4-nf6",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "C55",
+      "name": "Hans Niemann as White: Italian Game: Two Knights Defense, Modern Bishop's Opening",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 a6 O-O h6 c3 d6 Re1 Na5",
+      "color": "white",
+      "totalGamesPlayed": 15,
+      "recordInLine": {
+        "wins": 6,
+        "draws": 2,
+        "losses": 7
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Nf6",
+      "canonicalOpeningName": "Italian Game: Two Knights Defense, Modern Bishop's Opening",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3",
+      "variations": [
+        {
+          "name": "Italian Game: Giuoco Pianissimo, Normal",
+          "eco": "C50",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Bc5 O-O d6",
+          "gamesPlayed": 3,
+          "wins": 1,
+          "draws": 0,
+          "losses": 2
+        },
+        {
+          "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening — 5.c3 line",
+          "eco": "C55",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 h6 c3 Be7",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 1,
+          "losses": 0
+        },
+        {
+          "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening — 5.a4 line",
+          "eco": "C55",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 h6 a4 d6",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-niemann-w-e4-c5-nf3-d6-bb5--nd7",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "B51",
+      "name": "Hans Niemann as White: Sicilian Defense: Moscow Variation",
+      "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bd3 Ngf6 Re1 e6 Bf1 b5",
+      "color": "white",
+      "totalGamesPlayed": 11,
+      "recordInLine": {
+        "wins": 7,
+        "draws": 1,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 Bb5+ Nd7",
+      "canonicalOpeningName": "Sicilian Defense: Moscow Variation",
+      "canonicalEcoPgn": "e4 c5 Nf3 d6 Bb5+",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Moscow Variation — 4...Nf6 line",
+          "eco": "B51",
+          "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O Nf6 Re1 e6 c3 a6 Bf1 b5",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: Moscow Variation — 4...a6 line",
+          "eco": "B51",
+          "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bd3 Ngf6 Re1 e6 Bf1 Be7",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Sicilian Defense: Moscow Variation — 4...a6 line",
+          "eco": "B51",
+          "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bd3 Ngf6 Re1 e6 Bf1 Ne5",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-niemann-w-e4-e5-nf3-nc6-bc4-bc5",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "C50",
+      "name": "Hans Niemann as White: Italian Game: Giuoco Pianissimo",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a5 Re1 Ba7",
+      "color": "white",
+      "totalGamesPlayed": 9,
+      "recordInLine": {
+        "wins": 6,
+        "draws": 2,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 e5 Nf3 Nc6 Bc4 Bc5",
+      "canonicalOpeningName": "Italian Game: Giuoco Pianissimo",
+      "canonicalEcoPgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3",
+      "variations": [
+        {
+          "name": "Italian Game: Giuoco Pianissimo",
+          "eco": "C50",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 c3 d6",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 1,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-niemann-b-e4-c6-d4-d5-e5-bf5",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "B12",
+      "name": "Hans Niemann as Black: Caro-Kann Defense: Advance Variation, Short Variation",
+      "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Ne7 c3 Nd7 a4 h6",
+      "color": "black",
+      "totalGamesPlayed": 8,
+      "recordInLine": {
+        "wins": 7,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c6 d4 d5 e5 Bf5",
+      "canonicalOpeningName": "Caro-Kann Defense: Advance Variation, Short Variation",
+      "canonicalEcoPgn": "e4 c6 d4 d5 e5 Bf5 Nf3",
+      "variations": [
+        {
+          "name": "Caro-Kann Defense: Advance Variation, Short Variation",
+          "eco": "B12",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Nd7",
+          "gamesPlayed": 3,
+          "wins": 3,
+          "draws": 0,
+          "losses": 0
+        }
+      ]
+    },
+    {
+      "id": "pro-niemann-b-e4-c6-d4-d5-exd5-cxd5",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "B13",
+      "name": "Hans Niemann as Black: Caro-Kann Defense: Exchange Variation",
+      "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Nf6 h3 g6 Nf3 Bg7",
+      "color": "black",
+      "totalGamesPlayed": 4,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 1
+      },
+      "firstMovesSignature": "e4 c6 d4 d5 exd5 cxd5",
+      "canonicalOpeningName": "Caro-Kann Defense: Exchange Variation",
+      "canonicalEcoPgn": "e4 c6 d4 d5 exd5",
+      "variations": [
+        {
+          "name": "Caro-Kann Defense: Exchange Variation — 5.h3 line",
+          "eco": "B13",
+          "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nf6 h3 Nc6 c3 g6 Nf3 Bg7",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Caro-Kann Defense: Exchange Variation — 5.c3 line",
+          "eco": "B13",
+          "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nf6 c3 Bg4 Qb3 Qc7 h3 Bd7",
+          "gamesPlayed": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0
+        },
+        {
+          "name": "Caro-Kann Defense: Panov Attack, Fianchetto Defense, Fianchetto Gambit",
+          "eco": "B14",
+          "pgn": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 g6 cxd5 Bg7 Bb5+ Nbd7",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-niemann-b-e4-c5-nf3-d6-d4-cxd4",
+      "playerId": "niemann",
+      "playerDisplay": "Hans Niemann",
+      "eco": "B94",
+      "name": "Hans Niemann as Black: Sicilian Defense: Najdorf Variation",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 Nbd7 Qd2 e6",
+      "color": "black",
+      "totalGamesPlayed": 3,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "e4 c5 Nf3 d6 d4 cxd4",
+      "canonicalOpeningName": "Sicilian Defense: Najdorf Variation",
+      "canonicalEcoPgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Najdorf Variation",
+          "eco": "B90",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 h5 Be3 e6",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Sicilian Defense: Najdorf Variation, Adams Attack",
+          "eco": "B90",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 h3 e5 Nde2 h5",
+          "gamesPlayed": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-annacramling-w-d4-nf6-c4-e6-nc3-bb4",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "E35",
+      "name": "Anna Cramling as White: Nimzo-Indian Defense: Classical Variation, Noa Variation",
+      "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 exd5 Bg5 O-O e3 c6",
+      "color": "white",
+      "totalGamesPlayed": 10,
+      "recordInLine": {
+        "wins": 2,
+        "draws": 1,
+        "losses": 7
+      },
+      "firstMovesSignature": "d4 Nf6 c4 e6 Nc3 Bb4",
+      "canonicalOpeningName": "Nimzo-Indian Defense: Classical Variation, Noa Variation",
+      "canonicalEcoPgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 exd5",
+      "variations": [
+        {
+          "name": "Nimzo-Indian Defense: Classical Variation, Noa Variation",
+          "eco": "E34",
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 Qxd5",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1
+        },
+        {
+          "name": "Nimzo-Indian Defense: Classical Variation",
+          "eco": "E32",
+          "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O e4 d5",
+          "gamesPlayed": 2,
+          "wins": 0,
+          "draws": 1,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-annacramling-w-d4-d5-c4-e6-nc3-nf6",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "D35",
+      "name": "Anna Cramling as White: Queen's Gambit Declined: Normal Defense",
+      "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 c6",
+      "color": "white",
+      "totalGamesPlayed": 10,
+      "recordInLine": {
+        "wins": 6,
+        "draws": 1,
+        "losses": 3
+      },
+      "firstMovesSignature": "d4 d5 c4 e6 Nc3 Nf6",
+      "canonicalOpeningName": "Queen's Gambit Declined: Normal Defense",
+      "canonicalEcoPgn": "d4 d5 c4 e6 Nc3 Nf6",
+      "variations": [
+        {
+          "name": "Queen's Gambit Declined: Normal Defense",
+          "eco": "D35",
+          "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 c6",
+          "gamesPlayed": 3,
+          "wins": 2,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-annacramling-w-d4-nf6-c4-g6-nc3-d5",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "D85",
+      "name": "Anna Cramling as White: Grünfeld Defense: Exchange Variation",
+      "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 c5 Qa4+ Nc6",
+      "color": "white",
+      "totalGamesPlayed": 6,
+      "recordInLine": {
+        "wins": 4,
+        "draws": 0,
+        "losses": 2
+      },
+      "firstMovesSignature": "d4 Nf6 c4 g6 Nc3 d5",
+      "canonicalOpeningName": "Grünfeld Defense: Exchange Variation",
+      "canonicalEcoPgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5",
+      "variations": [
+        {
+          "name": "Grünfeld Defense: Exchange Variation",
+          "eco": "D85",
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7",
+          "gamesPlayed": 5,
+          "wins": 3,
+          "draws": 0,
+          "losses": 2
+        }
+      ]
+    },
+    {
+      "id": "pro-annacramling-b-e4-c5-nf3-e6-d4-cxd4",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "B40",
+      "name": "Anna Cramling as Black: Sicilian Defense: French Variation, Normal",
+      "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Nxc6 bxc6 Bg5 Be7",
+      "color": "black",
+      "totalGamesPlayed": 17,
+      "recordInLine": {
+        "wins": 8,
+        "draws": 1,
+        "losses": 8
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 d4 cxd4",
+      "canonicalOpeningName": "Sicilian Defense: French Variation, Normal",
+      "canonicalEcoPgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6",
+      "variations": [
+        {
+          "name": "Sicilian Defense: French Variation, Normal",
+          "eco": "B40",
+          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Ndb5 d6",
+          "gamesPlayed": 3,
+          "wins": 0,
+          "draws": 0,
+          "losses": 3
+        }
+      ]
+    },
+    {
+      "id": "pro-annacramling-b-d4-d5-c4-e6-nc3-c6",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "D31",
+      "name": "Anna Cramling as Black: Semi-Slav Defense: Accelerated Move Order",
+      "pgn": "d4 d5 c4 e6 Nc3 c6 Nf3 Nf6 Bg5 Be7 e3 O-O Rc1 Nbd7",
+      "color": "black",
+      "totalGamesPlayed": 6,
+      "recordInLine": {
+        "wins": 3,
+        "draws": 0,
+        "losses": 3
+      },
+      "firstMovesSignature": "d4 d5 c4 e6 Nc3 c6",
+      "canonicalOpeningName": "Semi-Slav Defense: Accelerated Move Order",
+      "canonicalEcoPgn": "d4 d5 c4 e6 Nc3 c6",
+      "variations": [
+        {
+          "name": "Semi-Slav Defense: Marshall Gambit",
+          "eco": "D31",
+          "pgn": "d4 d5 c4 e6 Nc3 c6 e4 dxe4 Nxe4 Nf6",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    },
+    {
+      "id": "pro-annacramling-b-e4-c5-nf3-e6-c3-nf6",
+      "playerId": "annacramling",
+      "playerDisplay": "Anna Cramling",
+      "eco": "B40",
+      "name": "Anna Cramling as Black: Sicilian Defense: Delayed Alapin Variation, with e6",
+      "pgn": "e4 c5 Nf3 e6 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6 exd6 Bxd6",
+      "color": "black",
+      "totalGamesPlayed": 5,
+      "recordInLine": {
+        "wins": 1,
+        "draws": 1,
+        "losses": 3
+      },
+      "firstMovesSignature": "e4 c5 Nf3 e6 c3 Nf6",
+      "canonicalOpeningName": "Sicilian Defense: Delayed Alapin Variation, with e6",
+      "canonicalEcoPgn": "e4 c5 Nf3 e6 c3",
+      "variations": [
+        {
+          "name": "Sicilian Defense: Delayed Alapin Variation, with e6",
+          "eco": "B40",
+          "pgn": "e4 c5 Nf3 e6 c3 Nf6 e5 Nd5 Bc4 Nb6",
+          "gamesPlayed": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1
+        }
+      ]
+    }
+  ]
+}

@@ -116,3 +116,17 @@ export function extractAndRememberNotes(text: string): string {
 export function __test__getRememberRegex(): RegExp {
   return new RegExp(REMEMBER_TAG_RE.source, 'gi');
 }
+
+/**
+ * Seed a one-time pointer note telling the coach the verified
+ * trap/pitfall puzzle library exists. Idempotent (addCoachMemoryNote
+ * dedupes). The actual verified positions are injected into the
+ * system prompt on puzzle intent (see verifiedLineLibrary +
+ * coachApi); this note ensures the brain is aware of the capability
+ * even on turns where the injection block isn't present.
+ */
+export async function seedVerifiedLibraryNote(): Promise<void> {
+  await addCoachMemoryNote(
+    'I have a Stockfish-verified library of ~1090 opening traps and pitfalls (repertoire + gambits + pro). When the student wants a puzzle/trap drill, use the injected VERIFIED TRAP/PITFALL PUZZLES block — never invent a position or winning move.',
+  );
+}

@@ -33,52 +33,52 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Benoni Defense Four Pawns Attack: Nc3 is a known theory move in this line.",
+      "annotation": "Nc3 reinforces the center and prepares to support the d5 pawn while controlling key squares like e4 and d5.",
       "shortNarration": "Nc3 is theory in the Four Pawns Attack, reinforcing the center and preparing e5."
     },
     {
       "san": "exd5",
-      "annotation": "Continuing Benoni Defense Four Pawns Attack: exd5 is a known theory move in this line.",
+      "annotation": "Black captures on d5 to relieve the pressure on the center and simplify White's pawn tension.",
       "shortNarration": "exd5 is theory in the Four Pawns Attack, opening the center and freeing Black's dark-squared bishop."
     },
     {
       "san": "cxd5",
-      "annotation": "Continuing Benoni Defense Four Pawns Attack: cxd5 is a known theory move in this line.",
+      "annotation": "Recapturing with the c-pawn keeps the d5 pawn advanced and dangerous, maintaining space advantage in the center.",
       "shortNarration": "cxd5 is theory in the Benoni Four Pawns Attack."
     },
     {
       "san": "d6",
-      "annotation": "Continuing Benoni Defense Four Pawns Attack: d6 is a known theory move in this line.",
+      "annotation": "Pushing d6 solidifies Black's structure and prevents White from easily advancing e5, while supporting the fianchettoed bishop.",
       "shortNarration": "d6 is theory in the Four Pawns Attack Benoni."
     },
     {
       "san": "e4",
-      "annotation": "Continuing Benoni Defense Four Pawns Attack: e4 is a known theory move in this line.",
+      "annotation": "e4 expands White's space and establishes a powerful pawn chain from d5 to e4, restricting Black's pieces.",
       "shortNarration": "e4 is theory in the Four Pawns Attack, pushing the center and opening lines."
     },
     {
       "san": "g6",
-      "annotation": "Continuing Benoni Defense Four Pawns Attack: g6 is a known theory move in this line.",
+      "annotation": "Black fianchettoes the kingside bishop to target the long diagonal and exert pressure on White's center.",
       "shortNarration": "g6 is theory in the Benoni Four Pawns Attack."
     },
     {
       "san": "f4",
-      "annotation": "Continuing Benoni Defense Four Pawns Attack: f4 is a known theory move in this line.",
+      "annotation": "f4 locks in White's pawn center and prevents Black from undermining with f5, creating a formidable space advantage.",
       "shortNarration": "f4 is theory in the Benoni Four Pawns Attack, pushing the center."
     },
     {
       "san": "Bg7",
-      "annotation": "Continuing Benoni Defense Four Pawns Attack: Bg7 is a known theory move in this line.",
+      "annotation": "The bishop on g7 commands the long diagonal and prepares to contest White's dominance by attacking the d4 and e4 squares.",
       "shortNarration": "Bg7 is theory in the Four Pawns Attack, Benoni Defense."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Benoni Defense Four Pawns Attack: Nf3 is a known theory move in this line.",
+      "annotation": "Nf3 completes the knight placement and prepares to support the e4–d5 pawn chain. This keeps Black's queenside counterplay (on c5) under observation.",
       "shortNarration": "Nf3 is the theory move in the Four Pawns Attack Benoni."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Benoni Defense Four Pawns Attack: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside removes the king from the center before Black can launch an attack along the half-open c-file. White is now ready to advance the kingside pawns.",
       "shortNarration": "In the Benoni Four Pawns Attack, O-O is the theory move."
     }
   ]

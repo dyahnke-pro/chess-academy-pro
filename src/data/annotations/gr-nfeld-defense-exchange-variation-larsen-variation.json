@@ -78,17 +78,17 @@
     },
     {
       "san": "Qd7",
-      "annotation": "Continuing Gr Nfeld Defense Exchange Variation Larsen Variation: Qd7 is a known theory move in this line.",
+      "annotation": "Qd7 prepares to reroute the queen toward the queenside while keeping options open. The move also supports potential pressure on White's c3 pawn.",
       "shortNarration": "Qd7 is a known theory move in the Grünfeld Exchange, Larsen Variation."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Gr Nfeld Defense Exchange Variation Larsen Variation: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside removes the king from the center and connects White's rooks. The move locks in White's control of the long diagonal via Bc4.",
       "shortNarration": "O-O is the theory move in the Grünfeld Exchange, Larsen Variation."
     },
     {
       "san": "b6",
-      "annotation": "Continuing Gr Nfeld Defense Exchange Variation Larsen Variation: b6 is a known theory move in this line.",
+      "annotation": "This fianchetto setup on the queenside eyes the long diagonal and prepares to contest White's bishop on c4. Black creates tactical flexibility with Bb7 to follow.",
       "shortNarration": "b6 is a known theory move in the Grünfeld Exchange, Larsen Variation."
     }
   ]

@@ -1,0 +1,11 @@
+{
+  "id": "kings-indian-attack",
+  "status": "fetched",
+  "wikipediaTitle": "King's Indian Attack",
+  "extract": "The King's Indian Attack is a chess opening system where White adopts the setup more commonly seen being played by Black in the King's Indian Defence. The King's Indian Attack is characterised by the following moves: the central pawns are developed to e4 and d3, the knights are developed to d2 and f3, the king's bishop is fianchettoed at g2 following the g-pawn's move to g3, and White castles kingside.",
+  "extractHtml": "<p>The <b>King's Indian Attack</b> is a chess <dfn><span><span class=\"glossary-link \" style=\"color:inherit\">opening system</span></span></dfn> where White adopts the setup more commonly seen being played by Black in the King's Indian Defence. The King's Indian Attack is characterised by the following moves: the central pawns are developed to e4 and d3, the knights are developed to d2 and f3, the <dfn><span><span class=\"glossary-link \" style=\"color:inherit\">king's bishop</span></span></dfn> is fianchettoed at g2 following the g-pawn's move to g3, and White castles kingside.</p>",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/King's_Indian_Attack",
+  "pageId": 1853888,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:32:47.965Z"
+}

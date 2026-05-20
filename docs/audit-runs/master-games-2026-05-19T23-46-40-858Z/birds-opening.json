@@ -1,0 +1,44 @@
+{
+  "openingId": "birds-opening",
+  "fromPgn": "f4 d5 Nf3 Nf6",
+  "depth": 4,
+  "games": [
+    {
+      "id": "ZPEjdsGK",
+      "white": "Carlsen, M.",
+      "whiteRating": 2832,
+      "black": "Kramnik, V.",
+      "blackRating": 2808,
+      "winner": "white",
+      "year": 2017,
+      "month": "2017-06",
+      "url": "https://lichess.org/ZPEjdsGK",
+      "pgn": "[Event \"GCT Rapid YourNextMove\"]\n[Site \"Leuven BEL\"]\n[Date \"2017.06.29\"]\n[Round \"5.2\"]\n[White \"Carlsen, M.\"]\n[Black \"Kramnik, V.\"]\n[Result \"1-0\"]\n[GameId \"ZPEjdsGK\"]\n[WhiteElo \"2832\"]\n[BlackElo \"2808\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A03\"]\n[Opening \"Bird Opening: Dutch Variation\"]\n[Termination \"Normal\"]\n\n1. f4 d5 2. Nf3 Nf6 3. g3 e6 4. Bg2 Be7 5. O-O b5 6. d3 Bb7 7. Qe1 c5 8. c3 O-O 9. a4 b4 10. cxb4 cxb4 11. Kh1 Nc6 12. Be3 Nd7 13. Nbd2 Bf6 14. Rb1 Re8 15. Nb3 a5 16. g4 g6 17. Qf2 Bg7 18. Nbd4 Nxd4 19. Bxd4 Rc8 20. Rbc1 Bxd4 21. Nxd4 Rxc1 22. Rxc1 Qb6 23. Rf1 f6 24. h4 Rf8 25. Kg1 e5 26. Nb3 Qxf2+ 27. Kxf2 exf4 28. Nxa5 Ba8 29. Rc1 Ne5 30. Bf3 d4 31. Nc4 Bxf3 32. Nxe5 Bxe2 33. Nd7 Rf7 34. Nxf6+ Rxf6 35. Kxe2 Re6+ 36. Kf2 Kf7 37. a5 g5 38. hxg5 Kg6 39. Rc5 f3 40. Kxf3 Re3+ 41. Kf4 Rxd3 42. a6 Rd1 43. Ra5 d3 44. Ke3 1-0\n\n\n"
+    },
+    {
+      "id": "EFEhOCYR",
+      "white": "Nakamura, Hi",
+      "whiteRating": 2807,
+      "black": "Gukesh, D.",
+      "blackRating": 2767,
+      "winner": null,
+      "year": 2025,
+      "month": "2025-10",
+      "url": "https://lichess.org/EFEhOCYR",
+      "pgn": "[Event \"Checkmate: USA vs India\"]\n[Site \"Arlington, TX USA\"]\n[Date \"2025.10.04\"]\n[Round \"5.5\"]\n[White \"Nakamura, Hi\"]\n[Black \"Gukesh, D.\"]\n[Result \"1/2-1/2\"]\n[GameId \"EFEhOCYR\"]\n[WhiteElo \"2807\"]\n[BlackElo \"2767\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A03\"]\n[Opening \"Bird Opening: Dutch Variation\"]\n[Termination \"Unknown\"]\n\n1. f4 d5 2. Nf3 Nf6 3. e3 g6 4. c4 c6 5. d4 Bg7 6. Bd3 O-O 7. Nc3 dxc4 8. Bxc4 c5 9. O-O cxd4 10. Nxd4 Bd7 11. Kh1 Nc6 12. b3 Nxd4 13. exd4 Bc6 14. f5 Nd5 15. Bxd5 Bxd5 16. Bg5 Bc6 17. Be3 Qd7 18. d5 Bb5 19. Nxb5 Qxb5 20. Rc1 Rad8 21. Rc5 Qd7 22. fxg6 fxg6 23. Rxf8+ Rxf8 24. Bg1 b6 25. Rc2 Rf5 26. Rd2 Be5 27. Qc2 Bd6 28. Qc4 h5 29. Qe4 Kh7 30. Rf2 Rxf2 31. Bxf2 Qf5 32. Qxf5 gxf5 33. g3 Kg6 34. Kg2 f4 35. Kf3 Kf5 36. Bd4 fxg3 37. hxg3 Be5 38. Be3 Bc3 39. Bf4 Bb4 40. Bb8 a6 41. Ba7 b5 42. Bd4 Ba3 43. Bc3 Bd6 44. Bd4 Be5 45. Bc5 Bd6 46. Bd4 a5 47. a4 bxa4 48. bxa4 Be5 49. Bb6 Bc3 50. Bc7 Bb4 51. Ke3 Bd6 52. Bxa5 Ke5 53. Kf3 Kxd5 54. Bd2 e5 55. Be1 e4+ 56. Ke2 Kc4 57. Ke3 Bxg3 58. Bxg3 Kb4 59. Kxe4 Kxa4 60. Bh4 Kb5 61. Kf5 Kc6 62. Kg5 Kd5 63. Kxh5 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "FlnV10dI",
+      "white": "Carlsen, M.",
+      "whiteRating": 2837,
+      "black": "Adams, Mi",
+      "blackRating": 2715,
+      "winner": "white",
+      "year": 2017,
+      "month": "2017-12",
+      "url": "https://lichess.org/FlnV10dI",
+      "pgn": "[Event \"9th London Classic 2017\"]\n[Site \"London ENG\"]\n[Date \"2017.12.09\"]\n[Round \"7.2\"]\n[White \"Carlsen, M.\"]\n[Black \"Adams, Mi\"]\n[Result \"1-0\"]\n[GameId \"FlnV10dI\"]\n[WhiteElo \"2837\"]\n[BlackElo \"2715\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A03\"]\n[Opening \"Bird Opening: Dutch Variation\"]\n[Termination \"Normal\"]\n\n1. f4 d5 2. Nf3 Nf6 3. g3 g6 4. Bg2 Bg7 5. O-O O-O 6. d3 c5 7. c3 Nc6 8. Na3 Re8 9. Nh4 b6 10. e4 dxe4 11. Qa4 Qxd3 12. Qxc6 Bd7 13. Qc7 Ng4 14. Re1 Bd4+ 15. cxd4 Qxd4+ 16. Be3 Nxe3 17. Qe5 f5 18. Bh3 Nc2+ 19. Qxd4 Nxd4 20. Rxe4 fxe4 21. Bxd7 Red8 22. Ba4 e5 23. Re1 exf4 24. gxf4 a6 25. Bd1 b5 26. Nb1 Nf5 27. Nxf5 gxf5 28. Kf2 Kf7 29. Be2 Rd6 30. h4 c4 31. a4 Rc8 32. axb5 axb5 33. Na3 Rd5 34. Rc1 Rdc5 35. Nc2 Ra8 36. Ne3 Rac8 37. h5 Ke6 38. h6 Kf6 39. Ra1 b4 40. Ra6+ Ke7 41. Ra7+ Kf6 42. Ke1 b3 43. Rb7 Ke6 44. Rb6+ Ke7 45. Rb4 R8c6 46. Bxc4 Rxh6 47. Rxb3 Kd8 48. Rb8+ Kc7 49. Rf8 Rh3 50. Nd5+ Kb7 51. Rf7+ Kb8 52. b3 Rh2 53. Nb4 Kc8 54. Na6 Rc6 55. Rf8+ Kb7 56. Bd5 Kxa6 57. Bxc6 Kb6 58. Bd7 1-0\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:49:37.137Z"
+}

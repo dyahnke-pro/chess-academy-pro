@@ -93,6 +93,1479 @@
   "subLines": [
     {
       "name": "KIA vs French Structure",
+      "moveAnnotations": [],
+      "type": "variation"
+    },
+    {
+      "name": "KIA vs Sicilian Structure",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "The KIA vs Sicilian Structure is an important variation of the King's Indian Attack. Against the Sicilian, White gets a reversed KID structure. The a4 move prevents ...b5 expansion and White slowly builds up for the e5 or f4 break. Let's walk through the key ideas.",
+          "shortNarration": "White's a4 prevents ...b5, building for an e5 or f4 break in the reversed KID structure."
+        },
+        {
+          "san": "c5",
+          "annotation": "Black replies with c5. This is the defining move of the KIA vs Sicilian Structure — it shapes the pawn structure and determines the resulting plans.",
+          "shortNarration": "Black's c5 shapes the KIA vs Sicilian structure, defining pawn plans and piece placement."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
+          "shortNarration": "g3 gains kingside space and supports a future attack toward the enemy king."
+        },
+        {
+          "san": "Nc6",
+          "annotation": ""
+        },
+        {
+          "san": "Bg2",
+          "annotation": "Bg2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
+          "shortNarration": "Bg2 fianchettoes the bishop onto the long diagonal, controlling the center from a distance."
+        },
+        {
+          "san": "g6",
+          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
+          "shortNarration": "g6 gains kingside space to support a future attack."
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "Bg7",
+          "annotation": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
+          "shortNarration": "Bg7 fianchettoes the bishop to control the center along the long diagonal."
+        },
+        {
+          "san": "d3",
+          "annotation": ""
+        },
+        {
+          "san": "d6",
+          "annotation": ""
+        },
+        {
+          "san": "e4",
+          "annotation": "Pushing to e4 completes the KIA setup and attacks d5, preventing Black from anchoring a knight there and forcing a choice between allowing White's spatial grip or playing d5 immediately.",
+          "shortNarration": "e4 stakes a central claim, controlling space and restricting Black's piece activity."
+        },
+        {
+          "san": "Nf6",
+          "annotation": ""
+        },
+        {
+          "san": "Nbd2",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a4",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Rb8",
+          "annotation": "Rb8. This is the typical position arising from the KIA vs Sicilian Structure. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "a8",
+              "to": "b8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "Rb8 — typical KIA vs Sicilian; key plans are piece placement, pawn breaks, and targets."
+        }
+      ]
+    },
+    {
+      "name": "KIA vs Caro-Kann Structure",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The KIA vs Caro-Kann Structure is an important variation of the King's Indian Attack. Against the Caro-Kann, the KIA leads to a rich middlegame. Black's ...e5 creates a symmetrical center but White's piece activity and kingside chances give a slight edge. Let's walk through the key ideas.",
+          "shortNarration": "KIA vs Caro-Kann: Black's ...e5 creates a symmetrical center, but White's piece activity and kingside chances yield a slight edge."
+        },
+        {
+          "san": "c6",
+          "annotation": "Black replies with c6. This is the defining move of the KIA vs Caro-Kann Structure — it shapes the pawn structure and determines the resulting plans.",
+          "shortNarration": "c6 shapes the KIA vs Caro-Kann structure, fixing the pawn center and dictating plans."
+        },
+        {
+          "san": "d3",
+          "annotation": ""
+        },
+        {
+          "san": "d5",
+          "annotation": "Black contests the center immediately with d5, forcing you to decide whether to hold the e4 pawn or allow a central exchange. This move establishes a symmetrical pawn structure typical of the Caro-Kann.",
+          "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
+        },
+        {
+          "san": "Nd2",
+          "annotation": ""
+        },
+        {
+          "san": "e5",
+          "annotation": "Black advances to e5, creating a central tension and preventing your knight from developing naturally to f3. You now face a choice: capture on e5 or maintain flexibility by retreating the pawn.",
+          "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
+        },
+        {
+          "san": "Ngf3",
+          "annotation": ""
+        },
+        {
+          "san": "Bd6",
+          "annotation": ""
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
+          "shortNarration": "g3 gains kingside space and supports a future attack toward the enemy king."
+        },
+        {
+          "san": "Nf6",
+          "annotation": ""
+        },
+        {
+          "san": "Bg2",
+          "annotation": "Bg2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
+          "shortNarration": "Bg2 fianchettoes the bishop to control the center along the long diagonal."
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "Re8",
+          "annotation": "Re8 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files. We're reaching the critical position of this variation.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "Re8 activates the rook on the central file, reaching the critical position of this variation."
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files. Notice how the pieces coordinate in this position.",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "Re1 activates the rook on the central file, coordinating with the queen and bishop."
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "Nbd7. This is the typical position arising from the KIA vs Caro-Kann Structure. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "Nbd7 — typical KIA vs Caro-Kann; key plans are piece placement, pawn breaks, and targets."
+        }
+      ]
+    },
+    {
+      "name": "KIA: Botvinnik Setup",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "The KIA: Botvinnik Setup is an important variation of the King's Indian Attack. The Botvinnik setup where Black plays a massive center with ...e5 and ...d4. White aims to undermine it with Nc4 and f4, creating dynamic play against Black's extended pawn chain. Let's walk through the key ideas.",
+          "shortNarration": "White undermines Black's massive e5-d4 center with Nc4 and f4, creating dynamic play against the pawn chain."
+        },
+        {
+          "san": "d5",
+          "annotation": "Black responds with d5, contesting the center. This is the move that defines the KIA: Botvinnik Setup.",
+          "shortNarration": "Black's d5 contests the center, defining the KIA Botvinnik Setup."
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
+          "shortNarration": "g3 gains kingside space and supports a future attack toward the enemy king."
+        },
+        {
+          "san": "c5",
+          "annotation": ""
+        },
+        {
+          "san": "Bg2",
+          "annotation": "Bg2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
+          "shortNarration": "Bg2 fianchettoes the bishop onto the long diagonal to control the center from a distance."
+        },
+        {
+          "san": "Nc6",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "e5",
+          "annotation": "Black plants a second central pawn, challenging White's Nf3 and preparing to open lines. This dual control of d4 and e5 contests White's space.",
+          "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
+        },
+        {
+          "san": "d3",
+          "annotation": ""
+        },
+        {
+          "san": "Nf6",
+          "annotation": ""
+        },
+        {
+          "san": "Nbd2",
+          "annotation": ""
+        },
+        {
+          "san": "Be7",
+          "annotation": ""
+        },
+        {
+          "san": "e4",
+          "annotation": "White punches at the heart of Black's center, fixing the d5 and e5 pawns as targets. This break threatens to isolate or win material on the next move.",
+          "shortNarration": "e4 stakes a central claim, controlling space and restricting Black's piece activity."
+        },
+        {
+          "san": "d4",
+          "annotation": "Black captures toward the center with tempo, forcing White to recapture and release the pressure. This counterattack keeps White from consolidating control.",
+          "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
+        },
+        {
+          "san": "Nc4",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "a4",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "a2",
+              "to": "a4",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Nd7. This is the typical position arising from the KIA: Botvinnik Setup. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "In the KIA Botvinnik Setup, Nd7 prepares a kingside pawn storm with f5 or g5."
+        }
+      ]
+    },
+    {
+      "name": "KIA: Fischer Attack",
+      "type": "variation",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "The KIA: Fischer Attack is an important variation of the King's Indian Attack. Fischer's signature variation. After e5, the knight retreats and White builds a powerful kingside attack with Nf1-h4, Bf4, and Qg4. This is one of the most dangerous attacking setups in chess. Let's walk through the key ideas.",
+          "shortNarration": "After e5, White retreats the knight to f1, then builds a kingside attack with Nh4, Bf4, and Qg4."
+        },
+        {
+          "san": "e6",
+          "annotation": "Black replies with e6. This is the defining move of the KIA: Fischer Attack — it shapes the pawn structure and determines the resulting plans.",
+          "shortNarration": "Black's e6 defines the KIA Fischer Attack pawn structure and dictates both sides' plans."
+        },
+        {
+          "san": "d3",
+          "annotation": ""
+        },
+        {
+          "san": "d5",
+          "annotation": "Black advances to challenge White's e4 pawn immediately. This d5 thrust forces White to commit to a central strategy rather than preserve flexibility.",
+          "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
+        },
+        {
+          "san": "Nd2",
+          "annotation": ""
+        },
+        {
+          "san": "Nf6",
+          "annotation": ""
+        },
+        {
+          "san": "Ngf3",
+          "annotation": ""
+        },
+        {
+          "san": "c5",
+          "annotation": ""
+        },
+        {
+          "san": "g3",
+          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
+          "shortNarration": "g3 gains kingside space and supports a future attack on the enemy king."
+        },
+        {
+          "san": "Nc6",
+          "annotation": ""
+        },
+        {
+          "san": "Bg2",
+          "annotation": "Bg2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
+          "shortNarration": "Bg2 fianchettoes the bishop to control the center along the long diagonal."
+        },
+        {
+          "san": "Be7",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "Re1",
+          "annotation": "Re1 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files.",
+          "shortNarration": "Re1 places the rook on the central e-file, an open line where it becomes most active."
+        },
+        {
+          "san": "b5",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "Black strikes at e5, attacking White's knight on f3 and forcing it to make a decision. The move also opens lines for Black's rooks and bishops while maintaining central tension.",
+          "arrows": [
+            {
+              "from": "e4",
+              "to": "e5",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "e5 stakes a central claim, controlling space and restricting Black's piece activity."
+        },
+        {
+          "san": "Nd7",
+          "annotation": "Nd7. This is the typical position arising from the KIA: Fischer Attack. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
+          "arrows": [
+            {
+              "from": "f6",
+              "to": "d7",
+              "color": "rgba(50, 150, 220, 0.8)"
+            }
+          ],
+          "shortNarration": "In the KIA Fischer Attack, Nd7 sets up piece placement, pawn breaks, and targets."
+        }
+      ]
+    },
+    {
+      "name": "e4 Break Unleashed",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "In the King's Indian Attack, the e4 Break Unleashed is a tactical pattern you should know. After the e4 break opens the position, White's pieces spring to life. The g2 bishop fires down the diagonal and the knight maneuver Nh4-f5 creates a devastating attack. Let's walk through how it works.",
+          "shortNarration": "After e4 breaks open the center, White's g2 bishop and Nh4-f5 knight create a devastating attack."
+        },
+        {
+          "san": "d5",
+          "annotation": ""
+        },
+        {
+          "san": "g3",
+          "annotation": ""
+        },
+        {
+          "san": "Nf6",
+          "annotation": ""
+        },
+        {
+          "san": "Bg2",
+          "annotation": ""
+        },
+        {
+          "san": "c6",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "Bg4",
+          "annotation": ""
+        },
+        {
+          "san": "d3",
+          "annotation": ""
+        },
+        {
+          "san": "Nbd7",
+          "annotation": ""
+        },
+        {
+          "san": "Nbd2",
+          "annotation": ""
+        },
+        {
+          "san": "e5",
+          "annotation": ""
+        },
+        {
+          "san": "e4",
+          "annotation": ""
+        },
+        {
+          "san": "dxe4",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Bc5",
+          "annotation": ""
+        },
+        {
+          "san": "Qe1",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "h3",
+          "annotation": ""
+        },
+        {
+          "san": "Bh5",
+          "annotation": ""
+        },
+        {
+          "san": "Nh4",
+          "annotation": ""
+        },
+        {
+          "san": "Re8",
+          "annotation": ""
+        }
+      ]
+    },
+    {
+      "name": "French Structure Squeeze",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the King's Indian Attack, the French Structure Squeeze is a tactical pattern you should know. Against the French structure, e5 creates a vice grip. Black struggles to find counterplay while White slowly builds up on the kingside. The f1 knight heads to g3-f5. Let's walk through how it works.",
+          "shortNarration": "In the King's Indian Attack, e5 creates a French Structure Squeeze — White's knight heads to g3-f5, Black struggles for counterplay."
+        },
+        {
+          "san": "e6",
+          "annotation": ""
+        },
+        {
+          "san": "d3",
+          "annotation": ""
+        },
+        {
+          "san": "d5",
+          "annotation": ""
+        },
+        {
+          "san": "Nd2",
+          "annotation": ""
+        },
+        {
+          "san": "Nf6",
+          "annotation": ""
+        },
+        {
+          "san": "Ngf3",
+          "annotation": ""
+        },
+        {
+          "san": "Nc6",
+          "annotation": ""
+        },
+        {
+          "san": "g3",
+          "annotation": ""
+        },
+        {
+          "san": "Be7",
+          "annotation": ""
+        },
+        {
+          "san": "Bg2",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "b6",
+          "annotation": ""
+        },
+        {
+          "san": "Re1",
+          "annotation": ""
+        },
+        {
+          "san": "Bb7",
+          "annotation": ""
+        },
+        {
+          "san": "e5",
+          "annotation": ""
+        },
+        {
+          "san": "Nd7",
+          "annotation": ""
+        },
+        {
+          "san": "Nf1",
+          "annotation": ""
+        },
+        {
+          "san": "f6",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "f7",
+              "to": "f6",
+              "color": "rgba(220, 50, 50, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Premature e4 Rush",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "In the King's Indian Attack, the Premature e4 Rush is a dangerous line you must be aware of. Rushing e4 without proper preparation can leave White overextended. Make sure Nbd2 is in place to support the break, and have a follow-up plan ready. Let's see why.",
+          "shortNarration": "Without Nbd2 supporting it, rushing e4 overextends White and leaves the pawn weak."
+        },
+        {
+          "san": "d5",
+          "annotation": ""
+        },
+        {
+          "san": "g3",
+          "annotation": ""
+        },
+        {
+          "san": "Nf6",
+          "annotation": ""
+        },
+        {
+          "san": "Bg2",
+          "annotation": ""
+        },
+        {
+          "san": "c6",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "Bg4",
+          "annotation": ""
+        },
+        {
+          "san": "d3",
+          "annotation": ""
+        },
+        {
+          "san": "Nbd7",
+          "annotation": ""
+        },
+        {
+          "san": "Nbd2",
+          "annotation": ""
+        },
+        {
+          "san": "e5",
+          "annotation": ""
+        },
+        {
+          "san": "e4",
+          "annotation": ""
+        },
+        {
+          "san": "dxe4",
+          "annotation": "Black captures on e4, removing White's advanced pawn and opening the d-file where Black's queen and rook align—a critical tactical asset White must respect.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "shortNarration": "dxe4 opens the d-file and clears e5 for Black's pieces."
+        },
+        {
+          "san": "dxe4",
+          "annotation": "White recaptures, but now the d-file pressure persists; Black's queen on d8 and rook on d8 create a second-rank threat if White neglects to defend accurately.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ],
+          "shortNarration": "dxe4 opens the d-file and frees Black's queen and bishop."
+        },
+        {
+          "san": "Bc5",
+          "annotation": ""
+        },
+        {
+          "san": "h3",
+          "annotation": ""
+        },
+        {
+          "san": "Bh5",
+          "annotation": ""
+        },
+        {
+          "san": "Qe1",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        },
+        {
+          "san": "Nh4",
+          "annotation": ""
+        },
+        {
+          "san": "Re8",
+          "annotation": ""
+        }
+      ]
+    },
+    {
+      "name": "Queenside Collapse",
+      "type": "warning",
+      "moveAnnotations": [
+        {
+          "san": "e4",
+          "annotation": "In the King's Indian Attack, the Queenside Collapse is a dangerous line you must be aware of. If White focuses only on the kingside and ignores Black's queenside expansion, ...b5-b4-a5-a4 can create serious problems. Balance your attack with defensive awareness. Let's see why.",
+          "shortNarration": "In the King's Indian Attack, ignoring Black's queenside expansion with ...b5-b4-a5-a4 risks a collapse — balance attack with defense."
+        },
+        {
+          "san": "e6",
+          "annotation": ""
+        },
+        {
+          "san": "d3",
+          "annotation": ""
+        },
+        {
+          "san": "d5",
+          "annotation": ""
+        },
+        {
+          "san": "Nd2",
+          "annotation": ""
+        },
+        {
+          "san": "c5",
+          "annotation": ""
+        },
+        {
+          "san": "Ngf3",
+          "annotation": ""
+        },
+        {
+          "san": "Nc6",
+          "annotation": ""
+        },
+        {
+          "san": "g3",
+          "annotation": ""
+        },
+        {
+          "san": "Nf6",
+          "annotation": ""
+        },
+        {
+          "san": "Bg2",
+          "annotation": ""
+        },
+        {
+          "san": "Be7",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "O-O",
+          "annotation": ""
+        },
+        {
+          "san": "Re1",
+          "annotation": ""
+        },
+        {
+          "san": "b5",
+          "annotation": ""
+        },
+        {
+          "san": "e5",
+          "annotation": ""
+        },
+        {
+          "san": "Nd7",
+          "annotation": ""
+        },
+        {
+          "san": "Nf1",
+          "annotation": ""
+        },
+        {
+          "san": "a5",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a5",
+              "color": "rgba(230, 170, 30, 0.8)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Fischer's Kingside Buildup",
+      "type": "trap",
+      "moveAnnotations": [
+        {
+          "san": "Nf3",
+          "annotation": "White activates the knight on f3. The knight on f3 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f3",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Control e5 and d4 squares from fianchetto structure.",
+            "Prepare g2-bishop to dominate long diagonal.",
+            "Control e5 and d4 squares from fianchetto structure.",
+            "Prepare g2-bishop to dominate long diagonal."
+          ],
+          "shortNarration": "Knight to f3 improves piece coordination and flexibility.",
+          "alternatives": [
+            "1.d4 — control center immediately",
+            "1.d4 — control center immediately"
+          ]
+        },
+        {
+          "san": "d5",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "d5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d5.",
+          "plans": [
+            "Challenge White's Nf3 with central pawn.",
+            "Avoid passivity after fianchetto setup.",
+            "Challenge White's Nf3 with central pawn.",
+            "Avoid passivity after fianchetto setup."
+          ],
+          "alternatives": [
+            "2...e6 — solid but passive structure",
+            "2...e6 — solid but passive structure"
+          ]
+        },
+        {
+          "san": "g3",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "g2",
+              "to": "g3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Fianchetto g2-bishop to control long diagonal.",
+            "Prepare kingside castling with pawn support.",
+            "Fianchetto g2-bishop to control long diagonal.",
+            "Prepare kingside castling with pawn support."
+          ],
+          "alternatives": [
+            "3.d3 — transpose similarly but allow ...e5 first",
+            "3.d3 — transpose similarly but allow ...e5 first"
+          ]
+        },
+        {
+          "san": "Nf6",
+          "annotation": "Black develops the knight to f6. The knight on f6 improves Black's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "g8",
+              "to": "f6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f6",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Attack d3 pawn and e4 square.",
+            "Prevent White's central breaks with pawns.",
+            "Attack d3 pawn and e4 square.",
+            "Prevent White's central breaks with pawns."
+          ],
+          "shortNarration": "Black's knight to f6 improves piece coordination and flexibility.",
+          "alternatives": [
+            "4...c5 — fight immediately for center",
+            "4...c5 — fight immediately for center"
+          ]
+        },
+        {
+          "san": "Bg2",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "f1",
+              "to": "g2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Activate g2-bishop on long diagonal against d5.",
+            "Prepare O-O with solid fianchetto setup.",
+            "Activate g2-bishop on long diagonal against d5.",
+            "Prepare O-O with solid fianchetto setup."
+          ],
+          "alternatives": [
+            "5.d3 — same idea, slightly different move order",
+            "5.d3 — same idea, slightly different move order"
+          ]
+        },
+        {
+          "san": "c6",
+          "annotation": "Black pushes the pawn to c6. This pawn move supports a future d-pawn advance, a key central plan.",
+          "arrows": [
+            {
+              "from": "c7",
+              "to": "c6",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on e7 and d5.",
+          "plans": [
+            "Reinforce d5 pawn and c6 support square.",
+            "Prevent White's e4 break with solid structure.",
+            "Reinforce d5 pawn and c6 support square.",
+            "Prevent White's e4 break with solid structure."
+          ],
+          "shortNarration": "c6 supports a future d5 central advance.",
+          "alternatives": [
+            "6...a6 — prepare queenside expansion",
+            "6...a6 — prepare queenside expansion"
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e1",
+              "to": "g1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g1",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
+          "plans": [
+            "Secure king on h1; activate rook later.",
+            "Connect rooks and prepare d3-pawn advance.",
+            "Secure king on h1; activate rook later.",
+            "Connect rooks and prepare d3-pawn advance."
+          ],
+          "alternatives": [
+            "7.c3 — prepare d4 break more directly",
+            "7.c3 — prepare d4 break more directly"
+          ]
+        },
+        {
+          "san": "Bg4",
+          "annotation": "Black develops the bishop to g4. The bishop on g4 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c8",
+              "to": "g4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g4",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "shortNarration": "Black's bishop to g4 controls key diagonal squares and maintains active piece play."
+        },
+        {
+          "san": "d3",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
+          "alternatives": [
+            "9.Bg5 — pin knight, activate bishop faster",
+            "9.Bg5 — pin knight, activate bishop faster"
+          ],
+          "plans": [
+            "Support e4 breakthrough and fix d5 pawn.",
+            "Prevent Black's ...e5 with pawn tension.",
+            "Support e4 breakthrough and fix d5 pawn.",
+            "Prevent Black's ...e5 with pawn tension."
+          ]
+        },
+        {
+          "san": "Nbd7",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d7",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Connect knight to f6 and d-file.",
+            "Prepare ...e5 central thrust or e6 solidification.",
+            "Connect knight to f6 and d-file.",
+            "Prepare ...e5 central thrust or e6 solidification."
+          ],
+          "alternatives": [
+            "10...Bg4 — pin knight and activate bishop",
+            "10...Bg4 — pin knight and activate bishop"
+          ]
+        },
+        {
+          "san": "Nbd2",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "b1",
+              "to": "d2",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d2",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "e5",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a strong central pawn duo on d5 and e5."
+        },
+        {
+          "san": "e4",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a strong central pawn duo on e4 and d3.",
+          "plans": [
+            "Open center with e4-pawn; attack c6 and d5.",
+            "Activate pieces through open lines after exd5.",
+            "Open center with e4-pawn; attack c6 and d5.",
+            "Activate pieces through open lines after exd5."
+          ],
+          "alternatives": [
+            "13.Nc4 — pressure d5 pawn and e5 square",
+            "13.Nc4 — pressure d5 pawn and e5 square"
+          ]
+        },
+        {
+          "san": "dxe4",
+          "annotation": "Black captures the pawn on e4. Black improves piece placement heading into the critical phase of the game.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "e4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "Black has a strong central pawn duo on e5 and e4, doubled pawns on the e-file.",
+          "shortNarration": "Black captures e4, improving piece placement before the critical phase."
+        },
+        {
+          "san": "dxe4",
+          "annotation": "White captures the pawn on e4. White improves piece placement heading into the critical phase of the game.",
+          "arrows": [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(255, 50, 50, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a central pawn on e4.",
+          "shortNarration": "White captures on e4, improving piece placement before the critical phase."
+        },
+        {
+          "san": "Bc5",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "c5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ],
+          "plans": [
+            "Black's Bc5 targets f2 and pins White's e4 pawn to the king.",
+            "White should push h3 to displace Black's Bg4 and weaken dark squares.",
+            "Black's Bc5 targets f2 and pins White's e4 pawn to the king.",
+            "White should push h3 to displace Black's Bg4 and weaken dark squares."
+          ],
+          "alternatives": [
+            "Nh4 — reroutes knight to f5 outpost, attacking e5 and g7.",
+            "Nh4 — reroutes knight to f5 outpost, attacking e5 and g7."
+          ]
+        },
+        {
+          "san": "h3",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "h2",
+              "to": "h3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "White has a central pawn on e4.",
+          "alternatives": [
+            "Be3 — develops bishop, supports d4 push, prepares h3 on next move.",
+            "Be3 — develops bishop, supports d4 push, prepares h3 on next move."
+          ],
+          "plans": [
+            "h3 expels Bg4 and prepares to reinforce e4 via g2-bishop.",
+            "After Bh5, White can develop with Be3 or Nc4, controlling d6.",
+            "h3 expels Bg4 and prepares to reinforce e4 via g2-bishop.",
+            "After Bh5, White can develop with Be3 or Nc4, controlling d6."
+          ]
+        },
+        {
+          "san": "Bh5",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "g4",
+              "to": "h5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qe1",
+          "annotation": "White moves the queen to e1. The queen takes up an influential position on e1, eyeing multiple targets.",
+          "arrows": [
+            {
+              "from": "d1",
+              "to": "e1",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e1",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Qe1 reorganizes the queen to g3 or c3, preparing c4 break.",
+            "White can then advance c4 to cramp Black's pieces and gain space.",
+            "Qe1 reorganizes the queen to g3 or c3, preparing c4 break.",
+            "White can then advance c4 to cramp Black's pieces and gain space."
+          ],
+          "shortNarration": "Queen to e1 eyes multiple targets from a central post.",
+          "alternatives": [
+            "Nc4 — attacks e5 immediately, pressures b6 and d6 squares.",
+            "Nc4 — attacks e5 immediately, pressures b6 and d6 squares."
+          ]
+        },
+        {
+          "san": "O-O",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "e8",
+              "to": "g8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g8",
+              "color": "rgba(0, 180, 80, 0.3)"
+            }
+          ]
+        },
+        {
+          "san": "Nh4",
+          "annotation": "White moves the knight to h4. The knight on h4 improves White's piece coordination and flexibility.",
+          "arrows": [
+            {
+              "from": "f3",
+              "to": "h4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "h4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "alternatives": [
+            "Be3 — solidifies center, prepares c4 advance with extra support.",
+            "Be3 — solidifies center, prepares c4 advance with extra support."
+          ],
+          "shortNarration": "Knight to h4 improves piece coordination and flexibility.",
+          "plans": [
+            "Nh4 forces Bh5 or Be6, then Nf5 enters a dominant outpost.",
+            "White prepares c4 break with the knight anchored on f5.",
+            "Nh4 forces Bh5 or Be6, then Nf5 enters a dominant outpost.",
+            "White prepares c4 break with the knight anchored on f5."
+          ]
+        },
+        {
+          "san": "Re8",
+          "annotation": "Black moves the rook to e8. The rook takes up a powerful position on the e-file, pressuring White's position.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "e8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "plans": [
+            "Re8 places rook on e-file to contest e4 pawn control.",
+            "Black prepares to reroute queen or pieces via e-file pressure.",
+            "Re8 places rook on e-file to contest e4 pawn control.",
+            "Black prepares to reroute queen or pieces via e-file pressure."
+          ],
+          "shortNarration": "Black's rook on e8 pressures White along the e-file.",
+          "alternatives": [
+            "Nh7 — retreats bishop to safety, prepares f6 repositioning.",
+            "Nh7 — retreats bishop to safety, prepares f6 repositioning."
+          ]
+        },
+        {
+          "san": "Nf5",
+          "annotation": "White moves the knight to f5. The knight reaches a powerful central outpost on f5, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "h4",
+              "to": "f5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f5",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "shortNarration": "Knight to f5 reaches a powerful central outpost controlling multiple key squares."
+        },
+        {
+          "san": "Bf8",
+          "annotation": "Black moves the bishop to f8. The bishop on f8 controls key diagonal squares and maintains active piece play.",
+          "arrows": [
+            {
+              "from": "c5",
+              "to": "f8",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f8",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "shortNarration": "Bishop to f8 controls key diagonal squares and keeps Black's pieces active."
+        },
+        {
+          "san": "Nc4",
+          "annotation": "White moves the knight to c4. The knight reaches a powerful central outpost on c4, controlling multiple key squares.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "c4",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c4",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "pawnStructure": "White has a central pawn on e4.",
+          "plans": [
+            "Nc4 hits e5 and d6, forces Black's pieces into passive squares.",
+            "White now has Nf5 and Nc4 dominating the center and kingside.",
+            "Nc4 hits e5 and d6, forces Black's pieces into passive squares.",
+            "White now has Nf5 and Nc4 dominating the center and kingside."
+          ],
+          "alternatives": [
+            "Qg3 — pins the h5 bishop to the king, threatens g7.",
+            "Qg3 — pins the h5 bishop to the king, threatens g7."
+          ],
+          "shortNarration": "Knight to c4 reaches a powerful central outpost controlling key squares."
+        },
+        {
+          "san": "b5",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [],
+          "pawnStructure": "Black has a central pawn on e5."
+        },
+        {
+          "san": "Nce3",
+          "annotation": "",
+          "arrows": [
+            {
+              "from": "c4",
+              "to": "e3",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "e3",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ]
+        },
+        {
+          "san": "Qc7",
+          "annotation": "Black moves the queen to c7. The queen takes up an influential position on c7, eyeing multiple targets.",
+          "arrows": [
+            {
+              "from": "d8",
+              "to": "c7",
+              "color": "rgba(0, 180, 80, 0.8)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c7",
+              "color": "rgba(255, 255, 0, 0.4)"
+            }
+          ],
+          "plans": [
+            "Qc7 defends b6 and prepares to challenge White's Nf5 outpost.",
+            "Black coordinates queen and bishop on long diagonal against e4.",
+            "Qc7 defends b6 and prepares to challenge White's Nf5 outpost.",
+            "Black coordinates queen and bishop on long diagonal against e4."
+          ],
+          "shortNarration": "Queen to c7 eyes multiple targets from an influential post.",
+          "alternatives": [
+            "Nh7 — drives Nf5 away, defends g7 and prepares f6 push.",
+            "Nh7 — drives Nf5 away, defends g7 and prepares f6 push."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "KIA vs French Structure (legacy tail)",
+      "type": "archive",
       "moveAnnotations": [
         {
           "san": "Nf3",
@@ -564,1378 +2037,6 @@
             }
           ],
           "shortNarration": "Knight retreats to d7, passive in the French — White now builds a kingside attack from the ideal KIA setup."
-        }
-      ],
-      "type": "variation"
-    },
-    {
-      "name": "KIA vs Sicilian Structure",
-      "type": "variation",
-      "moveAnnotations": [
-        {
-          "san": "Nf3",
-          "annotation": "The KIA vs Sicilian Structure is an important variation of the King's Indian Attack. Against the Sicilian, White gets a reversed KID structure. The a4 move prevents ...b5 expansion and White slowly builds up for the e5 or f4 break. Let's walk through the key ideas.",
-          "shortNarration": "White's a4 prevents ...b5, building for an e5 or f4 break in the reversed KID structure."
-        },
-        {
-          "san": "c5",
-          "annotation": "Black replies with c5. This is the defining move of the KIA vs Sicilian Structure — it shapes the pawn structure and determines the resulting plans.",
-          "shortNarration": "Black's c5 shapes the KIA vs Sicilian structure, defining pawn plans and piece placement."
-        },
-        {
-          "san": "g3",
-          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
-          "shortNarration": "g3 gains kingside space and supports a future attack toward the enemy king."
-        },
-        {
-          "san": "Nc6",
-          "annotation": ""
-        },
-        {
-          "san": "Bg2",
-          "annotation": "Bg2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
-          "shortNarration": "Bg2 fianchettoes the bishop onto the long diagonal, controlling the center from a distance."
-        },
-        {
-          "san": "g6",
-          "annotation": "g6 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
-          "shortNarration": "g6 gains kingside space to support a future attack."
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "Bg7",
-          "annotation": "Bg7 — Black fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
-          "shortNarration": "Bg7 fianchettoes the bishop to control the center along the long diagonal."
-        },
-        {
-          "san": "d3",
-          "annotation": ""
-        },
-        {
-          "san": "d6",
-          "annotation": ""
-        },
-        {
-          "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-          "shortNarration": "e4 stakes a central claim, controlling space and restricting Black's piece activity."
-        },
-        {
-          "san": "Nf6",
-          "annotation": ""
-        },
-        {
-          "san": "Nbd2",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "e8",
-              "to": "g8",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ]
-        },
-        {
-          "san": "a4",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "a2",
-              "to": "a4",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ]
-        },
-        {
-          "san": "Rb8",
-          "annotation": "Rb8. This is the typical position arising from the KIA vs Sicilian Structure. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
-          "arrows": [
-            {
-              "from": "a8",
-              "to": "b8",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ],
-          "shortNarration": "Rb8 — typical KIA vs Sicilian; key plans are piece placement, pawn breaks, and targets."
-        }
-      ]
-    },
-    {
-      "name": "KIA vs Caro-Kann Structure",
-      "type": "variation",
-      "moveAnnotations": [
-        {
-          "san": "e4",
-          "annotation": "The KIA vs Caro-Kann Structure is an important variation of the King's Indian Attack. Against the Caro-Kann, the KIA leads to a rich middlegame. Black's ...e5 creates a symmetrical center but White's piece activity and kingside chances give a slight edge. Let's walk through the key ideas.",
-          "shortNarration": "KIA vs Caro-Kann: Black's ...e5 creates a symmetrical center, but White's piece activity and kingside chances yield a slight edge."
-        },
-        {
-          "san": "c6",
-          "annotation": "Black replies with c6. This is the defining move of the KIA vs Caro-Kann Structure — it shapes the pawn structure and determines the resulting plans.",
-          "shortNarration": "c6 shapes the KIA vs Caro-Kann structure, fixing the pawn center and dictating plans."
-        },
-        {
-          "san": "d3",
-          "annotation": ""
-        },
-        {
-          "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-          "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
-        },
-        {
-          "san": "Nd2",
-          "annotation": ""
-        },
-        {
-          "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-          "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
-        },
-        {
-          "san": "Ngf3",
-          "annotation": ""
-        },
-        {
-          "san": "Bd6",
-          "annotation": ""
-        },
-        {
-          "san": "g3",
-          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
-          "shortNarration": "g3 gains kingside space and supports a future attack toward the enemy king."
-        },
-        {
-          "san": "Nf6",
-          "annotation": ""
-        },
-        {
-          "san": "Bg2",
-          "annotation": "Bg2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
-          "shortNarration": "Bg2 fianchettoes the bishop to control the center along the long diagonal."
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "Re8",
-          "annotation": "Re8 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files. We're reaching the critical position of this variation.",
-          "arrows": [
-            {
-              "from": "f8",
-              "to": "e8",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ],
-          "shortNarration": "Re8 activates the rook on the central file, reaching the critical position of this variation."
-        },
-        {
-          "san": "Re1",
-          "annotation": "Re1 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files. Notice how the pieces coordinate in this position.",
-          "arrows": [
-            {
-              "from": "f1",
-              "to": "e1",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ],
-          "shortNarration": "Re1 activates the rook on the central file, coordinating with the queen and bishop."
-        },
-        {
-          "san": "Nbd7",
-          "annotation": "Nbd7. This is the typical position arising from the KIA vs Caro-Kann Structure. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
-          "arrows": [
-            {
-              "from": "b8",
-              "to": "d7",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ],
-          "shortNarration": "Nbd7 — typical KIA vs Caro-Kann; key plans are piece placement, pawn breaks, and targets."
-        }
-      ]
-    },
-    {
-      "name": "KIA: Botvinnik Setup",
-      "type": "variation",
-      "moveAnnotations": [
-        {
-          "san": "Nf3",
-          "annotation": "The KIA: Botvinnik Setup is an important variation of the King's Indian Attack. The Botvinnik setup where Black plays a massive center with ...e5 and ...d4. White aims to undermine it with Nc4 and f4, creating dynamic play against Black's extended pawn chain. Let's walk through the key ideas.",
-          "shortNarration": "White undermines Black's massive e5-d4 center with Nc4 and f4, creating dynamic play against the pawn chain."
-        },
-        {
-          "san": "d5",
-          "annotation": "Black responds with d5, contesting the center. This is the move that defines the KIA: Botvinnik Setup.",
-          "shortNarration": "Black's d5 contests the center, defining the KIA Botvinnik Setup."
-        },
-        {
-          "san": "g3",
-          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
-          "shortNarration": "g3 gains kingside space and supports a future attack toward the enemy king."
-        },
-        {
-          "san": "c5",
-          "annotation": ""
-        },
-        {
-          "san": "Bg2",
-          "annotation": "Bg2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
-          "shortNarration": "Bg2 fianchettoes the bishop onto the long diagonal to control the center from a distance."
-        },
-        {
-          "san": "Nc6",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-          "shortNarration": "e5 stakes a central claim, controlling space and restricting White's piece activity."
-        },
-        {
-          "san": "d3",
-          "annotation": ""
-        },
-        {
-          "san": "Nf6",
-          "annotation": ""
-        },
-        {
-          "san": "Nbd2",
-          "annotation": ""
-        },
-        {
-          "san": "Be7",
-          "annotation": ""
-        },
-        {
-          "san": "e4",
-          "annotation": "e4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-          "shortNarration": "e4 stakes a central claim, controlling space and restricting Black's piece activity."
-        },
-        {
-          "san": "d4",
-          "annotation": "d4 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-          "shortNarration": "d4 stakes a central claim, controlling space and restricting Black's piece activity."
-        },
-        {
-          "san": "Nc4",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "e8",
-              "to": "g8",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ]
-        },
-        {
-          "san": "a4",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "a2",
-              "to": "a4",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ]
-        },
-        {
-          "san": "Nd7",
-          "annotation": "Nd7. This is the typical position arising from the KIA: Botvinnik Setup. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
-          "arrows": [
-            {
-              "from": "f6",
-              "to": "d7",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ],
-          "shortNarration": "In the KIA Botvinnik Setup, Nd7 prepares a kingside pawn storm with f5 or g5."
-        }
-      ]
-    },
-    {
-      "name": "KIA: Fischer Attack",
-      "type": "variation",
-      "moveAnnotations": [
-        {
-          "san": "e4",
-          "annotation": "The KIA: Fischer Attack is an important variation of the King's Indian Attack. Fischer's signature variation. After e5, the knight retreats and White builds a powerful kingside attack with Nf1-h4, Bf4, and Qg4. This is one of the most dangerous attacking setups in chess. Let's walk through the key ideas.",
-          "shortNarration": "After e5, White retreats the knight to f1, then builds a kingside attack with Nh4, Bf4, and Qg4."
-        },
-        {
-          "san": "e6",
-          "annotation": "Black replies with e6. This is the defining move of the KIA: Fischer Attack — it shapes the pawn structure and determines the resulting plans.",
-          "shortNarration": "Black's e6 defines the KIA Fischer Attack pawn structure and dictates both sides' plans."
-        },
-        {
-          "san": "d3",
-          "annotation": ""
-        },
-        {
-          "san": "d5",
-          "annotation": "d5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity.",
-          "shortNarration": "d5 stakes a central claim, controlling space and restricting White's piece activity."
-        },
-        {
-          "san": "Nd2",
-          "annotation": ""
-        },
-        {
-          "san": "Nf6",
-          "annotation": ""
-        },
-        {
-          "san": "Ngf3",
-          "annotation": ""
-        },
-        {
-          "san": "c5",
-          "annotation": ""
-        },
-        {
-          "san": "g3",
-          "annotation": "g3 pushes on the kingside. This pawn advance gains space and can support a future attack toward the enemy king.",
-          "shortNarration": "g3 gains kingside space and supports a future attack on the enemy king."
-        },
-        {
-          "san": "Nc6",
-          "annotation": ""
-        },
-        {
-          "san": "Bg2",
-          "annotation": "Bg2 — White fianchettoes the bishop, placing it on the long diagonal where it controls the center from a distance. This is a key positional idea.",
-          "shortNarration": "Bg2 fianchettoes the bishop to control the center along the long diagonal."
-        },
-        {
-          "san": "Be7",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "Re1",
-          "annotation": "Re1 places the rook on a central file where it will be most active. Rooks belong on open or semi-open files.",
-          "shortNarration": "Re1 places the rook on the central e-file, an open line where it becomes most active."
-        },
-        {
-          "san": "b5",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "b7",
-              "to": "b5",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ]
-        },
-        {
-          "san": "e5",
-          "annotation": "e5 stakes a claim in the center. Central pawns control space and restrict the opponent's piece activity. Notice how the pieces coordinate in this position.",
-          "arrows": [
-            {
-              "from": "e4",
-              "to": "e5",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ],
-          "shortNarration": "e5 stakes a central claim, controlling space and restricting Black's piece activity."
-        },
-        {
-          "san": "Nd7",
-          "annotation": "Nd7. This is the typical position arising from the KIA: Fischer Attack. From here, understanding the strategic plans — piece placement, pawn breaks, and targets — is essential.",
-          "arrows": [
-            {
-              "from": "f6",
-              "to": "d7",
-              "color": "rgba(50, 150, 220, 0.8)"
-            }
-          ],
-          "shortNarration": "In the KIA Fischer Attack, Nd7 sets up piece placement, pawn breaks, and targets."
-        }
-      ]
-    },
-    {
-      "name": "e4 Break Unleashed",
-      "type": "trap",
-      "moveAnnotations": [
-        {
-          "san": "Nf3",
-          "annotation": "In the King's Indian Attack, the e4 Break Unleashed is a tactical pattern you should know. After the e4 break opens the position, White's pieces spring to life. The g2 bishop fires down the diagonal and the knight maneuver Nh4-f5 creates a devastating attack. Let's walk through how it works.",
-          "shortNarration": "After e4 breaks open the center, White's g2 bishop and Nh4-f5 knight create a devastating attack."
-        },
-        {
-          "san": "d5",
-          "annotation": ""
-        },
-        {
-          "san": "g3",
-          "annotation": ""
-        },
-        {
-          "san": "Nf6",
-          "annotation": ""
-        },
-        {
-          "san": "Bg2",
-          "annotation": ""
-        },
-        {
-          "san": "c6",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "Bg4",
-          "annotation": ""
-        },
-        {
-          "san": "d3",
-          "annotation": ""
-        },
-        {
-          "san": "Nbd7",
-          "annotation": ""
-        },
-        {
-          "san": "Nbd2",
-          "annotation": ""
-        },
-        {
-          "san": "e5",
-          "annotation": ""
-        },
-        {
-          "san": "e4",
-          "annotation": ""
-        },
-        {
-          "san": "dxe4",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "d5",
-              "to": "e4",
-              "color": "rgba(220, 50, 50, 0.8)"
-            }
-          ]
-        },
-        {
-          "san": "dxe4",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "d3",
-              "to": "e4",
-              "color": "rgba(220, 50, 50, 0.8)"
-            }
-          ]
-        },
-        {
-          "san": "Bc5",
-          "annotation": ""
-        },
-        {
-          "san": "Qe1",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "h3",
-          "annotation": ""
-        },
-        {
-          "san": "Bh5",
-          "annotation": ""
-        },
-        {
-          "san": "Nh4",
-          "annotation": ""
-        },
-        {
-          "san": "Re8",
-          "annotation": ""
-        }
-      ]
-    },
-    {
-      "name": "French Structure Squeeze",
-      "type": "trap",
-      "moveAnnotations": [
-        {
-          "san": "e4",
-          "annotation": "In the King's Indian Attack, the French Structure Squeeze is a tactical pattern you should know. Against the French structure, e5 creates a vice grip. Black struggles to find counterplay while White slowly builds up on the kingside. The f1 knight heads to g3-f5. Let's walk through how it works.",
-          "shortNarration": "In the King's Indian Attack, e5 creates a French Structure Squeeze — White's knight heads to g3-f5, Black struggles for counterplay."
-        },
-        {
-          "san": "e6",
-          "annotation": ""
-        },
-        {
-          "san": "d3",
-          "annotation": ""
-        },
-        {
-          "san": "d5",
-          "annotation": ""
-        },
-        {
-          "san": "Nd2",
-          "annotation": ""
-        },
-        {
-          "san": "Nf6",
-          "annotation": ""
-        },
-        {
-          "san": "Ngf3",
-          "annotation": ""
-        },
-        {
-          "san": "Nc6",
-          "annotation": ""
-        },
-        {
-          "san": "g3",
-          "annotation": ""
-        },
-        {
-          "san": "Be7",
-          "annotation": ""
-        },
-        {
-          "san": "Bg2",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "b6",
-          "annotation": ""
-        },
-        {
-          "san": "Re1",
-          "annotation": ""
-        },
-        {
-          "san": "Bb7",
-          "annotation": ""
-        },
-        {
-          "san": "e5",
-          "annotation": ""
-        },
-        {
-          "san": "Nd7",
-          "annotation": ""
-        },
-        {
-          "san": "Nf1",
-          "annotation": ""
-        },
-        {
-          "san": "f6",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "f7",
-              "to": "f6",
-              "color": "rgba(220, 50, 50, 0.8)"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Premature e4 Rush",
-      "type": "warning",
-      "moveAnnotations": [
-        {
-          "san": "Nf3",
-          "annotation": "In the King's Indian Attack, the Premature e4 Rush is a dangerous line you must be aware of. Rushing e4 without proper preparation can leave White overextended. Make sure Nbd2 is in place to support the break, and have a follow-up plan ready. Let's see why.",
-          "shortNarration": "Without Nbd2 supporting it, rushing e4 overextends White and leaves the pawn weak."
-        },
-        {
-          "san": "d5",
-          "annotation": ""
-        },
-        {
-          "san": "g3",
-          "annotation": ""
-        },
-        {
-          "san": "Nf6",
-          "annotation": ""
-        },
-        {
-          "san": "Bg2",
-          "annotation": ""
-        },
-        {
-          "san": "c6",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "Bg4",
-          "annotation": ""
-        },
-        {
-          "san": "d3",
-          "annotation": ""
-        },
-        {
-          "san": "Nbd7",
-          "annotation": ""
-        },
-        {
-          "san": "Nbd2",
-          "annotation": ""
-        },
-        {
-          "san": "e5",
-          "annotation": ""
-        },
-        {
-          "san": "e4",
-          "annotation": ""
-        },
-        {
-          "san": "dxe4",
-          "annotation": "dxe4 — this capture changes the character of the position. Be alert.",
-          "arrows": [
-            {
-              "from": "d5",
-              "to": "e4",
-              "color": "rgba(230, 170, 30, 0.8)"
-            }
-          ],
-          "shortNarration": "dxe4 opens the d-file and clears e5 for Black's pieces."
-        },
-        {
-          "san": "dxe4",
-          "annotation": "dxe4 — this capture changes the character of the position. Be alert.",
-          "arrows": [
-            {
-              "from": "d3",
-              "to": "e4",
-              "color": "rgba(230, 170, 30, 0.8)"
-            }
-          ],
-          "shortNarration": "dxe4 opens the d-file and frees Black's queen and bishop."
-        },
-        {
-          "san": "Bc5",
-          "annotation": ""
-        },
-        {
-          "san": "h3",
-          "annotation": ""
-        },
-        {
-          "san": "Bh5",
-          "annotation": ""
-        },
-        {
-          "san": "Qe1",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "e8",
-              "to": "g8",
-              "color": "rgba(230, 170, 30, 0.8)"
-            }
-          ]
-        },
-        {
-          "san": "Nh4",
-          "annotation": ""
-        },
-        {
-          "san": "Re8",
-          "annotation": ""
-        }
-      ]
-    },
-    {
-      "name": "Queenside Collapse",
-      "type": "warning",
-      "moveAnnotations": [
-        {
-          "san": "e4",
-          "annotation": "In the King's Indian Attack, the Queenside Collapse is a dangerous line you must be aware of. If White focuses only on the kingside and ignores Black's queenside expansion, ...b5-b4-a5-a4 can create serious problems. Balance your attack with defensive awareness. Let's see why.",
-          "shortNarration": "In the King's Indian Attack, ignoring Black's queenside expansion with ...b5-b4-a5-a4 risks a collapse — balance attack with defense."
-        },
-        {
-          "san": "e6",
-          "annotation": ""
-        },
-        {
-          "san": "d3",
-          "annotation": ""
-        },
-        {
-          "san": "d5",
-          "annotation": ""
-        },
-        {
-          "san": "Nd2",
-          "annotation": ""
-        },
-        {
-          "san": "c5",
-          "annotation": ""
-        },
-        {
-          "san": "Ngf3",
-          "annotation": ""
-        },
-        {
-          "san": "Nc6",
-          "annotation": ""
-        },
-        {
-          "san": "g3",
-          "annotation": ""
-        },
-        {
-          "san": "Nf6",
-          "annotation": ""
-        },
-        {
-          "san": "Bg2",
-          "annotation": ""
-        },
-        {
-          "san": "Be7",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "O-O",
-          "annotation": ""
-        },
-        {
-          "san": "Re1",
-          "annotation": ""
-        },
-        {
-          "san": "b5",
-          "annotation": ""
-        },
-        {
-          "san": "e5",
-          "annotation": ""
-        },
-        {
-          "san": "Nd7",
-          "annotation": ""
-        },
-        {
-          "san": "Nf1",
-          "annotation": ""
-        },
-        {
-          "san": "a5",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "a7",
-              "to": "a5",
-              "color": "rgba(230, 170, 30, 0.8)"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "Fischer's Kingside Buildup",
-      "type": "trap",
-      "moveAnnotations": [
-        {
-          "san": "Nf3",
-          "annotation": "White activates the knight on f3. The knight on f3 improves White's piece coordination and flexibility.",
-          "arrows": [
-            {
-              "from": "g1",
-              "to": "f3",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "f3",
-              "color": "rgba(0, 180, 80, 0.3)"
-            }
-          ],
-          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
-          "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
-          ],
-          "shortNarration": "Knight to f3 improves piece coordination and flexibility."
-        },
-        {
-          "san": "d5",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "d7",
-              "to": "d5",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d5.",
-          "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
-          ]
-        },
-        {
-          "san": "g3",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "g2",
-              "to": "g3",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
-          "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
-          ]
-        },
-        {
-          "san": "Nf6",
-          "annotation": "Black develops the knight to f6. The knight on f6 improves Black's piece coordination and flexibility.",
-          "arrows": [
-            {
-              "from": "g8",
-              "to": "f6",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "f6",
-              "color": "rgba(0, 180, 80, 0.3)"
-            }
-          ],
-          "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
-          ],
-          "shortNarration": "Black's knight to f6 improves piece coordination and flexibility."
-        },
-        {
-          "san": "Bg2",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "f1",
-              "to": "g2",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "g2",
-              "color": "rgba(0, 180, 80, 0.3)"
-            }
-          ],
-          "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
-          ],
-          "alternatives": [
-            "The bishop could go to other squares, but g2 maximizes its influence on the key diagonals."
-          ]
-        },
-        {
-          "san": "c6",
-          "annotation": "Black pushes the pawn to c6. This pawn move supports a future d-pawn advance, a key central plan.",
-          "arrows": [
-            {
-              "from": "c7",
-              "to": "c6",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on e7 and d5.",
-          "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
-          ],
-          "shortNarration": "c6 supports a future d5 central advance."
-        },
-        {
-          "san": "O-O",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "e1",
-              "to": "g1",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "g1",
-              "color": "rgba(0, 180, 80, 0.3)"
-            }
-          ],
-          "pawnStructure": "White has a strong central pawn duo on d2 and e2.",
-          "plans": [
-            "Complete piece development and prepare castling",
-            "Fight for central control with pawns and pieces"
-          ]
-        },
-        {
-          "san": "Bg4",
-          "annotation": "Black develops the bishop to g4. The bishop on g4 controls key diagonal squares and maintains active piece play.",
-          "arrows": [
-            {
-              "from": "c8",
-              "to": "g4",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "g4",
-              "color": "rgba(0, 180, 80, 0.3)"
-            }
-          ],
-          "shortNarration": "Black's bishop to g4 controls key diagonal squares and maintains active piece play."
-        },
-        {
-          "san": "d3",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "d2",
-              "to": "d3",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on d3 and e2.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
-          ]
-        },
-        {
-          "san": "Nbd7",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "b8",
-              "to": "d7",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "d7",
-              "color": "rgba(0, 180, 80, 0.3)"
-            }
-          ],
-          "plans": [
-            "Look for tactical opportunities to exploit the opponent's inaccuracy",
-            "Maintain piece pressure while avoiding counter-tactics"
-          ]
-        },
-        {
-          "san": "Nbd2",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "b1",
-              "to": "d2",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "d2",
-              "color": "rgba(0, 180, 80, 0.3)"
-            }
-          ]
-        },
-        {
-          "san": "e5",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "e7",
-              "to": "e5",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [],
-          "pawnStructure": "Black has a strong central pawn duo on d5 and e5."
-        },
-        {
-          "san": "e4",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "e2",
-              "to": "e4",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [],
-          "pawnStructure": "White has a strong central pawn duo on e4 and d3.",
-          "plans": [
-            "Look for tactical opportunities to exploit the opponent's inaccuracy",
-            "Maintain piece pressure while avoiding counter-tactics"
-          ],
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
-          ]
-        },
-        {
-          "san": "dxe4",
-          "annotation": "Black captures the pawn on e4. Black improves piece placement heading into the critical phase of the game.",
-          "arrows": [
-            {
-              "from": "d5",
-              "to": "e4",
-              "color": "rgba(255, 50, 50, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "e4",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "pawnStructure": "Black has a strong central pawn duo on e5 and e4, doubled pawns on the e-file.",
-          "shortNarration": "Black captures e4, improving piece placement before the critical phase."
-        },
-        {
-          "san": "dxe4",
-          "annotation": "White captures the pawn on e4. White improves piece placement heading into the critical phase of the game.",
-          "arrows": [
-            {
-              "from": "d3",
-              "to": "e4",
-              "color": "rgba(255, 50, 50, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "e4",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "pawnStructure": "White has a central pawn on e4.",
-          "shortNarration": "White captures on e4, improving piece placement before the critical phase."
-        },
-        {
-          "san": "Bc5",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "f8",
-              "to": "c5",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "c5",
-              "color": "rgba(0, 180, 80, 0.3)"
-            }
-          ],
-          "plans": [
-            "Look for tactical opportunities to exploit the opponent's inaccuracy",
-            "Maintain piece pressure while avoiding counter-tactics"
-          ]
-        },
-        {
-          "san": "h3",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "h2",
-              "to": "h3",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [],
-          "pawnStructure": "White has a central pawn on e4.",
-          "alternatives": [
-            "Other pawn moves were available, but this advance best fits the strategic requirements of the position."
-          ]
-        },
-        {
-          "san": "Bh5",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "g4",
-              "to": "h5",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "h5",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ]
-        },
-        {
-          "san": "Qe1",
-          "annotation": "White moves the queen to e1. The queen takes up an influential position on e1, eyeing multiple targets.",
-          "arrows": [
-            {
-              "from": "d1",
-              "to": "e1",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "e1",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "pawnStructure": "White has a central pawn on e4.",
-          "plans": [
-            "Convert the positional advantages into concrete gains",
-            "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "shortNarration": "Queen to e1 eyes multiple targets from a central post."
-        },
-        {
-          "san": "O-O",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "e8",
-              "to": "g8",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "g8",
-              "color": "rgba(0, 180, 80, 0.3)"
-            }
-          ]
-        },
-        {
-          "san": "Nh4",
-          "annotation": "White moves the knight to h4. The knight on h4 improves White's piece coordination and flexibility.",
-          "arrows": [
-            {
-              "from": "f3",
-              "to": "h4",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "h4",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "alternatives": [
-            "A different knight move was possible, but h4 offers the best combination of activity and control."
-          ],
-          "shortNarration": "Knight to h4 improves piece coordination and flexibility."
-        },
-        {
-          "san": "Re8",
-          "annotation": "Black moves the rook to e8. The rook takes up a powerful position on the e-file, pressuring White's position.",
-          "arrows": [
-            {
-              "from": "f8",
-              "to": "e8",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "e8",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "plans": [
-            "Convert the positional advantages into concrete gains",
-            "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "shortNarration": "Black's rook on e8 pressures White along the e-file."
-        },
-        {
-          "san": "Nf5",
-          "annotation": "White moves the knight to f5. The knight reaches a powerful central outpost on f5, controlling multiple key squares.",
-          "arrows": [
-            {
-              "from": "h4",
-              "to": "f5",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "f5",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "shortNarration": "Knight to f5 reaches a powerful central outpost controlling multiple key squares."
-        },
-        {
-          "san": "Bf8",
-          "annotation": "Black moves the bishop to f8. The bishop on f8 controls key diagonal squares and maintains active piece play.",
-          "arrows": [
-            {
-              "from": "c5",
-              "to": "f8",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "f8",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "shortNarration": "Bishop to f8 controls key diagonal squares and keeps Black's pieces active."
-        },
-        {
-          "san": "Nc4",
-          "annotation": "White moves the knight to c4. The knight reaches a powerful central outpost on c4, controlling multiple key squares.",
-          "arrows": [
-            {
-              "from": "d2",
-              "to": "c4",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "c4",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "pawnStructure": "White has a central pawn on e4.",
-          "plans": [
-            "Convert the positional advantages into concrete gains",
-            "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "alternatives": [
-            "A different knight move was possible, but c4 offers the best combination of activity and control."
-          ],
-          "shortNarration": "Knight to c4 reaches a powerful central outpost controlling key squares."
-        },
-        {
-          "san": "b5",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "b7",
-              "to": "b5",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [],
-          "pawnStructure": "Black has a central pawn on e5."
-        },
-        {
-          "san": "Nce3",
-          "annotation": "",
-          "arrows": [
-            {
-              "from": "c4",
-              "to": "e3",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "e3",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ]
-        },
-        {
-          "san": "Qc7",
-          "annotation": "Black moves the queen to c7. The queen takes up an influential position on c7, eyeing multiple targets.",
-          "arrows": [
-            {
-              "from": "d8",
-              "to": "c7",
-              "color": "rgba(0, 180, 80, 0.8)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "c7",
-              "color": "rgba(255, 255, 0, 0.4)"
-            }
-          ],
-          "plans": [
-            "Convert the positional advantages into concrete gains",
-            "Coordinate pieces for maximum effectiveness in the coming exchanges"
-          ],
-          "shortNarration": "Queen to c7 eyes multiple targets from an influential post."
         }
       ]
     }

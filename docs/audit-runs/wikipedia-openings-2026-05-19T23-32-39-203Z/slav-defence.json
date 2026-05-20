@@ -1,0 +1,11 @@
+{
+  "id": "slav-defence",
+  "status": "fetched",
+  "wikipediaTitle": "Slav Defense",
+  "extract": "The Slav Defense is a chess opening that begins with the moves:1. d4 d5\n2. c4 c6",
+  "extractHtml": "<p>The <b>Slav Defense</b> is a chess opening that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">d5</span></dd>\n<dd>2. <span class=\"extiw\">c4</span> <span class=\"extiw\">c6</span></dd></dl>",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Slav_Defense",
+  "pageId": 1690040,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:33:02.563Z"
+}

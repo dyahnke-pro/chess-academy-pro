@@ -33,22 +33,22 @@
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Dutch Defense Leningrad Basman System: Nf3 is a known theory move in this line.",
+      "annotation": "Nf3 supports the d4 pawn and prepares to reroute the knight toward e5, controlling Black's fianchettoed bishop on g7.",
       "shortNarration": "Nf3 is a key theory move in the Leningrad Basman System."
     },
     {
       "san": "Bg7",
-      "annotation": "Continuing Dutch Defense Leningrad Basman System: Bg7 is a known theory move in this line.",
+      "annotation": "Bg7 completes Black's fianchetto setup, aiming the bishop down the long diagonal to pressure White's center and queenside.",
       "shortNarration": "Bg7 is theory in the Dutch Leningrad Basman System."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Dutch Defense Leningrad Basman System: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside moves the king to safety while keeping the rook active on f1 for potential pressure down the f-file where Black has weakened with f5.",
       "shortNarration": "Dutch Leningrad Basman: O-O is the theory move."
     },
     {
       "san": "Nh6",
-      "annotation": "Continuing Dutch Defense Leningrad Basman System: Nh6 is a known theory move in this line.",
+      "annotation": "Nh6 avoids immediate confrontation on f5 and eyes f7 as a potential outpost, while the knight can later jump to f6 or e5 depending on White's setup.",
       "shortNarration": "Nh6 is theory in the Dutch Leningrad Basman System."
     }
   ]

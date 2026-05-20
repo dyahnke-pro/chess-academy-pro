@@ -23,12 +23,12 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Pirc Defense: Nc3 is a known theory move in this line.",
+      "annotation": "Nc3 supports the d4 pawn and prepares f4, a key plan to control the center before Black's fianchetto setup solidifies.",
       "shortNarration": "Nc3 is the standard Pirc move, developing and pressuring d4."
     },
     {
       "san": "g6",
-      "annotation": "Continuing Pirc Defense: g6 is a known theory move in this line.",
+      "annotation": "Black completes the fianchetto, positioning the bishop on the long diagonal to pressure White's center from afar.",
       "shortNarration": "g6 enters the Pirc Defense, fianchettoing the bishop to pressure the center."
     }
   ]

@@ -29,7 +29,7 @@
     {
       "san": "g6",
       "annotation": "Black continues with the typical Pirc fianchetto setup, preparing to place the dark-squared bishop on g7 where it will become a powerful long-range piece. This move also provides an escape square for the rook on h8 if needed and prepares to challenge our center from the long diagonal. The pawn on g6 weakens Black's kingside slightly, particularly the f6 and h6 squares, which we can potentially exploit in our attack. However, Black gets excellent piece activity and central pressure in return, making this a principled hypermodern approach.",
-      "shortNarration": "Black fianchettoes the bishop to g7, challenging the center from the long diagonal while slightly weakening f6 and h6."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto to g7, challenging the center from the long diagonal while slightly weakening f6 and h6."
     },
     {
       "san": "f4",
@@ -43,17 +43,17 @@
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Pirc Defense Austrian Attack Weiss Variation: Nf3 is a known theory move in this line.",
+      "annotation": "Nf3 completes White's setup, stationing the knight on an ideal square where it supports the e4–d4 pawn chain and controls key central squares like e5 and d4.",
       "shortNarration": "Nf3 is the theory move in the Pirc Austrian Attack, developing and guarding the e5 square."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Pirc Defense Austrian Attack Weiss Variation: O-O is a known theory move in this line.",
+      "annotation": "Black castles kingside to tuck the king to safety before White launches the Austrian Attack's typical kingside assault with Bd3 and likely h4–h5.",
       "shortNarration": "O-O is theory in the Pirc Austrian Attack, castling kingside to activate the rook."
     },
     {
       "san": "Bd3",
-      "annotation": "Continuing Pirc Defense Austrian Attack Weiss Variation: Bd3 is a known theory move in this line.",
+      "annotation": "Bd3 aims the bishop at h7, preparing the hallmark h4–h5 pawn storm that defines White's attacking plan in the Weiss Variation.",
       "shortNarration": "Bd3 is the standard Austrian Attack setup against the Pirc."
     }
   ]

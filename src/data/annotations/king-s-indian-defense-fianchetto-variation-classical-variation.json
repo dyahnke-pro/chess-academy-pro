@@ -63,17 +63,17 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Classical Variation: Nc3 is a known theory move in this line.",
+      "annotation": "Nc3 guards e4 and prepares to support White's central pawns while keeping options open on the queenside.",
       "shortNarration": "Nc3 is the standard Classical move in the KID Fianchetto Variation."
     },
     {
       "san": "e5",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Classical Variation: e5 is a known theory move in this line.",
+      "annotation": "Black strikes at the center with e5, challenging the d4 pawn and preventing White from playing e4 with tempo.",
       "shortNarration": "e5 is the theory move in the Classical Fianchetto Kings Indian."
     },
     {
       "san": "e4",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Classical Variation: e4 is a known theory move in this line.",
+      "annotation": "White reclaims the center with e4, establishing a strong pawn duo and fixing Black's d6 pawn as a potential long-term target.",
       "shortNarration": "e4 is the theoretical move in the Classical Fianchetto Variation of the King's Indian Defense."
     }
   ]

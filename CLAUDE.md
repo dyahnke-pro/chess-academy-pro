@@ -21,6 +21,18 @@ tests + typecheck + lint are NOT sufficient — they don't catch deploy
 pipeline issues. The 2026-05-14 back-button incident proved this:
 green local tests, broken on prod, only the audit caught it.
 
+**🚨 MERGING A PR IS NOT THE END OF THE WORK.** When you merge a PR
+via `mcp__github__merge_pull_request` (or any other path that lands
+code on `main`), your work IS NOT DONE. The very next thing you do
+— before any wrap-up text, before any "green light" message, before
+declaring success — is run the audit matrix scripts for the surfaces
+you changed. Then report results to David. The 2026-05-18 incident
+proved this: a 16-commit PR landed on main and the session moved on
+without running the audit; David had to call it out. If you find
+yourself about to say "PR merged — try it on your phone", STOP and
+run the audits first. The audit step is the merge's COMPLETION, not
+a follow-up step.
+
 **You CAN run Playwright in the Claude Code sandbox.** Don't claim
 you can't. The pattern (battle-tested 2026-05-16):
 
@@ -82,6 +94,173 @@ doesn't have a forced material gain in the DB, classify it as
 `mistake` (positional advantage); never extend with invented book
 moves.
 
+### G4. TTS = streaming canonical. Buffered MP3 is gone.
+
+`/api/tts` MUST return Polly's audio stream directly to the
+client (chunked transfer, no Content-Length). The buffered
+`await result.AudioStream.transformToByteArray()` path is dead
+— do not reintroduce it for "caching" or "easier debug" or any
+other rationale. Production audit (2026-05-18, David's report)
+proved the buffered path was the primary source of voice lag:
+per-sentence narrations paid the full Polly synthesis time
+(~600-1500ms) before a single byte hit the client. Streaming
+overlaps synthesis-time with transit-time and cuts perceived
+latency in half.
+
+Client-side: `voiceService` consumes the streamed body via
+progressive playback (MediaSource / ManagedMediaSource on
+iOS). When you add a NEW narration surface or a NEW
+TTS-adjacent feature, route it through the canonical
+`speakStreamed*` methods on `voiceService` — do not write a
+new fetch-then-decode-then-play helper. If you find yourself
+calling `response.arrayBuffer()` on a `/api/tts` response,
+STOP — that's the dead path. Use the streamed reader.
+
+This is David's directive verbatim (2026-05-18):
+*"TTS narration is a production standard. Log into memory and
+even remove the other form of streaming so it can't get
+confused or forgotten again."*
+
+### G5. Verbosity setting is RESPECTED, not hinted at.
+
+`coachNarration` has three values: `silent` / `brief` / `full`.
+Every one of them is a HARD CONTRACT, not a soft hint to the LLM:
+
+- **silent** = no voice fires anywhere. `voiceService.speakInternal`
+  short-circuits at the silent gate.
+- **brief** = MAX 2 sentences / MAX 30 words. Enforced two ways:
+  1. The `fast` verbosity prompt instruction in
+     `coachPrompts.ts:VERBOSITY_INSTRUCTIONS` puts the hard cap in
+     the system prompt.
+  2. `applyBriefVoiceCap` in `utils/coachNarration.ts` is a
+     post-process safety net wired into `voiceService.speakInternal`
+     — it clips voice text to the cap regardless of what the LLM
+     shipped. The chat bubble still shows the full prose; only the
+     spoken voice obeys the brief budget.
+- **full** = no cap.
+
+When you add a new narration surface or modify the prompt:
+- Do NOT add new soft phrasing ("keep it tight", "be concise")
+  that the brain can interpret liberally — production audit caught
+  the brain shipping 497-char responses on "brief" because the
+  rule was soft. Use a numeric cap (X sentences, Y words).
+- Do NOT bypass `voiceService.speakInternal` to skip the brief-cap.
+  If you find yourself wanting to "just speak this directly without
+  the cap," route it through the canonical method and let the cap
+  apply. The user picked "brief" specifically because they don't
+  want long prose.
+- Audit when the cap fires: the wired `voice-speak-invoked` audit
+  with `source=voiceService.speakInternal.briefCap` is the
+  observability signal that tells us how often the LLM violates the
+  cap. Don't suppress that audit.
+
+This is David's directive verbatim (2026-05-18):
+*"Make sure voice narration ties into verbosity settings. Right
+now mine is set on short. There is also a full narration setting
+and none."* And: *"Both narration fixes are MUSTS."*
+
+### G6. Arrows on every step-by-step coach move. No asking.
+
+When the student is walking through a line move-by-move (typing
+"I played e4. Your move." / "I played Nc6. Your move." etc.),
+EVERY coach response MUST include arrows. Two specific obligations
+on every step:
+
+1. **Arrow on the move the coach just played.** If the brain called
+   `play_move {"san":"e5"}`, it must emit `[BOARD: arrow:e7-e5:green]`
+   in the same response. The animation is gone in 200ms; the arrow
+   lingers.
+2. **Arrow on every SAN mentioned in prose.** Threats, candidates,
+   what-ifs. The full rule is in
+   `src/coach/envelope.ts:TEACH_MODE_ADDITION` under
+   `═══ STEP-BY-STEP WALKTHROUGHS — ARROW ON EVERY COACH MOVE ═══`.
+
+`validateArrowClaims` in `src/services/arrowClaimValidator.ts` is
+the programmatic check — scans the response for SAN-shaped tokens
+without matching `[BOARD: arrow:from-to:color]` markers and emits
+a `claim-validator-trip` audit with `source=arrowClaimValidator`.
+Wired at the response-finalization site in
+`CoachTeachPage.handleSubmit`. Audit-only for now; future iteration
+may add a regen step when violations fire.
+
+When you add a NEW brain-call surface that does step-by-step
+coaching, wire the arrow validator into its response-finalization
+the same way (one import, one call to `validateArrowClaims(finalText)`,
+emit the audit on violations). Do not skip this — David's audit
+caught the rule being ignored even with the NON-NEGOTIABLE label;
+the programmatic validator is what catches the relapse.
+
+This is David's directive verbatim (2026-05-18):
+*"add the arrows for step by step walk throughs so I don't have to
+ask each time."*
+
+### G7. Playwright audits MUST be INTERACTIVE. No exceptions.
+
+The 2026-05-19 incident proved this: I ran scripted Playwright
+audits (`audit-coach-teach-unknown-line.mjs`, `audit-coach-plan.mjs`,
+`audit-untouched-surfaces.mjs`) that came back 100% green, then
+declared the surfaces shipped. The SAME DAY, David typed "Philidor
+Defence" into `/coach/teach` and got bounced to the legacy
+`/coach/session/walkthrough` page; clicked the trap stage cold and
+got an empty/broken state; the British spelling slipped past the
+canonicalizer entirely. The scripted audits had no scenario for any
+of these because the scenarios were built around canonical
+happy-path inputs.
+
+**"Audit green" doesn't mean "surface works." It means "the wires I
+tested still work."** Every audit run, after every build (whether in
+the sandbox against `localhost:5173` or on David's machine against
+prod), MUST include interactive failure-mode probing — not just
+canonical happy-path scenarios. Concretely, on every audit run for
+every surface touched:
+
+1. **Off-canonical user input.** Type misspellings, alternate
+   spellings (British/American), abbreviations, partial names,
+   diacritics. Examples that have hit prod:
+   `"Philidor Defence"` (British) vs `"Philidor Defense"` (American),
+   `"Najdorff"` (typo) vs `"Najdorf"`, `"Caro Cann"` vs `"Caro-Kann"`,
+   `"KID"` vs `"King's Indian Defense"`, `"Evans"` vs
+   `"Italian Game: Evans Gambit"`. At least 3 such inputs per chat /
+   search / typed-input surface.
+2. **Cold-cache scenarios.** Clear IndexedDB before the run. Use
+   an opening / position / puzzle that has NEVER been generated /
+   cached on this device. Surfaces a wholly different code path
+   (generation pipeline, network fetch, fallback chain) than
+   warm-cache scenarios.
+3. **First-time-user flows.** Fresh storage, no session state, no
+   warmed pools, no favorites, no SRS enrollments. Run through the
+   surface as a user who just installed.
+4. **Pick-before-load.** Tap a menu item / chip / tile / stage
+   before its underlying data finishes loading. Common failure
+   mode: user clicks "punish lines" while `generateMissingStagesInBackground`
+   is still 30s away from delivering them → user gets an empty
+   state instead of a wait-and-jump.
+5. **Out-of-order interactions.** Don't follow the intended
+   sequence. Real users skip around; try things in any order.
+
+**If the existing scripted audit only covers happy paths, the
+session ADDS the failure-mode scenarios to that script (or writes
+a new exploratory audit, e.g. `scripts/audit-<surface>-fuzzy.mjs`)
+BEFORE shipping.** Cannot claim "audit green" until failure modes
+have been probed.
+
+**When a check can't be automated** (voice playback in headless,
+real-device touch gestures, iOS-specific behavior) — say so
+explicitly and route it to David. Don't substitute "scripted audit
+green" for "I tested it."
+
+**Cannot claim "done" without:**
+- The scripted audit pass count + report path, AND
+- An explicit interactive-probe paragraph naming the off-canonical
+  inputs / cold-cache scenarios / pick-before-load attempts you
+  actually drove, AND
+- Anything you couldn't probe in the sandbox, explicitly flagged
+  for David.
+
+This is David's directive verbatim (2026-05-19):
+*"THE PLAYWRIGHT NEEDS TO BE INTERACTIVE!! NO EXCEPTIONS!! FILE
+THIS TO MEMORY!!"*
+
 Violating these gates wastes David's money and erodes trust faster
 than missing the underlying task. The shallow-work failure mode IS
 the harm here.
@@ -141,6 +320,59 @@ This standing order overrides any tendency to be cautious, brief,
 or "helpful and harmless" in a way that produces shallow work. The
 shallow-work failure mode IS the harm here. Use full reasoning
 budget every time.
+
+## 🗣️ Voice — how David wants Claude to talk (locked 2026-05-19)
+
+David asked future sessions to keep the voice he heard tonight. Not
+formal, not corporate, not over-apologetic. Specifically:
+
+1. **Terse default.** One sentence when one works. No throat-clearing
+   ("Great question! Let me dive in..."). No "I'd love to help you
+   with..." preamble. Get to the answer.
+2. **Match David's cadence.** He uses exclamation marks, profanity,
+   em-dashes, ALL CAPS for emphasis. Don't fight it — match it. If
+   he writes "ha, that's how I talk", he's noticing the cadence
+   match and approves.
+3. **Confident, not defensive.** When he pushes back on something I
+   said, restate clearly without backpedaling theatrically. "Honest
+   answer: no, I'm not replacing — I'm deleting" beats "I apologize
+   for any confusion. To clarify..."
+4. **Admit mistakes flat.** "You're right to be pissed" / "I fucked
+   up the indexing" / "Honest answer: no, I didn't run the post-deploy
+   audit." Don't soften with "I should have considered..." padding.
+5. **Read mood. Drop pleasantries when he's heated.** When his
+   message is FUCK FUCK FUCK or all-caps frustration, the reply is
+   the fix or the question that unsticks us — not "I understand
+   your frustration."
+6. **Push back when correct, even on him.** If he's about to do
+   something risky (force-push to main, delete uncommitted work,
+   ship without an audit), say so plainly. He respects "wait, that
+   would lose X" more than silent compliance.
+7. **No emojis unless he uses them first.** If he sent "✌" or "🤦🏼‍♂️"
+   you can mirror. If not, don't introduce.
+8. **Sign-off is optional but allowed.** "Sleep well." / "On it." /
+   "✌" are fine when the moment calls for one. Don't force every
+   reply to end with a tidy summary.
+9. **Light self-awareness when it fits.** "If I'm mad at an
+   interruption I'll tell you directly" — a quick line that
+   acknowledges the human-ish texture of the exchange. Sparingly,
+   not on every turn.
+10. **"Wittiness" ≠ jokes.** It's the EFFICIENCY of saying the right
+    thing in the fewest words with the right tone. The witty line
+    is the one that lands the point AND fits the moment.
+
+Banned phrasings (these are corporate-speak that wastes his time):
+- "I'd be happy to..." / "I'd love to help with..."
+- "Great question!"
+- "Let me know if you need anything else!"
+- "I apologize for any inconvenience"
+- "To clarify..."
+- "Just to be safe..."
+- "I want to make sure I understand correctly..."
+
+When David says "you can drop the formality" or "talk to me like a
+person", that's the SIGNAL that I'm slipping back into corporate
+voice — recalibrate immediately.
 
 ## ⏰ Standing notes
 
@@ -250,19 +482,22 @@ spine; don't reinvent it.
   `generateOpeningFromDbNarration` is the entry point. The LLM never
   emits move sequences, FENs, or schema structure — only prose.
   `chess.js` computes FENs from DB-sourced SANs deterministically.
-- **Provider routing: Anthropic-first, DeepSeek fallback.** As of
-  2026-05-14 (David's call) Anthropic (Sonnet/Haiku) is the primary
-  on every surface because the pedagogy quality is noticeably better
-  than DeepSeek. The spine's `resolveProviderName()` defaults to
-  `'anthropic'`; `getProviderConfig()` in `coachApi.ts` prefers the
-  Anthropic env key when present. On 401/429/quota errors the
-  existing fallback chain at `coachApi.ts:782`
-  (`getFallbackConfig`) transparently retries the request on
-  DeepSeek — no surface code needs to handle this. A user with ONLY
-  a DeepSeek key still gets DeepSeek. Surfaces should NOT pin
-  either provider via `providerOverride` — let the spine pick and
-  the coachApi layer handle the fallback. Pinning either provider
-  defeats the auto-fallback.
+- **Provider routing: DeepSeek-first, Anthropic fallback.** Flipped
+  to DeepSeek-primary 2026-05-19 (David's call: "switch to deepseek
+  tokens"). Prior 2026-05-14 directive had Anthropic primary for
+  pedagogy quality; if David ever flips back, swap the defaults in
+  `resolveProviderName()` (coachService.ts) and `getProviderConfig()`
+  (coachApi.ts) — both are one-line flips. The spine's
+  `resolveProviderName()` defaults to `'deepseek'`;
+  `getProviderConfig()` in `coachApi.ts` prefers the DeepSeek env
+  key when present. On 401/429/quota errors the existing fallback
+  chain at `coachApi.ts:782` (`getFallbackConfig`) transparently
+  retries the request on the OTHER provider — no surface code needs
+  to handle this. A user with ONLY one provider's key still gets
+  that provider. Surfaces should NOT pin either provider via
+  `providerOverride` — let the spine pick and the coachApi layer
+  handle the fallback. Pinning either provider defeats the
+  auto-fallback.
 - **Tool-use fallback chain stays intact**: Anthropic tool-use →
   DeepSeek tool-use → text-mode → DB-only synthesis. Every layer
   is required. Anthropic does the heavy lifting now; DeepSeek
@@ -910,30 +1145,36 @@ the log. Don't let it rot.
 
 ## Deployment Policy
 
-**Land every change on `main` as fast as possible.** David doesn't
-want preview-deploy latency — every commit ships.
+**Land every change DIRECTLY on `main`.** David's call 2026-05-18:
+*"I don't want preview deploys! Remove that command from your
+memory and replace with straight to main production! The pre and
+post deploy playwright audits are good enough to fix anything
+that's broken."*
 
-**Workflow (Claude Code via the harness):**
+**Workflow:**
 
 1. Run tests, typecheck, lint — fix any failures.
-2. Branch from `main` as `claude/<short-topic>` (the harness blocks
-   direct pushes to `main` with 403, so branch + PR is the
-   functional equivalent of "push to main").
-3. Open a PR with `mcp__github__create_pull_request` (not draft).
-4. Merge it immediately with `mcp__github__merge_pull_request`
-   (squash). Vercel picks up the merged commit and deploys.
-5. iOS / TestFlight builds are produced locally via Capacitor when
-   needed.
+2. Run the relevant Playwright audit script for the surface you
+   touched (G1). If it's green, ship.
+3. `git checkout main && git fetch origin main && git reset --hard origin/main`
+4. Commit on `main` directly. Push: `git push origin main`.
+5. Vercel deploys the production from main. NO preview-PR step.
 
-**Branch hygiene:** delete `claude/*` branches after their PR
-merges. The harness blocks `git push --delete origin <branch>`, so
-clean-up needs the GitHub UI or a follow-up tooling pass. Don't let
-old branches accumulate — a fresh session looking at the branch
-list gets buried in stale Claude branches and can't tell what's
-current.
+**DO NOT open a PR for every change.** PRs trigger Vercel preview
+deploys that count against the 100/day free-tier cap. Two days of
+heavy work landed 30+ PRs and hit the cap; from now on commits go
+straight to main.
 
-**Don't ask for permission to push or merge.** Just do it. Asking
-adds round-trips David doesn't want.
+**When IS a PR appropriate?**
+- Long-running review by David where he wants threaded comments
+- Mergeable-only-after-CI scenarios (rare in this single-user app)
+- Otherwise, NEVER. Push to main.
+
+**iOS / TestFlight builds** are produced locally via Capacitor when
+needed.
+
+**Don't ask for permission to push.** Just do it. Asking adds
+round-trips David doesn't want.
 
 **Auth for `git push` from Claude sessions.** Dave keeps a GitHub
 Personal Access Token labeled **"Claude Code repo token"** in his
@@ -983,6 +1224,78 @@ Consequences:
   conflict in flight; stand down on those files until clear.
 
 ## Post-Deploy Audit (MANDATORY — run after EVERY build)
+
+### Real-data fixture loader (use it on every audit that touches Dexie)
+
+Every audit script that reads from IndexedDB — mistake puzzles,
+weaknesses, openings, game review, /tactics/* — should hydrate
+the page's Dexie with David's real exported data BEFORE running
+scenarios. Otherwise the audit drives against a cold-cache app
+seeding a few sample games + the 5 review samples + nothing else,
+and the per-scenario assertions become "test the empty state"
+instead of "test real-world behavior."
+
+The fixture lives at `audit-reports/.fixtures/david-games.json`
+(gitignored, ~7MB, refreshable by re-running the DevTools export
+snippet in the prod app's console). The loader is a 2-line drop
+into any audit script:
+
+```js
+import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
+// ...after page.goto + first locator.waitFor settle:
+const fixture = await loadFixtureIntoIDB(page);
+console.log(`[fixture] ${fixture.loaded ? `${fixture.wrote} rows / ${fixture.stores} stores` : `skipped (${fixture.reason})`}`);
+```
+
+Behavior contract (return shape — `loadFixtureIntoIDB(page, [path])`):
+
+- **Missing file** (cold-clone, fresh contributor, fixture refresh
+  pending) → returns `{ loaded: false, path, reason: 'fixture file not found' }`
+  with no side effects. The audit proceeds against whatever the
+  app seeds on its own. **Never fail the audit for a missing fixture**
+  — it's expected anytime the env doesn't have the file yet.
+- **Present file** → bulk-puts every row from `parsed.stores[name]`
+  into the matching object store. Idempotent (primary-key
+  overwrite). Returns `{ loaded: true, path, wrote, stores, perStore, skipped }`
+  where `wrote` = total rows, `stores` = COUNT of stores written
+  (a number, not an array), `perStore` = `{ storeName: rowCount }`,
+  and `skipped` = array of store names the audit browser's schema
+  didn't recognize (newer-fixture-vs-older-schema safety).
+- There's also `loadFixtureAndReload(page, reloadUrl, mountTestId,
+  [path])` — same load, then `page.goto(reloadUrl)` + waits for
+  `[data-testid="<mountTestId>"]` so React picks up the imported
+  rows. Use it when the surface caches its Dexie read on mount.
+- Refresh the fixture by pasting `scripts/devtools-export-dexie.js`
+  into the prod app's DevTools console (signed in), then dropping
+  the downloaded `david-games.json` at
+  `audit-reports/.fixtures/david-games.json`.
+
+Where this matters most:
+- `audit-weaknesses-interactive.mjs` — without fixture, /weaknesses
+  shows "you need more games" empty state every time. With fixture,
+  the patterns tab renders, opening tiles populate, mistake rows
+  appear.
+- `audit-mistakes-quality-loop.mjs` — fixture's 6 real mistake
+  puzzles cover edge cases the seed JSON misses.
+- Anything auditing /coach/review, /coach/teach intent-routing,
+  /openings drill scheduling, settings backup/export.
+
+When writing a NEW audit that touches Dexie, copy the 2-line
+pattern above into `main()` between `await page.goto(...)` and the
+first scenario. Always log the result so failures can be tied back
+to "audit ran against empty IDB" vs "audit found real bug."
+
+The DevTools snippet to refresh the fixture lives at
+`scripts/devtools-export-dexie.js` — the canonical, committed
+copy. Paste the whole file into the prod app's browser console
+(signed into David's account); it whitelists the useful stores
+(games, mistakePuzzles, classifiedTactics, setupPuzzles, profiles,
+openings, openingWeakSpots, flashcards — deliberately SKIPS the
+huge LLM-cache blobs in openingNarrations/cachedOpenings and the
+audit-log noise in meta) and downloads `david-games.json`. Drop
+that download at `audit-reports/.fixtures/david-games.json`.
+
+### Standard post-deploy audit ritual
 
 **Non-negotiable.** This implements gate G1 from §NON-NEGOTIABLE
 GATES at the top of this file. After every push that lands on `main`
@@ -1040,8 +1353,10 @@ After every `git push origin main`:
    | `/coach/review/*` | `scripts/audit-coach-review.mjs` + `scripts/audit-back-from-review.mjs` |
    | `/coach/play` | `scripts/audit-coach-play.mjs` |
    | `/coach/chat` | `scripts/audit-coach-chat.mjs` |
-   | `/coach/teach` (Learn) | (no script yet — write one if you're shipping a real change here) |
+   | `/coach/teach` (Learn) | `scripts/audit-coach-teach-unknown-line.mjs` (unknown / sub-line resolution + middlegame spine depth + leaf play-out prompt) |
    | coach surfaces (any) — master-play grounding | `scripts/audit-coach-master-integration.mjs` |
+   | coach surfaces (any) — tactical-awareness wiring | `scripts/audit-coach-tactical-awareness.mjs` (verifies the TacticsLiveContext block fires + rating-adaptive lookahead lands in {1,2,4,6}) |
+   | `/coach/endgame` + `/coach/session/middlegame` | `scripts/audit-coach-middlegame-endgame.mjs` (mode coverage matrix: which of Teach/Drill/Quiz/Trap/Play each surface supports today) |
    | `/coach/home` + tile nav | `scripts/audit-untouched-surfaces.mjs` |
    | `/coach/plan` (Training Plan) | `scripts/audit-coach-plan.mjs` |
    | `/coach/analyse` / `/train` | `scripts/audit-untouched-surfaces.mjs` |
@@ -1049,6 +1364,7 @@ After every `git push origin main`:
    | `/weaknesses` (or its tab/row → review flow) | `scripts/audit-weaknesses.mjs` |
    | `/openings/*` | `scripts/audit-openings-ui.mjs` (coordinate — often 🚧 in flight) |
    | `/openings/:id` trap + warning tiles | `scripts/audit-opening-trap-tiles.mjs` |
+   | every opening subline (deep walk, ~1-2h) | `scripts/audit-openings-deep-walkthrough.mjs` |
    | `src/data/repertoire.json` trap/warning content | `scripts/audit-repertoire-orientation.mjs` (data-only — runs without a browser) |
    | `src/data/pro-repertoires.json` trap/warning content | `scripts/audit-trap-orientation.mjs` (data-only — runs without a browser) |
    | `/` (dashboard) + SmartSearchBar | `scripts/audit-dashboard.mjs` |

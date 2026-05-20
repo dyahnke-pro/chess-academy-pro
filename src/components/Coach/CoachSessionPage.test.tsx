@@ -48,6 +48,7 @@ function renderAt(path: string): ReturnType<typeof render> {
           <Route path="/coach/session/:kind" element={<CoachSessionPage />} />
           <Route path="/coach/chat" element={<div data-testid="chat-redirect" />} />
           <Route path="/coach/play" element={<CoachPlayProbe />} />
+          <Route path="/coach/teach" element={<CoachTeachProbe />} />
           <Route path="/tactics" element={<div data-testid="tactics-redirect" />} />
           <Route
             path="/tactics/adaptive"
@@ -56,6 +57,20 @@ function renderAt(path: string): ReturnType<typeof render> {
         </Routes>
       </MotionConfig>
     </MemoryRouter>,
+  );
+}
+
+function CoachTeachProbe(): JSX.Element {
+  // Surface the redirect path + query string so the walkthrough
+  // redirect can be asserted on (the legacy /coach/session/walkthrough
+  // now routes here).
+  const loc = useLocation();
+  return (
+    <div data-testid="coach-teach-redirect">
+      <span data-testid="coach-teach-redirect-path">
+        {loc.pathname + loc.search}
+      </span>
+    </div>
   );
 }
 
@@ -140,27 +155,31 @@ describe('CoachSessionPage — middlegame', () => {
   });
 });
 
-describe('CoachSessionPage — walkthrough', () => {
-  beforeEach(() => {
-    vi.spyOn(voiceService, 'speak').mockResolvedValue(undefined);
-    vi.mocked(resolveWalkthroughSession).mockReset();
-  });
-
-  it('renders the walkthrough session when one resolves', async () => {
-    vi.mocked(resolveWalkthroughSession).mockResolvedValue(
-      buildSession({ title: 'Sicilian Defense', kind: 'opening' }),
-    );
+describe('CoachSessionPage — walkthrough (redirect)', () => {
+  // /coach/session/walkthrough is a redirect-only kind now — the
+  // canonical Learn-with-Coach surface (/coach/teach) owns the
+  // walkthrough runtime. The redirect maps ?subject=X → ?opening=X
+  // and preserves ?orientation so CoachTeachPage's URL-param flow
+  // picks it up.
+  it('redirects to /coach/teach with subject mapped to opening', () => {
     renderAt('/coach/session/walkthrough?subject=Sicilian');
-    await waitFor(() =>
-      expect(screen.getByText('Sicilian Defense')).toBeInTheDocument(),
+    expect(screen.getByTestId('coach-teach-redirect')).toBeInTheDocument();
+    expect(screen.getByTestId('coach-teach-redirect-path').textContent).toBe(
+      '/coach/teach?opening=Sicilian',
     );
   });
 
-  it('shows a helpful error when the subject does not match', async () => {
-    vi.mocked(resolveWalkthroughSession).mockResolvedValue(null);
-    renderAt('/coach/session/walkthrough?subject=nothingburger');
-    await waitFor(() =>
-      expect(screen.getByText(/couldn't find an opening/i)).toBeInTheDocument(),
+  it('preserves orientation when redirecting', () => {
+    renderAt('/coach/session/walkthrough?subject=Caro-Kann&orientation=black');
+    expect(screen.getByTestId('coach-teach-redirect-path').textContent).toBe(
+      '/coach/teach?opening=Caro-Kann&orientation=black',
+    );
+  });
+
+  it('redirects to /coach/teach with no params when subject is missing', () => {
+    renderAt('/coach/session/walkthrough');
+    expect(screen.getByTestId('coach-teach-redirect-path').textContent).toBe(
+      '/coach/teach',
     );
   });
 });

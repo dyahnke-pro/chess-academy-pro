@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black continues with the signature King's Indian move, preparing to fianchetto the dark-squared bishop on g7. This setup will give Black's bishop incredible scope along the long diagonal, eyeing our castled king position and controlling key central squares like e5 and d4. The pawn on g6 also supports a future ...f5 advance, which is often the key pawn break in King's Indian positions. Our opponent is building a flexible pawn structure that can support both defensive and attacking operations, particularly on the kingside where Black often launches dangerous attacks.",
-      "shortNarration": "Black fianchettoes the bishop on g7, eyeing e5 and d4, with the g6 pawn supporting a future f5 break."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto on g7, eyeing e5 and d4, with the g6 pawn supporting a future f5 break."
     },
     {
       "san": "Nf3",
@@ -33,47 +33,47 @@
     },
     {
       "san": "g3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: g3 is a known theory move in this line.",
+      "annotation": "Fianchettoing the kingside bishop completes White's long-diagonal strategy, preparing to control the center and key dark squares from g2.",
       "shortNarration": "g3 is the Double Fianchetto Attack against the King's Indian Defense."
     },
     {
       "san": "d6",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: d6 is a known theory move in this line.",
+      "annotation": "Black supports the center and opens lines for the fianchettoed bishop. This modest advance gives Black space to maneuver pieces flexibly.",
       "shortNarration": "In the Double Fianchetto Attack, d6 is a theory move for Black."
     },
     {
       "san": "Bg2",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: Bg2 is a known theory move in this line.",
+      "annotation": "The bishop locks onto the long diagonal, where it will exert pressure on d4 and eye the queenside. This placement is the key to White's setup.",
       "shortNarration": "Bg2 fianchettoes the bishop, pressuring the center and kingside in the Double Fianchetto Attack."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: O-O is a known theory move in this line.",
+      "annotation": "Black secures the king early, avoiding tactics on the back rank and freeing the rook to shift toward the center or queenside.",
       "shortNarration": "O-O is theory in the Kings Indian Double Fianchetto Attack."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: O-O is a known theory move in this line.",
+      "annotation": "White completes kingside safety and prepares to centralize the rook. This also opens the f-file for potential pressure if needed later.",
       "shortNarration": "Kings Indian Fianchetto: O-O follows theory in the Double Fianchetto Attack."
     },
     {
       "san": "Nbd7",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: Nbd7 is a known theory move in this line.",
+      "annotation": "The knight heads to d7, a flexible square that supports e5 advances and keeps options open for rerouting to f6 or c5 later.",
       "shortNarration": "Nbd7 is a known theory move in the Double Fianchetto Attack of the King's Indian."
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: Nc3 is a known theory move in this line.",
+      "annotation": "The knight joins the center with tempo, pressuring d5 and supporting the d4 pawn. This controls key central squares and limits Black's expansion.",
       "shortNarration": "Nc3 develops and attacks d5, a standard move in the Double Fianchetto Attack."
     },
     {
       "san": "e5",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: e5 is a known theory move in this line.",
+      "annotation": "Black strikes at the center, challenging White's pawn on d4 and gaining space. This counterattack is Black's main fighting resource against White's setup.",
       "shortNarration": "In the Double Fianchetto Attack, e5 is a theory move challenging the center."
     },
     {
       "san": "b3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Double Fianchetto Attack: b3 is a known theory move in this line.",
+      "annotation": "Rerouting the knight to d2 or e4 via b3 keeps White's pieces flexible while preparing to contest the central tension on d4 and e5.",
       "shortNarration": "b3 develops the bishop to b2, fianchettoing against Black's kingside."
     }
   ]

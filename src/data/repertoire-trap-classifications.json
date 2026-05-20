@@ -1,0 +1,20 @@
+{
+  "_meta": {
+    "purpose": "Classification of trapLines in src/data/repertoire.json into one of three kinds — mirrors the pattern from src/data/trap-line-classifications.json (which keys against pro-repertoires.json). Without this sidecar, audit-repertoire-orientation.mjs treats every trapLine as kind:trap and flags sacrificial-attack lines as INVERTED_MATERIAL when the student is correctly down material but has positional / king-safety / initiative compensation.",
+    "kinds": {
+      "trap": "Opponent's natural-looking move has a CONCRETE tactical refutation forcing material gain or mate within ~3 plies. Examples: Noah's Ark Trap, Legal's Mate, Nb5-Nc7 fork.",
+      "mistake": "Opponent's slip — punished via principle (counting, structural, tempo) or sacrificial attack where the win is positional accumulation. Examples: Fried Liver (knight sac for king hunt), Muzio Gambit (extreme dev sacrifice), Allgaier (knight sac vs King's Gambit), Greek Gift sacs.",
+      "theme": "Long maneuvering line about middlegame plans, structural ideas, fortress, bishop pair, pawn storms. Examples: Berlin Wall, KID kingside storm."
+    },
+    "key": "<openingId>::<trapName>"
+  },
+  "classifications": {
+    "italian-game::Fried Liver Attack": "mistake",
+    "italian-game::Giuoco Piano Queen Trap": "mistake",
+    "italian-game::Jerome Gambit": "mistake",
+    "italian-game::Lolli Attack": "mistake",
+    "kings-gambit::Muzio: Total Development Lead": "mistake",
+    "evans-gambit::Double Pawn Sacrifice": "mistake",
+    "evans-gambit::Qb3 f7 Battery": "mistake"
+  }
+}

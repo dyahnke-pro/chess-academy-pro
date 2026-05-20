@@ -1,0 +1,11 @@
+{
+  "id": "grunfeld-defence",
+  "status": "fetched",
+  "wikipediaTitle": "Grünfeld Defence",
+  "extract": "The Grünfeld Defence is a chess opening characterised by the moves:1. d4 Nf6\n2. c4 g6\n3. Nc3 d5",
+  "extractHtml": "<p>The <b>Grünfeld Defence</b> is a chess opening characterised by the moves:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>2. <span class=\"extiw\">c4</span> <span class=\"extiw\">g6</span></dd>\n<dd>3. <span class=\"extiw\">Nc3</span> <span class=\"extiw\">d5</span></dd></dl>",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence",
+  "pageId": 353956,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:32:46.822Z"
+}

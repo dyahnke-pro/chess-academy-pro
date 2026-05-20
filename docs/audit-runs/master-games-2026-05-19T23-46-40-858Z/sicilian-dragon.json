@@ -1,0 +1,44 @@
+{
+  "openingId": "sicilian-dragon",
+  "fromPgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6",
+  "depth": 10,
+  "games": [
+    {
+      "id": "rZjU3wqD",
+      "white": "Karjakin, Sergey",
+      "whiteRating": 2771,
+      "black": "Carlsen, M.",
+      "blackRating": 2881,
+      "winner": null,
+      "year": 2014,
+      "month": "2014-06",
+      "url": "https://lichess.org/rZjU3wqD",
+      "pgn": "[Event \"FIDE World Rapid 2014\"]\n[Site \"Dubai UAE\"]\n[Date \"2014.06.17\"]\n[Round \"6.2\"]\n[White \"Karjakin, Sergey\"]\n[Black \"Carlsen, M.\"]\n[Result \"1/2-1/2\"]\n[GameId \"rZjU3wqD\"]\n[WhiteElo \"2771\"]\n[BlackElo \"2881\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B77\"]\n[Opening \"Sicilian Defense: Dragon Variation, Yugoslav Attack\"]\n[Termination \"Normal\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 Nc6 8. Qd2 O-O 9. Bc4 Bd7 10. h4 h5 11. O-O-O Ne5 12. Bb3 Rc8 13. Bg5 Rc5 14. Kb1 Re8 15. Bh6 a5 16. a4 Qb6 17. g4 Rxc3 18. bxc3 Nxf3 19. Nxf3 Nxe4 20. Qd3 Nxc3+ 21. Kc1 Bxh6+ 22. Ng5 Bg7 23. Rdf1 d5 24. Rxf7 Qd4 25. gxh5 Qxd3 26. cxd3 gxh5 27. Rf2 Bd4 28. Rc2 Rf8 29. Re1 Rf4 30. Ne4 Nxe4 31. Bxd5+ e6 32. Bxe4 Kf8 33. Rc7 Ke7 34. Rxb7 Kd6 35. Kd2 Rxh4 36. Rh1 Rxh1 37. Bxh1 Bxa4 38. Bf3 h4 39. Rh7 Bf6 40. Rh5 Bd8 41. d4 Bb3 42. Kc3 a4 43. Rh8 Bf6 44. Rh6 Ke7 45. Rh7+ Kf8 46. Bg4 Kg8 47. Rb7 Kf8 48. Rxb3 Bxd4+ 49. Kxd4 axb3 50. Kc3 Ke7 51. Kxb3 e5 52. Kc4 Kf6 53. Kd3 Kg5 54. Bc8 Kf4 55. Ke2 Kg3 56. Ke3 h3 57. Bxh3 e4 58. Kxe4 1/2-1/2\n\n\n"
+    },
+    {
+      "id": "RjbXhrby",
+      "white": "Grischuk, Alexander",
+      "whiteRating": 2777,
+      "black": "Carlsen, Magnus",
+      "blackRating": 2863,
+      "winner": "white",
+      "year": 2020,
+      "month": "2020-09",
+      "url": "https://lichess.org/RjbXhrby",
+      "pgn": "[Event \"Saint Louis Rapid\"]\n[Site \"Lichess.org INT\"]\n[Date \"2020.09.17\"]\n[Round \"9\"]\n[White \"Grischuk, Alexander\"]\n[Black \"Carlsen, Magnus\"]\n[Result \"1-0\"]\n[GameId \"RjbXhrby\"]\n[WhiteElo \"2777\"]\n[BlackElo \"2863\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B75\"]\n[Opening \"Sicilian Defense: Dragon Variation, Yugoslav Attack, Early Deviations\"]\n[Termination \"Normal\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 a6 8. Qd2 h5 9. Bc4 Nbd7 10. Bb3 Nc5 11. O-O-O b5 12. Kb1 Bb7 13. a3 Nxb3 14. cxb3 Rc8 15. Nc2 Qc7 16. Bd4 O-O 17. Qf2 e5 18. Bb6 Qd7 19. Nb4 Rxc3 20. bxc3 Qe6 21. Kb2 Rc8 22. Ba5 d5 23. Qa7 Ba8 24. Nxa6 Bf8 25. Nc7 Qe7 26. Nxb5 Qe8 27. Nc7 Qe7 28. Bb6 dxe4 29. Nxa8 Qxa7 30. Bxa7 Rxa8 31. Bf2 Bxa3+ 32. Kc2 Be7 33. Ra1 Rc8 34. Rhd1 exf3 35. gxf3 e4 36. fxe4 Nxe4 37. Bd4 f5 38. Kb2 Kf7 39. b4 g5 40. Kb3 g4 41. Ra7 Ke6 42. Ra6+ Kf7 43. c4 Bd6 44. Bg1 Ke7 45. c5 Be5 46. Rd5 1-0\n\n\n"
+    },
+    {
+      "id": "nJ6sMTpL",
+      "white": "Anand, Viswanathan",
+      "whiteRating": 2800,
+      "black": "Carlsen, Magnus",
+      "blackRating": 2826,
+      "winner": null,
+      "year": 2010,
+      "month": "2010-08",
+      "url": "https://lichess.org/nJ6sMTpL",
+      "pgn": "[Event \"Arctic Stars Prelim\"]\n[Site \"Kristiansund\"]\n[Date \"2010.08.28\"]\n[Round \"3\"]\n[White \"Anand, Viswanathan\"]\n[Black \"Carlsen, Magnus\"]\n[Result \"1/2-1/2\"]\n[GameId \"nJ6sMTpL\"]\n[WhiteElo \"2800\"]\n[BlackElo \"2826\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"B77\"]\n[Opening \"Sicilian Defense: Dragon Variation, Yugoslav Attack\"]\n[Termination \"Normal\"]\n\n1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Be3 Bg7 7. f3 O-O 8. Qd2 Nc6 9. Bc4 Bd7 10. Bb3 Nxd4 11. Bxd4 b5 12. a4 b4 13. Nd5 Nxd5 14. Bxg7 Kxg7 15. exd5 a5 16. h4 e5 17. dxe6 Bxe6 18. O-O-O Bxb3 19. cxb3 Re8 20. h5 Qf6 21. Kb1 gxh5 22. g4 h4 23. g5 Qf5+ 24. Ka2 h3 25. Rh2 Kg8 26. Rdh1 Rac8 27. Qxd6 Rc2 28. Rxc2 Qxc2 29. Rxh3 Re1 30. Qd8+ Kg7 31. Qf6+ Kg8 1/2-1/2\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:47:21.786Z"
+}

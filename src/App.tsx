@@ -4,6 +4,7 @@ import { useAppStore } from './stores/appStore';
 import { getOrCreateMainProfile } from './services/dbService';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
+import { seedVerifiedLibraryNote } from './services/coachMemoryService';
 import { seedPuzzles } from './services/puzzleService';
 import { runAutoImportIfDue } from './services/autoImportScheduler';
 import { getSharedAudioContext } from './services/audioContextManager';
@@ -44,6 +45,7 @@ import { CoachReviewListPage } from './components/Coach/CoachReviewListPage';
 import { CoachReviewSessionPage } from './components/Coach/CoachReviewSessionPage';
 import { CoachPage } from './components/Coach/CoachPage';
 import { TacticsPage } from './components/Tactics/TacticsPage';
+import { FindSquarePage } from './components/Tactics/FindSquarePage';
 import { TacticalProfilePage } from './components/Tactics/TacticalProfilePage';
 import { TacticDrillPage } from './components/Tactics/TacticDrillPage';
 import { TacticSetupPage } from './components/Tactics/TacticSetupPage';
@@ -190,8 +192,11 @@ export function App(): JSX.Element {
         }
         setOnboardingSkipped(true);
 
-        // Seed data in background (no-op if already seeded)
-        void seedDatabase();
+        // Seed data in background (no-op if already seeded).
+        // seedDatabase is single-flight guarded so the strict-mode
+        // double-invoke + re-renders can't race the bulkPut writes.
+        void seedDatabase().catch((e: unknown) => console.error('[seed] failed:', e));
+        void seedVerifiedLibraryNote();
         void seedPuzzles();
 
         // Biweekly chess.com / lichess auto-import. Fire-and-forget,
@@ -267,6 +272,7 @@ export function App(): JSX.Element {
           <Route path="/tactics/setup" element={<ErrorBoundary><TacticSetupPage /></ErrorBoundary>} />
           <Route path="/tactics/create" element={<ErrorBoundary><TacticCreatePage /></ErrorBoundary>} />
           <Route path="/tactics/mistakes" element={<ErrorBoundary><MyMistakesPage /></ErrorBoundary>} />
+          <Route path="/tactics/find-square" element={<ErrorBoundary><FindSquarePage /></ErrorBoundary>} />
           <Route path="/tactics/adaptive" element={<ErrorBoundary><AdaptivePuzzlePage /></ErrorBoundary>} />
           <Route path="/tactics/classic" element={<ErrorBoundary><PuzzleTrainerPage /></ErrorBoundary>} />
           <Route path="/tactics/weakness" element={<ErrorBoundary><WeaknessPuzzlePage /></ErrorBoundary>} />

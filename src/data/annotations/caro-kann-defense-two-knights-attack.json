@@ -13,17 +13,17 @@
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Caro Kann Defense Two Knights Attack: Nc3 is a known theory move in this line.",
+      "annotation": "The knight reaches c3, attacking d5 immediately and preparing to dominate the center. This aggressive setup defines the Two Knights Attack.",
       "shortNarration": "Nc3 is theory in the Caro-Kann Two Knights Attack."
     },
     {
       "san": "d5",
-      "annotation": "Continuing Caro Kann Defense Two Knights Attack: d5 is a known theory move in this line.",
+      "annotation": "Black strikes at e4 with the central pawn, challenging White's space and preventing Nxd5 tactics. This is Black's fundamental counterattack.",
       "shortNarration": "Caro Kann Two Knights Attack: d5 is the theoretical response."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Caro Kann Defense Two Knights Attack: Nf3 is a known theory move in this line.",
+      "annotation": "The f3 knight supports e4 and prepares exd5, keeping pressure on Black's center while maintaining piece coordination. White avoids allowing Black a comfortable setup.",
       "shortNarration": "Nf3 develops and supports the e4 pawn in the Caro-Kann Two Knights Attack."
     }
   ]

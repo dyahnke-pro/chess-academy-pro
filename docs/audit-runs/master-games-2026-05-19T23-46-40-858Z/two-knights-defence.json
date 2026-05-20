@@ -1,0 +1,44 @@
+{
+  "openingId": "two-knights-defence",
+  "fromPgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5",
+  "depth": 7,
+  "games": [
+    {
+      "id": "9BVdEqeK",
+      "white": "So, W..",
+      "whiteRating": 2770,
+      "black": "Carlsen, M..",
+      "blackRating": 2862,
+      "winner": "black",
+      "year": 2021,
+      "month": "2021-02",
+      "url": "https://lichess.org/9BVdEqeK",
+      "pgn": "[Event \"Opera Euro Rapid KO 2021\"]\n[Site \"chess24.com INT\"]\n[Date \"2021.02.13\"]\n[Round \"3.12\"]\n[White \"So, W..\"]\n[Black \"Carlsen, M..\"]\n[Result \"0-1\"]\n[GameId \"9BVdEqeK\"]\n[WhiteElo \"2770\"]\n[BlackElo \"2862\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C58\"]\n[Opening \"Italian Game: Two Knights Defense, Polerio Defense, Bishop Check Line\"]\n[Termination \"Normal\"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. Bb5+ c6 7. dxc6 bxc6 8. Bd3 Nd5 9. Nf3 Bd6 10. O-O O-O 11. Re1 f5 12. Nxe5 Qf6 13. Nf3 g5 14. c4 Nf4 15. Bf1 g4 16. d4 gxf3 17. Qxf3 Ne6 18. Qc3 Nb7 19. c5 Bc7 20. b4 a5 21. b5 Qxd4 22. Qxd4 Nxd4 23. Bc4+ Be6 24. Bxe6+ Nxe6 25. Rxe6 Nxc5 26. Re2 Rfe8 27. Nc3 cxb5 28. Be3 Be5 29. Bxc5 Bxc3 30. Rxe8+ Rxe8 31. Rb1 b4 32. Kf1 Re5 33. Be3 a4 34. Rc1 a3 35. g3 Rb5 36. Rc2 b3 37. axb3 Rxb3 38. Kg2 Kf7 39. Bd2 Be5 40. Bf4 Bxf4 41. gxf4 Rb7 42. Ra2 Ra7 43. Kg3 Ra4 44. Kh4 Kg6 45. Kg3 Kf6 46. h3 h5 47. Kh4 Kg6 48. Kg3 Kg7 49. Kf3 h4 50. Ke2 Kf6 51. Kd1 Ke6 52. Kc1 Kd5 53. Kb1 Ke4 54. Rd2 Kf3 55. Ka2 Kg2 0-1\n\n\n"
+    },
+    {
+      "id": "87u6NYxG",
+      "white": "Firouzja, Alireza",
+      "whiteRating": 2767,
+      "black": "Carlsen, M.",
+      "blackRating": 2832,
+      "winner": "white",
+      "year": 2024,
+      "month": "2024-09",
+      "url": "https://lichess.org/87u6NYxG",
+      "pgn": "[Event \"SpeedChess Final 2024\"]\n[Site \"Paris FRA\"]\n[Date \"2024.09.08\"]\n[Round \"2.22\"]\n[White \"Firouzja, Alireza\"]\n[Black \"Carlsen, M.\"]\n[Result \"1-0\"]\n[GameId \"87u6NYxG\"]\n[WhiteElo \"2767\"]\n[BlackElo \"2832\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C57\"]\n[Opening \"Italian Game: Two Knights Defense, Fried Liver Attack\"]\n[Termination \"Unknown\"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Nxd5 6. Nxf7 Kxf7 7. Qf3+ Ke6 8. Nc3 Ne7 9. O-O c6 10. d4 b5 11. Bb3 a5 12. Re1 Ng6 13. Ne4 Be7 14. dxe5 Rf8 15. Qh5 a4 16. Qxh7 Nxe5 17. Bxd5+ cxd5 18. Nc3 Bc5 19. Be3 d4 20. Ne4 dxe3 21. Nxc5+ Kd6 22. Rxe3 Kxc5 23. Rxe5+ Kb6 24. Qxg7 Qf6 25. Qg3 Qf4 26. Qxf4 Rxf4 27. g3 Rc4 28. c3 a3 29. bxa3 Rxa3 30. h4 Raxc3 31. h5 Bb7 32. Kh2 Rc2 33. Rf5 Be4 34. Rf6+ Ka5 35. g4 R4c3 36. h6 Kb4 37. Rf4 Rc4 38. Kg3 R2c3+ 39. Kh4 Bh7 40. Rf7 Rc7 41. Rxc7 Rxc7 42. f4 Kc5 43. Rc1+ Kd6 44. Rxc7 Kxc7 45. Kg5 1-0\n\n\n"
+    },
+    {
+      "id": "yx011mel",
+      "white": "Aronian, L.",
+      "whiteRating": 2772,
+      "black": "Caruana, F.",
+      "blackRating": 2822,
+      "winner": null,
+      "year": 2019,
+      "month": "2019-11",
+      "url": "https://lichess.org/yx011mel",
+      "pgn": "[Event \"Superbet Blitz 2019\"]\n[Site \"Bucharest ROU\"]\n[Date \"2019.11.09\"]\n[Round \"9.3\"]\n[White \"Aronian, L.\"]\n[Black \"Caruana, F.\"]\n[Result \"1/2-1/2\"]\n[GameId \"yx011mel\"]\n[WhiteElo \"2772\"]\n[BlackElo \"2822\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"C58\"]\n[Opening \"Italian Game: Two Knights Defense, Polerio Defense, Bishop Check Line\"]\n[Termination \"Normal\"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. Bb5+ c6 7. dxc6 bxc6 8. Bd3 h6 9. Ne4 Nd5 10. Nbc3 Be7 11. Ng3 O-O 12. Bf5 Bxf5 13. Nxf5 Bg5 14. d3 Rb8 15. O-O Bxc1 16. Qxc1 Nf4 17. Re1 Qg5 18. Ng3 c5 19. Nce2 Nc6 20. Nxf4 exf4 21. Ne4 Qf5 22. f3 Nd4 23. c3 Ne6 24. Qc2 Rfd8 25. a3 a5 26. Rad1 Rd7 27. Re2 Qd5 28. Qa4 Rdb7 29. Rdd2 Qd8 30. Qc4 Qb6 31. Nf2 Rd8 32. Ng4 Rbd7 33. Ne5 Rd5 34. Qa4 Qc7 35. Qc6 Qe7 36. Qa6 Qf6 37. Ng4 Qg5 38. Nf2 Qf5 39. Qb7 1/2-1/2\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:49:43.921Z"
+}

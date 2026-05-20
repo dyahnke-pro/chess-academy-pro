@@ -76,6 +76,18 @@ DO NOT emit decorative arrows. If you can't tie the arrow to a specific clause i
 
 DO NOT use red unless you're warning against a specific move or showing a specific threat. Red is a strong visual signal; using it for routine moves dilutes the meaning. If you wouldn't say "this is dangerous" in prose, don't use red.
 
+═══ STEP-BY-STEP WALKTHROUGHS — ARROW ON EVERY COACH MOVE (NON-NEGOTIABLE) ═══
+
+When the student is walking through a line move-by-move ("I played e4. Your move." → coach plays + comments → student plays next ply + says "I played Nc6. Your move." → repeat), every coach response MUST include arrows. Two specific obligations on every step:
+
+1. **Arrow on the move you just played.** If you called \`play_move {"san":"e5"}\` on this turn, emit \`[BOARD: arrow:e7-e5:green]\` in the same response so the student sees WHERE the move went. The board animates the piece but the arrow lingers — it's the breadcrumb the student follows. Without it the student has to find the moved piece visually each turn; with it, your move is unmissable.
+
+2. **Arrows on every threat or candidate you discuss.** If you say "watch out for Bxh7+ next" → \`[BOARD: arrow:c1-h7:red]\`. If you say "the natural reply is Nf3" → \`[BOARD: arrow:g1-f3:green]\`. EVERY SAN mentioned in prose needs a matching arrow on the same response, no exceptions, no "you can probably see it." The student is on a phone screen; pieces look similar; arrows are the difference between "obvious" and "where?"
+
+Production audit (2026-05-18, David's report): in a multi-turn Vienna walkthrough the brain shipped 5 consecutive coach moves with ZERO arrows. The student had to ask "can you draw arrows so I don't have to ask each time" mid-session. After this rule lands a brain response that mentions a SAN without an arrow triggers a \`coach-mentioned-san-without-arrow\` audit — that's the observability signal we'll use to confirm the rule actually changed behavior.
+
+DO NOT skip arrows because "the move animation already shows it." The animation is gone in 200ms; the arrow stays until the next turn. The student is LEARNING — they need the persistent visual anchor.
+
 ═══ MULTI-MOVE SEQUENCES — NEVER play_move PER PLY (NON-NEGOTIABLE) ═══
 
 When you want to demonstrate a sequence of moves ("the Vienna Gambit goes 1.e4 e5 2.Nc3 Nc6 3.f4 d5", or "the Greek Gift sac runs Bxh7+ Kxh7 Ng5+ Kg8 Qh5"), do NOT call \`play_move\` for each ply in the line. \`play_move\` is for ONE move on YOUR color's turn during practical play. It is not a way to walk a hypothetical line ply-by-ply.
@@ -104,6 +116,14 @@ If you stay on /coach/teach (e.g. the student wants to discuss a single position
 3. Use \`[BOARD: arrow:from-to:color]\` markers on the current position to highlight pieces / squares the student should focus on (see ARROWS rule for grounding requirements).
 
 When in doubt: \`start_walkthrough_for_opening\` for guided lessons, ONE \`set_board_position\` per turn for static discussion. NEVER chain set_board_position calls in a single response.
+
+═══ SET-BOARD SENTENCE — REQUIRED ON EVERY STATE-CHANGING TURN ═══
+
+Whenever your response calls \`set_board_position\` OR \`start_walkthrough_for_opening\`, the \`[VOICE: ...]\` block MUST begin with the sentence "Setting the board to {opening name}." (or "Starting the {opening name} walkthrough.") so the spoken signal matches the visual signal. The student's verbosity setting can be brief (≤2 sentences) — they're entitled to know the board changed under them. The first sentence of a brief response is preserved verbatim by the post-process cap; everything after may be clipped. Putting the state-change announcement FIRST guarantees the student hears it no matter what cap fires.
+
+Live audit 2026-05-19 (Bug A): the brain responded with 429 chars of multi-opening recommendation, the brief cap clipped to 136 chars, the student heard "Vienna is your bread and butter" — but the board silently switched to Danish Gambit because the tools fired for Danish Gambit. Audio said one opening, visual showed another. The "Setting the board to {name}" sentence is the contract that keeps them aligned.
+
+A post-process check will detect when a state-changing tool fired AND the voice didn't begin with the canonical sentence — and prepend it. So you'll get the right behavior either way; following the rule yourself just keeps the prose natural instead of having the wrapper-prepend feel mechanical.
 
 ═══ PLAY MODE TRIGGERS — WHEN TO CALL play_move (NON-NEGOTIABLE) ═══
 
@@ -231,6 +251,24 @@ Polly TTS reads ALOUD; the chat bubble shows TEXT. They're not the same content.
 2. **The full teaching text** — the rest of your response, AFTER the \`[VOICE: ...]\` marker. Chat-only (marker strips it from voice). Depth goes here: opening names, master-game references, Stockfish eval numbers, multi-move variations, candidate-move comparisons. The student reads this at their pace while listening to the spoken summary. Length is up to you — substance over brevity, but every sentence earns its place.
 
 Fallback: if you forget the \`[VOICE: ...]\` marker, the surface speaks only your first sentence — most of your teaching beat goes silent. Always emit the marker.
+
+═══ ASKING THE STUDENT A QUESTION — USE [CHOICES: A | B | C] ═══
+
+When your response asks the student a question that has DISCRETE answers — "Did you mean Najdorf or Dragon?", "Which side do you want to play, White or Black?", "Want to drill, quiz, or just play it out?", "Should I start with the main line, the Spanish, or the Italian?" — emit a \`[CHOICES: option | option | option]\` marker AT THE END of your response. The surface renders these as tap-target chips above the chat input so the student answers by tapping instead of typing.
+
+Format rules:
+- Each option is the exact text that will be SENT as the student's next message when tapped. Write it as if the student typed it.
+- Pipe-separated. 2-6 options max — more than that overflows the chip row and the picker stops feeling like a help.
+- Don't restate the options in prose right before the marker — the chips speak for themselves. Just ask the question.
+- Don't emit \`[CHOICES:]\` when the question is open-ended ("What do you want to learn?", "Tell me what's bothering you about this position"). Chips are for when the answer space is small and discrete.
+
+Examples:
+  • \`Did you mean the Najdorf or the Dragon? [CHOICES: Najdorf | Dragon]\`
+  • \`Which side do you want to play? [CHOICES: White | Black]\`
+  • \`Want me to walk through it, drill the moves, or quiz you? [CHOICES: walk through it | drill the moves | quiz me]\`
+  • \`Should we focus on what went wrong, or just keep playing? [CHOICES: review the mistake | keep playing]\`
+
+Without the marker the student has to type — which is fine for open questions but unnecessary friction for "yes/no" or "A/B/C" picks. Emit the marker every time the answer space is closed.
 
 ═══ PER-TURN SHAPE WHEN PLAYING IS HAPPENING ═══
 
@@ -664,11 +702,220 @@ function formatLiveStateBlock(state: LiveState): string {
     );
     parts.push(lines.join('\n'));
   }
+  if (state.tactics) {
+    parts.push(formatTacticsSubBlock(state.tactics));
+  }
+  if (state.annotationContext) {
+    const block = formatAnnotationContextSubBlock(state.annotationContext);
+    if (block) parts.push(block);
+  }
+  if (state.bookGrounding) {
+    const block = formatBookGroundingSubBlock(state.bookGrounding);
+    if (block) parts.push(block);
+  }
+  if (state.middlegamePlan) {
+    const block = formatMiddlegamePlanSubBlock(state.middlegamePlan);
+    if (block) parts.push(block);
+  }
+  if (state.modelGames) {
+    const block = formatModelGamesSubBlock(state.modelGames);
+    if (block) parts.push(block);
+  }
   if (state.moveHistory && state.moveHistory.length > 0) {
     parts.push(`- Move history: ${state.moveHistory.join(' ')}`);
   }
   if (state.userJustDid) parts.push(`- User just did: ${state.userJustDid}`);
   return parts.join('\n');
+}
+
+/** Render the pre-computed tactical context as a sub-block under
+ *  [Live state]. The format mirrors the lichessSnapshot pattern —
+ *  ground truth pre-computed by the surface, with an explicit "USE
+ *  THIS — don't invent" closer that anchors the brain to G3-style
+ *  bounded vocabulary. The block is omitted entirely when nothing
+ *  was detected (no tactics + no hanging + no upcoming) so a quiet
+ *  position adds zero tokens to the envelope. */
+function formatTacticsSubBlock(tactics: NonNullable<LiveState['tactics']>): string {
+  const has =
+    tactics.immediate.length > 0 ||
+    tactics.hanging.length > 0 ||
+    tactics.threats.length > 0 ||
+    tactics.opportunities.length > 0;
+  if (!has) return '';
+  const lines: string[] = [
+    `- Tactical context (PRE-COMPUTED — bounded vocabulary, G3 applies; lookahead ${tactics.lookaheadDepth} half-moves):`,
+  ];
+  if (tactics.immediate.length > 0) {
+    lines.push(`    Immediate on the board:`);
+    for (const t of tactics.immediate) {
+      lines.push(`      ${t.type.toUpperCase()} — ${t.description}`);
+    }
+  }
+  if (tactics.hanging.length > 0) {
+    const list = tactics.hanging
+      .map((h) => `${h.color === 'w' ? 'white' : 'black'} ${pieceFullName(h.piece)} on ${h.square}`)
+      .join(', ');
+    lines.push(`    Hanging pieces: ${list}`);
+  }
+  if (tactics.threats.length > 0) {
+    lines.push(`    Opponent threats (warn the student, name the pattern):`);
+    for (const t of tactics.threats) {
+      lines.push(`      depth ${t.depthAhead}/${tactics.lookaheadDepth}: ${t.type.toUpperCase()} — ${t.description} (line: ${t.line.join(' ')})`);
+    }
+  }
+  if (tactics.opportunities.length > 0) {
+    lines.push(`    Student opportunities (point these out, name the pattern):`);
+    for (const t of tactics.opportunities) {
+      lines.push(`      depth ${t.depthAhead}/${tactics.lookaheadDepth}: ${t.type.toUpperCase()} — ${t.description} (line: ${t.line.join(' ')})`);
+    }
+  }
+  lines.push(
+    `    NAME the pattern in prose (fork / pin / skewer / back rank / removal of guard / overloaded / discovered attack / etc.). For depth ≥ 2, walk the line: "if you play X, opponent has Y in N." NEVER invent a tactic that isn't in this block. NEVER claim a tactic at greater depth than ${tactics.lookaheadDepth}. The student is intermediate-or-stronger if lookahead ≥ 3 — push them to calculate the full sequence.`,
+  );
+  return lines.join('\n');
+}
+
+/** Render the curated opening-book annotation context as a sub-block
+ *  under [Live state]. Mirrors the `lichessSnapshot` / tactics
+ *  pattern — pre-fetched ground truth with an explicit "USE THIS, do
+ *  not contradict" closer that anchors the brain to G3-bounded
+ *  vocabulary. Returns empty string when no windowed moves are
+ *  present so a position past the book adds zero tokens. */
+export function formatAnnotationContextSubBlock(
+  ctx: NonNullable<LiveState['annotationContext']>,
+): string {
+  if (!ctx.moves.length) return '';
+  const lines: string[] = ['- Opening book (PRE-LOADED curated annotations):'];
+  lines.push(
+    `    Source: ${ctx.openingName} (id ${ctx.openingId}, ${ctx.totalAnnotated} annotated plies total). Current ply: ${ctx.currentPly}.`,
+  );
+  for (const m of ctx.moves) {
+    const heading = `    Ply ${m.ply} (${m.san}):`;
+    lines.push(heading);
+    if (m.annotation) lines.push(`      ${m.annotation}`);
+    if (m.shortNarration && m.shortNarration !== m.annotation) {
+      lines.push(`      Short: ${m.shortNarration}`);
+    }
+    if (m.pawnStructure) lines.push(`      Structure: ${m.pawnStructure}`);
+    if (m.plans && m.plans.length > 0) {
+      lines.push(`      Plans: ${m.plans.map((p) => `• ${p}`).join(' ')}`);
+    }
+    if (m.alternatives && m.alternatives.length > 0) {
+      lines.push(`      Alternatives: ${m.alternatives.map((a) => `• ${a}`).join(' ')}`);
+    }
+  }
+  lines.push(
+    `    USE this text as authoritative book grounding. RIFF on it — do not contradict its plans / structure / alternatives. When the current position is past the windowed plies (current ply ${ctx.currentPly} > last entry above), draw on the trajectory rather than inventing fresh book moves. NEVER invent alternative lines the book doesn't list.`,
+  );
+  return lines.join('\n');
+}
+
+/** Render the curated model-games block as a sub-block under
+ *  [Live state]. Each shipped game carries player + result + year +
+ *  event + overview + early-PGN + critical moments — the brain can
+ *  cite "Morphy vs Duke of Brunswick 1858" with the actual
+ *  positional context, not invented prose. Empty string when zero
+ *  games shipped so the block adds zero tokens. */
+export function formatModelGamesSubBlock(
+  ctx: NonNullable<LiveState['modelGames']>,
+): string {
+  if (!ctx.games.length) return '';
+  const lines: string[] = [
+    `- Curated model games (PRE-LOADED, ${ctx.games.length}/${ctx.totalAvailable} for ${ctx.openingName}):`,
+  ];
+  for (const g of ctx.games) {
+    lines.push(`    [${g.id}] ${g.white} vs ${g.black} (${g.event}, ${g.year}) — ${g.result}`);
+    if (g.overview) lines.push(`      ${g.overview}`);
+    if (g.pgnPrefix) lines.push(`      Opening PGN: ${g.pgnPrefix}`);
+    if (g.criticalMoments.length > 0) {
+      lines.push(`      Critical moments:`);
+      for (const m of g.criticalMoments) {
+        lines.push(`        • Move ${m.moveNumber} (${m.concept}) — ${m.annotation}`);
+      }
+    }
+  }
+  lines.push(
+    `    CITE these games by name + year when teaching the opening. Reference the critical moments and concepts shown above. NEVER fabricate "Carlsen vs X 2020" / "Morphy vs Y" — if the game isn't in this block, you can't cite it. Use lichess_master_games if the student asks for a specific year/player combo you don't have.`,
+  );
+  return lines.join('\n');
+}
+
+/** Render the named middlegame plan for the current opening as a
+ *  sub-block under [Live state]. Each plan covers title + overview +
+ *  strategic themes + pawn breaks + piece maneuvers + endgame
+ *  transitions — the brain's structural compass for "what's the
+ *  plan?" / "what should I play next?" questions. Returns empty
+ *  string when the plan carries no content (extremely rare —
+ *  the curated source has ≥1 theme on every entry). */
+export function formatMiddlegamePlanSubBlock(
+  plan: NonNullable<LiveState['middlegamePlan']>,
+): string {
+  if (!plan.title) return '';
+  const lines: string[] = [
+    `- Middlegame plan (PRE-LOADED, curated, id=${plan.id}):`,
+    `    Opening: ${plan.openingId}. Plan title: "${plan.title}".`,
+  ];
+  if (plan.overview) lines.push(`    Overview: ${plan.overview}`);
+  if (plan.criticalPositionFen) {
+    lines.push(`    Critical position FEN: ${plan.criticalPositionFen}`);
+  }
+  if (plan.strategicThemes.length > 0) {
+    lines.push(`    Strategic themes (${plan.strategicThemes.length}):`);
+    for (const t of plan.strategicThemes) lines.push(`      • ${t}`);
+  }
+  if (plan.pawnBreaks.length > 0) {
+    lines.push(`    Pawn breaks (${plan.pawnBreaks.length}):`);
+    for (const b of plan.pawnBreaks) {
+      lines.push(`      • ${b.move} — ${b.explanation}`);
+    }
+  }
+  if (plan.pieceManeuvers.length > 0) {
+    lines.push(`    Piece maneuvers (${plan.pieceManeuvers.length}):`);
+    for (const m of plan.pieceManeuvers) {
+      lines.push(`      • ${m.piece} ${m.route} — ${m.explanation}`);
+    }
+  }
+  if (plan.endgameTransitions.length > 0) {
+    lines.push(`    Endgame transitions:`);
+    for (const e of plan.endgameTransitions) lines.push(`      • ${e}`);
+  }
+  lines.push(
+    `    USE this plan to answer "what should I play next" / "what's the strategic idea". RIFF on the themes — don't contradict them. When recommending a pawn break or maneuver, prefer one from this list.`,
+  );
+  return lines.join('\n');
+}
+
+/** Render the classical-book grounding block as a sub-block under
+ *  [Live state]. The block text is already pre-formatted by
+ *  `chessConceptService.buildCoachChatContext` (header + passages +
+ *  footer), so we mostly pass it through. Wrapped with a single
+ *  leading bullet so the indentation matches the lichessSnapshot /
+ *  annotationContext / tactics sub-blocks. Returns empty string when
+ *  source count is 0 so a no-match call adds zero tokens. */
+export function formatBookGroundingSubBlock(
+  grounding: NonNullable<LiveState['bookGrounding']>,
+): string {
+  if (!grounding.block || grounding.sourceCount === 0) return '';
+  // Indent the multi-line block under the bullet for visual
+  // alignment with siblings. Block already has its own header/footer.
+  const indented = grounding.block
+    .split('\n')
+    .map((l) => `    ${l}`)
+    .join('\n');
+  return `- Classical chess-book grounding (PRE-LOADED, ${grounding.sourceCount} passage${grounding.sourceCount === 1 ? '' : 's'} from Capablanca / Lasker / Staunton / Young / Edge / Bird):\n${indented}\n    USE these passages to shape your prose. DO NOT quote verbatim, DO NOT contradict the ideas, DO NOT cite an author the block doesn't include. When the topic is outside the book corpus, fall back to your own knowledge — but if the block IS present, anchor your reply in it.`;
+}
+
+function pieceFullName(piece: string): string {
+  const key = piece.toLowerCase();
+  switch (key) {
+    case 'p': return 'pawn';
+    case 'n': return 'knight';
+    case 'b': return 'bishop';
+    case 'r': return 'rook';
+    case 'q': return 'queen';
+    case 'k': return 'king';
+    default: return piece;
+  }
 }
 
 function formatToolbeltBlock(toolbelt: ToolDefinition[]): string {

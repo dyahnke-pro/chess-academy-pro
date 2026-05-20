@@ -4,6 +4,7 @@ import {
   coachNarrationToLength,
   resolvePhaseNarrationVerbosity,
   resolveLlmNarrationDensity,
+  applyBriefVoiceCap,
 } from './coachNarration';
 
 describe('resolveCoachNarration', () => {
@@ -181,5 +182,122 @@ describe('resolveLlmNarrationDensity', () => {
     expect(resolveLlmNarrationDensity({ coachVerbosity: 'fast' })).toBe('fast');
     expect(resolveLlmNarrationDensity({ coachVerbosity: 'none' })).toBe('none');
     expect(resolveLlmNarrationDensity({ coachVerbosity: 'unlimited' })).toBe('unlimited');
+  });
+});
+
+describe('applyBriefVoiceCap', () => {
+  it('passes through when verbosity is full', () => {
+    const long = 'This is a long response. '.repeat(20).trim();
+    const r = applyBriefVoiceCap(long, 'full');
+    expect(r.text).toBe(long);
+    expect(r.truncated).toBe(false);
+  });
+
+  it('passes through when verbosity is silent (caller decides whether to speak)', () => {
+    const r = applyBriefVoiceCap('whatever', 'silent');
+    expect(r.text).toBe('whatever');
+    expect(r.truncated).toBe(false);
+  });
+
+  it('passes short text through unchanged on brief', () => {
+    const short = 'Knight to f3.';
+    const r = applyBriefVoiceCap(short, 'brief');
+    expect(r.text).toBe(short);
+    expect(r.truncated).toBe(false);
+  });
+
+  it('caps to 2 sentences on brief', () => {
+    const text = 'First sentence is here. Second sentence is here. Third sentence is here. Fourth sentence is here.';
+    const r = applyBriefVoiceCap(text, 'brief');
+    expect(r.truncated).toBe(true);
+    expect(r.text).not.toContain('Third');
+    expect(r.text).not.toContain('Fourth');
+    expect(r.text).toContain('First');
+    expect(r.text).toContain('Second');
+  });
+
+  it('caps to 30 words on brief even if sentences fit', () => {
+    // 35 words, single sentence so the sentence cap doesn't trigger
+    // — only the word cap should fire.
+    const text =
+      'The Vienna Gambit starts with f4 a sharp pawn sacrifice to rip open the f-file for your rook giving you fast development and an attack on the f7 square which is often weak in many openings indeed.';
+    const r = applyBriefVoiceCap(text, 'brief');
+    expect(r.truncated).toBe(true);
+    const wordCount = r.text.split(/\s+/).length;
+    expect(wordCount).toBeLessThanOrEqual(30);
+  });
+
+  it("matches David's audit example — 497-char response gets clipped to ≤30 words on brief", () => {
+    // From audit Finding 5 (the response that ignored "short"):
+    const audited =
+      "The move is f4 — that's what turns this into the Vienna Gambit. By pushing the f-pawn forward, you're offering it as a sacrifice to open up lines for your pieces and create attacking chances against Black's king. The key idea is to gain rapid development and put pressure on f7, which is often weak in the opening. This sacrifice can lead to dynamic positions where White has the initiative.";
+    const r = applyBriefVoiceCap(audited, 'brief');
+    expect(r.truncated).toBe(true);
+    // Audit Finding 5 reported length=497 in prod; our test fixture
+    // is shorter (we transcribed only the visible textPreview). 300
+    // is the loose lower bound that proves the truncator fired.
+    expect(r.originalLength).toBeGreaterThan(300);
+    const words = r.text.split(/\s+/).length;
+    expect(words).toBeLessThanOrEqual(30);
+  });
+
+  it('returns originalLength so callers can audit how much was clipped', () => {
+    const r = applyBriefVoiceCap('  hello world  ', 'brief');
+    expect(r.originalLength).toBe(15);
+  });
+
+  describe('Bug F regression — sentence splitter must not eat digits before periods', () => {
+    // Live audit 2026-05-19: the previous regex
+    // `/[^.!?\n]+(?<!\d)[.!?]?/g` backtracked when the SAN-disambiguation
+    // lookbehind failed, dropping the digit from any SAN ending in
+    // [1-8] followed by a period. Combined with the join-with-space,
+    // the digit AND the period vanished from spoken output.
+
+    it('"Nb4. Your opponent..." keeps the 4 and the period boundary', () => {
+      // From audit Finding 179 (spoken "Well played, knight to b Your
+      // opponent r" with the 4 silently dropped).
+      const input = 'Well played, knight to b4. Your opponent responds with h5. Now we continue.';
+      const r = applyBriefVoiceCap(input, 'brief');
+      expect(r.text).toContain('knight to b4');
+      expect(r.text).not.toMatch(/knight to b\s+Your/);
+    });
+
+    it('"Nbd7. Nbd7..." does NOT collapse into "Nbd Nbd7"', () => {
+      // From audit Finding 217 (spoken "Correct, Nbd Nbd7 gets the
+      // knight..." — the leading "Nbd7" lost its 7 AND its period).
+      const input = 'Correct, Nbd7. Nbd7 gets the knight into the game. The knight is well-placed.';
+      const r = applyBriefVoiceCap(input, 'brief');
+      // The leading "Nbd7" must keep its 7.
+      expect(r.text).toMatch(/Correct,\s+Nbd7\b/);
+      // Must NOT have the truncated "Nbd " (with space, no digit).
+      expect(r.text).not.toMatch(/\bNbd Nbd7\b/);
+    });
+
+    it('"cxd5. The position..." keeps the 5', () => {
+      // From audit Finding 283 — "That's it! c-pawn takes d The position..."
+      const input = "That's it. cxd5 picks up material. The position keeps getting better.";
+      const r = applyBriefVoiceCap(input, 'brief');
+      expect(r.text).toContain('cxd5');
+      expect(r.text).not.toMatch(/cxd\s/);
+    });
+
+    it('"f3.f4 then..." does NOT split on SAN-disambiguation periods', () => {
+      // SAN disambiguation: "f3." in opening notation isn't a sentence
+      // end. Splitter must skip it and keep the following text.
+      const input = 'After 1.e4 e5 2.Nf3 Nc6 3.Bc4 we reach the Italian Game. This is sharp.';
+      const r = applyBriefVoiceCap(input, 'brief');
+      // The early-out should fire (2 actual sentences within word
+      // budget) and return the input unchanged.
+      expect(r.truncated).toBe(false);
+      expect(r.text).toContain('Nf3 Nc6');
+    });
+
+    it('joined sentences preserve their own terminators (no run-on speech)', () => {
+      const input = 'First sentence. Second sentence. Third sentence. Fourth sentence.';
+      const r = applyBriefVoiceCap(input, 'brief');
+      expect(r.truncated).toBe(true);
+      // Both kept sentences should still have their terminators.
+      expect(r.text).toMatch(/First sentence\..+Second sentence\./);
+    });
   });
 });

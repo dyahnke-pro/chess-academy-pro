@@ -86,6 +86,61 @@ export interface MistakePuzzle {
   attempts: number;
   successes: number;
   tacticType?: TacticType | null;
+  /** Last solve-attempt duration in ms. Populated by gradeMistakePuzzle
+   *  from the board's elapsedMs timer. Drives /weaknesses aggregation:
+   *  "slow on skewers" / "fast on forks". Always recorded regardless
+   *  of the visible-clock toggle — that's the whole point of the
+   *  background-mode default. */
+  lastSolveTimeMs?: number;
+  /** Best (fastest correct) solve time in ms across all attempts.
+   *  Null if never solved correctly. */
+  bestSolveTimeMs?: number;
+  /** Rolling history of solve times in ms (most-recent first, capped
+   *  at the last 10 attempts to keep the record small). */
+  solveTimes?: number[];
+}
+
+// ─── Find-the-Square (board-vision drill) ──────────────────────────────────
+
+/** A single click during the Find-the-Square drill. David's spec
+ *  2026-05-19: blank board, single pawn (a2 white / h7 black) shows
+ *  the student's color, target square pops up, user clicks. Each
+ *  click is logged — timing + correctness feed the /weaknesses
+ *  aggregator as "blind squares" insights ("you're slow on g5, b3").
+ *
+ *  No adaptive tier system: every round is a random square. Sequence
+ *  mode grows the per-round chain length as streak holds (2 → 3 → 4
+ *  → 5); single mode is one square per round always. */
+export interface FindSquareAttempt {
+  id: string;
+  timestamp: number;
+  /** Student's playing color — drives pawn placement (a2 for white,
+   *  h7 for black) and board orientation (pawn always at bottom). */
+  color: 'white' | 'black';
+  /** The square that was prompted (algebraic SAN, e.g. "h7"). */
+  target: string;
+  /** The square the student actually clicked. Equals `target` when
+   *  `correct` is true. */
+  clicked: string;
+  correct: boolean;
+  /** Time from target-shown to click in ms. */
+  durationMs: number;
+  /** Whether the rank/file coordinate ribbon was visible on the board
+   *  when the student clicked. Surface toggle, persisted per-profile. */
+  coordsShown: boolean;
+  /** Voice mode = the coach spoke the target audibly instead of (or
+   *  in addition to) showing it as text. */
+  voiceMode: boolean;
+  /** "single" = one square per round. "sequence" = N squares chained;
+   *  the student must click them in order. */
+  mode: 'single' | 'sequence';
+  /** When mode === 'sequence', the total length of this round's
+   *  sequence. Grows with streak: 2 → 3 → 4 → 5. */
+  sequenceLength?: number;
+  /** 0-based index within the sequence this attempt covers. */
+  sequenceIndex?: number;
+  /** Streak count at the START of this attempt (before grading). */
+  streakBefore: number;
 }
 
 // ─── Opening Annotations ────────────────────────────────────────────────────
@@ -175,6 +230,17 @@ export interface OpeningVariation {
   frequency?: SidelineFrequency;
   danger?: SidelineDanger;
   deviationMove?: number;
+  /** Optional starting FEN for puzzle-derived trap lines. When set,
+   *  pgn is interpreted as moves played FROM setupFen rather than
+   *  from the standard start position. Used by Lichess-puzzle-mined
+   *  trap entries whose punishment begins from a middlegame position
+   *  rather than move 1. See scripts/mine-puzzle-traps.mjs. */
+  setupFen?: string;
+  /** Optional provenance — where the trap content originated. */
+  source?: string;
+  /** Optional Stockfish-verified final-position evaluation
+   *  ("+360cp" or "mate-in-3" from the student's perspective). */
+  verifiedEval?: string;
 }
 
 // ─── Model Games ────────────────────────────────────────────────────────────
@@ -507,6 +573,24 @@ export interface UserPreferences {
    *  disabling all in-app audio. Defaults to true (trainer-mode
    *  default) and syncs with appStore.coachVoiceOn. */
   coachVoiceOn?: boolean;
+  /** Show the named tactic (Skewer / Fork / Pin / etc.) at the top
+   *  of every mistake-puzzle. When OFF the chip is hidden so the
+   *  student can find the tactic blind. Toggle lives next to the
+   *  chip itself. Defaults to true (named-tactic shown). */
+  puzzleShowTacticName?: boolean;
+  /** When ON: show a visible countdown chip from puzzleClockTargetSec
+   *  → 0 (time-pressure mode, opt-in). When OFF (default): clock
+   *  runs silently in the background, count-up only, and gets
+   *  logged into the puzzle record as solveTimeMs so /weaknesses
+   *  can aggregate "slow on X tactic" insights. David's design
+   *  2026-05-19: "count up if no setting is chosen but run in
+   *  background. this information will be sent to weaknesses. if
+   *  user selects a timer then it shows on page and counts down
+   *  to add time pressure." */
+  puzzleTimerOn?: boolean;
+  /** Target seconds for the visible countdown mode. Defaults to 60.
+   *  Ignored when puzzleTimerOn is false (background mode). */
+  puzzleClockTargetSec?: number;
   dailySessionMinutes: number;
   aiProvider: AiProvider;
   apiKeyEncrypted: string | null;

@@ -34,6 +34,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { loadFixtureIntoIDB } from './audit-lib/fixture-loader.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -201,6 +202,21 @@ async function main() {
     await page.getByText('Chess Academy Pro', { exact: true }).first().waitFor({ timeout: BOOT_TIMEOUT_MS });
   }, 6000);
 
+  // ── Fixture: David's real account data (when present) ──────────
+  // See scripts/audit-lib/fixture-loader.mjs. Audits run against
+  // POPULATED data instead of an empty profile when the fixture
+  // file exists at audit-reports/.fixtures/david-games.json.
+  await record('fixture-load', async () => {
+    const result = await loadFixtureIntoIDB(page);
+    if (result.loaded) {
+      await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+      await page.getByText('Chess Academy Pro', { exact: true }).first().waitFor({ timeout: BOOT_TIMEOUT_MS });
+      console.log(`  fixture: ${result.wrote} rows / ${result.stores} stores`);
+    } else {
+      console.log(`  fixture: skipped (${result.reason})`);
+    }
+  }, 4000);
+
   await record('coach-hub', async () => {
     await page.getByRole('link', { name: 'Coach' }).first().click();
     await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 15000 });
@@ -219,10 +235,11 @@ async function main() {
     }
     await page.locator('[data-testid="coach-review-list-page"]').waitFor({ timeout: 15000 });
     // Wait for the seeder + Dexie schema migration to finish; tiles
-    // appear AFTER the seed + db.games.toArray() resolves (~8–15s on
-    // a fresh headless browser). Without this explicit wait the
-    // subsequent tile-click expectation flakes.
-    await page.locator('[data-testid^="review-game-card-"]').first().waitFor({ timeout: 25000 }).catch(() => undefined);
+    // appear AFTER the seed + db.games.toArray() resolves. Bumped to
+    // 45s after 2026-05-19 audit measured the cold-start path at
+    // ~28-32s in headless dev (multi-version Dexie migration +
+    // PGN parse on 5 sample games).
+    await page.locator('[data-testid^="review-game-card-"]').first().waitFor({ timeout: 45000 }).catch(() => undefined);
   }, SHORT_SETTLE_MS, [
     { kind: 'visible', selector: '[data-testid="coach-review-list-page"]', label: '2.1 list page renders' },
     { kind: 'visible', selector: 'h1, h2', label: 'header rendered (Review with Coach)' },

@@ -51,6 +51,8 @@ import { withTimeout } from '../../coach/withTimeout';
 import { emergencyPickMove } from '../../coach/coachTurnFallback';
 import type { LiveState } from '../../coach/types';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
+import { buildTacticsLiveContext } from '../../services/liveTacticsContext';
+import { validateTacticClaims } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
 import { generateMoveCommentary } from '../../services/coachMoveCommentary';
 import {
@@ -441,12 +443,16 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       orientation?: 'white' | 'black';
       pgn?: string;
     }): { ok: boolean; reason?: string } => {
+      // Walkthroughs always start on /coach/teach (the canonical
+      // Learn-with-Coach surface). The legacy
+      // /coach/session/walkthrough page is gone — CoachSessionPage
+      // redirects it to /coach/teach.
       const params = new URLSearchParams();
-      params.set('subject', args.opening);
+      params.set('opening', args.opening);
       if (args.variation) params.set('variation', args.variation);
       if (args.orientation) params.set('orientation', args.orientation);
       if (args.pgn) params.set('pgn', args.pgn);
-      const route = `/coach/session/walkthrough?${params.toString()}`;
+      const route = `/coach/teach?${params.toString()}`;
       void logAppAudit({
         kind: 'walkthrough-started-from-coach',
         category: 'subsystem',
@@ -1238,6 +1244,25 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           exploreMessages.map((m) => `${m.role === 'user' ? 'Student' : 'You'}: ${m.content}`).join('\n')
         : '';
       const exploreFenSideToMove = newFen.split(' ')[1] === 'b' ? 'black' : 'white';
+      // Tactical context on the explore-mode reaction — student is
+      // sandboxing moves and wants the coach to comment. Tactics
+      // detection runs without analysis (no cached PV at this hot
+      // path); immediate + hanging are still surfaced.
+      const exploreStudentColor = playerColor === 'white' ? 'w' : 'b';
+      const exploreRating = activeProfile?.puzzleRating ?? 1200;
+      const exploreTactics = buildTacticsLiveContext(
+        newFen,
+        null,
+        exploreStudentColor,
+        exploreRating,
+      );
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachGamePage.exploreChat.buildLiveTactics',
+        summary: `tactics ctx: immediate=${exploreTactics.immediate.length} hanging=${exploreTactics.hanging.length} threats=${exploreTactics.threats.length} opps=${exploreTactics.opportunities.length} depth=${exploreTactics.lookaheadDepth}`,
+        fen: newFen,
+      });
       void coachService.ask(
         {
           surface: 'game-chat',
@@ -1247,6 +1272,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             fen: newFen,
             userJustDid: `Played ${moveResult.san} in explore mode`,
             whoseTurn: exploreFenSideToMove,
+            tactics: exploreTactics,
           },
         },
         {
@@ -1257,6 +1283,22 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         },
       ).then((spineAnswer) => {
         const reaction = unwrapSpineError(spineAnswer.text);
+        // G3 enforcement on explore-mode coach reactions.
+        const exploreValidation = validateTacticClaims(reaction, exploreTactics);
+        if (exploreValidation.violations.length > 0) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'CoachGamePage.exploreReaction.tacticClaimValidator',
+            summary: `out-of-vocab tactics: ${exploreValidation.violations.map((v) => v.type).join(', ')}`,
+            details: JSON.stringify({
+              violations: exploreValidation.violations,
+              surface: 'game-chat',
+              fen: newFen,
+            }),
+            fen: newFen,
+          });
+        }
         setExploreMessages((prev) => [
           ...prev,
           { role: 'user', content: userMsg },
@@ -1954,12 +1996,34 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         const moveSelectorAsk = intendedOpeningName
           ? `It is your turn (${aiColor}). The student is rated about ${targetStrength} and has committed to ${intendedOpeningName}. Consult local_opening_book first; if we are still in book, play that move via play_move. If we are out of book, use stockfish_eval and pick a move calibrated to the student's rating, then play it via play_move.${engineHint}`
           : `It is your turn (${aiColor}). The student is rated about ${targetStrength}. Use stockfish_eval if you want depth, then pick a move calibrated to the student's rating and play it via play_move.${engineHint}`;
+        // Tactical context for the move-selector turn — when the coach
+        // is picking its own reply we still want it to be tactically
+        // aware so it can either (a) play into a tactic when it favors
+        // the coach's side, or (b) avoid walking into one the student
+        // would punish. The LLM still ultimately calls play_move via
+        // its toolbelt; the tactics block frames the decision.
+        const moveSelectorStudentColor = playerColor === 'white' ? 'w' : 'b';
+        const moveSelectorRating = activeProfile?.puzzleRating ?? 1200;
+        const moveSelectorTactics = buildTacticsLiveContext(
+          game.fen,
+          null, // No cached analysis at this site; immediate + hanging still fire.
+          moveSelectorStudentColor,
+          moveSelectorRating,
+        );
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachGamePage.moveSelector.buildLiveTactics',
+          summary: `tactics ctx: immediate=${moveSelectorTactics.immediate.length} hanging=${moveSelectorTactics.hanging.length} threats=${moveSelectorTactics.threats.length} opps=${moveSelectorTactics.opportunities.length} depth=${moveSelectorTactics.lookaheadDepth}`,
+          fen: game.fen,
+        });
         const moveSelectorLiveState: LiveState = {
           surface: 'move-selector',
           fen: game.fen,
           moveHistory: game.history,
           currentRoute: '/coach/play',
           userJustDid: 'pondering coach move',
+          tactics: moveSelectorTactics,
         };
         void logAppAudit({
           kind: 'coach-surface-migrated',
@@ -2542,7 +2606,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               // WO-VOICE-LAYER-01 (b): use the personality's secondary
               // voice so the alert cuts through with a different timbre
               // than the main narration.
-              void voiceService.speakAlert(warning).catch((err: unknown) => {
+              void voiceService.speakForced(warning).catch((err: unknown) => {
                 console.warn('[tactic-alert] TTS failed:', err);
               });
             }
@@ -2719,8 +2783,19 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     if (engineBestMoveUci) {
       try {
         engineBestMoveSan = uciMoveToSan(engineBestMoveUci, preFen);
+        // uciMoveToSan falls back to the raw UCI when chess.move()
+        // throws (= the move is illegal in this position, usually
+        // because the preAnalysis cache is stale and the suggested
+        // piece isn't on the source square anymore). Audit caught
+        // this rendering "Try c8d7" in the blunder modal when c8
+        // was empty. Surface the failure as '?' so the modal's
+        // best-move suggestion hides cleanly rather than showing a
+        // confusing UCI string.
+        if (engineBestMoveSan === engineBestMoveUci) {
+          engineBestMoveSan = '?';
+        }
       } catch {
-        engineBestMoveSan = engineBestMoveUci;
+        engineBestMoveSan = '?';
       }
     }
 
@@ -3262,6 +3337,25 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // legacy model + cost. Empty string on provider error keeps
         // the existing fallback path (clean template above).
         const fenSideToMove = moveResult.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+        // Tactical context for the blunder alert — the brain gets the
+        // named pattern (fork/pin/etc.) + threats in opponent's PV
+        // alongside the prose ask, so it can articulate WHY the move
+        // was a blunder by tactic name. analysis is already in scope.
+        const blunderStudentColor = playerColor === 'white' ? 'w' : 'b';
+        const blunderStudentRating = activeProfile?.puzzleRating ?? 1200;
+        const blunderTactics = buildTacticsLiveContext(
+          moveResult.fen,
+          analysis ?? null,
+          blunderStudentColor,
+          blunderStudentRating,
+        );
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachGamePage.blunderAlert.buildLiveTactics',
+          summary: `tactics ctx: immediate=${blunderTactics.immediate.length} hanging=${blunderTactics.hanging.length} threats=${blunderTactics.threats.length} opps=${blunderTactics.opportunities.length} depth=${blunderTactics.lookaheadDepth}`,
+          fen: moveResult.fen,
+        });
         const spineAlert = await coachService.ask(
           {
             surface: 'game-chat',
@@ -3271,6 +3365,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               fen: moveResult.fen,
               userJustDid: `Student blundered with ${moveResult.san}`,
               whoseTurn: fenSideToMove,
+              tactics: blunderTactics,
             },
           },
           {
@@ -3284,6 +3379,24 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         const trimmed = alertText.trim();
         if (trimmed && !trimmed.startsWith('⚠️')) {
           explanation = trimmed;
+          // G3 enforcement: scan the blunder-alert prose for tactic
+          // claims outside the bounded vocabulary the envelope shipped.
+          // Audit-only — observes hallucination rate in prod.
+          const validation = validateTacticClaims(trimmed, blunderTactics);
+          if (validation.violations.length > 0) {
+            void logAppAudit({
+              kind: 'claim-validator-trip',
+              category: 'subsystem',
+              source: 'CoachGamePage.blunderAlert.tacticClaimValidator',
+              summary: `out-of-vocab tactics: ${validation.violations.map((v) => v.type).join(', ')}`,
+              details: JSON.stringify({
+                violations: validation.violations,
+                surface: 'game-chat',
+                fen: moveResult.fen,
+              }),
+              fen: moveResult.fen,
+            });
+          }
         }
       } catch {
         // fall through with the clean template
@@ -3917,7 +4030,11 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           {/* Row 1: Back + title + color selector + analysis toggles */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 md:gap-3">
-              <button onClick={() => void navigate('/coach')} className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center">
+              <button
+                onClick={() => void navigate('/coach')}
+                className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center"
+                aria-label="Back to coach hub"
+              >
                 <ArrowLeft size={20} className="text-theme-text" />
               </button>
               <div>
@@ -4336,14 +4453,16 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                     >
                       Take Back
                     </button>
-                    <button
-                      onClick={handleBlunderTryBestMove}
-                      className="flex-1 py-2 rounded-xl text-xs font-semibold border-2 border-green-500/40 transition-colors"
-                      style={{ background: 'color-mix(in srgb, var(--color-success, #22c55e) 15%, var(--color-surface))', color: 'var(--color-text)' }}
-                      data-testid="blunder-try-best"
-                    >
-                      Try {blunderPause.bestMoveSan}
-                    </button>
+                    {blunderPause.bestMoveSan && blunderPause.bestMoveSan !== '?' && (
+                      <button
+                        onClick={handleBlunderTryBestMove}
+                        className="flex-1 py-2 rounded-xl text-xs font-semibold border-2 border-green-500/40 transition-colors"
+                        style={{ background: 'color-mix(in srgb, var(--color-success, #22c55e) 15%, var(--color-surface))', color: 'var(--color-text)' }}
+                        data-testid="blunder-try-best"
+                      >
+                        Try {blunderPause.bestMoveSan}
+                      </button>
+                    )}
                   </div>
                 </motion.div>
               )}

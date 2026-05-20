@@ -1,0 +1,44 @@
+{
+  "openingId": "old-indian-defence",
+  "fromPgn": "d4 Nf6 c4 d6 Nc3 e5",
+  "depth": 6,
+  "games": [
+    {
+      "id": "t6EUxiRp",
+      "white": "Caruana, Fabiano",
+      "whiteRating": 2770,
+      "black": "McShane, Luke J",
+      "blackRating": 2706,
+      "winner": "white",
+      "year": 2012,
+      "month": "2012-06",
+      "url": "https://lichess.org/t6EUxiRp",
+      "pgn": "[Event \"Moscow Tal Memorial 7th\"]\n[Site \"Moscow\"]\n[Date \"2012.06.14\"]\n[Round \"6\"]\n[White \"Caruana, Fabiano\"]\n[Black \"McShane, Luke J\"]\n[Result \"1-0\"]\n[GameId \"t6EUxiRp\"]\n[WhiteElo \"2770\"]\n[BlackElo \"2706\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A54\"]\n[Opening \"Old Indian Defense: Two Knights Variation\"]\n[Termination \"Unknown\"]\n\n1. d4 Nf6 2. c4 d6 3. Nc3 e5 4. Nf3 e4 5. Nd2 Qe7 6. Nb3 Bf5 7. Bg5 Nbd7 8. e3 h6 9. Bh4 g5 10. Bg3 a6 11. Na5 Rb8 12. b4 Bg7 13. Be2 O-O 14. Rb1 Bg6 15. h4 g4 16. h5 Bxh5 17. b5 axb5 18. Rxb5 Bg6 19. Nxb7 Rfc8 20. Na5 Ra8 21. Nc6 Qe8 22. a4 Nf8 23. Nd5 Nxd5 24. cxd5 f5 25. a5 Bf7 26. Qc2 Ng6 27. Bh4 Nxh4 28. Rxh4 h5 29. g3 Bf6 30. Rh1 h4 31. gxh4 Kh8 32. Kd2 Qg8 33. Bc4 g3 34. Rg1 g2 35. Kc3 Bxh4 36. Qe2 Qg5 37. Rb2 Bh5 38. Rxg2 Bxe2 39. Rxg5 Bxg5 40. Rxe2 Kg7 41. a6 Rh8 42. a7 Rh1 43. Kb2 Bh4 44. Rc2 Kf6 45. Ba6 Kg5 46. Bb7 Rxa7 47. Nxa7 Rf1 48. Nc6 Rxf2 49. Na5 f4 50. Nc4 Rxc2+ 51. Kxc2 fxe3 52. Nxe3 Bf2 53. Kd2 Kf4 54. Nc2 Kf3 55. Ba6 Bh4 56. Be2+ Kf2 57. Bh5 Bg5+ 58. Kc3 Bf6 59. Na3 Ke3 60. Nb5 Bh4 61. Nxc7 Be1+ 62. Kc4 Kd2 63. Nb5 e3 64. Nxd6 e2 65. Nf7 Bf2 66. Bxe2 Kxe2 67. d6 1-0\n\n\n"
+    },
+    {
+      "id": "U1PEREzS",
+      "white": "Shankland, S.",
+      "whiteRating": 2731,
+      "black": "Rapport, R.",
+      "blackRating": 2735,
+      "winner": "black",
+      "year": 2019,
+      "month": "2019-02",
+      "url": "https://lichess.org/U1PEREzS",
+      "pgn": "[Event \"Champions Showdown Blitz\"]\n[Site \"Saint Louis USA\"]\n[Date \"2019.02.23\"]\n[Round \"10.5\"]\n[White \"Shankland, S.\"]\n[Black \"Rapport, R.\"]\n[Result \"0-1\"]\n[GameId \"U1PEREzS\"]\n[WhiteElo \"2731\"]\n[BlackElo \"2735\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"A54\"]\n[Opening \"Old Indian Defense: Ukrainian Variation\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 d6 3. Nc3 e5 4. e3 Be7 5. Nf3 Nc6 6. d5 Nb8 7. e4 a5 8. h3 Na6 9. Be3 O-O 10. g4 Nd7 11. Qd2 Ndc5 12. O-O-O c6 13. Kb1 Bd7 14. Be2 cxd5 15. cxd5 b5 16. Bxc5 Nxc5 17. Bxb5 Nxe4 18. Nxe4 Bxb5 19. Rc1 Rb8 20. Rc3 a4 21. Rhc1 Qb6 22. h4 Bd7 23. Rg1 Rfc8 24. h5 Rxc3 25. Nxc3 Qb4 26. Ka1 a3 27. bxa3 Qxa3 28. Ne4 Qxf3 0-1\n\n\n"
+    },
+    {
+      "id": "LJeLL8cd",
+      "white": "Svidler, Peter",
+      "whiteRating": 2747,
+      "black": "Jobava, Baadur",
+      "blackRating": 2702,
+      "winner": null,
+      "year": 2013,
+      "month": "2013-04",
+      "url": "https://lichess.org/LJeLL8cd",
+      "pgn": "[Event \"RUS-chT 20th\"]\n[Site \"Loo\"]\n[Date \"2013.04.13\"]\n[Round \"7\"]\n[White \"Svidler, Peter\"]\n[Black \"Jobava, Baadur\"]\n[Result \"1/2-1/2\"]\n[GameId \"LJeLL8cd\"]\n[WhiteElo \"2747\"]\n[BlackElo \"2702\"]\n[Variant \"Standard\"]\n[TimeControl \"-\"]\n[ECO \"E95\"]\n[Opening \"King's Indian Defense: Orthodox Variation\"]\n[Termination \"Normal\"]\n\n1. d4 Nf6 2. c4 d6 3. Nc3 e5 4. Nf3 Nbd7 5. e4 g6 6. Be2 Bg7 7. O-O O-O 8. Re1 h6 9. Rb1 Nh7 10. dxe5 dxe5 11. b4 Ng5 12. Nxg5 hxg5 13. c5 c6 14. Be3 f5 15. exf5 gxf5 16. Bc4+ Kh7 17. Qh5+ Bh6 18. Rbd1 Qe8 19. Qh3 Qg6 20. Bc1 a5 21. Rd6 Rf6 22. Bd3 axb4 23. Ne4 Rxd6 24. cxd6 Nf8 25. Nxg5+ Kg7 26. Qh4 Qxd6 27. Bb2 Ra5 28. Bc4 Qd2 29. Nf3 Ng6 30. Nxd2 Nxh4 31. Rxe5 Rxe5 32. Bxe5+ Kh7 33. Nb3 Ng6 34. Bd4 Bg7 35. Bc5 Bf8 36. Bb6 Ne5 37. Be2 Be6 38. Bc7 Nd7 39. Bd3 Nc5 40. Nxc5 Bxc5 41. Bb1 Bd4 42. h4 Kg7 43. Kf1 b5 44. f3 c5 45. Ke2 Bc4+ 46. Kd2 Be6 47. Ke2 Bc4+ 48. Kd2 1/2-1/2\n\n\n"
+    }
+  ],
+  "fetchedAt": "2026-05-19T23:49:16.836Z"
+}

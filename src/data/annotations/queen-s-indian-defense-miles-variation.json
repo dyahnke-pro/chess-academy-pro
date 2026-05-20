@@ -29,7 +29,7 @@
     {
       "san": "b6",
       "annotation": "Black signals the Queen's Indian Defense, a sophisticated hypermodern opening where the light-squared bishop will fianchetto on b7 to exert long-term pressure against our center and kingside. This move prepares ...Bb7, which will create a powerful diagonal aimed at our e4 square and potentially our king once we castle. The b6 move also supports a future ...c5 pawn break and gives Black's queen access to the a6-square, where it might become active. Black is embracing a patient, positional approach that prioritizes piece activity and long-term pressure over immediate central occupation, typical of Indian Defense systems.",
-      "shortNarration": "Black fianchettoes the bishop to b7, pressuring e4 and the kingside after castling."
+      "shortNarration": "Black plays b6, preparing the bishop fianchetto to b7, pressuring e4 and the kingside after castling."
     },
     {
       "san": "Bf4",

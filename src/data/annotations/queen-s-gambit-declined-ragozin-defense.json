@@ -38,7 +38,7 @@
     },
     {
       "san": "Bb4",
-      "annotation": "Continuing Queens Gambit Declined Ragozin Defense: Bb4 is a known theory move in this line.",
+      "annotation": "The bishop pins the knight to the king, forcing White to make an immediate decision: allow the pin or commit to a central break with cxd5.",
       "shortNarration": "Bb4 pins the knight, pressuring White's center in the Ragozin Defense."
     }
   ]

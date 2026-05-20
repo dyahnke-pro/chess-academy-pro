@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black is signaling their intention to fianchetto the dark-squared bishop on g7, creating the characteristic King's Indian or Grünfeld pawn structure. This move prepares to put pressure on our pawn center from the long diagonal, particularly targeting our d4 pawn once the bishop reaches g7. Our opponent is also preparing kingside castling while keeping the option to play ...d6 (King's Indian) or ...d5 (Grünfeld) depending on how we continue. The fianchetto setup gives Black excellent piece coordination and counterplay against our central pawns.",
-      "shortNarration": "Black fianchettoes the bishop to g7, pressuring d4 and preparing kingside castling with either ...d6 or ...d5."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto to g7, pressuring d4 and preparing kingside castling with either ...d6 or ...d5."
     },
     {
       "san": "f3",

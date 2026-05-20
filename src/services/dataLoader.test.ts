@@ -3,11 +3,22 @@ import { db } from '../db/schema';
 import {
   isDatabaseSeeded,
   seedDatabase,
+  whenFullySeeded,
   loadEcoData,
   loadRepertoireData,
   computePosition,
   reconcileProRepertoires,
 } from './dataLoader';
+
+/** seedDatabase() now resolves after the CRITICAL seed (40 repertoire
+ *  openings) so /openings paints fast; the heavy ECO/pro/gambit/
+ *  model-game/flashcard backfill streams in behind it. Tests that
+ *  assert the FULL catalog is present must await both phases.
+ *  (David 2026-05-20: defer the ~40s first-run ECO seed.) */
+async function seedFully(): Promise<void> {
+  await seedDatabase();
+  await whenFullySeeded();
+}
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -33,6 +44,13 @@ vi.mock('chess.js', () => {
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
 beforeEach(async () => {
+  // Drain any detached deferred seed left in-flight by the previous
+  // test before wiping the DB — otherwise a still-running ECO
+  // backfill writes into a database we're about to delete + reopen,
+  // leaking partial rows into the next test. (seedDatabase now
+  // resolves after only the critical repertoire load; the heavy
+  // backfill runs detached, so tests must let it settle here.)
+  await whenFullySeeded().catch(() => undefined);
   await db.delete();
   await db.open();
 });
@@ -151,36 +169,51 @@ describe('loadRepertoireData', () => {
 
 describe('seedDatabase', () => {
   it('seeds the database and marks it as seeded', async () => {
-    await seedDatabase();
+    await seedFully();
     const seeded = await isDatabaseSeeded();
     expect(seeded).toBe(true);
   }, 60000);
 
   it('second call is a no-op (does not double-seed)', async () => {
-    await seedDatabase();
+    await seedFully();
     const countAfterFirst = await db.openings.count();
-    await seedDatabase();
+    await seedFully();
     const countAfterSecond = await db.openings.count();
     expect(countAfterSecond).toBe(countAfterFirst);
   }, 60000);
 
   it('seeds both ECO and repertoire data', async () => {
-    await seedDatabase();
+    await seedFully();
     const total = await db.openings.count();
     // Lichess entries (~3,641) + repertoire entries (40, some overlap via bulkPut)
     expect(total).toBeGreaterThan(3000);
   }, 60000);
 
   it('generates flashcards for repertoire openings', async () => {
-    await seedDatabase();
+    await seedFully();
     const flashcardCount = await db.flashcards.count();
     expect(flashcardCount).toBeGreaterThan(0);
+  }, 60000);
+
+  it('seedDatabase() resolves after the critical repertoire seed (fast first paint)', async () => {
+    // The contract that makes /openings paint fast: seedDatabase()
+    // resolves once the 40 repertoire openings are in, BEFORE the
+    // 3641-entry ECO backfill completes.
+    await seedDatabase();
+    // isRepertoire is a boolean — IndexedDB doesn't index booleans
+    // reliably, so count via a full scan rather than a .where() query.
+    const allAfterCritical = await db.openings.toArray();
+    const repertoireCount = allAfterCritical.filter((o) => o.isRepertoire).length;
+    expect(repertoireCount).toBeGreaterThanOrEqual(40);
+    // Full catalog lands after whenFullySeeded resolves.
+    await whenFullySeeded();
+    expect(await db.openings.count()).toBeGreaterThan(3000);
   }, 60000);
 });
 
 describe('reconcileProRepertoires — pick up JSON updates without wiping progress', () => {
   it('preserves user-progress fields when refreshing static content', async () => {
-    await seedDatabase();
+    await seedFully();
     // Pick a pro opening that should exist in the seeded data.
     const id = 'pro-firouzja-ruy-lopez';
     const before = await db.openings.get(id);
@@ -226,7 +259,7 @@ describe('reconcileProRepertoires — pick up JSON updates without wiping progre
   }, 60000);
 
   it('inserts brand-new pro entries with default progress fields', async () => {
-    await seedDatabase();
+    await seedFully();
     // Wipe a known pro entry to simulate it being added in this revision.
     const id = 'pro-firouzja-ruy-lopez';
     await db.openings.delete(id);
@@ -246,7 +279,7 @@ describe('reconcileProRepertoires — pick up JSON updates without wiping progre
   }, 60000);
 
   it('is a no-op when revision matches (no Dexie writes)', async () => {
-    await seedDatabase();
+    await seedFully();
     const before = await db.openings.get('pro-firouzja-ruy-lopez');
     expect(before).toBeDefined();
     if (!before) return;

@@ -1,0 +1,10 @@
+{
+  "id": "queens-indian",
+  "status": "fetched",
+  "wikipediaTitle": "Queen's Indian Defense",
+  "extract": "The Queen's Indian Defense (QID) is a chess opening defined by the moves:\n\n1. d4 Nf6\n2. c4 e6\n3. Nf3 b6\nThe opening is a solid defense to the Queen's Pawn Game. 3...b6 increases Black's control over the central light squares e4 and d5 by preparing to fianchetto the queen's bishop, with the opening deriving its name from this maneuver. As in the other Indian defenses, Black attempts to control the center with pieces in hypermodern style, instead of occupying it with pawns in classical style.\nBy playing 3.Nf3, White sidesteps the Nimzo-Indian Defense that arises after 3.Nc3 Bb4. The Queen's Indian is regarded as the sister opening of the Nimzo-Indian, since both openings aim to impede White's efforts to gain full control of the center by playing e2–e4 without directly putting a pawn in the centre. Together, they are a well-respected response to 1.d4.",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense",
+  "pageId": 498029,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:35:45.830Z"
+}

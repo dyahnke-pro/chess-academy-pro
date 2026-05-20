@@ -199,6 +199,136 @@ describe('voiceService', () => {
       voiceService.stop();
       expect(voiceService.isPlaying()).toBe(false);
     });
+
+    // 2026-05-19: David reported rapid-Next-press triggers 3+ audio
+    // elements playing simultaneously. Root cause was
+    // `currentAudioElement` only being set AFTER the sourceOpen
+    // await — so a stop() during the await found null and let a
+    // racing audio through. Verify the generation counter bumps on
+    // every stop (so the race-window check inside playAudioFromStream
+    // can detect supersession).
+    it('bumps stopGeneration on every stop() (race-window detector for rapid-clicks)', () => {
+      const before = voiceService.currentStopGeneration;
+      voiceService.stop();
+      voiceService.stop();
+      voiceService.stop();
+      const after = voiceService.currentStopGeneration;
+      expect(after).toBe(before + 3);
+    });
+
+    it('preserves stopGeneration monotonicity across mixed speak/stop sequences', () => {
+      const gens = [voiceService.currentStopGeneration];
+      // Sequence mimicking a user mashing Next: speak(), stop(),
+      // speak(), stop(), speak(), stop().
+      // Speak invokes stop() internally, so each pair bumps by 1.
+      voiceService.stop();
+      gens.push(voiceService.currentStopGeneration);
+      voiceService.stop();
+      gens.push(voiceService.currentStopGeneration);
+      voiceService.stop();
+      gens.push(voiceService.currentStopGeneration);
+      for (let i = 1; i < gens.length; i++) {
+        expect(gens[i]).toBeGreaterThan(gens[i - 1]);
+      }
+    });
+  });
+
+  describe('canStreamProgressivePlaybackFor (UA + capability matrix)', () => {
+    // User-agent fixtures captured from real devices. These don't
+    // need to be exhaustive — they're representative of each platform
+    // family the streaming gate is supposed to admit or exclude.
+    const UA = {
+      desktopChrome: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+      desktopFirefox: 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:128.0) Gecko/20100101 Firefox/128.0',
+      desktopSafari: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15',
+      androidChrome: 'Mozilla/5.0 (Linux; Android 14; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36',
+      androidFirefox: 'Mozilla/5.0 (Android 14; Mobile; rv:128.0) Gecko/128.0 Firefox/128.0',
+      androidSamsung: 'Mozilla/5.0 (Linux; Android 14; SAMSUNG SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/24.0 Chrome/115.0.0.0 Mobile Safari/537.36',
+      iphone: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1',
+      ipad: 'Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1',
+      ipadDesktopMode: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15',
+    };
+    const yesMpeg = (t: string) => t === 'audio/mpeg';
+    const noMpeg = () => false;
+    const fakeMMS = (supported: boolean): { new (): MediaSource; isTypeSupported: (t: string) => boolean } => {
+      const ctor = function FakeMMS(this: object) { /* noop */ } as unknown as { new (): MediaSource; isTypeSupported: (t: string) => boolean };
+      (ctor as unknown as { isTypeSupported: (t: string) => boolean }).isTypeSupported = (t: string) => supported && t === 'audio/mpeg';
+      return ctor;
+    };
+
+    it('Android Chrome → streams (matches desktop)', async () => {
+      const { canStreamProgressivePlaybackFor } = await import('./voiceService');
+      expect(canStreamProgressivePlaybackFor(true, yesMpeg, null, UA.androidChrome, false)).toBe(true);
+    });
+
+    it('Android Firefox → streams', async () => {
+      const { canStreamProgressivePlaybackFor } = await import('./voiceService');
+      expect(canStreamProgressivePlaybackFor(true, yesMpeg, null, UA.androidFirefox, false)).toBe(true);
+    });
+
+    it('Android Samsung Internet → streams', async () => {
+      const { canStreamProgressivePlaybackFor } = await import('./voiceService');
+      expect(canStreamProgressivePlaybackFor(true, yesMpeg, null, UA.androidSamsung, false)).toBe(true);
+    });
+
+    it('desktop Chrome / Firefox / Safari → streams', async () => {
+      const { canStreamProgressivePlaybackFor } = await import('./voiceService');
+      expect(canStreamProgressivePlaybackFor(true, yesMpeg, null, UA.desktopChrome, false)).toBe(true);
+      expect(canStreamProgressivePlaybackFor(true, yesMpeg, null, UA.desktopFirefox, false)).toBe(true);
+      expect(canStreamProgressivePlaybackFor(true, yesMpeg, null, UA.desktopSafari, false)).toBe(true);
+    });
+
+    it('iPhone with ManagedMediaSource (iOS 17.1+) → streams via the MMS branch', async () => {
+      const { canStreamProgressivePlaybackFor } = await import('./voiceService');
+      expect(canStreamProgressivePlaybackFor(true, yesMpeg, fakeMMS(true), UA.iphone, false)).toBe(true);
+    });
+
+    it('iPhone without ManagedMediaSource (iOS < 17.1) → falls back to buffered (bare MediaSource is restricted)', async () => {
+      const { canStreamProgressivePlaybackFor } = await import('./voiceService');
+      expect(canStreamProgressivePlaybackFor(true, yesMpeg, null, UA.iphone, false)).toBe(false);
+    });
+
+    it('iPad desktop-mode (UA looks like Mac) + touchend → detected as iOS, falls back', async () => {
+      const { canStreamProgressivePlaybackFor } = await import('./voiceService');
+      expect(canStreamProgressivePlaybackFor(true, yesMpeg, null, UA.ipadDesktopMode, true)).toBe(false);
+    });
+
+    it('any UA without MediaSource at all → falls back', async () => {
+      const { canStreamProgressivePlaybackFor } = await import('./voiceService');
+      expect(canStreamProgressivePlaybackFor(false, noMpeg, null, UA.desktopChrome, false)).toBe(false);
+      expect(canStreamProgressivePlaybackFor(false, noMpeg, null, UA.androidChrome, false)).toBe(false);
+    });
+
+    it('MediaSource present but no audio/mpeg support → falls back', async () => {
+      const { canStreamProgressivePlaybackFor } = await import('./voiceService');
+      expect(canStreamProgressivePlaybackFor(true, noMpeg, null, UA.desktopChrome, false)).toBe(false);
+    });
+  });
+
+  describe('getManagedMediaSource (iOS Safari 17.1+ detection)', () => {
+    it('returns null when window.ManagedMediaSource is undefined (jsdom baseline)', async () => {
+      const { getManagedMediaSource } = await import('./voiceService');
+      // jsdom does not implement MediaSource or ManagedMediaSource.
+      expect(getManagedMediaSource()).toBeNull();
+    });
+
+    it('returns the constructor when window.ManagedMediaSource is present', async () => {
+      const fakeCtor = function FakeMMS(this: object) { /* noop */ } as unknown as {
+        new (): MediaSource;
+        isTypeSupported(type: string): boolean;
+      };
+      (fakeCtor as unknown as { isTypeSupported: (t: string) => boolean }).isTypeSupported = (t: string) => t === 'audio/mpeg';
+      (window as unknown as { ManagedMediaSource: typeof fakeCtor }).ManagedMediaSource = fakeCtor;
+      try {
+        const { getManagedMediaSource } = await import('./voiceService');
+        const mms = getManagedMediaSource();
+        expect(mms).toBe(fakeCtor);
+        expect(mms?.isTypeSupported('audio/mpeg')).toBe(true);
+        expect(mms?.isTypeSupported('audio/aac')).toBe(false);
+      } finally {
+        delete (window as unknown as { ManagedMediaSource?: unknown }).ManagedMediaSource;
+      }
+    });
   });
 
   describe('tier reporting', () => {

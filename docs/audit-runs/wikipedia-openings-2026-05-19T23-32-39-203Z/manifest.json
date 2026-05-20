@@ -1,0 +1,224 @@
+{
+  "generatedAt": "2026-05-19T23:33:04.622Z",
+  "source": "Wikipedia (en.wikipedia.org REST API)",
+  "license": "CC BY-SA 4.0",
+  "count": 24,
+  "fetched": 14,
+  "failed": 10,
+  "entries": [
+    {
+      "id": "alekhine-defence",
+      "status": "fetched",
+      "wikipediaTitle": "Alekhine's Defence",
+      "extract": "Alekhine's Defence is a chess opening that begins with the moves:1. e4 Nf6",
+      "extractHtml": "<p><b>Alekhine's Defence</b> is a chess opening that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">e4</span> <span class=\"extiw\">Nf6</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Alekhine's_Defence",
+      "pageId": 960702,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:32:39.444Z"
+    },
+    {
+      "id": "benko-gambit",
+      "status": "fetched",
+      "wikipediaTitle": "Benko Gambit",
+      "extract": "The Benko Gambit is a chess opening characterised by the move 3...b5 in the Benoni Defence arising after:1. d4 Nf6\n2. c4 c5\n3. d5 b5",
+      "extractHtml": "<p>The <b>Benko Gambit</b> is a chess opening characterised by the move 3...b5 in the Benoni Defence arising after:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>2. <span class=\"extiw\">c4</span> <span class=\"extiw\">c5</span></dd>\n<dd>3. <span class=\"extiw\">d5</span> <span class=\"extiw\">b5</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Benko_Gambit",
+      "pageId": 1220424,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:32:40.490Z"
+    },
+    {
+      "id": "benoni-defence",
+      "status": "fetched",
+      "wikipediaTitle": "Benoni Defense",
+      "extract": "The Benoni Defense, or simply the Benoni, is a chess opening characterized by an early reply of ...c5 against White's opening move 1.d4.",
+      "extractHtml": "<p>The <b>Benoni Defense</b>, or simply the <b>Benoni</b>, is a chess opening characterized by an early reply of ...c5 against White's opening move 1.d4.</p>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Benoni_Defense",
+      "pageId": 1512923,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:32:41.547Z"
+    },
+    {
+      "id": "birds-opening",
+      "status": "fetched",
+      "wikipediaTitle": "Bird's Opening",
+      "extract": "Bird's Opening is a chess opening beginning with the move:1. f4",
+      "extractHtml": "<p><b>Bird's Opening</b> is a chess opening beginning with the move:</p><dl><dd>1. <span class=\"extiw\">f4</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Bird's_Opening",
+      "pageId": 900089,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:32:42.604Z"
+    },
+    {
+      "id": "budapest-gambit",
+      "status": "fetched",
+      "wikipediaTitle": "Budapest Gambit",
+      "extract": "The Budapest Gambit is a chess opening that begins with the moves:1. d4 Nf6\n2. c4 e5",
+      "extractHtml": "<p>The <b>Budapest Gambit</b> is a chess opening that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>2. <span class=\"extiw\">c4</span> <span class=\"extiw\">e5</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Budapest_Gambit",
+      "pageId": 1630627,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:32:43.662Z"
+    },
+    {
+      "id": "catalan-opening",
+      "status": "fetched",
+      "wikipediaTitle": "Catalan Opening",
+      "extract": "The Catalan Opening is a chess opening where White plays d4 and c4 and fianchettoes the white bishop on g2. A common opening sequence is 1.d4 Nf6 2.c4 e6 3.g3, although various other openings can transpose into the Catalan. The Encyclopaedia of Chess Openings (ECO) lists codes E01–E09 for lines with 1.d4 Nf6 2.c4 e6 3.g3 d5 4.Bg2; other lines are part of E00.",
+      "extractHtml": "<p>The <b>Catalan Opening</b> is a chess opening where White plays d4 and c4 and fianchettoes the white bishop on g2. A common opening sequence is 1.d4 Nf6 2.c4 e6 3.g3, although various other openings can transpose into the Catalan. The <i>Encyclopaedia of Chess Openings</i> (<i>ECO</i>) lists codes E01–E09 for lines with 1.d4 Nf6 2.c4 e6 3.g3 d5 4.Bg2; other lines are part of E00.</p>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Catalan_Opening",
+      "pageId": 1222692,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:32:44.711Z"
+    },
+    {
+      "id": "english-opening",
+      "status": "fetched",
+      "wikipediaTitle": "English Opening",
+      "extract": "The English Opening is a chess opening that begins with the move:1. c4",
+      "extractHtml": "<p>The <b>English Opening</b> is a chess opening that begins with the move:</p><dl><dd>1. <span class=\"extiw\">c4</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/English_Opening",
+      "pageId": 498039,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:32:45.764Z"
+    },
+    {
+      "id": "grunfeld-defence",
+      "status": "fetched",
+      "wikipediaTitle": "Grünfeld Defence",
+      "extract": "The Grünfeld Defence is a chess opening characterised by the moves:1. d4 Nf6\n2. c4 g6\n3. Nc3 d5",
+      "extractHtml": "<p>The <b>Grünfeld Defence</b> is a chess opening characterised by the moves:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>2. <span class=\"extiw\">c4</span> <span class=\"extiw\">g6</span></dd>\n<dd>3. <span class=\"extiw\">Nc3</span> <span class=\"extiw\">d5</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence",
+      "pageId": 353956,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:32:46.822Z"
+    },
+    {
+      "id": "kings-indian-attack",
+      "status": "fetched",
+      "wikipediaTitle": "King's Indian Attack",
+      "extract": "The King's Indian Attack is a chess opening system where White adopts the setup more commonly seen being played by Black in the King's Indian Defence. The King's Indian Attack is characterised by the following moves: the central pawns are developed to e4 and d3, the knights are developed to d2 and f3, the king's bishop is fianchettoed at g2 following the g-pawn's move to g3, and White castles kingside.",
+      "extractHtml": "<p>The <b>King's Indian Attack</b> is a chess <dfn><span><span class=\"glossary-link \" style=\"color:inherit\">opening system</span></span></dfn> where White adopts the setup more commonly seen being played by Black in the King's Indian Defence. The King's Indian Attack is characterised by the following moves: the central pawns are developed to e4 and d3, the knights are developed to d2 and f3, the <dfn><span><span class=\"glossary-link \" style=\"color:inherit\">king's bishop</span></span></dfn> is fianchettoed at g2 following the g-pawn's move to g3, and White castles kingside.</p>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/King's_Indian_Attack",
+      "pageId": 1853888,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:32:47.965Z"
+    },
+    {
+      "id": "kings-indian-defence",
+      "status": "fetched",
+      "wikipediaTitle": "King's Indian Defence",
+      "extract": "The King's Indian Defence is a common chess opening. It is defined by the following moves:1. d4 Nf6\n2. c4 g6",
+      "extractHtml": "<p>The <b>King's Indian Defence</b> is a common chess opening. It is defined by the following moves:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>2. <span class=\"extiw\">c4</span> <span class=\"extiw\">g6</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/King's_Indian_Defence",
+      "pageId": 498021,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:32:49.012Z"
+    },
+    {
+      "id": "london-system",
+      "wikipediaTitle": "London_System",
+      "status": "http-error",
+      "code": 429
+    },
+    {
+      "id": "nimzo-indian",
+      "wikipediaTitle": "Nimzo-Indian_Defence",
+      "status": "http-error",
+      "code": 429
+    },
+    {
+      "id": "pirc-defence",
+      "wikipediaTitle": "Pirc_Defence",
+      "status": "http-error",
+      "code": 429
+    },
+    {
+      "id": "qga",
+      "wikipediaTitle": "Queen's_Gambit_Accepted",
+      "status": "http-error",
+      "code": 429
+    },
+    {
+      "id": "queens-indian",
+      "wikipediaTitle": "Queen's_Indian_Defence",
+      "status": "http-error",
+      "code": 429
+    },
+    {
+      "id": "scandinavian-defence",
+      "wikipediaTitle": "Scandinavian_Defense",
+      "status": "http-error",
+      "code": 429
+    },
+    {
+      "id": "scotch-game",
+      "wikipediaTitle": "Scotch_Game",
+      "status": "http-error",
+      "code": 429
+    },
+    {
+      "id": "semi-slav",
+      "wikipediaTitle": "Semi-Slav_Defense",
+      "status": "http-error",
+      "code": 429
+    },
+    {
+      "id": "sicilian-alapin",
+      "wikipediaTitle": "Alapin_Variation",
+      "status": "http-error",
+      "code": 429
+    },
+    {
+      "id": "sicilian-dragon",
+      "wikipediaTitle": "Sicilian_Defence,_Dragon_Variation",
+      "status": "http-error",
+      "code": 429
+    },
+    {
+      "id": "sicilian-najdorf",
+      "status": "fetched",
+      "wikipediaTitle": "Sicilian Defence, Najdorf Variation",
+      "extract": "The Najdorf Variation is a variation of the Sicilian Defence that begins with the moves:1. e4 c5\n2. Nf3 d6\n3. d4 cxd4\n4. Nxd4 Nf6\n5. Nc3 a6",
+      "extractHtml": "<p>The <b>Najdorf Variation</b> is a variation of the Sicilian Defence that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">e4</span> <span class=\"extiw\">c5</span></dd>\n<dd>2. <span class=\"extiw\">Nf3</span> <span class=\"extiw\">d6</span></dd>\n<dd>3. <span class=\"extiw\">d4</span> <span class=\"extiw\">cxd4</span></dd>\n<dd>4. <span class=\"extiw\">Nxd4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>5. <span class=\"extiw\">Nc3</span> <span class=\"extiw\">a6</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Sicilian_Defence%2C_Najdorf_Variation",
+      "pageId": 906517,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:33:00.461Z"
+    },
+    {
+      "id": "sicilian-sveshnikov",
+      "status": "fetched",
+      "wikipediaTitle": "Sicilian Defence, Sveshnikov Variation",
+      "extract": "The Sveshnikov Variation, also known as the Lasker–Pelikan Variation, is a variation of the Sicilian Defence that begins with the moves:1. e4 c5\n2. Nf3 Nc6\n3. d4 cxd4\n4. Nxd4 Nf6\n5. Nc3 e5",
+      "extractHtml": "<p>The <b>Sveshnikov Variation</b>, also known as the <b>Lasker–Pelikan Variation</b>, is a variation of the Sicilian Defence that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">e4</span> <span class=\"extiw\">c5</span></dd>\n<dd>2. <span class=\"extiw\">Nf3</span> <span class=\"extiw\">Nc6</span></dd>\n<dd>3. <span class=\"extiw\">d4</span> <span class=\"extiw\">cxd4</span></dd>\n<dd>4. <span class=\"extiw\">Nxd4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>5. <span class=\"extiw\">Nc3</span> <span class=\"extiw\">e5</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Sicilian_Defence%2C_Sveshnikov_Variation",
+      "pageId": 78310915,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:33:01.517Z"
+    },
+    {
+      "id": "slav-defence",
+      "status": "fetched",
+      "wikipediaTitle": "Slav Defense",
+      "extract": "The Slav Defense is a chess opening that begins with the moves:1. d4 d5\n2. c4 c6",
+      "extractHtml": "<p>The <b>Slav Defense</b> is a chess opening that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">d5</span></dd>\n<dd>2. <span class=\"extiw\">c4</span> <span class=\"extiw\">c6</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Slav_Defense",
+      "pageId": 1690040,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:33:02.563Z"
+    },
+    {
+      "id": "trompowsky-attack",
+      "status": "fetched",
+      "wikipediaTitle": "Trompowsky Attack",
+      "extract": "The Trompowsky Attack is a chess opening that begins with the moves:1. d4 Nf6\n2. Bg5",
+      "extractHtml": "<p>The <b>Trompowsky Attack</b> is a chess opening that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>2. <span class=\"extiw\">Bg5</span></dd></dl>",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+      "pageId": 1691274,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:33:03.619Z"
+    }
+  ]
+}

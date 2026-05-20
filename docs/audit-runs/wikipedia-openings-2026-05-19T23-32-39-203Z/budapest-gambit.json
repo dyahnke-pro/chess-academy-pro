@@ -1,0 +1,11 @@
+{
+  "id": "budapest-gambit",
+  "status": "fetched",
+  "wikipediaTitle": "Budapest Gambit",
+  "extract": "The Budapest Gambit is a chess opening that begins with the moves:1. d4 Nf6\n2. c4 e5",
+  "extractHtml": "<p>The <b>Budapest Gambit</b> is a chess opening that begins with the moves:</p><dl><dd>1. <span class=\"extiw\">d4</span> <span class=\"extiw\">Nf6</span></dd>\n<dd>2. <span class=\"extiw\">c4</span> <span class=\"extiw\">e5</span></dd></dl>",
+  "canonicalUrl": "https://en.wikipedia.org/wiki/Budapest_Gambit",
+  "pageId": 1630627,
+  "attribution": "CC BY-SA 4.0 — Wikipedia",
+  "fetchedAt": "2026-05-19T23:32:43.662Z"
+}

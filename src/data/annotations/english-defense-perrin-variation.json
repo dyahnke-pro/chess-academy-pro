@@ -19,7 +19,7 @@
     {
       "san": "b6",
       "annotation": "Our opponent signals their intention to fianchetto the light-squared bishop on b7, aiming to pressure our central pawns from the long diagonal. This is the defining move of the English Defense - Black isn't trying to immediately challenge our center with d5 or c5, but rather preparing to exert long-term pressure on our pawn chain. The b6 move also keeps options open for playing d6 and e5 later, creating a King's Indian-style setup. We need to be mindful that Black's bishop on b7 will be eyeing our e4 square and potentially our king if we castle kingside.",
-      "shortNarration": "Black fianchettoes the bishop to b7, pressuring e4 and the kingside from the long diagonal."
+      "shortNarration": "Black plays b6, preparing the bishop fianchetto to b7, pressuring e4 and the kingside from the long diagonal."
     },
     {
       "san": "e4",

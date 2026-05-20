@@ -25,6 +25,45 @@ function persistCoachVoiceOn(profile: UserProfile | null, on: boolean): void {
   });
 }
 
+/** Same fire-and-forget pattern for the puzzle tactic-name toggle.
+ *  Mirrors the value to profile.preferences so it sticks across
+ *  reloads (David's call 2026-05-19: "I want a little on off
+ *  toggle next to the tactic name"). */
+function persistPuzzleShowTacticName(profile: UserProfile | null, on: boolean): void {
+  if (!profile) return;
+  profile.preferences.puzzleShowTacticName = on;
+  void db.profiles.update(profile.id, {
+    preferences: { ...profile.preferences, puzzleShowTacticName: on },
+  }).catch((err: unknown) => {
+    console.warn('[appStore] persistPuzzleShowTacticName failed:', err);
+  });
+}
+
+/** Puzzle timer toggle. OFF (default): silent background count-up
+ *  logged to the puzzle record. ON: visible countdown chip from
+ *  puzzleClockTargetSec → 0 (time pressure). Mirrored to
+ *  profile.preferences so the choice sticks. */
+function persistPuzzleTimerOn(profile: UserProfile | null, on: boolean): void {
+  if (!profile) return;
+  profile.preferences.puzzleTimerOn = on;
+  void db.profiles.update(profile.id, {
+    preferences: { ...profile.preferences, puzzleTimerOn: on },
+  }).catch((err: unknown) => {
+    console.warn('[appStore] persistPuzzleTimerOn failed:', err);
+  });
+}
+
+/** Countdown target in seconds for the visible-clock mode. */
+function persistPuzzleClockTargetSec(profile: UserProfile | null, sec: number): void {
+  if (!profile) return;
+  profile.preferences.puzzleClockTargetSec = sec;
+  void db.profiles.update(profile.id, {
+    preferences: { ...profile.preferences, puzzleClockTargetSec: sec },
+  }).catch((err: unknown) => {
+    console.warn('[appStore] persistPuzzleClockTargetSec failed:', err);
+  });
+}
+
 interface AppState {
   // Auth / Profile
   activeProfile: UserProfile | null;
@@ -48,6 +87,15 @@ interface AppState {
   coachBubbleText: string;
   coachVoiceOn: boolean;
   coachTipsOn: boolean;
+  /** Show the named tactic above each mistake puzzle. Toggleable
+   *  by the student via the eye-icon button next to the chip. */
+  puzzleShowTacticName: boolean;
+  /** ON: visible countdown chip (time pressure). OFF (default):
+   *  hidden background timer that gets logged to the puzzle
+   *  record for /weaknesses aggregation. */
+  puzzleTimerOn: boolean;
+  /** Target seconds for the visible countdown mode. */
+  puzzleClockTargetSec: number;
 
   // Background analysis
   backgroundAnalysisRunning: boolean;
@@ -112,6 +160,11 @@ interface AppActions {
   toggleCoachVoice: () => void;
   setCoachVoiceOn: (on: boolean) => void;
   toggleCoachTips: () => void;
+  togglePuzzleShowTacticName: () => void;
+  setPuzzleShowTacticName: (on: boolean) => void;
+  togglePuzzleTimer: () => void;
+  setPuzzleTimerOn: (on: boolean) => void;
+  setPuzzleClockTargetSec: (sec: number) => void;
   setBackgroundAnalysis: (running: boolean, progress?: string | null) => void;
   setCoachDrawerOpen: (open: boolean) => void;
   setCoachDrawerInitialMessage: (msg: string | null, modality?: 'voice' | 'text') => void;
@@ -142,6 +195,11 @@ const DEFAULT_STATE: AppState = {
   coachBubbleText: '',
   coachVoiceOn: true,
   coachTipsOn: false,
+  puzzleShowTacticName: true,
+  // Default OFF: hidden background timer, logged to weakness. Visible
+  // countdown is opt-in for students who want time pressure.
+  puzzleTimerOn: false,
+  puzzleClockTargetSec: 60,
   backgroundAnalysisRunning: false,
   backgroundAnalysisProgress: null,
   coachDrawerOpen: false,
@@ -166,7 +224,24 @@ export const useAppStore = create<AppState & AppActions>()(
       // isn't present on the profile yet.
       const persisted = profile?.preferences.coachVoiceOn;
       const nextVoiceOn = typeof persisted === 'boolean' ? persisted : true;
-      set({ activeProfile: profile, coachVoiceOn: nextVoiceOn });
+      const persistedTacticName = profile?.preferences.puzzleShowTacticName;
+      const nextPuzzleShowTacticName = typeof persistedTacticName === 'boolean' ? persistedTacticName : true;
+      const persistedTimer = profile?.preferences.puzzleTimerOn;
+      // Default flipped to false 2026-05-19 per David's clock design:
+      // hidden background timer is the default; visible countdown is
+      // opt-in for time pressure.
+      const nextPuzzleTimerOn = typeof persistedTimer === 'boolean' ? persistedTimer : false;
+      const persistedClockTarget = profile?.preferences.puzzleClockTargetSec;
+      const nextClockTarget = typeof persistedClockTarget === 'number' && persistedClockTarget > 0
+        ? persistedClockTarget
+        : 60;
+      set({
+        activeProfile: profile,
+        coachVoiceOn: nextVoiceOn,
+        puzzleShowTacticName: nextPuzzleShowTacticName,
+        puzzleTimerOn: nextPuzzleTimerOn,
+        puzzleClockTargetSec: nextClockTarget,
+      });
     },
 
     setLoading: (loading) => set({ isLoading: loading }),
@@ -206,6 +281,37 @@ export const useAppStore = create<AppState & AppActions>()(
     }),
 
     toggleCoachTips: () => set((state) => ({ coachTipsOn: !state.coachTipsOn })),
+
+    togglePuzzleShowTacticName: () => set((state) => {
+      const next = !state.puzzleShowTacticName;
+      persistPuzzleShowTacticName(state.activeProfile, next);
+      return { puzzleShowTacticName: next };
+    }),
+
+    setPuzzleShowTacticName: (on) => set((state) => {
+      persistPuzzleShowTacticName(state.activeProfile, on);
+      return { puzzleShowTacticName: on };
+    }),
+
+    togglePuzzleTimer: () => set((state) => {
+      const next = !state.puzzleTimerOn;
+      persistPuzzleTimerOn(state.activeProfile, next);
+      return { puzzleTimerOn: next };
+    }),
+
+    setPuzzleTimerOn: (on) => set((state) => {
+      persistPuzzleTimerOn(state.activeProfile, on);
+      return { puzzleTimerOn: on };
+    }),
+
+    setPuzzleClockTargetSec: (sec) => set((state) => {
+      // Clamp to sensible 10–600s window; out-of-range inputs would
+      // produce a useless clock (1s = always expired, 9999s = always
+      // green) and confuse the timer chip.
+      const clamped = Math.min(600, Math.max(10, Math.round(sec)));
+      persistPuzzleClockTargetSec(state.activeProfile, clamped);
+      return { puzzleClockTargetSec: clamped };
+    }),
 
     setBackgroundAnalysis: (running, progress) =>
       set({ backgroundAnalysisRunning: running, backgroundAnalysisProgress: progress ?? null }),

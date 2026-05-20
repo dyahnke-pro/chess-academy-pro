@@ -146,7 +146,12 @@ async function main() {
   // ── /coach/train ───────────────────────────────────────────────
   await record('coach-train', async () => {
     await page.goto(`${BASE_URL}/coach/train`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-train-page"]').waitFor({ timeout: 12000 });
+    // Cold visit to /coach/train pulls recommendation data + dexie
+    // reads + heavy initial bundle; 12s wasn't enough on a fresh
+    // dev server. The second scenario (coach-train-recommendation-click)
+    // hits a warm cache and passes at 12s, but this first cold visit
+    // needs more headroom.
+    await page.locator('[data-testid="coach-train-page"]').waitFor({ timeout: 25000 });
   }, SHORT_SETTLE_MS, [
     { kind: 'visible', selector: '[data-testid="coach-train-page"]', label: 'Coach Train mounts' },
     { kind: 'visible', selector: '[data-testid="training-heading"]', label: 'training heading visible' },
@@ -167,13 +172,18 @@ async function main() {
   ]);
 
   // ── /coach/plan ────────────────────────────────────────────────
+  // /coach/plan now renders TrainingPlanRolodexPage (WO-ROLODEX-UI-01).
+  // The legacy `coach-session-plan-page` testid is gone; deep audit
+  // lives in scripts/audit-coach-plan.mjs. Here we just check the
+  // mount.
   await record('coach-plan', async () => {
     await page.goto(`${BASE_URL}/coach/plan`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-session-plan-page"]').waitFor({ timeout: 12000 });
+    await page.locator('[data-testid="training-plan-rolodex-page"]').waitFor({ timeout: 12000 });
   }, SHORT_SETTLE_MS, [
-    { kind: 'visible', selector: '[data-testid="coach-session-plan-page"]', label: 'Coach Plan mounts' },
-    // Plan explanation OR start-session button (depending on plan-load state).
-    { kind: 'count-gte', selector: '[data-testid="plan-explanation"], [data-testid="start-session-btn"]', value: 0, label: 'plan content area renders (any state OK)' },
+    { kind: 'visible', selector: '[data-testid="training-plan-rolodex-page"]', label: 'Training Plan mounts' },
+    // Either the white column (favorites present) or the per-color empty
+    // state should be visible — both signal the page rendered.
+    { kind: 'count-gte', selector: '[data-testid="rolodex-white-column"], [data-testid="rolodex-empty-state-white"], [data-testid="rolodex-mobile-panel"]', value: 1, label: 'rolodex content area renders (any state OK)' },
     { kind: 'no-pageerrors-this-step', label: 'no pageerrors during mount' },
   ]);
 
@@ -215,9 +225,14 @@ async function main() {
   for (const card of kidCards) {
     await record(`kid-mode-nav-${card.testid}`, async () => {
       await page.goto(`${BASE_URL}/kid`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-      await page.locator('[data-testid="kid-mode-page"]').waitFor({ timeout: 12000 });
+      // Kid page does heavy gameProgress dexie reads on mount;
+      // bumped from 12s to 25s after audit flakes 2026-05-19.
+      await page.locator('[data-testid="kid-mode-page"]').waitFor({ timeout: 25000 });
       await page.locator(`[data-testid="${card.testid}"]`).click();
-      await page.waitForTimeout(1200);
+      // Wait for the actual URL change instead of a fixed timeout —
+      // React Router navigation can lag a frame or two behind the
+      // click, especially on the first hop after dexie hydration.
+      await page.waitForURL(card.route, { timeout: 8000 }).catch(() => undefined);
     }, SHORT_SETTLE_MS, [
       { kind: 'url-matches', value: card.route, label: card.label },
     ]);

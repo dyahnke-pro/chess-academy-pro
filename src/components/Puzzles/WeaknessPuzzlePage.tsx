@@ -58,7 +58,7 @@ export function WeaknessPuzzlePage(): JSX.Element {
     setPhase('solving');
   }
 
-  const handleComplete = useCallback(async (correct: boolean): Promise<void> => {
+  const handleComplete = useCallback(async (correct: boolean, solveTimeMs?: number): Promise<void> => {
     const item = queue.at(currentIndex);
     if (!item) return;
 
@@ -81,7 +81,7 @@ export function WeaknessPuzzlePage(): JSX.Element {
     // Grade the puzzle
     const grade = correct ? 'good' : 'again';
     if (item.source === 'mistake' && item.originalMistake) {
-      await gradeMistakePuzzle(item.originalMistake.id, grade, correct);
+      await gradeMistakePuzzle(item.originalMistake.id, grade, correct, solveTimeMs);
     } else {
       await recordAttempt(item.puzzle.id, correct, activeProfile?.puzzleRating ?? 1200, grade);
     }
@@ -196,7 +196,7 @@ export function WeaknessPuzzlePage(): JSX.Element {
             {currentItem.source === 'mistake' && currentItem.originalMistake ? (
               <MistakePuzzleBoard
                 puzzle={currentItem.originalMistake}
-                onComplete={(correct) => void handleComplete(correct)}
+                onComplete={(correct, solveTimeMs) => void handleComplete(correct, solveTimeMs)}
               />
             ) : (
               <PuzzleBoard

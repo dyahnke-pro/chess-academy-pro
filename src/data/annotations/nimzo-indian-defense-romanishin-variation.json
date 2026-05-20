@@ -43,17 +43,17 @@
     },
     {
       "san": "g3",
-      "annotation": "Continuing Nimzo Indian Defense Romanishin Variation: g3 is a known theory move in this line.",
+      "annotation": "Fianchettoing the kingside bishop prepares a long diagonal attack while sidestepping Black's pin on the c3 knight—a key strategic choice in this variation.",
       "shortNarration": "g3 is theory in the Nimzo-Indian Romanishin, preparing Bg2 to contest the dark-squared bishop."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Nimzo Indian Defense Romanishin Variation: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside removes the king to safety while completing development; Black must now decide whether to release the bishop pair by playing Bxc3 or retreat it.",
       "shortNarration": "O-O is the theory move in the Nimzo-Indian Romanishin Variation."
     },
     {
       "san": "Bg2",
-      "annotation": "Continuing Nimzo Indian Defense Romanishin Variation: Bg2 is a known theory move in this line.",
+      "annotation": "The fianchettoed bishop lands on g2, dominating the long diagonal toward a6 and applying constant pressure on Black's center and queenside.",
       "shortNarration": "Bg2 is theory in the Nimzo Indian Romanishin Variation."
     }
   ]

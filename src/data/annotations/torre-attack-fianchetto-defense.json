@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black chooses the King's Indian setup, fianchettoing the dark-squared bishop to prepare Bg7 where it will eye our long diagonal and support central counterplay with moves like d6 and e5. This is a hypermodern approach where Black allows us to occupy the center with pawns, planning to challenge it later with pieces from the flanks. The g6 move specifically prepares to control the important central squares e5 and d4 from the fianchettoed bishop, and it also gives Black's king a safe haven on g8 after castling. However, this setup does have some drawbacks - it slightly weakens the kingside, particularly the f6 square and the h1-a8 diagonal, which we can potentially exploit with our Torre Attack setup that's coming up.",
-      "shortNarration": "Black fianchettoes the bishop to Bg7, eyeing d4 and e5, but weakens f6 and the h1-a8 diagonal for White's Torre Attack."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto to Bg7, eyeing d4 and e5, but weakens f6 and the h1-a8 diagonal for White's Torre Attack."
     },
     {
       "san": "Bg5",

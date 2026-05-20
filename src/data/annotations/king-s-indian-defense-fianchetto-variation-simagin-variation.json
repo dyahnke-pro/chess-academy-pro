@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Our opponent chooses the King's Indian Defense setup, fianchettoing the king's bishop to control the long diagonal. This move signals Black's intention to play for dynamic counterplay rather than immediately challenging our center with moves like d5. The g6 advance prepares Bg7, where the bishop will become a powerful long-range piece eyeing our kingside and center. We should expect Black to castle kingside quickly and then look for pawn breaks like e5 or c5 to generate active play.",
-      "shortNarration": "Black fianchettoes the king's bishop to g7, aiming for dynamic counterplay with kingside castling and pawn breaks e5 or c5."
+      "shortNarration": "Black plays g6, preparing the king's bishop fianchetto to g7, aiming for dynamic counterplay with kingside castling and pawn breaks e5 or c5."
     },
     {
       "san": "Nc3",

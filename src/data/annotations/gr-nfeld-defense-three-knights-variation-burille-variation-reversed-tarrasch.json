@@ -29,7 +29,7 @@
     {
       "san": "g6",
       "annotation": "Black is fianchettoing the king's bishop, preparing to place it on the long diagonal where it will exert tremendous pressure on our center and queenside. This setup is characteristic of the Grünfeld Defense philosophy, where Black allows White to build an impressive pawn center before undermining it with piece pressure. The g6 move also prepares ...Bg7 and eventual castling kingside, completing Black's kingside development efficiently. From g7, Black's bishop will be a long-term strategic asset, pressuring our d4 pawn and supporting potential ...d5 breaks.",
-      "shortNarration": "Black fianchettoes the king's bishop to g7, pressuring the d4 pawn and preparing ...d5 to undermine White's center."
+      "shortNarration": "Black plays g6, preparing the king's bishop fianchetto to g7, pressuring the d4 pawn and preparing ...d5 to undermine White's center."
     },
     {
       "san": "Nc3",
@@ -78,7 +78,7 @@
     },
     {
       "san": "Nc6",
-      "annotation": "Continuing Gr Nfeld Defense Three Knights Variation Burille Variation Reversed Tarrasch: Nc6 is a known theory move in this line.",
+      "annotation": "Black attacks the d4 pawn and contests the center, a typical Grünfeld counter-strategy that prepares to challenge White's space advantage with piece pressure.",
       "shortNarration": "Nc6 is theory in the Grünfeld Three Knights, Burille Variation, Reversed Tarrasch."
     }
   ]

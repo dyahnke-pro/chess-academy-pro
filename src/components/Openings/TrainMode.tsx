@@ -41,9 +41,12 @@ interface MoveInfo {
   to: string;
 }
 
-function parseLineMoves(pgn: string): MoveInfo[] {
+function parseLineMoves(pgn: string, setupFen?: string): MoveInfo[] {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
-  const chess = new Chess();
+  // Puzzle-derived trap lines start from a middlegame setupFen
+  // rather than the standard start position (see OpeningVariation
+  // type comment in src/types/index.ts).
+  const chess = setupFen ? new Chess(setupFen) : new Chess();
   const moves: MoveInfo[] = [];
   for (const san of tokens) {
     try {
@@ -59,7 +62,7 @@ function parseLineMoves(pgn: string): MoveInfo[] {
 export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModeProps): JSX.Element {
   const [currentLineIndex, setCurrentLineIndex] = useState(0);
   const currentLine = lines[currentLineIndex];
-  const expectedMoves = useMemo(() => parseLineMoves(currentLine.pgn), [currentLine.pgn]);
+  const expectedMoves = useMemo(() => parseLineMoves(currentLine.pgn, currentLine.setupFen), [currentLine.pgn, currentLine.setupFen]);
 
   const playerColor = opening.color;
   const [currentMoveIndex, setCurrentMoveIndex] = useState(0);
@@ -132,7 +135,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
 
   const fenAtIndex = useCallback(
     (idx: number): string => {
-      const chess = new Chess();
+      const chess = currentLine.setupFen ? new Chess(currentLine.setupFen) : new Chess();
       for (let i = 0; i < idx && i < expectedMoves.length; i++) {
         try {
           chess.move(expectedMoves[i].san);
@@ -142,7 +145,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
       }
       return chess.fen();
     },
-    [expectedMoves],
+    [expectedMoves, currentLine.setupFen],
   );
 
   const currentFen = useMemo(() => fenAtIndex(currentMoveIndex), [fenAtIndex, currentMoveIndex]);

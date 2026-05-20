@@ -181,7 +181,7 @@ export function TacticCreatePage(): JSX.Element {
     setPhase('solving');
   }, []);
 
-  const handleComplete = useCallback(async (correct: boolean): Promise<void> => {
+  const handleComplete = useCallback(async (correct: boolean, solveTimeMs?: number): Promise<void> => {
     const item = queue.at(currentIndex);
     if (!item) return;
 
@@ -214,7 +214,7 @@ export function TacticCreatePage(): JSX.Element {
 
     // Grade the puzzle
     const grade = correct ? 'good' : 'again';
-    await gradeMistakePuzzle(item.originalMistake.id, grade, correct);
+    await gradeMistakePuzzle(item.originalMistake.id, grade, correct, solveTimeMs);
 
     // Update puzzle rating
     if (activeProfile) {
@@ -512,7 +512,7 @@ export function TacticCreatePage(): JSX.Element {
             {/* Board */}
             <MistakePuzzleBoard
               puzzle={currentItem.originalMistake}
-              onComplete={(correct) => void handleComplete(correct)}
+              onComplete={(correct, solveTimeMs) => void handleComplete(correct, solveTimeMs)}
             />
 
             {/* Navigation buttons */}

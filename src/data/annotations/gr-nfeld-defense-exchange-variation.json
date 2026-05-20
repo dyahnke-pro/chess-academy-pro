@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Our opponent signals their intention to fianchetto the king's bishop, preparing to control the long dark-squared diagonal from g7 and aiming for dynamic counterplay against our pawn center. This move is the hallmark of hypermodern defense - rather than immediately occupying the center with pawns, Black prepares to pressure it from the flanks with pieces. The g6 move also prepares kingside castling and keeps the option open for ...d6 or the more aggressive ...d5 central strike. We should recognize that Black is inviting us to build a large pawn center, planning to undermine it later with moves like ...c5 or ...d5.",
-      "shortNarration": "Black fianchettoes the king's bishop to g7, preparing to pressure the center from the flank with ...d5 or ...c5."
+      "shortNarration": "Black plays g6, preparing the king's bishop fianchetto to g7, preparing to pressure the center from the flank with ...d5 or ...c5."
     },
     {
       "san": "Nc3",

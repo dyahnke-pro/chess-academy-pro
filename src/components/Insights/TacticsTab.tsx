@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Play } from 'lucide-react';
 import { InsightsDonutChart } from './InsightsDonutChart';
 import { InsightsBarChart } from './InsightsBarChart';
+import { InsightsSection as Section } from './InsightsSection';
 import { InsightsStackedBar } from './InsightsStackedBar';
 import { StrengthsCard } from './StrengthsCard';
 import type { TacticInsights, TacticalMoment } from '../../types';
@@ -129,19 +130,7 @@ export function TacticsTab({ data }: TacticsTabProps): JSX.Element {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function Section({ title, children }: { title: string; children: React.ReactNode }): JSX.Element {
-  return (
-    <div className="pt-4">
-      <h3
-        className="text-[10px] font-bold uppercase tracking-wider pb-2 border-b"
-        style={{ color: 'var(--color-text-muted)', borderColor: 'var(--color-border)' }}
-      >
-        {title}
-      </h3>
-      {children}
-    </div>
-  );
-}
+// Section header moved to ./InsightsSection — shared across tabs.
 
 function DataRow({ label, value, color }: { label: string; value: string; color?: string }): JSX.Element {
   return (

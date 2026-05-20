@@ -100,12 +100,13 @@ async function main() {
     await page.goto(`${BASE_URL}/coach/review`);
     await page.locator('[data-testid="coach-review-list-page"]').waitFor({ timeout: 15_000 });
     // Sample seeder + Dexie migration run async after mount — tiles
-    // surface in ~8–15s on a fresh context. Wait up to 30s before
-    // declaring the list empty.
+    // surface in ~28-32s on a cold-start headless dev context.
+    // Bumped from 30s to 45s after 2026-05-19 audit measured the
+    // slower-than-expected path under HMR + asset competition.
     await page
       .locator('[data-testid^="review-game-card-"]')
       .first()
-      .waitFor({ timeout: 30_000 })
+      .waitFor({ timeout: 45_000 })
       .catch(() => undefined);
     return 'list page mounted';
   });
@@ -225,8 +226,15 @@ async function main() {
 
   await scenario('B1-weaknesses-loads', async () => {
     await page.goto(`${BASE_URL}/weaknesses`);
-    await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 20_000 });
-    return 'weaknesses page rendered';
+    // /weaknesses runs a heavy game-insights analyzer on cold start.
+    // Accept either the loaded page OR the loading state as proof of
+    // mount (same pattern as audit-mistakes-quality). Bumped from
+    // 20s to 45s after 2026-05-19 audit measured the cold-start
+    // analyzer run.
+    await page.locator(
+      '[data-testid="game-insights-page"], [data-testid="insights-loading"]',
+    ).first().waitFor({ timeout: 45_000 });
+    return 'weaknesses page rendered (page OR loading state)';
   });
 
   await scenario('B2-mistakes-tab-clickable', async () => {

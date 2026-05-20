@@ -40,6 +40,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { attachAuditStreamTracker, attributeScenarioEvents, readAllPageAudits } from './audit-lib/event-attribution.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -180,8 +181,12 @@ async function main() {
 
   const page = await ctx.newPage();
 
-  // Capture audit-stream POSTs.
+  // Capture audit-stream POSTs (network-arrival, retained as a
+  // cross-check). Canonical per-scenario attribution uses
+  // attributeScenarioEvents() with the in-page Dexie log to avoid
+  // the network-race issue documented in event-attribution.mjs.
   const captured = [];
+  const auditTracker = attachAuditStreamTracker(page, STREAM_URL);
   page.on('request', (req) => {
     const u = req.url();
     if (u === STREAM_URL && req.method() === 'POST') {
@@ -214,8 +219,9 @@ async function main() {
 
   /** Drain async audit-stream POSTs after the body resolves so events
    *  from this scenario fully land before the next one starts.
-   *  3500ms covers the audit-stream POST + the network round-trip + the
-   *  page.on('request') notification chain. */
+   *  3500ms was insufficient in practice — see attributeScenarioEvents
+   *  for the canonical fix that reads from the in-page Dexie log
+   *  (no network race) and filters by entry.timestamp. */
   const DRAIN_MS = 3500;
   async function scenario(name, body) {
     const before = captured.length;
@@ -228,7 +234,10 @@ async function main() {
       err = String(e?.message ?? e);
     }
     await page.waitForTimeout(DRAIN_MS);
-    const events = captured.slice(before);
+    // Canonical: in-page Dexie log + timestamp filter. Falls back to
+    // captured.slice(before) only if __AUDIT__ isn't available.
+    const fresh = await attributeScenarioEvents(page, auditTracker, { t0 });
+    const events = fresh.length > 0 ? fresh : captured.slice(before);
     const byKind = events.reduce((acc, e) => {
       const k = String(e.kind ?? 'unknown');
       acc[k] = (acc[k] ?? 0) + 1;
@@ -338,9 +347,12 @@ async function main() {
   });
 
   // Assert claim-validator-trip and master-play-enforcement-fallback fired
-  // somewhere in the captured stream (drain has already happened).
-  const tripEvents = captured.filter((e) => e.kind === 'claim-validator-trip');
-  const fallbackEvents = captured.filter((e) => e.kind === 'master-play-enforcement-fallback');
+  // somewhere in the run. Read from the in-page Dexie log directly so
+  // we catch events whose audit-stream POSTs haven't hit the wire yet —
+  // same fix as attributeScenarioEvents but for global assertions.
+  const allAudits = await readAllPageAudits(page);
+  const tripEvents = allAudits.filter((e) => e.kind === 'claim-validator-trip');
+  const fallbackEvents = allAudits.filter((e) => e.kind === 'master-play-enforcement-fallback');
   report.scenarios.push(
     tripEvents.length >= 2
       ? { name: 'assert.claim-validator-trip-fired-twice', ok: true, count: tripEvents.length }

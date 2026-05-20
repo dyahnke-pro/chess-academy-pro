@@ -19,7 +19,7 @@
     {
       "san": "b6",
       "annotation": "Black initiates the English Defense, a hypermodern system that fianchettoes the light-squared bishop to pressure our central pawns from the long diagonal. This is the hallmark move of the English Defense - instead of directly challenging our center with ...d5 or ...c5, Black adopts a more indirect approach, preparing to undermine our pawn duo with piece pressure. The move prepares ...Bb7, which will create immediate tension against our d4 pawn and potentially support a later ...f5 advance. However, this setup can be slow, and we need to be ready to strike in the center before Black's pieces coordinate effectively.",
-      "shortNarration": "Black fianchettoes the bishop to b7, pressuring d4 and preparing ...f5, but we must strike in the center before Black coordinates."
+      "shortNarration": "Black plays b6, preparing the bishop fianchetto to b7, pressuring d4 and preparing ...f5, but we must strike in the center before Black coordinates."
     },
     {
       "san": "Nc3",

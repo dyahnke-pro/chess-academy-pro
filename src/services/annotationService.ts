@@ -295,6 +295,27 @@ function countMatchingMoves(pgn: string, annotations: OpeningMoveAnnotation[]): 
 }
 
 /**
+ * Trim an annotation set to the longest prefix whose `san` field
+ * matches the PGN at the same index. Past that boundary the annotations
+ * describe positions that don't appear in this PGN; better to hand them
+ * off to the WalkthroughMode synth/LLM-enrich fallback than to render
+ * wrong-color narration. Used by `loadAnnotationsForPgn` when overlap
+ * is borderline.
+ */
+function trimAnnotationsToPgnPrefix(
+  pgn: string,
+  annotations: OpeningMoveAnnotation[],
+): OpeningMoveAnnotation[] {
+  const sans = parsePgnToSans(pgn);
+  let n = 0;
+  for (let i = 0; i < Math.min(sans.length, annotations.length); i++) {
+    if (annotations[i].san === sans[i]) n = i + 1;
+    else break;
+  }
+  return annotations.slice(0, n);
+}
+
+/**
  * Load annotations for an opening, using the PGN to find the best-matching
  * annotation set. When the main line annotations diverge from the opening's
  * PGN, this searches subLines for a better match.
@@ -344,7 +365,45 @@ export async function loadAnnotationsForPgn(
     return null;
   }
 
-  return bestAnnotations;
+  // Cross-line drift guard (2026-05-18 deep-walk audit):
+  // The 50% prefix check above passes annotation sets whose FIRST N
+  // plies match but whose TAIL describes a different opening's
+  // continuation. Real examples:
+  //   - Ponziani / variation-0: italian-game.json's annotations'
+  //     tail describes Italian's Black-d5 push at index 8 while
+  //     Ponziani plays White's d5 push there.
+  //   - Sveshnikov (Carlsen) / variation-0: cross-line drift on
+  //     Bg5 at ply 24.
+  //   - KIA / vs French Structure: kia.json's e5 narration applies
+  //     to White's e5 push at ply 16-18; this subline has Black
+  //     playing e5 at ply 14 — annotation narrates wrong color.
+  //
+  // Defense (2026-05-18 update — stricter than initial PR #598):
+  // ALWAYS trim to the strict prefix matching the PGN. The matched
+  // prefix is guaranteed correct. The divergent tail might be from
+  // a different line and would display wrong-color narration if
+  // surfaced. Better to drop the tail and let the synth/LLM-enrich
+  // fallback in WalkthroughMode render those plies.
+  //
+  // Cost: the 92-file class of intra-line reordering (annotations
+  // covering the same line but in a slightly different ply order)
+  // loses some tail content past the first divergence. The
+  // SAN-first resolver in WalkthroughMode would have salvaged that
+  // tail, but it can ALSO surface cross-line drift on lines like
+  // KIA-vs-French. Correctness over completeness — the audit
+  // surfaces the wrong-narration class loudly.
+  const trimmed = trimAnnotationsToPgnPrefix(pgn, bestAnnotations);
+  // If the trim caught everything (no divergence), use the full set.
+  if (trimmed.length === bestAnnotations.length && bestAnnotations.length > 0) {
+    return bestAnnotations;
+  }
+  // Refuse to return a tiny prefix (≤ 2 plies) on a long PGN — the
+  // student would see two annotated moves then many synth fallbacks.
+  // Better to fully fall through to synth + LLM enrich.
+  if (trimmed.length < 3 || (pgnLen >= 8 && trimmed.length * 3 < pgnLen)) {
+    return null;
+  }
+  return trimmed;
 }
 
 export async function loadSubLineAnnotations(

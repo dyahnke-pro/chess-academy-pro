@@ -13,17 +13,17 @@
     },
     {
       "san": "d4",
-      "annotation": "Continuing Caro Kann Defense Modern Variation: d4 is a known theory move in this line.",
+      "annotation": "The d4 advance stakes White's claim to the center while supporting the e4 pawn, forcing Black into the characteristic Caro-Kann trade-off: solid defense or delayed piece development.",
       "shortNarration": "d4 is the theory move in the Caro-Kann Modern Variation."
     },
     {
       "san": "d5",
-      "annotation": "Continuing Caro Kann Defense Modern Variation: d5 is a known theory move in this line.",
+      "annotation": "Black strikes back at e4 with the d5 advance, immediately challenging White's center and preventing an unconstested space advantage.",
       "shortNarration": "Caro-Kann Modern: d5 challenges e4, a standard theoretical response."
     },
     {
       "san": "Nd2",
-      "annotation": "Continuing Caro Kann Defense Modern Variation: Nd2 is a known theory move in this line.",
+      "annotation": "The knight reroutes to d2, keeping pressure on e4 while sidestepping pins on the c1–h6 diagonal and preparing smooth recapture should Black exchange on e4.",
       "shortNarration": "Nd2 is a standard Caro-Kann Modern Variation move."
     }
   ]

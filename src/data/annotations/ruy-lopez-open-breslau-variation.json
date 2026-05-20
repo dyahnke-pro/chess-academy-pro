@@ -108,7 +108,7 @@
     },
     {
       "san": "Nxe5",
-      "annotation": "Continuing Ruy Lopez Open Breslau Variation: Nxe5 is a known theory move in this line.",
+      "annotation": "Capturing on e5 eliminates Black's centralized knight and forces a recapture, clarifying the pawn structure after White's earlier e4–e5 advance.",
       "shortNarration": "Nxe5 is the theory move in the Ruy Lopez Open Breslau Variation."
     }
   ]

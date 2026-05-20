@@ -39,7 +39,7 @@
     {
       "san": "d6",
       "annotation": "Black plays a constructive move that prepares to bring the king's bishop into play, most likely to g7 where it will form part of a fianchetto setup. This move also supports the e7-e5 advance at some point, though Black's unusual pawn structure makes this less effective than in normal openings. Our opponent is trying to complete development while maintaining the integrity of their position, but this somewhat passive approach allows us to maintain our space advantage. The move does help Black's king safety by preparing to castle, which is becoming increasingly important as we develop our pieces with attacking potential.",
-      "shortNarration": "Black fianchettoes the king's bishop to g7, supporting e7-e5 and preparing to castle, but White keeps a space advantage."
+      "shortNarration": "Black plays d6, preparing the king's bishop fianchetto to g7, supporting e7-e5 and preparing to castle, but White keeps a space advantage."
     },
     {
       "san": "O-O",

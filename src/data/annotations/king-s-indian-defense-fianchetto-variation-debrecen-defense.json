@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black is committing to the King's Indian Defense setup, preparing to fianchetto the dark-squared bishop on g7 where it will become a powerful piece controlling the long diagonal. This move signals Black's strategic intent: rather than challenging our center directly with moves like d5, Black will allow us to build a pawn center while preparing counterplay on the kingside and dark squares. The g6 move also prepares safe kingside castling and creates potential for future pawn storms with moves like h6, g5, and f5. We should recognize that Black is setting up a complex, double-edged position where tactical complications often arise from Black's active piece play against our space advantage.",
-      "shortNarration": "Black fianchettoes the bishop on g7, preparing kingside counterplay and a pawn storm against White's center."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto on g7, preparing kingside counterplay and a pawn storm against White's center."
     },
     {
       "san": "g3",
@@ -33,32 +33,32 @@
     },
     {
       "san": "Bg2",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: Bg2 is a known theory move in this line.",
+      "annotation": "The fianchettoed bishop on g2 controls the long diagonal, exerting quiet pressure on Black's center and d5 square from afar.",
       "shortNarration": "Bg2 is the standard fianchetto in the Kings Indian Debrecen Defense."
     },
     {
       "san": "O-O",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: O-O is a known theory move in this line.",
+      "annotation": "Castling kingside tucks the king to safety and connects the rooks, preparing to coordinate pressure along the back rank and center files.",
       "shortNarration": "White castles kingside in the Kings Indian Fianchetto Debrecen Defense."
     },
     {
       "san": "Nc3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: Nc3 is a known theory move in this line.",
+      "annotation": "The knight on c3 supports the d4 pawn and eyes e4, a key square to contest once Black commits to a plan.",
       "shortNarration": "Nc3 is the standard theory move in the Kings Indian Fianchetto Debrecen Defense."
     },
     {
       "san": "d6",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: d6 is a known theory move in this line.",
+      "annotation": "Pushing the d-pawn to d6 solidifies Black's grip on e5 and prepares to reroute the queen or knight while supporting the fianchetto structure.",
       "shortNarration": "d6 is theory in the Kings Indian Fianchetto Debrecen Defense."
     },
     {
       "san": "Nf3",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: Nf3 is a known theory move in this line.",
+      "annotation": "Nf3 completes White's minor-piece setup, enabling potential e4 advances and ready flexibility in the center battle.",
       "shortNarration": "Nf3 is theory in the Kings Indian Fianchetto Debrecen Defense."
     },
     {
       "san": "Nbd7",
-      "annotation": "Continuing Kings Indian Defense Fianchetto Variation Debrecen Defense: Nbd7 is a known theory move in this line.",
+      "annotation": "Nbd7 supports e5 and prepares f6-e5 maneuvers, while keeping the queen's escape route open on the queenside.",
       "shortNarration": "Nbd7 is theory in the Kings Indian Fianchetto Debrecen Defense."
     }
   ]

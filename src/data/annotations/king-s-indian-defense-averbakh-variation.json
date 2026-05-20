@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black continues with the characteristic King's Indian setup, preparing to fianchetto the dark-squared bishop on g7 where it will become a monster piece. This pawn move also provides the king with an escape square on g7 and prepares to castle kingside safely. Our opponent is essentially saying 'I'm going to let you build a big center, but I'll counterattack it later with moves like ...e5 or ...c5.' The g6 move is crucial because it allows the Bg7 bishop to eye our entire queenside and central structure, making it Black's most important piece in the King's Indian.",
-      "shortNarration": "Black fianchettoes the bishop on g7, eyeing the center and queenside, preparing to counterattack with ...e5 or ...c5."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto on g7, eyeing the center and queenside, preparing to counterattack with ...e5 or ...c5."
     },
     {
       "san": "Nc3",

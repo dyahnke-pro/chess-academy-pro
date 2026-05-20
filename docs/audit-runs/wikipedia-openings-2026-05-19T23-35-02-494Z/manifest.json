@@ -1,0 +1,245 @@
+{
+  "generatedAt": "2026-05-19T23:36:16.557Z",
+  "source": "Wikipedia (en.wikipedia.org REST API)",
+  "license": "CC BY-SA 4.0",
+  "count": 24,
+  "fetched": 23,
+  "failed": 1,
+  "entries": [
+    {
+      "id": "alekhine-defence",
+      "status": "fetched",
+      "wikipediaTitle": "Alekhine's Defence",
+      "extract": "Alekhine's Defence (or the Alekhine Defence) is a chess opening that begins with the moves:\n\n1. e4 Nf6\nBlack tempts White's pawns forward to form a broad pawn centre, with plans to undermine and attack the white structure later in the spirit of hypermodern defence theory. Grandmaster Nick de Firmian observes of Alekhine's Defence in MCO-15 (2008), \"The game immediately loses any sense of symmetry or balance, which makes the opening a good choice for aggressive fighting players.\"\n\n",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Alekhine%27s_Defence",
+      "pageId": 960702,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:02.669Z"
+    },
+    {
+      "id": "benko-gambit",
+      "status": "fetched",
+      "wikipediaTitle": "Benko Gambit",
+      "extract": "The Benko Gambit (or Volga Gambit) is a chess opening characterised by the move 3...b5 in the Benoni Defence arising after:\n\n1. d4 Nf6\n2. c4 c5\n3. d5 b5\nBlack sacrifices a pawn for enduring queenside pressure. White can accept or decline the gambit pawn.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Benko_Gambit",
+      "pageId": 1220424,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:05.755Z"
+    },
+    {
+      "id": "benoni-defence",
+      "status": "fetched",
+      "wikipediaTitle": "Benoni Defense",
+      "extract": "The Benoni Defense, or simply the Benoni, is a chess opening characterized by an early reply of ...c5 against White's opening move 1.d4. \nThe original form of the Benoni, now known as the Old Benoni, is characterized by \n\n1. d4 c5\nThis leaves Black a few options such as an early ...f5 and an early dark-squared bishop trade by ...Be7–g5. However, because White has not played c4 yet, White also has more options, and often plays Nc3 while the pawn remains on c2, allowing White to play an earlier e4.\nMore commonly, the Benoni is reached by the sequence:\n\n1. d4 Nf6\n2. c4 c5\n3. d5\nThe most common following moves for Black are either to then play 3...e6, leading to the Modern Benoni, or to offer a pawn sacrifice with 3...b5 in exchange for a queenside attack, known as the Benko Gambit. 3...d6 or 3...g6 are also seen, typically transposing to main lines, or to lines of the King's Indian Defense.\nIf White plays 2.Nf3 instead of 2.c4, Black can still play 2...c5. White usually responds by pushing by with 3.d5, just as in the Benoni. If White later plays c4, the positions transpose into the Benoni. Otherwise, Nc3 is usually played (while the c pawn remains on the second rank), and leads to the Spielmann-Indian Variation, which has many similar patterns to the Benoni. White's early committal of Nf3 distinguishes it from the Old Benoni, where White avoids or delays Nf3.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Benoni_Defense",
+      "pageId": 1512923,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:08.834Z"
+    },
+    {
+      "id": "birds-opening",
+      "status": "fetched",
+      "wikipediaTitle": "Bird's Opening",
+      "extract": "Bird's Opening (or the Bird Opening, Stein Opening, or the Dutch Attack) is a chess opening beginning with the move:\n\n1. f4\nNamed after 19th-century English player Henry Bird, Bird's Opening is a standard flank opening. White's strategic ideas involve control of the e5-square, offering good attacking chances at the expense of slightly weakening their own kingside. Black's most common response is 1...d5, but Black may also challenge White's plan to control e5 immediately by playing the risky From Gambit (1...e5).\nThe Encyclopaedia of Chess Openings assigns two codes for Bird's Opening: A02 (1.f4) and A03 (1.f4 d5).\n\n",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Bird%27s_Opening",
+      "pageId": 900089,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:11.914Z"
+    },
+    {
+      "id": "budapest-gambit",
+      "status": "fetched",
+      "wikipediaTitle": "Budapest Gambit",
+      "extract": "The Budapest Gambit (or Budapest Defence) is a chess opening that begins with the moves:\n\n1. d4 Nf6\n2. c4 e5\nBlack sacrifices a pawn in return for active play. After being introduced by the Hungarian master Geza Maroczy in an off-hand game in 1896, the Budapest Gambit received attention from leading players after a win as Black by Milan Vidmar over Akiba Rubinstein in 1918. It enjoyed some popularity in the early 1920s, but since then it has rarely been played at the top level.\nAfter 3...Ng4 intending to recapture the pawn on e5, White has three main replies. 4.Nf3 sees White seeking to return the pawn for quick development. The Alekhine Variation 4.e4 attempts to establish a strong pawn centre and space advantage. The Rubinstein Variation 4.Bf4 leads to an important choice for White, after 4...Nc6 5.Nf3 Bb4+, between 6.Nbd2 and 6.Nc3. The reply 6.Nbd2 leads to a positional game in which White often enjoys the bishop pair, while 6.Nc3 keeps the material advantage of a pawn but allows Black to weaken White's pawn structure with ...Bxc3+.\nIn the less common Fajarowicz Variation (3...Ne4), Black forgoes regaining the pawn in favour of quickly generating tactical threats connected with ...Bb4+ as well as the f2-square. \n\n",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Budapest_Gambit",
+      "pageId": 1630627,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:14.981Z"
+    },
+    {
+      "id": "catalan-opening",
+      "status": "fetched",
+      "wikipediaTitle": "Catalan Opening",
+      "extract": "The Catalan Opening is a chess opening where White plays d4 and c4 and fianchettoes the white bishop on g2. A common opening sequence is 1.d4 Nf6 2.c4 e6 3.g3, although various other openings can transpose into the Catalan. The Encyclopaedia of Chess Openings (ECO) lists codes E01–E09 for lines with 1.d4 Nf6 2.c4 e6 3.g3 d5 4.Bg2; other lines are part of E00.\nIn the Catalan, White adopts a combination of the Queen's Gambit and Réti Opening. White combines the space-gaining moves d4 and c4 with g3, preparing to fianchetto the king's bishop. This places pressure mainly on the queenside while hoping to keep the white king safe in the long-term. The c4-pawn can become vulnerable, however, and White might have to sacrifice a pawn.\nBlack has two main approaches to play against the Catalan: in the Open Catalan Black plays ...dxc4 and can either try to hold on to the pawn with ...b5 or give it back for extra time to free their game. In the Closed Catalan, Black does not capture on c4; their game can be somewhat cramped for a while, but is quite solid. Additionally, Black has ways to avoid the Catalan.\nThe Catalan has had proponents at the highest level in chess, with Vladimir Kramnik, Viswanathan Anand and Magnus Carlsen all employing the opening in their World Chess Championship title games. A number of other grandmasters have successfully played the Catalan, including Fabiano Caruana, Daniil Dubov, Anish Giri and Ding Liren.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Catalan_Opening",
+      "pageId": 1222692,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:18.052Z"
+    },
+    {
+      "id": "english-opening",
+      "status": "fetched",
+      "wikipediaTitle": "English Opening",
+      "extract": "The English Opening is a chess opening that begins with the move:\n\n1. c4\nA flank opening, it is the fourth most popular and, according to various databases, one of the four most successful of White's twenty possible first moves. White begins the fight for the centre by staking a claim to the d5-square from the wing, in hypermodern style. Although many lines of the English have a distinct character, the opening is often used as a transpositional device in much the same way, though to a lesser extent, as the Zukertort Opening (1.Nf3). In particular, transpositions to the King's Indian Defence and Queen's Gambit Declined are common, among others. This allows players to avoid certain responses to 1.d4 if they desire to, such as the Nimzo-Indian and Grünfeld. The opening is considered reliable and flexible.\nThe two most common independent lines that usually start with 1.c4 are the Symmetrical Variation (1.c4 c5) and the Reversed Sicilian (1.c4 e5). Another notable independent line that does not derive from either of those is the Mikėnas-Carls Variation (1.c4 Nf6 2.Nc3 e6 3.e4). Other common independent lines, such as the Neo-Catalan, Anglo-Grünfeld, and Nimzo-English, generally parallel the development of their 1.d4 counterparts well into the game, hence their names. The Botvinnik System (White plays c4, Nc3, d3, e4, g3, Bg2, and Ne2 in some order), which can be played against a variety of Black defenses, is also classified as an English.\nIn the Encyclopaedia of Chess Openings, the opening is found in codes A10–A39. The opening was employed by Ding Liren in the twelfth game of the World Chess Championship 2024 against Gukesh Dommaraju, resulting in a win for Ding, one of his most famous games. He also used it to achieve a win in the fourth game of the World Chess Championship 2023 against Ian Nepomniachtchi.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/English_Opening",
+      "pageId": 498039,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:21.141Z"
+    },
+    {
+      "id": "grunfeld-defence",
+      "status": "fetched",
+      "wikipediaTitle": "Grünfeld Defence",
+      "extract": "The Grünfeld Defence is a chess opening characterised by the moves:\n\n1. d4 Nf6\n2. c4 g6\n3. Nc3 d5\nBlack offers White the possibility of 4.cxd5, which may be followed by 4...Nxd5 and 5.e4, giving White an imposing central pawn duo. If White does not take the d5-pawn, Black may eventually play ...dxc4, when a White response of e4 again leads to the same pawn structure. In classical opening theory this imposing pawn centre was held to give White a large advantage, but the hypermodern school, which was coming to the fore in the 1920s, held that a large pawn centre could be a liability rather than an asset. The Grünfeld is therefore a key hypermodern opening, showing in stark terms how a large pawn centre can either be a powerful battering ram or a target for attack.\n\n",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence",
+      "pageId": 353956,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:24.223Z"
+    },
+    {
+      "id": "kings-indian-attack",
+      "status": "fetched",
+      "wikipediaTitle": "King's Indian Attack",
+      "extract": "The King's Indian Attack (or KIA) is a chess opening system where White adopts the setup more commonly seen being played by Black in the King's Indian Defence. The King's Indian Attack is characterised by the following moves: the central pawns are developed to e4 and d3, the knights are developed to d2 and f3, the king's bishop is fianchettoed at g2 following the g-pawn's move to g3, and White castles kingside.\nThis pattern can either be achieved via a 1.e4 move order (typically against either the French Defence or a Sicilian Defence with a subsequent ...e6) or as a universal system starting with 1.Nf3.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/King%27s_Indian_Attack",
+      "pageId": 1853888,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:27.292Z"
+    },
+    {
+      "id": "kings-indian-defence",
+      "status": "fetched",
+      "wikipediaTitle": "King's Indian Defence",
+      "extract": "The King's Indian Defence (or KID) is a common chess opening. It is defined by the following  moves:\n\n1. d4 Nf6\n2. c4 g6\nBlack intends to follow up with 3...Bg7 and 4...d6 (the Grünfeld Defence arises when Black plays 3...d5 instead and is considered a separate opening). White's major third move options are 3.Nc3, 3.Nf3, or 3.g3, with both the King's Indian and Grünfeld playable against these moves. \nThe King's Indian is a hypermodern opening, where Black deliberately allows White control of the centre with pawns, with a view to subsequently challenging it. In the most critical lines of the King's Indian, White erects an imposing pawn centre with Nc3 followed by e4. Black stakes out their own claim to the centre with the Benoni-style ...c5, or ...e5. If White resolves the central pawn tension with d5, then Black follows with either ...b5 and queenside play, or ...f5 and an eventual kingside attack. Meanwhile, White attempts to expand on the opposite wing. The resulting unbalanced positions offer scope for both sides to play for a win.\nThe Encyclopaedia of Chess Openings classifies the King's Indian Defence under the codes E60 through E99.\n\n",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/King%27s_Indian_Defence",
+      "pageId": 498021,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:30.382Z"
+    },
+    {
+      "id": "london-system",
+      "status": "fetched",
+      "wikipediaTitle": "London System",
+      "extract": "The London System is an opening system in chess characterized by the moves (with any first move by Black):\n\n1. d4\n2. Bf4\nIn addition to these moves, in the standard system, White supports the d pawn and bishop with a pawn on e3, the other bishop is developed to d3, the knights are developed to f3 and d2, and the d pawn is reinforced again by c3. However, some variation exists; for example, Nc3 can be played instead of c3, entering the Rapport–Jobava System (or Jobava London).\nThe system can be used against virtually any Black response (although most popular against 1...d5) and thus comprises a smaller body of opening theory than many other openings. Black's most common response to the system involves playing c5 and Qb6 (pressuring White's now undefended pawn). White also has great flexibility in move order (2.Nf3 and then 3.Bf4 is common), and the system has many transpositional opportunities. For example, White can transpose to the Queen's Gambit with c4 (instead of c3 or Nc3), and Black can transpose to the Caro–Kann Defence with ...cxd4 exd4.\nWhite's set-up often results in a closed game, and often involves a plan to put a knight on e5, supported by the pawn and bishop. Although it has a reputation as a solid opening, the London System has been criticized for resulting in repetitive games and a lack of dynamic play. White can instead adopt a more flexible and theoretical approach after 2.Bf4, rather than committing to the same initial moves regardless of Black's response, often resulting in a more dynamic game.\nIn the Encyclopaedia of Chess Openings, the opening is not assigned its own unique codes, but it appears in lines within A46 (against 1...Nf6 without g6), A48 (against 1...Nf6 with g6), and D02 (against 1...d5). The opening was employed by Ding Liren in the sixth game of the World Chess Championship 2023 against Ian Nepomniachtchi, resulting in a win for Ding.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/London_System",
+      "pageId": 9732229,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:33.500Z"
+    },
+    {
+      "id": "nimzo-indian",
+      "status": "fetched",
+      "wikipediaTitle": "Nimzo-Indian Defence",
+      "extract": "The Nimzo-Indian Defence is a chess opening characterised by the moves:\n\n1. d4 Nf6\n2. c4 e6\n3. Nc3 Bb4\nOther move orders, such as 1.c4 e6 2.Nc3 Nf6 3.d4 Bb4, are also feasible. In the Encyclopaedia of Chess Openings, the Nimzo-Indian is classified as E20–E59.\nThis hypermodern opening was developed by Aron Nimzowitsch who introduced it to master-level chess in the early 20th century. Unlike most Indian openings, the Nimzo-Indian does not involve an immediate fianchetto, although Black often follows up with ...b6 and ...Bb7. By pinning White's knight, Black prevents the threatened 4.e4 and seeks to inflict doubled pawns on White. White will attempt to create a pawn centre and develop their pieces to prepare for an assault on the Black position.\nBlack's delay in committing to a pawn structure makes the Nimzo-Indian (sometimes colloquially referred to as the \"Nimzo\") a very flexible defence to 1.d4. It can also transpose into lines of the Queen's Gambit or Queen's Indian Defence. The Nimzo-Indian is a highly respected defence to 1.d4, is played at all levels and has been played by every world champion since Capablanca. White often plays 3.g3 or 3.Nf3 to avoid the Nimzo-Indian, allowing them to meet 3.Nf3 Bb4+ (the Bogo-Indian Defence) with 4.Bd2 or 4.Nbd2, rather than 4.Nc3.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence",
+      "pageId": 306663,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:36.590Z"
+    },
+    {
+      "id": "pirc-defence",
+      "status": "fetched",
+      "wikipediaTitle": "Pirc Defence",
+      "extract": "The Pirc Defence ( PEERTS) is a chess opening characterised by the moves:\n\n1. e4 d6\nIt is named after the Slovenian grandmaster Vasja Pirc or alternatively after Soviet master Anatoly Ufimtsev as the Ufimtsev Defence. Black allows White to establish a centre with pawns on d4 and e4, but plans to undermine it later. It can lead to both sharp and solid games. Black should remain cautious about playing too passively. Play most often continues with 2...Nf6 3.Nc3, and Black often then plays 3...g6 then 4...Bg7. Sometimes, only the line 2.d4 Nf6 3.Nc3 is classified as part of the opening, or even only lines with 3...g6. Third move alternatives for Black include 3...c6 (the Czech Defence), 3...e5, and 3...Nbd7 (supporting 4...e5).\nTranspositional opportunities to and from other openings are common. The main line of the Pirc Defence is closely related to the Modern Defence, the primary difference being that Black delays developing the knight to f6 in the Modern. The main line is also similar to the King's Indian Defence, with the difference being that that White has not played c4 before playing Nc3. All 3 setups involve allowing White to occupy the center with pawns on e4 and d4, in hypermodern fashion.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Pirc_Defence",
+      "pageId": 498009,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:39.656Z"
+    },
+    {
+      "id": "qga",
+      "status": "fetched",
+      "wikipediaTitle": "Queen's Gambit Accepted",
+      "extract": "The Queen's Gambit Accepted (QGA) is a chess opening beginning with the moves:\n\n1. d4 d5\n2. c4 dxc4\nThe Queen's Gambit Accepted is the third most popular option on Black's second move, after 2...e6 (the Queen's Gambit Declined) and 2...c6 (the Slav Defense). As Black's 2...dxc4 surrenders the centre, White will try to seize space in the centre and use it to launch an attack on Black's position. Black's game is not devoid of counterchances, however. If White's centre pawns can be held at bay, Black will try to weaken them to gain an advantage in the ensuing endgame by playing ...c5 and ...cxd4 at some stage. If White responds with exd4, the result will be an isolated pawn on d4 – which can also lead to a keen middlegame battle. If White recaptures with a piece at d4 instead, the centre will be liquidated and a fairly even game will usually ensue.\nThe Queen's Gambit is not considered a true gambit, in contrast to the King's Gambit, because the pawn is either regained, or can only be held unprofitably by Black. Black usually allows the pawn to be recaptured and uses the time expended to play against White's centre.\nThe Encyclopaedia of Chess Openings (ECO) classifies the Queen's Gambit Accepted under codes D20 to D29.\n\n",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted",
+      "pageId": 1738348,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:42.736Z"
+    },
+    {
+      "id": "queens-indian",
+      "status": "fetched",
+      "wikipediaTitle": "Queen's Indian Defense",
+      "extract": "The Queen's Indian Defense (QID) is a chess opening defined by the moves:\n\n1. d4 Nf6\n2. c4 e6\n3. Nf3 b6\nThe opening is a solid defense to the Queen's Pawn Game. 3...b6 increases Black's control over the central light squares e4 and d5 by preparing to fianchetto the queen's bishop, with the opening deriving its name from this maneuver. As in the other Indian defenses, Black attempts to control the center with pieces in hypermodern style, instead of occupying it with pawns in classical style.\nBy playing 3.Nf3, White sidesteps the Nimzo-Indian Defense that arises after 3.Nc3 Bb4. The Queen's Indian is regarded as the sister opening of the Nimzo-Indian, since both openings aim to impede White's efforts to gain full control of the center by playing e2–e4 without directly putting a pawn in the centre. Together, they are a well-respected response to 1.d4.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense",
+      "pageId": 498029,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:45.830Z"
+    },
+    {
+      "id": "scandinavian-defence",
+      "status": "fetched",
+      "wikipediaTitle": "Scandinavian Defense",
+      "extract": "The Scandinavian Defense (or Center Counter Defense, or Center Counter Game) is a chess opening characterized by the moves:\n\n1. e4 d5\nThis opening is classified under code B01 in the Encyclopaedia of Chess Openings. The Scandinavian Defense, described in the poem Scachs d'amor, is the oldest opening by Black recorded in modern chess. Considered to be the most directly challenging move available to Black after 1.e4, the general goal of the defense is to prevent White from controlling the center of the board with pawns, effectively forcing an open game, while allowing Black to build a strong pawn structure.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Scandinavian_Defense",
+      "pageId": 30873764,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:48.902Z"
+    },
+    {
+      "id": "scotch-game",
+      "status": "fetched",
+      "wikipediaTitle": "Scotch Game",
+      "extract": "The Scotch Game, or Scotch Opening, is a chess opening that begins with the moves: \n\n1. e4 e5\n2. Nf3 Nc6\n3. d4\nWhite strikes in the centre early with 3.d4. Black almost always responds with 3...exd4. White's most common reply is 4.Nxd4, with the notable alternatives 4.Bc4 (the Scotch Gambit) and 4.c3 (the Göring Gambit).\nErcole del Rio, in his 1750 treatise Sopra il giuoco degli Scacchi, Osservazioni pratiche d’anonimo Autore Modenese (\"On the game of Chess, practical Observations by an anonymous Modenese Author\"), was the first author to mention what is now called the Scotch Game. The opening received its name from a correspondence match in 1824 between Edinburgh and London.\nCommon in the 19th century, by 1900 the Scotch had declined in popularity because it was thought to release the central tension too early and allow Black to equalise without difficulty. Garry Kasparov led a revival of the Scotch in the late 20th century, however, arguing it caused Black lasting strategic problems while avoiding the extensively analysed Ruy Lopez. It has also been advocated by Jan Timman and Sergei Rublevsky.\n\n",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Scotch_Game",
+      "pageId": 1272375,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:51.968Z"
+    },
+    {
+      "id": "semi-slav",
+      "status": "fetched",
+      "wikipediaTitle": "Semi-Slav Defense",
+      "extract": "The Semi-Slav Defense is a variation of the Queen's Gambit Declined chess opening defined by the position reached after the moves:\n\n1. d4 d5\n2. c4 c6\n3. Nf3 Nf6\n4. Nc3 e6\nThe position may readily be reached by a number of different move orders. Black's supporting pawns resemble a mixture of the Orthodox Queen's Gambit Declined, e6, and the Slav Defense, c6.\nBlack is threatening to capture the white pawn on c4 and hold it with ...b7–b5. White can avoid this in a number of ways. About 80% of games continue 5.Bg5 or 5.e3: the former constitutes a sharp pawn sacrifice, while the latter restricts the dark-squared bishop from its natural development to g5. Other possible moves are 5.Qb3, 5.g3 and 5.cxd5, the last of which, after 5...exd5, leads to a line of the QGD Exchange Variation where White's early Nf3 enables Black's queen bishop to freely develop, which should give equality (ECO codes D43 and D45). 5.Bf4 is considered somewhat inaccurate, as 5...dxc4 is favorable for Black.\nThe Semi-Slav is designated by codes D43 through D49 in Encyclopaedia of Chess Openings.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Semi-Slav_Defense",
+      "pageId": 1967710,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:35:55.044Z"
+    },
+    {
+      "id": "sicilian-alapin",
+      "wikipediaTitle": "Alapin_Variation",
+      "status": "no-extract"
+    },
+    {
+      "id": "sicilian-dragon",
+      "status": "fetched",
+      "wikipediaTitle": "Sicilian Defence, Dragon Variation",
+      "extract": "In chess, the Dragon Variation is a variation of the Sicilian Defence that begins with the moves:\n\n1. e4 c5\n2. Nf3 d6\n3. d4 cxd4\n4. Nxd4 Nf6\n5. Nc3 g6\nIn the Dragon, Black's bishop is fianchettoed on g7, castling on the king's side while aiming the bishop at the centre and queenside. In one of the most popular and theoretically important lines, the Yugoslav Attack, White meets Black's setup with Be3, Qd2 and Bh6, exchanging off the Dragon bishop, castling queenside, and launching a kingside pawn storm with h4–h5 and g4. Black often counterattacks using the semi-open c-file. The result is often both sides attacking the other's king with all available resources. The line is considered one of the sharpest of all chess openings.\nThe modern form of the Dragon was originated by German master Louis Paulsen around 1880. It was played frequently by Henry Bird that decade, then received general acceptance around 1900 when played by Harry Nelson Pillsbury and other masters.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation",
+      "pageId": 3292303,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:36:01.220Z"
+    },
+    {
+      "id": "sicilian-najdorf",
+      "status": "fetched",
+      "wikipediaTitle": "Sicilian Defence, Najdorf Variation",
+      "extract": "The Najdorf Variation ( NY-dorf) is a variation of the Sicilian Defence that begins with the moves:\n\n1. e4 c5\n2. Nf3 d6\n3. d4 cxd4\n4. Nxd4 Nf6\n5. Nc3 a6\nBlack's 5...a6 aims to deny the b5-square to White's knights and light-square bishop while maintaining flexible development. Games in the Najdorf frequently feature opposite-side castling, where White castles long and both sides launch simultaneous attacks on their opponents' kings, with Black often planning a queenside minority attack. This is often carried out by means of ...b5, ...Bb7, and placing a knight on d5, or c4 via b6.\nThe Najdorf is one of the most popular, reputable, and deeply studied of all chess openings. Modern Chess Openings calls it the \"Cadillac\" or \"Rolls-Royce\" of chess openings. The opening is named after the Polish-Argentine grandmaster Miguel Najdorf, although he was not the first strong player to play the variation. Many players have relied on the Najdorf, including Bobby Fischer and Garry Kasparov, although Kasparov would often transpose into a Scheveningen.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation",
+      "pageId": 906517,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:36:04.304Z"
+    },
+    {
+      "id": "sicilian-sveshnikov",
+      "status": "fetched",
+      "wikipediaTitle": "Sicilian Defence, Sveshnikov Variation",
+      "extract": "The Sveshnikov Variation, also known as the Lasker–Pelikan Variation, is a variation of the Sicilian Defence that begins with the moves:\n\n1. e4 c5\n2. Nf3 Nc6\n3. d4 cxd4\n4. Nxd4 Nf6\n5. Nc3 e5\nThe move 5...e5 kicks White's knight from d4, but leaves Black with a backwards d-pawn and a weakness on d5, but affords dynamic potential for Black, who gets a central foothold and gains time on White's knight, which often ends up driven to the edge of the board. Though some lines still give Black trouble, it has been established as a first-rate defence.\nThe Sveshnikov Variation was pioneered by its namesake Evgeny Sveshnikov and Gennadi Timoshchenko in the 1970s. Before this, it only saw occasional play: Emanuel Lasker played it once in his world championship match against Carl Schlechter, and Jorge Pelikan played it a few times in the 1950s, but Sveshnikov's treatment of the variation was the key to its revitalization. Today, it is extremely popular among grandmasters and amateurs alike. Top players who have used this variation include Magnus Carlsen, Vladimir Kramnik, Veselin Topalov, and many others.",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation",
+      "pageId": 78310915,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:36:07.394Z"
+    },
+    {
+      "id": "slav-defence",
+      "status": "fetched",
+      "wikipediaTitle": "Slav Defense",
+      "extract": "The Slav Defense is a chess opening that begins with the moves: \n\n1. d4 d5\n2. c4 c6\nThe Slav is one of the primary defenses to the Queen's Gambit. Although it was analyzed as early as 1590, it was not until the 1920s that it started to be explored extensively, although Steinitz played it in the 1886 World Championship. Many masters of Slavic descent helped develop the theory of the opening, including Semyon Alapin, Alexander Alekhine, Efim Bogoljubov, and Milan Vidmar.\nThe Slav received an exhaustive test during the two Alekhine–Euwe World Championship matches in 1935 and 1937. Played by 11 of the first 13 world champions, this defense was particularly favored by Max Euwe, Mikhail Botvinnik, and Vasily Smyslov. More recently, the Slav has been adopted by Viswanathan Anand, Vassily Ivanchuk, Joël Lautier, Nigel Short, and other top grandmasters, including use in six of the eight games that Vladimir Kramnik played as Black in the 2006 World Championship.\nThe theory of the Slav has become very extensive and well-developed. The Slav is often distinguished from the related Semi-Slav Defense by Black avoiding or delaying the move ...e6, which is instead played early on in the Semi-Slav, though transposition to the Semi-Slav from the Slav is common.\n\n",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Slav_Defense",
+      "pageId": 1690040,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:36:10.465Z"
+    },
+    {
+      "id": "trompowsky-attack",
+      "status": "fetched",
+      "wikipediaTitle": "Trompowsky Attack",
+      "extract": "The Trompowsky Attack is a chess opening that begins with the moves:\n\n1. d4 Nf6\n2. Bg5\nWhite prepares to exchange the bishop for Black's knight, inflicting doubled pawns upon Black in the process. This is not a lethal threat; Black can choose to fall in with White's plan.\nThe Trompowsky is a popular alternative to the more common lines after 1.d4 Nf6 beginning 2.c4 or 2.Nf3. By playing 2.Bg5, White sidesteps immense bodies of opening theory of various Indian Defences like the Queen's Indian, King's Indian, Nimzo-Indian, as well as the Grünfeld Defence.\n\n",
+      "canonicalUrl": "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+      "pageId": 1691274,
+      "attribution": "CC BY-SA 4.0 — Wikipedia",
+      "fetchedAt": "2026-05-19T23:36:13.555Z"
+    }
+  ]
+}

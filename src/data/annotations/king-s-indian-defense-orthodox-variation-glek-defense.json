@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black chooses the King's Indian Defense setup with this fianchetto move, preparing to develop the dark-squared bishop to g7 where it will become a powerful long-range piece. This move signals Black's intention to allow us a strong pawn center while building counterplay on the kingside and along the long diagonal. Black is essentially saying 'take the center, but I'll create dynamic piece play and eventual pawn breaks to challenge it.' We should be prepared for Black's typical King's Indian plans involving ...Bg7, ...O-O, and eventually ...e5 or ...c5 to undermine our central dominance.",
-      "shortNarration": "Black fianchettoes the bishop to g7, signaling a King's Indian Defense with kingside counterplay and pawn breaks like ...e5 or ...c5."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto to g7, signaling a King's Indian Defense with kingside counterplay and pawn breaks like ...e5 or ...c5."
     },
     {
       "san": "Nc3",

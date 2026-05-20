@@ -23,7 +23,7 @@
     },
     {
       "san": "e3",
-      "annotation": "Continuing Queens Pawn Game Liedmann Gambit: e3 is a known theory move in this line.",
+      "annotation": "Playing e3 supports the d4 pawn and prepares to recapture on d4 with the queen, keeping Black's center pawn contested rather than allowing it to sit unchallenged.",
       "shortNarration": "e3 is a known theory move in the Liedmann Gambit."
     }
   ]

@@ -53,22 +53,22 @@
     },
     {
       "san": "O-O",
-      "annotation": "Continuing English Opening Symmetrical Variation Botvinnik System Reversed With Nf3: O-O is a known theory move in this line.",
+      "annotation": "White castles kingside to connect the rooks and move the king to safety before the tension in the center escalates.",
       "shortNarration": "O-O is the theory move in the English Opening Symmetrical Botvinnik Reversed with Nf3."
     },
     {
       "san": "Nge7",
-      "annotation": "Continuing English Opening Symmetrical Variation Botvinnik System Reversed With Nf3: Nge7 is a known theory move in this line.",
+      "annotation": "Black develops the knight from g8 to e7, keeping it flexible to reroute to f5 or support central play without committing to the bishop on g7 yet.",
       "shortNarration": "Nge7 is theory in the English Symmetrical Botvinnik Reversed with Nf3."
     },
     {
       "san": "d3",
-      "annotation": "Continuing English Opening Symmetrical Variation Botvinnik System Reversed With Nf3: d3 is a known theory move in this line.",
+      "annotation": "White reinforces the d4 square and prepares to contest the center by pushing d4 later, while preventing Black's c5 pawn from expanding control.",
       "shortNarration": "d3 is a theory move in the English Opening Symmetrical Botvinnik System Reversed with Nf3."
     },
     {
       "san": "d6",
-      "annotation": "Continuing English Opening Symmetrical Variation Botvinnik System Reversed With Nf3: d6 is a known theory move in this line.",
+      "annotation": "Black solidifies the center and supports a future e4 push, closing the d-file to limit White's pawn breaks and maintaining flexible piece placement.",
       "shortNarration": "d6 is theory in the English Symmetrical Botvinnik Reversed with Nf3."
     }
   ]

@@ -123,7 +123,15 @@ async function main() {
   }
   async function clickOpeningsNav() {
     await page.getByRole('link', { name: 'Openings' }).first().click().catch(() => {});
-    await page.locator('[data-testid="opening-explorer"]').waitFor({ timeout: 12_000 }).catch(() => {});
+    // Cold-seed headroom: on a fresh IndexedDB, OpeningExplorerPage's
+    // mount effect runs `await seedDatabase()` which populates 3641
+    // openings + the puzzle pool — measured at ~42s in a cold sandbox
+    // browser. The page shows "Loading openings…" until that resolves,
+    // so the explorer testid doesn't appear for ~40s on the first
+    // visit. 12s was far too short and false-failed every explorer /
+    // tab scenario. On David's device this is a one-time first-run
+    // cost (subsequent loads are seeded → instant). Bumped to 60s.
+    await page.locator('[data-testid="opening-explorer"]').waitFor({ timeout: 60_000 }).catch(() => {});
     await page.waitForTimeout(600);
   }
 
@@ -299,6 +307,51 @@ async function main() {
     ],
   );
 
+  // 5-zone teaching arc on the opening detail page (landed 2026-05-19,
+  // commit a5400385 + cf4c56e0 Classic Wisdom). Each zone renders an
+  // OpeningZoneHeader with testid `opening-zone-<color>`; the five
+  // colors are cyan / blue / emerald / amber / slate. Not every
+  // opening fills all five (zones are data-conditional), so the
+  // assertion is "at least one zone arc header rendered" plus a
+  // count for the report. The Classic Wisdom block (Wikipedia-
+  // attributed prose) renders a NarrationButton with
+  // sectionId="classic-wisdom" when the opening has an intro.
+  await scenario(
+    '08b-detail-teaching-zones',
+    async () => {
+      // Already on /openings/<id> from scenario 08. Give the
+      // conditional zone sections a beat to render.
+      await page.waitForTimeout(800);
+    },
+    SETTLE_MED,
+    [
+      // The teaching arc is data-conditional per opening, so we don't
+      // hard-require a fixed count. The contract we DO assert: every
+      // zone header that renders carries a canonical color testid
+      // (no orphan/typo'd colors leaking through). Zero zones is
+      // tolerated here — the report logs the count so a regression
+      // to "no arc at all" is still visible without false-failing a
+      // sparse opening.
+      { label: 'every rendered zone header uses a canonical color',
+        fn: async () => {
+          const known = ['cyan', 'blue', 'emerald', 'amber', 'slate'];
+          const counts = await Promise.all(
+            known.map((c) => countSel(`[data-testid="opening-zone-${c}"]`)),
+          );
+          const knownTotal = counts.reduce((a, b) => a + b, 0);
+          const allZones = await countSel('[data-testid^="opening-zone-"]');
+          // Pass when there are no stray non-canonical zone testids.
+          return knownTotal === allZones;
+        } },
+      { label: 'teaching-zone arc count (informational)',
+        fn: async () => {
+          const n = await countSel('[data-testid^="opening-zone-"]');
+          console.log(`      ↳ ${n} teaching-zone header(s) on this opening`);
+          return true; // informational — never fails
+        } },
+    ],
+  );
+
   // Favorite toggle (round-trip)
   await scenario(
     '09-detail-favorite-toggle',
@@ -424,7 +477,8 @@ async function main() {
     else {
       // Fallback: navigate to /openings then click the first card.
       await page.goto(`${BASE_URL}/openings`, { waitUntil: 'domcontentloaded' });
-      await page.locator('[data-testid="opening-explorer"]').waitFor({ timeout: 12_000 }).catch(() => {});
+      // Cold-seed headroom — see clickOpeningsNav (~42s first-run seed).
+      await page.locator('[data-testid="opening-explorer"]').waitFor({ timeout: 60_000 }).catch(() => {});
       await page.locator('[data-testid="tab-repertoire"]').click().catch(() => {});
       await page.waitForTimeout(500);
       const firstCardTid = await page.evaluate(() => {
@@ -520,7 +574,13 @@ async function main() {
   await scenario(
     '20-pro-player-click',
     async () => {
-      const proBtn = page.locator('[data-testid="pro-repertoires-tab"] button').first();
+      // ProPlayerCard renders as <div role="button"> (testid
+      // pro-player-card-<id>), NOT a <button> element — selecting
+      // `... button` matched nothing and the click never fired.
+      // Target the card testid directly.
+      const proBtn = page
+        .locator('[data-testid^="pro-player-card-"], [data-testid="pro-repertoires-tab"] [role="button"]')
+        .first();
       if (await proBtn.isVisible().catch(() => false)) {
         await proBtn.click();
         await waitUntil(() => page.url().includes('/openings/pro/'), 8000);

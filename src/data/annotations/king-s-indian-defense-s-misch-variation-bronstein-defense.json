@@ -19,7 +19,7 @@
     {
       "san": "g6",
       "annotation": "Black commits to the King's Indian Defense setup with this characteristic fianchetto move, preparing to develop the bishop to g7 where it will exert tremendous pressure along the long diagonal. This move signals Black's intention to play for a kingside attack later in the game, often involving pawn storms with ...f5 and ...h5-h4. The fianchetto structure is incredibly solid and gives Black excellent defensive resources around the king. However, it does concede some central space to us, which we'll try to exploit with our next moves.",
-      "shortNarration": "Black fianchettoes the bishop to g7, pressuring the long diagonal and preparing a kingside pawn storm, but concedes central space."
+      "shortNarration": "Black plays g6, preparing the bishop fianchetto to g7, pressuring the long diagonal and preparing a kingside pawn storm, but concedes central space."
     },
     {
       "san": "Nc3",

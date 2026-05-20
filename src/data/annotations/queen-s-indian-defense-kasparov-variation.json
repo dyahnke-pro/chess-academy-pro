@@ -29,7 +29,7 @@
     {
       "san": "b6",
       "annotation": "Black plays the characteristic Queen's Indian Defense move, immediately fianchettoing the light-squared bishop to exert pressure along the long diagonal toward our king. This setup is particularly effective against our Nc3 development, as the bishop on b7 will target our knight and create long-term pressure on our kingside. The move also supports a potential c5 advance, challenging our pawn center from the side rather than meeting it head-on with d5. By choosing this hypermodern approach, Black is allowing us central space while preparing to undermine it from the flanks with precise piece play.",
-      "shortNarration": "Black fianchettoes the bishop to b7, pressuring the long diagonal and supporting c5 to undermine White's center."
+      "shortNarration": "Black plays b6, preparing the bishop fianchetto to b7, pressuring the long diagonal and supporting c5 to undermine White's center."
     },
     {
       "san": "Nc3",

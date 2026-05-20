@@ -5,7 +5,7 @@
  *
  *   /coach/session/middlegame?opening=italian-game&orientation=white
  *   /coach/session/play-against?opening=sicilian&difficulty=auto&side=black
- *   /coach/session/walkthrough?subject=Sicilian%20Najdorf
+ *   /coach/session/walkthrough?subject=X                     (redirects)
  *   /coach/session/puzzle?theme=fork&difficulty=medium       (redirects)
  *   /coach/session/explain-position?fen=<FEN>
  *
@@ -15,8 +15,11 @@
  *   `runStep`, no timer races).
  * - Play-against: Stockfish plays the coach's side at ELO-relative
  *   difficulty (player ELO ± 300 for easy/hard).
- * - Walkthrough: fuzzy-match an opening by subject, build a session
- *   from its PGN + annotations, run with `useWalkthroughRunner`.
+ * - Walkthrough: redirect to /coach/teach (the canonical
+ *   Learn-with-Coach surface). Lives here as a redirect-only kind so
+ *   any stale bookmarks / picker chips / third-party links still land
+ *   on the right page. The actual walkthrough runtime is owned by
+ *   CoachTeachPage + useTeachWalkthrough.
  * - Puzzle: redirect to /puzzles with theme/difficulty query params —
  *   puzzles have their own dedicated full UI.
  * - Explain-position: Stockfish analysis + streaming coach commentary
@@ -45,7 +48,6 @@ import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useWalkthroughRunner } from '../../hooks/useWalkthroughRunner';
 import { resolveMiddlegameSessionWithFallback } from '../../services/middlegamePlanner';
-import { resolveWalkthroughSession } from '../../services/walkthroughResolver';
 import { buildNarrationSession } from '../../services/gameNarrationBuilder';
 import { db } from '../../db/schema';
 import { ExplainPositionSessionView } from './ExplainPositionSessionView';
@@ -122,18 +124,23 @@ export function CoachSessionPage(): JSX.Element {
   }
 
   if (kind === 'walkthrough') {
-    return (
-      <DynamicCoachSession
-        title={subject ? `Walkthrough: ${subject}` : 'Opening walkthrough'}
-        onExit={goBack}
-      >
-        <WalkthroughSessionBody
-          subject={subject}
-          orientation={orientation}
-          onExit={goBack}
-        />
-      </DynamicCoachSession>
-    );
+    // Legacy route. Walkthroughs now run on /coach/teach (the
+    // canonical Learn-with-Coach surface) which already owns the
+    // DB-narration generation pipeline + chat panel + voice +
+    // picker chips. This redirect catches any bookmarks, stale
+    // pickers, or third-party links that still point here.
+    //
+    // Use the RAW url params, not the derived `orientation` local
+    // (which defaults to 'white'). Otherwise the redirect would
+    // silently force white on every bare /coach/session/walkthrough
+    // link.
+    const params = new URLSearchParams();
+    if (subject) params.set('opening', subject);
+    if (orientationParam === 'white' || orientationParam === 'black') {
+      params.set('orientation', orientationParam);
+    }
+    const qs = params.toString();
+    return <Navigate to={qs ? `/coach/teach?${qs}` : '/coach/teach'} replace />;
   }
 
   if (kind === 'puzzle') {
@@ -241,57 +248,12 @@ function MiddlegameSessionBody({
   return <WalkthroughRunnerBody session={session} onExit={onExit} />;
 }
 
-// ─── Walkthrough ────────────────────────────────────────────────────
-
-interface WalkthroughSessionBodyProps {
-  subject?: string;
-  orientation: 'white' | 'black';
-  onExit: () => void;
-}
-
-function WalkthroughSessionBody({
-  subject,
-  orientation,
-  onExit,
-}: WalkthroughSessionBodyProps): JSX.Element {
-  const [session, setSession] = useState<WalkthroughSession | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!subject) {
-      setError('No opening specified.');
-      setLoading(false);
-      return;
-    }
-    let cancelled = false;
-    setLoading(true);
-    void resolveWalkthroughSession({ subject, orientation })
-      .then((s) => {
-        if (cancelled) return;
-        if (s) setSession(s);
-        else
-          setError(
-            `I couldn't find an opening matching "${subject}". Try searching from the Openings tab.`,
-          );
-      })
-      .catch((err: unknown) => {
-        if (cancelled) return;
-        console.warn('[CoachSessionPage] walkthrough resolve failed:', err);
-        setError('Could not load that walkthrough.');
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [subject, orientation]);
-
-  if (loading) return <LessonLoadingState label="Loading walkthrough…" onExit={onExit} />;
-  if (error || !session) return <LessonErrorState message={error ?? 'Walkthrough unavailable.'} onExit={onExit} />;
-  return <WalkthroughRunnerBody session={session} onExit={onExit} />;
-}
+// Walkthrough body removed — /coach/session/walkthrough now redirects
+// to /coach/teach (the canonical Learn-with-Coach surface, which owns
+// the DB-narration pipeline + chat panel + voice + picker chips). The
+// previous WalkthroughSessionBody was a stripped-down lesson view
+// without chat/voice/picker; the redirect happens at the route-level
+// switch above.
 
 // play-against now redirects to /coach/play (CoachGamePage) which owns
 // the full-featured game experience — themed board, click-to-move,
