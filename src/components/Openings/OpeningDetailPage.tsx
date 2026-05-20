@@ -1092,28 +1092,29 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
-      {/* ═══ ZONE 6 — DEPTH ════════════════════════════════════════════
-          "Full named sub-line list — go deeper if you want." */}
+      {/* ═══ ZONE 6 — VARIATIONS ═══════════════════════════════════════
+          The named sub-line list. The zone header is the ONLY header
+          for this block — the inner card's redundant "Lines (N)"
+          title was dropped so Depth + sublines read as one unit
+          (David 2026-05-20: "depth variations are separated"). */}
       <OpeningZoneHeader
         color="slate"
         icon={GitBranch}
-        title="Depth"
-        tagline="Full named sub-line list. Browse all variations if you want to go deeper."
+        title="Variations"
+        tagline="Every named sub-line. Browse them to go deeper."
         aside={
           opening.variations && opening.variations.length > 0 ? (
             <span className="text-xs font-semibold text-slate-400">
-              {opening.variations.length} variations
+              {opening.variations.length} lines
             </span>
           ) : undefined
         }
       />
 
-      {/* Variations (lines) */}
+      {/* Variations (lines) — no inner header; the zone header above
+          is the single title for this section. */}
       {opening.variations && opening.variations.length > 0 && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4">
-          <h3 className="text-sm font-semibold text-theme-text mb-3">
-            Lines ({opening.variations.length})
-          </h3>
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-slate-500/30">
           <div className="space-y-1">
             {opening.variations.map((variation, i) => {
               const isDiscovered = opening.linesDiscovered?.includes(i) ?? false;

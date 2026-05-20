@@ -781,7 +781,10 @@ export function WalkthroughMode({
     <div className="px-4 pt-2">
       <div className="flex items-center gap-2 mb-1">
         <span className="text-[10px] text-theme-text-muted uppercase font-medium">
-          Move {currentMoveIndex} / {expectedMoves.length}
+          {/* currentMoveIndex counts plies (half-moves); convert to
+              the chess move number so this matches the narration card
+              (e.g. ply 21 → "Move 11"). David 2026-05-20. */}
+          Move {Math.ceil(currentMoveIndex / 2)} / {Math.ceil(expectedMoves.length / 2)}
         </span>
       </div>
       <div className="w-full h-1.5 bg-theme-surface rounded-full overflow-hidden">
