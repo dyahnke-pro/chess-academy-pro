@@ -16,7 +16,7 @@
     {
       "slug": "staunton-blue-book-of-chess",
       "gutenbergId": 16377,
-      "title": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
+      "title": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
       "author": "Staunton, Howard"
     },
     {
@@ -53,8 +53,8 @@
         "gutenbergId": 5614,
         "chapter": "VI",
         "section": "ILLUSTRATIVE GAMES FROM MASTER TOURNAMENTS",
-        "text": "In many variations of the Ruy Lopez, this advance is always good, if Black cannot avoid exchanging the pawn, because the White Queen’s Rook, which only gets into play with difficulty, can either be exchanged or hold the Rook’s file. In any case the Black Knight’s pawn is weak for the end-game. If, as in the present game. Black can play P-Kt5, P-R4 is useless and even doubtful, as the Rook’s pawn itself may become weak in the end- game.\n\nThis causes the loss of the game. In the Ruy Lopez the Bishop is nearly always needed on the diagonal QB1-KR6, to prevent a Knight from settling at White’s KB5, which otherwise cannot be repelled except by P-KKt3, a most undesirable consummation. The proper continuation would have been P-Kt5, B-K3, Q-B2 and P-Q4, capturing the Queen’s file. Compare note to move 13 in the next game.\n\n--------------------------------------- 8 | #R | | | | | #R | #K | | |---------------------------------------| 7 | | #B | #Q | | #B | #P | | #P | |---------------------------------------| 6 | #P | | #Kt| #P | | #Kt| #P | | |---------------------------------------| 5 | | #P | #P | | #P | | | | |---------------------------------------| 4 | ^P | | | | ^P | | | | |---------------------------------------| 3 | | | ^P | ^P | | ^Kt| ^Kt| | |---------------------------------------| 2 | | ^P | ^B | | | ^P | ^P | ^P | |---------------------------------------| 1 | ^R | | ^B | ^Q | ^R | | ^K | | --------------------------------------- A B C D E F G H\n\nHere is the weakness. White first provides against Black’s P-Q4, and then starts a sharp attack on the King’s side.\n\nThis brings the Q away from her file, which Black could now secure by P-Q4, followed by PxP.",
-        "wordCount": 309
+        "text": "In many variations of the Ruy Lopez, this advance is always good, if Black cannot avoid exchanging the pawn, because the White Queen’s Rook, which only gets into play with difficulty, can either be exchanged or hold the Rook’s file. In any case the Black Knight’s pawn is weak for the end-game. If, as in the present game. Black can play P-Kt5, P-R4 is useless and even doubtful, as the Rook’s pawn itself may become weak in the end- game.\n\nThis causes the loss of the game. In the Ruy Lopez the Bishop is nearly always needed on the diagonal QB1-KR6, to prevent a Knight from settling at White’s KB5, which otherwise cannot be repelled except by P-KKt3, a most undesirable consummation. The proper continuation would have been P-Kt5, B-K3, Q-B2 and P-Q4, capturing the Queen’s file. Compare note to move 13 in the next game.\n\nHere is the weakness. White first provides against Black’s P-Q4, and then starts a sharp attack on the King’s side.\n\nThis brings the Q away from her file, which Black could now secure by P-Q4, followed by PxP.",
+        "wordCount": 184
       },
       {
         "bookSlug": "capablanca-chess-fundamentals",
@@ -90,7 +90,7 @@
     "petrov-defence": [
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
+        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
         "author": "Staunton, Howard",
         "gutenbergId": 16377,
         "chapter": null,
@@ -100,7 +100,7 @@
       },
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
+        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
         "author": "Staunton, Howard",
         "gutenbergId": 16377,
         "chapter": null,
@@ -110,7 +110,7 @@
       },
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
+        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
         "author": "Staunton, Howard",
         "gutenbergId": 16377,
         "chapter": null,
@@ -120,7 +120,7 @@
       },
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
+        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
         "author": "Staunton, Howard",
         "gutenbergId": 16377,
         "chapter": null,
@@ -157,8 +157,8 @@
         "gutenbergId": 5614,
         "chapter": "IV",
         "section": "THE OPENING",
-        "text": "There are two moves which deserve consideration as a preliminary to P-Q4, namely, 1. ... P-K3 (French Defence)\n\n--------------------------------------- 8 | #R |#Kt |#B | #Q | #K | #B |#Kt | #R | |---------------------------------------| 7 | #P | #P | #P | | | #P | #P | #P | |---------------------------------------| 6 | | | | | #P | | | | |---------------------------------------| 5 | | | | #P | | | | | |---------------------------------------| 4 | | | | ^P | ^P | | | | |---------------------------------------| 3 | | | | | | | | | |---------------------------------------| 2 | ^P | ^P | ^P | | | ^P | ^P |^P | |---------------------------------------| 1 | ^R |^Kt | ^B | ^Q | ^K | ^B |^Kt |^R | --------------------------------------- A B C D E F G H\n\nand P-QB3 (Caro-Kann defence). After 2. P-Q4, P-Q4, we attain the positions set out in the Diagrams 27 and 28, to which we must devote a good deal of attention.\n\nThese openings are worthy of study as being especially interesting examples of the struggle for the centre.\n\nAs early as the third move, White has to take an important decision. Is he to play P-K5 and prevent the opening of",
-        "wordCount": 210
+        "text": "There are two moves which deserve consideration as a preliminary to P-Q4, namely, 1. ... P-K3 (French Defence)\n\nand P-QB3 (Caro-Kann defence). After 2. P-Q4, P-Q4, we attain the positions set out in the Diagrams 27 and 28, to which we must devote a good deal of attention.\n\nThese openings are worthy of study as being especially interesting examples of the struggle for the centre.\n\nAs early as the third move, White has to take an important decision. Is he to play P-K5 and prevent the opening of",
+        "wordCount": 88
       },
       {
         "bookSlug": "edward-lasker-chess-strategy",
@@ -275,8 +275,8 @@
         "gutenbergId": 5614,
         "chapter": "IV",
         "section": "THE OPENING",
-        "text": "A second example is the Vienna game, which proceeds as follows:\n\nIf White plays 4. PxQP, Black can play P-K5, as in the Falkbeer gambit mentioned just now. In answer to 4. PxKP, on the other hand, Black can play KtxP without having the slightest difficulty with his development. For instance,\n\n5. Kt-KB3 B-K2 6. P-Q4 P-KB3 7. B-Q3 KtxKt 8. PxKt Castles 9. Castles Kt-B3 or B-KKt5\n\nand Black also will soon have an open file for his Rook, with no disadvantage in position.\n\n--------------------------------------- 8 | #R |#Kt | #B | #Q | #K | #B | | #R | |---------------------------------------| 7 | #P | #P | #P | | | #P | #P | #P | |---------------------------------------| 6 | | | | | |#Kt | | | |---------------------------------------| 5 | | | | #P | #P | | | | |---------------------------------------| 4 | | | | | ^P | ^P | | | |---------------------------------------| 3 | | |^Kt | | | | | | |---------------------------------------| 2 | ^P |^P | ^P | ^P | | | ^P | ^P | --------------------------------------- 1 | ^R | | ^B | ^Q | ^K | ^B |^Kt | ^R | --------------------------------------- A B C D E F G H",
-        "wordCount": 209
+        "text": "A second example is the Vienna game, which proceeds as follows:\n\nIf White plays 4. PxQP, Black can play P-K5, as in the Falkbeer gambit mentioned just now. In answer to 4. PxKP, on the other hand, Black can play KtxP without having the slightest difficulty with his development. For instance,\n\n5. Kt-KB3 B-K2 6. P-Q4 P-KB3 7. B-Q3 KtxKt 8. PxKt Castles 9. Castles Kt-B3 or B-KKt5\n\nand Black also will soon have an open file for his Rook, with no disadvantage in position.",
+        "wordCount": 85
       }
     ],
     "caro-kann": [
@@ -307,8 +307,8 @@
         "gutenbergId": 5614,
         "chapter": "IV",
         "section": "THE OPENING",
-        "text": "I shall first turn my attention to those games in which White plays P-K5, starting with the French Defence, after which the Caro-Kann Defence will be easily understood.\n\nThe position which ensues in the centre after 1. P-K4, P-K3; 2. P-Q4, P-Q4; 3. P-K5, divides the board diagonally, and it is easy to recognise roughly the main lines of play which will govern the game. White has more scope on the King’s side, where his pieces will have greater mobility, and prospects of attack. Black’s chances are on the Queen’s side. Both sides will have to advance more pawns in order to obtain openings for their Rooks, and use them for the attack, since they have no future on the K and Q files, as was the case in the openings mentioned hitherto.\n\nThe obvious moves to this end are: for White the advance of the KBP, for Black that of the QBP and sometimes even of the QKtP, that is when the QBP has not been exchanged for the opposing QP, but has pushed on to B5.\n\nIn Diagrams 29 and 30 we see the chains of pawns formed by these manœuvres.\n\n--------------------------------------- 8 | | | | | | | | | |---------------------------------------| 7 | #P | #P | | | | #P | #P | #P | |---------------------------------------| 6 | | | | | #P | | | | |---------------------------------------| 5 | | | #P | #P | ^P | ^P | | | |---------------------------------------| 4 | | | | ^P | | | | | |---------------------------------------| 3 | | | | | | | | | |---------------------------------------| 2 | ^P | ^P | ^P | | | | ^P | ^P | |---------------------------------------| 1 | | | | | | | | | --------------------------------------- A B C D E F G H",
-        "wordCount": 306
+        "text": "I shall first turn my attention to those games in which White plays P-K5, starting with the French Defence, after which the Caro-Kann Defence will be easily understood.\n\nThe position which ensues in the centre after 1. P-K4, P-K3; 2. P-Q4, P-Q4; 3. P-K5, divides the board diagonally, and it is easy to recognise roughly the main lines of play which will govern the game. White has more scope on the King’s side, where his pieces will have greater mobility, and prospects of attack. Black’s chances are on the Queen’s side. Both sides will have to advance more pawns in order to obtain openings for their Rooks, and use them for the attack, since they have no future on the K and Q files, as was the case in the openings mentioned hitherto.\n\nThe obvious moves to this end are: for White the advance of the KBP, for Black that of the QBP and sometimes even of the QKtP, that is when the QBP has not been exchanged for the opposing QP, but has pushed on to B5.\n\nIn Diagrams 29 and 30 we see the chains of pawns formed by these manœuvres.",
+        "wordCount": 193
       }
     ],
     "dutch-defence": [
@@ -326,7 +326,7 @@
     "kings-gambit": [
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
+        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
         "author": "Staunton, Howard",
         "gutenbergId": 16377,
         "chapter": null,
@@ -336,7 +336,7 @@
       },
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
+        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
         "author": "Staunton, Howard",
         "gutenbergId": 16377,
         "chapter": null,
@@ -346,7 +346,7 @@
       },
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
+        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
         "author": "Staunton, Howard",
         "gutenbergId": 16377,
         "chapter": null,
@@ -358,7 +358,7 @@
     "evans-gambit": [
       {
         "bookSlug": "staunton-blue-book-of-chess",
-        "bookTitle": "The blue book of chess : $b teaching the rudiments of the game, and giving an analysis of all the recognized openings",
+        "bookTitle": "The blue book of chess: teaching the rudiments of the game, and giving an analysis of all the recognized openings",
         "author": "Staunton, Howard",
         "gutenbergId": 16377,
         "chapter": null,
