@@ -115,8 +115,11 @@ export function LessonPlayer({ script, onExit }: LessonPlayerProps): JSX.Element
         </div>
       </div>
 
-      {/* Controls */}
-      <div className="flex items-center justify-center gap-3 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom,0px))]">
+      {/* Controls — clear the fixed mobile bottom nav (~4.5rem) + the
+          iOS home-indicator safe-area inset so the Play/Next buttons
+          aren't clipped (David 2026-05-20: "play button getting cut off
+          … cannot progress"). */}
+      <div className="flex items-center justify-center gap-3 px-4 py-3 pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:pb-4">
         <button
           type="button"
           onClick={prev}
