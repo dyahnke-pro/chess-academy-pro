@@ -269,7 +269,11 @@ export function WalkthroughMode({
   // Default to ON in walkthrough mode — students learning openings benefit
   // from seeing eval shift across each move. Toggle still respects user
   // input via AnalysisToggles.
-  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(true);
+  // Eval bar defaults OFF in walkthroughs. Running depth-14 Stockfish on
+  // every step pegged mobile CPUs and froze the board (David 2026-05-20);
+  // the eval is also near-0.0 noise in a guided opening walkthrough. The
+  // AnalysisToggles still let a user opt the bar (and the engine) back on.
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(false);
   const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
   const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
   const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
@@ -484,6 +488,9 @@ export function WalkthroughMode({
   // now they surface to the console so a stuck-at-0.0 eval bar can be
   // diagnosed.
   useEffect(() => {
+    // Only analyze when the eval bar is actually shown — otherwise we'd
+    // burn a depth-14 Stockfish run on every step for nothing (the freeze).
+    if (!showEvalBarEffective) return;
     const guard = { cancelled: false };
     void (async () => {
       try {
@@ -501,7 +508,7 @@ export function WalkthroughMode({
       }
     })();
     return () => { guard.cancelled = true; };
-  }, [currentFen]);
+  }, [currentFen, showEvalBarEffective]);
 
   // Lichess cloud eval on position change
   useEffect(() => {
