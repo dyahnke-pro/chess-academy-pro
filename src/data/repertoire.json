@@ -113,35 +113,35 @@
       },
       {
         "name": "Kingside Crush #1",
-        "pgn": "Bg5 Rxe8+ Qxe8 Bxg5",
-        "setupFen": "r2qr1k1/ppp1bppp/1nnp4/5P2/6P1/1BP5/P4P1P/RNBQR1K1 b - - 4 15",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 exd4 Nxd4 Nf6 Nf5 O-O O-O d6 Re1 Be6 Bd3 Re8 g4 Bxf5 exf5 Nd5 Bc4 Nb6 Bb3 Bg5 Rxe8+ Qxe8 Bxg5",
         "explanation": "Kingside Crush verified by Stockfish to win +360cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 1468, played 33,857 times).",
         "source": "lichess-puzzle:0DgYW",
-        "verifiedEval": "+360cp"
+        "verifiedEval": "+360cp",
+        "sourceGameUrl": "https://lichess.org/1xS4pFt5"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "cxd5 Be7+ Qxe7 Rxe7 Kxe7 Qxg7+ Kd6 Qxh8",
-        "setupFen": "r1b2k1r/pp4pp/2pq4/3B2B1/3Q4/8/P4PPP/4R1K1 b - - 1 18",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 d5 exd5 Nxd5 O-O Nxc3 bxc3 Bxc3 Qb3 Bxa1 Bxf7+ Kf8 Bg5 Qd7 Bd5 Bxd4 Nxd4 Nxd4 Qb4+ Qd6 Qxd4 c6 Re1 cxd5 Be7+ Qxe7 Rxe7 Kxe7 Qxg7+ Kd6 Qxh8",
         "explanation": "Fork Win verified by Stockfish to win +470cp for the student. Tactical themes: advantage, attraction, capturingDefender, fork. Sourced from real Lichess puzzle (rating 1545, played 23,797 times).",
         "source": "lichess-puzzle:0EXhU",
-        "verifiedEval": "+470cp"
+        "verifiedEval": "+470cp",
+        "sourceGameUrl": "https://lichess.org/EWdo2tjF"
       },
       {
         "name": "Tactical Strike #3",
-        "pgn": "Nxd5 Qh5 h6 Nxf7",
-        "setupFen": "r1bq1rk1/ppp2ppp/3p1nn1/3Np1N1/2B1P3/3PP3/PPP3PP/R2Q1RK1 b - - 4 10",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 d6 Ng5 O-O Be3 Bxe3 fxe3 Ne7 O-O Ng6 Nd5 Nxd5 Qh5 h6 Nxf7",
         "explanation": "Tactical Strike verified by Stockfish to win +417cp for the student. Tactical themes: advantage. Sourced from real Lichess puzzle (rating 2395, played 3,624 times).",
         "source": "lichess-puzzle:0Ksyp",
-        "verifiedEval": "+417cp"
+        "verifiedEval": "+417cp",
+        "sourceGameUrl": "https://lichess.org/FIrsatyM"
       },
       {
         "name": "Skewer Win #4",
-        "pgn": "fxg5 Bxg5+ Kxf7 Bxd8",
-        "setupFen": "r1bq3r/ppp1kB1p/5pp1/2b1p1N1/3n3Q/3P4/PPP2PPP/RNB1K2R b KQ - 1 11",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 Ng5 d5 exd5 Nxd5 Qf3 f6 Bxd5 Nd4 Bf7+ Ke7 Qh5 g6 Qh4 fxg5 Bxg5+ Kxf7 Bxd8",
         "explanation": "Skewer Win verified by Stockfish to win +535cp for the student. Tactical themes: crushing, skewer. Sourced from real Lichess puzzle (rating 1409, played 11,989 times).",
         "source": "lichess-puzzle:05Nmq",
-        "verifiedEval": "+535cp"
+        "verifiedEval": "+535cp",
+        "sourceGameUrl": "https://lichess.org/6HSRIxn3"
       }
     ],
     "warningLines": [
@@ -267,35 +267,35 @@
       },
       {
         "name": "Discovered Attack #1",
-        "pgn": "Rfe8 Nf6+ gxf6 Qxd7",
-        "setupFen": "r4rk1/2pq1ppp/pbn3b1/1p1NP3/6P1/5N1P/PP3P2/R1BQR1K1 b - - 0 17",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 Bc5 O-O a6 Ba4 b5 Bb3 d6 c3 Bg4 d4 exd4 h3 Bh5 g4 Bg6 cxd4 Bb6 Bd5 Qd7 Nc3 Nf6 Re1 O-O e5 Nxd5 Nxd5 dxe5 dxe5 Rfe8 Nf6+ gxf6 Qxd7",
         "explanation": "Discovered Attack verified by Stockfish to win +560cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1246, played 25,164 times).",
         "source": "lichess-puzzle:050qo",
-        "verifiedEval": "+560cp"
+        "verifiedEval": "+560cp",
+        "sourceGameUrl": "https://lichess.org/QJnPh0WG"
       },
       {
         "name": "Pin Pressure #2",
-        "pgn": "Nc5 Qxd5 O-O Rxe6 Nxb3 Qxb3",
-        "setupFen": "r3k2r/1p4pp/p3bb2/q2p1p2/4n3/1B1Q1P1P/PP1N2P1/R1B1R1K1 b kq - 0 18",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6 h3 Bd7 c3 Nf6 d4 Nxe4 Qe2 f5 O-O Be7 dxe5 Nxe5 Bb3 Nxf3+ Qxf3 Bf6 Re1 c6 Nd2 d5 c4 Qa5 cxd5 cxd5 Qd3 Be6 f3 Nc5 Qxd5 O-O Rxe6 Nxb3 Qxb3",
         "explanation": "Pin Pressure verified by Stockfish to win +395cp for the student. Tactical themes: advantage, master, pin. Sourced from real Lichess puzzle (rating 2145, played 8,793 times).",
         "source": "lichess-puzzle:0DEHt",
-        "verifiedEval": "+395cp"
+        "verifiedEval": "+395cp",
+        "sourceGameUrl": "https://lichess.org/iKqn3dTy"
       },
       {
         "name": "Pin Pressure #3",
-        "pgn": "Bd7 g4 Ne7 e6 fxe6 Ne5",
-        "setupFen": "r1bk1b1r/p1p2pp1/1pp4p/4Pn2/8/2N2N1P/PPP2PP1/R1BR2K1 b - - 1 11",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 h3 h6 Nc3 b6 Rd1+ Bd7 g4 Ne7 e6 fxe6 Ne5",
         "explanation": "Pin Pressure verified by Stockfish to win +385cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 2673, played 1,217 times).",
         "source": "lichess-puzzle:0Exzv",
-        "verifiedEval": "+385cp"
+        "verifiedEval": "+385cp",
+        "sourceGameUrl": "https://lichess.org/ZuAgJTkI"
       },
       {
         "name": "Discovered Attack #4",
-        "pgn": "Qxd4 Nxe6 fxe6 Rxc6 Qxd3 Qxd3",
-        "setupFen": "r4rk1/1p3ppp/p1n1b3/2NpP3/3P4/P1qB3P/5PP1/2RQ1RK1 b - - 6 18",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 Nd4 Nxd4 exd4 c3 dxc3 bxc3 c5 d4 a6 Bd3 d5 e5 cxd4 cxd4 Bb4+ Bd2 Qa5 O-O Ne7 a3 Bxd2 Nxd2 O-O h3 Be6 Nb3 Qc3 Nc5 Nc6 Rc1 Qxd4 Nxe6 fxe6 Rxc6 Qxd3 Qxd3",
         "explanation": "Discovered Attack verified by Stockfish to win +492cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1760, played 8,134 times).",
         "source": "lichess-puzzle:02viV",
-        "verifiedEval": "+492cp"
+        "verifiedEval": "+492cp",
+        "sourceGameUrl": "https://lichess.org/9tfb2Jv3"
       }
     ],
     "warningLines": [
@@ -423,43 +423,43 @@
       },
       {
         "name": "Kingside Crush #1",
-        "pgn": "Bg4 Rxe8+ Qxe8 Qxf6",
-        "setupFen": "r1bqr1k1/ppp2p2/2np1n1p/6p1/8/2NB1QB1/PPP2PPP/R3R1K1 b - - 7 15",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Be7 d4 exd4 Nxd4 Nf6 Nf5 O-O Bg5 d6 Nxe7+ Qxe7 O-O h6 Bh4 g5 Bg3 Qxe4 Bd3 Qe7 Re1 Qd8 Nc3 Re8 Qf3 Bg4 Rxe8+ Qxe8 Qxf6",
         "explanation": "Kingside Crush verified by Stockfish to win +471cp for the student. Tactical themes: crushing, kingsideAttack. Sourced from real Lichess puzzle (rating 1394, played 20,996 times).",
         "source": "lichess-puzzle:08zQG",
-        "verifiedEval": "+471cp"
+        "verifiedEval": "+471cp",
+        "sourceGameUrl": "https://lichess.org/veDbcuJ6"
       },
       {
         "name": "Pin Pressure #2",
-        "pgn": "a6 Be6 Bd6 Nxd6",
-        "setupFen": "r2k3r/pppbn1pp/5p2/1Nb1p3/2B1P3/8/PPP2PPP/R1BR2K1 b - - 7 11",
+        "pgn": "e4 e5 Nf3 Nc6 d4 d6 dxe5 Nxe5 Nxe5 dxe5 Qxd8+ Kxd8 Bc4 f6 O-O Bc5 Nc3 Bd7 Rd1 Ne7 Nb5 a6 Be6 Bd6 Nxd6",
         "explanation": "Pin Pressure verified by Stockfish to win +331cp for the student. Tactical themes: advantage, pin. Sourced from real Lichess puzzle (rating 1537, played 15,562 times).",
         "source": "lichess-puzzle:0F84a",
-        "verifiedEval": "+331cp"
+        "verifiedEval": "+331cp",
+        "sourceGameUrl": "https://lichess.org/TEg4pDng"
       },
       {
         "name": "Discovered Attack #3",
-        "pgn": "Qxb1+ Kd2 Nh6 Rxb1",
-        "setupFen": "r1b1k1nr/pppp1ppp/2N5/8/2B1P3/4PQ2/P1P3PP/qN2K2R b Kkq - 1 9",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qf6 Nxc6 Bc5 Be3 Bxe3 fxe3 Qxb2 Qf3 Qxa1 Bc4 Qxb1+ Kd2 Nh6 Rxb1",
         "explanation": "Discovered Attack verified by Stockfish to win +306cp for the student. Tactical themes: advantage, defensiveMove, discoveredAttack. Sourced from real Lichess puzzle (rating 1933, played 10,455 times).",
         "source": "lichess-puzzle:0CuYW",
-        "verifiedEval": "+306cp"
+        "verifiedEval": "+306cp",
+        "sourceGameUrl": "https://lichess.org/qi7ke81T"
       },
       {
         "name": "Tactical Strike #4",
-        "pgn": "Be7 Qd5 Nh6 Bxh6",
-        "setupFen": "r1bqk1nr/pppp1ppp/2n5/2b1P1B1/2B5/2P2N2/P4PPP/RN1QK2R b KQkq - 2 8",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Be7 d4 exd4 e5 Bb4+ c3 dxc3 bxc3 Bc5 Bg5 Be7 Qd5 Nh6 Bxh6",
         "explanation": "Tactical Strike verified by Stockfish to win +361cp for the student. Tactical themes: advantage. Sourced from real Lichess puzzle (rating 1909, played 10,415 times).",
         "source": "lichess-puzzle:04Lnq",
-        "verifiedEval": "+361cp"
+        "verifiedEval": "+361cp",
+        "sourceGameUrl": "https://lichess.org/R5lt2ZJK"
       },
       {
         "name": "Pin Pressure #5",
-        "pgn": "d5 Nf6+ Kh8 Qh4 h6 Bxh6",
-        "setupFen": "r1bq1rk1/p3nppp/1bpp4/8/2P1N3/3B2Q1/PP3PPP/R1B1K2R b KQ - 1 13",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 Nc3 Bc5 e5 Nd5 Ne4 Bb6 c4 Ne7 Qg4 O-O Qg3 d5 exd6 cxd6 Bd3 d5 Nf6+ Kh8 Qh4 h6 Bxh6",
         "explanation": "Pin Pressure verified by Stockfish to win +589cp for the student. Tactical themes: crushing, kingsideAttack, pin. Sourced from real Lichess puzzle (rating 2089, played 8,378 times).",
         "source": "lichess-puzzle:0IZXZ",
-        "verifiedEval": "+589cp"
+        "verifiedEval": "+589cp",
+        "sourceGameUrl": "https://lichess.org/YAwyida7"
       }
     ],
     "warningLines": [
@@ -574,19 +574,19 @@
       },
       {
         "name": "Pin Pressure #1",
-        "pgn": "Nf6 Re1 Qxe1+ Nxe1",
-        "setupFen": "rn2k1nr/ppp1qppp/3b4/8/2Q2p2/2N2N2/PPPP2PP/R1B2RK1 b kq - 0 10",
+        "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3 d6 exd6 Bxd6 Bc4 Be6 Qe2 Qe7 O-O Bxc4 Qxc4 Nf6 Re1 Qxe1+ Nxe1",
         "explanation": "Pin Pressure verified by Stockfish to win +409cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1447, played 20,308 times).",
         "source": "lichess-puzzle:0BLgI",
-        "verifiedEval": "+409cp"
+        "verifiedEval": "+409cp",
+        "sourceGameUrl": "https://lichess.org/BCOtaIKW"
       },
       {
         "name": "Deflection Win #2",
-        "pgn": "c6 Qe5+ Be7 Qxg7 Bf6 Nxf6+ Qxf6 Bh6 Qxg7 Bxg7",
-        "setupFen": "rnbqkbnr/1ppp1ppp/p7/3N3Q/3PP3/8/PPP3B1/R1B3KR b kq - 4 10",
+        "pgn": "e4 e5 Nc3 a6 f4 exf4 d4 Qh4+ g3 fxg3 Bg2 gxh2+ Kf1 hxg1=Q+ Kxg1 Qf6 Nd5 Qd8 Qh5 c6 Qe5+ Be7 Qxg7 Bf6 Nxf6+ Qxf6 Bh6 Qxg7 Bxg7",
         "explanation": "Deflection Win verified by Stockfish to win +346cp for the student. Tactical themes: advantage, deflection, quietMove. Sourced from real Lichess puzzle (rating 2789, played 1,789 times).",
         "source": "lichess-puzzle:0MIWi",
-        "verifiedEval": "+346cp"
+        "verifiedEval": "+346cp",
+        "sourceGameUrl": "https://lichess.org/URD13tKk"
       }
     ],
     "warningLines": [
@@ -715,35 +715,35 @@
       },
       {
         "name": "Tactical Strike #1",
-        "pgn": "Nd5 Qh5+ g6 fxg6",
-        "setupFen": "r1bqkb1r/ppp3pp/2n2n2/4PP2/3Pp3/2N5/PPP3PP/R1BQKB1R b KQkq - 0 8",
+        "pgn": "e4 e5 f4 Nc6 Nf3 f5 exf5 e4 Ne5 Nf6 d4 d6 Nc3 dxe5 fxe5 Nd5 Qh5+ g6 fxg6",
         "explanation": "Tactical Strike verified by Stockfish to win +383cp for the student. Tactical themes: crushing, master. Sourced from real Lichess puzzle (rating 1227, played 23,892 times).",
         "source": "lichess-puzzle:08J1X",
-        "verifiedEval": "+383cp"
+        "verifiedEval": "+383cp",
+        "sourceGameUrl": "https://lichess.org/uU5LKl0U"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Bxf4 Ne7+ Kh8 Nxg6+",
-        "setupFen": "r4rk1/ppp2ppp/3p2q1/3N2b1/2BPPRb1/6P1/PPP4P/4RQK1 b - - 4 17",
+        "pgn": "e4 e5 f4 Nc6 Nf3 Qf6 Nc3 Qd6 fxe5 Nxe5 Nxe5 Qxe5 d4 Qd6 Be3 Be7 Bc4 Nh6 O-O O-O Bxh6 Qxh6 Rf3 d6 Qf1 Qg6 Re1 Bh4 g3 Bg5 Nd5 Bg4 Rf4 Bxf4 Ne7+ Kh8 Nxg6+",
         "explanation": "Fork Win verified by Stockfish to win +528cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1117, played 21,679 times).",
         "source": "lichess-puzzle:0MwR1",
-        "verifiedEval": "+528cp"
+        "verifiedEval": "+528cp",
+        "sourceGameUrl": "https://lichess.org/lYlcsaWD"
       },
       {
         "name": "Sacrificial Attack #3",
-        "pgn": "Ke6 Qg4+ Kxe5 Bxf4+",
-        "setupFen": "r1bq2nr/pppp1kpp/8/2b1N3/3nPp2/8/PPP3PP/RNBQK2R b KQ - 1 7",
+        "pgn": "e4 e5 f4 exf4 Bc4 Nc6 Nf3 Bc5 d4 Nxd4 Bxf7+ Kxf7 Ne5+ Ke6 Qg4+ Kxe5 Bxf4+",
         "explanation": "Sacrificial Attack verified by Stockfish to win +317cp for the student. Tactical themes: crushing, sacrifice. Sourced from real Lichess puzzle (rating 1996, played 9,621 times).",
         "source": "lichess-puzzle:0542a",
-        "verifiedEval": "+317cp"
+        "verifiedEval": "+317cp",
+        "sourceGameUrl": "https://lichess.org/a3p2nQj1"
       },
       {
         "name": "King Hunt #4",
-        "pgn": "Kb6 Qd4+ Kc6 Qc3+ Kd7 Re1",
-        "setupFen": "rn5Q/ppk1np2/3B4/6N1/6b1/8/PPP1q3/2KR4 b - - 0 18",
+        "pgn": "e4 e5 f4 exf4 Bc4 d6 Nc3 h6 d4 g5 h4 Bg7 hxg5 hxg5 Rxh8 Bxh8 Qh5 Qf6 Nd5 Qxd4 Nxc7+ Kd8 Nf3 Qxe4+ Be2 Kxc7 Qxh8 Ne7 Nxg5 Qxg2 Bxf4 Bg4 O-O-O Qxe2 Bxd6+ Kb6 Qd4+ Kc6 Qc3+ Kd7 Re1",
         "explanation": "King Hunt verified by Stockfish to win +364cp for the student. Tactical themes: crushing, exposedKing. Sourced from real Lichess puzzle (rating 2791, played 763 times).",
         "source": "lichess-puzzle:00SWh",
-        "verifiedEval": "+364cp"
+        "verifiedEval": "+364cp",
+        "sourceGameUrl": "https://lichess.org/SIKtKv2M"
       }
     ],
     "warningLines": [
@@ -846,43 +846,43 @@
       },
       {
         "name": "Fork Win #1",
-        "pgn": "Qc6 Bb5 Qxb5 Nxc7+ Kf7 Nxb5",
-        "setupFen": "r1b1k1nr/pppqb2p/5pp1/3Nn3/2B4Q/8/PPP2PPP/R1B1R1K1 b kq - 3 15",
+        "pgn": "e4 Nf6 Nc3 e5 Nf3 Nc6 Nxe5 Nxe5 d4 Ng6 e5 Ng8 Bc4 d6 Qf3 Qd7 O-O dxe5 dxe5 Bc5 Rd1 Nxe5 Re1 f6 Qh5+ g6 Qh4 Be7 Nd5 Qc6 Bb5 Qxb5 Nxc7+ Kf7 Nxb5",
         "explanation": "Fork Win verified by Stockfish to win +553cp for the student. Tactical themes: attraction, crushing, deflection, exposedKing. Sourced from real Lichess puzzle (rating 2125, played 11,633 times).",
         "source": "lichess-puzzle:0CEiN",
-        "verifiedEval": "+553cp"
+        "verifiedEval": "+553cp",
+        "sourceGameUrl": "https://lichess.org/t2Ik7duM"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Rfe8 Ne4 Qc6 Nxc5 Qxc5 c3",
-        "setupFen": "r4rk1/ppp2ppp/5q2/2b1p3/3n4/2NPB2P/PPP2PP1/R2QR1K1 b - - 4 14",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4 Nxe4 Nxe4 d5 Bxd5 Qxd5 Nc3 Qd8 O-O Bc5 Re1 Bg4 h3 Bxf3 Qxf3 O-O d3 Nd4 Qd1 Qf6 Be3 Rfe8 Ne4 Qc6 Nxc5 Qxc5 c3",
         "explanation": "Fork Win verified by Stockfish to win +393cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 2126, played 9,048 times).",
         "source": "lichess-puzzle:0KrMB",
-        "verifiedEval": "+393cp"
+        "verifiedEval": "+393cp",
+        "sourceGameUrl": "https://lichess.org/ix14eWTV"
       },
       {
         "name": "Tactical Strike #3",
-        "pgn": "Bg7 Qe2+ Qe4 Qxe4+ Nxe4 Bxg7",
-        "setupFen": "r1b1kb1r/pp1p1p1p/n1qP1np1/1NP5/3B4/8/PP3PPP/R2QKB1R b KQkq - 1 14",
+        "pgn": "e4 e5 Nc3 Nc6 Nf3 Nf6 Nxe5 Nxe5 d4 Nc6 d5 Nb8 e5 Ng8 d6 cxd6 exd6 Qb6 Nb5 Na6 Be3 Qc6 c4 Nf6 c5 g6 Bd4 Bg7 Qe2+ Qe4 Qxe4+ Nxe4 Bxg7",
         "explanation": "Tactical Strike verified by Stockfish to win +406cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 1693, played 8,127 times).",
         "source": "lichess-puzzle:02rAh",
-        "verifiedEval": "+406cp"
+        "verifiedEval": "+406cp",
+        "sourceGameUrl": "https://lichess.org/IlbhjUVt"
       },
       {
         "name": "Sacrificial Attack #4",
-        "pgn": "Nef6 Qxe8+ Nxe8 Rxf7",
-        "setupFen": "r1b1r1k1/pp3ppp/1q6/3B4/3Nn1n1/B1P5/P1P3PP/R3QRK1 b - - 0 18",
+        "pgn": "e4 e5 Nf3 Nf6 Nc3 Nc6 d4 exd4 Nxd4 Bb4 Bc4 Nxe4 O-O Bxc3 bxc3 O-O Qd3 d5 Bb3 Ne5 Qe3 c5 Nf3 Ng4 Qe1 c4 Bxc4 Nexf2 Bb3 Ne4 Ba3 Qb6+ Nd4 Re8 Bxd5 Nef6 Qxe8+ Nxe8 Rxf7",
         "explanation": "Sacrificial Attack verified by Stockfish to win +604cp for the student. Tactical themes: crushing, kingsideAttack, sacrifice. Sourced from real Lichess puzzle (rating 2169, played 1,246 times).",
         "source": "lichess-puzzle:0EIPW",
-        "verifiedEval": "+604cp"
+        "verifiedEval": "+604cp",
+        "sourceGameUrl": "https://lichess.org/EEwD9bDK"
       },
       {
         "name": "Fork Win #5",
-        "pgn": "Kd8 Bg5+ Kd7 Be6+ Qxe6 Nxe6",
-        "setupFen": "r3k2r/ppp3Np/3p2pB/2b1p3/2B1P3/2NP3q/PPP2P2/R2R2K1 b - - 3 17",
+        "pgn": "e4 e5 Nc3 Nc6 Nf3 Bc5 Bb5 Nf6 O-O d6 d3 Bg4 h3 Bh5 g4 Nxg4 hxg4 Bxg4 Bc4 Nd4 Bxf7+ Kf8 Nxd4 Qh4 Nf5 Qh3 Bc4 Bxd1 Rxd1 g6 Bh6+ Ke8 Ng7+ Kd8 Bg5+ Kd7 Be6+ Qxe6 Nxe6",
         "explanation": "Fork Win verified by Stockfish to win +369cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1703, played 5,199 times).",
         "source": "lichess-puzzle:00lA1",
-        "verifiedEval": "+369cp"
+        "verifiedEval": "+369cp",
+        "sourceGameUrl": "https://lichess.org/UXSJkHbF"
       }
     ],
     "warningLines": [
@@ -1000,43 +1000,43 @@
       },
       {
         "name": "Pin Pressure #1",
-        "pgn": "a4 Qxb3 Bb5+ Kf8",
-        "setupFen": "2r1k2r/1p2bppp/1q1p4/p2Pp1P1/5n1P/1N3P2/PPPQ4/2KR1B1R w k - 0 17",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be7 f3 Be6 Nd5 Bxd5 exd5 Nbd7 Qd2 Rc8 g4 Nb6 Bxb6 Qxb6 g5 Nh5 O-O-O Nf4 h4 a5 a4 Qxb3 Bb5+ Kf8",
         "explanation": "Pin Pressure verified by Stockfish to win +357cp for the student. Tactical themes: advantage, defensiveMove, pin. Sourced from real Lichess puzzle (rating 1489, played 32,268 times).",
         "source": "lichess-puzzle:01Btz",
-        "verifiedEval": "+357cp"
+        "verifiedEval": "+357cp",
+        "sourceGameUrl": "https://lichess.org/FMeNuY7a"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Nxe7 Ne2+ Kb1 Nxg3",
-        "setupFen": "r4r1k/1p2bp1p/p4p2/2qNpP2/3n4/1B4Q1/PPP2PPP/2KR3R w - - 13 17",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e5 Nf5 Bxf5 Bxf6 gxf6 exf5 d5 Qxd5 Qb6 O-O-O Be7 Bc4 O-O Qf3 Nc6 Qg3+ Kh8 Nd5 Qc5 Bb3 Nd4 Nxe7 Ne2+ Kb1 Nxg3",
         "explanation": "Fork Win verified by Stockfish to win +348cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1446, played 14,046 times).",
         "source": "lichess-puzzle:07eKm",
-        "verifiedEval": "+348cp"
+        "verifiedEval": "+348cp",
+        "sourceGameUrl": "https://lichess.org/OdyvLucQ"
       },
       {
         "name": "Pin Pressure #3",
-        "pgn": "Qd2 Rxg5 hxg5 Bxg5 Rh8+ Kd7 Kb1 Bxd2",
-        "setupFen": "r1b1k1r1/1p2pp2/p2p1n1b/2q3B1/3NP1nP/2N1Q3/PPP3P1/2KR1B1R w q - 3 16",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 Nbd7 f4 Qc7 Qf3 h6 Bh4 g5 fxg5 hxg5 Bxg5 Ne5 Qg3 Qc5 O-O-O Rg8 h4 Bh6 Qe3 Neg4 Qd2 Rxg5 hxg5 Bxg5 Rh8+ Kd7 Kb1 Bxd2",
         "explanation": "Pin Pressure verified by Stockfish to win +444cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 2102, played 861 times).",
         "source": "lichess-puzzle:0D0UN",
-        "verifiedEval": "+444cp"
+        "verifiedEval": "+444cp",
+        "sourceGameUrl": "https://lichess.org/7k6rnjFG"
       },
       {
         "name": "Pin Pressure #4",
-        "pgn": "Bxd5 Bh6 Qxh6 Rxh6",
-        "setupFen": "2kr1b1r/1p3p2/pq1p1p2/3bp2p/2B1P3/1P3P2/1PPQ2PP/2KR2R1 w - - 0 16",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Rg1 h5 Bg5 Nbd7 Qd2 Nc5 f3 e5 Nb3 Nxb3 axb3 Be6 Bc4 Qb6 O-O-O O-O-O Bxf6 gxf6 Nd5 Bxd5 Bxd5 Bh6 Qxh6 Rxh6",
         "explanation": "Pin Pressure verified by Stockfish to win +520cp for the student. Tactical themes: advantage, pin. Sourced from real Lichess puzzle (rating 1218, played 1,670 times).",
         "source": "lichess-puzzle:06v4c",
-        "verifiedEval": "+520cp"
+        "verifiedEval": "+520cp",
+        "sourceGameUrl": "https://lichess.org/nUZ292sx"
       },
       {
         "name": "Discovered Attack #5",
-        "pgn": "O-O Nxd5 Nxd5 Bxg5",
-        "setupFen": "1n1qk2r/r3bppp/p2p1n2/1p1BpPB1/8/2N5/PPP2PPP/R2QK2R w KQk - 4 11",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Bc4 a6 Nc3 e5 Nf5 Bxf5 exf5 b5 Bd5 Ra7 Bg5 Be7 O-O Nxd5 Nxd5 Bxg5",
         "explanation": "Discovered Attack verified by Stockfish to win +319cp for the student. Tactical themes: advantage, discoveredAttack. Sourced from real Lichess puzzle (rating 992, played 974 times).",
         "source": "lichess-puzzle:0P563",
-        "verifiedEval": "+319cp"
+        "verifiedEval": "+319cp",
+        "sourceGameUrl": "https://lichess.org/7tkwPwGf"
       }
     ],
     "warningLines": [
@@ -1158,43 +1158,43 @@
       },
       {
         "name": "Sacrificial Attack #1",
-        "pgn": "Bb2 Qxb2+ Kxb2 Nxe4+ c3 Nxd2",
-        "setupFen": "r4r1k/1p2Npbp/p2pbnp1/8/2BBP3/qP3P2/2PQ2PP/2KR3R w - - 1 16",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 f3 Bg7 Be3 O-O Bc4 Nc6 Qd2 Nxd4 Bxd4 Qa5 O-O-O a6 a4 Be6 Nd5 Qxa4 Nxe7+ Kh8 b3 Qa3+ Bb2 Qxb2+ Kxb2 Nxe4+ c3 Nxd2",
         "explanation": "Sacrificial Attack verified by Stockfish to win +364cp for the student. Tactical themes: crushing, discoveredAttack, discoveredCheck, queensideAttack. Sourced from real Lichess puzzle (rating 1753, played 2,284 times).",
         "source": "lichess-puzzle:0FHqf",
-        "verifiedEval": "+364cp"
+        "verifiedEval": "+364cp",
+        "sourceGameUrl": "https://lichess.org/BxqtkIbL"
       },
       {
         "name": "Tactical Strike #2",
-        "pgn": "Qf3 Bxd2+ Bxd2 Qxc4",
-        "setupFen": "r1b1k1nr/pp1ppp1p/6pb/4P3/1qBP4/8/PP1N1PPP/R1BQK2R w KQkq - 3 10",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Bc4 Bg7 c3 Nxd4 cxd4 Qb6 e5 Qb4+ Nd2 Bh6 Qf3 Bxd2+ Bxd2 Qxc4",
         "explanation": "Tactical Strike verified by Stockfish to win +309cp for the student. Tactical themes: advantage. Sourced from real Lichess puzzle (rating 1400, played 3,859 times).",
         "source": "lichess-puzzle:05XlR",
-        "verifiedEval": "+309cp"
+        "verifiedEval": "+309cp",
+        "sourceGameUrl": "https://lichess.org/50uyS3AS"
       },
       {
         "name": "Sacrificial Attack #3",
-        "pgn": "h5 Qxd4 Bxd4 Nxf3+",
-        "setupFen": "2r2rk1/pp1bppbp/1q1p1np1/4n3/3NP1PP/1BN1BP2/PPPQ4/R3K2R w KQ - 1 13",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 f3 Bg7 Be3 O-O Qd2 Nc6 Bc4 Bd7 g4 Rc8 Bb3 Ne5 h4 Qb6 h5 Qxd4 Bxd4 Nxf3+",
         "explanation": "Sacrificial Attack verified by Stockfish to win +307cp for the student. Tactical themes: capturingDefender, crushing, sacrifice. Sourced from real Lichess puzzle (rating 1688, played 572 times).",
         "source": "lichess-puzzle:0JS5q",
-        "verifiedEval": "+307cp"
+        "verifiedEval": "+307cp",
+        "sourceGameUrl": "https://lichess.org/5hUE7JXh"
       },
       {
         "name": "Discovered Attack #4",
-        "pgn": "Qh6 Bxc3+ bxc3 Qxd3",
-        "setupFen": "r2q1rk1/pp2pp2/6p1/7p/3bN1b1/2NBQ3/PP3P2/R3K2R w KQ - 2 19",
+        "pgn": "e4 c5 Nf3 g6 c3 Bg7 d4 cxd4 cxd4 Nc6 Nc3 Nf6 e5 Ng4 h3 Nh6 g4 d6 Bf4 dxe5 dxe5 O-O Qc1 Nxg4 hxg4 Bxg4 Ng5 h6 Nge4 h5 Qe3 Nxe5 Bxe5 Bxe5 Bd3 Bd4 Qh6 Bxc3+ bxc3 Qxd3",
         "explanation": "Discovered Attack verified by Stockfish to win +625cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1293, played 1,831 times).",
         "source": "lichess-puzzle:0IKyu",
-        "verifiedEval": "+625cp"
+        "verifiedEval": "+625cp",
+        "sourceGameUrl": "https://lichess.org/XAWz4PlF"
       },
       {
         "name": "Discovered Attack #5",
-        "pgn": "Qd2 Qxd2+ Kxd2 Ne4+ Ke1 Bxe5",
-        "setupFen": "5k1r/p3ppbp/5np1/qb2B3/3p1Q2/1B6/PPP2PPP/R3K2R w KQ - 2 18",
+        "pgn": "e4 c5 Nf3 g6 d4 cxd4 Nxd4 Nc6 Nc3 Bg7 Nxc6 bxc6 Bd2 Rb8 Qc1 Nf6 Bc4 d5 exd5 cxd5 Bb3 Ba6 Bf4 Rb4 Be5 d4 Nd5 Rb5 Nc7+ Kf8 Nxb5 Bxb5 Qf4 Qa5+ Qd2 Qxd2+ Kxd2 Ne4+ Ke1 Bxe5",
         "explanation": "Discovered Attack verified by Stockfish to win +436cp for the student. Tactical themes: attraction, crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1323, played 770 times).",
         "source": "lichess-puzzle:0Ewhe",
-        "verifiedEval": "+436cp"
+        "verifiedEval": "+436cp",
+        "sourceGameUrl": "https://lichess.org/lAeda8g0"
       }
     ],
     "warningLines": [
@@ -1399,19 +1399,19 @@
       },
       {
         "name": "Tactical Strike #1",
-        "pgn": "Nc3 Nxc3 bxc3 b5 Rb1 bxc4",
-        "setupFen": "rn2kb1r/pbqp1ppp/1p2p3/3nP3/2BP4/5N2/PP2QPPP/RNB1K2R w KQkq - 0 9",
+        "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 b6 Nf3 Bb7 Bc4 Qc7 Qe2 e6 Nc3 Nxc3 bxc3 b5 Rb1 bxc4",
         "explanation": "Tactical Strike verified by Stockfish to win +389cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 2342, played 1,282 times).",
         "source": "lichess-puzzle:00u3b",
-        "verifiedEval": "+389cp"
+        "verifiedEval": "+389cp",
+        "sourceGameUrl": "https://lichess.org/hg1xugvX"
       },
       {
         "name": "Tactical Strike #2",
-        "pgn": "Be3 Na5 Bxf7+ Qxf7 Qxf7+ Kxf7",
-        "setupFen": "r3kb1r/pp1bqppp/2n2n2/8/2BN4/1QP5/PP3PPP/RNB1K2R w KQkq - 5 10",
+        "pgn": "e4 c5 c3 e6 d4 d5 exd5 cxd4 dxe6 Bxe6 Nf3 Nf6 Nxd4 Bd7 Qb3 Nc6 Bc4 Qe7+ Be3 Na5 Bxf7+ Qxf7 Qxf7+ Kxf7",
         "explanation": "Tactical Strike verified by Stockfish to win +302cp for the student. Tactical themes: advantage, master, masterVsMaster. Sourced from real Lichess puzzle (rating 1836, played 506 times).",
         "source": "lichess-puzzle:0D6hc",
-        "verifiedEval": "+302cp"
+        "verifiedEval": "+302cp",
+        "sourceGameUrl": "https://lichess.org/YwsACCn7"
       }
     ],
     "warningLines": [
@@ -1526,43 +1526,43 @@
       },
       {
         "name": "Pin Pressure #1",
-        "pgn": "Be3 Qg2 Rg1 Qxb2 Qa3 Qxa1",
-        "setupFen": "r4rk1/pp3ppp/2b1p3/2Q5/4pP2/2P3Pq/PP5P/RNB1K2R w KQ - 1 17",
+        "pgn": "e4 e6 f4 d5 e5 c5 d4 cxd4 Qxd4 Nc6 Qa4 Bd7 c3 Bc5 Nf3 Nxe5 Qd1 Nxf3+ Qxf3 Bc6 Qh5 Nf6 Qg5 O-O Bd3 Ne4 Bxe4 dxe4 Qxc5 Qh4+ g3 Qh3 Be3 Qg2 Rg1 Qxb2 Qa3 Qxa1",
         "explanation": "Pin Pressure verified by Stockfish to win +348cp for the student. Tactical themes: advantage, pin, trappedPiece. Sourced from real Lichess puzzle (rating 1714, played 19,787 times).",
         "source": "lichess-puzzle:0DvcD",
-        "verifiedEval": "+348cp"
+        "verifiedEval": "+348cp",
+        "sourceGameUrl": "https://lichess.org/7yEnaP3P"
       },
       {
         "name": "Pin Pressure #2",
-        "pgn": "b4 Bxf2+ Qxf2 Rxe2",
-        "setupFen": "3rr1k1/pp3ppp/1qn5/2bp1b2/2P5/PP3N1P/1B1NBRP1/R4QK1 w - - 3 17",
+        "pgn": "e4 e6 d3 d5 exd5 exd5 Nf3 Nf6 a3 Bd6 h3 O-O Be2 c5 O-O Bf5 b3 Nc6 Bb2 Re8 Nbd2 Qc7 d4 Ne4 dxc5 Bxc5 c4 Nxf2 Rxf2 Qb6 Qf1 Rad8 b4 Bxf2+ Qxf2 Rxe2",
         "explanation": "Pin Pressure verified by Stockfish to win +425cp for the student. Tactical themes: advantage, kingsideAttack, pin. Sourced from real Lichess puzzle (rating 1671, played 19,823 times).",
         "source": "lichess-puzzle:05bWa",
-        "verifiedEval": "+425cp"
+        "verifiedEval": "+425cp",
+        "sourceGameUrl": "https://lichess.org/EFcum3DT"
       },
       {
         "name": "Discovered Attack #3",
-        "pgn": "Ncxd4 Nfxd4 Nxd4 Rxf4",
-        "setupFen": "r4rk1/1pqbb1pp/p1n1p3/4Pn2/P2p1B2/2Q2N2/1PN1BPPP/1R3RK1 w - - 0 17",
+        "pgn": "e4 e6 d4 d5 e5 c5 c3 Qb6 Nf3 Nc6 Be2 Bd7 O-O Nh6 Na3 cxd4 cxd4 Nf5 Nc2 Be7 Rb1 O-O a4 f6 Qd2 fxe5 dxe5 Qc7 Qc3 a6 Bf4 d4 Ncxd4 Nfxd4 Nxd4 Rxf4",
         "explanation": "Discovered Attack verified by Stockfish to win +376cp for the student. Tactical themes: advantage, discoveredAttack. Sourced from real Lichess puzzle (rating 1969, played 15,545 times).",
         "source": "lichess-puzzle:0LDZf",
-        "verifiedEval": "+376cp"
+        "verifiedEval": "+376cp",
+        "sourceGameUrl": "https://lichess.org/gN0BqX69"
       },
       {
         "name": "Fork Win #4",
-        "pgn": "Nbd2 Qc5+ Kh1 Qxf5",
-        "setupFen": "r3k2r/1bqpnp2/1p3b1p/5B2/8/2P2N2/PP4PP/RN1QR1K1 w kq - 0 16",
+        "pgn": "e4 e6 d4 g6 f4 Bg7 Nf3 b6 Bd3 Bb7 O-O Nc6 c3 Nce7 f5 gxf5 exf5 exf5 Re1 Nf6 Bxf5 c5 dxc5 Qc7 cxb6 axb6 Bg5 h6 Bxf6 Bxf6 Nbd2 Qc5+ Kh1 Qxf5",
         "explanation": "Fork Win verified by Stockfish to win +325cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1253, played 16,908 times).",
         "source": "lichess-puzzle:05HUb",
-        "verifiedEval": "+325cp"
+        "verifiedEval": "+325cp",
+        "sourceGameUrl": "https://lichess.org/IJ0ZSb5y"
       },
       {
         "name": "Discovered Attack #5",
-        "pgn": "Nd4 Nxd4+ Kg1 Ne2+ Qxe2 Bxe2",
-        "setupFen": "r3k2r/pp3ppp/1B2p3/1b1pP3/1b6/1P3N2/P3nPPP/R2Q1K1R w kq - 1 15",
+        "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Bd7 Be3 Qb6 b3 cxd4 cxd4 Nge7 Nbd2 Nf5 Be2 Ncxd4 Nxd4 Nxd4 Nf3 Bb4+ Kf1 Nxe2 Bxb6 Bb5 Nd4 Nxd4+ Kg1 Ne2+ Qxe2 Bxe2",
         "explanation": "Discovered Attack verified by Stockfish to win +598cp for the student. Tactical themes: crushing, discoveredAttack, discoveredCheck. Sourced from real Lichess puzzle (rating 2082, played 7,632 times).",
         "source": "lichess-puzzle:0AR06",
-        "verifiedEval": "+598cp"
+        "verifiedEval": "+598cp",
+        "sourceGameUrl": "https://lichess.org/viRM2f3h"
       }
     ],
     "warningLines": [
@@ -1685,27 +1685,27 @@
       },
       {
         "name": "Sacrificial Attack #1",
-        "pgn": "Qg5 Nf3+ Bxf3 Bxf2+ Rxf2 Qxg5",
-        "setupFen": "r4rk1/pp4p1/4p1p1/q1b1n3/8/2N5/PP1QBPPP/3R1RK1 w - - 0 18",
+        "pgn": "e4 c6 d4 d5 e5 Bf5 c4 e6 Nc3 Nd7 Nf3 Ne7 Be2 c5 Nh4 Bg6 Nxg6 hxg6 Be3 cxd4 Bxd4 Nc6 cxd5 Nxd4 Qxd4 Bc5 Qd2 Qa5 dxe6 fxe6 Rd1 O-O O-O Nxe5 Qg5 Nf3+ Bxf3 Bxf2+ Rxf2 Qxg5",
         "explanation": "Sacrificial Attack verified by Stockfish to win +423cp for the student. Tactical themes: advantage, discoveredAttack, kingsideAttack, sacrifice. Sourced from real Lichess puzzle (rating 1879, played 16,812 times).",
         "source": "lichess-puzzle:0CQhq",
-        "verifiedEval": "+423cp"
+        "verifiedEval": "+423cp",
+        "sourceGameUrl": "https://lichess.org/K4uddo8n"
       },
       {
         "name": "Tactical Strike #2",
-        "pgn": "Nxg6 Bxh2+ Kh1 hxg6",
-        "setupFen": "rn1qk2r/pp3ppp/3bp1b1/3p4/3Pn2N/3BB3/PPP2PPP/RN1Q1RK1 w kq - 4 10",
+        "pgn": "e4 c6 d4 d5 exd5 cxd5 Nf3 Nf6 Bg5 Ne4 Be3 Bf5 Bd3 e6 O-O Bd6 Nh4 Bg6 Nxg6 Bxh2+ Kh1 hxg6",
         "explanation": "Tactical Strike verified by Stockfish to win +522cp for the student. Tactical themes: crushing, intermezzo. Sourced from real Lichess puzzle (rating 1992, played 15,585 times).",
         "source": "lichess-puzzle:009XT",
-        "verifiedEval": "+522cp"
+        "verifiedEval": "+522cp",
+        "sourceGameUrl": "https://lichess.org/bf23N8Ng"
       },
       {
         "name": "Discovered Attack #3",
-        "pgn": "Nxd5 Nxd5 Qxd5 Bxd4",
-        "setupFen": "5rk1/p3ppbp/bq3np1/3p4/3P4/1BN2Q2/PrPB1PPP/R3K2R w KQ - 4 15",
+        "pgn": "e4 c6 Nf3 d5 exd5 cxd5 d4 Nf6 Bg5 g6 Nc3 Bg7 Bb5+ Nc6 Ne5 O-O Nxc6 bxc6 Bxc6 Rb8 Ba4 Ba6 Qf3 Rxb2 Bb3 Qa5 Bd2 Qb6 Nxd5 Nxd5 Qxd5 Bxd4",
         "explanation": "Discovered Attack verified by Stockfish to win +392cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 2264, played 831 times).",
         "source": "lichess-puzzle:00oOp",
-        "verifiedEval": "+392cp"
+        "verifiedEval": "+392cp",
+        "sourceGameUrl": "https://lichess.org/hkM4TRId"
       }
     ],
     "warningLines": [
@@ -1823,35 +1823,35 @@
       },
       {
         "name": "Pin Pressure #1",
-        "pgn": "gxf5 Qg5+ Qg4 Nxh3+ Kf1 Qxg4",
-        "setupFen": "rn1q2k1/6bp/1p1p2p1/pBpPpr2/P1N2nP1/7P/1PP2P2/R1BQR1K1 w - - 1 17",
+        "pgn": "e4 Nf6 Nc3 d6 d4 g6 h3 Bg7 Nf3 O-O Bc4 c5 d5 a6 a4 Bd7 O-O a5 Re1 e5 Nb5 Bxb5 Bxb5 b6 Nd2 Nh5 Nc4 f5 exf5 Rxf5 g4 Nf4 gxf5 Qg5+ Qg4 Nxh3+ Kf1 Qxg4",
         "explanation": "Pin Pressure verified by Stockfish to win +471cp for the student. Tactical themes: crushing, kingsideAttack, pin. Sourced from real Lichess puzzle (rating 1498, played 22,028 times).",
         "source": "lichess-puzzle:0FdaR",
-        "verifiedEval": "+471cp"
+        "verifiedEval": "+471cp",
+        "sourceGameUrl": "https://lichess.org/IZ7zI8vi"
       },
       {
         "name": "Queenside Crush #2",
-        "pgn": "Rxd8 Qa3+ Kd2 Rxd8+ Ke1 Bxc3+",
-        "setupFen": "3rr1k1/pp2qp1p/1npR1bp1/8/4P3/1PN2NP1/P1P1QP1P/2KR4 w - - 0 19",
+        "pgn": "e4 d6 b3 Nf6 Nc3 c6 Bb2 g6 Qe2 e5 O-O-O Bg7 d4 Nbd7 dxe5 dxe5 g3 O-O Bh3 Qc7 Ba3 Re8 Nf3 Nb6 Bxc8 Raxc8 Bd6 Qd7 Bxe5 Qe6 Rd6 Qe7 Rhd1 Rcd8 Bxf6 Bxf6 Rxd8 Qa3+ Kd2 Rxd8+ Ke1 Bxc3+",
         "explanation": "Queenside Crush verified by Stockfish to win +437cp for the student. Tactical themes: crushing, interference, intermezzo, queensideAttack. Sourced from real Lichess puzzle (rating 1929, played 10,876 times).",
         "source": "lichess-puzzle:0C50u",
-        "verifiedEval": "+437cp"
+        "verifiedEval": "+437cp",
+        "sourceGameUrl": "https://lichess.org/rHqdlstz"
       },
       {
         "name": "Discovered Attack #3",
-        "pgn": "Qg4 Rxf2 Rxf2 Qxg4",
-        "setupFen": "b5k1/p2qp1bp/1p1p2p1/5r2/3P4/4B3/PPP2PPP/R2Q1RK1 w - - 0 17",
+        "pgn": "d4 d6 e4 g6 Be3 Bg7 Nf3 Nd7 Nc3 b6 Bc4 Ngf6 Ng5 O-O Bxf7+ Rxf7 Ne6 Qe8 Nxc7 Qd8 Nxa8 Bb7 e5 Nd5 e6 Rf5 Nxd5 Bxd5 exd7 Bxa8 O-O Qxd7 Qg4 Rxf2 Rxf2 Qxg4",
         "explanation": "Discovered Attack verified by Stockfish to win +501cp for the student. Tactical themes: advantage, discoveredAttack. Sourced from real Lichess puzzle (rating 2041, played 621 times).",
         "source": "lichess-puzzle:0KO0n",
-        "verifiedEval": "+501cp"
+        "verifiedEval": "+501cp",
+        "sourceGameUrl": "https://lichess.org/QalIPyp7"
       },
       {
         "name": "Pin Pressure #4",
-        "pgn": "Bf2 Bh6 g4 Bxd2+",
-        "setupFen": "r1bq1rk1/pp1n1pbp/4p1p1/4Pn2/8/2N1BN2/PPPQB1PP/2KR3R w - - 3 14",
+        "pgn": "e4 Nf6 Nc3 d6 d4 g6 f4 Bg7 Be2 Nbd7 e5 dxe5 fxe5 Ng8 Nf3 c5 Be3 e6 Qd2 Ne7 O-O-O cxd4 Bxd4 O-O Be3 Nf5 Bf2 Bh6 g4 Bxd2+",
         "explanation": "Pin Pressure verified by Stockfish to win +334cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1564, played 3,741 times).",
         "source": "lichess-puzzle:05r44",
-        "verifiedEval": "+334cp"
+        "verifiedEval": "+334cp",
+        "sourceGameUrl": "https://lichess.org/zuYRRJsM"
       }
     ],
     "warningLines": [
@@ -1963,43 +1963,43 @@
       },
       {
         "name": "Hanging Piece #1",
-        "pgn": "Nxd4 Qxc3 Bd2 Qxd4",
-        "setupFen": "r1b1r1k1/pp3ppp/1bq5/8/3n1Q2/1PN2P2/P1P1N1PP/R1B2R1K w - - 2 16",
+        "pgn": "e4 d5 exd5 c6 dxc6 Nxc6 Bb5 Qd5 Bxc6+ Qxc6 f3 e5 Nc3 Bc5 Qe2 Ne7 Qxe5 O-O d4 Bb6 Nge2 Re8 O-O Nf5 Qf4 Qc4 b3 Nxd4 Kh1 Qc6 Nxd4 Qxc3 Bd2 Qxd4",
         "explanation": "Hanging Piece verified by Stockfish to win +515cp for the student. Tactical themes: advantage, hangingPiece. Sourced from real Lichess puzzle (rating 1519, played 37,481 times).",
         "source": "lichess-puzzle:05010",
-        "verifiedEval": "+515cp"
+        "verifiedEval": "+515cp",
+        "sourceGameUrl": "https://lichess.org/lr2MYnfP"
       },
       {
         "name": "Sacrificial Attack #2",
-        "pgn": "Qd4 Nf3+ gxf3 Bxh2+ Kxh2 Qxd4",
-        "setupFen": "r1bq1rk1/pp3ppp/2pb4/4n3/2B3Q1/2NP4/PPP2PPP/R1B1R1K1 w - - 2 12",
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 Nf3 Nf6 Bc4 c6 d3 Nbd7 O-O e5 Re1 Bd6 Nxe5 O-O Nxd7 Nxd7 Qg4 Ne5 Qd4 Nf3+ gxf3 Bxh2+ Kxh2 Qxd4",
         "explanation": "Sacrificial Attack verified by Stockfish to win +333cp for the student. Tactical themes: advantage, discoveredAttack, kingsideAttack, sacrifice. Sourced from real Lichess puzzle (rating 1702, played 17,953 times).",
         "source": "lichess-puzzle:09fDR",
-        "verifiedEval": "+333cp"
+        "verifiedEval": "+333cp",
+        "sourceGameUrl": "https://lichess.org/nnB8ykqS"
       },
       {
         "name": "Fork Win #3",
-        "pgn": "Qxf3 Qxb2 Rb1 Qxc3+",
-        "setupFen": "1k1r1bnr/ppp1pppp/2n5/8/1q1P4/P1N1Bb2/1PP2PPP/R2QKB1R w KQ - 0 10",
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nc6 Nf3 Bg4 Nb5 Qb4+ Nc3 O-O-O Be3 Kb8 a3 Bxf3 Qxf3 Qxb2 Rb1 Qxc3+",
         "explanation": "Fork Win verified by Stockfish to win +525cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1326, played 20,847 times).",
         "source": "lichess-puzzle:08E3Z",
-        "verifiedEval": "+525cp"
+        "verifiedEval": "+525cp",
+        "sourceGameUrl": "https://lichess.org/uMYg5kvX"
       },
       {
         "name": "Attraction Tactic #4",
-        "pgn": "Qd2 Nxc3 Qxc3 Nd5 Bxe7 Nxc3",
-        "setupFen": "r2q1rk1/pp2bppp/2p1pn2/3nNbB1/1P6/P1NP4/2P1BPPP/1R1Q1RK1 w - - 3 13",
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 Nf3 Nf6 Be2 c6 O-O Bf5 d3 e6 Bg5 Be7 Rb1 Nbd7 a3 O-O b4 Nb6 Ne5 Nbd5 Qd2 Nxc3 Qxc3 Nd5 Bxe7 Nxc3",
         "explanation": "Attraction Tactic verified by Stockfish to win +482cp for the student. Tactical themes: attraction, crushing. Sourced from real Lichess puzzle (rating 1829, played 13,942 times).",
         "source": "lichess-puzzle:0Igue",
-        "verifiedEval": "+482cp"
+        "verifiedEval": "+482cp",
+        "sourceGameUrl": "https://lichess.org/XkX1Vare"
       },
       {
         "name": "Fork Win #5",
-        "pgn": "Rd1 Nxc3 Rxd8 Nxe2+ Kf2 Rxd8",
-        "setupFen": "rn1qr1k1/pp3ppp/8/3nN3/5P2/2P5/P3Q1PP/R1B2RK1 w - - 0 15",
+        "pgn": "c4 d5 cxd5 Nf6 Nc3 Nxd5 e4 Nf6 d4 e5 d5 c6 Nf3 Bg4 Be2 Bb4 Nxe5 Bxe2 Qxe2 O-O O-O Bxc3 bxc3 cxd5 exd5 Re8 f4 Nxd5 Rd1 Nxc3 Rxd8 Nxe2+ Kf2 Rxd8",
         "explanation": "Fork Win verified by Stockfish to win +543cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 2366, played 7,210 times).",
         "source": "lichess-puzzle:0KeNi",
-        "verifiedEval": "+543cp"
+        "verifiedEval": "+543cp",
+        "sourceGameUrl": "https://lichess.org/PbXbQUoA"
       }
     ],
     "warningLines": [
@@ -2202,19 +2202,19 @@
       },
       {
         "name": "Discovered Attack #1",
-        "pgn": "Nbc3 Nxc3 bxc3 Bxc4",
-        "setupFen": "rn1q1rk1/pp3ppp/2pbb3/3n4/2BPN3/8/PPP2PPP/RNBQR1K1 w - - 0 12",
+        "pgn": "e4 e5 Nf3 d6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 d4 e4 Nxe4 Bf5 Ng3 Be6 O-O Bd6 Ne4 O-O Re1 c6 Nbc3 Nxc3 bxc3 Bxc4",
         "explanation": "Discovered Attack verified by Stockfish to win +328cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1520, played 18,199 times).",
         "source": "lichess-puzzle:08zf0",
-        "verifiedEval": "+328cp"
+        "verifiedEval": "+328cp",
+        "sourceGameUrl": "https://lichess.org/vXY18Lkq"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Nd5 Qxd2+ Kxd2 Nxe4+ Kc1 Nxd6 Nc7+ Ke7",
-        "setupFen": "r3k2r/1p1b1ppp/p1nQ1n2/q1p5/4P3/2N5/PPPBBPPP/R3K2R w KQkq - 3 11",
+        "pgn": "e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Bd7 Be2 c5 Ndb5 a6 Nxd6+ Bxd6 Qxd6 Qa5 Bd2 Nc6 Nd5 Qxd2+ Kxd2 Nxe4+ Kc1 Nxd6 Nc7+ Ke7",
         "explanation": "Fork Win verified by Stockfish to win +332cp for the student. Tactical themes: advantage, attraction, defensiveMove, fork. Sourced from real Lichess puzzle (rating 1774, played 4,461 times).",
         "source": "lichess-puzzle:0ACFj",
-        "verifiedEval": "+332cp"
+        "verifiedEval": "+332cp",
+        "sourceGameUrl": "https://lichess.org/ZtTPXVS9"
       }
     ],
     "warningLines": [
@@ -2312,35 +2312,35 @@
       },
       {
         "name": "Fork Win #1",
-        "pgn": "Qe5 Qxf2+ Kxf2 Ng4+ Kg3 Nxe5",
-        "setupFen": "rnb3k1/p1p3pp/1q3n2/7Q/2P5/3P4/PP3RPP/R1B3K1 w - - 3 15",
+        "pgn": "e4 e5 Bc4 Nf6 Nf3 Bc5 Nxe5 O-O Nxf7 Rxf7 Bxf7+ Kxf7 d3 d5 exd5 Qxd5 O-O b5 Nc3 Qf5 Nxb5 Bxf2+ Rxf2 Qxb5 c4 Qb6 Qh5+ Kg8 Qe5 Qxf2+ Kxf2 Ng4+ Kg3 Nxe5",
         "explanation": "Fork Win verified by Stockfish to win +567cp for the student. Tactical themes: attraction, crushing, fork, sacrifice. Sourced from real Lichess puzzle (rating 1753, played 17,533 times).",
         "source": "lichess-puzzle:0Gdmy",
-        "verifiedEval": "+567cp"
+        "verifiedEval": "+567cp",
+        "sourceGameUrl": "https://lichess.org/N9f2ZV4k"
       },
       {
         "name": "Discovered Attack #2",
-        "pgn": "Qf8 Rxe5+ fxe5 Qxf8",
-        "setupFen": "rnb5/pp2rQpk/3q3p/2pPN3/5P2/8/PPP3PP/R3KB1R w KQ - 1 16",
+        "pgn": "e4 e5 Nf3 Nf6 d3 Bc5 Bg5 h6 Bxf6 Qxf6 Nc3 d6 Nd5 Qd8 d4 c6 dxc5 cxd5 exd5 dxc5 Nxe5 Qd6 Qe2 O-O Qh5 Re8 Qxf7+ Kh7 f4 Re7 Qf8 Rxe5+ fxe5 Qxf8",
         "explanation": "Discovered Attack verified by Stockfish to win +417cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1219, played 19,484 times).",
         "source": "lichess-puzzle:0FqPd",
-        "verifiedEval": "+417cp"
+        "verifiedEval": "+417cp",
+        "sourceGameUrl": "https://lichess.org/bdjxvAuU"
       },
       {
         "name": "Sacrificial Attack #3",
-        "pgn": "Bxd8 Bxf2+ Ke2 Bg4+ Kd3 Ne5+ Kxe4 f5+ Kd5 Rxd8",
-        "setupFen": "r1bqk2r/ppp2ppp/2np4/2b3B1/4n3/1NN5/PPP2PPP/R2QKB1R w KQkq - 0 8",
+        "pgn": "e4 e5 Nf3 Nf6 Nc3 Bc5 d4 exd4 Nxd4 d6 Bg5 Nc6 Nb3 Nxe4 Bxd8 Bxf2+ Ke2 Bg4+ Kd3 Ne5+ Kxe4 f5+ Kd5 Rxd8",
         "explanation": "Sacrificial Attack verified by Stockfish to win +402cp for the student. Tactical themes: attackingF2F7, crushing, sacrifice. Sourced from real Lichess puzzle (rating 2797, played 2,567 times).",
         "source": "lichess-puzzle:09DMC",
-        "verifiedEval": "+402cp"
+        "verifiedEval": "+402cp",
+        "sourceGameUrl": "https://lichess.org/alSuOmEu"
       },
       {
         "name": "Discovered Attack #4",
-        "pgn": "Bg5 Nxe4 fxe4 Qxg5+",
-        "setupFen": "r2qrbk1/1pp2ppp/p1np1n2/8/2BPN3/5P2/PPPB1QPP/2KR3R w - - 2 15",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 d6 Nc4 Nxe4 d4 Be7 Bd3 Nf6 Nc3 O-O Bd2 Bg4 f3 Be6 Qe2 Nc6 Qf2 Bxc4 Bxc4 Re8 O-O-O a6 Ne4 Bf8 Bg5 Nxe4 fxe4 Qxg5+",
         "explanation": "Discovered Attack verified by Stockfish to win +307cp for the student. Tactical themes: capturingDefender, crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1262, played 17,470 times).",
         "source": "lichess-puzzle:0JTkd",
-        "verifiedEval": "+307cp"
+        "verifiedEval": "+307cp",
+        "sourceGameUrl": "https://lichess.org/vt1K9zcT"
       }
     ],
     "warningLines": [
@@ -2557,43 +2557,43 @@
       },
       {
         "name": "Fork Win #1",
-        "pgn": "Nxe4 Bxg7 Kxg7 Qd4+ Nf6 Nxf6 exf6 Qxg4",
-        "setupFen": "rn1q1rk1/pp2ppbp/3p1np1/3N4/4P1b1/2B2N2/PPP1BPPP/R2QK2R b KQ - 2 11",
+        "pgn": "d4 Nf6 Bf4 g6 Nf3 Bg7 e3 O-O Nc3 d6 e4 Nh5 Bd2 Bg4 d5 c6 Be2 cxd5 Nxd5 Nf6 Bc3 Nxe4 Bxg7 Kxg7 Qd4+ Nf6 Nxf6 exf6 Qxg4",
         "explanation": "Fork Win verified by Stockfish to win +361cp for the student. Tactical themes: advantage, attraction, capturingDefender, fork. Sourced from real Lichess puzzle (rating 1447, played 39,128 times).",
         "source": "lichess-puzzle:0HIyU",
-        "verifiedEval": "+361cp"
+        "verifiedEval": "+361cp",
+        "sourceGameUrl": "https://lichess.org/VfBHvhtb"
       },
       {
         "name": "Tactical Strike #2",
-        "pgn": "f6 Qh5+ g6 Nxg6 Bxg6 Qxg6+",
-        "setupFen": "rn1qkb1r/1pp2pp1/p3p2p/3pNb2/3PnB2/2P1P2P/PP1N1PP1/R2QKB1R b KQkq - 1 8",
+        "pgn": "d4 d5 Bf4 Nf6 e3 a6 h3 Bf5 Nf3 h6 Nbd2 Ne4 c3 e6 Ne5 f6 Qh5+ g6 Nxg6 Bxg6 Qxg6+",
         "explanation": "Tactical Strike verified by Stockfish to win +552cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 1653, played 27,061 times).",
         "source": "lichess-puzzle:0BqBf",
-        "verifiedEval": "+552cp"
+        "verifiedEval": "+552cp",
+        "sourceGameUrl": "https://lichess.org/QMdEl0vg"
       },
       {
         "name": "Sacrificial Attack #3",
-        "pgn": "Nxe3 Bxh7+ Kxh7 Qh5+ Kg8 Rf3 g6 Nxg6",
-        "setupFen": "r2q1rk1/pb3ppp/1p1bp3/2ppNnP1/3P1P2/2PBP3/PP1N1R1P/R2Q3K b - - 0 16",
+        "pgn": "d4 d5 Nf3 Nf6 Bf4 e6 e3 Bd6 Bg3 c5 c3 O-O Bd3 Nc6 Nbd2 b6 Ne5 Bb7 f4 Ne7 O-O Nf5 Bf2 Ne4 g4 Ne7 g5 Nf5 Kh1 Nxf2+ Rxf2 Nxe3 Bxh7+ Kxh7 Qh5+ Kg8 Rf3 g6 Nxg6",
         "explanation": "Sacrificial Attack verified by Stockfish to win +585cp for the student. Tactical themes: attraction, crushing, kingsideAttack, sacrifice. Sourced from real Lichess puzzle (rating 2373, played 658 times).",
         "source": "lichess-puzzle:06RzD",
-        "verifiedEval": "+585cp"
+        "verifiedEval": "+585cp",
+        "sourceGameUrl": "https://lichess.org/Qk1nS4Pw"
       },
       {
         "name": "Discovered Attack #4",
-        "pgn": "Qf6 hxg7+ Kxg7 Rh7+ Kxh7 Qxf6",
-        "setupFen": "rn1q4/pp3ppk/2p4P/3pr3/2P3P1/2P1PQ2/P4P2/R3K2R b KQ - 0 17",
+        "pgn": "d4 d5 Bf4 Bf5 Nf3 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 Bg4 h3 Bxf3 Qxf3 Bxc3+ bxc3 c6 g4 Re8 h4 Nfd7 h5 e5 dxe5 Nxe5 Bxe5 Rxe5 Bxh7+ Kxh7 h6 Qf6 hxg7+ Kxg7 Rh7+ Kxh7 Qxf6",
         "explanation": "Discovered Attack verified by Stockfish to win +633cp for the student. Tactical themes: advancedPawn, attraction, crushing, deflection. Sourced from real Lichess puzzle (rating 1727, played 5,486 times).",
         "source": "lichess-puzzle:0HgKt",
-        "verifiedEval": "+633cp"
+        "verifiedEval": "+633cp",
+        "sourceGameUrl": "https://lichess.org/LLZnUyau"
       },
       {
         "name": "Attraction Tactic #5",
-        "pgn": "Kf8 hxg7+ Kxg7 Rxg5+ Qxg5 Qxg5+",
-        "setupFen": "r2qk2r/1ppn2pb/p3p2P/3pPpbQ/8/2P1P3/PP1N1P2/R3KBR1 b Qkq - 1 16",
+        "pgn": "d4 d5 Bf4 Nc6 e3 Nf6 Nf3 Bf5 Nbd2 a6 c3 e6 Ne5 Nxe5 dxe5 Nd7 g4 Bg6 h4 h6 h5 Bh7 Rg1 f5 g5 hxg5 Bxg5 Be7 h6 Bxg5 Qh5+ Kf8 hxg7+ Kxg7 Rxg5+ Qxg5 Qxg5+",
         "explanation": "Attraction Tactic verified by Stockfish to win +538cp for the student. Tactical themes: advancedPawn, attraction, crushing. Sourced from real Lichess puzzle (rating 1672, played 4,485 times).",
         "source": "lichess-puzzle:0JBM2",
-        "verifiedEval": "+538cp"
+        "verifiedEval": "+538cp",
+        "sourceGameUrl": "https://lichess.org/1VzzXGtD"
       }
     ],
     "warningLines": [
@@ -2691,11 +2691,11 @@
       },
       {
         "name": "Tactical Strike #1",
-        "pgn": "O-O Qxd8 Rxd8 Nc7",
-        "setupFen": "rnbqk2r/pp3ppp/4pn2/1Nb5/2p5/6P1/PP2PPBP/RNBQ1RK1 b kq - 2 8",
+        "pgn": "d4 d5 c4 dxc4 Nf3 Nf6 g3 e6 Bg2 c5 O-O cxd4 Nxd4 Bc5 Nb5 O-O Qxd8 Rxd8 Nc7",
         "explanation": "Tactical Strike verified by Stockfish to win +334cp for the student. Tactical themes: advantage, master. Sourced from real Lichess puzzle (rating 1064, played 5,635 times).",
         "source": "lichess-puzzle:083C6",
-        "verifiedEval": "+334cp"
+        "verifiedEval": "+334cp",
+        "sourceGameUrl": "https://lichess.org/mVRBXx6p"
       }
     ],
     "warningLines": [
@@ -2756,19 +2756,19 @@
       },
       {
         "name": "Hanging Piece #1",
-        "pgn": "Be6 Qxd6 Rd8 Qa3 Qxa3 bxa3",
-        "setupFen": "r1b1k2r/pp3p2/2nb3p/q2Q2p1/8/2N3P1/PP2NPP1/2R1KB1R b Kkq - 0 15",
+        "pgn": "d4 Nf6 Bg5 e6 e4 c5 e5 h6 Bh4 g5 Bg3 Ne4 c3 Nxg3 hxg3 cxd4 cxd4 Qa5+ Nc3 Bb4 Rc1 Nc6 Ne2 d6 exd6 Bxd6 d5 exd5 Qxd5 Be6 Qxd6 Rd8 Qa3 Qxa3 bxa3",
         "explanation": "Hanging Piece verified by Stockfish to win +322cp for the student. Tactical themes: crushing, hangingPiece. Sourced from real Lichess puzzle (rating 1573, played 837 times).",
         "source": "lichess-puzzle:0Cmbe",
-        "verifiedEval": "+322cp"
+        "verifiedEval": "+322cp",
+        "sourceGameUrl": "https://lichess.org/HK5VouDQ"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "fxg6 Qd5+ Kg7 Qxa8",
-        "setupFen": "r1bq1rk1/3pbp1p/p5P1/1p3p2/8/2PQP3/PP3PP1/RN2K1NR b KQ - 0 14",
+        "pgn": "d4 Nf6 Bg5 c5 e3 cxd4 Bxf6 exf6 Qxd4 Nc6 Qe4+ Be7 c3 O-O Bd3 g6 h4 f5 Qf3 Ne5 Qe2 Nxd3+ Qxd3 a6 h5 b5 hxg6 fxg6 Qd5+ Kg7 Qxa8",
         "explanation": "Fork Win verified by Stockfish to win +413cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 872, played 2,078 times).",
         "source": "lichess-puzzle:0LRNF",
-        "verifiedEval": "+413cp"
+        "verifiedEval": "+413cp",
+        "sourceGameUrl": "https://lichess.org/sjolQoYk"
       }
     ],
     "variations": [
@@ -2871,43 +2871,43 @@
       },
       {
         "name": "Discovered Attack #1",
-        "pgn": "Kxh2 Ng4+ Kg1 Qxg5",
-        "setupFen": "r1bqr1k1/pp3ppp/2p2nn1/6B1/3PP3/2NB4/PPQ1N1Pb/4RRK1 w - - 0 15",
+        "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Nbd7 Qc2 Re8 Nge2 Nf8 O-O c6 f3 Ng6 Rae1 Bd6 e4 dxe4 fxe4 Bxh2+ Kxh2 Ng4+ Kg1 Qxg5",
         "explanation": "Discovered Attack verified by Stockfish to win +338cp for the student. Tactical themes: advantage, discoveredAttack. Sourced from real Lichess puzzle (rating 1449, played 29,257 times).",
         "source": "lichess-puzzle:0HipD",
-        "verifiedEval": "+338cp"
+        "verifiedEval": "+338cp",
+        "sourceGameUrl": "https://lichess.org/9oQZi5Sx"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Nf3 Qa5+ Nc3 dxc3 Bxc6+ bxc6",
-        "setupFen": "r1bqkbnr/pp4pp/2n1p3/1B6/3p4/4P3/PP3PPP/RNBQK1NR w KQkq - 2 7",
+        "pgn": "d4 d5 c4 c5 e3 e6 cxd5 cxd4 dxe6 fxe6 Bb5+ Nc6 Nf3 Qa5+ Nc3 dxc3 Bxc6+ bxc6",
         "explanation": "Fork Win verified by Stockfish to win +383cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1585, played 17,519 times).",
         "source": "lichess-puzzle:0ALrx",
-        "verifiedEval": "+383cp"
+        "verifiedEval": "+383cp",
+        "sourceGameUrl": "https://lichess.org/t0GA5Zbv"
       },
       {
         "name": "Fork Win #3",
-        "pgn": "f3 Rxd2 Rxd2 Bxc3 Rad1 Bxd2",
-        "setupFen": "1r1r2k1/p4ppp/2p2b2/2p5/2P3b1/1PN3P1/P2BPP1P/R2R2K1 w - - 3 19",
+        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Nge7 Bg2 Ng6 O-O Ngxe5 Nbd2 Be7 Nb3 Nxf3+ Bxf3 O-O Bxc6 bxc6 Qxd4 Qxd4 Nxd4 c5 Nb5 c6 Nc3 Bf6 Bd2 Rb8 b3 Rd8 Rfd1 Bg4 f3 Rxd2 Rxd2 Bxc3 Rad1 Bxd2",
         "explanation": "Fork Win verified by Stockfish to win +315cp for the student. Tactical themes: advantage, attraction, capturingDefender, fork. Sourced from real Lichess puzzle (rating 1834, played 10,767 times).",
         "source": "lichess-puzzle:0BYfa",
-        "verifiedEval": "+315cp"
+        "verifiedEval": "+315cp",
+        "sourceGameUrl": "https://lichess.org/NrmFslCG"
       },
       {
         "name": "Fork Win #4",
-        "pgn": "Nxa6 Qc3+ Kd1 Bb3+ Qxb3 Qxb3+",
-        "setupFen": "5bnr/2Nk1p1p/pQ2p1p1/2Pp4/P1bq4/8/4PPPP/2B1KB1R w K - 0 19",
+        "pgn": "d4 d5 c4 e6 c5 b6 b4 Ba6 Nf3 Nc6 Qb3 Bc4 Qa4 b5 Qc2 Nxb4 Qd2 Nc6 Nc3 Qf6 Rb1 g6 Nxb5 Rb8 a4 a6 Nxc7+ Kd7 Rxb8 Nxb8 Qa5 Nc6 Qb6 Nxd4 Nxd4 Qxd4 Nxa6 Qc3+ Kd1 Bb3+ Qxb3 Qxb3+",
         "explanation": "Fork Win verified by Stockfish to win +631cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1179, played 17,264 times).",
         "source": "lichess-puzzle:0F4o9",
-        "verifiedEval": "+631cp"
+        "verifiedEval": "+631cp",
+        "sourceGameUrl": "https://lichess.org/u7kH47PP"
       },
       {
         "name": "Fork Win #5",
-        "pgn": "Kf2 Qd2+ Kg3 Qxc1 Bxa6 Qxh1",
-        "setupFen": "r4rk1/p5pp/bp2Nn2/q7/8/1Q2PP2/P3K1PP/2R2B1R w - - 1 17",
+        "pgn": "d4 e6 c4 d5 Nc3 Nf6 Bg5 Bb4 e3 Nbd7 Nf3 c5 cxd5 cxd4 Nxd4 Bxc3+ bxc3 Qa5 Bxf6 Qxc3+ Ke2 Nxf6 dxe6 fxe6 Rc1 Qa5 Qb3 O-O f3 b6 Nxe6 Ba6+ Kf2 Qd2+ Kg3 Qxc1 Bxa6 Qxh1",
         "explanation": "Fork Win verified by Stockfish to win +474cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 2413, played 917 times).",
         "source": "lichess-puzzle:0B6Qc",
-        "verifiedEval": "+474cp"
+        "verifiedEval": "+474cp",
+        "sourceGameUrl": "https://lichess.org/CcUvSoLI"
       }
     ],
     "variations": [
@@ -3010,19 +3010,19 @@
       },
       {
         "name": "Fork Win #1",
-        "pgn": "Bxc6 Nxc3 Bxd7 Ne2+ Kg2 Rxc1 Rxc1 Nxc1",
-        "setupFen": "r1r3k1/p2q1ppp/2n1p3/1B1n4/3P1B2/2Q1PP2/5P1P/R1R3K1 w - - 3 19",
+        "pgn": "d4 d5 c4 dxc4 Nf3 Bg4 Bf4 e6 e3 b5 a4 c6 axb5 cxb5 Nc3 Bb4 Qc2 Nc6 b3 Qd5 bxc4 bxc4 Be2 Nf6 O-O Bxc3 Qxc3 O-O Bxc4 Qd7 Bb5 Bxf3 gxf3 Rfc8 Rfc1 Nd5 Bxc6 Nxc3 Bxd7 Ne2+ Kg2 Rxc1 Rxc1 Nxc1",
         "explanation": "Fork Win verified by Stockfish to win +400cp for the student. Tactical themes: advantage, discoveredAttack, fork. Sourced from real Lichess puzzle (rating 1733, played 1,307 times).",
         "source": "lichess-puzzle:0ChqP",
-        "verifiedEval": "+400cp"
+        "verifiedEval": "+400cp",
+        "sourceGameUrl": "https://lichess.org/gFx5aAPd"
       },
       {
         "name": "Discovered Attack #2",
-        "pgn": "Bxc5 Nxf3+ gxf3 Rxe1+ Rxe1 Qxe1+",
-        "setupFen": "r1b1q1k1/pp1nrppp/3Q4/2p1n3/2B5/4BN2/PP3PPP/R3R1K1 w - - 0 15",
+        "pgn": "d4 d5 c4 dxc4 e4 e6 Bxc4 Nf6 Nc3 Be7 Nf3 O-O O-O c5 e5 Nfd7 d5 exd5 Nxd5 Re8 Be3 Nc6 Nxe7+ Rxe7 Qd6 Qe8 Rfe1 Ncxe5 Bxc5 Nxf3+ gxf3 Rxe1+ Rxe1 Qxe1+",
         "explanation": "Discovered Attack verified by Stockfish to win +590cp for the student. Tactical themes: crushing, discoveredAttack, kingsideAttack. Sourced from real Lichess puzzle (rating 1234, played 511 times).",
         "source": "lichess-puzzle:0PyR8",
-        "verifiedEval": "+590cp"
+        "verifiedEval": "+590cp",
+        "sourceGameUrl": "https://lichess.org/n0bVsZau"
       }
     ],
     "variations": [
@@ -3120,43 +3120,43 @@
       },
       {
         "name": "Pin Pressure #1",
-        "pgn": "Nh5 Nxd4 exd4 Ba4 Qxa4+ Qxa4",
-        "setupFen": "r3k2r/pp1b1p1p/2n1pp2/q2p4/1b1P4/1QN1P1N1/PP3PPP/R3KB1R w KQkq - 6 11",
+        "pgn": "d4 d5 c4 c6 Nc3 Nf6 Bg5 e6 e3 Qa5 Bxf6 gxf6 cxd5 cxd5 Ne2 Nc6 Ng3 Bb4 Qb3 Bd7 Nh5 Nxd4 exd4 Ba4 Qxa4+ Qxa4",
         "explanation": "Pin Pressure verified by Stockfish to win +445cp for the student. Tactical themes: clearance, crushing, pin, sacrifice. Sourced from real Lichess puzzle (rating 1975, played 142,076 times).",
         "source": "lichess-puzzle:0KE1r",
-        "verifiedEval": "+445cp"
+        "verifiedEval": "+445cp",
+        "sourceGameUrl": "https://lichess.org/NZBnNKF3"
       },
       {
         "name": "Pin Pressure #2",
-        "pgn": "Qd2 Bb4 a3 Bxd2+",
-        "setupFen": "rn2kb1r/1b3ppp/p1p1pn2/qp2N3/3P4/1P2PN2/PB3PPP/R2QKB1R w KQkq - 4 10",
+        "pgn": "d4 Nf6 c4 e6 e3 c6 Nf3 d5 Nbd2 a6 b3 dxc4 Nxc4 b5 Nce5 Bb7 Bb2 Qa5+ Qd2 Bb4 a3 Bxd2+",
         "explanation": "Pin Pressure verified by Stockfish to win +541cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1258, played 25,173 times).",
         "source": "lichess-puzzle:0BTSu",
-        "verifiedEval": "+541cp"
+        "verifiedEval": "+541cp",
+        "sourceGameUrl": "https://lichess.org/Ucaw4DSt"
       },
       {
         "name": "Fork Win #3",
-        "pgn": "Nxe4 dxe4 Bxe4 Rxe4",
-        "setupFen": "r1bqr1k1/1p3ppp/1np5/p2p4/1b1Pn3/2NBPN1P/PP1BQPP1/R1R3K1 w - - 2 13",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 e3 e6 Nc3 Nbd7 cxd5 exd5 Bd3 Bb4 O-O O-O Bd2 Nb6 Qe2 Re8 h3 a5 Rfc1 Ne4 Nxe4 dxe4 Bxe4 Rxe4",
         "explanation": "Fork Win verified by Stockfish to win +348cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1503, played 11,988 times).",
         "source": "lichess-puzzle:09SFr",
-        "verifiedEval": "+348cp"
+        "verifiedEval": "+348cp",
+        "sourceGameUrl": "https://lichess.org/FPJu1u0S"
       },
       {
         "name": "Tactical Strike #4",
-        "pgn": "Nb5 Bxb5 Bxb5 Qb4+",
-        "setupFen": "rn3rk1/pp1b1ppp/3qpn2/3p4/3P4/2N1PN2/PP3PPP/2RQKB1R w K - 2 10",
+        "pgn": "d4 e6 c4 c6 Nc3 d5 Bf4 Nf6 e3 Bd6 Bxd6 Qxd6 Nf3 O-O cxd5 cxd5 Rc1 Bd7 Nb5 Bxb5 Bxb5 Qb4+",
         "explanation": "Tactical Strike verified by Stockfish to win +497cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 1841, played 7,474 times).",
         "source": "lichess-puzzle:0JyZG",
-        "verifiedEval": "+497cp"
+        "verifiedEval": "+497cp",
+        "sourceGameUrl": "https://lichess.org/w6EMXgfS"
       },
       {
         "name": "Pin Pressure #5",
-        "pgn": "Kb1 Rxd5 Rxd5 Rxc3",
-        "setupFen": "2rrk3/p3bpp1/5pbp/3R4/4P3/2N2N2/PP3PPP/2KR4 w - - 3 18",
+        "pgn": "d4 d5 c4 c6 Nc3 Nf6 Nf3 Bf5 Bg5 h6 Bxf6 exf6 cxd5 cxd5 Qb3 Qd7 Qxd5 Be7 e4 Bg6 Bb5 Nc6 Bxc6 bxc6 Qxd7+ Kxd7 O-O-O Rhd8 d5 cxd5 Rxd5+ Ke8 Rhd1 Rac8 Kb1 Rxd5 Rxd5 Rxc3",
         "explanation": "Pin Pressure verified by Stockfish to win +416cp for the student. Tactical themes: advantage, pin. Sourced from real Lichess puzzle (rating 2122, played 2,092 times).",
         "source": "lichess-puzzle:0HeRL",
-        "verifiedEval": "+416cp"
+        "verifiedEval": "+416cp",
+        "sourceGameUrl": "https://lichess.org/UO2vGocM"
       }
     ],
     "variations": [
@@ -3259,27 +3259,27 @@
       },
       {
         "name": "Pin Pressure #1",
-        "pgn": "Qd2 Bb4 a3 Bxd2+",
-        "setupFen": "rn2kb1r/1b3ppp/p1p1pn2/qp2N3/3P4/1P2PN2/PB3PPP/R2QKB1R w KQkq - 4 10",
+        "pgn": "d4 Nf6 c4 e6 e3 c6 Nf3 d5 Nbd2 a6 b3 dxc4 Nxc4 b5 Nce5 Bb7 Bb2 Qa5+ Qd2 Bb4 a3 Bxd2+",
         "explanation": "Pin Pressure verified by Stockfish to win +541cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1258, played 25,173 times).",
         "source": "lichess-puzzle:0BTSu",
-        "verifiedEval": "+541cp"
+        "verifiedEval": "+541cp",
+        "sourceGameUrl": "https://lichess.org/Ucaw4DSt"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Nxe4 dxe4 Bxe4 Rxe4",
-        "setupFen": "r1bqr1k1/1p3ppp/1np5/p2p4/1b1Pn3/2NBPN1P/PP1BQPP1/R1R3K1 w - - 2 13",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 e3 e6 Nc3 Nbd7 cxd5 exd5 Bd3 Bb4 O-O O-O Bd2 Nb6 Qe2 Re8 h3 a5 Rfc1 Ne4 Nxe4 dxe4 Bxe4 Rxe4",
         "explanation": "Fork Win verified by Stockfish to win +348cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1503, played 11,988 times).",
         "source": "lichess-puzzle:09SFr",
-        "verifiedEval": "+348cp"
+        "verifiedEval": "+348cp",
+        "sourceGameUrl": "https://lichess.org/FPJu1u0S"
       },
       {
         "name": "Tactical Strike #3",
-        "pgn": "Nb5 Bxb5 Bxb5 Qb4+",
-        "setupFen": "rn3rk1/pp1b1ppp/3qpn2/3p4/3P4/2N1PN2/PP3PPP/2RQKB1R w K - 2 10",
+        "pgn": "d4 e6 c4 c6 Nc3 d5 Bf4 Nf6 e3 Bd6 Bxd6 Qxd6 Nf3 O-O cxd5 cxd5 Rc1 Bd7 Nb5 Bxb5 Bxb5 Qb4+",
         "explanation": "Tactical Strike verified by Stockfish to win +497cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 1841, played 7,474 times).",
         "source": "lichess-puzzle:0JyZG",
-        "verifiedEval": "+497cp"
+        "verifiedEval": "+497cp",
+        "sourceGameUrl": "https://lichess.org/w6EMXgfS"
       }
     ],
     "variations": [
@@ -3382,43 +3382,43 @@
       },
       {
         "name": "Discovered Attack #1",
-        "pgn": "Qc2 Bxc3+ Qxc3 Qxg5",
-        "setupFen": "rnb1r1k1/pp2Pp1p/6p1/q3b1B1/2P5/2N5/PP3PPP/R2QKB1R w KQ - 1 12",
+        "pgn": "d4 Nf6 Nf3 d6 c4 g6 Nc3 Bg7 e4 O-O Bg5 c5 e5 Ng4 dxc5 Nxe5 Nxe5 Bxe5 cxd6 Qa5 dxe7 Re8 Qc2 Bxc3+ Qxc3 Qxg5",
         "explanation": "Discovered Attack verified by Stockfish to win +425cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1427, played 35,372 times).",
         "source": "lichess-puzzle:0DIB4",
-        "verifiedEval": "+425cp"
+        "verifiedEval": "+425cp",
+        "sourceGameUrl": "https://lichess.org/WOWEdUv5"
       },
       {
         "name": "Pin Pressure #2",
-        "pgn": "Rae1 Qb8 g3 Nxg3",
-        "setupFen": "q4rk1/p3pp1p/1p4p1/2p4n/2Pb2n1/1PN5/P1QB1PPP/R4RK1 w - - 5 17",
+        "pgn": "c4 Nf6 Nc3 g6 Nf3 Bg7 e4 d6 d4 Bg4 Be2 c5 dxc5 dxc5 Qc2 O-O O-O Nc6 Be3 b6 e5 Bxf3 Bxf3 Nxe5 Bxa8 Qxa8 b3 Neg4 Bf4 Nh5 Bd2 Bd4 Rae1 Qb8 g3 Nxg3",
         "explanation": "Pin Pressure verified by Stockfish to win +504cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1957, played 594 times).",
         "source": "lichess-puzzle:0HM65",
-        "verifiedEval": "+504cp"
+        "verifiedEval": "+504cp",
+        "sourceGameUrl": "https://lichess.org/KVvKeK5T"
       },
       {
         "name": "Tactical Strike #3",
-        "pgn": "Be2 Bf5 Rxd8+ Rxd8",
-        "setupFen": "r1br2k1/1pq2pbp/2p2np1/p1n5/P1P5/2BBPN2/1PQ2PPP/RN1R2K1 w - - 5 15",
+        "pgn": "d4 Nf6 c4 g6 Nf3 Bg7 e3 O-O Bd3 d6 O-O Nbd7 Qc2 c6 Bd2 a6 Bc3 a5 a4 e5 dxe5 dxe5 Nxe5 Nc5 Rd1 Qc7 Nf3 Rd8 Be2 Bf5 Rxd8+ Rxd8",
         "explanation": "Tactical Strike verified by Stockfish to win +453cp for the student. Tactical themes: advantage. Sourced from real Lichess puzzle (rating 1946, played 501 times).",
         "source": "lichess-puzzle:07lQK",
-        "verifiedEval": "+453cp"
+        "verifiedEval": "+453cp",
+        "sourceGameUrl": "https://lichess.org/nTz3tsXT"
       },
       {
         "name": "Discovered Attack #4",
-        "pgn": "Rxb7 Nf3+ gxf3 Qxd3",
-        "setupFen": "r2q1rk1/pp3pbp/6p1/2p1p3/2PnP3/2NQB2P/P4PP1/1R3RK1 w - - 0 16",
+        "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Bd3 Nc6 O-O Bg4 h3 Bxf3 Qxf3 Nxd4 Qd1 e5 Be3 Nd7 Rb1 Nc5 b4 Nxd3 Qxd3 c5 bxc5 dxc5 Rxb7 Nf3+ gxf3 Qxd3",
         "explanation": "Discovered Attack verified by Stockfish to win +493cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1154, played 7,123 times).",
         "source": "lichess-puzzle:0816p",
-        "verifiedEval": "+493cp"
+        "verifiedEval": "+493cp",
+        "sourceGameUrl": "https://lichess.org/ts2ouSy0"
       },
       {
         "name": "Kingside Crush #5",
-        "pgn": "Bg5 Nxf3+ Qxf3 Qxg5",
-        "setupFen": "r1bq1rk1/p1n2pbp/1p1p2p1/2p1n3/2P1P3/2N2NPP/PP2QPB1/R1BR2K1 w - - 0 13",
+        "pgn": "d4 Nf6 c4 d6 Nf3 g6 g3 Bg7 Bg2 Nbd7 O-O O-O Nc3 e5 h3 Ne8 e4 c5 dxe5 Nxe5 Qe2 Nc7 Rd1 b6 Bg5 Nxf3+ Qxf3 Qxg5",
         "explanation": "Kingside Crush verified by Stockfish to win +441cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 932, played 777 times).",
         "source": "lichess-puzzle:08cza",
-        "verifiedEval": "+441cp"
+        "verifiedEval": "+441cp",
+        "sourceGameUrl": "https://lichess.org/wYslCH3M"
       }
     ],
     "variations": [
@@ -3540,35 +3540,35 @@
       },
       {
         "name": "Kingside Crush #1",
-        "pgn": "Nxd6 Qxd4+ Be3 Rxe3",
-        "setupFen": "r3r1k1/pp3pp1/1qpb1n1p/1N1p4/3P1P2/3B1PPb/PPQB3P/2R1R1K1 w - - 4 18",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 f3 d5 e3 O-O cxd5 exd5 Bd3 Re8 Ne2 c6 O-O Qc7 Bd2 Bd6 g3 Bh3 Re1 Nh5 Nf4 Nxf4 exf4 Nd7 Qc2 h6 Rac1 Nf6 Nb5 Qb6 Nxd6 Qxd4+ Be3 Rxe3",
         "explanation": "Kingside Crush verified by Stockfish to win +510cp for the student. Tactical themes: crushing, kingsideAttack. Sourced from real Lichess puzzle (rating 1183, played 11,226 times).",
         "source": "lichess-puzzle:0M3nZ",
-        "verifiedEval": "+510cp"
+        "verifiedEval": "+510cp",
+        "sourceGameUrl": "https://lichess.org/3t5cEuCt"
       },
       {
         "name": "Kingside Crush #2",
-        "pgn": "Rxf3 Ne5 Qe4 Nxf3+",
-        "setupFen": "r2qr1k1/ppp2ppp/2n5/8/3P4/P1PQPb2/6PP/R1B2RK1 w - - 0 16",
+        "pgn": "d4 d5 c4 Nf6 Nc3 e6 e3 Bb4 Nf3 O-O Bd3 Bd7 O-O Nc6 cxd5 exd5 a3 Bxc3 bxc3 Ne4 Bxe4 dxe4 Nd2 Re8 f3 exf3 Nxf3 Bg4 Qd3 Bxf3 Rxf3 Ne5 Qe4 Nxf3+",
         "explanation": "Kingside Crush verified by Stockfish to win +337cp for the student. Tactical themes: crushing, kingsideAttack. Sourced from real Lichess puzzle (rating 1282, played 1,929 times).",
         "source": "lichess-puzzle:05Puf",
-        "verifiedEval": "+337cp"
+        "verifiedEval": "+337cp",
+        "sourceGameUrl": "https://lichess.org/xZuDTsfg"
       },
       {
         "name": "Fork Win #3",
-        "pgn": "Qxd5 Qxc3+ Qd2 Qxa1+",
-        "setupFen": "rnb2rk1/pp3ppp/5q2/3p4/3Q4/2P1PN2/P4PPP/R3KB1R w KQ - 0 11",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Bg5 d5 e3 c5 Nf3 O-O cxd5 cxd4 Qxd4 Bxc3+ bxc3 exd5 Bxf6 Qxf6 Qxd5 Qxc3+ Qd2 Qxa1+",
         "explanation": "Fork Win verified by Stockfish to win +646cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 945, played 936 times).",
         "source": "lichess-puzzle:063Cp",
-        "verifiedEval": "+646cp"
+        "verifiedEval": "+646cp",
+        "sourceGameUrl": "https://lichess.org/LXf9U74y"
       },
       {
         "name": "Fork Win #4",
-        "pgn": "Bxf6 Qxf3+ Rg2 Qxf6",
-        "setupFen": "2r1rnk1/2p2ppp/p4n2/1p1q4/8/P2BPP2/1BQ2P1P/R5RK w - - 0 19",
+        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 e3 O-O a3 Bxc3+ bxc3 Nbd7 cxd5 exd5 c4 dxc4 Bxc4 a6 Nf3 b5 Bd3 Re8 O-O Bb7 Bb2 Bxf3 gxf3 Nf8 Kh1 Qd6 Rg1 Rac8 d5 Qxd5 Bxf6 Qxf3+ Rg2 Qxf6",
         "explanation": "Fork Win verified by Stockfish to win +327cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 923, played 814 times).",
         "source": "lichess-puzzle:0Mf8w",
-        "verifiedEval": "+327cp"
+        "verifiedEval": "+327cp",
+        "sourceGameUrl": "https://lichess.org/H6kgi51Q"
       }
     ],
     "variations": [
@@ -3690,35 +3690,35 @@
       },
       {
         "name": "Sacrificial Attack #1",
-        "pgn": "Nc6 Rxc6 Qxc6 Qa5+ Kf1 Rc8 Qxc8+ Bxc8",
-        "setupFen": "2rq1rk1/p3pp1p/p5p1/2QP4/3NP1b1/P7/5PPP/1R2K2R w K - 3 17",
+        "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Rb1 Nc6 d5 Bxc3+ Bd2 Bxd2+ Qxd2 Nb4 a3 Na6 Bxa6 bxa6 Qc3 O-O Qxc5 Bg4 Nd4 Rc8 Nc6 Rxc6 Qxc6 Qa5+ Kf1 Rc8 Qxc8+ Bxc8",
         "explanation": "Sacrificial Attack verified by Stockfish to win +428cp for the student. Tactical themes: clearance, crushing, master, sacrifice. Sourced from real Lichess puzzle (rating 2204, played 1,686 times).",
         "source": "lichess-puzzle:0N31J",
-        "verifiedEval": "+428cp"
+        "verifiedEval": "+428cp",
+        "sourceGameUrl": "https://lichess.org/2g0aoHxN"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Bb5 Qa5+ Bc3 Qxb5",
-        "setupFen": "r2qk2r/pp2ppbp/2n3p1/4P3/3P4/5Q2/PB3PPP/R3KB1R w KQkq - 1 12",
+        "pgn": "d4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 cxd5 Nxd5 e4 Nxc3 bxc3 c5 Bb2 cxd4 cxd4 Bg4 e5 Bxf3 Qxf3 Nc6 Bb5 Qa5+ Bc3 Qxb5",
         "explanation": "Fork Win verified by Stockfish to win +490cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1204, played 2,841 times).",
         "source": "lichess-puzzle:0Mc0H",
-        "verifiedEval": "+490cp"
+        "verifiedEval": "+490cp",
+        "sourceGameUrl": "https://lichess.org/dEsqRjxQ"
       },
       {
         "name": "Pin Pressure #3",
-        "pgn": "Ng3 Rxe3 Qxe3 Bd4",
-        "setupFen": "2r1r1k1/p2q1pbp/1p4p1/2pP4/b1P5/4BP2/P2QN1PP/2R2RK1 w - - 1 19",
+        "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 c5 Bc4 Bg7 Ne2 O-O O-O b6 Be3 Bb7 f3 Nc6 Rc1 Rc8 Bd5 Qd7 Bxc6 Bxc6 d5 Ba4 Qd2 e6 c4 exd5 exd5 Rfe8 Ng3 Rxe3 Qxe3 Bd4",
         "explanation": "Pin Pressure verified by Stockfish to win +482cp for the student. Tactical themes: crushing, master, pin, sacrifice. Sourced from real Lichess puzzle (rating 1245, played 1,470 times).",
         "source": "lichess-puzzle:05Fzd",
-        "verifiedEval": "+482cp"
+        "verifiedEval": "+482cp",
+        "sourceGameUrl": "https://lichess.org/94js72O6"
       },
       {
         "name": "Fork Win #4",
-        "pgn": "O-O Ne2+ Kh1 Nxg3+",
-        "setupFen": "r3q2r/pp4kp/6p1/3Pp3/3nP3/6Q1/PB3PPP/R3K2R w KQ - 2 19",
+        "pgn": "d4 Nf6 c4 g6 Nf3 d5 cxd5 Bg7 Nc3 Nxd5 e4 Nxc3 bxc3 c5 Bc4 Nc6 Bb2 Bg4 Bxf7+ Kxf7 Ng5+ Kg8 Qxg4 Qc8 Qf4 Qe8 Ne6 cxd4 Nxg7 Kxg7 cxd4 e6 d5+ e5 Qg3 Nd4 O-O Ne2+ Kh1 Nxg3+",
         "explanation": "Fork Win verified by Stockfish to win +443cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 924, played 1,055 times).",
         "source": "lichess-puzzle:02h9I",
-        "verifiedEval": "+443cp"
+        "verifiedEval": "+443cp",
+        "sourceGameUrl": "https://lichess.org/PDXhPgzy"
       }
     ],
     "variations": [
@@ -3835,43 +3835,43 @@
       },
       {
         "name": "Kingside Crush #1",
-        "pgn": "b3 Be5 Ng4 Qxg4+",
-        "setupFen": "1r3rk1/p5bp/2ppb1p1/8/2P2q2/3QN3/PP2PP1P/1RB2RK1 w - - 0 19",
+        "pgn": "d4 f5 c4 Nf6 Nc3 g6 Nf3 Bg7 g3 O-O Bg2 d6 d5 Qe8 Nd4 Na6 Rb1 Nc5 O-O e5 dxe6 Nxe6 Nxe6 Bxe6 Bxb7 Rb8 Bd5 Nxd5 Nxd5 Qf7 Qd3 c6 Ne3 f4 gxf4 Qxf4 b3 Be5 Ng4 Qxg4+",
         "explanation": "Kingside Crush verified by Stockfish to win +716cp for the student. Tactical themes: crushing, kingsideAttack, master, masterVsMaster. Sourced from real Lichess puzzle (rating 2110, played 8,228 times).",
         "source": "lichess-puzzle:0DJ8X",
-        "verifiedEval": "+716cp"
+        "verifiedEval": "+716cp",
+        "sourceGameUrl": "https://lichess.org/7p2rj9Ve"
       },
       {
         "name": "Sacrificial Attack #2",
-        "pgn": "Ne5 Qxg2+ Kxg2 Nxe5+ Kg1 Nxc4",
-        "setupFen": "r3kb1r/pbp1p1pp/1pn2n2/3q1p2/2QP4/5NP1/PP2PPBP/RNB2RK1 w kq - 1 9",
+        "pgn": "d4 f5 c4 Nf6 g3 b6 Bg2 Nc6 Nf3 Bb7 O-O d5 Qc2 dxc4 Qxc4 Qd5 Ne5 Qxg2+ Kxg2 Nxe5+ Kg1 Nxc4",
         "explanation": "Sacrificial Attack verified by Stockfish to win +761cp for the student. Tactical themes: crushing, discoveredAttack, discoveredCheck, kingsideAttack. Sourced from real Lichess puzzle (rating 1982, played 7,222 times).",
         "source": "lichess-puzzle:04DZk",
-        "verifiedEval": "+761cp"
+        "verifiedEval": "+761cp",
+        "sourceGameUrl": "https://lichess.org/VbByWpEu"
       },
       {
         "name": "Pin Pressure #3",
-        "pgn": "exd6 Qe3 Rh2 Rxf3+ Kg2 Rf2+ Kh1 Rxh2+",
-        "setupFen": "rn2k3/pp6/2pp2pp/4Prq1/2B4b/2N2N2/PPP5/R2Q1K1R w q - 2 17",
+        "pgn": "d4 f5 Bg5 g6 e3 Bg7 Nc3 Nf6 h4 h6 Bxf6 Bxf6 g4 d6 gxf5 Bxf5 Bc4 c6 e4 Bd7 f4 e5 dxe5 Bxh4+ Kf1 Rf8 f5 Bxf5 exf5 Rxf5+ Nf3 Qg5 exd6 Qe3 Rh2 Rxf3+ Kg2 Rf2+ Kh1 Rxh2+",
         "explanation": "Pin Pressure verified by Stockfish to win +359cp for the student. Tactical themes: advantage, exposedKing, pin. Sourced from real Lichess puzzle (rating 2559, played 625 times).",
         "source": "lichess-puzzle:01o5f",
-        "verifiedEval": "+359cp"
+        "verifiedEval": "+359cp",
+        "sourceGameUrl": "https://lichess.org/zJ6CvC0A"
       },
       {
         "name": "Trapped Piece #4",
-        "pgn": "Qd5 c6 Qxf5 gxf5",
-        "setupFen": "rn1qk2r/ppp1p1bp/3p2p1/5b2/2PPQ3/5N2/PP3PPP/R1B1KB1R w KQkq - 1 9",
+        "pgn": "d4 f5 c4 Nf6 Nc3 g6 Qc2 Bg7 Nf3 d6 e4 fxe4 Nxe4 Nxe4 Qxe4 Bf5 Qd5 c6 Qxf5 gxf5",
         "explanation": "Trapped Piece verified by Stockfish to win +492cp for the student. Tactical themes: crushing, trappedPiece. Sourced from real Lichess puzzle (rating 1516, played 11,004 times).",
         "source": "lichess-puzzle:09b6c",
-        "verifiedEval": "+492cp"
+        "verifiedEval": "+492cp",
+        "sourceGameUrl": "https://lichess.org/Ht2lNFky"
       },
       {
         "name": "Hanging Piece #5",
-        "pgn": "Nxg6 hxg6 Rxh8+ Qxh8",
-        "setupFen": "r1b1k2r/pppn3p/3bpqp1/3p1p2/3P3N/P3P1P1/1PPNBPP1/R2QK2R w KQkq - 4 11",
+        "pgn": "d4 f5 Bf4 Nf6 e3 e6 a3 d5 Be2 Bd6 Bg3 Ne4 Nd2 Nxg3 hxg3 g6 Ngf3 Nd7 Nh4 Qf6 Nxg6 hxg6 Rxh8+ Qxh8",
         "explanation": "Hanging Piece verified by Stockfish to win +345cp for the student. Tactical themes: advantage, hangingPiece. Sourced from real Lichess puzzle (rating 1643, played 3,094 times).",
         "source": "lichess-puzzle:04OYD",
-        "verifiedEval": "+345cp"
+        "verifiedEval": "+345cp",
+        "sourceGameUrl": "https://lichess.org/QYnRhe5u"
       }
     ],
     "variations": [
@@ -3969,35 +3969,35 @@
       },
       {
         "name": "Pin Pressure #1",
-        "pgn": "f3 Qh4+ g3 Nxg3 hxg3 Qxh1",
-        "setupFen": "rnbqkb1r/pp4pp/4p3/2ppP3/4n3/3B4/PPP2PPP/RNBQK1NR w KQkq - 1 7",
+        "pgn": "e4 c5 d4 e6 d5 Nf6 dxe6 fxe6 Bd3 d5 e5 Ne4 f3 Qh4+ g3 Nxg3 hxg3 Qxh1",
         "explanation": "Pin Pressure verified by Stockfish to win +342cp for the student. Tactical themes: crushing, pin, trappedPiece. Sourced from real Lichess puzzle (rating 1387, played 27,582 times).",
         "source": "lichess-puzzle:0InPz",
-        "verifiedEval": "+342cp"
+        "verifiedEval": "+342cp",
+        "sourceGameUrl": "https://lichess.org/GhOWN4ua"
       },
       {
         "name": "Kingside Crush #2",
-        "pgn": "Qxg4 Bd4+ Nf2 fxg4",
-        "setupFen": "rnb1qk1r/1p4b1/p2p4/2pP1p2/P1B1P1np/2N5/1PP1Q1PP/R1B2RKN w - - 1 17",
+        "pgn": "d4 c5 d5 e5 e4 a6 a4 g6 Nc3 d6 Bd3 Bg7 Nge2 f5 exf5 gxf5 Ng3 e4 Qh5+ Kf8 Bc4 Qd7 O-O Nf6 Qe2 h5 f3 h4 Nh1 Qe8 fxe4 Ng4 Qxg4 Bd4+ Nf2 fxg4",
         "explanation": "Kingside Crush verified by Stockfish to win +333cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 1471, played 1,348 times).",
         "source": "lichess-puzzle:0BwAW",
-        "verifiedEval": "+333cp"
+        "verifiedEval": "+333cp",
+        "sourceGameUrl": "https://lichess.org/ehODb7gK"
       },
       {
         "name": "Fork Win #3",
-        "pgn": "Bb5 Qa5+ c3 Qxb5",
-        "setupFen": "r2qkb1r/pp3ppp/2n1bn2/4p3/3pP3/P4NN1/1PP2PPP/R1BQKB1R w KQkq - 1 10",
+        "pgn": "d4 c5 Nf3 cxd4 Qxd4 Nc6 Qd1 d5 a3 e5 Nc3 d4 Ne4 Bf5 Ng3 Be6 e4 Nf6 Bb5 Qa5+ c3 Qxb5",
         "explanation": "Fork Win verified by Stockfish to win +509cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1085, played 1,740 times).",
         "source": "lichess-puzzle:07q5t",
-        "verifiedEval": "+509cp"
+        "verifiedEval": "+509cp",
+        "sourceGameUrl": "https://lichess.org/sJvfK4w6"
       },
       {
         "name": "Fork Win #4",
-        "pgn": "Kh1 Nxf2+ Rxf2 Rxf2",
-        "setupFen": "r2q1rk1/pp1b2bp/6p1/3p4/2pPp3/4P2n/PP2BPPP/RNBQ1RK1 w - - 3 18",
+        "pgn": "d4 c5 d5 e6 dxe6 fxe6 Nf3 Nf6 e3 g6 Ne5 Bg7 Bc4 O-O c3 d5 Be2 Ne4 Nf3 Nc6 Nbd2 Ng5 O-O e5 Nb3 e4 Nfd2 c4 Nd4 Nxd4 cxd4 Bd7 Nb1 Nh3+ Kh1 Nxf2+ Rxf2 Rxf2",
         "explanation": "Fork Win verified by Stockfish to win +407cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 986, played 926 times).",
         "source": "lichess-puzzle:0NOHS",
-        "verifiedEval": "+407cp"
+        "verifiedEval": "+407cp",
+        "sourceGameUrl": "https://lichess.org/KqgSQ0j0"
       }
     ],
     "variations": [
@@ -4132,11 +4132,11 @@
       },
       {
         "name": "Pin Pressure #1",
-        "pgn": "Bd2 Rxd2 Qxd2 Bb4 Qxb4 Qxb4+",
-        "setupFen": "2b2rk1/3pbppp/3r4/q7/2p5/6P1/PPQ1PPBP/R1B1K2R w KQ - 2 16",
+        "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 e6 Nc3 exd5 Nxd5 Be7 Nf3 O-O g3 Nxd5 Qxd5 Nc6 Ne5 Rxa6 Nxc6 Rxc6 Bg2 Rd6 Qb3 c4 Qc2 Qa5+ Bd2 Rxd2 Qxd2 Bb4 Qxb4 Qxb4+",
         "explanation": "Pin Pressure verified by Stockfish to win +596cp for the student. Tactical themes: crushing, master, pin, sacrifice. Sourced from real Lichess puzzle (rating 1338, played 16,833 times).",
         "source": "lichess-puzzle:01xVK",
-        "verifiedEval": "+596cp"
+        "verifiedEval": "+596cp",
+        "sourceGameUrl": "https://lichess.org/GXCpY5SI"
       }
     ],
     "warningLines": [
@@ -4234,19 +4234,19 @@
       },
       {
         "name": "Discovered Attack #1",
-        "pgn": "Nxd5 Bxf2+ Kxf2 Qxc2",
-        "setupFen": "r3k2r/p4ppp/1pq1p3/2bn4/8/2NR2P1/PPQ1PP1P/R1B3K1 w kq - 3 16",
+        "pgn": "d4 Nf6 Nf3 e6 g3 b6 Bg2 Bb7 c4 c5 O-O d5 cxd5 Bxd5 Nc3 Bb7 Qc2 cxd4 Rd1 Nc6 Ne5 Qc7 Nxc6 Bxc6 Bxc6+ Qxc6 Rxd4 Bc5 Rd3 Nd5 Nxd5 Bxf2+ Kxf2 Qxc2",
         "explanation": "Discovered Attack verified by Stockfish to win +430cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1129, played 9,750 times).",
         "source": "lichess-puzzle:0NZwv",
-        "verifiedEval": "+430cp"
+        "verifiedEval": "+430cp",
+        "sourceGameUrl": "https://lichess.org/IRYCrbnd"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Bxc4 Nf3+ Ke2 Nxd2",
-        "setupFen": "3r1rk1/p4ppp/1p2pn2/4n3/2bP4/6P1/P2Q1P1P/R3KB1R w KQ - 2 17",
+        "pgn": "d4 Nf6 Nf3 e6 c4 b6 Nc3 Ba6 b3 Bb4 Bd2 d5 Ne5 O-O g3 c5 e3 cxd4 exd4 dxc4 Bg2 Nbd7 Nc6 Bxc3 Nxd8 Bxd2+ Qxd2 Raxd8 bxc4 Bxc4 Bf1 Ne5 Bxc4 Nf3+ Ke2 Nxd2",
         "explanation": "Fork Win verified by Stockfish to win +477cp for the student. Tactical themes: advantage, fork, master. Sourced from real Lichess puzzle (rating 1240, played 894 times).",
         "source": "lichess-puzzle:0KqRQ",
-        "verifiedEval": "+477cp"
+        "verifiedEval": "+477cp",
+        "sourceGameUrl": "https://lichess.org/uWuRvTZZ"
       }
     ],
     "warningLines": [
@@ -4344,11 +4344,11 @@
       },
       {
         "name": "Trapped Piece #1",
-        "pgn": "Nc3 Bd6 Qxd6 Qxd6",
-        "setupFen": "r1b1kb1r/ppQ2ppp/1n3q2/3p4/8/1P2P3/P3BPPP/RNB2RK1 w kq - 1 12",
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Nc6 e3 Ngxe5 Nxe5 Nxe5 Be2 Qh4 O-O Nxc4 Qc2 d5 b3 Nb6 Qxc7 Qf6 Nc3 Bd6 Qxd6 Qxd6",
         "explanation": "Trapped Piece verified by Stockfish to win +338cp for the student. Tactical themes: advantage, trappedPiece. Sourced from real Lichess puzzle (rating 1344, played 589 times).",
         "source": "lichess-puzzle:0Adsy",
-        "verifiedEval": "+338cp"
+        "verifiedEval": "+338cp",
+        "sourceGameUrl": "https://lichess.org/h4RDH2r1"
       }
     ],
     "warningLines": [
@@ -4446,19 +4446,19 @@
       },
       {
         "name": "Sacrificial Attack #1",
-        "pgn": "Ne1 Bxf2+ Rxf2 Ne3 Nb3 Nxd1",
-        "setupFen": "r1bqk2r/ppp2ppp/2n5/2bpp3/6n1/3P1NP1/PPPNPPBP/R1BQ1RK1 w kq - 6 7",
+        "pgn": "d3 d5 Nf3 Nc6 g3 e5 Bg2 Bc5 O-O Nf6 Nbd2 Ng4 Ne1 Bxf2+ Rxf2 Ne3 Nb3 Nxd1",
         "explanation": "Sacrificial Attack verified by Stockfish to win +546cp for the student. Tactical themes: crushing, kingsideAttack, sacrifice, trappedPiece. Sourced from real Lichess puzzle (rating 1984, played 13,752 times).",
         "source": "lichess-puzzle:0AyuM",
-        "verifiedEval": "+546cp"
+        "verifiedEval": "+546cp",
+        "sourceGameUrl": "https://lichess.org/hj7zzrAC"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Kd2 Qf4+ Kc2 Qxh2+",
-        "setupFen": "r3k2r/ppp2pp1/3p1qp1/2nPp3/2P1P2b/P1N4P/1P2K2R/R1BQ1B2 w kq - 5 15",
+        "pgn": "d4 d6 c4 Nf6 Nc3 e5 d5 Bg4 h3 Bh5 g4 Bg6 Nf3 Be7 Nh4 Na6 Nxg6 hxg6 a3 Nxg4 e4 Nxf2 Kxf2 Bh4+ Ke2 Qf6 Rh2 Nc5 Kd2 Qf4+ Kc2 Qxh2+",
         "explanation": "Fork Win verified by Stockfish to win +455cp for the student. Tactical themes: advantage, fork. Sourced from real Lichess puzzle (rating 1584, played 2,036 times).",
         "source": "lichess-puzzle:0AmWM",
-        "verifiedEval": "+455cp"
+        "verifiedEval": "+455cp",
+        "sourceGameUrl": "https://lichess.org/U4bHuDyW"
       }
     ],
     "warningLines": [
@@ -4561,35 +4561,35 @@
       },
       {
         "name": "Pin Pressure #1",
-        "pgn": "Bg7 Re1 O-O Rxe7",
-        "setupFen": "r3kb1r/1pp1qp1p/p1n2np1/8/Q1P5/2NB1P2/P2P1P1P/R1BK3R b kq - 0 15",
+        "pgn": "c4 e5 Nc3 Nf6 e3 Nc6 Nf3 d5 b3 d4 exd4 exd4 Ne2 d3 Nc3 Bg4 b4 Nxb4 Qa4+ Nc6 Nb5 Bxf3 gxf3 Qe7+ Kd1 a6 Nc3 g6 Bxd3 Bg7 Re1 O-O Rxe7",
         "explanation": "Pin Pressure verified by Stockfish to win +447cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 1561, played 25,539 times).",
         "source": "lichess-puzzle:0JF4x",
-        "verifiedEval": "+447cp"
+        "verifiedEval": "+447cp",
+        "sourceGameUrl": "https://lichess.org/LsqUiBv1"
       },
       {
         "name": "Pin Pressure #2",
-        "pgn": "Bh3 Rh5 Bxg2 Qxh7+ Kf7 Rg5 Bxf1 Rxg7+",
-        "setupFen": "3rr1k1/pp1q2pp/1np1bp2/2R5/3P4/P3P1P1/1PQB2BP/5RK1 b - - 0 19",
+        "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 g3 d5 cxd5 Nxd5 Bg2 Nb6 O-O Be7 d3 Be6 Bd2 O-O Rc1 f6 a3 Nd4 Nxd4 exd4 Na4 c6 Nc5 Bxc5 Rxc5 Qd7 Qc2 Rfe8 e4 dxe3 fxe3 Rad8 d4 Bh3 Rh5 Bxg2 Qxh7+ Kf7 Rg5 Bxf1 Rxg7+",
         "explanation": "Pin Pressure verified by Stockfish to win +323cp for the student. Tactical themes: advantage, kingsideAttack, master, pin. Sourced from real Lichess puzzle (rating 2347, played 1,408 times).",
         "source": "lichess-puzzle:07dNV",
-        "verifiedEval": "+323cp"
+        "verifiedEval": "+323cp",
+        "sourceGameUrl": "https://lichess.org/z7DRcVF4"
       },
       {
         "name": "Pin Pressure #3",
-        "pgn": "Bh3 Bxh3 Qxh3 Qd5+ Kg7 Qxb7",
-        "setupFen": "rn4k1/1ppq3p/3p1rp1/p3p3/2P1P1b1/5PP1/PP2N1BP/R2Q1RK1 b - - 0 14",
+        "pgn": "c4 f5 g3 Nf6 Bg2 g6 Nc3 Bg7 d3 O-O e4 fxe4 dxe4 e5 Nge2 d6 O-O a5 Bg5 Bg4 Nd5 Qd7 Nxf6+ Bxf6 Bxf6 Rxf6 f3 Bh3 Bxh3 Qxh3 Qd5+ Kg7 Qxb7",
         "explanation": "Pin Pressure verified by Stockfish to win +467cp for the student. Tactical themes: crushing, pin. Sourced from real Lichess puzzle (rating 2169, played 1,566 times).",
         "source": "lichess-puzzle:0E9Hw",
-        "verifiedEval": "+467cp"
+        "verifiedEval": "+467cp",
+        "sourceGameUrl": "https://lichess.org/9hSzhttv"
       },
       {
         "name": "Discovered Attack #4",
-        "pgn": "Nd4 Nxd4 Bxd4 Bxg4",
-        "setupFen": "r3k2r/ppp1qppp/2np4/2b1p3/2P1P1b1/3P1N2/PP2BPPP/R1BQK2R b KQkq - 2 8",
+        "pgn": "c4 e5 Nc3 Bc5 e4 Nc6 Nf3 d6 Nd5 Nge7 Nxe7 Qxe7 d3 Bg4 Be2 Nd4 Nxd4 Bxd4 Bxg4",
         "explanation": "Discovered Attack verified by Stockfish to win +467cp for the student. Tactical themes: advantage, discoveredAttack. Sourced from real Lichess puzzle (rating 1334, played 9,581 times).",
         "source": "lichess-puzzle:022HT",
-        "verifiedEval": "+467cp"
+        "verifiedEval": "+467cp",
+        "sourceGameUrl": "https://lichess.org/DxRz4P05"
       }
     ],
     "warningLines": [
@@ -4692,27 +4692,27 @@
       },
       {
         "name": "Tactical Strike #1",
-        "pgn": "Bxb2 Bxb2 Rxb2 Qd4",
-        "setupFen": "1rbqk1nr/p2pppbp/2p3p1/8/2P5/6P1/PP2PPBP/RNBQ1RK1 b k - 2 8",
+        "pgn": "Nf3 c5 d4 cxd4 Nxd4 Nc6 g3 g6 Bg2 Bg7 Nxc6 bxc6 c4 Rb8 O-O Bxb2 Bxb2 Rxb2 Qd4",
         "explanation": "Tactical Strike verified by Stockfish to win +444cp for the student. Tactical themes: crushing. Sourced from real Lichess puzzle (rating 1308, played 17,105 times).",
         "source": "lichess-puzzle:07Ddb",
-        "verifiedEval": "+444cp"
+        "verifiedEval": "+444cp",
+        "sourceGameUrl": "https://lichess.org/xrWo7V22"
       },
       {
         "name": "Discovered Attack #2",
-        "pgn": "Qxd4 Bb5+ Bd7 Qxd4",
-        "setupFen": "r1b1kbnr/ppp1p1p1/n6p/3q1p2/3N1P2/3B2N1/PPP3PP/R1BQK2R b KQkq - 6 11",
+        "pgn": "e4 d5 Nf3 dxe4 Ng5 Qd5 d3 exd3 Bxd3 h6 Nc3 Qe5+ Nge4 f5 f4 Qe6 Nb5 Na6 Nd4 Qd5 Ng3 Qxd4 Bb5+ Bd7 Qxd4",
         "explanation": "Discovered Attack verified by Stockfish to win +476cp for the student. Tactical themes: crushing, discoveredAttack. Sourced from real Lichess puzzle (rating 1162, played 16,284 times).",
         "source": "lichess-puzzle:0IFtC",
-        "verifiedEval": "+476cp"
+        "verifiedEval": "+476cp",
+        "sourceGameUrl": "https://lichess.org/e3rKTilr"
       },
       {
         "name": "Pin Pressure #3",
-        "pgn": "e4 Bxe4 fxe4 Rxe4 b5 d6",
-        "setupFen": "r1b1kb1r/1pq1n1pp/p7/3Ppp2/2N5/1P1B1Q2/P1P2PPP/R3R1K1 b kq - 1 15",
+        "pgn": "Nf3 c5 b3 d6 Bb2 Nc6 e3 e6 Bb5 Qc7 O-O e5 d4 cxd4 exd4 e4 d5 exf3 Qxf3 a6 Re1+ Ne7 Bd3 Ne5 Bxe5 dxe5 Nd2 f5 Nc4 e4 Bxe4 fxe4 Rxe4 b5 d6",
         "explanation": "Pin Pressure verified by Stockfish to win +347cp for the student. Tactical themes: crushing, master, pin. Sourced from real Lichess puzzle (rating 2403, played 1,418 times).",
         "source": "lichess-puzzle:07Qve",
-        "verifiedEval": "+347cp"
+        "verifiedEval": "+347cp",
+        "sourceGameUrl": "https://lichess.org/qzgtW8Yu"
       }
     ],
     "warningLines": [
@@ -4815,35 +4815,35 @@
       },
       {
         "name": "Fork Win #1",
-        "pgn": "c5 Qe6+ Kh8 Qxa6",
-        "setupFen": "1r1q1rk1/b3n1pp/b1p2p2/p2pp3/N5Q1/PP2P1P1/1BP2PBP/R3R1K1 b - - 4 15",
+        "pgn": "Nf3 c5 g3 d5 Bg2 Nc6 d4 cxd4 Nxd4 e5 Nxc6 bxc6 O-O Bc5 a3 a5 b3 Ne7 Bb2 f6 Nc3 O-O Na4 Ba7 e3 Ba6 Re1 Rb8 Qg4 c5 Qe6+ Kh8 Qxa6",
         "explanation": "Fork Win verified by Stockfish to win +480cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1464, played 24,913 times).",
         "source": "lichess-puzzle:04r0B",
-        "verifiedEval": "+480cp"
+        "verifiedEval": "+480cp",
+        "sourceGameUrl": "https://lichess.org/htgX3hPp"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Qe7 Nc6 Qd7 Nxa7",
-        "setupFen": "3q1rk1/r1p3pp/pp2ppn1/8/3N4/2P1Q3/PP3PPP/R4RK1 b - - 1 18",
+        "pgn": "e4 e6 d3 d5 Nd2 dxe4 dxe4 Bc5 Ngf3 Nc6 Bb5 Bd7 O-O a6 Ba4 Nge7 c3 O-O Qe2 Ng6 Nb3 Ba7 Bg5 f6 Bxc6 Bxc6 Be3 Bxe4 Bxa7 Bxf3 Qxf3 Rxa7 Qe3 b6 Nd4 Qe7 Nc6 Qd7 Nxa7",
         "explanation": "Fork Win verified by Stockfish to win +349cp for the student. Tactical themes: crushing, fork, master. Sourced from real Lichess puzzle (rating 1488, played 13,924 times).",
         "source": "lichess-puzzle:08h7Y",
-        "verifiedEval": "+349cp"
+        "verifiedEval": "+349cp",
+        "sourceGameUrl": "https://lichess.org/MZeu35aU"
       },
       {
         "name": "Sacrificial Attack #3",
-        "pgn": "g5 Qxg4 Qxd6 Nf5",
-        "setupFen": "r3r1k1/pp3pbp/2pR2p1/2n1q3/2PNpQb1/1P4P1/PB2PPBP/5RK1 b - - 3 18",
+        "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O c4 d6 Nc3 c6 b3 Qa5 Bb2 Bg4 Qc2 Qh5 d4 Nbd7 Rad1 e5 dxe5 dxe5 Rd6 Rfe8 Ne4 Nxe4 Qxe4 Nc5 Qe3 e4 Nd4 Qe5 Qf4 g5 Qxg4 Qxd6 Nf5",
         "explanation": "Sacrificial Attack verified by Stockfish to win +340cp for the student. Tactical themes: crushing, master, masterVsMaster, sacrifice. Sourced from real Lichess puzzle (rating 1924, played 9,432 times).",
         "source": "lichess-puzzle:080T4",
-        "verifiedEval": "+340cp"
+        "verifiedEval": "+340cp",
+        "sourceGameUrl": "https://lichess.org/uUmAZq17"
       },
       {
         "name": "Fork Win #4",
-        "pgn": "Bf6 Qxc6+ Kf8 Qxa8+",
-        "setupFen": "r3k2r/p4pp1/2p5/2p5/3q3b/3P1QP1/PPP2R2/R5K1 b kq - 1 19",
+        "pgn": "g3 d5 Nf3 c5 Bg2 Nc6 O-O e5 Ne1 Nf6 d3 Be7 Bg5 h6 Bxf6 Bxf6 f4 exf4 Nc3 fxg3 hxg3 Be6 Nf3 h5 e4 h4 exd5 Bxd5 Nxd5 Qxd5 Nxh4 Qd4+ Rf2 Bxh4 Bxc6+ bxc6 Qf3 Bf6 Qxc6+ Kf8 Qxa8+",
         "explanation": "Fork Win verified by Stockfish to win +443cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 888, played 1,431 times).",
         "source": "lichess-puzzle:0CPWb",
-        "verifiedEval": "+443cp"
+        "verifiedEval": "+443cp",
+        "sourceGameUrl": "https://lichess.org/1527oIdQ"
       }
     ],
     "warningLines": [
@@ -4936,19 +4936,19 @@
       },
       {
         "name": "Pin Pressure #1",
-        "pgn": "f6 Qh5+ g6 Nxg6 hxg6 Qxh8",
-        "setupFen": "r2qk1nr/p2b1ppp/2pbp3/2ppN3/5P2/1P2P2P/PBPP2P1/RN1QK2R b KQkq - 2 9",
+        "pgn": "f4 d5 Nf3 Bg4 e3 c5 Bb5+ Nc6 Bxc6+ bxc6 h3 Bd7 Ne5 e6 b3 Bd6 Bb2 f6 Qh5+ g6 Nxg6 hxg6 Qxh8",
         "explanation": "Pin Pressure verified by Stockfish to win +389cp for the student. Tactical themes: crushing, pin, trappedPiece. Sourced from real Lichess puzzle (rating 1216, played 18,858 times).",
         "source": "lichess-puzzle:02cdm",
-        "verifiedEval": "+389cp"
+        "verifiedEval": "+389cp",
+        "sourceGameUrl": "https://lichess.org/qvK8ZwZ2"
       },
       {
         "name": "Fork Win #2",
-        "pgn": "Nxg2 Ne6+ Kxf7 Nxd8+",
-        "setupFen": "r2q1k1r/ppp2Pp1/8/8/5N2/3P2pP/PP2PbB1/1RB1nQ1K b - - 3 18",
+        "pgn": "f4 d5 Nf3 Nc6 d3 Nf6 g3 Bg4 Bg2 h5 O-O e6 Nc3 Bxf3 Rxf3 Bc5+ Kh1 h4 f5 Ng4 fxe6 Nf2+ Rxf2 Bxf2 exf7+ Kf8 Qf1 hxg3 h3 Nd4 Nxd5 Nxc2 Rb1 Ne1 Nf4 Nxg2 Ne6+ Kxf7 Nxd8+",
         "explanation": "Fork Win verified by Stockfish to win +450cp for the student. Tactical themes: crushing, fork. Sourced from real Lichess puzzle (rating 1989, played 794 times).",
         "source": "lichess-puzzle:0GIFn",
-        "verifiedEval": "+450cp"
+        "verifiedEval": "+450cp",
+        "sourceGameUrl": "https://lichess.org/ekndG96l"
       }
     ],
     "warningLines": [
@@ -5051,35 +5051,35 @@
       },
       {
         "name": "Discovered Attack #1",
-        "pgn": "Kh1 Qf1+ Kh2 Bg3+ Kxg3 Qxd1",
-        "setupFen": "r1b2rk1/ppp2Np1/7p/3B4/3P4/7P/PP3qP1/RNBQb1K1 w - - 0 14",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 O-O Bc5 Re1 O-O h3 h6 c3 d5 exd5 Nxd5 Nxe5 Qf6 d4 Nxd4 cxd4 Bb4 Bxd5 Bxe1 Nxf7 Qxf2+ Kh1 Qf1+ Kh2 Bg3+ Kxg3 Qxd1",
         "explanation": "Discovered Attack verified by Stockfish to win +459cp for the student. Tactical themes: crushing, discoveredAttack, kingsideAttack. Sourced from real Lichess puzzle (rating 1410, played 32,238 times).",
         "source": "lichess-puzzle:09YGV",
-        "verifiedEval": "+459cp"
+        "verifiedEval": "+459cp",
+        "sourceGameUrl": "https://lichess.org/H5lmKXfv"
       },
       {
         "name": "Sacrificial Attack #2",
-        "pgn": "Nc5 Rxg2+ Kxg2 Qg5+ Kh1 Bd5+ Re4 Bxe4+",
-        "setupFen": "1k1r4/p1p1qprp/2p1b3/Q7/2p1N3/8/PPP2PPP/R3R1K1 w - - 6 19",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 O-O Nf6 d4 exd4 e5 d5 exf6 dxc4 fxg7 Rg8 Re1+ Be6 Bg5 Qd7 Nbd2 Rxg7 Ne4 Be7 Bxe7 Qxe7 Nxd4 O-O-O Nxc6 bxc6 Qf3 Bd5 Qf5+ Be6 Qa5 Kb8 Nc5 Rxg2+ Kxg2 Qg5+ Kh1 Bd5+ Re4 Bxe4+",
         "explanation": "Sacrificial Attack verified by Stockfish to win +606cp for the student. Tactical themes: attraction, crushing, kingsideAttack, sacrifice. Sourced from real Lichess puzzle (rating 2485, played 1,532 times).",
         "source": "lichess-puzzle:09yLB",
-        "verifiedEval": "+606cp"
+        "verifiedEval": "+606cp",
+        "sourceGameUrl": "https://lichess.org/ZRIxWRud"
       },
       {
         "name": "Kingside Crush #3",
-        "pgn": "Qc4 Bxf3 gxf3 Rxd2 Qxc6 Rxd1+",
-        "setupFen": "3rr1k1/ppp1bpp1/2q2n2/8/6b1/4BN2/PPPNQPPP/R2R2K1 w - - 5 17",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 Ng5 Ne5 Qxd4 Nxc4 Qxc4 d5 exd5 Qxd5 Qe2+ Be7 O-O h6 Rd1 Qc5 Be3 Qc6 Nf3 O-O Bxh6 Re8 Be3 Bg4 Nbd2 Rad8 Qc4 Bxf3 gxf3 Rxd2 Qxc6 Rxd1+",
         "explanation": "Kingside Crush verified by Stockfish to win +428cp for the student. Tactical themes: crushing, kingsideAttack. Sourced from real Lichess puzzle (rating 1967, played 5,202 times).",
         "source": "lichess-puzzle:04ky0",
-        "verifiedEval": "+428cp"
+        "verifiedEval": "+428cp",
+        "sourceGameUrl": "https://lichess.org/XiwPRGqd"
       },
       {
         "name": "Kingside Crush #4",
-        "pgn": "g3 Bxg3 Qf3 Bh2+ Kg2 Bxg4 Qxg4 Qxg4+",
-        "setupFen": "r1b2rk1/p1p2pp1/2pb3p/3p4/6Pq/1B1P4/PPPB1PP1/RN1QR1K1 w - - 1 14",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 O-O Nxe4 Re1 d5 Bb3 Be7 d3 Nf6 Nxe5 O-O Nxc6 bxc6 h3 Bd6 Bg5 h6 Bd2 Ng4 hxg4 Qh4 g3 Bxg3 Qf3 Bh2+ Kg2 Bxg4 Qxg4 Qxg4+",
         "explanation": "Kingside Crush verified by Stockfish to win +372cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 2408, played 755 times).",
         "source": "lichess-puzzle:0Hbvr",
-        "verifiedEval": "+372cp"
+        "verifiedEval": "+372cp",
+        "sourceGameUrl": "https://lichess.org/7q5OdM3Z"
       }
     ],
     "warningLines": [
@@ -5197,19 +5197,19 @@
       },
       {
         "name": "Kingside Crush #1",
-        "pgn": "Bg5 Rxe8+ Qxe8 Bxg5",
-        "setupFen": "r2qr1k1/ppp1bppp/1nnp4/5P2/6P1/1BP5/P4P1P/RNBQR1K1 b - - 4 15",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 exd4 Nxd4 Nf6 Nf5 O-O O-O d6 Re1 Be6 Bd3 Re8 g4 Bxf5 exf5 Nd5 Bc4 Nb6 Bb3 Bg5 Rxe8+ Qxe8 Bxg5",
         "explanation": "Kingside Crush verified by Stockfish to win +360cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 1468, played 33,857 times).",
         "source": "lichess-puzzle:0DgYW",
-        "verifiedEval": "+360cp"
+        "verifiedEval": "+360cp",
+        "sourceGameUrl": "https://lichess.org/1xS4pFt5"
       },
       {
         "name": "Kingside Crush #2",
-        "pgn": "dxc4 Qxf7+ Kh8 Qh5 h6 Nf7+",
-        "setupFen": "r1bqr1k1/ppp1nppp/2n5/b2p2N1/2BPP3/B4Q2/P4PPP/RN3RK1 b - - 1 11",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 Ba3 Nge7 O-O O-O d4 exd4 cxd4 Re8 Ng5 d5 Qf3 dxc4 Qxf7+ Kh8 Qh5 h6 Nf7+",
         "explanation": "Kingside Crush verified by Stockfish to win +451cp for the student. Tactical themes: advantage, kingsideAttack. Sourced from real Lichess puzzle (rating 1857, played 2,209 times).",
         "source": "lichess-puzzle:0A1Jy",
-        "verifiedEval": "+451cp"
+        "verifiedEval": "+451cp",
+        "sourceGameUrl": "https://lichess.org/ySkprrqc"
       }
     ],
     "warningLines": [
