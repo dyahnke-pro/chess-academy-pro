@@ -82,7 +82,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
 
   // Analysis toggle overrides
   const { settings } = useSettings();
-  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(false);
   const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
   const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
   const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
@@ -185,6 +185,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
 
   // Analyze position when it changes
   useEffect(() => {
+    if (!showEvalBarEffective) return; // no per-step Stockfish unless the eval bar is shown (freeze fix)
     const guard = { cancelled: false };
     void (async () => {
       try {
@@ -200,7 +201,7 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
       }
     })();
     return () => { guard.cancelled = true; };
-  }, [currentFen]);
+  }, [currentFen, showEvalBarEffective]);
 
   // Lichess cloud eval on position change
   useEffect(() => {

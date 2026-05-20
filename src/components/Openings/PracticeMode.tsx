@@ -88,7 +88,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
   const { playCelebration, playEncouragement } = usePieceSound();
 
   // Analysis toggle overrides
-  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+  const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(false);
   const [engineLinesOverride, setEngineLinesOverride] = useState<boolean | null>(null);
   const showEvalBarEffective = evalBarOverride ?? settings.showEvalBar;
   const showEngineLinesEffective = engineLinesOverride ?? settings.showEngineLines;
@@ -286,6 +286,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
 
   // Analyze position when it changes
   useEffect(() => {
+    if (!showEvalBarEffective) return; // no per-step Stockfish unless the eval bar is shown (freeze fix)
     let cancelled = false;
     void (async () => {
       try {
@@ -302,7 +303,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
       }
     })();
     return () => { cancelled = true; };
-  }, [currentFen]);
+  }, [currentFen, showEvalBarEffective]);
 
   // Lichess cloud eval on position change
   useEffect(() => {
