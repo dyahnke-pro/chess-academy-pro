@@ -168,7 +168,16 @@ export function useStrictNarration({
   // small window where isAutoPlayingRef.current is not yet true when an
   // already-resolved promise's callback fires.
   // When auto-play turns OFF, stop voice and cancel pending advances.
+  const autoPlayEffectMounted = useRef(false);
   useEffect(() => {
+    // Skip the mount invocation: the [currentStep] effect already
+    // speaks step 0 on mount, so reacting to the initial isAutoPlaying
+    // here too would double-fire playStep (overlapping audio). Only
+    // react to LATER toggles of auto-play.
+    if (!autoPlayEffectMounted.current) {
+      autoPlayEffectMounted.current = true;
+      return;
+    }
     if (isAutoPlaying) {
       playStep(currentStep);
     } else {
