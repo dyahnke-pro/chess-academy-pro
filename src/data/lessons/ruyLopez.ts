@@ -50,9 +50,8 @@ export const RUY_LOPEZ_LESSON: LessonScript = {
       id: 'attack-defender',
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'],
       arrows: [{ from: 'b5', to: 'c6', color: ATK }],
-      highlights: [{ square: 'e5', color: KEY }],
-      say: "White does not attack the pawn. White attacks its defender. And here is the question every beginner asks: if nobody is guarding e5, why doesn't White just win it? Because it's poisoned. Try it — bishop takes c6, pawn recaptures, knight grabs e5. Now Black plays a queen check that forks the king and the stranded knight, and wins the pawn straight back. So White will never take e5 by force. The pressure is positional, patient, permanent — White simply makes that pawn a burden to hold.",
-      sayShort: "The soul of the Ruy: attack the defender, not the pawn. And e5 is poisoned — grabbing it loses to a queen fork.",
+      say: "White does not attack the pawn. White attacks its defender. That is the soul of the Spanish: patient, indirect pressure. White will never win e5 by force — White will simply make it exhausting for Black to hold.",
+      sayShort: "The soul of the Ruy: attack the defender, not the pawn.",
     },
     {
       id: 'demo-exchange',
