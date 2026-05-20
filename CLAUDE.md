@@ -451,6 +451,27 @@ header. The secret is in per-project memory.
   `x-audit-secret` header. Save the secret to memory so you don't have
   to re-ask each session.
 
+**Secrets — durable storage (stop re-pasting keys).** This container
+is ephemeral and re-cloned every web session, and `.env*` / `.claude/`
+are gitignored — so NOTHING on disk survives. The only durable secret
+store for web sessions is the **Claude Code environment's env-var
+config** (set once in the web UI). Keys set there land in `process.env`
+for every command, and the code already reads them:
+- `DEEPSEEK_KEY` — primary brain LLM; baked into the build (`vite.config.ts`),
+  read by audit scripts. `ANTHROPIC_KEY` — fallback provider.
+- `AUDIT_STREAM_SECRET` — `x-audit-secret` for the audit-stream pull
+  AND the GitHub Action's G2 step (add it as a repo secret too:
+  Settings → Secrets → Actions). Must match prod's Vercel env value
+  and the app's `profile.preferences.auditStreamSecret`, or you get 401.
+
+`scripts/session-secrets.mjs` runs as a **SessionStart hook**
+(`.claude/settings.json`) and reports which of these are present (names
+only) so a session knows what it can use WITHOUT asking. If a key
+shows "NOT set", it isn't in the env config yet — pass it inline for
+that session and tell David to add it to the env-var config. For local
+runs, a gitignored `.env.local` is auto-loaded by audit scripts
+(`scripts/audit-lib/env.mjs`) and by vite. NEVER commit secret values.
+
 **iOS AVAudioSession patch — DONE.** Lives in
 `ios-patches/App/AppDelegate.swift` and is copied over the Capacitor
 default by `npm run setup:ios`. Sets category `.playAndRecord` with
