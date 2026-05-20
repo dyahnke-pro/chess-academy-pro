@@ -39,7 +39,7 @@ import { spawn } from 'node:child_process';
 const STOCKFISH = '/usr/games/stockfish';
 const SF_DEPTH = 14;
 const SF_CONCURRENCY = 6;
-const MIN_DECISIVE_CP = 150;  // pitfall: student loses by >= this magnitude       // student must be ≥ +3.0 at end
+const MIN_DECISIVE_CP = 100;
 const CAP_PER_OPENING = 10;
 const STAGING_DIR = 'audit-reports/staged';
 const PITFALL_MODE = true;

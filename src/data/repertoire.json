@@ -4199,6 +4199,14 @@
         "explanation": "Snatching on c3 and grabbing the rook with ...Bxa1? lets White trap the bishop in the corner with a winning attack.",
         "source": "authored-verified",
         "verifiedEval": "-653cp"
+      },
+      {
+        "name": "Pitfall: discovered attack #1",
+        "pgn": "Bxe5 dxe5 Rc8 Rxd8",
+        "setupFen": "r2q1rk1/p3ppbp/6p1/nP2Nb2/3P1N2/2Q5/PP3PPP/2KR1B1R b - - 2 15",
+        "explanation": "Pitfall: if the student walks into this, Stockfish confirms they end -101cp. The opponent punishes with discovered attack. Themes: discoveredAttack. From a real Lichess game (rating 1205).",
+        "source": "lichess-puzzle:0Bc3T",
+        "verifiedEval": "-101cp"
       }
     ]
   },
@@ -5465,6 +5473,14 @@
         "explanation": "Tactic: Stockfish confirms the student wins +203cp after this sequence. Themes: . From a real Lichess game (rating 1746).",
         "source": "lichess-puzzle:09fE6",
         "verifiedEval": "+203cp"
+      },
+      {
+        "name": "Sacrifice #5",
+        "pgn": "Kf8 Ne5 dxe5 fxe5+ Bf6 exf6",
+        "setupFen": "r3k2r/1p2p1b1/pqnpp1Q1/7n/2P2P2/4PN2/PP4PP/R1B2RK1 b kq - 0 16",
+        "explanation": "Sacrifice: Stockfish confirms the student wins +136cp after this sequence. Themes: discoveredAttack, discoveredCheck, sacrifice. From a real Lichess game (rating 2718).",
+        "source": "lichess-puzzle:0H4SK",
+        "verifiedEval": "+136cp"
       }
     ],
     "warningLines": [
