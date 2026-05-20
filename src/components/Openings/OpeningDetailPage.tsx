@@ -18,6 +18,7 @@ import { MiddlegamePractice } from './MiddlegamePractice';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { BookPagesSection } from './BookPagesSection';
+import { MiddlegameTheorySection } from './MiddlegameTheorySection';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
@@ -918,6 +919,18 @@ export function OpeningDetailPage(): JSX.Element {
           onPlayPosition={handleQuizPlayPosition}
         />
       )}
+
+      {/* Middlegame Theory — readable prose (overview, strategic ideas,
+          pawn breaks, maneuvers, endgames) in the same inline format as
+          the Understand-zone reading sections. The interactive launcher
+          below is the practice/study counterpart. */}
+      <MiddlegameTheorySection
+        openingId={opening.id}
+        renderNarrationButton={(text) => (
+          <NarrationButton sectionId="middlegame-theory" text={text} />
+        )}
+        onActivate={(text) => toggleNarration('middlegame-theory', text)}
+      />
 
       {/* Middlegame Plans */}
       <MiddlegamePlansSection

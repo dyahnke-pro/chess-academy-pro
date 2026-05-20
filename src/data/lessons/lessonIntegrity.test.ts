@@ -80,3 +80,15 @@ describe('Ruy master-class integrity', () => {
     });
   }
 });
+
+describe('Ruy master-class orientation', () => {
+  // The Ruy Lopez is a White opening — the student always plays White.
+  // Every variation lesson must orient the board White-at-bottom; a
+  // stray 'black' (the 2026-05-20 Marshall/Arkhangelsk bug) shows the
+  // student the wrong side. Guard all lessons, not just the two we fixed.
+  for (const lesson of lessons) {
+    it(`${lesson.title}: student plays White`, () => {
+      expect(lesson.orientation, `${lesson.title} should orient White`).toBe('white');
+    });
+  }
+});
