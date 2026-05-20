@@ -3,6 +3,7 @@ import { Chess } from 'chess.js';
 import { ChevronLeft, ChevronRight, Play, Pause, X, GraduationCap } from 'lucide-react';
 import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentChessboard';
 import { useStrictNarration } from '../../hooks/useStrictNarration';
+import { voiceService } from '../../services/voiceService';
 import { useSettings } from '../../hooks/useSettings';
 import type { LessonScript } from '../../types';
 
@@ -43,6 +44,11 @@ export function LessonPlayer({ script, onExit }: LessonPlayerProps): JSX.Element
     getNarration,
     postNarrationDelayMs: 900,
     voiceEnabled,
+    // A master class is opt-in long-form teaching — speak it in full,
+    // not clipped to the coach's brief cap.
+    speak: (t: string) => voiceService.speakLecture(t),
+    // The story plays itself — beats auto-advance as each line finishes.
+    initialAutoPlay: true,
   });
 
   const idx = beatIndex;

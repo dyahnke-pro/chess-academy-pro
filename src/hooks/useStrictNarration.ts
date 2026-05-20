@@ -32,6 +32,13 @@ export interface UseStrictNarrationOptions {
   voiceEnabled: boolean;
   /** Initial step index (defaults to 0). */
   initialStepIndex?: number;
+  /** Custom speak function. Defaults to `voiceService.speak` (brief-capped).
+   *  The opening master class passes `voiceService.speakLecture` so its
+   *  long-form lecture isn't clipped by the brief cap. */
+  speak?: (text: string) => Promise<void>;
+  /** Start auto-playing immediately so the story progresses on its own
+   *  (the master class plays itself; the user can still pause/scrub). */
+  initialAutoPlay?: boolean;
 }
 
 export interface UseStrictNarrationReturn {
@@ -60,9 +67,12 @@ export function useStrictNarration({
   postNarrationDelayMs,
   voiceEnabled,
   initialStepIndex = 0,
+  speak,
+  initialAutoPlay = false,
 }: UseStrictNarrationOptions): UseStrictNarrationReturn {
+  const speakFn = speak ?? ((t: string) => voiceService.speak(t));
   const [currentStep, setCurrentStep] = useState(initialStepIndex);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(false);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(initialAutoPlay);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   // Token incremented on every advance/pause/stop. Stale speech resolutions
@@ -76,7 +86,9 @@ export function useStrictNarration({
   const postNarrationDelayRef = useRef(postNarrationDelayMs);
   const voiceEnabledRef = useRef(voiceEnabled);
   const stepCountRef = useRef(stepCount);
+  const speakFnRef = useRef(speakFn);
 
+  useEffect(() => { speakFnRef.current = speakFn; }, [speakFn]);
   useEffect(() => { applyStepRef.current = applyStep; }, [applyStep]);
   useEffect(() => { getNarrationRef.current = getNarration; }, [getNarration]);
   useEffect(() => { postNarrationDelayRef.current = postNarrationDelayMs; }, [postNarrationDelayMs]);
@@ -120,7 +132,7 @@ export function useStrictNarration({
       }
 
       setIsSpeaking(true);
-      void voiceService.speak(narration).finally(() => {
+      void speakFnRef.current(narration).finally(() => {
         if (myToken !== tokenRef.current) {
           // A newer call has superseded us; do nothing — the new call owns state.
           return;

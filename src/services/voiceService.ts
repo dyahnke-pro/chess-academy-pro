@@ -633,10 +633,20 @@ class VoiceService {
     return this.speakInternal(sanitizeForTTS(text), true);
   }
 
+  /**
+   * Speak a long-form master-class lecture line. Bypasses the brief
+   * voice cap (a lecture is opt-in long-form, unlike per-move coach
+   * commentary) but fully honors the silent gate. Used only by the
+   * opening LessonPlayer. See G5 — this is the one sanctioned exemption.
+   */
+  async speakLecture(text: string): Promise<void> {
+    return this.speakInternal(sanitizeForTTS(text), false, { bypassBriefCap: true });
+  }
+
   private async speakInternal(
     text: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean },
   ): Promise<void> {
     // Coach Narration = "silent" is the highest-priority gate: when
     // the user has explicitly set Settings → Coach → Coach Narration
@@ -672,7 +682,12 @@ class VoiceService {
     // bubble still shows the full prose; only the VOICE respects
     // the brief budget. Audit when truncation fires so we observe
     // how often the brain violates the cap in prod.
-    if (narrationVerbosity === 'brief') {
+    // The brief cap governs the coach's per-move commentary. An opt-in
+    // opening MASTER CLASS is the opposite — a long-form lecture the
+    // user explicitly chose to watch — so it bypasses the brief cap
+    // (the silent gate above STILL applies). This is the single
+    // sanctioned exemption to G5, used only by the lesson player.
+    if (narrationVerbosity === 'brief' && !opts?.bypassBriefCap) {
       const cap = applyBriefVoiceCap(text, 'brief');
       if (cap.truncated) {
         void import('./appAuditor').then(({ logAppAudit }) => {
