@@ -23,11 +23,11 @@ import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { BookReader } from './BookReader';
 import { ListenableProse } from './ListenableProse';
+import { VariationTabs, buildVariationTabs } from './VariationTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
-import { SidelineExplainer } from './SidelineExplainer';
 import commonMistakesData from '../../data/common-mistakes.json';
 import middlegamePlansData from '../../data/middlegame-plans.json';
 import checkpointQuizzesData from '../../data/checkpoint-quizzes.json';
@@ -61,12 +61,9 @@ import {
   Repeat,
   Clock,
   Target,
-  CheckCircle,
-  Trophy,
   Volume2,
   Square as StopIcon,
   Crosshair,
-  GitBranch,
   GraduationCap,
   Heart,
   PlayCircle,
@@ -136,6 +133,10 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [activeEndgameLesson, setActiveEndgameLesson] = useState<EndgameLesson | null>(null);
   const [endgamePlayFen, setEndgamePlayFen] = useState<string | null>(null);
+  // Which variation tab is selected (-1 = main line). Drives the
+  // full-page rescope: every section below renders for the selected
+  // variation as its own opening ("seven openings in one").
+  const [selectedTabIndex, setSelectedTabIndex] = useState(-1);
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [quizPlayFen, setQuizPlayFen] = useState<string | null>(null);
@@ -376,12 +377,6 @@ export function OpeningDetailPage(): JSX.Element {
 
     speakText(sectionId, text);
   }, [narratingSection, loadingSection, opening, speakText]);
-
-  // Precompute variation FENs for thumbnails
-  const variationFens = useMemo((): string[] => {
-    if (!opening?.variations) return [];
-    return opening.variations.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
-  }, [opening?.variations]);
 
   // Precompute trap/warning line FENs for thumbnails
   const trapLineFens = useMemo((): string[] => {
@@ -703,6 +698,27 @@ export function OpeningDetailPage(): JSX.Element {
   const quizzes = (checkpointQuizzesData as Record<string, CheckpointQuizItem[]>)[opening.id] ?? [];
   const currentQuiz: CheckpointQuizItem | null = quizzes[quizIndex] as CheckpointQuizItem | undefined ?? null;
 
+  // ── Variation tabs / full-page rescope ────────────────────────────
+  // The 7 first-class variation tabs; selecting one rescopes the whole
+  // page to that variation ("seven openings in one"). Per-variation
+  // overview = its explanation until Phase 5 authors fuller copy; key
+  // ideas / endgame / traps share the opening's for the initial rescope.
+  const variationTabs = buildVariationTabs(opening.id, opening.variations);
+  const tabLabel = variationTabs.find((t) => t.index === selectedTabIndex)?.label;
+  const selectedVariation =
+    selectedTabIndex >= 0 ? opening.variations?.[selectedTabIndex] ?? null : null;
+  const isVariation = selectedVariation !== null;
+  const subjectName = selectedVariation?.name ?? opening.name;
+  const subjectOverview = selectedVariation?.explanation ?? opening.overview;
+  const subjectKeyIdeas = opening.keyIdeas;
+  const planPrefix = `mp-${opening.id.replace(/-/g, '')}`;
+  // Variation tab → just that variation's plan; main line → all the
+  // opening's plans (undefined filter), preserving pre-tab behaviour and
+  // never stranding openings whose plan ids don't follow the naming.
+  const subjectPlanIds = isVariation
+    ? [`${planPrefix}-${(tabLabel ?? '').toLowerCase()}`]
+    : undefined;
+
   const NarrationButton = ({
     sectionId,
     text,
@@ -753,7 +769,7 @@ export function OpeningDetailPage(): JSX.Element {
           <ArrowLeft size={18} className="text-theme-text" />
         </button>
         <div className="flex-1">
-          <h1 className="text-xl font-bold text-theme-text">{opening.name}</h1>
+          <h1 className="text-xl font-bold text-theme-text">{subjectName}</h1>
           <div className="flex items-center gap-2 text-sm text-theme-text-muted">
             <span className="font-mono">{opening.eco}</span>
             <span className="w-1 h-1 rounded-full bg-theme-text-muted" />
@@ -803,10 +819,20 @@ export function OpeningDetailPage(): JSX.Element {
         </div>
       )}
 
+      {/* Variation tabs — selecting one rescopes the whole page to that
+          variation. The main line is the default (leftmost pill). */}
+      <VariationTabs
+        tabs={variationTabs}
+        selectedIndex={selectedTabIndex}
+        onSelect={setSelectedTabIndex}
+      />
+
       {/* WALKTHROUGH, LEARN, PRACTICE, PLAY buttons */}
       <div className="grid grid-cols-4 gap-1.5 mb-6">
         <button
-          onClick={() => setViewMode('walkthrough')}
+          onClick={() =>
+            isVariation ? handleStartVariationWalkthrough(selectedTabIndex) : setViewMode('walkthrough')
+          }
           className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-accent text-white font-semibold text-xs hover:opacity-90 transition-opacity opening-action-glow opening-action-glow-watch"
           data-testid="walkthrough-btn"
         >
@@ -814,7 +840,7 @@ export function OpeningDetailPage(): JSX.Element {
           Watch
         </button>
         <button
-          onClick={() => setViewMode('learn')}
+          onClick={() => (isVariation ? handleStartVariationLearn(selectedTabIndex) : setViewMode('learn'))}
           className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-xs hover:bg-theme-border transition-colors opening-action-glow opening-action-glow-learn"
           data-testid="learn-btn"
         >
@@ -822,7 +848,9 @@ export function OpeningDetailPage(): JSX.Element {
           Learn
         </button>
         <button
-          onClick={() => setViewMode('practice')}
+          onClick={() =>
+            isVariation ? handleStartVariationPractice(selectedTabIndex) : setViewMode('practice')
+          }
           className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-xs hover:bg-theme-border transition-colors opening-action-glow opening-action-glow-practice"
           data-testid="practice-btn"
         >
@@ -831,6 +859,10 @@ export function OpeningDetailPage(): JSX.Element {
         </button>
         <button
           onClick={() => {
+            if (isVariation) {
+              handleStartVariationPlay(selectedTabIndex);
+              return;
+            }
             // Same room as Play with Coach — declare the main line and hand
             // off to /coach/play to play it from move 1 against the coach.
             useCoachMemoryStore.getState().setIntendedOpening({
@@ -902,25 +934,28 @@ export function OpeningDetailPage(): JSX.Element {
         }}
       />
 
-      {/* Overview — listenable prose (tap-to-read, per-paragraph relisten). */}
-      {opening.overview && (
+      {/* Overview — listenable prose (tap-to-read, per-paragraph relisten).
+          Rescopes to the selected variation's text. */}
+      {subjectOverview && (
         <ListenableProse
+          key={`overview-${selectedTabIndex}`}
           title="Overview"
           icon={BookOpen}
           iconColor="text-theme-accent"
           idPrefix="overview"
-          items={opening.overview.split('\n\n').filter(Boolean)}
+          items={subjectOverview.split('\n\n').filter(Boolean)}
         />
       )}
 
       {/* Key Ideas — listenable bullets. */}
-      {opening.keyIdeas && opening.keyIdeas.length > 0 && (
+      {subjectKeyIdeas && subjectKeyIdeas.length > 0 && (
         <ListenableProse
+          key={`keyIdeas-${selectedTabIndex}`}
           title="Key Ideas"
           icon={Lightbulb}
           iconColor="text-yellow-500"
           idPrefix="keyIdeas"
-          items={opening.keyIdeas}
+          items={subjectKeyIdeas}
           variant="bullets"
         />
       )}
@@ -940,9 +975,10 @@ export function OpeningDetailPage(): JSX.Element {
           Middlegame / Endgame chapters) read aloud passage-by-passage.
           Replaces the prior split BookPagesSection + ConceptBookSection. */}
       <BookReader
-        openingName={opening.name}
-        overview={opening.overview}
-        keyIdeas={opening.keyIdeas}
+        key={`book-${selectedTabIndex}`}
+        openingName={subjectName}
+        overview={subjectOverview}
+        keyIdeas={subjectKeyIdeas}
       />
 
       {/* ═══ ZONE 3 — MASTER ═══════════════════════════════════════════
@@ -986,6 +1022,7 @@ export function OpeningDetailPage(): JSX.Element {
         openingId={opening.id}
         boardOrientation={opening.color}
         onAction={handleMiddlegameAction}
+        filterPlanIds={subjectPlanIds}
       />
 
       {/* Endgame Technique — the endgames this opening steers toward,
@@ -1237,126 +1274,6 @@ export function OpeningDetailPage(): JSX.Element {
             mistakes={mistakes}
             boardOrientation={opening.color}
           />
-        </div>
-      )}
-
-      {/* ═══ ZONE 6 — VARIATIONS ═══════════════════════════════════════
-          The named sub-line list. The zone header is the ONLY header
-          for this block — the inner card's redundant "Lines (N)"
-          title was dropped so Depth + sublines read as one unit
-          (David 2026-05-20: "depth variations are separated"). */}
-      <OpeningZoneHeader
-        color="slate"
-        icon={GitBranch}
-        title="Variations"
-        tagline="Every named sub-line. Browse them to go deeper."
-        aside={
-          opening.variations && opening.variations.length > 0 ? (
-            <span className="text-xs font-semibold text-slate-400">
-              {opening.variations.length} lines
-            </span>
-          ) : undefined
-        }
-      />
-
-      {/* Variations (lines) — no inner header; the zone header above
-          is the single title for this section. */}
-      {opening.variations && opening.variations.length > 0 && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-slate-500/30">
-          <div className="space-y-1">
-            {opening.variations.map((variation, i) => {
-              const isDiscovered = opening.linesDiscovered?.includes(i) ?? false;
-              const isPerfected = opening.linesPerfected?.includes(i) ?? false;
-              return (
-                <div
-                  key={i}
-                  className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors group"
-                  data-testid={`variation-${i}`}
-                >
-                  <button
-                    onClick={() => handleStartVariationWalkthrough(i)}
-                    className="flex items-center gap-3 w-full text-left"
-                    aria-label={`Open ${variation.name}`}
-                  >
-                    {/* Board thumbnail */}
-                    <MiniBoard
-                      fen={variationFens[i]}
-                      size={48}
-                      orientation={opening.color}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-medium text-theme-text">{variation.name}</span>
-                        {isPerfected && <Trophy size={12} className="text-yellow-500" />}
-                        {isDiscovered && !isPerfected && <CheckCircle size={12} className="text-green-500" />}
-                        {variation.frequency && (
-                          <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide ${
-                            variation.frequency === 'common' ? 'bg-blue-500/15 text-blue-400' :
-                            variation.frequency === 'uncommon' ? 'bg-amber-500/15 text-amber-400' :
-                            'bg-gray-500/15 text-gray-400'
-                          }`}>
-                            {variation.frequency}
-                          </span>
-                        )}
-                        {variation.danger && variation.danger !== 'safe' && (
-                          <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold uppercase tracking-wide ${
-                            variation.danger === 'critical' ? 'bg-red-500/15 text-red-400' :
-                            'bg-amber-500/15 text-amber-400'
-                          }`}>
-                            {variation.danger}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-theme-text-muted truncate mt-0.5">{variation.explanation}</p>
-                    </div>
-                  </button>
-                  <div className="flex items-center gap-1.5 mt-2 ml-[60px]">
-                    <button
-                      onClick={() => handleStartVariationWalkthrough(i)}
-                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-watch"
-                      aria-label={`Watch ${variation.name}`}
-                      title="Watch"
-                      data-testid={`variation-walkthrough-${i}`}
-                    >
-                      <PlayCircle size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleStartVariationLearn(i)}
-                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-learn"
-                      aria-label={`Learn ${variation.name}`}
-                      title="Learn"
-                      data-testid={`variation-learn-${i}`}
-                    >
-                      <LearnIcon size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleStartVariationPractice(i)}
-                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-practice"
-                      aria-label={`Practice ${variation.name}`}
-                      title="Practice"
-                      data-testid={`variation-practice-${i}`}
-                    >
-                      <Brain size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleStartVariationPlay(i)}
-                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-play"
-                      aria-label={`Play ${variation.name}`}
-                      title="Play"
-                      data-testid={`variation-play-${i}`}
-                    >
-                      <Swords size={16} />
-                    </button>
-                    <SidelineExplainer
-                      opening={opening}
-                      variation={variation}
-                      fen={variationFens[i]}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
         </div>
       )}
 

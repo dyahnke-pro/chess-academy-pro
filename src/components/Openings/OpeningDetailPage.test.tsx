@@ -206,23 +206,15 @@ describe('OpeningDetailPage', () => {
     });
   });
 
-  it('shows variations list labeled as Lines', async () => {
+  it('renders a variation tab per variation', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByText('Lines (2)')).toBeInTheDocument();
-      expect(screen.getByTestId('variation-0')).toBeInTheDocument();
-      expect(screen.getByTestId('variation-1')).toBeInTheDocument();
-      expect(screen.getByText('Vienna Gambit')).toBeInTheDocument();
-      expect(screen.getByText('Copycat')).toBeInTheDocument();
+      expect(screen.getByTestId('variation-tabs')).toBeInTheDocument();
     });
-  });
-
-  it('variation rows have learn and practice buttons', async () => {
-    renderWithRoute();
-    await waitFor(() => {
-      expect(screen.getByTestId('variation-learn-0')).toBeInTheDocument();
-      expect(screen.getByTestId('variation-practice-0')).toBeInTheDocument();
-    });
+    // One tab per variation, plus the leading "Main line" tab.
+    expect(screen.getByTestId('variation-tab-0')).toBeInTheDocument();
+    expect(screen.getByTestId('variation-tab-1')).toBeInTheDocument();
+    expect(screen.getByTestId('variation-tab-main')).toBeInTheDocument();
   });
 
   it('shows woodpecker stats when reps > 0', async () => {
@@ -280,12 +272,14 @@ describe('OpeningDetailPage', () => {
     });
   });
 
-  it('clicking variation learn button enters variation learn mode', async () => {
+  it('selecting a variation tab then Learn enters variation learn mode', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByTestId('variation-learn-0')).toBeInTheDocument();
+      expect(screen.getByTestId('variation-tab-0')).toBeInTheDocument();
     });
-    fireEvent.click(screen.getByTestId('variation-learn-0'));
+    // Select the variation tab, then the main Learn button rescopes to it.
+    fireEvent.click(screen.getByTestId('variation-tab-0'));
+    fireEvent.click(screen.getByTestId('learn-btn'));
     await waitFor(() => {
       expect(screen.getByTestId('drill-mode')).toBeInTheDocument();
     });
@@ -425,16 +419,13 @@ describe('OpeningDetailPage', () => {
     });
   });
 
-  describe('variation thumbnails', () => {
-    it('renders MiniBoard thumbnails in variation rows', async () => {
+  describe('variation tabs', () => {
+    it('shows each variation as a gold-glow tab', async () => {
       renderWithRoute();
-      // Each variation row carries its own MiniBoard thumbnail. Scope to
-      // the variation rows — other sections (middlegame/endgame) now also
-      // render MiniBoards, so a global count would be wrong.
       await waitFor(() => {
-        expect(within(screen.getByTestId('variation-0')).getByTestId('mini-board')).toBeInTheDocument();
+        expect(within(screen.getByTestId('variation-tabs')).getByText('Vienna Gambit')).toBeInTheDocument();
       });
-      expect(within(screen.getByTestId('variation-1')).getByTestId('mini-board')).toBeInTheDocument();
+      expect(within(screen.getByTestId('variation-tabs')).getByText('Copycat')).toBeInTheDocument();
     });
 
     it('MiniBoard receives computed FEN for variation', async () => {

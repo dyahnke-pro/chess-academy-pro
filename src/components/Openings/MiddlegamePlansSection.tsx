@@ -10,6 +10,8 @@ interface MiddlegamePlansSectionProps {
   openingId: string;
   boardOrientation: 'white' | 'black';
   onAction: (plan: MiddlegamePlan, action: MiddlegameAction) => void;
+  /** When set, show only plans whose id is in this list (variation rescope). */
+  filterPlanIds?: string[];
 }
 
 const ACTION_BTN =
@@ -19,15 +21,16 @@ export function MiddlegamePlansSection({
   openingId,
   boardOrientation,
   onAction,
+  filterPlanIds,
 }: MiddlegamePlansSectionProps): JSX.Element {
-  const [plans, setPlans] = useState<MiddlegamePlan[]>([]);
+  const [allPlans, setAllPlans] = useState<MiddlegamePlan[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
     void getPlansForOpening(openingId).then((result) => {
       if (!cancelled) {
-        setPlans(result);
+        setAllPlans(result);
         setLoading(false);
       }
     });
@@ -35,6 +38,10 @@ export function MiddlegamePlansSection({
       cancelled = true;
     };
   }, [openingId]);
+
+  const plans = filterPlanIds
+    ? allPlans.filter((p) => filterPlanIds.includes(p.id))
+    : allPlans;
 
   if (loading || plans.length === 0) return <div data-testid="middlegame-plans-empty" />;
 
