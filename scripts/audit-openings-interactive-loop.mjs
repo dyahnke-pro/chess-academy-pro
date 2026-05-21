@@ -471,15 +471,25 @@ async function runP4(page, opening) {
     await tab.click({ timeout: 3000 }).catch(() => {});
     // The page must rescope to that variation without breaking: tab
     // selected + opening-detail still alive (no blank/empty state).
-    const selected = await tab.getAttribute('aria-selected').catch(() => null);
-    if (selected !== 'true') {
+    // Tab selection is URL-driven (setSearchParams → effect → state →
+    // re-render), so allow the round-trip to land instead of reading
+    // aria-selected the instant after the click.
+    const selectedOk = await page
+      .waitForFunction(
+        () =>
+          document.querySelector('[data-testid="variation-tab-0"]')?.getAttribute('aria-selected') === 'true',
+        { timeout: 4000 },
+      )
+      .then(() => true)
+      .catch(() => false);
+    if (!selectedOk) {
       result.findings.push('P4: variation tab did not select after pick-before-load tap');
     }
     const stillAlive = await page.locator('[data-testid="opening-detail"]').isVisible().catch(() => false);
     if (!stillAlive) {
       result.findings.push('P4: opening-detail vanished after pick-before-load tab tap');
     }
-    result.label = `tab0 selected=${selected}`;
+    result.label = `tab0 selected=${selectedOk}`;
   } catch (e) {
     result.findings.push(`P4: error ${(e?.message || String(e)).slice(0,150)}`);
   }
@@ -517,17 +527,22 @@ async function runP6(page, opening) {
     // Learn mode renders <DrillMode> which has testid 'drill-mode',
     // NOT 'learn-mode'. Source-verified in OpeningDetailPage:390 +
     // DrillMode.tsx:424.
+    // Main-line Play hands off to the Play-with-Coach room (/coach/play)
+    // rather than mounting opening-play-mode in-page — accept that nav.
     const modes = [
       { btn: 'learn-btn', mode: 'drill-mode', label: 'learn' },
       { btn: 'practice-btn', mode: 'practice-mode', label: 'practice' },
-      { btn: 'play-btn', mode: 'opening-play-mode', label: 'play' },
+      { btn: 'play-btn', mode: 'opening-play-mode', label: 'play', navOk: /\/coach\/play/ },
     ];
-    for (const { btn, mode, label } of modes) {
+    for (const { btn, mode, label, navOk } of modes) {
       const b = page.locator(`[data-testid="${btn}"]`).first();
       if (!(await b.isVisible().catch(() => false))) continue;
       await b.click({ timeout: 3000 });
-      const mounted = await page.locator(`[data-testid="${mode}"]`).first().waitFor({ timeout: 8000 }).then(() => true).catch(() => false);
-      if (!mounted) result.findings.push(`P6 ${label}: ${btn} click did not mount ${mode}`);
+      const mounted = await page.locator(`[data-testid="${mode}"]`).first().waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+      const navigated = navOk ? navOk.test(page.url()) : false;
+      if (!mounted && !navigated) {
+        result.findings.push(`P6 ${label}: ${btn} click did not mount ${mode}${navOk ? ' or navigate to the play room' : ''}`);
+      }
       // Back to detail for next probe
       await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
       await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 10000 }).catch(() => {});
@@ -789,8 +804,11 @@ async function runP5(page, opening) {
     const pl = page.locator('[data-testid="play-btn"]').first();
     if (await pl.isVisible().catch(() => false)) {
       await pl.click({ timeout: 3000 });
+      // Main-line Play navigates to /coach/play; variation Play mounts
+      // opening-play-mode in-page. Either is success.
       const plMounted = await page.locator('[data-testid="opening-play-mode"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
-      if (!plMounted) result.findings.push('P5: play did not mount after out-of-order switch');
+      const navigatedToPlay = /\/coach\/play/.test(page.url());
+      if (!plMounted && !navigatedToPlay) result.findings.push('P5: play did not mount or navigate after out-of-order switch');
     }
   } catch (e) {
     result.findings.push(`P5: error ${(e?.message || String(e)).slice(0,150)}`);
