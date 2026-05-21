@@ -116,8 +116,140 @@ const ATTACK_150: LessonScript = {
 
 /** Pirc variation master classes, keyed `pirc-defence::<variation name>`
  *  to match the repertoire.json variation names. */
+
+/** Byrne Variation (Bg5, O-O-O) — opposite-side castling, mutual race. */
+const BYRNE: LessonScript = {
+  openingId: 'pirc-defence',
+  title: 'Pirc — The Byrne Variation',
+  minutes: 6,
+  orientation: 'black',
+  beats: [
+    b({ id: 'y1', moves: 'e4 d6 d4 Nf6 Nc3 g6 Bg5',
+      say: "Bg5 — the Byrne. White pins nothing yet but eyes the f6-knight and signals a sharp plan: queen to d2, castle queenside, and storm the kingside. The moment both kings sit on opposite wings, the game becomes a foot-race of pawn storms, and the faster attacker usually wins.",
+      sayShort: 'Bg5 — the Byrne: White heads for opposite-side castling and a pawn-storm race.',
+      highlights: [H('g5', KEY), H('f6', SOFT)] }),
+    b({ id: 'y2', moves: 'e4 d6 d4 Nf6 Nc3 g6 Bg5 Bg7 Qd2 O-O O-O-O c6',
+      say: "There it is: White castles long, committing the king to the queenside. That tells Black exactly where to attack — straight at White's king with c6 and the coming b5-b4. In opposite-castling positions you do not defend; you race.",
+      sayShort: "White castles long; ...c6 begins Black's b5-b4 storm at White's king.",
+      highlights: [H('c6', KEY), H('b5', SOFT)] }),
+    b({ id: 'y3', moves: 'e4 d6 d4 Nf6 Nc3 g6 Bg5 Bg7 Qd2 O-O O-O-O c6 f4 b5 e5 b4',
+      say: "Both storms break at once: White throws f4 and e5 at Black's king, Black hurls b5-b4 at White's. With b4 Black attacks the knight defending White's king — every tempo is gold here, and Black has not flinched.",
+      sayShort: 'f4-e5 versus ...b5-b4 — both storms crash in; ...b4 hits the defender.',
+      highlights: [H('b4', ATK), H('e5', SOFT)] }),
+    b({ id: 'y4', moves: 'e4 d6 d4 Nf6 Nc3 g6 Bg5 Bg7 Qd2 O-O O-O-O c6 f4 b5 e5 b4 exf6 bxc3 Qxc3 exf6',
+      say: "The pieces fly off: White grabs the f6-knight, Black smashes the knight shielding White's king, the queen recaptures on c3, and Black opens the centre by taking back on f6. The smoke clears to a wild, double-edged position — and crucially, White's king is the more exposed of the two.",
+      sayShort: "Knights traded, White's king cover cracked — a wild position, White's king the airier.",
+      highlights: [H('c3', KEY), H('f6', SOFT)] }),
+    b({ id: 'y5', moves: 'e4 d6 d4 Nf6 Nc3 g6 Bg5 Bg7 Qd2 O-O O-O-O c6 f4 b5 e5 b4 exf6 bxc3 Qxc3 exf6 Bh4 d5',
+      say: "And the hammer blow: d5. Black slams the centre open so the g7-bishop and the heavy pieces can pour down toward c3 and White's king. This is the Byrne in full cry — a hand-to-hand attacking battle where Black's initiative against the queenside king is very real. Know this race cold or do not enter it.",
+      sayShort: "...d5 rips the centre open toward White's king — Black's attack is real.",
+      highlights: [H('d5', ATK), H('c3', KEY)] }),
+  ],
+};
+
+/** Lion Variation (...e5 instead of the fianchetto) — Philidor-like. */
+const LION: LessonScript = {
+  openingId: 'pirc-defence',
+  title: 'Pirc — The Lion Variation',
+  minutes: 6,
+  orientation: 'black',
+  beats: [
+    b({ id: 'l1', moves: 'e4 d6 d4 Nf6 Nc3 e5',
+      say: "The Lion — Black skips the fianchetto and plays e5 at once, steering into a Philidor-like structure. Instead of pressuring d4 from g7, Black confronts the centre directly. It is solid, flexible, and sidesteps a mountain of Austrian-Attack theory.",
+      sayShort: 'The Lion: ...e5 instead of the fianchetto — a solid Philidor-like setup.',
+      highlights: [H('e5', KEY), H('d4', SOFT)] }),
+    b({ id: 'l2', moves: 'e4 d6 d4 Nf6 Nc3 e5 Nf3 Nbd7 Bc4 Be7 O-O O-O',
+      say: "Black builds the Lion's house: the knight to d7 backing e5, the bishop modestly to e7, and the king safely castled. Nothing is committed, nothing is loose — Black keeps maximum flexibility and waits to see how White arranges before choosing a plan.",
+      sayShort: '...Nbd7, ...Be7, castle — the flexible Lion setup, all options open.',
+      highlights: [H('d7', KEY), H('e5', SOFT)] }),
+    b({ id: 'l3', moves: 'e4 d6 d4 Nf6 Nc3 e5 Nf3 Nbd7 Bc4 Be7 O-O O-O a4 c6 Re1 Qc7 h3 b6',
+      say: "Now the Lion shows its teeth on the queenside. Black plays c6 and b6, opening a home on b7 for the bishop and lining the queen up on c7. The whole army quietly turns toward the centre and queenside, ready to expand when the moment is right.",
+      sayShort: '...c6, ...b6, ...Qc7 — Black coils for queenside and central expansion.',
+      highlights: [H('b6', KEY), H('c7', SOFT)] }),
+    b({ id: 'l4', moves: 'e4 d6 d4 Nf6 Nc3 e5 Nf3 Nbd7 Bc4 Be7 O-O O-O a4 c6 Re1 Qc7 h3 b6 Bg5 Bb7 dxe5 Nxe5',
+      say: "White tries the Bg5 pin; Black calmly answers with the bishop to b7, eyeing the long light-squared diagonal straight at White's king. When White releases with dxe5, the knight recaptures and lands proudly in the centre on e5. Black has emerged from the Lion with a sound structure and active, well-placed pieces.",
+      sayShort: '...Bb7 on the long diagonal, ...Nxe5 centralised — Black is comfortable and active.',
+      highlights: [H('e5', KEY), H('b7', SOFT)] }),
+  ],
+};
+
+/** Fianchetto System (g3, Bg2) — White's quietest; Black grabs space. */
+const FIANCHETTO: LessonScript = {
+  openingId: 'pirc-defence',
+  title: 'Pirc — The Fianchetto System',
+  minutes: 5,
+  orientation: 'black',
+  beats: [
+    b({ id: 'f1', moves: 'e4 d6 d4 Nf6 Nc3 g6 g3 Bg7 Bg2 O-O',
+      say: "White meets the Pirc with a fianchetto of their own — g3 and Bg2 — the quietest, most positional try. With no pawn storm coming, Black is free to play for the centre and for space. Two bishops staring down two long diagonals: this will be a slow, strategic battle.",
+      sayShort: "g3 and Bg2 — White's quiet fianchetto. Black plays for centre and space.",
+      highlights: [H('g2', SOFT), H('g7', KEY)] }),
+    b({ id: 'f2', moves: 'e4 d6 d4 Nf6 Nc3 g6 g3 Bg7 Bg2 O-O Nge2 e5 O-O Nc6 d5 Ne7',
+      say: "Black strikes the centre with e5 and develops the knight to c6 to pile on d4. White clamps with d5 — and that gift of a closed centre tells Black where to play. The knight reroutes from c6 to e7, heading for the magnificent f5 outpost where it will blockade and bite.",
+      sayShort: '...e5 and ...Nc6 hit d4; after d5, the knight reroutes ...Ne7 toward f5.',
+      highlights: [H('e5', KEY), H('e7', KEY), H('f5', SOFT)] }),
+    b({ id: 'f3', moves: 'e4 d6 d4 Nf6 Nc3 g6 g3 Bg7 Bg2 O-O Nge2 e5 O-O Nc6 d5 Ne7 a4 Nd7 Be3 f5',
+      say: "With the centre bolted shut by d5, Black knows exactly where to play: the kingside. The break is f5, gaining space and prying open lines for the g7-bishop and the rooks on the f-file. The knights reroute behind it — one toward f5, the other supporting from d7. In a locked Fianchetto position this thrust is Black's whole plan, and it gives fully equal, double-edged play.",
+      sayShort: "...f5 — Black's thematic kingside break in the locked Fianchetto. Equal, sharp play.",
+      highlights: [H('f5', ATK), H('e5', SOFT)] }),
+  ],
+};
+
+/** Czech Defence (...c6 instead of ...g6) — compact, direct ...e5. */
+const CZECH: LessonScript = {
+  openingId: 'pirc-defence',
+  title: 'Pirc — The Czech Defence',
+  minutes: 5,
+  orientation: 'black',
+  beats: [
+    b({ id: 'z1', moves: 'e4 d6 d4 Nf6 Nc3 c6',
+      say: "A different face of the Pirc family: instead of g6, Black plays c6 — the Czech. There is no fianchetto here. Black builds a low, compact structure and aims to challenge the centre head-on with e5, dodging the sharpest Austrian theory entirely.",
+      sayShort: 'The Czech: ...c6, no fianchetto — a compact setup aiming for a direct ...e5.',
+      highlights: [H('c6', KEY)] }),
+    b({ id: 'z2', moves: 'e4 d6 d4 Nf6 Nc3 c6 f4 Qa5',
+      say: "White grabs space with f4; Black answers with the clever Qa5. The queen swings out early to pin the knight on c3 against nothing material yet, but it freezes White's centre and prepares the e5 break by taking the sting out of any pawn advance. A typically resourceful Czech idea.",
+      sayShort: '...Qa5 pins the c3-knight and freezes the centre, preparing ...e5.',
+      highlights: [H('a5', KEY), H('c3', SOFT)] }),
+    b({ id: 'z3', moves: 'e4 d6 d4 Nf6 Nc3 c6 f4 Qa5 Bd3 e5 Nf3 Bg4',
+      say: "Now the central blow: e5, challenging d4 directly. Black follows with Bg4, pinning the f3-knight so that the defender of d4 is tied down. Every Czech move points at the same target — White's broad centre — and Black's pieces coordinate around cracking it.",
+      sayShort: '...e5 challenges d4, ...Bg4 pins its defender. The centre is under fire.',
+      highlights: [H('e5', ATK), H('g4', SOFT)] }),
+    b({ id: 'z4', moves: 'e4 d6 d4 Nf6 Nc3 c6 f4 Qa5 Bd3 e5 Nf3 Bg4 Be3 Nbd7 O-O Be7 h3 Bxf3 Qxf3 O-O Ne2 c5 dxe5 dxe5',
+      say: "Black finishes development — Nbd7, Be7, castle — trades the bishop for the knight to loosen White's grip, then strikes again with c5. When the centre finally resolves with dxe5 dxe5, Black has a sound, harmonious position with no weaknesses. The Czech delivers exactly what it promises: a solid, principled game on Black's terms.",
+      sayShort: '...c5 and ...dxe5 leave Black solid and harmonious — the Czech promise kept.',
+      highlights: [H('e5', KEY), H('c5', SOFT)] }),
+  ],
+};
+
+/** Austrian Attack with early e5 — meet it with ...c5 on the centre. */
+const AUSTRIAN_E5C5: LessonScript = {
+  openingId: 'pirc-defence',
+  title: 'Pirc — Austrian: meeting an early e5',
+  minutes: 4,
+  orientation: 'black',
+  beats: [
+    b({ id: 'e1', moves: 'e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O e5',
+      say: "In the Austrian, White sometimes pushes e5 immediately, lunging at the f6-knight and trying to bulldoze the centre forward. It looks frightening — but a pawn that advances is a pawn that no longer defends. This thrust can be met head-on.",
+      sayShort: 'White lunges with an early e5 at the f6-knight — frightening, but answerable.',
+      highlights: [H('e5', KEY), H('f6', SOFT)] }),
+    b({ id: 'e2', moves: 'e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O e5 Nfd7',
+      say: "The accurate retreat is Nfd7 — not back to the rim, but inward, where the knight still bites at e5 and supports the coming counter-break. The knight stays in the game; that is the whole point of choosing d7 over the passive corner.",
+      sayShort: 'Retreat ...Nfd7 — inward and active, still pressing e5.',
+      highlights: [H('d7', KEY), H('e5', SOFT)] }),
+    b({ id: 'e3', moves: 'e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O e5 Nfd7 Be2 c5',
+      say: "And the refutation of the rush: c5, striking the base that holds White's whole pawn chain together. Once the support under d4 is hit, White's grand centre starts to wobble. Black has met brute force with a precise central counter-punch — exactly the hypermodern idea the Pirc was built on.",
+      sayShort: '...c5 hits the base of the chain — the overextended centre wobbles.',
+      highlights: [H('c5', ATK), H('d4', KEY)] }),
+  ],
+};
+
 export const PIRC_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pirc-defence::Austrian Attack': AUSTRIAN,
   'pirc-defence::Classical System': CLASSICAL,
   'pirc-defence::150 Attack': ATTACK_150,
+  'pirc-defence::Byrne Variation': BYRNE,
+  'pirc-defence::Lion Variation': LION,
+  'pirc-defence::Fianchetto System': FIANCHETTO,
+  'pirc-defence::Czech Defence': CZECH,
+  'pirc-defence::Austrian Attack with e5 c5': AUSTRIAN_E5C5,
 };
