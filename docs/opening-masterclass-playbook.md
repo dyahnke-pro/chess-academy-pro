@@ -105,10 +105,17 @@ For each first-class variation tab, author:
   moves. No acknowledgments ("Great move!"), no first-person, no interface
   references. The position teaches, not a tutor character. (See the
   Narration Voice Rules in CLAUDE.md.)
-- **Highlight the pieces/squares as they're named** — lead the eye so the
-  user doesn't search the board. (Beats carry `highlights`/`arrows`;
-  arrows must originate on a non-pawn piece with a clear sight-line — the
-  `lessonIntegrity` test enforces this.)
+- **Highlight the pieces/squares as they're named — lead the eye. NON-
+  NEGOTIABLE, every played sequence (David 2026-05-21).** The arrows +
+  highlights move the user's eyes so they listen to the words instead of
+  hunting for pieces and angles. This applies to lessons AND **middlegame
+  plans (playableLines)** AND model games — NOT just beats. Naming a square
+  in the narration with nothing pointing at it is a defect (it's what made
+  the middlegame-plan WATCH "shitty work" — bare move-arrows, no vision to
+  the squares named). Author per-move arrows+highlights matching each
+  annotation; a played line without them is NOT done. (Arrows must
+  originate on a non-pawn piece with a clear sight-line — `lessonIntegrity`
+  enforces it.)
 - **Voice-first** (Polly TTS) everywhere; respect the verbosity contract
   (silent/brief/full — G5). Book passages get the descriptive-notation
   scrub (`scrubDescriptiveNotationForSpeech`) for speech only.

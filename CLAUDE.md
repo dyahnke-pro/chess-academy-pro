@@ -1012,6 +1012,26 @@ gauntlet + confirm revertible (it's on a branch) BEFORE committing. "Make
 sure that code is ACTUALLY dead before deleting it." Never blind-delete
 shared state.
 
+**🚨 ARROWS + HIGHLIGHTS LEAD THE EYE ON EVERY NARRATED MOVE — NON-
+NEGOTIABLE for all future builds (David 2026-05-21).** Every move / beat
+in ANY played sequence — masterclass lessons, **middlegame plans
+(playableLines)**, model games, traps, ALL of it — MUST carry arrows +
+highlights that point at exactly what the narration is describing, so the
+student's eye lands on the piece/square as they hear the words and never
+hunts the board. *"The arrows and highlights move the user's eyes so they
+listen to your words instead of hunting for pieces and angles."* Naming a
+square in the narration without an arrow/highlight on it is a DEFECT —
+that's what made the middlegame-plan WATCH "shitty work" (2026-05-21):
+bare from→to move-arrows while the narration talked about c6/e6/f5/b5 with
+nothing pointing there. Author per-move arrows+highlights the way the
+masterclass beats already do (and board-verify them — every arrow
+originates on a real piece with a clear sight-line, per `lessonIntegrity`).
+**A played line WITHOUT lead-the-eye arrows/highlights matching its
+narration is NOT done** — do not ship it or call it complete. The cleanest
+implementation is to treat every played line as a real beat sequence (say
++ arrows + highlights) through the voice-gated lesson player, so plans get
+the identical treatment the variation lessons have.
+
 Every spoken line in the app — whether hand-authored in JSON or
 generated in code templates — must follow these rules. The voice
 is the *position* teaching the student, not the interface
