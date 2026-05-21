@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { BookOpen, Play, Pause, SkipForward } from 'lucide-react';
-import { sanitizeForTTS, voiceService } from '../../services/voiceService';
+import { useEffect, useMemo, useState } from 'react';
+import { BookOpen, Play, Pause, Volume2 } from 'lucide-react';
+import { useProseReader, type ProseUnit } from '../../hooks/useProseReader';
 import {
   getOpeningBookPages,
   getConceptBookGroups,
@@ -8,10 +8,16 @@ import {
   type BookPassage,
 } from '../../services/chessConceptService';
 
+interface ReaderParagraph {
+  id: string;
+  text: string;
+  /** Spoken form — title prepended on a passage's first paragraph. */
+  spoken: string;
+}
+
 interface ReaderPassage {
-  /** Optional lead-in (concept name) shown bold above the passage. */
   title?: string;
-  paragraphs: string[];
+  paragraphs: ReaderParagraph[];
   citation: string;
   gutenbergId: number;
 }
@@ -35,18 +41,34 @@ function citationFor(p: { author: string; bookTitle: string; chapter: string | n
   return where ? `${author} — ${p.bookTitle}, ${where}` : `${author} — ${p.bookTitle}`;
 }
 
-function pageToPassage(p: BookPage): ReaderPassage {
+function buildParagraphs(
+  chapterId: string,
+  passageIdx: number,
+  title: string | undefined,
+  text: string,
+): ReaderParagraph[] {
+  return text
+    .split('\n\n')
+    .filter(Boolean)
+    .map((para, j) => ({
+      id: `${chapterId}-p${passageIdx}-${j}`,
+      text: para,
+      spoken: j === 0 && title ? `${title}. ${para}` : para,
+    }));
+}
+
+function pageToPassage(chapterId: string, idx: number, p: BookPage): ReaderPassage {
   return {
-    paragraphs: p.text.split('\n\n').filter(Boolean),
+    paragraphs: buildParagraphs(chapterId, idx, undefined, p.text),
     citation: citationFor(p),
     gutenbergId: p.gutenbergId,
   };
 }
 
-function conceptToPassage(name: string, p: BookPassage): ReaderPassage {
+function conceptToPassage(chapterId: string, idx: number, name: string, p: BookPassage): ReaderPassage {
   return {
     title: name,
-    paragraphs: p.text.split('\n\n').filter(Boolean),
+    paragraphs: buildParagraphs(chapterId, idx, name, p.text),
     citation: citationFor(p),
     gutenbergId: p.gutenbergId,
   };
@@ -59,24 +81,23 @@ interface BookReaderProps {
 }
 
 /**
- * Audiobook-style tabbed book reader for the Understand zone. Replaces
- * the separate "From the Books" (opening) and middlegame/endgame book
- * cards with one reader: chapters as tabs (Opening / Middlegame /
- * Endgame), each read aloud passage-by-passage via the canonical voice
- * path with a follow-along highlight. Renders nothing when no chapter
- * has content.
+ * Audiobook-style tabbed book reader for the Understand zone. Chapters
+ * as tabs (Opening / Middlegame / Endgame); each chapter reads aloud
+ * paragraph-by-paragraph via the shared useProseReader engine, with a
+ * follow-along highlight, click-any-paragraph-to-start-there, and a
+ * per-paragraph relisten. Renders nothing when no chapter has content.
  */
 export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps): React.ReactNode {
   const chapters = useMemo<Chapter[]>(() => {
     const out: Chapter[] = [];
-    const openingPages = getOpeningBookPages(openingName).map(pageToPassage);
+    const openingPages = getOpeningBookPages(openingName).map((p, i) => pageToPassage('opening', i, p));
     if (openingPages.length > 0) {
       out.push({ id: 'opening', label: 'Opening', intro: CHAPTER_INTRO.opening, passages: openingPages });
     }
     const groups = getConceptBookGroups([openingName, overview ?? '', ...(keyIdeas ?? [])].join('. '));
     for (const g of groups) {
       const id = g.label.toLowerCase() === 'endgame' ? 'endgame' : 'middlegame';
-      const passages = g.items.map((it) => conceptToPassage(it.name, it.passage));
+      const passages = g.items.map((it, i) => conceptToPassage(id, i, it.name, it.passage));
       if (passages.length > 0) {
         out.push({ id, label: g.label, intro: CHAPTER_INTRO[id], passages });
       }
@@ -85,69 +106,30 @@ export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps)
   }, [openingName, overview, keyIdeas]);
 
   const [activeIdx, setActiveIdx] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentPassage, setCurrentPassage] = useState(-1);
-  // Supersedes any in-flight playback chain so a stale promise can't
-  // advance the highlight after pause / chapter switch / unmount.
-  const tokenRef = useRef(0);
-  const passageRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const activeChapter = chapters[activeIdx] as Chapter | undefined;
 
-  const stop = useCallback(() => {
-    tokenRef.current++;
-    voiceService.stop();
-    setIsPlaying(false);
-  }, []);
-
-  // Stop voice on unmount.
-  useEffect(() => () => { tokenRef.current++; voiceService.stop(); }, []);
-
-  const activeChapter = chapters[activeIdx];
-
-  const playFrom = useCallback(
-    async (chapterIdx: number, startPassage: number): Promise<void> => {
-      const chapter = chapters[chapterIdx];
-      const token = ++tokenRef.current;
-      setIsPlaying(true);
-      for (let i = startPassage; i < chapter.passages.length; i++) {
-        if (tokenRef.current !== token) return;
-        setCurrentPassage(i);
-        passageRefs.current[i]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        const p = chapter.passages[i];
-        const text = `${p.title ? p.title + '. ' : ''}${p.paragraphs.join(' ')}`;
-        try {
-          await voiceService.speakForced(sanitizeForTTS(text));
-        } catch {
-          /* keep reading even if one passage fails */
-        }
-        if (tokenRef.current !== token) return;
-      }
-      if (tokenRef.current === token) {
-        setIsPlaying(false);
-        setCurrentPassage(-1);
-      }
-    },
-    [chapters],
+  const units = useMemo<ProseUnit[]>(
+    () =>
+      (activeChapter?.passages ?? []).flatMap((p) =>
+        p.paragraphs.map((para) => ({ id: para.id, text: para.spoken })),
+      ),
+    [activeChapter],
   );
 
-  if (chapters.length === 0) return null;
+  const reader = useProseReader(units);
 
-  const togglePlay = (): void => {
-    if (isPlaying) stop();
-    else void playFrom(activeIdx, currentPassage < 0 ? 0 : currentPassage);
-  };
+  // Stop playback when the chapter changes.
+  useEffect(() => {
+    reader.stop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIdx]);
 
-  const skip = (): void => {
-    const next = Math.min(activeChapter.passages.length - 1, (currentPassage < 0 ? 0 : currentPassage) + 1);
-    if (isPlaying) void playFrom(activeIdx, next);
-    else setCurrentPassage(next);
-  };
+  if (chapters.length === 0 || !activeChapter) return null;
 
   const selectChapter = (idx: number): void => {
     if (idx === activeIdx) return;
-    stop();
+    reader.stop();
     setActiveIdx(idx);
-    setCurrentPassage(-1);
-    passageRefs.current = [];
   };
 
   return (
@@ -155,27 +137,16 @@ export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps)
       <div className="flex items-center gap-2 mb-3">
         <BookOpen size={14} className="text-amber-400" />
         <h3 className="text-sm font-semibold text-theme-text">From the Books</h3>
-        <div className="ml-auto flex items-center gap-1">
-          <button
-            type="button"
-            onClick={togglePlay}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-500/15 border border-amber-400/40 text-amber-300 text-xs font-semibold hover:bg-amber-500/25 transition-colors"
-            aria-label={isPlaying ? 'Pause reading' : 'Read aloud'}
-            data-testid="book-reader-play"
-          >
-            {isPlaying ? <Pause size={14} /> : <Play size={14} />}
-            {isPlaying ? 'Pause' : 'Listen'}
-          </button>
-          <button
-            type="button"
-            onClick={skip}
-            className="p-1.5 rounded-lg text-theme-text-muted hover:text-amber-300 hover:bg-amber-500/15 transition-colors"
-            aria-label="Next passage"
-            data-testid="book-reader-skip"
-          >
-            <SkipForward size={14} />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={reader.toggle}
+          className="ml-auto flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-amber-500/15 border border-amber-400/40 text-amber-300 text-xs font-semibold hover:bg-amber-500/25 transition-colors"
+          aria-label={reader.isPlaying ? 'Pause reading' : 'Listen to this chapter'}
+          data-testid="book-reader-play"
+        >
+          {reader.isPlaying ? <Pause size={14} /> : <Play size={14} />}
+          {reader.isPlaying ? 'Pause' : 'Listen'}
+        </button>
       </div>
 
       {/* Chapter tabs */}
@@ -202,40 +173,55 @@ export function BookReader({ openingName, overview, keyIdeas }: BookReaderProps)
         })}
       </div>
 
-      <p className="text-xs text-theme-text-muted/80 italic mb-3">{activeChapter.intro}</p>
+      <p className="text-xs text-theme-text-muted/80 italic mb-1">{activeChapter.intro}</p>
+      <p className="text-[11px] text-theme-text-muted/60 mb-3">Tap any paragraph to listen from there.</p>
 
       <div className="space-y-4" data-testid="book-reader-passages">
-        {activeChapter.passages.map((p, i) => {
-          const reading = isPlaying && i === currentPassage;
-          return (
-            <div
-              key={`${activeChapter.id}-${i}`}
-              ref={(el) => { passageRefs.current[i] = el; }}
-              className={`border-l-2 pl-3 transition-colors rounded-r ${
-                reading ? 'border-amber-400 bg-amber-400/5' : 'border-amber-400/30'
-              }`}
-              data-testid={`book-reader-passage-${i}`}
-            >
-              {p.title && <p className="text-sm font-medium text-theme-text mb-1">{p.title}</p>}
-              {p.paragraphs.map((para, j) => (
-                <p key={j} className="text-sm text-theme-text-muted leading-relaxed mb-2 last:mb-0">
-                  {para}
-                </p>
-              ))}
-              <footer className="text-xs text-theme-text-muted/70 mt-2">
-                — {p.citation}{' '}
-                <a
-                  href={`https://www.gutenberg.org/ebooks/${p.gutenbergId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-amber-400/80 hover:text-amber-300 underline"
+        {activeChapter.passages.map((p, i) => (
+          <div key={`${activeChapter.id}-${i}`} className="border-l-2 border-amber-400/30 pl-3" data-testid={`book-reader-passage-${i}`}>
+            {p.title && <p className="text-sm font-medium text-theme-text mb-1">{p.title}</p>}
+            {p.paragraphs.map((para) => {
+              const reading = reader.currentId === para.id;
+              return (
+                <div
+                  key={para.id}
+                  className={`group flex items-start gap-2 rounded -ml-1 pl-1 pr-1 py-0.5 mb-2 last:mb-0 cursor-pointer transition-colors ${
+                    reading ? 'bg-amber-400/10' : 'hover:bg-amber-400/5'
+                  }`}
+                  onClick={() => reader.playFrom(para.id)}
+                  data-testid={`book-paragraph-${para.id}`}
                 >
-                  (Project Gutenberg)
-                </a>
-              </footer>
-            </div>
-          );
-        })}
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      reader.playOne(para.id);
+                    }}
+                    className={`shrink-0 mt-0.5 p-1 rounded text-amber-400/70 hover:text-amber-300 transition-opacity ${
+                      reading ? 'opacity-100 text-amber-300' : 'opacity-0 group-hover:opacity-100'
+                    }`}
+                    aria-label="Relisten to this paragraph"
+                    data-testid={`book-paragraph-replay-${para.id}`}
+                  >
+                    <Volume2 size={13} />
+                  </button>
+                  <p className="text-sm text-theme-text-muted leading-relaxed">{para.text}</p>
+                </div>
+              );
+            })}
+            <footer className="text-xs text-theme-text-muted/70 mt-2">
+              — {p.citation}{' '}
+              <a
+                href={`https://www.gutenberg.org/ebooks/${p.gutenbergId}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-amber-400/80 hover:text-amber-300 underline"
+              >
+                (Project Gutenberg)
+              </a>
+            </footer>
+          </div>
+        ))}
       </div>
     </div>
   );
