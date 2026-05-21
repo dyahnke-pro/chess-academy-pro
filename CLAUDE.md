@@ -1259,6 +1259,17 @@ the log. Don't let it rot.
 
 ## Deployment Policy
 
+**🚨 PUSH TO `main` (PRODUCTION) BY DEFAULT — PREVIEWS ARE OPT-IN ONLY.**
+David, 2026-05-21, emphatic: *"I HATE USING THE FUCKING PREVIEWS!! Push
+to main unless told otherwise."* Do NOT develop on a feature branch / open
+a PR / rely on the Vercel preview URL unless David **explicitly** asks for
+it. Branch-based work hides changes behind a preview URL David can't see
+on the real app and burns the cap on per-push preview builds — exactly the
+frustration from tonight (2026-05-21). The default, every time, is: work
+on `main`, push to `main`, it deploys to production. If a harness/tool
+spins up a feature branch by default, OVERRIDE it and go to main unless
+David says otherwise.
+
 **Land every change DIRECTLY on `main`.** David's call 2026-05-18:
 *"I don't want preview deploys! Remove that command from your
 memory and replace with straight to main production! The pre and
