@@ -37,17 +37,15 @@ an endgame ONLY if genuine · real named traps ONLY if genuine.
 
 ## Phased build
 - **P0 — this plan + archive Ruy plan. status: DONE.**
-- **P1 — main-line + first variation beat-lessons. status: IN PROGRESS.**
-  `src/data/lessons/pircDefence.ts` (PIRC_DEFENCE_LESSON, openingId
-  `pirc-defence`, orientation `black`) + `pircVariations.ts`
-  (PIRC_VARIATION_LESSONS keyed `pirc-defence::<name>`). Start: main line
-  (hypermodern setup + …c5/…e5 breaks), Austrian Attack, Classical, 150
-  Attack. Wire into `data/lessons/index.ts` (LESSONS + VARIATION_LESSONS
-  + VARIATION_KEYWORDS). Add `pircIntegrity.test.ts` (orientation
-  `black` + legal moves + valid arrows) and extend `narrationAccuracy`
-  to cover Pirc.
-- **P2 — remaining variation lessons.** Byrne, Lion, Fianchetto, Czech,
-  Austrian-e5-c5.
+- **P1 — main-line + first variation beat-lessons. status: DONE.**
+  `pircDefence.ts` (PIRC_DEFENCE_LESSON) + `pircVariations.ts` (Austrian,
+  Classical, 150). Wired into `index.ts`. `pircIntegrity.test.ts`
+  (orientation `black`) + `narrationAccuracy` extended.
+- **P2 — remaining variation lessons. status: DONE.** Byrne, Lion,
+  Fianchetto, Czech, Austrian-e5-c5. ALL 8 variations + main line now
+  have authored, DB-grounded, Black-oriented beat-lessons. Lesson keys
+  verified to match repertoire.json variation names exactly (Watch/Learn
+  resolve). 49 integrity + 130 narration-accuracy tests green.
 - **P3 — middlegame plans** per variation (DB-grounded builder script,
   copy `scripts/add-ruy-*-plans.mjs`) + a hand-picked plan-routing table
   `pircMasterclassTabs.ts` (parallel to ruyMasterclassTabs) + wire
