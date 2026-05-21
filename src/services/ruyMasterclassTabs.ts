@@ -9,10 +9,10 @@
 
 export const RUY_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-ruylopez-d4', 'mp-ruylopez-f4'],
-  berlin: ['mp-ruylopez-berlin'],
+  berlin: ['mp-ruylopez-berlin', 'mp-ruylopez-berlin-endgame'],
   open: ['mp-ruylopez-open'],
   marshall: ['mp-ruylopez-marshall'],
-  exchange: ['mp-ruylopez-exchange'],
+  exchange: ['mp-ruylopez-exchange', 'mp-ruylopez-exchange-endgame'],
   breyer: ['mp-ruylopez-breyer'],
   chigorin: ['mp-ruylopez-chigorin'],
   zaitsev: ['mp-ruylopez-zaitsev'],
