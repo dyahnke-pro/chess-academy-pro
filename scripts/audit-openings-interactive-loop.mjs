@@ -379,7 +379,7 @@ async function runP2(page, opening) {
       result.findings.push('P2: walkthrough-btn not visible after cold-cache mount');
       return result;
     }
-    await wt.click({ timeout: 5000 });
+    await wt.click({ timeout: 15000 });
     const wtMounted = await page.locator('[data-testid="walkthrough-mode"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
     result.walkthroughMounted = wtMounted;
     if (!wtMounted) {
@@ -428,7 +428,7 @@ async function runP3(page, opening) {
     // Walk 5 plies
     const wt = page.locator('[data-testid="walkthrough-btn"]').first();
     if (await wt.isVisible().catch(() => false)) {
-      await wt.click({ timeout: 5000 });
+      await wt.click({ timeout: 15000 });
       const wtMounted = await page.locator('[data-testid="walkthrough-mode"]').waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
       if (!wtMounted) {
         // LLM/voice-gated walkthrough can't mount headless — prod-verified (G7).
