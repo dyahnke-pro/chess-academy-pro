@@ -460,34 +460,37 @@ async function runP4(page, opening) {
     // Wait for the detail testid but only briefly
     const detail = await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 8000 }).then(() => true).catch(() => false);
     if (!detail) { result.findings.push('P4: detail did not appear even briefly'); return result; }
-    // Pick-before-load: immediately tap the first variation TAB before the
-    // page settles (the variation tabs replaced the old variation tiles).
-    const tab = page.locator('[data-testid="variation-tab-0"]').first();
-    const tabVisible = await tab.isVisible({ timeout: 1500 }).catch(() => false);
-    if (!tabVisible) {
+    // Pick-before-load: tap the LEFTMOST variation tab (DOM index 1 — [0]
+    // is the "Main line" pill). Leftmost so it's on-screen in the
+    // horizontal tab bar (later tabs scroll off); scroll it in to be safe.
+    const tabs = page.locator('[data-testid^="variation-tab-"]');
+    if ((await tabs.count().catch(() => 0)) < 2) {
       result.skipped = 'no variation tabs';
       return result;
     }
+    const tab = tabs.nth(1);
+    const tabId = await tab.getAttribute('data-testid').catch(() => null);
+    await tab.scrollIntoViewIfNeeded({ timeout: 2000 }).catch(() => {});
     await tab.click({ timeout: 3000 }).catch(() => {});
-    // The page must rescope to that variation without breaking: tab
-    // selected + opening-detail still alive (no blank/empty state).
-    // P4 contract is "no broken/empty state from an early tap" — NOT that
-    // a pre-settle tap necessarily registers. Tab selection is URL-driven
-    // and a tap before the page settles may legitimately no-op; that's
-    // fine as long as nothing breaks. So we only fail on a broken state.
+    // Tab selection is URL-driven (setSearchParams → effect → state →
+    // re-render); allow the round-trip to land. A visible tab should
+    // rescope the page.
     const selectedOk = await page
       .waitForFunction(
-        () =>
-          document.querySelector('[data-testid="variation-tab-0"]')?.getAttribute('aria-selected') === 'true',
+        (id) => document.querySelector(`[data-testid="${id}"]`)?.getAttribute('aria-selected') === 'true',
+        tabId,
         { timeout: 4000 },
       )
       .then(() => true)
       .catch(() => false);
+    if (!selectedOk) {
+      result.findings.push('P4: variation tab did not select after pick-before-load tap');
+    }
     const stillAlive = await page.locator('[data-testid="opening-detail"]').isVisible().catch(() => false);
     if (!stillAlive) {
       result.findings.push('P4: opening-detail vanished after pick-before-load tab tap');
     }
-    result.label = `tab0 selected=${selectedOk} alive=${stillAlive}`;
+    result.label = `${tabId} selected=${selectedOk} alive=${stillAlive}`;
   } catch (e) {
     result.findings.push(`P4: error ${(e?.message || String(e)).slice(0,150)}`);
   }
@@ -527,19 +530,23 @@ async function runP6(page, opening) {
     // DrillMode.tsx:424.
     // Main-line Play hands off to the Play-with-Coach room (/coach/play)
     // rather than mounting opening-play-mode in-page — accept that nav.
+    // Learn renders the authored LessonPlayer (lesson-player) when the
+    // opening has a master-class lesson, else the generic DrillMode
+    // (drill-mode) — accept either.
     const modes = [
-      { btn: 'learn-btn', mode: 'drill-mode', label: 'learn' },
+      { btn: 'learn-btn', mode: 'drill-mode', altMode: 'lesson-player', label: 'learn' },
       { btn: 'practice-btn', mode: 'practice-mode', label: 'practice' },
       { btn: 'play-btn', mode: 'opening-play-mode', label: 'play', navOk: /\/coach\/play/ },
     ];
-    for (const { btn, mode, label, navOk } of modes) {
+    for (const { btn, mode, altMode, label, navOk } of modes) {
       const b = page.locator(`[data-testid="${btn}"]`).first();
       if (!(await b.isVisible().catch(() => false))) continue;
       await b.click({ timeout: 3000 });
-      const mounted = await page.locator(`[data-testid="${mode}"]`).first().waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
+      const sel = altMode ? `[data-testid="${mode}"], [data-testid="${altMode}"]` : `[data-testid="${mode}"]`;
+      const mounted = await page.locator(sel).first().waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
       const navigated = navOk ? navOk.test(page.url()) : false;
       if (!mounted && !navigated) {
-        result.findings.push(`P6 ${label}: ${btn} click did not mount ${mode}${navOk ? ' or navigate to the play room' : ''}`);
+        result.findings.push(`P6 ${label}: ${btn} click did not mount ${mode}${altMode ? `/${altMode}` : ''}${navOk ? ' or navigate to the play room' : ''}`);
       }
       // Back to detail for next probe
       await page.goto(`${BASE_URL}/openings/${opening.id}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
