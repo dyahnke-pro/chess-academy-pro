@@ -650,6 +650,22 @@ spine; don't reinvent it.
   function carries a UA fallback chain because Lichess's CDN 401s
   iOS Safari's default UA.
 
+**Auto-mined junk PURGED from `repertoire.json` (2026-05-21).** The
+`trapLines`/`warningLines` arrays used to be polluted with auto-mined
+garbage — generic numbered names ("Discovered Attack #1", "Pitfall:
+tactic #2", broken fragment PGNs). 343 such entries were stripped
+(`scripts/strip-automined-traps.mjs`, signature = trailing `#<number>`);
+the 23 genuinely-named traps were KEPT (Kieninger Trap, Legal's Mate
+Reversal, Elephant Trap, Anderssen Attack, Petrosian Counterblow, the
+Dragon ones, …). The `repertoire-orientation` gate is now GREEN. **Do
+NOT re-introduce auto-mined junk.** Note the masterclass NAMED traps
+(Ruy: Tarrasch / Noah's Ark / Mortimer / Fishing Pole / Marshall) live
+in `src/data/lessons/ruyTrapLessons.ts` and are routed via
+`getRuyTrapsForTab` — a SEPARATE system from `repertoire.json`'s
+trapLines. The Ruy and Pirc carry ZERO trapLines/warningLines in
+`repertoire.json` now; their real traps are (or will be) hand-authored
+beat-lessons, not generic data tiles.
+
 **Trap-data taxonomy (commits `79f3a20`, `d575c84`, `2204166`).**
 Two parallel arrays per opening — `trapLines[]` (student weapons)
 and `warningLines[]` (student anti-traps to avoid) — with three
@@ -980,6 +996,21 @@ with a plausible-sounding guess. Empty > generic > invented, always. A
 half-built shelf flagged for review is correct; a confident fabrication
 is the cardinal sin. This applies to EVERY content surface, not just
 narration (traps, endgames, plans, key ideas, model-game annotations).
+
+**VERIFY IT'S ACTUALLY DEAD BEFORE DELETING — data can be live even when
+it looks like junk (David 2026-05-21, emphatic — a real near-miss).**
+Before deleting ANY data or code, prove it's unused: grep for EVERY
+consumer and confirm each degrades gracefully. Tonight the `trapLines` /
+`warningLines` in `repertoire.json` looked like deletable junk, but six
+systems read them (`flashcardService`, `useOpeningProgress`, `RolodexRow`,
+`verifiedLineLibrary`, `proRepertoireService`, `OpeningDetailPage`) — a
+blind delete could have broken flashcards and progress. The procedure:
+(1) grep all consumers, (2) confirm each handles empty/missing safely,
+(3) dry-run the deletion and show exactly what's removed vs kept, (4) keep
+genuinely-named content, only remove the verified-junk, (5) run the
+gauntlet + confirm revertible (it's on a branch) BEFORE committing. "Make
+sure that code is ACTUALLY dead before deleting it." Never blind-delete
+shared state.
 
 Every spoken line in the app — whether hand-authored in JSON or
 generated in code templates — must follow these rules. The voice
