@@ -413,6 +413,28 @@ the words. This is a teaching essential, not polish.
 - ⬜ Fuller per-variation overviews (currently the explanation).
 - ⬜ Per-variation book passages (needs extraction; shared for now).
 
+## ENDGAME COVERAGE (2026-05-21) — 6 of 7 variations
+
+Done: Exchange (kingside majority), Berlin (queenless), Breyer/Chigorin
+(deep line + Bc2↔Noah's-Ark prophylaxis), Zaitsev (tension→technique),
+Open (activity into the ending). All DB-grounded deep lines, distinct
+narration, routed onto their tabs.
+- **Marshall — intentionally NO endgame.** Its deep content IS the
+  only-move defense (in mp-ruylopez-marshall); the DB Spassky line stops at
+  the defense, no characteristic ending to ground. Fabricating one = G3
+  violation. Correct as-is.
+- **Main — no distinct endgame.** It's the trunk that branches into
+  Breyer/Chigorin/Zaitsev; their endgames ARE the main line's. Main's
+  identity = the d4/f4 breaks + traps (Noah's Ark, Fishing Pole).
+
+## RULE — tools wire into ALL play surfaces (David 2026-05-21)
+
+The money tools (explorer-in-play, coach-asks-why, reasoning→tagged-
+weakness) must wire into EVERY play surface — the opening Play tab
+(OpeningPlayMode), Play-with-Coach, the middlegame/endgame Play buttons,
+and Practice — NOT a standalone Discussion tab. Augment the existing play
+surfaces; don't silo. (Folded into the Discussion Practice spec.)
+
 ## AUDIT STATUS (loop running 2026-05-21)
 
 `audit-openings-interactive-loop.mjs` running vs localhost. ALL ruy-lopez

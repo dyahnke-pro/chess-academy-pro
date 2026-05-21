@@ -12824,5 +12824,217 @@
         "title": "Maximum Tension, then the Better Structure"
       }
     ]
+  },
+  {
+    "id": "mp-ruylopez-open-endgame",
+    "openingId": "ruy-lopez",
+    "criticalPositionFen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11",
+    "title": "Open Ruy: Activity into the Ending",
+    "overview": "The Open Ruy is the antithesis of the closed manoeuvring lines — Black takes on e4 and the game opens at once. The structure that results, Black's mobile d5-pawn against White's e5 wedge, carries straight into a piece-activity endgame: not patience, but coordination.",
+    "pawnBreaks": [
+      {
+        "move": "d4 / c3-c4",
+        "explanation": "Open the centre with d4, then challenge d5 with c4 to clarify the structure for the ending.",
+        "fen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11"
+      },
+      {
+        "move": "f2-f4-f5",
+        "explanation": "Support and expand the e5-wedge to cramp Black before trading down.",
+        "fen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-b3",
+        "explanation": "Reroute to b3, eyeing c5 and d4 and contesting the light squares."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bb3 stays active",
+        "explanation": "The Spanish bishop keeps the a2-g8 diagonal — a long-term trump into the ending."
+      }
+    ],
+    "strategicThemes": [
+      "The Open is activity, not patience — the better-coordinated army wins the ending.",
+      "Black's mobile d5-pawn vs White's e5-wedge is the defining imbalance, all the way down.",
+      "The bishop pair and open lines favour White if the position stays sharp into the endgame."
+    ],
+    "endgameTransitions": [
+      "An open, piece-active ending: White's bishop pair and the e5-wedge tell if coordination holds.",
+      "If Black's d5-pawn becomes weak rather than mobile, White's pressure converts the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "b5",
+          "Bb3",
+          "d5",
+          "dxe5",
+          "Be6",
+          "c3",
+          "Be7",
+          "Nbd2",
+          "O-O"
+        ],
+        "annotations": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "The Open Ruy — Black grabs the e4-pawn instead of defending it. The position cracks open; this is the most active, least patient way to meet the Spanish.",
+          "White strikes the centre back at once — in the Open, the open lines are worth far more than a pawn.",
+          "",
+          "",
+          "Black props the knight with d5, claiming the centre and the e6-square for the bishop. Here is the structure that defines the Open: Black's mobile d5-pawn against White's e5 wedge.",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Nbd2 — the knight reroutes to b3 to bear down on c5 and the d5/c5 light squares."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e2",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "g1",
+              "to": "f3"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "c6"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "a7",
+              "to": "a6"
+            }
+          ],
+          [
+            {
+              "from": "b5",
+              "to": "a4"
+            }
+          ],
+          [
+            {
+              "from": "g8",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g1"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "a4",
+              "to": "b3"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "d5"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "e6"
+            }
+          ],
+          [
+            {
+              "from": "c2",
+              "to": "c3"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "d2"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ]
+        ],
+        "title": "The Open Structure into the Ending"
+      }
+    ]
   }
 ]
