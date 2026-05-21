@@ -105,6 +105,10 @@ const SEED_KEY = 'db_seeded_v12';
  */
 const PRO_DATA_REVISION = '2026-05-16-traps-orient-fix';
 const PRO_REVISION_KEY = 'pro_data_revision';
+// Bump when repertoire.json CONTENT changes need to reach already-seeded
+// devices (the base repertoire is otherwise only loaded on first install).
+const BASE_DATA_REVISION = '2026-05-21-variation-keyideas';
+const BASE_REVISION_KEY = 'base_repertoire_revision';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
   const record = await db.meta.get(SEED_KEY);
@@ -330,6 +334,47 @@ export async function reconcileProRepertoires(): Promise<void> {
   await db.meta.put({ key: PRO_REVISION_KEY, value: PRO_DATA_REVISION });
 }
 
+/**
+ * Reconcile the BASE repertoire (repertoire.json) onto already-seeded
+ * devices. The base repertoire is otherwise only written on first
+ * install, so content edits (e.g. per-variation overview/keyIdeas) never
+ * reach existing users. Mirrors reconcileProRepertoires: overrides the
+ * content fields while preserving all per-user progress (drill/SRS/
+ * woodpecker/favorites/line tracking) via the `...existing` spread.
+ * Revision-gated so it no-ops once applied.
+ */
+export async function reconcileBaseRepertoire(): Promise<void> {
+  const meta = await db.meta.get(BASE_REVISION_KEY);
+  if (meta?.value === BASE_DATA_REVISION) return;
+
+  const toPut: OpeningRecord[] = [];
+  for (const entry of repertoireData as RepertoireEntry[]) {
+    const existing = await db.openings.get(entry.id);
+    if (!existing) continue; // first-install seed handles brand-new entries
+    const { fen, uci } = computePosition(entry.pgn);
+    toPut.push({
+      ...existing,
+      eco: entry.eco,
+      name: entry.name,
+      pgn: entry.pgn,
+      uci,
+      fen,
+      color: entry.color,
+      style: entry.style,
+      overview: entry.overview,
+      keyIdeas: entry.keyIdeas,
+      traps: entry.traps,
+      warnings: entry.warnings,
+      variations: entry.variations,
+      trapLines: entry.trapLines ?? null,
+      warningLines: entry.warningLines ?? null,
+    });
+  }
+
+  if (toPut.length > 0) await db.openings.bulkPut(toPut);
+  await db.meta.put({ key: BASE_REVISION_KEY, value: BASE_DATA_REVISION });
+}
+
 // ─── Gambit Loader ───────────────────────────────────────────────────────────
 
 export async function loadGambitData(): Promise<void> {
@@ -549,6 +594,10 @@ async function runSeedOnce(): Promise<void> {
   // updates to pro-repertoires.json reach them without wiping
   // drill/SRS/favorites/woodpecker progress.
   await reconcileProRepertoires();
+
+  // Same for the BASE repertoire (repertoire.json) — content edits like
+  // per-variation overview/keyIdeas otherwise never reach existing users.
+  await reconcileBaseRepertoire();
 
   // Middlegame plans are seeded ONCE in the first-install deferred
   // backfill, so already-seeded users never picked up plan JSON

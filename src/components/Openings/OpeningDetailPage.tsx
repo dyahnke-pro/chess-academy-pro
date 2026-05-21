@@ -742,8 +742,11 @@ export function OpeningDetailPage(): JSX.Element {
     selectedTabIndex >= 0 ? opening.variations?.[selectedTabIndex] ?? null : null;
   const isVariation = selectedVariation !== null;
   const subjectName = selectedVariation?.name ?? opening.name;
-  const subjectOverview = selectedVariation?.explanation ?? opening.overview;
-  const subjectKeyIdeas = opening.keyIdeas;
+  const subjectOverview =
+    selectedVariation?.overview ?? selectedVariation?.explanation ?? opening.overview;
+  const subjectKeyIdeas = selectedVariation
+    ? selectedVariation.keyIdeas ?? opening.keyIdeas
+    : opening.keyIdeas;
   const planPrefix = `mp-${opening.id.replace(/-/g, '')}`;
   // Variation tab → just that variation's plan; main line → all the
   // opening's plans (undefined filter), preserving pre-tab behaviour and

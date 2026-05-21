@@ -266,6 +266,12 @@ export interface OpeningVariation {
   name: string;
   pgn: string;
   explanation: string;
+  /** Optional fuller overview for the variation's masterclass tab.
+   *  Falls back to `explanation` when absent. */
+  overview?: string;
+  /** Optional per-variation key ideas (student-side plans) for the
+   *  variation's masterclass tab. Falls back to the opening's when absent. */
+  keyIdeas?: string[];
   frequency?: SidelineFrequency;
   danger?: SidelineDanger;
   deviationMove?: number;
