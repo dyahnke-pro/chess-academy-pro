@@ -413,6 +413,27 @@ the words. This is a teaching essential, not polish.
 - ⬜ Fuller per-variation overviews (currently the explanation).
 - ⬜ Per-variation book passages (needs extraction; shared for now).
 
+## WEAPONS — verified + ready to build (2026-05-21)
+
+All 5 trap lines confirmed in openings-lichess.json (G3 ✓). Hand-picked
+routing (refined: Fishing Pole is a Berlin line per the DB):
+- **Noah's Ark** (warning) → MAIN: `e4 e5 Nf3 Nc6 Bb5 a6 Ba4 b5 Bb3 d6 d4
+  Nxd4 Nxd4 exd4 Qxd4 c5` → …c4 cages Bb3. Snap-back antidote: don't grab
+  with Qxd4 / Bc2 keeps the bishop safe.
+- **Mortimer** (warning) → BERLIN: `…Bb5 Nf6 d3 Ne7 Nxe5?? c6` wins the
+  piece. Snap-back: don't take e5.
+- **Fishing Pole** (warning) → BERLIN: `…Bb5 Nf6 O-O Ng4` — grab it → …h5,
+  h-file mate. Snap-back: ignore the knight (don't play h3/hxg4).
+- **Tarrasch** (WEAPON) → OPEN: `…Nxe4 d4 b5 Bb3 d5 dxe5 Be6 c3 Be7 Re1
+  O-O?? Nd4 Qd7 Nxe6 fxe6 Rxe4` wins material. No snap-back (you punish).
+- **Marshall only-move warning** → MARSHALL (authored, not DB): omit g3 /
+  grab greedily → …Qh4/…Qh3 mates.
+
+Build = 5 show→snap-back walkthroughs (beat-lesson format + tile→
+LessonPlayer wiring) + `appliesTo` sidecar + tab-filter in
+OpeningDetailPage + maneuver↔trap narration (Bc2 = Noah's Ark antidote,
+already in Breyer/Chigorin endgame plans). Substantial focused build.
+
 ## ENDGAME COVERAGE (2026-05-21) — 6 of 7 variations
 
 Done: Exchange (kingside majority), Berlin (queenless), Breyer/Chigorin
