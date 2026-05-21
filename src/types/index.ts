@@ -337,7 +337,14 @@ export interface PlayableMiddlegameLine {
   fen: string;
   moves: string[];
   annotations: string[];
+  /** Per-move arrows. arrows[i][0] is always the move played (origin→
+   *  destination); arrows[i][1+] are vision arrows that lead the eye to
+   *  the piece relationship the annotation describes. */
   arrows: AnnotationArrow[][];
+  /** Per-move highlights — the squares the annotation names, so the eye
+   *  lands on what the narration is talking about instead of hunting for
+   *  pieces. Parallel to `moves` (highlights[i] = move i's squares). */
+  highlights?: AnnotationHighlight[][];
   title: string;
 }
 
@@ -1139,6 +1146,10 @@ export type MisconceptionSource =
 /** Adaptive-loop state per tagged instance. `open` = active weakness;
  *  `improving` = drilled successfully at least once; `mastered` =
  *  graduated out (stops counting / drilling). */
+// A misconception NEVER graduates out (David 2026-05-21: "it should never
+// graduate out! just reduce the amount of times you see it"). 'open' = due
+// now; 'improving' = spaced into the future. 'mastered' is legacy — old rows
+// carrying it are treated as due again so nothing ever drops permanently.
 export type MisconceptionStatus = 'open' | 'improving' | 'mastered';
 
 export interface MisconceptionTagRecord {
@@ -1169,8 +1180,12 @@ export interface MisconceptionTagRecord {
   /** Source game id, for review / auto-analysis entries. */
   sourceGameId?: string;
   status: MisconceptionStatus;
-  /** Consecutive successful drills toward graduation. */
+  /** SRS level — consecutive successful drills. Indexes the spacing
+   *  interval; higher = seen less often. Never removes the instance. */
   masteryHits: number;
+  /** When this instance is next due to resurface. Absent (or in the past)
+   *  = due now. Lengthens with each success, snaps back on a miss. */
+  dueAt?: number;
   lastDrilledAt?: number;
 }
 

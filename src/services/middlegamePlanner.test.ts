@@ -138,8 +138,116 @@ describe('resolveMiddlegameSessionWithFallback', () => {
   });
 });
 
+// ─── Lead-the-eye verification helpers ──────────────────────────────────────
+// Vision arrows + highlights must lead the eye to whatever the narration is
+// talking about (David's locked NON-NEGOTIABLE). Two contracts per move:
+//  1. Geometric legality — a vision arrow (arrows[i][1+]) must originate on a
+//     non-pawn piece with a clear sight-line to its target. No aspirational
+//     blocked arrows; same sees()/clearRay() gate the lessons use.
+//  2. Grounding — every highlight square AND every vision-arrow endpoint must
+//     be a square the annotation actually NAMES (bare "f5" or piece-token
+//     "Nf5"). The move arrow (arrows[i][0]) and the move's landing-square
+//     highlight are exempt — they ARE the move, not a claim about the words.
+type Sq = import('chess.js').Square;
+
+function fileRank(sq: string): [number, number] {
+  return [sq.charCodeAt(0) - 97, Number(sq[1]) - 1];
+}
+
+function clearRay(c: import('chess.js').Chess, from: string, to: string): boolean {
+  const [ff, fr] = fileRank(from);
+  const [tf, tr] = fileRank(to);
+  const df = Math.sign(tf - ff);
+  const dr = Math.sign(tr - fr);
+  let f = ff + df;
+  let r = fr + dr;
+  while (f !== tf || r !== tr) {
+    const sq = (String.fromCharCode(97 + f) + String(r + 1)) as Sq;
+    if (c.get(sq)) return false;
+    f += df;
+    r += dr;
+  }
+  return true;
+}
+
+function sees(c: import('chess.js').Chess, from: string, to: string): boolean {
+  if (from === to) return false;
+  const pc = c.get(from as Sq);
+  if (!pc) return false;
+  const [ff, fr] = fileRank(from);
+  const [tf, tr] = fileRank(to);
+  const adf = Math.abs(tf - ff);
+  const adr = Math.abs(tr - fr);
+  switch (pc.type) {
+    case 'n':
+      return (adf === 1 && adr === 2) || (adf === 2 && adr === 1);
+    case 'b':
+      return adf === adr && adf > 0 && clearRay(c, from, to);
+    case 'r':
+      return ((adf === 0) !== (adr === 0)) && clearRay(c, from, to);
+    case 'q':
+      return (adf === adr || adf === 0 || adr === 0) && clearRay(c, from, to);
+    case 'k':
+      return adf <= 1 && adr <= 1 && (adf > 0 || adr > 0);
+    default:
+      return false;
+  }
+}
+
+/** Squares an annotation names — bare ("f5") or via a piece token ("Nf5"). */
+function annotationSquares(text: string): Set<string> {
+  const out = new Set<string>();
+  for (const m of text.matchAll(/\b([NBRQK])([a-h][1-8])\b/g)) out.add(m[2]);
+  for (const m of text.matchAll(/\b([a-h][1-8])\b/g)) out.add(m[1]);
+  return out;
+}
+
+interface LeadEyeLine {
+  fen: string;
+  moves: string[];
+  annotations: string[];
+  arrows?: Array<Array<{ from: string; to: string; color?: string }>>;
+  highlights?: Array<Array<{ square: string; color?: string }>>;
+}
+
+async function assertLeadEye(line: LeadEyeLine, id: string): Promise<void> {
+  const { Chess } = await import('chess.js');
+  const c = new Chess(line.fen);
+  line.moves.forEach((san, i) => {
+    const mv = c.move(san);
+    const named = annotationSquares(line.annotations[i] ?? '');
+    const arrowRow = line.arrows?.[i] ?? [];
+    // Vision arrows (everything past the move arrow) must be legal + grounded.
+    arrowRow.slice(1).forEach((a) => {
+      expect(
+        sees(c, a.from, a.to),
+        `${id} move ${i} (${san}): blocked/illegal vision arrow ${a.from}->${a.to}`,
+      ).toBe(true);
+      expect(
+        named.has(a.from) || a.from === mv.to,
+        `${id} move ${i} (${san}): vision arrow origin ${a.from} not named in annotation`,
+      ).toBe(true);
+      expect(
+        named.has(a.to),
+        `${id} move ${i} (${san}): vision arrow target ${a.to} not named in annotation`,
+      ).toBe(true);
+    });
+    // Highlights must be real squares + grounded (move-landing square exempt).
+    const hlRow = line.highlights?.[i] ?? [];
+    hlRow.forEach((h) => {
+      expect(/^[a-h][1-8]$/.test(h.square), `${id} move ${i}: bad highlight square ${h.square}`).toBe(true);
+      expect(
+        named.has(h.square) || h.square === mv.to,
+        `${id} move ${i} (${san}): highlight ${h.square} not named in annotation`,
+      ).toBe(true);
+    });
+  });
+}
+
 describe('Ruy Lopez variation middlegame plans', () => {
   const RUY_VARIATION_PLAN_IDS = [
+    'mp-ruylopez-d4',
+    'mp-ruylopez-f4',
     'mp-ruylopez-marshall',
     'mp-ruylopez-berlin',
     'mp-ruylopez-open',
@@ -185,6 +293,7 @@ describe('Ruy Lopez variation middlegame plans', () => {
             expect(arrow.to).toBe(mv.to);
           }
         });
+        await assertLeadEye(line as LeadEyeLine, id);
       }
     });
   }
@@ -250,6 +359,7 @@ describe('Pirc Defence variation middlegame plans', () => {
             expect(arrow.to).toBe(mv.to);
           }
         });
+        await assertLeadEye(line as LeadEyeLine, id);
       }
     });
   }

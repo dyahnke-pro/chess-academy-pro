@@ -1852,53 +1852,186 @@
           [
             {
               "from": "d2",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b3",
+              "to": "f7",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "e5",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f3",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d4",
+              "to": "c6",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "d4",
+              "to": "e6",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "c6",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d1",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d4",
+              "to": "a7",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "d4",
+              "to": "d7",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "d6"
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b1",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "c3",
+              "to": "b5",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "c8",
-              "to": "e6"
+              "to": "e6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "Immediate d4 Central Break"
+        "title": "Immediate d4 Central Break",
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ]
+        ]
       },
       {
         "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
@@ -1926,53 +2059,186 @@
           [
             {
               "from": "d2",
-              "to": "d3"
+              "to": "d3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "d6"
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b1",
-              "to": "d2"
+              "to": "d2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d2",
+              "to": "f1",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "c8",
-              "to": "e6"
+              "to": "e6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e6",
+              "to": "b3",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "e1"
+              "to": "e1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f6",
-              "to": "d7"
+              "to": "d7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "f8",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "f1"
+              "to": "f1",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f1",
+              "to": "g3",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "c5"
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c5",
+              "to": "b3",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "c5",
+              "to": "d3",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ]
         ],
-        "title": "Slow Maneuver: Nbd2-f1-g3"
+        "title": "Slow Maneuver: Nbd2-f1-g3",
+        "highlights": [
+          [
+            {
+              "square": "d3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -2447,53 +2713,202 @@
           [
             {
               "from": "e5",
-              "to": "f4"
+              "to": "f4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "d3"
+              "to": "d3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d6",
-              "to": "d5"
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c1",
-              "to": "f4"
+              "to": "f4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "f4",
+              "to": "d6",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "f6",
-              "to": "d7"
+              "to": "d7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "d1",
-              "to": "e1"
+              "to": "e1",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e1",
+              "to": "g3",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "e1",
+              "to": "h4",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "c5"
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c5",
+              "to": "d3",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "e1",
-              "to": "g3"
+              "to": "g3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g3",
+              "to": "g7",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ]
         ],
-        "title": "f4 Exchange: Open f-File Attack"
+        "title": "f4 Exchange: Open f-File Attack",
+        "highlights": [
+          [
+            {
+              "square": "f4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "h6",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "h6",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -10959,59 +11374,150 @@
           [
             {
               "from": "d2",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e7",
-              "to": "d6"
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e5",
-              "to": "e1"
+              "to": "e1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d8",
-              "to": "h4"
+              "to": "h4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "h4",
+              "to": "h3",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "g2",
-              "to": "g3"
+              "to": "g3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "h4",
-              "to": "h3"
+              "to": "h3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "h3",
+              "to": "g2",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "c1",
-              "to": "e3"
+              "to": "e3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c8",
-              "to": "g4"
+              "to": "g4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d1",
-              "to": "d3"
+              "to": "d3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "The Attack Crashes In"
+        "title": "The Attack Crashes In",
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -11087,53 +11593,127 @@
           [
             {
               "from": "h2",
-              "to": "h3"
+              "to": "h3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d8",
-              "to": "e8"
+              "to": "e8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b1",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "h7",
-              "to": "h5"
+              "to": "h5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c1",
-              "to": "f4"
+              "to": "f4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f8",
-              "to": "e7"
+              "to": "e7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a1",
-              "to": "d1"
+              "to": "d1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c8",
-              "to": "e6"
+              "to": "e6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "The Queenless Middlegame"
+        "title": "The Queenless Middlegame",
+        "highlights": [
+          [
+            {
+              "square": "h3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -11209,53 +11789,146 @@
           [
             {
               "from": "b1",
-              "to": "d2"
+              "to": "d2",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e4",
-              "to": "c5"
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c5",
+              "to": "b3",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "c5",
+              "to": "d3",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "c2",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d5",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f3",
-              "to": "g5"
+              "to": "g5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g5",
+              "to": "e6",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "d4",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g5",
-              "to": "e6"
+              "to": "e6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f7",
-              "to": "e6"
+              "to": "e6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "Activity Meets the Targets"
+        "title": "Activity Meets the Targets",
+        "highlights": [
+          [
+            {
+              "square": "d2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -11331,53 +12004,120 @@
           [
             {
               "from": "c6",
-              "to": "c5"
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d4",
-              "to": "b3"
+              "to": "b3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d8",
-              "to": "d1"
+              "to": "d1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "d1"
+              "to": "d1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c8",
-              "to": "g4"
+              "to": "g4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "f2",
-              "to": "f3"
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g4",
-              "to": "e6"
+              "to": "e6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b1",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "Majority vs Bishops"
+        "title": "Majority vs Bishops",
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -11456,47 +12196,137 @@
           [
             {
               "from": "f1",
-              "to": "g3"
+              "to": "g3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g3",
+              "to": "f5",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "g3",
+              "to": "h5",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "g7",
-              "to": "g6"
+              "to": "g6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a2",
-              "to": "a4"
+              "to": "a4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c7",
-              "to": "c5"
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d4",
-              "to": "d5"
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c5",
-              "to": "c4"
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c1",
-              "to": "g5"
+              "to": "g5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ]
         ],
-        "title": "Locking the Centre, Storming the Wings"
+        "title": "Locking the Centre, Storming the Wings",
+        "highlights": [
+          [
+            {
+              "square": "g3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -11571,35 +12401,120 @@
           [
             {
               "from": "b1",
-              "to": "d2"
+              "to": "d2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d2",
+              "to": "f1",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "a5",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d4",
-              "to": "d5"
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c6",
-              "to": "d8"
+              "to": "d8",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d8",
+              "to": "e6",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "d8",
+              "to": "f7",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "f1"
+              "to": "f1",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f1",
+              "to": "g3",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ]
         ],
-        "title": "The Knight Tour and the Locked Centre"
+        "title": "The Knight Tour and the Locked Centre",
+        "highlights": [
+          [
+            {
+              "square": "d2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -11680,53 +12595,146 @@
           [
             {
               "from": "e5",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c3",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c6",
-              "to": "b4"
+              "to": "b4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b4",
+              "to": "c2",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "c2",
-              "to": "b1"
+              "to": "b1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c7",
-              "to": "c5"
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d4",
-              "to": "d5"
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f6",
-              "to": "d7"
+              "to": "d7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "a1",
-              "to": "a3"
+              "to": "a3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "The Rook Swings to the Kingside"
+        "title": "The Rook Swings to the Kingside",
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -11801,83 +12809,193 @@
           [
             {
               "from": "e2",
-              "to": "e4"
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e7",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g1",
-              "to": "f3"
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b8",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b5",
+              "to": "c6",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "a7",
-              "to": "a6"
+              "to": "a6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b5",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e1",
-              "to": "g1"
+              "to": "g1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f7",
-              "to": "f6"
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e5",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f3",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "Fischer's Structural Endgame"
+        "title": "Fischer's Structural Endgame",
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -11963,101 +13081,246 @@
           [
             {
               "from": "e2",
-              "to": "e4"
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e7",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g1",
-              "to": "f3"
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b8",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g8",
-              "to": "f6"
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "e1",
-              "to": "g1"
+              "to": "g1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f6",
-              "to": "e4"
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e4",
-              "to": "d6"
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b5",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d4",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d6",
-              "to": "f5"
+              "to": "f5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f5",
+              "to": "d4",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "f5",
+              "to": "e3",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "d1",
-              "to": "d8"
+              "to": "d8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e8",
-              "to": "d8"
+              "to": "d8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "The Queenless Wall"
+        "title": "The Queenless Wall",
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -12154,149 +13417,340 @@
           [
             {
               "from": "e2",
-              "to": "e4"
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e7",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g1",
-              "to": "f3"
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b8",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a7",
-              "to": "a6"
+              "to": "a6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b5",
-              "to": "a4"
+              "to": "a4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g8",
-              "to": "f6"
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e1",
-              "to": "g1"
+              "to": "g1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f8",
-              "to": "e7"
+              "to": "e7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "e1"
+              "to": "e1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b7",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a4",
-              "to": "b3"
+              "to": "b3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "d6"
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c2",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e8",
-              "to": "g8"
+              "to": "g8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "h2",
-              "to": "h3"
+              "to": "h3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c6",
-              "to": "b8"
+              "to": "b8",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b8",
+              "to": "d7",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b8",
-              "to": "d7"
+              "to": "d7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b1",
-              "to": "d2"
+              "to": "d2",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c8",
-              "to": "b7"
+              "to": "b7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b3",
-              "to": "c2"
+              "to": "c2",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c7",
-              "to": "c5"
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "The Reroute, the Prophylaxis, the Plan"
+        "title": "The Reroute, the Prophylaxis, the Plan",
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -12411,173 +13865,410 @@
           [
             {
               "from": "e2",
-              "to": "e4"
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e7",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g1",
-              "to": "f3"
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b8",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a7",
-              "to": "a6"
+              "to": "a6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b5",
-              "to": "a4"
+              "to": "a4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g8",
-              "to": "f6"
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e1",
-              "to": "g1"
+              "to": "g1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f8",
-              "to": "e7"
+              "to": "e7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "e1"
+              "to": "e1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b7",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a4",
-              "to": "b3"
+              "to": "b3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "d6"
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c2",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e8",
-              "to": "g8"
+              "to": "g8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "h2",
-              "to": "h3"
+              "to": "h3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c6",
-              "to": "a5"
+              "to": "a5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "a5",
+              "to": "b3",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "b3",
-              "to": "c2"
+              "to": "c2",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c7",
-              "to": "c5"
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d8",
-              "to": "c7"
+              "to": "c7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b1",
-              "to": "d2"
+              "to": "d2",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c8",
-              "to": "d7"
+              "to": "d7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "f1"
+              "to": "f1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f8",
-              "to": "e8"
+              "to": "e8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "e3"
+              "to": "e3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e3",
+              "to": "d5",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "e3",
+              "to": "f5",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "g7",
-              "to": "g6"
+              "to": "g6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "The Knight Hits, the Bishop Hides, the Space Tells"
+        "title": "The Knight Hits, the Bishop Hides, the Space Tells",
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -12679,149 +14370,335 @@
           [
             {
               "from": "e2",
-              "to": "e4"
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e7",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g1",
-              "to": "f3"
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b8",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a7",
-              "to": "a6"
+              "to": "a6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b5",
-              "to": "a4"
+              "to": "a4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g8",
-              "to": "f6"
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e1",
-              "to": "g1"
+              "to": "g1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f8",
-              "to": "e7"
+              "to": "e7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "e1"
+              "to": "e1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b7",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a4",
-              "to": "b3"
+              "to": "b3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "d6"
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c2",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e8",
-              "to": "g8"
+              "to": "g8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "h2",
-              "to": "h3"
+              "to": "h3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c8",
-              "to": "b7"
+              "to": "b7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f8",
-              "to": "e8"
+              "to": "e8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b1",
-              "to": "d2"
+              "to": "d2",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e7",
-              "to": "f8"
+              "to": "f8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a2",
-              "to": "a3"
+              "to": "a3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "h7",
-              "to": "h6"
+              "to": "h6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "Maximum Tension, then the Better Structure"
+        "title": "Maximum Tension, then the Better Structure",
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -12915,125 +14792,287 @@
           [
             {
               "from": "e2",
-              "to": "e4"
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e7",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g1",
-              "to": "f3"
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b8",
-              "to": "c6"
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a7",
-              "to": "a6"
+              "to": "a6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b5",
-              "to": "a4"
+              "to": "a4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g8",
-              "to": "f6"
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e1",
-              "to": "g1"
+              "to": "g1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f6",
-              "to": "e4"
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "d4"
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b7",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a4",
-              "to": "b3"
+              "to": "b3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "d5"
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d4",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c8",
-              "to": "e6"
+              "to": "e6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c2",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f8",
-              "to": "e7"
+              "to": "e7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b1",
-              "to": "d2"
+              "to": "d2",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e8",
-              "to": "g8"
+              "to": "g8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "The Open Structure into the Ending"
+        "title": "The Open Structure into the Ending",
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -13081,35 +15120,101 @@
           [
             {
               "from": "a2",
-              "to": "a4"
+              "to": "a4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "a8",
-              "to": "b8"
+              "to": "b8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d1",
-              "to": "e1"
+              "to": "e1",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e1",
+              "to": "h4",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "b7",
-              "to": "b6"
+              "to": "b6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e1",
-              "to": "h4"
+              "to": "h4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "The Queenside Counter-Race"
+        "title": "The Queenside Counter-Race",
+        "highlights": [
+          [
+            {
+              "square": "a4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -13163,53 +15268,133 @@
           [
             {
               "from": "h2",
-              "to": "h3"
+              "to": "h3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e7",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d4",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d6",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c1",
-              "to": "e3"
+              "to": "e3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d8",
-              "to": "e7"
+              "to": "e7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "d1",
-              "to": "d3"
+              "to": "d3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f6",
-              "to": "h5"
+              "to": "h5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "h5",
+              "to": "f4",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ]
         ],
-        "title": "Striking the Centre"
+        "title": "Striking the Centre",
+        "highlights": [
+          [
+            {
+              "square": "h3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -13255,29 +15440,81 @@
           [
             {
               "from": "e3",
-              "to": "h6"
+              "to": "h6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g7",
-              "to": "h6"
+              "to": "h6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "h6"
+              "to": "h6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d8",
-              "to": "a5"
+              "to": "a5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "a5",
+              "to": "c3",
+              "color": "rgba(255, 170, 0, 0.85)"
+            },
+            {
+              "from": "a5",
+              "to": "b5",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ]
         ],
-        "title": "The Counter-Race Begins"
+        "title": "The Counter-Race Begins",
+        "highlights": [
+          [
+            {
+              "square": "h6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 209, 71, 0.45)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -13335,65 +15572,149 @@
           [
             {
               "from": "f2",
-              "to": "f4"
+              "to": "f4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b7",
-              "to": "b5"
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e4",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b5",
-              "to": "b4"
+              "to": "b4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e5",
-              "to": "f6"
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b4",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d2",
-              "to": "c3"
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e7",
-              "to": "f6"
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g5",
-              "to": "h4"
+              "to": "h4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d6",
-              "to": "d5"
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "Both Storms Crash In"
+        "title": "Both Storms Crash In",
+        "highlights": [
+          [
+            {
+              "square": "f4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -13447,53 +15768,115 @@
           [
             {
               "from": "f1",
-              "to": "e1"
+              "to": "e1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d8",
-              "to": "c7"
+              "to": "c7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "h2",
-              "to": "h3"
+              "to": "h3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b7",
-              "to": "b6"
+              "to": "b6",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c1",
-              "to": "g5"
+              "to": "g5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c8",
-              "to": "b7"
+              "to": "b7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d4",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d7",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "Coiled and Comfortable"
+        "title": "Coiled and Comfortable",
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 209, 71, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -13539,29 +15922,59 @@
           [
             {
               "from": "a2",
-              "to": "a4"
+              "to": "a4",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f6",
-              "to": "d7"
+              "to": "d7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c1",
-              "to": "e3"
+              "to": "e3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f7",
-              "to": "f5"
+              "to": "f5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "The ...f5 Break"
+        "title": "The ...f5 Break",
+        "highlights": [
+          [
+            {
+              "square": "a4",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -13623,77 +16036,172 @@
           [
             {
               "from": "c1",
-              "to": "e3"
+              "to": "e3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "b8",
-              "to": "d7"
+              "to": "d7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "e1",
-              "to": "g1"
+              "to": "g1",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "f8",
-              "to": "e7"
+              "to": "e7",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "h2",
-              "to": "h3"
+              "to": "h3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "g4",
-              "to": "f3"
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d1",
-              "to": "f3"
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "e8",
-              "to": "g8"
+              "to": "g8",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c3",
-              "to": "e2"
+              "to": "e2",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c6",
-              "to": "c5"
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d4",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "d6",
-              "to": "e5"
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "A Sound, Harmonious Game"
+        "title": "A Sound, Harmonious Game",
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   },
@@ -13737,23 +16245,55 @@
           [
             {
               "from": "f6",
-              "to": "d7"
+              "to": "d7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(255, 170, 0, 0.85)"
             }
           ],
           [
             {
               "from": "f1",
-              "to": "e2"
+              "to": "e2",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
               "from": "c7",
-              "to": "c5"
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
-        "title": "Undermine the Overextended Centre"
+        "title": "Undermine the Overextended Centre",
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(34, 197, 94, 0.45)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(0, 229, 255, 0.32)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(34, 197, 94, 0.45)"
+            }
+          ]
+        ]
       }
     ]
   }

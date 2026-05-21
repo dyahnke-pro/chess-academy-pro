@@ -16,7 +16,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { useBoardGlow } from '../../hooks/useBoardGlow';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BOARD_DEMO_ANIMATION_MS } from '../../hooks/useBoardTheme';
-import type { PlayableMiddlegameLine, AnnotationArrow } from '../../types';
+import type { PlayableMiddlegameLine, AnnotationArrow, AnnotationHighlight } from '../../types';
 import type { PieceDropHandlerArgs, SquareHandlerArgs } from 'react-chessboard';
 
 interface PlayableLinePlayerProps {
@@ -95,6 +95,23 @@ export function PlayableLinePlayer({
     if (demoMoveIndex < 0 || demoMoveIndex >= line.arrows.length) return [];
     return arrowsToBoard(line.arrows[demoMoveIndex]);
   }, [demoMoveIndex, line.arrows]);
+
+  // Lead-the-eye highlights — light up exactly the squares the current
+  // annotation names so the student looks where the words point instead
+  // of hunting for the piece. Authored per-move alongside the arrows.
+  const currentDemoHighlights = useMemo((): Record<string, React.CSSProperties> => {
+    const perMove: AnnotationHighlight[][] | undefined = line.highlights;
+    if (!perMove || demoMoveIndex < 0 || demoMoveIndex >= perMove.length) return {};
+    const styles: Record<string, React.CSSProperties> = {};
+    for (const h of perMove[demoMoveIndex] ?? []) {
+      const color = h.color ?? 'rgba(255, 209, 71, 0.45)';
+      styles[h.square] = {
+        background: color,
+        boxShadow: `inset 0 0 0 2px ${color}`,
+      };
+    }
+    return styles;
+  }, [demoMoveIndex, line.highlights]);
 
   const currentAnnotation = useMemo((): string => {
     if (phase === 'demo') {
@@ -471,6 +488,7 @@ export function PlayableLinePlayer({
               fen={demoFen}
               boardOrientation={boardOrientation}
               arrows={currentDemoArrows}
+              squareStyles={currentDemoHighlights}
               animationDurationInMs={BOARD_DEMO_ANIMATION_MS}
               enableMoveSound={false}
             />
