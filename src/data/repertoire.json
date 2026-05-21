@@ -1464,15 +1464,7 @@
         "explanation": "Instead of the standard Bg5, White develops the bishop to f4 early, avoiding the main theoretical lines of the QGD. This sidesteps the Tartakower and Lasker variations entirely. If Black challenges with ...Bd6, the retreat to g3 maintains the bishop and after c5 dxc5, White enjoys a comfortable IQP position with active pieces and clear attacking prospects against Black's king."
       }
     ],
-    "trapLines": [
-      {
-        "name": "QGA b5 Overextension",
-        "pgn": "d4 d5 c4 dxc4 e3 b5 a4 c6 axb5 cxb5 Qf3",
-        "explanation": "Black tries to hold the gambit pawn with ...b5?; White's a4 break rips open the queenside and wins material.",
-        "source": "authored-verified",
-        "verifiedEval": "367cp"
-      }
-    ],
+    "trapLines": [],
     "warningLines": [
       {
         "name": "Elephant Trap",
