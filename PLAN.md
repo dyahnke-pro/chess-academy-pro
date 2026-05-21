@@ -235,6 +235,35 @@ Homes for the other tools (David): Training Plan + Game Review (your-games
 (puzzles.json punish-stage motifs); woodpecker rapid-fire trainer (blank
 board, no narration, resets on error, hint button).
 
+## FEATURE SPEC — Game Review integration (David 2026-05-21)
+
+Game Review becomes a SOURCE of the weakness-tag map (alongside live
+Discussion Practice) and a consumer that links back to the masterclass.
+
+- **Auto "where you left the book" marker.** Every reviewed game replays
+  its moves against the masters explorer and auto-surfaces the FIRST
+  off-book move + what masters play there (plain English, never raw %).
+  This is the headline — amateur games are lost by quietly leaving theory
+  and nobody shows you where.
+- **Off-book × Stockfish gate.** Off-book AND eval-drop = a real error to
+  study; off-book but eval-fine = "creative, playable" (no nag). Same gate
+  as the live tab.
+- **Whole-game coverage, no blind spots.** Explorer marker covers the
+  opening/early middlegame (masters DB thins ~move 12-15); Stockfish flags
+  the worst move(s) for the post-book phase.
+- **Reasoning capture in review.** At the deviation + at blunders, the
+  coach asks "why did you play this?" (voice or text) → tags the
+  misconception → Weaknesses. Skippable. So BOTH live games and reviewed
+  games feed the same tag bucket → Training Plan drills. Two faucets, one
+  bucket.
+- **Links close the loop.** Review detects the opening → deep-links to its
+  masterclass tab (`?line=berlin`); the tab aggregates "you've reached this
+  in N games, scored X%, keep missing a4."
+
+Have: Game Review + Stockfish classifications, opening detection, the
+explorer pipe, Weaknesses. NEW: the theory-deviation scan (your moves vs
+masters), reasoning capture in review, aggregate-on-tab.
+
 ## AUDIT STATUS (loop running 2026-05-21)
 
 `audit-openings-interactive-loop.mjs` running vs localhost. Round 7 findings
