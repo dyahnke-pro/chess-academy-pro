@@ -474,6 +474,61 @@ The masterclass is FUNCTIONAL. Loop relaunched with all probe fixes to
 certify 3 clean rounds. (Note: 8 tabs overflow the bar on narrow viewports —
 later tabs need a horizontal scroll/swipe; not a bug, a possible UX polish.)
 
+## AUDIT STATUS — RUY CERTIFIED (2026-05-21)
+
+`audit-openings-interactive-loop.mjs` scoped to ruy-lopez hit **3
+consecutive clean rounds (14, 15, 16: findings=0, errs=0)**. Masterclass
+certified. Watch-item (not a blocker): per-round mem-leak-rate is noisy
+(15-140 MB/opening) over the long-lived browser page — investigate if it
+shows on a fresh-context run. The named-trap lessons + narration-accuracy
+gate landed (PR #641): traps play the full multi-source-verified line then
+snap back to the antidote; `narrationAccuracy.test.ts` grounds every
+square-piece claim and already caught r4/z2 bugs.
+
+## MONEY BUILD — phased (David 2026-05-21: "start building money")
+
+"Two faucets, one bucket" — actually THREE faucets (David: tie game
+analysis in without a full review). The shared engine is built first; the
+faucets and the hub wire onto it.
+
+- **Phase M0 — the shared engine. status: DONE (this PR).**
+  - `src/data/misconceptionTags.ts` — the FIXED closed-set vocabulary
+    (16 tags across opening/tactical/positional/endgame/general + an
+    `other` catch-all in an `uncategorized` bucket for errors with no
+    home, held for later promotion/new tabs). `buildMisconceptionTagMenu`
+    renders the closed set into the classifier prompt (LLM picks an id,
+    never invents one). Each tag carries a `drill` mapping (kind +
+    puzzles.json themes) = the tag→position engine.
+  - Dexie v28 store `misconceptionTags` + `MisconceptionTagRecord` type.
+  - `src/services/misconceptionService.ts` — `logMisconception` (rejects
+    off-vocab tags; requires customLabel for `other`), `getMisconception
+    Profile` (ranked by open count; distinct `other` labels stay
+    separate), `recordTagDrillResult` (adaptive graduation at
+    MASTERY_THRESHOLD=3; a miss resets), `mapTagToDrills`.
+  - `src/services/explorerTranslate.ts` — popularity + W/D/L + sample
+    size → plain WORDS (never raw %, sample size as words). Single source
+    of "masters play X" phrasing for all three faucets.
+  - Tests: misconceptionService 9, explorerTranslate 6.
+- **Phase M1 — Discussion Practice (live faucet).** Wire into ALL play
+  surfaces (OpeningPlayMode first), NOT a silo. Embed coach chat bound to
+  live FEN; trigger = off-book (opening DB) AND worse (Stockfish);
+  coach asks "why did you play that?" → classify via the tag menu →
+  `logMisconception(source:'discussion-practice')`; voice via
+  speakStreamed (G5). Count-against gate: only on learned/SRS lines.
+- **Phase M2 — Game Review + import auto-analysis (faucets 2 & 3).**
+  Where-you-left-book marker (explorer scan over the game, `explorer
+  Translate`); reasoning capture at every blunder → `logMisconception
+  (source:'game-review')`; deep-link to masterclass tab. Plus passive
+  import-time auto-tag from `detectBlunders` + `detectOpening`
+  (`source:'auto-analysis'`, no "why" required).
+- **Phase M3 — Training Plan hub.** Read `getMisconceptionProfile` →
+  "Today's reps" (weighted shares: weakness > SRS-due > new) over the
+  full browse menu; drills via `mapTagToDrills`; feed results back via
+  `recordTagDrillResult` (graduation loop).
+- **Phase M4 — Weaknesses view.** Render the profile incl. the
+  Uncategorized bucket; later: promote a frequent `other` label into a
+  first-class tag + its own tab.
+
 ## Next-session pickup
 
 1. Read this file. Confirm main HEAD and which phases have merged PRs.
