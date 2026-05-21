@@ -2,9 +2,14 @@ import { describe, it, expect } from 'vitest';
 import { Chess, type Square } from 'chess.js';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
+import { RUY_TRAP_LESSONS } from './ruyTrapLessons';
 import { buildLessonReferenceBlock } from './index';
 
-const lessons = [RUY_LOPEZ_LESSON, ...Object.values(RUY_VARIATION_LESSONS)];
+const lessons = [
+  RUY_LOPEZ_LESSON,
+  ...Object.values(RUY_VARIATION_LESSONS),
+  ...Object.values(RUY_TRAP_LESSONS),
+];
 
 function fileRank(sq: string): [number, number] {
   return [sq.charCodeAt(0) - 97, Number(sq[1]) - 1];
