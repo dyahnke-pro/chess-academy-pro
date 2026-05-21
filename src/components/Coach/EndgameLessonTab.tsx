@@ -231,9 +231,7 @@ interface LessonViewProps {
   onExit: () => void;
 }
 
-/** Exported so opening pages can play a single endgame lesson in-page
- *  (the masterclass Endgame section) without the picker tab around it. */
-export function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
+function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
   const [drillSeed, setDrillSeed] = useState<number>(() => Date.now());
   const [tier, setTier] = useState<DrillTier>('beginner');
   // Persisted mastery for the keystones — { fen → mastered }.
