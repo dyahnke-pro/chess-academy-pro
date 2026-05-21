@@ -13036,5 +13036,249 @@
         "title": "The Open Structure into the Ending"
       }
     ]
+  },
+  {
+    "id": "mp-pircdefence-austrian",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "r1bq1rk1/ppn1ppbp/3p1np1/2pP4/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 1 9",
+    "title": "Austrian Attack: Race on the Wings",
+    "overview": "Against the Austrian's huge e4-d4-f4 centre, Black has already struck with ...c5; White locked it with d5, and the battle leaves the centre for the wings. The plan is now symmetrical in spirit and opposite in direction: White lifts the queen to h4 and throws pieces at Black's king, while Black loads the b-file with ...Rb8, ...b6 and ...Bb7 and breaks with ...b5. This is a pure race — Black does not defend passively, Black attacks first on the queenside. Know the move order and play it fast; the slower attacker loses.",
+    "pawnBreaks": [
+      "...b5 (the queenside lever — the whole plan)",
+      "White's f5 or e5 against the king"
+    ],
+    "pieceManeuvers": [
+      "...Nc7 supporting ...b5",
+      "...Rb8 and ...Bb7 on the b-file",
+      "White's Qe1-h4 to the kingside"
+    ],
+    "strategicThemes": [
+      "Opposite-wing attacks",
+      "Speed over material",
+      "The locked centre dictates the wings"
+    ],
+    "endgameTransitions": [
+      "Rare — this is a middlegame decided by the attacks, not an endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppn1ppbp/3p1np1/2pP4/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 1 9",
+        "moves": [
+          "a4",
+          "Rb8",
+          "Qe1",
+          "b6",
+          "Qh4"
+        ],
+        "annotations": [
+          "White plays a4 to clamp down on the b5 break — it delays Black's plan but cannot stop it.",
+          "The rook swings to b8, loading the b-file behind the coming ...b5 lever.",
+          "White's queen sets off on its journey to the kingside, Qe1 heading for h4 and Black's king.",
+          "...b6 prepares the bishop's route to b7 and props up the ...b5 advance.",
+          "Qh4 declares the attack. The race is on: Black answers with ...b5 and queenside speed, not defence."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "a2",
+              "to": "a4"
+            }
+          ],
+          [
+            {
+              "from": "a8",
+              "to": "b8"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "e1"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b6"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "h4"
+            }
+          ]
+        ],
+        "title": "The Queenside Counter-Race"
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-classical",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "r1bq1rk1/pp1nppbp/2pp1np1/8/P2PP3/2N2N2/1PP1BPPP/R1BQ1RK1 w - - 1 8",
+    "title": "Classical System: The ...e5 Break to Equality",
+    "overview": "Against White's quiet Classical setup (Nf3, Be2, no pawn storm), Black equalises with a textbook hypermodern plan: ...c6 and ...Nbd7 prepare the central ...e5 break, and once it lands the position simplifies toward dead equality. After the centre opens with ...dxe5, the d-file is Black's to contest, the queen comes to e7 to back the e5-pawn and connect the rooks, and the knight reroutes via h5 toward the f4 outpost. From a cramped, passive-looking start Black reaches a position with active pieces and no weaknesses — exactly what the Classical Pirc promises.",
+    "pawnBreaks": [
+      "...e5 (the freeing central break)",
+      "a later ...b5 if White allows it"
+    ],
+    "pieceManeuvers": [
+      "...Nbd7 to support ...e5",
+      "...Qe7 backing e5 + the d-file",
+      "...Nh5 toward the f4 outpost"
+    ],
+    "strategicThemes": [
+      "Hypermodern central counter-strike",
+      "Open d-file play",
+      "Knight to the f4 outpost"
+    ],
+    "endgameTransitions": [
+      "The symmetrical e5/e4 structure can simplify into a balanced queenless middlegame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1nppbp/2pp1np1/8/P2PP3/2N2N2/1PP1BPPP/R1BQ1RK1 w - - 1 8",
+        "moves": [
+          "h3",
+          "e5",
+          "dxe5",
+          "dxe5",
+          "Be3",
+          "Qe7",
+          "Qd3",
+          "Nh5"
+        ],
+        "annotations": [
+          "White makes luft with h3, a small waiting move before Black strikes.",
+          "...e5 — the freeing break, right on cue, challenging d4 head-on at last.",
+          "White releases the central tension.",
+          "Black recaptures: the d-file is now open and Black holds a firm pawn on e5.",
+          "White develops the bishop to e3, eyeing the centre.",
+          "...Qe7 backs the e5-pawn, connects the rooks, and eyes the open d-file.",
+          "White centralises the queen on d3.",
+          "...Nh5 swings the knight toward the f4-square, where it would be a monster — active, equal play."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "h2",
+              "to": "h3"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "d6",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "c1",
+              "to": "e3"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "d3"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "h5"
+            }
+          ]
+        ],
+        "title": "Striking the Centre"
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-150",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "rnbq1rk1/pp2ppbp/2pp1np1/8/3PP3/2N1BP2/PPPQ2PP/R3KBNR w KQ - 0 7",
+    "title": "150 Attack: Trade the Bishop, Win the Race",
+    "overview": "The 150 Attack is a blunt, dangerous plan: Be3, Qd2, f3, then Bh6 to trade off Black's great dark-squared defender, castle queenside, and storm the h-pawn at Black's king. Black's antidote is speed on the other wing. The key is the early ...c6, launching ...b5-b4 and freeing the queen. When White trades on h6, Black accepts the slightly airier king and immediately strikes back with ...Qa5 — the queen leaps into the game, eyes the c3-knight, and lends weight to the queenside pawn storm. Whoever's storm lands first wins; Black must not flinch and must not slow down.",
+    "pawnBreaks": [
+      "...b5-b4 (the queenside storm against the long-castled king)",
+      "White's h4-h5 against Black's king"
+    ],
+    "pieceManeuvers": [
+      "...c6 + ...Qa5 to start the counter",
+      "...b5-b4 hitting the c3 defender",
+      "White's Bh6 trade + h-pawn storm"
+    ],
+    "strategicThemes": [
+      "Opposite-side castling race",
+      "Trade of the dark-squared bishops",
+      "Speed over king safety"
+    ],
+    "endgameTransitions": [
+      "Rare — decided by the mutual attacks"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pp2ppbp/2pp1np1/8/3PP3/2N1BP2/PPPQ2PP/R3KBNR w KQ - 0 7",
+        "moves": [
+          "Bh6",
+          "Bxh6",
+          "Qxh6",
+          "Qa5"
+        ],
+        "annotations": [
+          "Bh6 — the point of the system: White offers to trade off Black's key dark-squared defender.",
+          "Black allows the trade; theory confirms it is fine because the counterplay arrives in time.",
+          "White's queen recaptures on h6, sitting aggressively near Black's king.",
+          "...Qa5 — Black strikes first, the queen joining the race, eyeing c3 and backing the ...b5-b4 storm."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e3",
+              "to": "h6"
+            }
+          ],
+          [
+            {
+              "from": "g7",
+              "to": "h6"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "h6"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "a5"
+            }
+          ]
+        ],
+        "title": "The Counter-Race Begins"
+      }
+    ]
   }
 ]

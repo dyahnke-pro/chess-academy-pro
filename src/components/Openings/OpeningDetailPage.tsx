@@ -22,6 +22,7 @@ import { BookReader } from './BookReader';
 import { ListenableProse } from './ListenableProse';
 import { VariationTabs, buildVariationTabs } from './VariationTabs';
 import { getRuyTabPlanIds } from '../../services/ruyMasterclassTabs';
+import { getPircTabPlanIds } from '../../services/pircMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
 import {
@@ -747,6 +748,7 @@ export function OpeningDetailPage(): JSX.Element {
   // openings fall back: variation → its own plan, main line → all plans.
   const subjectPlanIds =
     getRuyTabPlanIds(opening.id, tabKey) ??
+    getPircTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (Ruy masterclass beat lessons).
