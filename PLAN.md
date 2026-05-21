@@ -249,13 +249,15 @@ Discussion Practice) and a consumer that links back to the masterclass.
   study; off-book but eval-fine = "creative, playable" (no nag). Same gate
   as the live tab.
 - **Whole-game coverage, no blind spots.** Explorer marker covers the
-  opening/early middlegame (masters DB thins ~move 12-15); Stockfish flags
-  the worst move(s) for the post-book phase.
-- **Reasoning capture in review.** At the deviation + at blunders, the
-  coach asks "why did you play this?" (voice or text) → tags the
-  misconception → Weaknesses. Skippable. So BOTH live games and reviewed
-  games feed the same tag bucket → Training Plan drills. Two faucets, one
-  bucket.
+  opening/early middlegame (masters DB thins ~move 12-15); past book the
+  explorer drops out but **Stockfish + coach carry the discussion through
+  the ENTIRE game** — every phase still gets analysed and discussed.
+- **Reasoning capture at EVERY blunder, full game.** At each blunder (and
+  the book deviation), the coach asks "why did you play this?" (voice or
+  text) → tags the misconception → Weaknesses. We lose the explorer past
+  book but NEVER stop capturing the user's error reasoning. Skippable per
+  blunder. So BOTH live games and reviewed games feed the same tag bucket
+  → Training Plan drills. Two faucets, one bucket.
 - **Links close the loop.** Review detects the opening → deep-links to its
   masterclass tab (`?line=berlin`); the tab aggregates "you've reached this
   in N games, scored X%, keep missing a4."
