@@ -209,40 +209,76 @@
         "name": "Closed Ruy Lopez (Breyer)",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Nb8 d4 Nbd7 Nbd2 Bb7 Bc2 Re8 Nf1 Bf8 Ng3 g6 a4 c5 d5 c4 Bg5",
         "frequency": "high",
-        "explanation": "The Breyer is Black's most theoretically resilient system. The knight retreats Nb8-d7 to unclog the c-pawn and reroute to f8-g6 or e6, while the bishop fianchettoes on g7 or stays flexible on f8. White's plan is Nf1-g3, a4 to probe the queenside, and Bg5 to create tension against f6. The d5 advance locks the center and shifts the battle to the kingside, where Ng3-f5 or f4 are long-term breaks."
+        "explanation": "The Breyer is Black's most theoretically resilient system. The knight retreats Nb8-d7 to unclog the c-pawn and reroute to f8-g6 or e6, while the bishop fianchettoes on g7 or stays flexible on f8. White's plan is Nf1-g3, a4 to probe the queenside, and Bg5 to create tension against f6. The d5 advance locks the center and shifts the battle to the kingside, where Ng3-f5 or f4 are long-term breaks.",
+        "keyIdeas": [
+          "Build the full c3/d4 centre and probe the queenside with a4 before Black completes the regroup.",
+          "Tour the queen-knight Nbd2-f1-g3 toward the f5-outpost — the engine of your kingside play.",
+          "Lock with d5 when Black plays ...c5; the game becomes patient two-winged manoeuvring.",
+          "Lasker's rule: a knight that settles on f5 can't be repelled — fight for that square."
+        ]
       },
       {
         "name": "Closed Ruy Lopez (Chigorin)",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Na5 Bc2 c5 d4 Qc7 Nbd2 Nc6 d5 Nd8 Nf1",
         "frequency": "high",
-        "explanation": "In the Chigorin, Black plays ...Na5 to trade off White's powerful light-squared bishop, then expands with ...c5. White reroutes with Nbd2-f1-g3 and plays on the kingside, often preparing f4. After d5, White locks the center and targets the kingside with Ng5 exchanges followed by f4. Black's counterplay lives on the queenside via ...a5-a4 and the half-open b-file, making this a classic opposite-flank battle."
+        "explanation": "In the Chigorin, Black plays ...Na5 to trade off White's powerful light-squared bishop, then expands with ...c5. White reroutes with Nbd2-f1-g3 and plays on the kingside, often preparing f4. After d5, White locks the center and targets the kingside with Ng5 exchanges followed by f4. Black's counterplay lives on the queenside via ...a5-a4 and the half-open b-file, making this a classic opposite-flank battle.",
+        "keyIdeas": [
+          "Retreat the bishop to c2 and keep it — never allow ...Nxb3 to trade off the Spanish bishop.",
+          "Black's a5-knight is offside; press while it spends moves rerouting back into play.",
+          "Roll the kingside with Nbd2-f1-g3 and f4 once the c3/d4 centre is set.",
+          "Lock with d5 to gain space and define the two-winged battle."
+        ]
       },
       {
         "name": "Closed Ruy Lopez (Zaitsev)",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Bb7 d4 Re8 Nbd2 Bf8 a4 h6 Bc2 exd4 cxd4 Nb4 Bb1 c5 d5 Nd7 Ra3",
         "frequency": "medium",
-        "explanation": "The Zaitsev (named after Igor Zaitsev, Karpov's trainer) features the early ...Bb7 and ...Re8 before committing the knight. This setup pressures e4 indirectly and keeps maximum flexibility. White responds with a4 to undermine b5, then plays d4-d5 to seize space. The rook lift Ra3 is a key maneuver, swinging to g3 or f3 for a kingside attack. Black must time ...c5 and ...Nb4 precisely to generate queenside counterplay before White's attack lands."
+        "explanation": "The Zaitsev (named after Igor Zaitsev, Karpov's trainer) features the early ...Bb7 and ...Re8 before committing the knight. This setup pressures e4 indirectly and keeps maximum flexibility. White responds with a4 to undermine b5, then plays d4-d5 to seize space. The rook lift Ra3 is a key maneuver, swinging to g3 or f3 for a kingside attack. Black must time ...c5 and ...Nb4 precisely to generate queenside counterplay before White's attack lands.",
+        "keyIdeas": [
+          "Hold the central tension; meet ...exd4 with cxd4 and keep the b1-h7 diagonal alive for the bishop.",
+          "The signature plan after d5 is the Ra3 rook lift, swinging across the third rank into a kingside attack.",
+          "Mind the d5 timing — release it too early and Black's ...c5/...Nd7 outposts equalise.",
+          "A theory-heavy line — know the move-order cold, the way Karpov did."
+        ]
       },
       {
         "name": "Open Ruy Lopez",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 d5 dxe5 Be6 Nbd2 Nc5 c3 d4 Ng5 dxc3 Nxe6 fxe6 bxc3 Qd3 Bc2",
         "frequency": "medium",
         "deviationMove": "Nxe4",
-        "explanation": "The Open Ruy Lopez arises when Black captures on e4 with ...Nxe4 on move 5 instead of playing ...Be7. After d4 b5 Bb3 d5 dxe5 Be6, Black has temporarily won a pawn but White gains a strong center and rapid development. The Ng5 thrust targets e6 and forces structural concessions. White aims to exploit the open lines and Black's somewhat exposed king, while Black relies on the activity of the bishops and central pawn mass for compensation."
+        "explanation": "The Open Ruy Lopez arises when Black captures on e4 with ...Nxe4 on move 5 instead of playing ...Be7. After d4 b5 Bb3 d5 dxe5 Be6, Black has temporarily won a pawn but White gains a strong center and rapid development. The Ng5 thrust targets e6 and forces structural concessions. White aims to exploit the open lines and Black's somewhat exposed king, while Black relies on the activity of the bishops and central pawn mass for compensation.",
+        "keyIdeas": [
+          "Strike the centre at once with d4 — your lead in development more than pays for the e4-pawn.",
+          "Pressure the e6/d5 light squares: the b3-bishop plus Ng5 hunt Black's defending e6-bishop.",
+          "Reroute with c3 and Nbd2-b3 to clamp d4 and challenge the active c5/e4 knight.",
+          "Trade on e6 to open the f-file when it exposes Black's king."
+        ]
       },
       {
         "name": "Berlin Defense",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+ Kxd8 h3 Ke8 Nc3 h5 Bf4 Be7 Rad1 Be6 Ng5 Bxg5 Bxg5",
         "frequency": "high",
         "deviationMove": "Nf6",
-        "explanation": "The Berlin Wall, Kramnik's weapon that neutralized Kasparov in 2000. Black accepts doubled c-pawns and the loss of castling rights in exchange for the bishop pair and a rock-solid structure. White's plan revolves around Nc3, Bf4, and doubling rooks on the d-file to exploit Black's awkward king. The h5-h4 advance from Black prevents g4 and secures the f5 knight. Converting White's structural edge requires patience — Rd3 swings to the kingside or third rank to probe for weaknesses."
+        "explanation": "The Berlin Wall, Kramnik's weapon that neutralized Kasparov in 2000. Black accepts doubled c-pawns and the loss of castling rights in exchange for the bishop pair and a rock-solid structure. White's plan revolves around Nc3, Bf4, and doubling rooks on the d-file to exploit Black's awkward king. The h5-h4 advance from Black prevents g4 and secures the f5 knight. Converting White's structural edge requires patience — Rd3 swings to the kingside or third rank to probe for weaknesses.",
+        "keyIdeas": [
+          "Choose your weapon: the queenless Berlin endgame (Bxc6, dxe5, Qxd8+) for a risk-free pull, or d3 (Anti-Berlin) to keep queens on.",
+          "Your one structural trump is the clean kingside pawn majority — pressing only ever comes from threatening to make a passed pawn.",
+          "Restrain Black's f5-knight blockade, then pry with h3-g4 or f4 at the right moment.",
+          "Probe Black's doubled c-pawns and the king stuck in the centre — the long-term targets."
+        ]
       },
       {
         "name": "Marshall Attack",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 Rae8 Nd2 Re6 a4 f5",
         "frequency": "medium",
         "deviationMove": "d5",
-        "explanation": "Marshall's 1918 immortal gambit: Black sacrifices the e5 pawn with ...d5 to rip open lines toward White's king. After ...Bd6 and ...Qh4-h3, Black targets g2 with devastating threats including ...Bg4, ...Re6-h6, and ...f5-f4. White must find Be3 and Qd3 to hold the kingside together, and a4 to open a second front. This line requires deep memorization from White — a single inaccuracy and Black's attack becomes overwhelming. The f5 advance prepares f4 to blast open the g-file."
+        "explanation": "Marshall's 1918 immortal gambit: Black sacrifices the e5 pawn with ...d5 to rip open lines toward White's king. After ...Bd6 and ...Qh4-h3, Black targets g2 with devastating threats including ...Bg4, ...Re6-h6, and ...f5-f4. White must find Be3 and Qd3 to hold the kingside together, and a4 to open a second front. This line requires deep memorization from White — a single inaccuracy and Black's attack becomes overwhelming. The f5 advance prepares f4 to blast open the g-file.",
+        "keyIdeas": [
+          "Decline it with the Anti-Marshall (8.a4 or 8.h3) if you'd rather not memorise the main lines.",
+          "If you accept, return the pawn with d4 and blunt the storm with g3, Be3, and Qd3/Qf3.",
+          "Black's compensation is a lasting initiative, not the pawn — survive it and the extra pawn tells.",
+          "The light squares around your king (g2, f3, h3) are the battleground once g3 is played."
+        ]
       },
       {
         "name": "Anti-Marshall (8.a4)",
@@ -262,7 +298,13 @@
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 exd4 Nxd4 c5 Nb3 Qxd1 Rxd1 Bg4 f3 Be6 Nc3 Bd6 Be3 b6",
         "frequency": "medium",
         "deviationMove": "Bxc6",
-        "explanation": "The Exchange Variation (4.Bxc6) doubles Black's c-pawns and aims for a favorable endgame where White's 4-vs-3 kingside majority creates a passed pawn. After d4 and Nxd4, White exchanges into a technical endgame. Black compensates with the bishop pair and central pawn mass. The f6 move shores up e5 and prepares ...Be6. White's plan is Nc3-a4 to pressure c5, doubled rooks on the d-file, and an eventual kingside pawn advance to create a passed pawn."
+        "explanation": "The Exchange Variation (4.Bxc6) doubles Black's c-pawns and aims for a favorable endgame where White's 4-vs-3 kingside majority creates a passed pawn. After d4 and Nxd4, White exchanges into a technical endgame. Black compensates with the bishop pair and central pawn mass. The f6 move shores up e5 and prepares ...Be6. White's plan is Nc3-a4 to pressure c5, doubled rooks on the d-file, and an eventual kingside pawn advance to create a passed pawn.",
+        "keyIdeas": [
+          "Trade on c6 to give Black doubled c-pawns, then steer for the endgame — Fischer's recipe.",
+          "Your clean kingside majority can make a passed pawn; the crippled black queenside cannot.",
+          "Happily trade queens — the structural edge is most dangerous in the ending.",
+          "Black's bishop pair and open lines are the compensation; consolidate before the position opens."
+        ]
       }
     ],
     "trapLines": [
