@@ -25,6 +25,18 @@ is curated content, not code.
    auto-mined "Pin #3") is the cardinal sin. Empty > generic.
 4. **Translate, never dump.** No raw explorer percentages, no SAN read
    aloud as letters, no engine jargon. Plain English always.
+5. **NO BLANK / EMPTY SECTIONS OR TABS ON THE MASTERCLASS (David
+   2026-05-21, LOCKED).** A section renders ONLY when it has real content
+   for the current opening/tab — never an empty card, never a "0 items"
+   shell. Two specific consequences of this rule:
+   - **The standalone Model Game section is SCRAPPED** (removed from the
+     opening tab). Model-game teaching, when a real student-side win is
+     ever sourced, lives inside Watch — not its own often-empty section.
+   - **The standalone Weapons / "traps" section is REMOVED.** Keep only the
+     **"watch out for"** warnings (the anti-traps), and only render that
+     when the current tab actually has one. No empty trap zone.
+   Every other zone (key ideas, middlegame plans, endgame, book reader,
+   warnings) must self-hide when it has nothing for the current tab.
 
 ---
 

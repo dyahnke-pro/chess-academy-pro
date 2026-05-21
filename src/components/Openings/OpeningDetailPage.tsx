@@ -10,8 +10,6 @@ import { TrainMode } from './TrainMode';
 import { WalkthroughMode } from './WalkthroughMode';
 import { MasteryRing } from './MasteryRing';
 import { MiniBoard } from '../Board/MiniBoard';
-import { ModelGamesSection } from './ModelGamesSection';
-import { ModelGameViewer } from './ModelGameViewer';
 import { MiddlegamePlansSection, type MiddlegameAction } from './MiddlegamePlansSection';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
@@ -54,7 +52,7 @@ import {
 import { narrateOpeningSection } from '../../services/openingSectionNarrator';
 import { useStarAnimationStore } from '../../stores/starAnimationStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
-import type { OpeningRecord, ModelGame, MiddlegamePlan } from '../../types';
+import type { OpeningRecord, MiddlegamePlan } from '../../types';
 import {
   ArrowLeft,
   BookOpen as LearnIcon,
@@ -101,7 +99,6 @@ type ViewMode =
   | 'named-trap-learn'
   | 'named-trap-practice'
   | 'named-trap-play'
-  | 'model-game'
   | 'middlegame-watch'
   | 'middlegame-plan'
   | 'middlegame-practice'
@@ -138,7 +135,6 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [activeNamedTrapId, setActiveNamedTrapId] = useState<string | null>(null);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
-  const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   // Which variation tab is selected (-1 = main line). Drives the
   // full-page rescope: every section below renders for the selected
@@ -209,7 +205,6 @@ export function OpeningDetailPage(): JSX.Element {
     setActiveVariationIndex(-1);
     setActiveTrapLineIndex(-1);
     setActiveWarningLineIndex(-1);
-    setActiveModelGame(null);
     setActiveMiddlegamePlan(null);
     setQuizPlayFen(null);
     void loadOpening();
@@ -218,11 +213,6 @@ export function OpeningDetailPage(): JSX.Element {
   const handleQuizPlayPosition = useCallback((fen: string): void => {
     setQuizPlayFen(fen);
     setViewMode('play');
-  }, []);
-
-  const handleSelectModelGame = useCallback((game: ModelGame): void => {
-    setActiveModelGame(game);
-    setViewMode('model-game');
   }, []);
 
   const handleMiddlegameAction = useCallback(
@@ -325,11 +315,6 @@ export function OpeningDetailPage(): JSX.Element {
     void navigate(`/coach/play?side=${color}`);
   }, [opening, navigate]);
 
-  const handleStartTrapLineAction = useCallback((index: number, action: 'learn' | 'practice' | 'play' | 'walkthrough'): void => {
-    setActiveTrapLineIndex(index);
-    setViewMode(`trap-${action}` as ViewMode);
-  }, []);
-
   const handleStartWarningLineAction = useCallback((index: number, action: 'learn' | 'practice' | 'play' | 'walkthrough'): void => {
     setActiveWarningLineIndex(index);
     setViewMode(`warning-${action}` as ViewMode);
@@ -423,11 +408,7 @@ export function OpeningDetailPage(): JSX.Element {
     speakText(sectionId, text);
   }, [narratingSection, loadingSection, opening, speakText]);
 
-  // Precompute trap/warning line FENs for thumbnails
-  const trapLineFens = useMemo((): string[] => {
-    if (!opening?.trapLines) return [];
-    return opening.trapLines.map((v) => computeFenFromPgn(v.pgn, v.setupFen));
-  }, [opening?.trapLines]);
+  // Precompute warning line FENs for thumbnails (Pitfalls zone).
 
   const warningLineFens = useMemo((): string[] => {
     if (!opening?.warningLines) return [];
@@ -696,17 +677,6 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Model game viewer
-  if (viewMode === 'model-game' && activeModelGame) {
-    return (
-      <ModelGameViewer
-        game={activeModelGame}
-        boardOrientation={opening.color}
-        onExit={handleExit}
-      />
-    );
-  }
-
   // Middlegame WATCH / LEARN / PRACTICE — one player, three modes over the
   // plan's playable line (David 2026-05-21):
   //   • watch    — auto-play with voice (demo), then replay from memory.
@@ -815,12 +785,23 @@ export function OpeningDetailPage(): JSX.Element {
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (Ruy masterclass beat lessons).
-  // Weapons render in the Weapons zone, warnings in Pitfalls. When a tab
-  // has curated named traps of a kind, the generic line tiles of that
-  // kind are suppressed for the Ruy — the authored lesson IS the content.
+  // The Weapons/traps section is REMOVED (David 2026-05-21): only the
+  // "watch out for" warnings stay. We still route NAMED warnings per tab.
   const namedTraps: RuyTrapDef[] = getRuyTrapsForTab(opening.id === 'ruy-lopez' ? tabKey : '');
-  const namedWeapons = namedTraps.filter((t) => t.kind === 'weapon');
   const namedWarnings = namedTraps.filter((t) => t.kind === 'warning');
+
+  // Zone self-hide flags — NO blank/empty zones on the masterclass
+  // (David 2026-05-21). A zone header renders only when it has content for
+  // the current opening/tab; otherwise it's removed entirely.
+  const tabHasPlans = subjectPlanIds
+    ? (middlegamePlansData as MiddlegamePlan[]).some((p) => subjectPlanIds.includes(p.id))
+    : openingPlans.length > 0;
+  const hasMasterContent = Boolean(currentQuiz && !quizCompleted) || tabHasPlans;
+  const hasPitfalls =
+    namedWarnings.length > 0 ||
+    (opening.warnings?.length ?? 0) > 0 ||
+    (opening.warningLines?.length ?? 0) > 0 ||
+    mistakes.length > 0;
 
   // 4-button Watch/Learn/Practice/Play row for a named trap (weapon or
   // warning). Watch = beat lesson; Learn = voice-guided play; Practice =
@@ -1110,20 +1091,22 @@ export function OpeningDetailPage(): JSX.Element {
       {/* ═══ ZONE 3 — MASTER ═══════════════════════════════════════════
           "Test what you grasped. See the plans. Study one complete
           game." Contains: Quiz + Middlegame Plans + Model Games. */}
-      <OpeningZoneHeader
-        color="blue"
-        icon={GraduationCap}
-        title="Master"
-        tagline="Test what you grasped. See the plans. Study one complete game."
-        isActive={narratingSection === 'master-zone'}
-        onActivate={() => {
-          if (openingPlans.length === 0) return;
-          const text = openingPlans
-            .map((p) => `${p.title}. ${p.overview}`)
-            .join('. ');
-          toggleNarration('master-zone', text);
-        }}
-      />
+      {hasMasterContent && (
+        <OpeningZoneHeader
+          color="blue"
+          icon={GraduationCap}
+          title="Master"
+          tagline="Test what you grasped. See the plans. Study one complete game."
+          isActive={narratingSection === 'master-zone'}
+          onActivate={() => {
+            if (openingPlans.length === 0) return;
+            const text = openingPlans
+              .map((p) => `${p.title}. ${p.overview}`)
+              .join('. ');
+            toggleNarration('master-zone', text);
+          }}
+        />
+      )}
 
       {/* Checkpoint Quiz — after Key Ideas */}
       {currentQuiz && !quizCompleted && (
@@ -1151,173 +1134,25 @@ export function OpeningDetailPage(): JSX.Element {
         filterPlanIds={subjectPlanIds}
       />
 
-      {/* Model Games — only games where the student's side wins/draws
-          (never showcase the opening losing). */}
-      <ModelGamesSection
-        openingId={opening.id}
-        studentColor={opening.color}
-        onSelectGame={handleSelectModelGame}
-      />
-
-      {/* ═══ ZONE 4 — WEAPONS ══════════════════════════════════════════
-          "Sharp lines where YOU win material. Drill these." Contains:
-          Trap Lines + Trap Bullets. (Common Mistakes moved to Zone 5
-          Pitfalls below — they describe what NOT to do, not what to
-          weaponize.) */}
-      <OpeningZoneHeader
-        color="emerald"
-        icon={Crosshair}
-        title="Weapons"
-        tagline="Sharp lines where YOU win material. Drill these."
-        aside={
-          opening.trapLines && opening.trapLines.length > 0 ? (
-            <span className="text-xs font-semibold text-emerald-400">
-              {opening.trapLines.length} lines
-            </span>
-          ) : undefined
-        }
-      />
-
-      {/* Named traps for THIS tab — hand-routed masterclass beat lessons
-          (getRuyTrapsForTab). Weapons here; warnings in Pitfalls below. */}
-      {namedWeapons.length > 0 && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-emerald-500/30">
-          <div className="flex items-center gap-2 mb-3">
-            <Crosshair size={14} className="text-emerald-500" />
-            <h3 className="text-sm font-semibold text-theme-text">Named traps for this line</h3>
-          </div>
-          <div className="space-y-1">
-            {namedWeapons.map((trap) => (
-              <div
-                key={trap.id}
-                className="w-full p-3 rounded-lg"
-                data-testid={`named-trap-${trap.id}`}
-              >
-                <div className="min-w-0">
-                  <span className="text-sm font-medium text-theme-text">{trap.name}</span>
-                  <p className="text-xs text-emerald-400/80 mt-0.5">Your weapon — punish the slip.</p>
-                </div>
-                <NamedTrapWLPP trapId={trap.id} />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Traps — the Weapons zone card. Outlined green to match the
-          zone header; the card title is dropped because the zone
-          header already reads "Weapons" (David 2026-05-20). For the Ruy
-          masterclass, a tab with curated named weapons hides the generic
-          trapLines tiles — the authored lesson is the content. */}
-      {namedWeapons.length === 0 && opening.traps && opening.traps.length > 0 && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-emerald-500/30">
-          <div className="flex items-center gap-2 mb-2">
-            <Target size={14} className="text-emerald-500" />
-            <h3 className="text-sm font-semibold text-theme-text">Weapons</h3>
-            <NarrationButton
-              sectionId="traps"
-              text={opening.traps.join('. ')}
-              kind="traps"
-              bullets={opening.traps}
-            />
-            {opening.trapLines && opening.trapLines.length > 0 && (
-              <button
-                onClick={() => setViewMode('train-traps')}
-                className="p-1.5 rounded-lg hover:bg-theme-border/50 text-theme-text-muted hover:text-green-500 transition-colors"
-                aria-label="Train traps"
-                title="Train"
-                data-testid="train-traps-btn"
-              >
-                <Crosshair size={14} />
-              </button>
-            )}
-          </div>
-          <ul className="space-y-2">
-            {opening.traps.map((trap, i) => (
-              <li key={i} className="text-sm text-theme-text-muted">{trap}</li>
-            ))}
-          </ul>
-          {opening.trapLines && opening.trapLines.length > 0 && (
-            <div className="space-y-1 mt-3 pt-3 border-t border-theme-border">
-              {opening.trapLines.map((line, i) => (
-                <div
-                  key={i}
-                  className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
-                  data-testid={`trap-line-${i}`}
-                >
-                  <button
-                    onClick={() => handleStartTrapLineAction(i, 'walkthrough')}
-                    className="flex items-center gap-3 w-full text-left"
-                    aria-label={`Open ${line.name}`}
-                  >
-                    <MiniBoard fen={trapLineFens[i]} size={48} orientation={opening.color} />
-                    <div className="flex-1 min-w-0">
-                      <span className="text-sm font-medium text-theme-text">{line.name}</span>
-                      <p className="text-xs text-theme-text-muted truncate mt-0.5">{line.explanation}</p>
-                    </div>
-                  </button>
-                  <div className="flex items-center gap-1.5 mt-2 ml-[60px]">
-                    <button
-                      onClick={() => handleStartTrapLineAction(i, 'walkthrough')}
-                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-watch"
-                      aria-label={`Watch ${line.name}`}
-                      title="Watch"
-                      data-testid={`trap-walkthrough-${i}`}
-                    >
-                      <PlayCircle size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleStartTrapLineAction(i, 'learn')}
-                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-learn"
-                      aria-label={`Learn ${line.name}`}
-                      title="Learn"
-                      data-testid={`trap-learn-${i}`}
-                    >
-                      <LearnIcon size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleStartTrapLineAction(i, 'practice')}
-                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-practice"
-                      aria-label={`Practice ${line.name}`}
-                      title="Practice"
-                      data-testid={`trap-practice-${i}`}
-                    >
-                      <Brain size={16} />
-                    </button>
-                    <button
-                      onClick={() => handleStartTrapLineAction(i, 'play')}
-                      className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-play"
-                      aria-label={`Play ${line.name}`}
-                      title="Play"
-                      data-testid={`trap-play-${i}`}
-                    >
-                      <Swords size={16} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
       {/* ═══ ZONE 5 — PITFALLS ═════════════════════════════════════════
           "Don't fall into these. Avoid these moves." Contains:
           Warning Lines (specific PGNs that punish the student) +
           Common Mistakes (move-by-move corrections). */}
-      <OpeningZoneHeader
-        color="amber"
-        icon={AlertTriangle}
-        title="Pitfalls"
-        tagline="Don't fall into these. Avoid these moves."
-        aside={
-          (opening.warningLines?.length ?? 0) + mistakes.length > 0 ? (
-            <span className="text-xs font-semibold text-amber-400">
-              {(opening.warningLines?.length ?? 0) + mistakes.length} items
-            </span>
-          ) : undefined
-        }
-      />
+      {hasPitfalls && (
+        <OpeningZoneHeader
+          color="amber"
+          icon={AlertTriangle}
+          title="Pitfalls"
+          tagline="Don't fall into these. Avoid these moves."
+          aside={
+            (opening.warningLines?.length ?? 0) + mistakes.length > 0 ? (
+              <span className="text-xs font-semibold text-amber-400">
+                {(opening.warningLines?.length ?? 0) + mistakes.length} items
+              </span>
+            ) : undefined
+          }
+        />
+      )}
 
       {/* Named anti-traps for THIS tab — show the trap, then snap the
           board back to the avoiding move. Hand-routed beat lessons. */}
