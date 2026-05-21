@@ -5,11 +5,22 @@ import type { ModelGame } from '../../types';
 
 interface ModelGamesSectionProps {
   openingId: string;
+  /** The side the student plays. A model game where the student's side LOST
+   *  is never shown — a masterclass can't showcase its own opening losing
+   *  (David 2026-05-21). Wins (and draws) only. */
+  studentColor: 'white' | 'black';
   onSelectGame: (game: ModelGame) => void;
+}
+
+/** True when this game shows the student's side getting beaten. */
+function studentLost(game: ModelGame, studentColor: 'white' | 'black'): boolean {
+  return (studentColor === 'white' && game.result === '0-1') ||
+         (studentColor === 'black' && game.result === '1-0');
 }
 
 export function ModelGamesSection({
   openingId,
+  studentColor,
   onSelectGame,
 }: ModelGamesSectionProps): JSX.Element {
   const [games, setGames] = useState<ModelGame[]>([]);
@@ -19,12 +30,15 @@ export function ModelGamesSection({
     let cancelled = false;
     void getModelGamesForOpening(openingId).then((result) => {
       if (!cancelled) {
-        setGames(result);
+        // Drop any game where the student's side loses — never showcase the
+        // opening losing. (Pirc's only game is a White win vs the Pirc, so
+        // this hides it until a real Black win is sourced.)
+        setGames(result.filter((g) => !studentLost(g, studentColor)));
         setLoading(false);
       }
     });
     return () => { cancelled = true; };
-  }, [openingId]);
+  }, [openingId, studentColor]);
 
   if (loading || games.length === 0) return <div data-testid="model-games-empty" />;
 

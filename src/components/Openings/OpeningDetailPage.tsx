@@ -1151,9 +1151,11 @@ export function OpeningDetailPage(): JSX.Element {
         filterPlanIds={subjectPlanIds}
       />
 
-      {/* Model Games */}
+      {/* Model Games — only games where the student's side wins/draws
+          (never showcase the opening losing). */}
       <ModelGamesSection
         openingId={opening.id}
+        studentColor={opening.color}
         onSelectGame={handleSelectModelGame}
       />
 
