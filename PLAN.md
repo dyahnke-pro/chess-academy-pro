@@ -46,17 +46,26 @@ an endgame ONLY if genuine · real named traps ONLY if genuine.
   have authored, DB-grounded, Black-oriented beat-lessons. Lesson keys
   verified to match repertoire.json variation names exactly (Watch/Learn
   resolve). 49 integrity + 130 narration-accuracy tests green.
-- **P3 — middlegame plans. status: DONE for the 3 first-class systems.**
-  `scripts/add-pirc-middlegame-plans.mjs` builds mp-pircdefence-austrian
-  / -classical / -150 (DB-grounded from the lesson lines). Hand-picked
-  routing `pircMasterclassTabs.ts` (getPircTabPlanIds) wired into
-  OpeningDetailPage. middlegamePlanner.test extended (28 green).
-  REMAINING: plans for Byrne/Lion/Fianchetto/Czech if genuinely distinct
-  (else leave empty — playbook §3). Optional: a main-line Pirc plan.
-- **P4 — traps / endgames where GENUINE only.** Pirc-specific named
-  traps (hand-picked, DB-grounded) → `pircTrapLessons.ts` (parallel to
-  ruyTrapLessons) + routing. Endgames only where characteristic.
-- **P5 — audit to 3 clean rounds** (`AUDIT_ONLY_OPENINGS=pirc-defence`).
+- **P3 — middlegame plans. status: DONE for ALL 8 variations.**
+  `scripts/add-pirc-middlegame-plans.mjs` builds austrian / classical /
+  150 / byrne / lion / fianchetto / czech / austrian-e5 (DB-grounded from
+  the gate-verified lesson lines). Routing `pircMasterclassTabs.ts`
+  (getPircTabPlanIds, all 8). middlegamePlanner.test extended (33 green:
+  every line legal, annotations 1:1, arrows consistent, black-oriented).
+- **P4 — traps / endgames. status: DELIBERATELY SPARSE (accurate per
+  empty > generic).** The Pirc has few genuine NAMED traps; the old
+  auto-mined junk was purged. NOT fabricating to fill the shelf. The one
+  genuine motif to author properly later (web-verified, like the Ruy
+  traps): the **Ne6 queen-trap** (Bxf7+ Kxf7 Ng5+ … Ne6 forks the queen)
+  as a Black WARNING. Endgames: Pirc isn't endgame-defined → none unless
+  a genuinely characteristic one surfaces. Book pages: none (corpus is
+  pre-1930s; the Pirc postdates it — structural, unavoidable).
+- **Model game:** Kasparov–Topalov 1999 (present, 2 criticalMoments).
+  CURATION NOTE for David: it's a WHITE brilliancy against the Pirc
+  (masterclass is Black-oriented) + thinner than the Ruy's 7 moments —
+  his call whether to enrich/swap. Not fabricated around.
+- **P5 — audit to 3 clean rounds** (`AUDIT_ONLY_OPENINGS=pirc-defence`):
+  in progress.
 
 ## Orientation gotcha
 `lessonIntegrity.test.ts` asserts `orientation === 'white'` for the RUY
