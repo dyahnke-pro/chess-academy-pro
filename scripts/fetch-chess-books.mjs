@@ -127,6 +127,50 @@ const CANDIDATES = [
     expectedAuthorRe: /steinitz/i,
     focus: 'the scientific/positional school — the roots of modern strategy',
   },
+  // Batch 2 — distinctive titles only (so the regex can't grab the wrong
+  // book); all pre-1929 / safely public domain. Misses skip harmlessly.
+  {
+    slug: 'staunton-chess-players-handbook',
+    search: "The Chess-Player's Handbook Staunton",
+    expectedTitleRe: /chess.?player.?s handbook/i,
+    expectedAuthorRe: /staunton/i,
+    focus: 'the great Victorian opening + principles reference',
+  },
+  {
+    slug: 'emanuel-lasker-manual-of-chess',
+    search: "Lasker's Manual of Chess",
+    expectedTitleRe: /manual of chess/i,
+    expectedAuthorRe: /lasker,?\s*emanuel|emanuel\s+lasker/i,
+    focus: 'the classical-school summa — deep positional + strategic teaching',
+  },
+  {
+    slug: 'lowenthal-morphy-games-of-chess',
+    search: "Morphy's Games of Chess Lowenthal",
+    expectedTitleRe: /morphy.?s games of chess/i,
+    expectedAuthorRe: /l[oö]wenthal|morphy/i,
+    focus: 'attacking play + romantic-era tactical patterns (game collection)',
+  },
+  {
+    slug: 'cook-synopsis-chess-openings',
+    search: 'Synopsis of the Chess Openings Cook',
+    expectedTitleRe: /synopsis of the chess openings/i,
+    expectedAuthorRe: /cook|wormald/i,
+    focus: 'systematic classical opening lines (openings reference)',
+  },
+  {
+    slug: 'wormald-chess-openings',
+    search: 'The Chess Openings Wormald',
+    expectedTitleRe: /chess openings/i,
+    expectedAuthorRe: /wormald/i,
+    focus: 'classical opening theory (19th-century reference)',
+  },
+  {
+    slug: 'bird-chess-openings',
+    search: 'Chess Openings Bird',
+    expectedTitleRe: /chess openings/i,
+    expectedAuthorRe: /bird/i,
+    focus: "openings through Bird's original, enterprising lens",
+  },
 ];
 
 async function fetchWithTimeout(url, ms = 30000) {
