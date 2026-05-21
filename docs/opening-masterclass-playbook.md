@@ -178,6 +178,23 @@ Play-with-Coach, middlegame/endgame Play, Practice) — NEVER a silo:
   top before it satisfies this rule.)
 - `scripts/audit-openings-interactive-loop.mjs`, scoped to the opening
   (`AUDIT_ONLY_OPENINGS=<id>`): require **3 consecutive clean rounds**.
+- **THREE INSTRUMENTS, always used together (David's rule):**
+  1. **Playwright** — drives the live UI (taps, types, navigates,
+     asserts the DOM) via the pre-installed Chromium
+     (`scripts/audit-lib/chromium.mjs`). This is the "did the surface
+     work" layer.
+  2. **The live audit stream** (G2) — captures every `logAppAudit()` the
+     app emits during the run. In the sandbox the loop intercepts the
+     POST bodies via `page.on('request', …)`; against prod, pull
+     `GET /api/audit-stream?since=<ms>` with the `x-audit-secret` header.
+     This is the "what did the app actually do internally" layer (brain,
+     navigation, tool calls, errors).
+  3. **The listener tool** (`scripts/audit-lib/audit-listener.mjs`) —
+     captures the voice narration as it fires (text, order, verbosity).
+     This is the "did it speak, and say the right thing" layer.
+  All three on every run — DOM behavior + emitted events + voice. A green
+  Playwright pass alone is NOT a clean round; the audit-stream and the
+  listener must be inspected too.
 - Run vs a local dev server with the pre-installed Chromium
   (`scripts/audit-lib/chromium.mjs`).
 - **USE THE LISTENER TOOL to audit the voice narration** (David's rule).
