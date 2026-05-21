@@ -19,6 +19,7 @@ import { PlayableLinePlayer } from './PlayableLinePlayer';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { BookReader } from './BookReader';
+import { ListenableProse } from './ListenableProse';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
@@ -871,35 +872,27 @@ export function OpeningDetailPage(): JSX.Element {
         }}
       />
 
-      {/* Overview */}
+      {/* Overview — listenable prose (tap-to-read, per-paragraph relisten). */}
       {opening.overview && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4">
-          <div className="flex items-center gap-2 mb-2">
-            <BookOpen size={14} className="text-theme-accent" />
-            <h3 className="text-sm font-semibold text-theme-text">Overview</h3>
-            <NarrationButton sectionId="overview" text={opening.overview} />
-          </div>
-          <p className="text-sm text-theme-text-muted leading-relaxed">{opening.overview}</p>
-        </div>
+        <ListenableProse
+          title="Overview"
+          icon={BookOpen}
+          iconColor="text-theme-accent"
+          idPrefix="overview"
+          items={opening.overview.split('\n\n').filter(Boolean)}
+        />
       )}
 
-      {/* Key Ideas */}
+      {/* Key Ideas — listenable bullets. */}
       {opening.keyIdeas && opening.keyIdeas.length > 0 && (
-        <div className="bg-theme-surface rounded-xl p-4 mb-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Lightbulb size={14} className="text-yellow-500" />
-            <h3 className="text-sm font-semibold text-theme-text">Key Ideas</h3>
-            <NarrationButton sectionId="keyIdeas" text={opening.keyIdeas.join('. ')} />
-          </div>
-          <ul className="space-y-1.5">
-            {opening.keyIdeas.map((idea, i) => (
-              <li key={i} className="text-sm text-theme-text-muted flex gap-2">
-                <span className="text-theme-accent mt-0.5 shrink-0">-</span>
-                <span>{idea}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ListenableProse
+          title="Key Ideas"
+          icon={Lightbulb}
+          iconColor="text-yellow-500"
+          idPrefix="keyIdeas"
+          items={opening.keyIdeas}
+          variant="bullets"
+        />
       )}
 
       {/* Classic Wisdom — passages from Capablanca / Lasker / Staunton /
