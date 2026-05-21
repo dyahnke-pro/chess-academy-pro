@@ -1270,6 +1270,15 @@ on `main`, push to `main`, it deploys to production. If a harness/tool
 spins up a feature branch by default, OVERRIDE it and go to main unless
 David says otherwise.
 
+**🚨 DEPLOY ONLY WHEN THE WHOLE TASK IS DONE — batch to save the cap
+(David 2026-05-21).** The *timing* rule that pairs with the target rule
+above. Vercel free tier caps at 100 builds/day and EVERY push Vercel sees
+burns a build. So: commit locally as you work, but **push to `main` only
+when the entire body of work is complete** — one deploy per finished task,
+NOT one per commit. Don't deploy incrementally. (`main` is always the
+target; timing is batched-at-completion. The container is ephemeral, so
+local commits are fine mid-task — just don't push-deploy until done.)
+
 **Land every change DIRECTLY on `main`.** David's call 2026-05-18:
 *"I don't want preview deploys! Remove that command from your
 memory and replace with straight to main production! The pre and
