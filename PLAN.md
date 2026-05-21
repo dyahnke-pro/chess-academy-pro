@@ -509,12 +509,27 @@ faucets and the hub wire onto it.
     size → plain WORDS (never raw %, sample size as words). Single source
     of "masters play X" phrasing for all three faucets.
   - Tests: misconceptionService 9, explorerTranslate 6.
-- **Phase M1 — Discussion Practice (live faucet).** Wire into ALL play
-  surfaces (OpeningPlayMode first), NOT a silo. Embed coach chat bound to
-  live FEN; trigger = off-book (opening DB) AND worse (Stockfish);
-  coach asks "why did you play that?" → classify via the tag menu →
-  `logMisconception(source:'discussion-practice')`; voice via
-  speakStreamed (G5). Count-against gate: only on learned/SRS lines.
+- **Phase M1 — Discussion Practice (live faucet). status: DONE
+  (OpeningPlayMode wired; needs device verification of the voice/
+  interactive loop, G7).**
+  - `slipDetector.ts` — off-book × worse gate (cpLoss thresholds aligned
+    with the import blunder scan; learned/count-against flag). Tested.
+  - `misconceptionClassifier.ts` — LLM maps a slip → ONE closed-set tag
+    (or none/other+label) via the tag menu; JSON-parsed, fence-tolerant,
+    off-vocab + throw guards return null. skipPersonality. Tested.
+  - `discussionPractice.ts` — orchestrator: evaluateMove + buildWhyPrompt
+    + captureMisconception (classify then conditionally log, count-against
+    gated). Framework-agnostic, tested.
+  - `useDiscussionPractice.ts` (hook) + `DiscussionPracticePanel.tsx` —
+    the React shell: after a player move, best-effort eval (Stockfish,
+    'prefetch' priority, White-perspective sign), masters move
+    (lookupMasterPlay → explorerTranslate), raise the "why?" card; answer
+    (text now; voice via the surface's say()) or skip → coach teaches +
+    logs. Failures → no prompt (never blocks the game).
+  - Wired into `OpeningPlayMode.handlePlayerMove`. STILL TODO: roll the
+    same hook onto Play-with-Coach + middlegame/endgame Play (the hook is
+    surface-agnostic — one mount each); a Web Speech mic capture for the
+    answer (text input works today, voice question/teach already speak).
 - **Phase M2 — Game Review + import auto-analysis (faucets 2 & 3).**
   Where-you-left-book marker (explorer scan over the game, `explorer
   Translate`); reasoning capture at every blunder → `logMisconception
