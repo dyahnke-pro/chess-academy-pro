@@ -41,6 +41,8 @@ import {
   type LinePickerOption,
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
+import { classifyPhase } from '../../services/gamePhaseService';
+import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import {
   getCompletedStages,
@@ -543,6 +545,12 @@ export function CoachTeachPage(): JSX.Element {
   const { settings } = useSettings();
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>('white');
   const [difficulty, setDifficulty] = useState<CoachDifficulty>('medium');
+
+  // Silent Discussion-Practice faucet — feeds the shared misconception
+  // bucket on a genuine slip during guided play-against-coach, WITHOUT a
+  // "why?" panel or extra voice (the brain already narrates every move).
+  // Passive capture, exactly like the auto-analysis faucet but live.
+  const discussion = useDiscussionPractice(true, { silent: true, surface: 'coach-teach' });
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
 
@@ -2426,6 +2434,9 @@ export function CoachTeachPage(): JSX.Element {
   // observe completed moves and tell the coach about them.
   const handleStudentMove = useCallback((move: MoveResult): void => {
     if (busy) return;
+    // Pre-move FEN (before we overwrite liveFenRef below) — the slip faucet
+    // needs the position the student moved FROM.
+    const fenBefore = liveFenRef.current;
     // Update liveFenRef SYNCHRONOUSLY with the post-move FEN that the
     // MoveResult already carries. This is what every brain trip's
     // getLiveFen will read, so trip 1 sees the post-student-move
@@ -2433,8 +2444,23 @@ export function CoachTeachPage(): JSX.Element {
     // pass fenOverride for the kickoff envelope's input.liveState.fen
     // (used by trip 1 before getLiveFen kicks in on trip 2+).
     liveFenRef.current = move.fen;
+    // Silent faucet: a genuine eval-worsening slip during guided play feeds
+    // the bucket so it resurfaces as a drill. No panel/voice — the brain is
+    // already narrating this move.
+    const openingName = walkthrough.tree?.openingName;
+    void discussion.evaluatePlayerMove({
+      fenBefore,
+      fenAfter: move.fen,
+      playedSan: move.san,
+      playerColor,
+      inBook: false,
+      learned: !!openingName,
+      gamePhase: classifyPhase(move.fen, (move.moveNumber ?? 1) * 2),
+      moveNumber: move.moveNumber,
+      openingName,
+    });
     void handleSubmit(`I played ${move.san}. Your move.`, { fenOverride: move.fen });
-  }, [busy, handleSubmit]);
+  }, [busy, handleSubmit, discussion, walkthrough.tree?.openingName, playerColor]);
 
   // ─── Guided-opening-play kickoff ─────────────────────────────────────────
   // On mount, pull the student's last 5 games + weakness profile so the

@@ -70,9 +70,22 @@ function cpToWords(cpLoss: number): string {
   return 'gives away a little something';
 }
 
+export interface UseDiscussionPracticeOptions {
+  /** Silent mode: detect the slip and feed the bucket WITHOUT raising the
+   *  "why did you play that?" panel or speaking. For surfaces that are
+   *  already narrating (the /coach/teach brain) or are silent-by-contract
+   *  (WLPP Practice). The capture is passive — no userReason — exactly like
+   *  the auto-analysis faucet, just live per-move. */
+  silent?: boolean;
+  /** A label for the audit trail so we can tell which surface fired. */
+  surface?: string;
+}
+
 export function useDiscussionPractice(
   enabled: boolean,
+  opts: UseDiscussionPracticeOptions = {},
 ): UseDiscussionPracticeResult {
+  const { silent = false, surface } = opts;
   const [phase, setPhase] = useState<DiscussionPhase>('idle');
   const [prompt, setPrompt] = useState<DiscussionPrompt | null>(null);
   const [teach, setTeach] = useState<string | null>(null);
@@ -129,6 +142,54 @@ export function useDiscussionPractice(
         mastersTopSan = top?.san;
       } catch { /* no masters data */ }
 
+      void logAppAudit({
+        kind: 'faucet-slip-detected',
+        category: 'subsystem',
+        source: `useDiscussionPractice.evaluatePlayerMove${surface ? `:${surface}` : ''}`,
+        summary: `played=${args.playedSan} best=${bestSan ?? '?'} cpLoss=${slip.cpLoss} count=${slip.shouldCount} phase=${args.gamePhase} silent=${silent}`,
+        fen: args.fenBefore,
+        details: JSON.stringify({
+          surface,
+          silent,
+          playedSan: args.playedSan,
+          bestSan,
+          mastersTopSan,
+          cpLoss: slip.cpLoss,
+          shouldCount: slip.shouldCount,
+          inBook: args.inBook,
+          openingName: args.openingName,
+        }),
+      });
+
+      // Silent mode: feed the bucket directly, no panel, no voice — for
+      // surfaces that already narrate (the /coach/teach brain) or are
+      // silent-by-contract (WLPP Practice). Passive capture, no userReason.
+      if (silent) {
+        await captureMisconception({
+          classifyInput: {
+            fen: args.fenBefore,
+            playedSan: args.playedSan,
+            bestSan,
+            mastersTopSan,
+            evalSummary: cpToWords(slip.cpLoss),
+            gamePhase: args.gamePhase,
+          },
+          source: 'discussion-practice',
+          shouldCount: slip.shouldCount,
+          context: {
+            fen: args.fenBefore,
+            playedSan: args.playedSan,
+            bestSan,
+            cpLoss: slip.cpLoss,
+            gamePhase: args.gamePhase,
+            moveNumber: args.moveNumber,
+            openingId: args.openingId,
+            openingName: args.openingName,
+          },
+        });
+        return;
+      }
+
       setPrompt({
         question: buildWhyPrompt(slip),
         fenBefore: args.fenBefore,
@@ -143,26 +204,10 @@ export function useDiscussionPractice(
         moveNumber: args.moveNumber,
       });
       setPhase('asking');
-      void logAppAudit({
-        kind: 'faucet-slip-detected',
-        category: 'subsystem',
-        source: 'useDiscussionPractice.evaluatePlayerMove',
-        summary: `played=${args.playedSan} best=${bestSan ?? '?'} cpLoss=${slip.cpLoss} count=${slip.shouldCount} phase=${args.gamePhase}`,
-        fen: args.fenBefore,
-        details: JSON.stringify({
-          playedSan: args.playedSan,
-          bestSan,
-          mastersTopSan,
-          cpLoss: slip.cpLoss,
-          shouldCount: slip.shouldCount,
-          inBook: args.inBook,
-          openingName: args.openingName,
-        }),
-      });
     } catch {
       // Any failure → no prompt this move. Never block the game.
     }
-  }, [enabled]);
+  }, [enabled, silent, surface]);
 
   const resolve = useCallback(async (reason: string | undefined): Promise<void> => {
     if (!prompt) return;

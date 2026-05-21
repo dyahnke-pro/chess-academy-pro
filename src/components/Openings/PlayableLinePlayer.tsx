@@ -13,6 +13,8 @@ import {
   Lightbulb,
 } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
+import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
+import { classifyPhase } from '../../services/gamePhaseService';
 import { usePieceSound } from '../../hooks/usePieceSound';
 import { useBoardGlow } from '../../hooks/useBoardGlow';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
@@ -86,6 +88,15 @@ export function PlayableLinePlayer({
   // Chess instance for memory phase move validation + position tracking
   const chessRef = useRef<Chess>(new Chess(line.fen));
   const [memoryFen, setMemoryFen] = useState(line.fen);
+
+  // Silent Discussion-Practice faucet — Practice mode feeds the shared
+  // misconception bucket when the student plays a genuine eval-worsening
+  // slip off the line (David 2026-05-21: "Practice should get wired in").
+  // Silent by contract (no panel, no voice). The eval-delta gate means a
+  // good-but-off-line move doesn't capture — only real errors do. Fires at
+  // most once per move index so retries don't double-count.
+  const discussion = useDiscussionPractice(mode === 'practice', { silent: true, surface: 'opening-practice' });
+  const faucetFiredRef = useRef<Set<number>>(new Set());
 
   // Selected square + legal moves for click-to-move in memory phase
   const [selectedSquare, setSelectedSquare] = useState<string | null>(null);
@@ -306,6 +317,29 @@ export function PlayableLinePlayer({
         }, 400);
       } else {
         // Wrong move - do not apply to chess, show error
+        // Silent faucet: if the off-line move is a genuine eval-worsening
+        // slip (not just a different good move), feed the bucket. Once per
+        // move index so retries don't double-count. Best-effort — never
+        // blocks the drill.
+        if (mode === 'practice' && !faucetFiredRef.current.has(memoryMoveIndex)) {
+          faucetFiredRef.current.add(memoryMoveIndex);
+          const fenBefore = chessRef.current.fen();
+          const sideToMove = chessRef.current.turn();
+          try {
+            const temp = new Chess(fenBefore);
+            const attempted = temp.move({ from: from as Square, to: to as Square, promotion: 'q' });
+            void discussion.evaluatePlayerMove({
+              fenBefore,
+              fenAfter: temp.fen(),
+              playedSan: attempted.san,
+              playerColor: sideToMove === 'w' ? 'white' : 'black',
+              inBook: false,
+              learned: true,
+              gamePhase: classifyPhase(temp.fen(), chessRef.current.history().length + 1),
+              openingName: line.title,
+            });
+          } catch { /* illegal attempt — nothing to capture */ }
+        }
         setShowWrongFlash(true);
         setShakeBoard(true);
         playEncouragement();
@@ -317,7 +351,7 @@ export function PlayableLinePlayer({
         }, 1200);
       }
     },
-    [phase, memoryMoveIndex, expectedMoves, showWrongFlash, showCorrectFlash, playMoveSound, playCelebration, playEncouragement, clearSelection, onComplete],
+    [phase, memoryMoveIndex, expectedMoves, showWrongFlash, showCorrectFlash, playMoveSound, playCelebration, playEncouragement, clearSelection, onComplete, mode, discussion, line.title],
   );
 
   const handlePieceDrop = useCallback(
