@@ -84,6 +84,13 @@ export async function getAllMisconceptions(): Promise<MisconceptionTagRecord[]> 
   return db.misconceptionTags.toArray();
 }
 
+/** True when this game has already been tagged — guards Game Review /
+ *  auto-analysis against double-logging the same game's blunders. */
+export async function hasMisconceptionsForGame(gameId: string): Promise<boolean> {
+  const n = await db.misconceptionTags.where('sourceGameId').equals(gameId).count();
+  return n > 0;
+}
+
 export interface MisconceptionAggregate {
   tag: string;
   def: MisconceptionTagDef | null;

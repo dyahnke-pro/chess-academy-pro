@@ -530,12 +530,22 @@ faucets and the hub wire onto it.
     same hook onto Play-with-Coach + middlegame/endgame Play (the hook is
     surface-agnostic — one mount each); a Web Speech mic capture for the
     answer (text input works today, voice question/teach already speak).
-- **Phase M2 — Game Review + import auto-analysis (faucets 2 & 3).**
-  Where-you-left-book marker (explorer scan over the game, `explorer
-  Translate`); reasoning capture at every blunder → `logMisconception
-  (source:'game-review')`; deep-link to masterclass tab. Plus passive
-  import-time auto-tag from `detectBlunders` + `detectOpening`
-  (`source:'auto-analysis'`, no "why" required).
+- **Phase M2 — Game Review + auto-analysis (faucets 2 & 3). status:
+  DONE (CoachGameReview wired; classify/voice need device, G7).**
+  - `theoryDeviationScan.ts` — replays the game vs masters, first off-book
+    move + masters move (explorerTranslate). Tested.
+  - `autoAnalyzeGame.ts` — classify + log a game's blundered player-moves
+    (source:'auto-analysis'), count-against gated. Tested.
+  - `hasMisconceptionsForGame` dedup guard.
+  - `GameReviewWeaknessCapture.tsx` — the surface: "Where you left the
+    book" marker + deep-link to the masterclass + a one-tap "Add this
+    game's mistakes to your weaknesses" (builds BlunderForAnalysis from
+    CoachGameMove[], dedup by gameId). Mounted under ReviewSummaryCard.
+  - NOTE: capture is a deliberate one-tap (learned=true), NOT bulk-on-
+    import (would hammer the LLM across a whole history). Bulk/passive
+    import-time auto-tag is a future opt-in. STILL TODO: per-blunder
+    interactive "why?" during the walk (the marker + batch capture cover
+    the faucet for now); voice mic capture of the answer.
 - **Phase M3 — Training Plan hub.** Read `getMisconceptionProfile` →
   "Today's reps" (weighted shares: weakness > SRS-due > new) over the
   full browse menu; drills via `mapTagToDrills`; feed results back via
