@@ -98,12 +98,12 @@ beforeEach(() => {
 });
 
 describe('TheoryLinesRow', () => {
-  it('renders X / Y count and navigates to /openings?opening=<name>', () => {
+  it('renders X / Y count and deep-links into the opening masterclass', () => {
     mocks.useOpeningLinesProgress.mockReturnValue({ completed: 3, total: 8, loading: false });
     render(<TheoryLinesRow opening={buildOpening()} />);
     expect(screen.getByTestId('rolodex-row-count-theory-lines')).toHaveTextContent('3 / 8');
     fireEvent.click(screen.getByTestId('rolodex-row-tap-theory-lines'));
-    expect(mocks.navigate).toHaveBeenCalledWith('/openings?opening=Italian%20Game');
+    expect(mocks.navigate).toHaveBeenCalledWith('/openings/italian');
   });
 
   it('renders an ellipsis while the hook is loading', () => {

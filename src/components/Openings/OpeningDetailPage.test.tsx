@@ -206,6 +206,14 @@ describe('OpeningDetailPage', () => {
     });
   });
 
+  it('deep-links a variation via the ?line= query param', async () => {
+    renderWithRoute('vienna-game?line=copycat');
+    await waitFor(() => {
+      expect(screen.getByTestId('variation-tab-1')).toHaveAttribute('aria-selected', 'true');
+    });
+    expect(screen.getByTestId('variation-tab-main')).toHaveAttribute('aria-selected', 'false');
+  });
+
   it('renders a variation tab per variation', async () => {
     renderWithRoute();
     await waitFor(() => {
