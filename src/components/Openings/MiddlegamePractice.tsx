@@ -7,6 +7,8 @@ import { stockfishEngine } from '../../services/stockfishEngine';
 import { getCoachChatResponse } from '../../services/coachApi';
 import { speechService } from '../../services/speechService';
 import { sanitizeForTTS } from '../../services/voiceService';
+import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
+import { DiscussionPracticePanel } from './DiscussionPracticePanel';
 import { ArrowLeft, MessageCircle, Volume2, VolumeX, Undo, Lightbulb } from 'lucide-react';
 import type {
   MiddlegamePlan,
@@ -164,6 +166,15 @@ export function MiddlegamePractice({
   const planContextRef = useRef(buildPlanContext(plan));
   const isMountedRef = useRef(true);
 
+  // ─── Discussion Practice (the live faucet) ──────────────────────────────
+  // After a player slip the coach asks "why did you play that?"; the answer
+  // is classified into a misconception and logged to the shared weakness
+  // bucket. Same faucet OpeningPlayMode / /coach/play use — wired here so
+  // middlegame-plan practice feeds the money loop too. fenBefore is tracked
+  // because ControlledChessBoard mutates `game` before onMove fires.
+  const discussion = useDiscussionPractice(true);
+  const fenBeforeRef = useRef<string>(plan.criticalPositionFen);
+
   useEffect(() => {
     isMountedRef.current = true;
     return () => { isMountedRef.current = false; };
@@ -235,7 +246,10 @@ export function MiddlegamePractice({
     if (isEngineTurn()) {
       void makeEngineMove();
     } else {
-      // Player's turn — analyze for engine lines
+      // Player's turn — analyze for engine lines. Snapshot the pre-move FEN
+      // so the discussion faucet can eval the move the student is about to
+      // play (ControlledChessBoard mutates `game` before onMove fires).
+      fenBeforeRef.current = game.fen;
       void analyzePosition(game.fen);
     }
   }, [game.fen, game.isCheckmate, game.isStalemate, game.isDraw, isEngineTurn, makeEngineMove, analyzePosition]);
@@ -310,8 +324,36 @@ export function MiddlegamePractice({
     setMoveCount((prev) => prev + 1);
     setEngineArrows([]);
     setTopLines([]);
+    // Discussion Practice faucet — best-effort slip capture for the bucket.
+    // This is a middlegame plan, so the position is past book by definition.
+    void discussion.evaluatePlayerMove({
+      fenBefore: fenBeforeRef.current,
+      fenAfter: moveResult.fen,
+      playedSan: moveResult.san,
+      playerColor,
+      inBook: false,
+      learned: true,
+      gamePhase: 'middlegame',
+      moveNumber: moveCount + 1,
+      openingId: plan.openingId,
+      openingName: plan.title,
+    });
     void getCoachFeedback(moveResult.san, moveResult.fen);
-  }, [getCoachFeedback]);
+  }, [getCoachFeedback, discussion, playerColor, moveCount, plan.openingId, plan.title]);
+
+  // Speak the Discussion "why?" prompt + coach teach — only when the
+  // surface's narration toggle is on (Practice stays silent otherwise; the
+  // panel still shows the question visually).
+  useEffect(() => {
+    if (isNarrating && discussion.phase === 'asking' && discussion.prompt) {
+      void speechService.speak(sanitizeForTTS(discussion.prompt.question));
+    }
+  }, [isNarrating, discussion.phase, discussion.prompt]);
+  useEffect(() => {
+    if (isNarrating && discussion.phase === 'teaching' && discussion.teach) {
+      void speechService.speak(sanitizeForTTS(discussion.teach));
+    }
+  }, [isNarrating, discussion.phase, discussion.teach]);
 
   const toggleNarration = useCallback(() => {
     if (isNarrating) {
@@ -478,6 +520,16 @@ export function MiddlegamePractice({
           </div>
         </div>
       </div>
+
+      {/* Discussion Practice — "why did you play that?" + the coach teach */}
+      <DiscussionPracticePanel
+        phase={discussion.phase}
+        prompt={discussion.prompt}
+        teach={discussion.teach}
+        onSubmit={(reason) => void discussion.submitReason(reason)}
+        onSkip={() => void discussion.skip()}
+        onDismissTeach={discussion.dismissTeach}
+      />
     </div>
   );
 }

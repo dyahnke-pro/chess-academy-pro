@@ -651,7 +651,20 @@ export type AuditKind =
   | 'pwa-install-prompt'
   | 'pwa-installed'
   | 'notification-permission-changed'
-  | 'share-target-invoked';
+  | 'share-target-invoked'
+  // Misconception "money loop" instrumentation (2026-05-21). The faucet
+  // → bucket → hub → mirror → drill pipeline emits these so the live
+  // audit stream shows the loop firing during play. `faucet-slip-detected`
+  // fires the moment a play surface raises a "why did you play that?"
+  // prompt; `misconception-captured` when a tag is classified + written
+  // to the bucket (source field names which faucet: discussion-practice /
+  // game-review / auto-analysis); `misconception-drill-result` when an
+  // SRS drill spaces a tag out or snaps it back; `todays-reps-built` when
+  // the Training Plan assembles the day's reps from the bucket.
+  | 'faucet-slip-detected'
+  | 'misconception-captured'
+  | 'misconception-drill-result'
+  | 'todays-reps-built';
 
 export interface AuditEntry {
   timestamp: number;

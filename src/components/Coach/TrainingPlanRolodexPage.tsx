@@ -41,6 +41,7 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { getFavoriteOpenings } from '../../services/openingService';
 import { getMisconceptionProfile } from '../../services/misconceptionService';
 import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
+import { logAppAudit } from '../../services/appAuditor';
 import { RolodexCardStack } from './RolodexCardStack';
 import type { OpeningRecord } from '../../types';
 
@@ -62,8 +63,19 @@ function TodaysReps(): JSX.Element | null {
       if (flag.cancelled) return;
       // SRS-due / new-line pools wire in a follow-up; the selector
       // backfills gracefully from the weakness pool until then.
-      setReps(buildTodaysReps({ weaknesses: profile, srsDue: [], newLines: [], total: 5 }));
+      const built = buildTodaysReps({ weaknesses: profile, srsDue: [], newLines: [], total: 5 });
+      setReps(built);
       setLoaded(true);
+      void logAppAudit({
+        kind: 'todays-reps-built',
+        category: 'subsystem',
+        source: 'TrainingPlanRolodexPage.TodaysReps',
+        summary: `reps=${built.length} weaknessTags=${profile.length} dueTags=${profile.filter((p) => p.openCount > 0).length}`,
+        details: JSON.stringify({
+          repKinds: built.map((r) => r.kind),
+          topTags: profile.slice(0, 5).map((p) => ({ tag: p.tag, openCount: p.openCount, total: p.total })),
+        }),
+      });
     })();
     return () => { flag.cancelled = true; };
   }, []);

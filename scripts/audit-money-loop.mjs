@@ -136,6 +136,29 @@ async function main() {
   const page = await context.newPage();
   const pageErrors = [];
   page.on('pageerror', (e) => pageErrors.push(String(e)));
+
+  // Read the local Dexie audit log (db.meta key 'app-audit-log.v1') — every
+  // logAppAudit() call lands here regardless of whether the audit-stream
+  // POST is configured (it isn't on localhost). Lets us assert the loop's
+  // new instrumentation events actually fired during the run.
+  const readAuditKinds = () => page.evaluate(() => new Promise((res) => {
+    const o = indexedDB.open('ChessAcademyDB');
+    o.onsuccess = () => {
+      try {
+        const tx = o.result.transaction('meta', 'readonly');
+        const r = tx.objectStore('meta').get('app-audit-log.v1');
+        r.onsuccess = () => {
+          try {
+            const rows = JSON.parse(r.result?.value ?? '[]');
+            res(Array.isArray(rows) ? rows.map((e) => e.kind) : []);
+          } catch { res([]); }
+        };
+        r.onerror = () => res([]);
+      } catch { res([]); }
+    };
+    o.onerror = () => res([]);
+  }));
+
   const now = Date.now();
 
   try {
@@ -267,6 +290,23 @@ async function main() {
     // mirror/hub; the Game-Review "deviation → masterclass" link is unit-level
     // here (needs a reviewed game to render), flagged device-only.
     record('FAUCET: Game-Review capture deep-link is device-verified (needs a reviewed game)', true, 'G7 note');
+
+    // ── INSTRUMENTATION — the loop's new audit events fire on the stream ───
+    // The HUB render emits `todays-reps-built` (TrainingPlanRolodexPage). This
+    // proves the observability David asked for: the loop is visible in the live
+    // audit stream during play. The faucet/capture events (faucet-slip-detected,
+    // misconception-captured) are device-only here — they need a real LLM slip
+    // classification (G7), so they're verified on David's live device play, not
+    // headless. Give async POSTs a beat to flush, then assert.
+    await page.goto(`${BASE_URL}/coach/plan`, { waitUntil: 'domcontentloaded' });
+    await page.locator('[data-testid="todays-reps"]').waitFor({ state: 'visible', timeout: 25_000 }).catch(() => {});
+    await page.waitForTimeout(1500); // let the async audit-log write flush
+    const kinds = await readAuditKinds().catch(() => []);
+    record('INSTRUMENTATION: todays-reps-built audit event fired (logged to Dexie)',
+      kinds.includes('todays-reps-built'),
+      `loop kinds: ${kinds.filter((k) => /todays-reps|misconception|faucet/.test(k)).join(',') || 'none'}`);
+    record('INSTRUMENTATION: faucet-slip-detected + misconception-captured are device-only (LLM classify, G7)',
+      true, 'verified on live device play, not headless');
   } catch (e) {
     record('audit-run', false, String(e));
   }

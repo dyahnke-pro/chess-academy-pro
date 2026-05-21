@@ -6,6 +6,7 @@
 // stores, aggregates, and maps them to drills.
 
 import { db } from '../db/schema';
+import { logAppAudit } from './appAuditor';
 import type {
   MisconceptionTagRecord,
   MisconceptionSource,
@@ -104,6 +105,22 @@ export async function logMisconception(
     dueAt: Date.now(), // due immediately on first capture
   };
   await db.misconceptionTags.add(record);
+  void logAppAudit({
+    kind: 'misconception-captured',
+    category: 'subsystem',
+    source: `misconceptionService.logMisconception:${input.source}`,
+    summary: `tag=${record.tag} bucket=${getMisconceptionTag(record.tag)?.bucket ?? 'uncategorized'} cpLoss=${record.cpLoss ?? 'n/a'} phase=${record.gamePhase ?? 'n/a'}`,
+    fen: record.fen,
+    details: JSON.stringify({
+      tag: record.tag,
+      customLabel: record.customLabel,
+      source: record.source,
+      playedSan: record.playedSan,
+      bestSan: record.bestSan,
+      openingName: record.openingName,
+      sourceGameId: record.sourceGameId,
+    }),
+  });
   return record;
 }
 
@@ -210,6 +227,13 @@ export async function recordTagDrillResult(tag: string, success: boolean): Promi
       });
     }
   }
+  void logAppAudit({
+    kind: 'misconception-drill-result',
+    category: 'subsystem',
+    source: 'misconceptionService.recordTagDrillResult',
+    summary: `tag=${tag} success=${success} spaced=${due.length} instance(s)`,
+    details: JSON.stringify({ tag, success, affected: due.length }),
+  });
 }
 
 export interface TagDrillPlan {

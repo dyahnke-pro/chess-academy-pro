@@ -17,6 +17,7 @@ import {
   buildWhyPrompt,
   captureMisconception,
 } from '../services/discussionPractice';
+import { logAppAudit } from '../services/appAuditor';
 
 export type DiscussionPhase = 'idle' | 'asking' | 'thinking' | 'teaching';
 
@@ -142,6 +143,22 @@ export function useDiscussionPractice(
         moveNumber: args.moveNumber,
       });
       setPhase('asking');
+      void logAppAudit({
+        kind: 'faucet-slip-detected',
+        category: 'subsystem',
+        source: 'useDiscussionPractice.evaluatePlayerMove',
+        summary: `played=${args.playedSan} best=${bestSan ?? '?'} cpLoss=${slip.cpLoss} count=${slip.shouldCount} phase=${args.gamePhase}`,
+        fen: args.fenBefore,
+        details: JSON.stringify({
+          playedSan: args.playedSan,
+          bestSan,
+          mastersTopSan,
+          cpLoss: slip.cpLoss,
+          shouldCount: slip.shouldCount,
+          inBook: args.inBook,
+          openingName: args.openingName,
+        }),
+      });
     } catch {
       // Any failure → no prompt this move. Never block the game.
     }

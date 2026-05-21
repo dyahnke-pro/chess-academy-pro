@@ -147,7 +147,9 @@ import { getCapturedPieces, getMaterialAdvantage } from '../../services/boardUti
 import { uciMoveToSan, uciLinesToSan } from '../../utils/uciToSan';
 import { db } from '../../db/schema';
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
-import { getPhaseBreakdown } from '../../services/gamePhaseService';
+import { getPhaseBreakdown, classifyPhase } from '../../services/gamePhaseService';
+import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
+import { DiscussionPracticePanel } from '../Openings/DiscussionPracticePanel';
 import { detectMissedTactics } from '../../services/missedTacticService';
 import { detectBadHabitsFromGame } from '../../services/coachFeatureService';
 import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleService';
@@ -550,6 +552,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // its "still in opening teaching mode" window, which is computed
   // inline at the call site below.
   const intendedOpening = useCoachMemoryStore((s) => s.intendedOpening);
+
+  // ─── Discussion Practice (the live faucet) ──────────────────────────────
+  // After a player slip the coach asks "why did you play that?"; the answer
+  // is classified into a closed-set misconception and logged to the shared
+  // weakness bucket. The same faucet OpeningPlayMode uses — wired here so
+  // /coach/play feeds the bucket too. Enabled only during live play (not in
+  // explore/practice modes — those are guarded by the routed handler).
+  const discussion = useDiscussionPractice(gameState.status === 'playing');
 
   // Legacy shim: URL params (`?opening=…`, `?subject=…`) and resumed
   // games still call `handleOpeningRequest(name)`. We keep the name
@@ -1780,6 +1790,19 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     gameChatRef.current?.injectAssistantMessage(text);
   }, []);
 
+  // Speak the Discussion Practice "why?" prompt and the coach's teaching
+  // note (voice-first; voiceService self-gates on the silent verbosity).
+  useEffect(() => {
+    if (discussion.phase === 'asking' && discussion.prompt) {
+      void voiceService.speak(discussion.prompt.question).catch(() => { /* best-effort */ });
+    }
+  }, [discussion.phase, discussion.prompt]);
+  useEffect(() => {
+    if (discussion.phase === 'teaching' && discussion.teach) {
+      void voiceService.speak(discussion.teach).catch(() => { /* best-effort */ });
+    }
+  }, [discussion.phase, discussion.teach]);
+
   // Check for game over — transition to 'gameover' first to show final position
   useEffect(() => {
     if (game.isGameOver && gameState.status === 'playing') {
@@ -2703,6 +2726,30 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     const preFen = game.fen;
     previousFenRef.current = preFen;
 
+    // Discussion Practice faucet: best-effort slip check on the move just
+    // played. Mirrors OpeningPlayMode — feeds the shared weakness bucket so
+    // /coach/play participates in the money loop. Never blocks the game.
+    {
+      const openingName = intendedOpening?.name ?? detectOpening(game.history)?.name;
+      const ply = game.history.length;
+      const bookMoves = openingName ? getOpeningMoves(openingName) : null;
+      const inBook = !!bookMoves && ply < bookMoves.length;
+      const bookMoveSan = inBook ? bookMoves[ply] : undefined;
+      const phase = classifyPhase(moveResult.fen, ply + 1);
+      void discussion.evaluatePlayerMove({
+        fenBefore: preFen,
+        fenAfter: moveResult.fen,
+        playedSan: moveResult.san,
+        playerColor,
+        inBook,
+        bookMoveSan,
+        learned: !!openingName,
+        gamePhase: phase,
+        moveNumber: Math.ceil((ply + 1) / 2),
+        openingName,
+      });
+    }
+
     // NOTE: We intentionally defer game.makeMove() until after analysis.
     // Calling it here would flip game.turn to the coach's color, and because
     // the analysis below is async, React would re-render between awaits,
@@ -3492,7 +3539,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       currentHintLevel: 0,
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- intendedOpening/liveCoach/subjectParam used only for snapshot inside the callback; tracked for a dedicated exhaustive-deps audit.
-  }, [game, handleBackToGame, resetHints, playerColor, gameState.moves, triggerMoveFlash]);
+  }, [game, handleBackToGame, resetHints, playerColor, gameState.moves, triggerMoveFlash, discussion, intendedOpening]);
 
   // Handle practice move (when in chat-driven practice mode)
   const handlePracticeMove = useCallback(async (moveResult: MoveResult) => {
@@ -4521,6 +4568,16 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             isActive={isPlayerTurn && !game.isGameOver}
           />
         </div>
+
+        {/* Discussion Practice — "why did you play that?" + the coach teach */}
+        <DiscussionPracticePanel
+          phase={discussion.phase}
+          prompt={discussion.prompt}
+          teach={discussion.teach}
+          onSubmit={(reason) => void discussion.submitReason(reason)}
+          onSkip={() => void discussion.skip()}
+          onDismissTeach={discussion.dismissTeach}
+        />
 
         {/* Controls */}
         {gameState.status === 'playing' && (
