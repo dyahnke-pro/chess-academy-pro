@@ -27,3 +27,9 @@ missing_clips.txt
 .env*.local
 audit-reports/
 docs/audits/
+
+# Interactive-loop audit transient outputs (regenerated each run; read live, not versioned)
+docs/audit-runs/2026-05-19-openings-interactive-loop/findings-round-*.json
+docs/audit-runs/2026-05-19-openings-interactive-loop/findings-aggregate.json
+docs/audit-runs/2026-05-19-openings-interactive-loop/screenshots/
+docs/audit-runs/2026-05-19-openings-interactive-loop/checkpoint*.json
