@@ -1032,6 +1032,38 @@ implementation is to treat every played line as a real beat sequence (say
 + arrows + highlights) through the voice-gated lesson player, so plans get
 the identical treatment the variation lessons have.
 
+**🚨 BUILDING AN OPENING MASTERCLASS TAB → READ
+`docs/opening-masterclass-playbook.md` FIRST. It is the LOCKED build
+standard (David 2026-05-21: "lock in everything … 38 more openings plus
+the gambits").** Forged on the Ruy + Pirc; the wiring is opening-agnostic
+and done, so a new opening = author the curated data and it lights up. The
+playbook holds the rules you MUST follow, in particular:
+- **WLPP grammar (locked):** Watch = auto-play + narration; Learn = voice
+  guides each move, YOU play it; Practice = same board SILENT + a Hint
+  button; Play = coach LOCKED to this opening. Applies to the main line,
+  every variation tab, trap weapons, "watch out for" warnings, AND
+  middlegame plans (`PlayableLinePlayer` modes / `LessonPlayer`).
+- **Lead-the-eye colour language (locked):** ORANGE = the move's two
+  squares (no separate move-arrow), GREEN = vision arrows, YELLOW = a key
+  square the narration names. Generated per move + grounded/legality-gated
+  (`add-leadeye-to-plans.mjs` + `middlegamePlanner.test`).
+- **Sentence-grained reveal, NOT TTS:** speak a beat one whole sentence at
+  a time (prefetch the next so it's not choppy) and reveal each marker as
+  its square's sentence is spoken — `narrationSegments.ts`. Never wire
+  highlight timing to TTS word-boundaries.
+- **Named traps are hand-authored beat-lessons** (`ruyTrapLessons.ts` +
+  `getRuyTrapsForTab` routing by `appliesTo`), each on its CORRECT
+  variation tab, with full WLPP (Learn/Practice via the
+  `getRuyTrapPlayableLine` converter). Weapon = opponent slips, you punish;
+  warning = you must avoid — classify by who plays the punishing move.
+- **Model game MUST show the STUDENT'S side WINNING** — never ship a game
+  where the opening loses (the Pirc's Kasparov–Topalov is a White win
+  against the Pirc = wrong). Source a real win; never fabricate a PGN.
+The playbook + the gate roster (`middlegamePlanner` / `lessonIntegrity` /
+`narrationAccuracy` / orientation tests) + the audits (`audit-leadeye-plans`,
+`audit-named-traps`, `audit-openings-interactive-loop`) are how each of the
+remaining ~38 openings + gambits gets built to this standard independently.
+
 Every spoken line in the app — whether hand-authored in JSON or
 generated in code templates — must follow these rules. The voice
 is the *position* teaching the student, not the interface

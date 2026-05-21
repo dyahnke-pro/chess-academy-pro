@@ -41,8 +41,35 @@ is curated content, not code.
 - **URL is the source of truth** for the selected tab: `?line=<label>`
   (e.g. `/openings/ruy-lopez?line=berlin`). Deep-linkable from anywhere.
 - WLPP grammar everywhere: **Watch / Learn / Practice / Play** on every
-  teachable line. Main-line Play navigates to `/coach/play`; variation
-  Play mounts `OpeningPlayMode` in-page.
+  teachable line. See §1a for the LOCKED definition of each verb.
+
+## 1a. The WLPP grammar — LOCKED definitions (David 2026-05-21)
+
+These four verbs mean the SAME thing on every teachable unit — the main
+line, every variation tab, trap **weapons**, "watch out for" **warnings**,
+AND the middlegame plans. Get them right; I had them wrong before.
+
+- **Watch** — the board plays itself with the narration. Hands-off auto-play:
+  the masterclass teaching, voice-gated beats, board animates. (Lessons →
+  `LessonPlayer`; middlegame plans → `PlayableLinePlayer` mode `'watch'`
+  demo; named traps → the beat lesson via `LessonPlayer`.)
+- **Learn** — the voice GUIDES you move by move: it speaks each move's idea
+  and shows the move + its lead-the-eye arrows/highlights, and YOU play it on
+  the board. NOT a second auto-play. (`PlayableLinePlayer` mode `'learn'`.)
+  The old bug: Learn just re-played the Watch lesson — that is WRONG.
+- **Practice** — the SAME board as Learn but SILENT: no voice, just a **Hint
+  button** that reveals the move arrow on demand. You replay from memory.
+  (`PlayableLinePlayer` mode `'practice'`.)
+- **Play** — Play-with-Coach with THIS opening/line **locked in** so the
+  coach plays it and can't wander into a random opening (sets
+  `intendedOpening` / mounts `OpeningPlayMode` for the line). Main-line Play
+  may hand to `/coach/play` with the opening declared; variation/trap Play
+  mounts `OpeningPlayMode` in-page from the line.
+
+One player serves Watch/Learn/Practice over a `{fen, moves, annotations,
+arrows, highlights}` line; a PGN/beat-lesson is converted into that shape
+when needed (see §3 the trap converter). Plans with no playable line fall
+back to the study / free-practice surfaces.
 
 ## 2. Per-variation content checklist
 
@@ -79,6 +106,33 @@ For each first-class variation tab, author:
   Noah's Ark antidote) is taught as ONE idea: the danger and its prevention
   together. Weave the "this maneuver dodges that trap" line into the plan
   narration.
+- **Reality check on counts (student-side).** A trap is a WEAPON only when
+  the OPPONENT slips and YOU punish. In a White opening only the lines where
+  Black blunders are weapons; lines where YOU must avoid a slip are warnings.
+  Don't expect many weapons — the Ruy has exactly ONE true weapon (Tarrasch);
+  Noah's Ark / Mortimer / Fishing Pole / Marshall-only-move are all warnings.
+  Classify by who plays the punishing move, not by how famous the trap is.
+- **Named traps are hand-authored beat-lessons, NOT data tiles.** Pattern:
+  `src/data/lessons/ruyTrapLessons.ts` — a `LessonScript` per trap + a
+  `RUY_TRAP_DEFS` routing table (`{id, name, kind:'weapon'|'warning',
+  appliesTo:[tab labels]}`) + `getRuyTrapsForTab(tabKey)`. The page renders
+  weapons in the Weapons zone, warnings in Pitfalls, filtered by the current
+  tab. (`repertoire.json` trapLines/warningLines stay EMPTY for an opening
+  whose traps are hand-authored this way — don't double-source.)
+- **WLPP on every named trap.** Each trap tile gets the full 4-button row:
+  Watch = the beat lesson (untouched); Learn/Practice = the trap's CORRECT
+  teaching line played via `PlayableLinePlayer`; Play = coach locked to the
+  opening. The lesson→line **converter** (`getRuyTrapPlayableLine`) takes the
+  LAST beat (the punish for a weapon, the antidote move for a warning) as the
+  line and carries each prefix beat's `say` text onto its move VERBATIM. The
+  trap-branch beats (the wrong moves) stay Watch-only — nothing lost, the bad
+  moves just aren't drilled.
+- **Narration carries over verbatim through the converter** (it copies each
+  prefix beat's `say` onto its move unchanged). `lessonIntegrity.test.ts`
+  asserts this. NOTE: the "did the narration survive?" worry was a one-off
+  caused by a bad MERGE that dropped content — it is NOT an ongoing design
+  hazard, so don't treat "narration survival" as a standing doctrine. The
+  gate is cheap, so it's kept as a safety net; that's all.
 
 ## 4. Endgame rules
 
@@ -97,10 +151,20 @@ For each first-class variation tab, author:
 
 ## 5. Narration rules (apply to every spoken line)
 
+- **Model games MUST showcase the STUDENT'S SIDE WINNING (David 2026-05-21,
+  emphatic: "cannot have a model game that shows the opening losing, good god
+  that would be bad").** A Black-oriented class (Pirc, etc.) needs a beautiful
+  BLACK win; a White opening needs a White win. The Pirc shipped with
+  Kasparov–Topalov 1999 — a White brilliancy AGAINST the Pirc — which is
+  exactly wrong. **Source a real classic win for the student's side; never
+  fabricate a PGN** (G3 — if `model-games.json` has none for the side, leave
+  it empty / hide the section and flag for sourcing, rather than ship a loss
+  or invent moves). Empty > a losing game > a fabricated game.
 - **Model games**: reinforce the lesson's KEY PRINCIPLES at keystone
   moments + pause to appreciate the BEAUTY — NOT move-by-move. Vehicle =
   `criticalMoments` (moveNumber/color/fen/annotation/concept/highlights/
-  arrows). Voiced via the viewer.
+  arrows). Voiced via the viewer. Author them with the lead-the-eye colours
+  (§5a) and the sentence-grained reveal where the viewer supports it.
 - **Lessons/walkthroughs**: keystone narration; silence is fine for routine
   moves. No acknowledgments ("Great move!"), no first-person, no interface
   references. The position teaches, not a tutor character. (See the
@@ -108,14 +172,58 @@ For each first-class variation tab, author:
 - **Highlight the pieces/squares as they're named — lead the eye. NON-
   NEGOTIABLE, every played sequence (David 2026-05-21).** The arrows +
   highlights move the user's eyes so they listen to the words instead of
-  hunting for pieces and angles. This applies to lessons AND **middlegame
-  plans (playableLines)** AND model games — NOT just beats. Naming a square
-  in the narration with nothing pointing at it is a defect (it's what made
-  the middlegame-plan WATCH "shitty work" — bare move-arrows, no vision to
-  the squares named). Author per-move arrows+highlights matching each
-  annotation; a played line without them is NOT done. (Arrows must
-  originate on a non-pawn piece with a clear sight-line — `lessonIntegrity`
-  enforces it.)
+  hunting for pieces and angles. Applies to lessons AND **middlegame plans
+  (playableLines)** AND model games — NOT just beats. Naming a square in the
+  narration with nothing pointing at it is a defect. A played line without
+  lead-the-eye markers matching its narration is NOT done.
+
+### 5a. The lead-the-eye COLOUR LANGUAGE — LOCKED (David 2026-05-21)
+
+Three meanings, three colours. Fewer colours = less clutter; David cut the
+original 4-colour scheme (separate green move-arrow + amber vision + cyan
+piece) down to this:
+- **ORANGE** = the move just played — its two squares (from + to). This
+  REPLACES the move arrow; there is no separate "move arrow" any more.
+- **GREEN** = vision arrows — what a piece is looking at (piece → target).
+- **YELLOW** = a key square the narration is calling out.
+
+For the live coach the ARROW colours stay engine-rank (green=#1, blue=#2,
+yellow=#3, red=threat) because that serves live play; the TEACHING
+**highlight** colours match the lessons (yellow=key square, green=praised
+piece/square, red=weakness/target). Coach knows this via `envelope.ts`
+TEACH_MODE_ADDITION.
+
+### 5b. The lead-the-eye GENERATION ALGORITHM (per move, deterministic)
+
+`scripts/add-leadeye-to-plans.mjs` is the reference. Per move in a line:
+- **Vision arrows (green):** for every square the annotation NAMES, if a
+  named piece (or the piece that just moved) has a CLEAR legal sight-line to
+  it, draw a green arrow. Verify with chess.js `sees()`/`clearRay()`; a
+  blocked ray is SKIPPED, never faked. Cap ~2 so the board stays clean.
+- **Highlights:** the move's from+to squares ORANGE; every other named key
+  square YELLOW. Cap ~6, deduped.
+- **The gate (`middlegamePlanner.test.ts`):** every vision arrow must be a
+  legal sight-line AND grounded — every highlight + every vision-arrow
+  endpoint must be a square the annotation actually NAMES (bare `f5` or
+  piece-token `Nf5`). Only the orange move-squares are exempt (they ARE the
+  move). Run it; a played line that fails grounding is not shippable.
+
+### 5c. SENTENCE-GRAINED REVEAL — squares light as they're spoken, NOT TTS
+
+David: "we turn that [TTS-timing] off and use beats." Narration is
+voice-gated beats; the TTS engine does NOT drive timing. To make a square
+light up as its name is spoken WITHOUT choppy audio:
+- Speak the beat's narration ONE WHOLE SENTENCE at a time (sentences are
+  natural prosodic units — they don't sound chopped), **prefetch the next
+  sentence** so the seam stays small.
+- Reveal each arrow/highlight when the SENTENCE that names its square is
+  spoken. Voice-off → reveal everything immediately (no narration to gate).
+- Mechanism: `src/services/narrationSegments.ts`
+  (`buildNarrationSegments` + `speakSegments`), wired into `LessonPlayer`
+  (the player filters its board markers by the revealed set). Reuse it for
+  any new narrated player; do NOT reach for TTS word-boundary events.
+  CAVEAT (G7): per-sentence audio PACING can't be judged headless — route
+  the "does it sound smooth" check to David on prod.
 - **Voice-first** (Polly TTS) everywhere; respect the verbosity contract
   (silent/brief/full — G5). Book passages get the descriptive-notation
   scrub (`scrubDescriptiveNotationForSpeech`) for speech only.
@@ -236,7 +344,55 @@ Play-with-Coach, middlegame/endgame Play, Practice) — NEVER a silo:
   prose, replay the line through chess.js for legality + arrows, refuse to
   write on an illegal move. Validate with the planner / lessonIntegrity
   tests before shipping.
+- **KNOW WHERE THE DATA IS READ FROM (don't ship to the wrong place).**
+  Middlegame plans render from **Dexie** (`db.middlegamePlans`, via
+  `getPlansForOpening`), re-seeded from `middlegame-plans.json` on EVERY boot
+  (`loadMiddlegamePlansData` bulkPut — idempotent, carries no user progress).
+  So plan edits reach devices automatically. Named traps render from the
+  **static import** (`RUY_TRAP_DEFS`), so they ship in the bundle. The
+  opening detail page reads `playableLines` straight from the static JSON
+  import in some paths and Dexie in others — when content "isn't showing,"
+  check which path the surface reads before assuming a bug.
+- **The gate roster — run these before shipping any opening's content:**
+  - `middlegamePlanner.test.ts` — plan lines legal + annotations 1:1 + the
+    lead-the-eye legality/grounding gate (§5b) + correct orientation.
+  - `lessonIntegrity.test.ts` — beats legal, arrows originate on a non-pawn
+    with a clear sight-line, white-orientation for white openings, AND the
+    named-trap narration-survives-the-transition check (§3).
+  - `narrationAccuracy.test.ts` — every "<square>-<piece>" claim is grounded
+    on the board (colour-agnostic; extend it to the new opening).
+  - Black openings get their OWN orientation test (`pircIntegrity.test.ts`
+    asserts `'black'`); do NOT add black lessons to the Ruy white-orientation
+    array.
+- **Interactive audits (G7) for the new content:**
+  - `scripts/audit-leadeye-plans.mjs` — middlegame-plan Watch/Learn/Practice,
+    both orientations: highlights paint, vision arrows render, modes mount.
+  - `scripts/audit-named-traps.mjs` — named-trap WLPP on the correct tab,
+    Watch narration intact, Learn/Practice mount, Hint reveals the move.
+  - `scripts/audit-openings-interactive-loop.mjs` (`AUDIT_ONLY_OPENINGS=<id>`)
+    — the full §9 loop to 3 clean rounds.
+  Note react-chessboard v5 applies `squareStyles` to an INNER child div, not
+  the `[data-square]` element — a highlight-paint probe must scan descendant
+  div styles, not the square element.
 - **Per-opening process**: (1) curate the first-class variation tabs, (2)
-  per variation author key ideas + a DB-grounded plan + traps/endgame where
-  genuine, (3) the wiring auto-surfaces it, (4) audit to 3 clean rounds.
-  Each opening gets faster as the toolkit hardens.
+  per variation author key ideas + a DB-grounded plan (with §5a/§5b
+  lead-the-eye) + traps/endgame where genuine, all WLPP-wired (§1a), (3) the
+  wiring auto-surfaces it, (4) a real model game for the student's side if one
+  exists (§5), (5) run the gate roster, (6) audit to 3 clean rounds. Each
+  opening gets faster as the toolkit hardens.
+
+## 11. Reusable toolkit built on the Ruy/Pirc (use these, don't reinvent)
+
+- **Players:** `LessonPlayer` (beat masterclass + sentence-grained reveal),
+  `PlayableLinePlayer` (Watch/Learn/Practice modes + Hint), `MiniBoard`/
+  `ConsistentChessboard` (static), `ModelGameViewer`.
+- **Services:** `narrationSegments` (sentence reveal), `getRuyTrapPlayableLine`
+  (lesson→line converter), `getRuyTrapsForTab` (trap routing),
+  `middlegamePlanService` (Dexie plans), `boardAnnotationService`
+  (`[BOARD: arrow/highlight]` parsing for the coach).
+- **Builder scripts:** `add-leadeye-to-plans.mjs` (generates the lead-the-eye
+  arrows+highlights for plan lines), `add-<opening>-middlegame-plans.mjs`,
+  `add-<opening>-variation-keyideas.mjs`, `add-<opening>-*-endgame*.mjs`,
+  `strip-automined-traps.mjs`. Copy the Pirc set (`add-pirc-*`) as the
+  template for a new opening — hand-author prose, replay through chess.js for
+  legality + arrows, refuse to write on an illegal move.
