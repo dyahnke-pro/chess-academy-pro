@@ -146,9 +146,14 @@ deviationMove?, explanation`. NOT overview/keyIdeas/plans/games.
   default fundamentals + ruy override), each lesson a line with Study
   (in-page LessonView, exported from EndgameLessonTab) + Play (vs coach
   from the position). status: DONE (PR pending).
-- **Phase 4 — The 7-tab shell.** Gold-glow tab bar; selecting a tab
-  re-scopes the whole page to that variation (reusing the per-variation
-  viewModes). Remove the bottom Variations zone. status: pending.
+- **Phase 4 — The 7-tab shell.** DONE. VariationTabs (gold-glow:
+  selected = full glow, others = left+bottom glow) drives selectedTabIndex
+  (-1 = main line). Full-page rescope: subjectName/overview/keyIdeas +
+  middlegame plan filter + the main Watch/Learn/Practice/Play buttons all
+  retarget the selected variation. Bottom Variations zone removed.
+  Generic for all openings (curated 7 for Ruy, all variations otherwise)
+  so no opening is stranded. Still shares opening-level keyIdeas/endgame/
+  traps per variation until Phase 5 authors per-variation copy.
 - **Phase 5 — Per-variation depth.** middlegame plans for Breyer/
   Chigorin/Zaitsev: DONE (all 7 variations now have a plan). Still
   pending: per-variation overview/keyIdeas, per-variation endgame
