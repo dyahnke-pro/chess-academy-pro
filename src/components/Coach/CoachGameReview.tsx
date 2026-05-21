@@ -6,6 +6,7 @@ import { usePieceSound } from '../../hooks/usePieceSound';
 import { getCoachMove, resolveConfig } from '../../services/coachPlaySession';
 import { MoveListPanel } from './MoveListPanel';
 import { ReviewSummaryCard } from './ReviewSummaryCard';
+import { GameReviewWeaknessCapture } from './GameReviewWeaknessCapture';
 import { KeyMomentNav } from './KeyMomentNav';
 import { ChatInput } from './ChatInput';
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
@@ -1633,6 +1634,15 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           onPlayAgain={onPlayAgain}
           onBackToCoach={onBackToCoach}
         />
+        <div className="w-full max-w-md px-4 pb-4">
+          <GameReviewWeaknessCapture
+            moves={moves}
+            playerColor={playerColor}
+            pgn={pgn}
+            openingName={openingName}
+            gameId={props.gameId}
+          />
+        </div>
       </div>
     );
   }

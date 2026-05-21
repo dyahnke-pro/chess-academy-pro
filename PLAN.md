@@ -1,198 +1,80 @@
-# Opening Masterclass — Variation Tabs + WLPP everywhere
+# PLAN — Pirc Defence masterclass (David 2026-05-21)
 
-Living plan. Read this first on a new session. Captures David's
-approved vision for turning the opening detail page into "seven
-openings in one" — each variation a first-class masterclass — and
-the phased build to get there.
+The Ruy masterclass + the "money" weakness-loop build are DONE and
+archived at `docs/plans/2026-05-21-ruy-masterclass-and-money.md`. This
+plan covers the **second opening**: the Pirc Defence, built to the SAME
+structure as the Ruy, following `docs/opening-masterclass-playbook.md`.
 
-Owner surface: `src/components/Openings/OpeningDetailPage.tsx` and the
-sections it composes. Test bed: **Ruy Lopez** (`ruy-lopez`).
+## Ground rules (non-negotiable)
+- **Student plays BLACK.** The Pirc is Black's defence (`color: black`).
+  Every lesson orients **black-at-bottom** (`orientation: 'black'`).
+  Key ideas are BLACK's plans; narration speaks from Black's side
+  ("your Bg7", "meet White's f4 with …c5").
+- **G3 — no invented moves.** Every line comes from
+  `openings-lichess.json` or the already-curated `repertoire.json`
+  `pirc-defence` entry (8 variations, full DB-grounded pgns + key ideas
+  + explanations). chess.js verifies legality. The LLM writes prose only.
+- **Hand-pick everything. No algos.** Curator chooses tabs, plans, traps,
+  routing. Code only filters by the hand-picked lists.
+- **Narration quality is the headline** (David's emphasis). Board-
+  accurate (the `narrationAccuracy` gate enforces square-piece claims),
+  keystone-focused, plain English, no SAN-as-letters, no first person.
 
-## Current main HEAD reference
+## Data already in place (repertoire.json `pirc-defence`)
+- color: black; 4 top-level key ideas; overview (hypermodern story:
+  Spassky/Topalov/Anand; let White build the centre, then strike).
+- 8 variations, each with a full DB-grounded pgn + explanation + ideas:
+  Austrian Attack · Classical System · 150 Attack · Byrne Variation ·
+  Lion Variation · Fianchetto System · Czech Defence · Austrian Attack
+  with e5 c5. → Variation tabs AUTO-BUILD from these (wiring is opening-
+  agnostic; "other openings auto-list all their variations").
 
-Shipped this stream (all on `main`, deploying; **post-deploy audits
-are HELD until the whole masterclass lands — David's call**):
-- #627: Ruy sublines depth + Marshall/Arkhangelsk orientation→white +
-  Ruy variation middlegame plans + secrets-in-env memory.
-- #628: stripped garbled OCR board diagrams from "From the Books".
-- #629: middlegame & endgame book passages in the Understand zone
-  (`ConceptBookSection` + `getConceptBookGroups`).
+## Per-variation checklist (parallel to Ruy)
+For each first-class variation: 4 key ideas (have) · overview (have) ·
+a DB-grounded middlegame plan `mp-pircdefence-<label>` (TODO, builder
+script) · a Black-oriented Watch/Learn beat-lesson (TODO — the work) ·
+an endgame ONLY if genuine · real named traps ONLY if genuine.
 
-## The vision (David, 2026-05-21 — APPROVED)
+## Phased build
+- **P0 — this plan + archive Ruy plan. status: DONE.**
+- **P1 — main-line + first variation beat-lessons. status: DONE.**
+  `pircDefence.ts` (PIRC_DEFENCE_LESSON) + `pircVariations.ts` (Austrian,
+  Classical, 150). Wired into `index.ts`. `pircIntegrity.test.ts`
+  (orientation `black`) + `narrationAccuracy` extended.
+- **P2 — remaining variation lessons. status: DONE.** Byrne, Lion,
+  Fianchetto, Czech, Austrian-e5-c5. ALL 8 variations + main line now
+  have authored, DB-grounded, Black-oriented beat-lessons. Lesson keys
+  verified to match repertoire.json variation names exactly (Watch/Learn
+  resolve). 49 integrity + 130 narration-accuracy tests green.
+- **P3 — middlegame plans. status: DONE for ALL 8 variations.**
+  `scripts/add-pirc-middlegame-plans.mjs` builds austrian / classical /
+  150 / byrne / lion / fianchetto / czech / austrian-e5 (DB-grounded from
+  the gate-verified lesson lines). Routing `pircMasterclassTabs.ts`
+  (getPircTabPlanIds, all 8). middlegamePlanner.test extended (33 green:
+  every line legal, annotations 1:1, arrows consistent, black-oriented).
+- **P4 — traps / endgames. status: DELIBERATELY SPARSE (accurate per
+  empty > generic).** The Pirc has few genuine NAMED traps; the old
+  auto-mined junk was purged. NOT fabricating to fill the shelf. The one
+  genuine motif to author properly later (web-verified, like the Ruy
+  traps): the **Ne6 queen-trap** (Bxf7+ Kxf7 Ng5+ … Ne6 forks the queen)
+  as a Black WARNING. Endgames: Pirc isn't endgame-defined → none unless
+  a genuinely characteristic one surfaces. Book pages: none (corpus is
+  pre-1930s; the Pirc postdates it — structural, unavoidable).
+- **Model game:** Kasparov–Topalov 1999 (present, 2 criticalMoments).
+  CURATION NOTE for David: it's a WHITE brilliancy against the Pirc
+  (masterclass is Black-oriented) + thinner than the Ruy's 7 moments —
+  his call whether to enrich/swap. Not fabricated around.
+- **P5 — audit to 3 clean rounds** (`AUDIT_ONLY_OPENINGS=pirc-defence`):
+  in progress.
 
-The Ruy page becomes **seven openings in one**. A row of **7 variation
-tabs** at the very top; selecting one re-scopes the ENTIRE page to that
-variation. **The main opening page IS the template** — every tab
-inherits the exact same section format and depth.
-
-**The 7 tabs:** Berlin, Open, Marshall, Exchange, Breyer, Chigorin,
-Zaitsev. (No separate Main-Line tab; the Closed main line lives inside
-Breyer/Chigorin/Zaitsev.)
-
-**Tab styling:** gold glow. Selected tab = full gold-glow highlight;
-unselected tabs = gold glow on the **left + bottom** edges.
-
-**The old bottom "Variations" zone (slate) is REMOVED** — variations
-are now top tabs.
-
-### The WLPP grammar (Watch / Learn / Practice / Play)
-
-Every teachable unit speaks the same four verbs. Pattern already exists
-on trap/pitfall lines (`handleStartTrapLineAction(i, mode)`,
-OpeningDetailPage ~line 1021-1068: Watch=PlayCircle, Learn=LearnIcon,
-Practice=Brain, Play=Swords). Reuse it verbatim.
-
-Bring WLPP to **Middlegame** and **Endgame** (neither has it today;
-Endgame has no section on the page at all yet):
-
-- **Watch** — auto-play walkthrough (LessonPlayer / walkthrough runner,
-  voice-gated, board animation).
-- **Learn** — same content, advance-at-your-pace; quote the actual
-  Capablanca/Lasker passage for the concept in play (book grounding).
-- **Practice** — student plays the key moves (break/maneuver / endgame
-  solution) on the board.
-- **Play** — Play-with-Coach vs rating-matched engine from the
-  critical FEN.
-
-### The GM game = the Watch walkthrough
-
-David: "GM game would be the walkthrough" + "find more games but USE
-THE BOOKS!". So:
-- Where a real GM game exists (Marshall → Capablanca–Marshall 1918,
-  the ONLY model game we have), it IS the middlegame Watch/Learn
-  walkthrough, narrated move-by-move to call out the plan's breaks /
-  maneuvers / themes, grounded in the book passages.
-- Where no GM game exists (the other 6 tabs), the Watch/Learn
-  walkthrough = that variation's **DB-sourced masterclass beat-lesson**
-  (`RUY_VARIATION_LESSONS`), narration grounded in the **books**.
-- **NEVER fabricate GM games or moves (G3).** Source more real games
-  over time; until then, books + DB beat-lessons carry it.
-
-### Book reader = tabbed audiobook (Understand zone)
-
-Collapse the two scroll cards (`BookPagesSection` +
-`ConceptBookSection`) into **one tabbed reader**: chapters =
-**Opening / Middlegame / Endgame**. Audiobook-style: a Play that reads
-the chapter aloud passage-by-passage (voiceService), follow-along
-highlight, play/pause/skip. Inviting, easy to read, plain English;
-one authored plain-English intro line per chapter. (Descriptive
-notation in the old passages stays — David: "leave cleaned, focus
-authored"; we don't fabricate algebraic conversions.)
-
-### Approved ADD / CHANGE (from the masterclass discussion)
-
-ADD: (1) WLPP on middlegame+endgame; (2) book grounding inside Learn
-beats; (3) audiobook reader; (4) GM game as the Watch capstone/spine.
-CHANGE: fold the standalone inline `MiddlegameTheorySection` prose into
-the **Learn** mode (no separate scroll dump); middlegame plan cards →
-plan lines with the 4-button WLPP row; two book cards → one tabbed
-audiobook reader.
-TAKE AWAY: no LLM-generated middlegame/endgame content (DB is truth).
-
-## Per-variation data inventory (the real work)
-
-Variations in `repertoire.json` carry only `name, pgn, frequency,
-deviationMove?, explanation`. NOT overview/keyIdeas/plans/games.
-
-| Ingredient | Status across the 7 tabs |
-|---|---|
-| Masterclass beat-lesson (Watch/Learn) | exists for all 7 (`RUY_VARIATION_LESSONS`) ✅ |
-| Overview + Key Ideas | opening-level only → **author per variation** |
-| Middlegame plan (WLPP) | only Marshall/Berlin/Open/Exchange (4/7) → **author Breyer/Chigorin/Zaitsev** |
-| GM game (Watch spine) | Marshall only (1) → books+beat-lesson for the rest; source more |
-| Endgame mapping | none → **build opening/variation → endgame-lesson map** (27 curated lessons exist) |
-| Book audiobook | derivable per variation via concept detection ✅ |
-| Traps/Pitfalls | opening-level (6+6) → keep shared v1, curate per variation later |
-
-## Reusable infrastructure (confirmed via research)
-
-- `LessonPlayer` (`src/components/Openings/LessonPlayer.tsx`) — beat
-  player, Play, voice-gated auto-advance via `useStrictNarration`,
-  board animation. Surfaced via viewModes `learn`/`walkthrough` (main)
-  and `variation-learn`/`variation-walkthrough` (variations).
-- `walkthroughAdapter.buildSession` / `buildStepsFromPgn` — PGN +
-  annotations → `WalkthroughSession`.
-- `useWalkthroughRunner` / `walkthroughRunner` — Play/pause/next/prev,
-  voice gating.
-- Middlegame: `MiddlegamePlanStudy` (tabbed sections), `MiddlegamePractice`
-  (interactive), `PlayableLinePlayer` (demo+memory). Plans have
-  `playableLines` (FEN+moves+annotations+arrows) — verified legal.
-- Endgame: `useEndgamePlayout` + `EndgameLessonTab`; 27 lessons in
-  `endgame-principles/pawn-endings/drawn-patterns/rook-endings.json`,
-  each with positions (FEN + solution moves + narration).
-- Model game: `ModelGameViewer` — Play + animation, critical-moment
-  annotations only (no per-move narration → authoring gap).
-- Book/concepts: `chessConceptService` — `getOpeningBookPages`,
-  `getConceptBookGroups`, `detectConceptsInText`; 664 passages, 56
-  concepts; opening passages in `opening-book-pages.json`.
-- WLPP button row pattern: OpeningDetailPage trap lines (~1021-1068).
-- Gold-glow CSS hooks exist: `opening-action-glow*` classes.
-
-## Phased build (each phase = its own PR, ships independently)
-
-- **Phase 0 — this PLAN.md.** status: in progress.
-- **Phase 1 — Audiobook book reader.** Merge `BookPagesSection` +
-  `ConceptBookSection` into one tabbed (Opening/Middlegame/Endgame)
-  audiobook reader in the Understand zone, with follow-along TTS.
-  status: pending.
-- **Phase 2 — Middlegame WLPP (template, main page).** Plan lines with
-  the 4-button WLPP row (Watch=PlayableLinePlayer auto-play, Learn=
-  MiddlegamePlanStudy, Practice=MiddlegamePractice, Play=OpeningPlayMode
-  from criticalPositionFen). Inline MiddlegameTheorySection folded into
-  Learn + deleted. status: DONE (PR pending). Still TODO in Phase 5:
-  swap Watch to a real narrated GM-game walkthrough where one exists.
-- **Phase 3 — Endgame masterclass section (template, main page).** New
-  EndgameTechniqueSection: opening→endgame-lesson map (openingEndgameMap.ts,
-  default fundamentals + ruy override), each lesson a line with Study
-  (in-page LessonView, exported from EndgameLessonTab) + Play (vs coach
-  from the position). status: DONE (PR pending).
-- **Phase 4 — The 7-tab shell.** DONE. VariationTabs (gold-glow:
-  selected = full glow, others = left+bottom glow) drives selectedTabIndex
-  (-1 = main line). Full-page rescope: subjectName/overview/keyIdeas +
-  middlegame plan filter + the main Watch/Learn/Practice/Play buttons all
-  retarget the selected variation. Bottom Variations zone removed.
-  Generic for all openings (curated 7 for Ruy, all variations otherwise)
-  so no opening is stranded. Still shares opening-level keyIdeas/endgame/
-  traps per variation until Phase 5 authors per-variation copy.
-- **Phase 5 — Per-variation depth.** middlegame plans for Breyer/
-  Chigorin/Zaitsev: DONE (all 7 variations now have a plan). Still
-  pending: per-variation overview/keyIdeas, per-variation endgame
-  mapping, traps/pitfalls narration quality, source more GM games.
-- **Phase 6 — Full interactive audit pass** (HELD until all above
-  deployed, per David). Per G7: off-canonical input, cold-cache,
-  pick-before-load, on every touched surface. status: pending.
-
-## App-wide wiring (David 2026-05-21)
-
-- Variation tabs are URL-addressable via `?line=<label>` (OpeningDetailPage
-  reads/writes it; URL is source of truth). DONE.
-- Weaknesses: OpeningDrilldown has a "Study this opening" CTA →
-  `/openings/<id>` (resolveOpeningIdFromName). DONE.
-- Training plan: RolodexRow "Theory & Lines" deep-links to
-  `/openings/<id>` (was a filter redirect). DONE.
-- Still TODO: coach-chat `drill_opening` could carry a variation; consider
-  passing `?line=` from SmartSearch / coach session when a variation is named.
-
-## Decisions log
-
-- 2026-05-21 — 7 tabs = Berlin/Open/Marshall/Exchange/Breyer/Chigorin/
-  Zaitsev; no Main-Line tab. (David)
-- 2026-05-21 — main opening page is the template; all tabs inherit it.
-- 2026-05-21 — remove the bottom Variations zone. (David)
-- 2026-05-21 — GM gap: beat-lesson + books now, source real games over
-  time; never fabricate. (David: "find more games but USE THE BOOKS!")
-- 2026-05-21 — book reader = tabbed audiobook chapters. (David)
-- 2026-05-21 — HOLD all post-deploy audits until the masterclass fully
-  ships. (David)
-- 2026-05-21 — the MAIN LINE (Closed Ruy) is the showcase/template, NOT
-  Marshall. The Capablanca–Marshall game is a Marshall-Attack game →
-  it belongs under the Marshall tab as that tab's Watch walkthrough,
-  not the main-line showcase. (David)
+## Orientation gotcha
+`lessonIntegrity.test.ts` asserts `orientation === 'white'` for the RUY
+lessons array — do NOT add Pirc lessons there. Pirc gets its own
+`pircIntegrity.test.ts` asserting `orientation === 'black'`. The
+`narrationAccuracy` grounding check is colour-agnostic — safe to extend.
 
 ## Next-session pickup
-
-1. Read this file. Confirm main HEAD and which phases have merged PRs.
-2. Build phases in order; each ships its own PR (squash to main).
-3. Do NOT run post-deploy audits until Phase 6 (David's hold).
-4. Reuse the infra listed above; never reinvent the player/runner.
-5. Never fabricate GM games or chess moves (G3) — DB + books only.
+1. Finish P1 lessons (verify each beat via chess.js; run pirc integrity +
+   narration-accuracy tests).
+2. Then P2 → P5 in order. Reuse Ruy builders/patterns; never reinvent.
+3. Never fabricate moves (G3) — repertoire.json + openings-lichess.json.

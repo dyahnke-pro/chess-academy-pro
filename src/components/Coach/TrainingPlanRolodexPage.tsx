@@ -36,13 +36,74 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FolderOpen, Sparkles } from 'lucide-react';
+import { FolderOpen, Sparkles, Target, ChevronRight } from 'lucide-react';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { getFavoriteOpenings } from '../../services/openingService';
+import { getMisconceptionProfile } from '../../services/misconceptionService';
+import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
 import { RolodexCardStack } from './RolodexCardStack';
 import type { OpeningRecord } from '../../types';
 
 type RolodexColor = 'white' | 'black';
+
+/** "Today's reps" — the prioritised drill feed over the weakness bucket
+ *  (money M3). Advises; the full rolodex below stays browsable. A
+ *  weakness rep deep-links to the Weaknesses hub; an opening rep to its
+ *  masterclass. Empty bucket → an empty-state-as-teacher prompt. */
+function TodaysReps(): JSX.Element | null {
+  const navigate = useNavigate();
+  const [reps, setReps] = useState<RepCandidate[]>([]);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const flag = { cancelled: false };
+    void (async () => {
+      const profile = await getMisconceptionProfile();
+      if (flag.cancelled) return;
+      // SRS-due / new-line pools wire in a follow-up; the selector
+      // backfills gracefully from the weakness pool until then.
+      setReps(buildTodaysReps({ weaknesses: profile, srsDue: [], newLines: [], total: 5 }));
+      setLoaded(true);
+    })();
+    return () => { flag.cancelled = true; };
+  }, []);
+
+  if (!loaded) return null;
+
+  return (
+    <div className="mt-6 rounded-2xl border-2 border-theme-accent/30 bg-theme-accent/5 p-4" data-testid="todays-reps">
+      <div className="flex items-center gap-2 mb-3">
+        <Target size={16} className="text-theme-accent" />
+        <h2 className="text-sm font-bold text-theme-text">Today's reps</h2>
+      </div>
+      {reps.length === 0 ? (
+        <p className="text-sm text-theme-text-muted leading-relaxed" data-testid="todays-reps-empty">
+          Play a game with the coach or review one of yours — once I spot the patterns you keep
+          missing, your drills show up here.
+        </p>
+      ) : (
+        <ul className="space-y-2">
+          {reps.map((rep) => (
+            <li key={rep.key}>
+              <button
+                type="button"
+                onClick={() => void navigate(rep.kind === 'weakness' ? '/weaknesses' : `/openings/${rep.openingId ?? ''}`)}
+                className="w-full flex items-center gap-3 text-left p-3 rounded-xl bg-theme-surface border border-theme-border hover:border-theme-accent/40 transition-colors"
+                data-testid={`todays-rep-${rep.kind}`}
+              >
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-medium text-theme-text">{rep.label}</span>
+                  <p className="text-xs text-theme-text-muted mt-0.5">{rep.subtitle}</p>
+                </div>
+                <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 /** Resolve which card should be at the front of a color's stack.
  *  Prefer the persisted `activeOpeningCardId` for that color when
@@ -325,6 +386,9 @@ export function TrainingPlanRolodexPage(): JSX.Element {
       <p className="text-sm text-theme-text-muted mt-1">
         Your favorited openings, side-by-side.
       </p>
+
+      {/* Today's reps — prioritised drills over the weakness bucket */}
+      <TodaysReps />
 
       {/* Mobile: manila folder tabs */}
       <div

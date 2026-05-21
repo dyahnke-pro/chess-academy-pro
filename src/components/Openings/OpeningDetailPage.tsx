@@ -22,8 +22,14 @@ import { BookReader } from './BookReader';
 import { ListenableProse } from './ListenableProse';
 import { VariationTabs, buildVariationTabs } from './VariationTabs';
 import { getRuyTabPlanIds } from '../../services/ruyMasterclassTabs';
+import { getPircTabPlanIds } from '../../services/pircMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
+import {
+  RUY_TRAP_LESSONS,
+  getRuyTrapsForTab,
+  type RuyTrapDef,
+} from '../../data/lessons/ruyTrapLessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
 import commonMistakesData from '../../data/common-mistakes.json';
@@ -90,6 +96,7 @@ type ViewMode =
   | 'warning-walkthrough'
   | 'train-traps'
   | 'train-warnings'
+  | 'named-trap'
   | 'model-game'
   | 'middlegame-watch'
   | 'middlegame-plan'
@@ -125,6 +132,7 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeVariationIndex, setActiveVariationIndex] = useState(-1);
   const [activeTrapLineIndex, setActiveTrapLineIndex] = useState(-1);
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
+  const [activeNamedTrapId, setActiveNamedTrapId] = useState<string | null>(null);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
@@ -323,6 +331,11 @@ export function OpeningDetailPage(): JSX.Element {
     setViewMode(`warning-${action}` as ViewMode);
   }, []);
 
+  const handleWatchNamedTrap = useCallback((trapId: string): void => {
+    setActiveNamedTrapId(trapId);
+    setViewMode('named-trap');
+  }, []);
+
   const handleToggleFavorite = useCallback(async (): Promise<void> => {
     if (!opening) return;
     const newVal = await toggleFavorite(opening.id);
@@ -447,6 +460,17 @@ export function OpeningDetailPage(): JSX.Element {
       <WalkthroughMode
         opening={opening}
         variationIndex={viewMode === 'variation-walkthrough' ? activeVariationIndex : undefined}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Named-trap masterclass lesson (hand-authored show -> snap-back beats,
+  // tab-routed via getRuyTrapsForTab). Watch plays the beat lesson.
+  if (viewMode === 'named-trap' && activeNamedTrapId && activeNamedTrapId in RUY_TRAP_LESSONS) {
+    return (
+      <LessonPlayer
+        script={RUY_TRAP_LESSONS[activeNamedTrapId]}
         onExit={handleExit}
       />
     );
@@ -724,7 +748,16 @@ export function OpeningDetailPage(): JSX.Element {
   // openings fall back: variation → its own plan, main line → all plans.
   const subjectPlanIds =
     getRuyTabPlanIds(opening.id, tabKey) ??
+    getPircTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
+
+  // HAND-PICKED named traps for this tab (Ruy masterclass beat lessons).
+  // Weapons render in the Weapons zone, warnings in Pitfalls. When a tab
+  // has curated named traps of a kind, the generic line tiles of that
+  // kind are suppressed for the Ruy — the authored lesson IS the content.
+  const namedTraps: RuyTrapDef[] = getRuyTrapsForTab(opening.id === 'ruy-lopez' ? tabKey : '');
+  const namedWeapons = namedTraps.filter((t) => t.kind === 'weapon');
+  const namedWarnings = namedTraps.filter((t) => t.kind === 'warning');
 
   const NarrationButton = ({
     sectionId,
@@ -1057,10 +1090,46 @@ export function OpeningDetailPage(): JSX.Element {
         }
       />
 
+      {/* Named traps for THIS tab — hand-routed masterclass beat lessons
+          (getRuyTrapsForTab). Weapons here; warnings in Pitfalls below. */}
+      {namedWeapons.length > 0 && (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-emerald-500/30">
+          <div className="flex items-center gap-2 mb-3">
+            <Crosshair size={14} className="text-emerald-500" />
+            <h3 className="text-sm font-semibold text-theme-text">Named traps for this line</h3>
+          </div>
+          <div className="space-y-1">
+            {namedWeapons.map((trap) => (
+              <div
+                key={trap.id}
+                className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
+                data-testid={`named-trap-${trap.id}`}
+              >
+                <button
+                  onClick={() => handleWatchNamedTrap(trap.id)}
+                  className="flex items-center justify-between gap-3 w-full text-left"
+                  aria-label={`Watch ${trap.name}`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium text-theme-text">{trap.name}</span>
+                    <p className="text-xs text-emerald-400/80 mt-0.5">Your weapon — punish the slip.</p>
+                  </div>
+                  <span className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg bg-theme-surface border border-theme-border text-theme-text-muted opening-action-glow opening-action-glow-watch">
+                    <PlayCircle size={16} />
+                  </span>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Traps — the Weapons zone card. Outlined green to match the
           zone header; the card title is dropped because the zone
-          header already reads "Weapons" (David 2026-05-20). */}
-      {opening.traps && opening.traps.length > 0 && (
+          header already reads "Weapons" (David 2026-05-20). For the Ruy
+          masterclass, a tab with curated named weapons hides the generic
+          trapLines tiles — the authored lesson is the content. */}
+      {namedWeapons.length === 0 && opening.traps && opening.traps.length > 0 && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-emerald-500/30">
           <div className="flex items-center gap-2 mb-2">
             <Target size={14} className="text-emerald-500" />
@@ -1170,9 +1239,44 @@ export function OpeningDetailPage(): JSX.Element {
         }
       />
 
+      {/* Named anti-traps for THIS tab — show the trap, then snap the
+          board back to the avoiding move. Hand-routed beat lessons. */}
+      {namedWarnings.length > 0 && (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-amber-500/30">
+          <div className="flex items-center gap-2 mb-3">
+            <AlertTriangle size={14} className="text-amber-500" />
+            <h3 className="text-sm font-semibold text-theme-text">Traps to avoid on this line</h3>
+          </div>
+          <div className="space-y-1">
+            {namedWarnings.map((trap) => (
+              <div
+                key={trap.id}
+                className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
+                data-testid={`named-trap-${trap.id}`}
+              >
+                <button
+                  onClick={() => handleWatchNamedTrap(trap.id)}
+                  className="flex items-center justify-between gap-3 w-full text-left"
+                  aria-label={`Watch ${trap.name}`}
+                >
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium text-theme-text">{trap.name}</span>
+                    <p className="text-xs text-amber-400/80 mt-0.5">See the trap, then the move that dodges it.</p>
+                  </div>
+                  <span className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg bg-theme-surface border border-theme-border text-theme-text-muted opening-action-glow opening-action-glow-watch">
+                    <PlayCircle size={16} />
+                  </span>
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Warnings — Pitfalls zone card, amber outline to match the
-          zone header (David 2026-05-20). */}
-      {opening.warnings && opening.warnings.length > 0 && (
+          zone header (David 2026-05-20). Suppressed on Ruy tabs that
+          carry curated named anti-traps (the lesson is the content). */}
+      {namedWarnings.length === 0 && opening.warnings && opening.warnings.length > 0 && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-amber-500/30">
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle size={14} className="text-amber-500" />

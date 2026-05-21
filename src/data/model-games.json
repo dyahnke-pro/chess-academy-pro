@@ -227,18 +227,125 @@
     "overview": "The legendary game where Marshall unveiled his prepared gambit against Capablanca. Despite facing a surprise pawn sacrifice and fierce attacking play, Capablanca defended with supernatural precision.",
     "criticalMoments": [
       {
-        "moveNumber": 9,
+        "moveNumber": 8,
         "color": "black",
-        "fen": "r1bq1rk1/2p1bppp/p1n5/1p1np3/8/1BP2N2/PP1P1PPP/RNBQR1K1 w - - 0 10",
-        "annotation": "Marshall unleashes d5! — a prepared gambit sacrificing a pawn for rapid piece activity and attack. This was one of the first great opening preparations in chess history.",
-        "concept": "Prepared Gambit & Initiative"
+        "fen": "r1bq1rk1/2p1bppp/p1n2n2/1p1pp3/4P3/1BP2N2/PP1P1PPP/RNBQR1K1 w - - 0 9",
+        "annotation": "The Marshall Attack is born — right here, in 1918. Black hurls the d-pawn forward and offers e5. The pawn is not the point: Marshall had kept this idea secret for years, saving it for Capablanca himself. This is the gambit's whole soul — give up a pawn to tear the centre open and aim every piece at the white king.",
+        "concept": "Gambit for the initiative",
+        "highlights": [
+          {
+            "square": "d5",
+            "color": "rgba(255,214,0,0.88)"
+          },
+          {
+            "square": "e5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
       },
       {
-        "moveNumber": 17,
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r1bq1rk1/2p2ppp/p2b4/1p6/6n1/1BP4P/PP1P1PP1/RNBQR1K1 w - - 1 14",
+        "annotation": "Feel the initiative gather. The knight springs to g4, the queen is coming to h4, and within a few moves a wave of black pieces will be breaking over the white king. This is what the pawn bought — overwhelming activity. The position itself looks like a storm about to land.",
+        "concept": "Overwhelming initiative — the price of the pawn",
+        "arrows": [
+          {
+            "from": "g4",
+            "to": "f2",
+            "color": "rgba(40,185,95,0.92)"
+          }
+        ],
+        "highlights": [
+          {
+            "square": "g4",
+            "color": "rgba(40,185,95,0.92)"
+          },
+          {
+            "square": "g2",
+            "color": "rgba(80,140,255,0.32)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 14,
         "color": "white",
-        "fen": "r4rk1/2p2ppp/p2b4/1p6/3P2Pq/1BP2Q2/PP2RnP1/RNB3K1 b - - 0 17",
-        "annotation": "Capablanca finds the only defense with Qf3! The queen simultaneously defends f2, controls the diagonal, and prepares counterplay. Every other move loses.",
-        "concept": "Precise Defense Under Pressure"
+        "fen": "r1bq1rk1/2p2ppp/p2b4/1p6/6n1/1BP2Q1P/PP1P1PP1/RNB1R1K1 b - - 2 14",
+        "annotation": "And here is the move that decides the game — Qf3. Capablanca, meeting this storm for the very first time, finds the one square that does everything at once: it shields g2, it plugs the f-file, it stares straight back down the board. This is the only-move defense made flesh — no panic, no fear, just the exact square. Pure ice.",
+        "concept": "The only-move defense (the lesson, in the wild)",
+        "arrows": [
+          {
+            "from": "f3",
+            "to": "g2",
+            "color": "rgba(40,185,95,0.92)"
+          }
+        ],
+        "highlights": [
+          {
+            "square": "f3",
+            "color": "rgba(255,214,0,0.88)"
+          },
+          {
+            "square": "g2",
+            "color": "rgba(80,140,255,0.32)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 16,
+        "color": "white",
+        "fen": "r1b2rk1/2p2ppp/p2b4/1p6/3P3q/1BP2Q1P/PP2RnP1/RNB3K1 b - - 1 16",
+        "annotation": "Marshall throws in everything — ...Nxf2, smashing at the king. Most players would flinch. Capablanca answers with the quietest move on the board, Re2, calmly stepping the rook to safety and defence. Meet violence with precision, never with fear — that is the whole art of defending the Marshall.",
+        "concept": "Precision under fire — return material, not nerve",
+        "highlights": [
+          {
+            "square": "e2",
+            "color": "rgba(255,214,0,0.88)"
+          },
+          {
+            "square": "f2",
+            "color": "rgba(40,185,95,0.92)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 20,
+        "color": "white",
+        "fen": "r4rk1/2p2ppp/p7/1p6/3P2P1/1BP2Qb1/PP2KRP1/RNB4q b - - 2 20",
+        "annotation": "Now watch the white king. It walks — out to f1, then e2 — straight through the middle of the attack, because Capablanca has calculated to the end and knows there is no mate. The king becomes a soldier, strolling through fire. There is a strange, cold beauty in that fearlessness.",
+        "concept": "The king as a fighting piece",
+        "highlights": [
+          {
+            "square": "e2",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 26,
+        "color": "white",
+        "fen": "4rrk1/2p2ppp/p7/1p1B4/3P2P1/2P2Q2/PPKB1bP1/RN4q1 b - - 11 26",
+        "annotation": "The storm has blown itself out. Bd5 centralises the bishop and the truth is laid bare: the attack is spent, and White stands with extra material and a safe king. The Marshall's bargain — a pawn for an initiative — has come due, and the initiative has nothing left to spend.",
+        "concept": "When the attack burns out, material decides",
+        "highlights": [
+          {
+            "square": "d5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 37,
+        "color": "white",
+        "fen": "1Q4k1/5rp1/R6p/8/6P1/2B1rQ2/2K3P1/6q1 b - - 0 37",
+        "annotation": "The final flourish: the humble b-pawn marches home and becomes a queen, with check. Capablanca has not merely survived the most feared weapon of his age — he has turned it into a won game. The Marshall Attack lost its own debut, refuted by the calmest mind in chess. That is the beauty of defense: the storm passes, and the quiet player is the one still standing.",
+        "concept": "Refutation complete — calm outlasts the storm",
+        "highlights": [
+          {
+            "square": "b8",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
       }
     ],
     "middlegameTheme": "Defense & Counter-Attack",

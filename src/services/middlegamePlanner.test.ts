@@ -149,6 +149,10 @@ describe('Ruy Lopez variation middlegame plans', () => {
     'mp-ruylopez-zaitsev',
     'mp-ruylopez-exchange-endgame',
     'mp-ruylopez-berlin-endgame',
+    'mp-ruylopez-breyer-endgame',
+    'mp-ruylopez-chigorin-endgame',
+    'mp-ruylopez-zaitsev-endgame',
+    'mp-ruylopez-open-endgame',
   ];
 
   for (const id of RUY_VARIATION_PLAN_IDS) {
@@ -200,6 +204,66 @@ describe('Ruy Lopez variation middlegame plans', () => {
       expect(session, `session for ${id}`).not.toBeNull();
       expect(session!.steps.length, `steps for ${id}`).toBeGreaterThan(0);
       expect(session!.orientation).toBe('white');
+    }
+  });
+});
+
+describe('Pirc Defence variation middlegame plans', () => {
+  const PIRC_VARIATION_PLAN_IDS = [
+    'mp-pircdefence-austrian',
+    'mp-pircdefence-classical',
+    'mp-pircdefence-150',
+    'mp-pircdefence-byrne',
+    'mp-pircdefence-lion',
+    'mp-pircdefence-fianchetto',
+    'mp-pircdefence-czech',
+    'mp-pircdefence-austrian-e5',
+  ];
+
+  for (const id of PIRC_VARIATION_PLAN_IDS) {
+    it(`${id}: every playable line is legal, annotated, and arrow-consistent`, async () => {
+      const { Chess } = await import('chess.js');
+      const plans = (await import('../data/middlegame-plans.json')).default as Array<{
+        id: string;
+        openingId: string;
+        criticalPositionFen: string;
+        playableLines: Array<{
+          fen: string;
+          moves: string[];
+          annotations: string[];
+          arrows?: Array<Array<{ from: string; to: string }>>;
+        }>;
+      }>;
+      const plan = plans.find((p) => p.id === id);
+      expect(plan, `plan ${id} missing`).toBeTruthy();
+      expect(plan!.openingId).toBe('pirc-defence');
+      expect(plan!.playableLines.length).toBeGreaterThan(0);
+
+      for (const line of plan!.playableLines) {
+        expect(line.annotations.length).toBe(line.moves.length);
+        const c = new Chess(line.fen);
+        line.moves.forEach((san, i) => {
+          const mv = c.move(san);
+          const arrow = line.arrows?.[i]?.[0];
+          if (arrow) {
+            expect(arrow.from).toBe(mv.from);
+            expect(arrow.to).toBe(mv.to);
+          }
+        });
+      }
+    });
+  }
+
+  it('each Pirc variation plan builds a black-oriented middlegame session', async () => {
+    const plans = (await import('../data/middlegame-plans.json')).default as Array<{ id: string }>;
+    for (const id of PIRC_VARIATION_PLAN_IDS) {
+      const plan = plans.find((p) => p.id === id);
+      const session = sessionFromPlan(plan as unknown as Parameters<typeof sessionFromPlan>[0], {
+        orientation: 'black',
+      });
+      expect(session, `session for ${id}`).not.toBeNull();
+      expect(session!.steps.length, `steps for ${id}`).toBeGreaterThan(0);
+      expect(session!.orientation).toBe('black');
     }
   });
 });

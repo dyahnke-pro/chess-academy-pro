@@ -14,6 +14,8 @@ import { HintButton } from '../Coach/HintButton';
 import { DifficultyToggle } from '../Coach/DifficultyToggle';
 import { ResignButton } from '../Coach/ResignButton';
 import { ExplanationCard } from './ExplanationCard';
+import { DiscussionPracticePanel } from './DiscussionPracticePanel';
+import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { useAppStore } from '../../stores/appStore';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
@@ -146,6 +148,12 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
       void voiceService.speak(text);
     }
   }, [voiceOn]);
+
+  // ─── Discussion Practice (the live faucet) ──────────────────────────────
+  // After a player slip (off-book AND worse), the coach asks "why did you
+  // play that?"; the answer is classified into a closed-set misconception
+  // and logged to the shared weakness bucket. Enabled during live play.
+  const discussion = useDiscussionPractice(playPhase === 'opening' || playPhase === 'middlegame');
 
   // Coach tips during middlegame — detect tactics and alert about missed ones
   const coachTipMoves = useMemo(() =>
@@ -495,6 +503,7 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
   // ─── Handle player move ──────────────────────────────────────────────────
   const handlePlayerMove = useCallback((moveResult: MoveResult): void => {
     const currentMoveIdx = moveCountRef.current;
+    const fenBefore = game.fen;
     moveCountRef.current += 1;
     setComputerLastMove(null);
     resetHints();
@@ -505,6 +514,22 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
     setMoveHistory((prev) => [...prev, { fen: moveResult.fen, from: moveResult.from, to: moveResult.to }]);
 
     const inOpeningPhase = currentMoveIdx < openingPhaseLength && !deviatedRef.current;
+
+    // Discussion Practice: best-effort slip check on the move just played.
+    const bookMoveSan = inOpeningPhase ? openingMoves[currentMoveIdx]?.san : undefined;
+    void discussion.evaluatePlayerMove({
+      fenBefore,
+      fenAfter: moveResult.fen,
+      playedSan: moveResult.san,
+      playerColor,
+      inBook: inOpeningPhase,
+      bookMoveSan,
+      learned: opening.isRepertoire,
+      gamePhase: playPhase === 'opening' ? 'opening' : 'middlegame',
+      moveNumber: Math.ceil((currentMoveIdx + 1) / 2),
+      openingId: opening.id,
+      openingName: displayName,
+    });
 
     if (inOpeningPhase && currentMoveIdx < openingMoves.length) {
       const expected = openingMoves[currentMoveIdx];
@@ -535,7 +560,19 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
         setPlayPhase('middlegame');
       }
     }
-  }, [openingMoves, openingPhaseLength, firstDeviation, game, settings.moveQualityFlash, resetHints]);
+  }, [openingMoves, openingPhaseLength, firstDeviation, game, settings.moveQualityFlash, resetHints, discussion, playerColor, opening.id, opening.isRepertoire, playPhase, displayName]);
+
+  // Speak the "why?" prompt and the coach's teaching note (voice-first).
+  useEffect(() => {
+    if (discussion.phase === 'asking' && discussion.prompt) {
+      say(discussion.prompt.question);
+    }
+  }, [discussion.phase, discussion.prompt, say]);
+  useEffect(() => {
+    if (discussion.phase === 'teaching' && discussion.teach) {
+      say(discussion.teach);
+    }
+  }, [discussion.phase, discussion.teach, say]);
 
   // ─── Postgame report ─────────────────────────────────────────────────────
   if (playPhase === 'postgame' && result) {
@@ -754,6 +791,16 @@ export function OpeningPlayMode({ opening, customLine, startFen, onExit }: Openi
           variant="warning"
         />
       </div>
+
+      {/* Discussion Practice — "why did you play that?" + the coach teach */}
+      <DiscussionPracticePanel
+        phase={discussion.phase}
+        prompt={discussion.prompt}
+        teach={discussion.teach}
+        onSubmit={(reason) => void discussion.submitReason(reason)}
+        onSkip={() => void discussion.skip()}
+        onDismissTeach={discussion.dismissTeach}
+      />
     </div>
   );
 }

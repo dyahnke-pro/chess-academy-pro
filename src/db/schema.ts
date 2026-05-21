@@ -21,6 +21,7 @@ import type {
   EndgameProgressRecord,
   SrsOpeningCard,
   FindSquareAttempt,
+  MisconceptionTagRecord,
 } from '../types';
 import type { WalkthroughTree } from '../types/walkthroughTree';
 
@@ -61,6 +62,7 @@ class ChessAcademyDB extends Dexie {
   endgameProgress!: EntityTable<EndgameProgressRecord, 'id'>;
   srsOpeningCards!: EntityTable<SrsOpeningCard, 'id'>;
   findSquareAttempts!: EntityTable<FindSquareAttempt, 'id'>;
+  misconceptionTags!: EntityTable<MisconceptionTagRecord, 'id'>;
 
   constructor() {
     super('ChessAcademyDB');
@@ -636,6 +638,33 @@ class ChessAcademyDB extends Dexie {
       endgameProgress: 'id, lessonId, lastPlayedAt',
       srsOpeningCards: 'id, openingId, nextReviewAt, [openingId+nextReviewAt]',
       findSquareAttempts: 'id, timestamp, target, correct, color',
+    }).upgrade(async () => {
+      // Brand-new store; no migration.
+    });
+
+    this.version(28).stores({
+      puzzles: 'id, rating, *themes, srsDueDate, userRating',
+      openings: 'id, eco, name, color, isRepertoire, isFavorite',
+      games: 'id, source, eco, date, isMasterGame, openingId',
+      flashcards: 'id, openingId, type, srsDueDate',
+      profiles: 'id',
+      sessions: 'id, date, profileId',
+      meta: 'key',
+      mistakePuzzles: 'id, sourceGameId, classification, srsDueDate, status, sourceMode, gamePhase',
+      modelGames: 'id, openingId',
+      middlegamePlans: 'id, openingId',
+      generatedContent: 'id, openingId, type, generatedAt',
+      openingWeakSpots: 'id, openingId, failCount, lastFailedAt',
+      classifiedTactics: 'id, sourceGameId, tacticType, playerColor, createdAt',
+      setupPuzzles: 'id, tacticType, difficulty, srsDueDate, status, sourceGameId',
+      openingNarrations: 'id, openingName, variation, moveSan, fen, approved',
+      cachedOpenings: 'normalizedName, eco, generatedAt',
+      endgameProgress: 'id, lessonId, lastPlayedAt',
+      srsOpeningCards: 'id, openingId, nextReviewAt, [openingId+nextReviewAt]',
+      findSquareAttempts: 'id, timestamp, target, correct, color',
+      // Shared misconception bucket (Discussion Practice + Game Review +
+      // import auto-analysis). The Training Plan reads it for drills.
+      misconceptionTags: 'id, tag, source, status, createdAt, openingId, sourceGameId',
     }).upgrade(async () => {
       // Brand-new store; no migration.
     });

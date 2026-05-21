@@ -1,6 +1,8 @@
 import type { LessonScript } from '../../types';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
+import { PIRC_DEFENCE_LESSON } from './pircDefence';
+import { PIRC_VARIATION_LESSONS } from './pircVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 
 /**
@@ -18,10 +20,12 @@ import { resolveOpeningIdFromName } from '../../services/chessConceptService';
  */
 const LESSONS: Record<string, LessonScript> = {
   [RUY_LOPEZ_LESSON.openingId]: RUY_LOPEZ_LESSON,
+  [PIRC_DEFENCE_LESSON.openingId]: PIRC_DEFENCE_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...RUY_VARIATION_LESSONS,
+  ...PIRC_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
@@ -54,6 +58,9 @@ const VARIATION_KEYWORDS: Record<string, string[]> = {
   'ruy-lopez::Closed Ruy Lopez (Zaitsev)': ['zaitsev'],
   'ruy-lopez::Anti-Marshall (8.a4)': ['anti-marshall', 'anti marshall', 'antimarshall'],
   'ruy-lopez::Arkhangelsk Variation': ['arkhangelsk', 'archangelsk', 'arkhangel'],
+  'pirc-defence::Austrian Attack': ['austrian attack', 'austrian'],
+  'pirc-defence::Classical System': ['classical pirc', 'pirc classical'],
+  'pirc-defence::150 Attack': ['150 attack', '150-attack'],
 };
 
 /**

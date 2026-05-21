@@ -193,7 +193,7 @@ describe('OpeningDetailPage', () => {
   it('shows traps panel', async () => {
     renderWithRoute();
     await waitFor(() => {
-      expect(screen.getByText('Traps & Pitfalls')).toBeInTheDocument();
+      expect(screen.getAllByText('Weapons').length).toBeGreaterThan(0);
       expect(screen.getByText('Vienna Gambit trap')).toBeInTheDocument();
     });
   });
@@ -363,7 +363,7 @@ describe('OpeningDetailPage', () => {
     it('does not render train traps button when no trapLines', async () => {
       renderWithRoute();
       await waitFor(() => {
-        expect(screen.getByText('Traps & Pitfalls')).toBeInTheDocument();
+        expect(screen.getAllByText('Weapons').length).toBeGreaterThan(0);
       });
       expect(screen.queryByTestId('train-traps-btn')).not.toBeInTheDocument();
     });

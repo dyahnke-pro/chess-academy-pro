@@ -26,11 +26,13 @@ function positionToFen(pos: BoardPosition): string {
 }
 
 /**
- * Wraps any board element and floats the VoiceChatMic in the top-right
- * corner of the overlay. Prior versions stacked the mic below the board,
- * which pushed the mic into nearby text whenever the wrapper had a
- * fixed height (e.g. `w-48 h-48`). Absolute positioning keeps the mic
- * out of the document flow entirely so no downstream content is pushed.
+ * Wraps any board element and floats the VoiceChatMic just ABOVE the
+ * board's top-right corner (in the gap above the board), NOT on top of
+ * the board — the prior `top-1 right-1` placement sat the Ask button on
+ * the h8/g8 squares and covered pieces (David 2026-05-21). `bottom-full`
+ * anchors the mic to the top edge of the board wrapper so it lives in
+ * the header gap and never overlaps the play area. Absolute positioning
+ * keeps it out of the document flow so no downstream content is pushed.
  * Use this around raw `<Chessboard>` components that don't go through
  * the custom `ChessBoard` wrapper (which has the mic built in).
  */
@@ -39,7 +41,7 @@ export function BoardVoiceOverlay({ children, fen, pgn, turn, className, ...rest
   return (
     <div className={`relative ${className ?? ''}`} {...rest}>
       {children}
-      <div className="absolute top-1 right-1 z-10">
+      <div className="absolute bottom-full right-0 mb-2 z-10">
         <VoiceChatMic fen={fenStr} pgn={pgn} turn={turn} />
       </div>
     </div>

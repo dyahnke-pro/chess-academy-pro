@@ -414,6 +414,39 @@ chess structure when the DB already has it. Concretely:
   they don't exist. We don't make stuff up and we certainly don't
   break what we have just built!"
 
+**The injected books are the grounding source for narration IDEAS —
+check them, don't trust training recall (David 2026-05-21).** The app
+ships a real chess-book corpus: `src/data/chess-concepts.json` (664
+tagged passages) + `src/data/opening-book-pages.json` (per-opening
+pages), distilled from five public-domain Gutenberg classics —
+Capablanca *Chess Fundamentals*, Edward Lasker *Chess Strategy* and
+*Chess and Checkers*, Staunton *Blue Book*, Young *Chess Generalship*.
+Read via `src/coach/sources/bookGrounding.ts` /
+`chessConceptService.buildCoachChatContext`. The division of truth:
+**the DB owns the MOVES; the books own the IDEAS and framing.** When you
+author masterclass narration, do NOT rely on your training memory of
+these same books — it is a lossy copy. Double-check the actual injected
+text, and prefer its framing so the masterclass, the BookReader, and the
+coach all speak with one voice.
+
+**Caveat — the corpus is pre-1930s, so it covers CLASSICAL openings
+only.** It has the Ruy, French, Caro-Kann, Queen's/King's Gambit,
+Philidor, etc. — but NOT modern openings that postdate the books (Pirc
+[1940s], King's Indian, Grünfeld, Najdorf, …). For a modern opening:
+- There is NO opening-specific book material to ground against — that's
+  expected, not a failure (empty book-shelf is correct).
+- You CAN still verify the UNIVERSAL PRINCIPLES the opening rests on
+  against `chess-concepts.json` (flank attack → counter in the centre,
+  undermine a pawn chain at its base, the fianchettoed bishop on the long
+  diagonal — all straight out of Lasker/Capablanca, just not tagged with
+  the opening's name).
+- Narration for a modern opening therefore grounds on: the DB move-lines
+  (G3) + `repertoire.json` explanations + the concept corpus for
+  principles, with the `narrationAccuracy` gate enforcing board-truth.
+- Per-variation book reading for a modern opening shares the opening-
+  level / classical reading until real modern source material is
+  injected (a content-acquisition job — flag it to David, don't fake it).
+
 **Audit stream — gate G2 (NON-NEGOTIABLE).** Implements gate G2 from
 the top of this file. After every push that touches a runtime path
 that emits audits — coach brain, walkthrough runtime, voice (which
@@ -616,6 +649,22 @@ spine; don't reinvent it.
   call `explorer.lichess.ovh` directly from the client. The Edge
   function carries a UA fallback chain because Lichess's CDN 401s
   iOS Safari's default UA.
+
+**Auto-mined junk PURGED from `repertoire.json` (2026-05-21).** The
+`trapLines`/`warningLines` arrays used to be polluted with auto-mined
+garbage — generic numbered names ("Discovered Attack #1", "Pitfall:
+tactic #2", broken fragment PGNs). 343 such entries were stripped
+(`scripts/strip-automined-traps.mjs`, signature = trailing `#<number>`);
+the 23 genuinely-named traps were KEPT (Kieninger Trap, Legal's Mate
+Reversal, Elephant Trap, Anderssen Attack, Petrosian Counterblow, the
+Dragon ones, …). The `repertoire-orientation` gate is now GREEN. **Do
+NOT re-introduce auto-mined junk.** Note the masterclass NAMED traps
+(Ruy: Tarrasch / Noah's Ark / Mortimer / Fishing Pole / Marshall) live
+in `src/data/lessons/ruyTrapLessons.ts` and are routed via
+`getRuyTrapsForTab` — a SEPARATE system from `repertoire.json`'s
+trapLines. The Ruy and Pirc carry ZERO trapLines/warningLines in
+`repertoire.json` now; their real traps are (or will be) hand-authored
+beat-lessons, not generic data tiles.
 
 **Trap-data taxonomy (commits `79f3a20`, `d575c84`, `2204166`).**
 Two parallel arrays per opening — `trapLines[]` (student weapons)
@@ -918,6 +967,50 @@ Lesson playback (TTS + auto-advance) must use `useStrictNarration` (`src/hooks/u
 Spoken text comes from `pickNarrationText(annotation, length)` (`src/services/walkthroughNarration.ts`). New annotations should populate the optional `narration` and `shortNarration` fields on `OpeningMoveAnnotation` so the spoken script can diverge from the displayed annotation when needed; otherwise the helper falls back to the display text.
 
 ### Narration Voice Rules (IMPORTANT)
+
+**THE BAR — right ideas, elegantly taught (David 2026-05-21, verbatim):**
+*"The bar is right ideas, elegantly taught. I take the established,
+mainstream understanding of the opening — Spassky's plans, the standard
+maneuvers, what every strong player knows the Austrian or the 150 is
+about — and I rewrite it into clear, vivid teaching. That's not
+invention; it's translation. The general understanding is the raw
+material; the elegance is my job."*
+
+This is the masterclass authoring doctrine. The deep, consensus
+understanding of a line IS the source of the ideas — you don't need
+verbatim book grounding to teach it (the injected books are a bonus
+where they cover a line, not a gate; see the book-corpus standing note).
+Two rails keep "general understanding" from drifting into making-stuff-up:
+the MOVES are always real (G3 — from the DB / repertoire, never memory),
+and the board-FACTS are gated (the `narrationAccuracy` test rejects a
+claim like "the f5-knight" when no knight is on f5). Between those rails,
+translate the mainstream understanding into elegant teaching.
+
+**WHEN UNSURE: leave blank, skip, or ASK — never guess (David 2026-05-21,
+emphatic).** David spent months building guardrails because LLMs cannot
+play chess — we invent pieces, illegal moves, hallucinated lines. So the
+operating rule when you are not FULLY certain a move/line/trap/idea is
+correct and real: **leave it blank, skip it, or ask David — we double
+back to anything you don't fully understand.** Never paper over a gap
+with a plausible-sounding guess. Empty > generic > invented, always. A
+half-built shelf flagged for review is correct; a confident fabrication
+is the cardinal sin. This applies to EVERY content surface, not just
+narration (traps, endgames, plans, key ideas, model-game annotations).
+
+**VERIFY IT'S ACTUALLY DEAD BEFORE DELETING — data can be live even when
+it looks like junk (David 2026-05-21, emphatic — a real near-miss).**
+Before deleting ANY data or code, prove it's unused: grep for EVERY
+consumer and confirm each degrades gracefully. Tonight the `trapLines` /
+`warningLines` in `repertoire.json` looked like deletable junk, but six
+systems read them (`flashcardService`, `useOpeningProgress`, `RolodexRow`,
+`verifiedLineLibrary`, `proRepertoireService`, `OpeningDetailPage`) — a
+blind delete could have broken flashcards and progress. The procedure:
+(1) grep all consumers, (2) confirm each handles empty/missing safely,
+(3) dry-run the deletion and show exactly what's removed vs kept, (4) keep
+genuinely-named content, only remove the verified-junk, (5) run the
+gauntlet + confirm revertible (it's on a branch) BEFORE committing. "Make
+sure that code is ACTUALLY dead before deleting it." Never blind-delete
+shared state.
 
 Every spoken line in the app — whether hand-authored in JSON or
 generated in code templates — must follow these rules. The voice

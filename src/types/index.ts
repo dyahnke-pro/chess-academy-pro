@@ -1126,6 +1126,54 @@ export interface OpeningWeakSpot {
   lastDrilledAt: string | null;
 }
 
+/** A single tagged misconception — the shared bucket fed by Discussion
+ *  Practice (live), Game Review (past games), and import-time auto-
+ *  analysis. `tag` is always an id from the closed MISCONCEPTION_TAGS
+ *  set (or 'other' with a `customLabel`). The Training Plan reads these
+ *  to prioritise drills. */
+export type MisconceptionSource =
+  | 'discussion-practice'
+  | 'game-review'
+  | 'auto-analysis';
+
+/** Adaptive-loop state per tagged instance. `open` = active weakness;
+ *  `improving` = drilled successfully at least once; `mastered` =
+ *  graduated out (stops counting / drilling). */
+export type MisconceptionStatus = 'open' | 'improving' | 'mastered';
+
+export interface MisconceptionTagRecord {
+  id: string;
+  /** Closed-set id from MISCONCEPTION_TAGS (incl. 'other'). */
+  tag: string;
+  /** Free-text error label, present only when tag === 'other'. */
+  customLabel?: string;
+  source: MisconceptionSource;
+  createdAt: number;
+  /** Position where the slip happened (full FEN). */
+  fen: string;
+  /** The move the user actually played (SAN). */
+  playedSan?: string;
+  /** The move that was best — engine PV or the masters' move (SAN). */
+  bestSan?: string;
+  /** Centipawn loss vs best, when known (from Stockfish). */
+  cpLoss?: number;
+  gamePhase?: 'opening' | 'middlegame' | 'endgame';
+  moveNumber?: number;
+  openingId?: string;
+  openingName?: string;
+  /** What the user said when asked "why did you play that?" — voice or
+   *  text. Absent when skipped or auto-analysed. */
+  userReason?: string;
+  /** The coach's one-line teaching note tied to this instance. */
+  coachNote?: string;
+  /** Source game id, for review / auto-analysis entries. */
+  sourceGameId?: string;
+  status: MisconceptionStatus;
+  /** Consecutive successful drills toward graduation. */
+  masteryHits: number;
+  lastDrilledAt?: number;
+}
+
 
 export interface ReviewState {
   mode: ReviewMode;

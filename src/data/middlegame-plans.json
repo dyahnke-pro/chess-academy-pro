@@ -12060,5 +12060,1701 @@
         "title": "The Queenless Wall"
       }
     ]
+  },
+  {
+    "id": "mp-ruylopez-breyer-endgame",
+    "openingId": "ruy-lopez",
+    "criticalPositionFen": "r2q1rk1/1b1nbppp/p2p1n2/1pp1p3/3PP3/2P2N1P/PPBN1PP1/R1BQR1K1 w - - 0 13",
+    "title": "Breyer: From Reroute to Endgame",
+    "overview": "The Breyer is patience with a destination. Black's knight retreats all the way home to reroute through d7; White completes a harmonious build-up and — crucially — tucks the bishop to c2. Watch the structure lock, then understand where it's headed: a two-winged battle whose endgame favours White's kingside space.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5 / f2-f4",
+        "explanation": "Lock the centre with d5, then expand on the kingside with f4 — the space that wins the ending.",
+        "fen": "r2q1rk1/1b1nbppp/p2p1n2/1pp1p3/3PP3/2P2N1P/PPBN1PP1/R1BQR1K1 w - - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb8-d7",
+        "explanation": "The Breyer reroute — home and back out to d7, propping e5 and freeing the b7-bishop."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bb3-c2",
+        "explanation": "Prophylaxis: off b3 so Noah's Ark can never spring, and onto the b1-h7 diagonal for the kingside."
+      }
+    ],
+    "strategicThemes": [
+      "Bc2 makes the Noah's Ark trap structurally impossible — the maneuver IS the defence.",
+      "Two-winged play: White presses the kingside (f5, the space), Black the queenside.",
+      "The endgame is the Breyer's pay-off — White's space and the f5-outpost convert when the pieces come off."
+    ],
+    "endgameTransitions": [
+      "Trade into a heavy-piece or minor-piece ending and White's kingside space and the f5-square become decisive.",
+      "Black's queenside majority is the counter-trump; whoever's structure is sounder when the queens vanish wins."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "d6",
+          "c3",
+          "O-O",
+          "h3",
+          "Nb8",
+          "d4",
+          "Nbd7",
+          "Nbd2",
+          "Bb7",
+          "Bc2",
+          "c5"
+        ],
+        "annotations": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "The Breyer's calling card — the knight retreats all the way home, to reroute through d7 and free the b7-bishop's long diagonal.",
+          "",
+          "",
+          "",
+          "",
+          "And the quiet move that does double duty: Bc2. It develops toward the kingside AND tucks the bishop safely off b3 — sidestepping the Noah's Ark trap forever. The cage Black dreams of can never close. That single piece of prophylaxis is the whole reason the closed main lines retreat this bishop.",
+          "Black grabs queenside space and the centre locks. Now look past the middlegame: trade the heavy pieces and White's kingside space plus the f5-square are the trumps that decide the ending. The Breyer is patience that cashes out in the endgame."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e2",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "g1",
+              "to": "f3"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "c6"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "a7",
+              "to": "a6"
+            }
+          ],
+          [
+            {
+              "from": "b5",
+              "to": "a4"
+            }
+          ],
+          [
+            {
+              "from": "g8",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g1"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "e1"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "a4",
+              "to": "b3"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "d6"
+            }
+          ],
+          [
+            {
+              "from": "c2",
+              "to": "c3"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ],
+          [
+            {
+              "from": "h2",
+              "to": "h3"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "b8"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "d2"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "b7"
+            }
+          ],
+          [
+            {
+              "from": "b3",
+              "to": "c2"
+            }
+          ],
+          [
+            {
+              "from": "c7",
+              "to": "c5"
+            }
+          ]
+        ],
+        "title": "The Reroute, the Prophylaxis, the Plan"
+      }
+    ]
+  },
+  {
+    "id": "mp-ruylopez-chigorin-endgame",
+    "openingId": "ruy-lopez",
+    "criticalPositionFen": "r3r1k1/2qbbp1p/p2p1np1/npp1p3/3PP3/2P1NN1P/PPB2PP1/R1BQR1K1 w - - 0 15",
+    "title": "Chigorin: Queenside Space into the Ending",
+    "overview": "For decades the Chigorin WAS the main line. Black's ...Na5 hits the Spanish bishop, ...c5 claims queenside space, and White retreats to c2 — both answering the knight and dodging the Noah's Ark trap. The knight tours to e3 hunting d5/f5. Where it's all heading: a queenside-minority versus central-space ending.",
+    "pawnBreaks": [
+      {
+        "move": "d4 then d5",
+        "explanation": "Build the centre and clamp with d5, fixing the structure for the two-winged ending.",
+        "fen": "r3r1k1/2qbbp1p/p2p1np1/npp1p3/3PP3/2P1NN1P/PPB2PP1/R1BQR1K1 w - - 0 15"
+      },
+      {
+        "move": "a4 (later)",
+        "explanation": "Probe the queenside to fix Black's majority before the endgame.",
+        "fen": "r3r1k1/2qbbp1p/p2p1np1/npp1p3/3PP3/2P1NN1P/PPB2PP1/R1BQR1K1 w - - 0 15"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc6-a5",
+        "explanation": "Hits the b3-bishop — the Chigorin's defining idea (and the reason White must retreat it)."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bb3-c2",
+        "explanation": "Answers ...Na5 and dodges Noah's Ark in one — the maneuver is the trap's antidote."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-f1-e3",
+        "explanation": "The long tour to e3, hunting the d5 and f5 outposts."
+      }
+    ],
+    "strategicThemes": [
+      "Bc2 is forced AND prophylactic — it parries ...Na5 and erases the Noah's Ark trap together.",
+      "Black's queenside minority versus White's central space — that imbalance carries into the ending.",
+      "The d5/f5 outposts are the prize; owning them in the endgame usually decides it."
+    ],
+    "endgameTransitions": [
+      "A queenside-minority-vs-central-space ending: White's space and outposts tell as pieces come off.",
+      "If Black's minority attack stalls, White's healthier centre converts the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "d6",
+          "c3",
+          "O-O",
+          "h3",
+          "Na5",
+          "Bc2",
+          "c5",
+          "d4",
+          "Qc7",
+          "Nbd2",
+          "Bd7",
+          "Nf1",
+          "Rfe8",
+          "Ne3",
+          "g6"
+        ],
+        "annotations": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "The Chigorin's signature — ...Na5 jumps at the b3-bishop and demands it move.",
+          "Bc2 — and it is not merely a retreat. It answers the knight AND tucks the bishop off b3, so the Noah's Ark trap can never spring. Prophylaxis and development in a single move.",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "The knight completes its tour to e3, eyeing the d5- and f5-outposts — the squares the whole middlegame revolves around.",
+          "Black blunts the knight with g6. Now the shape of the ending is set: Black's queenside minority pawns press, White's central space and the d5/f5 squares answer. Trade down and that space is the deciding word."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e2",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "g1",
+              "to": "f3"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "c6"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "a7",
+              "to": "a6"
+            }
+          ],
+          [
+            {
+              "from": "b5",
+              "to": "a4"
+            }
+          ],
+          [
+            {
+              "from": "g8",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g1"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "e1"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "a4",
+              "to": "b3"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "d6"
+            }
+          ],
+          [
+            {
+              "from": "c2",
+              "to": "c3"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ],
+          [
+            {
+              "from": "h2",
+              "to": "h3"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "a5"
+            }
+          ],
+          [
+            {
+              "from": "b3",
+              "to": "c2"
+            }
+          ],
+          [
+            {
+              "from": "c7",
+              "to": "c5"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "c7"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "d2"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "f1"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e8"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "e3"
+            }
+          ],
+          [
+            {
+              "from": "g7",
+              "to": "g6"
+            }
+          ]
+        ],
+        "title": "The Knight Hits, the Bishop Hides, the Space Tells"
+      }
+    ]
+  },
+  {
+    "id": "mp-ruylopez-zaitsev-endgame",
+    "openingId": "ruy-lopez",
+    "criticalPositionFen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/3PP3/PBP2N1P/1P1N1PP1/R1BQR1K1 w - - 0 13",
+    "title": "Zaitsev: Tension into Technique",
+    "overview": "Karpov's lifelong weapon. Black commits the bishop to b7 and the rook to e8, holding the centre at maximum tension — and here the bishop stays on b3, because the ...Bb7 setup never goes for the Noah's Ark. White plays the quiet a3 and waits; whichever way the tension breaks, the resulting structure favours White's technique.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5",
+        "explanation": "Clamp the centre and define the structure for the technical phase.",
+        "fen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/3PP3/PBP2N1P/1P1N1PP1/R1BQR1K1 w - - 0 13"
+      },
+      {
+        "move": "a3 then a4",
+        "explanation": "Restrain and then pressure the queenside before trading down.",
+        "fen": "r2qrbk1/1bp2pp1/p1np1n1p/1p2p3/3PP3/PBP2N1P/1P1N1PP1/R1BQR1K1 w - - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Re8 (and Ra1-a-file later)",
+        "explanation": "Black's ...Re8 backs the centre; White's a-file play targets the queenside in the ending."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Be7-f8",
+        "explanation": "Black's regroup to f8 reinforces the king; White keeps the bishop pair as the long-term trump."
+      }
+    ],
+    "strategicThemes": [
+      "Hold the central tension; the side that resolves it on better terms owns the ending.",
+      "Here the bishop stays on b3 — the ...Bb7 setup never threatens Noah's Ark, so no retreat is needed.",
+      "White's bishop pair and central space are the technical trumps when the position simplifies."
+    ],
+    "endgameTransitions": [
+      "Once the tension breaks, an ending with the bishop pair and more space tends to favour White.",
+      "Precise move-order is everything — a single tempo decides whether the simplification helps or hurts."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "d6",
+          "c3",
+          "O-O",
+          "h3",
+          "Bb7",
+          "d4",
+          "Re8",
+          "Nbd2",
+          "Bf8",
+          "a3",
+          "h6"
+        ],
+        "annotations": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "The Zaitsev — Black commits the bishop to b7 and the rook to e8, holding the centre at maximum tension. Note the bishop stays on b3: the ...Bb7 plan never targets it, so there's no Noah's Ark to dodge here.",
+          "",
+          "",
+          "",
+          "",
+          "a3 — quiet prophylaxis, taking the b4-square from Black's pieces before the centre resolves.",
+          "The tension will break with d5 or ...exd4. Either way the position simplifies toward an ending where White's central space and the bishop pair are the lasting edge. Zaitsev is razor theory that, played accurately, drifts into White's favour in the endgame."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e2",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "g1",
+              "to": "f3"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "c6"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "a7",
+              "to": "a6"
+            }
+          ],
+          [
+            {
+              "from": "b5",
+              "to": "a4"
+            }
+          ],
+          [
+            {
+              "from": "g8",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g1"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "e1"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "a4",
+              "to": "b3"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "d6"
+            }
+          ],
+          [
+            {
+              "from": "c2",
+              "to": "c3"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ],
+          [
+            {
+              "from": "h2",
+              "to": "h3"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "b7"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e8"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "d2"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "f8"
+            }
+          ],
+          [
+            {
+              "from": "a2",
+              "to": "a3"
+            }
+          ],
+          [
+            {
+              "from": "h7",
+              "to": "h6"
+            }
+          ]
+        ],
+        "title": "Maximum Tension, then the Better Structure"
+      }
+    ]
+  },
+  {
+    "id": "mp-ruylopez-open-endgame",
+    "openingId": "ruy-lopez",
+    "criticalPositionFen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11",
+    "title": "Open Ruy: Activity into the Ending",
+    "overview": "The Open Ruy is the antithesis of the closed manoeuvring lines — Black takes on e4 and the game opens at once. The structure that results, Black's mobile d5-pawn against White's e5 wedge, carries straight into a piece-activity endgame: not patience, but coordination.",
+    "pawnBreaks": [
+      {
+        "move": "d4 / c3-c4",
+        "explanation": "Open the centre with d4, then challenge d5 with c4 to clarify the structure for the ending.",
+        "fen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11"
+      },
+      {
+        "move": "f2-f4-f5",
+        "explanation": "Support and expand the e5-wedge to cramp Black before trading down.",
+        "fen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQ1RK1 w - - 3 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-b3",
+        "explanation": "Reroute to b3, eyeing c5 and d4 and contesting the light squares."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bb3 stays active",
+        "explanation": "The Spanish bishop keeps the a2-g8 diagonal — a long-term trump into the ending."
+      }
+    ],
+    "strategicThemes": [
+      "The Open is activity, not patience — the better-coordinated army wins the ending.",
+      "Black's mobile d5-pawn vs White's e5-wedge is the defining imbalance, all the way down.",
+      "The bishop pair and open lines favour White if the position stays sharp into the endgame."
+    ],
+    "endgameTransitions": [
+      "An open, piece-active ending: White's bishop pair and the e5-wedge tell if coordination holds.",
+      "If Black's d5-pawn becomes weak rather than mobile, White's pressure converts the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "b5",
+          "Bb3",
+          "d5",
+          "dxe5",
+          "Be6",
+          "c3",
+          "Be7",
+          "Nbd2",
+          "O-O"
+        ],
+        "annotations": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "The Open Ruy — Black grabs the e4-pawn instead of defending it. The position cracks open; this is the most active, least patient way to meet the Spanish.",
+          "White strikes the centre back at once — in the Open, the open lines are worth far more than a pawn.",
+          "",
+          "",
+          "Black props the knight with d5, claiming the centre and the e6-square for the bishop. Here is the structure that defines the Open: Black's mobile d5-pawn against White's e5 wedge.",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Nbd2 — the knight reroutes to b3 to bear down on c5 and the d5/c5 light squares."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e2",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "g1",
+              "to": "f3"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "c6"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "a7",
+              "to": "a6"
+            }
+          ],
+          [
+            {
+              "from": "b5",
+              "to": "a4"
+            }
+          ],
+          [
+            {
+              "from": "g8",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g1"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "e4"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "d4"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "a4",
+              "to": "b3"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "d5"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "e6"
+            }
+          ],
+          [
+            {
+              "from": "c2",
+              "to": "c3"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "d2"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ]
+        ],
+        "title": "The Open Structure into the Ending"
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-austrian",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "r1bq1rk1/ppn1ppbp/3p1np1/2pP4/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 1 9",
+    "title": "Austrian Attack: Race on the Wings",
+    "overview": "Against the Austrian's huge e4-d4-f4 centre, Black has already struck with ...c5; White locked it with d5, and the battle leaves the centre for the wings. The plan is now symmetrical in spirit and opposite in direction: White lifts the queen to h4 and throws pieces at Black's king, while Black loads the b-file with ...Rb8, ...b6 and ...Bb7 and breaks with ...b5. This is a pure race — Black does not defend passively, Black attacks first on the queenside. Know the move order and play it fast; the slower attacker loses.",
+    "pawnBreaks": [
+      "...b5 (the queenside lever — the whole plan)",
+      "White's f5 or e5 against the king"
+    ],
+    "pieceManeuvers": [
+      "...Nc7 supporting ...b5",
+      "...Rb8 and ...Bb7 on the b-file",
+      "White's Qe1-h4 to the kingside"
+    ],
+    "strategicThemes": [
+      "Opposite-wing attacks",
+      "Speed over material",
+      "The locked centre dictates the wings"
+    ],
+    "endgameTransitions": [
+      "Rare — this is a middlegame decided by the attacks, not an endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppn1ppbp/3p1np1/2pP4/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 1 9",
+        "moves": [
+          "a4",
+          "Rb8",
+          "Qe1",
+          "b6",
+          "Qh4"
+        ],
+        "annotations": [
+          "White plays a4 to clamp down on the b5 break — it delays Black's plan but cannot stop it.",
+          "The rook swings to b8, loading the b-file behind the coming ...b5 lever.",
+          "White's queen sets off on its journey to the kingside, Qe1 heading for h4 and Black's king.",
+          "...b6 prepares the bishop's route to b7 and props up the ...b5 advance.",
+          "Qh4 declares the attack. The race is on: Black answers with ...b5 and queenside speed, not defence."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "a2",
+              "to": "a4"
+            }
+          ],
+          [
+            {
+              "from": "a8",
+              "to": "b8"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "e1"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b6"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "h4"
+            }
+          ]
+        ],
+        "title": "The Queenside Counter-Race"
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-classical",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "r1bq1rk1/pp1nppbp/2pp1np1/8/P2PP3/2N2N2/1PP1BPPP/R1BQ1RK1 w - - 1 8",
+    "title": "Classical System: The ...e5 Break to Equality",
+    "overview": "Against White's quiet Classical setup (Nf3, Be2, no pawn storm), Black equalises with a textbook hypermodern plan: ...c6 and ...Nbd7 prepare the central ...e5 break, and once it lands the position simplifies toward dead equality. After the centre opens with ...dxe5, the d-file is Black's to contest, the queen comes to e7 to back the e5-pawn and connect the rooks, and the knight reroutes via h5 toward the f4 outpost. From a cramped, passive-looking start Black reaches a position with active pieces and no weaknesses — exactly what the Classical Pirc promises.",
+    "pawnBreaks": [
+      "...e5 (the freeing central break)",
+      "a later ...b5 if White allows it"
+    ],
+    "pieceManeuvers": [
+      "...Nbd7 to support ...e5",
+      "...Qe7 backing e5 + the d-file",
+      "...Nh5 toward the f4 outpost"
+    ],
+    "strategicThemes": [
+      "Hypermodern central counter-strike",
+      "Open d-file play",
+      "Knight to the f4 outpost"
+    ],
+    "endgameTransitions": [
+      "The symmetrical e5/e4 structure can simplify into a balanced queenless middlegame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1nppbp/2pp1np1/8/P2PP3/2N2N2/1PP1BPPP/R1BQ1RK1 w - - 1 8",
+        "moves": [
+          "h3",
+          "e5",
+          "dxe5",
+          "dxe5",
+          "Be3",
+          "Qe7",
+          "Qd3",
+          "Nh5"
+        ],
+        "annotations": [
+          "White makes luft with h3, a small waiting move before Black strikes.",
+          "...e5 — the freeing break, right on cue, challenging d4 head-on at last.",
+          "White releases the central tension.",
+          "Black recaptures: the d-file is now open and Black holds a firm pawn on e5.",
+          "White develops the bishop to e3, eyeing the centre.",
+          "...Qe7 backs the e5-pawn, connects the rooks, and eyes the open d-file.",
+          "White centralises the queen on d3.",
+          "...Nh5 swings the knight toward the f4-square, where it would be a monster — active, equal play."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "h2",
+              "to": "h3"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "d6",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "c1",
+              "to": "e3"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "d3"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "h5"
+            }
+          ]
+        ],
+        "title": "Striking the Centre"
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-150",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "rnbq1rk1/pp2ppbp/2pp1np1/8/3PP3/2N1BP2/PPPQ2PP/R3KBNR w KQ - 0 7",
+    "title": "150 Attack: Trade the Bishop, Win the Race",
+    "overview": "The 150 Attack is a blunt, dangerous plan: Be3, Qd2, f3, then Bh6 to trade off Black's great dark-squared defender, castle queenside, and storm the h-pawn at Black's king. Black's antidote is speed on the other wing. The key is the early ...c6, launching ...b5-b4 and freeing the queen. When White trades on h6, Black accepts the slightly airier king and immediately strikes back with ...Qa5 — the queen leaps into the game, eyes the c3-knight, and lends weight to the queenside pawn storm. Whoever's storm lands first wins; Black must not flinch and must not slow down.",
+    "pawnBreaks": [
+      "...b5-b4 (the queenside storm against the long-castled king)",
+      "White's h4-h5 against Black's king"
+    ],
+    "pieceManeuvers": [
+      "...c6 + ...Qa5 to start the counter",
+      "...b5-b4 hitting the c3 defender",
+      "White's Bh6 trade + h-pawn storm"
+    ],
+    "strategicThemes": [
+      "Opposite-side castling race",
+      "Trade of the dark-squared bishops",
+      "Speed over king safety"
+    ],
+    "endgameTransitions": [
+      "Rare — decided by the mutual attacks"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pp2ppbp/2pp1np1/8/3PP3/2N1BP2/PPPQ2PP/R3KBNR w KQ - 0 7",
+        "moves": [
+          "Bh6",
+          "Bxh6",
+          "Qxh6",
+          "Qa5"
+        ],
+        "annotations": [
+          "Bh6 — the point of the system: White offers to trade off Black's key dark-squared defender.",
+          "Black allows the trade; theory confirms it is fine because the counterplay arrives in time.",
+          "White's queen recaptures on h6, sitting aggressively near Black's king.",
+          "...Qa5 — Black strikes first, the queen joining the race, eyeing c3 and backing the ...b5-b4 storm."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e3",
+              "to": "h6"
+            }
+          ],
+          [
+            {
+              "from": "g7",
+              "to": "h6"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "h6"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "a5"
+            }
+          ]
+        ],
+        "title": "The Counter-Race Begins"
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-byrne",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "rnbq1rk1/pp2ppbp/2pp1np1/6B1/3PP3/2N5/PPPQ1PPP/2KR1BNR w - - 0 7",
+    "title": "Byrne Variation: Race the Opposite-Side King",
+    "overview": "White has chosen Bg5 and the committal O-O-O — once the kings sit on opposite wings, the game is a foot-race of pawn storms and the faster attacker wins. Black does not defend; Black attacks. The plan is ...c6 and ...b5-b4 straight at White's queenside king, met by White's own f4-e5 thrust. Black willingly trades the f6-knight to crack White's queenside cover, and the hammer is ...d5 — ripping the centre open so the g7-bishop and the heavy pieces pour toward c3. Know the move order cold; a single slow tempo loses the race.",
+    "pawnBreaks": [
+      "...b5-b4 (the storm at the long-castled king)",
+      "White's f4-e5 at Black's king"
+    ],
+    "pieceManeuvers": [
+      "...c6 + ...b5-b4 lever",
+      "sac the f6-knight to open lines",
+      "...d5 to open the centre toward c3"
+    ],
+    "strategicThemes": [
+      "Opposite-side castling race",
+      "Speed over material",
+      "Open lines to the enemy king"
+    ],
+    "endgameTransitions": [
+      "Rare — decided by the mutual attacks"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pp2ppbp/2pp1np1/6B1/3PP3/2N5/PPPQ1PPP/2KR1BNR w - - 0 7",
+        "moves": [
+          "f4",
+          "b5",
+          "e5",
+          "b4",
+          "exf6",
+          "bxc3",
+          "Qxc3",
+          "exf6",
+          "Bh4",
+          "d5"
+        ],
+        "annotations": [
+          "White throws f4, beginning the kingside storm.",
+          "...b5 — Black’s storm answers on the queenside, straight at White’s king.",
+          "White pushes e5, lunging at the f6-knight.",
+          "...b4 attacks the c3-knight that shields White’s king — every tempo is gold.",
+          "White grabs the f6-knight.",
+          "...bxc3 smashes the knight shielding the queenside king.",
+          "White recaptures on c3 with the queen.",
+          "...exf6 opens the centre, taking back the pawn.",
+          "White keeps the bishop with Bh4.",
+          "...d5 — the hammer blow: the centre rips open toward c3 and Black’s attack is very real."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f2",
+              "to": "f4"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b5"
+            }
+          ],
+          [
+            {
+              "from": "e4",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "b5",
+              "to": "b4"
+            }
+          ],
+          [
+            {
+              "from": "e5",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "b4",
+              "to": "c3"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "c3"
+            }
+          ],
+          [
+            {
+              "from": "e7",
+              "to": "f6"
+            }
+          ],
+          [
+            {
+              "from": "g5",
+              "to": "h4"
+            }
+          ],
+          [
+            {
+              "from": "d6",
+              "to": "d5"
+            }
+          ]
+        ],
+        "title": "Both Storms Crash In"
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-lion",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "r1bq1rk1/pp1nbppp/2pp1n2/4p3/P1BPP3/2N2N2/1PP2PPP/R1BQ1RK1 w - - 0 8",
+    "title": "Lion Variation: The Philidor-Style Coil",
+    "overview": "The Lion skips the fianchetto and plays ...e5 at once, steering into a solid Philidor-like structure that sidesteps a mountain of Austrian theory. Black builds maximum flexibility — ...Nbd7 backing e5, ...Be7, ...c6 — then coils on the queenside with ...b6 and ...Bb7, eyeing the long light-squared diagonal at White's king, with the queen on c7. When White releases with dxe5, the knight recaptures and lands proudly in the centre on e5. From a modest start Black reaches a sound, harmonious position with active, well-placed pieces.",
+    "pawnBreaks": [
+      "...e5 (already played — the Philidor break)",
+      "a later ...b5 or ...d5 when prepared"
+    ],
+    "pieceManeuvers": [
+      "...Nbd7 supporting e5",
+      "...Bb7 + ...Qc7 battery on the long diagonal",
+      "...Nxe5 centralised"
+    ],
+    "strategicThemes": [
+      "Philidor-style flexibility",
+      "The long light-squared diagonal",
+      "Central knight outpost on e5"
+    ],
+    "endgameTransitions": [
+      "The symmetrical e5/e4 structure can simplify into a balanced ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1nbppp/2pp1n2/4p3/P1BPP3/2N2N2/1PP2PPP/R1BQ1RK1 w - - 0 8",
+        "moves": [
+          "Re1",
+          "Qc7",
+          "h3",
+          "b6",
+          "Bg5",
+          "Bb7",
+          "dxe5",
+          "Nxe5"
+        ],
+        "annotations": [
+          "White centralises the rook on e1.",
+          "...Qc7 lines the queen up behind the centre and the long diagonal.",
+          "White makes luft with h3.",
+          "...b6 opens the bishop’s road to b7.",
+          "White tries the Bg5 pin.",
+          "...Bb7 — calm: the bishop eyes the long diagonal straight at White’s king.",
+          "White releases the central tension.",
+          "...Nxe5 recaptures and lands a proud knight in the centre — Black is comfortable and active."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f1",
+              "to": "e1"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "c7"
+            }
+          ],
+          [
+            {
+              "from": "h2",
+              "to": "h3"
+            }
+          ],
+          [
+            {
+              "from": "b7",
+              "to": "b6"
+            }
+          ],
+          [
+            {
+              "from": "c1",
+              "to": "g5"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "b7"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "e5"
+            }
+          ]
+        ],
+        "title": "Coiled and Comfortable"
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-fianchetto",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/4P3/2N3P1/PPP1NPBP/R1BQ1RK1 w - - 1 9",
+    "title": "Fianchetto System: Win the Kingside with ...f5",
+    "overview": "Against White's quietest, most positional try — g3 and Bg2 — Black plays for the centre and for space. The strike is ...e5 and ...Nc6 to pressure d4; when White clamps with d5, the locked centre tells Black exactly where to play. The knight reroutes from c6 to e7 toward the magnificent f5 blockade square, and the whole plan crowns with the ...f5 break, gaining kingside space and opening lines for the g7-bishop and the rooks on the f-file. Whoever lands f5 first owns the kingside — make it Black.",
+    "pawnBreaks": [
+      "...f5 (the kingside break — the whole plan)",
+      "guard against White's own f4/f5"
+    ],
+    "pieceManeuvers": [
+      "...Nc6-e7 toward the f5 outpost",
+      "...Nd7 regroup",
+      "...f5 opening the f-file"
+    ],
+    "strategicThemes": [
+      "Closed-centre, play on the wing",
+      "Knight to the f5 blockade",
+      "Kingside space + open f-file"
+    ],
+    "endgameTransitions": [
+      "Locked-centre manoeuvring may persist deep into the game"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/4P3/2N3P1/PPP1NPBP/R1BQ1RK1 w - - 1 9",
+        "moves": [
+          "a4",
+          "Nd7",
+          "Be3",
+          "f5"
+        ],
+        "annotations": [
+          "White expands with a4 on the queenside.",
+          "...Nd7 regroups the knight, clearing the f-pawn’s path.",
+          "White develops the bishop to e3.",
+          "...f5 — Black’s thematic kingside break in the locked Fianchetto: space, the long diagonal, and the f-file open up. Equal, double-edged play."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "a2",
+              "to": "a4"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "c1",
+              "to": "e3"
+            }
+          ],
+          [
+            {
+              "from": "f7",
+              "to": "f5"
+            }
+          ]
+        ],
+        "title": "The ...f5 Break"
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-czech",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "rn2kb1r/pp3ppp/2pp1n2/q3p3/3PPPb1/2NB1N2/PPP3PP/R1BQK2R w KQkq - 2 7",
+    "title": "Czech Defence: Compact, Then Strike ...e5",
+    "overview": "The Czech swaps the fianchetto for a low, compact ...c6 setup, sidestepping the sharpest Austrian lines. The clever ...Qa5 pins the c3-knight and freezes the centre, preparing the direct ...e5 challenge; ...Bg4 then pins the f3-knight so d4's defender is tied down. Black finishes development, trades the bishop for the knight to loosen White's grip, and strikes again with ...c5. When the centre finally resolves with dxe5 dxe5, Black has a sound, harmonious position with no weaknesses — exactly what the Czech promises.",
+    "pawnBreaks": [
+      "...e5 (the central challenge)",
+      "...c5 (the second strike)"
+    ],
+    "pieceManeuvers": [
+      "...Qa5 pinning c3",
+      "...Bg4xf3 to loosen d4",
+      "...Nbd7 + ...Be7 development"
+    ],
+    "strategicThemes": [
+      "Compact ...c6 structure",
+      "Pin pressure on the centre",
+      "Direct central challenge over the fianchetto"
+    ],
+    "endgameTransitions": [
+      "The open d-file after ...dxe5 can lead to a balanced ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn2kb1r/pp3ppp/2pp1n2/q3p3/3PPPb1/2NB1N2/PPP3PP/R1BQK2R w KQkq - 2 7",
+        "moves": [
+          "Be3",
+          "Nbd7",
+          "O-O",
+          "Be7",
+          "h3",
+          "Bxf3",
+          "Qxf3",
+          "O-O",
+          "Ne2",
+          "c5",
+          "dxe5",
+          "dxe5"
+        ],
+        "annotations": [
+          "White develops the bishop to e3.",
+          "...Nbd7 completes the knight development, backing e5.",
+          "White castles.",
+          "...Be7 — modest and solid.",
+          "White asks the bishop with h3.",
+          "...Bxf3 trades to loosen White’s grip on the centre.",
+          "White recaptures with the queen.",
+          "...O-O — Black is safe and developed.",
+          "White reroutes the knight to e2.",
+          "...c5 strikes the centre a second time.",
+          "White releases the tension.",
+          "...dxe5 — the centre resolves; Black is sound and harmonious, no weaknesses."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "c1",
+              "to": "e3"
+            }
+          ],
+          [
+            {
+              "from": "b8",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "g1"
+            }
+          ],
+          [
+            {
+              "from": "f8",
+              "to": "e7"
+            }
+          ],
+          [
+            {
+              "from": "h2",
+              "to": "h3"
+            }
+          ],
+          [
+            {
+              "from": "g4",
+              "to": "f3"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "f3"
+            }
+          ],
+          [
+            {
+              "from": "e8",
+              "to": "g8"
+            }
+          ],
+          [
+            {
+              "from": "c3",
+              "to": "e2"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "c5"
+            }
+          ],
+          [
+            {
+              "from": "d4",
+              "to": "e5"
+            }
+          ],
+          [
+            {
+              "from": "d6",
+              "to": "e5"
+            }
+          ]
+        ],
+        "title": "A Sound, Harmonious Game"
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-austrian-e5",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "rnbq1rk1/ppp1ppbp/3p1np1/4P3/3P1P2/2N2N2/PPP3PP/R1BQKB1R b KQ - 0 6",
+    "title": "Austrian: Meet an Early e5 with ...c5",
+    "overview": "In the Austrian, White sometimes lunges e5 immediately, attacking the f6-knight and trying to bulldoze the centre forward. But a pawn that advances no longer defends what it left behind. The accurate retreat is ...Nfd7 — inward, not to the rim — keeping the knight active and still pressing e5. Then the refutation of the rush: ...c5, striking the base that holds White's whole pawn chain together. Once the support under d4 is hit, the grand centre wobbles. Black meets brute force with a precise central counter-punch — the hypermodern idea distilled.",
+    "pawnBreaks": [
+      "...c5 (hit the base of the chain)",
+      "later ...cxd4 / ...f6 to dissolve the centre"
+    ],
+    "pieceManeuvers": [
+      "...Nfd7 active retreat",
+      "...c5 undermining d4",
+      "...Nc6/...Qb6 piling on d4"
+    ],
+    "strategicThemes": [
+      "Undermine, don’t blockade",
+      "Punish overextension",
+      "Hypermodern central counter-strike"
+    ],
+    "endgameTransitions": [
+      "If the centre dissolves, an open-ish middlegame with even chances"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp1ppbp/3p1np1/4P3/3P1P2/2N2N2/PPP3PP/R1BQKB1R b KQ - 0 6",
+        "moves": [
+          "Nfd7",
+          "Be2",
+          "c5"
+        ],
+        "annotations": [
+          "...Nfd7 — the accurate retreat: inward and active, still eyeing e5, not the passive rim.",
+          "White supports with Be2.",
+          "...c5 — the refutation: it hits the base of the chain and the overextended centre starts to wobble."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f6",
+              "to": "d7"
+            }
+          ],
+          [
+            {
+              "from": "f1",
+              "to": "e2"
+            }
+          ],
+          [
+            {
+              "from": "c7",
+              "to": "c5"
+            }
+          ]
+        ],
+        "title": "Undermine the Overextended Centre"
+      }
+    ]
   }
 ]
