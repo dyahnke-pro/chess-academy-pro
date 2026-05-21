@@ -414,6 +414,39 @@ chess structure when the DB already has it. Concretely:
   they don't exist. We don't make stuff up and we certainly don't
   break what we have just built!"
 
+**The injected books are the grounding source for narration IDEAS —
+check them, don't trust training recall (David 2026-05-21).** The app
+ships a real chess-book corpus: `src/data/chess-concepts.json` (664
+tagged passages) + `src/data/opening-book-pages.json` (per-opening
+pages), distilled from five public-domain Gutenberg classics —
+Capablanca *Chess Fundamentals*, Edward Lasker *Chess Strategy* and
+*Chess and Checkers*, Staunton *Blue Book*, Young *Chess Generalship*.
+Read via `src/coach/sources/bookGrounding.ts` /
+`chessConceptService.buildCoachChatContext`. The division of truth:
+**the DB owns the MOVES; the books own the IDEAS and framing.** When you
+author masterclass narration, do NOT rely on your training memory of
+these same books — it is a lossy copy. Double-check the actual injected
+text, and prefer its framing so the masterclass, the BookReader, and the
+coach all speak with one voice.
+
+**Caveat — the corpus is pre-1930s, so it covers CLASSICAL openings
+only.** It has the Ruy, French, Caro-Kann, Queen's/King's Gambit,
+Philidor, etc. — but NOT modern openings that postdate the books (Pirc
+[1940s], King's Indian, Grünfeld, Najdorf, …). For a modern opening:
+- There is NO opening-specific book material to ground against — that's
+  expected, not a failure (empty book-shelf is correct).
+- You CAN still verify the UNIVERSAL PRINCIPLES the opening rests on
+  against `chess-concepts.json` (flank attack → counter in the centre,
+  undermine a pawn chain at its base, the fianchettoed bishop on the long
+  diagonal — all straight out of Lasker/Capablanca, just not tagged with
+  the opening's name).
+- Narration for a modern opening therefore grounds on: the DB move-lines
+  (G3) + `repertoire.json` explanations + the concept corpus for
+  principles, with the `narrationAccuracy` gate enforcing board-truth.
+- Per-variation book reading for a modern opening shares the opening-
+  level / classical reading until real modern source material is
+  injected (a content-acquisition job — flag it to David, don't fake it).
+
 **Audit stream — gate G2 (NON-NEGOTIABLE).** Implements gate G2 from
 the top of this file. After every push that touches a runtime path
 that emits audits — coach brain, walkthrough runtime, voice (which
