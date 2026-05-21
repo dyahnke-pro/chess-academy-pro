@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { sanitizeForTTS, voiceService } from '../../services/voiceService';
 import { generateWalkthroughNarrations } from '../../services/walkthroughLlmNarrator';
@@ -119,6 +119,7 @@ function computeFenFromPgn(pgn: string, setupFen?: string): string {
 export function OpeningDetailPage(): JSX.Element {
   const { id, playerId } = useParams<{ id: string; playerId?: string }>();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const isProContext = location.pathname.includes('/openings/pro/');
   const triggerStarAnimation = useStarAnimationStore((store) => store.trigger);
@@ -245,6 +246,38 @@ export function OpeningDetailPage(): JSX.Element {
       setViewMode('endgame-lesson');
     },
     [],
+  );
+
+  // Variation tab is URL-addressable (?line=marshall) so the training
+  // plan, weaknesses, coach chat, etc. can deep-link a specific variation.
+  // The URL is the source of truth: the handler updates it, this effect
+  // syncs selectedTabIndex from it.
+  useEffect(() => {
+    if (!opening) return;
+    const line = searchParams.get('line');
+    if (!line) {
+      setSelectedTabIndex(-1);
+      return;
+    }
+    const tabs = buildVariationTabs(opening.id, opening.variations);
+    const match =
+      tabs.find((t) => t.label.toLowerCase() === line.toLowerCase()) ??
+      (/^\d+$/.test(line) ? tabs.find((t) => t.index === Number(line)) : undefined);
+    setSelectedTabIndex(match ? match.index : -1);
+  }, [opening, searchParams]);
+
+  const handleSelectTab = useCallback(
+    (index: number): void => {
+      const next = new URLSearchParams(searchParams);
+      const label =
+        index >= 0
+          ? buildVariationTabs(opening?.id ?? '', opening?.variations).find((t) => t.index === index)?.label
+          : undefined;
+      if (label) next.set('line', label.toLowerCase());
+      else next.delete('line');
+      setSearchParams(next, { replace: true });
+    },
+    [searchParams, setSearchParams, opening],
   );
 
   // Pre-warm the LLM narration cache when the user picks a variation
@@ -824,7 +857,7 @@ export function OpeningDetailPage(): JSX.Element {
       <VariationTabs
         tabs={variationTabs}
         selectedIndex={selectedTabIndex}
-        onSelect={setSelectedTabIndex}
+        onSelect={handleSelectTab}
       />
 
       {/* WALKTHROUGH, LEARN, PRACTICE, PLAY buttons */}

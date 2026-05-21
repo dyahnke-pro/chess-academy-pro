@@ -162,6 +162,17 @@ deviationMove?, explanation`. NOT overview/keyIdeas/plans/games.
   deployed, per David). Per G7: off-canonical input, cold-cache,
   pick-before-load, on every touched surface. status: pending.
 
+## App-wide wiring (David 2026-05-21)
+
+- Variation tabs are URL-addressable via `?line=<label>` (OpeningDetailPage
+  reads/writes it; URL is source of truth). DONE.
+- Weaknesses: OpeningDrilldown has a "Study this opening" CTA →
+  `/openings/<id>` (resolveOpeningIdFromName). DONE.
+- Training plan: RolodexRow "Theory & Lines" deep-links to
+  `/openings/<id>` (was a filter redirect). DONE.
+- Still TODO: coach-chat `drill_opening` could carry a variation; consider
+  passing `?line=` from SmartSearch / coach session when a variation is named.
+
 ## Decisions log
 
 - 2026-05-21 — 7 tabs = Berlin/Open/Marshall/Exchange/Breyer/Chigorin/

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, BookOpen } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import { getGamesByOpening } from '../../services/gameInsightsService';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
 import { calculateAccuracy, getClassificationCounts } from '../../services/accuracyService';
@@ -65,6 +66,9 @@ function getResult(game: GameRecord, color: 'white' | 'black'): 'win' | 'loss' |
 
 export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JSX.Element {
   const navigate = useNavigate();
+  // Resolve the aggregate opening name to a repertoire id so we can
+  // deep-link into its masterclass. Null when it doesn't map to one.
+  const studyOpeningId = resolveOpeningIdFromName(opening.name);
   const activeProfile = useAppStore((s) => s.activeProfile);
   const [games, setGames] = useState<GameCardData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -147,6 +151,23 @@ export function OpeningDrilldown({ opening, onBack }: OpeningDrilldownProps): JS
           <span className="text-xs font-semibold" style={{ color: 'var(--color-text-muted)' }}>{opening.eco}</span>
         )}
       </div>
+
+      {/* Study this opening — deep-link into the opening masterclass
+          (overview, book, middlegame WLPP, endgame, variations). */}
+      {studyOpeningId && (
+        <button
+          onClick={() => void navigate(`/openings/${studyOpeningId}`)}
+          className="w-full mb-3 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold border-2 transition-colors"
+          style={{
+            borderColor: 'var(--color-accent)',
+            color: 'var(--color-accent)',
+          }}
+          data-testid="study-opening-btn"
+        >
+          <BookOpen size={16} />
+          Study this opening
+        </button>
+      )}
 
       {/* Summary stats */}
       <div className="flex border-b pb-3.5" style={{ borderColor: 'var(--color-border)' }}>

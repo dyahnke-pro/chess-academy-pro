@@ -143,7 +143,7 @@ export function TheoryLinesRow({ opening }: RowProps): JSX.Element {
       Icon={BookOpen}
       label="Theory & Lines"
       countText={formatTracked(completed, total, loading)}
-      onTap={() => { void navigate(`/openings?opening=${encodeURIComponent(opening.name)}`); }}
+      onTap={() => { void navigate(`/openings/${opening.id}`); }}
     />
   );
 }
