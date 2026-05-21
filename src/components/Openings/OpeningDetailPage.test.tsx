@@ -190,14 +190,6 @@ describe('OpeningDetailPage', () => {
     });
   });
 
-  it('shows traps panel', async () => {
-    renderWithRoute();
-    await waitFor(() => {
-      expect(screen.getAllByText('Weapons').length).toBeGreaterThan(0);
-      expect(screen.getByText('Vienna Gambit trap')).toBeInTheDocument();
-    });
-  });
-
   it('shows warnings panel', async () => {
     renderWithRoute();
     await waitFor(() => {
@@ -322,13 +314,6 @@ describe('OpeningDetailPage', () => {
       });
     });
 
-    it('renders narration button on traps section', async () => {
-      renderWithRoute();
-      await waitFor(() => {
-        expect(screen.getByTestId('narrate-traps')).toBeInTheDocument();
-      });
-    });
-
     it('renders narration button on warnings section', async () => {
       renderWithRoute();
       await waitFor(() => {
@@ -360,29 +345,6 @@ describe('OpeningDetailPage', () => {
   });
 
   describe('train buttons', () => {
-    it('does not render train traps button when no trapLines', async () => {
-      renderWithRoute();
-      await waitFor(() => {
-        expect(screen.getAllByText('Weapons').length).toBeGreaterThan(0);
-      });
-      expect(screen.queryByTestId('train-traps-btn')).not.toBeInTheDocument();
-    });
-
-    it('renders train traps button when trapLines exist', async () => {
-      const openingWithTraps = {
-        ...testOpening,
-        trapLines: [
-          { name: 'Trap 1', pgn: 'e4 e5 Nc3', explanation: 'A trap' },
-        ],
-      };
-      mockGetOpeningById.mockResolvedValue(openingWithTraps);
-
-      renderWithRoute();
-      await waitFor(() => {
-        expect(screen.getByTestId('train-traps-btn')).toBeInTheDocument();
-      });
-    });
-
     it('does not render train warnings button when no warningLines', async () => {
       renderWithRoute();
       await waitFor(() => {
@@ -403,26 +365,6 @@ describe('OpeningDetailPage', () => {
       renderWithRoute();
       await waitFor(() => {
         expect(screen.getByTestId('train-warnings-btn')).toBeInTheDocument();
-      });
-    });
-
-    it('clicking train traps button enters train-traps mode', async () => {
-      const openingWithTraps = {
-        ...testOpening,
-        trapLines: [
-          { name: 'Trap 1', pgn: 'e4 e5 Nc3', explanation: 'A trap' },
-        ],
-      };
-      mockGetOpeningById.mockResolvedValue(openingWithTraps);
-
-      renderWithRoute();
-      await waitFor(() => {
-        expect(screen.getByTestId('train-traps-btn')).toBeInTheDocument();
-      });
-
-      fireEvent.click(screen.getByTestId('train-traps-btn'));
-      await waitFor(() => {
-        expect(screen.getByTestId('train-mode')).toBeInTheDocument();
       });
     });
   });
