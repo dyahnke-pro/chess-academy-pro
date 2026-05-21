@@ -266,6 +266,34 @@ Have: Game Review + Stockfish classifications, opening detection, the
 explorer pipe, Weaknesses. NEW: the theory-deviation scan (your moves vs
 masters), reasoning capture in review, aggregate-on-tab.
 
+## FEATURE SPEC — Training Plan = the hub (David 2026-05-21)
+
+The masterclass TEACHES; the Training Plan (`/coach/plan`,
+TrainingPlanRolodexPage) DRILLS. It reads the weakness-tag map (from
+Discussion Practice + Game Review) + your repertoire and turns them into
+prioritized reps. Where the tags finally pay off.
+
+- **Shape:** a focused **"Today's reps"** feed (3-5 prioritized drills,
+  do-your-reps energy) on top, with the repertoire rolodex as a
+  browse-all layer underneath.
+- **Priority mix (weighted):** weakness-first → SRS-due → new lines.
+- **Drill formats:**
+  1. **Weakness drills (headline)** — tag-driven: "Your #1 error,
+     overvalued-attack 7×. Five positions where patience wins." Positions
+     pulled from opening lines / tactics / your own games tagged to it.
+  2. **Opening reps (SRS)** — spaced review of the masterclass lines.
+  3. **Woodpecker rapid-fire** — reflex trainer (blank board, fast,
+     resets on miss, hint button). (David note 7.)
+  4. **Masters "guess the move"** — explorer drill from variation positions.
+  5. **Replay your loss** — "left book move 11 in 3 games — drill it."
+- **Adaptive loop (makes it a system):** each session feeds tags back →
+  re-rank → an error you're fixing graduates out, a new one surfaces.
+  Per-tag "mastery" is the exit condition. Plan lives off your data, not a
+  fixed checklist.
+- **The engine: tag→position mapping** (the real build). Opening tags →
+  relevant lines/branches; tactical tags → puzzles.json by theme;
+  your-games tags → the positions you flubbed.
+
 ## AUDIT STATUS (loop running 2026-05-21)
 
 `audit-openings-interactive-loop.mjs` running vs localhost. Round 7 findings
