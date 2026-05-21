@@ -149,10 +149,10 @@ deviationMove?, explanation`. NOT overview/keyIdeas/plans/games.
 - **Phase 4 — The 7-tab shell.** Gold-glow tab bar; selecting a tab
   re-scopes the whole page to that variation (reusing the per-variation
   viewModes). Remove the bottom Variations zone. status: pending.
-- **Phase 5 — Per-variation depth.** Author overview/keyIdeas per
-  variation; middlegame plans for Breyer/Chigorin/Zaitsev; endgame
-  mapping per variation; traps/pitfalls narration quality; source more
-  GM games. status: pending.
+- **Phase 5 — Per-variation depth.** middlegame plans for Breyer/
+  Chigorin/Zaitsev: DONE (all 7 variations now have a plan). Still
+  pending: per-variation overview/keyIdeas, per-variation endgame
+  mapping, traps/pitfalls narration quality, source more GM games.
 - **Phase 6 — Full interactive audit pass** (HELD until all above
   deployed, per David). Per G7: off-canonical input, cold-cache,
   pick-before-load, on every touched surface. status: pending.

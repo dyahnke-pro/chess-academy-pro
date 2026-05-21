@@ -144,6 +144,9 @@ describe('Ruy Lopez variation middlegame plans', () => {
     'mp-ruylopez-berlin',
     'mp-ruylopez-open',
     'mp-ruylopez-exchange',
+    'mp-ruylopez-breyer',
+    'mp-ruylopez-chigorin',
+    'mp-ruylopez-zaitsev',
   ];
 
   for (const id of RUY_VARIATION_PLAN_IDS) {
