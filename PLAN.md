@@ -136,9 +136,11 @@ deviationMove?, explanation`. NOT overview/keyIdeas/plans/games.
   audiobook reader in the Understand zone, with follow-along TTS.
   status: pending.
 - **Phase 2 — Middlegame WLPP (template, main page).** Plan lines with
-  the 4-button WLPP row. Watch/Learn = GM-game walkthrough (Marshall)
-  or beat-lesson, narrated + book-grounded. Practice/Play from critical
-  FEN. Fold inline theory into Learn. status: pending.
+  the 4-button WLPP row (Watch=PlayableLinePlayer auto-play, Learn=
+  MiddlegamePlanStudy, Practice=MiddlegamePractice, Play=OpeningPlayMode
+  from criticalPositionFen). Inline MiddlegameTheorySection folded into
+  Learn + deleted. status: DONE (PR pending). Still TODO in Phase 5:
+  swap Watch to a real narrated GM-game walkthrough where one exists.
 - **Phase 3 — Endgame masterclass section (template, main page).** New
   section + WLPP, opening→endgame-lesson mapping over the 27 lessons.
   status: pending.
@@ -164,6 +166,10 @@ deviationMove?, explanation`. NOT overview/keyIdeas/plans/games.
 - 2026-05-21 — book reader = tabbed audiobook chapters. (David)
 - 2026-05-21 — HOLD all post-deploy audits until the masterclass fully
   ships. (David)
+- 2026-05-21 — the MAIN LINE (Closed Ruy) is the showcase/template, NOT
+  Marshall. The Capablanca–Marshall game is a Marshall-Attack game →
+  it belongs under the Marshall tab as that tab's Watch walkthrough,
+  not the main-line showcase. (David)
 
 ## Next-session pickup
 

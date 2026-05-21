@@ -2,8 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MotionConfig } from 'framer-motion';
-import { MiddlegamePlansSection } from './MiddlegamePlansSection';
+import { MiddlegamePlansSection, type MiddlegameAction } from './MiddlegamePlansSection';
 import { buildMiddlegamePlan } from '../../test/factories';
+import type { MiddlegamePlan } from '../../types';
 
 vi.mock('../../services/middlegamePlanService', () => ({
   getPlansForOpening: vi.fn(),
@@ -13,10 +14,13 @@ import { getPlansForOpening } from '../../services/middlegamePlanService';
 
 const mockGetPlans = vi.mocked(getPlansForOpening);
 
-function renderSection(openingId: string, onSelect = vi.fn()): ReturnType<typeof render> {
+function renderSection(
+  openingId: string,
+  onAction: (plan: MiddlegamePlan, action: MiddlegameAction) => void = vi.fn(),
+): ReturnType<typeof render> {
   return render(
     <MotionConfig transition={{ duration: 0 }}>
-      <MiddlegamePlansSection openingId={openingId} onSelectPlan={onSelect} />
+      <MiddlegamePlansSection openingId={openingId} boardOrientation="white" onAction={onAction} />
     </MotionConfig>,
   );
 }
@@ -35,10 +39,10 @@ describe('MiddlegamePlansSection', () => {
     });
   });
 
-  it('renders plan cards when plans exist', async () => {
+  it('renders a WLPP line per plan', async () => {
     const plans = [
-      buildMiddlegamePlan({ id: 'p1', title: 'Central Expansion', pawnBreaks: [{ move: 'd3-d4', explanation: 'Open the center', fen: 'start' }] }),
-      buildMiddlegamePlan({ id: 'p2', title: 'Kingside Attack', pawnBreaks: [{ move: 'f2-f4', explanation: 'Kingside expansion', fen: 'start' }] }),
+      buildMiddlegamePlan({ id: 'p1', title: 'Central Expansion' }),
+      buildMiddlegamePlan({ id: 'p2', title: 'Kingside Attack' }),
     ];
     mockGetPlans.mockResolvedValue(plans);
     renderSection('italian-game');
@@ -50,20 +54,26 @@ describe('MiddlegamePlansSection', () => {
     expect(screen.getByText('Central Expansion')).toBeInTheDocument();
     expect(screen.getByText('Kingside Attack')).toBeInTheDocument();
     expect(screen.getByText(/Middlegame Plans \(2\)/)).toBeInTheDocument();
-    expect(screen.getByText('d3-d4')).toBeInTheDocument();
+    // Each plan exposes the four WLPP actions.
+    for (const action of ['watch', 'learn', 'practice', 'play']) {
+      expect(screen.getByTestId(`plan-${action}-p1`)).toBeInTheDocument();
+    }
   });
 
-  it('calls onSelectPlan when a plan card is clicked', async () => {
+  it('calls onAction with the chosen mode', async () => {
     const plan = buildMiddlegamePlan({ id: 'p1' });
     mockGetPlans.mockResolvedValue([plan]);
-    const onSelect = vi.fn();
-    renderSection('italian-game', onSelect);
+    const onAction = vi.fn();
+    renderSection('italian-game', onAction);
 
     await waitFor(() => {
-      expect(screen.getByTestId('plan-card-p1')).toBeInTheDocument();
+      expect(screen.getByTestId('plan-line-p1')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('plan-card-p1'));
-    expect(onSelect).toHaveBeenCalledWith(plan);
+    await userEvent.click(screen.getByTestId('plan-learn-p1'));
+    expect(onAction).toHaveBeenCalledWith(plan, 'learn');
+
+    await userEvent.click(screen.getByTestId('plan-play-p1'));
+    expect(onAction).toHaveBeenCalledWith(plan, 'play');
   });
 });

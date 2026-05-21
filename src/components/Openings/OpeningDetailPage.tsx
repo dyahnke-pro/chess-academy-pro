@@ -12,13 +12,13 @@ import { MasteryRing } from './MasteryRing';
 import { MiniBoard } from '../Board/MiniBoard';
 import { ModelGamesSection } from './ModelGamesSection';
 import { ModelGameViewer } from './ModelGameViewer';
-import { MiddlegamePlansSection } from './MiddlegamePlansSection';
+import { MiddlegamePlansSection, type MiddlegameAction } from './MiddlegamePlansSection';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
+import { PlayableLinePlayer } from './PlayableLinePlayer';
 import { CheckpointQuiz } from './CheckpointQuiz';
 import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { BookReader } from './BookReader';
-import { MiddlegameTheorySection } from './MiddlegameTheorySection';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
@@ -92,8 +92,10 @@ type ViewMode =
   | 'train-traps'
   | 'train-warnings'
   | 'model-game'
+  | 'middlegame-watch'
   | 'middlegame-plan'
-  | 'middlegame-practice';
+  | 'middlegame-practice'
+  | 'middlegame-play';
 
 function computeFenFromPgn(pgn: string, setupFen?: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
@@ -207,15 +209,21 @@ export function OpeningDetailPage(): JSX.Element {
     setViewMode('model-game');
   }, []);
 
-  const handleSelectMiddlegamePlan = useCallback((plan: MiddlegamePlan): void => {
-    setActiveMiddlegamePlan(plan);
-    setViewMode('middlegame-plan');
-  }, []);
-
-  const handlePlayMiddlegamePlan = useCallback((plan: MiddlegamePlan): void => {
-    setActiveMiddlegamePlan(plan);
-    setViewMode('middlegame-practice');
-  }, []);
+  const handleMiddlegameAction = useCallback(
+    (plan: MiddlegamePlan, action: MiddlegameAction): void => {
+      setActiveMiddlegamePlan(plan);
+      const mode: ViewMode =
+        action === 'learn'
+          ? 'middlegame-plan'
+          : action === 'practice'
+            ? 'middlegame-practice'
+            : action === 'play'
+              ? 'middlegame-play'
+              : 'middlegame-watch';
+      setViewMode(mode);
+    },
+    [],
+  );
 
   // Pre-warm the LLM narration cache when the user picks a variation
   // — fires before WalkthroughMode mounts, so by the time they tap
@@ -596,8 +604,27 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Middlegame plan study
-  if (viewMode === 'middlegame-plan' && activeMiddlegamePlan) {
+  // Middlegame WATCH — auto-play the plan's line on the board with voice.
+  if (
+    viewMode === 'middlegame-watch' &&
+    activeMiddlegamePlan &&
+    activeMiddlegamePlan.playableLines &&
+    activeMiddlegamePlan.playableLines.length > 0
+  ) {
+    return (
+      <PlayableLinePlayer
+        line={activeMiddlegamePlan.playableLines[0]}
+        boardOrientation={opening.color}
+        onComplete={handleExit}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Middlegame LEARN — study the plan (overview, breaks, maneuvers, themes).
+  if ((viewMode === 'middlegame-watch' || viewMode === 'middlegame-plan') && activeMiddlegamePlan) {
+    // 'middlegame-watch' falls through to here when the plan has no
+    // playable line to animate.
     return (
       <MiddlegamePlanStudy
         plan={activeMiddlegamePlan}
@@ -607,12 +634,23 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Middlegame practice (direct play)
+  // Middlegame PRACTICE — student plays the moves with coach feedback.
   if (viewMode === 'middlegame-practice' && activeMiddlegamePlan) {
     return (
       <MiddlegamePractice
         plan={activeMiddlegamePlan}
         playerColor={opening.color}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Middlegame PLAY — play vs the coach from the plan's critical position.
+  if (viewMode === 'middlegame-play' && activeMiddlegamePlan) {
+    return (
+      <OpeningPlayMode
+        opening={opening}
+        startFen={activeMiddlegamePlan.criticalPositionFen}
         onExit={handleExit}
       />
     );
@@ -918,23 +956,13 @@ export function OpeningDetailPage(): JSX.Element {
         />
       )}
 
-      {/* Middlegame Theory — readable prose (overview, strategic ideas,
-          pawn breaks, maneuvers, endgames) in the same inline format as
-          the Understand-zone reading sections. The interactive launcher
-          below is the practice/study counterpart. */}
-      <MiddlegameTheorySection
-        openingId={opening.id}
-        renderNarrationButton={(text) => (
-          <NarrationButton sectionId="middlegame-theory" text={text} />
-        )}
-        onActivate={(text) => toggleNarration('middlegame-theory', text)}
-      />
-
-      {/* Middlegame Plans */}
+      {/* Middlegame Plans — Watch / Learn / Practice / Play per plan.
+          The theory prose now lives inside Learn (MiddlegamePlanStudy),
+          so there's no separate inline theory dump. */}
       <MiddlegamePlansSection
         openingId={opening.id}
-        onSelectPlan={handleSelectMiddlegamePlan}
-        onPlayPlan={handlePlayMiddlegamePlan}
+        boardOrientation={opening.color}
+        onAction={handleMiddlegameAction}
       />
 
       {/* Model Games */}
