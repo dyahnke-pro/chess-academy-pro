@@ -154,10 +154,25 @@ async function main() {
   page.on('pageerror', (e) => pageErrors.push(String(e)));
 
   try {
-    // Main/closed view — Noah's Ark (widened to the closed tabs).
+    // The "watch out for" warnings stay (with full WLPP). The Weapons/traps
+    // section + the Model Game section were REMOVED (David 2026-05-21) — verify
+    // they're gone and no blank zones render.
     await probeTile(page, 'variation-tab-main', 'noahs-ark', "Noah's Ark (main)");
-    // Open tab — the Tarrasch weapon (click the Open variation tab by label).
-    await probeTile(page, 'Open', 'tarrasch', 'Tarrasch (open)');
+
+    // Sections-removed + no-blank-zones check on the main view.
+    await openRuy(page, 'variation-tab-main');
+    const gone = await page.evaluate(() => {
+      const txt = document.body.innerText;
+      return {
+        noModelGames: !document.querySelector('[data-testid="model-games-section"]'),
+        noWeaponsHeader: !/\bWeapons\b/.test(txt),
+        // Pitfalls header should still appear (we have Noah's Ark warning).
+        hasPitfalls: /Pitfalls|watch out|Traps to avoid/i.test(txt),
+      };
+    });
+    record('Model Games section removed', gone.noModelGames);
+    record('Weapons/traps section removed', gone.noWeaponsHeader);
+    record('Pitfalls (watch out for) still present', gone.hasPitfalls);
   } catch (e) {
     record('audit-run', false, String(e));
   }
