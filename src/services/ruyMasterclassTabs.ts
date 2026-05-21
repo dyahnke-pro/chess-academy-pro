@@ -13,9 +13,9 @@ export const RUY_TAB_PLAN_IDS: Record<string, string[]> = {
   open: ['mp-ruylopez-open'],
   marshall: ['mp-ruylopez-marshall'],
   exchange: ['mp-ruylopez-exchange', 'mp-ruylopez-exchange-endgame'],
-  breyer: ['mp-ruylopez-breyer'],
-  chigorin: ['mp-ruylopez-chigorin'],
-  zaitsev: ['mp-ruylopez-zaitsev'],
+  breyer: ['mp-ruylopez-breyer', 'mp-ruylopez-breyer-endgame'],
+  chigorin: ['mp-ruylopez-chigorin', 'mp-ruylopez-chigorin-endgame'],
+  zaitsev: ['mp-ruylopez-zaitsev', 'mp-ruylopez-zaitsev-endgame'],
 };
 
 /** The hand-picked middlegame plan ids for a Ruy tab, or null when the
