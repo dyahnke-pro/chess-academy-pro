@@ -5,7 +5,7 @@ import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentC
 import { useStrictNarration } from '../../hooks/useStrictNarration';
 import { voiceService } from '../../services/voiceService';
 import { useSettings } from '../../hooks/useSettings';
-import { buildNarrationSegments, speakSegments } from '../../services/narrationSegments';
+import { buildNarrationSegments } from '../../services/narrationSegments';
 import type { LessonScript, LessonBeat } from '../../types';
 
 interface LessonPlayerProps {
@@ -63,15 +63,17 @@ export function LessonPlayer({ script, onExit, onComplete }: LessonPlayerProps):
   const animResolveRef = useRef<(() => void) | null>(null);
   const animPromiseRef = useRef<Promise<void>>(Promise.resolve());
 
-  // Lead-the-eye reveal: a beat's arrows/highlights are NOT shown all at once;
-  // each square is revealed as the SENTENCE that names it is spoken (sentence-
-  // grained beats, prefetched so the audio stays smooth — David 2026-05-21).
-  // `revealedSquares` accumulates across the beat; the board shows a marker
-  // only once its square has been revealed (and the moves have settled).
+  // Lead-the-eye TIMED SQUARE REVEAL (David 2026-05-21): the voice speaks the
+  // whole beat as ONE smooth utterance (no sentence-chopping — that sounded
+  // choppy), and each beat marker is revealed on a TIMER paced to where its
+  // square's sentence sits in the narration. So the square lights ~as the
+  // coach says its name, while the audio stays seamless. `revealedSquares`
+  // accumulates; the board shows a marker only once revealed AND settled.
   const [revealedSquares, setRevealedSquares] = useState<Set<string>>(new Set());
   const playTokenRef = useRef(0);
   const beatRef = useRef<LessonBeat | undefined>(beats[0]);
   const voiceEnabledRef = useRef(voiceEnabled);
+  const revealTimersRef = useRef<number[]>([]);
   useEffect(() => { voiceEnabledRef.current = voiceEnabled; }, [voiceEnabled]);
 
   const beatSquares = useCallback((b: LessonBeat | undefined): string[] => {
@@ -82,17 +84,22 @@ export function LessonPlayer({ script, onExit, onComplete }: LessonPlayerProps):
     ];
   }, []);
 
+  const clearRevealTimers = useCallback(() => {
+    revealTimersRef.current.forEach((t) => clearTimeout(t));
+    revealTimersRef.current = [];
+  }, []);
+
   const applyStep = useCallback((i: number) => {
     animPromiseRef.current = new Promise<void>((res) => { animResolveRef.current = res; });
-    // Bump the play token so any in-flight segmented speak from the prior beat
-    // bails (the speak closure compares against playTokenRef.current).
+    // Bump the play token so any pending reveal timers from the prior beat bail.
     playTokenRef.current += 1;
+    clearRevealTimers();
     const b = beats[i];
     beatRef.current = b;
-    // Voice off → no narration to gate the reveal, so show every marker now.
+    // Voice off → no narration to pace the reveal, so show every marker now.
     setRevealedSquares(voiceEnabledRef.current ? new Set() : new Set(beatSquares(b)));
     setBeatIndex(i);
-  }, [beats, beatSquares]);
+  }, [beats, beatSquares, clearRevealTimers]);
   const getNarration = useCallback((i: number) => beats[i]?.say ?? '', [beats]);
 
   const { isAutoPlaying, next, prev, goToStep, toggleAutoPlay } = useStrictNarration({
@@ -101,24 +108,32 @@ export function LessonPlayer({ script, onExit, onComplete }: LessonPlayerProps):
     getNarration,
     postNarrationDelayMs: 700,
     voiceEnabled,
-    // A master class is opt-in long-form teaching — speak it in full, not
-    // clipped to the coach's brief cap. Speak it SENTENCE BY SENTENCE,
-    // revealing each beat marker as its square is named (prefetching the
-    // next sentence so the seam stays small). Advance still waits for BOTH
+    // Speak the beat as ONE smooth utterance (long-form, not brief-capped),
+    // and schedule each marker's reveal on a timer estimated from where its
+    // square's sentence falls in the text — the board paints the square ~as
+    // the coach says it, without chopping the voice. Advance waits for BOTH
     // the full narration AND the board animation.
     speak: (t: string) => {
       const myToken = playTokenRef.current;
       const segments = buildNarrationSegments(t, beatSquares(beatRef.current));
-      const spoken = speakSegments(segments, {
-        speak: (s) => voiceService.speakLecture(s),
-        prefetch: (s) => { void voiceService.prefetchAudio([s]); },
-        reveal: (squares) => {
+      // Rough speech-duration estimate (~55ms/char, floor 1.2s) — we only
+      // need the RELATIVE pacing of the reveals across the utterance, not a
+      // precise sync (voice isn't driving it; this is a cosmetic timer).
+      const totalChars = segments.reduce((n, s) => n + s.text.length, 0) || 1;
+      const estMs = Math.max(totalChars * 55, 1200);
+      let accChars = 0;
+      for (const seg of segments) {
+        const at = (accChars / totalChars) * estMs;
+        accChars += seg.text.length;
+        if (seg.revealSquares.length === 0) continue;
+        const squares = seg.revealSquares;
+        const timer = window.setTimeout(() => {
           if (playTokenRef.current !== myToken) return;
           setRevealedSquares((prev) => new Set([...prev, ...squares]));
-        },
-        cancelled: () => playTokenRef.current !== myToken,
-      });
-      return Promise.all([spoken, animPromiseRef.current]).then(() => undefined);
+        }, at);
+        revealTimersRef.current.push(timer);
+      }
+      return Promise.all([voiceService.speakLecture(t), animPromiseRef.current]).then(() => undefined);
     },
     // The story plays itself — beats auto-advance as each line finishes.
     initialAutoPlay: true,
@@ -126,6 +141,9 @@ export function LessonPlayer({ script, onExit, onComplete }: LessonPlayerProps):
 
   const idx = beatIndex;
   const beat = beats[idx];
+
+  // Clear any pending reveal timers on unmount.
+  useEffect(() => () => clearRevealTimers(), [clearRevealTimers]);
 
   // Fire onComplete once when the student reaches the final beat.
   const completedRef = useRef(false);
