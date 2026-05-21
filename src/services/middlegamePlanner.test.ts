@@ -213,6 +213,11 @@ describe('Pirc Defence variation middlegame plans', () => {
     'mp-pircdefence-austrian',
     'mp-pircdefence-classical',
     'mp-pircdefence-150',
+    'mp-pircdefence-byrne',
+    'mp-pircdefence-lion',
+    'mp-pircdefence-fianchetto',
+    'mp-pircdefence-czech',
+    'mp-pircdefence-austrian-e5',
   ];
 
   for (const id of PIRC_VARIATION_PLAN_IDS) {

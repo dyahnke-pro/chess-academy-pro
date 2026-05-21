@@ -13,6 +13,11 @@ export const PIRC_TAB_PLAN_IDS: Record<string, string[]> = {
   'austrian attack': ['mp-pircdefence-austrian'],
   'classical system': ['mp-pircdefence-classical'],
   '150 attack': ['mp-pircdefence-150'],
+  'byrne variation': ['mp-pircdefence-byrne'],
+  'lion variation': ['mp-pircdefence-lion'],
+  'fianchetto system': ['mp-pircdefence-fianchetto'],
+  'czech defence': ['mp-pircdefence-czech'],
+  'austrian attack with e5 c5': ['mp-pircdefence-austrian-e5'],
 };
 
 /** The hand-picked middlegame plan ids for a Pirc tab, or null when the
