@@ -163,15 +163,26 @@ For each first-class variation tab, author:
 
 ## 5. Narration rules (apply to every spoken line)
 
-- **Model games MUST showcase the STUDENT'S SIDE WINNING (David 2026-05-21,
-  emphatic: "cannot have a model game that shows the opening losing, good god
-  that would be bad").** A Black-oriented class (Pirc, etc.) needs a beautiful
-  BLACK win; a White opening needs a White win. The Pirc shipped with
-  Kasparov–Topalov 1999 — a White brilliancy AGAINST the Pirc — which is
-  exactly wrong. **Source a real classic win for the student's side; never
-  fabricate a PGN** (G3 — if `model-games.json` has none for the side, leave
-  it empty / hide the section and flag for sourcing, rather than ship a loss
-  or invent moves). Empty > a losing game > a fabricated game.
+- **A MODEL GAME PER VARIATION, each showing the STUDENT'S SIDE WINNING
+  (David 2026-05-21, LOCKED: "find a model game for each variation").** Every
+  first-class variation tab gets its OWN model game — a real classic where the
+  student's side WINS in that exact variation. A Black-oriented class (Pirc,
+  etc.) needs beautiful BLACK wins; a White opening needs White wins. NEVER a
+  game where the opening loses (the Pirc's old Kasparov–Topalov was a White
+  win AGAINST the Pirc — exactly wrong, scrapped). **Source real games; never
+  fabricate a PGN** (G3). The render guard enforces it: `ModelGamesSection`
+  drops any game where the student's side lost. Sourcing rule:
+  - Search the web to IDENTIFY the game (players, event, year, result,
+    variation) — confirm it's a real win for the student's side in that line.
+  - Get the FULL verified PGN before authoring — from a fetchable source, or
+    pasted by David. The major chess sites (chessgames.com, chess.com) 403 the
+    sandbox's web-fetch, so the PGN often has to come from David or an open
+    mirror. Do NOT reconstruct moves from memory to fill the gap.
+  - Reference find (Pirc · Austrian Attack): **Fischer 0–1 Korchnoi, Curaçao
+    Candidates 1962 (B09)** — Black beats Fischer himself in the Austrian
+    Attack. Verified real; PGN pending a fetchable source.
+  - Until a variation's real win + PGN is in hand, that variation simply has
+    no model game (the section self-hides — empty > losing > fabricated).
 - **Model games**: reinforce the lesson's KEY PRINCIPLES at keystone
   moments + pause to appreciate the BEAUTY — NOT move-by-move. Vehicle =
   `criticalMoments` (moveNumber/color/fen/annotation/concept/highlights/

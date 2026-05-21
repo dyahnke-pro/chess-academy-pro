@@ -1056,9 +1056,14 @@ playbook holds the rules you MUST follow, in particular:
   variation tab, with full WLPP (Learn/Practice via the
   `getRuyTrapPlayableLine` converter). Weapon = opponent slips, you punish;
   warning = you must avoid — classify by who plays the punishing move.
-- **Model game MUST show the STUDENT'S side WINNING** — never ship a game
-  where the opening loses (the Pirc's Kasparov–Topalov is a White win
-  against the Pirc = wrong). Source a real win; never fabricate a PGN.
+- **A model game PER VARIATION, each showing the STUDENT'S side WINNING** —
+  never ship a game where the opening loses (the Pirc's Kasparov–Topalov is a
+  White win against the Pirc = wrong; scrapped). Source REAL games (search the
+  web to identify; get the full PGN from a fetchable source or David — major
+  chess sites 403 the sandbox); never fabricate a PGN. `ModelGamesSection`
+  drops any game where the student's side lost. Reference find: Fischer 0–1
+  Korchnoi, Curaçao 1962 (Pirc Austrian Attack). No game for a variation =
+  the section self-hides (empty > losing > fabricated).
 The playbook + the gate roster (`middlegamePlanner` / `lessonIntegrity` /
 `narrationAccuracy` / orientation tests) + the audits (`audit-leadeye-plans`,
 `audit-named-traps`, `audit-openings-interactive-loop`) are how each of the
