@@ -24,7 +24,18 @@ interface PlayableLinePlayerProps {
   boardOrientation: 'white' | 'black';
   onComplete: () => void;
   onExit: () => void;
+  /** How the line is taught:
+   *  - 'watch'    — auto-play the line with voice (demo), then replay from
+   *                 memory. The default.
+   *  - 'learn'    — voice GUIDES you move-by-move: it speaks each move's
+   *                 idea and shows the move + lead-the-eye arrows/highlights,
+   *                 then you play it on the board.
+   *  - 'practice' — same board, SILENT: you replay the line from memory with
+   *                 no voice and no hint. (David 2026-05-21.) */
+  mode?: PlayMode;
 }
+
+export type PlayMode = 'watch' | 'learn' | 'practice';
 
 type Phase = 'demo' | 'memory';
 
@@ -44,11 +55,17 @@ export function PlayableLinePlayer({
   boardOrientation,
   onComplete,
   onExit,
+  mode = 'watch',
 }: PlayableLinePlayerProps): JSX.Element {
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
 
-  // Phase state
-  const [phase, setPhase] = useState<Phase>('demo');
+  // 'learn' and 'practice' are board-play modes — they skip the auto-demo
+  // and go straight to playing the line. 'learn' adds voice + move hints.
+  const guided = mode === 'learn';
+
+  // Phase state. Watch starts by demonstrating; the play modes start on the
+  // board.
+  const [phase, setPhase] = useState<Phase>(mode === 'watch' ? 'demo' : 'memory');
 
   // Demonstration phase state
   const [demoMoveIndex, setDemoMoveIndex] = useState(-1);
@@ -104,7 +121,7 @@ export function PlayableLinePlayer({
     if (!perMove || demoMoveIndex < 0 || demoMoveIndex >= perMove.length) return {};
     const styles: Record<string, React.CSSProperties> = {};
     for (const h of perMove[demoMoveIndex] ?? []) {
-      const color = h.color ?? 'rgba(255, 209, 71, 0.45)';
+      const color = h.color ?? 'rgba(255, 235, 59, 0.5)';
       styles[h.square] = {
         background: color,
         boxShadow: `inset 0 0 0 2px ${color}`,
@@ -181,6 +198,20 @@ export function PlayableLinePlayer({
     if (demoMoveIndex < 0 || demoMoveIndex >= line.moves.length) return;
     playMoveSound(line.moves[demoMoveIndex]);
   }, [phase, demoMoveIndex, line.moves, playMoveSound]);
+
+  // ─── Learn mode: voice GUIDES the next move ──────────────────────────────
+  // Before the student plays each move, the voice speaks that move's idea
+  // (the same annotation the Watch demo narrates) — "what move to play, and
+  // why." The board shows the move's lead-the-eye arrows + highlights so the
+  // ear and the eye agree. Practice mode stays silent (no effect fires).
+  useEffect(() => {
+    if (!guided || phase !== 'memory' || memoryComplete) return;
+    if (memoryMoveIndex >= line.annotations.length) return;
+    const annotation = line.annotations[memoryMoveIndex] ?? '';
+    if (!annotation) return;
+    voiceService.stop();
+    void voiceService.speak(annotation).catch(() => { /* keep going */ });
+  }, [guided, phase, memoryMoveIndex, memoryComplete, line.annotations]);
 
   const togglePlayPause = useCallback((): void => {
     setIsPlaying((prev) => !prev);
@@ -356,8 +387,27 @@ export function PlayableLinePlayer({
           };
     }
 
+    // Learn mode: paint the move's lead-the-eye highlights underneath so the
+    // eye lands where the voice is pointing. Selection/legal-move hints win.
+    if (guided && line.highlights) {
+      const lead = line.highlights[memoryMoveIndex] ?? [];
+      for (const h of lead) {
+        if (styles[h.square]) continue;
+        const color = h.color ?? 'rgba(255, 235, 59, 0.5)';
+        styles[h.square] = { background: color, boxShadow: `inset 0 0 0 2px ${color}` };
+      }
+    }
+
     return styles;
-  }, [phase, selectedSquare, legalMoves, mergeGlow]);
+  }, [phase, selectedSquare, legalMoves, mergeGlow, guided, line.highlights, memoryMoveIndex]);
+
+  // Learn mode: the move's arrows (move + vision) as a live hint of what to
+  // play. Practice mode shows none — pure recall.
+  const memoryHintArrows = useMemo((): Array<{ startSquare: string; endSquare: string; color: string }> => {
+    if (!guided || phase !== 'memory' || memoryComplete) return [];
+    if (memoryMoveIndex >= line.arrows.length) return [];
+    return arrowsToBoard(line.arrows[memoryMoveIndex]);
+  }, [guided, phase, memoryComplete, memoryMoveIndex, line.arrows]);
 
   const handleRetryMemory = useCallback((): void => {
     chessRef.current = new Chess(line.fen);
@@ -532,17 +582,25 @@ export function PlayableLinePlayer({
           </button>
           <div>
             <p className="text-sm font-semibold text-theme-text">{line.title}</p>
-            <p className="text-xs text-theme-text-muted">Your Turn — Replay from Memory</p>
+            <p className="text-xs text-theme-text-muted">
+              {mode === 'learn'
+                ? 'Learn — listen, then play the move'
+                : mode === 'practice'
+                  ? 'Practice — play the line from memory'
+                  : 'Your Turn — Replay from Memory'}
+            </p>
           </div>
         </div>
-        <button
-          onClick={handleReplayDemo}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-surface hover:bg-theme-border text-theme-text-muted text-xs font-medium transition-colors"
-          data-testid="replay-demo"
-        >
-          <RotateCcw size={14} />
-          Watch Again
-        </button>
+        {mode === 'watch' && (
+          <button
+            onClick={handleReplayDemo}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-surface hover:bg-theme-border text-theme-text-muted text-xs font-medium transition-colors"
+            data-testid="replay-demo"
+          >
+            <RotateCcw size={14} />
+            Watch Again
+          </button>
+        )}
       </div>
 
       {/* Progress bar */}
@@ -570,6 +628,7 @@ export function PlayableLinePlayer({
             boardOrientation={boardOrientation}
             interactive={!showWrongFlash && !showCorrectFlash}
             squareStyles={memorySquareStyles}
+            arrows={memoryHintArrows}
             onPieceDrop={handlePieceDrop}
             onSquareClick={handleSquareClick}
             enableMoveSound={false}
@@ -631,7 +690,9 @@ export function PlayableLinePlayer({
         {!showWrongFlash && !showCorrectFlash && memoryMoveIndex < expectedMoves.length && (
           <div className="rounded-2xl bg-theme-surface/90 border border-white/15 p-3">
             <p className="text-sm text-theme-text-muted">
-              Play move {memoryMoveIndex + 1} of {expectedMoves.length} from memory.
+              {mode === 'learn'
+                ? `Listen, then play the highlighted move — ${memoryMoveIndex + 1} of ${expectedMoves.length}.`
+                : `Play move ${memoryMoveIndex + 1} of ${expectedMoves.length} from memory.`}
             </p>
           </div>
         )}

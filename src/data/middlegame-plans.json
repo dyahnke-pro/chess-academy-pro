@@ -1851,184 +1851,172 @@
         "arrows": [
           [
             {
-              "from": "d2",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
               "from": "b3",
               "to": "f7",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e5",
-              "to": "d4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
           [
-            {
-              "from": "f3",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "d4",
               "to": "c6",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "d4",
               "to": "e6",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c6",
-              "to": "d4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
           [
-            {
-              "from": "d1",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "d4",
               "to": "a7",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "d4",
               "to": "d7",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "d6",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
           [
-            {
-              "from": "b1",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "c3",
               "to": "d5",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "c3",
               "to": "b5",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c8",
-              "to": "e6",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          []
         ],
         "title": "Immediate d4 Central Break",
         "highlights": [
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f7",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c6",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "e6",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "b5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "a7",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "d7",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "b5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
@@ -2056,95 +2044,52 @@
           "Black places the knight on c5, pressuring the b3 bishop and controlling d3"
         ],
         "arrows": [
+          [],
+          [],
           [
-            {
-              "from": "d2",
-              "to": "d3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "d6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b1",
-              "to": "d2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "d2",
               "to": "f1",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
-            {
-              "from": "c8",
-              "to": "e6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "e6",
               "to": "b3",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "e1",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
           [
-            {
-              "from": "f6",
-              "to": "d7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "d7",
               "to": "c5",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "d7",
               "to": "f8",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
-            {
-              "from": "d2",
-              "to": "f1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "f1",
               "to": "g3",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
-              "from": "d7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
               "from": "c5",
               "to": "b3",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "c5",
               "to": "d3",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
@@ -2153,89 +2098,113 @@
           [
             {
               "square": "d3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f1",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "g3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f1",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f6",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f8",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "f1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "g3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "c5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "d3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -2710,95 +2679,52 @@
           "The queen arrives on g3, completing the kingside attacking setup. With Qg3 targeting g7, Bf4 controlling dark squares, Rf1 on the open file, and Bb3 pressuring f7, White's coordinated attack is extremely dangerous."
         ],
         "arrows": [
+          [],
+          [],
+          [],
           [
-            {
-              "from": "e5",
-              "to": "f4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d2",
-              "to": "d3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d6",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c1",
-              "to": "f4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "f4",
               "to": "e5",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "f4",
               "to": "d6",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
-            {
-              "from": "f6",
-              "to": "d7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "d7",
               "to": "c5",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
-              "from": "d1",
-              "to": "e1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
               "from": "e1",
               "to": "g3",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "e1",
               "to": "h4",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
-            {
-              "from": "d7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "c5",
               "to": "d3",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
-              "from": "e1",
-              "to": "g3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
               "from": "g3",
               "to": "g7",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
@@ -2807,105 +2733,137 @@
           [
             {
               "square": "f4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c1",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "h6",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f4",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "e4",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "d6",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "g3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "h6",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "g3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "h4",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "c5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "g3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "g7",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f7",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -11371,150 +11329,134 @@
           "White centralizes the queen to defend g3 and contest the light squares — the Marshall's bargain is struck."
         ],
         "arrows": [
-          [
-            {
-              "from": "d2",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "d6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e5",
-              "to": "e1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d8",
-              "to": "h4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "h4",
-              "to": "h3",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g2",
-              "to": "g3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           [
             {
               "from": "h4",
               "to": "h3",
               "color": "rgba(34, 197, 94, 0.85)"
-            },
+            }
+          ],
+          [],
+          [
             {
               "from": "h3",
               "to": "g2",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c1",
-              "to": "e3",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "c8",
-              "to": "g4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d1",
-              "to": "d3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          []
         ],
         "title": "The Attack Crashes In",
         "highlights": [
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "h2",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "h3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "g3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "g2",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "g3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -11590,127 +11532,111 @@
           "Black's bishop reaches e6, activating the bishop pair and shoring up the light squares."
         ],
         "arrows": [
-          [
-            {
-              "from": "h2",
-              "to": "h3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d8",
-              "to": "e8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b1",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "h7",
-              "to": "h5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c1",
-              "to": "f4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f8",
-              "to": "e7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a1",
-              "to": "d1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c8",
-              "to": "e6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
         "title": "The Queenless Middlegame",
         "highlights": [
           [
             {
               "square": "h3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "g4",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "g4",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "f4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c7",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
@@ -11786,63 +11712,21 @@
           "Black recaptures, opening the f-file but accepting weak, isolated e-pawns — activity against structure."
         ],
         "arrows": [
+          [],
           [
-            {
-              "from": "b1",
-              "to": "d2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e4",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "c5",
               "to": "b3",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "c5",
               "to": "d3",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c2",
-              "to": "c3",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "d5",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f3",
-              "to": "g5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "g5",
-              "to": "e6",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
           [
             {
               "from": "g5",
@@ -11850,82 +11734,106 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "f7",
-              "to": "e6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          []
         ],
         "title": "Activity Meets the Targets",
         "highlights": [
           [
             {
               "square": "d2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c5",
-              "color": "rgba(34, 197, 94, 0.45)"
-            },
-            {
-              "square": "b3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e4",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "d3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d4",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e6",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
@@ -12001,120 +11909,105 @@
           "White completes development; the long technical fight begins — majority versus the two bishops."
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [],
           [
-            {
-              "from": "c6",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "b3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d8",
-              "to": "d1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "d1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c8",
-              "to": "g4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "g4",
-              "to": "f3",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f2",
               "to": "f3",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "g4",
-              "to": "e6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b1",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          []
         ],
         "title": "Majority vs Bishops",
         "highlights": [
           [
             {
               "square": "c5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "f3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
@@ -12195,66 +12088,26 @@
         "arrows": [
           [
             {
-              "from": "f1",
-              "to": "g3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
               "from": "g3",
               "to": "f5",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "g3",
               "to": "h5",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g7",
-              "to": "g6",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [
-            {
-              "from": "a2",
-              "to": "a4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c5",
-              "to": "c4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c1",
-              "to": "g5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "g5",
               "to": "f6",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
@@ -12263,67 +12116,91 @@
           [
             {
               "square": "g3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "h5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "g6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d4",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f6",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -12400,57 +12277,30 @@
         "arrows": [
           [
             {
-              "from": "b1",
-              "to": "d2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
               "from": "d2",
               "to": "f1",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a5",
-              "to": "c6",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
           [
-            {
-              "from": "d4",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c6",
-              "to": "d8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "d8",
               "to": "e6",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "d8",
               "to": "f7",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
-              "from": "d2",
-              "to": "f1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
               "from": "f1",
               "to": "g3",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
@@ -12459,59 +12309,75 @@
           [
             {
               "square": "d2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f1",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "g3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "a5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e6",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f7",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "f1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "g3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -12592,146 +12458,132 @@
           "Ra3 — the signature Zaitsev rook lift, swinging the rook across the third rank toward Black's king."
         ],
         "arrows": [
+          [],
+          [],
           [
-            {
-              "from": "e5",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c3",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c6",
-              "to": "b4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "b4",
               "to": "c2",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c2",
-              "to": "b1",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
+          [],
           [
-            {
-              "from": "c7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f6",
-              "to": "d7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "d7",
               "to": "c5",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "d7",
               "to": "e5",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a1",
-              "to": "a3",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          []
         ],
         "title": "The Rook Swings to the Kingside",
         "highlights": [
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c2",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "b1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "h7",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "c5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d4",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "e5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "a3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
@@ -12806,53 +12658,10 @@
           "Now read the pawns. White's kingside — e, f, g, h — is a clean four against three: that majority makes a passed pawn. Black's extra pawn is the doubled c, and it makes nothing. Trade every piece and White wins the king-and-pawn ending. This is why Fischer played the Exchange."
         ],
         "arrows": [
-          [
-            {
-              "from": "e2",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g1",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b8",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "b5",
-              "to": "c6",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a7",
-              "to": "a6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
           [
             {
               "from": "b5",
@@ -12860,139 +12669,157 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "d7",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e1",
-              "to": "g1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f7",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d2",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e5",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f3",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
         "title": "Fischer's Structural Endgame",
         "highlights": [
           [
             {
               "square": "e4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c6",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "e5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "a6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
@@ -13078,60 +12905,11 @@
           "— and Black recaptures with the king, losing the right to castle. This is the Berlin endgame: Black has the bishop pair, but White owns the e5-pawn, a healthy kingside majority, and the safer king. A queenless grind where White presses for the long haul."
         ],
         "arrows": [
-          [
-            {
-              "from": "e2",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g1",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b8",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g8",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "f6",
-              "to": "e4",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e1",
-              "to": "g1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [
             {
               "from": "f6",
@@ -13139,185 +12917,204 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           [
-            {
-              "from": "d2",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e4",
-              "to": "d6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b5",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d6",
-              "to": "f5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "f5",
               "to": "d4",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "f5",
               "to": "e3",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d1",
-              "to": "d8",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "e8",
-              "to": "d8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          []
         ],
         "title": "The Queenless Wall",
         "highlights": [
           [
             {
               "square": "e4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e4",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "g1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d4",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "e3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -13414,144 +13211,23 @@
           "Black grabs queenside space and the centre locks. Now look past the middlegame: trade the heavy pieces and White's kingside space plus the f5-square are the trumps that decide the ending. The Breyer is patience that cashes out in the endgame."
         ],
         "arrows": [
-          [
-            {
-              "from": "e2",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g1",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b8",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a7",
-              "to": "a6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b5",
-              "to": "a4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g8",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e1",
-              "to": "g1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f8",
-              "to": "e7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "e1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b7",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a4",
-              "to": "b3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "d6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c2",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e8",
-              "to": "g8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "h2",
-              "to": "h3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c6",
-              "to": "b8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "b8",
-              "to": "d7",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d2",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           [
             {
               "from": "b8",
@@ -13559,195 +13235,265 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "b1",
-              "to": "d2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c8",
-              "to": "b7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b3",
-              "to": "c2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
         "title": "The Reroute, the Prophylaxis, the Plan",
         "highlights": [
           [
             {
               "square": "e4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d7",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "b7",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -13862,410 +13608,352 @@
           "Black blunts the knight with g6. Now the shape of the ending is set: Black's queenside minority pawns press, White's central space and the d5/f5 squares answer. Trade down and that space is the deciding word."
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           [
-            {
-              "from": "e2",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g1",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b8",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a7",
-              "to": "a6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b5",
-              "to": "a4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g8",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e1",
-              "to": "g1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f8",
-              "to": "e7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "e1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b7",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a4",
-              "to": "b3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "d6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c2",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e8",
-              "to": "g8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "h2",
-              "to": "h3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c6",
-              "to": "a5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "a5",
               "to": "b3",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b3",
-              "to": "c2",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           [
-            {
-              "from": "c7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d2",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d8",
-              "to": "c7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b1",
-              "to": "d2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c8",
-              "to": "d7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d2",
-              "to": "f1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f8",
-              "to": "e8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "e3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "e3",
               "to": "d5",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "e3",
               "to": "f5",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g7",
-              "to": "g6",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          []
         ],
         "title": "The Knight Hits, the Bishop Hides, the Space Tells",
         "highlights": [
           [
             {
               "square": "e4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "c2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b3",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "g6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -14367,335 +14055,287 @@
           "The tension will break with d5 or ...exd4. Either way the position simplifies toward an ending where White's central space and the bishop pair are the lasting edge. Zaitsev is razor theory that, played accurately, drifts into White's favour in the endgame."
         ],
         "arrows": [
-          [
-            {
-              "from": "e2",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g1",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b8",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a7",
-              "to": "a6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b5",
-              "to": "a4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g8",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e1",
-              "to": "g1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f8",
-              "to": "e7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "e1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b7",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a4",
-              "to": "b3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "d6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c2",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e8",
-              "to": "g8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "h2",
-              "to": "h3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c8",
-              "to": "b7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d2",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f8",
-              "to": "e8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b1",
-              "to": "d2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "f8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a2",
-              "to": "a3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "h7",
-              "to": "h6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
         "title": "Maximum Tension, then the Better Structure",
         "highlights": [
           [
             {
               "square": "e4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e8",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "b3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b4",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "h6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -14789,287 +14429,247 @@
           "Nbd2 — the knight reroutes to b3 to bear down on c5 and the d5/c5 light squares."
         ],
         "arrows": [
-          [
-            {
-              "from": "e2",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g1",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b8",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a7",
-              "to": "a6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b5",
-              "to": "a4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g8",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e1",
-              "to": "g1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f6",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d2",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b7",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a4",
-              "to": "b3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c8",
-              "to": "e6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c2",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f8",
-              "to": "e7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b1",
-              "to": "d2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e8",
-              "to": "g8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
         "title": "The Open Structure into the Ending",
         "highlights": [
           [
             {
               "square": "e4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e6",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "e5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "c5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "d5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -15117,101 +14717,88 @@
           "Qh4 declares the attack. The race is on: Black answers with ...b5 and queenside speed, not defence."
         ],
         "arrows": [
-          [
-            {
-              "from": "a2",
-              "to": "a4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "a8",
-              "to": "b8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d1",
-              "to": "e1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "e1",
-              "to": "h4",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b7",
-              "to": "b6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
           [
             {
               "from": "e1",
               "to": "h4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [],
+          []
         ],
         "title": "The Queenside Counter-Race",
         "highlights": [
           [
             {
               "square": "a4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "b8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "h4",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "b6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b7",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "h4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -15265,13 +14852,11 @@
           "...Nh5 swings the knight toward the f4-square, where it would be a monster — active, equal play."
         ],
         "arrows": [
-          [
-            {
-              "from": "h2",
-              "to": "h3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [
             {
               "from": "e7",
@@ -15279,56 +14864,12 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
           [
-            {
-              "from": "d4",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d6",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c1",
-              "to": "e3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d8",
-              "to": "e7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "e7",
-              "to": "e5",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d1",
-              "to": "d3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f6",
-              "to": "h5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "h5",
               "to": "f4",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
@@ -15337,61 +14878,93 @@
           [
             {
               "square": "h3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d4",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "d3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f4",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -15437,42 +15010,19 @@
           "...Qa5 — Black strikes first, the queen joining the race, eyeing c3 and backing the ...b5-b4 storm."
         ],
         "arrows": [
+          [],
+          [],
+          [],
           [
-            {
-              "from": "e3",
-              "to": "h6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g7",
-              "to": "h6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d2",
-              "to": "h6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d8",
-              "to": "a5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "a5",
               "to": "c3",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "a5",
               "to": "b5",
-              "color": "rgba(255, 170, 0, 0.85)"
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
@@ -15481,37 +15031,53 @@
           [
             {
               "square": "h6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "b5",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "b4",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -15569,149 +15135,129 @@
           "...d5 — the hammer blow: the centre rips open toward c3 and Black’s attack is very real."
         ],
         "arrows": [
-          [
-            {
-              "from": "f2",
-              "to": "f4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b7",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e4",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b5",
-              "to": "b4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e5",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b4",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d2",
-              "to": "c3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "f6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g5",
-              "to": "h4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d6",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
         "title": "Both Storms Crash In",
         "highlights": [
           [
             {
               "square": "f4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f6",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "b4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "f6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c3",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -15765,115 +15311,95 @@
           "...Nxe5 recaptures and lands a proud knight in the centre — Black is comfortable and active."
         ],
         "arrows": [
-          [
-            {
-              "from": "f1",
-              "to": "e1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d8",
-              "to": "c7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "h2",
-              "to": "h3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b7",
-              "to": "b6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c1",
-              "to": "g5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c8",
-              "to": "b7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
         "title": "Coiled and Comfortable",
         "highlights": [
           [
             {
               "square": "e1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b6",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b7",
-              "color": "rgba(255, 209, 71, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "b7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
@@ -15919,59 +15445,51 @@
           "...f5 — Black’s thematic kingside break in the locked Fianchetto: space, the long diagonal, and the f-file open up. Equal, double-edged play."
         ],
         "arrows": [
-          [
-            {
-              "from": "a2",
-              "to": "a4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f6",
-              "to": "d7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c1",
-              "to": "e3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f7",
-              "to": "f5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          []
         ],
         "title": "The ...f5 Break",
         "highlights": [
           [
             {
               "square": "a4",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
@@ -16033,172 +15551,149 @@
           "...dxe5 — the centre resolves; Black is sound and harmonious, no weaknesses."
         ],
         "arrows": [
+          [],
           [
-            {
-              "from": "c1",
-              "to": "e3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b8",
-              "to": "d7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
             {
               "from": "d7",
               "to": "e5",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e1",
-              "to": "g1",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "f8",
-              "to": "e7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "h2",
-              "to": "h3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g4",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d1",
-              "to": "f3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "e8",
-              "to": "g8",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c3",
-              "to": "e2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "c6",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "d6",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
         "title": "A Sound, Harmonious Game",
         "highlights": [
           [
             {
               "square": "e3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "g1",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "h3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "f3",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "g8",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "e5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
@@ -16244,53 +15739,48 @@
         "arrows": [
           [
             {
-              "from": "f6",
-              "to": "d7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
               "from": "d7",
               "to": "e5",
-              "color": "rgba(255, 170, 0, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "e2",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "c7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          []
         ],
         "title": "Undermine the Overextended Centre",
         "highlights": [
           [
             {
               "square": "d7",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e5",
-              "color": "rgba(0, 229, 255, 0.32)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e2",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c5",
-              "color": "rgba(34, 197, 94, 0.45)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]

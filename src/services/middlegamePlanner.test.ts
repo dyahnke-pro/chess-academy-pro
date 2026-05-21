@@ -140,14 +140,16 @@ describe('resolveMiddlegameSessionWithFallback', () => {
 
 // ─── Lead-the-eye verification helpers ──────────────────────────────────────
 // Vision arrows + highlights must lead the eye to whatever the narration is
-// talking about (David's locked NON-NEGOTIABLE). Two contracts per move:
-//  1. Geometric legality — a vision arrow (arrows[i][1+]) must originate on a
+// talking about (David's locked NON-NEGOTIABLE). Colour language: GREEN =
+// vision arrows, ORANGE = the move's two squares, YELLOW = called-out key
+// squares. Two contracts per move:
+//  1. Geometric legality — every (green) vision arrow must originate on a
 //     non-pawn piece with a clear sight-line to its target. No aspirational
 //     blocked arrows; same sees()/clearRay() gate the lessons use.
-//  2. Grounding — every highlight square AND every vision-arrow endpoint must
+//  2. Grounding — every yellow highlight AND every vision-arrow endpoint must
 //     be a square the annotation actually NAMES (bare "f5" or piece-token
-//     "Nf5"). The move arrow (arrows[i][0]) and the move's landing-square
-//     highlight are exempt — they ARE the move, not a claim about the words.
+//     "Nf5"). The orange move-squares are exempt — they ARE the move, not a
+//     claim about the words.
 type Sq = import('chess.js').Square;
 
 function fileRank(sq: string): [number, number] {
@@ -216,9 +218,11 @@ async function assertLeadEye(line: LeadEyeLine, id: string): Promise<void> {
   line.moves.forEach((san, i) => {
     const mv = c.move(san);
     const named = annotationSquares(line.annotations[i] ?? '');
+    // Every arrow is a GREEN vision arrow (no move arrow) — each must be a
+    // legal sight-line and grounded: origin is a named piece (or the piece
+    // that just moved), target is a square the annotation names.
     const arrowRow = line.arrows?.[i] ?? [];
-    // Vision arrows (everything past the move arrow) must be legal + grounded.
-    arrowRow.slice(1).forEach((a) => {
+    arrowRow.forEach((a) => {
       expect(
         sees(c, a.from, a.to),
         `${id} move ${i} (${san}): blocked/illegal vision arrow ${a.from}->${a.to}`,
@@ -232,12 +236,14 @@ async function assertLeadEye(line: LeadEyeLine, id: string): Promise<void> {
         `${id} move ${i} (${san}): vision arrow target ${a.to} not named in annotation`,
       ).toBe(true);
     });
-    // Highlights must be real squares + grounded (move-landing square exempt).
+    // Highlights must be real squares + grounded. The move's two squares
+    // (orange last-move) are exempt — they ARE the move; every other
+    // (yellow) highlight must be a square the annotation names.
     const hlRow = line.highlights?.[i] ?? [];
     hlRow.forEach((h) => {
       expect(/^[a-h][1-8]$/.test(h.square), `${id} move ${i}: bad highlight square ${h.square}`).toBe(true);
       expect(
-        named.has(h.square) || h.square === mv.to,
+        named.has(h.square) || h.square === mv.to || h.square === mv.from,
         `${id} move ${i} (${san}): highlight ${h.square} not named in annotation`,
       ).toBe(true);
     });
@@ -285,13 +291,8 @@ describe('Ruy Lopez variation middlegame plans', () => {
       for (const line of plan!.playableLines) {
         expect(line.annotations.length).toBe(line.moves.length);
         const c = new Chess(line.fen);
-        line.moves.forEach((san, i) => {
-          const mv = c.move(san); // chess.js throws on an illegal move, failing the test
-          const arrow = line.arrows?.[i]?.[0];
-          if (arrow) {
-            expect(arrow.from).toBe(mv.from);
-            expect(arrow.to).toBe(mv.to);
-          }
+        line.moves.forEach((san) => {
+          c.move(san); // chess.js throws on an illegal move, failing the test
         });
         await assertLeadEye(line as LeadEyeLine, id);
       }
@@ -351,13 +352,8 @@ describe('Pirc Defence variation middlegame plans', () => {
       for (const line of plan!.playableLines) {
         expect(line.annotations.length).toBe(line.moves.length);
         const c = new Chess(line.fen);
-        line.moves.forEach((san, i) => {
-          const mv = c.move(san);
-          const arrow = line.arrows?.[i]?.[0];
-          if (arrow) {
-            expect(arrow.from).toBe(mv.from);
-            expect(arrow.to).toBe(mv.to);
-          }
+        line.moves.forEach((san) => {
+          c.move(san);
         });
         await assertLeadEye(line as LeadEyeLine, id);
       }

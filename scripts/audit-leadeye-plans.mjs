@@ -25,14 +25,18 @@ const OUT_DIR = `audit-reports/leadeye-plans-${stamp}`;
 
 // Our lead-the-eye highlight colours (rgb triples) — proof the styles painted.
 // Green = the move-landing square; amber = a key/target square. (Cyan is also
-// the base-glow/last-move colour, so it's excluded to avoid false positives.)
-const HL_RGBS = ['34, 197, 94', '255, 209, 71'];
+// David's locked colour language: ORANGE = the move's squares, YELLOW = a
+// called-out key square, GREEN = vision arrows. The highlight check looks for
+// orange + yellow square fills. (Green is the vision-ARROW colour and the
+// base-glow colour, so it's excluded from the square-highlight check to avoid
+// false positives — arrows are verified separately as SVG primitives.)
+const HL_RGBS = ['255, 165, 0', '255, 235, 59'];
 
 // Plans known to carry a playable line (a 0-line plan falls through to the
-// study page, not the Watch player).
-const WATCH_TESTID = {
-  'ruy-lopez': 'plan-watch-mp-ruylopez-d4',
-  'pirc-defence': 'plan-watch-mp-pircdefence-austrian',
+// study page, not the player).
+const PLAN_ID = {
+  'ruy-lopez': 'mp-ruylopez-d4',
+  'pirc-defence': 'mp-pircdefence-austrian',
 };
 
 const results = [];
@@ -65,83 +69,99 @@ async function waitForPlansSeeded(page, openingId, timeoutMs) {
   return 0;
 }
 
+/** Scan a player board for painted lead-the-eye highlights (orange/yellow
+ *  square fills) + rendered arrows (green SVG primitives). */
+async function sampleBoard(page, testid) {
+  return page.evaluate(({ rgbs, tid }) => {
+    const board = document.querySelector(`[data-testid="${tid}"]`);
+    if (!board) return { hl: 0, arrows: 0 };
+    // react-chessboard v5 applies squareStyles to an INNER child div, not the
+    // [data-square] element — so scan every div's inline style.
+    let hl = 0;
+    for (const div of board.querySelectorAll('div')) {
+      const style = div.getAttribute('style') ?? '';
+      if (rgbs.some((c) => style.includes(c))) hl += 1;
+    }
+    const arrows = board.querySelectorAll('svg polygon, svg line, svg path').length;
+    return { hl, arrows };
+  }, { rgbs: HL_RGBS, tid: testid });
+}
+
+/** Open the warm detail page and wait for the plans section. */
+async function openDetail(page, openingId) {
+  await page.goto(`${BASE_URL}/openings/${openingId}`, { waitUntil: 'domcontentloaded' });
+  await page.locator('[data-testid="middlegame-plans-section"]').waitFor({ state: 'visible', timeout: 25_000 });
+}
+
+async function probeWatch(page, openingId, label) {
+  await openDetail(page, openingId);
+  await page.locator(`[data-testid="plan-watch-${PLAN_ID[openingId]}"]`).click();
+  const demo = page.locator('[data-testid="line-player-demo"]');
+  try {
+    await demo.waitFor({ state: 'visible', timeout: 10_000 });
+    record(`${label} WATCH: demo player mounts`, true);
+  } catch {
+    record(`${label} WATCH: demo player mounts`, false, 'demo never mounted');
+    return;
+  }
+  await page.locator('[data-testid="demo-annotation"]').waitFor({ state: 'visible', timeout: 15_000 }).catch(() => {});
+  let sawHighlight = false, maxArrows = 0, sawAnnotation = false;
+  for (let i = 0; i < 6; i++) {
+    const ann = (await page.locator('[data-testid="demo-annotation"]').textContent().catch(() => ''))?.trim() ?? '';
+    if (ann.length > 0) sawAnnotation = true;
+    const s = await sampleBoard(page, 'line-player-demo');
+    if (s.hl > 0) sawHighlight = true;
+    if (s.arrows > maxArrows) maxArrows = s.arrows;
+    await page.waitForTimeout(1200);
+  }
+  record(`${label} WATCH: annotation text renders`, sawAnnotation);
+  record(`${label} WATCH: orange/yellow highlights paint`, sawHighlight, sawHighlight ? '' : 'no orange/yellow square fill seen');
+  record(`${label} WATCH: green vision arrows render`, maxArrows > 0, `max svg arrow primitives = ${maxArrows}`);
+  // Out-of-order: jump to the recall phase mid-demo — must not crash.
+  const skip = page.locator('[data-testid="skip-to-memory"]');
+  if (await skip.isVisible().catch(() => false)) {
+    await skip.click();
+    const ok = await page.locator('[data-testid="line-player-memory"]').isVisible({ timeout: 6000 }).catch(() => false);
+    record(`${label} WATCH: recall phase reachable`, ok);
+  }
+}
+
+async function probePlayMode(page, openingId, label, action, expectSubtitle) {
+  await openDetail(page, openingId);
+  await page.locator(`[data-testid="plan-${action}-${PLAN_ID[openingId]}"]`).click();
+  const mem = page.locator('[data-testid="line-player-memory"]');
+  try {
+    await mem.waitFor({ state: 'visible', timeout: 10_000 });
+    record(`${label} ${action.toUpperCase()}: play board mounts`, true);
+  } catch {
+    record(`${label} ${action.toUpperCase()}: play board mounts`, false, 'memory board never mounted');
+    return;
+  }
+  // The header subtitle distinguishes the mode.
+  const header = (await mem.textContent().catch(() => '')) ?? '';
+  record(`${label} ${action.toUpperCase()}: header reads "${expectSubtitle}"`, header.includes(expectSubtitle), header.slice(0, 0));
+  // Learn paints the move's hint arrows + lead-the-eye highlights; Practice
+  // is silent (no hint). Sample either way.
+  await page.waitForTimeout(1500);
+  const s = await sampleBoard(page, 'line-player-memory');
+  if (action === 'learn') {
+    record(`${label} LEARN: guided highlights paint`, s.hl > 0, `hl=${s.hl}`);
+    record(`${label} LEARN: guided arrows render`, s.arrows > 0, `arrows=${s.arrows}`);
+  }
+  // The board must be interactive (a square is clickable without crashing).
+  const crashed = await page.evaluate(() => !!document.querySelector('[data-reactroot] .error-boundary'));
+  record(`${label} ${action.toUpperCase()}: no crash on mount`, !crashed);
+}
+
 async function probeOpening(page, openingId, label) {
   // First boot seeds Dexie (plans land late in the detached backfill).
   await page.goto(`${BASE_URL}/openings/${openingId}`, { waitUntil: 'domcontentloaded' });
   const seeded = await waitForPlansSeeded(page, openingId, 90_000);
   record(`${label}: plans seeded into Dexie`, seeded > 0, `${seeded} plan rows`);
   if (seeded <= 0) return;
-  // Reload warm so the section reads the now-present plans on mount.
-  await page.reload({ waitUntil: 'domcontentloaded' });
-
-  const section = page.locator('[data-testid="middlegame-plans-section"]');
-  try {
-    await section.waitFor({ state: 'visible', timeout: 25_000 });
-    record(`${label}: middlegame-plans section renders`, true);
-  } catch {
-    record(`${label}: middlegame-plans section renders`, false, 'section never appeared');
-    return;
-  }
-
-  // Open a plan that has a playable line (Watch player, not the study page).
-  const watchBtn = page.locator(`[data-testid="${WATCH_TESTID[openingId]}"]`);
-  await watchBtn.waitFor({ state: 'visible', timeout: 10_000 });
-  await watchBtn.click();
-
-  const demo = page.locator('[data-testid="line-player-demo"]');
-  try {
-    await demo.waitFor({ state: 'visible', timeout: 10_000 });
-    record(`${label}: Watch player (line-player-demo) mounts`, true);
-  } catch {
-    record(`${label}: Watch player (line-player-demo) mounts`, false, 'demo never mounted');
-    return;
-  }
-
-  // Let the voice-gated demo advance past the intro into the first narrated
-  // move, then sample the board. (No TTS in headless, so speak() resolves
-  // immediately and the demo steps quickly.)
-  await page.locator('[data-testid="demo-annotation"]').waitFor({ state: 'visible', timeout: 15_000 }).catch(() => {});
-
-  // Sample across the first few moves — collect the union of painted
-  // highlights + arrow counts as the demo walks forward.
-  let sawHighlight = false;
-  let maxArrows = 0;
-  let sawAnnotation = false;
-  for (let i = 0; i < 6; i++) {
-    const ann = (await page.locator('[data-testid="demo-annotation"]').textContent().catch(() => ''))?.trim() ?? '';
-    if (ann.length > 0) sawAnnotation = true;
-
-    const sample = await page.evaluate((rgbs) => {
-      const board = document.querySelector('[data-testid="line-player-demo"]');
-      if (!board) return { hl: 0, arrows: 0 };
-      // react-chessboard v5 applies squareStyles to an INNER child div, not
-      // the [data-square] element — so scan every div's inline style.
-      let hl = 0;
-      for (const div of board.querySelectorAll('div')) {
-        const style = div.getAttribute('style') ?? '';
-        if (rgbs.some((c) => style.includes(c))) hl += 1;
-      }
-      // Arrows render as SVG polygons/lines in the board overlay.
-      const arrows = board.querySelectorAll('svg polygon, svg line, svg path').length;
-      return { hl, arrows };
-    }, HL_RGBS);
-
-    if (sample.hl > 0) sawHighlight = true;
-    if (sample.arrows > maxArrows) maxArrows = sample.arrows;
-    await page.waitForTimeout(1200);
-  }
-
-  record(`${label}: annotation text renders during demo`, sawAnnotation);
-  record(`${label}: lead-the-eye highlights paint on the board`, sawHighlight, sawHighlight ? '' : 'no square carried a lead-the-eye background colour');
-  record(`${label}: arrows render on the board`, maxArrows > 0, `max svg arrow primitives seen = ${maxArrows}`);
-
-  // Out-of-order: hit Practice (skip-to-memory) mid-demo — must not crash.
-  const practice = page.locator('[data-testid="skip-to-memory"]');
-  if (await practice.isVisible().catch(() => false)) {
-    await practice.click();
-    const ok = await page.locator('[data-testid="line-player-memory"]').isVisible({ timeout: 6000 }).catch(() => false);
-    record(`${label}: Practice phase reachable from demo`, ok);
-  }
+  await probeWatch(page, openingId, label);
+  await probePlayMode(page, openingId, label, 'learn', 'Learn');
+  await probePlayMode(page, openingId, label, 'practice', 'Practice');
 }
 
 async function main() {

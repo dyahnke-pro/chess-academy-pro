@@ -5,20 +5,25 @@
 // instead of hunting for pieces and angles.
 //
 // Per move, deterministically derived (never invented):
-//   - arrows[i][0] = the move played (origin→destination), green. Rebuilt
-//     from chess.js so it can never drift from the SAN.
-//   - arrows[i][1+] = vision arrows. For every square the annotation NAMES,
-//     if a named non-pawn piece (or the piece that just moved) has a clear
-//     sight-line to it, draw an amber arrow. Capped so the board never
-//     clutters. Geometrically verified; blocked rays are skipped, not faked.
-//   - highlights[i] = every grounded square the annotation names: the move's
-//     landing square (green), occupied piece-squares it cites (cyan), and
-//     bare target/key squares (amber).
+//   - arrows[i] = GREEN vision arrows ONLY. For every square the annotation
+//     NAMES, if a named non-pawn piece (or the piece that just moved) has a
+//     clear sight-line to it, draw a green arrow. No "move arrow" — the move
+//     itself is shown by the orange last-move highlight, not an arrow (David
+//     2026-05-21: fewer colours, less clutter). Geometrically verified;
+//     blocked rays are skipped, not faked. Capped so the board stays clean.
+//   - highlights[i] = the move's from+to squares in ORANGE (the last move,
+//     replacing the move arrow), plus every key/called-out square the
+//     annotation names in YELLOW.
 //
-// Grounding contract (enforced by middlegamePlanner.test.ts): every
-// highlight square and every vision-arrow endpoint must appear as a square
-// token in that move's annotation (the move arrow is exempt — it IS the
-// move). Re-runnable: regenerates arrows[][1+] and highlights from scratch.
+// Colour language (David's locked scheme 2026-05-21):
+//   ORANGE  = the move just played (its two squares).
+//   GREEN   = vision — what a piece is looking at.
+//   YELLOW  = a key square the narration is calling out.
+//
+// Grounding contract (enforced by middlegamePlanner.test.ts): every yellow
+// highlight and every vision-arrow endpoint must appear as a square token in
+// that move's annotation. The orange move-squares are exempt — they ARE the
+// move. Re-runnable: regenerates arrows + highlights from scratch.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -28,14 +33,12 @@ import { Chess } from 'chess.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PLANS_PATH = join(__dirname, '..', 'src', 'data', 'middlegame-plans.json');
 
-const MOVE_ARROW_COLOR = 'rgba(34, 197, 94, 0.85)'; // green — the move played
-const VISION_ARROW_COLOR = 'rgba(255, 170, 0, 0.85)'; // amber — piece vision
-const HL_MOVE = 'rgba(34, 197, 94, 0.45)'; // green — where the move landed
-const HL_PIECE = 'rgba(0, 229, 255, 0.32)'; // cyan — a piece doing work
-const HL_TARGET = 'rgba(255, 209, 71, 0.45)'; // amber — a key/target square
+const VISION_ARROW_COLOR = 'rgba(34, 197, 94, 0.85)'; // green — piece vision
+const HL_MOVE = 'rgba(255, 165, 0, 0.55)'; // orange — the move's two squares
+const HL_KEY = 'rgba(255, 235, 59, 0.5)'; // yellow — a called-out key square
 
 const MAX_VISION_ARROWS = 2;
-const MAX_HIGHLIGHTS = 5;
+const MAX_HIGHLIGHTS = 6;
 
 const SQUARE_RE = /\b([a-h][1-8])\b/g;
 const PIECE_SQUARE_RE = /\b([NBRQK])([a-h][1-8])\b/g;
@@ -116,12 +119,9 @@ function buildLeadEye(line) {
     const ann = line.annotations[i] ?? '';
     const { ordered, pieceSquares } = namedSquares(ann);
 
-    // ── arrows ──────────────────────────────────────────────────────────
-    const moveArrow = { from: mv.from, to: mv.to, color: MOVE_ARROW_COLOR };
-    const moveArrows = [moveArrow];
-
-    // Vision arrows: prefer the piece that just moved, then any named
-    // piece-square, each pointing at a DIFFERENT named square it sees.
+    // ── arrows — GREEN vision only (no move arrow) ───────────────────────
+    // Prefer the piece that just moved, then any named piece-square, each
+    // pointing at a DIFFERENT named square it sees.
     const sources = [mv.to, ...[...pieceSquares].filter((s) => s !== mv.to)];
     const visionPairs = [];
     const usedTargets = new Set([mv.from, mv.to]);
@@ -137,20 +137,21 @@ function buildLeadEye(line) {
       }
       if (visionPairs.length >= MAX_VISION_ARROWS) break;
     }
-    arrows.push([...moveArrows, ...visionPairs]);
+    arrows.push(visionPairs);
 
-    // ── highlights ──────────────────────────────────────────────────────
+    // ── highlights — ORANGE move-squares + YELLOW called-out squares ─────
     const hl = [];
     const pushHl = (square, color) => {
       if (hl.some((h) => h.square === square)) return;
       hl.push({ square, color });
     };
-    // The square the move landed on — eye to the move first.
+    // The move just played: its two squares, orange (replaces the arrow).
     pushHl(mv.to, HL_MOVE);
+    pushHl(mv.from, HL_MOVE);
+    // Every other square the narration names: yellow key squares.
     for (const sq of ordered) {
       if (hl.length >= MAX_HIGHLIGHTS) break;
-      const occupied = chess.get(sq);
-      pushHl(sq, occupied ? HL_PIECE : HL_TARGET);
+      pushHl(sq, HL_KEY);
     }
     highlights.push(hl);
   });

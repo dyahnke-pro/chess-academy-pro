@@ -658,27 +658,41 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Middlegame WATCH — auto-play the plan's line on the board with voice.
+  // Middlegame WATCH / LEARN / PRACTICE — one player, three modes over the
+  // plan's playable line (David 2026-05-21):
+  //   • watch    — auto-play with voice (demo), then replay from memory.
+  //   • learn    — voice guides each move (says the idea + shows it); you play.
+  //   • practice — same board, silent; you replay the line from memory.
+  // When the plan has no playable line we fall back to the legacy study /
+  // free-practice surfaces below.
   if (
-    viewMode === 'middlegame-watch' &&
     activeMiddlegamePlan &&
     activeMiddlegamePlan.playableLines &&
-    activeMiddlegamePlan.playableLines.length > 0
+    activeMiddlegamePlan.playableLines.length > 0 &&
+    (viewMode === 'middlegame-watch' ||
+      viewMode === 'middlegame-plan' ||
+      viewMode === 'middlegame-practice')
   ) {
+    const playMode =
+      viewMode === 'middlegame-plan'
+        ? 'learn'
+        : viewMode === 'middlegame-practice'
+          ? 'practice'
+          : 'watch';
     return (
       <PlayableLinePlayer
         line={activeMiddlegamePlan.playableLines[0]}
         boardOrientation={opening.color}
+        mode={playMode}
         onComplete={handleExit}
         onExit={handleExit}
       />
     );
   }
 
-  // Middlegame LEARN — study the plan (overview, breaks, maneuvers, themes).
+  // Middlegame LEARN fallback — no playable line: study the plan
+  // (overview, breaks, maneuvers, themes).
   if ((viewMode === 'middlegame-watch' || viewMode === 'middlegame-plan') && activeMiddlegamePlan) {
-    // 'middlegame-watch' falls through to here when the plan has no
-    // playable line to animate.
     return (
       <MiddlegamePlanStudy
         plan={activeMiddlegamePlan}
@@ -688,7 +702,7 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Middlegame PRACTICE — student plays the moves with coach feedback.
+  // Middlegame PRACTICE fallback — no playable line: free practice vs engine.
   if (viewMode === 'middlegame-practice' && activeMiddlegamePlan) {
     return (
       <MiddlegamePractice
