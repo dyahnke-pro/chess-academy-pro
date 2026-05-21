@@ -273,10 +273,18 @@ TrainingPlanRolodexPage) DRILLS. It reads the weakness-tag map (from
 Discussion Practice + Game Review) + your repertoire and turns them into
 prioritized reps. Where the tags finally pay off.
 
-- **Shape:** a focused **"Today's reps"** feed (3-5 prioritized drills,
-  do-your-reps energy) on top, with the repertoire rolodex as a
-  browse-all layer underneath.
-- **Priority mix (weighted):** weakness-first → SRS-due → new lines.
+- **Shape:** suggested **"Today's reps"** feed (3-5 prioritized drills) on
+  top + the FULL browse menu always available underneath. Both — it
+  advises, you drive; never forced into the suggestion.
+- **Priority = weighted SHARES, not a strict gate.** Each category gets a
+  slice of the daily reps (e.g. of 5: ~3 weakness, ~1 SRS-due, ~1 new).
+  Weakness-first → SRS-due → new lines. New lines get the FEWEST slots.
+- **Count-against rule (important):** misconception-tagging fires ONLY on
+  lines you SHOULD know (learned / SRS-active) or on general principles —
+  NEVER on first-exposure theory. A mistake in a line you've never studied
+  is "not-learned-yet," not a weakness. New lines stay low-pressure /
+  no-penalty in "learning" mode until learned; THEN slips there start
+  counting. Keeps the weakness map honest.
 - **Drill formats:**
   1. **Weakness drills (headline)** — tag-driven: "Your #1 error,
      overvalued-attack 7×. Five positions where patience wins." Positions
