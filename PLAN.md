@@ -46,10 +46,13 @@ an endgame ONLY if genuine · real named traps ONLY if genuine.
   have authored, DB-grounded, Black-oriented beat-lessons. Lesson keys
   verified to match repertoire.json variation names exactly (Watch/Learn
   resolve). 49 integrity + 130 narration-accuracy tests green.
-- **P3 — middlegame plans** per variation (DB-grounded builder script,
-  copy `scripts/add-ruy-*-plans.mjs`) + a hand-picked plan-routing table
-  `pircMasterclassTabs.ts` (parallel to ruyMasterclassTabs) + wire
-  OpeningDetailPage to consult it for `pirc-defence`.
+- **P3 — middlegame plans. status: DONE for the 3 first-class systems.**
+  `scripts/add-pirc-middlegame-plans.mjs` builds mp-pircdefence-austrian
+  / -classical / -150 (DB-grounded from the lesson lines). Hand-picked
+  routing `pircMasterclassTabs.ts` (getPircTabPlanIds) wired into
+  OpeningDetailPage. middlegamePlanner.test extended (28 green).
+  REMAINING: plans for Byrne/Lion/Fianchetto/Czech if genuinely distinct
+  (else leave empty — playbook §3). Optional: a main-line Pirc plan.
 - **P4 — traps / endgames where GENUINE only.** Pirc-specific named
   traps (hand-picked, DB-grounded) → `pircTrapLessons.ts` (parallel to
   ruyTrapLessons) + routing. Endgames only where characteristic.
