@@ -18,9 +18,35 @@ import {
   type MisconceptionDrillKind,
 } from '../data/misconceptionTags';
 
-/** Consecutive successful drills before a tagged instance graduates to
- *  `mastered` and stops counting against the user. */
-export const MASTERY_THRESHOLD = 3;
+/** SRS spacing intervals (ms) indexed by masteryHits level. A misconception
+ *  NEVER graduates out (David 2026-05-21: "it should never graduate out!
+ *  just reduce the amount of times you see it"). Each success lengthens the
+ *  interval; a miss snaps it back so you see it sooner. Level 0 = due now. */
+export const SRS_INTERVALS_MS: readonly number[] = [
+  0, // 0 — due immediately (fresh capture or just missed)
+  1 * 24 * 60 * 60 * 1000, // 1 — 1 day
+  3 * 24 * 60 * 60 * 1000, // 2 — 3 days
+  7 * 24 * 60 * 60 * 1000, // 3 — 1 week
+  16 * 24 * 60 * 60 * 1000, // 4 — ~2 weeks
+  35 * 24 * 60 * 60 * 1000, // 5+ — ~5 weeks (cap)
+];
+
+const MAX_SRS_LEVEL = SRS_INTERVALS_MS.length - 1;
+/** A miss drops the level back this far so the instance resurfaces soon. */
+const MISS_LEVEL_DROP = 2;
+
+/** Spacing interval (ms) for a given level, capped at the longest. */
+function intervalForLevel(level: number): number {
+  const i = Math.min(Math.max(level, 0), MAX_SRS_LEVEL);
+  return SRS_INTERVALS_MS[i];
+}
+
+/** True when an instance is due to resurface. A missing dueAt (fresh capture
+ *  or a legacy row from the old graduate-out model) counts as due — that's
+ *  what guarantees nothing ever drops out of the loop permanently. */
+export function isMisconceptionDue(rec: MisconceptionTagRecord, now: number = Date.now()): boolean {
+  return rec.dueAt == null || rec.dueAt <= now;
+}
 
 function newId(): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
@@ -75,6 +101,7 @@ export async function logMisconception(
     sourceGameId: input.sourceGameId,
     status: 'open',
     masteryHits: 0,
+    dueAt: Date.now(), // due immediately on first capture
   };
   await db.misconceptionTags.add(record);
   return record;
@@ -99,18 +126,22 @@ export interface MisconceptionAggregate {
   bucket: string;
   /** Total instances logged for this tag (any status). */
   total: number;
-  /** Instances still counting (status !== 'mastered'). */
+  /** Instances DUE to resurface right now. Drives the headline ranking.
+   *  Spaced-out instances drop to 0 today but reappear when they come
+   *  due again — a tag never permanently graduates out. */
   openCount: number;
   lastSeenAt: number;
   /** A few representative records (most recent first), for the UI. */
   examples: MisconceptionTagRecord[];
 }
 
-/** Aggregate the bucket into one row per tag, ranked by open count
- *  (the Training Plan's headline order). Mastered-out tags sink to the
- *  bottom. `other` rows are grouped by their free-text label so distinct
- *  uncategorised errors stay distinct for later promotion. */
+/** Aggregate the bucket into one row per tag, ranked by DUE count (the
+ *  Training Plan's headline order). Well-spaced tags sink to the bottom
+ *  today but resurface when due — they never graduate out. `other` rows
+ *  are grouped by their free-text label so distinct uncategorised errors
+ *  stay distinct for later promotion. */
 export async function getMisconceptionProfile(): Promise<MisconceptionAggregate[]> {
+  const now = Date.now();
   const all = await db.misconceptionTags.toArray();
   const groups = new Map<string, MisconceptionTagRecord[]>();
   for (const rec of all) {
@@ -126,7 +157,7 @@ export async function getMisconceptionProfile(): Promise<MisconceptionAggregate[
     records.sort((a, b) => b.createdAt - a.createdAt);
     const head = records[0];
     const def = getMisconceptionTag(head.tag);
-    const openCount = records.filter((r) => r.status !== 'mastered').length;
+    const openCount = records.filter((r) => isMisconceptionDue(r, now)).length;
     rows.push({
       tag: head.tag,
       def,
@@ -148,28 +179,33 @@ export async function getMisconceptionProfile(): Promise<MisconceptionAggregate[
   return rows;
 }
 
-/** Record the outcome of a drill aimed at a tag. A success advances every
- *  still-open instance of that tag toward mastery (graduating at
- *  MASTERY_THRESHOLD); a miss resets their progress. This is the adaptive
- *  loop — an error you're fixing graduates out and stops counting. */
+/** Record the outcome of a drill aimed at a tag. A success SPACES every
+ *  currently-due instance of that tag further out (the interval lengthens
+ *  with the SRS level); a miss snaps it back so it resurfaces soon. The
+ *  instance NEVER graduates out — you just see it less often as you fix it
+ *  (David 2026-05-21). Only due instances move, so spacing one out doesn't
+ *  reset the ones already resting. */
 export async function recordTagDrillResult(tag: string, success: boolean): Promise<void> {
   const now = Date.now();
-  const open = await db.misconceptionTags
+  const due = await db.misconceptionTags
     .where('tag').equals(tag)
-    .filter((r) => r.status !== 'mastered')
+    .filter((r) => isMisconceptionDue(r, now))
     .toArray();
-  for (const rec of open) {
+  for (const rec of due) {
     if (success) {
-      const hits = rec.masteryHits + 1;
+      const level = Math.min(rec.masteryHits + 1, MAX_SRS_LEVEL);
       await db.misconceptionTags.update(rec.id, {
-        masteryHits: hits,
-        status: hits >= MASTERY_THRESHOLD ? 'mastered' : 'improving',
+        masteryHits: level,
+        status: 'improving',
+        dueAt: now + intervalForLevel(level),
         lastDrilledAt: now,
       });
     } else {
+      const level = Math.max(0, rec.masteryHits - MISS_LEVEL_DROP);
       await db.misconceptionTags.update(rec.id, {
-        masteryHits: 0,
-        status: 'open',
+        masteryHits: level,
+        status: level === 0 ? 'open' : 'improving',
+        dueAt: now, // due again immediately — see it sooner
         lastDrilledAt: now,
       });
     }
@@ -193,10 +229,14 @@ export interface TagDrillPlan {
 export async function mapTagToDrills(tag: string): Promise<TagDrillPlan | null> {
   const def = getMisconceptionTag(tag);
   if (!def) return null;
-  const records = await db.misconceptionTags
+  const now = Date.now();
+  const all = await db.misconceptionTags
     .where('tag').equals(tag)
-    .filter((r) => r.status !== 'mastered')
     .toArray();
+  // Drill the due instances first; if none are due, still surface the rest
+  // so the tag is always drillable on demand (it never graduates out).
+  const dueRecords = all.filter((r) => isMisconceptionDue(r, now));
+  const records = dueRecords.length > 0 ? dueRecords : all;
   records.sort((a, b) => b.createdAt - a.createdAt);
   return {
     tag,

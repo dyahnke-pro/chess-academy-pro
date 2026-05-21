@@ -6,7 +6,7 @@ import {
   getAllMisconceptions,
   recordTagDrillResult,
   mapTagToDrills,
-  MASTERY_THRESHOLD,
+  isMisconceptionDue,
 } from './misconceptionService';
 
 const FEN = 'rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
@@ -57,7 +57,7 @@ describe('logMisconception', () => {
 });
 
 describe('getMisconceptionProfile', () => {
-  it('ranks by open count, sinks mastered tags', async () => {
+  it('ranks by due count, sinks well-spaced tags', async () => {
     for (let i = 0; i < 3; i++) {
       await logMisconception({ tag: 'hung-material', source: 'auto-analysis', fen: FEN });
     }
@@ -82,27 +82,53 @@ describe('getMisconceptionProfile', () => {
   });
 });
 
-describe('recordTagDrillResult — adaptive graduation', () => {
-  it('graduates a tag to mastered after MASTERY_THRESHOLD successes', async () => {
+describe('recordTagDrillResult — SRS spacing, never graduate out', () => {
+  it('spaces a tag further out on success but never removes it', async () => {
     await logMisconception({ tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
-    for (let i = 0; i < MASTERY_THRESHOLD; i++) {
-      await recordTagDrillResult('missed-tactic', true);
-    }
+    // One success spaces it into the future — due count drops to 0 today.
+    await recordTagDrillResult('missed-tactic', true);
+
     const all = await getAllMisconceptions();
-    expect(all[0].status).toBe('mastered');
-    expect(all[0].masteryHits).toBe(MASTERY_THRESHOLD);
+    expect(all).toHaveLength(1); // still present — nothing graduated away
+    expect(all[0].status).toBe('improving');
+    expect(all[0].masteryHits).toBe(1);
+    expect(all[0].dueAt).toBeGreaterThan(Date.now()); // resting, not gone
+    expect(isMisconceptionDue(all[0])).toBe(false);
 
     const profile = await getMisconceptionProfile();
     expect(profile.find((r) => r.tag === 'missed-tactic')?.openCount).toBe(0);
+    // …but the instance still counts toward the lifetime total.
+    expect(profile.find((r) => r.tag === 'missed-tactic')?.total).toBe(1);
   });
 
-  it('a miss resets progress back to open', async () => {
+  it('the interval lengthens with each consecutive success', async () => {
     await logMisconception({ tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
     await recordTagDrillResult('missed-tactic', true);
+    const afterOne = (await getAllMisconceptions())[0];
+    const gapOne = (afterOne.dueAt ?? 0) - Date.now();
+
+    // Force it due again, then a second success should space it out FURTHER.
+    await db.misconceptionTags.update(afterOne.id, { dueAt: Date.now() - 1 });
+    await recordTagDrillResult('missed-tactic', true);
+    const afterTwo = (await getAllMisconceptions())[0];
+    const gapTwo = (afterTwo.dueAt ?? 0) - Date.now();
+
+    expect(afterTwo.masteryHits).toBe(2);
+    expect(gapTwo).toBeGreaterThan(gapOne);
+  });
+
+  it('a miss snaps the instance back to due so you see it sooner', async () => {
+    await logMisconception({ tag: 'missed-tactic', source: 'discussion-practice', fen: FEN });
+    await recordTagDrillResult('missed-tactic', true);
+    // Make it due again to drill it, then miss.
+    const rec = (await getAllMisconceptions())[0];
+    await db.misconceptionTags.update(rec.id, { dueAt: Date.now() - 1 });
     await recordTagDrillResult('missed-tactic', false);
+
     const all = await getAllMisconceptions();
     expect(all[0].status).toBe('open');
     expect(all[0].masteryHits).toBe(0);
+    expect(isMisconceptionDue(all[0])).toBe(true); // back in today's feed
   });
 });
 
