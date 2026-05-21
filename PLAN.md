@@ -302,6 +302,41 @@ prioritized reps. Where the tags finally pay off.
   relevant lines/branches; tactical tags → puzzles.json by theme;
   your-games tags → the positions you flubbed.
 
+## FEATURE SPEC — Per-variation weapons / "watch out for" (David 2026-05-21)
+
+Today `trapLines[]` / `warningLines[]` are opening-level (shared across
+tabs). Make them per-variation, hand-curated (no algo).
+
+- **Data model:** a sidecar (like `trap-line-classifications.json`),
+  keyed `<openingId>::<trapName>` → `appliesTo: string[]` (variation tab
+  labels, e.g. `['berlin']` or `['main']`; omitted = shows on all tabs).
+  Keeps curated source JSON untouched.
+- **Tab filtering:** Weapons + "Watch out for" sections filter by the
+  selected tab (same pattern as the middlegame plan table) — show a trap
+  if appliesTo includes the current variation or is general. (e.g. main-
+  line Noah's Ark caution stays on main + Closed tabs; Open traps on Open.)
+- **Curation = David, not an algo.** Hand-pick which weapon belongs to
+  which variation; REMOVE main-line traps from variations they can't occur
+  in. Orientation contract holds: trapLines = student weapons, warningLines
+  = anti-traps.
+
+## SCALE — 40 openings, Ruy is the template (David 2026-05-21)
+
+The wiring is opening-agnostic and DONE (tabs auto-build from variations,
+plans filter via the hand-picked table, per-variation key-ideas/overview
+fields, deep-link, sections). So openings #2-40 = AUTHOR THE DATA and it
+lights up — the hard part shifts from wiring to curated content.
+
+Repeatable per-opening pass:
+1. Curate the first-class variation tabs (like the Ruy 7).
+2. Per variation: 4 key ideas + a DB-grounded middlegame plan + traps/
+   warnings tagged to it + any genuine endgame.
+3. Wiring auto-surfaces it.
+
+David curates the picks; Claude authors the validated content; the builder
+scripts (add-ruy-*-plans, keyideas, endgames) enforce legality (G3) and are
+the start of a per-opening authoring toolkit that hardens each opening.
+
 ## AUDIT STATUS (loop running 2026-05-21)
 
 `audit-openings-interactive-loop.mjs` running vs localhost. Round 7 findings
