@@ -112,43 +112,51 @@ export function PlayableLinePlayer({
     }
   }, [line.annotations]);
 
-  // ─── Demonstration Phase: Auto-play logic ────────────────────────────────
-
+  // ─── Demonstration Phase: VOICE-GATED auto-play ──────────────────────────
+  // Speak the move's annotation, then advance only when the voice promise
+  // RESOLVES — never on a fixed timer that races the narration (CLAUDE.md:
+  // voice-promise resolution is the single source of truth for advance; no
+  // fallback timers racing voiceService.speak()). This is the same beat-
+  // narration principle the masterclass lessons use, so the narration is
+  // actually heard and the board never races ahead of it. The same effect
+  // narrates a manually-stepped move (speaks, but does not auto-advance).
   useEffect(() => {
     if (phase !== 'demo') return;
-    if (!isPlaying) return;
-
-    const delay = demoMoveIndex < 0 ? 1000 : 2000;
-
-    autoPlayTimerRef.current = setTimeout(() => {
-      const nextIndex = demoMoveIndex + 1;
-      if (nextIndex >= line.moves.length) {
-        // Demo complete, stop
-        setIsPlaying(false);
-        return;
-      }
-      setDemoMoveIndex(nextIndex);
-    }, delay);
-
-    return () => {
+    let cancelled = false;
+    const clearTimer = (): void => {
       if (autoPlayTimerRef.current !== null) {
         clearTimeout(autoPlayTimerRef.current);
         autoPlayTimerRef.current = null;
       }
     };
-  }, [phase, isPlaying, demoMoveIndex, line.moves.length]);
+    const advance = (): void => {
+      if (cancelled || !isPlaying) return;
+      const next = demoMoveIndex + 1;
+      if (next >= line.moves.length) setIsPlaying(false);
+      else setDemoMoveIndex(next);
+    };
 
-  // Voice narration for demo moves
-  useEffect(() => {
-    if (phase !== 'demo') return;
-    if (demoMoveIndex < 0) return;
-    if (demoMoveIndex >= line.annotations.length) return;
-
-    const annotation = line.annotations[demoMoveIndex];
-    if (annotation) {
-      void voiceService.speak(annotation);
+    // Intro beat before the first move.
+    if (demoMoveIndex < 0) {
+      if (isPlaying) autoPlayTimerRef.current = setTimeout(advance, 800);
+      return () => { cancelled = true; clearTimer(); };
     }
-  }, [phase, demoMoveIndex, line.annotations]);
+    if (demoMoveIndex >= line.moves.length) return;
+
+    const annotation = demoMoveIndex < line.annotations.length
+      ? (line.annotations[demoMoveIndex] ?? '')
+      : '';
+    const spoken = annotation
+      ? voiceService.speak(annotation).catch(() => { /* keep playing */ })
+      : Promise.resolve();
+    void spoken.finally(() => {
+      if (cancelled || !isPlaying) return;
+      // A short beat after the narration finishes, then the next move.
+      autoPlayTimerRef.current = setTimeout(advance, annotation ? 450 : 900);
+    });
+
+    return () => { cancelled = true; clearTimer(); };
+  }, [phase, isPlaying, demoMoveIndex, line.moves.length, line.annotations]);
 
   // Play piece sound during demo
   useEffect(() => {
