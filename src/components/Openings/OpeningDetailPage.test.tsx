@@ -306,17 +306,17 @@ describe('OpeningDetailPage', () => {
   });
 
   describe('narration buttons', () => {
-    it('renders narration button on overview section', async () => {
+    it('renders a Listen control on the overview section', async () => {
       renderWithRoute();
       await waitFor(() => {
-        expect(screen.getByTestId('narrate-overview')).toBeInTheDocument();
+        expect(screen.getByTestId('listenable-overview-play')).toBeInTheDocument();
       });
     });
 
-    it('renders narration button on key ideas section', async () => {
+    it('renders a Listen control on the key ideas section', async () => {
       renderWithRoute();
       await waitFor(() => {
-        expect(screen.getByTestId('narrate-keyIdeas')).toBeInTheDocument();
+        expect(screen.getByTestId('listenable-keyIdeas-play')).toBeInTheDocument();
       });
     });
 
@@ -334,23 +334,26 @@ describe('OpeningDetailPage', () => {
       });
     });
 
-    it('narration button has "Narrate section" aria-label initially', async () => {
+    it('Listen control has "Listen to this section" aria-label initially', async () => {
       renderWithRoute();
       await waitFor(() => {
-        expect(screen.getByTestId('narrate-overview')).toHaveAttribute('aria-label', 'Narrate section');
+        expect(screen.getByTestId('listenable-overview-play')).toHaveAttribute(
+          'aria-label',
+          'Listen to this section',
+        );
       });
     });
 
-    it('changes aria-label to "Stop narration" while narrating', async () => {
+    it('changes aria-label to "Pause reading" while reading', async () => {
       renderWithRoute();
       await waitFor(() => {
-        expect(screen.getByTestId('narrate-overview')).toBeInTheDocument();
+        expect(screen.getByTestId('listenable-overview-play')).toBeInTheDocument();
       });
 
-      fireEvent.click(screen.getByTestId('narrate-overview'));
+      fireEvent.click(screen.getByTestId('listenable-overview-play'));
 
-      // After click, the button should change aria-label to "Stop narration"
-      expect(screen.getByTestId('narrate-overview')).toHaveAttribute('aria-label', 'Stop narration');
+      // After click, playback starts and the toggle flips to pause.
+      expect(screen.getByTestId('listenable-overview-play')).toHaveAttribute('aria-label', 'Pause reading');
     });
   });
 
