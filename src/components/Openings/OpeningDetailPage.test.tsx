@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { render as rtlRender } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
@@ -428,11 +428,13 @@ describe('OpeningDetailPage', () => {
   describe('variation thumbnails', () => {
     it('renders MiniBoard thumbnails in variation rows', async () => {
       renderWithRoute();
+      // Each variation row carries its own MiniBoard thumbnail. Scope to
+      // the variation rows — other sections (middlegame/endgame) now also
+      // render MiniBoards, so a global count would be wrong.
       await waitFor(() => {
-        const miniBoards = screen.getAllByTestId('mini-board');
-        // 2 variations → 2 MiniBoard thumbnails
-        expect(miniBoards).toHaveLength(2);
+        expect(within(screen.getByTestId('variation-0')).getByTestId('mini-board')).toBeInTheDocument();
       });
+      expect(within(screen.getByTestId('variation-1')).getByTestId('mini-board')).toBeInTheDocument();
     });
 
     it('MiniBoard receives computed FEN for variation', async () => {

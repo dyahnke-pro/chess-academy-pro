@@ -13,6 +13,9 @@ import { MiniBoard } from '../Board/MiniBoard';
 import { ModelGamesSection } from './ModelGamesSection';
 import { ModelGameViewer } from './ModelGameViewer';
 import { MiddlegamePlansSection, type MiddlegameAction } from './MiddlegamePlansSection';
+import { EndgameTechniqueSection, type EndgameAction } from './EndgameTechniqueSection';
+import { LessonView as EndgameLessonView } from '../Coach/EndgameLessonTab';
+import type { EndgameLesson } from '../../types/endgameLesson';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
@@ -96,7 +99,9 @@ type ViewMode =
   | 'middlegame-watch'
   | 'middlegame-plan'
   | 'middlegame-practice'
-  | 'middlegame-play';
+  | 'middlegame-play'
+  | 'endgame-lesson'
+  | 'endgame-play';
 
 function computeFenFromPgn(pgn: string, setupFen?: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
@@ -129,6 +134,8 @@ export function OpeningDetailPage(): JSX.Element {
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
+  const [activeEndgameLesson, setActiveEndgameLesson] = useState<EndgameLesson | null>(null);
+  const [endgamePlayFen, setEndgamePlayFen] = useState<string | null>(null);
   const [quizIndex, setQuizIndex] = useState(0);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [quizPlayFen, setQuizPlayFen] = useState<string | null>(null);
@@ -222,6 +229,19 @@ export function OpeningDetailPage(): JSX.Element {
               ? 'middlegame-play'
               : 'middlegame-watch';
       setViewMode(mode);
+    },
+    [],
+  );
+
+  const handleEndgameAction = useCallback(
+    (lesson: EndgameLesson, action: EndgameAction): void => {
+      if (action === 'play') {
+        setEndgamePlayFen(lesson.positions[0]?.fen ?? null);
+        setViewMode('endgame-play');
+        return;
+      }
+      setActiveEndgameLesson(lesson);
+      setViewMode('endgame-lesson');
     },
     [],
   );
@@ -657,6 +677,16 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
+  // Endgame STUDY — the full interactive endgame lesson (watch + practice).
+  if (viewMode === 'endgame-lesson' && activeEndgameLesson) {
+    return <EndgameLessonView lesson={activeEndgameLesson} onExit={handleExit} />;
+  }
+
+  // Endgame PLAY — play the endgame position out against the coach.
+  if (viewMode === 'endgame-play' && endgamePlayFen) {
+    return <OpeningPlayMode opening={opening} startFen={endgamePlayFen} onExit={handleExit} />;
+  }
+
   // Detail view
   const mastery = getMasteryPercent(opening);
   const totalLines = getTotalLines(opening);
@@ -956,6 +986,14 @@ export function OpeningDetailPage(): JSX.Element {
         openingId={opening.id}
         boardOrientation={opening.color}
         onAction={handleMiddlegameAction}
+      />
+
+      {/* Endgame Technique — the endgames this opening steers toward,
+          each a playable curated lesson (study) + play-vs-coach. */}
+      <EndgameTechniqueSection
+        openingId={opening.id}
+        boardOrientation={opening.color}
+        onAction={handleEndgameAction}
       />
 
       {/* Model Games */}
