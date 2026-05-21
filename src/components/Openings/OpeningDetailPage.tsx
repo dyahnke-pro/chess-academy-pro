@@ -28,6 +28,7 @@ import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
 import {
   RUY_TRAP_LESSONS,
   getRuyTrapsForTab,
+  getRuyTrapPlayableLine,
   type RuyTrapDef,
 } from '../../data/lessons/ruyTrapLessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
@@ -97,6 +98,9 @@ type ViewMode =
   | 'train-traps'
   | 'train-warnings'
   | 'named-trap'
+  | 'named-trap-learn'
+  | 'named-trap-practice'
+  | 'named-trap-play'
   | 'model-game'
   | 'middlegame-watch'
   | 'middlegame-plan'
@@ -331,10 +335,24 @@ export function OpeningDetailPage(): JSX.Element {
     setViewMode(`warning-${action}` as ViewMode);
   }, []);
 
-  const handleWatchNamedTrap = useCallback((trapId: string): void => {
-    setActiveNamedTrapId(trapId);
-    setViewMode('named-trap');
-  }, []);
+  // Named-trap WLPP: Watch plays the beat lesson; Learn/Practice play the
+  // lesson's correct teaching line (voice-guided / silent+hint); Play hands
+  // off to the coach locked to this opening.
+  const handleNamedTrapAction = useCallback(
+    (trapId: string, action: 'watch' | 'learn' | 'practice' | 'play'): void => {
+      setActiveNamedTrapId(trapId);
+      setViewMode(
+        action === 'watch'
+          ? 'named-trap'
+          : action === 'learn'
+            ? 'named-trap-learn'
+            : action === 'practice'
+              ? 'named-trap-practice'
+              : 'named-trap-play',
+      );
+    },
+    [],
+  );
 
   const handleToggleFavorite = useCallback(async (): Promise<void> => {
     if (!opening) return;
@@ -471,6 +489,37 @@ export function OpeningDetailPage(): JSX.Element {
     return (
       <LessonPlayer
         script={RUY_TRAP_LESSONS[activeNamedTrapId]}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Named-trap LEARN / PRACTICE — play the lesson's correct teaching line
+  // (the beat narration is carried onto the moves verbatim). Learn guides
+  // with voice; Practice is silent with a hint button.
+  if (
+    (viewMode === 'named-trap-learn' || viewMode === 'named-trap-practice') &&
+    activeNamedTrapId
+  ) {
+    const trapLine = getRuyTrapPlayableLine(activeNamedTrapId);
+    if (trapLine) {
+      return (
+        <PlayableLinePlayer
+          line={trapLine}
+          boardOrientation={opening.color}
+          mode={viewMode === 'named-trap-learn' ? 'learn' : 'practice'}
+          onComplete={handleExit}
+          onExit={handleExit}
+        />
+      );
+    }
+  }
+
+  // Named-trap PLAY — play it out against the coach, locked to this opening.
+  if (viewMode === 'named-trap-play' && activeNamedTrapId) {
+    return (
+      <OpeningPlayMode
+        opening={opening}
         onExit={handleExit}
       />
     );
@@ -772,6 +821,29 @@ export function OpeningDetailPage(): JSX.Element {
   const namedTraps: RuyTrapDef[] = getRuyTrapsForTab(opening.id === 'ruy-lopez' ? tabKey : '');
   const namedWeapons = namedTraps.filter((t) => t.kind === 'weapon');
   const namedWarnings = namedTraps.filter((t) => t.kind === 'warning');
+
+  // 4-button Watch/Learn/Practice/Play row for a named trap (weapon or
+  // warning). Watch = beat lesson; Learn = voice-guided play; Practice =
+  // silent + hint; Play = coach locked to this opening.
+  const NamedTrapWLPP = ({ trapId }: { trapId: string }): JSX.Element => {
+    const btn = 'flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-lg bg-theme-surface border border-theme-border text-theme-text-muted hover:text-theme-text hover:bg-theme-border text-[10px] font-medium transition-colors';
+    return (
+      <div className="grid grid-cols-4 gap-1.5 mt-2">
+        <button onClick={() => handleNamedTrapAction(trapId, 'watch')} className={`${btn} opening-action-glow opening-action-glow-watch`} data-testid={`named-trap-watch-${trapId}`}>
+          <PlayCircle size={15} />Watch
+        </button>
+        <button onClick={() => handleNamedTrapAction(trapId, 'learn')} className={`${btn} opening-action-glow opening-action-glow-learn`} data-testid={`named-trap-learn-${trapId}`}>
+          <LearnIcon size={15} />Learn
+        </button>
+        <button onClick={() => handleNamedTrapAction(trapId, 'practice')} className={`${btn} opening-action-glow opening-action-glow-practice`} data-testid={`named-trap-practice-${trapId}`}>
+          <Brain size={15} />Practice
+        </button>
+        <button onClick={() => handleNamedTrapAction(trapId, 'play')} className={`${btn} opening-action-glow opening-action-glow-play`} data-testid={`named-trap-play-${trapId}`}>
+          <Swords size={15} />Play
+        </button>
+      </div>
+    );
+  };
 
   const NarrationButton = ({
     sectionId,
@@ -1116,22 +1188,14 @@ export function OpeningDetailPage(): JSX.Element {
             {namedWeapons.map((trap) => (
               <div
                 key={trap.id}
-                className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
+                className="w-full p-3 rounded-lg"
                 data-testid={`named-trap-${trap.id}`}
               >
-                <button
-                  onClick={() => handleWatchNamedTrap(trap.id)}
-                  className="flex items-center justify-between gap-3 w-full text-left"
-                  aria-label={`Watch ${trap.name}`}
-                >
-                  <div className="flex-1 min-w-0">
-                    <span className="text-sm font-medium text-theme-text">{trap.name}</span>
-                    <p className="text-xs text-emerald-400/80 mt-0.5">Your weapon — punish the slip.</p>
-                  </div>
-                  <span className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg bg-theme-surface border border-theme-border text-theme-text-muted opening-action-glow opening-action-glow-watch">
-                    <PlayCircle size={16} />
-                  </span>
-                </button>
+                <div className="min-w-0">
+                  <span className="text-sm font-medium text-theme-text">{trap.name}</span>
+                  <p className="text-xs text-emerald-400/80 mt-0.5">Your weapon — punish the slip.</p>
+                </div>
+                <NamedTrapWLPP trapId={trap.id} />
               </div>
             ))}
           </div>
@@ -1265,22 +1329,14 @@ export function OpeningDetailPage(): JSX.Element {
             {namedWarnings.map((trap) => (
               <div
                 key={trap.id}
-                className="w-full p-3 rounded-lg hover:bg-theme-border/50 transition-colors"
+                className="w-full p-3 rounded-lg"
                 data-testid={`named-trap-${trap.id}`}
               >
-                <button
-                  onClick={() => handleWatchNamedTrap(trap.id)}
-                  className="flex items-center justify-between gap-3 w-full text-left"
-                  aria-label={`Watch ${trap.name}`}
-                >
-                  <div className="flex-1 min-w-0">
-                    <span className="text-sm font-medium text-theme-text">{trap.name}</span>
-                    <p className="text-xs text-amber-400/80 mt-0.5">See the trap, then the move that dodges it.</p>
-                  </div>
-                  <span className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg bg-theme-surface border border-theme-border text-theme-text-muted opening-action-glow opening-action-glow-watch">
-                    <PlayCircle size={16} />
-                  </span>
-                </button>
+                <div className="min-w-0">
+                  <span className="text-sm font-medium text-theme-text">{trap.name}</span>
+                  <p className="text-xs text-amber-400/80 mt-0.5">See the trap, then the move that dodges it.</p>
+                </div>
+                <NamedTrapWLPP trapId={trap.id} />
               </div>
             ))}
           </div>

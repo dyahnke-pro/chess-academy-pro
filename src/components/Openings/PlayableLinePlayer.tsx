@@ -10,6 +10,7 @@ import {
   XCircle,
   RotateCcw,
   ArrowLeft,
+  Lightbulb,
 } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -74,6 +75,9 @@ export function PlayableLinePlayer({
 
   // Memory phase state
   const [memoryMoveIndex, setMemoryMoveIndex] = useState(0);
+  // Practice-mode hint: reveal the current move's arrow on demand (silent —
+  // no voice). Resets when the move advances so each move is a fresh recall.
+  const [showHint, setShowHint] = useState(false);
   const [showCorrectFlash, setShowCorrectFlash] = useState(false);
   const [showWrongFlash, setShowWrongFlash] = useState(false);
   const [shakeBoard, setShakeBoard] = useState(false);
@@ -401,13 +405,22 @@ export function PlayableLinePlayer({
     return styles;
   }, [phase, selectedSquare, legalMoves, mergeGlow, guided, line.highlights, memoryMoveIndex]);
 
-  // Learn mode: the move's arrows (move + vision) as a live hint of what to
-  // play. Practice mode shows none — pure recall.
+  // Reset the practice hint each time the move advances — fresh recall.
+  useEffect(() => { setShowHint(false); }, [memoryMoveIndex]);
+
+  // Learn mode shows the move's arrows live (voice-guided). Practice shows
+  // nothing until the student taps Hint, which reveals just the move arrow.
   const memoryHintArrows = useMemo((): Array<{ startSquare: string; endSquare: string; color: string }> => {
-    if (!guided || phase !== 'memory' || memoryComplete) return [];
-    if (memoryMoveIndex >= line.arrows.length) return [];
-    return arrowsToBoard(line.arrows[memoryMoveIndex]);
-  }, [guided, phase, memoryComplete, memoryMoveIndex, line.arrows]);
+    if (phase !== 'memory' || memoryComplete) return [];
+    if (guided && memoryMoveIndex < line.arrows.length) {
+      return arrowsToBoard(line.arrows[memoryMoveIndex]);
+    }
+    if (showHint && memoryMoveIndex < expectedMoves.length) {
+      const mv = expectedMoves[memoryMoveIndex];
+      return [{ startSquare: mv.from, endSquare: mv.to, color: 'rgba(255, 165, 0, 0.85)' }];
+    }
+    return [];
+  }, [guided, phase, memoryComplete, memoryMoveIndex, line.arrows, showHint, expectedMoves]);
 
   const handleRetryMemory = useCallback((): void => {
     chessRef.current = new Chess(line.fen);
@@ -599,6 +612,17 @@ export function PlayableLinePlayer({
           >
             <RotateCcw size={14} />
             Watch Again
+          </button>
+        )}
+        {mode === 'practice' && !memoryComplete && (
+          <button
+            onClick={() => setShowHint(true)}
+            disabled={showHint || showCorrectFlash || showWrongFlash}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-surface hover:bg-theme-border text-theme-text-muted text-xs font-medium transition-colors disabled:opacity-40"
+            data-testid="practice-hint"
+          >
+            <Lightbulb size={14} />
+            Hint
           </button>
         )}
       </div>

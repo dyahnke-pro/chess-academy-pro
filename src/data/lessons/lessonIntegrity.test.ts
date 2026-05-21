@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { Chess, type Square } from 'chess.js';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
-import { RUY_TRAP_LESSONS } from './ruyTrapLessons';
+import { RUY_TRAP_LESSONS, RUY_TRAP_DEFS, getRuyTrapPlayableLine } from './ruyTrapLessons';
 import { buildLessonReferenceBlock } from './index';
 
 const lessons = [
@@ -84,6 +84,51 @@ describe('Ruy master-class integrity', () => {
       }
     });
   }
+});
+
+// David 2026-05-21: when the named traps gained Watch/Learn/Practice/Play,
+// the hand-written beat narration MUST survive the transition into the
+// Learn/Practice playable line — "make sure the narration survives." This
+// proves the converter carries each prefix beat's `say` text VERBATIM onto
+// the move it lands on, the line is legal, and every routed trap converts.
+describe('Ruy named-trap → playable-line transition (narration survives)', () => {
+  for (const def of RUY_TRAP_DEFS) {
+    it(`${def.id}: converts to a legal line carrying the beat narration verbatim`, () => {
+      const line = getRuyTrapPlayableLine(def.id);
+      expect(line, `no playable line for ${def.id}`).toBeTruthy();
+      if (!line) return;
+
+      // Line is legal end-to-end.
+      const c = new Chess(line.fen);
+      line.moves.forEach((san) => {
+        const before = c.fen();
+        try { c.move(san); } catch { /* surfaced below */ }
+        expect(c.fen(), `illegal move "${san}" in ${def.id} line`).not.toBe(before);
+      });
+      expect(line.annotations.length).toBe(line.moves.length);
+
+      // Every beat that sits on the teaching line keeps its say text VERBATIM.
+      const lesson = RUY_TRAP_LESSONS[def.id];
+      for (const beat of lesson.beats) {
+        const isPrefix =
+          beat.moves.length <= line.moves.length &&
+          beat.moves.every((m, i) => m === line.moves[i]);
+        if (!isPrefix) continue; // trap-branch beats stay Watch-only
+        const ply = beat.moves.length - 1;
+        expect(
+          line.annotations[ply],
+          `${def.id}: beat ${beat.id} narration dropped at ply ${ply}`,
+        ).toBe(beat.say);
+      }
+    });
+  }
+
+  it('every routed trap def has a matching lesson + non-empty line', () => {
+    for (const def of RUY_TRAP_DEFS) {
+      expect(RUY_TRAP_LESSONS[def.id], `lesson missing for ${def.id}`).toBeTruthy();
+      expect(getRuyTrapPlayableLine(def.id)?.moves.length ?? 0).toBeGreaterThan(0);
+    }
+  });
 });
 
 describe('Ruy master-class orientation', () => {

@@ -1,4 +1,10 @@
-import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
+import type {
+  LessonScript,
+  LessonBeat,
+  AnnotationArrow,
+  AnnotationHighlight,
+  PlayableMiddlegameLine,
+} from '../../types';
 
 // Ruy trap lessons — show→snap-back walkthroughs (David 2026-05-21).
 // WARNINGS: play the trap to the danger, then snap the board BACK to the
@@ -161,10 +167,13 @@ export interface RuyTrapDef {
   appliesTo: string[];
 }
 
-/** HAND-PICKED routing — which trap shows on which tab. No algo. */
+/** HAND-PICKED routing — which trap shows on which tab. No algo. Each trap
+ *  only arises from a specific move order, so it lives on that variation's
+ *  tab. Noah's Ark is the exception: the b3-bishop cage can happen in ANY
+ *  closed a6/Bb3 line, so it shows on every closed-mainline tab. */
 export const RUY_TRAP_DEFS: RuyTrapDef[] = [
   { id: 'tarrasch', name: 'The Tarrasch Trap', kind: 'weapon', appliesTo: ['open'] },
-  { id: 'noahs-ark', name: "Noah's Ark Trap", kind: 'warning', appliesTo: ['main'] },
+  { id: 'noahs-ark', name: "Noah's Ark Trap", kind: 'warning', appliesTo: ['main', 'breyer', 'chigorin', 'zaitsev'] },
   { id: 'mortimer', name: 'Mortimer Trap', kind: 'warning', appliesTo: ['berlin'] },
   { id: 'fishing-pole', name: 'Fishing Pole', kind: 'warning', appliesTo: ['berlin'] },
   { id: 'marshall-onlymove', name: 'The only-move trap', kind: 'warning', appliesTo: ['marshall'] },
@@ -173,4 +182,35 @@ export const RUY_TRAP_DEFS: RuyTrapDef[] = [
 /** Trap defs for a given tab label ('main' for the main line). */
 export function getRuyTrapsForTab(tabKey: string): RuyTrapDef[] {
   return RUY_TRAP_DEFS.filter((t) => t.appliesTo.includes(tabKey));
+}
+
+const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+/** Convert a trap lesson into a playable line for Learn/Practice. The line
+ *  is the lesson's CORRECT teaching path — the last beat (the punish for a
+ *  weapon, the antidote move for a warning). The hand-written beat `say`
+ *  text is carried over VERBATIM onto the move it lands on, so the narration
+ *  survives the transition out of the Watch beat-player. Trap-branch beats
+ *  (the moves you must NOT play) aren't on this line, so they stay
+ *  Watch-only — nothing is lost, the wrong moves just aren't drilled.
+ *  Returns null when the lesson has no beats. */
+export function getRuyTrapPlayableLine(id: string): PlayableMiddlegameLine | null {
+  const lesson = RUY_TRAP_LESSONS[id];
+  if (!lesson || lesson.beats.length === 0) return null;
+  const lineBeat = lesson.beats[lesson.beats.length - 1];
+  const moves = lineBeat.moves;
+  const annotations: string[] = moves.map(() => '');
+  const arrows: AnnotationArrow[][] = moves.map(() => []);
+  const highlights: AnnotationHighlight[][] = moves.map(() => []);
+  for (const beat of lesson.beats) {
+    // Only beats whose moves are a prefix of the teaching line sit on it.
+    if (beat.moves.length > moves.length) continue;
+    if (!beat.moves.every((m, i) => m === moves[i])) continue;
+    const ply = beat.moves.length - 1;
+    if (ply < 0) continue;
+    annotations[ply] = beat.say; // verbatim — narration survives
+    if (beat.arrows) arrows[ply] = beat.arrows;
+    if (beat.highlights) highlights[ply] = beat.highlights;
+  }
+  return { fen: START_FEN, moves, annotations, arrows, highlights, title: lesson.title };
 }
