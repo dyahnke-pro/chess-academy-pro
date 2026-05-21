@@ -952,6 +952,24 @@ Spoken text comes from `pickNarrationText(annotation, length)` (`src/services/wa
 
 ### Narration Voice Rules (IMPORTANT)
 
+**THE BAR — right ideas, elegantly taught (David 2026-05-21, verbatim):**
+*"The bar is right ideas, elegantly taught. I take the established,
+mainstream understanding of the opening — Spassky's plans, the standard
+maneuvers, what every strong player knows the Austrian or the 150 is
+about — and I rewrite it into clear, vivid teaching. That's not
+invention; it's translation. The general understanding is the raw
+material; the elegance is my job."*
+
+This is the masterclass authoring doctrine. The deep, consensus
+understanding of a line IS the source of the ideas — you don't need
+verbatim book grounding to teach it (the injected books are a bonus
+where they cover a line, not a gate; see the book-corpus standing note).
+Two rails keep "general understanding" from drifting into making-stuff-up:
+the MOVES are always real (G3 — from the DB / repertoire, never memory),
+and the board-FACTS are gated (the `narrationAccuracy` test rejects a
+claim like "the f5-knight" when no knight is on f5). Between those rails,
+translate the mainstream understanding into elegant teaching.
+
 Every spoken line in the app — whether hand-authored in JSON or
 generated in code templates — must follow these rules. The voice
 is the *position* teaching the student, not the interface
