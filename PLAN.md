@@ -142,8 +142,10 @@ deviationMove?, explanation`. NOT overview/keyIdeas/plans/games.
   Learn + deleted. status: DONE (PR pending). Still TODO in Phase 5:
   swap Watch to a real narrated GM-game walkthrough where one exists.
 - **Phase 3 — Endgame masterclass section (template, main page).** New
-  section + WLPP, opening→endgame-lesson mapping over the 27 lessons.
-  status: pending.
+  EndgameTechniqueSection: opening→endgame-lesson map (openingEndgameMap.ts,
+  default fundamentals + ruy override), each lesson a line with Study
+  (in-page LessonView, exported from EndgameLessonTab) + Play (vs coach
+  from the position). status: DONE (PR pending).
 - **Phase 4 — The 7-tab shell.** Gold-glow tab bar; selecting a tab
   re-scopes the whole page to that variation (reusing the per-variation
   viewModes). Remove the bottom Variations zone. status: pending.
