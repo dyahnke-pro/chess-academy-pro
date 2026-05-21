@@ -85,40 +85,31 @@ function getDesktopBlackColumn(): HTMLElement {
 }
 
 describe('TrainingPlanRolodexPage — cold load with zero favorites', () => {
-  it('renders the empty state for both colors', async () => {
+  it('HARD-STOPS with a "Go to Openings" CTA (the one narrow path)', async () => {
+    // David 2026-05-21: no favourited opening → the whole Training Plan is
+    // grayed out and the user is sent to Openings to favourite a line first.
+    // No rolodex columns, no Today's reps until they do.
     mockGetFavoriteOpenings.mockResolvedValueOnce([]);
     render(<TrainingPlanRolodexPage />);
 
     await waitFor(() => {
-      expect(
-        within(getDesktopWhiteColumn()).getByTestId('rolodex-empty-state-white'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('training-plan-locked')).toBeInTheDocument();
     });
-    expect(
-      within(getDesktopBlackColumn()).getByTestId('rolodex-empty-state-black'),
-    ).toBeInTheDocument();
-
-    // Each empty state offers its own Browse Openings CTA so a user
-    // can act from whichever column they're looking at.
-    expect(
-      within(getDesktopWhiteColumn()).getByTestId('rolodex-empty-cta-white'),
-    ).toBeInTheDocument();
-    expect(
-      within(getDesktopBlackColumn()).getByTestId('rolodex-empty-cta-black'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('training-plan-go-openings')).toBeInTheDocument();
+    // The rolodex columns + Today's reps must NOT render in the hard-stop.
+    expect(screen.queryByTestId('rolodex-folder-tabs')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('todays-reps')).not.toBeInTheDocument();
   });
 
-  it('does NOT fire setActiveOpeningCard for empty colors', async () => {
+  it('does NOT fire setActiveOpeningCard with no favorites', async () => {
     mockGetFavoriteOpenings.mockResolvedValueOnce([]);
     render(<TrainingPlanRolodexPage />);
     await waitFor(() => {
-      expect(
-        within(getDesktopWhiteColumn()).getByTestId('rolodex-empty-state-white'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('training-plan-locked')).toBeInTheDocument();
     });
-    // No favorites → resolver returns null for both colors, which
-    // matches the default persisted state (null). The effect should
-    // see no diff and skip the setter, so no audit fires.
+    // No favorites → resolver returns null for both colors, matching the
+    // default persisted state (null). The effect sees no diff and skips the
+    // setter, so no audit fires.
     expect(
       auditCalls.some((c) => c.kind === 'coach-memory-rolodex-active-card-set'),
     ).toBe(false);
@@ -284,8 +275,13 @@ describe('TrainingPlanRolodexPage — PR-4 reconciliation', () => {
 
 describe('TrainingPlanRolodexPage — mobile folder default', () => {
   it('defaults the mobile tab to the persisted lastActiveRolodexColor', async () => {
+    // Folder tabs only render once an opening is favourited (else the page
+    // hard-stops). Favourite both colours so both tabs exist.
     useCoachMemoryStore.setState({ lastActiveRolodexColor: 'black' });
-    mockGetFavoriteOpenings.mockResolvedValueOnce([]);
+    mockGetFavoriteOpenings.mockResolvedValueOnce([
+      buildOpening({ id: 'italian', name: 'Italian Game', color: 'white' }),
+      buildOpening({ id: 'pirc-defence', name: 'Pirc Defence', color: 'black' }),
+    ]);
     render(<TrainingPlanRolodexPage />);
 
     await waitFor(() => {
@@ -301,7 +297,9 @@ describe('TrainingPlanRolodexPage — mobile folder default', () => {
   });
 
   it("defaults the mobile tab to White when there's no rolodex history yet", async () => {
-    mockGetFavoriteOpenings.mockResolvedValueOnce([]);
+    mockGetFavoriteOpenings.mockResolvedValueOnce([
+      buildOpening({ id: 'italian', name: 'Italian Game', color: 'white' }),
+    ]);
     render(<TrainingPlanRolodexPage />);
 
     await waitFor(() => {

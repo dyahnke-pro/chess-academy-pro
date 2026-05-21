@@ -36,7 +36,7 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FolderOpen, Sparkles, Target, ChevronRight } from 'lucide-react';
+import { FolderOpen, Sparkles, Target, ChevronRight, Lock } from 'lucide-react';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { getFavoriteOpenings } from '../../services/openingService';
 import { getMisconceptionProfile } from '../../services/misconceptionService';
@@ -203,6 +203,7 @@ function reconcileOrder(
 }
 
 export function TrainingPlanRolodexPage(): JSX.Element {
+  const navigate = useNavigate();
   const [favorites, setFavorites] = useState<OpeningRecord[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -376,6 +377,46 @@ export function TrainingPlanRolodexPage(): JSX.Element {
     }
     return `${base} bg-theme-surface/40 border-transparent text-theme-text-muted hover:text-theme-text`;
   };
+
+  // HARD STOP — the one narrow path (David 2026-05-21): the Training Plan is
+  // built on your FAVOURITED openings. With none favourited, gray everything
+  // out and send the user to Openings to pick a line. No Today's reps, no
+  // rolodex until they've favourited at least one opening.
+  if (loaded && favorites.length === 0) {
+    return (
+      <div
+        className="flex flex-col p-4 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-6xl mx-auto w-full"
+        data-testid="training-plan-rolodex-page"
+      >
+        <h1 className="text-2xl font-bold text-theme-text">Training Plan</h1>
+        <p className="text-sm text-theme-text-muted mt-1">
+          Your favorited openings, side-by-side.
+        </p>
+        <div
+          className="mt-8 rounded-2xl border-2 border-theme-border bg-theme-surface/40 p-8 text-center opacity-80"
+          data-testid="training-plan-locked"
+        >
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-theme-border/40 mb-4">
+            <Lock size={26} className="text-theme-text-muted" />
+          </div>
+          <h2 className="text-lg font-bold text-theme-text mb-1">Favorite an opening to begin</h2>
+          <p className="text-sm text-theme-text-muted max-w-sm mx-auto mb-5">
+            Your Training Plan is built on the openings you're studying. Head to Openings,
+            pick a line, and tap the heart to favorite it — then your plan and drills appear here.
+          </p>
+          <button
+            type="button"
+            onClick={() => void navigate('/openings')}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
+            data-testid="training-plan-go-openings"
+          >
+            Go to Openings
+            <ChevronRight size={16} />
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

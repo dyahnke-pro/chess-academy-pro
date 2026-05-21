@@ -175,14 +175,13 @@ export function GameInsightsPage(): JSX.Element {
     void navigate(`/coach/chat?q=${encodeURIComponent(query)}`);
   }
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center p-12" data-testid="insights-loading">
-        <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Analysing your games...</span>
-      </div>
-    );
-  }
-
+  // The game-insights tabs (overview/openings/mistakes/tactics) need analysis
+  // to finish. The "Thinking Errors" (misconceptions) + "Patterns" tabs load
+  // their OWN data and must NOT be blocked by game analysis — so we render the
+  // tab bar always and only gate the game-data tab BODIES on `loading`
+  // (David 2026-05-21: the weakness mirror must be reachable independent of
+  // "Analysing your games…").
+  const gameDataTab = tab === 'overview' || tab === 'openings' || tab === 'mistakes' || tab === 'tactics';
   const totalGames = overview?.totalGames ?? 0;
 
   return (
@@ -324,6 +323,11 @@ export function GameInsightsPage(): JSX.Element {
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto px-5 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6">
+        {loading && gameDataTab && (
+          <div className="flex items-center justify-center p-12" data-testid="insights-loading">
+            <span className="text-sm" style={{ color: 'var(--color-text-muted)' }}>Analysing your games...</span>
+          </div>
+        )}
         {tab === 'overview' && overview && (
           <>
             {/* Shareable "Your Chess, In A Nutshell" cards — the
