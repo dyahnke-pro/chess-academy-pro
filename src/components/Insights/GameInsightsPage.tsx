@@ -20,6 +20,7 @@ import { OpeningsTab } from './OpeningsTab';
 import { MistakesTab } from './MistakesTab';
 import { TacticsTab } from './TacticsTab';
 import { PatternsTab } from './PatternsTab';
+import { MisconceptionsTab } from './MisconceptionsTab';
 import type {
   InsightsTab,
   OverviewInsights,
@@ -30,6 +31,7 @@ import type {
 
 const TABS: { id: InsightsTab; label: string }[] = [
   { id: 'overview', label: 'Overview' },
+  { id: 'misconceptions', label: 'Thinking Errors' },
   { id: 'openings', label: 'Openings' },
   { id: 'mistakes', label: 'Mistakes' },
   { id: 'tactics', label: 'Tactics' },
@@ -40,6 +42,7 @@ const TABS: { id: InsightsTab; label: string }[] = [
 // keeps casts honest and rejects garbage values from history state.
 const VALID_TABS: ReadonlySet<InsightsTab> = new Set([
   'overview',
+  'misconceptions',
   'openings',
   'mistakes',
   'tactics',
@@ -339,6 +342,7 @@ export function GameInsightsPage(): JSX.Element {
         {tab === 'mistakes' && mistakes && <MistakesTab data={mistakes} />}
         {tab === 'tactics' && tactics && <TacticsTab data={tactics} />}
         {tab === 'patterns' && <PatternsTab />}
+        {tab === 'misconceptions' && <MisconceptionsTab />}
       </div>
     </motion.div>
   );
