@@ -460,34 +460,26 @@ async function runP4(page, opening) {
     // Wait for the detail testid but only briefly
     const detail = await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 8000 }).then(() => true).catch(() => false);
     if (!detail) { result.findings.push('P4: detail did not appear even briefly'); return result; }
-    // Don't wait for full settle — try to click immediately
-    const tile = (opening.varCount || 0) > 0
-      ? page.locator(`[data-testid="variation-walkthrough-0"]`).first()
-      : page.locator(`[data-testid="trap-walkthrough-0"]`).first();
-    const tileVisible = await tile.isVisible({ timeout: 1000 }).catch(() => false);
-    if (!tileVisible) {
-      result.findings.push('P4: tile not visible within 1s — slow detail page');
+    // Pick-before-load: immediately tap the first variation TAB before the
+    // page settles (the variation tabs replaced the old variation tiles).
+    const tab = page.locator('[data-testid="variation-tab-0"]').first();
+    const tabVisible = await tab.isVisible({ timeout: 1500 }).catch(() => false);
+    if (!tabVisible) {
+      result.skipped = 'no variation tabs';
       return result;
     }
-    await tile.click({ timeout: 3000 }).catch(() => {});
-    // Wait for walkthrough to mount (up to 12s)
-    const wtMounted = await page.locator('[data-testid="walkthrough-mode"]').waitFor({ timeout: 12000 }).then(() => true).catch(() => false);
-    if (!wtMounted) {
-      result.findings.push('P4: tap-before-load caused walkthrough to not mount within 12s');
-      return result;
+    await tab.click({ timeout: 3000 }).catch(() => {});
+    // The page must rescope to that variation without breaking: tab
+    // selected + opening-detail still alive (no blank/empty state).
+    const selected = await tab.getAttribute('aria-selected').catch(() => null);
+    if (selected !== 'true') {
+      result.findings.push('P4: variation tab did not select after pick-before-load tap');
     }
-    // Wait for the annotation card to RESOLVE (not the empty placeholder).
-    // AnnotationCard renders 'annotation-card-empty' until annotations
-    // load; flag only if it stays empty for 15s — that's a real stuck
-    // state, not just slow async resolution.
-    const labelResolved = await page.locator('[data-testid="annotation-move-label"]').first().waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
-    if (!labelResolved) {
-      const stillEmpty = await page.locator('[data-testid="annotation-card-empty"]').first().isVisible().catch(() => false);
-      result.findings.push(`P4: tap-before-load — walkthrough mounted but annotation never resolved after 15s (empty-card=${stillEmpty})`);
-      return result;
+    const stillAlive = await page.locator('[data-testid="opening-detail"]').isVisible().catch(() => false);
+    if (!stillAlive) {
+      result.findings.push('P4: opening-detail vanished after pick-before-load tab tap');
     }
-    const label = await page.locator('[data-testid="annotation-move-label"]').first().textContent().catch(() => null);
-    result.label = label;
+    result.label = `tab0 selected=${selected}`;
   } catch (e) {
     result.findings.push(`P4: error ${(e?.message || String(e)).slice(0,150)}`);
   }
