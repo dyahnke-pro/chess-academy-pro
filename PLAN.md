@@ -364,6 +364,21 @@ A complex app must teach itself. Per-page guided help, coach-narrated.
 - Skippable / dismissible / never blocks.
 - Priority pages: Training Plan, Pro Explorer, the Discussion Practice tab.
 
+## FEATURE — narration piece highlights (David 2026-05-21)
+
+When a walkthrough/lesson beat NAMES pieces or squares ("the f5-knight",
+"White's queen-knight", "the b7-bishop"), HIGHLIGHT them on the board
+(glow on the square) synced to the narration — lead the eye to what's
+being talked about so the user doesn't search the board and lose focus on
+the words. This is a teaching essential, not polish.
+- Infra to reuse: the [BOARD: arrow:from-to:color] marker system (G6) +
+  the board's square-highlight capability. Add a highlight marker
+  ([BOARD: highlight:sq:color]) and either author it into beats OR
+  auto-parse square refs in the spoken text.
+- Best version: highlight each square AS it's spoken (word-timed, magic);
+  simpler v1: highlight all squares a beat names while that beat plays.
+- Applies to Watch + Learn (LessonPlayer / WalkthroughMode narration).
+
 ## TODO — investigate later (2026-05-21)
 
 - **Ruy "Watch" walkthrough-mode not mounting in sandbox — RESOLVED
