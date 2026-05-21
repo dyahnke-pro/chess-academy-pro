@@ -93,6 +93,9 @@ vi.mock('../../services/boardColorService', () => ({
 
 vi.mock('../../services/pieceSetService', () => ({
   buildPieceRenderer: () => undefined,
+  preloadPieceSet: () => undefined,
+  getPieceSetConfig: () => ({ id: 'cburnett', label: 'cburnett', path: '' }),
+  PIECE_SETS: [],
 }));
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
