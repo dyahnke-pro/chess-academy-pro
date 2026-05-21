@@ -3,6 +3,8 @@ import { Chess } from 'chess.js';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { RUY_TRAP_LESSONS } from './ruyTrapLessons';
+import { PIRC_DEFENCE_LESSON } from './pircDefence';
+import { PIRC_VARIATION_LESSONS } from './pircVariations';
 import type { LessonScript } from '../../types';
 
 // Narration-accuracy gate. Every hand-written spoken line that names a
@@ -23,6 +25,8 @@ const lessons: LessonScript[] = [
   RUY_LOPEZ_LESSON,
   ...Object.values(RUY_VARIATION_LESSONS),
   ...Object.values(RUY_TRAP_LESSONS),
+  PIRC_DEFENCE_LESSON,
+  ...Object.values(PIRC_VARIATION_LESSONS),
 ];
 
 const PIECE_LETTER: Record<string, string> = {
