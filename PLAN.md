@@ -337,6 +337,33 @@ David curates the picks; Claude authors the validated content; the builder
 scripts (add-ruy-*-plans, keyideas, endgames) enforce legality (G3) and are
 the start of a per-opening authoring toolkit that hardens each opening.
 
+## FEATURE SPEC — Onboarding / in-app teaching (David 2026-05-21)
+
+A complex app must teach itself. Per-page guided help, coach-narrated.
+
+- **"i" button top-right on every page** → "click to learn how to use this
+  page." Press → step-through coach-marks that SPOTLIGHT each key area
+  (dim the rest), each explaining WHAT it does AND WHY it matters (the
+  "why" is the point — matches the app ethos).
+- **Auto-run on first visit, replayable via "i" after** (track per-page
+  "seen" in Dexie). New users taught automatically; veterans opt in.
+- **Coach NARRATES the tour (voice).** Ruth + TTS speak you through the
+  page — onboarding is voice-first like everything else. e.g. Pro Explorer:
+  "Talk to me here — I'll ask why you played a move, log it, map your
+  weaknesses."
+- **Reusable `PageHelp` component** — one pattern every page mounts,
+  opening-agnostic. Scales like the tabs.
+- **Teach features WHEN they first matter** — one-time contextual nudges
+  (first weakness logged → "tap to see your error map"), not a 12-bubble
+  firehose upfront.
+- **Empty states as teachers** — empty Weaknesses → "play a game and I'll
+  map how you think."
+- **Ask-the-coach fallback** — "what is this page?" → spoken explanation.
+- **30-sec first-run intro** teaching THE LOOP (learn → play → capture →
+  drill → repeat) so users get the mental model before the weeds.
+- Skippable / dismissible / never blocks.
+- Priority pages: Training Plan, Pro Explorer, the Discussion Practice tab.
+
 ## AUDIT STATUS (loop running 2026-05-21)
 
 `audit-openings-interactive-loop.mjs` running vs localhost. ALL ruy-lopez
