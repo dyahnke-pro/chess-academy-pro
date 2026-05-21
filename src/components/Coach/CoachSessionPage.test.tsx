@@ -37,7 +37,6 @@ vi.mock('./ExplainPositionSessionView', () => ({
 }));
 
 import { resolveMiddlegameSessionWithFallback } from '../../services/middlegamePlanner';
-import { resolveWalkthroughSession } from '../../services/walkthroughResolver';
 import type { WalkthroughSession } from '../../types/walkthrough';
 
 function renderAt(path: string): ReturnType<typeof render> {

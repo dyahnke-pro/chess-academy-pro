@@ -1271,7 +1271,7 @@ class VoiceService {
           // into a SourceBuffer that nobody hears, until the response
           // body is exhausted.
           if (myGen !== this.stopGeneration) {
-            try { reader.cancel(); } catch { /* ignore */ }
+            try { void reader.cancel(); } catch { /* ignore */ }
             if (mediaSource.readyState === 'open') {
               try { mediaSource.endOfStream(); } catch { /* ignore */ }
             }

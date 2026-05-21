@@ -1079,7 +1079,7 @@ function maybeEmitStreamFailureRollup(
       lastStatus,
       lastError: lastError instanceof Error
         ? { message: lastError.message, name: lastError.name }
-        : (lastError == null ? null : String(lastError)),
+        : (lastError == null ? null : JSON.stringify(lastError)),
     }),
   });
 }

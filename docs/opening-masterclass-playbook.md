@@ -155,17 +155,51 @@ Play-with-Coach, middlegame/endgame Play, Practice) — NEVER a silo:
 
 ## 9. Audit (the gate)
 
+- **EVERY FUNCTION, EVERY ANGLE, PROGRESSIVELY HARDER (David 2026-05-21,
+  emphatic).** The loop is NOT allowed to be "the same 3 tests" each
+  round. Hard requirements:
+  - **Total coverage** — every single function of the build must be
+    touched and tested: Watch, Learn, Practice, Play on the main line AND
+    every variation tab; middlegame plans; key ideas; traps/warnings;
+    model game; book reader; the deep-link/`?line=` routing; the money
+    surfaces (Discussion Practice slip→why→tag, Game Review capture,
+    Today's reps). Nothing untested.
+  - **Different every round** — each round asks DIFFERENT questions and
+    probes from DIFFERENT angles; do not repeat the prior round's checks
+    verbatim. Rotate the scenarios.
+  - **Progressively harder** — round N+1 digs deeper than round N
+    (canonical happy path → off-canonical input → cold cache → pick-
+    before-load → out-of-order → adversarial/edge). Escalate.
+  - **Multiple questions per run** — each round asks several distinct
+    questions of each surface, not one.
+  This is the bar the loop must MEET before "3 consecutive clean rounds"
+  counts for anything. (The current fixed P1–P6 probe set is the floor,
+  not the ceiling — it needs the rotating/escalating probe bank built on
+  top before it satisfies this rule.)
 - `scripts/audit-openings-interactive-loop.mjs`, scoped to the opening
   (`AUDIT_ONLY_OPENINGS=<id>`): require **3 consecutive clean rounds**.
 - Run vs a local dev server with the pre-installed Chromium
-  (`scripts/audit-lib/chromium.mjs`). The narration Listener is
-  `scripts/audit-lib/audit-listener.mjs`.
-- **Voice / walkthrough playback can't be tested headless** (the sandbox
-  blocks the LLM/Polly) → G7: route it to David on prod, and have the loop
-  SKIP (not fail) those probes. Probes must match the live UI (Learn →
-  `lesson-player` when an authored lesson exists, else `drill-mode`;
-  main-line Play → `/coach/play`; tab selection is URL-driven; generous
-  mount timeouts).
+  (`scripts/audit-lib/chromium.mjs`).
+- **USE THE LISTENER TOOL to audit the voice narration** (David's rule).
+  The narration Listener (`scripts/audit-lib/audit-listener.mjs`, wired
+  into the loop) captures the narration as it fires — the exact text
+  queued to TTS, the firing, the order, the verbosity gating. That is how
+  voice narration gets audited: it verifies the CONTENT and the FIRING of
+  every spoken line, even though the audio render itself can't be heard
+  headless. Run the loop WITH the listener on every masterclass audit and
+  inspect what it captured — silence where a keystone should speak is a
+  bug (this is exactly what would have caught the ModelGameViewer
+  never-calls-voiceService bug). Division of labor: the **narration
+  accuracy gate** checks the text is true to the board; the **listener**
+  checks it actually fires in the running app; **David's ear on prod**
+  checks it sounds good.
+- **Voice / walkthrough AUDIO playback can't be heard headless** (the
+  sandbox blocks Polly/LLM) → G7: route the audio-quality check to David
+  on prod, and have the loop SKIP (not fail) the audio-render probes (the
+  listener still audits content+firing). Probes must match the live UI
+  (Learn → `lesson-player` when an authored lesson exists, else
+  `drill-mode`; main-line Play → `/coach/play`; tab selection is
+  URL-driven; generous mount timeouts).
 
 ## 10. Plumbing that scales
 

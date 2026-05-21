@@ -74,7 +74,7 @@ function parseFacts(fenBefore: string, san: string): MoveFacts | null {
   const after = new Chess(c.fen());
   const enemy = move.color === 'w' ? 'b' : 'w';
   const newTargets: string[] = [];
-  for (const sq of after.moves({ square: move.to, verbose: true }) as Move[]) {
+  for (const sq of after.moves({ square: move.to, verbose: true })) {
     if (sq.captured) newTargets.push(sq.to);
   }
   void enemy;
