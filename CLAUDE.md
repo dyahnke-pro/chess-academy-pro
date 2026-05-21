@@ -970,6 +970,17 @@ and the board-FACTS are gated (the `narrationAccuracy` test rejects a
 claim like "the f5-knight" when no knight is on f5). Between those rails,
 translate the mainstream understanding into elegant teaching.
 
+**WHEN UNSURE: leave blank, skip, or ASK — never guess (David 2026-05-21,
+emphatic).** David spent months building guardrails because LLMs cannot
+play chess — we invent pieces, illegal moves, hallucinated lines. So the
+operating rule when you are not FULLY certain a move/line/trap/idea is
+correct and real: **leave it blank, skip it, or ask David — we double
+back to anything you don't fully understand.** Never paper over a gap
+with a plausible-sounding guess. Empty > generic > invented, always. A
+half-built shelf flagged for review is correct; a confident fabrication
+is the cardinal sin. This applies to EVERY content surface, not just
+narration (traps, endgames, plans, key ideas, model-game annotations).
+
 Every spoken line in the app — whether hand-authored in JSON or
 generated in code templates — must follow these rules. The voice
 is the *position* teaching the student, not the interface
