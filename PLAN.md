@@ -399,6 +399,20 @@ the words. This is a teaching essential, not polish.
 - **Tab overflow** on narrow viewports — later tabs need horizontal
   scroll/swipe; consider a scroll affordance or shorter labels.
 
+## RUY FINISH — progress (2026-05-21 late)
+
+- ✅ **Audit GREEN** — Ruy-scoped interactive loop: 3 consecutive clean
+  rounds (10/11/12, findings=0 errs=0). Gate met. (Walkthrough/voice path
+  prod-verified by David, not headless — G7.)
+- ✅ **From-the-Books pagination** — one passage/page, gold arrow + "1/4" +
+  swipe, auto-turns with narration. Verified page-turn works.
+- ✅ **Marshall saving only-moves** — lesson now PLAYS Nd2/a4/Qh5 (DB
+  Spassky line) instead of just asserting White holds. 86/86 integrity.
+- ⬜ **Traps** — generic auto-mined, no per-variation routing. Hand-curate
+  WITH David (real named traps + appliesTo). NEXT.
+- ⬜ Fuller per-variation overviews (currently the explanation).
+- ⬜ Per-variation book passages (needs extraction; shared for now).
+
 ## AUDIT STATUS (loop running 2026-05-21)
 
 `audit-openings-interactive-loop.mjs` running vs localhost. ALL ruy-lopez
