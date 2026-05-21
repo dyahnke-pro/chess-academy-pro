@@ -364,6 +364,26 @@ A complex app must teach itself. Per-page guided help, coach-narrated.
 - Skippable / dismissible / never blocks.
 - Priority pages: Training Plan, Pro Explorer, the Discussion Practice tab.
 
+## TODO — investigate later (2026-05-21)
+
+- **Ruy "Watch" walkthrough-mode not mounting in sandbox — RESOLVED
+  2026-05-21: SANDBOX ARTIFACT, prod works.** Headless probes on localhost
+  never mount `walkthrough-mode` because WalkthroughMode's narration needs
+  the LLM/Polly, which the sandbox blocks (403/cert). David verified on
+  prod: the Ruy master class plays perfectly — 19 beats, board + authored
+  narration with voice. So the audit's ruy P2/P3 walkthrough findings are
+  sandbox-only; NOT a product bug. (Implication: the interactive loop can't
+  exercise the voice/walkthrough path headless — treat its walkthrough-mount
+  findings as sandbox noise, or stub the LLM for the audit.)
+- **Per-variation book reading.** Only 4 Ruy book pages exist, none
+  variation-dedicated (general passages mentioning a variation in passing).
+  Per-variation "From the Books" needs NEW passage extraction from the
+  source public-domain books, keyed per variation. Content task, later.
+- **Generic tab labels** keep the opening-name prefix ("Réti: KIA Setup
+  g…") → truncate ugly. Strip the prefix on generic (non-curated) tabs.
+- **Tab overflow** on narrow viewports — later tabs need horizontal
+  scroll/swipe; consider a scroll affordance or shorter labels.
+
 ## AUDIT STATUS (loop running 2026-05-21)
 
 `audit-openings-interactive-loop.mjs` running vs localhost. ALL ruy-lopez
