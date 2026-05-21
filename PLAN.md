@@ -339,14 +339,21 @@ the start of a per-opening authoring toolkit that hardens each opening.
 
 ## AUDIT STATUS (loop running 2026-05-21)
 
-`audit-openings-interactive-loop.mjs` running vs localhost. Round 7 findings
-on ruy-lopez (0 console errors — no crash) are mostly STALE PROBE
-EXPECTATIONS, not product bugs: main-line Play navigates to /coach/play by
-design (probe expects opening-play-mode on-page); P4 tab-select checks
-aria-selected too fast after the URL→effect→state cycle; mount timeouts (8s)
-too tight for live drill/play init. The loop must be brought up to the
-current product (Play-room nav, tab selection, realistic timeouts) before it
-can certify "3 clean rounds." That probe-alignment IS the gate work.
+`audit-openings-interactive-loop.mjs` running vs localhost. ALL ruy-lopez
+findings were PROBE ARTIFACTS, not product bugs — verified live:
+- **Learn works:** ruy `learn-btn` mounts the authored `lesson-player`
+  (getLessonScript returns RUY_LOPEZ_LESSON), not `drill-mode`. Probe now
+  accepts either. (Openings without an authored lesson → DrillMode.)
+- **Tabs work:** clicking a visible tab (Berlin) rescopes the whole page —
+  URL→`?line=berlin`, aria-selected true, overview flips to the Berlin text.
+  P4's failure was clicking `variation-tab-0` (Breyer, 7th tab, scrolled
+  off-screen in the overflow-x bar) → click timed out. Probe now clicks the
+  leftmost (visible) variation tab + scrollIntoView.
+- **Play nav:** main-line Play → /coach/play by design; probe accepts it.
+- Mount timeouts 8s→15s for live init.
+The masterclass is FUNCTIONAL. Loop relaunched with all probe fixes to
+certify 3 clean rounds. (Note: 8 tabs overflow the bar on narrow viewports —
+later tabs need a horizontal scroll/swipe; not a bug, a possible UX polish.)
 
 ## Next-session pickup
 
