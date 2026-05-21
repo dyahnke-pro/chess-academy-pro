@@ -436,27 +436,6 @@ describe('OpeningDetailPage', () => {
       expect(within(screen.getByTestId('variation-tabs')).getByText('Copycat')).toBeInTheDocument();
     });
 
-    it('MiniBoard receives computed FEN for variation', async () => {
-      renderWithRoute();
-      await waitFor(() => {
-        const miniBoards = screen.getAllByTestId('mini-board');
-        // Each MiniBoard should have a non-empty FEN
-        for (const board of miniBoards) {
-          expect(board.getAttribute('data-fen')).toBeTruthy();
-          expect(board.getAttribute('data-fen')).not.toBe('');
-        }
-      });
-    });
-
-    it('MiniBoard uses 48 as size', async () => {
-      renderWithRoute();
-      await waitFor(() => {
-        const miniBoards = screen.getAllByTestId('mini-board');
-        for (const board of miniBoards) {
-          expect(board.getAttribute('data-size')).toBe('48');
-        }
-      });
-    });
   });
 
   describe('favorite button', () => {

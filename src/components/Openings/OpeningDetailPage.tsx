@@ -13,9 +13,6 @@ import { MiniBoard } from '../Board/MiniBoard';
 import { ModelGamesSection } from './ModelGamesSection';
 import { ModelGameViewer } from './ModelGameViewer';
 import { MiddlegamePlansSection, type MiddlegameAction } from './MiddlegamePlansSection';
-import { EndgameTechniqueSection, type EndgameAction } from './EndgameTechniqueSection';
-import { LessonView as EndgameLessonView } from '../Coach/EndgameLessonTab';
-import type { EndgameLesson } from '../../types/endgameLesson';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
@@ -24,6 +21,7 @@ import { ClassicWisdomSection } from './ClassicWisdomSection';
 import { BookReader } from './BookReader';
 import { ListenableProse } from './ListenableProse';
 import { VariationTabs, buildVariationTabs } from './VariationTabs';
+import { getRuyTabPlanIds } from '../../services/ruyMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
@@ -96,9 +94,7 @@ type ViewMode =
   | 'middlegame-watch'
   | 'middlegame-plan'
   | 'middlegame-practice'
-  | 'middlegame-play'
-  | 'endgame-lesson'
-  | 'endgame-play';
+  | 'middlegame-play';
 
 function computeFenFromPgn(pgn: string, setupFen?: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
@@ -132,8 +128,6 @@ export function OpeningDetailPage(): JSX.Element {
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
-  const [activeEndgameLesson, setActiveEndgameLesson] = useState<EndgameLesson | null>(null);
-  const [endgamePlayFen, setEndgamePlayFen] = useState<string | null>(null);
   // Which variation tab is selected (-1 = main line). Drives the
   // full-page rescope: every section below renders for the selected
   // variation as its own opening ("seven openings in one").
@@ -231,19 +225,6 @@ export function OpeningDetailPage(): JSX.Element {
               ? 'middlegame-play'
               : 'middlegame-watch';
       setViewMode(mode);
-    },
-    [],
-  );
-
-  const handleEndgameAction = useCallback(
-    (lesson: EndgameLesson, action: EndgameAction): void => {
-      if (action === 'play') {
-        setEndgamePlayFen(lesson.positions[0]?.fen ?? null);
-        setViewMode('endgame-play');
-        return;
-      }
-      setActiveEndgameLesson(lesson);
-      setViewMode('endgame-lesson');
     },
     [],
   );
@@ -705,16 +686,6 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Endgame STUDY — the full interactive endgame lesson (watch + practice).
-  if (viewMode === 'endgame-lesson' && activeEndgameLesson) {
-    return <EndgameLessonView lesson={activeEndgameLesson} onExit={handleExit} />;
-  }
-
-  // Endgame PLAY — play the endgame position out against the coach.
-  if (viewMode === 'endgame-play' && endgamePlayFen) {
-    return <OpeningPlayMode opening={opening} startFen={endgamePlayFen} onExit={handleExit} />;
-  }
-
   // Detail view
   const mastery = getMasteryPercent(opening);
   const totalLines = getTotalLines(opening);
@@ -747,13 +718,13 @@ export function OpeningDetailPage(): JSX.Element {
   const subjectKeyIdeas = selectedVariation
     ? selectedVariation.keyIdeas ?? opening.keyIdeas
     : opening.keyIdeas;
+  const tabKey = isVariation ? (tabLabel ?? '').toLowerCase() : 'main';
   const planPrefix = `mp-${opening.id.replace(/-/g, '')}`;
-  // Variation tab → just that variation's plan; main line → all the
-  // opening's plans (undefined filter), preserving pre-tab behaviour and
-  // never stranding openings whose plan ids don't follow the naming.
-  const subjectPlanIds = isVariation
-    ? [`${planPrefix}-${(tabLabel ?? '').toLowerCase()}`]
-    : undefined;
+  // Ruy tabs use the HAND-PICKED plan table (no algo show-all). Other
+  // openings fall back: variation → its own plan, main line → all plans.
+  const subjectPlanIds =
+    getRuyTabPlanIds(opening.id, tabKey) ??
+    (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   const NarrationButton = ({
     sectionId,
@@ -1059,14 +1030,6 @@ export function OpeningDetailPage(): JSX.Element {
         boardOrientation={opening.color}
         onAction={handleMiddlegameAction}
         filterPlanIds={subjectPlanIds}
-      />
-
-      {/* Endgame Technique — the endgames this opening steers toward,
-          each a playable curated lesson (study) + play-vs-coach. */}
-      <EndgameTechniqueSection
-        openingId={opening.id}
-        boardOrientation={opening.color}
-        onAction={handleEndgameAction}
       />
 
       {/* Model Games */}
