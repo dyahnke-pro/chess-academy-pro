@@ -5,7 +5,8 @@ import { ConsistentChessboard, type BoardArrow } from '../Chessboard/ConsistentC
 import { useStrictNarration } from '../../hooks/useStrictNarration';
 import { voiceService } from '../../services/voiceService';
 import { useSettings } from '../../hooks/useSettings';
-import type { LessonScript } from '../../types';
+import { buildNarrationSegments, speakSegments } from '../../services/narrationSegments';
+import type { LessonScript, LessonBeat } from '../../types';
 
 interface LessonPlayerProps {
   script: LessonScript;
@@ -62,10 +63,36 @@ export function LessonPlayer({ script, onExit, onComplete }: LessonPlayerProps):
   const animResolveRef = useRef<(() => void) | null>(null);
   const animPromiseRef = useRef<Promise<void>>(Promise.resolve());
 
+  // Lead-the-eye reveal: a beat's arrows/highlights are NOT shown all at once;
+  // each square is revealed as the SENTENCE that names it is spoken (sentence-
+  // grained beats, prefetched so the audio stays smooth — David 2026-05-21).
+  // `revealedSquares` accumulates across the beat; the board shows a marker
+  // only once its square has been revealed (and the moves have settled).
+  const [revealedSquares, setRevealedSquares] = useState<Set<string>>(new Set());
+  const playTokenRef = useRef(0);
+  const beatRef = useRef<LessonBeat | undefined>(beats[0]);
+  const voiceEnabledRef = useRef(voiceEnabled);
+  useEffect(() => { voiceEnabledRef.current = voiceEnabled; }, [voiceEnabled]);
+
+  const beatSquares = useCallback((b: LessonBeat | undefined): string[] => {
+    if (!b) return [];
+    return [
+      ...(b.arrows ?? []).flatMap((a) => [a.from, a.to]),
+      ...(b.highlights ?? []).map((h) => h.square),
+    ];
+  }, []);
+
   const applyStep = useCallback((i: number) => {
     animPromiseRef.current = new Promise<void>((res) => { animResolveRef.current = res; });
+    // Bump the play token so any in-flight segmented speak from the prior beat
+    // bails (the speak closure compares against playTokenRef.current).
+    playTokenRef.current += 1;
+    const b = beats[i];
+    beatRef.current = b;
+    // Voice off → no narration to gate the reveal, so show every marker now.
+    setRevealedSquares(voiceEnabledRef.current ? new Set() : new Set(beatSquares(b)));
     setBeatIndex(i);
-  }, []);
+  }, [beats, beatSquares]);
   const getNarration = useCallback((i: number) => beats[i]?.say ?? '', [beats]);
 
   const { isAutoPlaying, next, prev, goToStep, toggleAutoPlay } = useStrictNarration({
@@ -74,11 +101,25 @@ export function LessonPlayer({ script, onExit, onComplete }: LessonPlayerProps):
     getNarration,
     postNarrationDelayMs: 700,
     voiceEnabled,
-    // A master class is opt-in long-form teaching — speak it in full,
-    // not clipped to the coach's brief cap. Also wait for the board
-    // animation to finish before auto-advancing.
-    speak: (t: string) =>
-      Promise.all([voiceService.speakLecture(t), animPromiseRef.current]).then(() => undefined),
+    // A master class is opt-in long-form teaching — speak it in full, not
+    // clipped to the coach's brief cap. Speak it SENTENCE BY SENTENCE,
+    // revealing each beat marker as its square is named (prefetching the
+    // next sentence so the seam stays small). Advance still waits for BOTH
+    // the full narration AND the board animation.
+    speak: (t: string) => {
+      const myToken = playTokenRef.current;
+      const segments = buildNarrationSegments(t, beatSquares(beatRef.current));
+      const spoken = speakSegments(segments, {
+        speak: (s) => voiceService.speakLecture(s),
+        prefetch: (s) => { void voiceService.prefetchAudio([s]); },
+        reveal: (squares) => {
+          if (playTokenRef.current !== myToken) return;
+          setRevealedSquares((prev) => new Set([...prev, ...squares]));
+        },
+        cancelled: () => playTokenRef.current !== myToken,
+      });
+      return Promise.all([spoken, animPromiseRef.current]).then(() => undefined);
+    },
     // The story plays itself — beats auto-advance as each line finishes.
     initialAutoPlay: true,
   });
@@ -143,22 +184,27 @@ export function LessonPlayer({ script, onExit, onComplete }: LessonPlayerProps):
     return () => { timersRef.current.forEach((t) => clearTimeout(t)); };
   }, [idx, beat, beats, fens]);
 
-  // Trail arrows stay on the board; authored vision arrows + highlights
-  // add once the moves have settled.
+  // Trail arrows stay on the board; authored vision arrows + highlights add
+  // once the moves have settled AND the sentence naming their square has been
+  // spoken (revealedSquares) — so the eye lands on each square as the coach
+  // says its name, not all at once.
   const boardArrows: BoardArrow[] = [
     ...trailArrows,
     ...(settled
-      ? (beat.arrows ?? []).map((a) => ({
-          startSquare: a.from,
-          endSquare: a.to,
-          color: a.color ?? 'rgba(40,185,95,0.92)',
-        }))
+      ? (beat.arrows ?? [])
+          .filter((a) => revealedSquares.has(a.to) || revealedSquares.has(a.from))
+          .map((a) => ({
+            startSquare: a.from,
+            endSquare: a.to,
+            color: a.color ?? 'rgba(40,185,95,0.92)',
+          }))
       : []),
   ];
 
   const squareStyles: Record<string, CSSProperties> = {};
   if (settled) {
     for (const h of beat.highlights ?? []) {
+      if (!revealedSquares.has(h.square)) continue;
       squareStyles[h.square] = { background: h.color ?? 'rgba(255,214,0,0.88)' };
     }
   }
