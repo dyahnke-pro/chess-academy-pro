@@ -10628,68 +10628,6 @@
     ]
   },
   {
-    "id": "mp-pirc-austrian-attack",
-    "openingId": "pirc-defence",
-    "criticalPositionFen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PPP2/2NB1N2/PPP3PP/R1BQK2R b KQ - 4 6",
-    "title": "Austrian Attack: f4 + e5 kingside storm",
-    "overview": "The Austrian Attack (4.f4) is the Pirc's sharpest test. White pushes f4 + e5 to cramp Black's kingside and create attacking chances. The plan: develop Bd3 + O-O, then storm with e5-Ne1-f5 or f4-f5 directly. Black must defend precisely or face a crushing kingside attack.",
-    "pawnBreaks": [
-      {
-        "move": "e5",
-        "explanation": "The thematic Austrian Attack break that kicks Black's f6-knight and gains central space. After e5 dxe5 fxe5 Nfd7 White has a broad pawn center and Black's pieces are pushed back."
-      },
-      {
-        "move": "f5",
-        "explanation": "Once the e5 wedge is established, f4-f5 opens the f-file for the rook and creates direct mating threats on Black's king."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nf3-g5 or -h4",
-        "explanation": "After O-O, the f3-knight can swing to h4 (supporting f5-g6 ideas) or to g5 (creating direct kingside attacks)."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd1-e2-h4",
-        "explanation": "Qe2 supports the central pawns and prepares to swing to h4 for direct kingside attack."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing e5 before completing development — Black's …c5 counter-strike opens the position favorably for him.",
-      "Trading the dark-squared bishop on g7 without compensation — gives Black the long-diagonal pressure."
-    ]
-  },
-  {
-    "id": "mp-pirc-classical-150",
-    "openingId": "pirc-defence",
-    "criticalPositionFen": "rnbqk2r/p3ppbp/2pp1np1/1p6/3PP3/2N1BP2/PPPQ2PP/R3KBNR w KQkq - 0 7",
-    "title": "Classical 150 Attack with Bh6",
-    "overview": "The 150 Attack (named for the ~150 ELO needed to play it) is White's most popular modern weapon against the Pirc. The plan: Be3 + Qd2 + Bh6 trades Black's dark-squared bishop, leaving Black's kingside weak and his king without its main defender. After O-O-O and h2-h4-h5, White launches a pawn storm against Black's exposed king.",
-    "pawnBreaks": [
-      {
-        "move": "h4-h5",
-        "explanation": "The kingside pawn storm that opens lines after Black has castled kingside. After h5 gxh5 White's heavy pieces pour into the g-file and h-file."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Be3-h6 trade",
-        "explanation": "The Bh6 forces Black to trade his dark-squared bishop or accept a permanent weakness on the dark squares around his king."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd2-h6 after Bxh6",
-        "explanation": "After the trade, Qh6 lurks on the kingside threatening Qxg7+ mate ideas."
-      }
-    ],
-    "typicalMistakes": [
-      "Forgetting to castle long — kingside castling abandons the attack and Black's queenside expansion strikes first.",
-      "Allowing …Bxh6 without follow-up — the dark-square trade is only powerful if you can exploit the weak squares quickly."
-    ]
-  },
-  {
     "id": "mp-scandinavian-qa5-active-queen",
     "openingId": "scandinavian-defence",
     "criticalPositionFen": "rn2kb1r/pp2pppp/2p2n2/q4b2/2BP4/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
@@ -15781,6 +15719,352 @@
             {
               "square": "c7",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-bayonet",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP2P/2N5/PPP1BPP1/R1BQK1NR b KQkq - 0 5",
+    "title": "Bayonet Attack: Defuse the h-Storm with ...h5",
+    "overview": "Bayonet (4.Be2 + 5.h4) is White's rarer surprise weapon — the h-pawn races at Black's kingside before the fianchetto is safe. The danger is real: White wants h5, ripping open the file your king will sit on after castling. The answer is direct and prophylactic: ...h5 immediately, blocking White's intended advance and freezing the h-file. Once the storm is defused, Black completes a perfectly normal Pirc setup — fianchetto, castle, ...c6, ...Nbd7 — and White's h-pawn now sits as a structural awkwardness on h4 with nothing to attack. The surprise becomes a wasted tempo.",
+    "pawnBreaks": [
+      "...h5 (block the h-storm before it starts)",
+      "later ...c6 + ...e5 — the normal Pirc central break"
+    ],
+    "pieceManeuvers": [
+      "...Bg7 fianchetto on the long diagonal",
+      "...Nbd7 supporting the eventual ...e5",
+      "...Be6 / ...Qd7 connecting the rooks after castling"
+    ],
+    "strategicThemes": [
+      "Prophylaxis — block the wing storm at its first step",
+      "Turn White's h-pawn into a weakness",
+      "Standard Pirc structure once the storm is gone"
+    ],
+    "endgameTransitions": [
+      "White's stranded h4-pawn becomes a long-term target in any simplified position"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP2P/2N5/PPP1BPP1/R1BQK1NR b KQkq - 0 5",
+        "moves": [
+          "h5",
+          "Nf3",
+          "c6",
+          "O-O",
+          "O-O",
+          "Be3",
+          "Nbd7"
+        ],
+        "annotations": [
+          "...h5 — the prophylactic block: White wanted h5 next, you took it. The h-file is permanently closed and the bayonet has no point.",
+          "White completes development with Nf3, accepting the storm is dead.",
+          "...c6 — the flexible Pirc move: it grabs the b5 and d5 squares and prepares the central ...e5.",
+          "White castles; the dangerous-looking h-pawn on h4 is now just a structural awkwardness with nothing to attack.",
+          "...O-O — Black castles into safety, the kingside fully secured.",
+          "Be3 — White develops modestly, building a normal middlegame.",
+          "...Nbd7 — the knight backs the coming ...e5 break, eyeing the e5 square."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "title": "Defuse the Bayonet with ...h5",
+        "highlights": [
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-kholmov",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "rnbqkb1r/ppp1pp1p/3p1np1/8/2BPP3/2N5/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+    "title": "Kholmov System: Kick the Bishop with ...c6 and ...b5",
+    "overview": "The Kholmov (4.Bc4) is White's Italian-style try — the bishop comes out aggressively to c4, pressuring f7 and supporting a quick Qe2 + e5 plan. Black's response is concrete: ...Bg7 first to complete the fianchetto, then ...c6 to prepare ...b5, kicking the bishop off its diagonal. After 7.Bb3 a5, Black gains queenside space and the bishop on b3 stares at the b7-a8 diagonal closed by Black's own structure — permanently passive. The Kholmov turns into a Pirc with an extra-restricted White bishop, a clear strategic win for Black.",
+    "pawnBreaks": [
+      "...b5 (kick the Bc4 off the a2-g8 diagonal)",
+      "later ...a5-a4 to chase the bishop further or open the a-file"
+    ],
+    "pieceManeuvers": [
+      "...Bg7 fianchetto on the long diagonal",
+      "...Nbd7 supporting the future ...e5",
+      "Bb3 forced retreat after ...b5"
+    ],
+    "strategicThemes": [
+      "Concrete kick — force the aggressive bishop to a passive square",
+      "Queenside space with ...b5 and ...a5",
+      "Standard Pirc structure with an extra-restricted White bishop"
+    ],
+    "endgameTransitions": [
+      "The Bb3 stays passive long-term — a structural plus for Black in any endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/2BPP3/2N5/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+        "moves": [
+          "Bg7",
+          "Qe2",
+          "c6",
+          "Nf3",
+          "b5",
+          "Bb3",
+          "O-O",
+          "O-O",
+          "a5"
+        ],
+        "annotations": [
+          "...Bg7 — fianchetto first: the long diagonal is Black's primary weapon. Complete it before reacting to the Bc4.",
+          "Qe2 — Kholmov's idea: the queen overprotects e4 so White can push e5 in one move without trading queens.",
+          "...c6 — the launch-pad: a quiet move that prepares the powerful ...b5 thrust against the c4-bishop.",
+          "White completes development with Nf3, but Black has already set the trap.",
+          "...b5 — the kick. The c4-bishop has no aggressive square; the only safe retreat is back to b3.",
+          "Bb3 — forced retreat. The bishop now stares at b7-a8, closed by Black's own structure. Permanently passive.",
+          "White castles, accepting the structural concession.",
+          "...O-O — Black castles, now with a clear plus: queenside space, standard Pirc structure, a passive enemy bishop.",
+          "...a5 — gain more queenside space and prepare ...a4, pushing the bishop even further back to a2."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "g7",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "title": "Kick the Bishop, Gain Queenside Space",
+        "highlights": [
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
