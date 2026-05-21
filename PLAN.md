@@ -189,6 +189,63 @@ deviationMove?, explanation`. NOT overview/keyIdeas/plans/games.
   it belongs under the Marshall tab as that tab's Watch walkthrough,
   not the main-line showcase. (David)
 
+## FEATURE SPEC — "Discussion Practice" tab (David 2026-05-21, all decisions locked)
+
+A guided practice game vs the engine with a two-way, voice-first coaching
+conversation, grounded in live tools (masters explorer + Stockfish +
+books/DB). The killer feature — nobody else has it.
+
+The loop:
+- You play the engine in this tab.
+- **You → coach (ask anything about the live position):** "what should I
+  play?" / "why a4?" / "what do masters do?" / "is my move bad?" → real-time
+  answers from the masters explorer + Stockfish + books.
+- **Coach → you (Socratic, on a slip):** "why did you play that?" → you
+  answer → logged to Weaknesses as a TAGGED MISCONCEPTION → coach teaches
+  with the masters' move + a why.
+
+LOCKED decisions:
+1. **Trigger = layered.** Explorer while in book ("you left theory, masters
+   play X"), Stockfish once out of book ("that drops a pawn"). Gated to fire
+   only when off-book AND the move is actually worse — teach, don't nag.
+2. **Coach TAGS the misconception** (e.g. "ignored development tempo",
+   "overvalued the f7 attack"). Weaknesses becomes a drillable list of
+   recurring thinking errors, NOT a chat transcript. Feeds the Training Plan.
+3. **Skippable** — decline to answer → coach drops a one-line teach, plays on.
+4. **Voice-first, text optional, BOTH directions.** Speak via the Web Speech
+   mic input; coach replies via Polly TTS (verbosity-respecting, G5). Type if
+   you prefer.
+
+EXPLAINING THE EXPLORER (hard rule): never show raw percentages. Two numbers
+exist — POPULARITY ("played 42% of the time") and SCORE/W-D-L ("White scores
+58%", from White's side). Translate to plain English ("the main move",
+"roughly equal", "dubious") + always show game count (sample size). Coach
+speaks words, never digits.
+
+Already-built rails to reuse: Play-with-Coach (OpeningPlayMode); the
+master-play grounding pipeline (masterPlayWatcher + masterPlayContext
+injection already feeds the coach what masters play for the live FEN); the
+tactical-awareness TacticsLiveContext (feeds Stockfish eval/threats); coach
+chat; the Weaknesses system. NEW work: embed the chat in this tab bound to
+the live FEN; proactive "why" prompts on a slip; reasoning → tagged-weakness
+logging.
+
+Homes for the other tools (David): Training Plan + Game Review (your-games
+"you've played this N times, scored X%"); tactics-from-the-opening drills
+(puzzles.json punish-stage motifs); woodpecker rapid-fire trainer (blank
+board, no narration, resets on error, hint button).
+
+## AUDIT STATUS (loop running 2026-05-21)
+
+`audit-openings-interactive-loop.mjs` running vs localhost. Round 7 findings
+on ruy-lopez (0 console errors — no crash) are mostly STALE PROBE
+EXPECTATIONS, not product bugs: main-line Play navigates to /coach/play by
+design (probe expects opening-play-mode on-page); P4 tab-select checks
+aria-selected too fast after the URL→effect→state cycle; mount timeouts (8s)
+too tight for live drill/play init. The loop must be brought up to the
+current product (Play-room nav, tab selection, realistic timeouts) before it
+can certify "3 clean rounds." That probe-alignment IS the gate work.
+
 ## Next-session pickup
 
 1. Read this file. Confirm main HEAD and which phases have merged PRs.
