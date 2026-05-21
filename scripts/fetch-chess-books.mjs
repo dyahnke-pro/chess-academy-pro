@@ -68,6 +68,67 @@ const BOOKS = [
   },
 ];
 
+// CANDIDATES — hand-picked public-domain chess classics to ADD to the
+// corpus (David 2026-05-21: "get as many chess books as we can"). These
+// have NO hardcoded id: the fetcher discovers it via gutendex search and
+// the expectedTitle/Author regexes REJECT any wrong match — so this is
+// curation, not guessing. A candidate that isn't on Gutenberg simply
+// reports "search-no-match" and is skipped (no fabrication, no harm).
+// Réti leads the list: "Modern Ideas in Chess" is the hypermodern
+// manifesto — the philosophical roots of the Pirc/KID/Grünfeld families
+// that the current pre-1930s corpus doesn't reach by name.
+const CANDIDATES = [
+  {
+    slug: 'reti-modern-ideas-in-chess',
+    search: 'Modern Ideas in Chess Reti',
+    expectedTitleRe: /modern ideas in chess/i,
+    expectedAuthorRe: /r[eé]ti/i,
+    focus: 'HYPERMODERN principles — control the centre from a distance, the fianchetto, undermining the pawn centre (the Pirc/KID philosophical roots)',
+  },
+  {
+    slug: 'emanuel-lasker-common-sense-in-chess',
+    search: 'Common Sense in Chess Lasker',
+    expectedTitleRe: /common sense in chess/i,
+    expectedAuthorRe: /lasker,?\s*emanuel|emanuel\s+lasker/i,
+    focus: 'classical attacking + positional principles, development, the centre',
+  },
+  {
+    slug: 'mason-art-of-chess',
+    search: 'The Art of Chess Mason',
+    expectedTitleRe: /art of chess/i,
+    expectedAuthorRe: /mason/i,
+    focus: 'classical middlegame artistry, combinations, planning',
+  },
+  {
+    slug: 'mason-principles-of-chess',
+    search: 'The Principles of Chess Mason',
+    expectedTitleRe: /principles of chess/i,
+    expectedAuthorRe: /mason/i,
+    focus: 'positional principles in theory and practice',
+  },
+  {
+    slug: 'freeborough-ranken-chess-openings',
+    search: 'Chess Openings Ancient and Modern',
+    expectedTitleRe: /chess openings/i,
+    expectedAuthorRe: /freeborough|ranken/i,
+    focus: 'comprehensive classical opening analysis',
+  },
+  {
+    slug: 'gossip-chess-players-manual',
+    search: "The Chess-Player's Manual Gossip",
+    expectedTitleRe: /chess.?player.?s manual/i,
+    expectedAuthorRe: /gossip/i,
+    focus: 'opening theory + classical lines, instructional manual',
+  },
+  {
+    slug: 'steinitz-modern-chess-instructor',
+    search: 'The Modern Chess Instructor Steinitz',
+    expectedTitleRe: /modern chess instructor/i,
+    expectedAuthorRe: /steinitz/i,
+    focus: 'the scientific/positional school — the roots of modern strategy',
+  },
+];
+
 async function fetchWithTimeout(url, ms = 30000) {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), ms);
@@ -81,7 +142,33 @@ async function fetchWithTimeout(url, ms = 30000) {
   }
 }
 
+/** Resolve a candidate's Gutenberg id by searching gutendex, accepting
+ *  only a result whose title AND author match the candidate's regexes.
+ *  Returns the id or null (no match → the book is skipped, never faked). */
+async function resolveBookId(book) {
+  const url = `https://gutendex.com/books/?search=${encodeURIComponent(book.search)}`;
+  console.log(`\n[${book.slug}] searching gutendex for "${book.search}"`);
+  const r = await fetchWithTimeout(url);
+  if (!r.ok) { console.log(`  search fetch ${r.status}`); return null; }
+  const data = await r.json();
+  for (const res of data.results || []) {
+    const authors = (res.authors || []).map(a => a.name).join('; ');
+    if (book.expectedTitleRe.test(res.title || '') && book.expectedAuthorRe.test(authors)) {
+      console.log(`  matched #${res.id}: "${res.title}" — ${authors}`);
+      return res.id;
+    }
+  }
+  console.log(`  no PD match (checked ${(data.results || []).length} results)`);
+  return null;
+}
+
 async function fetchBook(book) {
+  // Candidates carry no id — discover it (and verify identity) via search.
+  if (!book.id) {
+    const id = await resolveBookId(book);
+    if (!id) return { ...book, status: 'search-no-match' };
+    book = { ...book, id };
+  }
   // Pull metadata first to verify author + title match
   const metaUrl = `https://gutendex.com/books/${book.id}`;
   console.log(`\n[${book.slug}] verifying #${book.id}`);
@@ -140,9 +227,10 @@ async function fetchBook(book) {
 async function main() {
   await rm(OUT_DIR, { recursive: true, force: true });
   await mkdir(OUT_DIR, { recursive: true });
-  console.log(`Fetching ${BOOKS.length} verified chess books from Gutenberg → ${OUT_DIR}/`);
+  const all = [...BOOKS, ...CANDIDATES];
+  console.log(`Fetching ${BOOKS.length} verified + ${CANDIDATES.length} candidate chess books from Gutenberg → ${OUT_DIR}/`);
   const manifest = [];
-  for (const book of BOOKS) {
+  for (const book of all) {
     try {
       manifest.push(await fetchBook(book));
     } catch (e) {
@@ -156,7 +244,7 @@ async function main() {
   );
   console.log(`\n=== SUMMARY ===`);
   const ok = manifest.filter(b => b.status === 'fetched');
-  console.log(`fetched: ${ok.length}/${BOOKS.length}`);
+  console.log(`fetched: ${ok.length}/${all.length}`);
   for (const b of ok) console.log(`  #${String(b.gutenbergId).padEnd(6)} ${b.title} — ${b.authors}`);
   const failed = manifest.filter(b => b.status !== 'fetched');
   if (failed.length) {
