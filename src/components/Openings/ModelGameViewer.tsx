@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Chess } from 'chess.js';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
+import { voiceService } from '../../services/voiceService';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft,
@@ -103,6 +104,24 @@ export function ModelGameViewer({
     : null;
 
   const isCriticalMove = criticalMoment !== null;
+
+  // Voice the critical-moment narration as the viewer lands on it — the
+  // model game is "voiced via the viewer" (playbook §5). Speaks once per
+  // moment (ref-guarded against re-render re-fires). Verbosity gating
+  // (silent / brief caps) is enforced inside voiceService.speak (G5), so
+  // a "none" setting stays silent and "brief" clips to the budget.
+  const lastSpokenMomentRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!criticalMoment) {
+      lastSpokenMomentRef.current = null;
+      return;
+    }
+    const key = `${criticalMoment.moveNumber}-${criticalMoment.color}`;
+    if (lastSpokenMomentRef.current === key) return;
+    lastSpokenMomentRef.current = key;
+    const text = criticalMoment.annotation;
+    if (text) void voiceService.speak(text);
+  }, [criticalMoment]);
 
   const customArrows = criticalMoment
     ? annotationArrowsToBoard(criticalMoment.arrows)
