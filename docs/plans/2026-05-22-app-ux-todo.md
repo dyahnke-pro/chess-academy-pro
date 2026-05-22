@@ -118,3 +118,21 @@ must communicate, and the empty-states should nudge toward.
 10. (Future) **Capture** mistakes from real games → **drill** them.
 
 The flywheel in one line: *learn it, play it, find the holes, drill them shut.*
+
+---
+
+## TODO 3 — Guide users back to Learn/Practice/Play after Watch
+
+Problem: Watch is the satisfying part; users forget to climb L→P→P. Fixes:
+1. **Tiered end-of-Watch hand-off.** The end-of-Watch CTA should tee up the
+   NEXT RUNG, not skip to Play: Watch→"Now Learn it", Learn→"Practice it",
+   Practice→"Play it". (Today's CTA jumps straight to Play — fix to step
+   through the ladder.)
+2. **Show the unfinished ladder everywhere.** Per line: `Watched ✓ · Learn ○
+   · Practice ○ · Play ○` with the next rung lit. An incomplete ladder is a
+   standing nudge.
+3. **Training Plan resurfaces watched-but-not-learned lines** as today's reps
+   ("You watched the Advance Caro — Learn it now, 3 min"). Re-entry point.
+   Once SRS lands, due reps are the daily return reason.
+- **Structural lever (already decided):** Watch earns only `discovered`, never
+  `learned` — the system withholds "done" until they climb, so it's the nudge.
