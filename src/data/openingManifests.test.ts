@@ -23,6 +23,7 @@ import manifests from './opening-manifests.json';
 import repertoireRaw from './repertoire.json';
 import middlegamePlansRaw from './middlegame-plans.json';
 import modelGamesRaw from './model-games.json';
+import { FIRST_CLASS_OPENING_IDS } from './lessons/registry';
 import type { OpeningRecord, MiddlegamePlan } from '../types';
 
 interface ModelGameLike { openingId: string }
@@ -88,6 +89,19 @@ const FIELDS: (keyof ManifestEntry)[] = [
 describe('opening-masterclass content manifests', () => {
   // Filter out meta keys (the underscore-prefixed _comment / _schema).
   const openingIds = Object.keys(manifests).filter((k) => !k.startsWith('_'));
+
+  // Hole 2: a new first-class opening (one with a main lesson registered
+  // in lessons/registry.ts) must NOT be able to ship without a manifest —
+  // otherwise its content floors are never declared and the count gate
+  // passes vacuously. Bind the manifest to the lesson registry so adding
+  // an opening forces a manifest entry.
+  it('every first-class (lesson-registered) opening has a manifest entry', () => {
+    const missing = FIRST_CLASS_OPENING_IDS.filter((id) => !openingIds.includes(id));
+    expect(
+      missing,
+      `These openings have a masterclass lesson but no opening-manifests.json entry — add one (declare its content floors): ${missing.join(', ')}`,
+    ).toEqual([]);
+  });
 
   for (const openingId of openingIds) {
     const declared = (manifests as Record<string, ManifestEntry>)[openingId];

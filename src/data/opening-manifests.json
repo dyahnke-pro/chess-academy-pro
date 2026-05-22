@@ -1,5 +1,5 @@
 {
-  "_comment": "Opening-masterclass content manifests (David 2026-05-22). Each first-class opening declares its MINIMUM curated content counts; the openingManifests test gates against them. If a manifest entry exceeds the current count, the build fails — preventing accidental regressions (deleted variations, dropped plans, lost weapons) and forcing intentional demotions to be explicit. Floors should track the CURRENT state and ratchet UP as content lands; never down without explicit demotion in this file.",
+  "_comment": "Opening-masterclass content manifests (David 2026-05-22). Each first-class opening declares its MINIMUM curated content counts; the openingManifests test gates against them. These are REGRESSION FLOORS, never targets. David's directive (2026-05-22): NO hard rules on the NUMBER of key ideas / traps / variations. A floor is simply 'what was verified as ground truth at last commit' — set it to the count you could verify (it may be 2, or 9), never pad to hit a number, and there is no upper cap (more verifiable content is always welcome — the gate only checks actual >= floor). The floor exists ONLY to catch accidental REGRESSIONS (a deleted variation, a dropped plan, a lost weapon); it must never be read as 'this opening should have N of X'. Floors ratchet UP as verified content lands; down only via explicit demotion here.",
   "_schema": {
     "variations": "min entries in repertoire.json:variations",
     "middlegamePlans": "min plans in middlegame-plans.json with openingId match, id NOT ending -endgame",
@@ -34,6 +34,15 @@
     "modelGames": 3,
     "weapons": 7,
     "warnings": 1,
+    "keyIdeas": 4
+  },
+  "caro-kann": {
+    "variations": 8,
+    "middlegamePlans": 0,
+    "endgamePlans": 0,
+    "modelGames": 3,
+    "weapons": 0,
+    "warnings": 0,
     "keyIdeas": 4
   }
 }

@@ -166,10 +166,12 @@ const GATE_TESTS = [
   'src/data/lessons/narrationAccuracy.test.ts',
   'src/data/lessons/narrationGrounding.test.ts',
   'src/data/lessons/lessonDepth.test.ts',
+  'src/data/lessons/courseScope.test.ts',
   'src/data/lessons/pircIntegrity.test.ts',
   'src/data/repertoire-orientation.test.ts',
   'src/data/pro-repertoires-orientation.test.ts',
   'src/data/openingManifests.test.ts',
+  'src/data/modelGames.test.ts',
   'src/services/middlegamePlanner.test.ts',
   'src/components/Openings/MiddlegamePlansSection.test.tsx',
   'src/components/Openings/EndgamePlansSection.test.tsx',
@@ -263,6 +265,21 @@ if (FULL) {
         summary: summarizePlaywright,
       });
     }
+  }
+
+  // Hole 6 — masters legitimacy (network, via prod proxy) + Stockfish
+  // soundness (engine, auto-skips when no UCI binary) on past-book lesson
+  // plies. Doesn't need the dev server. Only when masterclass content
+  // changed, since it's a multi-minute network/engine pass.
+  const mcTouched = changedFiles().some(
+    (f) => f.startsWith('src/data/lessons/') || f === 'src/data/middlegame-plans.json',
+  );
+  if (mcTouched) {
+    console.log('');
+    console.log('  ── Hole 6: past-book verification (masters + Stockfish) ──');
+    runStep('hole6-pastbook-verify'.padEnd(38), 'npx',
+      ['vitest', 'run', 'src/data/lessons/mastersCoverage.test.ts'],
+      { env: { RUN_MASTERS_AUDIT: '1' }, summary: summarizeVitest });
   }
 }
 

@@ -14,6 +14,10 @@ interface LessonPlayerProps {
   /** Fired once when the student reaches the final beat (lesson watched
    *  through). The host uses it to mark the line "Learned". */
   onComplete?: () => void;
+  /** When set, a "play it out against the coach" CTA appears once the lesson
+   *  reaches its final beat (David 2026-05-22 — continue playing at the end
+   *  of Watch). Hands off to Play, locked to this opening/line. */
+  onContinueToPlay?: () => void;
 }
 
 function fenForMoves(moves: string[]): string {
@@ -38,7 +42,7 @@ function moveSquares(prefix: string[], move: string): { from: string; to: string
  * via the voice-gated useStrictNarration runtime. Used by the openings
  * walkthrough surface whenever a LessonScript exists for the opening.
  */
-export function LessonPlayer({ script, onExit, onComplete }: LessonPlayerProps): JSX.Element {
+export function LessonPlayer({ script, onExit, onComplete, onContinueToPlay }: LessonPlayerProps): JSX.Element {
   const { settings } = useSettings();
   const voiceEnabled = settings.voiceEnabled;
 
@@ -306,6 +310,18 @@ export function LessonPlayer({ script, onExit, onComplete }: LessonPlayerProps):
           <ChevronRight size={22} />
         </button>
       </div>
+      {atEnd && onContinueToPlay && (
+        <div className="px-4 pb-[calc(4.75rem+env(safe-area-inset-bottom,0px))] md:pb-4">
+          <button
+            type="button"
+            onClick={onContinueToPlay}
+            data-testid="lesson-continue-play"
+            className="w-full py-3 rounded-2xl border-2 border-amber-500/40 bg-amber-500/10 text-amber-200 font-semibold"
+          >
+            Play it out against the coach →
+          </button>
+        </div>
+      )}
     </div>
   );
 }

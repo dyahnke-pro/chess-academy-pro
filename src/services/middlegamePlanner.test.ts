@@ -7,6 +7,7 @@ import {
   resolveMiddlegameSessionWithFallback,
 } from './middlegamePlanner';
 import { stockfishEngine } from './stockfishEngine';
+import { FIRST_CLASS_OPENING_IDS, expectedOrientation } from '../data/lessons/registry';
 
 describe('middlegamePlanner', () => {
   it('finds an exact plan by openingId', () => {
@@ -250,126 +251,55 @@ async function assertLeadEye(line: LeadEyeLine, id: string): Promise<void> {
   });
 }
 
-describe('Ruy Lopez variation middlegame plans', () => {
-  const RUY_VARIATION_PLAN_IDS = [
-    'mp-ruylopez-d4',
-    'mp-ruylopez-f4',
-    'mp-ruylopez-marshall',
-    'mp-ruylopez-berlin',
-    'mp-ruylopez-open',
-    'mp-ruylopez-exchange',
-    'mp-ruylopez-breyer',
-    'mp-ruylopez-chigorin',
-    'mp-ruylopez-zaitsev',
-    'mp-ruylopez-exchange-endgame',
-    'mp-ruylopez-berlin-endgame',
-    'mp-ruylopez-breyer-endgame',
-    'mp-ruylopez-chigorin-endgame',
-    'mp-ruylopez-zaitsev-endgame',
-    'mp-ruylopez-open-endgame',
-  ];
+// Hole 2: sweep every plan for every first-class opening (from the lesson
+// registry) instead of hardcoding Ruy + Pirc plan-id lists. This auto-
+// covers a new opening's plans AND closed a real gap — Vienna's plans were
+// never in either hardcoded list, so they shipped ungated. Orientation is
+// driven by repertoire.json color via expectedOrientation, so a black or
+// white opening is checked against its true student side.
+interface PlanRow {
+  id: string;
+  openingId: string;
+  criticalPositionFen?: string;
+  playableLines: LeadEyeLine[];
+}
 
-  for (const id of RUY_VARIATION_PLAN_IDS) {
-    it(`${id}: every playable line is legal, annotated, and arrow-consistent`, async () => {
+describe('first-class opening middlegame plans (registry sweep)', () => {
+  for (const openingId of FIRST_CLASS_OPENING_IDS) {
+    it(`${openingId}: every plan's lines are legal, annotated, lead-the-eye-consistent, and correctly oriented`, async () => {
       const { Chess } = await import('chess.js');
-      const plans = (await import('../data/middlegame-plans.json')).default as Array<{
-        id: string;
-        openingId: string;
-        criticalPositionFen: string;
-        playableLines: Array<{
-          fen: string;
-          moves: string[];
-          annotations: string[];
-          arrows?: Array<Array<{ from: string; to: string }>>;
-        }>;
-      }>;
-      const plan = plans.find((p) => p.id === id);
-      expect(plan, `plan ${id} missing`).toBeTruthy();
-      expect(plan!.openingId).toBe('ruy-lopez');
-      expect(plan!.playableLines.length).toBeGreaterThan(0);
+      const plans = ((await import('../data/middlegame-plans.json')).default as PlanRow[]).filter(
+        (p) => p.openingId === openingId,
+      );
+      // A freshly-registered masterclass opening is built incrementally —
+      // it may have its flagship lesson before any plan is authored. Zero
+      // plans is a valid mid-build state (the manifest floor governs the
+      // minimum, and floor 0 is allowed). What this gate enforces is that
+      // plans which DO exist are correct.
+      if (plans.length === 0) return;
 
-      for (const line of plan!.playableLines) {
-        expect(line.annotations.length).toBe(line.moves.length);
-        const c = new Chess(line.fen);
-        line.moves.forEach((san) => {
-          c.move(san); // chess.js throws on an illegal move, failing the test
-        });
-        await assertLeadEye(line as LeadEyeLine, id);
+      const orientation = expectedOrientation(openingId);
+      expect(orientation, `${openingId} missing repertoire.json color`).not.toBeNull();
+
+      for (const plan of plans) {
+        expect(plan.playableLines.length, `plan ${plan.id} has no playable lines`).toBeGreaterThan(0);
+        for (const line of plan.playableLines) {
+          expect(line.annotations.length, `${plan.id}: annotations not 1:1 with moves`).toBe(line.moves.length);
+          const c = new Chess(line.fen);
+          line.moves.forEach((san) => {
+            c.move(san); // chess.js throws on an illegal move, failing the test
+          });
+          await assertLeadEye(line, plan.id);
+        }
+
+        const session = sessionFromPlan(
+          plan as unknown as Parameters<typeof sessionFromPlan>[0],
+          { orientation: orientation! },
+        );
+        expect(session, `session for ${plan.id}`).not.toBeNull();
+        expect(session!.steps.length, `steps for ${plan.id}`).toBeGreaterThan(0);
+        expect(session!.orientation, `orientation for ${plan.id}`).toBe(orientation);
       }
     });
   }
-
-  it('each Ruy variation plan builds a white-oriented middlegame session', async () => {
-    const plans = (await import('../data/middlegame-plans.json')).default as Array<{
-      id: string;
-    }>;
-    for (const id of RUY_VARIATION_PLAN_IDS) {
-      const plan = plans.find((p) => p.id === id);
-      // sessionFromPlan takes the canonical MiddlegamePlan shape; the JSON
-      // row satisfies it. Cast through unknown since the JSON import is
-      // typed loosely.
-      const session = sessionFromPlan(plan as unknown as Parameters<typeof sessionFromPlan>[0], {
-        orientation: 'white',
-      });
-      expect(session, `session for ${id}`).not.toBeNull();
-      expect(session!.steps.length, `steps for ${id}`).toBeGreaterThan(0);
-      expect(session!.orientation).toBe('white');
-    }
-  });
-});
-
-describe('Pirc Defence variation middlegame plans', () => {
-  const PIRC_VARIATION_PLAN_IDS = [
-    'mp-pircdefence-austrian',
-    'mp-pircdefence-classical',
-    'mp-pircdefence-150',
-    'mp-pircdefence-byrne',
-    'mp-pircdefence-lion',
-    'mp-pircdefence-fianchetto',
-    'mp-pircdefence-czech',
-    'mp-pircdefence-austrian-e5',
-  ];
-
-  for (const id of PIRC_VARIATION_PLAN_IDS) {
-    it(`${id}: every playable line is legal, annotated, and arrow-consistent`, async () => {
-      const { Chess } = await import('chess.js');
-      const plans = (await import('../data/middlegame-plans.json')).default as Array<{
-        id: string;
-        openingId: string;
-        criticalPositionFen: string;
-        playableLines: Array<{
-          fen: string;
-          moves: string[];
-          annotations: string[];
-          arrows?: Array<Array<{ from: string; to: string }>>;
-        }>;
-      }>;
-      const plan = plans.find((p) => p.id === id);
-      expect(plan, `plan ${id} missing`).toBeTruthy();
-      expect(plan!.openingId).toBe('pirc-defence');
-      expect(plan!.playableLines.length).toBeGreaterThan(0);
-
-      for (const line of plan!.playableLines) {
-        expect(line.annotations.length).toBe(line.moves.length);
-        const c = new Chess(line.fen);
-        line.moves.forEach((san) => {
-          c.move(san);
-        });
-        await assertLeadEye(line as LeadEyeLine, id);
-      }
-    });
-  }
-
-  it('each Pirc variation plan builds a black-oriented middlegame session', async () => {
-    const plans = (await import('../data/middlegame-plans.json')).default as Array<{ id: string }>;
-    for (const id of PIRC_VARIATION_PLAN_IDS) {
-      const plan = plans.find((p) => p.id === id);
-      const session = sessionFromPlan(plan as unknown as Parameters<typeof sessionFromPlan>[0], {
-        orientation: 'black',
-      });
-      expect(session, `session for ${id}`).not.toBeNull();
-      expect(session!.steps.length, `steps for ${id}`).toBeGreaterThan(0);
-      expect(session!.orientation).toBe('black');
-    }
-  });
 });
