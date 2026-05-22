@@ -250,3 +250,37 @@ Revised next-session order:
    bad move → masters + Stockfish crush it → gem/mini-trap per line). THE must.
 2. **SRS** (retention — makes it stick).
 3. **Opening #2** (needs David's repertoire).
+
+---
+
+## ⭐⭐ DIRECTIVE — RESTRUCTURE THE ENTIRE WEAPON SECTION (David 2026-05-22)
+
+"This was the whole point to me building this app." The weapon section is
+being REDEFINED around the systematic punish-the-inaccuracy engine (TODO 3e),
+not around famous named traps.
+
+**Old model:** weapons = hand-authored famous named traps (Qe2 Nd6#, etc.) —
+rare, most openings have few/none, section often empty.
+
+**New model:**
+- **PRIMARY = mined "punish the inaccuracy" gems (TODO 3e).** Every line gets
+  "here's the common mistake your opponent actually makes, here's how you
+  crush it" — amateur DB finds the frequent-but-poor move, masters+Stockfish
+  confirm the punish, chess.js validates. Scales to every line / every
+  opening. This is the SPINE of the section. It's never empty again.
+- **Named traps = the rare jewels layered ON TOP** (Qe2, Légal's, Fishing
+  Pole…) — kept where real, but no longer the *definition* of weapons.
+
+**Build implications:**
+- Data model: a generated-gems store/file (mined inaccuracy → punish line +
+  insight + freq + engine eval), alongside the existing hand-authored
+  *TrapLessons.ts named traps.
+- Weapons-section UI: gems as the default list, named traps highlighted.
+- **Playbook §3 (weapons rules) must be REWRITTEN** when this lands — it
+  currently assumes hand-authored-only. Update the doctrine to: gems primary
+  (generated + gated), named traps as the curated overlay.
+- Pairs with / built on TODO 3e (the generator). 3e is the engine; this is
+  the section rebuilt around it.
+
+This is the #1 architectural priority alongside 3e — David's core vision for
+the app.
