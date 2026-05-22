@@ -39,6 +39,7 @@ import {
 } from '../../data/lessons/viennaTrapLessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
+import { MasterclassCoachChat } from './MasterclassCoachChat';
 import commonMistakesData from '../../data/common-mistakes.json';
 import middlegamePlansData from '../../data/middlegame-plans.json';
 import checkpointQuizzesData from '../../data/checkpoint-quizzes.json';
@@ -934,6 +935,7 @@ export function OpeningDetailPage(): JSX.Element {
 
   return (
     <div className="flex flex-col flex-1 p-4 md:p-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 overflow-y-auto" data-testid="opening-detail">
+      <MasterclassCoachChat openingId={opening.id} variationName={opening.variations?.[activeVariationIndex]?.name} />
       {/* Header */}
       <div className="flex items-center gap-3 mb-5">
         <button
