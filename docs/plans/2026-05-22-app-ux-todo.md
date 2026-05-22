@@ -181,3 +181,26 @@ they'll actually meet. Instead:
   power-up. Gate traps behind mastery because they're advanced/situational
   (don't drill the Qe2 punish before you know the line). Only fires where a
   REAL trap exists (Caro = the one Qe2 warning; empty > forced).
+
+### TODO 3d — "Hidden gem" 💎 reward when a line has no trap (David 2026-05-22)
+
+So EVERY line has an unlockable reward, no dead-ends. Reward ladder per line:
+**model game (always) → trap/weapon (if real) → else a HIDDEN GEM.**
+
+A gem = a piece of powerful, line-specific knowledge: *how to punish a common
+INACCURACY by the opponent.* On-ethos because it's SOURCED, never invented —
+same grounding as everything else:
+- **Explorer** finds a move the opponent plays reasonably often at amateur
+  level but that SCORES POORLY (a real, common inaccuracy — it shows up in the
+  games the user will actually face, not a textbook curiosity).
+- **Stockfish** confirms the punishing reply is genuinely best/winning.
+- **chess.js** validates the line.
+- Shape: "When White plays the lazy [common inferior move] here, punish with
+  [engine-confirmed reply] — you're already better." Gate it on Stockfish
+  soundness, like the rest.
+
+This is the playbook §7 "exploit inaccuracy" idea repackaged as the per-line
+unlock — and arguably MORE useful than a trap (traps are rare; inaccuracies
+are everywhere, so every line yields at least one gem). Builder task like the
+model games: query the line's key positions for a frequent-but-inferior
+opponent move + the engine-best punish, author the insight.
