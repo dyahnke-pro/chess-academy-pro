@@ -7,6 +7,7 @@ import { VIENNA_GAME_LESSON } from './vienna';
 import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
 import { CARO_KANN_LESSON } from './caroKann';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
+import repertoire from '../repertoire.json';
 
 /**
  * Registry of story-first master-class lessons.
@@ -115,3 +116,58 @@ export function buildLessonReferenceBlock(text: string | undefined | null): stri
   ].join('\n');
 }
 
+
+// ─── Course-scoped coach (David 2026-05-22) ─────────────────────────────
+//
+// On a masterclass surface the coach must KNOW which course/variation the
+// student is inside, so it stays on target instead of wandering into a
+// random opening. `buildCourseScope` turns an openingId (+ optional
+// variation tab) into a system-prompt addition + an opening greeting. The
+// caller passes `systemAddition` as the 2nd arg of getCoachChatResponse
+// (the same slot MiddlegamePractice uses for its plan context) — so this
+// needs NO change to the coach API. Scoping is explicit (by tab), not
+// text-matched, so "what's the plan here?" under the Caro tab still anchors
+// the coach to the Caro.
+
+interface RepertoireLite { id: string; name: string; color: 'white' | 'black'; keyIdeas?: string[]; variations?: { name: string }[] }
+const REPERTOIRE = repertoire as RepertoireLite[];
+
+export interface CourseScope {
+  /** Pass as getCoachChatResponse's `systemAddition` arg. */
+  systemAddition: string;
+  /** Opening greeting that names the course, e.g. shown when chat opens. */
+  greeting: string;
+  /** Human label for the course (opening + variation). */
+  label: string;
+}
+
+/** Build the coach's course-scope for a masterclass tab. Returns null when
+ *  the opening isn't a known masterclass repertoire entry. */
+export function buildCourseScope(
+  openingId: string | undefined | null,
+  variationName?: string | null,
+): CourseScope | null {
+  if (!openingId) return null;
+  const op = REPERTOIRE.find((o) => o.id === openingId);
+  if (!op) return null;
+
+  const label = variationName ? `${op.name} — ${variationName}` : `${op.name} Main Line`;
+
+  // Prefer the variation lesson's ideas, fall back to the main lesson, then
+  // the curated repertoire keyIdeas. sayShort is the concise spoken idea.
+  const lesson = (variationName && getVariationLessonScript(openingId, variationName)) || getLessonScript(openingId);
+  const ideasFromLesson = lesson
+    ? lesson.beats.map((b) => b.sayShort).filter((s): s is string => !!s)
+    : [];
+  const ideas = (ideasFromLesson.length ? ideasFromLesson : op.keyIdeas ?? []).slice(0, 6);
+
+  const ideaBlock = ideas.length ? `\nVerified ideas for this line (draw on these, don't recite):\n${ideas.map((i) => `• ${i}`).join('\n')}` : '';
+
+  const systemAddition = [
+    '[MASTERCLASS COURSE SCOPE]',
+    `The student is inside an interactive masterclass for the ${label} (they play ${op.color}). Keep every answer focused on THIS opening and variation — its plans, move-order, structures, and the ideas below. If they ask about a different opening, answer briefly then steer back to the ${label}. Answer naturally; do not lecture unprompted.`,
+    ideaBlock,
+  ].join('\n');
+
+  return { systemAddition, greeting: `What would you like to know about the ${label}?`, label };
+}
