@@ -51,7 +51,7 @@ export function CommonMistakesSection({
         </h3>
       </div>
       <p className="text-xs text-theme-text-muted mb-3">
-        Natural-looking moves that are actually wrong. Watch them play out so you see why.
+        Natural-looking moves that are actually wrong. Each one plays out so the reason is on the board.
       </p>
       <div className="space-y-2">
         {mistakes.map((mistake, i) => {
