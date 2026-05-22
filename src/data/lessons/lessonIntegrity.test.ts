@@ -3,12 +3,18 @@ import { Chess, type Square } from 'chess.js';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { RUY_TRAP_LESSONS, RUY_TRAP_DEFS, getRuyTrapPlayableLine } from './ruyTrapLessons';
+import { VIENNA_GAME_LESSON } from './vienna';
+import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
+import { VIENNA_TRAP_LESSONS } from './viennaTrapLessons';
 import { buildLessonReferenceBlock } from './index';
 
 const lessons = [
   RUY_LOPEZ_LESSON,
   ...Object.values(RUY_VARIATION_LESSONS),
   ...Object.values(RUY_TRAP_LESSONS),
+  VIENNA_GAME_LESSON,
+  ...Object.values(VIENNA_VARIATION_LESSONS),
+  ...Object.values(VIENNA_TRAP_LESSONS),
 ];
 
 function fileRank(sq: string): [number, number] {

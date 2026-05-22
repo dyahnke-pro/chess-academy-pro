@@ -21,6 +21,7 @@ import { ListenableProse } from './ListenableProse';
 import { VariationTabs, buildVariationTabs } from './VariationTabs';
 import { getRuyTabPlanIds } from '../../services/ruyMasterclassTabs';
 import { getPircTabPlanIds } from '../../services/pircMasterclassTabs';
+import { getViennaTabPlanIds } from '../../services/viennaMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
 import {
@@ -29,6 +30,12 @@ import {
   getRuyTrapPlayableLine,
   type RuyTrapDef,
 } from '../../data/lessons/ruyTrapLessons';
+import {
+  VIENNA_TRAP_LESSONS,
+  getViennaTrapsForTab,
+  getViennaTrapPlayableLine,
+  type ViennaTrapDef,
+} from '../../data/lessons/viennaTrapLessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
 import commonMistakesData from '../../data/common-mistakes.json';
@@ -465,11 +472,16 @@ export function OpeningDetailPage(): JSX.Element {
   }
 
   // Named-trap masterclass lesson (hand-authored show -> snap-back beats,
-  // tab-routed via getRuyTrapsForTab). Watch plays the beat lesson.
-  if (viewMode === 'named-trap' && activeNamedTrapId && activeNamedTrapId in RUY_TRAP_LESSONS) {
+  // tab-routed via getRuyTrapsForTab / getViennaTrapsForTab). Watch plays
+  // the beat lesson. Per-opening lookup falls through to the right module.
+  const namedTrapLessons =
+    opening.id === 'ruy-lopez' ? RUY_TRAP_LESSONS
+      : opening.id === 'vienna-game' ? VIENNA_TRAP_LESSONS
+        : {};
+  if (viewMode === 'named-trap' && activeNamedTrapId && activeNamedTrapId in namedTrapLessons) {
     return (
       <LessonPlayer
-        script={RUY_TRAP_LESSONS[activeNamedTrapId]}
+        script={namedTrapLessons[activeNamedTrapId]}
         onExit={handleExit}
       />
     );
@@ -482,7 +494,10 @@ export function OpeningDetailPage(): JSX.Element {
     (viewMode === 'named-trap-learn' || viewMode === 'named-trap-practice') &&
     activeNamedTrapId
   ) {
-    const trapLine = getRuyTrapPlayableLine(activeNamedTrapId);
+    const trapLine =
+      opening.id === 'ruy-lopez' ? getRuyTrapPlayableLine(activeNamedTrapId)
+        : opening.id === 'vienna-game' ? getViennaTrapPlayableLine(activeNamedTrapId)
+          : null;
     if (trapLine) {
       return (
         <PlayableLinePlayer
@@ -783,17 +798,25 @@ export function OpeningDetailPage(): JSX.Element {
   // variation name, not the display label.
   const pircTabKey = isVariation ? (selectedVariation?.name ?? '').toLowerCase() : 'main';
   const planPrefix = `mp-${opening.id.replace(/-/g, '')}`;
-  // Ruy tabs use the HAND-PICKED plan table (no algo show-all). Other
-  // openings fall back: variation → its own plan, main line → all plans.
+  // Curated openings (Ruy, Pirc, Vienna) use HAND-PICKED plan tables (no
+  // algo show-all). Other openings fall back: variation → its own plan,
+  // main line → all plans.
   const subjectPlanIds =
     getRuyTabPlanIds(opening.id, tabKey) ??
     getPircTabPlanIds(opening.id, pircTabKey) ??
+    getViennaTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
-  // HAND-PICKED named traps for this tab (Ruy masterclass beat lessons).
-  // The Weapons/traps section is REMOVED (David 2026-05-21): only the
-  // "watch out for" warnings stay. We still route NAMED warnings per tab.
-  const namedTraps: RuyTrapDef[] = getRuyTrapsForTab(opening.id === 'ruy-lopez' ? tabKey : '');
+  // HAND-PICKED named traps for this tab (hand-authored beat lessons).
+  // The STANDALONE Weapons SECTION HEADER is removed (David 2026-05-21:
+  // no blank/empty masterclass zones), but each real student-side WEAPON
+  // still gets its own green-outlined tile. Same WLPP shape as warnings.
+  // Ruy → ruyTrapLessons; Vienna → viennaTrapLessons. Per-opening lookup.
+  const namedTraps: (RuyTrapDef | ViennaTrapDef)[] =
+    opening.id === 'ruy-lopez' ? getRuyTrapsForTab(tabKey)
+      : opening.id === 'vienna-game' ? getViennaTrapsForTab(tabKey)
+        : [];
+  const namedWeapons = namedTraps.filter((t) => t.kind === 'weapon');
   const namedWarnings = namedTraps.filter((t) => t.kind === 'warning');
 
   // Zone self-hide flags — NO blank/empty zones on the masterclass
@@ -1151,6 +1174,37 @@ export function OpeningDetailPage(): JSX.Element {
         filterPlanIds={subjectPlanIds}
         emptyNote={mainPlanNote}
       />
+
+      {/* Named WEAPONS for THIS tab — student-side punishments when the
+          opponent slips. A single green-outlined card (no "Weapons" SECTION
+          header — no blank zones per playbook §0.5), rendered between
+          Master and Pitfalls so the arc reads: plans → weapons you wield
+          → things you avoid. Same WLPP shape as the warnings tile. */}
+      {namedWeapons.length > 0 && (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-green-500/30" data-testid="named-weapon-card">
+          <div className="flex items-center gap-2 mb-3">
+            <Swords size={14} className="text-green-500" />
+            <h3 className="text-sm font-semibold text-theme-text">
+              {namedWeapons.length === 1 ? 'Weapon on this line' : 'Weapons on this line'}
+            </h3>
+          </div>
+          <div className="space-y-1">
+            {namedWeapons.map((trap) => (
+              <div
+                key={trap.id}
+                className="w-full p-3 rounded-lg"
+                data-testid={`named-trap-${trap.id}`}
+              >
+                <div className="min-w-0">
+                  <span className="text-sm font-medium text-theme-text">{trap.name}</span>
+                  <p className="text-xs text-green-400/80 mt-0.5">When the opponent slips, this is how you punish.</p>
+                </div>
+                <NamedTrapWLPP trapId={trap.id} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* ═══ ZONE 5 — PITFALLS ═════════════════════════════════════════
           "Don't fall into these. Avoid these moves." Contains:

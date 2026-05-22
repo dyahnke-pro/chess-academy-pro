@@ -48,6 +48,33 @@ is curated content, not code.
   glow — selected = full glow, others = glow on left+bottom edges. A
   leading **"Main line"** pill is the default. Curated set per opening
   (Ruy → 7); other openings auto-list all their variations.
+- **Tab order is LOCKED to amateur frequency — most-played to least
+  (David 2026-05-21).** Once the first-class variations are hand-picked
+  (§0.1), they are SORTED by how often the lines actually arise at the
+  level the user plays at — not by gut feel and not by "elite theory
+  importance." This is a single-user app for an amateur; the masterclass
+  should prepare him for what he'll actually face on the board.
+  - **Data source:** the Lichess Explorer API
+    (`explorer.lichess.ovh/lichess`) at 1600+ rating, blitz/rapid/classical.
+    Authenticated with the Lichess PAT in per-project memory for the 4
+    req/sec rate. Query the position after the variation's defining move
+    and read off the move-frequency split. Masters DB is also worth
+    checking, but the AMATEUR DB is the default for tab order.
+  - **Procedure when building a new masterclass:**
+    1. Hand-pick the first-class variations (per §0.1).
+    2. Query the explorer for each variation's defining move's frequency.
+       Show the user the masters vs amateur numbers so they can see the
+       difference (Vienna example — masters put 3.g3 Paulsen at 35%; at
+       amateur level Paulsen is 4.2% and the Vienna Gambit's 3.f4 dominates
+       at 32%).
+    3. Sort the curated list by amateur frequency, most-played first. The
+       "Main line" pill stays the canonical showcase (e.g. Ruy = Closed,
+       Vienna = Classical) — it is NOT in the frequency sort; only the
+       variation tabs that follow it are.
+  - This rule was forged on the Vienna build (2026-05-21). The Vienna's
+    audience-correct tab order (Classical pill → Gambit → vs 2…Nc6 →
+    Frankenstein-Dracula → Paulsen) is opposite to the masters-frequency
+    order. The amateur lens is what matters for this app.
 - **Full-page rescope per tab**: selecting a tab re-scopes title, overview,
   key ideas, book reader, middlegame plan — all of it.
 - **URL is the source of truth** for the selected tab: `?line=<label>`
@@ -121,9 +148,29 @@ For each first-class variation tab, author:
 - **Reality check on counts (student-side).** A trap is a WEAPON only when
   the OPPONENT slips and YOU punish. In a White opening only the lines where
   Black blunders are weapons; lines where YOU must avoid a slip are warnings.
-  Don't expect many weapons — the Ruy has exactly ONE true weapon (Tarrasch);
-  Noah's Ark / Mortimer / Fishing Pole / Marshall-only-move are all warnings.
-  Classify by who plays the punishing move, not by how famous the trap is.
+  The Ruy has exactly ONE true weapon (Tarrasch); Noah's Ark / Mortimer /
+  Fishing Pole / Marshall-only-move are all warnings. But **weapon count is
+  opening-specific — some openings are weapon-rich and that richness IS their
+  identity.** The Vienna, for instance, ships 5-7 named weapons (Wurzburger,
+  Hamppe-Allgaier, Hamppe-Muzio, Frankenstein-Dracula Nxa8, Copycat Qg4,
+  Pierce Gambit, Steinitz Gambit) — that arsenal is the WHOLE PITCH of the
+  opening. Don't cap a weapon-rich opening at the Ruy's "expect few"
+  cadence; surface every named weapon that's real, DB-grounded, and hand-
+  authorable. Classify by who plays the punishing move, not by how famous
+  the trap is.
+- **FULL COVERAGE on weapons — NO SHORT NARRATIONS (David 2026-05-21,
+  LOCKED).** Each named weapon gets a FULL multi-beat teaching, not a
+  3-beat skim. Same depth as the masterclass variation lessons — set up the
+  position, name the threat, show the slip, walk the punishment move-by-
+  move with the WHY of each move, show the safe alternative (warning) or
+  the resulting better position (weapon), and tie it back to the opening's
+  identity. Target ~6-10 beats per weapon, ~5-8 minutes lesson time
+  (compare the Ruy's 3-beat trap lessons — those were RUY-appropriate
+  because each Ruy trap is one short tactic; weapon-rich openings get
+  fuller treatment per weapon). The reason: if the opening's identity IS
+  its arsenal, abbreviating each weapon undersells what the masterclass
+  exists to teach. Each weapon must stand on its own as a real lesson, not
+  a chip. Empty > generic > abbreviated.
 - **Named traps are hand-authored beat-lessons, NOT data tiles.** Pattern:
   `src/data/lessons/ruyTrapLessons.ts` — a `LessonScript` per trap + a
   `RUY_TRAP_DEFS` routing table (`{id, name, kind:'weapon'|'warning',

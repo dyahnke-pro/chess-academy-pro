@@ -320,12 +320,24 @@
       {
         "name": "Vienna Gambit",
         "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5",
-        "explanation": "The Vienna Gambit with 3.f4 is White's most aggressive choice, sacrificing a pawn for rapid central control. After exf4 e5, the knight is driven back and White builds a massive center with d4. The queen exchange on d8 looks tame but White gets a tremendous endgame advantage with superior piece activity and development. The bishop develops to f4 recapturing the pawn, and O-O-O puts the rook directly on the open d-file. The Nd5 jump is the key positional idea, dominating from the center."
+        "explanation": "The Vienna Gambit with 3.f4 is White's most aggressive choice, sacrificing a pawn for rapid central control. After exf4 e5, the knight is driven back and White builds a massive center with d4. The queen exchange on d8 looks tame but White gets a tremendous endgame advantage with superior piece activity and development. The bishop develops to f4 recapturing the pawn, and O-O-O puts the rook directly on the open d-file. The Nd5 jump is the key positional idea, dominating from the center.",
+        "keyIdeas": [
+          "Use Lasker's f4 lever — pull Black's e5-pawn away with a thrust from the side, exactly the principle from Chess Strategy.",
+          "After 3...d5 (the principled reply) accept with 4.fxe5 and aim for the giant d4-e5 centre with Nf3, Be7, d4.",
+          "Recapture with bxc3 after the knight trade — keep the big centre and the bishop pair instead of regaining the pawn.",
+          "The Bd3 lines up the b1-h7 diagonal — when Black plays …c5 the diagonal opens and the bishop becomes decisive."
+        ]
       },
       {
         "name": "Falkbeer Variation",
         "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qe7 Nxc7+ Kd8 Nxa8 b6 d3 Bb7",
-        "explanation": "The Falkbeer Variation arises when Black plays ...Nxe4, allowing the dangerous Qh5 strike. White threatens both f7 and the piece on e4, and after ...Nd6, the knight is awkwardly placed blocking Black's development. The Nb5 jump creates additional pressure on c7 and d6, and if Black is not careful, White's initiative becomes overwhelming. The Nxc7+ fork wins the exchange, and White emerges from the complications with material advantage and a strong initiative."
+        "explanation": "The Falkbeer Variation arises when Black plays ...Nxe4, allowing the dangerous Qh5 strike. White threatens both f7 and the piece on e4, and after ...Nd6, the knight is awkwardly placed blocking Black's development. The Nb5 jump creates additional pressure on c7 and d6, and if Black is not careful, White's initiative becomes overwhelming. The Nxc7+ fork wins the exchange, and White emerges from the complications with material advantage and a strong initiative.",
+        "keyIdeas": [
+          "After 3.Bc4 Nxe4 only 4.Qh5! works — recapturing or developing calmly loses the entire opening edge.",
+          "The Nb5 / Nxc7+ raid wins the exchange against the wild 5…Nc6 line — this is the famous Frankenstein-Dracula main line.",
+          "Black's queen will be chased to f5/h5 — every Black defensive move creates a new weakness for White to exploit.",
+          "After Nxa8 White is up the exchange and a pawn; Black has practical compensation but theory says White comes out ahead."
+        ]
       },
       {
         "name": "Stanley Variation",
@@ -335,12 +347,24 @@
       {
         "name": "Frankenstein-Dracula",
         "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Be7 Nf3 Nc6 Nxe5 g6 Qe2",
-        "explanation": "The Frankenstein-Dracula variation leads to wild tactical complications after Black takes on e4 and White responds with Qh5. The name comes from the monstrous tactical complexities that arise. White sacrifices material for a dangerous initiative, but Black can defend with precise play starting with ...Be7 and ...g6. After the dust settles, the position is roughly equal but requires both sides to navigate accurately through the tactical minefield. White must maintain the initiative or the extra material will tell."
+        "explanation": "The Frankenstein-Dracula variation leads to wild tactical complications after Black takes on e4 and White responds with Qh5. The name comes from the monstrous tactical complexities that arise. White sacrifices material for a dangerous initiative, but Black can defend with precise play starting with ...Be7 and ...g6. After the dust settles, the position is roughly equal but requires both sides to navigate accurately through the tactical minefield. White must maintain the initiative or the extra material will tell.",
+        "keyIdeas": [
+          "The calmer 5…Be7 (instead of 5…Nc6) lets White recover the pawn cleanly with Qxe5 and build a d4 centre.",
+          "White's queen tour Qh5-Qxe5-Qf4 keeps the queen active throughout the opening; Black wastes time chasing it.",
+          "Black's Nd6 is misplaced and blocks the d-pawn — Black needs multiple tempi to redeploy it via e8.",
+          "White's Bb3 + Qf4 + d4 + future Nge2 build a coherent attacking position; Black's pieces are awkwardly placed."
+        ]
       },
       {
         "name": "Vienna vs 2...Nc6",
         "pgn": "e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 d6 O-O h6 g3",
-        "explanation": "Against 2...Nc6, the Vienna Gambit with f4 is even more effective because Black's piece on c6 does not pressure e4, so White can push f4 safely. The resulting positions are very sharp with the g3 pawn break opening the h-file for White's rook. After O-O and g3, White demolishes the f4 pawn and gets open lines against Black's king. The Nd5 jump is again the key positional idea, and after ...Nxd5 exd5, White's pawn chain cramps Black's position significantly."
+        "explanation": "Against 2...Nc6, the Vienna Gambit with f4 is even more effective because Black's piece on c6 does not pressure e4, so White can push f4 safely. The resulting positions are very sharp with the g3 pawn break opening the h-file for White's rook. After O-O and g3, White demolishes the f4 pawn and gets open lines against Black's king. The Nd5 jump is again the key positional idea, and after ...Nxd5 exd5, White's pawn chain cramps Black's position significantly.",
+        "keyIdeas": [
+          "Against 2…Nc6 White has TWO completely different paths: calm Italian-Vienna with 3.Bc4, or sharp 3.f4 leading to the historical sacrifices.",
+          "The 3.f4 path opens the doorway to Hamppe-Allgaier (Nxf7), Hamppe-Muzio (O-O sacrifice), Pierce Gambit (d4), and Steinitz's king-walk.",
+          "In the Bc4 line, the Bg5 pin + Nd5 fork (on Nf6 + c7) is the standard tactical motif — exactly the same as the Italian Game.",
+          "2…Nc6 is the most common Black reply at amateur level (39% of replies) — knowing both paths is essential."
+        ]
       },
       {
         "name": "Vienna Gambit Accepted",
@@ -350,7 +374,13 @@
       {
         "name": "Paulsen Attack",
         "pgn": "e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 Bc5 O-O O-O d3 Re8 Rb1",
-        "explanation": "The Paulsen Attack with g3 and Bg2 is a quiet but poisonous approach where White fianchettoes and plays for long-term positional pressure. After ...d5 exd5 Nxd5, the position resembles a reversed Sicilian where White's bishop on g2 rakes the long diagonal. The Nxc3 bxc3 recapture gives White the semi-open b-file and a flexible pawn structure. White's plan involves d3, Rb1, and Ne4, slowly building pressure against Black's queenside while the g2 bishop dominates the center."
+        "explanation": "The Paulsen Attack with g3 and Bg2 is a quiet but poisonous approach where White fianchettoes and plays for long-term positional pressure. After ...d5 exd5 Nxd5, the position resembles a reversed Sicilian where White's bishop on g2 rakes the long diagonal. The Nxc3 bxc3 recapture gives White the semi-open b-file and a flexible pawn structure. White's plan involves d3, Rb1, and Ne4, slowly building pressure against Black's queenside while the g2 bishop dominates the center.",
+        "keyIdeas": [
+          "The fianchettoed Bg2 rakes the long light diagonal — screened by e4 until the centre opens, then decisive.",
+          "The Nc3-Nge2 setup keeps both knights flexible — Nge2 can reroute via f4 (attacking) or g3 (supporting).",
+          "The Nd5 outpost is the dream — once a knight lands there with the Bg2 supporting, Black's position cracks.",
+          "No forced lines to memorise — the Paulsen is the GM's pragmatic Vienna, leveraging position over tactics. Mamedyarov's favourite."
+        ]
       },
       {
         "name": "Copycat Variation",

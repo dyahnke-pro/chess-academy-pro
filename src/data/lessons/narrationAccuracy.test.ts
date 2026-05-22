@@ -5,6 +5,9 @@ import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { RUY_TRAP_LESSONS } from './ruyTrapLessons';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
 import { PIRC_VARIATION_LESSONS } from './pircVariations';
+import { VIENNA_GAME_LESSON } from './vienna';
+import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
+import { VIENNA_TRAP_LESSONS } from './viennaTrapLessons';
 import type { LessonScript } from '../../types';
 
 // Narration-accuracy gate. Every hand-written spoken line that names a
@@ -27,6 +30,9 @@ const lessons: LessonScript[] = [
   ...Object.values(RUY_TRAP_LESSONS),
   PIRC_DEFENCE_LESSON,
   ...Object.values(PIRC_VARIATION_LESSONS),
+  VIENNA_GAME_LESSON,
+  ...Object.values(VIENNA_VARIATION_LESSONS),
+  ...Object.values(VIENNA_TRAP_LESSONS),
 ];
 
 const PIECE_LETTER: Record<string, string> = {

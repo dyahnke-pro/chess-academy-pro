@@ -10456,67 +10456,6 @@
     ]
   },
   {
-    "id": "mp-vienna-classical-f4",
-    "openingId": "vienna-game",
-    "criticalPositionFen": "rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 1 5",
-    "title": "Classical f4 break",
-    "overview": "The Vienna's defining plan: after Nc3, the f4 push (Vienna Gambit) opens the f-file and challenges Black's central pawn. When Black plays …Nxe4 to recover material, White's pieces stand actively on Nc3 + Nf3 + Bc4 (next), and the open f-file gives the rook an instant attacking line. White's kingside attack mirrors a King's Gambit setup but with an extra developing tempo.",
-    "pawnBreaks": [
-      {
-        "move": "d3",
-        "explanation": "Quietly defends the e4 square (once recovered) and prepares Bd3 or Bc4. The d3 pawn supports a future e4-e5 push if Black retreats."
-      },
-      {
-        "move": "e5",
-        "explanation": "Once development is complete, e4-e5 kicks any Nf6 and opens the b1-h7 diagonal for the queen + bishop attack."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nc3-d5 outpost",
-        "explanation": "The c3-knight aims for d5 in many Vienna lines. From d5 the knight pressures Black's queenside and kingside with the same piece."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bf1-c4",
-        "explanation": "Standard king's-bishop development targeting f7. Combined with the open f-file from the gambit, the Bc4 + Rf1 battery creates immediate tactical chances."
-      }
-    ],
-    "typicalMistakes": [
-      "Forgetting to recover the e-pawn — Black's …Nxe4 is followed by Nxe4 dxe4, and White must capture back on e4 with the knight to maintain pressure.",
-      "Castling kingside without preparation — the f-file is open for Black's rook too."
-    ]
-  },
-  {
-    "id": "mp-vienna-quiet-g3-fianchetto",
-    "openingId": "vienna-game",
-    "criticalPositionFen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/4P3/2N3P1/PPPPNPBP/R1BQ1RK1 w - - 4 7",
-    "title": "Quiet g3 + Bg2 long-diagonal pressure",
-    "overview": "Vienna's quiet line — White fianchettos to g2 instead of pushing f4. The plan is slow maneuvering: Nge2 + O-O, then push d4 to challenge the center. The Bg2 controls the long diagonal and the position transposes into Closed Sicilian-like structures with colors reversed.",
-    "pawnBreaks": [
-      {
-        "move": "d4",
-        "explanation": "The central break that opens the position for the fianchettoed bishop. After d4 exd4 Nxd4 Nxd4 Qxd4 White has a strong centralized queen and the Bg2 fires on the long diagonal."
-      },
-      {
-        "move": "f4",
-        "explanation": "Even in the quiet line, a later f4 break creates kingside attacking chances. With the Bg2 supporting g3, the f-pawn can push to f5 without weakening the king as much as in the gambit lines."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nc3-d5 outpost",
-        "explanation": "The d5 square is a thematic outpost in every Vienna line. From d5 the knight pressures Black's queenside and supports central piece play."
-      }
-    ],
-    "typicalMistakes": [
-      "Allowing Black's …d5 push to lock the center — kills the Bg2's long-diagonal pressure.",
-      "Pushing f4 before completing development — Black's …Nxe4 counter-strike is dangerous."
-    ]
-  },
-  {
     "id": "mp-four-knights-belgrade-gambit",
     "openingId": "four-knights-game",
     "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n2/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 5",
@@ -15718,6 +15657,1397 @@
             },
             {
               "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-bayonet",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP2P/2N5/PPP1BPP1/R1BQK1NR b KQkq - 0 5",
+    "title": "Bayonet Attack: Defuse the h-Storm with ...h5",
+    "overview": "Bayonet (4.Be2 + 5.h4) is White's rarer surprise weapon — the h-pawn races at Black's kingside before the fianchetto is safe. The danger is real: White wants h5, ripping open the file your king will sit on after castling. The answer is direct and prophylactic: ...h5 immediately, blocking White's intended advance and freezing the h-file. Once the storm is defused, Black completes a perfectly normal Pirc setup — fianchetto, castle, ...c6, ...Nbd7 — and White's h-pawn now sits as a structural awkwardness on h4 with nothing to attack. The surprise becomes a wasted tempo.",
+    "pawnBreaks": [
+      "...h5 (block the h-storm before it starts)",
+      "later ...c6 + ...e5 — the normal Pirc central break"
+    ],
+    "pieceManeuvers": [
+      "...Bg7 fianchetto on the long diagonal",
+      "...Nbd7 supporting the eventual ...e5",
+      "...Be6 / ...Qd7 connecting the rooks after castling"
+    ],
+    "strategicThemes": [
+      "Prophylaxis — block the wing storm at its first step",
+      "Turn White's h-pawn into a weakness",
+      "Standard Pirc structure once the storm is gone"
+    ],
+    "endgameTransitions": [
+      "White's stranded h4-pawn becomes a long-term target in any simplified position"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP2P/2N5/PPP1BPP1/R1BQK1NR b KQkq - 0 5",
+        "moves": [
+          "h5",
+          "Nf3",
+          "c6",
+          "O-O",
+          "O-O",
+          "Be3",
+          "Nbd7"
+        ],
+        "annotations": [
+          "...h5 — the prophylactic block: White wanted h5 next, you took it. The h-file is permanently closed and the bayonet has no point.",
+          "White completes development with Nf3, accepting the storm is dead.",
+          "...c6 — the flexible Pirc move: it grabs the b5 and d5 squares and prepares the central ...e5.",
+          "White castles; the dangerous-looking h-pawn on h4 is now just a structural awkwardness with nothing to attack.",
+          "...O-O — Black castles into safety, the kingside fully secured.",
+          "Be3 — White develops modestly, building a normal middlegame.",
+          "...Nbd7 — the knight backs the coming ...e5 break, eyeing the e5 square."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "title": "Defuse the Bayonet with ...h5",
+        "highlights": [
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pircdefence-kholmov",
+    "openingId": "pirc-defence",
+    "criticalPositionFen": "rnbqkb1r/ppp1pp1p/3p1np1/8/2BPP3/2N5/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+    "title": "Kholmov System: Kick the Bishop with ...c6 and ...b5",
+    "overview": "The Kholmov (4.Bc4) is White's Italian-style try — the bishop comes out aggressively to c4, pressuring f7 and supporting a quick Qe2 + e5 plan. Black's response is concrete: ...Bg7 first to complete the fianchetto, then ...c6 to prepare ...b5, kicking the bishop off its diagonal. After 7.Bb3 a5, Black gains queenside space and the bishop on b3 stares at the b7-a8 diagonal closed by Black's own structure — permanently passive. The Kholmov turns into a Pirc with an extra-restricted White bishop, a clear strategic win for Black.",
+    "pawnBreaks": [
+      "...b5 (kick the Bc4 off the a2-g8 diagonal)",
+      "later ...a5-a4 to chase the bishop further or open the a-file"
+    ],
+    "pieceManeuvers": [
+      "...Bg7 fianchetto on the long diagonal",
+      "...Nbd7 supporting the future ...e5",
+      "Bb3 forced retreat after ...b5"
+    ],
+    "strategicThemes": [
+      "Concrete kick — force the aggressive bishop to a passive square",
+      "Queenside space with ...b5 and ...a5",
+      "Standard Pirc structure with an extra-restricted White bishop"
+    ],
+    "endgameTransitions": [
+      "The Bb3 stays passive long-term — a structural plus for Black in any endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/2BPP3/2N5/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+        "moves": [
+          "Bg7",
+          "Qe2",
+          "c6",
+          "Nf3",
+          "b5",
+          "Bb3",
+          "O-O",
+          "O-O",
+          "a5"
+        ],
+        "annotations": [
+          "...Bg7 — fianchetto first: the long diagonal is Black's primary weapon. Complete it before reacting to the Bc4.",
+          "Qe2 — Kholmov's idea: the queen overprotects e4 so White can push e5 in one move without trading queens.",
+          "...c6 — the launch-pad: a quiet move that prepares the powerful ...b5 thrust against the c4-bishop.",
+          "White completes development with Nf3, but Black has already set the trap.",
+          "...b5 — the kick. The c4-bishop has no aggressive square; the only safe retreat is back to b3.",
+          "Bb3 — forced retreat. The bishop now stares at b7-a8, closed by Black's own structure. Permanently passive.",
+          "White castles, accepting the structural concession.",
+          "...O-O — Black castles, now with a clear plus: queenside space, standard Pirc structure, a passive enemy bishop.",
+          "...a5 — gain more queenside space and prepare ...a4, pushing the bishop even further back to a2."
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "title": "Kick the Bishop, Gain Queenside Space",
+        "highlights": [
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-viennagame-classical",
+    "openingId": "vienna-game",
+    "title": "Classical Vienna: the f5 Outpost Plan",
+    "criticalPositionFen": "r1bq1rk1/pp1n1ppp/2pp1n2/2b1p3/4P3/1BNP1N2/PPP2PPP/R1BQ1RK1 w - - 2 8",
+    "overview": "The Classical Vienna's middlegame plan: White's c3-knight reroutes via e2 to g3, aiming for the f5 outpost — Lasker's immovable square. The Bb3-Bc2 bishop pivot loads a new diagonal toward h7, and d4 cracks the centre when White is fully coordinated. Patient build, decisive break.",
+    "pawnBreaks": [
+      {
+        "move": "d3-d4",
+        "explanation": "After all minor pieces reach their attacking squares (Ne2-g3 toward f5, Bc2 toward h7), d4 opens the centre at the moment White is best coordinated.",
+        "fen": "r2q1rk1/pp3ppp/1bpp4/2n1p2n/4P1b1/2PP1NN1/PPB2PPP/R1BQ1RK1 w - - 5 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3-e2-g3-f5",
+        "explanation": "The signature Vienna knight reroute. From f5 the knight cannot be chased by a pawn (Lasker) and pressures d6, h6, and the kingside."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bf1-c4-b3-c2",
+        "explanation": "The Italian-Vienna bishop dance. After Black harasses with c6, the bishop swings to b3 then c2, abandoning the a2-g8 diagonal for the b1-h7 diagonal aimed at h7."
+      }
+    ],
+    "strategicThemes": [
+      "The f5 outpost is the prize the whole middlegame organises around — White spends three tempi to plant a knight there.",
+      "The Bc2 reloads on the b1-h7 diagonal, loaded for the moment the centre opens.",
+      "Black's …c6 and …Nbd7 setup creates the d6-c6 chain; d4 opens lines and exposes that pawn structure."
+    ],
+    "playableLines": [
+      {
+        "title": "Classical: Ne2-g3-f5 maneuver into the d4 break",
+        "fen": "r1bq1rk1/pp1n1ppp/2pp1n2/2b1p3/4P3/1BNP1N2/PPP2PPP/R1BQ1RK1 w - - 2 8",
+        "moves": [
+          "Ne2",
+          "Bb6",
+          "c3",
+          "Nc5",
+          "Bc2",
+          "Bg4",
+          "Ng3",
+          "Nh5",
+          "d4"
+        ],
+        "annotations": [
+          "Ne2 begins the Vienna knight reroute. The c3-knight steps aside to clear the c-pawn for c3 next, then rides via g3 toward f5 — the immovable outpost.",
+          "…Bb6 — Black tucks the bishop back, anticipating c3 + d4 lines that would attack the Bc5.",
+          "c3 — the modest pawn move that prepares the d4 break and opens c2 as a future bishop square. Pure Vienna prep.",
+          "…Nc5 — Black's knight jumps to c5 attacking the Bb3, forcing the bishop to commit to its destination.",
+          "Bc2 — the bishop reloads on the b1-h7 diagonal, aimed at h7 once the centre opens. The Italian-Vienna pivot is complete.",
+          "…Bg4 — Black pins the f3-knight, preparing his own kingside expansion with Nh5.",
+          "Ng3 — the knight reaches g3, one square from the f5 outpost. The Vienna middlegame is fully coordinated.",
+          "…Nh5 — Black's knight jumps to h5, the typical Vienna kingside-counter-expansion. The f6-knight wants to swing to f4 or contest g3.",
+          "d4! — the central break lands. After ten moves of preparation, White cracks the centre at the moment every White piece is optimally placed."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e2",
+              "to": "g3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "c2",
+              "to": "b1",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "g3",
+              "to": "f5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "h5",
+              "to": "f4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "h5",
+              "to": "g3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-viennagame-gambit",
+    "openingId": "vienna-game",
+    "title": "Vienna Gambit: Lasker's Centre + Bishop Pair",
+    "criticalPositionFen": "rnbqk2r/ppp1bppp/8/3pP3/3Pn3/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+    "overview": "After the Lasker counter (3…d5) and the central trades, White builds a huge d4-e5 pawn duo and plays for the bishop pair. The Bd3 lines up the b1-h7 diagonal, the c1-bishop will swing out, and Black is left with a structural pawn deficit on the queenside.",
+    "pawnBreaks": [
+      {
+        "move": "d3-d4",
+        "explanation": "Already played. The d4 pawn anchors the centre alongside e5 — the Lasker-recommended setup that converts the gambit's tactical risk into a positional grip.",
+        "fen": "rnbqk2r/ppp1bppp/8/3pP3/3Pn3/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bf1-d3 (aimed at h7)",
+        "explanation": "The Bd3 lines up the b1-h7 diagonal, the Vienna Gambit's standard attacking aim. Once the …c5 break opens lines, the bishop becomes decisive."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bc1 (queen-side, swings out)",
+        "explanation": "White's queen-bishop swings out via Be3 or Bg5, completing development and contributing the second half of the bishop pair to the attack."
+      }
+    ],
+    "strategicThemes": [
+      "The Lasker-line d4-e5 centre converts the gambit's pawn into a permanent positional bind.",
+      "The bishop pair on d3 and c1 (later e3 or g5) aims at the kingside; Black's structure has no equivalent firepower.",
+      "…c5 is Black's only counterplay, opening the long diagonal for his queen-bishop — but it concedes the d4-square and exposes c5 itself."
+    ],
+    "playableLines": [
+      {
+        "title": "Gambit: Lasker centre + Bd3 toward h7",
+        "fen": "rnbqk2r/ppp1bppp/8/3pP3/3Pn3/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+        "moves": [
+          "O-O",
+          "Bd3",
+          "Nxc3",
+          "bxc3",
+          "c5",
+          "O-O",
+          "Nc6",
+          "Re1"
+        ],
+        "annotations": [
+          "…O-O — Black hurries his king to safety, conscious that White's open f-file and bishop pair will land hard.",
+          "Bd3 — the king-bishop occupies d3 with the diagonal aimed at h7. Standard Vienna Gambit development.",
+          "…Nxc3 — Black trades the e4-knight, simplifying. The recapture is a key positional moment.",
+          "bxc3 — White recaptures with the b-pawn instead of the d-pawn, retaining the big d4-e5 duo and the bishop pair.",
+          "…c5 — Black's only meaningful break, attacking d4 and freeing his queen-bishop.",
+          "O-O — White castles too. The position is settled; both sides are coordinated.",
+          "…Nc6 — Black's queen-knight finally comes out to challenge d4.",
+          "Re1 — the rook slides behind the e-pawn, supporting e5 and lined up against Black's king down the e-file."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e1",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-viennagame-vs-nc6",
+    "openingId": "vienna-game",
+    "title": "vs 2…Nc6: Italian-Vienna Pressure on f7",
+    "criticalPositionFen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+    "overview": "Against 2…Nc6 White chooses the Italian-Vienna setup — Bc4 plus the Vienna f4 lever held in reserve. The Bc4 aims at f7, Bg5 pins the Nf6, and a future Nd5 fork on f6 + c7 lurks. Slow squeeze with sharp tactical undercurrents.",
+    "pawnBreaks": [
+      {
+        "move": "f2-f4",
+        "explanation": "The f4 lever, held in reserve, opens the f-file or shoves the e5-pawn out of the centre when White's pieces are ready.",
+        "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 2 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc1-g5 (pins the Nf6)",
+        "explanation": "The queen-bishop swings to g5, pinning the f6-knight against the queen — the same pin Lasker named in his treatise on King's Pawn openings."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nc3-d5 (fork on f6 + c7)",
+        "explanation": "Once Black is committed, Nd5 forks the f6-knight and threatens Nxc7+ winning the rook — the classic Italian-Vienna combination."
+      }
+    ],
+    "strategicThemes": [
+      "The Bc4 + Nc3 duo combines the Italian Game's f7 pressure with the Vienna's flexible knight.",
+      "The f4 break is on call — White waits for the optimal moment, often after both sides castle.",
+      "The Nd5 fork (Nf6 + c7) is a constant tactical threat; Black's …Be6 or …a6 deflate it."
+    ],
+    "playableLines": [
+      {
+        "title": "vs 2…Nc6: Italian-Vienna Bg5 pin + Nd5 fork",
+        "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+        "moves": [
+          "O-O",
+          "O-O",
+          "Bg5",
+          "h6",
+          "Bh4",
+          "Be6",
+          "Nd5",
+          "Qd7"
+        ],
+        "annotations": [
+          "O-O — White castles short, completing kingside development. Both sides head into the middlegame fully coordinated.",
+          "…O-O — Black castles too. The position is now classical Italian-Vienna territory.",
+          "Bg5 — the queen-bishop pins the f6-knight against the queen. Same pin Lasker prescribed for King's Pawn openings.",
+          "…h6 — Black puts the question to the bishop, asking it to commit or retreat.",
+          "Bh4 — bishop retreats but stays on the diagonal, keeping the pin alive on the now-vulnerable f6-knight.",
+          "…Be6 — Black challenges the Bc4 by offering a trade on the a2-g8 diagonal.",
+          "Nd5! — the central knight jump. From d5 the knight forks the Nf6 AND threatens Nxc7 winning the rook. Black must defend twice.",
+          "…Qd7 — Black sidesteps the queen off d8, unpinning the f6-knight AND defending c7 in one move. White has reached the standard middlegame with a small but enduring edge."
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "h4",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c4",
+              "to": "a2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "c7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-viennagame-frankenstein-dracula",
+    "openingId": "vienna-game",
+    "title": "Frankenstein-Dracula: Calmer 5…Be7 Middlegame",
+    "criticalPositionFen": "rnbqk2r/ppppbppp/3n4/4p2Q/8/1BN5/PPPP1PPP/R1B1K1NR w KQkq - 4 6",
+    "overview": "The MODERN grandmaster's answer to the Frankenstein-Dracula — instead of the wild 5…Nc6 (taught as a weapon lesson), Black plays the calmer 5…Be7. White recovers the pawn cleanly, retains the active queen on f4, and the position settles into a strategic middlegame where White's development edge tells.",
+    "pawnBreaks": [
+      {
+        "move": "d2-d4",
+        "explanation": "White builds the centre with d4 after recovering the gambit pawn on e5, claiming control of the centre that Black cannot easily match.",
+        "fen": "rnbq1rk1/ppppbppp/3n4/4Q3/3P4/1BN5/PPP2PPP/R1B1K1NR b KQ - 0 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-h5-e5-f4 (active centre)",
+        "explanation": "The queen makes a circuit: Qh5 attacks, Qxe5 recovers the pawn, Qf4 settles on an active central square supporting d4 and eyeing the kingside."
+      },
+      {
+        "piece": "Knight",
+        "route": "Ng1-e2 (developing past Qh5)",
+        "explanation": "White's king-knight develops to e2 instead of f3, leaving the f3-square clear for the queen's retreat after Qf4 and supporting future Ng3 ideas."
+      }
+    ],
+    "strategicThemes": [
+      "The 5…Be7 line is calmer than 5…Nc6 but Black still cedes development time chasing White's queen.",
+      "White's Bb3 + Qf4 + d4 + future Nge2 build a coherent attacking position; Black's pieces are awkwardly placed.",
+      "The Nd6 knight is misplaced (blocks the d-pawn) and Black needs multiple moves to redeploy it."
+    ],
+    "playableLines": [
+      {
+        "title": "F-D: Calmer 5…Be7 then Qxe5 + d4 centre",
+        "fen": "rnbqk2r/ppppbppp/3n4/4p2Q/8/1BN5/PPPP1PPP/R1B1K1NR w KQkq - 4 6",
+        "moves": [
+          "Qxe5",
+          "O-O",
+          "d4",
+          "Nc6",
+          "Qf4",
+          "Na5",
+          "Bd5",
+          "Ne8"
+        ],
+        "annotations": [
+          "Qxe5! — White recovers the pawn cleanly. The queen on e5 is active, defends nothing critical, and attacks the e7-bishop indirectly.",
+          "…O-O — Black castles. The Nd6 is misplaced and blocks the d-pawn but Black accepts that for safety.",
+          "d4 — the central pawn pushes forward. White now controls e4-d4-e5 ideas and has space.",
+          "…Nc6 — Black develops the queen-knight, attacking the e5-queen and forcing the queen to move.",
+          "Qf4 — the queen relocates to an active central square. From f4 she eyes Black's kingside and supports d4.",
+          "…Na5 — Black's knight attacks the Bb3, hoping to trade off White's strong attacker.",
+          "Bd5 — bishop sidesteps the attack onto a dominant central square instead of being traded. Now Black's Na5 looks misplaced too.",
+          "…Ne8 — Black reroutes the Nd6 (which was blocking d-pawn ideas) via e8 to f6 or g7. Many moves of Black untangling; White stays a tempo ahead."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e5",
+              "to": "e7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f4",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "e8",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e8",
+              "to": "g7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-viennagame-paulsen",
+    "openingId": "vienna-game",
+    "title": "Paulsen: Nd5 Outpost + Long-Diagonal Bishop",
+    "criticalPositionFen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/4P3/2N3P1/PPPPNPBP/R1BQ1RK1 w - - 4 7",
+    "overview": "The Paulsen's slow squeeze. The Bg2 rakes the long light diagonal, the c3-knight reroutes via e2 toward d5 or g3, and White waits for the right moment to break with d3-d4 or f2-f4. Mamedyarov's favourite Vienna setup, leveraging quiet positional pressure over decades of theory.",
+    "pawnBreaks": [
+      {
+        "move": "d3-d4",
+        "explanation": "The slow d4 break, executed when White's pieces are perfectly placed. Opens the long diagonal for the Bg2.",
+        "fen": "r2q1rk1/1pp2ppp/p1np1n2/2b1p3/4P1b1/P1NP2P1/1PP1NPBP/R1BQ1RK1 w - - 1 9"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3 (eyes d5)",
+        "explanation": "The c3-knight stares at d5, ready to plant on the outpost once Black plays …c6 or trades the knight away."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nge2 (reroutes via f4 or g3)",
+        "explanation": "The king-knight develops to e2 instead of f3, keeping options to reroute via f4 (attacking) or g3 (supporting) depending on what Black gives."
+      }
+    ],
+    "strategicThemes": [
+      "The Bg2 on the long light diagonal is the Paulsen's defining piece, screened by the e4-pawn until the centre opens.",
+      "The Nd5 outpost is the dream — once a knight lands there, Black's position cracks.",
+      "White waits patiently for Black to commit; the Paulsen rewards the player who improves every piece before striking."
+    ],
+    "playableLines": [
+      {
+        "title": "Paulsen: Slow build toward Nd5 outpost",
+        "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/4P3/2N3P1/PPPPNPBP/R1BQ1RK1 w - - 4 7",
+        "moves": [
+          "a3",
+          "a6",
+          "d3",
+          "Bg4",
+          "h3",
+          "Be6",
+          "Nd5",
+          "Bb6"
+        ],
+        "annotations": [
+          "a3 — modest queenside expansion, preventing …Nb4 and preparing b4 in some lines.",
+          "…a6 — Black mirrors the queenside prep, also keeping b5 in reserve.",
+          "d3 — White solidifies the centre, locking in the structure. The Bg2 is still screened by e4.",
+          "…Bg4 — Black pins the e2-knight, hoping to gain a small structural concession.",
+          "h3 — White asks the bishop to decide: take and double White's pawns, or retreat.",
+          "…Be6 — bishop retreats. The pin is gone; the position settles into pure manoeuvring.",
+          "Nd5! — White lands the dream outpost. The knight on d5 attacks Black's f6-knight and e7 (covered by the bishop), supported by the e4-pawn and the c-pawn.",
+          "…Bb6 — Black's bishop tucks away from the knight's reach. White has the outpost; the long Paulsen squeeze begins."
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "g2",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "g4",
+              "to": "e2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d5",
+              "to": "e7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]

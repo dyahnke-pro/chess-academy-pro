@@ -16,6 +16,10 @@ interface VariationTabsProps {
 
 // Per-opening curated tab sets (matched by name substring → short
 // label, in display order). The Ruy shows its 7 first-class variations.
+// The Vienna shows 4 first-class variations in AMATEUR-FREQUENCY ORDER
+// (playbook §1, locked 2026-05-21: most-played first). Classical = the
+// "Main line" pill (showcase, not in this map). Falkbeer absorbed into
+// the Frankenstein-Dracula tab (same 4.Qh5 root, different Black 5th move).
 const CURATED: Record<string, { test: RegExp; label: string }[]> = {
   'ruy-lopez': [
     { test: /berlin/i, label: 'Berlin' },
@@ -25,6 +29,12 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /breyer/i, label: 'Breyer' },
     { test: /chigorin/i, label: 'Chigorin' },
     { test: /zaitsev/i, label: 'Zaitsev' },
+  ],
+  'vienna-game': [
+    { test: /^vienna gambit$/i, label: 'Gambit' },
+    { test: /vienna vs 2/i, label: 'vs 2…Nc6' },
+    { test: /frankenstein|falkbeer/i, label: 'Frankenstein-Dracula' },
+    { test: /paulsen/i, label: 'Paulsen' },
   ],
 };
 

@@ -107,7 +107,7 @@ const PRO_DATA_REVISION = '2026-05-21-strip-automined-traps';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
-const BASE_DATA_REVISION = '2026-05-21-strip-automined-traps-2';
+const BASE_DATA_REVISION = '2026-05-21-vienna-masterclass';
 const BASE_REVISION_KEY = 'base_repertoire_revision';
 
 export async function isDatabaseSeeded(): Promise<boolean> {

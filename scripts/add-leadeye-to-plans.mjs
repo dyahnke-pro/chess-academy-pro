@@ -165,7 +165,7 @@ function main() {
   let touchedLines = 0;
 
   for (const plan of plans) {
-    if (plan.openingId !== 'ruy-lopez' && plan.openingId !== 'pirc-defence') continue;
+    if (plan.openingId !== 'ruy-lopez' && plan.openingId !== 'pirc-defence' && plan.openingId !== 'vienna-game') continue;
     const lines = plan.playableLines ?? [];
     if (lines.length === 0) continue;
     let planTouched = false;
