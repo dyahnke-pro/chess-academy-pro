@@ -1,0 +1,68 @@
+# App UX TODO + Brainstorm — onboarding & progress model (2026-05-22)
+
+Forward-looking UX work captured during the Caro-Kann masterclass build.
+Not started yet — parked here so it isn't lost. Two linked threads: how we
+TEACH the user to use the app, and how we TRACK + CONVEY their progress.
+
+---
+
+## TODO 1 — Progress model (WLPP → tiers) + CONVEY it to the user
+
+**The model (locked with David 2026-05-22).** Each WLPP verb advances one
+progress tier:
+
+| Verb | Tier | Trigger |
+|---|---|---|
+| **Watch** | `discovered` | auto, on watching the line's masterclass through (`markLineDiscovered`, exists) |
+| **Learn** | `learned` | completing the Learn run **earns a question** — "Do you feel like you have this learned?" → **the user's "Got it" marks it learned**; "Not yet" keeps it discovered and brings it back sooner |
+| **Practice** | `perfected` | drilled clean (`markLinePerfected`, exists) |
+| **Play** | `mastery` | rolling `getMasteryPercent` from last 10 vs the coach |
+
+**Key decisions:**
+- **We ASK the user — the self-assessment is the marker, not just objective
+  completion** (David, emphatic: "we do need to ask the user!"). For a
+  single-user app, his self-knowledge IS the truth. Completing Learn only
+  *earns the question*; the answer marks the tier.
+- "Not yet" → SRS confidence rating: line returns for review sooner.
+- The eventual **weakness/error ACCOUNTING gate = `learned`** — so
+  watched-only and "Not yet" lines never count mistakes against the user
+  (this is the "don't penalize new openings" rule, made precise).
+
+**Build notes:**
+- New `linesLearned[]` field on the opening record → **Dexie version bump +
+  upgrade fn** (standing order).
+- The "Got it / Not yet" prompt UI at the end of every Learn run.
+- **CONVEY to the user:** show the tier per line/opening (discovered →
+  learned → perfected → mastery), and message the loop so they understand
+  what each verb does to their progress. This is the message David wants
+  surfaced, not buried.
+
+---
+
+## TODO 2 — "How to use this app" onboarding bubbles (the "i" help)
+
+The brainstorm: **info bubbles that pop up explaining what each tab does.**
+Formalised by playbook §8 (onboarding) — build to that spec:
+
+- An **"i" top-right on every page** → coach-narrated, spotlighted
+  coach-marks that explain WHAT each area/tab does and WHY.
+- **Auto-run on first visit, replayable** after via the "i".
+- Reusable **`PageHelp`** component.
+- Teach features **when they first matter**; use **empty-states as teachers**.
+- Teach **THE LOOP**: learn → play → capture → drill (and now: the WLPP
+  progress tiers from TODO 1 — explain Watch/Learn/Practice/Play and what
+  each does to your progress).
+- Concretely for the Masterclasses tab: a bubble on the tab itself + one on
+  each WLPP button explaining the verb, plus the progress-tier messaging.
+
+**TODO 1 and TODO 2 are linked:** the onboarding bubbles are HOW we convey
+the progress model (TODO 1) to the user. Build them together.
+
+---
+
+## Status
+- [ ] Progress model: `linesLearned` tier + Learn-completion "Got it/Not yet"
+      prompt + tier display + Dexie bump.
+- [ ] Onboarding `PageHelp` bubbles per tab (playbook §8) + WLPP/progress
+      explainer.
+- Accounting gate (weakness tagging) deferred until the `learned` gate exists.
