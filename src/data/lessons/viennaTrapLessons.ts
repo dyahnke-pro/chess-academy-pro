@@ -35,7 +35,6 @@ import type {
 // square, SOFT BLUE = secondary context.
 const ATK = 'rgba(40,185,95,0.92)';
 const VIS = 'rgba(40,185,95,0.92)';
-const INTENT = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
 const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
@@ -535,7 +534,7 @@ const STEINITZ_GAMBIT: LessonScript = {
       moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','Qh4+','Ke2'],
       highlights: [H('e2', KEY), H('e1', SOFT)],
       say: "5.Ke2!! Wilhelm Steinitz himself, the first world champion, walked his king to e2 — refusing to block the check, refusing to commit a pawn. The king moves INTO the centre on move five. Every modern player's instinct screams against this. But Steinitz's positional theory said: the king is a fighting piece, and in the centre with the queens still on the board, my king is no MORE exposed than yours just because you have rights to castle that I don't. Now I've kept my pawn structure intact, I'll bring my pieces out one by one, and your queen is the one stuck in enemy territory.",
-      sayShort: '5.Ke2!! — Steinitz himself walked the king. \"The king is a fighting piece.\"',
+      sayShort: '5.Ke2!! — Steinitz himself walked the king. "The king is a fighting piece."',
     },
     {
       id: 'sg4',
