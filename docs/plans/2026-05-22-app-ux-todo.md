@@ -96,3 +96,25 @@ game/trap pipelines all proven on Caro, so it's "author the data, it lights up."
 games+Qe2 warning), anti-invention gates 1-7, course-scoped coach chat,
 continue-playing CTA, depth shortfalls extended, Stockfish engine-soundness
 CI gate. Run the engine workflow to vet Vienna/Ruy deep tails.
+
+---
+
+## THE USER PATH — "the proper way to use the app" (what the bubbles teach)
+
+The mantra: **Watch → Learn → Practice → Play → (Capture →) Drill.**
+The first four climb the progress tiers (TODO 1); SRS + capture keep it from
+leaking back out. This is the content the onboarding "i" bubbles (TODO 2)
+must communicate, and the empty-states should nudge toward.
+
+1. **First visit:** "i" bubbles walk each tab — what it does + why.
+2. **Masterclasses tab → pick an opening you actually play.**
+3. **Watch** the main line + each variation → get the ideas → *discovered*.
+4. **Learn** → voice guides each move, you play it → "Got it / Not yet" → *learned*.
+5. **Practice** → same line, silent, Hint on demand → clean replay → *perfected*.
+6. **Play** → vs the coach, locked to the line → real reps → *mastery* (rolling).
+7. **Ask the coach** anytime — scoped to the exact line being studied.
+8. **Watch the model game** → see the idea win at the top level.
+9. **Daily SRS reps** (once built) → due moves resurface so it doesn't fade.
+10. (Future) **Capture** mistakes from real games → **drill** them.
+
+The flywheel in one line: *learn it, play it, find the holes, drill them shut.*
