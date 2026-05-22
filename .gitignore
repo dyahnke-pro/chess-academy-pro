@@ -33,3 +33,6 @@ docs/audit-runs/2026-05-19-openings-interactive-loop/findings-round-*.json
 docs/audit-runs/2026-05-19-openings-interactive-loop/findings-aggregate.json
 docs/audit-runs/2026-05-19-openings-interactive-loop/screenshots/
 docs/audit-runs/2026-05-19-openings-interactive-loop/checkpoint*.json
+
+# ship-check local watermark (green-run SHA + timestamp; used by --summary)
+.ship-check-log/

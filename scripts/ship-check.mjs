@@ -20,7 +20,7 @@
 // see exactly what broke without digging through logs.
 
 import { spawnSync } from 'node:child_process';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -29,7 +29,44 @@ const REPO_ROOT = join(__dirname, '..');
 
 const ARGS = new Set(process.argv.slice(2));
 const FULL = ARGS.has('--full');
+const SUMMARY = ARGS.has('--summary');
 const STARTED = Date.now();
+
+const LOG_DIR = join(REPO_ROOT, '.ship-check-log');
+const LOG_LATEST = join(LOG_DIR, 'latest.json');
+
+// ── --summary mode: print what changed since the last green run ─────
+// Doesn't run any checks — just reads the log and prints a paste-ready
+// summary for the next commit message or PR description. Stops early.
+if (SUMMARY) {
+  if (!existsSync(LOG_LATEST)) {
+    console.log('No prior green ship-check log. Run `npm run ship-check` first.');
+    process.exit(0);
+  }
+  const prev = JSON.parse(readFileSync(LOG_LATEST, 'utf-8'));
+  const since = prev.sha;
+  console.log('');
+  console.log(`── since last green ship-check (${prev.timestamp}) ──`);
+  console.log(`  Previous green at: ${since.slice(0, 8)}`);
+  console.log('');
+  const commits = spawnSync('git', ['log', '--oneline', `${since}..HEAD`], { encoding: 'utf-8' });
+  if (commits.stdout?.trim()) {
+    console.log('  Commits:');
+    for (const line of commits.stdout.trim().split('\n')) console.log(`    ${line}`);
+  } else {
+    console.log('  No commits since last green run.');
+  }
+  console.log('');
+  const files = spawnSync('git', ['diff', '--name-only', `${since}..HEAD`], { encoding: 'utf-8' });
+  if (files.stdout?.trim()) {
+    const arr = files.stdout.trim().split('\n');
+    console.log(`  Files changed (${arr.length}):`);
+    for (const f of arr.slice(0, 20)) console.log(`    · ${f}`);
+    if (arr.length > 20) console.log(`    · ... +${arr.length - 20} more`);
+  }
+  console.log('');
+  process.exit(0);
+}
 
 const results = [];
 
@@ -132,6 +169,7 @@ const GATE_TESTS = [
   'src/data/lessons/pircIntegrity.test.ts',
   'src/data/repertoire-orientation.test.ts',
   'src/data/pro-repertoires-orientation.test.ts',
+  'src/data/openingManifests.test.ts',
   'src/services/middlegamePlanner.test.ts',
   'src/components/Openings/MiddlegamePlansSection.test.tsx',
   'src/components/Openings/EndgamePlansSection.test.tsx',
@@ -153,7 +191,58 @@ runStep('content gates', 'npx', ['vitest', 'run', ...GATE_TESTS], { summary: sum
 // INFORMATIONAL: audit stream pull (never blocks).
 pullAuditStream();
 
-// FULL MODE: run the Playwright audit matrix. Requires dev server up.
+// ── FULL MODE — Playwright matrix auto-detected from changed files ──
+//
+// Maps file globs → audit scripts. When --full runs, we look at the
+// files changed in this work (unpushed commits + working tree) and run
+// the audits whose globs match. Matrix mirrors CLAUDE.md's Post-Deploy
+// Audit table so the source of truth stays in one place.
+//
+// "Always" entries run on every --full regardless of changes — they're
+// the canonical content-rendering checks that should pass whatever you
+// touched. Surface-specific entries layer on top.
+const AUDIT_MATRIX = [
+  { script: 'audit-named-traps.mjs',         globs: ['src/data/lessons/', 'src/components/Openings/', 'src/data/repertoire.json'], always: true },
+  { script: 'audit-leadeye-plans.mjs',       globs: ['src/data/lessons/', 'src/data/middlegame-plans.json', 'src/components/Openings/'], always: true },
+  { script: 'audit-opening-trap-tiles.mjs',  globs: ['src/data/lessons/', 'src/data/repertoire.json', 'src/components/Openings/'] },
+  { script: 'audit-coach-teach-unknown-line.mjs', globs: ['src/components/Coach/Teach', 'src/services/coachAgent', 'src/services/openingGenerator'] },
+  { script: 'audit-coach-master-integration.mjs', globs: ['src/coach/sources/', 'src/services/masterPlayWatcher', 'src/services/claimValidator'] },
+  { script: 'audit-coach-tactical-awareness.mjs', globs: ['src/coach/sources/tactics', 'src/services/tactics'] },
+  { script: 'audit-dashboard.mjs',           globs: ['src/components/Dashboard', 'src/components/SmartSearchBar'] },
+  { script: 'audit-weaknesses.mjs',          globs: ['src/components/Weaknesses', 'src/services/weaknessService'] },
+  { script: 'audit-coach-plan.mjs',          globs: ['src/components/Coach/Plan', 'src/services/coachPlan'] },
+  { script: 'audit-coach-review.mjs',        globs: ['src/components/Coach/Review', 'src/services/gameReview'] },
+  { script: 'audit-back-from-review.mjs',    globs: ['src/components/Coach/Review'] },
+  { script: 'audit-tactics.mjs',             globs: ['src/components/Tactics', 'src/services/srsEngine'] },
+  { script: 'audit-settings-behavior.mjs',   globs: ['src/components/Settings'] },
+];
+
+function changedFiles() {
+  // Unpushed commits + working-tree changes. Falls back to "everything in
+  // src/" if git is unavailable.
+  const out = [];
+  for (const cmd of [
+    ['git', ['diff', '--name-only', 'origin/main...HEAD']],
+    ['git', ['diff', '--name-only', 'HEAD']],
+    ['git', ['ls-files', '--others', '--exclude-standard']],
+  ]) {
+    const r = spawnSync(cmd[0], cmd[1], { encoding: 'utf-8' });
+    if (r.status === 0) out.push(...r.stdout.split('\n').filter(Boolean));
+  }
+  return [...new Set(out)];
+}
+
+function pickAudits(changed) {
+  const picked = [];
+  for (const entry of AUDIT_MATRIX) {
+    const matches = entry.always
+      ? true
+      : entry.globs.some((g) => changed.some((f) => f.startsWith(g)));
+    if (matches) picked.push(entry.script);
+  }
+  return picked;
+}
+
 if (FULL) {
   console.log('');
   console.log('  ── Playwright audits (FULL mode) ────────────');
@@ -162,14 +251,18 @@ if (FULL) {
     console.log('  ✗ dev server not running on :5173 — start it first (npm run dev)');
     results.push({ label: 'playwright-prereq', ok: false, ms: 0, out: 'dev server down', summary: 'dev server not running' });
   } else {
-    runStep('audit-named-traps', 'node', ['scripts/audit-named-traps.mjs'], {
-      env: { AUDIT_SMOKE_URL: 'http://localhost:5173' },
-      summary: summarizePlaywright,
-    });
-    runStep('audit-leadeye-plans', 'node', ['scripts/audit-leadeye-plans.mjs'], {
-      env: { AUDIT_SMOKE_URL: 'http://localhost:5173' },
-      summary: summarizePlaywright,
-    });
+    const changed = changedFiles();
+    const audits = pickAudits(changed);
+    console.log(`  changed: ${changed.length} files — picked ${audits.length} audit script${audits.length === 1 ? '' : 's'}`);
+    for (const f of changed.slice(0, 8)) console.log(`    · ${f}`);
+    if (changed.length > 8) console.log(`    · ... +${changed.length - 8} more`);
+    console.log('');
+    for (const script of audits) {
+      runStep(script.replace('.mjs','').padEnd(38), 'node', [`scripts/${script}`], {
+        env: { AUDIT_SMOKE_URL: 'http://localhost:5173' },
+        summary: summarizePlaywright,
+      });
+    }
   }
 }
 
@@ -181,6 +274,20 @@ console.log('');
 console.log('──────────────────────────────────────────────');
 if (failed.length === 0) {
   console.log(`  READY TO PUSH (${elapsed}s)`);
+  // Persist a green-run watermark — `--summary` reads this to print
+  // "what's changed since last green." Gitignored.
+  try {
+    mkdirSync(LOG_DIR, { recursive: true });
+    const sha = spawnSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf-8' }).stdout?.trim() ?? '';
+    const entry = {
+      sha,
+      timestamp: new Date().toISOString(),
+      elapsedSec: Number(elapsed),
+      mode: FULL ? 'full' : 'fast',
+      checks: results.map((r) => ({ label: r.label.trim(), ok: r.ok, summary: r.summary ?? null })),
+    };
+    writeFileSync(LOG_LATEST, JSON.stringify(entry, null, 2) + '\n');
+  } catch { /* logging is best-effort */ }
   console.log('');
   process.exit(0);
 }

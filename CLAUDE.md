@@ -1638,20 +1638,34 @@ showing you the green checks." Wired in `scripts/ship-check.mjs`. Runs:
   - The CURATED content-gate test list (NOT every test in the repo):
     lessonIntegrity, narrationAccuracy, narrationGrounding, lessonDepth,
     pircIntegrity, repertoire-orientation, pro-repertoires-orientation,
-    middlegamePlanner, MiddlegamePlansSection, EndgamePlansSection.
-    These are the load-bearing gates that protect content correctness.
-    UI / snapshot / integration tests live at a different reliability
-    bar and aren't gated here.
+    openingManifests, middlegamePlanner, MiddlegamePlansSection,
+    EndgamePlansSection. These are the load-bearing gates that protect
+    content correctness. UI / snapshot / integration tests live at a
+    different reliability bar and aren't gated here.
   - Pulls the live audit-stream (informational, never blocks).
+  - On green, writes a watermark to `.ship-check-log/latest.json`
+    (gitignored) recording the SHA + timestamp — used by `--summary`.
 
   Exits 0 with `READY TO PUSH` only if every required check is green.
   Exits 1 with a concise per-check failure tail otherwise. Run BEFORE
   every push to main. **Don't claim done without running it.**
 
-  Add `--full` (`npm run ship-check:full`) to additionally run the
-  Playwright audit matrix (named-traps + leadeye-plans). Required
-  before declaring a multi-surface build done. Needs `npm run dev`
-  up on :5173 first.
+  Add `--full` (`npm run ship-check:full`) for the **auto-detected
+  Playwright audit matrix**. ship-check inspects `git diff
+  origin/main...HEAD` + working tree, maps changed files to relevant
+  audit scripts via a built-in matrix (mirrors the Post-Deploy Audit
+  table), and runs them. Needs `npm run dev` up on :5173 first.
+
+  `npm run ship-check:summary` reads the last green-run watermark and
+  prints the commits + files changed since — paste-ready for a commit
+  message or PR description. Doesn't run any checks; instant.
+
+  **Pre-push git hook:** `npm run install-hooks` writes
+  `.git/hooks/pre-push` that runs `npm run ship-check` on every push
+  and blocks on red. Idempotent — re-run after a fresh clone or to
+  update. Bypass with `git push --no-verify` (only when you understand
+  the cost). `.git/hooks/` is gitignored, so each fresh clone needs
+  the install once.
 
 The full sequence:
 

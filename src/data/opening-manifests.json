@@ -1,0 +1,39 @@
+{
+  "_comment": "Opening-masterclass content manifests (David 2026-05-22). Each first-class opening declares its MINIMUM curated content counts; the openingManifests test gates against them. If a manifest entry exceeds the current count, the build fails — preventing accidental regressions (deleted variations, dropped plans, lost weapons) and forcing intentional demotions to be explicit. Floors should track the CURRENT state and ratchet UP as content lands; never down without explicit demotion in this file.",
+  "_schema": {
+    "variations": "min entries in repertoire.json:variations",
+    "middlegamePlans": "min plans in middlegame-plans.json with openingId match, id NOT ending -endgame",
+    "endgamePlans": "min plans in middlegame-plans.json with openingId match, id ending -endgame",
+    "modelGames": "min entries in model-games.json with openingId match",
+    "weapons": "min `kind: 'weapon'` entries in <opening>TrapLessons.ts (0 if no trap file)",
+    "warnings": "min `kind: 'warning'` entries in <opening>TrapLessons.ts",
+    "keyIdeas": "min length of repertoire.json:keyIdeas array"
+  },
+  "ruy-lopez": {
+    "variations": 9,
+    "middlegamePlans": 9,
+    "endgamePlans": 6,
+    "modelGames": 1,
+    "weapons": 1,
+    "warnings": 4,
+    "keyIdeas": 4
+  },
+  "pirc-defence": {
+    "variations": 8,
+    "middlegamePlans": 10,
+    "endgamePlans": 0,
+    "modelGames": 1,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "vienna-game": {
+    "variations": 8,
+    "middlegamePlans": 5,
+    "endgamePlans": 0,
+    "modelGames": 3,
+    "weapons": 7,
+    "warnings": 1,
+    "keyIdeas": 4
+  }
+}
