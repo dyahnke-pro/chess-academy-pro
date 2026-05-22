@@ -6,10 +6,15 @@
 // Keys are the variation tab labels, lower-cased — for the Pirc these
 // are the full variation names (no curated short-label set), e.g.
 // 'austrian attack'. Values are exact ids from middlegame-plans.json.
-// Tabs without a curated plan (Byrne, Lion, Fianchetto, Czech, …) show
-// no middlegame plan yet — empty > generic (playbook §3).
+// Every Pirc middlegame plan is White-system-specific, so each lands on
+// its own variation tab. The MAIN line carries NO plan (the Pirc main
+// line is just the d6/Nf6/g6 move-order; a concrete plan only exists once
+// White commits to a system) — `main: []` keeps the section empty there
+// instead of falling through to "show every plan" (playbook §3:
+// empty > generic).
 
 export const PIRC_TAB_PLAN_IDS: Record<string, string[]> = {
+  main: [],
   'austrian attack': ['mp-pircdefence-austrian'],
   'classical system': ['mp-pircdefence-classical'],
   '150 attack': ['mp-pircdefence-150'],

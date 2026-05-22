@@ -6,6 +6,7 @@ import {
   whenFullySeeded,
   loadEcoData,
   loadRepertoireData,
+  loadMiddlegamePlansData,
   computePosition,
   reconcileProRepertoires,
 } from './dataLoader';
@@ -53,6 +54,40 @@ beforeEach(async () => {
   await whenFullySeeded().catch(() => undefined);
   await db.delete();
   await db.open();
+});
+
+describe('loadMiddlegamePlansData — prune', () => {
+  it('deletes plans no longer in the JSON, keeps current ones', async () => {
+    // Simulate an already-seeded device carrying plans that were since
+    // DELETED from the JSON (the Pirc Bayonet/Kholmov case). bulkPut alone
+    // would leave them; the prune must remove them.
+    const stale = (id: string) =>
+      ({
+        id,
+        openingId: 'pirc-defence',
+        criticalPositionFen: '8/8/8/8/8/8/8/8 w - - 0 1',
+        title: 'stale',
+        overview: '',
+        pawnBreaks: [],
+        pieceManeuvers: [],
+        strategicThemes: [],
+        endgameTransitions: [],
+      }) as never;
+    await db.middlegamePlans.put(stale('mp-pircdefence-bayonet'));
+    await db.middlegamePlans.put(stale('mp-pircdefence-kholmov'));
+
+    await loadMiddlegamePlansData();
+
+    // Orphans pruned.
+    expect(await db.middlegamePlans.get('mp-pircdefence-bayonet')).toBeUndefined();
+    expect(await db.middlegamePlans.get('mp-pircdefence-kholmov')).toBeUndefined();
+    // Current plan still present.
+    expect(await db.middlegamePlans.get('mp-pircdefence-austrian')).toBeDefined();
+    // The Pirc now carries exactly its 8 variation plans, none orphaned.
+    const pirc = (await db.middlegamePlans.toArray()).filter((p) => p.openingId === 'pirc-defence');
+    expect(pirc).toHaveLength(8);
+    expect(pirc.some((p) => /bayonet|kholmov/.test(p.id))).toBe(false);
+  });
 });
 
 describe('computePosition', () => {

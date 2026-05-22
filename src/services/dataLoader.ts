@@ -433,6 +433,17 @@ export async function loadMiddlegamePlansData(): Promise<void> {
     ...entry,
   }));
   await db.middlegamePlans.bulkPut(records);
+  // PRUNE stale plans. bulkPut only upserts, so a plan DELETED from the
+  // JSON (e.g. the Pirc Bayonet/Kholmov plans) would otherwise linger in
+  // Dexie forever on already-seeded devices and keep rendering. Middlegame
+  // plans carry NO user progress (they're pure curated content keyed by id),
+  // so it's safe to delete any Dexie row whose id is no longer in the JSON.
+  const validIds = new Set(records.map((r) => r.id));
+  const all = await db.middlegamePlans.toArray();
+  const stale = all.filter((p) => !validIds.has(p.id)).map((p) => p.id);
+  if (stale.length > 0) {
+    await db.middlegamePlans.bulkDelete(stale);
+  }
 }
 
 // ─── Flashcard Seeder ─────────────────────────────────────────────────────────

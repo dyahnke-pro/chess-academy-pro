@@ -776,12 +776,18 @@ export function OpeningDetailPage(): JSX.Element {
     ? selectedVariation.keyIdeas ?? opening.keyIdeas
     : opening.keyIdeas;
   const tabKey = isVariation ? (tabLabel ?? '').toLowerCase() : 'main';
+  // The Pirc plan table keys on the FULL variation name; Ruy keys on its
+  // curated SHORT label. tabLabel is the (possibly truncated) display label
+  // — "Austrian Attack with e5 c5" shows as "Austrian Attack w…", which
+  // wouldn't match the full-name key. So resolve Pirc plans off the full
+  // variation name, not the display label.
+  const pircTabKey = isVariation ? (selectedVariation?.name ?? '').toLowerCase() : 'main';
   const planPrefix = `mp-${opening.id.replace(/-/g, '')}`;
   // Ruy tabs use the HAND-PICKED plan table (no algo show-all). Other
   // openings fall back: variation → its own plan, main line → all plans.
   const subjectPlanIds =
     getRuyTabPlanIds(opening.id, tabKey) ??
-    getPircTabPlanIds(opening.id, tabKey) ??
+    getPircTabPlanIds(opening.id, pircTabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (Ruy masterclass beat lessons).
