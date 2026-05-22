@@ -235,3 +235,18 @@ query amateur explorer for frequent-but-inferior opponent moves, attach the
 masters/Stockfish-best punish, gate on engine soundness → candidate gems for
 review. This generalises trap content to all 40 openings without hand-
 authoring each.
+
+---
+
+## ⭐ PRIORITY UPDATE (David 2026-05-22, emphatic — "absolute must, fix as soon as data resets")
+
+David's #1 want, the reason the course always had a "trap" section: **TODO 3e
+— the systematic punish-the-inaccuracy generator.** Build it FIRST next
+session (it's a contained builder like add-caro-model-games.mjs, faster than
+the full SRS build, and it's the feature he's been trying to articulate).
+
+Revised next-session order:
+1. **TODO 3e — punish-the-inaccuracy generator** (amateur DB finds the common
+   bad move → masters + Stockfish crush it → gem/mini-trap per line). THE must.
+2. **SRS** (retention — makes it stick).
+3. **Opening #2** (needs David's repertoire).
