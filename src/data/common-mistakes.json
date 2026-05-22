@@ -360,7 +360,7 @@
       "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
       "wrongMove": "e5",
       "correctMove": "Nf6",
-      "explanation": "...e5 cracks the d-file open under your own queen — White plays dxe5 dxe5 Qxd8+ and the queens trade off with check, costing castling rights. Nf6 develops naturally and pressures e4 in true Pirc style.",
+      "explanation": "...e5 cracks the d-file open under Black's own queen — White plays dxe5 dxe5 Qxd8+ and the queens trade off with check, costing Black the right to castle. Nf6 develops naturally and pressures e4 in true Pirc style.",
       "punishmentLine": {
         "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
         "title": "Why ...e5 loses on the spot",
@@ -410,13 +410,13 @@
       "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
       "wrongMove": "Bg4",
       "correctMove": "O-O",
-      "explanation": "...Bg4 develops the bishop with a pin, but it's premature — White just kicks with h3 and you have to give up the bishop pair on f3 with no compensation. Castle first; develop the queen's bishop later when you can keep it on a useful square.",
+      "explanation": "...Bg4 develops the bishop with a pin, but it's premature — White just kicks with h3 and Black has to give up the bishop pair on f3 with no compensation. Castling first keeps the queen's bishop in reserve for a square where it actually does something.",
       "punishmentLine": {
         "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
         "title": "Why ...Bg4 gives up the bishop pair",
         "moves": ["Bg4", "h3", "Bxf3", "Qxf3"],
         "annotations": [
-          "...Bg4 pins the f3-knight to the queen, looking aggressive. The problem: the bishop has no safe retreat once h3 hits it, and the c8-bishop is the most valuable piece you'll need for the Pirc's slow manoeuvring.",
+          "...Bg4 pins the f3-knight to the queen, looking aggressive. The problem: the bishop has no safe retreat once h3 hits it, and the c8-bishop is the Pirc's most valuable long-term piece for the slow manoeuvring middlegame.",
           "h3 — the simple kick. Retreats to h5 lose to g4, retreats to d7 or c8 just waste two tempi.",
           "...Bxf3 is forced. Black gives up the light-squared bishop for the knight — the bishop pair is gone, and with it the Pirc's long-term endgame chances.",
           "Qxf3 — White recaptures with the queen, now centralised and eyeing both b7 and f7. White has the bishop pair, a flexible centre, and Black has no real compensation for the structural concession."
