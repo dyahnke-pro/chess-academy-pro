@@ -1,35 +1,47 @@
 import { useState, useEffect } from 'react';
-import { Compass, PlayCircle, BookOpen as LearnIcon, Brain, Swords } from 'lucide-react';
+import { Crown, PlayCircle, BookOpen as LearnIcon, Brain, Swords } from 'lucide-react';
 import { getPlansForOpening } from '../../services/middlegamePlanService';
 import { MiniBoard } from '../Board/MiniBoard';
 import type { MiddlegamePlan } from '../../types';
+import type { MiddlegameAction } from './MiddlegamePlansSection';
 
-export type MiddlegameAction = 'watch' | 'learn' | 'practice' | 'play';
+// Phase architecture (David 2026-05-22). The opening's structure naturally
+// splits into three phases — Opening / Middlegame / Endgame — and the
+// platform's deep-dive promise is that each phase gets first-class
+// teaching. This section is the ENDGAME PHASE:
+//
+//   - Filters `middlegame-plans.json` entries whose id ends `-endgame`.
+//     Same data file, same schema as middlegame plans (a deep DB line +
+//     per-move annotations + pawn breaks / piece manoeuvres / strategic
+//     themes / endgame transitions), but the line runs DEEP into the
+//     characteristic endgame structure the opening produces.
+//   - Per playbook §4: only GENUINE, LINE-SPECIFIC endgames belong here.
+//     General endgame technique (Lucena, opposition, Philidor) belongs in
+//     the BookReader's Endgame chapter — never bolted onto opening tabs.
+//   - Empty by design for openings whose character is decided in the
+//     middlegame (Vienna, sharp gambits, attacking openings). The section
+//     self-hides when no `-endgame` plans exist for the current scope.
+//
+// Visually parallels MiddlegamePlansSection — same MiniBoard + WLPP row,
+// emerald accent instead of blue.
 
-interface MiddlegamePlansSectionProps {
+interface EndgamePlansSectionProps {
   openingId: string;
   boardOrientation: 'white' | 'black';
   onAction: (plan: MiddlegamePlan, action: MiddlegameAction) => void;
   /** When set, show only plans whose id is in this list (variation rescope). */
   filterPlanIds?: string[];
-  /** When there are no plans for the current scope AND this is provided,
-   *  render the section header with this explanatory line INSTEAD of
-   *  hiding it. Used on the main-line tab of openings whose plans are all
-   *  variation-specific, so the section states why it's empty rather than
-   *  silently vanishing. */
-  emptyNote?: string;
 }
 
 const ACTION_BTN =
   'p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow';
 
-export function MiddlegamePlansSection({
+export function EndgamePlansSection({
   openingId,
   boardOrientation,
   onAction,
   filterPlanIds,
-  emptyNote,
-}: MiddlegamePlansSectionProps): JSX.Element {
+}: EndgamePlansSectionProps): JSX.Element {
   const [allPlans, setAllPlans] = useState<MiddlegamePlan[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -46,42 +58,28 @@ export function MiddlegamePlansSection({
     };
   }, [openingId]);
 
-  // Phase architecture (David 2026-05-22): plans whose id ends `-endgame`
-  // are the OPENING-SPECIFIC ENDGAME phase per playbook §4 — they render
-  // in EndgamePlansSection, not here. This section is MIDDLEGAME-phase
-  // only. The id suffix convention matches the existing Ruy data
-  // (mp-ruylopez-exchange-endgame, mp-ruylopez-berlin-endgame).
-  const middlegamePlans = allPlans.filter((p) => !p.id.endsWith('-endgame'));
+  // Endgame-phase plans: id suffix convention (see MiddlegamePlansSection).
+  const endgamePlans = allPlans.filter((p) => p.id.endsWith('-endgame'));
   const plans = filterPlanIds
-    ? middlegamePlans.filter((p) => filterPlanIds.includes(p.id))
-    : middlegamePlans;
+    ? endgamePlans.filter((p) => filterPlanIds.includes(p.id))
+    : endgamePlans;
 
-  if (loading) return <div data-testid="middlegame-plans-empty" />;
+  if (loading) return <div data-testid="endgame-plans-empty" />;
 
-  // No plans for this scope. On the main-line tab of an opening whose plans
-  // are all variation-specific, state that fact instead of hiding (David
-  // 2026-05-22). Everywhere else, stay silent (empty > generic).
-  if (plans.length === 0) {
-    if (!emptyNote) return <div data-testid="middlegame-plans-empty" />;
-    return (
-      <div className="bg-theme-surface rounded-xl p-4 mb-4" data-testid="middlegame-plans-note">
-        <div className="flex items-center gap-2 mb-2">
-          <Compass size={14} className="text-blue-500" />
-          <h3 className="text-sm font-semibold text-theme-text">Middlegame Plans</h3>
-        </div>
-        <p className="text-xs text-theme-text-muted leading-relaxed">{emptyNote}</p>
-      </div>
-    );
-  }
+  // No curated endgame for this scope — stay silent (empty > generic).
+  // Per playbook §4: "It's fine for a sharp gambit / attacking line to
+  // have NO endgame. Don't fabricate." The Vienna deliberately has no
+  // entries here; the opening's character is decided in the middlegame.
+  if (plans.length === 0) return <div data-testid="endgame-plans-empty" />;
 
   return (
-    <div className="bg-theme-surface rounded-xl p-4 mb-4" data-testid="middlegame-plans-section">
+    <div className="bg-theme-surface rounded-xl p-4 mb-4" data-testid="endgame-plans-section">
       <div className="flex items-center gap-2 mb-3">
-        <Compass size={14} className="text-blue-500" />
-        <h3 className="text-sm font-semibold text-theme-text">Middlegame Plans ({plans.length})</h3>
+        <Crown size={14} className="text-emerald-500" />
+        <h3 className="text-sm font-semibold text-theme-text">Endgame Plans ({plans.length})</h3>
       </div>
       <p className="text-xs text-theme-text-muted mb-3">
-        Watch the plan played out, learn it, practise it, then play it against the coach.
+        The structural endgame this opening produces — watch it form, learn the technique, practise the conversion, play it against the coach.
       </p>
       <div className="space-y-1">
         {plans.map((plan) => (

@@ -11,6 +11,7 @@ import { WalkthroughMode } from './WalkthroughMode';
 import { MasteryRing } from './MasteryRing';
 import { MiniBoard } from '../Board/MiniBoard';
 import { MiddlegamePlansSection, type MiddlegameAction } from './MiddlegamePlansSection';
+import { EndgamePlansSection } from './EndgamePlansSection';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
@@ -1193,13 +1194,29 @@ export function OpeningDetailPage(): JSX.Element {
 
       {/* Middlegame Plans — Watch / Learn / Practice / Play per plan.
           The theory prose now lives inside Learn (MiddlegamePlanStudy),
-          so there's no separate inline theory dump. */}
+          so there's no separate inline theory dump.
+          Phase architecture (2026-05-22): this section now filters OUT
+          `-endgame` plans — those render below in EndgamePlansSection. */}
       <MiddlegamePlansSection
         openingId={opening.id}
         boardOrientation={opening.color}
         onAction={handleMiddlegameAction}
         filterPlanIds={subjectPlanIds}
         emptyNote={mainPlanNote}
+      />
+
+      {/* Endgame Plans — opening-specific endgames that arise from the
+          characteristic structure (e.g. Ruy Exchange → kingside-majority
+          K&P, Ruy Berlin → queenless ending). Self-hides for openings
+          whose character is decided in the middlegame (Vienna, sharp
+          gambits, attacking lines). Per playbook §4: only GENUINE,
+          LINE-SPECIFIC endgames belong here — general endgame technique
+          lives in the BookReader's Endgame chapter. */}
+      <EndgamePlansSection
+        openingId={opening.id}
+        boardOrientation={opening.color}
+        onAction={handleMiddlegameAction}
+        filterPlanIds={subjectPlanIds}
       />
 
       {/* Named WEAPONS for THIS tab — student-side punishments when the

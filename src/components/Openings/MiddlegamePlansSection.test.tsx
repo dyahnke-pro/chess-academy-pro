@@ -97,4 +97,24 @@ describe('MiddlegamePlansSection', () => {
     await userEvent.click(screen.getByTestId('plan-play-p1'));
     expect(onAction).toHaveBeenCalledWith(plan, 'play');
   });
+
+  // Phase architecture (David 2026-05-22): plans whose id ends `-endgame`
+  // belong in EndgamePlansSection (the endgame phase). MiddlegamePlansSection
+  // must EXCLUDE them so they don't double-render.
+  it('excludes plans whose id ends in -endgame (phase split)', async () => {
+    const plans = [
+      buildMiddlegamePlan({ id: 'mp-ruylopez-mainline', title: 'Mainline Plan' }),
+      buildMiddlegamePlan({ id: 'mp-ruylopez-exchange-endgame', title: 'Exchange Endgame' }),
+    ];
+    mockGetPlans.mockResolvedValue(plans);
+    renderSection('ruy-lopez');
+
+    await waitFor(() => {
+      expect(screen.getByTestId('middlegame-plans-section')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Mainline Plan')).toBeInTheDocument();
+    expect(screen.queryByText('Exchange Endgame')).not.toBeInTheDocument();
+    expect(screen.getByText(/Middlegame Plans \(1\)/)).toBeInTheDocument();
+  });
 });
