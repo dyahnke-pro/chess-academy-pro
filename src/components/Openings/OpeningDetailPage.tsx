@@ -109,7 +109,8 @@ type ViewMode =
   | 'middlegame-watch'
   | 'middlegame-plan'
   | 'middlegame-practice'
-  | 'middlegame-play';
+  | 'middlegame-play'
+  | 'mistake-watch';
 
 function computeFenFromPgn(pgn: string, setupFen?: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
@@ -143,6 +144,7 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeNamedTrapId, setActiveNamedTrapId] = useState<string | null>(null);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
+  const [activeMistake, setActiveMistake] = useState<CommonMistake | null>(null);
   // Which variation tab is selected (-1 = main line). Drives the
   // full-page rescope: every section below renders for the selected
   // variation as its own opening ("seven openings in one").
@@ -237,6 +239,16 @@ export function OpeningDetailPage(): JSX.Element {
     },
     [],
   );
+
+  /** Mount PlayableLinePlayer (watch mode) on the mistake's authored
+   *  punishment line. Mistakes intentionally only get WATCH — Learn /
+   *  Practice / Play would be asking the student to drill the WRONG
+   *  move, which contradicts the pedagogy. The static expand-card stays
+   *  for mistakes without a punishmentLine (legacy fallback). */
+  const handleMistakeWatch = useCallback((mistake: CommonMistake): void => {
+    setActiveMistake(mistake);
+    setViewMode('mistake-watch');
+  }, []);
 
   // Variation tab is URL-addressable (?line=marshall) so the training
   // plan, weaknesses, coach chat, etc. can deep-link a specific variation.
@@ -718,6 +730,21 @@ export function OpeningDetailPage(): JSX.Element {
         line={activeMiddlegamePlan.playableLines[0]}
         boardOrientation={opening.color}
         mode={playMode}
+        onComplete={handleExit}
+        onExit={handleExit}
+      />
+    );
+  }
+
+  // Common Mistake WATCH — auto-play the wrong move + its punishment
+  // with narration. Only WATCH is wired (Learn/Practice/Play would ask
+  // the student to drill the wrong move, which contradicts the point).
+  if (viewMode === 'mistake-watch' && activeMistake?.punishmentLine) {
+    return (
+      <PlayableLinePlayer
+        line={activeMistake.punishmentLine}
+        boardOrientation={opening.color}
+        mode="watch"
         onComplete={handleExit}
         onExit={handleExit}
       />
@@ -1349,12 +1376,16 @@ export function OpeningDetailPage(): JSX.Element {
 
       {/* Common Mistakes — Pitfalls zone tail (moved from above
           Traps section so the teaching arc reads Weapons → Pitfalls).
-          Amber-outlined to match the zone (David 2026-05-20). */}
+          Amber-outlined to match the zone (David 2026-05-20). When a
+          mistake has a punishmentLine, the card surfaces a "Watch the
+          punishment" button that mounts PlayableLinePlayer — same WLPP
+          surface as middlegame plans. */}
       {mistakes.length > 0 && (
         <div className="rounded-xl border border-amber-500/30">
           <CommonMistakesSection
             mistakes={mistakes}
             boardOrientation={opening.color}
+            onWatchPunishment={handleMistakeWatch}
           />
         </div>
       )}

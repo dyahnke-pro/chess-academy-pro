@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Chess } from 'chess.js';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
-import { Ban, ChevronDown, ChevronUp } from 'lucide-react';
+import { Ban, ChevronDown, ChevronUp, PlayCircle } from 'lucide-react';
 import type { CommonMistake } from '../../types';
 import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 
@@ -26,11 +26,17 @@ const CORRECT_ARROW_COLOR = 'rgba(34, 197, 94, 0.85)'; // green
 interface CommonMistakesSectionProps {
   mistakes: CommonMistake[];
   boardOrientation: 'white' | 'black';
+  /** Fired when the user taps "Watch the punishment" on a mistake whose
+   *  punishmentLine is authored. The page mounts PlayableLinePlayer
+   *  (locked WLPP grammar §1a) — same surface that drives middlegame
+   *  plans. Mistakes without a punishmentLine still expand-in-place. */
+  onWatchPunishment?: (mistake: CommonMistake) => void;
 }
 
 export function CommonMistakesSection({
   mistakes,
   boardOrientation,
+  onWatchPunishment,
 }: CommonMistakesSectionProps): JSX.Element {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
@@ -45,7 +51,7 @@ export function CommonMistakesSection({
         </h3>
       </div>
       <p className="text-xs text-theme-text-muted mb-3">
-        Natural-looking moves that are actually wrong. Learn what NOT to play.
+        Natural-looking moves that are actually wrong. Watch them play out so you see why.
       </p>
       <div className="space-y-2">
         {mistakes.map((mistake, i) => {
@@ -57,6 +63,7 @@ export function CommonMistakesSection({
               mistake={mistake}
               isExpanded={isExpanded}
               onToggle={() => setExpandedIndex(isExpanded ? null : i)}
+              onWatchPunishment={onWatchPunishment}
               boardOrientation={boardOrientation}
             />
           );
@@ -71,6 +78,7 @@ interface MistakeCardProps {
   mistake: CommonMistake;
   isExpanded: boolean;
   onToggle: () => void;
+  onWatchPunishment?: (mistake: CommonMistake) => void;
   boardOrientation: 'white' | 'black';
 }
 
@@ -79,6 +87,7 @@ function MistakeCard({
   mistake,
   isExpanded,
   onToggle,
+  onWatchPunishment,
   boardOrientation,
 }: MistakeCardProps): JSX.Element {
   // Compute red arrow (wrong move) and green arrow (correct move) by
@@ -97,6 +106,8 @@ function MistakeCard({
     }
     return out;
   }, [mistake.fen, mistake.wrongMove, mistake.correctMove]);
+
+  const hasPunishment = Boolean(mistake.punishmentLine && onWatchPunishment);
 
   return (
     <div
@@ -158,6 +169,19 @@ function MistakeCard({
           <p className="text-sm text-theme-text leading-relaxed">
             {mistake.explanation}
           </p>
+          {hasPunishment && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onWatchPunishment?.(mistake);
+              }}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-red-500/15 border-2 border-red-400/50 text-red-200 text-sm font-semibold hover:bg-red-500/25 hover:border-red-400/70 transition-colors"
+              data-testid={`mistake-watch-${i}`}
+            >
+              <PlayCircle size={16} />
+              Watch the punishment play out
+            </button>
+          )}
         </div>
       )}
     </div>

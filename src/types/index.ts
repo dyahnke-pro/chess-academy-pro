@@ -228,6 +228,16 @@ export interface CommonMistake {
   wrongMove: string;
   correctMove: string;
   explanation: string;
+  /** Optional: the punishment played out as a narrated walkthrough.
+   *  When set, the mistake renders as a "Watch the punishment" tile that
+   *  mounts PlayableLinePlayer (locked WLPP grammar §1a) instead of the
+   *  legacy static expand-card. moves[0] is always the wrongMove itself;
+   *  moves[1..] are the punishment continuation that explains WHY it's
+   *  bad. Annotations + arrows + highlights follow the same lead-the-eye
+   *  rules as middlegame plans (§5a — orange=move squares, yellow=key
+   *  squares, green=vision arrows; arrows must originate on a non-pawn
+   *  piece with a clear sight-line per the lessonIntegrity gate). */
+  punishmentLine?: PlayableMiddlegameLine;
 }
 
 // ─── Checkpoint Quiz ──────────────────────────────────────────────────────
