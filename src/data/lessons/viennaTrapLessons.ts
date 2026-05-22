@@ -35,7 +35,6 @@ import type {
 // square, SOFT BLUE = secondary context.
 const ATK = 'rgba(40,185,95,0.92)';
 const VIS = 'rgba(40,185,95,0.92)';
-const INTENT = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
 const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
