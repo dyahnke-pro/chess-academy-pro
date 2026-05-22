@@ -169,6 +169,29 @@ describe('dbService', () => {
       const result = await getOpeningById('nonexistent');
       expect(result).toBeUndefined();
     });
+
+    it('resolves alias ID to canonical record (pirc-defense → pirc-defence)', async () => {
+      // The Lichess DB slugifies "Pirc Defense" (American) to
+      // `pirc-defense`, but our curated repertoire/lessons/plans key on
+      // the British `pirc-defence`. The alias map lets URLs/lookups
+      // using either spelling resolve to the canonical record without
+      // renaming 40+ files or orphaning user-state.
+      const canonical = buildOpeningRecord({ id: 'pirc-defence', name: 'Pirc Defence' });
+      await db.openings.put(canonical);
+
+      const direct = await getOpeningById('pirc-defence');
+      const viaAlias = await getOpeningById('pirc-defense');
+      expect(direct?.id).toBe('pirc-defence');
+      expect(viaAlias?.id).toBe('pirc-defence');
+      expect(viaAlias).toEqual(direct);
+    });
+
+    it('does NOT fabricate a record when alias misses and canonical is absent', async () => {
+      // If the canonical record isn't in the DB, the alias fallback
+      // returns undefined rather than inventing a row.
+      const result = await getOpeningById('pirc-defense');
+      expect(result).toBeUndefined();
+    });
   });
 
   describe('updateOpeningProgress', () => {

@@ -33,11 +33,38 @@ export async function getRepertoireOpenings(
   return filtered.sort((a, b) => getMasteryPercent(a) - getMasteryPercent(b));
 }
 
-/** Returns a single opening by its ID. */
+/** Slug-level aliases for opening IDs whose canonical form in our DB
+ *  differs from a spelling the user (or a URL) might use. Used by
+ *  `getOpeningById` to transparently resolve either spelling to the
+ *  canonical record without renaming 40+ files or orphaning user-state
+ *  (favorites / SRS cards / weakness rows / etc.) that key on the old id.
+ *
+ *  Current entries:
+ *  - `pirc-defense` → `pirc-defence`: the Lichess DB slugifies "Pirc Defense"
+ *    (American) to `pirc-defense`, but our curated repertoire/lessons/plans
+ *    all key on the British `pirc-defence` (chosen by
+ *    scripts/dedupe-british-american.mjs because that's where the curated
+ *    content lives). Without this alias, navigating to /openings/pirc-defense
+ *    returns "Opening not found".
+ *
+ *  Add an entry only when a spelling needs to resolve to a different
+ *  canonical id; this is NOT a place for human-typed name aliases (those
+ *  live in src/services/openingAliases.ts). */
+export const OPENING_ID_ALIASES: Record<string, string> = {
+  'pirc-defense': 'pirc-defence',
+};
+
+/** Returns a single opening by its ID. Honours `OPENING_ID_ALIASES`: if
+ *  the direct lookup misses, retries with the aliased canonical id so
+ *  /openings/<alias> URLs resolve to the canonical record. */
 export async function getOpeningById(
   id: string,
 ): Promise<OpeningRecord | undefined> {
-  return db.openings.get(id);
+  const direct = await db.openings.get(id);
+  if (direct) return direct;
+  const aliased = OPENING_ID_ALIASES[id];
+  if (aliased) return db.openings.get(aliased);
+  return undefined;
 }
 
 /** Returns all openings matching a given ECO code. */
