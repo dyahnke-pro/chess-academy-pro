@@ -134,6 +134,14 @@ function collectKnownSans(context: MasterPlayContext): Set<string> {
       for (const san of e.sans) set.add(san);
     }
   }
+  // Game-review ground truth: moves actually played in the game under
+  // review + the legal moves of the reviewed position (chess.js-
+  // validated). These count as grounded so the coach can discuss the
+  // student's OWN game even when it left master book. Populated only on
+  // the review surface; undefined elsewhere.
+  if (context.groundedSans) {
+    for (const san of context.groundedSans) set.add(san);
+  }
   return set;
 }
 
@@ -303,11 +311,15 @@ export function validateClaims(
   const violations: ClaimViolation[] = [];
   const hasMasterData = context.current.source !== 'none' && context.current.moves.length > 0;
   const hasDbData = (context.dbEntries?.length ?? 0) > 0;
+  const hasGroundedSans = (context.groundedSans?.length ?? 0) > 0;
   // "hasData" here means we have ANY grounding source — live
-  // master-play OR canonical opening DB. The DB-grounding extension
-  // means an empty Lichess explorer no longer forces a stock-out when
-  // the question is about a named opening that exists in the DB.
-  const hasData = hasMasterData || hasDbData;
+  // master-play OR canonical opening DB OR the game-review ground-truth
+  // SAN set. The DB-grounding extension means an empty Lichess explorer
+  // no longer forces a stock-out when the question is about a named
+  // opening that exists in the DB; the grounded-SAN extension does the
+  // same for game review (the moves the student actually played are
+  // grounded even when the position left master book).
+  const hasData = hasMasterData || hasDbData || hasGroundedSans;
   const knownSans = collectKnownSans(context);
 
   // ── SAN check ────────────────────────────────────────────────────

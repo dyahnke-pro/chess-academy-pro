@@ -105,6 +105,64 @@ describe('validateClaims — SAN check', () => {
   });
 });
 
+describe('validateClaims — game-review grounded SANs', () => {
+  // Game review: position left master book (a sacrifice), so master-play
+  // has no data, but the game's own moves + legal moves of the reviewed
+  // position are ground truth. Regression for the review-surface stock-out
+  // storm where the coach's discussion of the student's OWN game (Kh8,
+  // exf7+, Nxf7, …) tripped the validator on every concrete SAN.
+  function reviewContext(groundedSans: string[]): MasterPlayContext {
+    return {
+      current: {
+        fen: 'r1bq1r1k/ppp1pPbp/6p1/4n3/6n1/2N2N2/PPP1BPPP/R1BQ1RK1 w - -',
+        totalGames: 0,
+        moves: [],
+        source: 'none',
+      },
+      lookahead: [],
+      groundedSans,
+    };
+  }
+
+  it('passes a SAN that was actually played in the game under review', () => {
+    const r = validateClaims(
+      'Kh8 sidesteps the check, but the king is exposed here.',
+      reviewContext(['e4', 'd6', 'f4', 'Nf6', 'exf7+', 'Kh8']),
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  it('passes the engine-suggested legal move at the reviewed position', () => {
+    // Nxf7 (a legal capture) is the engine's pick; it was NOT played
+    // (the student played Kh8) so it isn't in the game list — but it IS
+    // grounded because review threads in the legal moves of the position.
+    const r = validateClaims(
+      'Nxf7 was the more accurate move, winning the exchange.',
+      reviewContext(['e4', 'd6', 'Kh8', 'Nxf7', 'exf7+']),
+    );
+    expect(r.ok).toBe(true);
+  });
+
+  it('still flags a SAN that is neither played nor legal (a real hallucination)', () => {
+    const r = validateClaims(
+      'You should have played Qh5 to threaten mate.',
+      reviewContext(['e4', 'd6', 'Kh8', 'Nxf7']),
+    );
+    expect(r.ok).toBe(false);
+    expect(r.violations.some((v) => v.kind === 'san' && v.claim === 'Qh5')).toBe(true);
+  });
+
+  it('still flags fabricated master-play stats even with grounded SANs', () => {
+    // groundedSans grounds MOVES, not statistics — "73%" has no source.
+    const r = validateClaims(
+      'Kh8 is played in 73% of master games here.',
+      reviewContext(['e4', 'Kh8']),
+    );
+    expect(r.ok).toBe(false);
+    expect(r.violations.some((v) => v.kind === 'numeric')).toBe(true);
+  });
+});
+
 describe('validateClaims — numeric check', () => {
   it('passes a percentage that matches context', () => {
     // Bb5's whitePct in context is 37.1% — saying "37%" should pass (±3).
