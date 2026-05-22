@@ -160,3 +160,24 @@ break drill, 3 min") — the lesson plan tells them what just opened up.
 
 Ties to TODO 1 tiers (discovered/learned/perfected/mastery ARE the rung
 states) + TODO 3 (the come-back nudges become "next unlock" prompts).
+
+### TODO 3c — Subline gating + what unlocks unlock (David 2026-05-22)
+
+**Subline gating — light, not the full ladder.** Do NOT lock variation tabs
+behind the ENTIRE Classical ladder — it's a DEFENCE (opponent picks the line),
+and the Classical isn't even most-faced (Advance 37% > Exchange 30% >
+Classical 21%), so full-ladder gating leaves the user unprepared for the line
+they'll actually meet. Instead:
+- Gate sublines behind the Classical's **WATCH only** (~9 min, teaches the
+  core ideas every variation reuses) → then tabs open.
+- Unlock variations in **amateur-frequency order** (Advance first), matching
+  what they'll face — not the showcase order.
+- Keep the **"unlock all" escape** for a surprise line tonight.
+
+**Two-tier completion rewards (model game AND traps, at different moments):**
+- **Line ladder complete → unlock the MODEL GAME** — the celebratory "watch it
+  win at the top level" payoff. Reliable: one per variation.
+- **Line/opening MASTERED → unlock its TRAPS/WEAPONS** — the "earned a weapon"
+  power-up. Gate traps behind mastery because they're advanced/situational
+  (don't drill the Qe2 punish before you know the line). Only fires where a
+  REAL trap exists (Caro = the one Qe2 warning; empty > forced).
