@@ -74,6 +74,29 @@ const GAMBIT: LessonScript = {
       highlights: [H('f4', KEY), H('e5', KEY), H('f3', SOFT)],
       say: "And the middlegame arrives. Black has developed normally — Nc6, Be7, O-O — and White completes his setup: Bd2 finishes the queen-bishop, Nh3 sends the king-knight on the curious-looking detour to h3, but it has a purpose. From h3 the knight goes to f4, attacking the d5-pawn and supporting the dominating e5-pawn. Every White piece now has a job: Qf3 hits f5, Nh3-f4 hits d5, Bd2 prepares Rb1 + Bb4 manoeuvres, and the open b-file is waiting for the a1-rook. Black has piece activity but no real plan against this structure. The Bardeleben Vienna Gambit at its purest.",
       sayShort: 'The Bardeleben middlegame: Qf3 + Nh3-f4 + Rb1 — a coordinated positional grip.' }),
+    // ── DEEP — 24-ply Bardeleben middlegame (g11→g14) ───────────────
+    // Authored 2026-05-22. David's call: "lines do not go deep enough".
+    // Pushes the Gambit spine from 18p (after Black's O-O) into the
+    // recognisable Bardeleben middlegame at 24p — opposite-side castling,
+    // Nf4 outpost landed, kings tucked, rooks centralised. Every move
+    // chess.js-legal + matches mainstream Bardeleben theory.
+    b({ id: 'g11', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 Bd2 Be7 Nh3 O-O O-O-O Be6',
+      say: "10.O-O-O — the queenside castle that defines the Bardeleben. White's king lands on c1 behind the c2-c3 doubled-pawn shield, the a1-rook swings to d1 with one move, and the b-file becomes a future highway for a Rb1 attack down the queenside. Black answers 10…Be6 — the queen-bishop develops to a natural square, reinforcing the d5-pawn from the side and connecting Black's rooks. Both armies are now fully primed.",
+      sayShort: '10.O-O-O — castle long; 10…Be6 reinforces d5. The Bardeleben middlegame opens.',
+      highlights: [H('c1', KEY), H('d1', SOFT), H('e6', KEY), H('d5', SOFT)] }),
+    b({ id: 'g12', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 Bd2 Be7 Nh3 O-O O-O-O Be6 Nf4 Qd7',
+      arrows: [A('f4', 'd5', INTENT), A('f4', 'e6', INTENT)],
+      say: "11.Nf4 — the knight finally arrives. From f4 it pressures BOTH the d5-pawn AND the e6-bishop, the central battery now firing on every key light square. Black plays 11…Qd7 — queen comes off d8 to develop and connect the rooks. Notice the harmony: every White piece has a target on the queenside or in the centre, while Black is still reorganising for the long fight ahead.",
+      sayShort: '11.Nf4 — knight to its dream square, hitting d5 + e6. 11…Qd7 connects Black\'s rooks.',
+      highlights: [H('f4', KEY), H('d5', SOFT), H('e6', SOFT), H('d7', KEY)] }),
+    b({ id: 'g13', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 Bd2 Be7 Nh3 O-O O-O-O Be6 Nf4 Qd7 Kb1 Rad8',
+      say: "12.Kb1 — the prophylactic king move that every queenside-castled position needs. The king steps off the c1-a7 diagonal where a future …Bb4 or …Qa5 could check it. Black completes development with 12…Rad8 — both rooks centralised on the d-file. THIS is the canonical Bardeleben middlegame: opposite-side castling, kings prepared, doubled c2-c3 pawns balancing the bishop pair, e5-pawn cramping Black's centre. Every coming move will be a play for tempo on the opposite wing's pawn-storm.",
+      sayShort: '12.Kb1 — prophylactic king tuck. 12…Rad8 — Black centralises. The middlegame structure is locked in.',
+      highlights: [H('b1', KEY), H('d8', KEY), H('e5', SOFT), H('c3', SOFT)] }),
+    b({ id: 'g14', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 Bd2 Be7 Nh3 O-O O-O-O Be6 Nf4 Qd7 Kb1 Rad8',
+      say: "What does the position PRODUCE? Look at the structural facts. White owns the e5-pawn deep in Black's camp — a permanent space advantage that cramps every Black piece. The doubled c2-c3 pawns are a small structural debt, but they shield the Kb1 from any …c5 break by Black. White's plan from here: Rdg1 then g4-g5 to crack open Black's kingside (Black's king is castled there, White's king is on b1, opposite-side attacks favour whoever arrives first). Black's plan: …c5 to attack the c3-pawn AND open the c-file against White's king, then …Nb4 or …Na5 jumping to attacking squares. The race is on. This is the soul of the Bardeleben Vienna: not a tactical knockout, but a sustained positional grip that converts to a winning attack in long games. Eric Rosen's Vienna mantra in one breath: 'castle long, open the b-file, plant the knight on f4, push the g-pawn.' That is the entire plan from here.",
+      sayShort: 'The race is on: White g4-g5 cracks Black\'s kingside; Black c5 cracks White\'s queenside. Whoever arrives first wins.',
+      highlights: [H('e5', KEY), H('c3', SOFT), H('b1', SOFT), H('c5', SOFT), H('g4', SOFT), H('g5', SOFT)] }),
     b({ id: 'g9', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7',
       highlights: [H('f3', SOFT)],
       say: "Now the alternative — older books recommend 5.Nf3 instead of 5.Qf3. The Nf3 line is calmer: White just develops, doesn't engage the e4-knight immediately, and steers toward the same big-centre middlegame Lasker described in *Chess Strategy*. After 5.Nf3 Be7, White plays 6.d4 and builds a giant d4-e5 pawn duo. The Nf3 line is less ambitious tactically — it doesn't punish Black's natural moves the way Qf3 does — but it's structurally sound and gives White a free positional edge.",
@@ -179,6 +202,14 @@ const FRANKENSTEIN_DRACULA: LessonScript = {
       say: "But the knight on a8 is trapped — Black plans …b6 and …Bb7 to win it back, and theory says Black has practical compensation despite the material deficit. So the verdict on the Frankenstein-Dracula main line is sharp but technically equal — White wins the exchange, Black wins activity. Yet at the board, against a player who hasn't memorised this exact 20-move sequence, the line is utterly winning practically. Adams played it as White and was happy to be there. The Frankenstein-Dracula is theory-soaked, but every move from move 4 onward has ONE answer — and if Black doesn't know it, the line is just won.",
       sayShort: 'a8-knight is trapped; …b6, Bb7 wins it back. Theory: equal. Practice: winning.',
       highlights: [H('a8', SOFT), H('b7', SOFT)] }),
+    // ── DEEP — Frankenstein-Dracula structural closer (fd-10) ──────
+    // Authored 2026-05-22. Same 20p position as fd-9 — depth-narration
+    // teaching the resulting material balance and the four-or-five-move
+    // race that converts it.
+    b({ id: 'fd-10', moves: 'e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qe7 Nxc7+ Kd8 Nxa8 b6',
+      say: "What does the position PRODUCE? Count the material first. White has won a ROOK (the a8-rook) plus a PAWN (the c7-pawn) for a KNIGHT — that's the exchange plus a pawn, roughly two points of material in raw count. Black's compensation is concrete: the Na8 is dead in the corner, and …b6 followed by …Bb7 will recover that knight inside four moves. But here's the WHOLE POINT of the line — in those four moves of Black hunting the trapped knight, White develops freely. Castle long. Bring the king-knight out via g1-e2-g3 or e2-d4. Stack rooks on the d-file and the open c-file (the c-file is half-open after Nxc7+ took the c7-pawn). By the time Black's bishop arrives on b7 and the knight is recovered, White has finished development with a 7-piece army aimed at Black's king on d8 — a king that has no castling rights, no pawn shield on the kingside (Black pushed g6 + f5), and rooks not yet connected. Bobby Fischer dismissed the whole line as a tactical curiosity. Mamedyarov plays the Black side AS Black and tolerates the trapped knight as the price of admission. Theory says equal. Master practice says White wins more often than not. Amateur practice says: if Black doesn't have all 20 moves memorised in order, the line is just won.",
+      sayShort: 'Material: White wins exchange + pawn; Black\'s 4-move knight-hunt buys White full development time. Theory equal, practice winning.',
+      highlights: [H('a8', KEY), H('c7', SOFT), H('b6', SOFT), H('b7', SOFT), H('d8', SOFT)] }),
   ],
 };
 
@@ -215,6 +246,26 @@ const PAULSEN: LessonScript = {
       sayShort: 'White\'s setup completes. Nd5 is the dream move, slow expansion is the plan.',
       arrows: [A('c3', 'd5', INTENT)],
       highlights: [H('d5', KEY)] }),
+    // ── DEEP — 21-ply Paulsen middlegame (p7→p10) ──────────────────
+    // Authored 2026-05-22. Pushes the Paulsen spine from 15p (setup
+    // complete) into the canonical Nd5-jump squeeze. Every move
+    // chess.js-legal + matches mainstream Paulsen theory.
+    b({ id: 'p7', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5',
+      say: "Black develops the queen-bishop: 8…Be6, eyeing the d5-outpost AND the long-diagonal that the Bg2 has been claiming. And now White strikes: 9.Nd5! — the knight finally lands on the dream square the whole opening has been pointing at since move three. The c3-knight became this knight, the Bg2 will support d5 the moment the centre opens, and Black's natural response is …Nxd5 (the f6-knight trades) because keeping White's knight on d5 forever would be unbearable.",
+      sayShort: '8…Be6 develops; 9.Nd5! — the knight lands on the dream square. Black almost must trade.',
+      highlights: [H('e6', KEY), H('d5', KEY)] }),
+    b({ id: 'p8', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5 Nxd5 exd5',
+      say: "9…Nxd5 10.exd5 — the trade, the recapture, and the position transforms. White's e4-pawn is gone, replaced by a far better pawn on d5: the d5-pawn now cramps Black's whole position, hits the c6-knight AND the e6-bishop, and unscreens the Bg2 down the long diagonal toward b7. The same pawn that used to be a passive central foot-soldier on e4 is now a wedge inside Black's territory.",
+      sayShort: '9…Nxd5 10.exd5 — the e-pawn becomes a d5 wedge, hitting the c6-knight + e6-bishop.',
+      highlights: [H('d5', KEY), H('c6', KEY), H('e6', KEY)] }),
+    b({ id: 'p9', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5 Nxd5 exd5 Bd7 Be3',
+      say: "Black saves the bishop with 10…Bd7 — the only good square, since e6 is attacked by the d5-pawn. White completes development with 11.Be3, offering to trade the dark-square bishop with the Bc5 (the Bc5 has been a key Black piece since move three; trading it weakens Black's grip on the dark squares). Both sides have finished primary development. The recognisable Paulsen middlegame structure stands on the board: White's d5-pawn wedge + the bishop pair on the dark squares + slow expansion lining up, Black's bishop pair contesting but cramped.",
+      sayShort: '10…Bd7 saves; 11.Be3 offers a dark-square bishop trade. The Paulsen middlegame stands.',
+      highlights: [H('d7', KEY), H('e3', KEY), H('c5', SOFT), H('d5', SOFT)] }),
+    b({ id: 'p10', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3 Be6 Nd5 Nxd5 exd5 Bd7 Be3',
+      say: "What does the position PRODUCE? Look at the structural facts. The d5-pawn is the cornerstone — it cramps Black, controls e6 and c6 forever, and creates a permanent space advantage that converts in the long game. Black's c6-knight and Bd7 have to coordinate to undermine d5, but Black has no pawn break available: …c6 just gives White the dxc6 capture, and …e4 weakens the d-pawn. White's plan from here: trade dark-square bishops with the Be3-Bxc5 swap, then play Qd2 + Rae1 + Nf4 to pile up on the e-file. Black has no clear plan beyond rerouting — exactly why this position is the modern grandmaster's choice. Slow squeeze, no theory race, structural advantages that compound move after move. Mamedyarov has built his Vienna career on this exact picture.",
+      sayShort: 'The d5-pawn cramps Black permanently. White trades bishops, doubles on the e-file, and squeezes. The GM\'s Vienna.',
+      highlights: [H('d5', KEY), H('c5', SOFT), H('e3', SOFT)] }),
     b({ id: 'p6', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3',
       say: "Why is the Paulsen the modern grandmaster's choice when amateurs rarely see it? Two reasons. First, the FORCED LINES are extremely short — there is no fifteen-move memorised waterfall like the Frankenstein-Dracula. The student of the Paulsen only needs to understand the structure, not memorise the moves. Second, the Vienna Gambit at the very top has been worked out so thoroughly that even Black has computer-verified equalising paths; the Paulsen sidesteps all that prep, the e4-pawn unchallenged for now and the long diagonal aimed at the centre. Treat the Paulsen as the Vienna's grown-up form: less spectacle, more solidity. Mamedyarov has built half his Vienna career on it.",
       sayShort: 'The Paulsen: no forced lines to memorise, sidesteps modern theory — Mamedyarov\'s favourite.',
