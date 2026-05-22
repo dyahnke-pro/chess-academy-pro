@@ -1,21 +1,15 @@
 import { describe, it, expect } from 'vitest';
 import { Chess, type Square } from 'chess.js';
-import { RUY_LOPEZ_LESSON } from './ruyLopez';
-import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { RUY_TRAP_LESSONS, RUY_TRAP_DEFS, getRuyTrapPlayableLine } from './ruyTrapLessons';
-import { VIENNA_GAME_LESSON } from './vienna';
-import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
-import { VIENNA_TRAP_LESSONS } from './viennaTrapLessons';
 import { buildLessonReferenceBlock } from './index';
+import { ALL_LESSONS, expectedOrientation } from './registry';
+import { maxAnchorPly, longestAnchorPly, MIN_DB_ANCHOR_PLY } from '../../utils/dbAnchor';
 
-const lessons = [
-  RUY_LOPEZ_LESSON,
-  ...Object.values(RUY_VARIATION_LESSONS),
-  ...Object.values(RUY_TRAP_LESSONS),
-  VIENNA_GAME_LESSON,
-  ...Object.values(VIENNA_VARIATION_LESSONS),
-  ...Object.values(VIENNA_TRAP_LESSONS),
-];
+// Universal masterclass-lesson integrity gate. Sweeps the WHOLE lesson
+// registry (ALL_LESSONS) — main + variation + trap, every opening — so a
+// newly-built opening is covered the moment its lessons are added to
+// registry.ts. (Before 2026-05-22 this hardcoded the Ruy+Vienna arrays and
+// passed vacuously on anything else — "Hole 2".)
 
 function fileRank(sq: string): [number, number] {
   return [sq.charCodeAt(0) - 97, Number(sq[1]) - 1];
@@ -67,9 +61,9 @@ describe('coach lesson-reference block', () => {
   });
 });
 
-describe('Ruy master-class integrity', () => {
-  for (const lesson of lessons) {
-    describe(lesson.title, () => {
+describe('masterclass integrity — legal moves + valid arrows (all lessons)', () => {
+  for (const { scope, key, lesson } of ALL_LESSONS) {
+    describe(`[${scope}] ${key}`, () => {
       for (const beat of lesson.beats) {
         it(`${beat.id}: legal moves + valid arrows`, () => {
           const c = new Chess();
@@ -82,8 +76,6 @@ describe('Ruy master-class integrity', () => {
             const pc = c.get(a.from as Square);
             expect(pc, `arrow origin ${a.from} empty in ${beat.id}`).toBeTruthy();
             expect(pc?.type, `pawn arrow from ${a.from} in ${beat.id}`).not.toBe('p');
-            // Every arrow is green (a clear sight-line) — no aspirational
-            // blocked arrows. Enforce line of sight for all of them.
             expect(sees(c, a.from, a.to), `blocked/invalid arrow ${a.from}->${a.to} in ${beat.id}`).toBe(true);
           }
         });
@@ -92,11 +84,32 @@ describe('Ruy master-class integrity', () => {
   }
 });
 
+// ── Hole 1: G3 DB-anchoring on the moves themselves ─────────────────────
+// lessonIntegrity used to check LEGALITY only — a legal-but-INVENTED line
+// (a fabricated "variation" that's chess.js-legal but isn't real theory)
+// sailed straight through. This gate anchors every lesson's spine in the
+// canonical openings DB: some beat must reach a real ≥6-ply DB move-prefix.
+// The continuation past the anchor is the middlegame (legal play beyond
+// book) and is fine; what this catches is a line that never enters
+// canonical territory at all.
+describe('masterclass G3 — every lesson anchors a real DB opening line', () => {
+  for (const { scope, key, lesson } of ALL_LESSONS) {
+    it(`[${scope}] ${key}: spine anchors ≥ ${MIN_DB_ANCHOR_PLY} plies in openings-lichess.json`, () => {
+      const anchor = maxAnchorPly(lesson.beats.map((b) => b.moves));
+      expect(
+        anchor,
+        `${key}: deepest DB anchor is only ${anchor} plies — no beat's opening spine matches a real line in openings-lichess.json. ` +
+          `Either the line is invented (G3 violation — remove it) or it's a real sub-line the DB lacks (then it doesn't exist for us).`,
+      ).toBeGreaterThanOrEqual(MIN_DB_ANCHOR_PLY);
+    });
+  }
+});
+
 // David 2026-05-21: when the named traps gained Watch/Learn/Practice/Play,
 // the hand-written beat narration MUST survive the transition into the
-// Learn/Practice playable line — "make sure the narration survives." This
-// proves the converter carries each prefix beat's `say` text VERBATIM onto
-// the move it lands on, the line is legal, and every routed trap converts.
+// Learn/Practice playable line. Proves the converter carries each prefix
+// beat's `say` text VERBATIM onto the move it lands on, the line is legal,
+// and every routed trap converts.
 describe('Ruy named-trap → playable-line transition (narration survives)', () => {
   for (const def of RUY_TRAP_DEFS) {
     it(`${def.id}: converts to a legal line carrying the beat narration verbatim`, () => {
@@ -104,7 +117,6 @@ describe('Ruy named-trap → playable-line transition (narration survives)', () 
       expect(line, `no playable line for ${def.id}`).toBeTruthy();
       if (!line) return;
 
-      // Line is legal end-to-end.
       const c = new Chess(line.fen);
       line.moves.forEach((san) => {
         const before = c.fen();
@@ -113,7 +125,6 @@ describe('Ruy named-trap → playable-line transition (narration survives)', () 
       });
       expect(line.annotations.length).toBe(line.moves.length);
 
-      // Every beat that sits on the teaching line keeps its say text VERBATIM.
       const lesson = RUY_TRAP_LESSONS[def.id];
       for (const beat of lesson.beats) {
         const isPrefix =
@@ -137,14 +148,33 @@ describe('Ruy named-trap → playable-line transition (narration survives)', () 
   });
 });
 
-describe('Ruy master-class orientation', () => {
-  // The Ruy Lopez is a White opening — the student always plays White.
-  // Every variation lesson must orient the board White-at-bottom; a
-  // stray 'black' (the 2026-05-20 Marshall/Arkhangelsk bug) shows the
-  // student the wrong side. Guard all lessons, not just the two we fixed.
-  for (const lesson of lessons) {
-    it(`${lesson.title}: student plays White`, () => {
-      expect(lesson.orientation, `${lesson.title} should orient White`).toBe('white');
+// ── Hole 2: orientation driven by repertoire.json color, not a hardcoded
+// white-only loop. White openings orient white-at-bottom, black openings
+// black-at-bottom — read from the DB so a new opening of either colour is
+// covered automatically. Subsumes the old pircIntegrity orientation check.
+describe('masterclass orientation — matches the student side from repertoire.json', () => {
+  for (const { scope, key, lesson } of ALL_LESSONS) {
+    it(`[${scope}] ${key}: oriented for the student side`, () => {
+      const expected = expectedOrientation(lesson.openingId);
+      expect(expected, `${key}: opening "${lesson.openingId}" has no repertoire.json entry to source orientation from`).not.toBeNull();
+      expect(
+        lesson.orientation,
+        `${key}: lesson orients ${lesson.orientation} but ${lesson.openingId} is a ${expected} opening`,
+      ).toBe(expected);
+      for (const beat of lesson.beats) {
+        if (beat.orientation) {
+          expect(beat.orientation, `${key} beat ${beat.id}: overrides orientation to the wrong side`).toBe(expected);
+        }
+      }
     });
   }
+});
+
+// Sanity: the anchor helper actually reads the DB (guards a silently-empty
+// prefix set making every G3 assertion vacuously pass).
+describe('db-anchor helper sanity', () => {
+  it('anchors a known real line and rejects an invented one', () => {
+    expect(longestAnchorPly(['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6'])).toBeGreaterThanOrEqual(6);
+    expect(longestAnchorPly(['a3', 'h6', 'a4', 'h5'])).toBeLessThan(MIN_DB_ANCHOR_PLY);
+  });
 });

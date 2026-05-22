@@ -1,23 +1,22 @@
-// §5b grounding gate for Vienna lesson beats.
+// §5b grounding gate — every marker endpoint is a square the narration names.
 //
-// Per playbook §5b: every highlight + every vision-arrow endpoint must be
-// a square the annotation actually NAMES (bare `f5` or piece-token `Nf5`
-// or SAN capture `fxe5`). The orange move-squares are exempt — they ARE
-// the move.
+// Per playbook §5b: every highlight + every vision-arrow endpoint must be a
+// square the annotation actually NAMES (bare `f5` or piece-token `Nf5` or
+// SAN capture `fxe5`). The orange move-squares are exempt — they ARE the
+// move. middlegamePlanner.test.ts enforces this for PLAN playableLines;
+// this gate closes the gap for LESSON beats.
 //
-// middlegamePlanner.test.ts enforces this for PLAN playableLines. This
-// gate closes the gap for LESSON beats (Vienna only, for now — Ruy/Pirc
-// can be swept in follow-up and added here once clean).
-//
-// Why a hard gate: the original Vienna shipped with 57 §5b violations
-// because the only existing gate (lessonIntegrity.test.ts) checks
-// legality + line-of-sight, not narration grounding. Adding this gate
-// catches the violation class at author-time.
+// Hole 2 fix (2026-05-22): this used to be VIENNA-ONLY (the comment said
+// "Ruy/Pirc can be swept in follow-up"). It now sweeps the WHOLE lesson
+// registry (ALL_LESSONS). Ruy/Pirc lessons that pre-date the gate carry
+// §5b violations; rather than block, they're parked in BASELINE_VIOLATIONS
+// (the shrinking-allowlist pattern from lessonDepth/repertoire-orientation)
+// so the gate is GREEN now, surfaces the backlog, and HARD-FAILS any NEW
+// violation. The allowlist must SHRINK, never grow — a new opening cannot
+// add to it.
 
 import { describe, it, expect } from 'vitest';
-import { VIENNA_GAME_LESSON } from './vienna';
-import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
-import { VIENNA_TRAP_LESSONS } from './viennaTrapLessons';
+import { ALL_LESSONS } from './registry';
 import type { LessonScript } from '../../types';
 
 // Same regexes as narrationSegments.ts squaresInText — must stay in
@@ -52,16 +51,56 @@ function violationsFor(lesson: LessonScript): string[] {
   return out;
 }
 
-describe('§5b grounding — every marker endpoint is a square the narration names', () => {
-  const allLessons: { name: string; lesson: LessonScript }[] = [
-    { name: VIENNA_GAME_LESSON.title, lesson: VIENNA_GAME_LESSON },
-    ...Object.entries(VIENNA_VARIATION_LESSONS).map(([k, l]) => ({ name: `Variation: ${k.split('::')[1]}`, lesson: l })),
-    ...Object.entries(VIENNA_TRAP_LESSONS).map(([k, l]) => ({ name: `Trap: ${k}`, lesson: l })),
-  ];
-  for (const { name, lesson } of allLessons) {
-    it(`${name}: every arrow + highlight endpoint is grounded in the narration`, () => {
+// Pre-gate backlog (Ruy/Pirc lessons authored before §5b swept them in).
+// Keyed by the registry key. Value = exact violation count tolerated. The
+// gate fails if a key produces MORE violations than parked here, if a NEW
+// key appears, or if a parked key drops to zero (forces cleanup of the
+// entry). SHRINK this list; never grow it. Populated from the measurement
+// pass — see the report in the PR.
+// Measured 2026-05-22 sweeping §5b across the full registry for the first
+// time. Vienna = 0 (authored under this gate). Ruy = 50, Pirc = 5 markers
+// that lead the eye to a square the narration names by ROLE ("its
+// defender", "these two squares", "the doubled c-pawns", "the d-file")
+// rather than by coordinate — which the sentence-grained reveal can't
+// anchor. Real backlog, not regex noise (verified against the narration
+// text). Fix = name the square in the narration, or move the marker.
+const BASELINE_VIOLATIONS: Record<string, number> = {
+  'The Ruy Lopez — A Master Class': 8,
+  'ruy-lopez::Berlin Defense': 5,
+  'ruy-lopez::Open Ruy Lopez': 3,
+  'ruy-lopez::Marshall Attack': 7,
+  'ruy-lopez::Exchange Variation': 9,
+  'ruy-lopez::Closed Ruy Lopez (Breyer)': 4,
+  'ruy-lopez::Closed Ruy Lopez (Chigorin)': 3,
+  'ruy-lopez::Closed Ruy Lopez (Zaitsev)': 4,
+  'ruy-lopez::Anti-Marshall (8.a4)': 1,
+  'ruy-lopez::Arkhangelsk Variation': 3,
+  'fishing-pole': 2,
+  'marshall-onlymove': 1,
+  'The Pirc Defence — A Master Class': 1,
+  'pirc-defence::Classical System': 2,
+  'pirc-defence::Fianchetto System': 2,
+};
+
+describe('§5b grounding — every arrow + highlight endpoint is grounded in the narration', () => {
+  for (const { scope, key, lesson } of ALL_LESSONS) {
+    it(`[${scope}] ${key}: markers grounded (or within baseline)`, () => {
       const violations = violationsFor(lesson);
-      expect(violations, violations.join('\n  ')).toEqual([]);
+      const allowed = BASELINE_VIOLATIONS[key] ?? 0;
+      if (violations.length > allowed) {
+        expect(
+          violations.length,
+          `${key}: ${violations.length} §5b violation(s), baseline allows ${allowed}:\n  ${violations.join('\n  ')}`,
+        ).toBeLessThanOrEqual(allowed);
+      }
+      // Force the allowlist to shrink: a parked entry that's now clean must
+      // be removed from BASELINE_VIOLATIONS.
+      if (allowed > 0 && violations.length < allowed) {
+        expect(
+          violations.length,
+          `${key}: now has ${violations.length} violations but baseline reserves ${allowed} — lower/remove its BASELINE_VIOLATIONS entry`,
+        ).toBe(allowed);
+      }
     });
   }
 });

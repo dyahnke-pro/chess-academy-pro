@@ -22,13 +22,8 @@
 // the build hits David's eye.
 
 import { describe, it, expect } from 'vitest';
-import { RUY_LOPEZ_LESSON } from './ruyLopez';
-import { RUY_VARIATION_LESSONS } from './ruyVariations';
-import { PIRC_DEFENCE_LESSON } from './pircDefence';
-import { PIRC_VARIATION_LESSONS } from './pircVariations';
-import { VIENNA_GAME_LESSON } from './vienna';
-import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
 import type { LessonScript } from '../../types';
+import { ALL_LESSONS } from './registry';
 
 const MIN_PLIES = 20;
 
@@ -52,20 +47,12 @@ interface ScopedLesson {
   lesson: LessonScript;
 }
 
-const lessons: ScopedLesson[] = [
-  { scope: 'main', key: RUY_LOPEZ_LESSON.title, lesson: RUY_LOPEZ_LESSON },
-  { scope: 'main', key: PIRC_DEFENCE_LESSON.title, lesson: PIRC_DEFENCE_LESSON },
-  { scope: 'main', key: VIENNA_GAME_LESSON.title, lesson: VIENNA_GAME_LESSON },
-  ...Object.entries(RUY_VARIATION_LESSONS).map(([k, l]) => ({
-    scope: 'variation', key: k, lesson: l,
-  })),
-  ...Object.entries(PIRC_VARIATION_LESSONS).map(([k, l]) => ({
-    scope: 'variation', key: k, lesson: l,
-  })),
-  ...Object.entries(VIENNA_VARIATION_LESSONS).map(([k, l]) => ({
-    scope: 'variation', key: k, lesson: l,
-  })),
-];
+// Depth applies to teachable lines (main + variation). Trap lessons are
+// shorter by design and out of scope (their own integrity gates cover
+// them) — so the registry sweep drops the `trap` scope here.
+const lessons: ScopedLesson[] = ALL_LESSONS
+  .filter((l) => l.scope !== 'trap')
+  .map((l) => ({ scope: l.scope, key: l.key, lesson: l.lesson }));
 
 function deepestPlies(lesson: LessonScript): number {
   let max = 0;

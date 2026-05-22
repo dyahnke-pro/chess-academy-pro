@@ -1,14 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { RUY_LOPEZ_LESSON } from './ruyLopez';
-import { RUY_VARIATION_LESSONS } from './ruyVariations';
-import { RUY_TRAP_LESSONS } from './ruyTrapLessons';
-import { PIRC_DEFENCE_LESSON } from './pircDefence';
-import { PIRC_VARIATION_LESSONS } from './pircVariations';
-import { VIENNA_GAME_LESSON } from './vienna';
-import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
-import { VIENNA_TRAP_LESSONS } from './viennaTrapLessons';
-import type { LessonScript } from '../../types';
+import { ALL_LESSONS } from './registry';
 
 // Narration-accuracy gate. Every hand-written spoken line that names a
 // piece by its square ("the b3-bishop", "the e4-knight", "the e6-bishop")
@@ -24,22 +16,30 @@ import type { LessonScript } from '../../types';
 // the whole line the beat shows, not just its final frame. Color is not
 // asserted — the hyphenated form rarely encodes it and context fixes it.
 
-const lessons: LessonScript[] = [
-  RUY_LOPEZ_LESSON,
-  ...Object.values(RUY_VARIATION_LESSONS),
-  ...Object.values(RUY_TRAP_LESSONS),
-  PIRC_DEFENCE_LESSON,
-  ...Object.values(PIRC_VARIATION_LESSONS),
-  VIENNA_GAME_LESSON,
-  ...Object.values(VIENNA_VARIATION_LESSONS),
-  ...Object.values(VIENNA_TRAP_LESSONS),
-];
+const lessons = ALL_LESSONS.map((l) => l.lesson);
 
 const PIECE_LETTER: Record<string, string> = {
   pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k',
 };
 
+// Hyphenated form: "the e4-knight", "the b3-bishop". This is the RELIABLE
+// claim form — the hyphen binds the square to the piece as an assertion of
+// presence, so a mismatch is unambiguously a board-fact error.
 const CLAIM_RE = /\b([a-h][1-8])-(pawn|knight|bishop|rook|queen|king)\b/gi;
+//
+// Hole 3 (prose form, e.g. "the knight on e4") was TRIED and deliberately
+// NOT shipped. A measured pass over the Ruy/Pirc/Vienna masterclasses
+// produced 4 false positives and 0 real hallucinations — the prose form is
+// used legitimately for maxims ("a knight on f5 cannot be repelled"),
+// cross-opening comparisons ("the bishop on a4-b3-c2", a Ruy reference),
+// possessives ("on e5's defender's square"), and negated comparisons
+// ("doesn't expose the knight on e4 the way it does in the Nf6 line"). A
+// static regex can't separate those from a claim, and a gate that cries
+// wolf is worse than no gate. Prose-level hallucination is caught instead
+// by: (1) author-time grounding (the brain sees the board + masterclass
+// context), (2) the narration listener tool that audits what's actually
+// spoken (G7 / playbook §9), and (3) David's ear on prod. The static gate
+// owns the hyphenated form only — where it's certain.
 
 /** All (square -> pieceType) facts true at any frame of the beat's line. */
 function groundedFacts(moves: string[]): Set<string> {
@@ -68,17 +68,16 @@ describe('lesson narration accuracy — square-piece claims are grounded', () =>
           const facts = groundedFacts(beat.moves);
           const text = `${beat.say} ${beat.sayShort ?? ''}`;
           const seen = new Set<string>();
-          for (const match of text.matchAll(CLAIM_RE)) {
-            const square = match[1].toLowerCase();
-            const piece = match[2].toLowerCase();
-            const key = `${square}:${PIECE_LETTER[piece]}`;
-            if (seen.has(key)) continue;
+          const check = (square: string, piece: string): void => {
+            const key = `${square.toLowerCase()}:${PIECE_LETTER[piece.toLowerCase()]}`;
+            if (seen.has(key)) return;
             seen.add(key);
             expect(
               facts.has(key),
-              `${beat.id}: narration names the ${square}-${piece}, but no ${piece} ever stands on ${square} in this line`,
+              `${beat.id}: narration names the ${piece} on ${square}, but no ${piece} ever stands on ${square} in this line`,
             ).toBe(true);
-          }
+          };
+          for (const m of text.matchAll(CLAIM_RE)) check(m[1], m[2]);
         });
       }
     });
