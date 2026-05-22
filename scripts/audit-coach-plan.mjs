@@ -6,7 +6,7 @@
  *
  * Surfaces / behaviors exercised:
  *   - /coach/home → "Training Plan" tile → /coach/plan navigation
- *   - Empty state: zero favorites → per-color "Browse Openings" CTA
+ *   - Narrow-path hard-stop: zero favorites → locked state + "Go to Openings" CTA
  *   - Card stack render: seed favorites via raw IndexedDB,
  *     reload, verify the active card body + back card tabs
  *   - Tab activation: tap a back card → it becomes active,
@@ -338,7 +338,9 @@ async function main() {
   }, NAV_SETTLE_MS, [
     { kind: 'url-matches', value: /\/coach\/plan/, label: 'navigated to /coach/plan' },
     { kind: 'visible', selector: '[data-testid="training-plan-rolodex-page"]', label: 'rolodex page root mounts' },
-    { kind: 'visible', selector: '[data-testid="rolodex-folder-tabs"]', label: 'mobile folder tabs render' },
+    // Narrow-path contract (David 2026-05-21): with NO favorites yet, the
+    // plan HARD-STOPS — folder tabs only appear once a line is favorited.
+    { kind: 'visible', selector: '[data-testid="training-plan-locked"]', label: 'narrow-path hard-stop renders (no favorites)' },
     // PR-5 contract: the Coach nav tab in the bottom nav is the
     // destination StarAnimationLayer slides favorited cards toward.
     // If this testid moves or the tab disappears, the cross-surface
@@ -348,20 +350,17 @@ async function main() {
     { kind: 'visible', selector: '[data-testid="nav-coach-home-tab"]', label: 'Coach nav tab present (star animation slide target)' },
   ]);
 
-  // ── Empty state: zero favorites → per-color Browse Openings CTA ──
-  // Both panels (mobile-shown + desktop-hidden) render in the DOM, so
-  // the empty-state testid appears twice. count-gte=1 is the strict
-  // check; we don't pin a specific count to avoid coupling to the
-  // dual-panel rendering pattern.
-  await record('plan-empty-state', async () => {
-    // No favorites have been seeded yet; the page should be in empty
-    // state for both colors.
+  // ── Narrow-path hard-stop: zero favorites → ONE locked state + CTA ──
+  // David 2026-05-21: "if no opening has been favorited then it needs to be
+  // grayed out with a hard stop telling the user to go to openings and find
+  // one to favorite. That is the one narrow path I want users to walk."
+  // (Replaces the old per-color empty-state + Browse CTA — that pattern was
+  // retired when the hard-stop landed.)
+  await record('plan-narrow-path-hard-stop', async () => {
     await page.waitForTimeout(HYDRATE_SETTLE_MS);
   }, NAV_SETTLE_MS, [
-    { kind: 'count-gte', selector: '[data-testid="rolodex-empty-state-white"]', value: 1, label: 'white empty state renders' },
-    { kind: 'count-gte', selector: '[data-testid="rolodex-empty-state-black"]', value: 1, label: 'black empty state renders' },
-    { kind: 'count-gte', selector: '[data-testid="rolodex-empty-cta-white"]', value: 1, label: 'white Browse Openings CTA renders' },
-    { kind: 'count-gte', selector: '[data-testid="rolodex-empty-cta-black"]', value: 1, label: 'black Browse Openings CTA renders' },
+    { kind: 'visible', selector: '[data-testid="training-plan-locked"]', label: 'hard-stop locked state renders' },
+    { kind: 'visible', selector: '[data-testid="training-plan-go-openings"]', label: '"Go to Openings" CTA renders' },
   ]);
 
   // ── Seed 1 white favorite, reload, verify single-card active state
