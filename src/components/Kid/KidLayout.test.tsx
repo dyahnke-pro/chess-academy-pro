@@ -17,6 +17,16 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
+const mockLockKidVoice = vi.fn();
+const mockUnlockKidVoice = vi.fn();
+vi.mock('../../services/voiceService', () => ({
+  voiceService: {
+    lockKidVoice: () => mockLockKidVoice(),
+    unlockKidVoice: () => mockUnlockKidVoice(),
+    stop: vi.fn(),
+  },
+}));
+
 describe('KidLayout', () => {
   beforeEach(() => {
     useAppStore.getState().reset();
@@ -49,5 +59,15 @@ describe('KidLayout', () => {
     render(<KidLayout />);
     expect(screen.getByTestId('outlet-content')).toBeInTheDocument();
     expect(screen.getByText('Child content')).toBeInTheDocument();
+  });
+
+  it('locks kid voice to Ruth on mount, unlocks on unmount (non-negotiable #4)', () => {
+    mockLockKidVoice.mockClear();
+    mockUnlockKidVoice.mockClear();
+    const { unmount } = render(<KidLayout />);
+    expect(mockLockKidVoice).toHaveBeenCalledTimes(1);
+    expect(mockUnlockKidVoice).not.toHaveBeenCalled();
+    unmount();
+    expect(mockUnlockKidVoice).toHaveBeenCalledTimes(1);
   });
 });

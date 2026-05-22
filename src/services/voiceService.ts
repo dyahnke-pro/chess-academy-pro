@@ -598,6 +598,25 @@ class VoiceService {
     });
   }
 
+  /** Kid-section voice lock (CLAUDE.md kids non-negotiable #4: "Voice is
+   *  Ruth, default tone, no exceptions"). When set, the Polly path forces
+   *  the Ruth voice + default prosody regardless of the profile's
+   *  coachPersonality / per-personality voice overrides, so an adult-app
+   *  personality voice can never bleed into kid mode. Set by KidLayout on
+   *  mount, cleared on unmount — a single chokepoint so no kid call site
+   *  can forget. */
+  private kidVoiceLock = false;
+
+  /** Force the Ruth voice for all speech while kid surfaces are mounted. */
+  lockKidVoice(): void {
+    this.kidVoiceLock = true;
+  }
+
+  /** Release the kid voice lock when leaving kid surfaces. */
+  unlockKidVoice(): void {
+    this.kidVoiceLock = false;
+  }
+
   async speak(text: string): Promise<void> {
     this.logSpeakInvoked('speak', text);
     return this.speakInternal(sanitizeForTTS(text), false);
@@ -845,16 +864,21 @@ class VoiceService {
       // WO-VOICE-LAYER-01 (b): when speakAlert was the entry point,
       // use the SECONDARY voice instead so short alerts cut through
       // main narration with a different timbre.
-      const voiceForSpeak = opts?.useSecondary
-        ? resolvePollySecondaryVoice(
-            prefs.coachPersonality,
-            prefs.coachPersonalitySecondaryVoices,
-          )
-        : resolvePollyVoice(
-            prefs.coachPersonality,
-            prefs.coachPersonalityVoices,
-            prefs.pollyVoice,
-          );
+      // Kid voice lock (non-negotiable #4): kid surfaces ALWAYS speak in
+      // Ruth, ignoring the profile's coachPersonality / override maps /
+      // legacy pollyVoice so an adult personality voice can't leak in.
+      const voiceForSpeak = this.kidVoiceLock
+        ? PERSONALITY_VOICE_DEFAULTS.default
+        : opts?.useSecondary
+          ? resolvePollySecondaryVoice(
+              prefs.coachPersonality,
+              prefs.coachPersonalitySecondaryVoices,
+            )
+          : resolvePollyVoice(
+              prefs.coachPersonality,
+              prefs.coachPersonalityVoices,
+              prefs.pollyVoice,
+            );
       // Narration trace audit — captures the cross-product of voice ×
       // personality × dials at speak time. Loaded lazily so the audit
       // module isn't a hard import for the voice path.
@@ -864,7 +888,11 @@ class VoiceService {
       // sultry under flirtatious, clipped under drill-sergeant, etc.
       // Generative voices (Ruth/Matthew/Danielle/Gregory) ignore
       // prosody — pass the style through anyway for consistency.
-      const success = await this.speakPolly(text, voiceForSpeak, prefs.coachPersonality ?? 'default');
+      const success = await this.speakPolly(
+        text,
+        voiceForSpeak,
+        this.kidVoiceLock ? 'default' : (prefs.coachPersonality ?? 'default'),
+      );
       if (success) {
         this.lastTier = 'polly';
         this.lastSpeakDiagnostic.tier = 'polly';

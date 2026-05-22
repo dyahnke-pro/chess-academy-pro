@@ -16,9 +16,14 @@ export function KidLayout(): JSX.Element {
     const kidTheme = getThemeById('kid-mode');
     applyTheme(kidTheme);
     setActiveTheme(kidTheme);
+    // Kids non-negotiable #4: every kid utterance speaks in Ruth,
+    // regardless of the profile's coach personality. Lock here so no
+    // kid call site can leak an adult personality voice.
+    voiceService.lockKidVoice();
 
     return () => {
       voiceService.stop();
+      voiceService.unlockKidVoice();
       const prevTheme = getThemeById(savedThemeId);
       applyTheme(prevTheme);
       setActiveTheme(prevTheme);

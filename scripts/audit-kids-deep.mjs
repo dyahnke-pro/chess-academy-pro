@@ -125,7 +125,11 @@ async function main() {
   for (const p of PIECES) {
     await runScenario(`${p}-hub-loads`, `/kid/${p}-games loads`, async () => {
       await page.goto(`${BASE_URL}/kid/${p}-games`, { timeout: 30000 });
-      await page.locator(`[data-testid="${p}-puzzles-card"]`).waitFor({ timeout: 20000 });
+      // First navigation to a route triggers Vite dev on-demand compile
+      // (slow in dev, instant in the prebuilt prod bundle), so the cold
+      // mount can exceed 20s. Generous wait keeps the loop reflecting the
+      // app's truth, not dev-compile latency.
+      await page.locator(`[data-testid="${p}-puzzles-card"]`).waitFor({ timeout: 40000 });
     });
     await runScenario(`${p}-hub-has-maze`, `${p}-maze-card present`, async () => {
       await page.locator(`[data-testid="${p}-maze-card"]`).waitFor({ timeout: 5000 });
@@ -142,7 +146,7 @@ async function main() {
   for (const p of PIECES) {
     await runScenario(`${p}-puzzles-mounts`, `kid-piece-puzzles-rating renders`, async () => {
       await page.goto(`${BASE_URL}/kid/${p}-games/puzzles`, { timeout: 30000 });
-      await page.locator('[data-testid="kid-piece-puzzles-rating"]').waitFor({ timeout: 20000 });
+      await page.locator('[data-testid="kid-piece-puzzles-rating"]').waitFor({ timeout: 40000 });
     });
     await runScenario(`${p}-puzzles-rating-100`, `fresh profile rating starts at 100`, async () => {
       const txt = (await page.locator('[data-testid="kid-piece-puzzles-rating"]').textContent())?.trim();
