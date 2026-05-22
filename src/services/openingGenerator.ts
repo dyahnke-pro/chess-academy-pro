@@ -35,6 +35,7 @@ import {
 import {
   findRelatedDbEntries,
   resolveOpeningEntry,
+  resolveCuratedVariation,
   findSiblingExtensionBranches,
   findShortestCanonicalPgn,
   findContinuationsAtPly,
@@ -1764,7 +1765,10 @@ async function generateOpeningFromDbNarration(
    *  can frame the lesson as a counter to that opening. */
   faceContext?: { originalDisplayName: string },
 ): Promise<WalkthroughTree | null> {
-  const entry = resolveOpeningEntry(name);
+  // Prefer the curated repertoire line (the exact PGN the opening detail
+  // tab teaches) so a picker-chosen variation matches the opening tab; fall
+  // back to the ECO DB for anything not in the curated repertoire.
+  const entry = resolveCuratedVariation(name) ?? resolveOpeningEntry(name);
   if (!entry || entry.moves.length === 0) return null;
 
   // Use the SHORTEST canonical PGN as the spine. The DB carries
@@ -2114,7 +2118,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
 function buildFallbackTreeFromDb(
   name: string,
 ): WalkthroughTree | null {
-  const entry = resolveOpeningEntry(name);
+  const entry = resolveCuratedVariation(name) ?? resolveOpeningEntry(name);
   if (!entry || entry.moves.length === 0) return null;
   // Replay the PGN to validate moves before building. If the DB
   // entry's PGN is malformed (extremely rare — the DB is curated),

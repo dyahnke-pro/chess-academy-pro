@@ -1,78 +1,12 @@
-import type { OpeningVariation } from '../../types';
+import { buildVariationTabs, type VariationTab } from '../../services/variationTabs';
 
-export interface VariationTab {
-  /** Index into opening.variations. */
-  index: number;
-  /** Short tab label. */
-  label: string;
-}
+export { buildVariationTabs, type VariationTab };
 
 interface VariationTabsProps {
   tabs: VariationTab[];
   /** Selected variation index, or -1 for the main line. */
   selectedIndex: number;
   onSelect: (index: number) => void;
-}
-
-// Per-opening curated tab sets (matched by name substring → short
-// label, in display order). The Ruy shows its 7 first-class variations.
-// The Vienna shows 4 first-class variations in AMATEUR-FREQUENCY ORDER
-// (playbook §1, locked 2026-05-21: most-played first). Classical = the
-// "Main line" pill (showcase, not in this map). Falkbeer absorbed into
-// the Frankenstein-Dracula tab (same 4.Qh5 root, different Black 5th move).
-const CURATED: Record<string, { test: RegExp; label: string }[]> = {
-  'ruy-lopez': [
-    { test: /berlin/i, label: 'Berlin' },
-    { test: /open/i, label: 'Open' },
-    { test: /marshall attack/i, label: 'Marshall' },
-    { test: /exchange/i, label: 'Exchange' },
-    { test: /breyer/i, label: 'Breyer' },
-    { test: /chigorin/i, label: 'Chigorin' },
-    { test: /zaitsev/i, label: 'Zaitsev' },
-  ],
-  'vienna-game': [
-    { test: /^vienna gambit$/i, label: 'Gambit' },
-    { test: /vienna vs 2/i, label: 'vs 2…Nc6' },
-    { test: /frankenstein|falkbeer/i, label: 'Frankenstein-Dracula' },
-    { test: /paulsen/i, label: 'Paulsen' },
-  ],
-};
-
-/** Short tab label from a variation name: the parenthetical if present
- *  ("Closed Ruy Lopez (Breyer)" → "Breyer"), else the full name. Do NOT
- *  string-truncate here: the returned label is used as BOTH the visible
- *  tab text AND the canonical routing key flowing into the URL `?line=`
- *  param + the per-tab plan lookup (PIRC_TAB_PLAN_IDS etc.). Truncating
- *  with an ellipsis character (…) silently broke lookups for every long
- *  variation name (e.g. "Austrian Attack with e5 c5" → "Austrian Attack w…"
- *  no longer matched its routing key, leaving tab 7 on /openings/pirc-defence
- *  with 0 plan cards). Visual overflow is the tab strip's job (CSS scroll
- *  in the parent container), not this helper. */
-function shortLabel(name: string): string {
-  const paren = /\(([^)]+)\)/.exec(name);
-  if (paren) return paren[1];
-  return name;
-}
-
-/** Build the variation tabs for an opening. Curated openings (Ruy) show
- *  their first-class set; every other opening shows ALL its variations,
- *  so removing the old bottom Variations zone never strands them.
- *  Indices point into opening.variations so index-keyed handlers work. */
-export function buildVariationTabs(
-  openingId: string,
-  variations: OpeningVariation[] | null | undefined,
-): VariationTab[] {
-  if (!variations || variations.length === 0) return [];
-  const curated = CURATED[openingId];
-  if (curated) {
-    const tabs: VariationTab[] = [];
-    for (const m of curated) {
-      const index = variations.findIndex((v) => m.test.test(v.name));
-      if (index >= 0) tabs.push({ index, label: m.label });
-    }
-    if (tabs.length > 0) return tabs;
-  }
-  return variations.map((v, index) => ({ index, label: shortLabel(v.name) }));
 }
 
 /**

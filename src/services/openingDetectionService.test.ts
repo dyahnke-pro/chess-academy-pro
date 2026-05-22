@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { detectOpening, isStillInOpening, getOpeningMoves, getNextOpeningBookMove, findRelatedDbEntries, resolveOpeningEntry, findContinuationsAtPly, findLinePickerOptions, findSiblingExtensionBranches, findShortestCanonicalPgn, _resetTrie } from './openingDetectionService';
+import { detectOpening, isStillInOpening, getOpeningMoves, getNextOpeningBookMove, findRelatedDbEntries, resolveOpeningEntry, resolveCuratedVariation, findContinuationsAtPly, findLinePickerOptions, findSiblingExtensionBranches, findShortestCanonicalPgn, _resetTrie } from './openingDetectionService';
 import openingsData from '../data/openings-lichess.json';
 
 describe('openingDetectionService', () => {
@@ -517,6 +517,52 @@ describe('openingDetectionService', () => {
       const result = findLinePickerOptions('Italian Game');
       expect(result).not.toBeNull();
       expect(result?.canonicalPgn).toBe('e4 e5 Nf3 Nc6 Bc4');
+    });
+  });
+
+  describe('findLinePickerOptions matches the opening tab for curated openings', () => {
+    it('shows ALL 8 curated Pirc variations (not the 3-cap ECO enumeration)', () => {
+      const result = findLinePickerOptions('Pirc Defense');
+      expect(result).not.toBeNull();
+      const labels = result?.options.map((o) => o.label) ?? [];
+      // The opening tab's 8 variations (repertoire.json), in order.
+      expect(labels).toEqual([
+        'Austrian Attack',
+        'Classical System',
+        '150 Attack',
+        'Byrne Variation',
+        'Lion Variation',
+        'Fianchetto System',
+        'Czech Defence',
+        'Austrian Attack with e5 c5',
+      ]);
+      // Pirc = a Black defense; every tile is student-as-black.
+      expect(result?.options.every((o) => o.studentSide === 'black')).toBe(true);
+    });
+
+    it('British spelling resolves to the same curated set', () => {
+      const result = findLinePickerOptions('Pirc Defence');
+      expect(result?.options).toHaveLength(8);
+    });
+  });
+
+  describe('resolveCuratedVariation', () => {
+    it('resolves a curated variation name with no ECO entry to its curated PGN', () => {
+      // "Classical System" has NO matching ECO entry (ECO calls it
+      // "Classical Variation"), so resolveOpeningEntry would miss it —
+      // the curated resolver must catch it from repertoire.json.
+      const r = resolveCuratedVariation('Pirc Defence: Classical System');
+      expect(r).not.toBeNull();
+      expect(r?.moves.slice(0, 6)).toEqual(['e4', 'd6', 'd4', 'Nf6', 'Nc3', 'g6']);
+    });
+
+    it('tolerates the Defense/Defence spelling split', () => {
+      expect(resolveCuratedVariation('Pirc Defense: Lion Variation')).not.toBeNull();
+    });
+
+    it('returns null for a non-curated name (falls through to ECO)', () => {
+      expect(resolveCuratedVariation('Sicilian Defense: Najdorf Variation')).toBeNull();
+      expect(resolveCuratedVariation('Pirc Defence')).toBeNull();
     });
   });
 

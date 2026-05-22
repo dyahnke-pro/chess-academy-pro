@@ -1,7 +1,21 @@
 import canonicalOpenings from '../data/openings-lichess.json';
 import extendedOpenings from '../data/openings-lichess-extended.json';
-import type { DetectedOpening } from '../types';
+import repertoireData from '../data/repertoire.json';
+import type { DetectedOpening, OpeningVariation } from '../types';
+import { buildVariationTabs } from './variationTabs';
 import { MAX_SIBLING_BRANCHES } from '../utils/featureFlags';
+
+/** Minimal shape of a curated repertoire opening (repertoire.json). The
+ *  coach line picker + lesson generator read the SAME curated variations
+ *  the opening detail tab shows, so every picker matches the opening tab
+ *  (David 2026-05-22). */
+interface CuratedRepertoireOpening {
+  id: string;
+  name: string;
+  eco?: string;
+  variations?: OpeningVariation[];
+}
+const CURATED_REPERTOIRE = repertoireData as unknown as CuratedRepertoireOpening[];
 
 interface OpeningEntry {
   eco: string;
@@ -945,6 +959,44 @@ export interface LinePickerOption {
   leadingSide: 'white' | 'black';
 }
 
+/** Normalize for opening-family matching, collapsing the Defence/Defense
+ *  spelling split (the ECO DB uses "Defense", repertoire.json uses
+ *  "Defence") so "Pirc Defense" and "Pirc Defence" match. */
+function normForFamily(s: string): string {
+  return normalizeNameForMatch(s).replace(/\bdefence\b/g, 'defense');
+}
+
+/** The curated repertoire entry for a bare opening name, or undefined. */
+function findCuratedOpeningByName(name: string): CuratedRepertoireOpening | undefined {
+  const target = normForFamily(name);
+  return CURATED_REPERTOIRE.find(
+    (o) => !!o.name && !!o.variations?.length && normForFamily(o.name) === target,
+  );
+}
+
+/** Resolve a "Parent: Variation" name to its CURATED repertoire line — the
+ *  exact PGN the opening detail tab teaches. Preferred over the ECO DB in
+ *  the lesson generator so coach lessons match the opening tab (David
+ *  2026-05-22: "match the opening"). Returns null when the name isn't a
+ *  curated variation (the generator then falls back to resolveOpeningEntry). */
+export function resolveCuratedVariation(
+  fullName: string,
+): { canonicalName: string; eco: string; moves: string[] } | null {
+  const target = normForFamily(fullName);
+  for (const o of CURATED_REPERTOIRE) {
+    if (!o.name || !o.variations) continue;
+    for (const v of o.variations) {
+      if (!v?.name || !v.pgn) continue;
+      if (normForFamily(`${o.name}: ${v.name}`) === target) {
+        const moves = v.pgn.split(/\s+/).filter(Boolean);
+        if (moves.length === 0) return null;
+        return { canonicalName: `${o.name}: ${v.name}`, eco: o.eco ?? '', moves };
+      }
+    }
+  }
+  return null;
+}
+
 /** Classify a variation's style from name keywords. Falls through to
  *  'classical' as the neutral default. Production heuristic — not
  *  authoritative, but good enough to color-code tiles distinctly so
@@ -1017,6 +1069,9 @@ export function findLinePickerOptions(
   // Resolve through the alias map first so "KID" / "Caro Kann" work.
   const aliased = NAME_ALIASES[trimmed.toLowerCase()] ?? trimmed;
   const queryNorm = normalizeNameForMatch(aliased);
+  // Defence/Defense-tolerant form so British spellings ("Pirc Defence")
+  // resolve the bare entry the ECO DB stores as "Pirc Defense".
+  const queryFam = normForFamily(aliased);
 
   // Find the BARE entry — broad opening typed exactly. We use
   // normalized matching so apostrophes / diacritics / hyphens don't
@@ -1030,11 +1085,11 @@ export function findLinePickerOptions(
   const entries = openingsData;
   const bareCandidates = entries.filter((e) => {
     const eNorm = normalizeNameForMatch(e.name);
-    if (eNorm === queryNorm) return true;
+    if (eNorm === queryNorm || normForFamily(e.name) === queryFam) return true;
     const eStripped = eNorm
       .replace(/\s+(defense|defence|game|opening|attack)$/i, '')
       .trim();
-    return eStripped === queryNorm && !e.name.includes(':');
+    return (eStripped === queryNorm || eStripped === queryFam) && !e.name.includes(':');
   });
   if (bareCandidates.length === 0) return null;
   const SUFFIX_PRIORITY = ['defense', 'defence', 'game', 'opening', 'attack', ''];
@@ -1095,6 +1150,47 @@ export function findLinePickerOptions(
     /\bdefen[cs]e\b/.test(parentLower) ||
     /\b(sicilian|french|caro|pirc|modern|alekhine|scandinavian|king.s indian|queen.s indian|nimzo|grunfeld|grünfeld|benoni|benko|dutch|philidor|petroff|petrov|slav|two knights)\b/.test(parentLower);
   const studentSide: 'white' | 'black' = isBlackOpening ? 'black' : 'white';
+
+  // CURATED OVERRIDE (David 2026-05-22: "match the opening"). When this
+  // opening family has a hand-authored repertoire entry, the picker shows
+  // EXACTLY the variations the opening detail tab shows — same buildVariationTabs
+  // logic, so e.g. the Pirc lists all 8 and the Ruy its 7 curated lines. Each
+  // tile launches the curated line: the picker submits the full name and the
+  // gen path (generateOpeningFromDbNarration → resolveCuratedVariation) builds
+  // the walkthrough from the curated PGN. No popularity cap. The ECO
+  // enumeration below stays as the fallback for openings with no curated entry.
+  const curatedEntry = findCuratedOpeningByName(bareCandidate.name);
+  if (curatedEntry?.variations?.length) {
+    const variations = curatedEntry.variations;
+    const curatedOptions: LinePickerOption[] = buildVariationTabs(curatedEntry.id, variations)
+      .map((tab) => {
+        const v = variations[tab.index];
+        const moves = v.pgn.split(/\s+/).filter(Boolean);
+        const pgnLength = moves.length;
+        return {
+          label: tab.label,
+          fullName: `${curatedEntry.name}: ${v.name}`,
+          eco: findOpeningByPgnPrefix(moves)?.eco ?? curatedEntry.eco ?? bareCandidate.eco,
+          style: classifyVariationStyle(v.name),
+          pgnLength,
+          studentSide,
+          // A curated variation is the OPPONENT's named system (White's
+          // attack vs the Pirc; Black's defense vs the Ruy), so the leading
+          // side is the opposite of the student's. This is also uniform
+          // across an opening's variations, so the per-tile W/B chip stays
+          // hidden — matching the clean look (vs deriving from the curated
+          // PGN's arbitrary length, which gave a misleading mixed W/B).
+          leadingSide: studentSide === 'white' ? 'black' : 'white',
+        };
+      });
+    if (curatedOptions.length > 0) {
+      return {
+        canonicalName: curatedEntry.name,
+        canonicalPgn: bareCandidate.pgn,
+        options: curatedOptions,
+      };
+    }
+  }
 
   // Trust the Lichess DB: every named sub-variation in
   // openings-lichess.json is a real chess opening worth learning.
