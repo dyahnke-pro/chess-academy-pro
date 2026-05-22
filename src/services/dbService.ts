@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import { createDefaultSrsFields } from './srsEngine';
 import { DEFAULT_THEME_ID } from './themeService';
+import { OPENING_ID_ALIASES } from './openingService';
 import type { UserProfile, PuzzleRecord, OpeningRecord, SessionRecord, FlashcardRecord } from '../types';
 
 // ─── Profile ──────────────────────────────────────────────────────────────────
@@ -128,7 +129,14 @@ export async function getRepertoireOpenings(): Promise<OpeningRecord[]> {
 }
 
 export async function getOpeningById(id: string): Promise<OpeningRecord | undefined> {
-  return db.openings.get(id);
+  const direct = await db.openings.get(id);
+  if (direct) return direct;
+  // Honour the slug-level alias map so /openings/<alias-spelling> URLs
+  // (and any service-layer caller) resolve to the canonical record.
+  // See src/services/openingService.ts for the full alias rationale.
+  const aliased = OPENING_ID_ALIASES[id];
+  if (aliased) return db.openings.get(aliased);
+  return undefined;
 }
 
 export async function updateOpeningProgress(
