@@ -6,6 +6,7 @@ import { PIRC_VARIATION_LESSONS } from './pircVariations';
 import { VIENNA_GAME_LESSON } from './vienna';
 import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
 import { CARO_KANN_LESSON } from './caroKann';
+import { CARO_VARIATION_LESSONS } from './caroKannVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -33,6 +34,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...RUY_VARIATION_LESSONS,
   ...PIRC_VARIATION_LESSONS,
   ...VIENNA_VARIATION_LESSONS,
+  ...CARO_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
