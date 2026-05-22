@@ -136,3 +136,27 @@ Problem: Watch is the satisfying part; users forget to climb L→P→P. Fixes:
    Once SRS lands, due reps are the daily return reason.
 - **Structural lever (already decided):** Watch earns only `discovered`, never
   `learned` — the system withholds "done" until they climb, so it's the nudge.
+
+### TODO 3b — Progressive unlock / gating (David 2026-05-22, loved it)
+
+Make the path a LADDER with gated unlocks — three nested levels:
+
+1. **Rung-gating (per line).** Only the next WLPP rung is live; the rest are
+   greyed/locked. Watch lit → finish → Learn lights up → Practice → Play.
+   Guards: (a) completed rungs stay RE-OPENABLE (forward-lock only, never lock
+   backward); (b) an "I already know this — unlock all" escape per line so it
+   gates the learner without trapping the expert. Default gated.
+2. **Line completion → reward unlock.** Finishing a line's full ladder earns a
+   **mastered star** AND unlocks that line's **model game** as the payoff
+   ("You've mastered the Advance — now watch Carlsen win with it"). Reward
+   teaches + feels earned.
+3. **Opening completion → graduation → next opening unlocks.** Mastering all
+   variations graduates the opening and UNLOCKS THE NEXT OPENING in the
+   repertoire queue (amateur-frequency order). The whole app becomes a path:
+   openings unlock in order → variations within → rungs within those.
+
+**Training Plan announces every unlock** ("Practice unlocked. Next: the …c5
+break drill, 3 min") — the lesson plan tells them what just opened up.
+
+Ties to TODO 1 tiers (discovered/learned/perfected/mastery ARE the rung
+states) + TODO 3 (the come-back nudges become "next unlock" prompts).
