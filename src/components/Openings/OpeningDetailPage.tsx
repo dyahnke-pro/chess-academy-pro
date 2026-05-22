@@ -802,7 +802,18 @@ export function OpeningDetailPage(): JSX.Element {
   const tabHasPlans = subjectPlanIds
     ? (middlegamePlansData as MiddlegamePlan[]).some((p) => subjectPlanIds.includes(p.id))
     : openingPlans.length > 0;
-  const hasMasterContent = Boolean(currentQuiz && !quizCompleted) || tabHasPlans;
+  // Main-line note: when the MAIN tab has no plan of its own but the opening
+  // DOES carry plans (all on its variation tabs — e.g. the Pirc), state that
+  // fact in the Middlegame section instead of hiding it (David 2026-05-22).
+  const openingHasVariationPlans =
+    !isVariation &&
+    !tabHasPlans &&
+    (middlegamePlansData as MiddlegamePlan[]).some((p) => p.openingId === opening.id);
+  const mainPlanNote = openingHasVariationPlans
+    ? "There's no single main-line plan here — the middlegame depends on which system your opponent picks. Choose a variation tab above to study its plan."
+    : undefined;
+  const hasMasterContent =
+    Boolean(currentQuiz && !quizCompleted) || tabHasPlans || Boolean(mainPlanNote);
   const hasPitfalls =
     namedWarnings.length > 0 ||
     (opening.warnings?.length ?? 0) > 0 ||
@@ -1138,6 +1149,7 @@ export function OpeningDetailPage(): JSX.Element {
         boardOrientation={opening.color}
         onAction={handleMiddlegameAction}
         filterPlanIds={subjectPlanIds}
+        emptyNote={mainPlanNote}
       />
 
       {/* ═══ ZONE 5 — PITFALLS ═════════════════════════════════════════

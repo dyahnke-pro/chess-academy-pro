@@ -39,6 +39,27 @@ describe('MiddlegamePlansSection', () => {
     });
   });
 
+  it('states the fact instead of hiding when an emptyNote is given (main-line tab)', async () => {
+    mockGetPlans.mockResolvedValue([]);
+    render(
+      <MotionConfig transition={{ duration: 0 }}>
+        <MiddlegamePlansSection
+          openingId="pirc-defence"
+          boardOrientation="black"
+          onAction={vi.fn()}
+          filterPlanIds={[]}
+          emptyNote="Choose a variation tab above to study its plan."
+        />
+      </MotionConfig>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('middlegame-plans-note')).toBeInTheDocument();
+    });
+    expect(screen.getByText(/Choose a variation tab above/)).toBeInTheDocument();
+    expect(screen.queryByTestId('middlegame-plans-empty')).not.toBeInTheDocument();
+  });
+
   it('renders a WLPP line per plan', async () => {
     const plans = [
       buildMiddlegamePlan({ id: 'p1', title: 'Central Expansion' }),

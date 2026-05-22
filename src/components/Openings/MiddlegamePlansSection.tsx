@@ -12,6 +12,12 @@ interface MiddlegamePlansSectionProps {
   onAction: (plan: MiddlegamePlan, action: MiddlegameAction) => void;
   /** When set, show only plans whose id is in this list (variation rescope). */
   filterPlanIds?: string[];
+  /** When there are no plans for the current scope AND this is provided,
+   *  render the section header with this explanatory line INSTEAD of
+   *  hiding it. Used on the main-line tab of openings whose plans are all
+   *  variation-specific, so the section states why it's empty rather than
+   *  silently vanishing. */
+  emptyNote?: string;
 }
 
 const ACTION_BTN =
@@ -22,6 +28,7 @@ export function MiddlegamePlansSection({
   boardOrientation,
   onAction,
   filterPlanIds,
+  emptyNote,
 }: MiddlegamePlansSectionProps): JSX.Element {
   const [allPlans, setAllPlans] = useState<MiddlegamePlan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +50,23 @@ export function MiddlegamePlansSection({
     ? allPlans.filter((p) => filterPlanIds.includes(p.id))
     : allPlans;
 
-  if (loading || plans.length === 0) return <div data-testid="middlegame-plans-empty" />;
+  if (loading) return <div data-testid="middlegame-plans-empty" />;
+
+  // No plans for this scope. On the main-line tab of an opening whose plans
+  // are all variation-specific, state that fact instead of hiding (David
+  // 2026-05-22). Everywhere else, stay silent (empty > generic).
+  if (plans.length === 0) {
+    if (!emptyNote) return <div data-testid="middlegame-plans-empty" />;
+    return (
+      <div className="bg-theme-surface rounded-xl p-4 mb-4" data-testid="middlegame-plans-note">
+        <div className="flex items-center gap-2 mb-2">
+          <Compass size={14} className="text-blue-500" />
+          <h3 className="text-sm font-semibold text-theme-text">Middlegame Plans</h3>
+        </div>
+        <p className="text-xs text-theme-text-muted leading-relaxed">{emptyNote}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-theme-surface rounded-xl p-4 mb-4" data-testid="middlegame-plans-section">
