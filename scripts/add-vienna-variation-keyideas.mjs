@@ -17,9 +17,9 @@ const REP_PATH = join(__dirname, '..', 'src', 'data', 'repertoire.json');
 const KEY_IDEAS = {
   'Vienna Gambit': [
     'Use Lasker\'s f4 lever — pull Black\'s e5-pawn away with a thrust from the side, exactly the principle from Chess Strategy.',
-    'After 3...d5 (the principled reply) accept with 4.fxe5 and aim for the giant d4-e5 centre with Nf3, Be7, d4.',
-    'Recapture with bxc3 after the knight trade — keep the big centre and the bishop pair instead of regaining the pawn.',
-    'The Bd3 lines up the b1-h7 diagonal — when Black plays …c5 the diagonal opens and the bishop becomes decisive.',
+    'After 3…d5 (the principled reply) accept with 4.fxe5 Nxe4 and play 5.Qf3! — the modern Bardeleben main line that attacks the e4-knight AND threatens Qxd5 with tempo.',
+    'Black is forced to play 5…f5 to defend both — accept the structural weakness Black has just created on the light squares (f6, e6) and the f5-pawn itself.',
+    'After 6.d3 Nxc3 7.bxc3, the open b-file + bishop pair + Qf3 + Nh3-f4 set up a coherent positional grip. The older 5.Nf3 line stays as a calmer alternative.',
   ],
   'Falkbeer Variation': [
     'After 3.Bc4 Nxe4 only 4.Qh5! works — recapturing or developing calmly loses the entire opening edge.',

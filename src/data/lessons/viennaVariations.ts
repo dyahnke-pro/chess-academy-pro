@@ -27,16 +27,17 @@ function b(init: BeatInit): LessonBeat {
 }
 
 // ── The Vienna Gambit (3.f4) ─────────────────────────────────────
-// Spine: Lasker's "lure the pawn away" principle made concrete. Black's
-// most principled reply is 3...d5 (the counterstrike Edward Lasker himself
-// recommended in Chess Strategy). White accepts with 4.fxe5, both knights
-// trade in the centre, and White builds a big d4 centre against Black's
-// piece activity. The Wurzburger Trap and the Hamppe-Allgaier sacrifice
-// live in the WEAPONS layer — this lesson teaches the principled spine.
+// Spine (locked 2026-05-21): the modern MAIN line is 5.Qf3 — the
+// Bardeleben Variation — the trendy Eric Rosen / online weapon that
+// hits the e4-knight DIRECTLY with the queen and threatens Qxd5 with
+// tempo. The older 5.Nf3 (Breyer/Lasker calm line) is taught as the
+// alternative branch. Black's principled reply 3…d5 is the Lasker
+// counterstrike — same as it ever was. The Wurzburger Trap and the
+// Hamppe sacrifices live in the WEAPONS layer.
 const GAMBIT: LessonScript = {
   openingId: 'vienna-game',
   title: 'Vienna Game — The Gambit (3.f4)',
-  minutes: 10,
+  minutes: 11,
   orientation: 'white',
   beats: [
     b({ id: 'g1', moves: 'e4 e5 Nc3 Nf6 f4',
@@ -48,26 +49,39 @@ const GAMBIT: LessonScript = {
       sayShort: "3…d5! — Lasker's principled counterstrike. Refuse the pawn, attack the centre back.",
       highlights: [H('d5', KEY), H('e4', KEY), H('f4', SOFT)] }),
     b({ id: 'g3', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4',
-      say: "Now Lasker's exact passage from the book describes the next four plies: 'In answer to 4. PxKP, Black can play KtxP without having the slightest difficulty with his development.' White captures with 4.fxe5 — taking the gambit on the kingside, opening the f-file — and Black recaptures with 4…Nxe4, the knight grabbing the e4-pawn that f4 originally protected. Pawn structures cracked open, knights racing through the centre, the position is suddenly wide open.",
+      say: "Now Lasker's exact passage from the book describes the next four plies: 'In answer to 4. PxKP, Black can play KtxP without having the slightest difficulty with his development.' White captures with 4.fxe5 — taking the gambit on the kingside, opening the f-file — and Black recaptures with 4…Nxe4, the knight grabbing the e4-pawn that f4 originally protected. Pawn structures cracked open, knights racing through the centre, the e4-knight now sits inside White's territory begging to be hit.",
       sayShort: "4.fxe5 Nxe4 — Lasker's exact line: White's f-file opens, Black's knight grabs e4.",
       highlights: [H('e4', KEY), H('e5', KEY), H('f4', SOFT)] }),
-    b({ id: 'g4', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 d4',
-      say: "Here is what makes the Vienna Gambit dangerous. White develops the king-knight to f3 — Black answers Be7 — and then White plays d4! A huge central pawn duo on d4 and e5, supported by the c3-knight, the Nf3, and a future Bd3. This is what Lasker quietly endorsed: White accepts the gambit's tactical risk in exchange for the BIGGEST possible centre. Capablanca's rule is the law of this position: 'No violent attack can succeed without controlling at least two of the centre squares.' White just controls four.",
-      sayShort: "6.d4! — the gambit's payoff. A huge central duo, the Capablanca dream.",
-      highlights: [H('d4', KEY), H('e5', KEY)] }),
-    b({ id: 'g5', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 d4 O-O Bd3 Nxc3 bxc3',
-      say: "Both sides race to safety. Black castles, then trades the e4-knight off — 7…Nxc3 — and White recaptures with the b-pawn, bxc3. The position settles. White has the bishop pair, a giant centre, and three centre pawns versus Black's two — a near-permanent structural edge. Black has the bishop on e7 ready to swing to g5 and the standard …c5 break against the centre. The Vienna Gambit has done its job: traded a pawn for a long-term positional grip.",
-      sayShort: 'Black trades the e4-knight, White recaptures bxc3 — the bishop pair plus a big centre.',
-      highlights: [H('d4', KEY), H('e5', KEY), H('c3', SOFT)] }),
-    b({ id: 'g6', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 d4 O-O Bd3 Nxc3 bxc3 c5 O-O Nc6',
-      say: "Black strikes back the only way he can — 8…c5, opening the long diagonal for his light-squared bishop and challenging the d4-pawn. White castles, Black brings out the queen-knight to c6, and the modern middlegame begins. White's plan: hold the centre and unleash the d3-bishop, aimed straight at h7 once the …c5 break opens lines. Black's plan: dissolve the centre and prove his piece activity is worth a structural pawn. This is the canonical Vienna Gambit position, reached in Ivanchuk-Svidler 2009 and many other modern grandmaster games.",
-      sayShort: '…c5 challenges the centre, both sides castle. The canonical Gambit middlegame.',
-      arrows: [A('d3', 'h7', ATK)],
-      highlights: [H('h7', KEY)] }),
-    b({ id: 'g7', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 d4 O-O Bd3 Nxc3 bxc3 c5 O-O Nc6',
-      say: "And one branch you must know — if Black plays the OTHER reply and takes the gambit with 3…exf4, you are no longer in this strategic line. You are in territory that has been studied for two centuries: the Vienna Gambit Accepted. That is where the Wurzburger Trap waits if Black develops too naturally, where Hamppe-Allgaier and Hamppe-Muzio sacrifices live if Black ALSO played 2…Nc6 instead of 2…Nf6, and where Steinitz himself walked his king to e2 and attacked. The Vienna Gambit has TWO completely different personalities: this one — Lasker's principled centre fight — and a tactical jungle one tab away. Learn this calmer one first; the named weapons are the reward when Black drifts.",
-      sayShort: "If Black takes with 3…exf4 you're in the named-trap jungle — that's the next layer.",
-      highlights: [H('f4', SOFT)] }),
+    b({ id: 'g4', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3',
+      arrows: [A('f3', 'e4', ATK)],
+      highlights: [H('f3', KEY), H('e4', KEY), H('d5', SOFT)],
+      say: "5.Qf3! And THIS is the move that has turned the Vienna Gambit from a dusty 19th-century opening into one of the hottest weapons on Lichess in the 2020s. The queen leaps to f3, attacks the e4-knight directly, AND lines up against the d5-pawn down the f3-a8 diagonal. Black is suddenly facing two threats at once, and his natural moves are all walking into something. This is the Bardeleben Variation, and Eric Rosen's video tutorials on it have rebuilt the Vienna Gambit's whole online reputation. Older books recommend 5.Nf3 — the calm developmental move — but in modern theory 5.Qf3 is the main line: hit the knight, threaten d5, dare Black to defend BOTH at once.",
+      sayShort: "5.Qf3! — the modern Bardeleben main line. Attacks the e4-knight AND threatens Qxd5." }),
+    b({ id: 'g5', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5',
+      highlights: [H('f5', KEY), H('e4', KEY)],
+      say: "5…f5! — Black's best try. The pawn comes to f5 doing two jobs: it shields the d5-pawn from the Qf3, and it defends the e4-knight from being captured. It looks like the perfect answer. But every Black move costs structure, and this one is no exception — the f5-pawn now sits as a permanent weakness on a light square, and the f7-pawn that used to shield Black's king has surrendered the f6 hole behind it. Black has solved the immediate tactical problem and walked into a long-term positional one.",
+      sayShort: "5…f5 — defends the knight AND blocks Qf3-d5. Solves the tactic, creates a structural weakness." }),
+    b({ id: 'g6', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3',
+      highlights: [H('d3', KEY), H('e4', KEY)],
+      say: "6.d3 — the simple kick. The d3-pawn attacks the e4-knight a second time, and Black cannot defend it a second time. Black is forced to trade with …Nxc3 next move, and after bxc3 White ends up with the bishop pair, the open b-file for the rook, the Qf3 already active, and a permanent grip on the dark squares (f6, e5) the …f5 push abandoned.",
+      sayShort: "6.d3 — kicks the e4-knight a second time. Black must trade." }),
+    b({ id: 'g7', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3',
+      arrows: [A('a1', 'b1', INTENT)],
+      highlights: [H('b1', KEY), H('c3', KEY)],
+      say: "6…Nxc3 7.bxc3 — and here is what makes this whole line a quiet positional masterpiece. The b-file is wide open for the rook to come to b1, the doubled c-pawns are a tiny structural cost for the bishop pair, and the Qf3 stays active on its central square. Eric Rosen's mantra in his Vienna tutorials: 'open the b-file and let the queen sit on f3 — everything else is set up by those two facts.' White's plan from here writes itself: Rb1 to seize the b-file, Bd2 to complete development, and Nh3 (yes, Nh3 — the king-knight to the rim — because it's heading to f4 to support the e5-pawn and pressure d5).",
+      sayShort: "7.bxc3 — open b-file, bishop pair, Qf3 still hot. The positional payoff lands." }),
+    b({ id: 'g8', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 Bd2 Be7 Nh3 O-O',
+      arrows: [A('h3', 'f4', INTENT)],
+      highlights: [H('f4', KEY), H('e5', KEY), H('f3', SOFT)],
+      say: "And the middlegame arrives. Black has developed normally — Nc6, Be7, O-O — and White completes his setup: Bd2 finishes the queen-bishop, Nh3 sends the king-knight on the curious-looking detour to h3, but it has a purpose. From h3 the knight goes to f4, attacking the d5-pawn and supporting the dominating e5-pawn. Every White piece now has a job: Qf3 hits f5, Nh3-f4 hits d5, Bd2 prepares Rb1 + Bb4 manoeuvres, and the open b-file is waiting for the a1-rook. Black has piece activity but no real plan against this structure. The Bardeleben Vienna Gambit at its purest.",
+      sayShort: 'The Bardeleben middlegame: Qf3 + Nh3-f4 + Rb1 — a coordinated positional grip.' }),
+    b({ id: 'g9', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7',
+      highlights: [H('f3', SOFT)],
+      say: "Now the alternative — older books recommend 5.Nf3 instead of 5.Qf3. The Nf3 line is calmer: White just develops, doesn't engage the e4-knight immediately, and steers toward the same big-centre middlegame Lasker described in *Chess Strategy*. After 5.Nf3 Be7, White plays 6.d4 and builds a giant d4-e5 pawn duo. The Nf3 line is less ambitious tactically — it doesn't punish Black's natural moves the way Qf3 does — but it's structurally sound and gives White a free positional edge.",
+      sayShort: 'The calm alternative: 5.Nf3 — develop quietly, build the d4-e5 centre. Lasker\'s line.' }),
+    b({ id: 'g10', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 Bd2 Be7 Nh3 O-O',
+      highlights: [H('f4', SOFT)],
+      say: "And one branch you must know — if Black plays the OTHER reply and takes the gambit with 3…exf4, you are no longer in this strategic line. You are in territory that has been studied for two centuries: the Vienna Gambit Accepted. That is where the Wurzburger Trap waits if Black develops too naturally into the old 5.d3 line, where Hamppe-Allgaier and Hamppe-Muzio sacrifices live if Black ALSO played 2…Nc6 instead of 2…Nf6, and where Steinitz himself walked his king to e2 and attacked. The Vienna Gambit has TWO completely different personalities: this strategic Bardeleben + Lasker spine, and a tactical jungle one tab away. Learn this calm-but-clinical one first; the named weapons are the reward when Black drifts." }),
   ],
 };
 
@@ -136,10 +150,10 @@ const FRANKENSTEIN_DRACULA: LessonScript = {
       sayShort: '3…Nxe4 — the bold pawn-grab. Looks like a free pawn. Isn\'t.',
       highlights: [H('e4', KEY)] }),
     b({ id: 'fd-3', moves: 'e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5',
-      say: "4.Qh5! The bombshell. White's queen leaps to h5 with TWO threats at once: capture the e4-knight, and — far worse — checkmate on f7 next move (Qxf7#). Black's e4-knight cannot move because the queen-takes-on-f7 mates. Black has exactly one defensive move that meets both threats, and it isn't pretty.",
-      sayShort: '4.Qh5! — attacks the knight AND threatens Qxf7 mate. The Frankenstein wakes up.',
+      say: "4.Qh5! The bombshell. White's queen leaps to h5 with TWO threats at once: capture the e4-knight, and — far worse — checkmate on f7 next move (Qxf7#). The h5-e5 diagonal hits the knight; the h5-f7 diagonal mates the king. Black's e4-knight cannot move because Qxf7 mates. Black has exactly one defensive move that meets both threats, and it isn't pretty.",
+      sayShort: '4.Qh5! — attacks the e4-knight AND threatens Qxf7 mate. The Frankenstein wakes up.',
       arrows: [A('h5', 'f7', ATK), A('h5', 'e5', ATK)],
-      highlights: [H('f7', KEY), H('e4', SOFT)] }),
+      highlights: [H('f7', KEY), H('e4', SOFT), H('e5', SOFT)] }),
     b({ id: 'fd-4', moves: 'e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6',
       say: "4…Nd6 is forced — the only move that defends f7 AND saves the knight. The knight retreats from e4 to d6, blocking the queen's path to f7 and dodging the c3-knight's attack. Black has rescued the knight. He's lost three tempi in the process, but materially he is still up a pawn.",
       sayShort: '4…Nd6 — the only-move. The knight retreats to block Qxf7 and save itself.',
@@ -159,10 +173,9 @@ const FRANKENSTEIN_DRACULA: LessonScript = {
       arrows: [A('b5', 'c7', ATK)],
       highlights: [H('c7', KEY), H('f7', KEY), H('f5', SOFT)] }),
     b({ id: 'fd-8', moves: 'e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qe7 Nxc7+ Kd8 Nxa8',
-      say: "The famous raid lands. 8.Qd5 — queen attacks f5 AND c-file — Black plays …Qe7 to defend. And now 9.Nxc7+! Kd8 10.Nxa8! The knight gobbles the rook on a8. Steinitz-era players called this the most dramatic mini-combination in chess: two captures in a row, a queen-trap-then-rook-raid that turns the whole opening into a tactical demonstration. White is up the exchange and a pawn in raw material.",
-      sayShort: '9.Nxc7+! 10.Nxa8! — the Frankenstein\'s raid. Exchange and pawn won in two moves.',
-      arrows: [A('a8', 'b6', VIS)],
-      highlights: [H('a8', KEY), H('c7', KEY)] }),
+      say: "The famous raid lands. 8.Qd5 — queen attacks f5 AND the c-file — Black plays …Qe7 to defend. And now 9.Nxc7+! Kd8 10.Nxa8! The knight gobbles the rook on a8 and immediately needs Black to play …b6 to escape being trapped. Steinitz-era players called this the most dramatic mini-combination in chess: two captures in a row, a queen-trap-then-rook-raid that turns the whole opening into a tactical demonstration. White is up the exchange and a pawn in raw material.",
+      sayShort: '9.Nxc7+! 10.Nxa8! — the Frankenstein\'s raid. Exchange + pawn won; the knight on a8 awaits …b6.',
+      highlights: [H('a8', KEY), H('c7', KEY), H('b6', SOFT)] }),
     b({ id: 'fd-9', moves: 'e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qe7 Nxc7+ Kd8 Nxa8 b6',
       say: "But the knight on a8 is trapped — Black plans …b6 and …Bb7 to win it back, and theory says Black has practical compensation despite the material deficit. So the verdict on the Frankenstein-Dracula main line is sharp but technically equal — White wins the exchange, Black wins activity. Yet at the board, against a player who hasn't memorised this exact 20-move sequence, the line is utterly winning practically. Adams played it as White and was happy to be there. The Frankenstein-Dracula is theory-soaked, but every move from move 4 onward has ONE answer — and if Black doesn't know it, the line is just won.",
       sayShort: 'a8-knight is trapped; …b6, Bb7 wins it back. Theory: equal. Practice: winning.',
@@ -204,7 +217,7 @@ const PAULSEN: LessonScript = {
       arrows: [A('c3', 'd5', INTENT)],
       highlights: [H('d5', KEY)] }),
     b({ id: 'p6', moves: 'e4 e5 Nc3 Nf6 g3 Bc5 Bg2 d6 Nge2 Nc6 O-O a6 a4 O-O d3',
-      say: "Why is the Paulsen the modern grandmaster's choice when amateurs rarely see it? Two reasons. First, the FORCED LINES are extremely short — there is no fifteen-move memorised waterfall like the Frankenstein-Dracula. The student of the Paulsen only needs to understand the structure, not memorise the moves. Second, the Vienna Gambit at the very top has been worked out so thoroughly that even Black has computer-verified equalising paths; the Paulsen sidesteps all of that prep. Treat the Paulsen as the Vienna's grown-up form: less spectacle, more solidity. Mamedyarov has built half his Vienna career on it.",
+      say: "Why is the Paulsen the modern grandmaster's choice when amateurs rarely see it? Two reasons. First, the FORCED LINES are extremely short — there is no fifteen-move memorised waterfall like the Frankenstein-Dracula. The student of the Paulsen only needs to understand the structure, not memorise the moves. Second, the Vienna Gambit at the very top has been worked out so thoroughly that even Black has computer-verified equalising paths; the Paulsen sidesteps all that prep, the e4-pawn unchallenged for now and the long diagonal aimed at the centre. Treat the Paulsen as the Vienna's grown-up form: less spectacle, more solidity. Mamedyarov has built half his Vienna career on it.",
       sayShort: 'The Paulsen: no forced lines to memorise, sidesteps modern theory — Mamedyarov\'s favourite.',
       highlights: [H('e4', SOFT)] }),
   ],

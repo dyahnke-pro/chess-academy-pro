@@ -12,13 +12,18 @@
 
 /** A square coordinate like "e4". */
 const SQUARE_RE = /\b([a-h][1-8])\b/g;
-const PIECE_SQUARE_RE = /\b[NBRQK]([a-h][1-8])\b/g;
+/** A SAN piece move: Nf3, Nxe5, Nfd2, Rfe1, Bxd5+, Qh4+ — destination is captured. */
+const PIECE_SAN_RE = /\b[NBRQK][a-h]?[1-8]?x?([a-h][1-8])/g;
+/** A SAN pawn capture: fxe5, gxh4, dxc6+ — destination is captured. */
+const PAWN_CAPTURE_RE = /\b[a-h]x([a-h][1-8])/g;
 
-/** Every board square a sentence names — bare ("d5") or via a piece token
- *  ("Nd5"). Used to pair markers with the sentence that mentions them. */
+/** Every board square a sentence names — bare ("d5"), via a piece token
+ *  ("Nd5"), or via a SAN pawn capture ("fxe5"). Used to pair markers with
+ *  the sentence that mentions them. */
 export function squaresInText(text: string): Set<string> {
   const out = new Set<string>();
-  for (const m of text.matchAll(PIECE_SQUARE_RE)) out.add(m[1]);
+  for (const m of text.matchAll(PIECE_SAN_RE)) out.add(m[1]);
+  for (const m of text.matchAll(PAWN_CAPTURE_RE)) out.add(m[1]);
   for (const m of text.matchAll(SQUARE_RE)) out.add(m[1]);
   return out;
 }

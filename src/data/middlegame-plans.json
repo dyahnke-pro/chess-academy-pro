@@ -16270,56 +16270,56 @@
   {
     "id": "mp-viennagame-gambit",
     "openingId": "vienna-game",
-    "title": "Vienna Gambit: Lasker's Centre + Bishop Pair",
-    "criticalPositionFen": "rnbqk2r/ppp1bppp/8/3pP3/3Pn3/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
-    "overview": "After the Lasker counter (3…d5) and the central trades, White builds a huge d4-e5 pawn duo and plays for the bishop pair. The Bd3 lines up the b1-h7 diagonal, the c1-bishop will swing out, and Black is left with a structural pawn deficit on the queenside.",
+    "title": "Vienna Gambit: the Bardeleben Qf3 Squeeze",
+    "criticalPositionFen": "rnbqkb1r/ppp3pp/8/3pPp2/4n3/2NP1Q2/PPP3PP/R1B1KBNR b KQkq - 0 6",
+    "overview": "The modern Vienna Gambit main line — after 5.Qf3! (the Bardeleben Variation, the trendy Eric Rosen weapon) the queen hits the e4-knight AND threatens Qxd5 with tempo. Black is forced into 5…f5 to defend both, creating a permanent structural weakness on the light squares. White opens the b-file, plants the king-knight on f4 via h3, and dominates the centre with the e5-pawn and active Qf3.",
     "pawnBreaks": [
       {
-        "move": "d3-d4",
-        "explanation": "Already played. The d4 pawn anchors the centre alongside e5 — the Lasker-recommended setup that converts the gambit's tactical risk into a positional grip.",
-        "fen": "rnbqk2r/ppp1bppp/8/3pP3/3Pn3/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6"
+        "move": "b-file open after bxc3",
+        "explanation": "The doubled-c-pawn structure that comes from bxc3 looks like a structural cost, but the open b-file for the rook is the actual prize. Rb1 + active queen-on-f3 set up the kingside attack.",
+        "fen": "rnbqkb1r/ppp3pp/8/3pPp2/8/2PP1Q2/P1P3PP/R1B1KBNR b KQkq - 0 7"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Bishop",
-        "route": "Bf1-d3 (aimed at h7)",
-        "explanation": "The Bd3 lines up the b1-h7 diagonal, the Vienna Gambit's standard attacking aim. Once the …c5 break opens lines, the bishop becomes decisive."
+        "piece": "Queen",
+        "route": "Qd1-f3 (active centre)",
+        "explanation": "The Qf3 is the line's defining piece — attacks e4, threatens d5, stays on an active central square for the rest of the middlegame. Eric Rosen calls it the engine of the whole setup."
       },
       {
-        "piece": "Bishop",
-        "route": "Bc1 (queen-side, swings out)",
-        "explanation": "White's queen-bishop swings out via Be3 or Bg5, completing development and contributing the second half of the bishop pair to the attack."
+        "piece": "Knight",
+        "route": "Ng1-h3-f4 (the curious detour)",
+        "explanation": "The king-knight goes to h3 — not f3, where the queen lives — then routes to f4 to support the e5-pawn and pressure d5. The h3-square looks ugly but the f4-destination is gold."
       }
     ],
     "strategicThemes": [
-      "The Lasker-line d4-e5 centre converts the gambit's pawn into a permanent positional bind.",
-      "The bishop pair on d3 and c1 (later e3 or g5) aims at the kingside; Black's structure has no equivalent firepower.",
-      "…c5 is Black's only counterplay, opening the long diagonal for his queen-bishop — but it concedes the d4-square and exposes c5 itself."
+      "The Qf3 attacks the e4-knight on move 5, forcing 5…f5 which permanently weakens Black's light squares (especially f6 and e6).",
+      "The open b-file after bxc3 gives White's rook a permanent file; combined with the doubled-c structure, this is a structural exchange for the bishop pair.",
+      "The Nh3-f4 manoeuvre is the line's signature — supports e5, pressures d5, and clears the king-knight's starting square for the rook to come to f1."
     ],
     "playableLines": [
       {
-        "title": "Gambit: Lasker centre + Bd3 toward h7",
-        "fen": "rnbqk2r/ppp1bppp/8/3pP3/3Pn3/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+        "title": "Bardeleben: Qf3 hits the knight, bxc3 opens the b-file",
+        "fen": "rnbqkb1r/ppp3pp/8/3pPp2/4n3/2NP1Q2/PPP3PP/R1B1KBNR b KQkq - 0 6",
         "moves": [
-          "O-O",
-          "Bd3",
           "Nxc3",
           "bxc3",
-          "c5",
-          "O-O",
           "Nc6",
-          "Re1"
+          "Bd2",
+          "Be7",
+          "Nh3",
+          "O-O",
+          "Nf4"
         ],
         "annotations": [
-          "…O-O — Black hurries his king to safety, conscious that White's open f-file and bishop pair will land hard.",
-          "Bd3 — the king-bishop occupies d3 with the diagonal aimed at h7. Standard Vienna Gambit development.",
-          "…Nxc3 — Black trades the e4-knight, simplifying. The recapture is a key positional moment.",
-          "bxc3 — White recaptures with the b-pawn instead of the d-pawn, retaining the big d4-e5 duo and the bishop pair.",
-          "…c5 — Black's only meaningful break, attacking d4 and freeing his queen-bishop.",
-          "O-O — White castles too. The position is settled; both sides are coordinated.",
-          "…Nc6 — Black's queen-knight finally comes out to challenge d4.",
-          "Re1 — the rook slides behind the e-pawn, supporting e5 and lined up against Black's king down the e-file."
+          "…Nxc3 — Black is FORCED to trade the e4-knight. The d3-pawn attacks it a second time, the …f5 push has already used up his defending pawn, and there's no third defender.",
+          "bxc3 — White recaptures with the b-pawn. The b-file opens for the rook, the c-pawns double, but the bishop pair is preserved and the centre stays huge.",
+          "…Nc6 — Black's queen-knight comes out with no good attacking square. The natural Nc6 just develops; the …Bd6 or …Bb4 ideas come later.",
+          "Bd2 — the queen-bishop completes development on d2, preparing Bb4 ideas and clearing c1 for the rook if needed.",
+          "…Be7 — Black's king-bishop develops modestly. Be7 is the safest square; Bd6 would walk into e5-tactics.",
+          "Nh3! — the curious knight-to-the-rim move that defines the Bardeleben's middlegame. From h3 the knight heads to f4, supporting e5 and pressing d5.",
+          "…O-O — Black castles into safety. The position is now a pure positional fight: White's structure vs Black's active pieces.",
+          "Nf4! — the knight arrives at its dream square. From f4 it attacks the d5-pawn AND defends the e5-pawn, while the Qf3 and Bd2 stay aimed at Black's kingside. The Bardeleben middlegame is fully realized."
         ],
         "arrows": [
           [],
@@ -16327,23 +16327,107 @@
           [],
           [],
           [],
-          [],
           [
             {
-              "from": "c6",
-              "to": "d4",
+              "from": "h3",
+              "to": "f4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
           [
             {
-              "from": "e1",
-              "to": "e5",
+              "from": "f4",
+              "to": "d5",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
         ],
         "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
           [
             {
               "square": "g8",
@@ -16356,92 +16440,16 @@
           ],
           [
             {
-              "square": "d3",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f1",
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "h7",
+              "square": "d5",
               "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e5",
