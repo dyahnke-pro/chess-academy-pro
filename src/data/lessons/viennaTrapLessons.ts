@@ -115,8 +115,15 @@ const WURZBURGER: LessonScript = {
     {
       id: 'wt9',
       moves: ['e4','e5','Nc3','Nf6','f4','d5','fxe5','Nxe4','d3','Qh4+','g3','Nxg3','Nf3','Qh5','Nxd5'],
-      say: "The Wurzburger Trap is a weapon you wield when Black plays the Vienna Gambit Accepted, declines with 3…d5, and then ventures the Qh4+ adventure. It will not arrive in every Vienna Gambit you play — strong players know about it and avoid Qh4+ entirely. But against an opponent who reaches for the natural-looking attack the moment you allow 5.d3, the trap is utterly decisive. Steinitz himself used Vienna Gambit ideas in his match preparation, and his students at the Viennese club drilled this exact trap. Keep it loaded for when Black grabs at the d5 thrust without knowing what comes next.",
-      sayShort: 'A weapon to keep loaded — when Black grabs at Qh4+, the trap turns his plan inside out.',
+      say: "Look at what the position now produces. The Nd5 is the IMMOVABLE outpost — central knight on a square Black cannot challenge with a pawn (the c-pawn would have to first move to c6, but Nxc7+ punishes that). The d5-pawn that Black built his whole opening around is gone. The g3-knight is hanging to hxg3 next turn — Black will lose THAT piece too. The Qh5 is far from the queenside where the c7-fork is incoming. And White still has the bishop pair, an open f-file for the rook once Nf3 develops, and full kingside safety with O-O-O coming any time. The Wurzburger doesn't just trap material — it produces a position with EVERY ADVANTAGE.",
+      sayShort: 'The Wurzburger produces a position where every White piece is dominant — Nd5 outpost, bishop pair, open f-file.',
+      highlights: [H('d5', SOFT)],
+    },
+    {
+      id: 'wt10',
+      moves: ['e4','e5','Nc3','Nf6','f4','d5','fxe5','Nxe4','d3','Qh4+','g3','Nxg3','Nf3','Qh5','Nxd5'],
+      say: "The Wurzburger Trap is a weapon you wield when Black plays the Vienna Gambit Accepted, declines with 3…d5, and then ventures the Qh4+ adventure. It will not arrive in every Vienna Gambit you play — strong players know about it and avoid Qh4+ entirely. But against an opponent who reaches for the natural-looking attack the moment you allow 5.d3, the trap is utterly decisive. Steinitz himself used Vienna Gambit ideas in his match preparation, and his students at the Viennese club drilled this exact d5-square sequence. Keep it loaded.",
+      sayShort: 'A weapon to keep loaded — when Black grabs at Qh4+, the d5-square outpost turns his plan inside out.',
       highlights: [H('d5', SOFT)],
     },
   ],
