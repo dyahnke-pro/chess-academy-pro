@@ -168,16 +168,16 @@ describe('tacticAlertService', () => {
       expect(getTacticLookahead(800)).toBe(1);
     });
 
-    it('returns 2 for intermediate players', () => {
+    it('returns 2 for improvers', () => {
       expect(getTacticLookahead(1200)).toBe(2);
     });
 
-    it('returns 3 for advanced players', () => {
-      expect(getTacticLookahead(1600)).toBe(3);
+    it('returns 4 for intermediate players (calculate 2 moves)', () => {
+      expect(getTacticLookahead(1600)).toBe(4);
     });
 
-    it('returns 4 for strong players (plan ahead)', () => {
-      expect(getTacticLookahead(2000)).toBe(4);
+    it('returns 6 for advanced players (plan the whole sequence)', () => {
+      expect(getTacticLookahead(2000)).toBe(6);
     });
   });
 

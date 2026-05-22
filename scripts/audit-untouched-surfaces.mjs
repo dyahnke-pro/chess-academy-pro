@@ -164,7 +164,7 @@ async function main() {
   // ── /coach/analyse ─────────────────────────────────────────────
   await record('coach-analyse', async () => {
     await page.goto(`${BASE_URL}/coach/analyse`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 12000 });
+    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 25000 });
   }, SHORT_SETTLE_MS, [
     { kind: 'visible', selector: '[data-testid="coach-analyse-page"]', label: 'Coach Analyse mounts' },
     { kind: 'visible', selector: '[data-testid="fen-input"]', label: 'FEN input present' },
@@ -276,7 +276,7 @@ async function main() {
   // A starting-position FEN is the simplest deterministic input.
   await record('coach-analyse-paste-fen-loads-board', async () => {
     await page.goto(`${BASE_URL}/coach/analyse`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 12000 });
+    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 25000 });
     const startFen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
     const input = page.locator('[data-testid="fen-input"]');
     await input.fill(startFen);
@@ -297,7 +297,7 @@ async function main() {
   // a non-trivial position.
   await record('coach-analyse-midgame-fen-correct-placement', async () => {
     await page.goto(`${BASE_URL}/coach/analyse`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
-    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 12000 });
+    await page.locator('[data-testid="coach-analyse-page"]').waitFor({ timeout: 25000 });
     // FEN: position right before Bxh7+ (classical Greek Gift). White
     // bishop on d3, black king on g8, white knight on f3.
     const greekGiftFen = 'r2q1rk1/pppbppbp/2np1np1/8/3P4/2NB1N2/PPP2PPP/R1BQ1RK1 w - - 0 1';

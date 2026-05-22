@@ -1,80 +1,150 @@
-# PLAN — Pirc Defence masterclass (David 2026-05-21)
+# PLAN — Full Interactive Deep-Dive Audit (2026-05-22)
 
-The Ruy masterclass + the "money" weakness-loop build are DONE and
-archived at `docs/plans/2026-05-21-ruy-masterclass-and-money.md`. This
-plan covers the **second opening**: the Pirc Defence, built to the SAME
-structure as the Ruy, following `docs/opening-masterclass-playbook.md`.
+Loop audit (audit → diagnose → fix → re-audit). Scope: **exhaustive** across
+every function, with the three openings (Pirc, Ruy Lopez, Vienna) walked
+end-to-end. David is away; fix code/wiring confidently, flag uncertain
+content rather than fabricate. Land fixes straight to `main`, batched into
+one deploy at the end, then a final prod re-audit.
 
-## Ground rules (non-negotiable)
-- **Student plays BLACK.** The Pirc is Black's defence (`color: black`).
-  Every lesson orients **black-at-bottom** (`orientation: 'black'`).
-  Key ideas are BLACK's plans; narration speaks from Black's side
-  ("your Bg7", "meet White's f4 with …c5").
-- **G3 — no invented moves.** Every line comes from
-  `openings-lichess.json` or the already-curated `repertoire.json`
-  `pirc-defence` entry (8 variations, full DB-grounded pgns + key ideas
-  + explanations). chess.js verifies legality. The LLM writes prose only.
-- **Hand-pick everything. No algos.** Curator chooses tabs, plans, traps,
-  routing. Code only filters by the hand-picked lists.
-- **Narration quality is the headline** (David's emphasis). Board-
-  accurate (the `narrationAccuracy` gate enforces square-piece claims),
-  keystone-focused, plain English, no SAN-as-letters, no first person.
+## Environment notes (this session)
+- INVERTED sandbox: **prod IS reachable** (vercel + github allowed); the
+  **LLM hosts are BLOCKED** (api.deepseek.com / api.anthropic.com /
+  explorer.lichess.ovh all 403 "Host not in allowlist"). The baked DeepSeek
+  key is valid but useless locally — the network blocks the host. So the
+  local dev server's coach brain falls to DB-only synthesis and coach chat
+  Q&A fails. → LLM-driven surfaces audited against PROD (key baked in,
+  prod backend reaches the LLM). Local dev server used for static/
+  hand-authored content (masterclass lessons/traps/plans, lead-the-eye,
+  WLPP wiring) which need no LLM.
+- Audit-stream answers with secret (`storage:"memory"`, 0 events = app not
+  open). `.env.local` has the baked key (gitignored) — harmless, kept for
+  the audit scripts that read it; never commit the value.
+- KEY ARCHITECTURE FACT: the coach BRAIN is a CLIENT-SIDE call (openai SDK
+  + baked key run IN THE BROWSER). So a headless browser in this sandbox
+  CANNOT exercise the live brain whether the app is served from localhost
+  OR prod — the call originates in the sandboxed browser → blocked host.
+  → Live-brain-reply surfaces (coach chat Q&A quality, COLD-CACHE narration
+  generation, tactics narration generation, discussion practice) are
+  ROUTED TO DAVID for prod verification (G7). Deterministic / static /
+  mock-brain audits give real coverage (e.g. coach-master-integration
+  mocks the brain at the fetch layer → 10/10 grounding-pipeline scenarios
+  green on prod).
+- F8 [coach grounding — GREEN] coach-master-integration vs prod: 10
+  scenarios, 0 failed. Layer A prefetch, Layer B pre-injection, Layer D
+  claim-validator-trip + master-play-enforcement-fallback, kid carve-out
+  all fire correctly.
+- Branch `claude/zen-curie-TV7BN` == `origin/main` at start (0290c8b).
+- Deploy decision (David): straight to main, batched at completion.
 
-## Data already in place (repertoire.json `pirc-defence`)
-- color: black; 4 top-level key ideas; overview (hypermodern story:
-  Spassky/Topalov/Anand; let White build the centre, then strike).
-- 8 variations, each with a full DB-grounded pgn + explanation + ideas:
-  Austrian Attack · Classical System · 150 Attack · Byrne Variation ·
-  Lion Variation · Fianchetto System · Czech Defence · Austrian Attack
-  with e5 c5. → Variation tabs AUTO-BUILD from these (wiring is opening-
-  agnostic; "other openings auto-list all their variations").
+## Test targets / contracts
+- WLPP grammar on every line (main/variation/trap/warning/plan).
+- Lead-the-eye markers (ORANGE move squares / GREEN vision / YELLOW named
+  square) on every narrated move; sentence-grained reveal.
+- G3 (no invented moves), narrationAccuracy (board-truth), trap orientation,
+  voice rules, model-game-shows-student-winning.
+- G7 interactive failure-mode probing (off-canonical input, cold cache,
+  first-time user, pick-before-load, out-of-order).
 
-## Per-variation checklist (parallel to Ruy)
-For each first-class variation: 4 key ideas (have) · overview (have) ·
-a DB-grounded middlegame plan `mp-pircdefence-<label>` (TODO, builder
-script) · a Black-oriented Watch/Learn beat-lesson (TODO — the work) ·
-an endgame ONLY if genuine · real named traps ONLY if genuine.
+## Phases
+- [ ] 0. Bring-up: tests/typecheck/lint + data gates; Playwright drives
+      local dev + prod.
+- [ ] 1. Pirc — full WLPP × tabs/variations/traps/warnings/plans + lead-eye
+      + model game + G7 fuzzy.
+- [ ] 2. Ruy Lopez — same + 5 named beat-lesson traps (getRuyTrapsForTab).
+- [ ] 3. Vienna — same + 7 weapons + 1 warning + 5 plans.
+- [ ] 4. Coach loop — teach / play / chat / review / plan / endgame.
+- [ ] 5. Tactics + Weaknesses — interactive loops w/ fixture loader.
+- [ ] 6. Cross-surface smoke (dashboard, settings, openings UI, kid smoke).
+- [ ] 7. Batched deploy to main + final prod audit + audit-stream pull.
 
-## Phased build
-- **P0 — this plan + archive Ruy plan. status: DONE.**
-- **P1 — main-line + first variation beat-lessons. status: DONE.**
-  `pircDefence.ts` (PIRC_DEFENCE_LESSON) + `pircVariations.ts` (Austrian,
-  Classical, 150). Wired into `index.ts`. `pircIntegrity.test.ts`
-  (orientation `black`) + `narrationAccuracy` extended.
-- **P2 — remaining variation lessons. status: DONE.** Byrne, Lion,
-  Fianchetto, Czech, Austrian-e5-c5. ALL 8 variations + main line now
-  have authored, DB-grounded, Black-oriented beat-lessons. Lesson keys
-  verified to match repertoire.json variation names exactly (Watch/Learn
-  resolve). 49 integrity + 130 narration-accuracy tests green.
-- **P3 — middlegame plans. status: DONE for ALL 8 variations.**
-  `scripts/add-pirc-middlegame-plans.mjs` builds austrian / classical /
-  150 / byrne / lion / fianchetto / czech / austrian-e5 (DB-grounded from
-  the gate-verified lesson lines). Routing `pircMasterclassTabs.ts`
-  (getPircTabPlanIds, all 8). middlegamePlanner.test extended (33 green:
-  every line legal, annotations 1:1, arrows consistent, black-oriented).
-- **P4 — traps / endgames. status: DELIBERATELY SPARSE (accurate per
-  empty > generic).** The Pirc has few genuine NAMED traps; the old
-  auto-mined junk was purged. NOT fabricating to fill the shelf. The one
-  genuine motif to author properly later (web-verified, like the Ruy
-  traps): the **Ne6 queen-trap** (Bxf7+ Kxf7 Ng5+ … Ne6 forks the queen)
-  as a Black WARNING. Endgames: Pirc isn't endgame-defined → none unless
-  a genuinely characteristic one surfaces. Book pages: none (corpus is
-  pre-1930s; the Pirc postdates it — structural, unavoidable).
-- **Model game:** Kasparov–Topalov 1999 (present, 2 criticalMoments).
-  CURATION NOTE for David: it's a WHITE brilliancy against the Pirc
-  (masterclass is Black-oriented) + thinner than the Ruy's 7 moments —
-  his call whether to enrich/swap. Not fabricated around.
-- **P5 — audit to 3 clean rounds** (`AUDIT_ONLY_OPENINGS=pirc-defence`):
-  in progress.
+## Open findings
+(running list — one-line diagnosis each)
+- F1 [code] `npm run lint` RED on main: 323 warnings > 248 cap (0 errors).
+  Pre-existing (branch == origin/main untouched). ~75 warnings crept past
+  the cap since it was last set. Must resolve before batched push (CLAUDE.md
+  gate). Triage: reduce warnings vs justify cap bump.
+- F2 [code] Full vitest suite RED on main: 45 failed / 14 files (6337 pass).
+  In-scope failures: CoachTeachPage, useTeachWalkthrough, WalkthroughIntegration,
+  audit-openings-narration, tacticAlertService, dataLoader, Settings
+  (SettingsPage/VoiceSettingsPanel/PersonalityPanel), personalities. Out of
+  scope: Kid games, appAuditor, ChessLessonLayout. TRIAGE PENDING (real vs
+  env/flake). Pre-existing (branch == main).
+- F3 [FIXED · audit-infra] audit-dashboard.mjs nav loop raced React on
+  reload (waited 8s for tile without first awaiting [data-testid=dashboard]
+  root) → false "tile doesn't navigate" failures on coach/tactics/weaknesses/
+  import. Clean probe proved ALL dashboard tiles navigate correctly. Fixed
+  both the tile-nav and import-nav loops to await dashboard root first.
+- BASELINE GREEN: typecheck clean; 574 opening gate tests pass
+  (lessonIntegrity/narrationAccuracy/narrationGrounding/pircIntegrity/vienna);
+  repertoire+trap orientation gates exit 0 (flagged offenders are
+  Evans/Italian/Queen's-Indian — none in the 3 target openings).
 
-## Orientation gotcha
-`lessonIntegrity.test.ts` asserts `orientation === 'white'` for the RUY
-lessons array — do NOT add Pirc lessons there. Pirc gets its own
-`pircIntegrity.test.ts` asserting `orientation === 'black'`. The
-`narrationAccuracy` grounding check is colour-agnostic — safe to extend.
+- F4 [Pirc content/curation — FLAG, not fixing] Main-line tab shows NO
+  middlegame plan (Ruy's Main line has 2). May be by-design (main line
+  branches into variations; §0.5 lets empty sections self-hide) — verify
+  intended. All 8 Pirc VARIATION tabs render their plan correctly.
+- F5 [Pirc data/wiring — FLAG] Two plans in middlegame-plans.json route to
+  no tab: mp-pircdefence-bayonet, mp-pircdefence-kholmov (orphans). This is
+  why dataLoader prune test trips on mp-pircdefence-bayonet. Either wire
+  tabs for them or remove them — curation call, flagging for David.
+- F6 [FIXED · audit-infra] audit-leadeye-plans.mjs probed Pirc's Austrian
+  plan on the default Main-line tab (where it doesn't live) → 25s timeout.
+  Added PLAN_TAB map + tab selection in openDetail. Now 28/28 (Pirc
+  Austrian Watch/Learn/Practice all paint lead-the-eye highlights+arrows).
+- F7 [FIXED · test] tacticAlertService.test.ts asserted old lookahead
+  scheme (1600→3, 2000→4); code + CLAUDE.md contract is {1,2,4,6}
+  (1600→4, 2000→6). Updated assertions. 29/29 pass.
+- GREEN: masterclass static content — Ruy leadeye+traps, Pirc leadeye,
+  Vienna named-traps 99/100 (1 transient ERR_ABORTED nav, not content).
+
+- F9 [tactics — GREEN] audit-tactics (local): all scenarios pass — route
+  aliases (/puzzles/*, /weaknesses/* → /tactics/*), family tiles,
+  classification filter, hint-level advance, solving-mode mount, page mount.
+- F10 [weaknesses — MOSTLY GREEN] audit-weaknesses-interactive (local, no
+  fixture / empty IDB): 30/33. The 3 fails are all the same flaky
+  `tab-mistakes → mistakes-tab not-visible` on EMPTY IndexedDB (passes on
+  other passes). Empty-state/timing artifact — FLAG for David to verify
+  with real data (fixture david-games.json absent in this cold clone).
+- F2 FIXES (deterministic, in-scope, confident): tacticAlertService (2,
+  stale {1,2,4,6} contract), CoachTeachPage (3, mocks missing
+  dispatchedToolNames → cascade), useTeachWalkthrough (1, test-isolation:
+  inherited pending-promise voice mock), personalities (5, stale snapshots
+  — the new TACTICAL-AWARENESS prompt clause was intentional). 11 tests.
+- F11 [FLAKY — flag] audit-openings-narration.test.ts: annotation-overflow
+  regression (0→1) did NOT reproduce on a fresh run (byClass had 0
+  overflow); the script is non-deterministic and reports huge counts
+  (piece-on-square-mismatch:1067) that the GREEN narrationAccuracy gate
+  (256 tests) contradicts. Flaky test — flag, not a confirmed content bug.
+
+- F12 [openings UI — GREEN] audit-openings-ui (local): 50/50. Search typing,
+  detail mount, 4 mode buttons, ECO group expand, canonical zone colors,
+  pro-repertoires + gambits tabs all pass.
+- F13 [coach analyse — GREEN app; FIXED audit-infra] untouched-surfaces had
+  3 fails on /coach/analyse (page/fen-input/load-fen-btn not visible @12s).
+  Direct probe: the page mounts fine warm (page+fen-input+load-fen-btn
+  present, no errors) — cold Stockfish-WASM init just exceeds 12s. Bumped
+  the analyse waitFor 12s→25s (matches coach-train). Rest of untouched
+  (coach/home, train, kid nav) green.
+- F2 ROOT CAUSE: the failing unit tests are overwhelmingly TEST DRIFT from
+  rapid parallel-session development (renamed testids per WO-SETTINGS-
+  CLEANUP, updated {1,2,4,6} contract, intentional TACTICAL-AWARENESS prompt
+  clause, test-isolation, non-determinism) — NOT app regressions. Every
+  interactive surface audit is green. Settings (5: stale testids/text from
+  settings refactor), Kid (OOS), appAuditor/ChessLessonLayout (infra),
+  dataLoader (tied to F5 orphan plans + a trapLines-reconcile assertion),
+  WalkthroughIntegration (main-line annotation uniqueness — likely
+  by-design silence) left as FLAGGED for David — fixing them is test-debt
+  cleanup, not audit scope, and risks the incoming Vienna drops.
+
+## Decisions log
+- 2026-05-22 David: exhaustive scope; fix code, flag uncertain content;
+  straight to main; keys uploaded (used baked bundle key for this session).
+- 2026-05-22 David: "updates to vienna will drop a couple times during
+  this audit." → Treat Vienna CONTENT files as owned by incoming drops:
+  flag Vienna content findings, do NOT edit (viennaVariations/vienna/
+  viennaTrapLessons.ts, repertoire.json Vienna entry). Re-fetch origin/main
+  + rebase carefully before the batched push; Vienna files are the conflict
+  hot spot. Non-Vienna code/wiring bugs still fixed normally.
 
 ## Next-session pickup
-1. Finish P1 lessons (verify each beat via chess.js; run pirc integrity +
-   narration-accuracy tests).
-2. Then P2 → P5 in order. Reuse Ruy builders/patterns; never reinvent.
-3. Never fabricate moves (G3) — repertoire.json + openings-lichess.json.
+Read this file top-to-bottom; resume at first unchecked phase.

@@ -253,6 +253,10 @@ async function main() {
   for (const tile of tiles) {
     await record(`nav-${tile.testid}`, async () => {
       await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+      // Wait for the dashboard root to mount before looking for a tile.
+      // Without this the reload after the previous nav races React and
+      // the tile waitFor times out even though the tile renders fine.
+      await page.locator('[data-testid="dashboard"]').waitFor({ timeout: BOOT_TIMEOUT_MS });
       const btn = page.locator(`[data-testid="${tile.testid}"]`);
       await btn.waitFor({ timeout: 8000 });
       await btn.scrollIntoViewIfNeeded().catch(() => undefined);
@@ -277,6 +281,7 @@ async function main() {
   // ── Import Games button navigates ───────────────────────────────
   await record('nav-import-games', async () => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
+    await page.locator('[data-testid="dashboard"]').waitFor({ timeout: BOOT_TIMEOUT_MS });
     await page.locator('[data-testid="import-games-btn"]').waitFor({ timeout: 8000 });
     await page.locator('[data-testid="import-games-btn"]').click();
     const t0 = Date.now();

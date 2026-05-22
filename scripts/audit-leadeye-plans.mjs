@@ -39,6 +39,14 @@ const PLAN_ID = {
   'pirc-defence': 'mp-pircdefence-austrian',
 };
 
+// The plan above lives on a specific variation tab, not always the default
+// "Main line" pill. Ruy's d4 plan is on Main line (no selection needed);
+// Pirc's Austrian plan is on the "Austrian Attack" tab. openDetail selects
+// this tab before probing so the plan-watch button is present.
+const PLAN_TAB = {
+  'pirc-defence': 'Austrian Attack',
+};
+
 const results = [];
 function record(name, pass, detail) {
   results.push({ name, pass, detail });
@@ -90,6 +98,16 @@ async function sampleBoard(page, testid) {
 /** Open the warm detail page and wait for the plans section. */
 async function openDetail(page, openingId) {
   await page.goto(`${BASE_URL}/openings/${openingId}`, { waitUntil: 'domcontentloaded' });
+  await page.locator('[data-testid="variation-tabs"]').waitFor({ state: 'visible', timeout: 30_000 });
+  const tab = PLAN_TAB[openingId];
+  if (tab) {
+    await page
+      .locator('[data-testid="variation-tabs"] button', { hasText: new RegExp(`^${tab}$`, 'i') })
+      .first()
+      .click()
+      .catch(() => {});
+    await page.waitForTimeout(1200);
+  }
   await page.locator('[data-testid="middlegame-plans-section"]').waitFor({ state: 'visible', timeout: 25_000 });
 }
 

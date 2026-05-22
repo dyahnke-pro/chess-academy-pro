@@ -242,6 +242,11 @@ describe('useTeachWalkthrough', () => {
 
   it('Brief mode speaks shortIdea instead of idea when present', async () => {
     const { voiceService } = await import('../services/voiceService');
+    // Re-apply a resolving speakForced mock. The earlier 'segmented
+    // narration' test installs a pending-promise mockImplementation that
+    // vi.clearAllMocks does NOT reset, so without this the narrate() chain
+    // never resolves and the waitFor for phase='leaf' times out at 5s.
+    vi.mocked(voiceService.speakForced).mockResolvedValue(undefined);
     // Seed a profile with coachNarration='brief' so resolveCoachNarration
     // returns 'brief' and the helper picks shortIdea when available.
     useAppStore.setState({

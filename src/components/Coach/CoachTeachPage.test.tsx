@@ -89,7 +89,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
   }
 
   it('speaks the canned welcome line on mount via speakForced (no LLM call)', async () => {
-    vi.mocked(coachService.ask).mockResolvedValue({ text: '', toolCallIds: [], provider: 'anthropic' });
+    vi.mocked(coachService.ask).mockResolvedValue({ text: '', toolCallIds: [], dispatchedToolNames: [], provider: 'anthropic' });
     render(<CoachTeachPage />);
 
     await waitFor(() => {
@@ -114,7 +114,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
 
     vi.mocked(coachService.ask).mockImplementation(async (_input, options) => {
       options?.onChunk?.(fullText);
-      return { text: fullText, toolCallIds: [], provider: 'anthropic' };
+      return { text: fullText, toolCallIds: [], dispatchedToolNames: [], provider: 'anthropic' };
     });
 
     render(<CoachTeachPage />);
@@ -145,7 +145,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
 
     vi.mocked(coachService.ask).mockImplementation(async (_input, options) => {
       options?.onChunk?.(fullText);
-      return { text: fullText, toolCallIds: [], provider: 'anthropic' };
+      return { text: fullText, toolCallIds: [], dispatchedToolNames: [], provider: 'anthropic' };
     });
 
     render(<CoachTeachPage />);
@@ -202,6 +202,7 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
       return {
         text: '[VOICE: Pulling the position.] Detailed analysis follows.',
         toolCallIds: [],
+        dispatchedToolNames: [],
         provider: 'anthropic',
       };
     });
