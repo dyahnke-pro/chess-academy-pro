@@ -198,8 +198,15 @@ const HAMPPE_ALLGAIER: LessonScript = {
       id: 'ha8',
       moves: ['e4','e5','Nc3','Nc6','f4','exf4','Nf3','g5','h4','g4','Ng5','h6','Nxf7','Kxf7','Bc4+','d5','Bxd5+','Ke8','d4'],
       highlights: [H('d4', KEY), H('e4', KEY)],
-      say: "10.d4 — White completes the centre with d4-e4 pawn duo, builds a huge pawn-front, and now the position is exactly what Steinitz's school dreamed of: knight down, two pawns up plus a permanent positional grip, Black's king stuck on e8 with no castling rights for the rest of the game, an open h-file, and the Bd5 raking everything in sight. The verdict on the Hamppe-Allgaier: theoretically Black survives with computer-perfect defence, practically White wins more often than he loses. The opening was Steinitz's club's pet line and remains one of the most dangerous practical weapons in chess. Keep it loaded for when Black gives you …g5.",
-      sayShort: '10.d4 — verdict: knight for two pawns + a king with no castling + every White piece aimed.',
+      say: "10.d4 — White completes the centre with the d4-e4 pawn duo, builds a huge pawn-front, and now the position is exactly what Steinitz's school dreamed of: knight down, two pawns up plus a permanent positional grip, Black's king stuck on e8 with no castling rights, an open h-file, and the Bd5 raking everything in sight.",
+      sayShort: '10.d4 — knight for two pawns + a king with no castling + every White piece aimed.',
+    },
+    {
+      id: 'ha9',
+      moves: ['e4','e5','Nc3','Nc6','f4','exf4','Nf3','g5','h4','g4','Ng5','h6','Nxf7','Kxf7','Bc4+','d5','Bxd5+','Ke8','d4'],
+      highlights: [H('d5', KEY), H('e4', KEY), H('h1', SOFT)],
+      say: "What does the position PRODUCE? Look at the structural facts: White's d4-e4 pawn duo dominates the centre and Black has NO central pawns to push back; the Bd5 owns the long light diagonal and aims at b7 + the queenside; the h-file is open for the rook on h1 to swing toward h7 if Black ever brings his king to f7 or g8; Black's queenside pieces (Nb8, Bc8, Qd8, Ra8) are ALL still on their starting squares while White has 5 active pieces. The conversion plan: Bxf4 to recover one of the gambit pawns and aim at the h6-pawn, then Qd3 or Qf3 hitting the kingside, then O-O-O to bring the king-rook into the attack via the open h-file. Black will eventually develop, but the king on e8 is a permanent target — every White attacking move costs Black another defensive tempo. The verdict on the Hamppe-Allgaier: theoretically Black survives with computer-perfect defence, practically White wins more often than he loses. Steinitz's club's pet line, two centuries later still one of the most dangerous practical weapons in chess. Keep it loaded for when Black gives you …g5.",
+      sayShort: 'The d4-e4 centre + open h-file + Bd5 + Black\'s undeveloped queenside = practical knockout. Convert with Bxf4, Qf3, O-O-O.',
     },
   ],
 };
@@ -274,8 +281,16 @@ const HAMPPE_MUZIO: LessonScript = {
     {
       id: 'hm8',
       moves: ['e4','e5','Nc3','Nc6','f4','exf4','Nf3','g5','Bc4','g4','O-O','gxf3','Qxf3','Qf6','e5'],
-      say: "The verdict on the Hamppe-Muzio: modern engines say Black is materially better, but only by computer-level defence. In any practical setting — over the board, in blitz, against a human who hasn't memorised the exact only-moves — the attack scores extraordinarily well. The Hamppe-Muzio is the most extreme example of the Vienna's whole identity: when Black plays the most natural defending moves, White punishes him with a flurry of sacrifices and an unstoppable initiative. Don't play it every game — but when Black plays 4…g5 in the Vienna Gambit Accepted, you have it as the wildest option in your arsenal.",
-      sayShort: 'The verdict: engine says Black\'s better; practice says White wins. The wildest line in the Vienna.',
+      say: "8.e5! The e-pawn surges with tempo on the queen on f6. Black has to move her again, losing another precious tempo. Every White move now creates a NEW threat: the Bc4 still rakes f7, the Qf3 still hits f7 from the centre, the Rf1 stares straight down the f-file, and the e5-pawn opens the long h2-b8 diagonal for a future Qg3 or Bxh6 ideas. White is down a knight but every piece is firing at Black's king.",
+      sayShort: '8.e5! — pawn surges with tempo on the queen. Each White move makes a new threat.',
+      highlights: [H('e5', KEY), H('f6', KEY)],
+    },
+    {
+      id: 'hm9',
+      moves: ['e4','e5','Nc3','Nc6','f4','exf4','Nf3','g5','Bc4','g4','O-O','gxf3','Qxf3','Qf6','e5'],
+      say: "Look at what the position PRODUCES. Black is up a knight and two pawns on paper, but he can't develop — every move costs him tempo defending the f7-square. The Bc4 + Qf3 + Rf1 trinity makes …Nf6 or …Be7 impossible for Black; if Black ever castles the f-file rains down. White's plan from here is mechanical: bring the queen-bishop to f4 with Bxf4 (recovering the third pawn), bring the a1-rook to e1 to triple on the e-file, and feed pieces toward h7 and f7. Modern engines say Black is materially better, but only by computer-level defence. Against a human, the Hamppe-Muzio is the most punishing weapon White has when Black ventures 4…g5 — and that's the entire pitch: don't play it every game, but keep it loaded for when Black gives you the kingside chase.",
+      sayShort: 'The position produces: every White piece aimed at f7 + h7, Black can\'t develop without dropping more. Practical knockout.',
+      highlights: [H('f7', KEY), H('h7', SOFT), H('f4', SOFT)],
     },
   ],
 };
@@ -357,8 +372,15 @@ const FRANKENSTEIN_NXA8: LessonScript = {
       id: 'fn9',
       moves: ['e4','e5','Nc3','Nf6','Bc4','Nxe4','Qh5','Nd6','Bb3','Nc6','Nb5','g6','Qf3','f5','Qd5','Qe7','Nxc7+','Kd8','Nxa8'],
       highlights: [H('a8', KEY), H('d8', SOFT)],
-      say: "9…Kd8 (forced) 10.Nxa8! White gobbles the rook. White is up an EXCHANGE and a pawn — a winning material edge that defines the position for the rest of the game. Black has compensation in piece activity — the knight on a8 is technically still trapped, and Black plans …b6 + …Bb7 to win it back — but theory and practice both say White comes out ahead. This is the Nxa8 raid, the most famous mini-combination in the Vienna's history. Lock it in: when Black plays 5…Nc6, the nine-move waterfall starts, and at the end of it White owns the rook.",
+      say: "9…Kd8 (forced) 10.Nxa8! White gobbles the rook. White is up an EXCHANGE and a pawn — a winning material edge that defines the position for the rest of the game. This is the Nxa8 raid, the most famous mini-combination in the Vienna's history. Lock it in: when Black plays 5…Nc6, the nine-move waterfall starts, and at the end of it White owns the rook.",
       sayShort: '10.Nxa8! — White wins the exchange and a pawn. The famous Nxa8 raid lands.',
+    },
+    {
+      id: 'fn10',
+      moves: ['e4','e5','Nc3','Nf6','Bc4','Nxe4','Qh5','Nd6','Bb3','Nc6','Nb5','g6','Qf3','f5','Qd5','Qe7','Nxc7+','Kd8','Nxa8'],
+      highlights: [H('a8', KEY), H('b6', SOFT), H('b7', SOFT)],
+      say: "Now what does the position PRODUCE? Black will play …b6 and …Bb7 trying to trap the Na8 — and theory says yes, the knight on a8 is dead, Black will recover it within a few moves. But that's the WHOLE POINT: in the four-or-five moves Black spends maneuvering to win back the knight, White develops freely, completes castling, and consolidates the exchange-plus-pawn material edge. The conversion plan is simple: castle long, get the king-knight out, push the d2-pawn to d4 to claim the centre while Black is busy with the queenside knight-hunt. By the time Black wins the Na8 back, White is fully developed with the exchange in the bank. Adams played the White side and won; Mamedyarov plays the Black side and tolerates the trapped knight as the price of the wild line. Theory: equal. Practice: White wins more often than not.",
+      sayShort: 'Black\'s …b6 + …Bb7 wins the a8-knight back over 4-5 moves — White uses those tempi to consolidate the exchange edge.',
     },
   ],
 };
@@ -434,8 +456,15 @@ const COPYCAT_QG4: LessonScript = {
       id: 'cq8',
       moves: ['e4','e5','Nc3','Nc6','Bc4','Bc5','Qg4','Qf6','Nd5','Qxf2+','Kd1','Kf8','Nh3','Qd4','d3','Bb6','Qf3'],
       highlights: [H('f3', KEY)],
-      say: "9.Qf3 — the queen returns to defend and develop. Material is roughly equal (Black's pawn-grab balances White's better position), but White has a king that's safer than Black's, every piece developing onto active squares, the Nd5 dominating the centre, and the Bc4 still on the long diagonal. Black has a queen out of play, a king stuck on f8, and zero piece-coordination. The verdict: White stands much better — and that's the prize for punishing the mirror. Steinitz used Qg4 ideas exactly like this to set up complete positional binds against his contemporaries.",
+      say: "9.Qf3 — the queen returns to defend and develop. Material is roughly equal (Black's pawn-grab balances White's better position), but White has a king safer than Black's, every piece developing onto active squares, the Nd5 dominating the centre, and the Bc4 still on the long diagonal. Black has a queen out of play, a king stuck on f8, and zero piece-coordination.",
       sayShort: '9.Qf3 — White has the safer king, the Nd5 outpost, and full development. Mirror punished.',
+    },
+    {
+      id: 'cq9',
+      moves: ['e4','e5','Nc3','Nc6','Bc4','Bc5','Qg4','Qf6','Nd5','Qxf2+','Kd1','Kf8','Nh3','Qd4','d3','Bb6','Qf3'],
+      highlights: [H('d5', KEY), H('f7', SOFT), H('f3', SOFT)],
+      say: "What does the position PRODUCE? The structural facts: White's Nd5 sits on an unassailable central square supported by the Qf3 and the c2/e4 pawn duo; the Bc4 still rakes the a2-g8 diagonal at f7; the rook on h1 will swing to f1 via Re1-Rf1 to attack the f-file once Black's queen leaves; and Black's king on f8 has lost castling rights forever, blocked the rook on h8 from coordinating, and stares at White's three-piece kingside attack with no defenders behind. The conversion plan: trade pieces if Black wants (every trade favours the side with the safer king + better structure), play c3 to clamp the d4-square and chase Black's queen, then bring the king-rook to f1 or e1. Steinitz used Qg4 ideas exactly like this to set up complete positional binds against his contemporaries — the prize for punishing the mirror move is not just the pawn, but the long-term game.",
+      sayShort: 'The position produces: Nd5 outpost, Bc4 still raking f7, Black king stuck on f8 forever, queen out of play. Trade and convert.',
     },
   ],
 };
@@ -500,9 +529,16 @@ const PIERCE_GAMBIT: LessonScript = {
     {
       id: 'pg7',
       moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','d5','exd5','Qxd5','Nf3','Bg4'],
-      say: "The verdict on the Pierce Gambit: theoretically the position after these moves is balanced — engines say Black is slightly better with the two extra pawns IF he can survive the development race. The queen on d5 is the practical problem: every White piece comes out with tempo on it. Practically White scores well in human play because the initiative is concrete and Black's defence requires precision. The Pierce is less wild than the Hamppe-Allgaier or Muzio but it works the same way: punish Black for accepting a free pawn by making him spend every move defending. A weapon to keep loaded for variety.",
-      sayShort: 'The verdict: engine equal, human practical White edge. A weapon variety pack.',
+      say: "The verdict on the Pierce Gambit: theoretically the position after these moves is balanced — engines say Black is slightly better with the two extra pawns IF he can survive the development race. The queen on d5 is the practical problem: every White piece comes out with tempo on it.",
+      sayShort: 'The verdict: engine equal, human practical White edge.',
       highlights: [H('d5', SOFT)],
+    },
+    {
+      id: 'pg8',
+      moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','d5','exd5','Qxd5','Nf3','Bg4'],
+      highlights: [H('d5', KEY), H('f4', SOFT), H('g4', SOFT)],
+      say: "What does the Pierce position PRODUCE? Three concrete facts: the queen on d5 is a magnet — Bc4 hits it next move with another tempo, Nc3 already attacked it once, and every developing move continues the chase; the open e-file is wide open for White to throw the rook there with Re1 once castling lands; and the Bg4-pin on the f3-knight is FRAGILE because h3 just asks the bishop to commit, and any pin-piece-trade leaves Black even more behind in development. The conversion plan: 7.Bc4 (third attack on d5, queen moves yet again), 8.O-O (king-side safety + Re1), 9.h3 (challenge the Bg4-pin), 10.Bxf4 (recover the gambit pawn). By move 12 White will have full development, the bishop pair, the open e-file, and Black's queen still wandering. The Pierce is less wild than the Hamppe sacrifices but works the same way: punish Black for accepting a free pawn by making him spend every move defending.",
+      sayShort: 'The position produces: queen on d5 hunted by every White piece, open e-file, fragile Bg4-pin. Convert with Bc4, O-O, h3, Bxf4.',
     },
   ],
 };
@@ -541,7 +577,7 @@ const STEINITZ_GAMBIT: LessonScript = {
       moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','Qh4+','Ke2'],
       highlights: [H('e2', KEY), H('e1', SOFT)],
       say: "5.Ke2!! Wilhelm Steinitz himself, the first world champion, walked his king from e1 to e2 — refusing to block the check, refusing to commit a pawn. The king moves INTO the centre on move five. Every modern player's instinct screams against this. But Steinitz's positional theory held that the king is a fighting piece, and that with the queens still on the board, White's king on e2 is no MORE exposed than Black's on e8 — the difference is just the right to castle, which Steinitz judged a fair trade for keeping the pawn structure intact. Steinitz brings his pieces out one by one; the Black queen on h4 stays stuck in enemy territory.",
-      sayShort: '5.Ke2!! — Steinitz himself walked the king. \"The king is a fighting piece.\"',
+      sayShort: '5.Ke2!! — Steinitz himself walked the king. The king is a fighting piece.',
     },
     {
       id: 'sg4',
@@ -576,8 +612,15 @@ const STEINITZ_GAMBIT: LessonScript = {
     {
       id: 'sg8',
       moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','Qh4+','Ke2','d6','Nf3','Bg4','Bxf4'],
-      say: "The verdict on the Steinitz Gambit: modern theory considers it dubious because Black can defend correctly with deep computer preparation. But against a human who hasn't done that preparation, the line is murderous — White just hunts the misplaced queen and uses every tempo to attack. The opening's NAME is the verdict: a world champion played it because the practical chances were so good. Treat this as a weapon for blitz, rapid, and any game where your opponent can't memorise twenty-move only-move sequences. The king on e2 is not a bug — it's the feature.",
-      sayShort: 'Verdict: dubious against engines, devastating against humans. The king on e2 is the feature.',
+      say: "The verdict on the Steinitz Gambit: modern theory considers it dubious because Black can defend correctly with deep computer preparation. But against a human who hasn't done that preparation, the line is murderous — White just hunts the misplaced queen and uses every tempo to attack.",
+      sayShort: 'Verdict: dubious against engines, devastating against humans.',
+    },
+    {
+      id: 'sg9',
+      moves: ['e4','e5','Nc3','Nc6','f4','exf4','d4','Qh4+','Ke2','d6','Nf3','Bg4','Bxf4'],
+      highlights: [H('e2', KEY), H('h4', KEY), H('d4', SOFT), H('e4', SOFT)],
+      say: "What does the Steinitz position PRODUCE? Three structural facts that explain why a world champion played it: White has the d4-e4 pawn duo controlling the centre absolutely; the Bf4 just recovered the gambit pawn AND threatens Bxd6 next move winning ANOTHER pawn; and the Black queen on h4 is FAR from her army, a magnet that every White piece can attack as it comes out. The king on e2 looks scary but is actually well-protected: the Nf3 covers the e1-h4 diagonal-check threat, the Bf4 covers c1 ideas, and Black has no rook on the e-file to exploit. The conversion plan: Kd2 (eventually) to slide the king to safety on c1 after the queen is pacified, then Re1 swings the king-rook onto the open e-file, then push for an exchange of queens via Qd3-h7+ tactics to enter an endgame UP material. The opening's NAME is the verdict — a world champion played it because the practical chances are that good. Treat this as a weapon for blitz, rapid, and any game where your opponent can't memorise twenty-move only-move sequences. The king on e2 is not a bug — it's the feature.",
+      sayShort: 'The position produces: d4-e4 centre, Bf4 hunting d6, Black queen on h4 a magnet. Conversion: Kd2 → Re1 → trade queens UP material.',
     },
   ],
 };
@@ -616,6 +659,13 @@ const NXE4_NO_QH5: LessonScript = {
       highlights: [H('h5', KEY), H('f7', KEY), H('e5', SOFT), H('e4', SOFT)],
       say: "Rewind. The ONLY refutation is 4.Qh5! From h5 the queen attacks two squares at once: the f7-square (threatening Qxf7 MATE) and the e5-pawn straight down the h5-e5 diagonal. Forget the natural recapture. The Frankenstein-Dracula begins HERE with the queen leap — every other White move just gifts Black equality. Lock this in: 3…Nxe4 demands 4.Qh5, full stop. The dragon must wake up immediately.",
       sayShort: 'Rewind: 4.Qh5! is the only-move. Threatens mate AND attacks the knight. Wake the dragon.',
+    },
+    {
+      id: 'wn4',
+      moves: ['e4','e5','Nc3','Nf6','Bc4','Nxe4','Qh5'],
+      highlights: [H('h5', SOFT), H('f7', SOFT), H('d6', SOFT)],
+      say: "Why is 4.Qh5 the ONLY move? Because every other White reply lets Black equalise OR seize the initiative. 4.Nxe4 d5! forks the c4-bishop and the e4-knight — Black wins a piece back with an active centre. 4.Bxf7+ Kxf7 5.Nxe4 d5 — same idea, Black just trades pieces and emerges with central control. 4.d3 Nxc3 — Black trades into a clean position a pawn up. The Qh5 leap is the ONLY move that fights for an edge because it threatens Qxf7 MATE in one — a threat so concrete it forces Black to play the awkward 4…Nd6 burying his own knight on a square it doesn't want. Memorise this: in the Vienna's Bc4 line, …Nxe4 is the moment the Qh5 must come out. No development move, no recapture — just Qh5.",
+      sayShort: 'Why only Qh5? Because Nxe4 d5! and Bxf7+ Kxf7 d5! both let Black equalise. Qh5 is the only edge-keeping move.',
     },
   ],
 };

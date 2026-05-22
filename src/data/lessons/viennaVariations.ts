@@ -5,7 +5,6 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 // and SOFT BLUE (secondary context). Move squares are auto-painted orange
 // by the LessonPlayer — we don't author those.
 const ATK = 'rgba(40,185,95,0.92)';
-const VIS = 'rgba(40,185,95,0.92)';
 const INTENT = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
