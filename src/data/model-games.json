@@ -2671,54 +2671,6 @@
     "source": "lichess-masters"
   },
   {
-    "id": "mg-lichess-4vjGgx3t",
-    "openingId": "caro-kann",
-    "white": "Anand, Viswanathan",
-    "black": "Carlsen, Magnus",
-    "whiteElo": 2775,
-    "blackElo": 2870,
-    "result": "1/2-1/2",
-    "year": 2013,
-    "event": "2013-2013-11 master game",
-    "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 e6 Ne5 Bh7 Bd3 Bxd3 Qxd3 Nd7 f4 Bb4+ c3 Be7 Bd2 Ngf6 O-O-O O-O Ne4 Nxe4 Qxe4 Nxe5 fxe5 Qd5 Qxd5 cxd5 h5 b5 Rh3 a5 Rf1 Rac8 Rg3 Kh7 Rgf3 Kg8 Rg3 Kh7 Rgf3 Kg8",
-    "overview": "Master game from the Lichess masters database. Anand, Viswanathan vs Carlsen, Magnus, 2013. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/4vjGgx3t",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-l0GOEDHp",
-    "openingId": "caro-kann",
-    "white": "Caruana, Fabiano",
-    "black": "So, Wesley",
-    "whiteElo": 2835,
-    "blackElo": 2770,
-    "result": "1-0",
-    "year": 2020,
-    "event": "2020-2020-06 master game",
-    "pgn": "e4 c6 d4 d5 Nd2 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 Bd3 Bxd3 Qxd3 e6 Bd2 Ngf6 O-O-O Be7 Kb1 O-O Ne4 Nxe4 Qxe4 Nf6 Qe2 Qd5 Ne5 Qe4 Be3 Nd5 Qd3 Qxd3 Rxd3 Nxe3 fxe3 h5 Rb3 Bd6 Nc4 Bg3 Rh3 Bf2 Rxb7 Rfb8 Rxb8+ Rxb8 Ne5",
-    "overview": "Master game from the Lichess masters database. Caruana, Fabiano vs So, Wesley, 2020. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/l0GOEDHp",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-5KVwagdf",
-    "openingId": "caro-kann",
-    "white": "Kasparov, Garry",
-    "black": "Anand, Viswanathan",
-    "whiteElo": 2847,
-    "blackElo": 2753,
-    "result": "1-0",
-    "year": 2003,
-    "event": "2003-2003-03 master game",
-    "pgn": "e4 c6 d4 d5 Nd2 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 Ngf6 Bf4 e6 O-O-O Be7 Kb1 O-O Ne4 Nxe4 Qxe4 Nf6 Qe2 Qd5 Ne5 Qe4 Qxe4 Nxe4 Rhe1 Nf6 g4 Rfd8 Be3 Bd6 f3 Rac8 c4 a5 a4 Nd7 Bd2 Bc7 Bc3 Nxe5 dxe5 c5 Kc2 Rxd1 Kxd1 Rd8+ Ke2 Rd7 f4 Bd8 f5 Bg5 f6 b6 Ra1 Rd8 Ra3 gxf6 Rb3 Bf4 Rxb6 Bxe5 Bxe5 fxe5 Rb5 Rd4 Rxc5 Rxg4 b3 Rg3 Rxe5 Rxb3 Rxa5 f5 Ra8+ Kg7 c5 Rc3 Rc8 Ra3 c6 Rxa4 Re8 Rc4 Rxe6 f4 Rg6+ Kh7 Kd3 Rc5 Kd4 Rc1 Ke4 Rc4+ Kd5 Rc3 Kd4 Rc1 Ke4 Rc4+ Kf3 Kh8 Rxh6+ Kg7 Rd6 Kh7 Kg4 Kg7 Rd7+ Kf6 c7",
-    "overview": "Master game from the Lichess masters database. Kasparov, Garry vs Anand, Viswanathan, 2003. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/5KVwagdf",
-    "source": "lichess-masters"
-  },
-  {
     "id": "mg-lichess-hhaSI6SI",
     "openingId": "english-opening",
     "white": "Carlsen, Magnus",
@@ -3821,5 +3773,173 @@
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/2NIYGBtv",
     "source": "lichess-masters"
+  },
+  {
+    "id": "mg-caro-classical",
+    "openingId": "caro-kann",
+    "white": "Mamedyarov, Shakhriyar",
+    "black": "Topalov, Veselin",
+    "whiteElo": 2760,
+    "blackElo": 2780,
+    "result": "0-1",
+    "year": 2008,
+    "event": "Amber-blindfold 17th",
+    "pgn": "e4 c6 d4 d5 Nd2 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 f4 e6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 Ngf6 Bd2 Qc7 O-O-O c5 dxc5 Bxc5 Qe2 O-O Ne5 Rac8 Kb1 Bd6 Bc3 Nb6 Bd4 Nbd5 Ne4 Nxe4 Qxe4 f5 Qf3 Qxc2+ Ka1 Qa4 Kb1 Qc2+ Ka1 Nb4 Bc3 Bxe5 fxe5 Nxa2 Rd2 Qa4",
+    "overview": "Classical Caro-Kann — Black wins. Solid structure, no bad pieces.",
+    "criticalMoments": [
+      {
+        "moveNumber": 11,
+        "color": "black",
+        "fen": "r2qkb1r/pp1n1pp1/2p1pn1p/7P/3P1P2/3Q1NN1/PPP3P1/R1B1K2R w KQkq - 1 12",
+        "annotation": "Black has done the Caro's signature work: the light bishop came out to f5 and was traded off, and only then did e6 lock the chain. No bad bishop, no weaknesses — just a sound structure to play from.",
+        "concept": "The freed bishop"
+      }
+    ],
+    "middlegameTheme": "Solid structure, no bad pieces",
+    "lessonSummary": "The Classical variation, played out to a Black win at the top level."
+  },
+  {
+    "id": "mg-caro-advance",
+    "openingId": "caro-kann",
+    "white": "Giri, A.",
+    "black": "Carlsen, M.",
+    "whiteElo": 2782,
+    "blackElo": 2855,
+    "result": "0-1",
+    "year": 2016,
+    "event": "GCT Rapid YourNextMove",
+    "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 Bb4+ c3 Ba5 O-O Nd7 a4 Bc7 Nbd2 f6 Re1 Nh6 Nf1 fxe5 dxe5 O-O Bxh6 gxh6 Qd4 Be4 Ng3 c5 Qe3 Bxf3 Bxf3 Qg5 Qxg5+ hxg5 Bg4 Rae8 Re2 Nxe5 Bh5 Rd8 Rd1 c4 Nf1 Nd3",
+    "overview": "Advance Caro-Kann — Black wins. Undermine the chain.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "black",
+        "fen": "r2qk2r/ppbn2pp/2p1pp1n/3pPb2/P2P4/2P2N2/1P1NBPPP/R1BQR1K1 w kq - 2 11",
+        "annotation": "Black strikes the base of White's d4-e5 chain with c5. This is the Advance Caro's whole plan — undermine, don't sit. The bishop is already outside on f5, so Black plays with freedom the French never gets.",
+        "concept": "The c5 break"
+      }
+    ],
+    "middlegameTheme": "Undermine the chain",
+    "lessonSummary": "The Advance variation, played out to a Black win at the top level."
+  },
+  {
+    "id": "mg-caro-exchange",
+    "openingId": "caro-kann",
+    "white": "Carlsen, M.",
+    "black": "So, W.",
+    "whiteElo": 2832,
+    "blackElo": 2815,
+    "result": "0-1",
+    "year": 2017,
+    "event": "chess.com Speed 3m+2spm 2017",
+    "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 Qc7 Ne2 Nf6 Bf4 e5 dxe5 Nxe5 Bb5+ Kd8 O-O Bd6 Nd2 Be6 Nd4 a6 Re1 axb5 Nxb5 Qd7 Nxd6 Nd3 Bg3 Nxe1 Qxe1 Nh5 Qe5 Nxg3 Qxg3 Ke7 N2c4 dxc4 Rd1 Qc6 h4 Rhd8",
+    "overview": "Exchange Caro-Kann — Black wins. Symmetry then outplay.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "black",
+        "fen": "r1bk3r/ppq2ppp/3b1n2/1B1pn3/5B2/2P5/PP2NPPP/RN1Q1RK1 w - - 4 11",
+        "annotation": "The Exchange hands Black an open c-file and a sound, symmetrical centre. With the bishop developed and nothing to defend, the better-prepared side simply outplays the other — here Black does, against the World Champion.",
+        "concept": "Healthy symmetry"
+      }
+    ],
+    "middlegameTheme": "Symmetry then outplay",
+    "lessonSummary": "The Exchange variation, played out to a Black win at the top level."
+  },
+  {
+    "id": "mg-caro-two-knights",
+    "openingId": "caro-kann",
+    "white": "Nakamura, Hi",
+    "black": "Carlsen, M.",
+    "whiteElo": 2786,
+    "blackElo": 2832,
+    "result": "0-1",
+    "year": 2018,
+    "event": "chess.com Speed 1m+1spm 2017",
+    "pgn": "e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6 d3 Nf6 g3 Bb4 a3 Bxc3+ bxc3 dxe4 dxe4 Nbd7 Bg2 O-O O-O Qa5 a4 Rfd8 Qe3 Nb6 f4 Nc4 Qf3 Nd2 Bxd2 Rxd2 Rab1 b6 Rfd1 Rad8 Rxd2 Rxd2 Rd1 Nxe4 Rxd2 Nxd2 Qd3 Qc5+ Kh2 Nc4 Qd8+ Qf8 Qc7 g6 Qxa7 Qd8 Qa6 Nb2 Bxc6 Nd1 Qd3 Qxd3 cxd3 Nxc3 Kg2 Kf8 Kf3 Ke7 Ke3 Kd6 Be8 f6 Kd2 Nd5 d4 Nc7 Bf7 Ke7 Bg8 h6 Kc3 Kf8",
+    "overview": "Two Knights Caro-Kann — Black wins. Granite structure.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r4rk1/pp1n1ppp/2p1pn2/q7/4P3/P1P2QPP/2P2PB1/R1B2RK1 w - - 5 13",
+        "annotation": "Black traded the light bishop on f3 and built a granite wall with e6. The bishop pair is White's, but there is no target in Black's camp — and a structure with no weaknesses is the Caro's standing offer.",
+        "concept": "No weaknesses"
+      }
+    ],
+    "middlegameTheme": "Granite structure",
+    "lessonSummary": "The Two Knights variation, played out to a Black win at the top level."
+  },
+  {
+    "id": "mg-caro-panov",
+    "openingId": "caro-kann",
+    "white": "Radjabov, Teimour",
+    "black": "Anand, Viswanathan",
+    "whiteElo": 2761,
+    "blackElo": 2791,
+    "result": "0-1",
+    "year": 2009,
+    "event": "Amber-rapid 18th",
+    "pgn": "e4 c6 c4 d5 exd5 cxd5 d4 Nf6 Nc3 Nc6 Bg5 dxc4 Bxc4 h6 Bf4 e6 Nf3 Bd6 Be3 O-O Qd2 Re8 O-O-O Bb4 Qd3 Bxc3 Qxc3 Bd7 Kb1 Rc8 Qa3 Qe7 Qxe7 Nxe7 Ne5 Red8 Rc1 Be8 Bb3 Nfd5 Rxc8 Rxc8 Rc1 Rd8 Bc2 f6 Nf3 Bg6 Bxg6 Nxg6 Bd2 Kf7 a4 Nge7 Ka2 g5 Ng1 Nf5 Ne2 Nh4 Rg1 Kg6 Kb3 Rc8 Nc3 Nf5 Ne2 h5 h3 Rc6 a5 Rc7 Re1 Nh4 Rg1 Rd7 Kc2 Ne7 Bc3 Nc6 g3 Nf3 Rd1 Kf5 Rd3 g4 h4 Ne7 Nf4 Nd5 Nxd5 Rxd5 Re3 Nxd4+ Bxd4 Rxd4 Rc3 Rd7 Rc4 e5 Kc3 Rd6 Rb4 b6 axb6 axb6 Kc2 Ke6 Rb5 Kd7 Rb3 f5 Rb5 Ke6 Kc3 e4 Kc2 Rd3 Rxb6+ Kd7 Rh6 Rf3 Rxh5 Rxf2+ Kc3 Ke6 b4 Rf3+ Kc4 Rxg3 b5 Rg1 b6 Ke5 Rg5 Rc1+ Kb5 e3 Rg8 Kf4 b7 Rb1+ Kc6 e2 Re8 Kf3 h5 g3",
+    "overview": "Panov Caro-Kann — Black wins. Blockade the isolani.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1bqr1k1/pp3pp1/2n1pn1p/8/1bBP4/2N1BN2/PP1Q1PPP/2KR3R w - - 8 13",
+        "annotation": "Against the Panov's isolated d-pawn, Black plants a knight on d5 — the perfect blockading square — and leans on d4. Blockade in front, pressure behind: the textbook way to play against the isolani, and Black is the one pressing.",
+        "concept": "The d5 blockade"
+      }
+    ],
+    "middlegameTheme": "Blockade the isolani",
+    "lessonSummary": "The Panov variation, played out to a Black win at the top level."
+  },
+  {
+    "id": "mg-caro-fantasy",
+    "openingId": "caro-kann",
+    "white": "Buljubasic, Sab",
+    "black": "Mesic, Ismet",
+    "whiteElo": 2365,
+    "blackElo": 2280,
+    "result": "0-1",
+    "year": 2022,
+    "event": "20th Premier League BIH",
+    "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6 Nbd2 O-O Qe1 b5 Bd3 Qb6 Kh1 Rae8 Qh4 a5 a4 Bh5 axb5 cxb5 Qe1 Bg6 Qe2 exd4 Nxd4 Bb8 Bxb5 Nxe4 Nxe4 Rxe4 Qf2 Nf6 Be2 Qd6 g3 Ng4 Qg2 Ne3 Bxe3 Rxe3 Bf3 Rfe8 Rxa5 Bd3 Raa1 Bxf1 Qxf1 g6 Kg2 h5 Ra6 Qe5 Nc6 Qf5 Qf2 h4",
+    "overview": "Fantasy Caro-Kann — Black wins. Open it before they are ready.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "black",
+        "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
+        "annotation": "Against the Fantasy's f3, Black takes on e4 and strikes with e5 at once, prising the centre open before White is developed. The reward is a free, classical game with every piece active.",
+        "concept": "The e5 strike"
+      }
+    ],
+    "middlegameTheme": "Open it before they are ready",
+    "lessonSummary": "The Fantasy variation, played out to a Black win at the top level."
+  },
+  {
+    "id": "mg-caro-tartakower",
+    "openingId": "caro-kann",
+    "white": "Pikula, D.",
+    "black": "Sedlak, N.",
+    "whiteElo": 2471,
+    "blackElo": 2608,
+    "result": "0-1",
+    "year": 2018,
+    "event": "17th Premier League BIH",
+    "pgn": "e4 c6 d4 d5 Nd2 dxe4 Nxe4 Nf6 Nxf6+ exf6 c3 Bd6 Bd3 O-O Qc2 Re8+ Ne2 h5 Be3 Nd7 O-O-O Nf8 Kb1 Be6 c4 Rc8 h3 b5 g4 bxc4 Bxc4 h4 Rd3 Ng6 Qa4 Bxc4 Qxc4 Qd7 Rb3 f5 gxf5 Qxf5+ Qc2 Qf3 Qd1 c5 dxc5 Bxc5 Bxc5 Qf5+ Ka1 Rxc5 Re3 Rxe3 fxe3 Qe4 Nf4 Nxf4 exf4 Qxf4 a3 Rf5 Qd8+ Kh7 Rd1 Rf6 Qc8 Qe4 Qc5 Qe2 Qd4 Rf4 Qd8 f6 Qd5 a6 Qd6 Rf2 Qd4 g5 Rc1 Kg6 Rc6 a5 Ka2 a4 Qb4 Qe5 Rc4 Qe6 Qxa4 Rf4 Qc2+ Kh6 b3 Qxh3 Rxf4 gxf4 a4 f3 Ka3 Kg5 Qd2+ Kg6 Qf4 Qg3 Qe4+ Kf7 Qd5+ Kg7 Qe6 h3",
+    "overview": "Tartakower Caro-Kann — Black wins. Doubled pawns, real assets.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2qrnk1/pp3pp1/2pbbp2/7p/3P4/2PBB3/PPQ1NPPP/1K1R3R w - - 6 13",
+        "annotation": "Black accepted doubled f-pawns for the bishop pair and the half-open e-file — and now the rooks pour down it. The doubled pawns clamp e5 and g5; far from a weakness, they are the engine of Black's play.",
+        "concept": "The half-open e-file"
+      }
+    ],
+    "middlegameTheme": "Doubled pawns, real assets",
+    "lessonSummary": "The Tartakower variation, played out to a Black win at the top level."
   }
 ]
