@@ -455,7 +455,7 @@ export function OpeningDetailPage(): JSX.Element {
   if (viewMode === 'walkthrough') {
     const lesson = getLessonScript(opening.id);
     if (lesson) {
-      return <LessonPlayer script={lesson} onExit={handleExit} />;
+      return <LessonPlayer script={lesson} onExit={handleExit} onContinueToPlay={() => handleStartVariationPlay(-1)} />;
     }
   }
   if (viewMode === 'variation-walkthrough') {
@@ -470,6 +470,7 @@ export function OpeningDetailPage(): JSX.Element {
             // Watching the subline's master class through marks it Learned.
             void markLineDiscovered(opening.id, activeVariationIndex).then(() => loadOpening());
           }}
+          onContinueToPlay={() => handleStartVariationPlay(activeVariationIndex)}
         />
       );
     }
