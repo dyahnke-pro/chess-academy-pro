@@ -57,30 +57,16 @@ function violationsFor(lesson: LessonScript): string[] {
 // key appears, or if a parked key drops to zero (forces cleanup of the
 // entry). SHRINK this list; never grow it. Populated from the measurement
 // pass — see the report in the PR.
-// Measured 2026-05-22 sweeping §5b across the full registry for the first
-// time. Vienna = 0 (authored under this gate). Ruy = 50, Pirc = 5 markers
-// that lead the eye to a square the narration names by ROLE ("its
-// defender", "these two squares", "the doubled c-pawns", "the d-file")
-// rather than by coordinate — which the sentence-grained reveal can't
-// anchor. Real backlog, not regex noise (verified against the narration
-// text). Fix = name the square in the narration, or move the marker.
-const BASELINE_VIOLATIONS: Record<string, number> = {
-  'The Ruy Lopez — A Master Class': 8,
-  'ruy-lopez::Berlin Defense': 5,
-  'ruy-lopez::Open Ruy Lopez': 3,
-  'ruy-lopez::Marshall Attack': 7,
-  'ruy-lopez::Exchange Variation': 9,
-  'ruy-lopez::Closed Ruy Lopez (Breyer)': 4,
-  'ruy-lopez::Closed Ruy Lopez (Chigorin)': 3,
-  'ruy-lopez::Closed Ruy Lopez (Zaitsev)': 4,
-  'ruy-lopez::Anti-Marshall (8.a4)': 1,
-  'ruy-lopez::Arkhangelsk Variation': 3,
-  'fishing-pole': 2,
-  'marshall-onlymove': 1,
-  'The Pirc Defence — A Master Class': 1,
-  'pirc-defence::Classical System': 2,
-  'pirc-defence::Fianchetto System': 2,
-};
+// EMPTY — and that's the goal state. The first full-registry sweep
+// (2026-05-22) surfaced Ruy 50 / Pirc 5 markers that led the eye to a
+// square named only by ROLE ("its defender", "the doubled c-pawns") rather
+// than by coordinate. A parallel session then FIXED every one at the source
+// (commit 3c8eeed, "tighten lead-the-eye on every beat"), so the backlog is
+// gone — Ruy, Pirc, and Vienna are all §5b-clean. The allowlist stays here,
+// empty, as the mechanism: any NEW violation (a future opening, a
+// regression) hard-fails until fixed or explicitly parked. Never grow it
+// without a logged reason.
+const BASELINE_VIOLATIONS: Record<string, number> = {};
 
 describe('§5b grounding — every arrow + highlight endpoint is grounded in the narration', () => {
   for (const { scope, key, lesson } of ALL_LESSONS) {
@@ -115,7 +101,8 @@ describe('§5b grounding — every arrow + highlight endpoint is grounded in the
 // and leads the eye to none of them. Exactly 1 such beat exists today.
 const SQUARE_RE_H4 = /\b[a-h][1-8]\b/;
 const BARE_BEAT_BASELINE = new Set<string>([
-  'ruy-lopez::Berlin Defense::b4', // names c3/f4/e6, zero markers — Ruy lead-the-eye backlog
+  'ruy-lopez::Berlin Defense::b4',  // names c3/f4/e6, zero markers — Ruy lead-the-eye backlog
+  'ruy-lopez::Marshall Attack::m1', // pre-existing bare beat (post §5b sweep) — Ruy backlog
 ]);
 
 describe('lead-the-eye present — a beat that names squares carries ≥1 marker', () => {

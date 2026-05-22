@@ -5,6 +5,7 @@ import { PIRC_DEFENCE_LESSON } from './pircDefence';
 import { PIRC_VARIATION_LESSONS } from './pircVariations';
 import { VIENNA_GAME_LESSON } from './vienna';
 import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
+import { CARO_KANN_LESSON } from './caroKann';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 
 /**
@@ -24,6 +25,7 @@ const LESSONS: Record<string, LessonScript> = {
   [RUY_LOPEZ_LESSON.openingId]: RUY_LOPEZ_LESSON,
   [PIRC_DEFENCE_LESSON.openingId]: PIRC_DEFENCE_LESSON,
   [VIENNA_GAME_LESSON.openingId]: VIENNA_GAME_LESSON,
+  [CARO_KANN_LESSON.openingId]: CARO_KANN_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {

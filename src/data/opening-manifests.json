@@ -35,5 +35,14 @@
     "weapons": 7,
     "warnings": 1,
     "keyIdeas": 4
+  },
+  "caro-kann": {
+    "variations": 8,
+    "middlegamePlans": 0,
+    "endgamePlans": 0,
+    "modelGames": 3,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

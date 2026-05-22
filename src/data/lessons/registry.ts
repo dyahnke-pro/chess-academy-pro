@@ -23,6 +23,7 @@ import { PIRC_VARIATION_LESSONS } from './pircVariations';
 import { VIENNA_GAME_LESSON } from './vienna';
 import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
 import { VIENNA_TRAP_LESSONS } from './viennaTrapLessons';
+import { CARO_KANN_LESSON } from './caroKann';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -46,6 +47,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: RUY_LOPEZ_LESSON, variations: RUY_VARIATION_LESSONS, traps: RUY_TRAP_LESSONS },
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
   { main: VIENNA_GAME_LESSON, variations: VIENNA_VARIATION_LESSONS, traps: VIENNA_TRAP_LESSONS },
+  { main: CARO_KANN_LESSON, variations: {} }, // variation tabs land in follow-up commits
 ];
 
 function build(): RegisteredLesson[] {

@@ -61,7 +61,7 @@ function evalFen(bin: string, fen: string, searchMove?: string): Promise<number 
     let done = false;
     const finish = (v: number | null): void => { if (!done) { done = true; try { sf.kill(); } catch { /* */ } resolve(v); } };
     let buf = '';
-    sf.stdout.on('data', (d) => {
+    sf.stdout.on('data', (d: Buffer) => {
       buf += d.toString();
       const lines = buf.split('\n'); buf = lines.pop() ?? '';
       for (const line of lines) {
@@ -173,7 +173,6 @@ describe.runIf(RUN)('Hole 6a — masters legitimacy of past-book moves (main + v
         uci.push(mv.from + mv.to + (mv.promotion ?? ''));
       }
       if (beyondBook > 0) {
-        // eslint-disable-next-line no-console
         console.log(`  [${key}] ${beyondBook} ply past masters' book → deferred to Stockfish soundness`);
       }
       expect(
@@ -260,7 +259,6 @@ describe.runIf(RUN)('Hole 7a — masters legitimacy of middlegame plan lines', (
         }
       }
       if (beyondBook > 0) {
-        // eslint-disable-next-line no-console
         console.log(`  [${openingId} plans] ${beyondBook} ply past masters' book → deferred to Stockfish`);
       }
       expect(suspects, `${openingId}: master-divergent plan move(s):\n  ${suspects.join('\n  ')}`).toEqual([]);
@@ -297,7 +295,6 @@ describe.runIf(RUN && !!STOCKFISH)('Hole 7b — Stockfish soundness of middlegam
 // Always-present sanity + a clear note on what ran vs skipped.
 describe('past-book verification availability', () => {
   it('reports which checks are armed', () => {
-    // eslint-disable-next-line no-console
     console.log(`  masters(legitimacy): ${RUN ? 'ON' : 'OFF (set RUN_MASTERS_AUDIT=1)'} | stockfish(soundness): ${RUN && STOCKFISH ? `ON (${STOCKFISH})` : STOCKFISH ? 'OFF' : 'SKIPPED — no UCI engine (set STOCKFISH_PATH)'}`);
     expect(typeof PROXY).toBe('string');
   });
