@@ -29,11 +29,19 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
 };
 
 /** Short tab label from a variation name: the parenthetical if present
- *  ("Closed Ruy Lopez (Breyer)" → "Breyer"), else the trimmed name. */
+ *  ("Closed Ruy Lopez (Breyer)" → "Breyer"), else the full name. Do NOT
+ *  string-truncate here: the returned label is used as BOTH the visible
+ *  tab text AND the canonical routing key flowing into the URL `?line=`
+ *  param + the per-tab plan lookup (PIRC_TAB_PLAN_IDS etc.). Truncating
+ *  with an ellipsis character (…) silently broke lookups for every long
+ *  variation name (e.g. "Austrian Attack with e5 c5" → "Austrian Attack w…"
+ *  no longer matched its routing key, leaving tab 7 on /openings/pirc-defence
+ *  with 0 plan cards). Visual overflow is the tab strip's job (CSS scroll
+ *  in the parent container), not this helper. */
 function shortLabel(name: string): string {
   const paren = /\(([^)]+)\)/.exec(name);
   if (paren) return paren[1];
-  return name.length > 18 ? `${name.slice(0, 17)}…` : name;
+  return name;
 }
 
 /** Build the variation tabs for an opening. Curated openings (Ruy) show
