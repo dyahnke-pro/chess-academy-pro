@@ -219,6 +219,15 @@ export interface LessonScript {
   /** Default board orientation. */
   orientation: 'white' | 'black';
   beats: LessonBeat[];
+  /** Lesson shape (David 2026-05-22 — depth gate). Default is `variation`
+   *  (a real teachable line; must reach the depth gate's minimum-plies
+   *  threshold). `roadmap` opts out of the depth gate — used for lessons
+   *  that intentionally stop short of the middlegame because they're a
+   *  pointer to the WEAPONS layer (e.g. Vienna vs 2…Nc6's 11-ply spine
+   *  that fans out to Hamppe-Allgaier / Hamppe-Muzio / Pierce / Steinitz).
+   *  `trap` is reserved for hand-authored named-trap beat lessons that
+   *  live in their own files and are shorter by design. */
+  kind?: 'variation' | 'roadmap' | 'trap';
 }
 
 // ─── Common Mistakes ──────────────────────────────────────────────────────

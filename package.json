@@ -16,6 +16,8 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "ship-check": "node scripts/ship-check.mjs",
+    "ship-check:full": "node scripts/ship-check.mjs --full",
     "postinstall": "npm run stockfish:copy",
     "setup:ios": "npx cap add ios; npx cap sync ios; cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift",
     "setup:android": "npx cap add android; npx cap sync android",

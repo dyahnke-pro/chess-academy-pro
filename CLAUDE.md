@@ -1627,14 +1627,44 @@ the same commit.
 
 ## Before Finishing a Session
 
-1. All tests pass (`npm run test:run`)
-2. No TypeScript errors (`npm run typecheck`)
-3. No lint errors (`npm run lint`)
-4. **Post-deploy audit ran AND all scenarios green** (see
-   "Post-Deploy Audit (MANDATORY)" above) — this is the load-
-   bearing step, not the test suite.
-5. Update MANIFEST.md — mark completed work orders, note any blockers
-6. If you created new files, verify they follow the file organization rules above
-7. Merge and deploy (see Deployment Policy above)
+**🚨 The one-button "am I done?" check is `npm run ship-check`.** David
+2026-05-22: "next time I claim done, I should be running ship-check and
+showing you the green checks." Wired in `scripts/ship-check.mjs`. Runs:
+
+  - `typecheck` (must pass, 0 errors)
+  - `lint` (errors only — the project warning cap drifts at a different
+    cadence than the gates, so ship-check decouples warnings from
+    blocking ship-readiness)
+  - The CURATED content-gate test list (NOT every test in the repo):
+    lessonIntegrity, narrationAccuracy, narrationGrounding, lessonDepth,
+    pircIntegrity, repertoire-orientation, pro-repertoires-orientation,
+    middlegamePlanner, MiddlegamePlansSection, EndgamePlansSection.
+    These are the load-bearing gates that protect content correctness.
+    UI / snapshot / integration tests live at a different reliability
+    bar and aren't gated here.
+  - Pulls the live audit-stream (informational, never blocks).
+
+  Exits 0 with `READY TO PUSH` only if every required check is green.
+  Exits 1 with a concise per-check failure tail otherwise. Run BEFORE
+  every push to main. **Don't claim done without running it.**
+
+  Add `--full` (`npm run ship-check:full`) to additionally run the
+  Playwright audit matrix (named-traps + leadeye-plans). Required
+  before declaring a multi-surface build done. Needs `npm run dev`
+  up on :5173 first.
+
+The full sequence:
+
+1. `npm run ship-check` — must print `READY TO PUSH`.
+2. `npm run ship-check:full` (if you touched lesson surfaces or the
+   masterclass UI) — Playwright matrix must be green too.
+3. Commit + push to main (per Deployment Policy above — main only,
+   no PRs unless explicitly requested).
+4. Wait for Vercel build to finish; **Post-deploy audit ran AND all
+   scenarios green** (see "Post-Deploy Audit (MANDATORY)" above) — this
+   is the load-bearing step, not the test suite.
+5. Pull the audit-stream once more (G2), report counts to David.
+6. Update MANIFEST.md / archive any landed plan docs.
+7. If you created new files, verify they follow the file organization rules above.
 8. If you wrote a new audit script, add it to the matrix in
    "Post-Deploy Audit" and to `docs/AUDIT_INDEX.md`.

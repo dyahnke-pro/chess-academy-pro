@@ -1,0 +1,30 @@
+{
+  "vienna-game": {
+    "openingName": "Vienna Game",
+    "startPgn": "e4 e5 Nc3",
+    "refreshedAt": "2026-05-22",
+    "totalGamesInDB": 61341922,
+    "suggestedOrder": [
+      {
+        "replyMove": "Nc6",
+        "pct": 36.1,
+        "games": 22157521,
+        "variationName": "Vienna vs 2...Nc6"
+      }
+    ]
+  },
+  "ruy-lopez": {
+    "openingName": "Ruy Lopez",
+    "startPgn": "e4 e5 Nf3 Nc6 Bb5",
+    "refreshedAt": "2026-05-22",
+    "totalGamesInDB": 105519648,
+    "suggestedOrder": [
+      {
+        "replyMove": "a6",
+        "pct": 25.5,
+        "games": 26872068,
+        "variationName": "Closed Ruy Lopez (Breyer)"
+      }
+    ]
+  }
+}

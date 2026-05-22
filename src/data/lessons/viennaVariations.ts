@@ -117,6 +117,15 @@ const VS_NC6: LessonScript = {
   title: 'Vienna Game — Black plays 2…Nc6',
   minutes: 10,
   orientation: 'white',
+  // Intentional roadmap (depth gate opt-out, 2026-05-22). The vs 2…Nc6
+  // spine stops at the 11-ply launchpad position (5.h4 g4 6.Ng5) because
+  // from there it FANS OUT to four full beat lessons in the WEAPONS layer
+  // (Hamppe-Allgaier, Hamppe-Muzio, Pierce Gambit, Steinitz Gambit). Each
+  // weapon is its own 8-10 beat lesson that runs DEEP into the middlegame
+  // /endgame conversion. The roadmap design is the right shape here —
+  // forcing a single 20+ ply continuation would have to PICK one weapon's
+  // line and lose the others. See viennaTrapLessons.ts.
+  kind: 'roadmap',
   beats: [
     b({ id: 'nc6-1', moves: 'e4 e5 Nc3 Nc6',
       say: "At amateur level Black plays 2…Nc6 even more often than 2…Nf6 — almost forty per cent of the time. He defends e5 the classical Ruy way, with the knight, and waits to see what White does. The Vienna meets this with two completely different personalities: one calm, one furious. The calm path is 3.Bc4 — straight back into Italian-Vienna themes. The furious path is 3.f4 — and that is where almost every famous Vienna brilliancy in chess history was played.",
