@@ -25,6 +25,7 @@ import { VIENNA_VARIATION_LESSONS } from './viennaVariations';
 import { VIENNA_TRAP_LESSONS } from './viennaTrapLessons';
 import { CARO_KANN_LESSON } from './caroKann';
 import { CARO_VARIATION_LESSONS } from './caroKannVariations';
+import { CARO_TRAP_LESSONS } from './caroKannTrapLessons';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -48,7 +49,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: RUY_LOPEZ_LESSON, variations: RUY_VARIATION_LESSONS, traps: RUY_TRAP_LESSONS },
   { main: PIRC_DEFENCE_LESSON, variations: PIRC_VARIATION_LESSONS },
   { main: VIENNA_GAME_LESSON, variations: VIENNA_VARIATION_LESSONS, traps: VIENNA_TRAP_LESSONS },
-  { main: CARO_KANN_LESSON, variations: CARO_VARIATION_LESSONS },
+  { main: CARO_KANN_LESSON, variations: CARO_VARIATION_LESSONS, traps: CARO_TRAP_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

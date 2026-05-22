@@ -37,6 +37,11 @@ import {
   getViennaTrapPlayableLine,
   type ViennaTrapDef,
 } from '../../data/lessons/viennaTrapLessons';
+import {
+  CARO_TRAP_LESSONS,
+  getCaroTrapsForTab,
+  type CaroTrapDef,
+} from '../../data/lessons/caroKannTrapLessons';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
 import { MasterclassCoachChat } from './MasterclassCoachChat';
@@ -492,6 +497,7 @@ export function OpeningDetailPage(): JSX.Element {
   const namedTrapLessons =
     opening.id === 'ruy-lopez' ? RUY_TRAP_LESSONS
       : opening.id === 'vienna-game' ? VIENNA_TRAP_LESSONS
+      : opening.id === 'caro-kann' ? CARO_TRAP_LESSONS
         : {};
   if (viewMode === 'named-trap' && activeNamedTrapId && activeNamedTrapId in namedTrapLessons) {
     return (
@@ -842,9 +848,10 @@ export function OpeningDetailPage(): JSX.Element {
   // no blank/empty masterclass zones), but each real student-side WEAPON
   // still gets its own green-outlined tile. Same WLPP shape as warnings.
   // Ruy → ruyTrapLessons; Vienna → viennaTrapLessons. Per-opening lookup.
-  const namedTraps: (RuyTrapDef | ViennaTrapDef)[] =
+  const namedTraps: (RuyTrapDef | ViennaTrapDef | CaroTrapDef)[] =
     opening.id === 'ruy-lopez' ? getRuyTrapsForTab(tabKey)
       : opening.id === 'vienna-game' ? getViennaTrapsForTab(tabKey)
+      : opening.id === 'caro-kann' ? getCaroTrapsForTab(tabKey)
         : [];
   const namedWeapons = namedTraps.filter((t) => t.kind === 'weapon');
   const namedWarnings = namedTraps.filter((t) => t.kind === 'warning');

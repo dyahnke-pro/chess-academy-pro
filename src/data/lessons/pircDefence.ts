@@ -53,7 +53,7 @@ export const PIRC_DEFENCE_LESSON: LessonScript = {
       say: "Here is the moment the whole opening was built for: e5, striking at the heart of White's centre. The knight came to d7 to support it, and now the d4-pawn is challenged head-on. This is the hypermodern payoff — Black let White build, and now Black tears at it.",
       sayShort: 'The payoff break: ...e5 hits d4 head-on. This is what the Pirc was built for.',
       highlights: [H('e5', ATK), H('d4', KEY)] }),
-    b({ id: 'p6', moves: 'e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be2 O-O O-O c6 a4 Nbd7 h3 e5 dxe5 dxe5',
+    b({ id: 'p6', moves: 'e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Be2 O-O O-O c6 a4 Nbd7 h3 e5 dxe5 dxe5 Be3 Qe7 Qd3 Nh5',
       say: "When White releases the tension with dxe5 dxe5, the centre opens and Black has fully equalised. The d-file swings open all the way to d8 for the rooks, Black holds a firm pawn on e5, and the knight on d7 will reroute toward the strong central squares. From a cramped start, Black has reached an easy, healthy game — the Pirc's promise delivered.",
       sayShort: "...dxe5 opens the d-file from d8; Black firmly equal on the e5 pawn.",
       highlights: [H('e5', KEY), H('d8', SOFT)] }),
