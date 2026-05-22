@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import type { OpeningRecord, DrillAttempt } from '../types';
 import { fuzzyScore } from '../utils/fuzzySearch';
+import openingManifests from '../data/opening-manifests.json';
 
 // ─── Opening name helpers ────────────────────────────────────────────────────
 
@@ -339,6 +340,37 @@ export async function updateVariationProgress(
 export async function getGambitOpenings(): Promise<OpeningRecord[]> {
   const all = await db.openings.filter((o) => o.isGambit === true).toArray();
   return all.sort((a, b) => a.eco.localeCompare(b.eco) || a.name.localeCompare(b.name));
+}
+
+// ─── Masterclasses (David 2026-05-22) ───────────────────────────────────────
+//
+// The "Masterclasses" tab on /openings shows openings that have been built to
+// the full masterclass standard — hand-authored Watch/Learn/Practice/Play
+// across the main line and every first-class variation, named-trap weapons,
+// middlegame plans with playable lead-the-eye lines, model games per
+// variation, and grounded narration (§5b). The source of truth is
+// `src/data/opening-manifests.json`: any openingId declared there is a
+// masterclass and renders on this tab.
+
+/** Returns the list of openingIds that have a content manifest — these are
+ *  the masterclass openings. Keys are filtered to skip the JSON's meta
+ *  fields (those starting with `_`). */
+export function getMasterclassOpeningIds(): string[] {
+  return Object.keys(openingManifests).filter((k) => !k.startsWith('_'));
+}
+
+/** Returns the masterclass openings as full records, in the manifest's
+ *  declared order. Missing entries are skipped silently — if a manifest
+ *  exists for an opening that hasn't been seeded yet, the tab just shows
+ *  the ones we have. */
+export async function getMasterclassOpenings(): Promise<OpeningRecord[]> {
+  const ids = getMasterclassOpeningIds();
+  const out: OpeningRecord[] = [];
+  for (const id of ids) {
+    const o = await db.openings.get(id);
+    if (o) out.push(o);
+  }
+  return out;
 }
 
 // ─── Favorites (WO-3) ───────────────────────────────────────────────────────
