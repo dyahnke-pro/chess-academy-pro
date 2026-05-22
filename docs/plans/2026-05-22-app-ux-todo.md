@@ -204,3 +204,34 @@ unlock — and arguably MORE useful than a trap (traps are rare; inaccuracies
 are everywhere, so every line yields at least one gem). Builder task like the
 model games: query the line's key positions for a frequent-but-inferior
 opponent move + the engine-best punish, author the insight.
+
+### TODO 3e — THE BIG ONE: systematic "punish the inaccuracy" generator (David 2026-05-22, lightbulb)
+
+David's realization: the hidden-gem mechanic IS a content-generation ENGINE
+for trap-style material on EVERY line — not just a per-line reward. Named
+traps (Qe2 Nd6#) are the rare hand-authored case; this is the systematic case
+that scales to every line + every opening automatically.
+
+**The method — two DBs, two jobs:**
+- **Amateur explorer → find the bad move they actually play.** Common at the
+  user's level BUT scores poorly FOR THE OPPONENT (low opp win-rate /
+  Stockfish-inferior). A real inaccuracy you'll meet, not theory.
+- **Masters explorer + Stockfish → the crush.** The verified strong response
+  that punishes it; chess.js validates the line.
+
+Output: a mined "gem" / mini-trap per line — "when White plays the lazy
+[common inferior move], punish with [engine-best reply], you're better."
+Scales because every position has a common bad try.
+
+**On-ethos guardrails (so it's grounded, never invented):**
+1. "Scores poorly" measured from the OPPONENT'S side (their win-rate /
+   Stockfish eval), not gut feel.
+2. Punish must be Stockfish-CONFIRMED winning for the student.
+3. Frequency FLOOR — the inaccuracy must be commonly played (skip 0.3%
+   blunders nobody makes).
+
+Builder shape (like add-caro-model-games.mjs): walk the line's branch points,
+query amateur explorer for frequent-but-inferior opponent moves, attach the
+masters/Stockfish-best punish, gate on engine soundness → candidate gems for
+review. This generalises trap content to all 40 openings without hand-
+authoring each.
