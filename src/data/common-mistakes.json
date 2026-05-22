@@ -360,19 +360,145 @@
       "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
       "wrongMove": "e5",
       "correctMove": "Nf6",
-      "explanation": "e5 runs into dxe5 dxe5 Qxd8+ leaving Black worse. Nf6 develops and pressures e4 in true Pirc style."
+      "explanation": "...e5 cracks the d-file open under your own queen — White plays dxe5 dxe5 Qxd8+ and the queens trade off with check, costing castling rights. Nf6 develops naturally and pressures e4 in true Pirc style.",
+      "punishmentLine": {
+        "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+        "title": "Why ...e5 loses on the spot",
+        "moves": ["e5", "dxe5", "dxe5", "Qxd8+", "Kxd8"],
+        "annotations": [
+          "...e5 looks like a fight for the centre, but d6 was just played last move and no longer defends e5. The d-file is one trade away from cracking wide open with Black's queen still sitting on d8.",
+          "White takes immediately. dxe5 is forced — anything else loses a pawn for nothing.",
+          "Black recaptures with the d6-pawn — the only way to keep material — and the d-file flies open from d1 all the way to d8. The white queen now stares straight at Black's queen with nothing in between.",
+          "Qxd8+ — queens trade with check. There is no recapture except with the king.",
+          "The king takes back on d8 and Black has lost the right to castle forever. Down zero material, but the hypermodern Pirc just lost its quiet middlegame future. Game basically over before move five."
+        ],
+        "arrows": [
+          [],
+          [],
+          [{ "from": "d1", "to": "d8", "color": "rgba(34, 197, 94, 0.85)" }],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            { "square": "e7", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "e5", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "d6", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "d4", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "e5", "color": "rgba(255, 165, 0, 0.55)" }
+          ],
+          [
+            { "square": "d6", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "e5", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "d1", "color": "rgba(255, 235, 59, 0.5)" },
+            { "square": "d8", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "d1", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "d8", "color": "rgba(255, 165, 0, 0.55)" }
+          ],
+          [
+            { "square": "e8", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "d8", "color": "rgba(255, 165, 0, 0.55)" }
+          ]
+        ]
+      }
     },
     {
       "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
       "wrongMove": "Bg4",
       "correctMove": "O-O",
-      "explanation": "Bg4 is premature — after e5 dxe5 dxe5 the pin is awkward and Black loses material. Castle first, then look for counterplay."
+      "explanation": "...Bg4 develops the bishop with a pin, but it's premature — White just kicks with h3 and you have to give up the bishop pair on f3 with no compensation. Castle first; develop the queen's bishop later when you can keep it on a useful square.",
+      "punishmentLine": {
+        "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+        "title": "Why ...Bg4 gives up the bishop pair",
+        "moves": ["Bg4", "h3", "Bxf3", "Qxf3"],
+        "annotations": [
+          "...Bg4 pins the f3-knight to the queen, looking aggressive. The problem: the bishop has no safe retreat once h3 hits it, and the c8-bishop is the most valuable piece you'll need for the Pirc's slow manoeuvring.",
+          "h3 — the simple kick. Retreats to h5 lose to g4, retreats to d7 or c8 just waste two tempi.",
+          "...Bxf3 is forced. Black gives up the light-squared bishop for the knight — the bishop pair is gone, and with it the Pirc's long-term endgame chances.",
+          "Qxf3 — White recaptures with the queen, now centralised and eyeing both b7 and f7. White has the bishop pair, a flexible centre, and Black has no real compensation for the structural concession."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            { "square": "c8", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "g4", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "f3", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "h2", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "h3", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "h5", "color": "rgba(255, 235, 59, 0.5)" },
+            { "square": "g4", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "g4", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "f3", "color": "rgba(255, 165, 0, 0.55)" }
+          ],
+          [
+            { "square": "d1", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "f3", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "b7", "color": "rgba(255, 235, 59, 0.5)" },
+            { "square": "f7", "color": "rgba(255, 235, 59, 0.5)" }
+          ]
+        ]
+      }
     },
     {
       "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R b - - 0 5",
       "wrongMove": "c5",
       "correctMove": "Bg4",
-      "explanation": "c5 allows d5 closing the center in White's favor. Bg4 pins the knight and creates tension before White consolidates."
+      "explanation": "...c5 invites White to slam the centre shut with d5, leaving the c8-bishop dead behind the c5/d6/e7 pawn chain and the g7-bishop biting on a closed wall. Bg4 first pins the f3-knight and creates real tension before White can consolidate.",
+      "punishmentLine": {
+        "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R b - - 0 5",
+        "title": "Why ...c5 locks YOU out of the game",
+        "moves": ["c5", "d5", "Na6", "Nd2"],
+        "annotations": [
+          "...c5 looks like Pirc-style counterplay, hitting d4. But White's centre is fully supported — d4 isn't dropping — and the push lets White close the door instead of opening it.",
+          "d5 — and that's the trap. The centre is locked tight; ...c5 can't be undone. The c8-bishop is now buried behind c7-c5 with nowhere to go, and the g7-bishop bites on a wall at d4-e5.",
+          "...Na6 — the knight has to come out somewhere, but with the centre closed there are no good squares. The c7-square is the only home and even there the knight does nothing.",
+          "Nd2 — White reroutes calmly to better squares (f1, g3, then maybe f5) knowing Black has no plan. Closed centre, all of Black's pieces with no scope — this is the slow, suffocating defeat the Pirc is supposed to AVOID."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            { "square": "c7", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "c5", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "d4", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "d4", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "d5", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "c8", "color": "rgba(255, 235, 59, 0.5)" },
+            { "square": "g7", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "b8", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "a6", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "c7", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "f3", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "d2", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "f1", "color": "rgba(255, 235, 59, 0.5)" },
+            { "square": "g3", "color": "rgba(255, 235, 59, 0.5)" },
+            { "square": "f5", "color": "rgba(255, 235, 59, 0.5)" }
+          ]
+        ]
+      }
     }
   ],
   "pro-naroditsky-jobava-london": [
