@@ -129,6 +129,50 @@ watching every one. The gates go red if you drift; the trail lets him audit.
 student-side-winning game, a needed PGN behind a 403, or any line/idea you
 cannot verify is real and sound. Otherwise: proceed.
 
+## 0.6 WORKED EXAMPLE — the §0.5 process applied (Caro Classical, 2026-05-22)
+
+The canonical demonstration of §0.5: how the rules produced the Caro-Kann
+Classical build, every pick bound to live data. Pattern-match new builds
+against this — it is what "autonomous + grounded" looks like in practice.
+
+**1. The line to teach = the explorer dictates it, you don't.** Start at the
+variation's NAMED position (`1.e4 c6 2.d4 d5 3.Nc3 dxe4 4.Nxe4 Bf5`) and walk
+the MOST-PLAYED master move at each ply until ≥20 plies into the middlegame
+(the depth gate). For the Classical that was, from the masters DB:
+`5.Ng3 Bg6 6.h4 h6 7.Nf3 Nd7 8.h5(94%) Bh7(100%) 9.Bd3(100%) Bxd3(100%)
+10.Qxd3(100%) e6(77%) 11.Bd2(56%) Ngf6(87%) 12.O-O-O(96%) Be7(78%) 13.Kb1(45%)
+O-O(59%)`. Because the spine is BUILT from the masters DB, Hole 1 (DB-anchor)
+and Hole 6 (masters legitimacy) pass by construction — you didn't choose the
+moves, the data did. You only author the prose narration on top.
+
+**2. Tab placement.** Classical = the "Main line" showcase pill, exempt from
+the amateur-frequency sort (the pill is the reference line even when Advance/
+Exchange are more common); frequency orders the tabs that follow it.
+
+**3. Key ideas = corpus principle + a move in the spine.** Each idea anchors
+to BOTH a book-corpus principle AND a concrete move in the real line (e.g.
+"bishop out before …e6" = the spine's moves 4–5–8). Not opinion. No count
+target — ship what you can anchor.
+
+**4. Model game = the Elo rule picks it, not you.** masters `topGames` Black
+wins at the named position, ranked by min-Elo → **Mamedyarov–Topalov 2008
+(`ydlFwo0O`)**, min-Elo 2760 — which BEAT a ~2400 game on the rule, so the
+framework chose it. Then export → confirm ECO + result 0-1 → criticalMoments
+at the keystones. → Hole-5 gate.
+
+**5. Middlegame plan** from the spine's resulting structure (Black's …c5
+break + …Qc7/…Rd8 + …Nd5), oriented to the student side.
+
+**6. Traps = skip-if-unverified, the discipline in action.** The Classical's
+real motif is the g6-bishop trap (h4–h5 if Black mistimes …h6/…Bh7) — a
+WARNING, shipped ONLY if chess.js confirms it's forced; otherwise omitted.
+The Classical may carry one warning and ZERO weapons, and that is correct —
+a positional line is not padded with invented traps.
+
+The through-line: the explorer/DB/corpus IS the source at every step; the
+model translates; the gates verify; the one spot judgment enters (traps)
+defaults to skip-if-unverified.
+
 ## 1. Page structure (already wired — inherit it)
 
 - The opening detail page (`OpeningDetailPage.tsx`) IS the template. New
