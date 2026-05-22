@@ -66,3 +66,33 @@ the progress model (TODO 1) to the user. Build them together.
 - [ ] Onboarding `PageHelp` bubbles per tab (playbook §8) + WLPP/progress
       explainer.
 - Accounting gate (weakness tagging) deferred until the `learned` gate exists.
+
+---
+
+## NEXT-SESSION PRIORITY ORDER (David 2026-05-22)
+
+**1. Line-memorization SRS — the top lever (do BEFORE building opening #2).**
+Another opening adds breadth, but the Caro/Ruy/Pirc/Vienna courses don't
+*stick* without retention. SRS is what turns "I watched it" into "I can play
+it under pressure." Build:
+- Per-move SRS cards from the existing verified lesson lines: `(openingId,
+  variation, ply)` → position FEN + correct SAN + SRS state.
+- **FSRS** scheduling (not SM-2/Anki) — modern, fewer reviews, better
+  retention. Surface due reps through the Training Plan + Dexie SRS store.
+- **Drill the spine + KEY moves, not every filler move**, and keep the
+  narration "why" attached to each card → "understand then retain", not rote
+  (this is how it beats Chessable on our terms / honours the ideas-first ethos).
+- Feed the "Got it / Not yet" self-assessment (TODO 1) into initial card ease.
+- Natural home: the WLPP **Practice** mode (add scheduling + board-move grading).
+- Multi-file build (scheduler + review UI + Training-Plan wiring) — needs a
+  fresh session, not a 2%-data tail.
+
+**2. Build opening #2 — needs David's repertoire first.** Pick from what he
+actually plays (White 1st move + main Black answers), most-faced first — not
+at random. Process is locked (playbook §0.5/§0.6); builders + gates + model-
+game/trap pipelines all proven on Caro, so it's "author the data, it lights up."
+
+**Done this session (in prod):** Caro masterclass (flagship+6 var+7 model
+games+Qe2 warning), anti-invention gates 1-7, course-scoped coach chat,
+continue-playing CTA, depth shortfalls extended, Stockfish engine-soundness
+CI gate. Run the engine workflow to vet Vienna/Ruy deep tails.
