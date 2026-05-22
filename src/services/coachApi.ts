@@ -904,6 +904,21 @@ export interface MasterGroundingOptions {
    *  most recent message ("walk me through the Steinitz Gambit"
    *  surfaces the right entries with no move history needed). */
   moveHistory?: ReadonlyArray<string>;
+  /** Ground-truth SANs for surfaces analyzing a SPECIFIC played game
+   *  (game review): the full list of moves actually played, chess.js-
+   *  validated. When present, the grounding pipeline treats these moves
+   *  — PLUS the legal moves of `currentFen` — as grounded, so the claim
+   *  validator no longer flags the game's own moves (and engine-suggested
+   *  legal alternatives at the reviewed position) as ungrounded SAN
+   *  hallucinations. This is the fix for the review-surface false-positive
+   *  storm: a game that left master book (a sacrifice / sharp middlegame)
+   *  has no Lichess explorer data, so every concrete SAN the coach
+   *  mentioned about the student's game tripped the validator and the
+   *  answer stocked out. The legal-move expansion is GATED on this field
+   *  being set — surfaces that leave it undefined (opening teaching, "what
+   *  do masters play") keep the strict master-play-only SAN gate, where
+   *  "no master data → flag every SAN" is the intended contract. */
+  gameSans?: ReadonlyArray<string>;
   /** Surface route for audit attribution. Goes into every emitted
    *  audit event (`master-play-lookup`, `claim-validator-trip`, etc). */
   surface: string;
@@ -1001,10 +1016,30 @@ async function buildLookahead(
 /** Assemble the full master-play context for the brain. Returns
  *  undefined when no FEN was provided OR when both current + look-ahead
  *  resolve to source:'none' (the brain has nothing grounded to say). */
+/** Build the ground-truth SAN set for a game-review turn: the moves
+ *  actually played in the game (`gameSans`) plus the legal moves of the
+ *  position being reviewed (`currentFen`). chess.js is the authority for
+ *  both. Returns undefined off the review surface (no `gameSans`) so the
+ *  strict master-play-only SAN gate stays in force everywhere else. */
+function buildGroundedSans(grounding: MasterGroundingOptions): ReadonlyArray<string> | undefined {
+  if (!grounding.gameSans || grounding.gameSans.length === 0) return undefined;
+  const set = new Set<string>(grounding.gameSans);
+  if (grounding.currentFen) {
+    try {
+      const chess = new Chess(grounding.currentFen);
+      for (const m of chess.moves()) set.add(m);
+    } catch {
+      // Bad FEN — fall back to the played-game SANs alone.
+    }
+  }
+  return Array.from(set);
+}
+
 async function buildMasterPlayContext(
   grounding: MasterGroundingOptions,
 ): Promise<MasterPlayContext | undefined> {
   if (!grounding.currentFen) return undefined;
+  const groundedSans = buildGroundedSans(grounding);
   const current = await lookupMasterPlay(grounding.currentFen, {
     triggeredBy: 'pre-injection',
     surface: grounding.surface,
@@ -1012,8 +1047,11 @@ async function buildMasterPlayContext(
   });
   if (current.source === 'none' || current.moves.length === 0) {
     // Honest "no master data" context — claim validator will use this
-    // to reject any SAN/percentage the LLM tries to fabricate.
-    return { current, lookahead: [] };
+    // to reject any SAN/percentage the LLM tries to fabricate. In game
+    // review, `groundedSans` carries the game's own moves + legal moves
+    // so the coach can discuss the student's actual game without every
+    // SAN tripping the gate.
+    return { current, lookahead: [], groundedSans };
   }
   const lookahead = await buildLookahead(
     grounding.currentFen,
@@ -1021,7 +1059,7 @@ async function buildMasterPlayContext(
     grounding.surface,
     grounding.sessionId,
   );
-  return { current, lookahead };
+  return { current, lookahead, groundedSans };
 }
 
 /** Render the context as a system-prompt block the LLM can consume.
