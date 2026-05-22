@@ -170,6 +170,7 @@ const GATE_TESTS = [
   'src/data/repertoire-orientation.test.ts',
   'src/data/pro-repertoires-orientation.test.ts',
   'src/data/openingManifests.test.ts',
+  'src/data/modelGames.test.ts',
   'src/services/middlegamePlanner.test.ts',
   'src/components/Openings/MiddlegamePlansSection.test.tsx',
   'src/components/Openings/EndgamePlansSection.test.tsx',

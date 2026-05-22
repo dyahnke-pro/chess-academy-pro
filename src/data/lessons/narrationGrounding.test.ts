@@ -104,3 +104,35 @@ describe('§5b grounding — every arrow + highlight endpoint is grounded in the
     });
   }
 });
+
+// Hole 4 — the lead-the-eye-MISSING defect (David's "shitty work": bare
+// move-arrows while the narration talks about squares with nothing pointing
+// there). The STRICT inverse ("every named square must have a marker") is
+// unusable — 176/264 beats name a square in passing that carries no marker,
+// which is fine (you don't paint every square you mention). The defensible,
+// low-noise form: a beat whose narration NAMES at least one square must
+// carry AT LEAST ONE marker — i.e. no totally-bare beat that names squares
+// and leads the eye to none of them. Exactly 1 such beat exists today.
+const SQUARE_RE_H4 = /\b[a-h][1-8]\b/;
+const BARE_BEAT_BASELINE = new Set<string>([
+  'ruy-lopez::Berlin Defense::b4', // names c3/f4/e6, zero markers — Ruy lead-the-eye backlog
+]);
+
+describe('lead-the-eye present — a beat that names squares carries ≥1 marker', () => {
+  for (const { scope, key, lesson } of ALL_LESSONS) {
+    it(`[${scope}] ${key}: no bare named-square beats (or baselined)`, () => {
+      const bare: string[] = [];
+      for (const beat of lesson.beats) {
+        const namesSquare = SQUARE_RE_H4.test(`${beat.say} ${beat.sayShort ?? ''}`);
+        const markers = (beat.arrows?.length ?? 0) + (beat.highlights?.length ?? 0);
+        if (namesSquare && markers === 0 && !BARE_BEAT_BASELINE.has(`${key}::${beat.id}`)) {
+          bare.push(beat.id);
+        }
+      }
+      expect(
+        bare,
+        `${key}: beat(s) name a square but carry NO arrow/highlight to lead the eye there: ${bare.join(', ')}`,
+      ).toEqual([]);
+    });
+  }
+});
