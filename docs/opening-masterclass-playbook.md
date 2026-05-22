@@ -40,6 +40,95 @@ is curated content, not code.
 
 ---
 
+## 0.5 The AUTONOMOUS DECISION PROCESS — LOCKED (David 2026-05-22)
+
+David's directive: *"I want you to make the decisions, we are shooting for
+autonomy."* This section is the contract that makes that safe. A future
+session builds an opening WITHOUT asking David to hand-pick each variation/
+trap/game — but only because every pick is bound to a ground source and a
+gate, not to the model's taste or memory.
+
+**THE META-RULE (the whole game):** every pick resolves to a query against
+a GROUND SOURCE — never the model's chess opinion or training recall. A
+gate verifies it. And when the data can't resolve a pick, or you are not
+FULLY certain a line/trap/idea is real and sound, you LEAVE IT BLANK, SKIP
+IT, or ASK DAVID — never paper the gap with a plausible guess. Empty >
+generic > invented, always (this is the §0 ethos, now operationalised).
+Autonomy is not "decide from vibes"; it is "resolve each decision to real
+data, log the source, let the gate catch drift."
+
+**The reachable ground sources (verified reachable from the web sandbox
+2026-05-22 — do not assume otherwise without re-checking the allowlist):**
+- **Lichess explorer** via the PROD proxy `chess-academy-pro.vercel.app/api/lichess-explorer`
+  (`?source=masters` and `?source=lichess` for amateur; `play=<uci,csv>` OR
+  `fen=<fen>`). Direct `explorer.lichess.ovh` is firewalled — ALWAYS go
+  through the proxy. Goes FAR deeper than `openings-lichess.json`; covers
+  modern openings too. This is the source for tab order (amateur freq) AND
+  past-book legitimacy (masters).
+- **Real master PGNs:** the explorer's `topGames[]` returns `winner` + game
+  `id`; export the full PGN (with evals) via `…/api/lichess-game-export?id=<id>`.
+  So a student-side-winning model game for ANY variation is sandbox-sourceable.
+- **`openings-lichess.json`** — canonical move DB (G3 spine anchor).
+- **Book corpus** — `chess-concepts.json` + `opening-book-pages.json` (pre-1930s
+  classical; universal principles cover modern openings — see CLAUDE.md note).
+- **chess.js** (legality/forcing) and **Stockfish** (soundness — system UCI
+  binary or `STOCKFISH_PATH`; the WASM npm build is NOT node-drivable).
+- **Modern opening-specific PROSE** is a copyright wall — none exists CC0.
+  Don't acquire it; ground modern ideas on consensus understanding +
+  principles + real moves, board-truth-gated. Per-variation modern book
+  pages self-hide (empty > fabricated). If you need a specific 403'd PGN,
+  ASK DAVID — he can pull it from his terminal.
+
+**Per-decision rule (source → rule → gate):**
+1. **Which variations get tabs.** Earns a tab only if ALL of: (a) real named
+   line in `openings-lichess.json`, ≥6-ply anchor; (b) student actually faces
+   it — amateur explorer freq ≥~3% at its fork, or it's a canonical main-line
+   branch for the student's side; (c) structurally DISTINCT (a sub-line that
+   shares the parent's pawn structure folds INTO the parent tab, e.g. Caro
+   Short → Advance); (d) a student-side-winning master game exists. Sub-1%
+   junk never gets a tab. → DB-anchor + masters-coverage gates.
+2. **Tab order.** LOCKED to amateur frequency, most-faced first. The showcase
+   "Main line" pill leads and is exempt from the sort. Deterministic from the
+   explorer numbers — zero taste.
+3. **Model game per variation.** masters `topGames` at the variation's NAMED
+   position → filter `winner === <student colour>` (hard; none → widen to
+   parent position → still none → NO game, NEVER an opening-loses game) →
+   rank survivors by min-Elo, ECO match, decisiveness (≥~25 moves). →
+   Hole-5 gate (PGN legal + criticalMoments reachable). One game per variation
+   is the goal (David 2026-05-22).
+4. **Key ideas.** From the book corpus (opening passages + universal
+   principles) + what the explorer shows the student's side actually DOING in
+   that structure. Board-anchored prose. NO FIXED COUNT — ship every idea you
+   can ground (2 or 7), never pad to a number, no upper cap. → narrationAccuracy.
+5. **Traps.** Ship only if real + DB-anchored + chess.js-forced + Stockfish-
+   confirmed-winning, classified weapon/warning by WHO plays the punishing
+   move (the material/mate outcome decides, not the label). NO fixed count;
+   a positional opening may have few/none — that's correct. Unsure → leave it,
+   tell David. → orientation tests + Hole 6b.
+6. **Middlegame plan.** Real DB/explorer line into the variation's
+   characteristic structure, oriented to the student side (repertoire color),
+   lead-the-eye generated + §5b-grounded + sight-line-legal + Stockfish-sound.
+   → middlegamePlanner + Holes 6/7.
+7. **Lesson line + depth.** DB spine extended to ≥20 plies via master-explorer
+   continuation (every past-book ply masters-backed or engine-sound). Narration
+   = prose only, board-truth gated, arrows lead the eye. → Holes 1/6 +
+   lessonDepth + narrationAccuracy + §5b.
+
+**NO HARD COUNT RULES (David 2026-05-22).** Never mandate a number of key
+ideas / traps / variations. The manifest floors are "what was verified at
+last commit," never targets, no upper cap — they exist ONLY to catch a later
+accidental deletion.
+
+**Show the decision trail.** For each variation, log the SOURCE behind each
+pick — the explorer %, the game id, the DB anchor ply, the book passage — so
+David can spot-check any single decision against its ground source without
+watching every one. The gates go red if you drift; the trail lets him audit.
+
+**When to STOP and ask (not before):** a genuine fork the data can't resolve
+(two equally-frequent variations with no tiebreak), a variation with NO
+student-side-winning game, a needed PGN behind a 403, or any line/idea you
+cannot verify is real and sound. Otherwise: proceed.
+
 ## 1. Page structure (already wired — inherit it)
 
 - The opening detail page (`OpeningDetailPage.tsx`) IS the template. New

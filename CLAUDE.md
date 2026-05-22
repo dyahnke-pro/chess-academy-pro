@@ -1038,6 +1038,13 @@ standard (David 2026-05-21: "lock in everything … 38 more openings plus
 the gambits").** Forged on the Ruy + Pirc; the wiring is opening-agnostic
 and done, so a new opening = author the curated data and it lights up. The
 playbook holds the rules you MUST follow, in particular:
+- **§0.5 — the AUTONOMOUS DECISION PROCESS (locked 2026-05-22).** David wants
+  builds done autonomously: you make the picks (variations, order, model
+  games, traps, key ideas) WITHOUT asking him each time. Safe because every
+  pick binds to a ground source + a gate, and when unsure you leave it blank /
+  skip / ask — never invent. Reachable sources, per-decision rules, and the
+  audit trail are all in playbook §0.5. NO hard count rules. Read it before
+  building.
 - **WLPP grammar (locked):** Watch = auto-play + narration; Learn = voice
   guides each move, YOU play it; Practice = same board SILENT + a Hint
   button; Play = coach LOCKED to this opening. Applies to the main line,
