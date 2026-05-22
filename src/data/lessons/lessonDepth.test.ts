@@ -34,11 +34,11 @@ const MIN_PLIES = 20;
 // gate catches them. This list should SHRINK over time, not grow.
 //
 // Pattern matches `repertoire-orientation.test.ts`'s baseline allowlist.
+// EMPTY — the original 4 shortfalls were extended to ≥20 plies via the
+// masters spine (2026-05-22): Pirc main +Be3/Qe7/Qd3/Nh5, Arkhangelsk
+// +Qd7/Re1/Rfe8, 150 Attack +the h4-h5/b5-b4 race, Austrian-e5c5
+// +exd6/.../Nf6. The gate is now pure ≥20 for every variation lesson.
 const KNOWN_SHORTFALLS = new Set<string>([
-  'The Pirc Defence — A Master Class',                  // 18p — needs +2
-  'ruy-lopez::Arkhangelsk Variation',                   // 19p — needs +1
-  'pirc-defence::150 Attack',                           // 16p — needs +4
-  'pirc-defence::Austrian Attack with e5 c5',           // 14p — needs +6
 ]);
 
 interface ScopedLesson {

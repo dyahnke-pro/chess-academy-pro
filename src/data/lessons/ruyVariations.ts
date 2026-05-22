@@ -317,7 +317,7 @@ const ARKHANGELSK: LessonScript = {
       say: "The battle lines are drawn. Black's two bishops aim across the board — b7 down the long diagonal, e7 ready to swing — while White builds the classical clamp: the Ba2 on the a2-g8 diagonal pointing through to f7, and the c3-knight setting up the reroute to d5. The bishop on b7 wants e4, but its own knight on c6 blocks the view for now, so the pressure is latent. The Arkhangelsk is a straight fight between Black's bishop-pair activity and White's central control: whoever's pieces speak louder wins.",
       sayShort: "Black's bishops on b7/e7 versus White's Ba2-on-f7 and Nc3-d5 reroute.",
       arrows: [A('c3', 'd5', INTENT), A('a2', 'f7', ATK)], highlights: [H('d5', KEY), H('f7', KEY), H('e4', SOFT)] }),
-    b({ id: 'k5', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O b5 Bb3 Bb7 d3 Be7 Nc3 O-O a3 d6 Ba2',
+    b({ id: 'k5', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O b5 Bb3 Bb7 d3 Be7 Nc3 O-O a3 d6 Ba2 Qd7 Re1 Rfe8',
       say: "The Arkhangelsk is the choice for the Black player who simply refuses to sit. Where the main line meets Ba4 with the modest Be7 and a long, patient reroute, here Black throws the bishops forward at once — b5, Bb7 raking down at e4, pressure from move six. It is fully sound and richly aggressive, the exact opposite temperament to the Berlin's icy defence. Same Ruy, but Black is playing for the initiative, not the draw — and that is precisely why it belongs in your study, not your blind spot.",
       sayShort: "Bb7 rakes at e4 from move six — Black's aggressive answer, opposite of the Berlin.",
       highlights: [H('e4', SOFT)] }),
