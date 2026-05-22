@@ -1,0 +1,47 @@
+name: Engine soundness (Stockfish) — masterclass past-book plies
+
+# Closes Hole 6: the masters-coverage audit (mastersCoverage.test.ts) proves
+# a lesson's OPENING is real DB theory, but past the book the deep middlegame
+# tails are only legality-checked. This job runs the Hole-6b Stockfish pass
+# (centipawn-loss ≤ 120 vs best on every past-book ply) with a REAL UCI
+# engine — the one thing the ephemeral web sandbox can't do (no engine there).
+#
+# Runs on changes to masterclass content (lessons / plans). The audit skips
+# the Stockfish block cleanly when no engine is present, so this CI job is
+# the place it actually executes. STOCKFISH_PATH is auto-resolved: apt-get
+# installs the binary at /usr/games/stockfish, which resolveStockfish() finds.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/data/lessons/**'
+      - 'src/data/middlegame-plans.json'
+      - 'src/data/openings-lichess.json'
+  pull_request:
+    paths:
+      - 'src/data/lessons/**'
+      - 'src/data/middlegame-plans.json'
+  workflow_dispatch:
+
+jobs:
+  stockfish-soundness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --prefer-offline
+      - name: Install Stockfish
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y stockfish
+          which stockfish && (echo "uci"; echo "quit") | stockfish | grep -i "id name" || true
+      - name: Run Hole-6b Stockfish soundness pass
+        env:
+          RUN_MASTERS_AUDIT: '1'
+          STOCKFISH_PATH: /usr/games/stockfish
+        run: npx vitest run src/data/lessons/mastersCoverage.test.ts
