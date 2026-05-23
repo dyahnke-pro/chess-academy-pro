@@ -32,6 +32,20 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /frankenstein|falkbeer/i, label: 'Frankenstein-Dracula' },
     { test: /paulsen/i, label: 'Paulsen' },
   ],
+  // The MAIN-line tab already teaches the full Classical system, so the
+  // "Classical Variation" tab is a duplicate — omit it (David 2026-05-23:
+  // "main line and classical system are identical, remove one, keep the total
+  // classical system"). "Short" has no distinct masterclass lesson (it's an
+  // Advance sub-line), so it's omitted too — no weak/empty tabs (playbook).
+  // The six below are exactly the Caro variations with authored lessons.
+  'caro-kann': [
+    { test: /advance/i, label: 'Advance' },
+    { test: /exchange/i, label: 'Exchange' },
+    { test: /two knights/i, label: 'Two Knights' },
+    { test: /panov/i, label: 'Panov' },
+    { test: /fantasy/i, label: 'Fantasy' },
+    { test: /tartakower|breyer/i, label: 'Tartakower' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present

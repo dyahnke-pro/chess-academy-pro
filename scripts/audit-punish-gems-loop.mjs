@@ -53,6 +53,10 @@ const isMoveDictation = (t) =>
   /^([A-Z][a-z]+ to [a-h] [1-8]|Castle (kingside|queenside)|[a-h] takes [a-h] [1-8]|[A-Z][a-z]+ takes [a-h] [1-8])/.test(t.trim()) &&
   t.trim().split(/\s+/).length <= 6;
 const isProse = (t) => t.trim().split(/\s+/).length > 6;
+// voiceService.warmup() probes Polly with a one-char "." — that's an
+// availability ping, NOT narration. Exclude it from the contract checks.
+const isWarmupProbe = (t) => t.trim() === '.' || t.trim() === '';
+const narrationTexts = (ev) => ev.tts.map((r) => r.text).filter((t) => t && !isWarmupProbe(t));
 
 async function makeCtx(browser) {
   const ctx = await browser.newContext();
@@ -111,7 +115,7 @@ async function tier1(browser) {
       if (await cardVisible(page)) fail(`${id}: Watch did not unmount the detail card`);
       if ((await squares(page)) < 64) fail(`${id}: Watch board not present`);
       // Watch should narrate AUTHORED PROSE on the wire (its annotation beats).
-      if (!ev.tts.some((r) => isProse(r.text))) fail(`${id}: Watch fired no prose narration (tts: ${ev.tts.map((r) => r.text).join(' | ').slice(0, 80)})`);
+      if (!narrationTexts(ev).some(isProse)) fail(`${id}: Watch fired no prose narration (tts: ${narrationTexts(ev).join(' | ').slice(0, 80)})`);
       await exitPlayer(page);
     }
   } catch (e) { fail(`threw — ${String(e).slice(0, 160)}`); }
@@ -153,8 +157,8 @@ async function tier2(browser) {
     await page.locator('[data-testid^="gem-learn-"]').first().click();
     await page.waitForTimeout(4000);
     if ((await squares(page)) < 64) fail('Learn board not present');
-    const learnTts = ev.tts.map((r) => r.text).filter(Boolean);
-    if (learnTts.length === 0) fail('Learn fired NO tts (expected move dictation)');
+    const learnTts = narrationTexts(ev);
+    if (learnTts.length === 0) fail('Learn fired NO move-dictation tts');
     if (learnTts.some((t) => isProse(t))) fail(`Learn spoke PROSE (contract: moves only): "${learnTts.find(isProse)}"`);
     if (learnTts.length && !learnTts.some((t) => isMoveDictation(t))) fail(`Learn tts not move-dictation shaped: "${learnTts[0]}"`);
     await exitPlayer(page);
@@ -165,7 +169,7 @@ async function tier2(browser) {
     await page.locator('[data-testid^="gem-practice-"]').first().click();
     await page.waitForTimeout(4000);
     if ((await squares(page)) < 64) fail('Practice board not present');
-    if (ev.tts.length > 0) fail(`Practice is NOT silent — fired ${ev.tts.length} tts: "${ev.tts[0]?.text}"`);
+    { const nt = narrationTexts(ev); if (nt.length > 0) fail(`Practice is NOT silent — fired ${nt.length} narration tts: "${nt[0]}"`); }
     await exitPlayer(page);
     await openDetail(page, 'caro-kann');
 
@@ -252,7 +256,7 @@ async function tier3(browser) {
       if (await cell.isVisible().catch(() => false)) { await cell.click().catch(() => {}); await page.waitForTimeout(300); }
     }
     await page.waitForTimeout(2500);
-    if (ev.tts.length > 0) fail(`Practice broke silence under interaction — ${ev.tts.length} tts: "${ev.tts[0]?.text}"`);
+    { const nt = narrationTexts(ev); if (nt.length > 0) fail(`Practice broke silence under interaction — ${nt.length} narration tts: "${nt[0]}"`); }
     await exitPlayer(page);
 
     // Ruy too — adversarial breadth.

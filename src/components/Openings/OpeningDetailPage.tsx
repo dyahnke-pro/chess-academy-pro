@@ -1099,6 +1099,7 @@ export function OpeningDetailPage(): JSX.Element {
         tabs={variationTabs}
         selectedIndex={selectedTabIndex}
         onSelect={handleSelectTab}
+        mainLabel={opening.id === 'caro-kann' ? 'Classical System' : undefined}
       />
 
       {/* WALKTHROUGH, LEARN, PRACTICE, PLAY buttons */}
