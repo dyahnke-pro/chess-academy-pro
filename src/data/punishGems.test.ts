@@ -50,9 +50,11 @@ describe('punish-gems are real, legal, DB-grounded', () => {
       });
 
       it('the inaccuracy + punish sit on the line in order', () => {
-        const i = play.indexOf(g.inaccuracy);
-        expect(i, 'inaccuracy not on line').toBeGreaterThanOrEqual(0);
-        expect(play.indexOf(g.punish), 'punish not after inaccuracy').toBe(i + 1);
+        // Positional, not indexOf — a SAN like O-O can appear twice (both
+        // sides castle), so the inaccuracy lives at exactly ply = |spine|.
+        const i = setup.length;
+        expect(play[i], 'inaccuracy not at the spine boundary').toBe(g.inaccuracy);
+        expect(play[i + 1], 'punish not immediately after the inaccuracy').toBe(g.punish);
       });
 
       it("confirmed tier carries an engine eval; practical doesn't claim one", () => {

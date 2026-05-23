@@ -23,6 +23,7 @@ const MIN_GAMES = 400;       // …with real sample
 const EDGE = 0.06;           // ≥6 percentage-pts better student score than main
 const ENGINE_CP = 35;        // confirmed = student ≥ +35cp after the punish
 const SF_DEPTH = 16;
+const MIN_SPINE = 6;         // opening spine must be ≥6 plies (G3 DB-anchor)
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // ── Stockfish (optional — promotes practical → confirmed) ───────────────
@@ -96,7 +97,11 @@ async function mine(openingId, studentChar, seed, maxPlies = 14) {
           const cp = await evalFen(STOCKFISH, pc.fen());
           if (cp !== null) { engineCp = studentChar === pc.turn() ? cp : -cp; tier = engineCp >= ENGINE_CP ? 'confirmed' : 'weak'; }
         }
-        if (firstPunish && (!STOCKFISH || tier !== 'weak')) {
+        // The opening spine must DB-anchor ≥6 plies (G3). The miner walks the
+        // explorer's main line, so the spine anchors fully by construction —
+        // just enforce the length floor so depth-0 gems on a short seed (e.g.
+        // the 5-ply Ruy seed) don't slip under the bar.
+        if (firstPunish && line.length >= MIN_SPINE && (!STOCKFISH || tier !== 'weak')) {
           // playLine = full sequence from move 1 → feeds PlayableLinePlayer (WLPP).
           const playLine = [...line, bad.san, ...punishSeq];
           gems.push({
@@ -115,10 +120,32 @@ async function mine(openingId, studentChar, seed, maxPlies = 14) {
   return gems;
 }
 
+// The masterclass openings to mine. seed = the opening's canonical first
+// moves (each a real DB line); studentChar = the side the student plays
+// (matches repertoire.json `color`). Every gem is DB-anchored by the gate
+// regardless — a wrong seed just yields fewer gems, never invents one.
+// Override the set with OPENINGS=caro-kann,ruy-lopez to mine a subset.
+const OPENING_SEEDS = {
+  'caro-kann':    { studentChar: 'b', seed: ['e4', 'c6'] },
+  'ruy-lopez':    { studentChar: 'w', seed: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'] },
+  'pirc-defence': { studentChar: 'b', seed: ['e4', 'd6'] },
+  'vienna-game':  { studentChar: 'w', seed: ['e4', 'e5', 'Nc3'] },
+};
+
 (async () => {
   console.log(`[mine] stockfish: ${STOCKFISH ?? 'NONE (sandbox → practical tier)'}`);
-  const gems = await mine('caro-kann', 'b', ['e4', 'c6']);
-  await writeFile('src/data/punish-gems.json', JSON.stringify(gems, null, 2) + '\n');
-  console.log(`[mine] wrote ${gems.length} gems → src/data/punish-gems.json`);
-  for (const g of gems) console.log(`  ${g.lineMoves} | ${g.inaccuracy} (${g.freqPct}%) → ${g.punish} [${g.tier}${g.engineCp !== null ? ` ${g.engineCp}cp` : ''}]`);
+  const only = (process.env.OPENINGS || '').split(',').map((s) => s.trim()).filter(Boolean);
+  const ids = only.length ? only : Object.keys(OPENING_SEEDS);
+  const all = [];
+  for (const id of ids) {
+    const cfg = OPENING_SEEDS[id];
+    if (!cfg) { console.warn(`[mine] no seed config for "${id}" — skipping`); continue; }
+    console.log(`[mine] ${id} (student=${cfg.studentChar}) …`);
+    const gems = await mine(id, cfg.studentChar, cfg.seed);
+    console.log(`[mine]   ${gems.length} gems`);
+    all.push(...gems);
+  }
+  await writeFile('src/data/punish-gems.json', JSON.stringify(all, null, 2) + '\n');
+  console.log(`[mine] wrote ${all.length} gems → src/data/punish-gems.json`);
+  for (const g of all) console.log(`  ${g.openingId} | ${g.lineMoves} | ${g.inaccuracy} (${g.freqPct}%) → ${g.punish} [${g.tier}${g.engineCp !== null ? ` ${g.engineCp}cp` : ''}]`);
 })();
