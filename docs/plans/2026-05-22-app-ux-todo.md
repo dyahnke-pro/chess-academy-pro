@@ -1,3 +1,16 @@
+# ⭐ TOP PRIORITY — FIX/VERIFY THE LEARN TAB (David 2026-05-22)
+
+Learn must GUIDE move-by-move while YOU play your side. Two fixes already
+shipped (PR #653 routing: PlayableLinePlayer mode='learn'; PR #654: opponent
+auto-plays + each move voiced). FIRST next session: **verify on prod** that
+Learn now (a) auto-plays the opponent's side, (b) speaks each move, (c) only
+asks you to play YOUR colour — across all 4 openings. If still off: the
+remaining suspects are voice firing on every intended move (authored
+keystones only today) and the visual "play this" hint on silent moves. Also
+verify Practice mode shares the opponent-auto-play correctly.
+
+---
+
 # App UX TODO + Brainstorm — onboarding & progress model (2026-05-22)
 
 Forward-looking UX work captured during the Caro-Kann masterclass build.
