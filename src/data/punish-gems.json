@@ -1,0 +1,85 @@
+[
+  {
+    "openingId": "caro-kann",
+    "lineMoves": "e4 c6 d4 d5 e5 Bf5",
+    "inaccuracy": "f4",
+    "freqPct": 4.6,
+    "games": 216502,
+    "practicalScore": 53,
+    "mainMove": "h4",
+    "punish": "e6",
+    "punishSeq": [
+      "e6",
+      "Nf3"
+    ],
+    "playLine": "e4 c6 d4 d5 e5 Bf5 f4 e6 Nf3",
+    "engineCp": null,
+    "tier": "practical",
+    "why": "At your level White plays f4 here in 5% of games, but Black scores 53% against it. Punish with e6 — Black is comfortably on top in practice."
+  },
+  {
+    "openingId": "caro-kann",
+    "lineMoves": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bd3 Bxd3 Qxd3 e6",
+    "inaccuracy": "Nf3",
+    "freqPct": 33.6,
+    "games": 84502,
+    "practicalScore": 47,
+    "mainMove": "Bg5",
+    "punish": "Qa5+",
+    "punishSeq": [
+      "Qa5+",
+      "Nbd2",
+      "Nh6",
+      "O-O",
+      "Nf5",
+      "Nb3",
+      "Qa6",
+      "Qd1"
+    ],
+    "playLine": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bd3 Bxd3 Qxd3 e6 Nf3 Qa5+ Nbd2 Nh6 O-O Nf5 Nb3 Qa6 Qd1",
+    "engineCp": null,
+    "tier": "practical",
+    "why": "At your level White plays Nf3 here in 34% of games, but Black scores 47% against it. Punish with Qa5+ — Black is comfortably on top in practice."
+  },
+  {
+    "openingId": "ruy-lopez",
+    "lineMoves": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3",
+    "inaccuracy": "d6",
+    "freqPct": 25.3,
+    "games": 120709,
+    "practicalScore": 52,
+    "mainMove": "d5",
+    "punish": "h3",
+    "punishSeq": [
+      "h3",
+      "Na5",
+      "Bc2",
+      "c5",
+      "d4",
+      "Qc7",
+      "Nbd2",
+      "cxd4"
+    ],
+    "playLine": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d6 h3 Na5 Bc2 c5 d4 Qc7 Nbd2 cxd4",
+    "engineCp": null,
+    "tier": "practical",
+    "why": "At your level White plays d6 here in 25% of games, but Black scores 52% against it. Punish with h3 — Black is comfortably on top in practice."
+  },
+  {
+    "openingId": "pirc-defence",
+    "lineMoves": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 c5 dxc5 dxc5",
+    "inaccuracy": "O-O",
+    "freqPct": 29.3,
+    "games": 11913,
+    "practicalScore": 46,
+    "mainMove": "e5",
+    "punish": "Nc6",
+    "punishSeq": [
+      "Nc6"
+    ],
+    "playLine": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 c5 dxc5 dxc5 O-O Nc6",
+    "engineCp": null,
+    "tier": "practical",
+    "why": "At your level White plays O-O here in 29% of games, but Black scores 46% against it. Punish with Nc6 — Black is comfortably on top in practice."
+  }
+]

@@ -1,0 +1,82 @@
+name: Mine punish-gems (engine-confirmed)
+
+# Phase 3 of the punish-the-inaccuracy WO
+# (docs/plans/2026-05-23-punish-gems-wo.md). Re-runs the gem miner with a
+# REAL Stockfish present — the one thing the ephemeral web sandbox can't do.
+# In the sandbox gems ship `tier: 'practical'` (DB-scored only); here the
+# engine evaluates the played-out line and promotes a gem to
+# `tier: 'confirmed'` (student ≥ +35cp) — so "crush" is never claimed
+# without engine proof. The miner walks every masterclass opening
+# (caro-kann / ruy-lopez / pirc-defence / vienna-game).
+#
+# Opens a PR with the refreshed engine-confirmed JSON (main is
+# branch-protected). The punishGems gate runs first so a bad mine can't land.
+
+on:
+  workflow_dispatch:
+    inputs:
+      openings:
+        description: 'Comma-separated opening ids to mine (blank = all masterclass openings)'
+        required: false
+        default: ''
+  schedule:
+    # 06:30 UTC on the 1st of every month — just after the masters-DB refresh.
+    - cron: '30 6 1 * *'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  mine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund --prefer-offline
+      - name: Install Stockfish
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y stockfish
+          which stockfish && (echo "uci"; echo "quit") | stockfish | grep -i "id name" || true
+      - name: Mine punish-gems with engine confirmation
+        env:
+          STOCKFISH_PATH: /usr/games/stockfish
+          OPENINGS: ${{ inputs.openings }}
+        run: node scripts/mine-punish-gems.mjs
+      - name: Gate the refreshed gems
+        run: npx vitest run src/data/punishGems.test.ts
+      - name: Open PR with engine-confirmed gems
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: |
+            chore(gems): refresh punish-gems.json (engine-confirmed)
+
+            Automated mining run with Stockfish present — promotes
+            practical → confirmed where the engine shows the student
+            clearly better after the punish.
+
+            Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          branch: chore/mine-punish-gems-${{ github.run_id }}
+          delete-branch: true
+          title: 'chore(gems): refresh punish-gems.json (engine-confirmed)'
+          body: |
+            Automated mining run from `.github/workflows/mine-punish-gems.yml`.
+
+            Re-mined the masterclass openings with a real Stockfish
+            (`/usr/games/stockfish`) so the played-out punish is engine-evaluated
+            and gems are promoted `practical` → `confirmed` (student ≥ +35cp).
+            The `punishGems` gate ran green before this PR was opened.
+
+            Openings: ${{ inputs.openings || 'all masterclass' }}
+
+            Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          add-paths: |
+            src/data/punish-gems.json
+          author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
+          committer: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
