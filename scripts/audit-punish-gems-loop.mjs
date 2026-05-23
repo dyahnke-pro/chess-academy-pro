@@ -178,8 +178,10 @@ async function tier2(browser) {
     // Caro named-trap Learn (the Qe2 warning) now mounts (was null before).
     await openDetail(page, 'caro-kann');
     const trapLearn = page.locator('[data-testid="named-trap-learn-karpov-qe2-mate"]');
-    if (await trapLearn.isVisible().catch(() => false)) {
-      await trapLearn.click(); await page.waitForTimeout(2500);
+    await trapLearn.waitFor({ state: 'attached', timeout: 8000 }).catch(() => {});
+    if (await trapLearn.count()) {
+      await trapLearn.scrollIntoViewIfNeeded().catch(() => {});
+      await trapLearn.click().catch(() => {}); await page.waitForTimeout(2500);
       if ((await squares(page)) < 64) fail('Caro named-trap Learn did not mount a board');
       await exitPlayer(page);
     } else { fail('Caro named-trap Learn button not found on main tab'); }
