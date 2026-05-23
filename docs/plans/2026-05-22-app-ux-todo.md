@@ -149,6 +149,12 @@ Problem: Watch is the satisfying part; users forget to climb L→P→P. Fixes:
    Once SRS lands, due reps are the daily return reason.
 - **Structural lever (already decided):** Watch earns only `discovered`, never
   `learned` — the system withholds "done" until they climb, so it's the nudge.
+- **(David 2026-05-23) Make the post-Watch "continue playing" hand-off STRONGER
+  and present on ALL openings.** Right now the continue-to-play CTA after the
+  Watch tab is weak / inconsistent across openings — every opening (main line +
+  every variation) must surface a prominent "keep going" hand-off when Watch
+  ends (step to the next rung per item 1). Audit it across all masterclass
+  openings, not just Caro.
 
 ### TODO 3b — Progressive unlock / gating (David 2026-05-22, loved it)
 
