@@ -66,3 +66,221 @@ the progress model (TODO 1) to the user. Build them together.
 - [ ] Onboarding `PageHelp` bubbles per tab (playbook §8) + WLPP/progress
       explainer.
 - Accounting gate (weakness tagging) deferred until the `learned` gate exists.
+
+---
+
+## NEXT-SESSION PRIORITY ORDER (David 2026-05-22)
+
+**1. Line-memorization SRS — the top lever (do BEFORE building opening #2).**
+Another opening adds breadth, but the Caro/Ruy/Pirc/Vienna courses don't
+*stick* without retention. SRS is what turns "I watched it" into "I can play
+it under pressure." Build:
+- Per-move SRS cards from the existing verified lesson lines: `(openingId,
+  variation, ply)` → position FEN + correct SAN + SRS state.
+- **FSRS** scheduling (not SM-2/Anki) — modern, fewer reviews, better
+  retention. Surface due reps through the Training Plan + Dexie SRS store.
+- **Drill the spine + KEY moves, not every filler move**, and keep the
+  narration "why" attached to each card → "understand then retain", not rote
+  (this is how it beats Chessable on our terms / honours the ideas-first ethos).
+- Feed the "Got it / Not yet" self-assessment (TODO 1) into initial card ease.
+- Natural home: the WLPP **Practice** mode (add scheduling + board-move grading).
+- Multi-file build (scheduler + review UI + Training-Plan wiring) — needs a
+  fresh session, not a 2%-data tail.
+
+**2. Build opening #2 — needs David's repertoire first.** Pick from what he
+actually plays (White 1st move + main Black answers), most-faced first — not
+at random. Process is locked (playbook §0.5/§0.6); builders + gates + model-
+game/trap pipelines all proven on Caro, so it's "author the data, it lights up."
+
+**Done this session (in prod):** Caro masterclass (flagship+6 var+7 model
+games+Qe2 warning), anti-invention gates 1-7, course-scoped coach chat,
+continue-playing CTA, depth shortfalls extended, Stockfish engine-soundness
+CI gate. Run the engine workflow to vet Vienna/Ruy deep tails.
+
+---
+
+## THE USER PATH — "the proper way to use the app" (what the bubbles teach)
+
+The mantra: **Watch → Learn → Practice → Play → (Capture →) Drill.**
+The first four climb the progress tiers (TODO 1); SRS + capture keep it from
+leaking back out. This is the content the onboarding "i" bubbles (TODO 2)
+must communicate, and the empty-states should nudge toward.
+
+1. **First visit:** "i" bubbles walk each tab — what it does + why.
+2. **Masterclasses tab → pick an opening you actually play.**
+3. **Watch** the main line + each variation → get the ideas → *discovered*.
+4. **Learn** → voice guides each move, you play it → "Got it / Not yet" → *learned*.
+5. **Practice** → same line, silent, Hint on demand → clean replay → *perfected*.
+6. **Play** → vs the coach, locked to the line → real reps → *mastery* (rolling).
+7. **Ask the coach** anytime — scoped to the exact line being studied.
+8. **Watch the model game** → see the idea win at the top level.
+9. **Daily SRS reps** (once built) → due moves resurface so it doesn't fade.
+10. (Future) **Capture** mistakes from real games → **drill** them.
+
+The flywheel in one line: *learn it, play it, find the holes, drill them shut.*
+
+---
+
+## TODO 3 — Guide users back to Learn/Practice/Play after Watch
+
+Problem: Watch is the satisfying part; users forget to climb L→P→P. Fixes:
+1. **Tiered end-of-Watch hand-off.** The end-of-Watch CTA should tee up the
+   NEXT RUNG, not skip to Play: Watch→"Now Learn it", Learn→"Practice it",
+   Practice→"Play it". (Today's CTA jumps straight to Play — fix to step
+   through the ladder.)
+2. **Show the unfinished ladder everywhere.** Per line: `Watched ✓ · Learn ○
+   · Practice ○ · Play ○` with the next rung lit. An incomplete ladder is a
+   standing nudge.
+3. **Training Plan resurfaces watched-but-not-learned lines** as today's reps
+   ("You watched the Advance Caro — Learn it now, 3 min"). Re-entry point.
+   Once SRS lands, due reps are the daily return reason.
+- **Structural lever (already decided):** Watch earns only `discovered`, never
+  `learned` — the system withholds "done" until they climb, so it's the nudge.
+
+### TODO 3b — Progressive unlock / gating (David 2026-05-22, loved it)
+
+Make the path a LADDER with gated unlocks — three nested levels:
+
+1. **Rung-gating (per line).** Only the next WLPP rung is live; the rest are
+   greyed/locked. Watch lit → finish → Learn lights up → Practice → Play.
+   Guards: (a) completed rungs stay RE-OPENABLE (forward-lock only, never lock
+   backward); (b) an "I already know this — unlock all" escape per line so it
+   gates the learner without trapping the expert. Default gated.
+2. **Line completion → reward unlock.** Finishing a line's full ladder earns a
+   **mastered star** AND unlocks that line's **model game** as the payoff
+   ("You've mastered the Advance — now watch Carlsen win with it"). Reward
+   teaches + feels earned.
+3. **Opening completion → graduation → next opening unlocks.** Mastering all
+   variations graduates the opening and UNLOCKS THE NEXT OPENING in the
+   repertoire queue (amateur-frequency order). The whole app becomes a path:
+   openings unlock in order → variations within → rungs within those.
+
+**Training Plan announces every unlock** ("Practice unlocked. Next: the …c5
+break drill, 3 min") — the lesson plan tells them what just opened up.
+
+Ties to TODO 1 tiers (discovered/learned/perfected/mastery ARE the rung
+states) + TODO 3 (the come-back nudges become "next unlock" prompts).
+
+### TODO 3c — Subline gating + what unlocks unlock (David 2026-05-22)
+
+**Subline gating — light, not the full ladder.** Do NOT lock variation tabs
+behind the ENTIRE Classical ladder — it's a DEFENCE (opponent picks the line),
+and the Classical isn't even most-faced (Advance 37% > Exchange 30% >
+Classical 21%), so full-ladder gating leaves the user unprepared for the line
+they'll actually meet. Instead:
+- Gate sublines behind the Classical's **WATCH only** (~9 min, teaches the
+  core ideas every variation reuses) → then tabs open.
+- Unlock variations in **amateur-frequency order** (Advance first), matching
+  what they'll face — not the showcase order.
+- Keep the **"unlock all" escape** for a surprise line tonight.
+
+**Two-tier completion rewards (model game AND traps, at different moments):**
+- **Line ladder complete → unlock the MODEL GAME** — the celebratory "watch it
+  win at the top level" payoff. Reliable: one per variation.
+- **Line/opening MASTERED → unlock its TRAPS/WEAPONS** — the "earned a weapon"
+  power-up. Gate traps behind mastery because they're advanced/situational
+  (don't drill the Qe2 punish before you know the line). Only fires where a
+  REAL trap exists (Caro = the one Qe2 warning; empty > forced).
+
+### TODO 3d — "Hidden gem" 💎 reward when a line has no trap (David 2026-05-22)
+
+So EVERY line has an unlockable reward, no dead-ends. Reward ladder per line:
+**model game (always) → trap/weapon (if real) → else a HIDDEN GEM.**
+
+A gem = a piece of powerful, line-specific knowledge: *how to punish a common
+INACCURACY by the opponent.* On-ethos because it's SOURCED, never invented —
+same grounding as everything else:
+- **Explorer** finds a move the opponent plays reasonably often at amateur
+  level but that SCORES POORLY (a real, common inaccuracy — it shows up in the
+  games the user will actually face, not a textbook curiosity).
+- **Stockfish** confirms the punishing reply is genuinely best/winning.
+- **chess.js** validates the line.
+- Shape: "When White plays the lazy [common inferior move] here, punish with
+  [engine-confirmed reply] — you're already better." Gate it on Stockfish
+  soundness, like the rest.
+
+This is the playbook §7 "exploit inaccuracy" idea repackaged as the per-line
+unlock — and arguably MORE useful than a trap (traps are rare; inaccuracies
+are everywhere, so every line yields at least one gem). Builder task like the
+model games: query the line's key positions for a frequent-but-inferior
+opponent move + the engine-best punish, author the insight.
+
+### TODO 3e — THE BIG ONE: systematic "punish the inaccuracy" generator (David 2026-05-22, lightbulb)
+
+David's realization: the hidden-gem mechanic IS a content-generation ENGINE
+for trap-style material on EVERY line — not just a per-line reward. Named
+traps (Qe2 Nd6#) are the rare hand-authored case; this is the systematic case
+that scales to every line + every opening automatically.
+
+**The method — two DBs, two jobs:**
+- **Amateur explorer → find the bad move they actually play.** Common at the
+  user's level BUT scores poorly FOR THE OPPONENT (low opp win-rate /
+  Stockfish-inferior). A real inaccuracy you'll meet, not theory.
+- **Masters explorer + Stockfish → the crush.** The verified strong response
+  that punishes it; chess.js validates the line.
+
+Output: a mined "gem" / mini-trap per line — "when White plays the lazy
+[common inferior move], punish with [engine-best reply], you're better."
+Scales because every position has a common bad try.
+
+**On-ethos guardrails (so it's grounded, never invented):**
+1. "Scores poorly" measured from the OPPONENT'S side (their win-rate /
+   Stockfish eval), not gut feel.
+2. Punish must be Stockfish-CONFIRMED winning for the student.
+3. Frequency FLOOR — the inaccuracy must be commonly played (skip 0.3%
+   blunders nobody makes).
+
+Builder shape (like add-caro-model-games.mjs): walk the line's branch points,
+query amateur explorer for frequent-but-inferior opponent moves, attach the
+masters/Stockfish-best punish, gate on engine soundness → candidate gems for
+review. This generalises trap content to all 40 openings without hand-
+authoring each.
+
+---
+
+## ⭐ PRIORITY UPDATE (David 2026-05-22, emphatic — "absolute must, fix as soon as data resets")
+
+David's #1 want, the reason the course always had a "trap" section: **TODO 3e
+— the systematic punish-the-inaccuracy generator.** Build it FIRST next
+session (it's a contained builder like add-caro-model-games.mjs, faster than
+the full SRS build, and it's the feature he's been trying to articulate).
+
+Revised next-session order:
+1. **TODO 3e — punish-the-inaccuracy generator** (amateur DB finds the common
+   bad move → masters + Stockfish crush it → gem/mini-trap per line). THE must.
+2. **SRS** (retention — makes it stick).
+3. **Opening #2** (needs David's repertoire).
+
+---
+
+## ⭐⭐ DIRECTIVE — RESTRUCTURE THE ENTIRE WEAPON SECTION (David 2026-05-22)
+
+"This was the whole point to me building this app." The weapon section is
+being REDEFINED around the systematic punish-the-inaccuracy engine (TODO 3e),
+not around famous named traps.
+
+**Old model:** weapons = hand-authored famous named traps (Qe2 Nd6#, etc.) —
+rare, most openings have few/none, section often empty.
+
+**New model:**
+- **PRIMARY = mined "punish the inaccuracy" gems (TODO 3e).** Every line gets
+  "here's the common mistake your opponent actually makes, here's how you
+  crush it" — amateur DB finds the frequent-but-poor move, masters+Stockfish
+  confirm the punish, chess.js validates. Scales to every line / every
+  opening. This is the SPINE of the section. It's never empty again.
+- **Named traps = the rare jewels layered ON TOP** (Qe2, Légal's, Fishing
+  Pole…) — kept where real, but no longer the *definition* of weapons.
+
+**Build implications:**
+- Data model: a generated-gems store/file (mined inaccuracy → punish line +
+  insight + freq + engine eval), alongside the existing hand-authored
+  *TrapLessons.ts named traps.
+- Weapons-section UI: gems as the default list, named traps highlighted.
+- **Playbook §3 (weapons rules) must be REWRITTEN** when this lands — it
+  currently assumes hand-authored-only. Update the doctrine to: gems primary
+  (generated + gated), named traps as the curated overlay.
+- Pairs with / built on TODO 3e (the generator). 3e is the engine; this is
+  the section rebuilt around it.
+
+This is the #1 architectural priority alongside 3e — David's core vision for
+the app.

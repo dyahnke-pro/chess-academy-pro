@@ -24,7 +24,7 @@ import { getRuyTabPlanIds } from '../../services/ruyMasterclassTabs';
 import { getPircTabPlanIds } from '../../services/pircMasterclassTabs';
 import { getViennaTabPlanIds } from '../../services/viennaMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
-import { getLessonScript, getVariationLessonScript } from '../../data/lessons';
+import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
   RUY_TRAP_LESSONS,
   getRuyTrapsForTab,
@@ -564,21 +564,26 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Learn mode (main line or variation)
+  // Learn mode (main line or variation). LEARN must GUIDE you move-by-move
+  // while YOU play — NOT auto-play the chapter (that's Watch). So convert the
+  // masterclass lesson into a playable line and drive it through
+  // PlayableLinePlayer in 'learn' mode. (Previously this mounted LessonPlayer,
+  // i.e. Learn === Watch — the §1a bug.)
   if (viewMode === 'learn' || viewMode === 'variation-learn') {
-    // When a master class exists for this line, Learn plays it (the
-    // authored chapter) instead of the generic LLM move-narrator drill.
     const learnLesson = viewMode === 'variation-learn'
       ? getVariationLessonScript(opening.id, opening.variations?.[activeVariationIndex]?.name)
       : getLessonScript(opening.id);
-    if (learnLesson) {
+    const learnLine = lessonToPlayableLine(learnLesson);
+    if (learnLine) {
       return (
-        <LessonPlayer
-          script={learnLesson}
-          onExit={handleExit}
+        <PlayableLinePlayer
+          line={learnLine}
+          boardOrientation={opening.color}
+          mode="learn"
           onComplete={viewMode === 'variation-learn'
             ? () => { void markLineDiscovered(opening.id, activeVariationIndex).then(() => loadOpening()); }
-            : undefined}
+            : handleExit}
+          onExit={handleExit}
         />
       );
     }

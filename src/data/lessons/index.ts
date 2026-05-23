@@ -1,4 +1,4 @@
-import type { LessonScript } from '../../types';
+import type { LessonScript, AnnotationArrow, AnnotationHighlight, PlayableMiddlegameLine } from '../../types';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
@@ -172,4 +172,36 @@ export function buildCourseScope(
   ].join('\n');
 
   return { systemAddition, greeting: `What would you like to know about the ${label}?`, label };
+}
+
+// Convert any masterclass LessonScript into a PlayableMiddlegameLine so the
+// WLPP Learn/Practice modes (PlayableLinePlayer) can drive it — voice guides,
+// YOU play each move. WITHOUT this, Learn fell back to the LessonPlayer (the
+// Watch auto-play), so "Learn === Watch" (the §1a bug). Same logic as the
+// named-trap converter (getRuyTrapPlayableLine), generalised: take the
+// deepest beat as the teaching line and carry each prefix beat's say + arrows
+// + highlights VERBATIM onto the move it lands on.
+const LESSON_START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+export function lessonToPlayableLine(
+  lesson: LessonScript | null | undefined,
+): PlayableMiddlegameLine | null {
+  if (!lesson || lesson.beats.length === 0) return null;
+  let lineBeat = lesson.beats[0];
+  for (const b of lesson.beats) if (b.moves.length > lineBeat.moves.length) lineBeat = b;
+  const moves = lineBeat.moves;
+  if (moves.length === 0) return null;
+  const annotations: string[] = moves.map(() => '');
+  const arrows: AnnotationArrow[][] = moves.map(() => []);
+  const highlights: AnnotationHighlight[][] = moves.map(() => []);
+  for (const beat of lesson.beats) {
+    if (beat.moves.length > moves.length) continue;
+    if (!beat.moves.every((m, i) => m === moves[i])) continue;
+    const ply = beat.moves.length - 1;
+    if (ply < 0) continue;
+    annotations[ply] = beat.say;
+    if (beat.arrows) arrows[ply] = beat.arrows;
+    if (beat.highlights) highlights[ply] = beat.highlights;
+  }
+  return { fen: LESSON_START_FEN, moves, annotations, arrows, highlights, title: lesson.title };
 }
