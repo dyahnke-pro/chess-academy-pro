@@ -13,6 +13,7 @@ import {
   Lightbulb,
 } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
+import { sanToSpeech } from '../../utils/sanToSpeech';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -225,13 +226,14 @@ export function PlayableLinePlayer({
     if (phase !== 'memory' || memoryComplete) return;
     if (memoryMoveIndex >= line.moves.length) return;
     if (showWrongFlash || showCorrectFlash) return;
-    const annotation = guided ? (line.annotations[memoryMoveIndex] ?? '') : '';
-    if (annotation) {
+    // Learn = rapid-fire move DICTATION ("Bishop to f5"), no "why" prose —
+    // the why lives in Watch/Play (David 2026-05-23). Practice is silent.
+    if (guided) {
       voiceService.stop();
-      void voiceService.speak(annotation).catch(() => { /* keep going */ });
+      void voiceService.speak(sanToSpeech(line.moves[memoryMoveIndex])).catch(() => { /* keep going */ });
     }
-    // Student's move → show the hint + wait for input. Opponent's move →
-    // auto-play it (after the narration), so the user only plays their side.
+    // Your move → wait for input. Opponent's move → auto-play it fast, so you
+    // only play your own side and the line rips along.
     if (chessRef.current.turn() === studentChar) return;
     let cancelled = false;
     const t = setTimeout(() => {
@@ -244,9 +246,9 @@ export function PlayableLinePlayer({
         setMemoryMoveIndex(next);
         if (next >= line.moves.length) { setMemoryComplete(true); playCelebration(); }
       } catch { /* line desync — stop auto-advancing */ }
-    }, annotation ? 900 : 500);
+    }, guided ? 650 : 300);
     return () => { cancelled = true; clearTimeout(t); };
-  }, [guided, phase, memoryMoveIndex, memoryComplete, line.moves, showWrongFlash, showCorrectFlash, studentChar, line.annotations]);
+  }, [guided, phase, memoryMoveIndex, memoryComplete, line.moves, showWrongFlash, showCorrectFlash, studentChar]);
 
   const togglePlayPause = useCallback((): void => {
     setIsPlaying((prev) => !prev);
