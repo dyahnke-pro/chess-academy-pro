@@ -65,6 +65,8 @@ export function PlayableLinePlayer({
   // 'learn' and 'practice' are board-play modes — they skip the auto-demo
   // and go straight to playing the line. 'learn' adds voice + move hints.
   const guided = mode === 'learn';
+  // The student plays only THEIR side; the opponent's moves auto-play.
+  const studentChar = boardOrientation === 'white' ? 'w' : 'b';
 
   // Phase state. Watch starts by demonstrating; the play modes start on the
   // board.
@@ -220,13 +222,31 @@ export function PlayableLinePlayer({
   // why." The board shows the move's lead-the-eye arrows + highlights so the
   // ear and the eye agree. Practice mode stays silent (no effect fires).
   useEffect(() => {
-    if (!guided || phase !== 'memory' || memoryComplete) return;
-    if (memoryMoveIndex >= line.annotations.length) return;
-    const annotation = line.annotations[memoryMoveIndex] ?? '';
-    if (!annotation) return;
-    voiceService.stop();
-    void voiceService.speak(annotation).catch(() => { /* keep going */ });
-  }, [guided, phase, memoryMoveIndex, memoryComplete, line.annotations]);
+    if (phase !== 'memory' || memoryComplete) return;
+    if (memoryMoveIndex >= line.moves.length) return;
+    if (showWrongFlash || showCorrectFlash) return;
+    const annotation = guided ? (line.annotations[memoryMoveIndex] ?? '') : '';
+    if (annotation) {
+      voiceService.stop();
+      void voiceService.speak(annotation).catch(() => { /* keep going */ });
+    }
+    // Student's move → show the hint + wait for input. Opponent's move →
+    // auto-play it (after the narration), so the user only plays their side.
+    if (chessRef.current.turn() === studentChar) return;
+    let cancelled = false;
+    const t = setTimeout(() => {
+      if (cancelled) return;
+      try {
+        const mv = chessRef.current.move(line.moves[memoryMoveIndex]);
+        setMemoryFen(chessRef.current.fen());
+        playMoveSound(mv.san);
+        const next = memoryMoveIndex + 1;
+        setMemoryMoveIndex(next);
+        if (next >= line.moves.length) { setMemoryComplete(true); playCelebration(); }
+      } catch { /* line desync — stop auto-advancing */ }
+    }, annotation ? 900 : 500);
+    return () => { cancelled = true; clearTimeout(t); };
+  }, [guided, phase, memoryMoveIndex, memoryComplete, line.moves, showWrongFlash, showCorrectFlash, studentChar, line.annotations]);
 
   const togglePlayPause = useCallback((): void => {
     setIsPlaying((prev) => !prev);
