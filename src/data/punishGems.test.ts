@@ -89,11 +89,15 @@ describe('punish-gems are real, legal, DB-grounded', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('tab filter keeps gems whose spine starts with the tab spine', () => {
+  it('tab filter surfaces a gem when its spine is a prefix of the tab line', () => {
     const first = (gems as PunishGem[])[0];
-    const spine = first.lineMoves.split(' ').slice(0, 4).join(' ');
-    const hits = getPunishGemsForTab(first.openingId, spine);
-    expect(hits.length).toBeGreaterThan(0);
-    expect(hits.every((g) => g.lineMoves.startsWith(spine))).toBe(true);
+    // A tab line is the curated (longer) variation; a gem sits on its early
+    // part. Extend the gem's own line to simulate a deeper variation tab.
+    const tabLine = `${first.lineMoves} Nf3 e6 Be2 c5`;
+    const hits = getPunishGemsForTab(first.openingId, tabLine);
+    expect(hits.some((g) => g.lineMoves === first.lineMoves)).toBe(true);
+    // A tab that diverges before the gem's line must NOT surface it.
+    const diverged = 'e4 c6 d4 d5 exd5 cxd5 Bd3';
+    expect(getPunishGemsForTab(first.openingId, diverged).some((g) => g.lineMoves === first.lineMoves)).toBe(false);
   });
 });
