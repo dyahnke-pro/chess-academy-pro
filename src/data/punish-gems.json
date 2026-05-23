@@ -1,0 +1,44 @@
+[
+  {
+    "openingId": "caro-kann",
+    "lineMoves": "e4 c6 d4 d5 e5 Bf5",
+    "inaccuracy": "f4",
+    "freqPct": 4.6,
+    "games": 216502,
+    "practicalScore": 53,
+    "mainMove": "h4",
+    "punish": "e6",
+    "punishSeq": [
+      "e6",
+      "Nf3"
+    ],
+    "playLine": "e4 c6 d4 d5 e5 Bf5 f4 e6 Nf3",
+    "engineCp": null,
+    "tier": "practical",
+    "why": "At your level White plays f4 here in 5% of games, but Black scores 53% against it. Punish with e6 — Black is comfortably on top in practice."
+  },
+  {
+    "openingId": "caro-kann",
+    "lineMoves": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bd3 Bxd3 Qxd3 e6",
+    "inaccuracy": "Nf3",
+    "freqPct": 33.6,
+    "games": 84502,
+    "practicalScore": 47,
+    "mainMove": "Bg5",
+    "punish": "Qa5+",
+    "punishSeq": [
+      "Qa5+",
+      "Nbd2",
+      "Nh6",
+      "O-O",
+      "Nf5",
+      "Nb3",
+      "Qa6",
+      "Qd1"
+    ],
+    "playLine": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bd3 Bxd3 Qxd3 e6 Nf3 Qa5+ Nbd2 Nh6 O-O Nf5 Nb3 Qa6 Qd1",
+    "engineCp": null,
+    "tier": "practical",
+    "why": "At your level White plays Nf3 here in 34% of games, but Black scores 47% against it. Punish with Qa5+ — Black is comfortably on top in practice."
+  }
+]
