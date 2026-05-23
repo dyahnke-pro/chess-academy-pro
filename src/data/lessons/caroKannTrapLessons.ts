@@ -1,4 +1,4 @@
-import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
+import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight, PlayableMiddlegameLine } from '../../types';
 
 // Caro-Kann named traps (Black). Hand-authored beat-lessons, DB-grounded +
 // chess.js-verified. Warning pattern (playbook §3): show the trap, then snap
@@ -63,4 +63,30 @@ export const CARO_TRAP_DEFS: CaroTrapDef[] = [
 export function getCaroTrapsForTab(tabKey: string): CaroTrapDef[] {
   const key = (tabKey || 'main').toLowerCase();
   return CARO_TRAP_DEFS.filter((d) => d.appliesTo.includes(key));
+}
+
+const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+// Learn / Practice line for a Caro named trap. The teaching line is the
+// lesson's LAST beat — for a warning that's the FIX (e.g. ...Ndf6), never the
+// mate line, so the student practices the move that AVOIDS the trap. Authored
+// `say` survives onto its ply (Watch narration); Learn dictates moves only,
+// Practice is silent — the WLPP contract is enforced by PlayableLinePlayer.
+export function getCaroTrapPlayableLine(id: string): PlayableMiddlegameLine | null {
+  const lesson = CARO_TRAP_LESSONS[id];
+  if (!lesson || lesson.beats.length === 0) return null;
+  const lineBeat = lesson.beats[lesson.beats.length - 1];
+  const moves = lineBeat.moves;
+  const annotations: string[] = moves.map(() => '');
+  const arrows: AnnotationArrow[][] = moves.map(() => []);
+  const highlights: AnnotationHighlight[][] = moves.map(() => []);
+  for (const beat of lesson.beats) {
+    if (beat.moves.length > moves.length) continue;
+    if (!beat.moves.every((m, i) => m === moves[i])) continue;
+    const ply = beat.moves.length - 1;
+    annotations[ply] = beat.say;
+    if (beat.arrows) arrows[ply] = beat.arrows;
+    if (beat.highlights) highlights[ply] = beat.highlights;
+  }
+  return { fen: START_FEN, moves, annotations, arrows, highlights, title: lesson.title };
 }
