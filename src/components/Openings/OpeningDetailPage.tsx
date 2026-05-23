@@ -42,6 +42,13 @@ import {
   getCaroTrapsForTab,
   type CaroTrapDef,
 } from '../../data/lessons/caroKannTrapLessons';
+import {
+  getPunishGemsForTab,
+  getPunishGemById,
+  gemId,
+  gemInaccuracyFen,
+  gemToPlayableLine,
+} from '../../data/lessons/punishGems';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
 import { MasterclassCoachChat } from './MasterclassCoachChat';
@@ -113,6 +120,10 @@ type ViewMode =
   | 'named-trap-learn'
   | 'named-trap-practice'
   | 'named-trap-play'
+  | 'gem-watch'
+  | 'gem-learn'
+  | 'gem-practice'
+  | 'gem-play'
   | 'middlegame-watch'
   | 'middlegame-plan'
   | 'middlegame-practice'
@@ -149,6 +160,7 @@ export function OpeningDetailPage(): JSX.Element {
   const [activeTrapLineIndex, setActiveTrapLineIndex] = useState(-1);
   const [activeWarningLineIndex, setActiveWarningLineIndex] = useState(-1);
   const [activeNamedTrapId, setActiveNamedTrapId] = useState<string | null>(null);
+  const [activeGemId, setActiveGemId] = useState<string | null>(null);
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [activeMistake, setActiveMistake] = useState<CommonMistake | null>(null);
@@ -365,6 +377,17 @@ export function OpeningDetailPage(): JSX.Element {
     [],
   );
 
+  // Punish-gem WLPP: Watch plays the punish out, Learn voice-guides the
+  // student's moves, Practice is silent + hint, Play hands off to the coach
+  // locked to this opening. The weapon-section spine (WO: punish-gems).
+  const handleGemAction = useCallback(
+    (id: string, action: 'watch' | 'learn' | 'practice' | 'play'): void => {
+      setActiveGemId(id);
+      setViewMode(`gem-${action}` as ViewMode);
+    },
+    [],
+  );
+
   const handleToggleFavorite = useCallback(async (): Promise<void> => {
     if (!opening) return;
     const newVal = await toggleFavorite(opening.id);
@@ -540,6 +563,33 @@ export function OpeningDetailPage(): JSX.Element {
         onExit={handleExit}
       />
     );
+  }
+
+  // Punish-gem WLPP — Watch the crush played out, Learn it (voice-guided),
+  // Practice it (silent + hint). The line is built from the gem's played-out
+  // playLine; every move carries its lead-the-eye arrow.
+  if (
+    (viewMode === 'gem-watch' || viewMode === 'gem-learn' || viewMode === 'gem-practice') &&
+    activeGemId
+  ) {
+    const gem = getPunishGemById(activeGemId);
+    const gemLine = gem ? gemToPlayableLine(gem) : null;
+    if (gemLine) {
+      return (
+        <PlayableLinePlayer
+          line={gemLine}
+          boardOrientation={opening.color}
+          mode={viewMode === 'gem-watch' ? 'watch' : viewMode === 'gem-learn' ? 'learn' : 'practice'}
+          onComplete={handleExit}
+          onExit={handleExit}
+        />
+      );
+    }
+  }
+
+  // Punish-gem PLAY — play it out against the coach, locked to this opening.
+  if (viewMode === 'gem-play' && activeGemId) {
+    return <OpeningPlayMode opening={opening} onExit={handleExit} />;
   }
 
   // Walkthrough mode (trap/warning lines)
@@ -861,6 +911,16 @@ export function OpeningDetailPage(): JSX.Element {
   const namedWeapons = namedTraps.filter((t) => t.kind === 'weapon');
   const namedWarnings = namedTraps.filter((t) => t.kind === 'warning');
 
+  // Punish-the-inaccuracy GEMS for THIS tab — the weapon-section spine: the
+  // common move the opponent actually plays here that scores badly for them,
+  // and the punish played out. On a variation tab, filtered to gems that live
+  // on that tab's spine; on the main tab, every gem for the opening. (WO:
+  // docs/plans/2026-05-23-punish-gems-wo.md.)
+  const tabSpinePgn = selectedVariation
+    ? selectedVariation.pgn.replace(/\d+\.(\.\.)?/g, ' ').replace(/\s+/g, ' ').trim()
+    : undefined;
+  const tabGems = getPunishGemsForTab(opening.id, tabSpinePgn);
+
   // Zone self-hide flags — NO blank/empty zones on the masterclass
   // (David 2026-05-21). A zone header renders only when it has content for
   // the current opening/tab; otherwise it's removed entirely.
@@ -902,6 +962,28 @@ export function OpeningDetailPage(): JSX.Element {
           <Brain size={15} />Practice
         </button>
         <button onClick={() => handleNamedTrapAction(trapId, 'play')} className={`${btn} opening-action-glow opening-action-glow-play`} data-testid={`named-trap-play-${trapId}`}>
+          <Swords size={15} />Play
+        </button>
+      </div>
+    );
+  };
+
+  // Same WLPP row for a punish gem — Watch the crush played out, Learn it
+  // (voice-guided), Practice (silent + hint), Play (coach locked to opening).
+  const GemWLPP = ({ id }: { id: string }): JSX.Element => {
+    const btn = 'flex flex-col items-center justify-center gap-0.5 py-1.5 rounded-lg bg-theme-surface border border-theme-border text-theme-text-muted hover:text-theme-text hover:bg-theme-border text-[10px] font-medium transition-colors';
+    return (
+      <div className="grid grid-cols-4 gap-1.5 mt-2">
+        <button onClick={() => handleGemAction(id, 'watch')} className={`${btn} opening-action-glow opening-action-glow-watch`} data-testid={`gem-watch-${id}`}>
+          <PlayCircle size={15} />Watch
+        </button>
+        <button onClick={() => handleGemAction(id, 'learn')} className={`${btn} opening-action-glow opening-action-glow-learn`} data-testid={`gem-learn-${id}`}>
+          <LearnIcon size={15} />Learn
+        </button>
+        <button onClick={() => handleGemAction(id, 'practice')} className={`${btn} opening-action-glow opening-action-glow-practice`} data-testid={`gem-practice-${id}`}>
+          <Brain size={15} />Practice
+        </button>
+        <button onClick={() => handleGemAction(id, 'play')} className={`${btn} opening-action-glow opening-action-glow-play`} data-testid={`gem-play-${id}`}>
           <Swords size={15} />Play
         </button>
       </div>
@@ -1233,6 +1315,62 @@ export function OpeningDetailPage(): JSX.Element {
         onAction={handleMiddlegameAction}
         filterPlanIds={subjectPlanIds}
       />
+
+      {/* Punish-the-inaccuracy GEMS — the weapon-section SPINE (WO:
+          docs/plans/2026-05-23-punish-gems-wo.md). The common move the
+          opponent actually plays here that scores badly for them, mined from
+          the amateur DB, with the punish played out (masters). The student
+          Watches the crush, then Learns / Practices / Plays it. Named traps
+          (below) are the rarer hand-authored jewels layered on top. */}
+      {tabGems.length > 0 && (
+        <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-emerald-500/30" data-testid="punish-gems-card">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles size={14} className="text-emerald-400" />
+            <h3 className="text-sm font-semibold text-theme-text">
+              {tabGems.length === 1 ? 'Punish the common inaccuracy' : 'Punish the common inaccuracies'}
+            </h3>
+          </div>
+          <div className="space-y-3">
+            {tabGems.map((gem) => {
+              const id = gemId(gem);
+              return (
+                <div
+                  key={id}
+                  className="w-full p-3 rounded-lg border border-theme-border"
+                  data-testid={`punish-gem-${id}`}
+                >
+                  <div className="flex items-start gap-3">
+                    <MiniBoard fen={gemInaccuracyFen(gem)} size={64} orientation={opening.color} />
+                    <div className="min-w-0 flex-1">
+                      <span className="text-sm font-medium text-theme-text">
+                        Opponent plays {gem.inaccuracy} — punish with {gem.punish}
+                      </span>
+                      <p className="text-xs text-theme-text-muted mt-0.5">{gem.why}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <span className="text-[10px] font-semibold text-emerald-400/90">
+                          {gem.freqPct}% of opponents · you score {gem.practicalScore}%
+                        </span>
+                        <span
+                          className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
+                            gem.tier === 'confirmed'
+                              ? 'bg-emerald-500/20 text-emerald-300'
+                              : 'bg-theme-border text-theme-text-muted'
+                          }`}
+                        >
+                          {gem.tier === 'confirmed' && gem.engineCp !== null
+                            ? `engine ${gem.engineCp >= 0 ? '+' : ''}${(gem.engineCp / 100).toFixed(1)}`
+                            : 'practical'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <GemWLPP id={id} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Named WEAPONS for THIS tab — student-side punishments when the
           opponent slips. A single green-outlined card (no "Weapons" SECTION
