@@ -40,6 +40,7 @@ import {
 import {
   CARO_TRAP_LESSONS,
   getCaroTrapsForTab,
+  getCaroTrapPlayableLine,
   type CaroTrapDef,
 } from '../../data/lessons/caroKannTrapLessons';
 import {
@@ -541,7 +542,8 @@ export function OpeningDetailPage(): JSX.Element {
     const trapLine =
       opening.id === 'ruy-lopez' ? getRuyTrapPlayableLine(activeNamedTrapId)
         : opening.id === 'vienna-game' ? getViennaTrapPlayableLine(activeNamedTrapId)
-          : null;
+          : opening.id === 'caro-kann' ? getCaroTrapPlayableLine(activeNamedTrapId)
+            : null;
     if (trapLine) {
       return (
         <PlayableLinePlayer
@@ -1097,6 +1099,7 @@ export function OpeningDetailPage(): JSX.Element {
         tabs={variationTabs}
         selectedIndex={selectedTabIndex}
         onSelect={handleSelectTab}
+        mainLabel={opening.id === 'caro-kann' ? 'Classical System' : undefined}
       />
 
       {/* WALKTHROUGH, LEARN, PRACTICE, PLAY buttons */}

@@ -1562,6 +1562,7 @@ After every `git push origin main`:
    | `/weaknesses` (or its tab/row → review flow) | `scripts/audit-weaknesses.mjs` |
    | `/openings/*` | `scripts/audit-openings-ui.mjs` (coordinate — often 🚧 in flight) |
    | `/openings/:id` trap + warning tiles | `scripts/audit-opening-trap-tiles.mjs` |
+   | `/openings/:id` punish-gems weapon section + WLPP voice contract | `scripts/audit-punish-gems-loop.mjs` — **3-PASS CONTRACT (David 2026-05-23): MET only on 3 CONSECUTIVE error-free tiers (breadth → failure-modes → adversarial); any error resets the streak.** Decodes `/api/tts?text=` to prove Watch=prose, Learn=move-dictation-only, Practice=silent. Run after every deploy touching the gems/WLPP surface. |
    | every opening subline (deep walk, ~1-2h) | `scripts/audit-openings-deep-walkthrough.mjs` |
    | `src/data/repertoire.json` trap/warning content | `scripts/audit-repertoire-orientation.mjs` (data-only — runs without a browser) |
    | `src/data/pro-repertoires.json` trap/warning content | `scripts/audit-trap-orientation.mjs` (data-only — runs without a browser) |

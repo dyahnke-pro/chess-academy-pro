@@ -37,9 +37,12 @@ export function getPunishGemsForOpening(openingId: string | undefined | null): P
   return GEMS.filter((g) => g.openingId === openingId);
 }
 
-/** Gems whose opening spine starts with the given tab spine (SAN PGN). When
- *  `tabSpinePgn` is empty/undefined (main line), every gem for the opening
- *  surfaces. So each variation tab shows only the gems that live on its line. */
+/** Gems that sit on a given variation tab. A gem belongs to a tab when the
+ *  gem's (short) opening spine is a PREFIX of the tab's (long, curated) line —
+ *  i.e. the inaccuracy happens on the early part of that variation. When
+ *  `tabSpinePgn` is empty/undefined (main line) every gem for the opening
+ *  surfaces. A gem on a shared early structure (e.g. the e5 Advance) correctly
+ *  surfaces on every variation that shares that prefix (Advance AND Short). */
 export function getPunishGemsForTab(
   openingId: string | undefined | null,
   tabSpinePgn?: string | null,
@@ -47,10 +50,10 @@ export function getPunishGemsForTab(
   const all = getPunishGemsForOpening(openingId);
   const spine = (tabSpinePgn ?? '').trim();
   if (!spine) return all;
-  const prefix = spine.split(/\s+/).filter(Boolean);
+  const spineMoves = spine.split(/\s+/).filter(Boolean);
   return all.filter((g) => {
     const line = g.lineMoves.split(/\s+/).filter(Boolean);
-    return prefix.every((m, i) => line[i] === m);
+    return line.length <= spineMoves.length && line.every((m, i) => spineMoves[i] === m);
   });
 }
 

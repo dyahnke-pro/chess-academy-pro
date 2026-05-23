@@ -7,6 +7,11 @@ interface VariationTabsProps {
   /** Selected variation index, or -1 for the main line. */
   selectedIndex: number;
   onSelect: (index: number) => void;
+  /** Label for the leading main-line pill. Defaults to "Main line"; an
+   *  opening whose main line IS a named system overrides it (e.g. the Caro's
+   *  main line is the Classical System, so the duplicate Classical tab is
+   *  dropped and this pill carries the name — David 2026-05-23). */
+  mainLabel?: string;
 }
 
 /**
@@ -15,7 +20,7 @@ interface VariationTabsProps {
  * (David's spec). A leading "Main line" pill returns to the showcase
  * (the main line is the template, not one of the 7 variation tabs).
  */
-export function VariationTabs({ tabs, selectedIndex, onSelect }: VariationTabsProps): React.ReactNode {
+export function VariationTabs({ tabs, selectedIndex, onSelect, mainLabel = 'Main line' }: VariationTabsProps): React.ReactNode {
   if (tabs.length === 0) return null;
 
   return (
@@ -32,7 +37,7 @@ export function VariationTabs({ tabs, selectedIndex, onSelect }: VariationTabsPr
         }`}
         data-testid="variation-tab-main"
       >
-        Main line
+        {mainLabel}
       </button>
       {tabs.map((tab) => {
         const selected = tab.index === selectedIndex;

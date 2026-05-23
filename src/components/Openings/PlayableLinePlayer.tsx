@@ -156,13 +156,20 @@ export function PlayableLinePlayer({
     return '';
   }, [phase, demoMoveIndex, line.annotations]);
 
-  // Pre-warm voice service + prefetch audio for all annotations
+  // Pre-warm voice + prefetch ONLY what this mode will actually speak, so the
+  // wire matches the WLPP contract (David 2026-05-23): Watch narrates the
+  // authored annotations; Learn dictates the MOVES (sanToSpeech); Practice is
+  // SILENT — prefetch nothing, or it pings /api/tts for audio it never plays.
   useEffect(() => {
     void voiceService.warmup();
-    if (line.annotations.length > 0) {
-      void voiceService.prefetchAudio(line.annotations);
+    if (mode === 'watch') {
+      const prose = line.annotations.filter(Boolean);
+      if (prose.length > 0) void voiceService.prefetchAudio(prose);
+    } else if (mode === 'learn') {
+      void voiceService.prefetchAudio(line.moves.map((m) => sanToSpeech(m)));
     }
-  }, [line.annotations]);
+    // mode === 'practice' → silent: no prefetch.
+  }, [mode, line.annotations, line.moves]);
 
   // ─── Demonstration Phase: VOICE-GATED auto-play ──────────────────────────
   // Speak the move's annotation, then advance only when the voice promise
@@ -329,8 +336,10 @@ export function PlayableLinePlayer({
             // All moves completed
             setMemoryMoveIndex(nextIndex);
             setMemoryComplete(true);
+            // The celebration sound + completion UI IS the feedback. No spoken
+            // acknowledgment ("Excellent!" etc. are banned) and Practice stays
+            // silent — the wire must not fire on completion in any mode.
             playCelebration();
-            void voiceService.speak('Excellent! You remembered the entire line.');
             onComplete();
             return;
           }
