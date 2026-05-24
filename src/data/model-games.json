@@ -3480,5 +3480,39 @@
     ],
     "middlegameTheme": "Doubled pawns, real assets",
     "lessonSummary": "The Tartakower variation, played out to a Black win at the top level."
+  },
+  {
+    "id": "mg-pro-caruana-italian-0",
+    "openingId": "pro-caruana-italian",
+    "white": "FabianoCaruana",
+    "black": "DanielNaroditsky",
+    "whiteElo": 3146,
+    "blackElo": 3194,
+    "result": "1-0",
+    "year": 2024,
+    "event": "Chess.com (online blitz)",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 h6 c3 g5 a4 Bg7 a5 a6 O-O d6 Re1 O-O Na3 Bg4 Nc2 d5 exd5 Nxd5 Ne3 Nxe3 Bxe3 Qf6 Bd5 Rad8 Be4 Qe6 h3 Bf5 Qa4 Bxe4 dxe4 g4 hxg4 Qxg4 Qb3 Rd6 Nh2 Qe6 Qxe6 Rxe6 Red1 Rd8 Rxd8+ Nxd8 Rd1 Rd6 Rxd6 cxd6 Nf3 Bf8 Nh4 Kh7 Kf1 Ne6 Ke2 h5 Kd3 Be7 Nf5 Bf8 Kc4 Kg6 g3 Kf6 Bb6 Kg5 Kd5 Kg4 Nxd6 Bxd6 Kxd6 Kf3 Kxe5 Ng5 Kd6 Nxe4+ Kc7 Nxf2 Kxb7 Kxg3 Kxa6 h4 Kb5 h3 a6 f5 a7 Ne4 a8=Q h2 Bc7+ f4 Qxe4",
+    "overview": "Fabiano Caruana grinds down Daniel Naroditsky from the modern Italian — 4.d3 and c3, the patient Giuoco Pianissimo. White builds a flexible centre behind the c4-bishop, keeps the d4 break in reserve, and converts the long endgame. The light-squared bishop never stops eyeing f7.",
+    "middlegameTheme": "Slow Italian centre, bishop on the a2-g8 diagonal",
+    "lessonSummary": "The modern Italian is a slow squeeze, not a quick attack. d3 and c3 keep the centre flexible; White castles, improves, and breaks with d4 only when the pieces are ready — the c4-bishop pressuring f7 the whole way. Patience converts.",
+    "criticalMoments": []
+  },
+  {
+    "id": "mg-pro-niemann-grunfeld-0",
+    "openingId": "pro-niemann-grunfeld",
+    "white": "AlphaOdin",
+    "black": "HansOnTwitch",
+    "whiteElo": 3005,
+    "blackElo": 3122,
+    "result": "0-1",
+    "year": 2024,
+    "event": "Chess.com (online blitz)",
+    "studentSide": "black",
+    "pgn": "d4 d5 c4 Nf6 cxd5 Nxd5 e4 Nb6 Nc3 g6 Be2 Bg7 Be3 Nc6 d5 Ne5 f4 Ned7 Nf3 Nf6 O-O O-O a4 c6 a5 Nbd7 dxc6 bxc6 Kh1 e5 Qd6 Ng4 Bg1 exf4 Qxc6 Rb8 a6 Rxb2 Rfe1 Nde5 Nxe5 Nxe5 Qc5 f3 gxf3 Bh3 Rab1 Qg5 Qf2 Nd3 Qg3 Bg2+ Qxg2 Qxg2+ Kxg2 Nxe1+ Kf1 Bxc3 Rxb2 Bxb2 Kxe1 Ra8 Bc4 Rc8",
+    "overview": "Hans Niemann shows the Grünfeld's whole point against the Exchange Variation: hand White the big e4-d4 centre with ...dxc4 and ...g6/...Bg7, then dismantle it. The fianchettoed bishop rakes the long diagonal and the ...c6/...e5 breaks turn the imposing centre into a target. Black outplays a 3000-rated opponent and wins.",
+    "middlegameTheme": "Grünfeld Exchange — attack the big centre",
+    "lessonSummary": "The Grünfeld concedes the centre on purpose. After the Exchange Variation's e4-d4 duo, Black's plan is fixed: fianchetto, pressure d4 down the long diagonal with the g7-bishop, and strike with ...c5 or ...e5. The 'big' centre becomes a liability.",
+    "criticalMoments": []
   }
 ]

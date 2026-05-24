@@ -347,15 +347,33 @@ line, and (where the section implies a side) showing that side doing well.
 Sourcing rule (playbook §0.7 STEP 7): REAL games only, never fabricate a PGN;
 web-identify then get the PGN from a fetchable source or David.
 
-**EMPTIED — 0 games now, need ≥1 proper model:**
-- `pro-naroditsky-scotch` (had Ruy games, not Scotch)
-- `pro-gothamchess-italian` (had Ponziani, not Italian)
-- `pro-hikaru-scotch` (had Italian/Ruy, not Scotch)
-- `pro-caruana-italian` (had Ruy, not Italian)
-- `pro-firouzja-italian` (had Ruy, not Italian)
-- `pro-firouzja-grunfeld` (had KID, not Grünfeld)
-- `pro-niemann-anti-marshall` (had Italian, not Ruy/anti-Marshall)
-- `pro-niemann-grunfeld` (had KID, not Grünfeld)
+**SOURCING IS NOT BLOCKED — there's a local cache (David 2026-05-24).**
+`docs/audit-runs/2026-05-19-pro-games-gen/raw-fetched.json` holds **2,000 real
+games (10 pros × 200)** with full PGNs, fetched from the chess.com + lichess
+game APIs by `scripts/fetch-pro-games-local.mjs`. The pro model games were
+fuzzy-matched out of it (`curate-pro-games-fuzzy.mjs`). So re-curation is a
+local-cache + name/line-match problem, NOT "David must provide." Re-fetch more
+(or other pros) by re-running `fetch-pro-games-local.mjs` (those APIs are
+reachable). Caveat: the cache covers each pro's RECENT ~200 games, so a pro who
+doesn't currently play an opening has no game for it — that section stays empty
+(correct; empty > wrong-line). The remaining manual part is **narration**
+(cached games are raw PGNs → author overview [+ critical moments]).
+
+**RE-CURATED from the cache (done 2026-05-24):**
+- `pro-caruana-italian` ← Caruana 1-0 Naroditsky, Italian Two Knights (C55), narrated.
+- `pro-niemann-grunfeld` ← Niemann 0-1 (Black win), Grünfeld Exchange (D85), narrated.
+  (Top-rated candidate was a Torre Attack mislabel — skipped, used the real D85.)
+
+**STILL EMPTIED — no winning game for the pro in the cache → stay self-hidden
+until a broader fetch or a real game turns up (do NOT force a wrong-line match):**
+- `pro-naroditsky-scotch` — Naroditsky has no Scotch win cached (plays d4/QP).
+- `pro-gothamchess-italian` — 0 Italian games cached.
+- `pro-hikaru-scotch` — only a Black loss cached.
+- `pro-firouzja-italian` — only Black/draw cached, no White Italian win.
+- `pro-firouzja-grunfeld` — cache has him as White vs Grünfeld, not playing it as Black.
+- `pro-niemann-anti-marshall` — 0 anti-Marshall games cached.
+  → These pro-opening SECTIONS may be claimed-but-unplayed repertoire lines;
+  consider whether they should exist, or fetch a wider game set.
 
 **REDUCED — 1 left (a mismatch was removed; verify the survivor + consider a 2nd):**
 `pro-carlsen-ruy-lopez`, `pro-carlsen-catalan`, `pro-carlsen-berlin`,
