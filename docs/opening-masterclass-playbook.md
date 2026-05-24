@@ -107,6 +107,17 @@ data, log the source, let the gate catch drift."
    shares the parent's pawn structure folds INTO the parent tab, e.g. Caro
    Short → Advance); (d) a student-side-winning master game exists. Sub-1%
    junk never gets a tab. → DB-anchor + masters-coverage gates.
+   **🚫 NO UPPER CAP ON VARIATIONS (David 2026-05-24): if it's sound, ADD it.**
+   EVERY line that meets (a)–(d) earns a tab — do NOT stop at 6, or 8, or any
+   number. "Six feels like enough" is not a reason to drop a sound, distinct,
+   faced variation. The cap is the criteria themselves, not a count; a
+   weapon-rich or branch-rich opening (Sicilian, KID, Ruy) legitimately
+   carries many more tabs than a narrow one. This is the variation-specific
+   restatement of the "NO HARD COUNT RULES" doctrine below — the manifest
+   floor only catches accidental deletion; it is never a target or a ceiling.
+   When in doubt whether a borderline line clears (b)/(d), apply the standing
+   rule: verify it's genuinely sound + faced, and if so include it — leave out
+   only what fails a criterion, never what merely pushes the count past 6.
 2. **Tab order.** LOCKED to amateur frequency, most-faced first. The showcase
    "Main line" pill leads and is exempt from the sort. Deterministic from the
    explorer numbers — zero taste.

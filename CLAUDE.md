@@ -1162,15 +1162,28 @@ playbook holds the rules you MUST follow, in particular:
      - **Stockfish is PRE-INSTALLED** at `/usr/games/stockfish` (no
        `apt-get` needed; `resolveStockfish()` finds it). CI
        (`.github/workflows/mine-punish-gems.yml`) also apt-installs it.
-     - **The explorer proxy IS reachable.** The miner calls David's OWN app
-       domain `https://chess-academy-pro.vercel.app/api/lichess-explorer`,
-       which is on the sandbox allowlist (returns 200 with amateur
-       white/draws/black data). ONLY third-party hosts
-       (`explorer.lichess.ovh`, `lichess.org`, `chess.com`) are blocked — and
-       the miner does NOT call those. So do NOT conclude "explorer
-       firewall-blocked → needs a fresh session / CI"; that was a mis-diagnosis
-       from testing the wrong URL. Just run it:
-       `OPENINGS=<id> node scripts/mine-punish-gems.mjs`.
+     - **The explorer proxy — TEST IT FIRST; the allowlist varies per
+       environment (locked 2026-05-24).** The miner calls David's OWN app
+       domain `https://chess-academy-pro.vercel.app/api/lichess-explorer`
+       (NOT a third-party host — `explorer.lichess.ovh`, `lichess.org`,
+       `chess.com` are always blocked, and the miner doesn't call those). The
+       egress allowlist is fixed at container start and DIFFERS between
+       environments: in some web sandboxes the proxy returns 200 (mine
+       locally), in others it returns `Host not in allowlist` (retrying won't
+       help — route to CI). So do NOT hard-assert either "it's blocked" or
+       "it's reachable" — **`curl` the proxy URL first** and branch:
+       - 200 → just run it: `OPENINGS=<id> node scripts/mine-punish-gems.mjs`.
+       - `Host not in allowlist` → mine on a GitHub Actions runner (open
+         network): trigger `.github/workflows/mine-punish-gems.yml`
+         (`workflow_dispatch`, input `openings`), or push a temporary
+         path-filtered `push:` workflow that runs the miner and commits
+         `punish-gems.json` back to the branch (the miner MERGES — a scoped
+         `OPENINGS=<id>` run keeps other openings' gems). Then pull + author
+         the narration locally.
+       The same test-first / CI-fallback rule covers the masters-LEGITIMACY
+       soundness sub-checks (`mastersCoverage.test.ts` Hole 6a/7a), which also
+       query the live explorer and pass VACUOUSLY when it's unreachable — a
+       sandbox "green" there is not a real green; dump CI's flags on a runner.
      - **Seeds auto-derive** from `repertoire.json` (color → studentChar,
        common variation prefix → baseSeed), so a NEW masterclass opening mines
        with no hand-added `OPENING_SEEDS` entry. The map is now just an
