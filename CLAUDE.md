@@ -1156,10 +1156,26 @@ playbook holds the rules you MUST follow, in particular:
      confirmed) AND can flag a respected mainline you'd wrongly ship. Spot-
      check the headline crushes + any surprising one; drop what theory says is
      fine, keep verified refutations.
-  7. **Engine availability:** CI (`.github/workflows/mine-punish-gems.yml`,
-     apt-installs stockfish) OR local — the sandbox CAN `apt-get install -y
-     stockfish` (binary at `/usr/games/stockfish`); the miner is engine-first
-     and refuses to run without one.
+  7. **Engine availability + the explorer is NOT blocked (corrected
+     2026-05-24 — stop re-diagnosing this).** The miner runs FULLY in the web
+     sandbox. Two facts that earlier sessions kept getting wrong:
+     - **Stockfish is PRE-INSTALLED** at `/usr/games/stockfish` (no
+       `apt-get` needed; `resolveStockfish()` finds it). CI
+       (`.github/workflows/mine-punish-gems.yml`) also apt-installs it.
+     - **The explorer proxy IS reachable.** The miner calls David's OWN app
+       domain `https://chess-academy-pro.vercel.app/api/lichess-explorer`,
+       which is on the sandbox allowlist (returns 200 with amateur
+       white/draws/black data). ONLY third-party hosts
+       (`explorer.lichess.ovh`, `lichess.org`, `chess.com`) are blocked — and
+       the miner does NOT call those. So do NOT conclude "explorer
+       firewall-blocked → needs a fresh session / CI"; that was a mis-diagnosis
+       from testing the wrong URL. Just run it:
+       `OPENINGS=<id> node scripts/mine-punish-gems.mjs`.
+     - **Seeds auto-derive** from `repertoire.json` (color → studentChar,
+       common variation prefix → baseSeed), so a NEW masterclass opening mines
+       with no hand-added `OPENING_SEEDS` entry. The map is now just an
+       override for hand-tuned base seeds.
+     The miner is engine-first and refuses to run without an engine.
   8. **GATE + post-deploy contract:** `src/data/punishGems.test.ts` +
      `wlppNarration.test.ts` (in ship-check) prove legality / DB-anchor / tier
      evals / the WLPP narration contract (Watch=authored prose,
