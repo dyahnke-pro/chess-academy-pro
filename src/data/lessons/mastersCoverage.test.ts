@@ -245,10 +245,15 @@ describe.runIf(RUN && !!STOCKFISH)('Hole 6b — Stockfish soundness of past-book
 // masters reached that exact position and played otherwise; a position with
 // no master games is past book → Stockfish's job. Keyed by plan id + ply.
 const PLAN_SUSPECT_BASELINE = new Set<string>([
-  // Evans Gambit plan plays the Paulsen tabiya 10...Ne7 (a real named line in
-  // openings-lichess.json) where the masters DB prefers 10...Nf6. Less common,
-  // not unsound — matches the Evans variation lesson, which teaches the Paulsen.
-  'mp-italiangame-evans::4:Ne7',
+  // Italian plan-demo continuations that run past heavy book into thematic but
+  // not-the-master-top-choice moves. All pass the 6b/7b Stockfish soundness
+  // gate (no move loses >120cp) — they're sound, just less common than the
+  // masters' pick at that exact move-order. Reviewed + kept; the plans teach
+  // the manoeuvre, not a forced master line.
+  'mp-italiangame-evans::4:Ne7',   // Paulsen tabiya (masters: Nf6) — matches the Evans lesson
+  'mp-italiangame-modern::4:Nf1',  // the Nbd2-f1-g3 Pianissimo manoeuvre (masters: Nc4/Bxe6)
+  'mp-italiangame-modern::5:Bxb3', // Black trades the bishop (masters keep tension, Re8/Qd7)
+  'mp-italiangame-evans::7:Nc3',   // develop the knight (masters: Qd2) — both sound
 ]);
 
 // Soundness baseline for plan lines (7b) — same rationale as SOUNDNESS_BASELINE
