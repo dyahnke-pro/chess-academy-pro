@@ -238,6 +238,30 @@ function variationLines(opening) {
   }
   return lines;
 }
+
+// Auto-derive a seed config from the repertoire entry so a NEW masterclass
+// opening mines without a hand-added OPENING_SEEDS line. studentChar = the
+// repertoire `color`; baseSeed = the longest move-prefix common to every
+// variation (the opening's shared trunk). The miner extends this down the
+// amateur trunk anyway, and walks each full variation line separately, so a
+// short common prefix is fine. Returns null when nothing can be derived
+// (no variations) — caller falls back / skips, never invents a seed.
+function deriveSeed(opening) {
+  if (!opening) return null;
+  const studentChar = String(opening.color).toLowerCase() === 'black' ? 'b' : 'w';
+  const vlines = variationLines(opening);
+  if (!vlines.length) return null;
+  let prefix = vlines[0].slice();
+  for (const l of vlines.slice(1)) {
+    let i = 0;
+    while (i < prefix.length && i < l.length && prefix[i] === l[i]) i++;
+    prefix = prefix.slice(0, i);
+  }
+  // A 1-ply prefix (just "e4") is too generic to seed a useful trunk walk;
+  // require ≥2 plies, else fall back to the shortest full variation line.
+  const baseSeed = prefix.length >= 2 ? prefix : vlines.slice().sort((a, b) => a.length - b.length)[0];
+  return { studentChar, baseSeed };
+}
 const seedKey = (s) => s.join(' ');
 
 (async () => {
@@ -250,9 +274,13 @@ const seedKey = (s) => s.join(' ');
   const all = [];
   const seen = new Set(); // dedupe gems across overlapping lines
   for (const id of ids) {
-    const cfg = OPENING_SEEDS[id];
-    if (!cfg) { console.warn(`[mine] no seed config for "${id}" — skipping`); continue; }
     const opening = repertoire.find((o) => o.id === id);
+    // Hand-tuned seed if present, else auto-derive from the repertoire entry
+    // (color → studentChar, common variation prefix → baseSeed). Only truly
+    // un-deriveable openings (not in repertoire / no variations) are skipped.
+    const cfg = OPENING_SEEDS[id] ?? deriveSeed(opening);
+    if (!cfg) { console.warn(`[mine] no seed config and none derivable for "${id}" — skipping`); continue; }
+    if (!OPENING_SEEDS[id]) console.log(`[mine] ${id}: auto-derived seed (student=${cfg.studentChar}, base="${cfg.baseSeed.join(' ')}")`);
     const scanned = new Set(); // FENs already scanned (shared across this opening's lines)
     // The short base seed extends down the amateur trunk (extraPlies large);
     // each full variation line is walked as-is (extraPlies small).
