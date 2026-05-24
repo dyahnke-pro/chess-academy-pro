@@ -123,7 +123,7 @@ const CUE_WORD_CAP = 8;
 const GRANDFATHERED_OPENINGS = new Set<string>([
   // Legacy openings with long cues, pending rewrite (shrink this list as each
   // is tightened — see docs/plans/2026-05-22-app-ux-todo.md):
-  'ruy-lopez',
+  // ruy-lopez — DONE 2026-05-24.
   // pirc-defence — DONE 2026-05-24.
   // caro-kann — DONE 2026-05-24.
   // vienna-game — DONE 2026-05-24: all main + variation + trap cues ≤8 words.
