@@ -62,6 +62,11 @@ const NOISE = [
   // concurrency (4 audits × their own Stockfish workers). It's not part of the
   // gems/WLPP surface and doesn't repeat across passes — environmental.
   /\[Stockfish\]/i, /RuntimeError: unreachable/i, /worker\.onerror/i,
+  // The coach LLM (DeepSeek/Anthropic) has NO API key in the sandbox, so any
+  // surface that reaches the brain (e.g. gem-Play → coach room) logs a
+  // connection error. Environmental, not a masterclass bug — verify coach
+  // narration on a funded/prod run (same caveat as the TTS noise above).
+  /\[CoachAPI\]/i, /APIConnectionError/i, /Connection error/i,
 ];
 const isNoise = (s) => NOISE.some((re) => re.test(s));
 
