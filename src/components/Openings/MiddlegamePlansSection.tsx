@@ -35,12 +35,19 @@ export function MiddlegamePlansSection({
 
   useEffect(() => {
     let cancelled = false;
-    void getPlansForOpening(openingId).then((result) => {
-      if (!cancelled) {
-        setAllPlans(result);
-        setLoading(false);
-      }
-    });
+    void getPlansForOpening(openingId)
+      .then((result) => {
+        if (!cancelled) {
+          setAllPlans(result);
+          setLoading(false);
+        }
+      })
+      .catch((err: unknown) => {
+        // Don't pin `loading` forever on a Dexie read failure — degrade to the
+        // empty (self-hiding) state rather than an infinite spinner.
+        console.warn('[MiddlegamePlansSection] getPlansForOpening failed:', err);
+        if (!cancelled) { setAllPlans([]); setLoading(false); }
+      });
     return () => {
       cancelled = true;
     };

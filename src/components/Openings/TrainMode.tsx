@@ -238,6 +238,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
 
   // Analyze position when it changes
   useEffect(() => {
+    if (!showEvalBarEffective) return; // no per-step Stockfish unless the eval bar is shown (freeze fix)
     let cancelled = false;
     void (async () => {
       try {
@@ -254,7 +255,7 @@ export function TrainMode({ opening, lines, sectionLabel, onExit }: TrainModePro
       }
     })();
     return () => { cancelled = true; };
-  }, [currentFen]);
+  }, [currentFen, showEvalBarEffective]);
 
   // Lichess cloud eval on position change
   useEffect(() => {

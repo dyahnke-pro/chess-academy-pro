@@ -64,6 +64,22 @@ you can't. The pattern (battle-tested 2026-05-16):
    regressions. Run localhost ALWAYS; tell David when only he can
    run prod.
 
+4. **🚨 SANDBOX IndexedDB WRITE-STALL — don't burn hours on it (learned
+   2026-05-24).** In the sandbox-browser audits, IndexedDB *writes* to the
+   `openings` store STALL (a Dexie `db.openings.update`/`.get` from a click
+   handler never resolves; even a raw `indexedDB.open` times out). READS work
+   — which is why most audits pass — so any audit that drives a UI action
+   which WRITES openings (unlock ladder, favorites, rung completion via
+   `markRungComplete`, drill progress) will appear to "hang" or silently not
+   persist. This is the SANDBOX env, NOT a feature bug (reproduced with the
+   feature stashed). Do NOT debug it as app code. Instead: prove the write
+   LOGIC with a fake-indexeddb unit test (e.g. `openingService.ladder.test.ts`),
+   verify the UI up to the write (button states, arming), and route the
+   live-commit + persistence check to David on a real device / prod. When you
+   write a NEW audit that exercises an openings write, seed via
+   `loadFixtureIntoIDB` and expect the commit assertion to fail in-sandbox —
+   say so in the script header (see `audit-wlpp-unlock-budget.mjs`).
+
 **Cannot-run-Playwright is no longer a valid excuse in the sandbox.**
 The 2026-05-16 session shipped four PRs claiming "I can't run
 Playwright here" — that was wrong; the helper was already in place.
@@ -1734,10 +1750,19 @@ showing you the green checks." Wired in `scripts/ship-check.mjs`. Runs:
   - The CURATED content-gate test list (NOT every test in the repo):
     lessonIntegrity, narrationAccuracy, narrationGrounding, lessonDepth,
     pircIntegrity, repertoire-orientation, pro-repertoires-orientation,
-    openingManifests, middlegamePlanner, MiddlegamePlansSection,
-    EndgamePlansSection. These are the load-bearing gates that protect
-    content correctness. UI / snapshot / integration tests live at a
-    different reliability bar and aren't gated here.
+    openingManifests, modelGames-orientation, middlegamePlanner,
+    MiddlegamePlansSection, EndgamePlansSection, OpeningDetailPage.wiring.
+    These are the load-bearing gates that protect content correctness. UI /
+    snapshot / integration tests live at a different reliability bar and
+    aren't gated here. Two were added 2026-05-24:
+    • **modelGames-orientation** — no model game with `studentSide` set shows
+      that side LOSING, and the protected masterclass openings tag every game
+      (so the coach-injection filter excludes losses). Add a new opening to
+      its PROTECTED list when its model games declare `studentSide`.
+    • **OpeningDetailPage.wiring** — the masterclass sections actually RENDER
+      in OpeningDetailPage (catches the "built but mounted nowhere" orphan
+      class that hid the model-games renderer). Update REQUIRED_SECTIONS when
+      you add/remove a section.
   - Pulls the live audit-stream (informational, never blocks).
   - On green, writes a watermark to `.ship-check-log/latest.json`
     (gitignored) recording the SHA + timestamp — used by `--summary`.

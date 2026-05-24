@@ -47,12 +47,19 @@ export function EndgamePlansSection({
 
   useEffect(() => {
     let cancelled = false;
-    void getPlansForOpening(openingId).then((result) => {
-      if (!cancelled) {
-        setAllPlans(result);
-        setLoading(false);
-      }
-    });
+    void getPlansForOpening(openingId)
+      .then((result) => {
+        if (!cancelled) {
+          setAllPlans(result);
+          setLoading(false);
+        }
+      })
+      .catch((err: unknown) => {
+        // Degrade to the empty (self-hiding) state instead of an infinite
+        // spinner if the Dexie read fails.
+        console.warn('[EndgamePlansSection] getPlansForOpening failed:', err);
+        if (!cancelled) { setAllPlans([]); setLoading(false); }
+      });
     return () => {
       cancelled = true;
     };

@@ -216,6 +216,7 @@
   {
     "id": "mg-capablanca-marshall",
     "openingId": "ruy-lopez",
+    "studentSide": "white",
     "white": "Jose Raul Capablanca",
     "black": "Frank Marshall",
     "whiteElo": null,
@@ -3764,6 +3765,7 @@
   {
     "id": "mg-caro-classical",
     "openingId": "caro-kann",
+    "studentSide": "black",
     "white": "Mamedyarov, Shakhriyar",
     "black": "Topalov, Veselin",
     "whiteElo": 2760,
@@ -3788,6 +3790,7 @@
   {
     "id": "mg-caro-advance",
     "openingId": "caro-kann",
+    "studentSide": "black",
     "white": "Giri, A.",
     "black": "Carlsen, M.",
     "whiteElo": 2782,
@@ -3812,6 +3815,7 @@
   {
     "id": "mg-caro-exchange",
     "openingId": "caro-kann",
+    "studentSide": "black",
     "white": "Carlsen, M.",
     "black": "So, W.",
     "whiteElo": 2832,
@@ -3836,6 +3840,7 @@
   {
     "id": "mg-caro-two-knights",
     "openingId": "caro-kann",
+    "studentSide": "black",
     "white": "Nakamura, Hi",
     "black": "Carlsen, M.",
     "whiteElo": 2786,
@@ -3860,6 +3865,7 @@
   {
     "id": "mg-caro-panov",
     "openingId": "caro-kann",
+    "studentSide": "black",
     "white": "Radjabov, Teimour",
     "black": "Anand, Viswanathan",
     "whiteElo": 2761,
@@ -3884,6 +3890,7 @@
   {
     "id": "mg-caro-fantasy",
     "openingId": "caro-kann",
+    "studentSide": "black",
     "white": "Buljubasic, Sab",
     "black": "Mesic, Ismet",
     "whiteElo": 2365,
@@ -3908,6 +3915,7 @@
   {
     "id": "mg-caro-tartakower",
     "openingId": "caro-kann",
+    "studentSide": "black",
     "white": "Pikula, D.",
     "black": "Sedlak, N.",
     "whiteElo": 2471,

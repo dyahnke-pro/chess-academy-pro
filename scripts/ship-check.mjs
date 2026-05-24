@@ -175,9 +175,11 @@ const GATE_TESTS = [
   'src/data/pro-repertoires-orientation.test.ts',
   'src/data/openingManifests.test.ts',
   'src/data/modelGames.test.ts',
+  'src/data/modelGames-orientation.test.ts',
   'src/services/middlegamePlanner.test.ts',
   'src/components/Openings/MiddlegamePlansSection.test.tsx',
   'src/components/Openings/EndgamePlansSection.test.tsx',
+  'src/components/Openings/OpeningDetailPage.wiring.test.ts',
 ];
 
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);
