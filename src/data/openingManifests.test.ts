@@ -49,6 +49,7 @@ const TRAP_FILE_FOR: Record<string, string> = {
   'ruy-lopez': 'src/data/lessons/ruyTrapLessons.ts',
   'vienna-game': 'src/data/lessons/viennaTrapLessons.ts',
   'caro-kann': 'src/data/lessons/caroKannTrapLessons.ts',
+  'italian-game': 'src/data/lessons/italianGameTrapLessons.ts',
 };
 
 function countInTrapFile(openingId: string, kind: 'weapon' | 'warning'): number {

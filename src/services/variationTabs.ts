@@ -46,6 +46,17 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /fantasy/i, label: 'Fantasy' },
     { test: /tartakower|breyer/i, label: 'Tartakower' },
   ],
+  // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
+  // (the explorer freq query was unavailable when this was built; ordering is
+  // flagged for prod verification). The Giuoco Piano main line is the "Main
+  // line" pill (showcase), exempt from this list. Two "Modern …" names exist
+  // (the d3 system + the Moller Attack), so the d3 regex is specific.
+  'italian-game': [
+    { test: /modern d3/i, label: 'Modern' },
+    { test: /two knights/i, label: 'Two Knights' },
+    { test: /evans/i, label: 'Evans Gambit' },
+    { test: /moller/i, label: 'Møller' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present

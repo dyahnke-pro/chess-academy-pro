@@ -67,12 +67,20 @@ export function findPlanBySubject(subject: string): MiddlegamePlan | null {
     .filter((t) => t.length > 2);
   if (tokens.length === 0) return null;
 
-  let best: { plan: MiddlegamePlan; score: number } | null = null;
+  // A plan you can actually teach (has a usable playable line) beats a
+  // data-only tile plan on a score tie — otherwise a free-text subject can
+  // resolve to a plan that builds no session (e.g. the older pro-* tiles).
+  const hasLine = (p: MiddlegamePlan): boolean =>
+    (p.playableLines ?? []).some((l) => l.moves.length > 0 && l.annotations.length === l.moves.length);
+
+  let best: { plan: MiddlegamePlan; score: number; teachable: boolean } | null = null;
   for (const plan of PLANS) {
     const blob = `${plan.openingId} ${plan.title} ${plan.overview}`.toLowerCase();
     const score = tokens.reduce((s, t) => (blob.includes(t) ? s + 1 : s), 0);
-    if (score > 0 && (!best || score > best.score)) {
-      best = { plan, score };
+    if (score === 0) continue;
+    const teachable = hasLine(plan);
+    if (!best || score > best.score || (score === best.score && teachable && !best.teachable)) {
+      best = { plan, score, teachable };
     }
   }
   return best?.plan ?? null;
