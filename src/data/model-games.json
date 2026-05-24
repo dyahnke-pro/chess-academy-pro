@@ -3284,7 +3284,9 @@
     "year": 2021,
     "event": "2021-2021-06 master game",
     "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 f4 Nc6 Nf3 a6 Bb3 h6 Qe2 Bg4 fxe5 dxe5 Be3 Nd4 Qf2 Bxf3 gxf3 Nh5 O-O-O Nf4 Kb1 Nxb3 Bxc5 Nxc5 Qxc5 Qd6 Qxd6 cxd6 d4 O-O-O Rd2 Ne6 Ne2 Rhf8 d5 Ng5 Rd3 Nh3 Rc1 f5 c4 fxe4 fxe4 Rf2 Nc3 Rxh2 c5 Nf4 Rdd1 Kb8 c6 Rc8 Na4 Re2 Nb6 Rc7 Nd7+ Ka7 Rc4 h5 Rg1 g6 a4 h4 b4 b6 b5 a5 Nxe5 h3 Rh1 Nxd5 Nxg6 Ne3 Rc3 Ng4 Nf4 Rxe4 Nd5 Nf2 Nxc7 Nxh1 Rxh3",
-    "overview": "Master game from the Lichess masters database. Firouzja, Alireza vs Carlsen, M.., 2021. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
+    "overview": "Alireza Firouzja beats world champion Magnus Carlsen with the Vienna. White strikes with the opening's signature f4 lever, castles queenside, trades the queens, and grinds out the sharp endgame. Proof the Vienna's flexible aggression holds up against the very best.",
+    "middlegameTheme": "The f4 break + opposite-side play",
+    "lessonSummary": "The Vienna's f4 is the lever — it challenges e5 and opens lines for a direct attack. Firouzja castles long, trades into a favorable endgame, and converts. The opening you're learning beat the world's best.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/DzMqspxx",
     "source": "lichess-masters"
@@ -3301,7 +3303,9 @@
     "year": 2017,
     "event": "2017-2017-11 master game",
     "pgn": "e4 e5 Bc4 Nf6 d3 Bc5 Nc3 d6 Na4 Bd4 c3 Bxf2+ Kxf2 c6 Bb3 b5 Nf3 bxa4 Bxa4 Qb6+ Ke1 O-O Qe2 Nbd7 Be3 Qc7 h3 Ba6 Qc2 d5 Rd1 Nb6 Bb3 c5 exd5 Nbxd5 Bg5 Rae8 Kf2 Qb6 Bxd5 Nxd5 Rhe1 c4+ d4 e4 Nh2 f5 Bc1 Qg6 Kg1 h5 Re2 Kh7 Rde1 Bb7 b3 Ba6 Rf2 f4 bxc4 Bxc4 Qa4 Nb6 Qxa7 e3 Rb2 Nd5 Nf3 Nxc3 h4 Ne4 Qa5 Rf5 Qa4 Bd5 Rb6 Re6 Rxe6 Qxe6 Qc2 Qg6 a4 Nf2 Qe2 Qg3 Rf1 Nh3+ Kh1 Nf2+ Kg1 Bxf3 Qxf3 Qxf3 gxf3 Ra5 Re1 Rxa4 Bxe3 fxe3 Rxe3 Nh3+ Kg2 Nf4+ Kg3 Rxd4 Re5 Kh6 Rf5 Ng6 Ra5 Rxh4 Ra6 Rd4 Kf2 Rf4 Ke3 Rf6 Ra5 Nh4 f4 Ng6 Kf3 Rxf4+ Ke3 Rg4 Kd2 Rg5 Ra6",
-    "overview": "Master game from the Lichess masters database. Caruana, F. vs Grischuk, A., 2017. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
+    "overview": "Fabiano Caruana grinds down Alexander Grischuk in the Classical Vienna — the quiet Bc4/Nc3 setup that bites when Na4 challenges Black's bishop. White absorbs a ...Bxf2+ try and converts. The patient Italian-Vienna with teeth.",
+    "middlegameTheme": "Classical Vienna — Bc4 pressure, Na4 bite",
+    "lessonSummary": "The Classical Vienna looks quiet but bites: Bc4 eyes f7, Nc3 holds the center, Na4 hits the c5-bishop. Caruana weathers Black's ...Bxf2+ counterplay and grinds it out. Quiet isn't harmless.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/2NIYGBtv",
     "source": "lichess-masters"
