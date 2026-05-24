@@ -124,7 +124,7 @@ const GRANDFATHERED_OPENINGS = new Set<string>([
   // Legacy openings with long cues, pending rewrite (shrink this list as each
   // is tightened — see docs/plans/2026-05-22-app-ux-todo.md):
   'ruy-lopez',
-  'pirc-defence',
+  // pirc-defence — DONE 2026-05-24.
   'caro-kann',
   // vienna-game — DONE 2026-05-24: all main + variation + trap cues ≤8 words.
 ]);
