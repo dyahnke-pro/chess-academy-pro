@@ -1,0 +1,48 @@
+name: _soundness-debug-once (temporary)
+
+# TEMPORARY debug helper (delete after reading the output). The sandbox can't
+# reach the masters explorer, so the 6a/7a legitimacy checks can't run there.
+# This runs the Italian-scoped soundness audit on a runner (live explorer +
+# Stockfish) and commits the full output back to the branch so the exact
+# remaining flags can be read + baselined. Path-filtered to its own file.
+
+on:
+  push:
+    branches:
+      - claude/italian-game-masterclass-umuFc
+    paths:
+      - '.github/workflows/_soundness-debug-once.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci --no-audit --no-fund --prefer-offline
+      - run: sudo apt-get update && sudo apt-get install -y stockfish
+      - name: Run Italian soundness audit (capture output)
+        env:
+          RUN_MASTERS_AUDIT: '1'
+          STOCKFISH_PATH: /usr/games/stockfish
+        run: |
+          set +e
+          npx vitest run src/data/lessons/mastersCoverage.test.ts -t "italian-game" > soundness-debug.txt 2>&1
+          echo "VITEST_EXIT=$?" >> soundness-debug.txt
+          # keep only the signal: failures + suspect/blunder lines
+          echo "=== FILTERED ===" >> soundness-debug.txt
+          grep -iE "FAIL|×|✓ \[|loses|unsound|suspect|did not play|master-divergent|Tests " soundness-debug.txt >> soundness-debug.txt || true
+      - name: Commit debug output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -f soundness-debug.txt
+          git commit -m "debug: Italian soundness audit output (temporary)" || true
+          git push
