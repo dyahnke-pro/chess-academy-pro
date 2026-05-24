@@ -849,6 +849,293 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
     ],
   },
+
+  // ── CRUSHES I OWED — full-strength, no disclaimer ──────────────────────────
+
+  // Vienna Frankenstein — 7...Nd4?? ignores the loaded Nb5; a forcing combo wins.
+  // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 Nd4 Nxd6+ Ke7 Nxc8+ Rxc8 Qxf7+ Kd6 Qd5+ Ke7
+  'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5_g6_Qf3:Nd4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nd4? Black centralises the knight but ignores the loaded Nb5 — now a forcing sequence wins outright.',
+      'Nxd6+! Fork the king and grab the bishop — the start of a decisive combination.',
+      '',
+      'Nxc8+ — the other bishop falls too, the king flushed into the open.',
+      '',
+      'Qxf7+ — collect a pawn with check; the king is hunted.',
+      '',
+      'Qd5+ — the net tightens. You are winning by a mountain of material.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxd6 — fork, take the bishop.',
+      '', 'Nxc8 — take the other bishop.',
+      '', 'Qxf7 — check, grab the pawn.',
+      '', 'Qd5 — tighten the net.',
+      '',
+    ],
+  },
+
+  // Vienna Frankenstein — 6...d6?? abandons the trapped f2-queen; Nxf2 wins it.
+  // playLine: e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Kf8 Nh3 d6 Nxf2 Bxg4+ Nxg4 h5 Nge3 Bxe3 Nxe3 Nf6
+  'vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4_Qf6_Nd5_Qxf2+_Kd1_Kf8_Nh3:d6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd6?? Black ignores his own queen, stranded deep on f2. Snap it off.',
+      'Nxf2! Win the queen. Black gets a bishop and a check for it, but you come out a clear piece ahead.',
+      'Black grabs your queen with check —',
+      'Nxg4 recaptures the bishop. The dust settles: you are up a piece.',
+      '',
+      'Nge3 brings the knight back into play, consolidating the extra material.',
+      '',
+      'Nxe3 — keep it simple, cleanly winning.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxf2 — win the queen.',
+      '', 'Nxg4 — recapture, a piece up.',
+      '', 'Nge3 — bring the knight back.',
+      '', 'Nxe3 — consolidate.',
+      '',
+    ],
+  },
+
+  // ── WEAKER, POSITIONAL gems — each OPENS with the honest disclaimer ─────────
+
+  // Caro Fantasy — Qb3 is only a small inaccuracy (+0.75). playLine:
+  // e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6 Qb3 O-O Nbd2 b5 Bd3 Nc5 Qc2 Nxd3 Qxd3
+  'caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7_O-O_Ngf6_c3_Bd6:Qb3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Be straight: this is a quieter weapon than the tactical traps — no material falls. But Qb3 is a genuine inaccuracy, the queen drifting to the rim doing little. Punish it the simplest way.',
+      'O-O — just castle. Harmonious pieces, a sound centre, and White’s queen offside: a small but real, lasting edge.',
+      '', '', '',
+      'Nc5 — the knight heads for d3, angling to trade off White’s good bishop.',
+      '',
+      'Nxd3 — make the swap; the bishop pair and the better minor pieces are yours.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'O-O — castle; you’re simply better.',
+      '', '', '',
+      'Nc5 — head for d3.',
+      '', 'Nxd3 — win the bishop pair.',
+      '',
+    ],
+  },
+
+  // Ruy Berlin Open — 5...bxc6 (+0.85): structure, not material. playLine:
+  // e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 bxc6 dxe5 Nf5 Bg5 Be7 Bxe7 Nxe7 Nc3 O-O
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4_Nd6_Bxc6:bxc6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'A smaller edge than the crushes — no piece won, just structure. But after bxc6 Black’s pawns are doubled and limp, and you grab a free tempo.',
+      'dxe5 — hit the d6-knight and win time; your healthy structure against his damaged one is the whole point.',
+      '',
+      'Bg5 develops with a pin, pressing the awkward black pieces.',
+      '',
+      'Bxe7 trades into a comfortable edge: better pawns, easier game.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'dxe5 — hit the knight, gain time.',
+      '', 'Bg5 — develop, pin.',
+      '', 'Bxe7 — trade into a better structure.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Closed — 17...d5 premature (+0.76). playLine:
+  // e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d3 d5 exd5 Na5 Ba2 b3 Bxb3 Nxb3 cxb3 Nxd5
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Be7_Re1_b5_Bb3_O-O_a4_b4_d3:d5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'A quiet one — no tactic, no won piece. But d5 is premature: exd5 wins a pawn briefly, and even after Black regains it you keep the structural pull.',
+      'exd5 — take the pawn and open the centre on your terms.',
+      '',
+      'Ba2 keeps the bishop on its strong diagonal.',
+      '',
+      'Bxb3 — the dust clears with you holding the better structure and the cleaner position.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'exd5 — take the pawn, open the centre.',
+      '', 'Ba2 — keep the diagonal.',
+      '', 'Bxb3 — settle into the better game.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Exchange (3...a6 4.Bxc6) — bxc6 (+0.59), the gentlest edge. playLine:
+  // e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 bxc6 d4 exd4 Qxd4 Qf6 Qa4 Bc5 Nc3 Ne7
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6:bxc6': {
+    watch: [
+      '', '', '', '', '', '', '',
+      'The gentlest edge in the set — be honest: no material, and Black is fine in plenty of lines. But recapturing with bxc6 lets you take the centre and a slight, lasting pull.',
+      'd4 — strike the centre immediately, before Black coordinates.',
+      '',
+      'Qxd4 centralises with tempo.',
+      '',
+      'Qa4 keeps the queen active, pressuring the loose queenside pawns.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '',
+      'd4 — take the centre.',
+      '', 'Qxd4 — centralise.',
+      '', 'Qa4 — press the weak pawns.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Exchange endgame — Bd6 (+0.54), a nudge. playLine:
+  // e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 exd4 Nxd4 c5 Nb3 Qxd1 Rxd1 Bd6 Na5 b6 Nc4 Be7 Bf4 Bd8 Nc3 Be6
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4_c5_Nb3_Qxd1_Rxd1:Bd6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'The smallest edge here — honestly, it’s a nudge, not a knockout. But Bd6 lets your knight reroute to a dominant square with tempo.',
+      'Na5 — heading for the c4-outpost, where the knight sits unchallenged.',
+      '',
+      'Nc4 reaches the outpost, eyeing the dark squares and Black’s weak pawns.',
+      '',
+      'Bf4 offers to trade Black’s only active piece, leaving you the cleaner game.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Na5 — reroute toward c4.',
+      '', 'Nc4 — seize the outpost.',
+      '', 'Bf4 — trade his active piece.',
+      '', '', '',
+    ],
+  },
+
+  // Vienna — 6...Ng4 (+0.76), a modest sac-edge. playLine:
+  // e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 f4 d6 Nf3 Ng4 Ng5 h6 Bxf7+ Kf8 f5 hxg5 Qxg4 Kxf7
+  'vienna-game:e4_e5_Nc3_Nc6_Bc4_Nf6_d3_Bc5_f4_d6_Nf3:Ng4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'A modest edge, not a crush — it runs through a sac that nets only a small plus. But Ng4 overreaches, and you turn the tables on f7.',
+      'Ng5! Hit f7 — knight and bishop gang up on Black’s weakest point.',
+      '',
+      'Bxf7+ — the sac opens the king for a lasting initiative and a pawn.',
+      '',
+      'f5 keeps the attack rolling while you’re materially fine and the king is stuck.',
+      '',
+      'Qxg4 regains the piece; you’re left a touch better with the safer king.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'Ng5 — gang up on f7.',
+      '', 'Bxf7 — open the king.',
+      '', 'f5 — keep it rolling.',
+      '', 'Qxg4 — regain the piece, stay better.',
+      '',
+    ],
+  },
+
+  // Vienna — 7...Bxf3 (+0.88), structural. playLine:
+  // e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 Nf3 O-O O-O Bg4 h3 Bxf3 Qxf3 a5 Ne2 Nc6 c3 Nd7 a3 Kh8
+  'vienna-game:e4_e5_Nc3_Nf6_Bc4_Bc5_d3_d6_Nf3_O-O_O-O_Bg4_h3:Bxf3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'A quiet, structural edge — no material won. But Bxf3 hands you the bishop pair for free, and that is a real, durable asset.',
+      'Qxf3 — recapture toward the centre; two bishops against the knights in an open position.',
+      '',
+      'Ne2 reroutes the knight toward the kingside, improving your worst piece.',
+      '',
+      'c3 builds a broad pawn centre; the bishops will love the open lines.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qxf3 — recapture, keep the bishop pair.',
+      '', 'Ne2 — reroute the knight.',
+      '', 'c3 — build the centre.',
+      '', '', '',
+    ],
+  },
+
+  // Vienna g3 — 6...e4 (+0.85), a long-term weakness. playLine:
+  // e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 e4 Qe2 f5 d3 Qf6 O-O Bd6 dxe4 O-O
+  'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3:e4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'A positional edge, not a tactic — say so plainly. e4 lunges the pawn forward, where it becomes a long-term weakness you round up.',
+      'Qe2 — pressure the overextended e4-pawn; you’ll undermine it with d3.',
+      '',
+      'd3 — challenge e4 at its base; it can’t be held.',
+      '',
+      'O-O finishes development; you win or cripple e4 with the better game.',
+      '',
+      'dxe4 collects it — a clean structural plus.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qe2 — pressure e4.',
+      '', 'd3 — hit it at the base.',
+      '', 'O-O — finish developing.',
+      '', 'dxe4 — win the pawn.',
+      '',
+    ],
+  },
+
+  // Vienna g3 — 8...Bg4 (+0.62), a tempo. playLine:
+  // e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 Bc5 O-O Bg4 h3 Bxf3 Qxf3 O-O a4 Bd6 Qd5 Rb8
+  'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3_Bc5_O-O:Bg4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'A small edge — no win, just a tempo and the bishop pair. Bg4 pins nothing important here, so you simply question it.',
+      'h3 — put the question to the bishop; it must trade or retreat awkwardly.',
+      '',
+      'Qxf3 recaptures, and you own the two bishops in an open centre.',
+      '',
+      'a4 gains queenside space, pressing the long-term plus.',
+      '',
+      'Qd5 centralises into a comfortable pull.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'h3 — question the bishop.',
+      '', 'Qxf3 — take the bishop pair.',
+      '', 'a4 — gain space.',
+      '', 'Qd5 — centralise.',
+      '',
+    ],
+  },
+
+  // Vienna g3 — 9...f5 (+0.58), the slightest plus. playLine:
+  // e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 Bc5 O-O O-O d3 f5 Nxe5 Nxe5 d4 Bd6 dxe5 Bxe5 Ba3 Re8
+  'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3_Bc5_O-O_O-O_d3:f5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'The slightest edge here — be honest, it’s a small plus. But f5 loosens Black’s centre, and Nxe5 exploits the moment.',
+      'Nxe5 — grab the e5-pawn while it hangs; the little tactics favour you.',
+      '',
+      'd4 — hit the c5-bishop and clamp the centre.',
+      '',
+      'dxe5 keeps a healthy extra structure and the bishop pair.',
+      '',
+      'Ba3 develops with a pin into a pleasant edge.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxe5 — grab the pawn.',
+      '', 'd4 — hit the bishop, clamp.',
+      '', 'dxe5 — keep the better structure.',
+      '', 'Ba3 — develop with a pin.',
+      '',
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
