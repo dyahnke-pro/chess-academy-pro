@@ -670,10 +670,24 @@ class VoiceService {
     return this.speakInternal(sanitizeForTTS(text), false, { bypassBriefCap: true });
   }
 
+  /**
+   * Read a block of on-page text aloud on explicit user tap (the opening
+   * detail page's "listen" / Classic-Wisdom buttons). These are a read-aloud
+   * affordance, NOT in-game narration, so they are EXEMPT from the voice
+   * verbosity settings entirely — silent AND brief (David 2026-05-24: "read
+   * text on the opening page does not need to follow voice settings; voice
+   * narration in game only"). Still bypasses the voiceEnabled master toggle
+   * (force) like speakForced. Do NOT use for any in-game/coach narration.
+   */
+  async speakReadAloud(text: string): Promise<void> {
+    this.logSpeakInvoked('speakReadAloud', text);
+    return this.speakInternal(sanitizeForTTS(text), true, { bypassVerbosity: true });
+  }
+
   private async speakInternal(
     text: string,
     force: boolean,
-    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean },
+    opts?: { useSecondary?: boolean; noFallback?: boolean; bypassBriefCap?: boolean; bypassVerbosity?: boolean },
   ): Promise<void> {
     // Coach Narration = "silent" is the highest-priority gate: when
     // the user has explicitly set Settings → Coach → Coach Narration
@@ -686,9 +700,14 @@ class VoiceService {
     // those 50+ call sites bypass the unified setting and the
     // "Silent" promise is incomplete. Logged as `voice-speak-silenced`
     // so audit traces still show the attempt was suppressed by policy.
+    //
+    // EXEMPTION (David 2026-05-24): the voice/verbosity settings govern
+    // IN-GAME narration only. Explicit "read this text to me" buttons on the
+    // opening detail page are a read-aloud affordance the user just tapped —
+    // they bypass verbosity entirely (silent AND brief) via bypassVerbosity.
     const narrationPrefs = useAppStore.getState().activeProfile?.preferences;
     const narrationVerbosity = resolveCoachNarration(narrationPrefs);
-    if (narrationVerbosity === 'silent') {
+    if (narrationVerbosity === 'silent' && !opts?.bypassVerbosity) {
       void import('./appAuditor').then(({ logAppAudit }) => {
         void logAppAudit({
           kind: 'voice-speak-silenced',
@@ -714,7 +733,7 @@ class VoiceService {
     // user explicitly chose to watch — so it bypasses the brief cap
     // (the silent gate above STILL applies). This is the single
     // sanctioned exemption to G5, used only by the lesson player.
-    if (narrationVerbosity === 'brief' && !opts?.bypassBriefCap) {
+    if (narrationVerbosity === 'brief' && !opts?.bypassBriefCap && !opts?.bypassVerbosity) {
       const cap = applyBriefVoiceCap(text, 'brief');
       if (cap.truncated) {
         void import('./appAuditor').then(({ logAppAudit }) => {

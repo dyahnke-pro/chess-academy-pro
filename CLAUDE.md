@@ -126,8 +126,18 @@ confused or forgotten again."*
 `coachNarration` has three values: `silent` / `brief` / `full`.
 Every one of them is a HARD CONTRACT, not a soft hint to the LLM:
 
-- **silent** = no voice fires anywhere. `voiceService.speakInternal`
-  short-circuits at the silent gate.
+**SCOPE (David 2026-05-24): these settings govern IN-GAME / in-lesson
+voice narration ONLY.** Explicit "read this text to me" buttons on the
+opening detail page (Classic Wisdom, section narration via
+`voiceService.speakReadAloud`) are a read-aloud affordance the user just
+tapped — they are EXEMPT from verbosity entirely (silent AND brief). This
+is the SECOND sanctioned exemption alongside `speakLecture`; route opening-
+page read-text through `speakReadAloud` (sets `bypassVerbosity`), never
+through `speakForced`. Do NOT extend this exemption to any in-game surface.
+
+- **silent** = no in-game voice fires anywhere. `voiceService.speakInternal`
+  short-circuits at the silent gate (unless `bypassVerbosity`, the
+  read-aloud carve-out above).
 - **brief** = MAX 2 sentences / MAX 30 words. Enforced two ways:
   1. The `fast` verbosity prompt instruction in
      `coachPrompts.ts:VERBOSITY_INSTRUCTIONS` puts the hard cap in
@@ -1050,6 +1060,16 @@ playbook holds the rules you MUST follow, in particular:
   button; Play = coach LOCKED to this opening. Applies to the main line,
   every variation tab, trap weapons, "watch out for" warnings, AND
   middlegame plans (`PlayableLinePlayer` modes / `LessonPlayer`).
+- **Learn-rung fallback is INTENDED, not a bug (David 2026-05-24: "learn
+  fall back is good, that's what we want").** The Learn button tries
+  `lessonToPlayableLine(curatedLesson)` first → the modern
+  `PlayableLinePlayer` with authored cues (every masterclass opening hits
+  this). Only when there's NO curated lesson (the ~3,000 DB-only openings,
+  and old data-tile trap/warning Learn) does it fall back to the legacy
+  `DrillMode` / `TrainMode`, which speak code-generated move dictation. That
+  fallback is deliberate — do NOT "fix" its templated voice or rip it out as
+  a defect; it's the graceful non-curated path. The narration-register
+  standard above is a contract for CURATED lessons, not the fallback.
 - **🔒 NARRATION STANDARD — hand-written, two registers, verified per move
   (LOCKED, David 2026-05-24). Supersedes the old "Learn = pure move
   dictation" rule.** Every played line speaks in two registers, BOTH

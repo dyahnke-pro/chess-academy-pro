@@ -431,7 +431,9 @@ export function OpeningDetailPage(): JSX.Element {
       return;
     }
     setNarratingSection(sectionId);
-    void voiceService.speakForced(sanitizeForTTS(text)).finally(() => {
+    // Read-aloud affordance, exempt from voice verbosity settings (David
+    // 2026-05-24: voice settings govern in-game narration only).
+    void voiceService.speakReadAloud(sanitizeForTTS(text)).finally(() => {
       setNarratingSection((current) => (current === sectionId ? null : current));
     });
   }, []);
