@@ -307,6 +307,146 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', // ...Kd8
     ],
   },
+
+  // Vienna Gambit Accepted — 4...d6?? is too slow; seize the centre with d4.
+  // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 d6 d4 g5 d5 Ne5 Bb5+ c6 dxc6 bxc6
+  'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3:d6': {
+    watch: [
+      '', '', '', '', '', '', '',
+      'd6 is too slow in the Gambit — it does nothing about your centre. Take it.',
+      'd4! Build the big e4+d4 centre while Black still clutches the f4-pawn. You are already better.',
+      'g5 tries to prop up f4 —',
+      'd5 — gain space with tempo, kicking the c6-knight.',
+      '',
+      'Bb5+ develops with check and disrupts Black further.',
+      '',
+      'dxc6 rips open the centre against the uncastled king.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', // through d6 (opponent) at index 7
+      'd4 — seize the centre.',
+      '', // ...g5
+      'd5 — gain space, kick the knight.',
+      '', // ...Ne5
+      'Bb5 — check, disrupt.',
+      '', // ...c6
+      'dxc6 — rip it open.',
+      '', // ...bxc6
+    ],
+  },
+
+  // Vienna Gambit — 5...Bc5?? walks into d4 and a kingside crash.
+  // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bc5 d4 Be7 h4 d6 Nxg5 Bxg5 Qh5 Qe7
+  'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4:Bc5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      'Bc5 looks natural — but it walks into a central break that comes with tempo.',
+      'd4! Hit the bishop and build the centre at once. The g5/f4 pawn-grab is about to cost Black.',
+      'Be7 retreats —',
+      'h4 — pry open the g5-pawn holding Black’s extra material together.',
+      '',
+      'Nxg5! The knight crashes in; the g5-point collapses.',
+      '',
+      'Qh5 — double attack on the loose g5-bishop and f7. Black is overwhelmed.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', // through Bc5 (opponent) at index 9
+      'd4 — hit the bishop, take the centre.',
+      '', // ...Be7
+      'h4 — pry open g5.',
+      '', // ...d6
+      'Nxg5 — crash through.',
+      '', // ...Bxg5
+      'Qh5 — double attack, g5 and f7.',
+      '', // ...Qe7
+    ],
+  },
+
+  // Vienna Gambit — 6...Nge7?? leaves g5 hanging; Nxg5 + kingside storm.
+  // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 Nge7 Nxg5 Rf8 Qh5 Ng6 Nxh7 Qh4+ Qxh4 Nxh4
+  'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4:Nge7': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Nge7 develops the knight — but it abandons g5, and the Gambit’s whole point is to win that pawn back with interest.',
+      'Nxg5! Snap off the pawn and storm the kingside — the knight eyes f7 and h7.',
+      'Rf8 props up f7 —',
+      'Qh5 piles on, threatening mate ideas on f7 and h7.',
+      '',
+      'Nxh7! Grab another pawn and fork the rook; the attack rolls on.',
+      'Black checks to bail into an endgame —',
+      '',
+      'but after the queens come off you are up material with a wrecked black kingside.',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', // through Nge7 (opponent) at index 11
+      'Nxg5 — win the pawn, attack.',
+      '', // ...Rf8
+      'Qh5 — pile on f7 and h7.',
+      '', // ...Ng6
+      'Nxh7 — grab a pawn, fork the rook.',
+      '', // ...Qh4+
+      'Qxh4 — trade, stay up.',
+      '', // ...Nxh4
+    ],
+  },
+
+  // Vienna Gambit — 7...Nge7?? (castled version); Nxg5 then the Bxf7+ sac.
+  // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 d6 O-O Nge7 Nxg5 Ng6 Bxf7+ Kf8 Bxg6 Bxd4+ Kh1 hxg6
+  'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4_d6_O-O:Nge7': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nge7 again leaves g5 hanging — and now you are castled, so the attack comes at full force.',
+      'Nxg5! Win the pawn and ignite the kingside — f7 is the target.',
+      '',
+      'Bxf7+! The bishop sacrifices to rip the king open.',
+      '',
+      'Bxg6 — collect the knight; the king is stripped bare.',
+      'Black grabs a pawn with check in desperation —',
+      '',
+      'but you are winning: a shredded black king and decisive material.',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', // through Nge7 (opponent) at index 13
+      'Nxg5 — win the pawn, target f7.',
+      '', // ...Ng6
+      'Bxf7 — sac, rip the king open.',
+      '', // ...Kf8
+      'Bxg6 — take the knight.',
+      '', // ...Bxd4+
+      'Kh1 — sidestep, stay winning.',
+      '', // ...hxg6
+    ],
+  },
+
+  // Vienna Gambit — 8...fxg3?? grabs a third pawn and opens f7 to the sac.
+  // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 d6 O-O h6 g3 fxg3 Bxf7+ Kf8 e5 dxe5 Bd5 Nf6 Nxe5 Qd6
+  'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4_d6_O-O_h6_g3:fxg3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'fxg3 grabs a third pawn, but it opens the f-file straight at f7 — and you are ready to strike.',
+      'Bxf7+! The sac tears the king open; the f-file and your development lead do the rest.',
+      '',
+      'e5 — blow open the centre while the king is stuck on f8.',
+      '',
+      'Bd5 retreats the bishop to a monster post on the long diagonal.',
+      '',
+      'Nxe5 — centralise the knight; your pieces swarm the exposed king.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', // through fxg3 (opponent) at index 15
+      'Bxf7 — sac, open the king.',
+      '', // ...Kf8
+      'e5 — blow open the centre.',
+      '', // ...dxe5
+      'Bd5 — monster bishop.',
+      '', // ...Nf6
+      'Nxe5 — centralise, swarm.',
+      '', // ...Qd6
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
