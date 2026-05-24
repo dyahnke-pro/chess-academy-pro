@@ -42,7 +42,13 @@
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O Re1 Be6 Bb3 h6",
         "explanation": "The Giuoco Pianissimo is the weapon of choice for top GMs like Caruana and So. White avoids early theoretical clashes, builds up with d3, c3, Nbd2-f1-g3, and strikes with d4 at the perfect moment. The knight maneuver Nf1-g3-f5 is a key motif — the knight on f5 exerts tremendous pressure. Black must time the ...d5 break precisely or face a slow positional squeeze.",
         "frequency": "very common",
-        "deviationMove": 4
+        "deviationMove": 4,
+        "keyIdeas": [
+          "Re-route the queen-knight Nbd2-f1-g3 toward the f5 outpost.",
+          "Recoil the bishop to b3 to keep the f7 diagonal and dodge the trade.",
+          "Gain queenside space with a4 and tuck the bishop on a7.",
+          "Hold back d4 until every piece is coordinated, then break."
+        ]
       },
       {
         "name": "Giuoco Pianissimo: Closed Italian with a4/Ba2",
@@ -56,7 +62,13 @@
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2",
         "explanation": "The Evans Gambit remains a dangerous practical weapon. After 8.d5, White closes the center and launches a kingside attack. The key idea is Nc3-e2-g3 with Qd2 and Kh1 preparing f4. Black must generate counterplay with ...c5 and ...f6 before White's attack becomes overwhelming. At the club level, this gambit scores devastatingly well because Black must find precise defensive moves.",
         "frequency": "common",
-        "deviationMove": 4
+        "deviationMove": 4,
+        "keyIdeas": [
+          "Sacrifice the b-pawn to gain the tempo for c3 and d4.",
+          "Build the broad d4-e4 centre and roll d5 to gain space.",
+          "Plant the bishop on b2 raking the long diagonal at g7.",
+          "Throw the c4-bishop and queen at f7 before Black consolidates."
+        ]
       },
       {
         "name": "Italian: Hungarian Defense",
@@ -70,14 +82,26 @@
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qa5 Nxe4 Be6 Neg5 O-O-O Nxe6 fxe6 Rxe6 Bd6",
         "explanation": "The sharp 4.d4 line against the Two Knights leads to a forced sequence. After Re1 d5 Bxd5 Qxd5 Nc3, White recovers the piece with Nxe4 but Black has equalized. The endgame after mass exchanges is roughly level, but White's better pawn structure and active rook give a tiny edge. Know this line to avoid blundering but don't expect a big advantage.",
         "frequency": "common",
-        "deviationMove": 4
+        "deviationMove": 4,
+        "keyIdeas": [
+          "Gambit the d4-pawn for a lead in development and open lines.",
+          "Pin the e4-knight against the king on the e-file with Re1.",
+          "Use Bxd5 and Nc3 to fork the queen and regain the piece.",
+          "Trade into a balanced ending where the active rook presses."
+        ]
       },
       {
         "name": "Italian: Modern Moller Attack",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Nxc3 bxc3 Bxc3 Qb3 Bxa1 Bxf7+ Kf8 Bg5 Ne7 Ne5 Bxd4 Bg6 d5 Qf3+ Bf5 Bxf5",
         "explanation": "The Moller Attack is one of the most spectacular lines in all of chess theory. White sacrifices a full exchange with Qb3 and Bxf7+, then launches a ferocious attack against Black's uncastled king. After 12.Bg5, White threatens Ne5 with devastating effect. This line has been analyzed to a draw in many variations, but the practical danger for Black is enormous — one slip and the attack is overwhelming.",
         "frequency": "rare",
-        "deviationMove": 8
+        "deviationMove": 8,
+        "keyIdeas": [
+          "Keep the broad centre with Nc3 instead of trading on d2.",
+          "Sacrifice the exchange with Qb3 and Bxf7+ for the attack.",
+          "Bring every piece to the stuck king with Bg5 and Ne5.",
+          "Attack with checks so Black never gets time to consolidate."
+        ]
       }
     ],
     "trapLines": [],

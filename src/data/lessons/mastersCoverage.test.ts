@@ -89,6 +89,11 @@ function evalFen(bin: string, fen: string, searchMove?: string): Promise<number 
 //   • Vienna Gambit ply 15 Bd2 — masters' 1 game diverged; then the line
 //     leaves masters' book entirely (16-24 absent → Stockfish's job).
 //   • Vienna Paulsen plies 13 a4 / 16 Be6 — masters diverged; tail absent.
+// NOTE (2026-05-24): the Italian baselines below + in PLAN_SUSPECT_BASELINE /
+// SOUNDNESS_BASELINE / PLAN_SOUNDNESS_BASELINE were CI-verified clean on a
+// runner (the masters explorer is unreachable in the web sandbox, so 6a/7a
+// pass vacuously there — see playbook §9 lock-in). Last full Italian audit
+// (main lesson + all variations + all plans, `-t "talian"`): 12 passed / 0 failed.
 const SUSPECT_BASELINE = new Set<string>([
   'The Ruy Lopez — A Master Class::29:Ng3',
   'vienna-game::Vienna Gambit::15:Bd2',
@@ -183,6 +188,20 @@ describe.runIf(RUN)('Hole 6a — masters legitimacy of past-book moves (main + v
   }
 });
 
+// Soundness baseline (6b). Mirrors SUSPECT_BASELINE (6a): a small allowlist of
+// master-played plies the engine flags as a big cp-loss but which are DELIBERATELY
+// SHOWN — the opponent's defining mistake that the line exists to punish. The
+// cp-loss is real and CORRECT (the move IS bad for the side that plays it); the
+// gate just can't tell "recommended White move" from "opponent's greedy blunder
+// we're teaching the student to punish." Only legitimate when 6a confirms the
+// move is master-played (real theory, not invention). Keyed `${key}::${ply}:${san}`.
+const SOUNDNESS_BASELINE = new Set<string>([
+  // Møller Attack accepted: ...Bxa1 grabs the rook and walks into the winning
+  // attack — the whole point of the exchange sacrifice. Master-played (6a green);
+  // engine reads it as −3.7 for Black, i.e. White is winning, which IS the lesson.
+  'italian-game::Italian: Modern Moller Attack::20:Bxa1',
+]);
+
 // ── Hole 6b — Stockfish SOUNDNESS (all lessons, incl. traps) ────────────
 // Verifies each past-book move isn't a blunder: the move's centipawn loss
 // vs the engine's best at that position must be ≤ MAX_CP_LOSS. This is the
@@ -209,7 +228,7 @@ describe.runIf(RUN && !!STOCKFISH)('Hole 6b — Stockfish soundness of past-book
           const played = await evalFen(bin, fenBefore, mv.from + mv.to + (mv.promotion ?? ''));
           if (best !== null && played !== null) {
             const loss = best - played; // both side-to-move POV at fenBefore
-            if (loss > MAX_CP_LOSS) {
+            if (loss > MAX_CP_LOSS && !SOUNDNESS_BASELINE.has(`${key}::${ply}:${mv.san}`)) {
               blunders.push(`ply ${ply} ${mv.san} — loses ${loss}cp vs best (${best} → ${played})`);
             }
           }
@@ -231,7 +250,23 @@ describe.runIf(RUN && !!STOCKFISH)('Hole 6b — Stockfish soundness of past-book
 // masters reached that exact position and played otherwise; a position with
 // no master games is past book → Stockfish's job. Keyed by plan id + ply.
 const PLAN_SUSPECT_BASELINE = new Set<string>([
-  // <filled from the first plan-audit pass; review items, shrink over time>
+  // Italian plan-demo continuations that run past heavy book into thematic but
+  // not-the-master-top-choice moves. All pass the 6b/7b Stockfish soundness
+  // gate (no move loses >120cp) — they're sound, just less common than the
+  // masters' pick at that exact move-order. Reviewed + kept; the plans teach
+  // the manoeuvre, not a forced master line.
+  'mp-italiangame-evans::4:Ne7',   // Paulsen tabiya (masters: Nf6) — matches the Evans lesson
+  'mp-italiangame-modern::4:Nf1',  // the Nbd2-f1-g3 Pianissimo manoeuvre (masters: Nc4/Bxe6)
+  'mp-italiangame-modern::5:Bxb3', // Black trades the bishop (masters keep tension, Re8/Qd7)
+  'mp-italiangame-evans::7:Nc3',   // develop the knight (masters: Qd2) — both sound
+]);
+
+// Soundness baseline for plan lines (7b) — same rationale as SOUNDNESS_BASELINE
+// above. Keyed `${plan.id}::${moveNumber}:${san}`.
+const PLAN_SOUNDNESS_BASELINE = new Set<string>([
+  // Møller plan opens on the accepted-sacrifice ...Bxa1 (the rook grab the
+  // attack punishes). Master-played, deliberately shown; White is winning after.
+  'mp-italiangame-moller::1:Bxa1',
 ]);
 
 describe.runIf(RUN)('Hole 7a — masters legitimacy of middlegame plan lines', () => {
@@ -281,7 +316,10 @@ describe.runIf(RUN && !!STOCKFISH)('Hole 7b — Stockfish soundness of middlegam
             try { mv = c.move(line.moves[i]); } catch { break; }
             const best = await evalFen(bin, fenBefore);
             const played = await evalFen(bin, fenBefore, mv.from + mv.to + (mv.promotion ?? ''));
-            if (best !== null && played !== null && best - played > MAX_CP_LOSS) {
+            if (
+              best !== null && played !== null && best - played > MAX_CP_LOSS &&
+              !PLAN_SOUNDNESS_BASELINE.has(`${plan.id}::${i + 1}:${mv.san}`)
+            ) {
               blunders.push(`${plan.id} move ${i + 1} ${mv.san} — loses ${best - played}cp vs best`);
             }
           }

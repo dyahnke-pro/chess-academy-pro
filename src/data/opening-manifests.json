@@ -20,7 +20,7 @@
   },
   "pirc-defence": {
     "variations": 8,
-    "middlegamePlans": 10,
+    "middlegamePlans": 8,
     "endgamePlans": 0,
     "modelGames": 0,
     "weapons": 0,
@@ -42,6 +42,15 @@
     "endgamePlans": 0,
     "modelGames": 7,
     "weapons": 0,
+    "warnings": 1,
+    "keyIdeas": 4
+  },
+  "italian-game": {
+    "variations": 8,
+    "middlegamePlans": 5,
+    "endgamePlans": 0,
+    "modelGames": 1,
+    "weapons": 2,
     "warnings": 1,
     "keyIdeas": 4
   }

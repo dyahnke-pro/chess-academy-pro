@@ -220,6 +220,7 @@ const OPENING_SEEDS = {
   'ruy-lopez':    { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'] },
   'pirc-defence': { studentChar: 'b', baseSeed: ['e4', 'd6'] },
   'vienna-game':  { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nc3'] },
+  'italian-game': { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'] },
 };
 function loadRepertoire() {
   try {
@@ -272,7 +273,16 @@ const seedKey = (s) => s.join(' ');
     }
   }
   eng.quit();
-  await writeFile('src/data/punish-gems.json', JSON.stringify(all, null, 2) + '\n');
-  console.log(`[mine] wrote ${all.length} gems → src/data/punish-gems.json`);
+  // MERGE: a scoped run (OPENINGS=italian-game) must not wipe other openings'
+  // gems. Keep every existing gem whose opening wasn't mined this run; replace
+  // the mined openings' gems with the freshly-mined set (a full run mines all
+  // ids, so this still regenerates the whole file).
+  const minedIds = new Set(ids);
+  let existing = [];
+  try { existing = JSON.parse(readFileSync('src/data/punish-gems.json', 'utf-8')); } catch { /* none yet */ }
+  const kept = existing.filter((g) => !minedIds.has(g.openingId));
+  const merged = [...kept, ...all];
+  await writeFile('src/data/punish-gems.json', JSON.stringify(merged, null, 2) + '\n');
+  console.log(`[mine] wrote ${all.length} new gems (kept ${kept.length} from other openings) → ${merged.length} total`);
   for (const g of all) console.log(`  ${g.openingId} | ${g.lineMoves} | ${g.inaccuracy} (${g.freqPct}%) → ${g.punish} [${g.tier} ${g.engineCp}cp]`);
 })();

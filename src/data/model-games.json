@@ -2422,7 +2422,8 @@
     "overview": "Master game from the Lichess masters database. Nepomniachtchi, I. vs Carlsen, M., 2021. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/FbwSGQj3",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "studentSide": "white"
   },
   {
     "id": "mg-lichess-55GlUBTE",
@@ -2435,10 +2436,11 @@
     "year": 2021,
     "event": "2021-2021-02 master game",
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 e5 d5 Bb5 Ne4 cxd4 Bb6 Nc3 O-O Be3 Bg4 h3 Bh5 Qc2 Bg6 Qb3 Ne7 O-O c6 Bd3 Nf5 Qc2 Nxc3 bxc3 Nxe3 fxe3 Bxd3 Qxd3 f6 c4 Bc7 cxd5 Qxd5 exf6 gxf6 e4 Qd7 Rad1 Rad8 Nh4 Kh8 Nf5 c5 d5 Be5 Rb1 b6 Qc4 Rfe8 Kh1 Bd4 Rf4 Rxe4 Rxe4 Qxf5 Rbe1 Rxd5 Rg4 h5 Re8+ Kh7 Re7+ Kh8 Qc1",
-    "overview": "Master game from the Lichess masters database. So, W.. vs Carlsen, M.., 2021. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
+    "overview": "So vs Carlsen, 2021 — a model White win in the sharp main line of the Giuoco Piano. After the classical c3 and d4, White chooses the ambitious 9.e5, gaining space and clamping down on Black with a broad pawn front. The bishop swings to b5 to pressure the knight, and White builds a slow, suffocating initiative on the kingside and in the centre. This is the modern way to play the Italian for a win: not with a single knockout, but by accumulating small advantages — space, the better minor pieces, the safer king — until even the World Champion is squeezed off the board. Watch how White never rushes, keeps the centre mobile, and converts a structural edge into a full point against the strongest defender alive.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/55GlUBTE",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "studentSide": "white"
   },
   {
     "id": "mg-lichess-LtaxEabX",
@@ -2454,7 +2456,8 @@
     "overview": "Master game from the Lichess masters database. Giri, A.. vs Carlsen, M.., 2020. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/LtaxEabX",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "studentSide": "white"
   },
   {
     "id": "mg-lichess-uldGpuyI",

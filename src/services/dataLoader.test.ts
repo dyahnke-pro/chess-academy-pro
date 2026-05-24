@@ -249,8 +249,11 @@ describe('seedDatabase', () => {
 describe('reconcileProRepertoires — pick up JSON updates without wiping progress', () => {
   it('preserves user-progress fields when refreshing static content', async () => {
     await seedFully();
-    // Pick a pro opening that should exist in the seeded data.
-    const id = 'pro-firouzja-ruy-lopez';
+    // Pick a pro opening that exists in the seeded data AND still carries
+    // trapLines (the line-293 assertion checks they survive reconcile).
+    // pro-firouzja-ruy-lopez was used originally but its auto-mined traps were
+    // purged, leaving trapLines: [] → switch to one that genuinely has them.
+    const id = 'pro-gukesh-najdorf';
     const before = await db.openings.get(id);
     expect(before).toBeDefined();
     if (!before) return;
