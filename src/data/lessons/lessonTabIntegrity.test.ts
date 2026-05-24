@@ -19,9 +19,8 @@ import { FIRST_CLASS_OPENING_IDS } from './registry';
 // it ever ships.
 
 interface RepOpening { id: string; variations?: Array<{ name: string }> }
-const OPENINGS = (Array.isArray(repertoireData)
-  ? repertoireData
-  : (repertoireData as { openings?: RepOpening[] }).openings ?? []) as RepOpening[];
+// repertoire.json is an array of opening records.
+const OPENINGS = repertoireData as unknown as RepOpening[];
 
 describe('masterclass tabs resolve to distinct lessons — no dup/fallback lines', () => {
   for (const id of FIRST_CLASS_OPENING_IDS) {
