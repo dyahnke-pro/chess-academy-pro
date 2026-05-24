@@ -169,11 +169,17 @@ data, log the source, let the gate catch drift."
    wrong move** — Watch/Learn/Practice teach the antidote; Play hands off to
    the coach on this opening so the student meets the pitfall live. GROUNDED
    (G3): the move is chess.js-validated from the entry's own data — never
-   invented; a malformed entry self-hides. If you can author a richer
-   `punishmentLine` (the wrong move played out + its real, engine-confirmed
-   refutation, two-register narration + lead-the-eye), do — the converter uses
-   it verbatim; otherwise the synthesized antidote is the floor, not a TODO.
-   → CommonMistakesSection.test + commonMistakeLine.test (in ship-check).
+   invented; a malformed entry self-hides. **NARRATED BY HAND, TWO REGISTERS,
+   TIED TO SETTINGS (David 2026-05-24):** every masterclass pitfall carries
+   `explanation` (full Watch / Learn-FULL prose) AND a hand-authored
+   `shortNarration` (the ≤8-word Learn-LIMITED cue — move + 3-5 word echo,
+   never generated). The converter wires explanation→annotations and
+   shortNarration→learnCues so PlayableLinePlayer speaks the right register for
+   the user's FULL/LIMITED setting; absent a cue it falls back to move dictation
+   (non-curated tier only). Learn/Practice ALWAYS teach the antidote (the
+   correct move) — never the wrong-move line, even when a `punishmentLine`
+   exists (that's WATCH-only). → CommonMistakesSection.test +
+   commonMistakeLine.test + commonMistakeNarration.test (all in ship-check).
 
 **NO HARD COUNT RULES (David 2026-05-22).** Never mandate a number of key
 ideas / traps / variations. The manifest floors are "what was verified at

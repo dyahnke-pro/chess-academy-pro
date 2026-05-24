@@ -676,13 +676,14 @@ export function OpeningDetailPage(): JSX.Element {
     (viewMode === 'pitfall-watch' || viewMode === 'pitfall-learn' || viewMode === 'pitfall-practice') &&
     activeMistake
   ) {
-    const pitfallLine = commonMistakeToPlayableLine(activeMistake);
+    const pitfallMode = viewMode === 'pitfall-watch' ? 'watch' : viewMode === 'pitfall-learn' ? 'learn' : 'practice';
+    const pitfallLine = commonMistakeToPlayableLine(activeMistake, pitfallMode);
     if (pitfallLine) {
       return (
         <PlayableLinePlayer
           line={pitfallLine}
           boardOrientation={opening.color}
-          mode={viewMode === 'pitfall-watch' ? 'watch' : viewMode === 'pitfall-learn' ? 'learn' : 'practice'}
+          mode={pitfallMode}
           onComplete={handleExit}
           onExit={handleExit}
         />

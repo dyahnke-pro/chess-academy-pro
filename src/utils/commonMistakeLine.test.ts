@@ -34,7 +34,17 @@ describe('commonMistakeToPlayableLine', () => {
     expect(tempting.color).toContain('239, 68, 68'); // red = the tempting error
   });
 
-  it('returns the hand-authored punishmentLine verbatim when present', () => {
+  it('carries the hand-authored short cue as the Learn-LIMITED register', () => {
+    const line = commonMistakeToPlayableLine({ ...VIENNA_BC5, shortNarration: 'Nf6 — hit e4' })!;
+    expect(line.learnCues).toEqual(['Nf6 — hit e4']);
+  });
+
+  it('omits learnCues when no short cue is authored (dictation fallback)', () => {
+    const line = commonMistakeToPlayableLine(VIENNA_BC5)!;
+    expect(line.learnCues).toBeUndefined();
+  });
+
+  it('uses the authored punishmentLine for WATCH (richest "see why it fails")', () => {
     const authored = {
       fen: VIENNA_BC5.fen,
       moves: ['Bc5', 'd4'],
@@ -42,8 +52,23 @@ describe('commonMistakeToPlayableLine', () => {
       arrows: [[], []],
       title: 'authored',
     };
-    const line = commonMistakeToPlayableLine({ ...VIENNA_BC5, punishmentLine: authored });
+    const line = commonMistakeToPlayableLine({ ...VIENNA_BC5, punishmentLine: authored }, 'watch');
     expect(line).toBe(authored);
+  });
+
+  it('NEVER serves the punishmentLine for LEARN/PRACTICE (no drilling the wrong move)', () => {
+    const authored = {
+      fen: VIENNA_BC5.fen,
+      moves: ['Bc5', 'd4'],
+      annotations: ['x', 'y'],
+      arrows: [[], []],
+      title: 'authored',
+    };
+    for (const mode of ['learn', 'practice'] as const) {
+      const line = commonMistakeToPlayableLine({ ...VIENNA_BC5, punishmentLine: authored }, mode)!;
+      expect(line.moves).toEqual(['Nf6']); // the antidote, not the wrong-move line
+      expect(line.moves).not.toContain('Bc5');
+    }
   });
 
   it('returns null when the correct move is not legal in the position (graceful skip)', () => {

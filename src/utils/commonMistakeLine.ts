@@ -16,21 +16,26 @@ function squares(fen: string, san: string): { from: string; to: string } | null 
 }
 
 /**
- * Turn a CommonMistake into a single playable Pitfall line for the WLPP
- * surface (PlayableLinePlayer). GROUNDED — never invents moves:
- *  - If the mistake carries a hand-authored `punishmentLine`, use it verbatim.
- *  - Otherwise synthesize a one-move antidote line from the existing data: the
- *    student PLAYS the real `correctMove` from the real `fen`, while the
- *    narration (the already-authored `explanation`) says why `wrongMove` is the
- *    error. The board leads the eye with a red arrow on the tempting wrong move
- *    and a green arrow on the move actually played.
- * Returns null when `correctMove` doesn't parse against `fen` (graceful skip —
- * a malformed entry self-hides rather than crashing the tab).
+ * Turn a CommonMistake into a playable Pitfall line for the WLPP surface
+ * (PlayableLinePlayer). GROUNDED — never invents moves. MODE-AWARE so the
+ * student is never asked to drill the wrong move:
+ *  - WATCH: if a hand-authored `punishmentLine` exists (wrong move played out
+ *    + its refutation), use it verbatim — that's the richest "see why it
+ *    fails". Otherwise the antidote line (below).
+ *  - LEARN / PRACTICE: ALWAYS the antidote — a one-move line where the student
+ *    plays the real `correctMove` from the real `fen`. Never the punishment
+ *    line (its move[0] is the wrong move; drilling it is banned).
+ * The antidote carries two hand-authored narration registers: `explanation`
+ * (Watch / Learn-FULL) and `shortNarration` (Learn-LIMITED cue). The board
+ * leads the eye with a red arrow on the tempting wrong move + a green arrow on
+ * the move played. Returns null when `correctMove` doesn't parse (graceful
+ * skip — a malformed entry self-hides rather than crashing the tab).
  */
 export function commonMistakeToPlayableLine(
   mistake: CommonMistake,
+  mode: 'watch' | 'learn' | 'practice' = 'watch',
 ): PlayableMiddlegameLine | null {
-  if (mistake.punishmentLine) return mistake.punishmentLine;
+  if (mode === 'watch' && mistake.punishmentLine) return mistake.punishmentLine;
 
   const correct = squares(mistake.fen, mistake.correctMove);
   if (!correct) return null;
@@ -48,7 +53,11 @@ export function commonMistakeToPlayableLine(
   return {
     fen: mistake.fen,
     moves: [mistake.correctMove],
+    // Watch / Learn-FULL register = the hand-authored explanation.
     annotations: [mistake.explanation],
+    // Learn-LIMITED register = the hand-authored ≤8-word cue (never generated).
+    // Absent → PlayableLinePlayer dictates the move (non-curated fallback tier).
+    learnCues: mistake.shortNarration ? [mistake.shortNarration] : undefined,
     arrows: [moveArrows],
     highlights: [highlights],
     title: `${mistake.wrongMove}? — play ${mistake.correctMove} instead`,
