@@ -135,7 +135,9 @@ describe('Learn short-cue length — sayShort is a terse cue, not a lecture', ()
     for (const beat of lesson.beats) {
       const cue = beat.sayShort?.trim();
       if (!cue) continue;
-      const words = cue.split(/\s+/).length;
+      // Count real words — a standalone em-dash / hyphen separating the move
+      // from its echo ("Nd5 — fork the queen") isn't a word.
+      const words = cue.split(/\s+/).filter((w) => !/^[—–-]+$/.test(w)).length;
       if (words > CUE_WORD_CAP) {
         const list = overByOpening.get(openingId) ?? [];
         list.push(`${key} [${beat.id}] (${words}w): "${cue}"`);
