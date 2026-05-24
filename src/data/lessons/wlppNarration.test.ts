@@ -125,7 +125,7 @@ const GRANDFATHERED_OPENINGS = new Set<string>([
   // is tightened — see docs/plans/2026-05-22-app-ux-todo.md):
   'ruy-lopez',
   // pirc-defence — DONE 2026-05-24.
-  'caro-kann',
+  // caro-kann — DONE 2026-05-24.
   // vienna-game — DONE 2026-05-24: all main + variation + trap cues ≤8 words.
 ]);
 
