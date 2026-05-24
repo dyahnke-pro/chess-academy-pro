@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { lessonToPlayableLine } from './index';
+import { ALL_LESSONS } from './registry';
 import { CARO_KANN_LESSON } from './caroKann';
 import { CARO_VARIATION_LESSONS } from './caroKannVariations';
 import { CARO_TRAP_LESSONS, getCaroTrapPlayableLine } from './caroKannTrapLessons';
@@ -107,4 +108,57 @@ describe('WLPP narration contract — Watch authored / Learn moves-only / Practi
       });
     });
   }
+});
+
+// ── Learn short-cue length contract (David 2026-05-24) ──────────────────────
+// The narration SETTING picks which authored variation Learn speaks: FULL →
+// the beat's full `say`; LIMITED → the short `sayShort` cue. A cue must be a
+// terse "move + 3-5 word echo" (≤8 words), NOT a re-read of the lecture.
+// Enforced per opening; an opening is GRANDFATHERED only until its legacy long
+// cues are rewritten — then remove it here so the gate enforces it. The 38
+// future openings (not grandfathered) must comply from day one. This is the
+// gate that was missing — the old contract only checked move-dictation form
+// and never inspected sayShort, so cues drifted to 11-19 words unnoticed.
+const CUE_WORD_CAP = 8;
+const GRANDFATHERED_OPENINGS = new Set<string>([
+  // Legacy openings with long cues, pending rewrite (shrink this list as each
+  // is tightened — see docs/plans/2026-05-22-app-ux-todo.md):
+  'ruy-lopez',
+  'pirc-defence',
+  'caro-kann',
+  'vienna-game',
+]);
+
+describe('Learn short-cue length — sayShort is a terse cue, not a lecture', () => {
+  const overByOpening = new Map<string, string[]>();
+  for (const { openingId, key, lesson } of ALL_LESSONS) {
+    for (const beat of lesson.beats) {
+      const cue = beat.sayShort?.trim();
+      if (!cue) continue;
+      const words = cue.split(/\s+/).length;
+      if (words > CUE_WORD_CAP) {
+        const list = overByOpening.get(openingId) ?? [];
+        list.push(`${key} [${beat.id}] (${words}w): "${cue}"`);
+        overByOpening.set(openingId, list);
+      }
+    }
+  }
+  const openingIds = [...new Set(ALL_LESSONS.map((l) => l.openingId))];
+
+  it(`non-grandfathered openings: every Learn cue (sayShort) ≤ ${CUE_WORD_CAP} words`, () => {
+    const offenders: string[] = [];
+    for (const oid of openingIds) {
+      if (GRANDFATHERED_OPENINGS.has(oid)) continue;
+      offenders.push(...(overByOpening.get(oid) ?? []));
+    }
+    expect(
+      offenders,
+      'Over-long Learn cues — tighten each to the move + a 3-5 word echo (≤8 words)',
+    ).toEqual([]);
+  });
+
+  it('grandfather list only names real opening ids (shrink it as cues are tightened)', () => {
+    const stale = [...GRANDFATHERED_OPENINGS].filter((id) => !openingIds.includes(id));
+    expect(stale, 'GRANDFATHERED_OPENINGS has ids with no lessons — remove them').toEqual([]);
+  });
 });
