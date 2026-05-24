@@ -752,6 +752,103 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', '', '',
     ],
   },
+
+  // Pirc Austrian — White's 8.Be3?? walks into Ng4 with tempo (student = Black).
+  // playLine: e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 Be3 Ng4 Bd2 cxd4 Nb5 Ne3 Bxe3 dxe3 Nc3
+  'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_f4_Bg7_Nf3_O-O_Bd3_Na6_O-O_c5:Be3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Be3? White develops the bishop into a tempo-loss — the knight jumps to g4 and hits it at once.',
+      'Ng4! Hit the e3-bishop and gain time. White wastes moves while you seize the centre.',
+      'Bd2 retreats —',
+      'cxd4 — open the c-file and the centre while you’re a tempo up.',
+      '',
+      'Ne3! The knight forks in; White is forced to trade and damage his own structure.',
+      '',
+      'dxe3 — White’s left with wrecked pawns; you’re comfortably better.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Ng4 — hit the bishop, gain a tempo.',
+      '', 'cxd4 — open the centre.',
+      '', 'Ne3 — fork, wreck his structure.',
+      '', 'dxe3 — and you’re clearly better.',
+      '',
+    ],
+  },
+
+  // Pirc 150-style — White's 7.e5?? is too slow in the opposite-side race; b4!
+  // (student = Black). playLine: e4 d6 d4 Nf6 Nc3 g6 Bg5 Bg7 Qd2 O-O O-O-O c6 f4 b5 e5 b4 exf6 exf6 Bh4 bxc3 Qxc3 Nd7 Qxc6
+  'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_Bg5_Bg7_Qd2_O-O_O-O-O_c6_f4_b5:e5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'e5? White lunges in the centre, but in this opposite-side race it’s too slow — your attack lands first.',
+      'b4! Don’t recapture — strike the knight on c3 first. Your queenside attack is faster than anything White has.',
+      'exf6 grabs the knight —',
+      'exf6 — recapture and rip open the e-file toward White’s king.',
+      '',
+      'bxc3 — tear open the c-file; White’s king on c1 is suddenly freezing.',
+      '',
+      'Nd7 brings the last piece into the attack. You’re winning the race.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'b4 — strike c3 first, race him.',
+      '', 'exf6 — open the e-file.',
+      '', 'bxc3 — tear open his king.',
+      '', 'Nd7 — bring the last piece.',
+      '',
+    ],
+  },
+
+  // Pirc g3 system — White's Be3?? again invites Ng4 (student = Black).
+  // playLine: e4 d6 d4 Nf6 Nc3 g6 g3 Bg7 Bg2 O-O Nge2 e5 O-O Nc6 Be3 Ng4 Qd2 Nxe3 fxe3 Bh6 d5 Nb8 h3
+  'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_g3_Bg7_Bg2_O-O_Nge2_e5_O-O_Nc6:Be3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Be3? Again the bishop walks into Ng4 — and here it costs White even more tempo.',
+      'Ng4! Hit the bishop. White can’t hold it without conceding the bishop pair and a damaged structure.',
+      '',
+      'Nxe3 — take the bishop; the recapture wrecks White’s f-pawns.',
+      '',
+      'Bh6 — pile onto the dark squares White just weakened. Your bishop is a monster.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Ng4 — hit the bishop.',
+      '', 'Nxe3 — take it, wreck his pawns.',
+      '', 'Bh6 — rule the dark squares.',
+      '', '', '',
+    ],
+  },
+
+  // Pirc Austrian — White's 8.O-O?? castles into the tension; cxd4 strikes
+  // (student = Black). playLine: e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O e5 Nfd7 Be2 c5 O-O cxd4 Qxd4 Nc6 Qf2 dxe5 Rb1 Qa5 h3
+  'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_f4_Bg7_Nf3_O-O_e5_Nfd7_Be2_c5:O-O': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'O-O? White castles into the central tension instead of resolving it. Strike now.',
+      'cxd4 — open the centre with tempo; the queen recapture walks into a hit.',
+      '',
+      'Nc6! Develop with tempo, kicking the queen off its post.',
+      '',
+      'dxe5 — win the e5-pawn. You’ve untangled with the extra pawn and the freer game.',
+      '',
+      'Qa5 activates the queen at the loose queenside — comfortably better.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'cxd4 — open the centre.',
+      '', 'Nc6 — develop, kick the queen.',
+      '', 'dxe5 — win the pawn.',
+      '', 'Qa5 — activate, press.',
+      '',
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
