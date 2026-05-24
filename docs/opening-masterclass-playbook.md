@@ -464,12 +464,43 @@ Play-with-Coach, middlegame/endgame Play, Practice) — NEVER a silo:
 - **Eval bar**: NOT a live bar in walkthroughs (removed for chop) — on-demand
   only.
 
-## 8. Onboarding (the "i" help)
+## 8. Onboarding (the "i" help) — DONE, global (2026-05-24)
 
-- An "i" top-right on every page → coach-narrated, spotlighted coach-marks
-  that explain WHAT each area does and WHY. Auto-run first visit, replayable
-  after. Reusable `PageHelp`. Teach features when they first matter +
-  empty-states-as-teachers. Teach THE LOOP (learn → play → capture → drill).
+- An "i" top-right on every main tab + sub-tab landing → `PageHelp`
+  (`src/components/Layout/PageHelp.tsx`). **Auto-opens on first visit**
+  (tracked per-surface in Dexie `meta`, key `pagehelp-seen-<helpId>`), then
+  lives behind the icon, replayable. NOT on play surfaces (once the user is
+  in a board, they figure it out).
+- Copy teaches **flow + cross-tab connections**, not "what this page is":
+  Dashboard = the order of operations; Weaknesses = errors log → feed the
+  coach; etc. When you add a NEW landing surface, drop in a `<PageHelp
+  helpId="..." title=... steps=[...] />` (top-right) — that's the whole job.
+- **The masterclass detail page already carries its "i"** (`helpId=
+  "opening-detail"`, the WLPP climb explainer) — a NEW opening inherits it
+  automatically. No per-opening onboarding work.
+
+## 8.5 The WLPP unlock ladder — DONE, global + opening-agnostic (2026-05-24)
+
+Forged + verified on the Vienna; **a new opening gets it for free** (it reads
+the same `OpeningRecord` progress fields). Do NOT re-wire per opening.
+
+- **Rungs forward-lock**: Watch → Learn → Practice → Play. Only the next rung
+  is live; locked rungs grey out with "Complete X to unlock Y"; completed
+  rungs show a checkmark and stay re-openable.
+- **Weapons (gems + named traps) lock until Play** is done for that line.
+- **Per-line "I already know this — unlock all"** escape — gating never traps.
+- Resolver: `src/utils/wlppLadder.ts` (pure, tested). Progress fields on
+  `OpeningRecord`: `linesDiscovered` (Watch) / `linesLearned` (Learn) /
+  `linesPerfected` (Practice) / `linesPlayed` (Play) / `linesUnlockedAll`.
+  Marked via `markRungComplete(id, lineIdx, rung)` (monotonic backfill) from
+  each player's `onComplete`; the main line uses `MAIN_LINE_INDEX = -1`.
+  Play marks on launch (it hands off to /coach/play, no return signal).
+- **REMAINING (not built — TODO 3b items 2-3 / 3c in
+  `docs/plans/2026-05-22-app-ux-todo.md`)**: line-complete reward star +
+  model-game unlock animation; opening-complete graduation → unlock next
+  opening; light subline-gating (gate variation tabs behind the main line's
+  WATCH only). And TODO 1's Learn-completion "Got it / Not yet" self-assessment
+  + a visible per-line tier display.
 
 ## 9. Audit (the gate)
 
