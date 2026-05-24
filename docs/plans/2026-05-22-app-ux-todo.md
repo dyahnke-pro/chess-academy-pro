@@ -332,3 +332,48 @@ rare, most openings have few/none, section often empty.
 
 This is the #1 architectural priority alongside 3e — David's core vision for
 the app.
+
+---
+
+## TODO — Pro model games: source proper per-opening models (David 2026-05-24)
+
+The pro repertoire opening sections render model games via `ModelGamesSection`
+(opening-level). An audit found the pro model games did NOT reliably match the
+pro + the line: 25 games were the WRONG OPENING for their section (Ruy games in
+Italian/Scotch sections, KID in Grünfeld, Nimzo in Catalan/QGD, etc.) — those
+were **stripped** (commit on branch `claude/jolly-galileo-FqH02`). Now source
+**1 proper model game per opening** — featuring the named pro, in the correct
+line, and (where the section implies a side) showing that side doing well.
+Sourcing rule (playbook §0.7 STEP 7): REAL games only, never fabricate a PGN;
+web-identify then get the PGN from a fetchable source or David.
+
+**EMPTIED — 0 games now, need ≥1 proper model:**
+- `pro-naroditsky-scotch` (had Ruy games, not Scotch)
+- `pro-gothamchess-italian` (had Ponziani, not Italian)
+- `pro-hikaru-scotch` (had Italian/Ruy, not Scotch)
+- `pro-caruana-italian` (had Ruy, not Italian)
+- `pro-firouzja-italian` (had Ruy, not Italian)
+- `pro-firouzja-grunfeld` (had KID, not Grünfeld)
+- `pro-niemann-anti-marshall` (had Italian, not Ruy/anti-Marshall)
+- `pro-niemann-grunfeld` (had KID, not Grünfeld)
+
+**REDUCED — 1 left (a mismatch was removed; verify the survivor + consider a 2nd):**
+`pro-carlsen-ruy-lopez`, `pro-carlsen-catalan`, `pro-carlsen-berlin`,
+`pro-caruana-qgd`, `pro-caruana-catalan`, `pro-dubov-catalan`,
+`pro-dubov-tarrasch-defense`, `pro-dubov-scotch`, `pro-praggnanandhaa-catalan`.
+
+**STILL OPEN (separate passes, not done in the strip):**
+1. **De-dup right-family copies.** The same game is reused across several of a
+   pro's sections (e.g. one Caruana Ruy game sat in anti-berlin + berlin +
+   ruy-lopez; a Gotham Ponziani in italian + ponziani). One game per section.
+2. **Pro-presence.** At least `pro-naroditsky-jobava-london` features
+   Jobava–Mamedyarov with NO Naroditsky — the model must feature the pro (or be
+   re-scoped). Audit every section for "is the named pro actually a player?"
+   (handle map: Carlsen=MagnusCarlsen, Caruana=FabianoCaruana, Firouzja=Firouzja2003,
+   Gotham=GothamChess, Naroditsky=DanielNaroditsky, Pragg=rpragchess, Dubov=Duhless,
+   Niemann=HansOnTwitch, Nakamura=Hikaru, So=GMWSO).
+3. **Narration bar.** Most pro games are templated-overview + 0 critical
+   moments (thin). Per the "no thin-narration ships" doctrine, author a real
+   overview + critical moments, OR gate so only narrated games surface
+   (mirrors gems' `isSurfaceableGem`). (This was the in-progress filter/gate
+   work — paused 2026-05-24.)
