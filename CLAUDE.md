@@ -1527,6 +1527,26 @@ Consequences:
 
 ## Post-Deploy Audit (MANDATORY — run after EVERY build)
 
+### 🚨 AUDITS ARE LIVING — UPDATE THE AUDIT BEFORE YOU RUN IT (David 2026-05-24, LOCKED)
+
+**After EVERY build/change, it is YOUR job to update the relevant audit
+script(s) to match the NEW contract — BEFORE running them.** An audit that
+still asserts a superseded contract is a failure mode in itself: it either
+red-flags correct new behavior (wasting a run chasing a non-bug) or green-lights
+on stale assumptions. So the order is always: change the code → **update the
+audit to the new contract** → run it.
+
+Concretely, when a change alters a behavior an audit checks, edit the audit's
+assertions AND its header/comment in the same pass. The 2026-05-24 case that
+locked this: the `Learn` narration contract changed from "move-dictation ONLY"
+to "follows the narration setting (FULL → full explanation, LIMITED → ≤8-word
+cue; never silent)", but `audit-punish-gems-loop.mjs` still failed Learn for
+"speaking PROSE" — the audit was testing a dead contract. Update it first; a
+stale audit is not a passing build.
+
+This applies to every `scripts/audit-*.mjs` and the gate test list — they are
+maintained WITH the code, not frozen.
+
 ### Real-data fixture loader (use it on every audit that touches Dexie)
 
 Every audit script that reads from IndexedDB — mistake puzzles,

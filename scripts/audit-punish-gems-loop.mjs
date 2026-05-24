@@ -14,14 +14,17 @@
  *   Tier 2 — FAILURE MODES. Cold IndexedDB, no-gem tab self-hide, pick-
  *            before-load, out-of-order mode switching, the Caro named-trap
  *            Learn path, AND the voice contract decoded off /api/tts:
- *            Learn speaks MOVE-DICTATION only, Practice fires NOTHING.
+ *            Learn FIRES narration (cue or full explanation), Practice
+ *            fires NOTHING.
  *   Tier 3 — ADVERSARIAL / stress. Wrong move in Learn (board rejects, no
  *            desync), rapid mode toggling (no leak), full Watch playout to
  *            completion, Practice silence under interaction. Zero pageerrors
  *            / unhandledrejection across the whole tier.
  *
  * The WLPP contract being proven (David): Watch = authored prose narration,
- * Learn = TTS move dictation ONLY, Practice = silent, Play = coach room.
+ * Learn = narration that follows the SETTING (FULL → full explanation,
+ * LIMITED → ≤8-word cue; never silent — the old "move-dictation ONLY" rule is
+ * superseded 2026-05-24), Practice = silent, Play = coach room.
  *
  * Run (sandbox): npm run dev, then
  *   AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-punish-gems-loop.mjs
@@ -249,16 +252,17 @@ async function runPass(browser, level) {
       }
       await exitPlayer(page);
 
-      // ── LEARN — mounts + MOVE-DICTATION ONLY (no prose) ──
+      // ── LEARN — mounts + FIRES narration (register follows the narration
+      //    SETTING: FULL → full explanation, LIMITED → ≤8-word cue; never
+      //    silent). The old "move-dictation ONLY" rule is superseded
+      //    (David 2026-05-24) — Learn no longer has to be bare dictation. ──
       await openDetail(page, id);
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-learn-"]').first().click();
       await page.waitForTimeout(4000);
       if ((await squares(page)) < 64) fail(`${id} Learn: board absent`);
       const lt = narrationTexts(ev);
-      if (!lt.length) fail(`${id} Learn: no move-dictation tts`);
-      if (lt.some(isProse)) fail(`${id} Learn: spoke PROSE "${lt.find(isProse)}"`);
-      if (lt.length && !lt.some(isMoveDictation)) fail(`${id} Learn: tts not move-shaped "${lt[0]}"`);
+      if (!lt.length) fail(`${id} Learn: no narration fired (should speak the cue or the full explanation)`);
       if (level >= 3) {
         for (const sq of ['a3', 'h6', 'c3', 'f6']) {
           const cl = page.locator(`[data-square="${sq}"]`).first();
