@@ -57,8 +57,16 @@ describe('punish-gems are real, legal, DB-grounded', () => {
         expect(play[i + 1], 'punish not immediately after the inaccuracy').toBe(g.punish);
       });
 
-      it("confirmed tier carries an engine eval; practical doesn't claim one", () => {
-        if (g.tier === 'confirmed') expect(g.engineCp).not.toBeNull();
+      it('engine tiers carry a qualifying eval (confirmed ≥ +1.0, positional ≥ +0.5)', () => {
+        if (g.tier === 'confirmed') {
+          expect(g.engineCp, 'confirmed needs an eval').not.toBeNull();
+          expect(g.engineCp as number, 'confirmed must be ≥ +1.0 (100cp)').toBeGreaterThanOrEqual(100);
+        }
+        if (g.tier === 'positional') {
+          expect(g.engineCp, 'positional needs an eval').not.toBeNull();
+          expect(g.engineCp as number, 'positional must be ≥ +0.5 (50cp)').toBeGreaterThanOrEqual(50);
+          expect(g.engineCp as number, 'positional is below the +1.0 crush bar').toBeLessThan(100);
+        }
       });
 
       it('converts to a WLPP line whose every arrow grounds on a real piece', () => {

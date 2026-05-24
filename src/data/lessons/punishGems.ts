@@ -7,6 +7,7 @@
 // from explorer numbers / the engine — nothing invented (G3).
 import { Chess } from 'chess.js';
 import gemsData from '../punish-gems.json';
+import { getGemNarration, hasGemNarration } from './punishGemNarration';
 import type { PlayableMiddlegameLine, AnnotationArrow } from '../../types';
 
 export interface PunishGem {
@@ -21,11 +22,33 @@ export interface PunishGem {
   punishSeq: string[];
   playLine: string;
   engineCp: number | null;
-  tier: 'practical' | 'confirmed' | 'weak';
+  // 'confirmed' = engine ≥ +1.0 (a real crush — wins material or decisive
+  // edge). 'positional' = +0.5 to +1.0 (clearly better, not winning).
+  // 'practical' = DB-scored only, NOT engine-verified (sandbox). 'weak' =
+  // engine < +0.5 (dropped by the miner). Only confirmed + positional are
+  // WEAPONS that surface (David 2026-05-24).
+  tier: 'practical' | 'positional' | 'confirmed' | 'weak';
   why: string;
 }
 
 const GEMS = gemsData as PunishGem[];
+
+/** The tiers that earn a place in the weapon section: engine-verified REAL
+ *  benefit (≥ +0.5). Practical (unverified) and weak (< +0.5) are not weapons
+ *  — a 6%-better win-rate or a recapture is a scouting signal, not a crush.
+ *  David 2026-05-24: "any add of real benefit — winning a piece or real
+ *  strategic advantage; positional ok but ~+1.0 or greater." */
+export const WEAPON_TIERS: ReadonlySet<PunishGem['tier']> = new Set(['confirmed', 'positional']);
+export function isWeaponGem(gem: PunishGem): boolean {
+  return WEAPON_TIERS.has(gem.tier);
+}
+
+/** A gem SURFACES only when it's both a real weapon AND has hand-authored
+ *  narration — no thin-narration gems ship (David 2026-05-24). As each gem's
+ *  Watch script + Learn cues are hand-written, it lights up. */
+export function isSurfaceableGem(gem: PunishGem): boolean {
+  return isWeaponGem(gem) && hasGemNarration(gemId(gem));
+}
 
 /** A stable id for state/keys — opening + the inaccuracy's position + the slip. */
 export function gemId(gem: PunishGem): string {
@@ -87,9 +110,16 @@ export function gemToPlayableLine(gem: PunishGem): PlayableMiddlegameLine | null
   const inaccuracyPly = setup.length; // the inaccuracy is the first move after the spine
   const punishPly = inaccuracyPly + 1;
 
+  // Hand-authored narration (Watch full + Learn cues), keyed by gemId. When
+  // present it's used verbatim; otherwise the line falls back to a minimal
+  // factual annotation (and won't surface — see isWeaponGem usage / the
+  // narration gate). NEVER generated.
+  const narration = getGemNarration(gemId(gem));
+
   const chess = new Chess(START_FEN);
   const arrows: AnnotationArrow[][] = [];
   const annotations: string[] = [];
+  const learnCues: string[] = [];
 
   for (let i = 0; i < moves.length; i++) {
     let from = '';
@@ -103,8 +133,11 @@ export function gemToPlayableLine(gem: PunishGem): PlayableMiddlegameLine | null
       break;
     }
     arrows.push(from && to ? [{ from, to, color: 'orange' }] : []);
+    learnCues.push(narration?.learn[i] ?? '');
 
-    if (i === inaccuracyPly) {
+    if (narration) {
+      annotations.push(narration.watch[i] ?? '');
+    } else if (i === inaccuracyPly) {
       annotations.push(
         `${gem.inaccuracy} is a common try here — at your level it scores worse for your opponent than the main move.`,
       );
@@ -116,5 +149,5 @@ export function gemToPlayableLine(gem: PunishGem): PlayableMiddlegameLine | null
   }
 
   const title = `Punish ${gem.inaccuracy} with ${gem.punish}`;
-  return { fen: START_FEN, moves, annotations, arrows, title };
+  return { fen: START_FEN, moves, annotations, arrows, learnCues, title };
 }

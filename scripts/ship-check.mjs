@@ -169,6 +169,7 @@ const GATE_TESTS = [
   'src/data/lessons/courseScope.test.ts',
   'src/data/punishGems.test.ts',
   'src/data/lessons/wlppNarration.test.ts',
+  'src/data/lessons/lessonTabIntegrity.test.ts',
   'src/data/lessons/pircIntegrity.test.ts',
   'src/data/repertoire-orientation.test.ts',
   'src/data/pro-repertoires-orientation.test.ts',

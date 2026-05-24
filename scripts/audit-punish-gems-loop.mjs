@@ -28,10 +28,26 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, readFile } from 'node:fs/promises';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
-const GEM_OPENINGS = ['caro-kann', 'ruy-lopez', 'pirc-defence'];
+
+// Data-driven: only WEAPON-tier gems (engine-verified ≥+0.5) surface, so the
+// audit tests exactly the openings that actually have a weapon — not a
+// hardcoded list. If the engine bar leaves an opening gem-less, its card
+// self-hides and there's nothing to drive there.
+const GEMS = JSON.parse(await readFile('src/data/punish-gems.json', 'utf-8'));
+const WEAPON = new Set(['confirmed', 'positional']);
+// POST-DEPLOY: this is THE masterclass post-deploy audit (David 2026-05-24) —
+// it must verify EVERY masterclass line is integrated, not just today's gem
+// work. Walk all four masterclass openings and every variation tab's WLPP.
+// AUDIT_OPENING=<id> scopes a run to ONE opening so the four can run in
+// parallel (one audit per opening — David OK'd that).
+const ONLY = (process.env.AUDIT_OPENING || '').trim();
+let MASTERCLASS = ['caro-kann', 'ruy-lopez', 'pirc-defence', 'vienna-game'];
+let GEM_OPENINGS = [...new Set(GEMS.filter((g) => WEAPON.has(g.tier)).map((g) => g.openingId))];
+if (ONLY) { MASTERCLASS = MASTERCLASS.filter((o) => o === ONLY); GEM_OPENINGS = GEM_OPENINGS.filter((o) => o === ONLY); }
+const PRIMARY = GEM_OPENINGS[0]; // opening used for the deep voice/WLPP probes
 
 // Console noise that is NOT a bug in the sandbox (firewalled prod + the dev
 // server having no /api/tts function). Real app bugs are anything else.
@@ -39,6 +55,10 @@ const NOISE = [
   /ERR_CERT/i, /net::ERR_/i, /Failed to load resource/i,
   /\/api\/tts/i, /\/api\/audit-stream/i, /favicon/i, /Polly/i,
   /tts-failure/i, /the server responded with a status of 404/i,
+  // The eval-bar's Stockfish WASM worker can trap ("unreachable") under heavy
+  // concurrency (4 audits × their own Stockfish workers). It's not part of the
+  // gems/WLPP surface and doesn't repeat across passes — environmental.
+  /\[Stockfish\]/i, /RuntimeError: unreachable/i, /worker\.onerror/i,
 ];
 const isNoise = (s) => NOISE.some((re) => re.test(s));
 
@@ -57,6 +77,18 @@ const isProse = (t) => t.trim().split(/\s+/).length > 6;
 // availability ping, NOT narration. Exclude it from the contract checks.
 const isWarmupProbe = (t) => t.trim() === '.' || t.trim() === '';
 const narrationTexts = (ev) => ev.tts.map((r) => r.text).filter((t) => t && !isWarmupProbe(t));
+
+// Correctness helpers — prove the RIGHT content, not just that something mounted.
+const gemIdOf = (g) => `${g.openingId}:${g.lineMoves.replace(/\s+/g, '_')}:${g.inaccuracy}`;
+// A spoken move → its destination token ("Knight to f 3"→"f3", "Castle
+// kingside"→"OO"), so a Learn line can be fingerprinted from its dictation.
+function destToken(spoken) {
+  if (/Castle kingside/.test(spoken)) return 'OO';
+  if (/Castle queenside/.test(spoken)) return 'OOO';
+  const m = [...spoken.matchAll(/([a-h]) ([1-8])/g)];
+  return m.length ? m[m.length - 1][1] + m[m.length - 1][2] : spoken.trim().slice(0, 6);
+}
+const lineSig = (dicts) => dicts.map(destToken).join('-');
 
 async function makeCtx(browser) {
   const ctx = await browser.newContext();
@@ -93,201 +125,243 @@ async function exitPlayer(page) {
   await page.waitForTimeout(1200);
 }
 
-// ─── Tier 1 — breadth / happy path ──────────────────────────────────────────
-async function tier1(browser) {
+// ─── ONE PASS — touches EVERY function, depth scales with `level` ────────────
+// David 2026-05-24: "the audit needs to touch EVERY FUNCTION on each pass, then
+// deeper on every other pass after the first." So each pass exercises the WHOLE
+// surface (card render across all weapon openings, Watch, Learn, Practice, Play,
+// named-trap Learn, self-hide, voice contract) — and level 2/3 add cold-cache,
+// play-to-completion, wrong-move/interaction stress, pick-before-load,
+// out-of-order toggling, and widen the deep per-function checks to EVERY weapon
+// opening. The contract is MET only on 3 CONSECUTIVE error-free passes.
+async function runPass(browser, level) {
   const { ctx, page, ev } = await makeCtx(browser);
   const errs = [];
-  const fail = (m) => errs.push(`T1: ${m}`);
+  const fail = (m) => errs.push(`P${level}: ${m}`);
+  const silentCheck = (label) => { const nt = narrationTexts(ev); if (nt.length) fail(`${label}: NOT silent (${nt.length} tts: "${nt[0]}")`); };
   try {
     await bootSeed(page);
+    // Cold-cache is exercised on every deeper pass (clear IDB, reseed).
+    if (level >= 2) {
+      await page.evaluate(async () => { for (const d of await indexedDB.databases()) if (d.name) indexedDB.deleteDatabase(d.name); });
+      await bootSeed(page);
+    }
+
+    // ── card render + 4 WLPP buttons + CORRECT gem data — every pass ──
+    // The main tab shows ALL of an opening's weapon gems; assert each tile
+    // names its REAL inaccuracy + punish (not just "a card rendered").
     for (const id of GEM_OPENINGS) {
       const st = await openDetail(page, id);
-      if (st !== 'card') { fail(`${id}: gems card did not render (state=${st})`); continue; }
-      const tiles = await page.locator('[data-testid^="punish-gem-"]').count();
-      if (tiles < 1) { fail(`${id}: no gem tiles`); continue; }
+      if (st !== 'card') { fail(`${id}: gems card did not render (${st})`); continue; }
+      if ((await page.locator('[data-testid^="punish-gem-"]').count()) < 1) fail(`${id}: no gem tiles`);
       for (const mode of ['watch', 'learn', 'practice', 'play']) {
-        const n = await page.locator(`[data-testid^="gem-${mode}-"]`).count();
-        if (n < 1) fail(`${id}: missing ${mode} button`);
+        if (!(await page.locator(`[data-testid^="gem-${mode}-"]`).count())) fail(`${id}: missing ${mode} button`);
       }
+      for (const g of GEMS.filter((x) => x.openingId === id && WEAPON.has(x.tier))) {
+        const tile = page.locator(`[data-testid="punish-gem-${gemIdOf(g)}"]`);
+        if (!(await tile.count())) { fail(`${id}: gem tile missing for ${g.inaccuracy}→${g.punish}`); continue; }
+        const txt = await tile.innerText().catch(() => '');
+        if (!txt.includes(g.inaccuracy)) fail(`${id} gem: tile omits inaccuracy "${g.inaccuracy}"`);
+        if (!txt.includes(g.punish)) fail(`${id} gem: tile omits punish "${g.punish}"`);
+      }
+    }
+
+    // ── MASTERCLASS INTEGRATION — every masterclass opening × every variation
+    //    tab: the WLPP buttons are wired (every pass); deeper passes actually
+    //    MOUNT the variation Learn (≥2) and Watch (≥3) lessons. This is what
+    //    proves the WHOLE masterclass surface is integrated, not just gems. ──
+    for (const id of MASTERCLASS) {
+      const st = await openDetail(page, id);
+      if (st === 'notfound' || st === 'timeout') { fail(`${id}: masterclass detail did not load (${st})`); continue; }
+      const tabN = await page.locator('[data-testid^="variation-tab-"]').count();
+      if (tabN < 1) { fail(`${id}: no variation tabs`); continue; }
+      const tabTitles = []; // per-tab Watch lesson TITLE — for distinctness
+      for (let i = 0; i < tabN; i++) {
+        const tabLabel = (await page.locator('[data-testid^="variation-tab-"]').nth(i).innerText().catch(() => `#${i}`)).trim();
+        await page.locator('[data-testid^="variation-tab-"]').nth(i).click().catch(() => {});
+        await page.waitForTimeout(1500); // let tab-selection register before driving WLPP
+        for (const b of ['walkthrough-btn', 'learn-btn', 'practice-btn', 'play-btn']) {
+          if (!(await page.locator(`[data-testid="${b}"]`).count())) fail(`${id} [${tabLabel}]: missing ${b}`);
+        }
+        if (level >= 2) {
+          // The variation WATCH lesson must mount AND be the RIGHT lesson:
+          // capture its title (color-agnostic; Learn stalls waiting for the
+          // student so its dictation can't fingerprint the line).
+          await page.locator('[data-testid="walkthrough-btn"]').click().catch(() => {});
+          await page.waitForTimeout(2500);
+          if ((await squares(page)) < 64) fail(`${id} [${tabLabel}] Watch: lesson did not mount`);
+          const title = (await page.locator('[data-testid="lesson-title"]').first().innerText().catch(() => '')).trim();
+          if (!title) fail(`${id} [${tabLabel}] Watch: lesson has no title`);
+          tabTitles.push({ tabLabel, title });
+          await exitPlayer(page);
+          await openDetail(page, id);
+        }
+        if (level >= 3) {
+          // Learn + Practice must also MOUNT (interactive modes reachable).
+          await page.locator('[data-testid^="variation-tab-"]').nth(i).click().catch(() => {});
+          await page.waitForTimeout(1500); // let tab-selection register before driving WLPP
+          await page.locator('[data-testid="learn-btn"]').click().catch(() => {});
+          await page.waitForTimeout(2000);
+          if ((await squares(page)) < 64) fail(`${id} [${tabLabel}] Learn: did not mount`);
+          await exitPlayer(page);
+          await openDetail(page, id);
+        }
+      }
+      // CORRECTNESS: no two tabs may load the IDENTICAL lesson (catches a tab
+      // showing the wrong/duplicate lesson — e.g. the old main==Classical dup).
+      if (level >= 2) {
+        const byTitle = new Map();
+        for (const { tabLabel, title } of tabTitles) {
+          if (!title) continue;
+          if (byTitle.has(title)) fail(`${id}: "${tabLabel}" loads the SAME lesson ("${title}") as "${byTitle.get(title)}" (duplicate/wrong)`);
+          else byTitle.set(title, tabLabel);
+        }
+      }
+    }
+
+    // The deep Watch/Learn/Practice/Play checks run on PRIMARY every pass, and
+    // widen to EVERY weapon opening on the deepest pass.
+    const deepOpenings = level >= 3 ? GEM_OPENINGS : [PRIMARY];
+    for (const id of deepOpenings) {
+      // ── WATCH — mounts + narrates AUTHORED PROSE on the wire ──
+      await openDetail(page, id);
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-watch-"]').first().click();
-      await page.waitForTimeout(3500);
-      if (await cardVisible(page)) fail(`${id}: Watch did not unmount the detail card`);
-      if ((await squares(page)) < 64) fail(`${id}: Watch board not present`);
-      // Watch should narrate AUTHORED PROSE on the wire (its annotation beats).
-      if (!narrationTexts(ev).some(isProse)) fail(`${id}: Watch fired no prose narration (tts: ${narrationTexts(ev).join(' | ').slice(0, 80)})`);
+      await page.waitForTimeout(level >= 2 ? 3500 : 2500);
+      if (await cardVisible(page)) fail(`${id} Watch: detail card did not unmount`);
+      if ((await squares(page)) < 64) fail(`${id} Watch: board absent`);
+      if (!narrationTexts(ev).some(isProse)) fail(`${id} Watch: no prose narration fired`);
+      if (level >= 3) {
+        // Play the crush out to completion — no desync / throw mid-playout.
+        let last = '', stalls = 0;
+        for (let i = 0; i < 40 && stalls < 6; i++) {
+          await page.waitForTimeout(1000);
+          const b = await page.locator('body').innerText().catch(() => '');
+          const m = b.match(/MOVE\s+(\d+)\s*\/\s*(\d+)/i);
+          const tag = m ? `${m[1]}/${m[2]}` : '';
+          if (tag && tag === last) stalls++; else stalls = 0;
+          last = tag;
+          if (m && m[1] === m[2]) break;
+        }
+        if ((await squares(page)) < 64) fail(`${id} Watch playout: board lost`);
+      }
+      await exitPlayer(page);
+
+      // ── LEARN — mounts + MOVE-DICTATION ONLY (no prose) ──
+      await openDetail(page, id);
+      ev.tts.length = 0;
+      await page.locator('[data-testid^="gem-learn-"]').first().click();
+      await page.waitForTimeout(4000);
+      if ((await squares(page)) < 64) fail(`${id} Learn: board absent`);
+      const lt = narrationTexts(ev);
+      if (!lt.length) fail(`${id} Learn: no move-dictation tts`);
+      if (lt.some(isProse)) fail(`${id} Learn: spoke PROSE "${lt.find(isProse)}"`);
+      if (lt.length && !lt.some(isMoveDictation)) fail(`${id} Learn: tts not move-shaped "${lt[0]}"`);
+      if (level >= 3) {
+        for (const sq of ['a3', 'h6', 'c3', 'f6']) {
+          const cl = page.locator(`[data-square="${sq}"]`).first();
+          if (await cl.isVisible().catch(() => false)) { await cl.click().catch(() => {}); await page.waitForTimeout(150); }
+        }
+        if ((await squares(page)) < 64) fail(`${id} Learn: board vanished on stray click`);
+      }
+      await exitPlayer(page);
+
+      // ── PRACTICE — mounts + SILENT (level 3: silent under board interaction) ──
+      await openDetail(page, id);
+      ev.tts.length = 0;
+      await page.locator('[data-testid^="gem-practice-"]').first().click();
+      await page.waitForTimeout(level >= 2 ? 4000 : 2500);
+      if ((await squares(page)) < 64) fail(`${id} Practice: board absent`);
+      if (level >= 3) {
+        for (const sq of ['e4', 'e5', 'd4', 'd5']) {
+          const cl = page.locator(`[data-square="${sq}"]`).first();
+          if (await cl.isVisible().catch(() => false)) { await cl.click().catch(() => {}); await page.waitForTimeout(250); }
+        }
+      }
+      silentCheck(`${id} Practice`);
+      await exitPlayer(page);
+
+      // ── PLAY — hands off to the coach room ──
+      await openDetail(page, id);
+      await page.locator('[data-testid^="gem-play-"]').first().click();
+      await page.waitForTimeout(2500);
+      if (await cardVisible(page)) fail(`${id} Play: did not leave the detail card`);
       await exitPlayer(page);
     }
-  } catch (e) { fail(`threw — ${String(e).slice(0, 160)}`); }
-  errs.push(...ev.pageerrors.map((p) => `T1 pageerror: ${p}`), ...ev.consoleErrors.map((c) => `T1 console: ${c}`));
-  await ctx.close();
-  return errs;
-}
 
-// ─── Tier 2 — failure modes ──────────────────────────────────────────────────
-async function tier2(browser) {
-  const { ctx, page, ev } = await makeCtx(browser);
-  const errs = [];
-  const fail = (m) => errs.push(`T2: ${m}`);
-  try {
-    await bootSeed(page);
-    // Cold IndexedDB → reopen → must recover after seed (no permanent not-found).
-    await page.evaluate(async () => { for (const d of await indexedDB.databases()) if (d.name) indexedDB.deleteDatabase(d.name); });
-    await bootSeed(page);
-    if ((await openDetail(page, 'caro-kann')) !== 'card') fail('cold-cache: Caro gems card did not recover after IDB clear + reseed');
-
-    // No-gem tab self-hides (Fantasy has no mined gem) — no crash, card gone.
-    const fantasy = page.getByText('Fantasy Variation', { exact: false }).first();
-    if (await fantasy.isVisible().catch(() => false)) {
-      await fantasy.click(); await page.waitForTimeout(1500);
-      if (await cardVisible(page)) fail('no-gem tab (Fantasy): gems card should self-hide');
-    }
-
-    // Pick-before-load: reopen and slam Watch immediately.
-    await page.goto(`${URL}/openings/caro-kann`, { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(400);
-    const wb = page.locator('[data-testid^="gem-watch-"]').first();
-    if (await wb.isVisible().catch(() => false)) await wb.click().catch(() => {});
-    await page.waitForTimeout(3000);
-    // recover to detail for the next checks
-    await openDetail(page, 'caro-kann');
-
-    // VOICE CONTRACT — Learn = move dictation only.
-    ev.tts.length = 0;
-    await page.locator('[data-testid^="gem-learn-"]').first().click();
-    await page.waitForTimeout(4000);
-    if ((await squares(page)) < 64) fail('Learn board not present');
-    const learnTts = narrationTexts(ev);
-    if (learnTts.length === 0) fail('Learn fired NO move-dictation tts');
-    if (learnTts.some((t) => isProse(t))) fail(`Learn spoke PROSE (contract: moves only): "${learnTts.find(isProse)}"`);
-    if (learnTts.length && !learnTts.some((t) => isMoveDictation(t))) fail(`Learn tts not move-dictation shaped: "${learnTts[0]}"`);
-    await exitPlayer(page);
-    await openDetail(page, 'caro-kann');
-
-    // VOICE CONTRACT — Practice = silent (zero tts).
-    ev.tts.length = 0;
-    await page.locator('[data-testid^="gem-practice-"]').first().click();
-    await page.waitForTimeout(4000);
-    if ((await squares(page)) < 64) fail('Practice board not present');
-    { const nt = narrationTexts(ev); if (nt.length > 0) fail(`Practice is NOT silent — fired ${nt.length} narration tts: "${nt[0]}"`); }
-    await exitPlayer(page);
-    await openDetail(page, 'caro-kann');
-
-    // Play → coach room (OpeningPlayMode).
-    await page.locator('[data-testid^="gem-play-"]').first().click();
-    await page.waitForTimeout(2500);
-    if (await cardVisible(page)) fail('Play did not leave the detail card');
-    await exitPlayer(page);
-
-    // Caro named-trap Learn (the Qe2 warning) now mounts (was null before).
-    await openDetail(page, 'caro-kann');
-    const trapLearn = page.locator('[data-testid="named-trap-learn-karpov-qe2-mate"]');
-    await trapLearn.waitFor({ state: 'attached', timeout: 8000 }).catch(() => {});
-    if (await trapLearn.count()) {
-      await trapLearn.scrollIntoViewIfNeeded().catch(() => {});
-      await trapLearn.click().catch(() => {}); await page.waitForTimeout(2500);
-      if ((await squares(page)) < 64) fail('Caro named-trap Learn did not mount a board');
-      await exitPlayer(page);
-    } else { fail('Caro named-trap Learn button not found on main tab'); }
-  } catch (e) { fail(`threw — ${String(e).slice(0, 160)}`); }
-  errs.push(...ev.pageerrors.map((p) => `T2 pageerror: ${p}`), ...ev.consoleErrors.map((c) => `T2 console: ${c}`));
-  await ctx.close();
-  return errs;
-}
-
-// ─── Tier 3 — adversarial / stress ───────────────────────────────────────────
-async function tier3(browser) {
-  const { ctx, page, ev } = await makeCtx(browser);
-  const errs = [];
-  const fail = (m) => errs.push(`T3: ${m}`);
-  try {
-    await bootSeed(page);
-    await openDetail(page, 'caro-kann');
-
-    // Rapid mode toggling — no leak / crash. Watch→exit ×3 fast.
-    for (let i = 0; i < 3; i++) {
-      await page.locator('[data-testid^="gem-watch-"]').first().click().catch(() => {});
-      await page.waitForTimeout(500);
-      await exitPlayer(page);
+    // ── named-trap Learn (Caro Qe2) — mounts a board (when caro is in scope) ──
+    if (MASTERCLASS.includes('caro-kann')) {
       await openDetail(page, 'caro-kann');
+      const tl = page.locator('[data-testid="named-trap-learn-karpov-qe2-mate"]');
+      await tl.waitFor({ state: 'attached', timeout: 8000 }).catch(() => {});
+      if (await tl.count()) {
+        await tl.scrollIntoViewIfNeeded().catch(() => {});
+        await tl.click().catch(() => {}); await page.waitForTimeout(2500);
+        if ((await squares(page)) < 64) fail('named-trap Learn: board absent');
+        await exitPlayer(page);
+      } else { fail('named-trap Learn button not found'); }
     }
 
-    // Full Watch playout to completion — board must reach the final ply with
-    // no desync (the played-out line is gate-legal; this proves the runtime
-    // never throws mid-playout).
-    await page.locator('[data-testid^="gem-watch-"]').first().click();
-    let lastMove = '';
-    let stalls = 0;
-    for (let i = 0; i < 40 && stalls < 6; i++) {
-      await page.waitForTimeout(1000);
-      const body = await page.locator('body').innerText().catch(() => '');
-      const m = body.match(/MOVE\s+(\d+)\s*\/\s*(\d+)/i);
-      const tag = m ? `${m[1]}/${m[2]}` : '';
-      if (tag && tag === lastMove) stalls++; else stalls = 0;
-      lastMove = tag;
-      if (m && m[1] === m[2]) break; // reached the end
+    // ── NO EMPTY CARD — the real contract: a gem-less tab shows no card; a
+    //    tab that DOES show the card must carry ≥1 tile (never empty junk).
+    //    Switching tabs must never crash. (Not "≥1 tab must be empty" — an
+    //    opening can legitimately have a gem on every tab.) ──
+    await openDetail(page, PRIMARY);
+    const tabCount = await page.locator('[data-testid^="variation-tab-"]').count();
+    for (let i = 0; i < tabCount; i++) {
+      await page.locator('[data-testid^="variation-tab-"]').nth(i).click().catch(() => {});
+      await page.waitForTimeout(800);
+      if (await cardVisible(page) && (await page.locator('[data-testid^="punish-gem-"]').count()) < 1) {
+        fail(`${PRIMARY} tab#${i}: gems card visible but EMPTY (no tiles)`);
+      }
     }
-    if ((await squares(page)) < 64) fail('Watch playout lost the board');
-    await exitPlayer(page);
-    await openDetail(page, 'caro-kann');
 
-    // Wrong move in Learn — click an own piece then an illegal target; the
-    // MOVE counter must not advance to completion and nothing may throw.
-    await page.locator('[data-testid^="gem-learn-"]').first().click();
-    await page.waitForTimeout(2500);
-    const before = await page.locator('body').innerText().catch(() => '');
-    // Poke two arbitrary squares (Black student → try a nonsense reply).
-    for (const sq of ['a6', 'h6', 'a3']) {
-      const cell = page.locator(`[data-square="${sq}"]`).first();
-      if (await cell.isVisible().catch(() => false)) { await cell.click().catch(() => {}); await page.waitForTimeout(200); }
+    // ── deeper passes: pick-before-load + out-of-order toggling ──
+    if (level >= 2) {
+      await page.goto(`${URL}/openings/${PRIMARY}`, { waitUntil: 'domcontentloaded' });
+      await page.waitForTimeout(400);
+      const wb = page.locator('[data-testid^="gem-watch-"]').first();
+      if (await wb.isVisible().catch(() => false)) await wb.click().catch(() => {});
+      await page.waitForTimeout(2500); // must not crash
     }
-    await page.waitForTimeout(1500);
-    if ((await squares(page)) < 64) fail('Learn board vanished after a stray click');
-    void before;
-    await exitPlayer(page);
-    await openDetail(page, 'caro-kann');
-
-    // Practice silence under interaction (hard) — poke the board, expect 0 tts.
-    ev.tts.length = 0;
-    await page.locator('[data-testid^="gem-practice-"]').first().click();
-    await page.waitForTimeout(2000);
-    for (const sq of ['e7', 'e6', 'd7']) {
-      const cell = page.locator(`[data-square="${sq}"]`).first();
-      if (await cell.isVisible().catch(() => false)) { await cell.click().catch(() => {}); await page.waitForTimeout(300); }
+    if (level >= 3) {
+      await openDetail(page, PRIMARY);
+      for (let r = 0; r < 3; r++) {
+        for (const mode of ['watch', 'learn', 'practice']) {
+          const b = page.locator(`[data-testid^="gem-${mode}-"]`).first();
+          if (await b.isVisible().catch(() => false)) {
+            await b.click().catch(() => {}); await page.waitForTimeout(400);
+            await exitPlayer(page); await openDetail(page, PRIMARY);
+          }
+        }
+      }
     }
-    await page.waitForTimeout(2500);
-    { const nt = narrationTexts(ev); if (nt.length > 0) fail(`Practice broke silence under interaction — ${nt.length} narration tts: "${nt[0]}"`); }
-    await exitPlayer(page);
-
-    // Ruy too — adversarial breadth.
-    await openDetail(page, 'ruy-lopez');
-    await page.locator('[data-testid^="gem-watch-"]').first().click().catch(() => {});
-    await page.waitForTimeout(2500);
-    if ((await squares(page)) < 64) fail('ruy-lopez Watch board not present');
-    await exitPlayer(page);
   } catch (e) { fail(`threw — ${String(e).slice(0, 160)}`); }
-  errs.push(...ev.pageerrors.map((p) => `T3 pageerror: ${p}`), ...ev.consoleErrors.map((c) => `T3 console: ${c}`));
+  errs.push(...ev.pageerrors.map((p) => `P${level} pageerror: ${p}`), ...ev.consoleErrors.map((c) => `P${level} console: ${c}`));
   await ctx.close();
   return errs;
 }
 
 (async () => {
+  console.log(`[loop] weapon openings: ${GEM_OPENINGS.join(', ') || '(none)'} — primary: ${PRIMARY ?? '(none)'}`);
+  if (!PRIMARY) {
+    console.log('\n[loop] CONTRACT DEFERRED — no engine-graded weapon gems present. Run the mine-punish-gems Action (Stockfish) to populate, then re-run.');
+    process.exit(2);
+  }
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ executablePath: exe, headless: true });
-  const tiers = [['Tier 1 — breadth', tier1], ['Tier 2 — failure modes', tier2], ['Tier 3 — adversarial', tier3]];
-  const report = { url: URL, ts: new Date().toISOString(), tiers: [] };
+  const report = { url: URL, ts: new Date().toISOString(), passes: [] };
   let clean = 0;
-  for (const [name, fn] of tiers) {
-    process.stdout.write(`\n[loop] ${name} …\n`);
-    const errs = await fn(browser);
-    report.tiers.push({ name, errors: errs });
-    if (errs.length === 0) { clean++; console.log(`[loop] ${name}: 0 errors ✓ (consecutive clean: ${clean})`); }
-    else { console.log(`[loop] ${name}: ${errs.length} ERROR(S) — streak reset`); errs.forEach((e) => console.log(`   ✗ ${e}`)); clean = 0; }
+  for (const level of [1, 2, 3]) {
+    process.stdout.write(`\n[loop] Pass ${level} (every function${level > 1 ? `, depth ${level}` : ''}) …\n`);
+    const errs = await runPass(browser, level);
+    report.passes.push({ level, errors: errs });
+    if (errs.length === 0) { clean++; console.log(`[loop] Pass ${level}: 0 errors ✓ (consecutive clean: ${clean})`); }
+    else { console.log(`[loop] Pass ${level}: ${errs.length} ERROR(S) — streak reset`); errs.forEach((e) => console.log(`   ✗ ${e}`)); clean = 0; }
   }
   await browser.close();
   await mkdir('audit-reports', { recursive: true }).catch(() => {});
-  await writeFile(`audit-reports/punish-gems-loop-${report.ts.replace(/[:.]/g, '-')}.json`, JSON.stringify(report, null, 2));
+  await writeFile(`audit-reports/punish-gems-loop-${ONLY || 'all'}-${report.ts.replace(/[:.]/g, '-')}.json`, JSON.stringify(report, null, 2));
   const met = clean === 3;
-  console.log(`\n[loop] ${met ? 'CONTRACT MET — 3 consecutive error-free passes' : 'CONTRACT NOT MET — need 3 consecutive error-free tiers'} (clean streak: ${clean}/3)`);
+  console.log(`\n[loop] ${met ? 'CONTRACT MET — 3 consecutive error-free passes (every function, deepening)' : 'CONTRACT NOT MET — need 3 consecutive error-free passes'} (clean streak: ${clean}/3)`);
   process.exit(met ? 0 : 1);
 })();

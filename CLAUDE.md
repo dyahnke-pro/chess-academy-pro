@@ -1063,6 +1063,51 @@ playbook holds the rules you MUST follow, in particular:
   variation tab, with full WLPP (Learn/Practice via the
   `getRuyTrapPlayableLine` converter). Weapon = opponent slips, you punish;
   warning = you must avoid — classify by who plays the punishing move.
+- **🔒 PUNISH-GEMS DOCTRINE — the weapon-section spine (LOCKED, David
+  2026-05-24).** The weapon section is primarily MINED punish-gems
+  (`scripts/mine-punish-gems.mjs` → `src/data/punish-gems.json`), named traps
+  layered on top. The mining rules are non-negotiable, hard-won this session:
+  1. **ENGINE-FIRST discovery, NOT practical win-rate.** The amateur DB only
+     says what's COMMON at the student's rating (`RATINGS` ≈ their level — a
+     blunder hides in master buckets); STOCKFISH says what's PUNISHABLE. A
+     practical-score filter HIDES the real crushes — a move that loses by force
+     often still scores fine at 1500 because the winner doesn't find the
+     refutation (this was the original bug; it surfaced only `h3`-style fluff
+     and missed Bxf7+ sacs / gambit busts). So: take the common opponent moves,
+     keep the ones the engine refutes.
+  2. **REFUTE WITH THE BEST MOVE.** The punish is the ENGINE's best move (finds
+     the sac/fork), not the most-popular human reply. "Stockfish supplies the
+     crush" — that's in-scope for G3 (the punish is a real legal move; only the
+     opening SPINE must be DB-anchored ≥6 plies).
+  3. **GRADE AT THE QUIET END of a best-play-both-sides playout**, never a
+     one-ply eval. A pawn "won" that gets regained (Ruy `...a6 Bxc6 Nxe5`
+     looked +1.4 at one ply) must collapse; a real crush holds. Require the
+     final eval ≥ the bar AND a real jump from the pre-inaccuracy baseline
+     (the move's fault, not the opening's).
+  4. **TIERS:** ≥ +1.0 = `confirmed` (crush — wins material / decisive);
+     +0.5..+1.0 = `positional` (clearly better, honest label, never "crush");
+     below +0.5 → dropped. ONLY confirmed + positional surface (`isWeaponGem`);
+     `practical`/unverified NEVER ship as a weapon.
+  5. **WALK EVERY VARIATION'S FULL LINE** node-by-node (not just the shared
+     prefix — Marshall/Breyer/Berlin diverge late), with a shared scanned-FEN
+     set so overlapping lines don't re-burn engine time.
+  6. **🌐 GOOGLE-VERIFY the final set against theory before shipping
+     (David's rule).** The engine can be right where intuition is wrong (Ruy
+     `...a6` really does drop a pawn in the `O-O`-first order — Google
+     confirmed) AND can flag a respected mainline you'd wrongly ship. Spot-
+     check the headline crushes + any surprising one; drop what theory says is
+     fine, keep verified refutations.
+  7. **Engine availability:** CI (`.github/workflows/mine-punish-gems.yml`,
+     apt-installs stockfish) OR local — the sandbox CAN `apt-get install -y
+     stockfish` (binary at `/usr/games/stockfish`); the miner is engine-first
+     and refuses to run without one.
+  8. **GATE + post-deploy contract:** `src/data/punishGems.test.ts` +
+     `wlppNarration.test.ts` (in ship-check) prove legality / DB-anchor / tier
+     evals / the WLPP narration contract (Watch=authored prose,
+     Learn=move-dictation-only, Practice=silent, Play=coach room). The
+     `scripts/audit-punish-gems-loop.mjs` 3-PASS CONTRACT (MET only on 3
+     CONSECUTIVE error-free tiers, each digging deeper) runs after every deploy
+     touching the surface.
 - **A model game PER VARIATION, each showing the STUDENT'S side WINNING** —
   never ship a game where the opening loses (the Pirc's Kasparov–Topalov is a
   White win against the Pirc = wrong; scrapped). Source REAL games (search the

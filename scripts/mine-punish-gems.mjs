@@ -16,13 +16,27 @@ import { existsSync, readFileSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 
 const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer';
-const RATINGS = '2000,2200,2500';
+// Rating buckets matched to the student's level (~1400-1600) — that's where
+// the natural blunders David means (grab the gambit pawn, walk into Bxf7+)
+// actually get played. Master buckets hide them.
+const RATINGS = '1600,1800,2000';
 const SPEEDS = 'blitz,rapid,classical';
-const FREQ_FLOOR = 0.04;     // opponent move ≥4% common
-const MIN_GAMES = 400;       // …with real sample
-const EDGE = 0.06;           // ≥6 percentage-pts better student score than main
-const ENGINE_CP = 35;        // confirmed = student ≥ +35cp after the punish
-const SF_DEPTH = 16;
+// ENGINE-FIRST discovery (David 2026-05-24): the amateur DB only says what's
+// COMMON; STOCKFISH says what's PUNISHABLE. A move that loses by force often
+// still scores fine in amateur practice (the winner doesn't find the refutation),
+// so a practical-win-rate filter HIDES the real crushes (f7 sacs, bad gambit
+// grabs). Instead: take the common opponent moves, and keep the ones the engine
+// refutes — the punish is the ENGINE'S best move, so sacs surface.
+const FREQ_FLOOR = 0.02;     // opponent move ≥2% common (natural blunders are rarer)
+const MIN_GAMES = 100;       // …with a real sample
+const CANDIDATES = 5;        // engine-test the top-N common opponent moves per node
+const JUMP_CP = 50;          // the move must hand the student ≥+0.5 vs best play
+// Engine bar: a weapon must give REAL benefit. ≥+1.0 = 'confirmed' crush (wins
+// material / decisive); +0.5..+1.0 = 'positional' (clearly better); below +0.5
+// never becomes a gem.
+const WEAPON_CP = 100;       // confirmed: student ≥ +1.0
+const EDGE_CP = 50;          // positional: student ≥ +0.5
+const SF_DEPTH = 18;         // deep enough to see tactical follow-ups (sacs)
 const MIN_SPINE = 6;         // opening spine must DB-anchor ≥6 plies (G3)
 
 // G3 DB-anchor — mirror of src/utils/dbAnchor.ts. A gem's spine must match a
@@ -58,22 +72,38 @@ function resolveStockfish() {
   try { return execSync('which stockfish', { encoding: 'utf-8' }).trim() || null; } catch { return null; }
 }
 const STOCKFISH = resolveStockfish();
-function evalFen(bin, fen) {
-  return new Promise((resolve) => {
-    const sf = spawn(bin); let last = null, done = false, buf = '';
-    const fin = (v) => { if (!done) { done = true; try { sf.kill(); } catch {} resolve(v); } };
-    sf.stdout.on('data', (d) => {
-      buf += d.toString(); const lines = buf.split('\n'); buf = lines.pop() ?? '';
-      for (const l of lines) {
-        const cp = l.match(/score cp (-?\d+)/), mt = l.match(/score mate (-?\d+)/);
-        if (mt) last = parseInt(mt[1], 10) > 0 ? 100000 : -100000; else if (cp) last = parseInt(cp[1], 10);
-        if (l.startsWith('bestmove')) fin(last);
-      }
-    });
-    sf.on('error', () => fin(null));
-    sf.stdin.write(`uci\nposition fen ${fen}\ngo depth ${SF_DEPTH}\n`);
-    setTimeout(() => fin(last), 12000);
+
+// Persistent engine: one process, queried sequentially. Each eval returns the
+// score (cp, side-to-move perspective) AND the best move (UCI) — the best move
+// IS the punish (David: "we refute with BEST MOVES").
+function startEngine(bin) {
+  if (!bin) return null;
+  const sf = spawn(bin);
+  let buf = '', lastCp = null, resolver = null;
+  sf.stdout.on('data', (d) => {
+    buf += d.toString(); const lines = buf.split('\n'); buf = lines.pop() ?? '';
+    for (const l of lines) {
+      const cp = l.match(/score cp (-?\d+)/), mt = l.match(/score mate (-?\d+)/);
+      if (mt) lastCp = parseInt(mt[1], 10) > 0 ? 100000 : -100000; else if (cp) lastCp = parseInt(cp[1], 10);
+      const bm = l.match(/^bestmove (\S+)/);
+      if (bm && resolver) { const r = resolver; resolver = null; r({ cp: lastCp, best: bm[1] === '(none)' ? null : bm[1] }); }
+    }
   });
+  sf.on('error', () => { if (resolver) { const r = resolver; resolver = null; r({ cp: null, best: null }); } });
+  sf.stdin.write('uci\nisready\n');
+  return {
+    eval(fen) {
+      return new Promise((res) => {
+        lastCp = null; resolver = res;
+        sf.stdin.write(`position fen ${fen}\ngo depth ${SF_DEPTH}\n`);
+        setTimeout(() => { if (resolver === res) { resolver = null; res({ cp: lastCp, best: null }); } }, 20000);
+      });
+    },
+    quit() { try { sf.stdin.write('quit\n'); sf.kill(); } catch { /* ignore */ } },
+  };
+}
+function applyUci(chess, uci) {
+  return chess.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci[4] : undefined });
 }
 
 function toUci(sans) { const c = new Chess(); return sans.map((m) => { const mv = c.move(m); return mv.from + mv.to + (mv.promotion ?? ''); }); }
@@ -85,62 +115,95 @@ async function explorer(source, sans) {
 function gamesOf(m) { return m.white + m.draws + m.black; }
 function studentScore(m, sc) { const t = gamesOf(m); return t ? ((sc === 'w' ? m.white : m.black) + m.draws / 2) / t : 0; }
 
-async function mine(openingId, studentChar, seed, maxPlies = 14) {
-  const gems = []; const line = [...seed];
-  for (let depth = 0; depth < maxPlies; depth++) {
+// Walk a FULL line (a curated variation pgn, or a short seed that then extends
+// down the amateur trunk), scanning every opponent node for engine-refutable
+// inaccuracies. `scanned` is shared across lines so overlapping variations
+// (the closed-Ruy prefix, etc.) don't re-burn engine time on the same FENs.
+async function mine(openingId, studentChar, walkLine, eng, scanned, extraPlies = 4) {
+  if (!eng) return []; // engine-first: no Stockfish → no weapons (don't guess)
+  const sideWord = studentChar === 'w' ? 'White' : 'Black';
+  const SCAN_CAP = 18; // don't scan past the late opening (inaccuracies there are rarer / off-book)
+  const gems = []; const line = [];
+  for (let depth = 0; depth < walkLine.length + extraPlies; depth++) {
     const c = new Chess(); for (const m of line) c.move(m);
-    const j = await explorer('lichess', line); await sleep(160);
+    const j = await explorer('lichess', line); await sleep(140);
     if (!j || !(j.moves || []).length) break;
     const total = (j.white || 0) + (j.draws || 0) + (j.black || 0);
     const main = j.moves[0];
-    if (c.turn() !== studentChar) {
-      const mainS = studentScore(main, studentChar);
-      const bad = j.moves
-        .map((m) => ({ san: m.san, games: gamesOf(m), pct: gamesOf(m) / total, s: studentScore(m, studentChar) }))
-        .filter((m) => m.san !== main.san && m.pct >= FREQ_FLOOR && m.games >= MIN_GAMES && m.s >= mainS + EDGE)
-        .sort((a, b) => b.s - a.s)[0];
-      if (bad) {
-        // PLAY THE PUNISH OUT until the line resolves (David: "play the line
-        // out until the capture line is complete, then let the user try it").
-        // Follow the masters top move both sides until the sample thins out
-        // (past book) or a depth cap — that's the punishing sequence the user
-        // Watches, then Learns/Practices/Plays (same WLPP, via PlayableLinePlayer).
-        const punishSeq = [];               // moves AFTER the inaccuracy
-        const cur = [...line, bad.san];
-        let firstPunish = null;
-        for (let k = 0; k < 8; k++) {
-          const pm = (await explorer('masters', cur)) ?? (await explorer('lichess', cur));
-          await sleep(160);
-          const top = pm?.moves?.[0];
-          if (!top || gamesOf(top) < 15) break;   // past book / line resolved
-          punishSeq.push(top.san); cur.push(top.san);
-          if (k === 0) firstPunish = top.san;
+
+    if (c.turn() !== studentChar && depth < SCAN_CAP && longestAnchorPly(line) >= MIN_SPINE && !scanned.has(c.fen())) {
+      scanned.add(c.fen());
+      // Baseline: how good is THIS position for the student under best play?
+      // (node eval is opponent-to-move perspective, so flip for the student.)
+      const node = await eng.eval(c.fen());
+      const E0 = node.cp === null ? 0 : -node.cp;
+
+      // Only hunt when the position isn't already winning for the student —
+      // otherwise the edge is the opening, not the opponent's move.
+      if (E0 < WEAPON_CP) {
+        const cands = j.moves
+          .map((m) => ({ san: m.san, games: gamesOf(m), pct: gamesOf(m) / total, s: studentScore(m, studentChar) }))
+          .filter((m) => m.pct >= FREQ_FLOOR && m.games >= MIN_GAMES)
+          .slice(0, CANDIDATES);
+
+        let best = null;
+        for (const cand of cands) {
+          const cc = new Chess(c.fen());
+          let mv; try { mv = cc.move(cand.san); } catch { continue; }
+          // After the opponent's move it's the student to move → eval is the
+          // student's advantage, and after.best IS the punish (BEST MOVE).
+          const after = await eng.eval(cc.fen());
+          if (after.cp === null || !after.best) continue;
+          const E1 = after.cp;
+          // Real inaccuracy = leaves the student clearly better AND is a big
+          // drop vs the position under best play (the move's fault, not the line).
+          if (E1 >= EDGE_CP && (E1 - E0) >= JUMP_CP) {
+            if (!best || E1 > best.E1) best = { cand, E1, fenAfter: cc.fen(), punishUci: after.best, mv };
+          }
         }
-        let engineCp = null, tier = 'practical';
-        if (firstPunish && STOCKFISH) {
-          const pc = new Chess(); for (const m of cur) pc.move(m);  // end of the played-out line
-          const cp = await evalFen(STOCKFISH, pc.fen());
-          if (cp !== null) { engineCp = studentChar === pc.turn() ? cp : -cp; tier = engineCp >= ENGINE_CP ? 'confirmed' : 'weak'; }
-        }
-        // The opening spine must DB-ANCHOR ≥6 plies (G3) — not merely BE 6
-        // plies long. A transposition the explorer reaches in a different
-        // move order than the DB stores (e.g. Caro Two Knights via Nf3-first
-        // instead of the DB's Nc3-first) fails this, exactly like the gate.
-        if (firstPunish && longestAnchorPly(line) >= MIN_SPINE && (!STOCKFISH || tier !== 'weak')) {
-          // playLine = full sequence from move 1 → feeds PlayableLinePlayer (WLPP).
-          const playLine = [...line, bad.san, ...punishSeq];
-          gems.push({
-            openingId, lineMoves: line.join(' '), inaccuracy: bad.san,
-            freqPct: +(bad.pct * 100).toFixed(1), games: bad.games,
-            practicalScore: +(bad.s * 100).toFixed(0), mainMove: main.san,
-            punish: firstPunish, punishSeq, playLine: playLine.join(' '),
-            engineCp, tier,
-            why: `At your level White plays ${bad.san} here in ${(bad.pct * 100).toFixed(0)}% of games, but Black scores ${(bad.s * 100).toFixed(0)}% against it. Punish with ${firstPunish} — ${engineCp !== null ? `Black is clearly better (${engineCp >= 0 ? '+' : ''}${(engineCp / 100).toFixed(1)})` : 'Black is comfortably on top in practice'}.`,
-          });
+
+        if (best) {
+          // The punish + the played-out crush: the engine's BEST move for the
+          // student, then best play both sides until the advantage is shown.
+          const pc = new Chess(c.fen()); pc.move(best.cand.san);
+          const punishSeq = [];
+          let punishSan = null;
+          try { punishSan = applyUci(pc, best.punishUci).san; punishSeq.push(punishSan); } catch { /* skip */ }
+          if (punishSan) {
+            // Play the refutation OUT with best moves for BOTH sides, then
+            // grade the QUIET final position — not the one-ply eval. A pawn
+            // "won" that gets regained (e.g. Ruy ...a6 Bxc6 Nxe5) collapses
+            // here; a real crush (a fork, a winning attack) holds.
+            for (let k = 0; k < 7; k++) {
+              const e = await eng.eval(pc.fen());
+              if (!e.best) break;
+              let m2; try { m2 = applyUci(pc, e.best); } catch { break; }
+              punishSeq.push(m2.san);
+            }
+            const fin = await eng.eval(pc.fen());
+            const engineCp = fin.cp === null ? best.E1 : (pc.turn() === studentChar ? fin.cp : -fin.cp);
+            // Final, honest gate: still clearly better AND still a real jump
+            // from the pre-inaccuracy baseline.
+            if (engineCp >= EDGE_CP && (engineCp - E0) >= JUMP_CP) {
+              const tier = engineCp >= WEAPON_CP ? 'confirmed' : 'positional';
+              const playLine = [...line, best.cand.san, ...punishSeq];
+              gems.push({
+                openingId, lineMoves: line.join(' '), inaccuracy: best.cand.san,
+                freqPct: +(best.cand.pct * 100).toFixed(1), games: best.cand.games,
+                practicalScore: +(best.cand.s * 100).toFixed(0), mainMove: main.san,
+                punish: punishSan, punishSeq, playLine: playLine.join(' '),
+                engineCp, tier,
+                why: `At your level opponents play ${best.cand.san} here in ${(best.cand.pct * 100).toFixed(0)}% of games. Punish with the best move ${punishSan} — the engine has ${sideWord} ${engineCp >= WEAPON_CP ? 'winning' : 'clearly better'} (${engineCp >= 0 ? '+' : ''}${(engineCp / 100).toFixed(1)}).`,
+              });
+            }
+          }
         }
       }
     }
-    line.push(main.san);
+    // Advance ALONG the curated line; once it ends, follow the amateur trunk.
+    const next = depth < walkLine.length ? walkLine[depth] : main.san;
+    try { const t = new Chess(c.fen()); t.move(next); } catch { break; }
+    line.push(next);
   }
   return gems;
 }
@@ -158,51 +221,58 @@ const OPENING_SEEDS = {
   'pirc-defence': { studentChar: 'b', baseSeed: ['e4', 'd6'] },
   'vienna-game':  { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nc3'] },
 };
-const SEED_PLIES = 6; // how deep each variation seed goes before the miner walks
-
 function loadRepertoire() {
   try {
     const raw = JSON.parse(readFileSync('src/data/repertoire.json', 'utf-8'));
     return Array.isArray(raw) ? raw : raw.openings ?? [];
   } catch { return []; }
 }
-function variationSeeds(opening) {
-  // Each variation's first SEED_PLIES SAN moves → a seed the miner walks from.
-  const seeds = [];
+// Each variation's FULL curated line → walked node-by-node so every variation's
+// characteristic positions (Marshall, Breyer, Berlin, …) get scanned, not just
+// the shared opening prefix.
+function variationLines(opening) {
+  const lines = [];
   for (const v of opening?.variations ?? []) {
     const moves = v.pgn.replace(/\d+\.(\.\.)?/g, ' ').replace(/\s+/g, ' ').trim().split(' ').filter(Boolean);
-    if (moves.length >= SEED_PLIES) seeds.push(moves.slice(0, SEED_PLIES));
+    if (moves.length >= MIN_SPINE) lines.push(moves);
   }
-  return seeds;
+  return lines;
 }
 const seedKey = (s) => s.join(' ');
 
 (async () => {
-  console.log(`[mine] stockfish: ${STOCKFISH ?? 'NONE (sandbox → practical tier)'}`);
+  console.log(`[mine] stockfish: ${STOCKFISH ?? 'NONE'}`);
+  if (!STOCKFISH) { console.error('[mine] ENGINE REQUIRED — engine-first discovery refutes with best moves. Set STOCKFISH_PATH.'); process.exit(2); }
+  const eng = startEngine(STOCKFISH);
   const repertoire = loadRepertoire();
   const only = (process.env.OPENINGS || '').split(',').map((s) => s.trim()).filter(Boolean);
   const ids = only.length ? only : Object.keys(OPENING_SEEDS);
   const all = [];
-  const seen = new Set(); // dedupe gems across overlapping seeds
+  const seen = new Set(); // dedupe gems across overlapping lines
   for (const id of ids) {
     const cfg = OPENING_SEEDS[id];
     if (!cfg) { console.warn(`[mine] no seed config for "${id}" — skipping`); continue; }
     const opening = repertoire.find((o) => o.id === id);
-    const seeds = [cfg.baseSeed, ...variationSeeds(opening)];
-    const uniqueSeeds = [...new Map(seeds.map((s) => [seedKey(s), s])).values()];
-    console.log(`[mine] ${id} (student=${cfg.studentChar}) — ${uniqueSeeds.length} seeds`);
-    for (const seed of uniqueSeeds) {
-      const gems = await mine(id, cfg.studentChar, seed);
+    const scanned = new Set(); // FENs already scanned (shared across this opening's lines)
+    // The short base seed extends down the amateur trunk (extraPlies large);
+    // each full variation line is walked as-is (extraPlies small).
+    const lines = [cfg.baseSeed, ...variationLines(opening)];
+    const uniqueLines = [...new Map(lines.map((l) => [seedKey(l), l])).values()];
+    console.log(`[mine] ${id} (student=${cfg.studentChar}) — ${uniqueLines.length} lines`);
+    for (const wl of uniqueLines) {
+      const extra = wl.length <= 6 ? 12 : 2;
+      const gems = await mine(id, cfg.studentChar, wl, eng, scanned, extra);
       for (const g of gems) {
         const key = `${g.openingId}|${g.lineMoves}|${g.inaccuracy}`;
         if (seen.has(key)) continue;
         seen.add(key);
         all.push(g);
       }
-      if (gems.length) console.log(`[mine]   seed "${seedKey(seed)}" → ${gems.length}`);
+      if (gems.length) console.log(`[mine]   line "${seedKey(wl).slice(0, 40)}…" → ${gems.length}`);
     }
   }
+  eng.quit();
   await writeFile('src/data/punish-gems.json', JSON.stringify(all, null, 2) + '\n');
   console.log(`[mine] wrote ${all.length} gems → src/data/punish-gems.json`);
-  for (const g of all) console.log(`  ${g.openingId} | ${g.lineMoves} | ${g.inaccuracy} (${g.freqPct}%) → ${g.punish} [${g.tier}${g.engineCp !== null ? ` ${g.engineCp}cp` : ''}]`);
+  for (const g of all) console.log(`  ${g.openingId} | ${g.lineMoves} | ${g.inaccuracy} (${g.freqPct}%) → ${g.punish} [${g.tier} ${g.engineCp}cp]`);
 })();
