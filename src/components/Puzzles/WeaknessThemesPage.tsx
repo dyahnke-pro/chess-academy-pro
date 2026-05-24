@@ -1,3 +1,4 @@
+import { PageHelp } from '../Layout/PageHelp';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Target, Crosshair, Shuffle, ChevronRight, AlertTriangle } from 'lucide-react';
@@ -141,6 +142,17 @@ export function WeaknessThemesPage(): JSX.Element {
         <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
           {phase === 'drilling' ? (activeTheme ?? 'Mixed Training') : 'My Weaknesses'}
         </h1>
+        <div className="ml-auto">
+          <PageHelp
+            title="How to use Weaknesses"
+            steps={[
+              { label: 'Your real holes', body: 'Built from YOUR games — the motifs and mistakes you actually get wrong, not a generic list.' },
+              { label: 'Drill them', body: 'Each weakness becomes targeted puzzle practice until the pattern is fixed.' },
+              { label: 'Needs your games', body: 'Import your games first so this has real data — otherwise it can only show samples.' },
+              { label: 'Closes the loop', body: 'Learn openings, play them, find the holes here, drill them shut.' },
+            ]}
+          />
+        </div>
       </div>
 
       {/* Loading */}

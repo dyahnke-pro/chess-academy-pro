@@ -5,6 +5,7 @@ import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
 import { BookOpen, GraduationCap, Target, AlertTriangle, Upload } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
+import { PageHelp } from '../Layout/PageHelp';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
 
@@ -80,9 +81,22 @@ export function DashboardPage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="dashboard"
     >
-      <h1 className="text-xl font-bold text-center mt-2">
-        Chess Academy Pro
-      </h1>
+      <div className="relative mt-2">
+        <h1 className="text-xl font-bold text-center">
+          Chess Academy Pro
+        </h1>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2">
+          <PageHelp
+            title="How to use Chess Academy Pro"
+            steps={[
+              { label: 'Your home base', body: 'Jump to any area below, or use the search bar to ask the coach or find an opening or game.' },
+              { label: 'Import your games', body: 'Pull in your real games so the app can find the openings and tactics you actually get wrong.' },
+              { label: 'The sections', body: 'Openings, Coach, Tactics, Weaknesses — each a tap away. Openings is where the masterclasses live.' },
+              { label: 'The loop', body: 'Learn an opening → play it → find your holes → drill them shut.' },
+            ]}
+          />
+        </div>
+      </div>
 
       {/* Import Games */}
       <div className="max-w-lg mx-auto w-full">

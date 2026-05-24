@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Eye, AlertTriangle, Shuffle, Trophy, Wrench, Crosshair, MapPin } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
+import { PageHelp } from '../Layout/PageHelp';
 import { PuzzleQuickSettings } from './PuzzleQuickSettings';
 import { THEME_MAP } from '../../services/puzzleService';
 import { useSettings } from '../../hooks/useSettings';
@@ -129,9 +130,22 @@ export function TacticsPage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="tactics-page"
     >
-      <h1 className="text-xl font-bold text-center mt-2">
-        Tactical Training
-      </h1>
+      <div className="relative mt-2">
+        <h1 className="text-xl font-bold text-center">
+          Tactical Training
+        </h1>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2">
+          <PageHelp
+            title="How to use Tactics"
+            steps={[
+              { label: 'Sharpen your eye', body: 'Puzzle training — forks, pins, mates, sacrifices — graded to your level.' },
+              { label: 'Themed sets', body: 'Drill one specific motif, or take a mixed set across all of them.' },
+              { label: 'It sticks', body: 'Missed puzzles come back on a schedule so the pattern locks in.' },
+              { label: 'From your games', body: 'Once you import games, the tactics you actually miss feed straight into your training.' },
+            ]}
+          />
+        </div>
+      </div>
 
       {/* Search */}
       <div className="max-w-lg mx-auto w-full">

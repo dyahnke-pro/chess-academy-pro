@@ -106,14 +106,17 @@ async function bootSeed(page) {
 }
 async function openDetail(page, id) {
   await page.goto(`${URL}/openings/${id}`, { waitUntil: 'domcontentloaded' });
-  for (let i = 0; i < 22; i++) {
+  // Poll the FULL window for the gems card — the page headings render seconds
+  // before the card finishes (esp. a 21-gem tab), so don't early-return 'detail'.
+  let sawDetail = false;
+  for (let i = 0; i < 25; i++) {
     await page.waitForTimeout(1000);
     if (await page.locator('[data-testid="punish-gems-card"]').isVisible().catch(() => false)) return 'card';
     const t = await page.locator('body').innerText().catch(() => '');
     if (/not found/i.test(t)) return 'notfound';
-    if (/Pitfalls|Master|Overview/i.test(t)) return 'detail';
+    if (/Pitfalls|Master|Overview/i.test(t)) sawDetail = true;
   }
-  return 'timeout';
+  return sawDetail ? 'detail' : 'timeout';
 }
 const cardVisible = (p) => p.locator('[data-testid="punish-gems-card"]').isVisible().catch(() => false);
 const squares = (p) => p.locator('[data-square]').count();

@@ -79,6 +79,7 @@ the progress model (TODO 1) to the user. Build them together.
 - [ ] Onboarding `PageHelp` bubbles per tab (playbook §8) + WLPP/progress
       explainer.
 - Accounting gate (weakness tagging) deferred until the `learned` gate exists.
+- [ ] **Coach proactively asks the user about their mistakes** — after a game/drill, the coach surfaces a mistake and *quizzes* the student on it ("you played X here — what was better, and why?") rather than just labeling it. Retention + active recall. (David 2026-05-24)
 - [ ] **Store readiness (App Store + Play Store production)** — full plan at
       `docs/plans/2026-05-24-store-readiness.md`. Not a rewrite (Android already
       Capacitor-wired); real gaps = icon/splash assets, Android audio/mic native

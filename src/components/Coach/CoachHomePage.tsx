@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown } from 'lucide-react';
 import { useState } from 'react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
+import { PageHelp } from '../Layout/PageHelp';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
 import { logAppAudit } from '../../services/appAuditor';
@@ -59,9 +60,22 @@ export function CoachHomePage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="coach-home-page"
     >
-      <h1 className="text-xl font-bold text-center mt-2">
-        Coach
-      </h1>
+      <div className="relative mt-2">
+        <h1 className="text-xl font-bold text-center">
+          Coach
+        </h1>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2">
+          <PageHelp
+            title="How to use the Coach"
+            steps={[
+              { label: 'Ask anything', body: 'Type a question or say what you want to do — the coach routes you to a lesson, a drill, or a game.' },
+              { label: 'Learn with Coach', body: 'Guided lessons — pick a topic and dive in, move by move.' },
+              { label: 'Play with Coach', body: 'A real game vs the engine; the coach narrates each move and helps when you are stuck.' },
+              { label: 'It knows your context', body: 'The coach sees the position or line you are studying and answers in that context — not generic advice.' },
+            ]}
+          />
+        </div>
+      </div>
 
       {/* Search */}
       <div className="max-w-lg mx-auto w-full">

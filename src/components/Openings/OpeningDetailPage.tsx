@@ -53,6 +53,7 @@ import {
 } from '../../data/lessons/punishGems';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
+import { PageHelp } from '../Layout/PageHelp';
 import { MasterclassCoachChat } from './MasterclassCoachChat';
 import commonMistakesData from '../../data/common-mistakes.json';
 import middlegamePlansData from '../../data/middlegame-plans.json';
@@ -1081,6 +1082,18 @@ export function OpeningDetailPage(): JSX.Element {
             )}
           </div>
         </div>
+        <PageHelp
+          title="How to use a Masterclass"
+          steps={[
+            { label: 'Watch', body: 'Sit back — the line plays itself while the coach explains every idea. This is where you GET the opening.' },
+            { label: 'Learn', body: 'Now you play the moves. The voice cues each one; you make it on the board. Locks the line into your hands.' },
+            { label: 'Practice', body: 'Same line, silent. A Hint button if you blank. Prove you can play it with no help.' },
+            { label: 'Play', body: 'Play it out against the coach, locked to this opening. Real reps against resistance.' },
+            { label: 'Weapons', body: 'The common mistakes your opponent actually makes here — and exactly how to punish them. Watch the crush, then Learn / Practice / Play it like any line.' },
+            { label: 'Ask the coach', body: 'Stuck on a move? Ask anytime — the coach knows which line you are studying.' },
+            { label: 'The climb', body: 'Watch → Learn → Practice → Play. Each rung makes the opening more yours. Do them in order.' },
+          ]}
+        />
         <button
           onClick={(e) => {
             // Fire the star-slide animation only when the click will
