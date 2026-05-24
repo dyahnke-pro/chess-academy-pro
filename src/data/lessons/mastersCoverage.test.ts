@@ -183,6 +183,20 @@ describe.runIf(RUN)('Hole 6a — masters legitimacy of past-book moves (main + v
   }
 });
 
+// Soundness baseline (6b). Mirrors SUSPECT_BASELINE (6a): a small allowlist of
+// master-played plies the engine flags as a big cp-loss but which are DELIBERATELY
+// SHOWN — the opponent's defining mistake that the line exists to punish. The
+// cp-loss is real and CORRECT (the move IS bad for the side that plays it); the
+// gate just can't tell "recommended White move" from "opponent's greedy blunder
+// we're teaching the student to punish." Only legitimate when 6a confirms the
+// move is master-played (real theory, not invention). Keyed `${key}::${ply}:${san}`.
+const SOUNDNESS_BASELINE = new Set<string>([
+  // Møller Attack accepted: ...Bxa1 grabs the rook and walks into the winning
+  // attack — the whole point of the exchange sacrifice. Master-played (6a green);
+  // engine reads it as −3.7 for Black, i.e. White is winning, which IS the lesson.
+  'italian-game::Italian: Modern Moller Attack::20:Bxa1',
+]);
+
 // ── Hole 6b — Stockfish SOUNDNESS (all lessons, incl. traps) ────────────
 // Verifies each past-book move isn't a blunder: the move's centipawn loss
 // vs the engine's best at that position must be ≤ MAX_CP_LOSS. This is the
@@ -209,7 +223,7 @@ describe.runIf(RUN && !!STOCKFISH)('Hole 6b — Stockfish soundness of past-book
           const played = await evalFen(bin, fenBefore, mv.from + mv.to + (mv.promotion ?? ''));
           if (best !== null && played !== null) {
             const loss = best - played; // both side-to-move POV at fenBefore
-            if (loss > MAX_CP_LOSS) {
+            if (loss > MAX_CP_LOSS && !SOUNDNESS_BASELINE.has(`${key}::${ply}:${mv.san}`)) {
               blunders.push(`ply ${ply} ${mv.san} — loses ${loss}cp vs best (${best} → ${played})`);
             }
           }
@@ -232,6 +246,14 @@ describe.runIf(RUN && !!STOCKFISH)('Hole 6b — Stockfish soundness of past-book
 // no master games is past book → Stockfish's job. Keyed by plan id + ply.
 const PLAN_SUSPECT_BASELINE = new Set<string>([
   // <filled from the first plan-audit pass; review items, shrink over time>
+]);
+
+// Soundness baseline for plan lines (7b) — same rationale as SOUNDNESS_BASELINE
+// above. Keyed `${plan.id}::${moveNumber}:${san}`.
+const PLAN_SOUNDNESS_BASELINE = new Set<string>([
+  // Møller plan opens on the accepted-sacrifice ...Bxa1 (the rook grab the
+  // attack punishes). Master-played, deliberately shown; White is winning after.
+  'mp-italiangame-moller::1:Bxa1',
 ]);
 
 describe.runIf(RUN)('Hole 7a — masters legitimacy of middlegame plan lines', () => {
@@ -281,7 +303,10 @@ describe.runIf(RUN && !!STOCKFISH)('Hole 7b — Stockfish soundness of middlegam
             try { mv = c.move(line.moves[i]); } catch { break; }
             const best = await evalFen(bin, fenBefore);
             const played = await evalFen(bin, fenBefore, mv.from + mv.to + (mv.promotion ?? ''));
-            if (best !== null && played !== null && best - played > MAX_CP_LOSS) {
+            if (
+              best !== null && played !== null && best - played > MAX_CP_LOSS &&
+              !PLAN_SOUNDNESS_BASELINE.has(`${plan.id}::${i + 1}:${mv.san}`)
+            ) {
               blunders.push(`${plan.id} move ${i + 1} ${mv.san} — loses ${best - played}cp vs best`);
             }
           }
