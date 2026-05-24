@@ -23,6 +23,7 @@ const REQUIRED_SECTIONS = [
   'CheckpointQuiz',
   'MiddlegamePlansSection',
   'EndgamePlansSection',
+  'ModelGamesSection',
   'CommonMistakesSection',
   'MasterclassCoachChat',
   'MasteryRing',
@@ -38,13 +39,9 @@ describe('OpeningDetailPage live-wiring — masterclass sections are mounted', (
     });
   }
 
-  // KNOWN GAP (2026-05-24): ModelGamesSection / ModelGameViewer consume
-  // model-games.json + enforce the "student-side winning" guard but are
-  // currently mounted NOWHERE (the renderer is orphaned; the DATA still feeds
-  // the coach via loadModelGamesForLive). Wiring the renderer back into the
-  // masterclass page is pending (David approved it). Once mounted, add
-  // 'ModelGamesSection' to REQUIRED_SECTIONS above so it can't regress.
-  it('documents ModelGamesSection as a pending wire-in (not yet mounted)', () => {
-    expect(source.includes('<ModelGamesSection')).toBe(false);
+  // The model-game viewer must also be mounted (the section's onSelectGame
+  // routes into it). Without this, tapping a game would dead-end.
+  it('renders <ModelGameViewer> (the model-game viewer route)', () => {
+    expect(source.includes('<ModelGameViewer')).toBe(true);
   });
 });

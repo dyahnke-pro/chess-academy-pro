@@ -12,6 +12,8 @@ import { MasteryRing } from './MasteryRing';
 import { MiniBoard } from '../Board/MiniBoard';
 import { MiddlegamePlansSection, type MiddlegameAction } from './MiddlegamePlansSection';
 import { EndgamePlansSection } from './EndgamePlansSection';
+import { ModelGamesSection } from './ModelGamesSection';
+import { ModelGameViewer } from './ModelGameViewer';
 import { MiddlegamePlanStudy } from './MiddlegamePlanStudy';
 import { MiddlegamePractice } from './MiddlegamePractice';
 import { PlayableLinePlayer } from './PlayableLinePlayer';
@@ -90,7 +92,7 @@ import {
 import { narrateOpeningSection } from '../../services/openingSectionNarrator';
 import { useStarAnimationStore } from '../../stores/starAnimationStore';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
-import type { OpeningRecord, MiddlegamePlan } from '../../types';
+import type { OpeningRecord, MiddlegamePlan, ModelGame } from '../../types';
 import {
   ArrowLeft,
   BookOpen as LearnIcon,
@@ -147,7 +149,8 @@ type ViewMode =
   | 'middlegame-plan'
   | 'middlegame-practice'
   | 'middlegame-play'
-  | 'mistake-watch';
+  | 'mistake-watch'
+  | 'model-game';
 
 function computeFenFromPgn(pgn: string, setupFen?: string): string {
   const tokens = pgn.trim().split(/\s+/).filter(Boolean);
@@ -183,6 +186,7 @@ export function OpeningDetailPage(): JSX.Element {
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [activeMistake, setActiveMistake] = useState<CommonMistake | null>(null);
+  const [activeModelGame, setActiveModelGame] = useState<ModelGame | null>(null);
   // Two-tap guard for the expert-pass unlock: spending a 1-of-1 lifetime pass
   // shouldn't die to a misclick, so the first tap arms, the second commits.
   const [confirmingUnlock, setConfirmingUnlock] = useState(false);
@@ -867,6 +871,18 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
+  // Model game viewer — watch a real master win with this opening (the
+  // student's side always WINS; the section filters out any loss).
+  if (viewMode === 'model-game' && activeModelGame) {
+    return (
+      <ModelGameViewer
+        game={activeModelGame}
+        boardOrientation={opening.color}
+        onExit={handleExit}
+      />
+    );
+  }
+
   // Middlegame LEARN fallback — no playable line: study the plan
   // (overview, breaks, maneuvers, themes).
   if ((viewMode === 'middlegame-watch' || viewMode === 'middlegame-plan') && activeMiddlegamePlan) {
@@ -1454,6 +1470,16 @@ export function OpeningDetailPage(): JSX.Element {
         boardOrientation={opening.color}
         onAction={handleMiddlegameAction}
         filterPlanIds={subjectPlanIds}
+      />
+
+      {/* MODEL GAMES — watch a real master win with this opening. Self-hides
+          when there's no student-side win sourced; the section drops any game
+          where the student's side loses (David 2026-05-21). Opening-level
+          (games aren't tagged per variation). */}
+      <ModelGamesSection
+        openingId={opening.id}
+        studentColor={opening.color}
+        onSelectGame={(game) => { setActiveModelGame(game); setViewMode('model-game'); }}
       />
 
       {/* WEAPONS LOCK — the line's weapons (gems + named traps) stay locked

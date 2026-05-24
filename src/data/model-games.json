@@ -76,37 +76,6 @@
     "lessonSummary": "In the Najdorf, White's f4-f5 advance can create a devastating kingside attack. Fischer showed that sometimes an exchange sacrifice (Rxf6) is worth more than material — the resulting attack with knight on f5 and open lines is overwhelming."
   },
   {
-    "id": "mg-kasparov-topalov",
-    "openingId": "pirc-defence",
-    "white": "Garry Kasparov",
-    "black": "Veselin Topalov",
-    "whiteElo": 2812,
-    "blackElo": 2700,
-    "result": "1-0",
-    "year": 1999,
-    "event": "Wijk aan Zee",
-    "pgn": "e4 d6 d4 Nf6 Nc3 g6 Be3 Bg7 Qd2 c6 f3 b5 Nge2 Nbd7 Bh6 Bxh6 Qxh6 Bb7 a3 e5 O-O-O Qe7 Kb1 a6 Nc1 O-O-O Nb3 exd4 Rxd4 c5 Rd1 Nb6 g3 Kb8 Na5 Ba8 Bh3 d5 Qf4+ Ka7 Rhe1 d4 Nd5 Nbxd5 exd5 Qd6 Rxd4 cxd4 Re7+ Kb6 Qxd4+ Kxa5 b4+ Ka4 Qc3 Qxd5 Ra7 Bb7 Rxb7 Qc4 Qxf6 Kxa3 Qxa6+ Kxb4 c3+ Kxc3 Qa1+ Kd2 Qb2+ Kd1 Bf1 Rd2 Rd7 Rxd7 Bxc4 bxc4 Qxh8 Rd3 Qa8 c3 Qa4+ Ke1 f4 f5 Kc1 Rd2 Qa7",
-    "overview": "Widely considered the greatest chess game ever played. Kasparov unleashes a dazzling combination with multiple piece sacrifices in the Yugoslav Attack against the Dragon.",
-    "criticalMoments": [
-      {
-        "moveNumber": 15,
-        "color": "white",
-        "fen": "2kr3r/1b1nqp1p/p1pp1npQ/1p6/3RP3/PNN2P2/1PP3PP/1K3B1R b - - 0 15",
-        "annotation": "Kasparov plays the stunning Ndxe6! sacrificing a knight to blow open Black's kingside. This begins one of the most spectacular combinations in chess history.",
-        "concept": "Knight Sacrifice to Open Lines"
-      },
-      {
-        "moveNumber": 24,
-        "color": "white",
-        "fen": "b2r3r/k4p1p/p2q1np1/NppP4/3R1Q2/P4PPB/1PP4P/1K2R3 b - - 0 24",
-        "annotation": "White has sacrificed massive material but the passed e6 pawn and active rooks create an unstoppable attack. Black's pieces are discoordinated despite the material advantage.",
-        "concept": "Passed Pawn as Attacking Weapon"
-      }
-    ],
-    "middlegameTheme": "Yugoslav Attack Sacrificial Assault",
-    "lessonSummary": "In the Yugoslav Attack against the Dragon, White castles queenside and storms the kingside. Kasparov showed that piece sacrifices to open lines can be worth far more than material when the opponent's king is exposed. Initiative and coordination beat material."
-  },
-  {
     "id": "mg-botvinnik-capablanca",
     "openingId": "nimzo-indian",
     "white": "Mikhail Botvinnik",

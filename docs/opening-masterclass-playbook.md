@@ -43,13 +43,18 @@ it literally.**
 5. **NO BLANK / EMPTY SECTIONS OR TABS ON THE MASTERCLASS (David
    2026-05-21, LOCKED).** A section renders ONLY when it has real content
    for the current opening/tab — never an empty card, never a "0 items"
-   shell. Two specific consequences of this rule:
-   - **The standalone Model Game section is SCRAPPED** (removed from the
-     opening tab). Model-game teaching, when a real student-side win is
-     ever sourced, lives inside Watch — not its own often-empty section.
-   - **The standalone Weapons / "traps" section is REMOVED.** Keep only the
-     **"watch out for"** warnings (the anti-traps), and only render that
-     when the current tab actually has one. No empty trap zone.
+   shell. The enduring half of this rule (self-hide when empty) is LAW. The
+   two "scrapped section" consequences below are SUPERSEDED by the Vienna
+   keystone (2026-05-24) — both sections are back, but they SELF-HIDE:
+   - ~~The standalone Model Game section is SCRAPPED~~ → **RE-INTRODUCED**
+     (`ModelGamesSection` in `OpeningDetailPage`). It renders only the
+     opening's REAL student-side WINS (the guard drops any game where the
+     student's color loses), and self-hides when there are none. It ALSO
+     feeds the coach via `loadModelGamesForLive`. See §0.7 STEP 7.
+   - ~~The standalone Weapons / "traps" section is REMOVED~~ → **RE-INTRODUCED**
+     as the **gated punish-gem weapon section** (locked until Play; §0.7
+     STEP 6), plus the per-tab named-trap weapons/warnings. Still self-hides
+     when a tab has no gem/trap.
    Every other zone (key ideas, middlegame plans, endgame, book reader,
    warnings) must self-hide when it has nothing for the current tab.
 
