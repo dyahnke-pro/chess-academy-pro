@@ -528,6 +528,230 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', '', '',
     ],
   },
+
+  // Ruy Closed — 6...O-O?? (with Re1 in) allows Bxc6 + Nxe5 to bag a clean pawn.
+  // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 O-O Bxc6 bxc6 Nxe5 Bb7 d4 d5 exd5 cxd5
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Be7_Re1:O-O': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'O-O looks safe — but with the rook already on e1, it walks into a clean pawn grab.',
+      'Bxc6! Trade, then snatch e5 — the e1-rook means Black can’t win the pawn back.',
+      '',
+      'Nxe5 collects the pawn — a lasting extra pawn.',
+      '',
+      'd4 builds the centre behind the extra pawn.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'Bxc6 — trade, then take e5.',
+      '', 'Nxe5 — win the pawn.',
+      '', 'd4 — build the centre.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Open — 9...Nxd4?? just loses a piece; the desperado tricks fizzle.
+  // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 Nxd4 Nxd4 Bb7 Nf3 Bd6 a4 O-O Nc3 Nxc3
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Nxe4_d4_b5_Bb3:Nxd4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxd4? Grabbing the pawn loses a piece — there’s no real follow-up.',
+      'Nxd4 recaptures. You’re up a clean piece.',
+      '',
+      'Nf3 retreats the knight to safety, keeping the extra material.',
+      '',
+      'a4 chips at Black’s queenside to open lines while you’re up a piece.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxd4 — take the knight, up a piece.',
+      '', 'Nf3 — retreat, keep the piece.',
+      '', 'a4 — pry the queenside.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Open — 9...Bc5?? ignores the loose centre; Qxd5 wins material.
+  // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 d5 dxe5 Bc5 Qxd5 Qxd5 Bxd5 Bb7 Bxe4 O-O-O Bg5 Rde8
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Nxe4_d4_b5_Bb3_d5_dxe5:Bc5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Bc5 develops but ignores the loose d5-pawn and the offside e4-knight. The queens come off with profit.',
+      'Qxd5! Win the pawn and offer the trade — the recapture is the real point.',
+      '',
+      'Bxd5 — now the bishop rakes the long diagonal, hitting the e4-knight and the a8-rook.',
+      '',
+      'Bxe4 collects the knight. Up a piece with a monster bishop.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qxd5 — win the pawn, offer the trade.',
+      '', 'Bxd5 — rake the diagonal, hit e4.',
+      '', 'Bxe4 — win the knight.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Berlin (4.O-O a6) — 4...a6?? drops a pawn: Bxc6 dxc6 Nxe5 (Re1 makes
+  // the ...Qd4 regain fail — Google-confirmed). playLine:
+  // e4 e5 Nf3 Nc6 Bb5 Nf6 O-O a6 Bxc6 dxc6 Nxe5 Bc5 Nc3 h6 Nf3 Bg4
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O:a6': {
+    watch: [
+      '', '', '', '', '', '', '',
+      'a6 is the slip in this O-O-first order — the pawn-grab that follows can’t be answered.',
+      'Bxc6! Trade, then take e5 — and the usual ...Qd4 regain fails to Re1. A clean pawn.',
+      '',
+      'Nxe5 wins the pawn; theory confirms Black can’t get it back.',
+      '',
+      'Nc3 develops, holding the extra pawn comfortably.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '',
+      'Bxc6 — trade, then take e5.',
+      '', 'Nxe5 — win the pawn.',
+      '', 'Nc3 — develop, hold the pawn.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Berlin Open — 9...Nxd4?? loses a piece; the f2 desperado fizzles.
+  // playLine: e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nxd4 Nxd4 Bc5 Nb3 Bxf2+ Rxf2 Nxf2 Qf3 O-O
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4:Nxd4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      'Nxd4? Grabbing the pawn just loses a piece — there’s no follow-up.',
+      'Nxd4 takes the knight. You’re up a clean piece.',
+      '',
+      'Nb3 steps out of the bishop’s pin, keeping the extra piece.',
+      'Black tries Bxf2+ as a desperado —',
+      'Rxf2 — it fizzles; the material holds.',
+      '',
+      'Qf3 mops up the f2-knight and consolidates. Cleanly winning.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      'Nxd4 — take the knight.',
+      '', 'Nb3 — dodge the pin.',
+      '', 'Rxf2 — calmly take, stay up.',
+      '', 'Qf3 — win f2, consolidate.',
+      '',
+    ],
+  },
+
+  // Ruy Berlin Open — 7...Nc4?? has no home; Qe2 gains time and the initiative.
+  // playLine: e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nc4 Qe2 Nb6 Rd1 Qe7 Bg5 f6 Bh4 Bd7
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4_Nd6_Bxc6_dxc6_dxe5:Nc4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nc4 looks active, but the knight has no stable home — you gain time hitting it.',
+      'Qe2 eyes the c4-knight and clears d1 for the rook. Black must retreat and lose time.',
+      '',
+      'Rd1 seizes the open file with tempo.',
+      '',
+      'Bg5 develops with pressure on f6 and e7.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qe2 — hit the knight, clear d1.',
+      '', 'Rd1 — seize the file.',
+      '', 'Bg5 — develop with pressure.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Exchange — 5...Nf6?? forgets e5; Nxe5 bags the pawn.
+  // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O Nf6 Nxe5 Bc5 Nc3 h6 Kh1 h5 Qe1 h4
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O:Nf6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      'Nf6 develops, but it forgets e5 — and in the Exchange that pawn is the whole fight.',
+      'Nxe5! Snatch the pawn; the usual ...Qd4 fork doesn’t regain it here.',
+      '',
+      'Nc3 develops, holding the extra pawn.',
+      '',
+      'Kh1 tucks the king, calmly a pawn up.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      'Nxe5 — win the pawn.',
+      '', 'Nc3 — develop, hold it.',
+      '', 'Kh1 — tuck the king, consolidate.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Exchange — 6...Bd6?? overloads e5 with f6 played; dxe5 wins a pawn.
+  // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 Bd6 dxe5 fxe5 Nxe5 Qh4 Nf3 Qh5 Nbd2 Ne7
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4:Bd6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Bd6 develops, but with f6 already played the e5-point is overloaded. Break it.',
+      'dxe5! Open the centre — after the recaptures, e5 falls.',
+      '',
+      'Nxe5 wins the pawn, landing the knight on a dominant square.',
+      '',
+      'Nf3 calmly retreats, a pawn up with the safer king.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'dxe5 — break the centre.',
+      '', 'Nxe5 — win the pawn, centralise.',
+      '', 'Nf3 — retreat, stay up.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Exchange — 7...Bc5?? hangs to the Qh5+ fork, winning the bishop.
+  // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 exd4 Nxd4 Bc5 Qh5+ g6 Qxc5 Qe7 Qc3 c5 Nf3 Bg4
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4:Bc5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Bc5 develops to a natural square — but it hangs to a check. The queen forks.',
+      'Qh5+! Check and fork — the king and the loose c5-bishop at once. Black can’t save both.',
+      '',
+      'Qxc5 collects the bishop. Up a clean piece.',
+      '',
+      'Qc3 retreats to safety, consolidating the extra piece.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qh5 — check, fork the bishop.',
+      '', 'Qxc5 — win the piece.',
+      '', 'Qc3 — retreat, consolidate.',
+      '', '', '',
+    ],
+  },
+
+  // Ruy Exchange — 8...Bd6?? allows Qh5+, knocking Black’s coordination apart.
+  // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 exd4 Nxd4 c5 Nb3 Bd6 Qh5+ g6 Qf3 Qe7 Bf4 Bxf4 Qxf4 b6
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4_c5_Nb3:Bd6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Bd6 develops, but it allows a disruptive check that knocks Black’s coordination apart.',
+      'Qh5+! The check forces ...g6, weakening the kingside light squares for free.',
+      '',
+      'Qf3 retreats with the king already softened — you keep the initiative.',
+      '',
+      'Bf4 offers to trade Black’s good bishop; the resulting structure favours you.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qh5 — check, weaken g6.',
+      '', 'Qf3 — retreat, keep the initiative.',
+      '', 'Bf4 — trade off his good bishop.',
+      '', '', '',
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
