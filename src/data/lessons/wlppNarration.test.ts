@@ -126,7 +126,7 @@ const GRANDFATHERED_OPENINGS = new Set<string>([
   'ruy-lopez',
   'pirc-defence',
   'caro-kann',
-  'vienna-game',
+  // vienna-game — DONE 2026-05-24: all main + variation + trap cues ≤8 words.
 ]);
 
 describe('Learn short-cue length — sayShort is a terse cue, not a lecture', () => {
