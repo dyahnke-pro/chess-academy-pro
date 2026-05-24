@@ -180,7 +180,9 @@ const GATE_TESTS = [
   'src/services/middlegamePlanner.test.ts',
   'src/components/Openings/MiddlegamePlansSection.test.tsx',
   'src/components/Openings/EndgamePlansSection.test.tsx',
+  'src/components/Openings/CommonMistakesSection.test.tsx',
   'src/components/Openings/OpeningDetailPage.wiring.test.ts',
+  'src/utils/commonMistakeLine.test.ts',
 ];
 
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);

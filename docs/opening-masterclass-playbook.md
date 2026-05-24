@@ -157,6 +157,23 @@ data, log the source, let the gate catch drift."
    continuation (every past-book ply masters-backed or engine-sound). Narration
    = prose only, board-truth gated, arrows lead the eye. → Holes 1/6 +
    lessonDepth + narrationAccuracy + §5b.
+8. **Pitfalls = common mistakes, and EVERY pitfall is a playable WLPP line
+   (David 2026-05-24, LOCKED).** The opening's `common-mistakes.json` entries
+   are NOT static cards — each one surfaces in the consolidated **Pitfalls**
+   zone with the full Watch/Learn/Practice/Play row, exactly like a variation
+   or a gem. The line is built by `commonMistakeToPlayableLine` (src/utils):
+   the student PLAYS the real `correctMove` (the antidote) from the real
+   `fen` while the narration (the entry's `explanation`) says WHY the
+   `wrongMove` is the error; the board leads the eye with a RED arrow on the
+   tempting wrong move and a GREEN arrow on the move played. **Never drill the
+   wrong move** — Watch/Learn/Practice teach the antidote; Play hands off to
+   the coach on this opening so the student meets the pitfall live. GROUNDED
+   (G3): the move is chess.js-validated from the entry's own data — never
+   invented; a malformed entry self-hides. If you can author a richer
+   `punishmentLine` (the wrong move played out + its real, engine-confirmed
+   refutation, two-register narration + lead-the-eye), do — the converter uses
+   it verbatim; otherwise the synthesized antidote is the floor, not a TODO.
+   → CommonMistakesSection.test + commonMistakeLine.test (in ship-check).
 
 **NO HARD COUNT RULES (David 2026-05-22).** Never mandate a number of key
 ideas / traps / variations. The manifest floors are "what was verified at
@@ -326,9 +343,17 @@ game MUST be a win/draw for that side. Add `'<id>'` to the `PROTECTED` list in
 **STEP 8 — checkpoint quizzes + common mistakes.**
 - `src/data/checkpoint-quizzes.json` keyed `'<id>'` (plan-quiz = inline
   multiple-choice with `correctIndex`; move-quiz = preview + practice CTA).
-- `src/data/common-mistakes.json` keyed `'<id>'` — **Watch-only** (NO
-  Learn/Practice/Play; drilling the wrong move is banned). Provide a
-  `punishmentLine` where a real one exists so "watch the punishment" lights up.
+- `src/data/common-mistakes.json` keyed `'<id>'` — each entry
+  (`fen`/`wrongMove`/`correctMove`/`explanation`) auto-surfaces in the
+  consolidated **Pitfalls** zone as a **full WLPP line** (David 2026-05-24,
+  supersedes the old "Watch-only" rule). No extra wiring: `CommonMistakesSection`
+  renders the Watch/Learn/Practice/Play row and `commonMistakeToPlayableLine`
+  builds the antidote line on the fly. Watch/Learn/Practice teach the CORRECT
+  move (the wrong move is never drilled — that ban still holds, it's just
+  satisfied by teaching the antidote, not by hiding the buttons); Play hands
+  off to the coach. Optionally author a richer `punishmentLine` (wrong move
+  played out + real engine-confirmed refutation, two-register narration +
+  lead-the-eye) — the converter uses it verbatim when present. → §0.1 rule 8.
 
 **STEP 9 — manifest (content floors).** `src/data/opening-manifests.json`:
 add the `'<id>'` entry declaring floors (`variations`, `middlegamePlans`,

@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '../../test/utils';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import type { CommonMistake } from '../../types';
@@ -48,5 +48,28 @@ describe('CommonMistakesSection', () => {
     // Only the summary explanation remains
     const explanations = screen.getAllByText(/f6 weakens the kingside/);
     expect(explanations.length).toBe(1);
+  });
+
+  it('renders the full WLPP row when a pitfall handler is provided', () => {
+    render(
+      <CommonMistakesSection mistakes={mistakes} boardOrientation="white" onPitfallAction={vi.fn()} />,
+    );
+    for (const action of ['watch', 'learn', 'practice', 'play']) {
+      expect(screen.getByTestId(`pitfall-${action}-0`)).toBeInTheDocument();
+    }
+  });
+
+  it('fires onPitfallAction with the mistake and the chosen mode', () => {
+    const onPitfallAction = vi.fn();
+    render(
+      <CommonMistakesSection mistakes={mistakes} boardOrientation="white" onPitfallAction={onPitfallAction} />,
+    );
+    fireEvent.click(screen.getByTestId('pitfall-learn-1'));
+    expect(onPitfallAction).toHaveBeenCalledWith(mistakes[1], 'learn');
+  });
+
+  it('omits the WLPP row when no handler is provided (static fallback)', () => {
+    render(<CommonMistakesSection mistakes={mistakes} boardOrientation="white" />);
+    expect(screen.queryByTestId('pitfall-watch-0')).not.toBeInTheDocument();
   });
 });
