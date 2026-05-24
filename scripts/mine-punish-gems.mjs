@@ -220,6 +220,7 @@ const OPENING_SEEDS = {
   'ruy-lopez':    { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'] },
   'pirc-defence': { studentChar: 'b', baseSeed: ['e4', 'd6'] },
   'vienna-game':  { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nc3'] },
+  'italian-game': { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'] },
 };
 function loadRepertoire() {
   try {
