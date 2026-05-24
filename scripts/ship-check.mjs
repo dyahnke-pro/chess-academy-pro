@@ -196,6 +196,18 @@ runStep('lint (errors)', 'npx', [
 ], { summary: summarizeLint });
 runStep('content gates', 'npx', ['vitest', 'run', ...GATE_TESTS], { summary: summarizeVitest });
 
+// Co-located tests for the source files changed in THIS work — catches
+// regressions in tests that aren't in the curated GATE_TESTS and that the
+// (un-run) full suite would otherwise hide. David 2026-05-24: ship-check let a
+// ModelGamesSection regression through because that .test wasn't gated. Rule:
+// edit Foo.tsx → ship-check runs Foo.test.tsx.
+const _colocated = changedSourceTests(changedFiles());
+if (_colocated.length) {
+  runStep('changed-file tests', 'npx', ['vitest', 'run', ..._colocated], { summary: summarizeVitest });
+} else {
+  console.log('  • changed-file tests... ○ none beyond the gates');
+}
+
 // INFORMATIONAL: audit stream pull (never blocks).
 pullAuditStream();
 
@@ -238,6 +250,19 @@ function changedFiles() {
     if (r.status === 0) out.push(...r.stdout.split('\n').filter(Boolean));
   }
   return [...new Set(out)];
+}
+
+// Co-located *.test.{ts,tsx} for changed source files, minus what GATE_TESTS
+// already runs (avoid double-running). A changed `.test` file runs directly.
+function changedSourceTests(changed) {
+  const tests = new Set();
+  for (const f of changed) {
+    if (!/^src\/.*\.(ts|tsx)$/.test(f)) continue;
+    if (/\.test\.(ts|tsx)$/.test(f)) { if (existsSync(f)) tests.add(f); continue; }
+    const base = f.replace(/\.(ts|tsx)$/, '');
+    for (const t of [`${base}.test.ts`, `${base}.test.tsx`]) if (existsSync(t)) tests.add(t);
+  }
+  return [...tests].filter((t) => !GATE_TESTS.includes(t));
 }
 
 function pickAudits(changed) {
