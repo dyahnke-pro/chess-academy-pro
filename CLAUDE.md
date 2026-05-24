@@ -1050,6 +1050,29 @@ playbook holds the rules you MUST follow, in particular:
   button; Play = coach LOCKED to this opening. Applies to the main line,
   every variation tab, trap weapons, "watch out for" warnings, AND
   middlegame plans (`PlayableLinePlayer` modes / `LessonPlayer`).
+- **🔒 NARRATION STANDARD — hand-written, two registers, verified per move
+  (LOCKED, David 2026-05-24). Supersedes the old "Learn = pure move
+  dictation" rule.** Every played line speaks in two registers, BOTH
+  hand-written by the model (never generated, never templated):
+  - **Watch = the FULL teaching line** — vivid, per-move, names the squares
+    and the idea (the Naroditsky `pro-repertoires.json` `explanation` voice is
+    the benchmark). Authored on `beat.say` for lessons; on the gem narration
+    sidecar's `watch[]` for punish-gems.
+  - **Learn = a TRUNCATED reinforcement CUE** — the move plus a 3-5 word echo
+    of the Watch idea ("Nd5 — fork the queen, eye c7"), NOT a full sentence and
+    NOT bare dictation. Authored on `beat.sayShort` for lessons (carried by
+    `lessonToPlayableLine` → `PlayableMiddlegameLine.learnCues`); on the gem
+    sidecar's `learn[]`. Where no cue exists, `PlayableLinePlayer` falls back
+    to plain move dictation (`sanToSpeech`).
+  - **Practice = silent. Play = the coach room LOCKED to the exact line**
+    (pass the line as `customLine` to `OpeningPlayMode` — never the opening's
+    generic main line).
+  - **VERIFY EACH CUE AGAINST ITS OWN MOVE.** A `sayShort`/cue is a beat-level
+    line that lands on the beat's last move — read every one against the actual
+    move + live position so it never narrates the *previous* move or a summary
+    on the wrong ply. The `punishGems.test` alignment gate enforces array
+    lengths == playLine plies; semantic match is the author's eye. Gems only
+    SURFACE once hand-narrated (`isSurfaceableGem`) — no thin-narration ships.
 - **Lead-the-eye colour language (locked):** ORANGE = the move's two
   squares (no separate move-arrow), GREEN = vision arrows, YELLOW = a key
   square the narration names. Generated per move + grounded/legality-gated

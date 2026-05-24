@@ -194,14 +194,19 @@ export function lessonToPlayableLine(
   const annotations: string[] = moves.map(() => '');
   const arrows: AnnotationArrow[][] = moves.map(() => []);
   const highlights: AnnotationHighlight[][] = moves.map(() => []);
+  // Learn cues = the beat's hand-written short line (David 2026-05-24: the
+  // top-row variation Learn tabs reinforce the Watch lesson, not just dictate
+  // moves). Lands on the beat-boundary ply; '' elsewhere → plain dictation.
+  const learnCues: string[] = moves.map(() => '');
   for (const beat of lesson.beats) {
     if (beat.moves.length > moves.length) continue;
     if (!beat.moves.every((m, i) => m === moves[i])) continue;
     const ply = beat.moves.length - 1;
     if (ply < 0) continue;
     annotations[ply] = beat.say;
+    if (beat.sayShort) learnCues[ply] = beat.sayShort;
     if (beat.arrows) arrows[ply] = beat.arrows;
     if (beat.highlights) highlights[ply] = beat.highlights;
   }
-  return { fen: LESSON_START_FEN, moves, annotations, arrows, highlights, title: lesson.title };
+  return { fen: LESSON_START_FEN, moves, annotations, arrows, highlights, learnCues, title: lesson.title };
 }

@@ -447,6 +447,87 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', // ...Qd6
     ],
   },
+
+  // Vienna — 7...Bh5?? leaves the bishop on the rim; g4 traps it / opens the h-file.
+  // playLine: e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 f4 d6 Nf3 Bg4 h3 Bh5 g4 Nxg4 hxg4 Bxg4 Bb5 f5 Qe2 Qd7
+  'vienna-game:e4_e5_Nc3_Nc6_Bc4_Nf6_d3_Bc5_f4_d6_Nf3_Bg4_h3:Bh5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'h3 quizzes the g4-bishop —',
+      'Bh5 keeps the pin but parks the bishop on the rim, where a pawn storm can trap it. Strike.',
+      'g4! Attack the bishop and pry open the h-file at Black’s king. The pin backfires.',
+      'Nxg4 tries to muddy it —',
+      'hxg4 wins the knight; the h-file is yours.',
+      '',
+      'Bb5 develops with tempo, pinning the c6-knight — up material, with the initiative and an open file at the king.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'h3 — quiz the bishop.',
+      '', // ...Bh5
+      'g4 — attack the bishop, open the h-file.',
+      '', // ...Nxg4
+      'hxg4 — win the knight.',
+      '', // ...Bxg4
+      'Bb5 — pin, develop, press.',
+      '', '', '',
+    ],
+  },
+
+  // Vienna Frankenstein deep — 8...Qg5?? wanders; d4 opens and the Nxc7+ fork lands.
+  // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qg5 d4 Qg4 Nxc7+ Kd8 Nxa8 Ne4 g3 Nf6
+  'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5_g6_Qf3_f5_Qd5:Qg5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qd5 centralises, hitting f5 —',
+      'Qg5 sends the queen on a raid, but ignores the knight on b5 loaded on c7. Now you break.',
+      'd4! Rip the centre open; the Nxc7+ fork is coming and Black can’t cover it all.',
+      'Qg4 keeps the queen active —',
+      'Nxc7+ — the royal fork: king and the a8-rook.',
+      '',
+      'Nxa8 wins the rook. Decisive, with Black’s king stuck in the centre.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qd5 — centralise.',
+      '', // ...Qg5
+      'd4 — break open, set up c7.',
+      '', // ...Qg4
+      'Nxc7 — the royal fork.',
+      '', // ...Kd8
+      'Nxa8 — win the rook.',
+      '', '', '',
+    ],
+  },
+
+  // Vienna Frankenstein — 6...e4?? lunges and hangs; Nxe4 wins it and forks d6.
+  // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Be7 Nf3 e4 Nxe4 g6 Nxd6+ Bxd6 Qh6 Bf8 Qf4 d5
+  'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Be7_Nf3:e4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '',
+      'Nf3 develops, eyeing e5 —',
+      'e4? The pawn lunges forward but just hangs — and the d6-knight behind it is loose too.',
+      'Nxe4! Win the pawn — and the knight forks into d6. Black’s loose pieces fall.',
+      'g6 hits the queen —',
+      'Nxd6+ — snap off the knight with check; you’re up material cleanly.',
+      '',
+      'Qh6 keeps the queen active on the dark squares.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      'Nf3 — develop, eye e5.',
+      '', // ...e4
+      'Nxe4 — win the pawn, fork d6.',
+      '', // ...g6
+      'Nxd6 — take the knight, check.',
+      '', // ...Bxd6
+      'Qh6 — keep harassing.',
+      '', '', '',
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
