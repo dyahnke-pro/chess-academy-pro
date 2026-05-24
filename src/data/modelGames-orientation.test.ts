@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import modelGamesRaw from './model-games.json';
+import { isNarratedModelGame } from '../services/modelGameService';
+import type { ModelGame } from '../types';
 
 // Model-game orientation gate (David 2026-05-21: "a masterclass can't showcase
 // its own opening losing"). The coach grounds on these games via
@@ -53,4 +55,26 @@ describe('model-games orientation — never showcase the student losing', () => 
       ).toEqual([]);
     });
   }
+});
+
+// Narration gate: only games with a REAL authored overview surface in
+// ModelGamesSection (no thin-narration ships — David 2026-05-24). This proves
+// isNarratedModelGame correctly rejects the auto-import boilerplate, so a
+// templated game can never render.
+describe('model-games narration — boilerplate games never surface', () => {
+  const full = modelGamesRaw as unknown as ModelGame[];
+
+  it('every boilerplate-overview game is rejected by isNarratedModelGame', () => {
+    const re = /Master game from the Lichess masters database|Walk through the moves to see how masters handled/i;
+    const leaked = full
+      .filter((g) => re.test(g.overview ?? ''))
+      .filter((g) => isNarratedModelGame(g))
+      .map((g) => g.id);
+    expect(leaked, 'These boilerplate games would still surface — tighten the filter').toEqual([]);
+  });
+
+  it('authored games pass the filter (sanity — the bar is not rejecting everything)', () => {
+    const narrated = full.filter((g) => isNarratedModelGame(g)).length;
+    expect(narrated).toBeGreaterThan(0);
+  });
 });

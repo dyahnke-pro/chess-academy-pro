@@ -163,4 +163,19 @@ describe('Learn short-cue length — sayShort is a terse cue, not a lecture', ()
     const stale = [...GRANDFATHERED_OPENINGS].filter((id) => !openingIds.includes(id));
     expect(stale, 'GRANDFATHERED_OPENINGS has ids with no lessons — remove them').toEqual([]);
   });
+
+  // Both registers must be authored: a beat with full Watch prose (say) must
+  // also carry a short Learn cue (sayShort). Otherwise Learn falls to bare
+  // move-dictation for that beat — the regression we just fixed. Intermediate
+  // moves inside a multi-move beat legitimately have no say AND no cue; this
+  // only requires a cue where a say exists.
+  it('every beat with a Watch say also has a Learn cue (both registers authored)', () => {
+    const missing: string[] = [];
+    for (const { key, lesson } of ALL_LESSONS) {
+      for (const beat of lesson.beats) {
+        if (beat.say?.trim() && !beat.sayShort?.trim()) missing.push(`${key} [${beat.id}]`);
+      }
+    }
+    expect(missing, 'Beats with a Watch say but no Learn cue — author a ≤8-word sayShort').toEqual([]);
+  });
 });

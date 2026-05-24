@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Trophy, PlayCircle } from 'lucide-react';
-import { getModelGamesForOpening } from '../../services/modelGameService';
+import { getModelGamesForOpening, isNarratedModelGame } from '../../services/modelGameService';
 import type { ModelGame } from '../../types';
 
 interface ModelGamesSectionProps {
@@ -30,10 +30,11 @@ export function ModelGamesSection({
     let cancelled = false;
     void getModelGamesForOpening(openingId).then((result) => {
       if (!cancelled) {
-        // Drop any game where the student's side loses — never showcase the
-        // opening losing. (Pirc's only game is a White win vs the Pirc, so
-        // this hides it until a real Black win is sourced.)
-        setGames(result.filter((g) => !studentLost(g, studentColor)));
+        // Surface only REAL games: drop any where the student's side loses
+        // (never showcase the opening losing), AND drop thin/boilerplate games
+        // with no authored overview (no thin-narration ships — David 2026-05-24).
+        // The section self-hides when nothing qualifies.
+        setGames(result.filter((g) => !studentLost(g, studentColor) && isNarratedModelGame(g)));
         setLoading(false);
       }
     });

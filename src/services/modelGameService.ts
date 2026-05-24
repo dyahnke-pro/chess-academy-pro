@@ -1,6 +1,20 @@
 import { db } from '../db/schema';
 import type { ModelGame } from '../types';
 
+/** The auto-import boilerplate overview that thin (un-narrated) games carry.
+ *  A model game must have a REAL authored overview to surface — mirrors the
+ *  punish-gems "no thin-narration ships" bar (David 2026-05-24). */
+const BOILERPLATE_OVERVIEW = /Master game from the Lichess masters database|Walk through the moves to see how masters handled/i;
+
+/** True when a model game carries a real authored overview (not the
+ *  auto-import boilerplate). Only narrated games surface in ModelGamesSection;
+ *  thin ones self-hide until a real overview (+ ideally critical moments) is
+ *  authored. */
+export function isNarratedModelGame(game: ModelGame): boolean {
+  const overview = game.overview?.trim() ?? '';
+  return overview.length > 0 && !BOILERPLATE_OVERVIEW.test(overview);
+}
+
 /**
  * Get all model games for a specific opening.
  */

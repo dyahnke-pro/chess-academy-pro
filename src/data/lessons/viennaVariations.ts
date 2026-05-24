@@ -103,7 +103,8 @@ const GAMBIT: LessonScript = {
       sayShort: "5.Nf3 — the calm Lasker line, build the centre." }),
     b({ id: 'g10', moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 Nc6 Bd2 Be7 Nh3 O-O',
       highlights: [H('f4', SOFT)],
-      say: "And one branch you must know — if Black plays the OTHER reply and takes the gambit with 3…exf4, you are no longer in this strategic line. You are in territory that has been studied for two centuries: the Vienna Gambit Accepted. That is where the Wurzburger Trap waits if Black develops too naturally into the old 5.d3 line, where Hamppe-Allgaier and Hamppe-Muzio sacrifices live if Black ALSO played 2…Nc6 instead of 2…Nf6, and where Steinitz himself walked his king to e2 and attacked. The Vienna Gambit has TWO completely different personalities: this strategic Bardeleben + Lasker spine, and a tactical jungle one tab away. Learn this calm-but-clinical one first; the named weapons are the reward when Black drifts." }),
+      say: "And one branch you must know — if Black plays the OTHER reply and takes the gambit with 3…exf4, you are no longer in this strategic line. You are in territory that has been studied for two centuries: the Vienna Gambit Accepted. That is where the Wurzburger Trap waits if Black develops too naturally into the old 5.d3 line, where Hamppe-Allgaier and Hamppe-Muzio sacrifices live if Black ALSO played 2…Nc6 instead of 2…Nf6, and where Steinitz himself walked his king to e2 and attacked. The Vienna Gambit has TWO completely different personalities: this strategic Bardeleben + Lasker spine, and a tactical jungle one tab away. Learn this calm-but-clinical one first; the named weapons are the reward when Black drifts.",
+      sayShort: "3…exf4 — the Gambit Accepted, where the weapons live." }),
   ],
 };
 
