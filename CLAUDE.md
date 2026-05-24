@@ -1175,6 +1175,18 @@ playbook holds the rules you MUST follow, in particular:
        common variation prefix → baseSeed), so a NEW masterclass opening mines
        with no hand-added `OPENING_SEEDS` entry. The map is now just an
        override for hand-tuned base seeds.
+     - **🚫 Do NOT substitute `public/data/openings-masters-db.json` as the
+       gem source — it yields ZERO gems and that's not a bug.** That DB is
+       MASTERS-only (avg rating ~2300+); masters do NOT play the refutable
+       inaccuracies the miner hunts (the gambit-pawn grab, the Bxf7+ walk-in),
+       so at the 2%/100-game bar there is NOTHING to punish. A session that
+       distrusts the proxy and points the miner at the masters DB will mine 0
+       gems and wrongly conclude "the opening has no gems." The gem source is
+       the AMATEUR explorer (`ratings=1600,1800,2000`) — and the proxy above
+       serves exactly that and IS reachable. The masters DB is the right
+       source for THEORY / mainline frequency (`masterPlayLookup.ts` uses it),
+       NOT for amateur-blunder mining. Amateur-vs-masters is the whole point:
+       master buckets HIDE the crushes (CLAUDE.md gem-doctrine §1).
      The miner is engine-first and refuses to run without an engine.
   8. **GATE + post-deploy contract:** `src/data/punishGems.test.ts` +
      `wlppNarration.test.ts` (in ship-check) prove legality / DB-anchor / tier
