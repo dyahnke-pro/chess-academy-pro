@@ -181,6 +181,7 @@ const GATE_TESTS = [
   'src/components/Openings/MiddlegamePlansSection.test.tsx',
   'src/components/Openings/EndgamePlansSection.test.tsx',
   'src/components/Openings/CommonMistakesSection.test.tsx',
+  'src/components/Openings/OpeningExplorerPage.test.tsx',
   'src/components/Openings/OpeningDetailPage.wiring.test.ts',
   'src/utils/commonMistakeLine.test.ts',
   'src/data/commonMistakeNarration.test.ts',

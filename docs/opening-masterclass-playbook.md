@@ -367,6 +367,18 @@ add the `'<id>'` entry declaring floors (`variations`, `middlegamePlans`,
 `openingManifests` gate fails if actual < floor — declare honestly; if you
 legitimately have fewer, lower the floor explicitly (that's the sanctioned
 demotion, not a workaround).
+**🔒 DECLARING THE MANIFEST MOVES THE OPENING OUT OF "MOST COMMON" (David
+2026-05-24, LOCKED).** The main-40 repertoire is being replaced opening-by-
+opening with masterclasses, so a masterclass must NEVER also appear as a plain
+"Most Common" entry (no duplicate across tabs). This is automatic and needs NO
+extra wiring: the manifest keys ARE the masterclass set (`getMasterclassOpeningIds`),
+and `OpeningExplorerPage` excludes them from the Most Common list while
+`MasterclassesTab` shows exactly them. So adding the §STEP-9 manifest entry is
+what relocates the opening from Most Common → Masterclasses — verify it's gone
+from Most Common after the build. → OpeningExplorerPage.test (de-dup contract,
+in ship-check). The opening stays a full repertoire record (favorites, SRS,
+weakness rows, deep-links all keep working) — only the Most Common LISTING
+drops it.
 
 **INHERITED — DO NOT build per-opening (it just works):** the page shell +
 WLPP players (`OpeningDetailPage` / `PlayableLinePlayer` / `LessonPlayer` /
