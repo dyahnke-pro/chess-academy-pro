@@ -64,6 +64,23 @@ function persistPuzzleClockTargetSec(profile: UserProfile | null, sec: number): 
   });
 }
 
+/** Records spending a WLPP "I already know this" expert pass — one per color,
+ *  lifetime. Mirrors to the profile's top-level weaponUnlockPasses and
+ *  persists. Returns the new passes map (or null when no active profile). */
+function persistWeaponUnlockPass(
+  profile: UserProfile | null,
+  color: 'white' | 'black',
+  openingId: string,
+): { white?: string; black?: string } | null {
+  if (!profile) return null;
+  const passes = { ...(profile.weaponUnlockPasses ?? {}), [color]: openingId };
+  profile.weaponUnlockPasses = passes;
+  void db.profiles.update(profile.id, { weaponUnlockPasses: passes }).catch((err: unknown) => {
+    console.warn('[appStore] persistWeaponUnlockPass failed:', err);
+  });
+  return passes;
+}
+
 interface AppState {
   // Auth / Profile
   activeProfile: UserProfile | null;
@@ -159,6 +176,7 @@ interface AppActions {
   setCoachBubbleText: (text: string) => void;
   toggleCoachVoice: () => void;
   setCoachVoiceOn: (on: boolean) => void;
+  recordWeaponUnlockPass: (color: 'white' | 'black', openingId: string) => void;
   toggleCoachTips: () => void;
   togglePuzzleShowTacticName: () => void;
   setPuzzleShowTacticName: (on: boolean) => void;
@@ -278,6 +296,12 @@ export const useAppStore = create<AppState & AppActions>()(
     setCoachVoiceOn: (on) => set((state) => {
       persistCoachVoiceOn(state.activeProfile, on);
       return { coachVoiceOn: on };
+    }),
+
+    recordWeaponUnlockPass: (color, openingId) => set((state) => {
+      const passes = persistWeaponUnlockPass(state.activeProfile, color, openingId);
+      if (!passes || !state.activeProfile) return {};
+      return { activeProfile: { ...state.activeProfile, weaponUnlockPasses: passes } };
     }),
 
     toggleCoachTips: () => set((state) => ({ coachTipsOn: !state.coachTipsOn })),

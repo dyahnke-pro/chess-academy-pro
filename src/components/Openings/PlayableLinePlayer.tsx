@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import { voiceService } from '../../services/voiceService';
 import { sanToSpeech } from '../../utils/sanToSpeech';
+import { resolveCoachNarration } from '../../utils/coachNarration';
+import { useAppStore } from '../../stores/appStore';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -238,8 +240,17 @@ export function PlayableLinePlayer({
     // Practice is silent (no effect fires).
     if (guided) {
       voiceService.stop();
-      const cue = line.learnCues?.[memoryMoveIndex];
-      const spoken = cue && cue.trim() ? cue : sanToSpeech(line.moves[memoryMoveIndex]);
+      // Learn narration follows the user's narration setting (David 2026-05-24):
+      // FULL → the beat's full explanation; LIMITED (brief) → the short cue;
+      // neither present → dictate the move. Silent is gated inside voiceService.
+      const verbosity = resolveCoachNarration(useAppStore.getState().activeProfile?.preferences);
+      const cue = line.learnCues?.[memoryMoveIndex]?.trim();
+      const full = line.annotations?.[memoryMoveIndex]?.trim();
+      const spoken = verbosity === 'full' && full
+        ? full
+        : cue
+          ? cue
+          : sanToSpeech(line.moves[memoryMoveIndex]);
       void voiceService.speak(spoken).catch(() => { /* keep going */ });
     }
     // Your move → wait for input. Opponent's move → auto-play it fast, so you

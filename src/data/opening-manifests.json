@@ -22,7 +22,7 @@
     "variations": 8,
     "middlegamePlans": 10,
     "endgamePlans": 0,
-    "modelGames": 1,
+    "modelGames": 0,
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
@@ -31,7 +31,7 @@
     "variations": 8,
     "middlegamePlans": 5,
     "endgamePlans": 0,
-    "modelGames": 3,
+    "modelGames": 2,
     "weapons": 7,
     "warnings": 1,
     "keyIdeas": 4

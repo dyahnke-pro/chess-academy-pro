@@ -1,3 +1,4 @@
+import { PageHelp } from '../Layout/PageHelp';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -212,6 +213,16 @@ export function GameInsightsPage(): JSX.Element {
           </div>
           <div className="flex flex-col gap-1.5 items-end">
             <div className="flex items-center gap-1.5">
+              <PageHelp
+                helpId="weaknesses"
+                title="How Weaknesses works"
+                steps={[
+                  { label: 'What this is', body: 'Your real holes — the openings, phases, motifs, and thinking errors you actually get wrong, mined from your own games.' },
+                  { label: 'How errors get here', body: 'When you import and analyze games, every mistake and blunder is scored and logged automatically — each one tagged by motif and opening and filed here.' },
+                  { label: 'Sent to the coach', body: 'Those logged errors feed the Coach tab: they become Review walk-throughs, My Mistakes puzzles, and targeted training lessons built from your exact slips.' },
+                  { label: 'Closes the loop', body: 'Learn an opening → play it → your errors log here → the coach turns them into drills → you fix them. That cycle is the whole app.' },
+                ]}
+              />
               <ImportGamesButton variant="compact" />
               <button
                 onClick={() => void handleRefresh()}

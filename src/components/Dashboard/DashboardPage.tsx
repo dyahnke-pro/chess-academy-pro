@@ -5,6 +5,7 @@ import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
 import { BookOpen, GraduationCap, Target, AlertTriangle, Upload } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
+import { PageHelp } from '../Layout/PageHelp';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
 
@@ -80,9 +81,25 @@ export function DashboardPage(): JSX.Element {
       style={{ color: 'var(--color-text)' }}
       data-testid="dashboard"
     >
-      <h1 className="text-xl font-bold text-center mt-2">
-        Chess Academy Pro
-      </h1>
+      <div className="relative mt-2">
+        <h1 className="text-xl font-bold text-center">
+          Chess Academy Pro
+        </h1>
+        <div className="absolute right-0 top-1/2 -translate-y-1/2">
+          <PageHelp
+            helpId="dashboard"
+            title="The order of operations"
+            steps={[
+              { label: '1. Pick an opening', body: 'Go to Openings → Masterclasses and pick one you actually play as White or Black — not at random. This is where everything starts.' },
+              { label: '2. Climb the WLPP tabs', body: 'For each line: Watch it (get the ideas) → Learn it (you play, voice cues) → Practice it (silent, Hint if stuck) → Play it vs the coach. Each tab you finish unlocks the next.' },
+              { label: '3. Unlock the deeper theory', body: 'Finishing a line’s full ladder unlocks its reward — the model game and its traps/weapons (how to punish your opponent’s common mistakes).' },
+              { label: '4. Import your games', body: 'Pull in your real games so the app can log the mistakes and blunders you actually make.' },
+              { label: '5. Fix your holes', body: 'Those logged errors flow to Weaknesses and the Coach, which turn them into review walk-throughs and targeted drills until the patterns stick.' },
+              { label: 'The loop', body: 'Learn it → play it → find the holes → drill them shut. The four sections below are the steps of that one cycle.' },
+            ]}
+          />
+        </div>
+      </div>
 
       {/* Import Games */}
       <div className="max-w-lg mx-auto w-full">

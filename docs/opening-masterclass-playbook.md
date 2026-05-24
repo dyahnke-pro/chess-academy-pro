@@ -1,10 +1,25 @@
 # Opening Masterclass — Build Playbook
 
-**Read this before building ANY new opening masterclass.** The Ruy Lopez
-(`ruy-lopez`) is the reference build — every rule below was forged on it
-(David, 2026-05-21). The wiring is opening-agnostic and DONE; building a
-new opening = **author the data, and the page lights up.** The hard part
-is curated content, not code.
+**Read this before building ANY new opening masterclass.** 🔑 **THE VIENNA
+(`vienna-game`) IS THE KEYSTONE BUILD — replicate it exactly (David,
+2026-05-24: "I want every future masterclass to look and work like the
+Vienna. This is the keystone build, not the Ruy").** The Ruy/Pirc forged
+the early rules but the Vienna is the canonical, complete reference: it has
+the full WLPP grammar, the hand-narrated punish-gem weapon section, named
+traps routed per tab, one middlegame plan per tab, student-winning model
+games, the unlock ladder + expert-pass budget, and every gate green. The
+wiring is opening-agnostic and DONE; a new opening = **author the data the
+way the Vienna does it, and the page lights up.** The hard part is curated
+content, not code. **§0.6 below is the exact, file-by-file recipe — follow
+it literally.**
+
+> ⚠️ Some 2026-05-21 text further down predates the Vienna and is
+> SUPERSEDED where it conflicts — e.g. §0 point 5 says the model-game and
+> weapons sections were "scrapped"; the Vienna keystone RE-INTRODUCED them
+> as the **gated punish-gem weapon section** (locked until Play) and the
+> model-game data feeding the coach. The enduring rule (no EMPTY section
+> ever renders) still holds; the list of sections evolved. When in doubt,
+> match the live Vienna, not the older prose.
 
 ---
 
@@ -28,13 +43,18 @@ is curated content, not code.
 5. **NO BLANK / EMPTY SECTIONS OR TABS ON THE MASTERCLASS (David
    2026-05-21, LOCKED).** A section renders ONLY when it has real content
    for the current opening/tab — never an empty card, never a "0 items"
-   shell. Two specific consequences of this rule:
-   - **The standalone Model Game section is SCRAPPED** (removed from the
-     opening tab). Model-game teaching, when a real student-side win is
-     ever sourced, lives inside Watch — not its own often-empty section.
-   - **The standalone Weapons / "traps" section is REMOVED.** Keep only the
-     **"watch out for"** warnings (the anti-traps), and only render that
-     when the current tab actually has one. No empty trap zone.
+   shell. The enduring half of this rule (self-hide when empty) is LAW. The
+   two "scrapped section" consequences below are SUPERSEDED by the Vienna
+   keystone (2026-05-24) — both sections are back, but they SELF-HIDE:
+   - ~~The standalone Model Game section is SCRAPPED~~ → **RE-INTRODUCED**
+     (`ModelGamesSection` in `OpeningDetailPage`). It renders only the
+     opening's REAL student-side WINS (the guard drops any game where the
+     student's color loses), and self-hides when there are none. It ALSO
+     feeds the coach via `loadModelGamesForLive`. See §0.7 STEP 7.
+   - ~~The standalone Weapons / "traps" section is REMOVED~~ → **RE-INTRODUCED**
+     as the **gated punish-gem weapon section** (locked until Play; §0.7
+     STEP 6), plus the per-tab named-trap weapons/warnings. Still self-hides
+     when a tab has no gem/trap.
    Every other zone (key ideas, middlegame plans, endgame, book reader,
    warnings) must self-hide when it has nothing for the current tab.
 
@@ -172,6 +192,135 @@ a positional line is not padded with invented traps.
 The through-line: the explorer/DB/corpus IS the source at every step; the
 model translates; the gates verify; the one spot judgment enters (traps)
 defaults to skip-if-unverified.
+
+## 0.7 🔑 THE VIENNA TEMPLATE — the exact file-by-file build recipe (LOCKED, David 2026-05-24)
+
+**Every new masterclass replicates the Vienna LITERALLY.** Diff against the
+live `vienna-game` build at every step — same files, same symbol names, same
+key formats. `<id>` = your opening id (the repertoire.json slug, e.g.
+`scotch-game`); `<Id>` = PascalCase (`Scotch`); `<idnodashes>` = id with
+dashes stripped (`scotchgame`). Build in this order. Each step names the
+EXACT file + symbol + the gate that proves it.
+
+**STEP 0 — pick the content + scaffold.** Run the §0.5 autonomous decision
+process: variations→tabs, plans, traps, model games, key ideas. Everything
+binds to `openings-lichess.json` / `repertoire.json` / the concept corpus.
+Unsure → leave blank / skip / ask. The opening MUST already exist in
+`repertoire.json` with the correct `color` (the student side + coach-chat scope
+key). Then run `node scripts/scaffold-opening.mjs <id> "<Name>" <color>` — it
+stubs the lesson / variations / tab-plan files and prints this exact wiring
+checklist; fill the content and wire per the steps below.
+
+**STEP 1 — author the lessons (the Watch/Learn source).** Two registers,
+hand-written, per the NARRATION STANDARD (§1a below): `beat.say` = full Watch
+prose, `beat.sayShort` = 3-5 word Learn cue.
+- **1a. Main lesson** → create `src/data/lessons/<id>.ts` exporting
+  `<ID>_LESSON: LessonScript` (`openingId`, `title`, `minutes`,
+  `orientation` = student color, `beats[]`). Each beat: `{ id, moves, say,
+  sayShort?, arrows? (GREEN vision), highlights? (YELLOW key squares) }`.
+  Move squares are auto-painted ORANGE by the player — do NOT author those.
+  Model file: `vienna.ts`.
+- **1b. Variation lessons** → `src/data/lessons/<id>Variations.ts` exporting
+  `<ID>_VARIATION_LESSONS: Record<string, LessonScript>` keyed EXACTLY
+  `"<id>::<Exact Variation Name>"` (the key format `getVariationLessonScript`
+  looks up — `lessons/index.ts:54`). One entry per variation tab. Model file:
+  `viennaVariations.ts`.
+- **1c. Named traps** (only real, named ones) → `src/data/lessons/<id>TrapLessons.ts`:
+  `<ID>_TRAP_DEFS` (each `{ id, name, appliesTo: ['<tabkey>'…], kind:
+  'weapon' | 'warning', … }`), `<ID>_TRAP_LESSONS: Record<trapId, LessonScript>`
+  (a def surfaces ONLY if it also has a lesson here), plus
+  `get<Id>TrapsForTab(tabKey)` and `get<Id>TrapPlayableLine(id)`. Weapon =
+  opponent slips, student punishes; warning = student must avoid. Skip
+  entirely if the opening has no real named trap (empty > invented). Model
+  file: `viennaTrapLessons.ts`.
+
+**STEP 2 — register (ONE place only).** `src/data/lessons/registry.ts`: add
+the 3 imports + ONE line to the `OPENINGS` array (~line 48):
+`{ main: <ID>_LESSON, variations: <ID>_VARIATION_LESSONS, traps: <ID>_TRAP_LESSONS }`
+(drop `traps` if none). This auto-wires `getLessonScript`,
+`getVariationLessonScript`, the gate registry (`ALL_LESSONS`), and
+`FIRST_CLASS_OPENING_IDS` (which forces a manifest entry — STEP 9).
+
+**STEP 3 — variation tabs.** `src/services/variationTabs.ts`: add
+`CURATED['<id>'] = [{ test: /regex/i, label: 'Tab Label' }, …]`. The `test`
+RegExp matches `variation.name`; the "Main line" pill is automatic. HAND-PICK
+which variations become tabs (no algo). The lowercased `label` is the
+`tabKey` used by STEPS 1c/4. Match Vienna's entry exactly.
+
+**STEP 4 — tab → middlegame-plan map.** Create
+`src/services/<id>MasterclassTabs.ts` exporting `get<Id>TabPlanIds(tabKey)`:
+maps each lowercased tab label (and `'main'`) → that tab's plan id. Then in
+`OpeningDetailPage.tsx`, import it and add one branch next to
+`getViennaTabPlanIds`. Model file: `viennaMasterclassTabs.ts`.
+
+**STEP 5 — middlegame plans (one per tab).** `src/data/middlegame-plans.json`:
+add plans with id `mp-<idnodashes>-<tab>` (e.g. `mp-viennagame-gambit`),
+`openingId: '<id>'`, the playable line + per-move narration. (`-endgame`
+suffix → routes to the Endgame section instead.) THEN run
+`node scripts/add-leadeye-to-plans.mjs` to generate the ORANGE/GREEN/YELLOW
+lead-the-eye markers (grounded + legality-gated). Gate: `middlegamePlanner.test`
++ `node scripts/audit-leadeye-plans.mjs`.
+
+**STEP 6 — punish-gem weapon section (the weapon spine).**
+- Run `node scripts/mine-punish-gems.mjs` (ENGINE-FIRST; sandbox can
+  `apt-get install -y stockfish`, or use CI). Writes confirmed (≥+1.0) /
+  positional (+0.5..+1.0) gems to `src/data/punish-gems.json`. GOOGLE-VERIFY
+  the headline crushes against theory.
+- HAND-AUTHOR narration in `src/data/lessons/punishGemNarration.ts`:
+  `GEM_NARRATION[gemId] = { watch: [...], learn: [...] }`, arrays
+  length-matched to the gem's `playLine` plies. **Only narrated, weapon-tier
+  gems surface** (`isSurfaceableGem`) — a gem with no narration stays dark
+  (correct; never ship a thin gem). Gate: `punishGems.test` + the 3-pass
+  `audit-punish-gems-loop.mjs` with `AUDIT_OPENING=<id>`.
+
+**STEP 7 — model games (per variation, student WINNING).**
+`src/data/model-games.json`: add REAL sourced games (web-identify; NEVER
+fabricate a PGN — major chess sites 403 the sandbox, so get the PGN from a
+fetchable source or David). Set `studentSide` = the student's color, and the
+game MUST be a win/draw for that side. Add `'<id>'` to the `PROTECTED` list in
+`src/data/modelGames-orientation.test.ts`. No real student-win for a variation
+→ omit it (empty > losing > fabricated). Gate: `modelGames-orientation.test`.
+
+**STEP 8 — checkpoint quizzes + common mistakes.**
+- `src/data/checkpoint-quizzes.json` keyed `'<id>'` (plan-quiz = inline
+  multiple-choice with `correctIndex`; move-quiz = preview + practice CTA).
+- `src/data/common-mistakes.json` keyed `'<id>'` — **Watch-only** (NO
+  Learn/Practice/Play; drilling the wrong move is banned). Provide a
+  `punishmentLine` where a real one exists so "watch the punishment" lights up.
+
+**STEP 9 — manifest (content floors).** `src/data/opening-manifests.json`:
+add the `'<id>'` entry declaring floors (`variations`, `middlegamePlans`,
+`endgamePlans`, `modelGames`, `weapons`, `warnings`, `keyIdeas`). The
+`openingManifests` gate fails if actual < floor — declare honestly; if you
+legitimately have fewer, lower the floor explicitly (that's the sanctioned
+demotion, not a workaround).
+
+**INHERITED — DO NOT build per-opening (it just works):** the page shell +
+WLPP players (`OpeningDetailPage` / `PlayableLinePlayer` / `LessonPlayer` /
+`OpeningPlayMode`); the unlock LADDER (Watch→Learn→Practice→Play,
+weapons-locked-until-Play) + the expert-pass BUDGET (1 per color, two-tap
+confirm) — both read `OpeningRecord` progress, fully opening-agnostic; the
+onboarding "i" (`PageHelp` `opening-detail`); Classic Wisdom (auto from
+`chess-concepts.json` / definitions — modern openings correctly fall to the
+modern-definition footer); the coach chat (`buildCourseScope` off
+`repertoire.json`).
+
+**GATES — all green before "done"** (`npm run ship-check` runs the starred
+content gates): ⭐lessonIntegrity, ⭐narrationAccuracy, ⭐narrationGrounding,
+⭐lessonDepth, ⭐lessonTabIntegrity, ⭐wlppNarration, ⭐openingManifests,
+⭐modelGames-orientation, ⭐punishGems, ⭐middlegamePlanner,
+⭐OpeningDetailPage.wiring, ⭐openingWiring (the opening produces ≥1 valid
+variation tab + has variation lessons). Then the interactive audits (per
+opening): `AUDIT_OPENING=<id> node scripts/audit-punish-gems-loop.mjs` (3-pass
+contract), `scripts/audit-leadeye-plans.mjs`, `scripts/audit-named-traps.mjs`,
+and `AUDIT_OPENING=<id> node scripts/audit-opening-walkthrough.mjs` for the
+tab-by-tab interactive walk (parameterized — no longer clone the Vienna script). ⚠️ The sandbox can't verify openings-store
+WRITES (unlock persistence) — see CLAUDE.md G1 — so route that live-check to
+David on a real device.
+
+**Done = every ⭐ gate green + the per-opening audits green + the tab-by-tab
+walk shows each tab with a distinct lesson, its gem set, its plan, its traps,
+and no empty/duplicate section.** That is "looks and works like the Vienna."
 
 ## 1. Page structure (already wired — inherit it)
 
@@ -464,12 +613,43 @@ Play-with-Coach, middlegame/endgame Play, Practice) — NEVER a silo:
 - **Eval bar**: NOT a live bar in walkthroughs (removed for chop) — on-demand
   only.
 
-## 8. Onboarding (the "i" help)
+## 8. Onboarding (the "i" help) — DONE, global (2026-05-24)
 
-- An "i" top-right on every page → coach-narrated, spotlighted coach-marks
-  that explain WHAT each area does and WHY. Auto-run first visit, replayable
-  after. Reusable `PageHelp`. Teach features when they first matter +
-  empty-states-as-teachers. Teach THE LOOP (learn → play → capture → drill).
+- An "i" top-right on every main tab + sub-tab landing → `PageHelp`
+  (`src/components/Layout/PageHelp.tsx`). **Auto-opens on first visit**
+  (tracked per-surface in Dexie `meta`, key `pagehelp-seen-<helpId>`), then
+  lives behind the icon, replayable. NOT on play surfaces (once the user is
+  in a board, they figure it out).
+- Copy teaches **flow + cross-tab connections**, not "what this page is":
+  Dashboard = the order of operations; Weaknesses = errors log → feed the
+  coach; etc. When you add a NEW landing surface, drop in a `<PageHelp
+  helpId="..." title=... steps=[...] />` (top-right) — that's the whole job.
+- **The masterclass detail page already carries its "i"** (`helpId=
+  "opening-detail"`, the WLPP climb explainer) — a NEW opening inherits it
+  automatically. No per-opening onboarding work.
+
+## 8.5 The WLPP unlock ladder — DONE, global + opening-agnostic (2026-05-24)
+
+Forged + verified on the Vienna; **a new opening gets it for free** (it reads
+the same `OpeningRecord` progress fields). Do NOT re-wire per opening.
+
+- **Rungs forward-lock**: Watch → Learn → Practice → Play. Only the next rung
+  is live; locked rungs grey out with "Complete X to unlock Y"; completed
+  rungs show a checkmark and stay re-openable.
+- **Weapons (gems + named traps) lock until Play** is done for that line.
+- **Per-line "I already know this — unlock all"** escape — gating never traps.
+- Resolver: `src/utils/wlppLadder.ts` (pure, tested). Progress fields on
+  `OpeningRecord`: `linesDiscovered` (Watch) / `linesLearned` (Learn) /
+  `linesPerfected` (Practice) / `linesPlayed` (Play) / `linesUnlockedAll`.
+  Marked via `markRungComplete(id, lineIdx, rung)` (monotonic backfill) from
+  each player's `onComplete`; the main line uses `MAIN_LINE_INDEX = -1`.
+  Play marks on launch (it hands off to /coach/play, no return signal).
+- **REMAINING (not built — TODO 3b items 2-3 / 3c in
+  `docs/plans/2026-05-22-app-ux-todo.md`)**: line-complete reward star +
+  model-game unlock animation; opening-complete graduation → unlock next
+  opening; light subline-gating (gate variation tabs behind the main line's
+  WATCH only). And TODO 1's Learn-completion "Got it / Not yet" self-assessment
+  + a visible per-line tier display.
 
 ## 9. Audit (the gate)
 

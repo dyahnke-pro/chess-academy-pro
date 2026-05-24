@@ -74,11 +74,33 @@ the progress model (TODO 1) to the user. Build them together.
 ---
 
 ## Status
-- [ ] Progress model: `linesLearned` tier + Learn-completion "Got it/Not yet"
-      prompt + tier display + Dexie bump.
-- [ ] Onboarding `PageHelp` bubbles per tab (playbook §8) + WLPP/progress
-      explainer.
+- [~] Progress model: `linesLearned` + `linesPlayed` + `linesUnlockedAll`
+      fields ADDED (2026-05-24); WLPP rungs now marked on completion
+      (`markRungComplete`, monotonic backfill). STILL TODO: the Learn-completion
+      "Got it / Not yet" self-assessment prompt + a visible tier display
+      per line/opening. (No Dexie version bump needed — optional object fields,
+      read with `?? []`.)
+- [x] **Onboarding `PageHelp` bubbles per tab (playbook §8) DONE (2026-05-24).**
+      All main tabs + sub-tab landings carry an "i" (top-right) that auto-opens
+      on FIRST visit (Dexie-meta tracked) then lives behind the icon. Copy
+      teaches flow + cross-tab connections (Dashboard = the order of operations;
+      Weaknesses = how errors log → feed the coach). NOT on play surfaces.
+- [x] **WLPP unlock ladder (TODO 3b core) DONE (2026-05-24).** Watch→Learn→
+      Practice→Play rungs are forward-locked (greyed + "Complete X to unlock Y"
+      + checkmark on done); weapons (gems + named traps) locked until Play;
+      per-line "I already know this — unlock all" escape so nobody's trapped.
+      Resolver = `src/utils/wlppLadder.ts` (7 tests); marking = `markRungComplete`
+      (5 tests). Play marks on LAUNCH (no in-page completion signal — the main
+      line hands off to /coach/play). Verified interactively on the Vienna.
+      REMAINING ladder rungs (TODO 3b items 2-3): line-complete → reward
+      animation/star; opening-complete → graduate → unlock next opening;
+      subline gating (TODO 3c, gate variations behind main-line WATCH only).
 - Accounting gate (weakness tagging) deferred until the `learned` gate exists.
+- [ ] **Coach proactively asks the user about their mistakes** — after a game/drill, the coach surfaces a mistake and *quizzes* the student on it ("you played X here — what was better, and why?") rather than just labeling it. Retention + active recall. (David 2026-05-24)
+- [ ] **Store readiness (App Store + Play Store production)** — full plan at
+      `docs/plans/2026-05-24-store-readiness.md`. Not a rewrite (Android already
+      Capacitor-wired); real gaps = icon/splash assets, Android audio/mic native
+      patch, WebView-parity QA, mic permissions + privacy, Play keystore.
 
 ---
 
@@ -139,8 +161,15 @@ The flywheel in one line: *learn it, play it, find the holes, drill them shut.*
 Problem: Watch is the satisfying part; users forget to climb L→P→P. Fixes:
 1. **Tiered end-of-Watch hand-off.** The end-of-Watch CTA should tee up the
    NEXT RUNG, not skip to Play: Watch→"Now Learn it", Learn→"Practice it",
-   Practice→"Play it". (Today's CTA jumps straight to Play — fix to step
-   through the ladder.)
+   Practice→"Play it".
+   - **[x] DONE (2026-05-24): Watch → Learn.** LessonPlayer's end CTA was "Play
+     it out against the coach" wired to Play; now it reads **"Now Learn it →"**
+     and steps to Learn (`onContinueToNext` → `setViewMode('learn')` for the
+     main line / `handleStartVariationLearn` for a variation tab). The
+     jump-straight-to-Play bug is fixed.
+   - [ ] Remaining rungs: Learn-complete → Practice, Practice-complete → Play
+     (wire the `PlayableLinePlayer` `onComplete` to advance the ladder instead
+     of exiting).
 2. **Show the unfinished ladder everywhere.** Per line: `Watched ✓ · Learn ○
    · Practice ○ · Play ○` with the next rung lit. An incomplete ladder is a
    standing nudge.
@@ -303,3 +332,66 @@ rare, most openings have few/none, section often empty.
 
 This is the #1 architectural priority alongside 3e — David's core vision for
 the app.
+
+---
+
+## TODO — Pro model games: source proper per-opening models (David 2026-05-24)
+
+The pro repertoire opening sections render model games via `ModelGamesSection`
+(opening-level). An audit found the pro model games did NOT reliably match the
+pro + the line: 25 games were the WRONG OPENING for their section (Ruy games in
+Italian/Scotch sections, KID in Grünfeld, Nimzo in Catalan/QGD, etc.) — those
+were **stripped** (commit on branch `claude/jolly-galileo-FqH02`). Now source
+**1 proper model game per opening** — featuring the named pro, in the correct
+line, and (where the section implies a side) showing that side doing well.
+Sourcing rule (playbook §0.7 STEP 7): REAL games only, never fabricate a PGN;
+web-identify then get the PGN from a fetchable source or David.
+
+**SOURCING IS NOT BLOCKED — there's a local cache (David 2026-05-24).**
+`docs/audit-runs/2026-05-19-pro-games-gen/raw-fetched.json` holds **2,000 real
+games (10 pros × 200)** with full PGNs, fetched from the chess.com + lichess
+game APIs by `scripts/fetch-pro-games-local.mjs`. The pro model games were
+fuzzy-matched out of it (`curate-pro-games-fuzzy.mjs`). So re-curation is a
+local-cache + name/line-match problem, NOT "David must provide." Re-fetch more
+(or other pros) by re-running `fetch-pro-games-local.mjs` (those APIs are
+reachable). Caveat: the cache covers each pro's RECENT ~200 games, so a pro who
+doesn't currently play an opening has no game for it — that section stays empty
+(correct; empty > wrong-line). The remaining manual part is **narration**
+(cached games are raw PGNs → author overview [+ critical moments]).
+
+**RE-CURATED from the cache (done 2026-05-24):**
+- `pro-caruana-italian` ← Caruana 1-0 Naroditsky, Italian Two Knights (C55), narrated.
+- `pro-niemann-grunfeld` ← Niemann 0-1 (Black win), Grünfeld Exchange (D85), narrated.
+  (Top-rated candidate was a Torre Attack mislabel — skipped, used the real D85.)
+
+**STILL EMPTIED — no winning game for the pro in the cache → stay self-hidden
+until a broader fetch or a real game turns up (do NOT force a wrong-line match):**
+- `pro-naroditsky-scotch` — Naroditsky has no Scotch win cached (plays d4/QP).
+- `pro-gothamchess-italian` — 0 Italian games cached.
+- `pro-hikaru-scotch` — only a Black loss cached.
+- `pro-firouzja-italian` — only Black/draw cached, no White Italian win.
+- `pro-firouzja-grunfeld` — cache has him as White vs Grünfeld, not playing it as Black.
+- `pro-niemann-anti-marshall` — 0 anti-Marshall games cached.
+  → These pro-opening SECTIONS may be claimed-but-unplayed repertoire lines;
+  consider whether they should exist, or fetch a wider game set.
+
+**REDUCED — 1 left (a mismatch was removed; verify the survivor + consider a 2nd):**
+`pro-carlsen-ruy-lopez`, `pro-carlsen-catalan`, `pro-carlsen-berlin`,
+`pro-caruana-qgd`, `pro-caruana-catalan`, `pro-dubov-catalan`,
+`pro-dubov-tarrasch-defense`, `pro-dubov-scotch`, `pro-praggnanandhaa-catalan`.
+
+**STILL OPEN (separate passes, not done in the strip):**
+1. **De-dup right-family copies.** The same game is reused across several of a
+   pro's sections (e.g. one Caruana Ruy game sat in anti-berlin + berlin +
+   ruy-lopez; a Gotham Ponziani in italian + ponziani). One game per section.
+2. **Pro-presence.** At least `pro-naroditsky-jobava-london` features
+   Jobava–Mamedyarov with NO Naroditsky — the model must feature the pro (or be
+   re-scoped). Audit every section for "is the named pro actually a player?"
+   (handle map: Carlsen=MagnusCarlsen, Caruana=FabianoCaruana, Firouzja=Firouzja2003,
+   Gotham=GothamChess, Naroditsky=DanielNaroditsky, Pragg=rpragchess, Dubov=Duhless,
+   Niemann=HansOnTwitch, Nakamura=Hikaru, So=GMWSO).
+3. **Narration bar.** Most pro games are templated-overview + 0 critical
+   moments (thin). Per the "no thin-narration ships" doctrine, author a real
+   overview + critical moments, OR gate so only narrated games surface
+   (mirrors gems' `isSurfaceableGem`). (This was the in-progress filter/gate
+   work — paused 2026-05-24.)

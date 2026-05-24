@@ -30,15 +30,15 @@ const KARPOV_QE2_MATE: LessonScript = {
   beats: [
     b({ id: 'ck-w1', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Qe2',
       say: "In the Karpov line with Nd7, White slips in the quiet-looking Qe2. It seems to do nothing — but the queen now stares straight up the e-file at e7, and a trap is set.",
-      sayShort: 'Karpov Nd7: White plays Qe2 — the queen eyes e7 up the file, setting a trap.',
+      sayShort: "Karpov Nd7 — Qe2 eyes e7, setting a trap.",
       highlights: [H('e2', SOFT), H('e7', KEY)] }),
     b({ id: 'ck-w2', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Qe2 Ngf6 Nd6',
       say: "The natural Ngf6 walks straight into Nd6 — checkmate. The queen on e2 pins the e7-pawn to the king, so e7 cannot capture the knight on d6. A smothered mate, in the opening.",
-      sayShort: '...Ngf6?? Nd6 is mate — the e2 queen pins e7, so it can’t take on d6.',
+      sayShort: "…Ngf6?? — Nd6 is mate; e7 is pinned.",
       highlights: [H('d6', ATK), H('e7', KEY), H('e2', SOFT)] }),
     b({ id: 'ck-w3', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Qe2 Ndf6',
       say: "So rewind. The fix is Ndf6 — the other knight develops to f6, the king keeps its breathing room, and the Nd6 mate simply does not work. Learn this one move and Qe2 holds no terror.",
-      sayShort: 'The fix: ...Ndf6 — develop the d7-knight instead, and Nd6 is no longer mate.',
+      sayShort: "The fix: …Ndf6 — now Nd6 isn't mate.",
       highlights: [H('f6', KEY), H('d6', SOFT)] }),
   ],
 };

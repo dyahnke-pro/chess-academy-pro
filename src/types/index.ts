@@ -330,6 +330,10 @@ export interface ModelGame {
   year: number;
   event: string;
   pgn: string;
+  /** The side the student plays in this opening. When set, a game where this
+   *  side loses is excluded from coach grounding — a masterclass never cites
+   *  its own opening losing (David 2026-05-21). */
+  studentSide?: 'white' | 'black';
   overview: string;
   criticalMoments: ModelGameCriticalMoment[];
   middlegameTheme: string;
@@ -462,9 +466,17 @@ export interface OpeningRecord {
   variationAccuracy?: number[];
   // Last 10 drill attempts for rolling mastery calculation
   drillHistory?: DrillAttempt[];
-  // Chess Reps-style line tracking (indices into variations array)
+  // Chess Reps-style line tracking (indices into variations array; the main
+  // line uses MAIN_LINE_INDEX = -1). These drive the WLPP unlock ladder:
+  // Watch→discovered, Learn→learned, Practice→perfected, Play→played. Each
+  // rung unlocks the next; finishing Play unlocks the line's weapons.
   linesDiscovered?: number[];
+  linesLearned?: number[];
   linesPerfected?: number[];
+  linesPlayed?: number[];
+  // Per-line "I already know this — unlock everything" escape (forward-lock
+  // is for learners; this frees the rung + weapon gating for a given line).
+  linesUnlockedAll?: number[];
   // Favorites (WO-3)
   isFavorite: boolean;
   // Gambit flag (true for openings loaded from gambits.json)
@@ -864,6 +876,11 @@ export interface UserProfile {
   lastActiveDate: string;
   skillRadar: SkillRadar;
   badHabits: BadHabit[];
+  /** WLPP "I already know this" expert passes — a lifetime budget of one per
+   *  color. The value is the openingId that consumed that color's pass, so
+   *  weapons stay gated on every OTHER opening and nobody can click past the
+   *  ladder for free. Undefined ⇒ both passes still available. */
+  weaponUnlockPasses?: { white?: string; black?: string };
   preferences: UserPreferences;
 }
 

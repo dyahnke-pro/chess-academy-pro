@@ -64,6 +64,22 @@ you can't. The pattern (battle-tested 2026-05-16):
    regressions. Run localhost ALWAYS; tell David when only he can
    run prod.
 
+4. **🚨 SANDBOX IndexedDB WRITE-STALL — don't burn hours on it (learned
+   2026-05-24).** In the sandbox-browser audits, IndexedDB *writes* to the
+   `openings` store STALL (a Dexie `db.openings.update`/`.get` from a click
+   handler never resolves; even a raw `indexedDB.open` times out). READS work
+   — which is why most audits pass — so any audit that drives a UI action
+   which WRITES openings (unlock ladder, favorites, rung completion via
+   `markRungComplete`, drill progress) will appear to "hang" or silently not
+   persist. This is the SANDBOX env, NOT a feature bug (reproduced with the
+   feature stashed). Do NOT debug it as app code. Instead: prove the write
+   LOGIC with a fake-indexeddb unit test (e.g. `openingService.ladder.test.ts`),
+   verify the UI up to the write (button states, arming), and route the
+   live-commit + persistence check to David on a real device / prod. When you
+   write a NEW audit that exercises an openings write, seed via
+   `loadFixtureIntoIDB` and expect the commit assertion to fail in-sandbox —
+   say so in the script header (see `audit-wlpp-unlock-budget.mjs`).
+
 **Cannot-run-Playwright is no longer a valid excuse in the sandbox.**
 The 2026-05-16 session shipped four PRs claiming "I can't run
 Playwright here" — that was wrong; the helper was already in place.
@@ -126,8 +142,18 @@ confused or forgotten again."*
 `coachNarration` has three values: `silent` / `brief` / `full`.
 Every one of them is a HARD CONTRACT, not a soft hint to the LLM:
 
-- **silent** = no voice fires anywhere. `voiceService.speakInternal`
-  short-circuits at the silent gate.
+**SCOPE (David 2026-05-24): these settings govern IN-GAME / in-lesson
+voice narration ONLY.** Explicit "read this text to me" buttons on the
+opening detail page (Classic Wisdom, section narration via
+`voiceService.speakReadAloud`) are a read-aloud affordance the user just
+tapped — they are EXEMPT from verbosity entirely (silent AND brief). This
+is the SECOND sanctioned exemption alongside `speakLecture`; route opening-
+page read-text through `speakReadAloud` (sets `bypassVerbosity`), never
+through `speakForced`. Do NOT extend this exemption to any in-game surface.
+
+- **silent** = no in-game voice fires anywhere. `voiceService.speakInternal`
+  short-circuits at the silent gate (unless `bypassVerbosity`, the
+  read-aloud carve-out above).
 - **brief** = MAX 2 sentences / MAX 30 words. Enforced two ways:
   1. The `fast` verbosity prompt instruction in
      `coachPrompts.ts:VERBOSITY_INSTRUCTIONS` puts the hard cap in
@@ -1050,6 +1076,16 @@ playbook holds the rules you MUST follow, in particular:
   button; Play = coach LOCKED to this opening. Applies to the main line,
   every variation tab, trap weapons, "watch out for" warnings, AND
   middlegame plans (`PlayableLinePlayer` modes / `LessonPlayer`).
+- **Learn-rung fallback is INTENDED, not a bug (David 2026-05-24: "learn
+  fall back is good, that's what we want").** The Learn button tries
+  `lessonToPlayableLine(curatedLesson)` first → the modern
+  `PlayableLinePlayer` with authored cues (every masterclass opening hits
+  this). Only when there's NO curated lesson (the ~3,000 DB-only openings,
+  and old data-tile trap/warning Learn) does it fall back to the legacy
+  `DrillMode` / `TrainMode`, which speak code-generated move dictation. That
+  fallback is deliberate — do NOT "fix" its templated voice or rip it out as
+  a defect; it's the graceful non-curated path. The narration-register
+  standard above is a contract for CURATED lessons, not the fallback.
 - **🔒 NARRATION STANDARD — hand-written, two registers, verified per move
   (LOCKED, David 2026-05-24). Supersedes the old "Learn = pure move
   dictation" rule.** Every played line speaks in two registers, BOTH
@@ -1714,10 +1750,19 @@ showing you the green checks." Wired in `scripts/ship-check.mjs`. Runs:
   - The CURATED content-gate test list (NOT every test in the repo):
     lessonIntegrity, narrationAccuracy, narrationGrounding, lessonDepth,
     pircIntegrity, repertoire-orientation, pro-repertoires-orientation,
-    openingManifests, middlegamePlanner, MiddlegamePlansSection,
-    EndgamePlansSection. These are the load-bearing gates that protect
-    content correctness. UI / snapshot / integration tests live at a
-    different reliability bar and aren't gated here.
+    openingManifests, modelGames-orientation, middlegamePlanner,
+    MiddlegamePlansSection, EndgamePlansSection, OpeningDetailPage.wiring.
+    These are the load-bearing gates that protect content correctness. UI /
+    snapshot / integration tests live at a different reliability bar and
+    aren't gated here. Two were added 2026-05-24:
+    • **modelGames-orientation** — no model game with `studentSide` set shows
+      that side LOSING, and the protected masterclass openings tag every game
+      (so the coach-injection filter excludes losses). Add a new opening to
+      its PROTECTED list when its model games declare `studentSide`.
+    • **OpeningDetailPage.wiring** — the masterclass sections actually RENDER
+      in OpeningDetailPage (catches the "built but mounted nowhere" orphan
+      class that hid the model-games renderer). Update REQUIRED_SECTIONS when
+      you add/remove a section.
   - Pulls the live audit-stream (informational, never blocks).
   - On green, writes a watermark to `.ship-check-log/latest.json`
     (gitignored) recording the SHA + timestamp — used by `--summary`.

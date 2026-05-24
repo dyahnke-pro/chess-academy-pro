@@ -1,3 +1,4 @@
+import { PageHelp } from '../Layout/PageHelp';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { importLichessGames, importLichessStats } from '../../services/lichessService';
@@ -171,6 +172,17 @@ export function ImportPage(): JSX.Element {
           <ArrowLeft size={18} />
         </button>
         <h1 className="text-2xl font-bold">Import Games & Stats</h1>
+        <div className="ml-auto">
+          <PageHelp
+            helpId="games-import"
+            title="How to import your games"
+            steps={[
+              { label: 'Why import', body: 'Pulling in your real games is what lets the app find YOUR weaknesses and the openings you actually play.' },
+              { label: 'Where from', body: 'Connect your Lichess or Chess.com username and the app pulls your recent games.' },
+              { label: 'What happens next', body: 'Your games feed Weaknesses (the motifs you miss) and Tactics drills built from your own mistakes.' },
+            ]}
+          />
+        </div>
       </div>
 
       {/* Platform toggle */}

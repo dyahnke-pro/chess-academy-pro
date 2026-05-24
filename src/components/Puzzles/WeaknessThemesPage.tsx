@@ -1,3 +1,4 @@
+import { PageHelp } from '../Layout/PageHelp';
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Target, Crosshair, Shuffle, ChevronRight, AlertTriangle } from 'lucide-react';
@@ -141,6 +142,18 @@ export function WeaknessThemesPage(): JSX.Element {
         <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>
           {phase === 'drilling' ? (activeTheme ?? 'Mixed Training') : 'My Weaknesses'}
         </h1>
+        <div className="ml-auto">
+          <PageHelp
+            helpId="weakness-themes"
+            title="How Weakness Themes works"
+            steps={[
+              { label: 'What this is', body: 'The tactical motifs you miss most — forks, pins, back-rank, and the rest — ranked by how often they cost you, from your own games.' },
+              { label: 'How errors get here', body: 'Importing and analyzing games logs every mistake and blunder automatically, tagged by motif — that tally is what ranks these themes.' },
+              { label: 'Sent to the coach', body: 'Each logged error feeds the Coach tab — Review walk-throughs and My Mistakes puzzles built from your exact slips, so training targets what you actually get wrong.' },
+              { label: 'Drill them shut', body: 'Tap a theme to drill exactly that pattern. Learn an opening → play it → errors log → drill them here. That loop is the whole app.' },
+            ]}
+          />
+        </div>
       </div>
 
       {/* Loading */}
