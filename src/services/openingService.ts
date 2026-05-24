@@ -277,6 +277,20 @@ export async function markLineDiscovered(
   }
 }
 
+/** Marks a variation as "learned" (completed the Learn run). Idempotent. */
+export async function markLineLearned(
+  id: string,
+  variationIndex: number,
+): Promise<void> {
+  const opening = await db.openings.get(id);
+  if (!opening) return;
+  const learned = opening.linesLearned ? [...opening.linesLearned] : [];
+  if (!learned.includes(variationIndex)) {
+    learned.push(variationIndex);
+    await db.openings.update(id, { linesLearned: learned });
+  }
+}
+
 /** Marks a variation as "perfected" (practiced without errors). Idempotent. */
 export async function markLinePerfected(
   id: string,
@@ -288,6 +302,60 @@ export async function markLinePerfected(
   if (!perfected.includes(variationIndex)) {
     perfected.push(variationIndex);
     await db.openings.update(id, { linesPerfected: perfected });
+  }
+}
+
+/** Marks a variation as "played" (completed a Play rep vs the coach).
+ *  Idempotent. This is the rung that unlocks the line's weapons. */
+export async function markLinePlayed(
+  id: string,
+  variationIndex: number,
+): Promise<void> {
+  const opening = await db.openings.get(id);
+  if (!opening) return;
+  const played = opening.linesPlayed ? [...opening.linesPlayed] : [];
+  if (!played.includes(variationIndex)) {
+    played.push(variationIndex);
+    await db.openings.update(id, { linesPlayed: played });
+  }
+}
+
+/** Marks a WLPP rung complete for a line, backfilling every earlier rung
+ *  (monotonic — finishing Practice implies Watch + Learn are done). One call
+ *  the runtime can fire from any rung's completion without ordering bugs. */
+export async function markRungComplete(
+  id: string,
+  variationIndex: number,
+  rung: 'watch' | 'learn' | 'practice' | 'play',
+): Promise<void> {
+  const order: Array<'watch' | 'learn' | 'practice' | 'play'> = ['watch', 'learn', 'practice', 'play'];
+  const upto = order.slice(0, order.indexOf(rung) + 1);
+  const opening = await db.openings.get(id);
+  if (!opening) return;
+  const patch: Partial<OpeningRecord> = {};
+  const add = (key: 'linesDiscovered' | 'linesLearned' | 'linesPerfected' | 'linesPlayed'): void => {
+    const arr = opening[key] ? [...opening[key]] : [];
+    if (!arr.includes(variationIndex)) { arr.push(variationIndex); patch[key] = arr; }
+  };
+  if (upto.includes('watch')) add('linesDiscovered');
+  if (upto.includes('learn')) add('linesLearned');
+  if (upto.includes('practice')) add('linesPerfected');
+  if (upto.includes('play')) add('linesPlayed');
+  if (Object.keys(patch).length) await db.openings.update(id, patch);
+}
+
+/** Per-line "I already know this" escape — unlocks every rung + the weapons
+ *  for one line without forcing the climb. Idempotent toggle-on. */
+export async function unlockLineAll(
+  id: string,
+  variationIndex: number,
+): Promise<void> {
+  const opening = await db.openings.get(id);
+  if (!opening) return;
+  const unlocked = opening.linesUnlockedAll ? [...opening.linesUnlockedAll] : [];
+  if (!unlocked.includes(variationIndex)) {
+    unlocked.push(variationIndex);
+    await db.openings.update(id, { linesUnlockedAll: unlocked });
   }
 }
 

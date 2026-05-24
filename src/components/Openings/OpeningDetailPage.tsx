@@ -66,8 +66,20 @@ import {
   getLinesPerfected,
   getTotalLines,
   toggleFavorite,
-  markLineDiscovered,
+  markRungComplete,
+  unlockLineAll,
 } from '../../services/openingService';
+import {
+  MAIN_LINE_INDEX,
+  isRungComplete,
+  isRungUnlocked,
+  isLineUnlockedAll,
+  areWeaponsUnlocked,
+  nextRung,
+  lockHint,
+  RUNG_LABEL,
+  WEAPONS_LOCK_HINT,
+} from '../../utils/wlppLadder';
 import {
   enrollOpening,
   unenrollOpening,
@@ -97,6 +109,8 @@ import {
   Loader2,
   Sparkles,
   CheckCircle2,
+  Lock,
+  Check,
 } from 'lucide-react';
 
 type ViewMode =
@@ -487,7 +501,14 @@ export function OpeningDetailPage(): JSX.Element {
   if (viewMode === 'walkthrough') {
     const lesson = getLessonScript(opening.id);
     if (lesson) {
-      return <LessonPlayer script={lesson} onExit={handleExit} onContinueToNext={() => setViewMode('learn')} />;
+      return (
+        <LessonPlayer
+          script={lesson}
+          onExit={handleExit}
+          onComplete={() => { void markRungComplete(opening.id, MAIN_LINE_INDEX, 'watch').then(() => loadOpening()); }}
+          onContinueToNext={() => setViewMode('learn')}
+        />
+      );
     }
   }
   if (viewMode === 'variation-walkthrough') {
@@ -499,8 +520,8 @@ export function OpeningDetailPage(): JSX.Element {
           script={vlesson}
           onExit={handleExit}
           onComplete={() => {
-            // Watching the subline's master class through marks it Learned.
-            void markLineDiscovered(opening.id, activeVariationIndex).then(() => loadOpening());
+            // Watching the subline's master class through completes the Watch rung.
+            void markRungComplete(opening.id, activeVariationIndex, 'watch').then(() => loadOpening());
           }}
           onContinueToNext={() => handleStartVariationLearn(activeVariationIndex)}
         />
@@ -646,23 +667,23 @@ export function OpeningDetailPage(): JSX.Element {
       : getLessonScript(opening.id);
     const learnLine = lessonToPlayableLine(learnLesson);
     if (learnLine) {
+      const learnLineIdx = viewMode === 'variation-learn' ? activeVariationIndex : MAIN_LINE_INDEX;
       return (
         <PlayableLinePlayer
           line={learnLine}
           boardOrientation={opening.color}
           mode="learn"
-          onComplete={viewMode === 'variation-learn'
-            ? () => { void markLineDiscovered(opening.id, activeVariationIndex).then(() => loadOpening()); }
-            : handleExit}
+          onComplete={() => { void markRungComplete(opening.id, learnLineIdx, 'learn').then(() => loadOpening()); }}
           onExit={handleExit}
         />
       );
     }
+    const learnLineIdx = viewMode === 'variation-learn' ? activeVariationIndex : MAIN_LINE_INDEX;
     return (
       <DrillMode
         opening={opening}
         variationIndex={viewMode === 'variation-learn' ? activeVariationIndex : undefined}
-        onComplete={handleComplete}
+        onComplete={() => { void markRungComplete(opening.id, learnLineIdx, 'learn').then(() => loadOpening()); }}
         onExit={handleExit}
       />
     );
@@ -692,11 +713,12 @@ export function OpeningDetailPage(): JSX.Element {
 
   // Practice mode (main line or variation)
   if (viewMode === 'practice' || viewMode === 'variation-practice') {
+    const practiceLineIdx = viewMode === 'variation-practice' ? activeVariationIndex : MAIN_LINE_INDEX;
     return (
       <PracticeMode
         opening={opening}
         variationIndex={viewMode === 'variation-practice' ? activeVariationIndex : undefined}
-        onComplete={handleComplete}
+        onComplete={() => { void markRungComplete(opening.id, practiceLineIdx, 'practice').then(() => loadOpening()); }}
         onExit={handleExit}
       />
     );
@@ -896,6 +918,18 @@ export function OpeningDetailPage(): JSX.Element {
   const selectedVariation =
     selectedTabIndex >= 0 ? opening.variations?.[selectedTabIndex] ?? null : null;
   const isVariation = selectedVariation !== null;
+
+  // WLPP unlock ladder for the active line (main = MAIN_LINE_INDEX). Forward-
+  // lock only; the per-line "unlock all" escape frees everything. Weapons
+  // unlock once Play is done.
+  const ladderLine = isVariation ? selectedTabIndex : MAIN_LINE_INDEX;
+  const ladderUnlockedAll = isLineUnlockedAll(opening, ladderLine);
+  const weaponsUnlocked = areWeaponsUnlocked(opening, ladderLine);
+  const ladderNext = nextRung(opening, ladderLine);
+  const handleUnlockAll = (): void => {
+    void unlockLineAll(opening.id, ladderLine).then(() => loadOpening());
+  };
+
   const subjectName = selectedVariation?.name ?? opening.name;
   const subjectOverview =
     selectedVariation?.overview ?? selectedVariation?.explanation ?? opening.overview;
@@ -1141,59 +1175,93 @@ export function OpeningDetailPage(): JSX.Element {
         mainLabel={opening.id === 'caro-kann' ? 'Classical System' : undefined}
       />
 
-      {/* WALKTHROUGH, LEARN, PRACTICE, PLAY buttons */}
-      <div className="grid grid-cols-4 gap-1.5 mb-6">
-        <button
-          onClick={() =>
-            isVariation ? handleStartVariationWalkthrough(selectedTabIndex) : setViewMode('walkthrough')
+      {/* WALKTHROUGH, LEARN, PRACTICE, PLAY buttons — the WLPP unlock ladder.
+          Each rung unlocks the next; locked rungs are greyed with a hint.
+          The per-line "unlock all" escape (below) frees the whole ladder. */}
+      {(() => {
+        const launchPlay = (): void => {
+          // Play has no in-page completion signal (main line hands off to
+          // /coach/play), so reaching Play counts as "played" — this is what
+          // unlocks the line's weapons. The unlock-all escape is the safety
+          // valve if a learner wants the weapons without playing.
+          void markRungComplete(opening.id, ladderLine, 'play').then(() => loadOpening());
+          if (isVariation) {
+            handleStartVariationPlay(selectedTabIndex);
+            return;
           }
-          className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-accent text-white font-semibold text-xs hover:opacity-90 transition-opacity opening-action-glow opening-action-glow-watch"
-          data-testid="walkthrough-btn"
-        >
-          <PlayCircle size={18} />
-          Watch
-        </button>
-        <button
-          onClick={() => (isVariation ? handleStartVariationLearn(selectedTabIndex) : setViewMode('learn'))}
-          className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-xs hover:bg-theme-border transition-colors opening-action-glow opening-action-glow-learn"
-          data-testid="learn-btn"
-        >
-          <LearnIcon size={18} />
-          Learn
-        </button>
-        <button
-          onClick={() =>
-            isVariation ? handleStartVariationPractice(selectedTabIndex) : setViewMode('practice')
-          }
-          className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-xs hover:bg-theme-border transition-colors opening-action-glow opening-action-glow-practice"
-          data-testid="practice-btn"
-        >
-          <Brain size={18} />
-          Practice
-        </button>
-        <button
-          onClick={() => {
-            if (isVariation) {
-              handleStartVariationPlay(selectedTabIndex);
-              return;
-            }
-            // Same room as Play with Coach — declare the main line and hand
-            // off to /coach/play to play it from move 1 against the coach.
-            useCoachMemoryStore.getState().setIntendedOpening({
-              name: opening.name,
-              color: opening.color,
-              capturedFromSurface: 'openings-play',
-              pgn: opening.pgn,
-            });
-            void navigate(`/coach/play?side=${opening.color}`);
-          }}
-          className="flex flex-col items-center justify-center gap-1 py-3 rounded-xl bg-theme-surface border border-theme-border text-theme-text font-semibold text-xs hover:bg-theme-border transition-colors opening-action-glow opening-action-glow-play"
-          data-testid="play-btn"
-        >
-          <Swords size={18} />
-          Play
-        </button>
-      </div>
+          useCoachMemoryStore.getState().setIntendedOpening({
+            name: opening.name,
+            color: opening.color,
+            capturedFromSurface: 'openings-play',
+            pgn: opening.pgn,
+          });
+          void navigate(`/coach/play?side=${opening.color}`);
+        };
+        const rungs = [
+          { rung: 'watch' as const, label: 'Watch', icon: <PlayCircle size={18} />, glow: 'opening-action-glow-watch', testid: 'walkthrough-btn',
+            base: 'bg-theme-accent text-white hover:opacity-90',
+            onClick: () => (isVariation ? handleStartVariationWalkthrough(selectedTabIndex) : setViewMode('walkthrough')) },
+          { rung: 'learn' as const, label: 'Learn', icon: <LearnIcon size={18} />, glow: 'opening-action-glow-learn', testid: 'learn-btn',
+            base: 'bg-theme-surface border border-theme-border text-theme-text hover:bg-theme-border',
+            onClick: () => (isVariation ? handleStartVariationLearn(selectedTabIndex) : setViewMode('learn')) },
+          { rung: 'practice' as const, label: 'Practice', icon: <Brain size={18} />, glow: 'opening-action-glow-practice', testid: 'practice-btn',
+            base: 'bg-theme-surface border border-theme-border text-theme-text hover:bg-theme-border',
+            onClick: () => (isVariation ? handleStartVariationPractice(selectedTabIndex) : setViewMode('practice')) },
+          { rung: 'play' as const, label: 'Play', icon: <Swords size={18} />, glow: 'opening-action-glow-play', testid: 'play-btn',
+            base: 'bg-theme-surface border border-theme-border text-theme-text hover:bg-theme-border',
+            onClick: launchPlay },
+        ];
+        return (
+          <div className="mb-6">
+            <div className="grid grid-cols-4 gap-1.5">
+              {rungs.map((r) => {
+                const unlocked = isRungUnlocked(opening, ladderLine, r.rung);
+                const complete = isRungComplete(opening, ladderLine, r.rung);
+                return (
+                  <button
+                    key={r.rung}
+                    onClick={unlocked ? r.onClick : undefined}
+                    disabled={!unlocked}
+                    title={unlocked ? undefined : lockHint(r.rung)}
+                    className={`relative flex flex-col items-center justify-center gap-1 py-3 rounded-xl font-semibold text-xs transition-all opening-action-glow ${r.glow} ${
+                      unlocked ? r.base : 'bg-theme-surface border border-theme-border text-theme-text-muted opacity-40 cursor-not-allowed'
+                    }`}
+                    data-testid={r.testid}
+                    data-locked={!unlocked}
+                  >
+                    {unlocked ? r.icon : <Lock size={18} />}
+                    {r.label}
+                    {complete && (
+                      <span className="absolute top-1 right-1 text-emerald-400" data-testid={`rung-done-${r.rung}`}>
+                        <Check size={12} strokeWidth={3} />
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+            {/* Ladder guidance + unlock-all escape */}
+            <div className="flex items-center justify-between mt-2 px-0.5">
+              <span className="text-xs text-theme-text-muted" data-testid="ladder-hint">
+                {ladderUnlockedAll
+                  ? 'All unlocked'
+                  : ladderNext
+                    ? `Next: ${RUNG_LABEL[ladderNext]} it`
+                    : 'Ladder complete — weapons unlocked'}
+              </span>
+              {!ladderUnlockedAll && (
+                <button
+                  onClick={handleUnlockAll}
+                  className="text-xs text-theme-text-muted hover:text-amber-300 underline underline-offset-2"
+                  data-testid="unlock-all-btn"
+                >
+                  I already know this — unlock all
+                </button>
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* SRS trainer enrollment */}
       <div className="flex items-center gap-2 mb-5" data-testid="srs-enroll-row">
@@ -1358,13 +1426,36 @@ export function OpeningDetailPage(): JSX.Element {
         filterPlanIds={subjectPlanIds}
       />
 
+      {/* WEAPONS LOCK — the line's weapons (gems + named traps) stay locked
+          until the user has Played the line (David: "lock the gems until play
+          has been completed"). The unlock-all escape frees them early. */}
+      {!weaponsUnlocked && (tabGems.length > 0 || namedWeapons.length > 0) && (
+        <div
+          className="bg-theme-surface rounded-xl p-4 mb-4 border border-theme-border opacity-80 flex items-center gap-3"
+          data-testid="weapons-locked-card"
+        >
+          <Lock size={18} className="text-theme-text-muted shrink-0" />
+          <div className="min-w-0 flex-1">
+            <h3 className="text-sm font-semibold text-theme-text">Weapons locked</h3>
+            <p className="text-xs text-theme-text-muted mt-0.5">{WEAPONS_LOCK_HINT}</p>
+          </div>
+          <button
+            onClick={handleUnlockAll}
+            className="text-xs text-theme-text-muted hover:text-amber-300 underline underline-offset-2 shrink-0"
+            data-testid="weapons-unlock-all-btn"
+          >
+            Unlock now
+          </button>
+        </div>
+      )}
+
       {/* Punish-the-inaccuracy GEMS — the weapon-section SPINE (WO:
           docs/plans/2026-05-23-punish-gems-wo.md). The common move the
           opponent actually plays here that scores badly for them, mined from
           the amateur DB, with the punish played out (masters). The student
           Watches the crush, then Learns / Practices / Plays it. Named traps
           (below) are the rarer hand-authored jewels layered on top. */}
-      {tabGems.length > 0 && (
+      {weaponsUnlocked && tabGems.length > 0 && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-emerald-500/30" data-testid="punish-gems-card">
           <div className="flex items-center gap-2 mb-3">
             <Sparkles size={14} className="text-emerald-400" />
@@ -1419,7 +1510,7 @@ export function OpeningDetailPage(): JSX.Element {
           header — no blank zones per playbook §0.5), rendered between
           Master and Pitfalls so the arc reads: plans → weapons you wield
           → things you avoid. Same WLPP shape as the warnings tile. */}
-      {namedWeapons.length > 0 && (
+      {weaponsUnlocked && namedWeapons.length > 0 && (
         <div className="bg-theme-surface rounded-xl p-4 mb-4 border border-green-500/30" data-testid="named-weapon-card">
           <div className="flex items-center gap-2 mb-3">
             <Swords size={14} className="text-green-500" />

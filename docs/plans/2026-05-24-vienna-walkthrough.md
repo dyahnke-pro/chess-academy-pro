@@ -149,6 +149,15 @@ on a blocked external resource (sandbox network policy), not app code.
   Masterclass help **auto-opens on first visit** and is a modal; the probe
   confirmed it overlays the page until dismissed (intended), then stays
   behind the "i".
+- **WLPP unlock ladder built + verified on the Vienna (2026-05-24).** Watch
+  open, Learn/Practice/Play forward-locked with "Complete X to unlock Y" +
+  checkmarks; weapons (gems + named traps) locked until Play; per-line
+  "unlock all" escape. Verified interactively on Vienna main: fresh = Watch
+  open, L/P/P locked, weapons hidden; "unlock all" persists (`linesUnlockedAll
+  = [-1]`) and flips the rungs + reveals the gems within ~1.6 s. Completion
+  marking fires from each player's `onComplete` (LessonPlayer / PlayableLine /
+  PracticeMode all verified to call it). See `src/utils/wlppLadder.ts` (+ 12
+  tests).
 
 ## PART 4 — Flagged for David (not blind-fixed, per "when unsure, ask")
 1. **Latent data mislabel — Frankenstein-Dracula / "Falkbeer".** The

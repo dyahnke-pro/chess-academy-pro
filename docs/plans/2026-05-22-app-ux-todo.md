@@ -74,10 +74,27 @@ the progress model (TODO 1) to the user. Build them together.
 ---
 
 ## Status
-- [ ] Progress model: `linesLearned` tier + Learn-completion "Got it/Not yet"
-      prompt + tier display + Dexie bump.
-- [ ] Onboarding `PageHelp` bubbles per tab (playbook §8) + WLPP/progress
-      explainer.
+- [~] Progress model: `linesLearned` + `linesPlayed` + `linesUnlockedAll`
+      fields ADDED (2026-05-24); WLPP rungs now marked on completion
+      (`markRungComplete`, monotonic backfill). STILL TODO: the Learn-completion
+      "Got it / Not yet" self-assessment prompt + a visible tier display
+      per line/opening. (No Dexie version bump needed — optional object fields,
+      read with `?? []`.)
+- [x] **Onboarding `PageHelp` bubbles per tab (playbook §8) DONE (2026-05-24).**
+      All main tabs + sub-tab landings carry an "i" (top-right) that auto-opens
+      on FIRST visit (Dexie-meta tracked) then lives behind the icon. Copy
+      teaches flow + cross-tab connections (Dashboard = the order of operations;
+      Weaknesses = how errors log → feed the coach). NOT on play surfaces.
+- [x] **WLPP unlock ladder (TODO 3b core) DONE (2026-05-24).** Watch→Learn→
+      Practice→Play rungs are forward-locked (greyed + "Complete X to unlock Y"
+      + checkmark on done); weapons (gems + named traps) locked until Play;
+      per-line "I already know this — unlock all" escape so nobody's trapped.
+      Resolver = `src/utils/wlppLadder.ts` (7 tests); marking = `markRungComplete`
+      (5 tests). Play marks on LAUNCH (no in-page completion signal — the main
+      line hands off to /coach/play). Verified interactively on the Vienna.
+      REMAINING ladder rungs (TODO 3b items 2-3): line-complete → reward
+      animation/star; opening-complete → graduate → unlock next opening;
+      subline gating (TODO 3c, gate variations behind main-line WATCH only).
 - Accounting gate (weakness tagging) deferred until the `learned` gate exists.
 - [ ] **Coach proactively asks the user about their mistakes** — after a game/drill, the coach surfaces a mistake and *quizzes* the student on it ("you played X here — what was better, and why?") rather than just labeling it. Retention + active recall. (David 2026-05-24)
 - [ ] **Store readiness (App Store + Play Store production)** — full plan at

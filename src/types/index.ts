@@ -462,9 +462,17 @@ export interface OpeningRecord {
   variationAccuracy?: number[];
   // Last 10 drill attempts for rolling mastery calculation
   drillHistory?: DrillAttempt[];
-  // Chess Reps-style line tracking (indices into variations array)
+  // Chess Reps-style line tracking (indices into variations array; the main
+  // line uses MAIN_LINE_INDEX = -1). These drive the WLPP unlock ladder:
+  // Watch→discovered, Learn→learned, Practice→perfected, Play→played. Each
+  // rung unlocks the next; finishing Play unlocks the line's weapons.
   linesDiscovered?: number[];
+  linesLearned?: number[];
   linesPerfected?: number[];
+  linesPlayed?: number[];
+  // Per-line "I already know this — unlock everything" escape (forward-lock
+  // is for learners; this frees the rung + weapon gating for a given line).
+  linesUnlockedAll?: number[];
   // Favorites (WO-3)
   isFavorite: boolean;
   // Gambit flag (true for openings loaded from gambits.json)
