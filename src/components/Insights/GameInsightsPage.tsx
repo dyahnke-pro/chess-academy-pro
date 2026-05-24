@@ -1,3 +1,4 @@
+import { PageHelp } from '../Layout/PageHelp';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -212,6 +213,15 @@ export function GameInsightsPage(): JSX.Element {
           </div>
           <div className="flex flex-col gap-1.5 items-end">
             <div className="flex items-center gap-1.5">
+              <PageHelp
+                title="How to use Weaknesses"
+                steps={[
+                  { label: 'Your real holes', body: 'Built from YOUR analysed games — the openings, phases, and mistakes you actually get wrong.' },
+                  { label: 'Drill them', body: 'Each weakness links into targeted puzzle practice until the pattern is fixed.' },
+                  { label: 'Needs your games', body: 'Import + analyse games first so this has real data — otherwise it shows samples.' },
+                  { label: 'Closes the loop', body: 'Learn openings → play them → find the holes here → drill them shut.' },
+                ]}
+              />
               <ImportGamesButton variant="compact" />
               <button
                 onClick={() => void handleRefresh()}
