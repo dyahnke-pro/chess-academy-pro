@@ -88,6 +88,18 @@ data, log the source, let the gate catch drift."
 - **Real master PGNs:** the explorer's `topGames[]` returns `winner` + game
   `id`; export the full PGN (with evals) via `…/api/lichess-game-export?id=<id>`.
   So a student-side-winning model game for ANY variation is sandbox-sourceable.
+  **TEST-FIRST + LOCAL FALLBACK (locked 2026-05-24, same rule as gem mining):**
+  the export endpoint rides the same per-environment egress allowlist as the
+  explorer proxy — `curl` it first. If it 200s, pull PGNs live. If it's blocked
+  (`Host not in allowlist`), DON'T fall straight to "ask David" — there is a
+  committed local cache of **~2,000 real pro games (full PGN, 10 top players)**
+  at `docs/audit-runs/2026-05-19-pro-games-gen/raw-fetched.json`; curate model
+  games from it offline (`scripts/curate-pro-games-to-model-games.mjs` /
+  `curate-pro-games-fuzzy.mjs`), or run the live export on a GitHub Actions
+  runner (open network) and commit the result back. Only after BOTH the live
+  endpoint AND the local cache come up empty for a variation do you ask David
+  for a specific 403'd PGN. (Note: `openings-masters-db.json` gives move
+  frequencies, NOT game PGNs — it is NOT a model-game source.)
 - **`openings-lichess.json`** — canonical move DB (G3 spine anchor).
 - **Book corpus** — `chess-concepts.json` + `opening-book-pages.json` (pre-1930s
   classical; universal principles cover modern openings — see CLAUDE.md note).
@@ -96,8 +108,9 @@ data, log the source, let the gate catch drift."
 - **Modern opening-specific PROSE** is a copyright wall — none exists CC0.
   Don't acquire it; ground modern ideas on consensus understanding +
   principles + real moves, board-truth-gated. Per-variation modern book
-  pages self-hide (empty > fabricated). If you need a specific 403'd PGN,
-  ASK DAVID — he can pull it from his terminal.
+  pages self-hide (empty > fabricated). If you need a specific 403'd PGN that
+  is in NEITHER the live export NOR the local pro-game cache, ASK DAVID — he
+  can pull it from his terminal.
 
 **Per-decision rule (source → rule → gate):**
 1. **Which variations get tabs.** Earns a tab only if ALL of: (a) real named
@@ -159,6 +172,24 @@ watching every one. The gates go red if you drift; the trail lets him audit.
 (two equally-frequent variations with no tiebreak), a variation with NO
 student-side-winning game, a needed PGN behind a 403, or any line/idea you
 cannot verify is real and sound. Otherwise: proceed.
+
+**🔒 DEFINITION OF DONE — a branch build is NOT done at the draft PR (locked
+2026-05-24).** Web/cloud sessions develop on a branch and open a PR — but the
+build is not complete, and you do NOT declare it done, until BOTH:
+1. **It lands on `main`.** The work has to be MERGED (per CLAUDE.md Deployment
+   Policy + G1's "MERGING A PR IS NOT THE END"). A green draft PR sitting
+   unmerged is a half-finished build, not a shipped one. If you lack merge
+   rights or there's an open question, say so and hand David the merge — don't
+   walk away calling it done.
+2. **The post-deploy audit runs against `main` and is green.** G1 is
+   NON-NEGOTIABLE: after the merge lands, run the surface's audit matrix
+   (`audit-punish-gems-loop.mjs` 3-pass, `audit-openings-interactive-loop.mjs`,
+   `audit-leadeye-plans`, `audit-named-traps`) + pull the audit stream (G2).
+   "Tests green on the branch" is NOT the audit — the audit catches deploy-
+   pipeline regressions the branch tests can't. A build whose audit hasn't run
+   on `main` is unverified, full stop. (This is the gap that bit the Italian
+   build: great work green on a branch, but unmerged + unaudited reads as
+   "not actually shipped.")
 
 ## 0.6 WORKED EXAMPLE — the §0.5 process applied (Caro Classical, 2026-05-22)
 
