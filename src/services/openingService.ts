@@ -1,6 +1,7 @@
 import { db } from '../db/schema';
 import type { OpeningRecord, DrillAttempt } from '../types';
 import { fuzzyScore } from '../utils/fuzzySearch';
+import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 import openingManifests from '../data/opening-manifests.json';
 
 // ─── Opening name helpers ────────────────────────────────────────────────────
@@ -357,6 +358,17 @@ export async function unlockLineAll(
     unlocked.push(variationIndex);
     await db.openings.update(id, { linesUnlockedAll: unlocked });
   }
+}
+
+/** "I already know this whole opening" expert pass — unlocks EVERY line (main
+ *  + all variations) at once. Spent against a per-color lifetime budget at the
+ *  call site (see unlockBudgetFor); this just applies the unlock. */
+export async function unlockOpeningAllLines(
+  id: string,
+  variationCount: number,
+): Promise<void> {
+  const all = [MAIN_LINE_INDEX, ...Array.from({ length: variationCount }, (_, i) => i)];
+  await db.openings.update(id, { linesUnlockedAll: all });
 }
 
 /** Returns count of discovered lines for an opening. */

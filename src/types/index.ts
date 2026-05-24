@@ -876,6 +876,11 @@ export interface UserProfile {
   lastActiveDate: string;
   skillRadar: SkillRadar;
   badHabits: BadHabit[];
+  /** WLPP "I already know this" expert passes — a lifetime budget of one per
+   *  color. The value is the openingId that consumed that color's pass, so
+   *  weapons stay gated on every OTHER opening and nobody can click past the
+   *  ladder for free. Undefined ⇒ both passes still available. */
+  weaponUnlockPasses?: { white?: string; black?: string };
   preferences: UserPreferences;
 }
 

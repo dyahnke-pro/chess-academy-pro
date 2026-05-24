@@ -67,7 +67,7 @@ import {
   getTotalLines,
   toggleFavorite,
   markRungComplete,
-  unlockLineAll,
+  unlockOpeningAllLines,
 } from '../../services/openingService';
 import {
   MAIN_LINE_INDEX,
@@ -79,7 +79,9 @@ import {
   lockHint,
   RUNG_LABEL,
   WEAPONS_LOCK_HINT,
+  unlockBudgetFor,
 } from '../../utils/wlppLadder';
+import { useAppStore } from '../../stores/appStore';
 import {
   enrollOpening,
   unenrollOpening,
@@ -181,6 +183,11 @@ export function OpeningDetailPage(): JSX.Element {
   const [narratingSection, setNarratingSection] = useState<string | null>(null);
   const [activeMiddlegamePlan, setActiveMiddlegamePlan] = useState<MiddlegamePlan | null>(null);
   const [activeMistake, setActiveMistake] = useState<CommonMistake | null>(null);
+  // Two-tap guard for the expert-pass unlock: spending a 1-of-1 lifetime pass
+  // shouldn't die to a misclick, so the first tap arms, the second commits.
+  const [confirmingUnlock, setConfirmingUnlock] = useState(false);
+  const weaponUnlockPasses = useAppStore((s) => s.activeProfile?.weaponUnlockPasses);
+  const recordWeaponUnlockPass = useAppStore((s) => s.recordWeaponUnlockPass);
   // Which variation tab is selected (-1 = main line). Drives the
   // full-page rescope: every section below renders for the selected
   // variation as its own opening ("seven openings in one").
@@ -926,8 +933,21 @@ export function OpeningDetailPage(): JSX.Element {
   const ladderUnlockedAll = isLineUnlockedAll(opening, ladderLine);
   const weaponsUnlocked = areWeaponsUnlocked(opening, ladderLine);
   const ladderNext = nextRung(opening, ladderLine);
+  // "I already know this" expert pass — a lifetime budget of ONE per color
+  // (one White opening + one Black opening). Spending it unlocks the WHOLE
+  // opening (every line), so the ladder can't be defeated by clicking
+  // "I'm an expert" everywhere.
+  const unlockBudget = unlockBudgetFor(weaponUnlockPasses, opening.id, opening.color);
+  const colorLabel = opening.color === 'white' ? 'White' : 'Black';
   const handleUnlockAll = (): void => {
-    void unlockLineAll(opening.id, ladderLine).then(() => loadOpening());
+    if (!unlockBudget.allowed) return;
+    // Spending a 1-of-1 lifetime pass shouldn't die to a misclick: the first
+    // tap arms the confirm, the second commits.
+    if (!confirmingUnlock) { setConfirmingUnlock(true); return; }
+    setConfirmingUnlock(false);
+    void unlockOpeningAllLines(opening.id, opening.variations?.length ?? 0)
+      .then(() => { recordWeaponUnlockPass(opening.color, opening.id); return loadOpening(); })
+      .catch((err: unknown) => { console.warn('[OpeningDetailPage] unlockOpeningAllLines failed:', err); });
   };
 
   const subjectName = selectedVariation?.name ?? opening.name;
@@ -1250,13 +1270,21 @@ export function OpeningDetailPage(): JSX.Element {
                     : 'Ladder complete — weapons unlocked'}
               </span>
               {!ladderUnlockedAll && (
-                <button
-                  onClick={handleUnlockAll}
-                  className="text-xs text-theme-text-muted hover:text-amber-300 underline underline-offset-2"
-                  data-testid="unlock-all-btn"
-                >
-                  I already know this — unlock all
-                </button>
+                unlockBudget.allowed ? (
+                  <button
+                    onClick={handleUnlockAll}
+                    className="text-xs text-theme-text-muted hover:text-amber-300 underline underline-offset-2"
+                    data-testid="unlock-all-btn"
+                  >
+                    {confirmingUnlock
+                      ? `Spend your ${colorLabel} expert pass? Tap to confirm`
+                      : `I already know this opening — use ${colorLabel} expert pass`}
+                  </button>
+                ) : (
+                  <span className="text-xs text-theme-text-muted/70" data-testid="unlock-all-spent">
+                    {colorLabel} expert pass already used
+                  </span>
+                )
               )}
             </div>
           </div>
@@ -1439,13 +1467,19 @@ export function OpeningDetailPage(): JSX.Element {
             <h3 className="text-sm font-semibold text-theme-text">Weapons locked</h3>
             <p className="text-xs text-theme-text-muted mt-0.5">{WEAPONS_LOCK_HINT}</p>
           </div>
-          <button
-            onClick={handleUnlockAll}
-            className="text-xs text-theme-text-muted hover:text-amber-300 underline underline-offset-2 shrink-0"
-            data-testid="weapons-unlock-all-btn"
-          >
-            Unlock now
-          </button>
+          {unlockBudget.allowed ? (
+            <button
+              onClick={handleUnlockAll}
+              className="text-xs text-theme-text-muted hover:text-amber-300 underline underline-offset-2 shrink-0"
+              data-testid="weapons-unlock-all-btn"
+            >
+              {confirmingUnlock ? `Spend ${colorLabel} pass?` : `Use ${colorLabel} expert pass`}
+            </button>
+          ) : (
+            <span className="text-xs text-theme-text-muted/70 shrink-0" data-testid="weapons-unlock-spent">
+              {colorLabel} pass used
+            </span>
+          )}
         </div>
       )}
 

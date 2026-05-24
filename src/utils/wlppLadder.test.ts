@@ -7,6 +7,7 @@ import {
   areWeaponsUnlocked,
   nextRung,
   lockHint,
+  unlockBudgetFor,
 } from './wlppLadder';
 
 function rec(p: Partial<OpeningRecord>): OpeningRecord {
@@ -66,5 +67,37 @@ describe('wlppLadder', () => {
     expect(lockHint('practice')).toBe('Complete Learn to unlock Practice');
     expect(lockHint('play')).toBe('Complete Practice to unlock Play');
     expect(lockHint('watch')).toBe('');
+  });
+});
+
+describe('unlockBudgetFor — one expert pass per color, lifetime', () => {
+  it('unused pass is available', () => {
+    expect(unlockBudgetFor(undefined, 'ruy-lopez', 'white')).toEqual({ allowed: true, reason: 'available' });
+    expect(unlockBudgetFor({}, 'ruy-lopez', 'white')).toEqual({ allowed: true, reason: 'available' });
+  });
+
+  it('the same opening that spent the pass is idempotently allowed', () => {
+    const passes = { white: 'ruy-lopez' };
+    expect(unlockBudgetFor(passes, 'ruy-lopez', 'white')).toEqual({ allowed: true, reason: 'already-here' });
+  });
+
+  it('a different opening of the same color is blocked', () => {
+    const passes = { white: 'ruy-lopez' };
+    expect(unlockBudgetFor(passes, 'vienna-game', 'white')).toEqual({
+      allowed: false, reason: 'spent-elsewhere', spentOn: 'ruy-lopez',
+    });
+  });
+
+  it('colors are independent — spending White leaves Black available', () => {
+    const passes = { white: 'ruy-lopez' };
+    expect(unlockBudgetFor(passes, 'caro-kann', 'black')).toEqual({ allowed: true, reason: 'available' });
+  });
+
+  it('both passes can be spent, one per color', () => {
+    const passes = { white: 'ruy-lopez', black: 'caro-kann' };
+    expect(unlockBudgetFor(passes, 'caro-kann', 'black')).toEqual({ allowed: true, reason: 'already-here' });
+    expect(unlockBudgetFor(passes, 'pirc-defence', 'black')).toEqual({
+      allowed: false, reason: 'spent-elsewhere', spentOn: 'caro-kann',
+    });
   });
 });

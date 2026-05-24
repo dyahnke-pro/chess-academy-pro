@@ -67,3 +67,31 @@ export function lockHint(rung: Rung): string {
 
 /** Messaging for the weapons lock. */
 export const WEAPONS_LOCK_HINT = 'Complete Play to unlock this line’s weapons';
+
+// ─── "I already know this" expert passes ────────────────────────────────────
+// A scarce, lifetime budget: ONE pass per color (one White opening + one Black
+// opening). Spending a pass unlocks the WHOLE opening (every line). The point
+// is that the ladder can't be defeated by clicking "I'm an expert" everywhere
+// — you get exactly two skips, and you spend them deliberately.
+
+export type WeaponUnlockColor = 'white' | 'black';
+export type WeaponUnlockPasses = Partial<Record<WeaponUnlockColor, string>>;
+
+export type UnlockBudgetState =
+  | { allowed: true; reason: 'available' | 'already-here' }
+  | { allowed: false; reason: 'spent-elsewhere'; spentOn: string };
+
+/** Can the user spend their <color> expert pass on this opening?
+ *  - available     → pass unused, spending it here is allowed.
+ *  - already-here  → this opening already consumed the pass (idempotent).
+ *  - spent-elsewhere → the pass went to a DIFFERENT opening of this color; blocked. */
+export function unlockBudgetFor(
+  passes: WeaponUnlockPasses | undefined,
+  openingId: string,
+  color: WeaponUnlockColor,
+): UnlockBudgetState {
+  const spentOn = passes?.[color];
+  if (!spentOn) return { allowed: true, reason: 'available' };
+  if (spentOn === openingId) return { allowed: true, reason: 'already-here' };
+  return { allowed: false, reason: 'spent-elsewhere', spentOn };
+}

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { db } from '../db/schema';
-import { markRungComplete, unlockLineAll } from './openingService';
+import { markRungComplete, unlockLineAll, unlockOpeningAllLines } from './openingService';
 import { buildOpeningRecord } from '../test/factories';
 
 describe('openingService — WLPP ladder marking', () => {
@@ -55,5 +55,20 @@ describe('openingService — WLPP ladder marking', () => {
     await unlockLineAll('x', 3);
     const a = await db.openings.get('x');
     expect(a?.linesUnlockedAll).toEqual([3]);
+  });
+
+  it('unlockOpeningAllLines unlocks main + every variation index', async () => {
+    await db.openings.put(buildOpeningRecord({ id: 'vienna-game' }));
+    // 8 variations → main (-1) plus indices 0..7
+    await unlockOpeningAllLines('vienna-game', 8);
+    const a = await db.openings.get('vienna-game');
+    expect(a?.linesUnlockedAll).toEqual([-1, 0, 1, 2, 3, 4, 5, 6, 7]);
+  });
+
+  it('unlockOpeningAllLines with no variations unlocks just the main line', async () => {
+    await db.openings.put(buildOpeningRecord({ id: 'x' }));
+    await unlockOpeningAllLines('x', 0);
+    const a = await db.openings.get('x');
+    expect(a?.linesUnlockedAll).toEqual([-1]);
   });
 });
