@@ -202,11 +202,14 @@ key formats. `<id>` = your opening id (the repertoire.json slug, e.g.
 dashes stripped (`scotchgame`). Build in this order. Each step names the
 EXACT file + symbol + the gate that proves it.
 
-**STEP 0 — pick the content.** Run the §0.5 autonomous decision process:
-variations→tabs, plans, traps, model games, key ideas. Everything binds to
-`openings-lichess.json` / `repertoire.json` / the concept corpus. Unsure →
-leave blank / skip / ask. The opening MUST already exist in `repertoire.json`
-with the correct `color` (that's the student side + the coach-chat scope key).
+**STEP 0 — pick the content + scaffold.** Run the §0.5 autonomous decision
+process: variations→tabs, plans, traps, model games, key ideas. Everything
+binds to `openings-lichess.json` / `repertoire.json` / the concept corpus.
+Unsure → leave blank / skip / ask. The opening MUST already exist in
+`repertoire.json` with the correct `color` (the student side + coach-chat scope
+key). Then run `node scripts/scaffold-opening.mjs <id> "<Name>" <color>` — it
+stubs the lesson / variations / tab-plan files and prints this exact wiring
+checklist; fill the content and wire per the steps below.
 
 **STEP 1 — author the lessons (the Watch/Learn source).** Two registers,
 hand-written, per the NARRATION STANDARD (§1a below): `beat.say` = full Watch
@@ -306,11 +309,12 @@ modern-definition footer); the coach chat (`buildCourseScope` off
 content gates): ⭐lessonIntegrity, ⭐narrationAccuracy, ⭐narrationGrounding,
 ⭐lessonDepth, ⭐lessonTabIntegrity, ⭐wlppNarration, ⭐openingManifests,
 ⭐modelGames-orientation, ⭐punishGems, ⭐middlegamePlanner,
-⭐OpeningDetailPage.wiring. Then the interactive audits (per opening):
-`AUDIT_OPENING=<id> node scripts/audit-punish-gems-loop.mjs` (3-pass
+⭐OpeningDetailPage.wiring, ⭐openingWiring (the opening produces ≥1 valid
+variation tab + has variation lessons). Then the interactive audits (per
+opening): `AUDIT_OPENING=<id> node scripts/audit-punish-gems-loop.mjs` (3-pass
 contract), `scripts/audit-leadeye-plans.mjs`, `scripts/audit-named-traps.mjs`,
-and CLONE `scripts/audit-vienna-walkthrough.mjs` → `audit-<id>-walkthrough.mjs`
-for the tab-by-tab interactive walk. ⚠️ The sandbox can't verify openings-store
+and `AUDIT_OPENING=<id> node scripts/audit-opening-walkthrough.mjs` for the
+tab-by-tab interactive walk (parameterized — no longer clone the Vienna script). ⚠️ The sandbox can't verify openings-store
 WRITES (unlock persistence) — see CLAUDE.md G1 — so route that live-check to
 David on a real device.
 
