@@ -245,7 +245,10 @@ describe.runIf(RUN && !!STOCKFISH)('Hole 6b — Stockfish soundness of past-book
 // masters reached that exact position and played otherwise; a position with
 // no master games is past book → Stockfish's job. Keyed by plan id + ply.
 const PLAN_SUSPECT_BASELINE = new Set<string>([
-  // <filled from the first plan-audit pass; review items, shrink over time>
+  // Evans Gambit plan plays the Paulsen tabiya 10...Ne7 (a real named line in
+  // openings-lichess.json) where the masters DB prefers 10...Nf6. Less common,
+  // not unsound — matches the Evans variation lesson, which teaches the Paulsen.
+  'mp-italiangame-evans::4:Ne7',
 ]);
 
 // Soundness baseline for plan lines (7b) — same rationale as SOUNDNESS_BASELINE

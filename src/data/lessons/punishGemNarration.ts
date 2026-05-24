@@ -1136,6 +1136,181 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
     ],
   },
+
+  // ── Italian Game (mined on CI from the amateur explorer + Stockfish) ──────
+
+  // Two Knights / Scotch-gambit: 5...Nxd4?? drops to the f7 sac. 16 plies.
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Nf6_d4:Nxd4': {
+    watch: [
+      '', '', '', '', '', '', '',
+      'Nxd4? The knight grabs the d4-pawn — but it was the c6-knight that guarded f7 from afar. With it gone, f7 is fatally weak, and White does not recapture.',
+      'Bxf7+! The bishop crashes into f7 with check. The king is forced to take.',
+      '',
+      'Nxe5+ — the point. The knight snaps the e5-pawn with check; the king must run, and the stranded d4-knight falls next.',
+      '',
+      'Qxd4 collects the knight. White gave a bishop but took two pawns and a knight, and Black has lost the right to castle.',
+      '',
+      'Qc4+ — the queen checks and rakes the weak light squares. White is simply winning.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '',
+      'd4 — strike the centre.',
+      '',
+      'Bxf7+ — sac, drag the king out.',
+      '',
+      'Nxe5+ — fork, win the knight back.',
+      '',
+      'Qxd4 — collect it, up material.',
+      '',
+      'Qc4+ — keep the heat on.',
+      '',
+    ],
+  },
+
+  // Giuoco main line: 8...Bb6?! is too slow — 9.e5! storms the centre. 20 plies.
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4:Bb6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Bb6?! Retreating the bishop is too passive here — it hands White his strongest break for free.',
+      'e5! The centre pawn storms forward with tempo, kicking the f6-knight and seizing a huge space advantage — the modern way to punish a passive Italian.',
+      '',
+      'Bd5 — the bishop plants itself in the centre, eyeing f7 and b7 and propping the cramping e5-pawn.',
+      '',
+      'Nc3 challenges the e4-knight; the f5-pawn Black needed to play has left lasting light-square holes.',
+      '',
+      'Nxe4 trades into a clear plus: the e5-pawn cramps Black and the squares around his king are full of holes.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      '',
+      'e5! — storm the centre.',
+      '',
+      'Bd5 — dominate the centre.',
+      '',
+      'Nc3 — hit the knight.',
+      '',
+      'Nxe4 — trade into a plus.',
+      '',
+    ],
+  },
+
+  // Greco/Nc3: after 7...Nxe4 8.O-O, 8...d5?? drops a piece to 9.Nxd5. 24 plies.
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O:d5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd5? Black tries to shore up the e4-knight, but the d5-pawn is undefended and the move simply drops material.',
+      'Nxd5! Winning a pawn and hitting c7 — Black’s position cracks along the centre.',
+      '',
+      'Re1 pins and piles onto the e4-knight down the open file.',
+      '',
+      'Qxe1 recaptures; now the e4-knight is falling too.',
+      '',
+      'Qxe4 — the dust settles two pawns up with the safer king. The greedy ...d5 just lost material.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'O-O — tuck the king away.',
+      '',
+      'Nxd5 — win the pawn.',
+      '',
+      'Re1 — pin on the e-file.',
+      '',
+      'Qxe1 — recapture.',
+      '',
+      'Qxe4 — two pawns up.',
+      '',
+    ],
+  },
+
+  // Møller Attack accepted: 8...Bxc3?! 9.Ba3! — the exchange sac roars. 26 plies.
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O_Nxc3_bxc3:Bxc3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Bxc3?! Black keeps grabbing — the bishop snatches the c3-pawn and eyes the a1-rook. But White has a quiet killer.',
+      'Ba3! The bishop slides out with deadly purpose: it stops Black from ever castling, and his king is stuck in the centre while the loot on c3 means nothing.',
+      '',
+      'Bb5 — pinning and developing with tempo; every White piece joins the hunt.',
+      '',
+      'Re1+! The rook checks down the open e-file. Black’s king is caught and the trophy bishop on a1 is out of the game.',
+      '',
+      'Qc2 brings the queen in with a decisive lead in development. The exchange Black won is worthless against the storm.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'bxc3 — recapture.',
+      '',
+      'Ba3! — stop the castle.',
+      '',
+      'Bb5 — pin with tempo.',
+      '',
+      'Re1+ — open the e-file.',
+      '',
+      'Qc2 — pile in.',
+      '',
+    ],
+  },
+
+  // Greco/Nc3 again: 8...Nxc3?? loses to the 9.Qe1+ zwischenzug. 26 plies.
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O_Bxc3_bxc3:Nxc3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxc3?? Black snatches a third pawn with the knight — but it’s a blunder. White checks first.',
+      'Qe1+! The zwischenzug. The queen checks before recapturing — Black must block, and then the c3-knight simply falls.',
+      '',
+      'Qxc3 wins the knight clean. White is a piece up for a pawn with the bishop pair — completely winning.',
+      '',
+      'Bd3 develops toward the king; the extra piece will tell.',
+      '',
+      'Rb1 seizes the open b-file. White converts the extra material at leisure.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'bxc3 — recapture.',
+      '',
+      'Qe1+! — check first.',
+      '',
+      'Qxc3 — win the knight.',
+      '',
+      'Bd3 — develop, up a piece.',
+      '',
+      'Rb1 — grab the file.',
+      '',
+    ],
+  },
+
+  // Hungarian Defence: the passive 9...Nxe5?? drops a pawn to the Qh5 fork. 18 plies.
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Be7_d4_d6_dxe5:Nxe5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      'Nxe5? Recapturing with the knight walks into a simple combination — the e5-knight is loose and the queen is about to pounce.',
+      'Nxe5 — White takes the knight.',
+      '',
+      'Qh5! The fork. The queen hits the loose e5-pawn and threatens mayhem on f7 and h7 at once.',
+      '',
+      'Qxe5 wins the pawn with a dominating central queen, raking the e7-bishop and the long diagonal. A clean pawn up against the passive Hungarian.',
+      '',
+      'Bh6 keeps the king stuck in the centre, denying Black any chance to castle out of trouble.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '',
+      'dxe5 — open the centre.',
+      '',
+      'Nxe5 — take the knight.',
+      '',
+      'Qh5! — the fork.',
+      '',
+      'Qxe5 — win the pawn.',
+      '',
+      'Bh6 — trap the king in.',
+      '',
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
