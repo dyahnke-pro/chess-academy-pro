@@ -43,6 +43,7 @@ import { getMisconceptionProfile } from '../../services/misconceptionService';
 import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
 import { logAppAudit } from '../../services/appAuditor';
 import { RolodexCardStack } from './RolodexCardStack';
+import { PageHelp } from '../Layout/PageHelp';
 import type { OpeningRecord } from '../../types';
 
 type RolodexColor = 'white' | 'black';
@@ -400,7 +401,19 @@ export function TrainingPlanRolodexPage(): JSX.Element {
         className="flex flex-col p-4 pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 max-w-6xl mx-auto w-full"
         data-testid="training-plan-rolodex-page"
       >
-        <h1 className="text-2xl font-bold text-theme-text">Training Plan</h1>
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="text-2xl font-bold text-theme-text">Training Plan</h1>
+          <PageHelp
+            helpId="training-plan"
+            title="How the Training Plan works"
+            steps={[
+              { label: 'What this is', body: 'Your daily to-do list, built from the openings you favorite and the weaknesses found in your games. It tells you what to work on today.' },
+              { label: 'Feed it first', body: 'Favorite an opening (the heart on any Masterclass) and import your games — the plan is empty until it has something to draw from.' },
+              { label: "Today's reps", body: 'Each card is a short session — a line to Learn, a weakness to drill, a position to review. Tap in, do the rep, come back.' },
+              { label: 'Where it fits', body: 'This is the hub that pulls Openings, Tactics, and Weaknesses together into one path. When in doubt, start your session here.' },
+            ]}
+          />
+        </div>
         <p className="text-sm text-theme-text-muted mt-1">
           Your favorited openings, side-by-side.
         </p>

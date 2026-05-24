@@ -66,12 +66,13 @@ export function CoachHomePage(): JSX.Element {
         </h1>
         <div className="absolute right-0 top-1/2 -translate-y-1/2">
           <PageHelp
-            title="How to use the Coach"
+            helpId="coach-home"
+            title="How the Coach works"
             steps={[
-              { label: 'Ask anything', body: 'Type a question or say what you want to do — the coach routes you to a lesson, a drill, or a game.' },
-              { label: 'Learn with Coach', body: 'Guided lessons — pick a topic and dive in, move by move.' },
-              { label: 'Play with Coach', body: 'A real game vs the engine; the coach narrates each move and helps when you are stuck.' },
-              { label: 'It knows your context', body: 'The coach sees the position or line you are studying and answers in that context — not generic advice.' },
+              { label: 'Ask anything', body: 'Type a question or say what you want to do — the coach routes you to a lesson, a drill, a review, or a game.' },
+              { label: 'Learn & Play', body: 'Learn with Coach guides a line move by move; Play with Coach is a real game vs the engine with the coach narrating and helping when you’re stuck.' },
+              { label: 'It trains your mistakes', body: 'Review and Training Plan pull from the errors logged out of your imported games — the coach quizzes you on YOUR slips, not generic puzzles.' },
+              { label: 'It knows your context', body: 'The coach sees the exact position or line you’re studying and answers in that context. This tab is where Weaknesses become lessons.' },
             ]}
           />
         </div>

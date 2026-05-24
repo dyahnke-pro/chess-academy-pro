@@ -8,6 +8,7 @@ import { ImportGamesButton } from '../Games/ImportGamesButton';
 import { AnalyzeGamesButton } from '../Games/AnalyzeGamesButton';
 import { logAppAudit } from '../../services/appAuditor';
 import { seedReviewSamplesIfNeeded } from '../../services/reviewSampleGames';
+import { PageHelp } from '../Layout/PageHelp';
 
 type SourceFilter = 'all' | GameSource;
 
@@ -83,6 +84,16 @@ export function CoachReviewListPage(): JSX.Element {
           <ImportGamesButton variant="compact" />
           <AnalyzeGamesButton variant="compact" source="CoachReviewListPage" />
         </div>
+        <PageHelp
+          helpId="coach-review"
+          title="How Review with Coach works"
+          steps={[
+            { label: 'What this is', body: 'The coach replays one of your real games move by move and stops at the moments you went wrong — so you learn from your own games, not generic puzzles.' },
+            { label: 'Get games in', body: 'Import from Lichess or Chess.com, then Analyze — that scores every move and finds your mistakes and blunders.' },
+            { label: 'Walk it through', body: 'Pick a game and the coach explains what you missed, what was better, and why — in the position, not in the abstract.' },
+            { label: 'Where it goes', body: "The mistakes found here are logged and become your Weaknesses and Tactics drills — review surfaces the error, the rest of the app drills it shut." },
+          ]}
+        />
       </div>
 
       <p className="text-center text-sm text-theme-text-muted max-w-lg mx-auto w-full -mt-2">

@@ -136,12 +136,13 @@ export function TacticsPage(): JSX.Element {
         </h1>
         <div className="absolute right-0 top-1/2 -translate-y-1/2">
           <PageHelp
-            title="How to use Tactics"
+            helpId="tactics"
+            title="How Tactics works"
             steps={[
-              { label: 'Sharpen your eye', body: 'Puzzle training — forks, pins, mates, sacrifices — graded to your level.' },
-              { label: 'Themed sets', body: 'Drill one specific motif, or take a mixed set across all of them.' },
-              { label: 'It sticks', body: 'Missed puzzles come back on a schedule so the pattern locks in.' },
-              { label: 'From your games', body: 'Once you import games, the tactics you actually miss feed straight into your training.' },
+              { label: 'Sharpen your eye', body: 'Puzzle training — forks, pins, mates, sacrifices — graded to your level. My Profile shows your strongest and weakest motifs.' },
+              { label: 'Themed sets', body: 'Drill one specific motif, or take a mixed set. Setup Trainer drills the quiet moves that set tactics up.' },
+              { label: 'From your games', body: 'My Mistakes turns the blunders logged from your imported games into puzzles — you re-solve the exact positions you got wrong.' },
+              { label: 'It sticks', body: 'Missed puzzles come back on a schedule so the pattern locks in. Tactics + Weaknesses are the drilling end of the loop.' },
             ]}
           />
         </div>

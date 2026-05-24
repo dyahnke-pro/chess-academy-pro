@@ -170,6 +170,7 @@ export function OpeningExplorerPage(): JSX.Element {
         <h1 className="text-2xl font-bold text-theme-text">Openings</h1>
         <div className="ml-auto">
           <PageHelp
+            helpId="openings"
             title="How to use Openings"
             steps={[
               { label: 'Masterclasses', body: 'Deep, hand-built courses on full openings — Watch the ideas, Learn the moves, Practice them, Play them vs the coach.' },

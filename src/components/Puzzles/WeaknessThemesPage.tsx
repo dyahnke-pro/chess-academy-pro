@@ -144,12 +144,13 @@ export function WeaknessThemesPage(): JSX.Element {
         </h1>
         <div className="ml-auto">
           <PageHelp
-            title="How to use Weaknesses"
+            helpId="weakness-themes"
+            title="How Weakness Themes works"
             steps={[
-              { label: 'Your real holes', body: 'Built from YOUR games — the motifs and mistakes you actually get wrong, not a generic list.' },
-              { label: 'Drill them', body: 'Each weakness becomes targeted puzzle practice until the pattern is fixed.' },
-              { label: 'Needs your games', body: 'Import your games first so this has real data — otherwise it can only show samples.' },
-              { label: 'Closes the loop', body: 'Learn openings, play them, find the holes here, drill them shut.' },
+              { label: 'What this is', body: 'The tactical motifs you miss most — forks, pins, back-rank, and the rest — ranked by how often they cost you, from your own games.' },
+              { label: 'How errors get here', body: 'Importing and analyzing games logs every mistake and blunder automatically, tagged by motif — that tally is what ranks these themes.' },
+              { label: 'Sent to the coach', body: 'Each logged error feeds the Coach tab — Review walk-throughs and My Mistakes puzzles built from your exact slips, so training targets what you actually get wrong.' },
+              { label: 'Drill them shut', body: 'Tap a theme to drill exactly that pattern. Learn an opening → play it → errors log → drill them here. That loop is the whole app.' },
             ]}
           />
         </div>

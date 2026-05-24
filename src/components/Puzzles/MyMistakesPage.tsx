@@ -13,6 +13,7 @@ import {
 import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, RefreshCw, BookOpen, Swords, Crown, Search, X } from 'lucide-react';
 import { logAppAudit } from '../../services/appAuditor';
 import { tacticTypeLabel } from '../../services/tacticAlertService';
+import { PageHelp } from '../Layout/PageHelp';
 import type { MistakePuzzle, MistakeClassification, MistakePuzzleSourceMode, MistakePuzzleStatus, MistakeGamePhase } from '../../types';
 
 type ClassificationFilter = MistakeClassification | 'all';
@@ -252,6 +253,16 @@ export function MyMistakesPage(): JSX.Element {
           <RefreshCw size={14} className={analyzing ? 'animate-spin' : ''} />
           {analyzing ? 'Analyzing...' : 'Re-analyze Games'}
         </button>
+        <PageHelp
+          helpId="tactics-mistakes"
+          title="How My Mistakes works"
+          steps={[
+            { label: 'What this is', body: 'Every mistake and blunder from your imported games, turned into a puzzle from the exact position where you went wrong.' },
+            { label: 'Where it comes from', body: 'When you import and analyze games, each error is logged here automatically — these are YOUR misses, not generic puzzles.' },
+            { label: 'Solve them', body: 'Replay the position and find the move you missed. Getting it right is how the pattern stops costing you games.' },
+            { label: 'Where it fits', body: 'Mistakes here feed your Weaknesses profile and the coach’s training lessons — fix them here, the holes close everywhere.' },
+          ]}
+        />
       </div>
 
       {/* Analysis progress */}

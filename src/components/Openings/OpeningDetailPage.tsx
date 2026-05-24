@@ -1083,6 +1083,7 @@ export function OpeningDetailPage(): JSX.Element {
           </div>
         </div>
         <PageHelp
+          helpId="opening-detail"
           title="How to use a Masterclass"
           steps={[
             { label: 'Watch', body: 'Sit back — the line plays itself while the coach explains every idea. This is where you GET the opening.' },

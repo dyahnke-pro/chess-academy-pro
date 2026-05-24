@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, RefreshCw, Play, Eye, ChevronRight } from 'lucide-react';
 import { getThemeSkills, THEME_MAP } from '../../services/puzzleService';
+import { PageHelp } from '../Layout/PageHelp';
 import type { ThemeSkill } from '../../services/puzzleService';
 import { logAppAudit } from '../../services/appAuditor';
 
@@ -120,6 +121,16 @@ export function TacticalProfilePage(): JSX.Element {
       >
         <RefreshCw size={18} className={refreshing ? 'animate-spin' : ''} style={{ color: 'var(--color-text-muted)' }} />
       </button>
+      <PageHelp
+        helpId="tactics-profile"
+        title="How your Tactical Profile works"
+        steps={[
+          { label: 'What this is', body: 'A breakdown of your tactical strengths and weaknesses by motif — forks, pins, mates, sacrifices — scored from the puzzles you solve and miss.' },
+          { label: 'How it fills in', body: 'Solve puzzles and import games; every solved and missed pattern updates these skill ratings, so the profile sharpens the more you train.' },
+          { label: 'Train your gaps', body: 'Tap a weak motif to drill exactly that pattern — the profile points you at what to work on instead of guessing.' },
+          { label: 'Where it fits', body: 'This is the map; Daily Training, Setup Trainer, and your Weaknesses are how you close the gaps it finds.' },
+        ]}
+      />
     </div>
   );
 

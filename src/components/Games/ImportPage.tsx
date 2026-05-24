@@ -174,6 +174,7 @@ export function ImportPage(): JSX.Element {
         <h1 className="text-2xl font-bold">Import Games & Stats</h1>
         <div className="ml-auto">
           <PageHelp
+            helpId="games-import"
             title="How to import your games"
             steps={[
               { label: 'Why import', body: 'Pulling in your real games is what lets the app find YOUR weaknesses and the openings you actually play.' },

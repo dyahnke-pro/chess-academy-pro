@@ -4,6 +4,7 @@ import { db } from '../../db/schema';
 import { GameCard } from './GameCard';
 import { GameViewer } from './GameViewer';
 import { Upload, FileText, Download } from 'lucide-react';
+import { PageHelp } from '../Layout/PageHelp';
 import type { GameRecord } from '../../types';
 
 export function GameDatabasePage(): JSX.Element {
@@ -88,6 +89,16 @@ export function GameDatabasePage(): JSX.Element {
             <Upload size={14} />
             PGN
           </button>
+          <PageHelp
+            helpId="games"
+            title="How your Games work"
+            steps={[
+              { label: 'What this is', body: 'Every game you import or paste lives here — the raw material the whole app learns from.' },
+              { label: 'Get them in', body: 'Import from Lichess or Chess.com, or paste a PGN. The more real games, the sharper everything downstream gets.' },
+              { label: 'What they power', body: 'Analyzed games feed Review (walk your mistakes), Weaknesses (your real holes), and My Mistakes (puzzles from your blunders).' },
+              { label: 'Where it fits', body: 'This is the source. Import here first — then Review, Weaknesses, and Tactics all fill with YOUR data instead of samples.' },
+            ]}
+          />
         </div>
       </div>
 

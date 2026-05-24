@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Info, X } from 'lucide-react';
+import { db } from '../../db/schema';
 
 // "How to use this app" help bubble (playbook §8). A top-right "i" button that
-// opens a coach-mark explainer for the surface. Click-to-open + replayable;
-// additive, no app state. Teach the LOOP (Watch → Learn → Practice → Play).
+// opens a coach-mark explainer for the surface. Auto-opens on FIRST visit
+// (tracked per-surface in Dexie meta), then lives behind the "i" — replayable
+// any time. Additive, no app state. Teach the LOOP (Watch → Learn → Practice → Play).
 
 export interface HelpStep {
   /** Short label, e.g. "Watch" or "The climb". */
@@ -18,10 +20,32 @@ interface PageHelpProps {
   steps: HelpStep[];
   /** Extra classes for the trigger button (positioning at the call site). */
   className?: string;
+  /**
+   * Stable per-surface id. When set, the help auto-opens the first time this
+   * surface is visited (persisted in Dexie `meta`), then stays behind the "i".
+   * Omit to disable auto-open (manual-only).
+   */
+  helpId?: string;
 }
 
-export function PageHelp({ title, steps, className = '' }: PageHelpProps): JSX.Element {
+function metaKey(helpId: string): string {
+  return `pagehelp-seen-${helpId}`;
+}
+
+export function PageHelp({ title, steps, className = '', helpId }: PageHelpProps): JSX.Element {
   const [open, setOpen] = useState(false);
+
+  // First-visit auto-open: check Dexie once on mount; if unseen, open + mark seen.
+  useEffect(() => {
+    if (!helpId) return;
+    let cancelled = false;
+    void db.meta.get(metaKey(helpId)).then((rec) => {
+      if (cancelled || rec) return;
+      setOpen(true);
+      void db.meta.put({ key: metaKey(helpId), value: '1' });
+    });
+    return () => { cancelled = true; };
+  }, [helpId]);
 
   useEffect(() => {
     if (!open) return;

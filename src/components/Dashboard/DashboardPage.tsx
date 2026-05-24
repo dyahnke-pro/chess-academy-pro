@@ -87,12 +87,15 @@ export function DashboardPage(): JSX.Element {
         </h1>
         <div className="absolute right-0 top-1/2 -translate-y-1/2">
           <PageHelp
-            title="How to use Chess Academy Pro"
+            helpId="dashboard"
+            title="The order of operations"
             steps={[
-              { label: 'Your home base', body: 'Jump to any area below, or use the search bar to ask the coach or find an opening or game.' },
-              { label: 'Import your games', body: 'Pull in your real games so the app can find the openings and tactics you actually get wrong.' },
-              { label: 'The sections', body: 'Openings, Coach, Tactics, Weaknesses — each a tap away. Openings is where the masterclasses live.' },
-              { label: 'The loop', body: 'Learn an opening → play it → find your holes → drill them shut.' },
+              { label: '1. Pick an opening', body: 'Go to Openings → Masterclasses and pick one you actually play as White or Black — not at random. This is where everything starts.' },
+              { label: '2. Climb the WLPP tabs', body: 'For each line: Watch it (get the ideas) → Learn it (you play, voice cues) → Practice it (silent, Hint if stuck) → Play it vs the coach. Each tab you finish unlocks the next.' },
+              { label: '3. Unlock the deeper theory', body: 'Finishing a line’s full ladder unlocks its reward — the model game and its traps/weapons (how to punish your opponent’s common mistakes).' },
+              { label: '4. Import your games', body: 'Pull in your real games so the app can log the mistakes and blunders you actually make.' },
+              { label: '5. Fix your holes', body: 'Those logged errors flow to Weaknesses and the Coach, which turn them into review walk-throughs and targeted drills until the patterns stick.' },
+              { label: 'The loop', body: 'Learn it → play it → find the holes → drill them shut. The four sections below are the steps of that one cycle.' },
             ]}
           />
         </div>

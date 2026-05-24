@@ -95,11 +95,13 @@ export function TacticSetupPage(): JSX.Element {
         <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Setup Trainer</h1>
         <div className="ml-auto">
           <PageHelp
-            title="How to use the Setup Trainer"
+            helpId="tactics-setup"
+            title="How the Setup Trainer works"
             steps={[
-              { label: 'Build your set', body: 'Choose the themes, rating range, and size of the puzzle set you want to drill.' },
-              { label: 'Target weaknesses', body: 'Bias the set toward the motifs you get wrong most, or take a balanced mix.' },
-              { label: 'Then train', body: 'Start the set — missed puzzles come back on a schedule so the patterns stick.' },
+              { label: 'What this trains', body: 'Not "find the fork" — "engineer the fork." You find the quiet preparatory move that makes a tactic inevitable a move or two later.' },
+              { label: 'Pick a difficulty', body: 'Beginner is 1 prep move; harder levels add more prep moves before the tactic, and the first move looks quieter.' },
+              { label: 'Solve the set', body: 'Work through the puzzles; missed ones come back on a schedule so the setup patterns stick.' },
+              { label: 'Where it fits', body: 'A deeper tactical skill than spot-the-motif drilling — it sharpens the move-before-the-move that wins games.' },
             ]}
           />
         </div>

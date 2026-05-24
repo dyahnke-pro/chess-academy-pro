@@ -214,12 +214,13 @@ export function GameInsightsPage(): JSX.Element {
           <div className="flex flex-col gap-1.5 items-end">
             <div className="flex items-center gap-1.5">
               <PageHelp
-                title="How to use Weaknesses"
+                helpId="weaknesses"
+                title="How Weaknesses works"
                 steps={[
-                  { label: 'Your real holes', body: 'Built from YOUR analysed games — the openings, phases, and mistakes you actually get wrong.' },
-                  { label: 'Drill them', body: 'Each weakness links into targeted puzzle practice until the pattern is fixed.' },
-                  { label: 'Needs your games', body: 'Import + analyse games first so this has real data — otherwise it shows samples.' },
-                  { label: 'Closes the loop', body: 'Learn openings → play them → find the holes here → drill them shut.' },
+                  { label: 'What this is', body: 'Your real holes — the openings, phases, motifs, and thinking errors you actually get wrong, mined from your own games.' },
+                  { label: 'How errors get here', body: 'When you import and analyze games, every mistake and blunder is scored and logged automatically — each one tagged by motif and opening and filed here.' },
+                  { label: 'Sent to the coach', body: 'Those logged errors feed the Coach tab: they become Review walk-throughs, My Mistakes puzzles, and targeted training lessons built from your exact slips.' },
+                  { label: 'Closes the loop', body: 'Learn an opening → play it → your errors log here → the coach turns them into drills → you fix them. That cycle is the whole app.' },
                 ]}
               />
               <ImportGamesButton variant="compact" />
