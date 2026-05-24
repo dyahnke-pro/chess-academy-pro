@@ -49,6 +49,7 @@ import {
   gemId,
   gemInaccuracyFen,
   gemToPlayableLine,
+  isSurfaceableGem,
 } from '../../data/lessons/punishGems';
 import { CommonMistakesSection } from './CommonMistakesSection';
 import { OpeningZoneHeader } from './OpeningZoneHeader';
@@ -557,11 +558,21 @@ export function OpeningDetailPage(): JSX.Element {
     }
   }
 
-  // Named-trap PLAY — play it out against the coach, locked to this opening.
+  // Named-trap PLAY — the coach MUST follow the trap's exact teaching line,
+  // not the opening's generic main line (David 2026-05-24).
   if (viewMode === 'named-trap-play' && activeNamedTrapId) {
+    const trapLine =
+      opening.id === 'ruy-lopez' ? getRuyTrapPlayableLine(activeNamedTrapId)
+        : opening.id === 'vienna-game' ? getViennaTrapPlayableLine(activeNamedTrapId)
+          : opening.id === 'caro-kann' ? getCaroTrapPlayableLine(activeNamedTrapId)
+            : null;
+    const trapCustom = trapLine
+      ? { name: trapLine.title, pgn: trapLine.moves.join(' '), explanation: '' }
+      : undefined;
     return (
       <OpeningPlayMode
         opening={opening}
+        customLine={trapCustom}
         onExit={handleExit}
       />
     );
@@ -589,9 +600,16 @@ export function OpeningDetailPage(): JSX.Element {
     }
   }
 
-  // Punish-gem PLAY — play it out against the coach, locked to this opening.
+  // Punish-gem PLAY — the coach MUST follow the gem's exact line (David
+  // 2026-05-24: "it MUST stick to the line/variation being taught"). Pass the
+  // gem's played-out line as the customLine so OpeningPlayMode locks the
+  // opponent to it instead of playing the opening's generic main line.
   if (viewMode === 'gem-play' && activeGemId) {
-    return <OpeningPlayMode opening={opening} onExit={handleExit} />;
+    const gem = getPunishGemById(activeGemId);
+    const gemLine = gem
+      ? { name: `Punish ${gem.inaccuracy} with ${gem.punish}`, pgn: gem.playLine, explanation: gem.why }
+      : undefined;
+    return <OpeningPlayMode opening={opening} customLine={gemLine} onExit={handleExit} />;
   }
 
   // Walkthrough mode (trap/warning lines)
@@ -921,7 +939,14 @@ export function OpeningDetailPage(): JSX.Element {
   const tabSpinePgn = selectedVariation
     ? selectedVariation.pgn.replace(/\d+\.(\.\.)?/g, ' ').replace(/\s+/g, ' ').trim()
     : undefined;
-  const tabGems = getPunishGemsForTab(opening.id, tabSpinePgn);
+  // Only WEAPONS surface — engine-verified real benefit (≥ +0.5). Practical
+  // (DB-scored, unverified) and weak gems are hidden; the section repopulates
+  // when the Stockfish CI (mine-punish-gems.yml) grades them (David 2026-05-24).
+  // Strongest first — the tactical crushes lead, the honest positional edges
+  // sit last (David 2026-05-24: order by strength, weak ones at the bottom).
+  const tabGems = getPunishGemsForTab(opening.id, tabSpinePgn)
+    .filter(isSurfaceableGem)
+    .sort((a, b) => (b.engineCp ?? 0) - (a.engineCp ?? 0));
 
   // Zone self-hide flags — NO blank/empty zones on the masterclass
   // (David 2026-05-21). A zone header renders only when it has content for
@@ -1357,12 +1382,12 @@ export function OpeningDetailPage(): JSX.Element {
                           className={`text-[10px] font-semibold px-1.5 py-0.5 rounded ${
                             gem.tier === 'confirmed'
                               ? 'bg-emerald-500/20 text-emerald-300'
-                              : 'bg-theme-border text-theme-text-muted'
+                              : 'bg-sky-500/20 text-sky-300'
                           }`}
                         >
-                          {gem.tier === 'confirmed' && gem.engineCp !== null
-                            ? `engine ${gem.engineCp >= 0 ? '+' : ''}${(gem.engineCp / 100).toFixed(1)}`
-                            : 'practical'}
+                          {gem.engineCp !== null
+                            ? `${gem.tier === 'confirmed' ? 'Crush' : 'Edge'} ${gem.engineCp >= 0 ? '+' : ''}${(gem.engineCp / 100).toFixed(1)}`
+                            : gem.tier === 'confirmed' ? 'Crush' : 'Edge'}
                         </span>
                       </div>
                     </div>

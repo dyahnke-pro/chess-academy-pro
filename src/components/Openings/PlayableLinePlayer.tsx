@@ -233,11 +233,14 @@ export function PlayableLinePlayer({
     if (phase !== 'memory' || memoryComplete) return;
     if (memoryMoveIndex >= line.moves.length) return;
     if (showWrongFlash || showCorrectFlash) return;
-    // Learn = rapid-fire move DICTATION ("Bishop to f5"), no "why" prose —
-    // the why lives in Watch/Play (David 2026-05-23). Practice is silent.
+    // Learn = the hand-written truncated CUE for this move when present
+    // (reinforces the Watch lesson as you play it — David 2026-05-24); else
+    // Practice is silent (no effect fires).
     if (guided) {
       voiceService.stop();
-      void voiceService.speak(sanToSpeech(line.moves[memoryMoveIndex])).catch(() => { /* keep going */ });
+      const cue = line.learnCues?.[memoryMoveIndex];
+      const spoken = cue && cue.trim() ? cue : sanToSpeech(line.moves[memoryMoveIndex]);
+      void voiceService.speak(spoken).catch(() => { /* keep going */ });
     }
     // Your move → wait for input. Opponent's move → auto-play it fast, so you
     // only play your own side and the line rips along.

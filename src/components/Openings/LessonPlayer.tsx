@@ -249,7 +249,7 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToPlay }: L
         </button>
         <GraduationCap size={18} className="text-amber-400 shrink-0" />
         <div className="min-w-0">
-          <h2 className="text-sm font-semibold text-theme-text truncate">{script.title}</h2>
+          <h2 className="text-sm font-semibold text-theme-text truncate" data-testid="lesson-title">{script.title}</h2>
           <p className="text-[11px] text-theme-text-muted/70">
             {script.minutes} min · beat {idx + 1} / {beats.length}
           </p>

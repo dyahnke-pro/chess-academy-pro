@@ -364,6 +364,12 @@ export interface PlayableMiddlegameLine {
    *  lands on what the narration is talking about instead of hunting for
    *  pieces. Parallel to `moves` (highlights[i] = move i's squares). */
   highlights?: AnnotationHighlight[][];
+  /** Per-move truncated LEARN cue — the short, hand-written line the voice
+   *  speaks as the student plays move i, reinforcing the Watch lesson (David
+   *  2026-05-24). When absent for a ply, Learn falls back to plain move
+   *  dictation. Every cue is hand-authored and verified against its move —
+   *  never generated. Parallel to `moves`. */
+  learnCues?: string[];
   title: string;
 }
 

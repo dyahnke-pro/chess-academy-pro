@@ -8,6 +8,7 @@ import {
   getPunishGemsForTab,
   type PunishGem,
 } from './lessons/punishGems';
+import { GEM_NARRATION } from './lessons/punishGemNarration';
 
 // Gate for the mined punish-gems (WO: docs/plans/2026-05-23-punish-gems-wo.md).
 // Every gem is DB-grounded by construction (it comes from the explorer), and
@@ -57,8 +58,16 @@ describe('punish-gems are real, legal, DB-grounded', () => {
         expect(play[i + 1], 'punish not immediately after the inaccuracy').toBe(g.punish);
       });
 
-      it("confirmed tier carries an engine eval; practical doesn't claim one", () => {
-        if (g.tier === 'confirmed') expect(g.engineCp).not.toBeNull();
+      it('engine tiers carry a qualifying eval (confirmed ≥ +1.0, positional ≥ +0.5)', () => {
+        if (g.tier === 'confirmed') {
+          expect(g.engineCp, 'confirmed needs an eval').not.toBeNull();
+          expect(g.engineCp as number, 'confirmed must be ≥ +1.0 (100cp)').toBeGreaterThanOrEqual(100);
+        }
+        if (g.tier === 'positional') {
+          expect(g.engineCp, 'positional needs an eval').not.toBeNull();
+          expect(g.engineCp as number, 'positional must be ≥ +0.5 (50cp)').toBeGreaterThanOrEqual(50);
+          expect(g.engineCp as number, 'positional is below the +1.0 crush bar').toBeLessThan(100);
+        }
       });
 
       it('converts to a WLPP line whose every arrow grounds on a real piece', () => {
@@ -78,11 +87,32 @@ describe('punish-gems are real, legal, DB-grounded', () => {
         // The inaccuracy + punish beats carry the (only) spoken annotations,
         // each naming exactly its own move.
         const setupLen = g.lineMoves.split(' ').length;
-        expect(pl.annotations[setupLen]).toContain(g.inaccuracy);
-        expect(pl.annotations[setupLen + 1]).toContain(g.punish);
+        // The inaccuracy + punish beats must name their move — but hand-
+        // authored prose may write "Qxe5 — check!" rather than the literal
+        // "Qxe5+", so compare without check/mate symbols.
+        const bare = (san: string): string => san.replace(/[+#]/g, '');
+        expect(pl.annotations[setupLen]).toContain(bare(g.inaccuracy));
+        expect(pl.annotations[setupLen + 1]).toContain(bare(g.punish));
       });
     });
   }
+
+  // Hand-authored narration MUST stay aligned to the moves — a watch/learn
+  // array shorter or longer than the playLine would slide a cue onto the wrong
+  // move (David's exact worry). Every authored gemId must also be a real gem.
+  describe('hand-authored narration is aligned to its gem', () => {
+    const byId = new Map((gems as PunishGem[]).map((g) => [gemId(g), g]));
+    for (const [id, narr] of Object.entries(GEM_NARRATION)) {
+      it(`${id}: watch/learn arrays match the playLine length`, () => {
+        const g = byId.get(id);
+        expect(g, `narration for unknown gemId "${id}"`).toBeTruthy();
+        if (!g) return;
+        const plies = g.playLine.split(' ').length;
+        expect(narr.watch.length, 'watch array length ≠ playLine plies').toBe(plies);
+        expect(narr.learn.length, 'learn array length ≠ playLine plies').toBe(plies);
+      });
+    }
+  });
 
   it('gemId is stable and unique per gem', () => {
     const ids = (gems as PunishGem[]).map(gemId);
