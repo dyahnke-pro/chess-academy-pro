@@ -5,7 +5,8 @@ import { MotionConfig } from 'framer-motion';
 import { ModelGamesSection } from './ModelGamesSection';
 import { buildModelGame } from '../../test/factories';
 
-vi.mock('../../services/modelGameService', () => ({
+vi.mock('../../services/modelGameService', async (importActual) => ({
+  ...(await importActual<typeof import('../../services/modelGameService')>()),
   getModelGamesForOpening: vi.fn(),
 }));
 

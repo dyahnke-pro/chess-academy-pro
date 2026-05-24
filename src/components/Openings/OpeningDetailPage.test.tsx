@@ -251,6 +251,9 @@ describe('OpeningDetailPage', () => {
   });
 
   it('clicking LEARN enters learn/drill mode', async () => {
+    // WLPP ladder forward-locks Learn behind Watch — mark the main line
+    // (MAIN_LINE_INDEX = -1) discovered so the Learn rung is unlocked.
+    mockGetOpeningById.mockResolvedValue({ ...testOpening, linesDiscovered: [-1, 0] });
     renderWithRoute();
     await waitFor(() => {
       expect(screen.getByTestId('learn-btn')).toBeInTheDocument();
@@ -262,6 +265,9 @@ describe('OpeningDetailPage', () => {
   });
 
   it('clicking PRACTICE enters practice mode', async () => {
+    // Practice is forward-locked behind Learn — mark the main line discovered
+    // AND learned so the Practice rung is unlocked.
+    mockGetOpeningById.mockResolvedValue({ ...testOpening, linesDiscovered: [-1, 0], linesLearned: [-1, 0] });
     renderWithRoute();
     await waitFor(() => {
       expect(screen.getByTestId('practice-btn')).toBeInTheDocument();
