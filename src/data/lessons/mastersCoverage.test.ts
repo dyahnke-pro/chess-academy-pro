@@ -92,8 +92,8 @@ function evalFen(bin: string, fen: string, searchMove?: string): Promise<number 
 // NOTE (2026-05-24): the Italian baselines below + in PLAN_SUSPECT_BASELINE /
 // SOUNDNESS_BASELINE / PLAN_SOUNDNESS_BASELINE were CI-verified clean on a
 // runner (the masters explorer is unreachable in the web sandbox, so 6a/7a
-// pass vacuously there — see playbook §9 lock-in). Last full Italian audit:
-// 10 passed / 0 failed.
+// pass vacuously there — see playbook §9 lock-in). Last full Italian audit
+// (main lesson + all variations + all plans, `-t "talian"`): 12 passed / 0 failed.
 const SUSPECT_BASELINE = new Set<string>([
   'The Ruy Lopez — A Master Class::29:Ng3',
   'vienna-game::Vienna Gambit::15:Bd2',
