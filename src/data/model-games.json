@@ -1818,6 +1818,7 @@
   {
     "id": "mg-pro-firouzja-vienna-0",
     "openingId": "pro-firouzja-vienna",
+    "studentSide": "white",
     "white": "Firouzja2003",
     "black": "only_strong_moves",
     "whiteElo": 3164,
@@ -3729,6 +3730,7 @@
   {
     "id": "mg-lichess-DzMqspxx",
     "openingId": "vienna-game",
+    "studentSide": "white",
     "white": "Firouzja, Alireza",
     "black": "Carlsen, M..",
     "whiteElo": 2759,
@@ -3743,24 +3745,9 @@
     "source": "lichess-masters"
   },
   {
-    "id": "mg-lichess-lCaIIqnr",
-    "openingId": "vienna-game",
-    "white": "Caruana, F.",
-    "black": "Grischuk, A.",
-    "whiteElo": 2799,
-    "blackElo": 2782,
-    "result": "0-1",
-    "year": 2017,
-    "event": "2017-2017-11 master game",
-    "pgn": "e4 e5 Bc4 Nf6 d3 Bc5 Nc3 d6 Na4 Bb6 Nxb6 axb6 Nf3 Be6 Bxe6 fxe6 O-O O-O c3 Qe8 Re1 Nbd7 a4 Qg6 b4 h6 h3 Nh5 Kh2 Rf6 Be3 Raf8 a5 Nf4 Bxf4 Rxf4 axb6 Nxb6 Ra7 Rb8 d4 exd4 cxd4 Qe8 Qb3 Kh8 Re2 Qb5 Re1 Nc4 Ra2 Rbf8 Rc2 d5 exd5 exd5 Ne5 Nxe5 dxe5 Rxb4 Qa3 c5 e6 b6 e7 Re8 Qf3 Qd7 Rce2 Qd6+ g3 Re4 Rxe4 dxe4 Rxe4 Qf6 Qe3 Qf7 Kg1 Kh7 Re6 b5 Re5 c4 Qc5 c3 Qxc3 Rxe7 Qd3+ g6 Rxb5 Rd7 Qc3 Rc7 Qb2 Re7 Rb8 Re8 Rb6 Re7 h4 Qd5 Rb5 Re1+",
-    "overview": "Master game from the Lichess masters database. Caruana, F. vs Grischuk, A., 2017. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/lCaIIqnr",
-    "source": "lichess-masters"
-  },
-  {
     "id": "mg-lichess-2NIYGBtv",
     "openingId": "vienna-game",
+    "studentSide": "white",
     "white": "Caruana, F.",
     "black": "Grischuk, A.",
     "whiteElo": 2799,

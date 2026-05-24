@@ -23,6 +23,14 @@ import type { ModelGame } from '../../types';
 
 const ALL_GAMES = modelGamesData as unknown as ModelGame[];
 
+/** A game where the student's side loses — never cite the opening losing
+ *  (David 2026-05-21). Only filters when studentSide is declared; legacy
+ *  entries without it are left untouched. */
+function studentLost(game: ModelGame): boolean {
+  return (game.studentSide === 'white' && game.result === '0-1') ||
+         (game.studentSide === 'black' && game.result === '1-0');
+}
+
 function openingNameToId(name: string): string {
   const base = name.split(':')[0].trim();
   return base
@@ -62,7 +70,7 @@ export function loadModelGamesForLive(args: {
   if (openingId.endsWith('-defence')) candidates.add(openingId.replace(/-defence$/, '-defense'));
   const stripped = openingId.replace(/-defen[cs]e$/, '');
   if (stripped !== openingId) candidates.add(stripped);
-  const matches = ALL_GAMES.filter((g) => candidates.has(g.openingId));
+  const matches = ALL_GAMES.filter((g) => candidates.has(g.openingId) && !studentLost(g));
   if (matches.length === 0) return null;
 
   // Take up to 2 games. Pick highest-rated first when ratings exist,

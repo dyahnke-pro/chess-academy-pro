@@ -330,6 +330,10 @@ export interface ModelGame {
   year: number;
   event: string;
   pgn: string;
+  /** The side the student plays in this opening. When set, a game where this
+   *  side loses is excluded from coach grounding — a masterclass never cites
+   *  its own opening losing (David 2026-05-21). */
+  studentSide?: 'white' | 'black';
   overview: string;
   criticalMoments: ModelGameCriticalMoment[];
   middlegameTheme: string;
