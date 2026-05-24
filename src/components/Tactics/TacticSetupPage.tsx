@@ -1,3 +1,4 @@
+import { PageHelp } from '../Layout/PageHelp';
 import { useState, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -92,6 +93,16 @@ export function TacticSetupPage(): JSX.Element {
         </button>
         <Wrench size={24} style={{ color: 'var(--color-success)' }} />
         <h1 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Setup Trainer</h1>
+        <div className="ml-auto">
+          <PageHelp
+            title="How to use the Setup Trainer"
+            steps={[
+              { label: 'Build your set', body: 'Choose the themes, rating range, and size of the puzzle set you want to drill.' },
+              { label: 'Target weaknesses', body: 'Bias the set toward the motifs you get wrong most, or take a balanced mix.' },
+              { label: 'Then train', body: 'Start the set — missed puzzles come back on a schedule so the patterns stick.' },
+            ]}
+          />
+        </div>
       </div>
 
       {/* Difficulty Select */}

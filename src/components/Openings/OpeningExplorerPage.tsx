@@ -1,3 +1,4 @@
+import { PageHelp } from '../Layout/PageHelp';
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -167,6 +168,17 @@ export function OpeningExplorerPage(): JSX.Element {
       <div className="flex items-center gap-3 mb-4">
         <BookOpen size={24} className="text-theme-accent" />
         <h1 className="text-2xl font-bold text-theme-text">Openings</h1>
+        <div className="ml-auto">
+          <PageHelp
+            title="How to use Openings"
+            steps={[
+              { label: 'Masterclasses', body: 'Deep, hand-built courses on full openings — Watch the ideas, Learn the moves, Practice them, Play them vs the coach.' },
+              { label: 'Pick what you play', body: 'Start with an opening you actually use as White or Black — not at random.' },
+              { label: 'Climb each line', body: 'Do the main line and every variation tab through Watch → Learn → Practice → Play.' },
+              { label: 'Weapons', body: 'Each line shows the common mistakes opponents make and exactly how to punish them.' },
+            ]}
+          />
+        </div>
       </div>
 
       {/* SRS Trainer entry tile */}
