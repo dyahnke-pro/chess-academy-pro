@@ -79,6 +79,10 @@ the progress model (TODO 1) to the user. Build them together.
 - [ ] Onboarding `PageHelp` bubbles per tab (playbook §8) + WLPP/progress
       explainer.
 - Accounting gate (weakness tagging) deferred until the `learned` gate exists.
+- [ ] **Store readiness (App Store + Play Store production)** — full plan at
+      `docs/plans/2026-05-24-store-readiness.md`. Not a rewrite (Android already
+      Capacitor-wired); real gaps = icon/splash assets, Android audio/mic native
+      patch, WebView-parity QA, mic permissions + privacy, Play keystore.
 
 ---
 
@@ -139,8 +143,15 @@ The flywheel in one line: *learn it, play it, find the holes, drill them shut.*
 Problem: Watch is the satisfying part; users forget to climb L→P→P. Fixes:
 1. **Tiered end-of-Watch hand-off.** The end-of-Watch CTA should tee up the
    NEXT RUNG, not skip to Play: Watch→"Now Learn it", Learn→"Practice it",
-   Practice→"Play it". (Today's CTA jumps straight to Play — fix to step
-   through the ladder.)
+   Practice→"Play it".
+   - **[x] DONE (2026-05-24): Watch → Learn.** LessonPlayer's end CTA was "Play
+     it out against the coach" wired to Play; now it reads **"Now Learn it →"**
+     and steps to Learn (`onContinueToNext` → `setViewMode('learn')` for the
+     main line / `handleStartVariationLearn` for a variation tab). The
+     jump-straight-to-Play bug is fixed.
+   - [ ] Remaining rungs: Learn-complete → Practice, Practice-complete → Play
+     (wire the `PlayableLinePlayer` `onComplete` to advance the ladder instead
+     of exiting).
 2. **Show the unfinished ladder everywhere.** Per line: `Watched ✓ · Learn ○
    · Practice ○ · Play ○` with the next rung lit. An incomplete ladder is a
    standing nudge.
