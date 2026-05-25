@@ -336,6 +336,16 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /taimanov/i, label: 'Taimanov' },
     { test: /four pawns/i, label: 'Four Pawns' },
   ],
+  // Queen's Indian Defence — the soundest Indian, a fight for the e4-square.
+  // Main-line pill = the g3 Fianchetto with …Ne4/…f5 (repertoire pgn). Tabs =
+  // the distinct ≥20-ply systems: the a3 Petrosian (…d5 central strike; the
+  // Kasparov Nc3/a3 line shares its structure and folds in), the …Bb4+
+  // simplification, and the modern Miles …Ba6.
+  'queens-indian': [
+    { test: /petrosian/i, label: 'Petrosian a3' },
+    { test: /nimzowitsch/i, label: '…Bb4+' },
+    { test: /miles/i, label: 'Miles …Ba6' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same

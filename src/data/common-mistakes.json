@@ -1186,16 +1186,15 @@
   ],
   "queens-indian": [
     {
-      "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
-      "wrongMove": "Nc3",
-      "correctMove": "g3",
-      "explanation": "4.Nc3 is engine-equivalent but allows 4…Bb4+ pinning the knight (Nimzo-Indian/Queens Indian hybrid where Black has the better bishop). The mainline 4.g3 prepares Bg2 mirroring Black's fianchetto — both players reach a symmetric, double-fianchetto position where White's tempo edge is decisive. Practical edge: with g3 you keep your knight free; with Nc3 you must spend tempo undoing the pin."
-    },
-    {
       "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/5NP1/PP2PPBP/RNBQK2R b KQkq - 2 5",
       "wrongMove": "d5",
       "correctMove": "Be7",
-      "explanation": "Engine sees 5…d5 as similar to 5…Be7 but pedagogically d5 cedes the e4 square permanently — after 6.cxd5 exd5 Black has a passive Carlsbad-like structure where White's b1-h7 diagonal (via Bg2) gains lasting pressure. 5…Be7 develops the bishop, keeps options for both …d5 (later) and …d6 (Hedgehog-style), and prepares castling. Practical edge: 5…Be7 keeps Black's structural choice flexible; 5…d5 locks it in passively."
+      "explanation": "Engine sees 5…d5 as similar to 5…Be7 but pedagogically d5 cedes the e4 square permanently — after 6.cxd5 exd5 Black has a passive Carlsbad-like structure where White's b1-h7 diagonal (via Bg2) gains lasting pressure. 5…Be7 develops the bishop, keeps options for both …d5 (later) and …d6 (Hedgehog-style), and prepares castling. Practical edge: 5…Be7 keeps Black's structural choice flexible; 5…d5 locks it in passively.",
+      "shortNarration": "…Be7 — solid main line, …d5 premature.",
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence"
+      ]
     }
   ],
   "budapest-gambit": [

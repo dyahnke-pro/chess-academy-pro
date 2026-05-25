@@ -66,6 +66,8 @@ import { GRUNFELD_DEFENCE_LESSON } from './grunfeldDefence';
 import { GRUNFELD_DEFENCE_VARIATION_LESSONS } from './grunfeldDefenceVariations';
 import { BENONI_DEFENCE_LESSON } from './benoniDefence';
 import { BENONI_DEFENCE_VARIATION_LESSONS } from './benoniDefenceVariations';
+import { QUEENS_INDIAN_DEFENCE_LESSON } from './queensIndianDefence';
+import { QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS } from './queensIndianDefenceVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -116,6 +118,7 @@ const LESSONS: Record<string, LessonScript> = {
   [KINGS_INDIAN_DEFENCE_LESSON.openingId]: KINGS_INDIAN_DEFENCE_LESSON,
   [GRUNFELD_DEFENCE_LESSON.openingId]: GRUNFELD_DEFENCE_LESSON,
   [BENONI_DEFENCE_LESSON.openingId]: BENONI_DEFENCE_LESSON,
+  [QUEENS_INDIAN_DEFENCE_LESSON.openingId]: QUEENS_INDIAN_DEFENCE_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -152,6 +155,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...KINGS_INDIAN_DEFENCE_VARIATION_LESSONS,
   ...GRUNFELD_DEFENCE_VARIATION_LESSONS,
   ...BENONI_DEFENCE_VARIATION_LESSONS,
+  ...QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

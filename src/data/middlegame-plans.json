@@ -8190,59 +8190,6 @@
     ]
   },
   {
-    "id": "mp-queens-indian-long-diagonal",
-    "openingId": "queens-indian",
-    "criticalPositionFen": "rn1q1rk1/pbp1bppp/1p3n2/3p4/3P4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 0 9",
-    "title": "Long diagonal pressure with …Bb7 + …c5",
-    "overview": "The Queen's Indian's defining plan: fianchetto the queen's bishop to b7 controlling the long h1-a8 diagonal. After …c5 break and …Bxg2 trade (sometimes), Black gets active piece play in symmetric setups. The plan is to challenge White's center with …d5 and use the bishop pair for slow positional grinding.",
-    "pawnBreaks": [
-      {
-        "move": "d5",
-        "explanation": "Black's main central challenge. After …d5 cxd5 exd5 Black has a symmetric structure with the bishop pair as advantage. The e-file is half-open for the rook."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc8-b7 long-diagonal control",
-        "explanation": "The bishop on b7 controls the long diagonal and pressures the e4 square. Combined with …Re8 doubling on the e-file, this creates lasting pressure on White's center."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd8-c7 (Reti style)",
-        "explanation": "The queen on c7 supports …c5 break and prepares queenside expansion with …Rfc8."
-      }
-    ],
-    "typicalMistakes": [
-      "Trading the b7-bishop without compensation — kills the entire Queen's Indian concept.",
-      "Allowing White's d4-d5 push without contesting — locks the center against Black's pieces."
-    ]
-  },
-  {
-    "id": "mp-queens-indian-petrosian-system",
-    "openingId": "queens-indian",
-    "criticalPositionFen": "rn1qk2r/pbp1bppp/1p2p3/8/3PP3/P1P2N2/2Q2PPP/R1B1KB1R b KQkq - 0 9",
-    "title": "Petrosian System: …Bb4+ + …c5 + …b6",
-    "overview": "Petrosian's specialty against the Queen's Indian. After a3, White prepares Nc3 without the threat of …Bb4+ pin. Black's plan: use the bishop pair (after the …Nxc3 bxc3 trade) for slow positional pressure. The e6-pawn becomes weak but the bishop pair compensates.",
-    "pawnBreaks": [
-      {
-        "move": "c5",
-        "explanation": "Black's central counter-break. After …c5 dxc5 bxc5 Black opens the b-file for the rook and gains piece activity."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop pair",
-        "route": "Maintaining both bishops for endgame",
-        "explanation": "Black's two bishops are the main long-term asset. The plan is to reach an endgame where the bishop pair dominates against a knight + bishop."
-      }
-    ],
-    "typicalMistakes": [
-      "Forgetting the …c5 break — Black's queenside files stay closed if you don't break.",
-      "Trading the dark-squared bishop on e7 for a knight — gives up the bishop pair advantage."
-    ]
-  },
-  {
     "id": "mp-budapest-active-piece-play",
     "openingId": "budapest-gambit",
     "criticalPositionFen": "r1bq1rk1/pppp1ppp/8/2b1n3/2P5/4P3/PP2BPPP/RNBQ1RK1 w - - 2 9",
@@ -27989,6 +27936,124 @@
             {
               "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-queensindian-main",
+    "openingId": "queens-indian",
+    "criticalPositionFen": "rn1q1rk1/pbppb1pp/1p2p3/5p2/2PP4/2Q2NP1/PP2PPBP/R1B2RK1 w - - 0 10",
+    "title": "Queen's Indian: Both Bishops on the Long Diagonals",
+    "overview": "The Queen's Indian is won by control, not by attack. Black has clamped the e4-square with …Ne4 and …f5, and the plan now is harmony: redeploy the dark bishop to f6 so BOTH bishops rake the long diagonals at White's centre, back the central squares with the rooks, and squeeze a weakness-free position where Black is never worse and can press without risk.",
+    "pawnBreaks": [
+      "…d5 to challenge the centre when prepared",
+      "…e5 to break once fully backed"
+    ],
+    "pieceManeuvers": [
+      "…Bf6 to the long diagonal beside the b7-bishop",
+      "…Re8 to the central e-file"
+    ],
+    "strategicThemes": [
+      "Both bishops on the long diagonals",
+      "The e4-clamp",
+      "Squeezing a weakness-free position"
+    ],
+    "endgameTransitions": [
+      "The flawless structure carries comfortably into any ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/pbppb1pp/1p2p3/5p2/2PP4/2Q2NP1/PP2PPBP/R1B2RK1 w - - 0 10",
+        "moves": [
+          "Bf4",
+          "Bf6",
+          "Qe3",
+          "Re8"
+        ],
+        "annotations": [
+          "Bf4 develops the bishop, eyeing the queenside dark squares.",
+          "…Bf6 — the dark bishop redeploys to the long diagonal, joining the b7-bishop in raking d4 and the white centre.",
+          "Qe3 centralises White’s queen.",
+          "…Re8 backs the e-file and the central squares. There is the Queen’s Indian harmony: both bishops on the long diagonals, a clamp on e4, and a weakness-free position Black can patiently squeeze."
+        ],
+        "learnCues": [
+          "Bf4 — White develops.",
+          "…Bf6 — bishop to the long diagonal.",
+          "Qe3 — White centralises.",
+          "…Re8 — back the centre."
+        ],
+        "sources": [
+          "concept:pos-weak-squares",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence"
+        ],
+        "title": "Queen's Indian: Both Bishops on the Long Diagonals",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "f6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
