@@ -164,8 +164,12 @@ function main() {
   let touchedPlans = 0;
   let touchedLines = 0;
 
+  const LEADEYE_OPENINGS = new Set([
+    'ruy-lopez', 'pirc-defence', 'vienna-game', 'italian-game', 'scotch-game',
+    'queens-gambit', 'qgd',
+  ]);
   for (const plan of plans) {
-    if (plan.openingId !== 'ruy-lopez' && plan.openingId !== 'pirc-defence' && plan.openingId !== 'vienna-game' && plan.openingId !== 'italian-game' && plan.openingId !== 'scotch-game') continue;
+    if (!LEADEYE_OPENINGS.has(plan.openingId)) continue;
     const lines = plan.playableLines ?? [];
     if (lines.length === 0) continue;
     let planTouched = false;
