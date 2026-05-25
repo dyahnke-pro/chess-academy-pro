@@ -42,6 +42,24 @@ export function MasterclassesTab(): JSX.Element {
     );
   }
 
+  const white = openings.filter((o) => o.color === 'white');
+  const black = openings.filter((o) => o.color === 'black');
+
+  const renderSection = (list: OpeningRecord[], offset: number): JSX.Element[] =>
+    list.map((opening, i) => (
+      <motion.div
+        key={opening.id}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: (offset + i) * 0.03, duration: 0.25 }}
+      >
+        <OpeningCard
+          opening={opening}
+          onClick={() => void navigate(`/openings/${opening.id}`)}
+        />
+      </motion.div>
+    ));
+
   return (
     <div data-testid="tab-masterclasses">
       <div className="mb-4 flex items-center gap-2 text-xs text-theme-text-muted">
@@ -51,21 +69,27 @@ export function MasterclassesTab(): JSX.Element {
           every variation, weapons, plans, and model games.
         </span>
       </div>
-      <div className="space-y-2">
-        {openings.map((opening, i) => (
-          <motion.div
-            key={opening.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.03, duration: 0.25 }}
-          >
-            <OpeningCard
-              opening={opening}
-              onClick={() => void navigate(`/openings/${opening.id}`)}
-            />
-          </motion.div>
-        ))}
-      </div>
+
+      {/* Separated by the side you play (matches the Most Common tab). */}
+      {white.length > 0 && (
+        <>
+          <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-white border border-theme-border" />
+            White Openings
+          </h2>
+          <div className="space-y-2 mb-5">{renderSection(white, 0)}</div>
+        </>
+      )}
+
+      {black.length > 0 && (
+        <>
+          <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-neutral-800 border border-theme-border" />
+            Black Openings
+          </h2>
+          <div className="space-y-2">{renderSection(black, white.length)}</div>
+        </>
+      )}
     </div>
   );
 }
