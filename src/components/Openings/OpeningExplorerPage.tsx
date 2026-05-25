@@ -19,7 +19,7 @@ import { MasterclassesTab } from './MasterclassesTab';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { BookOpen, Library, ChevronDown, ChevronRight, Users, Swords, Sparkles, GraduationCap } from 'lucide-react';
 
-type TabMode = 'common' | 'masterclasses' | 'pro' | 'gambits' | 'all';
+type TabMode = 'common' | 'white' | 'black' | 'pro' | 'gambits' | 'all';
 
 const ECO_LETTERS = ['A', 'B', 'C', 'D', 'E'] as const;
 
@@ -209,10 +209,11 @@ export function OpeningExplorerPage(): JSX.Element {
       </button>
 
       {/* Tab toggle */}
-      <div className="grid grid-cols-5 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
+      <div className="grid grid-cols-6 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
         {([
           { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-repertoire', activeClasses: 'bg-blue-500/25 text-blue-200', borderColor: 'border-blue-400/80 shadow-[0_0_6px_rgba(59,130,246,0.7),0_0_14px_rgba(59,130,246,0.45),0_0_24px_rgba(59,130,246,0.25)]' },
-          { id: 'masterclasses' as const, label: 'Masterclasses', icon: GraduationCap, testId: 'tab-masterclasses', activeClasses: 'bg-amber-500/25 text-amber-200', borderColor: 'border-amber-400/80 shadow-[0_0_6px_rgba(245,158,11,0.7),0_0_14px_rgba(245,158,11,0.45),0_0_24px_rgba(245,158,11,0.25)]' },
+          { id: 'white' as const, label: 'White', icon: GraduationCap, testId: 'tab-white', activeClasses: 'bg-white/15 text-white', borderColor: 'border-slate-300/80 shadow-[0_0_6px_rgba(226,232,240,0.7),0_0_14px_rgba(226,232,240,0.4),0_0_24px_rgba(226,232,240,0.2)]' },
+          { id: 'black' as const, label: 'Black', icon: GraduationCap, testId: 'tab-black', activeClasses: 'bg-neutral-800/70 text-neutral-100', borderColor: 'border-neutral-500/80 shadow-[0_0_6px_rgba(115,115,115,0.7),0_0_14px_rgba(115,115,115,0.4),0_0_24px_rgba(115,115,115,0.2)]' },
           { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro', activeClasses: 'bg-emerald-500/25 text-emerald-200', borderColor: 'border-emerald-400/80 shadow-[0_0_6px_rgba(16,185,129,0.7),0_0_14px_rgba(16,185,129,0.45),0_0_24px_rgba(16,185,129,0.25)]' },
           { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits', activeClasses: 'bg-rose-500/25 text-rose-200', borderColor: 'border-rose-400/80 shadow-[0_0_6px_rgba(244,63,94,0.7),0_0_14px_rgba(244,63,94,0.45),0_0_24px_rgba(244,63,94,0.25)]' },
           { id: 'all' as const, label: 'All', icon: Library, testId: 'tab-all', activeClasses: 'bg-violet-500/25 text-violet-200', borderColor: 'border-violet-400/80 shadow-[0_0_6px_rgba(139,92,246,0.7),0_0_14px_rgba(139,92,246,0.45),0_0_24px_rgba(139,92,246,0.25)]' },
@@ -331,8 +332,10 @@ export function OpeningExplorerPage(): JSX.Element {
         </>
       )}
 
-      {/* ─── Masterclasses tab ───────────────────────────────────────────── */}
-      {tab === 'masterclasses' && <MasterclassesTab />}
+      {/* ─── White / Black masterclass tabs ──────────────────────────────── */}
+      {tab === 'white' && <MasterclassesTab color="white" />}
+
+      {tab === 'black' && <MasterclassesTab color="black" />}
 
       {/* ─── Pro Repertoires tab ──────────────────────────────────────────── */}
       {tab === 'pro' && <ProRepertoiresTab />}
