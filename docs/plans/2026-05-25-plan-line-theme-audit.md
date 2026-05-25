@@ -49,6 +49,36 @@ for qgd, kid, kings-gambit, vienna, alapin, london, catalan, kia.
 
 ---
 
+## GAPS CLOSED FOR FUTURE BUILDS (2026-05-25, David's directive)
+
+Before authoring the gem/common-mistake backlog, locked the standard into gates
++ rules so the holes can't reopen. All three coverage gates are manifest-driven
+(keyed off `opening-manifests.json`, so a new masterclass opening is auto-in-
+scope) with SHRINKING baselines, and proven non-vacuous (fail on any new gap):
+
+- **Plan lines — short register.** `middlegamePlanThemes.test.ts` now also
+  requires `learnCues` on every masterclass plan line. Baseline
+  `middlegamePlanShort.baseline.json` = **119** lines missing short (the 15
+  rewritten this session have it). New masterclass plan lines must ship both
+  registers.
+- **Punish-gems — narration coverage.** `punishGems.test.ts` now requires a
+  `GEM_NARRATION` entry for every masterclass gem. Baseline
+  `punishGemNarration.baseline.json` = **42** mined-but-un-narrated gems
+  (King's Gambit 20, Scotch 15, Italian 7). Un-narrated gems don't surface, but
+  this gate makes the backlog visible and forces it down.
+- **Common mistakes.** Already gated (`commonMistakeNarration.test.ts`,
+  manifest-driven, full `explanation` + ≤8-word `shortNarration`). 37
+  non-masterclass entries lack short — sanctioned fallback, not gated.
+
+Rule corrections in CLAUDE.md: the move-dictation fallback is now explicitly
+ONLY for non-masterclass / DB-only lines; masterclass curated content (plan
+lines, gems, common mistakes) REQUIRES both registers, enforced by the gates.
+
+### Backlog (the actual content authoring, next phase)
+- [ ] 119 masterclass plan lines → hand-author short cues (+ quality-pass full).
+- [ ] 42 masterclass gems → hand-narrate (priority: King's Gambit, Scotch, Italian).
+- [ ] Quality-audit the 92 already-narrated gems (correct advantage, per subline).
+
 ## RESULT (full sweep, 2026-05-25)
 
 The original "65 theme-empty" was inflated by two regex bugs in my own detector:

@@ -1151,8 +1151,35 @@ playbook holds the rules you MUST follow, in particular:
     of the Watch idea ("Nd5 — fork the queen, eye c7"), NOT a full sentence and
     NOT bare dictation. Authored on `beat.sayShort` for lessons (carried by
     `lessonToPlayableLine` → `PlayableMiddlegameLine.learnCues`); on the gem
-    sidecar's `learn[]`. Where no cue exists, `PlayableLinePlayer` falls back
-    to plain move dictation (`sanToSpeech`).
+    sidecar's `learn[]`. The move-dictation fallback (`sanToSpeech`) is
+    sanctioned ONLY for non-masterclass / DB-only lines — for a MASTERCLASS
+    opening the authored short cue is REQUIRED, not optional (see the coverage
+    gates below).
+  - **🔒 NARRATION COVERAGE IS PART OF "DONE" — gated for every masterclass
+    surface (David 2026-05-25, locked after the gem/plan-line gap audit).** It
+    is not enough that the narration that EXISTS is good; every curated artifact
+    on a masterclass opening MUST carry BOTH registers (full + short), hand-
+    authored and verified showing its theme. Three manifest-driven coverage
+    gates enforce this — each keyed off `opening-manifests.json` (so a NEW
+    masterclass opening is auto-in-scope, no hardcoded list) with a SHRINKING
+    baseline of the current backlog:
+    - **Plan lines** — `middlegamePlanThemes.test.ts`: (1) a student move lands
+      on a declared break/maneuver goal square (demonstrates the plan, no
+      promise ending); (2) every masterclass plan line has `learnCues`
+      (short register), baseline `middlegamePlanShort.baseline.json`.
+    - **Punish-gems** — `punishGems.test.ts`: every masterclass gem has a
+      `GEM_NARRATION` entry (watch + learn), baseline
+      `punishGemNarration.baseline.json`. (Un-narrated gems don't surface, but
+      they're an invisible backlog — this gate forces them down.)
+    - **Common mistakes** — `commonMistakeNarration.test.ts`: every masterclass
+      Pitfall has a full `explanation` + a ≤8-word `shortNarration`.
+    A new masterclass opening CANNOT ship a plan line / gem / common mistake
+    without both registers; the only escape is an explicit baseline add (a
+    deliberate, visible deferral), and baselines only ever shrink. When you
+    author the backlog, regenerate the relevant baseline and watch the count
+    drop. This does NOT contradict the 2026-05-24 "Learn fallback is good" rule
+    — that fallback is for the ~3,000 NON-curated DB-only openings; masterclass
+    curated content is held to the two-register bar.
   - **Practice = silent. Play = the coach room LOCKED to the exact line**
     (pass the line as `customLine` to `OpeningPlayMode` — never the opening's
     generic main line).
@@ -1872,7 +1899,10 @@ showing you the green checks." Wired in `scripts/ship-check.mjs`. Runs:
     lessonIntegrity, narrationAccuracy, narrationGrounding, lessonDepth,
     pircIntegrity, repertoire-orientation, pro-repertoires-orientation,
     openingManifests, modelGames-orientation, middlegamePlanner,
-    MiddlegamePlansSection, EndgamePlansSection, OpeningDetailPage.wiring.
+    middlegamePlanThemes, MiddlegamePlansSection, EndgamePlansSection,
+    OpeningDetailPage.wiring. (The narration-coverage gates ride inside
+    middlegamePlanThemes, punishGems, and commonMistakeNarration — see the
+    NARRATION COVERAGE rule above.)
     These are the load-bearing gates that protect content correctness. UI /
     snapshot / integration tests live at a different reliability bar and
     aren't gated here. Two were added 2026-05-24:

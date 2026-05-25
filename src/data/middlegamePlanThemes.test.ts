@@ -4,6 +4,8 @@ import plansRaw from './middlegame-plans.json';
 import baselineRaw from './middlegamePlanThemes.baseline.json';
 import repertoireRaw from './repertoire.json';
 import proRaw from './pro-repertoires.json';
+import openingManifests from './opening-manifests.json';
+import shortBaselineRaw from './middlegamePlanShort.baseline.json';
 
 // ─── The "show the theme" gate (David 2026-05-25) ───────────────────────────
 // A middlegame-plan playableLine MUST demonstrate the plan's named theme — it
@@ -126,6 +128,38 @@ describe('middlegame-plan playableLines demonstrate their named theme', () => {
     // pruned. Not a hard failure (avoids churn while a sweep is in flight),
     // but surfaced so the baseline shrinks honestly.
     if (stale.length > 0) console.warn(`[plan-themes] ${stale.length} baseline entries are now fixed — prune them: ${stale.join(', ')}`);
+    expect(stale.length).toBeLessThanOrEqual(baseline.size);
+  });
+});
+
+// ─── Short-register coverage gate (David 2026-05-25) ────────────────────────
+// Every masterclass plan playableLine MUST carry a hand-authored SHORT register
+// (learnCues, one per move) alongside its full Watch annotations — the Learn
+// mode should speak an authored cue, not the bare move-dictation fallback. The
+// fallback is sanctioned ONLY for non-masterclass / DB-only lines. The baseline
+// holds the current backlog (119 lines at lock time) and only SHRINKS, so a NEW
+// masterclass plan line can't ship without both registers.
+describe('masterclass plan lines carry a short (learnCues) register', () => {
+  const baseline = new Set((shortBaselineRaw as { keys: string[] }).keys);
+  const masterclass = new Set(Object.keys(openingManifests).filter((k) => !k.startsWith('_')));
+  const missing: string[] = [];
+  for (const plan of plans) {
+    if (!masterclass.has(plan.openingId)) continue;
+    (plan.playableLines ?? []).forEach((l, i) => {
+      const cues = (l as { learnCues?: string[] }).learnCues;
+      if (!(Array.isArray(cues) && cues.length === l.moves.length)) missing.push(`${plan.id}#${i}`);
+    });
+  }
+
+  it('introduces NO masterclass plan line missing its short register beyond the baseline', () => {
+    const novel = missing.filter((k) => !baseline.has(k));
+    expect(novel, `New masterclass plan lines have no hand-authored short cues (learnCues, one per move). Author them, or — only if deferred — add to middlegamePlanShort.baseline.json:\n${novel.join('\n')}`).toEqual([]);
+  });
+
+  it('short-register baseline only shrinks', () => {
+    const live = new Set(missing);
+    const stale = [...baseline].filter((k) => !live.has(k));
+    if (stale.length > 0) console.warn(`[plan-short] ${stale.length} baseline lines now have short cues — prune them: ${stale.join(', ')}`);
     expect(stale.length).toBeLessThanOrEqual(baseline.size);
   });
 });

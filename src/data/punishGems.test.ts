@@ -9,6 +9,8 @@ import {
   type PunishGem,
 } from './lessons/punishGems';
 import { GEM_NARRATION } from './lessons/punishGemNarration';
+import openingManifests from './opening-manifests.json';
+import gemNarrationBaseline from './punishGemNarration.baseline.json';
 
 // Gate for the mined punish-gems (WO: docs/plans/2026-05-23-punish-gems-wo.md).
 // Every gem is DB-grounded by construction (it comes from the explorer), and
@@ -112,6 +114,33 @@ describe('punish-gems are real, legal, DB-grounded', () => {
         expect(narr.learn.length, 'learn array length ≠ playLine plies').toBe(plies);
       });
     }
+  });
+
+  // COVERAGE GATE (David 2026-05-25): every masterclass gem MUST be hand-
+  // narrated (full watch + short learn). Un-narrated gems don't surface, so the
+  // app is safe — but they're an invisible backlog (Italian/Scotch/King's Gambit
+  // had dozens mined-but-dark). This gate forces a narration entry for every
+  // masterclass gem; the baseline holds the current backlog and only SHRINKS, so
+  // a NEW masterclass opening can't ship gems without authoring their narration.
+  describe('every masterclass gem is hand-narrated (coverage)', () => {
+    const baseline = new Set((gemNarrationBaseline as { keys: string[] }).keys);
+    const masterclass = new Set(Object.keys(openingManifests).filter((k) => !k.startsWith('_')));
+    const missing = (gems as PunishGem[])
+      .filter((g) => masterclass.has(g.openingId))
+      .map(gemId)
+      .filter((id) => !(id in GEM_NARRATION));
+
+    it('introduces NO un-narrated masterclass gem beyond the baseline', () => {
+      const novel = missing.filter((id) => !baseline.has(id));
+      expect(novel, `New masterclass gems have no hand-narration (watch + learn). Author an entry in punishGemNarration.ts, or — only if deferred — add to punishGemNarration.baseline.json:\n${novel.join('\n')}`).toEqual([]);
+    });
+
+    it('baseline only shrinks (no stale entries that are now narrated)', () => {
+      const live = new Set(missing);
+      const stale = [...baseline].filter((id) => !live.has(id));
+      if (stale.length) console.warn(`[gem-narration] ${stale.length} baseline gems are now narrated — prune them: ${stale.join(', ')}`);
+      expect(stale.length).toBeLessThanOrEqual(baseline.size);
+    });
   });
 
   it('gemId is stable and unique per gem', () => {
