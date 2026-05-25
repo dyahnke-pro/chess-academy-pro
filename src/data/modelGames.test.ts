@@ -15,6 +15,8 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import modelGamesRaw from './model-games.json';
+import openingManifests from './opening-manifests.json';
+import { sourcesAreValid } from './narrationSources';
 
 interface CriticalMoment {
   moveNumber: number;
@@ -78,4 +80,19 @@ describe('model-game integrity — legal PGN + grounded critical moments', () =>
       }
     });
   }
+});
+
+// Independent-verification gate (David 2026-05-25). Every model game on a
+// masterclass opening must record a resolvable source for its overview prose.
+// All masterclass games were sourced 2026-05-25, so this gates with no baseline
+// escape — a new masterclass model game can't ship unsourced.
+describe('masterclass model games cite an independent verification source', () => {
+  const masterclass = new Set(Object.keys(openingManifests).filter((k) => !k.startsWith('_')));
+  const unsourced = (modelGamesRaw as Array<{ id: string; openingId: string; sources?: string[] }>)
+    .filter((g) => masterclass.has(g.openingId) && !sourcesAreValid(g.sources))
+    .map((g) => g.id);
+
+  it('every masterclass model game has a resolvable source', () => {
+    expect(unsourced, `Masterclass model games missing a resolvable source (sources: ["book:<id>" | "concept:<id>" | reputable https URL]):\n${unsourced.join('\n')}`).toEqual([]);
+  });
 });

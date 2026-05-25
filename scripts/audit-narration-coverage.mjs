@@ -41,7 +41,7 @@ add('common mistakes', cm.length, cm.filter((m) => (m.explanation || '').trim())
 
 // 5. Model games (overview / lessonSummary / annotations) + sources
 const mg = [...J('model-games.json'), ...(J('vienna-model-games.json').games || [])];
-add('model games', mg.length, mg.filter((g) => (g.overview || '').trim()).length, mg.filter((g) => (g.lessonSummary || '').trim()).length, mg.filter((g) => (g.sources || []).length).length, false, false);
+add('model games', mg.length, mg.filter((g) => (g.overview || '').trim()).length, mg.filter((g) => (g.lessonSummary || '').trim()).length, mg.filter((g) => (g.sources || []).length).length, false, true);
 
 // 6. Pro-repertoires (per-variation explanation) + sources
 const pro = J('pro-repertoires.json').openings || [];

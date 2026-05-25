@@ -250,7 +250,12 @@
       }
     ],
     "middlegameTheme": "Defense & Counter-Attack",
-    "lessonSummary": "Even the greatest attacks can be refuted with precise defense. Capablanca showed that staying calm under pressure and finding accurate defensive moves can turn the tables. In the Ruy Lopez, understanding both attack and defense is crucial."
+    "lessonSummary": "Even the greatest attacks can be refuted with precise defense. Capablanca showed that staying calm under pressure and finding accurate defensive moves can turn the tables. In the Ruy Lopez, understanding both attack and defense is crucial.",
+    "sources": [
+      "book:ruy-lopez",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Ruy_Lopez"
+    ]
   },
   {
     "id": "mg-kasparov-karpov-wch85",
@@ -344,7 +349,12 @@
     ],
     "middlegameTheme": "Queenside pressure with central space",
     "lessonSummary": "The Scotch Game allows White to open the center early and dictate the pawn structure. Kasparov demonstrated how to convert a space advantage into piece activity, using opposite-side castling to generate a powerful initiative. This game illustrates the importance of seizing the center and keeping the opponent reactive.",
-    "studentSide": "white"
+    "studentSide": "white",
+    "sources": [
+      "concept:pos-development",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Scotch_Game"
+    ]
   },
   {
     "id": "mg-rubinstein-four-knights-game",
@@ -406,7 +416,12 @@
       }
     ],
     "middlegameTheme": "Isolated pawn exploitation",
-    "lessonSummary": "The Alapin Sicilian gives White a straightforward development scheme but often creates an isolated d-pawn that Black can target. Kasparov showed how to methodically pressure structural weaknesses while maintaining active piece play. This game is a textbook example of converting a positional advantage against a strong opponent."
+    "lessonSummary": "The Alapin Sicilian gives White a straightforward development scheme but often creates an isolated d-pawn that Black can target. Kasparov showed how to methodically pressure structural weaknesses while maintaining active piece play. This game is a textbook example of converting a positional advantage against a strong opponent.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
+    ]
   },
   {
     "id": "mg-alekhine-slav-defence",
@@ -1960,7 +1975,12 @@
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/8I2YuiTC",
     "source": "lichess-masters",
-    "studentSide": "white"
+    "studentSide": "white",
+    "sources": [
+      "book:italian-game",
+      "concept:pos-center",
+      "https://www.chess.com/openings/Italian-Game"
+    ]
   },
   {
     "id": "mg-lichess-55GlUBTE",
@@ -1977,7 +1997,12 @@
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/55GlUBTE",
     "source": "lichess-masters",
-    "studentSide": "white"
+    "studentSide": "white",
+    "sources": [
+      "book:italian-game",
+      "concept:pos-center",
+      "https://www.chess.com/openings/Italian-Game"
+    ]
   },
   {
     "id": "mg-lichess-M2yAXpb3",
@@ -1994,7 +2019,12 @@
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/M2yAXpb3",
     "source": "lichess-masters",
-    "studentSide": "white"
+    "studentSide": "white",
+    "sources": [
+      "book:italian-game",
+      "concept:pos-center",
+      "https://www.chess.com/openings/Italian-Game"
+    ]
   },
   {
     "id": "mg-lichess-6YRWrSqn",
@@ -2011,7 +2041,12 @@
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/6YRWrSqn",
     "source": "lichess-masters",
-    "studentSide": "white"
+    "studentSide": "white",
+    "sources": [
+      "book:kings-gambit",
+      "concept:tac-sacrifice",
+      "https://en.wikipedia.org/wiki/King%27s_Gambit"
+    ]
   },
   {
     "id": "mg-lichess-ZsJXLdvq",
@@ -2028,7 +2063,12 @@
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/ZsJXLdvq",
     "source": "lichess-masters",
-    "studentSide": "white"
+    "studentSide": "white",
+    "sources": [
+      "book:kings-gambit",
+      "concept:tac-sacrifice",
+      "https://en.wikipedia.org/wiki/King%27s_Gambit"
+    ]
   },
   {
     "id": "mg-lichess-NRs2P5Fh",
@@ -2045,7 +2085,12 @@
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/NRs2P5Fh",
     "source": "lichess-masters",
-    "studentSide": "white"
+    "studentSide": "white",
+    "sources": [
+      "book:kings-gambit",
+      "concept:tac-sacrifice",
+      "https://en.wikipedia.org/wiki/King%27s_Gambit"
+    ]
   },
   {
     "id": "mg-lichess-jIWOc713",
@@ -2445,7 +2490,12 @@
     "overview": "Master game from the Lichess masters database. Carlsen, M. vs Grischuk, A., 2015. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/jMVMo1Ua",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "concept:att-queenside-attack",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+    ]
   },
   {
     "id": "mg-lichess-BTVJpaP6",
@@ -2461,7 +2511,12 @@
     "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Ding, Liren, 2020. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/BTVJpaP6",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "concept:att-queenside-attack",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+    ]
   },
   {
     "id": "mg-lichess-6ra0xjZ4",
@@ -2477,7 +2532,12 @@
     "overview": "Master game from the Lichess masters database. Ding, Liren vs Carlsen, Magnus, 2020. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/6ra0xjZ4",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "concept:att-queenside-attack",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+    ]
   },
   {
     "id": "mg-lichess-gnCbmvaX",
@@ -2493,7 +2553,12 @@
     "overview": "Master game from the Lichess masters database. Caruana, F. vs Carlsen, M., 2018. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/gnCbmvaX",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "concept:pos-outpost",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+    ]
   },
   {
     "id": "mg-lichess-9hRmnVXz",
@@ -2509,7 +2574,12 @@
     "overview": "Master game from the Lichess masters database. Caruana, F. vs Carlsen, M., 2018. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/9hRmnVXz",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "concept:pos-outpost",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+    ]
   },
   {
     "id": "mg-lichess-oI7SdvND",
@@ -2525,7 +2595,12 @@
     "overview": "Master game from the Lichess masters database. Caruana, F. vs Carlsen, M., 2018. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/oI7SdvND",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "concept:pos-outpost",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+    ]
   },
   {
     "id": "mg-lichess-hbMtoz7m",
@@ -2640,7 +2715,12 @@
     "lessonSummary": "The Vienna's f4 is the lever — it challenges e5 and opens lines for a direct attack. Firouzja castles long, trades into a favorable endgame, and converts. The opening you're learning beat the world's best.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/DzMqspxx",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "book:vienna-game",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Vienna_Game"
+    ]
   },
   {
     "id": "mg-lichess-2NIYGBtv",
@@ -2659,7 +2739,12 @@
     "lessonSummary": "The Classical Vienna looks quiet but bites: Bc4 eyes f7, Nc3 holds the center, Na4 hits the c5-bishop. Caruana weathers Black's ...Bxf2+ counterplay and grinds it out. Quiet isn't harmless.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/2NIYGBtv",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "book:vienna-game",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Vienna_Game"
+    ]
   },
   {
     "id": "mg-caro-classical",
@@ -2684,7 +2769,12 @@
       }
     ],
     "middlegameTheme": "Solid structure, no bad pieces",
-    "lessonSummary": "The Classical variation, played out to a Black win at the top level."
+    "lessonSummary": "The Classical variation, played out to a Black win at the top level.",
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   },
   {
     "id": "mg-caro-advance",
@@ -2709,7 +2799,12 @@
       }
     ],
     "middlegameTheme": "Undermine the chain",
-    "lessonSummary": "The Advance variation, played out to a Black win at the top level."
+    "lessonSummary": "The Advance variation, played out to a Black win at the top level.",
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   },
   {
     "id": "mg-caro-exchange",
@@ -2734,7 +2829,12 @@
       }
     ],
     "middlegameTheme": "Symmetry then outplay",
-    "lessonSummary": "The Exchange variation, played out to a Black win at the top level."
+    "lessonSummary": "The Exchange variation, played out to a Black win at the top level.",
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   },
   {
     "id": "mg-caro-two-knights",
@@ -2759,7 +2859,12 @@
       }
     ],
     "middlegameTheme": "Granite structure",
-    "lessonSummary": "The Two Knights variation, played out to a Black win at the top level."
+    "lessonSummary": "The Two Knights variation, played out to a Black win at the top level.",
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   },
   {
     "id": "mg-caro-panov",
@@ -2784,7 +2889,12 @@
       }
     ],
     "middlegameTheme": "Blockade the isolani",
-    "lessonSummary": "The Panov variation, played out to a Black win at the top level."
+    "lessonSummary": "The Panov variation, played out to a Black win at the top level.",
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   },
   {
     "id": "mg-caro-fantasy",
@@ -2809,7 +2919,12 @@
       }
     ],
     "middlegameTheme": "Open it before they are ready",
-    "lessonSummary": "The Fantasy variation, played out to a Black win at the top level."
+    "lessonSummary": "The Fantasy variation, played out to a Black win at the top level.",
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   },
   {
     "id": "mg-caro-tartakower",
@@ -2834,7 +2949,12 @@
       }
     ],
     "middlegameTheme": "Doubled pawns, real assets",
-    "lessonSummary": "The Tartakower variation, played out to a Black win at the top level."
+    "lessonSummary": "The Tartakower variation, played out to a Black win at the top level.",
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   },
   {
     "id": "mg-pro-caruana-italian-0",
@@ -2887,7 +3007,12 @@
     "lessonSummary": "In the Modern Defence White doesn't cling to the pawn — he plays for structure. The bishop pair and the d4-d5 centre give a lasting pull that a top grandmaster grinds into a win.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/aZ6oVKX6",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "book:kings-gambit",
+      "concept:tac-sacrifice",
+      "https://en.wikipedia.org/wiki/King%27s_Gambit"
+    ]
   },
   {
     "id": "mg-lichess-4OOofMO6",
@@ -2906,7 +3031,12 @@
     "lessonSummary": "Against …g5 White ignores the pawn and develops for the attack. Lead in development plus open lines beats an extra pawn — the central break and piece activity do the rest.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/4OOofMO6",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "book:kings-gambit",
+      "concept:tac-sacrifice",
+      "https://en.wikipedia.org/wiki/King%27s_Gambit"
+    ]
   },
   {
     "id": "mg-lichess-pIV55Pi8",
@@ -2925,7 +3055,12 @@
     "lessonSummary": "Fischer's 3…d6 is sound, so White wins by patience: build the centre, re-route the knight to regain the pawn, and squeeze the resulting structure. No fireworks — just a lasting edge converted.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/pIV55Pi8",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "book:kings-gambit",
+      "concept:tac-sacrifice",
+      "https://en.wikipedia.org/wiki/King%27s_Gambit"
+    ]
   },
   {
     "id": "mg-lichess-MxHHpDbg",
@@ -2944,7 +3079,12 @@
     "lessonSummary": "When Black declines with 2…Bc5, White builds the broad centre and plays for the long game. Superior structure and activity carry into the endgame, where precise technique brings the point home.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/MxHHpDbg",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "book:kings-gambit",
+      "concept:tac-sacrifice",
+      "https://en.wikipedia.org/wiki/King%27s_Gambit"
+    ]
   },
   {
     "id": "mg-lichess-x8zHWTWJ",
@@ -2963,7 +3103,12 @@
     "lessonSummary": "The Bishop's Gambit's whole idea — develop the bishop at once, allow nothing, build and break — beats even the strongest defender when White keeps the initiative and the bishop's diagonal alive.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/x8zHWTWJ",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "book:kings-gambit",
+      "concept:tac-sacrifice",
+      "https://en.wikipedia.org/wiki/King%27s_Gambit"
+    ]
   },
   {
     "id": "mg-lichess-SivhQWtT",
@@ -2982,7 +3127,12 @@
     "lessonSummary": "In the Kieseritzky the e5-knight is the engine: it can't be chased, it supports the attack, and when the dust settles White's activity and structure win the ending.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/SivhQWtT",
-    "source": "lichess-masters"
+    "source": "lichess-masters",
+    "sources": [
+      "book:kings-gambit",
+      "concept:tac-sacrifice",
+      "https://en.wikipedia.org/wiki/King%27s_Gambit"
+    ]
   },
   {
     "id": "mg-sicilian-dragon-dubov-2024",
@@ -3014,7 +3164,12 @@
     ],
     "middlegameTheme": "Opposite-side castling: Black's c-file and b-pawn attack races White's h- and f-pawn storm.",
     "lessonSummary": "The Dragon in one game: trade efficiently, train every piece on White's king, and win the race down the queenside.",
-    "studentSide": "black"
+    "studentSide": "black",
+    "sources": [
+      "concept:att-queenside-attack",
+      "concept:pos-open-file",
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
+    ]
   },
   {
     "id": "mg-anand-four-knights",
@@ -3053,7 +3208,12 @@
       }
     ],
     "middlegameTheme": "Route a knight to the f5 outpost, then sacrifice to hunt the king.",
-    "lessonSummary": "Even the symmetrical Four Knights can catch fire: get a knight to f5 and the sacrifice on h6 or g7 is always in the air."
+    "lessonSummary": "Even the symmetrical Four Knights can catch fire: get a knight to f5 and the sacrifice on h6 or g7 is always in the air.",
+    "sources": [
+      "book:four-knights-game",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Four_Knights_Game"
+    ]
   },
   {
     "id": "mg-kramnik-scotch-four-knights",
@@ -3092,7 +3252,12 @@
       }
     ],
     "middlegameTheme": "Besiege the hanging d-pawn, win material around the weak square.",
-    "lessonSummary": "The early d4 hands Black a fragile centre; pile onto it and the tactics tend to fall White's way."
+    "lessonSummary": "The early d4 hands Black a fragile centre; pile onto it and the tactics tend to fall White's way.",
+    "sources": [
+      "book:four-knights-game",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Four_Knights_Game"
+    ]
   },
   {
     "id": "mg-mamedyarov-glek",
@@ -3131,7 +3296,12 @@
       }
     ],
     "middlegameTheme": "Fianchetto, expand with g4, plant a knight on f5, convert.",
-    "lessonSummary": "The Glek is positional but never passive — g4 and a knight on f5 give a real kingside initiative."
+    "lessonSummary": "The Glek is positional but never passive — g4 and a knight on f5 give a real kingside initiative.",
+    "sources": [
+      "book:four-knights-game",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Four_Knights_Game"
+    ]
   },
   {
     "id": "mg-karthikeyan-italian-four-knights",
@@ -3170,7 +3340,12 @@
       }
     ],
     "middlegameTheme": "Survive the fork trick with the better bishop, win a pawn, convert.",
-    "lessonSummary": "Meet the fork trick calmly: the centralised bishop and the healthier structure give White a small, very real pull."
+    "lessonSummary": "Meet the fork trick calmly: the centralised bishop and the healthier structure give White a small, very real pull.",
+    "sources": [
+      "book:four-knights-game",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Four_Knights_Game"
+    ]
   },
   {
     "id": "mg-carlsen-rubinstein",
@@ -3209,7 +3384,12 @@
       }
     ],
     "middlegameTheme": "Keep the bishop pair, open lines, deliver mate.",
-    "lessonSummary": "Against the Rubinstein, refuse complications, keep the two bishops, and let them dominate the open position."
+    "lessonSummary": "Against the Rubinstein, refuse complications, keep the two bishops, and let them dominate the open position.",
+    "sources": [
+      "book:four-knights-game",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Four_Knights_Game"
+    ]
   },
   {
     "id": "mg-carlsen-london-main",
@@ -3248,7 +3428,12 @@
       }
     ],
     "middlegameTheme": "Preserve the bishop, break with e4, attack the king.",
-    "lessonSummary": "Meet ...Qb6/...c5 calmly, keep the dark-squared bishop, and the e4-break turns the solid London into a real attack."
+    "lessonSummary": "Meet ...Qb6/...c5 calmly, keep the dark-squared bishop, and the e4-break turns the solid London into a real attack.",
+    "sources": [
+      "concept:pos-development",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/London_System"
+    ]
   },
   {
     "id": "mg-carlsen-london-kid",
@@ -3287,7 +3472,12 @@
       }
     ],
     "middlegameTheme": "Build the granite wall, open lines, dominate the files.",
-    "lessonSummary": "Against the fianchetto, build the granite London centre and punish loosening pawn moves by opening lines."
+    "lessonSummary": "Against the fianchetto, build the granite London centre and punish loosening pawn moves by opening lines.",
+    "sources": [
+      "concept:pos-development",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/London_System"
+    ]
   },
   {
     "id": "mg-carlsen-london-jobava",
@@ -3326,7 +3516,12 @@
       }
     ],
     "middlegameTheme": "Sharp Nc3 set-up, h4 lunge, kingside initiative.",
-    "lessonSummary": "The Jobava trades the London's calm for a real attack: the early Nc3 and an h4 lunge generate kingside chances."
+    "lessonSummary": "The Jobava trades the London's calm for a real attack: the early Nc3 and an h4 lunge generate kingside chances.",
+    "sources": [
+      "concept:pos-development",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/London_System"
+    ]
   },
   {
     "id": "mg-caruana-catalan-open",
@@ -3365,7 +3560,12 @@
       }
     ],
     "middlegameTheme": "Recover the pawn, centralise the bishops, attack.",
-    "lessonSummary": "In the Open Catalan, undermine and recover c4, then let the two bishops and long-diagonal pressure decide."
+    "lessonSummary": "In the Open Catalan, undermine and recover c4, then let the two bishops and long-diagonal pressure decide.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Catalan_Opening"
+    ]
   },
   {
     "id": "mg-so-catalan-closed",
@@ -3404,7 +3604,12 @@
       }
     ],
     "middlegameTheme": "Break with e4, recover the pawn, dominate the c-file.",
-    "lessonSummary": "Against the Closed Catalan, engineer e4, gain space, and grind the better structure home."
+    "lessonSummary": "Against the Closed Catalan, engineer e4, gain space, and grind the better structure home.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Catalan_Opening"
+    ]
   },
   {
     "id": "mg-carlsen-catalan-slav",
@@ -3443,7 +3648,12 @@
       }
     ],
     "middlegameTheme": "Stop ...b5, break with d5, convert the bishop's pressure.",
-    "lessonSummary": "Against the Slav move-order, the Catalan fianchetto plus a4 and d5 give White a lasting bind."
+    "lessonSummary": "Against the Slav move-order, the Catalan fianchetto plus a4 and d5 give White a lasting bind.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Catalan_Opening"
+    ]
   },
   {
     "id": "mg-carlsen-english-revsic",
@@ -3482,7 +3692,12 @@
       }
     ],
     "middlegameTheme": "Reversed-Dragon structure, open centre, attack.",
-    "lessonSummary": "Against 1.c4 e5, play the Dragon a tempo up: fianchetto, open the centre, and press."
+    "lessonSummary": "Against 1.c4 e5, play the Dragon a tempo up: fianchetto, open the centre, and press.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-space",
+      "https://en.wikipedia.org/wiki/English_Opening"
+    ]
   },
   {
     "id": "mg-mvl-english-symmetrical",
@@ -3521,7 +3736,12 @@
       }
     ],
     "middlegameTheme": "Maróczy bind, c-file domination, convert.",
-    "lessonSummary": "In the Symmetrical English, keep the bind and pile on the c-file — small edges accumulate into a win."
+    "lessonSummary": "In the Symmetrical English, keep the bind and pile on the c-file — small edges accumulate into a win.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-space",
+      "https://en.wikipedia.org/wiki/English_Opening"
+    ]
   },
   {
     "id": "mg-caruana-english-mikenas",
@@ -3560,7 +3780,12 @@
       }
     ],
     "middlegameTheme": "Slam e4, build the centre, attack.",
-    "lessonSummary": "The Mikenas trades the English's calm for a sharp central initiative — well worth the doubled pawns."
+    "lessonSummary": "The Mikenas trades the English's calm for a sharp central initiative — well worth the doubled pawns.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-space",
+      "https://en.wikipedia.org/wiki/English_Opening"
+    ]
   },
   {
     "id": "mg-kramnik-reti-main",
@@ -3592,7 +3817,12 @@
       }
     ],
     "middlegameTheme": "Double fianchetto, time the break, squeeze.",
-    "lessonSummary": "The Réti wins by patience: pressure the centre from the flanks and break only when the pieces are perfect."
+    "lessonSummary": "The Réti wins by patience: pressure the centre from the flanks and break only when the pieces are perfect.",
+    "sources": [
+      "concept:pos-development",
+      "concept:pos-space",
+      "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
+    ]
   },
   {
     "id": "mg-giri-reti-antislav",
@@ -3631,7 +3861,12 @@
       }
     ],
     "middlegameTheme": "Trade into the weakness, press, convert.",
-    "lessonSummary": "In the Anti-Slav, trade into Black's structural weakness and grind it down — the Réti's positional payoff."
+    "lessonSummary": "In the Anti-Slav, trade into Black's structural weakness and grind it down — the Réti's positional payoff.",
+    "sources": [
+      "concept:pos-development",
+      "concept:pos-space",
+      "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
+    ]
   },
   {
     "id": "mg-giri-kia-french",
@@ -3670,7 +3905,12 @@
       }
     ],
     "middlegameTheme": "e5-wedge, knight to the kingside, storm.",
-    "lessonSummary": "Against the French structure the KIA is a kingside attacking machine: clamp with e5 and storm the king."
+    "lessonSummary": "Against the French structure the KIA is a kingside attacking machine: clamp with e5 and storm the king.",
+    "sources": [
+      "concept:att-kingside-storm",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/King's_Indian_Attack"
+    ]
   },
   {
     "id": "mg-carlsen-kia-g6",
@@ -3709,7 +3949,12 @@
       }
     ],
     "middlegameTheme": "Pivot to the queenside, manoeuvre, convert.",
-    "lessonSummary": "Against ...g6 the KIA's strength is flexibility — switch wings and outplay slowly."
+    "lessonSummary": "Against ...g6 the KIA's strength is flexibility — switch wings and outplay slowly.",
+    "sources": [
+      "concept:att-kingside-storm",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/King's_Indian_Attack"
+    ]
   },
   {
     "id": "mg-mvl-evans-accepted",
@@ -3748,7 +3993,12 @@
       }
     ],
     "middlegameTheme": "Sac the b-pawn, storm f7, mate.",
-    "lessonSummary": "The Evans is an attacking machine: sacrifice the pawn, swarm f7, and let the initiative decide."
+    "lessonSummary": "The Evans is an attacking machine: sacrifice the pawn, swarm f7, and let the initiative decide.",
+    "sources": [
+      "book:evans-gambit",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Evans_Gambit"
+    ]
   },
   {
     "id": "mg-kasparov-evans-declined",
@@ -3787,7 +4037,12 @@
       }
     ],
     "middlegameTheme": "Gain space, seize d5, squeeze.",
-    "lessonSummary": "Declining the Evans avoids the attack but concedes space and the d5-outpost — White still presses."
+    "lessonSummary": "Declining the Evans avoids the attack but concedes space and the d5-outpost — White still presses.",
+    "sources": [
+      "book:evans-gambit",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Evans_Gambit"
+    ]
   },
   {
     "id": "mg-evans-compromised-win",
@@ -3826,7 +4081,12 @@
       }
     ],
     "middlegameTheme": "Battery on f7, central rooks, attack.",
-    "lessonSummary": "In the Compromised Defence, ignore the material — the Qb3+Bc4 battery and central rooks decide."
+    "lessonSummary": "In the Compromised Defence, ignore the material — the Qb3+Bc4 battery and central rooks decide.",
+    "sources": [
+      "book:evans-gambit",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Evans_Gambit"
+    ]
   },
   {
     "id": "mg-kasparov-evans-lasker",
@@ -3865,7 +4125,12 @@
       }
     ],
     "middlegameTheme": "Recover the pawn, keep activity, grind.",
-    "lessonSummary": "Even against Lasker's accurate defence the Evans gives a pleasant pull — Kasparov beat Anand from it."
+    "lessonSummary": "Even against Lasker's accurate defence the Evans gives a pleasant pull — Kasparov beat Anand from it.",
+    "sources": [
+      "book:evans-gambit",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Evans_Gambit"
+    ]
   },
   {
     "id": "mg-french-advance",
@@ -3890,7 +4155,12 @@
       }
     ],
     "middlegameTheme": "Queenside space and the f5-knight against the fixed chain",
-    "lessonSummary": "Carlsen shows the Advance plan: clamp the queenside, post pieces against d4, and convert the structural edge."
+    "lessonSummary": "Carlsen shows the Advance plan: clamp the queenside, post pieces against d4, and convert the structural edge.",
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   },
   {
     "id": "mg-french-winawer",
@@ -3915,7 +4185,12 @@
       }
     ],
     "middlegameTheme": "The doubled c-pawns and dark-square play after …Bxc3+",
-    "lessonSummary": "A model Winawer: Black gives up the bishop to cripple White’s pawns, then plays against the lasting weakness."
+    "lessonSummary": "A model Winawer: Black gives up the bishop to cripple White’s pawns, then plays against the lasting weakness.",
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   },
   {
     "id": "mg-french-classical",
@@ -3940,7 +4215,12 @@
       }
     ],
     "middlegameTheme": "Opposite-side castling and the …c5/…f6 levers",
-    "lessonSummary": "Morozevich demonstrates the Classical race: open the centre and storm the wing where White’s king has fled."
+    "lessonSummary": "Morozevich demonstrates the Classical race: open the centre and storm the wing where White’s king has fled.",
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   },
   {
     "id": "mg-french-tarrasch",
@@ -3965,7 +4245,12 @@
       }
     ],
     "middlegameTheme": "Play against White’s isolated d4-pawn",
-    "lessonSummary": "A clean Tarrasch: Black blockades d5, lines up against d4, and grinds the isolated pawn down."
+    "lessonSummary": "A clean Tarrasch: Black blockades d5, lines up against d4, and grinds the isolated pawn down.",
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   },
   {
     "id": "mg-french-exchange",
@@ -3990,7 +4275,12 @@
       }
     ],
     "middlegameTheme": "Seize the open e-file and out-play in symmetry",
-    "lessonSummary": "Even the world’s best can be outplayed in the Exchange: Grischuk grabs the file and the initiative."
+    "lessonSummary": "Even the world’s best can be outplayed in the Exchange: Grischuk grabs the file and the initiative.",
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   },
   {
     "id": "mg-french-burn",
@@ -4013,7 +4303,12 @@
       }
     ],
     "middlegameTheme": "The bishop pair after …dxe4 and …Bxf6",
-    "lessonSummary": "Anand showcases the Burn: concede the centre, keep the bishops, and let them rake an opening position."
+    "lessonSummary": "Anand showcases the Burn: concede the centre, keep the bishops, and let them rake an opening position.",
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   },
   {
     "id": "mg-french-fortknox",
@@ -4038,7 +4333,12 @@
       }
     ],
     "middlegameTheme": "Solving the bad bishop via …Bd7–c6",
-    "lessonSummary": "Karpov’s Fort Knox: trade the problem bishop, build a weakness-free fortress, and outplay from solidity."
+    "lessonSummary": "Karpov’s Fort Knox: trade the problem bishop, build a weakness-free fortress, and outplay from solidity.",
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   },
   {
     "id": "mg-french-milnerbarry",
@@ -4063,7 +4363,12 @@
       }
     ],
     "middlegameTheme": "Accept the gambit, neutralise the attack, win the endgame",
-    "lessonSummary": "Giri’s antidote to the Milner-Barry: take the pawn, play …Bd7 and …a6, trade the attackers, and convert the extra material."
+    "lessonSummary": "Giri’s antidote to the Milner-Barry: take the pawn, play …Bd7 and …a6, trade the attackers, and convert the extra material.",
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   },
   {
     "id": "mg-french-mccutcheon",
@@ -4088,7 +4393,12 @@
       }
     ],
     "middlegameTheme": "Punishing White’s doubled c-pawns and stranded king",
-    "lessonSummary": "Nakamura’s McCutcheon: trade the dark bishop to wreck White’s pawns and chase the king, then convert the structural edge."
+    "lessonSummary": "Nakamura’s McCutcheon: trade the dark bishop to wreck White’s pawns and chase the king, then convert the structural edge.",
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   },
   {
     "id": "mg-scandi-main",
@@ -4113,7 +4423,12 @@
       }
     ],
     "middlegameTheme": "Active queen on a5 and the unproblematic f5-bishop",
-    "lessonSummary": "A model Qa5 Scandinavian: recapture with the queen, get the bishop out to f5, and play a clean, weakness-free game."
+    "lessonSummary": "A model Qa5 Scandinavian: recapture with the queen, get the bishop out to f5, and play a clean, weakness-free game.",
+    "sources": [
+      "book:scandinavian-defence",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+    ]
   },
   {
     "id": "mg-scandi-qa5",
@@ -4138,7 +4453,12 @@
       }
     ],
     "middlegameTheme": "Solid …c6 setup turning into a queenside attack",
-    "lessonSummary": "The patient …c6 Qa5: rock-solid structure, then a queenside pawn storm when the kings go opposite ways."
+    "lessonSummary": "The patient …c6 Qa5: rock-solid structure, then a queenside pawn storm when the kings go opposite ways.",
+    "sources": [
+      "book:scandinavian-defence",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+    ]
   },
   {
     "id": "mg-scandi-modern",
@@ -4163,7 +4483,12 @@
       }
     ],
     "middlegameTheme": "…g6/Bg7 fianchetto pressuring White’s big centre",
-    "lessonSummary": "The Modern Scandinavian: recapture with the knight, fianchetto, and swarm White’s centre with the pieces."
+    "lessonSummary": "The Modern Scandinavian: recapture with the knight, fianchetto, and swarm White’s centre with the pieces.",
+    "sources": [
+      "book:scandinavian-defence",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+    ]
   },
   {
     "id": "mg-scandi-icelandic",
@@ -4188,7 +4513,12 @@
       }
     ],
     "middlegameTheme": "A pawn sacrificed for a raging development lead",
-    "lessonSummary": "The Icelandic: give the pawn, develop with checks, castle long, and pile every piece onto the open central files."
+    "lessonSummary": "The Icelandic: give the pawn, develop with checks, castle long, and pile every piece onto the open central files.",
+    "sources": [
+      "book:scandinavian-defence",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+    ]
   },
   {
     "id": "mg-scandi-tiviakov",
@@ -4213,7 +4543,12 @@
       }
     ],
     "middlegameTheme": "…Qd6 — safe, flexible, no harassment",
-    "lessonSummary": "The Tiviakov: retreat the queen to d6, take the sting out with …a6, and play a safe, flexible, weakness-free game."
+    "lessonSummary": "The Tiviakov: retreat the queen to d6, take the sting out with …a6, and play a safe, flexible, weakness-free game.",
+    "sources": [
+      "book:scandinavian-defence",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+    ]
   },
   {
     "id": "mg-scandi-portuguese",
@@ -4238,7 +4573,12 @@
       }
     ],
     "middlegameTheme": "…Bg4 pin, rapid development, pawn recovered",
-    "lessonSummary": "The Portuguese: …Bg4 pins instead of recapturing, then Black regains the pawn with an active, equal game."
+    "lessonSummary": "The Portuguese: …Bg4 pins instead of recapturing, then Black regains the pawn with an active, equal game.",
+    "sources": [
+      "book:scandinavian-defence",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+    ]
   },
   {
     "id": "mg-scandi-gubinsky",
@@ -4263,7 +4603,12 @@
       }
     ],
     "middlegameTheme": "…Qd8 — patient, solid, no target",
-    "lessonSummary": "The Gubinsky-Melts: retreat the queen all the way home, develop smoothly, and offer White nothing to attack."
+    "lessonSummary": "The Gubinsky-Melts: retreat the queen all the way home, develop smoothly, and offer White nothing to attack.",
+    "sources": [
+      "book:scandinavian-defence",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+    ]
   },
   {
     "id": "mg-alekhine-main",
@@ -4288,7 +4633,12 @@
       }
     ],
     "middlegameTheme": "Hypermodern: let White build, then tear the centre down",
-    "lessonSummary": "The Modern Alekhine: solid …Bg4/…e6/…Be7, then chip at the over-extended centre until it falls."
+    "lessonSummary": "The Modern Alekhine: solid …Bg4/…e6/…Be7, then chip at the over-extended centre until it falls.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+    ]
   },
   {
     "id": "mg-alekhine-fourpawns",
@@ -4313,7 +4663,12 @@
       }
     ],
     "middlegameTheme": "Surround and break the four-pawn centre",
-    "lessonSummary": "The Four Pawns Attack invites the maximal centre; Black undermines with …dxe5, …Nc6, …Bf5/…Bb4 and …f6 to crack it open."
+    "lessonSummary": "The Four Pawns Attack invites the maximal centre; Black undermines with …dxe5, …Nc6, …Bf5/…Bb4 and …f6 to crack it open.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+    ]
   },
   {
     "id": "mg-alekhine-exchange",
@@ -4338,7 +4693,12 @@
       }
     ],
     "middlegameTheme": "Free development and the …d5 break vs White's space",
-    "lessonSummary": "The Exchange is comfortable: Black develops actively, plays …Bf5/…Bf6 and the …d5 break, and equalises fully."
+    "lessonSummary": "The Exchange is comfortable: Black develops actively, plays …Bf5/…Bf6 and the …d5 break, and equalises fully.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+    ]
   },
   {
     "id": "mg-alekhine-chase",
@@ -4363,7 +4723,12 @@
       }
     ],
     "middlegameTheme": "White chases the knight; Black collects the tempi",
-    "lessonSummary": "The Chase wastes White's time hunting the knight; Black liquidates the over-reach and emerges with the initiative and the bishop pair."
+    "lessonSummary": "The Chase wastes White's time hunting the knight; Black liquidates the over-reach and emerges with the initiative and the bishop pair.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+    ]
   },
   {
     "id": "mg-alekhine-voronezh",
@@ -4388,7 +4753,12 @@
       }
     ],
     "middlegameTheme": "…g6/Bg7 fianchetto and the …e5 central strike",
-    "lessonSummary": "The Voronezh: recapture …cxd6, fianchetto with …g6/Bg7, and strike the centre with …e5 for dynamic King's-Indian play."
+    "lessonSummary": "The Voronezh: recapture …cxd6, fianchetto with …g6/Bg7, and strike the centre with …e5 for dynamic King's-Indian play.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+    ]
   },
   {
     "id": "mg-alekhine-scandtrans",
@@ -4413,7 +4783,12 @@
       }
     ],
     "middlegameTheme": "Early trades neutralise White's space",
-    "lessonSummary": "Black resolves the tension with …dxe5, trades pieces, and reaches a sound, weakness-free position with easy equality."
+    "lessonSummary": "Black resolves the tension with …dxe5, trades pieces, and reaches a sound, weakness-free position with easy equality.",
+    "sources": [
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+    ]
   },
   {
     "id": "mg-benko-main",
@@ -4438,7 +4813,12 @@
       }
     ],
     "middlegameTheme": "Open a-/b-files and lasting queenside pressure for the pawn",
-    "lessonSummary": "The classic Benko: sacrifice the b-pawn, fianchetto, and squeeze White's queenside with the rooks, queen and g7-bishop."
+    "lessonSummary": "The classic Benko: sacrifice the b-pawn, fianchetto, and squeeze White's queenside with the rooks, queen and g7-bishop.",
+    "sources": [
+      "concept:att-queenside-attack",
+      "concept:pos-open-file",
+      "https://en.wikipedia.org/wiki/Benko_Gambit"
+    ]
   },
   {
     "id": "mg-benko-declined",
@@ -4463,7 +4843,12 @@
       }
     ],
     "middlegameTheme": "…bxc4 and the fianchetto when White declines",
-    "lessonSummary": "When White declines with Nf3, Black takes on c4, fianchettoes, and gets the Benko pressure with none of the gambit risk."
+    "lessonSummary": "When White declines with Nf3, Black takes on c4, fianchettoes, and gets the Benko pressure with none of the gambit risk.",
+    "sources": [
+      "concept:att-queenside-attack",
+      "concept:pos-open-file",
+      "https://en.wikipedia.org/wiki/Benko_Gambit"
+    ]
   },
   {
     "id": "mg-benko-zaitsev",
@@ -4488,7 +4873,12 @@
       }
     ],
     "middlegameTheme": "…b4 cramps White's queenside; full compensation",
-    "lessonSummary": "When White clings to the pawn, Black pushes …b4 to cramp the queenside, fianchettoes, and gets full compensation on the a-file."
+    "lessonSummary": "When White clings to the pawn, Black pushes …b4 to cramp the queenside, fianchettoes, and gets full compensation on the a-file.",
+    "sources": [
+      "concept:att-queenside-attack",
+      "concept:pos-open-file",
+      "https://en.wikipedia.org/wiki/Benko_Gambit"
+    ]
   },
   {
     "id": "mg-benko-halfaccepted",
@@ -4513,7 +4903,12 @@
       }
     ],
     "middlegameTheme": "…Qa5+, …Bb7 and …Nxd5 active play",
-    "lessonSummary": "Against the modest e3, Black grabs the initiative with …Qa5+ and …Bb7, regains the pawn with …Nxd5, and stays active."
+    "lessonSummary": "Against the modest e3, Black grabs the initiative with …Qa5+ and …Bb7, regains the pawn with …Nxd5, and stays active.",
+    "sources": [
+      "concept:att-queenside-attack",
+      "concept:pos-open-file",
+      "https://en.wikipedia.org/wiki/Benko_Gambit"
+    ]
   },
   {
     "id": "mg-dutch-main",
@@ -4538,7 +4933,12 @@
       }
     ],
     "middlegameTheme": "…f5 storm and the …Qe8 reroute against the king",
-    "lessonSummary": "The Leningrad: fianchetto, reroute the queen with …Qe8, and storm the kingside while the centre stays fluid."
+    "lessonSummary": "The Leningrad: fianchetto, reroute the queen with …Qe8, and storm the kingside while the centre stays fluid.",
+    "sources": [
+      "book:dutch-defence",
+      "concept:att-kingside-storm",
+      "https://en.wikipedia.org/wiki/Dutch_Defence"
+    ]
   },
   {
     "id": "mg-dutch-stonewall",
@@ -4563,7 +4963,12 @@
       }
     ],
     "middlegameTheme": "The d5/e6/f5 wall, the e4 outpost and …Bd6 battery",
-    "lessonSummary": "The Stonewall: build the wall, plant a knight on e4, and attack the king with the d6-bishop while the structure stays unbreakable."
+    "lessonSummary": "The Stonewall: build the wall, plant a knight on e4, and attack the king with the d6-bishop while the structure stays unbreakable.",
+    "sources": [
+      "book:dutch-defence",
+      "concept:att-kingside-storm",
+      "https://en.wikipedia.org/wiki/Dutch_Defence"
+    ]
   },
   {
     "id": "mg-dutch-classical",
@@ -4588,7 +4993,12 @@
       }
     ],
     "middlegameTheme": "Flexible …Be7/…d5 and the …Ne4/…fxe4 cramp",
-    "lessonSummary": "The Classical: develop flexibly with …Be7 and …d5, plant the e4-knight, and recapture …fxe4 for a cramping pawn and a kingside attack."
+    "lessonSummary": "The Classical: develop flexibly with …Be7 and …d5, plant the e4-knight, and recapture …fxe4 for a cramping pawn and a kingside attack.",
+    "sources": [
+      "book:dutch-defence",
+      "concept:att-kingside-storm",
+      "https://en.wikipedia.org/wiki/Dutch_Defence"
+    ]
   },
   {
     "id": "mg-dutch-ilyinzhenevsky",
@@ -4613,7 +5023,12 @@
       }
     ],
     "middlegameTheme": "…Qe8 kingside reroute plus the …b5 queenside break",
-    "lessonSummary": "The Ilyin-Zhenevsky: solid Classical base, reroute the queen with …Qe8 for a kingside attack, and break with …b5 on the queenside."
+    "lessonSummary": "The Ilyin-Zhenevsky: solid Classical base, reroute the queen with …Qe8 for a kingside attack, and break with …b5 on the queenside.",
+    "sources": [
+      "book:dutch-defence",
+      "concept:att-kingside-storm",
+      "https://en.wikipedia.org/wiki/Dutch_Defence"
+    ]
   },
   {
     "id": "mg-dutch-leningrade5",
@@ -4638,7 +5053,12 @@
       }
     ],
     "middlegameTheme": "The …c6 and …e5 central break in the Leningrad",
-    "lessonSummary": "The Leningrad …e5 plan: prepare with …c6, strike the centre with …e5, and reach an open, active position with the fianchettoed bishop."
+    "lessonSummary": "The Leningrad …e5 plan: prepare with …c6, strike the centre with …e5, and reach an open, active position with the fianchettoed bishop.",
+    "sources": [
+      "book:dutch-defence",
+      "concept:att-kingside-storm",
+      "https://en.wikipedia.org/wiki/Dutch_Defence"
+    ]
   },
   {
     "id": "mg-nimzo-main",
@@ -4663,7 +5083,12 @@
       }
     ],
     "middlegameTheme": "Trade …Bxc3, control e4, dominate the open files",
-    "lessonSummary": "The Classical Nimzo: give up the bishop pair for control of e4 and the files, then outplay from the better structure."
+    "lessonSummary": "The Classical Nimzo: give up the bishop pair for control of e4 and the files, then outplay from the better structure.",
+    "sources": [
+      "concept:pawn-doubled",
+      "concept:pos-outpost",
+      "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+    ]
   },
   {
     "id": "mg-nimzo-rubinstein",
@@ -4688,7 +5113,12 @@
       }
     ],
     "middlegameTheme": "…d5/…c5 and the …Bb7 fianchetto vs e3",
-    "lessonSummary": "Against 4.e3, Black contests the centre with …d5/…c5, fianchettoes, and trades on c3 at the right moment."
+    "lessonSummary": "Against 4.e3, Black contests the centre with …d5/…c5, fianchettoes, and trades on c3 at the right moment.",
+    "sources": [
+      "concept:pawn-doubled",
+      "concept:pos-outpost",
+      "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+    ]
   },
   {
     "id": "mg-nimzo-huebner",
@@ -4713,7 +5143,12 @@
       }
     ],
     "middlegameTheme": "…Bxc3 doubling, …d6/…e5 blockade",
-    "lessonSummary": "The Hübner: double White's c-pawns with …Bxc3, clamp the centre with …d6/…e5, and besiege the weakness."
+    "lessonSummary": "The Hübner: double White's c-pawns with …Bxc3, clamp the centre with …d6/…e5, and besiege the weakness.",
+    "sources": [
+      "concept:pawn-doubled",
+      "concept:pos-outpost",
+      "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+    ]
   },
   {
     "id": "mg-nimzo-leningrad",
@@ -4738,7 +5173,12 @@
       }
     ],
     "middlegameTheme": "…Bxc3 doubling, …e5 clamp, …g5 space",
-    "lessonSummary": "Against 4.Bg5, Black doubles the c-pawns, clamps with …e5, and grabs kingside space with …g5 to entomb the bishop."
+    "lessonSummary": "Against 4.Bg5, Black doubles the c-pawns, clamps with …e5, and grabs kingside space with …g5 to entomb the bishop.",
+    "sources": [
+      "concept:pawn-doubled",
+      "concept:pos-outpost",
+      "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+    ]
   },
   {
     "id": "mg-nimzo-kasparov",
@@ -4763,7 +5203,12 @@
       }
     ],
     "middlegameTheme": "…d5 central strike, …Bxc3 + …Ba6",
-    "lessonSummary": "Against 4.Nf3/g3, Black strikes with …d5, trades on c3 to fracture the queenside, and activates …Ba6 on the light squares."
+    "lessonSummary": "Against 4.Nf3/g3, Black strikes with …d5, trades on c3 to fracture the queenside, and activates …Ba6 on the light squares.",
+    "sources": [
+      "concept:pawn-doubled",
+      "concept:pos-outpost",
+      "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+    ]
   },
   {
     "id": "mg-nimzo-saemisch",
@@ -4788,7 +5233,12 @@
       }
     ],
     "middlegameTheme": "Blockade the doubled c-pawns vs centre + bishops",
-    "lessonSummary": "Against the Sämisch, Black blockades White's doubled c-pawns and big centre with pieces on the light squares, then converts the structural edge."
+    "lessonSummary": "Against the Sämisch, Black blockades White's doubled c-pawns and big centre with pieces on the light squares, then converts the structural edge.",
+    "sources": [
+      "concept:pawn-doubled",
+      "concept:pos-outpost",
+      "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+    ]
   },
   {
     "id": "mg-nimzo-f3",
@@ -4813,7 +5263,12 @@
       }
     ],
     "middlegameTheme": "…d5/…c4 clamp vs the 4.f3 centre",
-    "lessonSummary": "Against 4.f3, Black challenges with …d5, clamps with …c4, and exploits White's doubled pawns and slow development."
+    "lessonSummary": "Against 4.f3, Black challenges with …d5, clamps with …c4, and exploits White's doubled pawns and slow development.",
+    "sources": [
+      "concept:pawn-doubled",
+      "concept:pos-outpost",
+      "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+    ]
   },
   {
     "id": "mg-nimzo-fischer",
@@ -4838,6 +5293,11 @@
       }
     ],
     "middlegameTheme": "…b6/…Bb7 control e4, …Bd6 bishop pair",
-    "lessonSummary": "The Fischer …b6 setup: control e4 with the b7-bishop, keep the bishop pair with …Bd6, and play actively on both wings."
+    "lessonSummary": "The Fischer …b6 setup: control e4 with the b7-bishop, keep the bishop pair with …Bd6, and play actively on both wings.",
+    "sources": [
+      "concept:pawn-doubled",
+      "concept:pos-outpost",
+      "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+    ]
   }
 ]
