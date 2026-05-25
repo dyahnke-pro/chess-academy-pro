@@ -796,6 +796,14 @@ export async function runInTurn<T>(turnId: string, fn: () => Promise<T>): Promis
  *  survived. Fire-and-forget callers continue to work unchanged. */
 let auditWriteChain: Promise<void> = Promise.resolve();
 
+/** One-shot latch: the rolling buffer drops one entry on every write
+ *  once it's full, so emitting a truncation marker per drop floods the
+ *  log (a production export was 151/301 markers). We emit a single
+ *  "partial view" marker the first time we truncate this session —
+ *  enough to flag the export as partial — and never again. Reset only
+ *  by a full page reload (= a new module evaluation = a new session). */
+let truncationMarkerEmitted = false;
+
 /** Log one entry. Fire-and-forget. Also streams the entry to
  *  `/api/audit-stream` when the user has opted in by setting
  *  `auditStreamUrl` + `auditStreamSecret` in localStorage. Stream
@@ -819,26 +827,39 @@ export async function logAppAudit(
     try {
       const current = await readLog();
       current.push(filled);
-      const trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
+      let trimmed = current.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
       // Audit-instrumentation phase-1 (2026-05-19): when the rolling
       // buffer drops entries, emit a marker so exports flag "you're
-      // looking at a partial view". Only emit when DROP transitions
-      // (no marker for every new entry past the cap — that'd flood).
+      // looking at a partial view".
+      //
+      // Two bugs fixed here (see appAuditor.test.ts "caps at 300"):
+      //   1. The marker used to be appended AFTER the slice, so the
+      //      stored array was cap+1 (301). Every subsequent write then
+      //      saw a length over the cap and reported a fresh drop — a
+      //      self-perpetuating loop. We now re-trim after appending so
+      //      the stored array never exceeds the cap.
+      //   2. A rolling buffer drops one entry on every write once full,
+      //      so emitting a marker per drop flooded the log. We emit a
+      //      single marker the first time we truncate this session.
       const dropped = current.length - trimmed.length;
-      if (dropped > 0 && filled.kind !== 'audit-stream-truncated') {
-        // Append the truncation marker directly to the trimmed array
-        // so it survives this write and lands AFTER the entries that
-        // displaced the dropped ones. Avoids recursive logAppAudit
-        // calls (would re-enter the chain).
+      if (
+        dropped > 0 &&
+        !truncationMarkerEmitted &&
+        filled.kind !== 'audit-stream-truncated'
+      ) {
+        truncationMarkerEmitted = true;
+        // Append the marker directly (no recursive logAppAudit — that
+        // would re-enter the chain), then re-trim so we stay at the cap.
         trimmed.push({
           timestamp: Date.now(),
           kind: 'audit-stream-truncated',
           category: 'subsystem',
           source: 'appAuditor.rollingBuffer',
-          summary: `${dropped} oldest entries dropped (cap ${APP_AUDIT_LOG_MAX_ENTRIES})`,
+          summary: `Rolling buffer reached its ${APP_AUDIT_LOG_MAX_ENTRIES}-entry cap — older entries are being dropped (partial view)`,
           buildId: getBuildId(),
           sessionId: SESSION_ID,
         });
+        trimmed = trimmed.slice(-APP_AUDIT_LOG_MAX_ENTRIES);
       }
       await db.meta.put({
         key: APP_AUDIT_LOG_META_KEY,
@@ -920,6 +941,9 @@ export async function loadAuditStreamConfig(): Promise<AuditStreamConfig | null>
 
     streamConfigHydrated = true;
     cachedStreamConfig = url && secret ? { url, secret } : null;
+    // Fresh config → give streaming another chance (the secret may have
+    // changed since a prior 401 disabled it).
+    streamAuthDisabled = false;
     flushPreHydrationQueue();
     return cachedStreamConfig;
   } catch {
@@ -939,6 +963,9 @@ export async function loadAuditStreamConfig(): Promise<AuditStreamConfig | null>
 export async function setAuditStreamConfig(url: string, secret: string): Promise<void> {
   cachedStreamConfig = url && secret ? { url, secret } : null;
   streamConfigHydrated = true;
+  // Re-saving config clears a prior auth-disable latch so the new
+  // secret gets a fresh attempt.
+  streamAuthDisabled = false;
   // Late config-set after boot also triggers a flush in case any
   // audits queued before this point (rare but possible).
   flushPreHydrationQueue();
@@ -957,6 +984,7 @@ export async function setAuditStreamConfig(url: string, secret: string): Promise
 export async function clearAuditStreamConfig(): Promise<void> {
   cachedStreamConfig = null;
   streamConfigHydrated = true;
+  streamAuthDisabled = false;
   try {
     const profile = await db.profiles.get('main');
     if (!profile) return;
@@ -1006,12 +1034,24 @@ let streamPostFailureLastReport = 0;
 const STREAM_FAILURE_REPORT_THRESHOLD = 5;
 const STREAM_FAILURE_REPORT_INTERVAL_MS = 60_000;
 
+/** Latch set when the server rejects our secret (401/403). A wrong
+ *  secret is deterministic — retrying on every audit can't fix it, it
+ *  just floods the network and the failure rollup (a production export
+ *  showed 26 repeated "5 POSTs failed", all HTTP 401). Once tripped we
+ *  stop streaming for the session and emit one actionable rollup.
+ *  Reset whenever the config is re-set (the user may have fixed the
+ *  secret) via setAuditStreamConfig / loadAuditStreamConfig. */
+let streamAuthDisabled = false;
+
 async function streamAuditEntry(entry: AuditEntry): Promise<void> {
   if (typeof window === 'undefined') return;
   // Never recurse: the rollup event itself is part of the stream;
   // skipping it here prevents an infinite loop when the network is
   // genuinely broken.
   if (entry.kind === 'audit-stream-post-failed') return;
+  // Auth was permanently rejected this session — don't keep hammering
+  // the endpoint with a secret the server won't accept.
+  if (streamAuthDisabled) return;
   const cfg = cachedStreamConfig;
   if (!cfg) {
     // Boot window: hydration hasn't completed yet. Queue for replay
@@ -1055,7 +1095,15 @@ async function streamAuditEntry(entry: AuditEntry): Promise<void> {
     // network errors; emit a rollup every N or every M minutes.
     if (!response.ok) {
       streamPostFailureCount += 1;
-      maybeEmitStreamFailureRollup(response.status, null);
+      // 401/403 = the configured `auditStreamSecret` doesn't match the
+      // server's AUDIT_STREAM_SECRET. This won't recover by retrying, so
+      // disable streaming for the session after one clear rollup instead
+      // of failing (and re-rolling-up) on every subsequent audit.
+      if (response.status === 401 || response.status === 403) {
+        emitStreamAuthDisabledRollup(response.status);
+      } else {
+        maybeEmitStreamFailureRollup(response.status, null);
+      }
     }
   } catch (err) {
     streamPostFailureCount += 1;
@@ -1097,15 +1145,42 @@ function maybeEmitStreamFailureRollup(
   });
 }
 
+/** Emit a single rollup when the audit-stream secret is rejected, then
+ *  latch streaming off for the session. Idempotent — the latch makes
+ *  the rollup fire exactly once even though many in-flight POSTs may
+ *  each get a 401 before the latch is observed. */
+function emitStreamAuthDisabledRollup(status: number): void {
+  if (streamAuthDisabled) return;
+  streamAuthDisabled = true;
+  const count = streamPostFailureCount;
+  streamPostFailureCount = 0;
+  // The early-return at the top of streamAuditEntry breaks the recursion
+  // (post-failed entries are never streamed).
+  void logAppAudit({
+    kind: 'audit-stream-post-failed',
+    category: 'subsystem',
+    source: 'appAuditor.streamAuditEntry',
+    summary: `audit-stream secret rejected (HTTP ${status}) — streaming disabled for this session; set auditStreamSecret to match the server's AUDIT_STREAM_SECRET, then re-save in Settings`,
+    details: JSON.stringify({ failureCount: count, lastStatus: status, authDisabled: true }),
+  });
+}
+
 /** Flush any audits queued during the boot window. Called from
  *  `loadAuditStreamConfig` (and `setAuditStreamConfig`) once the
  *  in-memory cache lands. Idempotent. */
 function flushPreHydrationQueue(): void {
   if (preHydrationQueue.length === 0) return;
   const drained = preHydrationQueue.splice(0, preHydrationQueue.length);
-  for (const entry of drained) {
-    void streamAuditEntry(entry);
-  }
+  // Drain sequentially (fire-and-forget for the caller). Sequential
+  // matters when the secret is wrong: the first POST 401s and trips the
+  // streamAuthDisabled latch, so the remaining queued entries short-
+  // circuit instead of firing up to PREHYDRATE_QUEUE_LIMIT (100) doomed
+  // POSTs in one synchronous burst.
+  void (async (): Promise<void> => {
+    for (const entry of drained) {
+      await streamAuditEntry(entry);
+    }
+  })();
 }
 
 /** Read the full log, newest-last ordering preserved. */
