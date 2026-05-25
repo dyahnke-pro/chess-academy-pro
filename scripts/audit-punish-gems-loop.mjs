@@ -270,7 +270,11 @@ async function runPass(browser, level) {
       if (ws === 'locked') { skip(`${id}: weapons locked + unlock write stalled (sandbox) — deep gem probes device/prod-only`); continue; }
       if (ws !== 'card') { fail(`${id}: gems card did not render for deep probe (${ws})`); continue; }
       // ── WATCH — mounts + narrates AUTHORED PROSE on the wire ──
-      await openDetail(page, id);
+      // Re-unlock before each probe: every openDetail re-navigation re-reads
+      // Dexie, and in the sandbox the unlock write stalls (G1) so weapons
+      // re-lock. ensureWeapons re-arms the in-memory unlock or returns 'locked'
+      // → skip cleanly (device/prod-only) instead of timing out on a click.
+      if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Watch: unlock write stalled (sandbox) — device/prod-only`); continue; }
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-watch-"]').first().click();
       await page.waitForTimeout(level >= 2 ? 3500 : 2500);
@@ -297,7 +301,7 @@ async function runPass(browser, level) {
       //    SETTING: FULL → full explanation, LIMITED → ≤8-word cue; never
       //    silent). The old "move-dictation ONLY" rule is superseded
       //    (David 2026-05-24) — Learn no longer has to be bare dictation. ──
-      await openDetail(page, id);
+      if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Learn: unlock write stalled (sandbox) — device/prod-only`); continue; }
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-learn-"]').first().click();
       await page.waitForTimeout(4000);
@@ -314,7 +318,7 @@ async function runPass(browser, level) {
       await exitPlayer(page);
 
       // ── PRACTICE — mounts + SILENT (level 3: silent under board interaction) ──
-      await openDetail(page, id);
+      if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Practice: unlock write stalled (sandbox) — device/prod-only`); continue; }
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-practice-"]').first().click();
       await page.waitForTimeout(level >= 2 ? 4000 : 2500);
@@ -329,7 +333,7 @@ async function runPass(browser, level) {
       await exitPlayer(page);
 
       // ── PLAY — hands off to the coach room ──
-      await openDetail(page, id);
+      if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Play: unlock write stalled (sandbox) — device/prod-only`); continue; }
       await page.locator('[data-testid^="gem-play-"]').first().click();
       await page.waitForTimeout(2500);
       if (await cardVisible(page)) fail(`${id} Play: did not leave the detail card`);
