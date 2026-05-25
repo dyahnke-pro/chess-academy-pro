@@ -15,6 +15,8 @@ import { KINGS_GAMBIT_LESSON } from './kingsGambit';
 import { KINGS_GAMBIT_VARIATION_LESSONS } from './kingsGambitVariations';
 import { SICILIAN_DRAGON_LESSON } from './sicilianDragon';
 import { SICILIAN_DRAGON_VARIATION_LESSONS } from './sicilianDragonVariations';
+import { SICILIAN_NAJDORF_LESSON } from './sicilianNajdorf';
+import { SICILIAN_NAJDORF_VARIATION_LESSONS } from './sicilianNajdorfVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -40,6 +42,7 @@ const LESSONS: Record<string, LessonScript> = {
   [SCOTCH_GAME_LESSON.openingId]: SCOTCH_GAME_LESSON,
   [KINGS_GAMBIT_LESSON.openingId]: KINGS_GAMBIT_LESSON,
   [SICILIAN_DRAGON_LESSON.openingId]: SICILIAN_DRAGON_LESSON,
+  [SICILIAN_NAJDORF_LESSON.openingId]: SICILIAN_NAJDORF_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -51,6 +54,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...SCOTCH_GAME_VARIATION_LESSONS,
   ...KINGS_GAMBIT_VARIATION_LESSONS,
   ...SICILIAN_DRAGON_VARIATION_LESSONS,
+  ...SICILIAN_NAJDORF_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

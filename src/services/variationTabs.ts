@@ -69,6 +69,19 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /accelerated/i, label: 'Accelerated' },
     { test: /bg5|anti-dragon/i, label: 'Anti-Dragon Bg5' },
   ],
+  // Sicilian Najdorf — Black-oriented. Main-line pill = the English Attack
+  // (6.Be3) main line, so it's exempt from this tab list. The rest are the
+  // White 6th-move branches a Najdorf player must know.
+  'sicilian-najdorf': [
+    { test: /classical/i, label: 'Classical' },
+    { test: /6\.bg5 main/i, label: '6.Bg5' },
+    { test: /poisoned/i, label: 'Poisoned Pawn' },
+    { test: /6\.f3/i, label: '6.f3' },
+    { test: /fischer/i, label: 'Fischer-Sozin' },
+    { test: /adams|6\.g3/i, label: '6.g3' },
+    { test: /ng4/i, label: 'Ng4' },
+    { test: /anti-najdorf|6\.a4/i, label: '6.a4' },
+  ],
   // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
   // (the explorer freq query was unavailable when this was built; ordering is
   // flagged for prod verification). The Giuoco Piano main line is the "Main

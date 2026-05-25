@@ -165,7 +165,7 @@ function main() {
   let touchedLines = 0;
 
   for (const plan of plans) {
-    if (plan.openingId !== 'ruy-lopez' && plan.openingId !== 'pirc-defence' && plan.openingId !== 'vienna-game' && plan.openingId !== 'italian-game' && plan.openingId !== 'scotch-game' && plan.openingId !== 'kings-gambit' && plan.openingId !== 'sicilian-dragon') continue;
+    if (plan.openingId !== 'ruy-lopez' && plan.openingId !== 'pirc-defence' && plan.openingId !== 'vienna-game' && plan.openingId !== 'italian-game' && plan.openingId !== 'scotch-game' && plan.openingId !== 'kings-gambit' && plan.openingId !== 'sicilian-dragon' && plan.openingId !== 'sicilian-najdorf') continue;
     const lines = plan.playableLines ?? [];
     if (lines.length === 0) continue;
     let planTouched = false;
