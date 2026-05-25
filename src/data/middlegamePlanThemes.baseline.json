@@ -1,5 +1,5 @@
 {
-  "_doc": "Middlegame-plan playableLines not yet rewritten to demonstrate their plan. These 4 are the documented leave-flagged cases (David 2026-05-25): the thematic squares are already occupied/passed at the critical FEN (ruy-lopez endgame, scotch gambit, alapin main) or the obvious break is not verified-sound (nimzo huebner). The line is sound; the gate proxy cannot confirm it. Never fabricate a contrived move to clear the gate. Gate: middlegamePlanThemes.test.ts. Regenerate: node scripts/audit-plan-line-themes.mjs --json",
+  "_doc": "Middlegame-plan playableLines not yet rewritten to demonstrate their plan. Leave-flagged cases (David 2026-05-25): thematic squares already occupied/passed at the critical FEN, or break not verified-sound. Never fabricate a contrived move. Gate: middlegamePlanThemes.test.ts. Regenerate: node scripts/audit-plan-line-themes.mjs --json",
   "count": 4,
   "keys": [
     "mp-nimzoindian-huebner#0",

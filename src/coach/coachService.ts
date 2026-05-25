@@ -662,6 +662,13 @@ async function ask(input: CoachAskInput, options: CoachServiceOptions = {}): Pro
             // top-N for the exact FEN (the Steinitz Gambit failure
             // mode caught 2026-05-18).
             moveHistory: input.liveState.moveHistory,
+            // Game-review ground truth: the moves actually played in
+            // the game under review. The claim validator treats these
+            // (and the legal moves of the reviewed position) as grounded
+            // so the coach can discuss the student's OWN game without the
+            // master-play gate nuking legal moves that aren't in the
+            // Lichess explorer's top-N. Undefined off the review surface.
+            gameSans: input.liveState.gameSans,
             surface: coachSurfaceToRoute(input.liveState.surface),
           }
         : undefined);

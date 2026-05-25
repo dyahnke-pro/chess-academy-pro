@@ -23726,6 +23726,14 @@
           "Nd2 — the knight retreats and the kingside guard is gone.",
           "…f4 — the hammer hits g3. After …fxg3 the f-file rips open onto White’s king, the g7-bishop and f8-rook already trained down it."
         ],
+        "learnCues": [
+          "d5 — clamp the centre",
+          "g5 — start the storm",
+          "b4 — White’s counter-race",
+          "g4 — evict the knight",
+          "Nd2 — the guard retreats",
+          "f4 — crack open g3"
+        ],
         "title": "Dutch Leningrad: The Kingside Storm",
         "arrows": [
           [],
@@ -23808,14 +23816,6 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
-        ],
-        "learnCues": [
-          "d5 — clamp the centre",
-          "g5 — start the storm",
-          "b4 — White’s counter-race",
-          "g4 — evict the knight",
-          "Nd2 — the guard retreats",
-          "f4 — crack open g3"
         ]
       }
     ]

@@ -111,4 +111,14 @@ export interface MasterPlayContext {
    *  position. Empty / undefined when neither path matched (validator
    *  falls back to master-play-only behavior). */
   dbEntries?: ReadonlyArray<OpeningDbEntry>;
+  /** Ground-truth SANs for game-review turns: the moves actually played
+   *  in the game under review PLUS the legal moves of the reviewed
+   *  position (chess.js-validated). The claim validator treats these as
+   *  grounded so the coach can discuss the student's OWN game — including
+   *  moves and engine-suggested legal alternatives that left master book
+   *  — without every concrete SAN being flagged as an ungrounded
+   *  hallucination. Populated by `buildMasterPlayContext` only when the
+   *  surface supplied `gameSans` (review); undefined elsewhere, where the
+   *  strict master-play-only SAN gate stays in force. */
+  groundedSans?: ReadonlyArray<string>;
 }
