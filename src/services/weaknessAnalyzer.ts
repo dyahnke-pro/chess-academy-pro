@@ -3,6 +3,8 @@ import { db } from '../db/schema';
 import { getThemeSkills } from './puzzleService';
 import { getRepertoireOpenings } from './openingService';
 import { detectTactics } from './tacticsDetector';
+import { getMisconceptionProfile, type MisconceptionAggregate } from './misconceptionService';
+import type { MisconceptionBucket } from '../data/misconceptionTags';
 import type {
   WeaknessProfile,
   WeaknessItem,
@@ -381,6 +383,49 @@ function analyzeEndgame(themeSkills: ThemeSkill[]): {
 
 const MIN_OPENING_MISTAKES_FOR_WEAKNESS = 2;
 const OPENING_MISTAKE_SEVERITY_BASE = 55;
+
+/** Map a misconception bucket to the Weaknesses-page category vocabulary. */
+function bucketToCategory(bucket: MisconceptionBucket): WeaknessCategory {
+  switch (bucket) {
+    case 'opening': return 'openings';
+    case 'tactical': return 'tactics';
+    case 'positional': return 'positional';
+    case 'endgame': return 'endgame';
+    default: return 'calculation';
+  }
+}
+
+/** Fold the coach-caught misconception bucket into the Weaknesses page so
+ *  it shows your WHOLE picture, not just the Analyze-derived half (David
+ *  2026-05-25 cohesion). Each tag with repeat instances becomes a weakness
+ *  card whose drill action routes to the Training Plan — the hub that
+ *  spaces these tags out. The Analyze-derived mistakePuzzle cards still
+ *  render separately (analyzeMistakePuzzles); together they're the full
+ *  weakness view. */
+function analyzeMisconceptions(aggregates: MisconceptionAggregate[]): {
+  weaknesses: WeaknessItem[];
+  strengths: string[];
+} {
+  const weaknesses: WeaknessItem[] = [];
+  for (const a of aggregates) {
+    // One-off slips are noise; surface a tag once it repeats OR is due.
+    if (a.total < 2 && a.openCount === 0) continue;
+    const severity = Math.min(88, a.openCount * 14 + a.total * 6);
+    const dueSuffix = a.openCount > 0 ? `, ${a.openCount} due to drill` : ', all spaced out for now';
+    weaknesses.push({
+      category: bucketToCategory((a.def?.bucket ?? 'general') as MisconceptionBucket),
+      label: a.label,
+      metric: `seen ${a.total}×${dueSuffix}`,
+      severity,
+      detail: `${a.def?.blurb ?? 'A recurring thinking error the coach flagged in your games.'} Drilled from the Training Plan, which spaces it out as you stop making it.`,
+      trainingAction: {
+        route: '/coach/plan',
+        buttonLabel: a.openCount > 0 ? 'Drill in Training Plan' : 'Review in Training Plan',
+      },
+    });
+  }
+  return { weaknesses, strengths: [] };
+}
 
 function analyzeMistakePuzzles(mistakePuzzles: MistakePuzzle[]): {
   weaknesses: WeaknessItem[];
@@ -922,7 +967,7 @@ export async function computeWeaknessProfile(
   profile: UserProfile,
 ): Promise<WeaknessProfile> {
   // Gather all data in parallel
-  const [themeSkills, repertoire, recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots] = await Promise.all([
+  const [themeSkills, repertoire, recentGames, recentSessions, flashcards, mistakePuzzles, weakSpots, misconceptions] = await Promise.all([
     getThemeSkills(),
     getRepertoireOpenings(),
     db.games.orderBy('date').reverse().limit(RECENT_GAMES_LIMIT).toArray(),
@@ -930,6 +975,7 @@ export async function computeWeaknessProfile(
     db.flashcards.toArray(),
     db.mistakePuzzles.toArray(),
     db.openingWeakSpots.toArray(),
+    getMisconceptionProfile(),
   ]);
 
   // Run each analyzer
@@ -941,6 +987,7 @@ export async function computeWeaknessProfile(
   const endgame = analyzeEndgame(themeSkills);
   const mistakes = analyzeMistakePuzzles(mistakePuzzles);
   const openingWeakSpots = analyzeOpeningWeakSpots(weakSpots);
+  const misconceptionItems = analyzeMisconceptions(misconceptions);
 
   // Merge all items and strengths
   const allItems: WeaknessItem[] = [
@@ -952,6 +999,7 @@ export async function computeWeaknessProfile(
     ...flashcardAnalysis.weaknesses,
     ...endgame.weaknesses,
     ...mistakes.weaknesses,
+    ...misconceptionItems.weaknesses,
   ].sort((a, b) => b.severity - a.severity);
 
   const allStrengths: string[] = [

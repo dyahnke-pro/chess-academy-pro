@@ -468,3 +468,21 @@ export async function toggleFavorite(id: string): Promise<boolean> {
 export async function getFavoriteOpenings(): Promise<OpeningRecord[]> {
   return db.openings.filter((o) => o.isFavorite).toArray();
 }
+
+/** Favorited openings that still have at least one un-learned line (the
+ *  main line or any variation index missing from `linesLearned`). Feeds the
+ *  Training Plan's "new line to learn" reps so the openings you favorited
+ *  actually enter your daily path. One entry per opening (the rep deep-links
+ *  into the opening so the student picks which line). */
+export async function getUnlearnedFavoriteOpenings(): Promise<{ openingId: string; name: string }[]> {
+  const favorites = await getFavoriteOpenings();
+  const out: { openingId: string; name: string }[] = [];
+  for (const o of favorites) {
+    const learned = new Set(o.linesLearned ?? []);
+    const allLines = [MAIN_LINE_INDEX, ...Array.from({ length: o.variations?.length ?? 0 }, (_, i) => i)];
+    if (allLines.some((idx) => !learned.has(idx))) {
+      out.push({ openingId: o.id, name: o.name });
+    }
+  }
+  return out;
+}

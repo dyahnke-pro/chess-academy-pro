@@ -5,9 +5,17 @@
 // the full menu. Weakness-first → SRS-due → new lines; new lines get the
 // FEWEST slots and never count against you until learned.
 
-import type { MisconceptionAggregate } from './misconceptionService';
-
 export type RepKind = 'weakness' | 'srs' | 'new';
+
+/** The minimal weakness shape the feed needs. Satisfied by both a
+ *  MisconceptionAggregate (coach pipeline) and a UnifiedWeakness
+ *  (coach + Analyze merged) — see weaknessSpine.ts. */
+export interface WeaknessRep {
+  tag: string;
+  label: string;
+  /** Instances due/open right now — drives the ranking. */
+  openCount: number;
+}
 
 export interface RepCandidate {
   kind: RepKind;
@@ -22,8 +30,9 @@ export interface RepCandidate {
 }
 
 export interface BuildTodaysRepsInput {
-  /** Ranked, already-aggregated misconceptions (open first). */
-  weaknesses: MisconceptionAggregate[];
+  /** Ranked, already-aggregated weaknesses (open first). Either the
+   *  misconception pipeline alone or the unified coach+Analyze profile. */
+  weaknesses: WeaknessRep[];
   /** Openings with SRS reviews due today. */
   srsDue: { openingId: string; name: string }[];
   /** Repertoire lines not yet learned (low-pressure, fewest slots). */
@@ -42,7 +51,7 @@ function timesPhrase(n: number): string {
   return `${n}×`;
 }
 
-function weaknessRep(w: MisconceptionAggregate, rank: number): RepCandidate {
+function weaknessRep(w: WeaknessRep, rank: number): RepCandidate {
   const lead = rank === 0 ? 'Your top error' : 'A recurring error';
   return {
     kind: 'weakness',

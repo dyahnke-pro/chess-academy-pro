@@ -281,6 +281,22 @@ export async function getTotalEnrolled(): Promise<number> {
 }
 
 /** List the openings the student has enrolled, with per-opening counts. */
+/** SRS-enrolled openings with at least one card due now, paired with the
+ *  opening's display name — the exact `{openingId, name}[]` shape the
+ *  Training Plan's `srsDue` reps want. Joins enrolled cards (this service)
+ *  to names (openings store) so spaced opening review enters the daily path. */
+export async function getSrsDueOpenings(): Promise<{ openingId: string; name: string }[]> {
+  const enrolled = await getEnrolledOpenings();
+  const due = enrolled.filter((e) => e.dueCards > 0);
+  if (due.length === 0) return [];
+  const out: { openingId: string; name: string }[] = [];
+  for (const e of due) {
+    const opening = await db.openings.get(e.openingId);
+    out.push({ openingId: e.openingId, name: opening?.name ?? e.openingId });
+  }
+  return out;
+}
+
 export async function getEnrolledOpenings(): Promise<
   { openingId: string; totalCards: number; dueCards: number }[]
 > {

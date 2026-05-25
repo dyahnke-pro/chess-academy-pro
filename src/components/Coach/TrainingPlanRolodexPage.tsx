@@ -38,8 +38,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FolderOpen, Sparkles, Target, ChevronRight, Lock } from 'lucide-react';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
-import { getFavoriteOpenings } from '../../services/openingService';
-import { getMisconceptionProfile } from '../../services/misconceptionService';
+import { getFavoriteOpenings, getUnlearnedFavoriteOpenings } from '../../services/openingService';
+import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
+import { getSrsDueOpenings } from '../../services/srsOpeningService';
 import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
 import { logAppAudit } from '../../services/appAuditor';
 import { RolodexCardStack } from './RolodexCardStack';
@@ -60,21 +61,27 @@ function TodaysReps(): JSX.Element | null {
   useEffect(() => {
     const flag = { cancelled: false };
     void (async () => {
-      const profile = await getMisconceptionProfile();
+      // The plan is the hub: pull from ALL three sources so it reflects
+      // the whole loop. Weaknesses = unified coach+Analyze profile
+      // (weaknessSpine); SRS-due = enrolled opening cards due today;
+      // new lines = favorited openings with an un-learned line.
+      const [weaknesses, srsDue, newLines] = await Promise.all([
+        getUnifiedWeaknessProfile(),
+        getSrsDueOpenings(),
+        getUnlearnedFavoriteOpenings(),
+      ]);
       if (flag.cancelled) return;
-      // SRS-due / new-line pools wire in a follow-up; the selector
-      // backfills gracefully from the weakness pool until then.
-      const built = buildTodaysReps({ weaknesses: profile, srsDue: [], newLines: [], total: 5 });
+      const built = buildTodaysReps({ weaknesses, srsDue, newLines, total: 5 });
       setReps(built);
       setLoaded(true);
       void logAppAudit({
         kind: 'todays-reps-built',
         category: 'subsystem',
         source: 'TrainingPlanRolodexPage.TodaysReps',
-        summary: `reps=${built.length} weaknessTags=${profile.length} dueTags=${profile.filter((p) => p.openCount > 0).length}`,
+        summary: `reps=${built.length} weaknesses=${weaknesses.length} due=${weaknesses.filter((w) => w.openCount > 0).length} srsDue=${srsDue.length} newLines=${newLines.length}`,
         details: JSON.stringify({
           repKinds: built.map((r) => r.kind),
-          topTags: profile.slice(0, 5).map((p) => ({ tag: p.tag, openCount: p.openCount, total: p.total })),
+          topWeaknesses: weaknesses.slice(0, 5).map((w) => ({ tag: w.tag, openCount: w.openCount, total: w.total })),
         }),
       });
     })();
