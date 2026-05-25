@@ -154,7 +154,7 @@ function fromMisconception(a: MisconceptionAggregate): UnifiedWeakness {
     key: `coach:${a.tag}:${a.label}`,
     tag: a.tag,
     label: a.label,
-    bucket: (a.def?.bucket ?? 'uncategorized') as MisconceptionBucket,
+    bucket: a.def?.bucket ?? 'uncategorized',
     openCount: a.openCount,
     total: a.total,
     severity: Math.min(95, a.openCount * 12 + a.total * 3),

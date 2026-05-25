@@ -413,7 +413,7 @@ function analyzeMisconceptions(aggregates: MisconceptionAggregate[]): {
     const severity = Math.min(88, a.openCount * 14 + a.total * 6);
     const dueSuffix = a.openCount > 0 ? `, ${a.openCount} due to drill` : ', all spaced out for now';
     weaknesses.push({
-      category: bucketToCategory((a.def?.bucket ?? 'general') as MisconceptionBucket),
+      category: bucketToCategory(a.def?.bucket ?? 'general'),
       label: a.label,
       metric: `seen ${a.total}×${dueSuffix}`,
       severity,
