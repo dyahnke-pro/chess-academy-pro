@@ -63,8 +63,16 @@ not blocked. `BASE_DATA_REVISION` bumped to `2026-05-25-french-variations`.
       Black win — self-hides). Removed 3 stale boilerplate auto-imports.
 - [x] STEP 8 — 2 Black-oriented Pitfalls (two-register) + 4 Black-oriented
       checkpoint quizzes (fixed 2 that were White-oriented).
-- [~] STEP 6 — punish-gem miner RUNNING (Stockfish reachable here, amateur
-      explorer reachable). Hand-author narration after it lands.
+- [x] STEP 6 — mined 10 gems (engine-first, Stockfish + amateur explorer here);
+      hand-narrated 9 as weapons. SKIPPED the Burn Bxf6→gxf6 gem (+0.59) — that's
+      mainline theory, not a punishable mistake (doctrine: drop what's fine).
+      Confirmed crushes: Burn Nf3→Nxe4 (+4.4), Milner-Barry Qxb2 (+2.7), Classical
+      Nf3→Nxe4 (+1.2), Tarrasch fxe5 (+1.1), Rubinstein Neg5→h6 (+1.0).
+
+## ✅ BUILD COMPLETE (branch) — ship-check READY TO PUSH, all ⭐ gates green
+All 9 Vienna-template STEPs done. Remaining = §0.5 definition of done:
+merge to `main` + run the post-deploy audit there (David drives the merge).
+Local interactive audits (G1/G7) run against the dev server next.
 
 ## Status (2026-05-25)
 Lesson spine COMPLETE + gate-green + `ship-check` READY TO PUSH. The page lights
