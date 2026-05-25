@@ -139,6 +139,15 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /scandinavian transposition/i, label: 'Scandinavian' },
     { test: /voronezh/i, label: 'Voronezh' },
   ],
+  // Benko Gambit — distinct validated variations (complete builds only). Main
+  // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
+  // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same
+  // Fully-Accepted complex). Three distinct White approaches remain.
+  'benko-gambit': [
+    { test: /declined/i, label: 'Declined' },
+    { test: /zaitsev/i, label: 'Zaitsev' },
+    { test: /half-accepted/i, label: 'Half-Accepted' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present

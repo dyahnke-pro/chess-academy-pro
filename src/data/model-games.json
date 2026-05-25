@@ -1964,54 +1964,6 @@
     "lessonSummary": "Full game by Anna Cramling in the Queen's Gambit (Cramling) line. Watch how the pro handles the position end to end."
   },
   {
-    "id": "mg-lichess-ZiXqZje1",
-    "openingId": "benko-gambit",
-    "white": "Gelfand, B.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2761,
-    "blackElo": 2872,
-    "result": "0-1",
-    "year": 2014,
-    "event": "2014-2014-02 master game",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bg7 e4 O-O Nf3 Qa5 Bd3 Nxd5 exd5 Bxc3+ bxc3 Qxc3+ Qd2 Qxa1 O-O Bxa6 Bb2 Qxa2 Ra1 Qb3 Be4 d6 Rb1 f6 Bxf6 Qc4 Bb2 Qxe4 Re1 Qd3 Qxd3 Bxd3 Rxe7 Rxf3 gxf3 Na6",
-    "overview": "Master game from the Lichess masters database. Gelfand, B. vs Carlsen, M., 2014. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/ZiXqZje1",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-kR4mY2Xe",
-    "openingId": "benko-gambit",
-    "white": "Carlsen, Magnus",
-    "black": "Bologan, Viktor",
-    "whiteElo": 2837,
-    "blackElo": 2732,
-    "result": "1-0",
-    "year": 2012,
-    "event": "2012-2012-07 master game",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1 d6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Qe2 Qb6 a4 Rfb8 Nb5 Ne8 Bg5 Qd8 Ra3 Nb6 b3 Qd7 Ra2 f6 Bc1 f5 exf5 gxf5 Rd1 Nf6 Qe6+ Qxe6 dxe6 Ne4 Nh4 c4 bxc4 Nxc4 Nc7 Nc3 Nxa8 Nxa2 Nc7 Nc3 Rd3 Rc8 Nb5 Nxb5 axb5 Rc5 Rb3 Na5 Rb1 Bd4 b6 Nb7 Rb4 Bxf2 Kxf2 Rc2+ Kf3 Rxc1 Nxf5 Rf1+ Kg4 Nc5 b7",
-    "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Bologan, Viktor, 2012. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/kR4mY2Xe",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-N9sx7pSk",
-    "openingId": "benko-gambit",
-    "white": "Kramnik, Vladimir",
-    "black": "Topalov, Veselin",
-    "whiteElo": 2807,
-    "blackElo": 2743,
-    "result": "1-0",
-    "year": 2003,
-    "event": "2003-2003-01 master game",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 g3 d6 Bg2 Nbd7 Nf3 Bg7 Rb1 O-O O-O Qa5 Bd2 Rfb8 Qc2 Ne8 Rfe1 Nc7 a4 Qb6 b3 Bxc3 Bxc3 Nxd5 Ne5 Nxe5 Bxd5 Bb7 Bxb7 Rxb7 Bxe5 dxe5 Rec1 f6 Qe4 Kg7 Rc3 Rab8 Qc2 Qe6 a5 Kf7 Ra1 Rxb3 Rxb3 Qxb3 Qxc5 Qb2 Qc4+ Kg7 Qa2 Qxa2 Rxa2 Ra8 a6 Ra7 Kg2 Kf7 Kf3 Ke6 g4 Kd6 h4 h6 g5 hxg5 hxg5 f5 e4 e6 Ra5 Kc7 Ke3 Kb8 Rxe5 Rxa6 Rc5 Kb7 Kf4 Kb6 Rc8 fxe4 Kxe4 Kb7 Rg8 Kc6 Rxg6 Kd6 f4 Ra4+ Kf3 Ke7 Rg7+ Kf8 Rb7 Rc4 g6 Rc1 Kg4 Rc5 Rf7+ Ke8 f5",
-    "overview": "Master game from the Lichess masters database. Kramnik, Vladimir vs Topalov, Veselin, 2003. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/N9sx7pSk",
-    "source": "lichess-masters"
-  },
-  {
     "id": "mg-lichess-hOrznatU",
     "openingId": "benoni-defence",
     "white": "Keymer, Vincent",
@@ -4013,5 +3965,105 @@
     ],
     "middlegameTheme": "Early trades neutralise White's space",
     "lessonSummary": "Black resolves the tension with …dxe5, trades pieces, and reaches a sound, weakness-free position with easy equality."
+  },
+  {
+    "id": "mg-benko-main",
+    "openingId": "benko-gambit",
+    "studentSide": "black",
+    "white": "Gelfand, Boris",
+    "black": "Carlsen, Magnus",
+    "whiteElo": 2733,
+    "blackElo": 2815,
+    "result": "0-1",
+    "year": 2011,
+    "event": "Amber-rapid 20th",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1 d6 g3 Bg7 Kg2 Nbd7 f4 O-O Nf3 Ne8 Re1 Nc7 Bd2 Nb6 Qe2 Qd7 b3 f5 a4 fxe4 Qxe4 Qf5 Qxf5 gxf5 Rxe7 Nbxd5 Rd7 Nxc3 Rxg7+ Kxg7 Bxc3+ Kf7 Rd1 Ke7 b4 Rxa4 bxc5 dxc5 Be5 Nb5 Rb1 Rb4 Ra1 c4 Ra6 Rc8 Rb6 c3 Rb7+ Ke6 Bxc3 Rxc3 Rxb5 Rxb5 Nd4+ Kd5 Nxb5 Rc5 Na3 Ra5 Nb1 Ra2+ Kh3 Kd4 Kh4 Rxh2+ Kg5 Rb2 Na3 Rb3 Nc2+ Ke4 Kh4 h6 Kh3 Rb2 Ne1 Rb1 Nc2 Kd3",
+    "overview": "Fully Accepted Benko — Carlsen grinds down Gelfand from the Black side, the open files and queenside pressure doing the work.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r2q1rk1/2nnppbp/3p2p1/2pP4/4PP2/2N2NP1/PP4KP/R1BQR3 w - - 5 14",
+        "annotation": "Black has the full Benko grip — the open a- and b-files, the g7-bishop on the long diagonal, and the queen swinging to the queenside. The pawn is gone but the pressure is permanent.",
+        "concept": "The Benko grip"
+      }
+    ],
+    "middlegameTheme": "Open a-/b-files and lasting queenside pressure for the pawn",
+    "lessonSummary": "The classic Benko: sacrifice the b-pawn, fianchetto, and squeeze White's queenside with the rooks, queen and g7-bishop."
+  },
+  {
+    "id": "mg-benko-declined",
+    "openingId": "benko-gambit",
+    "studentSide": "black",
+    "white": "Tunik, Gennady",
+    "black": "Fominyh, Alexander",
+    "whiteElo": 2465,
+    "blackElo": 2505,
+    "result": "0-1",
+    "year": 1993,
+    "event": "Alushta op",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Nc3 d6 e4 g6 Bxc4 Bg7 O-O O-O h3 Ba6 Qd3 Bxc4 Qxc4 Nbd7 Bd2 Rb8 Na4 Nb6 Nxb6 Qxb6 Bc3 Qb5 Qxb5 Rxb5 Rfe1 Rfb8 a4 R5b7 Nd2 Nd7 Nc4 Bxc3 bxc3 Ne5 Nxe5 dxe5 a5 Rb3 Rec1 a6 g3 Rb2 Ra4 Kf8 Rc4 R8b5 Rd1 Ke8 Ra4 Kd7 Kg2 Rc2 Rd3 f6 g4 Rbb2 Rf3 h6 h4 Rb3 Rc4 Rb5 g5 fxg5 hxg5 hxg5 Kg3 Rxa5 Kg4 Rca2 Rf8 R2a4 Rxa4 Rxa4 f3 Ra1 Ra8 a5 Kxg5 Rg1+",
+    "overview": "Benko Declined — Fominyh beats Tunik from the Black side; declining the gambit just hands Black an easy, comfortable game.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "1r1q1rk1/p3ppbp/1n1p1np1/2pP4/N1Q1P3/5N1P/PP1B1PP1/R4RK1 w - - 5 14",
+        "annotation": "White declined the pawn, but Black still has the fianchettoed bishop, the half-open b-file, and easy queenside pressure — the Benko grip with no risk.",
+        "concept": "The grip without risk"
+      }
+    ],
+    "middlegameTheme": "…bxc4 and the fianchetto when White declines",
+    "lessonSummary": "When White declines with Nf3, Black takes on c4, fianchettoes, and gets the Benko pressure with none of the gambit risk."
+  },
+  {
+    "id": "mg-benko-zaitsev",
+    "openingId": "benko-gambit",
+    "studentSide": "black",
+    "white": "Seliverstov, Vl",
+    "black": "Zvjaginsev, V.",
+    "whiteElo": 2455,
+    "blackElo": 2673,
+    "result": "0-1",
+    "year": 2016,
+    "event": "70th Moscow Blitz",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6 e5 dxe5 d6 exd6 Bg5 Ra5 Qb3 Rxb5 Bxb5+ Nbd7 Ne2 Bg7 Rd1 Qb6 Bxf6 Bxf6 Qa4 Qc7 Ng3 O-O Ne4 Be7 O-O Nb6 Qc2 d5 Nd2 c4 a4 Bf5 Qc1 Bd3 Rfe1 Ra8 Nf3 e4 Nd4 Bc5 Nc6 Nxa4 Qd2 Nb6 Ra1 Rxa1 Rxa1 c3",
+    "overview": "Zaitsev Variation — Zvjaginsev outplays Seliverstov from the Black side after White tries to keep the extra pawn.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "2bqkb1r/3n1p1p/3p1np1/1Bp1p1B1/1p6/1Q6/PP3PPP/R3K1NR w KQk - 1 14",
+        "annotation": "White nominally keeps the pawn, but the …b4-pawn cramps his queenside, the a-file is Black's, and the g7-bishop rakes the centre — full Benko compensation.",
+        "concept": "The b4-pawn cramp"
+      }
+    ],
+    "middlegameTheme": "…b4 cramps White's queenside; full compensation",
+    "lessonSummary": "When White clings to the pawn, Black pushes …b4 to cramp the queenside, fianchettoes, and gets full compensation on the a-file."
+  },
+  {
+    "id": "mg-benko-halfaccepted",
+    "openingId": "benko-gambit",
+    "studentSide": "black",
+    "white": "So, W.",
+    "black": "Praggnanandhaa, R.",
+    "whiteElo": 2751,
+    "blackElo": 2758,
+    "result": "0-1",
+    "year": 2025,
+    "event": "Superbet ROM Classic 2025",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 e3 axb5 Bxb5 Qa5+ Nc3 Bb7 Bd2 Qb6 Nf3 Nxd5 a4 e6 e4 Nxc3 Bxc3 Bxe4 Ne5 Qb7 Qh5 Bg6 Nxg6 Qe4+ Kf1 fxg6 Qh3 Qf5 Qg3 Nc6 Qc7 Qd5 Bxc6 dxc6 h4 Be7 Rh3 Rf8 Qe5 Bf6 Qe2 Bd4 Bxd4 cxd4 h5 Rf6 Kg1 Kf7 hxg6+ Rxg6 g3 d3 Qd2 Rg4 a5 Re4 Rxh7 Kg8 Rh4 Re2 Qc3 d2 Rd1 Rf8 Rh2 Qe4 Rf1 Rf3 Qc5 Re1",
+    "overview": "Half-Accepted — Praggnanandhaa beats Wesley So from the Black side; the e3 line returns the pawn and Black seizes the initiative.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "rn2kb1r/1q1p1ppp/4p3/1Bp1N3/P3b3/2B5/1P3PPP/R2QK2R w KQkq - 2 14",
+        "annotation": "White returned the pawn with e3, but Black's pieces are the active ones — the queen on a5, the bishop on the long diagonal, and …Nxd5 regaining material with the initiative.",
+        "concept": "Initiative with the pawn returned"
+      }
+    ],
+    "middlegameTheme": "…Qa5+, …Bb7 and …Nxd5 active play",
+    "lessonSummary": "Against the modest e3, Black grabs the initiative with …Qa5+ and …Bb7, regains the pawn with …Nxd5, and stays active."
   }
 ]

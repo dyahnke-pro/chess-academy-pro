@@ -38,6 +38,8 @@ import { SCANDINAVIAN_DEFENCE_LESSON } from './scandinavianDefence';
 import { SCANDINAVIAN_DEFENCE_VARIATION_LESSONS } from './scandinavianDefenceVariations';
 import { ALEKHINE_DEFENCE_LESSON } from './alekhineDefence';
 import { ALEKHINE_DEFENCE_VARIATION_LESSONS } from './alekhineDefenceVariations';
+import { BENKO_GAMBIT_LESSON } from './benkoGambit';
+import { BENKO_GAMBIT_VARIATION_LESSONS } from './benkoGambitVariations';
 import { KINGS_GAMBIT_LESSON } from './kingsGambit';
 import { KINGS_GAMBIT_VARIATION_LESSONS } from './kingsGambitVariations';
 import { SICILIAN_DRAGON_LESSON } from './sicilianDragon';
@@ -71,6 +73,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: FRENCH_DEFENCE_LESSON, variations: FRENCH_DEFENCE_VARIATION_LESSONS },
   { main: SCANDINAVIAN_DEFENCE_LESSON, variations: SCANDINAVIAN_DEFENCE_VARIATION_LESSONS },
   { main: ALEKHINE_DEFENCE_LESSON, variations: ALEKHINE_DEFENCE_VARIATION_LESSONS },
+  { main: BENKO_GAMBIT_LESSON, variations: BENKO_GAMBIT_VARIATION_LESSONS },
   { main: KINGS_GAMBIT_LESSON, variations: KINGS_GAMBIT_VARIATION_LESSONS },
   { main: SICILIAN_DRAGON_LESSON, variations: SICILIAN_DRAGON_VARIATION_LESSONS },
 ];

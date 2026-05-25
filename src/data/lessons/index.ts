@@ -17,6 +17,8 @@ import { SCANDINAVIAN_DEFENCE_LESSON } from './scandinavianDefence';
 import { SCANDINAVIAN_DEFENCE_VARIATION_LESSONS } from './scandinavianDefenceVariations';
 import { ALEKHINE_DEFENCE_LESSON } from './alekhineDefence';
 import { ALEKHINE_DEFENCE_VARIATION_LESSONS } from './alekhineDefenceVariations';
+import { BENKO_GAMBIT_LESSON } from './benkoGambit';
+import { BENKO_GAMBIT_VARIATION_LESSONS } from './benkoGambitVariations';
 import { KINGS_GAMBIT_LESSON } from './kingsGambit';
 import { KINGS_GAMBIT_VARIATION_LESSONS } from './kingsGambitVariations';
 import { SICILIAN_DRAGON_LESSON } from './sicilianDragon';
@@ -47,6 +49,7 @@ const LESSONS: Record<string, LessonScript> = {
   [FRENCH_DEFENCE_LESSON.openingId]: FRENCH_DEFENCE_LESSON,
   [SCANDINAVIAN_DEFENCE_LESSON.openingId]: SCANDINAVIAN_DEFENCE_LESSON,
   [ALEKHINE_DEFENCE_LESSON.openingId]: ALEKHINE_DEFENCE_LESSON,
+  [BENKO_GAMBIT_LESSON.openingId]: BENKO_GAMBIT_LESSON,
   [KINGS_GAMBIT_LESSON.openingId]: KINGS_GAMBIT_LESSON,
   [SICILIAN_DRAGON_LESSON.openingId]: SICILIAN_DRAGON_LESSON,
 };
@@ -61,6 +64,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...FRENCH_DEFENCE_VARIATION_LESSONS,
   ...SCANDINAVIAN_DEFENCE_VARIATION_LESSONS,
   ...ALEKHINE_DEFENCE_VARIATION_LESSONS,
+  ...BENKO_GAMBIT_VARIATION_LESSONS,
   ...KINGS_GAMBIT_VARIATION_LESSONS,
   ...SICILIAN_DRAGON_VARIATION_LESSONS,
 };

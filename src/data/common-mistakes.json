@@ -861,13 +861,15 @@
       "fen": "rnbqkb1r/p2ppppp/5n2/1PpP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 4",
       "wrongMove": "Nxd5",
       "correctMove": "a6",
-      "explanation": "4…Nxd5? loses the central knight for a pawn after 5.Nf3 with central pressure. The standard Benko 4…a6 invites White to either accept (5.bxa6) or decline (5.b6) — both lead to advantageous Black positions."
+      "explanation": "4…Nxd5? loses the central knight for a pawn after 5.Nf3 with central pressure. The standard Benko 4…a6 invites White to either accept (5.bxa6) or decline (5.b6) — both lead to advantageous Black positions.",
+      "shortNarration": "a6 — play the gambit, not …Nxd5"
     },
     {
       "fen": "rnbqkb1r/3ppppp/P4n2/2pP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 5",
       "wrongMove": "Nxa6",
       "correctMove": "Bxa6",
-      "explanation": "Engine sees both recaptures as similar (~13cp difference). But Bxa6 develops a piece WITH TEMPO — attacks the Bf1 directly forcing the trade Bxa6 Nxa6. With Bxa6 you reach the trade naturally; with Nxa6 the knight is offside and your bishop is still stuck behind the pawn. Practical edge: Bxa6 leaves you with active pieces and the bishop pair traded for piece coordination; Nxa6 needs three more moves to develop the bishop and never matches Bxa6's piece activity."
+      "explanation": "Engine sees both recaptures as similar (~13cp difference). But Bxa6 develops a piece WITH TEMPO — attacks the Bf1 directly forcing the trade Bxa6 Nxa6. With Bxa6 you reach the trade naturally; with Nxa6 the knight is offside and your bishop is still stuck behind the pawn. Practical edge: Bxa6 leaves you with active pieces and the bishop pair traded for piece coordination; Nxa6 needs three more moves to develop the bishop and never matches Bxa6's piece activity.",
+      "shortNarration": "Bxa6 — recapture with the bishop"
     }
   ],
   "old-indian-defence": [
