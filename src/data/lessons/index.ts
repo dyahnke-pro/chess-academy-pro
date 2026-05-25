@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js';
 import type { LessonScript, AnnotationArrow, AnnotationHighlight, PlayableMiddlegameLine } from '../../types';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
@@ -211,8 +212,22 @@ export function buildLessonReferenceBlock(text: string | undefined | null): stri
 // text-matched, so "what's the plan here?" under the Caro tab still anchors
 // the coach to the Caro.
 
-interface RepertoireLite { id: string; name: string; color: 'white' | 'black'; keyIdeas?: string[]; variations?: { name: string }[] }
+interface RepertoireLite { id: string; name: string; color: 'white' | 'black'; keyIdeas?: string[]; pgn?: string; variations?: { name: string; pgn?: string }[] }
 const REPERTOIRE = repertoire as RepertoireLite[];
+
+/** The position the scoped line reaches, so the coach chat is anchored to
+ *  the actual resulting board — not move 1. Computed from the real line PGN
+ *  (DB-canonical), never invented; null if the PGN is missing/unparseable. */
+function finalFenForLine(linePgn: string | undefined): string | null {
+  if (!linePgn?.trim()) return null;
+  try {
+    const c = new Chess();
+    c.loadPgn(linePgn);
+    return c.fen();
+  } catch {
+    return null;
+  }
+}
 
 export interface CourseScope {
   /** Pass as getCoachChatResponse's `systemAddition` arg. */
@@ -245,9 +260,18 @@ export function buildCourseScope(
 
   const ideaBlock = ideas.length ? `\nVerified ideas for this line (draw on these, don't recite):\n${ideas.map((i) => `• ${i}`).join('\n')}` : '';
 
+  // Anchor the coach to the position THIS line reaches (not move 1), computed
+  // from the real DB line PGN — main line or the selected variation.
+  const linePgn = (variationName && op.variations?.find((v) => v.name === variationName)?.pgn) || op.pgn;
+  const finalFen = finalFenForLine(linePgn);
+  const positionBlock = finalFen
+    ? `\nThe line reaches this position — treat it as the board in front of the student (they play ${op.color}):\n${finalFen}`
+    : '';
+
   const systemAddition = [
     '[MASTERCLASS COURSE SCOPE]',
     `The student is inside an interactive masterclass for the ${label} (they play ${op.color}). Keep every answer focused on THIS opening and variation — its plans, move-order, structures, and the ideas below. If they ask about a different opening, answer briefly then steer back to the ${label}. Answer naturally; do not lecture unprompted.`,
+    positionBlock,
     ideaBlock,
   ].join('\n');
 

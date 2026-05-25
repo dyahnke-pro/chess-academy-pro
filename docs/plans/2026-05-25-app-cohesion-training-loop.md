@@ -233,9 +233,9 @@ bubble says." This is the only call that changes the data model.
 | Weakness rep → real drill | ✅ DONE — weakness reps deep-link to `/tactics/adaptive` with the tag's themes; completion spaces the misconception tag (`recordTagDrillResult`) — closes the capture→drill→space loop that was never wired. |
 | O6 Setup Trainer | ✅ tied in — `getDueSetupPuzzleCount` surfaced on the Dashboard daily strip (it already consumes the spine as a source). |
 | B1 Pitfall Play lock | ✅ DONE — in-page `OpeningPlayMode`. |
-| Endgame | ✅ via spine — endgame mistakes flow through the `endgame` bucket of the unified profile. A dedicated endgame-lesson SRS scheduler is net-new infra (no due-model today) — deferred, not faked. |
-| B2 coach-chat live FEN | ⏭️ skipped — no live board on the masterclass overview; line-scope already works. |
-| Four SRS schedulers | ⏭️ left separate — `puzzles` / `mistakePuzzles` / `srsOpeningCards` / `misconceptionTags` each schedule independently but all now feed the plan/dashboard. A single cross-store "due today" scheduler is a larger refactor, deferred. |
+| Endgame | ✅ DONE — endgame mistakes flow through the `endgame` bucket of the unified profile, AND a spaced-review due-model (`getDueEndgameLessons`/`getDueEndgameCount`, derived from `timesPlayed`+`lastPlayedAt`, no schema bump) feeds the unified scheduler. |
+| B2 coach-chat live FEN | ✅ DONE — `buildCourseScope` now folds the line's resulting FEN (computed from the real DB line PGN) into the system prompt, so the coach is anchored to the position the line reaches, not move 1. |
+| Cross-store "due today" scheduler | ✅ DONE — `dueToday.getDueTodayTracks()` aggregates all standalone SRS stores (tactical puzzles, game mistakes, opening reviews, setup puzzles, endgame reviews) into one routable board, surfaced on the Dashboard. (The plan feed still owns weakness/SRS-opening/new-line reps; the board covers the drill stores the feed doesn't, so no double-count.) |
 
 ## 8. Next-session pickup
 Start at Phase 1 once §6 is decided. The audit findings + file:line
