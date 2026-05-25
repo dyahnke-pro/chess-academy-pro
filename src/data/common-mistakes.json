@@ -977,7 +977,12 @@
       "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 4",
       "wrongMove": "h6",
       "correctMove": "Be7",
-      "explanation": "4…h6 is a common but weakening reply — after 5.Bxf6 Qxf6 Black accepts an isolated pawn structure without compensation. The mainline 4…Be7 develops and unpins the f6-knight indirectly."
+      "explanation": "4…h6 is a common but weakening reply — after 5.Bxf6 Qxf6 Black accepts an isolated pawn structure without compensation. The mainline 4…Be7 develops and unpins the f6-knight indirectly.",
+      "shortNarration": "Be7 — develop, avoid the …h6 weakening",
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+      ]
     }
   ],
   "qga": [

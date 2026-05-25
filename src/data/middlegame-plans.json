@@ -28602,6 +28602,14 @@
           "concept:pos-development",
           "concept:pawn-minority-attack",
           "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ],
+        "learnCues": [
+          "…e5 — strike at d4",
+          "Qc2 — eye h7, back the centre",
+          "…exd4 — open the centre",
+          "exd4 — IQP for activity, open e-file",
+          "…Nb6 — hit the bishop, eye d5",
+          "Re1 — claim the open e-file"
         ]
       }
     ]
@@ -28734,6 +28742,14 @@
           "concept:pos-development",
           "concept:pawn-minority-attack",
           "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ],
+        "learnCues": [
+          "Rad1 — centralise the last rook",
+          "…Rc8 — contest the c-file",
+          "b4 — start the minority attack",
+          "…a6 — brace against b5",
+          "a4 — back the b5 break",
+          "…Ng6 — regroup toward the kingside"
         ]
       }
     ]
@@ -28863,6 +28879,15 @@
           "concept:pos-development",
           "concept:pawn-minority-attack",
           "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ],
+        "learnCues": [
+          "Nxd5 — grab d5, open lines",
+          "…Nxd5 — recapture",
+          "Bxd5 — take, press the diagonal",
+          "…Bxd5 — trade bishops",
+          "Rxd5 — rook dominates the d-file",
+          "…Be7 — develop, hurry to castle",
+          "e4 — seize the centre"
         ]
       }
     ]
@@ -29001,6 +29026,14 @@
           "concept:pos-development",
           "concept:pawn-minority-attack",
           "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ],
+        "learnCues": [
+          "…Qe7 — unpin, connect rooks",
+          "Rad1 — centralise behind the centre",
+          "…Rfe8 — eye the e-file",
+          "e5 — central break, kick the knight",
+          "…Bxc3 — trade to ease pressure",
+          "bxc3 — bishop pair, broad front"
         ]
       }
     ]
@@ -29144,6 +29177,15 @@
           "concept:pos-development",
           "concept:pawn-minority-attack",
           "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ],
+        "learnCues": [
+          "e4 — seize the full centre",
+          "…e5 — strike back at the centre",
+          "Bg5 — pin the f6-knight",
+          "…exd4 — open the position",
+          "Rxd4 — recapture, rook centralised",
+          "…Ne5 — centralise the knight",
+          "g3 — prepare f4 vs e5"
         ]
       }
     ]
@@ -29295,6 +29337,15 @@
           "concept:pos-development",
           "concept:pawn-minority-attack",
           "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ],
+        "learnCues": [
+          "O-O — castle before pushing",
+          "…a5 — challenge the b4-pawn",
+          "b5 — clamp, fix c6 as target",
+          "…c5 — strike the tension",
+          "Ne5 — knight to the e5 outpost",
+          "…cxd4 — open the centre",
+          "exd4 — mobile centre, e5 dominates"
         ]
       }
     ]
@@ -29454,6 +29505,15 @@
           "concept:pos-development",
           "concept:pawn-minority-attack",
           "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ],
+        "learnCues": [
+          "O-O — king safe, space secured",
+          "…Qc7 — eye c5 and the diagonal",
+          "g3 — solidify, support f4",
+          "…Ba6 — trade the bad bishop",
+          "Bxa6 — accept; keep the space",
+          "…Rxa6 — recapture, rook awkward",
+          "Qe2 — connect rooks, back f4-f5"
         ]
       }
     ]
