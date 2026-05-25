@@ -68,6 +68,14 @@ import { SICILIAN_SVESHNIKOV_LESSON } from './sicilianSveshnikov';
 import { SICILIAN_SVESHNIKOV_VARIATION_LESSONS } from './sicilianSveshnikovVariations';
 import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
 import { SICILIAN_ALAPIN_VARIATION_LESSONS } from './sicilianAlapinVariations';
+import { PETROV_DEFENCE_LESSON } from './petrovDefence';
+import { PETROV_DEFENCE_VARIATION_LESSONS } from './petrovDefenceVariations';
+import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
+import { PHILIDOR_DEFENCE_VARIATION_LESSONS } from './philidorDefenceVariations';
+import { QGD_LESSON } from './qgd';
+import { QGD_VARIATION_LESSONS } from './qgdVariations';
+import { QGA_LESSON } from './queensGambitAccepted';
+import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -112,6 +120,10 @@ const OPENINGS: OpeningLessons[] = [
   { main: SICILIAN_SVESHNIKOV_LESSON, variations: SICILIAN_SVESHNIKOV_VARIATION_LESSONS },
   { main: SICILIAN_ALAPIN_LESSON, variations: SICILIAN_ALAPIN_VARIATION_LESSONS },
   { main: NIMZO_INDIAN_LESSON, variations: NIMZO_INDIAN_VARIATION_LESSONS },
+  { main: PETROV_DEFENCE_LESSON, variations: PETROV_DEFENCE_VARIATION_LESSONS },
+  { main: PHILIDOR_DEFENCE_LESSON, variations: PHILIDOR_DEFENCE_VARIATION_LESSONS },
+  { main: QGD_LESSON, variations: QGD_VARIATION_LESSONS },
+  { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

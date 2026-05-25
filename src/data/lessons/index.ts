@@ -48,6 +48,14 @@ import { SICILIAN_SVESHNIKOV_LESSON } from './sicilianSveshnikov';
 import { SICILIAN_SVESHNIKOV_VARIATION_LESSONS } from './sicilianSveshnikovVariations';
 import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
 import { SICILIAN_ALAPIN_VARIATION_LESSONS } from './sicilianAlapinVariations';
+import { PETROV_DEFENCE_LESSON } from './petrovDefence';
+import { PETROV_DEFENCE_VARIATION_LESSONS } from './petrovDefenceVariations';
+import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
+import { PHILIDOR_DEFENCE_VARIATION_LESSONS } from './philidorDefenceVariations';
+import { QGD_LESSON } from './qgd';
+import { QGD_VARIATION_LESSONS } from './qgdVariations';
+import { QGA_LESSON } from './queensGambitAccepted';
+import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -89,6 +97,10 @@ const LESSONS: Record<string, LessonScript> = {
   [SICILIAN_NAJDORF_LESSON.openingId]: SICILIAN_NAJDORF_LESSON,
   [SICILIAN_SVESHNIKOV_LESSON.openingId]: SICILIAN_SVESHNIKOV_LESSON,
   [SICILIAN_ALAPIN_LESSON.openingId]: SICILIAN_ALAPIN_LESSON,
+  [PETROV_DEFENCE_LESSON.openingId]: PETROV_DEFENCE_LESSON,
+  [PHILIDOR_DEFENCE_LESSON.openingId]: PHILIDOR_DEFENCE_LESSON,
+  [QGD_LESSON.openingId]: QGD_LESSON,
+  [QGA_LESSON.openingId]: QGA_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -116,6 +128,10 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...SICILIAN_NAJDORF_VARIATION_LESSONS,
   ...SICILIAN_SVESHNIKOV_VARIATION_LESSONS,
   ...SICILIAN_ALAPIN_VARIATION_LESSONS,
+  ...PETROV_DEFENCE_VARIATION_LESSONS,
+  ...PHILIDOR_DEFENCE_VARIATION_LESSONS,
+  ...QGD_VARIATION_LESSONS,
+  ...QGA_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

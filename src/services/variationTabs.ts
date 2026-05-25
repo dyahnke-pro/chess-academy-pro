@@ -232,6 +232,57 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /scandinavian transposition/i, label: 'Scandinavian' },
     { test: /voronezh/i, label: 'Voronezh' },
   ],
+  // Petrov (Russian) Defence — Black's symmetric equaliser. Main-line pill =
+  // the Classical 3.Nxe5 symmetric main (…Nc6/…Bf5, White's doubled c-pawns).
+  // Tabs = the structurally-distinct tries Black faces, by reasoned amateur
+  // prevalence: White's modern 3.d4 Steinitz, the dxc3 bishop-pair complex
+  // (covers the Kaufmann sub-line), the 3.Nc3 Three Knights, the …Bd6 5.Bd3
+  // setup. (The "Classical Variation" repertoire entry IS the main pill, so no
+  // duplicate tab; the Cochrane Nxf7 sac is a sideline, not a structural tab.)
+  'petrov-defence': [
+    { test: /steinitz/i, label: 'Steinitz 3.d4' },
+    { test: /^italian/i, label: 'dxc3 Lines' },
+    { test: /three knights/i, label: 'Three Knights' },
+    { test: /5\.bd3|bd3 line/i, label: '5.Bd3' },
+  ],
+  // Philidor Defence — Black's solid …d6 system. Main-line pill = the Improved
+  // Hanham (…Nbd7/…c6/…d5 break, repertoire pgn). Tabs = the structurally-
+  // distinct tries Black faces: the open Exchange, the Petrov-like Antoshin
+  // (dxe5 Nxe4), the Qe2/Nf5 Nimzowitsch, the sharp …f5 Counter-Gambit, and
+  // and the sharp …f5 Counter-Gambit. (The Hanham and Lion repertoire entries
+  // share the main pill's solid Hanham structure, so they fold into it. The
+  // "Modern d3 Hybrid" is dropped — its 3.d3 spine anchors only 4 plies in
+  // openings-lichess.json, so per G3 it is not taught as a tab.)
+  'philidor-defence': [
+    { test: /^exchange/i, label: 'Exchange' },
+    { test: /antoshin/i, label: 'Antoshin' },
+    { test: /nimzowitsch/i, label: 'Nimzowitsch' },
+    { test: /counter-gambit|counter gambit/i, label: 'Counter-Gambit' },
+  ],
+  // Queen's Gambit Declined — the classical 1.d4 d5 defence. Main-line pill =
+  // the Orthodox / Capablanca freeing system (…dxc4/…Nd5/…e5, repertoire pgn).
+  // Tabs = the structurally-distinct mainstream lines: the modern Tartakower
+  // (…b6 hanging pawns), the Lasker (…Ne4 simplification), the Exchange
+  // (Carlsbad minority attack), and the engine-era Bf4 lines. (Ragozin and
+  // Cambridge Springs anchor <20 plies in the curated repertoire pgn, so per
+  // the depth gate they fold in rather than getting thin tabs.)
+  'qgd': [
+    { test: /tartakower/i, label: 'Tartakower' },
+    { test: /lasker/i, label: 'Lasker' },
+    { test: /^exchange/i, label: 'Exchange' },
+    { test: /bf4/i, label: 'Bf4 Lines' },
+  ],
+  // Queen's Gambit Accepted — Black takes c4, then develops freely. Main-line
+  // pill = the calm Classical tabiya (…c5/…b5/…Bb7, repertoire pgn). Tabs = the
+  // distinct mainstream tries: the flexible Smyslov 3…a6, the Sadler …Bg4
+  // (bishop out before …e6), and the Janowski dxc5 lines. (The Central 3.e4
+  // and Alekhine 4.Nc3 repertoire lines anchor <20 plies in the curated pgn,
+  // so per the depth gate they fold in rather than getting thin tabs.)
+  'qga': [
+    { test: /smyslov/i, label: 'Smyslov' },
+    { test: /sadler/i, label: 'Sadler' },
+    { test: /janowski/i, label: 'Janowski' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same

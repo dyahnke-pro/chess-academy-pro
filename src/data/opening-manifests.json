@@ -224,5 +224,41 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "petrov-defence": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "philidor-defence": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "qgd": {
+    "variations": 8,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "qga": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

@@ -120,19 +120,23 @@
       "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
       "wrongMove": "dxc4",
       "correctMove": "e6",
-      "explanation": "Taking on c4 too early (QGA) lets White develop freely with e3+Bxc4. In the QGD, e6 maintains the central tension and keeps a solid pawn structure."
-    },
-    {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
-      "wrongMove": "cxd5",
-      "correctMove": "Bg5",
-      "explanation": "Exchanging on d5 too early relieves tension and makes Black's position easier. Bg5 maintains pressure, pins the knight, and keeps Black guessing about when you'll exchange."
+      "explanation": "Taking on c4 too early (QGA) lets White develop freely with e3+Bxc4. In the QGD, e6 maintains the central tension and keeps a solid pawn structure.",
+      "shortNarration": "…e6 — keep the tension, hold c4.",
+      "sources": [
+        "book:qgd",
+        "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+      ]
     },
     {
       "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 0 4",
       "wrongMove": "Bb4",
       "correctMove": "Be7",
-      "explanation": "Bb4 pins the knight but after Qa4+ Nc6 e3, the bishop is awkwardly placed. Be7 is the classical move, developing solidly and preparing to castle."
+      "explanation": "Bb4 pins the knight but after Qa4+ Nc6 e3, the bishop is awkwardly placed. Be7 is the classical move, developing solidly and preparing to castle.",
+      "shortNarration": "…Be7 — classical post, avoid Qa4+.",
+      "sources": [
+        "book:qgd",
+        "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+      ]
     }
   ],
   "kings-indian-defence": [
@@ -931,19 +935,23 @@
       "fen": "rnbqkb1r/pppp1ppp/5n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
       "wrongMove": "Nxe4",
       "correctMove": "d6",
-      "explanation": "3…Nxe4?? is the most famous beginner blunder in the Petrov. After 4.Qe2 Nf6 5.Nc6+ (revealing the discovered attack on the queen) White wins material. The correct 3…d6 kicks the knight first; only THEN 4…Nxe4 is safe."
+      "explanation": "3…Nxe4?? is the most famous beginner blunder in the Petrov. After 4.Qe2 Nf6 5.Nc6+ (revealing the discovered attack on the queen) White wins material. The correct 3…d6 kicks the knight first; only THEN 4…Nxe4 is safe.",
+      "shortNarration": "…d6 first — dodge the Qe2 fork.",
+      "sources": [
+        "book:petrov-defence",
+        "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+      ]
     },
     {
       "fen": "rnbqkb1r/ppp2Npp/3p1n2/8/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 4",
       "wrongMove": "Kxf7",
       "correctMove": "Qe7",
-      "explanation": "Cochrane Gambit — both 4…Kxf7 and 4…Qe7 are theoretically sound (engine sees them as similar). But Kxf7 commits the king to a permanently exposed life (can't castle, must hide on h8 manually); Qe7 keeps the king safe and attacks the offside knight at f7. Practical edge: with Qe7 you reach a normal middlegame up material; with Kxf7 you spend the next 20 moves defending the king."
-    },
-    {
-      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
-      "wrongMove": "d3",
-      "correctMove": "Nxe5",
-      "explanation": "3.d3 is a quiet, harmless move that lets Black equalize comfortably. The principled choice is 3.Nxe5 (mainline) or 3.d4 (Steinitz attack). Choose your line and play it sharply."
+      "explanation": "Cochrane Gambit — both 4…Kxf7 and 4…Qe7 are theoretically sound, but Kxf7 commits the king to a permanently exposed life: it cannot castle and must shuffle to safety by hand. 4…Qe7 keeps the king safe and hits the offside f7-knight, reaching a normal middlegame up material.",
+      "shortNarration": "…Qe7 — keep the king safe.",
+      "sources": [
+        "book:petrov-defence",
+        "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+      ]
     }
   ],
   "queens-gambit": [
@@ -959,19 +967,34 @@
       "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
       "wrongMove": "b5",
       "correctMove": "Nf6",
-      "explanation": "Defending the extra pawn with 3…b5? is a known trap — White plays 4.a4 b4 5.b3 cxb3 6.axb5 with a huge attack on the open files. The principled move is 3…Nf6 — give back the pawn for development and play a normal QGA position."
+      "explanation": "Defending the extra pawn with 3…b5? is a known trap — White plays 4.a4 b4 5.b3 cxb3 6.axb5 with a huge attack on the open files. The principled move is 3…Nf6 — give back the pawn for development and play a normal QGA position.",
+      "shortNarration": "…Nf6 — give the pawn back, develop.",
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
+      ]
     },
     {
       "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2BP4/4PN2/PP3PPP/RNBQK2R b KQkq - 0 5",
       "wrongMove": "b5",
       "correctMove": "c5",
-      "explanation": "Even after the bishop recaptures, …b5? is still a structural mistake — White plays 6.Bd3 and Black has weakened the queenside permanently. The mainline 5…c5 fights for the center and prepares …Nc6 development."
+      "explanation": "Even after the bishop recaptures, …b5? is still a structural mistake — White plays 6.Bd3 and Black has weakened the queenside permanently. The mainline 5…c5 fights for the center and prepares …Nc6 development.",
+      "shortNarration": "…c5 — fight the centre, not …b5.",
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
+      ]
     },
     {
       "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
       "wrongMove": "e5",
       "correctMove": "dxc4",
-      "explanation": "Pushing 2…e5? loses a pawn after 3.dxe5 d4 4.Nf3 Nc6 5.a3 with a clearly favorable position for White. The QGA accepts with 2…dxc4 — clean and theoretically sound."
+      "explanation": "Pushing 2…e5? loses a pawn after 3.dxe5 d4 4.Nf3 Nc6 5.a3 with a clearly favorable position for White. The QGA accepts with 2…dxc4 — clean and theoretically sound.",
+      "shortNarration": "…dxc4 — accept cleanly, skip …e5.",
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
+      ]
     }
   ],
   "sicilian-sveshnikov": [
