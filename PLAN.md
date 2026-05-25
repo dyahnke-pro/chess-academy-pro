@@ -56,6 +56,16 @@ not blocked. `BASE_DATA_REVISION` bumped to `2026-05-25-french-variations`.
       keyIdeas; plans/models/weapons start 0, ratchet up as they land). French
       now moves from "Most Common" → Masterclasses automatically.
 
+## Progress update (2026-05-25, session 2)
+- [x] STEP 4/5 — 10 Black-oriented per-tab middlegame plans + lead-the-eye, wired.
+- [x] STEP 7 — 9 real Black-winning model games (Carlsen/Anand/Karpov/Giri/
+      Nakamura/Morozevich/Ponomariov/Grischuk). Rubinstein omitted (no masters
+      Black win — self-hides). Removed 3 stale boilerplate auto-imports.
+- [x] STEP 8 — 2 Black-oriented Pitfalls (two-register) + 4 Black-oriented
+      checkpoint quizzes (fixed 2 that were White-oriented).
+- [~] STEP 6 — punish-gem miner RUNNING (Stockfish reachable here, amateur
+      explorer reachable). Hand-author narration after it lands.
+
 ## Status (2026-05-25)
 Lesson spine COMPLETE + gate-green + `ship-check` READY TO PUSH. The page lights
 up: Watch/Learn/Practice on the main line + all 10 tabs, unlock ladder, key
