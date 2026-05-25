@@ -1171,6 +1171,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
 
   // Two Knights / Scotch-gambit: Nxd4?? drops to the f7 sac. 16 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Nf6_d4:Nxd4': {
+    sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
     watch: [
       '', '', '', '', '', '', '',
       'Nxd4? The knight grabs the d4-pawn — but it was the c6-knight that guarded f7 from afar. With it gone, f7 is fatally weak, and White does not recapture.',
@@ -1200,6 +1201,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
 
   // Giuoco main line: Bb6?! is too slow — e5! storms the centre. 20 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4:Bb6': {
+    sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '',
       'Bb6?! Retreating the bishop is too passive here — it hands White his strongest break for free.',
@@ -1228,6 +1230,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
 
   // Greco/Nc3: after Nxe4 O-O, d5?? drops a piece to Nxd5. 24 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O:d5': {
+    sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'd5? Black tries to shore up the e4-knight, but the d5-pawn is undefended and the move simply drops material.',
@@ -1257,6 +1260,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
 
   // Møller Attack accepted: Bxc3?! Ba3! — the exchange sac roars. 26 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O_Nxc3_bxc3:Bxc3': {
+    sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Bxc3?! Black keeps grabbing — the bishop snatches the c3-pawn and eyes the a1-rook. But White has a quiet killer.',
@@ -1286,6 +1290,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
 
   // Greco/Nc3 again: Nxc3?? loses to the Qe1+ zwischenzug. 26 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O_Bxc3_bxc3:Nxc3': {
+    sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Nxc3?? Black snatches a third pawn with the knight — but it’s a blunder. White checks first.',
@@ -1315,6 +1320,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
 
   // Hungarian Defence: the passive Nxe5?? drops a pawn to the Qh5 fork. 18 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Be7_d4_d6_dxe5:Nxe5': {
+    sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
     watch: [
       '', '', '', '', '', '', '', '', '',
       'Nxe5? Recapturing with the knight walks into a simple combination — the e5-knight is loose and the queen is about to pounce.',
@@ -1419,6 +1425,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // ── King's Gambit — curated confirmed crushes (mined 2026-05-25, engine-first;
   // theory-spot-checked). The other ~20 mined KG gems stay dark until narrated.
   'kings-gambit:e4_e5_f4_d5_exd5_e4_d3_Nf6_dxe4_Nxe4_Nf3_Bc5_Qe2_Bf5_Nc3:Bb4': {
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     watch: [
       '',
       '',
@@ -1473,6 +1480,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
   'kings-gambit:e4_e5_f4_exf4_Bc4_Nf6_Nc3_Bb4_e5:Qe7': {
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     watch: [
       '',
       '',
@@ -1515,6 +1523,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
   'kings-gambit:e4_e5_f4_exf4_Nf3_g5_h4:f6': {
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     watch: [
       '',
       '',
@@ -1553,6 +1562,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
   'kings-gambit:e4_e5_f4_exf4_Nf3_g5_h4_g4_Ne5:g3': {
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     watch: [
       '',
       '',
@@ -1595,6 +1605,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
   'kings-gambit:e4_e5_f4_exf4_Nf3_g5_h4_g4_Ng5:f6': {
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     watch: [
       '',
       '',
@@ -1637,6 +1648,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
   'kings-gambit:e4_e5_f4_exf4_Nf3_d6_d4_g5_h4_g4_Ng1_Bh6_Nc3_Nc6_Nge2:Qf6': {
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     watch: [
       '',
       '',
