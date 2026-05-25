@@ -1969,30 +1969,6 @@
   },
   {
     "openingId": "queens-gambit",
-    "lineMoves": "d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4",
-    "inaccuracy": "Nc6",
-    "freqPct": 9.9,
-    "games": 111600,
-    "practicalScore": 60,
-    "mainMove": "Be7",
-    "punish": "Nc3",
-    "punishSeq": [
-      "Nc3",
-      "a6",
-      "e4",
-      "b5",
-      "Bb3",
-      "Bb7",
-      "O-O",
-      "Be7"
-    ],
-    "playLine": "d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 Nc6 Nc3 a6 e4 b5 Bb3 Bb7 O-O Be7",
-    "engineCp": 98,
-    "tier": "positional",
-    "why": "At your level opponents play Nc6 here in 10% of games. Punish with the best move Nc3 — the engine has White clearly better (+1.0)."
-  },
-  {
-    "openingId": "queens-gambit",
     "lineMoves": "d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Qe2",
     "inaccuracy": "Be7",
     "freqPct": 3,
@@ -2014,30 +1990,6 @@
     "engineCp": 52,
     "tier": "positional",
     "why": "At your level opponents play Be7 here in 3% of games. Punish with the best move dxc5 — the engine has White clearly better (+0.5)."
-  },
-  {
-    "openingId": "queens-gambit",
-    "lineMoves": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4",
-    "inaccuracy": "Nd5",
-    "freqPct": 6.8,
-    "games": 41552,
-    "practicalScore": 54,
-    "mainMove": "Bf5",
-    "punish": "e4",
-    "punishSeq": [
-      "e4",
-      "Nxc3",
-      "bxc3",
-      "e6",
-      "Bxc4",
-      "Be7",
-      "O-O",
-      "O-O"
-    ],
-    "playLine": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Nd5 e4 Nxc3 bxc3 e6 Bxc4 Be7 O-O O-O",
-    "engineCp": 145,
-    "tier": "confirmed",
-    "why": "At your level opponents play Nd5 here in 7% of games. Punish with the best move e4 — the engine has White winning (+1.4)."
   },
   {
     "openingId": "queens-gambit",
@@ -2146,16 +2098,25 @@
     "punish": "Qxd4",
     "punishSeq": [
       "Qxd4",
+      "Qxd4",
       "Nxd4",
       "Nxe4",
       "Be3",
       "Nxc3",
       "a3",
       "Ba5",
-      "Bd2"
+      "Bd2",
+      "Bd7",
+      "Nb3",
+      "Nc6",
+      "bxc3",
+      "Bb6",
+      "Be2",
+      "O-O-O",
+      "a4"
     ],
-    "playLine": "d4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4 Bg5 dxc4 e4 c5 Bxc4 cxd4 Qxd4 Qxd4 Nxd4 Nxe4 Be3 Nxc3 a3 Ba5 Bd2",
-    "engineCp": 177,
+    "playLine": "d4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4 Bg5 dxc4 e4 c5 Bxc4 cxd4 Qxd4 Qxd4 Nxd4 Nxe4 Be3 Nxc3 a3 Ba5 Bd2 Bd7 Nb3 Nc6 bxc3 Bb6 Be2 O-O-O a4",
+    "engineCp": 189,
     "tier": "confirmed",
     "why": "At your level opponents play Qxd4 here in 8% of games. Punish with the best move Qxd4 — the engine has Black winning (+1.8)."
   },

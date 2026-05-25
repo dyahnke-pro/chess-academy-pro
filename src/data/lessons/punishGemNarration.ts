@@ -1340,34 +1340,6 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ["", "", "", "", "", "", "", "", "", "", "", "", "", "Be6? It walks into a thunderbolt — the c4-bishop and the c3-knight are perfectly placed to pounce.", "Nd5! The knight forks the b4-bishop and threatens c7; suddenly every Black piece is loose.", "", "Qb3 doubles on b7 and f7 at once, hitting two targets the knight uncovered.", "", "Qxb7 grabs the pawn and attacks the a8-rook.", "", "Nxc7+! The fork — the king must move and the rook in the corner falls. The Göring's development lead crashes through.", ""],
     learn: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "Nd5! — fork the bishop, hit c7.", "", "Qb3 — double on b7 and f7.", "", "Qxb7 — grab the pawn, hit the rook.", "", "Nxc7+ — fork; win the rook.", ""],
   },
-  // Queen's Gambit — Slav: …Nd5? too early; e4! kicks it and grabs the centre.
-  // playLine: d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Nd5 e4 Nxc3 bxc3 e6 Bxc4 Be7 O-O O-O
-  'queens-gambit:d4_d5_c4_c6_Nf3_Nf6_Nc3_dxc4_a4:Nd5': {
-    watch: [
-      '', '', '', '', '', '', '', '', '',
-      'Nd5? — too early. The knight leaps to the centre before Black is developed, and it has nothing to support it there.',
-      'e4! — the kick and the centre in one move. The knight must move, and White claims the whole middle with tempo.',
-      '…Nxc3 — forced; the knight trades itself off rather than retreat to a worse square.',
-      'bxc3 — recapture toward the centre. White owns a broad pawn front on c3, d4 and e4, and the open b-file for the rook.',
-      '',
-      'Bxc4 — the gambit pawn comes back for free. White is fully mobilised with a dream centre.',
-      '',
-      "O-O — White's pull is permanent: more space, a mobile centre, and a black position with no counter-break.",
-      '',
-    ],
-    learn: [
-      '', '', '', '', '', '', '', '', '', '',
-      'e4 — kick the knight, take the centre.',
-      '',
-      'bxc3 — recapture, build the big centre.',
-      '',
-      'Bxc4 — pawn back, fully developed.',
-      '',
-      'O-O — castle; a lasting space edge.',
-      '',
-    ],
-  },
-
   // Queen's Gambit — Exchange QGD: …b6? too slow; Bxf6 removes d5's only guard,
   // then Qh5 and Qxd5 win the central pawn.
   // playLine: d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 b6 Bxf6 Bxf6 Qh5 g6 Qxd5 c6 Qxd8 Rxd8
@@ -1397,32 +1369,6 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Queen's Gambit — Accepted: …Nc6? blocks Black's own …c5 freeing break;
-  // White builds the big e4 centre unchallenged. Positional, not a crush.
-  // playLine: d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 Nc6 Nc3 a6 e4 b5 Bb3 Bb7 O-O Be7
-  'queens-gambit:d4_d5_c4_dxc4_Nf3_Nf6_e3_e6_Bxc4:Nc6': {
-    watch: [
-      '', '', '', '', '', '', '', '', '',
-      'Nc6? — a positional slip. In the QGA, Black frees his game with …c5 — but the knight on c6 blocks the c-pawn, so that break never comes.',
-      "Nc3 — White just develops. Knowing Black can't free himself, the plan is simple: build the centre.",
-      '',
-      'e4 — the full centre, and there is no …c5 to challenge it.',
-      '',
-      '',
-      '',
-      'O-O — White is comfortably better: more space, a mobile centre, and a knight on c6 with no future. A lasting positional pull, not a knockout.',
-      '',
-    ],
-    learn: [
-      '', '', '', '', '', '', '', '', '', '',
-      "Nc3 — just develop; Black's stuck.",
-      '',
-      'e4 — take the full centre.',
-      '', '', '',
-      'O-O — castle; enjoy the space.',
-      '',
-    ],
-  },
   // QGD — Cambridge Springs trap: White's natural Bd3? walks into …dxc4 and
   // …Qxg5, winning the loose bishop because the c3-knight is pinned (…Qa5/…Bb4).
   // playLine: d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 Nf3 c6 e3 Qa5 Nd2 Bb4 Qc2 O-O Bd3 dxc4 Nxc4 Qxg5 O-O-O Qh6 Ne4 Nxe4 Bxe4
@@ -1481,31 +1427,47 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
 
   // QGD — Vienna: White's Qxd4? (instead of Nxd4) lets Black trade queens and
-  // snatch the e4-pawn into a winning endgame.
-  // playLine: d4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4 Bg5 dxc4 e4 c5 Bxc4 cxd4 Qxd4 Qxd4 Nxd4 Nxe4 Be3 Nxc3 a3 Ba5 Bd2
+  // win a clean pawn; the line is extended to the quiet, pawn-up frame (+1.9).
+  // playLine: d4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4 Bg5 dxc4 e4 c5 Bxc4 cxd4 Qxd4 Qxd4 Nxd4 Nxe4 Be3 Nxc3 a3 Ba5 Bd2 Bd7 Nb3 Nc6 bxc3 Bb6 Be2 O-O-O a4
   'qgd:d4_d5_c4_e6_Nc3_Nf6_Nf3_Bb4_Bg5_dxc4_e4_c5_Bxc4_cxd4:Qxd4': {
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-      'Qxd4? — recapturing with the queen instead of the knight. It looks natural, but it lets Black trade queens and snatch a central pawn.',
+      'Qxd4? — recapturing with the queen instead of the knight. It looks natural, but it lets Black trade queens and win a clean pawn.',
       '…Qxd4 — trade the queens straight off.',
-      'Nxd4 — White recaptures…',
-      '…Nxe4! — the point. With the queens gone, Black grabs the e4-pawn for free and heads into a clean pawn-up endgame.',
       '',
-      '…Nxc3 — picking up more, a pawn to the good and simplifying.',
+      '…Nxe4! — the point. With the queens gone, Black snaps the undefended e4-pawn for free.',
       '',
-      '…Ba5 — keeping the bishop active; Black is winning the endgame.',
+      '…Nxc3 — simplifying; the minor pieces come off and Black stays a pawn up.',
+      '',
+      '…Ba5 — keeping the bishop active rather than retreating.',
+      '',
+      '…Bd7 — developing; Black consolidates the extra pawn.',
+      '',
+      '…Nc6 — developing with tempo.',
+      '',
+      '…Bb6 — the bishop swings to a strong diagonal.',
+      '',
+      "…O-O-O — Black castles into a clean, pawn-up endgame: queens off, structure sound, the extra pawn decides. White's Qxd4 simply lost a pawn for nothing.",
       '',
     ],
     learn: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-      '', // Qxd4 (opponent)
+      '',
       '…Qxd4 — trade the queens off.',
       '',
       '…Nxe4 — grab the free centre pawn.',
       '',
       '…Nxc3 — simplify, a pawn up.',
       '',
-      '…Ba5 — keep the bishop active; winning.',
+      '…Ba5 — keep the bishop active.',
+      '',
+      '…Bd7 — develop; consolidate.',
+      '',
+      '…Nc6 — develop with tempo.',
+      '',
+      '…Bb6 — strong diagonal.',
+      '',
+      '…O-O-O — castle; a clean pawn-up endgame.',
       '',
     ],
   },
