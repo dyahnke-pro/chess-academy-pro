@@ -10,7 +10,7 @@ const data = commonMistakesData as Record<string, CommonMistake[]>;
 //   - shortNarration  → Learn-LIMITED (≤8-word cue)
 // Non-masterclass openings use the graceful fallback (move dictation) and are
 // not gated here. Add an opening to this list when it gets the masterclass build.
-const MASTERCLASS = ['ruy-lopez', 'vienna-game', 'caro-kann', 'pirc-defence', 'italian-game'];
+const MASTERCLASS = ['ruy-lopez', 'vienna-game', 'caro-kann', 'pirc-defence', 'italian-game', 'kings-gambit'];
 
 const CUE_WORD_CAP = 8;
 function wordCount(s: string): number {

@@ -60,6 +60,20 @@ arise in the 3...g5 complex), classified by who plays the punishing move.
       named-traps, opening-walkthrough — TODO
 - [ ] DONE — merged to main + post-deploy audit green (playbook §0.5 DoD)
 
+## Checkpoint 2 (2026-05-25): + model games + pitfalls + quizzes.
+- STEP 7 model games: 6 REAL White-winning master games sourced from the live
+  explorer + export endpoint (no fabrication), one per major tab:
+  Carlsen–Wang 2010 (Abbazia/Main), Ponomariov–Dominguez 2016 (Classical g5),
+  Short–Akopian 1997 (Fischer), Short–Zhu 2002 (Declined), **Short–Kasparov
+  2011 (Bishop's)**, Nunn–Piket 1995 (Kieseritzky). `kings-gambit` added to
+  modelGames-orientation PROTECTED; 3 pre-existing thin imports tagged studentSide.
+- STEP 8 pitfalls: 3 KG common-mistakes given two-register narration
+  (explanation + ≤8-word shortNarration); `kings-gambit` gated in
+  commonMistakeNarration. Checkpoint quizzes: 4 valid move-quizzes (pre-existing).
+- Manifest: modelGames floor → 6.
+- STEP 6 gems: miner ran in-sandbox (stockfish apt-installed at /usr/games/stockfish,
+  explorer proxy reachable). Tier results pending.
+
 ## Checkpoint 1 (2026-05-25): lessons + tabs + 2 plans, all content gates green.
 Remaining for full Vienna parity: punish-gems (mine via reachable proxy/CI +
 hand-narrate), named-trap weapon lessons, model games per variation (real PGNs,
