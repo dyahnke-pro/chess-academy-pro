@@ -657,6 +657,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       },
       {
@@ -845,6 +850,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -1090,6 +1100,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -8069,6 +8084,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:kings-gambit",
+          "concept:tac-sacrifice",
+          "https://en.wikipedia.org/wiki/King%27s_Gambit"
         ]
       }
     ]
@@ -8333,6 +8353,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:kings-gambit",
+          "concept:tac-sacrifice",
+          "https://en.wikipedia.org/wiki/King%27s_Gambit"
         ]
       }
     ]
@@ -9276,6 +9301,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -9456,6 +9486,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -9653,6 +9688,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -9827,6 +9867,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -10020,6 +10065,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -10197,6 +10247,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -10403,6 +10458,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -10639,6 +10699,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -10934,6 +10999,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -11313,6 +11383,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -11773,6 +11848,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -12155,6 +12235,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -12489,6 +12574,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ]
       }
     ]
@@ -12618,6 +12708,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
         ]
       }
     ]
@@ -12784,6 +12879,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
         ]
       }
     ]
@@ -12897,6 +12997,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
         ]
       }
     ]
@@ -13077,6 +13182,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
         ]
       }
     ]
@@ -13241,6 +13351,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
         ]
       }
     ]
@@ -13331,6 +13446,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
         ]
       }
     ]
@@ -13551,6 +13671,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
         ]
       }
     ]
@@ -13638,6 +13763,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
         ]
       }
     ]
@@ -13885,6 +14015,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
         ]
       }
     ]
@@ -14078,6 +14213,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
         ]
       }
     ]
@@ -14275,6 +14415,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
         ]
       }
     ]
@@ -14481,6 +14626,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
         ]
       }
     ]
@@ -14681,6 +14831,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
         ]
       }
     ]
@@ -14930,6 +15085,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:italian-game",
+          "concept:pos-center",
+          "https://www.chess.com/openings/Italian-Game"
         ]
       }
     ]
@@ -15133,6 +15293,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:italian-game",
+          "concept:pos-center",
+          "https://www.chess.com/openings/Italian-Game"
         ]
       }
     ]
@@ -15337,6 +15502,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:italian-game",
+          "concept:pos-center",
+          "https://www.chess.com/openings/Italian-Game"
         ]
       }
     ]
@@ -15501,6 +15671,11 @@
           "Bd3 — aim at h7",
           "O-O — into the crossfire",
           "Nc3 — full attack"
+        ],
+        "sources": [
+          "book:italian-game",
+          "concept:pos-center",
+          "https://www.chess.com/openings/Italian-Game"
         ]
       }
     ]
@@ -15676,6 +15851,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:italian-game",
+          "concept:pos-center",
+          "https://www.chess.com/openings/Italian-Game"
         ]
       }
     ]
@@ -15837,6 +16017,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
         ]
       }
     ]
@@ -16003,6 +16188,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
         ]
       }
     ]
@@ -16157,6 +16347,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
         ]
       }
     ]
@@ -16310,6 +16505,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
         ]
       }
     ]
@@ -16451,6 +16651,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
         ]
       }
     ]
@@ -16603,6 +16808,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
         ]
       }
     ]
@@ -16766,6 +16976,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ]
       }
     ]
@@ -16891,6 +17106,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ]
       }
     ]
@@ -17016,6 +17236,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ]
       }
     ]
@@ -17151,6 +17376,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ]
       }
     ]
@@ -17286,6 +17516,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ]
       }
     ]
@@ -17435,6 +17670,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ]
       }
     ]
@@ -17560,6 +17800,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ]
       }
     ]
@@ -17698,6 +17943,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ]
       }
     ]
@@ -17829,6 +18079,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ]
       }
     ]
@@ -17954,6 +18209,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ]
       }
     ]
@@ -18075,6 +18335,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ]
       }
     ]
@@ -18200,6 +18465,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ]
       }
     ]
@@ -18295,6 +18565,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ]
       }
     ]
@@ -18400,6 +18675,11 @@
           "b5 — the lever",
           "axb5 — open the a-file",
           "axb5 — queenside rolls"
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ]
       }
     ]
@@ -18521,6 +18801,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ]
       }
     ]
@@ -18661,6 +18946,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ]
       }
     ]
@@ -18773,6 +19063,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
         ]
       }
     ]
@@ -18894,6 +19189,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
         ]
       }
     ]
@@ -19016,6 +19316,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
         ]
       }
     ]
@@ -19137,6 +19442,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
         ]
       }
     ]
@@ -19232,6 +19542,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-outpost",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
         ]
       }
     ]
@@ -19363,6 +19678,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
         ]
       }
     ]
@@ -19495,6 +19815,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
         ]
       }
     ]
@@ -19546,6 +19871,11 @@
           "…Qc7 — the queen drops to c7, eyeing the e5-pawn and the c-file.",
           "d5! — the space-gaining thrust; the pawn on d5 cramps Black and frees the bishop pair.",
           "…Nf8 — the e6-knight retreats to f8 to regroup."
+        ],
+        "sources": [
+          "book:four-knights-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Four_Knights_Game"
         ]
       }
     ]
@@ -19597,6 +19927,11 @@
           "…Bd6 — Black develops the bishop to d6, eyeing the kingside.",
           "Rae1 — the rook joins on e1, seizing the open e-file.",
           "…Rb8 — Black activates the rook on b8 on the half-open b-file."
+        ],
+        "sources": [
+          "book:four-knights-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Four_Knights_Game"
         ]
       }
     ]
@@ -19644,6 +19979,11 @@
           "Nh4 — White's knight hops to h4, aiming for the f5 outpost.",
           "…c6 — Black takes queenside space with c6.",
           "Nf5! — the knight lands on the f5 outpost, dominating from the centre of Black's camp."
+        ],
+        "sources": [
+          "book:four-knights-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Four_Knights_Game"
         ]
       }
     ]
@@ -19695,6 +20035,11 @@
           "Bd5+ — the bishop checks from d5, harassing the king with tempo.",
           "…Kf8 — the king steps to f8, losing the right to castle.",
           "b4 — White expands on the queenside with b4 and a lasting pull."
+        ],
+        "sources": [
+          "book:four-knights-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Four_Knights_Game"
         ]
       }
     ]
@@ -19746,6 +20091,11 @@
           "cxd4 — White recaptures, keeping a broad centre on d4 and e4.",
           "…exd4 — Black takes again on d4.",
           "Qxd4 — the queen recaptures on d4, centralised, the open lines favouring the two bishops."
+        ],
+        "sources": [
+          "book:four-knights-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Four_Knights_Game"
         ]
       }
     ]
@@ -19797,6 +20147,11 @@
           "f4 — the key move: White anchors the knight on e5 for good.",
           "…a6 — Black gains a little queenside room.",
           "O-O — White castles; the e5-knight and f4-pawn point at the king."
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/London_System"
         ]
       }
     ]
@@ -19848,6 +20203,11 @@
           "Nbd2 — the knight heads to d2, supporting the centre.",
           "…cxd4 — Black releases the tension on d4.",
           "exd4 — White recaptures toward the centre, a broad d4-pawn front."
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/London_System"
         ]
       }
     ]
@@ -19899,6 +20259,11 @@
           "…Qb6 — Black eyes the b2-pawn and the queenside.",
           "a3 — White calmly anchors and prepares to expand.",
           "…c5 — Black strikes at the d4-centre."
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/London_System"
         ]
       }
     ]
@@ -19950,6 +20315,11 @@
           "axb3 — White recaptures on b3, opening lines.",
           "…Be7 — Black develops the bishop to e7.",
           "Bb2 — the dark-squared bishop joins the long diagonal toward b7."
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Catalan_Opening"
         ]
       }
     ]
@@ -20001,6 +20371,11 @@
           "cxd5 — White clarifies the centre.",
           "…cxd5 — Black recaptures on d5.",
           "Re1 — the rook supports the e5-wedge."
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Catalan_Opening"
         ]
       }
     ]
@@ -20146,6 +20521,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Catalan_Opening"
         ]
       }
     ]
@@ -20197,6 +20577,11 @@
           "…O-O — Black castles.",
           "b4 — the queenside pawn storm rolls forward.",
           "…Be6 — Black develops the bishop to e6."
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/English_Opening"
         ]
       }
     ]
@@ -20248,6 +20633,11 @@
           "…Rb8 — Black prepares ...b5.",
           "Rac1 — White seizes the open c-file.",
           "…Bf5 — Black develops the bishop to f5."
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/English_Opening"
         ]
       }
     ]
@@ -20299,6 +20689,11 @@
           "…Na6 — Black develops the knight to a6.",
           "O-O — White castles, ready to break with d4.",
           "…Bd6 — Black develops the bishop to d6."
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/English_Opening"
         ]
       }
     ]
@@ -20350,6 +20745,11 @@
           "Nc3 — White completes development.",
           "…Bb7 — Black fianchettoes on b7, mirroring.",
           "cxd5 — White opens lines at the right moment."
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
         ]
       }
     ]
@@ -20445,6 +20845,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
         ]
       }
     ]
@@ -20496,6 +20901,11 @@
           "Nf1 — the knight begins its trek to g4.",
           "…a5 — Black pushes on the queenside.",
           "h4 — White starts the kingside pawn storm."
+        ],
+        "sources": [
+          "concept:att-kingside-storm",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/King's_Indian_Attack"
         ]
       }
     ]
@@ -20547,6 +20957,11 @@
           "…h6 — Black makes luft.",
           "b4 — White expands on the queenside.",
           "…Be6 — Black develops the bishop to e6."
+        ],
+        "sources": [
+          "concept:att-kingside-storm",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/King's_Indian_Attack"
         ]
       }
     ]
@@ -20598,6 +21013,11 @@
           "exd5 — White opens lines toward the king.",
           "…Ne5 — Black returns material to ease the pressure.",
           "Qxd4 — the queen recaptures, centralised and dominant."
+        ],
+        "sources": [
+          "book:evans-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
         ]
       }
     ]
@@ -20649,6 +21069,11 @@
           "exd5 — White gains the d5-pawn wedge.",
           "…Nd4 — Black centralises a knight.",
           "a5 — White gains space and harasses the bishop."
+        ],
+        "sources": [
+          "book:evans-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
         ]
       }
     ]
@@ -20700,6 +21125,11 @@
           "…Qg6 — the queen is shoved to g6.",
           "Nxc3 — White regains a pawn, fully developed.",
           "…Nge7 — Black tries to untangle."
+        ],
+        "sources": [
+          "book:evans-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
         ]
       }
     ]
@@ -20751,6 +21181,11 @@
           "…d6 — Black blunts the centre.",
           "Qa4+ — the check sets up regaining the pawn.",
           "…c6 — Black blocks the check."
+        ],
+        "sources": [
+          "book:evans-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
         ]
       }
     ]
@@ -20886,6 +21321,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]
@@ -21009,6 +21449,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]
@@ -21121,6 +21566,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]
@@ -21252,6 +21702,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]
@@ -21356,6 +21811,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]
@@ -21464,6 +21924,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]
@@ -21564,6 +22029,11 @@
           "O-O — king safe",
           "Rad1 — the d-file",
           "Re8 — seize the e-file"
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]
@@ -21664,6 +22134,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]
@@ -21758,6 +22233,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]
@@ -21860,6 +22340,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]
@@ -21987,6 +22472,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:scandinavian-defence",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ]
       }
     ]
@@ -22108,6 +22598,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:scandinavian-defence",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ]
       }
     ]
@@ -22220,6 +22715,11 @@
           "Nc6 — lean on d4",
           "d5 — kick and grab",
           "Ne5 — central outpost"
+        ],
+        "sources": [
+          "book:scandinavian-defence",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ]
       }
     ]
@@ -22324,6 +22824,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:scandinavian-defence",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ]
       }
     ]
@@ -22441,6 +22946,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:scandinavian-defence",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ]
       }
     ]
@@ -22545,6 +23055,11 @@
           "e5 — strike d4",
           "dxe5 — open it",
           "Nxe5 — central outpost"
+        ],
+        "sources": [
+          "book:scandinavian-defence",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ]
       }
     ]
@@ -22653,6 +23168,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:scandinavian-defence",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ]
       }
     ]
@@ -22776,6 +23296,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
         ]
       }
     ]
@@ -22880,6 +23405,11 @@
           "f6 — detonate e5",
           "exf6 — crumbling",
           "gxf6 — centre broken"
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
         ]
       }
     ]
@@ -22992,6 +23522,11 @@
           "Bg4 — pin f3",
           "b3 — prop c4",
           "Bf6 — siege d4"
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
         ]
       }
     ]
@@ -23092,6 +23627,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
         ]
       }
     ]
@@ -23190,6 +23730,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
         ]
       }
     ]
@@ -23292,6 +23837,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
         ]
       }
     ]
@@ -23392,6 +23942,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Benko_Gambit"
         ]
       }
     ]
@@ -23496,6 +24051,11 @@
           "e6 — hit the base",
           "dxe6 — open it",
           "Bxe6 — rake the diagonal"
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Benko_Gambit"
         ]
       }
     ]
@@ -23590,6 +24150,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Benko_Gambit"
         ]
       }
     ]
@@ -23680,6 +24245,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Benko_Gambit"
         ]
       }
     ]
@@ -23816,6 +24386,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:dutch-defence",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Dutch_Defence"
         ]
       }
     ]
@@ -23911,6 +24486,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:dutch-defence",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Dutch_Defence"
         ]
       }
     ]
@@ -24029,6 +24609,11 @@
           "Be8 — head for h5",
           "Ne5 — contest the centre",
           "Ne4 — eternal outpost"
+        ],
+        "sources": [
+          "book:dutch-defence",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Dutch_Defence"
         ]
       }
     ]
@@ -24127,6 +24712,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:dutch-defence",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Dutch_Defence"
         ]
       }
     ]
@@ -24241,6 +24831,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:dutch-defence",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Dutch_Defence"
         ]
       }
     ]
@@ -24353,6 +24948,11 @@
           "Ba6 — spear c4",
           "Qa4 — defend c4",
           "h6 — own the light squares"
+        ],
+        "sources": [
+          "concept:pawn-doubled",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
         ]
       }
     ]
@@ -24443,6 +25043,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pawn-doubled",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
         ]
       }
     ]
@@ -24555,6 +25160,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pawn-doubled",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
         ]
       }
     ]
@@ -24695,6 +25305,11 @@
           "Nbd7 — blockade set",
           "Bd3 — locked out",
           "g5 — the storm breaks"
+        ],
+        "sources": [
+          "concept:pawn-doubled",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
         ]
       }
     ]
@@ -24799,6 +25414,11 @@
           "e5 — strike the centre",
           "Nf3 — retreat",
           "Bxc3 — fracture the pawns"
+        ],
+        "sources": [
+          "concept:pawn-doubled",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
         ]
       }
     ]
@@ -24917,6 +25537,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pawn-doubled",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
         ]
       }
     ]
@@ -25017,6 +25642,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pawn-doubled",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
         ]
       }
     ]
@@ -25127,6 +25757,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pawn-doubled",
+          "concept:pos-outpost",
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
         ]
       }
     ]
@@ -25231,6 +25866,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:caro-kann",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ]
       }
     ]
@@ -25349,6 +25989,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:caro-kann",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ]
       }
     ]
@@ -25449,6 +26094,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:caro-kann",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ]
       }
     ]
@@ -25543,6 +26193,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "sources": [
+          "book:caro-kann",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ]
       }
     ]
@@ -25655,6 +26310,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:caro-kann",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ]
       }
     ]
@@ -25755,6 +26415,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:caro-kann",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ]
       }
     ]
@@ -25878,6 +26543,11 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "book:caro-kann",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ]
       }
     ]
