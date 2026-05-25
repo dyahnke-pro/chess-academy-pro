@@ -2314,54 +2314,6 @@
     "source": "lichess-masters"
   },
   {
-    "id": "mg-lichess-dUpyzpF3",
-    "openingId": "four-knights-game",
-    "white": "Carlsen, M.",
-    "black": "Nakamura, Hi",
-    "whiteElo": 2837,
-    "blackElo": 2804,
-    "result": "1/2-1/2",
-    "year": 2025,
-    "event": "2025-2025-06 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O Bxc6 dxc6 Nxe5 Re8 Nd3 Bxc3 dxc3 Nxe4 Re1 Nd6 Bf4 Rxe1+ Qxe1 Bf5 Rd1 Qe8 f3 f6 Qxe8+ Rxe8 Kf2 g5 Bg3 Rd8 Ke2 Re8+ Kf2 Rd8 Ke2 Re8+ Kf2",
-    "overview": "Master game from the Lichess masters database. Carlsen, M. vs Nakamura, Hi, 2025. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/dUpyzpF3",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-7qWPTdaq",
-    "openingId": "four-knights-game",
-    "white": "Grischuk, A.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2750,
-    "blackElo": 2832,
-    "result": "0-1",
-    "year": 2017,
-    "event": "2017-2017-11 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 Bxc3 bxc3 d6 Re1 Bd7 d4 Re8 Bd3 Bg4 d5 Nb8 h3 Bxf3 Qxf3 Nbd7 Rb1 Nc5 Be3 Rb8 g4 Nfd7 g5 Nf8 Bb5 Re7 Kh2 Ng6 Rg1 Nf4 Rg4 Qf8 Bxf4 exf4 Rxf4 Re5 Rg1 Qe7 Bd3 Re8 Rgg4 a6 c4 Nd7 Qg3 Nc5 h4 Rf8 Kg2 Nd7 Rf5 f6 gxf6 Rxf6 Rfg5 Rf7 f4 Rxg5 hxg5 Nc5 e5 Nxd3 cxd3 dxe5 fxe5 Qa3 Rf4 Qxa2+ Kh3 Qb1 Rxf7 Qh1+ Kg4 Kxf7 e6+ Ke8 Qxc7 Qg2+ Qg3 Qxg3+ Kxg3 a5 c5 Ke7 Kf4 a4 Ke5 a3 d6+ Ke8 e7 Kd7 Kd5 a2",
-    "overview": "Master game from the Lichess masters database. Grischuk, A. vs Carlsen, M., 2017. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/7qWPTdaq",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-iRtkr1jy",
-    "openingId": "four-knights-game",
-    "white": "Naiditsch, A.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2706,
-    "blackElo": 2865,
-    "result": "1-0",
-    "year": 2015,
-    "event": "2015-2015-02 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 Nc3 Bb4 O-O O-O d3 d6 Bg5 Ne7 Re1 c6 Ba4 Ng6 Bb3 h6 Bd2 Bg4 h3 Bh5 g3 d5 Kg2 d4 Ne2 Bxf3+ Kxf3 Bxd2 Qxd2 Nd7 a3 Kh8 Kg2 Nc5 Ba2 f5 exf5 Rxf5 Rf1 Qf6 f4 Rf8 Rae1 h5 Rf3 h4 g4 Nxf4+ Kh2 Rg5 Nxf4 exf4 b4 Nd7 Re6 Qd8 Qe1 Rb5 a4 Rb6 Re7 Nf6 Qxh4+ Nh7 Be6 Rf6 Bf5 Rh6 Qe1 Qd6 Re8+ Nf8 Qe7 Qxe7 Rxe7 Rxb4 Re8 Rf6 Rxf4 g6 g5 Rf7 Rh4+ Kg7 Be4 Rb2 Kg3 Rxc2 Rf4 Rc5 h4 Ra5 Rxf7+ Kxf7 Rb8 b5 Rb7+ Ke6 axb5 cxb5 Kf4 Ra2 Rxb5 Rf2+ Kg3 Re2 Ra5 Nd7 Ra6+ Ke7 Bxg6 Ne5 Be4 Nxd3 Bxd3 Re3+ Kf4 Rxd3 h5 Rh3 h6 d3 Rxa7+ Ke6 Ra6+ Kf7 g6+ Ke7 g7 d2 g8=Q",
-    "overview": "Master game from the Lichess masters database. Naiditsch, A. vs Carlsen, M., 2015. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/iRtkr1jy",
-    "source": "lichess-masters"
-  },
-  {
     "id": "mg-lichess-GjkiRzzC",
     "openingId": "french-defence",
     "white": "Karjakin, Sergey",
@@ -3623,5 +3575,200 @@
     "middlegameTheme": "Opposite-side castling: Black's c-file and b-pawn attack races White's h- and f-pawn storm.",
     "lessonSummary": "The Dragon in one game: trade efficiently, train every piece on White's king, and win the race down the queenside.",
     "studentSide": "black"
+  },
+  {
+    "id": "mg-anand-four-knights",
+    "openingId": "four-knights-game",
+    "white": "Viswanathan Anand",
+    "black": "Levon Aronian",
+    "whiteElo": 2784,
+    "blackElo": 2792,
+    "result": "1-0",
+    "year": 2016,
+    "event": "Zurich Chess Challenge 2016",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 Nc3 Bd6 O-O O-O d3 Re8 a3 h6 Bc4 Bc5 Be3 Bxe3 fxe3 d6 Nh4 Be6 Nf5 Bxc4 dxc4 Kh7 Qf3 Nb8 Nxh6 Kxh6 Qh3+ Kg6 Rf3 Nh5 Rf5 Nf6 Qh4",
+    "overview": "Anand reveals the attacking fire hidden inside the quiet Spanish Four Knights. After routine symmetrical development he transferred a knight to the f5 outpost, sacrificed it on h6 to tear open Aronian's king, and hunted the monarch into the open for a swift, brilliant finish.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r2qr1k1/ppp2pp1/2npbn1p/4pN2/2B1P3/P1NPP3/1PP3PP/R2Q1RK1 b - - 3 12",
+        "annotation": "Nf5 — the knight reaches the f5 outpost, the dream square of the whole opening. From f5 it eyes h6 and g7 and no pawn can ever chase it away.",
+        "concept": "The f5 outpost"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "rn1qr3/ppp2ppk/3p1n1N/4p3/2P1P3/P1N1PQ2/1PP3PP/R4RK1 b - - 0 15",
+        "annotation": "Nxh6! — the outpost knight sacrifices itself to rip open the king's shelter. With the queen swinging to h3, the exposed monarch cannot survive.",
+        "concept": "Sacrifice to expose the king"
+      },
+      {
+        "moveNumber": 19,
+        "color": "white",
+        "fen": "rn1qr3/ppp2pp1/3p1nk1/4pR2/2P1P2Q/P1N1P3/1PP3PP/R5K1 b - - 7 19",
+        "annotation": "Qh4 — the queen joins the hunt. Black's king is stranded on g6 in the open while the rooks and queen weave a mating net.",
+        "concept": "King hunt"
+      }
+    ],
+    "middlegameTheme": "Route a knight to the f5 outpost, then sacrifice to hunt the king.",
+    "lessonSummary": "Even the symmetrical Four Knights can catch fire: get a knight to f5 and the sacrifice on h6 or g7 is always in the air."
+  },
+  {
+    "id": "mg-kramnik-scotch-four-knights",
+    "openingId": "four-knights-game",
+    "white": "Vladimir Kramnik",
+    "black": "Levon Aronian",
+    "whiteElo": 2801,
+    "blackElo": 2820,
+    "result": "1-0",
+    "year": 2012,
+    "event": "Zurich Match 2012",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bc5 Be3 Bb6 Qd2 O-O O-O-O Re8 f3 d5 exd5 Nxd5 Bg5 Nxc3 Bxd8 Nxd1 Bxc7 Bxc7 Nxc6 Ne3 Bb5 bxc6 Bxc6 Nc4 Qd4 Be6 Bxa8 Bb6 Qd3 Rxa8 Re1 Rd8 Qe4 g5 c3 Bc5 Re2 h6 g3 a5 f4 a4 f5 Bd5 Qd3 Bb6 b3 axb3 axb3 Na5 Re8+ Rxe8 Qxd5 Rd8 Qb5 Rd6 Kc2 Kg7 b4 Nb7 c4 Rf6 g4 Nd8 c5 Bc7 Qd7 Nc6 b5 Na7 Qxc7 Nxb5 Qe5 Na7 Kd3",
+    "overview": "A model Scotch Four Knights. Kramnik played the early d4, traded into Black's hanging d-pawn structure, castled queenside and used f3 and Bg5 to pile onto the centre. A crisp tactical sequence around the d5-pawn won material, and Kramnik converted the extra exchange with his trademark technique.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bqr1k1/ppp2ppp/1bn2n2/3P4/3N4/2N1BP2/PPPQ2PP/2KR1B1R b - - 0 10",
+        "annotation": "exd5 — opening the centre against Black's hanging pawns. White's pieces are poised on the d- and e-files to besiege the structure.",
+        "concept": "Open the centre against hanging pawns"
+      },
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r1bBr1k1/ppp2ppp/1bn5/8/3N4/2n2P2/PPPQ2PP/2KR1B1R b - - 0 12",
+        "annotation": "Bxd8 — the point of the combination: White emerges from the tactics around the d5-square with an extra exchange.",
+        "concept": "Tactics on the weak square"
+      },
+      {
+        "moveNumber": 42,
+        "color": "white",
+        "fen": "8/n4pk1/5r1p/2P1QPp1/6P1/3K4/7P/8 b - - 3 42",
+        "annotation": "Kd3 — deep in the won endgame the king marches up to escort the c-pawn home. The structural edge has become a full point.",
+        "concept": "Convert the material edge"
+      }
+    ],
+    "middlegameTheme": "Besiege the hanging d-pawn, win material around the weak square.",
+    "lessonSummary": "The early d4 hands Black a fragile centre; pile onto it and the tactics tend to fall White's way."
+  },
+  {
+    "id": "mg-mamedyarov-glek",
+    "openingId": "four-knights-game",
+    "white": "Shakhriyar Mamedyarov",
+    "black": "Vladimir Kramnik",
+    "whiteElo": 2753,
+    "blackElo": 2803,
+    "result": "1-0",
+    "year": 2013,
+    "event": "Geneva Masters 2013",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Bc5 O-O O-O Re1 Bb6 d3 Re8 a4 Bg4 h3 Bh5 g4 Bg6 Nd2 Qh4 Qe2 f5 Nf3 Qf6 gxf5 Bxf5 Ng5 e4 d4 Kh8 Nxe4 Qg6 Qf3 Rf8 Qg3 Qxg3 Nxg3 Ba5 Bxc6 Bxc3 Bxb7 Rab8 Ba3 Rf6 Nxf5 Bxa1 Rxa1 Rxb7 Ne3 h6 d5 Rf4 Bc5 a6 Kg2 Kh7 Ra3 Rb1 d6 cxd6 Bxd6 Rd4 Bc5 Rd7 a5 Rb5 Bb6 Rg5+ Kf1 Rh5 Rd3 Rxd3 cxd3 Rxh3 d4 Kg6 Nc4 Rc3 Nd6 h5 Ne4 Rc4 Nd6 Rc6 Nb7 Kf5 Kg2 h4 Nc5 g5 Nxa6 Rc2 Nb4 Rb2 Nd5 g4 Ne3+ Kg5 d5 g3 Nc4 Re2 d6 Kg4 Ne3+ Kf4 d7 h3+ Kxh3 Rxf2 Ng2+",
+    "overview": "Mamedyarov, the great Glek-System practitioner, beats Kramnik from his pet 4.g3. The fianchettoed bishop and a kingside pawn advance opened lines, a knight grabbed the f5 outpost amid the tactics, and after the queens came off Mamedyarov ground out a long, technical rook-and-knight endgame.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r2qr1k1/ppp2ppp/1bn5/4p3/P5b1/2PP1NPP/2P2PB1/R1BQR1K1 b - - 0 12",
+        "annotation": "h3 — preparing g4 to expand on the kingside and challenge Black's bishop. The Glek's quiet setup becomes a pawn-storm engine.",
+        "concept": "Kingside expansion"
+      },
+      {
+        "moveNumber": 27,
+        "color": "white",
+        "fen": "1r5k/pBp3pp/5r2/5N2/P2P4/B1b4P/2P2P2/R3R1K1 b - - 0 27",
+        "annotation": "Nxf5 — the knight seizes the f5 outpost in the thick of the tactics, dominating from the centre of Black's camp.",
+        "concept": "The f5 knight"
+      },
+      {
+        "moveNumber": 60,
+        "color": "white",
+        "fen": "8/3P4/1B6/P7/5k2/6pK/5rN1/8 b - - 1 60",
+        "annotation": "Ng2+ — the final touch in a won endgame: the knight and the passed d-pawn decide. Patience converted the small Glek edge.",
+        "concept": "Endgame technique"
+      }
+    ],
+    "middlegameTheme": "Fianchetto, expand with g4, plant a knight on f5, convert.",
+    "lessonSummary": "The Glek is positional but never passive — g4 and a knight on f5 give a real kingside initiative."
+  },
+  {
+    "id": "mg-karthikeyan-italian-four-knights",
+    "openingId": "four-knights-game",
+    "white": "Murali Karthikeyan",
+    "black": "Aleksey Grebnev",
+    "whiteElo": 2658,
+    "blackElo": 2556,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Asian Individual Championship 2025",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nf6 Nc3 Nc6 Bc4 Nxe4 Nxe4 d5 Bd3 dxe4 Bxe4 Bd6 d4 Nxd4 Nxd4 exd4 Qxd4 O-O Bd2 Qh4 g3 Qg4 h3 Qe6 Bc3 Qh6 Bd2 Qe6 Bc3 Qh6 h4 f5 Bd5+ Be6 f4 c6 Qxg7+ Qxg7 Bxe6+ Qf7 Bxf7+ Kxf7 h5 Rfe8+ Kf1 Rad8 Rd1 Bf8 Kg2 b5 Kf3 Bc5 Be5 a5 g4 fxg4+ Kxg4 Ke6 Rhe1 Rg8+ Kf3 Rxd1 Rxd1 Be7 b3 a4 bxa4 bxa4 Rb1 a3 Ke4 Rg2 f5+ Kf7 Rb7 Re2+ Kf4 Rf2+ Ke3 Rxf5 Bd6 Ke6 Bxe7 Rf7 Kd4 Rxe7 Rxe7+ Kxe7 Kc5 Kf6 Kxc6 Kg5 c4 Kxh5 c5",
+    "overview": "A clean modern handling of the Italian Four Knights fork-trick. After 4...Nxe4 5.Nxe4 d5 regained the piece, White kept the more active centralised bishop, won a pawn with a well-timed Qxg7+ that forced off the queens, and converted a textbook bishop endgame.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r1bqk2r/ppp2ppp/3b4/4p3/3NB3/8/PPP2PPP/R1BQK2R b KQkq - 0 9",
+        "annotation": "Nxd4 — White recaptures and the dust settles: the centralised bishop on e4 and the more harmonious pieces give a small but real pull.",
+        "concept": "Emerge from the fork trick with the edge"
+      },
+      {
+        "moveNumber": 20,
+        "color": "white",
+        "fen": "r4rk1/pp4Qp/2pbb2q/3B1p2/5P1P/2B3P1/PPP5/R3K2R b KQ - 0 20",
+        "annotation": "Qxg7+ — a precise trade: having grabbed a pawn, White forces off the queens and steers into a winning endgame.",
+        "concept": "Trade into a winning endgame"
+      },
+      {
+        "moveNumber": 49,
+        "color": "white",
+        "fen": "8/7p/2K5/2P4k/8/p7/P7/8 b - - 0 49",
+        "annotation": "c5 — the passed pawn advances; the extra pawn and the active king decide. The tiny Italian edge has matured into a win.",
+        "concept": "Convert the extra pawn"
+      }
+    ],
+    "middlegameTheme": "Survive the fork trick with the better bishop, win a pawn, convert.",
+    "lessonSummary": "Meet the fork trick calmly: the centralised bishop and the healthier structure give White a small, very real pull."
+  },
+  {
+    "id": "mg-carlsen-rubinstein",
+    "openingId": "four-knights-game",
+    "white": "Magnus Carlsen",
+    "black": "Boris Gelfand",
+    "whiteElo": 2813,
+    "blackElo": 2750,
+    "result": "1-0",
+    "year": 2010,
+    "event": "Amber Blindfold 2010",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nf6 Nc3 Nc6 Bb5 Nd4 Bc4 d6 Nxd4 exd4 Nd5 Nd7 d3 c6 Nf4 g6 a3 Bg7 O-O O-O Ba2 Nc5 Bd2 Qh4 Ne2 Be6 Ng3 Bxa2 Rxa2 d5 exd5 cxd5 a4 Rac8 f4 f5 Qf3 Qd8 b4 Ne6 Ne2 Qd7 Qf2 Rc7 Kh1 Rfc8 Rc1 Qd6 Ng1 Bh6 g3 Bg7 Nf3 Bf6 Qg2 Kf7 Rb2 Kg8 Be1 Qd7 b5 Nc5 Ra1 Ne6 Bb4 a6 Re1 axb5 axb5 b6 Ne5 Qxb5 Nxg6 hxg6 Rxe6 Rc6 Re2 Kh7 g4 fxg4 Qxg4 Qa4 f5 Bg7 Rb1 gxf5 Qxf5+ Kh8 Rg2 Rxc2 Qh5+ Kg8 Rxg7+ Kxg7 Rg1+ Kf6 Qg6+ Ke5 Bd6#",
+    "overview": "Carlsen meets the Rubinstein's bold ...Nd4 with calm development, keeps the bishop pair, and slowly outplays Gelfand. A queenside pawn advance opened lines, the two bishops took over the board, and the game ended with a crisp mating attack in the centre.",
+    "criticalMoments": [
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "2rq1rk1/pp4bp/6p1/2np1p2/PP1p1P2/3P1QN1/R1PB2PP/5RK1 b - - 0 21",
+        "annotation": "b4 — Carlsen expands on the queenside, prising open lines for the bishop pair against Black's position.",
+        "concept": "Open lines for the bishops"
+      },
+      {
+        "moveNumber": 43,
+        "color": "white",
+        "fen": "2r5/7k/1pr2bp1/3p1P2/qB1p2Q1/3P4/1RP1R2P/7K b - - 0 43",
+        "annotation": "f5 — the breakthrough; White's pieces flood toward the Black king as the position cracks open.",
+        "concept": "Breakthrough attack"
+      },
+      {
+        "moveNumber": 51,
+        "color": "white",
+        "fen": "2r5/8/1p1B2Q1/3pk3/q2p4/3P4/2r4P/6RK b - - 5 51",
+        "annotation": "Bd6# — checkmate. The bishop pair delivers the final blow, the Black king caught in the open centre.",
+        "concept": "The bishop pair mates"
+      }
+    ],
+    "middlegameTheme": "Keep the bishop pair, open lines, deliver mate.",
+    "lessonSummary": "Against the Rubinstein, refuse complications, keep the two bishops, and let them dominate the open position."
   }
 ]

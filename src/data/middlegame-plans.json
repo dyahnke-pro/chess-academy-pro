@@ -10060,64 +10060,6 @@
     ]
   },
   {
-    "id": "mp-four-knights-belgrade-gambit",
-    "openingId": "four-knights-game",
-    "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n2/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 5",
-    "title": "Belgrade Gambit central crash with d5",
-    "overview": "The Belgrade Gambit (d4 exd4 Nd5) is the sharpest treatment of the Four Knights. White sacrifices the d-pawn to pin the f6-knight to the queen and gain a massive central knight outpost. After Nxe4 Qe2 Black's pieces tangle and White recovers the pawn with positional advantage.",
-    "pawnBreaks": [
-      {
-        "move": "c3",
-        "explanation": "Once the dust settles, c3 challenges Black's d-pawn and prepares to recapture with the c-pawn if Black trades d-pawns. Supports a future d4 push too."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nd5 dominant outpost",
-        "explanation": "The d5-knight is the Belgrade Gambit's centerpiece. From d5 it pins Nf6 to the queen, dominates the center, and creates tactical threats with every move."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd1-e2",
-        "explanation": "Qe2 supports the central knight and the pinned position. Combined with O-O-O later, this creates king-and-queen pressure on Black's exposed king-side."
-      }
-    ],
-    "typicalMistakes": [
-      "Trading queens early — kills the attacking compensation completely.",
-      "Castling kingside before securing the center — Black's …Bb4 + …Bxc3 can damage your structure."
-    ]
-  },
-  {
-    "id": "mp-four-knights-spanish-symmetry",
-    "openingId": "four-knights-game",
-    "criticalPositionFen": "r1bq1rk1/ppp2ppp/2np1n2/1B2p3/1b2P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7",
-    "title": "Spanish Four Knights — slow maneuvering",
-    "overview": "The Spanish Four Knights — both sides mirror each other. The plan is slow piece maneuvering. White's idea: develop completely, then break symmetry with Nd5 (which Black can never match because his knight is pinned by Bb5). Once the imbalance is created, White's two bishops outpace Black's identical setup.",
-    "pawnBreaks": [
-      {
-        "move": "d4",
-        "explanation": "After full development, d4 challenges Black's central e5 pawn. The break creates the first asymmetry in the position."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nc3-d5 strategic outpost",
-        "explanation": "The d5-knight breaks Black's symmetric setup. From d5 the knight pressures the kingside and can be supported by c2-c4 + Nbd2 to prevent the trade."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bc1-g5 pin",
-        "explanation": "Bg5 pins the f6-knight to the queen and creates a tactical asymmetry — Black's identical bishop on g4 doesn't create the same threat because White hasn't castled yet."
-      }
-    ],
-    "typicalMistakes": [
-      "Trading bishops on c3 — gives Black the bishop pair for no compensation.",
-      "Pushing d4 without preparation — Black's …exd4 + …d5 break-up neutralizes White's edge."
-    ]
-  },
-  {
     "id": "mp-alapin-isolated-d-pawn",
     "openingId": "sicilian-alapin",
     "criticalPositionFen": "rnb1kb1r/pp3ppp/4pn2/3q4/3P4/5N2/PP2BPPP/RNBQK2R b KQkq - 0 7",
@@ -19199,6 +19141,257 @@
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-fourknightsgame-main",
+    "openingId": "four-knights-game",
+    "title": "Spanish Four Knights: the Bishop Pair and the d4-d5 Space",
+    "criticalPositionFen": "r1b2rk1/pp2qppp/3pnn2/1Bp1p3/3PP3/2P2N2/P1P2PPP/R1BQR1K1 w - - 0 12",
+    "overview": "The Metger middlegame: White owns the bishop pair after Bxc3 and the doubled c-pawns control extra central squares. The plan is to regroup the bishops, gain space with d4-d5, and slowly open the position where the two bishops outgun Black's bishop and knight.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5",
+        "explanation": "The d5 thrust gains space, cramps Black, and frees the long diagonal for the bishop pair.",
+        "fen": "r1b2rk1/pp2qppp/3pnn2/1Bp1p3/3PP3/2P2N2/P1P2PPP/R1BQR1K1 w - - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bb5-f1-g2",
+        "explanation": "The Spanish bishop regroups to f1 and then g2, where it rakes the long light diagonal once the centre opens."
+      }
+    ],
+    "strategicThemes": [
+      "Convert the bishop pair in the increasingly open position.",
+      "Gain space with d4-d5 and clamp Black's pieces.",
+      "Use the half-open b-file from the doubled c-pawns against the queenside."
+    ],
+    "endgameTransitions": [
+      "The two bishops and central space carry into a comfortable endgame edge."
+    ],
+    "playableLines": [
+      {
+        "title": "Spanish Four Knights: the Bishop Pair and the d4-d5 Space",
+        "fen": "r1b2rk1/pp2qppp/3pnn2/1Bp1p3/3PP3/2P2N2/P1P2PPP/R1BQR1K1 w - - 0 12",
+        "moves": [
+          "Bf1",
+          "Rd8",
+          "g3",
+          "Qc7",
+          "d5",
+          "Nf8"
+        ],
+        "annotations": [
+          "Bf1 — the bishop regroups to f1, ready to swing out to the long diagonal once the centre opens.",
+          "…Rd8 — Black centralises a rook on d8 behind the d6-pawn.",
+          "g3 — White builds a kingside pawn shield on g3 and prepares f4 later.",
+          "…Qc7 — the queen drops to c7, eyeing the e5-pawn and the c-file.",
+          "d5! — the space-gaining thrust; the pawn on d5 cramps Black and frees the bishop pair.",
+          "…Nf8 — the e6-knight retreats to f8 to regroup."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-fourknightsgame-scotchfk",
+    "openingId": "four-knights-game",
+    "title": "Scotch Four Knights: Besiege the Isolated d5-Pawn",
+    "criticalPositionFen": "r1bq1rk1/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1RK1 w - - 2 10",
+    "overview": "After the early d4 and the trade on c6, Black is left with a lonely d5-pawn. White's whole plan is the classic minority-style siege: pin the f6-knight with Bg5, swing the queen to f3, double on the e-file, and make the structural weakness on d5 tell.",
+    "pawnBreaks": [
+      {
+        "move": "c4 break (later)",
+        "explanation": "A timely c4 can dissolve into pressure on the isolated d5-pawn once the pieces are aimed at it.",
+        "fen": "r1bq1rk1/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1RK1 w - - 2 10"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-f3",
+        "explanation": "The queen swings to f3 to add a third attacker on the d5-pawn and eye the kingside."
+      }
+    ],
+    "strategicThemes": [
+      "Pin and trade the defenders of the d5-pawn.",
+      "Occupy the open e-file with the rooks.",
+      "The bishop pair supports the long-term blockade-and-besiege plan."
+    ],
+    "endgameTransitions": [
+      "If the d5-pawn falls or freezes, the resulting endgame is strategically winning for White."
+    ],
+    "playableLines": [
+      {
+        "title": "Scotch Four Knights: Besiege the Isolated d5-Pawn",
+        "fen": "r1bq1rk1/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1RK1 w - - 2 10",
+        "moves": [
+          "Bg5",
+          "c6",
+          "Qf3",
+          "Bd6",
+          "Rae1",
+          "Rb8"
+        ],
+        "annotations": [
+          "Bg5 — pin the f6-knight, a defender of the d5-pawn.",
+          "…c6 — Black props the d5-pawn with c6.",
+          "Qf3 — the queen swings to f3, a third attacker bearing on d5.",
+          "…Bd6 — Black develops the bishop to d6, eyeing the kingside.",
+          "Rae1 — the rook joins on e1, seizing the open e-file.",
+          "…Rb8 — Black activates the rook on b8 on the half-open b-file."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-fourknightsgame-glek",
+    "openingId": "four-knights-game",
+    "title": "Glek System: the Knight to the f5 Outpost",
+    "criticalPositionFen": "r1bq1rk1/1pp2pp1/p1np1n1p/4p3/4P3/2NPPNPP/PPP3B1/R2Q1RK1 b - - 0 10",
+    "overview": "The Glek's quiet fianchetto setup hides a concrete plan: trade the dark-squared bishops, recapture toward the centre to open the f-file, and reroute the knight via h4 to the f5 outpost. There, supported by the g2-bishop and the f-file rook, White builds a patient but real kingside initiative.",
+    "pawnBreaks": [
+      {
+        "move": "e3-e4 front",
+        "explanation": "Recapturing fxe3 builds a broad e3-e4 pawn front and opens the f-file for the rook.",
+        "fen": "r1bq1rk1/1pp2pp1/p1np1n1p/4p3/4P3/2NPPNPP/PPP3B1/R2Q1RK1 b - - 0 10"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-h4-f5",
+        "explanation": "The king-knight reroutes via h4 to the dominant f5 outpost, where it cannot be chased by a pawn."
+      }
+    ],
+    "strategicThemes": [
+      "Trade the dark-squared bishops, then exploit the dark squares.",
+      "Open the f-file with fxe3 for the rook.",
+      "Plant a knight on the f5 outpost for a kingside initiative."
+    ],
+    "endgameTransitions": [
+      "The space edge and the f5 knight keep a pull even into a queenless middlegame."
+    ],
+    "playableLines": [
+      {
+        "title": "Glek System: the Knight to the f5 Outpost",
+        "fen": "r1bq1rk1/1pp2pp1/p1np1n1p/4p3/4P3/2NPPNPP/PPP3B1/R2Q1RK1 b - - 0 10",
+        "moves": [
+          "Ne7",
+          "Nh4",
+          "c6",
+          "Nf5"
+        ],
+        "annotations": [
+          "…Ne7 — Black reroutes the knight toward the centre via e7.",
+          "Nh4 — White's knight hops to h4, aiming for the f5 outpost.",
+          "…c6 — Black takes queenside space with c6.",
+          "Nf5! — the knight lands on the f5 outpost, dominating from the centre of Black's camp."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-fourknightsgame-italian",
+    "openingId": "four-knights-game",
+    "title": "Italian Four Knights: the Small, Sound Edge",
+    "criticalPositionFen": "r1bqr1k1/ppp2ppp/2nb4/4p3/4B3/3P1N2/PPP2PPP/R1BQR1K1 b - - 0 10",
+    "overview": "After the fork trick equalises material, White is left with a centralised bishop on e4 and a slightly more harmonious setup. The plan is undramatic and technical: hold the better piece, build a small flexible centre with c3 and d3, and pressure down the half-open e-file, outplaying Black slowly from a healthy structure.",
+    "pawnBreaks": [
+      {
+        "move": "b4 expansion",
+        "explanation": "With a stable centre, b4 grabs queenside space and a long-term initiative.",
+        "fen": "r1bqr1k1/ppp2ppp/2nb4/4p3/4B3/3P1N2/PPP2PPP/R1BQR1K1 b - - 0 10"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Be4-d5",
+        "explanation": "The centralised bishop can jump to d5 with check, harassing the king and gaining time."
+      }
+    ],
+    "strategicThemes": [
+      "Keep the more active centralised bishop.",
+      "Build a small flexible centre with c3 and d3.",
+      "Pressure the half-open e-file and expand with b4."
+    ],
+    "endgameTransitions": [
+      "The healthier structure converts into a pleasant, risk-free endgame edge."
+    ],
+    "playableLines": [
+      {
+        "title": "Italian Four Knights: the Small, Sound Edge",
+        "fen": "r1bqr1k1/ppp2ppp/2nb4/4p3/4B3/3P1N2/PPP2PPP/R1BQR1K1 b - - 0 10",
+        "moves": [
+          "h6",
+          "c3",
+          "f5",
+          "Bd5+",
+          "Kf8",
+          "b4"
+        ],
+        "annotations": [
+          "…h6 — Black makes luft on h6.",
+          "c3 — White builds a small, flexible centre with c3 and d3.",
+          "…f5 — Black lunges with f5 to challenge the centralised bishop.",
+          "Bd5+ — the bishop checks from d5, harassing the king with tempo.",
+          "…Kf8 — the king steps to f8, losing the right to castle.",
+          "b4 — White expands on the queenside with b4 and a lasting pull."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-fourknightsgame-rubinstein",
+    "openingId": "four-knights-game",
+    "title": "Rubinstein: the d4-Break that Unleashes the Bishops",
+    "criticalPositionFen": "r1bq1rk1/1pp2ppp/1p1p1n2/4p3/4P3/2PP1B2/PP3PPP/R1BQ1RK1 b - - 0 11",
+    "overview": "Having met the Rubinstein's …Nd4 with the calm Be2 and traded off Black's active b6-bishop, White holds the bishop pair in a sound position. The c3-pawn was played for one reason: to support the thematic d4-break that opens the centre and turns the two bishops loose.",
+    "pawnBreaks": [
+      {
+        "move": "d3-d4",
+        "explanation": "The d4-break opens the centre at the moment White's bishops are ready to dominate the long diagonals.",
+        "fen": "r1bq1rk1/1pp2ppp/1p1p1n2/4p3/4P3/2PP1B2/PP3PPP/R1BQ1RK1 b - - 0 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-d4",
+        "explanation": "After the central exchanges the queen recaptures on d4, centralised and supporting the open-position bishops."
+      }
+    ],
+    "strategicThemes": [
+      "Refuse provocation, keep the bishop pair.",
+      "Prepare and execute the d4-break to open the centre.",
+      "Let the two bishops dominate the resulting open lines."
+    ],
+    "endgameTransitions": [
+      "The bishop pair in an open position is a durable endgame trump."
+    ],
+    "playableLines": [
+      {
+        "title": "Rubinstein: the d4-Break that Unleashes the Bishops",
+        "fen": "r1bq1rk1/1pp2ppp/1p1p1n2/4p3/4P3/2PP1B2/PP3PPP/R1BQ1RK1 b - - 0 11",
+        "moves": [
+          "c5",
+          "d4",
+          "cxd4",
+          "cxd4",
+          "exd4",
+          "Qxd4"
+        ],
+        "annotations": [
+          "…c5 — Black clamps the d4-square with c5.",
+          "d4! — the thematic break; White opens the centre for the bishop pair.",
+          "…cxd4 — Black captures on d4.",
+          "cxd4 — White recaptures, keeping a broad centre on d4 and e4.",
+          "…exd4 — Black takes again on d4.",
+          "Qxd4 — the queen recaptures on d4, centralised, the open lines favouring the two bishops."
         ]
       }
     ]

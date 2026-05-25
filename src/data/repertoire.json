@@ -579,6 +579,11 @@
         "name": "Metger Unpin: ...Qe7 System",
         "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Bg5 Bxc3 bxc3 Qe7 Re1 Nd8 d4 Ne6 Bc1 c6 Bd3",
         "explanation": "The Metger Unpin is a classic method for Black to break the Bg5 pin by playing ...Qe7, connecting the rooks and preparing to reroute the knight. White responds with Re1 and d4, using the center to generate play. The critical battle is over the d4 break — White wants to open the position for the bishop pair while Black aims to keep the center stable with ...c6 and ...Nd8-e6. The Bc1-g5 maneuver re-pins the knight and forces Black into careful maneuvering. White's long-term advantage lies in the bishop pair and central space."
+      },
+      {
+        "name": "Glek System: 4.g3",
+        "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 Bc5 Bg2 d6 d3 a6 O-O O-O h3 h6 Be3 Bxe3 fxe3 Ne7 Nh4 c6",
+        "explanation": "The Glek System fianchettoes with 4.g3 and Bg2, blending a King's Indian Attack idea into the open game. The bishop on the long diagonal and a flexible pawn structure make this a modern, low-theory way to play for a positional pull — a favourite of Mamedyarov. After both sides develop and castle, White trades the dark-squared bishops with Be3 and recaptures fxe3 to open the f-file and build a broad central front. The knight reroutes via h4 toward the f5 outpost, where combined with the f-file rook and the g2-bishop, White generates a patient, lasting kingside initiative without committing to any forcing line."
       }
     ],
     "trapLines": [],

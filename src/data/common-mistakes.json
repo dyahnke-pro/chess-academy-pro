@@ -335,19 +335,22 @@
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
       "wrongMove": "Nxe5",
       "correctMove": "Bb5",
-      "explanation": "Nxe5 Nxe5 d4 recovers the piece but Black gets easy equality. Bb5 enters the Spanish Four Knights with positional pressure."
+      "explanation": "Nxe5 is the Halloween Gambit — a knight sacrifice that is objectively unsound; with accurate defence Black is simply better. Bb5 keeps the principled Spanish Four Knights, pressuring the c6-knight and preparing the d4 break.",
+      "shortNarration": "Bb5 — the sound Spanish, not the gambit"
     },
     {
-      "fen": "r1bqk2r/pppp1ppp/2n2n2/1B2p3/1b2P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
-      "wrongMove": "Bxc6",
-      "correctMove": "O-O",
-      "explanation": "Bxc6 dxc6 gives Black the bishop pair and strong center. O-O keeps tension and develops naturally."
+      "fen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
+      "wrongMove": "Nxe5",
+      "correctMove": "Be2",
+      "explanation": "Grabbing the pawn with Nxe5 invites the strong ...Qe7, when Black regains it with a fine game — and the careless f4 even drops a piece to ...Nxb5. Be2 is the calm Maroczy retreat that keeps the bishop pair and a sound edge.",
+      "shortNarration": "Be2 — don't grab e5, retreat calmly"
     },
     {
-      "fen": "r1bq1rk1/pppp1ppp/2n2n2/1B2p3/1b2P3/2N2N2/PPPP1PPP/R1BQ1RK1 w - - 8 6",
-      "wrongMove": "Nd5",
-      "correctMove": "d3",
-      "explanation": "Nd5 Nxd5 exd5 Ne7 gives Black comfortable play. d3 is solid and prepares Bg5 or Be3."
+      "fen": "r1bq1rk1/ppp2ppp/2np1n2/1B2p3/1b2P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7",
+      "wrongMove": "h3",
+      "correctMove": "Bg5",
+      "explanation": "Drifting with a slow move like h3 lets Black comfortably hold the symmetry. Bg5 breaks it on White's terms, pinning the f6-knight — which Black cannot mirror without wrecking his own kingside.",
+      "shortNarration": "Bg5 — break the symmetry, pin f6"
     }
   ],
   "sicilian-alapin": [

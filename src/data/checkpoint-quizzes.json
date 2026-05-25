@@ -399,28 +399,28 @@
     {
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
       "correctMove": "Bb5",
-      "hint": "Pin the knight to the king, entering the Spanish variation.",
-      "concept": "Spanish Four Knights with Bb5"
+      "hint": "Borrow the Ruy idea — lean on the knight that guards e5.",
+      "concept": "The Spanish Four Knights"
     },
     {
-      "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
-      "correctMove": "Nd4",
-      "hint": "Place the knight on a strong central square attacking the bishop.",
-      "concept": "Rubinstein variation knight jump"
+      "fen": "r1bn1rk1/ppp1qppp/3p1n2/1B2p1B1/4P3/2PP1N2/P1P2PPP/R2QR1K1 w - - 3 10",
+      "correctMove": "d4",
+      "hint": "You hold the bishop pair — strike the centre open.",
+      "concept": "The d4 break for the bishop pair"
     },
     {
-      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+      "fen": "r1b2rk1/pp2qppp/3pnn2/1Bp1p3/3PP3/2P2N2/P1P2PPP/R1BQR1K1 w - - 0 12",
       "type": "plan",
-      "question": "What is the best plan here?",
+      "question": "What is White's plan in this Metger middlegame?",
       "choices": [
-        "Play Nxe4 to win a pawn, exploiting the symmetry",
-        "Play d6 to solidify the center and develop the bishop",
-        "Play Bc5 to put pressure on f2",
-        "Play h6 to prevent Bg5"
+        "Open the position with d4-d5 to exploit the bishop pair",
+        "Trade everything and steer for a draw",
+        "Win the e5-pawn by force",
+        "Castle queenside and storm the kingside"
       ],
       "correctIndex": 0,
-      "hint": "The symmetrical position allows a tactical trick involving the unprotected e4 pawn.",
-      "concept": "Tactical pawn win in the Italian Four Knights"
+      "hint": "White's trump is the two bishops — open lines for them.",
+      "concept": "Exploit the bishop pair"
     }
   ],
   "sicilian-alapin": [

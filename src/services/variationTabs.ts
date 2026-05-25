@@ -46,6 +46,17 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /fantasy/i, label: 'Fantasy' },
     { test: /tartakower|breyer/i, label: 'Tartakower' },
   ],
+  // Four Knights Game — quiet, classical White opening. Main-line pill = the
+  // Spanish Four Knights / Metger (the showcase, exempt from this list). Tabs
+  // ordered by reasoned amateur prevalence: the open Scotch Four Knights and
+  // the tricky Italian fork-trick are most-met, then Glek's modern fianchetto,
+  // then Black's ambitious Rubinstein counter.
+  'four-knights-game': [
+    { test: /scotch four knights/i, label: 'Scotch Four Knights' },
+    { test: /italian four knights/i, label: 'Italian Four Knights' },
+    { test: /glek/i, label: 'Glek System' },
+    { test: /rubinstein/i, label: 'Rubinstein' },
+  ],
   // Scotch Game — hand-picked tabs, frequency-ordered (repertoire weights).
   // Main-line pill = the Classical 4…Bc5 Be3 Qf6 line (the repertoire pgn), so
   // the "Classical" variation is omitted as a tab (it'd duplicate the pill).
