@@ -398,3 +398,53 @@ until a broader fetch or a real game turns up (do NOT force a wrong-line match):
    overview + critical moments, OR gate so only narrated games surface
    (mirrors gems' `isSurfaceableGem`). (This was the in-progress filter/gate
    work — paused 2026-05-24.)
+
+---
+
+## ⭐ REMAINING TRACKS (David 2026-05-25, after the cohesion-loop work shipped)
+
+The app-cohesion training loop is done + merged. David's read on what's left:
+**(A) finish the opening masterclasses, and (B) the pro-repertoire model-game gap.**
+
+### A. Finish the opening masterclasses
+Build the remaining masterclasses to the LOCKED keystone standard
+(`docs/opening-masterclass-playbook.md` §0.5 — author the data, the wiring
+lights up). Each = main line + variations (all validated lines) + per-variation
+model games (student-side WINS) + gems/traps + plans + quizzes + narration
+(two registers, sourced). The bigger track.
+
+### B. Pro-repertoire completeness — WALKED 2026-05-25
+Walked all **14 pros / 82 opening entries**. **Text content is 100% complete**
+(every entry has overview + 4 key ideas + variations with explanations). The
+**only gap is model games: 46/82 have one, 36 are missing.** (Traps are sparse
+by design — empty > forced — NOT a gap.)
+
+**The 36 missing a model game, by pro:**
+- **Akeem** — Italian, Scotch, King's Gambit, Caro-Kann (all 4)
+- **Hikaru** — KIA, Scotch, London, Najdorf, KID, Benko, English (7 of 8; only Nimzo has one)
+- **Gukesh** — Italian, Catalan, Najdorf (all 3)
+- **Eric Rosen** — London, Stafford, Englund (all 3)
+- **Samay** — Italian, Najdorf, Nimzo (all 3)
+- **Naroditsky** — Scotch, Vienna, Semi-Slav
+- **Carlsen** — English, Sveshnikov, QP London
+- **Anna Cramling** — London, The Cow
+- **Firouzja** — Italian, Grünfeld
+- **Dubov** — Modern Benoni, Dutch
+- **GothamChess** — Italian, Rossolimo
+- **Caruana** — Petroff
+- **Niemann** — Anti-Marshall
+- **Praggnanandhaa** — ✅ none (fully complete)
+
+**Fill path (sourcing reality, per the section above):**
+- The 10 cached pros: fuzzy-match a real pro-WIN in the correct line out of
+  `docs/audit-runs/2026-05-19-pro-games-gen/raw-fetched.json`, then author
+  overview + critical moments. A pro with no cached win for an opening →
+  the section correctly **self-hides** (empty > wrong-line); not all 36 are
+  fillable.
+- The **streamer pros (Akeem, Samay, Gukesh)** likely aren't in the 10-pro
+  cache → need a fresh `scripts/fetch-pro-games-local.mjs` fetch, or they stay
+  model-game-less (section just doesn't render).
+- Never fabricate a PGN; templated overviews are filtered by `isNarratedModelGame`.
+
+Audit walker: `/tmp/pro-audit.cjs` (ad-hoc; re-derive by walking
+`pro-repertoires.json` openings + cross-referencing `model-games.json`).
