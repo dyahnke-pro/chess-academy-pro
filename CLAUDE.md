@@ -1180,6 +1180,24 @@ playbook holds the rules you MUST follow, in particular:
     drop. This does NOT contradict the 2026-05-24 "Learn fallback is good" rule
     — that fallback is for the ~3,000 NON-curated DB-only openings; masterclass
     curated content is held to the two-register bar.
+  - **🔒 INDEPENDENT VERIFICATION — narration IDEAS must be checked against a
+    source OUTSIDE training recall, and the source RECORDED (David 2026-05-25:
+    "use independent verification — books, online — that's the gate").** Author
+    by consulting the book corpus (`chess-concepts.json` /
+    `opening-book-pages.json`, classical openings only) AND/OR reputable online
+    references (the pre-1930s books don't cover modern openings); never from
+    memory. Record the ref in a `sources[]` array on the narration unit:
+    `concept:<id>` | `book:<openingId>` | a reputable chess URL. `narrationSources.ts`
+    (`sourcesAreValid` / `isResolvableSource`) is the resolver; the gates require
+    every masterclass narration unit to carry ≥1 resolvable source —
+    `punishGems.test` (gems), `middlegamePlanThemes.test` (plan lines),
+    `commonMistakeNarration.test` (Pitfalls), each with a shrinking baseline
+    (`punishGemSources` / `middlegamePlanSources` / `commonMistakeSources`).
+    A gate can't prove the prose was truly derived from the source, but no
+    recorded+resolvable source = no ship. STILL TO WIRE: beat-lessons
+    (`ruyTrapLessons.ts` etc.) — add the same `sources` gate when sourcing them.
+    The gem move/advantage is already independently verified by the engine eval
+    (G3 + tier); `sources[]` covers the IDEAS/framing.
   - **Practice = silent. Play = the coach room LOCKED to the exact line**
     (pass the line as `customLine` to `OpeningPlayMode` — never the opening's
     generic main line).

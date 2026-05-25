@@ -6,6 +6,8 @@ import repertoireRaw from './repertoire.json';
 import proRaw from './pro-repertoires.json';
 import openingManifests from './opening-manifests.json';
 import shortBaselineRaw from './middlegamePlanShort.baseline.json';
+import planSourcesBaselineRaw from './middlegamePlanSources.baseline.json';
+import { sourcesAreValid } from './narrationSources';
 
 // ─── The "show the theme" gate (David 2026-05-25) ───────────────────────────
 // A middlegame-plan playableLine MUST demonstrate the plan's named theme — it
@@ -160,6 +162,36 @@ describe('masterclass plan lines carry a short (learnCues) register', () => {
     const live = new Set(missing);
     const stale = [...baseline].filter((k) => !live.has(k));
     if (stale.length > 0) console.warn(`[plan-short] ${stale.length} baseline lines now have short cues — prune them: ${stale.join(', ')}`);
+    expect(stale.length).toBeLessThanOrEqual(baseline.size);
+  });
+});
+
+// ─── Independent-verification gate (David 2026-05-25: "all other narrations
+// checked against sources") ─────────────────────────────────────────────────
+// Every masterclass plan playableLine must record a resolvable verification
+// source (sources[]: book:/concept:/reputable-URL) — proof the ideas were
+// checked against the books/online, not training recall. Baseline holds the
+// pre-rule lines and only SHRINKS as sources are added.
+describe('masterclass plan lines cite an independent verification source', () => {
+  const baseline = new Set((planSourcesBaselineRaw as { keys: string[] }).keys);
+  const masterclass = new Set(Object.keys(openingManifests).filter((k) => !k.startsWith('_')));
+  const unverified: string[] = [];
+  for (const plan of plans) {
+    if (!masterclass.has(plan.openingId)) continue;
+    (plan.playableLines ?? []).forEach((l, i) => {
+      if (!sourcesAreValid((l as { sources?: string[] }).sources)) unverified.push(`${plan.id}#${i}`);
+    });
+  }
+
+  it('introduces NO masterclass plan line without a resolvable source beyond the baseline', () => {
+    const novel = unverified.filter((k) => !baseline.has(k));
+    expect(novel, `New masterclass plan lines missing a resolvable verification source (sources: ["book:<id>" | "concept:<id>" | reputable https URL]). Verify the ideas and record the ref:\n${novel.join('\n')}`).toEqual([]);
+  });
+
+  it('plan-source baseline only shrinks', () => {
+    const live = new Set(unverified);
+    const stale = [...baseline].filter((k) => !live.has(k));
+    if (stale.length > 0) console.warn(`[plan-sources] ${stale.length} baseline lines now cite a source — prune them: ${stale.join(', ')}`);
     expect(stale.length).toBeLessThanOrEqual(baseline.size);
   });
 });

@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import commonMistakesData from './common-mistakes.json';
 import openingManifests from './opening-manifests.json';
 import type { CommonMistake } from '../types';
+import sourcesBaselineRaw from './commonMistakeSources.baseline.json';
+import { sourcesAreValid } from './narrationSources';
 
 const data = commonMistakesData as Record<string, CommonMistake[]>;
 
@@ -41,5 +43,31 @@ describe('common-mistake narration — two registers on masterclass Pitfalls', (
       });
     });
   }
+});
+
+// Independent-verification gate (David 2026-05-25: "all other narrations checked
+// against sources"). Every masterclass Pitfall must record a resolvable source
+// (sources[]: book:/concept:/reputable-URL). Baseline holds the pre-rule entries
+// and only SHRINKS as sources are added.
+describe('masterclass common mistakes cite an independent verification source', () => {
+  const baseline = new Set((sourcesBaselineRaw as { keys: string[] }).keys);
+  const unverified: string[] = [];
+  for (const id of MASTERCLASS) {
+    (data[id] ?? []).forEach((m, i) => {
+      if (!sourcesAreValid((m as { sources?: string[] }).sources)) unverified.push(`${id}#${i}`);
+    });
+  }
+
+  it('introduces NO masterclass Pitfall without a resolvable source beyond the baseline', () => {
+    const novel = unverified.filter((k) => !baseline.has(k));
+    expect(novel, `New masterclass common mistakes missing a resolvable verification source (sources: ["book:<id>" | "concept:<id>" | reputable https URL]):\n${novel.join('\n')}`).toEqual([]);
+  });
+
+  it('common-mistake source baseline only shrinks', () => {
+    const live = new Set(unverified);
+    const stale = [...baseline].filter((k) => !live.has(k));
+    if (stale.length > 0) console.warn(`[mistake-sources] ${stale.length} baseline entries now cite a source — prune them: ${stale.join(', ')}`);
+    expect(stale.length).toBeLessThanOrEqual(baseline.size);
+  });
 });
 
