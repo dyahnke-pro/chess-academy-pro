@@ -1,5 +1,9 @@
 # PLAN — Sicilian Masterclass Program (2026-05-25)
 
+**STATUS: all 4 Sicilian masterclass CORES shipped on main + walkthrough-audited.**
+Remaining: punish-gems (CI-blocked — explorer firewalled), per-variation model games
+(Najdorf/Sveshnikov/Alapin), and the Dragon's deferred Dragadorf tab (needs CI theory).
+
 David: *"build out all Sicilian openings. one master class for each one
 (they are all different openings). be thorough."* Build a full masterclass per
 Sicilian, to the LOCKED Vienna keystone standard (`docs/opening-masterclass-playbook.md`).
