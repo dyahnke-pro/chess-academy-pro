@@ -2,6 +2,7 @@ import { db } from '../db/schema';
 import type { OpeningRecord, DrillAttempt } from '../types';
 import { fuzzyScore } from '../utils/fuzzySearch';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
+import { enrollOpeningLine } from './srsOpeningService';
 import openingManifests from '../data/opening-manifests.json';
 
 // ─── Opening name helpers ────────────────────────────────────────────────────
@@ -343,6 +344,15 @@ export async function markRungComplete(
   if (upto.includes('practice')) add('linesPerfected');
   if (upto.includes('play')) add('linesPlayed');
   if (Object.keys(patch).length) await db.openings.update(id, patch);
+
+  // Auto-enroll the learned line into spaced repetition (David 2026-05-25):
+  // once you've Learned a line it enters SRS so it resurfaces for review and
+  // feeds the Training Plan's "spaced review due" reps — no manual enroll
+  // step. Scoped to THIS line so SRS never surfaces lines you haven't
+  // learned. Fire-and-forget; never block rung completion.
+  if (upto.includes('learn') && patch.linesLearned) {
+    void enrollOpeningLine(opening, variationIndex).catch(() => undefined);
+  }
 }
 
 /** Per-line "I already know this" escape — unlocks every rung + the weapons

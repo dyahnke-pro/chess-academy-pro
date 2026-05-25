@@ -882,6 +882,111 @@ export async function getMistakePuzzlesByClassification(
     .toArray();
 }
 
+/** Position identity for capture dedup — placement+side+castling+ep (no
+ *  move counters) + the played SAN. Mirrors weaknessSpine.posKey. */
+function capturePosKey(fen: string, san: string): string {
+  return `${fen.split(' ').slice(0, 4).join(' ')}|${san}`;
+}
+
+export interface CapturePuzzleInput {
+  fen: string;
+  playedSan: string;
+  bestSan: string;
+  cpLoss?: number;
+  gamePhase?: MistakeGamePhase;
+  moveNumber?: number;
+  openingName?: string;
+  sourceGameId?: string;
+}
+
+/** Option B of the weakness-spine unification (David 2026-05-25): a mistake
+ *  the COACH catches in conversation (review / play / opening-play) is also
+ *  written as a drillable mistakePuzzle, so it surfaces in My Mistakes and
+ *  Tactics like an Analyze-derived one — not just as a misconception tally.
+ *  Deduped by position so it never duplicates an Analyze puzzle for the same
+ *  slip (the read-side weaknessSpine dedup also collapses any overlap). Needs
+ *  fen + playedSan + bestSan; derives UCI via chess.js and skips silently on
+ *  any illegal/ambiguous SAN (we never write a bad puzzle — CLAUDE.md
+ *  "when unsure, skip"). */
+export async function addMistakePuzzleFromCapture(
+  input: CapturePuzzleInput,
+): Promise<MistakePuzzle | null> {
+  const { fen, playedSan, bestSan } = input;
+  if (!fen || !playedSan || !bestSan) return null;
+
+  // Derive UCI for both moves from the position-before fen.
+  let playerMove: string;
+  let bestMove: string;
+  let playerColor: 'white' | 'black';
+  try {
+    const c1 = new Chess(fen);
+    playerColor = c1.turn() === 'w' ? 'white' : 'black';
+    const pm = c1.move(playedSan);
+    playerMove = `${pm.from}${pm.to}${pm.promotion ?? ''}`;
+    const c2 = new Chess(fen);
+    const bm = c2.move(bestSan);
+    bestMove = `${bm.from}${bm.to}${bm.promotion ?? ''}`;
+  } catch {
+    return null; // illegal/ambiguous SAN for this fen — don't write junk
+  }
+
+  // Dedup against any existing puzzle for the same position+move.
+  const key = capturePosKey(fen, playedSan);
+  const existing = await db.mistakePuzzles.toArray();
+  if (existing.some((p) => capturePosKey(p.fen, p.playerMoveSan) === key)) return null;
+
+  const cpLoss = input.cpLoss && input.cpLoss > 0 ? Math.round(input.cpLoss) : 150;
+  const classification = classifyCpLoss(cpLoss);
+  const gamePhase = input.gamePhase ?? classifyGamePhase(fen, input.moveNumber ?? 20);
+  const tacticType = detectTacticType(fen, bestMove);
+  const srsDefaults = createDefaultSrsFields();
+  const narration = generateMistakeNarration({
+    classification,
+    gamePhase,
+    playerMoveSan: playedSan,
+    bestMoveSan: bestSan,
+    cpLoss,
+    fen,
+    moves: bestMove,
+    openingName: input.openingName ?? null,
+  });
+
+  const puzzle: MistakePuzzle = {
+    id: generateId(),
+    fen,
+    playerMove,
+    playerMoveSan: playedSan,
+    bestMove,
+    bestMoveSan: bestSan,
+    moves: bestMove,
+    cpLoss,
+    classification,
+    gamePhase,
+    moveNumber: input.moveNumber ?? 0,
+    sourceGameId: input.sourceGameId ?? '',
+    sourceMode: 'coach',
+    playerColor,
+    promptText: `${tacticTypeLabel(tacticType).charAt(0).toUpperCase() + tacticTypeLabel(tacticType).slice(1)} — ${PROMPT_TEXT[classification]}`,
+    narration,
+    createdAt: new Date().toISOString(),
+    opponentName: null,
+    gameDate: null,
+    openingName: input.openingName ?? null,
+    evalBefore: null,
+    srsInterval: srsDefaults.interval,
+    srsEaseFactor: srsDefaults.easeFactor,
+    srsRepetitions: srsDefaults.repetitions,
+    srsDueDate: srsDefaults.dueDate,
+    srsLastReview: null,
+    status: 'unsolved',
+    attempts: 0,
+    successes: 0,
+    tacticType,
+  };
+  await db.mistakePuzzles.add(puzzle);
+  return puzzle;
+}
+
 export async function getAllMistakePuzzles(): Promise<MistakePuzzle[]> {
   const all = await db.mistakePuzzles.toArray();
 

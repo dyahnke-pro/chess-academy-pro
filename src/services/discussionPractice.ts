@@ -15,6 +15,7 @@ import {
   type MisconceptionClassification,
 } from './misconceptionClassifier';
 import { logMisconception } from './misconceptionService';
+import { addMistakePuzzleFromCapture } from './mistakePuzzleService';
 import type { MisconceptionSource, MisconceptionTagRecord } from '../types';
 
 /** Decide whether a played move warrants the "why?" prompt. Thin
@@ -104,6 +105,23 @@ export async function captureMisconception(
     coachNote,
     sourceGameId: args.context.sourceGameId,
   });
+
+  // Option B (David 2026-05-25): a logged tactical/concrete slip with a
+  // known best move ALSO becomes a drillable mistakePuzzle, so coach-caught
+  // mistakes surface in My Mistakes + Tactics, not just as a tally. Deduped
+  // by position inside the helper; fire-and-forget so capture never blocks.
+  if (record && args.context.bestSan) {
+    void addMistakePuzzleFromCapture({
+      fen: args.context.fen,
+      playedSan: args.context.playedSan ?? '',
+      bestSan: args.context.bestSan,
+      cpLoss: args.context.cpLoss,
+      gamePhase: args.context.gamePhase,
+      moveNumber: args.context.moveNumber,
+      openingName: args.context.openingName,
+      sourceGameId: args.context.sourceGameId,
+    }).catch(() => undefined);
+  }
 
   return {
     classification,
