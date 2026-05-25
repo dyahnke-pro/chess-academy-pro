@@ -1,6 +1,6 @@
 {
   "_doc": "Narrated masterclass gems that do NOT yet carry an independent-verification source (sources[] of concept:/book:/reputable-URL refs). David 2026-05-25: narration IDEAS must be verified against books/online, not training recall, and the source recorded. Gate: punishGems.test.ts (isResolvableSource). Baseline only SHRINKS as sources are added. Regenerate after authoring.",
-  "count": 87,
+  "count": 66,
   "keys": [
     "alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_c5_Nd5_d4_d6_cxd6_exd6:f4",
     "alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_d4_d6:Nc3",
@@ -67,27 +67,6 @@
     "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Nb3:Bxf2+",
     "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nc3:Nxd4",
     "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nxd4_Qxd4:Nf6",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3_Bb4_Bc4_d6_O-O:Be6",
-    "vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4:Nf6",
-    "vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4_Qf6_Nd5:Qg6",
-    "vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4_Qf6_Nd5_Qxf2+_Kd1:Bb6",
-    "vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4_Qf6_Nd5_Qxf2+_Kd1_Kf8_Nh3:d6",
-    "vienna-game:e4_e5_Nc3_Nc6_Bc4_Nf6_d3_Bc5_f4_d6_Nf3:Ng4",
-    "vienna-game:e4_e5_Nc3_Nc6_Bc4_Nf6_d3_Bc5_f4_d6_Nf3_Bg4_h3:Bh5",
-    "vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3:d6",
-    "vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4:Bc5",
-    "vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4:Nge7",
-    "vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4_d6_O-O:Nge7",
-    "vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4_d6_O-O_h6_g3:fxg3",
-    "vienna-game:e4_e5_Nc3_Nf6_Bc4_Bc5_d3_d6_Nf3_O-O_O-O_Bg4_h3:Bxf3",
-    "vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5:g6",
-    "vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3:Qf6",
-    "vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Be7_Nf3:e4",
-    "vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5:Qf6",
-    "vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5_g6_Qf3:Nd4",
-    "vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5_g6_Qf3_f5_Qd5:Qg5",
-    "vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3:e4",
-    "vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3_Bc5_O-O:Bg4",
-    "vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3_Bc5_O-O_O-O_d3:f5"
+    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3_Bb4_Bc4_d6_O-O:Be6"
   ]
 }

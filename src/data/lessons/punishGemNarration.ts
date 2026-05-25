@@ -145,6 +145,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna — Black grabs e4, then g6?? drops e5 with check and loses a piece.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 g6 Qxe5+ Qe7 Qxe4 Qxe4+ Nxe4 c6 b3 Bg7
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5:g6': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '',
       'Bc4 takes aim at f7 — the Vienna bishop on its working diagonal.',
@@ -176,6 +177,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Frankenstein — Qf6?? parks the queen on Nd5's fork square.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Qf6 Nd5 Qg6 Qxg6 hxg6 Nxc7+ Kd8 Nxa8 b6
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3:Qf6': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '',
       'Qf6 defends f7 and eyes f2 — but it parks the queen right on the d5-knight’s fork square. The blow is ready.',
@@ -204,6 +206,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Frankenstein — Qf6?? ignores the Nb5 already eyeing c7.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 Qf6 Nxc7+ Kd8 Nxa8 Qg6 Qxg6 hxg6 Ne2 b6
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5:Qf6': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '',
       'Qf6 develops the queen but ignores the knight on b5 staring at c7. That’s the slip.',
@@ -230,6 +233,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna — Nf6?? blocks f7 but drops g7. playLine:
   // e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Nf6 Qxg7 Rf8 d3 Nd4 Nf3 c6 Nxe5 d5
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4:Nf6': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '',
       'Qg4 swings out and stares straight at g7.',
@@ -259,6 +263,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Frankenstein — Qg6?? saves the queen but not the c7-fork.
   // playLine: e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qg6 Qxg6 hxg6 Nxc7+ Kd8 Nxa8 Nf6 d3 d5
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4_Qf6_Nd5:Qg6': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '',
       'Qg4 eyes g7; Black defends with Qf6.',
@@ -288,6 +293,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Frankenstein — Bb6?? takes the eye off g7. playLine:
   // e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Bb6 Qxg7 d6 Nf3 Bh3 Nxb6 cxb6 Qxf7+ Kd8
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4_Qf6_Nd5_Qxf2+_Kd1:Bb6': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '',
       'Kd1 sidesteps the check; Black’s queen is deep in your camp, but your g4-queen and d5-knight are both loaded.',
@@ -319,6 +325,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Gambit Accepted — d6?? is too slow; seize the centre with d4.
   // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 d6 d4 g5 d5 Ne5 Bb5+ c6 dxc6 bxc6
   'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3:d6': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '',
       'd6 is too slow in the Gambit — it does nothing about your centre. Take it.',
@@ -347,6 +354,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Gambit — Bc5?? walks into d4 and a kingside crash.
   // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bc5 d4 Be7 h4 d6 Nxg5 Bxg5 Qh5 Qe7
   'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4:Bc5': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '',
       'Bc5 looks natural — but it walks into a central break that comes with tempo.',
@@ -375,6 +383,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Gambit — Nge7?? leaves g5 hanging; Nxg5 + kingside storm.
   // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 Nge7 Nxg5 Rf8 Qh5 Ng6 Nxh7 Qh4+ Qxh4 Nxh4
   'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4:Nge7': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '',
       'Nge7 develops the knight — but it abandons g5, and the Gambit’s whole point is to win that pawn back with interest.',
@@ -403,6 +412,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Gambit — Nge7?? (castled version); Nxg5 then the Bxf7+ sac.
   // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 d6 O-O Nge7 Nxg5 Ng6 Bxf7+ Kf8 Bxg6 Bxd4+ Kh1 hxg6
   'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4_d6_O-O:Nge7': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Nge7 again leaves g5 hanging — and now you are castled, so the attack comes at full force.',
@@ -431,6 +441,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Gambit — fxg3?? grabs a third pawn and opens f7 to the sac.
   // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 d6 O-O h6 g3 fxg3 Bxf7+ Kf8 e5 dxe5 Bd5 Nf6 Nxe5 Qd6
   'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4_d6_O-O_h6_g3:fxg3': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'fxg3 grabs a third pawn, but it opens the f-file straight at f7 — and you are ready to strike.',
@@ -459,6 +470,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna — Bh5?? leaves the bishop on the rim; g4 traps it / opens the h-file.
   // playLine: e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 f4 d6 Nf3 Bg4 h3 Bh5 g4 Nxg4 hxg4 Bxg4 Bb5 f5 Qe2 Qd7
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Nf6_d3_Bc5_f4_d6_Nf3_Bg4_h3:Bh5': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '',
       'h3 quizzes the g4-bishop —',
@@ -486,6 +498,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Frankenstein deep — Qg5?? wanders; d4 opens and the Nxc7+ fork lands.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qg5 d4 Qg4 Nxc7+ Kd8 Nxa8 Ne4 g3 Nf6
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5_g6_Qf3_f5_Qd5:Qg5': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Qd5 centralises, hitting f5 —',
@@ -513,6 +526,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Frankenstein — e4?? lunges and hangs; Nxe4 wins it and forks d6.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Be7 Nf3 e4 Nxe4 g6 Nxd6+ Bxd6 Qh6 Bf8 Qf4 d5
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Be7_Nf3:e4': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '',
       'Nf3 develops, eyeing e5 —',
@@ -863,6 +877,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Frankenstein — Nd4?? ignores the loaded Nb5; a forcing combo wins.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 Nd4 Nxd6+ Ke7 Nxc8+ Rxc8 Qxf7+ Kd6 Qd5+ Ke7
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5_g6_Qf3:Nd4': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Nd4? Black centralises the knight but ignores the loaded Nb5 — now a forcing sequence wins outright.',
@@ -888,6 +903,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna Frankenstein — d6?? abandons the trapped f2-queen; Nxf2 wins it.
   // playLine: e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Kf8 Nh3 d6 Nxf2 Bxg4+ Nxg4 h5 Nge3 Bxe3 Nxe3 Nf6
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4_Qf6_Nd5_Qxf2+_Kd1_Kf8_Nh3:d6': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '',
       'd6?? Black ignores his own queen, stranded deep on f2. Snap it off.',
@@ -1027,6 +1043,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna — Ng4 (+0.76), a modest sac-edge. playLine:
   // e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 f4 d6 Nf3 Ng4 Ng5 h6 Bxf7+ Kf8 f5 hxg5 Qxg4 Kxf7
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Nf6_d3_Bc5_f4_d6_Nf3:Ng4': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '',
       'A modest edge, not a crush — it runs through a sac that nets only a small plus. But Ng4 overreaches, and you turn the tables on f7.',
@@ -1052,6 +1069,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna — Bxf3 (+0.88), structural. playLine:
   // e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 Nf3 O-O O-O Bg4 h3 Bxf3 Qxf3 a5 Ne2 Nc6 c3 Nd7 a3 Kh8
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Bc5_d3_d6_Nf3_O-O_O-O_Bg4_h3:Bxf3': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '',
       'A quiet, structural edge — no material won. But Bxf3 hands you the bishop pair for free, and that is a real, durable asset.',
@@ -1074,6 +1092,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna g3 — e4 (+0.85), a long-term weakness. playLine:
   // e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 e4 Qe2 f5 d3 Qf6 O-O Bd6 dxe4 O-O
   'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3:e4': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '',
       'A positional edge, not a tactic — say so plainly. e4 lunges the pawn forward, where it becomes a long-term weakness you round up.',
@@ -1099,6 +1118,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna g3 — Bg4 (+0.62), a tempo. playLine:
   // e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 Bc5 O-O Bg4 h3 Bxf3 Qxf3 O-O a4 Bd6 Qd5 Rb8
   'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3_Bc5_O-O:Bg4': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'A small edge — no win, just a tempo and the bishop pair. Bg4 pins nothing important here, so you simply question it.',
@@ -1124,6 +1144,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Vienna g3 — f5 (+0.58), the slightest plus. playLine:
   // e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 Bc5 O-O O-O d3 f5 Nxe5 Nxe5 d4 Bd6 dxe5 Bxe5 Ba3 Re8
   'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3_Bc5_O-O_O-O_d3:f5': {
+    sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'The slightest edge here — be honest, it’s a small plus. But f5 loosens Black’s centre, and Nxe5 exploits the moment.',
