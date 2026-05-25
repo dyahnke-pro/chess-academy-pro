@@ -384,6 +384,15 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /lasker/i, label: 'Lasker Trap' },
     { test: /spassky/i, label: 'Spassky' },
   ],
+  // Schliemann Defence (Jänisch Gambit) — Black's aggressive 3…f5 vs the Ruy.
+  // Main-line pill = the Classical 4.Nc3 (…d5/…Qg5, repertoire pgn). Tabs = the
+  // distinct White tries: the Schönemann 4.d4, the Jänisch-Accepted 4.exf5, and
+  // the solid Dyckhoff 4.d3. Sharp gambit lines → kind:'roadmap' (depth opt-out).
+  'schliemann-defence': [
+    { test: /schönemann|schonemann/i, label: 'Schönemann 4.d4' },
+    { test: /accepted/i, label: '4.exf5' },
+    { test: /dyckhoff/i, label: 'Dyckhoff 4.d3' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same

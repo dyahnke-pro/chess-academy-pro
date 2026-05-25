@@ -28385,5 +28385,129 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-schliemanndefence-main",
+    "openingId": "schliemann-defence",
+    "criticalPositionFen": "r1b1kbnr/ppp3pp/2N5/1B4q1/4p3/8/PPPP1PPP/R1BQK2R w KQkq - 1 8",
+    "title": "Schliemann: Develop with the Initiative",
+    "overview": "The Schliemann's compensation for its loosened structure is pure activity: the open f-file, a lead in development, and the bishop pair. In the sharp main line Black regains the sacrificed material and, even when White grabs a pawn on the rim, gets a thoroughly active position. The plan is to develop fast with tempo, target any offside white piece, and use the open f-file against the white king.",
+    "pawnBreaks": [
+      "…c5 or …e-pawn pushes to open lines further",
+      "…b5 to harry the bishop and gain space"
+    ],
+    "pieceManeuvers": [
+      "…Nf6 to develop and guard the e4-pawn",
+      "…Bd7 to develop and round up an offside a7-knight"
+    ],
+    "strategicThemes": [
+      "The open f-file",
+      "Lead in development and the bishop pair",
+      "Targeting offside white pieces"
+    ],
+    "endgameTransitions": [
+      "If the attack fizzles the bishop pair gives long-term endgame chances"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1kbnr/ppp3pp/2N5/1B4q1/4p3/8/PPPP1PPP/R1BQK2R w KQkq - 1 8",
+        "moves": [
+          "Qe2",
+          "Nf6",
+          "Nxa7+",
+          "Bd7"
+        ],
+        "annotations": [
+          "Qe2 defends and pressures the e4-pawn.",
+          "…Nf6 develops with tempo, guarding the e4-pawn and eyeing the centre.",
+          "Nxa7+ snatches a second pawn — but the knight lands offside on the rim.",
+          "…Bd7 develops, and the offside a7-knight becomes a target to round up. There is the Schliemann’s compensation: the bishop pair, the open f-file for the rook, a lead in development, and a rim-stuck knight — full activity for the pawns."
+        ],
+        "learnCues": [
+          "Qe2 — White guards e4.",
+          "…Nf6 — develop, guard e4.",
+          "Nxa7+ — White grabs the rim pawn.",
+          "…Bd7 — develop, target a7."
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Schliemann_Defense"
+        ],
+        "title": "Schliemann: Develop with the Initiative",
+        "arrows": [
+          [
+            {
+              "from": "e2",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]

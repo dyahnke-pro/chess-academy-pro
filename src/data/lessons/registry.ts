@@ -96,6 +96,8 @@ import { BUDAPEST_GAMBIT_LESSON } from './budapestGambit';
 import { BUDAPEST_GAMBIT_VARIATION_LESSONS } from './budapestGambitVariations';
 import { ALBIN_COUNTERGAMBIT_LESSON } from './albinCountergambit';
 import { ALBIN_COUNTERGAMBIT_VARIATION_LESSONS } from './albinCountergambitVariations';
+import { SCHLIEMANN_DEFENCE_LESSON } from './schliemannDefence';
+import { SCHLIEMANN_DEFENCE_VARIATION_LESSONS } from './schliemannDefenceVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -154,6 +156,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: TWO_KNIGHTS_DEFENCE_LESSON, variations: TWO_KNIGHTS_DEFENCE_VARIATION_LESSONS },
   { main: BUDAPEST_GAMBIT_LESSON, variations: BUDAPEST_GAMBIT_VARIATION_LESSONS },
   { main: ALBIN_COUNTERGAMBIT_LESSON, variations: ALBIN_COUNTERGAMBIT_VARIATION_LESSONS },
+  { main: SCHLIEMANN_DEFENCE_LESSON, variations: SCHLIEMANN_DEFENCE_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

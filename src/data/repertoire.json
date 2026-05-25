@@ -3138,5 +3138,41 @@
     ],
     "trapLines": [],
     "warningLines": []
+  },
+  {
+    "id": "schliemann-defence",
+    "eco": "C63",
+    "name": "Schliemann Defence",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 Nc3 fxe4 Nxe4 d5 Nxe5 dxe4 Nxc6 Qg5",
+    "color": "black",
+    "style": "Gambit, Tactical",
+    "overview": "The Schliemann Defence (also called the Jänisch Gambit) is Black's most aggressive answer to the Ruy Lopez: 3...f5!? Instead of the slow main lines, Black strikes at White's e4-pawn at once, gambiting structure for a sharp, open fight and the initiative. A genuine fighting weapon — Radjabov used it against the world's elite. Best play gives White a small pull, so Black plays it for the imbalance and the attack, not for dead equality.",
+    "keyIdeas": [
+      "Strike at e4 immediately with 3...f5, opening the position for a sharp fight",
+      "In the main 4.Nc3 line, meet fxe4/Nxe4 with ...d5 and ...Qg5, regaining material with active piece play",
+      "Black accepts a slightly loosened structure for the initiative and attacking chances against the white king",
+      "Know the move-orders cold — the Schliemann is theory-heavy and one imprecise move can be punished"
+    ],
+    "traps": [],
+    "warnings": [],
+    "variations": [
+      {
+        "name": "Schönemann Attack",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 d4 fxe4 Nxe5 Nxe5 dxe5 c6",
+        "explanation": "White meets 3...f5 with the central 4.d4, opening lines fast. After 4...fxe4 5.Nxe5 Nxe5 6.dxe5 c6 Black returns the bishop to a safe square and challenges the e5-pawn, reaching a sharp, roughly balanced middlegame with the bishop pair."
+      },
+      {
+        "name": "Jänisch Gambit Accepted",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 exf5 e4",
+        "explanation": "White grabs the gambit pawn with 4.exf5, but after 4...e4! Black gains space and time, kicking the f3-knight and opening the position for the pieces. Black regains the pawn with active play and the initiative for the temporary material."
+      },
+      {
+        "name": "Dyckhoff Variation",
+        "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 d3 fxe4 dxe4 Nf6",
+        "explanation": "The solid 4.d3 keeps the tension low. After 4...fxe4 5.dxe4 Black develops naturally with ...Nf6, hitting the e4-pawn and reaching a sound, open game where the …f5 thrust has freed the position."
+      }
+    ],
+    "trapLines": [],
+    "warningLines": []
   }
 ]
