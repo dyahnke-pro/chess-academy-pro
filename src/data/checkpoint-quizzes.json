@@ -1018,5 +1018,27 @@
       "hint": "White must respond to the gambit. Which capture accepts the pawn (the principled mainline)?",
       "concept": "Accepting the gambit"
     }
+  ],
+  "kings-indian-attack": [
+    {
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/4P3/3P4/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+      "correctMove": "Nd2",
+      "hint": "Build the King's Indian Attack — knight to d2, heading to f3 and beyond.",
+      "concept": "The KIA setup"
+    },
+    {
+      "fen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQ1RK1 w - - 5 8",
+      "type": "plan",
+      "question": "How should White treat the centre in this KIA?",
+      "choices": [
+        "Clamp with e5 and storm the kingside",
+        "Trade with exd5 for an open game",
+        "Castle queenside and attack there",
+        "Offer a draw by repetition"
+      ],
+      "correctIndex": 0,
+      "hint": "The KIA's whole point is the e5-wedge and the kingside attack.",
+      "concept": "The e5-wedge plan"
+    }
   ]
 }

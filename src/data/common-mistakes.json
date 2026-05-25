@@ -940,5 +940,21 @@
       "correctMove": "Bc5",
       "explanation": "4…Ngxe5? trades the central knight too early — after 5.Nxe5 White's pieces dominate. The principled 4…Bc5 develops the bishop with pressure on f2, then recaptures …Nxe5 at the right moment."
     }
+  ],
+  "kings-indian-attack": [
+    {
+      "fen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQ1RK1 w - - 5 8",
+      "wrongMove": "exd5",
+      "correctMove": "e5",
+      "explanation": "Trading with exd5 exd5 gives Black an easy, open French-style game and throws away White's plan. e5 is the whole point of the KIA — clamp the centre and launch the kingside attack.",
+      "shortNarration": "e5 — clamp the centre, then attack"
+    },
+    {
+      "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7",
+      "wrongMove": "Nh4",
+      "correctMove": "e4",
+      "explanation": "Lunging at the kingside with Nh4 is toothless against the solid ...g6 fianchetto. Stake the centre with e4 and expand on the queenside — flexibility is the KIA's strength against the KID setup.",
+      "shortNarration": "e4 — pivot to the centre vs …g6"
+    }
   ]
 }

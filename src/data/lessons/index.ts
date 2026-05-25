@@ -25,6 +25,8 @@ import { ENGLISH_OPENING_LESSON } from './englishOpening';
 import { ENGLISH_OPENING_VARIATION_LESSONS } from './englishOpeningVariations';
 import { RETI_OPENING_LESSON } from './retiOpening';
 import { RETI_OPENING_VARIATION_LESSONS } from './retiOpeningVariations';
+import { KINGS_INDIAN_ATTACK_LESSON } from './kingsIndianAttack';
+import { KINGS_INDIAN_ATTACK_VARIATION_LESSONS } from './kingsIndianAttackVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -55,6 +57,7 @@ const LESSONS: Record<string, LessonScript> = {
   [CATALAN_OPENING_LESSON.openingId]: CATALAN_OPENING_LESSON,
   [ENGLISH_OPENING_LESSON.openingId]: ENGLISH_OPENING_LESSON,
   [RETI_OPENING_LESSON.openingId]: RETI_OPENING_LESSON,
+  [KINGS_INDIAN_ATTACK_LESSON.openingId]: KINGS_INDIAN_ATTACK_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -71,6 +74,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...CATALAN_OPENING_VARIATION_LESSONS,
   ...ENGLISH_OPENING_VARIATION_LESSONS,
   ...RETI_OPENING_VARIATION_LESSONS,
+  ...KINGS_INDIAN_ATTACK_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

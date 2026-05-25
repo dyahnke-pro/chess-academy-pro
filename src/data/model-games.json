@@ -633,37 +633,6 @@
     "lessonSummary": "Short's game against Timman is a model example of how to play against the Dutch Defence by targeting the light-square weaknesses created by f5. The e4 break opened the position at just the right moment, and White's pieces flooded in through the gaps. This game teaches that the Dutch can become very dangerous for Black if White times the central break correctly."
   },
   {
-    "id": "mg-fischer-kings-indian-attack",
-    "openingId": "kings-indian-attack",
-    "white": "Bobby Fischer",
-    "black": "Lhamsuren Myagmarsuren",
-    "whiteElo": null,
-    "blackElo": null,
-    "result": "1-0",
-    "year": 1967,
-    "event": "Sousse Interzonal",
-    "pgn": "e4 e6 d3 d5 Nd2 Nf6 g3 c5 Bg2 Nc6 Ngf3 Be7 O-O O-O e5 Nd7 Re1 b5 Nf1 b4 h4 a5 Bf4 a4 a3 bxa3 bxa3 Na5 Ne3 Ba6 Bh3 d4 Nf1 Nb6 Ng5 Nd5 Bd2 Bxg5 Bxg5 Qd7 Qh5 Rfc8 Nd2 Nc3 Bf6 Qe8 Ne4 g6 Qg5 Nxe4 Rxe4 c4 h5 cxd3 Rh4 Ra7 Bg2 dxc2 Qh6 Qf8 Qxh7+",
-    "overview": "Fischer unleashed a devastating kingside attack from the King's Indian Attack setup, sacrificing an exchange and a queen to create an unstoppable mating net. This game is widely regarded as one of Fischer's most brilliant attacking masterpieces.",
-    "criticalMoments": [
-      {
-        "moveNumber": 19,
-        "color": "white",
-        "fen": "r2q1rk1/4bppp/b3p3/n1pnP1N1/p2p3P/P2P2PB/2PB1P2/R2QRNK1 b - - 5 19",
-        "annotation": "Fischer repositions with Ne3-f1-g5, beginning a deep regrouping that targets Black's kingside. The knight's journey to f5 will prove to be the cornerstone of a spectacular sacrificial attack.",
-        "concept": "Piece regrouping for attack"
-      },
-      {
-        "moveNumber": 25,
-        "color": "white",
-        "fen": "r1r1q1k1/5p1p/b3pBp1/n1p1P1Q1/p2pN2P/P1nP2PB/2P2P2/R3R1K1 b - - 1 25",
-        "annotation": "Fischer plays Qh5, threatening devastating discoveries with the knight on e7. The combination of Nxg6+ and Qxg6 creates an inescapable mating attack despite Black's extra material.",
-        "concept": "Sacrificial mating attack"
-      }
-    ],
-    "middlegameTheme": "Kingside sacrificial attack",
-    "lessonSummary": "Fischer's immortal King's Indian Attack game shows the explosive potential hidden in this quiet opening system. By patiently building up on the kingside while Black expanded on the queenside, Fischer created the conditions for a brilliant sacrificial combination. The game teaches that in the KIA, White's kingside attack can arrive with devastating speed once the pieces are optimally placed."
-  },
-  {
     "id": "mg-jobava-mamedyarov-2014",
     "openingId": "pro-naroditsky-jobava-london",
     "white": "Baadur Jobava",
@@ -4017,5 +3986,83 @@
     ],
     "middlegameTheme": "Trade into the weakness, press, convert.",
     "lessonSummary": "In the Anti-Slav, trade into Black's structural weakness and grind it down — the Réti's positional payoff."
+  },
+  {
+    "id": "mg-giri-kia-french",
+    "openingId": "kings-indian-attack",
+    "white": "Anish Giri",
+    "black": "Hikaru Nakamura",
+    "whiteElo": 2790,
+    "blackElo": 2814,
+    "result": "1-0",
+    "year": 2015,
+    "event": "Bilbao Masters 2015",
+    "studentSide": "white",
+    "pgn": "Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3 O-O Nbd2 c5 e4 Nc6 Re1 Qc7 Qe2 b5 a4 b4 exd5 exd5 Nb3 Re8 Bf4 Qb6 a5 Qb5 Qd2 Be6 a6 Bf8 Ne5 Nxe5 Bxe5 Nd7 Bf4 Qb6 c3 Rac8 Qc2 d4 Nd2 h6 h4 dxc3 bxc3 bxc3 Qxc3 Nf6 Nc4 Qd8 Bb7 Nd5 Qd2 Nxf4 Qxf4 Qxd3 Ne5 Qd6 Rad1 Qc7 Nc6 Qxc6 Bxc6 Rxc6 Qa4 Rec8 Rd8 c4 Rxc8 Rxc8 Rxe6 fxe6 Qd7 Rc5 Qxe6+ Kh7 Qf7 Bd6 h5 Rg5 Kg2 c3 f4",
+    "overview": "A textbook KIA against the French structure: Giri clamped the centre with the e5-wedge, rerouted his knight to the kingside, and overran Nakamura with a direct pawn-and-piece storm at the king.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r1b2rk1/ppq1bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPNQPBP/R1B1R1K1 b - - 4 9",
+        "annotation": "Qe2 — White completes the KIA setup, the queen and rook lined up behind the coming e5 thrust.",
+        "concept": "The KIA setup"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "r3rbk1/p4ppp/P1n1bn2/1qppN3/1p3B2/1N1P2P1/1PPQ1PBP/R3R1K1 b - - 2 17",
+        "annotation": "Ne5 — the knight dominates the e5-wedge, the spearhead of White's kingside initiative.",
+        "concept": "The e5 outpost"
+      },
+      {
+        "moveNumber": 43,
+        "color": "white",
+        "fen": "8/p4Qpk/P2b3p/6rP/5P2/2p3P1/6K1/8 b - - 0 43",
+        "annotation": "f4 — the storm crashes through; White's kingside attack has become a winning position.",
+        "concept": "Convert the attack"
+      }
+    ],
+    "middlegameTheme": "e5-wedge, knight to the kingside, storm.",
+    "lessonSummary": "Against the French structure the KIA is a kingside attacking machine: clamp with e5 and storm the king."
+  },
+  {
+    "id": "mg-carlsen-kia-g6",
+    "openingId": "kings-indian-attack",
+    "white": "Magnus Carlsen",
+    "black": "Alexander Grischuk",
+    "whiteElo": 2855,
+    "blackElo": 2752,
+    "result": "1-0",
+    "year": 2016,
+    "event": "Norway Chess Blitz 2016",
+    "studentSide": "white",
+    "pgn": "g3 g6 Bg2 Bg7 e4 c5 d3 Nc6 Nf3 d6 O-O e5 Nc3 Nge7 Nd2 O-O Nc4 h6 a4 f5 exf5 gxf5 f4 Kh7 fxe5 dxe5 a5 Rb8 Be3 Nd4 Ne2 Be6 c3 Ndc6 Bxc5 Bd5 Ne3 Bxg2 Kxg2 b6 axb6 axb6 Bxe7 Nxe7 Ra7 Ra8 Rxa8 Qxa8+ Kg1 Qc6 Rf2 Qg6 Ng2 Rd8 d4 f4 gxf4 exd4 Nxd4 Nf5 Rd2 Ne3 Qf3 Qb1+ Kf2 Nc4 Re2 Nxb2 Ne6 Rg8 Qe4+ Qxe4 Rxe4 Bxc3 Kf3 b5 Ne3 b4 Nd5 Nd3 Ke3 Ne1 Rc4 Ng2+ Ke4 Re8 Rc7+ Kg6 f5+ Kh5 Nxc3 bxc3 Rxc3 Nh4 Rh3 Kg4 Rg3+ Kh5 Kf4",
+    "overview": "Against Black's solid ...g6 setup, Carlsen pivoted away from the kingside: he expanded on the queenside, manoeuvred patiently, and ground out a long technical win — showing the KIA's flexibility.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bq1rk1/pp2npb1/2np2pp/2p1p3/P1N1P3/2NP2P1/1PP2PBP/R1BQ1RK1 b - - 0 10",
+        "annotation": "a4 — against the solid ...g6 wall, Carlsen expands on the queenside rather than batter the king.",
+        "concept": "Pivot to the queenside"
+      },
+      {
+        "moveNumber": 19,
+        "color": "white",
+        "fen": "1r1q1r2/pp2n1bk/2n4p/P1Bbpp2/8/2PPN1P1/1P2N1BP/R2Q1RK1 b - - 2 19",
+        "annotation": "Ne3 — White manoeuvres the knights to the best squares, slowly improving the position.",
+        "concept": "Patient manoeuvring"
+      },
+      {
+        "moveNumber": 50,
+        "color": "white",
+        "fen": "4r3/8/4N2p/5P1k/5K1n/6R1/7P/8 b - - 6 50",
+        "annotation": "Kf4 — deep in a won endgame the king strides up; Carlsen converts the long grind.",
+        "concept": "Convert the endgame"
+      }
+    ],
+    "middlegameTheme": "Pivot to the queenside, manoeuvre, convert.",
+    "lessonSummary": "Against ...g6 the KIA's strength is flexibility — switch wings and outplay slowly."
   }
 ]

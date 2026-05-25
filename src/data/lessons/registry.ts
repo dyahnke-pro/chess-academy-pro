@@ -46,6 +46,8 @@ import { ENGLISH_OPENING_LESSON } from './englishOpening';
 import { ENGLISH_OPENING_VARIATION_LESSONS } from './englishOpeningVariations';
 import { RETI_OPENING_LESSON } from './retiOpening';
 import { RETI_OPENING_VARIATION_LESSONS } from './retiOpeningVariations';
+import { KINGS_INDIAN_ATTACK_LESSON } from './kingsIndianAttack';
+import { KINGS_INDIAN_ATTACK_VARIATION_LESSONS } from './kingsIndianAttackVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -79,6 +81,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: CATALAN_OPENING_LESSON, variations: CATALAN_OPENING_VARIATION_LESSONS },
   { main: ENGLISH_OPENING_LESSON, variations: ENGLISH_OPENING_VARIATION_LESSONS },
   { main: RETI_OPENING_LESSON, variations: RETI_OPENING_VARIATION_LESSONS },
+  { main: KINGS_INDIAN_ATTACK_LESSON, variations: KINGS_INDIAN_ATTACK_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

@@ -10018,63 +10018,6 @@
     ]
   },
   {
-    "id": "mp-kia-slow-buildup-e4-e5",
-    "openingId": "kings-indian-attack",
-    "criticalPositionFen": "r1bq1rk1/pp1nbppp/2n1p3/2ppP3/8/3P1NP1/PPPN1PBP/R1BQ1RK1 w - - 1 9",
-    "title": "Slow buildup with e4-e5 wedge",
-    "overview": "The KIA's classic plan — mirror the King's Indian Defence with colors reversed. Build slowly with Nf3 + g3 + Bg2 + O-O + d3 + Nbd2, then push e4-e5 to gain kingside space and cramp Black's pieces. After the wedge is established, White attacks with Nf3-h4 + Qe1-h4 + f4-f5 for direct mating threats.",
-    "pawnBreaks": [
-      {
-        "move": "e5",
-        "explanation": "The defining KIA break that cramps Black's kingside. After e5 Nd7 White has gained central space and the Bg2 has a clearer view toward Black's queenside."
-      },
-      {
-        "move": "f4-f5",
-        "explanation": "Once the e5 wedge is established, f4-f5 opens the f-file for the rook and creates direct mating threats on g7."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nf3-h4 (after e5)",
-        "explanation": "After the e5 push, the f3-knight reroutes to h4 supporting the kingside attack with potential Nf5 + Qh4 swing."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd1-e1-h4",
-        "explanation": "Qe1 supports the central pawn and prepares the swing to h4 for direct kingside attack."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing e5 too early — Black's …e6 prevents the wedge from being effective.",
-      "Forgetting to swing the queen — without queen+rook support, the kingside attack has no teeth."
-    ]
-  },
-  {
-    "id": "mp-kia-flexible-c4-transposition",
-    "openingId": "kings-indian-attack",
-    "criticalPositionFen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2P5/3P1NP1/PP2PPBP/RNBQ1RK1 w - - 0 7",
-    "title": "Flexible KIA with c4 transposition",
-    "overview": "When Black plays …g6 + …Bg7 (mirror setup), the KIA can transpose into an English Opening with c4 + Nc3. White's plan: use the flexible move order to choose the most challenging structure based on Black's setup. The Bg2 + c4 + Nc3 combo creates classical positional pressure.",
-    "pawnBreaks": [
-      {
-        "move": "d4",
-        "explanation": "Once developed, d4 challenges Black's …e5 central pawn. The break creates symmetric trade-offs where White's extra tempo is decisive."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bg2 long-diagonal pressure",
-        "explanation": "The Bg2 controls the long h1-a8 diagonal — combined with c4 + Nc3 attacking d5, this creates lasting central pressure."
-      }
-    ],
-    "typicalMistakes": [
-      "Allowing Black's …e5 to lock the center — kills the KIA's flexibility.",
-      "Trading the Bg2 without compensation — eliminates the main attacking weapon."
-    ]
-  },
-  {
     "id": "mp-bird-classical-kingside-attack",
     "openingId": "birds-opening",
     "criticalPositionFen": "rnbq1rk1/pp2ppbp/5np1/2pp4/5P2/3PPN2/PPP1B1PP/RNB1QRK1 b - - 1 7",
@@ -19428,6 +19371,108 @@
           "…e6 — Black solidifies the centre.",
           "O-O — White castles into safety.",
           "…Bc5 — Black develops the bishop to c5."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-kingsindianattack-main",
+    "openingId": "kings-indian-attack",
+    "title": "KIA vs French: the e5-Wedge Kingside Attack",
+    "criticalPositionFen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQR1K1 b - - 6 8",
+    "overview": "The archetypal KIA: clamp the centre with the e5-wedge, reroute the knight Nf1-h2-g4, and storm the kingside with h4-g4-g5 while Black plays on the other wing. White's attack at the king usually arrives first.",
+    "pawnBreaks": [
+      {
+        "move": "e4-e5",
+        "explanation": "The e5-wedge cramps Black and frees White's hands for the kingside assault.",
+        "fen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQR1K1 b - - 6 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf1-h2-g4",
+        "explanation": "The signature KIA reroute, bringing the knight to g4 for the kingside attack."
+      }
+    ],
+    "strategicThemes": [
+      "Clamp the centre with the e5-wedge.",
+      "Reroute Nf1-h2-g4 toward the king.",
+      "Storm with h4-g4-g5; win the opposite-wing race."
+    ],
+    "endgameTransitions": [
+      "If the attack is parried, the e5-space keeps White comfortable."
+    ],
+    "playableLines": [
+      {
+        "title": "KIA vs French: the e5-Wedge Kingside Attack",
+        "fen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQR1K1 b - - 6 8",
+        "moves": [
+          "b5",
+          "e5",
+          "Nd7",
+          "Nf1",
+          "a5",
+          "h4"
+        ],
+        "annotations": [
+          "…b5 — Black expands on the queenside.",
+          "e5 — the wedge clamps the centre.",
+          "…Nd7 — the f6-knight is shoved back to d7.",
+          "Nf1 — the knight begins its trek to g4.",
+          "…a5 — Black pushes on the queenside.",
+          "h4 — White starts the kingside pawn storm."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-kingsindianattack-kid",
+    "openingId": "kings-indian-attack",
+    "title": "KIA vs ...g6: Centre and Queenside",
+    "criticalPositionFen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7",
+    "overview": "Against the solid ...g6 fianchetto, the kingside storm is blunted, so White pivots: stake the centre with e4, expand on the queenside with c3 and b4, and break with d4 to open lines for the bishops.",
+    "pawnBreaks": [
+      {
+        "move": "d3-d4",
+        "explanation": "After staking e4 and expanding, d4 breaks the centre and frees the fianchettoed bishop.",
+        "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Pawn",
+        "route": "b2-b4-b5",
+        "explanation": "Queenside expansion where Black is least active."
+      }
+    ],
+    "strategicThemes": [
+      "Pivot from kingside to centre vs the solid ...g6.",
+      "Stake e4 and expand with c3-b4.",
+      "Break with d4 to activate the bishops."
+    ],
+    "endgameTransitions": [
+      "The central space carries a comfortable pull."
+    ],
+    "playableLines": [
+      {
+        "title": "KIA vs ...g6: Centre and Queenside",
+        "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7",
+        "moves": [
+          "e4",
+          "Nc6",
+          "c3",
+          "h6",
+          "b4",
+          "Be6"
+        ],
+        "annotations": [
+          "e4 — White stakes the centre.",
+          "…Nc6 — Black develops the knight.",
+          "c3 — White prepares b4.",
+          "…h6 — Black makes luft.",
+          "b4 — White expands on the queenside.",
+          "…Be6 — Black develops the bishop to e6."
         ]
       }
     ]

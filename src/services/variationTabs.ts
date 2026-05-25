@@ -93,6 +93,13 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
   'reti-opening': [
     { test: /anti-slav/i, label: 'Anti-Slav' },
   ],
+  // King's Indian Attack — the universal d3/Nd2/g3/Bg2/e4 system. Main-line
+  // pill = the vs-French treatment (the e5-wedge + Nf1-h2-g4 kingside storm,
+  // the KIA archetype, exempt). The one DB-anchored distinct tab is the ...g6
+  // KID-style response, where White pivots to the centre and queenside.
+  'kings-indian-attack': [
+    { test: /kid-style/i, label: 'KID-style' },
+  ],
   // Scotch Game — hand-picked tabs, frequency-ordered (repertoire weights).
   // Main-line pill = the Classical 4…Bc5 Be3 Qf6 line (the repertoire pgn), so
   // the "Classical" variation is omitted as a tab (it'd duplicate the pill).
