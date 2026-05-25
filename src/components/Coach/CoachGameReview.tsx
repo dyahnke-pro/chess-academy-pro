@@ -532,6 +532,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       surface: 'review',
       fen: fenForQ,
       moveHistory: moves.slice(0, Math.max(0, moveIdx + 1)).map((m) => m.san),
+      // Full game move list — ground truth for the master-play claim
+      // validator so the coach can discuss the student's OWN game
+      // (including moves past the current review ply, and after the game
+      // left master book) without every SAN being flagged as an
+      // ungrounded hallucination and the answer stocking out.
+      gameSans: moves.map((m) => m.san),
       // Thread the opening name into lichessSnapshot so the
       // book-context loader in coachService.ask pulls the curated
       // annotation passages for this opening — the review-ask

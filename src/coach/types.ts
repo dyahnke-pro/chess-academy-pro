@@ -190,6 +190,20 @@ export interface LiveState {
    *  moments instead of fabricating game citations. Quiet when no
    *  curated games are registered for the opening. */
   modelGames?: LiveModelGameContext;
+  /** Ground-truth SAN list for surfaces analyzing a SPECIFIC played
+   *  game (game review). These are the moves actually played — chess.js-
+   *  validated, real, legal — so the master-play claim validator treats
+   *  them (plus the legal moves of the position being analyzed) as
+   *  grounded. Without this, reviewing a game that left master book
+   *  (a sacrifice, a sharp middlegame) tripped the validator on the
+   *  game's OWN moves — every concrete SAN the coach mentioned about
+   *  the student's game was flagged as an ungrounded hallucination and
+   *  the answer stocked out. The Lichess explorer is the wrong authority
+   *  for "analyze MY game"; the game itself is. Review passes the full
+   *  move list; other surfaces leave undefined (strict master-play
+   *  grounding stays in force for opening / "what do masters play"
+   *  questions). */
+  gameSans?: string[];
 }
 
 /** Pre-formatted classical-book grounding block. The text is built
