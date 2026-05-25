@@ -81,11 +81,47 @@
     "warnings": 0,
     "keyIdeas": 4
   },
-  "french-defence": {
-    "variations": 10,
-    "middlegamePlans": 10,
+  "sicilian-najdorf": {
+    "variations": 9,
+    "middlegamePlans": 9,
     "endgamePlans": 0,
-    "modelGames": 9,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "sicilian-sveshnikov": {
+    "variations": 8,
+    "middlegamePlans": 5,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "sicilian-alapin": {
+    "variations": 8,
+    "middlegamePlans": 2,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "benko-gambit": {
+    "variations": 7,
+    "middlegamePlans": 4,
+    "endgamePlans": 0,
+    "modelGames": 4,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "dutch-defence": {
+    "variations": 7,
+    "middlegamePlans": 5,
+    "endgamePlans": 0,
+    "modelGames": 5,
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
@@ -108,20 +144,11 @@
     "warnings": 0,
     "keyIdeas": 4
   },
-  "benko-gambit": {
-    "variations": 7,
-    "middlegamePlans": 4,
+  "french-defence": {
+    "variations": 10,
+    "middlegamePlans": 10,
     "endgamePlans": 0,
-    "modelGames": 4,
-    "weapons": 0,
-    "warnings": 0,
-    "keyIdeas": 4
-  },
-  "dutch-defence": {
-    "variations": 7,
-    "middlegamePlans": 5,
-    "endgamePlans": 0,
-    "modelGames": 5,
+    "modelGames": 9,
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4

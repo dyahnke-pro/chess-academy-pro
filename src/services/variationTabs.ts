@@ -69,6 +69,36 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /accelerated/i, label: 'Accelerated' },
     { test: /bg5|anti-dragon/i, label: 'Anti-Dragon Bg5' },
   ],
+  // Sicilian Najdorf — Black-oriented. Main-line pill = the English Attack
+  // (6.Be3) main line, so it's exempt from this tab list. The rest are the
+  // White 6th-move branches a Najdorf player must know.
+  'sicilian-najdorf': [
+    { test: /classical/i, label: 'Classical' },
+    { test: /6\.bg5 main/i, label: '6.Bg5' },
+    { test: /poisoned/i, label: 'Poisoned Pawn' },
+    { test: /6\.f3/i, label: '6.f3' },
+    { test: /fischer/i, label: 'Fischer-Sozin' },
+    { test: /adams|6\.g3/i, label: '6.g3' },
+    { test: /ng4/i, label: 'Ng4' },
+    { test: /anti-najdorf|6\.a4/i, label: '6.a4' },
+  ],
+  // Sicilian Sveshnikov — Black-oriented. Main-line pill = the 9.Nd5 (c3)
+  // main line. Only the structurally DISTINCT branches get tabs (playbook
+  // §0.5c): 11.c4 folds into Chelyabinsk, Novosibirsk/…Rb8 fold into the main
+  // line + its plans (all share the same 20-ply prefix — no near-dup tabs).
+  'sicilian-sveshnikov': [
+    { test: /9\.bxf6|early exchange/i, label: '9.Bxf6' },
+    { test: /chelyabinsk/i, label: 'Chelyabinsk c4' },
+    { test: /anti-sveshnikov|6\.nf3/i, label: 'Anti-Svesh 6.Nf3' },
+    { test: /kalashnikov/i, label: 'Kalashnikov' },
+  ],
+  // Sicilian Alapin — Black-oriented (the student meets White's 2.c3).
+  // Main-line pill = the 2...Nf6 mainline. Only 2...d5 is a distinct, canonical
+  // DB-anchored second mainline; 2...e6 (French structure) and 2...g6 are not in
+  // the canonical DB in the 2.c3 order, so they are deferred (G3), not shipped.
+  'sicilian-alapin': [
+    { test: /central counter/i, label: '2...d5' },
+  ],
   // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
   // (the explorer freq query was unavailable when this was built; ordering is
   // flagged for prod verification). The Giuoco Piano main line is the "Main

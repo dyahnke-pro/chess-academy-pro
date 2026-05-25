@@ -14,7 +14,8 @@ import type { ModelGame } from '../types';
 // protected masterclass openings tag every game so the filter covers them.
 //
 // When you add a NEW masterclass opening, set studentSide on every model game
-// (= the student's color, and the game MUST be a win/draw for that side) and
+// (= the student's color, and the game MUST be a WIN for that side — NOT a
+// draw, NOT a loss; David 2026-05-25: "wins only. replace the draws!") and
 // add the openingId to PROTECTED below.
 
 interface ModelGameLike {
@@ -30,8 +31,11 @@ function studentLost(g: ModelGameLike): boolean {
   return (g.studentSide === 'white' && g.result === '0-1') ||
          (g.studentSide === 'black' && g.result === '1-0');
 }
+function studentDrew(g: ModelGameLike): boolean {
+  return Boolean(g.studentSide) && /^(1\/2-1\/2|½-½)$/.test((g.result ?? '').trim());
+}
 
-describe('model-games orientation — never showcase the student losing', () => {
+describe('model-games orientation — wins only, never the student losing OR drawing', () => {
   it('no model game with studentSide set shows that side losing', () => {
     const offenders = games
       .filter(studentLost)
@@ -39,6 +43,16 @@ describe('model-games orientation — never showcase the student losing', () => 
     expect(
       offenders,
       `These games declare a studentSide but show it LOSING — relocate or remove: ${offenders.join(', ')}`,
+    ).toEqual([]);
+  });
+
+  it('no model game with studentSide set is a DRAW — model games showcase a WIN (David 2026-05-25)', () => {
+    const offenders = games
+      .filter(studentDrew)
+      .map((g) => `${g.id} (${g.openingId} ${String(g.studentSide)} ${g.result})`);
+    expect(
+      offenders,
+      `These studentSide games are DRAWS — a model game must show the student WINNING. Replace with a real student-side win: ${offenders.join(', ')}`,
     ).toEqual([]);
   });
 

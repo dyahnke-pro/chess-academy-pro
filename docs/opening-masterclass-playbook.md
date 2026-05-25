@@ -144,12 +144,19 @@ data, log the source, let the gate catch drift."
 2. **Tab order.** LOCKED to amateur frequency, most-faced first. The showcase
    "Main line" pill leads and is exempt from the sort. Deterministic from the
    explorer numbers — zero taste.
-3. **Model game per variation.** masters `topGames` at the variation's NAMED
-   position → filter `winner === <student colour>` (hard; none → widen to
-   parent position → still none → NO game, NEVER an opening-loses game) →
-   rank survivors by min-Elo, ECO match, decisiveness (≥~25 moves). →
-   Hole-5 gate (PGN legal + criticalMoments reachable). One game per variation
-   is the goal (David 2026-05-22).
+3. **Model game per variation — WINS ONLY (David 2026-05-25: "wins only.
+   replace the draws!").** masters `topGames` at the variation's NAMED
+   position → filter `winner === <student colour>` (a WIN — **never a draw,
+   never a loss**; `winner` must be the student's colour, so a `1/2-1/2` is
+   excluded by definition). None → widen to parent position → still none → NO
+   game, NEVER an opening-loses-or-draws game. Rank survivors by min-Elo, ECO
+   match, decisiveness (≥~25 moves). 🚫 **Do NOT bulk-import masters games and
+   stamp `studentSide` on them regardless of result** — that is exactly how
+   draw/boilerplate games slipped into Italian + King's Gambit. Every game ships
+   with a hand-authored overview (boilerplate is filtered out by
+   `isNarratedModelGame`, so a templated game never surfaces). → Hole-5 gate +
+   `modelGames-orientation.test` (now rejects studentSide LOSSES **and DRAWS**).
+   One game per variation is the goal (David 2026-05-22).
 4. **Key ideas.** From the book corpus (opening passages + universal
    principles) + what the explorer shows the student's side actually DOING in
    that structure. Board-anchored prose. NO FIXED COUNT — ship every idea you

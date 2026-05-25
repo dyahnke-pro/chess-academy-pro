@@ -54,7 +54,7 @@ describe('coach lesson-reference block', () => {
     expect(blk).toContain('A Master Class'); // main Ruy lesson too
   });
   it('returns empty for openings we have no master class for', () => {
-    expect(buildLessonReferenceBlock('how do I play the Najdorf Sicilian')).toBe('');
+    expect(buildLessonReferenceBlock('how do I play the Grob Attack')).toBe('');
   });
   it('returns empty for empty input', () => {
     expect(buildLessonReferenceBlock('')).toBe('');
