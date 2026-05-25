@@ -72,3 +72,32 @@ rg -n 'process\.env\.[A-Z_]+|import\.meta\.env\.[A-Z_]+' \
 
 If you see a key in code that's not listed in `.env.example`, add it
 there and here — missing docs are how keys rot silently on Vercel.
+
+## Deploys: disable previews to protect the free-tier cap
+
+The free tier caps at **100 deployments/day** (`api-deployments-free-per-day`).
+Every push to a branch / PR triggers a **preview** deploy that counts
+against it — and CLAUDE.md's policy is **push straight to `main`
+(production), no previews**. To stop previews from eating the cap:
+
+**Vercel → project `chess-academy-pro` → Settings → Git → "Ignored
+Build Step" → "Run my own command":**
+
+```bash
+if [ "$VERCEL_ENV" = "production" ]; then exit 1; else exit 0; fi
+```
+
+Exit-code contract: **exit 1 = build, exit 0 = skip**. So production
+(`main`) builds; every preview is skipped before it consumes a build.
+
+If skipped previews still tick the deployment counter, use the stronger
+lever on the same Git settings page: turn **off preview deployments**
+for non-production branches (Production Branch = `main`, don't deploy
+others) so the deployment is never created.
+
+This is a **project setting, not a `vercel.json` key** — there's no
+committable field for it, so it lives here as the durable cross-session
+note. Nothing in `.github/workflows/` creates Vercel builds
+(`post-deploy-audit.yml` only *audits* after a deploy); builds come
+solely from Vercel's native Git integration, which the setting above
+controls.
