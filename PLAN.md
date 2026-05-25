@@ -77,7 +77,14 @@ confirm it best shows White's pull, else re-steer to a queens-on line.
   catalan-opening (white). Black classes orient black; lessons teach the
   defender's plans. They auto-file into the Masterclasses Black sub-tab.
 
-## NEXT CLASS — QGD (BLACK) — P0 spines done (`scripts/_qgd-extend.mjs`)
+## CLASS STATUS (David's build order: White QG → QGD → QGA → Catalan)
+- ✅ **queens-gambit (WHITE) — COMPLETE** (lessons, 6 tabs, 7 plans+leadeye, 3 gems, 4 model games, manifest, color sub-tabs). ship-check READY.
+- ✅ **qgd (BLACK) — COMPLETE** (main + 7 variation lessons, 7 tabs, 8 plans+leadeye, 3 Black-win model games [Kasparov/Anand/Ivanisevic], 3 gems incl. the Cambridge Springs trap, manifest). ship-check confirming.
+- 🚧 **qga (BLACK) — P0**: 7 curated spines exist in repertoire.json (Classical=main pill; tabs: Smyslov, Sadler, Central, Alekhine, Modern Tabiya, Janowski). 6/7 ≥20 ply; **Central (3.e4) thins on the …Ng5 sideline — re-steer at authoring** (walk from …Nc6 O-O). Alekhine extended to 22p. Next: author lessons (black) → wire → plans → gems → Black-win model games.
+- ⏳ **catalan-opening (WHITE)** — not started.
+- Side-fix this session: `add-leadeye-to-plans.mjs` allowlist now includes queens-gambit + qgd (both were missing — QG plans had shipped bare).
+
+## QGD (BLACK) — spines (`scripts/_qgd-extend.mjs`)
 Student = BLACK (defending the QGD). 7/8 spines at 22 ply, masters-backed:
 
 | Variation | Spine (SAN) |
