@@ -1011,211 +1011,6 @@
     "playableLines": []
   },
   {
-    "id": "mp-english-d4",
-    "openingId": "english-opening",
-    "criticalPositionFen": "rnbqkb1r/pppppppp/5n2/8/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
-    "title": "d4 Central Transposition",
-    "overview": "This is the d4 Central Transposition plan in the English Opening. White plays d2-d4 to establish a classical c4+d4 pawn center, transposing into Queen's Gambit or Catalan structures. The flexible move order means White can choose between a QGD setup, a Catalan fianchetto with g3-Bg2, or a Réti-style development depending on Black's response.",
-    "pawnBreaks": [
-      {
-        "move": "d2-d4",
-        "explanation": "The d4 push alongside c4 establishes the classical central pawn duo that controls d5, e5, c5, and e4. This powerful center can lead to QGD structures (with Nc3, Bg5), Catalan setups (with g3, Bg2), or Nimzo-Indian lines depending on how both sides develop.",
-        "fen": "rnbqkb1r/pppppppp/5n2/8/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bf1-g2 (fianchetto)",
-        "explanation": "The Catalan-style g3-Bg2 fianchetto places the bishop on the powerful a8-h1 diagonal, where it exerts long-range pressure on d5 and the entire queenside. The Bg2 is particularly effective when Black plays ...dxc4, as it then targets the b7 and a8 squares through the open diagonal."
-      }
-    ],
-    "strategicThemes": [
-      "The English Opening's d4 transposition gives White a flexible move order advantage. White can wait to see Black's setup before committing — choosing between a Catalan (g3), a QGD (Nc3, Bg5), or other systems based on Black's response.",
-      "The c4+d4 pawn duo is one of the strongest central formations in chess. Together, these pawns control d5, e5, c5, and e4, severely restricting Black's piece development and giving White a natural space advantage.",
-      "The ability to transpose into multiple openings from the English is a strategic weapon. Black can't prepare for a single system — White might head for a Catalan, QGD Exchange, Nimzo-Indian, or even a Réti depending on the position.",
-      "In the Catalan setup, the Bg2 exerts tremendous pressure along the a8-h1 diagonal. Combined with the c4+d4 center, this fianchettoed bishop controls the center from a distance and is particularly powerful after ...dxc4 when the diagonal opens completely."
-    ],
-    "endgameTransitions": [
-      "The central pawn majority (c4+d4 vs Black's e6) gives White a structural advantage in the endgame. The d-pawn can advance to create a passed pawn, while the c-pawn supports from the side.",
-      "The fianchettoed Bg2 remains a powerful piece even in simplified positions. In the endgame, the bishop on the long diagonal controls both the center and the queenside, supporting pawn advances and restricting Black's king activity."
-    ],
-    "playableLines": [
-      {
-        "fen": "rnbqkb1r/pppppppp/5n2/8/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
-        "moves": [
-          "d4",
-          "e6",
-          "g3",
-          "d5",
-          "Bg2",
-          "Be7",
-          "Nf3",
-          "O-O"
-        ],
-        "annotations": [
-          "This is the English Opening transposing to a Catalan structure. White plays d4, establishing the classical c4+d4 pawn center. Combined with the knight already on c3, White has maximum central control.",
-          "Black responds with e6, solidifying the d5 square and creating the French-like d5+e6 pawn structure. This is Black's most solid response, preparing natural development while keeping the position closed.",
-          "White fianchettoes with g3, signaling the Catalan setup. The bishop will go to g2 on the powerful a8-h1 diagonal, where it will exert long-range pressure on d5 and Black's entire queenside.",
-          "Black plays d5, staking a central claim and challenging White's c4 pawn directly. The tension between c4 and d5 is the key to the Catalan — Black must decide whether to capture or maintain the tension.",
-          "The bishop lands on g2, the crown jewel of the Catalan system. From g2, it pressures the a8-h1 diagonal, targeting d5, c6, b7, and a8. If Black ever captures ...dxc4, this bishop becomes enormously powerful on the open diagonal.",
-          "Black develops the bishop to e7, a solid and flexible placement. The Be7 prepares kingside castling and avoids committing to an active but potentially vulnerable square like b4 or d6.",
-          "White develops Nf3, completing kingside development and preparing to castle. The Nf3 controls d4 and e5, supports the central tension, and adds another piece to the coordinated setup.",
-          "Black castles, and the Catalan structure is fully established. The position is a classic contest between White's central control and long-diagonal pressure versus Black's solid but slightly passive setup."
-        ],
-        "arrows": [
-          [
-            {
-              "from": "d2",
-              "to": "d4"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "e6"
-            }
-          ],
-          [
-            {
-              "from": "g2",
-              "to": "g3"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "d5"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "g2"
-            }
-          ],
-          [
-            {
-              "from": "f8",
-              "to": "e7"
-            }
-          ],
-          [
-            {
-              "from": "g1",
-              "to": "f3"
-            }
-          ],
-          [
-            {
-              "from": "e8",
-              "to": "g8"
-            }
-          ]
-        ],
-        "title": "d4 Catalan Transposition"
-      }
-    ]
-  },
-  {
-    "id": "mp-english-b4",
-    "openingId": "english-opening",
-    "criticalPositionFen": "rnbqkbnr/pp1ppppp/8/2p5/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
-    "title": "b4 Queenside Expansion",
-    "overview": "This is the b4 Queenside Expansion plan in the Symmetrical English. White pushes b2-b4 to challenge Black's c5 pawn, gaining queenside space and opening the a-file and b-file for rook activity. Combined with the Nd5 outpost and central control, this creates a dynamic position where White seizes the initiative.",
-    "pawnBreaks": [
-      {
-        "move": "b2-b4",
-        "explanation": "The b4 push directly challenges Black's c5 pawn — the anchor of Black's queenside presence. After cxb4, White can recapture with axb4 opening the a-file for the rook, or play Nd5 exploiting the weakened d5 square. Either way, White gains active piece play and open files.",
-        "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Rook",
-        "route": "Ra1-b1 (supporting b-pawn)",
-        "explanation": "The rook moves to b1 to support the b-pawn advance from behind and pressure the b-file after exchanges. Once the b-file opens after cxb4, the Rb1 targets b7 and can infiltrate to the seventh rank, creating serious problems for Black's queenside."
-      }
-    ],
-    "strategicThemes": [
-      "The b4 push gives White a significant queenside space advantage in the Symmetrical English. Black's c5 pawn is challenged, and after the exchange, White's pieces flood into the open queenside files with natural targets on b7 and a7.",
-      "After cxb4 and axb4, both the a-file and b-file open for White's rooks. The Ra1 and Rb1 become active immediately, creating dual-file pressure that is difficult for Black to contain.",
-      "White's piece pressure on the queenside is the hallmark of this plan. The Nd5 outpost, Rb1 on the b-file, and potential Ba3 or Bb2 on the long diagonal combine to create overwhelming force against Black's queenside."
-    ],
-    "endgameTransitions": [
-      "In the endgame, White's queenside pawn majority (b4+c4 vs Black's weakened structure) can create a dangerous passed pawn. The a-pawn or b-pawn advances while Black's pieces struggle to stop it.",
-      "White's active rooks on the open a-file and b-file translate directly into endgame advantages. Active rooks on open files can infiltrate to the seventh rank, cutting off Black's king and attacking pawns from behind."
-    ],
-    "playableLines": [
-      {
-        "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
-        "moves": [
-          "b4",
-          "cxb4",
-          "Nd5",
-          "Nf6",
-          "Rb1",
-          "a5",
-          "e4"
-        ],
-        "annotations": [
-          "This is the English Opening's b4 Queenside Expansion. White pushes b4, challenging Black's c5 pawn and seizing the initiative on the queenside. This aggressive pawn sacrifice aims to open files and gain dominant piece placement.",
-          "Black captures cxb4, accepting the pawn and opening the b-file. While Black gains material, White gets exactly what was wanted — open lines on the queenside and the powerful d5 square for the knight.",
-          "White jumps the knight to the dominant d5 outpost, the strongest square on the board. The Nd5 attacks c7, e7, b6, and f6, radiating influence across the entire position and proving that the b4 pawn sacrifice was well worth it.",
-          "Black develops the knight to f6, contesting the center and attacking the Nd5. Black hopes to trade off the dominant knight, but White can maintain it with proper support from the e-pawn and Bg2.",
-          "White places the rook on b1, targeting the b4 pawn along the open b-file. The Rb1 pressures b4 and b7 simultaneously, and if the b4 pawn falls, White regains the material with an improved position.",
-          "Black pushes a5, trying to secure the extra b4 pawn by supporting it from behind. This is a committal move — it weakens the b5 square and creates potential targets on the a-file.",
-          "White seizes the center with e4, gaining space and activating the light-squared bishop on the f1-a6 diagonal. With Nd5, Rb1, and e4, White has a powerful position where every piece is actively placed despite the pawn deficit."
-        ],
-        "arrows": [
-          [
-            {
-              "from": "b2",
-              "to": "b4"
-            }
-          ],
-          [
-            {
-              "from": "c5",
-              "to": "b4"
-            }
-          ],
-          [
-            {
-              "from": "c3",
-              "to": "d5"
-            }
-          ],
-          [
-            {
-              "from": "g8",
-              "to": "f6"
-            }
-          ],
-          [
-            {
-              "from": "a1",
-              "to": "b1"
-            }
-          ],
-          [
-            {
-              "from": "a7",
-              "to": "a5"
-            }
-          ],
-          [
-            {
-              "from": "e2",
-              "to": "e4"
-            }
-          ]
-        ],
-        "title": "b4 Queenside Gambit"
-      }
-    ]
-  },
-  {
     "id": "mp-ruylopez-d4",
     "openingId": "ruy-lopez",
     "criticalPositionFen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
@@ -19430,6 +19225,159 @@
           "Rd1 — White centralises the rook on d1.",
           "…Nb4 — the knight hops to b4.",
           "Qe2 — White completes development, ready to regain c4."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-englishopening-main",
+    "openingId": "english-opening",
+    "title": "Reversed Sicilian: the Queenside Expansion",
+    "criticalPositionFen": "r1bqkb1r/ppp2ppp/1nn5/4p3/8/2N2NP1/PP1PPPBP/R1BQK2R w KQkq - 2 7",
+    "overview": "In the Reversed Sicilian, White plays a Dragon with an extra tempo: fianchetto, castle, and roll the queenside pawns with a3 and b4-b5, pressing exactly where Black presses in the real Dragon — only a move ahead.",
+    "pawnBreaks": [
+      {
+        "move": "b4-b5",
+        "explanation": "The b5 push cracks open Black's queenside, the reversed-Dragon pawn-storm.",
+        "fen": "r1bqkb1r/ppp2ppp/1nn5/4p3/8/2N2NP1/PP1PPPBP/R1BQK2R w KQkq - 2 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Ra1-b1",
+        "explanation": "The rook lifts to b1 to back the b-pawn storm."
+      }
+    ],
+    "strategicThemes": [
+      "Treat 1.c4 e5 as a Dragon a tempo up.",
+      "Expand with a3 and b4-b5 on the queenside.",
+      "Use the g2-bishop's long-diagonal pressure."
+    ],
+    "endgameTransitions": [
+      "The queenside space and bishop carry into a pleasant endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Reversed Sicilian: the Queenside Expansion",
+        "fen": "r1bqkb1r/ppp2ppp/1nn5/4p3/8/2N2NP1/PP1PPPBP/R1BQK2R w KQkq - 2 7",
+        "moves": [
+          "O-O",
+          "Be7",
+          "a3",
+          "O-O",
+          "b4",
+          "Be6"
+        ],
+        "annotations": [
+          "O-O — White castles, the reversed-Dragon setup complete.",
+          "…Be7 — Black develops the bishop to e7.",
+          "a3 — White prepares the b4 expansion.",
+          "…O-O — Black castles.",
+          "b4 — the queenside pawn storm rolls forward.",
+          "…Be6 — Black develops the bishop to e6."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-englishopening-symmetrical",
+    "openingId": "english-opening",
+    "title": "Symmetrical English: the c-File Squeeze",
+    "criticalPositionFen": "r1bq1rk1/pp2ppbp/3p1np1/8/2PQ4/2N3P1/PP2PPBP/R1B2RK1 w - - 0 10",
+    "overview": "After the d4-break shatters the symmetry, White centralises the queen, develops, and piles on the half-open c-file — the classic Maróczy-style English bind that squeezes Black's queenside.",
+    "pawnBreaks": [
+      {
+        "move": "e4",
+        "explanation": "A timely e4 grabs the full centre and deepens the Maróczy bind.",
+        "fen": "r1bq1rk1/pp2ppbp/3p1np1/8/2PQ4/2N3P1/PP2PPBP/R1B2RK1 w - - 0 10"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Ra1-c1",
+        "explanation": "The rook seizes the half-open c-file, the spine of the English squeeze."
+      }
+    ],
+    "strategicThemes": [
+      "Break the symmetry with d4.",
+      "Centralise on d4 and dominate the long diagonal.",
+      "Pile on the c-file and the queenside."
+    ],
+    "endgameTransitions": [
+      "The space and c-file pressure convert into an endgame edge."
+    ],
+    "playableLines": [
+      {
+        "title": "Symmetrical English: the c-File Squeeze",
+        "fen": "r1bq1rk1/pp2ppbp/3p1np1/8/2PQ4/2N3P1/PP2PPBP/R1B2RK1 w - - 0 10",
+        "moves": [
+          "Qd3",
+          "a6",
+          "Bd2",
+          "Rb8",
+          "Rac1",
+          "Bf5"
+        ],
+        "annotations": [
+          "Qd3 — the queen steps back to d3, eyeing the centre.",
+          "…a6 — Black makes queenside luft with a6.",
+          "Bd2 — White develops the dark-squared bishop to d2.",
+          "…Rb8 — Black prepares ...b5.",
+          "Rac1 — White seizes the open c-file.",
+          "…Bf5 — Black develops the bishop to f5."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-englishopening-mikenas",
+    "openingId": "english-opening",
+    "title": "Mikenas: the Central Pawn Mass",
+    "criticalPositionFen": "rnb1kb1r/ppp2ppp/4pq2/8/2P5/2P5/P2P1PPP/R1BQKBNR w KQkq - 0 7",
+    "overview": "After the sharp Mikenas tactics, White is left with doubled c-pawns but a powerful pawn centre, the open b- and e-files, and a development lead. Develop actively, build the centre with d4, and aim the bishop at Black's king.",
+    "pawnBreaks": [
+      {
+        "move": "d2-d4",
+        "explanation": "d4 erects the broad central pawn mass that is the engine of White's initiative.",
+        "fen": "rnb1kb1r/ppp2ppp/4pq2/8/2P5/2P5/P2P1PPP/R1BQKBNR w KQkq - 0 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bf1-d3-c2",
+        "explanation": "The light-squared bishop swings to the b1-h7 diagonal, aiming at Black's king."
+      }
+    ],
+    "strategicThemes": [
+      "Trade the structural blemish for activity.",
+      "Build a broad pawn centre with d4.",
+      "Aim the bishop at the king down the b1-h7 diagonal."
+    ],
+    "endgameTransitions": [
+      "If the attack is parried, the centre keeps White comfortable."
+    ],
+    "playableLines": [
+      {
+        "title": "Mikenas: the Central Pawn Mass",
+        "fen": "rnb1kb1r/ppp2ppp/4pq2/8/2P5/2P5/P2P1PPP/R1BQKBNR w KQkq - 0 7",
+        "moves": [
+          "Nf3",
+          "e5",
+          "Bd3",
+          "Na6",
+          "O-O",
+          "Bd6"
+        ],
+        "annotations": [
+          "Nf3 — White develops, eyeing the e5- and d4-squares.",
+          "…e5 — Black stakes out the centre with e5.",
+          "Bd3 — the bishop eyes the kingside.",
+          "…Na6 — Black develops the knight to a6.",
+          "O-O — White castles, ready to break with d4.",
+          "…Bd6 — Black develops the bishop to d6."
         ]
       }
     ]

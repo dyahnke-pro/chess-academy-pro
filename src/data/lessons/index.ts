@@ -21,6 +21,8 @@ import { LONDON_SYSTEM_LESSON } from './londonSystem';
 import { LONDON_SYSTEM_VARIATION_LESSONS } from './londonSystemVariations';
 import { CATALAN_OPENING_LESSON } from './catalanOpening';
 import { CATALAN_OPENING_VARIATION_LESSONS } from './catalanOpeningVariations';
+import { ENGLISH_OPENING_LESSON } from './englishOpening';
+import { ENGLISH_OPENING_VARIATION_LESSONS } from './englishOpeningVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -49,6 +51,7 @@ const LESSONS: Record<string, LessonScript> = {
   [FOUR_KNIGHTS_GAME_LESSON.openingId]: FOUR_KNIGHTS_GAME_LESSON,
   [LONDON_SYSTEM_LESSON.openingId]: LONDON_SYSTEM_LESSON,
   [CATALAN_OPENING_LESSON.openingId]: CATALAN_OPENING_LESSON,
+  [ENGLISH_OPENING_LESSON.openingId]: ENGLISH_OPENING_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -63,6 +66,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...FOUR_KNIGHTS_GAME_VARIATION_LESSONS,
   ...LONDON_SYSTEM_VARIATION_LESSONS,
   ...CATALAN_OPENING_VARIATION_LESSONS,
+  ...ENGLISH_OPENING_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

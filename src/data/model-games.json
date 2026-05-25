@@ -2187,54 +2187,6 @@
     "source": "lichess-masters"
   },
   {
-    "id": "mg-lichess-hhaSI6SI",
-    "openingId": "english-opening",
-    "white": "Carlsen, Magnus",
-    "black": "Caruana, Fabiano",
-    "whiteElo": 2863,
-    "blackElo": 2835,
-    "result": "1-0",
-    "year": 2020,
-    "event": "2020-2020-06 master game",
-    "pgn": "c4 e5 Nc3 Nf6 g3 Bb4 e4 Bxc3 bxc3 O-O f3 b5 d4 exd4 cxd4 bxc4 e5 Nd5 Bxc4 Bb7 Nh3 d6 O-O Nd7 Re1 dxe5 dxe5 N7b6 Bb3 Qe7 e6 fxe6 Ng5 Rf6 Qc2 Rg6 Rxe6 Qxe6 Nxe6 Rxe6 Bb2 Rae8 Bd4 Kh8 Qf5 Bc8 Qh5 c5 Bxc5 Re5 Qf7 Bh3 Bf8 Re1+ Rxe1 Rxe1+ Kf2 Rf1+ Ke2 Nc3+ Kd3",
-    "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Caruana, Fabiano, 2020. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/hhaSI6SI",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-51EhMpIT",
-    "openingId": "english-opening",
-    "white": "Carlsen, Magnus",
-    "black": "Caruana, Fabiano",
-    "whiteElo": 2863,
-    "blackElo": 2835,
-    "result": "1/2-1/2",
-    "year": 2020,
-    "event": "2020-2020-06 master game",
-    "pgn": "c4 e5 Nc3 Nf6 g3 Bb4 e4 Bxc3 bxc3 O-O f3 Re8 Kf2 c6 d4 d5 cxd5 cxd5 dxe5 Rxe5 c4 d4 Ne2 Nc6 Nf4 Nd7 Nd5 Re8 Bf4 Nde5 Bxe5 Rxe5 Bd3 f5 Re1 fxe4 Bxe4 Bf5 Bxf5 Rxf5 f4 Qd7 Rb1 Raf8 Kg1 R5f7 Rb2 Re8 Rbe2 Rff8 a4 Qf7 Qd3 Rxe2 Qxe2 Rd8 Qe4 g6 g4 Kf8 Kf2 Kg7 Kg3 Kf8 h3 a6 Kf3 Kg7 Qe6 Qxe6 Rxe6 Kf7 f5 gxf5 gxf5 Rg8 Rh6 Kg7 Rd6 Rf8 Kf4 d3 Nc7 Rc8 Ne6+ Kf7 Rxd3 Ne7 Ng5+ Ke8 Ke5 Rc5+ Ke6 Nxf5 Ne4 Ng7+ Kd6 Rxc4 Ke5 Rxa4 Nd6+ Ke7 Nxb7 Rh4 Ra3 Rh6 Nc5 Rh5+ Kd4 a5 Rxa5 Ne6+ Kc4 Nxc5 Rxc5 Rxh3 Kd4 Kf6 Ke4 Kg6 Kf4 Rh5 Rxh5 Kxh5 Kg3 Kg5 Kh2 Kh5 Kh1 Kg5 Kg1 Kh5 Kh1",
-    "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Caruana, Fabiano, 2020. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/51EhMpIT",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-1OdQ8CAQ",
-    "openingId": "english-opening",
-    "white": "Carlsen, M.",
-    "black": "Caruana, F.",
-    "whiteElo": 2876,
-    "blackElo": 2812,
-    "result": "1/2-1/2",
-    "year": 2019,
-    "event": "2019-2019-10 master game",
-    "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 e4 Bc5 Nxe5 Nxe5 d4 Bb4 dxe5 Nxe4 Qf3 Nxc3 bxc3 Ba5 Bf4 O-O O-O-O Qe7 Kb2 Rb8 Bd3 b5 cxb5 Bb7 Qh3 g6 Qe3 Rfe8 Rhe1 Bc6 a4 a6 Bg5 Bxc3+ Kxc3 Qa3+ Kd2 Qb4+ Ke2 Qg4+ Kd2 Qb4+ Ke2 Qg4+ Kd2 Qb4+",
-    "overview": "Master game from the Lichess masters database. Carlsen, M. vs Caruana, F., 2019. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/1OdQ8CAQ",
-    "source": "lichess-masters"
-  },
-  {
     "id": "mg-lichess-UayafTnB",
     "openingId": "evans-gambit",
     "white": "Caruana, Fabiano",
@@ -3925,5 +3877,122 @@
     ],
     "middlegameTheme": "Stop ...b5, break with d5, convert the bishop's pressure.",
     "lessonSummary": "Against the Slav move-order, the Catalan fianchetto plus a4 and d5 give White a lasting bind."
+  },
+  {
+    "id": "mg-carlsen-english-revsic",
+    "openingId": "english-opening",
+    "white": "Magnus Carlsen",
+    "black": "Fabiano Caruana",
+    "whiteElo": 2863,
+    "blackElo": 2842,
+    "result": "1-0",
+    "year": 2020,
+    "event": "Carlsen Invitational 2020",
+    "studentSide": "white",
+    "pgn": "c4 e5 Nc3 Nf6 g3 Bb4 e4 Bxc3 bxc3 O-O f3 b5 d4 exd4 cxd4 bxc4 e5 Nd5 Bxc4 Bb7 Nh3 d6 O-O Nd7 Re1 dxe5 dxe5 N7b6 Bb3 Qe7 e6 fxe6 Ng5 Rf6 Qc2 Rg6 Rxe6 Qxe6 Nxe6 Rxe6 Bb2 Rae8 Bd4 Kh8 Qf5 Bc8 Qh5 c5 Bxc5 Re5 Qf7 Bh3 Bf8 Re1+ Rxe1 Rxe1+ Kf2 Rf1+ Ke2 Nc3+ Kd3",
+    "overview": "Carlsen treats 1.c4 e5 as a reversed Sicilian, opens the centre, repositions for a kingside attack, and converts a dominating position into a winning endgame against Caruana.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "rnbq1rk1/p1pp1ppp/5n2/1p6/2PPP3/5PP1/P6P/R1BQKBNR b KQ - 0 8",
+        "annotation": "cxd4 — White opens the centre after the early skirmish; the reversed-Dragon structure hands him space and the bishop pair.",
+        "concept": "Open the centre"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r2q1rk1/pbp2ppp/1n6/3nP3/8/1B3PPN/P6P/R1BQR1K1 b - - 2 15",
+        "annotation": "Bb3 — the bishop swings to the a2-g8 diagonal, eyeing f7 and the kingside as White's attack gathers.",
+        "concept": "Reposition for attack"
+      },
+      {
+        "moveNumber": 31,
+        "color": "white",
+        "fen": "5B1k/p4Qpp/1n6/8/8/1BnK1PPb/P6P/5r2 b - - 5 31",
+        "annotation": "Kd3 — deep in a winning position White's pieces dominate; the king strides up and the point is secured.",
+        "concept": "Convert the advantage"
+      }
+    ],
+    "middlegameTheme": "Reversed-Dragon structure, open centre, attack.",
+    "lessonSummary": "Against 1.c4 e5, play the Dragon a tempo up: fianchetto, open the centre, and press."
+  },
+  {
+    "id": "mg-mvl-english-symmetrical",
+    "openingId": "english-opening",
+    "white": "Maxime Vachier-Lagrave",
+    "black": "Magnus Carlsen",
+    "whiteElo": 2779,
+    "blackElo": 2876,
+    "result": "1-0",
+    "year": 2019,
+    "event": "Croatia GCT 2019",
+    "studentSide": "white",
+    "pgn": "c4 c5 Nf3 Nf6 Nc3 e6 g3 b6 Bg2 Bb7 O-O Be7 b3 O-O Bb2 d6 e3 Nbd7 Qe2 a6 d4 Ne4 Rfd1 Nxc3 Bxc3 Be4 Rac1 Re8 Bh3 Qc7 Nd2 Bb7 e4 Bf6 Nf3 b5 cxb5 axb5 dxc5 Bxc3 Rxc3 b4 Rc2 dxc5 Qe3 h6 Bf1 Ba6 Rcd2 Nf6 Bxa6 Rxa6 Rc1 Rea8 Rxc5 Qa7 Rdc2 Rxa2 Rc8+ Kh7 Qxa7 R8xa7 Nd2 Ng4 Kg2 Ne5 f4 Nd3 Kf1 Ra1+ Ke2 Rd7 Nf3 Rb1 Rd2 Rb2 Rxb2 Nxb2 Ne5 Rd4 Ke3 Rd1 Nxf7 Re1+ Kd4 Re2 h4 Kg6 Ne5+ Kh5 Rg8 Rd2+ Ke3 Rc2 Rxg7 Rc3+ Ke2 Nd1 g4+ Kxh4 Kxd1 Kg3 f5 Kf4 Ng6+ Kxe4 f6 Rf3 f7",
+    "overview": "A model Symmetrical/Hedgehog English. MVL kept the Maróczy bind, dominated the c-file, and converted the space advantage into a winning endgame against Carlsen himself.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r2q1rk1/pb1nbppp/1p1ppn2/2p5/2P5/1PN1PNP1/PB1PQPBP/R4RK1 b - - 2 10",
+        "annotation": "Qe2 — White completes a harmonious setup against the Hedgehog, keeping the bind and the c-file pressure.",
+        "concept": "The English bind"
+      },
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "r3r1k1/1bqn1ppp/3pp3/1pP5/4P3/1PR2NPB/P3QP1P/3R2K1 b - - 0 21",
+        "annotation": "Rxc3 — White dominates the c-file; the recurring English squeeze tells, converting to an edge.",
+        "concept": "Dominate the c-file"
+      },
+      {
+        "moveNumber": 55,
+        "color": "white",
+        "fen": "8/5PR1/4p1Np/8/1p2k1P1/1P3r2/8/3K4 b - - 0 55",
+        "annotation": "f7 — the passed pawn marches to queen; White's space edge has become a winning endgame.",
+        "concept": "Convert the passer"
+      }
+    ],
+    "middlegameTheme": "Maróczy bind, c-file domination, convert.",
+    "lessonSummary": "In the Symmetrical English, keep the bind and pile on the c-file — small edges accumulate into a win."
+  },
+  {
+    "id": "mg-caruana-english-mikenas",
+    "openingId": "english-opening",
+    "white": "Fabiano Caruana",
+    "black": "Wesley So",
+    "whiteElo": 2822,
+    "blackElo": 2815,
+    "result": "1-0",
+    "year": 2017,
+    "event": "Sinquefield Cup 2017",
+    "studentSide": "white",
+    "pgn": "c4 e6 Nc3 Nf6 e4 d5 cxd5 exd5 e5 Ne4 Nf3 Bf5 Be2 Be7 O-O Nc6 d3 Nxc3 bxc3 O-O d4 Qd7 Bd3 Na5 Re1 Nc4 Rb1 Bxd3 Qxd3 b5 Nd2 Rab8 Nb3 Rb6 Bf4 Qg4 Bg3 Qg6 Qf3 a5 Rbd1 Qc2 Qxd5 Qxa2 Nc5 Rd8 Nd7 c6 Qe4 Ra6 e6 f6 d5 cxd5 Qxd5 Qb3 Qb7 Rxe6 Qd5 Nd2 Qxb3 Nxb3 Rxe6 Kf7 Ree1 a4 Bc7 Rc8 Bd6 Bxd6 Rxd6 Rxc3 Nb6 a3 Nd5 Rc4 Ra6 b4 Ra4 Nc1 Rxb4 a2 Rb7+ Kg6 Ra7 Rc2 Nb4 Rb2 Rxc1",
+    "overview": "Caruana shows the Mikenas Attack's bite: he met ...e6 with e4, consolidated the big centre, kept the initiative for the doubled pawns, and ground out a winning rook endgame.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r2qk2r/ppp1bppp/2n5/3pPb2/4n3/2NP1N2/PP2BPPP/R1BQ1RK1 b kq - 0 9",
+        "annotation": "d3 — White consolidates the big centre; the Mikenas pawn mass and active pieces give a lasting initiative.",
+        "concept": "Consolidate the centre"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "1r3rk1/p1pqbppp/8/1p1pP3/2nP4/1NPQ4/P4PPP/1RB1R1K1 b - - 3 17",
+        "annotation": "Nb3 — White's pieces dominate; the doubled c-pawns are forgotten next to the activity.",
+        "concept": "Activity over structure"
+      },
+      {
+        "moveNumber": 45,
+        "color": "white",
+        "fen": "8/R5pp/5pk1/8/1N6/8/pr3PPP/2R3K1 b - - 0 45",
+        "annotation": "Rxc1 — the rooks decide a won endgame; Caruana converts cleanly.",
+        "concept": "Convert the endgame"
+      }
+    ],
+    "middlegameTheme": "Slam e4, build the centre, attack.",
+    "lessonSummary": "The Mikenas trades the English's calm for a sharp central initiative — well worth the doubled pawns."
   }
 ]

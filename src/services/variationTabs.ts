@@ -76,6 +76,15 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /closed catalan/i, label: 'Closed' },
     { test: /vs slav|slav setup/i, label: 'vs Slav' },
   ],
+  // English Opening — 1.c4, the flexible flank opening. Main-line pill = the
+  // Reversed Sicilian (1.c4 e5) with the queenside reversed-Dragon plan (the
+  // showcase, exempt). The two DB-anchored, structurally-distinct tabs with
+  // student-winning master games: the Symmetrical (1.c4 c5) and the sharp
+  // Mikenas Attack.
+  'english-opening': [
+    { test: /english: symmetrical/i, label: 'Symmetrical' },
+    { test: /mikenas/i, label: 'Mikenas' },
+  ],
   // Scotch Game — hand-picked tabs, frequency-ordered (repertoire weights).
   // Main-line pill = the Classical 4…Bc5 Be3 Qf6 line (the repertoire pgn), so
   // the "Classical" variation is omitted as a tab (it'd duplicate the pill).

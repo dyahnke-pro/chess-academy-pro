@@ -267,36 +267,30 @@
   ],
   "english-opening": [
     {
-      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
-      "correctMove": "g3",
-      "hint": "Fianchetto the bishop to control the long diagonal.",
-      "concept": "King's Fianchetto"
+      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+      "correctMove": "Nc3",
+      "hint": "Develop toward a reversed Sicilian — a Dragon a tempo up.",
+      "concept": "The Reversed Sicilian"
     },
     {
-      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2P5/2N3P1/PP1PPP1P/R1BQKBNR w KQkq - 0 3",
-      "correctMove": "Bg2",
-      "hint": "Complete the fianchetto — the bishop belongs on g2.",
-      "concept": "Completing the Fianchetto"
+      "fen": "r1bq1rk1/pp1pppbp/2n2np1/2p5/2P5/2N2NP1/PP1PPPBP/R1BQ1RK1 w - - 6 7",
+      "correctMove": "d4",
+      "hint": "Break the symmetry in the centre at the right moment.",
+      "concept": "The symmetry-breaking d4"
     },
     {
-      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - 0 4",
       "type": "plan",
-      "question": "What is White's strategic plan in the English?",
+      "question": "In the Mikenas, how should White meet ...d5?",
       "choices": [
-        "Fianchetto the bishop with g3-Bg2 and control the center from the flank",
-        "Push d4 immediately to transpose to 1.d4 openings",
-        "Play f4 for a Grand Prix Attack",
-        "Develop Nf3-e4 for a direct center"
+        "Push e5, gaining space and kicking the f6-knight",
+        "Trade with cxd5, giving Black an easy game",
+        "Retreat the e-pawn to e3",
+        "Castle and play quietly"
       ],
       "correctIndex": 0,
-      "hint": "The English is a flank opening — control the center indirectly.",
-      "concept": "English Opening Fianchetto Plan"
-    },
-    {
-      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2P5/2N3P1/PP1PPP1P/R1BQKBNR b KQkq - 0 3",
-      "correctMove": "Nf6",
-      "hint": "Develop a piece and control the center.",
-      "concept": "Piece Development"
+      "hint": "The Mikenas is about the central thrust — keep the initiative.",
+      "concept": "Mikenas central push"
     }
   ],
   "sicilian-dragon": [

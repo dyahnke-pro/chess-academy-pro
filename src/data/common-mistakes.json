@@ -159,22 +159,25 @@
   ],
   "english-opening": [
     {
-      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq - 0 1",
-      "wrongMove": "d5",
+      "fen": "r1bqkb1r/ppp2ppp/2n5/3np3/8/2N2NP1/PP1PPP1P/R1BQKB1R w KQkq - 0 6",
+      "wrongMove": "Nxe5",
+      "correctMove": "Bg2",
+      "explanation": "Grabbing the pawn with Nxe5 walks into ...Nxc3! — the d5-knight forks the queen and White loses material. Just fianchetto with Bg2; the reversed Sicilian is about pressure, not pawn-grabbing.",
+      "shortNarration": "Bg2 — fianchetto, don't grab e5"
+    },
+    {
+      "fen": "r1bq1rk1/pp1pppbp/2n2np1/2p5/2P5/2N2NP1/PP1PPPBP/R1BQ1RK1 w - - 6 7",
+      "wrongMove": "d3",
+      "correctMove": "d4",
+      "explanation": "Drifting with d3 keeps the symmetry and lets Black equalize comfortably. d4 is the thematic break that shatters the mirror and hands White the initiative his extra tempo earns.",
+      "shortNarration": "d4 — break the symmetry, don't drift"
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - 0 4",
+      "wrongMove": "cxd5",
       "correctMove": "e5",
-      "explanation": "d5 allows cxd5 Qxd5 Nc3, developing White's knight with tempo on the queen. Playing e5 grabs central space and avoids the tempo loss. If White plays d3, you keep a symmetrical but comfortable position."
-    },
-    {
-      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
-      "wrongMove": "d4",
-      "correctMove": "Nc3",
-      "explanation": "d4 transposes to an open game where Black is well prepared. Nc3 keeps the English character with flexible development."
-    },
-    {
-      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
-      "wrongMove": "e4",
-      "correctMove": "g3",
-      "explanation": "e4 gives Black a target with d5. g3 fianchettoes the bishop to control the center from the flank — the English way."
+      "explanation": "Releasing with cxd5 exd5 gives Black free, easy development. e5 is the whole point of the Mikenas — gain space and kick the f6-knight, keeping the initiative.",
+      "shortNarration": "e5 — push past, keep the initiative"
     }
   ],
   "sicilian-dragon": [
