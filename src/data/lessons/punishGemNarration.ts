@@ -1695,6 +1695,26 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'c4? The most common try here, but it abandons the d4-pawn\'s defender — and Black pounces.', 'Nxd4! The little tactic: the knight grabs d4 because c4 left it undefended. If White recaptures, the queen takes back and Black is a pawn up.', '', 'Qxd4 regains the piece, leaving Black a clean pawn ahead with an active centralised queen.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxd4 — grab the loose pawn.', '', 'Qxd4 — recapture, a pawn up.', '', '', '', '', ''],
   },
+  'alekhine-defence:e4_Nf6_e5_Nd5_d4_d6_c4_Nb6:Nc3': {
+    // e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 Nc3 dxe5 dxe5 Qxd1+ Nxd1 Nc6 f4 Bf5 Nf3
+    watch: ['', '', '', '', '', '', '', '', 'Nc3? This fails to shore up the e5-spearhead. Black undermines at once.', 'dxe5! Striking the spearhead. After the trades the e5-pawn is left weak and falls.', '', 'Qxd1+ trades queens — with no attack to fear, Black simply hunts the weak e5-pawn.', '', 'Nc6 piles onto e5; the pawn cannot be held, and Black wins it cleanly.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'dxe5 — undermine the spearhead.', '', 'Qxd1+ — trade queens, target e5.', '', 'Nc6 — win the weak e5-pawn.', '', '', ''],
+  },
+  'alekhine-defence:e4_Nf6_e5_Nd5_d4_d6_c4_Nb6_f4_dxe5_fxe5_Nc6_Be3_Bf5:Bd3': {
+    // e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Bd3 Bxd3 Qxd3 Nxe5 Qe2 Nexc4 Bf2 e6 Nc3
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bd3?? A blunder. It offers a trade but fatally loosens the defence of the centre — and Black wins material by force.', 'Bxd3 — take the bishop. After Qxd3 the e5-pawn is suddenly undefended.', '', 'Nxe5! The first pawn falls, and the knight eyes c4 next. Black is already a pawn up with more to come.', '', 'Nexc4! A second pawn drops. Black has won two pawns out of the blunder and is simply winning.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bxd3 — trade, loosen the centre.', '', 'Nxe5 — win the e5-pawn.', '', 'Nexc4 — and a second pawn.', '', '', ''],
+  },
+  'alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_d4_d6:Nc3': {
+    // e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 Nc3 dxe5 dxe5 Qxd1+ Nxd1 Nc6 f4 Bf5 Nf3
+    watch: ['', '', '', '', '', '', '', '', 'Nc3? It leaves the e5-spearhead under-defended. Black undermines immediately.', 'dxe5! Hitting the spearhead — after the trades the e5-pawn becomes a weakness.', '', 'Qxd1+ trades queens; with the position simplified Black just targets the loose e5-pawn.', '', 'Nc6 attacks e5 — the pawn falls and Black is clearly better.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'dxe5 — undermine the spearhead.', '', 'Qxd1+ — trade queens, target e5.', '', 'Nc6 — win the weak e5-pawn.', '', '', ''],
+  },
+  'alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_c5_Nd5_d4_d6_cxd6_exd6:f4': {
+    // e4 Nf6 e5 Nd5 c4 Nb6 c5 Nd5 d4 d6 cxd6 exd6 f4 dxe5 dxe5 Nc6 Nc3 Bb4 Bd2 Be6 Bb5
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'f4? Over-extending once more. The e5-pawn is now overworked, and Black strikes.', 'dxe5! Undermining. After the recapture the e5-spearhead is isolated and weak.', '', 'Nc6 attacks e5; the over-extended pawn becomes a lasting target.', '', 'Bb4 pins and develops — Black is comfortably better with e5 under fire.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'dxe5 — undermine the spearhead.', '', 'Nc6 — target the weak e5-pawn.', '', 'Bb4 — pin, pile on e5.', '', '', ''],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

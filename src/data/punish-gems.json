@@ -2902,5 +2902,101 @@
     "engineCp": 112,
     "tier": "confirmed",
     "why": "At your level opponents play c4 here in 47% of games. Punish with the best move Nxd4 — the engine has Black winning (+1.1)."
+  },
+  {
+    "openingId": "alekhine-defence",
+    "lineMoves": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6",
+    "inaccuracy": "Nc3",
+    "freqPct": 2.3,
+    "games": 100393,
+    "practicalScore": 60,
+    "mainMove": "exd6",
+    "punish": "dxe5",
+    "punishSeq": [
+      "dxe5",
+      "dxe5",
+      "Qxd1+",
+      "Nxd1",
+      "Nc6",
+      "f4",
+      "Bf5",
+      "Nf3"
+    ],
+    "playLine": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 Nc3 dxe5 dxe5 Qxd1+ Nxd1 Nc6 f4 Bf5 Nf3",
+    "engineCp": 105,
+    "tier": "confirmed",
+    "why": "At your level opponents play Nc3 here in 2% of games. Punish with the best move dxe5 — the engine has Black winning (+1.1)."
+  },
+  {
+    "openingId": "alekhine-defence",
+    "lineMoves": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5",
+    "inaccuracy": "Bd3",
+    "freqPct": 2.4,
+    "games": 4720,
+    "practicalScore": 67,
+    "mainMove": "Nc3",
+    "punish": "Bxd3",
+    "punishSeq": [
+      "Bxd3",
+      "Qxd3",
+      "Nxe5",
+      "Qe2",
+      "Nexc4",
+      "Bf2",
+      "e6",
+      "Nc3"
+    ],
+    "playLine": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Bd3 Bxd3 Qxd3 Nxe5 Qe2 Nexc4 Bf2 e6 Nc3",
+    "engineCp": 275,
+    "tier": "confirmed",
+    "why": "At your level opponents play Bd3 here in 2% of games. Punish with the best move Bxd3 — the engine has Black winning (+2.8)."
+  },
+  {
+    "openingId": "alekhine-defence",
+    "lineMoves": "e4 Nf6 e5 Nd5 c4 Nb6 d4 d6",
+    "inaccuracy": "Nc3",
+    "freqPct": 2.3,
+    "games": 100393,
+    "practicalScore": 60,
+    "mainMove": "exd6",
+    "punish": "dxe5",
+    "punishSeq": [
+      "dxe5",
+      "dxe5",
+      "Qxd1+",
+      "Nxd1",
+      "Nc6",
+      "f4",
+      "Bf5",
+      "Nf3"
+    ],
+    "playLine": "e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 Nc3 dxe5 dxe5 Qxd1+ Nxd1 Nc6 f4 Bf5 Nf3",
+    "engineCp": 89,
+    "tier": "positional",
+    "why": "At your level opponents play Nc3 here in 2% of games. Punish with the best move dxe5 — the engine has Black clearly better (+0.9)."
+  },
+  {
+    "openingId": "alekhine-defence",
+    "lineMoves": "e4 Nf6 e5 Nd5 c4 Nb6 c5 Nd5 d4 d6 cxd6 exd6",
+    "inaccuracy": "f4",
+    "freqPct": 15.7,
+    "games": 6410,
+    "practicalScore": 53,
+    "mainMove": "Nf3",
+    "punish": "dxe5",
+    "punishSeq": [
+      "dxe5",
+      "dxe5",
+      "Nc6",
+      "Nc3",
+      "Bb4",
+      "Bd2",
+      "Be6",
+      "Bb5"
+    ],
+    "playLine": "e4 Nf6 e5 Nd5 c4 Nb6 c5 Nd5 d4 d6 cxd6 exd6 f4 dxe5 dxe5 Nc6 Nc3 Bb4 Bd2 Be6 Bb5",
+    "engineCp": 114,
+    "tier": "confirmed",
+    "why": "At your level opponents play f4 here in 16% of games. Punish with the best move dxe5 — the engine has Black winning (+1.1)."
   }
 ]
