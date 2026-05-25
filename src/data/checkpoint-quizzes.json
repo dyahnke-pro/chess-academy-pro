@@ -69,10 +69,10 @@
   ],
   "french-defence": [
     {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
-      "correctMove": "Bd3",
-      "hint": "Which square puts the bishop on an active diagonal while keeping f4 available?",
-      "concept": "Bishop Development in French"
+      "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 2 5",
+      "correctMove": "Qb6",
+      "hint": "Which move hits the d4-base AND the b2-pawn at the same time?",
+      "concept": "The thematic ...Qb6"
     },
     {
       "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P1P2/2NB4/PPP3PP/R1BQK1NR b KQkq - 0 6",
@@ -81,18 +81,18 @@
       "concept": "King Safety First"
     },
     {
-      "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P4/2NB4/PPP2PPP/R1BQK1NR w KQkq - 0 5",
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
       "type": "plan",
-      "question": "What is White's main plan in the French Advance?",
+      "question": "What is Black's main plan against the French Advance?",
       "choices": [
-        "Support e5 with f4, develop pieces to active squares, and attack the kingside",
-        "Trade the e5 pawn and simplify to an endgame",
-        "Play c4 to attack d5 from both sides",
-        "Fianchetto the dark-squared bishop with g3-Bg2"
+        "Strike the base of White's chain with ...c5, pressure d4, and play for queenside counterplay",
+        "Trade everything off and head straight for a draw",
+        "Push ...f6 at once to break the centre open",
+        "Develop the light-squared bishop to f5 before locking with ...e6"
       ],
       "correctIndex": 0,
-      "hint": "White wants to maintain the space advantage and build a kingside attack.",
-      "concept": "French Advance Attack Plan"
+      "hint": "The base of White's d4-e5 chain is the d4-pawn — go after it.",
+      "concept": "Black's French Advance plan"
     },
     {
       "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P4/2N5/PPP1BPPP/R1BQK1NR b KQkq - 0 5",

@@ -44,22 +44,18 @@
   ],
   "french-defence": [
     {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
-      "wrongMove": "Nf3",
-      "correctMove": "Bd3",
-      "explanation": "Nf3 blocks the f-pawn and removes the option of f4 to support e5. Bd3 develops actively, eyes h7, and keeps f2-f4 available for later."
-    },
-    {
       "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P4/2NB4/PPP2PPP/R1BQK1NR b KQkq - 0 5",
       "wrongMove": "c5",
       "correctMove": "Nfd7",
-      "explanation": "c5 immediately gives White a target after dxc5 Bxc5 Qg4. First retreat the knight to d7 (or e4) to reorganize, then break with c5 when better prepared."
+      "explanation": "After e5 the f6-knight is attacked and must move — …c5 ignores it and simply drops the piece to exf6. First retreat the knight to d7 to reorganize, then strike the base with …c5 once it is safely prepared.",
+      "shortNarration": "Nfd7 — save the attacked knight first"
     },
     {
       "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
       "wrongMove": "Nf6",
       "correctMove": "d5",
-      "explanation": "Nf6 allows e5 pushing the knight back and gaining space. d5 is the whole point of the French — challenge the center immediately."
+      "explanation": "…Nf6 here just invites e5, kicking the knight back and handing White free space. …d5 is the whole point of the French — challenge the e4-pawn at once and fight for the centre.",
+      "shortNarration": "d5 — the principled French strike"
     }
   ],
   "caro-kann": [
