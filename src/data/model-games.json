@@ -2749,54 +2749,6 @@
     "source": "lichess-masters"
   },
   {
-    "id": "mg-lichess-XyOyGGhV",
-    "openingId": "qgd",
-    "white": "Aronian, Levon",
-    "black": "Carlsen, Magnus",
-    "whiteElo": 2813,
-    "blackElo": 2868,
-    "result": "1/2-1/2",
-    "year": 2013,
-    "event": "2013-2013-05 master game",
-    "pgn": "d4 Nf6 c4 e6 Nf3 d5 Nc3 Nbd7 Bg5 Be7 e3 O-O Rc1 a6 Qc2 dxc4 Bxc4 c5 Be2 b5 a4 b4 Ne4 cxd4 Nxf6+ Nxf6 Nxd4 Bb7 Nc6 Bxc6 Qxc6 Rc8 Qxc8 Qxc8 Rxc8 Rxc8 O-O a5 b3 Kf8 Bxf6 Bxf6 Rd1 Rc3 Bc4 h5 Kf1 Ke7 Ke2 Be5 h3 h4 Rd3 Rc2+ Rd2 Rc3 Rd3 Rc2+ Rd2 Rc3",
-    "overview": "Master game from the Lichess masters database. Aronian, Levon vs Carlsen, Magnus, 2013. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/XyOyGGhV",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-5MTULzEv",
-    "openingId": "qgd",
-    "white": "Carlsen, M..",
-    "black": "Karjakin, Sergey",
-    "whiteElo": 2847,
-    "blackElo": 2757,
-    "result": "1-0",
-    "year": 2021,
-    "event": "2021-2021-03 master game",
-    "pgn": "d4 Nf6 c4 e6 Nf3 d5 Nc3 Be7 Bg5 O-O e3 Nbd7 Qc2 h6 Bh4 c5 cxd5 Nxd5 Bxe7 Qxe7 Nxd5 exd5 dxc5 Nxc5 Be2 Bg4 O-O Rac8 Rad1 Rfd8 h3 Ne6 Qa4 Bxf3 Bxf3 Qc5 b4 Qc4 Qxa7 d4 exd4 Nxd4 Bxb7 Rc7 Qa5 Rcd7 Ba6 Qe6 Kh1 Rd6 b5 g6 a4 Qf5 Qb4 Qe5 Qc3 Qf4 Bb7 Nxb5 Rxd6 Nxc3 Rxd8+ Kg7 a5 Qc7 a6 Nb5 Rfd1 h5 Kg1 h4 R8d7 Qc2 Ra1 Qc3 Rdd1 g5 a7",
-    "overview": "Master game from the Lichess masters database. Carlsen, M.. vs Karjakin, Sergey, 2021. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/5MTULzEv",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-8NogdEns",
-    "openingId": "qgd",
-    "white": "Ding Liren",
-    "black": "Mamedyarov, S.",
-    "whiteElo": 2778,
-    "blackElo": 2814,
-    "result": "1/2-1/2",
-    "year": 2018,
-    "event": "2018-2018-04 master game",
-    "pgn": "c4 Nf6 Nc3 e6 Nf3 d5 d4 Be7 Bg5 O-O e3 Nbd7 Be2 h6 Bh4 c5 cxd5 Nxd5 Bxe7 Nxe7 O-O cxd4 Nxd4 Nf6 Qb3 Qa5 a3 Rd8 Qb4 Qxb4 axb4 Nc6 Nc2 Rd2 Rfc1 Nd5 Nxd5 exd5 b5 Rxe2 bxc6 d4 exd4 bxc6 Kf1 Re4 f3 Rh4 Nb4 Bd7 Nxc6 Bxc6 Rxc6 Rxd4 Rc2 a5 b3 Rb4 Ra3 Rab8 Rxa5 Rxb3 Kf2 Rb2 Rxb2 Rxb2+ Kf1 Rb1+ Kf2 Rb2+ Kf1 Rb1+ Kf2 Rb2+",
-    "overview": "Master game from the Lichess masters database. Ding Liren vs Mamedyarov, S., 2018. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/8NogdEns",
-    "source": "lichess-masters"
-  },
-  {
     "id": "mg-lichess-IHJjuOuQ",
     "openingId": "queens-indian",
     "white": "Aronian, Levon",
@@ -3600,6 +3552,102 @@
         "fen": "r3kb1r/ppqn1p1p/2p5/4nN2/P4p2/2N3P1/1P2PPBP/R2QK2R b KQkq - 0 13",
         "annotation": "Nxf5 — winning the bishop pair and fracturing Black's coordination; from here the initiative never relents.",
         "concept": "Bishop pair and initiative"
+      }
+    ]
+  },
+  {
+    "id": "qgd-topalov-kasparov-1998",
+    "openingId": "qgd",
+    "white": "Veselin Topalov",
+    "black": "Garry Kasparov",
+    "whiteElo": 2740,
+    "blackElo": 2825,
+    "result": "0-1",
+    "year": 1998,
+    "event": "Sofia (rapid match) 1998",
+    "pgn": "Nf3 d5 d4 Nf6 c4 e6 Nc3 Be7 Bg5 O-O e3 h6 Bh4 b6 Be2 Bb7 Bxf6 Bxf6 cxd5 exd5 b4 c5 bxc5 bxc5 Rb1 Bc6 O-O Nd7 Bb5 Qc7 Qd3 Rfc8 h3 cxd4 Nxd4 Bb7 Rfc1 Nc5 Qd1 Qe7 Qg4 g6 Bf1 Bg7 Qd1 Rab8 Rc2 Ba8 Rbc1 Rd8 g3 Bxd4 exd4 Ne6 h4 Qf6 Ne2 Rb4 Rc8 Bb7 Rxd8+ Nxd8 Qd2 Ra4 Qxh6 Rxa2 Qe3 Ne6 Rb1 Bc6 Qh6 Qd8 Qe3 Qf6 Qb3 Rd2 Qe3 Nxd4 Nf4 Qe5 Qa3 Kg7 Rc1 Bb5 Rc8 Be8 Qc3 Bd7 Rd8 Rd1 Rxd7 Qe4 Rxd5 Rxf1+",
+    "overview": "Kasparov demonstrates the Tartakower from the Black side against Topalov: the …b6/…Bb7 fianchetto cures the bad bishop, and Black's harmonious pieces and queenside pressure gradually overwhelm White, the active rooks crashing through to win.",
+    "middlegameTheme": "Tartakower fianchetto and queenside pressure",
+    "lessonSummary": "The Tartakower's …b6/…Bb7 turns the QGD's worst piece into its best; from there Black equalises and, against a slip, plays for the win with active rooks.",
+    "studentSide": "black",
+    "criticalMoments": [
+      {
+        "moveNumber": 7,
+        "color": "black",
+        "fen": "rnbq1rk1/p1p1bpp1/1p2pn1p/3p4/2PP3B/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 8",
+        "annotation": "…b6 — the Tartakower fianchetto. Kasparov frees the bad bishop to b7, the foundation of Black's whole counterplay.",
+        "concept": "Fianchetto the bad bishop"
+      },
+      {
+        "moveNumber": 39,
+        "color": "black",
+        "fen": "6k1/p4p2/2b2qp1/3p4/3n3P/4Q1P1/3rNP2/1R3BK1 w - - 0 40",
+        "annotation": "…Nxd4 — Black's pieces crash through in the centre; the won pawn and the active rooks on the second rank decide the game.",
+        "concept": "Active rooks break through"
+      }
+    ]
+  },
+  {
+    "id": "qgd-topalov-anand-2010",
+    "openingId": "qgd",
+    "white": "Veselin Topalov",
+    "black": "Viswanathan Anand",
+    "whiteElo": 2803,
+    "blackElo": 2800,
+    "result": "0-1",
+    "year": 2010,
+    "event": "Nanjing Pearl Spring 2010",
+    "pgn": "d4 Nf6 c4 e6 Nf3 d5 Nc3 Be7 Bg5 h6 Bh4 O-O e3 Ne4 Bxe7 Qxe7 cxd5 Nxc3 bxc3 exd5 Qb3 Rd8 c4 Be6 c5 b6 Rc1 bxc5 Qa3 Nd7 Bb5 Bg4 Bxd7 Rxd7 Qxc5 Qe4 Rg1 Re8 Qb5 Rdd8 Qe2 Rb8 h3 Bxf3 gxf3 Qf5 f4 Rb1 Rxb1 Qxb1+ Qd1 Rb8 Ke2 Qf5 Rh1 Rb2+ Kf3 h5 a4 Qe4+ Kg3 h4+ Kxh4 Rxf2 Qg4 Rg2",
+    "overview": "Anand shows the Lasker Defence against Topalov: the freeing …Ne4 trades into a comfortable game, and when White overpresses, Black's queen and rook invade decisively — a model of the QGD's defend-then-counterpunch character.",
+    "middlegameTheme": "Lasker …Ne4 simplification and the counterpunch",
+    "lessonSummary": "The Lasker …Ne4 takes the sting out of White's setup; equalise first, then punish any overreach with a sudden counterattack.",
+    "studentSide": "black",
+    "criticalMoments": [
+      {
+        "moveNumber": 7,
+        "color": "black",
+        "fen": "rnbq1rk1/ppp1bpp1/4p2p/3p4/2PPn2B/2N1PN2/PP3PPP/R2QKB1R w KQ - 1 8",
+        "annotation": "…Ne4 — the Lasker. Anand jumps the knight into the centre to trade pieces and free Black's game against the most aggressive attacker of the era.",
+        "concept": "The Lasker simplification"
+      },
+      {
+        "moveNumber": 28,
+        "color": "black",
+        "fen": "6k1/p1p2pp1/7p/3p1q2/3P1P2/4P2P/Pr2KP2/3Q3R w - - 6 29",
+        "annotation": "…Rb2+ — Black's rook crashes onto the seventh rank; the counterattack overwhelms White's exposed king.",
+        "concept": "Counterattack on the seventh"
+      }
+    ]
+  },
+  {
+    "id": "qgd-salem-ivanisevic-2021",
+    "openingId": "qgd",
+    "white": "A.R. Salem",
+    "black": "Ivan Ivanisevic",
+    "whiteElo": 2690,
+    "blackElo": 2599,
+    "result": "0-1",
+    "year": 2021,
+    "event": "Abu Dhabi Masters 2021",
+    "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 e3 c6 Bd3 Be7 Nge2 Nf8 O-O Ne6 Bh4 O-O b4 g5 Bg3 Bxb4 f4 Bd6 fxg5 Nxg5 Qe1 Kh8 Bxd6 Qxd6 Qh4 Rg8 Ng3 Qe7 Qf4 Nh5 Qf2 Nxg3 hxg3 Bd7 Rae1 Rg7 Ne2 Rag8 Qf4 Qe6 Kf2 f6 Rh1 Be8 Qh4 Qe7 Nf4 Rf8 Qh6 Kg8 Rh4 f5 Rhh1 Rf6 Qh4 Qd6 Re2 b6 Qh2 Ne4+ Bxe4 fxe4 Qh4 c5 dxc5 bxc5 Rd1 d4 Qh3 Bd7 Qh5 Bg4 Qe8+ Rf8 Qxe4 Re7 Qc2 Rxe3",
+    "overview": "A model of the Carlsbad from Black's side: instead of passively meeting White's minority attack, Ivanisevic answers b4 with the thematic …g5 kingside storm, opens lines against the white king, and crashes through — exactly the active plan the Exchange tab teaches.",
+    "middlegameTheme": "Carlsbad kingside …g5 counter-storm",
+    "lessonSummary": "In the Exchange Carlsbad, Black need not sit and defend the minority attack — the …g5/…f5 kingside storm is the active antidote, and it can win the game outright.",
+    "studentSide": "black",
+    "criticalMoments": [
+      {
+        "moveNumber": 11,
+        "color": "black",
+        "fen": "r1bq1rk1/pp2bp1p/2p1nn2/3p2p1/1P1P3B/2NBP3/P3NPPP/R2Q1RK1 w - - 0 12",
+        "annotation": "…g5! — the thematic Carlsbad counter. Rather than defend the queenside passively, Black storms the kingside where White's king lives.",
+        "concept": "Kingside pawn storm"
+      },
+      {
+        "moveNumber": 34,
+        "color": "black",
+        "fen": "4b1k1/p5rp/1ppq1r2/3p1p2/3PnN2/3BP1P1/P3RKPQ/7R w - - 2 35",
+        "annotation": "…Ne4+ — the storm breaks through. Black's pieces pour into the white king and the attack is decisive.",
+        "concept": "Attack crashes through"
       }
     ]
   }
