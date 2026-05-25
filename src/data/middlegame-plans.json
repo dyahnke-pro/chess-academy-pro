@@ -13125,7 +13125,7 @@
           "White tries the Bg5 pin.",
           "...Bb7 — calm: the bishop eyes the long diagonal straight at White’s king.",
           "White releases the central tension.",
-          "...Nxe5 recaptures and lands a proud knight in the centre — Black is comfortable and active."
+          "…Nxe5 plants a strong knight in the centre; with the b7-bishop raking the long diagonal, the solid c6-d6 chain and a …d5 break in hand, Black has a fully-equal Lion — active pieces, no weaknesses, the kind of position Black plays for a win."
         ],
         "arrows": [
           [],
@@ -13135,7 +13135,13 @@
           [],
           [],
           [],
-          []
+          [
+            {
+              "from": "e5",
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
         ],
         "title": "Coiled and Comfortable",
         "highlights": [
@@ -13217,6 +13223,22 @@
             {
               "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -13365,7 +13387,7 @@
           "White reroutes the knight to e2.",
           "...c5 strikes the centre a second time.",
           "White releases the tension.",
-          "...dxe5 — the centre resolves; Black is sound and harmonious, no weaknesses."
+          "…dxe5 opens the centre just as Black is fully mobilised: the queen on a5 rakes the queenside, the knights and the e7-bishop are all active, and White's f4-thrust has left e4 and the king's shelter loose. Black has easy equality and the more purposeful plan."
         ],
         "arrows": [
           [],
@@ -13511,6 +13533,22 @@
             {
               "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -21254,7 +21292,7 @@
           "White contests the open e-file with Rfe1 — whoever owns it owns the only imbalance.",
           "Black redeploys …Qc7, lining the queen up behind the d6-bishop toward h2.",
           "White offers a trade of dark-squared bishops with Bg3.",
-          "Black takes on g3 — trading into a clean, level structure where the e-file and a flexible position give Black the more comfortable side."
+          "…Bxg3 wins the bishop pair, and with both bishops trained on White's king and the rook on the open e-file, Black is the more active side — the Exchange's symmetry is no draw, it is Black's to press."
         ],
         "title": "The e-File Edge",
         "arrows": [
@@ -21760,7 +21798,7 @@
           "White centralises a rook on d1, eyeing the d-file.",
           "Black redeploys …Qc7, connecting the rooks and eyeing the half-open c-file.",
           "White trades on f6 to damage Black's kingside pawns.",
-          "Black recaptures …gxf6 — the doubled f-pawns control the centre, the half-open g-file opens for the rook, and the b7-bishop and the sound structure keep Black fully comfortable."
+          "…gxf6 recaptures toward the centre: the doubled f-pawns clamp e5 and g5, the half-open g-file feeds the rook at White's king, and the b7-bishop rakes the long diagonal — concrete attacking assets, not just a tidy structure."
         ],
         "title": "Sound Equality",
         "arrows": [
@@ -21810,6 +21848,14 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
               "square": "b7",
               "color": "rgba(255, 235, 59, 0.5)"
             }
@@ -21854,7 +21900,7 @@
           "Black develops …Nc6, a second attacker on the d4-pawn and a step toward queenside castling.",
           "a3 questions the b4-bishop.",
           "…Bxc3 trades, damaging White's queenside structure — the bishop has done its job.",
-          "Bxc3 recaptures, and Black is left pressing d4 with the active queen on a5 and the fine bishop on f5."
+          "Black stands fully mobilised: the queen on a5 pins down the queenside, the bishop on f5 is active outside the chain, and both knights bear on d4. Equal material, but every black piece already works while White must still untangle."
         ],
         "title": "Scandinavian: The Active Queen and f5-Bishop",
         "arrows": [
@@ -21870,12 +21916,12 @@
           [
             {
               "from": "c3",
-              "to": "d4",
+              "to": "a5",
               "color": "rgba(34, 197, 94, 0.85)"
             },
             {
               "from": "c3",
-              "to": "a5",
+              "to": "d4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
@@ -21929,15 +21975,15 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
               "square": "a5",
               "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
@@ -22318,14 +22364,25 @@
           "White castles short.",
           "…O-O-O castles long, the rook landing on the open d-file behind the flexible …Qd6 queen.",
           "d5 chases the c6-knight and grabs space.",
-          "…Ne5 centralises the knight, and Black trades into a sound, comfortable middlegame with no weaknesses."
+          "…Ne5 centralises on a powerful square, hitting f3 and c4, while the rook already sits on the half-open d-file behind White's advanced d5-pawn. Black has active, fully-equal play and a ready-made target — the over-extended d5-pawn."
         ],
         "title": "Scandinavian: The Flexible …Qd6 Setup",
         "arrows": [
           [],
           [],
           [],
-          []
+          [
+            {
+              "from": "e5",
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e5",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
         ],
         "highlights": [
           [
@@ -22370,6 +22427,18 @@
             {
               "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -23063,7 +23132,7 @@
           "Nc3 develops.",
           "…e6 supports a future …d5.",
           "Be2 develops.",
-          "…c5 strikes at d4, freeing the position — Black is fully equal with a sound, simple structure."
+          "…c5 strikes d4 and frees Black's game entirely; once the tension resolves Black has a sound structure with no weaknesses and smooth development — a line that tried to trick Black into passivity, refuted into comfortable equality."
         ],
         "title": "Alekhine: Simplified Safety",
         "arrows": [
@@ -23650,20 +23719,12 @@
           "f4"
         ],
         "annotations": [
-          "d5 clamps the centre and grabs space — but with the centre fixed, Black's hands are free to storm the kingside.",
-          "…g5 — the storm rolls forward. The pawn heads for g4 to pry loose the f3-knight, White's key kingside defender.",
-          "b4 — White counters on the far wing; now it's a race between the two attacks.",
-          "…g4 evicts the f3-knight from the post guarding White's king.",
+          "d5 clamps the centre and grabs space — but with the centre fixed, Black’s hands are free to storm the kingside.",
+          "…g5 — the storm rolls forward. The pawn heads for g4 to pry loose the f3-knight, White’s key kingside defender.",
+          "b4 — White counters on the far wing; now it’s a race between the two attacks.",
+          "…g4 evicts the f3-knight from the post guarding White’s king.",
           "Nd2 — the knight retreats and the kingside guard is gone.",
-          "…f4 — the hammer hits g3. After …fxg3 the f-file rips open onto White's king, the g7-bishop and f8-rook already trained down it."
-        ],
-        "learnCues": [
-          "d5 — clamp the centre",
-          "g5 — start the storm",
-          "b4 — White's counter-race",
-          "g4 — evict the knight",
-          "Nd2 — the guard retreats",
-          "f4 — crack open g3"
+          "…f4 — the hammer hits g3. After …fxg3 the f-file rips open onto White’s king, the g7-bishop and f8-rook already trained down it."
         ],
         "title": "Dutch Leningrad: The Kingside Storm",
         "arrows": [
@@ -23747,6 +23808,14 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "learnCues": [
+          "d5 — clamp the centre",
+          "g5 — start the storm",
+          "b4 — White’s counter-race",
+          "g4 — evict the knight",
+          "Nd2 — the guard retreats",
+          "f4 — crack open g3"
         ]
       }
     ]
@@ -24324,7 +24393,7 @@
           "Qe2 centralises.",
           "…b6 prepares the …Bb7 fianchetto onto the long diagonal.",
           "Rd1 eyes the d-file.",
-          "…cxd4 opens the centre on Black's terms, freeing the pieces — fully comfortable."
+          "…cxd4 opens the centre on Black's terms: the d4-pawn cramps White, and after …Bxc3 the doubled c-pawns become a lasting target while Black's pieces flow to active squares. Black presses the structure and never defends — comfortably the easier game."
         ],
         "title": "Nimzo Rubinstein: Central Tension",
         "arrows": [
@@ -24988,7 +25057,7 @@
           "a3 questions the b4-bishop.",
           "…Bd6 retreats, keeping the bishop pair and eyeing the kingside.",
           "b4 grabs queenside space.",
-          "…a6 prepares …c5 and …a5 to challenge the advance — Black is comfortable with the two bishops."
+          "…a6 readies …c5 to hit d4 and …a5 to undercut b4, while the b7-bishop locks down e4 and the d6-bishop eyes the kingside. Black keeps both bishops and a sound centre with active play on each wing — it is Black, not White, who sets the agenda."
         ],
         "title": "Nimzo Fischer: Light-Square Control",
         "arrows": [
@@ -25046,7 +25115,15 @@
               "color": "rgba(255, 235, 59, 0.5)"
             },
             {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
               "square": "a5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
@@ -25194,7 +25271,7 @@
           "c3 shores up the queenside.",
           "…Bd6 trains the dark bishop on the e5-pawn — the head of White’s chain.",
           "Bf4 defends e5.",
-          "…Qe7 lines the queen up behind the pressure on e5; Black has the easier game."
+          "…Qe7 stacks the queen behind the pressure on e5; with the light bishop entrenched on e4 and the dark bishop and both knights all trained on the e5-spearhead, Black besieges White's over-extended pawn. Black has the easier game and the clearer plan — pile up on e5 until it falls."
         ],
         "title": "Caro Advance: Pressure the e5-Chain",
         "arrows": [
@@ -25265,6 +25342,10 @@
             },
             {
               "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
@@ -25408,7 +25489,7 @@
           "b3 prepares the long-diagonal bishop.",
           "…c5 strikes at d4 — the freeing break the Two Knights invites.",
           "Bb2 develops.",
-          "…cxd4 opens the centre on Black’s terms, activating the pieces for full equality."
+          "…cxd4 opens the centre on Black's terms: the d4-pawn cramps White and the half-open c-file invites the rooks, while Black carries not a single weakness. Comfortable equality with by far the more purposeful pieces."
         ],
         "title": "Caro Two Knights: Strike with …c5",
         "arrows": [
@@ -25714,7 +25795,7 @@
           "Rae1 contests the open e-file.",
           "…Ng6 reroutes the knight to the kingside, eyeing f4 and h4.",
           "Ng3 covers f5.",
-          "…Be6 develops the second bishop; with the bishop pair and the cramping h3-pawn, Black holds the initiative."
+          "…Be6 develops the second bishop into a harmonious setup; with both bishops active, the cramping h4-pawn squeezing White's king and the rook on the open e-file, Black holds a real initiative — the doubled f-pawns bought genuine, lasting assets."
         ],
         "title": "Caro Tartakower: The Doubled-Pawn Clamp",
         "arrows": [
@@ -25738,13 +25819,7 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "e6",
-              "to": "h3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          []
         ],
         "highlights": [
           [
@@ -25799,7 +25874,7 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "h3",
+              "square": "h4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]

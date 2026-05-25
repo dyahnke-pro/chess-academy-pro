@@ -5,6 +5,21 @@
 // if unsound — so nothing ungrounded ships. Narration: full = Watch (vivid,
 // names squares/ideas), short = Learn cue (3-5 words). Authored 2026-05-25.
 export const patches = [
+  // ── Dutch Leningrad "Kingside Storm" (David's reported line) — the real storm ──
+  {
+    key: 'mp-dutchdefence-main#0',
+    moves: ['d5', 'g5', 'b4', 'g4', 'Nd2', 'f4'],
+    full: [
+      'd5 clamps the centre and grabs space — but with the centre fixed, Black’s hands are free to storm the kingside.',
+      '…g5 — the storm rolls forward. The pawn heads for g4 to pry loose the f3-knight, White’s key kingside defender.',
+      'b4 — White counters on the far wing; now it’s a race between the two attacks.',
+      '…g4 evicts the f3-knight from the post guarding White’s king.',
+      'Nd2 — the knight retreats and the kingside guard is gone.',
+      '…f4 — the hammer hits g3. After …fxg3 the f-file rips open onto White’s king, the g7-bishop and f8-rook already trained down it.',
+    ],
+    short: ['d5 — clamp the centre', 'g5 — start the storm', 'b4 — White’s counter-race', 'g4 — evict the knight', 'Nd2 — the guard retreats', 'f4 — crack open g3'],
+    yellow: [[], ['g4'], [], ['f3'], [], ['g3']],
+  },
   // ── Promise-enders: line already shows the theme; concrete narration, no promise ──
   {
     key: 'mp-italiangame-evans#0',
