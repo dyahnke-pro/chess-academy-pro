@@ -111,8 +111,20 @@ use the replay-to-(moveNo:color) method when building model games (one stale FEN
 slipped through and was caught by ship-check; fixed).
 
 ### Vetted COMPLETE, not yet built (all variations have Black-win model games):
-- Nimzo-Indian (8 vars) — NEXT for the following session
-### Vetted INCOMPLETE (skip — a variation lacks a Black-win model game):
-- KID (Averbakh), Grünfeld (Exchange lines)
+- ~~Nimzo-Indian (8 vars)~~ ✅ SHIPPED on main (commit 91d7549) — 7 tabs + main, 8 plans,
+  8 models, 6 gems, pitfalls, quizzes, audit 3-pass green.
+### Caro-Kann — COMPLETED the model-game-rich masterclass (this session):
+- Was a near-complete prior build (lessons + 7 models + 5 gems + traps, wired) missing
+  per-tab middlegame plans. Added 7 plans (main + Advance/Exchange/Two Knights/Panov/
+  Fantasy/Tartakower) with lead-the-eye + tab service + manifest bump. Gate-green.
 ### Off-limits (done on main / in flight): ruy, pirc, vienna, caro, italian, scotch,
-kings-gambit, sicilian-dragon, najdorf + Sicilian program; QGD/QGA/Slav/Semi-Slav (#669).
+kings-gambit, sicilian program (dragon/najdorf/sveshnikov/alapin); QGD/QGA/Slav/Semi-Slav (#669).
+
+## 🎯 MODEL GAMES NEEDED — running todo (David sources these later)
+**New rule (David 2026-05-25): build the masterclass fully WITHOUT model games; the
+ModelGamesSection self-hides until games land. Log here EXACTLY which opening + which
+line needs a real Black-WIN master game (one per variation tab).** When David supplies a
+PGN, add it to model-games.json with `studentSide:'black'`, a hand-authored overview,
+bump the manifest modelGames floor, and add the opening to modelGames-orientation PROTECTED.
+
+_(none outstanding yet — entries added as model-game-deferred openings are built below)_

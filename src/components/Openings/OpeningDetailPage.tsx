@@ -33,6 +33,7 @@ import { getAlekhineDefenceTabPlanIds } from '../../services/alekhineDefenceMast
 import { getBenkoGambitTabPlanIds } from '../../services/benkoGambitMasterclassTabs';
 import { getDutchDefenceTabPlanIds } from '../../services/dutchDefenceMasterclassTabs';
 import { getNimzoIndianTabPlanIds } from '../../services/nimzoIndianMasterclassTabs';
+import { getCaroKannTabPlanIds } from '../../services/caroKannMasterclassTabs';
 import { getKingsGambitTabPlanIds } from '../../services/kingsGambitMasterclassTabs';
 import { getSicilianDragonTabPlanIds } from '../../services/sicilianDragonMasterclassTabs';
 import { getFourKnightsTabPlanIds } from '../../services/fourKnightsMasterclassTabs';
@@ -1064,6 +1065,7 @@ export function OpeningDetailPage(): JSX.Element {
     getBenkoGambitTabPlanIds(opening.id, tabKey) ??
     getDutchDefenceTabPlanIds(opening.id, tabKey) ??
     getNimzoIndianTabPlanIds(opening.id, tabKey) ??
+    getCaroKannTabPlanIds(opening.id, tabKey) ??
     getKingsGambitTabPlanIds(opening.id, tabKey) ??
     getSicilianDragonTabPlanIds(opening.id, tabKey) ??
     getFourKnightsTabPlanIds(opening.id, tabKey) ??
