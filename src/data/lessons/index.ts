@@ -60,6 +60,8 @@ import { SLAV_DEFENCE_LESSON } from './slavDefence';
 import { SLAV_DEFENCE_VARIATION_LESSONS } from './slavDefenceVariations';
 import { SEMI_SLAV_LESSON } from './semiSlav';
 import { SEMI_SLAV_VARIATION_LESSONS } from './semiSlavVariations';
+import { KINGS_INDIAN_DEFENCE_LESSON } from './kingsIndianDefence';
+import { KINGS_INDIAN_DEFENCE_VARIATION_LESSONS } from './kingsIndianDefenceVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -107,6 +109,7 @@ const LESSONS: Record<string, LessonScript> = {
   [QGA_LESSON.openingId]: QGA_LESSON,
   [SLAV_DEFENCE_LESSON.openingId]: SLAV_DEFENCE_LESSON,
   [SEMI_SLAV_LESSON.openingId]: SEMI_SLAV_LESSON,
+  [KINGS_INDIAN_DEFENCE_LESSON.openingId]: KINGS_INDIAN_DEFENCE_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -140,6 +143,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...QGA_VARIATION_LESSONS,
   ...SLAV_DEFENCE_VARIATION_LESSONS,
   ...SEMI_SLAV_VARIATION_LESSONS,
+  ...KINGS_INDIAN_DEFENCE_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

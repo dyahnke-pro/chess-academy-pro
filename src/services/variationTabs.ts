@@ -305,6 +305,17 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /moscow/i, label: 'Moscow' },
     { test: /stoltz/i, label: 'Stoltz' },
   ],
+  // King's Indian Defence — the great hypermodern fighting defence. Main-line
+  // pill = the Classical Mar del Plata (…f5/…f4/…g5 kingside storm, repertoire
+  // pgn). Tabs = the structurally-distinct ≥20-ply White systems: the Bayonet
+  // (9.b4 queenside race), the Four Pawns (max-centre over-extension), and the
+  // positional Fianchetto. (Sämisch/Petrosian/Averbakh deferred pending engine-
+  // soundness verification of their sharp curated lines; Makogonov <20p folds in.)
+  'kings-indian-defence': [
+    { test: /bayonet/i, label: 'Bayonet' },
+    { test: /four pawns/i, label: 'Four Pawns' },
+    { test: /fianchetto/i, label: 'Fianchetto' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same

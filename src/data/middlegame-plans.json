@@ -1,217 +1,5 @@
 [
   {
-    "id": "mp-kid-f5",
-    "openingId": "kings-indian-defence",
-    "criticalPositionFen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 7",
-    "title": "f5 Pawn Storm",
-    "overview": "This is the f5 Pawn Storm plan in the King's Indian Defense. Black plays ...f5 to attack White's e4 pawn and rip open the f-file for the rook on f8. After exf5 gxf5, the half-open g-file becomes a battering ram aimed at White's king. This is the classic King's Indian kingside counter-attack that has decided countless games.",
-    "pawnBreaks": [
-      {
-        "move": "f7-f5",
-        "explanation": "The ...f5 advance is the signature King's Indian break — the move Black's entire setup is built around. It attacks e4, opens the f-file for the Rf8, and after exf5 gxf5, the half-open g-file gives Black a devastating highway to attack White's king with ...Rg8 and ...Qh4.",
-        "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 7"
-      },
-      {
-        "move": "g6-g5",
-        "explanation": "After ...f5, the ...g5-g4 advance drives away White's Nf3 — the key defender of the kingside. Once the Nf3 is displaced, Black's rooks and queen pour through the open g-file and f-file, creating an unstoppable attack against White's king.",
-        "fen": "r1bq1rk1/ppp2pb1/3p1npp/4pp2/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 8"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nf6-h5-f4",
-        "explanation": "The Nf6 reroutes via h5 to reach the powerful f4 outpost. On f4, the knight is nearly impossible to dislodge — it attacks d3, e2, g2, and h3, creating direct threats against White's king. The Nf4 is often the most important piece in Black's attack."
-      },
-      {
-        "piece": "Rook",
-        "route": "Rf8-f7-g7 (doubling on g-file)",
-        "explanation": "After ...f5 opens the f-file and ...gxf5 opens the g-file, Black doubles rooks with Rf7-g7 or Rf8-f6-g6. Doubling on the g-file creates overwhelming pressure against g2 — White's last line of kingside defense."
-      }
-    ],
-    "strategicThemes": [
-      "Black's kingside pawn storm with ...f5-f4 and ...g5-g4 is the heart of the King's Indian Defense. The pawns advance to open lines, drive away White's defenders, and create a direct assault on White's castled king.",
-      "The open f-file and g-file after ...f5 exchanges are Black's primary attacking highways. The Rf8 uses the f-file naturally, and after ...gxf5, the g-file opens for doubling rooks or swinging the queen to the g-file.",
-      "The f4 square is the dream outpost for Black's knight in the King's Indian. On f4, the knight attacks d3, e2, g2, and h3 — all squares near White's king. It can't be captured without opening more lines for Black's attack.",
-      "The entire King's Indian setup — Bg7, Nf6, castling kingside, ...f5 — is designed for a direct attack against White's king. Black sacrifices queenside space to generate overwhelming kingside force."
-    ],
-    "endgameTransitions": [
-      "The King's Indian f5 attack rarely reaches an endgame — the middlegame is usually decisive one way or another. If it does simplify, the open kingside files and Black's active pieces provide lasting initiative."
-    ],
-    "playableLines": [
-      {
-        "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 7",
-        "moves": [
-          "Nh5",
-          "d5",
-          "f5",
-          "exf5",
-          "gxf5",
-          "Ng5",
-          "Nf4"
-        ],
-        "annotations": [
-          "This is the King's Indian f5 Pawn Storm. Black plays Nh5, clearing the f-pawn's path and heading for the f4 outpost via h5. The knight on h5 also prevents f2-f4 ideas from White and prepares the critical ...f5 advance.",
-          "White closes the center with d5, locking the pawn structure and committing to a queenside vs kingside race. After d5, the game becomes a pure attack — White pushes on the queenside with c5-c6, Black storms the kingside with f5-f4-g5.",
-          "Black strikes with f5, the signature King's Indian break that the entire setup was designed for. The f5 pawn attacks e4, threatens to open the f-file, and signals the start of Black's kingside offensive.",
-          "White captures exf5, choosing to open the position. This gives Black the half-open g-file after ...gxf5, but White hopes to use the e4 square and target Black's weakened e6 and f5 pawns.",
-          "Black recaptures gxf5, opening the g-file — the crucial attacking highway in the King's Indian. The Rf8 now has the f-file, and the g-file is ready for ...Rg8, ...Qg5, or doubling rooks for a devastating assault.",
-          "White counter-attacks with Ng5, targeting the weakened e6 pawn and exploiting the light-square holes on f7 and h7. This is White's best defensive resource — creating counterplay against Black's weakened center rather than passively defending.",
-          "Black lands the knight on the powerful f4 outpost, the dominant piece in the position. The Nf4 attacks d3, e2, g2, and h3, creating direct threats against White's king while being almost impossible to dislodge."
-        ],
-        "arrows": [
-          [
-            {
-              "from": "f6",
-              "to": "h5"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "d5"
-            }
-          ],
-          [
-            {
-              "from": "f7",
-              "to": "f5"
-            }
-          ],
-          [
-            {
-              "from": "e4",
-              "to": "f5"
-            }
-          ],
-          [
-            {
-              "from": "g6",
-              "to": "f5"
-            }
-          ],
-          [
-            {
-              "from": "f3",
-              "to": "g5"
-            }
-          ],
-          [
-            {
-              "from": "h5",
-              "to": "f4"
-            }
-          ]
-        ],
-        "title": "f5 Break: Open g-File Attack"
-      },
-      {
-        "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 0 7",
-        "moves": [
-          "Nh5",
-          "d5",
-          "f5",
-          "Nd2",
-          "Ndf6",
-          "g3",
-          "g5",
-          "Kg2"
-        ],
-        "annotations": [
-          "Black clears the knight from f6, preparing the f-pawn advance",
-          "White locks the center, choosing a positional approach",
-          "Black pushes f5, beginning the kingside pawn storm",
-          "White reroutes the f3 knight to d2, heading for c4 or e3",
-          "Black brings the d7 knight to f6, reinforcing the kingside",
-          "White plays g3, shoring up the kingside and preparing Kg2",
-          "Black advances g5, continuing the pawn storm toward g4",
-          "White tucks the king to g2, preparing for the coming storm"
-        ],
-        "arrows": [
-          [
-            {
-              "from": "f6",
-              "to": "h5"
-            }
-          ],
-          [
-            {
-              "from": "d4",
-              "to": "d5"
-            }
-          ],
-          [
-            {
-              "from": "f7",
-              "to": "f5"
-            }
-          ],
-          [
-            {
-              "from": "f3",
-              "to": "d2"
-            }
-          ],
-          [
-            {
-              "from": "d7",
-              "to": "f6"
-            }
-          ],
-          [
-            {
-              "from": "g2",
-              "to": "g3"
-            }
-          ],
-          [
-            {
-              "from": "g6",
-              "to": "g5"
-            }
-          ],
-          [
-            {
-              "from": "g1",
-              "to": "g2"
-            }
-          ]
-        ],
-        "title": "f5-g5-g4 Pawn Storm"
-      }
-    ]
-  },
-  {
-    "id": "mp-kid-e5",
-    "openingId": "kings-indian-defence",
-    "criticalPositionFen": "r1bq1rk1/ppp2pbp/2np1np1/4p3/2PPP3/2N1BN2/PP2BPPP/R2Q1RK1 b - - 0 7",
-    "title": "e5 Central Break",
-    "overview": "This is the e5 Central Break in the King's Indian Defense. Black pushes ...e5 to challenge White's d4 pawn directly. After d5, the center closes and the game splits into a two-front war — Black attacks on the kingside with ...f5-f4-g5, while White expands on the queenside with c5-c6. The side that breaks through first typically wins.",
-    "pawnBreaks": [
-      {
-        "move": "e7-e5",
-        "explanation": "The ...e5 advance challenges White's d4 pawn and stakes Black's claim in the center. After d5, the center locks and the game becomes a race — Black prepares ...f5-f4-g5 on the kingside while White advances c5-c6 on the queenside. The closed center allows both sides to attack without worrying about central counterplay.",
-        "fen": "r1bq1rk1/ppp2pbp/2np1np1/8/2PPP3/2N1BN2/PP2BPPP/R2Q1RK1 b - - 0 7"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nc6-d4 (after d5)",
-        "explanation": "After d5 closes the center, the Nc6 is displaced but can reroute via e7 to reach d4 or c5. The knight on d4 is a superb outpost — it blocks the d-file, supports the ...f5 break, and can never be dislodged since White's e-pawn has advanced past it."
-      }
-    ],
-    "strategicThemes": [
-      "After d5 closes the center, the game becomes a classic King's Indian structure with opposite-side attacks. The locked pawns mean neither side can break through in the center, so both sides attack on their respective flanks — Black kingside, White queenside.",
-      "This is a pure race — Black plays ...f5-f4-g5-g4 to storm White's kingside, while White pushes c5-c6-b5 to break through on the queenside. Tempo is everything — the side that creates threats first typically wins. Both players must attack relentlessly without wasting time on defense.",
-      "In the closed King's Indian center, knights outperform bishops. Black's knights can reach powerful outposts on d4, f4, and c5, while the Bg7 and Bg2 are blocked by their own pawns. Proper knight maneuvering often decides the game."
-    ],
-    "endgameTransitions": [
-      "If the attacks don't break through, the blocked center leads to complex maneuvering endgames. The side with better-placed knights and a more advanced pawn storm typically holds the advantage in these slow, strategic positions."
-    ],
-    "playableLines": []
-  },
-  {
     "id": "mp-ruylopez-d4",
     "openingId": "ruy-lopez",
     "criticalPositionFen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
@@ -27945,6 +27733,125 @@
             {
               "square": "c4",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-kingsindiandefence-main",
+    "openingId": "kings-indian-defence",
+    "criticalPositionFen": "r1bq1rk1/ppp1n1bp/3p1n2/3Pp1p1/2P1Pp2/2NN1P2/PP2BBPP/R2Q1RK1 w - - 2 14",
+    "title": "King's Indian: The Kingside Pawn-Storm",
+    "overview": "The Classical King's Indian has reached its defining moment: the centre is locked, White breaks on the queenside, and Black throws everything at the king. The plan is the famous king-hunt — bring the knight to f4/h4, lift a rook to the g- or h-file, and crash through with …g4 while White is busy on the far wing. Black isn't racing for material; Black is racing for mate.",
+    "pawnBreaks": [
+      "…g4 to rip open the white king’s cover",
+      "…h5–h4 to feed the storm"
+    ],
+    "pieceManeuvers": [
+      "…Ng6 toward f4 and h4, the squares by the king",
+      "…Rf7 the rook-lift to the kingside"
+    ],
+    "strategicThemes": [
+      "The kingside pawn-storm",
+      "Knights to f4/h4",
+      "Racing for mate, not material"
+    ],
+    "endgameTransitions": [
+      "If the attack is parried the locked centre still gives a playable game"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppp1n1bp/3p1n2/3Pp1p1/2P1Pp2/2NN1P2/PP2BBPP/R2Q1RK1 w - - 2 14",
+        "moves": [
+          "c5",
+          "Ng6",
+          "Rc1",
+          "Rf7"
+        ],
+        "annotations": [
+          "c5 — White’s queenside break, racing on the opposite wing.",
+          "…Ng6 — the knight swings toward f4 and h4, the squares right beside the white king, joining the assault.",
+          "Rc1 lines the rook up on the c-file for White’s own play.",
+          "…Rf7 lifts the rook to the seventh rank, pouring the heavy pieces into the kingside storm against the white king. There is the King’s Indian race in pure form — both sides attack, and Black’s target is the king itself."
+        ],
+        "learnCues": [
+          "c5 — White’s queenside break.",
+          "…Ng6 — knight toward f4/h4.",
+          "Rc1 — White’s c-file.",
+          "…Rf7 — the rook-lift."
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ],
+        "title": "King's Indian: The Kingside Pawn-Storm",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "g6",
+              "to": "f4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g6",
+              "to": "h4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]

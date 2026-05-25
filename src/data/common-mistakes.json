@@ -144,19 +144,34 @@
       "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
       "wrongMove": "e5",
       "correctMove": "d6",
-      "explanation": "Playing e5 immediately runs into d5 closing the center when White is better prepared. Play d6 first to support e5, which typically comes after O-O and proper piece placement."
+      "explanation": "Playing e5 immediately runs into d5 closing the center when White is better prepared. Play d6 first to support e5, which typically comes after O-O and proper piece placement.",
+      "shortNarration": "…d6 — set up first, then …e5.",
+      "sources": [
+        "concept:pos-space",
+        "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+      ]
     },
     {
       "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b - - 0 6",
       "wrongMove": "Bg4",
       "correctMove": "e5",
-      "explanation": "Bg4 pins the knight but after Be3 the pin is not effective and Black wastes time. e5 is the key KID break, contesting central control."
+      "explanation": "Bg4 pins the knight but after Be3 the pin is not effective and Black wastes time. e5 is the key KID break, contesting central control.",
+      "shortNarration": "…e5 — strike the centre, not …Bg4.",
+      "sources": [
+        "concept:pos-space",
+        "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+      ]
     },
     {
       "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N1BN2/PP2BPPP/R2Q1RK1 b - - 0 7",
       "wrongMove": "exd4",
       "correctMove": "Nh5",
-      "explanation": "exd4 opens the center which favors White. Nh5 prepares f5 for the classic KID kingside attack."
+      "explanation": "exd4 opens the center which favors White. Nh5 prepares f5 for the classic KID kingside attack.",
+      "shortNarration": "…Nh5 — keep it closed, prep …f5.",
+      "sources": [
+        "concept:pos-space",
+        "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+      ]
     }
   ],
   "london-system": [
