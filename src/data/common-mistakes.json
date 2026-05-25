@@ -116,42 +116,48 @@
   ],
   "london-system": [
     {
-      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 3",
-      "wrongMove": "Nh5",
-      "correctMove": "c5",
-      "explanation": "Nh5 tries to win the bishop but after Bg5! the bishop is safe on g5 and the knight on h5 is offside. Play c5 instead to challenge the center — this is the main way to fight the London."
+      "fen": "rnb1kb1r/pp2pppp/1q3n2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 1 5",
+      "wrongMove": "b3",
+      "correctMove": "Nc3",
+      "explanation": "Defending b2 passively with b3 weakens the queenside and concedes the initiative. Nc3 develops with tempo — the pawn is taboo, since ...Qxb2 runs into Na4 trapping the queen.",
+      "shortNarration": "Nc3 — develop, the pawn is taboo"
     },
     {
-      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 3",
-      "wrongMove": "Bf5",
-      "correctMove": "c5",
-      "explanation": "Bf5 looks logical but after e3 e6, Black has a passive French-like structure. c5 challenges the center and is the most principled response."
+      "fen": "rnbqk2r/ppp2ppp/3bpn2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 2 5",
+      "wrongMove": "Bxd6",
+      "correctMove": "Bg3",
+      "explanation": "Trading the prized London bishop with Bxd6 hands Black comfortable equality. Bg3 preserves it, keeping the grip on the b8-h2 diagonal — the soul of the whole system.",
+      "shortNarration": "Bg3 — keep the London bishop"
     },
     {
-      "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 0 3",
-      "wrongMove": "Qb6",
-      "correctMove": "Bg4",
-      "explanation": "Qb6 attacks b2 but after Qc1 the queen is misplaced and loses time. Bg4 develops with tempo by pinning the knight."
+      "fen": "r1b1kb1r/pp2pppp/1qn5/3p3n/2pP1B2/2P1P3/PPQN1PPP/R3KBNR w KQkq - 2 8",
+      "wrongMove": "Be2",
+      "correctMove": "Bg5",
+      "explanation": "Ignoring the attack on the bishop with a move like Be2 lets ...Nxf4 trade off the prized London bishop for a knight. Bg5 keeps it active and out of harm's way.",
+      "shortNarration": "Bg5 — save the prized bishop"
     }
   ],
   "english-opening": [
     {
-      "fen": "rnbqkbnr/pppppppp/8/8/2P5/8/PP1PPPPP/RNBQKBNR b KQkq - 0 1",
-      "wrongMove": "d5",
+      "fen": "r1bqkb1r/ppp2ppp/2n5/3np3/8/2N2NP1/PP1PPP1P/R1BQKB1R w KQkq - 0 6",
+      "wrongMove": "Nxe5",
+      "correctMove": "Bg2",
+      "explanation": "Grabbing the pawn with Nxe5 walks into ...Nxc3! — the d5-knight forks the queen and White loses material. Just fianchetto with Bg2; the reversed Sicilian is about pressure, not pawn-grabbing.",
+      "shortNarration": "Bg2 — fianchetto, don't grab e5"
+    },
+    {
+      "fen": "r1bq1rk1/pp1pppbp/2n2np1/2p5/2P5/2N2NP1/PP1PPPBP/R1BQ1RK1 w - - 6 7",
+      "wrongMove": "d3",
+      "correctMove": "d4",
+      "explanation": "Drifting with d3 keeps the symmetry and lets Black equalize comfortably. d4 is the thematic break that shatters the mirror and hands White the initiative his extra tempo earns.",
+      "shortNarration": "d4 — break the symmetry, don't drift"
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - 0 4",
+      "wrongMove": "cxd5",
       "correctMove": "e5",
-      "explanation": "d5 allows cxd5 Qxd5 Nc3, developing White's knight with tempo on the queen. Playing e5 grabs central space and avoids the tempo loss. If White plays d3, you keep a symmetrical but comfortable position."
-    },
-    {
-      "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
-      "wrongMove": "d4",
-      "correctMove": "Nc3",
-      "explanation": "d4 transposes to an open game where Black is well prepared. Nc3 keeps the English character with flexible development."
-    },
-    {
-      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 0 3",
-      "wrongMove": "e4",
-      "correctMove": "g3",
-      "explanation": "e4 gives Black a target with d5. g3 fianchettoes the bishop to control the center from the flank — the English way."
+      "explanation": "Releasing with cxd5 exd5 gives Black free, easy development. e5 is the whole point of the Mikenas — gain space and kick the f6-knight, keeping the initiative.",
+      "shortNarration": "e5 — push past, keep the initiative"
     }
   ],
   "sicilian-dragon": [
@@ -192,22 +198,25 @@
   ],
   "catalan-opening": [
     {
-      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
-      "wrongMove": "Bb4+",
-      "correctMove": "d5",
-      "explanation": "Bb4+ transposes into unfavorable lines where White's fianchettoed bishop gains power on the long diagonal. Playing d5 stakes a claim in the center and challenges White's pawn structure directly."
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2pP4/6P1/PP2PPBP/RNBQK1NR w KQkq - 0 5",
+      "wrongMove": "Na3",
+      "correctMove": "Nf3",
+      "explanation": "Lunging after the c4-pawn with Na3 wastes time and misplaces the knight on the rim. Nf3 develops naturally — White recovers the pawn later with the bishop pair and long-diagonal pressure.",
+      "shortNarration": "Nf3 — develop, recover c4 later"
     },
     {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/6P1/PP2PPBP/RNBQK1NR b KQkq - 1 4",
-      "wrongMove": "dxc4",
-      "correctMove": "Be7",
-      "explanation": "Capturing on c4 gives White a powerful center and the Catalan bishop devastating scope on the long diagonal. Developing with Be7 keeps the position solid and prepares to castle without conceding the center."
+      "fen": "r2qkb1r/2pb1ppp/p1n1pn2/1p6/2pP4/4PNP1/PP2QPBP/RNB2RK1 w kq - 0 9",
+      "wrongMove": "Qxc4",
+      "correctMove": "b3",
+      "explanation": "Qxc4 loses the queen to ...bxc4 — the b5-pawn guards c4! Undermine the base of the chain with b3 instead, recovering the pawn under far better circumstances.",
+      "shortNarration": "b3 — undermine, b5 guards c4"
     },
     {
-      "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/6P1/PP1NPPBP/R1BQK1NR b KQkq - 3 5",
-      "wrongMove": "Nc6",
-      "correctMove": "O-O",
-      "explanation": "Nc6 blocks the c-pawn and commits the knight before the pawn structure is clarified. Castling immediately brings the king to safety and connects the rooks for flexible development."
+      "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/5NP1/PPQ1PPBP/RNB2RK1 w - - 0 8",
+      "wrongMove": "cxd5",
+      "correctMove": "Nbd2",
+      "explanation": "Releasing the tension with cxd5 hands Black an easy game and a clear structure. Keep the tension and prepare the thematic e4-break with Nbd2 — that is how White plays for the advantage.",
+      "shortNarration": "Nbd2 — prepare e4, keep tension"
     }
   ],
   "slav-defence": [
@@ -315,19 +324,22 @@
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
       "wrongMove": "Nxe5",
       "correctMove": "Bb5",
-      "explanation": "Nxe5 Nxe5 d4 recovers the piece but Black gets easy equality. Bb5 enters the Spanish Four Knights with positional pressure."
+      "explanation": "Nxe5 is the Halloween Gambit — a knight sacrifice that is objectively unsound; with accurate defence Black is simply better. Bb5 keeps the principled Spanish Four Knights, pressuring the c6-knight and preparing the d4 break.",
+      "shortNarration": "Bb5 — the sound Spanish, not the gambit"
     },
     {
-      "fen": "r1bqk2r/pppp1ppp/2n2n2/1B2p3/1b2P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
-      "wrongMove": "Bxc6",
-      "correctMove": "O-O",
-      "explanation": "Bxc6 dxc6 gives Black the bishop pair and strong center. O-O keeps tension and develops naturally."
+      "fen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
+      "wrongMove": "Nxe5",
+      "correctMove": "Be2",
+      "explanation": "Grabbing the pawn with Nxe5 invites the strong ...Qe7, when Black regains it with a fine game — and the careless f4 even drops a piece to ...Nxb5. Be2 is the calm Maroczy retreat that keeps the bishop pair and a sound edge.",
+      "shortNarration": "Be2 — don't grab e5, retreat calmly"
     },
     {
-      "fen": "r1bq1rk1/pppp1ppp/2n2n2/1B2p3/1b2P3/2N2N2/PPPP1PPP/R1BQ1RK1 w - - 8 6",
-      "wrongMove": "Nd5",
-      "correctMove": "d3",
-      "explanation": "Nd5 Nxd5 exd5 Ne7 gives Black comfortable play. d3 is solid and prepares Bg5 or Be3."
+      "fen": "r1bq1rk1/ppp2ppp/2np1n2/1B2p3/1b2P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7",
+      "wrongMove": "h3",
+      "correctMove": "Bg5",
+      "explanation": "Drifting with a slow move like h3 lets Black comfortably hold the symmetry. Bg5 breaks it on White's terms, pinning the f6-knight — which Black cannot mirror without wrecking his own kingside.",
+      "shortNarration": "Bg5 — break the symmetry, pin f6"
     }
   ],
   "sicilian-alapin": [
@@ -662,22 +674,18 @@
   ],
   "evans-gambit": [
     {
-      "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 b kq - 1 7",
-      "wrongMove": "dxc3",
-      "correctMove": "d6",
-      "explanation": "Compromised Defence — dxc3 is engine-fine but a defensive nightmare in practice. After 8.Qb3 Black has TEN+ only moves to hold equality against the f7 + b7 double-pressure. 7…d6 is the calm modern way: give back the pawn, keep the king safe, and let White overextend. The slim engine edge is on Black's side either way, but the human winning percentages with d6 (60% Black) crush those with dxc3 (35% Black)."
+      "fen": "r1bqk1nr/pppp1ppp/2n5/b3p3/2B1P3/2P2N2/P2P1PPP/RNBQK2R w KQkq - 1 6",
+      "wrongMove": "Nxe5",
+      "correctMove": "d4",
+      "explanation": "Grabbing the pawn back with Nxe5 throws away the whole point of the gambit. d4! builds the towering centre and keeps the initiative — that is exactly what the b-pawn bought.",
+      "shortNarration": "d4 — build the centre, keep the attack"
     },
     {
-      "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
-      "wrongMove": "Ng5",
-      "correctMove": "b4",
-      "explanation": "Ng5 (Fried Liver intentions) is premature against the Italian Bc5 setup — Black isn't committed to Nf6 yet and can simply castle. The Evans 4.b4 is the principled gambit: sacrifice the pawn for the c3+d4 break before Black completes development."
-    },
-    {
-      "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/1PB1P3/5N2/P1PP1PPP/RNBQK2R b KQkq - 0 4",
-      "wrongMove": "Bb6",
-      "correctMove": "Bxb4",
-      "explanation": "Declining with 4…Bb6 is theoretically dubious — it cedes the principled gambit position without claiming compensation. White's a4-a5 follow-up will harass the bishop and Black ends up in a passive Italian-like position without the natural …Bc5 squares. Accept the pawn with Bxb4 and refute the gambit if you can."
+      "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2B1P3/2p2N2/P4PPP/RNBQ1RK1 w kq - 0 8",
+      "wrongMove": "Nxc3",
+      "correctMove": "Qb3",
+      "explanation": "In the Compromised Defence, meekly regaining the pawn with Nxc3 lets Black consolidate the extra material. Qb3! is the point — the queen and bishop train on f7 and the attack roars on, worth far more than a pawn.",
+      "shortNarration": "Qb3 — the battery on f7, not the pawn"
     }
   ],
   "kings-gambit": [
@@ -784,21 +792,17 @@
   "reti-opening": [
     {
       "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5N2/PPPPPPPP/RNBQKB1R w KQkq - 0 2",
-      "wrongMove": "d4",
-      "correctMove": "g3",
-      "explanation": "2.d4 is engine-equivalent — both moves lead to sound openings. But playing d4 immediately is a system-commitment to a Queen's Gambit, defeating the entire reason to start with 1.Nf3. The Réti gets its edge from FLEXIBILITY — delaying central commitment forces Black to commit first. Practical edge: with g3 you keep the option to play e4 OR c4 OR d4 based on Black's next move; with d4 you've locked into one structure."
+      "wrongMove": "e3",
+      "correctMove": "c4",
+      "explanation": "2.e3 is passive and surrenders the Réti's whole point. 2.c4 immediately challenges the d5-pawn from the flank — the hypermodern idea that controls the centre without occupying it.",
+      "shortNarration": "c4 — challenge d5 from the flank"
     },
     {
-      "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/8/5NP1/PPPPPPBP/RNBQ1RK1 w kq - 2 5",
-      "wrongMove": "c4",
-      "correctMove": "d3",
-      "explanation": "Both c4 and d3 are engine-equal. But c4 commits to a Reversed QGD structure too early — Black's …c5 break becomes powerful and the bishop on g2 has fewer targets. 5.d3 keeps the option of c4 OR e4 break for two more moves while you watch Black develop. Practical edge: the player choosing later has more information."
-    },
-    {
-      "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5NP1/PPPPPP1P/RNBQKB1R b KQkq - 0 2",
-      "wrongMove": "Bf5",
-      "correctMove": "Nf6",
-      "explanation": "2…Bf5 is engine-fine but commits the bishop to a square where White's g3-fianchetto exerts long-diagonal pressure. After 3.Bg2 + …Nf6 + …e6, Black's Bf5 is targetable by Nh4 or Nd4-c2-h4 maneuvers. 2…Nf6 develops a piece without committing the bishop — wait until you see whether White plays c4 (then Bf5 is fine) or e3 (then Bg4 is better)."
+      "fen": "r2q1rk1/pb2bppp/1pn1pn2/2pp4/2P5/1PN1PNP1/PB1P1PBP/R2Q1RK1 w - - 2 10",
+      "wrongMove": "a3",
+      "correctMove": "cxd5",
+      "explanation": "Drifting with a slow move like a3 lets Black consolidate comfortably. cxd5 opens the long diagonal for the g2-bishop and the c-file — the thematic Réti break, played exactly when the pieces are ready.",
+      "shortNarration": "cxd5 — open lines, the Réti break"
     }
   ],
   "trompowsky-attack": [
@@ -909,6 +913,22 @@
       "wrongMove": "Ngxe5",
       "correctMove": "Bc5",
       "explanation": "4…Ngxe5? trades the central knight too early — after 5.Nxe5 White's pieces dominate. The principled 4…Bc5 develops the bishop with pressure on f2, then recaptures …Nxe5 at the right moment."
+    }
+  ],
+  "kings-indian-attack": [
+    {
+      "fen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQ1RK1 w - - 5 8",
+      "wrongMove": "exd5",
+      "correctMove": "e5",
+      "explanation": "Trading with exd5 exd5 gives Black an easy, open French-style game and throws away White's plan. e5 is the whole point of the KIA — clamp the centre and launch the kingside attack.",
+      "shortNarration": "e5 — clamp the centre, then attack"
+    },
+    {
+      "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7",
+      "wrongMove": "Nh4",
+      "correctMove": "e4",
+      "explanation": "Lunging at the kingside with Nh4 is toothless against the solid ...g6 fianchetto. Stake the centre with e4 and expand on the queenside — flexibility is the KIA's strength against the KID setup.",
+      "shortNarration": "e4 — pivot to the centre vs …g6"
     }
   ]
 }
