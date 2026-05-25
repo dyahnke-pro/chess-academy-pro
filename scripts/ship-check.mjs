@@ -187,6 +187,7 @@ const GATE_TESTS = [
   'src/components/Openings/OpeningDetailPage.wiring.test.ts',
   'src/utils/commonMistakeLine.test.ts',
   'src/data/commonMistakeNarration.test.ts',
+  'src/data/proRepertoireSources.test.ts',
 ];
 
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);

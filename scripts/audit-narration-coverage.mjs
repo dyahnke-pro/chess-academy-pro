@@ -47,7 +47,7 @@ add('model games', mg.length, mg.filter((g) => (g.overview || '').trim()).length
 const pro = J('pro-repertoires.json').openings || [];
 let vTot = 0, vExpl = 0, vSrc = 0;
 for (const o of pro) for (const v of (o.variations || [])) { vTot++; if ((v.explanation || '').trim()) vExpl++; if ((v.sources || []).length) vSrc++; }
-add('pro-repertoire variations', vTot, vExpl, 0, vSrc, false, false);
+add('pro-repertoire variations', vTot, vExpl, 0, vSrc, false, true);
 
 // 7. Endgame (narration.why + position.explanation + source)
 let eUnits = 0, eFull = 0, eSrc = 0;
