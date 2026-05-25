@@ -24,22 +24,18 @@
   ],
   "french-defence": [
     {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
-      "wrongMove": "Nf3",
-      "correctMove": "Bd3",
-      "explanation": "Nf3 blocks the f-pawn and removes the option of f4 to support e5. Bd3 develops actively, eyes h7, and keeps f2-f4 available for later."
-    },
-    {
       "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P4/2NB4/PPP2PPP/R1BQK1NR b KQkq - 0 5",
       "wrongMove": "c5",
       "correctMove": "Nfd7",
-      "explanation": "c5 immediately gives White a target after dxc5 Bxc5 Qg4. First retreat the knight to d7 (or e4) to reorganize, then break with c5 when better prepared."
+      "explanation": "After e5 the f6-knight is attacked and must move — …c5 ignores it and simply drops the piece to exf6. First retreat the knight to d7 to reorganize, then strike the base with …c5 once it is safely prepared.",
+      "shortNarration": "Nfd7 — save the attacked knight first"
     },
     {
       "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
       "wrongMove": "Nf6",
       "correctMove": "d5",
-      "explanation": "Nf6 allows e5 pushing the knight back and gaining space. d5 is the whole point of the French — challenge the center immediately."
+      "explanation": "…Nf6 here just invites e5, kicking the knight back and handing White free space. …d5 is the whole point of the French — challenge the e4-pawn at once and fight for the centre.",
+      "shortNarration": "d5 — the principled French strike"
     }
   ],
   "caro-kann": [
@@ -178,22 +174,25 @@
   ],
   "scandinavian-defence": [
     {
-      "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
-      "wrongMove": "Qxd5",
-      "correctMove": "Nf6",
-      "explanation": "Recapturing with the queen early exposes it to tempo-gaining attacks after Nc3. The modern 2...Nf6 develops a piece and recaptures the pawn later without losing time."
+      "fen": "rnb1kb1r/ppp1pppp/5n2/q7/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+      "wrongMove": "e6",
+      "correctMove": "Bf5",
+      "explanation": "Playing …e6 first locks the light-squared bishop behind its own pawn — the very French problem the Scandinavian exists to avoid. Develop …Bf5 (or …Bg4) FIRST, getting the bishop outside the chain, and only then play …e6.",
+      "shortNarration": "Bf5 — bishop out before …e6"
     },
     {
       "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
       "wrongMove": "Qe5+",
       "correctMove": "Qa5",
-      "explanation": "Qe5+ blocks the e-pawn and hinders Black's own development after Be2 blocks the check calmly. Qa5 keeps the queen active on the queenside while allowing e5 or e6 to develop the bishop naturally."
+      "explanation": "…Qe5+ is a greedy check that goes nowhere: after Be2 the bishop blocks calmly and Black has only misplaced the queen and blocked the e-pawn. …Qa5 keeps the queen active and out of harm's way, the sound main-line square.",
+      "shortNarration": "Qa5 — active retreat, not the greedy check"
     },
     {
       "fen": "rnb1kb1r/ppp1pppp/5n2/q2P4/8/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 4",
       "wrongMove": "Qb6",
       "correctMove": "Nxd5",
-      "explanation": "Retreating the queen to b6 wastes another tempo and leaves the d5 pawn unchallenged. Recapturing with Nxd5 equalizes material and centralizes the knight on a strong square."
+      "explanation": "Shuffling the queen to b6 wastes a tempo and lets White keep the extra d5-pawn. Just recapture with …Nxd5, regaining the pawn and centralising the knight — equal and easy.",
+      "shortNarration": "Nxd5 — recapture, do not dawdle"
     }
   ],
   "catalan-opening": [
@@ -844,13 +843,15 @@
       "fen": "rnbqkb1r/p2ppppp/5n2/1PpP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 4",
       "wrongMove": "Nxd5",
       "correctMove": "a6",
-      "explanation": "4…Nxd5? loses the central knight for a pawn after 5.Nf3 with central pressure. The standard Benko 4…a6 invites White to either accept (5.bxa6) or decline (5.b6) — both lead to advantageous Black positions."
+      "explanation": "4…Nxd5? loses the central knight for a pawn after 5.Nf3 with central pressure. The standard Benko 4…a6 invites White to either accept (5.bxa6) or decline (5.b6) — both lead to advantageous Black positions.",
+      "shortNarration": "a6 — play the gambit, not …Nxd5"
     },
     {
       "fen": "rnbqkb1r/3ppppp/P4n2/2pP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 5",
       "wrongMove": "Nxa6",
       "correctMove": "Bxa6",
-      "explanation": "Engine sees both recaptures as similar (~13cp difference). But Bxa6 develops a piece WITH TEMPO — attacks the Bf1 directly forcing the trade Bxa6 Nxa6. With Bxa6 you reach the trade naturally; with Nxa6 the knight is offside and your bishop is still stuck behind the pawn. Practical edge: Bxa6 leaves you with active pieces and the bishop pair traded for piece coordination; Nxa6 needs three more moves to develop the bishop and never matches Bxa6's piece activity."
+      "explanation": "Engine sees both recaptures as similar (~13cp difference). But Bxa6 develops a piece WITH TEMPO — attacks the Bf1 directly forcing the trade Bxa6 Nxa6. With Bxa6 you reach the trade naturally; with Nxa6 the knight is offside and your bishop is still stuck behind the pawn. Practical edge: Bxa6 leaves you with active pieces and the bishop pair traded for piece coordination; Nxa6 needs three more moves to develop the bishop and never matches Bxa6's piece activity.",
+      "shortNarration": "Bxa6 — recapture with the bishop"
     }
   ],
   "old-indian-defence": [
@@ -929,6 +930,38 @@
       "correctMove": "e4",
       "explanation": "Lunging at the kingside with Nh4 is toothless against the solid ...g6 fianchetto. Stake the centre with e4 and expand on the queenside — flexibility is the KIA's strength against the KID setup.",
       "shortNarration": "e4 — pivot to the centre vs …g6"
+    }
+  ],
+  "alekhine-defence": [
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+      "wrongMove": "Ng8",
+      "correctMove": "Nd5",
+      "explanation": "Retreating the knight home with …Ng8 throws away the whole point of the Alekhine — Black has just lost two tempi for nothing. …Nd5 keeps the knight active in the centre, where it provokes White's pawns forward and becomes the springboard for the counterattack.",
+      "shortNarration": "Nd5 — active centre, not back home"
+    },
+    {
+      "fen": "rnbqkb1r/pppppppp/8/3nP3/2P5/8/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "Nf4",
+      "correctMove": "Nb6",
+      "explanation": "With c4 attacking the knight, …Nf4 lunges to the rim where g3 simply chases it back with tempo, costing Black even more time. …Nb6 is the sound retreat — the knight stays useful, eyeing c4 and d5, and Black continues to undermine the centre.",
+      "shortNarration": "Nb6 — sound retreat, not the rim"
+    }
+  ],
+  "dutch-defence": [
+    {
+      "fen": "rnbq1rk1/ppppp1bp/5np1/5p2/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 0 6",
+      "wrongMove": "d5",
+      "correctMove": "d6",
+      "explanation": "In the Leningrad, …d5 locks the position and entombs the g7-bishop behind its own pawn chain — the very piece the fianchetto exists to activate. …d6 is correct: it keeps the centre flexible and prepares the thematic …e5 break that opens the long diagonal.",
+      "shortNarration": "d6 — keep it flexible, free the g7-bishop"
+    },
+    {
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "wrongMove": "Nf6",
+      "correctMove": "fxe4",
+      "explanation": "Against the Staunton Gambit 2.e4, …Nf6 just drops the f-pawn to 3.exf5 with no compensation. Accept the gambit with …fxe4 — Black is a clean pawn up and, with accurate play, weathers White's development lead.",
+      "shortNarration": "fxe4 — accept the gambit, grab the pawn"
     }
   ]
 }

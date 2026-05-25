@@ -59,7 +59,7 @@ describe('model-games orientation — wins only, never the student losing OR dra
   // Masterclass openings whose model games are all curated student-wins and
   // tagged so the coach-injection filter protects them. Add a new opening here
   // once its model games declare studentSide.
-  const PROTECTED = ['vienna-game', 'caro-kann', 'ruy-lopez', 'italian-game', 'scotch-game', 'kings-gambit', 'sicilian-dragon', 'four-knights-game', 'london-system', 'catalan-opening', 'english-opening', 'reti-opening', 'kings-indian-attack', 'evans-gambit'];
+  const PROTECTED = ['vienna-game', 'caro-kann', 'ruy-lopez', 'italian-game', 'scotch-game', 'kings-gambit', 'sicilian-dragon', 'four-knights-game', 'london-system', 'catalan-opening', 'english-opening', 'reti-opening', 'kings-indian-attack', 'evans-gambit', 'french-defence', 'scandinavian-defence', 'alekhine-defence', 'benko-gambit', 'dutch-defence'];
   for (const oid of PROTECTED) {
     it(`${oid}: every model game declares studentSide (coach filter covers it)`, () => {
       const missing = games.filter((g) => g.openingId === oid && !g.studentSide).map((g) => g.id);

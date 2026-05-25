@@ -37,6 +37,7 @@ const HL_RGBS = ['255, 165, 0', '255, 235, 59'];
 const PLAN_ID = {
   'ruy-lopez': 'mp-ruylopez-d4',
   'pirc-defence': 'mp-pircdefence-austrian',
+  'french-defence': 'mp-frenchdefence-advance',
 };
 
 // The plan above lives on a specific variation tab, not always the default
@@ -45,6 +46,7 @@ const PLAN_ID = {
 // this tab before probing so the plan-watch button is present.
 const PLAN_TAB = {
   'pirc-defence': 'Austrian Attack',
+  'french-defence': 'Advance',
 };
 
 const results = [];
@@ -99,6 +101,15 @@ async function sampleBoard(page, testid) {
 async function openDetail(page, openingId) {
   await page.goto(`${BASE_URL}/openings/${openingId}`, { waitUntil: 'domcontentloaded' });
   await page.locator('[data-testid="variation-tabs"]').waitFor({ state: 'visible', timeout: 30_000 });
+  // The "How to use a Masterclass" PageHelp modal auto-opens on first visit
+  // and intercepts clicks. In the sandbox the "seen" flag can't persist
+  // (IndexedDB write-stall, CLAUDE.md G1), so it re-opens every load — dismiss
+  // it before probing.
+  const help = page.locator('[data-testid="page-help-modal"]');
+  if (await help.isVisible().catch(() => false)) {
+    await page.locator('[data-testid="page-help-close"]').click({ timeout: 5_000 }).catch(() => {});
+    await help.waitFor({ state: 'hidden', timeout: 5_000 }).catch(() => {});
+  }
   const tab = PLAN_TAB[openingId];
   if (tab) {
     await page
@@ -109,6 +120,12 @@ async function openDetail(page, openingId) {
     await page.waitForTimeout(1200);
   }
   await page.locator('[data-testid="middlegame-plans-section"]').waitFor({ state: 'visible', timeout: 25_000 });
+  // The help modal can re-open after the tab click (it can't persist "seen" in
+  // the sandbox) — dismiss again right before the caller clicks a plan button.
+  if (await help.isVisible().catch(() => false)) {
+    await page.locator('[data-testid="page-help-close"]').click({ timeout: 5_000 }).catch(() => {});
+    await help.waitFor({ state: 'hidden', timeout: 5_000 }).catch(() => {});
+  }
 }
 
 async function probeWatch(page, openingId, label) {
@@ -198,6 +215,7 @@ async function main() {
   try {
     await probeOpening(page, 'ruy-lopez', 'Ruy (white)');
     await probeOpening(page, 'pirc-defence', 'Pirc (black)');
+    await probeOpening(page, 'french-defence', 'French (black)');
   } catch (e) {
     record('audit-run', false, String(e));
   }

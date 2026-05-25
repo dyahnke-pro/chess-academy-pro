@@ -69,10 +69,10 @@
   ],
   "french-defence": [
     {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
-      "correctMove": "Bd3",
-      "hint": "Which square puts the bishop on an active diagonal while keeping f4 available?",
-      "concept": "Bishop Development in French"
+      "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 2 5",
+      "correctMove": "Qb6",
+      "hint": "Which move hits the d4-base AND the b2-pawn at the same time?",
+      "concept": "The thematic ...Qb6"
     },
     {
       "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P1P2/2NB4/PPP3PP/R1BQK1NR b KQkq - 0 6",
@@ -81,18 +81,18 @@
       "concept": "King Safety First"
     },
     {
-      "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P4/2NB4/PPP2PPP/R1BQK1NR w KQkq - 0 5",
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
       "type": "plan",
-      "question": "What is White's main plan in the French Advance?",
+      "question": "What is Black's main plan against the French Advance?",
       "choices": [
-        "Support e5 with f4, develop pieces to active squares, and attack the kingside",
-        "Trade the e5 pawn and simplify to an endgame",
-        "Play c4 to attack d5 from both sides",
-        "Fianchetto the dark-squared bishop with g3-Bg2"
+        "Strike the base of White's chain with ...c5, pressure d4, and play for queenside counterplay",
+        "Trade everything off and head straight for a draw",
+        "Push ...f6 at once to break the centre open",
+        "Develop the light-squared bishop to f5 before locking with ...e6"
       ],
       "correctIndex": 0,
-      "hint": "White wants to maintain the space advantage and build a kingside attack.",
-      "concept": "French Advance Attack Plan"
+      "hint": "The base of White's d4-e5 chain is the d4-pawn — go after it.",
+      "concept": "Black's French Advance plan"
     },
     {
       "fen": "rnbqk2r/ppp1bppp/4pn2/3pP3/3P4/2N5/PPP1BPPP/R1BQK1NR b KQkq - 0 5",
@@ -469,30 +469,30 @@
   ],
   "scandinavian-defence": [
     {
-      "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2",
-      "correctMove": "exd5",
-      "hint": "Capture the pawn to challenge Black's center immediately.",
-      "concept": "Central pawn exchange in the Scandinavian"
+      "fen": "rnb1kb1r/ppp1pppp/5n2/q7/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+      "correctMove": "Bf5",
+      "hint": "Which move gets the light-squared bishop OUTSIDE the pawn chain before …e6?",
+      "concept": "The key Scandinavian move — bishop out first"
     },
     {
       "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
       "correctMove": "Qa5",
-      "hint": "The queen needs a safe square that keeps pressure on the position.",
-      "concept": "Queen retreat to a5 in the main line Scandinavian"
+      "hint": "Nc3 hits the queen — find the active, safe main-line retreat.",
+      "concept": "Queen retreat to a5"
     },
     {
-      "fen": "r1b1kbnr/ppp1pppp/2n5/q7/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 3 5",
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 2",
       "type": "plan",
-      "question": "What is the best plan for White here?",
+      "question": "What is Black's plan in the Scandinavian?",
       "choices": [
-        "Develop the bishop to d2 to connect the queen to the queenside and prepare long castle",
-        "Push a3 immediately to chase the queen",
-        "Play e4 to build a big pawn center",
-        "Fianchetto the kingside bishop with g3 and Bg2"
+        "Recapture the pawn actively, develop the light bishop to f5 OUTSIDE the chain, then …e6 and queenside play",
+        "Trade everything and head for a quick draw",
+        "Lock the centre with …e6 first, then develop the bishop",
+        "Leave the d5-pawn and play for a kingside attack"
       ],
       "correctIndex": 0,
-      "hint": "White should develop efficiently while addressing the queen's placement on a5.",
-      "concept": "Harmonious piece development against the Scandinavian queen sortie"
+      "hint": "The whole point is to solve the bad-bishop problem before …e6.",
+      "concept": "Black's Scandinavian plan"
     }
   ],
   "catalan-opening": [
@@ -1035,6 +1035,50 @@
       "correctIndex": 0,
       "hint": "The KIA's whole point is the e5-wedge and the kingside attack.",
       "concept": "The e5-wedge plan"
+    }
+  ],
+  "alekhine-defence": [
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+      "correctMove": "Nd5",
+      "hint": "e5 attacks the knight — keep it active in the centre, do not retreat home.",
+      "concept": "The active knight hop"
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+      "type": "plan",
+      "question": "What is Black's plan in Alekhine's Defence?",
+      "choices": [
+        "Provoke White's pawns forward, then undermine the over-extended centre with …d6, …Bg4, …c5 and piece pressure",
+        "Trade the knights and head for a quick draw",
+        "Grab space with …e5 and play like White",
+        "Castle and wait passively for White to attack"
+      ],
+      "correctIndex": 0,
+      "hint": "The Alekhine is hypermodern — let White build a big centre, then tear it down.",
+      "concept": "Black's Alekhine plan"
+    }
+  ],
+  "dutch-defence": [
+    {
+      "fen": "rnbq1rk1/ppp1p1bp/3p1np1/5p2/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b - - 1 7",
+      "correctMove": "Qe8",
+      "hint": "The signature Leningrad move — reroute the queen toward the kingside attack.",
+      "concept": "The …Qe8 reroute"
+    },
+    {
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "type": "plan",
+      "question": "What is Black's plan in the Dutch Defence?",
+      "choices": [
+        "Grab kingside space with …f5, fight for e4, and play for a kingside pawn storm and attack on the white king",
+        "Trade everything and head for a quick draw",
+        "Develop passively and wait for White to attack",
+        "Play …d5 and …e6 to lock the position and shuffle pieces"
+      ],
+      "correctIndex": 0,
+      "hint": "The Dutch is the most aggressive answer to 1.d4 — Black attacks the kingside.",
+      "concept": "Black's Dutch plan"
     }
   ]
 }

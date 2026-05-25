@@ -170,5 +170,50 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "benko-gambit": {
+    "variations": 7,
+    "middlegamePlans": 4,
+    "endgamePlans": 0,
+    "modelGames": 4,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "scandinavian-defence": {
+    "variations": 7,
+    "middlegamePlans": 7,
+    "endgamePlans": 0,
+    "modelGames": 7,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "french-defence": {
+    "variations": 10,
+    "middlegamePlans": 10,
+    "endgamePlans": 0,
+    "modelGames": 9,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "alekhine-defence": {
+    "variations": 7,
+    "middlegamePlans": 6,
+    "endgamePlans": 0,
+    "modelGames": 6,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "dutch-defence": {
+    "variations": 7,
+    "middlegamePlans": 5,
+    "endgamePlans": 0,
+    "modelGames": 5,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

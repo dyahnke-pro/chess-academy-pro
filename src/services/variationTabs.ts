@@ -173,6 +173,26 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /evans/i, label: 'Evans Gambit' },
     { test: /moller/i, label: 'Møller' },
   ],
+  // French Defence — all 10 validated variations (David 2026-05-25: "add all
+  // validated variation"). Frequency-ordered from the amateur explorer
+  // (1600-2000): White's 3rd-move choices Exchange 32% / Advance 30% /
+  // Tarrasch 10% lead; then the 3.Nc3 family by its fork share (Rubinstein 27%
+  // / Winawer 21%); then the 4.Bg5 lines (Classical / Burn / McCutcheon); then
+  // the sub-line weapons (Milner-Barry under Advance, Fort Knox under Nd2). The
+  // repertoire main pgn is the Steinitz (3.Nc3 Nf6 4.e5) = the "Main line" pill.
+  // Specific regexes so "Advance" doesn't swallow "Advance: Milner-Barry".
+  'french-defence': [
+    { test: /^exchange/i, label: 'Exchange' },
+    { test: /^advance variation$/i, label: 'Advance' },
+    { test: /tarrasch/i, label: 'Tarrasch' },
+    { test: /rubinstein/i, label: 'Rubinstein' },
+    { test: /winawer/i, label: 'Winawer' },
+    { test: /classical/i, label: 'Classical' },
+    { test: /burn/i, label: 'Burn' },
+    { test: /mccutcheon/i, label: 'McCutcheon' },
+    { test: /milner-barry/i, label: 'Milner-Barry' },
+    { test: /fort knox/i, label: 'Fort Knox' },
+  ],
   // King's Gambit — all 8 repertoire variations earn a tab (David 2026-05-25:
   // "add all validated variations"; every line DB-anchors ≥6 plies). Ordered
   // by amateur frequency of the defining branch (Classical …g5 17%, Fischer
@@ -187,6 +207,48 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /kieseritzky/i, label: 'Kieseritzky' },
     { test: /muzio/i, label: 'Muzio' },
     { test: /allgaier/i, label: 'Allgaier' },
+  ],
+  // Scandinavian Defence — distinct validated variations (David 2026-05-25:
+  // "add all validated variations", complete builds only — each tab has a real
+  // Black-win model game). The repertoire main pgn is the Qa5 …Bb4 line = the
+  // "Main line" pill; "Qa5 with Bd2 Main Line" folds into it (same Qa5 system),
+  // so its regex is excluded. Ordered by amateur prevalence of the 3rd move.
+  'scandinavian-defence': [
+    { test: /qa5 main line/i, label: 'Qa5 Solid' },
+    { test: /tiviakov/i, label: 'Tiviakov' },
+    { test: /nf6 modern/i, label: 'Modern' },
+    { test: /portuguese/i, label: 'Portuguese' },
+    { test: /icelandic/i, label: 'Icelandic' },
+    { test: /gubinsky/i, label: 'Gubinsky-Melts' },
+  ],
+  // Alekhine's Defence — distinct validated variations (complete builds only;
+  // each tab has a real Black-win model game). Main pill = the Modern (repertoire
+  // pgn), so "Modern Variation" folds in; "Two Pawns Attack" transposes to the
+  // Exchange, so it folds into Exchange. Five distinct tabs remain.
+  'alekhine-defence': [
+    { test: /four pawns/i, label: 'Four Pawns' },
+    { test: /^exchange/i, label: 'Exchange' },
+    { test: /chase/i, label: 'Chase' },
+    { test: /scandinavian transposition/i, label: 'Scandinavian' },
+    { test: /voronezh/i, label: 'Voronezh' },
+  ],
+  // Benko Gambit — distinct validated variations (complete builds only). Main
+  // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
+  // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same
+  // Fully-Accepted complex). Three distinct White approaches remain.
+  'benko-gambit': [
+    { test: /declined/i, label: 'Declined' },
+    { test: /zaitsev/i, label: 'Zaitsev' },
+    { test: /half-accepted/i, label: 'Half-Accepted' },
+  ],
+  // Dutch Defence — distinct validated variations (complete builds only). Main
+  // pill = the Leningrad g6 main line (repertoire pgn); "Leningrad g6 Main Line"
+  // folds in, and the "Hopton" transposes to the …e5 break. Five distinct tabs.
+  'dutch-defence': [
+    { test: /stonewall/i, label: 'Stonewall' },
+    { test: /classical/i, label: 'Classical' },
+    { test: /ilyin/i, label: 'Ilyin-Zhenevsky' },
+    { test: /e5 break/i, label: 'Leningrad …e5' },
   ],
 };
 

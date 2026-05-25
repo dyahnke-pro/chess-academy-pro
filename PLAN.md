@@ -94,3 +94,25 @@ Start the Dragon: walk its spines (`1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 
 → Yugoslav Attack `6.Be3 Bg7 7.f3 O-O 8.Qd2 Nc6 9.Bc4 …` and the Classical/other
 tabs) from masters-db + Stockfish-extend, BLACK-oriented. Then author
 `_dragon-content.json`. Reuse the QG/Scotch pipeline scripts.
+
+## SESSION 2026-05-25 (autonomous Black-opening program)
+Merged origin/main (Dragon + King's Gambit) into the branch, then built COMPLETE
+Black masterclasses (David's rule: only build if ALL model games sourceable):
+- [x] French Defence — 10 vars, 10 plans, 9 models, 9 gems, pitfalls, quizzes
+- [x] Scandinavian Defence — 6 tabs, 7 plans, 7 models, 7 gems, pitfalls, quizzes
+- [x] Alekhine's Defence — 5 tabs, 6 plans, 6 models, 4 gems, pitfalls, quizzes
+- [x] Benko Gambit — 3 tabs, 4 plans, 4 models, 3 gems, pitfalls
+- [x] Dutch Defence — 4 tabs, 5 plans, 5 models, 0 gems (none found — correct,
+      self-hides), pitfalls, quizzes. Dropped Anti-Dutch 2.Bg5 (G3: DB-anchors 3 plies).
+All gate-green (lessonIntegrity/narration/depth/tabIntegrity/wlpp/manifest/
+modelGames-orientation/modelGames/middlegamePlanner/commonMistakeNarration/punishGems).
+NOTE: modelGames.test (criticalMoment FEN must match the PGN position) is a gate —
+use the replay-to-(moveNo:color) method when building model games (one stale FEN
+slipped through and was caught by ship-check; fixed).
+
+### Vetted COMPLETE, not yet built (all variations have Black-win model games):
+- Nimzo-Indian (8 vars) — NEXT for the following session
+### Vetted INCOMPLETE (skip — a variation lacks a Black-win model game):
+- KID (Averbakh), Grünfeld (Exchange lines)
+### Off-limits (done on main / in flight): ruy, pirc, vienna, caro, italian, scotch,
+kings-gambit, sicilian-dragon, najdorf + Sicilian program; QGD/QGA/Slav/Semi-Slav (#669).

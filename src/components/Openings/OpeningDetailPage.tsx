@@ -27,6 +27,11 @@ import { getPircTabPlanIds } from '../../services/pircMasterclassTabs';
 import { getViennaTabPlanIds } from '../../services/viennaMasterclassTabs';
 import { getItalianTabPlanIds } from '../../services/italianMasterclassTabs';
 import { getScotchTabPlanIds } from '../../services/scotchMasterclassTabs';
+import { getFrenchDefenceTabPlanIds } from '../../services/frenchDefenceMasterclassTabs';
+import { getScandinavianDefenceTabPlanIds } from '../../services/scandinavianDefenceMasterclassTabs';
+import { getAlekhineDefenceTabPlanIds } from '../../services/alekhineDefenceMasterclassTabs';
+import { getBenkoGambitTabPlanIds } from '../../services/benkoGambitMasterclassTabs';
+import { getDutchDefenceTabPlanIds } from '../../services/dutchDefenceMasterclassTabs';
 import { getKingsGambitTabPlanIds } from '../../services/kingsGambitMasterclassTabs';
 import { getSicilianDragonTabPlanIds } from '../../services/sicilianDragonMasterclassTabs';
 import { getFourKnightsTabPlanIds } from '../../services/fourKnightsMasterclassTabs';
@@ -1052,6 +1057,11 @@ export function OpeningDetailPage(): JSX.Element {
     getViennaTabPlanIds(opening.id, tabKey) ??
     getItalianTabPlanIds(opening.id, tabKey) ??
     getScotchTabPlanIds(opening.id, tabKey) ??
+    getFrenchDefenceTabPlanIds(opening.id, tabKey) ??
+    getScandinavianDefenceTabPlanIds(opening.id, tabKey) ??
+    getAlekhineDefenceTabPlanIds(opening.id, tabKey) ??
+    getBenkoGambitTabPlanIds(opening.id, tabKey) ??
+    getDutchDefenceTabPlanIds(opening.id, tabKey) ??
     getKingsGambitTabPlanIds(opening.id, tabKey) ??
     getSicilianDragonTabPlanIds(opening.id, tabKey) ??
     getFourKnightsTabPlanIds(opening.id, tabKey) ??
