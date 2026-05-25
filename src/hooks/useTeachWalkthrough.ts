@@ -237,6 +237,11 @@ export function buildPunishWalkthroughTree(
 
   return {
     openingName: `${parentOpening.openingName}: ${lesson.name}`,
+    // One-shot tree built from a punish lesson — not a cacheable
+    // opening. `openingName` above is a composite display label, so
+    // consumers gate on this flag before treating it as a cache key
+    // (see mergeStagesFromCache + the leaf play-out prompt).
+    derived: true,
     eco: parentOpening.eco,
     // Inherit board orientation from the parent opening so a black-
     // side opening's punish lessons keep Black on bottom.
@@ -245,9 +250,15 @@ export function buildPunishWalkthroughTree(
     // directly. Otherwise the walkthrough animates setupMoves from
     // the standard start.
     startFen: lesson.setupFen,
+    // Spoken intro: plain teaching prose. We deliberately do NOT
+    // prepend `lesson.name` — it's a terse internal label packed with
+    // raw SAN ("Benoni Nge2: Nxf8?? — Qxg2#") that TTS reads aloud as
+    // "knight g to e2 ... knight takes f8 question question ..." (per
+    // CLAUDE.md narration rules: name the pattern, never dump SAN). The
+    // label still shows on the picker tile; voice carries only framing.
     intro: lesson.setupFen
-      ? `${lesson.name}. ${opponentLabel} has just played a careless move out of the opening — find the punishment.`
-      : `${lesson.name}. Watch the position set up, then find the punishment.`,
+      ? `${opponentLabel} has just played a careless move out of the opening — find the punishment.`
+      : `Watch the position set up, then find the punishment.`,
     outro: lesson.whyPunish,
     root,
   };
@@ -1247,6 +1258,11 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
    *  appear as cards if they finished while the walkthrough played. */
   const mergeStagesFromCache = useCallback(async (): Promise<void> => {
     if (!tree?.openingName) return;
+    // Derived trees (punish one-shots) have a composite display name,
+    // not a cache key — looking it up is a guaranteed miss that just
+    // noises the audit stream ("cache miss → fresh generation"). They
+    // carry no opening stages to merge anyway.
+    if (tree.derived) return;
     try {
       const fresh = await getCachedOpening(tree.openingName);
       if (!fresh) return;
