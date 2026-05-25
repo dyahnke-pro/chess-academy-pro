@@ -170,10 +170,10 @@ describe('loadRepertoireData', () => {
     expect(repertoire.length).toBe(all.length);
   }, 30000);
 
-  it('loads exactly 40 repertoire openings', async () => {
+  it('loads exactly 41 repertoire openings', async () => {
     await loadRepertoireData();
     const count = await db.openings.count();
-    expect(count).toBe(40);
+    expect(count).toBe(41);
   }, 30000);
 
   it('each repertoire opening has overview and keyIdeas', async () => {
@@ -190,7 +190,7 @@ describe('loadRepertoireData', () => {
     const whites = await db.openings.where('color').equals('white').toArray();
     const blacks = await db.openings.where('color').equals('black').toArray();
     expect(whites.length).toBe(15);
-    expect(blacks.length).toBe(25);
+    expect(blacks.length).toBe(26);
   }, 30000);
 
   it('is idempotent — second run does not duplicate records', async () => {

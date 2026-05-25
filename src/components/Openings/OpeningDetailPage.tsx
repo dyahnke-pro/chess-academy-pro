@@ -59,6 +59,7 @@ import { getQueensIndianDefenceTabPlanIds } from '../../services/queensIndianDef
 import { getOldIndianDefenceTabPlanIds } from '../../services/oldIndianDefenceMasterclassTabs';
 import { getTwoKnightsDefenceTabPlanIds } from '../../services/twoKnightsDefenceMasterclassTabs';
 import { getBudapestGambitTabPlanIds } from '../../services/budapestGambitMasterclassTabs';
+import { getAlbinCountergambitTabPlanIds } from '../../services/albinCountergambitMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
@@ -1106,6 +1107,7 @@ export function OpeningDetailPage(): JSX.Element {
     getOldIndianDefenceTabPlanIds(opening.id, tabKey) ??
     getTwoKnightsDefenceTabPlanIds(opening.id, tabKey) ??
     getBudapestGambitTabPlanIds(opening.id, tabKey) ??
+    getAlbinCountergambitTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).

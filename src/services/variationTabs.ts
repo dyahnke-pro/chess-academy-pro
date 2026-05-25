@@ -375,6 +375,15 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /adler/i, label: 'Adler' },
     { test: /fajarowicz/i, label: 'Fajarowicz' },
   ],
+  // Albin Countergambit — Black's bold 1.d4 d5 2.c4 e5 gambit (the d4-wedge).
+  // Main-line pill = the modern …Nc6/…Bg4 development (repertoire pgn). Tabs =
+  // the Fianchetto (g3), the famous Lasker Trap (…dxe3 underpromotion weapon),
+  // and the Spassky 4.e4. Short gambit lines → kind:'roadmap' (depth opt-out).
+  'albin-countergambit': [
+    { test: /fianchetto/i, label: 'Fianchetto' },
+    { test: /lasker/i, label: 'Lasker Trap' },
+    { test: /spassky/i, label: 'Spassky' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same

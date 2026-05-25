@@ -94,6 +94,8 @@ import { TWO_KNIGHTS_DEFENCE_LESSON } from './twoKnightsDefence';
 import { TWO_KNIGHTS_DEFENCE_VARIATION_LESSONS } from './twoKnightsDefenceVariations';
 import { BUDAPEST_GAMBIT_LESSON } from './budapestGambit';
 import { BUDAPEST_GAMBIT_VARIATION_LESSONS } from './budapestGambitVariations';
+import { ALBIN_COUNTERGAMBIT_LESSON } from './albinCountergambit';
+import { ALBIN_COUNTERGAMBIT_VARIATION_LESSONS } from './albinCountergambitVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -151,6 +153,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: OLD_INDIAN_DEFENCE_LESSON, variations: OLD_INDIAN_DEFENCE_VARIATION_LESSONS },
   { main: TWO_KNIGHTS_DEFENCE_LESSON, variations: TWO_KNIGHTS_DEFENCE_VARIATION_LESSONS },
   { main: BUDAPEST_GAMBIT_LESSON, variations: BUDAPEST_GAMBIT_VARIATION_LESSONS },
+  { main: ALBIN_COUNTERGAMBIT_LESSON, variations: ALBIN_COUNTERGAMBIT_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

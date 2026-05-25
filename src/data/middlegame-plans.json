@@ -28277,5 +28277,113 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-albincountergambit-main",
+    "openingId": "albin-countergambit",
+    "criticalPositionFen": "r3k1nr/ppp1qppp/2n5/4P3/1bPp4/5N1P/PP1BPPP1/R2QKB1R w KQkq - 3 9",
+    "title": "Albin: Castle Long Behind the Wedge",
+    "overview": "The Albin's compensation for the gambit pawn is dynamic: the cramping d4-wedge, a lead in development, and an attack. The plan is to trade off White's defenders, castle queenside so the rook lands on the open d-file right behind the wedge, and storm the kingside with the pawns while White is still untangling. Activity and the wedge for the pawn.",
+    "pawnBreaks": [
+      "…f6 or …g5 to open the kingside against the white king",
+      "…b5 to pry open the queenside later"
+    ],
+    "pieceManeuvers": [
+      "…Bxd2 to clear the way for castling",
+      "…O-O-O, the king to c8 and rook to the open d-file"
+    ],
+    "strategicThemes": [
+      "The cramping d4-wedge",
+      "Queenside castling, rook behind the wedge",
+      "Attacking for the gambit pawn"
+    ],
+    "endgameTransitions": [
+      "If the attack is parried the d4-wedge can still cramp White into the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r3k1nr/ppp1qppp/2n5/4P3/1bPp4/5N1P/PP1BPPP1/R2QKB1R w KQkq - 3 9",
+        "moves": [
+          "a3",
+          "Bxd2+",
+          "Qxd2",
+          "O-O-O"
+        ],
+        "annotations": [
+          "a3 questions the b4-bishop.",
+          "…Bxd2+ trades the bishop off, removing a defender and clearing the way to castle.",
+          "Qxd2 recaptures.",
+          "…O-O-O! the king tucks to c8 and the rook swings to the open d-file, right behind the d4-wedge — rook and pawn pressing deep into White’s position. Black has full attacking compensation for the gambit pawn: the lead in development, the cramping wedge, and the files toward the white king."
+        ],
+        "learnCues": [
+          "a3 — White questions the bishop.",
+          "…Bxd2 — trade, clear for castling.",
+          "Qxd2 — White recaptures.",
+          "…O-O-O — rook behind the wedge."
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Albin_Countergambit"
+        ],
+        "title": "Albin: Castle Long Behind the Wedge",
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]

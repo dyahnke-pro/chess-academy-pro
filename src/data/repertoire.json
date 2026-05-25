@@ -3102,5 +3102,41 @@
         "verifiedEval": "-183cp"
       }
     ]
+  },
+  {
+    "id": "albin-countergambit",
+    "eco": "D08",
+    "name": "Albin Countergambit",
+    "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 Nbd2 Bg4 h3 Bxf3 Nxf3 Bb4+ Bd2 Qe7",
+    "color": "black",
+    "style": "Gambit, Tactical",
+    "overview": "The Albin Countergambit (1.d4 d5 2.c4 e5!?) is Black's boldest answer to the Queen's Gambit. Black gambits a pawn to plant a cramping pawn on d4 that lodges deep in White's position and refuses to be dislodged. In return Black gets rapid development, attacking chances with queenside castling, and the famous Lasker Trap. A genuine surprise weapon — Morozevich wielded it at the elite level.",
+    "keyIdeas": [
+      "Plant the d4-pawn as a cramping wedge — it sits deep in White's camp and is hard to dislodge",
+      "Develop fast with ...Nc6, ...Bg4 or ...Be6, and ...Bb4+, generating quick piece activity for the pawn",
+      "Castle queenside and storm the kingside, exploiting the lead in development",
+      "Know the Lasker Trap: if White plays the natural e3, Black wins with ...Bb4+, ...dxe3 and the underpromotion ...exf2+, ...fxg1=N+"
+    ],
+    "traps": [],
+    "warnings": [],
+    "variations": [
+      {
+        "name": "Fianchetto Variation",
+        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4",
+        "explanation": "White's modern main line, fianchettoing with g3 to undermine the d4-pawn from the long diagonal. Black develops ...Nc6 and ...Bg4, pinning the f3-knight (a key defender of d4) and keeping the cramping wedge and the initiative."
+      },
+      {
+        "name": "Lasker Trap",
+        "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 Bxb4 exf2+ Ke2 fxg1=N+",
+        "explanation": "The most famous trap in the Albin, named after Emanuel Lasker. If White grabs at the d4-pawn with the natural 4.e3?, Black strikes: 4...Bb4+ 5.Bd2 dxe3! and after 6.Bxb4?? exf2+ 7.Ke2 the spectacular 7...fxg1=N+! — an underpromotion to a knight with check — wins material. Every Albin player dreams of springing it."
+      },
+      {
+        "name": "Spassky Variation",
+        "pgn": "d4 d5 c4 e5 dxe5 d4 e4 Nc6 Nf3 Bg4",
+        "explanation": "White grabs more central space with 4.e4, the principled try. Black continues developing with ...Nc6 and ...Bg4, pinning the knight and targeting the over-extended pawns while the d4-wedge remains a thorn in White's position."
+      }
+    ],
+    "trapLines": [],
+    "warningLines": []
   }
 ]
