@@ -1,6 +1,6 @@
 {
   "_doc": "Narrated masterclass gems that do NOT yet carry an independent-verification source (sources[] of concept:/book:/reputable-URL refs). David 2026-05-25: narration IDEAS must be verified against books/online, not training recall, and the source recorded. Gate: punishGems.test.ts (isResolvableSource). Baseline only SHRINKS as sources are added. Regenerate after authoring.",
-  "count": 92,
+  "count": 87,
   "keys": [
     "alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_c5_Nd5_d4_d6_cxd6_exd6:f4",
     "alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_d4_d6:Nc3",
@@ -9,11 +9,6 @@
     "benko-gambit:d4_Nf6_c4_c5_d5_b5_Nf3_bxc4:Qc2",
     "benko-gambit:d4_Nf6_c4_c5_d5_b5_cxb5_a6_Nc3_axb5_e4_b4:e5",
     "benko-gambit:d4_Nf6_c4_c5_d5_b5_cxb5_a6_Nc3_axb5_e4_b4_Nb5_d6_Bc4_g6:Bf4",
-    "caro-kann:e4_c6_d4_d5_Nc3_dxe4:f3",
-    "caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5:c3",
-    "caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7:Bxf7+",
-    "caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7_O-O_Ngf6:Nc3",
-    "caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7_O-O_Ngf6_c3_Bd6:Qb3",
     "french-defence:e4_e6_d4_d5_Nc3_Nf6_Bg5_Bb4:a3",
     "french-defence:e4_e6_d4_d5_Nc3_Nf6_Bg5_Be7:Nf3",
     "french-defence:e4_e6_d4_d5_Nc3_Nf6_Bg5_dxe4_Nxe4_Be7:Nf3",

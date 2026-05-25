@@ -26,6 +26,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Caro — White's f3 (Fantasy) but f3?? offered too loosely: exf3 just
   // wins a pawn. playLine: e4 c6 d4 d5 Nc3 dxe4 f3 exf3 Nxf3 Nf6 Bd3 Bg4 h3 Bxf3 Qxf3
   'caro-kann:e4_c6_d4_d5_Nc3_dxe4:f3': {
+    sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
     watch: [
       '', '', '', '', '', '',
       'f3? White offers a pawn to blast open the centre — but here it is simply unsound. The e4-pawn is yours, and f3 only hangs another.',
@@ -55,6 +56,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Caro Fantasy — after f3 dxe4 fxe4 e5, White's c3?? ignores the centre
   // and the king is caught. playLine: e4 c6 d4 d5 f3 dxe4 fxe4 e5 c3 Qh4+ Kd2 Nf6 Nf3 Qf2+ Be2 Nxe4+ Kc2
   'caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5:c3': {
+    sources: ['book:caro-kann', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
     watch: [
       '', '', '', '', '', '', '', '',
       'c3? White ignores the fire in the centre. The king on e1 has no shelter now — and the queen pounces.',
@@ -83,6 +85,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Caro Fantasy — White's Bxf7+?? is an UNSOUND sac; just take it and you're
   // up a piece. playLine: e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 Bxf7+ Kxf7 O-O Ke8 Nbd2 Nh6 h3 Bh5 c3
   'caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7:Bxf7+': {
+    sources: ['book:caro-kann', 'concept:tac-sacrifice', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '',
       'Bxf7+? White flings the bishop at f7 hoping for a king hunt — but there is no follow-up here. It is just a piece thrown away.',
@@ -112,6 +115,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Caro Fantasy — White's Nc3?? leaves d4 loose with the centre tense; exd4
   // wins it. playLine: e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 Nc3 exd4 Ne2 Bc5 Kh1 Qe7 Ng3 O-O-O Qd3
   'caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7_O-O_Ngf6:Nc3': {
+    sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Nc3? Natural-looking development — but with the centre still tense it leaves d4 underdefended. Strike before White consolidates.',
@@ -911,6 +915,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Caro Fantasy — Qb3 is only a small inaccuracy (+0.75). playLine:
   // e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6 Qb3 O-O Nbd2 b5 Bd3 Nc5 Qc2 Nxd3 Qxd3
   'caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7_O-O_Ngf6_c3_Bd6:Qb3': {
+    sources: ['book:caro-kann', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Be straight: this is a quieter weapon than the tactical traps — no material falls. But Qb3 is a genuine inaccuracy, the queen drifting to the rim doing little. Punish it the simplest way.',
