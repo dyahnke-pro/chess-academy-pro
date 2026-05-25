@@ -11,7 +11,6 @@ import {
 import { GEM_NARRATION } from './lessons/punishGemNarration';
 import openingManifests from './opening-manifests.json';
 import gemNarrationBaseline from './punishGemNarration.baseline.json';
-import gemSourcesBaseline from './punishGemSources.baseline.json';
 import { sourcesAreValid } from './narrationSources';
 
 // Gate for the mined punish-gems (WO: docs/plans/2026-05-23-punish-gems-wo.md).
@@ -137,38 +136,30 @@ describe('punish-gems are real, legal, DB-grounded', () => {
       expect(novel, `New masterclass gems have no hand-narration (watch + learn). Author an entry in punishGemNarration.ts, or — only if deferred — add to punishGemNarration.baseline.json:\n${novel.join('\n')}`).toEqual([]);
     });
 
-    it('baseline only shrinks (no stale entries that are now narrated)', () => {
-      const live = new Set(missing);
-      const stale = [...baseline].filter((id) => !live.has(id));
-      if (stale.length) console.warn(`[gem-narration] ${stale.length} baseline gems are now narrated — prune them: ${stale.join(', ')}`);
-      expect(stale.length).toBeLessThanOrEqual(baseline.size);
+    // The coverage backlog can only SHRINK — a hard ceiling on the baseline
+    // size blocks a future build from adding a new un-narrated gem to the
+    // baseline to bypass the rule. Lower GEM_COVERAGE_CEILING as the 8 deferred
+    // Scotch positional gems get narrated; never raise it.
+    const GEM_COVERAGE_CEILING = 8;
+    it(`coverage baseline never grows (ceiling ${GEM_COVERAGE_CEILING})`, () => {
+      expect(baseline.size, 'punishGemNarration.baseline.json grew — narrate the gem instead of baselining it').toBeLessThanOrEqual(GEM_COVERAGE_CEILING);
     });
   });
 
-  // INDEPENDENT-VERIFICATION GATE (David 2026-05-25: "use independent
-  // verification — books, online — that's the gate"). Every masterclass gem's
-  // narration must carry a `sources` ref that resolves (a book/concept passage
-  // in the corpus, or a reputable chess URL) — proof the IDEAS were checked
-  // outside training recall and recorded for spot-check. Baseline holds the
-  // pre-rule narrated gems; it only SHRINKS as sources are added.
+  // NON-NEGOTIABLE INDEPENDENT-VERIFICATION GATE (David 2026-05-25: "use
+  // independent verification — books, online — that's the gate"). Every
+  // narrated masterclass gem MUST carry a `sources` ref that resolves (a
+  // book/concept passage, or a reputable chess URL). NO baseline escape — all
+  // 126 narrated gems were sourced 2026-05-25; a new one without a source fails.
   describe('narrated masterclass gems cite an independent verification source', () => {
-    const baseline = new Set((gemSourcesBaseline as { keys: string[] }).keys);
     const masterclass = new Set(Object.keys(openingManifests).filter((k) => !k.startsWith('_')));
     const unverified = (gems as PunishGem[])
       .filter((g) => masterclass.has(g.openingId) && gemId(g) in GEM_NARRATION)
       .filter((g) => !sourcesAreValid(GEM_NARRATION[gemId(g)].sources))
       .map(gemId);
 
-    it('introduces NO narrated masterclass gem without a resolvable source beyond the baseline', () => {
-      const novel = unverified.filter((id) => !baseline.has(id));
-      expect(novel, `Narrated masterclass gems missing a resolvable verification source (sources: ["book:<id>" | "concept:<id>" | reputable https URL]). Verify the ideas against the books/online and record the ref:\n${novel.join('\n')}`).toEqual([]);
-    });
-
-    it('verification baseline only shrinks', () => {
-      const live = new Set(unverified);
-      const stale = [...baseline].filter((id) => !live.has(id));
-      if (stale.length) console.warn(`[gem-sources] ${stale.length} baseline gems now cite a source — prune them: ${stale.join(', ')}`);
-      expect(stale.length).toBeLessThanOrEqual(baseline.size);
+    it('EVERY narrated masterclass gem has a resolvable source — no exceptions', () => {
+      expect(unverified, `Narrated masterclass gems missing a resolvable verification source (sources: ["book:<id>" | "concept:<id>" | reputable https URL]):\n${unverified.join('\n')}`).toEqual([]);
     });
   });
 

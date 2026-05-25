@@ -1,5 +1,0 @@
-{
-  "_doc": "Masterclass beat-lessons (main lines + variations + named traps) without a recorded independent-verification source on the LessonScript. David 2026-05-25: main opening lines checked against books/online. Gate: lessonSources.test.ts. Seed with WRITE_LESSON_SOURCE_BASELINE=1; only SHRINKS as sources are added.",
-  "count": 0,
-  "keys": []
-}

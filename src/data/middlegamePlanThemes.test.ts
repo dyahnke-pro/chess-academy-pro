@@ -6,7 +6,6 @@ import repertoireRaw from './repertoire.json';
 import proRaw from './pro-repertoires.json';
 import openingManifests from './opening-manifests.json';
 import shortBaselineRaw from './middlegamePlanShort.baseline.json';
-import planSourcesBaselineRaw from './middlegamePlanSources.baseline.json';
 import { sourcesAreValid } from './narrationSources';
 
 // ─── The "show the theme" gate (David 2026-05-25) ───────────────────────────
@@ -123,14 +122,12 @@ describe('middlegame-plan playableLines demonstrate their named theme', () => {
     expect(offenders.some((o) => o.key === 'mp-dutchdefence-main#0')).toBe(false);
   });
 
-  it('baseline does not contain entries that are already fixed (keep it honest)', () => {
-    const live = new Set(offenders.map((o) => o.key));
-    const stale = [...baseline].filter((k) => !live.has(k));
-    // Informational: stale baseline entries are fixed lines that should be
-    // pruned. Not a hard failure (avoids churn while a sweep is in flight),
-    // but surfaced so the baseline shrinks honestly.
-    if (stale.length > 0) console.warn(`[plan-themes] ${stale.length} baseline entries are now fixed — prune them: ${stale.join(', ')}`);
-    expect(stale.length).toBeLessThanOrEqual(baseline.size);
+  // The theme baseline can only SHRINK — a hard ceiling blocks a future build
+  // from baselining a new theme-empty / promise-only line. Lower THEME_CEILING
+  // as the deferred lines are rewritten; never raise it.
+  const THEME_CEILING = 4;
+  it(`theme baseline never grows (ceiling ${THEME_CEILING})`, () => {
+    expect(baseline.size, 'middlegamePlanThemes.baseline.json grew — fix the line instead of baselining it').toBeLessThanOrEqual(THEME_CEILING);
   });
 });
 
@@ -158,22 +155,21 @@ describe('masterclass plan lines carry a short (learnCues) register', () => {
     expect(novel, `New masterclass plan lines have no hand-authored short cues (learnCues, one per move). Author them, or — only if deferred — add to middlegamePlanShort.baseline.json:\n${novel.join('\n')}`).toEqual([]);
   });
 
-  it('short-register baseline only shrinks', () => {
-    const live = new Set(missing);
-    const stale = [...baseline].filter((k) => !live.has(k));
-    if (stale.length > 0) console.warn(`[plan-short] ${stale.length} baseline lines now have short cues — prune them: ${stale.join(', ')}`);
-    expect(stale.length).toBeLessThanOrEqual(baseline.size);
+  // Short-register backlog can only SHRINK. Lower SHORT_CEILING as cues are
+  // authored; never raise it (a new masterclass line must ship with both
+  // registers, not be added to the baseline).
+  const SHORT_CEILING = 119;
+  it(`short-register baseline never grows (ceiling ${SHORT_CEILING})`, () => {
+    expect(baseline.size, 'middlegamePlanShort.baseline.json grew — author the short cues instead of baselining').toBeLessThanOrEqual(SHORT_CEILING);
   });
 });
 
-// ─── Independent-verification gate (David 2026-05-25: "all other narrations
-// checked against sources") ─────────────────────────────────────────────────
-// Every masterclass plan playableLine must record a resolvable verification
-// source (sources[]: book:/concept:/reputable-URL) — proof the ideas were
-// checked against the books/online, not training recall. Baseline holds the
-// pre-rule lines and only SHRINKS as sources are added.
+// ─── NON-NEGOTIABLE independent-verification gate (David 2026-05-25) ─────────
+// Every masterclass plan playableLine MUST record a resolvable verification
+// source (sources[]: book:/concept:/reputable-URL). NO baseline escape — all
+// 134 masterclass plan lines were sourced 2026-05-25; a new one without a
+// source fails this gate.
 describe('masterclass plan lines cite an independent verification source', () => {
-  const baseline = new Set((planSourcesBaselineRaw as { keys: string[] }).keys);
   const masterclass = new Set(Object.keys(openingManifests).filter((k) => !k.startsWith('_')));
   const unverified: string[] = [];
   for (const plan of plans) {
@@ -183,15 +179,7 @@ describe('masterclass plan lines cite an independent verification source', () =>
     });
   }
 
-  it('introduces NO masterclass plan line without a resolvable source beyond the baseline', () => {
-    const novel = unverified.filter((k) => !baseline.has(k));
-    expect(novel, `New masterclass plan lines missing a resolvable verification source (sources: ["book:<id>" | "concept:<id>" | reputable https URL]). Verify the ideas and record the ref:\n${novel.join('\n')}`).toEqual([]);
-  });
-
-  it('plan-source baseline only shrinks', () => {
-    const live = new Set(unverified);
-    const stale = [...baseline].filter((k) => !live.has(k));
-    if (stale.length > 0) console.warn(`[plan-sources] ${stale.length} baseline lines now cite a source — prune them: ${stale.join(', ')}`);
-    expect(stale.length).toBeLessThanOrEqual(baseline.size);
+  it('EVERY masterclass plan line has a resolvable source — no exceptions', () => {
+    expect(unverified, `Masterclass plan lines missing a resolvable verification source (sources: ["book:<id>" | "concept:<id>" | reputable https URL]):\n${unverified.join('\n')}`).toEqual([]);
   });
 });

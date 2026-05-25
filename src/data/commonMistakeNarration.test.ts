@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import commonMistakesData from './common-mistakes.json';
 import openingManifests from './opening-manifests.json';
 import type { CommonMistake } from '../types';
-import sourcesBaselineRaw from './commonMistakeSources.baseline.json';
 import { sourcesAreValid } from './narrationSources';
 
 const data = commonMistakesData as Record<string, CommonMistake[]>;
@@ -45,12 +44,11 @@ describe('common-mistake narration — two registers on masterclass Pitfalls', (
   }
 });
 
-// Independent-verification gate (David 2026-05-25: "all other narrations checked
-// against sources"). Every masterclass Pitfall must record a resolvable source
-// (sources[]: book:/concept:/reputable-URL). Baseline holds the pre-rule entries
-// and only SHRINKS as sources are added.
+// NON-NEGOTIABLE independent-verification gate (David 2026-05-25). Every
+// masterclass Pitfall MUST record a resolvable source (sources[]:
+// book:/concept:/reputable-URL). NO baseline escape — all 56 were sourced
+// 2026-05-25; a new masterclass mistake without a source fails this gate.
 describe('masterclass common mistakes cite an independent verification source', () => {
-  const baseline = new Set((sourcesBaselineRaw as { keys: string[] }).keys);
   const unverified: string[] = [];
   for (const id of MASTERCLASS) {
     (data[id] ?? []).forEach((m, i) => {
@@ -58,16 +56,8 @@ describe('masterclass common mistakes cite an independent verification source', 
     });
   }
 
-  it('introduces NO masterclass Pitfall without a resolvable source beyond the baseline', () => {
-    const novel = unverified.filter((k) => !baseline.has(k));
-    expect(novel, `New masterclass common mistakes missing a resolvable verification source (sources: ["book:<id>" | "concept:<id>" | reputable https URL]):\n${novel.join('\n')}`).toEqual([]);
-  });
-
-  it('common-mistake source baseline only shrinks', () => {
-    const live = new Set(unverified);
-    const stale = [...baseline].filter((k) => !live.has(k));
-    if (stale.length > 0) console.warn(`[mistake-sources] ${stale.length} baseline entries now cite a source — prune them: ${stale.join(', ')}`);
-    expect(stale.length).toBeLessThanOrEqual(baseline.size);
+  it('EVERY masterclass Pitfall has a resolvable source — no exceptions', () => {
+    expect(unverified, `Masterclass common mistakes missing a resolvable verification source (sources: ["book:<id>" | "concept:<id>" | reputable https URL]):\n${unverified.join('\n')}`).toEqual([]);
   });
 });
 

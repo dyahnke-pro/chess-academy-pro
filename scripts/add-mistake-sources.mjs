@@ -14,10 +14,4 @@ for (const [op, arr] of Object.entries(cm)) {
 }
 writeFileSync('src/data/common-mistakes.json', JSON.stringify(cm, null, 2) + '\n');
 
-const un = [];
-for (const [op, arr] of Object.entries(cm)) { if (!MC.has(op)) continue; (arr || []).forEach((m, i) => { if (!(Array.isArray(m.sources) && m.sources.length)) un.push(`${op}#${i}`); }); }
-const path = 'src/data/commonMistakeSources.baseline.json';
-const o = JSON.parse(readFileSync(path, 'utf8'));
-o.count = un.length; o.keys = un.sort();
-writeFileSync(path, JSON.stringify(o, null, 2) + '\n');
-console.log(`common mistakes sourced: ${n} | baseline now: ${un.length}${noMap.size ? ` | no-map: ${[...noMap].join(',')}` : ''}`);
+console.log(`common mistakes sourced: ${n}${noMap.size ? ` | no-map: ${[...noMap].join(',')}` : ''}`);

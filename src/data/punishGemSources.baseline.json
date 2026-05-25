@@ -1,5 +1,0 @@
-{
-  "_doc": "Narrated masterclass gems that do NOT yet carry an independent-verification source (sources[] of concept:/book:/reputable-URL refs). David 2026-05-25: narration IDEAS must be verified against books/online, not training recall, and the source recorded. Gate: punishGems.test.ts (isResolvableSource). Baseline only SHRINKS as sources are added. Regenerate after authoring.",
-  "count": 0,
-  "keys": []
-}
