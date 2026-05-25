@@ -3602,5 +3602,101 @@
         "concept": "Attack crashes through"
       }
     ]
+  },
+  {
+    "id": "qga-aronian-caruana-2017",
+    "openingId": "qga",
+    "white": "Levon Aronian",
+    "black": "Fabiano Caruana",
+    "whiteElo": 2809,
+    "blackElo": 2807,
+    "result": "0-1",
+    "year": 2017,
+    "event": "Sinquefield Cup 2017",
+    "pgn": "d4 d5 Nf3 Nf6 c4 dxc4 e3 e6 Bxc4 c5 O-O a6 Be2 cxd4 exd4 Nc6 Nc3 Be7 Be3 Ng4 Bf4 Nf6 Rc1 O-O Na4 Nd5 Bg3 Bd6 Bd3 Nce7 Qb3 b6 Be4 Rb8 Rfe1 Bb7 Nc3 Nxc3 Bxb7 Nxa2 Qxa2 Rxb7 Qxa6 Rc7 b3 Nf5 Rxc7 Qxc7 Qb5 h6 d5 exd5 Qxd5 Nxg3 hxg3 Rd8 Qb5 g6 Ne5 Qc5 Qxc5 Bxc5 Kf1 Kg7 Ke2 Bb4 Rc1 Re8 f4 f6 Rc7+ Kh8 Rc6 fxe5 Rxb6 exf4 Kf3 Re3+ Kxf4 Bd2 Rxg6 Kh7 Kf5 Rxb3",
+    "overview": "A classical-chess masterpiece of QGA defence: Caruana trades into the isolated-queen's-pawn structure, blockades White's d4-pawn on d5, and grinds the small structural edge into a long, winning endgame against Aronian at the Sinquefield Cup.",
+    "middlegameTheme": "Blockade and grind the isolated queen’s pawn",
+    "lessonSummary": "The QGA's …cxd4 hands White an isolated d-pawn; blockade it on d5, trade pieces, and the long-term weakness tells in the endgame.",
+    "studentSide": "black",
+    "criticalMoments": [
+      {
+        "moveNumber": 7,
+        "color": "black",
+        "fen": "rnbqkb1r/1p3ppp/p3pn2/8/3p4/4PN2/PP2BPPP/RNBQ1RK1 w kq - 0 8",
+        "annotation": "…cxd4 — Black trades to leave White an isolated pawn on d4, the QGA's standing target.",
+        "concept": "Create the isolated d-pawn"
+      },
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r1bq1rk1/1p2bppp/p1n1p3/3n4/N2P1B2/5N2/PP2BPPP/2RQ1RK1 w - - 11 14",
+        "annotation": "…Nd5 — the knight blockades on d5; from here Black swarms the isolated pawn and slowly grinds White down.",
+        "concept": "Blockade on d5"
+      }
+    ]
+  },
+  {
+    "id": "qga-carlsen-aronian-2022",
+    "openingId": "qga",
+    "white": "Magnus Carlsen",
+    "black": "Levon Aronian",
+    "whiteElo": 2861,
+    "blackElo": 2759,
+    "result": "0-1",
+    "year": 2022,
+    "event": "Julius Baer Generation Cup 2022",
+    "pgn": "d4 d5 c4 dxc4 e3 Nf6 Bxc4 e6 Nf3 c5 O-O a6 Be2 Nbd7 Nc3 b5 d5 exd5 Nxd5 Bb7 Nxf6+ Qxf6 a4 b4 Ra2 Ne5 Nxe5 Qxe5 b3 Bd6 f4 Qe7 Bc4 O-O Qg4 Kh8 Re2 f5 Qg3 Rad8 Bb2 Bc7 h4 Bd5 Bxd5 Rxd5 e4 fxe4 Rxe4 Qf7 Rfe1 Bd6 Re8 Kg8 Qf3 Rd2 Rxf8+ Bxf8 Bc1 Rc2 f5 c4 bxc4 Qxc4 Bf4 Rc3 Qg4 Qd4+ Kh2 Rc4 Rf1 Bd6 g3 Bxf4 Rxf4 Qd2+ Kh3 Rxf4 gxf4 Qd7 Qe2 Qxf5+ Kg3 Qg6+ Kh2 Qc6 Qe5 Qc2+ Kg1 Qc8 Qd6 a5 Qd5+ Kh8 Qxa5 Qb8 Qf5 b3 a5 h6 Qb1 b2 Kf2 Qxf4+",
+    "overview": "Aronian shows the QGA's dynamic side against the world champion: …a6/…b5 queenside expansion, the …exd5 break, and then accurate, active play to outslug Carlsen in a sharp middlegame and endgame.",
+    "middlegameTheme": "Queenside expansion and active counterplay",
+    "lessonSummary": "The QGA isn't just solid — …a6/…b5 and active pieces give Black a full, fighting game, even against the best.",
+    "studentSide": "black",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "black",
+        "fen": "r1bqkb1r/3n1ppp/p3pn2/1pp5/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 w kq - 0 9",
+        "annotation": "…b5 — the QGA's thematic queenside expansion, gaining space and preparing …Bb7 on the long diagonal.",
+        "concept": "Queenside expansion"
+      },
+      {
+        "moveNumber": 34,
+        "color": "black",
+        "fen": "5bk1/6pp/p7/5P2/Pp1q1BQP/2r5/6P1/4R1K1 w - - 4 35",
+        "annotation": "…Qd4+ — Black's queen and rook infiltrate; the active pieces turn the tables on the world champion.",
+        "concept": "Active-piece counterplay"
+      }
+    ]
+  },
+  {
+    "id": "qga-kramnik-anand-2001",
+    "openingId": "qga",
+    "white": "Vladimir Kramnik",
+    "black": "Viswanathan Anand",
+    "whiteElo": 2797,
+    "blackElo": 2794,
+    "result": "0-1",
+    "year": 2001,
+    "event": "Mainz Chess Classic 2001",
+    "pgn": "d4 d5 c4 dxc4 Nf3 e6 e3 Nf6 Bxc4 c5 O-O a6 Bb3 Nbd7 Qe2 b5 a4 Bb7 axb5 axb5 Rxa8 Qxa8 Nc3 b4 Nb5 Qb8 e4 cxd4 Nbxd4 Bd6 Bxe6 fxe6 Nxe6 h6 Nxg7+ Kf7 Nf5 Bxe4 Nxh6+ Kg7 h3 Rxh6 Bxh6+ Kxh6 Rd1 Bxf3 Qxf3 Be5 Qe3+ Kg7 Qg5+ Kf7 Qf5 Nf8 b3 Bc3 g3 Qe5 Qxe5 Bxe5 f4 Bc3 Kg2 Ne4 g4 Nd2 f5 Nxb3 g5 Nc5 Kf3 b3 h4 b2 h5 Bd2 Rb1 Bc1 Ke2 Nb3 Kd3 Nd2 Rxb2 Bxb2 Kxd2 Kg7 Kd3 Bc1 g6 Nd7 Ke4 Nf6+ Ke5 Nxh5",
+    "overview": "Anand defends the QGA against a full-blooded Kramnik piece sacrifice: White throws everything at the black king with Bxe6 and Nxg7+, but precise defence holds the extra material and converts — a lesson in trusting the QGA's soundness.",
+    "middlegameTheme": "Refuting White’s sacrificial attack",
+    "lessonSummary": "The QGA is sound enough to absorb a sacrifice: defend accurately, keep the material, and convert.",
+    "studentSide": "black",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "black",
+        "fen": "r1bqkb1r/3n1ppp/p3pn2/1pp5/3P4/1B2PN2/PP2QPPP/RNB2RK1 w kq - 0 9",
+        "annotation": "…b5 — the standard queenside expansion, gaining space with tempo on the bishop.",
+        "concept": "Queenside expansion"
+      },
+      {
+        "moveNumber": 23,
+        "color": "black",
+        "fen": "1q6/3n4/3b1n1k/8/1p6/5b1P/1P2QPP1/3R2K1 w - - 0 24",
+        "annotation": "…Bxf3 — Anand trades down and consolidates; White's sacrificial attack has run out of steam and the extra material decides.",
+        "concept": "Consolidate the extra material"
+      }
+    ]
   }
 ]
