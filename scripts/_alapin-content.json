@@ -1,0 +1,86 @@
+[
+  {
+    "_out": "main",
+    "openingId": "sicilian-alapin",
+    "title": "The Alapin Sicilian — A Master Class",
+    "minutes": 8,
+    "orientation": "black",
+    "beats": [
+      {
+        "id": "alapin",
+        "moves": "e4 c5 c3 Nf6",
+        "say": "The Alapin — White sidesteps the Open Sicilian with c3, planning d4 to build a big pawn centre. Black's most principled reply is Nf6, hitting the e4-pawn at once and refusing to let White set up in comfort.",
+        "sayShort": "Nf6 — hit e4, deny White comfort.",
+        "arrows": [{ "from": "f6", "to": "e4", "color": "ATK" }]
+      },
+      {
+        "id": "center",
+        "moves": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4",
+        "say": "White claims space with e5, kicking the knight to d5, then d4. Black strikes back at once with cxd4, refusing to let White keep the broad pawn duo for free. The knight on d5 is superbly placed, eyeing c3, e3 and f4.",
+        "sayShort": "cxd4 — strike the centre, knight on d5.",
+        "highlights": [{ "square": "d5", "color": "KEY" }, { "square": "e5", "color": "SOFT" }]
+      },
+      {
+        "id": "undermine",
+        "moves": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6",
+        "say": "Both sides develop; Nc6 leans on the d4-pawn and Black plays d6 to challenge the e5-spearhead directly. This is the heart of Black's plan against the Alapin — undermine the centre before it becomes a steamroller.",
+        "sayShort": "Nc6 and d6 — undermine White's centre.",
+        "arrows": [{ "from": "c6", "to": "d4", "color": "ATK" }],
+        "highlights": [{ "square": "e5", "color": "KEY" }]
+      },
+      {
+        "id": "liquidate",
+        "moves": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7",
+        "say": "A flurry of trades follows — dxe5 removes the spearhead, and after the pieces come off on d7 Black has fully equalised. This is the Alapin's quiet truth: with accurate play Black neutralises the centre and reaches a comfortable, balanced game, often heading toward a level endgame.",
+        "sayShort": "dxe5 and trades — Black is equal.",
+        "highlights": [{ "square": "e5", "color": "KEY" }, { "square": "d7", "color": "SOFT" }]
+      },
+      {
+        "id": "verdict",
+        "moves": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7",
+        "say": "That is how to meet the Alapin: hit e4 with Nf6, strike the centre with cxd4 and d6, and trade White's space away. White's c3 cost a tempo and denied the knight its natural c3-square — and Black emerges with an easy, equal game, the queen active on d7, against this popular anti-Sicilian.",
+        "sayShort": "Nf6, cxd4, d6 — equalise the Alapin.",
+        "highlights": [{ "square": "d7", "color": "KEY" }]
+      }
+    ]
+  },
+  {
+    "_out": "variation",
+    "_key": "Alapin: 2...d5 Central Counter (IQP Play)",
+    "openingId": "sicilian-alapin",
+    "title": "Alapin — The 2...d5 Central Counter",
+    "minutes": 6,
+    "orientation": "black",
+    "beats": [
+      {
+        "id": "d5",
+        "moves": "e4 c5 c3 d5",
+        "say": "The most direct answer: d5, striking the centre at once. Black refuses to let White build the big pawn duo and forces an immediate clarification.",
+        "sayShort": "d5 — strike the centre immediately.",
+        "highlights": [{ "square": "d5", "color": "KEY" }]
+      },
+      {
+        "id": "iqp",
+        "moves": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6",
+        "say": "After exd5 Qxd5 the queen recaptures actively in the centre, and d4 leaves White with an isolated queen's pawn once the c-pawns come off. Black develops Nf6 with tempo and prepares to blockade and besiege that lone d-pawn.",
+        "sayShort": "Qxd5 and Nf6 — target the d-pawn.",
+        "highlights": [{ "square": "d4", "color": "KEY" }, { "square": "f6", "color": "SOFT" }]
+      },
+      {
+        "id": "pieces",
+        "moves": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6",
+        "say": "Black's pieces swarm the isolated pawn — Bg4 pins the f3-knight that defends d4, and e6 secures the d5-blockade square. The recipe against an isolated pawn is timeless: blockade it, pile on it, and trade into a better endgame.",
+        "sayShort": "Bg4 pins f3; e6 blockades d5.",
+        "arrows": [{ "from": "g4", "to": "f3", "color": "ATK" }],
+        "highlights": [{ "square": "d4", "color": "KEY" }]
+      },
+      {
+        "id": "verdict",
+        "moves": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 h3 Bh5 O-O Nc6 Na3 a6 Nc2 cxd4",
+        "say": "Black completes development around the isolated pawn and finally captures cxd4, resolving the structure in his favour. The verdict on the central counter: Black gets a clean, principled game against a known weakness — exactly the comfortable equality the Alapin player hoped to avoid conceding.",
+        "sayShort": "cxd4 — resolve it; Black is comfortable.",
+        "highlights": [{ "square": "d4", "color": "KEY" }]
+      }
+    ]
+  }
+]

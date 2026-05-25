@@ -92,6 +92,13 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /anti-sveshnikov|6\.nf3/i, label: 'Anti-Svesh 6.Nf3' },
     { test: /kalashnikov/i, label: 'Kalashnikov' },
   ],
+  // Sicilian Alapin — Black-oriented (the student meets White's 2.c3).
+  // Main-line pill = the 2...Nf6 mainline. Only 2...d5 is a distinct, canonical
+  // DB-anchored second mainline; 2...e6 (French structure) and 2...g6 are not in
+  // the canonical DB in the 2.c3 order, so they are deferred (G3), not shipped.
+  'sicilian-alapin': [
+    { test: /central counter/i, label: '2...d5' },
+  ],
   // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
   // (the explorer freq query was unavailable when this was built; ordering is
   // flagged for prod verification). The Giuoco Piano main line is the "Main

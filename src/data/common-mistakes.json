@@ -335,19 +335,15 @@
       "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
       "wrongMove": "e6",
       "correctMove": "d5",
-      "explanation": "e6 is too passive and lets White build a big center with d4. d5 immediately challenges White's center."
-    },
-    {
-      "fen": "rnbqkbnr/pp2pppp/8/3p4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
-      "wrongMove": "e5",
-      "correctMove": "exd5",
-      "explanation": "e5 creates a fixed center that can become a target. exd5 Qxd5 d4 gives White good development and central control."
+      "explanation": "e6 is too passive and lets White build a big centre with d4. d5 challenges White's centre at once and gives Black the freer game.",
+      "shortNarration": "d5 — challenge now, not passive e6."
     },
     {
       "fen": "rnb1kbnr/pp2pppp/8/3q4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
       "wrongMove": "Qxd4",
       "correctMove": "Nf6",
-      "explanation": "Qxd4 loses time after Nc3 Qd8 and White has a big development lead. Nf6 develops and eyes e4."
+      "explanation": "Qxd4 grabs a pawn but loses time after Nc3, when the queen is chased back and White races ahead in development. Nf6 develops with tempo and eyes e4.",
+      "shortNarration": "Nf6 — develop; Qxd4 just loses time."
     }
   ],
   "pirc-defence": [

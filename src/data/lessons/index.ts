@@ -19,6 +19,8 @@ import { SICILIAN_NAJDORF_LESSON } from './sicilianNajdorf';
 import { SICILIAN_NAJDORF_VARIATION_LESSONS } from './sicilianNajdorfVariations';
 import { SICILIAN_SVESHNIKOV_LESSON } from './sicilianSveshnikov';
 import { SICILIAN_SVESHNIKOV_VARIATION_LESSONS } from './sicilianSveshnikovVariations';
+import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
+import { SICILIAN_ALAPIN_VARIATION_LESSONS } from './sicilianAlapinVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -46,6 +48,7 @@ const LESSONS: Record<string, LessonScript> = {
   [SICILIAN_DRAGON_LESSON.openingId]: SICILIAN_DRAGON_LESSON,
   [SICILIAN_NAJDORF_LESSON.openingId]: SICILIAN_NAJDORF_LESSON,
   [SICILIAN_SVESHNIKOV_LESSON.openingId]: SICILIAN_SVESHNIKOV_LESSON,
+  [SICILIAN_ALAPIN_LESSON.openingId]: SICILIAN_ALAPIN_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -59,6 +62,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...SICILIAN_DRAGON_VARIATION_LESSONS,
   ...SICILIAN_NAJDORF_VARIATION_LESSONS,
   ...SICILIAN_SVESHNIKOV_VARIATION_LESSONS,
+  ...SICILIAN_ALAPIN_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

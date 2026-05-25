@@ -9779,59 +9779,6 @@
     ]
   },
   {
-    "id": "mp-alapin-isolated-d-pawn",
-    "openingId": "sicilian-alapin",
-    "criticalPositionFen": "rnb1kb1r/pp3ppp/4pn2/3q4/3P4/5N2/PP2BPPP/RNBQK2R b KQkq - 0 7",
-    "title": "Isolated d-pawn (IQP) attack",
-    "overview": "The Alapin's main treatment leads to an isolated d-pawn position. White accepts the structural weakness in exchange for piece activity: the Nf3 has e5 as an outpost, the Bc1 develops to g5 attacking f6, and the queen swings to e2 then to d3 supporting kingside attacks. Classic IQP middlegame — strong with pieces on the board, weak in the endgame.",
-    "pawnBreaks": [
-      {
-        "move": "d5",
-        "explanation": "The thematic IQP break that liquidates the structural weakness. After d5 exd5 White gains the e-file and dissolves the weakness, often leading to a favorable endgame transition."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nf3-e5 outpost",
-        "explanation": "The e5 square is a permanent outpost in the IQP structure. From e5 the knight controls central squares and supports kingside attacks via Nxf7 or Ng4-h6 ideas."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd1-e2-d3",
-        "explanation": "Qe2 prepares Rd1 (queen rook behind the isolated pawn). Qd3 supports d4-d5 and aligns on the b1-h7 diagonal for kingside attack."
-      }
-    ],
-    "typicalMistakes": [
-      "Trading pieces too quickly — IQP is strong with pieces, weak in the endgame.",
-      "Pushing d5 before piece coordination — Black equalizes if the break liquidates without gaining anything."
-    ]
-  },
-  {
-    "id": "mp-alapin-quiet-d3-development",
-    "openingId": "sicilian-alapin",
-    "criticalPositionFen": "r1bqkb1r/pp2pppp/1nnp4/1B2P3/3P4/5N2/PP3PPP/RNBQK2R b KQkq - 5 8",
-    "title": "Quiet d3 + Nbd2 setup",
-    "overview": "When Black plays the sharp Nf6, White's plan shifts to a closed central setup with d3 supporting e5 and Nbd2 + Bd3 building toward a kingside attack. The structure resembles a French Advance with colors reversed — White's e5 pawn cramps Black's kingside development.",
-    "pawnBreaks": [
-      {
-        "move": "f4",
-        "explanation": "Once Black's pieces are restricted, f2-f4 supports the e5 pawn and prepares a kingside pawn storm with f4-f5."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bf1-c4-b5+ swing",
-        "explanation": "The Bc4 + Bb5 maneuver after Black's …Nb6 forces Black to either trade or retreat the knight. Both outcomes favor White's central pawn structure."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing e5 too early — Black's …d6 break dissolves the pawn structure with tempo.",
-      "Trading the e5 pawn for a piece — the e5-wedge is the central restriction; without it the position equalizes."
-    ]
-  },
-  {
     "id": "mp-scandinavian-qa5-active-queen",
     "openingId": "scandinavian-defence",
     "criticalPositionFen": "rn2kb1r/pp2pppp/2p2n2/q4b2/2BP4/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
@@ -20555,6 +20502,269 @@
             },
             {
               "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-sicilianalapin-main",
+    "openingId": "sicilian-alapin",
+    "title": "Alapin: Undermine the Centre",
+    "criticalPositionFen": "r1bqkb1r/pp2pppp/1nnp4/4P3/2BP4/5N2/PP3PPP/RNBQK2R w KQkq - 2 8",
+    "overview": "Black's plan against the Alapin: hit e4 with Nf6, strike with cxd4 and d6 to undermine White's e5-spearhead, and trade the centre away into a comfortable, equal game.",
+    "pawnBreaks": [
+      {
+        "move": "d6",
+        "explanation": "d6 challenges the e5-spearhead directly.",
+        "fen": "r1bqkb1r/pp2pppp/1nnp4/4P3/2BP4/5N2/PP3PPP/RNBQK2R w KQkq - 2 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb8-c6",
+        "explanation": "Nc6 leans on the d4-pawn."
+      }
+    ],
+    "strategicThemes": [
+      "Hit e4 with Nf6.",
+      "Undermine the centre with cxd4 and d6.",
+      "Trade White's space into equality."
+    ],
+    "endgameTransitions": [
+      "Trades lead to a level endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Alapin: Undermine the Centre",
+        "fen": "r1bqkb1r/pp2pppp/1nnp4/4P3/2BP4/5N2/PP3PPP/RNBQK2R w KQkq - 2 8",
+        "moves": [
+          "Bb5",
+          "dxe5",
+          "Nxe5",
+          "Bd7",
+          "Nxd7",
+          "Qxd7"
+        ],
+        "annotations": [
+          "Bb5 — White pins the c6-knight.",
+          "dxe5 — Black removes the spearhead.",
+          "Nxe5 — White recaptures.",
+          "Bd7 — Black offers trades to ease the game.",
+          "Nxd7 — pieces come off.",
+          "Qxd7 — Black is fully equal, the queen active."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "b5",
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-sicilianalapin-d5",
+    "openingId": "sicilian-alapin",
+    "title": "Alapin 2...d5: Blockade the Isolated Pawn",
+    "criticalPositionFen": "rn2kb1r/pp3ppp/4pn2/2pq3b/3P4/2P2N1P/PP2BPP1/RNBQ1RK1 b kq - 2 8",
+    "overview": "After 2...d5 Black plays against White's isolated queen's pawn: develop with tempo, pin the f3-knight, blockade d5, and pile on the lone d-pawn.",
+    "pawnBreaks": [
+      {
+        "move": "cxd4 (resolve)",
+        "explanation": "Black resolves the structure favourably once developed.",
+        "fen": "rn2kb1r/pp3ppp/4pn2/2pq3b/3P4/2P2N1P/PP2BPP1/RNBQ1RK1 b kq - 2 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc8-g4",
+        "explanation": "Bg4 pins the knight defending d4."
+      }
+    ],
+    "strategicThemes": [
+      "Blockade the d5-square.",
+      "Pin and pile on the isolated d-pawn.",
+      "Trade into a better endgame."
+    ],
+    "endgameTransitions": [
+      "The isolated pawn is a long-term target."
+    ],
+    "playableLines": [
+      {
+        "title": "Alapin 2...d5: Blockade the Isolated Pawn",
+        "fen": "rn2kb1r/pp3ppp/4pn2/2pq3b/3P4/2P2N1P/PP2BPP1/RNBQ1RK1 b kq - 2 8",
+        "moves": [
+          "Nc6",
+          "Na3",
+          "a6",
+          "Nc2",
+          "cxd4"
+        ],
+        "annotations": [
+          "Nc6 — develop, pressing d4.",
+          "Na3 — White reroutes awkwardly.",
+          "a6 — Black denies b5 and prepares.",
+          "Nc2 — White eyes the d4-pawn.",
+          "cxd4 — Black resolves it, comfortable against the weakness."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "c2",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
