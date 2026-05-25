@@ -554,6 +554,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Closed — O-O?? (with Re1 in) allows Bxc6 + Nxe5 to bag a clean pawn.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 O-O Bxc6 bxc6 Nxe5 Bb7 d4 d5 exd5 cxd5
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Be7_Re1:O-O': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '',
       'O-O looks safe — but with the rook already on e1, it walks into a clean pawn grab.',
@@ -576,6 +577,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Open — Nxd4?? just loses a piece; the desperado tricks fizzle.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 Nxd4 Nxd4 Bb7 Nf3 Bd6 a4 O-O Nc3 Nxc3
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Nxe4_d4_b5_Bb3:Nxd4': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Nxd4? Grabbing the pawn loses a piece — there’s no real follow-up.',
@@ -598,6 +600,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Open — Bc5?? ignores the loose centre; Qxd5 wins material.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 d5 dxe5 Bc5 Qxd5 Qxd5 Bxd5 Bb7 Bxe4 O-O-O Bg5 Rde8
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Nxe4_d4_b5_Bb3_d5_dxe5:Bc5': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Bc5 develops but ignores the loose d5-pawn and the offside e4-knight. The queens come off with profit.',
@@ -621,6 +624,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // the ...Qd4 regain fail — Google-confirmed). playLine:
   // e4 e5 Nf3 Nc6 Bb5 Nf6 O-O a6 Bxc6 dxc6 Nxe5 Bc5 Nc3 h6 Nf3 Bg4
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O:a6': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '',
       'a6 is the slip in this O-O-first order — the pawn-grab that follows can’t be answered.',
@@ -643,6 +647,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Berlin Open — Nxd4?? loses a piece; the f2 desperado fizzles.
   // playLine: e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nxd4 Nxd4 Bc5 Nb3 Bxf2+ Rxf2 Nxf2 Qf3 O-O
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4:Nxd4': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '',
       'Nxd4? Grabbing the pawn just loses a piece — there’s no follow-up.',
@@ -668,6 +673,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Berlin Open — Nc4?? has no home; Qe2 gains time and the initiative.
   // playLine: e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nc4 Qe2 Nb6 Rd1 Qe7 Bg5 f6 Bh4 Bd7
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4_Nd6_Bxc6_dxc6_dxe5:Nc4': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Nc4 looks active, but the knight has no stable home — you gain time hitting it.',
@@ -690,6 +696,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Exchange — Nf6?? forgets e5; Nxe5 bags the pawn.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O Nf6 Nxe5 Bc5 Nc3 h6 Kh1 h5 Qe1 h4
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O:Nf6': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '',
       'Nf6 develops, but it forgets e5 — and in the Exchange that pawn is the whole fight.',
@@ -712,6 +719,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Exchange — Bd6?? overloads e5 with f6 played; dxe5 wins a pawn.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 Bd6 dxe5 fxe5 Nxe5 Qh4 Nf3 Qh5 Nbd2 Ne7
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4:Bd6': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '',
       'Bd6 develops, but with f6 already played the e5-point is overloaded. Break it.',
@@ -734,6 +742,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Exchange — Bc5?? hangs to the Qh5+ fork, winning the bishop.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 exd4 Nxd4 Bc5 Qh5+ g6 Qxc5 Qe7 Qc3 c5 Nf3 Bg4
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4:Bc5': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Bc5 develops to a natural square — but it hangs to a check. The queen forks.',
@@ -756,6 +765,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Exchange — Bd6?? allows Qh5+, knocking Black’s coordination apart.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 exd4 Nxd4 c5 Nb3 Bd6 Qh5+ g6 Qf3 Qe7 Bf4 Bxf4 Qxf4 b6
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4_c5_Nb3:Bd6': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Bd6 develops, but it allows a disruptive check that knocks Black’s coordination apart.',
@@ -955,6 +965,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Berlin Open — bxc6 (+0.85): structure, not material. playLine:
   // e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 bxc6 dxe5 Nf5 Bg5 Be7 Bxe7 Nxe7 Nc3 O-O
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4_Nd6_Bxc6:bxc6': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '',
       'A smaller edge than the crushes — no piece won, just structure. But after bxc6 Black’s pawns are doubled and limp, and you grab a free tempo.',
@@ -977,6 +988,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Closed — d5 premature (+0.76). playLine:
   // e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d3 d5 exd5 Na5 Ba2 b3 Bxb3 Nxb3 cxb3 Nxd5
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Be7_Re1_b5_Bb3_O-O_a4_b4_d3:d5': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'A quiet one — no tactic, no won piece. But d5 is premature: exd5 wins a pawn briefly, and even after Black regains it you keep the structural pull.',
@@ -999,6 +1011,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Exchange (a6 Bxc6) — bxc6 (+0.59), the gentlest edge. playLine:
   // e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 bxc6 d4 exd4 Qxd4 Qf6 Qa4 Bc5 Nc3 Ne7
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6:bxc6': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '',
       'The gentlest edge in the set — be honest: no material, and Black is fine in plenty of lines. But recapturing with bxc6 lets you take the centre and a slight, lasting pull.',
@@ -1021,6 +1034,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Ruy Exchange endgame — Bd6 (+0.54), a nudge. playLine:
   // e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 exd4 Nxd4 c5 Nb3 Qxd1 Rxd1 Bd6 Na5 b6 Nc4 Be7 Bf4 Bd8 Nc3 Be6
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4_c5_Nb3_Qxd1_Rxd1:Bd6': {
+    sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'The smallest edge here — honestly, it’s a nudge, not a knockout. But Bd6 lets your knight reroute to a dominant square with tempo.',
@@ -1377,46 +1391,55 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "Nd5! — fork the bishop, hit c7.", "", "Qb3 — double on b7 and f7.", "", "Qxb7 — grab the pawn, hit the rook.", "", "Nxc7+ — fork; win the rook.", ""],
   },
   'french-defence:e4_e6_d4_d5_e5_c5_c3_Nc6:f4': {
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     // e4 e6 d4 d5 e5 c5 c3 Nc6 f4 Qb6 Nf3 Nh6 dxc5 Bxc5 Bd3 f6 Qe2
     watch: ['', '', '', '', '', '', '', '', 'f4? Too ambitious — White grabs more space but neglects the queenside. The b2-pawn and the d4-base are both suddenly underdefended.', 'Qb6! The thematic French hit: the queen attacks d4 and rakes b2 down the b-file at once. White cannot comfortably defend both.', '', 'Nh6 heads for f5, the dream square, eyeing d4 and the dark holes f4 left behind.', '', 'Bxc5 develops with tempo. Black is simply comfortable to better — active pieces, a target on d4, and White\'s centre creaking.', '', 'f6 strikes the e5-spearhead and cracks the centre in Black\'s favour; the f4-push stands exposed as a weakness.', ''],
     learn: ['', '', '', '', '', '', '', '', '', 'Qb6 — hit d4 and b2.', '', 'Nh6 — reroute toward f5.', '', 'Bxc5 — develop, stay on top.', '', 'f6 — break the centre open.', ''],
   },
   'french-defence:e4_e6_d4_d5_Nc3_Nf6_Bg5_Be7:Nf3': {
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     // e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 Nf3 Nxe4 Bxe7 Qxe7 Nxe4 dxe4 Nd2 f5 Qh5+
     watch: ['', '', '', '', '', '', '', '', 'Nf3? Natural-looking, but it forgets that e4 is defended only once. Black strikes at once.', 'Nxe4! Winning a pawn out of the pin — if White recaptures the knight, the g5-bishop hangs, so the tactic just works.', '', 'Qxe7 recaptures the bishop. Black is a clean pawn up with a healthy position.', '', 'dxe4 — and Black keeps the extra pawn, a strong protected pawn on e4 that cramps White.', '', 'f5 props the e4-pawn and shores up the kingside; the pawn-up structure is rock-solid.', ''],
     learn: ['', '', '', '', '', '', '', '', '', 'Nxe4 — win the e4-pawn.', '', 'Qxe7 — take the bishop back.', '', 'dxe4 — keep the extra pawn.', '', 'f5 — defend the e4-pawn.', ''],
   },
   'french-defence:e4_e6_d4_d5_Nd2_Nf6_e5_Nfd7_Bd3_c5_c3_Nc6_Ne2_cxd4_cxd4_f6:Nf3': {
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     // e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 cxd4 cxd4 f6 Nf3 fxe5 Ng5 Bd6 Bc2 Nf6 dxe5 Bxe5 O-O
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nf3? White had to recapture with exf6. Instead the e5-spearhead is left hanging to the …f6 lever.', 'fxe5! Simply winning the e5-pawn. The pawn that cramped Black all opening is gone, and Black is a pawn up.', '', 'Bd6 develops toward h2 and holds the extra pawn; Black has the freer game.', '', '', '', 'Bxe5 — the dust settles with Black a clean pawn ahead and the bishop beautifully centralised.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'fxe5 — win the e5-pawn.', '', 'Bd6 — develop, hold the pawn.', '', '', '', 'Bxe5 — recapture, a pawn up.', ''],
   },
   'french-defence:e4_e6_d4_d5_Nc3_Nf6_Bg5_dxe4_Nxe4_Be7:Nf3': {
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     // e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Nf3 Nxe4 Bxe7 Qxe7 Bd3 Nf6 Qe2 Bd7 O-O-O
     watch: ['', '', '', '', '', '', '', '', '', '', 'Nf3?? A blunder. White had to settle the e4-knight first with Bxf6; now it simply drops.', 'Nxe4! Black wins a clean piece. Once the bishops come off, the knight on e4 is just extra material with no recapture.', '', 'Qxe7, and Black is up a full knight for nothing. The game is effectively decided.', '', '', '', 'Bd7 calmly develops; a piece to the good, Black simply completes development and converts.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nxe4 — win a whole piece.', '', 'Qxe7 — up a piece.', '', '', '', 'Bd7 — develop and convert.', ''],
   },
   'french-defence:e4_e6_d4_d5_e5_c5_c3_Nc6_Nf3_Qb6_Bd3_cxd4_cxd4_Bd7:Be3': {
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     // e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 Be3 Qxb2 Nbd2 Nb4 Nb3 Qc3+ Ke2 Nxd3 Qxd3
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Be3? This leaves the b2-pawn — and the rook behind it — fatally loose. White had to cover b2 first.', 'Qxb2! The queen grabs the pawn and now eyes the a1-rook. White is already losing material.', '', 'Nb4 jumps in with threats on d3 and c2 — Black piles on while a pawn up.', '', 'Qc3+ checks and tightens the net; White\'s position is collapsing.', '', 'Nxd3 wins the bishop as well — Black emerges with a decisive material edge.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qxb2 — grab the pawn, hit the rook.', '', 'Nb4 — pile on, hit d3.', '', 'Qc3+ — check and fork.', '', 'Nxd3 — win the bishop.', ''],
   },
   'french-defence:e4_e6_d4_d5_e5_c5_c3_Nc6_Nf3_Qb6_Bd3_cxd4_cxd4_Bd7_O-O_Nxd4:Be3': {
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     // e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Be3 Nxf3+ Qxf3 Qxb2 Nd2 Qxe5 Bf4 Qf6 Qe3
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Be3? This loosens b2 and walks into a fork — the d4-knight is poised to strike.', 'Nxf3+! A zwischenzug with check: Black wins the e5-pawn and then b2, cashing the gambit material in for keeps.', '', 'Qxb2 snatches the second pawn; Black is clearly up material with a safe king.', '', 'Qxe5 grabs the spearhead too — Black is rolling, several pawns to the good.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxf3+ — check, then collect.', '', 'Qxb2 — take the second pawn.', '', 'Qxe5 — and another pawn.', '', '', ''],
   },
   'french-defence:e4_e6_d4_d5_Nc3_Nf6_Bg5_Bb4:a3': {
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     // e4 e6 d4 d5 Nc3 Nf6 Bg5 Bb4 a3 Bxc3+ bxc3 dxe4 Ne2 Nbd7 c4 h6 Bh4
     watch: ['', '', '', '', '', '', '', '', 'a3? A slow sideline that simply invites the trade handing Black the structural prize.', 'Bxc3+! Take it — the trade wrecks White\'s queenside into doubled c-pawns, the permanent McCutcheon target.', '', 'dxe4 — with the c3-knight gone, the e4-pawn falls too. Black is a pawn up with the better structure.', '', 'Nbd7 develops smoothly; Black has the structure, the extra pawn, and no problems.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', 'Bxc3+ — wreck the c-pawns.', '', 'dxe4 — win the e4-pawn.', '', 'Nbd7 — develop, stay on top.', '', '', ''],
   },
   'french-defence:e4_e6_d4_d5_Nc3_dxe4:f3': {
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     // e4 e6 d4 d5 Nc3 dxe4 f3 Bb4 fxe4 Bxc3+ bxc3 Qh4+ Ke2 Qxe4+ Kf2
     watch: ['', '', '', '', '', '', 'f3? White tries to win the centre back, but this just tears open lines around White\'s own king.', 'Bb4! Pin the c3-knight before White can recapture in good order — the e1-king is about to be exposed.', '', 'Bxc3+ smashes the knight and the pawn shelter; the white king is stuck in the centre.', '', 'Qh4+ — the queen joins with check and forces the king to walk into the open.', '', 'Qxe4+ wins the pawn back with a raging attack on the exposed king. Black is winning.', ''],
     learn: ['', '', '', '', '', '', '', 'Bb4 — pin before fxe4.', '', 'Bxc3+ — open the king.', '', 'Qh4+ — check, drag the king out.', '', 'Qxe4+ — win the pawn, keep attacking.', ''],
   },
   'french-defence:e4_e6_d4_d5_Nc3_dxe4_Nxe4_Nd7_Nf3_Ngf6:Neg5': {
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     // e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Nf3 Ngf6 Neg5 h6 Nh3 c5 Bd3 cxd4 Nxd4 e5 Nb3
     watch: ['', '', '', '', '', '', '', '', '', '', 'Neg5? The knight lunges to g5 with nothing to do there. Black simply kicks it.', 'h6! Put the question to the knight — it has no good square. Nh3 dumps it on the rim, and Black takes the centre.', '', 'c5 strikes the centre while White\'s knight sulks on h3; Black seizes space and the better game.', '', '', '', 'e5 rolls the centre forward — Black has a clear initiative with the knight stranded on the rim.', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', 'h6 — kick the offside knight.', '', 'c5 — hit the centre, take over.', '', '', '', 'e5 — roll the centre.', ''],
@@ -1703,36 +1726,43 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
   'scandinavian-defence:e4_d5_exd5_Qxd5_Nc3_Qa5_d4_c6_Bd2_Qc7_Nf3_Nf6_Bc4_Bg4:Bxf7+': {
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     // e4 d5 exd5 Qxd5 Nc3 Qa5 d4 c6 Bd2 Qc7 Nf3 Nf6 Bc4 Bg4 Bxf7+ Kxf7 h3 Bxf3 Qxf3 Kg8 g4 e6 g5
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bxf7+? An unsound sacrifice. White gives up the bishop hoping to expose the king, but Black has everything covered — there is no real follow-up.', 'Kxf7 — just take it. Black is a clean piece up and the king is perfectly safe, ready to tuck back to g8.', '', 'Bxf3 trades off White\'s one active piece, snuffing the last spark of the bluff.', '', 'Kg8 tucks the king away — Black is simply a piece up with no danger at all.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Kxf7 — take the piece, king is safe.', '', 'Bxf3 — trade off the attacker.', '', 'Kg8 — king safe, up a piece.', '', '', ''],
   },
   'scandinavian-defence:e4_d5_exd5_Nf6_d4_Nxd5_Nf3_g6_Be2_Bg7_O-O_O-O_c4_Nb6:b3': {
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     // e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6 Be2 Bg7 O-O O-O c4 Nb6 b3 c5 Bb2 Nc6 a4 Bf5 a5 Nc8 b4
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'b3? Too slow. In this King\'s-Indian structure White cannot afford to dawdle — Black strikes the centre at once.', 'c5! Hitting d4 and opening the long diagonal for the g7-bishop. Black seizes the initiative against White\'s broad but loose centre.', '', 'Nc6 piles onto d4; White\'s centre is creaking and Black is already the more comfortable side.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'c5 — strike d4, open the diagonal.', '', 'Nc6 — pile onto d4.', '', '', '', '', ''],
   },
   'scandinavian-defence:e4_d5_exd5_Nf6_c4_e6_dxe6_Bxe6:b3': {
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     // e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 b3 Nc6 Nf3 Ne4 Nc3 Qf6 Bb2 O-O-O Qb1
     watch: ['', '', '', '', '', '', '', '', 'b3? Far too slow against a gambit. White must hurry to develop and consolidate the extra pawn; instead this hands Black free rein.', 'Nc6 develops with tempo, eyeing d4 and the centre. Black\'s lead in development is already worth far more than the pawn.', '', 'Ne4 leaps to a dominating central outpost; every black piece is firing while White flounders.', '', '', '', 'O-O-O throws the rook onto the open d-file with threats — the gambit has paid off in full.', ''],
     learn: ['', '', '', '', '', '', '', '', '', 'Nc6 — develop, seize the initiative.', '', 'Ne4 — dominate the centre.', '', '', '', 'O-O-O — rook to the d-file.', ''],
   },
   'scandinavian-defence:e4_d5_exd5_Nf6_c4_e6_dxe6_Bxe6_d4_Bb4+_Bd2_Qe7:Qa4+': {
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     // e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+ Bd2 Qe7 Qa4+ Bd7+ Be2 Bxa4 Nc3 O-O Kf1 Nc6 Nf3
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'Qa4+?? A blunder. The check looks natural, but Black has a devastating in-between reply.', 'Bd7+! A zwischenzug — Black blocks the check WITH check, and the bishop now also attacks the white queen on a4. White must answer the check first, and the queen is lost.', '', 'Bxa4 — and the queen falls. Black is up a full queen; the game is effectively over.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'Bd7+ — block with check, hit the queen.', '', 'Bxa4 — win the queen.', '', '', '', '', ''],
   },
   'scandinavian-defence:e4_d5_exd5_Nf6_c4_e6_dxe6_Bxe6_d4_Bb4+_Bd2_Qe7_Bxb4_Qxb4+_Qd2_Nc6:a3': {
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     // e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+ Bd2 Qe7 Bxb4 Qxb4+ Qd2 Nc6 a3 Qxd2+ Nxd2 Nxd4 O-O-O Ng4 Nh3 O-O-O b4
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'a3? A wasted move that walks into a tactic and drops the d4-pawn.', 'Qxd2+ — take the queen with check. After the recapture Black grabs the d4-pawn too, regaining the gambit material with the better game.', '', 'Nxd4 collects the central pawn; Black has the material back and an active, comfortable position.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qxd2+ — trade favourably with check.', '', 'Nxd4 — win back the pawn.', '', '', '', '', ''],
   },
   'scandinavian-defence:e4_d5_exd5_Nf6_d4_Bg4_Be2_Bxe2_Qxe2_Qxd5:c3': {
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     // e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 c3 Qxg2 Qf3 Qxf3 Nxf3 e6 a4 Nc6 Nbd2
     watch: ['', '', '', '', '', '', '', '', '', '', 'c3? This leaves the g2-pawn hanging on the long diagonal — a costly oversight.', 'Qxg2! The queen snatches g2 and rakes the h1-rook down the diagonal. Black wins material out of nowhere.', '', 'Qxf3 forces the trade on Black\'s terms; Black emerges a clean pawn up with the safer position.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', 'Qxg2 — grab the pawn, hit the rook.', '', 'Qxf3 — trade, stay a pawn up.', '', '', '', '', ''],
   },
   'scandinavian-defence:e4_d5_exd5_Nf6_d4_Bg4_Be2_Bxe2_Qxe2_Qxd5_Nf3_e6_O-O_Nc6:c4': {
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     // e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 e6 O-O Nc6 c4 Nxd4 Nxd4 Qxd4 Nc3 a6 Qf3 c6 b3
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'c4? The most common try here, but it abandons the d4-pawn\'s defender — and Black pounces.', 'Nxd4! The little tactic: the knight grabs d4 because c4 left it undefended. If White recaptures, the queen takes back and Black is a pawn up.', '', 'Qxd4 regains the piece, leaving Black a clean pawn ahead with an active centralised queen.', '', '', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxd4 — grab the loose pawn.', '', 'Qxd4 — recapture, a pawn up.', '', '', '', '', ''],
