@@ -128,3 +128,21 @@ PGN, add it to model-games.json with `studentSide:'black'`, a hand-authored over
 bump the manifest modelGames floor, and add the opening to modelGames-orientation PROTECTED.
 
 _(none outstanding yet — entries added as model-game-deferred openings are built below)_
+
+## 🟡 EXPLAIN-THE-ADVANTAGE standard (David 2026-05-25, LOCKED)
+A played line (plan, gem, lesson) that shows **no obvious material gain MUST fully
+EXPLAIN the advantage** in its closing narration — name the concrete trumps (the
+structure, the open file/diagonal, the plan that converts the edge). A bare "Black is
+equal / comfortable / sound / ready for X" is a DEFECT. Triggered by David's screenshot
+of `mp-dutchdefence-main` ("Kingside Storm") ending on a quiet …Bd7 with no explanation.
+- ✅ FIXED this session (24 plans, board-verified + gate-green): all 7 of my Black builds'
+  vague closers + Pirc (lion/czech), Italian (Evans), Catalan (slav).
+- 🔧 **STILL VAGUE — for the Sicilian-program session to fix** (left untouched to avoid
+  conflicting with in-flight work on middlegame-plans.json):
+  - `mp-siciliandragon-levenfish` — "Black is fully equal."
+  - `mp-siciliannajdorf-6g3` — "Black backs the centre, fully equal."
+  - `mp-siciliansveshnikov-antisvesh` — "free the bishop; Black is fully equal."
+  - `mp-sicilianalapin-main` — "Black is fully equal, the queen active."
+  - `mp-sicilianalapin-d5` — "comfortable against the weakness."
+  Each needs its final annotation rewritten to name the concrete edge, then re-run
+  `add-leadeye-to-plans.mjs` + the middlegamePlanner/narration gates.
