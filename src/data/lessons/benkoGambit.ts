@@ -1,4 +1,4 @@
-import type { LessonScript, LessonBeat, AnnotationHighlight } from '../../types';
+import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
 
 // Black-oriented main lesson for the Benko Gambit. Lead-the-eye §5a. DB-anchored.
 const KEY = 'rgba(255,214,0,0.88)';
