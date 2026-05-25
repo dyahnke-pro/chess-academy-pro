@@ -23559,81 +23559,64 @@
         "fen": "rnb1qrk1/ppp1p1bp/3p1np1/5p2/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 2 8",
         "moves": [
           "d5",
-          "Na6",
-          "Rb1",
-          "Bd7"
+          "g5",
+          "b4",
+          "g4",
+          "Nd2",
+          "f4"
         ],
         "annotations": [
-          "d5 grabs central space.",
-          "…Na6 reroutes toward c5 to support the breaks.",
-          "Rb1 prepares White's queenside play.",
-          "…Bd7 develops; Black is ready for …e5 and the kingside storm with the queen swinging to h5."
+          "d5 clamps the centre and grabs space — but with the centre fixed, Black's hands are free to storm the kingside.",
+          "…g5 — the storm rolls forward. The pawn heads for g4 to pry loose the f3-knight, White's key kingside defender.",
+          "b4 — White counters on the far wing; now it's a race between the two attacks.",
+          "…g4 evicts the f3-knight from the post guarding White's king.",
+          "Nd2 — the knight retreats and the kingside guard is gone.",
+          "…f4 — the hammer hits g3. After …fxg3 the f-file rips open onto White's king, the g7-bishop and f8-rook already trained down it."
+        ],
+        "learnCues": [
+          "d5 — clamp the centre",
+          "g5 — start the storm",
+          "b4 — White's counter-race",
+          "g4 — evict the knight",
+          "Nd2 — the guard retreats",
+          "f4 — crack open g3"
         ],
         "title": "Dutch Leningrad: The Kingside Storm",
         "arrows": [
           [],
-          [
-            {
-              "from": "a6",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           [],
           []
         ],
         "highlights": [
           [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
+            { "square": "d4", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "d5", "color": "rgba(255, 165, 0, 0.55)" }
           ],
           [
-            {
-              "square": "a6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
+            { "square": "g6", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "g5", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "g4", "color": "rgba(255, 235, 59, 0.5)" }
           ],
           [
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
+            { "square": "b2", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "b4", "color": "rgba(255, 165, 0, 0.55)" }
           ],
           [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "h5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
+            { "square": "g5", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "g4", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "f3", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "f3", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "d2", "color": "rgba(255, 165, 0, 0.55)" }
+          ],
+          [
+            { "square": "f5", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "f4", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "g3", "color": "rgba(255, 235, 59, 0.5)" }
           ]
         ]
       }
