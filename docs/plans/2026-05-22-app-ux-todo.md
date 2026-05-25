@@ -222,13 +222,16 @@ they'll actually meet. Instead:
   what they'll face — not the showcase order.
 - Keep the **"unlock all" escape** for a surprise line tonight.
 
-**Two-tier completion rewards (model game AND traps, at different moments):**
-- **Line ladder complete → unlock the MODEL GAME** — the celebratory "watch it
-  win at the top level" payoff. Reliable: one per variation.
-- **Line/opening MASTERED → unlock its TRAPS/WEAPONS** — the "earned a weapon"
-  power-up. Gate traps behind mastery because they're advanced/situational
-  (don't drill the Qe2 punish before you know the line). Only fires where a
-  REAL trap exists (Caro = the one Qe2 warning; empty > forced).
+**Completion rewards — CORRECTED (David 2026-05-25): model games are NOT a
+gated reward.**
+- **Model games are ALWAYS available** — never gated behind line/ladder
+  completion. They render unconditionally and only self-hide when there's no
+  real student-side win to show. (Supersedes the earlier "line ladder complete
+  → unlock the MODEL GAME" idea.) ✅ Already how the code works
+  (`ModelGamesSection` is ungated).
+- **ONLY the trap/weapon lines are gated** — gems + named traps stay locked
+  until the **Play** rung is complete (`areWeaponsUnlocked` = `play` done or
+  "unlock all"). Don't drill the punish before you know the line. ✅ Done.
 
 ### TODO 3d — "Hidden gem" 💎 reward when a line has no trap (David 2026-05-22)
 
