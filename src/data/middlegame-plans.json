@@ -1637,217 +1637,6 @@
     ]
   },
   {
-    "id": "mp-london-e4",
-    "openingId": "london-system",
-    "criticalPositionFen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 3",
-    "title": "e4 Central Push",
-    "overview": "This is the e4 Central Push plan in the London System. White prepares e3-e4 to challenge Black's d5 pawn and transform the quiet London into an active, open position. After dxe4 Nxe4, White gains a powerfully centralized knight while the Bf4 and Bd3 spring to life on their diagonals.",
-    "pawnBreaks": [
-      {
-        "move": "e3-e4",
-        "explanation": "The e4 break challenges Black's d5 pawn directly, the foundation of Black's defensive setup. After dxe4, Nxe4 centralizes the knight on a dominant square controlling d6, f6, c5, and g5. If Black maintains d5, the central tension favors White whose pieces are better positioned to exploit any opening of the position.",
-        "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 4"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nb1-d2-e4 (after dxe4)",
-        "explanation": "After dxe4, the Nd2 recaptures on e4 reaching a superb central outpost. The Ne4 controls d6, f6, c5, and g5 — sitting in the heart of the board where it dominates the position. Combined with the Bf4 on the diagonal, this creates a powerful piece setup."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bf1-d3 (after e4)",
-        "explanation": "The Bd3 activates after the e4 push, targeting the h7 pawn along the b1-h7 diagonal. Combined with a potential Qc2, this creates the classic b1-h7 battery that threatens Bxh7+ sacrifices — one of the most dangerous attacking motifs in positions with a centralized knight on e4."
-      }
-    ],
-    "strategicThemes": [
-      "The e3-e4 central break transforms the London from a quiet system into an active, aggressive position. By challenging d5, White opens the center and activates pieces that were previously blocked behind the e3 pawn.",
-      "After dxe4 Nxe4, all of White's pieces come alive simultaneously. The Ne4 controls key squares, the Bf4 has open diagonals, the Bd3 targets h7, and the rooks can use the open e-file. This coordinated piece activity gives White a strong initiative.",
-      "The Bd3 targeting h7 creates the classic b1-h7 diagonal battery. Combined with Ne4 and Qc2, White threatens the devastating Bxh7+ Greek Gift sacrifice — a tactical motif that wins many games in the London System.",
-      "The beauty of the London e4 plan is that it transforms a quiet, solid opening into a dynamic attacking position. Black often underestimates the danger because the London appears passive — but the e4 break unleashes all of White's latent energy."
-    ],
-    "endgameTransitions": [
-      "If the middlegame attack doesn't decide the game, White's actively placed pieces translate into an endgame advantage. The centralized knight, active bishops, and rooks on open files give White superior piece placement in simplified positions.",
-      "White's central pawn majority (d4+potentially e4) provides a structural advantage in the endgame. The central pawns can advance to create a passed pawn that ties down Black's pieces."
-    ],
-    "playableLines": [
-      {
-        "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 3",
-        "moves": [
-          "e3",
-          "e6",
-          "Bd3",
-          "c5",
-          "Nbd2",
-          "Nc6",
-          "e4",
-          "dxe4"
-        ],
-        "annotations": [
-          "This is the London System's e4 plan. White plays e3, the preparatory move that supports the future e4 advance. The e3 pawn also opens the f1-a6 diagonal for the bishop to develop to d3.",
-          "Black plays e6, reinforcing the d5 pawn and preparing to develop the dark-squared bishop. The d5+e6 structure is solid but slightly passive — it locks in the light-squared bishop behind the e6 pawn.",
-          "White develops the bishop to d3, the most aggressive square available. The Bd3 targets h7 along the b1-h7 diagonal, preparing for the e4 break that will unleash its attacking potential. Combined with a future Qc2, this creates the classic Greek Gift battery.",
-          "Black challenges the center with c5, striking at White's d4 pawn. This is Black's most active response — creating central tension and opening lines for counterplay before White can consolidate.",
-          "White develops the knight to d2, a key preparatory move. The Nd2 supports the e4 break directly — after e4 dxe4, the knight recaptures on e4 reaching a dominant central post. The knight also avoids blocking the Bd3's diagonal.",
-          "Black develops the knight to c6, adding pressure to the d4 and e5 squares. The Nc6 develops naturally and prepares to contest the center, but it may need to move again if White pushes d5.",
-          "White plays the key e4 break, challenging Black's d5 pawn directly and opening the position. This transforms the quiet London into a dynamic middlegame — the Bd3 comes alive, the center opens for the rooks, and White's pieces surge into action.",
-          "Black captures dxe4, and after Nxe4 White has a powerfully centralized knight on e4 controlling d6, f6, c5, and g5. The Bd3 now targets h7 unopposed, and White has achieved the ideal London System position."
-        ],
-        "arrows": [
-          [
-            {
-              "from": "e2",
-              "to": "e3"
-            }
-          ],
-          [
-            {
-              "from": "e7",
-              "to": "e6"
-            }
-          ],
-          [
-            {
-              "from": "f1",
-              "to": "d3"
-            }
-          ],
-          [
-            {
-              "from": "c7",
-              "to": "c5"
-            }
-          ],
-          [
-            {
-              "from": "b1",
-              "to": "d2"
-            }
-          ],
-          [
-            {
-              "from": "b8",
-              "to": "c6"
-            }
-          ],
-          [
-            {
-              "from": "e3",
-              "to": "e4"
-            }
-          ],
-          [
-            {
-              "from": "d5",
-              "to": "e4"
-            }
-          ]
-        ],
-        "title": "e4 Central Breakthrough"
-      }
-    ]
-  },
-  {
-    "id": "mp-london-c4",
-    "openingId": "london-system",
-    "criticalPositionFen": "rnbqkb1r/ppp1pppp/5n2/3p4/2PP1B2/5N2/PP2PPPP/RN1QKB1R b KQkq - 0 3",
-    "title": "c4 Queenside Play",
-    "overview": "This is the Queenside Play variation of the English Opening. White plays an early c4 to immediately challenge Black's central control and prepare queenside expansion. The main plan is to follow up with b4-b5 to create pawn weaknesses in Black's structure.",
-    "pawnBreaks": [
-      {
-        "move": "This is the Queenside Play in the English Opening. The move c2-c4 immediately challenges Black's control of d5 and prepares to gain space on the queenside. White's main plan is to support this structure with moves like Nc3, Qb3, and eventually b4-b5.",
-        "explanation": "By playing c4, White attacks the d5 square and prepares to grab space on the queenside. This setup often transposes into a favorable version of the London System where the bishop on f4 becomes very active against Black's queenside.",
-        "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R w KQkq - 0 3"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Queen",
-        "route": "White often plays Qd1-b3 to put immediate pressure on both b7 and d5. This move forces Black to defend carefully and prepares to bring the rooks to the c-file, increasing the pressure on Black's queenside.",
-        "explanation": "Placing the queen on b3 creates double pressure on b7 and d5. This is a key maneuver in this system that restricts Black's development and prepares for a queenside breakthrough with b4-b5."
-      }
-    ],
-    "strategicThemes": [
-      "White's main strategic idea in this variation is to expand on the queenside. With pawns already on c4 and d4, White prepares the b4-b5 push to create weaknesses in Black's pawn structure and open lines for the rooks.",
-      "White has established a strong central presence with pawns on c4 and d4. This gives White a space advantage and provides a solid foundation for operations on both the queenside and in the center.",
-      "This structure can easily transpose into a favorable London System setup for White. The bishop on f4 becomes a powerful piece, putting pressure on Black's queenside while White maintains strong central control with the c4-d4 pawn duo.",
-      "The bishop on f4 is excellently placed in this system. It controls the e5 square, eyes the b8-h2 diagonal, and makes it very difficult for Black to play ...e5 or comfortably develop the light-squared bishop."
-    ],
-    "endgameTransitions": [
-      "White's long-term plan is often a minority attack with b4-b5. This creates a weak pawn on c6 for Black and gives White clear targets to attack on the queenside.",
-      "Controlling the c-file is a major theme in this setup. White typically develops the queen to b3 or c2 and brings the rooks to c1 and c2, putting heavy pressure on Black's queenside development."
-    ],
-    "playableLines": [
-      {
-        "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/2PP1B2/5N2/PP2PPPP/RN1QKB1R b KQkq - 0 3",
-        "moves": [
-          "e6",
-          "Nc3",
-          "Be7",
-          "Qb3",
-          "c6",
-          "e3",
-          "Nbd7"
-        ],
-        "annotations": [
-          "Black maintains a solid pawn structure with pawns on d5 and e6. While solid, this structure can become passive if White successfully carries out the queenside minority attack.",
-          "White's dark-squared bishop on f4 is a key piece in this system. It exerts pressure along the h2-b8 diagonal and controls the important e5 square, making it harder for Black to play ...e5 comfortably.",
-          "Black's knight on f6 is a strong defensive piece, but White can often challenge it later with moves like h3 and g4, or by putting pressure on d5 to force the knight to move.",
-          "This setup focuses on queenside expansion. White's pawn structure with c4 and d4 combined with the bishop on f4 prepares a minority attack on the queenside, aiming to create a weak pawn on c6 or b7 for Black.",
-          "The knight on f3 is well-placed, supporting the d4 pawn and controlling the e5 square. It also prepares for potential kingside expansion or to jump into e5 if Black allows it.",
-          "Both sides have developed most of their minor pieces. White's next priority is connecting the rooks and deciding whether to push on the queenside or increase central pressure.",
-          "A key idea for White is to prepare the b4 push. This move gains even more space on the queenside and prepares the b4-b5 advance that is central to White's strategy in this opening."
-        ],
-        "arrows": [
-          [
-            {
-              "from": "e7",
-              "to": "e6"
-            }
-          ],
-          [
-            {
-              "from": "b1",
-              "to": "c3"
-            }
-          ],
-          [
-            {
-              "from": "f8",
-              "to": "e7"
-            }
-          ],
-          [
-            {
-              "from": "d1",
-              "to": "b3"
-            }
-          ],
-          [
-            {
-              "from": "c7",
-              "to": "c6"
-            }
-          ],
-          [
-            {
-              "from": "e2",
-              "to": "e3"
-            }
-          ],
-          [
-            {
-              "from": "b8",
-              "to": "d7"
-            }
-          ]
-        ],
-        "title": "c4 with Qb3 Pressure"
-      }
-    ]
-  },
-  {
     "id": "mp-ruylopez-f4",
     "openingId": "ruy-lopez",
     "criticalPositionFen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4PP2/1BN2N2/PPPP2PP/R1BQ1RK1 b - - 0 9",
@@ -19392,6 +19181,159 @@
           "cxd4 — White recaptures, keeping a broad centre on d4 and e4.",
           "…exd4 — Black takes again on d4.",
           "Qxd4 — the queen recaptures on d4, centralised, the open lines favouring the two bishops."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-londonsystem-main",
+    "openingId": "london-system",
+    "title": "London: the e5-Knight and Kingside Expansion",
+    "criticalPositionFen": "rnb1k2r/pp3ppp/3qpn2/3pN3/2pP4/P1N1P3/1PP2PPP/1R1QKB1R b Kkq - 1 9",
+    "overview": "Having neutralised the ...Qb6 poisoned-pawn raid, White's whole plan crystallises around the knight on e5. Anchor it with f4, finish development, and roll the kingside pawns — the e5-knight is the engine of the London attack.",
+    "pawnBreaks": [
+      {
+        "move": "f4-f5",
+        "explanation": "After f4 anchors the knight, the f5 break opens lines against Black's king.",
+        "fen": "rnb1k2r/pp3ppp/3qpn2/3pN3/2pP4/P1N1P3/1PP2PPP/1R1QKB1R b Kkq - 1 9"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-e5",
+        "explanation": "The king-knight lands on e5, the dominant central outpost eyeing f7 and the kingside."
+      }
+    ],
+    "strategicThemes": [
+      "Plant and anchor a knight on e5.",
+      "Support it with f4 and expand on the kingside.",
+      "Keep the harmonious London structure behind the advanced knight."
+    ],
+    "endgameTransitions": [
+      "The space edge and the strong knight keep a pull even when queens come off."
+    ],
+    "playableLines": [
+      {
+        "title": "London: the e5-Knight and Kingside Expansion",
+        "fen": "rnb1k2r/pp3ppp/3qpn2/3pN3/2pP4/P1N1P3/1PP2PPP/1R1QKB1R b Kkq - 1 9",
+        "moves": [
+          "O-O",
+          "Be2",
+          "Nc6",
+          "f4",
+          "a6",
+          "O-O"
+        ],
+        "annotations": [
+          "…O-O — Black tucks the king away.",
+          "Be2 — White completes development, eyeing the kingside.",
+          "…Nc6 — Black challenges the e5-knight with the c6-knight.",
+          "f4 — the key move: White anchors the knight on e5 for good.",
+          "…a6 — Black gains a little queenside room.",
+          "O-O — White castles; the e5-knight and f4-pawn point at the king."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-londonsystem-kid",
+    "openingId": "london-system",
+    "title": "London vs the Fianchetto: the Broad Centre",
+    "criticalPositionFen": "rnb2rk1/pp2ppbp/1q1p1np1/2p5/3P1B2/4PN1P/PPP1BPP1/RNQ2RK1 b - - 5 8",
+    "overview": "Against the King's Indian fianchetto, White builds a broad, granite centre and manoeuvres. Meet ...c5 with the c3/d4 duo, recapture toward the centre, and let the space advantage and the unbreakable structure do the work.",
+    "pawnBreaks": [
+      {
+        "move": "e3-e4 (later)",
+        "explanation": "Once the pieces are placed, a timely e4 expands the broad centre against the cramped fianchetto.",
+        "fen": "rnb2rk1/pp2ppbp/1q1p1np1/2p5/3P1B2/4PN1P/PPP1BPP1/RNQ2RK1 b - - 5 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2",
+        "explanation": "The queen-knight develops to d2, supporting e4 and the broad centre."
+      }
+    ],
+    "strategicThemes": [
+      "Build a broad d4-centre against the fianchetto.",
+      "Manoeuvre patiently behind the granite structure.",
+      "Use the space edge to outplay the cramped opponent."
+    ],
+    "endgameTransitions": [
+      "The space and structure carry into a pleasant endgame for White."
+    ],
+    "playableLines": [
+      {
+        "title": "London vs the Fianchetto: the Broad Centre",
+        "fen": "rnb2rk1/pp2ppbp/1q1p1np1/2p5/3P1B2/4PN1P/PPP1BPP1/RNQ2RK1 b - - 5 8",
+        "moves": [
+          "Nc6",
+          "c3",
+          "Be6",
+          "Nbd2",
+          "cxd4",
+          "exd4"
+        ],
+        "annotations": [
+          "…Nc6 — Black develops and eyes the d4-pawn.",
+          "c3 — White braces d4, the centre rock-solid.",
+          "…Be6 — Black develops the bishop to e6.",
+          "Nbd2 — the knight heads to d2, supporting the centre.",
+          "…cxd4 — Black releases the tension on d4.",
+          "exd4 — White recaptures toward the centre, a broad d4-pawn front."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-londonsystem-jobava",
+    "openingId": "london-system",
+    "title": "Jobava: the Kingside Lunge and the e5 Outpost",
+    "criticalPositionFen": "r1bq1rk1/ppp1bppp/n3pn2/1N1p4/3P1B2/4PN2/PPP2PPP/R2QKB1R w KQ - 3 7",
+    "overview": "The Jobava's whole appeal is a London structure carrying a genuine attack. Lunge with h4 to gain kingside space, reroute the knight to the e5-outpost, and lift a rook to the third rank — the quiet London turned aggressive.",
+    "pawnBreaks": [
+      {
+        "move": "h4-h5",
+        "explanation": "The h4-h5 lunge cracks open the kingside in front of Black's castled king.",
+        "fen": "r1bq1rk1/ppp1bppp/n3pn2/1N1p4/3P1B2/4PN2/PPP2PPP/R2QKB1R w KQ - 3 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Rh1-h3",
+        "explanation": "After h4, the rook lifts to h3 and swings along the third rank toward the kingside."
+      }
+    ],
+    "strategicThemes": [
+      "Use the early Nc3 for an aggressive, fast set-up.",
+      "Lunge with h4 to gain kingside space.",
+      "Plant a knight on e5 and lift a rook to attack."
+    ],
+    "endgameTransitions": [
+      "If the attack is parried, the e5-knight and space still favour White."
+    ],
+    "playableLines": [
+      {
+        "title": "Jobava: the Kingside Lunge and the e5 Outpost",
+        "fen": "r1bq1rk1/ppp1bppp/n3pn2/1N1p4/3P1B2/4PN2/PPP2PPP/R2QKB1R w KQ - 3 7",
+        "moves": [
+          "h4",
+          "c6",
+          "Nc3",
+          "Qb6",
+          "a3",
+          "c5"
+        ],
+        "annotations": [
+          "h4 — the signature Jobava lunge, grabbing kingside space.",
+          "…c6 — Black nudges the b5-knight back.",
+          "Nc3 — the knight retreats to c3, ready to support e4.",
+          "…Qb6 — Black eyes the b2-pawn and the queenside.",
+          "a3 — White calmly anchors and prepares to expand.",
+          "…c5 — Black strikes at the d4-centre."
         ]
       }
     ]

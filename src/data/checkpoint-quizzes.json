@@ -239,36 +239,30 @@
   ],
   "london-system": [
     {
-      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 3",
-      "correctMove": "c5",
-      "hint": "Challenge White's center immediately — the best reaction to the London.",
-      "concept": "Anti-London Counter"
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq d6 0 2",
+      "correctMove": "Bf4",
+      "hint": "Develop the bishop outside the pawn chain — the London signature.",
+      "concept": "The London move-order"
     },
     {
-      "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 4",
-      "correctMove": "Bd3",
-      "hint": "Offer to trade the light-squared bishops. This is a key London idea.",
-      "concept": "Bishop Trade"
+      "fen": "rnb1kb1r/pp2pppp/1q3n2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 1 5",
+      "correctMove": "Nc3",
+      "hint": "The b2-pawn is poisoned — just develop with tempo.",
+      "concept": "Meeting the ...Qb6 poisoned pawn"
     },
     {
-      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 0 3",
+      "fen": "rnb1k2r/pp3ppp/3qpn2/3pN3/2pP4/P1N1P3/1PP2PPP/1R1QKB1R b Kkq - 1 9",
       "type": "plan",
-      "question": "What is Black's best approach against the London System?",
+      "question": "What is White's plan with the knight on e5?",
       "choices": [
-        "Challenge the center with c5 and develop actively",
-        "Mirror White's setup with Bf5 and e6",
-        "Play g6 and Bg7 for a KID-style setup",
-        "Push e5 immediately"
+        "Anchor it with f4 and expand on the kingside",
+        "Retreat it at once and offer a draw",
+        "Push the a-pawn and forget the kingside",
+        "Trade the bishop pair immediately"
       ],
       "correctIndex": 0,
-      "hint": "The most principled response is to fight for the center.",
-      "concept": "Anti-London Strategy"
-    },
-    {
-      "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 3",
-      "correctMove": "Bd3",
-      "hint": "Develop the bishop to its best square eyeing h7.",
-      "concept": "London Bishop Development"
+      "hint": "The e5-knight is the engine of the London attack — keep it.",
+      "concept": "The e5-knight plan"
     }
   ],
   "english-opening": [

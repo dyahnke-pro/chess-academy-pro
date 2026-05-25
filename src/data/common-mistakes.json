@@ -136,22 +136,25 @@
   ],
   "london-system": [
     {
-      "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 3",
-      "wrongMove": "Nh5",
-      "correctMove": "c5",
-      "explanation": "Nh5 tries to win the bishop but after Bg5! the bishop is safe on g5 and the knight on h5 is offside. Play c5 instead to challenge the center — this is the main way to fight the London."
+      "fen": "rnb1kb1r/pp2pppp/1q3n2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 1 5",
+      "wrongMove": "b3",
+      "correctMove": "Nc3",
+      "explanation": "Defending b2 passively with b3 weakens the queenside and concedes the initiative. Nc3 develops with tempo — the pawn is taboo, since ...Qxb2 runs into Na4 trapping the queen.",
+      "shortNarration": "Nc3 — develop, the pawn is taboo"
     },
     {
-      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/5N2/PPP1PPPP/RN1QKB1R b KQkq - 0 3",
-      "wrongMove": "Bf5",
-      "correctMove": "c5",
-      "explanation": "Bf5 looks logical but after e3 e6, Black has a passive French-like structure. c5 challenges the center and is the most principled response."
+      "fen": "rnbqk2r/ppp2ppp/3bpn2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 2 5",
+      "wrongMove": "Bxd6",
+      "correctMove": "Bg3",
+      "explanation": "Trading the prized London bishop with Bxd6 hands Black comfortable equality. Bg3 preserves it, keeping the grip on the b8-h2 diagonal — the soul of the whole system.",
+      "shortNarration": "Bg3 — keep the London bishop"
     },
     {
-      "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 0 3",
-      "wrongMove": "Qb6",
-      "correctMove": "Bg4",
-      "explanation": "Qb6 attacks b2 but after Qc1 the queen is misplaced and loses time. Bg4 develops with tempo by pinning the knight."
+      "fen": "r1b1kb1r/pp2pppp/1qn5/3p3n/2pP1B2/2P1P3/PPQN1PPP/R3KBNR w KQkq - 2 8",
+      "wrongMove": "Be2",
+      "correctMove": "Bg5",
+      "explanation": "Ignoring the attack on the bishop with a move like Be2 lets ...Nxf4 trade off the prized London bishop for a knight. Bg5 keeps it active and out of harm's way.",
+      "shortNarration": "Bg5 — save the prized bishop"
     }
   ],
   "english-opening": [

@@ -57,6 +57,16 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /glek/i, label: 'Glek System' },
     { test: /rubinstein/i, label: 'Rubinstein' },
   ],
+  // London System — quiet, system-based White opening (Carlsen's workhorse).
+  // Main-line pill = the London vs ...d5 / ...Qb6 poisoned-pawn line (the
+  // showcase, exempt). Tabs are the two DB-anchored, distinct structures with
+  // student-winning master games: the fianchetto and the sharp Jobava. (The
+  // ...c5-Benoni and ...Bf5-mirror lines lack a ≥6-ply line in
+  // openings-lichess.json, so per G3 they are not taught as tabs.)
+  'london-system': [
+    { test: /king's indian|kings indian/i, label: 'vs KID' },
+    { test: /jobava/i, label: 'Jobava' },
+  ],
   // Scotch Game — hand-picked tabs, frequency-ordered (repertoire weights).
   // Main-line pill = the Classical 4…Bc5 Be3 Qf6 line (the repertoire pgn), so
   // the "Classical" variation is omitted as a tab (it'd duplicate the pill).
