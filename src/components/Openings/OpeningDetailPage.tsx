@@ -416,23 +416,15 @@ export function OpeningDetailPage(): JSX.Element {
   }, []);
 
   const handleStartVariationPlay = useCallback((index: number): void => {
-    // Play uses the SAME room as Play with Coach: declare the line as the
-    // intended opening and hand off to /coach/play. The user plays the
-    // line from move 1 against the coach (not an autoplay), and the coach's
-    // plan-tracker follows whether they stay on book.
-    const v = opening?.variations?.[index];
-    const name = v ? v.name : opening?.name ?? '';
-    const color = opening?.color ?? 'white';
-    const pgn = v ? v.pgn : opening?.pgn;
-    if (!name) return;
-    useCoachMemoryStore.getState().setIntendedOpening({
-      name,
-      color,
-      capturedFromSurface: 'openings-play',
-      pgn,
-    });
-    void navigate(`/coach/play?side=${color}`);
-  }, [opening, navigate]);
+    // Play LOCKS the coach to the exact variation being taught: mount the
+    // in-page OpeningPlayMode with this variation as the customLine so the
+    // opponent plays THIS line move-for-move through the opening phase
+    // (David 2026-05-25: "lock in the exact opening line/variation being
+    // taught"). The generic /coach/play room picks its own moves and wanders
+    // off the taught line — that was the bug.
+    setActiveVariationIndex(index);
+    setViewMode('variation-play');
+  }, []);
 
   const handleStartWarningLineAction = useCallback((index: number, action: 'learn' | 'practice' | 'play' | 'walkthrough'): void => {
     setActiveWarningLineIndex(index);
@@ -1309,22 +1301,20 @@ export function OpeningDetailPage(): JSX.Element {
           The per-line "unlock all" escape (below) frees the whole ladder. */}
       {(() => {
         const launchPlay = (): void => {
-          // Play has no in-page completion signal (main line hands off to
-          // /coach/play), so reaching Play counts as "played" — this is what
-          // unlocks the line's weapons. The unlock-all escape is the safety
-          // valve if a learner wants the weapons without playing.
+          // Reaching Play counts as "played" — this unlocks the line's weapons
+          // (there's no in-page completion signal). The unlock-all escape is
+          // the safety valve if a learner wants the weapons without playing.
           void markRungComplete(opening.id, ladderLine, 'play').then(() => loadOpening());
+          // Play LOCKS the coach to the EXACT line being taught via the in-page
+          // OpeningPlayMode — a variation runs as its customLine, the main line
+          // as opening.pgn. Don't hand off to the generic /coach/play room: it
+          // picks its own moves and wanders off the taught line (David
+          // 2026-05-25).
           if (isVariation) {
             handleStartVariationPlay(selectedTabIndex);
             return;
           }
-          useCoachMemoryStore.getState().setIntendedOpening({
-            name: opening.name,
-            color: opening.color,
-            capturedFromSurface: 'openings-play',
-            pgn: opening.pgn,
-          });
-          void navigate(`/coach/play?side=${opening.color}`);
+          setViewMode('play');
         };
         const rungs = [
           { rung: 'watch' as const, label: 'Watch', icon: <PlayCircle size={18} />, glow: 'opening-action-glow-watch', testid: 'walkthrough-btn',

@@ -1101,6 +1101,34 @@ playbook holds the rules you MUST follow, in particular:
   button; Play = coach LOCKED to this opening. Applies to the main line,
   every variation tab, trap weapons, "watch out for" warnings, AND
   middlegame plans (`PlayableLinePlayer` modes / `LessonPlayer`).
+- **🔒 WLPP Play LOCKS to the taught line — mount the IN-PAGE
+  `OpeningPlayMode`, NEVER hand off to the generic `/coach/play` room (locked,
+  David 2026-05-25 — verified fix).** The Play rung MUST keep the student on
+  the page: main line → `setViewMode('play')` (mounts `OpeningPlayMode
+  opening={opening}`, locked to `opening.pgn`); a variation tab →
+  `setViewMode('variation-play')` (mounts `OpeningPlayMode
+  customLine={variation}`, locked to THAT variation's pgn). `OpeningPlayMode`
+  is the lock: it plays the line's exact repertoire moves move-for-move
+  through the opening phase, then adaptive Stockfish in the middlegame. The
+  generic `/coach/play` route picks its OWN moves and wanders off the taught
+  line — `navigate('/coach/play')` from the WLPP Play rung (`launchPlay` /
+  `handleStartVariationPlay` in `OpeningDetailPage.tsx`) WAS the bug David
+  reported. Same lock already covers gem-play + named-trap-play (they pass
+  `customLine`). Do NOT reintroduce the `/coach/play` handoff for any
+  line/variation/trap Play that is supposed to teach a specific line.
+- **🔒 WLPP rung completion fires on the OPPONENT's final move too (locked,
+  David 2026-05-25 — verified fix).** In `PlayableLinePlayer`, `onComplete`
+  (which runs `markRungComplete` → unlocks the next rung) MUST fire whether
+  the STUDENT plays the last move OR the opponent's reply is the last,
+  auto-played move. Both completion paths route through ONE guarded
+  `finishLine()` (ref-backed so the parent's inline `onComplete` doesn't churn
+  the auto-play effect; the guard resets on retry/replay/skip). A line ending
+  on the opponent's move (e.g. a White line closing on `...a6`) used to reach
+  the "Line Mastered!" screen WITHOUT persisting the rung, so Practice never
+  unlocked. Never let only the student-move path call `onComplete` — the
+  opponent-auto-play completion branch must call it too. Covered by
+  `PlayableLinePlayer.test.tsx` ("fires onComplete when the line ends on the
+  opponent auto-played move" + the fire-exactly-once replay test).
 - **Learn-rung fallback is INTENDED, not a bug (David 2026-05-24: "learn
   fall back is good, that's what we want").** The Learn button tries
   `lessonToPlayableLine(curatedLesson)` first → the modern

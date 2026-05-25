@@ -90,6 +90,26 @@ export function PlayableLinePlayer({
   const [shakeBoard, setShakeBoard] = useState(false);
   const [memoryComplete, setMemoryComplete] = useState(false);
 
+  // onComplete MUST fire exactly once when the line finishes — whether the
+  // student plays the final move OR the opponent's reply is the last (auto-
+  // played) move. The student-move path used to be the only one that called
+  // it, so a line ending on the opponent's move (e.g. a White line closing on
+  // Black's ...a6) reached the "Line Mastered!" screen but never persisted the
+  // rung → Practice/Play never unlocked. Routed through a ref so the parent's
+  // inline onComplete doesn't churn the opponent auto-play effect.
+  const completedRef = useRef(false);
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => { onCompleteRef.current = onComplete; }, [onComplete]);
+  const finishLine = useCallback((): void => {
+    if (completedRef.current) return;
+    completedRef.current = true;
+    setMemoryComplete(true);
+    // The celebration sound + completion UI IS the feedback. No spoken
+    // acknowledgment ("Excellent!" etc. are banned) and Practice stays silent.
+    playCelebration();
+    onCompleteRef.current();
+  }, [playCelebration]);
+
   // Chess instance for memory phase move validation + position tracking
   const chessRef = useRef<Chess>(new Chess(line.fen));
   const [memoryFen, setMemoryFen] = useState(line.fen);
@@ -265,11 +285,11 @@ export function PlayableLinePlayer({
         playMoveSound(mv.san);
         const next = memoryMoveIndex + 1;
         setMemoryMoveIndex(next);
-        if (next >= line.moves.length) { setMemoryComplete(true); playCelebration(); }
+        if (next >= line.moves.length) finishLine();
       } catch { /* line desync — stop auto-advancing */ }
     }, guided ? 650 : 300);
     return () => { cancelled = true; clearTimeout(t); };
-  }, [guided, phase, memoryMoveIndex, memoryComplete, line.moves, showWrongFlash, showCorrectFlash, studentChar]);
+  }, [guided, phase, memoryMoveIndex, memoryComplete, line.moves, showWrongFlash, showCorrectFlash, studentChar, finishLine]);
 
   const togglePlayPause = useCallback((): void => {
     setIsPlaying((prev) => !prev);
@@ -289,6 +309,7 @@ export function PlayableLinePlayer({
     setMemoryMoveIndex(0);
     setSelectedSquare(null);
     setLegalMoves([]);
+    completedRef.current = false;
   }, [line.fen]);
 
   // ─── Memory Phase: Move handling ─────────────────────────────────────────
@@ -349,12 +370,7 @@ export function PlayableLinePlayer({
           if (nextIndex >= expectedMoves.length) {
             // All moves completed
             setMemoryMoveIndex(nextIndex);
-            setMemoryComplete(true);
-            // The celebration sound + completion UI IS the feedback. No spoken
-            // acknowledgment ("Excellent!" etc. are banned) and Practice stays
-            // silent — the wire must not fire on completion in any mode.
-            playCelebration();
-            onComplete();
+            finishLine();
             return;
           }
 
@@ -396,7 +412,7 @@ export function PlayableLinePlayer({
         }, 1200);
       }
     },
-    [phase, memoryMoveIndex, expectedMoves, showWrongFlash, showCorrectFlash, playMoveSound, playCelebration, playEncouragement, clearSelection, onComplete, mode, discussion, line.title],
+    [phase, memoryMoveIndex, expectedMoves, showWrongFlash, showCorrectFlash, playMoveSound, playEncouragement, clearSelection, finishLine, mode, discussion, line.title],
   );
 
   const handlePieceDrop = useCallback(
@@ -509,6 +525,7 @@ export function PlayableLinePlayer({
     setShowWrongFlash(false);
     setShakeBoard(false);
     setMemoryComplete(false);
+    completedRef.current = false;
     clearSelection();
     voiceService.stop();
   }, [line.fen, clearSelection]);
@@ -519,6 +536,7 @@ export function PlayableLinePlayer({
     setDemoMoveIndex(-1);
     setIsPlaying(true);
     setMemoryComplete(false);
+    completedRef.current = false;
   }, []);
 
   const memoryProgress = expectedMoves.length > 0
