@@ -236,4 +236,44 @@ describe('PlayableLinePlayer', () => {
     const board = screen.getByTestId('mock-chessboard');
     expect(board.getAttribute('data-draggable')).toBe('false');
   });
+
+  // Regression (WLPP unlock): a White line that closes on Black's reply ends
+  // on the opponent's auto-played move. onComplete used to fire ONLY from the
+  // student-move path, so the rung never persisted and Practice stayed locked.
+  // finishLine() now fires onComplete from the opponent auto-play path too.
+  it('fires onComplete when the line ends on the opponent auto-played move', async () => {
+    vi.useRealTimers();
+    const onComplete = vi.fn();
+    const line: PlayableMiddlegameLine = {
+      fen: TEST_LINE.fen,
+      moves: ['d4', 'exd4'], // student plays d4; ...exd4 auto-plays and ends the line
+      annotations: ['', ''],
+      arrows: [[{ from: 'd3', to: 'd4' }], [{ from: 'e5', to: 'd4' }]],
+      title: 'Opponent closes the line',
+    };
+    renderPlayer({ line, mode: 'learn', onComplete });
+    // Learn starts in the memory phase — the student plays their move.
+    await userEvent.click(screen.getByTestId('drop-d3-d4'));
+    await waitFor(() => expect(onComplete).toHaveBeenCalledTimes(1), { timeout: 3000 });
+    expect(screen.getByTestId('line-player-complete')).toBeInTheDocument();
+  });
+
+  it('fires onComplete exactly once even when the line is replayed', async () => {
+    vi.useRealTimers();
+    const onComplete = vi.fn();
+    const line: PlayableMiddlegameLine = {
+      fen: TEST_LINE.fen,
+      moves: ['d4', 'exd4'],
+      annotations: ['', ''],
+      arrows: [[{ from: 'd3', to: 'd4' }], [{ from: 'e5', to: 'd4' }]],
+      title: 'Opponent closes the line',
+    };
+    renderPlayer({ line, mode: 'learn', onComplete });
+    await userEvent.click(screen.getByTestId('drop-d3-d4'));
+    await waitFor(() => expect(onComplete).toHaveBeenCalledTimes(1), { timeout: 3000 });
+    // Replaying resets the guard so a fresh completion can fire again.
+    await userEvent.click(screen.getByTestId('line-retry'));
+    await userEvent.click(screen.getByTestId('drop-d3-d4'));
+    await waitFor(() => expect(onComplete).toHaveBeenCalledTimes(2), { timeout: 3000 });
+  });
 });
