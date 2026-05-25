@@ -38,6 +38,8 @@ import { SICILIAN_DRAGON_LESSON } from './sicilianDragon';
 import { SICILIAN_DRAGON_VARIATION_LESSONS } from './sicilianDragonVariations';
 import { SICILIAN_NAJDORF_LESSON } from './sicilianNajdorf';
 import { SICILIAN_NAJDORF_VARIATION_LESSONS } from './sicilianNajdorfVariations';
+import { SICILIAN_SVESHNIKOV_LESSON } from './sicilianSveshnikov';
+import { SICILIAN_SVESHNIKOV_VARIATION_LESSONS } from './sicilianSveshnikovVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -67,6 +69,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: KINGS_GAMBIT_LESSON, variations: KINGS_GAMBIT_VARIATION_LESSONS },
   { main: SICILIAN_DRAGON_LESSON, variations: SICILIAN_DRAGON_VARIATION_LESSONS },
   { main: SICILIAN_NAJDORF_LESSON, variations: SICILIAN_NAJDORF_VARIATION_LESSONS },
+  { main: SICILIAN_SVESHNIKOV_LESSON, variations: SICILIAN_SVESHNIKOV_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

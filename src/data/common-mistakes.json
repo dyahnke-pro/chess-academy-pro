@@ -760,13 +760,15 @@
       "fen": "r1bqkb1r/pp1p1ppp/2n2n2/1N2p3/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 6",
       "wrongMove": "a6",
       "correctMove": "d6",
-      "explanation": "6…a6? loses a pawn — after 7.Nd6+ Bxd6 8.Qxd6 Black has lost the d-pawn structure. 6…d6 defends the e5-pawn while keeping the knight kicked."
+      "explanation": "Playing a6 too early walks into Nd6+ — after Bxd6 Qxd6 White grabs the bishop pair and wrecks Black's structure. d6 first defends the e5-pawn while keeping the knight kicked.",
+      "shortNarration": "d6 first — a6 allows Nd6+."
     },
     {
       "fen": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 6",
       "wrongMove": "d5",
       "correctMove": "d6",
-      "explanation": "After 6.Nf3 (avoiding the mainline 6.Ndb5), …d5? overextends and loses the e-pawn structure. 6…d6 is solid and similar in spirit to the Najdorf."
+      "explanation": "After Nf3 (avoiding the mainline Ndb5), d5 overextends and loses the e-pawn structure. d6 is solid and similar in spirit to the Najdorf.",
+      "shortNarration": "d6 — solid; d5 overextends."
     }
   ],
   "semi-slav": [

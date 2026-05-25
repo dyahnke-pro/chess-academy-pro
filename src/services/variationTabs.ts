@@ -82,6 +82,16 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /ng4/i, label: 'Ng4' },
     { test: /anti-najdorf|6\.a4/i, label: '6.a4' },
   ],
+  // Sicilian Sveshnikov — Black-oriented. Main-line pill = the 9.Nd5 (c3)
+  // main line. Only the structurally DISTINCT branches get tabs (playbook
+  // §0.5c): 11.c4 folds into Chelyabinsk, Novosibirsk/…Rb8 fold into the main
+  // line + its plans (all share the same 20-ply prefix — no near-dup tabs).
+  'sicilian-sveshnikov': [
+    { test: /9\.bxf6|early exchange/i, label: '9.Bxf6' },
+    { test: /chelyabinsk/i, label: 'Chelyabinsk c4' },
+    { test: /anti-sveshnikov|6\.nf3/i, label: 'Anti-Svesh 6.Nf3' },
+    { test: /kalashnikov/i, label: 'Kalashnikov' },
+  ],
   // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
   // (the explorer freq query was unavailable when this was built; ordering is
   // flagged for prod verification). The Giuoco Piano main line is the "Main
