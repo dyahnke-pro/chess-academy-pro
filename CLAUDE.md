@@ -1233,12 +1233,19 @@ playbook holds the rules you MUST follow, in particular:
      `scripts/audit-punish-gems-loop.mjs` 3-PASS CONTRACT (MET only on 3
      CONSECUTIVE error-free tiers, each digging deeper) runs after every deploy
      touching the surface.
-- **A model game PER VARIATION, each showing the STUDENT'S side WINNING** —
-  never ship a game where the opening loses (the Pirc's Kasparov–Topalov is a
-  White win against the Pirc = wrong; scrapped). Source REAL games (search the
-  web to identify; get the full PGN from a fetchable source or David — major
-  chess sites 403 the sandbox); never fabricate a PGN. `ModelGamesSection`
-  drops any game where the student's side lost. Reference find: Fischer 0–1
+- **A model game PER VARIATION, each showing the STUDENT'S side WINNING — a
+  WIN, never a DRAW or a loss (David 2026-05-25: "wins only. replace the
+  draws!").** A draw is NOT a model game — it doesn't showcase the win. Never
+  ship a game where the opening loses OR draws (the Pirc's Kasparov–Topalov is a
+  White win against the Pirc = wrong; scrapped. Italian + King's Gambit shipped
+  draw + boilerplate auto-imports = wrong; replaced with real student-side wins
+  2026-05-25). Source REAL games (the explorer's `topGames` filtered to
+  `winner === student colour`, or the local pro-game cache; never fabricate a
+  PGN), each with a HAND-AUTHORED overview (boilerplate "Master game from the
+  Lichess masters database…" is filtered out by `isNarratedModelGame`, so a
+  templated game never surfaces — don't bulk-import and stamp `studentSide`).
+  `ModelGamesSection` drops any student-side loss; the
+  `modelGames-orientation` gate now also rejects studentSide DRAWS. Reference find: Fischer 0–1
   Korchnoi, Curaçao 1962 (Pirc Austrian Attack). No game for a variation =
   the section self-hides (empty > losing > fabricated).
 The playbook + the gate roster (`middlegamePlanner` / `lessonIntegrity` /
