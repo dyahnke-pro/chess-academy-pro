@@ -67,6 +67,26 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /evans/i, label: 'Evans Gambit' },
     { test: /moller/i, label: 'Møller' },
   ],
+  // French Defence — all 10 validated variations (David 2026-05-25: "add all
+  // validated variation"). Frequency-ordered from the amateur explorer
+  // (1600-2000): White's 3rd-move choices Exchange 32% / Advance 30% /
+  // Tarrasch 10% lead; then the 3.Nc3 family by its fork share (Rubinstein 27%
+  // / Winawer 21%); then the 4.Bg5 lines (Classical / Burn / McCutcheon); then
+  // the sub-line weapons (Milner-Barry under Advance, Fort Knox under Nd2). The
+  // repertoire main pgn is the Steinitz (3.Nc3 Nf6 4.e5) = the "Main line" pill.
+  // Specific regexes so "Advance" doesn't swallow "Advance: Milner-Barry".
+  'french-defence': [
+    { test: /^exchange/i, label: 'Exchange' },
+    { test: /^advance variation$/i, label: 'Advance' },
+    { test: /tarrasch/i, label: 'Tarrasch' },
+    { test: /rubinstein/i, label: 'Rubinstein' },
+    { test: /winawer/i, label: 'Winawer' },
+    { test: /classical/i, label: 'Classical' },
+    { test: /burn/i, label: 'Burn' },
+    { test: /mccutcheon/i, label: 'McCutcheon' },
+    { test: /milner-barry/i, label: 'Milner-Barry' },
+    { test: /fort knox/i, label: 'Fort Knox' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present
