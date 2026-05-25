@@ -94,26 +94,6 @@
       "shortNarration": "a6 — question the bishop, stay flexible"
     }
   ],
-  "qgd": [
-    {
-      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
-      "wrongMove": "dxc4",
-      "correctMove": "e6",
-      "explanation": "Taking on c4 too early (QGA) lets White develop freely with e3+Bxc4. In the QGD, e6 maintains the central tension and keeps a solid pawn structure."
-    },
-    {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
-      "wrongMove": "cxd5",
-      "correctMove": "Bg5",
-      "explanation": "Exchanging on d5 too early relieves tension and makes Black's position easier. Bg5 maintains pressure, pins the knight, and keeps Black guessing about when you'll exchange."
-    },
-    {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 0 4",
-      "wrongMove": "Bb4",
-      "correctMove": "Be7",
-      "explanation": "Bb4 pins the knight but after Qa4+ Nc6 e3, the bishop is awkwardly placed. Be7 is the classical move, developing solidly and preparing to castle."
-    }
-  ],
   "kings-indian-defence": [
     {
       "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
