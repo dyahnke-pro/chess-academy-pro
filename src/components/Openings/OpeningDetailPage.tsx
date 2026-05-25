@@ -28,6 +28,7 @@ import { getViennaTabPlanIds } from '../../services/viennaMasterclassTabs';
 import { getItalianTabPlanIds } from '../../services/italianMasterclassTabs';
 import { getScotchTabPlanIds } from '../../services/scotchMasterclassTabs';
 import { getQueensGambitTabPlanIds } from '../../services/queensGambitMasterclassTabs';
+import { getQgdTabPlanIds } from '../../services/qgdMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
@@ -1042,6 +1043,7 @@ export function OpeningDetailPage(): JSX.Element {
     getItalianTabPlanIds(opening.id, tabKey) ??
     getScotchTabPlanIds(opening.id, tabKey) ??
     getQueensGambitTabPlanIds(opening.id, tabKey) ??
+    getQgdTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).

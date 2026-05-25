@@ -71,5 +71,14 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "qgd": {
+    "variations": 8,
+    "middlegamePlans": 0,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

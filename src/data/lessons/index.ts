@@ -13,6 +13,8 @@ import { SCOTCH_GAME_LESSON } from './scotchGame';
 import { SCOTCH_GAME_VARIATION_LESSONS } from './scotchGameVariations';
 import { QUEENS_GAMBIT_LESSON } from './queensGambit';
 import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
+import { QGD_LESSON } from './qgd';
+import { QGD_VARIATION_LESSONS } from './qgdVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -37,6 +39,7 @@ const LESSONS: Record<string, LessonScript> = {
   [ITALIAN_GAME_LESSON.openingId]: ITALIAN_GAME_LESSON,
   [SCOTCH_GAME_LESSON.openingId]: SCOTCH_GAME_LESSON,
   [QUEENS_GAMBIT_LESSON.openingId]: QUEENS_GAMBIT_LESSON,
+  [QGD_LESSON.openingId]: QGD_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -47,6 +50,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ITALIAN_GAME_VARIATION_LESSONS,
   ...SCOTCH_GAME_VARIATION_LESSONS,
   ...QUEENS_GAMBIT_VARIATION_LESSONS,
+  ...QGD_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
