@@ -62,5 +62,14 @@
     "weapons": 1,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "kings-gambit": {
+    "variations": 8,
+    "middlegamePlans": 2,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

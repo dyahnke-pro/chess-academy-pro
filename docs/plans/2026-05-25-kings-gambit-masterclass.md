@@ -37,24 +37,35 @@ arise in the 3...g5 complex), classified by who plays the punishing move.
 > Order above is from known KG amateur frequency; refine if the proxy answers.
 
 ## Build steps (Vienna template §0.7) — status
-- [x] STEP 0 — scaffold (`scaffold-opening.mjs kings-gambit "King's Gambit" white`) + DB-anchor verify
-- [ ] STEP 1a — main lesson `src/data/lessons/kingsGambit.ts` (≥20-ply deepest beat)
-- [ ] STEP 1b — variation lessons `kingsGambitVariations.ts` (one per tab, each ≥20 plies)
-- [ ] STEP 1c — named-trap lessons `kingsGambitTrapLessons.ts` (Muzio/Allgaier/Kieseritzky)
-- [ ] STEP 2 — register in `lessons/registry.ts`
-- [ ] STEP 3 — `variationTabs.ts` CURATED['kings-gambit']
-- [ ] STEP 4 — `kingsGambitMasterclassTabs.ts` + wire into `OpeningDetailPage`
-- [ ] STEP 5 — middlegame plans (one per tab) + `add-leadeye-to-plans.mjs`
-- [ ] STEP 6 — punish-gems: mine (CI if proxy blocked) + author `punishGemNarration.ts`
-- [ ] STEP 7 — model games (REAL PGNs, White winning) + PROTECTED list
-- [ ] STEP 8 — checkpoint quizzes + common mistakes
-- [ ] STEP 9 — manifest entry `opening-manifests.json`
-- [ ] GATES — ship-check green (lessonIntegrity, narrationAccuracy, lessonDepth,
-      wlppNarration, openingManifests, openingWiring, modelGames-orientation,
-      punishGems, middlegamePlanner, OpeningDetailPage.wiring)
+- [x] STEP 0 — scaffold + DB-anchor verify (all 8 variations anchor ≥6 plies)
+- [x] STEP 1a — main lesson `kingsGambit.ts` (16 beats, 24-ply deepest, gates clean)
+- [x] STEP 1b — variation lessons `kingsGambitVariations.ts` (8 lessons; 6 sound
+      lines ≥20p, Muzio+Allgaier `kind:'roadmap'` — sanctioned opt-out for the
+      unsound romantic sacs, narrated honestly about practical-vs-objective)
+- [ ] STEP 1c — named-trap lessons `kingsGambitTrapLessons.ts` (Muzio/Allgaier/Kieseritzky as weapons) — TODO
+- [x] STEP 2 — registered in `lessons/registry.ts` + `lessons/index.ts`
+- [x] STEP 3 — `variationTabs.ts` CURATED['kings-gambit'] (8 tabs, freq order)
+- [x] STEP 4 — `kingsGambitMasterclassTabs.ts` wired into `OpeningDetailPage`
+- [~] STEP 5 — middlegame plans: 2 done (open-f-file Classical, central-bind Main)
+      w/ lead-the-eye; more per-tab plans TODO
+- [ ] STEP 6 — punish-gems: mine (explorer proxy IS reachable here) + `punishGemNarration.ts` — TODO
+- [ ] STEP 7 — model games (REAL PGNs, White winning) + PROTECTED list — TODO
+- [ ] STEP 8 — checkpoint quizzes + common mistakes — TODO
+- [x] STEP 9 — manifest entry (floors: variations 8, plans 2, keyIdeas 4; rest 0)
+- [~] GATES — content gates GREEN (lessonIntegrity, narrationAccuracy, narrationGrounding,
+      lessonDepth, lessonTabIntegrity, wlppNarration, openingManifests, openingWiring,
+      modelGames-orientation, punishGems, middlegamePlanner, OpeningDetailPage.wiring);
+      typecheck + lint clean
 - [ ] AUDITS — `AUDIT_OPENING=kings-gambit` punish-gems-loop (3-pass), leadeye,
-      named-traps, opening-walkthrough
+      named-traps, opening-walkthrough — TODO
 - [ ] DONE — merged to main + post-deploy audit green (playbook §0.5 DoD)
+
+## Checkpoint 1 (2026-05-25): lessons + tabs + 2 plans, all content gates green.
+Remaining for full Vienna parity: punish-gems (mine via reachable proxy/CI +
+hand-narrate), named-trap weapon lessons, model games per variation (real PGNs,
+White winning — Anderssen Immortal 1851 / Spassky–Bronstein 1960 / Morphy),
+checkpoint quizzes, common mistakes, more per-tab plans. Ratchet manifest floors
+up as each lands.
 
 ## Decisions log
 - 2026-05-25: Picked King's Gambit (rationale above). Tabs = 5 + Main pill;
