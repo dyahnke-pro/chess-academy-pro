@@ -19681,5 +19681,697 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-qga-main",
+    "openingId": "qga",
+    "title": "Classical QGA: Trade Down to Active Equality",
+    "criticalPositionFen": "r3kb1r/1b1n1ppp/pq3n2/1ppp4/8/1BN1PN2/PP2QPPP/R1BR2K1 w kq - 0 12",
+    "overview": "After White's d5 break, Black trades down the centre; the b7-bishop dominates the long diagonal and Black reaches a fully equal, active middlegame.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The b7-bishop rules the long diagonal.",
+      "Trade the centre, keep the pieces active.",
+      "Equalise comfortably as Black."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Classical QGA: Trade Down to Active Equality",
+        "fen": "r3kb1r/1b1n1ppp/pq3n2/1ppp4/8/1BN1PN2/PP2QPPP/R1BR2K1 w kq - 0 12",
+        "moves": [
+          "Nxd5",
+          "Nxd5",
+          "Bxd5",
+          "Bxd5",
+          "Rxd5",
+          "Be7"
+        ],
+        "annotations": [
+          "Nxd5 — White trades on d5 to open the centre.",
+          "…Nxd5 — Black recaptures, centralising the knight.",
+          "Bxd5 — White takes again…",
+          "…Bxd5 — the b7-bishop captures, dominating the long diagonal.",
+          "Rxd5 — White's rook grabs the pawn back.",
+          "…Be7 — Black completes development; fully equal with active pieces."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-qga-smyslov",
+    "openingId": "qga",
+    "title": "Smyslov: Fianchetto and Equalise",
+    "criticalPositionFen": "r1bqk2r/4bppp/p1n1pn2/1p6/3P4/1BN2N2/PP2QPPP/R1BR2K1 b kq - 2 11",
+    "overview": "The Smyslov move-order lets Black complete a smooth setup: castle, fianchetto the bishop to b7 on the long diagonal, and trade off into a comfortable, active equality.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Fianchetto to b7 — the QGA's good bishop.",
+      "Smooth, flexible development.",
+      "Trade the dark bishops; equalise."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Smyslov: Fianchetto and Equalise",
+        "fen": "r1bqk2r/4bppp/p1n1pn2/1p6/3P4/1BN2N2/PP2QPPP/R1BR2K1 b kq - 2 11",
+        "moves": [
+          "O-O",
+          "Bg5",
+          "Bb7",
+          "Bxf6",
+          "Bxf6"
+        ],
+        "annotations": [
+          "…O-O — Black castles, fully developed.",
+          "Bg5 — White pins the f6-knight.",
+          "…Bb7 — the bishop fianchettoes to the long diagonal, eyeing e4.",
+          "Bxf6 — White trades off the dark-squared bishops…",
+          "…Bxf6 — Black recaptures; the b7-bishop and easy development give full equality."
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-qga-sadler",
+    "openingId": "qga",
+    "title": "Sadler: The Outpost Knight Holds",
+    "criticalPositionFen": "r2qkb1r/pppn1ppp/4p3/8/2BPn1PN/4P2P/PP3P2/R1BQK2R w KQkq - 0 11",
+    "overview": "After the …Bg4 trade, Black is left with a strong knight on e4 and no bad bishop. Quiet development gives a comfortable, equal game.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The e4-knight is a fine outpost.",
+      "No bad bishop — the Sadler's whole point.",
+      "Calm development equalises."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Sadler: The Outpost Knight Holds",
+        "fen": "r2qkb1r/pppn1ppp/4p3/8/2BPn1PN/4P2P/PP3P2/R1BQK2R w KQkq - 0 11",
+        "moves": [
+          "Nf3",
+          "Bd6",
+          "O-O",
+          "O-O"
+        ],
+        "annotations": [
+          "Nf3 — White brings the knight back to a normal square.",
+          "…Bd6 — Black develops the bishop actively toward h2.",
+          "O-O — White castles.",
+          "…O-O — Black castles; the e4-knight is a strong central outpost and the game is equal."
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "d6",
+              "to": "h2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-qga-central",
+    "openingId": "qga",
+    "title": "Central: Win the Centre Pawn",
+    "criticalPositionFen": "r2qk1nr/b1p2ppp/p1p1b3/P7/1P1pP3/5N2/5PPP/RNBQ1RK1 w kq - 1 12",
+    "overview": "Having met 3.e4 with …e5, Black has active pieces and a target on e4. Accurate play wins the e4-pawn and equalises into a balanced, lively game.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The …e5 strike dissolved White's centre.",
+      "Target and win the e4-pawn.",
+      "Active pieces, balanced game."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Central: Win the Centre Pawn",
+        "fen": "r2qk1nr/b1p2ppp/p1p1b3/P7/1P1pP3/5N2/5PPP/RNBQ1RK1 w kq - 1 12",
+        "moves": [
+          "Bb2",
+          "Nf6",
+          "Bxd4",
+          "Nxe4",
+          "Bxa7",
+          "Qxd1"
+        ],
+        "annotations": [
+          "Bb2 — White develops the bishop, eyeing the d4-pawn.",
+          "…Nf6 — Black develops, hitting the e4-pawn.",
+          "Bxd4 — White regains the pawn on d4…",
+          "…Nxe4! — Black grabs the e4-pawn, active and equal.",
+          "Bxa7 — White snatches a pawn back…",
+          "…Qxd1 — trading into a level endgame with active black pieces."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "b2",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-qga-alekhine",
+    "openingId": "qga",
+    "title": "Alekhine: Fianchetto, Better Structure",
+    "criticalPositionFen": "rn2kb1r/1bpqpp1p/p5p1/1p2P3/P1pP4/B1P2NP1/5PBP/R2QK2R w KQkq - 0 12",
+    "overview": "Black's …Nxc3 has fractured White's queenside into a doubled c3-pawn. Black fianchettoes, castles, and plays on the superior structure with active pieces.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "White's doubled c3-pawn is a lasting weakness.",
+      "Fianchetto and castle.",
+      "Press the better structure."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Alekhine: Fianchetto, Better Structure",
+        "fen": "rn2kb1r/1bpqpp1p/p5p1/1p2P3/P1pP4/B1P2NP1/5PBP/R2QK2R w KQkq - 0 12",
+        "moves": [
+          "O-O",
+          "Bg7",
+          "Re1",
+          "O-O"
+        ],
+        "annotations": [
+          "O-O — White castles.",
+          "…Bg7 — Black fianchettoes, the bishop joining the long diagonal.",
+          "Re1 — White centralises the rook.",
+          "…O-O — Black castles; the better structure (White's doubled c3-pawn) and active pieces give the edge in a balanced fight."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-qga-modern",
+    "openingId": "qga",
+    "title": "Modern Tabiya: Blockade the IQP",
+    "criticalPositionFen": "r1bq1rk1/4bppp/p1n1pn2/1p1P2B1/8/1BN2N2/PP3PPP/R2QR1K1 b - - 0 12",
+    "overview": "White pushes the isolated queen's pawn to d5; Black meets it head-on, trades it off, and reaches a comfortable, equal position with the d-file neutralised.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Blockade and trade the isolated d-pawn.",
+      "Keep the structure sound.",
+      "Comfortable equality."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Modern Tabiya: Blockade the IQP",
+        "fen": "r1bq1rk1/4bppp/p1n1pn2/1p1P2B1/8/1BN2N2/PP3PPP/R2QR1K1 b - - 0 12",
+        "moves": [
+          "Nxd5",
+          "Bxd5",
+          "exd5",
+          "Qxd5",
+          "Qxd5"
+        ],
+        "annotations": [
+          "…Nxd5 — Black blockades the d5-push immediately.",
+          "Bxd5 — White recaptures with the bishop…",
+          "…exd5 — Black opens the e-file, the structure sound.",
+          "Qxd5 — White grabs the d5-pawn…",
+          "…Qxd5 — Black trades into a level, comfortable position."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-qga-janowski",
+    "openingId": "qga",
+    "title": "Janowski: The …e5 Freeing Break",
+    "criticalPositionFen": "r3k2r/1b2qppp/p1n1pn2/1pb5/4P3/1BN2N2/PP2QPPP/R1BR2K1 b kq - 0 12",
+    "overview": "In the dxc5 lines Black's pieces are already active; the thematic …e5 break frees the position completely and secures comfortable equality.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The …e5 break frees Black's game.",
+      "Active bishops after the early …Bxc5.",
+      "Castle and equalise."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Janowski: The …e5 Freeing Break",
+        "fen": "r3k2r/1b2qppp/p1n1pn2/1pb5/4P3/1BN2N2/PP2QPPP/R1BR2K1 b kq - 0 12",
+        "moves": [
+          "e5",
+          "a4",
+          "O-O"
+        ],
+        "annotations": [
+          "…e5! — Black strikes the centre, the thematic freeing break.",
+          "a4 — White probes the queenside.",
+          "…O-O — Black castles; active pieces and full equality, the …e5 break achieved."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
