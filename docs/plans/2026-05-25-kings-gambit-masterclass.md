@@ -1,0 +1,112 @@
+# King's Gambit Masterclass — Build Plan
+
+**Started 2026-05-25.** Branch `claude/amazing-cori-ioqeh`. Replicates the
+Vienna keystone literally (playbook §0.7). Opening is a White romantic
+gambit — the closest sibling to the Vienna, so the template fits near-perfectly.
+
+## Why this opening (the §0.5 pick rationale)
+- White, classical → the pre-1930s book corpus actually grounds it (unlike
+  modern openings). Higher-quality narration grounding.
+- Weapon-rich (Muzio / Allgaier / Kieseritzky / Bishop's Gambit) → ideal for
+  the gem weapon section + named-trap arsenal, exactly like the Vienna's pitch.
+- Already fully scaffolded in `repertoire.json`: 8 variations w/ PGNs, key
+  ideas, overview. **All 8 anchor ≥6 plies in `openings-lichess.json`** (verified
+  2026-05-25 — anchors 7–15), so every line is DB-grounded (G3 clean).
+- Abundant student-side-winning model games (Anderssen Immortal 1851,
+  Spassky–Bronstein 1960, Morphy).
+
+## Tab plan (hand-picked; order = amateur frequency, Main-line pill exempt)
+Tabs = the structural families **Black** chooses (what the student faces);
+the sacrificial gambits are WHITE weapons → gem section + named-trap lessons,
+not tabs (mirrors the Vienna).
+
+| # | Tab | Defining line | Role |
+|---|-----|---------------|------|
+| pill | **Main line** | KGA Modern 3...d5 (repertoire `pgn`) | showcase |
+| 1 | **Classical (3...g5)** | KGA 3.Nf3 g5 4.Bc4 — Black holds the pawn | tab |
+| 2 | **Fischer Defense (3...d6)** | KGA 3.Nf3 d6 | tab |
+| 3 | **Declined (2...Bc5)** | KGD 2...Bc5 | tab |
+| 4 | **Falkbeer (2...d5)** | Falkbeer Counter-Gambit | tab |
+| 5 | **Bishop's Gambit (3.Bc4)** | White's 3.Bc4 alternative | tab |
+
+Weapons (gems + named traps): **Muzio**, **Allgaier**, **Kieseritzky** (all
+arise in the 3...g5 complex), classified by who plays the punishing move.
+
+> Tab order should be confirmed against the amateur explorer when reachable
+> (proxy `chess-academy-pro.vercel.app/api/lichess-explorer?source=lichess`).
+> Order above is from known KG amateur frequency; refine if the proxy answers.
+
+## Build steps (Vienna template §0.7) — status
+- [x] STEP 0 — scaffold + DB-anchor verify (all 8 variations anchor ≥6 plies)
+- [x] STEP 1a — main lesson `kingsGambit.ts` (16 beats, 24-ply deepest, gates clean)
+- [x] STEP 1b — variation lessons `kingsGambitVariations.ts` (8 lessons; 6 sound
+      lines ≥20p, Muzio+Allgaier `kind:'roadmap'` — sanctioned opt-out for the
+      unsound romantic sacs, narrated honestly about practical-vs-objective)
+- [ ] STEP 1c — named-trap lessons `kingsGambitTrapLessons.ts` (Muzio/Allgaier/Kieseritzky as weapons) — TODO
+- [x] STEP 2 — registered in `lessons/registry.ts` + `lessons/index.ts`
+- [x] STEP 3 — `variationTabs.ts` CURATED['kings-gambit'] (8 tabs, freq order)
+- [x] STEP 4 — `kingsGambitMasterclassTabs.ts` wired into `OpeningDetailPage`
+- [~] STEP 5 — middlegame plans: 2 done (open-f-file Classical, central-bind Main)
+      w/ lead-the-eye; more per-tab plans TODO
+- [ ] STEP 6 — punish-gems: mine (explorer proxy IS reachable here) + `punishGemNarration.ts` — TODO
+- [ ] STEP 7 — model games (REAL PGNs, White winning) + PROTECTED list — TODO
+- [ ] STEP 8 — checkpoint quizzes + common mistakes — TODO
+- [x] STEP 9 — manifest entry (floors: variations 8, plans 2, keyIdeas 4; rest 0)
+- [~] GATES — content gates GREEN (lessonIntegrity, narrationAccuracy, narrationGrounding,
+      lessonDepth, lessonTabIntegrity, wlppNarration, openingManifests, openingWiring,
+      modelGames-orientation, punishGems, middlegamePlanner, OpeningDetailPage.wiring);
+      typecheck + lint clean
+- [ ] AUDITS — `AUDIT_OPENING=kings-gambit` punish-gems-loop (3-pass), leadeye,
+      named-traps, opening-walkthrough — TODO
+- [ ] DONE — merged to main + post-deploy audit green (playbook §0.5 DoD)
+
+## Checkpoint 4 (2026-05-25): stockfish-soundness CI green.
+The `stockfish-soundness` CI (mastersCoverage Hole 6b) flagged 2 plies:
+- **Classical d5 (−144cp):** the masters most-played 5.O-O exchange-sac line
+  leaves White objectively ~−1 — dubious, not a teachable White win. REBUILT the
+  Classical variation on the sound `h4` maneuvering line (Bc4 Bg7 h4 h6 d4 d6 c3
+  Nc6 O-O Qe7 b4 Bd7 Na3 g4 Ne1 f3), re-narrated honestly as a double-edged
+  fight. Verified 0 cp-loss flags (Hole 6b green).
+- **Allgaier O-O (−235cp):** the gambit is objectively unsound by design (the
+  lesson's verdict beat says so). Added a documented `SOUNDNESS_BASELINE` entry
+  (playbook §9) — engine-correct flag IS the teaching point.
+Also fixed a lint error (unused `VIS` after the Classical re-author). ship-check
+READY TO PUSH; mastersCoverage 6b green for both lessons.
+
+## Checkpoint 3 (2026-05-25): + punish-gem weapon section.
+Mined 26 engine-first gems (Stockfish 16 apt-installed at /usr/games/stockfish;
+amateur explorer proxy reachable). Hand-narrated 6 curated confirmed crushes
+(`punishGemNarration.ts`); only narrated weapon-tier gems surface, rest stay dark.
+591 punishGems tests green.
+
+## Checkpoint 2 (2026-05-25): + model games + pitfalls + quizzes.
+- STEP 7 model games: 6 REAL White-winning master games sourced from the live
+  explorer + export endpoint (no fabrication), one per major tab:
+  Carlsen–Wang 2010 (Abbazia/Main), Ponomariov–Dominguez 2016 (Classical g5),
+  Short–Akopian 1997 (Fischer), Short–Zhu 2002 (Declined), **Short–Kasparov
+  2011 (Bishop's)**, Nunn–Piket 1995 (Kieseritzky). `kings-gambit` added to
+  modelGames-orientation PROTECTED; 3 pre-existing thin imports tagged studentSide.
+- STEP 8 pitfalls: 3 KG common-mistakes given two-register narration
+  (explanation + ≤8-word shortNarration); `kings-gambit` gated in
+  commonMistakeNarration. Checkpoint quizzes: 4 valid move-quizzes (pre-existing).
+- Manifest: modelGames floor → 6.
+- STEP 6 gems: miner ran in-sandbox (stockfish apt-installed at /usr/games/stockfish,
+  explorer proxy reachable). Tier results pending.
+
+## Checkpoint 1 (2026-05-25): lessons + tabs + 2 plans, all content gates green.
+Remaining for full Vienna parity: punish-gems (mine via reachable proxy/CI +
+hand-narrate), named-trap weapon lessons, model games per variation (real PGNs,
+White winning — Anderssen Immortal 1851 / Spassky–Bronstein 1960 / Morphy),
+checkpoint quizzes, common mistakes, more per-tab plans. Ratchet manifest floors
+up as each lands.
+
+## Decisions log
+- 2026-05-25: Picked King's Gambit (rationale above). Tabs = 5 + Main pill;
+  gambits routed as weapons not tabs.
+
+## Next-session pickup
+Resume at the first unchecked STEP. The Vienna files are the literal template:
+`vienna.ts`, `viennaVariations.ts`, `viennaTrapLessons.ts`,
+`viennaMasterclassTabs.ts`, plus the Vienna rows in `registry.ts`,
+`variationTabs.ts`, `middlegame-plans.json`, `punishGemNarration.ts`,
+`model-games.json`, `opening-manifests.json`. Diff against them at each step.

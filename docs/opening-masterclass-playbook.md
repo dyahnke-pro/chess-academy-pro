@@ -25,10 +25,20 @@ it literally.**
 
 ## 0. The non-negotiable ethos
 
-1. **NO ALGOS decide what goes on a tab. David hand-picks everything** —
-   which variations are tabs, which plans, which traps, the routing. Code
-   never "matches" content onto a tab. The curator chooses; code only
-   filters by the hand-picked list.
+1. **NO ALGOS auto-match content onto a tab — the CURATOR chooses. And the
+   curator is the BUILDING SESSION, deciding autonomously (per §0.5), NOT
+   David.** Code never fuzzy-"matches" content onto a tab; the session picks
+   each variation/plan/trap by resolving the §0.1 criteria against the ground
+   sources, then code filters by that hand-curated list. **"Hand-pick" means
+   the session decides per the criteria — it does NOT mean ask David.**
+   🚫 **NEVER ask David "how many variations should I build" (or which ones).**
+   The answer is always the same and is not a judgment call: build **ALL
+   validated variations** — every line that passes §0.1 rule 1's (a)–(d) test
+   (real DB-anchored named line, student actually faces it, structurally
+   distinct, student-side-winning model game) + the gates. No count, no cap,
+   no "is six enough." If a specific line is genuinely ambiguous (a real data
+   fork you can't resolve), skip THAT line or ask about THAT line — never punt
+   the whole count decision to David.
 2. **G3 — never invent chess.** Every move / FEN / line comes from
    `openings-lichess.json` or is chess.js-validated. NEVER author moves
    "from book knowledge" or memory. If a line isn't in the DB, verify it's
@@ -194,16 +204,31 @@ watching every one. The gates go red if you drift; the trail lets him audit.
 **When to STOP and ask (not before):** a genuine fork the data can't resolve
 (two equally-frequent variations with no tiebreak), a variation with NO
 student-side-winning game, a needed PGN behind a 403, or any line/idea you
-cannot verify is real and sound. Otherwise: proceed.
+cannot verify is real and sound. Otherwise: proceed. **These are always
+SINGLE-LINE questions ("is THIS line sound?"), never the scope question
+("how many variations should I build?") — the count is never David's to
+answer (§0 point 1): build ALL validated variations.**
 
-**🔒 DEFINITION OF DONE — a branch build is NOT done at the draft PR (locked
-2026-05-24).** Web/cloud sessions develop on a branch and open a PR — but the
-build is not complete, and you do NOT declare it done, until BOTH:
-1. **It lands on `main`.** The work has to be MERGED (per CLAUDE.md Deployment
-   Policy + G1's "MERGING A PR IS NOT THE END"). A green draft PR sitting
-   unmerged is a half-finished build, not a shipped one. If you lack merge
-   rights or there's an open question, say so and hand David the merge — don't
-   walk away calling it done.
+**🔒 ALWAYS PUSH MASTERCLASS BUILDS STRAIGHT TO `main` — NO branch, NO PR
+(David 2026-05-25, emphatic: "always push to main!!! make sure that is on the
+rules").** A masterclass build is a `main`-production change like any other
+(CLAUDE.md Deployment Policy: push to `main` by default, previews are opt-in).
+Do NOT develop it on a feature branch or behind a draft PR unless David
+explicitly asks for one — that hides the work behind a preview URL he can't
+use and burns the build cap. If the harness spins up a feature branch by
+default, OVERRIDE it: commit on `main` and `git push origin main`. When a
+session DID start on a branch with a PR (older default), the build is not done
+until that PR is MERGED to `main` — a green unmerged PR is a half-finished
+build; merge it yourself (don't hand it off) unless you lack rights or there's
+an open question.
+
+**🔒 DEFINITION OF DONE — NOT done until it's on `main` AND audited (locked
+2026-05-24, reaffirmed 2026-05-25).** The build is not complete, and you do NOT
+declare it done, until BOTH:
+1. **It is on `main`.** Pushed directly (the default above) or, if a PR was
+   used, MERGED (per CLAUDE.md Deployment Policy + G1's "MERGING A PR IS NOT
+   THE END"). Work that only exists on a branch / unmerged PR is a
+   half-finished build, not a shipped one.
 2. **The post-deploy audit runs against `main` and is green.** G1 is
    NON-NEGOTIABLE: after the merge lands, run the surface's audit matrix
    (`audit-punish-gems-loop.mjs` 3-pass, `audit-openings-interactive-loop.mjs`,
@@ -308,9 +333,12 @@ the 3 imports + ONE line to the `OPENINGS` array (~line 48):
 
 **STEP 3 — variation tabs.** `src/services/variationTabs.ts`: add
 `CURATED['<id>'] = [{ test: /regex/i, label: 'Tab Label' }, …]`. The `test`
-RegExp matches `variation.name`; the "Main line" pill is automatic. HAND-PICK
-which variations become tabs (no algo). The lowercased `label` is the
-`tabKey` used by STEPS 1c/4. Match Vienna's entry exactly.
+RegExp matches `variation.name`; the "Main line" pill is automatic. Add a
+CURATED entry for **EVERY variation that passes §0.1 rule 1's (a)–(d) test** —
+not a hand-picked favorite few, not a count you ask David for. The session
+itself decides the set from the criteria + gates (no algo fuzzy-match, and no
+asking "how many"). The lowercased `label` is the `tabKey` used by STEPS 1c/4.
+Match Vienna's entry exactly.
 
 **STEP 4 — tab → middlegame-plan map.** Create
 `src/services/<id>MasterclassTabs.ts` exporting `get<Id>TabPlanIds(tabKey)`:

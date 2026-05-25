@@ -175,13 +175,15 @@
       "fen": "r1bqk2r/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R b KQkq - 0 7",
       "wrongMove": "a5",
       "correctMove": "O-O",
-      "explanation": "a5 is premature queenside expansion before castling. O-O gets the king safe first — in the Dragon, a single tempo can decide the game."
+      "explanation": "a5 is premature queenside expansion before castling. O-O gets the king safe first — in the Dragon, a single tempo can decide the game.",
+      "shortNarration": "O-O first — king safe before a5."
     },
     {
       "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/2KR1B1R b - - 0 8",
       "wrongMove": "Be6",
       "correctMove": "Qa5",
-      "explanation": "Be6 allows Nxe6 fxe6 with a weakened pawn structure. Qa5 starts immediate queenside counterplay which is critical in the Yugoslav Attack."
+      "explanation": "Be6 allows Nxe6 fxe6 with a weakened pawn structure. Qa5 starts immediate queenside counterplay which is critical in the Yugoslav Attack.",
+      "shortNarration": "Qa5 — immediate queenside counterplay."
     }
   ],
   "scandinavian-defence": [
@@ -283,19 +285,22 @@
       "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
       "wrongMove": "Nxd4",
       "correctMove": "exd4",
-      "explanation": "Nxd4 Nxd4 exd4 leaves Black with an isolated d-pawn and no compensation. exd4 Nxd4 gives Black active piece play."
+      "explanation": "Nxd4 Nxd4 exd4 leaves Black with an isolated d-pawn and no compensation. exd4 Nxd4 gives Black active piece play.",
+      "shortNarration": "exd4 — recapture for active piece play"
     },
     {
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
       "wrongMove": "Nxe4",
       "correctMove": "Bd6",
-      "explanation": "Nxe4 loses to d5 forking the knight and bishop. Bd6 attacks the knight and develops naturally."
+      "explanation": "Nxe4 loses to d5 forking the knight and bishop. Bd6 attacks the knight and develops naturally.",
+      "shortNarration": "Bd6 — attack the knight, develop"
     },
     {
       "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
       "wrongMove": "e5",
       "correctMove": "Bd3",
-      "explanation": "e5 pushes the pawn forward without support and the knight retreats to safety. Bd3 develops calmly with a lead in development."
+      "explanation": "e5 pushes the pawn forward without support and the knight retreats to safety. Bd3 develops calmly with a lead in development.",
+      "shortNarration": "Bd3 — develop calmly, keep your lead"
     }
   ],
   "vienna-game": [
@@ -700,19 +705,22 @@
       "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
       "wrongMove": "d5",
       "correctMove": "exf4",
-      "explanation": "2…d5 (Falkbeer Counter-Gambit) is sharp but theoretically dubious for Black at the top level. After 3.exd5 e4 White has the Nimzowitsch Variation 4.d3 with a strong reply. Accepting the gambit with 2…exf4 is the principled move — keep the extra pawn and defend."
+      "explanation": "2…d5 (Falkbeer Counter-Gambit) is sharp but theoretically dubious for Black at the top level. After 3.exd5 e4 White has the Nimzowitsch Variation 4.d3 with a strong reply. Accepting the gambit with 2…exf4 is the principled move — keep the extra pawn and defend.",
+      "shortNarration": "exf4 — take it, hold the extra pawn"
     },
     {
       "fen": "rnbqkbnr/pppp1p1p/8/6p1/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
       "wrongMove": "h3",
       "correctMove": "Bc4",
-      "explanation": "4.h3 is engine-equivalent but wastes a critical tempo near your own king. 4.Bc4 develops with two threats: it eyes f7 AND prepares O-O immediately. In gambit play tempo is the gambit — every wasted move gives Black time to consolidate the extra pawn into a fortress. Practical edge: with Bc4 you reach an attacking middlegame; with h3 you reach an equal-but-passive middlegame."
+      "explanation": "4.h3 is engine-equivalent but wastes a critical tempo near your own king. 4.Bc4 develops with two threats: it eyes f7 AND prepares O-O immediately. In gambit play tempo is the gambit — every wasted move gives Black time to consolidate the extra pawn into a fortress. Practical edge: with Bc4 you reach an attacking middlegame; with h3 you reach an equal-but-passive middlegame.",
+      "shortNarration": "Bc4 — develop with tempo, hit f7"
     },
     {
       "fen": "rnbqkbnr/pppp1ppp/8/8/2B1Pp2/8/PPPP2PP/RNBQK1NR b KQkq - 1 3",
       "wrongMove": "Qh4+",
       "correctMove": "Nf6",
-      "explanation": "Qh4+ is engine-fine — White just plays Kf1 and the king gets to g1 next move anyway. But the queen on h4 is OFFSIDE: it commits early and gives White moves like Nf3, Nc3, d4 with tempo on the queen. 3…Nf6 develops a piece (zero tempo cost) and prepares …d5 to challenge the center. Practical edge: with Nf6 you have more pieces in play when the center opens."
+      "explanation": "Qh4+ is engine-fine — White just plays Kf1 and the king gets to g1 next move anyway. But the queen on h4 is OFFSIDE: it commits early and gives White moves like Nf3, Nc3, d4 with tempo on the queen. 3…Nf6 develops a piece (zero tempo cost) and prepares …d5 to challenge the center. Practical edge: with Nf6 you have more pieces in play when the center opens.",
+      "shortNarration": "Nf6 — develop, don't chase with the queen"
     }
   ],
   "petrov-defence": [

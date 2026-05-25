@@ -56,6 +56,19 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /nb3|kasparov/i, label: 'Kasparov Nb3' },
     { test: /steinitz|qh4/i, label: 'Steinitz' },
   ],
+  // Sicilian Dragon — Black-oriented masterclass. Main-line pill = the
+  // Yugoslav Attack main line (the showcase), so it's exempt from this tab
+  // list. The Dragadorf is DEFERRED (its sound move order needs deeper theory
+  // than the local masters-db carries — no unsound tab). Order: the Yugoslav
+  // sub-systems first, then the quieter White tries.
+  'sicilian-dragon': [
+    { test: /soltis/i, label: 'Soltis' },
+    { test: /chinese/i, label: 'Chinese Dragon' },
+    { test: /^classical/i, label: 'Classical' },
+    { test: /levenfish/i, label: 'Levenfish' },
+    { test: /accelerated/i, label: 'Accelerated' },
+    { test: /bg5|anti-dragon/i, label: 'Anti-Dragon Bg5' },
+  ],
   // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
   // (the explorer freq query was unavailable when this was built; ordering is
   // flagged for prod verification). The Giuoco Piano main line is the "Main
@@ -86,6 +99,21 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /mccutcheon/i, label: 'McCutcheon' },
     { test: /milner-barry/i, label: 'Milner-Barry' },
     { test: /fort knox/i, label: 'Fort Knox' },
+  ],
+  // King's Gambit — all 8 repertoire variations earn a tab (David 2026-05-25:
+  // "add all validated variations"; every line DB-anchors ≥6 plies). Ordered
+  // by amateur frequency of the defining branch (Classical …g5 17%, Fischer
+  // …d6 16%, then the declines and the sharp gambits). The Main-line pill is
+  // the KGA Modern (3…d5) repertoire pgn — exempt from this list.
+  'kings-gambit': [
+    { test: /knight gambit classical/i, label: 'Classical' },
+    { test: /fischer/i, label: 'Fischer' },
+    { test: /falkbeer/i, label: 'Falkbeer' },
+    { test: /declined/i, label: 'Declined' },
+    { test: /bishop/i, label: "Bishop's" },
+    { test: /kieseritzky/i, label: 'Kieseritzky' },
+    { test: /muzio/i, label: 'Muzio' },
+    { test: /allgaier/i, label: 'Allgaier' },
   ],
 };
 

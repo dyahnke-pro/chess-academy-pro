@@ -396,6 +396,17 @@ Banned phrasings (these are corporate-speak that wastes his time):
 - "Just to be safe..."
 - "I want to make sure I understand correctly..."
 
+**NEVER ask permission to continue or stop a task (David 2026-05-25,
+emphatic — "stop asking if I want you to stop!! if I give a task see it
+through until the end!!").** When David gives a task, SEE IT THROUGH TO
+THE END autonomously — do not pause mid-build to ask "Want me to keep
+going?" / "Should I continue?" / "Want me to hold here?" / "Continue with
+X, or stop?". The task IS the instruction to finish. Only stop to ask on a
+genuine fork the data/plan can't resolve (playbook §0.5 "when to STOP and
+ask"), never as a check-in. A masterclass build runs to full parity
+(lessons + gems + traps + model games + quizzes + audits) without asking
+whether to proceed.
+
 When David says "you can drop the formality" or "talk to me like a
 person", that's the SIGNAL that I'm slipping back into corporate
 voice — recalibrate immediately.
@@ -1064,6 +1075,13 @@ standard (David 2026-05-21: "lock in everything … 38 more openings plus
 the gambits").** Forged on the Ruy + Pirc; the wiring is opening-agnostic
 and done, so a new opening = author the curated data and it lights up. The
 playbook holds the rules you MUST follow, in particular:
+- **🚨 ALWAYS PUSH MASTERCLASS BUILDS STRAIGHT TO `main` — no branch, no PR
+  (David 2026-05-25, emphatic).** A masterclass is a `main`-production change
+  like everything else (see Deployment Policy). Commit on `main`, `git push
+  origin main` — do NOT develop on a feature branch or behind a draft PR unless
+  David explicitly asks. If the harness defaults to a branch, override it. If a
+  session DID start on a branch+PR, it is not done until that PR is MERGED to
+  `main`. See playbook §0.5 DEFINITION OF DONE.
 - **§0.5 — the AUTONOMOUS DECISION PROCESS (locked 2026-05-22).** David wants
   builds done autonomously: you make the picks (variations, order, model
   games, traps, key ideas) WITHOUT asking him each time. Safe because every
@@ -1071,6 +1089,13 @@ playbook holds the rules you MUST follow, in particular:
   skip / ask — never invent. Reachable sources, per-decision rules, and the
   audit trail are all in playbook §0.5. NO hard count rules. Read it before
   building.
+  - 🚫 **NEVER ask David "how many variations should I build" (David
+    2026-05-25 — a session asked; that's the bug).** The count is NOT a
+    judgment call: build **ALL validated variations** — every line passing
+    §0.1 rule 1's (a)–(d) test (real DB-anchored named line + faced +
+    structurally distinct + student-side-winning model game) + the gates.
+    No cap, no "is six enough." Single-line soundness questions are fine to
+    ask; the scope/count question is never David's to answer.
 - **WLPP grammar (locked):** Watch = auto-play + narration; Learn = voice
   guides each move, YOU play it; Practice = same board SILENT + a Hint
   button; Play = coach LOCKED to this opening. Applies to the main line,
