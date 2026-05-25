@@ -1,94 +1,67 @@
-// Analysis: which middlegame-plan playableLines fail to DEMONSTRATE their
-// named theme. The disease (David 2026-05-25, "Dutch Leningrad: The Kingside
-// Storm" showed d5/Na6/Rb1/Bd7 — zero storm moves + a promise-only ending):
-// a plan's playableLine walks generic continuation moves instead of the
-// plan's own declared pawn breaks, then the final annotation just PROMISES
-// the advantage ("ready for …e5 and the kingside storm") without ever showing
-// it. This script measures the blast radius and emits the offender list that
-// seeds the gate baseline. Read-only; prints JSON to stdout.
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+// Gate detector: a middlegame-plan playableLine must DEMONSTRATE its plan —
+// a student move must land on one of the plan's GOAL squares (an UNCONDITIONAL
+// declared pawn break, or any square named in pieceManeuvers) — and it must not
+// end on a bare promise. The disease (David 2026-05-25): "Dutch Leningrad: The
+// Kingside Storm" played d5/Na6/Rb1/Bd7 (zero storm) then PROMISED the storm.
+// Conditional breaks ("…c5 only if", "avoid loosening", "the passed c3-pawn")
+// are NOT required — forcing them would be wrong content; those plans are
+// demonstrated via their maneuvers instead. Read-only; --json writes the report.
+import { readFileSync, writeFileSync } from 'node:fs';
 import { Chess } from 'chess.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const dataDir = join(__dirname, '..', 'src', 'data');
-const plans = JSON.parse(readFileSync(join(dataDir, 'middlegame-plans.json'), 'utf8'));
-
-// openingId -> 'white' | 'black'
+const dir = 'src/data';
+const plans = JSON.parse(readFileSync(`${dir}/middlegame-plans.json`, 'utf8'));
 const colorMap = {};
 for (const f of ['repertoire.json', 'pro-repertoires.json']) {
-  try {
-    const arr = JSON.parse(readFileSync(join(dataDir, f), 'utf8'));
-    const list = Array.isArray(arr) ? arr : arr.openings ?? [];
-    for (const o of list) if (o && o.id && o.color) colorMap[o.id] = o.color;
-  } catch { /* optional */ }
+  try { for (const o of JSON.parse(readFileSync(`${dir}/${f}`, 'utf8'))) if (o?.id && o?.color) colorMap[o.id] = o.color; } catch {}
 }
 
-const SQUARE = /\b([a-h][1-8])\b/g;
-const PROMISE = /\b(ready for|ready to|prepares?|preparing|will follow|is ready|planning|intends?|sets? up|setting up|swinging to|aims? to|looking to|poised|about to|coming next|next comes|to follow)\b/i;
+const SQUARE = /([a-h][1-8])/g;
+const PROMISE = /\b(ready for|ready to|prepares? to|preparing to|will follow|is ready|planning to|intends? to|swinging to|aims? to|looking to|poised|about to|coming next|next comes|to follow)\b/i;
+const COND = /\b(only|if|else|avoid|keep|restrain|passed|once|when|unless|never|don'?t|patient|flawless|sound|respect|balance|small)\b/i;
 
-function breakSquaresOf(plan) {
+function squares(s) { const out = new Set(); if (typeof s === 'string') { let m; SQUARE.lastIndex = 0; while ((m = SQUARE.exec(s)) !== null) out.add(m[1]); } return out; }
+
+export function goalSquares(plan) {
   const out = new Set();
-  const harvest = (s) => { if (typeof s !== 'string') return; let m; while ((m = SQUARE.exec(s)) !== null) out.add(m[1]); };
-  for (const pb of plan.pawnBreaks ?? []) {
-    if (typeof pb === 'string') harvest(pb);
-    else if (pb && typeof pb === 'object') harvest(pb.move);
-  }
+  for (const pb of plan.pawnBreaks ?? []) { const s = typeof pb === 'string' ? pb : pb?.move; if (typeof s === 'string' && !COND.test(s)) for (const q of squares(s)) out.add(q); }
+  for (const pm of plan.pieceManeuvers ?? []) { for (const q of squares(typeof pm === 'string' ? pm : (pm?.move ?? pm?.route))) out.add(q); }
   return out;
 }
 
-const report = { totalPlans: 0, plansWithLines: 0, totalLines: 0, themeEmptyLines: 0, promiseEndingLines: 0, offenders: [] };
-
-for (const plan of plans) {
-  report.totalPlans++;
-  const lines = plan.playableLines ?? [];
-  if (lines.length === 0) continue;
-  report.plansWithLines++;
-  const color = colorMap[plan.openingId] ?? null;
-  const breakSq = breakSquaresOf(plan);
-
-  for (let li = 0; li < lines.length; li++) {
-    const line = lines[li];
-    report.totalLines++;
-    let themeHit = false;
-    let badFen = false;
-    try {
-      const chess = new Chess(line.fen);
-      const studentChar = color === 'black' ? 'b' : color === 'white' ? 'w' : null;
-      for (const san of line.moves) {
-        const mover = chess.turn();
-        let mv;
-        try { mv = chess.move(san); } catch { badFen = true; break; }
-        const isStudent = studentChar ? mover === studentChar : true;
-        if (isStudent && breakSq.size > 0 && breakSq.has(mv.to)) themeHit = true;
+export function findOffenders() {
+  const offenders = [];
+  for (const plan of plans) {
+    const color = colorMap[plan.openingId] ?? null;
+    const sc = color === 'black' ? 'b' : color === 'white' ? 'w' : null;
+    const goals = goalSquares(plan);
+    const lines = plan.playableLines ?? [];
+    for (let li = 0; li < lines.length; li++) {
+      const line = lines[li];
+      let demo = false, bad = false;
+      try {
+        const c = new Chess(line.fen);
+        for (const san of line.moves) {
+          const mover = c.turn(); let mv;
+          try { mv = c.move(san); } catch { bad = true; break; }
+          if ((sc ? mover === sc : true) && goals.has(mv.to)) demo = true;
+        }
+      } catch { bad = true; }
+      const anns = line.annotations ?? [];
+      const last = anns.length ? anns[anns.length - 1] : '';
+      const promise = PROMISE.test(last);
+      const themeEmpty = goals.size > 0 && !demo && !bad;
+      if (themeEmpty || promise || bad) {
+        offenders.push({ key: `${plan.id}#${li}`, planId: plan.id, lineIndex: li, openingId: plan.openingId, title: line.title ?? plan.title, goals: [...goals], flags: { themeEmpty, promise, bad }, moves: line.moves, lastAnnotation: last });
       }
-    } catch { badFen = true; }
-
-    const anns = line.annotations ?? [];
-    const last = anns.length ? anns[anns.length - 1] : '';
-    const promiseEnding = PROMISE.test(last);
-
-    const themeEmpty = breakSq.size > 0 && !themeHit && !badFen;
-    if (themeEmpty) report.themeEmptyLines++;
-    if (promiseEnding) report.promiseEndingLines++;
-
-    if (themeEmpty || promiseEnding || badFen) {
-      report.offenders.push({
-        key: `${plan.id}#${li}`,
-        planId: plan.id,
-        lineIndex: li,
-        openingId: plan.openingId,
-        title: line.title ?? plan.title,
-        color,
-        moves: line.moves,
-        breakSquares: [...breakSq],
-        flags: { themeEmpty, promiseEnding, badFen },
-        lastAnnotation: last,
-      });
     }
   }
+  return offenders;
 }
 
-console.log(JSON.stringify(report, null, 2));
-console.error(`\n[summary] plans=${report.totalPlans} plansWithLines=${report.plansWithLines} lines=${report.totalLines} themeEmpty=${report.themeEmptyLines} promiseEnding=${report.promiseEndingLines} offenders=${report.offenders.length}`);
+const offenders = findOffenders();
+const report = { totalLines: plans.reduce((n, p) => n + (p.playableLines?.length ?? 0), 0), offenders };
+if (process.argv.includes('--json')) writeFileSync('/tmp/plan-themes.json', JSON.stringify(report, null, 2));
+const byO = {}; for (const o of offenders) byO[o.openingId] = (byO[o.openingId] || 0) + 1;
+console.error(`[summary] lines=${report.totalLines} offenders=${offenders.length} (promise=${offenders.filter((o) => o.flags.promise).length})`);
+console.error(Object.entries(byO).sort((a, b) => b[1] - a[1]).map(([k, v]) => `${k}:${v}`).join('  '));

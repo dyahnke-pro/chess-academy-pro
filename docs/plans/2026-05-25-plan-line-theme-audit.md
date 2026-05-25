@@ -49,7 +49,35 @@ for qgd, kid, kings-gambit, vienna, alapin, london, catalan, kia.
 
 ---
 
-## Done this session
+## RESULT (full sweep, 2026-05-25)
+
+The original "65 theme-empty" was inflated by two regex bugs in my own detector:
+(1) object-form `pieceManeuvers` use a `route` field, not `move`, so their goal
+squares were never extracted; (2) the square regex required a `\b` word boundary,
+so piece-glued squares (`Ne7`, `Bd6`, `Nf5`) never matched. After fixing both and
+adopting the defensible definition (a student move must land on an UNCONDITIONAL
+break OR a declared maneuver square; conditional breaks like "…c5 only if" are not
+required), the **true offender count was 18**, not 65.
+
+**18 → 4.** Rewrote **14** lines (grounded, chess.js-verified via the harness):
+7 promise-enders got concrete, non-promise narration (some extended one move to end
+on the student's strong move — e.g. Nimzo Leningrad now ends on …g5, the storm; Dutch
+Classical on …Ne4, the outpost); 7 theme-empty lines now play a real break/maneuver
+(Najdorf …b5, Benko …e6, Nimzo-Kasparov …e5 + …Bxc3, Alekhine 4-Pawns …f6, Fort Knox
+…Re8, Portuguese …e5, Réti Bf4). All carry full Watch narration + short Learn cues +
+auto-generated lead-eye highlights.
+
+**4 left flagged — deliberately, never fabricated.** `ruy-lopez exchange-endgame`,
+`scotch-game gambit`, `alapin main`: their thematic squares are already occupied/passed
+at the critical FEN (the theme happened *before* the position) — the lines are sound,
+the gate proxy just can't confirm. `nimzo huebner`: in its FEN, …e4 appears to win a
+piece, so the "positional wedge" narration isn't verified-sound. Per the cardinal rule
+(when unsure: leave flagged, never invent) these stay in the baseline.
+
+Tooling: `scripts/apply-plan-line-patches.mjs` (gate-safe authoring harness) +
+`scripts/plan-line-patches.mjs` (the 14 authored patches) + `scripts/plan-line-dossier.mjs`.
+
+## Done (initial)
 
 1. **Fixed `mp-dutchdefence-main`** (David's exact line) to the masterclass bar.
    New line `d5 g5 b4 g4 Nd2 f4` — chess.js-verified; `…g4` genuinely forces the

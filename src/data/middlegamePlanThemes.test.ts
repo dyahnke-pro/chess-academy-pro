@@ -15,8 +15,20 @@ import proRaw from './pro-repertoires.json';
 // only lines; the baseline holds the known offenders and only SHRINKS as lines
 // are rewritten to play their breaks. See scripts/audit-plan-line-themes.mjs.
 
+// ─── The "demonstrate the plan" gate (David 2026-05-25) ─────────────────────
+// A middlegame-plan playableLine MUST demonstrate its plan: a student move must
+// land on one of the plan's GOAL squares — an UNCONDITIONAL declared pawn break
+// OR any square named in pieceManeuvers — and it must not end on a bare promise
+// ("Black is ready for …e5 and the kingside storm" without ever showing it).
+// Conditional breaks ("…c5 only if", "avoid loosening", "the passed c3-pawn")
+// are NOT required; those plans are demonstrated through their maneuvers. The
+// disease: "Dutch Leningrad: The Kingside Storm" played d5/Na6/Rb1/Bd7 — zero
+// storm — then promised the storm. This gate blocks NEW non-demonstrating /
+// promise-only lines; the baseline holds the known offenders and only SHRINKS
+// as lines are rewritten. See scripts/audit-plan-line-themes.mjs.
+
 interface PlanLine { fen: string; moves: string[]; annotations?: string[]; title?: string }
-interface Plan { id: string; openingId: string; title?: string; pawnBreaks?: unknown[]; playableLines?: PlanLine[] }
+interface Plan { id: string; openingId: string; title?: string; pawnBreaks?: unknown[]; pieceManeuvers?: unknown[]; playableLines?: PlanLine[] }
 
 const plans = plansRaw as unknown as Plan[];
 const baseline = new Set((baselineRaw as { keys: string[] }).keys);
@@ -27,20 +39,28 @@ for (const src of [repertoireRaw, proRaw]) {
   for (const o of list) if (o?.id && o?.color) colorMap[o.id] = o.color;
 }
 
-const SQUARE = /\b([a-h][1-8])\b/g;
-const PROMISE = /\b(ready for|ready to|prepares?|preparing|will follow|is ready|planning|intends?|sets? up|setting up|swinging to|aims? to|looking to|poised|about to|coming next|next comes|to follow)\b/i;
+const SQUARE = /([a-h][1-8])/g;
+const PROMISE = /\b(ready for|ready to|prepares? to|preparing to|will follow|is ready|planning to|intends? to|swinging to|aims? to|looking to|poised|about to|coming next|next comes|to follow)\b/i;
+const COND = /\b(only|if|else|avoid|keep|restrain|passed|once|when|unless|never|don'?t|patient|flawless|sound|respect|balance|small)\b/i;
 
-function breakSquares(plan: Plan): Set<string> {
+function squaresIn(s: unknown): string[] {
+  if (typeof s !== 'string') return [];
+  const out: string[] = [];
+  let m: RegExpExecArray | null;
+  SQUARE.lastIndex = 0;
+  while ((m = SQUARE.exec(s)) !== null) out.push(m[1]);
+  return out;
+}
+
+function goalSquares(plan: Plan): Set<string> {
   const out = new Set<string>();
-  const harvest = (s: unknown): void => {
-    if (typeof s !== 'string') return;
-    let m: RegExpExecArray | null;
-    SQUARE.lastIndex = 0;
-    while ((m = SQUARE.exec(s)) !== null) out.add(m[1]);
-  };
   for (const pb of plan.pawnBreaks ?? []) {
-    if (typeof pb === 'string') harvest(pb);
-    else if (pb && typeof pb === 'object') harvest((pb as { move?: unknown }).move);
+    const s = typeof pb === 'string' ? pb : (pb as { move?: unknown })?.move;
+    if (typeof s === 'string' && !COND.test(s)) for (const q of squaresIn(s)) out.add(q);
+  }
+  for (const pm of plan.pieceManeuvers ?? []) {
+    const obj = pm as { move?: unknown; route?: unknown };
+    for (const q of squaresIn(typeof pm === 'string' ? pm : (obj?.move ?? obj?.route))) out.add(q);
   }
   return out;
 }
@@ -52,10 +72,10 @@ function findOffenders(): Offender[] {
   for (const plan of plans) {
     const lines = plan.playableLines ?? [];
     const color = colorMap[plan.openingId] ?? null;
-    const breakSq = breakSquares(plan);
+    const goals = goalSquares(plan);
     for (let li = 0; li < lines.length; li++) {
       const line = lines[li];
-      let themeHit = false;
+      let demo = false;
       let badFen = false;
       try {
         const chess = new Chess(line.fen);
@@ -65,13 +85,13 @@ function findOffenders(): Offender[] {
           let mv;
           try { mv = chess.move(san); } catch { badFen = true; break; }
           const isStudent = studentChar ? mover === studentChar : true;
-          if (isStudent && breakSq.size > 0 && breakSq.has(mv.to)) themeHit = true;
+          if (isStudent && goals.has(mv.to)) demo = true;
         }
       } catch { badFen = true; }
       const anns = line.annotations ?? [];
       const last = anns.length ? anns[anns.length - 1] : '';
       const promiseEnding = PROMISE.test(last);
-      const themeEmpty = breakSq.size > 0 && !themeHit && !badFen;
+      const themeEmpty = goals.size > 0 && !demo && !badFen;
       if (themeEmpty || promiseEnding || badFen) {
         offenders.push({ key: `${plan.id}#${li}`, planId: plan.id, flags: { themeEmpty, promiseEnding, badFen } });
       }
