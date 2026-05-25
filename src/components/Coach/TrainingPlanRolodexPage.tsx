@@ -107,7 +107,26 @@ function TodaysReps(): JSX.Element | null {
             <li key={rep.key}>
               <button
                 type="button"
-                onClick={() => void navigate(rep.kind === 'weakness' ? '/weaknesses' : `/openings/${rep.openingId ?? ''}`)}
+                onClick={() => {
+                  if (rep.kind !== 'weakness') {
+                    void navigate(`/openings/${rep.openingId ?? ''}`);
+                    return;
+                  }
+                  // A weakness rep drills its motif: deep-link into the
+                  // adaptive tactical drill scoped to the tag's themes. The
+                  // real misconception tag (not an analysis:* cluster) rides
+                  // along so the drill can space it out on completion.
+                  if (rep.puzzleThemes && rep.puzzleThemes.length > 0) {
+                    void navigate('/tactics/adaptive', {
+                      state: {
+                        forcedWeakThemes: rep.puzzleThemes,
+                        misconceptionTag: rep.tag && !rep.tag.startsWith('analysis:') ? rep.tag : undefined,
+                      },
+                    });
+                  } else {
+                    void navigate('/weaknesses');
+                  }
+                }}
                 className="w-full flex items-center gap-3 text-left p-3 rounded-xl bg-theme-surface border border-theme-border hover:border-theme-accent/40 transition-colors"
                 data-testid={`todays-rep-${rep.kind}`}
               >

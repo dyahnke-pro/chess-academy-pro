@@ -201,6 +201,17 @@ async function verifySetupPosition(
  * Build a queue of setup puzzles at the given difficulty.
  * Generates from the user's mistake puzzles on demand.
  */
+/** How many setup puzzles are due for review now (non-mastered + past their
+ *  SRS date). Lets the daily surfaces (Dashboard) fold Setup Trainer into the
+ *  one training path instead of it being a side door. */
+export async function getDueSetupPuzzleCount(): Promise<number> {
+  const now = Date.now();
+  const all = await db.setupPuzzles.toArray();
+  return all.filter(
+    (sp) => sp.status !== 'mastered' && new Date(sp.srsDueDate).getTime() <= now,
+  ).length;
+}
+
 export async function buildSetupPuzzleQueue(
   count: number = 10,
   difficulty: SetupPuzzleDifficulty,

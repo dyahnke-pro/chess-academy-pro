@@ -15,6 +15,9 @@ export interface WeaknessRep {
   label: string;
   /** Instances due/open right now — drives the ranking. */
   openCount: number;
+  /** puzzles.json themes to drill this weakness against (may be empty —
+   *  then the rep falls back to the Weaknesses overview). */
+  puzzleThemes?: string[];
 }
 
 export interface RepCandidate {
@@ -27,6 +30,8 @@ export interface RepCandidate {
   tag?: string;
   /** Present for srs / new reps — the opening to drill. */
   openingId?: string;
+  /** Present for weakness reps — themes to deep-link into a tactical drill. */
+  puzzleThemes?: string[];
 }
 
 export interface BuildTodaysRepsInput {
@@ -59,6 +64,7 @@ function weaknessRep(w: WeaknessRep, rank: number): RepCandidate {
     label: w.label,
     subtitle: `${lead} — seen ${timesPhrase(w.openCount)}.`,
     tag: w.tag,
+    puzzleThemes: w.puzzleThemes,
   };
 }
 

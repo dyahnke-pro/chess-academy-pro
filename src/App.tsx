@@ -38,7 +38,6 @@ import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
 import { TrainingPlanRolodexPage } from './components/Coach/TrainingPlanRolodexPage';
 import { GameInsightsPage } from './components/Insights/GameInsightsPage';
 import { GamesDrilldownPage } from './components/Insights/GamesDrilldownPage';
-import { CoachTrainPage } from './components/Coach/CoachTrainPage';
 import { CoachTeachPage } from './components/Coach/CoachTeachPage';
 import { CoachEndgamePage } from './components/Coach/CoachEndgamePage';
 import { CoachReviewListPage } from './components/Coach/CoachReviewListPage';
@@ -260,7 +259,10 @@ export function App(): JSX.Element {
           <Route path="/coach/analyse" element={<ErrorBoundary><CoachAnalysePage /></ErrorBoundary>} />
           <Route path="/coach/plan" element={<ErrorBoundary><TrainingPlanRolodexPage /></ErrorBoundary>} />
           {/* /coach/report is a legacy alias — redirect lives below in the redirects block */}
-          <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
+          {/* /coach/train consolidated into the Training Plan (David 2026-05-25):
+              the plan is the single training hub. CoachTrainPage was an orphaned,
+              parallel recommender (no nav link). Redirect to the plan. */}
+          <Route path="/coach/train" element={<Navigate to="/coach/plan" replace />} />
           <Route path="/coach/teach" element={<ErrorBoundary><CoachTeachPage /></ErrorBoundary>} />
           <Route path="/coach/endgame" element={<ErrorBoundary><CoachEndgamePage /></ErrorBoundary>} />
           <Route path="/coach/review" element={<ErrorBoundary><CoachReviewListPage /></ErrorBoundary>} />

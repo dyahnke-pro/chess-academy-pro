@@ -11,6 +11,7 @@ import { scaledShadow } from '../../utils/neonColors';
 import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
 import { getUnlearnedFavoriteOpenings } from '../../services/openingService';
 import { getSrsDueOpenings } from '../../services/srsOpeningService';
+import { getDueSetupPuzzleCount } from '../../services/tacticSetupService';
 import { buildTodaysReps } from '../../services/trainingPlanSelector';
 
 interface SectionItem {
@@ -65,41 +66,64 @@ const SECTIONS: SectionItem[] = [
 function TodayStatus(): JSX.Element | null {
   const navigate = useNavigate();
   const [count, setCount] = useState<number | null>(null);
+  const [setupDue, setSetupDue] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const [weaknesses, srsDue, newLines] = await Promise.all([
+      const [weaknesses, srsDue, newLines, setupCount] = await Promise.all([
         getUnifiedWeaknessProfile(),
         getSrsDueOpenings(),
         getUnlearnedFavoriteOpenings(),
+        getDueSetupPuzzleCount(),
       ]);
       if (cancelled) return;
       setCount(buildTodaysReps({ weaknesses, srsDue, newLines, total: 5 }).length);
+      setSetupDue(setupCount);
     })();
     return () => { cancelled = true; };
   }, []);
 
-  if (count === null || count === 0) return null;
+  if (count === null || (count === 0 && setupDue === 0)) return null;
 
   return (
-    <div className="max-w-lg mx-auto w-full">
-      <button
-        onClick={() => void navigate('/coach/plan')}
-        className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-theme-accent/10 border border-theme-accent/30 hover:opacity-80 transition-all"
-        data-testid="dashboard-today-status"
-      >
-        <Target size={18} className="text-theme-accent shrink-0" />
-        <div className="flex-1 text-left min-w-0">
-          <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-            {count} {count === 1 ? 'rep' : 'reps'} ready today
-          </span>
-          <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-            Your Training Plan — lines to learn, weaknesses to drill.
-          </p>
-        </div>
-        <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
-      </button>
+    <div className="max-w-lg mx-auto w-full flex flex-col gap-2">
+      {count > 0 && (
+        <button
+          onClick={() => void navigate('/coach/plan')}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-theme-accent/10 border border-theme-accent/30 hover:opacity-80 transition-all"
+          data-testid="dashboard-today-status"
+        >
+          <Target size={18} className="text-theme-accent shrink-0" />
+          <div className="flex-1 text-left min-w-0">
+            <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+              {count} {count === 1 ? 'rep' : 'reps'} ready today
+            </span>
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              Your Training Plan — lines to learn, weaknesses to drill.
+            </p>
+          </div>
+          <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
+        </button>
+      )}
+      {setupDue > 0 && (
+        <button
+          onClick={() => void navigate('/tactics/setup')}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-teal-500/10 border border-teal-500/30 hover:opacity-80 transition-all"
+          data-testid="dashboard-setup-due"
+        >
+          <Target size={18} className="text-teal-400 shrink-0" />
+          <div className="flex-1 text-left min-w-0">
+            <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+              {setupDue} setup {setupDue === 1 ? 'puzzle' : 'puzzles'} due
+            </span>
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              Engineer the tactic — review the quiet prep moves.
+            </p>
+          </div>
+          <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
+        </button>
+      )}
     </div>
   );
 }

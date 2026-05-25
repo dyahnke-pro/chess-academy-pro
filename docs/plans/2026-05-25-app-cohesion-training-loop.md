@@ -213,6 +213,29 @@ bubble says." This is the only call that changes the data model.
 ## 7. Decisions log
 - 2026-05-25 — Plan written; awaiting David's call on §6 (merge vs
   dual-write). Default = merge unless told otherwise.
+- 2026-05-25 — David: "Do both." Built read-merge (Option A) +
+  dual-write (Option B).
+- 2026-05-25 — David: "work down the list ... all tied together in a
+  pretty bow." Closed the remaining standalone surfaces (below).
+
+## 9. Implementation status (2026-05-25)
+
+| Item | Status |
+|---|---|
+| 3.1 two-bucket disease | ✅ DONE — `weaknessSpine.getUnifiedWeaknessProfile()` (merge + dedup); read by Weaknesses page, Training Plan, Dashboard, Tactical Profile. |
+| Option B dual-write | ✅ DONE — `addMistakePuzzleFromCapture` from `captureMisconception`. |
+| O1 review walk capture | ✅ DONE — `useReviewBlunderCapture` mounted in the walk. |
+| O2 plan srs/new pools | ✅ DONE — `getSrsDueOpenings` + `getUnlearnedFavoriteOpenings` feed `buildTodaysReps`. |
+| O3 SRS auto-enroll | ✅ DONE — `markRungComplete('learn')` → `enrollOpeningLine`. |
+| O4 Tactical Profile | ✅ DONE — "From your games" section from the unified spine; taps drill via `/tactics/adaptive`. |
+| O5 Dashboard live | ✅ DONE — `TodayStatus` strip (plan reps + setup-due). |
+| O7 duplicate recommender | ✅ DONE — `/coach/train` redirects to `/coach/plan`; `CoachTrainPage` unmounted. |
+| Weakness rep → real drill | ✅ DONE — weakness reps deep-link to `/tactics/adaptive` with the tag's themes; completion spaces the misconception tag (`recordTagDrillResult`) — closes the capture→drill→space loop that was never wired. |
+| O6 Setup Trainer | ✅ tied in — `getDueSetupPuzzleCount` surfaced on the Dashboard daily strip (it already consumes the spine as a source). |
+| B1 Pitfall Play lock | ✅ DONE — in-page `OpeningPlayMode`. |
+| Endgame | ✅ via spine — endgame mistakes flow through the `endgame` bucket of the unified profile. A dedicated endgame-lesson SRS scheduler is net-new infra (no due-model today) — deferred, not faked. |
+| B2 coach-chat live FEN | ⏭️ skipped — no live board on the masterclass overview; line-scope already works. |
+| Four SRS schedulers | ⏭️ left separate — `puzzles` / `mistakePuzzles` / `srsOpeningCards` / `misconceptionTags` each schedule independently but all now feed the plan/dashboard. A single cross-store "due today" scheduler is a larger refactor, deferred. |
 
 ## 8. Next-session pickup
 Start at Phase 1 once §6 is decided. The audit findings + file:line
