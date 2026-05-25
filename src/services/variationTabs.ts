@@ -46,6 +46,69 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /fantasy/i, label: 'Fantasy' },
     { test: /tartakower|breyer/i, label: 'Tartakower' },
   ],
+  // Four Knights Game — quiet, classical White opening. Main-line pill = the
+  // Spanish Four Knights / Metger (the showcase, exempt from this list). Tabs
+  // ordered by reasoned amateur prevalence: the open Scotch Four Knights and
+  // the tricky Italian fork-trick are most-met, then Glek's modern fianchetto,
+  // then Black's ambitious Rubinstein counter.
+  'four-knights-game': [
+    { test: /scotch four knights/i, label: 'Scotch Four Knights' },
+    { test: /italian four knights/i, label: 'Italian Four Knights' },
+    { test: /glek/i, label: 'Glek System' },
+    { test: /rubinstein/i, label: 'Rubinstein' },
+  ],
+  // London System — quiet, system-based White opening (Carlsen's workhorse).
+  // Main-line pill = the London vs ...d5 / ...Qb6 poisoned-pawn line (the
+  // showcase, exempt). Tabs are the two DB-anchored, distinct structures with
+  // student-winning master games: the fianchetto and the sharp Jobava. (The
+  // ...c5-Benoni and ...Bf5-mirror lines lack a ≥6-ply line in
+  // openings-lichess.json, so per G3 they are not taught as tabs.)
+  'london-system': [
+    { test: /king's indian|kings indian/i, label: 'vs KID' },
+    { test: /jobava/i, label: 'Jobava' },
+  ],
+  // Catalan Opening — White's fianchetto bind (Kramnik/Carlsen/Ding weapon).
+  // Main-line pill = the Open Catalan (…dxc4) with the pawn-recovery squeeze
+  // (the showcase, exempt). The two DB-anchored, structurally-distinct tabs
+  // with student-winning master games: the Closed Catalan and the Slav move-
+  // order. (Other repertoire sub-lines fold into the Open main structure.)
+  'catalan-opening': [
+    { test: /closed catalan/i, label: 'Closed' },
+    { test: /vs slav|slav setup/i, label: 'vs Slav' },
+  ],
+  // English Opening — 1.c4, the flexible flank opening. Main-line pill = the
+  // Reversed Sicilian (1.c4 e5) with the queenside reversed-Dragon plan (the
+  // showcase, exempt). The two DB-anchored, structurally-distinct tabs with
+  // student-winning master games: the Symmetrical (1.c4 c5) and the sharp
+  // Mikenas Attack.
+  'english-opening': [
+    { test: /english: symmetrical/i, label: 'Symmetrical' },
+    { test: /mikenas/i, label: 'Mikenas' },
+  ],
+  // Réti Opening — hypermodern 1.Nf3/c4/g3. Main-line pill = the Nimzo-English
+  // Hybrid (the b3/Bb2 double-fianchetto, the quintessential Réti, exempt). The
+  // one DB-anchored, NON-duplicate distinct tab is the ...Bf5 Anti-Slav. (The
+  // Réti "Advance c4-d4" transposes directly into the Catalan — already built
+  // — so per §0.1c it folds there rather than duplicating as a Réti tab.)
+  'reti-opening': [
+    { test: /anti-slav/i, label: 'Anti-Slav' },
+  ],
+  // King's Indian Attack — the universal d3/Nd2/g3/Bg2/e4 system. Main-line
+  // pill = the vs-French treatment (the e5-wedge + Nf1-h2-g4 kingside storm,
+  // the KIA archetype, exempt). The one DB-anchored distinct tab is the ...g6
+  // KID-style response, where White pivots to the centre and queenside.
+  'kings-indian-attack': [
+    { test: /kid-style/i, label: 'KID-style' },
+  ],
+  // Evans Gambit — the romantic 4.b4 attacking gambit. Main-line pill = the
+  // Accepted main (...Bxb4 c3 Ba5 d4, the f7 attack, exempt). Three DB-anchored
+  // distinct tabs: Declined (...Bb6), the wild Compromised Defence (...dxc3),
+  // and Lasker's solid antidote (...Be7).
+  'evans-gambit': [
+    { test: /declined/i, label: 'Declined' },
+    { test: /compromised/i, label: 'Compromised' },
+    { test: /lasker/i, label: 'Lasker' },
+  ],
   // Scotch Game — hand-picked tabs, frequency-ordered (repertoire weights).
   // Main-line pill = the Classical 4…Bc5 Be3 Qf6 line (the repertoire pgn), so
   // the "Classical" variation is omitted as a tab (it'd duplicate the pill).

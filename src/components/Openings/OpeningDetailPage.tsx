@@ -34,6 +34,13 @@ import { getBenkoGambitTabPlanIds } from '../../services/benkoGambitMasterclassT
 import { getDutchDefenceTabPlanIds } from '../../services/dutchDefenceMasterclassTabs';
 import { getKingsGambitTabPlanIds } from '../../services/kingsGambitMasterclassTabs';
 import { getSicilianDragonTabPlanIds } from '../../services/sicilianDragonMasterclassTabs';
+import { getFourKnightsTabPlanIds } from '../../services/fourKnightsMasterclassTabs';
+import { getLondonTabPlanIds } from '../../services/londonMasterclassTabs';
+import { getCatalanTabPlanIds } from '../../services/catalanMasterclassTabs';
+import { getEnglishTabPlanIds } from '../../services/englishMasterclassTabs';
+import { getRetiTabPlanIds } from '../../services/retiMasterclassTabs';
+import { getKiaTabPlanIds } from '../../services/kiaMasterclassTabs';
+import { getEvansTabPlanIds } from '../../services/evansMasterclassTabs';
 import { getSicilianNajdorfTabPlanIds } from '../../services/sicilianNajdorfMasterclassTabs';
 import { getSicilianSveshnikovTabPlanIds } from '../../services/sicilianSveshnikovMasterclassTabs';
 import { getSicilianAlapinTabPlanIds } from '../../services/sicilianAlapinMasterclassTabs';
@@ -1057,6 +1064,13 @@ export function OpeningDetailPage(): JSX.Element {
     getDutchDefenceTabPlanIds(opening.id, tabKey) ??
     getKingsGambitTabPlanIds(opening.id, tabKey) ??
     getSicilianDragonTabPlanIds(opening.id, tabKey) ??
+    getFourKnightsTabPlanIds(opening.id, tabKey) ??
+    getLondonTabPlanIds(opening.id, tabKey) ??
+    getCatalanTabPlanIds(opening.id, tabKey) ??
+    getEnglishTabPlanIds(opening.id, tabKey) ??
+    getRetiTabPlanIds(opening.id, tabKey) ??
+    getKiaTabPlanIds(opening.id, tabKey) ??
+    getEvansTabPlanIds(opening.id, tabKey) ??
     getSicilianNajdorfTabPlanIds(opening.id, tabKey) ??
     getSicilianSveshnikovTabPlanIds(opening.id, tabKey) ??
     getSicilianAlapinTabPlanIds(opening.id, tabKey) ??
