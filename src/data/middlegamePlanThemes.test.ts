@@ -158,7 +158,7 @@ describe('masterclass plan lines carry a short (learnCues) register', () => {
   // Short-register backlog can only SHRINK. Lower SHORT_CEILING as cues are
   // authored; never raise it (a new masterclass line must ship with both
   // registers, not be added to the baseline).
-  const SHORT_CEILING = 104;
+  const SHORT_CEILING = 86;
   it(`short-register baseline never grows (ceiling ${SHORT_CEILING})`, () => {
     expect(baseline.size, 'middlegamePlanShort.baseline.json grew — author the short cues instead of baselining').toBeLessThanOrEqual(SHORT_CEILING);
   });
