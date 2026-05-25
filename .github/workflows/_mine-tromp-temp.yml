@@ -1,0 +1,58 @@
+name: TEMP mine trompowsky-attack gems
+
+# Temporary push-triggered miner for the Queen's Gambit masterclass build.
+# The web sandbox egress is GitHub-only (amateur explorer + URLs unreachable),
+# so gems are mined on a runner (open network) per CLAUDE.md gem-doctrine §7 /
+# playbook STEP 6. Engine-confirmed (apt Stockfish). Opens a PR with the
+# refreshed punish-gems.json (main is branch-protected). DELETE after merge.
+
+on:
+  push:
+    branches: [claude/mine-tromp-gems]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  mine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci --no-audit --no-fund --prefer-offline
+      - name: Install Stockfish
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y stockfish
+          which stockfish || true
+      - name: Mine trompowsky-attack (engine-confirmed)
+        env:
+          STOCKFISH_PATH: /usr/games/stockfish
+          OPENINGS: trompowsky-attack
+        run: node scripts/mine-punish-gems.mjs
+      - name: Gate the refreshed gems
+        run: npx vitest run src/data/punishGems.test.ts
+      - name: Open PR with the mined Trompowsky gems
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: 'chore(gems): mine trompowsky-attack punish-gems (engine-confirmed)'
+          branch: chore/tromp-gems-${{ github.run_id }}
+          delete-branch: true
+          base: main
+          title: 'chore(gems): trompowsky-attack punish-gems (engine-confirmed)'
+          body: |
+            Mined `trompowsky-attack` on a runner (amateur explorer + Stockfish
+            reachable here; the web sandbox is GitHub-only). `punishGems` gate
+            ran green before this PR opened. Verify the headline crushes vs
+            theory, then merge so the masterclass build can narrate them.
+
+            Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          add-paths: |
+            src/data/punish-gems.json
+          author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
+          committer: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
