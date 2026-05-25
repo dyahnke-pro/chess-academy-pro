@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Chess } from 'chess.js';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
-import { Ban, ChevronDown, ChevronUp, PlayCircle } from 'lucide-react';
+import { Ban, BookOpen as LearnIcon, Brain, ChevronDown, ChevronUp, PlayCircle, Swords } from 'lucide-react';
 import type { CommonMistake } from '../../types';
 import type { BoardArrow } from '../Chessboard/ConsistentChessboard';
 
@@ -23,20 +23,22 @@ function resolveMoveSquares(
 const WRONG_ARROW_COLOR = 'rgba(239, 68, 68, 0.85)'; // red
 const CORRECT_ARROW_COLOR = 'rgba(34, 197, 94, 0.85)'; // green
 
+type PitfallAction = 'watch' | 'learn' | 'practice' | 'play';
+
 interface CommonMistakesSectionProps {
   mistakes: CommonMistake[];
   boardOrientation: 'white' | 'black';
-  /** Fired when the user taps "Watch the punishment" on a mistake whose
-   *  punishmentLine is authored. The page mounts PlayableLinePlayer
-   *  (locked WLPP grammar §1a) — same surface that drives middlegame
-   *  plans. Mistakes without a punishmentLine still expand-in-place. */
-  onWatchPunishment?: (mistake: CommonMistake) => void;
+  /** Fired when the user taps a WLPP action on a pitfall. The page drives
+   *  PlayableLinePlayer (Watch/Learn/Practice on the antidote line) or hands
+   *  off to the coach (Play) — locked WLPP grammar. Every mistake is a
+   *  playable line, never a static card (David 2026-05-24). */
+  onPitfallAction?: (mistake: CommonMistake, action: PitfallAction) => void;
 }
 
 export function CommonMistakesSection({
   mistakes,
   boardOrientation,
-  onWatchPunishment,
+  onPitfallAction,
 }: CommonMistakesSectionProps): JSX.Element {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
@@ -51,7 +53,7 @@ export function CommonMistakesSection({
         </h3>
       </div>
       <p className="text-xs text-theme-text-muted mb-3">
-        Natural-looking moves that are actually wrong. Each one plays out so the reason is on the board.
+        Natural-looking moves that are actually wrong. Play each one out — Watch the fix, Learn it, Practice it, or Play it against the coach.
       </p>
       <div className="space-y-2">
         {mistakes.map((mistake, i) => {
@@ -63,7 +65,7 @@ export function CommonMistakesSection({
               mistake={mistake}
               isExpanded={isExpanded}
               onToggle={() => setExpandedIndex(isExpanded ? null : i)}
-              onWatchPunishment={onWatchPunishment}
+              onPitfallAction={onPitfallAction}
               boardOrientation={boardOrientation}
             />
           );
@@ -78,7 +80,7 @@ interface MistakeCardProps {
   mistake: CommonMistake;
   isExpanded: boolean;
   onToggle: () => void;
-  onWatchPunishment?: (mistake: CommonMistake) => void;
+  onPitfallAction?: (mistake: CommonMistake, action: PitfallAction) => void;
   boardOrientation: 'white' | 'black';
 }
 
@@ -87,7 +89,7 @@ function MistakeCard({
   mistake,
   isExpanded,
   onToggle,
-  onWatchPunishment,
+  onPitfallAction,
   boardOrientation,
 }: MistakeCardProps): JSX.Element {
   // Compute red arrow (wrong move) and green arrow (correct move) by
@@ -107,7 +109,15 @@ function MistakeCard({
     return out;
   }, [mistake.fen, mistake.wrongMove, mistake.correctMove]);
 
-  const hasPunishment = Boolean(mistake.punishmentLine && onWatchPunishment);
+  // Only offer the WLPP row when the antidote line is buildable (the correct
+  // move parses against the FEN). A malformed entry degrades to the static
+  // expand-card rather than mounting an empty player.
+  const playable = Boolean(onPitfallAction && resolveMoveSquares(mistake.fen, mistake.correctMove));
+
+  const act = (action: PitfallAction) => (e: React.MouseEvent): void => {
+    e.stopPropagation();
+    onPitfallAction?.(mistake, action);
+  };
 
   return (
     <div
@@ -139,6 +149,46 @@ function MistakeCard({
           <ChevronDown size={14} className="text-theme-text-muted shrink-0" />
         )}
       </button>
+      {playable && (
+        <div className="flex items-center gap-1.5 px-3 pb-3 -mt-1">
+          <button
+            onClick={act('watch')}
+            className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-watch"
+            aria-label={`Watch the fix for ${mistake.wrongMove}`}
+            title="Watch"
+            data-testid={`pitfall-watch-${i}`}
+          >
+            <PlayCircle size={16} />
+          </button>
+          <button
+            onClick={act('learn')}
+            className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-learn"
+            aria-label={`Learn the fix for ${mistake.wrongMove}`}
+            title="Learn"
+            data-testid={`pitfall-learn-${i}`}
+          >
+            <LearnIcon size={16} />
+          </button>
+          <button
+            onClick={act('practice')}
+            className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-practice"
+            aria-label={`Practice the fix for ${mistake.wrongMove}`}
+            title="Practice"
+            data-testid={`pitfall-practice-${i}`}
+          >
+            <Brain size={16} />
+          </button>
+          <button
+            onClick={act('play')}
+            className="p-2 min-w-[36px] min-h-[36px] flex items-center justify-center rounded-lg hover:bg-theme-accent/20 bg-theme-surface border border-theme-border hover:border-theme-accent/40 text-theme-text-muted hover:text-theme-accent transition-colors opening-action-glow opening-action-glow-play"
+            aria-label={`Play this line against the coach`}
+            title="Play"
+            data-testid={`pitfall-play-${i}`}
+          >
+            <Swords size={16} />
+          </button>
+        </div>
+      )}
       {isExpanded && (
         <div className="px-3 pb-3 space-y-2">
           <div className="flex justify-center">
@@ -169,19 +219,6 @@ function MistakeCard({
           <p className="text-sm text-theme-text leading-relaxed">
             {mistake.explanation}
           </p>
-          {hasPunishment && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onWatchPunishment?.(mistake);
-              }}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg bg-red-500/15 border-2 border-red-400/50 text-red-200 text-sm font-semibold hover:bg-red-500/25 hover:border-red-400/70 transition-colors"
-              data-testid={`mistake-watch-${i}`}
-            >
-              <PlayCircle size={16} />
-              Watch the punishment play out
-            </button>
-          )}
         </div>
       )}
     </div>

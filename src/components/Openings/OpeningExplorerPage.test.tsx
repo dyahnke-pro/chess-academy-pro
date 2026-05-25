@@ -8,6 +8,7 @@ import { OpeningExplorerPage } from './OpeningExplorerPage';
 const mockGetRepertoireOpenings = vi.fn();
 const mockSearchOpenings = vi.fn();
 const mockGetOpeningsByEcoLetter = vi.fn();
+const mockGetMasterclassOpeningIds = vi.fn();
 
 const whiteOpening = {
   id: 'vienna-game',
@@ -85,6 +86,7 @@ vi.mock('../../services/openingService', () => ({
   getRepertoireOpenings: (...args: unknown[]): unknown => mockGetRepertoireOpenings(...args),
   searchOpenings: (...args: unknown[]): unknown => mockSearchOpenings(...args),
   getOpeningsByEcoLetter: (...args: unknown[]): unknown => mockGetOpeningsByEcoLetter(...args),
+  getMasterclassOpeningIds: (...args: unknown[]): unknown => mockGetMasterclassOpeningIds(...args),
   toggleFavorite: vi.fn().mockResolvedValue(true),
   getMasteryPercent: (o: typeof whiteOpening) => Math.round(o.drillAccuracy * 100),
   needsReview: (o: typeof whiteOpening) => o.drillAttempts > 0 && o.drillAccuracy < 0.7,
@@ -107,10 +109,26 @@ describe('OpeningExplorerPage', () => {
     vi.clearAllMocks();
     mockGetRepertoireOpenings.mockResolvedValue([whiteOpening, blackOpening]);
     mockSearchOpenings.mockResolvedValue([]);
+    mockGetMasterclassOpeningIds.mockReturnValue([]);
     mockGetOpeningsByEcoLetter.mockImplementation((letter: string) => {
       if (letter === 'A') return Promise.resolve([ecoOpening]);
       return Promise.resolve([]);
     });
+  });
+
+  // De-dup contract (David 2026-05-24): masterclass openings live ONLY on the
+  // Masterclasses tab — they must NOT also appear in the Most Common list, even
+  // though they're still repertoire records. Exclusion is keyed on the manifest
+  // ids, so each new masterclass auto-drops out the moment its manifest lands.
+  it('excludes masterclass openings from the Most Common tab', async () => {
+    mockGetMasterclassOpeningIds.mockReturnValue(['vienna-game']);
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      // The non-masterclass opening still shows…
+      expect(screen.getByTestId('opening-card-sicilian-najdorf')).toBeInTheDocument();
+    });
+    // …but the masterclass one is gone from Most Common.
+    expect(screen.queryByTestId('opening-card-vienna-game')).not.toBeInTheDocument();
   });
 
   it('renders the page title', async () => {

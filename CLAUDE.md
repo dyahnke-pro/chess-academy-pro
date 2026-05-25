@@ -1156,10 +1156,51 @@ playbook holds the rules you MUST follow, in particular:
      confirmed) AND can flag a respected mainline you'd wrongly ship. Spot-
      check the headline crushes + any surprising one; drop what theory says is
      fine, keep verified refutations.
-  7. **Engine availability:** CI (`.github/workflows/mine-punish-gems.yml`,
-     apt-installs stockfish) OR local — the sandbox CAN `apt-get install -y
-     stockfish` (binary at `/usr/games/stockfish`); the miner is engine-first
-     and refuses to run without one.
+  7. **Engine availability + the explorer is NOT blocked (corrected
+     2026-05-24 — stop re-diagnosing this).** The miner runs FULLY in the web
+     sandbox. Two facts that earlier sessions kept getting wrong:
+     - **Stockfish is PRE-INSTALLED** at `/usr/games/stockfish` (no
+       `apt-get` needed; `resolveStockfish()` finds it). CI
+       (`.github/workflows/mine-punish-gems.yml`) also apt-installs it.
+     - **The explorer proxy — TEST IT FIRST; the allowlist varies per
+       environment (locked 2026-05-24).** The miner calls David's OWN app
+       domain `https://chess-academy-pro.vercel.app/api/lichess-explorer`
+       (NOT a third-party host — `explorer.lichess.ovh`, `lichess.org`,
+       `chess.com` are always blocked, and the miner doesn't call those). The
+       egress allowlist is fixed at container start and DIFFERS between
+       environments: in some web sandboxes the proxy returns 200 (mine
+       locally), in others it returns `Host not in allowlist` (retrying won't
+       help — route to CI). So do NOT hard-assert either "it's blocked" or
+       "it's reachable" — **`curl` the proxy URL first** and branch:
+       - 200 → just run it: `OPENINGS=<id> node scripts/mine-punish-gems.mjs`.
+       - `Host not in allowlist` → mine on a GitHub Actions runner (open
+         network): trigger `.github/workflows/mine-punish-gems.yml`
+         (`workflow_dispatch`, input `openings`), or push a temporary
+         path-filtered `push:` workflow that runs the miner and commits
+         `punish-gems.json` back to the branch (the miner MERGES — a scoped
+         `OPENINGS=<id>` run keeps other openings' gems). Then pull + author
+         the narration locally.
+       The same test-first / CI-fallback rule covers the masters-LEGITIMACY
+       soundness sub-checks (`mastersCoverage.test.ts` Hole 6a/7a), which also
+       query the live explorer and pass VACUOUSLY when it's unreachable — a
+       sandbox "green" there is not a real green; dump CI's flags on a runner.
+     - **Seeds auto-derive** from `repertoire.json` (color → studentChar,
+       common variation prefix → baseSeed), so a NEW masterclass opening mines
+       with no hand-added `OPENING_SEEDS` entry. The map is now just an
+       override for hand-tuned base seeds.
+     - **🚫 Do NOT substitute `public/data/openings-masters-db.json` as the
+       gem source — it yields ZERO gems and that's not a bug.** That DB is
+       MASTERS-only (avg rating ~2300+); masters do NOT play the refutable
+       inaccuracies the miner hunts (the gambit-pawn grab, the Bxf7+ walk-in),
+       so at the 2%/100-game bar there is NOTHING to punish. A session that
+       distrusts the proxy and points the miner at the masters DB will mine 0
+       gems and wrongly conclude "the opening has no gems." The gem source is
+       the AMATEUR explorer (`ratings=1600,1800,2000`) — and the proxy above
+       serves exactly that and IS reachable. The masters DB is the right
+       source for THEORY / mainline frequency (`masterPlayLookup.ts` uses it),
+       NOT for amateur-blunder mining. Amateur-vs-masters is the whole point:
+       master buckets HIDE the crushes (CLAUDE.md gem-doctrine §1).
+     The miner is engine-first and refuses to run without an engine.
   8. **GATE + post-deploy contract:** `src/data/punishGems.test.ts` +
      `wlppNarration.test.ts` (in ship-check) prove legality / DB-anchor / tier
      evals / the WLPP narration contract (Watch=authored prose,

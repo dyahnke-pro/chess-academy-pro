@@ -88,6 +88,18 @@ data, log the source, let the gate catch drift."
 - **Real master PGNs:** the explorer's `topGames[]` returns `winner` + game
   `id`; export the full PGN (with evals) via `…/api/lichess-game-export?id=<id>`.
   So a student-side-winning model game for ANY variation is sandbox-sourceable.
+  **TEST-FIRST + LOCAL FALLBACK (locked 2026-05-24, same rule as gem mining):**
+  the export endpoint rides the same per-environment egress allowlist as the
+  explorer proxy — `curl` it first. If it 200s, pull PGNs live. If it's blocked
+  (`Host not in allowlist`), DON'T fall straight to "ask David" — there is a
+  committed local cache of **~2,000 real pro games (full PGN, 10 top players)**
+  at `docs/audit-runs/2026-05-19-pro-games-gen/raw-fetched.json`; curate model
+  games from it offline (`scripts/curate-pro-games-to-model-games.mjs` /
+  `curate-pro-games-fuzzy.mjs`), or run the live export on a GitHub Actions
+  runner (open network) and commit the result back. Only after BOTH the live
+  endpoint AND the local cache come up empty for a variation do you ask David
+  for a specific 403'd PGN. (Note: `openings-masters-db.json` gives move
+  frequencies, NOT game PGNs — it is NOT a model-game source.)
 - **`openings-lichess.json`** — canonical move DB (G3 spine anchor).
 - **Book corpus** — `chess-concepts.json` + `opening-book-pages.json` (pre-1930s
   classical; universal principles cover modern openings — see CLAUDE.md note).
@@ -96,8 +108,9 @@ data, log the source, let the gate catch drift."
 - **Modern opening-specific PROSE** is a copyright wall — none exists CC0.
   Don't acquire it; ground modern ideas on consensus understanding +
   principles + real moves, board-truth-gated. Per-variation modern book
-  pages self-hide (empty > fabricated). If you need a specific 403'd PGN,
-  ASK DAVID — he can pull it from his terminal.
+  pages self-hide (empty > fabricated). If you need a specific 403'd PGN that
+  is in NEITHER the live export NOR the local pro-game cache, ASK DAVID — he
+  can pull it from his terminal.
 
 **Per-decision rule (source → rule → gate):**
 1. **Which variations get tabs.** Earns a tab only if ALL of: (a) real named
@@ -107,6 +120,17 @@ data, log the source, let the gate catch drift."
    shares the parent's pawn structure folds INTO the parent tab, e.g. Caro
    Short → Advance); (d) a student-side-winning master game exists. Sub-1%
    junk never gets a tab. → DB-anchor + masters-coverage gates.
+   **🚫 NO UPPER CAP ON VARIATIONS (David 2026-05-24): if it's sound, ADD it.**
+   EVERY line that meets (a)–(d) earns a tab — do NOT stop at 6, or 8, or any
+   number. "Six feels like enough" is not a reason to drop a sound, distinct,
+   faced variation. The cap is the criteria themselves, not a count; a
+   weapon-rich or branch-rich opening (Sicilian, KID, Ruy) legitimately
+   carries many more tabs than a narrow one. This is the variation-specific
+   restatement of the "NO HARD COUNT RULES" doctrine below — the manifest
+   floor only catches accidental deletion; it is never a target or a ceiling.
+   When in doubt whether a borderline line clears (b)/(d), apply the standing
+   rule: verify it's genuinely sound + faced, and if so include it — leave out
+   only what fails a criterion, never what merely pushes the count past 6.
 2. **Tab order.** LOCKED to amateur frequency, most-faced first. The showcase
    "Main line" pill leads and is exempt from the sort. Deterministic from the
    explorer numbers — zero taste.
@@ -133,6 +157,29 @@ data, log the source, let the gate catch drift."
    continuation (every past-book ply masters-backed or engine-sound). Narration
    = prose only, board-truth gated, arrows lead the eye. → Holes 1/6 +
    lessonDepth + narrationAccuracy + §5b.
+8. **Pitfalls = common mistakes, and EVERY pitfall is a playable WLPP line
+   (David 2026-05-24, LOCKED).** The opening's `common-mistakes.json` entries
+   are NOT static cards — each one surfaces in the consolidated **Pitfalls**
+   zone with the full Watch/Learn/Practice/Play row, exactly like a variation
+   or a gem. The line is built by `commonMistakeToPlayableLine` (src/utils):
+   the student PLAYS the real `correctMove` (the antidote) from the real
+   `fen` while the narration (the entry's `explanation`) says WHY the
+   `wrongMove` is the error; the board leads the eye with a RED arrow on the
+   tempting wrong move and a GREEN arrow on the move played. **Never drill the
+   wrong move** — Watch/Learn/Practice teach the antidote; Play hands off to
+   the coach on this opening so the student meets the pitfall live. GROUNDED
+   (G3): the move is chess.js-validated from the entry's own data — never
+   invented; a malformed entry self-hides. **NARRATED BY HAND, TWO REGISTERS,
+   TIED TO SETTINGS (David 2026-05-24):** every masterclass pitfall carries
+   `explanation` (full Watch / Learn-FULL prose) AND a hand-authored
+   `shortNarration` (the ≤8-word Learn-LIMITED cue — move + 3-5 word echo,
+   never generated). The converter wires explanation→annotations and
+   shortNarration→learnCues so PlayableLinePlayer speaks the right register for
+   the user's FULL/LIMITED setting; absent a cue it falls back to move dictation
+   (non-curated tier only). Learn/Practice ALWAYS teach the antidote (the
+   correct move) — never the wrong-move line, even when a `punishmentLine`
+   exists (that's WATCH-only). → CommonMistakesSection.test +
+   commonMistakeLine.test + commonMistakeNarration.test (all in ship-check).
 
 **NO HARD COUNT RULES (David 2026-05-22).** Never mandate a number of key
 ideas / traps / variations. The manifest floors are "what was verified at
@@ -148,6 +195,24 @@ watching every one. The gates go red if you drift; the trail lets him audit.
 (two equally-frequent variations with no tiebreak), a variation with NO
 student-side-winning game, a needed PGN behind a 403, or any line/idea you
 cannot verify is real and sound. Otherwise: proceed.
+
+**🔒 DEFINITION OF DONE — a branch build is NOT done at the draft PR (locked
+2026-05-24).** Web/cloud sessions develop on a branch and open a PR — but the
+build is not complete, and you do NOT declare it done, until BOTH:
+1. **It lands on `main`.** The work has to be MERGED (per CLAUDE.md Deployment
+   Policy + G1's "MERGING A PR IS NOT THE END"). A green draft PR sitting
+   unmerged is a half-finished build, not a shipped one. If you lack merge
+   rights or there's an open question, say so and hand David the merge — don't
+   walk away calling it done.
+2. **The post-deploy audit runs against `main` and is green.** G1 is
+   NON-NEGOTIABLE: after the merge lands, run the surface's audit matrix
+   (`audit-punish-gems-loop.mjs` 3-pass, `audit-openings-interactive-loop.mjs`,
+   `audit-leadeye-plans`, `audit-named-traps`) + pull the audit stream (G2).
+   "Tests green on the branch" is NOT the audit — the audit catches deploy-
+   pipeline regressions the branch tests can't. A build whose audit hasn't run
+   on `main` is unverified, full stop. (This is the gap that bit the Italian
+   build: great work green on a branch, but unmerged + unaudited reads as
+   "not actually shipped.")
 
 ## 0.6 WORKED EXAMPLE — the §0.5 process applied (Caro Classical, 2026-05-22)
 
@@ -306,9 +371,17 @@ game MUST be a win/draw for that side. Add `'<id>'` to the `PROTECTED` list in
 **STEP 8 — checkpoint quizzes + common mistakes.**
 - `src/data/checkpoint-quizzes.json` keyed `'<id>'` (plan-quiz = inline
   multiple-choice with `correctIndex`; move-quiz = preview + practice CTA).
-- `src/data/common-mistakes.json` keyed `'<id>'` — **Watch-only** (NO
-  Learn/Practice/Play; drilling the wrong move is banned). Provide a
-  `punishmentLine` where a real one exists so "watch the punishment" lights up.
+- `src/data/common-mistakes.json` keyed `'<id>'` — each entry
+  (`fen`/`wrongMove`/`correctMove`/`explanation`) auto-surfaces in the
+  consolidated **Pitfalls** zone as a **full WLPP line** (David 2026-05-24,
+  supersedes the old "Watch-only" rule). No extra wiring: `CommonMistakesSection`
+  renders the Watch/Learn/Practice/Play row and `commonMistakeToPlayableLine`
+  builds the antidote line on the fly. Watch/Learn/Practice teach the CORRECT
+  move (the wrong move is never drilled — that ban still holds, it's just
+  satisfied by teaching the antidote, not by hiding the buttons); Play hands
+  off to the coach. Optionally author a richer `punishmentLine` (wrong move
+  played out + real engine-confirmed refutation, two-register narration +
+  lead-the-eye) — the converter uses it verbatim when present. → §0.1 rule 8.
 
 **STEP 9 — manifest (content floors).** `src/data/opening-manifests.json`:
 add the `'<id>'` entry declaring floors (`variations`, `middlegamePlans`,
@@ -316,6 +389,18 @@ add the `'<id>'` entry declaring floors (`variations`, `middlegamePlans`,
 `openingManifests` gate fails if actual < floor — declare honestly; if you
 legitimately have fewer, lower the floor explicitly (that's the sanctioned
 demotion, not a workaround).
+**🔒 DECLARING THE MANIFEST MOVES THE OPENING OUT OF "MOST COMMON" (David
+2026-05-24, LOCKED).** The main-40 repertoire is being replaced opening-by-
+opening with masterclasses, so a masterclass must NEVER also appear as a plain
+"Most Common" entry (no duplicate across tabs). This is automatic and needs NO
+extra wiring: the manifest keys ARE the masterclass set (`getMasterclassOpeningIds`),
+and `OpeningExplorerPage` excludes them from the Most Common list while
+`MasterclassesTab` shows exactly them. So adding the §STEP-9 manifest entry is
+what relocates the opening from Most Common → Masterclasses — verify it's gone
+from Most Common after the build. → OpeningExplorerPage.test (de-dup contract,
+in ship-check). The opening stays a full repertoire record (favorites, SRS,
+weakness rows, deep-links all keep working) — only the Most Common LISTING
+drops it.
 
 **INHERITED — DO NOT build per-opening (it just works):** the page shell +
 WLPP players (`OpeningDetailPage` / `PlayableLinePlayer` / `LessonPlayer` /

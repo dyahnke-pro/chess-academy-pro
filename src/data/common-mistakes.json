@@ -4,19 +4,22 @@
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
       "wrongMove": "Ng5",
       "correctMove": "c3",
-      "explanation": "Ng5 looks aggressive targeting f7, but after d5! exd5 Na5, Black wins the bishop pair and has a strong center. Instead c3 prepares d4 for a sound central build-up."
+      "explanation": "Ng5 looks aggressive targeting f7, but after d5! exd5 Na5, Black wins the bishop pair and has a strong center. Instead c3 prepares d4 for a sound central build-up.",
+      "shortNarration": "c3 — prepare d4, build the centre"
     },
     {
       "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 7",
       "wrongMove": "d4",
       "correctMove": "Nbd2",
-      "explanation": "Playing d4 immediately is premature — after exd4 cxd4 Bb4, Black pins the knight and puts pressure on d4. First develop with Nbd2, preparing d4 with proper support."
+      "explanation": "Playing d4 immediately is premature — after exd4 cxd4 Bb4, Black pins the knight and puts pressure on d4. First develop with Nbd2, preparing d4 with proper support.",
+      "shortNarration": "Nbd2 — support d4 before pushing it"
     },
     {
       "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
       "wrongMove": "Bxf7+",
       "correctMove": "d3",
-      "explanation": "Bxf7+ wins a pawn but after Kxf7, Black gets the bishop pair and the king is safe on g8 after Rf8. Develop solidly with d3 instead."
+      "explanation": "Bxf7+ wins a pawn but after Kxf7, Black gets the bishop pair and the king is safe on g8 after Rf8. Develop solidly with d3 instead.",
+      "shortNarration": "d3 — develop solidly, skip the sac"
     }
   ],
   "sicilian-najdorf": [
@@ -64,19 +67,22 @@
       "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
       "wrongMove": "e6",
       "correctMove": "Bf5",
-      "explanation": "e6 locks in the light-squared bishop — the Caro-Kann's main advantage is developing this bishop OUTSIDE the pawn chain first. Bf5 is the whole point of the opening."
+      "explanation": "e6 locks in the light-squared bishop — the Caro-Kann's main advantage is developing this bishop OUTSIDE the pawn chain first. Bf5 is the whole point of the opening.",
+      "shortNarration": "Bf5 — bishop out before locking with e6"
     },
     {
       "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 2",
       "wrongMove": "f3",
       "correctMove": "Nc3",
-      "explanation": "f3 weakens the kingside and blocks the knight. Nc3 develops naturally and maintains pressure on d5."
+      "explanation": "f3 weakens the kingside and blocks the knight. Nc3 develops naturally and maintains pressure on d5.",
+      "shortNarration": "Nc3 — develop, keep pressure on d5"
     },
     {
       "fen": "rn1qkb1r/pp2pppp/2p2n2/3p2B1/3PP3/2N5/PPP2PPP/R2QKBNR b KQkq - 0 4",
       "wrongMove": "Nxe4",
       "correctMove": "dxe4",
-      "explanation": "Nxe4 walks into Nxe4 dxe4 Qd4 forking e4 and g7. Simply recapture with dxe4 keeping a solid position."
+      "explanation": "Nxe4 walks into Nxe4 dxe4 Qd4 forking e4 and g7. Simply recapture with dxe4 keeping a solid position.",
+      "shortNarration": "dxe4 — just recapture, stay solid"
     }
   ],
   "ruy-lopez": [
@@ -84,7 +90,8 @@
       "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 3",
       "wrongMove": "Nf6",
       "correctMove": "a6",
-      "explanation": "Nf6 allows 4. O-O Nxe4 5. d4 (the Open Ruy Lopez) which leads to very sharp tactical play favoring White. a6 forces the bishop back and gives Black more flexibility."
+      "explanation": "Nf6 allows 4. O-O Nxe4 5. d4 (the Open Ruy Lopez) which leads to very sharp tactical play favoring White. a6 forces the bishop back and gives Black more flexibility.",
+      "shortNarration": "a6 — question the bishop, stay flexible"
     }
   ],
   "qgd": [
@@ -300,19 +307,22 @@
       "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
       "wrongMove": "Bc5",
       "correctMove": "Nf6",
-      "explanation": "Bc5 is passive and allows f4 with tempo. Nf6 counter-attacks e4 and fights for the initiative."
+      "explanation": "Bc5 is passive and allows f4 with tempo. Nf6 counter-attacks e4 and fights for the initiative.",
+      "shortNarration": "Nf6 — hit e4, take the initiative"
     },
     {
       "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
       "wrongMove": "exf4",
       "correctMove": "d5",
-      "explanation": "exf4 gives up the center. d5 strikes back centrally and opens lines for development."
+      "explanation": "exf4 gives up the center. d5 strikes back centrally and opens lines for development.",
+      "shortNarration": "d5 — strike back in the centre"
     },
     {
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
       "wrongMove": "fxe5",
       "correctMove": "d3",
-      "explanation": "fxe5 Nxe4 gives Black active piece play. d3 solidifies the center and prepares calm development."
+      "explanation": "fxe5 Nxe4 gives Black active piece play. d3 solidifies the center and prepares calm development.",
+      "shortNarration": "d3 — hold the centre, develop calmly"
     }
   ],
   "four-knights-game": [
@@ -364,7 +374,13 @@
       "punishmentLine": {
         "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
         "title": "Why ...e5 loses on the spot",
-        "moves": ["e5", "dxe5", "dxe5", "Qxd8+", "Kxd8"],
+        "moves": [
+          "e5",
+          "dxe5",
+          "dxe5",
+          "Qxd8+",
+          "Kxd8"
+        ],
         "annotations": [
           "...e5 looks like a fight for the centre, but d6 was just played last move and no longer defends e5. The d-file is one trade away from cracking wide open with Black's queen still sitting on d8.",
           "White takes immediately. dxe5 is forced — anything else loses a pawn for nothing.",
@@ -375,36 +391,82 @@
         "arrows": [
           [],
           [],
-          [{ "from": "d1", "to": "d8", "color": "rgba(34, 197, 94, 0.85)" }],
+          [
+            {
+              "from": "d1",
+              "to": "d8",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           []
         ],
         "highlights": [
           [
-            { "square": "e7", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "e5", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "d6", "color": "rgba(255, 235, 59, 0.5)" }
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ],
           [
-            { "square": "d4", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "e5", "color": "rgba(255, 165, 0, 0.55)" }
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ],
           [
-            { "square": "d6", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "e5", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "d1", "color": "rgba(255, 235, 59, 0.5)" },
-            { "square": "d8", "color": "rgba(255, 235, 59, 0.5)" }
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ],
           [
-            { "square": "d1", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "d8", "color": "rgba(255, 165, 0, 0.55)" }
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ],
           [
-            { "square": "e8", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "d8", "color": "rgba(255, 165, 0, 0.55)" }
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ]
-      }
+      },
+      "shortNarration": "Nf6 — develop and pressure e4"
     },
     {
       "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
@@ -414,7 +476,12 @@
       "punishmentLine": {
         "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
         "title": "Why ...Bg4 gives up the bishop pair",
-        "moves": ["Bg4", "h3", "Bxf3", "Qxf3"],
+        "moves": [
+          "Bg4",
+          "h3",
+          "Bxf3",
+          "Qxf3"
+        ],
         "annotations": [
           "...Bg4 pins the f3-knight to the queen, looking aggressive. The problem: the bishop has no safe retreat once h3 hits it, and the c8-bishop is the Pirc's most valuable long-term piece for the slow manoeuvring middlegame.",
           "h3 — the simple kick. Retreats to h5 lose to g4, retreats to d7 or c8 just waste two tempi.",
@@ -429,28 +496,68 @@
         ],
         "highlights": [
           [
-            { "square": "c8", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "g4", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "f3", "color": "rgba(255, 235, 59, 0.5)" }
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ],
           [
-            { "square": "h2", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "h3", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "h5", "color": "rgba(255, 235, 59, 0.5)" },
-            { "square": "g4", "color": "rgba(255, 235, 59, 0.5)" }
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ],
           [
-            { "square": "g4", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "f3", "color": "rgba(255, 165, 0, 0.55)" }
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ],
           [
-            { "square": "d1", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "f3", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "b7", "color": "rgba(255, 235, 59, 0.5)" },
-            { "square": "f7", "color": "rgba(255, 235, 59, 0.5)" }
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ]
-      }
+      },
+      "shortNarration": "O-O — castle, keep the bishop in reserve"
     },
     {
       "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R b - - 0 5",
@@ -460,7 +567,12 @@
       "punishmentLine": {
         "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R b - - 0 5",
         "title": "Why ...c5 locks YOU out of the game",
-        "moves": ["c5", "d5", "Na6", "Nd2"],
+        "moves": [
+          "c5",
+          "d5",
+          "Na6",
+          "Nd2"
+        ],
         "annotations": [
           "...c5 looks like Pirc-style counterplay, hitting d4. But White's centre is fully supported — d4 isn't dropping — and the push lets White close the door instead of opening it.",
           "d5 — and that's the trap. The centre is locked tight; ...c5 can't be undone. The c8-bishop is now buried behind c7-c5 with nowhere to go, and the g7-bishop bites on a wall at d4-e5.",
@@ -475,30 +587,76 @@
         ],
         "highlights": [
           [
-            { "square": "c7", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "c5", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "d4", "color": "rgba(255, 235, 59, 0.5)" }
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ],
           [
-            { "square": "d4", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "d5", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "c8", "color": "rgba(255, 235, 59, 0.5)" },
-            { "square": "g7", "color": "rgba(255, 235, 59, 0.5)" }
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ],
           [
-            { "square": "b8", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "a6", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "c7", "color": "rgba(255, 235, 59, 0.5)" }
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ],
           [
-            { "square": "f3", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "d2", "color": "rgba(255, 165, 0, 0.55)" },
-            { "square": "f1", "color": "rgba(255, 235, 59, 0.5)" },
-            { "square": "g3", "color": "rgba(255, 235, 59, 0.5)" },
-            { "square": "f5", "color": "rgba(255, 235, 59, 0.5)" }
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ]
-      }
+      },
+      "shortNarration": "Bg4 — pin the knight, make tension first"
     }
   ],
   "pro-naroditsky-jobava-london": [

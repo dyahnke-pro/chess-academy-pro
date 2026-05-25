@@ -236,7 +236,15 @@ export interface CommonMistake {
   fen: string;
   wrongMove: string;
   correctMove: string;
+  /** Full Watch / Learn-FULL narration (hand-authored): why the wrong move is
+   *  the error and what the correct move achieves. Board-focused prose. */
   explanation: string;
+  /** Hand-authored ≤8-word LEARN cue (the LIMITED-verbosity register), spoken
+   *  as the student plays the correct move. Move + a 3-5 word echo of the idea
+   *  ("Nf6 — hit e4, grab the initiative"). Never generated; when absent, Learn
+   *  falls back to plain move dictation (the non-curated tier). Masterclass
+   *  openings MUST carry it — gated by commonMistakeNarration.test. */
+  shortNarration?: string;
   /** Optional: the punishment played out as a narrated walkthrough.
    *  When set, the mistake renders as a "Watch the punishment" tile that
    *  mounts PlayableLinePlayer (locked WLPP grammar §1a) instead of the

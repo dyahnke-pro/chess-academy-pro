@@ -65,6 +65,7 @@ import { OpeningZoneHeader } from './OpeningZoneHeader';
 import { PageHelp } from '../Layout/PageHelp';
 import { MasterclassCoachChat } from './MasterclassCoachChat';
 import commonMistakesData from '../../data/common-mistakes.json';
+import { commonMistakeToPlayableLine } from '../../utils/commonMistakeLine';
 import middlegamePlansData from '../../data/middlegame-plans.json';
 import checkpointQuizzesData from '../../data/checkpoint-quizzes.json';
 import type { CommonMistake, CheckpointQuizItem } from '../../types';
@@ -156,7 +157,9 @@ type ViewMode =
   | 'middlegame-plan'
   | 'middlegame-practice'
   | 'middlegame-play'
-  | 'mistake-watch'
+  | 'pitfall-watch'
+  | 'pitfall-learn'
+  | 'pitfall-practice'
   | 'model-game';
 
 function computeFenFromPgn(pgn: string, setupFen?: string): string {
@@ -294,15 +297,32 @@ export function OpeningDetailPage(): JSX.Element {
     [],
   );
 
-  /** Mount PlayableLinePlayer (watch mode) on the mistake's authored
-   *  punishment line. Mistakes intentionally only get WATCH — Learn /
-   *  Practice / Play would be asking the student to drill the WRONG
-   *  move, which contradicts the pedagogy. The static expand-card stays
-   *  for mistakes without a punishmentLine (legacy fallback). */
-  const handleMistakeWatch = useCallback((mistake: CommonMistake): void => {
-    setActiveMistake(mistake);
-    setViewMode('mistake-watch');
-  }, []);
+  /** Pitfall WLPP (David 2026-05-24): every common mistake is a playable
+   *  line, NOT a static card. Watch/Learn/Practice drive PlayableLinePlayer
+   *  on the antidote line (the student plays the CORRECT move; the narration
+   *  says why the wrong move is the error — never drilling the wrong move).
+   *  Play hands off to the coach on this opening so the student meets the
+   *  pitfall live. Grounded: the line comes from the mistake's real
+   *  fen/correctMove (chess.js-validated), never invented. */
+  const handlePitfallAction = useCallback(
+    (mistake: CommonMistake, action: 'watch' | 'learn' | 'practice' | 'play'): void => {
+      if (action === 'play') {
+        const name = opening?.name ?? '';
+        if (!name) return;
+        useCoachMemoryStore.getState().setIntendedOpening({
+          name,
+          color: opening?.color ?? 'white',
+          capturedFromSurface: 'openings-play',
+          pgn: opening?.pgn,
+        });
+        void navigate(`/coach/play?side=${opening?.color ?? 'white'}`);
+        return;
+      }
+      setActiveMistake(mistake);
+      setViewMode(`pitfall-${action}` as ViewMode);
+    },
+    [opening, navigate],
+  );
 
   // Variation tab is URL-addressable (?line=marshall) so the training
   // plan, weaknesses, coach chat, etc. can deep-link a specific variation.
@@ -657,6 +677,30 @@ export function OpeningDetailPage(): JSX.Element {
     return <OpeningPlayMode opening={opening} customLine={gemLine} onExit={handleExit} />;
   }
 
+  // Pitfall WLPP — the antidote line for a common mistake. Watch plays the
+  // correct move with the narration explaining why the wrong move fails;
+  // Learn voice-guides the student to play the correct move; Practice is
+  // silent + hint. The line is synthesized from the mistake's real
+  // fen/correctMove (or its authored punishmentLine) — never invented.
+  if (
+    (viewMode === 'pitfall-watch' || viewMode === 'pitfall-learn' || viewMode === 'pitfall-practice') &&
+    activeMistake
+  ) {
+    const pitfallMode = viewMode === 'pitfall-watch' ? 'watch' : viewMode === 'pitfall-learn' ? 'learn' : 'practice';
+    const pitfallLine = commonMistakeToPlayableLine(activeMistake, pitfallMode);
+    if (pitfallLine) {
+      return (
+        <PlayableLinePlayer
+          line={pitfallLine}
+          boardOrientation={opening.color}
+          mode={pitfallMode}
+          onComplete={handleExit}
+          onExit={handleExit}
+        />
+      );
+    }
+  }
+
   // Walkthrough mode (trap/warning lines)
   if (viewMode === 'trap-walkthrough' && opening.trapLines?.[activeTrapLineIndex]) {
     return (
@@ -860,21 +904,6 @@ export function OpeningDetailPage(): JSX.Element {
         line={activeMiddlegamePlan.playableLines[0]}
         boardOrientation={opening.color}
         mode={playMode}
-        onComplete={handleExit}
-        onExit={handleExit}
-      />
-    );
-  }
-
-  // Common Mistake WATCH — auto-play the wrong move + its punishment
-  // with narration. Only WATCH is wired (Learn/Practice/Play would ask
-  // the student to drill the wrong move, which contradicts the point).
-  if (viewMode === 'mistake-watch' && activeMistake?.punishmentLine) {
-    return (
-      <PlayableLinePlayer
-        line={activeMistake.punishmentLine}
-        boardOrientation={opening.color}
-        mode="watch"
         onComplete={handleExit}
         onExit={handleExit}
       />
@@ -1762,7 +1791,7 @@ export function OpeningDetailPage(): JSX.Element {
           <CommonMistakesSection
             mistakes={mistakes}
             boardOrientation={opening.color}
-            onWatchPunishment={handleMistakeWatch}
+            onPitfallAction={handlePitfallAction}
           />
         </div>
       )}

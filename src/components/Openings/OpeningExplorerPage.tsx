@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   getRepertoireOpenings,
+  getMasterclassOpeningIds,
   getOpeningsByEcoLetter,
   searchOpenings,
   toggleFavorite,
@@ -140,13 +141,20 @@ export function OpeningExplorerPage(): JSX.Element {
     );
   }, []);
 
-  // Common/repertoire display (with optional search)
+  // Common/repertoire display (with optional search). Masterclass openings are
+  // EXCLUDED here — they live on the Masterclasses tab, not the Most Common
+  // list (David 2026-05-24: the main-40 repertoire is being replaced opening-
+  // by-opening with masterclasses, so a masterclass must NOT also appear as a
+  // plain "common" entry). Source of truth = the manifest keys, so each new
+  // masterclass auto-drops out of this list the moment its manifest is declared.
+  const masterclassIds = useMemo(() => new Set(getMasterclassOpeningIds()), []);
   const displayCommon = useMemo((): OpeningRecord[] => {
+    const base = repertoire.filter((o) => !masterclassIds.has(o.id));
     if (searchResultIds && tab === 'common') {
-      return repertoire.filter((o) => searchResultIds.has(o.id));
+      return base.filter((o) => searchResultIds.has(o.id));
     }
-    return repertoire;
-  }, [repertoire, searchResultIds, tab]);
+    return base;
+  }, [repertoire, masterclassIds, searchResultIds, tab]);
 
   // All openings search results
   const displayAllSearch = useMemo((): OpeningRecord[] | null => {
