@@ -722,26 +722,6 @@
       "explanation": "3.d3 is a quiet, harmless move that lets Black equalize comfortably. The principled choice is 3.Nxe5 (mainline) or 3.d4 (Steinitz attack). Choose your line and play it sharply."
     }
   ],
-  "qga": [
-    {
-      "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
-      "wrongMove": "b5",
-      "correctMove": "Nf6",
-      "explanation": "Defending the extra pawn with 3…b5? is a known trap — White plays 4.a4 b4 5.b3 cxb3 6.axb5 with a huge attack on the open files. The principled move is 3…Nf6 — give back the pawn for development and play a normal QGA position."
-    },
-    {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2BP4/4PN2/PP3PPP/RNBQK2R b KQkq - 0 5",
-      "wrongMove": "b5",
-      "correctMove": "c5",
-      "explanation": "Even after the bishop recaptures, …b5? is still a structural mistake — White plays 6.Bd3 and Black has weakened the queenside permanently. The mainline 5…c5 fights for the center and prepares …Nc6 development."
-    },
-    {
-      "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
-      "wrongMove": "e5",
-      "correctMove": "dxc4",
-      "explanation": "Pushing 2…e5? loses a pawn after 3.dxe5 d4 4.Nf3 Nc6 5.a3 with a clearly favorable position for White. The QGA accepts with 2…dxc4 — clean and theoretically sound."
-    }
-  ],
   "sicilian-sveshnikov": [
     {
       "fen": "r1bqkb1r/pp1p1ppp/2n2n2/1N2p3/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 6",

@@ -9014,59 +9014,6 @@
     ]
   },
   {
-    "id": "mp-qga-classical-isolated-pawn",
-    "openingId": "qga",
-    "criticalPositionFen": "rnbqk2r/1p3ppp/p3pn2/2b5/2B5/4PN2/PP3PPP/RNBQ1RK1 w kq - 0 8",
-    "title": "Classical Isolated d-pawn (IQP) attack",
-    "overview": "After Nf6 and e6, the classical QGA lines transition to an isolated d-pawn structure where White has the isolated d4 pawn. White's plan: use the d4-pawn as a wedge to gain space and piece activity. The Nf3 has e5 as an outpost; the c4-bishop targets f7; the queen swings to e2 then d3 supporting d4-d5 ideas.",
-    "pawnBreaks": [
-      {
-        "move": "d4-d5",
-        "explanation": "The break that liquidates the isolated d-pawn. After d5 exd5 White gains the e-file for the rooks and dissolves the structural weakness, often leading to a favorable middlegame."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nf3-e5 outpost",
-        "explanation": "The e5 square is a permanent outpost for the f3-knight once Black's e-pawn moves. From e5 the knight controls central squares and supports kingside attacks via Nxf7 or Ng4 ideas."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd1-e2-d3",
-        "explanation": "Qe2 prepares Rd1 (the queen rook to the d-file behind the isolated pawn). Qd3 then supports d4-d5 and aligns on the b1-h7 diagonal for kingside attack."
-      }
-    ],
-    "typicalMistakes": [
-      "Trading pieces too quickly — the IQP is strong with pieces on the board, weak in the endgame.",
-      "Pushing d4-d5 before piece coordination — Black equalizes if the break liquidates without gaining anything."
-    ]
-  },
-  {
-    "id": "mp-qga-active-bishop-development",
-    "openingId": "qga",
-    "criticalPositionFen": "rnbqkb1r/ppp2ppp/5n2/8/2BP4/2N5/PP3PPP/R1BQK1NR b KQkq - 2 6",
-    "title": "Active bishop development with Nc3 + Bd3",
-    "overview": "In lines where Black plays …e5 early to challenge the center, White accepts the symmetric pawn structure and aims for piece-based pressure. Nc3 attacks d5 (or the b5 square after a future b-push), Bd3 controls the long diagonal, and queen comes to e2 to support a quick e4 break.",
-    "pawnBreaks": [
-      {
-        "move": "e4-e5",
-        "explanation": "Once Black has played …e5xd4 White can later push e4-e5 to gain space and attack any Black piece on f6."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop pair",
-        "route": "Bd3 + Bc1-g5 or Bf4",
-        "explanation": "The dark-squared bishop develops to g5 or f4 attacking Black's queenside or kingside. The light-squared bishop on d3 supports central pawn pushes and aims at h7."
-      }
-    ],
-    "typicalMistakes": [
-      "Leaving the c-file open — Black's …Rc8 + …Rc1 doubling can be devastating.",
-      "Forgetting to support d4 with the queen or rook — Black's pieces target the pawn from multiple directions."
-    ]
-  },
-  {
     "id": "mp-sveshnikov-d5-outpost",
     "openingId": "sicilian-sveshnikov",
     "criticalPositionFen": "r1bqkb1r/5ppp/p1np1n2/1p2p1B1/4P3/N1N5/PPP2PPP/R2QKB1R w KQkq - 0 9",

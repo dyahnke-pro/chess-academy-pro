@@ -90,6 +90,14 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /cambridge/i, label: 'Cambridge Springs' },
     { test: /bf4/i, label: 'Bf4' },
   ],
+  'qga': [
+    { test: /smyslov/i, label: 'Smyslov' },
+    { test: /sadler/i, label: 'Sadler' },
+    { test: /central/i, label: 'Central' },
+    { test: /alekhine/i, label: 'Alekhine' },
+    { test: /modern tabiya|rd1/i, label: 'Modern' },
+    { test: /janowski/i, label: 'Janowski' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present

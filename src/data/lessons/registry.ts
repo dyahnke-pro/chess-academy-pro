@@ -36,6 +36,8 @@ import { QUEENS_GAMBIT_LESSON } from './queensGambit';
 import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
 import { QGD_LESSON } from './qgd';
 import { QGD_VARIATION_LESSONS } from './qgdVariations';
+import { QGA_LESSON } from './qga';
+import { QGA_VARIATION_LESSONS } from './qgaVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -64,6 +66,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: SCOTCH_GAME_LESSON, variations: SCOTCH_GAME_VARIATION_LESSONS, traps: SCOTCH_GAME_TRAP_LESSONS },
   { main: QUEENS_GAMBIT_LESSON, variations: QUEENS_GAMBIT_VARIATION_LESSONS },
   { main: QGD_LESSON, variations: QGD_VARIATION_LESSONS },
+  { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {
