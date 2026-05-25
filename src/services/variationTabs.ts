@@ -293,6 +293,18 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /geller/i, label: 'Geller Gambit' },
     { test: /schlechter/i, label: 'Schlechter' },
   ],
+  // Semi-Slav — the …c6/…e6 wall, solid and sharp. Main-line pill = the sharp
+  // Anti-Moscow (…dxc4/…g5/…b5, repertoire pgn). Tabs = the structurally-
+  // distinct mainstream battlegrounds, all ≥20-ply: the positional Meran, the
+  // famous Botvinnik gambit, the calm Moscow (Bxf6 → bishop pair), and the
+  // Stoltz Qc2 anti-Meran. (Anti-Meran/Reynolds/Romih fold into the Meran
+  // e3-complex; no near-duplicate tabs.)
+  'semi-slav': [
+    { test: /meran/i, label: 'Meran' },
+    { test: /botvinnik/i, label: 'Botvinnik' },
+    { test: /moscow/i, label: 'Moscow' },
+    { test: /stoltz/i, label: 'Stoltz' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same

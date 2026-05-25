@@ -78,6 +78,8 @@ import { QGA_LESSON } from './queensGambitAccepted';
 import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
 import { SLAV_DEFENCE_LESSON } from './slavDefence';
 import { SLAV_DEFENCE_VARIATION_LESSONS } from './slavDefenceVariations';
+import { SEMI_SLAV_LESSON } from './semiSlav';
+import { SEMI_SLAV_VARIATION_LESSONS } from './semiSlavVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -127,6 +129,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: QGD_LESSON, variations: QGD_VARIATION_LESSONS },
   { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
   { main: SLAV_DEFENCE_LESSON, variations: SLAV_DEFENCE_VARIATION_LESSONS },
+  { main: SEMI_SLAV_LESSON, variations: SEMI_SLAV_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

@@ -8254,54 +8254,6 @@
     ]
   },
   {
-    "id": "mp-semi-slav-meran-counterattack",
-    "openingId": "semi-slav",
-    "criticalPositionFen": "r1bqkb1r/3n1ppp/p1p1pn2/1p6/3P4/2NBPN2/PP3PPP/R1BQK2R w KQkq - 0 9",
-    "title": "Meran with …b5 + …a6 + …c5",
-    "overview": "The Meran Variation is Black's primary aggressive Semi-Slav plan. After …b5 + …a6, the c-pawn is poised to break with …c5 — opening lines for the bishop on b7 and the rook on c8. This creates a sharp pawn race on the queenside where Black often emerges with a passed c-pawn or active piece play.",
-    "pawnBreaks": [
-      {
-        "move": "c5",
-        "explanation": "The Meran's defining break. After …c5 dxc5 Black has an open c-file and a bishop on b7 dominating the long diagonal. Black often follows with …Bxh2+ sacrificing for kingside attack."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc8-b7 fianchetto",
-        "explanation": "After …b5, the bishop develops to b7 controlling the long diagonal toward White's king. Combined with …c5 opening the diagonal, this becomes Black's main attacking weapon."
-      }
-    ],
-    "typicalMistakes": [
-      "Playing …c5 before completing development — White's …dxc5 attacks the e-file and creates a passed c-pawn.",
-      "Trading the b7-bishop too early — the bishop's long-diagonal pressure IS the Meran's attacking compensation."
-    ]
-  },
-  {
-    "id": "mp-semi-slav-botvinnik",
-    "openingId": "semi-slav",
-    "criticalPositionFen": "r1bqkb1r/p2n1p2/2p1pn2/1p2P1B1/2pP4/2N5/PP3PPP/R2QKB1R w KQkq - 1 11",
-    "title": "Botvinnik System with f3 + e4",
-    "overview": "The Botvinnik System (Bg5 dxc4) leads to one of the sharpest, most theoretical lines in all chess. Both sides storm pawns on opposite wings. White sacrifices a knight on g5 to open lines toward Black's king; Black accepts and tries to consolidate while attacking on the queenside with the extra material.",
-    "pawnBreaks": [
-      {
-        "move": "f3 then g4",
-        "explanation": "White's plan is to support e4 with f3, then storm with g4 to open the kingside. The pawn storm is fully committed — there's no going back once the king has been exposed."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Queen",
-        "route": "Qd1-f3-h3",
-        "explanation": "The queen moves to h3 in some Botvinnik lines, supporting the kingside attack and threatening Qh7+ ideas with the rook joining."
-      }
-    ],
-    "typicalMistakes": [
-      "Playing the Botvinnik without preparation — it's the sharpest line in chess and one mistake loses immediately.",
-      "Forgetting that Black's bishop pair often emerges victorious in the endgame — White must win in the middlegame."
-    ]
-  },
-  {
     "id": "mp-trompowsky-pin-pressure",
     "openingId": "trompowsky-attack",
     "criticalPositionFen": "rn1qkb1r/ppp2ppp/4p3/3p1b2/2PPnB2/2N1P3/PP3PPP/R2QKBNR b KQkq - 1 6",
@@ -27862,6 +27814,137 @@
             {
               "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-semislav-main",
+    "openingId": "semi-slav",
+    "criticalPositionFen": "rn1qkb1r/pb3p2/2p1pn1p/1p4p1/2pPP3/2N2NB1/PP2BPPP/R2Q1RK1 b kq - 3 10",
+    "title": "Semi-Slav: Free the Bishop with …c5",
+    "overview": "In the sharp Anti-Moscow Black has grabbed the c4-pawn, clamped the queenside with …b5, and developed the light bishop to b7 — but it is still walled in behind the c6-pawn. The plan is the thematic …c5 break: it strikes at White's d4-centre and, crucially, blows open the long diagonal so the b7-bishop roars to life. Free the problem bishop, keep the extra pawn, and let the two bishops do the talking.",
+    "pawnBreaks": [
+      "…c5 to open the centre and the b7-bishop’s diagonal",
+      "…b4 to gain more queenside space"
+    ],
+    "pieceManeuvers": [
+      "…Nbd7 toward the …c5 break and the e5-square",
+      "…Bg7 onto the long diagonal"
+    ],
+    "strategicThemes": [
+      "Freeing the b7-bishop with …c5",
+      "The extra c4-pawn",
+      "The bishop pair"
+    ],
+    "endgameTransitions": [
+      "The extra pawn and bishop pair carry into the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1qkb1r/pb3p2/2p1pn1p/1p4p1/2pPP3/2N2NB1/PP2BPPP/R2Q1RK1 b kq - 3 10",
+        "moves": [
+          "Nbd7",
+          "Ne5",
+          "c5",
+          "Nxd7"
+        ],
+        "annotations": [
+          "…Nbd7 develops the knight, eyeing the e5-square and supporting the coming …c5.",
+          "Ne5 plants the knight on its outpost in front of the black camp.",
+          "…c5! the freeing break — it strikes at the d4-pawn and finally opens the long diagonal for the b7-bishop, the whole point of Black’s queenside expansion.",
+          "Nxd7 trades the outpost knight off, and Black recaptures into a dynamic, equal middlegame with the bishop pair, queenside space, and the extra c4-pawn still in hand."
+        ],
+        "learnCues": [
+          "…Nbd7 — develop, prep …c5.",
+          "Ne5 — White’s outpost.",
+          "…c5 — free the bishop, hit d4.",
+          "Nxd7 — White trades off."
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Semi-Slav_Defense"
+        ],
+        "title": "Semi-Slav: Free the Bishop with …c5",
+        "arrows": [
+          [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]

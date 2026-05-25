@@ -269,5 +269,14 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "semi-slav": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }
