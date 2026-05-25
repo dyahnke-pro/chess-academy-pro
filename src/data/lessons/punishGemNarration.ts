@@ -1715,6 +1715,21 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'f4? Over-extending once more. The e5-pawn is now overworked, and Black strikes.', 'dxe5! Undermining. After the recapture the e5-spearhead is isolated and weak.', '', 'Nc6 attacks e5; the over-extended pawn becomes a lasting target.', '', 'Bb4 pins and develops — Black is comfortably better with e5 under fire.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'dxe5 — undermine the spearhead.', '', 'Nc6 — target the weak e5-pawn.', '', 'Bb4 — pin, pile on e5.', '', '', ''],
   },
+  'benko-gambit:d4_Nf6_c4_c5_d5_b5_Nf3_bxc4:Qc2': {
+    // d4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Qc2 Nxd5 Qxc4 e6 e4 Qa5+ Bd2 Nb4 Qb3
+    watch: ['', '', '', '', '', '', '', '', 'Qc2? This forgets the d5-pawn — Black simply grabs it for free.', 'Nxd5! Winning the central pawn. White can round up c4, but Black stays a sound pawn up with an active knight.', '', 'e6 solidifies the extra pawn; Black is simply a pawn to the good.', '', 'Qa5+ develops with check, and after Bd2 Nb4 Black keeps the material with active pieces.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'Nxd5 — grab the free d5-pawn.', '', 'e6 — shore up the extra pawn.', '', 'Qa5+ — check, keep the pawn.', '', '', ''],
+  },
+  'benko-gambit:d4_Nf6_c4_c5_d5_b5_cxb5_a6_Nc3_axb5_e4_b4:e5': {
+    // d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 e5 bxc3 exf6 cxb2 Bxb2 Qa5+ Qd2 Qxd2+ Kxd2
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'e5? Over-eager. It allows a crushing in-between capture.', 'bxc3! Take the knight first. After exf6 cxb2 the passed pawn is one step from queening and forks the rook.', '', 'cxb2 — the pawn reaches the seventh, attacking the a1-rook. White must deal with it and Black comes out on top.', '', 'Qa5+ forces the queens off into an endgame where Black is clearly better.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'bxc3 — take the knight, push on.', '', 'cxb2 — to b2, hit the rook.', '', 'Qa5+ — trade into a better ending.', '', '', ''],
+  },
+  'benko-gambit:d4_Nf6_c4_c5_d5_b5_cxb5_a6_Nc3_axb5_e4_b4_Nb5_d6_Bc4_g6:Bf4': {
+    // d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6 Bf4 Bg7 Nf3 O-O e5 Nh5 Bg5 h6 Bh4
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bf4? Misplacing the bishop. Black calmly develops and White\'s setup backfires.', 'Bg7 fianchettoes; now if White lunges e5, the f4-bishop is loose and Black will hit it.', '', 'O-O — Black is safe and ready; White\'s e5 push runs into …Nh5 hitting the f4-bishop.', '', 'Nh5 forks the f4-bishop; White\'s pieces tangle and Black is clearly better.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bg7 — develop, exploit the loose bishop.', '', 'O-O — safe, prepare …Nh5.', '', 'Nh5 — hit the f4-bishop.', '', '', ''],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

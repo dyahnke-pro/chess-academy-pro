@@ -2998,5 +2998,77 @@
     "engineCp": 114,
     "tier": "confirmed",
     "why": "At your level opponents play f4 here in 16% of games. Punish with the best move dxe5 — the engine has Black winning (+1.1)."
+  },
+  {
+    "openingId": "benko-gambit",
+    "lineMoves": "d4 Nf6 c4 c5 d5 b5 Nf3 bxc4",
+    "inaccuracy": "Qc2",
+    "freqPct": 2.2,
+    "games": 848,
+    "practicalScore": 56,
+    "mainMove": "Nc3",
+    "punish": "Nxd5",
+    "punishSeq": [
+      "Nxd5",
+      "Qxc4",
+      "e6",
+      "e4",
+      "Qa5+",
+      "Bd2",
+      "Nb4",
+      "Qb3"
+    ],
+    "playLine": "d4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Qc2 Nxd5 Qxc4 e6 e4 Qa5+ Bd2 Nb4 Qb3",
+    "engineCp": 132,
+    "tier": "confirmed",
+    "why": "At your level opponents play Qc2 here in 2% of games. Punish with the best move Nxd5 — the engine has Black winning (+1.3)."
+  },
+  {
+    "openingId": "benko-gambit",
+    "lineMoves": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4",
+    "inaccuracy": "e5",
+    "freqPct": 11.7,
+    "games": 3098,
+    "practicalScore": 56,
+    "mainMove": "Nb5",
+    "punish": "bxc3",
+    "punishSeq": [
+      "bxc3",
+      "exf6",
+      "cxb2",
+      "Bxb2",
+      "Qa5+",
+      "Qd2",
+      "Qxd2+",
+      "Kxd2"
+    ],
+    "playLine": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 e5 bxc3 exf6 cxb2 Bxb2 Qa5+ Qd2 Qxd2+ Kxd2",
+    "engineCp": 169,
+    "tier": "confirmed",
+    "why": "At your level opponents play e5 here in 12% of games. Punish with the best move bxc3 — the engine has Black winning (+1.7)."
+  },
+  {
+    "openingId": "benko-gambit",
+    "lineMoves": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6",
+    "inaccuracy": "Bf4",
+    "freqPct": 10,
+    "games": 190,
+    "practicalScore": 59,
+    "mainMove": "e5",
+    "punish": "Bg7",
+    "punishSeq": [
+      "Bg7",
+      "Nf3",
+      "O-O",
+      "e5",
+      "Nh5",
+      "Bg5",
+      "h6",
+      "Bh4"
+    ],
+    "playLine": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6 Bf4 Bg7 Nf3 O-O e5 Nh5 Bg5 h6 Bh4",
+    "engineCp": 139,
+    "tier": "confirmed",
+    "why": "At your level opponents play Bf4 here in 10% of games. Punish with the best move Bg7 — the engine has Black winning (+1.4)."
   }
 ]
