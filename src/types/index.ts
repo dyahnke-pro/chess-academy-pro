@@ -228,6 +228,10 @@ export interface LessonScript {
    *  `trap` is reserved for hand-authored named-trap beat lessons that
    *  live in their own files and are shorter by design. */
   kind?: 'variation' | 'roadmap' | 'trap';
+  /** Independent-verification refs (concept:<id> | book:<openingId> | https URL)
+   *  proving the line's ideas were checked against the books/online, not
+   *  training recall. Gated for masterclass lessons (David 2026-05-25). */
+  sources?: string[];
 }
 
 // ─── Common Mistakes ──────────────────────────────────────────────────────
