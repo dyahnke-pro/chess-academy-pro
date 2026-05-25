@@ -949,5 +949,21 @@
       "explanation": "With c4 attacking the knight, …Nf4 lunges to the rim where g3 simply chases it back with tempo, costing Black even more time. …Nb6 is the sound retreat — the knight stays useful, eyeing c4 and d5, and Black continues to undermine the centre.",
       "shortNarration": "Nb6 — sound retreat, not the rim"
     }
+  ],
+  "dutch-defence": [
+    {
+      "fen": "rnbq1rk1/ppppp1bp/5np1/5p2/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 0 6",
+      "wrongMove": "d5",
+      "correctMove": "d6",
+      "explanation": "In the Leningrad, …d5 locks the position and entombs the g7-bishop behind its own pawn chain — the very piece the fianchetto exists to activate. …d6 is correct: it keeps the centre flexible and prepares the thematic …e5 break that opens the long diagonal.",
+      "shortNarration": "d6 — keep it flexible, free the g7-bishop"
+    },
+    {
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "wrongMove": "Nf6",
+      "correctMove": "fxe4",
+      "explanation": "Against the Staunton Gambit 2.e4, …Nf6 just drops the f-pawn to 3.exf5 with no compensation. Accept the gambit with …fxe4 — Black is a clean pawn up and, with accurate play, weathers White's development lead.",
+      "shortNarration": "fxe4 — accept the gambit, grab the pawn"
+    }
   ]
 }

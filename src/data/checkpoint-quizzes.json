@@ -1056,5 +1056,27 @@
       "hint": "The Alekhine is hypermodern — let White build a big centre, then tear it down.",
       "concept": "Black's Alekhine plan"
     }
+  ],
+  "dutch-defence": [
+    {
+      "fen": "rnbq1rk1/ppp1p1bp/3p1np1/5p2/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b - - 1 7",
+      "correctMove": "Qe8",
+      "hint": "The signature Leningrad move — reroute the queen toward the kingside attack.",
+      "concept": "The …Qe8 reroute"
+    },
+    {
+      "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR b KQkq d3 0 1",
+      "type": "plan",
+      "question": "What is Black's plan in the Dutch Defence?",
+      "choices": [
+        "Grab kingside space with …f5, fight for e4, and play for a kingside pawn storm and attack on the white king",
+        "Trade everything and head for a quick draw",
+        "Develop passively and wait for White to attack",
+        "Play …d5 and …e6 to lock the position and shuffle pieces"
+      ],
+      "correctIndex": 0,
+      "hint": "The Dutch is the most aggressive answer to 1.d4 — Black attacks the kingside.",
+      "concept": "Black's Dutch plan"
+    }
   ]
 }

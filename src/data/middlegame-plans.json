@@ -10085,63 +10085,6 @@
     ]
   },
   {
-    "id": "mp-dutch-stonewall-fortress",
-    "openingId": "dutch-defence",
-    "criticalPositionFen": "rnbq1rk1/pp4pp/2pbpn2/3p1p2/2PP4/5NP1/PP1NPPBP/R1BQ1RK1 w - - 4 8",
-    "title": "Stonewall Dutch fortress + kingside attack",
-    "overview": "The Stonewall Dutch is Black's most fortress-like setup. Pawns on c6, d5, e6, f5 create a rock-solid structure. Black's plan: complete development with …Bd6 + …Nbd7, then storm the kingside with …Ne4 + …Qf6 + …Qh4 + …g5-g4. The fortress holds while the attack develops; White must precisely counter or face being checkmated on the kingside.",
-    "pawnBreaks": [
-      {
-        "move": "g5-g4",
-        "explanation": "The thematic kingside attack push. After …g5 + …g4 Black opens lines toward White's king and creates direct mating threats."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nf6-e4 central outpost",
-        "explanation": "The e4-knight is the Stonewall's centerpiece. From e4 it controls every kingside square and supports the …Qh4 attack."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd8-e8-h5 swing",
-        "explanation": "The queen reroutes through e8 to h5, joining the kingside attack with maximum effect."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing …g5 before piece coordination — White's …Ng5 counter-strikes neutralize the attack.",
-      "Trading the dark-squared bishop on d6 — eliminates the main attacking piece."
-    ]
-  },
-  {
-    "id": "mp-dutch-leningrad-fianchetto",
-    "openingId": "dutch-defence",
-    "criticalPositionFen": "rnbq1rk1/pp2p1bp/2pp1np1/5p2/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 0 8",
-    "title": "Leningrad: …g6 + …Bg7 active fianchetto",
-    "overview": "The Leningrad Dutch combines …f5 with a King's-Indian-style fianchetto. More active than the Stonewall but structurally weaker. Black's plan: complete development, then break with …e5 (challenging the center) or …Ne4 (central outpost). The Bg7 + …Nf6 + …Qe8-h5 attacking battery threatens the kingside.",
-    "pawnBreaks": [
-      {
-        "move": "e5",
-        "explanation": "The central break that challenges White's d4 pawn. After …e5 dxe5 dxe5 Black has the open d-file for the rook and active piece play."
-      },
-      {
-        "move": "g5",
-        "explanation": "Kingside expansion combined with the …f4 push opens lines toward White's king."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Queen",
-        "route": "Qd8-e8-h5",
-        "explanation": "The queen reroutes to h5 to support the kingside attack. From h5 it threatens direct kingside checkmate ideas."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing …e5 before piece coordination — White's …dxe5 isolates Black's d-pawn and ruins the structure.",
-      "Trading the Bg7 for a knight — eliminates the long-diagonal pressure."
-    ]
-  },
-  {
     "id": "mp-kia-slow-buildup-e4-e5",
     "openingId": "kings-indian-attack",
     "criticalPositionFen": "r1bq1rk1/pp1nbppp/2n1p3/2ppP3/8/3P1NP1/PPPN1PBP/R1BQ1RK1 w - - 1 9",
@@ -21651,6 +21594,525 @@
             {
               "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-dutchdefence-main",
+    "openingId": "dutch-defence",
+    "criticalPositionFen": "rnb1qrk1/ppp1p1bp/3p1np1/5p2/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 2 8",
+    "title": "Dutch Leningrad: The Kingside Storm",
+    "overview": "The Leningrad is assembled — the g7-bishop on the long diagonal, the f5-pawn spearheading, and the queen rerouted via …Qe8 toward h5/g6. The plan is a direct kingside attack: …Qh5, …g5–g4, and …f4 to blast open lines at the white king, while …e5 keeps the centre fluid. Black plays to attack.",
+    "pawnBreaks": [
+      "…e5 central break",
+      "…g5–g4 and …f4 kingside storm"
+    ],
+    "pieceManeuvers": [
+      "…Qe8–h5/g6 to the kingside",
+      "…Na6–c5/c7 to the breaks",
+      "…Bg7 on the long diagonal"
+    ],
+    "strategicThemes": [
+      "Kingside pawn storm",
+      "The …Qe8 reroute",
+      "Fluid centre, sharp attack"
+    ],
+    "endgameTransitions": [
+      "Rare — the Leningrad is decided by the attack"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnb1qrk1/ppp1p1bp/3p1np1/5p2/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 2 8",
+        "moves": [
+          "d5",
+          "Na6",
+          "Rb1",
+          "Bd7"
+        ],
+        "annotations": [
+          "d5 grabs central space.",
+          "…Na6 reroutes toward c5 to support the breaks.",
+          "Rb1 prepares White's queenside play.",
+          "…Bd7 develops; Black is ready for …e5 and the kingside storm with the queen swinging to h5."
+        ],
+        "title": "Dutch Leningrad: The Kingside Storm",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "a6",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-dutchdefence-stonewall",
+    "openingId": "dutch-defence",
+    "criticalPositionFen": "rnb1k2r/pp2q1pp/2pbpn2/3p1p2/2PP4/1P3NP1/PB2PPBP/RN1Q1RK1 b kq - 2 8",
+    "title": "Dutch Stonewall: The Attacking Fortress",
+    "overview": "The Stonewall wall (d5/e6/f5) is unbreakable, the d6-bishop aims at h2, and the plan is to plant a knight on the eternal e4-outpost and attack. Solve the bad light bishop with …b6/…Bb7, then throw the kingside pieces at the white king while the wall stands firm behind.",
+    "pawnBreaks": [
+      "…g5–g4 kingside storm once developed",
+      "keep the d5/e6/f5 wall intact"
+    ],
+    "pieceManeuvers": [
+      "…Ne4 the eternal outpost",
+      "…Bd6 battery at h2",
+      "…b6/…Bb7 solving the bad bishop",
+      "…Qe7–h4/g6 to the kingside"
+    ],
+    "strategicThemes": [
+      "The e4 outpost",
+      "Kingside attack from a fortress",
+      "The d6-bishop battery"
+    ],
+    "endgameTransitions": [
+      "The wall holds; Black is solid even if simplified"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnb1k2r/pp2q1pp/2pbpn2/3p1p2/2PP4/1P3NP1/PB2PPBP/RN1Q1RK1 b kq - 2 8",
+        "moves": [
+          "O-O",
+          "Qc1",
+          "b6",
+          "Ba3"
+        ],
+        "annotations": [
+          "…O-O tucks the king safely behind the wall.",
+          "Qc1 eyes a trade of the dark-squared bishops.",
+          "…b6 prepares …Bb7 to solve Black's one problem piece.",
+          "Ba3 offers the trade, but Black's structure and e4-outpost plans give a fortress that attacks."
+        ],
+        "title": "Dutch Stonewall: The Attacking Fortress",
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-dutchdefence-classical",
+    "openingId": "dutch-defence",
+    "criticalPositionFen": "rnbq1rk1/pp2b1pp/2p1pn2/3p1p2/2PP4/1P3NP1/PB2PPBP/RN1Q1RK1 b - - 1 8",
+    "title": "Dutch Classical: Flexible Outpost Play",
+    "overview": "The flexible Classical with …Be7: Black keeps the choice between a Stonewall structure and a central break, plants a knight on e4, and recaptures …fxe4 for a cramping pawn and the half-open f-file. Sound, adaptable, and quietly aggressive.",
+    "pawnBreaks": [
+      "…e5 or the …fxe4 cramp",
+      "…c5 to challenge d4"
+    ],
+    "pieceManeuvers": [
+      "…Ne4 the central outpost",
+      "…Bd7–e8–h5 reroute",
+      "…Nbd7 development"
+    ],
+    "strategicThemes": [
+      "The e4 outpost and …fxe4 cramp",
+      "Flexibility",
+      "The half-open f-file"
+    ],
+    "endgameTransitions": [
+      "Comfortable, balanced endings"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pp2b1pp/2p1pn2/3p1p2/2PP4/1P3NP1/PB2PPBP/RN1Q1RK1 b - - 1 8",
+        "moves": [
+          "Bd7",
+          "Nbd2",
+          "Be8",
+          "Ne5"
+        ],
+        "annotations": [
+          "…Bd7 develops the light bishop, heading for the …Be8–h5 reroute to the kingside.",
+          "Nbd2 develops.",
+          "…Be8 begins the rook-lift-style bishop reroute toward h5.",
+          "Ne5 occupies the centre, but Black is poised to plant …Ne4 and play for the kingside."
+        ],
+        "title": "Dutch Classical: Flexible Outpost Play",
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "e8",
+              "to": "h5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-dutchdefence-ilyinzhenevsky",
+    "openingId": "dutch-defence",
+    "criticalPositionFen": "rnb1qrk1/pp2b1pp/2p1pn2/3p1p2/2PP4/2N2NP1/PPQ1PPBP/R1B2RK1 w - - 2 9",
+    "title": "Dutch Ilyin-Zhenevsky: Play on Both Wings",
+    "overview": "A Classical Dutch where Black combines the kingside …Qe8 reroute with a queenside …b5 break. The plan: attack the king with the queen and f-pawn while expanding and breaking on the queenside with …a5 and …b5 — Black fights across the whole board.",
+    "pawnBreaks": [
+      "…b5 queenside break",
+      "…e5 or the kingside …g5–g4"
+    ],
+    "pieceManeuvers": [
+      "…Qe8–h5 kingside reroute",
+      "…a5 and …b5 queenside expansion",
+      "…Nbd7 development"
+    ],
+    "strategicThemes": [
+      "Play on both wings",
+      "The …Qe8 reroute",
+      "Queenside …b5 break"
+    ],
+    "endgameTransitions": [
+      "The queenside majority can tell in the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnb1qrk1/pp2b1pp/2p1pn2/3p1p2/2PP4/2N2NP1/PPQ1PPBP/R1B2RK1 w - - 2 9",
+        "moves": [
+          "Rb1",
+          "a5",
+          "a3",
+          "b5"
+        ],
+        "annotations": [
+          "Rb1 prepares White's queenside expansion.",
+          "…a5 stakes out queenside space and slows White's b4.",
+          "a3 supports b4.",
+          "…b5! Black breaks first, opening the queenside while the queen eyes the kingside — play across the whole board."
+        ],
+        "title": "Dutch Ilyin-Zhenevsky: Play on Both Wings",
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-dutchdefence-leningrade5",
+    "openingId": "dutch-defence",
+    "criticalPositionFen": "rnbq1rk1/pp4bp/2pp1np1/3Ppp2/2P5/2N2NP1/PP2PPBP/R1BQ1RK1 w - e6 0 9",
+    "title": "Dutch Leningrad: The …e5 Counterstrike",
+    "overview": "Instead of the kingside storm, Black meets White's central space with the …c6/…e5 break. The plan: open the centre, develop the light bishop actively to e6, and use the fianchettoed g7-bishop on the cleared long diagonal. A principled, low-risk Leningrad.",
+    "pawnBreaks": [
+      "…e5 the central counterstrike",
+      "…c6 supporting it"
+    ],
+    "pieceManeuvers": [
+      "…Be6 the active light bishop",
+      "…Na6–c5/c7",
+      "…Bg7 on the cleared diagonal"
+    ],
+    "strategicThemes": [
+      "Central counterstrike",
+      "Open, active pieces",
+      "No weaknesses"
+    ],
+    "endgameTransitions": [
+      "The open, equal centre yields comfortable endings"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pp4bp/2pp1np1/3Ppp2/2P5/2N2NP1/PP2PPBP/R1BQ1RK1 w - e6 0 9",
+        "moves": [
+          "dxe6",
+          "Bxe6",
+          "b3",
+          "Na6"
+        ],
+        "annotations": [
+          "dxe6 opens the centre.",
+          "…Bxe6 recaptures actively, the bishop eyeing c4 and the queenside.",
+          "b3 props c4.",
+          "…Na6 develops toward c5; Black has free, active piece play with the fianchettoed bishop firing down the open diagonal."
+        ],
+        "title": "Dutch Leningrad: The …e5 Counterstrike",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "e6",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "a6",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]

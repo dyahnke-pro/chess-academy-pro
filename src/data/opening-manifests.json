@@ -116,5 +116,14 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "dutch-defence": {
+    "variations": 7,
+    "middlegamePlans": 5,
+    "endgamePlans": 0,
+    "modelGames": 5,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

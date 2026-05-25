@@ -148,6 +148,15 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /zaitsev/i, label: 'Zaitsev' },
     { test: /half-accepted/i, label: 'Half-Accepted' },
   ],
+  // Dutch Defence — distinct validated variations (complete builds only). Main
+  // pill = the Leningrad g6 main line (repertoire pgn); "Leningrad g6 Main Line"
+  // folds in, and the "Hopton" transposes to the …e5 break. Five distinct tabs.
+  'dutch-defence': [
+    { test: /stonewall/i, label: 'Stonewall' },
+    { test: /classical/i, label: 'Classical' },
+    { test: /ilyin/i, label: 'Ilyin-Zhenevsky' },
+    { test: /e5 break/i, label: 'Leningrad …e5' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present
