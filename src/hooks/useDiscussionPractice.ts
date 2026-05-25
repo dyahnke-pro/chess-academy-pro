@@ -18,6 +18,7 @@ import {
   captureMisconception,
 } from '../services/discussionPractice';
 import { logAppAudit } from '../services/appAuditor';
+import { useSettings } from './useSettings';
 
 export type DiscussionPhase = 'idle' | 'asking' | 'thinking' | 'teaching';
 
@@ -86,6 +87,13 @@ export function useDiscussionPractice(
   opts: UseDiscussionPracticeOptions = {},
 ): UseDiscussionPracticeResult {
   const { silent = false, surface } = opts;
+  const { settings } = useSettings();
+  // The "Ask why on my mistakes" toggle controls the INTERJECTION, not the
+  // capture. When off, a slip is still detected and logged to the weakness
+  // bucket — it just happens silently (no spoken "why?" prompt), exactly
+  // like Practice mode. So the loop keeps learning from your games whether
+  // or not you want to be interrupted mid-move.
+  const effectiveSilent = silent || !settings.coachInGameDiscussion;
   const [phase, setPhase] = useState<DiscussionPhase>('idle');
   const [prompt, setPrompt] = useState<DiscussionPrompt | null>(null);
   const [teach, setTeach] = useState<string | null>(null);
@@ -146,11 +154,11 @@ export function useDiscussionPractice(
         kind: 'faucet-slip-detected',
         category: 'subsystem',
         source: `useDiscussionPractice.evaluatePlayerMove${surface ? `:${surface}` : ''}`,
-        summary: `played=${args.playedSan} best=${bestSan ?? '?'} cpLoss=${slip.cpLoss} count=${slip.shouldCount} phase=${args.gamePhase} silent=${silent}`,
+        summary: `played=${args.playedSan} best=${bestSan ?? '?'} cpLoss=${slip.cpLoss} count=${slip.shouldCount} phase=${args.gamePhase} silent=${effectiveSilent}`,
         fen: args.fenBefore,
         details: JSON.stringify({
           surface,
-          silent,
+          silent: effectiveSilent,
           playedSan: args.playedSan,
           bestSan,
           mastersTopSan,
@@ -163,8 +171,9 @@ export function useDiscussionPractice(
 
       // Silent mode: feed the bucket directly, no panel, no voice — for
       // surfaces that already narrate (the /coach/teach brain) or are
-      // silent-by-contract (WLPP Practice). Passive capture, no userReason.
-      if (silent) {
+      // silent-by-contract (WLPP Practice) OR the user turned the "ask why"
+      // interjection off. Passive capture, no userReason.
+      if (effectiveSilent) {
         await captureMisconception({
           classifyInput: {
             fen: args.fenBefore,
@@ -207,7 +216,7 @@ export function useDiscussionPractice(
     } catch {
       // Any failure → no prompt this move. Never block the game.
     }
-  }, [enabled, silent, surface]);
+  }, [enabled, effectiveSilent, surface]);
 
   const resolve = useCallback(async (reason: string | undefined): Promise<void> => {
     if (!prompt) return;

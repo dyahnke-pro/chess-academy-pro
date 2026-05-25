@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { BookOpen, Target, Check, Loader2 } from 'lucide-react';
 import { scanTheoryDeviation, type TheoryDeviation } from '../../services/theoryDeviationScan';
 import { autoAnalyzeBlunders, type BlunderForAnalysis } from '../../services/autoAnalyzeGame';
+import { classifyPhase } from '../../services/gamePhaseService';
 import { hasMisconceptionsForGame } from '../../services/misconceptionService';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import type { CoachGameMove } from '../../types';
@@ -40,12 +41,14 @@ function buildBlunders(moves: CoachGameMove[], playerColor: 'white' | 'black'): 
       move.preMoveEval !== null && move.evaluation !== null
         ? (move.preMoveEval - move.evaluation) * sign
         : undefined;
+    const fenBefore = i > 0 ? moves[i - 1].fen : START_FEN;
     out.push({
-      fen: i > 0 ? moves[i - 1].fen : START_FEN,
+      fen: fenBefore,
       playedSan: move.san,
       bestSan: move.bestMove ?? undefined,
       cpLoss: cpLoss !== undefined && cpLoss > 0 ? cpLoss : undefined,
-      gamePhase: move.moveNumber <= 12 ? 'opening' : 'middlegame',
+      // Material-aware phase so endgame slips are filed as endgame.
+      gamePhase: classifyPhase(fenBefore, i + 1),
       moveNumber: move.moveNumber,
     });
   }

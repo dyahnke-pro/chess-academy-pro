@@ -4,6 +4,7 @@ import { ArrowLeft, Brain, BookOpen, AlertTriangle } from 'lucide-react';
 import { useAppStore } from '../../stores/appStore';
 import { seedPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
 import type { PuzzleStats } from '../../services/puzzleService';
+import { recordTagDrillResult } from '../../services/misconceptionService';
 import {
   createAdaptiveSession,
   processAdaptiveResult,
@@ -39,8 +40,15 @@ export function AdaptivePuzzlePage(): JSX.Element {
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
   const location = useLocation();
   const navigate = useNavigate();
-  const forcedWeakThemes = (location.state as { forcedWeakThemes?: string[] } | null)?.forcedWeakThemes;
+  const navState = location.state as { forcedWeakThemes?: string[]; misconceptionTag?: string } | null;
+  const forcedWeakThemes = navState?.forcedWeakThemes;
+  // When the Training Plan deep-links a weakness rep here, the real
+  // misconception tag rides along so completing the drill spaces it out
+  // (closes the capture → drill → space loop). analysis:* clusters carry
+  // no tag and don't space.
+  const misconceptionTag = navState?.misconceptionTag;
   const autoStartedRef = useRef(false);
+  const spacedTagRef = useRef(false);
 
   // Mount audit — see PR #504 F1 fix lineage; tactics tab was
   // observability-blind to the audit stream before this.
@@ -113,6 +121,15 @@ export function AdaptivePuzzlePage(): JSX.Element {
       void handleSelectDifficulty('medium');
     }
   }, [forcedWeakThemes, handleSelectDifficulty]);
+
+  // On session end, space out the misconception tag that sent us here:
+  // a solid session (≥60% accuracy) advances its SRS interval so it
+  // resurfaces less often; a weak session keeps it due. Fires once.
+  useEffect(() => {
+    if (phase !== 'summary' || !misconceptionTag || spacedTagRef.current || !summary) return;
+    spacedTagRef.current = true;
+    void recordTagDrillResult(misconceptionTag, summary.accuracy >= 0.6);
+  }, [phase, summary, misconceptionTag]);
 
   const handlePuzzleComplete = useCallback(async (outcome: PuzzleOutcome): Promise<void> => {
     if (!session || !currentPuzzle) return;

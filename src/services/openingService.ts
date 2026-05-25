@@ -2,6 +2,7 @@ import { db } from '../db/schema';
 import type { OpeningRecord, DrillAttempt } from '../types';
 import { fuzzyScore } from '../utils/fuzzySearch';
 import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
+import { enrollOpeningLine } from './srsOpeningService';
 import openingManifests from '../data/opening-manifests.json';
 
 // ─── Opening name helpers ────────────────────────────────────────────────────
@@ -343,6 +344,15 @@ export async function markRungComplete(
   if (upto.includes('practice')) add('linesPerfected');
   if (upto.includes('play')) add('linesPlayed');
   if (Object.keys(patch).length) await db.openings.update(id, patch);
+
+  // Auto-enroll the learned line into spaced repetition (David 2026-05-25):
+  // once you've Learned a line it enters SRS so it resurfaces for review and
+  // feeds the Training Plan's "spaced review due" reps — no manual enroll
+  // step. Scoped to THIS line so SRS never surfaces lines you haven't
+  // learned. Fire-and-forget; never block rung completion.
+  if (upto.includes('learn') && patch.linesLearned) {
+    void enrollOpeningLine(opening, variationIndex).catch(() => undefined);
+  }
 }
 
 /** Per-line "I already know this" escape — unlocks every rung + the weapons
@@ -467,4 +477,22 @@ export async function toggleFavorite(id: string): Promise<boolean> {
 /** Returns all favorited repertoire openings. */
 export async function getFavoriteOpenings(): Promise<OpeningRecord[]> {
   return db.openings.filter((o) => o.isFavorite).toArray();
+}
+
+/** Favorited openings that still have at least one un-learned line (the
+ *  main line or any variation index missing from `linesLearned`). Feeds the
+ *  Training Plan's "new line to learn" reps so the openings you favorited
+ *  actually enter your daily path. One entry per opening (the rep deep-links
+ *  into the opening so the student picks which line). */
+export async function getUnlearnedFavoriteOpenings(): Promise<{ openingId: string; name: string }[]> {
+  const favorites = await getFavoriteOpenings();
+  const out: { openingId: string; name: string }[] = [];
+  for (const o of favorites) {
+    const learned = new Set(o.linesLearned ?? []);
+    const allLines = [MAIN_LINE_INDEX, ...Array.from({ length: o.variations?.length ?? 0 }, (_, i) => i)];
+    if (allLines.some((idx) => !learned.has(idx))) {
+      out.push({ openingId: o.id, name: o.name });
+    }
+  }
+  return out;
 }

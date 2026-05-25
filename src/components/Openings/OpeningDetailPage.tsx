@@ -125,7 +125,6 @@ import {
 } from '../../services/srsOpeningService';
 import { narrateOpeningSection } from '../../services/openingSectionNarrator';
 import { useStarAnimationStore } from '../../stores/starAnimationStore';
-import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import type { OpeningRecord, MiddlegamePlan, ModelGame } from '../../types';
 import {
   ArrowLeft,
@@ -186,6 +185,7 @@ type ViewMode =
   | 'pitfall-watch'
   | 'pitfall-learn'
   | 'pitfall-practice'
+  | 'pitfall-play'
   | 'model-game';
 
 function computeFenFromPgn(pgn: string, setupFen?: string): string {
@@ -332,22 +332,15 @@ export function OpeningDetailPage(): JSX.Element {
    *  fen/correctMove (chess.js-validated), never invented. */
   const handlePitfallAction = useCallback(
     (mistake: CommonMistake, action: 'watch' | 'learn' | 'practice' | 'play'): void => {
-      if (action === 'play') {
-        const name = opening?.name ?? '';
-        if (!name) return;
-        useCoachMemoryStore.getState().setIntendedOpening({
-          name,
-          color: opening?.color ?? 'white',
-          capturedFromSurface: 'openings-play',
-          pgn: opening?.pgn,
-        });
-        void navigate(`/coach/play?side=${opening?.color ?? 'white'}`);
-        return;
-      }
+      // Play LOCKS to the pitfall in-page (David 2026-05-25): NO handoff to
+      // the generic /coach/play room (which would play its own moves and
+      // wander off the taught position). pitfall-play mounts OpeningPlayMode
+      // on the position right AFTER the opponent's wrong move — where the
+      // student plays the punishment and converts vs adaptive Stockfish.
       setActiveMistake(mistake);
       setViewMode(`pitfall-${action}` as ViewMode);
     },
-    [opening, navigate],
+    [],
   );
 
   // Variation tab is URL-addressable (?line=marshall) so the training
@@ -720,6 +713,23 @@ export function OpeningDetailPage(): JSX.Element {
         />
       );
     }
+  }
+
+  // Pitfall PLAY — locked in-page (no /coach/play handoff). Set the board to
+  // the position right AFTER the opponent's wrong move so the student plays
+  // the punishment, then converts vs adaptive Stockfish. The FEN is derived
+  // from the mistake's real fen + wrongMove (chess.js-validated) — never
+  // invented; on any illegal SAN we fall back to the opening's main line.
+  if (viewMode === 'pitfall-play' && activeMistake) {
+    let antidoteFen: string | undefined;
+    try {
+      const c = new Chess(activeMistake.fen);
+      c.move(activeMistake.wrongMove);
+      antidoteFen = c.fen();
+    } catch {
+      antidoteFen = undefined;
+    }
+    return <OpeningPlayMode opening={opening} startFen={antidoteFen} onExit={handleExit} />;
   }
 
   // Walkthrough mode (trap/warning lines)

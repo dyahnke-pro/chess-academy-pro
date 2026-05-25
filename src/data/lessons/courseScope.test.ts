@@ -18,6 +18,9 @@ describe('buildCourseScope', () => {
     expect(scope!.systemAddition).toContain('black');
     // Carries the verified ideas so answers stay grounded.
     expect(scope!.systemAddition).toMatch(/Verified ideas/i);
+    // Anchored to the position the line reaches (B2) — a real FEN, not move 1.
+    expect(scope!.systemAddition).toMatch(/reaches this position/i);
+    expect(scope!.systemAddition).toMatch(/\b[pnbrqkPNBRQK1-8]+\/[pnbrqkPNBRQK1-8/]+ [wb] /);
   });
 
   it('scopes to a named variation', () => {
