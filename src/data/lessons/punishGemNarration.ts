@@ -1340,6 +1340,51 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ["", "", "", "", "", "", "", "", "", "", "", "", "", "Be6? It walks into a thunderbolt — the c4-bishop and the c3-knight are perfectly placed to pounce.", "Nd5! The knight forks the b4-bishop and threatens c7; suddenly every Black piece is loose.", "", "Qb3 doubles on b7 and f7 at once, hitting two targets the knight uncovered.", "", "Qxb7 grabs the pawn and attacks the a8-rook.", "", "Nxc7+! The fork — the king must move and the rook in the corner falls. The Göring's development lead crashes through.", ""],
     learn: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "Nd5! — fork the bishop, hit c7.", "", "Qb3 — double on b7 and f7.", "", "Qxb7 — grab the pawn, hit the rook.", "", "Nxc7+ — fork; win the rook.", ""],
   },
+  'french-defence:e4_e6_d4_d5_e5_c5_c3_Nc6:f4': {
+    // e4 e6 d4 d5 e5 c5 c3 Nc6 f4 Qb6 Nf3 Nh6 dxc5 Bxc5 Bd3 f6 Qe2
+    watch: ['', '', '', '', '', '', '', '', 'f4? Too ambitious — White grabs more space but neglects the queenside. The b2-pawn and the d4-base are both suddenly underdefended.', 'Qb6! The thematic French hit: the queen attacks d4 and rakes b2 down the b-file at once. White cannot comfortably defend both.', '', 'Nh6 heads for f5, the dream square, eyeing d4 and the dark holes f4 left behind.', '', 'Bxc5 develops with tempo. Black is simply comfortable to better — active pieces, a target on d4, and White\'s centre creaking.', '', 'f6 strikes the e5-spearhead and cracks the centre in Black\'s favour; the f4-push stands exposed as a weakness.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'Qb6 — hit d4 and b2.', '', 'Nh6 — reroute toward f5.', '', 'Bxc5 — develop, stay on top.', '', 'f6 — break the centre open.', ''],
+  },
+  'french-defence:e4_e6_d4_d5_Nc3_Nf6_Bg5_Be7:Nf3': {
+    // e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 Nf3 Nxe4 Bxe7 Qxe7 Nxe4 dxe4 Nd2 f5 Qh5+
+    watch: ['', '', '', '', '', '', '', '', 'Nf3? Natural-looking, but it forgets that e4 is defended only once. Black strikes at once.', 'Nxe4! Winning a pawn out of the pin — if White recaptures the knight, the g5-bishop hangs, so the tactic just works.', '', 'Qxe7 recaptures the bishop. Black is a clean pawn up with a healthy position.', '', 'dxe4 — and Black keeps the extra pawn, a strong protected pawn on e4 that cramps White.', '', 'f5 props the e4-pawn and shores up the kingside; the pawn-up structure is rock-solid.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'Nxe4 — win the e4-pawn.', '', 'Qxe7 — take the bishop back.', '', 'dxe4 — keep the extra pawn.', '', 'f5 — defend the e4-pawn.', ''],
+  },
+  'french-defence:e4_e6_d4_d5_Nd2_Nf6_e5_Nfd7_Bd3_c5_c3_Nc6_Ne2_cxd4_cxd4_f6:Nf3': {
+    // e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 cxd4 cxd4 f6 Nf3 fxe5 Ng5 Bd6 Bc2 Nf6 dxe5 Bxe5 O-O
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nf3? White had to recapture with exf6. Instead the e5-spearhead is left hanging to the …f6 lever.', 'fxe5! Simply winning the e5-pawn. The pawn that cramped Black all opening is gone, and Black is a pawn up.', '', 'Bd6 develops toward h2 and holds the extra pawn; Black has the freer game.', '', '', '', 'Bxe5 — the dust settles with Black a clean pawn ahead and the bishop beautifully centralised.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'fxe5 — win the e5-pawn.', '', 'Bd6 — develop, hold the pawn.', '', '', '', 'Bxe5 — recapture, a pawn up.', ''],
+  },
+  'french-defence:e4_e6_d4_d5_Nc3_Nf6_Bg5_dxe4_Nxe4_Be7:Nf3': {
+    // e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Nf3 Nxe4 Bxe7 Qxe7 Bd3 Nf6 Qe2 Bd7 O-O-O
+    watch: ['', '', '', '', '', '', '', '', '', '', 'Nf3?? A blunder. White had to settle the e4-knight first with Bxf6; now it simply drops.', 'Nxe4! Black wins a clean piece. Once the bishops come off, the knight on e4 is just extra material with no recapture.', '', 'Qxe7, and Black is up a full knight for nothing. The game is effectively decided.', '', '', '', 'Bd7 calmly develops; a piece to the good, Black simply completes development and converts.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nxe4 — win a whole piece.', '', 'Qxe7 — up a piece.', '', '', '', 'Bd7 — develop and convert.', ''],
+  },
+  'french-defence:e4_e6_d4_d5_e5_c5_c3_Nc6_Nf3_Qb6_Bd3_cxd4_cxd4_Bd7:Be3': {
+    // e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 Be3 Qxb2 Nbd2 Nb4 Nb3 Qc3+ Ke2 Nxd3 Qxd3
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Be3? This leaves the b2-pawn — and the rook behind it — fatally loose. White had to cover b2 first.', 'Qxb2! The queen grabs the pawn and now eyes the a1-rook. White is already losing material.', '', 'Nb4 jumps in with threats on d3 and c2 — Black piles on while a pawn up.', '', 'Qc3+ checks and tightens the net; White\'s position is collapsing.', '', 'Nxd3 wins the bishop as well — Black emerges with a decisive material edge.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qxb2 — grab the pawn, hit the rook.', '', 'Nb4 — pile on, hit d3.', '', 'Qc3+ — check and fork.', '', 'Nxd3 — win the bishop.', ''],
+  },
+  'french-defence:e4_e6_d4_d5_e5_c5_c3_Nc6_Nf3_Qb6_Bd3_cxd4_cxd4_Bd7_O-O_Nxd4:Be3': {
+    // e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Be3 Nxf3+ Qxf3 Qxb2 Nd2 Qxe5 Bf4 Qf6 Qe3
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Be3? This loosens b2 and walks into a fork — the d4-knight is poised to strike.', 'Nxf3+! A zwischenzug with check: Black wins the e5-pawn and then b2, cashing the gambit material in for keeps.', '', 'Qxb2 snatches the second pawn; Black is clearly up material with a safe king.', '', 'Qxe5 grabs the spearhead too — Black is rolling, several pawns to the good.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxf3+ — check, then collect.', '', 'Qxb2 — take the second pawn.', '', 'Qxe5 — and another pawn.', '', '', ''],
+  },
+  'french-defence:e4_e6_d4_d5_Nc3_Nf6_Bg5_Bb4:a3': {
+    // e4 e6 d4 d5 Nc3 Nf6 Bg5 Bb4 a3 Bxc3+ bxc3 dxe4 Ne2 Nbd7 c4 h6 Bh4
+    watch: ['', '', '', '', '', '', '', '', 'a3? A slow sideline that simply invites the trade handing Black the structural prize.', 'Bxc3+! Take it — the trade wrecks White\'s queenside into doubled c-pawns, the permanent McCutcheon target.', '', 'dxe4 — with the c3-knight gone, the e4-pawn falls too. Black is a pawn up with the better structure.', '', 'Nbd7 develops smoothly; Black has the structure, the extra pawn, and no problems.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'Bxc3+ — wreck the c-pawns.', '', 'dxe4 — win the e4-pawn.', '', 'Nbd7 — develop, stay on top.', '', '', ''],
+  },
+  'french-defence:e4_e6_d4_d5_Nc3_dxe4:f3': {
+    // e4 e6 d4 d5 Nc3 dxe4 f3 Bb4 fxe4 Bxc3+ bxc3 Qh4+ Ke2 Qxe4+ Kf2
+    watch: ['', '', '', '', '', '', 'f3? White tries to win the centre back, but this just tears open lines around White\'s own king.', 'Bb4! Pin the c3-knight before White can recapture in good order — the e1-king is about to be exposed.', '', 'Bxc3+ smashes the knight and the pawn shelter; the white king is stuck in the centre.', '', 'Qh4+ — the queen joins with check and forces the king to walk into the open.', '', 'Qxe4+ wins the pawn back with a raging attack on the exposed king. Black is winning.', ''],
+    learn: ['', '', '', '', '', '', '', 'Bb4 — pin before fxe4.', '', 'Bxc3+ — open the king.', '', 'Qh4+ — check, drag the king out.', '', 'Qxe4+ — win the pawn, keep attacking.', ''],
+  },
+  'french-defence:e4_e6_d4_d5_Nc3_dxe4_Nxe4_Nd7_Nf3_Ngf6:Neg5': {
+    // e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Nf3 Ngf6 Neg5 h6 Nh3 c5 Bd3 cxd4 Nxd4 e5 Nb3
+    watch: ['', '', '', '', '', '', '', '', '', '', 'Neg5? The knight lunges to g5 with nothing to do there. Black simply kicks it.', 'h6! Put the question to the knight — it has no good square. Nh3 dumps it on the rim, and Black takes the centre.', '', 'c5 strikes the centre while White\'s knight sulks on h3; Black seizes space and the better game.', '', '', '', 'e5 rolls the centre forward — Black has a clear initiative with the knight stranded on the rim.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', 'h6 — kick the offside knight.', '', 'c5 — hit the centre, take over.', '', '', '', 'e5 — roll the centre.', ''],
+  },
 
   // ── King's Gambit — curated confirmed crushes (mined 2026-05-25, engine-first;
   // theory-spot-checked). The other ~20 mined KG gems stay dark until narrated.
@@ -1613,6 +1658,198 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
       '',
       '',
+    ],
+  },
+  'scandinavian-defence:e4_d5_exd5_Qxd5_Nc3_Qa5_d4_c6_Bd2_Qc7_Nf3_Nf6_Bc4_Bg4:Bxf7+': {
+    // e4 d5 exd5 Qxd5 Nc3 Qa5 d4 c6 Bd2 Qc7 Nf3 Nf6 Bc4 Bg4 Bxf7+ Kxf7 h3 Bxf3 Qxf3 Kg8 g4 e6 g5
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bxf7+? An unsound sacrifice. White gives up the bishop hoping to expose the king, but Black has everything covered — there is no real follow-up.', 'Kxf7 — just take it. Black is a clean piece up and the king is perfectly safe, ready to tuck back to g8.', '', 'Bxf3 trades off White\'s one active piece, snuffing the last spark of the bluff.', '', 'Kg8 tucks the king away — Black is simply a piece up with no danger at all.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Kxf7 — take the piece, king is safe.', '', 'Bxf3 — trade off the attacker.', '', 'Kg8 — king safe, up a piece.', '', '', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_d4_Nxd5_Nf3_g6_Be2_Bg7_O-O_O-O_c4_Nb6:b3': {
+    // e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6 Be2 Bg7 O-O O-O c4 Nb6 b3 c5 Bb2 Nc6 a4 Bf5 a5 Nc8 b4
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'b3? Too slow. In this King\'s-Indian structure White cannot afford to dawdle — Black strikes the centre at once.', 'c5! Hitting d4 and opening the long diagonal for the g7-bishop. Black seizes the initiative against White\'s broad but loose centre.', '', 'Nc6 piles onto d4; White\'s centre is creaking and Black is already the more comfortable side.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'c5 — strike d4, open the diagonal.', '', 'Nc6 — pile onto d4.', '', '', '', '', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_c4_e6_dxe6_Bxe6:b3': {
+    // e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 b3 Nc6 Nf3 Ne4 Nc3 Qf6 Bb2 O-O-O Qb1
+    watch: ['', '', '', '', '', '', '', '', 'b3? Far too slow against a gambit. White must hurry to develop and consolidate the extra pawn; instead this hands Black free rein.', 'Nc6 develops with tempo, eyeing d4 and the centre. Black\'s lead in development is already worth far more than the pawn.', '', 'Ne4 leaps to a dominating central outpost; every black piece is firing while White flounders.', '', '', '', 'O-O-O throws the rook onto the open d-file with threats — the gambit has paid off in full.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'Nc6 — develop, seize the initiative.', '', 'Ne4 — dominate the centre.', '', '', '', 'O-O-O — rook to the d-file.', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_c4_e6_dxe6_Bxe6_d4_Bb4+_Bd2_Qe7:Qa4+': {
+    // e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+ Bd2 Qe7 Qa4+ Bd7+ Be2 Bxa4 Nc3 O-O Kf1 Nc6 Nf3
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'Qa4+?? A blunder. The check looks natural, but Black has a devastating in-between reply.', 'Bd7+! A zwischenzug — Black blocks the check WITH check, and the bishop now also attacks the white queen on a4. White must answer the check first, and the queen is lost.', '', 'Bxa4 — and the queen falls. Black is up a full queen; the game is effectively over.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'Bd7+ — block with check, hit the queen.', '', 'Bxa4 — win the queen.', '', '', '', '', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_c4_e6_dxe6_Bxe6_d4_Bb4+_Bd2_Qe7_Bxb4_Qxb4+_Qd2_Nc6:a3': {
+    // e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+ Bd2 Qe7 Bxb4 Qxb4+ Qd2 Nc6 a3 Qxd2+ Nxd2 Nxd4 O-O-O Ng4 Nh3 O-O-O b4
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'a3? A wasted move that walks into a tactic and drops the d4-pawn.', 'Qxd2+ — take the queen with check. After the recapture Black grabs the d4-pawn too, regaining the gambit material with the better game.', '', 'Nxd4 collects the central pawn; Black has the material back and an active, comfortable position.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qxd2+ — trade favourably with check.', '', 'Nxd4 — win back the pawn.', '', '', '', '', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_d4_Bg4_Be2_Bxe2_Qxe2_Qxd5:c3': {
+    // e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 c3 Qxg2 Qf3 Qxf3 Nxf3 e6 a4 Nc6 Nbd2
+    watch: ['', '', '', '', '', '', '', '', '', '', 'c3? This leaves the g2-pawn hanging on the long diagonal — a costly oversight.', 'Qxg2! The queen snatches g2 and rakes the h1-rook down the diagonal. Black wins material out of nowhere.', '', 'Qxf3 forces the trade on Black\'s terms; Black emerges a clean pawn up with the safer position.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Qxg2 — grab the pawn, hit the rook.', '', 'Qxf3 — trade, stay a pawn up.', '', '', '', '', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_d4_Bg4_Be2_Bxe2_Qxe2_Qxd5_Nf3_e6_O-O_Nc6:c4': {
+    // e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 e6 O-O Nc6 c4 Nxd4 Nxd4 Qxd4 Nc3 a6 Qf3 c6 b3
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'c4? The most common try here, but it abandons the d4-pawn\'s defender — and Black pounces.', 'Nxd4! The little tactic: the knight grabs d4 because c4 left it undefended. If White recaptures, the queen takes back and Black is a pawn up.', '', 'Qxd4 regains the piece, leaving Black a clean pawn ahead with an active centralised queen.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxd4 — grab the loose pawn.', '', 'Qxd4 — recapture, a pawn up.', '', '', '', '', ''],
+  },
+  'alekhine-defence:e4_Nf6_e5_Nd5_d4_d6_c4_Nb6:Nc3': {
+    // e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 Nc3 dxe5 dxe5 Qxd1+ Nxd1 Nc6 f4 Bf5 Nf3
+    watch: ['', '', '', '', '', '', '', '', 'Nc3? This fails to shore up the e5-spearhead. Black undermines at once.', 'dxe5! Striking the spearhead. After the trades the e5-pawn is left weak and falls.', '', 'Qxd1+ trades queens — with no attack to fear, Black simply hunts the weak e5-pawn.', '', 'Nc6 piles onto e5; the pawn cannot be held, and Black wins it cleanly.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'dxe5 — undermine the spearhead.', '', 'Qxd1+ — trade queens, target e5.', '', 'Nc6 — win the weak e5-pawn.', '', '', ''],
+  },
+  'alekhine-defence:e4_Nf6_e5_Nd5_d4_d6_c4_Nb6_f4_dxe5_fxe5_Nc6_Be3_Bf5:Bd3': {
+    // e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Bd3 Bxd3 Qxd3 Nxe5 Qe2 Nexc4 Bf2 e6 Nc3
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bd3?? A blunder. It offers a trade but fatally loosens the defence of the centre — and Black wins material by force.', 'Bxd3 — take the bishop. After Qxd3 the e5-pawn is suddenly undefended.', '', 'Nxe5! The first pawn falls, and the knight eyes c4 next. Black is already a pawn up with more to come.', '', 'Nexc4! A second pawn drops. Black has won two pawns out of the blunder and is simply winning.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bxd3 — trade, loosen the centre.', '', 'Nxe5 — win the e5-pawn.', '', 'Nexc4 — and a second pawn.', '', '', ''],
+  },
+  'alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_d4_d6:Nc3': {
+    // e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 Nc3 dxe5 dxe5 Qxd1+ Nxd1 Nc6 f4 Bf5 Nf3
+    watch: ['', '', '', '', '', '', '', '', 'Nc3? It leaves the e5-spearhead under-defended. Black undermines immediately.', 'dxe5! Hitting the spearhead — after the trades the e5-pawn becomes a weakness.', '', 'Qxd1+ trades queens; with the position simplified Black just targets the loose e5-pawn.', '', 'Nc6 attacks e5 — the pawn falls and Black is clearly better.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'dxe5 — undermine the spearhead.', '', 'Qxd1+ — trade queens, target e5.', '', 'Nc6 — win the weak e5-pawn.', '', '', ''],
+  },
+  'alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_c5_Nd5_d4_d6_cxd6_exd6:f4': {
+    // e4 Nf6 e5 Nd5 c4 Nb6 c5 Nd5 d4 d6 cxd6 exd6 f4 dxe5 dxe5 Nc6 Nc3 Bb4 Bd2 Be6 Bb5
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'f4? Over-extending once more. The e5-pawn is now overworked, and Black strikes.', 'dxe5! Undermining. After the recapture the e5-spearhead is isolated and weak.', '', 'Nc6 attacks e5; the over-extended pawn becomes a lasting target.', '', 'Bb4 pins and develops — Black is comfortably better with e5 under fire.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'dxe5 — undermine the spearhead.', '', 'Nc6 — target the weak e5-pawn.', '', 'Bb4 — pin, pile on e5.', '', '', ''],
+  },
+  'benko-gambit:d4_Nf6_c4_c5_d5_b5_Nf3_bxc4:Qc2': {
+    // d4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Qc2 Nxd5 Qxc4 e6 e4 Qa5+ Bd2 Nb4 Qb3
+    watch: ['', '', '', '', '', '', '', '', 'Qc2? This forgets the d5-pawn — Black simply grabs it for free.', 'Nxd5! Winning the central pawn. White can round up c4, but Black stays a sound pawn up with an active knight.', '', 'e6 solidifies the extra pawn; Black is simply a pawn to the good.', '', 'Qa5+ develops with check, and after Bd2 Nb4 Black keeps the material with active pieces.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'Nxd5 — grab the free d5-pawn.', '', 'e6 — shore up the extra pawn.', '', 'Qa5+ — check, keep the pawn.', '', '', ''],
+  },
+  'benko-gambit:d4_Nf6_c4_c5_d5_b5_cxb5_a6_Nc3_axb5_e4_b4:e5': {
+    // d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 e5 bxc3 exf6 cxb2 Bxb2 Qa5+ Qd2 Qxd2+ Kxd2
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'e5? Over-eager. It allows a crushing in-between capture.', 'bxc3! Take the knight first. After exf6 cxb2 the passed pawn is one step from queening and forks the rook.', '', 'cxb2 — the pawn reaches the seventh, attacking the a1-rook. White must deal with it and Black comes out on top.', '', 'Qa5+ forces the queens off into an endgame where Black is clearly better.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'bxc3 — take the knight, push on.', '', 'cxb2 — to b2, hit the rook.', '', 'Qa5+ — trade into a better ending.', '', '', ''],
+  },
+  'benko-gambit:d4_Nf6_c4_c5_d5_b5_cxb5_a6_Nc3_axb5_e4_b4_Nb5_d6_Bc4_g6:Bf4': {
+    // d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6 Bf4 Bg7 Nf3 O-O e5 Nh5 Bg5 h6 Bh4
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bf4? Misplacing the bishop. Black calmly develops and White\'s setup backfires.', 'Bg7 fianchettoes; now if White lunges e5, the f4-bishop is loose and Black will hit it.', '', 'O-O — Black is safe and ready; White\'s e5 push runs into …Nh5 hitting the f4-bishop.', '', 'Nh5 forks the f4-bishop; White\'s pieces tangle and Black is clearly better.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bg7 — develop, exploit the loose bishop.', '', 'O-O — safe, prepare …Nh5.', '', 'Nh5 — hit the f4-bishop.', '', '', ''],
+  },
+
+  // Nimzo 4.Qc2 — White’s wing lunge h4 hangs the g5-bishop to a zwischenzug.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O Nf3 d5 Bg5 h6 h4 Bxc3+ bxc3 hxg5 hxg5 Ne4 e3 g6 g4
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Qc2_O-O_Nf3_d5_Bg5_h6:h4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'h4? White lunges on the wing before finishing development — and the g5-bishop is suddenly loose. There is a zwischenzug.',
+      'Bxc3+ first — the in-between check removes the bishop’s defender before you touch it.',
+      '',
+      'hxg5 — now collect the bishop. White wins a pawn back, but you stay up a piece for a pawn.',
+      '',
+      'Ne4 lands on the hole, hammering the wrecked c3-pawns. A piece for a pawn, with the better structure.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      '', 'Bxc3 — check first, remove the guard.', '', 'hxg5 — now win the bishop.', '', 'Ne4 — a piece up, dominate.', '', '', '',
+    ],
+  },
+
+  // Nimzo 4.Qc2 5.a3 — White’s c5 releases the centre too early; ...Ne4 and ...e5.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 c5 Ne4 Qc2 e5 Nf3 exd4 e3 dxe3 Bxe3
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Qc2_O-O_a3_Bxc3+_Qxc3_d5:c5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'c5? White grabs space but releases the central tension too early — the d4-pawn is left weak and a knight leaps into e4.',
+      'Ne4 jumps to the hole with tempo, hitting the queen on c3 and seizing the centre.',
+      '',
+      'e5! Strike at the centre while White is uncoordinated; the d4-pawn cannot be held.',
+      '',
+      'exd4 — when the smoke clears Black holds an extra pawn with a monster knight on e4.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      '', 'Ne4 — leap in, hit the queen.', '', 'e5 — hit the loose centre.', '', 'exd4 — a pawn up, great knight.', '', '', '',
+    ],
+  },
+
+  // Nimzo Rubinstein 4.e3 — premature c5; ...b6 undermines the base.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 c5 b6 cxb6 Bxc3+ bxc3 axb6 Ne2 Ba6 Bc2
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_e3_O-O_Bd3_d5:c5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '',
+      'c5?! White clamps the queenside, but a pawn chain is undermined at its base — and the d3-bishop ends up biting on granite.',
+      'b6! Hit the base of the c5-pawn before White can prop it up.',
+      '',
+      'Bxc3+ — trade off and damage the white pawns before recapturing.',
+      '',
+      'axb6 — recapture, open the a-file, and leave the doubled c3-pawn as a standing target.',
+      '',
+      'Ba6 trades off White’s good light-squared bishop; the c3-weakness and the bishop pair hand Black the edge.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      '', 'b6 — undermine the c5-pawn.', '', 'Bxc3 — trade, wreck his pawns.', '', 'axb6 — open the a-file.', '', 'Ba6 — trade his good bishop.', '',
+    ],
+  },
+
+  // Nimzo Rubinstein — White’s premature d5 overextends; ...Nb6 wins it.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O dxc4 Bxc4 Nbd7 d5 Nb6 Be2 exd5 Bd2 Nc4 Be1 Nxb2 Qc2
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_e3_O-O_Bd3_d5_Nf3_c5_O-O_dxc4_Bxc4_Nbd7:d5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd5? White lunges in the centre for space, but the pawn overextends — and the c4-bishop is hit at the same time.',
+      'Nb6 attacks the c4-bishop and targets the loose d5-pawn in one move.',
+      '',
+      'exd5 wins the central pawn cleanly. Black is a healthy pawn up with the initiative.',
+      '',
+      'Nc4 — the knight invades, raking b2 and the dark squares; White’s queenside cracks.',
+      '',
+      'Nxb2 snatches a second pawn. Two pawns up with a dominant position.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      '', 'Nb6 — hit the bishop and d5.', '', 'exd5 — win the pawn.', '', 'Nc4 — invade, hit b2.', '', 'Nxb2 — grab a second pawn.', '',
+    ],
+  },
+
+  // Nimzo Leningrad 4.Bg5 — White’s e4 with the bishop on h4 walks into ...g5.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Bg5 h6 Bh4 c5 d5 d6 e4 g5 Bg3 Bxc3+ bxc3 Nxe4 Bd3 Nxg3 hxg3
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Bg5_h6_Bh4_c5_d5_d6:e4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'e4? White builds the big centre, but with the bishop marooned on h4 it walks straight into a kingside pawn-fork.',
+      'g5! Hit the h4-bishop and gain time; it must shuffle to g3, where it sits loose.',
+      '',
+      'Bxc3+ — remove the defender of e4 with check before grabbing the pawn.',
+      '',
+      'Nxe4 wins the central pawn — and the knight even forks the g3-bishop.',
+      '',
+      'Nxg3 trades the knight for the bishop and shatters White’s pawns. Black is a clean pawn up with the bishop pair.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      '', 'g5 — hit the bishop, gain time.', '', 'Bxc3 — check, undefend e4.', '', 'Nxe4 — win the pawn.', '', 'Nxg3 — a pawn up, bishop pair.', '',
+    ],
+  },
+
+  // Nimzo Fianchetto 4.Nf3/g3 — White’s O-O misses the c3 combination.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Nf3 c5 g3 cxd4 Nxd4 O-O Bg2 d5 cxd5 Nxd5 O-O Nxc3 bxc3 Bxc3 Ba3 Bxd4 Bxf8 Kxf8 Rb1
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Nf3_c5_g3_cxd4_Nxd4_O-O_Bg2_d5_cxd5_Nxd5:O-O': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'O-O? Natural development — but it walks into a combination: the d5-knight and b4-bishop gang up on c3.',
+      'Nxc3 begins it — capture the knight to prise open the c3-square.',
+      '',
+      'Bxc3 recaptures, forking the a1-rook and the d4-knight at once.',
+      '',
+      'Bxd4 collects the knight; Black wins material and keeps the dominant dark-squared bishop.',
+      '',
+      'Kxf8 — the dust settles with Black up clear material. The lost castling means nothing here.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      '', 'Nxc3 — start the combination.', '', 'Bxc3 — fork the rook and knight.', '', 'Bxd4 — win the knight.', '', 'Kxf8 — clear material edge.', '',
     ],
   },
 };

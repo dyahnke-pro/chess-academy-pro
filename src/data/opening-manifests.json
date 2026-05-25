@@ -38,7 +38,7 @@
   },
   "caro-kann": {
     "variations": 8,
-    "middlegamePlans": 0,
+    "middlegamePlans": 7,
     "endgamePlans": 0,
     "modelGames": 7,
     "weapons": 0,
@@ -104,6 +104,123 @@
     "middlegamePlans": 2,
     "endgamePlans": 0,
     "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "kings-indian-attack": {
+    "variations": 8,
+    "middlegamePlans": 2,
+    "endgamePlans": 0,
+    "modelGames": 2,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "four-knights-game": {
+    "variations": 9,
+    "middlegamePlans": 5,
+    "endgamePlans": 0,
+    "modelGames": 5,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "evans-gambit": {
+    "variations": 8,
+    "middlegamePlans": 4,
+    "endgamePlans": 0,
+    "modelGames": 4,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "reti-opening": {
+    "variations": 8,
+    "middlegamePlans": 2,
+    "endgamePlans": 0,
+    "modelGames": 2,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "english-opening": {
+    "variations": 8,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 3,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "london-system": {
+    "variations": 8,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 3,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "catalan-opening": {
+    "variations": 7,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 3,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "benko-gambit": {
+    "variations": 7,
+    "middlegamePlans": 4,
+    "endgamePlans": 0,
+    "modelGames": 4,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "scandinavian-defence": {
+    "variations": 7,
+    "middlegamePlans": 7,
+    "endgamePlans": 0,
+    "modelGames": 7,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "french-defence": {
+    "variations": 10,
+    "middlegamePlans": 10,
+    "endgamePlans": 0,
+    "modelGames": 9,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "alekhine-defence": {
+    "variations": 7,
+    "middlegamePlans": 6,
+    "endgamePlans": 0,
+    "modelGames": 6,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "dutch-defence": {
+    "variations": 7,
+    "middlegamePlans": 5,
+    "endgamePlans": 0,
+    "modelGames": 5,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "nimzo-indian": {
+    "variations": 8,
+    "middlegamePlans": 8,
+    "endgamePlans": 0,
+    "modelGames": 8,
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4

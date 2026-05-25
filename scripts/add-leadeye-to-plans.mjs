@@ -165,7 +165,7 @@ function main() {
   let touchedLines = 0;
 
   for (const plan of plans) {
-    if (plan.openingId !== 'ruy-lopez' && plan.openingId !== 'pirc-defence' && plan.openingId !== 'vienna-game' && plan.openingId !== 'italian-game' && plan.openingId !== 'scotch-game' && plan.openingId !== 'kings-gambit' && plan.openingId !== 'sicilian-dragon' && plan.openingId !== 'sicilian-najdorf' && plan.openingId !== 'sicilian-sveshnikov' && plan.openingId !== 'sicilian-alapin') continue;
+    if (plan.openingId !== 'ruy-lopez' && plan.openingId !== 'pirc-defence' && plan.openingId !== 'vienna-game' && plan.openingId !== 'italian-game' && plan.openingId !== 'scotch-game' && plan.openingId !== 'kings-gambit' && plan.openingId !== 'sicilian-dragon' && plan.openingId !== 'sicilian-najdorf' && plan.openingId !== 'sicilian-sveshnikov' && plan.openingId !== 'sicilian-alapin' && plan.openingId !== 'french-defence' && plan.openingId !== 'scandinavian-defence' && plan.openingId !== 'alekhine-defence' && plan.openingId !== 'benko-gambit' && plan.openingId !== 'dutch-defence' && plan.openingId !== 'nimzo-indian' && plan.openingId !== 'caro-kann') continue;
     const lines = plan.playableLines ?? [];
     if (lines.length === 0) continue;
     let planTouched = false;

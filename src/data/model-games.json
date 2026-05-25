@@ -76,75 +76,6 @@
     "lessonSummary": "In the Najdorf, White's f4-f5 advance can create a devastating kingside attack. Fischer showed that sometimes an exchange sacrifice (Rxf6) is worth more than material — the resulting attack with knight on f5 and open lines is overwhelming."
   },
   {
-    "id": "mg-botvinnik-capablanca",
-    "openingId": "nimzo-indian",
-    "white": "Mikhail Botvinnik",
-    "black": "Jose Raul Capablanca",
-    "whiteElo": null,
-    "blackElo": null,
-    "result": "1-0",
-    "year": 1938,
-    "event": "AVRO Tournament, Rotterdam, round 11 (22 November 1938)",
-    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 Bd3 O-O Ne2 b6 O-O Ba6 Bxa6 Nxa6 Bb2 Qd7 a4 Rfe8 Qd3 c4 Qc2 Nb8 Rae1 Nc6 Ng3 Na5 f3 Nb3 e4 Qxa4 e5 Nd7 Qf2 g6 f4 f5 exf6 Nxf6 f5 Rxe1 Rxe1 Re8 Re6 Rxe6 fxe6 Kg7 Qf4 Qe8 Qe5 Qe7 Ba3 Qxa3 Nh5+ gxh5 Qg5+ Kf8 Qxf6+ Kg8 e7 Qc1+ Kf2 Qc2+ Kg3 Qd3+ Kh4 Qe4+ Kxh5 Qe2+ Kh4 Qe4+ g4 Qe1+ Kh5",
-    "overview": "One of the greatest positional masterpieces ever played. Botvinnik builds a crushing kingside attack against the legendary Capablanca using a minority pawn structure and the e5 advance.",
-    "criticalMoments": [
-      {
-        "moveNumber": 19,
-        "color": "white",
-        "fen": "r3r1k1/p2q1ppp/1p3n2/3p4/P1pPP3/1nP2PN1/1BQ3PP/4RRK1 b - - 0 19",
-        "annotation": "Botvinnik repositions the knight to g3 where it supports e4 and eyes f5/h5. This regrouping is a key idea — the knight was passive on e2 but becomes a monster on g3.",
-        "concept": "Knight Redeployment"
-      },
-      {
-        "moveNumber": 21,
-        "color": "white",
-        "fen": "r3r1k1/p2n1ppp/1p6/3pP3/q1pP4/1nP2PN1/1B3QPP/4RRK1 b - - 2 21",
-        "annotation": "The e5 advance locks in a space advantage and creates a powerful outpost. Combined with f4 and the bishop on b2, White gets a crushing kingside attack.",
-        "concept": "Central Advance & Space"
-      },
-      {
-        "moveNumber": 30,
-        "color": "white",
-        "fen": "8/p3q1kp/1p2Pnp1/3pQ3/2pP4/BnP3N1/6PP/6K1 b - - 6 30",
-        "annotation": "Nh5+! is the final combination. The knight sacrifice deflects the king and the e-pawn promotes. Capablanca is helpless against the mating threats despite being up material.",
-        "concept": "Knight Sacrifice & Passed Pawn Promotion"
-      }
-    ],
-    "middlegameTheme": "Positional Squeeze & Kingside Attack",
-    "lessonSummary": "Botvinnik demonstrated how to convert a small positional advantage into a winning attack. The e4-e5 advance created space and open lines, while patient piece maneuvering (Ng3, f4, Bb2) built irresistible pressure. Even Capablanca could not defend."
-  },
-  {
-    "id": "mg-capablanca-tartakower",
-    "openingId": "dutch-defence",
-    "white": "Jose Raul Capablanca",
-    "black": "Saviely Tartakower",
-    "whiteElo": null,
-    "blackElo": null,
-    "result": "1-0",
-    "year": 1924,
-    "event": "New York 1924 (round 6)",
-    "pgn": "d4 e6 Nf3 f5 c4 Nf6 Bg5 Be7 Nc3 O-O e3 b6 Bd3 Bb7 O-O Qe8 Qe2 Ne4 Bxe7 Nxc3 bxc3 Qxe7 a4 Bxf3 Qxf3 Nc6 Rfb1 Rae8 Qh3 Rf6 f4 Na5 Qf3 d6 Re1 Qd7 e4 fxe4 Qxe4 g6 g3 Kf8 Kg2 Rf7 h4 d5 cxd5 exd5 Qxe8+ Qxe8 Rxe8+ Kxe8 h5 Rf6 hxg6 hxg6 Rh1 Kf8 Rh7 Rc6 g4 Nc4 g5 Ne3+ Kf3 Nf5 Bxf5 gxf5 Kg3 Rxc3+ Kh4 Rf3 g6 Rxf4+ Kg5 Re4 Kf6 Kg8 Rg7+ Kh8 Rxc7 Re8 Kxf5 Re4 Kf6 Rf4+ Ke5 Rg4 g7+ Kg8 Rxa7 Rg1 Kxd5 Rc1 Kd6 Rc2 d5 Rc1 Rc7 Ra1 Kc6 Rxa4 d6",
-    "overview": "A masterclass in exploiting the doubled f-pawns in the Caro-Kann Exchange variation. Capablanca's endgame technique converts a tiny structural advantage into a winning passed pawn.",
-    "criticalMoments": [
-      {
-        "moveNumber": 16,
-        "color": "white",
-        "fen": "4r1k1/p1ppq1pp/1pn1pr2/5p2/P1PP1P2/2PBP2Q/6PP/RR4K1 b - - 0 16",
-        "annotation": "White's pieces are beautifully coordinated targeting the weak f7 and e-file. The doubled f-pawns give Black a permanent structural weakness that White exploits throughout the endgame.",
-        "concept": "Exploiting Structural Weakness"
-      },
-      {
-        "moveNumber": 22,
-        "color": "white",
-        "fen": "4rk2/p1pq3p/1p1pprp1/n7/P1PPQP2/2PB2P1/6KP/R3R3 b - - 2 22",
-        "annotation": "Capablanca penetrates with Re7, seizing the seventh rank. This classic rook invasion ties down all of Black's pieces to defense and prepares the decisive breakthrough.",
-        "concept": "Rook on the Seventh Rank"
-      }
-    ],
-    "middlegameTheme": "Endgame Technique & Structural Exploitation",
-    "lessonSummary": "Capablanca showed that small structural advantages — like doubled pawns — can be decisive with proper technique. The key is patience: improve your pieces, penetrate with rooks, and convert the advantage in the endgame."
-  },
-  {
     "id": "mg-fischer-petrosian",
     "openingId": "sicilian-kan",
     "white": "Bobby Fischer",
@@ -353,37 +284,6 @@
     "lessonSummary": "In the QGD Exchange Variation, the minority attack and isolated d-pawn are key themes. Kasparov showed that patient endgame play — centralizing the king, activating rooks, and pushing passed pawns — can convert small structural advantages."
   },
   {
-    "id": "mg-bronstein-ljubojevic",
-    "openingId": "alekhine-defence",
-    "white": "David Bronstein",
-    "black": "Ljubomir Ljubojevic",
-    "whiteElo": null,
-    "blackElo": null,
-    "result": "1-0",
-    "year": 1973,
-    "event": "Petropolis Interzonal 1973, Round 11",
-    "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 c5 d5 e6 Nc3 exd5 cxd5 c4 Nf3 Bg4 Qd4 Bxf3 gxf3 Bb4 Bxc4 O-O Rg1 g6 Bg5 Qc7 Bb3 Bc5 Qf4 Bxg1 d6 Qc8 Ke2 Bc5 Ne4 N8d7 Rc1 Qc6 Rxc5 Nxc5 Nf6+ Kh8 Qh4 Qb5+ Ke3 h5 Nxh5 Qxb3+ axb3 Nd5+ Kd4 Ne6+ Kxd5 Nxg5 Nf6+ Kg7 Qxg5 Rfd8 e6 fxe6+ Kxe6 Rf8 d7 a5 Ng4 Ra6+ Ke5 Rf5+ Qxf5 gxf5 d8=Q fxg4 Qd7+ Kh6 Qxb7 Rg6 f4",
-    "overview": "A wild King's Indian where Bronstein sacrifices his queen for two minor pieces and a crushing initiative. A perfect example of KID counterattacking play on the kingside.",
-    "criticalMoments": [
-      {
-        "moveNumber": 8,
-        "color": "black",
-        "fen": "rnbqkb1r/pp3ppp/1n6/2ppP3/2P5/2N5/PP4PP/R1BQKBNR w KQkq - 0 9",
-        "annotation": "Nxg3! begins a forcing sequence where Black gives up the queen but destroys White's pawn structure and wins massive material. The knight wreaks havoc in White's position.",
-        "concept": "Queen Sacrifice for Piece Activity"
-      },
-      {
-        "moveNumber": 12,
-        "color": "black",
-        "fen": "rn1qk2r/pp3ppp/1n6/3PP3/1bpQ4/2N2P2/PP5P/R1B1KB1R w KQkq - 1 13",
-        "annotation": "Black has two knights and a bishop for the queen plus a shattered white king. The pieces coordinate perfectly — White can never consolidate.",
-        "concept": "Piece Coordination vs Queen"
-      }
-    ],
-    "middlegameTheme": "Kingside Counter-Attack",
-    "lessonSummary": "In the King's Indian, Black's kingside counterplay can be explosive. Bronstein showed that piece activity and pawn structure can outweigh material. When White weakens their kingside, Black's pieces can infiltrate with devastating effect."
-  },
-  {
     "id": "mg-kasparov-karpov-wch85-g24",
     "openingId": "sicilian-scheveningen",
     "white": "Anatoly Karpov",
@@ -509,37 +409,6 @@
     "lessonSummary": "The Alapin Sicilian gives White a straightforward development scheme but often creates an isolated d-pawn that Black can target. Kasparov showed how to methodically pressure structural weaknesses while maintaining active piece play. This game is a textbook example of converting a positional advantage against a strong opponent."
   },
   {
-    "id": "mg-kramnik-catalan-opening",
-    "openingId": "catalan-opening",
-    "white": "Vladimir Kramnik",
-    "black": "Veselin Topalov",
-    "whiteElo": 2772,
-    "blackElo": 2783,
-    "result": "1-0",
-    "year": 2006,
-    "event": "World Chess Championship, Elista (Game 1)",
-    "pgn": "d4 Nf6 c4 e6 Nf3 d5 g3 dxc4 Bg2 Bb4+ Bd2 a5 Qc2 Bxd2+ Qxd2 c6 a4 b5 axb5 cxb5 Qg5 O-O Qxb5 Ba6 Qa4 Qb6 O-O Qxb2 Nbd2 Bb5 Nxc4 Bxa4 Nxb2 Bb5 Ne5 Ra7 Bf3 Nbd7 Nec4 Rb8 Rfb1 g5 e3 g4 Bd1 Bc6 Rc1 Be4 Na4 Rb4 Nd6 Bf3 Bxf3 gxf3 Nc8 Ra8 Ne7+ Kg7 Nc6 Rb3 Nc5 Rb5 h3 Nxc5 Rxc5 Rb2 Rg5+ Kh6 Rgxa5 Rxa5 Nxa5 Ne4 Rf1 Nd2 Rc1 Ne4 Rf1 f6 Nc6 Nd2 Rd1 Ne4 Rf1 Kg6 Nd8 Rb6 Rc1 h5 Ra1 h4 gxh4 Kh5 Ra2 Kxh4 Kh2 Kh5 Rc2 Kh6 Ra2 Kg6 Rc2 Kf5 Ra2 Rb5 Nc6 Rb7 Ra5+ Kg6 Ra2 Kh5 d5 e5 Ra4 f5 Nxe5 Rb2 Nd3 Rb7 Rd4 Rb6 d6 Nxd6 Kg3 Ne4+ Kxf3 Kg5 h4+ Kf6 Rd5 Nc3 Rd8 Rb1 Rf8+ Ke6 Nf4+ Ke5 Re8+ Kf6 Nh5+ Kg6 Ng3 Rb2 h5+ Kf7 Re5 Nd1 Ne2 Kf6 Rd5",
-    "overview": "Kramnik employed the Catalan Opening to gradually build pressure against Anand's solid but passive setup in a critical World Championship game. The powerful Bg2 bishop and central pawn advances eventually overwhelmed Black's defenses, demonstrating the Catalan's long-term positional venom.",
-    "criticalMoments": [
-      {
-        "moveNumber": 12,
-        "color": "white",
-        "fen": "rnbq1rk1/5ppp/4pn2/pQ6/2pP4/5NP1/1P2PPBP/RN2K2R b KQ - 0 12",
-        "annotation": "Kramnik plays e4, seizing the full center and activating the g2 bishop along the long diagonal. This advance puts Black in a strategic bind, as the fianchettoed bishop now exerts tremendous pressure on the queenside and center simultaneously.",
-        "concept": "central expansion"
-      },
-      {
-        "moveNumber": 16,
-        "color": "white",
-        "fen": "rn3rk1/5ppp/4pn2/pb6/Q1NP4/5NP1/1q2PPBP/R4RK1 b - - 0 16",
-        "annotation": "The d5-d6 advance followed by Ng4-e3 creates a passed pawn on c6 that becomes a permanent thorn in Black's position. White's pieces coordinate beautifully around this advanced pawn, forcing Black into a defensive posture with no active counterplay.",
-        "concept": "passed pawn creation"
-      }
-    ],
-    "middlegameTheme": "Fianchetto bishop pressure and advanced passed pawn",
-    "lessonSummary": "The Catalan Opening allows White to combine fianchetto pressure with central control, creating a slow but relentless positional squeeze. Kramnik demonstrated how the g2 bishop becomes a monster once the center opens, especially when combined with a passed pawn. This game is a textbook example of how the Catalan can dismantle even world-class defenses through patient maneuvering."
-  },
-  {
     "id": "mg-alekhine-slav-defence",
     "openingId": "slav-defence",
     "white": "Alexander Alekhine",
@@ -571,37 +440,6 @@
     "lessonSummary": "In the Slav Defence, White can exploit the early capture on c4 by developing pieces to active squares and controlling the center. Alekhine showed that recovering the pawn with tempo and maintaining harmonious piece coordination creates lasting pressure. The game highlights the importance of not allowing the opponent to equalize after an early pawn grab in the Slav."
   },
   {
-    "id": "mg-kramnik-nimzo-indian",
-    "openingId": "nimzo-indian",
-    "white": "Vladimir Kramnik",
-    "black": "Garry Kasparov",
-    "whiteElo": 2770,
-    "blackElo": 2849,
-    "result": "1-0",
-    "year": 2000,
-    "event": "World Championship Game 10, London 2000",
-    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O cxd4 exd4 dxc4 Bxc4 b6 Bg5 Bb7 Re1 Nbd7 Rc1 Rc8 Qb3 Be7 Bxf6 Nxf6 Bxe6 fxe6 Qxe6+ Kh8 Qxe7 Bxf3 gxf3 Qxd4 Nb5 Qxb2 Rxc8 Rxc8 Nd6 Rb8 Nf7+ Kg8 Qe6 Rf8 Nd8+ Kh8 Qe7",
-    "overview": "In a pivotal game of the 2000 World Championship match, Kramnik sacrificed a bishop on e6 to shatter Kasparov's pawn structure and win material. Kasparov fought back with activity but Kramnik's precise technique secured the full point.",
-    "criticalMoments": [
-      {
-        "moveNumber": 15,
-        "color": "white",
-        "fen": "2rq1rk1/pb2bppp/1p2Bn2/8/3P4/1QN2N2/PP3PPP/2R1R1K1 b - - 0 15",
-        "annotation": "Kramnik plays Bxf6 followed by the powerful Bxe6 sacrifice, exploiting the weakness of Black's e6 pawn. This combination wins a pawn and leaves Black's king exposed with a shattered structure.",
-        "concept": "Positional sacrifice"
-      },
-      {
-        "moveNumber": 17,
-        "color": "white",
-        "fen": "2rq1r1k/pb2Q1pp/1p3n2/8/3P4/2N2N2/PP3PPP/2R1R1K1 b - - 0 17",
-        "annotation": "After Qxb6, Kramnik has won two pawns and maintains pressure along the open lines. Kasparov's desperate exchange sacrifice on c3 is not enough to generate sufficient counterplay.",
-        "concept": "Material conversion"
-      }
-    ],
-    "middlegameTheme": "Piece sacrifice for structural damage",
-    "lessonSummary": "Kramnik demonstrated the power of exploiting weak pawn structures in the Nimzo-Indian, using a bishop sacrifice to demolish Kasparov's center. The game shows how a well-timed tactical blow can convert a slight positional edge into a winning material advantage. Even against the greatest player of all time, precise calculation and calm technique proved decisive."
-  },
-  {
     "id": "mg-karpov-grunfeld-defence",
     "openingId": "grunfeld-defence",
     "white": "Anatoly Karpov",
@@ -631,68 +469,6 @@
     ],
     "middlegameTheme": "Challenging and destroying the pawn center",
     "lessonSummary": "This World Championship game is a textbook example of the Grunfeld Defence's strategic idea: allowing White to build a big center, then tearing it apart. Kasparov's patient maneuvering provoked Karpov into advancing too aggressively, and the thematic central counterattack was devastating. The game illustrates why a large pawn center can be a liability if it lacks adequate piece support."
-  },
-  {
-    "id": "mg-short-dutch-defence",
-    "openingId": "alekhine-defence",
-    "white": "Nigel Short",
-    "black": "Jan Timman",
-    "whiteElo": 2660,
-    "blackElo": 2630,
-    "result": "1-0",
-    "year": 1991,
-    "event": "Interpolis 15th, Tilburg",
-    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 g6 Bc4 Nb6 Bb3 Bg7 Qe2 Nc6 O-O O-O h3 a5 a4 dxe5 dxe5 Nd4 Nxd4 Qxd4 Re1 e6 Nd2 Nd5 Nf3 Qc5 Qe4 Qb4 Bc4 Nb6 b3 Nxc4 bxc4 Re8 Rd1 Qc5 Qh4 b6 Be3 Qc6 Bh6 Bh8 Rd8 Bb7 Rad1 Bg7 R8d7 Rf8 Bxg7 Kxg7 R1d4 Rae8 Qf6+ Kg8 h4 h5 Kh2 Rc8 Kg3 Rce8 Kf4 Bc8 Kg5",
-    "overview": "Short handled the Dutch Defence masterfully, opening the position with e4 to exploit the weakened light squares around Black's king. Timman's kingside was left exposed after the pawn exchanges, and Short's rooks dominated the open files.",
-    "criticalMoments": [
-      {
-        "moveNumber": 9,
-        "color": "white",
-        "fen": "r1bq1rk1/ppp1ppbp/1nnp2p1/4P3/3P4/1B3N1P/PPP1QPP1/RNB2RK1 b - - 0 9",
-        "annotation": "Short strikes with e4, the thematic break against the Dutch, opening the position while Black's pieces are awkwardly placed. This move exploits the chronic weakness of the e6 square and the light-squared holes in Black's camp.",
-        "concept": "Thematic pawn break"
-      },
-      {
-        "moveNumber": 16,
-        "color": "white",
-        "fen": "r1b2rk1/1pp2pbp/4p1p1/p1qnP3/P3Q3/1B3N1P/1PP2PP1/R1B1R1K1 b - - 5 16",
-        "annotation": "With Rae1, Short doubles rooks on the e-file with tremendous pressure against Black's position. The combination of open lines and Black's structural weaknesses makes the position nearly impossible to defend.",
-        "concept": "Rook domination on open files"
-      }
-    ],
-    "middlegameTheme": "Exploiting light-square weaknesses",
-    "lessonSummary": "Short's game against Timman is a model example of how to play against the Dutch Defence by targeting the light-square weaknesses created by f5. The e4 break opened the position at just the right moment, and White's pieces flooded in through the gaps. This game teaches that the Dutch can become very dangerous for Black if White times the central break correctly."
-  },
-  {
-    "id": "mg-fischer-kings-indian-attack",
-    "openingId": "kings-indian-attack",
-    "white": "Bobby Fischer",
-    "black": "Lhamsuren Myagmarsuren",
-    "whiteElo": null,
-    "blackElo": null,
-    "result": "1-0",
-    "year": 1967,
-    "event": "Sousse Interzonal",
-    "pgn": "e4 e6 d3 d5 Nd2 Nf6 g3 c5 Bg2 Nc6 Ngf3 Be7 O-O O-O e5 Nd7 Re1 b5 Nf1 b4 h4 a5 Bf4 a4 a3 bxa3 bxa3 Na5 Ne3 Ba6 Bh3 d4 Nf1 Nb6 Ng5 Nd5 Bd2 Bxg5 Bxg5 Qd7 Qh5 Rfc8 Nd2 Nc3 Bf6 Qe8 Ne4 g6 Qg5 Nxe4 Rxe4 c4 h5 cxd3 Rh4 Ra7 Bg2 dxc2 Qh6 Qf8 Qxh7+",
-    "overview": "Fischer unleashed a devastating kingside attack from the King's Indian Attack setup, sacrificing an exchange and a queen to create an unstoppable mating net. This game is widely regarded as one of Fischer's most brilliant attacking masterpieces.",
-    "criticalMoments": [
-      {
-        "moveNumber": 19,
-        "color": "white",
-        "fen": "r2q1rk1/4bppp/b3p3/n1pnP1N1/p2p3P/P2P2PB/2PB1P2/R2QRNK1 b - - 5 19",
-        "annotation": "Fischer repositions with Ne3-f1-g5, beginning a deep regrouping that targets Black's kingside. The knight's journey to f5 will prove to be the cornerstone of a spectacular sacrificial attack.",
-        "concept": "Piece regrouping for attack"
-      },
-      {
-        "moveNumber": 25,
-        "color": "white",
-        "fen": "r1r1q1k1/5p1p/b3pBp1/n1p1P1Q1/p2pN2P/P1nP2PB/2P2P2/R3R1K1 b - - 1 25",
-        "annotation": "Fischer plays Qh5, threatening devastating discoveries with the knight on e7. The combination of Nxg6+ and Qxg6 creates an inescapable mating attack despite Black's extra material.",
-        "concept": "Sacrificial mating attack"
-      }
-    ],
-    "middlegameTheme": "Kingside sacrificial attack",
-    "lessonSummary": "Fischer's immortal King's Indian Attack game shows the explosive potential hidden in this quiet opening system. By patiently building up on the kingside while Black expanded on the queenside, Fischer created the conditions for a brilliant sacrificial combination. The game teaches that in the KIA, White's kingside attack can arrive with devastating speed once the pieces are optimally placed."
   },
   {
     "id": "mg-jobava-mamedyarov-2014",
@@ -2026,54 +1802,6 @@
     "lessonSummary": "Full game by Anna Cramling in the Queen's Gambit (Cramling) line. Watch how the pro handles the position end to end."
   },
   {
-    "id": "mg-lichess-ZiXqZje1",
-    "openingId": "benko-gambit",
-    "white": "Gelfand, B.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2761,
-    "blackElo": 2872,
-    "result": "0-1",
-    "year": 2014,
-    "event": "2014-2014-02 master game",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bg7 e4 O-O Nf3 Qa5 Bd3 Nxd5 exd5 Bxc3+ bxc3 Qxc3+ Qd2 Qxa1 O-O Bxa6 Bb2 Qxa2 Ra1 Qb3 Be4 d6 Rb1 f6 Bxf6 Qc4 Bb2 Qxe4 Re1 Qd3 Qxd3 Bxd3 Rxe7 Rxf3 gxf3 Na6",
-    "overview": "Master game from the Lichess masters database. Gelfand, B. vs Carlsen, M., 2014. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/ZiXqZje1",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-kR4mY2Xe",
-    "openingId": "benko-gambit",
-    "white": "Carlsen, Magnus",
-    "black": "Bologan, Viktor",
-    "whiteElo": 2837,
-    "blackElo": 2732,
-    "result": "1-0",
-    "year": 2012,
-    "event": "2012-2012-07 master game",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1 d6 Nf3 Bg7 g3 O-O Kg2 Nbd7 Qe2 Qb6 a4 Rfb8 Nb5 Ne8 Bg5 Qd8 Ra3 Nb6 b3 Qd7 Ra2 f6 Bc1 f5 exf5 gxf5 Rd1 Nf6 Qe6+ Qxe6 dxe6 Ne4 Nh4 c4 bxc4 Nxc4 Nc7 Nc3 Nxa8 Nxa2 Nc7 Nc3 Rd3 Rc8 Nb5 Nxb5 axb5 Rc5 Rb3 Na5 Rb1 Bd4 b6 Nb7 Rb4 Bxf2 Kxf2 Rc2+ Kf3 Rxc1 Nxf5 Rf1+ Kg4 Nc5 b7",
-    "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Bologan, Viktor, 2012. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/kR4mY2Xe",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-N9sx7pSk",
-    "openingId": "benko-gambit",
-    "white": "Kramnik, Vladimir",
-    "black": "Topalov, Veselin",
-    "whiteElo": 2807,
-    "blackElo": 2743,
-    "result": "1-0",
-    "year": 2003,
-    "event": "2003-2003-01 master game",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 g3 d6 Bg2 Nbd7 Nf3 Bg7 Rb1 O-O O-O Qa5 Bd2 Rfb8 Qc2 Ne8 Rfe1 Nc7 a4 Qb6 b3 Bxc3 Bxc3 Nxd5 Ne5 Nxe5 Bxd5 Bb7 Bxb7 Rxb7 Bxe5 dxe5 Rec1 f6 Qe4 Kg7 Rc3 Rab8 Qc2 Qe6 a5 Kf7 Ra1 Rxb3 Rxb3 Qxb3 Qxc5 Qb2 Qc4+ Kg7 Qa2 Qxa2 Rxa2 Ra8 a6 Ra7 Kg2 Kf7 Kf3 Ke6 g4 Kd6 h4 h6 g5 hxg5 hxg5 f5 e4 e6 Ra5 Kc7 Ke3 Kb8 Rxe5 Rxa6 Rc5 Kb7 Kf4 Kb6 Rc8 fxe4 Kxe4 Kb7 Rg8 Kc6 Rxg6 Kd6 f4 Ra4+ Kf3 Ke7 Rg7+ Kf8 Rb7 Rc4 g6 Rc1 Kg4 Rc5 Rf7+ Ke8 f5",
-    "overview": "Master game from the Lichess masters database. Kramnik, Vladimir vs Topalov, Veselin, 2003. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/N9sx7pSk",
-    "source": "lichess-masters"
-  },
-  {
     "id": "mg-lichess-hOrznatU",
     "openingId": "benoni-defence",
     "white": "Keymer, Vincent",
@@ -2215,198 +1943,6 @@
     "overview": "Master game from the Lichess masters database. Kramnik, Vladimir vs Mamedyarov, Shakhriyar, 2008. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/zLxWOn3b",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-hhaSI6SI",
-    "openingId": "english-opening",
-    "white": "Carlsen, Magnus",
-    "black": "Caruana, Fabiano",
-    "whiteElo": 2863,
-    "blackElo": 2835,
-    "result": "1-0",
-    "year": 2020,
-    "event": "2020-2020-06 master game",
-    "pgn": "c4 e5 Nc3 Nf6 g3 Bb4 e4 Bxc3 bxc3 O-O f3 b5 d4 exd4 cxd4 bxc4 e5 Nd5 Bxc4 Bb7 Nh3 d6 O-O Nd7 Re1 dxe5 dxe5 N7b6 Bb3 Qe7 e6 fxe6 Ng5 Rf6 Qc2 Rg6 Rxe6 Qxe6 Nxe6 Rxe6 Bb2 Rae8 Bd4 Kh8 Qf5 Bc8 Qh5 c5 Bxc5 Re5 Qf7 Bh3 Bf8 Re1+ Rxe1 Rxe1+ Kf2 Rf1+ Ke2 Nc3+ Kd3",
-    "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Caruana, Fabiano, 2020. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/hhaSI6SI",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-51EhMpIT",
-    "openingId": "english-opening",
-    "white": "Carlsen, Magnus",
-    "black": "Caruana, Fabiano",
-    "whiteElo": 2863,
-    "blackElo": 2835,
-    "result": "1/2-1/2",
-    "year": 2020,
-    "event": "2020-2020-06 master game",
-    "pgn": "c4 e5 Nc3 Nf6 g3 Bb4 e4 Bxc3 bxc3 O-O f3 Re8 Kf2 c6 d4 d5 cxd5 cxd5 dxe5 Rxe5 c4 d4 Ne2 Nc6 Nf4 Nd7 Nd5 Re8 Bf4 Nde5 Bxe5 Rxe5 Bd3 f5 Re1 fxe4 Bxe4 Bf5 Bxf5 Rxf5 f4 Qd7 Rb1 Raf8 Kg1 R5f7 Rb2 Re8 Rbe2 Rff8 a4 Qf7 Qd3 Rxe2 Qxe2 Rd8 Qe4 g6 g4 Kf8 Kf2 Kg7 Kg3 Kf8 h3 a6 Kf3 Kg7 Qe6 Qxe6 Rxe6 Kf7 f5 gxf5 gxf5 Rg8 Rh6 Kg7 Rd6 Rf8 Kf4 d3 Nc7 Rc8 Ne6+ Kf7 Rxd3 Ne7 Ng5+ Ke8 Ke5 Rc5+ Ke6 Nxf5 Ne4 Ng7+ Kd6 Rxc4 Ke5 Rxa4 Nd6+ Ke7 Nxb7 Rh4 Ra3 Rh6 Nc5 Rh5+ Kd4 a5 Rxa5 Ne6+ Kc4 Nxc5 Rxc5 Rxh3 Kd4 Kf6 Ke4 Kg6 Kf4 Rh5 Rxh5 Kxh5 Kg3 Kg5 Kh2 Kh5 Kh1 Kg5 Kg1 Kh5 Kh1",
-    "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Caruana, Fabiano, 2020. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/51EhMpIT",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-1OdQ8CAQ",
-    "openingId": "english-opening",
-    "white": "Carlsen, M.",
-    "black": "Caruana, F.",
-    "whiteElo": 2876,
-    "blackElo": 2812,
-    "result": "1/2-1/2",
-    "year": 2019,
-    "event": "2019-2019-10 master game",
-    "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 e4 Bc5 Nxe5 Nxe5 d4 Bb4 dxe5 Nxe4 Qf3 Nxc3 bxc3 Ba5 Bf4 O-O O-O-O Qe7 Kb2 Rb8 Bd3 b5 cxb5 Bb7 Qh3 g6 Qe3 Rfe8 Rhe1 Bc6 a4 a6 Bg5 Bxc3+ Kxc3 Qa3+ Kd2 Qb4+ Ke2 Qg4+ Kd2 Qb4+ Ke2 Qg4+ Kd2 Qb4+",
-    "overview": "Master game from the Lichess masters database. Carlsen, M. vs Caruana, F., 2019. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/1OdQ8CAQ",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-UayafTnB",
-    "openingId": "evans-gambit",
-    "white": "Caruana, Fabiano",
-    "black": "So, Wesley",
-    "whiteElo": 2835,
-    "blackElo": 2770,
-    "result": "0-1",
-    "year": 2020,
-    "event": "2020-2020-06 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Bd3 d6 dxe5 dxe5 Nxe5 Nf6 O-O O-O Qc2 Bd6 Nf3 Nc6 Bg5 h6 Bh4 g5 Bg3 Bxg3 hxg3 g4 Nh4 Ne5 Be2 Re8 Nd2 b6 Rad1 Qe7 Rfe1 Be6 Nf1 Rad8 Ne3 Qc5 Nef5 Rxd1 Rxd1 h5 Rd4 Qf8 Qd2 Nh7 a4 Nc6 Nh6+ Kg7 N4f5+ Kg6 Bd3 Ng5 Qf4 f6 Bb5 Nxd4 Bxe8+ Qxe8 cxd4 Bxf5 Nxf5 Qxe4 Nh4+ Kf7 Qxc7+ Qe7 Qc4+ Qe6 d5 Qd6 Qd3 Qe5 Qg6+ Ke7 Nf5+ Kd8 Kh2 Ne4 Qg8+ Kd7 Qf7+ Kd8 Ng7 h4 Ne6+ Kc8 Qg8+ Kb7 Qh7+ Ka6 Qxh4 Nxf2 Qh8 Qe1 Nc5+ Ka5",
-    "overview": "Master game from the Lichess masters database. Caruana, Fabiano vs So, Wesley, 2020. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/UayafTnB",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-l2qKTr1O",
-    "openingId": "evans-gambit",
-    "white": "Grischuk, A.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2750,
-    "blackElo": 2832,
-    "result": "0-1",
-    "year": 2017,
-    "event": "2017-2017-11 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 Nc3 Nf6 Nd5 d6 Nxb6 cxb6 d3 O-O O-O Nxb4 c3 Nc6 Bg5 h6 Bh4 Be6 Bxe6 fxe6 Rb1 Na5 d4 Qc7 Qd3 Rac8 Rfc1 Nh5 Bg3 Nf4 Bxf4 exf4 c4 Nxc4 d5 e5 Qb3 Qc5 h3 b5 axb5 axb5 Qxb5 Qxb5 Rxb5 Rc7 Nh4 Rfc8 Nf5 Nd2 Rxc7 Rxc7 f3 Nc4 Kf2 h5 Ke2 g6 Nh4 Kg7 Kd3 Kf6 Rb4 b5 Rxb5 Kg5 Rb4 Kxh4 Rxc4 Rxc4 Kxc4 Kg3 Kb5 Kxg2 Kc6 Kxf3 Kxd6 Kxe4 Kc6 f3 d6 f2 d7 f1=Q d8=Q Qc4+",
-    "overview": "Master game from the Lichess masters database. Grischuk, A. vs Carlsen, M., 2017. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/l2qKTr1O",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-oVs5EH8m",
-    "openingId": "evans-gambit",
-    "white": "Grischuk, A.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2750,
-    "blackElo": 2832,
-    "result": "1-0",
-    "year": 2017,
-    "event": "2017-2017-11 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a5 b5 Nd4 Nc3 d6 Nd5 Bg4 c3 Nxf3+ gxf3 Bh5 Rg1 Ne7 Nxb6 cxb6 Rxg7 d5 exd5 Nf5 Rg1 Qh4 Qe2 Qxh2 Rg5 Qh1+ Qf1 Qxf3 Be2 Qxe2+ Qxe2 Bxe2 Kxe2 Nd6 Rxe5+ Kd7 Ba3 Rae8 Rxe8 Rxe8+ Kd3 Ne4 f3 Nf2+ Kd4 h5 Rg1 Re2 d3 h4 Rg7 Ke8 Rg8+ Kd7 Rf8 h3 Rxf7+ Ke8 Rf8+ Kd7 Rf7+ Ke8 Rh7 Rd2 Ke3 Ra2 Bd6 Nd1+ Kd4 Rxa4+ c4 Ra2 Bc7 a4 d6",
-    "overview": "Master game from the Lichess masters database. Grischuk, A. vs Carlsen, M., 2017. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/oVs5EH8m",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-dUpyzpF3",
-    "openingId": "four-knights-game",
-    "white": "Carlsen, M.",
-    "black": "Nakamura, Hi",
-    "whiteElo": 2837,
-    "blackElo": 2804,
-    "result": "1/2-1/2",
-    "year": 2025,
-    "event": "2025-2025-06 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O Bxc6 dxc6 Nxe5 Re8 Nd3 Bxc3 dxc3 Nxe4 Re1 Nd6 Bf4 Rxe1+ Qxe1 Bf5 Rd1 Qe8 f3 f6 Qxe8+ Rxe8 Kf2 g5 Bg3 Rd8 Ke2 Re8+ Kf2 Rd8 Ke2 Re8+ Kf2",
-    "overview": "Master game from the Lichess masters database. Carlsen, M. vs Nakamura, Hi, 2025. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/dUpyzpF3",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-7qWPTdaq",
-    "openingId": "four-knights-game",
-    "white": "Grischuk, A.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2750,
-    "blackElo": 2832,
-    "result": "0-1",
-    "year": 2017,
-    "event": "2017-2017-11 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 Bxc3 bxc3 d6 Re1 Bd7 d4 Re8 Bd3 Bg4 d5 Nb8 h3 Bxf3 Qxf3 Nbd7 Rb1 Nc5 Be3 Rb8 g4 Nfd7 g5 Nf8 Bb5 Re7 Kh2 Ng6 Rg1 Nf4 Rg4 Qf8 Bxf4 exf4 Rxf4 Re5 Rg1 Qe7 Bd3 Re8 Rgg4 a6 c4 Nd7 Qg3 Nc5 h4 Rf8 Kg2 Nd7 Rf5 f6 gxf6 Rxf6 Rfg5 Rf7 f4 Rxg5 hxg5 Nc5 e5 Nxd3 cxd3 dxe5 fxe5 Qa3 Rf4 Qxa2+ Kh3 Qb1 Rxf7 Qh1+ Kg4 Kxf7 e6+ Ke8 Qxc7 Qg2+ Qg3 Qxg3+ Kxg3 a5 c5 Ke7 Kf4 a4 Ke5 a3 d6+ Ke8 e7 Kd7 Kd5 a2",
-    "overview": "Master game from the Lichess masters database. Grischuk, A. vs Carlsen, M., 2017. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/7qWPTdaq",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-iRtkr1jy",
-    "openingId": "four-knights-game",
-    "white": "Naiditsch, A.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2706,
-    "blackElo": 2865,
-    "result": "1-0",
-    "year": 2015,
-    "event": "2015-2015-02 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 Nc3 Bb4 O-O O-O d3 d6 Bg5 Ne7 Re1 c6 Ba4 Ng6 Bb3 h6 Bd2 Bg4 h3 Bh5 g3 d5 Kg2 d4 Ne2 Bxf3+ Kxf3 Bxd2 Qxd2 Nd7 a3 Kh8 Kg2 Nc5 Ba2 f5 exf5 Rxf5 Rf1 Qf6 f4 Rf8 Rae1 h5 Rf3 h4 g4 Nxf4+ Kh2 Rg5 Nxf4 exf4 b4 Nd7 Re6 Qd8 Qe1 Rb5 a4 Rb6 Re7 Nf6 Qxh4+ Nh7 Be6 Rf6 Bf5 Rh6 Qe1 Qd6 Re8+ Nf8 Qe7 Qxe7 Rxe7 Rxb4 Re8 Rf6 Rxf4 g6 g5 Rf7 Rh4+ Kg7 Be4 Rb2 Kg3 Rxc2 Rf4 Rc5 h4 Ra5 Rxf7+ Kxf7 Rb8 b5 Rb7+ Ke6 axb5 cxb5 Kf4 Ra2 Rxb5 Rf2+ Kg3 Re2 Ra5 Nd7 Ra6+ Ke7 Bxg6 Ne5 Be4 Nxd3 Bxd3 Re3+ Kf4 Rxd3 h5 Rh3 h6 d3 Rxa7+ Ke6 Ra6+ Kf7 g6+ Ke7 g7 d2 g8=Q",
-    "overview": "Master game from the Lichess masters database. Naiditsch, A. vs Carlsen, M., 2015. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/iRtkr1jy",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-GjkiRzzC",
-    "openingId": "french-defence",
-    "white": "Karjakin, Sergey",
-    "black": "Carlsen, M.",
-    "whiteElo": 2750,
-    "blackElo": 2882,
-    "result": "1-0",
-    "year": 2019,
-    "event": "2019-2019-08 master game",
-    "pgn": "d4 e6 e4 d5 Nc3 Nf6 e5 Nfd7 f4 c5 Nf3 Nc6 Be3 cxd4 Nxd4 Bc5 Qd2 Bxd4 Bxd4 Nxd4 Qxd4 Qb6 Qxb6 Nxb6 h4 Bd7 h5 h6 O-O-O Ke7 Bd3 a6 Rh3 Na4 Ne2 Nc5 Nd4 Rac8 Rg3 Rhg8 Kd2 Bb5 f5 Bd7 fxe6 Bxe6 Ke3 Nd7 Bh7 Rh8 Rxg7 Nxe5 Rf1 Rce8 Nxe6 Kxe6 Kd4 Kd6 Bd3 Nc6+ Kc3 Ne5 Kd4 Re6 Bf5 Rf6 Bd3 Nc6+ Ke3 Rxf1 Bxf1 Ke6 Rg4 Re8 Bd3 Ne5 Rb4 Re7 Kf4 Nc6 Rb6 Kd6 g4 Kc5 Rb3 Nd4 Rc3+ Kd6 Rc8 Re1 Rh8 Ne6+ Kg3 Ke5 Rxh6 Re3+ Kf2 d4 Rh8 Ng5 Re8+ Kf4 Rxe3 dxe3+ Ke2 Kxg4 h6 f5 Kxe3 a5 a4 b6 c3 Kh5 Bxf5 Kxh6 Kd4 Kg7 Kd5 Kf6 Bc2 Nf3 Kc6 Ne5+ Kxb6 Nc4+ Kc5 Nxb2 Kd4",
-    "overview": "Master game from the Lichess masters database. Karjakin, Sergey vs Carlsen, M., 2019. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/GjkiRzzC",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-Cf1e6zzg",
-    "openingId": "french-defence",
-    "white": "Kasparov, G.",
-    "black": "Caruana, F.",
-    "whiteElo": 2812,
-    "blackElo": 2807,
-    "result": "0-1",
-    "year": 2017,
-    "event": "2017-2017-08 master game",
-    "pgn": "e4 e6 d4 d5 Nc3 Nf6 e5 Nfd7 f4 c5 Nf3 Nc6 Be3 Be7 Qd2 a6 a3 b5 Bd3 Bb7 O-O O-O Kh1 f5 Qf2 Rc8 Rg1 b4 axb4 Nxb4 g4 g6 gxf5 Nxd3 cxd3 Rxf5 Ne2 Rf7 h4 Kh8 h5 gxh5 Qh2 Qf8 Qxh5 c4 Ng5 Bxg5 Rxg5 cxd3 Nc3 Nb6 f5 Rxf5 Rxf5 Qxf5 Bg5 Rf8 Qh4 Qf3+ Kg1 Nd7 Kh2 Qf2+ Qxf2 Rxf2+ Kg3 Rxb2 Rf1 Kg7 Na4 Rc2 Bf6+ Kg6 Kf4 Nxf6 exf6 d2 f7 Rc1",
-    "overview": "Master game from the Lichess masters database. Kasparov, G. vs Caruana, F., 2017. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/Cf1e6zzg",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-LcHBiBca",
-    "openingId": "french-defence",
-    "white": "Caruana, F.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2764,
-    "blackElo": 2853,
-    "result": "1-0",
-    "year": 2023,
-    "event": "2023-2023-05 master game",
-    "pgn": "e4 e6 d4 d5 Nc3 Nf6 e5 Nfd7 f4 c5 Nf3 Nc6 Be3 a6 Ne2 Qb6 Qc1 Be7 c3 O-O g3 f6 Bg2 cxd4 cxd4 Qa5+ Nc3 Nb6 exf6 Bxf6 b3 Bd7 O-O Rac8 Qd2 Be7 Ne2 Qxd2 Bxd2 Rc7 Rac1 Rfc8 f5 Ba3 Rce1 Bb4 Bxb4 Nxb4 fxe6 Bxe6 Nf4 Bf5 Ne5 g6 g4 Be4 Bxe4 dxe4 a3 N4d5 Rxe4 Rc3 Nd7 Rxb3 Nxd5 Nxd5 Re5 Nc3 Nf6+",
-    "overview": "Master game from the Lichess masters database. Caruana, F. vs Carlsen, M., 2023. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/LcHBiBca",
     "source": "lichess-masters"
   },
   {
@@ -2557,54 +2093,6 @@
     "overview": "Master game from the Lichess masters database. Ding, Liren vs Carlsen, Magnus, 2020. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/qTDbYPql",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-PxvKsHlR",
-    "openingId": "london-system",
-    "white": "Carlsen, Magnus",
-    "black": "Ding, Liren",
-    "whiteElo": 2863,
-    "blackElo": 2791,
-    "result": "1/2-1/2",
-    "year": 2020,
-    "event": "2020-2020-08 master game",
-    "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 O-O Be2 d6 h3 c5 Nbd2 cxd4 exd4 Nc6 c3 e5 dxe5 dxe5 Bg5 h6 Bxf6 Qxf6 O-O Rd8 Qb3 Qe7 Rad1 e4 Nh2 e3 Ndf3 exf2+ Rxf2 Be6 Qa4 a6 Re1 b5 Qf4 Qc5 a3 Ne5 Bf1 Nxf3+ Nxf3 Ra7 Nd2 Rad7 Ne4 Qb6 Nf6+ Bxf6 Qxf6 Rd2 Qf4 Rxb2 Re3 Rxf2 Qxf2 Kg7 Qe1 Rd1 Qxd1 Qxe3+ Kh2 Qxc3 Qd6 Bc4 Bxc4 bxc4 Qxa6 Qe5+ Kg1 Qe1+ Kh2 Qe5+ Kg1 Qe1+ Kh2 Qe5+",
-    "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Ding, Liren, 2020. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/PxvKsHlR",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-nVJB3MvZ",
-    "openingId": "london-system",
-    "white": "Carlsen, Magnus",
-    "black": "Nepomniachtchi, Ian",
-    "whiteElo": 2863,
-    "blackElo": 2784,
-    "result": "1-0",
-    "year": 2020,
-    "event": "2020-2020-04 master game",
-    "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 Nbd2 O-O c3 d6 h3 c5 dxc5 dxc5 e4 Nc6 Be2 b6 O-O Bb7 Re1 Qd7 Qc2 Rad8 Rad1 Qc8 e5 Nd5 Bg3 Nc7 Qa4 Ne6 Qh4 Ba6 Bxa6 Qxa6 Qe4 Qb7 Nc4 Rxd1 Rxd1 Rd8 Rxd8+ Ncxd8 Qxb7 Nxb7 a4 Kf8 Kf1 Ke8 Ke2 Kd7 Kd3 Nbd8 Ng1 Nc6 Ke4 h5 f4 f5+ exf6 exf6 f5 Ng5+ Kd3 gxf5 Ne3 Ne7 Ne2 Ne6 Kc4 Kc6 b4 cxb4 cxb4 Bh6 b5+ Kd7 Nd5 Nxd5 Kxd5 f4 Bf2 Bf8 Nd4 Nc5 Nc6 Nxa4 Nxa7 Nc3+ Kc4 Nd1 Bxb6 Ne3+ Bxe3 fxe3 Kd3 Bc5 Nc6 Kd6 Na5 Ke5 Ke2 Kf4 Nc4 Kg3 Nxe3 h4 Kd3 Ba7 Ke4 f5+ Nxf5+ Kxg2 Nxh4+ Kxh3 Nf5 Kg4 Ne7 Kg5 Ke5 Kh6 Ke6 Kg7 Nc8 Bf2 Nd6 Kf8 Kd7 Bg1 Ne4 Kf7 Kc6 Ke7 Nc5 Kd8 b6 Bh2 b7 Bb8 Na6 Bf4 Nc5 Bb8 Ne6+ Ke7 Nc7 Kd8 Nd5 Bg3 Nf6 Bh2 Ne4 Bb8 Nc5 Bh2 Ne6+",
-    "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Nepomniachtchi, Ian, 2020. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/nVJB3MvZ",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-igoizkyc",
-    "openingId": "london-system",
-    "white": "Carlsen, Magnus",
-    "black": "Nepomniachtchi, Ian",
-    "whiteElo": 2863,
-    "blackElo": 2784,
-    "result": "1-0",
-    "year": 2020,
-    "event": "2020-2020-08 master game",
-    "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 O-O Be2 d6 O-O Nh5 Bg5 h6 Bh4 g5 Nfd2 Nf6 Bg3 Nc6 Nc3 e5 dxe5 Nxe5 f4 Neg4 Rf3 Re8 Nf1 Nh5 Be1 f5 Bc4+ Be6 Bxe6+ Rxe6 h3 Ngf6 fxg5 hxg5 Rxf5 Bh6 g4 Ng7 Rf3 Qd7 Ng3 Rae8 Bf2 Qc6 e4 Nd7 Nd5",
-    "overview": "Master game from the Lichess masters database. Carlsen, Magnus vs Nepomniachtchi, Ian, 2020. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/igoizkyc",
     "source": "lichess-masters"
   },
   {
@@ -2893,102 +2381,6 @@
     "overview": "Master game from the Lichess masters database. Nakamura, Hi vs Carlsen, M., 2016. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
     "criticalMoments": [],
     "sourceUrl": "https://lichess.org/N8XEWWZo",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-Cvdkin8Y",
-    "openingId": "reti-opening",
-    "white": "Caruana, F.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2804,
-    "blackElo": 2855,
-    "result": "0-1",
-    "year": 2016,
-    "event": "2016-2016-06 master game",
-    "pgn": "Nf3 d5 c4 c6 Qb3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 Re8 Bf4 Nbd7 cxd5 Nxd5 Bd2 e5 Nc3 Nc7 Ne4 Nb6 Bg5 Qd5 Nf6+ Bxf6 Bxf6 Qxb3 axb3 Bg4 Rfe1 Bxf3 Bxf3 h6 d4 e4 Bg4 Nbd5 Be5 Nb5 Bf4 f5 Bh3 Nxf4 gxf4 Nxd4 Ra4 Red8 Bf1 a5 Rc1 Nxb3 Rc3 Nd4 e3 Nf3+ Kg2 Rd1 Rc5 Rad8 Rcxa5 Rxf1 Kxf1 Rd1+ Kg2 Rg1+ Kh3 g5 fxg5 hxg5",
-    "overview": "Master game from the Lichess masters database. Caruana, F. vs Carlsen, M., 2016. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/Cvdkin8Y",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-0DfZPdnI",
-    "openingId": "reti-opening",
-    "white": "Aronian, L.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2775,
-    "blackElo": 2872,
-    "result": "1-0",
-    "year": 2019,
-    "event": "2019-2019-12 master game",
-    "pgn": "Nf3 d5 c4 d4 b4 c5 g3 cxb4 a3 b3 d3 Nc6 Nbd2 a5 Qxb3 a4 Qc2 e5 Bg2 Nf6 O-O Be7 Rb1 O-O Rb5 Nd7 Bb2 Nc5 Rb1 Qc7 Bc1 Na5 R5b2 Bd7 Qd1 Bc6 Ne1 Bxg2 Kxg2 Ncb3 Nc2 b5 cxb5 Rfb8 Nxb3 axb3 Nb4 Rxb5 e4 dxe3 Qf3 Rd8 Bxe3 Qd7 Rc1 f5 Rbb1 Qe6 Bd2 e4 Qe3 Bxb4 Bxb4 Rxd3 Qa7 Nc4 Rxc4 Qxc4 Qa8+ Kf7 Qf8+ Kg6 Rc1 Qxc1 Qe8+ Kh6 Qe6+ g6 Bf8+ Kh5 Qe7",
-    "overview": "Master game from the Lichess masters database. Aronian, L. vs Carlsen, M., 2019. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/0DfZPdnI",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-NQrR51OA",
-    "openingId": "reti-opening",
-    "white": "Caruana, F.",
-    "black": "So, W.",
-    "whiteElo": 2808,
-    "blackElo": 2812,
-    "result": "0-1",
-    "year": 2017,
-    "event": "2017-2017-06 master game",
-    "pgn": "Nf3 d5 c4 e6 Qb3 Nf6 g3 Be7 Bg2 O-O O-O d4 d3 Nc6 Bf4 Nd7 Na3 e5 Bd2 Re8 Qc2 a5 Nb5 Nb4 Qd1 c6 Na3 Bf8 Nc2 Nxc2 Qxc2 Nc5 a3 a4 Bb4 Nb3 Rae1 Bxb4 axb4 Qb6 e3 Bg4 Nd2 Qxb4 Nxb3 axb3 Qc1 Bf5 Qd1 Rad8 e4 Bd7 f4 b5 cxb5 Qxb5 Rf2 c5 Bf1 f6 Qh5 Ra8 Rc1 Kh8 g4 exf4 Rxc5 Qb4 Rc7 Qd6 Rb7 Reb8 Rxb8+ Rxb8 g5 Qe5 h4 f5 Qf3 fxe4 dxe4 Rf8 Bc4 Bc6 Re2 Qc5 Bd3 Bb5 e5 Bxd3 Qxd3 f3 Rf2 Qc1+ Qf1 Qf4 Qh3 d3 Qd7 Qxe5 Qxd3 Qg3+ Kf1 Qxh4 Rxf3 Qh3+ Kf2 Qxf3+ Qxf3 Rxf3+ Kxf3 Kg8 Ke4 Kf7 Kf5 Ke7 Ke5 h6 gxh6 gxh6 Kf5 Kd6",
-    "overview": "Master game from the Lichess masters database. Caruana, F. vs So, W., 2017. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/NQrR51OA",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-qGeCrW3o",
-    "openingId": "scandinavian-defence",
-    "white": "Caruana, F.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2805,
-    "blackElo": 2876,
-    "result": "1/2-1/2",
-    "year": 2015,
-    "event": "2015-2015-06 master game",
-    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 Nf3 Nf6 d4 c6 Bc4 Bg4 h3 Bxf3 Qxf3 e6 Bd2 Qc7 O-O-O Nbd7 Ne4 Nxe4 Qxe4 Bd6 Kb1 Nf6 Qf3 O-O Bd3 a5 h4 Nd5 h5 Rfd8 Qe4 Nf6 Qe2 Bf4 Bxf4 Qxf4 g3 Qg5 c3 h6 Bc2 Kf8 Rde1 c5 dxc5 Qxc5 Rd1 b5 Rxd8+ Rxd8 Rd1 Rc8 a3 Qxh5 Qxh5 Nxh5 Rd7 b4 cxb4 axb4 axb4 Nf6 Rb7 Nd5 b5 Nb4 Be4 Rc4 Bg2 Rd4 Rc7 Rd1+ Rc1 Rxc1+ Kxc1 Ke7 Kd2 Kd6 b6 h5 f4 f6 Kc3 Nc6 b7 Nb8 Kd4 Nd7 b4 Kc7 Bf3 g6 Be4 g5 fxg5 fxg5 Bf3 h4 g4 h3 b5 h2 Bh1 Nf6 Ke5 Nxg4+ Kxe6 Nf2 Bg2 Nd1 Ke5 Kb8 Ke4 Nf2+ Kf5 h1=Q Bxh1 Nxh1 Kxg5 Kxb7 b6 Kxb6",
-    "overview": "Master game from the Lichess masters database. Caruana, F. vs Carlsen, M., 2015. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/qGeCrW3o",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-06wNUWaA",
-    "openingId": "scandinavian-defence",
-    "white": "Firouzja, Alireza",
-    "black": "Carlsen, M.",
-    "whiteElo": 2759,
-    "blackElo": 2847,
-    "result": "1-0",
-    "year": 2021,
-    "event": "2021-2021-08 master game",
-    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Ne5 c6 Bc4 e6 g4 Bg6 h4 Nbd7 Nxd7 Nxd7 h5 Be4 O-O Bd5 Nxd5 cxd5 Bd3 Bd6 Qf3 O-O-O Be3 g6 h6 Rhf8 a3 f5 c4 e5 b4 Qc7 c5 Be7 Bb5 e4 Qh3 f4 Bd2 Bg5 c6 Nf6 cxb7+ Qxb7 Rac1+ Kb8 Bc6 Qe7 Rc5 e3 fxe3 fxe3 Be1 Ne4 Qh2+ Kc8 Bd7+ Kxd7 Rc7+ Ke6 Qe5#",
-    "overview": "Master game from the Lichess masters database. Firouzja, Alireza vs Carlsen, M., 2021. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/06wNUWaA",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-K3TNuDAQ",
-    "openingId": "scandinavian-defence",
-    "white": "Dominguez Perez, L.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2758,
-    "blackElo": 2847,
-    "result": "1/2-1/2",
-    "year": 2021,
-    "event": "2021-2021-08 master game",
-    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bd2 c6 Bc4 Nbd7 Qe2 Qc7 O-O-O e6 Nh4 Bg6 Nxg6 hxg6 d5 cxd5 Nxd5 Nxd5 Bxd5 O-O-O Bf3 Bd6 g3 Ne5 Bc3 Nxf3 Qxf3 f5 Qe3 e5 Qxa7 Qc6 Qa8+ Kd7 Qa5 Ke6 Rhe1 Bc7 Qb4 Rxd1+ Rxd1 Rxh2 Qf8 Rh1 Be1 Qe4 Qxg7 Rxe1 Qxg6+ Ke7 Qg7+ Ke6 Qd7+ Kf6 Qxc7 Rxd1+ Kxd1 Qd5+ Kc1 Qh1+ Kd2 Qd5+ Kc3 Qf3+ Kb4 Qxf2 Qd6+ Kg5 Qxe5 Qxc2 Qf4+ Kg6 Qd4 Kg5 a4 Qe4 Qxe4 fxe4 Kc3 Kg4 Kd2 Kf3 Ke1 Kxg3 b4 Kf4 a5 Ke5 b5 Kd5 a6 bxa6 bxa6 Kc6 Ke2 Kb6 Ke3 Kxa6 Kxe4",
-    "overview": "Master game from the Lichess masters database. Dominguez Perez, L. vs Carlsen, M., 2021. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/K3TNuDAQ",
     "source": "lichess-masters"
   },
   {
@@ -3623,5 +3015,1829 @@
     "middlegameTheme": "Opposite-side castling: Black's c-file and b-pawn attack races White's h- and f-pawn storm.",
     "lessonSummary": "The Dragon in one game: trade efficiently, train every piece on White's king, and win the race down the queenside.",
     "studentSide": "black"
+  },
+  {
+    "id": "mg-anand-four-knights",
+    "openingId": "four-knights-game",
+    "white": "Viswanathan Anand",
+    "black": "Levon Aronian",
+    "whiteElo": 2784,
+    "blackElo": 2792,
+    "result": "1-0",
+    "year": 2016,
+    "event": "Zurich Chess Challenge 2016",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 Nc3 Bd6 O-O O-O d3 Re8 a3 h6 Bc4 Bc5 Be3 Bxe3 fxe3 d6 Nh4 Be6 Nf5 Bxc4 dxc4 Kh7 Qf3 Nb8 Nxh6 Kxh6 Qh3+ Kg6 Rf3 Nh5 Rf5 Nf6 Qh4",
+    "overview": "Anand reveals the attacking fire hidden inside the quiet Spanish Four Knights. After routine symmetrical development he transferred a knight to the f5 outpost, sacrificed it on h6 to tear open Aronian's king, and hunted the monarch into the open for a swift, brilliant finish.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r2qr1k1/ppp2pp1/2npbn1p/4pN2/2B1P3/P1NPP3/1PP3PP/R2Q1RK1 b - - 3 12",
+        "annotation": "Nf5 — the knight reaches the f5 outpost, the dream square of the whole opening. From f5 it eyes h6 and g7 and no pawn can ever chase it away.",
+        "concept": "The f5 outpost"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "rn1qr3/ppp2ppk/3p1n1N/4p3/2P1P3/P1N1PQ2/1PP3PP/R4RK1 b - - 0 15",
+        "annotation": "Nxh6! — the outpost knight sacrifices itself to rip open the king's shelter. With the queen swinging to h3, the exposed monarch cannot survive.",
+        "concept": "Sacrifice to expose the king"
+      },
+      {
+        "moveNumber": 19,
+        "color": "white",
+        "fen": "rn1qr3/ppp2pp1/3p1nk1/4pR2/2P1P2Q/P1N1P3/1PP3PP/R5K1 b - - 7 19",
+        "annotation": "Qh4 — the queen joins the hunt. Black's king is stranded on g6 in the open while the rooks and queen weave a mating net.",
+        "concept": "King hunt"
+      }
+    ],
+    "middlegameTheme": "Route a knight to the f5 outpost, then sacrifice to hunt the king.",
+    "lessonSummary": "Even the symmetrical Four Knights can catch fire: get a knight to f5 and the sacrifice on h6 or g7 is always in the air."
+  },
+  {
+    "id": "mg-kramnik-scotch-four-knights",
+    "openingId": "four-knights-game",
+    "white": "Vladimir Kramnik",
+    "black": "Levon Aronian",
+    "whiteElo": 2801,
+    "blackElo": 2820,
+    "result": "1-0",
+    "year": 2012,
+    "event": "Zurich Match 2012",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bc5 Be3 Bb6 Qd2 O-O O-O-O Re8 f3 d5 exd5 Nxd5 Bg5 Nxc3 Bxd8 Nxd1 Bxc7 Bxc7 Nxc6 Ne3 Bb5 bxc6 Bxc6 Nc4 Qd4 Be6 Bxa8 Bb6 Qd3 Rxa8 Re1 Rd8 Qe4 g5 c3 Bc5 Re2 h6 g3 a5 f4 a4 f5 Bd5 Qd3 Bb6 b3 axb3 axb3 Na5 Re8+ Rxe8 Qxd5 Rd8 Qb5 Rd6 Kc2 Kg7 b4 Nb7 c4 Rf6 g4 Nd8 c5 Bc7 Qd7 Nc6 b5 Na7 Qxc7 Nxb5 Qe5 Na7 Kd3",
+    "overview": "A model Scotch Four Knights. Kramnik played the early d4, traded into Black's hanging d-pawn structure, castled queenside and used f3 and Bg5 to pile onto the centre. A crisp tactical sequence around the d5-pawn won material, and Kramnik converted the extra exchange with his trademark technique.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bqr1k1/ppp2ppp/1bn2n2/3P4/3N4/2N1BP2/PPPQ2PP/2KR1B1R b - - 0 10",
+        "annotation": "exd5 — opening the centre against Black's hanging pawns. White's pieces are poised on the d- and e-files to besiege the structure.",
+        "concept": "Open the centre against hanging pawns"
+      },
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r1bBr1k1/ppp2ppp/1bn5/8/3N4/2n2P2/PPPQ2PP/2KR1B1R b - - 0 12",
+        "annotation": "Bxd8 — the point of the combination: White emerges from the tactics around the d5-square with an extra exchange.",
+        "concept": "Tactics on the weak square"
+      },
+      {
+        "moveNumber": 42,
+        "color": "white",
+        "fen": "8/n4pk1/5r1p/2P1QPp1/6P1/3K4/7P/8 b - - 3 42",
+        "annotation": "Kd3 — deep in the won endgame the king marches up to escort the c-pawn home. The structural edge has become a full point.",
+        "concept": "Convert the material edge"
+      }
+    ],
+    "middlegameTheme": "Besiege the hanging d-pawn, win material around the weak square.",
+    "lessonSummary": "The early d4 hands Black a fragile centre; pile onto it and the tactics tend to fall White's way."
+  },
+  {
+    "id": "mg-mamedyarov-glek",
+    "openingId": "four-knights-game",
+    "white": "Shakhriyar Mamedyarov",
+    "black": "Vladimir Kramnik",
+    "whiteElo": 2753,
+    "blackElo": 2803,
+    "result": "1-0",
+    "year": 2013,
+    "event": "Geneva Masters 2013",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Bc5 O-O O-O Re1 Bb6 d3 Re8 a4 Bg4 h3 Bh5 g4 Bg6 Nd2 Qh4 Qe2 f5 Nf3 Qf6 gxf5 Bxf5 Ng5 e4 d4 Kh8 Nxe4 Qg6 Qf3 Rf8 Qg3 Qxg3 Nxg3 Ba5 Bxc6 Bxc3 Bxb7 Rab8 Ba3 Rf6 Nxf5 Bxa1 Rxa1 Rxb7 Ne3 h6 d5 Rf4 Bc5 a6 Kg2 Kh7 Ra3 Rb1 d6 cxd6 Bxd6 Rd4 Bc5 Rd7 a5 Rb5 Bb6 Rg5+ Kf1 Rh5 Rd3 Rxd3 cxd3 Rxh3 d4 Kg6 Nc4 Rc3 Nd6 h5 Ne4 Rc4 Nd6 Rc6 Nb7 Kf5 Kg2 h4 Nc5 g5 Nxa6 Rc2 Nb4 Rb2 Nd5 g4 Ne3+ Kg5 d5 g3 Nc4 Re2 d6 Kg4 Ne3+ Kf4 d7 h3+ Kxh3 Rxf2 Ng2+",
+    "overview": "Mamedyarov, the great Glek-System practitioner, beats Kramnik from his pet 4.g3. The fianchettoed bishop and a kingside pawn advance opened lines, a knight grabbed the f5 outpost amid the tactics, and after the queens came off Mamedyarov ground out a long, technical rook-and-knight endgame.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r2qr1k1/ppp2ppp/1bn5/4p3/P5b1/2PP1NPP/2P2PB1/R1BQR1K1 b - - 0 12",
+        "annotation": "h3 — preparing g4 to expand on the kingside and challenge Black's bishop. The Glek's quiet setup becomes a pawn-storm engine.",
+        "concept": "Kingside expansion"
+      },
+      {
+        "moveNumber": 27,
+        "color": "white",
+        "fen": "1r5k/pBp3pp/5r2/5N2/P2P4/B1b4P/2P2P2/R3R1K1 b - - 0 27",
+        "annotation": "Nxf5 — the knight seizes the f5 outpost in the thick of the tactics, dominating from the centre of Black's camp.",
+        "concept": "The f5 knight"
+      },
+      {
+        "moveNumber": 60,
+        "color": "white",
+        "fen": "8/3P4/1B6/P7/5k2/6pK/5rN1/8 b - - 1 60",
+        "annotation": "Ng2+ — the final touch in a won endgame: the knight and the passed d-pawn decide. Patience converted the small Glek edge.",
+        "concept": "Endgame technique"
+      }
+    ],
+    "middlegameTheme": "Fianchetto, expand with g4, plant a knight on f5, convert.",
+    "lessonSummary": "The Glek is positional but never passive — g4 and a knight on f5 give a real kingside initiative."
+  },
+  {
+    "id": "mg-karthikeyan-italian-four-knights",
+    "openingId": "four-knights-game",
+    "white": "Murali Karthikeyan",
+    "black": "Aleksey Grebnev",
+    "whiteElo": 2658,
+    "blackElo": 2556,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Asian Individual Championship 2025",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nf6 Nc3 Nc6 Bc4 Nxe4 Nxe4 d5 Bd3 dxe4 Bxe4 Bd6 d4 Nxd4 Nxd4 exd4 Qxd4 O-O Bd2 Qh4 g3 Qg4 h3 Qe6 Bc3 Qh6 Bd2 Qe6 Bc3 Qh6 h4 f5 Bd5+ Be6 f4 c6 Qxg7+ Qxg7 Bxe6+ Qf7 Bxf7+ Kxf7 h5 Rfe8+ Kf1 Rad8 Rd1 Bf8 Kg2 b5 Kf3 Bc5 Be5 a5 g4 fxg4+ Kxg4 Ke6 Rhe1 Rg8+ Kf3 Rxd1 Rxd1 Be7 b3 a4 bxa4 bxa4 Rb1 a3 Ke4 Rg2 f5+ Kf7 Rb7 Re2+ Kf4 Rf2+ Ke3 Rxf5 Bd6 Ke6 Bxe7 Rf7 Kd4 Rxe7 Rxe7+ Kxe7 Kc5 Kf6 Kxc6 Kg5 c4 Kxh5 c5",
+    "overview": "A clean modern handling of the Italian Four Knights fork-trick. After 4...Nxe4 5.Nxe4 d5 regained the piece, White kept the more active centralised bishop, won a pawn with a well-timed Qxg7+ that forced off the queens, and converted a textbook bishop endgame.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r1bqk2r/ppp2ppp/3b4/4p3/3NB3/8/PPP2PPP/R1BQK2R b KQkq - 0 9",
+        "annotation": "Nxd4 — White recaptures and the dust settles: the centralised bishop on e4 and the more harmonious pieces give a small but real pull.",
+        "concept": "Emerge from the fork trick with the edge"
+      },
+      {
+        "moveNumber": 20,
+        "color": "white",
+        "fen": "r4rk1/pp4Qp/2pbb2q/3B1p2/5P1P/2B3P1/PPP5/R3K2R b KQ - 0 20",
+        "annotation": "Qxg7+ — a precise trade: having grabbed a pawn, White forces off the queens and steers into a winning endgame.",
+        "concept": "Trade into a winning endgame"
+      },
+      {
+        "moveNumber": 49,
+        "color": "white",
+        "fen": "8/7p/2K5/2P4k/8/p7/P7/8 b - - 0 49",
+        "annotation": "c5 — the passed pawn advances; the extra pawn and the active king decide. The tiny Italian edge has matured into a win.",
+        "concept": "Convert the extra pawn"
+      }
+    ],
+    "middlegameTheme": "Survive the fork trick with the better bishop, win a pawn, convert.",
+    "lessonSummary": "Meet the fork trick calmly: the centralised bishop and the healthier structure give White a small, very real pull."
+  },
+  {
+    "id": "mg-carlsen-rubinstein",
+    "openingId": "four-knights-game",
+    "white": "Magnus Carlsen",
+    "black": "Boris Gelfand",
+    "whiteElo": 2813,
+    "blackElo": 2750,
+    "result": "1-0",
+    "year": 2010,
+    "event": "Amber Blindfold 2010",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nf6 Nc3 Nc6 Bb5 Nd4 Bc4 d6 Nxd4 exd4 Nd5 Nd7 d3 c6 Nf4 g6 a3 Bg7 O-O O-O Ba2 Nc5 Bd2 Qh4 Ne2 Be6 Ng3 Bxa2 Rxa2 d5 exd5 cxd5 a4 Rac8 f4 f5 Qf3 Qd8 b4 Ne6 Ne2 Qd7 Qf2 Rc7 Kh1 Rfc8 Rc1 Qd6 Ng1 Bh6 g3 Bg7 Nf3 Bf6 Qg2 Kf7 Rb2 Kg8 Be1 Qd7 b5 Nc5 Ra1 Ne6 Bb4 a6 Re1 axb5 axb5 b6 Ne5 Qxb5 Nxg6 hxg6 Rxe6 Rc6 Re2 Kh7 g4 fxg4 Qxg4 Qa4 f5 Bg7 Rb1 gxf5 Qxf5+ Kh8 Rg2 Rxc2 Qh5+ Kg8 Rxg7+ Kxg7 Rg1+ Kf6 Qg6+ Ke5 Bd6#",
+    "overview": "Carlsen meets the Rubinstein's bold ...Nd4 with calm development, keeps the bishop pair, and slowly outplays Gelfand. A queenside pawn advance opened lines, the two bishops took over the board, and the game ended with a crisp mating attack in the centre.",
+    "criticalMoments": [
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "2rq1rk1/pp4bp/6p1/2np1p2/PP1p1P2/3P1QN1/R1PB2PP/5RK1 b - - 0 21",
+        "annotation": "b4 — Carlsen expands on the queenside, prising open lines for the bishop pair against Black's position.",
+        "concept": "Open lines for the bishops"
+      },
+      {
+        "moveNumber": 43,
+        "color": "white",
+        "fen": "2r5/7k/1pr2bp1/3p1P2/qB1p2Q1/3P4/1RP1R2P/7K b - - 0 43",
+        "annotation": "f5 — the breakthrough; White's pieces flood toward the Black king as the position cracks open.",
+        "concept": "Breakthrough attack"
+      },
+      {
+        "moveNumber": 51,
+        "color": "white",
+        "fen": "2r5/8/1p1B2Q1/3pk3/q2p4/3P4/2r4P/6RK b - - 5 51",
+        "annotation": "Bd6# — checkmate. The bishop pair delivers the final blow, the Black king caught in the open centre.",
+        "concept": "The bishop pair mates"
+      }
+    ],
+    "middlegameTheme": "Keep the bishop pair, open lines, deliver mate.",
+    "lessonSummary": "Against the Rubinstein, refuse complications, keep the two bishops, and let them dominate the open position."
+  },
+  {
+    "id": "mg-carlsen-london-main",
+    "openingId": "london-system",
+    "white": "Magnus Carlsen",
+    "black": "Wesley So",
+    "whiteElo": 2832,
+    "blackElo": 2812,
+    "result": "1-0",
+    "year": 2017,
+    "event": "Chess.com Isle of Man / GCT 2017",
+    "studentSide": "white",
+    "pgn": "d4 d5 Bf4 c5 e3 Nc6 c3 Qb6 Qb3 Nf6 Nd2 c4 Qc2 Nh5 Bg5 h6 Bh4 g5 Be2 Ng7 Bg3 Bf5 Qc1 e6 Ngf3 Qa5 e4 Bh7 O-O Be7 Re1 O-O Ne5 Nxe5 Bxe5 f6 Bg3 Rfe8 h4 b5 b4 Qd8 a4 a5 axb5 axb4 Rxa8 Qxa8 exd5 exd5 Bf3 Qd8 hxg5 hxg5 b6 bxc3 Qxc3 Qxb6 Bxd5+ Kf8 Nxc4 Qb5 Ne3 Rd8 Qc7 Qd7 Qa5 Nh5 Bc7 Rc8 Bh2 Nf4 Bxf4 gxf4 Nc4 Qf5 Qa7 Qxd5 Qxe7+ Kg8 Nb6",
+    "overview": "Carlsen shows the London at its best against one of the world's elite. He met the ...Qb6/...c5 plan calmly, refused to part with the dark-squared bishop, broke with e4 at the right moment, and converted the resulting initiative into a crushing attack.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "r1b1kb1r/pp2pppp/1qn5/3p2Bn/2pP4/2P1P3/PPQN1PPP/R3KBNR b KQkq - 3 8",
+        "annotation": "Bg5 — Carlsen redeploys the bishop to dodge the ...Nh5 trade. You never give up the prized London bishop cheaply; it is the soul of the system.",
+        "concept": "Preserve the London bishop"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r3kb1r/pp3pnb/2n1p2p/q2p2p1/2pPP3/2P2NB1/PP1NBPPP/R1Q2RK1 b kq - 2 15",
+        "annotation": "With e4 in and the king castled, White has the freer game — the patient build-up has opened the centre for the better-placed pieces.",
+        "concept": "The e4 break"
+      },
+      {
+        "moveNumber": 41,
+        "color": "white",
+        "fen": "2r3k1/4Q2b/1N3p2/3q4/3P1p2/8/5PP1/4R1K1 b - - 2 41",
+        "annotation": "Nb6 — the queen and knight swarm and the attack crashes through. The quiet London has become a winning kingside assault.",
+        "concept": "Convert the initiative"
+      }
+    ],
+    "middlegameTheme": "Preserve the bishop, break with e4, attack the king.",
+    "lessonSummary": "Meet ...Qb6/...c5 calmly, keep the dark-squared bishop, and the e4-break turns the solid London into a real attack."
+  },
+  {
+    "id": "mg-carlsen-london-kid",
+    "openingId": "london-system",
+    "white": "Magnus Carlsen",
+    "black": "Maxime Vachier-Lagrave",
+    "whiteElo": 2832,
+    "blackElo": 2796,
+    "result": "1-0",
+    "year": 2017,
+    "event": "Grand Chess Tour Paris 2017",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 Bf4 g6 e3 Bg7 Nf3 d6 Be2 Nh5 Bg5 h6 Bh4 g5 Nfd2 Nf4 exf4 gxh4 c3 c5 dxc5 dxc5 Na3 O-O O-O Nc6 Re1 h3 g3 e5 fxe5 Nxe5 Nf3 Nxf3+ Bxf3 Qf6 Nc4 Rd8 Qe2 Be6 Bg4 Bxg4 Qxg4 b5 Ne3 Rd2 Re2 Rad8 Rae1 Rxe2 Rxe2 Qe6 Qxe6 fxe6 Kf1 b4 cxb4 cxb4 Rc2 b3 axb3 Rb8 Rc6 Rxb3 Rxe6 Rxb2 Nf5 Bf8 Nxh6+ Kg7 Ng4 a5 Ra6 Ra2 f4 a4 f5 Bb4 Ra7+ Kf8 f6 Ra1+ Ke2 a3 Nh6 Re1+ Kd3 Re6 Ra8+ Re8 Ra6 Rc8 g4 Rd8+ Ke4 Ke8 g5 Bf8 Kf5 Rd2 Ra8+ Rd8 Rxd8+ Kxd8 g6 a2 g7 Bxg7 fxg7 a1=Q g8=Q+ Kc7 Qg3+ Kd7 Qxh3 Qg7 Kf4+ Kc7 Nf5 Qb2 Qh7+ Kc8 Qg8+",
+    "overview": "Against the King's Indian fianchetto, Carlsen built the granite London wall, punished Black's early ...Nh5/...g5 adventure by opening lines, dominated the open files, and ground out a long technical win — the model anti-fianchetto London.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "rnbqk2r/ppp1ppb1/3p3p/6p1/3P1P1B/8/PPPNBPPP/RN1QK2R b KQkq - 0 9",
+        "annotation": "exf4 — White opens the e-file and seizes the centre after Black's loosening ...g5; the structural concession is worth the open lines and the dark squares.",
+        "concept": "Open lines for activity"
+      },
+      {
+        "moveNumber": 24,
+        "color": "white",
+        "fen": "r5k1/p4pb1/5q1p/1pp5/6Q1/2P1N1Pp/PP1rRP1P/R5K1 b - - 3 24",
+        "annotation": "Re2 — White doubles on the open e-file; the pieces flow to the open lines while Black's king lacks shelter.",
+        "concept": "Dominate the open file"
+      },
+      {
+        "moveNumber": 62,
+        "color": "white",
+        "fen": "2k3Q1/8/8/5N2/5K2/8/1q5P/8 b - - 8 62",
+        "annotation": "Qg8+ — the finish. White's queen and knight corral the king; the long technical grind pays off.",
+        "concept": "Convert to a win"
+      }
+    ],
+    "middlegameTheme": "Build the granite wall, open lines, dominate the files.",
+    "lessonSummary": "Against the fianchetto, build the granite London centre and punish loosening pawn moves by opening lines."
+  },
+  {
+    "id": "mg-carlsen-london-jobava",
+    "openingId": "london-system",
+    "white": "Magnus Carlsen",
+    "black": "Gukesh D",
+    "whiteElo": 2837,
+    "blackElo": 2787,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Norway Chess / 2025",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 Nc3 d5 Bf4 c5 e3 Bg4 Be2 Bxe2 Ncxe2 Nc6 Nf3 e6 c3 Be7 Ng3 O-O Qe2 h6 Rd1 Qa5 a3 Rfd8 h4 Qa4 Ne5 Nxe5 Bxe5 Nd7 Bf4 Qa6 Qf3 Bd6 Nh5 Bxf4 Qxf4 e5 Qg3 Qg6 Qxg6 fxg6 Ng3 exd4 cxd4 c4 Ne2 b5 Nc3 Nf6 Rb1 Rab8 f3 a5 b4 cxb3 Rxb3 b4 axb4 Rxb4 Ra3 Re8 Kd2 Rb2+ Kd3 Rxg2 Rxa5 Rg3 Rf1 g5 hxg5 Rxg5 Rfa1 h5 Ra8 Rxa8 Rxa8+ Kh7 e4 dxe4+ fxe4 h4 e5 h3 exf6 h2 f7 Rg3+ Kd2 h1=Q f8=Q Qh6+ Kc2 Qg6+ Kb2 Qb6+ Ka2 Rg2+ Ka3 Qb2+ Ka4 Qxc3 Qh8+ Kg6 Ra6+ Kf5 Qf8+ Ke4 Re6+",
+    "overview": "Carlsen wheels out the sharp Jobava (early Nc3) against the reigning prodigy. The aggressive set-up and an h4 lunge gave White the initiative; he swung the queen to the kingside, simplified into a superior endgame, and converted with his trademark technique.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r2q1rk1/pp2bppp/2n1pn2/2pp4/3P1B2/2P1PNN1/PP2QPPP/R3K2R b KQ - 4 10",
+        "annotation": "Qe2 — White completes the Jobava set-up, the early Nc3 having steered the game into the sharp, fighting positions the line is built for.",
+        "concept": "The Jobava set-up"
+      },
+      {
+        "moveNumber": 20,
+        "color": "white",
+        "fen": "r2r2k1/pp1n1pp1/q6p/2ppp2N/3P3P/P1P1P1Q1/1P3PP1/3RK2R b K - 1 20",
+        "annotation": "Qg3 — with h4 already in, the queen swings to the kingside and White's pieces train on the king. The Jobava's attacking promise in action.",
+        "concept": "Kingside pressure"
+      },
+      {
+        "moveNumber": 55,
+        "color": "white",
+        "fen": "5Q2/6p1/4R3/8/K2Pk3/2q5/6r1/8 b - - 7 55",
+        "annotation": "Re6+ — the active rook and queen decide; White converts the edge into a full point against the world's best.",
+        "concept": "Convert the endgame"
+      }
+    ],
+    "middlegameTheme": "Sharp Nc3 set-up, h4 lunge, kingside initiative.",
+    "lessonSummary": "The Jobava trades the London's calm for a real attack: the early Nc3 and an h4 lunge generate kingside chances."
+  },
+  {
+    "id": "mg-caruana-catalan-open",
+    "openingId": "catalan-opening",
+    "white": "Fabiano Caruana",
+    "black": "Viswanathan Anand",
+    "whiteElo": 2827,
+    "blackElo": 2771,
+    "result": "1-0",
+    "year": 2018,
+    "event": "Grenke Chess Classic 2018",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Qa4+ Nbd7 Qxc4 a6 Be3 Bd6 Qc2 O-O Nh3 e5 O-O h6 dxe5 Nxe5 Nc3 Qe7 Rad1 Re8 Nf4 c6 Bd4 g5 Nd3 Nxd3 Rxd3 Be5 Qd2 Bf5 e4 Bg6 f4 gxf4 Bxe5 Qxe5 gxf4 Qc5+ Kh1 Nxe4 Nxe4 Rxe4 Rg3 Rd4 Qe3",
+    "overview": "Caruana shows the Open Catalan squeeze against Anand. He recovered the c4-pawn without fuss, centralised both bishops on the long diagonals, and turned the positional bind into a swift, decisive attack.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "r1bqk2r/1ppn1ppp/p2bpn2/8/3P4/4B1P1/PPQ1PPBP/RN2K1NR b KQkq - 3 8",
+        "annotation": "Qc2 — White lines up to recover the c4-pawn and supports the centre. No rush: the Catalan trusts the position over the material count.",
+        "concept": "Patient pawn recovery"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r1b1r1k1/1p2qpp1/p1pb1n1p/4n3/3B1N2/2N3P1/PPQ1PPBP/3R1RK1 b - - 1 15",
+        "annotation": "Bd4 — the dark-squared bishop centralises powerfully, dominating the long diagonal alongside its partner on g2. The two bishops rule the board.",
+        "concept": "The two bishops dominate"
+      },
+      {
+        "moveNumber": 26,
+        "color": "white",
+        "fen": "r5k1/1p3p2/p1p3bp/2q5/3r1P2/4Q1R1/PP4BP/5R1K b - - 3 26",
+        "annotation": "Qe3 — the bind has become a decisive attack; the bishops and active queen overwhelm Black's position.",
+        "concept": "Convert the bind"
+      }
+    ],
+    "middlegameTheme": "Recover the pawn, centralise the bishops, attack.",
+    "lessonSummary": "In the Open Catalan, undermine and recover c4, then let the two bishops and long-diagonal pressure decide."
+  },
+  {
+    "id": "mg-so-catalan-closed",
+    "openingId": "catalan-opening",
+    "white": "Wesley So",
+    "black": "Alireza Firouzja",
+    "whiteElo": 2765,
+    "blackElo": 2726,
+    "result": "1-0",
+    "year": 2020,
+    "event": "Saint Louis 2020",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 c4 e6 Nf3 d5 g3 Be7 Bg2 O-O O-O c6 Qc2 Nbd7 Nbd2 b6 e4 dxc4 Nxc4 Bb7 Rd1 c5 Nfe5 cxd4 Rxd4 Qc8 Nxd7 Nxd7 Qd1 Nf6 Bg5 Bc5 Nd6 Bxd6 Bxf6 gxf6 Rxd6 Qc5 Rd7 Rab8 Rc1 Qe5 Qg4+ Qg5 Qxg5+ fxg5 Rcc7 Ba6 Rxa7 Bb5 Rdc7 g4 h3 h5 hxg4 hxg4 Bf1 Bxf1 Kxf1 Rbd8 Ke2 Kg7 Rab7 Rd6 Rd7 Rxd7 Rxd7 Rc8 Kd3 Kf6 a4 Rc1 Rb7 Rd1+ Ke3 Re1+ Kd4 Rd1+ Kc4 Ke5 Rxb6 Kxe4 a5 Ra1 b4 Kf3 a6 Kxf2 b5 Kxg3 Rb7 f5 a7 Kf2 b6 g3 Rg7 g2 Rg8 Ra4+ Kb5 Rg4 Rxg4 fxg4 a8=Q g1=Q Qa2+ Kf3 Qb3+ Kf4 b7 Qa7 Qa4+",
+    "overview": "A model Closed Catalan. So prepared and played the e4-break, recovered the pawn with a space edge, seized the open c-file, and converted a long technical endgame against Firouzja.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bq1rk1/p2nbppp/1pp1pn2/8/2NPP3/5NP1/PPQ2PBP/R1B2RK1 b - - 0 10",
+        "annotation": "Nxc4 — after the e4-break White recovers the pawn, emerging with the broad centre and the bishop pair. The Closed Catalan plan pays off.",
+        "concept": "The e4 break pays off"
+      },
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "1r3rk1/pb1R1p1p/1p2pp2/2q5/4P3/6P1/PP3PBP/2RQ2K1 b - - 4 21",
+        "annotation": "Rc1 — White dominates the open c-file; the Catalan pressure builds toward a winning bind.",
+        "concept": "Dominate the open file"
+      },
+      {
+        "moveNumber": 57,
+        "color": "white",
+        "fen": "8/qP6/4p3/1K6/Q4kp1/8/8/8 b - - 2 57",
+        "annotation": "Qa4+ — the technical endgame is won; the passed b-pawn and the active queen decide.",
+        "concept": "Convert the endgame"
+      }
+    ],
+    "middlegameTheme": "Break with e4, recover the pawn, dominate the c-file.",
+    "lessonSummary": "Against the Closed Catalan, engineer e4, gain space, and grind the better structure home."
+  },
+  {
+    "id": "mg-carlsen-catalan-slav",
+    "openingId": "catalan-opening",
+    "white": "Magnus Carlsen",
+    "black": "Alexey Dreev",
+    "whiteElo": 2856,
+    "blackElo": 2623,
+    "result": "1-0",
+    "year": 2021,
+    "event": "Online Rapid 2021",
+    "studentSide": "white",
+    "pgn": "d4 d5 Nf3 Nf6 g3 c6 c4 dxc4 Bg2 b5 O-O Bb7 Ne5 e6 b3 cxb3 axb3 Nbd7 Nxc6 Qb6 d5 Nxd5 Na5 Rd8 Nxb7 Qxb7 Nc3 Nxc3 Bxb7 Nxd1 Rxd1 Bc5 Bb2 O-O Rac1 Bb4 Rd4 Nc5 Rxb4 Nxb7 Rxb5 Rd7 Ba3 Rfd8 Rc6 h6 Ra6 Nd6 Bxd6 Rxd6 Rxa7 g5 Rbb7 Rf8 Rd7 Rb6 Rab7 Rxb7 Rxb7 Rc8 g4 Rc3 b4 Kg7 Kg2 Rb3 b5 Kg6 b6 f5 h3 h5 gxh5+ Kxh5 Rb8 Kg6 b7 Kg7 e3 e5 f3 Rb1 e4 fxe4 fxe4 Rb3 Kf2",
+    "overview": "Carlsen handles the Slav move-order with a Catalan fianchetto, stops ...b5 with a4, breaks in the centre with d5, and converts the long-diagonal pressure into a winning endgame.",
+    "criticalMoments": [
+      {
+        "moveNumber": 11,
+        "color": "white",
+        "fen": "r3kb1r/pb1n1ppp/1qN1pn2/1p1P4/8/1P4P1/4PPBP/RNBQ1RK1 b kq - 0 11",
+        "annotation": "d5! — Carlsen strikes in the centre, opening lines for the Catalan bishop against Black's queenside.",
+        "concept": "Central break"
+      },
+      {
+        "moveNumber": 23,
+        "color": "white",
+        "fen": "3r2k1/pn1r1ppp/2R1p3/1R6/8/BP4P1/4PP1P/6K1 b - - 4 23",
+        "annotation": "Rc6 — the rook infiltrates the sixth rank; White's pieces dominate the open files.",
+        "concept": "Infiltration"
+      },
+      {
+        "moveNumber": 44,
+        "color": "white",
+        "fen": "1R6/1P4k1/8/4p1p1/4P3/1r5P/5K2/8 b - - 2 44",
+        "annotation": "Kf2 — deep in a won endgame, the king steps up to escort the passed b-pawn home.",
+        "concept": "Endgame technique"
+      }
+    ],
+    "middlegameTheme": "Stop ...b5, break with d5, convert the bishop's pressure.",
+    "lessonSummary": "Against the Slav move-order, the Catalan fianchetto plus a4 and d5 give White a lasting bind."
+  },
+  {
+    "id": "mg-carlsen-english-revsic",
+    "openingId": "english-opening",
+    "white": "Magnus Carlsen",
+    "black": "Fabiano Caruana",
+    "whiteElo": 2863,
+    "blackElo": 2842,
+    "result": "1-0",
+    "year": 2020,
+    "event": "Carlsen Invitational 2020",
+    "studentSide": "white",
+    "pgn": "c4 e5 Nc3 Nf6 g3 Bb4 e4 Bxc3 bxc3 O-O f3 b5 d4 exd4 cxd4 bxc4 e5 Nd5 Bxc4 Bb7 Nh3 d6 O-O Nd7 Re1 dxe5 dxe5 N7b6 Bb3 Qe7 e6 fxe6 Ng5 Rf6 Qc2 Rg6 Rxe6 Qxe6 Nxe6 Rxe6 Bb2 Rae8 Bd4 Kh8 Qf5 Bc8 Qh5 c5 Bxc5 Re5 Qf7 Bh3 Bf8 Re1+ Rxe1 Rxe1+ Kf2 Rf1+ Ke2 Nc3+ Kd3",
+    "overview": "Carlsen treats 1.c4 e5 as a reversed Sicilian, opens the centre, repositions for a kingside attack, and converts a dominating position into a winning endgame against Caruana.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "rnbq1rk1/p1pp1ppp/5n2/1p6/2PPP3/5PP1/P6P/R1BQKBNR b KQ - 0 8",
+        "annotation": "cxd4 — White opens the centre after the early skirmish; the reversed-Dragon structure hands him space and the bishop pair.",
+        "concept": "Open the centre"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r2q1rk1/pbp2ppp/1n6/3nP3/8/1B3PPN/P6P/R1BQR1K1 b - - 2 15",
+        "annotation": "Bb3 — the bishop swings to the a2-g8 diagonal, eyeing f7 and the kingside as White's attack gathers.",
+        "concept": "Reposition for attack"
+      },
+      {
+        "moveNumber": 31,
+        "color": "white",
+        "fen": "5B1k/p4Qpp/1n6/8/8/1BnK1PPb/P6P/5r2 b - - 5 31",
+        "annotation": "Kd3 — deep in a winning position White's pieces dominate; the king strides up and the point is secured.",
+        "concept": "Convert the advantage"
+      }
+    ],
+    "middlegameTheme": "Reversed-Dragon structure, open centre, attack.",
+    "lessonSummary": "Against 1.c4 e5, play the Dragon a tempo up: fianchetto, open the centre, and press."
+  },
+  {
+    "id": "mg-mvl-english-symmetrical",
+    "openingId": "english-opening",
+    "white": "Maxime Vachier-Lagrave",
+    "black": "Magnus Carlsen",
+    "whiteElo": 2779,
+    "blackElo": 2876,
+    "result": "1-0",
+    "year": 2019,
+    "event": "Croatia GCT 2019",
+    "studentSide": "white",
+    "pgn": "c4 c5 Nf3 Nf6 Nc3 e6 g3 b6 Bg2 Bb7 O-O Be7 b3 O-O Bb2 d6 e3 Nbd7 Qe2 a6 d4 Ne4 Rfd1 Nxc3 Bxc3 Be4 Rac1 Re8 Bh3 Qc7 Nd2 Bb7 e4 Bf6 Nf3 b5 cxb5 axb5 dxc5 Bxc3 Rxc3 b4 Rc2 dxc5 Qe3 h6 Bf1 Ba6 Rcd2 Nf6 Bxa6 Rxa6 Rc1 Rea8 Rxc5 Qa7 Rdc2 Rxa2 Rc8+ Kh7 Qxa7 R8xa7 Nd2 Ng4 Kg2 Ne5 f4 Nd3 Kf1 Ra1+ Ke2 Rd7 Nf3 Rb1 Rd2 Rb2 Rxb2 Nxb2 Ne5 Rd4 Ke3 Rd1 Nxf7 Re1+ Kd4 Re2 h4 Kg6 Ne5+ Kh5 Rg8 Rd2+ Ke3 Rc2 Rxg7 Rc3+ Ke2 Nd1 g4+ Kxh4 Kxd1 Kg3 f5 Kf4 Ng6+ Kxe4 f6 Rf3 f7",
+    "overview": "A model Symmetrical/Hedgehog English. MVL kept the Maróczy bind, dominated the c-file, and converted the space advantage into a winning endgame against Carlsen himself.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r2q1rk1/pb1nbppp/1p1ppn2/2p5/2P5/1PN1PNP1/PB1PQPBP/R4RK1 b - - 2 10",
+        "annotation": "Qe2 — White completes a harmonious setup against the Hedgehog, keeping the bind and the c-file pressure.",
+        "concept": "The English bind"
+      },
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "r3r1k1/1bqn1ppp/3pp3/1pP5/4P3/1PR2NPB/P3QP1P/3R2K1 b - - 0 21",
+        "annotation": "Rxc3 — White dominates the c-file; the recurring English squeeze tells, converting to an edge.",
+        "concept": "Dominate the c-file"
+      },
+      {
+        "moveNumber": 55,
+        "color": "white",
+        "fen": "8/5PR1/4p1Np/8/1p2k1P1/1P3r2/8/3K4 b - - 0 55",
+        "annotation": "f7 — the passed pawn marches to queen; White's space edge has become a winning endgame.",
+        "concept": "Convert the passer"
+      }
+    ],
+    "middlegameTheme": "Maróczy bind, c-file domination, convert.",
+    "lessonSummary": "In the Symmetrical English, keep the bind and pile on the c-file — small edges accumulate into a win."
+  },
+  {
+    "id": "mg-caruana-english-mikenas",
+    "openingId": "english-opening",
+    "white": "Fabiano Caruana",
+    "black": "Wesley So",
+    "whiteElo": 2822,
+    "blackElo": 2815,
+    "result": "1-0",
+    "year": 2017,
+    "event": "Sinquefield Cup 2017",
+    "studentSide": "white",
+    "pgn": "c4 e6 Nc3 Nf6 e4 d5 cxd5 exd5 e5 Ne4 Nf3 Bf5 Be2 Be7 O-O Nc6 d3 Nxc3 bxc3 O-O d4 Qd7 Bd3 Na5 Re1 Nc4 Rb1 Bxd3 Qxd3 b5 Nd2 Rab8 Nb3 Rb6 Bf4 Qg4 Bg3 Qg6 Qf3 a5 Rbd1 Qc2 Qxd5 Qxa2 Nc5 Rd8 Nd7 c6 Qe4 Ra6 e6 f6 d5 cxd5 Qxd5 Qb3 Qb7 Rxe6 Qd5 Nd2 Qxb3 Nxb3 Rxe6 Kf7 Ree1 a4 Bc7 Rc8 Bd6 Bxd6 Rxd6 Rxc3 Nb6 a3 Nd5 Rc4 Ra6 b4 Ra4 Nc1 Rxb4 a2 Rb7+ Kg6 Ra7 Rc2 Nb4 Rb2 Rxc1",
+    "overview": "Caruana shows the Mikenas Attack's bite: he met ...e6 with e4, consolidated the big centre, kept the initiative for the doubled pawns, and ground out a winning rook endgame.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r2qk2r/ppp1bppp/2n5/3pPb2/4n3/2NP1N2/PP2BPPP/R1BQ1RK1 b kq - 0 9",
+        "annotation": "d3 — White consolidates the big centre; the Mikenas pawn mass and active pieces give a lasting initiative.",
+        "concept": "Consolidate the centre"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "1r3rk1/p1pqbppp/8/1p1pP3/2nP4/1NPQ4/P4PPP/1RB1R1K1 b - - 3 17",
+        "annotation": "Nb3 — White's pieces dominate; the doubled c-pawns are forgotten next to the activity.",
+        "concept": "Activity over structure"
+      },
+      {
+        "moveNumber": 45,
+        "color": "white",
+        "fen": "8/R5pp/5pk1/8/1N6/8/pr3PPP/2R3K1 b - - 0 45",
+        "annotation": "Rxc1 — the rooks decide a won endgame; Caruana converts cleanly.",
+        "concept": "Convert the endgame"
+      }
+    ],
+    "middlegameTheme": "Slam e4, build the centre, attack.",
+    "lessonSummary": "The Mikenas trades the English's calm for a sharp central initiative — well worth the doubled pawns."
+  },
+  {
+    "id": "mg-kramnik-reti-main",
+    "openingId": "reti-opening",
+    "white": "Vladimir Kramnik",
+    "black": "Shakhriyar Mamedyarov",
+    "whiteElo": 2800,
+    "blackElo": 2808,
+    "result": "1-0",
+    "year": 2018,
+    "event": "Berlin Candidates 2018",
+    "studentSide": "white",
+    "pgn": "Nf3 Nf6 g3 d5 Bg2 e6 O-O Be7 c4 O-O b3 c5 cxd5 Nxd5 Bb2 Nc6 d4 cxd4 Nxd4 Nxd4 Qxd4 Bf6 Qd2 Nf4 gxf4 Qxd2 Nxd2 Bxb2 Rab1 Bf6 Rbc1 Rd8 Ne4 Be7 Rc7 Kf8 Rfc1 Rb8 e3 h6 Bf3 a5 Kg2 g5 fxg5 hxg5 h3 f5 Nc5 b6 Na4 Bd6 Rh7 Kg8 Ra7 Be5 Rc6 Rd6 Rxd6 Bxd6 Nc3 b5 Rxa5 b4 Nb5 Bc5 Nd4 Bxd4 exd4 Kf7 Ra7+ Kf6 Rc7 Ba6 d5 Bb7 d6 Bxf3+ Kxf3 Rd8 Rb7 Rxd6 Rxb4 e5 a4 e4+ Ke2 Ke5 a5 f4 Ra4 f3+ Ke1 Rc6 a6 Rc1+ Kd2 Rf1",
+    "overview": "Kramnik, a great Réti expert, shows the hypermodern double-fianchetto in its purest form: quiet long-diagonal pressure, a well-timed central break, and a slow technical squeeze that converts against Mamedyarov.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "rnbq1rk1/pp2bppp/4p3/2pn4/8/1P3NP1/PB1PPPBP/RN1Q1RK1 b - - 1 8",
+        "annotation": "Bb2 — Kramnik completes the double fianchetto; both bishops rake the long diagonals, the essence of the Réti.",
+        "concept": "The double fianchetto"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r1b2rk1/pp3ppp/4p3/8/5P2/1P6/Pb1NPPBP/1R3RK1 b - - 1 15",
+        "annotation": "Rab1 — the rook swings to the half-open b-file; the quiet Réti pressure steadily mounts into a bind.",
+        "concept": "Long-diagonal pressure"
+      }
+    ],
+    "middlegameTheme": "Double fianchetto, time the break, squeeze.",
+    "lessonSummary": "The Réti wins by patience: pressure the centre from the flanks and break only when the pieces are perfect."
+  },
+  {
+    "id": "mg-giri-reti-antislav",
+    "openingId": "reti-opening",
+    "white": "Anish Giri",
+    "black": "Levon Aronian",
+    "whiteElo": 2780,
+    "blackElo": 2767,
+    "result": "1-0",
+    "year": 2018,
+    "event": "Tata Steel 2018",
+    "studentSide": "white",
+    "pgn": "Nf3 d5 g3 Nf6 Bg2 Bf5 c4 c6 Qb3 Qb6 d3 e6 Be3 Qxb3 axb3 a6 Bd2 Nbd7 Bc3 Be7 Nbd2 c5 Ne5 d4 Nxd7 Nxd7 Ba5 Ra7 Nb1 b6 Bd2 Ne5 Na3 Rc7 Bf4 Bf6 Nb5 axb5 Ra8+ Ke7 Rxh8 Ra7 O-O Ra2 Bxe5 Bxe5 Rb1 b4 h3 g5 Rg8 Bg6 Bc6 Kd6 Bb5 f5 Rc8 Ke7 Rc6 f4 gxf4 gxf4 f3 Bf5 Kh2 Bf6 Rxb6 Bh4 Ra6 Rxa6 Bxa6 Kd6 Bb7 e5 Be4 Bxe4 fxe4 Bg3+ Kg2 h5 Ra1 Kc6 Ra6+ Kb7 Rh6 h4 Kf3 Be1 Re6",
+    "overview": "Giri handles the ...Bf5 Anti-Slav model-perfectly: he traded into a structure where Black carried a long-term weakness, pressed it patiently, and converted a clean endgame against Aronian.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "rn2kb1r/1p3ppp/p1p1pn2/3p1b2/2P5/1P1P1NP1/1P1BPPBP/RN2K2R b KQkq - 1 9",
+        "annotation": "Bd2 — White develops, already preparing to target the queenside and the slightly loose Black structure.",
+        "concept": "Target the weakness"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "4k2r/r3bppp/pp2p3/2p1nb2/2Pp4/NP1P2P1/1P1BPPBP/R3K2R b KQk - 3 17",
+        "annotation": "Na3 — the knight reroutes toward c4 and the weak queenside squares; White's pressure grows.",
+        "concept": "Knight reroute"
+      },
+      {
+        "moveNumber": 45,
+        "color": "white",
+        "fen": "8/1k6/4R3/2p1p3/1pPpPp1p/1P1P1K1P/1P2P3/4b3 b - - 3 45",
+        "annotation": "Re6 — in the won endgame the rook dominates; White converts the long-term structural edge.",
+        "concept": "Convert the endgame"
+      }
+    ],
+    "middlegameTheme": "Trade into the weakness, press, convert.",
+    "lessonSummary": "In the Anti-Slav, trade into Black's structural weakness and grind it down — the Réti's positional payoff."
+  },
+  {
+    "id": "mg-giri-kia-french",
+    "openingId": "kings-indian-attack",
+    "white": "Anish Giri",
+    "black": "Hikaru Nakamura",
+    "whiteElo": 2790,
+    "blackElo": 2814,
+    "result": "1-0",
+    "year": 2015,
+    "event": "Bilbao Masters 2015",
+    "studentSide": "white",
+    "pgn": "Nf3 d5 g3 Nf6 Bg2 e6 O-O Be7 d3 O-O Nbd2 c5 e4 Nc6 Re1 Qc7 Qe2 b5 a4 b4 exd5 exd5 Nb3 Re8 Bf4 Qb6 a5 Qb5 Qd2 Be6 a6 Bf8 Ne5 Nxe5 Bxe5 Nd7 Bf4 Qb6 c3 Rac8 Qc2 d4 Nd2 h6 h4 dxc3 bxc3 bxc3 Qxc3 Nf6 Nc4 Qd8 Bb7 Nd5 Qd2 Nxf4 Qxf4 Qxd3 Ne5 Qd6 Rad1 Qc7 Nc6 Qxc6 Bxc6 Rxc6 Qa4 Rec8 Rd8 c4 Rxc8 Rxc8 Rxe6 fxe6 Qd7 Rc5 Qxe6+ Kh7 Qf7 Bd6 h5 Rg5 Kg2 c3 f4",
+    "overview": "A textbook KIA against the French structure: Giri clamped the centre with the e5-wedge, rerouted his knight to the kingside, and overran Nakamura with a direct pawn-and-piece storm at the king.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r1b2rk1/ppq1bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPNQPBP/R1B1R1K1 b - - 4 9",
+        "annotation": "Qe2 — White completes the KIA setup, the queen and rook lined up behind the coming e5 thrust.",
+        "concept": "The KIA setup"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "r3rbk1/p4ppp/P1n1bn2/1qppN3/1p3B2/1N1P2P1/1PPQ1PBP/R3R1K1 b - - 2 17",
+        "annotation": "Ne5 — the knight dominates the e5-wedge, the spearhead of White's kingside initiative.",
+        "concept": "The e5 outpost"
+      },
+      {
+        "moveNumber": 43,
+        "color": "white",
+        "fen": "8/p4Qpk/P2b3p/6rP/5P2/2p3P1/6K1/8 b - - 0 43",
+        "annotation": "f4 — the storm crashes through; White's kingside attack has become a winning position.",
+        "concept": "Convert the attack"
+      }
+    ],
+    "middlegameTheme": "e5-wedge, knight to the kingside, storm.",
+    "lessonSummary": "Against the French structure the KIA is a kingside attacking machine: clamp with e5 and storm the king."
+  },
+  {
+    "id": "mg-carlsen-kia-g6",
+    "openingId": "kings-indian-attack",
+    "white": "Magnus Carlsen",
+    "black": "Alexander Grischuk",
+    "whiteElo": 2855,
+    "blackElo": 2752,
+    "result": "1-0",
+    "year": 2016,
+    "event": "Norway Chess Blitz 2016",
+    "studentSide": "white",
+    "pgn": "g3 g6 Bg2 Bg7 e4 c5 d3 Nc6 Nf3 d6 O-O e5 Nc3 Nge7 Nd2 O-O Nc4 h6 a4 f5 exf5 gxf5 f4 Kh7 fxe5 dxe5 a5 Rb8 Be3 Nd4 Ne2 Be6 c3 Ndc6 Bxc5 Bd5 Ne3 Bxg2 Kxg2 b6 axb6 axb6 Bxe7 Nxe7 Ra7 Ra8 Rxa8 Qxa8+ Kg1 Qc6 Rf2 Qg6 Ng2 Rd8 d4 f4 gxf4 exd4 Nxd4 Nf5 Rd2 Ne3 Qf3 Qb1+ Kf2 Nc4 Re2 Nxb2 Ne6 Rg8 Qe4+ Qxe4 Rxe4 Bxc3 Kf3 b5 Ne3 b4 Nd5 Nd3 Ke3 Ne1 Rc4 Ng2+ Ke4 Re8 Rc7+ Kg6 f5+ Kh5 Nxc3 bxc3 Rxc3 Nh4 Rh3 Kg4 Rg3+ Kh5 Kf4",
+    "overview": "Against Black's solid ...g6 setup, Carlsen pivoted away from the kingside: he expanded on the queenside, manoeuvred patiently, and ground out a long technical win — showing the KIA's flexibility.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bq1rk1/pp2npb1/2np2pp/2p1p3/P1N1P3/2NP2P1/1PP2PBP/R1BQ1RK1 b - - 0 10",
+        "annotation": "a4 — against the solid ...g6 wall, Carlsen expands on the queenside rather than batter the king.",
+        "concept": "Pivot to the queenside"
+      },
+      {
+        "moveNumber": 19,
+        "color": "white",
+        "fen": "1r1q1r2/pp2n1bk/2n4p/P1Bbpp2/8/2PPN1P1/1P2N1BP/R2Q1RK1 b - - 2 19",
+        "annotation": "Ne3 — White manoeuvres the knights to the best squares, slowly improving the position.",
+        "concept": "Patient manoeuvring"
+      },
+      {
+        "moveNumber": 50,
+        "color": "white",
+        "fen": "4r3/8/4N2p/5P1k/5K1n/6R1/7P/8 b - - 6 50",
+        "annotation": "Kf4 — deep in a won endgame the king strides up; Carlsen converts the long grind.",
+        "concept": "Convert the endgame"
+      }
+    ],
+    "middlegameTheme": "Pivot to the queenside, manoeuvre, convert.",
+    "lessonSummary": "Against ...g6 the KIA's strength is flexibility — switch wings and outplay slowly."
+  },
+  {
+    "id": "mg-mvl-evans-accepted",
+    "openingId": "evans-gambit",
+    "white": "Maxime Vachier-Lagrave",
+    "black": "Wesley So",
+    "whiteElo": 2779,
+    "blackElo": 2767,
+    "result": "1-0",
+    "year": 2019,
+    "event": "Saint Louis Rapid 2019",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nge7 cxd4 d6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Qf6 Bxd5+ Ke7 Qe4+ Kd8 Be3 Bf5 Qf3 Bb6 Nc3 Bg6 Qg3 Qd6 Bf4 Qd7 Rfe1 Nxd4 Rad1 Re8 Rxe8+ Qxe8 Be5 c6 Bc4 Qd7 Bxd4 Bxd4 Qh4+ Bf6 Rxd7+ Kxd7 Qh3+ Kc7 Qg3+ Kb6 Na4+ Ka5 Nc5 b5 Qa3+ Kb6 Nd7+ Kc7 Nxf6 gxf6 Qa5+ Kb7 Bxb5 cxb5 Qxb5+ Kc7 Qc5+ Kb7 Qd5+ Kb8 Qc6 a5 Qxf6 Ra7 g4 Rb7 Qe5+ Kc8 Qxa5 Be4 Qc3+ Rc7 Qe3 Bg6 h4 Rc6 h5 Bf7 Qf3 Rc7 Qf5+ Rd7 Qxh7 Kc7 Qc2+ Kd8 h6 Bg8 g5 Bh7 g6 Bxg6 Qxg6 Ke7 h7 Rd6 Qxd6+ Kxd6 h8=Q Kd5 f4 Kc4 Qe5 Kb4 f5 Ka3 f6 Kxa2 Qb5 Ka1 f7 Ka2 f8=Q Ka1 Qa8#",
+    "overview": "MVL revives the romantic Evans against an elite opponent: he sacrificed the b-pawn, swarmed f7 with the bishop and the g5-knight, and rode the initiative all the way to a queen-mate.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r1bqk2r/ppp1nppp/2np4/b5N1/2BPP3/8/P4PPP/RNBQ1RK1 b kq - 1 9",
+        "annotation": "Ng5 — the knight joins the c4-bishop in attacking f7; the gambit's development lead becomes a concrete threat.",
+        "concept": "Pile onto f7"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "r2k3r/ppp3pp/1bn2q2/3B1b2/3P4/2N1BQ2/P4PPP/R4RK1 b - - 8 17",
+        "annotation": "Nc3 — every White piece is developed and active while Black's king is stuck in the centre; the initiative is overwhelming.",
+        "concept": "Initiative for the pawn"
+      },
+      {
+        "moveNumber": 67,
+        "color": "white",
+        "fen": "Q7/8/8/1Q6/8/8/8/k5K1 b - - 2 67",
+        "annotation": "Qa8# — checkmate. The romantic gambit's attack carried all the way to the end.",
+        "concept": "Convert the attack"
+      }
+    ],
+    "middlegameTheme": "Sac the b-pawn, storm f7, mate.",
+    "lessonSummary": "The Evans is an attacking machine: sacrifice the pawn, swarm f7, and let the initiative decide."
+  },
+  {
+    "id": "mg-kasparov-evans-declined",
+    "openingId": "evans-gambit",
+    "white": "Garry Kasparov",
+    "black": "Jeroen Piket",
+    "whiteElo": 2805,
+    "blackElo": 2630,
+    "result": "1-0",
+    "year": 1995,
+    "event": "Amsterdam 1995",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a5 b5 Nd4 Nxd4 Bxd4 c3 Bb6 d4 exd4 O-O Ne7 Bg5 h6 Bxe7 Qxe7 cxd4 Qd6 Nc3 Bxd4 Nd5 Bxa1 Qxa1 O-O e5 Qc5 Rc1 c6 Ba2 Qa3 Nb6 d5 Nxa8 Kh8 Nb6 Be6 h3 Rd8 bxc6 bxc6 Rc3 Qb4 Rxc6 Rb8 Nxd5 Qxa4 Rc1 Qa3 Bc4",
+    "overview": "Kasparov, who revived the Evans for modern play, shows that declining it with ...Bb6 brings no peace: he grabbed space, dominated the d5-square, and ground Piket down.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "r1bqk1nr/1ppp1ppp/8/pP2p3/P1BbP3/2P5/3P1PPP/RNBQK2R b KQkq - 0 8",
+        "annotation": "c3 — White builds the centre and gains space; declining the gambit has not freed Black's game.",
+        "concept": "Space from the gambit"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r1b1k2r/1ppp1pp1/3q3p/pP1N4/P1BbP3/8/5PPP/R2Q1RK1 b kq - 1 15",
+        "annotation": "Nd5 — the knight dominates the central outpost, the hallmark of the declined lines.",
+        "concept": "The d5 outpost"
+      },
+      {
+        "moveNumber": 29,
+        "color": "white",
+        "fen": "1r5k/5pp1/4b2p/p2NP3/2B5/q6P/5PP1/Q1R3K1 b - - 3 29",
+        "annotation": "Bc4 — White's pieces dominate and the bishop rakes toward the king; Kasparov closes in.",
+        "concept": "Convert the bind"
+      }
+    ],
+    "middlegameTheme": "Gain space, seize d5, squeeze.",
+    "lessonSummary": "Declining the Evans avoids the attack but concedes space and the d5-outpost — White still presses."
+  },
+  {
+    "id": "mg-evans-compromised-win",
+    "openingId": "evans-gambit",
+    "white": "Keith A Rodriguez",
+    "black": "Alberto F Dillenburg",
+    "whiteElo": 2400,
+    "blackElo": 2300,
+    "result": "1-0",
+    "year": 2012,
+    "event": "Continental 2012",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3 O-O Rad1 Bb6 Rfe1 Na5 Qa4 Nxc4 Qxc4 Re8 Bxe7 Rxe7 Nd5 Re8 Qh4 Kh8 Ne7 Qh6 Ng5 Rf8 Qf4 d5 Nxc8 Bxf2+ Kxf2 f6 exf6 Qxf6 Qxf6 Rxf6+ Kg1 Rxc8 Re7 Rf5 Ne6 Re5 Rxc7 Rxc7 Nxc7 Kg8 Rxd5 Re7 Nb5 a6 Nd6 g6 Kf2 Kg7 Rd3 Kf6 Re3 Rd7 Ne4+ Kf7 Rb3 Kf8 Ke3",
+    "overview": "A model Compromised Defence: two pawns down, White built the Qb3+Bc4 battery on f7, brought the rooks to the centre, and let the overwhelming activity crash through.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1b1k1nr/pppp1ppp/2n3q1/b3P3/2B5/1QN2N2/P4PPP/R1B2RK1 b kq - 0 10",
+        "annotation": "Nxc3 — White regains one pawn fully developed, the Qb3+Bc4 battery already trained on f7.",
+        "concept": "The f7 battery"
+      },
+      {
+        "moveNumber": 18,
+        "color": "white",
+        "fen": "r1b1r1k1/pppp1ppp/1b4q1/3NP3/7Q/5N2/P4PPP/3RR1K1 b - - 3 18",
+        "annotation": "Qh4 — the rooks are centralised and the queen swings to the kingside; the attack is decisive despite the pawn deficit.",
+        "concept": "Activity over material"
+      },
+      {
+        "moveNumber": 39,
+        "color": "white",
+        "fen": "5k2/1p1r3p/p5p1/8/4N3/1R2K3/P5PP/8 b - - 11 39",
+        "annotation": "Ke3 — the attack has won material; White converts the resulting endgame.",
+        "concept": "Convert"
+      }
+    ],
+    "middlegameTheme": "Battery on f7, central rooks, attack.",
+    "lessonSummary": "In the Compromised Defence, ignore the material — the Qb3+Bc4 battery and central rooks decide."
+  },
+  {
+    "id": "mg-kasparov-evans-lasker",
+    "openingId": "evans-gambit",
+    "white": "Garry Kasparov",
+    "black": "Viswanathan Anand",
+    "whiteElo": 2795,
+    "blackElo": 2725,
+    "result": "1-0",
+    "year": 1995,
+    "event": "PCA World Championship 1995",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Be2 exd4 Qxd4 Nf6 e5 Nc6 Qh4 Nd5 Qg3 g6 O-O Nb6 c4 d6 Rd1 Nd7 Bh6 Ncxe5 Nxe5 Nxe5 Nc3 f6 c5 Nf7 cxd6 cxd6 Qe3 Nxh6 Qxh6 Bf8 Qe3+ Kf7 Nd5 Be6 Nf4 Qe7 Re1",
+    "overview": "The famous game that put the Evans back on the map: against Lasker's solid ...Be7, Kasparov recovered the pawn, kept the more active pieces, and outplayed Anand from a small, pleasant edge.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bqk2r/ppppbppp/2n2n2/4P3/7Q/2P2N2/P3BPPP/RNB1K2R b KQkq - 2 10",
+        "annotation": "Qh4 — White has regained the pawn and the e5-wedge cramps Black; the more active position tells.",
+        "concept": "Recover the pawn, stay active"
+      },
+      {
+        "moveNumber": 19,
+        "color": "white",
+        "fen": "r1bqk2r/ppp1bn1p/3P1ppB/8/8/2N3Q1/P3BPPP/R2R2K1 b kq - 0 19",
+        "annotation": "cxd6 — White's pieces swarm and the passed d-pawn bites; Kasparov turns the small edge into a bind.",
+        "concept": "Press the edge"
+      },
+      {
+        "moveNumber": 25,
+        "color": "white",
+        "fen": "r4b1r/pp2qk1p/3pbpp1/8/5N2/4Q3/P3BPPP/R3R1K1 b - - 8 25",
+        "annotation": "Re1 — the rooks dominate the open files and Black's king is exposed; White converts the famous game.",
+        "concept": "Convert against the best"
+      }
+    ],
+    "middlegameTheme": "Recover the pawn, keep activity, grind.",
+    "lessonSummary": "Even against Lasker's accurate defence the Evans gives a pleasant pull — Kasparov beat Anand from it."
+  },
+  {
+    "id": "mg-french-advance",
+    "openingId": "french-defence",
+    "studentSide": "black",
+    "white": "Giri, A.",
+    "black": "Carlsen, M.",
+    "whiteElo": 2760,
+    "blackElo": 2864,
+    "result": "0-1",
+    "year": 2022,
+    "event": "FTX Crypto Cup 2022",
+    "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Bd7 Be2 Nge7 O-O cxd4 cxd4 Nf5 Nc3 Rc8 Kh1 a6 Bg5 Qb6 Na4 Qa7 Be3 Be7 a3 b5 Nc3 O-O Bd3 Nxe3 fxe3 b4 axb4 Nxb4 e4 Nxd3 Qxd3 dxe4 Nxe4 h6 Rfe1 a5 Qd2 Bc6 Qf4 Qb8 Re2 a4 Qg4 Qb5 Rae1 Bb4 d5 Bxe1 Nd4 Qd3 Rxe1 Bxd5 Nf6+ Kh8 Nxd5 Qd2 Rd1 Rc1 Nc3 Qe1+",
+    "overview": "Advance Variation — Carlsen grinds down Giri from the Black side. The locked centre hands Black a fixed target and the queenside space to work on.",
+    "criticalMoments": [
+      {
+        "moveNumber": 14,
+        "color": "black",
+        "fen": "2r1k2r/q2bbppp/p1n1p3/1p1pPn2/N2P4/P3BN2/1P2BPPP/R2Q1R1K w k - 0 15",
+        "annotation": "Black has the French Advance structure: the chain is fixed, Black has struck the d4-base with …c5 and …Nc6, and the queenside is where Black will press. No counterplay for White's bishop-blocked centre.",
+        "concept": "The queenside clamp"
+      }
+    ],
+    "middlegameTheme": "Queenside space and the f5-knight against the fixed chain",
+    "lessonSummary": "Carlsen shows the Advance plan: clamp the queenside, post pieces against d4, and convert the structural edge."
+  },
+  {
+    "id": "mg-french-winawer",
+    "openingId": "french-defence",
+    "studentSide": "black",
+    "white": "Anand, V.",
+    "black": "Carlsen, M.",
+    "whiteElo": 2754,
+    "blackElo": 2853,
+    "result": "0-1",
+    "year": 2023,
+    "event": "Global Chess League 2023",
+    "pgn": "e4 e6 d4 d5 Nc3 Bb4 e5 c5 a3 Bxc3+ bxc3 Nc6 Qg4 g6 h4 h6 h5 g5 f4 Qa5 Bd2 f5 Qg3 g4 dxc5 Nge7 Bd3 Qxc5 Ne2 Na5 Qf2 Qxf2+ Kxf2 Bd7 a4 Kf7 Rhb1 b6 Bc1 Nec6 Ba3 Nd8 Bb4 Ndb7 Nd4 Rhb8 Nb3 Nc4 Bxc4 dxc4 Nd4 Rc8 a5 b5 Rd1 Be8 Ne2 a6 Rd4 Rd8 Rad1 Rxd4 Rxd4 Bc6 Rd2 g3+ Kg1 Rg8 Nd4 Rd8 Bd6 Be4 Bb4 Rd5 Kf1 Nd8 Ke1 Nc6 Ne2 Rxd2 Kxd2 Bxg2 Nxg3 Bf3 Ke3 Bd1 Kd2 Bg4 Ke3 Ke8 Kd2 Ne7 Bxe7 Kxe7 Kc1 Kd7 Kb2 Kc6 Ka2 Kd5 Ka3 Kc5 Kb2 Bd1 Kc1 Bf3 Kb2 b4 cxb4+ Kd4 c3+ Kd3 b5 axb5 a6 Kd2 a7 Bd5 Nxf5 exf5 e6 b4 e7 bxc3+ Ka2 c2 a8=Q Bxa8 e8=Q Be4 Qd8+ Bd3 Qd4 c1=N+ Ka3 c3 Qb6 Ne2 Qxh6 c2",
+    "overview": "Winawer — Carlsen beats Anand from the Black side. The trade on c3 wrecks White’s queenside, and Black plays on the structural target.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1b1k1nr/pp6/2n1p2p/q1ppPp1P/3P1Pp1/P1P3Q1/2PB2P1/R3KBNR w KQkq - 0 13",
+        "annotation": "The Winawer bargain is on the board: Black has traded the dark-squared bishop with …Bxc3+ and White carries doubled, immobile c-pawns — the permanent target Black plays against for the whole game.",
+        "concept": "Doubled c-pawns and the initiative"
+      }
+    ],
+    "middlegameTheme": "The doubled c-pawns and dark-square play after …Bxc3+",
+    "lessonSummary": "A model Winawer: Black gives up the bishop to cripple White’s pawns, then plays against the lasting weakness."
+  },
+  {
+    "id": "mg-french-classical",
+    "openingId": "french-defence",
+    "studentSide": "black",
+    "white": "Shirov, Alexei",
+    "black": "Morozevich, Alexander",
+    "whiteElo": 2751,
+    "blackElo": 2748,
+    "result": "0-1",
+    "year": 2000,
+    "event": "Fujitsu Siemens Giants",
+    "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 f4 a6 Nf3 c5 Qd2 Nc6 O-O-O c4 f5 Nb6 fxe6 fxe6 h4 Bd7 h5 O-O-O h6 gxh6 Rxh6 Rdg8 Qf4 Be8 Qf6 Bg6 g4 Qe8 Bg2 Rf8 Qh4 Nb4 Rd2 Na4 a3 Nxc3 bxc3 Qa4 cxb4 Qxa3+ Kd1 Rxf3 Qe7 Re3 Qxe6+ Kb8 Qd6+ Ka8 Re2 Qa1+ Kd2 Qc3+",
+    "overview": "Classical (4.Bg5) — Morozevich, the great French expert, outraces Shirov from the Black side after opposite-side castling.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r3k2r/1p1bq1pp/pnn1p3/3pP3/2pP3P/2N2N2/PPPQ2P1/2KR1B1R w kq - 1 14",
+        "annotation": "Black has the Classical structure with the dark-squared bishops traded and the …c5/…f6 levers in hand. With kings set to race, Black’s pawns and pieces turn toward White’s wing.",
+        "concept": "Opposite-wing race"
+      }
+    ],
+    "middlegameTheme": "Opposite-side castling and the …c5/…f6 levers",
+    "lessonSummary": "Morozevich demonstrates the Classical race: open the centre and storm the wing where White’s king has fled."
+  },
+  {
+    "id": "mg-french-tarrasch",
+    "openingId": "french-defence",
+    "studentSide": "black",
+    "white": "Shirov, Alexei",
+    "black": "Ponomariov, Ruslan",
+    "whiteElo": 2739,
+    "blackElo": 2705,
+    "result": "0-1",
+    "year": 2007,
+    "event": "Wch Blitz 3rd",
+    "pgn": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 f4 c5 c3 Nc6 Ndf3 Rb8 Bd3 b5 Ne2 g6 O-O Qb6 g4 h5 h3 b4 Qa4 bxc3 bxc3 cxd4 Rb1 Qc7 Rxb8 Ndxb8 cxd4 Bd7 Qc2 Qa5 Bxg6 Nb4 Qb1 Qxa2 Bd2 Qxb1 Bxb1 hxg4 hxg4 Bb5 Re1 N8c6 Nc3 Bc4 Kg2 a5 Na4 Bb3 Nc5 Bxc5 dxc5 a4 Bxb4 Nxb4 Nd4 Bc4 Re3 Kd7 Ra3 Ra8 f5 Nc6 Nf3 Rb8 Ra1",
+    "overview": "Tarrasch (3.Nd2) — Ponomariov defeats Shirov from the Black side, pressing the isolated d-pawn the line hands Black.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "1rb1kb1r/p2n1p2/1qn1p1p1/2ppP2p/Q2P1PP1/2pB1N1P/PP2N3/R1B2RK1 w k - 0 14",
+        "annotation": "The exchanges have left White an isolated d4-pawn — the heart of the Tarrasch. Black blockades the d5-square and aims every piece at d4, the long-term target.",
+        "concept": "Siege of the isolated pawn"
+      }
+    ],
+    "middlegameTheme": "Play against White’s isolated d4-pawn",
+    "lessonSummary": "A clean Tarrasch: Black blockades d5, lines up against d4, and grinds the isolated pawn down."
+  },
+  {
+    "id": "mg-french-exchange",
+    "openingId": "french-defence",
+    "studentSide": "black",
+    "white": "Carlsen, M.",
+    "black": "Grischuk, A.",
+    "whiteElo": 2832,
+    "blackElo": 2750,
+    "result": "0-1",
+    "year": 2017,
+    "event": "chess.com Speed 1m+1spm 2017",
+    "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 Qe2+ Be6 c4 dxc4 Bxc4 Qe7 O-O O-O Nc3 Re8 Bg5 h6 Bh4 Nbd7 Rfe1 Qf8 Bxe6 Rxe6 Qb5 a6 Qxb7 Rb8 Qa7 Ra8 Qb7 Rb8 Qa7 Qc8 Bxf6 Ra8 Qxa8 Qxa8 Rxe6 fxe6 Be5 Qb7 b3 Bb4 Rc1 Qc6 Ne2 Qb5 Ng3 c5 h4 Ba3 Rc4 Nb6 Rc2 c4 Nd2 cxb3 axb3 Bf8 Nge4 a5 g3 Qd3 Rc3 Qb5 Rf3 Nd5 Kg2 Be7 Nc4 a4 Ncd6 Qa6 bxa4 Qxa4 Rf7 Bf8 Rb7 Qc2 Rb8 Ne3+ Kh3 Nf5 Kg2 Qe2 Kg1 Qd1+ Kg2 Qe2 Kg1 Qf3 Nxf5 exf5 Nd6 f4 Bxf4 Qd1+ Kg2 Qxd4 Nf5 Qd5+ Kh2 Qxf5 Bd6 Qxf2+ Kh3 Qf1+ Kh2 Qe2+ Kh3 Qe6+",
+    "overview": "Exchange — Grischuk beats Carlsen himself from the Black side, proving the \"drawish\" Exchange has bite when Black plays for the open file.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r3r1k1/pppnqpp1/3bbn1p/8/2BP3B/2N2N2/PP2QPPP/R4RK1 w - - 2 13",
+        "annotation": "The symmetrical Exchange structure is set. There are no weaknesses — so Black plays for the only imbalance, grabbing the open e-file first and nursing a small initiative.",
+        "concept": "Activity in symmetry"
+      }
+    ],
+    "middlegameTheme": "Seize the open e-file and out-play in symmetry",
+    "lessonSummary": "Even the world’s best can be outplayed in the Exchange: Grischuk grabs the file and the initiative."
+  },
+  {
+    "id": "mg-french-burn",
+    "openingId": "french-defence",
+    "studentSide": "black",
+    "white": "Gashimov, Vugar",
+    "black": "Anand, Viswanathan",
+    "result": "0-1",
+    "year": 2011,
+    "event": "Amber-rapid 20th",
+    "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 gxf6 Qd3 Nc6 O-O-O Nb4 Qb3 Qd5 Qxd5 Nxd5 Bc4 Nb6 Bb5+ c6 Be2 f5 Ng3 c5 Bb5+ Nd7 d5 a6 Be2 Nf6 dxe6 fxe6 Nh3 b5 Rhe1 Rb8 Nh5 Rb6 Kb1 Rg8 N3f4 Kf7 Nxf6 Kxf6 Rd3 Bd6 Nh5+ Kf7 Red1 Ke7 Rh3 Rxg2 Ng3 Bxg3 Rxh7+ Kf6 hxg3 Rxf2 Bh5 Bb7 Re1 Be4 Rf7+ Kg5 Bd1 Rd6 Kc1 Rdd2 g4 Bxc2 gxf5 Bxf5 Rf1 Rxb2 Rxf2 Rxf2",
+    "overview": "Burn Variation — Anand wins from the Black side. After …dxe4 Black keeps the two bishops and a clean structure, then opens the position for them.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r1b1k2r/pp2bp1p/1np1p3/5p2/3PN3/8/PPP1BPPP/2KR2NR w kq - 0 14",
+        "annotation": "Black has the Burn’s payoff — the two bishops and a flawless structure after …dxe4. The plan is to complete development and break to unleash the bishop pair.",
+        "concept": "The bishop pair"
+      }
+    ],
+    "middlegameTheme": "The bishop pair after …dxe4 and …Bxf6",
+    "lessonSummary": "Anand showcases the Burn: concede the centre, keep the bishops, and let them rake an opening position."
+  },
+  {
+    "id": "mg-french-fortknox",
+    "openingId": "french-defence",
+    "studentSide": "black",
+    "white": "Kamsky, Gata",
+    "black": "Karpov, Anatoly",
+    "whiteElo": 2735,
+    "blackElo": 2770,
+    "result": "0-1",
+    "year": 1996,
+    "event": "Amber-rapid 05th",
+    "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Bd7 Nf3 Bc6 Bd3 Nd7 O-O Ngf6 Ng3 Be7 Re1 O-O c3 Re8 Bf4 Bd5 c4 Bxf3 Qxf3 c6 Rad1 Nf8 Bc2 Qb6 b3 Rad8 Be3 Qa5 a4 Rd7 h4 Red8 h5 h6 Re2 N8h7 Red2 Bd6 Bxh7+ Kxh7 Ne4 Nxe4 Qxe4+ Kh8 d5 cxd5 cxd5 exd5 Qd4 Qb4 Qxa7 Qxb3 Qd4 Qb4 Qxb4 Bxb4 Rd3 Ba5 g3 Kh7 Kg2 g6 hxg6+ Kxg6 Bd4 Rc8 Be3 Rcd8 Bd4 h5 Rb1 Ra8 Rb5 Bd8 Be3 Ra5 Rb4 Be7 Rb6+ f6 Rb5 Rxa4 Rbxd5 Rxd5 Rxd5 Rb4 Rd7 Bf8 Rd8 Bg7 Rd7 b5 Rb7 Rb3 Kf3 Bh6 Rb8 b4 Ke4 Bxe3 fxe3 Rb1 Rg8+ Kh7 Rf8 Kg7 Rb8 b3 Kf3 b2 Ke4 Kf7 Rb6 Ke7 Rb7+ Kd6 Rb6+ Kc5 Rb8 f5+ Ke5 Kc4 Rb7 Kd3",
+    "overview": "Fort Knox — Karpov, the great defender, beats Kamsky from the Black side, with the once-bad bishop traded and a fortress structure.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2qr1k1/pppnbppp/4pn2/8/2PP1B2/3B1bN1/PP3PPP/R2QR1K1 w - - 0 13",
+        "annotation": "The Fort Knox idea is complete: the normally-bad light-squared bishop reached c6 and was traded, leaving Black a symmetrical, weakness-free position with no targets for White.",
+        "concept": "The solved bad bishop"
+      }
+    ],
+    "middlegameTheme": "Solving the bad bishop via …Bd7–c6",
+    "lessonSummary": "Karpov’s Fort Knox: trade the problem bishop, build a weakness-free fortress, and outplay from solidity."
+  },
+  {
+    "id": "mg-french-milnerbarry",
+    "openingId": "french-defence",
+    "studentSide": "black",
+    "white": "Sulskis, S.",
+    "black": "Giri, A.",
+    "whiteElo": 2525,
+    "blackElo": 2780,
+    "result": "0-1",
+    "year": 2018,
+    "event": "43rd Olympiad 2018",
+    "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 Nc3 Nxd4 Nxd4 Qxd4 O-O a6 Qe2 Rc8 Kh1 Bc5 Bg5 h6 Bd2 Ne7 Rac1 O-O a3 Qh4 f4 f5 Nd1 Be8 Be1 Qh5 Qd2 Rc6 Nf2 Ba7 Be2 Qf7 Ra1 Bd7 Nd3 Rfc8 Bd1 R6c7 a4 d4 Bb3 Bc6 Bf2 Bd5 Bxd5 Nxd5 Rfc1 Qd7 Rxc7 Rxc7 h3 Ne3 Ne1 Qc6 Bxe3 dxe3 Qe2 Qe4 Nd3 Rd7 Ra3 a5 Kh2 Kh7 h4 Rd4 h5 Rxa4 Rxa4 Qxa4 g4 fxg4 Kg3 Qe4 Kxg4 Bd4 Kg3 a4 Ne1 Bc5 Nf3 Be7 Nh2 b5 Ng4 b4 Nf2 Qf5 Ng4 a3 bxa3 bxa3 Nxe3 Qe4 Qc2 Qxc2 Nxc2 a2 Kf3 Ba3 f5 exf5 Kf4 g6 e6 Bd6+",
+    "overview": "Milner-Barry Gambit — Giri refutes the gambit from the Black side, accepting the pawn, defusing the attack, and converting.",
+    "criticalMoments": [
+      {
+        "moveNumber": 15,
+        "color": "black",
+        "fen": "2r2rk1/1p1bnpp1/p3p2p/2bpP3/3q4/2NB4/PP1BQPPP/2R2R1K w - - 4 16",
+        "annotation": "Black accepted the gambit pawn and consolidated. With the dangerous light-squared bishop neutralised and the attack defused, the extra pawn becomes a winning advantage.",
+        "concept": "Converting the extra pawn"
+      }
+    ],
+    "middlegameTheme": "Accept the gambit, neutralise the attack, win the endgame",
+    "lessonSummary": "Giri’s antidote to the Milner-Barry: take the pawn, play …Bd7 and …a6, trade the attackers, and convert the extra material."
+  },
+  {
+    "id": "mg-french-mccutcheon",
+    "openingId": "french-defence",
+    "studentSide": "black",
+    "white": "Gashimov, Vugar",
+    "black": "Nakamura, Hikaru",
+    "whiteElo": 2746,
+    "blackElo": 2774,
+    "result": "0-1",
+    "year": 2011,
+    "event": "Amber-rapid 20th",
+    "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Bb4 e5 h6 Be3 Ne4 Qg4 g6 a3 Bxc3+ bxc3 Nxc3 Bd3 b6 h4 Ba6 h5 g5 f4 gxf4 Bxf4 Kd7 Bd2 Ne4 Bxe4 dxe4 Qxe4 Kc8 Nf3 Bb7 Qf4 Rh7 O-O-O Qd5 Qg4 Kd7 Qg8 Qa2 Bc3 Be4 Bb2 Qc4 Rd2 Na6 Qg4 Bd5 Rd3 Qc6 Nd2 Rf8 Rc3 Qb7 Re3 b5 Ne4 Bxe4 Rxe4 c6 Bc3 Qc8 Rf1 Rg8 Qh3 Nc7 Ref4 Rgg7 Bb4 Nd5 R4f2 Qg8 Bc5 a5 Qd3 a4 g4 Qd8 c4 Qg5+ Rd2 bxc4 Qxc4 Qe3 Qa6 Nc7 Qxa4 Rxg4 Qc2 Rg2 d5 Qxd2+ Qxd2 Rxd2 Kxd2 exd5 Be3 Ne6 Rf6 Rg7 Bxh6 Rg2+ Ke1 Ke7 Rf2 Rg1+ Rf1 Rg3 Rh1 Rxa3 Bc1 Ra1 Kf2 Ra2+ Kg3 Kf8 h6 Kg8 Rf1 Ra7 Rd1 Rd7 Kg4 c5 Kf5 Kh7 Be3 d4 Bf2 c4 Ke4 c3 Kd3 Nc5+ Kc4 c2 Rc1 d3 Be3 Ne4 Kb3 d2 Bxd2 Rxd2 Rxc2 Rxc2 Kxc2 Kxh6",
+    "overview": "McCutcheon — Nakamura wins from the Black side after the combative …Bb4, leaving White doubled c-pawns and an exposed king.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "rn1qk2r/p1p2p2/bp2p2p/3pP1pP/3P2Q1/P1nBB3/2P2PP1/R3K1NR w KQkq - 0 13",
+        "annotation": "The McCutcheon has done its work: White’s c-pawns are doubled and crippled, the king has been dragged from its castle, and Black plays on both lasting weaknesses.",
+        "concept": "The wrecked structure"
+      }
+    ],
+    "middlegameTheme": "Punishing White’s doubled c-pawns and stranded king",
+    "lessonSummary": "Nakamura’s McCutcheon: trade the dark bishop to wreck White’s pawns and chase the king, then convert the structural edge."
+  },
+  {
+    "id": "mg-scandi-main",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Leko, Peter",
+    "black": "Fressinet, Laurent",
+    "whiteElo": 2732,
+    "blackElo": 2700,
+    "result": "0-1",
+    "year": 2012,
+    "event": "Beijing Sportaccord blitz",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 a3 Bxc3 Bxc3 Qb6 b3 Nc6 O-O O-O Ne5 Rad8 Nxc6 Qxc6 Bb4 Rfe8 Qe2 a6 Rfd1 Nd5 Qd2 Nb6 Qe2 Nxc4 bxc4 b6 Rd2 a5 Bc3 Be4 f3 Bd5 c5 bxc5 dxc5 Qxc5+ Bd4 Qc4 Qxc4 Bxc4 Bc3 a4 Rad1 Rd5 Rxd5 Bxd5 Rb1 f6 Kf2 Kf7 Rb4 Ra8 Bd4 Ra6 Ke1 g5 Be3 Kg6 h4 h6 hxg5 hxg5 c3 Ra8 c4 Bc6 c5 Rd8 Kf2 Rd3 Bc1 Rc3 Bb2 Rxc5 Rb8 e5 Ke3 Rc2 g3 Rg2 Rc8 Rxb2",
+    "overview": "Qa5 Main Line — Fressinet outplays Leko from the Black side, the light-squared bishop active on f5 the whole game.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "3r1rk1/ppp2ppp/1qn1pn2/4Nb2/2BP4/PPB5/2P2PPP/R2Q1RK1 w - - 5 13",
+        "annotation": "Black has the Scandinavian dream: the queen active, the light-squared bishop developed OUTSIDE the chain on f5, and not a weakness in the camp — the early …Qxd5/…Bf5 plan delivered.",
+        "concept": "The good bishop on f5"
+      }
+    ],
+    "middlegameTheme": "Active queen on a5 and the unproblematic f5-bishop",
+    "lessonSummary": "A model Qa5 Scandinavian: recapture with the queen, get the bishop out to f5, and play a clean, weakness-free game."
+  },
+  {
+    "id": "mg-scandi-qa5",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Svidler, Peter",
+    "black": "Nielsen, Peter Heine",
+    "whiteElo": 2734,
+    "blackElo": 2700,
+    "result": "0-1",
+    "year": 2010,
+    "event": "Politiken Larsen blitz",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 c6 Bc4 Nf6 Nf3 Bf5 Bd2 e6 Nd5 Qd8 Nxf6+ gxf6 Bb3 Nd7 Qe2 Qc7 Nh4 Bg6 O-O-O O-O-O f4 f5 h3 Nf6 c3 Bh5 Nf3 Bd6 g3 Ne4 Rhg1 Rhg8 g4 Nxd2 Nxd2 Bg6 Bc2 fxg4 f5 exf5 hxg4 Rge8 Qf3 fxg4 Qxg4+ Kb8 Rdf1 a6 Nc4 Ka7 Nxd6 Rxd6 Qf4 Bxc2 Kxc2 Re2+ Kb1 Qb6 Qc1 Rh6 Re1 Rhh2 Rxe2 Rxe2 a3 Qb5 Rg5 Rxb2+",
+    "overview": "Qa5 with …c6 — Peter Heine Nielsen beats Svidler from the Black side in the solid main line.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "2kr1b1r/ppqn1p1p/2p1ppb1/8/3P3N/1B6/PPPBQPPP/2KR3R w - - 8 14",
+        "annotation": "The solid …c6 Qa5 structure is set — no weaknesses, the queen poised on a5, and with opposite-side castling Black turns the patient setup into a queenside attack.",
+        "concept": "Opposite-side race"
+      }
+    ],
+    "middlegameTheme": "Solid …c6 setup turning into a queenside attack",
+    "lessonSummary": "The patient …c6 Qa5: rock-solid structure, then a queenside pawn storm when the kings go opposite ways."
+  },
+  {
+    "id": "mg-scandi-modern",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Hodgson, Julian M",
+    "black": "Stefansson, Hannes",
+    "whiteElo": 2545,
+    "blackElo": 2480,
+    "result": "0-1",
+    "year": 1989,
+    "event": "Reykjavik",
+    "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6 Be2 Bg7 O-O O-O c4 Nb6 Nc3 Nc6 d5 Ne5 Nxe5 Bxe5 Bh6 Re8 Qd2 c6 Rad1 cxd5 c5 Nd7 Qxd5 e6 Qc4 Qe7 f4 Bh8 Ne4 b6 Bf3 Rb8 c6 Nc5 b4 Nxe4 Bxe4 Qc7 b5 Ra8 a4 a6 Rd3 axb5 axb5 Ra1 Rxa1 Bxa1 Rd1 Bh8 h3 Rd8 Qa4 Bc3 Rxd8+ Qxd8 Qa7 Qd1+ Kh2 Bd4 Qa3 Qg1+ Kg3 Qe1+ Kg4 e5+ Bf5 Bxf5+ Kg5 f6+ Kxf6 Qh4+ Bg5 exf4+ Ke7 Qxg5+ Ke8 Qf6 Qe7 Qxe7+ Kxe7",
+    "overview": "…Nf6 Modern — Stefansson defeats Hodgson from the Black side with the King’s-Indian-style fianchetto.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1bqr1k1/pp2pp1p/1np3pB/3Pb3/2P5/2N5/PP1QBPPP/R4RK1 w - - 0 13",
+        "annotation": "Black has the Modern setup — knight recaptured and centralised, bishop fianchettoed on g7 raking the long diagonal at White’s broad but targetable centre.",
+        "concept": "The fianchetto vs the centre"
+      }
+    ],
+    "middlegameTheme": "…g6/Bg7 fianchetto pressuring White’s big centre",
+    "lessonSummary": "The Modern Scandinavian: recapture with the knight, fianchetto, and swarm White’s centre with the pieces."
+  },
+  {
+    "id": "mg-scandi-icelandic",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Sokolov, Andrei",
+    "black": "Speelman, Jonathan S",
+    "whiteElo": 2595,
+    "blackElo": 2625,
+    "result": "0-1",
+    "year": 1988,
+    "event": "Madrid rapid",
+    "pgn": "e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+ Bd2 Qe7 Bxb4 Qxb4+ Nd2 Nc6 Nf3 O-O-O d5 Bg4 Be2 Bxf3 Bxf3 Rhe8+ Kf1 Nd4 Qc1 Nxf3 Nxf3 Re4 b3 Rde8 h3 Nh5 g3 Nxg3+ fxg3 Re3 Ng1 Qd6 Rh2 Rxg3 Qb2 Qg6 Kf2 Ree3 Ne2 Rgf3+ Ke1 Qg1+ Kd2 Qxh2 Re1 Qf2",
+    "overview": "Icelandic Gambit — Speelman beats Andrei Sokolov from the Black side, the development lead worth far more than the pawn.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "2krr3/ppp2ppp/2n2n2/3P4/1qP5/5B2/PP1N1PPP/R2QK2R w KQ - 1 13",
+        "annotation": "A pawn down, but every black piece is active, the bishops rake the board, and White is still untangling — the textbook Icelandic Gambit initiative.",
+        "concept": "Gambit initiative"
+      }
+    ],
+    "middlegameTheme": "A pawn sacrificed for a raging development lead",
+    "lessonSummary": "The Icelandic: give the pawn, develop with checks, castle long, and pile every piece onto the open central files."
+  },
+  {
+    "id": "mg-scandi-tiviakov",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Jakovenko, Dmitrij",
+    "black": "Gashimov, Vugar",
+    "whiteElo": 2736,
+    "blackElo": 2758,
+    "result": "0-1",
+    "year": 2009,
+    "event": "Wch Blitz 5th",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4 Bg2 Nc6 O-O O-O-O Be3 e5 dxe5 Nxe5 Qxd6 Nxf3+ Bxf3 Bxd6 Bg2 Be5 Rfe1 Rhe8 Rac1 Bf5 h3 h6 Na4 Be4 b3 Bxg2 Kxg2 Nd5 Nc5 Bc3 Re2 Nxe3+ fxe3 Bd4 Nd3 Rxe3 Rxe3 Bxe3 Rf1 Rd7 a4 Bd4 h4 Kd8 g4 Ke7 Re1+ Kf8 Re4 a5 Kf3 b6 h5 Bf6 Nf4 Be7 Rc4 Bd6 Nd3 Re7 Nf2 Ke8 Ne4 Be5 c3 Rd7 b4 axb4 cxb4 Rd3+ Ke2 Ra3 a5 bxa5 bxa5 Rxa5 Nc5 Bd6 Ne4 Ke7 Kf3 Ra3+ Ke2 Ke6 Nc3 Ra5 Kf3 Be5 Ne4 Kd5 Rb4 Ra3+",
+    "overview": "…Qd6 Tiviakov — Gashimov beats Jakovenko from the Black side with the modern flexible queen retreat.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "2kr3r/1pp2ppp/p2b1n2/8/6b1/2N1BBP1/PPP2P1P/R4RK1 w - - 0 13",
+        "annotation": "The …Qd6 queen sits flexible and untouchable, …a6 has snuffed out White’s tricks, and Black develops a sound, comfortable position — the Tiviakov recipe.",
+        "concept": "The flexible queen"
+      }
+    ],
+    "middlegameTheme": "…Qd6 — safe, flexible, no harassment",
+    "lessonSummary": "The Tiviakov: retreat the queen to d6, take the sting out with …a6, and play a safe, flexible, weakness-free game."
+  },
+  {
+    "id": "mg-scandi-portuguese",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Andriasian, Z.",
+    "black": "Adhiban, Baskaran",
+    "whiteElo": 2600,
+    "blackElo": 2683,
+    "result": "0-1",
+    "year": 2019,
+    "event": "PRO League KO Stage 2019",
+    "pgn": "e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 e6 O-O Nc6 Be3 O-O-O c4 Qf5 Nc3 Bd6 Rad1 Rhe8 Rfe1 Bb4 a3 Bxc3 bxc3 Qa5 Qb2 Qa6 Rb1 Na5 Ne5 Nxc4 Nxc4 Qxc4 Qxb7+ Kd7 Qf3 Qc6 d5 exd5 Bxa7 Re4 Bd4 Qe6 Rxe4 Nxe4 Rd1 c5 Bxg7 Rg8 Bh6 Kc6 Bf4 Qg4 Qxg4 Rxg4 Be5 Rg5 Bh8 f6 f3 Nxc3 Bxf6 Rxg2+ Kxg2 Nxd1 Kf1 d4 f4 Ne3+ Ke2 Nf5 a4 c4 Bd8 Kc5 a5 Kb5 Bb6 h5 Kd2 h4 h3 Ka6 Bd8 Nd6 Bb6 Ne4+ Kc1 d3 f5 Kb5 Kd1 c3 Kc1 Kc4 Be3 Kb3 Kd1 d2 Bxd2 cxd2 a6 Kc3 Ke2 Kc2 a7 d1=Q+ Ke3 Qg1+ Kxe4 Qxa7 Ke5 Qe7+",
+    "overview": "Portuguese Gambit — Adhiban beats Andriasian from the Black side, the …Bg4 pin regaining the pawn with activity.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "2krr3/ppp2ppp/2n1pn2/5q2/1bPP4/2N1BN2/PP2QPPP/3RR1K1 w - - 7 13",
+        "annotation": "The …Bg4 pin has done its work: Black regains the gambit pawn with the queen active and the pieces developed — full equality out of the Portuguese.",
+        "concept": "Pin to regain the pawn"
+      }
+    ],
+    "middlegameTheme": "…Bg4 pin, rapid development, pawn recovered",
+    "lessonSummary": "The Portuguese: …Bg4 pins instead of recapturing, then Black regains the pawn with an active, equal game."
+  },
+  {
+    "id": "mg-scandi-gubinsky",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Caruana, F.",
+    "black": "Carlsen, M.",
+    "whiteElo": 2801,
+    "blackElo": 2877,
+    "result": "0-1",
+    "year": 2014,
+    "event": "41st Olympiad Open 2014",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 h3 Bxf3 Qxf3 c6 Ne2 e6 g4 Qd5 Bg2 Nbd7 Qg3 Qc4 Qb3 Qxb3 axb3 Bd6 c4 a6 Be3 O-O-O O-O-O Rhe8 Ng3 Nf8 Bf3 Ng6 h4 Bf4 h5 Bxe3+ fxe3 Ne7 e4 h6 e5 Nh7 Ne4 Rf8 Nd6+ Kc7 Bg2 Ng5 Rhf1 f6 Kc2 fxe5 dxe5 Nc8 c5 Ne7 b4 Nd5 Bxd5 cxd5 b5 axb5 Nxb5+ Kc6 Nd6 Nf3 b4 Ra8 Ra1 Rxa1 Rxa1 Nxe5 Ra7 Rb8 Ra3 b6 Ra7 bxc5 Ra6+ Kc7 bxc5 Nd7 Ra7+ Kc6 g5 Nxc5 Nf7 d4 Ne5+ Kd5 Nd7 d3+ Kc1 Nxd7 Rxd7+ Ke4",
+    "overview": "…Qd8 Gubinsky-Melts — Carlsen beats Caruana from the Black side, the queen home and the position impregnable.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r3kb1r/pp1n1ppp/2p1pn2/8/3P2P1/1q5P/PPP1NPB1/R1B1K2R w KQkq - 0 13",
+        "annotation": "The queen sits patiently on d8 — never to be harassed again — while Black develops a solid, weakness-free structure with the light bishop already active.",
+        "concept": "Patient solidity"
+      }
+    ],
+    "middlegameTheme": "…Qd8 — patient, solid, no target",
+    "lessonSummary": "The Gubinsky-Melts: retreat the queen all the way home, develop smoothly, and offer White nothing to attack."
+  },
+  {
+    "id": "mg-alekhine-main",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Lagarde, Max",
+    "black": "Abasov, N.",
+    "whiteElo": 2657,
+    "blackElo": 2632,
+    "result": "0-1",
+    "year": 2020,
+    "event": "Chess24 Banter Blitz Cup",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 exd6 cxd6 Nc3 O-O Be3 d5 c5 Nc4 Qb3 Nc6 Rad1 b6 Qc2 Nxe3 fxe3 bxc5 dxc5 Nb4 Qc1 Bxc5 Nxd5 Qb8 Nf6+ gxf6 Qxc5 Nd5 Qd4 Bh5 Rf2 Rd8 Rdf1 Bg6 Nh4 f5 Nxg6 hxg6 e4 Qb6 Qxb6 Nxb6 exf5 exf5 g4 fxg4 Rxf7 Rd4 R7f4 Rd2 Bxg4 Rxb2 Be6+ Kg7 Rh4 Rf8 Rxf8 Kxf8 Rh8+ Ke7 Bb3 Nd7 Rh7+ Kd6 Rg7 Ne5 Rxa7 Nf3+ Kf1 Nxh2+ Ke1 Nf3+ Kd1 g5 Kc1 Rh2 a4 Nd4 Bd1 Ke5 Rg7 Kf4 Rf7+ Ke3 Rg7 Rg2 Re7+ Kd3 Rd7 Kc3 Rc7+ Kb4 a5 Kxa5 Rc4 Nb5 Rc5 Kb4 Rf5 Nc3 Bc2 Na2+ Kd1 Nc3+ Kc1 Ne2+ Kd1 Nd4 Bd3 Nxf5 Bf1 Kc3 Bxg2 Ne3+ Ke2 Nxg2 Kf2 Nf4 Kg3 Ne6 Kg4 Kd4 Kf5 Kd5 Kg4 Ke5 Kh5 Kf4",
+    "overview": "Modern Alekhine — Abasov outplays Lagarde from the Black side, dismantling White's big centre with the pieces.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2q1rk1/pp2bppp/2n1p3/2Pp4/2nP2b1/1QN1BN2/PP2BPPP/R4RK1 w - - 3 13",
+        "annotation": "Black has the Modern setup — pieces developed and aimed at White's broad centre, ready to undermine it with …dxe5 and …c5. The hypermodern plan in action.",
+        "concept": "Undermining the centre"
+      }
+    ],
+    "middlegameTheme": "Hypermodern: let White build, then tear the centre down",
+    "lessonSummary": "The Modern Alekhine: solid …Bg4/…e6/…Be7, then chip at the over-extended centre until it falls."
+  },
+  {
+    "id": "mg-alekhine-fourpawns",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Grischuk, Alexander",
+    "black": "Svidler, Peter",
+    "whiteElo": 2748,
+    "blackElo": 2726,
+    "result": "0-1",
+    "year": 2009,
+    "event": "World Cup ACP 3rd",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 e6 Nf3 Be7 d5 exd5 cxd5 Nb4 Nd4 Bd7 e6 fxe6 dxe6 Bc6 Qg4 Bh4+ g3 O-O O-O-O Bxh1 gxh4 Qf6 Bb5 c6 Bg5 Qe5 e7 Rfe8 Rxh1 cxb5 Nf3 Nd3+ Kc2 Qd6 Rd1 Nf2 Rxd6 Nxg4 Rd4 Nf6 h5 Rxe7 h6 Rd7 Bxf6 gxf6 Rg4+ Kf7 Nxb5 Rc8+ Nc3 Rg8 Rf4 Nd5",
+    "overview": "Four Pawns Attack — Svidler beats Grischuk from the Black side, the massive centre collapsing under fire.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2qk2r/pppbbppp/1n6/3PP3/1n1N4/2N1B3/PP4PP/R2QKB1R w KQkq - 3 13",
+        "annotation": "White's four-pawn centre looks huge, but every pawn is under fire from Black's pieces — the over-extension is about to be punished, exactly the Alekhine idea.",
+        "concept": "Punishing over-extension"
+      }
+    ],
+    "middlegameTheme": "Surround and break the four-pawn centre",
+    "lessonSummary": "The Four Pawns Attack invites the maximal centre; Black undermines with …dxe5, …Nc6, …Bf5/…Bb4 and …f6 to crack it open."
+  },
+  {
+    "id": "mg-alekhine-exchange",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Kosintseva, N.",
+    "black": "Zherebukh, Y.",
+    "whiteElo": 2489,
+    "blackElo": 2631,
+    "result": "0-1",
+    "year": 2014,
+    "event": "Pan-Am Intercollegiate",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Be2 Be7 Nf3 O-O O-O Bg4 Nc3 Re8 b3 Bf6 Be3 c6 h3 Bh5 Rc1 Na6 Re1 Nc7 Qd2 d5 c5 Nd7 b4 Ne6 Nh2 Bxe2 Nxe2 g6 Ng4 Bg7 Nf4 Ndf8 Nxe6 Nxe6 Bh6 Bh8 Bf4 h5 Ne5 Qh4 Be3 Bxe5 dxe5 d4 Bh6 Kh7 Kh2 Qe7 Bf4 a5 bxa5 Qc7 Bg3 Qxa5 Qd3 Qxa2 Qf3 Kg8 Rb1 Re7 Qf6 Rd7 f4 Qc2 Ra1 Re8 Qh4 Qf5",
+    "overview": "Exchange Variation — Zherebukh outplays Kosintseva from the Black side, the better-coordinated army telling.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "rn1qr1k1/pp3ppp/1npp1b2/7b/2PP4/1PN1BN1P/P3BPP1/R2Q1RK1 w - - 1 13",
+        "annotation": "The Exchange structure is set — White has a little space, but Black's pieces are free and active, heading for the …d5 freeing break and full equality.",
+        "concept": "Active equality"
+      }
+    ],
+    "middlegameTheme": "Free development and the …d5 break vs White's space",
+    "lessonSummary": "The Exchange is comfortable: Black develops actively, plays …Bf5/…Bf6 and the …d5 break, and equalises fully."
+  },
+  {
+    "id": "mg-alekhine-chase",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Atabayev, Y.",
+    "black": "Lalith, B.",
+    "whiteElo": 2455,
+    "blackElo": 2529,
+    "result": "0-1",
+    "year": 2017,
+    "event": "16th Asian Continental",
+    "pgn": "e4 Nf6 e5 Nd5 c4 Nb6 c5 Nd5 d4 d6 cxd6 exd6 Nf3 dxe5 dxe5 Bb4+ Bd2 O-O Bc4 Nc6 O-O Bg4 h3 Bxf3 Qxf3 Nb6 Bxb4 Nxb4 Bb3 a5 e6 fxe6 Qxb7 N6d5 Nc3 c6 Bxd5 exd5 Na4 Rb8 Qa7 Nd3 Qe3 Nf4 Kh2 Qd6 g3 Rbe8 Qc3 Qh6 gxf4 Qxf4+ Kh1 Qxa4 Rg1 Qe4+ Rg2 d4 Qg3 g6 Rd1 c5 Qd3 Qd5 Kg1 c4 Rxg6+ Kf7",
+    "overview": "Chase Variation — Lalith beats Atabayev from the Black side, exploiting White's tempo-wasting pawn chase.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2q1rk1/ppp2ppp/2n5/3nP3/1bB5/5b1P/PP1B1PP1/RN1Q1RK1 w - - 0 13",
+        "annotation": "White spent tempo after tempo chasing the knight; Black has liquidated the over-extended pawns and the squandered time has flowed into a Black initiative.",
+        "concept": "Punishing wasted tempi"
+      }
+    ],
+    "middlegameTheme": "White chases the knight; Black collects the tempi",
+    "lessonSummary": "The Chase wastes White's time hunting the knight; Black liquidates the over-reach and emerges with the initiative and the bishop pair."
+  },
+  {
+    "id": "mg-alekhine-voronezh",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Aronian, Levon",
+    "black": "Carlsen, Magnus",
+    "whiteElo": 2773,
+    "blackElo": 2863,
+    "result": "0-1",
+    "year": 2020,
+    "event": "Clutch-ch June",
+    "pgn": "e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 exd6 cxd6 Nc3 g6 Be3 Bg7 h3 O-O Nf3 Nc6 d5 Na5 Bd4 Bxd4 Qxd4 e5 dxe6 Bxe6 Ne4 Nc6 Nf6+ Kh8 Qf4 Bf5 Ng4 Re8+ Be2 Bd3 Ne3 Bxe2 Kxe2 d5 Ng5 Qe7 Rhe1 d4 Kf1 dxe3 Rxe3 Qd7 Nxf7+ Kg7 Rf3 Qd4 Nd6 Re7 Qxd4+ Nxd4 Rd3 Nc6 b3 Nd7 Rad1 Nc5 R3d2 a5 g3 a4 Rb2 Nb4 bxa4 Rxa4 a3 Nbd3 Rb3 Nxb3",
+    "overview": "Voronezh — Carlsen beats Aronian from the Black side with the King's-Indian-style fianchetto and …e5 break.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1bq1rk1/pp3p1p/1n1p2p1/n2Pp3/2PQ4/2N2N1P/PP3PP1/R3KB1R w KQ e6 0 13",
+        "annotation": "Black has the Voronezh setup — the fianchettoed g7-bishop raking the long diagonal and the …e5 break ready, a dynamic King's-Indian-style position Carlsen rode to victory.",
+        "concept": "KID-style fianchetto"
+      }
+    ],
+    "middlegameTheme": "…g6/Bg7 fianchetto and the …e5 central strike",
+    "lessonSummary": "The Voronezh: recapture …cxd6, fianchetto with …g6/Bg7, and strike the centre with …e5 for dynamic King's-Indian play."
+  },
+  {
+    "id": "mg-alekhine-scandtrans",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Ciruk, Jerzy",
+    "black": "Kosiorek, Marek",
+    "whiteElo": 2261,
+    "blackElo": 2378,
+    "result": "0-1",
+    "year": 2000,
+    "event": "POL-chT",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 Nxe5 Nd7 Nxd7 Bxd7 Bc4 Bf5 O-O e6 c3 Be7 Nd2 O-O Nf3 Nb6 Be2 c5 Bf4 Nd5 Bg3 Qb6 Qb3 Rfd8 dxc5 Bxc5 Qxb6 Nxb6 Rfd1 Na4 Rd2 Rxd2 Nxd2 Nxb2 Nb3 Bb6 Bf3 Rc8 Rc1 Nd3 Bxb7 Nxc1 Bxc8 Ne2+ Kf1 Nxc3 a3 Ne4 Bb8 Nxf2 a4 Bd3+ Ke1 Ne4 a5 Bf2+ Kd1 Be3 Bb7 Nc3+ Ke1 Nd5 Bd6 Bc4 Nd2 Bb5 Ne4 Bd3 Nc5 Bc4 Nd7 f6 Nb8 Nc3 Nc6 Bb5 Bb8 Bxc6 Bxc6 Kf7 Bd6 f5 Be5 Nd5 g3 Bc5 a6 Nb4 Bb5 Bd4 Bd6 Bc3+ Ke2 Nd5 Bc5 Bb4 Bd4 Nc3+ Bxc3 Bxc3 Bd3 Kf6 Bb5 Bd4 Bc4 e5 h3 e4 Bb5 g5 Kf1 h5 Be2 h4 Kg2 f4 gxf4 gxf4 Bg4 f3+",
+    "overview": "The …dxe5 simplification — Black wins after trading into a clean, safe structure where White's space edge evaporates.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2q1rk1/pp2bppp/1n2p3/2p2b2/3P4/2P2N2/PP2BPPP/R1BQ1RK1 w - - 0 13",
+        "annotation": "The early …dxe5 trades have simplified the position — White's space edge is gone and Black has a clean, weakness-free structure with active bishops.",
+        "concept": "Simplified safety"
+      }
+    ],
+    "middlegameTheme": "Early trades neutralise White's space",
+    "lessonSummary": "Black resolves the tension with …dxe5, trades pieces, and reaches a sound, weakness-free position with easy equality."
+  },
+  {
+    "id": "mg-benko-main",
+    "openingId": "benko-gambit",
+    "studentSide": "black",
+    "white": "Gelfand, Boris",
+    "black": "Carlsen, Magnus",
+    "whiteElo": 2733,
+    "blackElo": 2815,
+    "result": "0-1",
+    "year": 2011,
+    "event": "Amber-rapid 20th",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1 d6 g3 Bg7 Kg2 Nbd7 f4 O-O Nf3 Ne8 Re1 Nc7 Bd2 Nb6 Qe2 Qd7 b3 f5 a4 fxe4 Qxe4 Qf5 Qxf5 gxf5 Rxe7 Nbxd5 Rd7 Nxc3 Rxg7+ Kxg7 Bxc3+ Kf7 Rd1 Ke7 b4 Rxa4 bxc5 dxc5 Be5 Nb5 Rb1 Rb4 Ra1 c4 Ra6 Rc8 Rb6 c3 Rb7+ Ke6 Bxc3 Rxc3 Rxb5 Rxb5 Nd4+ Kd5 Nxb5 Rc5 Na3 Ra5 Nb1 Ra2+ Kh3 Kd4 Kh4 Rxh2+ Kg5 Rb2 Na3 Rb3 Nc2+ Ke4 Kh4 h6 Kh3 Rb2 Ne1 Rb1 Nc2 Kd3",
+    "overview": "Fully Accepted Benko — Carlsen grinds down Gelfand from the Black side, the open files and queenside pressure doing the work.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r2q1rk1/2nnppbp/3p2p1/2pP4/4PP2/2N2NP1/PP4KP/R1BQR3 w - - 5 14",
+        "annotation": "Black has the full Benko grip — the open a- and b-files, the g7-bishop on the long diagonal, and the queen swinging to the queenside. The pawn is gone but the pressure is permanent.",
+        "concept": "The Benko grip"
+      }
+    ],
+    "middlegameTheme": "Open a-/b-files and lasting queenside pressure for the pawn",
+    "lessonSummary": "The classic Benko: sacrifice the b-pawn, fianchetto, and squeeze White's queenside with the rooks, queen and g7-bishop."
+  },
+  {
+    "id": "mg-benko-declined",
+    "openingId": "benko-gambit",
+    "studentSide": "black",
+    "white": "Tunik, Gennady",
+    "black": "Fominyh, Alexander",
+    "whiteElo": 2465,
+    "blackElo": 2505,
+    "result": "0-1",
+    "year": 1993,
+    "event": "Alushta op",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Nc3 d6 e4 g6 Bxc4 Bg7 O-O O-O h3 Ba6 Qd3 Bxc4 Qxc4 Nbd7 Bd2 Rb8 Na4 Nb6 Nxb6 Qxb6 Bc3 Qb5 Qxb5 Rxb5 Rfe1 Rfb8 a4 R5b7 Nd2 Nd7 Nc4 Bxc3 bxc3 Ne5 Nxe5 dxe5 a5 Rb3 Rec1 a6 g3 Rb2 Ra4 Kf8 Rc4 R8b5 Rd1 Ke8 Ra4 Kd7 Kg2 Rc2 Rd3 f6 g4 Rbb2 Rf3 h6 h4 Rb3 Rc4 Rb5 g5 fxg5 hxg5 hxg5 Kg3 Rxa5 Kg4 Rca2 Rf8 R2a4 Rxa4 Rxa4 f3 Ra1 Ra8 a5 Kxg5 Rg1+",
+    "overview": "Benko Declined — Fominyh beats Tunik from the Black side; declining the gambit just hands Black an easy, comfortable game.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "1r1q1rk1/p3ppbp/1n1p1np1/2pP4/N1Q1P3/5N1P/PP1B1PP1/R4RK1 w - - 5 14",
+        "annotation": "White declined the pawn, but Black still has the fianchettoed bishop, the half-open b-file, and easy queenside pressure — the Benko grip with no risk.",
+        "concept": "The grip without risk"
+      }
+    ],
+    "middlegameTheme": "…bxc4 and the fianchetto when White declines",
+    "lessonSummary": "When White declines with Nf3, Black takes on c4, fianchettoes, and gets the Benko pressure with none of the gambit risk."
+  },
+  {
+    "id": "mg-benko-zaitsev",
+    "openingId": "benko-gambit",
+    "studentSide": "black",
+    "white": "Seliverstov, Vl",
+    "black": "Zvjaginsev, V.",
+    "whiteElo": 2455,
+    "blackElo": 2673,
+    "result": "0-1",
+    "year": 2016,
+    "event": "70th Moscow Blitz",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6 e5 dxe5 d6 exd6 Bg5 Ra5 Qb3 Rxb5 Bxb5+ Nbd7 Ne2 Bg7 Rd1 Qb6 Bxf6 Bxf6 Qa4 Qc7 Ng3 O-O Ne4 Be7 O-O Nb6 Qc2 d5 Nd2 c4 a4 Bf5 Qc1 Bd3 Rfe1 Ra8 Nf3 e4 Nd4 Bc5 Nc6 Nxa4 Qd2 Nb6 Ra1 Rxa1 Rxa1 c3",
+    "overview": "Zaitsev Variation — Zvjaginsev outplays Seliverstov from the Black side after White tries to keep the extra pawn.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "2bqkb1r/3n1p1p/3p1np1/1Bp1p1B1/1p6/1Q6/PP3PPP/R3K1NR w KQk - 1 14",
+        "annotation": "White nominally keeps the pawn, but the …b4-pawn cramps his queenside, the a-file is Black's, and the g7-bishop rakes the centre — full Benko compensation.",
+        "concept": "The b4-pawn cramp"
+      }
+    ],
+    "middlegameTheme": "…b4 cramps White's queenside; full compensation",
+    "lessonSummary": "When White clings to the pawn, Black pushes …b4 to cramp the queenside, fianchettoes, and gets full compensation on the a-file."
+  },
+  {
+    "id": "mg-benko-halfaccepted",
+    "openingId": "benko-gambit",
+    "studentSide": "black",
+    "white": "So, W.",
+    "black": "Praggnanandhaa, R.",
+    "whiteElo": 2751,
+    "blackElo": 2758,
+    "result": "0-1",
+    "year": 2025,
+    "event": "Superbet ROM Classic 2025",
+    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 e3 axb5 Bxb5 Qa5+ Nc3 Bb7 Bd2 Qb6 Nf3 Nxd5 a4 e6 e4 Nxc3 Bxc3 Bxe4 Ne5 Qb7 Qh5 Bg6 Nxg6 Qe4+ Kf1 fxg6 Qh3 Qf5 Qg3 Nc6 Qc7 Qd5 Bxc6 dxc6 h4 Be7 Rh3 Rf8 Qe5 Bf6 Qe2 Bd4 Bxd4 cxd4 h5 Rf6 Kg1 Kf7 hxg6+ Rxg6 g3 d3 Qd2 Rg4 a5 Re4 Rxh7 Kg8 Rh4 Re2 Qc3 d2 Rd1 Rf8 Rh2 Qe4 Rf1 Rf3 Qc5 Re1",
+    "overview": "Half-Accepted — Praggnanandhaa beats Wesley So from the Black side; the e3 line returns the pawn and Black seizes the initiative.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "rn2kb1r/1q1p1ppp/4p3/1Bp1N3/P3b3/2B5/1P3PPP/R2QK2R w KQkq - 2 14",
+        "annotation": "White returned the pawn with e3, but Black's pieces are the active ones — the queen on a5, the bishop on the long diagonal, and …Nxd5 regaining material with the initiative.",
+        "concept": "Initiative with the pawn returned"
+      }
+    ],
+    "middlegameTheme": "…Qa5+, …Bb7 and …Nxd5 active play",
+    "lessonSummary": "Against the modest e3, Black grabs the initiative with …Qa5+ and …Bb7, regains the pawn with …Nxd5, and stays active."
+  },
+  {
+    "id": "mg-dutch-main",
+    "openingId": "dutch-defence",
+    "studentSide": "black",
+    "white": "Eljanov, P.",
+    "black": "Svidler, P.",
+    "whiteElo": 2723,
+    "blackElo": 2753,
+    "result": "0-1",
+    "year": 2014,
+    "event": "FIDE World Blitz 2014",
+    "pgn": "d4 d6 Nf3 g6 c4 f5 Nc3 Nf6 g3 Bg7 Bg2 O-O O-O Qe8 d5 Na6 Be3 Bd7 Qd2 Ng4 Bd4 Ne5 b3 c5 dxc6 Bxc6 Rad1 b6 Nd5 e6 Nc3 Rd8 Rfe1 Nc5 Qb2 Bxf3 Bxf3 Ncd3 Rxd3 Nxd3 exd3 Bxd4 Bd5 Rf6 Qd2 Qd7 Bg2 Rf7 Nb5 Bf6 d4 Kg7 Nc3 e5 Nd5 e4 f3 exf3 Bxf3 Re8 Rf1 Qd8 Nf4 Bg5 h4 Bxf4 Qxf4 Qf6 Kg2 Rfe7 Rf2 h6 g4 Qxh4 Qxd6 fxg4 Bc6 Qh3+",
+    "overview": "Leningrad Dutch — Svidler beats Eljanov from the Black side, the …f5 spearhead and rerouted queen powering a kingside attack.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r3qrk1/pp2p1bp/n1bp2p1/4np2/2PB4/1PN2NP1/P2QPPBP/R4RK1 w - - 0 14",
+        "annotation": "Black has the Leningrad setup — the g7-bishop on the long diagonal, the f5-pawn spearheading, and the queen rerouted via …Qe8 to power the kingside attack.",
+        "concept": "The Leningrad attack"
+      }
+    ],
+    "middlegameTheme": "…f5 storm and the …Qe8 reroute against the king",
+    "lessonSummary": "The Leningrad: fianchetto, reroute the queen with …Qe8, and storm the kingside while the centre stays fluid."
+  },
+  {
+    "id": "mg-dutch-stonewall",
+    "openingId": "dutch-defence",
+    "studentSide": "black",
+    "white": "Caruana, F.",
+    "black": "Carlsen, M.",
+    "whiteElo": 2802,
+    "blackElo": 2863,
+    "result": "0-1",
+    "year": 2015,
+    "event": "Vugar Gashimov Mem 2015",
+    "pgn": "d4 f5 g3 Nf6 Bg2 e6 c4 c6 Nf3 d5 O-O Bd6 b3 Qe7 Bb2 b6 Ne5 Bb7 Nd2 O-O Rc1 a5 e3 Na6 Nb1 Bxe5 dxe5 Ne4 Qe2 a4 Nc3 axb3 axb3 Qb4 Nxe4 dxe4 Qc2 Nc5 Bc3 Qxb3 Qxb3 Nxb3 Rb1 Nc5 Rxb6 Na4 Rxb7 Nxc3 Re7 Rfe8 Rxe8+ Rxe8 Ra1 Rd8 Bf1 c5 Ra3 Nb1 Ra1 Nd2 Be2 Nf3+ Bxf3 exf3 h3 h5 g4 fxg4 hxg4 h4 Kh2 Rd2 Kh3 g5 e4 Rd4 Ra8+ Kf7 Ra3 Rxc4 Rxf3+ Ke7 Re3 Rd4 f3 c4 Ra3 Rd3 Ra7+ Kd8 Kg2 c3 Ra4 c2 Rc4 Rd2+ Kh3 Kd7 Rc5 Rf2 f4 Rf3+ Kh2 Rxf4",
+    "overview": "Stonewall — Carlsen outplays Caruana from the Black side, the e4-knight and d6-bishop the heart of a fortress that attacks.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r4rk1/1b2q1pp/npp1pn2/p2pbp2/2PP4/1P2P1P1/PB3PBP/1NRQ1RK1 w - - 0 14",
+        "annotation": "Black has the Stonewall structure — the immovable wall clamping e4, the d6-bishop aimed at h2, and a knight heading for the eternal e4 outpost. A fortress that attacks.",
+        "concept": "The Stonewall fortress"
+      }
+    ],
+    "middlegameTheme": "The d5/e6/f5 wall, the e4 outpost and …Bd6 battery",
+    "lessonSummary": "The Stonewall: build the wall, plant a knight on e4, and attack the king with the d6-bishop while the structure stays unbreakable."
+  },
+  {
+    "id": "mg-dutch-classical",
+    "openingId": "dutch-defence",
+    "studentSide": "black",
+    "white": "Mikhalevski, Victor",
+    "black": "Sadler, Matthew",
+    "whiteElo": 2542,
+    "blackElo": 2625,
+    "result": "0-1",
+    "year": 2011,
+    "event": "Oslo op",
+    "pgn": "d4 e6 c4 f5 g3 Nf6 Bg2 Be7 Nf3 O-O O-O c6 b3 d5 Ba3 Nbd7 Qc1 Ne4 e3 a5 Ne1 b5 Bxe7 Qxe7 c5 e5 f3 Nef6 f4 e4 b4 a4 Nc3 h6 a3 Kh7 Ra2 Rf7 Bh3 Nf8 Ng2 g6 Ne1 Ne6 Bg2 Ng7 Bh1 Be6 Rg2 g5 Kf2 Rg8 Qd2 Bd7 Ke2 Ne6 Rfg1 Rfg7 Kd1 Be8 Kc1 Bh5 Rf2 gxf4 Rxf4 Nxf4 exf4 e3 Qd3 Ne4 Nxe4 dxe4 Qxe3 Qe6 Kb2 Bf7 Nc2",
+    "overview": "Classical Dutch — Sadler beats Mikhalevski from the Black side with the flexible …Be7 setup and the e4 outpost.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r1b2rk1/3nq1pp/2p5/ppPppp2/3Pn3/1P2P1P1/P4PBP/RNQ1NRK1 w - - 0 14",
+        "annotation": "Black has the flexible Classical structure — …Be7, …d5 clamping e4, and the knight heading for the central outpost, with the kingside attack in reserve.",
+        "concept": "Flexible activity"
+      }
+    ],
+    "middlegameTheme": "Flexible …Be7/…d5 and the …Ne4/…fxe4 cramp",
+    "lessonSummary": "The Classical: develop flexibly with …Be7 and …d5, plant the e4-knight, and recapture …fxe4 for a cramping pawn and a kingside attack."
+  },
+  {
+    "id": "mg-dutch-ilyinzhenevsky",
+    "openingId": "dutch-defence",
+    "studentSide": "black",
+    "white": "Illescas Cordoba, Miguel",
+    "black": "Speelman, Jonathan S",
+    "whiteElo": 2595,
+    "blackElo": 2610,
+    "result": "0-1",
+    "year": 1995,
+    "event": "ESP-chT",
+    "pgn": "d4 e6 Nf3 f5 g3 Nf6 Bg2 Be7 c4 c6 O-O O-O Nc3 d5 Bg5 h6 Bxf6 Bxf6 e3 Qe7 cxd5 cxd5 Ne5 Bxe5 dxe5 Nc6 f4 Bd7 Rc1 Be8 Qd2 Rd8 Ne2 g5 Nd4 Rf7 Rfd1 Kh7 Qe2 gxf4 exf4 Nxd4 Rxd4 Rd7 Qe3 Rc7 Rdd1 Qb4 Rxc7 Rxc7 Rc1 Rxc1+ Qxc1 Qd4+ Kh1 Bc6 h3 Qf2 Qg1 Qxg3 Qc5 Qxf4 Qe7+ Kg6 Qxe6+ Kh5 Qf6 Qg5 Qd6 Qc1+ Kh2 Qf4+ Kg1 d4 Bxc6 bxc6 Kg2 Qe4+",
+    "overview": "Ilyin-Zhenevsky — Speelman beats Illescas from the Black side, the …Qe8 reroute and …b5 break giving play across the board.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r1b2rk1/pp2q1p1/2n1p2p/3pPp2/8/2N1P1P1/PP3PBP/R2Q1RK1 w - - 1 14",
+        "annotation": "Black has the Ilyin-Zhenevsky setup — the solid …e6/…Be7/…d5 base, the queen rerouted via …Qe8 for the kingside, and queenside expansion with …a5/…b5 brewing.",
+        "concept": "Play on both wings"
+      }
+    ],
+    "middlegameTheme": "…Qe8 kingside reroute plus the …b5 queenside break",
+    "lessonSummary": "The Ilyin-Zhenevsky: solid Classical base, reroute the queen with …Qe8 for a kingside attack, and break with …b5 on the queenside."
+  },
+  {
+    "id": "mg-dutch-leningrade5",
+    "openingId": "dutch-defence",
+    "studentSide": "black",
+    "white": "Kramnik, Vladimir",
+    "black": "Caruana, F.",
+    "whiteElo": 2783,
+    "blackElo": 2811,
+    "result": "0-1",
+    "year": 2015,
+    "event": "4th Zurich CC Blitz",
+    "pgn": "Nf3 g6 g3 Bg7 Bg2 f5 d4 Nf6 O-O O-O c4 d6 Nc3 c6 Rb1 Na6 b4 Ne4 Nxe4 fxe4 Nd2 d5 b5 Nc7 e3 Bf5 bxc6 bxc6 Qa4 Rf6 Ba3 Bd7 Qa5 Bf8 cxd5 cxd5 Rb7 Rc6 Rc1 e6 Nb3 Bxa3 Qxa3 Nb5 Rxc6 Bxc6 Rxb5 Bxb5 Nc5 Qd6 Bh3 Bd7 Qa5 Bc8 Qb5 Kf7 Bxe6+ Ke7 Bxc8 Rxc8 Qb7+ Rc7 Qb3 Rc6 Qa4 Qc7 Kg2 Qb6 h4 Rc7 Qd1 Qf6 Qb3 Qc6 Qb8 Rc8 Qxa7+ Qc7 Qa4 Qc6 Qa7+ Qc7 Qa6 Qc6 Qe2 Ra8 h5 Kf7 a4 Qf6 Qg4 Kg8 hxg6 hxg6 Nd7 Qf5 Qxf5 gxf5 Nb6 Ra5 g4 Kf7 gxf5 Kf6 Nd7+ Kxf5 Nc5 Kg4 Kf1 Kf3 Ke1 Ra8 Kf1 Rb8 Ke1 Rb1+ Kd2 Kxf2 a5 Ra1 a6 Ra2+ Kc3 Kxe3 Kb3 Ra1 Kb2 Ra5 Kc3 Kf2 Kb4 Ra1 Kb5 e3 Nd3+ Ke2 Nf4+ Kf3 Nd3 e2 Kb6 Ke3 Nb4 Rb1 Kc5 Rxb4",
+    "overview": "Leningrad …e5 break — Caruana beats Kramnik from the Black side, meeting White's space with a central counterstrike.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "r2q1rk1/ppn1p1bp/2p3p1/1P1p1b2/2PPp3/4P1P1/P2N1PBP/1RBQ1RK1 w - - 1 14",
+        "annotation": "Black has met White's central space with the …c6/…e5 counterstrike — the centre opens, the g7-bishop's diagonal clears, and Black has free, active piece play.",
+        "concept": "The central counterstrike"
+      }
+    ],
+    "middlegameTheme": "The …c6 and …e5 central break in the Leningrad",
+    "lessonSummary": "The Leningrad …e5 plan: prepare with …c6, strike the centre with …e5, and reach an open, active position with the fianchettoed bishop."
+  },
+  {
+    "id": "mg-nimzo-main",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Kasparov, G.",
+    "black": "Aronian, L.",
+    "whiteElo": 2812,
+    "blackElo": 2799,
+    "result": "0-1",
+    "year": 2017,
+    "event": "Saint Louis Blitz 2017",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 h4 Bb7 Bg5 Qd5 Rc1 Nbd7 Qxd5 Bxd5 Ne5 c5 Bxf6 Nxf6 dxc5 bxc5 f3 Rab8 e4 Ba2 Rc2 Bb1 Rd2 Rfd8 Rxd8+ Rxd8 Bb5 Nh5 g4 Nf4 Kf2 f6 Nc6 Rd2+ Ke3 Rxb2 Kxf4 Rxb5 Rd1 h6 h5 Rb3 e5 Bd3 a4 c4 Nxa7 Ra3 Nb5 Rxa4 Ke3 fxe5 Nd6 Ra3 Kf2 Kf8 Nb5 Rb3",
+    "overview": "Classical 4.Qc2 — Aronian outplays Kasparov from the Black side, trading the bishop for structure and the better files.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r4rk1/p1pn1ppp/1p2pn2/3b2B1/3P3P/P4N2/1P2PPP1/2R1KB1R w K - 0 13",
+        "annotation": "Black has the Classical Nimzo bargain — the bishop traded for control of e4 and the light squares, the pieces heading for the open files. Control over conquest.",
+        "concept": "Control over conquest"
+      }
+    ],
+    "middlegameTheme": "Trade …Bxc3, control e4, dominate the open files",
+    "lessonSummary": "The Classical Nimzo: give up the bishop pair for control of e4 and the files, then outplay from the better structure."
+  },
+  {
+    "id": "mg-nimzo-rubinstein",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Le Quang Liem",
+    "black": "Caruana, F.",
+    "whiteElo": 2713,
+    "blackElo": 2822,
+    "result": "0-1",
+    "year": 2019,
+    "event": "Superbet Rapid 2019",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Nf3 c5 Bd3 d5 O-O dxc4 Bxc4 cxd4 exd4 b6 Bg5 Bb7 Qe2 Nbd7 Rac1 h6 Bh4 Rc8 Bd3 Bxc3 bxc3 Qc7 Bg3 Qc6 Bb5 Qd5 c4 Qh5 Bd6 Rfe8 c5 Bc6 Ba6 Ra8 Rfd1 bxc5 dxc5 e5 Bb5 Bxb5 Qxb5 e4 Nd4 Ne5 c6 e3 f3 e2 Re1 Qg5 Kh1 a6 Qb1 Nd3 f4 Nf2+ Kg1 Nh3+ Kh1 Ng4",
+    "overview": "Rubinstein 4.e3 — Caruana beats Le Quang Liem from the Black side, the b7-bishop and central breaks doing the work.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2q1rk1/pb1n1pp1/1p2pn1p/6B1/1bBP4/2N2N2/PP2QPPP/2R2RK1 w - - 0 13",
+        "annotation": "The Rubinstein structure is set — Black contesting the centre with …d5/…c5, the pieces harmonious and the …Bxc3 trade held in reserve for when it damages White.",
+        "concept": "Active equality"
+      }
+    ],
+    "middlegameTheme": "…d5/…c5 and the …Bb7 fianchetto vs e3",
+    "lessonSummary": "Against 4.e3, Black contests the centre with …d5/…c5, fianchettoes, and trades on c3 at the right moment."
+  },
+  {
+    "id": "mg-nimzo-huebner",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Laznicka, Viktor",
+    "black": "Ivanchuk, Vassily",
+    "whiteElo": 2693,
+    "blackElo": 2764,
+    "result": "0-1",
+    "year": 2012,
+    "event": "Capablanca Memorial Elite 47th",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 c5 Nf3 Nc6 Bd3 Bxc3+ bxc3 d6 O-O e5 Nd2 O-O Rb1 b6 d5 Ne7 Qc2 g6 f4 exf4 h3 Nf5 Bxf5 Bxf5 e4 Bd7 Rxf4 Qe7 Bb2 Nh5 Rf2 f5 Re1 Rae8 Bc1 f4 Qd1 Qg7 Nf1 Re5 Nh2 Qe7 Qd3 Rg5 g4 fxg3 Rxf8+ Qxf8 Nf3 Re5 Kg2 Re7 e5 dxe5 d6 Re6 Qd5 Nf6",
+    "overview": "Hübner — Ivanchuk beats Laznicka from the Black side, the doubled c-pawns blockaded and besieged.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1bq1rk1/p3np1p/1p1p1np1/2pPp3/2P5/2PBP3/P1QN1PPP/1RB2RK1 w - - 0 13",
+        "annotation": "The Hübner blockade is in place — White's doubled c-pawns fixed as a chronic weakness, the centre clamped, and Black's knights the better minor pieces. Nimzowitsch's dream.",
+        "concept": "Doubled-pawn blockade"
+      }
+    ],
+    "middlegameTheme": "…Bxc3 doubling, …d6/…e5 blockade",
+    "lessonSummary": "The Hübner: double White's c-pawns with …Bxc3, clamp the centre with …d6/…e5, and besiege the weakness."
+  },
+  {
+    "id": "mg-nimzo-leningrad",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Jussupow, Artur",
+    "black": "Karpov, Anatoly",
+    "whiteElo": 2680,
+    "blackElo": 2775,
+    "result": "0-1",
+    "year": 1995,
+    "event": "Hofmann Cup",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Bg5 h6 Bh4 c5 d5 Bxc3+ bxc3 d6 e3 e5 Qc2 Qe7 Nf3 g5 Bg3 Nh5 Bd3 Nd7 Nd2 Ndf6 h3 Bd7 Rb1 b6 a4 Ng7 f3 Nfh5 Bh2 Kd8 a5 Kc7 O-O f5 Rb2 f4 Ra1 Rhb8 Rba2 a6 Rb2 bxa5 Rxa5 Rxb2 Qxb2 Nf6 Qa3 Bc8 Nb3 Nd7 Kf1 Rb8 Bg1 Kd8 e4 Nh5 Bc2 Ng3+ Ke1 Ke8 Nd2 Kf8 Ba4 Kg7 Bxd7 Qxd7 Kd1 Qb7 Kc2 Nf1 Nb3 Ne3+ Bxe3 fxe3 Qb2 Qf7 Kd3 Qf4 Qc2 Qg3 Ra1 h5 Kxe3 g4 hxg4 hxg4 Nd2 Qxg2 Rf1 g3 Qc1 Qh2 Kd3 g2 Rg1 Bh3 Kc2 Qg3 Kd3 Qf2 Qa1 Rb6 Qc1 Kg6 Qa1 Kh5 Qc1 a5 Re1 a4 Qd1 Kh4 Qc1 Kg3 Nb1 Rb2",
+    "overview": "Leningrad 4.Bg5 — Karpov beats Jussupow from the Black side, blockading the doubled pawns and storming the kingside.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1b1k2r/pp1nqp2/3p3p/2pPp1pn/2P5/2PBPNB1/P1Q2PPP/R3K2R w KQkq - 4 13",
+        "annotation": "The Leningrad blockade holds — doubled white c-pawns, a clamped centre, and Black gaining kingside space with …g5 to shut out the h4-bishop. All the trumps are Black's.",
+        "concept": "Blockade + kingside storm"
+      }
+    ],
+    "middlegameTheme": "…Bxc3 doubling, …e5 clamp, …g5 space",
+    "lessonSummary": "Against 4.Bg5, Black doubles the c-pawns, clamps with …e5, and grabs kingside space with …g5 to entomb the bishop."
+  },
+  {
+    "id": "mg-nimzo-kasparov",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Kasparov, Garry",
+    "black": "Kramnik, Vladimir",
+    "whiteElo": 2815,
+    "blackElo": 2780,
+    "result": "0-1",
+    "year": 1998,
+    "event": "Kosmos m 5'",
+    "pgn": "c4 c5 Nf3 Nf6 d4 cxd4 Nxd4 e6 g3 Bb4+ Nc3 O-O Bg2 d5 cxd5 Nxd5 Qb3 Qb6 Bxd5 exd5 Be3 Bxc3+ Qxc3 Qg6 O-O Nc6 Rfc1 Bh3 Qc2 Nxd4 Bxd4 Qe6 f3 Rfe8 Kf2 Qh6 Qd3 Re7 Rc2 Rae8 Re1 Qh5 Kg1 Bf5",
+    "overview": "Kasparov 4.Nf3 — Kramnik beats Kasparov himself from the Black side, equalising against the fianchetto.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "rnb2rk1/pp3ppp/6q1/3p4/3N4/2Q1B1P1/PP2PP1P/R3K2R w KQ - 1 13",
+        "annotation": "Black has met the fianchetto head-on with …d5, and the …Bxc3 trade plus …Ba6 gives the doubled-c-pawn target and active light-squared play — full equality against the smoothest setup.",
+        "concept": "Structure vs the fianchetto"
+      }
+    ],
+    "middlegameTheme": "…d5 central strike, …Bxc3 + …Ba6",
+    "lessonSummary": "Against 4.Nf3/g3, Black strikes with …d5, trades on c3 to fracture the queenside, and activates …Ba6 on the light squares."
+  },
+  {
+    "id": "mg-nimzo-saemisch",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Carlsen, Magnus",
+    "black": "Nakamura, Hikaru",
+    "whiteElo": 2863,
+    "blackElo": 2736,
+    "result": "0-1",
+    "year": 2020,
+    "event": "Carlsen Tour Final",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 b6 e4 Ne8 O-O Ba6 f4 f5 exf5 exf5 dxc5 bxc5 Be3 d6 Ng3 g6 Re1 Nf6 Bf2 Qd7 Nf1 Na5 Bh4 Rae8 Rxe8 Qxe8 Bxf6 Rxf6 Qf3 Re6 Rb1 Bxc4 Bxc4 Nxc4 a4 Kg7 Qb7+ Qf7 Qa6 Re7 Rb8 Kh6 h3 Qe6 Ra8 Nd2 Rd8 Nxf1 Qxf1 Qe3+ Kh2 Re4 Rxd6 Qxf4+ Qxf4+ Rxf4 a5 Rc4 Ra6 Rxc3 Rxa7 Ra3 Kg1 c4 Kf2 Ra2+ Ke3 Rxg2 Kd4 Rh2 a6 Rxh3 Kxc4 Rh1 Rd7 Ra1 Kb5 Kg5 Rd4 f4 Ra4 Rxa4 Kxa4 f3 a7 f2 a8=Q f1=Q Qd5+ Qf5 Qd2+ Qf4+",
+    "overview": "Sämisch 4.a3 — Nakamura beats Carlsen from the Black side, blockading the doubled pawns against White's centre and bishop pair.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2qnrk1/p2p2pp/bpn5/2p2p2/2PP1P2/P1PB4/4N1PP/R1BQ1RK1 w - - 0 13",
+        "annotation": "The Sämisch battle is joined — White's big centre and bishop pair against Black's blockade of the doubled c-pawns. Hold the blockade, trade the attackers, and the structure tells.",
+        "concept": "Blockade vs the big centre"
+      }
+    ],
+    "middlegameTheme": "Blockade the doubled c-pawns vs centre + bishops",
+    "lessonSummary": "Against the Sämisch, Black blockades White's doubled c-pawns and big centre with pieces on the light squares, then converts the structural edge."
+  },
+  {
+    "id": "mg-nimzo-f3",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Anand, V.",
+    "black": "Carlsen, M.",
+    "whiteElo": 2775,
+    "blackElo": 2870,
+    "result": "0-1",
+    "year": 2013,
+    "event": "WCh 2013",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3 c4 Ne2 Nc6 g4 O-O Bg2 Na5 O-O Nb3 Ra2 b5 Ng3 a5 g5 Ne8 e4 Nxc1 Qxc1 Ra6 e5 Nc7 f4 b4 axb4 axb4 Rxa6 Nxa6 f5 b3 Qf4 Nc7 f6 g6 Qh4 Ne8 Qh6 b2 Rf4 b1=Q+ Nf1 Qe1",
+    "overview": "4.f3 — Carlsen beats Anand from the Black side, punishing White's over-ambitious central plan.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1bq1rk1/pp3ppp/5n2/3p4/2pP2P1/PnP1PP2/4N1BP/R1BQ1RK1 w - - 5 13",
+        "annotation": "White's grand 4.f3 central ambitions have backfired — doubled c-pawns and slow development, while Black clamps the queenside and develops against the static weaknesses.",
+        "concept": "Punishing over-ambition"
+      }
+    ],
+    "middlegameTheme": "…d5/…c4 clamp vs the 4.f3 centre",
+    "lessonSummary": "Against 4.f3, Black challenges with …d5, clamps with …c4, and exploits White's doubled pawns and slow development."
+  },
+  {
+    "id": "mg-nimzo-fischer",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Grischuk, A.",
+    "black": "Karjakin, Sergey",
+    "whiteElo": 2745,
+    "blackElo": 2747,
+    "result": "0-1",
+    "year": 2022,
+    "event": "18th Moscow Stars Prelim",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Nf3 b6 e3 Bb7 Bd3 O-O O-O d5 cxd5 exd5 Qc2 Be7 a3 c5 b3 Nbd7 Bb2 Rc8 Rfd1 g6 Qe2 Qc7 Nb5 Qb8 Rac1 Rfd8 a4 Bf8 h3 Bg7 Nc3 Nf8 a5 Ne6 a6 Bc6 Nb5 Ne4 Ne5 Be8 Nf3 Bxb5 Bxb5 cxd4 exd4 Qd6 g3 Rxc1 Rxc1 Qb4 Bd3 Qxb3 Kg2 Qb4 Ba1 Nd6 Ne5 Bxe5 dxe5 Ne4 Qe3 N4c5 Rd1 d4 Qf3 Nxd3 Rxd3 Qb5 h4 Qxa6 Ra3 Qb5 Rxa7 Qd5 Bb2 d3 Qxd5 Rxd5 Ra8+ Kg7 Ra1 Kf8 Kf3 Ke7 Ke4 Rd7 Ke3 Nc5 Rb1 d2 Ke2 Ke6 Rd1 Kf5 Rxd2 Rxd2+ Kxd2 Nd7 f3 Nxe5 Ke2 Ke6 Ba1 b5 Ke3 Kd5 Kf4 f6 g4 b4 h5 b3 hxg6 hxg6 g5 Nd3+",
+    "overview": "Fischer 4.e3 b6 — Karjakin beats Grischuk from the Black side with the light-squared fianchetto setup.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "2rq1rk1/pb1nbppp/1p3n2/2pp4/3P4/PPNBPN2/1BQ2PPP/R4RK1 w - - 3 13",
+        "annotation": "Black has the Fischer setup — the b7-bishop controlling e4, the dark bishop kept active on d6, and a sound centre. Light-square control and the two bishops give an easy, fighting game.",
+        "concept": "Light-square control"
+      }
+    ],
+    "middlegameTheme": "…b6/…Bb7 control e4, …Bd6 bishop pair",
+    "lessonSummary": "The Fischer …b6 setup: control e4 with the b7-bishop, keep the bishop pair with …Bd6, and play actively on both wings."
   }
 ]

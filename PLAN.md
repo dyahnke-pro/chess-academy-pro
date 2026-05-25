@@ -94,3 +94,37 @@ Start the Dragon: walk its spines (`1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 
 → Yugoslav Attack `6.Be3 Bg7 7.f3 O-O 8.Qd2 Nc6 9.Bc4 …` and the Classical/other
 tabs) from masters-db + Stockfish-extend, BLACK-oriented. Then author
 `_dragon-content.json`. Reuse the QG/Scotch pipeline scripts.
+
+## SESSION 2026-05-25 (autonomous Black-opening program)
+Merged origin/main (Dragon + King's Gambit) into the branch, then built COMPLETE
+Black masterclasses (David's rule: only build if ALL model games sourceable):
+- [x] French Defence — 10 vars, 10 plans, 9 models, 9 gems, pitfalls, quizzes
+- [x] Scandinavian Defence — 6 tabs, 7 plans, 7 models, 7 gems, pitfalls, quizzes
+- [x] Alekhine's Defence — 5 tabs, 6 plans, 6 models, 4 gems, pitfalls, quizzes
+- [x] Benko Gambit — 3 tabs, 4 plans, 4 models, 3 gems, pitfalls
+- [x] Dutch Defence — 4 tabs, 5 plans, 5 models, 0 gems (none found — correct,
+      self-hides), pitfalls, quizzes. Dropped Anti-Dutch 2.Bg5 (G3: DB-anchors 3 plies).
+All gate-green (lessonIntegrity/narration/depth/tabIntegrity/wlpp/manifest/
+modelGames-orientation/modelGames/middlegamePlanner/commonMistakeNarration/punishGems).
+NOTE: modelGames.test (criticalMoment FEN must match the PGN position) is a gate —
+use the replay-to-(moveNo:color) method when building model games (one stale FEN
+slipped through and was caught by ship-check; fixed).
+
+### Vetted COMPLETE, not yet built (all variations have Black-win model games):
+- ~~Nimzo-Indian (8 vars)~~ ✅ SHIPPED on main (commit 91d7549) — 7 tabs + main, 8 plans,
+  8 models, 6 gems, pitfalls, quizzes, audit 3-pass green.
+### Caro-Kann — COMPLETED the model-game-rich masterclass (this session):
+- Was a near-complete prior build (lessons + 7 models + 5 gems + traps, wired) missing
+  per-tab middlegame plans. Added 7 plans (main + Advance/Exchange/Two Knights/Panov/
+  Fantasy/Tartakower) with lead-the-eye + tab service + manifest bump. Gate-green.
+### Off-limits (done on main / in flight): ruy, pirc, vienna, caro, italian, scotch,
+kings-gambit, sicilian program (dragon/najdorf/sveshnikov/alapin); QGD/QGA/Slav/Semi-Slav (#669).
+
+## 🎯 MODEL GAMES NEEDED — running todo (David sources these later)
+**New rule (David 2026-05-25): build the masterclass fully WITHOUT model games; the
+ModelGamesSection self-hides until games land. Log here EXACTLY which opening + which
+line needs a real Black-WIN master game (one per variation tab).** When David supplies a
+PGN, add it to model-games.json with `studentSide:'black'`, a hand-authored overview,
+bump the manifest modelGames floor, and add the opening to modelGames-orientation PROTECTED.
+
+_(none outstanding yet — entries added as model-game-deferred openings are built below)_

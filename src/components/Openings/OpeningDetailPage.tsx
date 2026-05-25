@@ -27,8 +27,22 @@ import { getPircTabPlanIds } from '../../services/pircMasterclassTabs';
 import { getViennaTabPlanIds } from '../../services/viennaMasterclassTabs';
 import { getItalianTabPlanIds } from '../../services/italianMasterclassTabs';
 import { getScotchTabPlanIds } from '../../services/scotchMasterclassTabs';
+import { getFrenchDefenceTabPlanIds } from '../../services/frenchDefenceMasterclassTabs';
+import { getScandinavianDefenceTabPlanIds } from '../../services/scandinavianDefenceMasterclassTabs';
+import { getAlekhineDefenceTabPlanIds } from '../../services/alekhineDefenceMasterclassTabs';
+import { getBenkoGambitTabPlanIds } from '../../services/benkoGambitMasterclassTabs';
+import { getDutchDefenceTabPlanIds } from '../../services/dutchDefenceMasterclassTabs';
+import { getNimzoIndianTabPlanIds } from '../../services/nimzoIndianMasterclassTabs';
+import { getCaroKannTabPlanIds } from '../../services/caroKannMasterclassTabs';
 import { getKingsGambitTabPlanIds } from '../../services/kingsGambitMasterclassTabs';
 import { getSicilianDragonTabPlanIds } from '../../services/sicilianDragonMasterclassTabs';
+import { getFourKnightsTabPlanIds } from '../../services/fourKnightsMasterclassTabs';
+import { getLondonTabPlanIds } from '../../services/londonMasterclassTabs';
+import { getCatalanTabPlanIds } from '../../services/catalanMasterclassTabs';
+import { getEnglishTabPlanIds } from '../../services/englishMasterclassTabs';
+import { getRetiTabPlanIds } from '../../services/retiMasterclassTabs';
+import { getKiaTabPlanIds } from '../../services/kiaMasterclassTabs';
+import { getEvansTabPlanIds } from '../../services/evansMasterclassTabs';
 import { getSicilianNajdorfTabPlanIds } from '../../services/sicilianNajdorfMasterclassTabs';
 import { getSicilianSveshnikovTabPlanIds } from '../../services/sicilianSveshnikovMasterclassTabs';
 import { getSicilianAlapinTabPlanIds } from '../../services/sicilianAlapinMasterclassTabs';
@@ -1037,8 +1051,22 @@ export function OpeningDetailPage(): JSX.Element {
     getViennaTabPlanIds(opening.id, tabKey) ??
     getItalianTabPlanIds(opening.id, tabKey) ??
     getScotchTabPlanIds(opening.id, tabKey) ??
+    getFrenchDefenceTabPlanIds(opening.id, tabKey) ??
+    getScandinavianDefenceTabPlanIds(opening.id, tabKey) ??
+    getAlekhineDefenceTabPlanIds(opening.id, tabKey) ??
+    getBenkoGambitTabPlanIds(opening.id, tabKey) ??
+    getDutchDefenceTabPlanIds(opening.id, tabKey) ??
+    getNimzoIndianTabPlanIds(opening.id, tabKey) ??
+    getCaroKannTabPlanIds(opening.id, tabKey) ??
     getKingsGambitTabPlanIds(opening.id, tabKey) ??
     getSicilianDragonTabPlanIds(opening.id, tabKey) ??
+    getFourKnightsTabPlanIds(opening.id, tabKey) ??
+    getLondonTabPlanIds(opening.id, tabKey) ??
+    getCatalanTabPlanIds(opening.id, tabKey) ??
+    getEnglishTabPlanIds(opening.id, tabKey) ??
+    getRetiTabPlanIds(opening.id, tabKey) ??
+    getKiaTabPlanIds(opening.id, tabKey) ??
+    getEvansTabPlanIds(opening.id, tabKey) ??
     getSicilianNajdorfTabPlanIds(opening.id, tabKey) ??
     getSicilianSveshnikovTabPlanIds(opening.id, tabKey) ??
     getSicilianAlapinTabPlanIds(opening.id, tabKey) ??

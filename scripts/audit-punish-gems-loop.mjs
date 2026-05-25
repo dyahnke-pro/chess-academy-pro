@@ -134,10 +134,16 @@ const squares = (p) => p.locator('[data-square]').count();
 // openings-store WRITE the unlock performs STALLS (CLAUDE.md G1), so the card
 // never appears — we return 'locked' and the caller SKIPS the gem checks (the
 // full gem contract then only runs on a real device / prod).
+// The gems CARD renders even when weapons are LOCKED (locked tiles, no
+// clickable Watch/Learn buttons). So "card visible" is NOT "unlocked" — the
+// real unlock signal is a clickable gem-watch button. Use that, or the sandbox
+// write-stall (no buttons ever appear) is mistaken for unlocked and the later
+// gem-button clicks time out instead of skipping.
+const gemPlayable = async (p) => (await p.locator('[data-testid^="gem-watch-"]').count().catch(() => 0)) > 0;
 async function ensureWeapons(page, id) {
   const st = await openDetail(page, id);
-  if (st === 'card') return 'card';
-  if (st !== 'detail') return st; // notfound / timeout
+  if (st !== 'card' && st !== 'detail') return st; // notfound / timeout
+  if (await gemPlayable(page)) return 'card';
   const btn = page.locator('[data-testid="weapons-unlock-all-btn"]').first();
   if (await btn.isVisible().catch(() => false)) {
     await btn.click().catch(() => {});       // tap 1: arm the confirm
@@ -145,10 +151,10 @@ async function ensureWeapons(page, id) {
     await btn.click().catch(() => {});       // tap 2: confirm → Dexie write + reload
     for (let i = 0; i < 10; i++) {
       await page.waitForTimeout(1000);
-      if (await cardVisible(page)) return 'card';
+      if (await gemPlayable(page)) return 'card';
     }
   }
-  return 'locked';
+  return 'locked'; // sandbox: unlock write stalled (G1) — gem probes are device/prod-only
 }
 async function exitPlayer(page) {
   // The player exposes a back/exit affordance; fall back to browser back.
@@ -264,7 +270,11 @@ async function runPass(browser, level) {
       if (ws === 'locked') { skip(`${id}: weapons locked + unlock write stalled (sandbox) — deep gem probes device/prod-only`); continue; }
       if (ws !== 'card') { fail(`${id}: gems card did not render for deep probe (${ws})`); continue; }
       // ── WATCH — mounts + narrates AUTHORED PROSE on the wire ──
-      await openDetail(page, id);
+      // Re-unlock before each probe: every openDetail re-navigation re-reads
+      // Dexie, and in the sandbox the unlock write stalls (G1) so weapons
+      // re-lock. ensureWeapons re-arms the in-memory unlock or returns 'locked'
+      // → skip cleanly (device/prod-only) instead of timing out on a click.
+      if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Watch: unlock write stalled (sandbox) — device/prod-only`); continue; }
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-watch-"]').first().click();
       await page.waitForTimeout(level >= 2 ? 3500 : 2500);
@@ -291,7 +301,7 @@ async function runPass(browser, level) {
       //    SETTING: FULL → full explanation, LIMITED → ≤8-word cue; never
       //    silent). The old "move-dictation ONLY" rule is superseded
       //    (David 2026-05-24) — Learn no longer has to be bare dictation. ──
-      await openDetail(page, id);
+      if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Learn: unlock write stalled (sandbox) — device/prod-only`); continue; }
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-learn-"]').first().click();
       await page.waitForTimeout(4000);
@@ -308,7 +318,7 @@ async function runPass(browser, level) {
       await exitPlayer(page);
 
       // ── PRACTICE — mounts + SILENT (level 3: silent under board interaction) ──
-      await openDetail(page, id);
+      if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Practice: unlock write stalled (sandbox) — device/prod-only`); continue; }
       ev.tts.length = 0;
       await page.locator('[data-testid^="gem-practice-"]').first().click();
       await page.waitForTimeout(level >= 2 ? 4000 : 2500);
@@ -323,7 +333,7 @@ async function runPass(browser, level) {
       await exitPlayer(page);
 
       // ── PLAY — hands off to the coach room ──
-      await openDetail(page, id);
+      if (await ensureWeapons(page, id) === 'locked') { skip(`${id} Play: unlock write stalled (sandbox) — device/prod-only`); continue; }
       await page.locator('[data-testid^="gem-play-"]').first().click();
       await page.waitForTimeout(2500);
       if (await cardVisible(page)) fail(`${id} Play: did not leave the detail card`);
