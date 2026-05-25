@@ -16,12 +16,14 @@ openingId, so the de-dup contract (STEP 9) is satisfied.
 - **Main-line pill (showcase):** Classical Mainline → the Orthodox/Capablanca QGD.
 - **Tabs:** Exchange · Tartakower · QGA · Slav · Semi-Slav · Catalan · Anti-QGD Bf4.
 
-## Environment notes (this session)
-- **ONLY GitHub reachable.** The live Lichess explorer / `api/lichess-explorer`
-  proxy returns "Host not in allowlist" — gem mining + deep-theory extension
-  go to a **GitHub Actions runner** (open network).
-- **Stockfish present** at `/usr/games/stockfish` (offline soundness +
-  spine-extension past the DB anchor).
+## Environment notes
+- **2026-05-25 session (zen-tesla):** the egress allowlist DIFFERS from the
+  prior session — the `api/lichess-explorer` proxy **IS reachable here** (200,
+  live data, both `source=masters` and `source=lichess`). So gem mining +
+  deep-theory spine extension run **locally**, no CI round-trip needed. Always
+  re-test the proxy per session (playbook); don't trust a stale "firewalled".
+- **Stockfish 16** installed via `apt-get install -y stockfish`
+  (`/usr/games/stockfish` after install) — offline soundness + spine extension.
 - **Local masters-db** (`public/data/openings-masters-db.json`, 131,895
   positions, 4-field-FEN keyed, frequency-sorted) = the spine source
   (sanctioned, playbook §0.6). It THINS at depth (see open items).
@@ -30,31 +32,32 @@ openingId, so the de-dup contract (STEP 9) is satisfied.
 - Tab ORDER should be amateur-frequency (explorer); firewalled → using
   masters-db frequency as a proxy, **flagged for prod verification**.
 
-## DB-anchored spines (walked from masters-db, `scripts/_qg-spines.mjs`)
-Game counts per ply printed by the walker = the audit trail. Status vs the
-≥20-ply lessonDepth gate:
+## DB-anchored spines — ALL 8 at 22 plies (✅ P0 done)
+Extended via the LIVE masters explorer (`scripts/_qg-extend.mjs`); every ply
+masters-backed (game counts = the audit trail). Final lines:
 
-| Variation | Plies | Status |
-|---|---|---|
-| Classical (Orthodox/Capablanca, MAIN pill) | 22 | ✅ full depth, all masters-anchored |
-| QGA (Classical, …a6/…b5) | 20 | ✅ full depth |
-| Semi-Slav (Meran) | 19 | ⚠ extend ~1–3 ply |
-| Slav (main, …dxc4 …Bf5) | 18 | ⚠ extend ~2–4 ply |
-| Tartakower | 17 | ⚠ extend ~3–5 ply |
-| Catalan (Open, …dxc4) | 15 | ⚠ extend ~5–7 ply |
-| Exchange (minority attack) | 13 | ⚠ extend ~7 ply (masters-db dies early) |
-| Anti-QGD Bf4 | 10 | ⚠ THIN in masters; re-anchor move order (Harrwitz) or ask |
+| Variation | Spine (SAN) |
+|---|---|
+| Classical (MAIN pill) | d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 |
+| Exchange | d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 c6 e3 Be7 Bd3 Nbd7 Qc2 O-O Nge2 Re8 O-O Nf8 f3 Be6 |
+| Tartakower | d4 d5 c4 e6 Nc3 Be7 Nf3 Nf6 Bg5 h6 Bh4 O-O e3 b6 Be2 Bb7 Bxf6 Bxf6 cxd5 exd5 b4 c6 |
+| QGA | d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 dxc5 Bxc5 Qxd8+ Kxd8 Be2 Ke7 Nbd2 Bd7 b3 Bb5 |
+| Slav | d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 Ne5 Nbd7 Nxc4 Qc7 g3 e5 dxe5 Nxe5 Bf4 Nfd7 Bg2 g5 |
+| Semi-Slav | d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Qc2 Bd6 Bd3 O-O O-O dxc4 Bxc4 b5 Be2 Bb7 Rd1 Qc7 |
+| Catalan | d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bg5 Bd5 Qc2 Be4 |
+| Anti-QGD Bf4 | d4 d5 c4 e6 Nc3 Nf6 Bf4 Be7 e3 O-O Nf3 Nbd7 c5 Nh5 Bd3 Nxf4 exf4 b6 b4 a5 a3 c6 |
 
-The local masters-db simply lacks these lines past the listed depth. Two
-grounded extension paths (playbook): each past-DB ply must be **masters-backed
-(CI explorer) OR engine-sound (local Stockfish)**; the soundness gate (6b/7b)
-verifies and baselines deliberate divergences.
+Notes for lesson authoring: the live explorer's most-played line replaced
+several planned sub-lines with the true masters main line (Slav → 11.Ne5
+modern main; QGA → early queen trade endgame; Anti-QGD Bf4 = Harrwitz w/ c5
+clamp, re-anchor resolved). Revisit the QGA queen-trade spine when authoring —
+confirm it best shows White's pull, else re-steer to a queens-on line.
 
 ## Phased plan
 - **P0 — research + scaffold + PLAN** … _in progress_
   - [x] Confirm pick + scope (all 8); confirm tooling (scaffold, Stockfish, miner, pro-cache).
   - [x] Walk DB spines (`_qg-spines.mjs`); 2/8 at full depth.
-  - [ ] Extend the 6 short spines to ≥20 ply (Stockfish-sound, masters-backed where CI can reach); re-anchor Anti-QGD Bf4.
+  - [x] Extend all 8 spines to 22 ply via LIVE masters explorer (`_qg-extend.mjs`); Anti-QGD Bf4 re-anchored (Harrwitz + c5). Every ply masters-backed.
   - [ ] `node scripts/scaffold-opening.mjs queens-gambit "Queen's Gambit" white`.
 - **P1 — lessons** (`scripts/_qg-content.json` + `_check-beats.mjs` validator + `_gen-qg.mjs`): main + 7 variation lessons, two registers (`say`/`sayShort`), lead-the-eye arrows/highlights. → lessonIntegrity, narrationAccuracy, narrationGrounding, lessonDepth, wlppNarration.
 - **P2 — register + tabs**: `registry.ts` (1 line), `index.ts`, `variationTabs.ts` CURATED, `queensGambitMasterclassTabs.ts`, `OpeningDetailPage.tsx` branch. → lessonTabIntegrity, openingWiring.
@@ -69,6 +72,13 @@ verifies and baselines deliberate divergences.
 - 2026-05-25 — Pick = Queen's Gambit (first 1.d4 masterclass; classical → book-grounded; pillar opening).
 - 2026-05-25 — Scope = all 8 repertoire variations (David).
 - 2026-05-25 — Classical main pill steered to Orthodox/Capablanca line (NOT the Exchange) so the pill is distinct from the Exchange tab; every steered move verified in masters-db.
+- 2026-05-25 — **STRUCTURE (David): `qgd` and `qga` become their OWN separate masterclasses, oriented BLACK (student defending). `queens-gambit` stays the WHITE class (push c4, handle Black's replies as tabs).** The split is by COLOR/side, not by carving the White opening up. Counts (named, faced, distinct candidate set from the repertoire records): QGD(black) = 8 (Orthodox, Lasker, Tartakower, Cambridge Springs, Ragozin, Vienna, Exchange, Bf4/Harrwitz); QGA(black) = 7 (Classical …c5, Smyslov …a6, Sadler …Bg4, Central 3.e4, Alekhine 4.Nc3, Modern Rd1, Janowski …Qd5). Final tab count per playbook = every line that passes §0.1 (a)–(d), no cap.
+- 2026-05-25 — **FINAL (David): build ALL 4 of the QG family as SEPARATE masterclasses, each its own class:** (1) `queens-gambit` — WHITE; (2) `qgd` — BLACK (8 variations); (3) `qga` — BLACK (7 variations); (4) `catalan-opening` — WHITE (own g3 system). Catalan is its OWN class, not a `queens-gambit` tab → drop the "Catalan Transposition" tab from the White QG. Each built to the Vienna keystone standard, one at a time.
+
+## Build status (this session — paused pending structure decisions)
+- **P0 done:** all 8 White-QG spines extended to 22 plies via live masters explorer (`scripts/_qg-extend.mjs`); scaffold run.
+- **P1 partial:** the WHITE `queens-gambit` MAIN lesson (`src/data/lessons/queensGambit.ts`) is authored — 17 beats, two registers, lead-the-eye markers — and PASSES all 5 content gates (lessonIntegrity, narrationAccuracy, narrationGrounding, lessonDepth, wlppNarration) when registered. It is currently UN-registered in `registry.ts` so the repo stays gate-green while the structure is finalized (registering forces a manifest + tabs that aren't built yet). Re-add the one import + OPENINGS line to resume.
+- **Next:** finalize structure (Catalan), then author the 7 White variation lessons, wire (P2), plans/gems/model-games/manifest (P3–P6), gates + audits (P7). Then the separate BLACK `qgd`/`qga` masterclasses.
 
 ## Next-session pickup
 Resume at P0: extend the 6 short spines to ≥20 ply via Stockfish (local) +/or
