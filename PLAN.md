@@ -88,12 +88,16 @@ Black masterclasses (David's rule: only build if ALL model games sourceable):
 - [x] Scandinavian Defence — 6 tabs, 7 plans, 7 models, 7 gems, pitfalls, quizzes
 - [x] Alekhine's Defence — 5 tabs, 6 plans, 6 models, 4 gems, pitfalls, quizzes
 - [x] Benko Gambit — 3 tabs, 4 plans, 4 models, 3 gems, pitfalls
+- [x] Dutch Defence — 4 tabs, 5 plans, 5 models, 0 gems (none found — correct,
+      self-hides), pitfalls, quizzes. Dropped Anti-Dutch 2.Bg5 (G3: DB-anchors 3 plies).
 All gate-green (lessonIntegrity/narration/depth/tabIntegrity/wlpp/manifest/
-modelGames-orientation/middlegamePlanner/commonMistakeNarration/punishGems).
+modelGames-orientation/modelGames/middlegamePlanner/commonMistakeNarration/punishGems).
+NOTE: modelGames.test (criticalMoment FEN must match the PGN position) is a gate —
+use the replay-to-(moveNo:color) method when building model games (one stale FEN
+slipped through and was caught by ship-check; fixed).
 
 ### Vetted COMPLETE, not yet built (all variations have Black-win model games):
-- Dutch Defence (7 vars) — NEXT
-- Nimzo-Indian (8 vars)
+- Nimzo-Indian (8 vars) — NEXT for the following session
 ### Vetted INCOMPLETE (skip — a variation lacks a Black-win model game):
 - KID (Averbakh), Grünfeld (Exchange lines)
 ### Off-limits (done on main / in flight): ruy, pirc, vienna, caro, italian, scotch,
