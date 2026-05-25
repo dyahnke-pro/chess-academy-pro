@@ -30,31 +30,37 @@ openingId, so the de-dup contract (STEP 9) is satisfied.
 - Tab ORDER should be amateur-frequency (explorer); firewalled → using
   masters-db frequency as a proxy, **flagged for prod verification**.
 
-## DB-anchored spines (walked from masters-db, `scripts/_qg-spines.mjs`)
-Game counts per ply printed by the walker = the audit trail. Status vs the
-≥20-ply lessonDepth gate:
+## DB-anchored spines — LOCKED (`scripts/_qg-spines.mjs`)
+All 8 reach ≥20 plies: masters-anchored as deep as the local masters-db goes
+(game counts printed per ply = audit trail), then Stockfish-extended (depth 16)
+where it thins — every engine-extended ply shows a small balanced White edge
+(+0.06..+0.52), so no spine drifts into a forced sequence.
 
-| Variation | Plies | Status |
-|---|---|---|
-| Classical (Orthodox/Capablanca, MAIN pill) | 22 | ✅ full depth, all masters-anchored |
-| QGA (Classical, …a6/…b5) | 20 | ✅ full depth |
-| Semi-Slav (Meran) | 19 | ⚠ extend ~1–3 ply |
-| Slav (main, …dxc4 …Bf5) | 18 | ⚠ extend ~2–4 ply |
-| Tartakower | 17 | ⚠ extend ~3–5 ply |
-| Catalan (Open, …dxc4) | 15 | ⚠ extend ~5–7 ply |
-| Exchange (minority attack) | 13 | ⚠ extend ~7 ply (masters-db dies early) |
-| Anti-QGD Bf4 | 10 | ⚠ THIN in masters; re-anchor move order (Harrwitz) or ask |
+| Variation | Masters ply | Total | Line |
+|---|---|---|---|
+| Classical (Orthodox/Capablanca, MAIN pill) | 22 | 22 | `d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3` |
+| QGA | 20 | 20 | `d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5 O-O a6 Qe2 b5 Bb3 Bb7 Rd1 Nbd7 Nc3 Qb8` |
+| Semi-Slav (Meran) | 19 | 20 | `d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 Bb7 O-O a6 e4 c5` |
+| Slav (main, …Bf5) | 18 | 20 | `d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O Nbd7 Qe2 Bg6 e4 O-O` |
+| Tartakower | 17 | 20 | `d4 d5 c4 e6 Nc3 Be7 Nf3 Nf6 Bg5 h6 Bh4 O-O e3 b6 Be2 Bb7 Bxf6 Bxf6 cxd5 exd5` |
+| Anti-QGD Harrwitz (5.Bf4) | 16 | 20 | `d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bf4 O-O e3 Nbd7 c5 Nh5 Bd3 Nxf4 exf4 c6 O-O b6` |
+| Catalan (Open) | 15 | 20 | `d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Nc6 Qxc4 Qd5 Nbd2 Rd8` |
+| Exchange | 13 | 20 | `d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 c6 e3 Be7 Bd3 O-O Nf3 Nbd7 Qc2 h6 Bh4 Re8` |
 
-The local masters-db simply lacks these lines past the listed depth. Two
-grounded extension paths (playbook): each past-DB ply must be **masters-backed
-(CI explorer) OR engine-sound (local Stockfish)**; the soundness gate (6b/7b)
-verifies and baselines deliberate divergences.
+- **Anti-QGD Bf4 re-anchored to the Harrwitz Attack** (1.d4 d5 2.c4 e6 3.Nf3
+  Nf6 4.Nc3 Be7 5.Bf4 — 10,906 master games at the Bf4 position). The repertoire's
+  literal early-4.Bf4 is rare (166g); Harrwitz IS "Early Bf4 System" properly anchored.
+- **Exchange spine** lands in the standard Qc2/Bh4 setup; the minority-attack
+  push (b4–b5–bxc6) is the Exchange's identity and will live in its MIDDLEGAME
+  PLAN (P3), with the lesson naming the plan — masters-db died at ply 13 so the
+  thematic push isn't on the main spine (refine the tail toward Rab1/b4 during
+  P1 if Stockfish keeps it sound, else teach it in the plan).
 
 ## Phased plan
-- **P0 — research + scaffold + PLAN** … _in progress_
+- **P0 — research + scaffold + PLAN** … _spines locked; scaffold next_
   - [x] Confirm pick + scope (all 8); confirm tooling (scaffold, Stockfish, miner, pro-cache).
-  - [x] Walk DB spines (`_qg-spines.mjs`); 2/8 at full depth.
-  - [ ] Extend the 6 short spines to ≥20 ply (Stockfish-sound, masters-backed where CI can reach); re-anchor Anti-QGD Bf4.
+  - [x] Walk DB spines (`_qg-spines.mjs`); all 8 now ≥20 ply (masters + Stockfish-sound tail).
+  - [x] Re-anchor Anti-QGD Bf4 → Harrwitz Attack.
   - [ ] `node scripts/scaffold-opening.mjs queens-gambit "Queen's Gambit" white`.
 - **P1 — lessons** (`scripts/_qg-content.json` + `_check-beats.mjs` validator + `_gen-qg.mjs`): main + 7 variation lessons, two registers (`say`/`sayShort`), lead-the-eye arrows/highlights. → lessonIntegrity, narrationAccuracy, narrationGrounding, lessonDepth, wlppNarration.
 - **P2 — register + tabs**: `registry.ts` (1 line), `index.ts`, `variationTabs.ts` CURATED, `queensGambitMasterclassTabs.ts`, `OpeningDetailPage.tsx` branch. → lessonTabIntegrity, openingWiring.
