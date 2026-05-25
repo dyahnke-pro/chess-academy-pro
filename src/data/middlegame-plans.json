@@ -8343,59 +8343,6 @@
     ]
   },
   {
-    "id": "mp-grunfeld-exchange-central-pressure",
-    "openingId": "grunfeld-defence",
-    "criticalPositionFen": "rnbq1rk1/pp2ppbp/6p1/2p5/3PP3/2P2N2/P3BPPP/R1BQK2R w KQ - 2 9",
-    "title": "Exchange Grünfeld: undermine the center",
-    "overview": "The Exchange Grünfeld is the main test. White builds a massive pawn center with c3 + d4 + e4; Black undermines it with …c5 + …Nc6 + …Bg4. The plan: pressure d4 from every direction, force exchanges, and exploit White's weak c-pawn in the endgame. The Bg7 dominates the long diagonal and supports the central attack.",
-    "pawnBreaks": [
-      {
-        "move": "c5",
-        "explanation": "The thematic break against White's central c3 + d4 + e4 structure. After …c5 Black attacks d4 with the c-pawn and forces White to either trade or push d5."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bg7 long-diagonal attack",
-        "explanation": "The Grünfeld's signature piece — aimed at White's queenside, it pressures b2 and supports the central attack. Even trading it on c3 (creating tripled pawns) is sometimes worthwhile."
-      },
-      {
-        "piece": "Knight",
-        "route": "Nb8-c6-a5",
-        "explanation": "The knight attacks White's c4 pawn after …Na5, often forcing White's bishop to retreat passively."
-      }
-    ],
-    "typicalMistakes": [
-      "Forgetting to play …c5 — gives White time to consolidate the center into a winning pawn mass.",
-      "Trading the Bg7 for a knight — eliminates the long-diagonal pressure that defines the Grünfeld."
-    ]
-  },
-  {
-    "id": "mp-grunfeld-russian-system",
-    "openingId": "grunfeld-defence",
-    "criticalPositionFen": "rnbq1rk1/1pp1ppbp/p4np1/8/2QPP3/2N2N2/PP3PPP/R1B1KB1R w KQ - 0 8",
-    "title": "Russian System: Qb3 + Rd1 central pressure",
-    "overview": "The Russian System (Qb3) avoids the Exchange and builds central pressure with Qc4 + e4 + Be2 + O-O. Black's plan: develop quickly, then attack the center with …a6 + …b5 + …Bb7 + …c5. The Bg7 + Bb7 double-fianchetto creates lasting positional pressure on White's center.",
-    "pawnBreaks": [
-      {
-        "move": "b5",
-        "explanation": "The thematic queenside break. After …b5 Black gains the b-file for the rook and creates a strong bishop battery on b7 attacking the e4-pawn."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop pair",
-        "route": "Bg7 + Bb7 double-fianchetto",
-        "explanation": "Two bishops on long diagonals — Bg7 attacks the queenside, Bb7 attacks the center. The pair creates lasting pressure even in queenless endings."
-      }
-    ],
-    "typicalMistakes": [
-      "Forgetting …b5 — Black's queenside stays cramped and the central pressure dissipates.",
-      "Trading the bishop pair — gives up Black's main long-term compensation."
-    ]
-  },
-  {
     "id": "mp-bird-classical-kingside-attack",
     "openingId": "birds-opening",
     "criticalPositionFen": "rnbq1rk1/pp2ppbp/5np1/2pp4/5P2/3PPN2/PPP1B1PP/RNB1QRK1 b - - 1 7",
@@ -27852,6 +27799,144 @@
             {
               "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-grunfelddefence-main",
+    "openingId": "grunfeld-defence",
+    "criticalPositionFen": "r1b2rk1/p3ppbp/1p4p1/n7/3PP3/4BN2/P3BPPP/2R1K2R w K - 0 14",
+    "title": "Grünfeld: Hounding the Isolated d-Pawn",
+    "overview": "The Grünfeld bargain has paid off: in exchange for letting White build the centre, Black has traded it down to a single isolated d4-pawn and aimed every piece at it. The plan is relentless pressure — the g7-bishop on the long diagonal, the light bishop to b7, and a rook to the open d-file, hounding the d4-pawn until it falls or White ties himself in knots defending it.",
+    "pawnBreaks": [
+      "…e6 to fix and besiege the d4-pawn",
+      "…f5 to strike the e4-pawn when prepared"
+    ],
+    "pieceManeuvers": [
+      "…Bb7 onto the long diagonal at e4",
+      "…Rfd8 onto the open d-file against d4"
+    ],
+    "strategicThemes": [
+      "Hounding the isolated d4-pawn",
+      "Two bishops on the long diagonals",
+      "Piling up on the open d-file"
+    ],
+    "endgameTransitions": [
+      "The isolated d4-pawn is a lasting target into any endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b2rk1/p3ppbp/1p4p1/n7/3PP3/4BN2/P3BPPP/2R1K2R w K - 0 14",
+        "moves": [
+          "O-O",
+          "Bb7",
+          "Rfd1",
+          "Rfd8"
+        ],
+        "annotations": [
+          "O-O — White finally tucks the king to safety.",
+          "…Bb7 develops the light bishop to the long diagonal, a second piece bearing down on the e4-pawn and the white centre.",
+          "Rfd1 brings a rook to defend the isolated d4-pawn.",
+          "…Rfd8 swings the rook to the open d-file, training directly on the d4-pawn. Black simply piles up on the weakness — the g7-bishop, the b7-bishop, and the rook all converge on White’s isolani."
+        ],
+        "learnCues": [
+          "O-O — White castles.",
+          "…Bb7 — bishop to the diagonal, eye e4.",
+          "Rfd1 — White defends d4.",
+          "…Rfd8 — rook onto the d-file."
+        ],
+        "sources": [
+          "concept:pawn-isolated",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"
+        ],
+        "title": "Grünfeld: Hounding the Isolated d-Pawn",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "b7",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d1",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d8",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]

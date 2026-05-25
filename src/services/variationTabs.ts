@@ -316,6 +316,16 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /four pawns/i, label: 'Four Pawns' },
     { test: /fianchetto/i, label: 'Fianchetto' },
   ],
+  // Grünfeld Defence — the boldest hypermodern counter, …d5 vs the centre. Main-
+  // line pill = the Exchange main (e4/d4 vs …Bg7/…c5/…Nc6 on the IQP, repertoire
+  // pgn). Tabs = the distinct ≥20-ply White systems: the Russian System (Qb3,
+  // no doubled pawns), the Classical Bc4 (with the Bxf7+ try), and the modern
+  // Rb1 Exchange. (Fianchetto/Neo-Grünfeld <20p; Taimanov folds into Bc4.)
+  'grunfeld-defence': [
+    { test: /russian/i, label: 'Russian System' },
+    { test: /bc4/i, label: 'Classical Bc4' },
+    { test: /rb1/i, label: 'Modern Rb1' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same

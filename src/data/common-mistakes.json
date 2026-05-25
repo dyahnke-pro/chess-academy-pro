@@ -404,16 +404,15 @@
   ],
   "grunfeld-defence": [
     {
-      "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq d6 0 4",
-      "wrongMove": "Nf3",
-      "correctMove": "cxd5",
-      "explanation": "Nf3 allows Black to comfortably capture on c4 or play Bg7 with an ideal Grunfeld setup. Capturing cxd5 immediately tests Black's commitment and leads to the mainline Exchange Variation where White builds a strong center."
-    },
-    {
       "fen": "rnbq1rk1/ppp1ppbp/6p1/8/2BPn3/2N1BN2/PP3PPP/R2QK2R b KQ - 5 7",
       "wrongMove": "Nxc3",
       "correctMove": "c5",
-      "explanation": "Exchanging on c3 helps White recapture and strengthen the center without any compensation. Playing c5 immediately strikes at the d4 pawn, generating counterplay on the dark squares as is typical in the Grunfeld."
+      "explanation": "Exchanging on c3 helps White recapture and strengthen the center without any compensation. Playing c5 immediately strikes at the d4 pawn, generating counterplay on the dark squares as is typical in the Grunfeld.",
+      "shortNarration": "…c5 — hit the centre, time the trade.",
+      "sources": [
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"
+      ]
     }
   ],
   "scotch-game": [

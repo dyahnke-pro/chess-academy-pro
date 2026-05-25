@@ -386,37 +386,6 @@
     ]
   },
   {
-    "id": "mg-karpov-grunfeld-defence",
-    "openingId": "grunfeld-defence",
-    "white": "Anatoly Karpov",
-    "black": "Garry Kasparov",
-    "whiteElo": 2700,
-    "blackElo": 2735,
-    "result": "0-1",
-    "year": 1987,
-    "event": "World Championship Game 11, Seville 1987",
-    "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Bc4 c5 Ne2 Nc6 Be3 O-O O-O Bg4 f3 Na5 Bxf7+ Rxf7 fxg4 Rxf1+ Kxf1 Qd6 Kg1 Qe6 Qd3 Qc4 Qxc4+ Nxc4 Bf2 cxd4 cxd4 e5 d5 Bh6 h4 Bd2 Rd1 Ba5 Rc1 b5 Rc2 Nd6 Ng3 Nc4 Nf1 Nd6 Ng3 Nc4 g5 Kf7 Nf1 Nd6 Ng3 Nc4 Kf1 Ke7 Bc5+ Kf7 Rf2+ Kg7 Rf6 Bb6 Rc6 Na5 Bxb6 Nxc6 Bc7 Rf8+ Ke2 Rf7 Bd6 Rd7 Bc5 Na5 Nf1 Rc7 Bd6 Rc2+ Kd3 Rxa2 Ne3 Kf7 Ng4 Nc4 Nxe5+ Nxe5+ Bxe5 b4 Bf6 b3 e5 Rxg2 e6+ Kf8",
-    "overview": "Kasparov employed the Grunfeld Defence to challenge Karpov's central pawn mass, and the strategy paid off brilliantly. After provoking White into overextending with e5 and f5, Kasparov struck back with the thematic Nxe5, demolishing the center.",
-    "criticalMoments": [
-      {
-        "moveNumber": 12,
-        "color": "white",
-        "fen": "r2q1rk1/pp2pBbp/6p1/n1p5/3PP1b1/2P1BP2/P3N1PP/R2Q1RK1 b - - 0 12",
-        "annotation": "Karpov pushes d5 to gain space, but this allows Kasparov's pieces to find active squares on e5 and c4. The pawn advance looks imposing but creates targets that Black can attack.",
-        "concept": "Overextended center"
-      },
-      {
-        "moveNumber": 19,
-        "color": "black",
-        "fen": "r5k1/pp4bp/6p1/4p3/2nPP1P1/8/P3NBPP/R5K1 w - - 0 20",
-        "annotation": "Kasparov plays Nxe5, capturing the advanced pawn and shattering White's center completely. This move highlights the classic Grunfeld theme of destroying an imposing but fragile pawn center.",
-        "concept": "Central pawn destruction"
-      }
-    ],
-    "middlegameTheme": "Challenging and destroying the pawn center",
-    "lessonSummary": "This World Championship game is a textbook example of the Grunfeld Defence's strategic idea: allowing White to build a big center, then tearing it apart. Kasparov's patient maneuvering provoked Karpov into advancing too aggressively, and the thematic central counterattack was devastating. The game illustrates why a large pawn center can be a liability if it lacks adequate piece support."
-  },
-  {
     "id": "mg-jobava-mamedyarov-2014",
     "openingId": "pro-naroditsky-jobava-london",
     "white": "Baadur Jobava",
