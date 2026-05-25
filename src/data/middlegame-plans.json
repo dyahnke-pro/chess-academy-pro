@@ -14045,6 +14045,17 @@
           "book:vienna-game",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Vienna_Game"
+        ],
+        "learnCues": [
+          "Ne2 — start the g3-f5 reroute",
+          "Bb6 — tuck the bishop back",
+          "c3 — prepare the d4 break",
+          "Nc5 — hit the b3-bishop",
+          "Bc2 — reload toward h7",
+          "Bg4 — pin the f3-knight",
+          "Ng3 — toward the f5 outpost",
+          "Nh5 — Black’s kingside counter",
+          "d4 — the central break lands"
         ]
       }
     ]
@@ -14243,6 +14254,16 @@
           "book:vienna-game",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Vienna_Game"
+        ],
+        "learnCues": [
+          "Nxc3 — forced to trade",
+          "bxc3 — open the b-file, keep bishops",
+          "Nc6 — develop, no attacking square",
+          "Bd2 — complete development",
+          "Be7 — the safest square",
+          "Nh3 — heading to f4",
+          "O-O — castle to safety",
+          "Nf4 — dream square, hits d5"
         ]
       }
     ]
@@ -14445,6 +14466,16 @@
           "book:vienna-game",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Vienna_Game"
+        ],
+        "learnCues": [
+          "O-O — castle short",
+          "O-O — Black castles",
+          "Bg5 — pin the f6-knight",
+          "h6 — question the bishop",
+          "Bh4 — retreat, keep the pin",
+          "Be6 — challenge the c4-bishop",
+          "Nd5 — fork f6, threaten Nxc7",
+          "Qd7 — unpin and defend c7"
         ]
       }
     ]
@@ -14656,6 +14687,16 @@
           "book:vienna-game",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Vienna_Game"
+        ],
+        "learnCues": [
+          "Qxe5 — recover the pawn",
+          "O-O — castle, Nd6 misplaced",
+          "d4 — grab the centre",
+          "Nc6 — hit the queen",
+          "Qf4 — active central square",
+          "Na5 — hit the b3-bishop",
+          "Bd5 — sidestep to a dominant square",
+          "Ne8 — reroute the misplaced knight"
         ]
       }
     ]
@@ -14861,6 +14902,16 @@
           "book:vienna-game",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Vienna_Game"
+        ],
+        "learnCues": [
+          "a3 — modest queenside prep",
+          "a6 — mirror, keep b5",
+          "d3 — solidify the centre",
+          "Bg4 — pin the e2-knight",
+          "h3 — question the bishop",
+          "Be6 — retreat; manoeuvring begins",
+          "Nd5 — land the dream outpost",
+          "Bb6 — tuck away; the squeeze begins"
         ]
       }
     ]
@@ -19135,6 +19186,13 @@
           "concept:pos-outpost",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+        ],
+        "learnCues": [
+          "Bg5 — swing to the kingside",
+          "Qd3 — eye the f5-square",
+          "f5 — the thematic break",
+          "exf5 — open lines",
+          "Bxf5 — both bishops alive"
         ]
       }
     ]
@@ -19261,6 +19319,14 @@
           "concept:pos-outpost",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+        ],
+        "learnCues": [
+          "Qh5 — probe the kingside",
+          "Bg7 — rake the long diagonal",
+          "O-O — king to safety",
+          "Bxd5 — trade the strong knight",
+          "exd5 — recapture",
+          "f4 — roll the f-pawn"
         ]
       }
     ]
@@ -19388,6 +19454,13 @@
           "concept:pos-outpost",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+        ],
+        "learnCues": [
+          "O-O — complete development",
+          "Be2 — develop toward the bind",
+          "Be6 — challenge the d5-knight",
+          "O-O — castle",
+          "a5 — cement b4"
         ]
       }
     ]
@@ -19514,6 +19587,14 @@
           "concept:pos-outpost",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+        ],
+        "learnCues": [
+          "Qe2 — develop quietly",
+          "Bc5 — develop with bite",
+          "Be3 — offer a trade",
+          "Bxe3 — take the dark bishop",
+          "Qxe3 — recapture, no edge",
+          "d6 — free the bishop, equal"
         ]
       }
     ]
@@ -19614,6 +19695,12 @@
           "concept:pos-outpost",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+        ],
+        "learnCues": [
+          "O-O — castle",
+          "O-O — fully developed",
+          "Ne3 — reroute the knight",
+          "Nd4 — seize the outpost"
         ]
       }
     ]
@@ -19958,6 +20045,14 @@
           "book:four-knights-game",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Four_Knights_Game"
+        ],
+        "learnCues": [
+          "Bf1 — regroup the bishop",
+          "Rd8 — centralise behind d6",
+          "g3 — kingside shield, prep f4",
+          "Qc7 — eye e5 and the c-file",
+          "d5 — the space-gaining thrust",
+          "Nf8 — regroup the knight"
         ]
       }
     ]
@@ -20014,6 +20109,14 @@
           "book:four-knights-game",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Four_Knights_Game"
+        ],
+        "learnCues": [
+          "Bg5 — pin a d5-defender",
+          "c6 — prop the d5-pawn",
+          "Qf3 — third attacker on d5",
+          "Bd6 — develop, eye the kingside",
+          "Rae1 — seize the e-file",
+          "Rb8 — activate on the b-file"
         ]
       }
     ]
@@ -20066,6 +20169,12 @@
           "book:four-knights-game",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Four_Knights_Game"
+        ],
+        "learnCues": [
+          "Ne7 — reroute the knight",
+          "Nh4 — aim for the f5 outpost",
+          "c6 — queenside space",
+          "Nf5 — land the outpost"
         ]
       }
     ]
@@ -20122,6 +20231,14 @@
           "book:four-knights-game",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Four_Knights_Game"
+        ],
+        "learnCues": [
+          "h6 — make luft",
+          "c3 — small flexible centre",
+          "f5 — challenge the bishop",
+          "Bd5+ — check with tempo",
+          "Kf8 — lose castling",
+          "b4 — a queenside pull"
         ]
       }
     ]
@@ -20178,6 +20295,14 @@
           "book:four-knights-game",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Four_Knights_Game"
+        ],
+        "learnCues": [
+          "c5 — clamp the d4-square",
+          "d4 — the thematic break",
+          "cxd4 — capture on d4",
+          "cxd4 — keep a broad centre",
+          "exd4 — take again",
+          "Qxd4 — centralise, bishops favoured"
         ]
       }
     ]
@@ -22679,6 +22804,12 @@
           "book:scandinavian-defence",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ],
+        "learnCues": [
+          "Nc6 — second attacker on d4",
+          "a3 — question the b4-bishop",
+          "Bxc3 — trade, damage the structure",
+          "Bxc3 — mobilised, every piece works"
         ]
       }
     ]
@@ -22805,6 +22936,12 @@
           "book:scandinavian-defence",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ],
+        "learnCues": [
+          "Bb4 — pin the c3-knight",
+          "O-O-O — opposite wings, race on",
+          "Nbd7 — prepare the …b5 lever",
+          "a3 — but …b5-b4 is rolling"
         ]
       }
     ]
@@ -23031,6 +23168,12 @@
           "book:scandinavian-defence",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ],
+        "learnCues": [
+          "Qd2 — try to consolidate",
+          "Nc6 — develop with tempo",
+          "d5 — chase the knight, grab space",
+          "O-O-O — seize the d-file"
         ]
       }
     ]
@@ -23153,6 +23296,12 @@
           "book:scandinavian-defence",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ],
+        "learnCues": [
+          "O-O — castle short",
+          "O-O-O — rook to the d-file",
+          "d5 — chase the knight, grab space",
+          "Ne5 — centralise; target d5"
         ]
       }
     ]
@@ -23375,6 +23524,12 @@
           "book:scandinavian-defence",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ],
+        "learnCues": [
+          "g4 — grab the bishop, loosen the king",
+          "Bg6 — calm retreat, unharmed",
+          "Ne5 — occupy the centre",
+          "Bb4 — pin and develop; target g4"
         ]
       }
     ]
@@ -25310,6 +25465,12 @@
           "concept:pawn-doubled",
           "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+        ],
+        "learnCues": [
+          "Qe2 — centralise",
+          "b6 — prepare …Bb7",
+          "Rd1 — eye the d-file",
+          "cxd4 — open on Black’s terms"
         ]
       }
     ]
@@ -25427,6 +25588,12 @@
           "concept:pawn-doubled",
           "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+        ],
+        "learnCues": [
+          "Nd2 — reroute toward c4",
+          "O-O — complete behind the clamp",
+          "Rb1 — eye the b-file",
+          "b6 — keep c4 fixed as a target"
         ]
       }
     ]
@@ -25804,6 +25971,12 @@
           "concept:pawn-doubled",
           "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+        ],
+        "learnCues": [
+          "e4 — build the big centre",
+          "Ne8 — reroute to d6, blockade c4",
+          "O-O — castle",
+          "Ba6 — train on the weak c4-pawn"
         ]
       }
     ]
@@ -25909,6 +26082,12 @@
           "concept:pawn-doubled",
           "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+        ],
+        "learnCues": [
+          "Ne2 — develop awkwardly",
+          "Nc6 — eye the queenside weaknesses",
+          "g4 — space but loosens the king",
+          "Na5 — swarm c4; clearly better"
         ]
       }
     ]
@@ -26024,6 +26203,12 @@
           "concept:pawn-doubled",
           "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+        ],
+        "learnCues": [
+          "a3 — question the b4-bishop",
+          "Bd6 — keep the bishop pair",
+          "b4 — queenside space",
+          "a6 — ready …c5 and …a5"
         ]
       }
     ]
