@@ -709,19 +709,22 @@
       "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
       "wrongMove": "d5",
       "correctMove": "exf4",
-      "explanation": "2…d5 (Falkbeer Counter-Gambit) is sharp but theoretically dubious for Black at the top level. After 3.exd5 e4 White has the Nimzowitsch Variation 4.d3 with a strong reply. Accepting the gambit with 2…exf4 is the principled move — keep the extra pawn and defend."
+      "explanation": "2…d5 (Falkbeer Counter-Gambit) is sharp but theoretically dubious for Black at the top level. After 3.exd5 e4 White has the Nimzowitsch Variation 4.d3 with a strong reply. Accepting the gambit with 2…exf4 is the principled move — keep the extra pawn and defend.",
+      "shortNarration": "exf4 — take it, hold the extra pawn"
     },
     {
       "fen": "rnbqkbnr/pppp1p1p/8/6p1/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
       "wrongMove": "h3",
       "correctMove": "Bc4",
-      "explanation": "4.h3 is engine-equivalent but wastes a critical tempo near your own king. 4.Bc4 develops with two threats: it eyes f7 AND prepares O-O immediately. In gambit play tempo is the gambit — every wasted move gives Black time to consolidate the extra pawn into a fortress. Practical edge: with Bc4 you reach an attacking middlegame; with h3 you reach an equal-but-passive middlegame."
+      "explanation": "4.h3 is engine-equivalent but wastes a critical tempo near your own king. 4.Bc4 develops with two threats: it eyes f7 AND prepares O-O immediately. In gambit play tempo is the gambit — every wasted move gives Black time to consolidate the extra pawn into a fortress. Practical edge: with Bc4 you reach an attacking middlegame; with h3 you reach an equal-but-passive middlegame.",
+      "shortNarration": "Bc4 — develop with tempo, hit f7"
     },
     {
       "fen": "rnbqkbnr/pppp1ppp/8/8/2B1Pp2/8/PPPP2PP/RNBQK1NR b KQkq - 1 3",
       "wrongMove": "Qh4+",
       "correctMove": "Nf6",
-      "explanation": "Qh4+ is engine-fine — White just plays Kf1 and the king gets to g1 next move anyway. But the queen on h4 is OFFSIDE: it commits early and gives White moves like Nf3, Nc3, d4 with tempo on the queen. 3…Nf6 develops a piece (zero tempo cost) and prepares …d5 to challenge the center. Practical edge: with Nf6 you have more pieces in play when the center opens."
+      "explanation": "Qh4+ is engine-fine — White just plays Kf1 and the king gets to g1 next move anyway. But the queen on h4 is OFFSIDE: it commits early and gives White moves like Nf3, Nc3, d4 with tempo on the queen. 3…Nf6 develops a piece (zero tempo cost) and prepares …d5 to challenge the center. Practical edge: with Nf6 you have more pieces in play when the center opens.",
+      "shortNarration": "Nf6 — develop, don't chase with the queen"
     }
   ],
   "petrov-defence": [

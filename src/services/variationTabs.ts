@@ -80,6 +80,21 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /evans/i, label: 'Evans Gambit' },
     { test: /moller/i, label: 'Møller' },
   ],
+  // King's Gambit — all 8 repertoire variations earn a tab (David 2026-05-25:
+  // "add all validated variations"; every line DB-anchors ≥6 plies). Ordered
+  // by amateur frequency of the defining branch (Classical …g5 17%, Fischer
+  // …d6 16%, then the declines and the sharp gambits). The Main-line pill is
+  // the KGA Modern (3…d5) repertoire pgn — exempt from this list.
+  'kings-gambit': [
+    { test: /knight gambit classical/i, label: 'Classical' },
+    { test: /fischer/i, label: 'Fischer' },
+    { test: /falkbeer/i, label: 'Falkbeer' },
+    { test: /declined/i, label: 'Declined' },
+    { test: /bishop/i, label: "Bishop's" },
+    { test: /kieseritzky/i, label: 'Kieseritzky' },
+    { test: /muzio/i, label: 'Muzio' },
+    { test: /allgaier/i, label: 'Allgaier' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present

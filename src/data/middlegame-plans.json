@@ -8949,14 +8949,197 @@
     "typicalMistakes": [
       "Forgetting to capture f4 early — Black can consolidate the extra pawn into a fortress if White delays.",
       "Castling kingside without enough cover — once Kg1, the open f-file cuts both ways."
+    ],
+    "playableLines": [
+      {
+        "title": "The g3 lever: undermine the f4-g5 chain and open the f-file",
+        "fen": "rnbqk1nr/ppp2pbp/3p4/6p1/2BPPp2/5N2/PPP3PP/RNBQ1RK1 b kq - 0 6",
+        "moves": [
+          "h6",
+          "c3",
+          "Nc6",
+          "g3",
+          "Bh3",
+          "gxf4",
+          "Bxf1",
+          "Qxf1",
+          "gxf4"
+        ],
+        "annotations": [
+          "…h6 props the g5-pawn so the f4-g5 chain holds firm.",
+          "c3 braces the d4-pawn and frees c2 for the bishop, preparing the g3 break.",
+          "…Nc6 develops, pressing the d4-pawn.",
+          "g3 strikes the base of the f4-g5 chain — the lever that pries the f-file open.",
+          "…Bh3 forks the rook on f1, the critical counter.",
+          "gxf4 dissolves the chain and rips the f-file open.",
+          "…Bxf1 grabs the exchange on f1.",
+          "Qxf1 recaptures; for the exchange White owns the open f-file and the bare squares around f7.",
+          "…gxf4 wins the pawn back, but every White piece now swarms the f-file toward f7."
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "h3",
+              "to": "f1",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
     ]
   },
   {
     "id": "mp-kings-gambit-bishop-pair-attack",
     "openingId": "kings-gambit",
-    "criticalPositionFen": "rnbqkbnr/ppp2pp1/3p3p/8/2BPPp2/5N2/PPP3PP/RNBQK2R b KQkq - 0 5",
-    "title": "Bc4 + Qe2 + Nc3 piece swarm",
-    "overview": "The classic King's Gambit attacking setup. Bc4 hits f7, Nf3 controls e5, and a future Nc3 + Qe2 brings every minor piece into the attack within the first 10 moves. The d4 break opens the center while every White piece is already poised on its best square.",
+    "criticalPositionFen": "rnbqkb1r/ppp2ppp/8/3n4/2B2p2/5N2/PPPP2PP/RNBQ1RK1 b kq - 1 6",
+    "title": "Bb3 bishop, c4-d4 centre, Nc3-d5 clamp (Modern main line)",
+    "overview": "In the Modern main line White hands the gambit pawn back and converts to a positional bind: the c4-bishop reroutes to b3, c4 and d4 build a broad centre, the knight swings via c3 to d5, and Bxf4 recovers the pawn with a dominant, open game and a lasting initiative.",
     "pawnBreaks": [
       {
         "move": "d4",
@@ -8977,6 +9160,242 @@
     "typicalMistakes": [
       "Pushing g4 too early to defend f4 — weakens the king and lets Black counterattack with …Qh4+ ideas.",
       "Trading on f4 with the bishop without sufficient piece development — gives Black time to consolidate."
+    ],
+    "playableLines": [
+      {
+        "title": "Convert the gambit into a central bind",
+        "fen": "rnbqkb1r/ppp2ppp/8/3n4/2B2p2/5N2/PPPP2PP/RNBQ1RK1 b kq - 1 6",
+        "moves": [
+          "Be6",
+          "Bb3",
+          "Be7",
+          "c4",
+          "Nb6",
+          "d4",
+          "Nxc4",
+          "Nc3",
+          "Nb6",
+          "d5",
+          "Bg4",
+          "Bxf4"
+        ],
+        "annotations": [
+          "…Be6 offers to trade White’s strong bishop and shields f7.",
+          "Bb3 sidesteps the trade, keeping the bishop on the long diagonal eyeing the knight on d5.",
+          "…Be7 develops the bishop to e7, completing Black’s kingside.",
+          "c4 gains space and kicks the knight on d5 back to b6.",
+          "…Nb6 retreats the knight to b6.",
+          "d4 erects the broad c4-d4 centre — the heart of White’s plan.",
+          "…Nxc4 grabs the c4-pawn.",
+          "Nc3 develops and heads for d5.",
+          "…Nb6 steps back from the c4 skirmish.",
+          "d5 clamps the centre and shuts the light-squared bishop out.",
+          "…Bg4 pins along the d1-h5 line.",
+          "Bxf4 recovers the gambit pawn, the bishop sweeping the c1-h6 diagonal toward h6."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e6",
+              "to": "f7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b3",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "g4",
+              "to": "h5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f4",
+              "to": "h6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
     ]
   },
   {

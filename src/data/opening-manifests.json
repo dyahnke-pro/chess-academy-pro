@@ -63,6 +63,15 @@
     "warnings": 0,
     "keyIdeas": 4
   },
+  "kings-gambit": {
+    "variations": 8,
+    "middlegamePlans": 2,
+    "endgamePlans": 0,
+    "modelGames": 6,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
   "sicilian-dragon": {
     "variations": 8,
     "middlegamePlans": 7,

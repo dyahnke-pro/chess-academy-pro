@@ -27,6 +27,7 @@ import { getPircTabPlanIds } from '../../services/pircMasterclassTabs';
 import { getViennaTabPlanIds } from '../../services/viennaMasterclassTabs';
 import { getItalianTabPlanIds } from '../../services/italianMasterclassTabs';
 import { getScotchTabPlanIds } from '../../services/scotchMasterclassTabs';
+import { getKingsGambitTabPlanIds } from '../../services/kingsGambitMasterclassTabs';
 import { getSicilianDragonTabPlanIds } from '../../services/sicilianDragonMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
@@ -1041,6 +1042,7 @@ export function OpeningDetailPage(): JSX.Element {
     getViennaTabPlanIds(opening.id, tabKey) ??
     getItalianTabPlanIds(opening.id, tabKey) ??
     getScotchTabPlanIds(opening.id, tabKey) ??
+    getKingsGambitTabPlanIds(opening.id, tabKey) ??
     getSicilianDragonTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
