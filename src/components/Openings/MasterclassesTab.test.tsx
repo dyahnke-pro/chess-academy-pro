@@ -50,6 +50,31 @@ describe('MasterclassesTab', () => {
     expect(screen.getByText('Vienna Game')).toBeInTheDocument();
   });
 
+  it('splits masterclasses into White and Black opening sections', async () => {
+    mockGetMasterclassOpenings.mockResolvedValue([
+      buildOpeningRecord({ id: 'ruy-lopez', name: 'Ruy Lopez', color: 'white' }),
+      buildOpeningRecord({ id: 'pirc-defence', name: 'Pirc Defence', color: 'black' }),
+    ]);
+    renderTab();
+
+    await waitFor(() => {
+      expect(screen.getByText('White Openings')).toBeInTheDocument();
+    });
+    expect(screen.getByText('Black Openings')).toBeInTheDocument();
+  });
+
+  it('hides a color section when no opening of that color exists', async () => {
+    mockGetMasterclassOpenings.mockResolvedValue([
+      buildOpeningRecord({ id: 'ruy-lopez', name: 'Ruy Lopez', color: 'white' }),
+    ]);
+    renderTab();
+
+    await waitFor(() => {
+      expect(screen.getByText('White Openings')).toBeInTheDocument();
+    });
+    expect(screen.queryByText('Black Openings')).not.toBeInTheDocument();
+  });
+
   it('renders an empty message when the service returns no masterclasses', async () => {
     mockGetMasterclassOpenings.mockResolvedValue([]);
     renderTab();

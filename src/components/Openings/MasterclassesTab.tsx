@@ -42,6 +42,9 @@ export function MasterclassesTab(): JSX.Element {
     );
   }
 
+  const whiteOpenings = openings.filter((o) => o.color === 'white');
+  const blackOpenings = openings.filter((o) => o.color === 'black');
+
   return (
     <div data-testid="tab-masterclasses">
       <div className="mb-4 flex items-center gap-2 text-xs text-theme-text-muted">
@@ -51,21 +54,54 @@ export function MasterclassesTab(): JSX.Element {
           every variation, weapons, plans, and model games.
         </span>
       </div>
-      <div className="space-y-2">
-        {openings.map((opening, i) => (
-          <motion.div
-            key={opening.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.03, duration: 0.25 }}
-          >
-            <OpeningCard
-              opening={opening}
-              onClick={() => void navigate(`/openings/${opening.id}`)}
-            />
-          </motion.div>
-        ))}
-      </div>
+
+      {whiteOpenings.length > 0 && (
+        <>
+          <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-white border border-theme-border" />
+            White Openings
+          </h2>
+          <div className="space-y-2 mb-5">
+            {whiteOpenings.map((opening, i) => (
+              <motion.div
+                key={opening.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.03, duration: 0.25 }}
+              >
+                <OpeningCard
+                  opening={opening}
+                  onClick={() => void navigate(`/openings/${opening.id}`)}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {blackOpenings.length > 0 && (
+        <>
+          <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-neutral-800 border border-theme-border" />
+            Black Openings
+          </h2>
+          <div className="space-y-2">
+            {blackOpenings.map((opening, i) => (
+              <motion.div
+                key={opening.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.03, duration: 0.25 }}
+              >
+                <OpeningCard
+                  opening={opening}
+                  onClick={() => void navigate(`/openings/${opening.id}`)}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
