@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { MasterclassesTab } from './MasterclassesTab';
@@ -33,7 +34,7 @@ describe('MasterclassesTab', () => {
     vi.clearAllMocks();
   });
 
-  it('renders an opening card for each masterclass returned by the service', async () => {
+  it('files masterclasses under White / Black color sub-tabs', async () => {
     mockGetMasterclassOpenings.mockResolvedValue([
       buildOpeningRecord({ id: 'ruy-lopez', name: 'Ruy Lopez', color: 'white' }),
       buildOpeningRecord({ id: 'pirc-defence', name: 'Pirc Defence', color: 'black' }),
@@ -45,9 +46,15 @@ describe('MasterclassesTab', () => {
       expect(screen.getByTestId('tab-masterclasses')).toBeInTheDocument();
     });
 
+    // White sub-tab is the default: White classes show, Black ones don't.
     expect(screen.getByText('Ruy Lopez')).toBeInTheDocument();
-    expect(screen.getByText('Pirc Defence')).toBeInTheDocument();
     expect(screen.getByText('Vienna Game')).toBeInTheDocument();
+    expect(screen.queryByText('Pirc Defence')).not.toBeInTheDocument();
+
+    // Switching to the Black sub-tab reveals the black-side classes.
+    await userEvent.click(screen.getByTestId('masterclass-color-black'));
+    expect(screen.getByText('Pirc Defence')).toBeInTheDocument();
+    expect(screen.queryByText('Ruy Lopez')).not.toBeInTheDocument();
   });
 
   it('renders an empty message when the service returns no masterclasses', async () => {

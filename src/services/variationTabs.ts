@@ -67,6 +67,20 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /evans/i, label: 'Evans Gambit' },
     { test: /moller/i, label: 'Møller' },
   ],
+  // Queen's Gambit (White) — the "Main line" pill = the Classical Orthodox /
+  // Capablanca line (repertoire pgn), so "Classical Mainline" is NOT a tab
+  // (it'd duplicate the pill). "Catalan Transposition" is omitted too — the
+  // Catalan is its own White masterclass (catalan-opening), not a QG tab.
+  // The six below are exactly the variations with authored lessons; order is
+  // reasoned amateur prevalence (flagged for prod explorer verification).
+  'queens-gambit': [
+    { test: /exchange/i, label: 'Exchange' },
+    { test: /accepted/i, label: 'QGA' },
+    { test: /slav defence/i, label: 'Slav' },
+    { test: /semi-slav/i, label: 'Semi-Slav' },
+    { test: /tartakower/i, label: 'Tartakower' },
+    { test: /bf4|anti-qgd/i, label: 'Anti-Bf4' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present

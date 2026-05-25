@@ -1482,7 +1482,7 @@
     "id": "queens-gambit",
     "eco": "D06",
     "name": "Queen's Gambit",
-    "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Nbd7 Nf3 Re8 Qc2 c6 O-O Nf8 Bf4 Bg4",
+    "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 Rxc3",
     "color": "white",
     "style": "Classical, Strategic",
     "overview": "The Queen's Gambit is one of chess's oldest analyzed openings — documented in Spanish manuscripts dating to the 1490s, refined by Wilhelm Steinitz in his championship matches of the 1880s-1890s. Capablanca, Lasker, Alekhine, Botvinnik, Karpov, Kasparov, Kramnik, Anand, and Carlsen — every world champion since Steinitz has played the Queen's Gambit at some point in their career. The Netflix series 'The Queen's Gambit' (2020) brought the opening to a new generation of viewers. It's not really a gambit since you can always win the pawn back; the point is to either gain a central pawn majority or saddle Black with an isolated queen's pawn. This opening has been a cornerstone of championship chess for 140 years.",
