@@ -943,7 +943,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 // ─── Coach Gameplay Section ──────────────────────────────────────────────────
 
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
-  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice', value: boolean): Promise<void> => {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -1001,6 +1001,13 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
         checked={profile.preferences.coachMissedTacticTakeback ?? true}
         onChange={(v) => void handleToggle('coachMissedTacticTakeback', v)}
         testId="coach-missed-tactic-toggle"
+      />
+      <ToggleRow
+        label="Ask Why On My Mistakes"
+        tooltip="When you slip during a live game, the coach pauses to ask what your idea was, then teaches. Turn off to play uninterrupted (your mistakes are still logged to Weaknesses silently)."
+        checked={profile.preferences.coachInGameDiscussion ?? true}
+        onChange={(v) => void handleToggle('coachInGameDiscussion', v)}
+        testId="coach-ingame-discussion-toggle"
       />
       <ToggleRow
         label="Review Voice Narration"

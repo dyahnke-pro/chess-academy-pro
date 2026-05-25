@@ -752,6 +752,11 @@ export interface UserPreferences {
   coachPositionalTips?: boolean;
   coachMissedTacticTakeback?: boolean;
   coachReviewVoice?: boolean;
+  /** In-the-moment "why did you play that?" interjection during live play
+   *  (Play with Coach, opening Play rung, middlegame play). When off, the
+   *  coach stops interrupting your moves to ask — silent weakness capture
+   *  (Practice mode) is unaffected. Defaults to on. */
+  coachInGameDiscussion?: boolean;
   coachVerbosity?: CoachVerbosity;
   /** Live phase-transition narration verbosity. 'off' silences the
    *  coach at phase boundaries; 'brief'/'standard'/'full' set the

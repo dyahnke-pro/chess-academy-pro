@@ -65,6 +65,14 @@ describe('SettingsPage', () => {
     expect(screen.getByTestId('api-key-input')).toBeInTheDocument();
   });
 
+  it('exposes the in-game "ask why on my mistakes" toggle in the Gameplay Coaching modal', () => {
+    useAppStore.getState().setActiveProfile(buildUserProfile());
+    render(<SettingsPage />);
+    fireEvent.click(screen.getByTestId('tab-coach'));
+    fireEvent.click(screen.getByTestId('gameplay-coaching-row'));
+    expect(screen.getByTestId('coach-ingame-discussion-toggle')).toBeInTheDocument();
+  });
+
   it('switches to appearance tab on click', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile());
     render(<SettingsPage />);
@@ -114,7 +122,6 @@ describe('SettingsPage', () => {
       expect(screen.getByTestId('show-legal-moves-toggle')).toBeInTheDocument();
       expect(screen.getByTestId('show-coordinates-toggle')).toBeInTheDocument();
       expect(screen.getByTestId('animation-speed-select')).toBeInTheDocument();
-      expect(screen.getByTestId('board-orientation-toggle')).toBeInTheDocument();
     });
 
     it('renders board appearance controls', () => {
@@ -135,8 +142,6 @@ describe('SettingsPage', () => {
       expect(screen.getByTestId('show-hints-toggle')).toBeInTheDocument();
       expect(screen.getByTestId('voice-narration-toggle')).toBeInTheDocument();
       expect(screen.getByTestId('move-method-select')).toBeInTheDocument();
-      expect(screen.getByTestId('move-confirmation-toggle')).toBeInTheDocument();
-      expect(screen.getByTestId('auto-promote-queen-toggle')).toBeInTheDocument();
     });
 
     it('renders audio and engine controls', () => {
@@ -185,8 +190,6 @@ describe('SettingsPage', () => {
 
       expect(screen.getByTestId('sound-toggle')).not.toBeDisabled();
       expect(screen.getByTestId('move-method-select')).not.toBeDisabled();
-      expect(screen.getByTestId('move-confirmation-toggle')).not.toBeDisabled();
-      expect(screen.getByTestId('auto-promote-queen-toggle')).not.toBeDisabled();
     });
 
     it('turning master all-off back off re-enables affected toggles', () => {

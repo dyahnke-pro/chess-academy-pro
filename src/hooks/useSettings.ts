@@ -28,6 +28,7 @@ export interface EffectiveSettings {
   coachPositionalTips: boolean;
   coachMissedTacticTakeback: boolean;
   coachReviewVoice: boolean;
+  coachInGameDiscussion: boolean;
   coachVerbosity: CoachVerbosity;
   // Neon glow
   glowBrightness: number;
@@ -80,6 +81,7 @@ const DEFAULT_SETTINGS: EffectiveSettings = {
   coachPositionalTips: true,
   coachMissedTacticTakeback: true,
   coachReviewVoice: true,
+  coachInGameDiscussion: true,
   coachVerbosity: 'unlimited',
   glowBrightness: 100,
   boardGlowColor: '0, 229, 255',
@@ -121,6 +123,7 @@ export function useSettings(): UseSettingsReturn {
       coachPositionalTips: raw.coachPositionalTips ?? true,
       coachMissedTacticTakeback: raw.coachMissedTacticTakeback ?? true,
       coachReviewVoice: raw.coachReviewVoice ?? true,
+      coachInGameDiscussion: raw.coachInGameDiscussion ?? true,
       coachVerbosity: raw.coachVerbosity ?? 'unlimited',
       glowBrightness: raw.glowBrightness ?? 100,
       boardGlowColor: raw.boardGlowColor ?? '0, 229, 255',
