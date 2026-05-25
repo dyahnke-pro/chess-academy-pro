@@ -222,13 +222,16 @@ they'll actually meet. Instead:
   what they'll face — not the showcase order.
 - Keep the **"unlock all" escape** for a surprise line tonight.
 
-**Two-tier completion rewards (model game AND traps, at different moments):**
-- **Line ladder complete → unlock the MODEL GAME** — the celebratory "watch it
-  win at the top level" payoff. Reliable: one per variation.
-- **Line/opening MASTERED → unlock its TRAPS/WEAPONS** — the "earned a weapon"
-  power-up. Gate traps behind mastery because they're advanced/situational
-  (don't drill the Qe2 punish before you know the line). Only fires where a
-  REAL trap exists (Caro = the one Qe2 warning; empty > forced).
+**Completion rewards — CORRECTED (David 2026-05-25): model games are NOT a
+gated reward.**
+- **Model games are ALWAYS available** — never gated behind line/ladder
+  completion. They render unconditionally and only self-hide when there's no
+  real student-side win to show. (Supersedes the earlier "line ladder complete
+  → unlock the MODEL GAME" idea.) ✅ Already how the code works
+  (`ModelGamesSection` is ungated).
+- **ONLY the trap/weapon lines are gated** — gems + named traps stay locked
+  until the **Play** rung is complete (`areWeaponsUnlocked` = `play` done or
+  "unlock all"). Don't drill the punish before you know the line. ✅ Done.
 
 ### TODO 3d — "Hidden gem" 💎 reward when a line has no trap (David 2026-05-22)
 
@@ -395,3 +398,53 @@ until a broader fetch or a real game turns up (do NOT force a wrong-line match):
    overview + critical moments, OR gate so only narrated games surface
    (mirrors gems' `isSurfaceableGem`). (This was the in-progress filter/gate
    work — paused 2026-05-24.)
+
+---
+
+## ⭐ REMAINING TRACKS (David 2026-05-25, after the cohesion-loop work shipped)
+
+The app-cohesion training loop is done + merged. David's read on what's left:
+**(A) finish the opening masterclasses, and (B) the pro-repertoire model-game gap.**
+
+### A. Finish the opening masterclasses
+Build the remaining masterclasses to the LOCKED keystone standard
+(`docs/opening-masterclass-playbook.md` §0.5 — author the data, the wiring
+lights up). Each = main line + variations (all validated lines) + per-variation
+model games (student-side WINS) + gems/traps + plans + quizzes + narration
+(two registers, sourced). The bigger track.
+
+### B. Pro-repertoire completeness — WALKED 2026-05-25
+Walked all **14 pros / 82 opening entries**. **Text content is 100% complete**
+(every entry has overview + 4 key ideas + variations with explanations). The
+**only gap is model games: 46/82 have one, 36 are missing.** (Traps are sparse
+by design — empty > forced — NOT a gap.)
+
+**The 36 missing a model game, by pro:**
+- **Akeem** — Italian, Scotch, King's Gambit, Caro-Kann (all 4)
+- **Hikaru** — KIA, Scotch, London, Najdorf, KID, Benko, English (7 of 8; only Nimzo has one)
+- **Gukesh** — Italian, Catalan, Najdorf (all 3)
+- **Eric Rosen** — London, Stafford, Englund (all 3)
+- **Samay** — Italian, Najdorf, Nimzo (all 3)
+- **Naroditsky** — Scotch, Vienna, Semi-Slav
+- **Carlsen** — English, Sveshnikov, QP London
+- **Anna Cramling** — London, The Cow
+- **Firouzja** — Italian, Grünfeld
+- **Dubov** — Modern Benoni, Dutch
+- **GothamChess** — Italian, Rossolimo
+- **Caruana** — Petroff
+- **Niemann** — Anti-Marshall
+- **Praggnanandhaa** — ✅ none (fully complete)
+
+**Fill path (sourcing reality, per the section above):**
+- The 10 cached pros: fuzzy-match a real pro-WIN in the correct line out of
+  `docs/audit-runs/2026-05-19-pro-games-gen/raw-fetched.json`, then author
+  overview + critical moments. A pro with no cached win for an opening →
+  the section correctly **self-hides** (empty > wrong-line); not all 36 are
+  fillable.
+- The **streamer pros (Akeem, Samay, Gukesh)** likely aren't in the 10-pro
+  cache → need a fresh `scripts/fetch-pro-games-local.mjs` fetch, or they stay
+  model-game-less (section just doesn't render).
+- Never fabricate a PGN; templated overviews are filtered by `isNarratedModelGame`.
+
+Audit walker: `/tmp/pro-audit.cjs` (ad-hoc; re-derive by walking
+`pro-repertoires.json` openings + cross-referencing `model-games.json`).
