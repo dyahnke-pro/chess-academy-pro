@@ -65,7 +65,7 @@
   },
   "french-defence": {
     "variations": 10,
-    "middlegamePlans": 0,
+    "middlegamePlans": 10,
     "endgamePlans": 0,
     "modelGames": 0,
     "weapons": 0,
