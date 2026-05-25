@@ -200,6 +200,13 @@ const SOUNDNESS_BASELINE = new Set<string>([
   // attack — the whole point of the exchange sacrifice. Master-played (6a green);
   // engine reads it as −3.7 for Black, i.e. White is winning, which IS the lesson.
   'italian-game::Italian: Modern Moller Attack::20:Bxa1',
+  // Allgaier Gambit (roadmap): the Allgaier is OBJECTIVELY UNSOUND by design —
+  // a romantic piece sacrifice taught honestly as a practical surprise weapon.
+  // The lesson's own verdict beat states "best defence leaves Black on top", so
+  // O-O here (White already down the sacked piece) playing on for the attack is
+  // the lesson's explicit point, not a hidden blunder. The engine is correct that
+  // Black is winning — that IS what the lesson teaches.
+  'kings-gambit::Allgaier Gambit::17:O-O',
 ]);
 
 // ── Hole 6b — Stockfish SOUNDNESS (all lessons, incl. traps) ────────────
