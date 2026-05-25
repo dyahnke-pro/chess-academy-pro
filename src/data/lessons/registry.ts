@@ -29,6 +29,8 @@ import { CARO_TRAP_LESSONS } from './caroKannTrapLessons';
 import { ITALIAN_GAME_LESSON } from './italianGame';
 import { ITALIAN_GAME_VARIATION_LESSONS } from './italianGameVariations';
 import { ITALIAN_GAME_TRAP_LESSONS } from './italianGameTrapLessons';
+import { SCOTCH_GAME_LESSON } from './scotchGame';
+import { SCOTCH_GAME_VARIATION_LESSONS } from './scotchGameVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -54,6 +56,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: VIENNA_GAME_LESSON, variations: VIENNA_VARIATION_LESSONS, traps: VIENNA_TRAP_LESSONS },
   { main: CARO_KANN_LESSON, variations: CARO_VARIATION_LESSONS, traps: CARO_TRAP_LESSONS },
   { main: ITALIAN_GAME_LESSON, variations: ITALIAN_GAME_VARIATION_LESSONS, traps: ITALIAN_GAME_TRAP_LESSONS },
+  { main: SCOTCH_GAME_LESSON, variations: SCOTCH_GAME_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

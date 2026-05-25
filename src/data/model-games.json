@@ -443,7 +443,8 @@
       }
     ],
     "middlegameTheme": "Queenside pressure with central space",
-    "lessonSummary": "The Scotch Game allows White to open the center early and dictate the pawn structure. Kasparov demonstrated how to convert a space advantage into piece activity, using opposite-side castling to generate a powerful initiative. This game illustrates the importance of seizing the center and keeping the opponent reactive."
+    "lessonSummary": "The Scotch Game allows White to open the center early and dictate the pawn structure. Kasparov demonstrated how to convert a space advantage into piece activity, using opposite-side castling to generate a powerful initiative. This game illustrates the importance of seizing the center and keeping the opponent reactive.",
+    "studentSide": "white"
   },
   {
     "id": "mg-rubinstein-four-knights-game",

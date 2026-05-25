@@ -46,6 +46,15 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /fantasy/i, label: 'Fantasy' },
     { test: /tartakower|breyer/i, label: 'Tartakower' },
   ],
+  // Scotch Game — hand-picked tabs, frequency-ordered (repertoire weights).
+  // Main-line pill = the Classical 4…Bc5 Be3 Qf6 line (the repertoire pgn), so
+  // the "Classical" variation is omitted as a tab (it'd duplicate the pill).
+  'scotch-game': [
+    { test: /mieses/i, label: 'Mieses' },
+    { test: /scotch gambit/i, label: 'Scotch Gambit' },
+    { test: /four knights/i, label: 'Four Knights' },
+    { test: /nb3|kasparov/i, label: 'Kasparov Nb3' },
+  ],
   // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
   // (the explorer freq query was unavailable when this was built; ordering is
   // flagged for prod verification). The Giuoco Piano main line is the "Main

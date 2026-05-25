@@ -2296,43 +2296,6 @@
     ]
   },
   {
-    "id": "mp-scotch-center",
-    "openingId": "scotch-game",
-    "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
-    "title": "Open Center Activity",
-    "overview": "This is the Open Center Activity plan in the Scotch Game. White opens the center immediately with d2-d4, creating an open position that favors rapid piece development. After exd4 Nxd4, White's centralized knight dominates the board and the open position rewards the side with better-developed pieces — which is White.",
-    "pawnBreaks": [
-      {
-        "move": "d2-d4",
-        "explanation": "The early d4 push is the defining move of the Scotch Game — it opens the center immediately on move 3 before Black can build a solid defensive setup. After exd4 Nxd4, White gets a centralized knight that controls c6, e6, f5, and b5, and the open position allows rapid deployment of all White's pieces.",
-        "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nd4-central outpost",
-        "explanation": "The Nd4 is the star piece of the Scotch Game. It controls c6, e6, f5, and b5 from the center and can jump to any of these squares to create problems. Nxc6 damages Black's pawn structure, Nf5 attacks g7 near the king, and Nb5 threatens Nc7 forking the rook and king."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bf1-c4 or Bf1-b5",
-        "explanation": "White develops the bishop rapidly to an active diagonal. On c4, it pressures f7 (the weakest square near Black's king) and supports a potential d5 advance. On b5, it pins Black's Nc6 to the king, creating immediate tactical pressure and threatening Bxc6 to damage Black's pawn structure."
-      }
-    ],
-    "strategicThemes": [
-      "The Scotch Game prioritizes rapid piece development over pawn structure. By opening the center on move 3, White ensures that the superior development will translate into active piece play and tactical opportunities before Black can consolidate.",
-      "With the center open, piece activity matters more than pawn structure. White's pieces develop to active squares naturally — Nd4, Bc4, O-O, Re1 — and the lack of central pawns means pieces have maximum mobility and attacking potential.",
-      "The Nd4 is the dominant piece in the Scotch opening. From d4, it controls four key squares (c6, e6, f5, b5) and can jump to create immediate tactical threats. Nxc6 damages pawns, Nf5 attacks the king, and Nb5 threatens Nc7.",
-      "White's development lead creates a natural initiative that must be exploited actively. The Scotch rewards aggressive play — if White doesn't press the advantage, Black will catch up in development and the open position becomes equal."
-    ],
-    "endgameTransitions": [
-      "In simplified positions, White's central pawn majority (e4 vs Black's queenside pawns) provides a lasting structural advantage. The e-pawn can advance to create a passed pawn in the endgame.",
-      "White's superior piece activity from the opening carries into the endgame. Actively placed minor pieces and rooks on open files convert the initiative into concrete advantages — winning pawns or creating a passed pawn."
-    ],
-    "playableLines": []
-  },
-  {
     "id": "mp-jobava-e4",
     "openingId": "pro-naroditsky-jobava-london",
     "criticalPositionFen": "r1bq1rk1/ppp1bppp/n3pn2/1N1p4/3P1B2/3BPN2/PPP2PPP/R2QK2R b KQ - 4 7",
@@ -17134,6 +17097,781 @@
             {
               "square": "f7",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-scotchgame-main",
+    "openingId": "scotch-game",
+    "title": "Classical Scotch: Trade into the Better Structure",
+    "criticalPositionFen": "r1b2rk1/ppp1nppp/2np1q2/2b5/2BNP3/2P1B3/PP3PPP/RN1Q1RK1 w - - 0 9",
+    "overview": "The Classical Scotch middlegame: White trades the centralised knight and the dark-squared bishops to saddle Black with doubled c-pawns, then claims kingside space with f4 and pins the c6-knight with Bb5. A clean, Capablanca-style plan — convert the healthier structure.",
+    "pawnBreaks": [
+      {
+        "move": "f4-f5",
+        "explanation": "After f4, the f5 push cramps Black and opens an attacking front while Black untangles the doubled pawns.",
+        "fen": "r1b2rk1/ppp1nppp/2np1q2/2b5/2BNP3/2P1B3/PP3PPP/RN1Q1RK1 w - - 0 9"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc4-b5",
+        "explanation": "The light-squared bishop swings to b5 to pin and pressure the c6-knight holding Black together."
+      }
+    ],
+    "strategicThemes": [
+      "Trade into Black's doubled c-pawns — the recurring Scotch dividend.",
+      "f4-f5 grabs kingside space and an attacking front.",
+      "Pile on the weak c6-knight and the split queenside pawns."
+    ],
+    "endgameTransitions": [
+      "The healthier majority and safer king carry into a pleasant endgame for White."
+    ],
+    "playableLines": [
+      {
+        "title": "Classical Scotch: Trade into the Better Structure",
+        "fen": "r1b2rk1/ppp1nppp/2np1q2/2b5/2BNP3/2P1B3/PP3PPP/RN1Q1RK1 w - - 0 9",
+        "moves": [
+          "Nxc6",
+          "Nxc6",
+          "Bxc5",
+          "dxc5",
+          "f4",
+          "Be6",
+          "Bb5",
+          "Rad8"
+        ],
+        "annotations": [
+          "Nxc6 — trade the centralised knight to damage Black's pawns.",
+          "…Nxc6 — Black recaptures on c6.",
+          "Bxc5 — remove the dark-squared bishop, the bishop pair gone.",
+          "…dxc5 — and Black is left with doubled c-pawns.",
+          "f4 — claim kingside space and prepare the f5 cramp.",
+          "…Be6 — Black develops the last piece, offering a trade.",
+          "Bb5 — pin and pressure the c6-knight that holds Black together.",
+          "…Rad8 — Black centralises; White presses the better structure."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b5",
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-scotchgame-mieses",
+    "openingId": "scotch-game",
+    "title": "Mieses: Space, the c4 Clamp, and the Bishop Pair Fight",
+    "criticalPositionFen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP1QPPP/RNB1KB1R b KQkq - 2 7",
+    "overview": "The Mieses middlegame: White rides the e5-spearhead and the c4-clamp to bind Black's wrecked queenside pawns, while Black counts on the bishop pair and the …Ba6 pin for activity. A genuinely double-edged modern struggle (Kasparov's choice).",
+    "pawnBreaks": [
+      {
+        "move": "c4 clamp",
+        "explanation": "c4 kicks the d5-knight and locks down the queenside light squares.",
+        "fen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP1QPPP/RNB1KB1R b KQkq - 2 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc1-a3",
+        "explanation": "The dark-squared bishop fianchettoes via b2 to a3, spearing the queen on e7."
+      }
+    ],
+    "strategicThemes": [
+      "The e5-pawn cramps Black; the doubled c-pawns are a long-term target.",
+      "c4 + b3 build a queenside clamp.",
+      "Ba3 hits the e7-queen and the dark squares."
+    ],
+    "endgameTransitions": [
+      "If Black's activity fades, the structural edge tells in the endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Mieses: Space, the c4 Clamp, and the Bishop Pair Fight",
+        "fen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP1QPPP/RNB1KB1R b KQkq - 2 7",
+        "moves": [
+          "Nd5",
+          "c4",
+          "Ba6",
+          "b3",
+          "g6",
+          "Ba3",
+          "d6"
+        ],
+        "annotations": [
+          "…Nd5 — the knight hops to the strong central d5 square.",
+          "c4 — kick the d5-knight and clamp the queenside.",
+          "…Ba6 — the thematic pin, pressuring the c4-pawn.",
+          "b3 — calmly prop c4 and prepare Ba3.",
+          "…g6 — Black prepares to fianchetto and blunt the light squares.",
+          "Ba3 — spear the queen on e7 down the diagonal.",
+          "…d6 — Black strikes the e5-spearhead to free the game."
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "a6",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "a3",
+              "to": "e7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-scotchgame-gambit",
+    "openingId": "scotch-game",
+    "title": "Scotch Gambit: Develop with Threats, Regain the Pawn",
+    "criticalPositionFen": "r1bqkb1r/ppp2ppp/2n5/1B1pP3/3Nn3/8/PPP2PPP/RNBQK2R b KQkq - 0 7",
+    "overview": "The Scotch Gambit's modern verdict: the early Bc4 and e5 win time, and after Bb5 + Nxd4 White simply regains the gambit pawn with a grip on the centre and Black's doubled c-pawns. A clever move-order into a pressable position.",
+    "pawnBreaks": [
+      {
+        "move": "e5",
+        "explanation": "The e5 push gains space and forces Black's …d5 break, opening the position for White's lead in development.",
+        "fen": "r1bqkb1r/ppp2ppp/2n5/1B1pP3/3Nn3/8/PPP2PPP/RNBQK2R b KQkq - 0 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3xd4",
+        "explanation": "The knight reaches the central d4 square, regaining the gambit pawn."
+      }
+    ],
+    "strategicThemes": [
+      "A lead in development is the compensation for the pawn.",
+      "Bb5 pins the c6-knight; Nxd4 recovers material.",
+      "Black's doubled c-pawns give White the cleaner structure."
+    ],
+    "endgameTransitions": [
+      "Level material but the better structure presses in the endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Scotch Gambit: Develop with Threats, Regain the Pawn",
+        "fen": "r1bqkb1r/ppp2ppp/2n5/1B1pP3/3Nn3/8/PPP2PPP/RNBQK2R b KQkq - 0 7",
+        "moves": [
+          "Bd7",
+          "Bxc6",
+          "bxc6",
+          "O-O",
+          "Bc5",
+          "Be3",
+          "Bxd4"
+        ],
+        "annotations": [
+          "…Bd7 — Black unpins the c6-knight.",
+          "Bxc6 — trade on c6 to inflict the doubled pawns.",
+          "…bxc6 — Black recaptures, structure compromised.",
+          "O-O — bring the king to safety, fully coordinated.",
+          "…Bc5 — Black develops with a hit on the d4-knight.",
+          "Be3 — defend the knight and offer a trade.",
+          "…Bxd4 — Black trades; White owns the better structure."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d7",
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c5",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-scotchgame-fourknights",
+    "openingId": "scotch-game",
+    "title": "Four Knights: Press the Hanging d5-Pawn",
+    "criticalPositionFen": "r1bq1rk1/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1RK1 w - - 2 10",
+    "overview": "The Scotch Four Knights middlegame: a near-symmetrical structure where White leans on Black's split queenside pawns and the d5-point with Bg5 and a knight rerouted via e2 to g3 toward f5. Quiet, classical, structure-driven chess.",
+    "pawnBreaks": [
+      {
+        "move": "minority pressure",
+        "explanation": "White targets the d5-pawn and the doubled c-pawns rather than pushing a break of his own.",
+        "fen": "r1bq1rk1/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1RK1 w - - 2 10"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Ne2-g3",
+        "explanation": "The knight reroutes via e2 to g3, heading for the f5 outpost."
+      }
+    ],
+    "strategicThemes": [
+      "Pin and pile on the d5-pawn with Bg5.",
+      "Reroute the knight to g3 and f5.",
+      "The split queenside pawns are the long-term target."
+    ],
+    "endgameTransitions": [
+      "The structural pressure on d5 and the c-pawns favours White in a long game."
+    ],
+    "playableLines": [
+      {
+        "title": "Four Knights: Press the Hanging d5-Pawn",
+        "fen": "r1bq1rk1/p1p2ppp/5n2/3p4/1b6/2NB4/PPP2PPP/R1BQ1RK1 w - - 2 10",
+        "moves": [
+          "Bg5",
+          "c6",
+          "Ne2",
+          "Bd6",
+          "Ng3",
+          "h6"
+        ],
+        "annotations": [
+          "Bg5 — pin the f6-knight and lean on the d5-pawn.",
+          "…c6 — Black braces the d5-pawn.",
+          "Ne2 — reroute the knight toward greener squares.",
+          "…Bd6 — Black's bishop eyes the kingside.",
+          "Ng3 — the knight lands, pressuring f5 and the kingside.",
+          "…h6 — Black makes luft; White probes the d5 weakness."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g3",
+              "to": "f5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-scotchgame-kasparov",
+    "openingId": "scotch-game",
+    "title": "Kasparov Nb3: Opposite Castling, the Pawn-Storm Race",
+    "criticalPositionFen": "r1bqk2r/ppp2ppp/1bnp1n2/8/4P3/1NN1B3/PPP1QPPP/R3KB1R b KQkq - 1 8",
+    "overview": "Kasparov's Nb3 Scotch: White trades the dark-squared bishops, castles long, and races his kingside pawns at Black's king while Black storms the queenside. A sharp, opposite-side-castling middlegame from a 'quiet' opening.",
+    "pawnBreaks": [
+      {
+        "move": "g4-g5",
+        "explanation": "After f3 anchors e4, White rolls the g-pawn to pry open Black's kingside.",
+        "fen": "r1bqk2r/ppp2ppp/1bnp1n2/8/4P3/1NN1B3/PPP1QPPP/R3KB1R b KQkq - 1 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qe2-e3",
+        "explanation": "The queen recaptures on e3 after the bishop trade and supports the long castle."
+      }
+    ],
+    "strategicThemes": [
+      "Trade the dark-squared bishops, then castle queenside.",
+      "Race the kingside pawns (f3, g4-g5) at Black's king.",
+      "The half-open d-file pressures the d6-pawn."
+    ],
+    "endgameTransitions": [
+      "Sharp middlegame; the attack usually decides before an endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Kasparov Nb3: Opposite Castling, the Pawn-Storm Race",
+        "fen": "r1bqk2r/ppp2ppp/1bnp1n2/8/4P3/1NN1B3/PPP1QPPP/R3KB1R b KQkq - 1 8",
+        "moves": [
+          "Bxe3",
+          "Qxe3",
+          "O-O",
+          "O-O-O",
+          "Be6",
+          "f3"
+        ],
+        "annotations": [
+          "…Bxe3 — Black trades the dark-squared bishops.",
+          "Qxe3 — the queen recaptures, eyeing the kingside.",
+          "…O-O — Black castles kingside, into the coming storm.",
+          "O-O-O — White castles long; the d-file points at d6.",
+          "…Be6 — Black develops and challenges the c5 outpost.",
+          "f3 — anchor e4 and prepare the g4-g5 pawn storm."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]

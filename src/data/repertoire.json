@@ -271,14 +271,26 @@
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Ba6 b3 g6 Ba3 d6",
         "explanation": "The Mieses is the sharpest response to the Scotch. After 5.Nxc6 bxc6 6.e5, Black's queen goes to e7 and the knight retreats to d5. White gains space with c4 and the Ba3 diagonal is devastating, targeting d6 and the dark squares around Black's king. The f4 push reinforces the e5 wedge. Black has forfeited castling rights in many lines and must rely on the fianchettoed bishop for king safety.",
         "frequency": 0.25,
-        "deviationMove": "Nf6"
+        "deviationMove": "Nf6",
+        "keyIdeas": [
+          "Trade on c6 and push e5 to wreck Black's pawns and grab space.",
+          "Clamp the queenside with c4 and b3.",
+          "Fianchetto the dark-squared bishop to a3, hitting the e7-queen.",
+          "Nurse the e5-pawn; the doubled c-pawns are the long-term target."
+        ]
       },
       {
         "name": "Scotch Gambit (4.Bc4)",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 Bxd4",
         "explanation": "By playing 4.Bc4 instead of 4.Nxd4, White enters the Scotch Gambit, sacrificing a tempo on the d-pawn for rapid piece development. After e5 and Bb5, the position transposes into sharp Italian-like territory where White's lead in development compensates for the pawn deficit. The key plan is Be3, exchanging dark-squared bishops to weaken Black's kingside, then building pressure with Nd2, Qd2, and Rfe1 targeting the e-file. Black must play precisely to avoid falling into a passive position.",
         "frequency": 0.15,
-        "deviationMove": "Bc4"
+        "deviationMove": "Bc4",
+        "keyIdeas": [
+          "Gambit the d4-pawn for a lead in development.",
+          "Push e5 to gain space and force Black's ...d5 break.",
+          "Bb5 pins the c6-knight; Nxd4 regains the pawn.",
+          "Trade on c6 for the doubled pawns and the cleaner structure."
+        ]
       },
       {
         "name": "Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)",
@@ -305,14 +317,26 @@
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Ne2 Bd6 Ng3 h6",
         "explanation": "A major transposition into Scotch Four Knights territory. Black plays solidly with Bb4, d5, and c6 to build a compact pawn structure. White develops with Bg5 and reroutes the knight via e2-g3 to target f5. The Re1 rook lift supports the central tension. After the rook exchange, Black's queen becomes active on b6, targeting b2 and d4. This is one of the most theoretically important lines because Black can equalize with accurate play, so White must understand the nuances of the Bg5 pin and the Ng3 maneuver to maintain any edge.",
         "frequency": 0.12,
-        "deviationMove": "Nf6"
+        "deviationMove": "Nf6",
+        "keyIdeas": [
+          "Play Nc3 for a solid, classical, structure-driven game.",
+          "Pin the f6-knight with Bg5 and lean on the d5-pawn.",
+          "Reroute the knight Ne2-g3 toward the f5 outpost.",
+          "Target Black's split queenside pawns over the long game."
+        ]
       },
       {
         "name": "Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 Nc3 Nf6 Qe2 d6 Be3 Bxe3 Qxe3 O-O O-O-O Be6 f3",
         "explanation": "Kasparov's favorite weapon at the highest level. Instead of Be3, White retreats the knight to b3 to avoid the Bc5 pin entirely. After Nc3, Qe2, Be3, and O-O-O, White launches a kingside pawn storm while Black counterattacks on the queenside. The exchange of dark-squared bishops with Bxe3 Qxe3 gives White a centralized queen. The plan with f3 and Kb1 prepares a safe king while pushing forward. This line led to several of Kasparov's most famous victories against Karpov and Short.",
         "frequency": 0.1,
-        "deviationMove": "Bc5"
+        "deviationMove": "Bc5",
+        "keyIdeas": [
+          "Retreat Nb3 to dodge the ...Bc5 pin and keep all the pieces.",
+          "Trade the dark-squared bishops with Be3, then castle long.",
+          "Race the kingside pawns f3 and g4-g5 at Black's king.",
+          "Use the half-open d-file to pressure the d6-pawn."
+        ]
       }
     ],
     "trapLines": [],
