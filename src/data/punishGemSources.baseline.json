@@ -1,30 +1,5 @@
 {
   "_doc": "Narrated masterclass gems that do NOT yet carry an independent-verification source (sources[] of concept:/book:/reputable-URL refs). David 2026-05-25: narration IDEAS must be verified against books/online, not training recall, and the source recorded. Gate: punishGems.test.ts (isResolvableSource). Baseline only SHRINKS as sources are added. Regenerate after authoring.",
-  "count": 24,
-  "keys": [
-    "alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_c5_Nd5_d4_d6_cxd6_exd6:f4",
-    "alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_d4_d6:Nc3",
-    "alekhine-defence:e4_Nf6_e5_Nd5_d4_d6_c4_Nb6:Nc3",
-    "alekhine-defence:e4_Nf6_e5_Nd5_d4_d6_c4_Nb6_f4_dxe5_fxe5_Nc6_Be3_Bf5:Bd3",
-    "benko-gambit:d4_Nf6_c4_c5_d5_b5_Nf3_bxc4:Qc2",
-    "benko-gambit:d4_Nf6_c4_c5_d5_b5_cxb5_a6_Nc3_axb5_e4_b4:e5",
-    "benko-gambit:d4_Nf6_c4_c5_d5_b5_cxb5_a6_Nc3_axb5_e4_b4_Nb5_d6_Bc4_g6:Bf4",
-    "nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Bg5_h6_Bh4_c5_d5_d6:e4",
-    "nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Nf3_c5_g3_cxd4_Nxd4_O-O_Bg2_d5_cxd5_Nxd5:O-O",
-    "nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Qc2_O-O_Nf3_d5_Bg5_h6:h4",
-    "nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Qc2_O-O_a3_Bxc3+_Qxc3_d5:c5",
-    "nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_e3_O-O_Bd3_d5:c5",
-    "nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_e3_O-O_Bd3_d5_Nf3_c5_O-O_dxc4_Bxc4_Nbd7:d5",
-    "pirc-defence:e4_d6_d4_Nf6_Nc3_g6_Bg5_Bg7_Qd2_O-O_O-O-O_c6_f4_b5:e5",
-    "pirc-defence:e4_d6_d4_Nf6_Nc3_g6_f4_Bg7_Nf3_O-O_Bd3_Na6_O-O_c5:Be3",
-    "pirc-defence:e4_d6_d4_Nf6_Nc3_g6_f4_Bg7_Nf3_O-O_e5_Nfd7_Be2_c5:O-O",
-    "pirc-defence:e4_d6_d4_Nf6_Nc3_g6_g3_Bg7_Bg2_O-O_Nge2_e5_O-O_Nc6:Be3",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Nf6_e5:Qe7",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3:Nf6",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3:Bxd4",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Nb3:Bxf2+",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nc3:Nxd4",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nxd4_Qxd4:Nf6",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3_Bb4_Bc4_d6_O-O:Be6"
-  ]
+  "count": 0,
+  "keys": []
 }

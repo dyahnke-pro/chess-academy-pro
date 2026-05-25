@@ -788,6 +788,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Pirc Austrian — White's Be3?? walks into Ng4 with tempo (student = Black).
   // playLine: e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 Be3 Ng4 Bd2 cxd4 Nb5 Ne3 Bxe3 dxe3 Nc3
   'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_f4_Bg7_Nf3_O-O_Bd3_Na6_O-O_c5:Be3': {
+    sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Be3? White develops the bishop into a tempo-loss — the knight jumps to g4 and hits it at once.',
@@ -813,6 +814,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Pirc 150-style — White's e5?? is too slow in the opposite-side race; b4!
   // (student = Black). playLine: e4 d6 d4 Nf6 Nc3 g6 Bg5 Bg7 Qd2 O-O O-O-O c6 f4 b5 e5 b4 exf6 exf6 Bh4 bxc3 Qxc3 Nd7 Qxc6
   'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_Bg5_Bg7_Qd2_O-O_O-O-O_c6_f4_b5:e5': {
+    sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'e5? White lunges in the centre, but in this opposite-side race it’s too slow — your attack lands first.',
@@ -838,6 +840,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Pirc g3 system — White's Be3?? again invites Ng4 (student = Black).
   // playLine: e4 d6 d4 Nf6 Nc3 g6 g3 Bg7 Bg2 O-O Nge2 e5 O-O Nc6 Be3 Ng4 Qd2 Nxe3 fxe3 Bh6 d5 Nb8 h3
   'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_g3_Bg7_Bg2_O-O_Nge2_e5_O-O_Nc6:Be3': {
+    sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'Be3? Again the bishop walks into Ng4 — and here it costs White even more tempo.',
@@ -860,6 +863,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Pirc Austrian — White's O-O?? castles into the tension; cxd4 strikes
   // (student = Black). playLine: e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O e5 Nfd7 Be2 c5 O-O cxd4 Qxd4 Nc6 Qf2 dxe5 Rb1 Qa5 h3
   'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_f4_Bg7_Nf3_O-O_e5_Nfd7_Be2_c5:O-O': {
+    sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'O-O? White castles into the central tension instead of resolving it. Strike now.',
@@ -1363,30 +1367,37 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   },
   // ── Scotch Game (mined on CI from the amateur explorer + Stockfish) ──────
   "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nxd4_Qxd4:Nf6": {
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
     watch: ["", "", "", "", "", "", "", "", "", "Nf6? Developing straight into the queen's fire — the e5 push gains a tempo and a big central clamp.", "e5! The pawn jumps forward with tempo, kicking the knight away and seizing space while the queen sits proudly on d4.", "", "Qe3 keeps the extra space and eyes the kingside; Black is cramped and a step behind.", "", "Qf3 holds the e5-pawn and the central grip — White is comfortably better.", "", "Nc3 finishes development with a clear space-and-structure edge.", ""],
     learn: ["", "", "", "", "", "", "", "", "", "", "e5 — clamp and kick the knight.", "", "Qe3 — keep the space.", "", "Qf3 — hold e5.", "", "Nc3 — develop, you're better.", ""],
   },
   "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3:Nf6": {
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
     watch: ["", "", "", "", "", "", "", "", "", "Nf6?? A blunder — it ignores the c5-bishop, which the bishop on e3 is already attacking.", "Nxc6 — first remove the defender, trading the knights.", "", "Bxc5 wins the bishop clean; Black has nothing to recapture with. White is simply up a piece.", "", "Be3 tucks the bishop back — the extra piece will decide.", "", "Nc3 develops with a winning material edge in hand.", ""],
     learn: ["", "", "", "", "", "", "", "", "", "", "Nxc6 — remove the c5 defender.", "", "Bxc5 — win the bishop.", "", "Be3 — retreat, up a piece.", "", "Nc3 — develop and convert.", ""],
   },
   "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3:Bxd4": {
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
     watch: ["", "", "", "", "", "", "", "", "", "", "", "Bxd4? Trading the good bishop for the knight only helps White — it hands over the bishop pair and a mighty pawn centre.", "cxd4 — recapturing toward the centre. White now owns the bishop pair and a broad, mobile centre.", "", "Nc3 hits the d5-pawn and develops with tempo.", "", "Nb5! The knight leaps in, eyeing c7 and d6 against a king that can no longer castle.", "", "Rc1 piles onto the half-open c-file; White's pieces swarm.", ""],
     learn: ["", "", "", "", "", "", "", "", "", "", "", "", "cxd4 — take the centre, bishop pair.", "", "Nc3 — hit d5.", "", "Nb5! — leap at c7 and d6.", "", "Rc1 — seize the c-file.", ""],
   },
   "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Nf6_e5:Qe7": {
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
     watch: ["", "", "", "", "", "", "", "", "", "Qe7? Pinning the e5-pawn looks clever, but it parks the queen on the e-file where White's rook is coming with deadly effect.", "O-O — and the rook is ready for e1. The e5-pawn is poisoned.", "", "Nxe5 — give the knight back to spring the trap.", "", "Re1! The rook skewers the queen to the king down the e-file; Black must shed material to survive.", "", "f4 hits the queen again and keeps the initiative rolling — White is clearly on top.", ""],
     learn: ["", "", "", "", "", "", "", "", "", "", "O-O — ready the rook, poison e5.", "", "Nxe5 — spring the trap.", "", "Re1! — skewer the queen.", "", "f4 — hit the queen, keep pressing.", ""],
   },
   "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nc3:Nxd4": {
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
     watch: ["", "", "", "", "", "", "", "", "", "Nxd4? The most popular move here, and an inaccuracy — trading on d4 only invites White's queen to a dominating central post.", "Qxd4 — the queen lands in the centre with a tempo-gaining grip, and Black has no way to challenge her.", "", "f3 anchors e4 and prepares to castle long and storm the kingside.", "", "Be3 develops and eyes the queenside dark squares.", "", "O-O-O — opposite-side castling, and White's attack is the faster one.", ""],
     learn: ["", "", "", "", "", "", "", "", "", "", "Qxd4 — centralise the queen.", "", "f3 — anchor e4, prep long castle.", "", "Be3 — develop, eye the queenside.", "", "O-O-O — castle long, attack first.", ""],
   },
   "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Nb3:Bxf2+": {
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
     watch: ["", "", "", "", "", "", "", "", "", "Bxf2+? A tempting sacrifice, but it is simply unsound here — there's no follow-up.", "Kxf2 — the king grabs the bishop. White is up a clean piece for a single pawn, and the king is perfectly safe.", "", "Nc3 develops; the king walks to safety and the extra piece wins.", "", "Be2 prepares to connect the rooks and tuck the king away.", "", "Rf1 brings the rook back into play — White is winning comfortably.", ""],
     learn: ["", "", "", "", "", "", "", "", "", "", "Kxf2 — take it, up a piece.", "", "Nc3 — develop, convert.", "", "Be2 — reroute the king to safety.", "", "Rf1 — rook back, winning.", ""],
   },
   "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3_Bb4_Bc4_d6_O-O:Be6": {
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
     watch: ["", "", "", "", "", "", "", "", "", "", "", "", "", "Be6? It walks into a thunderbolt — the c4-bishop and the c3-knight are perfectly placed to pounce.", "Nd5! The knight forks the b4-bishop and threatens c7; suddenly every Black piece is loose.", "", "Qb3 doubles on b7 and f7 at once, hitting two targets the knight uncovered.", "", "Qxb7 grabs the pawn and attacks the a8-rook.", "", "Nxc7+! The fork — the king must move and the rook in the corner falls. The Göring's development lead crashes through.", ""],
     learn: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "Nd5! — fork the bishop, hit c7.", "", "Qb3 — double on b7 and f7.", "", "Qxb7 — grab the pawn, hit the rook.", "", "Nxc7+ — fork; win the rook.", ""],
   },
@@ -1768,36 +1779,43 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxd4 — grab the loose pawn.', '', 'Qxd4 — recapture, a pawn up.', '', '', '', '', ''],
   },
   'alekhine-defence:e4_Nf6_e5_Nd5_d4_d6_c4_Nb6:Nc3': {
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
     // e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 Nc3 dxe5 dxe5 Qxd1+ Nxd1 Nc6 f4 Bf5 Nf3
     watch: ['', '', '', '', '', '', '', '', 'Nc3? This fails to shore up the e5-spearhead. Black undermines at once.', 'dxe5! Striking the spearhead. After the trades the e5-pawn is left weak and falls.', '', 'Qxd1+ trades queens — with no attack to fear, Black simply hunts the weak e5-pawn.', '', 'Nc6 piles onto e5; the pawn cannot be held, and Black wins it cleanly.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', 'dxe5 — undermine the spearhead.', '', 'Qxd1+ — trade queens, target e5.', '', 'Nc6 — win the weak e5-pawn.', '', '', ''],
   },
   'alekhine-defence:e4_Nf6_e5_Nd5_d4_d6_c4_Nb6_f4_dxe5_fxe5_Nc6_Be3_Bf5:Bd3': {
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
     // e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Bd3 Bxd3 Qxd3 Nxe5 Qe2 Nexc4 Bf2 e6 Nc3
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bd3?? A blunder. It offers a trade but fatally loosens the defence of the centre — and Black wins material by force.', 'Bxd3 — take the bishop. After Qxd3 the e5-pawn is suddenly undefended.', '', 'Nxe5! The first pawn falls, and the knight eyes c4 next. Black is already a pawn up with more to come.', '', 'Nexc4! A second pawn drops. Black has won two pawns out of the blunder and is simply winning.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bxd3 — trade, loosen the centre.', '', 'Nxe5 — win the e5-pawn.', '', 'Nexc4 — and a second pawn.', '', '', ''],
   },
   'alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_d4_d6:Nc3': {
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
     // e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 Nc3 dxe5 dxe5 Qxd1+ Nxd1 Nc6 f4 Bf5 Nf3
     watch: ['', '', '', '', '', '', '', '', 'Nc3? It leaves the e5-spearhead under-defended. Black undermines immediately.', 'dxe5! Hitting the spearhead — after the trades the e5-pawn becomes a weakness.', '', 'Qxd1+ trades queens; with the position simplified Black just targets the loose e5-pawn.', '', 'Nc6 attacks e5 — the pawn falls and Black is clearly better.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', 'dxe5 — undermine the spearhead.', '', 'Qxd1+ — trade queens, target e5.', '', 'Nc6 — win the weak e5-pawn.', '', '', ''],
   },
   'alekhine-defence:e4_Nf6_e5_Nd5_c4_Nb6_c5_Nd5_d4_d6_cxd6_exd6:f4': {
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
     // e4 Nf6 e5 Nd5 c4 Nb6 c5 Nd5 d4 d6 cxd6 exd6 f4 dxe5 dxe5 Nc6 Nc3 Bb4 Bd2 Be6 Bb5
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'f4? Over-extending once more. The e5-pawn is now overworked, and Black strikes.', 'dxe5! Undermining. After the recapture the e5-spearhead is isolated and weak.', '', 'Nc6 attacks e5; the over-extended pawn becomes a lasting target.', '', 'Bb4 pins and develops — Black is comfortably better with e5 under fire.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'dxe5 — undermine the spearhead.', '', 'Nc6 — target the weak e5-pawn.', '', 'Bb4 — pin, pile on e5.', '', '', ''],
   },
   'benko-gambit:d4_Nf6_c4_c5_d5_b5_Nf3_bxc4:Qc2': {
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
     // d4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Qc2 Nxd5 Qxc4 e6 e4 Qa5+ Bd2 Nb4 Qb3
     watch: ['', '', '', '', '', '', '', '', 'Qc2? This forgets the d5-pawn — Black simply grabs it for free.', 'Nxd5! Winning the central pawn. White can round up c4, but Black stays a sound pawn up with an active knight.', '', 'e6 solidifies the extra pawn; Black is simply a pawn to the good.', '', 'Qa5+ develops with check, and after Bd2 Nb4 Black keeps the material with active pieces.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', 'Nxd5 — grab the free d5-pawn.', '', 'e6 — shore up the extra pawn.', '', 'Qa5+ — check, keep the pawn.', '', '', ''],
   },
   'benko-gambit:d4_Nf6_c4_c5_d5_b5_cxb5_a6_Nc3_axb5_e4_b4:e5': {
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
     // d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 e5 bxc3 exf6 cxb2 Bxb2 Qa5+ Qd2 Qxd2+ Kxd2
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'e5? Over-eager. It allows a crushing in-between capture.', 'bxc3! Take the knight first. After exf6 cxb2 the passed pawn is one step from queening and forks the rook.', '', 'cxb2 — the pawn reaches the seventh, attacking the a1-rook. White must deal with it and Black comes out on top.', '', 'Qa5+ forces the queens off into an endgame where Black is clearly better.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'bxc3 — take the knight, push on.', '', 'cxb2 — to b2, hit the rook.', '', 'Qa5+ — trade into a better ending.', '', '', ''],
   },
   'benko-gambit:d4_Nf6_c4_c5_d5_b5_cxb5_a6_Nc3_axb5_e4_b4_Nb5_d6_Bc4_g6:Bf4': {
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
     // d4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4 Nb5 d6 Bc4 g6 Bf4 Bg7 Nf3 O-O e5 Nh5 Bg5 h6 Bh4
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bf4? Misplacing the bishop. Black calmly develops and White\'s setup backfires.', 'Bg7 fianchettoes; now if White lunges e5, the f4-bishop is loose and Black will hit it.', '', 'O-O — Black is safe and ready; White\'s e5 push runs into …Nh5 hitting the f4-bishop.', '', 'Nh5 forks the f4-bishop; White\'s pieces tangle and Black is clearly better.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bg7 — develop, exploit the loose bishop.', '', 'O-O — safe, prepare …Nh5.', '', 'Nh5 — hit the f4-bishop.', '', '', ''],
@@ -1806,6 +1824,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Nimzo 4.Qc2 — White’s wing lunge h4 hangs the g5-bishop to a zwischenzug.
   // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O Nf3 d5 Bg5 h6 h4 Bxc3+ bxc3 hxg5 hxg5 Ne4 e3 g6 g4
   'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Qc2_O-O_Nf3_d5_Bg5_h6:h4': {
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '',
       'h4? White lunges on the wing before finishing development — and the g5-bishop is suddenly loose. There is a zwischenzug.',
@@ -1825,6 +1844,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Nimzo 4.Qc2 5.a3 — White’s c5 releases the centre too early; ...Ne4 and ...e5.
   // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 c5 Ne4 Qc2 e5 Nf3 exd4 e3 dxe3 Bxe3
   'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Qc2_O-O_a3_Bxc3+_Qxc3_d5:c5': {
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '',
       'c5? White grabs space but releases the central tension too early — the d4-pawn is left weak and a knight leaps into e4.',
@@ -1844,6 +1864,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Nimzo Rubinstein 4.e3 — premature c5; ...b6 undermines the base.
   // playLine: d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 c5 b6 cxb6 Bxc3+ bxc3 axb6 Ne2 Ba6 Bc2
   'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_e3_O-O_Bd3_d5:c5': {
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '',
       'c5?! White clamps the queenside, but a pawn chain is undermined at its base — and the d3-bishop ends up biting on granite.',
@@ -1865,6 +1886,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Nimzo Rubinstein — White’s premature d5 overextends; ...Nb6 wins it.
   // playLine: d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O dxc4 Bxc4 Nbd7 d5 Nb6 Be2 exd5 Bd2 Nc4 Be1 Nxb2 Qc2
   'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_e3_O-O_Bd3_d5_Nf3_c5_O-O_dxc4_Bxc4_Nbd7:d5': {
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'd5? White lunges in the centre for space, but the pawn overextends — and the c4-bishop is hit at the same time.',
@@ -1886,6 +1908,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Nimzo Leningrad 4.Bg5 — White’s e4 with the bishop on h4 walks into ...g5.
   // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Bg5 h6 Bh4 c5 d5 d6 e4 g5 Bg3 Bxc3+ bxc3 Nxe4 Bd3 Nxg3 hxg3
   'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Bg5_h6_Bh4_c5_d5_d6:e4': {
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '',
       'e4? White builds the big centre, but with the bishop marooned on h4 it walks straight into a kingside pawn-fork.',
@@ -1907,6 +1930,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
   // Nimzo Fianchetto 4.Nf3/g3 — White’s O-O misses the c3 combination.
   // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Nf3 c5 g3 cxd4 Nxd4 O-O Bg2 d5 cxd5 Nxd5 O-O Nxc3 bxc3 Bxc3 Ba3 Bxd4 Bxf8 Kxf8 Rb1
   'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Nf3_c5_g3_cxd4_Nxd4_O-O_Bg2_d5_cxd5_Nxd5:O-O': {
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
       'O-O? Natural development — but it walks into a combination: the d5-knight and b4-bishop gang up on c3.',
