@@ -77,6 +77,26 @@ confirm it best shows White's pull, else re-steer to a queens-on line.
   catalan-opening (white). Black classes orient black; lessons teach the
   defender's plans. They auto-file into the Masterclasses Black sub-tab.
 
+## NEXT CLASS — QGD (BLACK) — P0 spines done (`scripts/_qgd-extend.mjs`)
+Student = BLACK (defending the QGD). 7/8 spines at 22 ply, masters-backed:
+
+| Variation | Spine (SAN) |
+|---|---|
+| Orthodox (MAIN pill) | d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 O-O Nxc3 |
+| Lasker Defense | d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 h6 Bh4 Ne4 Bxe7 Qxe7 Rc1 c6 Bd3 Nxc3 Rxc3 dxc4 |
+| Tartakower | d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 h6 Bh4 b6 Be2 Bb7 Bxf6 Bxf6 cxd5 exd5 b4 c6 |
+| Exchange | d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 c6 e3 Bf5 Qf3 Bg6 Bxf6 Qxf6 Qxf6 gxf6 Nf3 Nd7 Nh4 Be7 |
+| Ragozin | d4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4 Bg5 h6 Bxf6 Qxf6 e3 O-O Rc1 dxc4 Bxc4 c5 O-O cxd4 Ne4 Qe7 |
+| Cambridge Springs | d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 e3 c6 Nf3 Qa5 Nd2 Bb4 Qc2 O-O Be2 c5 O-O cxd4 Nb3 Qb6 |
+| Bf4 QGD | d4 d5 c4 e6 Nc3 Nf6 Bf4 Be7 e3 O-O Nf3 Nbd7 c5 Nh5 Bd3 Nxf4 exf4 b6 b4 a5 a3 c6 |
+
+⚠ **Vienna QGD** spine thins in masters at 15 ply (rare sharp …Bb4/…g5 line).
+Re-anchor to the mainline Vienna (3.Nf3 …dxc4 4.Nc3) or DROP the tab if it
+doesn't clear §0.1 (faced + distinct + student-win game). Decide at authoring.
+Note: Orthodox/Tartakower/Bf4 spines mirror the White QG (same line, BLACK
+orientation + Black-defensive narration); lessons must be authored fresh for
+the black side, not reused. Model games = BLACK wins.
+
 ## Phased plan
 - **P0 — research + scaffold + PLAN** … _in progress_
   - [x] Confirm pick + scope (all 8); confirm tooling (scaffold, Stockfish, miner, pro-cache).
