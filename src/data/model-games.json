@@ -353,37 +353,6 @@
     "lessonSummary": "In the QGD Exchange Variation, the minority attack and isolated d-pawn are key themes. Kasparov showed that patient endgame play — centralizing the king, activating rooks, and pushing passed pawns — can convert small structural advantages."
   },
   {
-    "id": "mg-bronstein-ljubojevic",
-    "openingId": "alekhine-defence",
-    "white": "David Bronstein",
-    "black": "Ljubomir Ljubojevic",
-    "whiteElo": null,
-    "blackElo": null,
-    "result": "1-0",
-    "year": 1973,
-    "event": "Petropolis Interzonal 1973, Round 11",
-    "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 c5 d5 e6 Nc3 exd5 cxd5 c4 Nf3 Bg4 Qd4 Bxf3 gxf3 Bb4 Bxc4 O-O Rg1 g6 Bg5 Qc7 Bb3 Bc5 Qf4 Bxg1 d6 Qc8 Ke2 Bc5 Ne4 N8d7 Rc1 Qc6 Rxc5 Nxc5 Nf6+ Kh8 Qh4 Qb5+ Ke3 h5 Nxh5 Qxb3+ axb3 Nd5+ Kd4 Ne6+ Kxd5 Nxg5 Nf6+ Kg7 Qxg5 Rfd8 e6 fxe6+ Kxe6 Rf8 d7 a5 Ng4 Ra6+ Ke5 Rf5+ Qxf5 gxf5 d8=Q fxg4 Qd7+ Kh6 Qxb7 Rg6 f4",
-    "overview": "A wild King's Indian where Bronstein sacrifices his queen for two minor pieces and a crushing initiative. A perfect example of KID counterattacking play on the kingside.",
-    "criticalMoments": [
-      {
-        "moveNumber": 8,
-        "color": "black",
-        "fen": "rnbqkb1r/pp3ppp/1n6/2ppP3/2P5/2N5/PP4PP/R1BQKBNR w KQkq - 0 9",
-        "annotation": "Nxg3! begins a forcing sequence where Black gives up the queen but destroys White's pawn structure and wins massive material. The knight wreaks havoc in White's position.",
-        "concept": "Queen Sacrifice for Piece Activity"
-      },
-      {
-        "moveNumber": 12,
-        "color": "black",
-        "fen": "rn1qk2r/pp3ppp/1n6/3PP3/1bpQ4/2N2P2/PP5P/R1B1KB1R w KQkq - 1 13",
-        "annotation": "Black has two knights and a bishop for the queen plus a shattered white king. The pieces coordinate perfectly — White can never consolidate.",
-        "concept": "Piece Coordination vs Queen"
-      }
-    ],
-    "middlegameTheme": "Kingside Counter-Attack",
-    "lessonSummary": "In the King's Indian, Black's kingside counterplay can be explosive. Bronstein showed that piece activity and pawn structure can outweigh material. When White weakens their kingside, Black's pieces can infiltrate with devastating effect."
-  },
-  {
     "id": "mg-kasparov-karpov-wch85-g24",
     "openingId": "sicilian-scheveningen",
     "white": "Anatoly Karpov",
@@ -631,37 +600,6 @@
     ],
     "middlegameTheme": "Challenging and destroying the pawn center",
     "lessonSummary": "This World Championship game is a textbook example of the Grunfeld Defence's strategic idea: allowing White to build a big center, then tearing it apart. Kasparov's patient maneuvering provoked Karpov into advancing too aggressively, and the thematic central counterattack was devastating. The game illustrates why a large pawn center can be a liability if it lacks adequate piece support."
-  },
-  {
-    "id": "mg-short-dutch-defence",
-    "openingId": "alekhine-defence",
-    "white": "Nigel Short",
-    "black": "Jan Timman",
-    "whiteElo": 2660,
-    "blackElo": 2630,
-    "result": "1-0",
-    "year": 1991,
-    "event": "Interpolis 15th, Tilburg",
-    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 g6 Bc4 Nb6 Bb3 Bg7 Qe2 Nc6 O-O O-O h3 a5 a4 dxe5 dxe5 Nd4 Nxd4 Qxd4 Re1 e6 Nd2 Nd5 Nf3 Qc5 Qe4 Qb4 Bc4 Nb6 b3 Nxc4 bxc4 Re8 Rd1 Qc5 Qh4 b6 Be3 Qc6 Bh6 Bh8 Rd8 Bb7 Rad1 Bg7 R8d7 Rf8 Bxg7 Kxg7 R1d4 Rae8 Qf6+ Kg8 h4 h5 Kh2 Rc8 Kg3 Rce8 Kf4 Bc8 Kg5",
-    "overview": "Short handled the Dutch Defence masterfully, opening the position with e4 to exploit the weakened light squares around Black's king. Timman's kingside was left exposed after the pawn exchanges, and Short's rooks dominated the open files.",
-    "criticalMoments": [
-      {
-        "moveNumber": 9,
-        "color": "white",
-        "fen": "r1bq1rk1/ppp1ppbp/1nnp2p1/4P3/3P4/1B3N1P/PPP1QPP1/RNB2RK1 b - - 0 9",
-        "annotation": "Short strikes with e4, the thematic break against the Dutch, opening the position while Black's pieces are awkwardly placed. This move exploits the chronic weakness of the e6 square and the light-squared holes in Black's camp.",
-        "concept": "Thematic pawn break"
-      },
-      {
-        "moveNumber": 16,
-        "color": "white",
-        "fen": "r1b2rk1/1pp2pbp/4p1p1/p1qnP3/P3Q3/1B3N1P/1PP2PP1/R1B1R1K1 b - - 5 16",
-        "annotation": "With Rae1, Short doubles rooks on the e-file with tremendous pressure against Black's position. The combination of open lines and Black's structural weaknesses makes the position nearly impossible to defend.",
-        "concept": "Rook domination on open files"
-      }
-    ],
-    "middlegameTheme": "Exploiting light-square weaknesses",
-    "lessonSummary": "Short's game against Timman is a model example of how to play against the Dutch Defence by targeting the light-square weaknesses created by f5. The e4 break opened the position at just the right moment, and White's pieces flooded in through the gaps. This game teaches that the Dutch can become very dangerous for Black if White times the central break correctly."
   },
   {
     "id": "mg-fischer-kings-indian-attack",
@@ -3925,5 +3863,155 @@
     ],
     "middlegameTheme": "…Qd8 — patient, solid, no target",
     "lessonSummary": "The Gubinsky-Melts: retreat the queen all the way home, develop smoothly, and offer White nothing to attack."
+  },
+  {
+    "id": "mg-alekhine-main",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Lagarde, Max",
+    "black": "Abasov, N.",
+    "whiteElo": 2657,
+    "blackElo": 2632,
+    "result": "0-1",
+    "year": 2020,
+    "event": "Chess24 Banter Blitz Cup",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Bg4 Be2 e6 O-O Be7 c4 Nb6 exd6 cxd6 Nc3 O-O Be3 d5 c5 Nc4 Qb3 Nc6 Rad1 b6 Qc2 Nxe3 fxe3 bxc5 dxc5 Nb4 Qc1 Bxc5 Nxd5 Qb8 Nf6+ gxf6 Qxc5 Nd5 Qd4 Bh5 Rf2 Rd8 Rdf1 Bg6 Nh4 f5 Nxg6 hxg6 e4 Qb6 Qxb6 Nxb6 exf5 exf5 g4 fxg4 Rxf7 Rd4 R7f4 Rd2 Bxg4 Rxb2 Be6+ Kg7 Rh4 Rf8 Rxf8 Kxf8 Rh8+ Ke7 Bb3 Nd7 Rh7+ Kd6 Rg7 Ne5 Rxa7 Nf3+ Kf1 Nxh2+ Ke1 Nf3+ Kd1 g5 Kc1 Rh2 a4 Nd4 Bd1 Ke5 Rg7 Kf4 Rf7+ Ke3 Rg7 Rg2 Re7+ Kd3 Rd7 Kc3 Rc7+ Kb4 a5 Kxa5 Rc4 Nb5 Rc5 Kb4 Rf5 Nc3 Bc2 Na2+ Kd1 Nc3+ Kc1 Ne2+ Kd1 Nd4 Bd3 Nxf5 Bf1 Kc3 Bxg2 Ne3+ Ke2 Nxg2 Kf2 Nf4 Kg3 Ne6 Kg4 Kd4 Kf5 Kd5 Kg4 Ke5 Kh5 Kf4",
+    "overview": "Modern Alekhine — Abasov outplays Lagarde from the Black side, dismantling White's big centre with the pieces.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2q1rk1/pp2bppp/2n1p3/2Pp4/2nP2b1/1QN1BN2/PP2BPPP/R4RK1 w - - 3 13",
+        "annotation": "Black has the Modern setup — pieces developed and aimed at White's broad centre, ready to undermine it with …dxe5 and …c5. The hypermodern plan in action.",
+        "concept": "Undermining the centre"
+      }
+    ],
+    "middlegameTheme": "Hypermodern: let White build, then tear the centre down",
+    "lessonSummary": "The Modern Alekhine: solid …Bg4/…e6/…Be7, then chip at the over-extended centre until it falls."
+  },
+  {
+    "id": "mg-alekhine-fourpawns",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Grischuk, Alexander",
+    "black": "Svidler, Peter",
+    "whiteElo": 2748,
+    "blackElo": 2726,
+    "result": "0-1",
+    "year": 2009,
+    "event": "World Cup ACP 3rd",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 e6 Nf3 Be7 d5 exd5 cxd5 Nb4 Nd4 Bd7 e6 fxe6 dxe6 Bc6 Qg4 Bh4+ g3 O-O O-O-O Bxh1 gxh4 Qf6 Bb5 c6 Bg5 Qe5 e7 Rfe8 Rxh1 cxb5 Nf3 Nd3+ Kc2 Qd6 Rd1 Nf2 Rxd6 Nxg4 Rd4 Nf6 h5 Rxe7 h6 Rd7 Bxf6 gxf6 Rg4+ Kf7 Nxb5 Rc8+ Nc3 Rg8 Rf4 Nd5",
+    "overview": "Four Pawns Attack — Svidler beats Grischuk from the Black side, the massive centre collapsing under fire.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2qk2r/pppbbppp/1n6/3PP3/1n1N4/2N1B3/PP4PP/R2QKB1R w KQkq - 3 13",
+        "annotation": "White's four-pawn centre looks huge, but every pawn is under fire from Black's pieces — the over-extension is about to be punished, exactly the Alekhine idea.",
+        "concept": "Punishing over-extension"
+      }
+    ],
+    "middlegameTheme": "Surround and break the four-pawn centre",
+    "lessonSummary": "The Four Pawns Attack invites the maximal centre; Black undermines with …dxe5, …Nc6, …Bf5/…Bb4 and …f6 to crack it open."
+  },
+  {
+    "id": "mg-alekhine-exchange",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Kosintseva, N.",
+    "black": "Zherebukh, Y.",
+    "whiteElo": 2489,
+    "blackElo": 2631,
+    "result": "0-1",
+    "year": 2014,
+    "event": "Pan-Am Intercollegiate",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Be2 Be7 Nf3 O-O O-O Bg4 Nc3 Re8 b3 Bf6 Be3 c6 h3 Bh5 Rc1 Na6 Re1 Nc7 Qd2 d5 c5 Nd7 b4 Ne6 Nh2 Bxe2 Nxe2 g6 Ng4 Bg7 Nf4 Ndf8 Nxe6 Nxe6 Bh6 Bh8 Bf4 h5 Ne5 Qh4 Be3 Bxe5 dxe5 d4 Bh6 Kh7 Kh2 Qe7 Bf4 a5 bxa5 Qc7 Bg3 Qxa5 Qd3 Qxa2 Qf3 Kg8 Rb1 Re7 Qf6 Rd7 f4 Qc2 Ra1 Re8 Qh4 Qf5",
+    "overview": "Exchange Variation — Zherebukh outplays Kosintseva from the Black side, the better-coordinated army telling.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "rn1qr1k1/pp3ppp/1npp1b2/7b/2PP4/1PN1BN1P/P3BPP1/R2Q1RK1 w - - 1 13",
+        "annotation": "The Exchange structure is set — White has a little space, but Black's pieces are free and active, heading for the …d5 freeing break and full equality.",
+        "concept": "Active equality"
+      }
+    ],
+    "middlegameTheme": "Free development and the …d5 break vs White's space",
+    "lessonSummary": "The Exchange is comfortable: Black develops actively, plays …Bf5/…Bf6 and the …d5 break, and equalises fully."
+  },
+  {
+    "id": "mg-alekhine-chase",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Atabayev, Y.",
+    "black": "Lalith, B.",
+    "whiteElo": 2455,
+    "blackElo": 2529,
+    "result": "0-1",
+    "year": 2017,
+    "event": "16th Asian Continental",
+    "pgn": "e4 Nf6 e5 Nd5 c4 Nb6 c5 Nd5 d4 d6 cxd6 exd6 Nf3 dxe5 dxe5 Bb4+ Bd2 O-O Bc4 Nc6 O-O Bg4 h3 Bxf3 Qxf3 Nb6 Bxb4 Nxb4 Bb3 a5 e6 fxe6 Qxb7 N6d5 Nc3 c6 Bxd5 exd5 Na4 Rb8 Qa7 Nd3 Qe3 Nf4 Kh2 Qd6 g3 Rbe8 Qc3 Qh6 gxf4 Qxf4+ Kh1 Qxa4 Rg1 Qe4+ Rg2 d4 Qg3 g6 Rd1 c5 Qd3 Qd5 Kg1 c4 Rxg6+ Kf7",
+    "overview": "Chase Variation — Lalith beats Atabayev from the Black side, exploiting White's tempo-wasting pawn chase.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2q1rk1/ppp2ppp/2n5/3nP3/1bB5/5b1P/PP1B1PP1/RN1Q1RK1 w - - 0 13",
+        "annotation": "White spent tempo after tempo chasing the knight; Black has liquidated the over-extended pawns and the squandered time has flowed into a Black initiative.",
+        "concept": "Punishing wasted tempi"
+      }
+    ],
+    "middlegameTheme": "White chases the knight; Black collects the tempi",
+    "lessonSummary": "The Chase wastes White's time hunting the knight; Black liquidates the over-reach and emerges with the initiative and the bishop pair."
+  },
+  {
+    "id": "mg-alekhine-voronezh",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Aronian, Levon",
+    "black": "Carlsen, Magnus",
+    "whiteElo": 2773,
+    "blackElo": 2863,
+    "result": "0-1",
+    "year": 2020,
+    "event": "Clutch-ch June",
+    "pgn": "e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 exd6 cxd6 Nc3 g6 Be3 Bg7 h3 O-O Nf3 Nc6 d5 Na5 Bd4 Bxd4 Qxd4 e5 dxe6 Bxe6 Ne4 Nc6 Nf6+ Kh8 Qf4 Bf5 Ng4 Re8+ Be2 Bd3 Ne3 Bxe2 Kxe2 d5 Ng5 Qe7 Rhe1 d4 Kf1 dxe3 Rxe3 Qd7 Nxf7+ Kg7 Rf3 Qd4 Nd6 Re7 Qxd4+ Nxd4 Rd3 Nc6 b3 Nd7 Rad1 Nc5 R3d2 a5 g3 a4 Rb2 Nb4 bxa4 Rxa4 a3 Nbd3 Rb3 Nxb3",
+    "overview": "Voronezh — Carlsen beats Aronian from the Black side with the King's-Indian-style fianchetto and …e5 break.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1bq1rk1/pp3p1p/1n1p2p1/n2Pp3/2PQ4/2N2N1P/PP3PP1/R3KB1R w KQ e6 0 13",
+        "annotation": "Black has the Voronezh setup — the fianchettoed g7-bishop raking the long diagonal and the …e5 break ready, a dynamic King's-Indian-style position Carlsen rode to victory.",
+        "concept": "KID-style fianchetto"
+      }
+    ],
+    "middlegameTheme": "…g6/Bg7 fianchetto and the …e5 central strike",
+    "lessonSummary": "The Voronezh: recapture …cxd6, fianchetto with …g6/Bg7, and strike the centre with …e5 for dynamic King's-Indian play."
+  },
+  {
+    "id": "mg-alekhine-scandtrans",
+    "openingId": "alekhine-defence",
+    "studentSide": "black",
+    "white": "Ciruk, Jerzy",
+    "black": "Kosiorek, Marek",
+    "whiteElo": 2261,
+    "blackElo": 2378,
+    "result": "0-1",
+    "year": 2000,
+    "event": "POL-chT",
+    "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5 Nxe5 Nd7 Nxd7 Bxd7 Bc4 Bf5 O-O e6 c3 Be7 Nd2 O-O Nf3 Nb6 Be2 c5 Bf4 Nd5 Bg3 Qb6 Qb3 Rfd8 dxc5 Bxc5 Qxb6 Nxb6 Rfd1 Na4 Rd2 Rxd2 Nxd2 Nxb2 Nb3 Bb6 Bf3 Rc8 Rc1 Nd3 Bxb7 Nxc1 Bxc8 Ne2+ Kf1 Nxc3 a3 Ne4 Bb8 Nxf2 a4 Bd3+ Ke1 Ne4 a5 Bf2+ Kd1 Be3 Bb7 Nc3+ Ke1 Nd5 Bd6 Bc4 Nd2 Bb5 Ne4 Bd3 Nc5 Bc4 Nd7 f6 Nb8 Nc3 Nc6 Bb5 Bb8 Bxc6 Bxc6 Kf7 Bd6 f5 Be5 Nd5 g3 Bc5 a6 Nb4 Bb5 Bd4 Bd6 Bc3+ Ke2 Nd5 Bc5 Bb4 Bd4 Nc3+ Bxc3 Bxc3 Bd3 Kf6 Bb5 Bd4 Bc4 e5 h3 e4 Bb5 g5 Kf1 h5 Be2 h4 Kg2 f4 gxf4 gxf4 Bg4 f3+",
+    "overview": "The …dxe5 simplification — Black wins after trading into a clean, safe structure where White's space edge evaporates.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2qkb1r/pppbpppp/8/3n4/3P4/8/PPP2PPP/RNBQKB1R w KQkq - 0 7",
+        "annotation": "The early …dxe5 trades have simplified the position — White's space edge is gone and Black has a clean, weakness-free structure with active bishops.",
+        "concept": "Simplified safety"
+      }
+    ],
+    "middlegameTheme": "Early trades neutralise White's space",
+    "lessonSummary": "Black resolves the tension with …dxe5, trades pieces, and reaches a sound, weakness-free position with easy equality."
   }
 ]

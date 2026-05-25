@@ -29,6 +29,7 @@ import { getItalianTabPlanIds } from '../../services/italianMasterclassTabs';
 import { getScotchTabPlanIds } from '../../services/scotchMasterclassTabs';
 import { getFrenchDefenceTabPlanIds } from '../../services/frenchDefenceMasterclassTabs';
 import { getScandinavianDefenceTabPlanIds } from '../../services/scandinavianDefenceMasterclassTabs';
+import { getAlekhineDefenceTabPlanIds } from '../../services/alekhineDefenceMasterclassTabs';
 import { getKingsGambitTabPlanIds } from '../../services/kingsGambitMasterclassTabs';
 import { getSicilianDragonTabPlanIds } from '../../services/sicilianDragonMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
@@ -1046,6 +1047,7 @@ export function OpeningDetailPage(): JSX.Element {
     getScotchTabPlanIds(opening.id, tabKey) ??
     getFrenchDefenceTabPlanIds(opening.id, tabKey) ??
     getScandinavianDefenceTabPlanIds(opening.id, tabKey) ??
+    getAlekhineDefenceTabPlanIds(opening.id, tabKey) ??
     getKingsGambitTabPlanIds(opening.id, tabKey) ??
     getSicilianDragonTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);

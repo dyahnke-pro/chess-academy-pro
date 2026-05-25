@@ -1034,5 +1034,27 @@
       "hint": "White must respond to the gambit. Which capture accepts the pawn (the principled mainline)?",
       "concept": "Accepting the gambit"
     }
+  ],
+  "alekhine-defence": [
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+      "correctMove": "Nd5",
+      "hint": "e5 attacks the knight — keep it active in the centre, do not retreat home.",
+      "concept": "The active knight hop"
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+      "type": "plan",
+      "question": "What is Black's plan in Alekhine's Defence?",
+      "choices": [
+        "Provoke White's pawns forward, then undermine the over-extended centre with …d6, …Bg4, …c5 and piece pressure",
+        "Trade the knights and head for a quick draw",
+        "Grab space with …e5 and play like White",
+        "Castle and wait passively for White to attack"
+      ],
+      "correctIndex": 0,
+      "hint": "The Alekhine is hypermodern — let White build a big centre, then tear it down.",
+      "concept": "Black's Alekhine plan"
+    }
   ]
 }

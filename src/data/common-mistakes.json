@@ -931,5 +931,21 @@
       "correctMove": "Bc5",
       "explanation": "4…Ngxe5? trades the central knight too early — after 5.Nxe5 White's pieces dominate. The principled 4…Bc5 develops the bishop with pressure on f2, then recaptures …Nxe5 at the right moment."
     }
+  ],
+  "alekhine-defence": [
+    {
+      "fen": "rnbqkb1r/pppppppp/5n2/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+      "wrongMove": "Ng8",
+      "correctMove": "Nd5",
+      "explanation": "Retreating the knight home with …Ng8 throws away the whole point of the Alekhine — Black has just lost two tempi for nothing. …Nd5 keeps the knight active in the centre, where it provokes White's pawns forward and becomes the springboard for the counterattack.",
+      "shortNarration": "Nd5 — active centre, not back home"
+    },
+    {
+      "fen": "rnbqkb1r/pppppppp/8/3nP3/2P5/8/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "Nf4",
+      "correctMove": "Nb6",
+      "explanation": "With c4 attacking the knight, …Nf4 lunges to the rim where g3 simply chases it back with tempo, costing Black even more time. …Nb6 is the sound retreat — the knight stays useful, eyeing c4 and d5, and Black continues to undermine the centre.",
+      "shortNarration": "Nb6 — sound retreat, not the rim"
+    }
   ]
 }

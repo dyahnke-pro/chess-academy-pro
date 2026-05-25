@@ -128,6 +128,17 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /icelandic/i, label: 'Icelandic' },
     { test: /gubinsky/i, label: 'Gubinsky-Melts' },
   ],
+  // Alekhine's Defence — distinct validated variations (complete builds only;
+  // each tab has a real Black-win model game). Main pill = the Modern (repertoire
+  // pgn), so "Modern Variation" folds in; "Two Pawns Attack" transposes to the
+  // Exchange, so it folds into Exchange. Five distinct tabs remain.
+  'alekhine-defence': [
+    { test: /four pawns/i, label: 'Four Pawns' },
+    { test: /^exchange/i, label: 'Exchange' },
+    { test: /chase/i, label: 'Chase' },
+    { test: /scandinavian transposition/i, label: 'Scandinavian' },
+    { test: /voronezh/i, label: 'Voronezh' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present
