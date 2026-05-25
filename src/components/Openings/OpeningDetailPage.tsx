@@ -46,6 +46,16 @@ import { getEvansTabPlanIds } from '../../services/evansMasterclassTabs';
 import { getSicilianNajdorfTabPlanIds } from '../../services/sicilianNajdorfMasterclassTabs';
 import { getSicilianSveshnikovTabPlanIds } from '../../services/sicilianSveshnikovMasterclassTabs';
 import { getSicilianAlapinTabPlanIds } from '../../services/sicilianAlapinMasterclassTabs';
+import { getPetrovDefenceTabPlanIds } from '../../services/petrovDefenceMasterclassTabs';
+import { getPhilidorDefenceTabPlanIds } from '../../services/philidorDefenceMasterclassTabs';
+import { getQgdTabPlanIds } from '../../services/qgdMasterclassTabs';
+import { getQgaTabPlanIds } from '../../services/queensGambitAcceptedMasterclassTabs';
+import { getSlavDefenceTabPlanIds } from '../../services/slavDefenceMasterclassTabs';
+import { getSemiSlavTabPlanIds } from '../../services/semiSlavMasterclassTabs';
+import { getKingsIndianDefenceTabPlanIds } from '../../services/kingsIndianDefenceMasterclassTabs';
+import { getGrunfeldDefenceTabPlanIds } from '../../services/grunfeldDefenceMasterclassTabs';
+import { getBenoniDefenceTabPlanIds } from '../../services/benoniDefenceMasterclassTabs';
+import { getQueensIndianDefenceTabPlanIds } from '../../services/queensIndianDefenceMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
@@ -1080,6 +1090,16 @@ export function OpeningDetailPage(): JSX.Element {
     getSicilianNajdorfTabPlanIds(opening.id, tabKey) ??
     getSicilianSveshnikovTabPlanIds(opening.id, tabKey) ??
     getSicilianAlapinTabPlanIds(opening.id, tabKey) ??
+    getPetrovDefenceTabPlanIds(opening.id, tabKey) ??
+    getPhilidorDefenceTabPlanIds(opening.id, tabKey) ??
+    getQgdTabPlanIds(opening.id, tabKey) ??
+    getQgaTabPlanIds(opening.id, tabKey) ??
+    getSlavDefenceTabPlanIds(opening.id, tabKey) ??
+    getSemiSlavTabPlanIds(opening.id, tabKey) ??
+    getKingsIndianDefenceTabPlanIds(opening.id, tabKey) ??
+    getGrunfeldDefenceTabPlanIds(opening.id, tabKey) ??
+    getBenoniDefenceTabPlanIds(opening.id, tabKey) ??
+    getQueensIndianDefenceTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).

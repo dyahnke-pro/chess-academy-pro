@@ -224,5 +224,95 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "petrov-defence": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "philidor-defence": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "qgd": {
+    "variations": 8,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "qga": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "slav-defence": {
+    "variations": 8,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "semi-slav": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "kings-indian-defence": {
+    "variations": 8,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "grunfeld-defence": {
+    "variations": 8,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "benoni-defence": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "queens-indian": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

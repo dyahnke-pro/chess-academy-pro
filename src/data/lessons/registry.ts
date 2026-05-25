@@ -68,6 +68,26 @@ import { SICILIAN_SVESHNIKOV_LESSON } from './sicilianSveshnikov';
 import { SICILIAN_SVESHNIKOV_VARIATION_LESSONS } from './sicilianSveshnikovVariations';
 import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
 import { SICILIAN_ALAPIN_VARIATION_LESSONS } from './sicilianAlapinVariations';
+import { PETROV_DEFENCE_LESSON } from './petrovDefence';
+import { PETROV_DEFENCE_VARIATION_LESSONS } from './petrovDefenceVariations';
+import { PHILIDOR_DEFENCE_LESSON } from './philidorDefence';
+import { PHILIDOR_DEFENCE_VARIATION_LESSONS } from './philidorDefenceVariations';
+import { QGD_LESSON } from './qgd';
+import { QGD_VARIATION_LESSONS } from './qgdVariations';
+import { QGA_LESSON } from './queensGambitAccepted';
+import { QGA_VARIATION_LESSONS } from './queensGambitAcceptedVariations';
+import { SLAV_DEFENCE_LESSON } from './slavDefence';
+import { SLAV_DEFENCE_VARIATION_LESSONS } from './slavDefenceVariations';
+import { SEMI_SLAV_LESSON } from './semiSlav';
+import { SEMI_SLAV_VARIATION_LESSONS } from './semiSlavVariations';
+import { KINGS_INDIAN_DEFENCE_LESSON } from './kingsIndianDefence';
+import { KINGS_INDIAN_DEFENCE_VARIATION_LESSONS } from './kingsIndianDefenceVariations';
+import { GRUNFELD_DEFENCE_LESSON } from './grunfeldDefence';
+import { GRUNFELD_DEFENCE_VARIATION_LESSONS } from './grunfeldDefenceVariations';
+import { BENONI_DEFENCE_LESSON } from './benoniDefence';
+import { BENONI_DEFENCE_VARIATION_LESSONS } from './benoniDefenceVariations';
+import { QUEENS_INDIAN_DEFENCE_LESSON } from './queensIndianDefence';
+import { QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS } from './queensIndianDefenceVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -112,6 +132,16 @@ const OPENINGS: OpeningLessons[] = [
   { main: SICILIAN_SVESHNIKOV_LESSON, variations: SICILIAN_SVESHNIKOV_VARIATION_LESSONS },
   { main: SICILIAN_ALAPIN_LESSON, variations: SICILIAN_ALAPIN_VARIATION_LESSONS },
   { main: NIMZO_INDIAN_LESSON, variations: NIMZO_INDIAN_VARIATION_LESSONS },
+  { main: PETROV_DEFENCE_LESSON, variations: PETROV_DEFENCE_VARIATION_LESSONS },
+  { main: PHILIDOR_DEFENCE_LESSON, variations: PHILIDOR_DEFENCE_VARIATION_LESSONS },
+  { main: QGD_LESSON, variations: QGD_VARIATION_LESSONS },
+  { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
+  { main: SLAV_DEFENCE_LESSON, variations: SLAV_DEFENCE_VARIATION_LESSONS },
+  { main: SEMI_SLAV_LESSON, variations: SEMI_SLAV_VARIATION_LESSONS },
+  { main: KINGS_INDIAN_DEFENCE_LESSON, variations: KINGS_INDIAN_DEFENCE_VARIATION_LESSONS },
+  { main: GRUNFELD_DEFENCE_LESSON, variations: GRUNFELD_DEFENCE_VARIATION_LESSONS },
+  { main: BENONI_DEFENCE_LESSON, variations: BENONI_DEFENCE_VARIATION_LESSONS },
+  { main: QUEENS_INDIAN_DEFENCE_LESSON, variations: QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {
