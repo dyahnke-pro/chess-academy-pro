@@ -20,7 +20,7 @@ for (const f of lessonFiles) {
   bShort += (t.match(/\bsayShort:\s*['"`]/g) || []).length;
   bSrc += (t.match(/\bsources:\s*\[/g) || []).length;
 }
-add('beat-lessons (main+variation+trap)', bSay, bSay, bShort, bSrc, false, false);
+add('beat-lessons (main+variation+trap)', bSay, bSay, bShort, bSrc, false, true);
 
 // 2. Punish-gems
 const gems = J('punish-gems.json');

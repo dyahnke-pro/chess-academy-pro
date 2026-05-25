@@ -39,9 +39,10 @@ Run it any time for the live picture.
 ## Backlog (the grind — verify each against books/online, record source)
 
 Priority order (David named main lines first):
-- [ ] **beat-lessons / main opening lines** — add lesson-level `sources` + a
-  masterclass gate; source 869 beats' lessons opening by opening. `sources?` field
-  added to `LessonScript` 2026-05-25; gate + baseline still to wire.
+- [x] **beat-lessons / main opening lines** — `sources?` on `LessonScript` +
+  `lessonSources.test.ts` gate (156 lessons baselined: 24 main + 114 variations
+  + 18 traps), wired into ship-check. NOW: source the 156 lessons opening by
+  opening (re-seed baseline with `WRITE_LESSON_SOURCE_BASELINE=1 npx vitest run lessonSources`).
 - [ ] middlegame-plan lines — 134 sources + 119 short cues.
 - [ ] common mistakes — 56 sources.
 - [ ] model games — gate + 223 sources (overview verification).
