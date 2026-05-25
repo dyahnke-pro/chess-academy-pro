@@ -14,10 +14,23 @@ complements the two existing Black builds (Caro-Kann, Pirc) without duplicating.
   (verified 2026-05-25). Narration is prose-only over these real lines (G3).
 - Book grounding: `opening-book-pages.json → pages → french-defence`.
 
-## Variations (tabs) — hand-picked, all DB-anchored
+## Variations (tabs) — ALL validated (David 2026-05-25: "add all validated variation"; no cap)
+10 first-class, each DB-anchored + chess.js-legal + amateur-faced ≥3% at its fork:
 Advance · Winawer · Classical · Tarrasch · Exchange · Burn · Fort Knox ·
-Advance: Milner-Barry Gambit. Tab order TBD by amateur-explorer frequency
-(Classical is the "Main line" showcase pill; the rest sort by frequency).
+Advance: Milner-Barry Gambit · **McCutcheon** (added) · **Rubinstein** (added).
+- McCutcheon (Bb4 vs 4.Bg5 = 12% of that fork) + Rubinstein (dxe4 vs 3.Nc3 = 27%)
+  added to `repertoire.json`, masters-extended to 22 plies via the live explorer.
+- EXCLUDED as sub-cliff sidelines (not padding, §0 ethos #3): St. George, Wing
+  Gambit, KIA (2.d3), Franco-Sicilian, 3...c5, Chigorin, the assorted gambits.
+- Steinitz (3.Nc3 Nf6 4.e5) IS the repertoire main line = the "Main line" pill.
+  Alekhine-Chatard folds into Classical (shared structure, §0.5(c)).
+- Amateur freq (1600-2000) for tab order: White's 3rd → Exchange 32% / Advance
+  30% / Nc3 21% / Tarrasch 10%. After 3.Nc3 → Nf6 33% / Rubinstein 27% / Winawer 21%.
+
+## Environment note (this sandbox)
+ALL endpoints reachable: masters explorer ✓, amateur explorer ✓, game-export ✓.
+So gem mining (STEP 6) and model-game sourcing (STEP 7) can run locally here —
+not blocked. `BASE_DATA_REVISION` bumped to `2026-05-25-french-variations`.
 
 ## Phased plan (Vienna §0.7 STEPs)
 - [ ] **STEP 1** — author lessons. Main (`frenchDefence.ts`) + 8 variation

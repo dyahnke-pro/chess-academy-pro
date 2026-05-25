@@ -970,6 +970,18 @@
         "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4 Nc3 a6 Qe2 Ne7 Kh1 Nc6 f4 Nb4 Rd1 Nxd3",
         "explanation": "The Milner-Barry Gambit sees White sacrifice the d4 pawn with Bd3 and O-O for rapid development and attacking chances. Black accepts the pawn with ...Nxd4 followed by ...Qxd4, grabbing material while staying alert. After Nc3 a6 Qe2 Ne7 the knight reroutes back to c6 and ...Nb4 attacks the d3 bishop. ...Nxd3 simplifies decisively into a winning endgame — Black's extra pawn plus the bishop pair settles the position.",
         "shortExplanation": "Milner-Barry: accept d4 pawn, consolidate with ...a6/Ne7-c6, then ...Nb4/Nxd3 simplifies into winning endgame."
+      },
+      {
+        "name": "McCutcheon Variation",
+        "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Bb4 e5 h6 Bd2 Bxc3 bxc3 Ne4 Qg4 g6 Bd3 Nxd2 Kxd2 c5 Nf3 Bd7",
+        "explanation": "The McCutcheon is Black's most combative answer to the Classical 4.Bg5: instead of the meek ...Be7, Black pins the c3-knight with ...Bb4 and meets 5.e5 with ...h6, refusing to retreat the f6-knight. After Bd2 Bxc3 bxc3 Ne4, Black plants a knight on e4 and hands White doubled, immobile c-pawns — the structural prize the whole line is built around. White lunges Qg4 at g7, but ...g6 calmly defends and ...Nxd2 Kxd2 drags the white king into the open. With the white king stuck in the centre and the queenside pawns crippled, Black strikes the base of the chain with ...c5 and develops the once-problem bishop via ...Bd7, with a comfortable, structurally superior middlegame.",
+        "shortExplanation": "McCutcheon: ...Bb4 pin + ...Ne4 wrecks White's c-pawns; ...g6, ...Nxd2 unhouses the king, then ...c5/...Bd7 strikes the chain."
+      },
+      {
+        "name": "Rubinstein Variation",
+        "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Nf3 Ngf6 Nxf6+ Nxf6 Bd3 c5 dxc5 Bxc5 O-O O-O Bg5 b6 Qe2 Bb7",
+        "explanation": "The Rubinstein is the French player's solid escape hatch — and at club level the single most common Black choice against 3.Nc3. Black resolves the central tension at once with ...dxe4, conceding the centre in return for a position with no weaknesses and an easy plan: develop, trade a pair of knights, and free the light-squared bishop — the French's traditional problem piece. After Nxe4 Nd7 and ...Ngf6, Black invites the knight trade Nxf6+ Nxf6 that removes White's most active piece. Then ...c5 hits d4, dxc5 Bxc5 develops the dark-squared bishop with tempo, both sides castle, and ...b6 with ...Bb7 finally fianchettoes the light-squared bishop onto the long diagonal. The result is a sound, slightly passive but rock-solid position where Black is never worse than a touch and White's extra space is hard to convert.",
+        "shortExplanation": "Rubinstein: ...dxe4 gives up the centre for a weakness-free structure; trade knights, ...c5/...Bxc5, then ...b6/...Bb7 frees the bad bishop."
       }
     ],
     "trapLines": [],
