@@ -11,6 +11,8 @@ import {
 import { GEM_NARRATION } from './lessons/punishGemNarration';
 import openingManifests from './opening-manifests.json';
 import gemNarrationBaseline from './punishGemNarration.baseline.json';
+import gemSourcesBaseline from './punishGemSources.baseline.json';
+import { sourcesAreValid } from './narrationSources';
 
 // Gate for the mined punish-gems (WO: docs/plans/2026-05-23-punish-gems-wo.md).
 // Every gem is DB-grounded by construction (it comes from the explorer), and
@@ -139,6 +141,33 @@ describe('punish-gems are real, legal, DB-grounded', () => {
       const live = new Set(missing);
       const stale = [...baseline].filter((id) => !live.has(id));
       if (stale.length) console.warn(`[gem-narration] ${stale.length} baseline gems are now narrated — prune them: ${stale.join(', ')}`);
+      expect(stale.length).toBeLessThanOrEqual(baseline.size);
+    });
+  });
+
+  // INDEPENDENT-VERIFICATION GATE (David 2026-05-25: "use independent
+  // verification — books, online — that's the gate"). Every masterclass gem's
+  // narration must carry a `sources` ref that resolves (a book/concept passage
+  // in the corpus, or a reputable chess URL) — proof the IDEAS were checked
+  // outside training recall and recorded for spot-check. Baseline holds the
+  // pre-rule narrated gems; it only SHRINKS as sources are added.
+  describe('narrated masterclass gems cite an independent verification source', () => {
+    const baseline = new Set((gemSourcesBaseline as { keys: string[] }).keys);
+    const masterclass = new Set(Object.keys(openingManifests).filter((k) => !k.startsWith('_')));
+    const unverified = (gems as PunishGem[])
+      .filter((g) => masterclass.has(g.openingId) && gemId(g) in GEM_NARRATION)
+      .filter((g) => !sourcesAreValid(GEM_NARRATION[gemId(g)].sources))
+      .map(gemId);
+
+    it('introduces NO narrated masterclass gem without a resolvable source beyond the baseline', () => {
+      const novel = unverified.filter((id) => !baseline.has(id));
+      expect(novel, `Narrated masterclass gems missing a resolvable verification source (sources: ["book:<id>" | "concept:<id>" | reputable https URL]). Verify the ideas against the books/online and record the ref:\n${novel.join('\n')}`).toEqual([]);
+    });
+
+    it('verification baseline only shrinks', () => {
+      const live = new Set(unverified);
+      const stale = [...baseline].filter((id) => !live.has(id));
+      if (stale.length) console.warn(`[gem-sources] ${stale.length} baseline gems now cite a source — prune them: ${stale.join(', ')}`);
       expect(stale.length).toBeLessThanOrEqual(baseline.size);
     });
   });
