@@ -131,3 +131,78 @@ describe('punish-gems are real, legal, DB-grounded', () => {
     expect(getPunishGemsForTab(first.openingId, diverged).some((g) => g.lineMoves === first.lineMoves)).toBe(false);
   });
 });
+
+// ── A surfaced gem must SHOW a clear advantage (David 2026-05-25) ────────────
+// The failure mode: a "gem" whose play-line ends on an even-material, merely
+// "+0.8 better" frame — it neither shows nor explains a concrete advantage
+// (the Dutch-lesson bug). Rule: every NARRATED (surfaceable) gem must end with
+// the student up material, OR be explicitly baselined as a decisive non-
+// material case (a mating/overwhelming attack) with a one-line why. This is a
+// cheap chess.js-only check (no engine) that catches the regression at gate
+// time. Keep the baseline EMPTY unless a genuine decisive-sac gem needs it.
+const PIECE_VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+function materialBalance(c: Chess): number {
+  let m = 0;
+  for (const row of c.board()) for (const sq of row) if (sq) m += (sq.color === 'w' ? 1 : -1) * PIECE_VALUE[sq.type];
+  return m; // + = White ahead
+}
+// LEGACY allowlist — gems authored BEFORE this clear-advantage rule
+// (2026-05-25) that end material-equal. They are GRANDFATHERED (tolerated),
+// NOT endorsed: each needs the same Stockfish material/decisiveness audit the
+// QG-family gems got — extend to where material is won, confirm a genuine
+// mating/decisive bind, or cut. SHRINK this list to zero over time; a NEW gem
+// can never be added here (the gate forces new gems to end on won material).
+// The QG-family gems (queens-gambit/qgd/qga/catalan-opening) are deliberately
+// NOT here — they were all audited to a won pawn/piece.
+const LEGACY_MATERIAL_EQUAL = new Set<string>([
+  'caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7_O-O_Ngf6_c3_Bd6:Qb3',
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Nxe4_d4_b5_Bb3:Nxd4',
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4:Nxd4',
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4_Nd6_Bxc6:bxc6',
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4_Nd6_Bxc6_dxc6_dxe5:Nc4',
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6:bxc6',
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4_c5_Nb3:Bd6',
+  'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4_c5_Nb3_Qxd1_Rxd1:Bd6',
+  'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_Bg5_Bg7_Qd2_O-O_O-O-O_c6_f4_b5:e5',
+  'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_g3_Bg7_Bg2_O-O_Nge2_e5_O-O_Nc6:Be3',
+  'vienna-game:e4_e5_Nc3_Nc6_Bc4_Nf6_d3_Bc5_f4_d6_Nf3:Ng4',
+  'vienna-game:e4_e5_Nc3_Nf6_Bc4_Bc5_d3_d6_Nf3_O-O_O-O_Bg4_h3:Bxf3',
+  'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Be7_Nf3:e4',
+  'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3:d6',
+  'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4:Bc5',
+  'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4_d6_O-O:Nge7',
+  'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4_d6_O-O_h6_g3:fxg3',
+  'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3_Bc5_O-O:Bg4',
+  'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3_Bc5_O-O_O-O_d3:f5',
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4:Bb6',
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O_Nxc3_bxc3:Bxc3',
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nxd4_Qxd4:Nf6',
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3:Bxd4',
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Nf6_e5:Qe7',
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nc3:Nxd4',
+]);
+
+describe('surfaced gems show a clear advantage (student ends up material)', () => {
+  const surfaced = (GEMS).filter((g) => gemId(g as unknown as PunishGem) in GEM_NARRATION);
+  it('there is at least one surfaced gem to check', () => {
+    expect(surfaced.length).toBeGreaterThan(0);
+  });
+  for (const g of surfaced) {
+    const id = gemId(g as unknown as PunishGem);
+    it(`${id}: student ends with won material (or legacy)`, () => {
+      const c = new Chess();
+      for (const m of g.playLine.split(' ')) c.move(m);
+      // The student is the side that plays the punish — i.e. NOT the side to
+      // move after the opening spine (that side plays the inaccuracy).
+      const spine = new Chess();
+      for (const m of g.lineMoves.split(' ')) spine.move(m);
+      const studentIsWhite = spine.turn() === 'b';
+      const studentMaterial = studentIsWhite ? materialBalance(c) : -materialBalance(c);
+      if (LEGACY_MATERIAL_EQUAL.has(id)) return; // grandfathered — pending audit
+      expect(
+        studentMaterial,
+        `${id}: gem ends material ${studentMaterial} for the student — a gem must end on a WON pawn/piece. Extend the line (Stockfish best-play) to where material is won, or cut the gem.`,
+      ).toBeGreaterThan(0);
+    });
+  }
+});
