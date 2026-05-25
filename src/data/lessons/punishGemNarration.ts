@@ -1423,6 +1423,92 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
     ],
   },
+  // QGD — Cambridge Springs trap: White's natural Bd3? walks into …dxc4 and
+  // …Qxg5, winning the loose bishop because the c3-knight is pinned (…Qa5/…Bb4).
+  // playLine: d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 Nf3 c6 e3 Qa5 Nd2 Bb4 Qc2 O-O Bd3 dxc4 Nxc4 Qxg5 O-O-O Qh6 Ne4 Nxe4 Bxe4
+  'qgd:d4_d5_c4_e6_Nc3_Nf6_Bg5_Nbd7_Nf3_c6_e3_Qa5_Nd2_Bb4_Qc2_O-O:Bd3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Bd3? — the natural developing move, and a famous blunder. White has forgotten that the c3-knight is pinned by the queen on a5 and the bishop on b4.',
+      "…dxc4! — the pinned knight can't recapture, so the c4-pawn just falls. But that's only the start.",
+      'Nxc4 — the d2-knight takes back instead…',
+      '…Qxg5! — and Black simply scoops the undefended bishop on g5. A whole piece — the textbook Cambridge Springs trap.',
+      'O-O-O — White castles long, a piece down.',
+      '…Qh6 — Black tucks the queen to safety, consolidating the extra piece.',
+      '',
+      '…Nxe4 — trading into a clean, piece-up position.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      "…dxc4 — the pinned knight can't take back.",
+      '',
+      '…Qxg5 — win the loose bishop.',
+      '',
+      '…Qh6 — tuck the queen, consolidate.',
+      '',
+      '…Nxe4 — trade into a piece-up win.',
+      '',
+    ],
+  },
+
+  // QGD — Cambridge Springs trap, Qb3 move-order: same pin, same …Qxg5 win.
+  // playLine: d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 Nf3 c6 e3 Qa5 Nd2 Bb4 Qb3 dxc4 Nxc4 Bxc3+ Qxc3 Qxg5 Nd6+ Ke7 Qa3
+  'qgd:d4_d5_c4_e6_Nc3_Nf6_Bg5_Nbd7_Nf3_c6_e3_Qa5_Nd2_Bb4:Qb3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qb3? — White develops the queen, but walks straight into the Cambridge Springs trap: the c3-knight is pinned by …Qa5 and …Bb4.',
+      "…dxc4! — grabbing the pawn the pinned knight can't recapture.",
+      '',
+      '…Bxc3+! — first eliminate the pinned knight, with check.',
+      '',
+      '…Qxg5 — and the loose g5-bishop falls. Black has won a clean piece.',
+      'Nd6+ — White lashes out with a desperado check…',
+      '…Ke7 — the king steps up; Black keeps the extra piece and the win.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      "…dxc4 — win the pawn; the knight's pinned.",
+      '',
+      '…Bxc3+ — remove the pinned knight, with check.',
+      '',
+      '…Qxg5 — take the loose bishop.',
+      '',
+      '…Ke7 — king up, stay a piece ahead.',
+      '',
+    ],
+  },
+
+  // QGD — Vienna: White's Qxd4? (instead of Nxd4) lets Black trade queens and
+  // snatch the e4-pawn into a winning endgame.
+  // playLine: d4 d5 c4 e6 Nc3 Nf6 Nf3 Bb4 Bg5 dxc4 e4 c5 Bxc4 cxd4 Qxd4 Qxd4 Nxd4 Nxe4 Be3 Nxc3 a3 Ba5 Bd2
+  'qgd:d4_d5_c4_e6_Nc3_Nf6_Nf3_Bb4_Bg5_dxc4_e4_c5_Bxc4_cxd4:Qxd4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qxd4? — recapturing with the queen instead of the knight. It looks natural, but it lets Black trade queens and snatch a central pawn.',
+      '…Qxd4 — trade the queens straight off.',
+      'Nxd4 — White recaptures…',
+      '…Nxe4! — the point. With the queens gone, Black grabs the e4-pawn for free and heads into a clean pawn-up endgame.',
+      '',
+      '…Nxc3 — picking up more, a pawn to the good and simplifying.',
+      '',
+      '…Ba5 — keeping the bishop active; Black is winning the endgame.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      '', // Qxd4 (opponent)
+      '…Qxd4 — trade the queens off.',
+      '',
+      '…Nxe4 — grab the free centre pawn.',
+      '',
+      '…Nxc3 — simplify, a pawn up.',
+      '',
+      '…Ba5 — keep the bishop active; winning.',
+      '',
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
