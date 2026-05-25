@@ -53,6 +53,23 @@ modern main; QGA → early queen trade endgame; Anti-QGD Bf4 = Harrwitz w/ c5
 clamp, re-anchor resolved). Revisit the QGA queen-trade spine when authoring —
 confirm it best shows White's pull, else re-steer to a queens-on line.
 
+## Progress (2026-05-25, zen-tesla)
+- ✅ **P0** spines (all 8 → 22 ply, masters-backed) + scaffold.
+- ✅ **P1** lessons: main (Orthodox/Capablanca) + 6 variation lessons (Exchange,
+  QGA, Slav, Semi-Slav, Tartakower, Anti-Bf4). Content gates green.
+- ✅ **P2** wiring: registry (gate+runtime), CURATED tabs (Classical→main pill,
+  Catalan dropped→own class), tab→plan map, OpeningDetailPage branch, repertoire
+  pgn → Classical spine, BASE_DATA_REVISION bump. Tab-integrity + wiring green.
+- ✅ **P3** 7 middlegame plans (one per tab) + lead-the-eye. Planner gate green.
+- ✅ **P6 (partial)** manifest entry (variations 8, plans 7, keyIdeas 4; gems/
+  models 0 for now). ship-check green; pushed (commit 5c8c282, PR #669).
+- ✅ **Masterclasses tab → White/Black color sub-tabs** (David). QG files under White.
+- ⏳ **P4** gems: miner running for queens-gambit (Stockfish+explorer reachable
+  this session). Author `punishGemNarration.ts` once mined; bump weapons floor.
+- ⏳ **P5** model games: curate White QG-family wins (pro-cache / explorer export).
+- ⏳ **P7** post-merge audits (G1) once on main.
+- ⏭ **NEXT classes:** qgd (black), qga (black), catalan-opening (white).
+
 ## Phased plan
 - **P0 — research + scaffold + PLAN** … _in progress_
   - [x] Confirm pick + scope (all 8); confirm tooling (scaffold, Stockfish, miner, pro-cache).
