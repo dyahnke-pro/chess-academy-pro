@@ -53,10 +53,35 @@ Priority order (David named main lines first):
 
 ## Done this session
 - Gem narration: KG (20) + Scotch (7) + Italian (7) authored & sourced.
-- **Gem verification: 126/126 sourced, baseline 0** (opening by opening, each
-  verified vs book corpus and/or Wikipedia/Chess.com).
-- Verification gate extended to plan lines + common mistakes.
+- **FIVE surfaces fully masterclass-sourced + source-gated, baseline 0 each:**
+  punish-gems (126), main opening lines / beat-lessons (156), middlegame-plan
+  lines (134), common mistakes (56), model games (92). Each verified opening by
+  opening vs the book corpus and/or Wikipedia/Chess.com; refs in
+  `scripts/opening-source-map.mjs` (one source of truth).
+- Coverage gates (full+short) + verification gates wired into ship-check.
 - This comprehensive audit instrument + the surface inventory.
+
+## Remaining surfaces — honest notes (not yet gated)
+- **pro-repertoire variations (243)** — real Naroditsky-voice `explanation`
+  prose, BUT keyed by `pro-<player>-<slug>` ids with NO `openingId` field and 82
+  openings (many non-masterclass: KID, Grünfeld, Semi-Slav…). A manifest-scoped
+  gate needs a reliable id→openingId map first; forcing a fuzzy match would be
+  wrong. Next: build that map (from `eco`/`name`), then gate + source.
+- **checkpoint quizzes (133)** — `hint` prose is a coaching nudge for a quiz,
+  not an authoritative theory claim; lower verification priority. Decide whether
+  it's in scope before gating.
+- **gambit variations (55)** — like pro-rep (`explanation` per variation);
+  some already carry a mined `source`. Gate + source after pro-rep map exists.
+- **endgame (27) / mating (37)** — already carry position-level `source` /
+  `narration.history` (endgame 100%, mating 59%). Formalize into a gate +
+  finish mating's 41%.
+- **8 Scotch positional gems** — narration deferred (cp<1.0), then sources.
+- **plan-line short cues (119) / common-mistake short cues (37 non-masterclass)** —
+  coverage backlog, separate from sources.
+
+**Next-session pickup:** `node scripts/audit-narration-coverage.mjs` for the live
+picture. Build the pro-rep id→openingId map, then gate+source pro-rep / gambits;
+formalize endgame/mating gates; finish the short-cue coverage backlog.
 
 **Next-session pickup:** `node scripts/audit-narration-coverage.mjs` for the live
 picture; wire the beat-lesson source gate next, then source main lines opening by
