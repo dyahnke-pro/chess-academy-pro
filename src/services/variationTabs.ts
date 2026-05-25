@@ -54,6 +54,7 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /scotch gambit/i, label: 'Scotch Gambit' },
     { test: /four knights/i, label: 'Four Knights' },
     { test: /nb3|kasparov/i, label: 'Kasparov Nb3' },
+    { test: /steinitz|qh4/i, label: 'Steinitz' },
   ],
   // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
   // (the explorer freq query was unavailable when this was built; ordering is

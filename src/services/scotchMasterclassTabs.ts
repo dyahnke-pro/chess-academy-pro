@@ -8,6 +8,7 @@ export const SCOTCH_TAB_PLAN_IDS: Record<string, string[]> = {
   'scotch gambit': ['mp-scotchgame-gambit'],
   'four knights': ['mp-scotchgame-fourknights'],
   'kasparov nb3': ['mp-scotchgame-kasparov'],
+  steinitz: ['mp-scotchgame-steinitz'],
 };
 
 /** The hand-picked middlegame plan ids for a Scotch tab, or null when the

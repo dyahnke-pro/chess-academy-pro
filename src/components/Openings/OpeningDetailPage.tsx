@@ -54,6 +54,12 @@ import {
   type ItalianTrapDef,
 } from '../../data/lessons/italianGameTrapLessons';
 import {
+  SCOTCH_GAME_TRAP_LESSONS,
+  getScotchTrapsForTab,
+  getScotchTrapPlayableLine,
+  type ScotchTrapDef,
+} from '../../data/lessons/scotchGameTrapLessons';
+import {
   getPunishGemsForTab,
   getPunishGemById,
   gemId,
@@ -587,6 +593,7 @@ export function OpeningDetailPage(): JSX.Element {
       : opening.id === 'vienna-game' ? VIENNA_TRAP_LESSONS
       : opening.id === 'caro-kann' ? CARO_TRAP_LESSONS
       : opening.id === 'italian-game' ? ITALIAN_GAME_TRAP_LESSONS
+      : opening.id === 'scotch-game' ? SCOTCH_GAME_TRAP_LESSONS
         : {};
   if (viewMode === 'named-trap' && activeNamedTrapId && activeNamedTrapId in namedTrapLessons) {
     return (
@@ -609,6 +616,7 @@ export function OpeningDetailPage(): JSX.Element {
         : opening.id === 'vienna-game' ? getViennaTrapPlayableLine(activeNamedTrapId)
           : opening.id === 'caro-kann' ? getCaroTrapPlayableLine(activeNamedTrapId)
             : opening.id === 'italian-game' ? getItalianTrapPlayableLine(activeNamedTrapId)
+            : opening.id === 'scotch-game' ? getScotchTrapPlayableLine(activeNamedTrapId)
             : null;
     if (trapLine) {
       return (
@@ -631,6 +639,7 @@ export function OpeningDetailPage(): JSX.Element {
         : opening.id === 'vienna-game' ? getViennaTrapPlayableLine(activeNamedTrapId)
           : opening.id === 'caro-kann' ? getCaroTrapPlayableLine(activeNamedTrapId)
             : opening.id === 'italian-game' ? getItalianTrapPlayableLine(activeNamedTrapId)
+            : opening.id === 'scotch-game' ? getScotchTrapPlayableLine(activeNamedTrapId)
             : null;
     const trapCustom = trapLine
       ? { name: trapLine.title, pgn: trapLine.moves.join(' '), explanation: '' }
@@ -1038,11 +1047,12 @@ export function OpeningDetailPage(): JSX.Element {
   // no blank/empty masterclass zones), but each real student-side WEAPON
   // still gets its own green-outlined tile. Same WLPP shape as warnings.
   // Ruy → ruyTrapLessons; Vienna → viennaTrapLessons. Per-opening lookup.
-  const namedTraps: (RuyTrapDef | ViennaTrapDef | CaroTrapDef | ItalianTrapDef)[] =
+  const namedTraps: (RuyTrapDef | ViennaTrapDef | CaroTrapDef | ItalianTrapDef | ScotchTrapDef)[] =
     opening.id === 'ruy-lopez' ? getRuyTrapsForTab(tabKey)
       : opening.id === 'vienna-game' ? getViennaTrapsForTab(tabKey)
       : opening.id === 'caro-kann' ? getCaroTrapsForTab(tabKey)
       : opening.id === 'italian-game' ? getItalianTrapsForTab(tabKey)
+      : opening.id === 'scotch-game' ? getScotchTrapsForTab(tabKey)
         : [];
   const namedWeapons = namedTraps.filter((t) => t.kind === 'weapon');
   const namedWarnings = namedTraps.filter((t) => t.kind === 'warning');

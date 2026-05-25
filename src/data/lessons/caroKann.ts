@@ -1,7 +1,7 @@
 import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
 
 // Caro-Kann Defence — the main-line master class (Black's solid answer to
-// 1.e4). The student plays BLACK: board orients black-at-bottom, narration
+// e4). The student plays BLACK: board orients black-at-bottom, narration
 // speaks from Black's side. The spine is the CLASSICAL main line, built
 // move-by-move from the Lichess masters database (every move the master
 // main move at its position — so it's DB-grounded by construction and the
@@ -28,7 +28,7 @@ function b(init: BeatInit): LessonBeat {
   return { ...rest, moves: moves.trim().split(/\s+/) };
 }
 
-/** Main-line Caro-Kann: the Classical (4...Bf5), the most principled line —
+/** Main-line Caro-Kann: the Classical (Bf5), the most principled line —
  *  Black solves the bad-bishop problem before locking the chain, trades it
  *  off, and reaches a rock-solid structure with no weak pieces, then breaks
  *  with ...c5 against opposite-side castling. */
@@ -51,7 +51,7 @@ export const CARO_KANN_LESSON: LessonScript = {
       sayShort: "…Bg6, h6, Bh7 — stay ahead of h5.",
       highlights: [H('g6', KEY), H('h5', ATK), H('h7', KEY)] }),
     b({ id: 'ck4', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3',
-      say: "Now White offers the trade on d3, and Black takes it. The bishop that every other 1.e4 c6-ish defence struggles to free has been developed AND swapped for White's good one. That is a small, permanent structural plus — and it is the Caro's quiet boast in nearly every game.",
+      say: "Now White offers the trade on d3, and Black takes it. The bishop that every other e4 c6-ish defence struggles to free has been developed AND swapped for White's good one. That is a small, permanent structural plus — and it is the Caro's quiet boast in nearly every game.",
       sayShort: "…Bxd3 — swap the problem bishop, lasting plus.",
       highlights: [H('d3', KEY)] }),
     b({ id: 'ck5', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bd2 Ngf6',

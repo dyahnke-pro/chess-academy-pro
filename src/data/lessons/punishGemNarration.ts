@@ -19,7 +19,7 @@ export interface GemNarration {
 }
 
 export const GEM_NARRATION: Record<string, GemNarration> = {
-  // Caro — White's 3.f3 (Fantasy) but 4.f3?? offered too loosely: 4...exf3 just
+  // Caro — White's f3 (Fantasy) but f3?? offered too loosely: exf3 just
   // wins a pawn. playLine: e4 c6 d4 d5 Nc3 dxe4 f3 exf3 Nxf3 Nf6 Bd3 Bg4 h3 Bxf3 Qxf3
   'caro-kann:e4_c6_d4_d5_Nc3_dxe4:f3': {
     watch: [
@@ -36,19 +36,19 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     learn: [
       '', '', '', '', '', '',
-      '', // 4.f3 (opponent)
+      '', // f3 (opponent)
       'exf3 — grab the free pawn.',
-      '', // 5.Nxf3 (opponent)
+      '', // Nxf3 (opponent)
       '', // ...Nf6
-      '', // 6.Bd3 (opponent)
+      '', // Bd3 (opponent)
       'Bg4 — pin the knight.',
-      '', // 7.h3 (opponent)
+      '', // h3 (opponent)
       'Bxf3 — trade it off, stay a pawn up.',
-      '', // 8.Qxf3 (opponent)
+      '', // Qxf3 (opponent)
     ],
   },
 
-  // Caro Fantasy — after 3.f3 dxe4 4.fxe4 e5, White's 5.c3?? ignores the centre
+  // Caro Fantasy — after f3 dxe4 fxe4 e5, White's c3?? ignores the centre
   // and the king is caught. playLine: e4 c6 d4 d5 f3 dxe4 fxe4 e5 c3 Qh4+ Kd2 Nf6 Nf3 Qf2+ Be2 Nxe4+ Kc2
   'caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5:c3': {
     watch: [
@@ -65,18 +65,18 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     learn: [
       '', '', '', '', '', '', '', '',
-      '', // 5.c3 (opponent)
+      '', // c3 (opponent)
       'Qh4 — check, and chase the king.',
-      '', // 6.Kd2
+      '', // Kd2
       'Nf6 — develop, hit e4.',
-      '', // 7.Nf3
+      '', // Nf3
       'Qf2 — check, keep the initiative.',
-      '', // 8.Be2
+      '', // Be2
       'Nxe4 — win the pawn, with check.',
-      '', // 9.Kc2
+      '', // Kc2
     ],
   },
-  // Caro Fantasy — White's 7.Bxf7+?? is an UNSOUND sac; just take it and you're
+  // Caro Fantasy — White's Bxf7+?? is an UNSOUND sac; just take it and you're
   // up a piece. playLine: e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 Bxf7+ Kxf7 O-O Ke8 Nbd2 Nh6 h3 Bh5 c3
   'caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7:Bxf7+': {
     watch: [
@@ -93,19 +93,19 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     learn: [
       '', '', '', '', '', '', '', '', '', '', '', '',
-      '', // 7.Bxf7+ (opponent)
+      '', // Bxf7+ (opponent)
       'Kxf7 — just take the bishop.',
-      '', // 8.O-O
+      '', // O-O
       'Ke8 — walk the king home.',
-      '', // 9.Nbd2
+      '', // Nbd2
       'Nh6 — develop, consolidate.',
-      '', // 10.h3
+      '', // h3
       'Bh5 — keep the bishop, stay a piece up.',
-      '', // 11.c3
+      '', // c3
     ],
   },
 
-  // Caro Fantasy — White's 8.Nc3?? leaves d4 loose with the centre tense; exd4
+  // Caro Fantasy — White's Nc3?? leaves d4 loose with the centre tense; exd4
   // wins it. playLine: e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 Nc3 exd4 Ne2 Bc5 Kh1 Qe7 Ng3 O-O-O Qd3
   'caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7_O-O_Ngf6:Nc3': {
     watch: [
@@ -122,19 +122,19 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     learn: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-      '', // 8.Nc3 (opponent)
+      '', // Nc3 (opponent)
       'exd4 — win the centre pawn.',
-      '', // 9.Ne2
+      '', // Ne2
       'Bc5 — guard d4, eye f2.',
-      '', // 10.Kh1
+      '', // Kh1
       'Qe7 — connect, prepare to castle long.',
-      '', // 11.Ng3
+      '', // Ng3
       'Castle long — king safe, a pawn up.',
-      '', // 12.Qd3
+      '', // Qd3
     ],
   },
 
-  // Vienna — Black grabs e4, then 4...g6?? drops e5 with check and loses a piece.
+  // Vienna — Black grabs e4, then g6?? drops e5 with check and loses a piece.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 g6 Qxe5+ Qe7 Qxe4 Qxe4+ Nxe4 c6 b3 Bg7
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5:g6': {
     watch: [
@@ -165,7 +165,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Frankenstein — 5...Qf6?? parks the queen on Nd5's fork square.
+  // Vienna Frankenstein — Qf6?? parks the queen on Nd5's fork square.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Qf6 Nd5 Qg6 Qxg6 hxg6 Nxc7+ Kd8 Nxa8 b6
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3:Qf6': {
     watch: [
@@ -193,7 +193,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Frankenstein — 6...Qf6?? ignores the Nb5 already eyeing c7.
+  // Vienna Frankenstein — Qf6?? ignores the Nb5 already eyeing c7.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 Qf6 Nxc7+ Kd8 Nxa8 Qg6 Qxg6 hxg6 Ne2 b6
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5:Qf6': {
     watch: [
@@ -219,7 +219,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna — 4...Nf6?? blocks f7 but drops g7. playLine:
+  // Vienna — Nf6?? blocks f7 but drops g7. playLine:
   // e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Nf6 Qxg7 Rf8 d3 Nd4 Nf3 c6 Nxe5 d5
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4:Nf6': {
     watch: [
@@ -248,7 +248,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Frankenstein — 5...Qg6?? saves the queen but not the c7-fork.
+  // Vienna Frankenstein — Qg6?? saves the queen but not the c7-fork.
   // playLine: e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qg6 Qxg6 hxg6 Nxc7+ Kd8 Nxa8 Nf6 d3 d5
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4_Qf6_Nd5:Qg6': {
     watch: [
@@ -277,7 +277,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Frankenstein — 6...Bb6?? takes the eye off g7. playLine:
+  // Vienna Frankenstein — Bb6?? takes the eye off g7. playLine:
   // e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Bb6 Qxg7 d6 Nf3 Bh3 Nxb6 cxb6 Qxf7+ Kd8
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4_Qf6_Nd5_Qxf2+_Kd1:Bb6': {
     watch: [
@@ -308,7 +308,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Gambit Accepted — 4...d6?? is too slow; seize the centre with d4.
+  // Vienna Gambit Accepted — d6?? is too slow; seize the centre with d4.
   // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 d6 d4 g5 d5 Ne5 Bb5+ c6 dxc6 bxc6
   'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3:d6': {
     watch: [
@@ -336,7 +336,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Gambit — 5...Bc5?? walks into d4 and a kingside crash.
+  // Vienna Gambit — Bc5?? walks into d4 and a kingside crash.
   // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bc5 d4 Be7 h4 d6 Nxg5 Bxg5 Qh5 Qe7
   'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4:Bc5': {
     watch: [
@@ -364,7 +364,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Gambit — 6...Nge7?? leaves g5 hanging; Nxg5 + kingside storm.
+  // Vienna Gambit — Nge7?? leaves g5 hanging; Nxg5 + kingside storm.
   // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 Nge7 Nxg5 Rf8 Qh5 Ng6 Nxh7 Qh4+ Qxh4 Nxh4
   'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4:Nge7': {
     watch: [
@@ -392,7 +392,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Gambit — 7...Nge7?? (castled version); Nxg5 then the Bxf7+ sac.
+  // Vienna Gambit — Nge7?? (castled version); Nxg5 then the Bxf7+ sac.
   // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 d6 O-O Nge7 Nxg5 Ng6 Bxf7+ Kf8 Bxg6 Bxd4+ Kh1 hxg6
   'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4_d6_O-O:Nge7': {
     watch: [
@@ -420,7 +420,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Gambit — 8...fxg3?? grabs a third pawn and opens f7 to the sac.
+  // Vienna Gambit — fxg3?? grabs a third pawn and opens f7 to the sac.
   // playLine: e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 Bg7 d4 d6 O-O h6 g3 fxg3 Bxf7+ Kf8 e5 dxe5 Bd5 Nf6 Nxe5 Qd6
   'vienna-game:e4_e5_Nc3_Nc6_f4_exf4_Nf3_g5_Bc4_Bg7_d4_d6_O-O_h6_g3:fxg3': {
     watch: [
@@ -448,7 +448,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna — 7...Bh5?? leaves the bishop on the rim; g4 traps it / opens the h-file.
+  // Vienna — Bh5?? leaves the bishop on the rim; g4 traps it / opens the h-file.
   // playLine: e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 f4 d6 Nf3 Bg4 h3 Bh5 g4 Nxg4 hxg4 Bxg4 Bb5 f5 Qe2 Qd7
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Nf6_d3_Bc5_f4_d6_Nf3_Bg4_h3:Bh5': {
     watch: [
@@ -475,7 +475,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Frankenstein deep — 8...Qg5?? wanders; d4 opens and the Nxc7+ fork lands.
+  // Vienna Frankenstein deep — Qg5?? wanders; d4 opens and the Nxc7+ fork lands.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qg5 d4 Qg4 Nxc7+ Kd8 Nxa8 Ne4 g3 Nf6
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5_g6_Qf3_f5_Qd5:Qg5': {
     watch: [
@@ -502,7 +502,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Frankenstein — 6...e4?? lunges and hangs; Nxe4 wins it and forks d6.
+  // Vienna Frankenstein — e4?? lunges and hangs; Nxe4 wins it and forks d6.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Be7 Nf3 e4 Nxe4 g6 Nxd6+ Bxd6 Qh6 Bf8 Qf4 d5
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Be7_Nf3:e4': {
     watch: [
@@ -529,7 +529,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Closed — 6...O-O?? (with Re1 in) allows Bxc6 + Nxe5 to bag a clean pawn.
+  // Ruy Closed — O-O?? (with Re1 in) allows Bxc6 + Nxe5 to bag a clean pawn.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 O-O Bxc6 bxc6 Nxe5 Bb7 d4 d5 exd5 cxd5
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Be7_Re1:O-O': {
     watch: [
@@ -551,7 +551,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Open — 9...Nxd4?? just loses a piece; the desperado tricks fizzle.
+  // Ruy Open — Nxd4?? just loses a piece; the desperado tricks fizzle.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 Nxd4 Nxd4 Bb7 Nf3 Bd6 a4 O-O Nc3 Nxc3
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Nxe4_d4_b5_Bb3:Nxd4': {
     watch: [
@@ -573,7 +573,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Open — 9...Bc5?? ignores the loose centre; Qxd5 wins material.
+  // Ruy Open — Bc5?? ignores the loose centre; Qxd5 wins material.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 b5 Bb3 d5 dxe5 Bc5 Qxd5 Qxd5 Bxd5 Bb7 Bxe4 O-O-O Bg5 Rde8
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Nxe4_d4_b5_Bb3_d5_dxe5:Bc5': {
     watch: [
@@ -595,7 +595,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Berlin (4.O-O a6) — 4...a6?? drops a pawn: Bxc6 dxc6 Nxe5 (Re1 makes
+  // Ruy Berlin (O-O a6) — a6?? drops a pawn: Bxc6 dxc6 Nxe5 (Re1 makes
   // the ...Qd4 regain fail — Google-confirmed). playLine:
   // e4 e5 Nf3 Nc6 Bb5 Nf6 O-O a6 Bxc6 dxc6 Nxe5 Bc5 Nc3 h6 Nf3 Bg4
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O:a6': {
@@ -618,7 +618,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Berlin Open — 9...Nxd4?? loses a piece; the f2 desperado fizzles.
+  // Ruy Berlin Open — Nxd4?? loses a piece; the f2 desperado fizzles.
   // playLine: e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nxd4 Nxd4 Bc5 Nb3 Bxf2+ Rxf2 Nxf2 Qf3 O-O
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4:Nxd4': {
     watch: [
@@ -643,7 +643,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Berlin Open — 7...Nc4?? has no home; Qe2 gains time and the initiative.
+  // Ruy Berlin Open — Nc4?? has no home; Qe2 gains time and the initiative.
   // playLine: e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nc4 Qe2 Nb6 Rd1 Qe7 Bg5 f6 Bh4 Bd7
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4_Nd6_Bxc6_dxc6_dxe5:Nc4': {
     watch: [
@@ -665,7 +665,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Exchange — 5...Nf6?? forgets e5; Nxe5 bags the pawn.
+  // Ruy Exchange — Nf6?? forgets e5; Nxe5 bags the pawn.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O Nf6 Nxe5 Bc5 Nc3 h6 Kh1 h5 Qe1 h4
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O:Nf6': {
     watch: [
@@ -687,7 +687,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Exchange — 6...Bd6?? overloads e5 with f6 played; dxe5 wins a pawn.
+  // Ruy Exchange — Bd6?? overloads e5 with f6 played; dxe5 wins a pawn.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 Bd6 dxe5 fxe5 Nxe5 Qh4 Nf3 Qh5 Nbd2 Ne7
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4:Bd6': {
     watch: [
@@ -709,7 +709,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Exchange — 7...Bc5?? hangs to the Qh5+ fork, winning the bishop.
+  // Ruy Exchange — Bc5?? hangs to the Qh5+ fork, winning the bishop.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 exd4 Nxd4 Bc5 Qh5+ g6 Qxc5 Qe7 Qc3 c5 Nf3 Bg4
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4:Bc5': {
     watch: [
@@ -731,7 +731,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Exchange — 8...Bd6?? allows Qh5+, knocking Black’s coordination apart.
+  // Ruy Exchange — Bd6?? allows Qh5+, knocking Black’s coordination apart.
   // playLine: e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6 d4 exd4 Nxd4 c5 Nb3 Bd6 Qh5+ g6 Qf3 Qe7 Bf4 Bxf4 Qxf4 b6
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6_dxc6_O-O_f6_d4_exd4_Nxd4_c5_Nb3:Bd6': {
     watch: [
@@ -753,7 +753,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Pirc Austrian — White's 8.Be3?? walks into Ng4 with tempo (student = Black).
+  // Pirc Austrian — White's Be3?? walks into Ng4 with tempo (student = Black).
   // playLine: e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 Be3 Ng4 Bd2 cxd4 Nb5 Ne3 Bxe3 dxe3 Nc3
   'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_f4_Bg7_Nf3_O-O_Bd3_Na6_O-O_c5:Be3': {
     watch: [
@@ -778,7 +778,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Pirc 150-style — White's 7.e5?? is too slow in the opposite-side race; b4!
+  // Pirc 150-style — White's e5?? is too slow in the opposite-side race; b4!
   // (student = Black). playLine: e4 d6 d4 Nf6 Nc3 g6 Bg5 Bg7 Qd2 O-O O-O-O c6 f4 b5 e5 b4 exf6 exf6 Bh4 bxc3 Qxc3 Nd7 Qxc6
   'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_Bg5_Bg7_Qd2_O-O_O-O-O_c6_f4_b5:e5': {
     watch: [
@@ -825,7 +825,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Pirc Austrian — White's 8.O-O?? castles into the tension; cxd4 strikes
+  // Pirc Austrian — White's O-O?? castles into the tension; cxd4 strikes
   // (student = Black). playLine: e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O e5 Nfd7 Be2 c5 O-O cxd4 Qxd4 Nc6 Qf2 dxe5 Rb1 Qa5 h3
   'pirc-defence:e4_d6_d4_Nf6_Nc3_g6_f4_Bg7_Nf3_O-O_e5_Nfd7_Be2_c5:O-O': {
     watch: [
@@ -852,7 +852,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
 
   // ── CRUSHES I OWED — full-strength, no disclaimer ──────────────────────────
 
-  // Vienna Frankenstein — 7...Nd4?? ignores the loaded Nb5; a forcing combo wins.
+  // Vienna Frankenstein — Nd4?? ignores the loaded Nb5; a forcing combo wins.
   // playLine: e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 Nd4 Nxd6+ Ke7 Nxc8+ Rxc8 Qxf7+ Kd6 Qd5+ Ke7
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3_Nc6_Nb5_g6_Qf3:Nd4': {
     watch: [
@@ -877,7 +877,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna Frankenstein — 6...d6?? abandons the trapped f2-queen; Nxf2 wins it.
+  // Vienna Frankenstein — d6?? abandons the trapped f2-queen; Nxf2 wins it.
   // playLine: e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Kf8 Nh3 d6 Nxf2 Bxg4+ Nxg4 h5 Nge3 Bxe3 Nxe3 Nf6
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Bc5_Qg4_Qf6_Nd5_Qxf2+_Kd1_Kf8_Nh3:d6': {
     watch: [
@@ -927,7 +927,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Berlin Open — 5...bxc6 (+0.85): structure, not material. playLine:
+  // Ruy Berlin Open — bxc6 (+0.85): structure, not material. playLine:
   // e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 bxc6 dxe5 Nf5 Bg5 Be7 Bxe7 Nxe7 Nc3 O-O
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_Nf6_O-O_Nxe4_d4_Nd6_Bxc6:bxc6': {
     watch: [
@@ -949,7 +949,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Closed — 17...d5 premature (+0.76). playLine:
+  // Ruy Closed — d5 premature (+0.76). playLine:
   // e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d3 d5 exd5 Na5 Ba2 b3 Bxb3 Nxb3 cxb3 Nxd5
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Ba4_Nf6_O-O_Be7_Re1_b5_Bb3_O-O_a4_b4_d3:d5': {
     watch: [
@@ -971,7 +971,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Ruy Exchange (3...a6 4.Bxc6) — bxc6 (+0.59), the gentlest edge. playLine:
+  // Ruy Exchange (a6 Bxc6) — bxc6 (+0.59), the gentlest edge. playLine:
   // e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 bxc6 d4 exd4 Qxd4 Qf6 Qa4 Bc5 Nc3 Ne7
   'ruy-lopez:e4_e5_Nf3_Nc6_Bb5_a6_Bxc6:bxc6': {
     watch: [
@@ -1015,7 +1015,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna — 6...Ng4 (+0.76), a modest sac-edge. playLine:
+  // Vienna — Ng4 (+0.76), a modest sac-edge. playLine:
   // e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 f4 d6 Nf3 Ng4 Ng5 h6 Bxf7+ Kf8 f5 hxg5 Qxg4 Kxf7
   'vienna-game:e4_e5_Nc3_Nc6_Bc4_Nf6_d3_Bc5_f4_d6_Nf3:Ng4': {
     watch: [
@@ -1040,7 +1040,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna — 7...Bxf3 (+0.88), structural. playLine:
+  // Vienna — Bxf3 (+0.88), structural. playLine:
   // e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 Nf3 O-O O-O Bg4 h3 Bxf3 Qxf3 a5 Ne2 Nc6 c3 Nd7 a3 Kh8
   'vienna-game:e4_e5_Nc3_Nf6_Bc4_Bc5_d3_d6_Nf3_O-O_O-O_Bg4_h3:Bxf3': {
     watch: [
@@ -1062,7 +1062,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna g3 — 6...e4 (+0.85), a long-term weakness. playLine:
+  // Vienna g3 — e4 (+0.85), a long-term weakness. playLine:
   // e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 e4 Qe2 f5 d3 Qf6 O-O Bd6 dxe4 O-O
   'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3:e4': {
     watch: [
@@ -1087,7 +1087,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna g3 — 8...Bg4 (+0.62), a tempo. playLine:
+  // Vienna g3 — Bg4 (+0.62), a tempo. playLine:
   // e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 Bc5 O-O Bg4 h3 Bxf3 Qxf3 O-O a4 Bd6 Qd5 Rb8
   'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3_Bc5_O-O:Bg4': {
     watch: [
@@ -1112,7 +1112,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Vienna g3 — 9...f5 (+0.58), the slightest plus. playLine:
+  // Vienna g3 — f5 (+0.58), the slightest plus. playLine:
   // e4 e5 Nc3 Nf6 g3 d5 exd5 Nxd5 Bg2 Nxc3 bxc3 Nc6 Nf3 Bc5 O-O O-O d3 f5 Nxe5 Nxe5 d4 Bd6 dxe5 Bxe5 Ba3 Re8
   'vienna-game:e4_e5_Nc3_Nf6_g3_d5_exd5_Nxd5_Bg2_Nxc3_bxc3_Nc6_Nf3_Bc5_O-O_O-O_d3:f5': {
     watch: [
@@ -1139,7 +1139,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
 
   // ── Italian Game (mined on CI from the amateur explorer + Stockfish) ──────
 
-  // Two Knights / Scotch-gambit: 5...Nxd4?? drops to the f7 sac. 16 plies.
+  // Two Knights / Scotch-gambit: Nxd4?? drops to the f7 sac. 16 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Nf6_d4:Nxd4': {
     watch: [
       '', '', '', '', '', '', '',
@@ -1168,7 +1168,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Giuoco main line: 8...Bb6?! is too slow — 9.e5! storms the centre. 20 plies.
+  // Giuoco main line: Bb6?! is too slow — e5! storms the centre. 20 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4:Bb6': {
     watch: [
       '', '', '', '', '', '', '', '', '', '', '',
@@ -1196,7 +1196,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Greco/Nc3: after 7...Nxe4 8.O-O, 8...d5?? drops a piece to 9.Nxd5. 24 plies.
+  // Greco/Nc3: after Nxe4 O-O, d5?? drops a piece to Nxd5. 24 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O:d5': {
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -1225,7 +1225,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Møller Attack accepted: 8...Bxc3?! 9.Ba3! — the exchange sac roars. 26 plies.
+  // Møller Attack accepted: Bxc3?! Ba3! — the exchange sac roars. 26 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O_Nxc3_bxc3:Bxc3': {
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -1254,7 +1254,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Greco/Nc3 again: 8...Nxc3?? loses to the 9.Qe1+ zwischenzug. 26 plies.
+  // Greco/Nc3 again: Nxc3?? loses to the Qe1+ zwischenzug. 26 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O_Bxc3_bxc3:Nxc3': {
     watch: [
       '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
@@ -1283,7 +1283,7 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
   },
 
-  // Hungarian Defence: the passive 9...Nxe5?? drops a pawn to the Qh5 fork. 18 plies.
+  // Hungarian Defence: the passive Nxe5?? drops a pawn to the Qh5 fork. 18 plies.
   'italian-game:e4_e5_Nf3_Nc6_Bc4_Be7_d4_d6_dxe5:Nxe5': {
     watch: [
       '', '', '', '', '', '', '', '', '',
@@ -1310,6 +1310,35 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       'Bh6 — trap the king in.',
       '',
     ],
+  },
+  // ── Scotch Game (mined on CI from the amateur explorer + Stockfish) ──────
+  "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nxd4_Qxd4:Nf6": {
+    watch: ["", "", "", "", "", "", "", "", "", "Nf6? Developing straight into the queen's fire — the e5 push gains a tempo and a big central clamp.", "e5! The pawn jumps forward with tempo, kicking the knight away and seizing space while the queen sits proudly on d4.", "", "Qe3 keeps the extra space and eyes the kingside; Black is cramped and a step behind.", "", "Qf3 holds the e5-pawn and the central grip — White is comfortably better.", "", "Nc3 finishes development with a clear space-and-structure edge.", ""],
+    learn: ["", "", "", "", "", "", "", "", "", "", "e5 — clamp and kick the knight.", "", "Qe3 — keep the space.", "", "Qf3 — hold e5.", "", "Nc3 — develop, you're better.", ""],
+  },
+  "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3:Nf6": {
+    watch: ["", "", "", "", "", "", "", "", "", "Nf6?? A blunder — it ignores the c5-bishop, which the bishop on e3 is already attacking.", "Nxc6 — first remove the defender, trading the knights.", "", "Bxc5 wins the bishop clean; Black has nothing to recapture with. White is simply up a piece.", "", "Be3 tucks the bishop back — the extra piece will decide.", "", "Nc3 develops with a winning material edge in hand.", ""],
+    learn: ["", "", "", "", "", "", "", "", "", "", "Nxc6 — remove the c5 defender.", "", "Bxc5 — win the bishop.", "", "Be3 — retreat, up a piece.", "", "Nc3 — develop and convert.", ""],
+  },
+  "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3:Bxd4": {
+    watch: ["", "", "", "", "", "", "", "", "", "", "", "Bxd4? Trading the good bishop for the knight only helps White — it hands over the bishop pair and a mighty pawn centre.", "cxd4 — recapturing toward the centre. White now owns the bishop pair and a broad, mobile centre.", "", "Nc3 hits the d5-pawn and develops with tempo.", "", "Nb5! The knight leaps in, eyeing c7 and d6 against a king that can no longer castle.", "", "Rc1 piles onto the half-open c-file; White's pieces swarm.", ""],
+    learn: ["", "", "", "", "", "", "", "", "", "", "", "", "cxd4 — take the centre, bishop pair.", "", "Nc3 — hit d5.", "", "Nb5! — leap at c7 and d6.", "", "Rc1 — seize the c-file.", ""],
+  },
+  "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Nf6_e5:Qe7": {
+    watch: ["", "", "", "", "", "", "", "", "", "Qe7? Pinning the e5-pawn looks clever, but it parks the queen on the e-file where White's rook is coming with deadly effect.", "O-O — and the rook is ready for e1. The e5-pawn is poisoned.", "", "Nxe5 — give the knight back to spring the trap.", "", "Re1! The rook skewers the queen to the king down the e-file; Black must shed material to survive.", "", "f4 hits the queen again and keeps the initiative rolling — White is clearly on top.", ""],
+    learn: ["", "", "", "", "", "", "", "", "", "", "O-O — ready the rook, poison e5.", "", "Nxe5 — spring the trap.", "", "Re1! — skewer the queen.", "", "f4 — hit the queen, keep pressing.", ""],
+  },
+  "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nc3:Nxd4": {
+    watch: ["", "", "", "", "", "", "", "", "", "Nxd4? The most popular move here, and an inaccuracy — trading on d4 only invites White's queen to a dominating central post.", "Qxd4 — the queen lands in the centre with a tempo-gaining grip, and Black has no way to challenge her.", "", "f3 anchors e4 and prepares to castle long and storm the kingside.", "", "Be3 develops and eyes the queenside dark squares.", "", "O-O-O — opposite-side castling, and White's attack is the faster one.", ""],
+    learn: ["", "", "", "", "", "", "", "", "", "", "Qxd4 — centralise the queen.", "", "f3 — anchor e4, prep long castle.", "", "Be3 — develop, eye the queenside.", "", "O-O-O — castle long, attack first.", ""],
+  },
+  "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Nb3:Bxf2+": {
+    watch: ["", "", "", "", "", "", "", "", "", "Bxf2+? A tempting sacrifice, but it is simply unsound here — there's no follow-up.", "Kxf2 — the king grabs the bishop. White is up a clean piece for a single pawn, and the king is perfectly safe.", "", "Nc3 develops; the king walks to safety and the extra piece wins.", "", "Be2 prepares to connect the rooks and tuck the king away.", "", "Rf1 brings the rook back into play — White is winning comfortably.", ""],
+    learn: ["", "", "", "", "", "", "", "", "", "", "Kxf2 — take it, up a piece.", "", "Nc3 — develop, convert.", "", "Be2 — reroute the king to safety.", "", "Rf1 — rook back, winning.", ""],
+  },
+  "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3_Bb4_Bc4_d6_O-O:Be6": {
+    watch: ["", "", "", "", "", "", "", "", "", "", "", "", "", "Be6? It walks into a thunderbolt — the c4-bishop and the c3-knight are perfectly placed to pounce.", "Nd5! The knight forks the b4-bishop and threatens c7; suddenly every Black piece is loose.", "", "Qb3 doubles on b7 and f7 at once, hitting two targets the knight uncovered.", "", "Qxb7 grabs the pawn and attacks the a8-rook.", "", "Nxc7+! The fork — the king must move and the rook in the corner falls. The Göring's development lead crashes through.", ""],
+    learn: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "Nd5! — fork the bishop, hit c7.", "", "Qb3 — double on b7 and f7.", "", "Qxb7 — grab the pawn, hit the rook.", "", "Nxc7+ — fork; win the rook.", ""],
   },
 };
 

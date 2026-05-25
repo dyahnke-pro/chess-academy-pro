@@ -264,10 +264,10 @@ const ZAITSEV: LessonScript = {
   ],
 };
 
-// ── Anti-Marshall (8.a4) ──────────────────────────────────────────
+// ── Anti-Marshall (a4) ──────────────────────────────────────────
 const ANTI_MARSHALL: LessonScript = {
   openingId: 'ruy-lopez',
-  title: 'Ruy Lopez — The Anti-Marshall (8.a4)',
+  title: 'Ruy Lopez — The Anti-Marshall (a4)',
   minutes: 9,
   orientation: 'white',
   beats: [

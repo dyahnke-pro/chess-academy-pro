@@ -18,7 +18,7 @@
         "moves": "e4 e5 Nf3",
         "arrows": [{ "from": "f3", "to": "e5", "color": "ATK" }],
         "highlights": [{ "square": "e5", "color": "KEY" }],
-        "say": "2.Nf3 — develop a piece and attack something. The king-knight leaps out and immediately pressures the e5-pawn, forcing Black to react. This is the move that separates the Italian and the Ruy from the quieter openings: White doesn't shuffle, he asks Black a question on move two. Defend e5, or lose it.",
+        "say": "Nf3 — develop a piece and attack something. The king-knight leaps out and immediately pressures the e5-pawn, forcing Black to react. This is the move that separates the Italian and the Ruy from the quieter openings: White doesn't shuffle, he asks Black a question on move two. Defend e5, or lose it.",
         "sayShort": "Nf3 — develop and hit e5 at once."
       },
       {
@@ -26,7 +26,7 @@
         "moves": "e4 e5 Nf3 Nc6",
         "arrows": [{ "from": "c6", "to": "e5", "color": "ATK" }],
         "highlights": [{ "square": "e5", "color": "KEY" }],
-        "say": "Black answers the most natural defence: 2…Nc6. The queen-knight comes to its best square and props up e5 a second time. Now the fight for the centre is fully joined, and White makes the move that names the opening.",
+        "say": "Black answers the most natural defence: Nc6. The queen-knight comes to its best square and props up e5 a second time. Now the fight for the centre is fully joined, and White makes the move that names the opening.",
         "sayShort": "…Nc6 — defends e5, the fight is joined."
       },
       {
@@ -34,7 +34,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4",
         "arrows": [{ "from": "c4", "to": "f7", "color": "ATK" }],
         "highlights": [{ "square": "f7", "color": "KEY" }],
-        "say": "3.Bc4 — the Italian bishop, and the move the whole opening is named for. From c4 it stares straight down the longest light diagonal at f7. Remember why f7 matters: it's the only square near Black's king defended by nothing but the king himself. Every plan in the Italian, slow or violent, eventually comes back to pressure on this square.",
+        "say": "Bc4 — the Italian bishop, and the move the whole opening is named for. From c4 it stares straight down the longest light diagonal at f7. Remember why f7 matters: it's the only square near Black's king defended by nothing but the king himself. Every plan in the Italian, slow or violent, eventually comes back to pressure on this square.",
         "sayShort": "Bc4 — the Italian bishop drills into f7."
       },
       {
@@ -42,14 +42,14 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5",
         "arrows": [{ "from": "c5", "to": "f2", "color": "ATK" }],
         "highlights": [{ "square": "f2", "color": "KEY" }, { "square": "f7", "color": "SOFT" }],
-        "say": "3…Bc5 — the Giuoco Piano, the \"quiet game.\" Black mirrors, aiming his own bishop at f2 exactly as White's bishop aims at f7. The position is symmetrical and both sides point at the other's weak f-pawn. Symmetry is a standing invitation: whoever breaks it first, in his own favour, takes the initiative. White's tool for breaking it is a pawn break in the centre.",
+        "say": "Bc5 — the Giuoco Piano, the \"quiet game.\" Black mirrors, aiming his own bishop at f2 exactly as White's bishop aims at f7. The position is symmetrical and both sides point at the other's weak f-pawn. Symmetry is a standing invitation: whoever breaks it first, in his own favour, takes the initiative. White's tool for breaking it is a pawn break in the centre.",
         "sayShort": "…Bc5 — the Giuoco Piano mirror; break it first."
       },
       {
         "id": "c3",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3",
         "highlights": [{ "square": "d4", "color": "KEY" }],
-        "say": "4.c3 — modest, and the foundation of the entire classical plan. The pawn does one job: it prepares d4. White wants to build the broad centre — pawns on d4 and e4 side by side — and c3 is the brace that will support that d4 push the moment it advances. Patience first: build the centre, then fight in it.",
+        "say": "c3 — modest, and the foundation of the entire classical plan. The pawn does one job: it prepares d4. White wants to build the broad centre — pawns on d4 and e4 side by side — and c3 is the brace that will support that d4 push the moment it advances. Patience first: build the centre, then fight in it.",
         "sayShort": "c3 — the brace that prepares the d4 break."
       },
       {
@@ -57,7 +57,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6",
         "arrows": [{ "from": "f6", "to": "e4", "color": "ATK" }],
         "highlights": [{ "square": "e4", "color": "KEY" }],
-        "say": "4…Nf6 develops with a threat — the knight attacks the e4-pawn — and forces White to commit. There's no more time for slow moves; the centre tension has to be resolved. So White plays the break the whole opening has been preparing.",
+        "say": "Nf6 develops with a threat — the knight attacks the e4-pawn — and forces White to commit. There's no more time for slow moves; the centre tension has to be resolved. So White plays the break the whole opening has been preparing.",
         "sayShort": "…Nf6 — hits e4 and forces the break."
       },
       {
@@ -65,14 +65,14 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4",
         "arrows": [{ "from": "f3", "to": "e5", "color": "ATK" }],
         "highlights": [{ "square": "d4", "color": "KEY" }, { "square": "e5", "color": "KEY" }],
-        "say": "5.d4! The break lands. The pawn that c3 was bracing storms forward, attacking the e5-pawn and the c5-bishop's support at once. This is the central detonation Capablanca taught was the heart of every sound attack: no assault succeeds without control of the centre, and White is seizing it. Black must capture.",
+        "say": "d4! The break lands. The pawn that c3 was bracing storms forward, attacking the e5-pawn and the c5-bishop's support at once. This is the central detonation Capablanca taught was the heart of every sound attack: no assault succeeds without control of the centre, and White is seizing it. Black must capture.",
         "sayShort": "d4! — the prepared break detonates the centre."
       },
       {
         "id": "exd4-cxd4",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4",
         "highlights": [{ "square": "d4", "color": "KEY" }, { "square": "e4", "color": "KEY" }],
-        "say": "5…exd4 6.cxd4 — and there it is: White's pawns stand abreast on d4 and e4, the classical broad centre. This duo cramps Black, controls the key central squares, and gives every White piece a clear line forward. But the d4-pawn is also a target, and Black strikes at it immediately with a check.",
+        "say": "exd4 cxd4 — and there it is: White's pawns stand abreast on d4 and e4, the classical broad centre. This duo cramps Black, controls the key central squares, and gives every White piece a clear line forward. But the d4-pawn is also a target, and Black strikes at it immediately with a check.",
         "sayShort": "exd4 cxd4 — the broad d4-e4 centre stands."
       },
       {
@@ -80,14 +80,14 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2",
         "arrows": [{ "from": "d2", "to": "e4", "color": "VIS" }],
         "highlights": [{ "square": "e4", "color": "KEY" }],
-        "say": "6…Bb4+ checks, and after 7.Bd2 Bxd2+ 8.Nbxd2 the bishops come off. This is the Greco Attack, the calm heart of the Giuoco Piano. Notice White recaptured with the queen-knight: it lands on d2 heading for the kingside, and crucially it adds a second defender to the e4-pawn — because Black's next blow falls right there.",
+        "say": "Bb4+ checks, and after Bd2 Bxd2+ Nbxd2 the bishops come off. This is the Greco Attack, the calm heart of the Giuoco Piano. Notice White recaptured with the queen-knight: it lands on d2 heading for the kingside, and crucially it adds a second defender to the e4-pawn — because Black's next blow falls right there.",
         "sayShort": "Bb4+ Bd2 — trade off; Nd2 reinforces e4."
       },
       {
         "id": "d5",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5",
         "highlights": [{ "square": "d5", "color": "KEY" }, { "square": "e4", "color": "SOFT" }],
-        "say": "8…d5! Black's freeing break, and the standard equalising idea in these positions. The pawn hits the e4-centre and opens lines for Black's pieces before White can use the space. After 9.exd5 Nxd5 the smoke clears: White is left with an isolated d4-pawn, and the middlegame becomes a classic battle — White's central pawn and freer pieces against Black's pressure on the lone d-pawn.",
+        "say": "d5! Black's freeing break, and the standard equalising idea in these positions. The pawn hits the e4-centre and opens lines for Black's pieces before White can use the space. After exd5 Nxd5 the smoke clears: White is left with an isolated d4-pawn, and the middlegame becomes a classic battle — White's central pawn and freer pieces against Black's pressure on the lone d-pawn.",
         "sayShort": "…d5! — Black frees up; White gets the isolani."
       },
       {
@@ -95,7 +95,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O Re1",
         "arrows": [{ "from": "e1", "to": "e8", "color": "VIS" }],
         "highlights": [{ "square": "e8", "color": "KEY" }],
-        "say": "9.O-O O-O 10.Re1 — both kings reach safety and White's rook swings to the open e-file, pointing straight down at Black's king on e8. This is the dividend of the isolated d-pawn structure: the pawn may be a long-term weakness, but in return White gets open lines and active pieces for the middlegame, and the e-file is the first highway.",
+        "say": "O-O O-O Re1 — both kings reach safety and White's rook swings to the open e-file, pointing straight down at Black's king on e8. This is the dividend of the isolated d-pawn structure: the pawn may be a long-term weakness, but in return White gets open lines and active pieces for the middlegame, and the e-file is the first highway.",
         "sayShort": "O-O O-O Re1 — rook seizes the open e-file."
       },
       {
@@ -103,7 +103,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O Re1 Nb6 Bb3 Nxd4 Nxd4 Qxd4 Qc2",
         "arrows": [{ "from": "b3", "to": "f7", "color": "ATK" }, { "from": "c2", "to": "h7", "color": "VIS" }],
         "highlights": [{ "square": "f7", "color": "KEY" }, { "square": "h7", "color": "KEY" }],
-        "say": "10…Nb6 nudges the bishop, which slides to b3 staying on its f7 diagonal — the same reroute the Ruy Lopez bishop makes. Black grabs the isolated d-pawn with 12…Nxd4 13.Nxd4 Qxd4, but this is the trade White wanted: after 14.Qc2 the queen unveils the b3-bishop's aim at f7 and lines up its own battery on the b1-h7 diagonal toward h7. White has given a pawn for a raging initiative against the Black king.",
+        "say": "Nb6 nudges the bishop, which slides to b3 staying on its f7 diagonal — the same reroute the Ruy Lopez bishop makes. Black grabs the isolated d-pawn with Nxd4 Nxd4 Qxd4, but this is the trade White wanted: after Qc2 the queen unveils the b3-bishop's aim at f7 and lines up its own battery on the b1-h7 diagonal toward h7. White has given a pawn for a raging initiative against the Black king.",
         "sayShort": "Bb3, Qc2 — aim at f7 and h7."
       },
       {
@@ -111,7 +111,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O Re1 Nb6 Bb3 Nxd4 Nxd4 Qxd4 Qc2 c6 Ne4 Bf5 Rad1",
         "arrows": [{ "from": "e4", "to": "f6", "color": "INTENT" }, { "from": "d1", "to": "d4", "color": "VIS" }],
         "highlights": [{ "square": "d4", "color": "KEY" }, { "square": "f5", "color": "SOFT" }],
-        "say": "14…c6 shores up the light squares, but White keeps pouring pieces toward the king: 15.Ne4 jumps into the centre eyeing f6 and d6, 15…Bf5 pins it to the queen, and 16.Rad1 brings the last rook to the d-file, hitting the Black queen on d4. Every White piece now has a job near the centre or the king — this is the Italian's promise paying off: surrender the structure, collect the initiative. The isolated-pawn middlegame is dynamic, not passive.",
+        "say": "c6 shores up the light squares, but White keeps pouring pieces toward the king: Ne4 jumps into the centre eyeing f6 and d6, Bf5 pins it to the queen, and Rad1 brings the last rook to the d-file, hitting the Black queen on d4. Every White piece now has a job near the centre or the king — this is the Italian's promise paying off: surrender the structure, collect the initiative. The isolated-pawn middlegame is dynamic, not passive.",
         "sayShort": "Ne4, Rad1 — every piece swarms the centre."
       },
       {
@@ -135,21 +135,21 @@
         "id": "m1",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3",
         "highlights": [{ "square": "e4", "color": "KEY" }, { "square": "d4", "color": "SOFT" }],
-        "say": "Welcome to the Giuoco Pianissimo — the \"quietest game\" — and the single most important Italian for the modern player. This is the weapon of Carlsen, Caruana, and So at the very top. Instead of the immediate c3-and-d4 break, White plays 4.d3: a small, patient move that overprotects e4 and refuses to release the central tension. The whole point is to avoid early theory and reach a rich, slow middlegame where understanding beats memorisation.",
+        "say": "Welcome to the Giuoco Pianissimo — the \"quietest game\" — and the single most important Italian for the modern player. This is the weapon of Carlsen, Caruana, and So at the very top. Instead of the immediate c3-and-d4 break, White plays d3: a small, patient move that overprotects e4 and refuses to release the central tension. The whole point is to avoid early theory and reach a rich, slow middlegame where understanding beats memorisation.",
         "sayShort": "d3 — the patient modern Italian, no early break."
       },
       {
         "id": "m2",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6",
         "highlights": [{ "square": "e5", "color": "KEY" }, { "square": "e4", "color": "SOFT" }],
-        "say": "4…Nf6 5.O-O d6 — both sides build the same modest structure. Black mirrors with …d6, propping e5 just as White propped e4. Nothing is forced, nothing is resolved. In the Pianissimo the opening doesn't decide the game; the manoeuvring that follows does. White's plan from here is a slow, specific knight journey that every strong player knows by heart.",
+        "say": "Nf6 O-O d6 — both sides build the same modest structure. Black mirrors with …d6, propping e5 just as White propped e4. Nothing is forced, nothing is resolved. In the Pianissimo the opening doesn't decide the game; the manoeuvring that follows does. White's plan from here is a slow, specific knight journey that every strong player knows by heart.",
         "sayShort": "O-O d6 — quiet symmetry; the manoeuvre decides."
       },
       {
         "id": "m3",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6",
         "highlights": [{ "square": "d4", "color": "KEY" }, { "square": "b5", "color": "SOFT" }],
-        "say": "6.c3 — still preparing d4, but on White's own terms, only when the pieces are ready. Black replies 6…a6, a useful little move that takes the b5-square away from White's pieces and prepares to meet a future bishop pin. Both armies are coiling. The tension is the message: whoever forces the d4 break at the right moment gets the better game.",
+        "say": "c3 — still preparing d4, but on White's own terms, only when the pieces are ready. Black replies a6, a useful little move that takes the b5-square away from White's pieces and prepares to meet a future bishop pin. Both armies are coiling. The tension is the message: whoever forces the d4 break at the right moment gets the better game.",
         "sayShort": "c3 a6 — coil up; d4 comes when ready."
       },
       {
@@ -157,7 +157,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7",
         "arrows": [{ "from": "a7", "to": "f2", "color": "ATK" }],
         "highlights": [{ "square": "a7", "color": "KEY" }, { "square": "f2", "color": "SOFT" }],
-        "say": "7.a4 grabs queenside space and stops Black's …b5 expansion before it starts — pure prophylaxis. Black tucks the bishop away with 7…Ba7, a key Pianissimo idea: the bishop steps off c5 onto a7, out of reach of any future d4-d5 fork, while keeping its glare down the a7-g1 diagonal toward f2 and White's king. Now both bishops sit on the long diagonals, fully loaded, waiting for the centre to open.",
+        "say": "a4 grabs queenside space and stops Black's …b5 expansion before it starts — pure prophylaxis. Black tucks the bishop away with Ba7, a key Pianissimo idea: the bishop steps off c5 onto a7, out of reach of any future d4-d5 fork, while keeping its glare down the a7-g1 diagonal toward f2 and White's king. Now both bishops sit on the long diagonals, fully loaded, waiting for the centre to open.",
         "sayShort": "a4 Ba7 — stop …b5; bishop hides, eyes f2."
       },
       {
@@ -165,14 +165,14 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O",
         "arrows": [{ "from": "d2", "to": "f1", "color": "INTENT" }],
         "highlights": [{ "square": "f1", "color": "KEY" }, { "square": "g3", "color": "SOFT" }],
-        "say": "8.Nbd2 — and here begins the manoeuvre that defines the modern Italian. The queen-knight develops to d2, but d2 is only a waypoint. Its destination is the kingside: d2 to f1 to g3, and from g3 it eyes the beautiful f5-outpost. Edward Lasker's old rule applies word-for-word — a knight on f5 cannot be driven away by a pawn. White is willing to spend three tempi to get there. Black castles into safety; the slow squeeze is on.",
+        "say": "Nbd2 — and here begins the manoeuvre that defines the modern Italian. The queen-knight develops to d2, but d2 is only a waypoint. Its destination is the kingside: d2 to f1 to g3, and from g3 it eyes the beautiful f5-outpost. Edward Lasker's old rule applies word-for-word — a knight on f5 cannot be driven away by a pawn. White is willing to spend three tempi to get there. Black castles into safety; the slow squeeze is on.",
         "sayShort": "Nbd2 — the knight starts the f1-g3-f5 trek."
       },
       {
         "id": "m6",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O Re1 Be6",
         "highlights": [{ "square": "e6", "color": "KEY" }, { "square": "e4", "color": "SOFT" }],
-        "say": "9.Re1 puts the rook behind the e-pawn, supporting the e4-point and bracing the e-file for when it opens. Black develops 9…Be6, offering to trade the light-squared bishops. This is a critical decision for White: allowing the trade eases Black's game, so White will usually slide his bishop back a square rather than give it up — the same bishop dance you saw in the main line and the Ruy.",
+        "say": "Re1 puts the rook behind the e-pawn, supporting the e4-point and bracing the e-file for when it opens. Black develops Be6, offering to trade the light-squared bishops. This is a critical decision for White: allowing the trade eases Black's game, so White will usually slide his bishop back a square rather than give it up — the same bishop dance you saw in the main line and the Ruy.",
         "sayShort": "Re1 Be6 — brace the e-file; bishops face off."
       },
       {
@@ -180,7 +180,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O Re1 Be6 Bb3 h6",
         "arrows": [{ "from": "b3", "to": "e6", "color": "ATK" }],
         "highlights": [{ "square": "e6", "color": "KEY" }, { "square": "f7", "color": "SOFT" }],
-        "say": "10.Bb3 keeps the bishop alive on its favourite diagonal, still pressuring e6 and f7 and declining the trade. Black plays 10…h6, a typical prophylactic move that denies White's pieces the g5-square and gives the king a flight square. We've arrived at the Pianissimo tabiya — and from here White's plan writes itself: complete the knight's journey to g3 and f5, recoil the bishop if needed, and strike with d4 only when every piece is aimed at the centre and the kingside. This is positional chess at its purest: small moves, deep plans, one eventual break.",
+        "say": "Bb3 keeps the bishop alive on its favourite diagonal, still pressuring e6 and f7 and declining the trade. Black plays h6, a typical prophylactic move that denies White's pieces the g5-square and gives the king a flight square. We've arrived at the Pianissimo tabiya — and from here White's plan writes itself: complete the knight's journey to g3 and f5, recoil the bishop if needed, and strike with d4 only when every piece is aimed at the centre and the kingside. This is positional chess at its purest: small moves, deep plans, one eventual break.",
         "sayShort": "Bb3 h6 — the tabiya; now Ng3-f5 and d4."
       }
     ]
@@ -198,14 +198,14 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6",
         "arrows": [{ "from": "f6", "to": "e4", "color": "ATK" }],
         "highlights": [{ "square": "e4", "color": "KEY" }],
-        "say": "Instead of mirroring with 3…Bc5, Black plays 3…Nf6 — the Two Knights Defence, the aggressive choice. The knight immediately attacks the e4-pawn and dares White to do something about it. This is one of the oldest and sharpest battlegrounds in chess. White has the swashbuckling 4.Ng5 going straight for f7, but here we study the principled centre break: 4.d4.",
+        "say": "Instead of mirroring with Bc5, Black plays Nf6 — the Two Knights Defence, the aggressive choice. The knight immediately attacks the e4-pawn and dares White to do something about it. This is one of the oldest and sharpest battlegrounds in chess. White has the swashbuckling Ng5 going straight for f7, but here we study the principled centre break: d4.",
         "sayShort": "…Nf6 — the Two Knights hits e4 at once."
       },
       {
         "id": "t2",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O",
         "highlights": [{ "square": "d4", "color": "KEY" }],
-        "say": "4.d4! exd4 5.O-O — White strikes the centre and then, rather than recapture the pawn on d4, simply castles. This is the modern, dynamic treatment: White hands Black the d4-pawn and in return gets a huge lead in development with open lines toward the Black king. The gambit pawn is irrelevant; the time is everything.",
+        "say": "d4! exd4 O-O — White strikes the centre and then, rather than recapture the pawn on d4, simply castles. This is the modern, dynamic treatment: White hands Black the d4-pawn and in return gets a huge lead in development with open lines toward the Black king. The gambit pawn is irrelevant; the time is everything.",
         "sayShort": "d4 exd4 O-O — gambit the pawn for development."
       },
       {
@@ -213,7 +213,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5",
         "arrows": [{ "from": "e1", "to": "e4", "color": "ATK" }],
         "highlights": [{ "square": "e4", "color": "KEY" }, { "square": "d5", "color": "KEY" }],
-        "say": "5…Nxe4 grabs a second pawn — and walks into 6.Re1, the rook pinning the e4-knight against the king down the open e-file. Black must defend, and the only move is 6…d5, blocking the file and giving the knight a shield. The position is razor-sharp: Black is two pawns up but every one of his pieces is loose and his king is stuck in the centre.",
+        "say": "Nxe4 grabs a second pawn — and walks into Re1, the rook pinning the e4-knight against the king down the open e-file. Black must defend, and the only move is d5, blocking the file and giving the knight a shield. The position is razor-sharp: Black is two pawns up but every one of his pieces is loose and his king is stuck in the centre.",
         "sayShort": "Nxe4 Re1 d5 — pin and prop the e-file."
       },
       {
@@ -221,7 +221,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3",
         "arrows": [{ "from": "c3", "to": "e4", "color": "ATK" }, { "from": "c3", "to": "d5", "color": "ATK" }],
         "highlights": [{ "square": "e4", "color": "KEY" }, { "square": "d5", "color": "KEY" }],
-        "say": "7.Bxd5! Qxd5 8.Nc3 — the key tactical point. White sacrifices the bishop to drag Black's queen to d5, then springs 8.Nc3 forking the queen and the e4-knight at the same time. The knight develops with tempo and White is about to regain the material with interest. Watch how every White move comes with a threat — that is the dividend of the development lead.",
+        "say": "Bxd5! Qxd5 Nc3 — the key tactical point. White sacrifices the bishop to drag Black's queen to d5, then springs Nc3 forking the queen and the e4-knight at the same time. The knight develops with tempo and White is about to regain the material with interest. Watch how every White move comes with a threat — that is the dividend of the development lead.",
         "sayShort": "Bxd5 Qxd5 Nc3 — fork queen and knight."
       },
       {
@@ -229,7 +229,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qa5 Nxe4 Be6 Neg5",
         "arrows": [{ "from": "g5", "to": "e6", "color": "ATK" }],
         "highlights": [{ "square": "e6", "color": "KEY" }],
-        "say": "8…Qa5 9.Nxe4 Be6 10.Neg5 — Black's queen flees to a5 and White scoops the e4-knight back, restoring material equality. When Black covers f7 with 9…Be6, White redoubles with 10.Neg5, attacking that e6-bishop and renewing the pressure on f7. The forcing sequence is still flowing, and White's pieces remain the more active throughout.",
+        "say": "Qa5 Nxe4 Be6 Neg5 — Black's queen flees to a5 and White scoops the e4-knight back, restoring material equality. When Black covers f7 with Be6, White redoubles with Neg5, attacking that e6-bishop and renewing the pressure on f7. The forcing sequence is still flowing, and White's pieces remain the more active throughout.",
         "sayShort": "Nxe4 Be6 Neg5 — regain piece, hit e6."
       },
       {
@@ -237,7 +237,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qa5 Nxe4 Be6 Neg5 O-O-O Nxe6 fxe6 Rxe6 Bd6",
         "arrows": [{ "from": "e6", "to": "d6", "color": "VIS" }],
         "highlights": [{ "square": "e6", "color": "KEY" }, { "square": "d6", "color": "SOFT" }],
-        "say": "10…O-O-O 11.Nxe6 fxe6 12.Rxe6 Bd6 — the dust finally settles. Black castles long out of the pin, the knights are traded on e6, and White's rook grabs the e6-pawn, landing actively in the heart of Black's position. The verdict: material is level, but White's better pawn structure and his active rook give a small, lasting pull. Know this forcing line cold — it's how you punish 5…Nxe4 — but understand that with accurate play it leads to a balanced, playable middlegame, not a knockout.",
+        "say": "O-O-O Nxe6 fxe6 Rxe6 Bd6 — the dust finally settles. Black castles long out of the pin, the knights are traded on e6, and White's rook grabs the e6-pawn, landing actively in the heart of Black's position. The verdict: material is level, but White's better pawn structure and his active rook give a small, lasting pull. Know this forcing line cold — it's how you punish Nxe4 — but understand that with accurate play it leads to a balanced, playable middlegame, not a knockout.",
         "sayShort": "Nxe6 fxe6 Rxe6 — level, but White presses."
       }
     ]
@@ -254,28 +254,28 @@
         "id": "e1",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4",
         "highlights": [{ "square": "b4", "color": "KEY" }, { "square": "c5", "color": "SOFT" }],
-        "say": "4.b4 — the Evans Gambit, the most romantic weapon in the Italian and a favourite of Morphy and, in the modern era, Kasparov. White throws a wing pawn at the c5-bishop. The idea is pure energy: if Black grabs the pawn, White gains the tempo to play c3 and d4, builds a massive centre, and unleashes the c4-bishop and the dark-squared bishop on the long diagonals. A pawn for a head start.",
+        "say": "b4 — the Evans Gambit, the most romantic weapon in the Italian and a favourite of Morphy and, in the modern era, Kasparov. White throws a wing pawn at the c5-bishop. The idea is pure energy: if Black grabs the pawn, White gains the tempo to play c3 and d4, builds a massive centre, and unleashes the c4-bishop and the dark-squared bishop on the long diagonals. A pawn for a head start.",
         "sayShort": "b4! — the Evans: a pawn for the lead."
       },
       {
         "id": "e2",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5",
         "highlights": [{ "square": "c3", "color": "KEY" }, { "square": "d4", "color": "SOFT" }],
-        "say": "4…Bxb4 5.c3 — Black accepts, and White plays the point of the gambit: c3, gaining a tempo by attacking the b4-bishop while preparing the d4 break. The bishop retreats to c5 with 5…Bc5, returning to the diagonal it came from. White has surrendered a pawn but gained exactly what he wanted — the time to seize the centre.",
+        "say": "Bxb4 c3 — Black accepts, and White plays the point of the gambit: c3, gaining a tempo by attacking the b4-bishop while preparing the d4 break. The bishop retreats to c5 with Bc5, returning to the diagonal it came from. White has surrendered a pawn but gained exactly what he wanted — the time to seize the centre.",
         "sayShort": "Bxb4 c3 — kick the bishop, prepare d4."
       },
       {
         "id": "e3",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4",
         "highlights": [{ "square": "d4", "color": "KEY" }, { "square": "e4", "color": "KEY" }],
-        "say": "6.d4 exd4 7.O-O d6 8.cxd4 — and there it is: the broad pawn centre, pawns on d4 and e4, exactly the structure the gambit paid for. White is down a pawn but his centre is huge, his king is castled, and his pieces are ready to pour out. Black has slowed White with the solid 7…d6, but now White claims the space he bought.",
+        "say": "d4 exd4 O-O d6 cxd4 — and there it is: the broad pawn centre, pawns on d4 and e4, exactly the structure the gambit paid for. White is down a pawn but his centre is huge, his king is castled, and his pieces are ready to pour out. Black has slowed White with the solid d6, but now White claims the space he bought.",
         "sayShort": "d4 O-O cxd4 — the bought centre stands tall."
       },
       {
         "id": "e4",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 d5",
         "highlights": [{ "square": "d5", "color": "KEY" }, { "square": "c6", "color": "SOFT" }],
-        "say": "8…Bb6 9.d5! — the bishop slides back to the safe b6-square, and White lunges forward with d5, gaining space with tempo by hitting the c6-knight. This is the modern engine-approved treatment: rather than keep the tension, White rolls the centre pawn forward, cramps Black, and forces the knight to a miserable square.",
+        "say": "Bb6 d5! — the bishop slides back to the safe b6-square, and White lunges forward with d5, gaining space with tempo by hitting the c6-knight. This is the modern engine-approved treatment: rather than keep the tension, White rolls the centre pawn forward, cramps Black, and forces the knight to a miserable square.",
         "sayShort": "Bb6 d5! — roll the pawn, kick the knight."
       },
       {
@@ -283,7 +283,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2",
         "arrows": [{ "from": "b2", "to": "g7", "color": "ATK" }],
         "highlights": [{ "square": "a5", "color": "KEY" }, { "square": "g7", "color": "SOFT" }],
-        "say": "9…Na5 10.Bb2 — the knight is shoved to the rim on a5, biting on the c4-bishop but doing nothing for Black's king. White answers with the thematic 10.Bb2, planting the dark-squared bishop on the long diagonal where it rakes all the way toward g7 and Black's castled home. The two bishops on c4 and b2 are the Evans Gambit's twin cannons.",
+        "say": "Na5 Bb2 — the knight is shoved to the rim on a5, biting on the c4-bishop but doing nothing for Black's king. White answers with the thematic Bb2, planting the dark-squared bishop on the long diagonal where it rakes all the way toward g7 and Black's castled home. The two bishops on c4 and b2 are the Evans Gambit's twin cannons.",
         "sayShort": "Na5 Bb2 — knight to rim; bishop rakes g7."
       },
       {
@@ -291,7 +291,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2 Ne7",
         "arrows": [{ "from": "b2", "to": "g7", "color": "ATK" }],
         "highlights": [{ "square": "f7", "color": "KEY" }, { "square": "g7", "color": "KEY" }],
-        "say": "10…Ne7 brings the other knight back toward the defence — the Paulsen Variation — and we reach the Evans tabiya. Survey what White bought with one pawn: a space-gaining centre, two bishops aimed at f7 and g7, an open b-file behind the Bb2, and the half-open c-file for a rook. Black's a5-knight is offside and his king will need careful defending. The plans from here are Nbd2-f3 ideas, Qb3 or Qc2 joining the f7 assault, and a kingside pawn storm. This is why the Evans scores so brutally against the unprepared: every White piece points at the king.",
+        "say": "Ne7 brings the other knight back toward the defence — the Paulsen Variation — and we reach the Evans tabiya. Survey what White bought with one pawn: a space-gaining centre, two bishops aimed at f7 and g7, an open b-file behind the Bb2, and the half-open c-file for a rook. Black's a5-knight is offside and his king will need careful defending. The plans from here are Nbd2-f3 ideas, Qb3 or Qc2 joining the f7 assault, and a kingside pawn storm. This is why the Evans scores so brutally against the unprepared: every White piece points at the king.",
         "sayShort": "Ne7 — bishops blaze at f7 and g7."
       }
     ]
@@ -308,14 +308,14 @@
         "id": "o1",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3",
         "highlights": [{ "square": "c3", "color": "KEY" }, { "square": "d4", "color": "SOFT" }],
-        "say": "The Møller Attack is the most spectacular line in the entire Italian — a willing sacrifice of a full rook for a raging attack. We branch from the main line at the check: after 6…Bb4+ White plays not the calm 7.Bd2, but the fighting 7.Nc3, defending the check with a piece and keeping the broad d4-e4 centre completely intact. White is offering Black the chance to win material — and inviting him to regret it.",
-        "sayShort": "7.Nc3 — keep the centre, dare Black to grab."
+        "say": "The Møller Attack is the most spectacular line in the entire Italian — a willing sacrifice of a full rook for a raging attack. We branch from the main line at the check: after Bb4+ White plays not the calm Bd2, but the fighting Nc3, defending the check with a piece and keeping the broad d4-e4 centre completely intact. White is offering Black the chance to win material — and inviting him to regret it.",
+        "sayShort": "Nc3 — keep the centre, dare Black to grab."
       },
       {
         "id": "o2",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Nxc3 bxc3 Bxc3",
         "highlights": [{ "square": "e4", "color": "KEY" }, { "square": "c3", "color": "KEY" }],
-        "say": "7…Nxe4 8.O-O — Black snatches the e4-pawn and White just castles, ignoring it. After 8…Nxc3 9.bxc3 Bxc3 Black has greedily munched two centre pawns and is now eyeing the rook in the corner. Every Black move has been a capture; not one has developed a new piece or helped his king. White, meanwhile, is fully castled with both bishops loaded. The trap is set.",
+        "say": "Nxe4 O-O — Black snatches the e4-pawn and White just castles, ignoring it. After Nxc3 bxc3 Bxc3 Black has greedily munched two centre pawns and is now eyeing the rook in the corner. Every Black move has been a capture; not one has developed a new piece or helped his king. White, meanwhile, is fully castled with both bishops loaded. The trap is set.",
         "sayShort": "Nxe4 O-O Bxc3 — Black feasts; White just develops."
       },
       {
@@ -323,14 +323,14 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Nxc3 bxc3 Bxc3 Qb3",
         "arrows": [{ "from": "c4", "to": "f7", "color": "ATK" }],
         "highlights": [{ "square": "f7", "color": "KEY" }, { "square": "c3", "color": "SOFT" }],
-        "say": "9.Qb3!! — the move that makes the Møller immortal. The queen leaps out with a double purpose: it attacks the c3-bishop and, far more dangerously, it joins the c4-bishop in a battery firing straight at f7. Two pieces now bear down on the one square the king alone defends. Black's c3-bishop is hanging, but if he stops to save it, the storm on f7 breaks. He is being asked to choose between his pieces and his king.",
+        "say": "Qb3!! — the move that makes the Møller immortal. The queen leaps out with a double purpose: it attacks the c3-bishop and, far more dangerously, it joins the c4-bishop in a battery firing straight at f7. Two pieces now bear down on the one square the king alone defends. Black's c3-bishop is hanging, but if he stops to save it, the storm on f7 breaks. He is being asked to choose between his pieces and his king.",
         "sayShort": "Qb3!! — queen and bishop double on f7."
       },
       {
         "id": "o4",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Nxc3 bxc3 Bxc3 Qb3 Bxa1 Bxf7+ Kf8",
         "highlights": [{ "square": "f7", "color": "KEY" }, { "square": "f8", "color": "SOFT" }],
-        "say": "9…Bxa1 — Black takes the rook, winning the exchange and seemingly the game. 10.Bxf7+! White ignores his lost rook and smashes the bishop into f7 with check. The king cannot take — after 10…Kxf7 the queen check on b3 collects everything — so it shuffles to f8 with 10…Kf8, and now Black's king is stranded in the centre, his queenside asleep, and his trophy bishop marooned in the corner on a1.",
+        "say": "Bxa1 — Black takes the rook, winning the exchange and seemingly the game. Bxf7+! White ignores his lost rook and smashes the bishop into f7 with check. The king cannot take — after Kxf7 the queen check on b3 collects everything — so it shuffles to f8 with Kf8, and now Black's king is stranded in the centre, his queenside asleep, and his trophy bishop marooned in the corner on a1.",
         "sayShort": "Bxa1 Bxf7+! — ignore the rook, crack the king."
       },
       {
@@ -338,14 +338,14 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Nxc3 bxc3 Bxc3 Qb3 Bxa1 Bxf7+ Kf8 Bg5 Ne7 Ne5",
         "arrows": [{ "from": "g5", "to": "e7", "color": "ATK" }, { "from": "e5", "to": "f7", "color": "VIS" }],
         "highlights": [{ "square": "e7", "color": "KEY" }, { "square": "e5", "color": "KEY" }],
-        "say": "11.Bg5! Ne7 12.Ne5 — White brings the reserves with gain of time. The g5-bishop pins and harasses, Black props up with the knight on e7, and 12.Ne5 plants the knight in the centre, supporting the f7-bishop and threatening to leap into d7 or g6 with devastating effect. White is down a whole rook and entirely winning — because every single one of his pieces is attacking and Black's are spectators.",
+        "say": "Bg5! Ne7 Ne5 — White brings the reserves with gain of time. The g5-bishop pins and harasses, Black props up with the knight on e7, and Ne5 plants the knight in the centre, supporting the f7-bishop and threatening to leap into d7 or g6 with devastating effect. White is down a whole rook and entirely winning — because every single one of his pieces is attacking and Black's are spectators.",
         "sayShort": "Bg5 Ne7 Ne5 — down a rook, still winning."
       },
       {
         "id": "o6",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Nc3 Nxe4 O-O Nxc3 bxc3 Bxc3 Qb3 Bxa1 Bxf7+ Kf8 Bg5 Ne7 Ne5 Bxd4 Bg6 d5 Qf3+ Bf5 Bxf5",
         "highlights": [{ "square": "f5", "color": "KEY" }, { "square": "f3", "color": "SOFT" }],
-        "say": "The finish is a hurricane: 12…Bxd4 13.Bg6! d5 14.Qf3+ Bf5 15.Bxf5 — the bishop sacrifices itself again to drag out a defender, the queen swings to f3 with check, and White's attack rolls on with crushing force. Modern analysis has shown that with inhuman precision Black can hold parts of the Møller to a draw — but across the board, against a human, this is one of the deadliest practical weapons in all of chess. The lesson of the Møller: pawns and even rooks are worth nothing next to an attack on a king that cannot run.",
+        "say": "The finish is a hurricane: Bxd4 Bg6! d5 Qf3+ Bf5 Bxf5 — the bishop sacrifices itself again to drag out a defender, the queen swings to f3 with check, and White's attack rolls on with crushing force. Modern analysis has shown that with inhuman precision Black can hold parts of the Møller to a draw — but across the board, against a human, this is one of the deadliest practical weapons in all of chess. The lesson of the Møller: pawns and even rooks are worth nothing next to an attack on a king that cannot run.",
         "sayShort": "Bg6, Qf3+ — the hurricane; an unstoppable attack."
       }
     ]
@@ -366,35 +366,35 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4",
         "arrows": [{ "from": "g4", "to": "f3", "color": "ATK" }],
         "highlights": [{ "square": "g4", "color": "KEY" }, { "square": "f3", "color": "SOFT" }],
-        "say": "This is the oldest recorded trap in chess, named for Légal de Kermeur, Philidor's own teacher. Black has played a quiet 3…d6 and then pinned the f3-knight with 4…Bg4. The pin looks strong: the knight seems frozen, because moving it would expose White's queen on d1 to the g4-bishop. Most players believe a pinned piece simply cannot move. The Légal trap punishes exactly that belief.",
+        "say": "This is the oldest recorded trap in chess, named for Légal de Kermeur, Philidor's own teacher. Black has played a quiet d6 and then pinned the f3-knight with Bg4. The pin looks strong: the knight seems frozen, because moving it would expose White's queen on d1 to the g4-bishop. Most players believe a pinned piece simply cannot move. The Légal trap punishes exactly that belief.",
         "sayShort": "…Bg4 — the pin that looks unbreakable."
       },
       {
         "id": "l2",
         "moves": "e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 h3 Bh5",
         "highlights": [{ "square": "h5", "color": "KEY" }],
-        "say": "5.h3 asks the bishop a question. If Black breaks the pin himself with 5…Bxf3, White simply recaptures and the danger passes. But the greedy, natural human move is 5…Bh5, maintaining the pin and refusing to give up the bishop. That move walks straight into the oldest trick in the book.",
+        "say": "h3 asks the bishop a question. If Black breaks the pin himself with Bxf3, White simply recaptures and the danger passes. But the greedy, natural human move is Bh5, maintaining the pin and refusing to give up the bishop. That move walks straight into the oldest trick in the book.",
         "sayShort": "h3 Bh5 — Black keeps the pin."
       },
       {
         "id": "l3",
         "moves": "e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 h3 Bh5 Nxe5",
         "highlights": [{ "square": "e5", "color": "KEY" }, { "square": "d1", "color": "SOFT" }],
-        "say": "6.Nxe5!! The pinned knight moves anyway — and grabs a pawn. It looks like a blunder hanging the queen, and if Black sees the whole picture he plays 6…Nxe5 declining the queen, staying only a pawn down. But the bait is irresistible: the white queen on d1 sits there for the taking. Most opponents cannot resist.",
+        "say": "Nxe5!! The pinned knight moves anyway — and grabs a pawn. It looks like a blunder hanging the queen, and if Black sees the whole picture he plays Nxe5 declining the queen, staying only a pawn down. But the bait is irresistible: the white queen on d1 sits there for the taking. Most opponents cannot resist.",
         "sayShort": "Nxe5!! — the pinned knight moves and grabs e5."
       },
       {
         "id": "l4",
         "moves": "e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 h3 Bh5 Nxe5 Bxd1",
         "highlights": [{ "square": "d1", "color": "KEY" }, { "square": "f7", "color": "SOFT" }],
-        "say": "6…Bxd1?? Black snatches the queen, certain he has won. He has, in fact, just lost — by force, in two moves. White doesn't recapture the bishop. White plays for mate, and the f7-square, weak since move three, is the door.",
+        "say": "Bxd1?? Black snatches the queen, certain he has won. He has, in fact, just lost — by force, in two moves. White doesn't recapture the bishop. White plays for mate, and the f7-square, weak since move three, is the door.",
         "sayShort": "…Bxd1?? — the queen grab that loses by force."
       },
       {
         "id": "l5",
         "moves": "e4 e5 Nf3 Nc6 Bc4 d6 Nc3 Bg4 h3 Bh5 Nxe5 Bxd1 Bxf7+ Ke7 Nd5#",
         "highlights": [{ "square": "f7", "color": "KEY" }, { "square": "e7", "color": "KEY" }, { "square": "d5", "color": "KEY" }],
-        "say": "7.Bxf7+ Ke7 8.Nd5# — checkmate. The bishop checks from f7, the king is forced to e7, and the knight leaps to d5 delivering mate: the king cannot escape, every flight square is covered by the bishop on f7, the knight on d5, and White's own pieces. Three minor pieces and a pawn weave a perfect net while the Black queen looks on, useless, from d1. This is Légal's Mate — the immortal lesson that a pin is only as strong as the tactics it can survive. Whenever you see …Bg4 pinning your knight against an undefended queen, remember: the pin can be an illusion.",
+        "say": "Bxf7+ Ke7 Nd5# — checkmate. The bishop checks from f7, the king is forced to e7, and the knight leaps to d5 delivering mate: the king cannot escape, every flight square is covered by the bishop on f7, the knight on d5, and White's own pieces. Three minor pieces and a pawn weave a perfect net while the Black queen looks on, useless, from d1. This is Légal's Mate — the immortal lesson that a pin is only as strong as the tactics it can survive. Whenever you see …Bg4 pinning your knight against an undefended queen, remember: the pin can be an illusion.",
         "sayShort": "Bxf7+ Ke7 Nd5# — the minor pieces mate."
       }
     ]
@@ -415,7 +415,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5",
         "arrows": [{ "from": "g5", "to": "f7", "color": "ATK" }],
         "highlights": [{ "square": "g5", "color": "KEY" }, { "square": "f7", "color": "KEY" }],
-        "say": "Against the Two Knights, White can play the brazen 4.Ng5 — \"a real duffer's move\" Tarrasch sneered, and yet it is venomous. The knight jumps to g5 and, together with the c4-bishop, double-attacks f7. There is no good way to defend the pawn directly, so Black must counter in the centre.",
+        "say": "Against the Two Knights, White can play the brazen Ng5 — \"a real duffer's move\" Tarrasch sneered, and yet it is venomous. The knight jumps to g5 and, together with the c4-bishop, double-attacks f7. There is no good way to defend the pawn directly, so Black must counter in the centre.",
         "sayShort": "Ng5 — knight and bishop both hit f7."
       },
       {
@@ -423,7 +423,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5",
         "arrows": [{ "from": "a5", "to": "c4", "color": "ATK" }],
         "highlights": [{ "square": "d5", "color": "KEY" }, { "square": "a5", "color": "SOFT" }],
-        "say": "4…d5 5.exd5 — Black hits back in the centre and White grabs the pawn. Now comes the great fork in the road. Black's correct move is 5…Na5!, the Polerio Defence: the knight hits the c4-bishop and chases it away, accepting a pawn deficit for safety. Knowing this move is how Black survives the Fried Liver. The temptation, though, is to recapture the pawn — and that is the slip the whole attack is built to punish.",
+        "say": "d5 exd5 — Black hits back in the centre and White grabs the pawn. Now comes the great fork in the road. Black's correct move is Na5!, the Polerio Defence: the knight hits the c4-bishop and chases it away, accepting a pawn deficit for safety. Knowing this move is how Black survives the Fried Liver. The temptation, though, is to recapture the pawn — and that is the slip the whole attack is built to punish.",
         "sayShort": "d5 exd5 Na5 — the safe defence."
       },
       {
@@ -431,7 +431,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5",
         "arrows": [{ "from": "g5", "to": "f7", "color": "ATK" }, { "from": "c4", "to": "d5", "color": "ATK" }],
         "highlights": [{ "square": "d5", "color": "KEY" }, { "square": "f7", "color": "KEY" }],
-        "say": "5…Nxd5?! The natural recapture — and the move that earns its German name, the \"Fried Liver,\" because Black's position is about to be cooked. The knight grabs the pawn but now stands on d5 attacked by the c4-bishop, while f7 remains under fire from the g5-knight. White is ready to sacrifice.",
+        "say": "Nxd5?! The natural recapture — and the move that earns its German name, the \"Fried Liver,\" because Black's position is about to be cooked. The knight grabs the pawn but now stands on d5 attacked by the c4-bishop, while f7 remains under fire from the g5-knight. White is ready to sacrifice.",
         "sayShort": "…Nxd5?! — the greedy recapture gets cooked."
       },
       {
@@ -439,7 +439,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+",
         "arrows": [{ "from": "f3", "to": "f7", "color": "ATK" }, { "from": "f3", "to": "d5", "color": "ATK" }],
         "highlights": [{ "square": "f7", "color": "KEY" }, { "square": "d5", "color": "SOFT" }],
-        "say": "6.Nxf7! Kxf7 7.Qf3+ — the knight sacrifices itself on f7, dragging the king out into the open on the seventh rank, and the queen swings to f3 with check. From f3 she does two jobs at once: she checks the exposed king and she skewers the loose d5-knight down the diagonal. Black is up a knight, but his king is walking and his pieces are hanging.",
+        "say": "Nxf7! Kxf7 Qf3+ — the knight sacrifices itself on f7, dragging the king out into the open on the seventh rank, and the queen swings to f3 with check. From f3 she does two jobs at once: she checks the exposed king and she skewers the loose d5-knight down the diagonal. Black is up a knight, but his king is walking and his pieces are hanging.",
         "sayShort": "Nxf7! Kxf7 Qf3+ — drag the king, hit d5."
       },
       {
@@ -447,7 +447,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Ke6 Nc3",
         "arrows": [{ "from": "c3", "to": "d5", "color": "ATK" }],
         "highlights": [{ "square": "e6", "color": "KEY" }, { "square": "d5", "color": "KEY" }],
-        "say": "7…Ke6 — the only move. The king must step forward to e6 to defend the pinned d5-knight, because nothing else holds it. And now 8.Nc3 brings the last piece into the assault, piling a third attacker onto the d5-knight and threatening to rip the centre open with the king sitting in the middle of the board. White has sacrificed a knight to lure the king to e6 and aim his whole army at it — at club level this attack is simply winning. The Fried Liver is the reason every Two Knights player must know 5…Na5.",
+        "say": "Ke6 — the only move. The king must step forward to e6 to defend the pinned d5-knight, because nothing else holds it. And now Nc3 brings the last piece into the assault, piling a third attacker onto the d5-knight and threatening to rip the centre open with the king sitting in the middle of the board. White has sacrificed a knight to lure the king to e6 and aim his whole army at it — at club level this attack is simply winning. The Fried Liver is the reason every Two Knights player must know Na5.",
         "sayShort": "Ke6 Nc3 — the king is hunted."
       }
     ]
@@ -467,7 +467,7 @@
         "id": "b1",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nd4",
         "highlights": [{ "square": "d4", "color": "KEY" }, { "square": "e5", "color": "SOFT" }],
-        "say": "Here is a trap to AVOID — set for White, not by White. After 3.Bc4 Black plays the odd-looking 3…Nd4, the Blackburne Shilling Gambit. The knight jumps to the centre and seems to just hang the e5-pawn. Legend says Blackburne won shillings off amateurs with it in the pubs. White's greedy, natural reply loses on the spot.",
+        "say": "Here is a trap to AVOID — set for White, not by White. After Bc4 Black plays the odd-looking Nd4, the Blackburne Shilling Gambit. The knight jumps to the centre and seems to just hang the e5-pawn. Legend says Blackburne won shillings off amateurs with it in the pubs. White's greedy, natural reply loses on the spot.",
         "sayShort": "…Nd4?! — the bait that offers e5."
       },
       {
@@ -475,7 +475,7 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nd4 Nxe5 Qg5",
         "arrows": [{ "from": "g5", "to": "e5", "color": "ATK" }, { "from": "g5", "to": "g2", "color": "ATK" }],
         "highlights": [{ "square": "e5", "color": "KEY" }, { "square": "g2", "color": "KEY" }],
-        "say": "4.Nxe5?? Grab the pawn and the trap snaps shut. 4…Qg5! forks the e5-knight and the g2-pawn at once. White cannot save both, and defending the knight runs into disaster on the kingside. This single queen move is the whole point of Black's gambit.",
+        "say": "Nxe5?? Grab the pawn and the trap snaps shut. Qg5! forks the e5-knight and the g2-pawn at once. White cannot save both, and defending the knight runs into disaster on the kingside. This single queen move is the whole point of Black's gambit.",
         "sayShort": "Nxe5?? Qg5! — the fork that springs the trap."
       },
       {
@@ -483,14 +483,14 @@
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nd4 Nxe5 Qg5 Nxf7 Qxg2 Rf1 Qxe4+ Be2 Nf3#",
         "arrows": [{ "from": "f3", "to": "e1", "color": "VIS" }],
         "highlights": [{ "square": "g2", "color": "KEY" }, { "square": "f3", "color": "KEY" }, { "square": "e1", "color": "KEY" }],
-        "say": "It ends in mate. 5.Nxf7 Qxg2 6.Rf1 Qxe4+ 7.Be2 Nf3# — Black's queen storms in on g2, the knight that was sitting on d4 the whole time drops onto f3, and it mates the white king on e1: smothered, checkmate. White is the one who got fried, all for one greedy pawn grab. This is the danger; now learn the cure.",
+        "say": "It ends in mate. Nxf7 Qxg2 Rf1 Qxe4+ Be2 Nf3# — Black's queen storms in on g2, the knight that was sitting on d4 the whole time drops onto f3, and it mates the white king on e1: smothered, checkmate. White is the one who got fried, all for one greedy pawn grab. This is the danger; now learn the cure.",
         "sayShort": "Nf3# — White is mated for one greedy pawn."
       },
       {
         "id": "b4",
         "moves": "e4 e5 Nf3 Nc6 Bc4 Nd4 Nxd4 exd4 c3",
         "highlights": [{ "square": "d4", "color": "KEY" }, { "square": "c3", "color": "SOFT" }],
-        "say": "Rewind. Against 3…Nd4 the refutation is simple — just don't take the e5-pawn. The cleanest path is 4.Nxd4! exd4 5.c3, trading off the impudent knight and then challenging the d4-pawn with c3. White stays a healthy step ahead in development with no risk at all. The whole gambit depends on White's greed; decline the bait and Black has simply misplaced his pieces. The rule to lock in: when a knight leaps to d4 offering e5, develop and challenge — never grab.",
+        "say": "Rewind. Against Nd4 the refutation is simple — just don't take the e5-pawn. The cleanest path is Nxd4! exd4 c3, trading off the impudent knight and then challenging the d4-pawn with c3. White stays a healthy step ahead in development with no risk at all. The whole gambit depends on White's greed; decline the bait and Black has simply misplaced his pieces. The rule to lock in: when a knight leaps to d4 offering e5, develop and challenge — never grab.",
         "sayShort": "Nxd4 exd4 c3 — decline the bait, just develop."
       }
     ]

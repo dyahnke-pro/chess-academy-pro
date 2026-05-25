@@ -7591,7 +7591,7 @@
     "openingId": "pro-praggnanandhaa-ruy-lopez",
     "criticalPositionFen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8",
     "title": "Central d4 Break",
-    "overview": "Pragg's Ruy Lopez reaches the classic Closed position after 8.O-O. White's plan is c3 followed by d4, challenging Black's e5 pawn and opening the center. The Bb3 remains on the powerful a2-g8 diagonal targeting f7, and after d4, White's pieces gain maximum scope. Pragg plays this with deep preparation and precise calculation.",
+    "overview": "Pragg's Ruy Lopez reaches the classic Closed position after O-O. White's plan is c3 followed by d4, challenging Black's e5 pawn and opening the center. The Bb3 remains on the powerful a2-g8 diagonal targeting f7, and after d4, White's pieces gain maximum scope. Pragg plays this with deep preparation and precise calculation.",
     "pawnBreaks": [
       {
         "move": "c2-c3 then d2-d4",
@@ -8083,7 +8083,7 @@
     "openingId": "pro-ericrosen-italian",
     "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
     "title": "d4 Central Strike",
-    "overview": "Rosen's Italian at the 1.e4 e5 2.Nf3 Nc6 3.Bc4 Bc5 tabiya. The main plan is c3 followed by d4, seizing the center. After d4 exd4 cxd4, White gets a powerful pawn duo (d4+e4) and the Bc4 targets f7. Rosen's trappy style means he's always looking for tactical shots after the center opens.",
+    "overview": "Rosen's Italian at the e4 e5 Nf3 Nc6 Bc4 Bc5 tabiya. The main plan is c3 followed by d4, seizing the center. After d4 exd4 cxd4, White gets a powerful pawn duo (d4+e4) and the Bc4 targets f7. Rosen's trappy style means he's always looking for tactical shots after the center opens.",
     "pawnBreaks": [
       {
         "move": "c2-c3 then d2-d4",
@@ -8165,7 +8165,7 @@
     "openingId": "pro-ericrosen-stafford",
     "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n02/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
     "title": "Piece Activity and Tactical Tricks",
-    "overview": "Rosen's Stafford Gambit sacrifices a pawn for rapid piece development and tactical tricks. After 3.Nxe5 Nc6, Black aims to develop pieces aggressively (Bc5, d5, Qh4) creating multiple threats. If White doesn't know the theory, the tricks are devastating. Even in correct play, Black gets active compensation.",
+    "overview": "Rosen's Stafford Gambit sacrifices a pawn for rapid piece development and tactical tricks. After Nxe5 Nc6, Black aims to develop pieces aggressively (Bc5, d5, Qh4) creating multiple threats. If White doesn't know the theory, the tricks are devastating. Even in correct play, Black gets active compensation.",
     "pawnBreaks": [
       {
         "move": "d7-d5",
@@ -8247,7 +8247,7 @@
     "openingId": "pro-ericrosen-englund",
     "criticalPositionFen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
     "title": "Tactical Tricks After dxe5",
-    "overview": "Rosen's Englund Gambit (1.d4 e5?!) is a pure surprise weapon. After 2.dxe5, Black plays ...Nc6, ...Qe7, and ...Nxe5 or other tricky setups. The gambit is objectively dubious but the tricks are real — many opponents fall into devastating traps. Rosen uses this for entertainment and rapid games.",
+    "overview": "Rosen's Englund Gambit (d4 e5?!) is a pure surprise weapon. After dxe5, Black plays ...Nc6, ...Qe7, and ...Nxe5 or other tricky setups. The gambit is objectively dubious but the tricks are real — many opponents fall into devastating traps. Rosen uses this for entertainment and rapid games.",
     "pawnBreaks": [
       {
         "move": "d7-d6",
@@ -8288,7 +8288,7 @@
     "openingId": "pro-ericrosen-englund",
     "criticalPositionFen": "rnbqkbnr/pppp1ppp/8/4p3/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
     "title": "Piece Development and Tricks",
-    "overview": "After 1.d4 e5 2.dxe5, Rosen develops rapidly with ...Nc6, ...Qe7, and aims for tricks. The key patterns involve ...Qb4+ ideas, ...Bg4 pins, and ...Nd4 jumps. Even if White plays accurately, the unfamiliarity of the position gives Black practical chances. This is Rosen at his most creative.",
+    "overview": "After d4 e5 dxe5, Rosen develops rapidly with ...Nc6, ...Qe7, and aims for tricks. The key patterns involve ...Qb4+ ideas, ...Bg4 pins, and ...Nd4 jumps. Even if White plays accurately, the unfamiliarity of the position gives Black practical chances. This is Rosen at his most creative.",
     "pawnBreaks": [
       {
         "move": "e5xd4 (if White doesn't take)",
@@ -8493,7 +8493,7 @@
     "openingId": "pro-annacramling-sicilian",
     "criticalPositionFen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
     "title": "Classical Sicilian with ...d6",
-    "overview": "Cramling's Sicilian at the 1.e4 c5 tabiya. The most common continuation is ...d6, entering the Open Sicilian after 2.Nf3 d6 3.d4 cxd4 4.Nxd4. From there, Black can choose the Najdorf (...a6), Dragon (...g6), or Classical (...Nc6) depending on mood. Cramling recommends the solid, reliable approach.",
+    "overview": "Cramling's Sicilian at the e4 c5 tabiya. The most common continuation is ...d6, entering the Open Sicilian after Nf3 d6 d4 cxd4 Nxd4. From there, Black can choose the Najdorf (...a6), Dragon (...g6), or Classical (...Nc6) depending on mood. Cramling recommends the solid, reliable approach.",
     "pawnBreaks": [
       {
         "move": "d7-d6 then c5xd4",
@@ -8519,7 +8519,7 @@
       }
     ],
     "strategicThemes": [
-      "The Sicilian is the most dynamic response to 1.e4. Cramling chooses it for fighting chess with Black.",
+      "The Sicilian is the most dynamic response to e4. Cramling chooses it for fighting chess with Black.",
       "The half-open c-file is Black's main weapon. Every Sicilian plan involves exploiting this file.",
       "Asymmetry is the Sicilian's strength — it avoids symmetrical positions and creates imbalances.",
       "Cramling's Sicilian is accessible: clear plans, natural development, and reliable results."
@@ -8739,7 +8739,7 @@
     "openingId": "pro-chesswithakeem-kings-gambit",
     "criticalPositionFen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
     "title": "d4 Broad Center",
-    "overview": "Akeem's King's Gambit (1.e4 e5 2.f4) is the ultimate romantic opening. After Black takes ...exf4, White plays d4 and Bc4/Nf3, building a massive center and developing rapidly. The plan is to sacrifice the f-pawn for quick development, central control, and a direct kingside attack. This is chess at its most exciting.",
+    "overview": "Akeem's King's Gambit (e4 e5 f4) is the ultimate romantic opening. After Black takes ...exf4, White plays d4 and Bc4/Nf3, building a massive center and developing rapidly. The plan is to sacrifice the f-pawn for quick development, central control, and a direct kingside attack. This is chess at its most exciting.",
     "pawnBreaks": [
       {
         "move": "d2-d4 (after ...exf4)",
@@ -8780,7 +8780,7 @@
     "openingId": "pro-chesswithakeem-kings-gambit",
     "criticalPositionFen": "rnbqkbnr/pppp1ppp/8/4p3/4PP02/8/PPPP02PP/RNBQKBNR b KQkq - 0 2",
     "title": "Bc4 King's Bishop Gambit",
-    "overview": "The King's Bishop Gambit (2.f4 exf4 3.Bc4) is the most direct King's Gambit approach. Bc4 develops with tempo by targeting f7 and prepares for a direct kingside assault. Akeem loves this line because it creates immediate tactical complications where his calculation shines.",
+    "overview": "The King's Bishop Gambit (f4 exf4 Bc4) is the most direct King's Gambit approach. Bc4 develops with tempo by targeting f7 and prepares for a direct kingside assault. Akeem loves this line because it creates immediate tactical complications where his calculation shines.",
     "pawnBreaks": [
       {
         "move": "d2-d4",
@@ -8929,7 +8929,7 @@
       }
     ],
     "strategicThemes": [
-      "The Najdorf is the most ambitious response to 1.e4. Samay chooses it for maximum fighting chances as Black.",
+      "The Najdorf is the most ambitious response to e4. Samay chooses it for maximum fighting chances as Black.",
       "The race between White's kingside attack and Black's queenside counterplay is the heart of the Najdorf.",
       "The ...e5 pawn is Black's strategic anchor. It controls d4 and f4, limiting White's attacking options.",
       "Samay's ambitious style makes the Najdorf his natural weapon. He plays for the full point from the opening."
@@ -9067,7 +9067,7 @@
     "openingId": "evans-gambit",
     "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 b kq - 1 7",
     "title": "Central Avalanche with c3 + d4",
-    "overview": "The defining plan of the Evans Gambit. The b-pawn was sacrificed to gain a tempo for c3 + d4, blasting open the center while every White piece develops with a threat. After 7.O-O the cxd4 recapture is coming next; the e-file will swing open and the Bc4 + Re1 battery will hammer e8.",
+    "overview": "The defining plan of the Evans Gambit. The b-pawn was sacrificed to gain a tempo for c3 + d4, blasting open the center while every White piece develops with a threat. After O-O the cxd4 recapture is coming next; the e-file will swing open and the Bc4 + Re1 battery will hammer e8.",
     "pawnBreaks": [
       {
         "move": "cxd4",
@@ -9186,7 +9186,7 @@
     "id": "mp-petrov-symmetrical-classical",
     "openingId": "petrov-defence",
     "criticalPositionFen": "rnbqkb1r/ppp2ppp/3p4/8/3Pn3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 5",
-    "title": "Symmetrical Classical (3.Nxe5 d6 4.Nf3 Nxe4)",
+    "title": "Symmetrical Classical (Nxe5 d6 Nf3 Nxe4)",
     "overview": "The Petrov's defining tabiya. After the symmetric capture sequence, both sides have a developed knight and an open center. The position is highly drawish at master level — the side with the move has only a microscopic edge. White's plan: complete development with Bd3, Nc3, O-O, and aim for slight space advantages through pawn moves.",
     "pawnBreaks": [
       {
@@ -9211,7 +9211,7 @@
     "openingId": "petrov-defence",
     "criticalPositionFen": "rnbqkb1r/pppp1ppp/5n2/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
     "title": "Initiative with quick development",
-    "overview": "Steinitz's preferred treatment — 3.d4 instead of 3.Nxe5 leads to more imbalanced play. The center opens immediately, both sides scramble to develop. White's plan: castle quickly, get Re1 on the e-file, and pressure Black's centralized knight if Black plays …exd4.",
+    "overview": "Steinitz's preferred treatment — d4 instead of Nxe5 leads to more imbalanced play. The center opens immediately, both sides scramble to develop. White's plan: castle quickly, get Re1 on the e-file, and pressure Black's centralized knight if Black plays …exd4.",
     "pawnBreaks": [
       {
         "move": "d4 (already played)",
@@ -9288,7 +9288,7 @@
     "openingId": "qga",
     "criticalPositionFen": "rnbqk2r/1p3ppp/p3pn2/2b5/2B5/4PN2/PP3PPP/RNBQ1RK1 w kq - 0 8",
     "title": "Classical Isolated d-pawn (IQP) attack",
-    "overview": "After 3…Nf6 and 4…e6, the classical QGA lines transition to an isolated d-pawn structure where White has the isolated d4 pawn. White's plan: use the d4-pawn as a wedge to gain space and piece activity. The Nf3 has e5 as an outpost; the c4-bishop targets f7; the queen swings to e2 then d3 supporting d4-d5 ideas.",
+    "overview": "After Nf6 and e6, the classical QGA lines transition to an isolated d-pawn structure where White has the isolated d4 pawn. White's plan: use the d4-pawn as a wedge to gain space and piece activity. The Nf3 has e5 as an outpost; the c4-bishop targets f7; the queen swings to e2 then d3 supporting d4-d5 ideas.",
     "pawnBreaks": [
       {
         "move": "d4-d5",
@@ -9418,7 +9418,7 @@
     "openingId": "semi-slav",
     "criticalPositionFen": "r1bqkb1r/p2n1p2/2p1pn2/1p2P1B1/2pP4/2N5/PP3PPP/R2QKB1R w KQkq - 1 11",
     "title": "Botvinnik System with f3 + e4",
-    "overview": "The Botvinnik System (5.Bg5 dxc4) leads to one of the sharpest, most theoretical lines in all chess. Both sides storm pawns on opposite wings. White sacrifices a knight on g5 to open lines toward Black's king; Black accepts and tries to consolidate while attacking on the queenside with the extra material.",
+    "overview": "The Botvinnik System (Bg5 dxc4) leads to one of the sharpest, most theoretical lines in all chess. Both sides storm pawns on opposite wings. White sacrifices a knight on g5 to open lines toward Black's king; Black accepts and tries to consolidate while attacking on the queenside with the extra material.",
     "pawnBreaks": [
       {
         "move": "f3 then g4",
@@ -9494,7 +9494,7 @@
     "openingId": "trompowsky-attack",
     "criticalPositionFen": "rn1qkb1r/ppp2ppp/4p3/3p1b2/2PPnB2/2N1P3/PP3PPP/R2QKBNR b KQkq - 1 6",
     "title": "Pin pressure with Bg5xf6",
-    "overview": "The Trompowsky's defining idea: pin the f6-knight immediately. When Black plays 2…Ne4 escaping the pin, White's Bf4 maintains pressure on the kingside and the natural f3 push forces the knight back. The resulting position is a positional middlegame where White's queenside expansion with c4 + Nc3 attacks Black's center.",
+    "overview": "The Trompowsky's defining idea: pin the f6-knight immediately. When Black plays Ne4 escaping the pin, White's Bf4 maintains pressure on the kingside and the natural f3 push forces the knight back. The resulting position is a positional middlegame where White's queenside expansion with c4 + Nc3 attacks Black's center.",
     "pawnBreaks": [
       {
         "move": "c4",
@@ -9522,7 +9522,7 @@
     "openingId": "trompowsky-attack",
     "criticalPositionFen": "rnbqkb1r/pp2pp1p/5p2/2pp4/3P4/4PN2/PPP2PPP/RN1QKB1R b KQkq - 1 5",
     "title": "Exchange variation: Bxf6 + e4",
-    "overview": "After 2…d5, taking on f6 is the principled choice. Black recaptures with the g-pawn doubling the f-pawns. White's plan: complete development with e3 + Nf3 + c4 (or c3) and exploit the long-term structural weaknesses on f6+f7. Black's compensation is the bishop pair and the open g-file.",
+    "overview": "After d5, taking on f6 is the principled choice. Black recaptures with the g-pawn doubling the f-pawns. White's plan: complete development with e3 + Nf3 + c4 (or c3) and exploit the long-term structural weaknesses on f6+f7. Black's compensation is the bishop pair and the open g-file.",
     "pawnBreaks": [
       {
         "move": "c4",
@@ -9776,7 +9776,7 @@
     "openingId": "queens-indian",
     "criticalPositionFen": "rn1qk2r/pbp1bppp/1p2p3/8/3PP3/P1P2N2/2Q2PPP/R1B1KB1R b KQkq - 0 9",
     "title": "Petrosian System: …Bb4+ + …c5 + …b6",
-    "overview": "Petrosian's specialty against the Queen's Indian. After 4.a3, White prepares Nc3 without the threat of …Bb4+ pin. Black's plan: use the bishop pair (after the …Nxc3 bxc3 trade) for slow positional pressure. The e6-pawn becomes weak but the bishop pair compensates.",
+    "overview": "Petrosian's specialty against the Queen's Indian. After a3, White prepares Nc3 without the threat of …Bb4+ pin. Black's plan: use the bishop pair (after the …Nxc3 bxc3 trade) for slow positional pressure. The e6-pawn becomes weak but the bishop pair compensates.",
     "pawnBreaks": [
       {
         "move": "c5",
@@ -9824,7 +9824,7 @@
     "openingId": "budapest-gambit",
     "criticalPositionFen": "rn1q1rk1/ppp2ppp/3b4/8/2P1b3/4PN2/PP3PPP/R1BQKB1R w KQ - 1 9",
     "title": "Fajarowicz: …Ne4 attacking f2",
-    "overview": "The Fajarowicz Variation (3…Ne4) is even more provocative than the mainline Budapest. The knight on e4 attacks f2 directly and prepares …d6 for piece development. Black accepts a permanent material deficit for active piece play and pressure on White's king.",
+    "overview": "The Fajarowicz Variation (Ne4) is even more provocative than the mainline Budapest. The knight on e4 attacks f2 directly and prepares …d6 for piece development. Black accepts a permanent material deficit for active piece play and pressure on White's king.",
     "pawnBreaks": [
       {
         "move": "f5",
@@ -9848,7 +9848,7 @@
     "openingId": "four-knights-game",
     "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n2/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 5",
     "title": "Belgrade Gambit central crash with d5",
-    "overview": "The Belgrade Gambit (4.d4 exd4 5.Nd5) is the sharpest treatment of the Four Knights. White sacrifices the d-pawn to pin the f6-knight to the queen and gain a massive central knight outpost. After 5…Nxe4 6.Qe2 Black's pieces tangle and White recovers the pawn with positional advantage.",
+    "overview": "The Belgrade Gambit (d4 exd4 Nd5) is the sharpest treatment of the Four Knights. White sacrifices the d-pawn to pin the f6-knight to the queen and gain a massive central knight outpost. After Nxe4 Qe2 Black's pieces tangle and White recovers the pawn with positional advantage.",
     "pawnBreaks": [
       {
         "move": "c3",
@@ -9935,7 +9935,7 @@
     "openingId": "sicilian-alapin",
     "criticalPositionFen": "r1bqkb1r/pp2pppp/1nnp4/1B2P3/3P4/5N2/PP3PPP/RNBQK2R b KQkq - 5 8",
     "title": "Quiet d3 + Nbd2 setup",
-    "overview": "When Black plays the sharp 2…Nf6, White's plan shifts to a closed central setup with d3 supporting e5 and Nbd2 + Bd3 building toward a kingside attack. The structure resembles a French Advance with colors reversed — White's e5 pawn cramps Black's kingside development.",
+    "overview": "When Black plays the sharp Nf6, White's plan shifts to a closed central setup with d3 supporting e5 and Nbd2 + Bd3 building toward a kingside attack. The structure resembles a French Advance with colors reversed — White's e5 pawn cramps Black's kingside development.",
     "pawnBreaks": [
       {
         "move": "f4",
@@ -9959,7 +9959,7 @@
     "openingId": "scandinavian-defence",
     "criticalPositionFen": "rn2kb1r/pp2pppp/2p2n2/q4b2/2BP4/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
     "title": "Qa5 active queen with …c6 + …Bf5",
-    "overview": "Black's main Scandinavian plan with 2…Qxd5 3…Qa5. The queen on a5 is active (pressuring c3 and a2) while Black develops the bishop to f5 (BEFORE …e6 to avoid trapping it), then castles long for sharp opposite-side attacks. The plan: complete development with …e6 + …Nbd7 + …O-O-O, then attack on the kingside with …h6 + …g5.",
+    "overview": "Black's main Scandinavian plan with Qxd5 Qa5. The queen on a5 is active (pressuring c3 and a2) while Black develops the bishop to f5 (BEFORE …e6 to avoid trapping it), then castles long for sharp opposite-side attacks. The plan: complete development with …e6 + …Nbd7 + …O-O-O, then attack on the kingside with …h6 + …g5.",
     "pawnBreaks": [
       {
         "move": "e6",
@@ -10045,7 +10045,7 @@
     "openingId": "alekhine-defence",
     "criticalPositionFen": "rnbqk2r/ppp2pbp/1n1pp1p1/4P1N1/3P4/1B6/PPP2PPP/RNBQK2R w KQkq - 0 8",
     "title": "Modern Variation: …g6 + …Bg7 fianchetto",
-    "overview": "The Modern Variation (4.Nf3) leads to slower, more positional play. Black's plan: fianchetto with …g6 + …Bg7, then attack the center with …c5 or …f6. The Bg7 controls the long diagonal toward White's queenside and supports a slow attacking buildup.",
+    "overview": "The Modern Variation (Nf3) leads to slower, more positional play. Black's plan: fianchetto with …g6 + …Bg7, then attack the center with …c5 or …f6. The Bg7 controls the long diagonal toward White's queenside and supports a slow attacking buildup.",
     "pawnBreaks": [
       {
         "move": "c5",
@@ -10178,7 +10178,7 @@
     "openingId": "slav-defence",
     "criticalPositionFen": "rn1qk2r/pp3ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P3PPP/R1BQK2R w KQkq - 1 8",
     "title": "…Bf5 active development — Czech Variation",
-    "overview": "The Czech Variation — Black takes the c-pawn (4…dxc4) and develops actively with …Bf5. After 5.a4 (preventing …b5), Black plays …e6 + …Bb4 for a Nimzo-Indian-like setup. The plan: solid central structure with bishop pair, then a future …c5 break for queenside expansion.",
+    "overview": "The Czech Variation — Black takes the c-pawn (dxc4) and develops actively with …Bf5. After a4 (preventing …b5), Black plays …e6 + …Bb4 for a Nimzo-Indian-like setup. The plan: solid central structure with bishop pair, then a future …c5 break for queenside expansion.",
     "pawnBreaks": [
       {
         "move": "c5",
@@ -10202,7 +10202,7 @@
     "openingId": "slav-defence",
     "criticalPositionFen": "rnbqkb1r/1p2pppp/p1p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
     "title": "Chebanenko: …a6 + flexible structure",
-    "overview": "The Chebanenko Slav (4…a6) is the modern flexible treatment. Black keeps options for …dxc4 + …b5, …Bf5 development, or transposition to Semi-Slav with …e6. The …a6 move prevents Nb5 ideas and prepares queenside expansion. White's most challenging response is 5.c5 (the Anti-Chebanenko, locking the center) or 5.Bf4 (the System Slav).",
+    "overview": "The Chebanenko Slav (a6) is the modern flexible treatment. Black keeps options for …dxc4 + …b5, …Bf5 development, or transposition to Semi-Slav with …e6. The …a6 move prevents Nb5 ideas and prepares queenside expansion. White's most challenging response is c5 (the Anti-Chebanenko, locking the center) or Bf4 (the System Slav).",
     "pawnBreaks": [
       {
         "move": "b5",
@@ -10254,8 +10254,8 @@
     "id": "mp-nimzo-rubinstein-isolated-pawn",
     "openingId": "nimzo-indian",
     "criticalPositionFen": "rnbq1rk1/pp3ppp/4pn2/8/1bBP4/2N2N2/PP3PPP/R1BQ1RK1 b - - 0 9",
-    "title": "Rubinstein: 4.e3 isolated d-pawn complexes",
-    "overview": "The Rubinstein System (4.e3) avoids the doubled-pawn structure entirely. After d-pawn trades, White ends up with an isolated d-pawn (or hanging pawns on c4 + d4). The plan: use the active pieces and central pawn for kingside attack. Classic IQP middlegame — strong with pieces on the board, weaker in the endgame.",
+    "title": "Rubinstein: e3 isolated d-pawn complexes",
+    "overview": "The Rubinstein System (e3) avoids the doubled-pawn structure entirely. After d-pawn trades, White ends up with an isolated d-pawn (or hanging pawns on c4 + d4). The plan: use the active pieces and central pawn for kingside attack. Classic IQP middlegame — strong with pieces on the board, weaker in the endgame.",
     "pawnBreaks": [
       {
         "move": "d5",
@@ -10308,7 +10308,7 @@
     "openingId": "grunfeld-defence",
     "criticalPositionFen": "rnbq1rk1/1pp1ppbp/p4np1/8/2QPP3/2N2N2/PP3PPP/R1B1KB1R w KQ - 0 8",
     "title": "Russian System: Qb3 + Rd1 central pressure",
-    "overview": "The Russian System (5.Qb3) avoids the Exchange and builds central pressure with Qc4 + e4 + Be2 + O-O. Black's plan: develop quickly, then attack the center with …a6 + …b5 + …Bb7 + …c5. The Bg7 + Bb7 double-fianchetto creates lasting positional pressure on White's center.",
+    "overview": "The Russian System (Qb3) avoids the Exchange and builds central pressure with Qc4 + e4 + Be2 + O-O. Black's plan: develop quickly, then attack the center with …a6 + …b5 + …Bb7 + …c5. The Bg7 + Bb7 double-fianchetto creates lasting positional pressure on White's center.",
     "pawnBreaks": [
       {
         "move": "b5",
@@ -10470,7 +10470,7 @@
     "openingId": "two-knights-defence",
     "criticalPositionFen": "r1bq1b1r/ppp2kpp/2n5/3np3/2B5/5Q2/PPPP1PPP/RNB1K2R b KQ - 1 7",
     "title": "Fried Liver attack with Ng5 + Nxf7",
-    "overview": "The Fried Liver Attack — White sacrifices a knight for a vicious king-side attack against Black's exposed king. After 6.Nxf7 Kxf7 7.Qf3+ Black must defend precisely; one inaccuracy and White's attack crushes through. Modern theory considers Black holding with accurate defense, but in practical games White wins more often than not.",
+    "overview": "The Fried Liver Attack — White sacrifices a knight for a vicious king-side attack against Black's exposed king. After Nxf7 Kxf7 Qf3+ Black must defend precisely; one inaccuracy and White's attack crushes through. Modern theory considers Black holding with accurate defense, but in practical games White wins more often than not.",
     "pawnBreaks": [
       {
         "move": "d4",
@@ -10499,7 +10499,7 @@
     "openingId": "two-knights-defence",
     "criticalPositionFen": "r1bqk2r/pppp1Npp/2n2n2/2b1p3/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5",
     "title": "Traxler Counter (Wilkes-Barre) — sharp Black counter-attack",
-    "overview": "The Traxler Counter-Attack — Black sacrifices a knight too (4…Bc5!?). After 5.Nxf7 Black plays 5…Bxf2+! pressuring White's exposed king. The position is one of the sharpest in chess — both sides have only forcing moves. Modern theory holds it's about equal but extremely double-edged.",
+    "overview": "The Traxler Counter-Attack — Black sacrifices a knight too (Bc5!?). After Nxf7 Black plays Bxf2+! pressuring White's exposed king. The position is one of the sharpest in chess — both sides have only forcing moves. Modern theory holds it's about equal but extremely double-edged.",
     "pawnBreaks": [
       {
         "move": "No pawn breaks — purely tactical",
@@ -10510,7 +10510,7 @@
       {
         "piece": "Bishop",
         "route": "Bxf2+ sacrifice",
-        "explanation": "Black's signature Traxler move. After 5…Bxf2+ 6.Ke2 or 6.Kxf2 (each leads to wild complications), the position is theoretical hand-to-hand combat."
+        "explanation": "Black's signature Traxler move. After Bxf2+ Ke2 or Kxf2 (each leads to wild complications), the position is theoretical hand-to-hand combat."
       },
       {
         "piece": "Queen",
@@ -15304,7 +15304,7 @@
     "openingId": "vienna-game",
     "title": "Vienna Gambit: the Bardeleben Qf3 Squeeze",
     "criticalPositionFen": "rnbqkb1r/ppp3pp/8/3pPp2/4n3/2NP1Q2/PPP3PP/R1B1KBNR b KQkq - 0 6",
-    "overview": "The modern Vienna Gambit main line — after 5.Qf3! (the Bardeleben Variation, the trendy Eric Rosen weapon) the queen hits the e4-knight AND threatens Qxd5 with tempo. Black is forced into 5…f5 to defend both, creating a permanent structural weakness on the light squares. White opens the b-file, plants the king-knight on f4 via h3, and dominates the centre with the e5-pawn and active Qf3.",
+    "overview": "The modern Vienna Gambit main line — after Qf3! (the Bardeleben Variation, the trendy Eric Rosen weapon) the queen hits the e4-knight AND threatens Qxd5 with tempo. Black is forced into f5 to defend both, creating a permanent structural weakness on the light squares. White opens the b-file, plants the king-knight on f4 via h3, and dominates the centre with the e5-pawn and active Qf3.",
     "pawnBreaks": [
       {
         "move": "b-file open after bxc3",
@@ -15325,7 +15325,7 @@
       }
     ],
     "strategicThemes": [
-      "The Qf3 attacks the e4-knight on move 5, forcing 5…f5 which permanently weakens Black's light squares (especially f6 and e6).",
+      "The Qf3 attacks the e4-knight on move 5, forcing f5 which permanently weakens Black's light squares (especially f6 and e6).",
       "The open b-file after bxc3 gives White's rook a permanent file; combined with the doubled-c structure, this is a structural exchange for the bishop pair.",
       "The Nh3-f4 manoeuvre is the line's signature — supports e5, pressures d5, and clears the king-knight's starting square for the rook to come to f1."
     ],
@@ -15495,9 +15495,9 @@
   {
     "id": "mp-viennagame-vs-nc6",
     "openingId": "vienna-game",
-    "title": "vs 2…Nc6: Italian-Vienna Pressure on f7",
+    "title": "vs Nc6: Italian-Vienna Pressure on f7",
     "criticalPositionFen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
-    "overview": "Against 2…Nc6 White chooses the Italian-Vienna setup — Bc4 plus the Vienna f4 lever held in reserve. The Bc4 aims at f7, Bg5 pins the Nf6, and a future Nd5 fork on f6 + c7 lurks. Slow squeeze with sharp tactical undercurrents.",
+    "overview": "Against Nc6 White chooses the Italian-Vienna setup — Bc4 plus the Vienna f4 lever held in reserve. The Bc4 aims at f7, Bg5 pins the Nf6, and a future Nd5 fork on f6 + c7 lurks. Slow squeeze with sharp tactical undercurrents.",
     "pawnBreaks": [
       {
         "move": "f2-f4",
@@ -15524,7 +15524,7 @@
     ],
     "playableLines": [
       {
-        "title": "vs 2…Nc6: Italian-Vienna Bg5 pin + Nd5 fork",
+        "title": "vs Nc6: Italian-Vienna Bg5 pin + Nd5 fork",
         "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
         "moves": [
           "O-O",
@@ -15692,9 +15692,9 @@
   {
     "id": "mp-viennagame-frankenstein-dracula",
     "openingId": "vienna-game",
-    "title": "Frankenstein-Dracula: Calmer 5…Be7 Middlegame",
+    "title": "Frankenstein-Dracula: Calmer Be7 Middlegame",
     "criticalPositionFen": "rnbqk2r/ppppbppp/3n4/4p2Q/8/1BN5/PPPP1PPP/R1B1K1NR w KQkq - 4 6",
-    "overview": "The MODERN grandmaster's answer to the Frankenstein-Dracula — instead of the wild 5…Nc6 (taught as a weapon lesson), Black plays the calmer 5…Be7. White recovers the pawn cleanly, retains the active queen on f4, and the position settles into a strategic middlegame where White's development edge tells.",
+    "overview": "The MODERN grandmaster's answer to the Frankenstein-Dracula — instead of the wild Nc6 (taught as a weapon lesson), Black plays the calmer Be7. White recovers the pawn cleanly, retains the active queen on f4, and the position settles into a strategic middlegame where White's development edge tells.",
     "pawnBreaks": [
       {
         "move": "d2-d4",
@@ -15715,13 +15715,13 @@
       }
     ],
     "strategicThemes": [
-      "The 5…Be7 line is calmer than 5…Nc6 but Black still cedes development time chasing White's queen.",
+      "The Be7 line is calmer than Nc6 but Black still cedes development time chasing White's queen.",
       "White's Bb3 + Qf4 + d4 + future Nge2 build a coherent attacking position; Black's pieces are awkwardly placed.",
       "The Nd6 knight is misplaced (blocks the d-pawn) and Black needs multiple moves to redeploy it."
     ],
     "playableLines": [
       {
-        "title": "F-D: Calmer 5…Be7 then Qxe5 + d4 centre",
+        "title": "F-D: Calmer Be7 then Qxe5 + d4 centre",
         "fen": "rnbqk2r/ppppbppp/3n4/4p2Q/8/1BN5/PPPP1PPP/R1B1K1NR w KQkq - 4 6",
         "moves": [
           "Qxe5",
@@ -16552,7 +16552,7 @@
     "openingId": "italian-game",
     "title": "Two Knights with d4: the Forcing Sequence",
     "criticalPositionFen": "r1b1kb1r/ppp2ppp/2n5/3q4/3pn3/2N2N2/PPP2PPP/R1BQR1K1 b kq - 1 8",
-    "overview": "The dynamic 4.d4 line: White gambits a pawn for a development lead, pins the e4-knight on the e-file, and uses the Bxd5/Nc3 fork to regain material. Precise play leads to a balanced middlegame where White’s rook and structure give a small, lasting pull.",
+    "overview": "The dynamic d4 line: White gambits a pawn for a development lead, pins the e4-knight on the e-file, and uses the Bxd5/Nc3 fork to regain material. Precise play leads to a balanced middlegame where White’s rook and structure give a small, lasting pull.",
     "pawnBreaks": [
       {
         "move": "d4 gambit",
@@ -17872,6 +17872,158 @@
             {
               "square": "g5",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-scotchgame-steinitz",
+    "openingId": "scotch-game",
+    "title": "Steinitz Qh4: Punish the Early Queen with Development",
+    "criticalPositionFen": "r1bk2nr/pppp1ppp/2n5/1N6/1b2q3/8/PPPBBPPP/RN1QK2R w KQ - 2 8",
+    "overview": "Black's premature ...Qh4 is met by Nb5! and rapid development. Black grabs a pawn on e4 but cannot castle, and White's lead in development against the stranded king on d8 is worth far more than the pawn.",
+    "pawnBreaks": [
+      {
+        "move": "e5 / f4",
+        "explanation": "Once developed, White opens lines toward the stuck king with central and kingside pawn breaks.",
+        "fen": "r1bk2nr/pppp1ppp/2n5/1N6/1b2q3/8/PPPBBPPP/RN1QK2R w KQ - 2 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb5-d2-f3",
+        "explanation": "The knight harasses c7, recaptures on d2, and redeploys via f3 toward the e5 and g5 outposts."
+      }
+    ],
+    "strategicThemes": [
+      "Nb5 threatens the Nxc7 fork and exploits the early queen.",
+      "Black cannot castle; the king is stranded on d8.",
+      "A development lead beats Black's extra pawn."
+    ],
+    "endgameTransitions": [
+      "White converts the development lead before Black ever coordinates."
+    ],
+    "playableLines": [
+      {
+        "title": "Steinitz Qh4: Punish the Early Queen with Development",
+        "fen": "r1bk2nr/pppp1ppp/2n5/1N6/1b2q3/8/PPPBBPPP/RN1QK2R w KQ - 2 8",
+        "moves": [
+          "O-O",
+          "Bxd2",
+          "Nxd2",
+          "Qg6",
+          "Nf3",
+          "Nf6"
+        ],
+        "annotations": [
+          "O-O — tuck the king safely away while Black's king is stuck on d8.",
+          "Bxd2 — Black trades the dark-squared bishops.",
+          "Nxd2 — recapture; the b5-knight still eyes the c7 fork.",
+          "Qg6 — the overworked queen retreats to g6 to consolidate.",
+          "Nf3 — redeploy the knight toward the e5 and g5 outposts.",
+          "Nf6 — Black finally develops a piece; White is a step from converting."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f3",
+              "to": "g5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]

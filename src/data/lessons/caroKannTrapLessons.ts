@@ -18,9 +18,9 @@ function b(init: BeatInit): LessonBeat {
   return { ...rest, moves: moves.trim().split(/\s+/) };
 }
 
-// The Karpov-line smothered mate (chess.js-verified: 6.Nd6 is checkmate;
-// the queen on e2 pins the e7-pawn so it can't recapture). 5...Ngf6 and even
-// 5...g6 walk into it; 5...Ndf6 is the only-move fix.
+// The Karpov-line smothered mate (chess.js-verified: Nd6 is checkmate;
+// the queen on e2 pins the e7-pawn so it can't recapture). Ngf6 and even
+// g6 walk into it; Ndf6 is the only-move fix.
 const KARPOV_QE2_MATE: LessonScript = {
   openingId: 'caro-kann',
   title: 'Caro-Kann — Watch out: the Qe2 smothered mate',

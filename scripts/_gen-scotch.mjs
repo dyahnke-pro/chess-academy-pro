@@ -82,5 +82,58 @@ const varEntries = variations.map((v) => `  ${j(`${v.openingId}::${v._key}`)}: $
 const varBody = `export const SCOTCH_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {\n${varEntries}\n};\n`;
 writeFileSync('src/data/lessons/scotchGameVariations.ts', `${header(varBody)}\n${varBody}`);
 
-// Scotch ships NO named traps (weapons come from mined punish-gems, like Caro).
-console.log('generated: scotchGame.ts, scotchGameVariations.ts');
+// ── traps ──
+const traps = lessons.filter((l) => l._out === 'trap');
+const sq = (s) => `'${String(s).replace(/'/g, "\\'")}'`;
+const trapLessonEntries = traps.map((t) => `  ${j(t._trapId)}: ${lessonObj(t, 'trap')},`).join('\n\n');
+const trapDefs = traps.map((t) => `  { id: ${sq(t._trapId)}, name: ${sq(t._name)}, kind: ${sq(t._kind)}, appliesTo: [${t._appliesTo.map(sq).join(', ')}] },`).join('\n');
+const trapsBody = `${trapLessonEntries}\n${trapDefs}`;
+const trapsFile = `${header(trapsBody)}
+import type { PlayableMiddlegameLine } from '../../types';
+
+export const SCOTCH_GAME_TRAP_LESSONS: Record<string, LessonScript> = {
+${trapLessonEntries}
+};
+
+export type ScotchTrapKind = 'weapon' | 'warning';
+export interface ScotchTrapDef {
+  id: string;
+  name: string;
+  kind: ScotchTrapKind;
+  /** Hand-picked tab labels (lower-case) this trap appears on. */
+  appliesTo: string[];
+}
+
+export const SCOTCH_GAME_TRAP_DEFS: ScotchTrapDef[] = [
+${trapDefs}
+];
+
+export function getScotchTrapsForTab(tabKey: string): ScotchTrapDef[] {
+  return SCOTCH_GAME_TRAP_DEFS.filter(
+    (t) => t.appliesTo.includes(tabKey) && t.id in SCOTCH_GAME_TRAP_LESSONS,
+  );
+}
+
+const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+export function getScotchTrapPlayableLine(id: string): PlayableMiddlegameLine | null {
+  const lesson = SCOTCH_GAME_TRAP_LESSONS[id];
+  if (!lesson || lesson.beats.length === 0) return null;
+  const lineBeat = lesson.beats[lesson.beats.length - 1];
+  const moves = lineBeat.moves;
+  const annotations: string[] = moves.map(() => '');
+  const arrows: AnnotationArrow[][] = moves.map(() => []);
+  const highlights: AnnotationHighlight[][] = moves.map(() => []);
+  for (const beat of lesson.beats) {
+    if (beat.moves.length > moves.length) continue;
+    if (!beat.moves.every((m, i) => m === moves[i])) continue;
+    const ply = beat.moves.length - 1;
+    annotations[ply] = beat.say;
+    if (beat.arrows) arrows[ply] = beat.arrows;
+    if (beat.highlights) highlights[ply] = beat.highlights;
+  }
+  return { fen: START_FEN, moves, annotations, arrows, highlights, title: lesson.title };
+}
+`;
+writeFileSync('src/data/lessons/scotchGameTrapLessons.ts', trapsFile);
+
+console.log('generated: scotchGame.ts, scotchGameVariations.ts, scotchGameTrapLessons.ts');

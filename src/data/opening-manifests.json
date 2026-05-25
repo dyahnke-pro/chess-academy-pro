@@ -56,10 +56,10 @@
   },
   "scotch-game": {
     "variations": 8,
-    "middlegamePlans": 5,
+    "middlegamePlans": 6,
     "endgamePlans": 0,
     "modelGames": 1,
-    "weapons": 0,
+    "weapons": 1,
     "warnings": 0,
     "keyIdeas": 4
   }

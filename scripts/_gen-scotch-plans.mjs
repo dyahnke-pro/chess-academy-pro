@@ -144,6 +144,31 @@ const PLANS = [
       'f3 — anchor e4 and prepare the g4-g5 pawn storm.',
     ],
   },
+  {
+    id: 'mp-scotchgame-steinitz',
+    title: 'Steinitz 4...Qh4: Punish the Early Queen with Development',
+    overview: "Black's premature ...Qh4 is met by Nb5! and rapid development. Black grabs a pawn on e4 but cannot castle, and White's lead in development against the stranded king on d8 is worth far more than the pawn.",
+    pawnBreaks: [{ move: 'e5 / f4', explanation: 'Once developed, White opens lines toward the stuck king with central and kingside pawn breaks.' }],
+    pieceManeuvers: [
+      { piece: 'Knight', route: 'Nb5-d2-f3', explanation: 'The knight harasses c7, recaptures on d2, and redeploys via f3 toward the e5 and g5 outposts.' },
+    ],
+    strategicThemes: [
+      'Nb5 threatens the Nxc7 fork and exploits the early queen.',
+      'Black cannot castle; the king is stranded on d8.',
+      'A development lead beats Black\'s extra pawn.',
+    ],
+    endgameTransitions: ['White converts the development lead before Black ever coordinates.'],
+    prefix: 'e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Bb4+ Bd2 Qxe4+ Be2 Kd8',
+    line: ['O-O', 'Bxd2', 'Nxd2', 'Qg6', 'Nf3', 'Nf6'],
+    annotations: [
+      'O-O — tuck the king safely away while Black\'s king is stuck on d8.',
+      'Bxd2 — Black trades the dark-squared bishops.',
+      'Nxd2 — recapture; the b5-knight still eyes the c7 fork.',
+      'Qg6 — the overworked queen retreats to g6 to consolidate.',
+      'Nf3 — redeploy the knight toward the e5 and g5 outposts.',
+      'Nf6 — Black finally develops a piece; White is a step from converting.',
+    ],
+  },
 ];
 
 const out = [];

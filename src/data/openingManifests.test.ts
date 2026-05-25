@@ -50,6 +50,7 @@ const TRAP_FILE_FOR: Record<string, string> = {
   'vienna-game': 'src/data/lessons/viennaTrapLessons.ts',
   'caro-kann': 'src/data/lessons/caroKannTrapLessons.ts',
   'italian-game': 'src/data/lessons/italianGameTrapLessons.ts',
+  'scotch-game': 'src/data/lessons/scotchGameTrapLessons.ts',
 };
 
 function countInTrapFile(openingId: string, kind: 'weapon' | 'warning'): number {
