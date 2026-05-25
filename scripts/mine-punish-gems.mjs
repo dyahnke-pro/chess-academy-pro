@@ -221,6 +221,7 @@ const OPENING_SEEDS = {
   'pirc-defence': { studentChar: 'b', baseSeed: ['e4', 'd6'] },
   'vienna-game':  { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nc3'] },
   'italian-game': { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'] },
+  'scotch-game':  { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6', 'd4'] },
 };
 function loadRepertoire() {
   try {
