@@ -31,6 +31,7 @@ import type { PlayableMiddlegameLine } from '../../types';
 export const ITALIAN_GAME_TRAP_LESSONS: Record<string, LessonScript> = {
   "legals-mate": {
   openingId: "italian-game",
+  sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
   title: "Légal's Mate — the Bishop Sacrifice",
   minutes: 4,
   orientation: "white",
@@ -46,6 +47,7 @@ export const ITALIAN_GAME_TRAP_LESSONS: Record<string, LessonScript> = {
 
   "fried-liver": {
   openingId: "italian-game",
+  sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
   title: "The Fried Liver Attack",
   minutes: 5,
   orientation: "white",
@@ -61,6 +63,7 @@ export const ITALIAN_GAME_TRAP_LESSONS: Record<string, LessonScript> = {
 
   "blackburne-shilling": {
   openingId: "italian-game",
+  sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
   title: "Watch out: the Blackburne Shilling Gambit",
   minutes: 4,
   orientation: "white",

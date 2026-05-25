@@ -13,6 +13,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const NIMZO_INDIAN_LESSON: LessonScript = {
   openingId: 'nimzo-indian',
+  sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
   title: 'The Nimzo-Indian Defence — A Master Class',
   minutes: 12,
   orientation: 'black',

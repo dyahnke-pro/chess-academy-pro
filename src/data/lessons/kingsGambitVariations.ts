@@ -15,6 +15,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   // ───────────────────────── Classical 3...g5 (4.Bc4) ─────────────────────
   'kings-gambit::King\'s Knight Gambit Classical': {
     openingId: 'kings-gambit',
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     title: "King's Gambit — Classical (3…g5)",
     minutes: 11,
     orientation: 'white',
@@ -75,6 +76,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   // ───────────────────────── Fischer Defence 3...d6 ───────────────────────
   'kings-gambit::Fischer Defense': {
     openingId: 'kings-gambit',
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     title: "King's Gambit — Fischer Defence (3…d6)",
     minutes: 11,
     orientation: 'white',
@@ -128,6 +130,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   // ───────────────────── Falkbeer Counter-Gambit 2...d5 ───────────────────
   'kings-gambit::Falkbeer Counter-Gambit': {
     openingId: 'kings-gambit',
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     title: "King's Gambit — Falkbeer Counter-Gambit (2…d5)",
     minutes: 10,
     orientation: 'white',
@@ -174,6 +177,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   // ─────────────────────── Declined 2...Bc5 (Classical) ───────────────────
   'kings-gambit::King\'s Gambit Declined': {
     openingId: 'kings-gambit',
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     title: "King's Gambit Declined (2…Bc5)",
     minutes: 10,
     orientation: 'white',
@@ -220,6 +224,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   // ───────────────────────── Bishop's Gambit 3.Bc4 ────────────────────────
   'kings-gambit::Bishop\'s Gambit (3.Bc4)': {
     openingId: 'kings-gambit',
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     title: "King's Gambit — Bishop's Gambit (3.Bc4)",
     minutes: 10,
     orientation: 'white',
@@ -277,6 +282,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   // ───────────────────────── Kieseritzky 5.Ne5 ────────────────────────────
   'kings-gambit::Kieseritzky Gambit': {
     openingId: 'kings-gambit',
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     title: "King's Gambit — Kieseritzky Gambit (5.Ne5)",
     minutes: 11,
     orientation: 'white',
@@ -323,6 +329,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   // ───────────────────────── Muzio Gambit (roadmap) ───────────────────────
   'kings-gambit::Muzio Gambit': {
     openingId: 'kings-gambit',
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     title: "King's Gambit — Muzio Gambit (5.O-O)",
     minutes: 9,
     orientation: 'white',
@@ -371,6 +378,7 @@ export const KINGS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   // ───────────────────────── Allgaier Gambit (roadmap) ────────────────────
   'kings-gambit::Allgaier Gambit': {
     openingId: 'kings-gambit',
+    sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
     title: "King's Gambit — Allgaier Gambit (5.Ng5)",
     minutes: 9,
     orientation: 'white',

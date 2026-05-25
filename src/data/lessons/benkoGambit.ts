@@ -9,6 +9,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const BENKO_GAMBIT_LESSON: LessonScript = {
   openingId: 'benko-gambit',
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
   title: 'The Benko Gambit — A Master Class',
   minutes: 12,
   orientation: 'black',

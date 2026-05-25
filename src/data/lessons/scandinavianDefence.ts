@@ -15,6 +15,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const SCANDINAVIAN_DEFENCE_LESSON: LessonScript = {
   openingId: 'scandinavian-defence',
+  sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
   title: 'The Scandinavian Defence — A Master Class',
   minutes: 12,
   orientation: 'black',

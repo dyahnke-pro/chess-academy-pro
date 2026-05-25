@@ -41,6 +41,7 @@ const MARSH_BASE = `${RUY} a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe
 /** WEAPON — Open Ruy: Black castles too early and drops the e4-knight. */
 const TARRASCH: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Weapon: The Tarrasch Trap',
   minutes: 3,
   orientation: 'white',
@@ -63,6 +64,7 @@ const TARRASCH: LessonScript = {
 /** WARNING — Main: grabbing the d-pawn with the queen lets Black cage Bb3. */
 const NOAH: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Watch out: Noah\'s Ark Trap',
   minutes: 3,
   orientation: 'white',
@@ -85,6 +87,7 @@ const NOAH: LessonScript = {
 /** WARNING — Berlin: taking the e5-pawn loses a piece to ...c6. */
 const MORTIMER: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Watch out: Mortimer Trap',
   minutes: 2,
   orientation: 'white',
@@ -107,6 +110,7 @@ const MORTIMER: LessonScript = {
 /** WARNING — Berlin: grabbing the g4-knight opens the h-file for mate. */
 const FISHING_POLE: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Watch out: Fishing Pole',
   minutes: 2,
   orientation: 'white',
@@ -130,6 +134,7 @@ const FISHING_POLE: LessonScript = {
 /** WARNING — Marshall: one square (g3, not h3) is the only-move that holds. */
 const MARSHALL_WARNING: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Watch out: the Marshall only-move',
   minutes: 2,
   orientation: 'white',

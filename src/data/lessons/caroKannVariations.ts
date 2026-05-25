@@ -22,6 +22,7 @@ function b(init: BeatInit): LessonBeat {
 
 const ADVANCE: LessonScript = {
   openingId: 'caro-kann',
+  sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   title: 'Caro-Kann — The Advance Variation',
   minutes: 7,
   orientation: 'black',
@@ -52,6 +53,7 @@ const ADVANCE: LessonScript = {
 
 const EXCHANGE: LessonScript = {
   openingId: 'caro-kann',
+  sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   title: 'Caro-Kann — The Exchange Variation',
   minutes: 6,
   orientation: 'black',
@@ -78,6 +80,7 @@ const EXCHANGE: LessonScript = {
 
 const TWO_KNIGHTS: LessonScript = {
   openingId: 'caro-kann',
+  sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   title: 'Caro-Kann — The Two Knights',
   minutes: 6,
   orientation: 'black',
@@ -104,6 +107,7 @@ const TWO_KNIGHTS: LessonScript = {
 
 const PANOV: LessonScript = {
   openingId: 'caro-kann',
+  sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   title: 'Caro-Kann — The Panov-Botvinnik Attack',
   minutes: 7,
   orientation: 'black',
@@ -130,6 +134,7 @@ const PANOV: LessonScript = {
 
 const FANTASY: LessonScript = {
   openingId: 'caro-kann',
+  sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   title: 'Caro-Kann — The Fantasy Variation',
   minutes: 6,
   orientation: 'black',
@@ -156,6 +161,7 @@ const FANTASY: LessonScript = {
 
 const TARTAKOWER: LessonScript = {
   openingId: 'caro-kann',
+  sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   title: 'Caro-Kann — The Tartakower Variation',
   minutes: 6,
   orientation: 'black',

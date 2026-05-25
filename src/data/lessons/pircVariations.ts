@@ -27,6 +27,7 @@ function b(init: BeatInit): LessonBeat {
 /** Austrian Attack (f4) — White's most aggressive try; a wing race. */
 const AUSTRIAN: LessonScript = {
   openingId: 'pirc-defence',
+  sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
   title: 'Pirc — The Austrian Attack',
   minutes: 7,
   orientation: 'black',
@@ -57,6 +58,7 @@ const AUSTRIAN: LessonScript = {
 /** Classical System (Nf3, Be2) — White's solid, quiet main line. */
 const CLASSICAL: LessonScript = {
   openingId: 'pirc-defence',
+  sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
   title: 'Pirc — The Classical System',
   minutes: 6,
   orientation: 'black',
@@ -87,6 +89,7 @@ const CLASSICAL: LessonScript = {
 /** 150 Attack (Be3, Qd2, Bh6) — trade the dark bishop, castle long, storm. */
 const ATTACK_150: LessonScript = {
   openingId: 'pirc-defence',
+  sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
   title: 'Pirc — The 150 Attack',
   minutes: 6,
   orientation: 'black',
@@ -120,6 +123,7 @@ const ATTACK_150: LessonScript = {
 /** Byrne Variation (Bg5, O-O-O) — opposite-side castling, mutual race. */
 const BYRNE: LessonScript = {
   openingId: 'pirc-defence',
+  sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
   title: 'Pirc — The Byrne Variation',
   minutes: 6,
   orientation: 'black',
@@ -150,6 +154,7 @@ const BYRNE: LessonScript = {
 /** Lion Variation (...e5 instead of the fianchetto) — Philidor-like. */
 const LION: LessonScript = {
   openingId: 'pirc-defence',
+  sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
   title: 'Pirc — The Lion Variation',
   minutes: 6,
   orientation: 'black',
@@ -176,6 +181,7 @@ const LION: LessonScript = {
 /** Fianchetto System (g3, Bg2) — White's quietest; Black grabs space. */
 const FIANCHETTO: LessonScript = {
   openingId: 'pirc-defence',
+  sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
   title: 'Pirc — The Fianchetto System',
   minutes: 5,
   orientation: 'black',
@@ -198,6 +204,7 @@ const FIANCHETTO: LessonScript = {
 /** Czech Defence (...c6 instead of ...g6) — compact, direct ...e5. */
 const CZECH: LessonScript = {
   openingId: 'pirc-defence',
+  sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
   title: 'Pirc — The Czech Defence',
   minutes: 5,
   orientation: 'black',
@@ -224,6 +231,7 @@ const CZECH: LessonScript = {
 /** Austrian Attack with early e5 — meet it with ...c5 on the centre. */
 const AUSTRIAN_E5C5: LessonScript = {
   openingId: 'pirc-defence',
+  sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
   title: 'Pirc — Austrian: meeting an early e5',
   minutes: 4,
   orientation: 'black',

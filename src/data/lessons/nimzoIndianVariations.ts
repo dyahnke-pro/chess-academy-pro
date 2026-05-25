@@ -13,6 +13,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 export const NIMZO_INDIAN_VARIATION_LESSONS: Record<string, LessonScript> = {
   'nimzo-indian::Rubinstein System (4.e3)': {
     openingId: 'nimzo-indian', title: 'Nimzo — The Rubinstein (4.e3)', minutes: 10, orientation: 'black',
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     beats: [
       b({ id: 'ru1', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 e3', say: "The Rubinstein — 4.e3, the most flexible and popular system. White develops modestly, keeps options open, and waits to see how Black commits. Black answers with classical development, ready to strike the centre with …d5 and …c5 and to trade on c3 when it damages White.", sayShort: 'e3 — the flexible main system.', highlights: [H('c3', SOFT)] }),
       b({ id: 'ru2', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5', say: "…O-O, …d5 and …c5 — Black contests the centre directly, the classical Nimzo plan against e3. The position resembles a Queen's Gambit but with the bishop already active on b4, pinning the knight and pressuring White's centre.", sayShort: '…d5, …c5 — contest the centre.', highlights: [H('d5'), H('c5')] }),
@@ -23,6 +24,7 @@ export const NIMZO_INDIAN_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'nimzo-indian::Huebner Variation (4.e3 c5)': {
     openingId: 'nimzo-indian', title: 'Nimzo — The Hübner (doubled pawns + blockade)', minutes: 10, orientation: 'black',
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     beats: [
       b({ id: 'hu1', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 e3 c5 Bd3 Nc6 Nf3 Bxc3+ bxc3', say: "The Hübner — the purest expression of the Nimzo idea. Black strikes with …c5, develops …Nc6, then trades …Bxc3+ bxc3, saddling White with doubled c-pawns. This is the structural prize Nimzowitsch sought: a fixed weakness Black will blockade and besiege.", sayShort: '…Bxc3+ — double the c-pawns.', highlights: [H('c3')] }),
       b({ id: 'hu2', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 e3 c5 Bd3 Nc6 Nf3 Bxc3+ bxc3 d6', say: "…d6 — the key restraining move. Black fixes the structure and prepares …e5, clamping the dark squares. The doubled c-pawns are now a permanent target, and Black's knights will dominate the light squares in front of them.", sayShort: '…d6 — fix the structure, prepare …e5.', highlights: [H('d6')] }),
@@ -33,6 +35,7 @@ export const NIMZO_INDIAN_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'nimzo-indian::Leningrad Variation (4.Bg5)': {
     openingId: 'nimzo-indian', title: 'Nimzo — The Leningrad (4.Bg5)', minutes: 10, orientation: 'black',
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     beats: [
       b({ id: 'le1', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Bg5 h6 Bh4', say: "The Leningrad — 4.Bg5, the aggressive try, pinning the f6-knight to add pressure on the centre. Black immediately puts the question with …h6, and after Bh4 the bishop is committed. Black will exploit its absence from the queenside with the thematic doubling of White's pawns.", sayShort: '…h6 — question the g5-bishop.', highlights: [H('f6', SOFT)] }),
       b({ id: 'le2', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Bg5 h6 Bh4 c5 d5 d6 e3 Bxc3+ bxc3', say: "…c5 strikes the centre, White locks with d5, and Black trades …Bxc3+ bxc3 — the doubled c-pawns appear again. With the dark-squared bishop gone, Black will blockade and target the weak pawns, just like the Hübner.", sayShort: '…Bxc3+ — double the c-pawns.', highlights: [H('c3')] }),
@@ -43,6 +46,7 @@ export const NIMZO_INDIAN_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'nimzo-indian::Kasparov Variation (4.Nf3)': {
     openingId: 'nimzo-indian', title: 'Nimzo — The Kasparov (4.Nf3)', minutes: 10, orientation: 'black',
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     beats: [
       b({ id: 'ka1', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Nf3 c5 g3', say: "The Kasparov Variation — 4.Nf3 followed by a kingside fianchetto with g3. White avoids the doubled pawns and aims for a smooth, harmonious setup. Black hits the centre with …c5 and prepares to fight for the central light squares with …d5.", sayShort: '…c5 — strike the centre vs the fianchetto.', highlights: [H('c5')] }),
       b({ id: 'ka2', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 Nf3 c5 g3 cxd4 Nxd4 O-O Bg2 d5', say: "…cxd4 opens the centre and …d5! challenges White's grip head-on. Black refuses to be squeezed by the fianchetto — by striking in the centre at once, the light-squared battle is joined on equal terms.", sayShort: '…d5 — challenge the fianchetto centre.', highlights: [H('d5')] }),
@@ -53,6 +57,7 @@ export const NIMZO_INDIAN_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'nimzo-indian::Saemisch Variation (4.a3)': {
     openingId: 'nimzo-indian', title: 'Nimzo — The Sämisch (4.a3)', minutes: 10, orientation: 'black',
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     beats: [
       b({ id: 'sa1', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3', say: "The Sämisch — White plays 4.a3 at once, forcing …Bxc3+ bxc3. White voluntarily accepts doubled c-pawns to gain the bishop pair and a big pawn centre. It is the sharpest test of the Nimzo bargain: White's centre and bishops versus Black's structural targets.", sayShort: '…Bxc3+ — doubled pawns vs the bishop pair.', highlights: [H('c3')] }),
       b({ id: 'sa2', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6', say: "…c5 and …Nc6 attack the d4-centre and the doubled pawns immediately. Black's strategy is clear: blockade White's pawns on the light squares, trade off White's good pieces, and prove the doubled c-pawns a long-term liability before White's centre rolls.", sayShort: '…c5, …Nc6 — attack the doubled pawns.', arrows: [A('c6', 'd4')], highlights: [H('d4')] }),
@@ -63,6 +68,7 @@ export const NIMZO_INDIAN_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'nimzo-indian::4.f3 (Aggressive Center)': {
     openingId: 'nimzo-indian', title: 'Nimzo — The 4.f3 (Aggressive Centre)', minutes: 10, orientation: 'black',
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     beats: [
       b({ id: 'f1', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 f3 d5', say: "4.f3 — the most ambitious try. White prepares e4 to build a huge pawn centre, ignoring development. Black hits back immediately with …d5, refusing to let White set up unchallenged. The position becomes sharp and concrete at once.", sayShort: '…d5 — challenge before e4 lands.', highlights: [H('d5')] }),
       b({ id: 'f2', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5', say: "a3 forces …Bxc3+ bxc3, and Black strikes with …c5. White has the doubled c-pawns and a centre that is not yet built; Black's plan is to open lines against the structure before White can consolidate the e4-push.", sayShort: '…c5 — open lines vs the doubled pawns.', highlights: [H('c5'), H('c3', SOFT)] }),
@@ -73,6 +79,7 @@ export const NIMZO_INDIAN_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'nimzo-indian::Fischer Variation (4.e3 b6)': {
     openingId: 'nimzo-indian', title: 'Nimzo — The Fischer (4.e3 b6)', minutes: 10, orientation: 'black',
+    sources: ['concept:pawn-doubled', 'concept:pos-outpost', 'https://en.wikipedia.org/wiki/Nimzo-Indian_Defence'],
     beats: [
       b({ id: 'fi1', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 e3 b6', say: "The Fischer Variation — against 4.e3 Black plays …b6 at once, preparing the light-squared fianchetto …Bb7. The idea is to control e4 with the bishop rather than commit the centre early. Fischer favoured this flexible, light-square-focused treatment.", sayShort: '…b6 — fianchetto, control e4 by piece.', highlights: [H('b6'), H('e4', SOFT)] }),
       b({ id: 'fi2', moves: 'd4 Nf6 c4 e6 Nc3 Bb4 e3 b6 Bd3 Bb7 Nf3 O-O O-O d5', say: "…Bb7 rakes the long diagonal at e4, Black castles, and only now plays …d5 — having first secured control of e4 with the bishop. The Nimzo and the Queen's Indian blend: the b4-bishop pins, the b7-bishop watches the centre, and Black is rock-solid.", sayShort: '…Bb7, …d5 — control e4, then strike.', highlights: [H('e4')] }),

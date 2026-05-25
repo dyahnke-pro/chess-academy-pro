@@ -30,6 +30,7 @@ function b(init: BeatInit): LessonBeat {
 export const SCOTCH_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
   "scotch-game::Scotch: Mieses Variation 4...Nf6 (e5 Push)": {
   openingId: "scotch-game",
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
   title: "Scotch Game — The Mieses Variation",
   minutes: 11,
   orientation: "white",
@@ -45,6 +46,7 @@ export const SCOTCH_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "scotch-game::Scotch Gambit (4.Bc4)": {
   openingId: "scotch-game",
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
   title: "Scotch Game — The Scotch Gambit",
   minutes: 10,
   orientation: "white",
@@ -59,6 +61,7 @@ export const SCOTCH_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "scotch-game::Scotch Four Knights (4...Nf6 5.Nc3 Bb4 6.Nxc6 bxc6 7.Bd3 d5)": {
   openingId: "scotch-game",
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
   title: "Scotch Game — The Four Knights",
   minutes: 11,
   orientation: "white",
@@ -73,6 +76,7 @@ export const SCOTCH_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "scotch-game::Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)": {
   openingId: "scotch-game",
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
   title: "Scotch Game — Kasparov's Nb3 Line",
   minutes: 11,
   orientation: "white",
@@ -87,6 +91,7 @@ export const SCOTCH_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "scotch-game::Scotch: 4...Qh4 (Steinitz Variation)": {
   openingId: "scotch-game",
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
   title: "Scotch Game — The Steinitz Qh4",
   minutes: 10,
   orientation: "white",

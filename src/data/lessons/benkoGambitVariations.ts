@@ -12,6 +12,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 export const BENKO_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   'benko-gambit::Benko Declined: Nf3 System': {
     openingId: 'benko-gambit', title: 'Benko — The Declined (Nf3 System)', minutes: 10, orientation: 'black',
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
     beats: [
       b({ id: 'd1', moves: 'd4 Nf6 c4 c5 d5 b5 Nf3', say: "The Declined — rather than grab the b-pawn, White develops Nf3 and lets Black resolve the tension. This avoids the open a- and b-files of the Accepted Benko, but it also lets Black off the hook: Black simply takes on c4 and gets an easy, comfortable game.", sayShort: 'Nf3 — White declines the pawn.', highlights: [H('c4', SOFT)] }),
       b({ id: 'd2', moves: 'd4 Nf6 c4 c5 d5 b5 Nf3 bxc4 Nc3 g6', say: "…bxc4 grabs the pawn, and …g6 prepares the trademark fianchetto. Black has won a pawn (which White will regain) but more importantly keeps the open b-file and the Benko's natural setup. The structure favours Black's easy development.", sayShort: '…bxc4, …g6 — grab the pawn, fianchetto.', highlights: [H('g6')] }),
@@ -22,6 +23,7 @@ export const BENKO_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'benko-gambit::Zaitsev Variation': {
     openingId: 'benko-gambit', title: 'Benko — The Zaitsev (White Keeps the Pawn)', minutes: 10, orientation: 'black',
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
     beats: [
       b({ id: 'z1', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4', say: "The Zaitsev — White tries to keep the extra pawn with Nc3 and e4 rather than return it. Black recaptures …axb5 and faces e4, which clamps the centre. But White's grip on the b5-pawn comes at a cost: time and queenside weaknesses Black will exploit.", sayShort: '…axb5 — meet the pawn-grab attempt.', highlights: [H('b5'), H('e4', SOFT)] }),
       b({ id: 'z2', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 Nc3 axb5 e4 b4', say: "…b4! The key move. Instead of letting White round up the pawn, Black pushes it forward, kicking the c3-knight and gaining queenside space. The b4-pawn becomes a thorn that cramps White's queenside for the rest of the game.", sayShort: '…b4 — push the pawn, cramp the queenside.', highlights: [H('b4')] }),
@@ -32,6 +34,7 @@ export const BENKO_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'benko-gambit::Half-Accepted': {
     openingId: 'benko-gambit', title: 'Benko — The Half-Accepted (e3)', minutes: 10, orientation: 'black',
+    sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Benko_Gambit'],
     beats: [
       b({ id: 'h1', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 e3', say: "The Half-Accepted — White takes on b5 but then plays the modest e3, returning the pawn to blunt Black's pressure and develop quickly. Black is happy: recapturing on a6 leaves an open a-file and active piece play, with no structural concessions.", sayShort: 'e3 — White returns the pawn for development.', highlights: [H('a6', SOFT)] }),
       b({ id: 'h2', moves: 'd4 Nf6 c4 c5 d5 b5 cxb5 a6 e3 axb5 Bxb5 Qa5+', say: "…axb5 Bxb5 and the in-between check …Qa5+! — Black develops the queen with tempo, forcing White to react. The check disrupts White's coordination and lets Black seize the initiative on the queenside straight away.", sayShort: '…Qa5+ — develop the queen with tempo.', highlights: [H('a5')] }),

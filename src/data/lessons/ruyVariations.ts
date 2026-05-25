@@ -27,6 +27,7 @@ function b(init: BeatInit): LessonBeat {
 // ── Berlin Defense ────────────────────────────────────────────────
 const BERLIN: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Ruy Lopez — The Berlin Defense',
   minutes: 10,
   orientation: 'white',
@@ -62,6 +63,7 @@ const BERLIN: LessonScript = {
 // ── Open Ruy Lopez ────────────────────────────────────────────────
 const OPEN: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Ruy Lopez — The Open Variation',
   minutes: 10,
   orientation: 'white',
@@ -96,6 +98,7 @@ const OPEN: LessonScript = {
 // ── Marshall Attack ───────────────────────────────────────────────
 const MARSHALL: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Ruy Lopez — The Marshall Attack',
   minutes: 10,
   orientation: 'white',
@@ -140,6 +143,7 @@ const MARSHALL: LessonScript = {
 // ── Exchange Variation ────────────────────────────────────────────
 const EXCHANGE: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Ruy Lopez — The Exchange Variation',
   minutes: 9,
   orientation: 'white',
@@ -173,6 +177,7 @@ const EXCHANGE: LessonScript = {
 // ── Closed: Breyer ────────────────────────────────────────────────
 const BREYER: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Ruy Lopez — The Breyer (Closed)',
   minutes: 9,
   orientation: 'white',
@@ -207,6 +212,7 @@ const BREYER: LessonScript = {
 // ── Closed: Chigorin ──────────────────────────────────────────────
 const CHIGORIN: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Ruy Lopez — The Chigorin (Closed)',
   minutes: 9,
   orientation: 'white',
@@ -237,6 +243,7 @@ const CHIGORIN: LessonScript = {
 // ── Closed: Zaitsev ───────────────────────────────────────────────
 const ZAITSEV: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Ruy Lopez — The Zaitsev (Closed)',
   minutes: 9,
   orientation: 'white',
@@ -267,6 +274,7 @@ const ZAITSEV: LessonScript = {
 // ── Anti-Marshall (a4) ──────────────────────────────────────────
 const ANTI_MARSHALL: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Ruy Lopez — The Anti-Marshall (a4)',
   minutes: 9,
   orientation: 'white',
@@ -297,6 +305,7 @@ const ANTI_MARSHALL: LessonScript = {
 // ── Arkhangelsk ───────────────────────────────────────────────────
 const ARKHANGELSK: LessonScript = {
   openingId: 'ruy-lopez',
+  sources: ['book:ruy-lopez', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Ruy_Lopez'],
   title: 'Ruy Lopez — The Arkhangelsk',
   minutes: 9,
   orientation: 'white',

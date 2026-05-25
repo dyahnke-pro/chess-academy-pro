@@ -29,6 +29,7 @@ function b(init: BeatInit): LessonBeat {
 export const FRENCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
   'french-defence::Advance Variation': {
     openingId: 'french-defence',
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     title: 'French Defence — The Advance Variation',
     minutes: 11,
     orientation: 'black',
@@ -45,6 +46,7 @@ export const FRENCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'french-defence::Winawer Variation': {
     openingId: 'french-defence',
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     title: 'French Defence — The Winawer (Poisoned Pawn)',
     minutes: 12,
     orientation: 'black',
@@ -62,6 +64,7 @@ export const FRENCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'french-defence::Classical Variation': {
     openingId: 'french-defence',
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     title: 'French Defence — The Classical (4.Bg5)',
     minutes: 11,
     orientation: 'black',
@@ -77,6 +80,7 @@ export const FRENCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'french-defence::Tarrasch Variation': {
     openingId: 'french-defence',
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     title: 'French Defence — The Tarrasch (3.Nd2)',
     minutes: 11,
     orientation: 'black',
@@ -92,6 +96,7 @@ export const FRENCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'french-defence::Exchange Variation': {
     openingId: 'french-defence',
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     title: 'French Defence — The Exchange',
     minutes: 10,
     orientation: 'black',
@@ -106,6 +111,7 @@ export const FRENCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'french-defence::Burn Variation': {
     openingId: 'french-defence',
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     title: 'French Defence — The Burn',
     minutes: 10,
     orientation: 'black',
@@ -120,6 +126,7 @@ export const FRENCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'french-defence::Fort Knox Variation': {
     openingId: 'french-defence',
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     title: 'French Defence — The Fort Knox',
     minutes: 10,
     orientation: 'black',
@@ -134,6 +141,7 @@ export const FRENCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'french-defence::Advance: Milner-Barry Gambit': {
     openingId: 'french-defence',
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     title: 'French Defence — The Milner-Barry Gambit',
     minutes: 11,
     orientation: 'black',
@@ -149,6 +157,7 @@ export const FRENCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'french-defence::McCutcheon Variation': {
     openingId: 'french-defence',
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     title: 'French Defence — The McCutcheon',
     minutes: 11,
     orientation: 'black',
@@ -164,6 +173,7 @@ export const FRENCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'french-defence::Rubinstein Variation': {
     openingId: 'french-defence',
+    sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
     title: 'French Defence — The Rubinstein',
     minutes: 10,
     orientation: 'black',

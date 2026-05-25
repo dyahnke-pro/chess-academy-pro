@@ -29,6 +29,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const ITALIAN_GAME_LESSON: LessonScript = {
   openingId: "italian-game",
+  sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
   title: "The Italian Game — A Master Class",
   minutes: 14,
   orientation: "white",

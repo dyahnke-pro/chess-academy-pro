@@ -29,6 +29,7 @@ const M = 'e4 e5 f4 exf4 Nf3 d5 exd5 Nf6 Bc4 Nxd5 O-O Be6 Bb3 Be7 c4 Nb6 d4 Nxc4
  */
 export const KINGS_GAMBIT_LESSON: LessonScript = {
   openingId: 'kings-gambit',
+  sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
   title: "The King's Gambit — A Master Class",
   minutes: 14,
   orientation: 'white',

@@ -29,6 +29,7 @@ const M = 'e4 e5 Nc3 Nf6 Bc4 Bc5 d3 O-O Nf3 d6 O-O c6 Bb3 Nbd7 Ne2 Bb6 c3 Nc5 Bc
  */
 export const VIENNA_GAME_LESSON: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'The Vienna Game — A Master Class',
   minutes: 14,
   orientation: 'white',

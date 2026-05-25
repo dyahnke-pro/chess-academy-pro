@@ -30,6 +30,7 @@ function b(init: BeatInit): LessonBeat {
 export const ITALIAN_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
   "italian-game::Giuoco Pianissimo: Modern d3 System": {
   openingId: "italian-game",
+  sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
   title: "Italian Game — The Modern d3 System",
   minutes: 11,
   orientation: "white",
@@ -46,6 +47,7 @@ export const ITALIAN_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "italian-game::Italian: Two Knights with d4": {
   openingId: "italian-game",
+  sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
   title: "Italian Game — Two Knights with d4",
   minutes: 11,
   orientation: "white",
@@ -61,6 +63,7 @@ export const ITALIAN_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "italian-game::Evans Gambit Accepted: Main Line": {
   openingId: "italian-game",
+  sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
   title: "Italian Game — The Evans Gambit",
   minutes: 11,
   orientation: "white",
@@ -76,6 +79,7 @@ export const ITALIAN_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "italian-game::Italian: Modern Moller Attack": {
   openingId: "italian-game",
+  sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
   title: "Italian Game — The Møller Attack",
   minutes: 12,
   orientation: "white",

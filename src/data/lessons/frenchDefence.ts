@@ -28,6 +28,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const FRENCH_DEFENCE_LESSON: LessonScript = {
   openingId: 'french-defence',
+  sources: ['book:french-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/French_Defence'],
   title: 'The French Defence — A Master Class',
   minutes: 13,
   orientation: 'black',

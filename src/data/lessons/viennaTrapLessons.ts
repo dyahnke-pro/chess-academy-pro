@@ -48,6 +48,7 @@ const A = (from: string, to: string, color = ATK): AnnotationArrow => ({ from, t
 // idea. Full-coverage 9-beat treatment per the playbook's locked rule.
 const WURZBURGER: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Weapon: The Wurzburger Trap',
   minutes: 6,
   orientation: 'white',
@@ -138,6 +139,7 @@ const WURZBURGER: LessonScript = {
 // White repertoire. Full-coverage 8-beat treatment.
 const HAMPPE_ALLGAIER: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Weapon: The Hamppe-Allgaier Sacrifice',
   minutes: 6,
   orientation: 'white',
@@ -221,6 +223,7 @@ const HAMPPE_ALLGAIER: LessonScript = {
 // against a king with no easy way to safety. Full-coverage 8 beats.
 const HAMPPE_MUZIO: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Weapon: The Hamppe-Muzio — Castle Into the Sacrifice',
   minutes: 6,
   orientation: 'white',
@@ -304,6 +307,7 @@ const HAMPPE_MUZIO: LessonScript = {
 // Full-coverage 9 beats.
 const FRANKENSTEIN_NXA8: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Weapon: Frankenstein-Dracula — the Nxa8 Raid',
   minutes: 7,
   orientation: 'white',
@@ -394,6 +398,7 @@ const FRANKENSTEIN_NXA8: LessonScript = {
 // 8 beats — pure Romantic-era Vienna at its quickest.
 const COPYCAT_QG4: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Weapon: Copycat — Punish the Mirror with Qg4',
   minutes: 5,
   orientation: 'white',
@@ -478,6 +483,7 @@ const COPYCAT_QG4: LessonScript = {
 // but a completely different attacking idea. Full-coverage 7 beats.
 const PIERCE_GAMBIT: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Weapon: The Pierce Gambit (d4)',
   minutes: 5,
   orientation: 'white',
@@ -553,6 +559,7 @@ const PIERCE_GAMBIT: LessonScript = {
 // opponent who hasn't memorised the right defensive sequence.
 const STEINITZ_GAMBIT: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: "Weapon: Steinitz's King-Walk Gambit",
   minutes: 6,
   orientation: 'white',
@@ -634,6 +641,7 @@ const STEINITZ_GAMBIT: LessonScript = {
 // to the correct Qh5.
 const NXE4_NO_QH5: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Watch out: Nxe4 demands Qh5',
   minutes: 3,
   orientation: 'white',

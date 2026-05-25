@@ -35,6 +35,7 @@ function b(init: BeatInit): LessonBeat {
 // Hamppe sacrifices live in the WEAPONS layer.
 const GAMBIT: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Vienna Game — The Gambit (f4)',
   minutes: 11,
   orientation: 'white',
@@ -115,6 +116,7 @@ const GAMBIT: LessonScript = {
 // weapon lessons that teach each individual sacrifice in depth.
 const VS_NC6: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Vienna Game — Black plays Nc6',
   minutes: 10,
   orientation: 'white',
@@ -169,6 +171,7 @@ const VS_NC6: LessonScript = {
 // (David's Falkbeer-merge call, 2026-05-21).
 const FRANKENSTEIN_DRACULA: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Vienna Game — The Frankenstein-Dracula',
   minutes: 12,
   orientation: 'white',
@@ -231,6 +234,7 @@ const FRANKENSTEIN_DRACULA: LessonScript = {
 // pure positional Vienna.
 const PAULSEN: LessonScript = {
   openingId: 'vienna-game',
+  sources: ['book:vienna-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   title: 'Vienna Game — The Paulsen (g3)',
   minutes: 9,
   orientation: 'white',

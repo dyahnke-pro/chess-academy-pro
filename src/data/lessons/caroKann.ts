@@ -34,6 +34,7 @@ function b(init: BeatInit): LessonBeat {
  *  with ...c5 against opposite-side castling. */
 export const CARO_KANN_LESSON: LessonScript = {
   openingId: 'caro-kann',
+  sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   title: 'The Caro-Kann Defence — A Master Class',
   minutes: 9,
   orientation: 'black',

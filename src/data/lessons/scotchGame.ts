@@ -29,6 +29,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const SCOTCH_GAME_LESSON: LessonScript = {
   openingId: "scotch-game",
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
   title: "The Scotch Game — A Master Class",
   minutes: 13,
   orientation: "white",

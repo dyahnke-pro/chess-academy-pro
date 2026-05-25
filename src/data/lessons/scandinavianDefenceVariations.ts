@@ -15,6 +15,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 export const SCANDINAVIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
   'scandinavian-defence::Qa5 Main Line': {
     openingId: 'scandinavian-defence', title: 'Scandinavian — The Solid …c6 Qa5', minutes: 10, orientation: 'black',
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     beats: [
       b({ id: 'q1', moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5', say: "The classical Qa5 Scandinavian, played the solid way. Black recaptures with the queen and retreats to a5, the most popular square — active, eyeing the a5-e1 diagonal, and ready to support a slow, sturdy setup.", sayShort: '…Qa5 — the solid main retreat.', highlights: [H('a5')] }),
       b({ id: 'q2', moves: 'e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5', say: "…Nf6 and the trademark …Bf5 — the bishop comes out before …e6, the whole point of the Scandinavian. From f5 it eyes the b1-h7 diagonal and c2, and it will never be a bad bishop.", sayShort: '…Bf5 — bishop out before …e6.', arrows: [A('f5', 'c2')], highlights: [H('f5'), H('c2', SOFT)] }),
@@ -26,6 +27,7 @@ export const SCANDINAVIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript
 
   'scandinavian-defence::Nf6 Modern Variation': {
     openingId: 'scandinavian-defence', title: 'Scandinavian — The …Nf6 Modern', minutes: 10, orientation: 'black',
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     beats: [
       b({ id: 'm1', moves: 'e4 d5 exd5 Nf6', say: "The Modern Scandinavian — instead of recapturing with the queen, Black plays …Nf6, offering to regain the pawn with a piece and avoid the early queen sortie entirely. Black accepts a temporary pawn deficit for fast, harmonious development.", sayShort: '…Nf6 — regain d5 with the knight.', highlights: [H('f6'), H('d5', SOFT)] }),
       b({ id: 'm2', moves: 'e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6', say: "d4 Nxd5 — the knight recaptures, centralised — and …g6 prepares a King's-Indian-style fianchetto. Black will park the bishop on g7 and pressure White's big centre on the long diagonal.", sayShort: '…g6 — fianchetto, KID-style.', highlights: [H('d5'), H('g6')] }),
@@ -38,6 +40,7 @@ export const SCANDINAVIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript
 
   'scandinavian-defence::Icelandic Gambit': {
     openingId: 'scandinavian-defence', title: 'Scandinavian — The Icelandic Gambit', minutes: 10, orientation: 'black',
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     beats: [
       b({ id: 'i1', moves: 'e4 d5 exd5 Nf6 c4 e6', say: "The Icelandic Gambit — pure dynamite. After 3…Nf6 4.c4, Black plays …e6!, offering a second pawn to blast the position open. The point is speed: Black will recapture, develop with checks, and hurl every piece into the game while White is still untangling.", sayShort: '…e6 — gambit for a development lead.', highlights: [H('e6'), H('c4', SOFT)] }),
       b({ id: 'i2', moves: 'e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+', say: "dxe6 Bxe6 — Black has the bishop pair and a big lead in development for the pawn — and …Bb4+ develops with check, forcing White to react rather than build. Every tempo counts in a gambit, and Black spends none.", sayShort: '…Bb4+ — develop with check.', highlights: [H('b4')] }),
@@ -50,6 +53,7 @@ export const SCANDINAVIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript
 
   'scandinavian-defence::Qd6 Tiviakov Variation': {
     openingId: 'scandinavian-defence', title: 'Scandinavian — The …Qd6 Tiviakov', minutes: 10, orientation: 'black',
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     beats: [
       b({ id: 't1', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd6', say: "The Tiviakov — the modern, ultra-flexible queen retreat. Instead of a5, Black drops the queen to d6, where it controls key central and kingside squares, stays out of harm's way, and keeps every setup open. Sergei Tiviakov scored countless wins from this rock-solid square.", sayShort: '…Qd6 — flexible, safe central retreat.', highlights: [H('d6')] }),
       b({ id: 't2', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6', say: "d4 Nf6, and the prophylactic …a6 — a small but key move. It gives the queen luft, prevents any Nb5 leap at the d6-queen, and prepares a flexible setup with …Bg4 or …Bf5. Black takes the sting out of White's tricks before developing.", sayShort: '…a6 — luft; stop Nb5 ideas.', highlights: [H('a6')] }),
@@ -61,6 +65,7 @@ export const SCANDINAVIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript
 
   'scandinavian-defence::Portuguese Variation': {
     openingId: 'scandinavian-defence', title: 'Scandinavian — The Portuguese Gambit', minutes: 10, orientation: 'black',
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     beats: [
       b({ id: 'p1', moves: 'e4 d5 exd5 Nf6 d4 Bg4', say: "The Portuguese Gambit — a sharp, modern try. After 3…Nf6 4.d4, Black plays …Bg4!?, pinning ideas and refusing to spend a move recapturing on d5 yet. Black offers the pawn for rapid, active development and pressure on White's centre.", sayShort: '…Bg4 — pin first, regain d5 later.', highlights: [H('g4')] }),
       b({ id: 'p2', moves: 'e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5', say: "Be2 Bxe2 Qxe2 trades the light bishops, and …Qxd5 finally collects the pawn back — with the queen actively centralised and Black fully developed-to-be. The gambit was really a clever move-order to reach an active, equal game.", sayShort: '…Qxd5 — regain the pawn, queen active.', highlights: [H('d5')] }),
@@ -72,6 +77,7 @@ export const SCANDINAVIAN_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript
 
   'scandinavian-defence::Gubinsky-Melts (3...Qd8)': {
     openingId: 'scandinavian-defence', title: 'Scandinavian — The …Qd8 Gubinsky-Melts', minutes: 10, orientation: 'black',
+    sources: ['book:scandinavian-defence', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scandinavian_Defense'],
     beats: [
       b({ id: 'g1', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd8', say: "The Gubinsky-Melts — the most patient Scandinavian of all. Black retreats the queen all the way home to d8. It looks passive, but the point is profound: the queen can never be harassed again, so Black simply develops smoothly and solidly behind a Caro-like structure with no target.", sayShort: '…Qd8 — queen home, no more harassment.', highlights: [H('d8')] }),
       b({ id: 'g2', moves: 'e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4', say: "d4 Nf6 and …Bg4 — the light bishop comes out, pinning the f3-knight before Black ever plays …e6. Same Scandinavian principle as the main line: get the good bishop active outside the pawn chain first.", sayShort: '…Bg4 — pin f3, bishop out early.', arrows: [A('g4', 'f3')], highlights: [H('f3')] }),

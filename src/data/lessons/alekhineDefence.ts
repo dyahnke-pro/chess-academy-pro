@@ -13,6 +13,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const ALEKHINE_DEFENCE_LESSON: LessonScript = {
   openingId: 'alekhine-defence',
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Alekhine%27s_Defence'],
   title: "Alekhine's Defence — A Master Class",
   minutes: 12,
   orientation: 'black',

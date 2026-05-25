@@ -29,6 +29,7 @@ function b(init: BeatInit): LessonBeat {
 /** Main-line Pirc: the hypermodern setup, then the central counter-strike. */
 export const PIRC_DEFENCE_LESSON: LessonScript = {
   openingId: 'pirc-defence',
+  sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
   title: 'The Pirc Defence — A Master Class',
   minutes: 9,
   orientation: 'black',

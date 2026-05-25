@@ -23,6 +23,7 @@ function b(init: BeatInit): LessonBeat {
 // g6 walk into it; Ndf6 is the only-move fix.
 const KARPOV_QE2_MATE: LessonScript = {
   openingId: 'caro-kann',
+  sources: ['book:caro-kann', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence'],
   title: 'Caro-Kann — Watch out: the Qe2 smothered mate',
   minutes: 4,
   orientation: 'black',

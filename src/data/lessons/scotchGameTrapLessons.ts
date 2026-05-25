@@ -30,6 +30,7 @@ import type { PlayableMiddlegameLine } from '../../types';
 export const SCOTCH_GAME_TRAP_LESSONS: Record<string, LessonScript> = {
   "sea-cadet-mate": {
   openingId: "scotch-game",
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
   title: "The Sea-Cadet Mate — Göring Gambit",
   minutes: 4,
   orientation: "white",
