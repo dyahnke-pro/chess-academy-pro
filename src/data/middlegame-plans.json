@@ -20316,5 +20316,759 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-catalan-main",
+    "openingId": "catalan-opening",
+    "title": "Open Catalan: The Long-Diagonal Squeeze",
+    "criticalPositionFen": "r2q1rk1/1bp1bppp/p1n1pn2/1p6/3P4/2N2NP1/PPQBPPBP/R4RK1 b - - 5 11",
+    "overview": "The model Catalan middlegame: White's g2-bishop and central space generate a small, permanent pull that is squeezed for the long haul.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The g2-bishop rules the long diagonal.",
+      "Rooks to the central files.",
+      "Nurse the small, permanent pull."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Open Catalan: The Long-Diagonal Squeeze",
+        "fen": "r2q1rk1/1bp1bppp/p1n1pn2/1p6/3P4/2N2NP1/PPQBPPBP/R4RK1 b - - 5 11",
+        "moves": [
+          "Rc8",
+          "Rfd1",
+          "Nb4",
+          "Qb1",
+          "Bd5"
+        ],
+        "annotations": [
+          "…Rc8 — Black lines up on the c-file.",
+          "Rfd1 — White centralises the rook behind the d4-pawn.",
+          "…Nb4 — Black's knight hits the queen on c2.",
+          "Qb1 — the queen sidesteps, keeping the long-diagonal pressure and an eye on h7.",
+          "…Bd5 — Black challenges the g2-bishop; White keeps the nagging Catalan pull."
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "b4",
+              "to": "c2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "h7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-catalan-closed",
+    "openingId": "catalan-opening",
+    "title": "Closed Catalan: Space and the c-File",
+    "criticalPositionFen": "r2qnrk1/pb1nbppp/1pp1p3/3pP3/2PP4/5NP1/PPQN1PBP/R1B2RK1 w - - 1 11",
+    "overview": "After the e5 space-grab cracks the closed centre, White opens the c-file and plays on the queenside while the bishop and kingside space tell.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "e5 grabs space and unleashes the bishop.",
+      "Open and contest the c-file.",
+      "Probe the queenside with the queen."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Closed Catalan: Space and the c-File",
+        "fen": "r2qnrk1/pb1nbppp/1pp1p3/3pP3/2PP4/5NP1/PPQN1PBP/R1B2RK1 w - - 1 11",
+        "moves": [
+          "cxd5",
+          "cxd5",
+          "Re1",
+          "Rc8",
+          "Qa4",
+          "Nc7"
+        ],
+        "annotations": [
+          "cxd5 — White opens the c-file after the e5 space-grab.",
+          "…cxd5 — Black recaptures.",
+          "Re1 — the rook supports the e5-pawn and the centre.",
+          "…Rc8 — Black contests the open c-file.",
+          "Qa4 — the queen swings to the queenside, probing.",
+          "…Nc7 — Black reroutes to defend; White keeps the space edge."
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "e1",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-catalan-opena6",
+    "openingId": "catalan-opening",
+    "title": "Open a6-b5: Build the Big Centre",
+    "criticalPositionFen": "bn1qkb1r/2p2ppp/4p3/1p1nN3/2pP4/6P1/1P2PPBP/1NBQ1RK1 w k - 0 11",
+    "overview": "With the gambit pawn recovered, White builds a broad centre with e4 and d5, the g2-bishop surging down the long diagonal behind the pawns.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Build the e4 centre once the pawn is back.",
+      "The d5 break opens the diagonal.",
+      "Central space plus the bishop."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Open a6-b5: Build the Big Centre",
+        "fen": "bn1qkb1r/2p2ppp/4p3/1p1nN3/2pP4/6P1/1P2PPBP/1NBQ1RK1 w k - 0 11",
+        "moves": [
+          "e4",
+          "Nf6",
+          "Nc3",
+          "c6",
+          "d5",
+          "Be7"
+        ],
+        "annotations": [
+          "e4 — White builds the big centre, the gambit pawn already regained.",
+          "…Nf6 — the knight retreats from d5.",
+          "Nc3 — developing and supporting the centre.",
+          "…c6 — Black bolsters the light squares.",
+          "d5! — White strikes, the central pawns and the g2-bishop surging forward.",
+          "…Be7 — Black retreats; White has a powerful space advantage."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-catalan-nbd7",
+    "openingId": "catalan-opening",
+    "title": "…Nbd7 Line: The e5 Outpost",
+    "criticalPositionFen": "r2q1rk1/1pp1bppp/p1b1pn2/3N4/P2P1B2/3Q1NP1/1P2PPBP/R4RK1 b - - 0 13",
+    "overview": "After the bishops are traded, White plants a knight on the central e5 outpost and keeps the familiar Catalan pull — more space and the better minor pieces.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Trade and occupy the e5 outpost.",
+      "Keep the space edge.",
+      "Patient Catalan grind."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "…Nbd7 Line: The e5 Outpost",
+        "fen": "r2q1rk1/1pp1bppp/p1b1pn2/3N4/P2P1B2/3Q1NP1/1P2PPBP/R4RK1 b - - 0 13",
+        "moves": [
+          "Bxd5",
+          "Ne5",
+          "Rc8",
+          "Rfd1"
+        ],
+        "annotations": [
+          "…Bxd5 — Black trades the light-squared bishops.",
+          "Ne5 — White's knight grabs the central e5 outpost.",
+          "…Rc8 — Black develops the rook.",
+          "Rfd1 — White centralises, keeping the pull: space and the better minor pieces."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-catalan-vsslav",
+    "openingId": "catalan-opening",
+    "title": "vs Slav: Recover the Pawn, Hold the Centre",
+    "criticalPositionFen": "r1bq1rk1/pp2ppbp/2pn2p1/8/PnpPP3/N4NP1/1PQ2PBP/R1BR2K1 w - - 5 12",
+    "overview": "Against the Slav-Catalan hybrid, White regains the c4-pawn with the knight and holds the broad e4 centre for a pleasant edge.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Recover c4 with the knight.",
+      "Hold the e4 centre.",
+      "Develop and press the small edge."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "vs Slav: Recover the Pawn, Hold the Centre",
+        "fen": "r1bq1rk1/pp2ppbp/2pn2p1/8/PnpPP3/N4NP1/1PQ2PBP/R1BR2K1 w - - 5 12",
+        "moves": [
+          "Qe2",
+          "Bg4",
+          "Nxc4",
+          "a5",
+          "Bf4",
+          "f5"
+        ],
+        "annotations": [
+          "Qe2 — White prepares to regain the c4-pawn.",
+          "…Bg4 — Black pins to disrupt.",
+          "Nxc4 — White recovers the gambit pawn, the knight active.",
+          "…a5 — Black grabs queenside space.",
+          "Bf4 — White develops, eyeing the c7- and d6-squares.",
+          "…f5 — Black hits back; White holds the centre and a small edge."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e2",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f4",
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-catalan-declined",
+    "openingId": "catalan-opening",
+    "title": "Declined: Central Pressure after e4",
+    "criticalPositionFen": "2rq1rk1/pb1nbppp/1pp1p3/8/2PPQ3/1P3NP1/PB3PBP/R4RK1 b - - 0 13",
+    "overview": "After the e4 break trades pieces, White's queen and two long-diagonal bishops bear down the centre for a durable pull against Black's solid wall.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The e4 break opened the position.",
+      "Two bishops on the long diagonals.",
+      "Central pressure, durable edge."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Declined: Central Pressure after e4",
+        "fen": "2rq1rk1/pb1nbppp/1pp1p3/8/2PPQ3/1P3NP1/PB3PBP/R4RK1 b - - 0 13",
+        "moves": [
+          "Nf6",
+          "Qe2",
+          "c5",
+          "Rad1"
+        ],
+        "annotations": [
+          "…Nf6 — Black redeploys after the e4-break trades.",
+          "Qe2 — White connects the rooks, the queen eyeing the centre.",
+          "…c5 — Black strikes at the d4-pawn.",
+          "Rad1 — White centralises both rooks; the g2-bishop and central pressure give the edge."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-catalan-qa4",
+    "openingId": "catalan-opening",
+    "title": "Early Qa4+: Attack the Long-Castled King",
+    "criticalPositionFen": "2kr1b1r/pppq1pp1/2n1p3/3n3p/2QP4/4P1P1/PP3PBP/RNB2RK1 w - - 0 12",
+    "overview": "Having recovered the pawn, White develops and turns the long diagonal and the open files against Black's queenside-castled king.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Pawn recovered; now attack.",
+      "Target the c8-king down open lines.",
+      "The g2-bishop joins the assault."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "title": "Early Qa4+: Attack the Long-Castled King",
+        "fen": "2kr1b1r/pppq1pp1/2n1p3/3n3p/2QP4/4P1P1/PP3PBP/RNB2RK1 w - - 0 12",
+        "moves": [
+          "Nc3",
+          "h4",
+          "Bd2",
+          "f5"
+        ],
+        "annotations": [
+          "Nc3 — White develops, the c4-pawn already regained.",
+          "…h4 — Black tries kingside counterplay.",
+          "Bd2 — White completes development, eyeing the queenside.",
+          "…f5 — Black grabs space; White has the better structure and chances against the c8-king."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]

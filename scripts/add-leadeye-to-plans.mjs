@@ -166,7 +166,7 @@ function main() {
 
   const LEADEYE_OPENINGS = new Set([
     'ruy-lopez', 'pirc-defence', 'vienna-game', 'italian-game', 'scotch-game',
-    'queens-gambit', 'qgd', 'qga',
+    'queens-gambit', 'qgd', 'qga', 'catalan-opening',
   ]);
   for (const plan of plans) {
     if (!LEADEYE_OPENINGS.has(plan.openingId)) continue;
