@@ -141,6 +141,16 @@ data, log the source, let the gate catch drift."
    When in doubt whether a borderline line clears (b)/(d), apply the standing
    rule: verify it's genuinely sound + faced, and if so include it — leave out
    only what fails a criterion, never what merely pushes the count past 6.
+1b. **Which COLOR TAB the opening lives under.** Masterclasses surface on two
+   top-level tabs — White and Black (`MasterclassesTab color="white|black"`,
+   hard-filtered on `o.color`). Set the opening's `color` in `repertoire.json`
+   to the side the STUDENT plays (White repertoire → `'white'`, Black defence →
+   `'black'`) and it auto-drops into the correct tab — no per-tab wiring. A
+   wrong `color` is the only way it lands on the wrong tab. David's hard rule
+   (2026-05-25): a white opening must NEVER show under Black or vice versa.
+   Verify `color` = student side before shipping; the orientation gates and
+   face-mode inversion key off the same field. → `MasterclassesTab.test.tsx`
+   anti-leak assertions.
 2. **Tab order.** LOCKED to amateur frequency, most-faced first. The showcase
    "Main line" pill leads and is exempt from the sort. Deterministic from the
    explorer numbers — zero taste.

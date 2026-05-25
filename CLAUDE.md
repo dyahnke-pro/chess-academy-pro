@@ -1078,6 +1078,21 @@ playbook holds the rules you MUST follow, in particular:
     structurally distinct + student-side-winning model game) + the gates.
     No cap, no "is six enough." Single-line soundness questions are fine to
     ask; the scope/count question is never David's to answer.
+- **🎨 COLOR-TAB PLACEMENT — a new masterclass opening MUST land on the
+  correct White/Black tab (locked 2026-05-25).** The Openings explorer splits
+  masterclasses into two top-level tabs, **White** and **Black**
+  (`OpeningExplorerPage` → `MasterclassesTab color="white|black"`). Placement is
+  NOT hand-wired per tab — it is driven STRICTLY by the opening's `color` field
+  (`'white' | 'black'`) in `repertoire.json` (`MasterclassesTab` hard-filters
+  `o.color === color`). So when you build a new opening: set its `color` to the
+  side the STUDENT plays — White-repertoire opening → `'white'`, Black-defence →
+  `'black'` — and it auto-drops into the right tab with no extra wiring. A wrong
+  `color` is the ONLY way an opening lands on the wrong tab, and David's hard
+  rule is: **a white opening must NEVER appear under Black, and vice versa.**
+  Verify `color` matches the student side before shipping (it's the same field
+  the orientation gates and face-mode inversion already key off — getting it
+  wrong breaks more than the tab). `MasterclassesTab.test.tsx` carries the
+  anti-leak assertions; keep them green.
 - **WLPP grammar (locked):** Watch = auto-play + narration; Learn = voice
   guides each move, YOU play it; Practice = same board SILENT + a Hint
   button; Play = coach LOCKED to this opening. Applies to the main line,
