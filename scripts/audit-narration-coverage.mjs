@@ -54,12 +54,12 @@ let eUnits = 0, eFull = 0, eSrc = 0;
 for (const f of ['endgame-principles.json', 'pawn-endings.json', 'rook-endings.json', 'drawn-patterns.json']) {
   try { for (const e of J(f)) { eUnits++; if (e.narration?.why || e.explanation) eFull++; if (e.narration?.history || e.source) eSrc++; } } catch {}
 }
-add('endgame lessons', eUnits, eFull, 0, eSrc, false, false);
+add('endgame lessons', eUnits, eFull, 0, eSrc, false, true);
 
 // 8. Mating patterns
 let mUnits = 0, mFull = 0, mSrc = 0;
 try { for (const p of J('mating-patterns.json')) { mUnits++; if (p.narration?.intro) mFull++; if (p.narration?.history) mSrc++; } } catch {}
-add('mating patterns', mUnits, mFull, 0, mSrc, false, false);
+add('mating patterns', mUnits, mFull, 0, mSrc, false, true);
 
 // 9. Checkpoint quizzes (hint prose)
 let qUnits = 0, qHint = 0;

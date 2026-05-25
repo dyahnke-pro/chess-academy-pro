@@ -188,6 +188,7 @@ const GATE_TESTS = [
   'src/utils/commonMistakeLine.test.ts',
   'src/data/commonMistakeNarration.test.ts',
   'src/data/proRepertoireSources.test.ts',
+  'src/data/narrationProvenance.test.ts',
 ];
 
 runStep('typecheck   ', 'npm', ['run', 'typecheck']);

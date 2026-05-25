@@ -61,7 +61,24 @@ Priority order (David named main lines first):
 - Coverage gates (full+short) + verification gates wired into ship-check.
 - This comprehensive audit instrument + the surface inventory.
 
-## Remaining surfaces — honest notes (not yet gated)
+## FINAL STATE (2026-05-25) — surfaces gated for verification
+
+**8 of 10 surfaces now have a source/provenance gate, all sealed (no escape):**
+gems, main-line beat-lessons, plan lines, common mistakes, model games,
+pro-repertoires (masterclass-mapped), endgame (sealed 0), mating patterns
+(ceiling 15). The 6 core WLPP teaching surfaces are 100% masterclass-sourced.
+
+**2 surfaces deliberately NOT gated (documented scope decisions):**
+- **gambit variations (55)** — `explanation` prose; maps to openings like
+  pro-rep BUT with fuzzy edge cases (Danish Gambit ≠ Scotch, Marshall Attack =
+  Ruy) that need a hand-curated map like `proRepertoireOpeningMap.json`. Deferred
+  to a careful pass — NOT auto-keyword-mapped (would mis-ground). 6 of 12 gambits
+  map cleanly (KG, Evans, Vienna, Benko, Scotch); 6 are non-masterclass.
+- **checkpoint quizzes (133)** — the `hint` field is a coaching nudge for a quiz,
+  not an authoritative chess-theory claim, so it's OUT OF SCOPE for independent-
+  verification sourcing (a deliberate call, not a gap).
+
+## Remaining surfaces — honest notes (superseded by FINAL STATE above)
 - **pro-repertoire variations (243)** — real Naroditsky-voice `explanation`
   prose, BUT keyed by `pro-<player>-<slug>` ids with NO `openingId` field and 82
   openings (many non-masterclass: KID, Grünfeld, Semi-Slav…). A manifest-scoped
