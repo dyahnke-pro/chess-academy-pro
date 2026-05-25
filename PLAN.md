@@ -81,7 +81,8 @@ confirm it best shows White's pull, else re-steer to a queens-on line.
 - ✅ **queens-gambit (WHITE) — COMPLETE** (lessons, 6 tabs, 7 plans+leadeye, 3 gems, 4 model games, manifest, color sub-tabs). ship-check READY.
 - ✅ **qgd (BLACK) — COMPLETE** (main + 7 variation lessons, 7 tabs, 8 plans+leadeye, 3 Black-win model games [Kasparov/Anand/Ivanisevic], 3 gems incl. the Cambridge Springs trap, manifest). ship-check confirming.
 - ✅ **qga (BLACK) — COMPLETE** (main + 6 variation lessons, 6 tabs, 7 plans+leadeye, 3 elite Black-win model games [Caruana/Aronian/Anand, Classical QGA], 3 gems incl. the Central …Bb4+ zwischenzug + Alekhine pawn-grabs, manifest). ship-check confirming.
-- 🚧 **catalan-opening (WHITE) — P0**: 7 curated spines in repertoire.json (main pill = dxc4 Qc2 a6 b5; tabs: Open dxc4, Closed …c6, Open a6-b5, …Nbd7, vs-Slav, Declined …Be7, Early Qa4+). 6/7 ≥20 ply; **vs-Slav (…c6/…b5) thins — re-steer or fold at authoring**. Qa4+ extended to 22p. Next: author WHITE lessons → wire → plans → gems → White-win model games.
+- 🚧 **catalan-opening (WHITE) — near-complete**: main + 6 variation lessons (Closed, Open a6-b5, …Nbd7, vs-Slav, Declined, Early Qa4+), 6 tabs, 7 plans+leadeye, 3 White-win model games (Kramnik–Topalov 2006 WCh, Ding–Carlsen 2021, Carlsen–Giri 2022), manifest. **Gems mining now; then narrate + ship-check.** vs-Slav re-steered to the …g6 line (22p); main pill = Open Catalan dxc4 Qc2.
+- ALL FOUR QG-family classes built (White QG, QGD, QGA, Catalan). After Catalan gems + ship-check: merge to main + post-deploy audit (G1).
 - Side-fix this session: `add-leadeye-to-plans.mjs` allowlist now includes queens-gambit + qgd (both were missing — QG plans had shipped bare).
 
 ## QGD (BLACK) — spines (`scripts/_qgd-extend.mjs`)
