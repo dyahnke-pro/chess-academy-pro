@@ -43,7 +43,11 @@ understanding, board-truth-gated (CLAUDE.md modern-opening note).
    leadeye, named-traps). DONE = on `main` + post-deploy audit green (§0.5).
 
 ## Phased plan (per opening; build sequentially)
-- **DRAGON** … _in progress_ — P0 spines next.
+- **DRAGON** … _P0 spines LOCKED (`scripts/_sic-spines.mjs`); P1 lessons next._
+  - All 8 tabs reach ≥20 plies (masters-anchored + Stockfish-extend):
+    - Yugoslav Main (pill) 22 · Soltis 24 · Chinese Dragon 22 · Classical 22 · Dragadorf 20 (all deeply masters-anchored)
+    - Levenfish / Accelerated / Anti-Dragon Bg5 → Stockfish-extended tail.
+  - **Re-steer in P1:** Levenfish should walk Black's `6...Nbd7` antidote (current spine walks into White's `e5` idea); Accelerated lands in the Maroczy Bind (White ~+0.5 is honest — teach Black's …f5/…b5/…a5 counterplay). Chinese Dragon `…b5` is thin in masters (4g) — verify it's sound theory.
 - NAJDORF … pending
 - SVESHNIKOV … pending
 - ALAPIN … pending
