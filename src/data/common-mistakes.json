@@ -5,21 +5,36 @@
       "wrongMove": "Ng5",
       "correctMove": "c3",
       "explanation": "Ng5 looks aggressive targeting f7, but after d5! exd5 Na5, Black wins the bishop pair and has a strong center. Instead c3 prepares d4 for a sound central build-up.",
-      "shortNarration": "c3 — prepare d4, build the centre"
+      "shortNarration": "c3 — prepare d4, build the centre",
+      "sources": [
+        "book:italian-game",
+        "concept:pos-center",
+        "https://www.chess.com/openings/Italian-Game"
+      ]
     },
     {
       "fen": "r1bq1rk1/ppp2ppp/2np1n2/2b1p3/2B1P3/2PP1N2/PP3PPP/RNBQ1RK1 w - - 0 7",
       "wrongMove": "d4",
       "correctMove": "Nbd2",
       "explanation": "Playing d4 immediately is premature — after exd4 cxd4 Bb4, Black pins the knight and puts pressure on d4. First develop with Nbd2, preparing d4 with proper support.",
-      "shortNarration": "Nbd2 — support d4 before pushing it"
+      "shortNarration": "Nbd2 — support d4 before pushing it",
+      "sources": [
+        "book:italian-game",
+        "concept:pos-center",
+        "https://www.chess.com/openings/Italian-Game"
+      ]
     },
     {
       "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
       "wrongMove": "Bxf7+",
       "correctMove": "d3",
       "explanation": "Bxf7+ wins a pawn but after Kxf7, Black gets the bishop pair and the king is safe on g8 after Rf8. Develop solidly with d3 instead.",
-      "shortNarration": "d3 — develop solidly, skip the sac"
+      "shortNarration": "d3 — develop solidly, skip the sac",
+      "sources": [
+        "book:italian-game",
+        "concept:pos-center",
+        "https://www.chess.com/openings/Italian-Game"
+      ]
     }
   ],
   "french-defence": [
@@ -28,14 +43,24 @@
       "wrongMove": "c5",
       "correctMove": "Nfd7",
       "explanation": "After e5 the f6-knight is attacked and must move — …c5 ignores it and simply drops the piece to exf6. First retreat the knight to d7 to reorganize, then strike the base with …c5 once it is safely prepared.",
-      "shortNarration": "Nfd7 — save the attacked knight first"
+      "shortNarration": "Nfd7 — save the attacked knight first",
+      "sources": [
+        "book:french-defence",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/French_Defence"
+      ]
     },
     {
       "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
       "wrongMove": "Nf6",
       "correctMove": "d5",
       "explanation": "…Nf6 here just invites e5, kicking the knight back and handing White free space. …d5 is the whole point of the French — challenge the e4-pawn at once and fight for the centre.",
-      "shortNarration": "d5 — the principled French strike"
+      "shortNarration": "d5 — the principled French strike",
+      "sources": [
+        "book:french-defence",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/French_Defence"
+      ]
     }
   ],
   "caro-kann": [
@@ -44,21 +69,36 @@
       "wrongMove": "e6",
       "correctMove": "Bf5",
       "explanation": "e6 locks in the light-squared bishop — the Caro-Kann's main advantage is developing this bishop OUTSIDE the pawn chain first. Bf5 is the whole point of the opening.",
-      "shortNarration": "Bf5 — bishop out before locking with e6"
+      "shortNarration": "Bf5 — bishop out before locking with e6",
+      "sources": [
+        "book:caro-kann",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+      ]
     },
     {
       "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 2",
       "wrongMove": "f3",
       "correctMove": "Nc3",
       "explanation": "f3 weakens the kingside and blocks the knight. Nc3 develops naturally and maintains pressure on d5.",
-      "shortNarration": "Nc3 — develop, keep pressure on d5"
+      "shortNarration": "Nc3 — develop, keep pressure on d5",
+      "sources": [
+        "book:caro-kann",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+      ]
     },
     {
       "fen": "rn1qkb1r/pp2pppp/2p2n2/3p2B1/3PP3/2N5/PPP2PPP/R2QKBNR b KQkq - 0 4",
       "wrongMove": "Nxe4",
       "correctMove": "dxe4",
       "explanation": "Nxe4 walks into Nxe4 dxe4 Qd4 forking e4 and g7. Simply recapture with dxe4 keeping a solid position.",
-      "shortNarration": "dxe4 — just recapture, stay solid"
+      "shortNarration": "dxe4 — just recapture, stay solid",
+      "sources": [
+        "book:caro-kann",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+      ]
     }
   ],
   "ruy-lopez": [
@@ -67,7 +107,12 @@
       "wrongMove": "Nf6",
       "correctMove": "a6",
       "explanation": "Nf6 allows 4. O-O Nxe4 5. d4 (the Open Ruy Lopez) which leads to very sharp tactical play favoring White. a6 forces the bishop back and gives Black more flexibility.",
-      "shortNarration": "a6 — question the bishop, stay flexible"
+      "shortNarration": "a6 — question the bishop, stay flexible",
+      "sources": [
+        "book:ruy-lopez",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Ruy_Lopez"
+      ]
     }
   ],
   "qgd": [
@@ -116,21 +161,36 @@
       "wrongMove": "b3",
       "correctMove": "Nc3",
       "explanation": "Defending b2 passively with b3 weakens the queenside and concedes the initiative. Nc3 develops with tempo — the pawn is taboo, since ...Qxb2 runs into Na4 trapping the queen.",
-      "shortNarration": "Nc3 — develop, the pawn is taboo"
+      "shortNarration": "Nc3 — develop, the pawn is taboo",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/London_System"
+      ]
     },
     {
       "fen": "rnbqk2r/ppp2ppp/3bpn2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 2 5",
       "wrongMove": "Bxd6",
       "correctMove": "Bg3",
       "explanation": "Trading the prized London bishop with Bxd6 hands Black comfortable equality. Bg3 preserves it, keeping the grip on the b8-h2 diagonal — the soul of the whole system.",
-      "shortNarration": "Bg3 — keep the London bishop"
+      "shortNarration": "Bg3 — keep the London bishop",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/London_System"
+      ]
     },
     {
       "fen": "r1b1kb1r/pp2pppp/1qn5/3p3n/2pP1B2/2P1P3/PPQN1PPP/R3KBNR w KQkq - 2 8",
       "wrongMove": "Be2",
       "correctMove": "Bg5",
       "explanation": "Ignoring the attack on the bishop with a move like Be2 lets ...Nxf4 trade off the prized London bishop for a knight. Bg5 keeps it active and out of harm's way.",
-      "shortNarration": "Bg5 — save the prized bishop"
+      "shortNarration": "Bg5 — save the prized bishop",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/London_System"
+      ]
     }
   ],
   "english-opening": [
@@ -139,21 +199,36 @@
       "wrongMove": "Nxe5",
       "correctMove": "Bg2",
       "explanation": "Grabbing the pawn with Nxe5 walks into ...Nxc3! — the d5-knight forks the queen and White loses material. Just fianchetto with Bg2; the reversed Sicilian is about pressure, not pawn-grabbing.",
-      "shortNarration": "Bg2 — fianchetto, don't grab e5"
+      "shortNarration": "Bg2 — fianchetto, don't grab e5",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-space",
+        "https://en.wikipedia.org/wiki/English_Opening"
+      ]
     },
     {
       "fen": "r1bq1rk1/pp1pppbp/2n2np1/2p5/2P5/2N2NP1/PP1PPPBP/R1BQ1RK1 w - - 6 7",
       "wrongMove": "d3",
       "correctMove": "d4",
       "explanation": "Drifting with d3 keeps the symmetry and lets Black equalize comfortably. d4 is the thematic break that shatters the mirror and hands White the initiative his extra tempo earns.",
-      "shortNarration": "d4 — break the symmetry, don't drift"
+      "shortNarration": "d4 — break the symmetry, don't drift",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-space",
+        "https://en.wikipedia.org/wiki/English_Opening"
+      ]
     },
     {
       "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - 0 4",
       "wrongMove": "cxd5",
       "correctMove": "e5",
       "explanation": "Releasing with cxd5 exd5 gives Black free, easy development. e5 is the whole point of the Mikenas — gain space and kick the f6-knight, keeping the initiative.",
-      "shortNarration": "e5 — push past, keep the initiative"
+      "shortNarration": "e5 — push past, keep the initiative",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-space",
+        "https://en.wikipedia.org/wiki/English_Opening"
+      ]
     }
   ],
   "sicilian-dragon": [
@@ -162,14 +237,24 @@
       "wrongMove": "a5",
       "correctMove": "O-O",
       "explanation": "a5 is premature queenside expansion before castling. O-O gets the king safe first — in the Dragon, a single tempo can decide the game.",
-      "shortNarration": "O-O first — king safe before a5."
+      "shortNarration": "O-O first — king safe before a5.",
+      "sources": [
+        "concept:att-queenside-attack",
+        "concept:pos-open-file",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
+      ]
     },
     {
       "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/2KR1B1R b - - 0 8",
       "wrongMove": "Be6",
       "correctMove": "Qa5",
       "explanation": "Be6 allows Nxe6 fxe6 with a weakened pawn structure. Qa5 starts immediate queenside counterplay which is critical in the Yugoslav Attack.",
-      "shortNarration": "Qa5 — immediate queenside counterplay."
+      "shortNarration": "Qa5 — immediate queenside counterplay.",
+      "sources": [
+        "concept:att-queenside-attack",
+        "concept:pos-open-file",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
+      ]
     }
   ],
   "scandinavian-defence": [
@@ -178,21 +263,36 @@
       "wrongMove": "e6",
       "correctMove": "Bf5",
       "explanation": "Playing …e6 first locks the light-squared bishop behind its own pawn — the very French problem the Scandinavian exists to avoid. Develop …Bf5 (or …Bg4) FIRST, getting the bishop outside the chain, and only then play …e6.",
-      "shortNarration": "Bf5 — bishop out before …e6"
+      "shortNarration": "Bf5 — bishop out before …e6",
+      "sources": [
+        "book:scandinavian-defence",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+      ]
     },
     {
       "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
       "wrongMove": "Qe5+",
       "correctMove": "Qa5",
       "explanation": "…Qe5+ is a greedy check that goes nowhere: after Be2 the bishop blocks calmly and Black has only misplaced the queen and blocked the e-pawn. …Qa5 keeps the queen active and out of harm's way, the sound main-line square.",
-      "shortNarration": "Qa5 — active retreat, not the greedy check"
+      "shortNarration": "Qa5 — active retreat, not the greedy check",
+      "sources": [
+        "book:scandinavian-defence",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+      ]
     },
     {
       "fen": "rnb1kb1r/ppp1pppp/5n2/q2P4/8/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 4",
       "wrongMove": "Qb6",
       "correctMove": "Nxd5",
       "explanation": "Shuffling the queen to b6 wastes a tempo and lets White keep the extra d5-pawn. Just recapture with …Nxd5, regaining the pawn and centralising the knight — equal and easy.",
-      "shortNarration": "Nxd5 — recapture, do not dawdle"
+      "shortNarration": "Nxd5 — recapture, do not dawdle",
+      "sources": [
+        "book:scandinavian-defence",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+      ]
     }
   ],
   "catalan-opening": [
@@ -201,21 +301,36 @@
       "wrongMove": "Na3",
       "correctMove": "Nf3",
       "explanation": "Lunging after the c4-pawn with Na3 wastes time and misplaces the knight on the rim. Nf3 develops naturally — White recovers the pawn later with the bishop pair and long-diagonal pressure.",
-      "shortNarration": "Nf3 — develop, recover c4 later"
+      "shortNarration": "Nf3 — develop, recover c4 later",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Catalan_Opening"
+      ]
     },
     {
       "fen": "r2qkb1r/2pb1ppp/p1n1pn2/1p6/2pP4/4PNP1/PP2QPBP/RNB2RK1 w kq - 0 9",
       "wrongMove": "Qxc4",
       "correctMove": "b3",
       "explanation": "Qxc4 loses the queen to ...bxc4 — the b5-pawn guards c4! Undermine the base of the chain with b3 instead, recovering the pawn under far better circumstances.",
-      "shortNarration": "b3 — undermine, b5 guards c4"
+      "shortNarration": "b3 — undermine, b5 guards c4",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Catalan_Opening"
+      ]
     },
     {
       "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/5NP1/PPQ1PPBP/RNB2RK1 w - - 0 8",
       "wrongMove": "cxd5",
       "correctMove": "Nbd2",
       "explanation": "Releasing the tension with cxd5 hands Black an easy game and a clear structure. Keep the tension and prepare the thematic e4-break with Nbd2 — that is how White plays for the advantage.",
-      "shortNarration": "Nbd2 — prepare e4, keep tension"
+      "shortNarration": "Nbd2 — prepare e4, keep tension",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Catalan_Opening"
+      ]
     }
   ],
   "slav-defence": [
@@ -244,14 +359,24 @@
       "wrongMove": "Be7",
       "correctMove": "Bxc3+",
       "explanation": "When a3 questions the bishop, retreating …Be7 throws away the whole point of the Nimzo — two tempi lost and the pin abandoned for nothing. Take with …Bxc3+: damage White's structure (or, in the Qc2 line, loosen the grip on e4) and play on from there. The bishop is meant to be traded, not retreated.",
-      "shortNarration": "Bxc3+ — take, don't retreat the bishop"
+      "shortNarration": "Bxc3+ — take, don't retreat the bishop",
+      "sources": [
+        "concept:pawn-doubled",
+        "concept:pos-outpost",
+        "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+      ]
     },
     {
       "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 2 5",
       "wrongMove": "Bxc3+",
       "correctMove": "d5",
       "explanation": "Trading …Bxc3+ here, before White has spent a3 to force it, hands over the bishop pair for free — White recaptures with the b-pawn and is happy to have the centre and the bishops. Keep the pin and strike with …d5, contesting the centre while the bishop still does its job.",
-      "shortNarration": "d5 — keep the pin, strike the centre"
+      "shortNarration": "d5 — keep the pin, strike the centre",
+      "sources": [
+        "concept:pawn-doubled",
+        "concept:pos-outpost",
+        "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+      ]
     }
   ],
   "grunfeld-defence": [
@@ -274,21 +399,36 @@
       "wrongMove": "Nxd4",
       "correctMove": "exd4",
       "explanation": "Nxd4 Nxd4 exd4 leaves Black with an isolated d-pawn and no compensation. exd4 Nxd4 gives Black active piece play.",
-      "shortNarration": "exd4 — recapture for active piece play"
+      "shortNarration": "exd4 — recapture for active piece play",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Scotch_Game"
+      ]
     },
     {
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
       "wrongMove": "Nxe4",
       "correctMove": "Bd6",
       "explanation": "Nxe4 loses to d5 forking the knight and bishop. Bd6 attacks the knight and develops naturally.",
-      "shortNarration": "Bd6 — attack the knight, develop"
+      "shortNarration": "Bd6 — attack the knight, develop",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Scotch_Game"
+      ]
     },
     {
       "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
       "wrongMove": "e5",
       "correctMove": "Bd3",
       "explanation": "e5 pushes the pawn forward without support and the knight retreats to safety. Bd3 develops calmly with a lead in development.",
-      "shortNarration": "Bd3 — develop calmly, keep your lead"
+      "shortNarration": "Bd3 — develop calmly, keep your lead",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Scotch_Game"
+      ]
     }
   ],
   "vienna-game": [
@@ -297,21 +437,36 @@
       "wrongMove": "Bc5",
       "correctMove": "Nf6",
       "explanation": "Bc5 is passive and allows f4 with tempo. Nf6 counter-attacks e4 and fights for the initiative.",
-      "shortNarration": "Nf6 — hit e4, take the initiative"
+      "shortNarration": "Nf6 — hit e4, take the initiative",
+      "sources": [
+        "book:vienna-game",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Vienna_Game"
+      ]
     },
     {
       "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
       "wrongMove": "exf4",
       "correctMove": "d5",
       "explanation": "exf4 gives up the center. d5 strikes back centrally and opens lines for development.",
-      "shortNarration": "d5 — strike back in the centre"
+      "shortNarration": "d5 — strike back in the centre",
+      "sources": [
+        "book:vienna-game",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Vienna_Game"
+      ]
     },
     {
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
       "wrongMove": "fxe5",
       "correctMove": "d3",
       "explanation": "fxe5 Nxe4 gives Black active piece play. d3 solidifies the center and prepares calm development.",
-      "shortNarration": "d3 — hold the centre, develop calmly"
+      "shortNarration": "d3 — hold the centre, develop calmly",
+      "sources": [
+        "book:vienna-game",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Vienna_Game"
+      ]
     }
   ],
   "four-knights-game": [
@@ -320,21 +475,36 @@
       "wrongMove": "Nxe5",
       "correctMove": "Bb5",
       "explanation": "Nxe5 is the Halloween Gambit — a knight sacrifice that is objectively unsound; with accurate defence Black is simply better. Bb5 keeps the principled Spanish Four Knights, pressuring the c6-knight and preparing the d4 break.",
-      "shortNarration": "Bb5 — the sound Spanish, not the gambit"
+      "shortNarration": "Bb5 — the sound Spanish, not the gambit",
+      "sources": [
+        "book:four-knights-game",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Four_Knights_Game"
+      ]
     },
     {
       "fen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
       "wrongMove": "Nxe5",
       "correctMove": "Be2",
       "explanation": "Grabbing the pawn with Nxe5 invites the strong ...Qe7, when Black regains it with a fine game — and the careless f4 even drops a piece to ...Nxb5. Be2 is the calm Maroczy retreat that keeps the bishop pair and a sound edge.",
-      "shortNarration": "Be2 — don't grab e5, retreat calmly"
+      "shortNarration": "Be2 — don't grab e5, retreat calmly",
+      "sources": [
+        "book:four-knights-game",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Four_Knights_Game"
+      ]
     },
     {
       "fen": "r1bq1rk1/ppp2ppp/2np1n2/1B2p3/1b2P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7",
       "wrongMove": "h3",
       "correctMove": "Bg5",
       "explanation": "Drifting with a slow move like h3 lets Black comfortably hold the symmetry. Bg5 breaks it on White's terms, pinning the f6-knight — which Black cannot mirror without wrecking his own kingside.",
-      "shortNarration": "Bg5 — break the symmetry, pin f6"
+      "shortNarration": "Bg5 — break the symmetry, pin f6",
+      "sources": [
+        "book:four-knights-game",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Four_Knights_Game"
+      ]
     }
   ],
   "sicilian-alapin": [
@@ -343,14 +513,24 @@
       "wrongMove": "e6",
       "correctMove": "d5",
       "explanation": "e6 is too passive and lets White build a big centre with d4. d5 challenges White's centre at once and gives Black the freer game.",
-      "shortNarration": "d5 — challenge now, not passive e6."
+      "shortNarration": "d5 — challenge now, not passive e6.",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
+      ]
     },
     {
       "fen": "rnb1kbnr/pp2pppp/8/3q4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
       "wrongMove": "Qxd4",
       "correctMove": "Nf6",
       "explanation": "Qxd4 grabs a pawn but loses time after Nc3, when the queen is chased back and White races ahead in development. Nf6 develops with tempo and eyes e4.",
-      "shortNarration": "Nf6 — develop; Qxd4 just loses time."
+      "shortNarration": "Nf6 — develop; Qxd4 just loses time.",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
+      ]
     }
   ],
   "pirc-defence": [
@@ -454,7 +634,12 @@
           ]
         ]
       },
-      "shortNarration": "Nf6 — develop and pressure e4"
+      "shortNarration": "Nf6 — develop and pressure e4",
+      "sources": [
+        "concept:pos-center",
+        "concept:att-queenside-attack",
+        "https://en.wikipedia.org/wiki/Pirc_Defence"
+      ]
     },
     {
       "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
@@ -545,7 +730,12 @@
           ]
         ]
       },
-      "shortNarration": "O-O — castle, keep the bishop in reserve"
+      "shortNarration": "O-O — castle, keep the bishop in reserve",
+      "sources": [
+        "concept:pos-center",
+        "concept:att-queenside-attack",
+        "https://en.wikipedia.org/wiki/Pirc_Defence"
+      ]
     },
     {
       "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R b - - 0 5",
@@ -644,7 +834,12 @@
           ]
         ]
       },
-      "shortNarration": "Bg4 — pin the knight, make tension first"
+      "shortNarration": "Bg4 — pin the knight, make tension first",
+      "sources": [
+        "concept:pos-center",
+        "concept:att-queenside-attack",
+        "https://en.wikipedia.org/wiki/Pirc_Defence"
+      ]
     }
   ],
   "pro-naroditsky-jobava-london": [
@@ -673,14 +868,24 @@
       "wrongMove": "Nxe5",
       "correctMove": "d4",
       "explanation": "Grabbing the pawn back with Nxe5 throws away the whole point of the gambit. d4! builds the towering centre and keeps the initiative — that is exactly what the b-pawn bought.",
-      "shortNarration": "d4 — build the centre, keep the attack"
+      "shortNarration": "d4 — build the centre, keep the attack",
+      "sources": [
+        "book:evans-gambit",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Evans_Gambit"
+      ]
     },
     {
       "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2B1P3/2p2N2/P4PPP/RNBQ1RK1 w kq - 0 8",
       "wrongMove": "Nxc3",
       "correctMove": "Qb3",
       "explanation": "In the Compromised Defence, meekly regaining the pawn with Nxc3 lets Black consolidate the extra material. Qb3! is the point — the queen and bishop train on f7 and the attack roars on, worth far more than a pawn.",
-      "shortNarration": "Qb3 — the battery on f7, not the pawn"
+      "shortNarration": "Qb3 — the battery on f7, not the pawn",
+      "sources": [
+        "book:evans-gambit",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Evans_Gambit"
+      ]
     }
   ],
   "kings-gambit": [
@@ -689,21 +894,36 @@
       "wrongMove": "d5",
       "correctMove": "exf4",
       "explanation": "2…d5 (Falkbeer Counter-Gambit) is sharp but theoretically dubious for Black at the top level. After 3.exd5 e4 White has the Nimzowitsch Variation 4.d3 with a strong reply. Accepting the gambit with 2…exf4 is the principled move — keep the extra pawn and defend.",
-      "shortNarration": "exf4 — take it, hold the extra pawn"
+      "shortNarration": "exf4 — take it, hold the extra pawn",
+      "sources": [
+        "book:kings-gambit",
+        "concept:tac-sacrifice",
+        "https://en.wikipedia.org/wiki/King%27s_Gambit"
+      ]
     },
     {
       "fen": "rnbqkbnr/pppp1p1p/8/6p1/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
       "wrongMove": "h3",
       "correctMove": "Bc4",
       "explanation": "4.h3 is engine-equivalent but wastes a critical tempo near your own king. 4.Bc4 develops with two threats: it eyes f7 AND prepares O-O immediately. In gambit play tempo is the gambit — every wasted move gives Black time to consolidate the extra pawn into a fortress. Practical edge: with Bc4 you reach an attacking middlegame; with h3 you reach an equal-but-passive middlegame.",
-      "shortNarration": "Bc4 — develop with tempo, hit f7"
+      "shortNarration": "Bc4 — develop with tempo, hit f7",
+      "sources": [
+        "book:kings-gambit",
+        "concept:tac-sacrifice",
+        "https://en.wikipedia.org/wiki/King%27s_Gambit"
+      ]
     },
     {
       "fen": "rnbqkbnr/pppp1ppp/8/8/2B1Pp2/8/PPPP2PP/RNBQK1NR b KQkq - 1 3",
       "wrongMove": "Qh4+",
       "correctMove": "Nf6",
       "explanation": "Qh4+ is engine-fine — White just plays Kf1 and the king gets to g1 next move anyway. But the queen on h4 is OFFSIDE: it commits early and gives White moves like Nf3, Nc3, d4 with tempo on the queen. 3…Nf6 develops a piece (zero tempo cost) and prepares …d5 to challenge the center. Practical edge: with Nf6 you have more pieces in play when the center opens.",
-      "shortNarration": "Nf6 — develop, don't chase with the queen"
+      "shortNarration": "Nf6 — develop, don't chase with the queen",
+      "sources": [
+        "book:kings-gambit",
+        "concept:tac-sacrifice",
+        "https://en.wikipedia.org/wiki/King%27s_Gambit"
+      ]
     }
   ],
   "petrov-defence": [
@@ -760,14 +980,24 @@
       "wrongMove": "a6",
       "correctMove": "d6",
       "explanation": "Playing a6 too early walks into Nd6+ — after Bxd6 Qxd6 White grabs the bishop pair and wrecks Black's structure. d6 first defends the e5-pawn while keeping the knight kicked.",
-      "shortNarration": "d6 first — a6 allows Nd6+."
+      "shortNarration": "d6 first — a6 allows Nd6+.",
+      "sources": [
+        "concept:pos-outpost",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+      ]
     },
     {
       "fen": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 6",
       "wrongMove": "d5",
       "correctMove": "d6",
       "explanation": "After Nf3 (avoiding the mainline Ndb5), d5 overextends and loses the e-pawn structure. d6 is solid and similar in spirit to the Najdorf.",
-      "shortNarration": "d6 — solid; d5 overextends."
+      "shortNarration": "d6 — solid; d5 overextends.",
+      "sources": [
+        "concept:pos-outpost",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+      ]
     }
   ],
   "semi-slav": [
@@ -790,14 +1020,24 @@
       "wrongMove": "e3",
       "correctMove": "c4",
       "explanation": "2.e3 is passive and surrenders the Réti's whole point. 2.c4 immediately challenges the d5-pawn from the flank — the hypermodern idea that controls the centre without occupying it.",
-      "shortNarration": "c4 — challenge d5 from the flank"
+      "shortNarration": "c4 — challenge d5 from the flank",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-space",
+        "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
+      ]
     },
     {
       "fen": "r2q1rk1/pb2bppp/1pn1pn2/2pp4/2P5/1PN1PNP1/PB1P1PBP/R2Q1RK1 w - - 2 10",
       "wrongMove": "a3",
       "correctMove": "cxd5",
       "explanation": "Drifting with a slow move like a3 lets Black consolidate comfortably. cxd5 opens the long diagonal for the g2-bishop and the c-file — the thematic Réti break, played exactly when the pieces are ready.",
-      "shortNarration": "cxd5 — open lines, the Réti break"
+      "shortNarration": "cxd5 — open lines, the Réti break",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-space",
+        "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
+      ]
     }
   ],
   "trompowsky-attack": [
@@ -840,14 +1080,24 @@
       "wrongMove": "Nxd5",
       "correctMove": "a6",
       "explanation": "4…Nxd5? loses the central knight for a pawn after 5.Nf3 with central pressure. The standard Benko 4…a6 invites White to either accept (5.bxa6) or decline (5.b6) — both lead to advantageous Black positions.",
-      "shortNarration": "a6 — play the gambit, not …Nxd5"
+      "shortNarration": "a6 — play the gambit, not …Nxd5",
+      "sources": [
+        "concept:att-queenside-attack",
+        "concept:pos-open-file",
+        "https://en.wikipedia.org/wiki/Benko_Gambit"
+      ]
     },
     {
       "fen": "rnbqkb1r/3ppppp/P4n2/2pP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 5",
       "wrongMove": "Nxa6",
       "correctMove": "Bxa6",
       "explanation": "Engine sees both recaptures as similar (~13cp difference). But Bxa6 develops a piece WITH TEMPO — attacks the Bf1 directly forcing the trade Bxa6 Nxa6. With Bxa6 you reach the trade naturally; with Nxa6 the knight is offside and your bishop is still stuck behind the pawn. Practical edge: Bxa6 leaves you with active pieces and the bishop pair traded for piece coordination; Nxa6 needs three more moves to develop the bishop and never matches Bxa6's piece activity.",
-      "shortNarration": "Bxa6 — recapture with the bishop"
+      "shortNarration": "Bxa6 — recapture with the bishop",
+      "sources": [
+        "concept:att-queenside-attack",
+        "concept:pos-open-file",
+        "https://en.wikipedia.org/wiki/Benko_Gambit"
+      ]
     }
   ],
   "old-indian-defence": [
@@ -918,14 +1168,24 @@
       "wrongMove": "exd5",
       "correctMove": "e5",
       "explanation": "Trading with exd5 exd5 gives Black an easy, open French-style game and throws away White's plan. e5 is the whole point of the KIA — clamp the centre and launch the kingside attack.",
-      "shortNarration": "e5 — clamp the centre, then attack"
+      "shortNarration": "e5 — clamp the centre, then attack",
+      "sources": [
+        "concept:att-kingside-storm",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/King's_Indian_Attack"
+      ]
     },
     {
       "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7",
       "wrongMove": "Nh4",
       "correctMove": "e4",
       "explanation": "Lunging at the kingside with Nh4 is toothless against the solid ...g6 fianchetto. Stake the centre with e4 and expand on the queenside — flexibility is the KIA's strength against the KID setup.",
-      "shortNarration": "e4 — pivot to the centre vs …g6"
+      "shortNarration": "e4 — pivot to the centre vs …g6",
+      "sources": [
+        "concept:att-kingside-storm",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/King's_Indian_Attack"
+      ]
     }
   ],
   "alekhine-defence": [
@@ -934,14 +1194,24 @@
       "wrongMove": "Ng8",
       "correctMove": "Nd5",
       "explanation": "Retreating the knight home with …Ng8 throws away the whole point of the Alekhine — Black has just lost two tempi for nothing. …Nd5 keeps the knight active in the centre, where it provokes White's pawns forward and becomes the springboard for the counterattack.",
-      "shortNarration": "Nd5 — active centre, not back home"
+      "shortNarration": "Nd5 — active centre, not back home",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+      ]
     },
     {
       "fen": "rnbqkb1r/pppppppp/8/3nP3/2P5/8/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
       "wrongMove": "Nf4",
       "correctMove": "Nb6",
       "explanation": "With c4 attacking the knight, …Nf4 lunges to the rim where g3 simply chases it back with tempo, costing Black even more time. …Nb6 is the sound retreat — the knight stays useful, eyeing c4 and d5, and Black continues to undermine the centre.",
-      "shortNarration": "Nb6 — sound retreat, not the rim"
+      "shortNarration": "Nb6 — sound retreat, not the rim",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+      ]
     }
   ],
   "dutch-defence": [
@@ -950,14 +1220,24 @@
       "wrongMove": "d5",
       "correctMove": "d6",
       "explanation": "In the Leningrad, …d5 locks the position and entombs the g7-bishop behind its own pawn chain — the very piece the fianchetto exists to activate. …d6 is correct: it keeps the centre flexible and prepares the thematic …e5 break that opens the long diagonal.",
-      "shortNarration": "d6 — keep it flexible, free the g7-bishop"
+      "shortNarration": "d6 — keep it flexible, free the g7-bishop",
+      "sources": [
+        "book:dutch-defence",
+        "concept:att-kingside-storm",
+        "https://en.wikipedia.org/wiki/Dutch_Defence"
+      ]
     },
     {
       "fen": "rnbqkbnr/ppppp1pp/8/5p2/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
       "wrongMove": "Nf6",
       "correctMove": "fxe4",
       "explanation": "Against the Staunton Gambit 2.e4, …Nf6 just drops the f-pawn to 3.exf5 with no compensation. Accept the gambit with …fxe4 — Black is a clean pawn up and, with accurate play, weathers White's development lead.",
-      "shortNarration": "fxe4 — accept the gambit, grab the pawn"
+      "shortNarration": "fxe4 — accept the gambit, grab the pawn",
+      "sources": [
+        "book:dutch-defence",
+        "concept:att-kingside-storm",
+        "https://en.wikipedia.org/wiki/Dutch_Defence"
+      ]
     }
   ]
 }
