@@ -240,22 +240,18 @@
   ],
   "nimzo-indian": [
     {
-      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 3",
-      "wrongMove": "Bg5",
-      "correctMove": "e3",
-      "explanation": "Bg5 allows the sharp Leningrad variation where Black plays h6 and gains the bishop pair with tempo. Playing e3 is the solid Rubinstein system that protects d4 and prepares smooth development."
-    },
-    {
-      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N1P3/PP3PPP/R1BQKBNR b KQkq - 0 4",
-      "wrongMove": "b6",
-      "correctMove": "O-O",
-      "explanation": "Playing b6 too early allows White to push e4 gaining a massive center before Black is fully developed. Castling first ensures king safety and keeps options open for both b6 and d5 plans."
+      "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/P1N5/1PQ1PPPP/R1B1KBNR b KQ - 0 5",
+      "wrongMove": "Be7",
+      "correctMove": "Bxc3+",
+      "explanation": "When a3 questions the bishop, retreating …Be7 throws away the whole point of the Nimzo — two tempi lost and the pin abandoned for nothing. Take with …Bxc3+: damage White's structure (or, in the Qc2 line, loosen the grip on e4) and play on from there. The bishop is meant to be traded, not retreated.",
+      "shortNarration": "Bxc3+ — take, don't retreat the bishop"
     },
     {
       "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 2 5",
       "wrongMove": "Bxc3+",
       "correctMove": "d5",
-      "explanation": "Exchanging on c3 too early gives White the bishop pair and strong central pawns without extracting any concession. Playing d5 first challenges the center and may provoke a3, making the exchange more favorable strategically."
+      "explanation": "Trading …Bxc3+ here, before White has spent a3 to force it, hands over the bishop pair for free — White recaptures with the b-pawn and is happy to have the centre and the bishops. Keep the pin and strike with …d5, contesting the centre while the bishop still does its job.",
+      "shortNarration": "d5 — keep the pin, strike the centre"
     }
   ],
   "grunfeld-defence": [

@@ -1730,6 +1730,128 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bf4? Misplacing the bishop. Black calmly develops and White\'s setup backfires.', 'Bg7 fianchettoes; now if White lunges e5, the f4-bishop is loose and Black will hit it.', '', 'O-O — Black is safe and ready; White\'s e5 push runs into …Nh5 hitting the f4-bishop.', '', 'Nh5 forks the f4-bishop; White\'s pieces tangle and Black is clearly better.', '', '', ''],
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bg7 — develop, exploit the loose bishop.', '', 'O-O — safe, prepare …Nh5.', '', 'Nh5 — hit the f4-bishop.', '', '', ''],
   },
+
+  // Nimzo 4.Qc2 — White’s wing lunge h4 hangs the g5-bishop to a zwischenzug.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O Nf3 d5 Bg5 h6 h4 Bxc3+ bxc3 hxg5 hxg5 Ne4 e3 g6 g4
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Qc2_O-O_Nf3_d5_Bg5_h6:h4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'h4? White lunges on the wing before finishing development — and the g5-bishop is suddenly loose. There is a zwischenzug.',
+      'Bxc3+ first — the in-between check removes the bishop’s defender before you touch it.',
+      '',
+      'hxg5 — now collect the bishop. White wins a pawn back, but you stay up a piece for a pawn.',
+      '',
+      'Ne4 lands on the hole, hammering the wrecked c3-pawns. A piece for a pawn, with the better structure.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      '', 'Bxc3 — check first, remove the guard.', '', 'hxg5 — now win the bishop.', '', 'Ne4 — a piece up, dominate.', '', '', '',
+    ],
+  },
+
+  // Nimzo 4.Qc2 5.a3 — White’s c5 releases the centre too early; ...Ne4 and ...e5.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 c5 Ne4 Qc2 e5 Nf3 exd4 e3 dxe3 Bxe3
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Qc2_O-O_a3_Bxc3+_Qxc3_d5:c5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'c5? White grabs space but releases the central tension too early — the d4-pawn is left weak and a knight leaps into e4.',
+      'Ne4 jumps to the hole with tempo, hitting the queen on c3 and seizing the centre.',
+      '',
+      'e5! Strike at the centre while White is uncoordinated; the d4-pawn cannot be held.',
+      '',
+      'exd4 — when the smoke clears Black holds an extra pawn with a monster knight on e4.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      '', 'Ne4 — leap in, hit the queen.', '', 'e5 — hit the loose centre.', '', 'exd4 — a pawn up, great knight.', '', '', '',
+    ],
+  },
+
+  // Nimzo Rubinstein 4.e3 — premature c5; ...b6 undermines the base.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 c5 b6 cxb6 Bxc3+ bxc3 axb6 Ne2 Ba6 Bc2
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_e3_O-O_Bd3_d5:c5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '',
+      'c5?! White clamps the queenside, but a pawn chain is undermined at its base — and the d3-bishop ends up biting on granite.',
+      'b6! Hit the base of the c5-pawn before White can prop it up.',
+      '',
+      'Bxc3+ — trade off and damage the white pawns before recapturing.',
+      '',
+      'axb6 — recapture, open the a-file, and leave the doubled c3-pawn as a standing target.',
+      '',
+      'Ba6 trades off White’s good light-squared bishop; the c3-weakness and the bishop pair hand Black the edge.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      '', 'b6 — undermine the c5-pawn.', '', 'Bxc3 — trade, wreck his pawns.', '', 'axb6 — open the a-file.', '', 'Ba6 — trade his good bishop.', '',
+    ],
+  },
+
+  // Nimzo Rubinstein — White’s premature d5 overextends; ...Nb6 wins it.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O dxc4 Bxc4 Nbd7 d5 Nb6 Be2 exd5 Bd2 Nc4 Be1 Nxb2 Qc2
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_e3_O-O_Bd3_d5_Nf3_c5_O-O_dxc4_Bxc4_Nbd7:d5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd5? White lunges in the centre for space, but the pawn overextends — and the c4-bishop is hit at the same time.',
+      'Nb6 attacks the c4-bishop and targets the loose d5-pawn in one move.',
+      '',
+      'exd5 wins the central pawn cleanly. Black is a healthy pawn up with the initiative.',
+      '',
+      'Nc4 — the knight invades, raking b2 and the dark squares; White’s queenside cracks.',
+      '',
+      'Nxb2 snatches a second pawn. Two pawns up with a dominant position.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      '', 'Nb6 — hit the bishop and d5.', '', 'exd5 — win the pawn.', '', 'Nc4 — invade, hit b2.', '', 'Nxb2 — grab a second pawn.', '',
+    ],
+  },
+
+  // Nimzo Leningrad 4.Bg5 — White’s e4 with the bishop on h4 walks into ...g5.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Bg5 h6 Bh4 c5 d5 d6 e4 g5 Bg3 Bxc3+ bxc3 Nxe4 Bd3 Nxg3 hxg3
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Bg5_h6_Bh4_c5_d5_d6:e4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'e4? White builds the big centre, but with the bishop marooned on h4 it walks straight into a kingside pawn-fork.',
+      'g5! Hit the h4-bishop and gain time; it must shuffle to g3, where it sits loose.',
+      '',
+      'Bxc3+ — remove the defender of e4 with check before grabbing the pawn.',
+      '',
+      'Nxe4 wins the central pawn — and the knight even forks the g3-bishop.',
+      '',
+      'Nxg3 trades the knight for the bishop and shatters White’s pawns. Black is a clean pawn up with the bishop pair.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      '', 'g5 — hit the bishop, gain time.', '', 'Bxc3 — check, undefend e4.', '', 'Nxe4 — win the pawn.', '', 'Nxg3 — a pawn up, bishop pair.', '',
+    ],
+  },
+
+  // Nimzo Fianchetto 4.Nf3/g3 — White’s O-O misses the c3 combination.
+  // playLine: d4 Nf6 c4 e6 Nc3 Bb4 Nf3 c5 g3 cxd4 Nxd4 O-O Bg2 d5 cxd5 Nxd5 O-O Nxc3 bxc3 Bxc3 Ba3 Bxd4 Bxf8 Kxf8 Rb1
+  'nimzo-indian:d4_Nf6_c4_e6_Nc3_Bb4_Nf3_c5_g3_cxd4_Nxd4_O-O_Bg2_d5_cxd5_Nxd5:O-O': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'O-O? Natural development — but it walks into a combination: the d5-knight and b4-bishop gang up on c3.',
+      'Nxc3 begins it — capture the knight to prise open the c3-square.',
+      '',
+      'Bxc3 recaptures, forking the a1-rook and the d4-knight at once.',
+      '',
+      'Bxd4 collects the knight; Black wins material and keeps the dominant dark-squared bishop.',
+      '',
+      'Kxf8 — the dust settles with Black up clear material. The lost castling means nothing here.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      '', 'Nxc3 — start the combination.', '', 'Bxc3 — fork the rook and knight.', '', 'Bxd4 — win the knight.', '', 'Kxf8 — clear material edge.', '',
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

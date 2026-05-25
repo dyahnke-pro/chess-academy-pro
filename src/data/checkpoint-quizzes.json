@@ -553,30 +553,24 @@
   ],
   "nimzo-indian": [
     {
-      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 3",
-      "correctMove": "e3",
-      "hint": "Solid development that supports d4 and prepares to develop the kingside.",
-      "concept": "The Rubinstein variation with e3 in the Nimzo-Indian"
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+      "correctMove": "Bb4",
+      "hint": "Which move pins the c3-knight and fights for the e4-square — the Nimzo idea?",
+      "concept": "The Nimzo pin"
     },
     {
-      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N1P3/PP3PPP/R1BQKBNR b KQkq - 0 4",
-      "correctMove": "O-O",
-      "hint": "Get the king to safety before committing to a pawn structure.",
-      "concept": "Early castling in the Nimzo-Indian Rubinstein"
-    },
-    {
-      "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2N1PN2/PP3PPP/R1BQKB1R w KQ - 3 5",
+      "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/P1N5/1PQ1PPPP/R1B1KBNR b KQ - 0 5",
       "type": "plan",
-      "question": "What is White's best strategic plan here?",
+      "question": "What is Black's plan in the Nimzo-Indian?",
       "choices": [
-        "Play Bd3 and aim for e4 to seize the center and gain the bishop pair",
-        "Play a3 immediately to force Bxc3 and double pawns",
-        "Fianchetto with b3 and Bb2 for long diagonal control",
-        "Push c5 to gain queenside space immediately"
+        "Trade the bishop for the c3-knight to damage White's structure or loosen e4, then control the light squares and the open files",
+        "Push …e5 immediately and play like White",
+        "Retreat the bishop and play passively",
+        "Trade queens and head for a quick draw"
       ],
       "correctIndex": 0,
-      "hint": "Preparing a central break often outweighs forcing the bishop trade immediately.",
-      "concept": "Classical center expansion with Bd3 and e4 in the Nimzo-Indian"
+      "hint": "Control over conquest — the bishop is traded for structural and light-square pressure.",
+      "concept": "Black's Nimzo plan"
     }
   ],
   "grunfeld-defence": [

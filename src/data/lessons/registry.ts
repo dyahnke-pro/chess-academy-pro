@@ -42,6 +42,8 @@ import { BENKO_GAMBIT_LESSON } from './benkoGambit';
 import { BENKO_GAMBIT_VARIATION_LESSONS } from './benkoGambitVariations';
 import { DUTCH_DEFENCE_LESSON } from './dutchDefence';
 import { DUTCH_DEFENCE_VARIATION_LESSONS } from './dutchDefenceVariations';
+import { NIMZO_INDIAN_LESSON } from './nimzoIndian';
+import { NIMZO_INDIAN_VARIATION_LESSONS } from './nimzoIndianVariations';
 import { KINGS_GAMBIT_LESSON } from './kingsGambit';
 import { KINGS_GAMBIT_VARIATION_LESSONS } from './kingsGambitVariations';
 import { SICILIAN_DRAGON_LESSON } from './sicilianDragon';
@@ -109,6 +111,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: SICILIAN_NAJDORF_LESSON, variations: SICILIAN_NAJDORF_VARIATION_LESSONS },
   { main: SICILIAN_SVESHNIKOV_LESSON, variations: SICILIAN_SVESHNIKOV_VARIATION_LESSONS },
   { main: SICILIAN_ALAPIN_LESSON, variations: SICILIAN_ALAPIN_VARIATION_LESSONS },
+  { main: NIMZO_INDIAN_LESSON, variations: NIMZO_INDIAN_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

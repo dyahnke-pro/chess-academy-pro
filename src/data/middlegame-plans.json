@@ -8941,59 +8941,6 @@
     ]
   },
   {
-    "id": "mp-nimzo-classical-doubled-c-pawns",
-    "openingId": "nimzo-indian",
-    "criticalPositionFen": "rnbq1rk1/p1pp1ppp/1p2pn2/8/2PP4/P1Q5/1P2PPPP/R1B1KBNR w KQ - 0 7",
-    "title": "Classical: …Bxc3 trade for doubled c-pawns",
-    "overview": "The Nimzo-Indian's defining concept: trade the dark-squared bishop on c3 to inflict permanent structural damage on White (doubled c-pawns). Black's plan: complete development with …b6 + …Bb7, then attack the weak c-pawns with …c5 + …Rfc8 + …Na5 ideas. The bishop pair belongs to White, but the structural weakness is decisive in the endgame.",
-    "pawnBreaks": [
-      {
-        "move": "c5",
-        "explanation": "The thematic break against the doubled c-pawns. After …c5 dxc5 Black gets an open c-file and can attack the c4 + c5 pawns from multiple directions."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nb8-c6-a5 attacking c4",
-        "explanation": "The knight on a5 attacks White's c4-pawn and prepares to land on b3 or c4 itself. Combined with …Rfc8 + …Qc7, the c-file pressure becomes overwhelming."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bc8-b7 long-diagonal pressure",
-        "explanation": "The fianchettoed bishop controls the long diagonal and supports the …c5 break. Combined with …Ne4 outpost, this creates lasting central pressure."
-      }
-    ],
-    "typicalMistakes": [
-      "Forgetting to play …c5 — gives White time to consolidate the doubled pawns into a strong central pawn mass.",
-      "Trading the b7-bishop early — kills the long-diagonal pressure that compensates for White's bishop pair."
-    ]
-  },
-  {
-    "id": "mp-nimzo-rubinstein-isolated-pawn",
-    "openingId": "nimzo-indian",
-    "criticalPositionFen": "rnbq1rk1/pp3ppp/4pn2/8/1bBP4/2N2N2/PP3PPP/R1BQ1RK1 b - - 0 9",
-    "title": "Rubinstein: e3 isolated d-pawn complexes",
-    "overview": "The Rubinstein System (e3) avoids the doubled-pawn structure entirely. After d-pawn trades, White ends up with an isolated d-pawn (or hanging pawns on c4 + d4). The plan: use the active pieces and central pawn for kingside attack. Classic IQP middlegame — strong with pieces on the board, weaker in the endgame.",
-    "pawnBreaks": [
-      {
-        "move": "d5",
-        "explanation": "The IQP break that liquidates the structural weakness. After d5 exd5 White gains the e-file and the position transitions to a favorable endgame."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nf3-e5 outpost",
-        "explanation": "The e5 square is the IQP's main outpost. From e5 the knight controls central squares and supports kingside attacks."
-      }
-    ],
-    "typicalMistakes": [
-      "Trading pieces too quickly — the IQP weakens in the endgame.",
-      "Pushing d5 before coordination — Black equalizes if the break liquidates without gaining anything."
-    ]
-  },
-  {
     "id": "mp-grunfeld-exchange-central-pressure",
     "openingId": "grunfeld-defence",
     "criticalPositionFen": "rnbq1rk1/pp2ppbp/6p1/2p5/3PP3/2P2N2/P3BPPP/R1BQK2R w KQ - 2 9",
@@ -24096,6 +24043,876 @@
             },
             {
               "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-nimzoindian-main",
+    "openingId": "nimzo-indian",
+    "criticalPositionFen": "rnbq1rk1/p1p2ppp/1p2pn2/8/2QP4/P4N2/1P2PPPP/R1B1KB1R w KQ - 0 9",
+    "title": "Nimzo Classical: Files and Light Squares",
+    "overview": "Black has traded the bishop for the c3-knight, loosening White's grip on e4. The plan: fianchetto the light bishop to a6 with tempo on the queen, break with …c5, and take over the open b- and c-files. The bishop pair White won is offset by Black's superior activity and structure.",
+    "pawnBreaks": [
+      "…c5 to open the position",
+      "…e5 once the centre is contained"
+    ],
+    "pieceManeuvers": [
+      "…Ba6 hitting the queen",
+      "…Rfd8/…Rab8 on the open files",
+      "…Ne5 to the outpost"
+    ],
+    "strategicThemes": [
+      "Control of e4",
+      "Open-file pressure",
+      "Activity for the bishop pair"
+    ],
+    "endgameTransitions": [
+      "Black's better structure and files tell in the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/p1p2ppp/1p2pn2/8/2QP4/P4N2/1P2PPPP/R1B1KB1R w KQ - 0 9",
+        "moves": [
+          "Bg5",
+          "Ba6",
+          "Qa4",
+          "h6"
+        ],
+        "annotations": [
+          "Bg5 pins the f6-knight.",
+          "…Ba6 swings the light bishop out with tempo, hitting the queen on c4 down the a6-f1 diagonal.",
+          "Qa4 retreats.",
+          "…h6 puts the question to the g5-bishop; Black is active and ready to break with …c5."
+        ],
+        "title": "Nimzo Classical: Files and Light Squares",
+        "arrows": [
+          [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "a6",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-nimzoindian-rubinstein",
+    "openingId": "nimzo-indian",
+    "criticalPositionFen": "r1bq1rk1/pp1n1ppp/4pn2/2p5/1bBP4/2N1PN2/PP3PPP/R1BQ1RK1 w - - 1 9",
+    "title": "Nimzo Rubinstein: Central Tension",
+    "overview": "In the e3 Rubinstein, Black has contested the centre with …d5 and …c5 and developed harmoniously. The plan: fianchetto …b6/…Bb7 onto the long diagonal at e4, keep the central tension, and trade …Bxc3 to damage White exactly when it counts.",
+    "pawnBreaks": [
+      "…cxd4 to open lines",
+      "…d5/…c5 central tension"
+    ],
+    "pieceManeuvers": [
+      "…Bb7 on the long diagonal",
+      "…Bxc3 at the right moment",
+      "…Nbd7 development"
+    ],
+    "strategicThemes": [
+      "Contest the centre",
+      "The long-diagonal bishop",
+      "Damage White's structure on cue"
+    ],
+    "endgameTransitions": [
+      "Comfortable, balanced endings"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1n1ppp/4pn2/2p5/1bBP4/2N1PN2/PP3PPP/R1BQ1RK1 w - - 1 9",
+        "moves": [
+          "Qe2",
+          "b6",
+          "Rd1",
+          "cxd4"
+        ],
+        "annotations": [
+          "Qe2 centralises.",
+          "…b6 prepares the …Bb7 fianchetto onto the long diagonal.",
+          "Rd1 eyes the d-file.",
+          "…cxd4 opens the centre on Black's terms, freeing the pieces — fully comfortable."
+        ],
+        "title": "Nimzo Rubinstein: Central Tension",
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-nimzoindian-huebner",
+    "openingId": "nimzo-indian",
+    "criticalPositionFen": "r1bqk2r/pp3ppp/2np1n2/2p1p3/2PP4/2PBPN2/P4PPP/R1BQ1RK1 w kq - 0 9",
+    "title": "Nimzo Hübner: Blockade the Doubled Pawns",
+    "overview": "The Hübner — Black has doubled White's c-pawns with …Bxc3 and clamped the centre with …d6/…e5. The plan is pure Nimzowitsch: blockade the doubled c-pawns on the light squares, dominate with the knights, and besiege the fixed weakness while White's bishops sit blunted by the locked pawns.",
+    "pawnBreaks": [
+      "…e4 to gain kingside space",
+      "keep the centre locked, c4 fixed"
+    ],
+    "pieceManeuvers": [
+      "…Re8 supporting …e4",
+      "…Nh5/…g6 kingside play",
+      "knights to the light squares"
+    ],
+    "strategicThemes": [
+      "Blockade the doubled c-pawns",
+      "Knights over bishops in a locked centre",
+      "Besiege the fixed weakness"
+    ],
+    "endgameTransitions": [
+      "The doubled c-pawns are a long-term endgame target"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/pp3ppp/2np1n2/2p1p3/2PP4/2PBPN2/P4PPP/R1BQ1RK1 w kq - 0 9",
+        "moves": [
+          "Nd2",
+          "O-O",
+          "Rb1",
+          "b6"
+        ],
+        "annotations": [
+          "Nd2 reroutes toward c4 and the blockade.",
+          "…O-O completes development behind the clamp.",
+          "Rb1 eyes the b-file.",
+          "…b6 supports …c5/…a5 and keeps the c4-pawn fixed as a permanent target."
+        ],
+        "title": "Nimzo Hübner: Blockade the Doubled Pawns",
+        "arrows": [
+          [
+            {
+              "from": "d2",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-nimzoindian-leningrad",
+    "openingId": "nimzo-indian",
+    "criticalPositionFen": "rnbqk2r/pp3pp1/3p1n1p/2pPp3/2P4B/2P1P3/P4PPP/R2QKBNR w KQkq - 0 9",
+    "title": "Nimzo Leningrad: Clamp and Storm",
+    "overview": "Against 4.Bg5, Black has doubled the c-pawns and clamped the centre with …e5. The plan: blockade the doubled pawns, then grab kingside space with …g5 to entomb the h4-bishop and launch a pawn storm with …g5-g4. A closed position where every trump is Black's.",
+    "pawnBreaks": [
+      "…g5-g4 the kingside storm",
+      "keep the centre locked"
+    ],
+    "pieceManeuvers": [
+      "…Nbd7 development",
+      "…Qe7 connecting",
+      "…g5 to entomb the bishop"
+    ],
+    "strategicThemes": [
+      "Blockade + kingside storm",
+      "The locked centre favours Black",
+      "Doubled c-pawn target"
+    ],
+    "endgameTransitions": [
+      "The structural edge persists if it simplifies"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/pp3pp1/3p1n1p/2pPp3/2P4B/2P1P3/P4PPP/R2QKBNR w KQkq - 0 9",
+        "moves": [
+          "Qc2",
+          "Qe7",
+          "Nf3",
+          "Nbd7"
+        ],
+        "annotations": [
+          "Qc2 develops.",
+          "…Qe7 connects the rooks and supports …g5.",
+          "Nf3 eyes e5.",
+          "…Nbd7 completes development; Black is ready for …g5-g4 to storm the kingside while the doubled c-pawns rot."
+        ],
+        "title": "Nimzo Leningrad: Clamp and Storm",
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-nimzoindian-kasparov",
+    "openingId": "nimzo-indian",
+    "criticalPositionFen": "rnbq1rk1/pp3ppp/4p3/3n4/1b1N4/2N3P1/PP2PPBP/R1BQK2R w KQ - 0 9",
+    "title": "Nimzo Kasparov: Strike the Fianchetto",
+    "overview": "Against 4.Nf3/g3, Black has struck the centre with …d5 and centralised the knight on d5. The plan: trade …Bxc3 to fracture White's queenside, activate …Ba6 on the open light-squared diagonal, and centralise the queen — full equality with active play against the smoothest White setup.",
+    "pawnBreaks": [
+      "…e5 or …c5 to free the position",
+      "the doubled c-pawns are the target"
+    ],
+    "pieceManeuvers": [
+      "…Bxc3 fracturing the queenside",
+      "…Ba6 on the a6-f1 diagonal",
+      "…Qc5 centralising"
+    ],
+    "strategicThemes": [
+      "Strike the fianchetto's centre",
+      "Doubled c-pawn target",
+      "Active light-squared play"
+    ],
+    "endgameTransitions": [
+      "The structural target carries into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pp3ppp/4p3/3n4/1b1N4/2N3P1/PP2PPBP/R1BQK2R w KQ - 0 9",
+        "moves": [
+          "Qb3",
+          "Nc6",
+          "Nxc6",
+          "bxc6"
+        ],
+        "annotations": [
+          "Qb3 eyes b7 and d5.",
+          "…Nc6 challenges the centralised d4-knight.",
+          "Nxc6 trades.",
+          "…bxc6 gives Black a solid pawn mass and the half-open b-file — ready for …Bxc3 and …Ba6 against the light squares."
+        ],
+        "title": "Nimzo Kasparov: Strike the Fianchetto",
+        "arrows": [
+          [
+            {
+              "from": "b3",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-nimzoindian-saemisch",
+    "openingId": "nimzo-indian",
+    "criticalPositionFen": "r1bq1rk1/p2p1ppp/1pn1pn2/2p5/2PP4/P1PBP3/4NPPP/R1BQK2R w KQ - 0 9",
+    "title": "Nimzo Sämisch: Blockade the Big Centre",
+    "overview": "White has the bishop pair and a big centre but doubled c-pawns. Black's plan is the blockade: pieces on the light squares in front of White's pawns — …Ne8-d6, …Ba6 pressuring c4 — trade off White's attackers, and prove the doubled c-pawns a liability before the centre rolls.",
+    "pawnBreaks": [
+      "restrain White's e4-f4 advance",
+      "…f5 to challenge the centre"
+    ],
+    "pieceManeuvers": [
+      "…Ne8-d6 to blockade c4",
+      "…Ba6 pressuring c4",
+      "…Na5 to b3/c4 outpost"
+    ],
+    "strategicThemes": [
+      "Blockade the doubled c-pawns",
+      "Light-square control vs the bishop pair",
+      "Contain the big centre"
+    ],
+    "endgameTransitions": [
+      "The doubled c-pawns decide a simplified ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/p2p1ppp/1pn1pn2/2p5/2PP4/P1PBP3/4NPPP/R1BQK2R w KQ - 0 9",
+        "moves": [
+          "e4",
+          "Ne8",
+          "O-O",
+          "Ba6"
+        ],
+        "annotations": [
+          "e4 builds the big centre.",
+          "…Ne8 reroutes toward d6 to blockade c4 and watch f5.",
+          "White castles.",
+          "…Ba6 trains the light bishop on the weak c4-pawn — the blockade takes shape."
+        ],
+        "title": "Nimzo Sämisch: Blockade the Big Centre",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "e8",
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "a6",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-nimzoindian-f3",
+    "openingId": "nimzo-indian",
+    "criticalPositionFen": "rnbqk2r/pp3ppp/5n2/3p4/2pP4/P1P1PP2/6PP/R1BQKBNR w KQkq - 0 9",
+    "title": "Nimzo 4.f3: Clamp and Exploit",
+    "overview": "White's 4.f3 over-reached for a big centre and got doubled c-pawns instead. Black has clamped the queenside with …c4. The plan: develop the pieces against the static weaknesses, target the doubled c-pawns and the c4-clamp's cramping effect, and exploit White's slow, committal play.",
+    "pawnBreaks": [
+      "the …c4-clamp fixes White's queenside",
+      "…e5 or …f5 vs the centre later"
+    ],
+    "pieceManeuvers": [
+      "…Nc6-a5 hitting c4",
+      "…Bxh3 wrecking the kingside if Nh3",
+      "…Re8 and …Nbd7 development"
+    ],
+    "strategicThemes": [
+      "Clamp the queenside",
+      "Punish the over-ambition",
+      "Doubled c-pawn + slow development"
+    ],
+    "endgameTransitions": [
+      "White's structural ruin tells in the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/pp3ppp/5n2/3p4/2pP4/P1P1PP2/6PP/R1BQKBNR w KQkq - 0 9",
+        "moves": [
+          "Ne2",
+          "Nc6",
+          "g4",
+          "Na5"
+        ],
+        "annotations": [
+          "Ne2 develops awkwardly.",
+          "…Nc6 develops, eyeing the queenside weaknesses.",
+          "g4 lunges for space but loosens the kingside.",
+          "…Na5 swarms the c4-clamp and White's shattered queenside — Black is clearly better."
+        ],
+        "title": "Nimzo 4.f3: Clamp and Exploit",
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "a5",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-nimzoindian-fischer",
+    "openingId": "nimzo-indian",
+    "criticalPositionFen": "rn1q1rk1/pbp2ppp/1p3n2/3p4/1b1P4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 9",
+    "title": "Nimzo Fischer: Light-Square Control",
+    "overview": "Black's …b6 setup controls e4 with the b7-bishop rather than committing pawns. The plan: keep the bishop pair (retreat …Bd6 rather than trade), support the d5-pawn, and play actively on both wings with the two bishops and a sound centre.",
+    "pawnBreaks": [
+      "…c5 to challenge d4",
+      "…a5 to hit a queenside advance"
+    ],
+    "pieceManeuvers": [
+      "…Bb7 controlling e4",
+      "…Bd6 keeping the bishop pair",
+      "…Nbd7 and …a5"
+    ],
+    "strategicThemes": [
+      "Light-square control by piece",
+      "The bishop pair",
+      "Active play on both wings"
+    ],
+    "endgameTransitions": [
+      "The two bishops shine in an open ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/pbp2ppp/1p3n2/3p4/1b1P4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 0 9",
+        "moves": [
+          "a3",
+          "Bd6",
+          "b4",
+          "a6"
+        ],
+        "annotations": [
+          "a3 questions the b4-bishop.",
+          "…Bd6 retreats, keeping the bishop pair and eyeing the kingside.",
+          "b4 grabs queenside space.",
+          "…a6 prepares …c5 and …a5 to challenge the advance — Black is comfortable with the two bishops."
+        ],
+        "title": "Nimzo Fischer: Light-Square Control",
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]

@@ -76,44 +76,6 @@
     "lessonSummary": "In the Najdorf, White's f4-f5 advance can create a devastating kingside attack. Fischer showed that sometimes an exchange sacrifice (Rxf6) is worth more than material — the resulting attack with knight on f5 and open lines is overwhelming."
   },
   {
-    "id": "mg-botvinnik-capablanca",
-    "openingId": "nimzo-indian",
-    "white": "Mikhail Botvinnik",
-    "black": "Jose Raul Capablanca",
-    "whiteElo": null,
-    "blackElo": null,
-    "result": "1-0",
-    "year": 1938,
-    "event": "AVRO Tournament, Rotterdam, round 11 (22 November 1938)",
-    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 Bd3 O-O Ne2 b6 O-O Ba6 Bxa6 Nxa6 Bb2 Qd7 a4 Rfe8 Qd3 c4 Qc2 Nb8 Rae1 Nc6 Ng3 Na5 f3 Nb3 e4 Qxa4 e5 Nd7 Qf2 g6 f4 f5 exf6 Nxf6 f5 Rxe1 Rxe1 Re8 Re6 Rxe6 fxe6 Kg7 Qf4 Qe8 Qe5 Qe7 Ba3 Qxa3 Nh5+ gxh5 Qg5+ Kf8 Qxf6+ Kg8 e7 Qc1+ Kf2 Qc2+ Kg3 Qd3+ Kh4 Qe4+ Kxh5 Qe2+ Kh4 Qe4+ g4 Qe1+ Kh5",
-    "overview": "One of the greatest positional masterpieces ever played. Botvinnik builds a crushing kingside attack against the legendary Capablanca using a minority pawn structure and the e5 advance.",
-    "criticalMoments": [
-      {
-        "moveNumber": 19,
-        "color": "white",
-        "fen": "r3r1k1/p2q1ppp/1p3n2/3p4/P1pPP3/1nP2PN1/1BQ3PP/4RRK1 b - - 0 19",
-        "annotation": "Botvinnik repositions the knight to g3 where it supports e4 and eyes f5/h5. This regrouping is a key idea — the knight was passive on e2 but becomes a monster on g3.",
-        "concept": "Knight Redeployment"
-      },
-      {
-        "moveNumber": 21,
-        "color": "white",
-        "fen": "r3r1k1/p2n1ppp/1p6/3pP3/q1pP4/1nP2PN1/1B3QPP/4RRK1 b - - 2 21",
-        "annotation": "The e5 advance locks in a space advantage and creates a powerful outpost. Combined with f4 and the bishop on b2, White gets a crushing kingside attack.",
-        "concept": "Central Advance & Space"
-      },
-      {
-        "moveNumber": 30,
-        "color": "white",
-        "fen": "8/p3q1kp/1p2Pnp1/3pQ3/2pP4/BnP3N1/6PP/6K1 b - - 6 30",
-        "annotation": "Nh5+! is the final combination. The knight sacrifice deflects the king and the e-pawn promotes. Capablanca is helpless against the mating threats despite being up material.",
-        "concept": "Knight Sacrifice & Passed Pawn Promotion"
-      }
-    ],
-    "middlegameTheme": "Positional Squeeze & Kingside Attack",
-    "lessonSummary": "Botvinnik demonstrated how to convert a small positional advantage into a winning attack. The e4-e5 advance created space and open lines, while patient piece maneuvering (Ng3, f4, Bb2) built irresistible pressure. Even Capablanca could not defend."
-  },
-  {
     "id": "mg-fischer-petrosian",
     "openingId": "sicilian-kan",
     "white": "Bobby Fischer",
@@ -476,37 +438,6 @@
     ],
     "middlegameTheme": "Superior piece activity against passive defense",
     "lessonSummary": "In the Slav Defence, White can exploit the early capture on c4 by developing pieces to active squares and controlling the center. Alekhine showed that recovering the pawn with tempo and maintaining harmonious piece coordination creates lasting pressure. The game highlights the importance of not allowing the opponent to equalize after an early pawn grab in the Slav."
-  },
-  {
-    "id": "mg-kramnik-nimzo-indian",
-    "openingId": "nimzo-indian",
-    "white": "Vladimir Kramnik",
-    "black": "Garry Kasparov",
-    "whiteElo": 2770,
-    "blackElo": 2849,
-    "result": "1-0",
-    "year": 2000,
-    "event": "World Championship Game 10, London 2000",
-    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Bd3 d5 Nf3 c5 O-O cxd4 exd4 dxc4 Bxc4 b6 Bg5 Bb7 Re1 Nbd7 Rc1 Rc8 Qb3 Be7 Bxf6 Nxf6 Bxe6 fxe6 Qxe6+ Kh8 Qxe7 Bxf3 gxf3 Qxd4 Nb5 Qxb2 Rxc8 Rxc8 Nd6 Rb8 Nf7+ Kg8 Qe6 Rf8 Nd8+ Kh8 Qe7",
-    "overview": "In a pivotal game of the 2000 World Championship match, Kramnik sacrificed a bishop on e6 to shatter Kasparov's pawn structure and win material. Kasparov fought back with activity but Kramnik's precise technique secured the full point.",
-    "criticalMoments": [
-      {
-        "moveNumber": 15,
-        "color": "white",
-        "fen": "2rq1rk1/pb2bppp/1p2Bn2/8/3P4/1QN2N2/PP3PPP/2R1R1K1 b - - 0 15",
-        "annotation": "Kramnik plays Bxf6 followed by the powerful Bxe6 sacrifice, exploiting the weakness of Black's e6 pawn. This combination wins a pawn and leaves Black's king exposed with a shattered structure.",
-        "concept": "Positional sacrifice"
-      },
-      {
-        "moveNumber": 17,
-        "color": "white",
-        "fen": "2rq1r1k/pb2Q1pp/1p3n2/8/3P4/2N2N2/PP3PPP/2R1R1K1 b - - 0 17",
-        "annotation": "After Qxb6, Kramnik has won two pawns and maintains pressure along the open lines. Kasparov's desperate exchange sacrifice on c3 is not enough to generate sufficient counterplay.",
-        "concept": "Material conversion"
-      }
-    ],
-    "middlegameTheme": "Piece sacrifice for structural damage",
-    "lessonSummary": "Kramnik demonstrated the power of exploiting weak pawn structures in the Nimzo-Indian, using a bishop sacrifice to demolish Kasparov's center. The game shows how a well-timed tactical blow can convert a slight positional edge into a winning material advantage. Even against the greatest player of all time, precise calculation and calm technique proved decisive."
   },
   {
     "id": "mg-karpov-grunfeld-defence",
@@ -4708,5 +4639,205 @@
     ],
     "middlegameTheme": "The …c6 and …e5 central break in the Leningrad",
     "lessonSummary": "The Leningrad …e5 plan: prepare with …c6, strike the centre with …e5, and reach an open, active position with the fianchettoed bishop."
+  },
+  {
+    "id": "mg-nimzo-main",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Kasparov, G.",
+    "black": "Aronian, L.",
+    "whiteElo": 2812,
+    "blackElo": 2799,
+    "result": "0-1",
+    "year": 2017,
+    "event": "Saint Louis Blitz 2017",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 O-O a3 Bxc3+ Qxc3 d5 Nf3 dxc4 Qxc4 b6 h4 Bb7 Bg5 Qd5 Rc1 Nbd7 Qxd5 Bxd5 Ne5 c5 Bxf6 Nxf6 dxc5 bxc5 f3 Rab8 e4 Ba2 Rc2 Bb1 Rd2 Rfd8 Rxd8+ Rxd8 Bb5 Nh5 g4 Nf4 Kf2 f6 Nc6 Rd2+ Ke3 Rxb2 Kxf4 Rxb5 Rd1 h6 h5 Rb3 e5 Bd3 a4 c4 Nxa7 Ra3 Nb5 Rxa4 Ke3 fxe5 Nd6 Ra3 Kf2 Kf8 Nb5 Rb3",
+    "overview": "Classical 4.Qc2 — Aronian outplays Kasparov from the Black side, trading the bishop for structure and the better files.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r4rk1/p1pn1ppp/1p2pn2/3b2B1/3P3P/P4N2/1P2PPP1/2R1KB1R w K - 0 13",
+        "annotation": "Black has the Classical Nimzo bargain — the bishop traded for control of e4 and the light squares, the pieces heading for the open files. Control over conquest.",
+        "concept": "Control over conquest"
+      }
+    ],
+    "middlegameTheme": "Trade …Bxc3, control e4, dominate the open files",
+    "lessonSummary": "The Classical Nimzo: give up the bishop pair for control of e4 and the files, then outplay from the better structure."
+  },
+  {
+    "id": "mg-nimzo-rubinstein",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Le Quang Liem",
+    "black": "Caruana, F.",
+    "whiteElo": 2713,
+    "blackElo": 2822,
+    "result": "0-1",
+    "year": 2019,
+    "event": "Superbet Rapid 2019",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 O-O Nf3 c5 Bd3 d5 O-O dxc4 Bxc4 cxd4 exd4 b6 Bg5 Bb7 Qe2 Nbd7 Rac1 h6 Bh4 Rc8 Bd3 Bxc3 bxc3 Qc7 Bg3 Qc6 Bb5 Qd5 c4 Qh5 Bd6 Rfe8 c5 Bc6 Ba6 Ra8 Rfd1 bxc5 dxc5 e5 Bb5 Bxb5 Qxb5 e4 Nd4 Ne5 c6 e3 f3 e2 Re1 Qg5 Kh1 a6 Qb1 Nd3 f4 Nf2+ Kg1 Nh3+ Kh1 Ng4",
+    "overview": "Rubinstein 4.e3 — Caruana beats Le Quang Liem from the Black side, the b7-bishop and central breaks doing the work.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2q1rk1/pb1n1pp1/1p2pn1p/6B1/1bBP4/2N2N2/PP2QPPP/2R2RK1 w - - 0 13",
+        "annotation": "The Rubinstein structure is set — Black contesting the centre with …d5/…c5, the pieces harmonious and the …Bxc3 trade held in reserve for when it damages White.",
+        "concept": "Active equality"
+      }
+    ],
+    "middlegameTheme": "…d5/…c5 and the …Bb7 fianchetto vs e3",
+    "lessonSummary": "Against 4.e3, Black contests the centre with …d5/…c5, fianchettoes, and trades on c3 at the right moment."
+  },
+  {
+    "id": "mg-nimzo-huebner",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Laznicka, Viktor",
+    "black": "Ivanchuk, Vassily",
+    "whiteElo": 2693,
+    "blackElo": 2764,
+    "result": "0-1",
+    "year": 2012,
+    "event": "Capablanca Memorial Elite 47th",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 c5 Nf3 Nc6 Bd3 Bxc3+ bxc3 d6 O-O e5 Nd2 O-O Rb1 b6 d5 Ne7 Qc2 g6 f4 exf4 h3 Nf5 Bxf5 Bxf5 e4 Bd7 Rxf4 Qe7 Bb2 Nh5 Rf2 f5 Re1 Rae8 Bc1 f4 Qd1 Qg7 Nf1 Re5 Nh2 Qe7 Qd3 Rg5 g4 fxg3 Rxf8+ Qxf8 Nf3 Re5 Kg2 Re7 e5 dxe5 d6 Re6 Qd5 Nf6",
+    "overview": "Hübner — Ivanchuk beats Laznicka from the Black side, the doubled c-pawns blockaded and besieged.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1bq1rk1/p3np1p/1p1p1np1/2pPp3/2P5/2PBP3/P1QN1PPP/1RB2RK1 w - - 0 13",
+        "annotation": "The Hübner blockade is in place — White's doubled c-pawns fixed as a chronic weakness, the centre clamped, and Black's knights the better minor pieces. Nimzowitsch's dream.",
+        "concept": "Doubled-pawn blockade"
+      }
+    ],
+    "middlegameTheme": "…Bxc3 doubling, …d6/…e5 blockade",
+    "lessonSummary": "The Hübner: double White's c-pawns with …Bxc3, clamp the centre with …d6/…e5, and besiege the weakness."
+  },
+  {
+    "id": "mg-nimzo-leningrad",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Jussupow, Artur",
+    "black": "Karpov, Anatoly",
+    "whiteElo": 2680,
+    "blackElo": 2775,
+    "result": "0-1",
+    "year": 1995,
+    "event": "Hofmann Cup",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Bg5 h6 Bh4 c5 d5 Bxc3+ bxc3 d6 e3 e5 Qc2 Qe7 Nf3 g5 Bg3 Nh5 Bd3 Nd7 Nd2 Ndf6 h3 Bd7 Rb1 b6 a4 Ng7 f3 Nfh5 Bh2 Kd8 a5 Kc7 O-O f5 Rb2 f4 Ra1 Rhb8 Rba2 a6 Rb2 bxa5 Rxa5 Rxb2 Qxb2 Nf6 Qa3 Bc8 Nb3 Nd7 Kf1 Rb8 Bg1 Kd8 e4 Nh5 Bc2 Ng3+ Ke1 Ke8 Nd2 Kf8 Ba4 Kg7 Bxd7 Qxd7 Kd1 Qb7 Kc2 Nf1 Nb3 Ne3+ Bxe3 fxe3 Qb2 Qf7 Kd3 Qf4 Qc2 Qg3 Ra1 h5 Kxe3 g4 hxg4 hxg4 Nd2 Qxg2 Rf1 g3 Qc1 Qh2 Kd3 g2 Rg1 Bh3 Kc2 Qg3 Kd3 Qf2 Qa1 Rb6 Qc1 Kg6 Qa1 Kh5 Qc1 a5 Re1 a4 Qd1 Kh4 Qc1 Kg3 Nb1 Rb2",
+    "overview": "Leningrad 4.Bg5 — Karpov beats Jussupow from the Black side, blockading the doubled pawns and storming the kingside.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1b1k2r/pp1nqp2/3p3p/2pPp1pn/2P5/2PBPNB1/P1Q2PPP/R3K2R w KQkq - 4 13",
+        "annotation": "The Leningrad blockade holds — doubled white c-pawns, a clamped centre, and Black gaining kingside space with …g5 to shut out the h4-bishop. All the trumps are Black's.",
+        "concept": "Blockade + kingside storm"
+      }
+    ],
+    "middlegameTheme": "…Bxc3 doubling, …e5 clamp, …g5 space",
+    "lessonSummary": "Against 4.Bg5, Black doubles the c-pawns, clamps with …e5, and grabs kingside space with …g5 to entomb the bishop."
+  },
+  {
+    "id": "mg-nimzo-kasparov",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Kasparov, Garry",
+    "black": "Kramnik, Vladimir",
+    "whiteElo": 2815,
+    "blackElo": 2780,
+    "result": "0-1",
+    "year": 1998,
+    "event": "Kosmos m 5'",
+    "pgn": "c4 c5 Nf3 Nf6 d4 cxd4 Nxd4 e6 g3 Bb4+ Nc3 O-O Bg2 d5 cxd5 Nxd5 Qb3 Qb6 Bxd5 exd5 Be3 Bxc3+ Qxc3 Qg6 O-O Nc6 Rfc1 Bh3 Qc2 Nxd4 Bxd4 Qe6 f3 Rfe8 Kf2 Qh6 Qd3 Re7 Rc2 Rae8 Re1 Qh5 Kg1 Bf5",
+    "overview": "Kasparov 4.Nf3 — Kramnik beats Kasparov himself from the Black side, equalising against the fianchetto.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "rnb2rk1/pp3ppp/6q1/3p4/3N4/2Q1B1P1/PP2PP1P/R3K2R w KQ - 1 13",
+        "annotation": "Black has met the fianchetto head-on with …d5, and the …Bxc3 trade plus …Ba6 gives the doubled-c-pawn target and active light-squared play — full equality against the smoothest setup.",
+        "concept": "Structure vs the fianchetto"
+      }
+    ],
+    "middlegameTheme": "…d5 central strike, …Bxc3 + …Ba6",
+    "lessonSummary": "Against 4.Nf3/g3, Black strikes with …d5, trades on c3 to fracture the queenside, and activates …Ba6 on the light squares."
+  },
+  {
+    "id": "mg-nimzo-saemisch",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Carlsen, Magnus",
+    "black": "Nakamura, Hikaru",
+    "whiteElo": 2863,
+    "blackElo": 2736,
+    "result": "0-1",
+    "year": 2020,
+    "event": "Carlsen Tour Final",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 c5 e3 Nc6 Bd3 O-O Ne2 b6 e4 Ne8 O-O Ba6 f4 f5 exf5 exf5 dxc5 bxc5 Be3 d6 Ng3 g6 Re1 Nf6 Bf2 Qd7 Nf1 Na5 Bh4 Rae8 Rxe8 Qxe8 Bxf6 Rxf6 Qf3 Re6 Rb1 Bxc4 Bxc4 Nxc4 a4 Kg7 Qb7+ Qf7 Qa6 Re7 Rb8 Kh6 h3 Qe6 Ra8 Nd2 Rd8 Nxf1 Qxf1 Qe3+ Kh2 Re4 Rxd6 Qxf4+ Qxf4+ Rxf4 a5 Rc4 Ra6 Rxc3 Rxa7 Ra3 Kg1 c4 Kf2 Ra2+ Ke3 Rxg2 Kd4 Rh2 a6 Rxh3 Kxc4 Rh1 Rd7 Ra1 Kb5 Kg5 Rd4 f4 Ra4 Rxa4 Kxa4 f3 a7 f2 a8=Q f1=Q Qd5+ Qf5 Qd2+ Qf4+",
+    "overview": "Sämisch 4.a3 — Nakamura beats Carlsen from the Black side, blockading the doubled pawns against White's centre and bishop pair.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r2qnrk1/p2p2pp/bpn5/2p2p2/2PP1P2/P1PB4/4N1PP/R1BQ1RK1 w - - 0 13",
+        "annotation": "The Sämisch battle is joined — White's big centre and bishop pair against Black's blockade of the doubled c-pawns. Hold the blockade, trade the attackers, and the structure tells.",
+        "concept": "Blockade vs the big centre"
+      }
+    ],
+    "middlegameTheme": "Blockade the doubled c-pawns vs centre + bishops",
+    "lessonSummary": "Against the Sämisch, Black blockades White's doubled c-pawns and big centre with pieces on the light squares, then converts the structural edge."
+  },
+  {
+    "id": "mg-nimzo-f3",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Anand, V.",
+    "black": "Carlsen, M.",
+    "whiteElo": 2775,
+    "blackElo": 2870,
+    "result": "0-1",
+    "year": 2013,
+    "event": "WCh 2013",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3 c4 Ne2 Nc6 g4 O-O Bg2 Na5 O-O Nb3 Ra2 b5 Ng3 a5 g5 Ne8 e4 Nxc1 Qxc1 Ra6 e5 Nc7 f4 b4 axb4 axb4 Rxa6 Nxa6 f5 b3 Qf4 Nc7 f6 g6 Qh4 Ne8 Qh6 b2 Rf4 b1=Q+ Nf1 Qe1",
+    "overview": "4.f3 — Carlsen beats Anand from the Black side, punishing White's over-ambitious central plan.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1bq1rk1/pp3ppp/5n2/3p4/2pP2P1/PnP1PP2/4N1BP/R1BQ1RK1 w - - 5 13",
+        "annotation": "White's grand 4.f3 central ambitions have backfired — doubled c-pawns and slow development, while Black clamps the queenside and develops against the static weaknesses.",
+        "concept": "Punishing over-ambition"
+      }
+    ],
+    "middlegameTheme": "…d5/…c4 clamp vs the 4.f3 centre",
+    "lessonSummary": "Against 4.f3, Black challenges with …d5, clamps with …c4, and exploits White's doubled pawns and slow development."
+  },
+  {
+    "id": "mg-nimzo-fischer",
+    "openingId": "nimzo-indian",
+    "studentSide": "black",
+    "white": "Grischuk, A.",
+    "black": "Karjakin, Sergey",
+    "whiteElo": 2745,
+    "blackElo": 2747,
+    "result": "0-1",
+    "year": 2022,
+    "event": "18th Moscow Stars Prelim",
+    "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Nf3 b6 e3 Bb7 Bd3 O-O O-O d5 cxd5 exd5 Qc2 Be7 a3 c5 b3 Nbd7 Bb2 Rc8 Rfd1 g6 Qe2 Qc7 Nb5 Qb8 Rac1 Rfd8 a4 Bf8 h3 Bg7 Nc3 Nf8 a5 Ne6 a6 Bc6 Nb5 Ne4 Ne5 Be8 Nf3 Bxb5 Bxb5 cxd4 exd4 Qd6 g3 Rxc1 Rxc1 Qb4 Bd3 Qxb3 Kg2 Qb4 Ba1 Nd6 Ne5 Bxe5 dxe5 Ne4 Qe3 N4c5 Rd1 d4 Qf3 Nxd3 Rxd3 Qb5 h4 Qxa6 Ra3 Qb5 Rxa7 Qd5 Bb2 d3 Qxd5 Rxd5 Ra8+ Kg7 Ra1 Kf8 Kf3 Ke7 Ke4 Rd7 Ke3 Nc5 Rb1 d2 Ke2 Ke6 Rd1 Kf5 Rxd2 Rxd2+ Kxd2 Nd7 f3 Nxe5 Ke2 Ke6 Ba1 b5 Ke3 Kd5 Kf4 f6 g4 b4 h5 b3 hxg6 hxg6 g5 Nd3+",
+    "overview": "Fischer 4.e3 b6 — Karjakin beats Grischuk from the Black side with the light-squared fianchetto setup.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "2rq1rk1/pb1nbppp/1p3n2/2pp4/3P4/PPNBPN2/1BQ2PPP/R4RK1 w - - 3 13",
+        "annotation": "Black has the Fischer setup — the b7-bishop controlling e4, the dark bishop kept active on d6, and a sound centre. Light-square control and the two bishops give an easy, fighting game.",
+        "concept": "Light-square control"
+      }
+    ],
+    "middlegameTheme": "…b6/…Bb7 control e4, …Bd6 bishop pair",
+    "lessonSummary": "The Fischer …b6 setup: control e4 with the b7-bishop, keep the bishop pair with …Bd6, and play actively on both wings."
   }
 ]

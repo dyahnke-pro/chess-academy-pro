@@ -250,6 +250,18 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /ilyin/i, label: 'Ilyin-Zhenevsky' },
     { test: /e5 break/i, label: 'Leningrad …e5' },
   ],
+  // Nimzo-Indian — Black. Main pill = the Classical 4.Qc2 (repertoire pgn), so
+  // the "Classical Variation (4.Qc2)" folds in. The 7 distinct White 4th-move
+  // systems each earn a tab; each has a real Black-win model game.
+  'nimzo-indian': [
+    { test: /rubinstein/i, label: 'Rubinstein' },
+    { test: /huebner|hübner/i, label: 'Hübner' },
+    { test: /leningrad/i, label: 'Leningrad' },
+    { test: /kasparov/i, label: 'Kasparov' },
+    { test: /saemisch|sämisch/i, label: 'Sämisch' },
+    { test: /aggressive center/i, label: '4.f3' },
+    { test: /fischer/i, label: 'Fischer' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present

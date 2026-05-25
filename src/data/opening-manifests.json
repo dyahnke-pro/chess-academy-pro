@@ -215,5 +215,14 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "nimzo-indian": {
+    "variations": 8,
+    "middlegamePlans": 8,
+    "endgamePlans": 0,
+    "modelGames": 8,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }
