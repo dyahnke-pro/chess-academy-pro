@@ -138,9 +138,9 @@ describe('punish-gems are real, legal, DB-grounded', () => {
 
     // The coverage backlog can only SHRINK — a hard ceiling on the baseline
     // size blocks a future build from adding a new un-narrated gem to the
-    // baseline to bypass the rule. Lower GEM_COVERAGE_CEILING as the 8 deferred
-    // Scotch positional gems get narrated; never raise it.
-    const GEM_COVERAGE_CEILING = 8;
+    // baseline to bypass the rule. All 134 gems narrated
+    // 2026-05-25; never raise this.
+    const GEM_COVERAGE_CEILING = 0;
     it(`coverage baseline never grows (ceiling ${GEM_COVERAGE_CEILING})`, () => {
       expect(baseline.size, 'punishGemNarration.baseline.json grew — narrate the gem instead of baselining it').toBeLessThanOrEqual(GEM_COVERAGE_CEILING);
     });

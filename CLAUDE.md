@@ -1204,7 +1204,7 @@ playbook holds the rules you MUST follow, in particular:
       each require a resolvable `sources` on EVERY masterclass unit, no baseline
       file to game (all were 100% sourced 2026-05-25).
     - **Coverage backlogs have hard size CEILINGS that can only shrink, never
-      grow:** gem-narration baseline ≤8, plan-theme ≤4, plan-short ≤119,
+      grow:** gem-narration baseline =0, plan-theme ≤4, plan-short =0,
       lessonDepth `KNOWN_SHORTFALLS` ≤0, narrationGrounding `BASELINE_VIOLATIONS`
       ≤0 / `BARE_BEAT_BASELINE` ≤2, repertoire-orientation allowlist ≤161,
       wlppNarration grandfather list sealed =0. A future build CANNOT add a new

@@ -49,7 +49,7 @@ Priority order (David named main lines first):
 - [ ] pro-repertoire variations — gate + 243 sources.
 - [ ] checkpoint quizzes, gambits — gate + sources.
 - [ ] endgame / mating — formalize the existing `source` field into the gate.
-- [ ] 8 Scotch positional gems (narration + sources).
+- [x] 8 Scotch positional gems — narrated honestly (low-end positional, never oversold) + sourced 2026-05-25; gem coverage + verification baselines now 0.
 
 ## Done this session
 - Gem narration: KG (20) + Scotch (7) + Italian (7) authored & sourced.

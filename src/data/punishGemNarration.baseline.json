@@ -1,14 +1,5 @@
 {
   "_doc": "Masterclass punish-gems mined but NOT yet hand-narrated (no GEM_NARRATION entry). These do not surface in-app (a gem only shows once narrated), but they are the authoring backlog. Gate: punishGems.test.ts requires a narration entry for every masterclass gem; list only SHRINKS. Priority: kings-gambit, scotch, italian. Regenerate after authoring. [2026-05-25: KG+Scotch(7/15)+Italian narrated; remaining are subtle Scotch positional gems (cp<1.0) deliberately left for a verified pass.]",
-  "count": 8,
-  "keys": [
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Bc4:h6",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Nf6_e5_d5_Bb5:Ng4",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3_Nge7_Bc4_O-O_O-O:Nxd4",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nc3_Bb4_Nxc6_bxc6_Bd3_d5_exd5:Nxd5",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nxc6:dxc6",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nxc6_bxc6_e5:Ne4",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3:d6",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3:Be7"
-  ]
+  "count": 0,
+  "keys": []
 }

@@ -2128,6 +2128,51 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '', '', 'exd5 — win the race.', '', 'Bb5+ — check, win material.', '', '', '', '', ''],
     sources: ['concept:tac-pin', 'concept:pos-development', 'https://www.chess.com/openings/Italian-Game'],
   },
+
+  // ── Scotch Game — low-end POSITIONAL gems (David 2026-05-25: keep, narrate
+  // honestly). Each is a real ≥+0.5 jump from the opening baseline (engine-
+  // verified), but a small "clearly better", never a crush — the narration says
+  // so plainly. Student is White.
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3_Nge7_Bc4_O-O_O-O:Nxd4': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxd4? Natural to trade, but it hands White the recapture toward the centre — a small, lasting pull.', 'cxd4 — the c-pawn rebuilds the centre; White’s broad pawns and the half-open c-file are the edge.', '', '', '', '', '', 'Nd5 — the knight lands on the central outpost; White is clearly better, nothing forced, just the sounder position.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'cxd4 — rebuild the centre', '', '', '', '', '', 'Nd5 — the central outpost', ''],
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nxc6:dxc6': {
+    watch: ['', '', '', '', '', '', '', '', '', 'dxc6? Recapturing toward the centre — but …bxc6 was sounder; this walks into the queen trade.', 'Qxd8+ — trade queens and rob Black of castling; the king must trudge to d8.', '', 'f3 — a small, pleasant edge: Black’s king is stuck on d8 and the queenside pawns are doubled.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'Qxd8+ — trade, deny castling', '', 'f3 — press the better structure', '', '', '', '', ''],
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nxc6_bxc6_e5:Ne4': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', 'Ne4? The knight grabs a forward post, but it’s easily challenged and traded — leaving White the space.', 'Nd2 — offer to trade the e4-knight; once it’s gone White’s e5-wedge tells.', '', '', '', '', '', 'Be3 — develop; White’s central space is the clear, if modest, edge.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Nd2 — trade off the knight', '', '', '', '', '', 'Be3 — press the space', ''],
+    sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Bc4:h6': {
+    watch: ['', '', '', '', '', '', '', 'h6? A slow move that wastes a tempo — White simply develops and takes over.', 'O-O — castle and press; with a free move in hand White builds a comfortable space edge.', '', 'Re1 — the rook backs the centre, e5 to come.', '', 'e5 — the pawn lunges, shoving the f6-knight to the rim; White is clearly better on space.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', 'O-O — develop, take over', '', 'Re1 — back the centre', '', 'e5 — gain space, kick the knight', '', '', ''],
+    sources: ['concept:pos-space', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Nf6_e5_d5_Bb5:Ng4': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', 'Ng4? The knight lunges with no target — White kicks it and damages the structure.', 'h3 — question the knight; it must go to the awful h6-square.', '', 'Bxh6 — trade it off, shattering Black’s kingside pawns.', '', 'Qxd4 — regain the pawn; White is clearly better, the safer king against Black’s wrecked kingside.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'h3 — kick the knight', '', 'Bxh6 — shatter the kingside', '', 'Qxd4 — regain it, clearly better', '', '', ''],
+    sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nc3_Bb4_Nxc6_bxc6_Bd3_d5_exd5:Nxd5': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxd5? Recapturing, but Black’s doubled c-pawns stay a lasting weakness.', 'O-O — calmly develop; White owns the bishop pair and the sounder structure.', '', 'Ne4 — the knight eyes d6 and the dark squares; White is clearly better.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'O-O — develop, bishop pair', '', 'Ne4 — eye d6, press', '', '', '', '', ''],
+    sources: ['concept:pos-bishop-pair', 'concept:pawn-doubled', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3:d6': {
+    watch: ['', '', '', '', '', '', '', 'd6? Passive — declining the gambit lets White build the full centre for free.', 'cxd4 — take the pawn back and stand with a broad d4/e4 centre.', '', 'Nc3 — develop; the big centre and free play give White a clear pull.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', 'cxd4 — broad centre, pawn back', '', 'Nc3 — develop, press the centre', '', '', '', '', ''],
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3:Be7': {
+    watch: ['', '', '', '', '', '', '', '', '', 'Be7? Passive — it leaves f7 soft and the kingside loose.', 'Bc4 — train on f7; Black’s only guard is the awkward …Nh6.', '', 'Bxh6 — trade it off, shattering Black’s kingside pawns.', '', '', '', 'Qxh6 — the queen grabs the pawn and eyes the open kingside; White is clearly better.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'Bc4 — aim at f7', '', 'Bxh6 — shatter the kingside', '', '', '', 'Qxh6 — grab it, press the king', ''],
+    sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
