@@ -3,7 +3,6 @@ import type { LessonScript } from '../../types';
 // Lead-the-eye colours (playbook §5a): GREEN arrows (vision / threat /
 // intent), YELLOW highlights (a key square the narration names), SOFT blue
 // (secondary context). Orange move-squares are auto-painted by the player.
-const VIS = 'rgba(40,185,95,0.92)';
 const ATK = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
