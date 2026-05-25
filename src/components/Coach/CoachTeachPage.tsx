@@ -775,6 +775,11 @@ export function CoachTeachPage(): JSX.Element {
   useEffect(() => {
     const openingName = walkthrough.tree?.openingName;
     if (walkthrough.phase !== 'leaf' || !openingName) return;
+    // Derived trees (punish one-shots) aren't an opening line you "play
+    // out into the middlegame against me" — they end on a tactical shot
+    // (often mate). The whyPunish outro already closes them; don't tack
+    // on the play-out invitation with the composite display name.
+    if (walkthrough.tree?.derived) return;
     if (playOutPromptedFor.current.has(openingName)) return;
     playOutPromptedFor.current.add(openingName);
     const msg = `That's the canonical line into the middlegame for the ${openingName}. Want to play it out yourself against me? Tap "Play this line out yourself" — or keep learning with quizzes and drills if you'd rather lock it in first.`;
@@ -803,7 +808,7 @@ export function CoachTeachPage(): JSX.Element {
       source: 'CoachTeachPage.leafPlayOutPrompt',
       summary: `leaf reached — asked student to play out "${openingName}"`,
     });
-  }, [walkthrough.phase, walkthrough.tree?.openingName]);
+  }, [walkthrough.phase, walkthrough.tree?.openingName, walkthrough.tree?.derived]);
 
   const handleSubmit = useCallback(async (
     text: string,

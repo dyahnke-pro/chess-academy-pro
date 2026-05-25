@@ -20,8 +20,9 @@ vi.mock('../services/appAuditor', () => ({
   logAppAudit: vi.fn(),
 }));
 
-import { useTeachWalkthrough } from './useTeachWalkthrough';
+import { useTeachWalkthrough, buildPunishWalkthroughTree } from './useTeachWalkthrough';
 import { useAppStore } from '../stores/appStore';
+import type { PunishLesson } from '../types/walkthroughTree';
 
 // Synthetic tree:
 //   root → 1.e4 → 1...e5 → FORK { 2.Nc3 → leaf , 2.Nf3 → leaf }
@@ -316,4 +317,55 @@ describe('useTeachWalkthrough', () => {
       { timeout: 10000 },
     );
   }, 15000);
+});
+
+describe('buildPunishWalkthroughTree', () => {
+  const PARENT: WalkthroughTree = {
+    openingName: "Benoni Defense: King's Pawn Line, with Nge2",
+    eco: 'A65',
+    intro: 'parent intro',
+    outro: 'parent outro',
+    studentSide: 'black',
+    root: { san: null, movedBy: null, idea: '', children: [] },
+  };
+  const LESSON: PunishLesson = {
+    name: 'Benoni Nge2: Nxf8?? — Qxg2# mates via smothered king',
+    setupFen: 'rnbqk2r/pp3pbp/3p1np1/2pP4/4P3/2N2P2/PP2N1PP/R1BQKB1R w KQkq - 0 1',
+    setupMoves: ['d4', 'Nf6', 'c4', 'g6'],
+    inaccuracy: 'Nxf8',
+    whyBad: 'Taking the rook removes the only defender of g2.',
+    punishment: 'Qxg2',
+    whyPunish: 'The queen delivers a smothered mate on g2.',
+    distractors: [
+      { san: 'Kxf8', label: 'recapture', explanation: 'Recapturing wins the knight but misses the mate.' },
+    ],
+  };
+
+  it('flags the tree as derived and keeps the composite display name', () => {
+    const tree = buildPunishWalkthroughTree(LESSON, PARENT);
+    expect(tree.derived).toBe(true);
+    // The display label still names parent + lesson (shown on the tile),
+    // but it must NOT be used as a cache key — that's what `derived` gates.
+    expect(tree.openingName).toBe(
+      "Benoni Defense: King's Pawn Line, with Nge2: Benoni Nge2: Nxf8?? — Qxg2# mates via smothered king",
+    );
+  });
+
+  it('does not dump the raw-SAN lesson label into the spoken intro', () => {
+    const tree = buildPunishWalkthroughTree(LESSON, PARENT);
+    // Regression: the intro used to lead with `lesson.name`, so TTS read
+    // "Benoni knight g to e2 ... knight takes f8 question question ...".
+    // Per CLAUDE.md narration rules the intro must be plain prose.
+    expect(tree.intro).not.toContain('Nge2');
+    expect(tree.intro).not.toContain('Nxf8');
+    expect(tree.intro).not.toContain('Qxg2');
+    expect(tree.intro).not.toContain(LESSON.name);
+    expect(tree.intro.toLowerCase()).toContain('find the punishment');
+  });
+
+  it('inherits parent orientation and eco', () => {
+    const tree = buildPunishWalkthroughTree(LESSON, PARENT);
+    expect(tree.studentSide).toBe('black');
+    expect(tree.eco).toBe('A65');
+  });
 });

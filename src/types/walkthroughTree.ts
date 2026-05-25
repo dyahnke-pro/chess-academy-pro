@@ -135,6 +135,13 @@ export interface WalkthroughTree {
   /** Canonical opening name (matches the brain's intendedOpening
    *  memory and Lichess explorer responses). */
   openingName: string;
+  /** Marks a one-shot tree built on the fly from another lesson
+   *  (e.g. a punish exercise via `buildPunishWalkthroughTree`) rather
+   *  than a cacheable opening. `openingName` on these is a composite
+   *  display label (`<parent>: <lesson>`), NOT a cache key — surfaces
+   *  must NOT feed it to `getCachedOpening` / completed-stage tracking
+   *  or offer the "play this line out as an opening" leaf prompt. */
+  derived?: boolean;
   /** ECO code (e.g. "C25" for Vienna). Used for opening-detection
    *  cross-reference. */
   eco: string;
