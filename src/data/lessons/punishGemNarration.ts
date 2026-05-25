@@ -1509,6 +1509,94 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
     ],
   },
+  // QGA — Central: White's premature Ng5? met by the zwischenzug …Bb4+!,
+  // costing White castling; the g5-knight is just a misplaced lunge.
+  // playLine: d4 d5 c4 dxc4 e4 e5 Nf3 exd4 Bxc4 Nc6 Ng5 Bb4+ Kf1 Nh6 h3 Qe7 a3 Bc5 Nf3
+  'qga:d4_d5_c4_dxc4_e4_e5_Nf3_exd4_Bxc4_Nc6:Ng5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '',
+      'Ng5? — White lunges at f7, hoping for a quick attack. But it is premature, and Black has a cool zwischenzug.',
+      '…Bb4+! — check first! Before dealing with the f7-threat, Black inserts the bishop with check, forcing White to react.',
+      'Kf1 — White must block with the king, losing the right to castle. The g5-knight is now a misplaced lunge, not an attacker.',
+      '…Nh6 — calmly defending f7. White\'s "attack" is over before it began.',
+      '',
+      '…Qe7 — developing; Black keeps the healthier game and the safer king.',
+      '',
+      '…Bc5 — the bishop swings to a fine diagonal; Black is clearly better, White\'s king stuck on f1.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      '…Bb4+ — zwischenzug check first.',
+      '',
+      '…Nh6 — calmly defend f7.',
+      '',
+      '…Qe7 — develop, keep the edge.',
+      '',
+      '…Bc5 — active bishop; clearly better.',
+      '',
+    ],
+  },
+
+  // QGA — Alekhine: White's slow a3? lets Black solidify and trap the c3-knight
+  // with …b4, then …Nxe4 nets a pawn into a dominant game.
+  // playLine: d4 d5 c4 dxc4 Nf3 Nf6 Nc3 a6 e4 b5 a3 e6 a4 b4 Nb1 Nxe4 Bxc4 Bb7 O-O
+  'qga:d4_d5_c4_dxc4_Nf3_Nf6_Nc3_a6_e4_b5:a3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '',
+      'a3? — a slow, passive move that does nothing about Black\'s extra pawn or central grip. Black seizes the moment.',
+      '…e6 — solidifying the queenside structure and the extra c4-pawn.',
+      '',
+      '…b4! — kicking the c3-knight, which has no good square.',
+      'Nb1 — the knight slinks back to its starting square, a humiliating retreat. White is tied in knots.',
+      '…Nxe4 — and the loose e4-pawn falls too. Black is a pawn up with a dominant position.',
+      '',
+      '…Bb7 — the bishop rakes the long diagonal; Black is clearly winning.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      '',
+      '…e6 — solidify; hold the extra pawn.',
+      '',
+      '…b4 — kick the knight; no good square.',
+      '',
+      '…Nxe4 — grab the loose centre pawn.',
+      '',
+      '…Bb7 — long diagonal; winning.',
+      '',
+    ],
+  },
+
+  // QGA — Alekhine: White's passive Ne4? lets Black consolidate the extra pawn
+  // with …e6 and the …c3 passed-pawn lunge.
+  // playLine: d4 d5 c4 dxc4 Nf3 Nf6 Nc3 a6 e4 b5 e5 Nd5 Ne4 e6 Be2 Bb7 O-O Nc6 b3 c3 a3
+  'qga:d4_d5_c4_dxc4_Nf3_Nf6_Nc3_a6_e4_b5_e5_Nd5:Ne4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'Ne4? — the knight retreats passively, doing nothing to challenge Black\'s grip. Black simply banks the extra pawn.',
+      '…e6 — solidifying the d5-knight and the extra c4-pawn. White has no compensation.',
+      '',
+      '…Bb7 — the bishop takes the long diagonal; every black piece is active.',
+      '',
+      '…Nc6 — completing development, a healthy pawn in hand.',
+      '',
+      '…c3! — the passed pawn lunges, cramping White and clinging to the extra material. Black is firmly on top.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      '',
+      '…e6 — solidify; keep the extra pawn.',
+      '',
+      '…Bb7 — bishop on the long diagonal.',
+      '',
+      '…Nc6 — develop, a pawn up.',
+      '',
+      '…c3 — the passed pawn cramps White.',
+      '',
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
