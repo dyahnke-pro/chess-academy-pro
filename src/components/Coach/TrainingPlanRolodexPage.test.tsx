@@ -11,6 +11,8 @@ vi.mock('../../services/appAuditor', () => ({
 const mockGetFavoriteOpenings = vi.fn();
 vi.mock('../../services/openingService', () => ({
   getFavoriteOpenings: () => mockGetFavoriteOpenings(),
+  // TodaysReps reads un-learned favorite lines for its "new line" reps.
+  getUnlearnedFavoriteOpenings: () => Promise.resolve([]),
   // RolodexCard renders PuzzlesRow → useOpeningPuzzlesProgress →
   // puzzlesByOpening.getOpeningFamily(). Mock the dependency chain
   // explicitly so card-row hooks don't crash when openingService

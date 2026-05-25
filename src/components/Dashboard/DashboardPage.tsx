@@ -1,13 +1,18 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
-import { BookOpen, GraduationCap, Target, AlertTriangle, Upload } from 'lucide-react';
+import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
 import { useSettings } from '../../hooks/useSettings';
 import { scaledShadow } from '../../utils/neonColors';
+import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
+import { getUnlearnedFavoriteOpenings } from '../../services/openingService';
+import { getSrsDueOpenings } from '../../services/srsOpeningService';
+import { buildTodaysReps } from '../../services/trainingPlanSelector';
+import { getDueTodayTracks, type DueTrack } from '../../services/dueToday';
 
 interface SectionItem {
   label: string;
@@ -52,6 +57,75 @@ const SECTIONS: SectionItem[] = [
     rgb: '139, 92, 246',
   },
 ];
+
+/** Live loop-state strip (David 2026-05-25): the Dashboard is the status
+ *  board for the one training loop, not just static tiles. Pulls today's
+ *  reps from the same three sources as the Training Plan (unified
+ *  weaknesses + SRS-due + new lines) and routes into the hub. Renders
+ *  nothing until there's something to do, so a fresh user isn't nagged. */
+function TodayStatus(): JSX.Element | null {
+  const navigate = useNavigate();
+  const [planReps, setPlanReps] = useState<number | null>(null);
+  const [tracks, setTracks] = useState<DueTrack[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      const [weaknesses, srsDue, newLines, dueTracks] = await Promise.all([
+        getUnifiedWeaknessProfile(),
+        getSrsDueOpenings(),
+        getUnlearnedFavoriteOpenings(),
+        getDueTodayTracks(),
+      ]);
+      if (cancelled) return;
+      setPlanReps(buildTodaysReps({ weaknesses, srsDue, newLines, total: 5 }).length);
+      setTracks(dueTracks);
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  if (planReps === null) return null;
+  if (planReps === 0 && tracks.length === 0) return null;
+
+  return (
+    <div className="max-w-lg mx-auto w-full flex flex-col gap-2" data-testid="dashboard-due-board">
+      {planReps > 0 && (
+        <button
+          onClick={() => void navigate('/coach/plan')}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-theme-accent/10 border border-theme-accent/30 hover:opacity-80 transition-all"
+          data-testid="dashboard-today-status"
+        >
+          <Target size={18} className="text-theme-accent shrink-0" />
+          <div className="flex-1 text-left min-w-0">
+            <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+              {planReps} {planReps === 1 ? 'rep' : 'reps'} ready today
+            </span>
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+              Your Training Plan — lines to learn, weaknesses to drill.
+            </p>
+          </div>
+          <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
+        </button>
+      )}
+      {tracks.map((t) => (
+        <button
+          key={t.key}
+          onClick={() => void navigate(t.route)}
+          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-theme-surface border border-theme-border hover:border-theme-accent/40 transition-all"
+          data-testid={`dashboard-due-${t.key}`}
+        >
+          <div className="flex-1 text-left min-w-0">
+            <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
+              {t.label} <span className="text-theme-text-muted">· {t.count} due</span>
+            </span>
+            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{t.sublabel}</p>
+          </div>
+          <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export function DashboardPage(): JSX.Element {
   const activeProfile = useAppStore((s) => s.activeProfile);
@@ -124,6 +198,9 @@ export function DashboardPage(): JSX.Element {
       <div className="max-w-lg mx-auto w-full">
         <SmartSearchBar />
       </div>
+
+      {/* Live loop status — today's reps, routes into the Training Plan hub */}
+      <TodayStatus />
 
       {/* Section grid — uniform cards, order matches sidebar */}
       <div className="grid grid-cols-2 gap-3 flex-1 content-center max-w-lg mx-auto w-full">

@@ -27,6 +27,8 @@ vi.mock('../services/appAuditor', () => ({ logAppAudit: vi.fn(async () => {}) })
 
 import { captureMisconception } from '../services/discussionPractice';
 import { logAppAudit } from '../services/appAuditor';
+import { useAppStore } from '../stores/appStore';
+import { buildUserProfile } from '../test/factories';
 
 const mockedCapture = vi.mocked(captureMisconception);
 const mockedAudit = vi.mocked(logAppAudit);
@@ -50,6 +52,9 @@ const SLIP_ARGS = {
 beforeEach(() => {
   mockedCapture.mockClear();
   mockedAudit.mockClear();
+  // No active profile → settings fall back to defaults (coachInGameDiscussion
+  // on), so the prompt-mode tests see the default interjection behavior.
+  useAppStore.setState({ activeProfile: null });
 });
 
 describe('useDiscussionPractice — silent mode (the /coach/teach + Practice faucet)', () => {
@@ -101,5 +106,21 @@ describe('useDiscussionPractice — prompt mode (the /coach/play faucet)', () =>
     await act(async () => { await result.current.evaluatePlayerMove(SLIP_ARGS); });
     expect(mockedCapture).not.toHaveBeenCalled();
     expect(result.current.phase).toBe('idle');
+  });
+
+  it('captures silently (no prompt) when the in-game discussion toggle is off', async () => {
+    useAppStore.setState({
+      activeProfile: buildUserProfile({ preferences: { coachInGameDiscussion: false } }),
+    });
+    // A normally-prompting (non-silent) surface, but the toggle is off.
+    const { result } = renderHook(() => useDiscussionPractice(true));
+    await act(async () => { await result.current.evaluatePlayerMove(SLIP_ARGS); });
+
+    // No interruption — the why-prompt never engages...
+    expect(result.current.phase).toBe('idle');
+    expect(result.current.prompt).toBeNull();
+    // ...but the slip is STILL captured to the weakness bucket (passive).
+    expect(mockedCapture).toHaveBeenCalledOnce();
+    expect(mockedCapture.mock.calls[0][0].classifyInput.userReason).toBeUndefined();
   });
 });

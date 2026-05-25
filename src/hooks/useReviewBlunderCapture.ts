@@ -9,6 +9,7 @@
 
 import { useCallback, useRef, useState } from 'react';
 import { captureMisconception } from '../services/discussionPractice';
+import { classifyPhase } from '../services/gamePhaseService';
 import type { CoachGameMove } from '../types';
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -67,13 +68,17 @@ function blunderAtPly(
     move.preMoveEval !== null && move.evaluation !== null
       ? (move.preMoveEval - move.evaluation) * sign
       : undefined;
+  const fenBefore = idx > 0 ? moves[idx - 1].fen : START_FEN;
   return {
     ply,
-    fen: idx > 0 ? moves[idx - 1].fen : START_FEN,
+    fen: fenBefore,
     playedSan: move.san,
     bestSan: move.bestMove ?? undefined,
     cpLoss: cpLoss !== undefined && cpLoss > 0 ? cpLoss : undefined,
-    gamePhase: move.moveNumber <= 12 ? 'opening' : 'middlegame',
+    // Material-aware phase (opening / middlegame / endgame) so an endgame
+    // slip caught in review is filed as endgame — not mislabeled middlegame
+    // by a move-count heuristic.
+    gamePhase: classifyPhase(fenBefore, ply),
     moveNumber: move.moveNumber,
   };
 }

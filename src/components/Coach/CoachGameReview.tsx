@@ -9,6 +9,9 @@ import { ReviewSummaryCard } from './ReviewSummaryCard';
 import { GameReviewWeaknessCapture } from './GameReviewWeaknessCapture';
 import { KeyMomentNav } from './KeyMomentNav';
 import { ChatInput } from './ChatInput';
+import { useReviewBlunderCapture } from '../../hooks/useReviewBlunderCapture';
+import { resolveOpeningIdFromName } from '../../services/chessConceptService';
+import { useSettings } from '../../hooks/useSettings';
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
@@ -86,6 +89,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // backwards-compat with legacy callers but no longer consumed —
   // the walk surface derives everything it needs from `moves`.
   const navigate = useNavigate();
+  const { settings } = useSettings();
+  const coachedReview = settings.coachedReview;
 
   // ship-4: `reviewPhase` state removed. The walk-phase UI is the only
   // review surface; when narration generation fails or the prep effect
@@ -737,6 +742,30 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const walkUiActive =
     walkNarration !== null &&
     walkNarration.segments.length > 0;
+
+  // Per-blunder capture (David 2026-05-21, wired into the walk 2026-05-25):
+  // as the walk lands on one of the student's own blunder/mistake plies the
+  // coach asks "why did you play that?", classifies the answer into the
+  // closed-set misconception taxonomy, and logs it to the shared weakness
+  // bucket (source 'game-review'). Previously this hook was built + tested
+  // but mounted nowhere, so the review walk captured nothing.
+  const reviewCapture = useReviewBlunderCapture({
+    moves,
+    playerColor,
+    openingName,
+    openingId: openingName ? (resolveOpeningIdFromName(openingName) ?? undefined) : undefined,
+    gameId: props.gameId,
+    learned: true,
+  });
+  useEffect(() => {
+    // Standalone-review opt-out (David 2026-05-25): when coached review is
+    // off, never raise the "why?" prompt — the review becomes a plain
+    // walk-through. The summary-card "add this game's mistakes" button still
+    // works for deliberate, user-initiated capture.
+    if (!walkUiActive || !coachedReview) return;
+    reviewCapture.onPlyLanded(walkPlayback.currentPly);
+  }, [walkUiActive, coachedReview, walkPlayback.currentPly, reviewCapture]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {
       if (walkUiActive) {
@@ -1440,6 +1469,68 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                 </div>
               )}
             </div>
+
+            {/* Per-blunder capture: coach asks "why did you play that?" */}
+            {reviewCapture.phase !== 'idle' && (
+              <div className="px-3 py-2 border-t border-amber-500/30 bg-amber-500/5" data-testid="review-blunder-capture">
+                {reviewCapture.prompt && (reviewCapture.phase === 'asking' || reviewCapture.phase === 'thinking') && (
+                  <>
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Crosshair size={12} style={{ color: 'var(--color-accent)' }} />
+                      <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
+                        Coach
+                      </span>
+                    </div>
+                    <p className="text-xs leading-relaxed mb-2" style={{ color: 'var(--color-text)' }}>
+                      You played {reviewCapture.prompt.playedSan} here — what was the idea behind it?
+                    </p>
+                    {reviewCapture.phase === 'thinking' ? (
+                      <div className="flex items-center gap-1.5 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                        <Loader2 size={12} className="animate-spin" /> Thinking…
+                      </div>
+                    ) : (
+                      <>
+                        <ChatInput
+                          onSend={(reason) => void reviewCapture.submitReason(reason)}
+                          placeholder="Tell the coach your reasoning…"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => void reviewCapture.skip()}
+                          className="mt-1.5 text-[11px] font-semibold"
+                          style={{ color: 'var(--color-text-muted)' }}
+                          data-testid="review-capture-skip"
+                        >
+                          Skip
+                        </button>
+                      </>
+                    )}
+                  </>
+                )}
+                {reviewCapture.phase === 'teaching' && reviewCapture.teach && (
+                  <div data-testid="review-capture-teach">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <Crosshair size={12} style={{ color: 'var(--color-accent)' }} />
+                      <span className="text-[10px] font-semibold uppercase tracking-wide" style={{ color: 'var(--color-accent)' }}>
+                        Coach
+                      </span>
+                    </div>
+                    <p className="text-xs leading-relaxed mb-2" style={{ color: 'var(--color-text)' }}>
+                      {reviewCapture.teach}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={reviewCapture.dismissTeach}
+                      className="text-[11px] font-semibold"
+                      style={{ color: 'var(--color-accent)' }}
+                      data-testid="review-capture-continue"
+                    >
+                      Continue
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Ask panel (expandable) */}
             {askExpanded && (

@@ -23,6 +23,7 @@
  */
 import { Chess } from 'chess.js';
 import { db } from '../db/schema';
+import { MAIN_LINE_INDEX } from '../utils/wlppLadder';
 import type { OpeningRecord, SrsOpeningCard } from '../types';
 
 /** Normalize a FEN for use as a card-id suffix. Drops the half-move and
@@ -166,6 +167,31 @@ export async function enrollOpening(opening: OpeningRecord): Promise<{
   return { added: toAdd.length, alreadyEnrolled: existing.length };
 }
 
+/** Enroll only ONE line (the main line via MAIN_LINE_INDEX, or a variation
+ *  index) into SRS. Used to auto-enroll on Learn completion so spaced review
+ *  tracks exactly the lines you've actually learned — NOT every line in the
+ *  opening (which would flood "due" with material you've never seen). New
+ *  cards only; existing SRS state survives. Returns the count added. */
+export async function enrollOpeningLine(
+  opening: OpeningRecord,
+  variationIndex: number,
+): Promise<number> {
+  const now = Date.now();
+  const isMain = variationIndex === MAIN_LINE_INDEX;
+  const pgn = isMain ? opening.pgn : opening.variations?.[variationIndex]?.pgn;
+  const name = isMain ? opening.name : opening.variations?.[variationIndex]?.name ?? opening.name;
+  if (!pgn?.trim()) return 0;
+
+  const cards = extractCardsFromPgn(pgn, name, opening.color, opening.id, now);
+  if (cards.length === 0) return 0;
+  const ids = cards.map((c) => c.id);
+  const existing = await db.srsOpeningCards.where('id').anyOf(ids).toArray();
+  const existingIds = new Set(existing.map((c) => c.id));
+  const toAdd = cards.filter((c) => !existingIds.has(c.id));
+  if (toAdd.length > 0) await db.srsOpeningCards.bulkAdd(toAdd);
+  return toAdd.length;
+}
+
 /** Remove all cards for an opening. Used when un-enrolling. */
 export async function unenrollOpening(openingId: string): Promise<number> {
   return db.srsOpeningCards.where('openingId').equals(openingId).delete();
@@ -281,6 +307,22 @@ export async function getTotalEnrolled(): Promise<number> {
 }
 
 /** List the openings the student has enrolled, with per-opening counts. */
+/** SRS-enrolled openings with at least one card due now, paired with the
+ *  opening's display name — the exact `{openingId, name}[]` shape the
+ *  Training Plan's `srsDue` reps want. Joins enrolled cards (this service)
+ *  to names (openings store) so spaced opening review enters the daily path. */
+export async function getSrsDueOpenings(): Promise<{ openingId: string; name: string }[]> {
+  const enrolled = await getEnrolledOpenings();
+  const due = enrolled.filter((e) => e.dueCards > 0);
+  if (due.length === 0) return [];
+  const out: { openingId: string; name: string }[] = [];
+  for (const e of due) {
+    const opening = await db.openings.get(e.openingId);
+    out.push({ openingId: e.openingId, name: opening?.name ?? e.openingId });
+  }
+  return out;
+}
+
 export async function getEnrolledOpenings(): Promise<
   { openingId: string; totalCards: number; dueCards: number }[]
 > {

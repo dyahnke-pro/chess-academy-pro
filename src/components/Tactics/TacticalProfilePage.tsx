@@ -6,6 +6,7 @@ import { getThemeSkills, THEME_MAP } from '../../services/puzzleService';
 import { PageHelp } from '../Layout/PageHelp';
 import type { ThemeSkill } from '../../services/puzzleService';
 import { logAppAudit } from '../../services/appAuditor';
+import { getUnifiedWeaknessProfile, type UnifiedWeakness } from '../../services/weaknessSpine';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -60,13 +61,31 @@ function buildCategoryStats(skills: ThemeSkill[]): ThemeCategoryStats[] {
 export function TacticalProfilePage(): JSX.Element {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<ThemeCategoryStats[]>([]);
+  const [gameMisses, setGameMisses] = useState<UnifiedWeakness[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
   const loadProfile = useCallback(async (): Promise<void> => {
-    const skills = await getThemeSkills();
+    const [skills, weaknesses] = await Promise.all([getThemeSkills(), getUnifiedWeaknessProfile()]);
     setCategories(buildCategoryStats(skills));
+    // The profile reflects real games, not just puzzle accuracy: the
+    // tactical motifs you actually miss in your games (from the unified
+    // weakness spine) surface here and drill with one tap.
+    setGameMisses(weaknesses.filter((w) => w.bucket === 'tactical' && w.total > 0).slice(0, 4));
   }, []);
+
+  const drillWeakness = useCallback((w: UnifiedWeakness): void => {
+    if (w.puzzleThemes.length > 0) {
+      void navigate('/tactics/adaptive', {
+        state: {
+          forcedWeakThemes: w.puzzleThemes,
+          misconceptionTag: w.tag.startsWith('analysis:') ? undefined : w.tag,
+        },
+      });
+    } else {
+      void navigate('/weaknesses');
+    }
+  }, [navigate]);
 
   useEffect(() => {
     setLoading(true);
@@ -172,6 +191,31 @@ export function TacticalProfilePage(): JSX.Element {
           </span>
         )}
       </button>
+
+      {/* From your games — real tactical misses (unified weakness spine) */}
+      {gameMisses.length > 0 && (
+        <div className="flex flex-col gap-2" data-testid="profile-game-misses">
+          <h3 className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+            From your games
+            <span className="font-normal ml-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>tap to drill</span>
+          </h3>
+          {gameMisses.map((w) => (
+            <button
+              key={w.key}
+              onClick={() => drillWeakness(w)}
+              className="w-full rounded-lg border p-3 text-left flex items-center gap-2 transition-all hover:opacity-90"
+              style={{ borderColor: 'var(--color-border)', background: 'var(--color-surface)' }}
+              data-testid="profile-game-miss-row"
+            >
+              <span className="text-sm font-medium flex-1" style={{ color: 'var(--color-text)' }}>{w.label}</span>
+              <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                {w.total}× in your games
+              </span>
+              <ChevronRight size={14} style={{ color: 'var(--color-text-muted)' }} />
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-3">
