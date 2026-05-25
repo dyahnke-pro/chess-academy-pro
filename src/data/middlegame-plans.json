@@ -662,6 +662,16 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "d4 — the central break",
+          "exd4 — open the centre",
+          "Nxd4 — centralise the knight",
+          "Nxd4 — trade off the monster",
+          "Qxd4 — a commanding central post",
+          "d6 — solid but passive",
+          "Nc3 — complete development",
+          "Be6 — challenge Bb3; White presses"
         ]
       },
       {
@@ -855,6 +865,16 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "d3 — quiet, keep flexibility",
+          "d6 — the closed centre",
+          "Nbd2 — start the f1-g3 tour",
+          "Be6 — challenge the b3-bishop",
+          "Re1 — free f1 for the knight",
+          "Nd7 — reroute toward c5/f8",
+          "Nf1 — one step from g3",
+          "Nc5 — pressure Bb3, control d3"
         ]
       }
     ]
@@ -1105,6 +1125,16 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "exf4 — open the f-file",
+          "d3 — clear the bishop’s path",
+          "d5 — counter in the centre",
+          "Bxf4 — activate the dark bishop",
+          "Nd7 — reroute toward c5",
+          "Qe1 — lift toward g3/h4",
+          "Nc5 — hit Bb3, control d3",
+          "Qg3 — the attack lands on g7"
         ]
       }
     ]
@@ -9331,6 +9361,17 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "d4 — return a pawn with tempo",
+          "Bd6 — aim at h2",
+          "Re1 — defend the back rank",
+          "Qh4 — the classic Marshall lift",
+          "g3 — blunt mate, weaken light squares",
+          "Qh3 — glued to the king",
+          "Be3 — develop, prepare Qd3",
+          "Bg4 — the last piece joins",
+          "Qd3 — centralise to defend"
         ]
       }
     ]
@@ -9516,6 +9557,16 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "h3 — luft, prepare g4",
+          "Ke8 — the Berlin king walk",
+          "Nc3 — pressure the king",
+          "h5 — stop g4, keep f5",
+          "Bf4 — probe the queenside",
+          "Be7 — free the king, connect rooks",
+          "Rad1 — seize the d-file",
+          "Be6 — activate the bishop pair"
         ]
       }
     ]
@@ -9718,6 +9769,16 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "Nbd2 — reroute toward the kingside",
+          "Nc5 — hit Bb3, eye e4/d3",
+          "c3 — clamp the d4-square",
+          "d4 — grab a protected outpost",
+          "Ng5 — trade the e6-bishop",
+          "dxc3 — the Open Ruy imbalance",
+          "Nxe6 — eliminate the strong bishop",
+          "fxe6 — activity vs structure"
         ]
       }
     ]
@@ -9897,6 +9958,16 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "c5 — space, lean on the bishops",
+          "Nb3 — head for the endgame",
+          "Qxd1 — invite the queen trade",
+          "Rxd1 — take the d-file",
+          "Bg4 — rake the back rank, hit f3",
+          "f3 — challenge, prep the majority",
+          "Be6 — hold the light squares",
+          "Nc3 — the technical fight begins"
         ]
       }
     ]
@@ -10095,6 +10166,15 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "Ng3 — the reroute completes",
+          "g6 — prepare …Bg7",
+          "a4 — probe the queenside",
+          "c5 — the central counter",
+          "d5 — lock the centre",
+          "c4 — clamp, secure c5",
+          "Bg5 — pin, regroup toward f5"
         ]
       }
     ]
@@ -10277,6 +10357,13 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "Nbd2 — start the f1-g3 regroup",
+          "Nc6 — bring the knight back",
+          "d5 — lock the centre, grab space",
+          "Nd8 — reroute toward e6/f7",
+          "Nf1 — en route to g3"
         ]
       }
     ]
@@ -10488,6 +10575,16 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "exd4 — release the tension",
+          "cxd4 — central space, open lines",
+          "Nb4 — harass the c2-bishop",
+          "Bb1 — keep the b1-h7 diagonal",
+          "c5 — challenge d4",
+          "d5 — clamp, free the third rank",
+          "Nd7 — reroute toward c5/e5",
+          "Ra3 — the signature rook lift"
         ]
       }
     ]
@@ -10729,6 +10826,21 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "",
+          "Bb5 — eye the c6-knight",
+          "a6 — the Morphy poke",
+          "Bxc6 — the structural Exchange",
+          "dxc6 — doubled c-pawns",
+          "",
+          "f6 — shore up e5",
+          "d4 — steer to the trade",
+          "",
+          "Nxd4 — 4v3 majority wins the ending"
         ]
       }
     ]
@@ -11029,6 +11141,24 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Nf6 — the Berlin, hits e4",
+          "O-O — offer the pawn",
+          "Nxe4 — the Open Berlin",
+          "d4 — strike the centre",
+          "Nd6 — douse the initiative",
+          "Bxc6 — the structural blow",
+          "",
+          "",
+          "Nf5 — head for d4/e3",
+          "Qxd8+ — queens off with check",
+          "Kxd8 — lose castling; White grinds"
         ]
       }
     ]
@@ -11413,6 +11543,32 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Nb8 — the Breyer reroute home",
+          "",
+          "",
+          "",
+          "",
+          "Bc2 — develop, dodge Noah’s Ark",
+          "c5 — lock the centre; space tells"
         ]
       }
     ]
@@ -11878,6 +12034,36 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Na5 — jump at the b3-bishop",
+          "Bc2 — retreat, dodge Noah’s Ark",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Ne3 — toward the d5/f5 outposts",
+          "g6 — blunt the knight; space tells"
         ]
       }
     ]
@@ -12265,6 +12451,32 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Bb7 — maximum central tension",
+          "",
+          "",
+          "",
+          "",
+          "a3 — prophylaxis, take b4",
+          "h6 — simplify; White’s space edges"
         ]
       }
     ]
@@ -12604,6 +12816,28 @@
           "book:ruy-lopez",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "Nxe4 — the Open Ruy grab",
+          "d4 — strike the centre back",
+          "",
+          "",
+          "d5 — prop the knight, claim space",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "O-O — Nbd2 heads to b3"
         ]
       }
     ]
@@ -12738,6 +12972,13 @@
           "concept:pos-center",
           "concept:att-queenside-attack",
           "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ],
+        "learnCues": [
+          "a4 — clamp the b5 break",
+          "Rb8 — load the b-file",
+          "Qe1 — start the queen’s trek",
+          "b6 — prep …b7 and …b5",
+          "Qh4 — the attack; race with …b5"
         ]
       }
     ]
@@ -12909,6 +13150,16 @@
           "concept:pos-center",
           "concept:att-queenside-attack",
           "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ],
+        "learnCues": [
+          "h3 — a small waiting move",
+          "e5 — the freeing break",
+          "dxe5 — release the tension",
+          "dxe5 — open d-file, firm e5",
+          "Be3 — eye the centre",
+          "Qe7 — back e5, eye the d-file",
+          "Qd3 — centralise",
+          "Nh5 — toward f4; active, equal"
         ]
       }
     ]
@@ -13027,6 +13278,12 @@
           "concept:pos-center",
           "concept:att-queenside-attack",
           "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ],
+        "learnCues": [
+          "Bh6 — offer to trade the defender",
+          "Bxh6 — allow it; counterplay arrives",
+          "Qxh6 — queen near the king",
+          "Qa5 — strike first, back …b5-b4"
         ]
       }
     ]
@@ -13212,6 +13469,18 @@
           "concept:pos-center",
           "concept:att-queenside-attack",
           "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ],
+        "learnCues": [
+          "f4 — begin the kingside storm",
+          "b5 — the queenside answer",
+          "e5 — lunge at the f6-knight",
+          "b4 — hit the c3-knight",
+          "exf6 — grab the knight",
+          "bxc3 — smash the king’s shield",
+          "Qxc3 — recapture",
+          "exf6 — open the centre, regain it",
+          "Bh4 — keep the bishop",
+          "d5 — the hammer; attack is real"
         ]
       }
     ]
@@ -13381,6 +13650,16 @@
           "concept:pos-center",
           "concept:att-queenside-attack",
           "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ],
+        "learnCues": [
+          "Re1 — centralise the rook",
+          "Qc7 — behind the centre and diagonal",
+          "h3 — make luft",
+          "b6 — open the bishop’s road",
+          "Bg5 — try the pin",
+          "Bb7 — calm; eye the long diagonal",
+          "dxe5 — release the tension",
+          "Nxe5 — strong knight; equal Lion"
         ]
       }
     ]
@@ -13476,6 +13755,12 @@
           "concept:pos-center",
           "concept:att-queenside-attack",
           "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ],
+        "learnCues": [
+          "a4 — queenside expansion",
+          "Nd7 — clear the f-pawn’s path",
+          "Be3 — develop the bishop",
+          "f5 — the thematic break; equal"
         ]
       }
     ]
@@ -13701,6 +13986,20 @@
           "concept:pos-center",
           "concept:att-queenside-attack",
           "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ],
+        "learnCues": [
+          "Be3 — develop the bishop",
+          "Nbd7 — back e5",
+          "O-O — castle",
+          "Be7 — modest and solid",
+          "h3 — question the bishop",
+          "Bxf3 — trade, loosen the centre",
+          "Qxf3 — recapture",
+          "O-O — safe and developed",
+          "Ne2 — reroute the knight",
+          "c5 — strike the centre again",
+          "dxe5 — release the tension",
+          "dxe5 — open centre; easy equality"
         ]
       }
     ]
@@ -13793,6 +14092,11 @@
           "concept:pos-center",
           "concept:att-queenside-attack",
           "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ],
+        "learnCues": [
+          "Nfd7 — the accurate inward retreat",
+          "Be2 — White supports",
+          "c5 — the refutation; hit the chain"
         ]
       }
     ]
@@ -18175,6 +18479,15 @@
           "concept:att-queenside-attack",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+        ],
+        "learnCues": [
+          "Kb1 — tuck the king, prepare the storm",
+          "b5 — the queenside avalanche",
+          "g4 — race on the kingside",
+          "b4 — hit the c3-knight",
+          "Nd5 — jump in, not retreat",
+          "Bxd5 — trade it off",
+          "exd5 — the b-file opens at the king"
         ]
       }
     ]
@@ -18311,6 +18624,14 @@
           "concept:att-queenside-attack",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+        ],
+        "learnCues": [
+          "Nd5 — occupy the outpost",
+          "Bxd5 — trade it off at once",
+          "exd5 — recapture, close the centre",
+          "Nbd7 — reroute toward c5",
+          "c4 — grab queenside space",
+          "a5 — expand; comfortably equal"
         ]
       }
     ]
@@ -18441,6 +18762,14 @@
           "concept:att-queenside-attack",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+        ],
+        "learnCues": [
+          "g4 — launch the kingside storm",
+          "b5 — the queenside counter",
+          "Bxf6 — trade to loosen the grip",
+          "Nxf6 — recapture naturally",
+          "g5 — kick the knight",
+          "Nd7 — reroute; …b4 next"
         ]
       }
     ]
@@ -18567,6 +18896,14 @@
           "concept:att-queenside-attack",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+        ],
+        "learnCues": [
+          "e5 — blow open the centre",
+          "dxe5 — take calmly",
+          "fxe5 — recapture, lines open",
+          "Nfd7 — retreat to untangle",
+          "Be2 — develop toward the attack",
+          "Bb4 — pin, a pawn up"
         ]
       }
     ]
@@ -18697,6 +19034,14 @@
           "concept:att-queenside-attack",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+        ],
+        "learnCues": [
+          "Kb1 — tuck the king away",
+          "b5 — the queenside storm",
+          "g4 — race on the kingside",
+          "b4 — hit the c3-knight",
+          "Nd5 — jump in, not retreat",
+          "Bxd5 — trade it; the b-file opens"
         ]
       }
     ]
@@ -18797,6 +19142,12 @@
           "concept:att-queenside-attack",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+        ],
+        "learnCues": [
+          "Nd5 — the attacked knight jumps",
+          "Nxd5 — trade it off",
+          "Bxd5 — recapture with the bishop",
+          "exd5 — open the e-file, queenside rolls"
         ]
       }
     ]
@@ -19033,6 +19384,14 @@
           "concept:att-queenside-attack",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+        ],
+        "learnCues": [
+          "Nb3 — retreat the knight",
+          "Nge5 — return to e5",
+          "O-O-O — commit the king queenside",
+          "b5 — the queenside storm",
+          "Kb1 — tuck as Black charges",
+          "b4 — open lines at the king"
         ]
       }
     ]
@@ -19178,6 +19537,14 @@
           "concept:att-queenside-attack",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+        ],
+        "learnCues": [
+          "a5 — clamp the queenside",
+          "Rc8 — take the half-open c-file",
+          "Nd5 — occupy the outpost",
+          "Bxd5 — trade it off",
+          "exd5 — recapture, close the centre",
+          "Nb6 — press d5 and a4"
         ]
       }
     ]
@@ -21762,6 +22129,12 @@
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "Ne7 — sidestep g4, eye f5/d5",
+          "Nh4 — eye f5/g6, ease the cramp",
+          "O-O-O — king safe behind the clamp",
+          "Bd1 — reroute; the Advance edge"
         ]
       }
     ]
@@ -21890,6 +22263,12 @@
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "Rg1 — contest the g-file",
+          "Nf5 — the dream square, hits d4",
+          "Qf2 — untangle, eye the f-file",
+          "Qc6 — rake g2, back the c3-passer"
         ]
       }
     ]
@@ -22007,6 +22386,12 @@
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "g3 — shelter the king",
+          "cxd4 — open lines at the king",
+          "Nxd4 — recapture; the race is on",
+          "Nb6 — head for c4; the storm rolls"
         ]
       }
     ]
@@ -22143,6 +22528,12 @@
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "Bg5 — pin, lean on d5",
+          "O-O — castle, pile on d4",
+          "Bh4 — keep the pin",
+          "Nh5 — eye f4; d4 a target"
         ]
       }
     ]
@@ -22252,6 +22643,12 @@
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "Rfe1 — contest the e-file",
+          "Qc7 — line up toward h2",
+          "Bg3 — offer a bishop trade",
+          "Bxg3 — win the bishop pair, press"
         ]
       }
     ]
@@ -22365,6 +22762,12 @@
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "Qf4 — centralise, prep the advance",
+          "Nf6 — hit the e4-knight",
+          "c4 — blunt the b7-bishop",
+          "Qb8 — clear d8, eye the b-file"
         ]
       }
     ]
@@ -22575,6 +22978,12 @@
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "Rxd3 — but the attacker is gone",
+          "Qb6 — safe, eye b2, hold the pawn",
+          "Be3 — develop, hit the queen",
+          "Bc5 — trade; a clean pawn up"
         ]
       }
     ]
@@ -22674,6 +23083,12 @@
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "h4 — hunt kingside distraction",
+          "Qe7 — connect, prepare O-O-O",
+          "Qf4 — centralise the queen",
+          "Bc6 — activate; the wrecked pawns tell"
         ]
       }
     ]
@@ -22781,6 +23196,12 @@
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "Rad1 — eye the d-file",
+          "Qc7 — connect, eye the c-file",
+          "Bxf6 — damage the kingside pawns",
+          "gxf6 — clamp e5/g5; attacking assets"
         ]
       }
     ]
