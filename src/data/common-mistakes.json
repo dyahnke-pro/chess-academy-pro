@@ -742,14 +742,6 @@
       "explanation": "3.d3 is a quiet, harmless move that lets Black equalize comfortably. The principled choice is 3.Nxe5 (mainline) or 3.d4 (Steinitz attack). Choose your line and play it sharply."
     }
   ],
-  "queens-gambit": [
-    {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 4",
-      "wrongMove": "h6",
-      "correctMove": "Be7",
-      "explanation": "4…h6 is a common but weakening reply — after 5.Bxf6 Qxf6 Black accepts an isolated pawn structure without compensation. The mainline 4…Be7 develops and unpins the f6-knight indirectly."
-    }
-  ],
   "qga": [
     {
       "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
