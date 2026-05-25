@@ -6,6 +6,8 @@ import {
   clearAppAuditLog,
   installGlobalErrorHooks,
   installConsoleBackdoor,
+  setAuditStreamConfig,
+  clearAuditStreamConfig,
 } from './appAuditor';
 
 describe('appAuditor', () => {
@@ -52,7 +54,7 @@ describe('appAuditor', () => {
     expect(await getAppAuditLog()).toEqual([]);
   });
 
-  it('caps at 300 entries (rolling window)', async () => {
+  it('caps at 300 entries (rolling window) and emits at most one truncation marker', async () => {
     for (let i = 0; i < 310; i++) {
       await logAppAudit({
         kind: 'bad-fen',
@@ -62,10 +64,24 @@ describe('appAuditor', () => {
       });
     }
     const log = await getAppAuditLog();
+    // Regression: the truncation marker used to be appended AFTER the
+    // slice, storing cap+1 (301) and making every subsequent write
+    // report a fresh drop forever. The stored array must never exceed
+    // the cap.
     expect(log.length).toBe(300);
-    // Oldest 10 should have been evicted
-    expect(log[0].summary).toBe('entry 10');
-    expect(log[log.length - 1].summary).toBe('entry 309');
+    // A rolling buffer drops one entry on every write once full, so a
+    // marker-per-drop floods the log (a production export was 151/301
+    // markers). Exactly one marker per session now.
+    const markers = log.filter((e) => e.kind === 'audit-stream-truncated');
+    expect(markers.length).toBe(1);
+    // The newest real entry is still the last write; real entries stay
+    // in insertion order.
+    const real = log.filter((e) => e.kind !== 'audit-stream-truncated');
+    expect(real[real.length - 1].summary).toBe('entry 309');
+    const realSummaries = real.map((e) => e.summary);
+    expect(realSummaries).toEqual([...realSummaries].sort((a, b) =>
+      Number(a.split(' ')[1]) - Number(b.split(' ')[1]),
+    ));
   });
 
   it('survives JSON parse failures by returning an empty log', async () => {
@@ -100,6 +116,44 @@ describe('appAuditor', () => {
     for (let i = 0; i < 20; i++) {
       expect(summaries.has(`entry ${i}`)).toBe(true);
     }
+  });
+
+  describe('audit-stream auth failure', () => {
+    it('stops streaming for the session after a 401 instead of retrying every audit', async () => {
+      const calls: string[] = [];
+      const originalFetch = globalThis.fetch;
+      globalThis.fetch = (async (url: string | URL) => {
+        calls.push(String(url));
+        return new Response(JSON.stringify({ error: 'unauthorized' }), {
+          status: 401,
+        });
+      }) as typeof fetch;
+      try {
+        await setAuditStreamConfig('https://example.test/api/audit-stream', 'wrong-secret');
+        for (let i = 0; i < 6; i++) {
+          await logAppAudit({
+            kind: 'bad-fen',
+            category: 'subsystem',
+            source: 'auth-test',
+            summary: `e${i}`,
+          });
+        }
+        // Let the fire-and-forget stream POSTs + the disable latch settle.
+        await new Promise((r) => setTimeout(r, 50));
+        // The first POST 401s and disables streaming for the session, so
+        // we must NOT see one POST per audit (pre-fix: 6).
+        expect(calls.length).toBeGreaterThanOrEqual(1);
+        expect(calls.length).toBeLessThan(6);
+        // Exactly one actionable rollup explaining the disable.
+        const log = await getAppAuditLog();
+        const rollups = log.filter((e) => e.kind === 'audit-stream-post-failed');
+        expect(rollups.length).toBe(1);
+        expect(rollups[0].summary).toContain('streaming disabled');
+      } finally {
+        globalThis.fetch = originalFetch;
+        await clearAuditStreamConfig();
+      }
+    });
   });
 
   describe('installGlobalErrorHooks', () => {
