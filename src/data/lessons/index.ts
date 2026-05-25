@@ -72,6 +72,8 @@ import { OLD_INDIAN_DEFENCE_LESSON } from './oldIndianDefence';
 import { OLD_INDIAN_DEFENCE_VARIATION_LESSONS } from './oldIndianDefenceVariations';
 import { TWO_KNIGHTS_DEFENCE_LESSON } from './twoKnightsDefence';
 import { TWO_KNIGHTS_DEFENCE_VARIATION_LESSONS } from './twoKnightsDefenceVariations';
+import { BUDAPEST_GAMBIT_LESSON } from './budapestGambit';
+import { BUDAPEST_GAMBIT_VARIATION_LESSONS } from './budapestGambitVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -125,6 +127,7 @@ const LESSONS: Record<string, LessonScript> = {
   [QUEENS_INDIAN_DEFENCE_LESSON.openingId]: QUEENS_INDIAN_DEFENCE_LESSON,
   [OLD_INDIAN_DEFENCE_LESSON.openingId]: OLD_INDIAN_DEFENCE_LESSON,
   [TWO_KNIGHTS_DEFENCE_LESSON.openingId]: TWO_KNIGHTS_DEFENCE_LESSON,
+  [BUDAPEST_GAMBIT_LESSON.openingId]: BUDAPEST_GAMBIT_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -164,6 +167,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...QUEENS_INDIAN_DEFENCE_VARIATION_LESSONS,
   ...OLD_INDIAN_DEFENCE_VARIATION_LESSONS,
   ...TWO_KNIGHTS_DEFENCE_VARIATION_LESSONS,
+  ...BUDAPEST_GAMBIT_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

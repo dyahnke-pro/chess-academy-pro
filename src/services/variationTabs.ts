@@ -366,6 +366,15 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /fried liver/i, label: 'Fried Liver' },
     { test: /max lange/i, label: 'Max Lange' },
   ],
+  // Budapest Gambit — Black's surprise 2…e5 gambit. Main-line pill = the Bf4
+  // main (…Ng4/…Bb4+/…Ngxe5 recoup, repertoire pgn). Tabs = the two distinct
+  // approaches: the Adler (3.Nf3 / …Bc5) and the wild Fajarowicz (3…Ne4). These
+  // are short gambit lines that resolve before the middlegame, authored as
+  // `kind: 'roadmap'` (sanctioned depth opt-out).
+  'budapest-gambit': [
+    { test: /adler/i, label: 'Adler' },
+    { test: /fajarowicz/i, label: 'Fajarowicz' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same

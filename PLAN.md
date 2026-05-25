@@ -24,15 +24,27 @@ variations with explanations + pgn).
 | 2 | philidor-defence | book:philidor-defence | DONE (4 tabs; dropped d3 hybrid — DB-anchor 4p) |
 | 3 | qgd | book:qgd | DONE (4 tabs) |
 | 4 | qga | wiki+concepts | DONE (3 tabs) |
-| 5 | slav-defence | wiki+concepts | pending (depth caveat: many vars <20p) |
-| 6 | semi-slav | wiki+concepts | pending |
-| 7 | kings-indian-defence | wiki+concepts | pending |
-| 8 | grunfeld-defence | wiki+concepts | pending |
-| 9 | benoni-defence | wiki+concepts | pending |
-| 10 | queens-indian | wiki+concepts | pending |
-| 11 | budapest-gambit | wiki+concepts | pending |
-| 12 | old-indian-defence | book:old-indian-defence | pending |
-| 13 | two-knights-defence | book:two-knights-defence | pending |
+| 5 | slav-defence | wiki+concepts | DONE (2 tabs — Geller/Schlechter; rest <20p) |
+| 6 | semi-slav | wiki+concepts | DONE (4 tabs) |
+| 7 | kings-indian-defence | wiki+concepts | DONE (3 tabs; Sämisch/Petrosian/Averbakh deferred) |
+| 8 | grunfeld-defence | wiki+concepts | DONE (3 tabs) |
+| 9 | benoni-defence | wiki+concepts | DONE (3 tabs) |
+| 10 | queens-indian | wiki+concepts | DONE (3 tabs) |
+| 11 | budapest-gambit | wiki+concepts | DONE (2 roadmap tabs — gambit lines short) |
+| 12 | old-indian-defence | book:old-indian-defence | DONE (2 tabs) |
+| 13 | two-knights-defence | book:two-knights-defence | DONE (3 tabs; Ulvestad/Traxler deferred) |
+
+### ALL 13 BLACK MAIN-40 OPENINGS CONVERTED TO MASTERCLASSES.
+- #1–10 merged to main via PR #676; #12,#13 pushed direct to main; #11 (Budapest) pending final push.
+- **Deferred per-opening items** (flagged, not bugs): per-tab middlegame plans
+  (only main plan built each — other tabs self-hide gracefully); model games
+  (omitted — no verified Black WIN sourced; David's carve-out); a handful of
+  SHARP variation tabs deferred pending engine-soundness verification (KID
+  Sämisch/Petrosian/Averbakh, Two Knights Ulvestad/Traxler) — when unsure, skip.
+- **Remaining black openings NOT in main-40** (David's "add other good black
+  openings missing"): none outstanding — the 25 black repertoire entries are now
+  all either masterclasses or fold-ins. (If new ones are wanted, they'd need
+  fresh repertoire records first.)
 
 ### Per-opening notes (done)
 - Each: main lesson + variation tabs (≥20p, two registers, sources, lead-the-eye

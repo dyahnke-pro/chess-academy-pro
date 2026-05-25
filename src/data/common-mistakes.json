@@ -1201,13 +1201,23 @@
       "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
       "wrongMove": "Ne4",
       "correctMove": "Ng4",
-      "explanation": "3…Ne4 (Fajarowicz) is sharp but theoretically dubious — after 4.Nf3 Nc6 5.Nbd2 the knight is forced back. The mainline 3…Ng4 immediately threatens …Nxe5 and creates more practical chances."
+      "explanation": "3…Ne4 (Fajarowicz) is sharp but theoretically dubious — after 4.Nf3 Nc6 5.Nbd2 the knight is forced back. The mainline 3…Ng4 immediately threatens …Nxe5 and creates more practical chances.",
+      "shortNarration": "…Ng4 — the sound main; …Ne4 is dubious.",
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Budapest_Gambit"
+      ]
     },
     {
       "fen": "rnbqkb1r/pppp1ppp/8/4P3/2P3n1/5N2/PP2PPPP/RNBQKB1R b KQkq - 2 4",
       "wrongMove": "Ngxe5",
       "correctMove": "Bc5",
-      "explanation": "4…Ngxe5? trades the central knight too early — after 5.Nxe5 White's pieces dominate. The principled 4…Bc5 develops the bishop with pressure on f2, then recaptures …Nxe5 at the right moment."
+      "explanation": "4…Ngxe5? trades the central knight too early — after 5.Nxe5 White's pieces dominate. The principled 4…Bc5 develops the bishop with pressure on f2, then recaptures …Nxe5 at the right moment.",
+      "shortNarration": "…Bc5 — develop first, don’t rush …Ngxe5.",
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Budapest_Gambit"
+      ]
     }
   ],
   "kings-indian-attack": [

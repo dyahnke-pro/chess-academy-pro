@@ -58,6 +58,7 @@ import { getBenoniDefenceTabPlanIds } from '../../services/benoniDefenceMastercl
 import { getQueensIndianDefenceTabPlanIds } from '../../services/queensIndianDefenceMasterclassTabs';
 import { getOldIndianDefenceTabPlanIds } from '../../services/oldIndianDefenceMasterclassTabs';
 import { getTwoKnightsDefenceTabPlanIds } from '../../services/twoKnightsDefenceMasterclassTabs';
+import { getBudapestGambitTabPlanIds } from '../../services/budapestGambitMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
@@ -1104,6 +1105,7 @@ export function OpeningDetailPage(): JSX.Element {
     getQueensIndianDefenceTabPlanIds(opening.id, tabKey) ??
     getOldIndianDefenceTabPlanIds(opening.id, tabKey) ??
     getTwoKnightsDefenceTabPlanIds(opening.id, tabKey) ??
+    getBudapestGambitTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).

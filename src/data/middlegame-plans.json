@@ -8142,54 +8142,6 @@
     ]
   },
   {
-    "id": "mp-budapest-active-piece-play",
-    "openingId": "budapest-gambit",
-    "criticalPositionFen": "r1bq1rk1/pppp1ppp/8/2b1n3/2P5/4P3/PP2BPPP/RNBQ1RK1 w - - 2 9",
-    "title": "Active piece play with …Bb4+ + …Nxe5",
-    "overview": "The Budapest Gambit's main idea. Black sacrifices the e-pawn for rapid piece development. After dxe5 Ng4 and the eventual …Nxe5 recapture, Black has active piece play around White's king. The plan: pressure the f2 square with the Bc5 + Ne5 battery and prepare …Qf6 or …Qh4 for kingside attack.",
-    "pawnBreaks": [
-      {
-        "move": "d6",
-        "explanation": "Once Black has consolidated, …d6 prepares …f5 or …c5 to challenge White's center and open lines for the rook."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bf8-b4-c5",
-        "explanation": "The bishop's diagonal pressure on f2 is the Budapest's main weapon. Combined with …Nc6-e5 attack, this creates lasting tactical chances."
-      }
-    ],
-    "typicalMistakes": [
-      "Trading the Bc5 too early — the bishop's pressure on f2 IS the gambit's compensation.",
-      "Failing to play …d6 — Black's queenside stays cramped and the bishop on c5 has nowhere good to go."
-    ]
-  },
-  {
-    "id": "mp-budapest-fajarowicz-knight-attack",
-    "openingId": "budapest-gambit",
-    "criticalPositionFen": "rn1q1rk1/ppp2ppp/3b4/8/2P1b3/4PN2/PP3PPP/R1BQKB1R w KQ - 1 9",
-    "title": "Fajarowicz: …Ne4 attacking f2",
-    "overview": "The Fajarowicz Variation (Ne4) is even more provocative than the mainline Budapest. The knight on e4 attacks f2 directly and prepares …d6 for piece development. Black accepts a permanent material deficit for active piece play and pressure on White's king.",
-    "pawnBreaks": [
-      {
-        "move": "f5",
-        "explanation": "Once the knight on e4 is defended, …f5 supports the central piece and creates kingside attacking chances. The combination of …f5 + …Bf5 + …Qh4 creates direct threats against White's king."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc8-f5 active development",
-        "explanation": "The c8-bishop develops to f5 attacking the e4-pawn (or the e4-knight after captures). This combines with the Bd6 to create a kingside attacking battery."
-      }
-    ],
-    "typicalMistakes": [
-      "Allowing White to trade pieces — the Fajarowicz needs all pieces on the board to compensate for the missing pawn.",
-      "Pushing …f5 before piece coordination — White's exf5 with central pressure is overwhelming."
-    ]
-  },
-  {
     "id": "mp-bird-classical-kingside-attack",
     "openingId": "birds-opening",
     "criticalPositionFen": "rnbq1rk1/pp2ppbp/5np1/2pp4/5P2/3PPN2/PPP1B1PP/RNB1QRK1 b - - 1 7",
@@ -28205,6 +28157,120 @@
             },
             {
               "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-budapestgambit-main",
+    "openingId": "budapest-gambit",
+    "criticalPositionFen": "r1b2rk1/ppp1qppp/3p4/4n3/2P2B2/P3P3/1P1QBPPP/R3K2R w KQ - 0 12",
+    "title": "Budapest: Activity Around the e5-Knight",
+    "overview": "Out of the gambit Black has recouped the pawn and reached the position the Budapest is all about: a strong knight on e5, harmonious pieces, and the initiative. The plan is pure activity — develop the light bishop to f5, swing a rook to the e-file behind the e5-knight, and press White's slightly loose position. The surprise gambit has handed Black an easy, fighting game.",
+    "pawnBreaks": [
+      "…d5 to free the position when fully prepared",
+      "…f5 to support the e5-knight and gain space"
+    ],
+    "pieceManeuvers": [
+      "…Bf5 to the active b1–h7 diagonal",
+      "…Rfe8 to the e-file behind the e5-knight"
+    ],
+    "strategicThemes": [
+      "The strong e5-knight",
+      "Active piece play",
+      "Pressing from a surprise gambit"
+    ],
+    "endgameTransitions": [
+      "The level material and active pieces give a comfortable endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b2rk1/ppp1qppp/3p4/4n3/2P2B2/P3P3/1P1QBPPP/R3K2R w KQ - 0 12",
+        "moves": [
+          "O-O",
+          "Bf5",
+          "Rfd1",
+          "Rfe8"
+        ],
+        "annotations": [
+          "O-O — White completes development and tucks the king away.",
+          "…Bf5 — the light bishop takes an active diagonal, eyeing c2 and the white queenside.",
+          "Rfd1 contests the open d-file.",
+          "…Rfe8 swings the rook to the e-file, backing the strong e5-knight and the central squares. There is the recouped Budapest: the gambit pawn long since regained, every piece active, and a comfortable, fighting game with surprise on Black’s side."
+        ],
+        "learnCues": [
+          "O-O — White castles.",
+          "…Bf5 — active diagonal.",
+          "Rfd1 — White’s d-file.",
+          "…Rfe8 — back the e5-knight."
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Budapest_Gambit"
+        ],
+        "title": "Budapest: Activity Around the e5-Knight",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "f5",
+              "to": "c2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
