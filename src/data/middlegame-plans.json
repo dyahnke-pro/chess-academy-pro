@@ -17826,5 +17826,962 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-siciliandragon-main",
+    "openingId": "sicilian-dragon",
+    "title": "Yugoslav: Black's c-File Attack",
+    "criticalPositionFen": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - - 6 10",
+    "overview": "The Dragon's core plan: Black piles down the half-open c-file, swings the knight into the c4 outpost, and trades into a raging attack on White's queenside king. Speed is everything — Black aims to crash through before White's h-pawn arrives.",
+    "pawnBreaks": [
+      {
+        "move": "b5-b4",
+        "explanation": "Black often follows with b5 and b4 to pry the c3-knight away and open more lines at the king.",
+        "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - - 6 10"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc6-e5-c4",
+        "explanation": "The knight reroutes to the c4 outpost, where it pressures b2, e3 and the king."
+      }
+    ],
+    "strategicThemes": [
+      "The half-open c-file is the highway to White's king.",
+      "The knight on c4 is the Dragon's spearhead.",
+      "Trade pieces toward the king — speed beats material."
+    ],
+    "endgameTransitions": [
+      "The attack usually decides; if it simplifies, Black's active rook holds the edge."
+    ],
+    "playableLines": [
+      {
+        "title": "Yugoslav: Black's c-File Attack",
+        "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/2KR3R b - - 6 10",
+        "moves": [
+          "Rc8",
+          "Bb3",
+          "Ne5",
+          "h4",
+          "Nc4",
+          "Bxc4",
+          "Rxc4"
+        ],
+        "annotations": [
+          "Rc8 — the rook seizes the half-open c-file, aimed at the king.",
+          "Bb3 — White tucks the bishop off the c-file.",
+          "Ne5 — the knight heads for the c4 outpost.",
+          "h4 — White begins the kingside storm.",
+          "Nc4 — the knight leaps in, hitting the queen on d2 and b2.",
+          "Bxc4 — White trades off the powerful knight.",
+          "Rxc4 — the rook recaptures, pressure pouring down the c-file."
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "c4",
+              "to": "d2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c4",
+              "to": "b2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-siciliandragon-soltis",
+    "openingId": "sicilian-dragon",
+    "title": "Soltis: Freeze the Storm, then Strike",
+    "criticalPositionFen": "2rq1rk1/pp1bppbp/3p1np1/4n3/3NP3/1BN1BP2/PPPQ2PP/2KR3R w - - 9 12",
+    "overview": "The Soltis plan: meet White's h4 with h5, nailing the kingside shut, then turn the full force of the c-file and the c4-knight against White's king with no counterplay coming the other way.",
+    "pawnBreaks": [
+      {
+        "move": "h5",
+        "explanation": "h5 freezes White's h-pawn and kills the entire kingside storm before it begins.",
+        "fen": "2rq1rk1/pp1bppbp/3p1np1/4n3/3NP3/1BN1BP2/PPPQ2PP/2KR3R w - - 9 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Ne5-c4",
+        "explanation": "Once the kingside is locked, the knight jumps to c4 to spearhead the attack."
+      }
+    ],
+    "strategicThemes": [
+      "h5 neutralises White's whole reason for castling long.",
+      "With the storm frozen, Black attacks for free.",
+      "The c-file and the c4-knight do the work."
+    ],
+    "endgameTransitions": [
+      "A frozen kingside leaves Black pressing risk-free on the queenside."
+    ],
+    "playableLines": [
+      {
+        "title": "Soltis: Freeze the Storm, then Strike",
+        "fen": "2rq1rk1/pp1bppbp/3p1np1/4n3/3NP3/1BN1BP2/PPPQ2PP/2KR3R w - - 9 12",
+        "moves": [
+          "h4",
+          "h5",
+          "Kb1",
+          "Nc4",
+          "Bxc4",
+          "Rxc4"
+        ],
+        "annotations": [
+          "h4 — White lunges, intending h5 to crack the king open.",
+          "h5 — Black slams the door; the storm is frozen.",
+          "Kb1 — White tucks the king and waits.",
+          "Nc4 — Black switches the attack to the queenside.",
+          "Bxc4 — White trades the strong knight.",
+          "Rxc4 — the rook pours down the open c-file."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-siciliandragon-chinese",
+    "openingId": "sicilian-dragon",
+    "title": "Chinese Dragon: the b-File Avalanche",
+    "criticalPositionFen": "1r1q1rk1/pp1bppbp/2np1np1/8/3NP3/1BN1BP2/PPPQ2PP/2KR3R b - - 8 11",
+    "overview": "The Chinese Dragon plan: with the rook already on b8, Black charges the b-pawn — b5 then b4 — to blast open the b-file straight at White's king, often a full tempo faster than White's kingside play.",
+    "pawnBreaks": [
+      {
+        "move": "b4",
+        "explanation": "b4 hits the c3-knight and rips the b-file open in front of White's king.",
+        "fen": "1r1q1rk1/pp1bppbp/2np1np1/8/3NP3/1BN1BP2/PPPQ2PP/2KR3R b - - 8 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Rb8 behind the b-pawn",
+        "explanation": "The rook waits on b8 so every pawn push comes with heavy support."
+      }
+    ],
+    "strategicThemes": [
+      "The b-pawn storm arrives with the rook already behind it.",
+      "b4 tears open the file at the king.",
+      "Raw speed — attack first, ask questions never."
+    ],
+    "endgameTransitions": [
+      "The open b-file gives Black a lasting initiative even if pieces come off."
+    ],
+    "playableLines": [
+      {
+        "title": "Chinese Dragon: the b-File Avalanche",
+        "fen": "1r1q1rk1/pp1bppbp/2np1np1/8/3NP3/1BN1BP2/PPPQ2PP/2KR3R b - - 8 11",
+        "moves": [
+          "b5",
+          "h4",
+          "b4",
+          "Nd5",
+          "Nxd5",
+          "Bxd5"
+        ],
+        "annotations": [
+          "b5 — the b-pawn charges, the rook waiting behind it.",
+          "h4 — White races on the other wing.",
+          "b4 — the pawn hits the c3-knight, tearing open the b-file.",
+          "Nd5 — White jumps the knight in rather than retreat.",
+          "Nxd5 — Black trades it off.",
+          "Bxd5 — and the b-file stands open at the king."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-siciliandragon-classical",
+    "openingId": "sicilian-dragon",
+    "title": "Classical: Comfortable Equality",
+    "criticalPositionFen": "r2q1rk1/pp2ppbp/2npbnp1/8/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 8 10",
+    "overview": "Against the quiet Be2 Classical, Black has no storm to fear. The plan is simple good chess: the knight reroutes to the c4 outpost via a5, trades off White's strong bishop, and Black equalises with every piece on a fine square.",
+    "pawnBreaks": [
+      {
+        "move": "a5-a4",
+        "explanation": "a5 and a4 gain queenside space and harass the b3-knight in some lines.",
+        "fen": "r2q1rk1/pp2ppbp/2npbnp1/8/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 8 10"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc6-a5-c4",
+        "explanation": "The knight swings to the c4 outpost to trade White's good light-squared bishop."
+      }
+    ],
+    "strategicThemes": [
+      "No king hunt — Black simply plays solid chess.",
+      "The c4 outpost trades White's best minor piece.",
+      "The long-diagonal bishop is a lasting asset."
+    ],
+    "endgameTransitions": [
+      "A sound structure and the strong bishop give Black a pleasant endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Classical: Comfortable Equality",
+        "fen": "r2q1rk1/pp2ppbp/2npbnp1/8/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 8 10",
+        "moves": [
+          "f4",
+          "Na5",
+          "f5",
+          "Bc4",
+          "Bxc4",
+          "Nxc4"
+        ],
+        "annotations": [
+          "f4 — White grabs kingside space.",
+          "Na5 — the knight heads for the c4 outpost.",
+          "f5 — White pushes on, hitting the e6-bishop.",
+          "Bc4 — Black trades off White's good bishop.",
+          "Bxc4 — White recaptures on c4.",
+          "Nxc4 — Black is comfortably equal, every piece placed."
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "a5",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-siciliandragon-levenfish",
+    "openingId": "sicilian-dragon",
+    "title": "Levenfish: Develop and Equalise",
+    "criticalPositionFen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10",
+    "overview": "After the Nbd7 antidote has defused White's early f4, Black develops smoothly and swings the knight to the active c5 square, hitting e4, then expands on the queenside with full, comfortable equality.",
+    "pawnBreaks": [
+      {
+        "move": "b5-b4",
+        "explanation": "b5 and b4 expand on the queenside and harass the c3-knight.",
+        "fen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nd7-c5",
+        "explanation": "The knight jumps to c5, hitting e4 and eyeing d3."
+      }
+    ],
+    "strategicThemes": [
+      "Nbd7 already killed the f4-push's venom.",
+      "The c5-knight is active, pressing e4.",
+      "Queenside expansion gives Black the easier game."
+    ],
+    "endgameTransitions": [
+      "Sound and active, Black is at least equal heading into the endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Levenfish: Develop and Equalise",
+        "fen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10",
+        "moves": [
+          "Qe1",
+          "Nc5",
+          "Be2",
+          "b5",
+          "Qh4",
+          "b4"
+        ],
+        "annotations": [
+          "Qe1 — White reroutes the queen toward the kingside.",
+          "Nc5 — the knight jumps to an active post, hitting e4.",
+          "Be2 — White preserves the light-squared bishop.",
+          "b5 — Black expands on the queenside.",
+          "Qh4 — White eyes the kingside.",
+          "b4 — the pawn hits the c3-knight; Black is fully equal."
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "c5",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-siciliandragon-accelerated",
+    "openingId": "sicilian-dragon",
+    "title": "Accelerated: Squeeze the Maroczy Bind",
+    "criticalPositionFen": "r2q1rk1/pp1bppbp/3p1np1/8/2PBP3/2N5/PP2BPPP/R2Q1RK1 w - - 1 11",
+    "overview": "Against the Maroczy Bind, Black plays the patient anti-bind plan: the bishop to c6 pressures e4, the a-pawn grabs queenside space, and the knight reroutes toward c5, building slowly toward the freeing f5 break.",
+    "pawnBreaks": [
+      {
+        "move": "f5",
+        "explanation": "The f5 break is Black's thematic freeing lever against the bind once the pieces are ready.",
+        "fen": "r2q1rk1/pp1bppbp/3p1np1/8/2PBP3/2N5/PP2BPPP/R2Q1RK1 w - - 1 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf6-d7-c5",
+        "explanation": "The knight reroutes toward the c5 outpost to pressure e4 and the queenside."
+      }
+    ],
+    "strategicThemes": [
+      "Pressure the e4-pawn down the long diagonal.",
+      "Expand with a5 and reroute the knight to c5.",
+      "Patience: trade, restrain, then break with f5."
+    ],
+    "endgameTransitions": [
+      "Solid as a rock — the bind has been the graveyard of impatient White players."
+    ],
+    "playableLines": [
+      {
+        "title": "Accelerated: Squeeze the Maroczy Bind",
+        "fen": "r2q1rk1/pp1bppbp/3p1np1/8/2PBP3/2N5/PP2BPPP/R2Q1RK1 w - - 1 11",
+        "moves": [
+          "Qd2",
+          "Bc6",
+          "f3",
+          "a5",
+          "b3",
+          "Nd7"
+        ],
+        "annotations": [
+          "Qd2 — White consolidates the bind.",
+          "Bc6 — the bishop targets the e4-pawn down the long diagonal.",
+          "f3 — White props up e4.",
+          "a5 — Black grabs queenside space, eyeing a4.",
+          "b3 — White restrains the a-pawn.",
+          "Nd7 — the knight reroutes toward the c5 outpost."
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "c6",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-siciliandragon-antibg5",
+    "openingId": "sicilian-dragon",
+    "title": "Anti-Dragon Bg5: Seize the Initiative",
+    "criticalPositionFen": "r1bqk2r/pp2ppb1/2np2pp/8/4PBn1/1NN5/PPPQ1PPP/R3KB1R b KQkq - 3 10",
+    "overview": "Against the Bg5 sideline Black plays actively: a6 prepares the b5 expansion, the knight returns to the strong e5 square, and Black charges the queenside while White's slow setup achieves nothing.",
+    "pawnBreaks": [
+      {
+        "move": "b5",
+        "explanation": "b5 launches the queenside expansion that gives Black the initiative.",
+        "fen": "r1bqk2r/pp2ppb1/2np2pp/8/4PBn1/1NN5/PPPQ1PPP/R3KB1R b KQkq - 3 10"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Ng4-e5",
+        "explanation": "The knight returns from g4 to the strong central e5 square."
+      }
+    ],
+    "strategicThemes": [
+      "Active, concrete play neutralises the Bg5 try.",
+      "The knight belongs on the strong e5 square.",
+      "a6 and b5 hand Black the initiative."
+    ],
+    "endgameTransitions": [
+      "Having seized the initiative, Black carries the easier game forward."
+    ],
+    "playableLines": [
+      {
+        "title": "Anti-Dragon Bg5: Seize the Initiative",
+        "fen": "r1bqk2r/pp2ppb1/2np2pp/8/4PBn1/1NN5/PPPQ1PPP/R3KB1R b KQkq - 3 10",
+        "moves": [
+          "a6",
+          "O-O-O",
+          "Nge5",
+          "h4",
+          "b5",
+          "Kb1"
+        ],
+        "annotations": [
+          "a6 — Black prepares the b5 queenside expansion.",
+          "O-O-O — White commits the king to the queenside.",
+          "Nge5 — the knight returns to the strong e5 square.",
+          "h4 — White gestures at the kingside.",
+          "b5 — Black's queenside attack rolls forward.",
+          "Kb1 — White tucks the king as Black charges."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
