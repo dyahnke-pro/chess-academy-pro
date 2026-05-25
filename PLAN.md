@@ -43,7 +43,17 @@ understanding, board-truth-gated (CLAUDE.md modern-opening note).
    leadeye, named-traps). DONE = on `main` + post-deploy audit green (§0.5).
 
 ## Phased plan (per opening; build sequentially)
-- **DRAGON** … _P0 spines LOCKED (`scripts/_sic-spines.mjs`); P1 lessons next._
+- **DRAGON** … _CORE COMPLETE on main + audit-green (lessons + plans + model game)._
+  - ✅ P1 lessons (main pill + 6 variation tabs), ✅ P2 wiring, ✅ P3 plans (7, lead-the-eye),
+    ✅ P5 model game (Dubov Black win, 2 criticalMoments). Walkthrough audit: 7 distinct tabs,
+    model-game present, 0 page errors.
+  - ⏳ **P4 gems — CI-BLOCKED** (explorer firewalled in-sandbox; `curl` confirmed "Host not in
+    allowlist"). Seed added to `mine-punish-gems.mjs`; run `mine-punish-gems` workflow_dispatch
+    with `openings=sicilian-dragon` → PR → pull + hand-author `punishGemNarration.ts`.
+  - ⏸ **Dragadorf tab deferred** — needs sound theory deeper than the local masters-db (naive
+    line −1.5 for Black). Source via CI explorer, then add the 7th variation tab.
+- **NAJDORF** … _in progress — P0 spines._
+  - _(old DRAGON P0 detail retained below for reference)_
   - All 8 tabs reach ≥20 plies (masters-anchored + Stockfish-extend):
     - Yugoslav Main (pill) 22 · Soltis 24 · Chinese Dragon 22 · Classical 22 · Dragadorf 20 (all deeply masters-anchored)
     - Levenfish / Accelerated / Anti-Dragon Bg5 → Stockfish-extended tail.
