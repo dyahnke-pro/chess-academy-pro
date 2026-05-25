@@ -1116,13 +1116,12 @@
       "fen": "rnbqkb1r/pp3p1p/3p1np1/2pP4/4PP2/2N5/PP4PP/R1BQKBNR b KQkq - 0 7",
       "wrongMove": "Bg7",
       "correctMove": "Nbd7",
-      "explanation": "In the Four Pawns Attack (f4), engine sees both moves as similar. But 7…Bg7 walks into 8.e5 (the natural pawn push) with Black's knight getting kicked from f6. 7…Nbd7 first defends the knight indirectly (after e5 dxe5 fxe5 Ng4 Nf3 the knight has the escape square e6 already controlled). Practical edge: with Nbd7 first, Black's pieces stay coordinated; with Bg7 first you face an immediate central push."
-    },
-    {
-      "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-      "wrongMove": "e3",
-      "correctMove": "d5",
-      "explanation": "3.e3 accepts a Queen's Gambit-like setup but loses time. The principled Benoni push 3.d5 immediately commits to the wedge structure — easier to play and theoretically the most challenging."
+      "explanation": "In the Four Pawns Attack (f4), engine sees both moves as similar. But 7…Bg7 walks into 8.e5 (the natural pawn push) with Black's knight getting kicked from f6. 7…Nbd7 first defends the knight indirectly (after e5 dxe5 fxe5 Ng4 Nf3 the knight has the escape square e6 already controlled). Practical edge: with Nbd7 first, Black's pieces stay coordinated; with Bg7 first you face an immediate central push.",
+      "shortNarration": "…Nbd7 — accurate vs the Four Pawns.",
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Modern_Benoni"
+      ]
     }
   ],
   "benko-gambit": [

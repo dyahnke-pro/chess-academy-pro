@@ -54,6 +54,7 @@ import { getSlavDefenceTabPlanIds } from '../../services/slavDefenceMasterclassT
 import { getSemiSlavTabPlanIds } from '../../services/semiSlavMasterclassTabs';
 import { getKingsIndianDefenceTabPlanIds } from '../../services/kingsIndianDefenceMasterclassTabs';
 import { getGrunfeldDefenceTabPlanIds } from '../../services/grunfeldDefenceMasterclassTabs';
+import { getBenoniDefenceTabPlanIds } from '../../services/benoniDefenceMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
@@ -1096,6 +1097,7 @@ export function OpeningDetailPage(): JSX.Element {
     getSemiSlavTabPlanIds(opening.id, tabKey) ??
     getKingsIndianDefenceTabPlanIds(opening.id, tabKey) ??
     getGrunfeldDefenceTabPlanIds(opening.id, tabKey) ??
+    getBenoniDefenceTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).

@@ -84,6 +84,8 @@ import { KINGS_INDIAN_DEFENCE_LESSON } from './kingsIndianDefence';
 import { KINGS_INDIAN_DEFENCE_VARIATION_LESSONS } from './kingsIndianDefenceVariations';
 import { GRUNFELD_DEFENCE_LESSON } from './grunfeldDefence';
 import { GRUNFELD_DEFENCE_VARIATION_LESSONS } from './grunfeldDefenceVariations';
+import { BENONI_DEFENCE_LESSON } from './benoniDefence';
+import { BENONI_DEFENCE_VARIATION_LESSONS } from './benoniDefenceVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -136,6 +138,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: SEMI_SLAV_LESSON, variations: SEMI_SLAV_VARIATION_LESSONS },
   { main: KINGS_INDIAN_DEFENCE_LESSON, variations: KINGS_INDIAN_DEFENCE_VARIATION_LESSONS },
   { main: GRUNFELD_DEFENCE_LESSON, variations: GRUNFELD_DEFENCE_VARIATION_LESSONS },
+  { main: BENONI_DEFENCE_LESSON, variations: BENONI_DEFENCE_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

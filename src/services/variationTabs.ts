@@ -326,6 +326,16 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /bc4/i, label: 'Classical Bc4' },
     { test: /rb1/i, label: 'Modern Rb1' },
   ],
+  // Benoni Defence — the unbalanced fighting defence. Main-line pill = the
+  // Modern Main (…c5/…d6/…g6/…Bg7, …b5 queenside race, repertoire pgn). Tabs =
+  // the distinct ≥20-ply White systems: the solid Fianchetto, the aggressive
+  // Taimanov (f4/Bb5+), and the Four Pawns Attack. (Classical Bf4/Czech/Snake
+  // anchor <20p in the curated pgn, so they fold into the main.)
+  'benoni-defence': [
+    { test: /fianchetto/i, label: 'Fianchetto' },
+    { test: /taimanov/i, label: 'Taimanov' },
+    { test: /four pawns/i, label: 'Four Pawns' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same

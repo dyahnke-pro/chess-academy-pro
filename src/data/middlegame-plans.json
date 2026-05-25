@@ -8094,58 +8094,6 @@
     ]
   },
   {
-    "id": "mp-benoni-queenside-expansion",
-    "openingId": "benoni-defence",
-    "criticalPositionFen": "rnbq1rk1/1p3pbp/p2p1np1/2pP4/4P3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 10",
-    "title": "Queenside expansion with …a6 + …b5",
-    "overview": "The Benoni's signature plan. After accepting the backward d-pawn and locked center, Black expands on the queenside with …a6 + …b5. The b-pawn break creates a passed c-pawn (if c4 is traded) or opens the b-file for the rook. Combined with …Re8 + …Nbd7 + …Rb8, Black builds heavy pressure on White's queenside.",
-    "pawnBreaks": [
-      {
-        "move": "b5",
-        "explanation": "The defining Benoni break. After …b5 cxb5 axb5 Black has the open a-file, the c-file pressure, and a passed c-pawn after future …c4 push."
-      },
-      {
-        "move": "f5",
-        "explanation": "Black's secondary break — challenges White's central e4 pawn and prepares …f4 to choke the kingside. Often played after the queenside structure is fixed."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nb8-d7-e5",
-        "explanation": "The queenside knight reroutes to e5 (an outpost in the Benoni structure due to White's locked d5-pawn). From e5 the knight supports …f5 and pressures White's queenside."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing …b5 before completing development — White's a4 push fixes the queenside before Black is ready.",
-      "Trading the dark-squared bishop on g7 — kills the entire Benoni attacking concept."
-    ]
-  },
-  {
-    "id": "mp-benoni-modern-fianchetto",
-    "openingId": "benoni-defence",
-    "criticalPositionFen": "rnbq1rk1/pp3pbp/3p1np1/2pP4/8/2N2NP1/PP2PPBP/R1BQ1RK1 b - - 4 9",
-    "title": "Modern Bg7 fianchetto pressure",
-    "overview": "The Modern (fianchetto) Benoni gives Black the dynamic bishop pair on g7. After O-O, Black's plan is to maneuver the bishop to a active diagonal and break with …e6 + …f5. The position is sharp and unbalanced — White has more space but Black has piece pressure on the long diagonal.",
-    "pawnBreaks": [
-      {
-        "move": "e6",
-        "explanation": "The thematic break that challenges White's d5 pawn. After …e6 dxe6 fxe6 Black opens the f-file for the rook and gains central piece play."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bg7 long diagonal + Bc8-f5 development",
-        "explanation": "Black's bishop pair is the main asset. Bg7 attacks the b2-pawn (after Bxg7 Kxg7 leaves the king vulnerable). The c8-bishop develops to f5 or e6 (after …e6) for double-bishop attack."
-      }
-    ],
-    "typicalMistakes": [
-      "Allowing White's Bh6 trading dark-squared bishops — Black loses the main attacking piece.",
-      "Pushing …e6 before piece coordination — White's …dxe6 fxe6 fxg2 Kxg2 leaves Black's structure damaged."
-    ]
-  },
-  {
     "id": "mp-old-indian-philidor-structure",
     "openingId": "old-indian-defence",
     "criticalPositionFen": "r1bq1rk1/pp1nbppp/2pp1n2/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 4 8",
@@ -27937,6 +27885,110 @@
             {
               "square": "b7",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-benonidefence-main",
+    "openingId": "benoni-defence",
+    "criticalPositionFen": "r1bqr1k1/ppn2pbp/3p1np1/2pP4/P3P3/2N5/1P1NBPPP/R1BQR1K1 b - - 0 12",
+    "title": "Benoni: The …b5 Queenside Break",
+    "overview": "The Modern Benoni has reached its strategic core: White holds the centre, but Black owns the queenside pawn majority and the long-diagonal g7-bishop. The plan is the thematic …b5 break — swing a rook behind the b-pawn, prepare with …a6, and surge the majority forward, prying open lines for the rooks and the g7-bishop straight at White's queenside and the loose pawns around it.",
+    "pawnBreaks": [
+      "…b5 — the queenside pawn-majority break",
+      "…a6 to prepare and support …b5"
+    ],
+    "pieceManeuvers": [
+      "…Rb8 behind the b-pawn",
+      "…Nc7 supporting the …b5 break"
+    ],
+    "strategicThemes": [
+      "The …b5 queenside break",
+      "The queenside pawn majority",
+      "The long-diagonal g7-bishop"
+    ],
+    "endgameTransitions": [
+      "The queenside majority is a long-term winning asset into the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqr1k1/ppn2pbp/3p1np1/2pP4/P3P3/2N5/1P1NBPPP/R1BQR1K1 b - - 0 12",
+        "moves": [
+          "Rb8",
+          "h3",
+          "b5",
+          "axb5"
+        ],
+        "annotations": [
+          "…Rb8 — the rook swings behind the b-pawn, loading the queenside break.",
+          "h3 — White makes luft and waits.",
+          "…b5! the thematic Benoni break — the queenside pawn majority surges forward, prying open lines for the rook and the g7-bishop.",
+          "axb5 opens the a-file, and Black recaptures into a dynamic position with the queenside opening up in Black’s favour."
+        ],
+        "learnCues": [
+          "…Rb8 — load the b-pawn.",
+          "h3 — White makes luft.",
+          "…b5 — the queenside break.",
+          "axb5 — lines open for Black."
+        ],
+        "sources": [
+          "concept:pawn-majority",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Modern_Benoni"
+        ],
+        "title": "Benoni: The …b5 Queenside Break",
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
