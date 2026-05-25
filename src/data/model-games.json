@@ -519,7 +519,7 @@
     "year": 2006,
     "event": "World Chess Championship, Elista (Game 1)",
     "pgn": "d4 Nf6 c4 e6 Nf3 d5 g3 dxc4 Bg2 Bb4+ Bd2 a5 Qc2 Bxd2+ Qxd2 c6 a4 b5 axb5 cxb5 Qg5 O-O Qxb5 Ba6 Qa4 Qb6 O-O Qxb2 Nbd2 Bb5 Nxc4 Bxa4 Nxb2 Bb5 Ne5 Ra7 Bf3 Nbd7 Nec4 Rb8 Rfb1 g5 e3 g4 Bd1 Bc6 Rc1 Be4 Na4 Rb4 Nd6 Bf3 Bxf3 gxf3 Nc8 Ra8 Ne7+ Kg7 Nc6 Rb3 Nc5 Rb5 h3 Nxc5 Rxc5 Rb2 Rg5+ Kh6 Rgxa5 Rxa5 Nxa5 Ne4 Rf1 Nd2 Rc1 Ne4 Rf1 f6 Nc6 Nd2 Rd1 Ne4 Rf1 Kg6 Nd8 Rb6 Rc1 h5 Ra1 h4 gxh4 Kh5 Ra2 Kxh4 Kh2 Kh5 Rc2 Kh6 Ra2 Kg6 Rc2 Kf5 Ra2 Rb5 Nc6 Rb7 Ra5+ Kg6 Ra2 Kh5 d5 e5 Ra4 f5 Nxe5 Rb2 Nd3 Rb7 Rd4 Rb6 d6 Nxd6 Kg3 Ne4+ Kxf3 Kg5 h4+ Kf6 Rd5 Nc3 Rd8 Rb1 Rf8+ Ke6 Nf4+ Ke5 Re8+ Kf6 Nh5+ Kg6 Ng3 Rb2 h5+ Kf7 Re5 Nd1 Ne2 Kf6 Rd5",
-    "overview": "Kramnik employed the Catalan Opening to gradually build pressure against Anand's solid but passive setup in a critical World Championship game. The powerful Bg2 bishop and central pawn advances eventually overwhelmed Black's defenses, demonstrating the Catalan's long-term positional venom.",
+    "overview": "Kramnik employed the Catalan Opening to gradually build pressure against Topalov's solid but passive setup in a critical World Championship game. The powerful Bg2 bishop and central pawn advances eventually overwhelmed Black's defenses, demonstrating the Catalan's long-term positional venom.",
     "criticalMoments": [
       {
         "moveNumber": 12,
@@ -537,7 +537,8 @@
       }
     ],
     "middlegameTheme": "Fianchetto bishop pressure and advanced passed pawn",
-    "lessonSummary": "The Catalan Opening allows White to combine fianchetto pressure with central control, creating a slow but relentless positional squeeze. Kramnik demonstrated how the g2 bishop becomes a monster once the center opens, especially when combined with a passed pawn. This game is a textbook example of how the Catalan can dismantle even world-class defenses through patient maneuvering."
+    "lessonSummary": "The Catalan Opening allows White to combine fianchetto pressure with central control, creating a slow but relentless positional squeeze. Kramnik demonstrated how the g2 bishop becomes a monster once the center opens, especially when combined with a passed pawn. This game is a textbook example of how the Catalan can dismantle even world-class defenses through patient maneuvering.",
+    "studentSide": "white"
   },
   {
     "id": "mg-alekhine-slav-defence",
@@ -3696,6 +3697,70 @@
         "fen": "1q6/3n4/3b1n1k/8/1p6/5b1P/1P2QPP1/3R2K1 w - - 0 24",
         "annotation": "…Bxf3 — Anand trades down and consolidates; White's sacrificial attack has run out of steam and the extra material decides.",
         "concept": "Consolidate the extra material"
+      }
+    ]
+  },
+  {
+    "id": "cat-ding-carlsen-2021",
+    "openingId": "catalan-opening",
+    "white": "Ding Liren",
+    "black": "Magnus Carlsen",
+    "whiteElo": 2799,
+    "blackElo": 2847,
+    "result": "1-0",
+    "year": 2021,
+    "event": "Goldmoney Asian Rapid 2021",
+    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O dxc4 Qc2 a6 a4 Bd7 Qxc4 Bc6 Bg5 h6 Bxf6 Bxf6 Rd1 Bd5 Qc2 a5 e4 Bc6 Nc3 Na6 h4 Nb4 Qe2 g6 Rd2 Qe7 Re1 Rad8 Qd1 Bg7 h5 g5 d5 Bd7 Nd4 Bxd4 Rxd4 e5 Rd2 g4 Nb5 Qg5 Re3 Rc8 Rc3 Qxh5 Nxc7 Qg5 b3 h5 d6 Rfd8 Bf1 Kg7 Bb5 Bc6 Bxc6 Nxc6 Ne8+ Kf8 d7 Rb8 Rd6 Nd4 Rxd4 exd4 Qxd4 Rxd7 Qxd7 Rxe8 Qxb7 Qe5 Rc8 Rxc8 Qxc8+ Kg7 Qc4 Qa1+ Kg2 Qf6 Qd5 h4 gxh4 Qxh4 Qxa5 Qh3+ Kg1 Qxb3 Qe5+ Kf8 a5 Qa3 Qg5 Qb4 Qf5 Qa3 Qc8+ Ke7 a6 g3 Qb7+ Kf6 a7 Qc1+ Kg2 gxf2 Qb6+ Ke7 Qxf2 Qg5+ Kh3 Qa5 Kg4 Qa1 Qc5+ Kf6 Qc6+ Kg7 a8=Q Qg1+ Kf5",
+    "overview": "Ding Liren outplays Carlsen with the Catalan: he recovers the gambit pawn with Qxc4, builds the big e4 centre, and rolls a protected passed d-pawn — the long-diagonal bishop and central space converting a quiet edge into a win against the world champion.",
+    "middlegameTheme": "Pawn recovery, e4 centre and a passed d-pawn",
+    "lessonSummary": "The Catalan's recipe in action: regain the pawn with Qxc4, claim the centre with e4, and let the bishop and a passed pawn grind the win.",
+    "studentSide": "white",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "rn1q1rk1/1ppbbppp/p3pn2/8/P1QP4/5NP1/1P2PPBP/RNB2RK1 b - - 0 9",
+        "annotation": "Qxc4 — White regains the gambit pawn with the queen, leaving the great g2-bishop untouched on the long diagonal.",
+        "concept": "Pawn recovery"
+      },
+      {
+        "moveNumber": 26,
+        "color": "white",
+        "fen": "3r1rk1/1ppbqp2/7p/pN1Pp2P/Pn2P1p1/6P1/1P1R1PB1/3QR1K1 b - - 1 26",
+        "annotation": "e4 — White claims the full centre; the bishop and central pawns will roll a passed d-pawn through.",
+        "concept": "Seize the centre"
+      }
+    ]
+  },
+  {
+    "id": "cat-carlsen-giri-2022",
+    "openingId": "catalan-opening",
+    "white": "Magnus Carlsen",
+    "black": "Anish Giri",
+    "whiteElo": 2865,
+    "blackElo": 2772,
+    "result": "1-0",
+    "year": 2022,
+    "event": "Tata Steel Masters 2022",
+    "pgn": "d4 Nf6 c4 e6 Nf3 d5 g3 Be7 Bg2 O-O O-O dxc4 Na3 Bxa3 bxa3 Bd7 a4 Bc6 Ba3 Re8 Qc2 Nbd7 Rac1 a6 Qxc4 Nb6 Qc3 Nxa4 Qb3 Qd5 Rxc6 Qxc6 Ne5 Qb5 Qc2 Nd5 Rb1 Qa5 Bxd5 exd5 Rxb7 c5 Qf5 Rf8 Nxf7 Qd8 dxc5 Qf6 Qxf6 gxf6 Nh6+ Kh8 c6 Rfc8 c7 Nc3 Bb2 d4 Nf7+ Kg7 Nd6 Kg6 Kf1 Nb5 Nxc8 Rxc8 a4 Nxc7 Bxd4 Ne6 Be3",
+    "overview": "Carlsen wins a classical-tournament Catalan with a thematic exchange sacrifice: Rxc6 shatters Black's queenside light squares, and the Bg2's long-diagonal dominance plus a queenside passed pawn carry the day at Tata Steel.",
+    "middlegameTheme": "Exchange sacrifice on the long diagonal",
+    "lessonSummary": "The Catalan bishop is worth an exchange: Rxc6 wrecks Black's light squares, and the long-diagonal grip converts.",
+    "studentSide": "white",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "white",
+        "fen": "r2qr1k1/1ppn1ppp/p1b1pn2/8/P1QP4/B4NP1/P3PPBP/2R2RK1 b - - 0 13",
+        "annotation": "Qxc4 — the familiar Catalan recovery, the bishop on g2 still glaring down the long diagonal.",
+        "concept": "Pawn recovery"
+      },
+      {
+        "moveNumber": 16,
+        "color": "white",
+        "fen": "r3r1k1/1pp2ppp/p1R1pn2/3q4/n2P4/BQ3NP1/P3PPBP/5RK1 b - - 0 16",
+        "annotation": "Rxc6! — the thematic exchange sacrifice, smashing Black's light-squared defender; the Bg2 now rules unopposed.",
+        "concept": "Exchange sac on the long diagonal"
       }
     ]
   }

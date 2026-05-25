@@ -30,6 +30,7 @@ import { getScotchTabPlanIds } from '../../services/scotchMasterclassTabs';
 import { getQueensGambitTabPlanIds } from '../../services/queensGambitMasterclassTabs';
 import { getQgdTabPlanIds } from '../../services/qgdMasterclassTabs';
 import { getQgaTabPlanIds } from '../../services/qgaMasterclassTabs';
+import { getCatalanTabPlanIds } from '../../services/catalanOpeningMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
@@ -1046,6 +1047,7 @@ export function OpeningDetailPage(): JSX.Element {
     getQueensGambitTabPlanIds(opening.id, tabKey) ??
     getQgdTabPlanIds(opening.id, tabKey) ??
     getQgaTabPlanIds(opening.id, tabKey) ??
+    getCatalanTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).

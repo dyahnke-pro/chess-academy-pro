@@ -38,6 +38,8 @@ import { QGD_LESSON } from './qgd';
 import { QGD_VARIATION_LESSONS } from './qgdVariations';
 import { QGA_LESSON } from './qga';
 import { QGA_VARIATION_LESSONS } from './qgaVariations';
+import { CATALAN_OPENING_LESSON } from './catalanOpening';
+import { CATALAN_OPENING_VARIATION_LESSONS } from './catalanOpeningVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -67,6 +69,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: QUEENS_GAMBIT_LESSON, variations: QUEENS_GAMBIT_VARIATION_LESSONS },
   { main: QGD_LESSON, variations: QGD_VARIATION_LESSONS },
   { main: QGA_LESSON, variations: QGA_VARIATION_LESSONS },
+  { main: CATALAN_OPENING_LESSON, variations: CATALAN_OPENING_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

@@ -9794,63 +9794,6 @@
     ]
   },
   {
-    "id": "mp-catalan-open-pressure",
-    "openingId": "catalan-opening",
-    "criticalPositionFen": "r1bqkb1r/1pp2ppp/p1n1pn2/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 w kq - 2 7",
-    "title": "Open Catalan — diagonal pressure with …dxc4",
-    "overview": "Open Catalan (Black takes the c-pawn). White's plan: long-term pressure on the long diagonal via Bg2, force Black to give back the c-pawn with active piece play, and exploit Black's slightly weakened queenside structure. The Bg2 is the most powerful Catalan piece — its diagonal reaches deep into Black's territory and supports virtually every White plan.",
-    "pawnBreaks": [
-      {
-        "move": "e4",
-        "explanation": "After Black gives back the c-pawn (usually with …b5 + …Bb7), e4 opens the center and lets the Bg2 fire on the long diagonal. The break creates immediate central pressure."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Queen",
-        "route": "Qd1-c2 attacking c-pawn",
-        "explanation": "Qc2 attacks the c4-pawn that Black grabbed, forcing Black to either return it with …b5 or defend awkwardly."
-      },
-      {
-        "piece": "Knight",
-        "route": "Nbd2-c4 or -e4",
-        "explanation": "The b1-knight reroutes through d2 to c4 (attacking …e5 or …b6) or e4 (the central outpost). Flexibility is the Catalan's strength."
-      }
-    ],
-    "typicalMistakes": [
-      "Forgetting to play Qc2 — Black consolidates the extra pawn comfortably.",
-      "Trading the Bg2 without compensation — eliminates the entire Catalan attacking concept."
-    ]
-  },
-  {
-    "id": "mp-catalan-closed-positional",
-    "openingId": "catalan-opening",
-    "criticalPositionFen": "r1bq1rk1/pppnbppp/4pn2/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 6 7",
-    "title": "Closed Catalan — slow maneuvering",
-    "overview": "Closed Catalan (Black keeps the central tension). White's plan: complete development, then build queenside pressure with Nc3 + b3 + Bb2 or Qc2 + Rd1. The Bg2 supports a future e4 break that opens the long diagonal. The position is strategically rich — many master games end with White converting a small positional edge into a winning endgame.",
-    "pawnBreaks": [
-      {
-        "move": "cxd5",
-        "explanation": "The Exchange Catalan trades the central tension for clear positional play. Black is left with an isolated d-pawn or symmetric structure where the Bg2 dominates."
-      },
-      {
-        "move": "e4",
-        "explanation": "After completing development, e4 challenges the d5 pawn and opens the long diagonal for the Bg2."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc1-b2 fianchetto",
-        "explanation": "The dark-squared bishop fianchettos to b2, controlling the long h1-a8 diagonal alongside the Bg2. Double-bishop pressure on the central squares."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing e4 before completing development — Black's …c5 destabilizes the center.",
-      "Trading the Bg2 too early — without it, the Catalan loses its main attacking weapon."
-    ]
-  },
-  {
     "id": "mp-slav-bf5-active-development",
     "openingId": "slav-defence",
     "criticalPositionFen": "rn1qk2r/pp3ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P3PPP/R1BQK2R w KQkq - 1 8",
