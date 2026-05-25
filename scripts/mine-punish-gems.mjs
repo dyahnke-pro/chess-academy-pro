@@ -222,6 +222,9 @@ const OPENING_SEEDS = {
   'vienna-game':  { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nc3'] },
   'italian-game': { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'] },
   'scotch-game':  { studentChar: 'w', baseSeed: ['e4', 'e5', 'Nf3', 'Nc6', 'd4'] },
+  // Sicilian Dragon — Black. Seed = the Dragon tabiya (the repertoire variations
+  // carry no move lists, so pin the base seed explicitly rather than derive it).
+  'sicilian-dragon': { studentChar: 'b', baseSeed: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'g6'] },
 };
 function loadRepertoire() {
   try {

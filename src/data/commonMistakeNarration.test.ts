@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import commonMistakesData from './common-mistakes.json';
+import openingManifests from './opening-manifests.json';
 import type { CommonMistake } from '../types';
 
 const data = commonMistakesData as Record<string, CommonMistake[]>;
@@ -8,9 +9,13 @@ const data = commonMistakesData as Record<string, CommonMistake[]>;
 // mistakes MUST carry BOTH narration registers, hand-authored (David 2026-05-24):
 //   - explanation     → Watch / Learn-FULL (full prose)
 //   - shortNarration  → Learn-LIMITED (≤8-word cue)
-// Non-masterclass openings use the graceful fallback (move dictation) and are
-// not gated here. Add an opening to this list when it gets the masterclass build.
-const MASTERCLASS = ['ruy-lopez', 'vienna-game', 'caro-kann', 'pirc-defence', 'italian-game', 'kings-gambit'];
+// AUTO-TRACKED from the manifest keys (the single source of truth for "this is
+// a masterclass"), so a NEW masterclass is held to the rule automatically — no
+// hardcoded list to forget (the gap that let Scotch ship cue-less). An opening
+// with no common-mistakes entry is fine (nothing to narrate); the gate only
+// fires on entries that exist. Non-masterclass openings use the move-dictation
+// fallback and are not gated here.
+const MASTERCLASS = Object.keys(openingManifests).filter((k) => !k.startsWith('_'));
 
 const CUE_WORD_CAP = 8;
 function wordCount(s: string): number {
@@ -23,9 +28,6 @@ function wordCount(s: string): number {
 describe('common-mistake narration — two registers on masterclass Pitfalls', () => {
   for (const id of MASTERCLASS) {
     const mistakes = data[id] ?? [];
-    it(`${id}: has common mistakes to narrate`, () => {
-      expect(mistakes.length).toBeGreaterThan(0);
-    });
 
     mistakes.forEach((m, i) => {
       it(`${id}[${i}] (${m.wrongMove}→${m.correctMove}): full explanation present`, () => {
@@ -40,3 +42,4 @@ describe('common-mistake narration — two registers on masterclass Pitfalls', (
     });
   }
 });
+

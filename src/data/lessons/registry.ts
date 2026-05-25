@@ -34,6 +34,8 @@ import { SCOTCH_GAME_VARIATION_LESSONS } from './scotchGameVariations';
 import { SCOTCH_GAME_TRAP_LESSONS } from './scotchGameTrapLessons';
 import { KINGS_GAMBIT_LESSON } from './kingsGambit';
 import { KINGS_GAMBIT_VARIATION_LESSONS } from './kingsGambitVariations';
+import { SICILIAN_DRAGON_LESSON } from './sicilianDragon';
+import { SICILIAN_DRAGON_VARIATION_LESSONS } from './sicilianDragonVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -61,6 +63,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: ITALIAN_GAME_LESSON, variations: ITALIAN_GAME_VARIATION_LESSONS, traps: ITALIAN_GAME_TRAP_LESSONS },
   { main: SCOTCH_GAME_LESSON, variations: SCOTCH_GAME_VARIATION_LESSONS, traps: SCOTCH_GAME_TRAP_LESSONS },
   { main: KINGS_GAMBIT_LESSON, variations: KINGS_GAMBIT_VARIATION_LESSONS },
+  { main: SICILIAN_DRAGON_LESSON, variations: SICILIAN_DRAGON_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {
