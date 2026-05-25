@@ -25,11 +25,10 @@ describe('universal named-technique content records its provenance', () => {
     expect(missing.length, `${missing.length} endgame lessons lack narration.history / source`).toBe(0);
   });
 
-  // Mating backlog can only SHRINK — lower MATING_HISTORY_GAP_CEILING as the
-  // remaining patterns get a history line; never raise it.
-  const MATING_HISTORY_GAP_CEILING = 15;
-  it(`mating-pattern history gap never grows (ceiling ${MATING_HISTORY_GAP_CEILING})`, () => {
-    const missing = mating.filter((m) => !hist(m)).length;
-    expect(missing, 'more mating patterns now lack a history line — author one instead of regressing').toBeLessThanOrEqual(MATING_HISTORY_GAP_CEILING);
+  // SEALED 2026-05-25: all 37 mating patterns now carry a history line. No
+  // exceptions — a new pattern without one fails.
+  it('EVERY mating pattern records a history line — no exceptions', () => {
+    const missing = mating.filter((m) => !hist(m));
+    expect(missing.length, `${missing.length} mating patterns lack narration.history`).toBe(0);
   });
 });

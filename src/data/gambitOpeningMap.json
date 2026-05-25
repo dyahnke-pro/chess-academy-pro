@@ -1,0 +1,11 @@
+{
+  "_doc": "Curated map: gambits.json opening id -> masterclass openingId whose verified grounding applies. Hand-reviewed: Marshall Attack=ruy-lopez; Danish/Smith-Morra/Stafford/Englund/Budapest/Albin are non-masterclass and intentionally excluded. David 2026-05-25.",
+  "map": {
+    "gambit-kings-gambit": "kings-gambit",
+    "gambit-evans-gambit": "evans-gambit",
+    "scotch-gambit": "scotch-game",
+    "vienna-gambit": "vienna-game",
+    "gambit-benko-gambit": "benko-gambit",
+    "marshall-attack": "ruy-lopez"
+  }
+}

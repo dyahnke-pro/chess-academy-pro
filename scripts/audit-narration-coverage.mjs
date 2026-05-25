@@ -69,7 +69,7 @@ add('checkpoint quizzes', qUnits, qHint, 0, 0, false, false);
 // 10. Gambits
 let gTot = 0, gExpl = 0, gSrc = 0;
 try { for (const o of J('gambits.json')) for (const v of (o.variations || [])) { gTot++; if ((v.explanation || '').trim()) gExpl++; if (v.source || (v.sources || []).length) gSrc++; } } catch {}
-add('gambit variations', gTot, gExpl, 0, gSrc, false, false);
+add('gambit variations', gTot, gExpl, 0, gSrc, false, true);
 
 const pct = (n, d) => (d ? Math.round((100 * n) / d) : 0);
 console.log('\n COMPREHENSIVE NARRATION AUDIT — coverage by surface\n');

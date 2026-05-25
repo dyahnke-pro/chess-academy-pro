@@ -27,27 +27,52 @@
       {
         "name": "King's Gambit Accepted: Knight Gambit Main Line",
         "pgn": "e4 e5 f4 exf4 Nf3 g5 Bc4 Bg7 h4 g4",
-        "explanation": "The classical Knight Gambit. After 2…exf4 3.Nf3 g5 (defending the extra pawn) 4.Bc4 (targeting f7) 4…Bg7 (defending the g5 pawn diagonally), White probes with 5.h4 to undermine the pawn chain — and after 5…g4, Black's knight has been forced to commit to either Ne5 (Kieseritzky) or Ng5 (Allgaier). The choice is White's: pick a flavor of attack."
+        "explanation": "The classical Knight Gambit. After 2…exf4 3.Nf3 g5 (defending the extra pawn) 4.Bc4 (targeting f7) 4…Bg7 (defending the g5 pawn diagonally), White probes with 5.h4 to undermine the pawn chain — and after 5…g4, Black's knight has been forced to commit to either Ne5 (Kieseritzky) or Ng5 (Allgaier). The choice is White's: pick a flavor of attack.",
+        "sources": [
+          "book:kings-gambit",
+          "concept:tac-sacrifice",
+          "https://en.wikipedia.org/wiki/King%27s_Gambit"
+        ]
       },
       {
         "name": "King's Gambit Accepted: Bishop Gambit (Fischer's Favorite)",
         "pgn": "e4 e5 f4 exf4 Bc4 Qh4+ Kf1 d6 Nf3 Qh5 d4 Nf6 Nc3 Be7",
-        "explanation": "White plays 3.Bc4 instead of Nf3, willingly losing castling rights to Qh4+ because the bishop on c4 already creates strong attacking chances. After Kf1, White builds a powerful center with d4 + Nc3; Black's Be7 + Qh5 defends but White's lead in central control compensates for the displaced king."
+        "explanation": "White plays 3.Bc4 instead of Nf3, willingly losing castling rights to Qh4+ because the bishop on c4 already creates strong attacking chances. After Kf1, White builds a powerful center with d4 + Nc3; Black's Be7 + Qh5 defends but White's lead in central control compensates for the displaced king.",
+        "sources": [
+          "book:kings-gambit",
+          "concept:tac-sacrifice",
+          "https://en.wikipedia.org/wiki/King%27s_Gambit"
+        ]
       },
       {
         "name": "King's Gambit Declined: Classical with Bc5",
         "pgn": "e4 e5 f4 Bc5 Nf3 d6 Nc3 Nf6 Bc4 O-O d3 Nc6 Na4 Bb6 Nxb6 axb6 O-O",
-        "explanation": "Black declines the gambit with 2…Bc5, keeping a solid position rather than grabbing the f4 pawn. White's Na4-Nxb6 trade eliminates Black's strong dark-squared bishop (the piece that was holding the diagonal); after O-O, White has the bishop pair and the option to break with f5 later."
+        "explanation": "Black declines the gambit with 2…Bc5, keeping a solid position rather than grabbing the f4 pawn. White's Na4-Nxb6 trade eliminates Black's strong dark-squared bishop (the piece that was holding the diagonal); after O-O, White has the bishop pair and the option to break with f5 later.",
+        "sources": [
+          "book:kings-gambit",
+          "concept:tac-sacrifice",
+          "https://en.wikipedia.org/wiki/King%27s_Gambit"
+        ]
       },
       {
         "name": "Falkbeer Countergambit",
         "pgn": "e4 e5 f4 d5 exd5 e4 d3 Nf6 dxe4 Nxe4 Nf3 Bc5 Qe2 Bf5 Nc3 Qe7 Be3 Bxe3 Qxe3 Nxc3 Qxe7+ Kxe7 bxc3",
-        "explanation": "Black counter-sacrifices with 2…d5, refusing to play defense. After 3.exd5 e4, Black gains an advanced pawn cramping White. The long forced sequence ends with Qxe7+ Kxe7 — a queenless middlegame where Black's piece activity and central pawn compensate for the missing pawn."
+        "explanation": "Black counter-sacrifices with 2…d5, refusing to play defense. After 3.exd5 e4, Black gains an advanced pawn cramping White. The long forced sequence ends with Qxe7+ Kxe7 — a queenless middlegame where Black's piece activity and central pawn compensate for the missing pawn.",
+        "sources": [
+          "book:kings-gambit",
+          "concept:tac-sacrifice",
+          "https://en.wikipedia.org/wiki/King%27s_Gambit"
+        ]
       },
       {
         "name": "King's Gambit Accepted: Kieseritzky Gambit",
         "pgn": "e4 e5 f4 exf4 Nf3 g5 h4 g4 Ne5 d6 Nxg4 Nf6 Nxf6+ Qxf6 Nc3 Nc6 d4",
-        "explanation": "After 4.h4 g4 5.Ne5, White's knight on e5 dominates the center. The Nxg4 + Nxf6+ sequence recovers the pawn while damaging Black's kingside. After 17.d4, White has central pawns + open lines; Black has the queen-side pawn structure and must defend accurately."
+        "explanation": "After 4.h4 g4 5.Ne5, White's knight on e5 dominates the center. The Nxg4 + Nxf6+ sequence recovers the pawn while damaging Black's kingside. After 17.d4, White has central pawns + open lines; Black has the queen-side pawn structure and must defend accurately.",
+        "sources": [
+          "book:kings-gambit",
+          "concept:tac-sacrifice",
+          "https://en.wikipedia.org/wiki/King%27s_Gambit"
+        ]
       }
     ],
     "trapLines": [
@@ -133,6 +158,11 @@
         "source": "lichess-puzzle:0AWYq",
         "verifiedEval": "-525cp"
       }
+    ],
+    "sources": [
+      "book:kings-gambit",
+      "concept:tac-sacrifice",
+      "https://en.wikipedia.org/wiki/King%27s_Gambit"
     ]
   },
   {
@@ -163,27 +193,52 @@
       {
         "name": "Evans Gambit: Normal Variation with d5 Push",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d6 cxd4 Bb6 d5 Na5 Bb2",
-        "explanation": "The main line. After 5.b4 Bxb4 6.c3 Ba5, White builds the center with c3 + d4 and trades the gambit pawn for tempo. The d5 push cramps Black; Bb2 develops the dark-squared bishop to the long diagonal where it eyes g7 and the entire kingside."
+        "explanation": "The main line. After 5.b4 Bxb4 6.c3 Ba5, White builds the center with c3 + d4 and trades the gambit pawn for tempo. The d5 push cramps Black; Bb2 develops the dark-squared bishop to the long diagonal where it eyes g7 and the entire kingside.",
+        "sources": [
+          "book:evans-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
+        ]
       },
       {
         "name": "Evans Gambit: Slow Variation with Be7 Retreat",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Be2 exd4 Qxd4 Nf6 e5 Nc6 Qh4 Nd5 Qg3",
-        "explanation": "Black retreats the bishop to e7 — a conservative choice avoiding the sharpest lines. White plays d4 and builds up gradually. After Qxd4 + e5, the central space advantage and open lines provide excellent compensation; the queen on g3 eyes both the kingside and the g7 pawn."
+        "explanation": "Black retreats the bishop to e7 — a conservative choice avoiding the sharpest lines. White plays d4 and builds up gradually. After Qxd4 + e5, the central space advantage and open lines provide excellent compensation; the queen on g3 eyes both the kingside and the g7 pawn.",
+        "sources": [
+          "book:evans-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
+        ]
       },
       {
         "name": "Evans Gambit Declined: Bb6 System",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 Nc3 Nf6 Nd5 Nxd5 exd5 Nd4 a5 Ba7",
-        "explanation": "Black declines with Bb6 — a sensible choice avoiding the sharpest play. White pushes a4-a5 to gain queenside space and plays Nd5 for a central grip; the trade Nxd5 + exd5 leaves White with a strong d5 pawn and the open e-file."
+        "explanation": "Black declines with Bb6 — a sensible choice avoiding the sharpest play. White pushes a4-a5 to gain queenside space and plays Nd5 for a central grip; the trade Nxd5 + exd5 leaves White with a strong d5 pawn and the open e-file.",
+        "sources": [
+          "book:evans-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
+        ]
       },
       {
         "name": "Evans Gambit: Compromised Defense (dxc3)",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3 O-O",
-        "explanation": "The sharpest line where Black grabs the c3 pawn. White plays Qb3 targeting f7, and e5 gains space with tempo. After Nxc3 + Ba3, White's piece activity is overwhelming despite being down two pawns — Ba3 specifically targets the e7-knight and prevents Black from developing comfortably."
+        "explanation": "The sharpest line where Black grabs the c3 pawn. White plays Qb3 targeting f7, and e5 gains space with tempo. After Nxc3 + Ba3, White's piece activity is overwhelming despite being down two pawns — Ba3 specifically targets the e7-knight and prevents Black from developing comfortably.",
+        "sources": [
+          "book:evans-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
+        ]
       },
       {
         "name": "Evans Gambit: Waller Attack with Qb3",
         "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4",
-        "explanation": "The Waller Attack — after Black retreats Bc5 (instead of Ba5), White builds the same big center and develops Nc3. The Bg4 pin tries to slow White's attack but White has Qa4 / Qb3 ready to trade the bishop or chase it away while maintaining the kingside pressure."
+        "explanation": "The Waller Attack — after Black retreats Bc5 (instead of Ba5), White builds the same big center and develops Nc3. The Bg4 pin tries to slow White's attack but White has Qa4 / Qb3 ready to trade the bishop or chase it away while maintaining the kingside pressure.",
+        "sources": [
+          "book:evans-gambit",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
+        ]
       }
     ],
     "trapLines": [
@@ -245,6 +300,11 @@
         "source": "lichess-puzzle:077SA",
         "verifiedEval": "-519cp"
       }
+    ],
+    "sources": [
+      "book:evans-gambit",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Evans_Gambit"
     ]
   },
   {
@@ -275,27 +335,52 @@
       {
         "name": "Scotch Gambit: Main Line with d5",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 Bxd4",
-        "explanation": "The main line where Black strikes back with d5. After Bb5, White targets the pinned knight on c6. Bxc6 + bxc6 saddles Black with doubled pawns; the Bxd4 exchange equalizes material but leaves White with a slightly better structure and the bishop pair."
+        "explanation": "The main line where Black strikes back with d5. After Bb5, White targets the pinned knight on c6. Bxc6 + bxc6 saddles Black with doubled pawns; the Bxd4 exchange equalizes material but leaves White with a slightly better structure and the bishop pair.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
+        ]
       },
       {
         "name": "Scotch Gambit: Ng4 Retreat Variation",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ng4",
-        "explanation": "Black plays Ng4 to pressure e5 and f2 — the most popular response to 5.e5. From here White can try the aggressive Bxf7+ sacrifice (exposing Black's king at the cost of a bishop) or the quieter Bxg4 / Nxd4 routes. The decision shapes the whole middlegame."
+        "explanation": "Black plays Ng4 to pressure e5 and f2 — the most popular response to 5.e5. From here White can try the aggressive Bxf7+ sacrifice (exposing Black's king at the cost of a bishop) or the quieter Bxg4 / Nxd4 routes. The decision shapes the whole middlegame.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
+        ]
       },
       {
         "name": "Max Lange Attack: Bc5 Line",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O Nf6 e5 d5 exf6 dxc4 Re1+ Be6 Ng5 Qd5 Nc3 Qf5 Nce4 O-O-O g4 Qd5",
-        "explanation": "The Max Lange Attack arises when Black plays 4...Bc5. After O-O Nf6 e5 d5 exf6 dxc4, the position becomes incredibly sharp. White has the initiative with Re1+ and Ng5, while Black counters with O-O-O and piece activity. Both sides must play with extreme precision."
+        "explanation": "The Max Lange Attack arises when Black plays 4...Bc5. After O-O Nf6 e5 d5 exf6 dxc4, the position becomes incredibly sharp. White has the initiative with Re1+ and Ng5, while Black counters with O-O-O and piece activity. Both sides must play with extreme precision.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
+        ]
       },
       {
         "name": "Scotch Gambit: Dubois-Reti Defense",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O d6 c3 dxc3 Nxc3 Bg4",
-        "explanation": "Black plays 4...Bc5 and 6...dxc3 to grab pawns. White sacrifices the c-pawn for rapid development and open lines. The Bg4 pin pressures the f3 knight; White's Nc3 + Bxf7+ tactical resources are ready to exploit Black's still-uncoordinated pieces."
+        "explanation": "Black plays 4...Bc5 and 6...dxc3 to grab pawns. White sacrifices the c-pawn for rapid development and open lines. The Bg4 pin pressures the f3 knight; White's Nc3 + Bxf7+ tactical resources are ready to exploit Black's still-uncoordinated pieces.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
+        ]
       },
       {
         "name": "Scotch Gambit: Haxo Gambit with c3",
         "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 dxc3 Bxf7+ Kxf7 Qd5+ Ke8",
-        "explanation": "The Haxo Gambit sacrifices the c3 pawn against Black's Bc5. The stunning Bxf7+ followed by Qd5+ chases Black's king back to e8 with no castling rights and a wandering knight on c3 to recapture. White's lead in development plus the lost castling rights provide ample compensation."
+        "explanation": "The Haxo Gambit sacrifices the c3 pawn against Black's Bc5. The stunning Bxf7+ followed by Qd5+ chases Black's king back to e8 with no castling rights and a wandering knight on c3 to recapture. White's lead in development plus the lost castling rights provide ample compensation.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
+        ]
       }
     ],
     "trapLines": [
@@ -381,6 +466,11 @@
         "source": "lichess-puzzle:0Ef6N",
         "verifiedEval": "-541cp"
       }
+    ],
+    "sources": [
+      "concept:pos-development",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Scotch_Game"
     ]
   },
   {
@@ -411,27 +501,52 @@
       {
         "name": "Vienna Gambit: Main Line with Ng8 Retreat",
         "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3",
-        "explanation": "The main line. After 3.f4 exf4 4.e5 the Nf6 has no good square except back to g8 — Black has wasted three tempi on the knight by move 4. Nf3 develops and prepares d4 to dominate the center with the moved-back knight unable to defend."
+        "explanation": "The main line. After 3.f4 exf4 4.e5 the Nf6 has no good square except back to g8 — Black has wasted three tempi on the knight by move 4. Nf3 develops and prepares d4 to dominate the center with the moved-back knight unable to defend.",
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
+        ]
       },
       {
         "name": "Vienna Gambit: Qe7 Variation",
         "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5",
-        "explanation": "After 4.e5 Black can pin the e5 pawn with ...Qe7 instead of retreating the knight. White plays Qe2 to defend e5 and continues developing — the position remains sharp with both sides racing to complete development."
+        "explanation": "After 4.e5 Black can pin the e5 pawn with ...Qe7 instead of retreating the knight. White plays Qe2 to defend e5 and continues developing — the position remains sharp with both sides racing to complete development.",
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
+        ]
       },
       {
         "name": "Frankenstein-Dracula Variation",
         "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Nc6 Nb5 g6 Qf3 f5 Qd5 Qe7 Nxc7+ Kd8 Nxa8 b6 d3 Bb7 Qf3 Nd4",
-        "explanation": "The wildly named Frankenstein-Dracula arises after 3.Bc4 Nxe4. This is one of the sharpest positions in all of chess — both sides are throwing punches from move 4. White plays Qh5 threatening Qxf7 mate. Knowing this line is essential if you play the Vienna — one wrong move and the game is over for either side."
+        "explanation": "The wildly named Frankenstein-Dracula arises after 3.Bc4 Nxe4. This is one of the sharpest positions in all of chess — both sides are throwing punches from move 4. White plays Qh5 threatening Qxf7 mate. Knowing this line is essential if you play the Vienna — one wrong move and the game is over for either side.",
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
+        ]
       },
       {
         "name": "Vienna Gambit: Nd5 Variation",
         "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5",
-        "explanation": "Black can also place the knight on d5 instead of retreating to g8. From the position after 4.e5, White's pieces can develop naturally; the d-file and f-file both open as the structure simplifies, giving White attacking chances on the kingside."
+        "explanation": "Black can also place the knight on d5 instead of retreating to g8. From the position after 4.e5, White's pieces can develop naturally; the d-file and f-file both open as the structure simplifies, giving White attacking chances on the kingside.",
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
+        ]
       },
       {
         "name": "Vienna Gambit: Pierce Gambit",
         "pgn": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3",
-        "explanation": "The Pierce Gambit transposes to the main Vienna Gambit position after 5.Nf3. From here White can choose between d4 / Bc4 / Bd3 setups; the Pierce specifically delays the bishop development to keep more flexibility."
+        "explanation": "The Pierce Gambit transposes to the main Vienna Gambit position after 5.Nf3. From here White can choose between d4 / Bc4 / Bd3 setups; the Pierce specifically delays the bishop development to keep more flexibility.",
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
+        ]
       }
     ],
     "trapLines": [
@@ -517,6 +632,11 @@
         "source": "lichess-puzzle:0Ds5S",
         "verifiedEval": "-259cp"
       }
+    ],
+    "sources": [
+      "book:vienna-game",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Vienna_Game"
     ]
   },
   {
@@ -938,27 +1058,52 @@
       {
         "name": "Marshall Attack: Classical Main Line",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 Rae8 Nd2 Re6 a4 Qh5 axb5",
-        "explanation": "The classical main line where Black builds the attack step by step. After Qh4 + g3 Qh3 the queen settles on h3; the Rae8 + Re6 rook lift is the key Marshall motif — every piece coordinates toward White's king while White's a4 + axb5 try to generate counterplay on the queenside."
+        "explanation": "The classical main line where Black builds the attack step by step. After Qh4 + g3 Qh3 the queen settles on h3; the Rae8 + Re6 rook lift is the key Marshall motif — every piece coordinates toward White's king while White's a4 + axb5 try to generate counterplay on the queenside.",
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ]
       },
       {
         "name": "Marshall Attack: Bf5 Modern Setup",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Bf5",
-        "explanation": "A more modern approach where Black develops the bishop to f5 before committing the queen. This is considered more precise by theory, as it avoids some defensive resources. The bishop on f5 controls d3 and supports the upcoming Re8 + rook-lift attack."
+        "explanation": "A more modern approach where Black develops the bishop to f5 before committing the queen. This is considered more precise by theory, as it avoids some defensive resources. The bishop on f5 controls d3 and supports the upcoming Re8 + rook-lift attack.",
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ]
       },
       {
         "name": "Marshall Attack: Re6 Rook Lift",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Qf3 Bg4 Qg2",
-        "explanation": "When White plays Qf3 to challenge the queen, Black has Bg4 + Qg2 — even trading queens, the rook lift Re8-Re2 invades the second rank. Black's piece activity creates an unpleasant endgame for White to defend despite the trades."
+        "explanation": "When White plays Qf3 to challenge the queen, Black has Bg4 + Qg2 — even trading queens, the rook lift Re8-Re2 invades the second rank. Black's piece activity creates an unpleasant endgame for White to defend despite the trades.",
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ]
       },
       {
         "name": "Marshall Attack: d5-d4 Pawn Storm",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re2",
-        "explanation": "After Re2 (a more passive defense by White), Black still has the typical Marshall plan of Bd6 + Qh4 + Bf5/Bg4 building toward the kingside. The f5-f4 pawn storm idea later in the game completely destroys White's kingside pawn cover."
+        "explanation": "After Re2 (a more passive defense by White), Black still has the typical Marshall plan of Bd6 + Qh4 + Bf5/Bg4 building toward the kingside. The f5-f4 pawn storm idea later in the game completely destroys White's kingside pawn cover.",
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ]
       },
       {
         "name": "Marshall Attack: Spassky Variation",
         "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Re4",
-        "explanation": "Named after Spassky's brilliant games. The Re4 defense places the rook actively to block the attack, but Black responds with Bf5 to attack the rook — shifting the bishop to gain time and continuing the kingside pressure."
+        "explanation": "Named after Spassky's brilliant games. The Re4 defense places the rook actively to block the attack, but Black responds with Bf5 to attack the rook — shifting the bishop to gain time and continuing the kingside pressure.",
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Ruy_Lopez"
+        ]
       }
     ],
     "trapLines": [
@@ -980,6 +1125,11 @@
         "source": "lichess-puzzle:0Cuip",
         "verifiedEval": "mated-in-1"
       }
+    ],
+    "sources": [
+      "book:ruy-lopez",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Ruy_Lopez"
     ]
   },
   {
@@ -1355,17 +1505,32 @@
       {
         "name": "Benko Gambit: Fully Accepted (King Walk)",
         "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 e4 Bxf1 Kxf1 g6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5 Qc2 Rfb8",
-        "explanation": "The main line where White accepts both pawns with the king walk maneuver. After Kxf1, g3, and Kg2, White's king is safe on g2. Black plays the standard Benko plan with Bg7, O-O, Nbd7, and rooks to the a and b files. The resulting middlegame is one of the most strategically rich in chess."
+        "explanation": "The main line where White accepts both pawns with the king walk maneuver. After Kxf1, g3, and Kg2, White's king is safe on g2. Black plays the standard Benko plan with Bg7, O-O, Nbd7, and rooks to the a and b files. The resulting middlegame is one of the most strategically rich in chess.",
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Benko_Gambit"
+        ]
       },
       {
         "name": "Benko Gambit: Fianchetto System",
         "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 g3 d6 Bg2 g6 Nf3 Bg7 O-O O-O Nc3 Nbd7 Re1 Qa5 Qc2 Rfb8 Rb1 Nb6",
-        "explanation": "White fianchettos the kingside bishop, creating a solid but passive setup. Black responds with the standard plan of Bg7, O-O, and rooks to the open files. The Nb6 maneuver prepares Nc4 to target the b2 and a3 weaknesses; the doubled rooks on the a-file are coming."
+        "explanation": "White fianchettos the kingside bishop, creating a solid but passive setup. Black responds with the standard plan of Bg7, O-O, and rooks to the open files. The Nb6 maneuver prepares Nc4 to target the b2 and a3 weaknesses; the doubled rooks on the a-file are coming.",
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Benko_Gambit"
+        ]
       },
       {
         "name": "Benko Gambit: Modern with bxa6 g6",
         "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 g6 Nc3 Bxa6 e4 Bxf1 Kxf1 d6 g3 Bg7 Kg2 O-O Nf3 Nbd7 Re1 Qa5 Qc2 Rfb8",
-        "explanation": "A modern move order where Black plays g6 before Bxa6. This can transpose to the main lines but gives Black some flexibility. The key ideas remain the same — fianchetto, trade the light-squared bishop, and apply pressure on the a and b files with rooks."
+        "explanation": "A modern move order where Black plays g6 before Bxa6. This can transpose to the main lines but gives Black some flexibility. The key ideas remain the same — fianchetto, trade the light-squared bishop, and apply pressure on the a and b files with rooks.",
+        "sources": [
+          "concept:att-queenside-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Benko_Gambit"
+        ]
       }
     ],
     "trapLines": [
@@ -1395,6 +1560,11 @@
         "source": "lichess-puzzle:07Ihz",
         "verifiedEval": "-332cp"
       }
+    ],
+    "sources": [
+      "concept:att-queenside-attack",
+      "concept:pos-open-file",
+      "https://en.wikipedia.org/wiki/Benko_Gambit"
     ]
   }
 ]
