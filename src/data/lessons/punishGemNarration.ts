@@ -1958,6 +1958,84 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bc4+ — check the open king.', '', 'Bxd5+ — grab with check, keep hunting.', '', 'Bxf4 — pawn back, bishops raking.', '', '', ''],
     sources: ['book:kings-gambit', 'concept:tac-sacrifice', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/King%27s_Gambit'],
   },
+
+  // ── Scotch Game (White) — not in the pre-1930s corpus; verified vs engine +
+  // online (Wikipedia / Chessable). Only the gems with a concrete, engine-
+  // confirmed point are narrated; the subtle ≤+1.0 positional ones stay
+  // baselined rather than narrate a reason I can't verify (David 2026-05-25).
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nxd4_Qxd4_d6_Nc3_Nf6_Bg5_Be7_O-O-O:c5': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'c5? It hits the d4-queen, but the king is still in the centre — and White checks first.', 'Bb5+! The zwischenzug. Black must deal with the check, so the pawn’s attack on the queen never arrives in time.', '', 'Bxe7 — White grabs the bishop and trades down a clean pawn to the better game.', '', 'Bxd8 — collecting; the c5 lunge has cost Black material.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bb5+ — check first, zwischenzug.', '', 'Bxe7 — grab the bishop.', '', 'Bxd8 — up material.', '', '', ''],
+    sources: ['concept:tac-zwischen', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3_Nge7_Bc4:Qg6': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'Qg6? The queen drifts off f6 — and with the pressure on d4 gone, the knight is free to strike.', 'Nxc6 — removing the defender; after the recapture the queen swings to h5 and hits f7.', '', 'Qh5 — eyeing f7; the threat of Qxf7+ outruns Black’s ...Bxe3.', '', 'Qxf7+ — the pawn falls with check and a raging attack on the stuck king.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxc6 — remove the defender.', '', 'Qh5 — hit f7.', '', 'Qxf7+ — grab it, attack.', '', '', ''],
+    sources: ['concept:pos-initiative', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/Scotch_Game', 'https://www.chessable.com/blog/the-scotch-game/'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3_Nge7_Bc4_O-O_O-O_d6_Nxc6:Bxe3': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bxe3? Black grabs the bishop instead of dealing with the knight on c6 — a costly slip.', 'fxe3 — recapturing, and now the c6-knight is a monster, forking the e7-knight and the queen.', '', 'Nxe7+ — the fork lands with check; White wins a clean piece.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'fxe3 — recapture, knight forks.', '', 'Nxe7+ — fork, win a piece.', '', '', '', '', ''],
+    sources: ['concept:tac-fork', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nxc6_bxc6_e5_Qe7_Qe2_Nd5_c4_Ba6_b3:Qh4': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qh4? The queen sortie hits nothing concrete and just invites White to develop with gain.', 'Bb2 — the bishop takes the long diagonal, raking toward the centre and kingside; White’s space and the two bishops give a lasting pull.', '', '', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bb2 — long diagonal, lasting pull.', '', '', '', '', '', '', ''],
+    sources: ['concept:pos-bishop-pair', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3_Bb4_Bc4_d6_O-O_Bxc3_bxc3:Nge7': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nge7? It blocks the defence of f7 and lets White’s lead in development pounce.', 'Ng5! — the knight jumps at f7, the eternal soft spot; with the Bc4 already aimed there, the threats pile up fast.', '', '', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Ng5 — jump at f7.', '', '', '', '', '', '', ''],
+    sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Nb3_Bb6_Nc3_Nf6_Qe2:h6': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'h6? A slow, weakening move in a position that demands development.', 'e5 — White grabs the centre with tempo, kicking the f6-knight to the rim; the space advantage is real.', '', '', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'e5 — seize space, kick the knight.', '', '', '', '', '', '', ''],
+    sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+  'scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Nb3_Bb6_Nc3_Nf6_Qe2_d6_Be3_Bxe3_Qxe3:Nb4': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nb4? The knight jumps to the rim with no future — a3 will kick it and it loses time.', 'O-O-O — White castles into the lead; the rook hits d6, Bb5+ looms, and the misplaced knight leaves White clearly better.', '', '', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'O-O-O — castle into the lead.', '', '', '', '', '', '', ''],
+    sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Scotch_Game'],
+  },
+
+  // ── Italian Game / Evans Gambit (White) — verified vs engine + online
+  // (Chess.com / Wikipedia). c3+d4 central break, Qb3/Ba3 diagonals at f7.
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3:a6': {
+    watch: ['', '', '', '', '', '', '', 'a6? A slow waiting move that does nothing for the centre — White seizes the moment.', 'd4! The thematic Italian break rips the centre open with tempo, hitting the c5-bishop.', '', 'cxd4 — White builds a broad, mobile pawn centre while Black has wasted time.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', 'd4 — the central break.', '', 'cxd4 — broad pawn centre.', '', '', '', '', ''],
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://www.chess.com/openings/Italian-Game'],
+  },
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3:d5': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'd5? Black strikes back in the centre a move too early, with the bishop loose on b4.', 'exd5 — White wins the pawn; after Nxd5 both the b4-bishop and the d5-knight become targets.', '', 'O-O — calmly completing development; White keeps the extra pawn and the initiative.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'exd5 — win the pawn.', '', 'O-O — keep the edge.', '', '', '', '', ''],
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://www.chess.com/openings/Italian-Game'],
+  },
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Ba5_d4_exd4_O-O:Bxc3': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'Bxc3? Greedily grabbing a second pawn opens the very lines White’s gambit wanted.', 'Nxc3 — recapturing with the knight; White’s lead in development is now overwhelming.', '', 'Qb3 — the queen swings to the a2–g8 diagonal, hitting f7 and tying Black down. Full Evans value and more.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxc3 — recapture, huge lead.', '', 'Qb3 — hit f7.', '', '', '', '', ''],
+    sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
+  },
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Ba5_d4_exd4_O-O_d6_cxd4:h6': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'h6? A wasted tempo in a gambit where every move counts.', 'Qb3 — the queen lands on the b3–f7 diagonal, hitting f7 and b7 at once.', '', 'd5 — the centre pawn lunges, forking the c6-knight and blasting the position open for White’s bishops.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qb3 — hit f7 and b7.', '', 'd5 — fork, blast it open.', '', '', '', '', ''],
+    sources: ['concept:pos-development', 'concept:pos-initiative', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
+  },
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Ba5_d4_exd4_O-O_d6_cxd4_Bb6_d5:Ne5': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Ne5? Trading into White’s strong d5-clamp — it hands White the more pleasant game.', 'Nxe5 — removing Black’s most active piece; the d5-pawn cramps Black and White is clearly better.', '', '', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxe5 — trade off, keep the clamp.', '', '', '', '', '', '', ''],
+    sources: ['concept:pos-space', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
+  },
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Be7_d4:Nf6': {
+    watch: ['', '', '', '', '', '', '', 'Nf6? It attacks e4 but ignores the centre — White strikes first.', 'dxe5 — winning the pawn and chasing the knight; after Ng4 the queen comes to d5 hitting g4 and f7.', '', 'Qd5 — the double attack: the g4-knight and f7 both hang. White stays a clean pawn up.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', 'dxe5 — win the pawn, chase.', '', 'Qd5 — double attack.', '', '', '', '', ''],
+    sources: ['concept:tac-double-attack', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
+  },
+  'italian-game:e4_e5_Nf3_Nc6_Bc4_Nf6_d4_exd4_O-O:d5': {
+    watch: ['', '', '', '', '', '', '', '', '', 'd5? Returning the pawn to free the position — but it walks into a pin.', 'exd5 — winning the race; after Nb4 the bishop checks and Black’s pieces tangle.', '', 'Bb5+ — check, exploiting the loose pieces; White emerges a clean pawn up with the initiative.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'exd5 — win the race.', '', 'Bb5+ — check, win material.', '', '', '', '', ''],
+    sources: ['concept:tac-pin', 'concept:pos-development', 'https://www.chess.com/openings/Italian-Game'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

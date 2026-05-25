@@ -1,28 +1,14 @@
 {
-  "_doc": "Masterclass punish-gems mined but NOT yet hand-narrated (no GEM_NARRATION entry). These do not surface in-app (a gem only shows once narrated), but they are the authoring backlog. Gate: punishGems.test.ts requires a narration entry for every masterclass gem; list only SHRINKS. Priority: kings-gambit, scotch, italian. Regenerate after authoring.",
-  "count": 22,
+  "_doc": "Masterclass punish-gems mined but NOT yet hand-narrated (no GEM_NARRATION entry). These do not surface in-app (a gem only shows once narrated), but they are the authoring backlog. Gate: punishGems.test.ts requires a narration entry for every masterclass gem; list only SHRINKS. Priority: kings-gambit, scotch, italian. Regenerate after authoring. [2026-05-25: KG+Scotch(7/15)+Italian narrated; remaining are subtle Scotch positional gems (cp<1.0) deliberately left for a verified pass.]",
+  "count": 8,
   "keys": [
-    "italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Ba5_d4_exd4_O-O:Bxc3",
-    "italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Ba5_d4_exd4_O-O_d6_cxd4:h6",
-    "italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Ba5_d4_exd4_O-O_d6_cxd4_Bb6_d5:Ne5",
-    "italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3:a6",
-    "italian-game:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3:d5",
-    "italian-game:e4_e5_Nf3_Nc6_Bc4_Be7_d4:Nf6",
-    "italian-game:e4_e5_Nf3_Nc6_Bc4_Nf6_d4_exd4_O-O:d5",
     "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Bc4:h6",
     "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Bc4_Nf6_e5_d5_Bb5:Ng4",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3_Nge7_Bc4:Qg6",
     "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3_Nge7_Bc4_O-O_O-O:Nxd4",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Be3_Qf6_c3_Nge7_Bc4_O-O_O-O_d6_Nxc6:Bxe3",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Nb3_Bb6_Nc3_Nf6_Qe2:h6",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Bc5_Nb3_Bb6_Nc3_Nf6_Qe2_d6_Be3_Bxe3_Qxe3:Nb4",
     "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nc3_Bb4_Nxc6_bxc6_Bd3_d5_exd5:Nxd5",
     "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nxc6:dxc6",
     "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nxc6_bxc6_e5:Ne4",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nf6_Nxc6_bxc6_e5_Qe7_Qe2_Nd5_c4_Ba6_b3:Qh4",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_Nxd4_Nxd4_Qxd4_d6_Nc3_Nf6_Bg5_Be7_O-O-O:c5",
     "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3:d6",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3:Be7",
-    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3_Bb4_Bc4_d6_O-O_Bxc3_bxc3:Nge7"
+    "scotch-game:e4_e5_Nf3_Nc6_d4_exd4_c3_dxc3_Nxc3:Be7"
   ]
 }
