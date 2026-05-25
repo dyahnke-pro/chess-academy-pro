@@ -3238,5 +3238,77 @@
     "engineCp": 127,
     "tier": "confirmed",
     "why": "At your level opponents play b6 here in 7% of games. Punish with the best move Bxf6 — the engine has White winning (+1.3)."
+  },
+  {
+    "openingId": "trompowsky-attack",
+    "lineMoves": "d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2",
+    "inaccuracy": "d6",
+    "freqPct": 5.1,
+    "games": 1007,
+    "practicalScore": 67,
+    "mainMove": "Qb6",
+    "punish": "Rb1",
+    "punishSeq": [
+      "Rb1",
+      "Qa3",
+      "Nb5",
+      "Qxa2",
+      "Nc7+",
+      "Kd8",
+      "Nxa8",
+      "Na6"
+    ],
+    "playLine": "d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 d6 Rb1 Qa3 Nb5 Qxa2 Nc7+ Kd8 Nxa8 Na6",
+    "engineCp": 275,
+    "tier": "confirmed",
+    "why": "At your level opponents play d6 here in 5% of games. Punish with the best move Rb1 — the engine has White winning (+2.8)."
+  },
+  {
+    "openingId": "trompowsky-attack",
+    "lineMoves": "d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 Qb6 e4",
+    "inaccuracy": "a6",
+    "freqPct": 2.4,
+    "games": 319,
+    "practicalScore": 59,
+    "mainMove": "d6",
+    "punish": "e5",
+    "punishSeq": [
+      "e5",
+      "Ng8",
+      "d6",
+      "exd6",
+      "Nd5",
+      "Qc6",
+      "Ba5",
+      "b6"
+    ],
+    "playLine": "d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 Qb6 e4 a6 e5 Ng8 d6 exd6 Nd5 Qc6 Ba5 b6",
+    "engineCp": 229,
+    "tier": "confirmed",
+    "why": "At your level opponents play a6 here in 2% of games. Punish with the best move e5 — the engine has White winning (+2.3)."
+  },
+  {
+    "openingId": "trompowsky-attack",
+    "lineMoves": "d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 Qb6 e4 d6 f4",
+    "inaccuracy": "Nbd7",
+    "freqPct": 16.1,
+    "games": 1516,
+    "practicalScore": 55,
+    "mainMove": "g6",
+    "punish": "Nf3",
+    "punishSeq": [
+      "Nf3",
+      "Qc7",
+      "Qe2",
+      "a6",
+      "a4",
+      "c4",
+      "e5",
+      "dxe5"
+    ],
+    "playLine": "d4 Nf6 Bg5 c5 d5 Qb6 Nc3 Qxb2 Bd2 Qb6 e4 d6 f4 Nbd7 Nf3 Qc7 Qe2 a6 a4 c4 e5 dxe5",
+    "engineCp": 168,
+    "tier": "confirmed",
+    "why": "At your level opponents play Nbd7 here in 16% of games. Punish with the best move Nf3 — the engine has White winning (+1.7)."
   }
 ]
