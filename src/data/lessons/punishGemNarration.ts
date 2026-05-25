@@ -1340,6 +1340,89 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     watch: ["", "", "", "", "", "", "", "", "", "", "", "", "", "Be6? It walks into a thunderbolt — the c4-bishop and the c3-knight are perfectly placed to pounce.", "Nd5! The knight forks the b4-bishop and threatens c7; suddenly every Black piece is loose.", "", "Qb3 doubles on b7 and f7 at once, hitting two targets the knight uncovered.", "", "Qxb7 grabs the pawn and attacks the a8-rook.", "", "Nxc7+! The fork — the king must move and the rook in the corner falls. The Göring's development lead crashes through.", ""],
     learn: ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "Nd5! — fork the bishop, hit c7.", "", "Qb3 — double on b7 and f7.", "", "Qxb7 — grab the pawn, hit the rook.", "", "Nxc7+ — fork; win the rook.", ""],
   },
+  // Queen's Gambit — Slav: …Nd5? too early; e4! kicks it and grabs the centre.
+  // playLine: d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Nd5 e4 Nxc3 bxc3 e6 Bxc4 Be7 O-O O-O
+  'queens-gambit:d4_d5_c4_c6_Nf3_Nf6_Nc3_dxc4_a4:Nd5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      'Nd5? — too early. The knight leaps to the centre before Black is developed, and it has nothing to support it there.',
+      'e4! — the kick and the centre in one move. The knight must move, and White claims the whole middle with tempo.',
+      '…Nxc3 — forced; the knight trades itself off rather than retreat to a worse square.',
+      'bxc3 — recapture toward the centre. White owns a broad pawn front on c3, d4 and e4, and the open b-file for the rook.',
+      '',
+      'Bxc4 — the gambit pawn comes back for free. White is fully mobilised with a dream centre.',
+      '',
+      "O-O — White's pull is permanent: more space, a mobile centre, and a black position with no counter-break.",
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      'e4 — kick the knight, take the centre.',
+      '',
+      'bxc3 — recapture, build the big centre.',
+      '',
+      'Bxc4 — pawn back, fully developed.',
+      '',
+      'O-O — castle; a lasting space edge.',
+      '',
+    ],
+  },
+
+  // Queen's Gambit — Exchange QGD: …b6? too slow; Bxf6 removes d5's only guard,
+  // then Qh5 and Qxd5 win the central pawn.
+  // playLine: d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 b6 Bxf6 Bxf6 Qh5 g6 Qxd5 c6 Qxd8 Rxd8
+  'queens-gambit:d4_d5_c4_e6_Nc3_Nf6_cxd5_exd5_Bg5_Be7_e3_O-O_Bd3:b6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      "b6? — too slow. It frees the queenside bishop, but the d5-pawn's only real guard is the f6-knight, and White strikes before Black is ready.",
+      'Bxf6 — first remove the knight; it was the lone defender of d5.',
+      '…Bxf6 — Black must recapture.',
+      'Qh5 — the queen darts out to attack the undefended d5-pawn, with a glance at h7.',
+      '…g6 — Black shoos the queen and shields h7, but d5 is still hanging.',
+      'Qxd5 — the queen sidesteps the kick by grabbing d5. A clean central pawn, and White is on top.',
+      '…c6 — chasing the queen off the post.',
+      'Qxd8 — simplest: trade into a pawn-up endgame.',
+      '…Rxd8 — and White sets about grinding the extra pawn home.',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      "Bxf6 — remove d5's only guard.",
+      '',
+      'Qh5 — hit d5; eye h7.',
+      '',
+      'Qxd5 — win the centre pawn.',
+      '',
+      'Qxd8 — trade into a pawn-up ending.',
+      '',
+    ],
+  },
+
+  // Queen's Gambit — Accepted: …Nc6? blocks Black's own …c5 freeing break;
+  // White builds the big e4 centre unchallenged. Positional, not a crush.
+  // playLine: d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 Nc6 Nc3 a6 e4 b5 Bb3 Bb7 O-O Be7
+  'queens-gambit:d4_d5_c4_dxc4_Nf3_Nf6_e3_e6_Bxc4:Nc6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      'Nc6? — a positional slip. In the QGA, Black frees his game with …c5 — but the knight on c6 blocks the c-pawn, so that break never comes.',
+      "Nc3 — White just develops. Knowing Black can't free himself, the plan is simple: build the centre.",
+      '',
+      'e4 — the full centre, and there is no …c5 to challenge it.',
+      '',
+      '',
+      '',
+      'O-O — White is comfortably better: more space, a mobile centre, and a knight on c6 with no future. A lasting positional pull, not a knockout.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      "Nc3 — just develop; Black's stuck.",
+      '',
+      'e4 — take the full centre.',
+      '', '', '',
+      'O-O — castle; enjoy the space.',
+      '',
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
