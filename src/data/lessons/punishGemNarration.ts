@@ -1597,6 +1597,51 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
     ],
   },
+  // Catalan — Closed: premature …dxc4 walks into the Ne5/Nxc6 combination;
+  // White wins the c6-pawn, the queen recaptures the bishop, and White
+  // consolidates a clean extra pawn (Stockfish-verified to +1.5).
+  // playLine: d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 dxc4 Nxc4 b5 Nce5 Nxe5 Nxe5 Bb7 Nxc6 Bxc6 Qxc6 Qxd4 Qxb5 Rab8 Qa6 Nd5 Rb1 Bf6
+  'catalan-opening:d4_Nf6_c4_e6_g3_d5_Bg2_Be7_Nf3_O-O_O-O_Nbd7_Qc2_c6_Nbd2:dxc4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'dxc4? — taking here is premature. It opens lines for White\'s better pieces and the great g2-bishop, and it walks into a concrete combination.',
+      'Nxc4 — White recaptures, the knight eyeing the e5 outpost.',
+      '',
+      'Nce5 — the knight jumps to e5, teaming with the Bg2 on the long diagonal toward c6.',
+      '',
+      'Nxe5 — recapturing toward the centre; now the c6-pawn is in the crosshairs of knight and bishop.',
+      '',
+      'Nxc6! — the combination. The knight grabs the c6-pawn; if the bishop recaptures, the diagonal collects it in turn.',
+      '',
+      'Qxc6 — the queen takes the bishop, winning the piece back with a clean extra pawn — and the Bg2 never leaves its diagonal. White is simply up material.',
+      '',
+      'Qxb5 — White scoops the loose b5-pawn too, a clear pawn to the good with the more active queen.',
+      '',
+      'Qa6 — the queen sidesteps the rook, keeping the extra pawn and pressing Black\'s queenside.',
+      '',
+      'Rb1 — contesting the b-file; White consolidates a winning extra pawn.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxc4 — recapture; eye e5.',
+      '',
+      'Nce5 — the central outpost.',
+      '',
+      'Nxe5 — recapture; target c6.',
+      '',
+      'Nxc6 — the combination begins.',
+      '',
+      'Qxc6 — win the piece, a pawn up.',
+      '',
+      'Qxb5 — grab the loose pawn.',
+      '',
+      'Qa6 — sidestep; keep the edge.',
+      '',
+      'Rb1 — contest the file; consolidate.',
+      '',
+    ],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

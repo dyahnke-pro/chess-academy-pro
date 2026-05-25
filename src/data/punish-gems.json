@@ -2337,6 +2337,7 @@
     "mainMove": "b6",
     "punish": "Nxc4",
     "punishSeq": [
+      "dxc4",
       "Nxc4",
       "b5",
       "Nce5",
@@ -2344,36 +2345,20 @@
       "Nxe5",
       "Bb7",
       "Nxc6",
-      "Bxc6"
+      "Bxc6",
+      "Qxc6",
+      "Qxd4",
+      "Qxb5",
+      "Rab8",
+      "Qa6",
+      "Nd5",
+      "Rb1",
+      "Bf6"
     ],
-    "playLine": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 dxc4 Nxc4 b5 Nce5 Nxe5 Nxe5 Bb7 Nxc6 Bxc6",
-    "engineCp": 129,
+    "playLine": "d4 Nf6 c4 e6 g3 d5 Bg2 Be7 Nf3 O-O O-O Nbd7 Qc2 c6 Nbd2 dxc4 Nxc4 b5 Nce5 Nxe5 Nxe5 Bb7 Nxc6 Bxc6 Qxc6 Qxd4 Qxb5 Rab8 Qa6 Nd5 Rb1 Bf6",
+    "engineCp": 148,
     "tier": "confirmed",
     "why": "At your level opponents play dxc4 here in 9% of games. Punish with the best move Nxc4 — the engine has White winning (+1.3)."
-  },
-  {
-    "openingId": "catalan-opening",
-    "lineMoves": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O b5 Ne5",
-    "inaccuracy": "Ra7",
-    "freqPct": 48.7,
-    "games": 1698,
-    "practicalScore": 62,
-    "mainMove": "Ra7",
-    "punish": "a4",
-    "punishSeq": [
-      "a4",
-      "b4",
-      "e4",
-      "Be7",
-      "Nxc4",
-      "O-O",
-      "Nbd2",
-      "Bb7"
-    ],
-    "playLine": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Nf3 a6 O-O b5 Ne5 Ra7 a4 b4 e4 Be7 Nxc4 O-O Nbd2 Bb7",
-    "engineCp": 166,
-    "tier": "confirmed",
-    "why": "At your level opponents play Ra7 here in 49% of games. Punish with the best move a4 — the engine has White winning (+1.7)."
   },
   {
     "openingId": "catalan-opening",
