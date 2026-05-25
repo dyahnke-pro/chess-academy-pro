@@ -1155,13 +1155,12 @@
       "fen": "rnbqkb1r/ppp2ppp/3p1n2/4p3/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 1 4",
       "wrongMove": "exd4",
       "correctMove": "Nbd7",
-      "explanation": "Engine sees both moves as similar. But 4…exd4? gives up the locked-center structure that defines the Old Indian — after 5.Nxd4 the position opens and White's pieces (with the bishop pair) outclass Black's cramped setup. 4…Nbd7 keeps the wedge intact and prepares slow positional play. Practical edge: exd4 surrenders the structural insurance Black bought with 2…d6; Nbd7 preserves it."
-    },
-    {
-      "fen": "rnbqkb1r/ppp2ppp/3p1n2/4p3/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
-      "wrongMove": "dxe5",
-      "correctMove": "Nf3",
-      "explanation": "4.dxe5? gives up the central pawn structure for nothing — after 4…dxe5 5.Qxd8+ Kxd8 Black's king is exposed but White has no follow-up. The principled 4.Nf3 maintains the tension and develops normally."
+      "explanation": "Engine sees both moves as similar. But 4…exd4? gives up the locked-center structure that defines the Old Indian — after 5.Nxd4 the position opens and White's pieces (with the bishop pair) outclass Black's cramped setup. 4…Nbd7 keeps the wedge intact and prepares slow positional play. Practical edge: exd4 surrenders the structural insurance Black bought with 2…d6; Nbd7 preserves it.",
+      "shortNarration": "…Nbd7 — keep the tension, hold …exd4.",
+      "sources": [
+        "book:old-indian-defence",
+        "https://en.wikipedia.org/wiki/Old_Indian_Defense"
+      ]
     }
   ],
   "bird-opening": [

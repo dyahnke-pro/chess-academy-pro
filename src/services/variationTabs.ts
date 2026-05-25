@@ -346,6 +346,26 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /nimzowitsch/i, label: '…Bb4+' },
     { test: /miles/i, label: 'Miles …Ba6' },
   ],
+  // Old Indian Defence — the restrained …d6/…e5 cousin of the KID (bishop on e7,
+  // no …g6). Main-line pill = the classical …Nc5-outpost manoeuvring main
+  // (repertoire pgn). Tabs = the two ≥20-ply White setups: the Czech (…c6/…c5
+  // closed centre) and the Be2/Qc2 development. (Janowski/Tartakower/Ukrainian/
+  // Seirawan/Main-d5 anchor <20p in the curated pgn, so they fold into the main.)
+  'old-indian-defence': [
+    { test: /czech/i, label: 'Czech' },
+    { test: /be2/i, label: 'Be2 System' },
+  ],
+  // Two Knights Defence — Black's combative …Nf6 answer to the Italian. Main-
+  // line pill = the quiet 4.d3 Ruy-style manoeuvring main (repertoire pgn).
+  // Tabs = the distinct ≥20-ply battlegrounds: the 4.d4 Italian, the …Na5
+  // antidote to the Fried Liver (4.Ng5), and the wild Max Lange Attack.
+  // (Ulvestad/Polerio/Traxler are sharp sidelines deferred pending soundness
+  // verification; the <20p 4.d3 …Be7 line folds into the main.)
+  'two-knights-defence': [
+    { test: /italian two knights d4/i, label: '4.d4 Italian' },
+    { test: /fried liver/i, label: 'Fried Liver' },
+    { test: /max lange/i, label: 'Max Lange' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same

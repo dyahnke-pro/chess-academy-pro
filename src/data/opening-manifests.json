@@ -314,5 +314,23 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "old-indian-defence": {
+    "variations": 7,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "two-knights-defence": {
+    "variations": 8,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }
