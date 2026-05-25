@@ -32,6 +32,8 @@ import { ITALIAN_GAME_TRAP_LESSONS } from './italianGameTrapLessons';
 import { SCOTCH_GAME_LESSON } from './scotchGame';
 import { SCOTCH_GAME_VARIATION_LESSONS } from './scotchGameVariations';
 import { SCOTCH_GAME_TRAP_LESSONS } from './scotchGameTrapLessons';
+import { QUEENS_GAMBIT_LESSON } from './queensGambit';
+import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
 import { FRENCH_DEFENCE_LESSON } from './frenchDefence';
 import { FRENCH_DEFENCE_VARIATION_LESSONS } from './frenchDefenceVariations';
 import { SCANDINAVIAN_DEFENCE_LESSON } from './scandinavianDefence';
@@ -120,6 +122,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: CARO_KANN_LESSON, variations: CARO_VARIATION_LESSONS, traps: CARO_TRAP_LESSONS },
   { main: ITALIAN_GAME_LESSON, variations: ITALIAN_GAME_VARIATION_LESSONS, traps: ITALIAN_GAME_TRAP_LESSONS },
   { main: SCOTCH_GAME_LESSON, variations: SCOTCH_GAME_VARIATION_LESSONS, traps: SCOTCH_GAME_TRAP_LESSONS },
+  { main: QUEENS_GAMBIT_LESSON, variations: QUEENS_GAMBIT_VARIATION_LESSONS },
   { main: FRENCH_DEFENCE_LESSON, variations: FRENCH_DEFENCE_VARIATION_LESSONS },
   { main: SCANDINAVIAN_DEFENCE_LESSON, variations: SCANDINAVIAN_DEFENCE_VARIATION_LESSONS },
   { main: ALEKHINE_DEFENCE_LESSON, variations: ALEKHINE_DEFENCE_VARIATION_LESSONS },

@@ -341,5 +341,14 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "queens-gambit": {
+    "variations": 8,
+    "middlegamePlans": 7,
+    "endgamePlans": 0,
+    "modelGames": 4,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }
