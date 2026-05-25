@@ -80,8 +80,8 @@ confirm it best shows White's pull, else re-steer to a queens-on line.
 ## CLASS STATUS (David's build order: White QG → QGD → QGA → Catalan)
 - ✅ **queens-gambit (WHITE) — COMPLETE** (lessons, 6 tabs, 7 plans+leadeye, 3 gems, 4 model games, manifest, color sub-tabs). ship-check READY.
 - ✅ **qgd (BLACK) — COMPLETE** (main + 7 variation lessons, 7 tabs, 8 plans+leadeye, 3 Black-win model games [Kasparov/Anand/Ivanisevic], 3 gems incl. the Cambridge Springs trap, manifest). ship-check confirming.
-- 🚧 **qga (BLACK) — P0**: 7 curated spines exist in repertoire.json (Classical=main pill; tabs: Smyslov, Sadler, Central, Alekhine, Modern Tabiya, Janowski). 6/7 ≥20 ply; **Central (3.e4) thins on the …Ng5 sideline — re-steer at authoring** (walk from …Nc6 O-O). Alekhine extended to 22p. Next: author lessons (black) → wire → plans → gems → Black-win model games.
-- ⏳ **catalan-opening (WHITE)** — not started.
+- ✅ **qga (BLACK) — COMPLETE** (main + 6 variation lessons, 6 tabs, 7 plans+leadeye, 3 elite Black-win model games [Caruana/Aronian/Anand, Classical QGA], 3 gems incl. the Central …Bb4+ zwischenzug + Alekhine pawn-grabs, manifest). ship-check confirming.
+- 🚧 **catalan-opening (WHITE) — P0**: 7 curated spines in repertoire.json (main pill = dxc4 Qc2 a6 b5; tabs: Open dxc4, Closed …c6, Open a6-b5, …Nbd7, vs-Slav, Declined …Be7, Early Qa4+). 6/7 ≥20 ply; **vs-Slav (…c6/…b5) thins — re-steer or fold at authoring**. Qa4+ extended to 22p. Next: author WHITE lessons → wire → plans → gems → White-win model games.
 - Side-fix this session: `add-leadeye-to-plans.mjs` allowlist now includes queens-gambit + qgd (both were missing — QG plans had shipped bare).
 
 ## QGD (BLACK) — spines (`scripts/_qgd-extend.mjs`)
