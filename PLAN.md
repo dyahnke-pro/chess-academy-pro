@@ -33,15 +33,18 @@ So gem mining (STEP 6) and model-game sourcing (STEP 7) can run locally here —
 not blocked. `BASE_DATA_REVISION` bumped to `2026-05-25-french-variations`.
 
 ## Phased plan (Vienna §0.7 STEPs)
-- [ ] **STEP 1** — author lessons. Main (`frenchDefence.ts`) + 8 variation
-      lessons (`frenchDefenceVariations.ts`), two registers (`say`/`sayShort`),
-      lead-the-eye arrows/highlights, orientation `black`.
-- [ ] **STEP 2** — register in `registry.ts` (3 imports + 1 OPENINGS line).
-- [ ] **STEP 3** — `variationTabs.ts` `CURATED['french-defence']`.
+- [x] **STEP 1** — author lessons. Main (`frenchDefence.ts`, 12 beats) + **10**
+      variation lessons (`frenchDefenceVariations.ts`), two registers, lead-the-eye,
+      orientation `black`. All gate-green.
+- [x] **STEP 2** — registered in `registry.ts` AND runtime `index.ts`.
+- [x] **STEP 3** — `variationTabs.ts` `CURATED['french-defence']`, 10 tabs, freq-ordered.
 - [ ] **STEP 4** — `frenchDefenceMasterclassTabs.ts` `getFrenchDefenceTabPlanIds`
-      + wire into `OpeningDetailPage.tsx`.
+      + wire into `OpeningDetailPage.tsx`. *(pending STEP 5 plans)*
 - [ ] **STEP 5** — middlegame plans (one per tab) in `middlegame-plans.json`
-      (`mp-frenchdefence-<tab>`), then `add-leadeye-to-plans.mjs`.
+      (`mp-frenchdefence-<tab>`, BLACK-oriented), then `add-leadeye-to-plans.mjs`.
+      NOTE: removed 2 stale WHITE-oriented French plans (mp-french-kingside/
+      queenside) — backwards for a Black opening (empty > backwards). Section
+      self-hides until proper Black plans land.
 - [ ] **STEP 6** — punish-gems. Mining needs the amateur explorer → likely
       firewall-blocked in sandbox → **CI runner** (`mine-punish-gems.yml`).
       Then hand-author `punishGemNarration.ts`. *(staged — needs CI)*
@@ -49,8 +52,17 @@ not blocked. `BASE_DATA_REVISION` bumped to `2026-05-25-french-variations`.
       from the local pro-games cache or David; add to `model-games.json` +
       PROTECTED list. *(staged — needs sourcing)*
 - [ ] **STEP 8** — checkpoint quizzes + common mistakes keyed `french-defence`.
-- [ ] **STEP 9** — `opening-manifests.json` floors. (Moves French out of
-      "Most Common" into Masterclasses automatically.)
+- [x] **STEP 9** — `opening-manifests.json` floors added (10 variations, 4
+      keyIdeas; plans/models/weapons start 0, ratchet up as they land). French
+      now moves from "Most Common" → Masterclasses automatically.
+
+## Status (2026-05-25)
+Lesson spine COMPLETE + gate-green + `ship-check` READY TO PUSH. The page lights
+up: Watch/Learn/Practice on the main line + all 10 tabs, unlock ladder, key
+ideas, book reader, coach scope — all inherited. Remaining for full Vienna
+parity: STEP 5 plans, STEP 6 gems (miner reachable here), STEP 7 model games
+(export reachable here), STEP 8 quizzes/common-mistakes. NOT done until merged
+to main + post-deploy audit green (§0.5 definition of done).
 
 ## Gates (must be green before done)
 lessonIntegrity, narrationAccuracy, narrationGrounding, lessonDepth,
