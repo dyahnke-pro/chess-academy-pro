@@ -115,6 +115,19 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /muzio/i, label: 'Muzio' },
     { test: /allgaier/i, label: 'Allgaier' },
   ],
+  // Scandinavian Defence — distinct validated variations (David 2026-05-25:
+  // "add all validated variations", complete builds only — each tab has a real
+  // Black-win model game). The repertoire main pgn is the Qa5 …Bb4 line = the
+  // "Main line" pill; "Qa5 with Bd2 Main Line" folds into it (same Qa5 system),
+  // so its regex is excluded. Ordered by amateur prevalence of the 3rd move.
+  'scandinavian-defence': [
+    { test: /qa5 main line/i, label: 'Qa5 Solid' },
+    { test: /tiviakov/i, label: 'Tiviakov' },
+    { test: /nf6 modern/i, label: 'Modern' },
+    { test: /portuguese/i, label: 'Portuguese' },
+    { test: /icelandic/i, label: 'Icelandic' },
+    { test: /gubinsky/i, label: 'Gubinsky-Melts' },
+  ],
 };
 
 /** Short tab label from a variation name: the parenthetical if present

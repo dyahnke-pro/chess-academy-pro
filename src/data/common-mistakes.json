@@ -188,22 +188,25 @@
   ],
   "scandinavian-defence": [
     {
-      "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
-      "wrongMove": "Qxd5",
-      "correctMove": "Nf6",
-      "explanation": "Recapturing with the queen early exposes it to tempo-gaining attacks after Nc3. The modern 2...Nf6 develops a piece and recaptures the pawn later without losing time."
+      "fen": "rnb1kb1r/ppp1pppp/5n2/q7/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+      "wrongMove": "e6",
+      "correctMove": "Bf5",
+      "explanation": "Playing …e6 first locks the light-squared bishop behind its own pawn — the very French problem the Scandinavian exists to avoid. Develop …Bf5 (or …Bg4) FIRST, getting the bishop outside the chain, and only then play …e6.",
+      "shortNarration": "Bf5 — bishop out before …e6"
     },
     {
       "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
       "wrongMove": "Qe5+",
       "correctMove": "Qa5",
-      "explanation": "Qe5+ blocks the e-pawn and hinders Black's own development after Be2 blocks the check calmly. Qa5 keeps the queen active on the queenside while allowing e5 or e6 to develop the bishop naturally."
+      "explanation": "…Qe5+ is a greedy check that goes nowhere: after Be2 the bishop blocks calmly and Black has only misplaced the queen and blocked the e-pawn. …Qa5 keeps the queen active and out of harm's way, the sound main-line square.",
+      "shortNarration": "Qa5 — active retreat, not the greedy check"
     },
     {
       "fen": "rnb1kb1r/ppp1pppp/5n2/q2P4/8/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 4",
       "wrongMove": "Qb6",
       "correctMove": "Nxd5",
-      "explanation": "Retreating the queen to b6 wastes another tempo and leaves the d5 pawn unchallenged. Recapturing with Nxd5 equalizes material and centralizes the knight on a strong square."
+      "explanation": "Shuffling the queen to b6 wastes a tempo and lets White keep the extra d5-pawn. Just recapture with …Nxd5, regaining the pawn and centralising the knight — equal and easy.",
+      "shortNarration": "Nxd5 — recapture, do not dawdle"
     }
   ],
   "catalan-opening": [

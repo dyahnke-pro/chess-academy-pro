@@ -89,5 +89,14 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "scandinavian-defence": {
+    "variations": 7,
+    "middlegamePlans": 7,
+    "endgamePlans": 0,
+    "modelGames": 7,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

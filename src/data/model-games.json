@@ -2896,54 +2896,6 @@
     "source": "lichess-masters"
   },
   {
-    "id": "mg-lichess-qGeCrW3o",
-    "openingId": "scandinavian-defence",
-    "white": "Caruana, F.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2805,
-    "blackElo": 2876,
-    "result": "1/2-1/2",
-    "year": 2015,
-    "event": "2015-2015-06 master game",
-    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 Nf3 Nf6 d4 c6 Bc4 Bg4 h3 Bxf3 Qxf3 e6 Bd2 Qc7 O-O-O Nbd7 Ne4 Nxe4 Qxe4 Bd6 Kb1 Nf6 Qf3 O-O Bd3 a5 h4 Nd5 h5 Rfd8 Qe4 Nf6 Qe2 Bf4 Bxf4 Qxf4 g3 Qg5 c3 h6 Bc2 Kf8 Rde1 c5 dxc5 Qxc5 Rd1 b5 Rxd8+ Rxd8 Rd1 Rc8 a3 Qxh5 Qxh5 Nxh5 Rd7 b4 cxb4 axb4 axb4 Nf6 Rb7 Nd5 b5 Nb4 Be4 Rc4 Bg2 Rd4 Rc7 Rd1+ Rc1 Rxc1+ Kxc1 Ke7 Kd2 Kd6 b6 h5 f4 f6 Kc3 Nc6 b7 Nb8 Kd4 Nd7 b4 Kc7 Bf3 g6 Be4 g5 fxg5 fxg5 Bf3 h4 g4 h3 b5 h2 Bh1 Nf6 Ke5 Nxg4+ Kxe6 Nf2 Bg2 Nd1 Ke5 Kb8 Ke4 Nf2+ Kf5 h1=Q Bxh1 Nxh1 Kxg5 Kxb7 b6 Kxb6",
-    "overview": "Master game from the Lichess masters database. Caruana, F. vs Carlsen, M., 2015. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/qGeCrW3o",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-06wNUWaA",
-    "openingId": "scandinavian-defence",
-    "white": "Firouzja, Alireza",
-    "black": "Carlsen, M.",
-    "whiteElo": 2759,
-    "blackElo": 2847,
-    "result": "1-0",
-    "year": 2021,
-    "event": "2021-2021-08 master game",
-    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Ne5 c6 Bc4 e6 g4 Bg6 h4 Nbd7 Nxd7 Nxd7 h5 Be4 O-O Bd5 Nxd5 cxd5 Bd3 Bd6 Qf3 O-O-O Be3 g6 h6 Rhf8 a3 f5 c4 e5 b4 Qc7 c5 Be7 Bb5 e4 Qh3 f4 Bd2 Bg5 c6 Nf6 cxb7+ Qxb7 Rac1+ Kb8 Bc6 Qe7 Rc5 e3 fxe3 fxe3 Be1 Ne4 Qh2+ Kc8 Bd7+ Kxd7 Rc7+ Ke6 Qe5#",
-    "overview": "Master game from the Lichess masters database. Firouzja, Alireza vs Carlsen, M., 2021. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/06wNUWaA",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-K3TNuDAQ",
-    "openingId": "scandinavian-defence",
-    "white": "Dominguez Perez, L.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2758,
-    "blackElo": 2847,
-    "result": "1/2-1/2",
-    "year": 2021,
-    "event": "2021-2021-08 master game",
-    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bd2 c6 Bc4 Nbd7 Qe2 Qc7 O-O-O e6 Nh4 Bg6 Nxg6 hxg6 d5 cxd5 Nxd5 Nxd5 Bxd5 O-O-O Bf3 Bd6 g3 Ne5 Bc3 Nxf3 Qxf3 f5 Qe3 e5 Qxa7 Qc6 Qa8+ Kd7 Qa5 Ke6 Rhe1 Bc7 Qb4 Rxd1+ Rxd1 Rxh2 Qf8 Rh1 Be1 Qe4 Qxg7 Rxe1 Qxg6+ Ke7 Qg7+ Ke6 Qd7+ Kf6 Qxc7 Rxd1+ Kxd1 Qd5+ Kc1 Qh1+ Kd2 Qd5+ Kc3 Qf3+ Kb4 Qxf2 Qd6+ Kg5 Qxe5 Qxc2 Qf4+ Kg6 Qd4 Kg5 a4 Qe4 Qxe4 fxe4 Kc3 Kg4 Kd2 Kf3 Ke1 Kxg3 b4 Kf4 a5 Ke5 b5 Kd5 a6 bxa6 bxa6 Kc6 Ke2 Kb6 Ke3 Kxa6 Kxe4",
-    "overview": "Master game from the Lichess masters database. Dominguez Perez, L. vs Carlsen, M., 2021. Result: 1/2-1/2. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/K3TNuDAQ",
-    "source": "lichess-masters"
-  },
-  {
     "id": "mg-lichess-0H6H5Wpx",
     "openingId": "semi-slav",
     "white": "Carlsen, M.",
@@ -3798,5 +3750,180 @@
     ],
     "middlegameTheme": "Punishing White’s doubled c-pawns and stranded king",
     "lessonSummary": "Nakamura’s McCutcheon: trade the dark bishop to wreck White’s pawns and chase the king, then convert the structural edge."
+  },
+  {
+    "id": "mg-scandi-main",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Leko, Peter",
+    "black": "Fressinet, Laurent",
+    "whiteElo": 2732,
+    "blackElo": 2700,
+    "result": "0-1",
+    "year": 2012,
+    "event": "Beijing Sportaccord blitz",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 Bb4 a3 Bxc3 Bxc3 Qb6 b3 Nc6 O-O O-O Ne5 Rad8 Nxc6 Qxc6 Bb4 Rfe8 Qe2 a6 Rfd1 Nd5 Qd2 Nb6 Qe2 Nxc4 bxc4 b6 Rd2 a5 Bc3 Be4 f3 Bd5 c5 bxc5 dxc5 Qxc5+ Bd4 Qc4 Qxc4 Bxc4 Bc3 a4 Rad1 Rd5 Rxd5 Bxd5 Rb1 f6 Kf2 Kf7 Rb4 Ra8 Bd4 Ra6 Ke1 g5 Be3 Kg6 h4 h6 hxg5 hxg5 c3 Ra8 c4 Bc6 c5 Rd8 Kf2 Rd3 Bc1 Rc3 Bb2 Rxc5 Rb8 e5 Ke3 Rc2 g3 Rg2 Rc8 Rxb2",
+    "overview": "Qa5 Main Line — Fressinet outplays Leko from the Black side, the light-squared bishop active on f5 the whole game.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "3r1rk1/ppp2ppp/1qn1pn2/4Nb2/2BP4/PPB5/2P2PPP/R2Q1RK1 w - - 5 13",
+        "annotation": "Black has the Scandinavian dream: the queen active, the light-squared bishop developed OUTSIDE the chain on f5, and not a weakness in the camp — the early …Qxd5/…Bf5 plan delivered.",
+        "concept": "The good bishop on f5"
+      }
+    ],
+    "middlegameTheme": "Active queen on a5 and the unproblematic f5-bishop",
+    "lessonSummary": "A model Qa5 Scandinavian: recapture with the queen, get the bishop out to f5, and play a clean, weakness-free game."
+  },
+  {
+    "id": "mg-scandi-qa5",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Svidler, Peter",
+    "black": "Nielsen, Peter Heine",
+    "whiteElo": 2734,
+    "blackElo": 2700,
+    "result": "0-1",
+    "year": 2010,
+    "event": "Politiken Larsen blitz",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 c6 Bc4 Nf6 Nf3 Bf5 Bd2 e6 Nd5 Qd8 Nxf6+ gxf6 Bb3 Nd7 Qe2 Qc7 Nh4 Bg6 O-O-O O-O-O f4 f5 h3 Nf6 c3 Bh5 Nf3 Bd6 g3 Ne4 Rhg1 Rhg8 g4 Nxd2 Nxd2 Bg6 Bc2 fxg4 f5 exf5 hxg4 Rge8 Qf3 fxg4 Qxg4+ Kb8 Rdf1 a6 Nc4 Ka7 Nxd6 Rxd6 Qf4 Bxc2 Kxc2 Re2+ Kb1 Qb6 Qc1 Rh6 Re1 Rhh2 Rxe2 Rxe2 a3 Qb5 Rg5 Rxb2+",
+    "overview": "Qa5 with …c6 — Peter Heine Nielsen beats Svidler from the Black side in the solid main line.",
+    "criticalMoments": [
+      {
+        "moveNumber": 13,
+        "color": "black",
+        "fen": "2kr1b1r/ppqn1p1p/2p1ppb1/8/3P3N/1B6/PPPBQPPP/2KR3R w - - 8 14",
+        "annotation": "The solid …c6 Qa5 structure is set — no weaknesses, the queen poised on a5, and with opposite-side castling Black turns the patient setup into a queenside attack.",
+        "concept": "Opposite-side race"
+      }
+    ],
+    "middlegameTheme": "Solid …c6 setup turning into a queenside attack",
+    "lessonSummary": "The patient …c6 Qa5: rock-solid structure, then a queenside pawn storm when the kings go opposite ways."
+  },
+  {
+    "id": "mg-scandi-modern",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Hodgson, Julian M",
+    "black": "Stefansson, Hannes",
+    "whiteElo": 2545,
+    "blackElo": 2480,
+    "result": "0-1",
+    "year": 1989,
+    "event": "Reykjavik",
+    "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6 Be2 Bg7 O-O O-O c4 Nb6 Nc3 Nc6 d5 Ne5 Nxe5 Bxe5 Bh6 Re8 Qd2 c6 Rad1 cxd5 c5 Nd7 Qxd5 e6 Qc4 Qe7 f4 Bh8 Ne4 b6 Bf3 Rb8 c6 Nc5 b4 Nxe4 Bxe4 Qc7 b5 Ra8 a4 a6 Rd3 axb5 axb5 Ra1 Rxa1 Bxa1 Rd1 Bh8 h3 Rd8 Qa4 Bc3 Rxd8+ Qxd8 Qa7 Qd1+ Kh2 Bd4 Qa3 Qg1+ Kg3 Qe1+ Kg4 e5+ Bf5 Bxf5+ Kg5 f6+ Kxf6 Qh4+ Bg5 exf4+ Ke7 Qxg5+ Ke8 Qf6 Qe7 Qxe7+ Kxe7",
+    "overview": "…Nf6 Modern — Stefansson defeats Hodgson from the Black side with the King’s-Indian-style fianchetto.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1bqr1k1/pp2pp1p/1np3pB/3Pb3/2P5/2N5/PP1QBPPP/R4RK1 w - - 0 13",
+        "annotation": "Black has the Modern setup — knight recaptured and centralised, bishop fianchettoed on g7 raking the long diagonal at White’s broad but targetable centre.",
+        "concept": "The fianchetto vs the centre"
+      }
+    ],
+    "middlegameTheme": "…g6/Bg7 fianchetto pressuring White’s big centre",
+    "lessonSummary": "The Modern Scandinavian: recapture with the knight, fianchetto, and swarm White’s centre with the pieces."
+  },
+  {
+    "id": "mg-scandi-icelandic",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Sokolov, Andrei",
+    "black": "Speelman, Jonathan S",
+    "whiteElo": 2595,
+    "blackElo": 2625,
+    "result": "0-1",
+    "year": 1988,
+    "event": "Madrid rapid",
+    "pgn": "e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+ Bd2 Qe7 Bxb4 Qxb4+ Nd2 Nc6 Nf3 O-O-O d5 Bg4 Be2 Bxf3 Bxf3 Rhe8+ Kf1 Nd4 Qc1 Nxf3 Nxf3 Re4 b3 Rde8 h3 Nh5 g3 Nxg3+ fxg3 Re3 Ng1 Qd6 Rh2 Rxg3 Qb2 Qg6 Kf2 Ree3 Ne2 Rgf3+ Ke1 Qg1+ Kd2 Qxh2 Re1 Qf2",
+    "overview": "Icelandic Gambit — Speelman beats Andrei Sokolov from the Black side, the development lead worth far more than the pawn.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "2krr3/ppp2ppp/2n2n2/3P4/1qP5/5B2/PP1N1PPP/R2QK2R w KQ - 1 13",
+        "annotation": "A pawn down, but every black piece is active, the bishops rake the board, and White is still untangling — the textbook Icelandic Gambit initiative.",
+        "concept": "Gambit initiative"
+      }
+    ],
+    "middlegameTheme": "A pawn sacrificed for a raging development lead",
+    "lessonSummary": "The Icelandic: give the pawn, develop with checks, castle long, and pile every piece onto the open central files."
+  },
+  {
+    "id": "mg-scandi-tiviakov",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Jakovenko, Dmitrij",
+    "black": "Gashimov, Vugar",
+    "whiteElo": 2736,
+    "blackElo": 2758,
+    "result": "0-1",
+    "year": 2009,
+    "event": "Wch Blitz 5th",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 g3 Bg4 Bg2 Nc6 O-O O-O-O Be3 e5 dxe5 Nxe5 Qxd6 Nxf3+ Bxf3 Bxd6 Bg2 Be5 Rfe1 Rhe8 Rac1 Bf5 h3 h6 Na4 Be4 b3 Bxg2 Kxg2 Nd5 Nc5 Bc3 Re2 Nxe3+ fxe3 Bd4 Nd3 Rxe3 Rxe3 Bxe3 Rf1 Rd7 a4 Bd4 h4 Kd8 g4 Ke7 Re1+ Kf8 Re4 a5 Kf3 b6 h5 Bf6 Nf4 Be7 Rc4 Bd6 Nd3 Re7 Nf2 Ke8 Ne4 Be5 c3 Rd7 b4 axb4 cxb4 Rd3+ Ke2 Ra3 a5 bxa5 bxa5 Rxa5 Nc5 Bd6 Ne4 Ke7 Kf3 Ra3+ Ke2 Ke6 Nc3 Ra5 Kf3 Be5 Ne4 Kd5 Rb4 Ra3+",
+    "overview": "…Qd6 Tiviakov — Gashimov beats Jakovenko from the Black side with the modern flexible queen retreat.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "2kr3r/1pp2ppp/p2b1n2/8/6b1/2N1BBP1/PPP2P1P/R4RK1 w - - 0 13",
+        "annotation": "The …Qd6 queen sits flexible and untouchable, …a6 has snuffed out White’s tricks, and Black develops a sound, comfortable position — the Tiviakov recipe.",
+        "concept": "The flexible queen"
+      }
+    ],
+    "middlegameTheme": "…Qd6 — safe, flexible, no harassment",
+    "lessonSummary": "The Tiviakov: retreat the queen to d6, take the sting out with …a6, and play a safe, flexible, weakness-free game."
+  },
+  {
+    "id": "mg-scandi-portuguese",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Andriasian, Z.",
+    "black": "Adhiban, Baskaran",
+    "whiteElo": 2600,
+    "blackElo": 2683,
+    "result": "0-1",
+    "year": 2019,
+    "event": "PRO League KO Stage 2019",
+    "pgn": "e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 e6 O-O Nc6 Be3 O-O-O c4 Qf5 Nc3 Bd6 Rad1 Rhe8 Rfe1 Bb4 a3 Bxc3 bxc3 Qa5 Qb2 Qa6 Rb1 Na5 Ne5 Nxc4 Nxc4 Qxc4 Qxb7+ Kd7 Qf3 Qc6 d5 exd5 Bxa7 Re4 Bd4 Qe6 Rxe4 Nxe4 Rd1 c5 Bxg7 Rg8 Bh6 Kc6 Bf4 Qg4 Qxg4 Rxg4 Be5 Rg5 Bh8 f6 f3 Nxc3 Bxf6 Rxg2+ Kxg2 Nxd1 Kf1 d4 f4 Ne3+ Ke2 Nf5 a4 c4 Bd8 Kc5 a5 Kb5 Bb6 h5 Kd2 h4 h3 Ka6 Bd8 Nd6 Bb6 Ne4+ Kc1 d3 f5 Kb5 Kd1 c3 Kc1 Kc4 Be3 Kb3 Kd1 d2 Bxd2 cxd2 a6 Kc3 Ke2 Kc2 a7 d1=Q+ Ke3 Qg1+ Kxe4 Qxa7 Ke5 Qe7+",
+    "overview": "Portuguese Gambit — Adhiban beats Andriasian from the Black side, the …Bg4 pin regaining the pawn with activity.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "2krr3/ppp2ppp/2n1pn2/5q2/1bPP4/2N1BN2/PP2QPPP/3RR1K1 w - - 7 13",
+        "annotation": "The …Bg4 pin has done its work: Black regains the gambit pawn with the queen active and the pieces developed — full equality out of the Portuguese.",
+        "concept": "Pin to regain the pawn"
+      }
+    ],
+    "middlegameTheme": "…Bg4 pin, rapid development, pawn recovered",
+    "lessonSummary": "The Portuguese: …Bg4 pins instead of recapturing, then Black regains the pawn with an active, equal game."
+  },
+  {
+    "id": "mg-scandi-gubinsky",
+    "openingId": "scandinavian-defence",
+    "studentSide": "black",
+    "white": "Caruana, F.",
+    "black": "Carlsen, M.",
+    "whiteElo": 2801,
+    "blackElo": 2877,
+    "result": "0-1",
+    "year": 2014,
+    "event": "41st Olympiad Open 2014",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 h3 Bxf3 Qxf3 c6 Ne2 e6 g4 Qd5 Bg2 Nbd7 Qg3 Qc4 Qb3 Qxb3 axb3 Bd6 c4 a6 Be3 O-O-O O-O-O Rhe8 Ng3 Nf8 Bf3 Ng6 h4 Bf4 h5 Bxe3+ fxe3 Ne7 e4 h6 e5 Nh7 Ne4 Rf8 Nd6+ Kc7 Bg2 Ng5 Rhf1 f6 Kc2 fxe5 dxe5 Nc8 c5 Ne7 b4 Nd5 Bxd5 cxd5 b5 axb5 Nxb5+ Kc6 Nd6 Nf3 b4 Ra8 Ra1 Rxa1 Rxa1 Nxe5 Ra7 Rb8 Ra3 b6 Ra7 bxc5 Ra6+ Kc7 bxc5 Nd7 Ra7+ Kc6 g5 Nxc5 Nf7 d4 Ne5+ Kd5 Nd7 d3+ Kc1 Nxd7 Rxd7+ Ke4",
+    "overview": "…Qd8 Gubinsky-Melts — Carlsen beats Caruana from the Black side, the queen home and the position impregnable.",
+    "criticalMoments": [
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r3kb1r/pp1n1ppp/2p1pn2/8/3P2P1/1q5P/PPP1NPB1/R1B1K2R w KQkq - 0 13",
+        "annotation": "The queen sits patiently on d8 — never to be harassed again — while Black develops a solid, weakness-free structure with the light bishop already active.",
+        "concept": "Patient solidity"
+      }
+    ],
+    "middlegameTheme": "…Qd8 — patient, solid, no target",
+    "lessonSummary": "The Gubinsky-Melts: retreat the queen all the way home, develop smoothly, and offer White nothing to attack."
   }
 ]
