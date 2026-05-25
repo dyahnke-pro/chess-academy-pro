@@ -1,14 +1,13 @@
-import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
+import type { LessonScript, LessonBeat, AnnotationHighlight } from '../../types';
 
 // Catalan (WHITE) variation lessons. Student = White. Keyed EXACTLY
 // "catalan-opening::<Exact Variation Name>". Spines from the catalan-opening
 // repertoire pgns + masters extension (PLAN.md); deepest beat ≥20 ply.
-const VIS = 'rgba(40,185,95,0.92)';
+// These lessons lead the eye with highlights only (no vision arrows).
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
-const A = (from: string, to: string, color = VIS): AnnotationArrow => ({ from, to, color });
 const H = (square: string, color = KEY): AnnotationHighlight => ({ square, color });
-interface BeatInit { id: string; moves: string; say: string; sayShort?: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[]; }
+interface BeatInit { id: string; moves: string; say: string; sayShort?: string; highlights?: AnnotationHighlight[]; }
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
 
 // ── Closed Catalan (…c6) — the e4 break ─────────────────────────────────
