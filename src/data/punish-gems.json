@@ -1969,30 +1969,6 @@
   },
   {
     "openingId": "french-defence",
-    "lineMoves": "e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4",
-    "inaccuracy": "Bxf6",
-    "freqPct": 8.4,
-    "games": 50870,
-    "practicalScore": 43,
-    "mainMove": "Nxe4",
-    "punish": "gxf6",
-    "punishSeq": [
-      "gxf6",
-      "Nxe4",
-      "f5",
-      "Nc3",
-      "Bg7",
-      "Nf3",
-      "O-O",
-      "Qd2"
-    ],
-    "playLine": "e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Bxf6 gxf6 Nxe4 f5 Nc3 Bg7 Nf3 O-O Qd2",
-    "engineCp": 59,
-    "tier": "positional",
-    "why": "At your level opponents play Bxf6 here in 8% of games. Punish with the best move gxf6 — the engine has Black clearly better (+0.6)."
-  },
-  {
-    "openingId": "french-defence",
     "lineMoves": "e4 e6 d4 d5 Nc3 Nf6 Bg5 dxe4 Nxe4 Be7",
     "inaccuracy": "Nf3",
     "freqPct": 2.4,

@@ -134,10 +134,16 @@ const squares = (p) => p.locator('[data-square]').count();
 // openings-store WRITE the unlock performs STALLS (CLAUDE.md G1), so the card
 // never appears — we return 'locked' and the caller SKIPS the gem checks (the
 // full gem contract then only runs on a real device / prod).
+// The gems CARD renders even when weapons are LOCKED (locked tiles, no
+// clickable Watch/Learn buttons). So "card visible" is NOT "unlocked" — the
+// real unlock signal is a clickable gem-watch button. Use that, or the sandbox
+// write-stall (no buttons ever appear) is mistaken for unlocked and the later
+// gem-button clicks time out instead of skipping.
+const gemPlayable = async (p) => (await p.locator('[data-testid^="gem-watch-"]').count().catch(() => 0)) > 0;
 async function ensureWeapons(page, id) {
   const st = await openDetail(page, id);
-  if (st === 'card') return 'card';
-  if (st !== 'detail') return st; // notfound / timeout
+  if (st !== 'card' && st !== 'detail') return st; // notfound / timeout
+  if (await gemPlayable(page)) return 'card';
   const btn = page.locator('[data-testid="weapons-unlock-all-btn"]').first();
   if (await btn.isVisible().catch(() => false)) {
     await btn.click().catch(() => {});       // tap 1: arm the confirm
@@ -145,10 +151,10 @@ async function ensureWeapons(page, id) {
     await btn.click().catch(() => {});       // tap 2: confirm → Dexie write + reload
     for (let i = 0; i < 10; i++) {
       await page.waitForTimeout(1000);
-      if (await cardVisible(page)) return 'card';
+      if (await gemPlayable(page)) return 'card';
     }
   }
-  return 'locked';
+  return 'locked'; // sandbox: unlock write stalled (G1) — gem probes are device/prod-only
 }
 async function exitPlayer(page) {
   // The player exposes a back/exit affordance; fall back to browser back.
