@@ -386,37 +386,6 @@
     ]
   },
   {
-    "id": "mg-alekhine-slav-defence",
-    "openingId": "slav-defence",
-    "white": "Alexander Alekhine",
-    "black": "Max Euwe",
-    "whiteElo": null,
-    "blackElo": null,
-    "result": "1-0",
-    "year": 1937,
-    "event": "World Chess Championship Rematch 1937, Round 2, Rotterdam",
-    "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 Ne5 e6 Bg5 Bb4 Nxc4 Qd5 Bxf6 Qxc4 Qd2 gxf6 e4 Qb3 exf5 Nd7 fxe6 fxe6 Be2 O-O-O O-O e5 dxe5 Nxe5 Qc1 Bxc3 bxc3 Rhg8 Qe3 Kb8 g3 Rd7 Rab1 Qc2 Rfe1 Qd2 Qxd2 Rxd2 f4 Ng6 Bc4 Rgd8 Re6 R8d6 Rbe1 Kc7 Rxd6 Rxd6 h4 Kd7 Kf2 Ne7 Kf3 Nd5 Bd3 h6 Bf5+ Kd8 Kg4 Ne7 Bb1 Ke8 Kh5 Kf7 Ba2+ Kf8 Kxh6 Rd2 Be6 Rd3 g4 Rxc3 g5",
-    "overview": "Alekhine reclaimed the World Championship title with precise handling of the Slav Defence, converting White's superior piece activity into a winning advantage. His treatment of the opening neutralized Black's early bishop development and left Euwe struggling with a passive position.",
-    "criticalMoments": [
-      {
-        "moveNumber": 8,
-        "color": "white",
-        "fen": "rn1qk2r/pp3ppp/2p1pn2/5bB1/PbNP4/2N5/1P2PPPP/R2QKB1R b KQkq - 0 8",
-        "annotation": "Alekhine plays g3, preparing the fianchetto while maintaining flexible central control after the pawn exchange on e5. This quiet move signals White's intention to develop harmoniously rather than rush into tactical complications, a hallmark of Alekhine's mature style.",
-        "concept": "flexible development"
-      },
-      {
-        "moveNumber": 14,
-        "color": "white",
-        "fen": "r3k2r/pp1n3p/2p1pp2/8/Pb1P4/1qN5/1P1QBPPP/R3K2R b KQkq - 1 14",
-        "annotation": "The knight maneuver to e3 targets critical central squares and prepares to exploit Black's weakened dark squares after the bishop exchange. Alekhine's piece placement demonstrates how coordinated minor pieces can dominate a position even without immediate tactical threats.",
-        "concept": "piece coordination"
-      }
-    ],
-    "middlegameTheme": "Superior piece activity against passive defense",
-    "lessonSummary": "In the Slav Defence, White can exploit the early capture on c4 by developing pieces to active squares and controlling the center. Alekhine showed that recovering the pawn with tempo and maintaining harmonious piece coordination creates lasting pressure. The game highlights the importance of not allowing the opponent to equalize after an early pawn grab in the Slav."
-  },
-  {
     "id": "mg-karpov-grunfeld-defence",
     "openingId": "grunfeld-defence",
     "white": "Anatoly Karpov",

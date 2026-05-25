@@ -260,5 +260,14 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "slav-defence": {
+    "variations": 8,
+    "middlegamePlans": 1,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

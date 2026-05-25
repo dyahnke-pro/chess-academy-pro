@@ -50,6 +50,7 @@ import { getPetrovDefenceTabPlanIds } from '../../services/petrovDefenceMastercl
 import { getPhilidorDefenceTabPlanIds } from '../../services/philidorDefenceMasterclassTabs';
 import { getQgdTabPlanIds } from '../../services/qgdMasterclassTabs';
 import { getQgaTabPlanIds } from '../../services/queensGambitAcceptedMasterclassTabs';
+import { getSlavDefenceTabPlanIds } from '../../services/slavDefenceMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
@@ -1088,6 +1089,7 @@ export function OpeningDetailPage(): JSX.Element {
     getPhilidorDefenceTabPlanIds(opening.id, tabKey) ??
     getQgdTabPlanIds(opening.id, tabKey) ??
     getQgaTabPlanIds(opening.id, tabKey) ??
+    getSlavDefenceTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).

@@ -8603,54 +8603,6 @@
     ]
   },
   {
-    "id": "mp-slav-bf5-active-development",
-    "openingId": "slav-defence",
-    "criticalPositionFen": "rn1qk2r/pp3ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P3PPP/R1BQK2R w KQkq - 1 8",
-    "title": "…Bf5 active development — Czech Variation",
-    "overview": "The Czech Variation — Black takes the c-pawn (dxc4) and develops actively with …Bf5. After a4 (preventing …b5), Black plays …e6 + …Bb4 for a Nimzo-Indian-like setup. The plan: solid central structure with bishop pair, then a future …c5 break for queenside expansion.",
-    "pawnBreaks": [
-      {
-        "move": "c5",
-        "explanation": "The thematic queenside break. After …c5 d5 (or dxc5) Black has the open c-file and active piece play. The bishop pair compensates for any structural concessions."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc8-f5 active development",
-        "explanation": "The Slav's key piece — developed BEFORE …e6 to keep the long diagonal active. Without …Bf5 first, the c8-bishop becomes the worst piece in the position."
-      }
-    ],
-    "typicalMistakes": [
-      "Playing …e6 before …Bf5 — locks in the c8-bishop permanently. The Slav becomes passive.",
-      "Trading the Bf5 for a knight — loses the bishop pair compensation."
-    ]
-  },
-  {
-    "id": "mp-slav-chebanenko-flexible",
-    "openingId": "slav-defence",
-    "criticalPositionFen": "rnbqkb1r/1p2pppp/p1p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
-    "title": "Chebanenko: …a6 + flexible structure",
-    "overview": "The Chebanenko Slav (a6) is the modern flexible treatment. Black keeps options for …dxc4 + …b5, …Bf5 development, or transposition to Semi-Slav with …e6. The …a6 move prevents Nb5 ideas and prepares queenside expansion. White's most challenging response is c5 (the Anti-Chebanenko, locking the center) or Bf4 (the System Slav).",
-    "pawnBreaks": [
-      {
-        "move": "b5",
-        "explanation": "After …a6, the …b5 push gains queenside space and attacks White's c4 pawn. Often combined with …Bb7 for long-diagonal pressure."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc8-b7 or Bc8-f5",
-        "explanation": "Black's bishop has TWO good homes depending on White's setup: Bb7 (long-diagonal pressure) if White plays a slow setup, or Bf5 (active development) if White plays c4-c5 wedge."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing …b5 before piece coordination — White's c5 wedge locks Black's pieces out.",
-      "Trading the dark-squared bishop without compensation — gives White the bishop pair."
-    ]
-  },
-  {
     "id": "mp-grunfeld-exchange-central-pressure",
     "openingId": "grunfeld-defence",
     "criticalPositionFen": "rnbq1rk1/pp2ppbp/6p1/2p5/3PP3/2P2N2/P3BPPP/R1BQK2R w KQ - 2 9",
@@ -27805,6 +27757,110 @@
             },
             {
               "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-slavdefence-main",
+    "openingId": "slav-defence",
+    "criticalPositionFen": "r2q1rk1/pp1n1pp1/2p1pnbp/8/PbBPP2B/2N2N2/1P2QPPP/R4RK1 b - - 1 12",
+    "title": "Slav: Trade on c3, then Break with …c5",
+    "overview": "Black has the classical Slav: the rock-solid c6/e6 wall, the good light bishop already developed on g6, and no weaknesses. The plan converts that solidity into pressure — trade the dark bishop for the c3-knight to saddle White with doubled c-pawns, then strike the centre with the thematic …c5 break, opening lines for Black's harmonious pieces against a damaged white structure.",
+    "pawnBreaks": [
+      "…c5 to strike the d4-centre and free the position",
+      "…e5 once fully prepared"
+    ],
+    "pieceManeuvers": [
+      "…Bxc3 to damage White’s queenside structure",
+      "…Qa5 pressuring the doubled c-pawns"
+    ],
+    "strategicThemes": [
+      "Doubling White’s c-pawns",
+      "The …c5 freeing break",
+      "The good bishop on g6"
+    ],
+    "endgameTransitions": [
+      "The doubled c-pawns are a lasting target into the endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2q1rk1/pp1n1pp1/2p1pnbp/8/PbBPP2B/2N2N2/1P2QPPP/R4RK1 b - - 1 12",
+        "moves": [
+          "Bxc3",
+          "bxc3",
+          "c5",
+          "e5"
+        ],
+        "annotations": [
+          "…Bxc3 trades the dark bishop for the knight, doubling White’s c-pawns and handing Black a clean structural target.",
+          "bxc3 recaptures, accepting the doubled, isolated c-pawns.",
+          "…c5! the thematic Slav break, striking at the d4-centre and opening lines for Black’s harmonious pieces.",
+          "e5 pushes past to grab space, but Black has forced the freeing break and kept the structurally superior position."
+        ],
+        "learnCues": [
+          "…Bxc3 — double the c-pawns.",
+          "bxc3 — White recaptures.",
+          "…c5 — the freeing break on d4.",
+          "e5 — White grabs space."
+        ],
+        "sources": [
+          "concept:pos-center",
+          "concept:pawn-doubled",
+          "https://en.wikipedia.org/wiki/Slav_Defense"
+        ],
+        "title": "Slav: Trade on c3, then Break with …c5",
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]

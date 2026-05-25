@@ -283,6 +283,16 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /sadler/i, label: 'Sadler' },
     { test: /janowski/i, label: 'Janowski' },
   ],
+  // Slav Defence — the …c6 solid system. Main-line pill = the classical a4 …Bf5
+  // main (good bishop out before …e6, repertoire pgn). Tabs = the two lines
+  // whose curated pgn reaches the ≥20-ply depth gate AND are structurally
+  // distinct: the sharp Geller Gambit (5.e4) and the Schlechter fianchetto.
+  // (Exchange/Quiet/Chebanenko anchor <20 plies in the curated pgn / the DB,
+  // so per G3 + the depth gate they fold into the main pill — not invented.)
+  'slav-defence': [
+    { test: /geller/i, label: 'Geller Gambit' },
+    { test: /schlechter/i, label: 'Schlechter' },
+  ],
   // Benko Gambit — distinct validated variations (complete builds only). Main
   // pill = the Fully Accepted g3 line (repertoire pgn); the Fianchetto, King
   // Walk, Fully-Accepted-Main and "Modern f3" entries all fold into it (same
