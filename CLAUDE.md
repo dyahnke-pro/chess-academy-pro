@@ -1071,6 +1071,13 @@ playbook holds the rules you MUST follow, in particular:
   skip / ask — never invent. Reachable sources, per-decision rules, and the
   audit trail are all in playbook §0.5. NO hard count rules. Read it before
   building.
+  - 🚫 **NEVER ask David "how many variations should I build" (David
+    2026-05-25 — a session asked; that's the bug).** The count is NOT a
+    judgment call: build **ALL validated variations** — every line passing
+    §0.1 rule 1's (a)–(d) test (real DB-anchored named line + faced +
+    structurally distinct + student-side-winning model game) + the gates.
+    No cap, no "is six enough." Single-line soundness questions are fine to
+    ask; the scope/count question is never David's to answer.
 - **WLPP grammar (locked):** Watch = auto-play + narration; Learn = voice
   guides each move, YOU play it; Practice = same board SILENT + a Hint
   button; Play = coach LOCKED to this opening. Applies to the main line,
