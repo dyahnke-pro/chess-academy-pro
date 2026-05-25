@@ -2721,54 +2721,6 @@
     "source": "lichess-masters"
   },
   {
-    "id": "mg-lichess-Cvdkin8Y",
-    "openingId": "reti-opening",
-    "white": "Caruana, F.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2804,
-    "blackElo": 2855,
-    "result": "0-1",
-    "year": 2016,
-    "event": "2016-2016-06 master game",
-    "pgn": "Nf3 d5 c4 c6 Qb3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 Re8 Bf4 Nbd7 cxd5 Nxd5 Bd2 e5 Nc3 Nc7 Ne4 Nb6 Bg5 Qd5 Nf6+ Bxf6 Bxf6 Qxb3 axb3 Bg4 Rfe1 Bxf3 Bxf3 h6 d4 e4 Bg4 Nbd5 Be5 Nb5 Bf4 f5 Bh3 Nxf4 gxf4 Nxd4 Ra4 Red8 Bf1 a5 Rc1 Nxb3 Rc3 Nd4 e3 Nf3+ Kg2 Rd1 Rc5 Rad8 Rcxa5 Rxf1 Kxf1 Rd1+ Kg2 Rg1+ Kh3 g5 fxg5 hxg5",
-    "overview": "Master game from the Lichess masters database. Caruana, F. vs Carlsen, M., 2016. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/Cvdkin8Y",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-0DfZPdnI",
-    "openingId": "reti-opening",
-    "white": "Aronian, L.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2775,
-    "blackElo": 2872,
-    "result": "1-0",
-    "year": 2019,
-    "event": "2019-2019-12 master game",
-    "pgn": "Nf3 d5 c4 d4 b4 c5 g3 cxb4 a3 b3 d3 Nc6 Nbd2 a5 Qxb3 a4 Qc2 e5 Bg2 Nf6 O-O Be7 Rb1 O-O Rb5 Nd7 Bb2 Nc5 Rb1 Qc7 Bc1 Na5 R5b2 Bd7 Qd1 Bc6 Ne1 Bxg2 Kxg2 Ncb3 Nc2 b5 cxb5 Rfb8 Nxb3 axb3 Nb4 Rxb5 e4 dxe3 Qf3 Rd8 Bxe3 Qd7 Rc1 f5 Rbb1 Qe6 Bd2 e4 Qe3 Bxb4 Bxb4 Rxd3 Qa7 Nc4 Rxc4 Qxc4 Qa8+ Kf7 Qf8+ Kg6 Rc1 Qxc1 Qe8+ Kh6 Qe6+ g6 Bf8+ Kh5 Qe7",
-    "overview": "Master game from the Lichess masters database. Aronian, L. vs Carlsen, M., 2019. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/0DfZPdnI",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-NQrR51OA",
-    "openingId": "reti-opening",
-    "white": "Caruana, F.",
-    "black": "So, W.",
-    "whiteElo": 2808,
-    "blackElo": 2812,
-    "result": "0-1",
-    "year": 2017,
-    "event": "2017-2017-06 master game",
-    "pgn": "Nf3 d5 c4 e6 Qb3 Nf6 g3 Be7 Bg2 O-O O-O d4 d3 Nc6 Bf4 Nd7 Na3 e5 Bd2 Re8 Qc2 a5 Nb5 Nb4 Qd1 c6 Na3 Bf8 Nc2 Nxc2 Qxc2 Nc5 a3 a4 Bb4 Nb3 Rae1 Bxb4 axb4 Qb6 e3 Bg4 Nd2 Qxb4 Nxb3 axb3 Qc1 Bf5 Qd1 Rad8 e4 Bd7 f4 b5 cxb5 Qxb5 Rf2 c5 Bf1 f6 Qh5 Ra8 Rc1 Kh8 g4 exf4 Rxc5 Qb4 Rc7 Qd6 Rb7 Reb8 Rxb8+ Rxb8 g5 Qe5 h4 f5 Qf3 fxe4 dxe4 Rf8 Bc4 Bc6 Re2 Qc5 Bd3 Bb5 e5 Bxd3 Qxd3 f3 Rf2 Qc1+ Qf1 Qf4 Qh3 d3 Qd7 Qxe5 Qxd3 Qg3+ Kf1 Qxh4 Rxf3 Qh3+ Kf2 Qxf3+ Qxf3 Rxf3+ Kxf3 Kg8 Ke4 Kf7 Kf5 Ke7 Ke5 h6 gxh6 gxh6 Kf5 Kd6",
-    "overview": "Master game from the Lichess masters database. Caruana, F. vs So, W., 2017. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/NQrR51OA",
-    "source": "lichess-masters"
-  },
-  {
     "id": "mg-lichess-qGeCrW3o",
     "openingId": "scandinavian-defence",
     "white": "Caruana, F.",
@@ -3994,5 +3946,76 @@
     ],
     "middlegameTheme": "Slam e4, build the centre, attack.",
     "lessonSummary": "The Mikenas trades the English's calm for a sharp central initiative — well worth the doubled pawns."
+  },
+  {
+    "id": "mg-kramnik-reti-main",
+    "openingId": "reti-opening",
+    "white": "Vladimir Kramnik",
+    "black": "Shakhriyar Mamedyarov",
+    "whiteElo": 2800,
+    "blackElo": 2808,
+    "result": "1-0",
+    "year": 2018,
+    "event": "Berlin Candidates 2018",
+    "studentSide": "white",
+    "pgn": "Nf3 Nf6 g3 d5 Bg2 e6 O-O Be7 c4 O-O b3 c5 cxd5 Nxd5 Bb2 Nc6 d4 cxd4 Nxd4 Nxd4 Qxd4 Bf6 Qd2 Nf4 gxf4 Qxd2 Nxd2 Bxb2 Rab1 Bf6 Rbc1 Rd8 Ne4 Be7 Rc7 Kf8 Rfc1 Rb8 e3 h6 Bf3 a5 Kg2 g5 fxg5 hxg5 h3 f5 Nc5 b6 Na4 Bd6 Rh7 Kg8 Ra7 Be5 Rc6 Rd6 Rxd6 Bxd6 Nc3 b5 Rxa5 b4 Nb5 Bc5 Nd4 Bxd4 exd4 Kf7 Ra7+ Kf6 Rc7 Ba6 d5 Bb7 d6 Bxf3+ Kxf3 Rd8 Rb7 Rxd6 Rxb4 e5 a4 e4+ Ke2 Ke5 a5 f4 Ra4 f3+ Ke1 Rc6 a6 Rc1+ Kd2 Rf1",
+    "overview": "Kramnik, a great Réti expert, shows the hypermodern double-fianchetto in its purest form: quiet long-diagonal pressure, a well-timed central break, and a slow technical squeeze that converts against Mamedyarov.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "rnbq1rk1/pp2bppp/4p3/2pn4/8/1P3NP1/PB1PPPBP/RN1Q1RK1 b - - 1 8",
+        "annotation": "Bb2 — Kramnik completes the double fianchetto; both bishops rake the long diagonals, the essence of the Réti.",
+        "concept": "The double fianchetto"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r1b2rk1/pp3ppp/4p3/8/5P2/1P6/Pb1NPPBP/1R3RK1 b - - 1 15",
+        "annotation": "Rab1 — the rook swings to the half-open b-file; the quiet Réti pressure steadily mounts into a bind.",
+        "concept": "Long-diagonal pressure"
+      }
+    ],
+    "middlegameTheme": "Double fianchetto, time the break, squeeze.",
+    "lessonSummary": "The Réti wins by patience: pressure the centre from the flanks and break only when the pieces are perfect."
+  },
+  {
+    "id": "mg-giri-reti-antislav",
+    "openingId": "reti-opening",
+    "white": "Anish Giri",
+    "black": "Levon Aronian",
+    "whiteElo": 2780,
+    "blackElo": 2767,
+    "result": "1-0",
+    "year": 2018,
+    "event": "Tata Steel 2018",
+    "studentSide": "white",
+    "pgn": "Nf3 d5 g3 Nf6 Bg2 Bf5 c4 c6 Qb3 Qb6 d3 e6 Be3 Qxb3 axb3 a6 Bd2 Nbd7 Bc3 Be7 Nbd2 c5 Ne5 d4 Nxd7 Nxd7 Ba5 Ra7 Nb1 b6 Bd2 Ne5 Na3 Rc7 Bf4 Bf6 Nb5 axb5 Ra8+ Ke7 Rxh8 Ra7 O-O Ra2 Bxe5 Bxe5 Rb1 b4 h3 g5 Rg8 Bg6 Bc6 Kd6 Bb5 f5 Rc8 Ke7 Rc6 f4 gxf4 gxf4 f3 Bf5 Kh2 Bf6 Rxb6 Bh4 Ra6 Rxa6 Bxa6 Kd6 Bb7 e5 Be4 Bxe4 fxe4 Bg3+ Kg2 h5 Ra1 Kc6 Ra6+ Kb7 Rh6 h4 Kf3 Be1 Re6",
+    "overview": "Giri handles the ...Bf5 Anti-Slav model-perfectly: he traded into a structure where Black carried a long-term weakness, pressed it patiently, and converted a clean endgame against Aronian.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "rn2kb1r/1p3ppp/p1p1pn2/3p1b2/2P5/1P1P1NP1/1P1BPPBP/RN2K2R b KQkq - 1 9",
+        "annotation": "Bd2 — White develops, already preparing to target the queenside and the slightly loose Black structure.",
+        "concept": "Target the weakness"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "4k2r/r3bppp/pp2p3/2p1nb2/2Pp4/NP1P2P1/1P1BPPBP/R3K2R b KQk - 3 17",
+        "annotation": "Na3 — the knight reroutes toward c4 and the weak queenside squares; White's pressure grows.",
+        "concept": "Knight reroute"
+      },
+      {
+        "moveNumber": 45,
+        "color": "white",
+        "fen": "8/1k6/4R3/2p1p3/1pPpPp1p/1P1P1K1P/1P2P3/4b3 b - - 3 45",
+        "annotation": "Re6 — in the won endgame the rook dominates; White converts the long-term structural edge.",
+        "concept": "Convert the endgame"
+      }
+    ],
+    "middlegameTheme": "Trade into the weakness, press, convert.",
+    "lessonSummary": "In the Anti-Slav, trade into Black's structural weakness and grind it down — the Réti's positional payoff."
   }
 ]

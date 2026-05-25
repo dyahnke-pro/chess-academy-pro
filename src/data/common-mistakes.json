@@ -818,21 +818,17 @@
   "reti-opening": [
     {
       "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5N2/PPPPPPPP/RNBQKB1R w KQkq - 0 2",
-      "wrongMove": "d4",
-      "correctMove": "g3",
-      "explanation": "2.d4 is engine-equivalent — both moves lead to sound openings. But playing d4 immediately is a system-commitment to a Queen's Gambit, defeating the entire reason to start with 1.Nf3. The Réti gets its edge from FLEXIBILITY — delaying central commitment forces Black to commit first. Practical edge: with g3 you keep the option to play e4 OR c4 OR d4 based on Black's next move; with d4 you've locked into one structure."
+      "wrongMove": "e3",
+      "correctMove": "c4",
+      "explanation": "2.e3 is passive and surrenders the Réti's whole point. 2.c4 immediately challenges the d5-pawn from the flank — the hypermodern idea that controls the centre without occupying it.",
+      "shortNarration": "c4 — challenge d5 from the flank"
     },
     {
-      "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/8/5NP1/PPPPPPBP/RNBQ1RK1 w kq - 2 5",
-      "wrongMove": "c4",
-      "correctMove": "d3",
-      "explanation": "Both c4 and d3 are engine-equal. But c4 commits to a Reversed QGD structure too early — Black's …c5 break becomes powerful and the bishop on g2 has fewer targets. 5.d3 keeps the option of c4 OR e4 break for two more moves while you watch Black develop. Practical edge: the player choosing later has more information."
-    },
-    {
-      "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5NP1/PPPPPP1P/RNBQKB1R b KQkq - 0 2",
-      "wrongMove": "Bf5",
-      "correctMove": "Nf6",
-      "explanation": "2…Bf5 is engine-fine but commits the bishop to a square where White's g3-fianchetto exerts long-diagonal pressure. After 3.Bg2 + …Nf6 + …e6, Black's Bf5 is targetable by Nh4 or Nd4-c2-h4 maneuvers. 2…Nf6 develops a piece without committing the bishop — wait until you see whether White plays c4 (then Bf5 is fine) or e3 (then Bg4 is better)."
+      "fen": "r2q1rk1/pb2bppp/1pn1pn2/2pp4/2P5/1PN1PNP1/PB1P1PBP/R2Q1RK1 w - - 2 10",
+      "wrongMove": "a3",
+      "correctMove": "cxd5",
+      "explanation": "Drifting with a slow move like a3 lets Black consolidate comfortably. cxd5 opens the long diagonal for the g2-bishop and the c-file — the thematic Réti break, played exactly when the pieces are ready.",
+      "shortNarration": "cxd5 — open lines, the Réti break"
     }
   ],
   "trompowsky-attack": [

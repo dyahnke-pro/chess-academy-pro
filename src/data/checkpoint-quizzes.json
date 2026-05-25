@@ -823,28 +823,24 @@
   ],
   "reti-opening": [
     {
-      "fen": "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1",
-      "correctMove": "d5",
-      "hint": "White has played the flexible 1.Nf3. Which classical central move stakes a claim on the center?",
-      "concept": "Classical central response"
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5N2/PPPPPPPP/RNBQKB1R w KQkq - 0 2",
+      "correctMove": "c4",
+      "hint": "Challenge d5 from the flank — the hypermodern Réti.",
+      "concept": "The Réti move"
     },
     {
-      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/8/5NP1/PPPPPP1P/RNBQKB1R w KQkq - 1 3",
-      "correctMove": "Bg2",
-      "hint": "The Réti hallmark. Which bishop development takes the long diagonal pressure?",
-      "concept": "Réti fianchetto"
-    },
-    {
-      "fen": "rnbq1rk1/pp2bppp/4pn2/2pp4/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7",
-      "correctMove": "e4",
-      "hint": "White has completed development. Which central break challenges Blacks pawn structure and activates the Bg2?",
-      "concept": "Central e4 break"
-    },
-    {
-      "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/8/3P1NP1/PPP1PPBP/RNBQ1RK1 b kq - 0 5",
-      "correctMove": "O-O",
-      "hint": "Black has developed solidly. Which natural move completes development and prepares the queenside expansion?",
-      "concept": "Castling and consolidating"
+      "fen": "r2q1rk1/pb2bppp/1pn1pn2/2pp4/2P5/1PN1PNP1/PB1P1PBP/R2Q1RK1 w - - 2 10",
+      "type": "plan",
+      "question": "What is White's plan in the Réti double fianchetto?",
+      "choices": [
+        "Break with cxd5/d4 once the pieces are placed",
+        "Attack on the h-file at once",
+        "Trade everything for a quick draw",
+        "Push the a-pawn to a4-a5"
+      ],
+      "correctIndex": 0,
+      "hint": "The Réti prepares from the flanks, then strikes in the centre.",
+      "concept": "The timed central break"
     }
   ],
   "trompowsky-attack": [

@@ -116,5 +116,14 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "reti-opening": {
+    "variations": 8,
+    "middlegamePlans": 2,
+    "endgamePlans": 0,
+    "modelGames": 2,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

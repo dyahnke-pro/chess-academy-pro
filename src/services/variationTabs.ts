@@ -85,6 +85,14 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /english: symmetrical/i, label: 'Symmetrical' },
     { test: /mikenas/i, label: 'Mikenas' },
   ],
+  // Réti Opening — hypermodern 1.Nf3/c4/g3. Main-line pill = the Nimzo-English
+  // Hybrid (the b3/Bb2 double-fianchetto, the quintessential Réti, exempt). The
+  // one DB-anchored, NON-duplicate distinct tab is the ...Bf5 Anti-Slav. (The
+  // Réti "Advance c4-d4" transposes directly into the Catalan — already built
+  // — so per §0.1c it folds there rather than duplicating as a Réti tab.)
+  'reti-opening': [
+    { test: /anti-slav/i, label: 'Anti-Slav' },
+  ],
   // Scotch Game — hand-picked tabs, frequency-ordered (repertoire weights).
   // Main-line pill = the Classical 4…Bc5 Be3 Qf6 line (the repertoire pgn), so
   // the "Classical" variation is omitted as a tab (it'd duplicate the pill).

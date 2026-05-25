@@ -9238,58 +9238,6 @@
     ]
   },
   {
-    "id": "mp-reti-fianchetto-pressure",
-    "openingId": "reti-opening",
-    "criticalPositionFen": "rnbq1rk1/pp2bppp/4pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQ1RK1 b - - 0 7",
-    "title": "Long-diagonal pressure with Bg2",
-    "overview": "The Réti's signature plan: the fianchettoed Bg2 dominates the long h1-a8 diagonal. After completing development with O-O + Nbd2, White breaks with e4 to challenge Black's center. Once e4 fires, the Bg2 has open lines toward Black's queenside.",
-    "pawnBreaks": [
-      {
-        "move": "e4",
-        "explanation": "The central break that activates the fianchettoed bishop. After e4 dxe4 dxe4 (or e4 d4) Black's central pawn structure is destabilized and White's pieces have open lines."
-      },
-      {
-        "move": "c4",
-        "explanation": "Adding c4 to attack d5 creates a Reversed Slav structure. White plays for the same minority-attack ideas Black gets in the QGD Exchange."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nb1-d2-c4 or -e4",
-        "explanation": "The d2-knight reroutes to c4 (attacking …e5 or …b6) or to e4 (the central outpost after the e4 push). The knight's flexibility is a Réti hallmark."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing e4 too early before the king is safe — Black's …Nxe4 forks are common.",
-      "Allowing …d4 to lock the center — kills the Bg2's long-diagonal pressure entirely."
-    ]
-  },
-  {
-    "id": "mp-reti-transposition-king-indian",
-    "openingId": "reti-opening",
-    "criticalPositionFen": "r1b2rk1/ppq1bppp/2n1pn2/2ppP3/8/3P1NP1/PPPN1PBP/R1BQR1K1 b - - 0 9",
-    "title": "King's Indian Attack transposition",
-    "overview": "When Black plays Slav-like setups, the Réti transposes into the King's Indian Attack: Bg2 + O-O + d3 + e4 + e5 + Ne5 attack. White plays for a slow kingside attack mirroring the King's Indian Defence with colors reversed.",
-    "pawnBreaks": [
-      {
-        "move": "e4-e5",
-        "explanation": "Once Re1 supports the e-file, e4-e5 kicks the f6-knight and gains kingside space. The e5 pawn supports a future f4-f5 push if needed."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nf3-e5-d7 (after exchanges)",
-        "explanation": "The f3-knight aims for e5 (after Black's …e6 frees the square). From e5 the knight pressures f7 and supports kingside attacks."
-      }
-    ],
-    "typicalMistakes": [
-      "Allowing Black to expand on the queenside without challenge — Black's …b5 + …Bb7 + …a5 takes over the long diagonal.",
-      "Trading the dark-squared bishop without reason — keeps Black's queenside cramped longer."
-    ]
-  },
-  {
     "id": "mp-trompowsky-pin-pressure",
     "openingId": "trompowsky-attack",
     "criticalPositionFen": "rn1qkb1r/ppp2ppp/4p3/3p1b2/2PPnB2/2N1P3/PP3PPP/R2QKBNR b KQkq - 1 6",
@@ -19378,6 +19326,108 @@
           "…Na6 — Black develops the knight to a6.",
           "O-O — White castles, ready to break with d4.",
           "…Bd6 — Black develops the bishop to d6."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-retiopening-main",
+    "openingId": "reti-opening",
+    "title": "Réti: Double Fianchetto, then Break",
+    "criticalPositionFen": "rnbq1rk1/pp2bppp/4pn2/2pp4/2P5/1P3NP1/PB1PPPBP/RN1Q1RK1 b - - 1 7",
+    "overview": "The Réti's hypermodern plan: complete the double fianchetto, pressure the centre from the flanks with the two long-diagonal bishops, and break with cxd5 and d4 only when the pieces are ideally placed.",
+    "pawnBreaks": [
+      {
+        "move": "cxd5 then d4",
+        "explanation": "Opening the centre at the right moment springs the g2-bishop to life on the long diagonal.",
+        "fen": "rnbq1rk1/pp2bppp/4pn2/2pp4/2P5/1P3NP1/PB1PPPBP/RN1Q1RK1 b - - 1 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc1-b2",
+        "explanation": "The dark-squared bishop fianchettoes to b2, raking the long dark diagonal."
+      }
+    ],
+    "strategicThemes": [
+      "Control the centre from the flanks, not with pawns.",
+      "Both bishops on the long diagonals.",
+      "Break with cxd5/d4 at the ideal moment."
+    ],
+    "endgameTransitions": [
+      "The bishop pair and central pressure carry an edge into the endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Réti: Double Fianchetto, then Break",
+        "fen": "rnbq1rk1/pp2bppp/4pn2/2pp4/2P5/1P3NP1/PB1PPPBP/RN1Q1RK1 b - - 1 7",
+        "moves": [
+          "Nc6",
+          "e3",
+          "b6",
+          "Nc3",
+          "Bb7",
+          "cxd5"
+        ],
+        "annotations": [
+          "…Nc6 — Black develops the knight to c6.",
+          "e3 — White supports the eventual d4 break.",
+          "…b6 — Black prepares his own fianchetto.",
+          "Nc3 — White completes development.",
+          "…Bb7 — Black fianchettoes on b7, mirroring.",
+          "cxd5 — White opens lines at the right moment."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-retiopening-antislav",
+    "openingId": "reti-opening",
+    "title": "Réti Anti-Slav: Press the Doubled Pawns",
+    "criticalPositionFen": "rn2kb1r/1p2pppp/1p3n2/3p1b2/8/5NP1/PP1PPPBP/RNB1K2R w KQkq - 0 8",
+    "overview": "After the queen trade leaves Black with doubled b-pawns, White develops harmoniously, brings the dark-squared bishop to f4, and presses the queenside weakness for a pleasant, risk-free endgame edge.",
+    "pawnBreaks": [
+      {
+        "move": "e4 (later)",
+        "explanation": "Once developed, a timely e4 opens the centre against the slightly worse Black structure.",
+        "fen": "rn2kb1r/1p2pppp/1p3n2/3p1b2/8/5NP1/PP1PPPBP/RNB1K2R w KQkq - 0 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc1-f4",
+        "explanation": "The dark-squared bishop comes to f4, raking toward c7 and the weak queenside."
+      }
+    ],
+    "strategicThemes": [
+      "Trade into Black's doubled b-pawns.",
+      "Develop the dark bishop to f4.",
+      "Press the queenside weakness in a calm endgame."
+    ],
+    "endgameTransitions": [
+      "The healthier structure is a durable endgame trump."
+    ],
+    "playableLines": [
+      {
+        "title": "Réti Anti-Slav: Press the Doubled Pawns",
+        "fen": "rn2kb1r/1p2pppp/1p3n2/3p1b2/8/5NP1/PP1PPPBP/RNB1K2R w KQkq - 0 8",
+        "moves": [
+          "Nc3",
+          "Nc6",
+          "d3",
+          "e6",
+          "O-O",
+          "Bc5"
+        ],
+        "annotations": [
+          "Nc3 — White develops, eyeing the d5-pawn.",
+          "…Nc6 — Black develops the knight to c6.",
+          "d3 — White keeps a flexible centre.",
+          "…e6 — Black solidifies the centre.",
+          "O-O — White castles into safety.",
+          "…Bc5 — Black develops the bishop to c5."
         ]
       }
     ]
