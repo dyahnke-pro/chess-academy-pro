@@ -64,11 +64,18 @@ confirm it best shows White's pull, else re-steer to a queens-on line.
 - ✅ **P6 (partial)** manifest entry (variations 8, plans 7, keyIdeas 4; gems/
   models 0 for now). ship-check green; pushed (commit 5c8c282, PR #669).
 - ✅ **Masterclasses tab → White/Black color sub-tabs** (David). QG files under White.
-- ⏳ **P4** gems: miner running for queens-gambit (Stockfish+explorer reachable
-  this session). Author `punishGemNarration.ts` once mined; bump weapons floor.
-- ⏳ **P5** model games: curate White QG-family wins (pro-cache / explorer export).
-- ⏳ **P7** post-merge audits (G1) once on main.
-- ⏭ **NEXT classes:** qgd (black), qga (black), catalan-opening (white).
+- ✅ **P4** gems: mined 8 (Stockfish+live explorer); hand-narrated the 3 soundest
+  (Slav …Nd5, Exchange …b6, QGA …Nc6). Others stay dark (doctrine). Pushed 39dc0e7.
+- ✅ **P5** model games: 4 real White wins (Karpov–Short Tartakower, Carlsen–Kramnik
+  Exchange, Carlsen–Mamedyarov QGA, Kasparov–Morozevich Slav) via the masters
+  game-export proxy; criticalMoments authored; PROTECTED + floor=4. Pushed 9b82372.
+- **WHITE queens-gambit class = COMPLETE** (lessons, 6 tabs, 7 plans, 3 gems,
+  4 model games, manifest, color sub-tabs). Optional polish remaining: common-
+  mistakes pitfalls + checkpoint quizzes (self-hide if absent).
+- ⏳ **P7** post-merge audits (G1) once #669 lands on main.
+- ⏭ **NEXT classes (David's build order):** qgd (BLACK) → qga (BLACK) →
+  catalan-opening (white). Black classes orient black; lessons teach the
+  defender's plans. They auto-file into the Masterclasses Black sub-tab.
 
 ## Phased plan
 - **P0 — research + scaffold + PLAN** … _in progress_
