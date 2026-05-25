@@ -757,6 +757,11 @@ export interface UserPreferences {
    *  coach stops interrupting your moves to ask — silent weakness capture
    *  (Practice mode) is unaffected. Defaults to on. */
   coachInGameDiscussion?: boolean;
+  /** Coached game review: the coach asks "why did you play that?" at each of
+   *  your blunder plies during the review walk and logs the answer. When off,
+   *  review is STANDALONE — a plain walk-through with no coach interjection
+   *  (the manual "add this game's mistakes" button still works). Defaults to on. */
+  coachedReview?: boolean;
   coachVerbosity?: CoachVerbosity;
   /** Live phase-transition narration verbosity. 'off' silences the
    *  coach at phase boundaries; 'brief'/'standard'/'full' set the

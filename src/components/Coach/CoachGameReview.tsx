@@ -11,6 +11,7 @@ import { KeyMomentNav } from './KeyMomentNav';
 import { ChatInput } from './ChatInput';
 import { useReviewBlunderCapture } from '../../hooks/useReviewBlunderCapture';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
+import { useSettings } from '../../hooks/useSettings';
 import { calculateAccuracy, getClassificationCounts, detectMisses } from '../../services/accuracyService';
 import { getPhaseBreakdown } from '../../services/gamePhaseService';
 import { detectMissedTactics } from '../../services/missedTacticService';
@@ -88,6 +89,8 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   // backwards-compat with legacy callers but no longer consumed —
   // the walk surface derives everything it needs from `moves`.
   const navigate = useNavigate();
+  const { settings } = useSettings();
+  const coachedReview = settings.coachedReview;
 
   // ship-4: `reviewPhase` state removed. The walk-phase UI is the only
   // review surface; when narration generation fails or the prep effect
@@ -755,9 +758,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     learned: true,
   });
   useEffect(() => {
-    if (!walkUiActive) return;
+    // Standalone-review opt-out (David 2026-05-25): when coached review is
+    // off, never raise the "why?" prompt — the review becomes a plain
+    // walk-through. The summary-card "add this game's mistakes" button still
+    // works for deliberate, user-initiated capture.
+    if (!walkUiActive || !coachedReview) return;
     reviewCapture.onPlyLanded(walkPlayback.currentPly);
-  }, [walkUiActive, walkPlayback.currentPly, reviewCapture]);
+  }, [walkUiActive, coachedReview, walkPlayback.currentPly, reviewCapture]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent): void => {

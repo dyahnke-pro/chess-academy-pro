@@ -482,6 +482,17 @@ export function TrainingPlanRolodexPage(): JSX.Element {
       {/* Today's reps — prioritised drills over the weakness bucket */}
       <TodaysReps />
 
+      {/* The plan is the hub, but the standalone coach-recommendations view
+          stays reachable on demand (David 2026-05-25). */}
+      <button
+        type="button"
+        onClick={() => void navigate('/coach/train')}
+        className="mt-3 self-start text-xs font-semibold text-theme-text-muted hover:text-theme-accent transition-colors"
+        data-testid="standalone-train-link"
+      >
+        See the coach's recommendations →
+      </button>
+
       {/* Mobile: manila folder tabs */}
       <div
         className="md:hidden flex gap-1 mt-6 border-b-2 border-theme-border"

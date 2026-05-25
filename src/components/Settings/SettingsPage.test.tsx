@@ -71,6 +71,8 @@ describe('SettingsPage', () => {
     fireEvent.click(screen.getByTestId('tab-coach'));
     fireEvent.click(screen.getByTestId('gameplay-coaching-row'));
     expect(screen.getByTestId('coach-ingame-discussion-toggle')).toBeInTheDocument();
+    // Standalone-review opt-out lives alongside it.
+    expect(screen.getByTestId('coach-coached-review-toggle')).toBeInTheDocument();
   });
 
   it('switches to appearance tab on click', () => {

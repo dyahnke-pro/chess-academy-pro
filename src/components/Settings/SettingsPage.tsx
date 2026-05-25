@@ -943,7 +943,7 @@ function CoachTab({ profile, setProfile }: TabProps): JSX.Element {
 // ─── Coach Gameplay Section ──────────────────────────────────────────────────
 
 function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
-  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion', value: boolean): Promise<void> => {
+  const handleToggle = async (key: 'coachBlunderAlerts' | 'coachTacticAlerts' | 'coachPositionalTips' | 'coachMissedTacticTakeback' | 'coachReviewVoice' | 'coachInGameDiscussion' | 'coachedReview', value: boolean): Promise<void> => {
     const updatedPrefs = { ...profile.preferences, [key]: value };
     await db.profiles.update(profile.id, { preferences: updatedPrefs });
     setProfile({ ...profile, preferences: updatedPrefs });
@@ -1008,6 +1008,13 @@ function CoachGameplaySection({ profile, setProfile }: TabProps): JSX.Element {
         checked={profile.preferences.coachInGameDiscussion ?? true}
         onChange={(v) => void handleToggle('coachInGameDiscussion', v)}
         testId="coach-ingame-discussion-toggle"
+      />
+      <ToggleRow
+        label="Coached Game Review"
+        tooltip="During game review the coach stops at each of your blunders to ask what you were thinking, then teaches — and the mistake feeds your Weaknesses. Turn off for a plain standalone review (walk the game with no interruptions; the 'add this game's mistakes' button still works)."
+        checked={profile.preferences.coachedReview ?? true}
+        onChange={(v) => void handleToggle('coachedReview', v)}
+        testId="coach-coached-review-toggle"
       />
       <ToggleRow
         label="Review Voice Narration"

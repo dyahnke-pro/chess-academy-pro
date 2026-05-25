@@ -35,6 +35,7 @@ import { CoachGamePage } from './components/Coach/CoachGamePage';
 import { CoachChatPage } from './components/Coach/CoachChatPage';
 import { CoachSessionPage } from './components/Coach/CoachSessionPage';
 import { CoachAnalysePage } from './components/Coach/CoachAnalysePage';
+import { CoachTrainPage } from './components/Coach/CoachTrainPage';
 import { TrainingPlanRolodexPage } from './components/Coach/TrainingPlanRolodexPage';
 import { GameInsightsPage } from './components/Insights/GameInsightsPage';
 import { GamesDrilldownPage } from './components/Insights/GamesDrilldownPage';
@@ -259,10 +260,11 @@ export function App(): JSX.Element {
           <Route path="/coach/analyse" element={<ErrorBoundary><CoachAnalysePage /></ErrorBoundary>} />
           <Route path="/coach/plan" element={<ErrorBoundary><TrainingPlanRolodexPage /></ErrorBoundary>} />
           {/* /coach/report is a legacy alias — redirect lives below in the redirects block */}
-          {/* /coach/train consolidated into the Training Plan (David 2026-05-25):
-              the plan is the single training hub. CoachTrainPage was an orphaned,
-              parallel recommender (no nav link). Redirect to the plan. */}
-          <Route path="/coach/train" element={<Navigate to="/coach/plan" replace />} />
+          {/* /coach/train: the Training Plan (/coach/plan) is the primary hub,
+              but the standalone coach-recommendations view stays reachable on
+              demand (David 2026-05-25: "tie in but allow for standalone if user
+              desires"). Linked from the plan, not the main nav. */}
+          <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
           <Route path="/coach/teach" element={<ErrorBoundary><CoachTeachPage /></ErrorBoundary>} />
           <Route path="/coach/endgame" element={<ErrorBoundary><CoachEndgamePage /></ErrorBoundary>} />
           <Route path="/coach/review" element={<ErrorBoundary><CoachReviewListPage /></ErrorBoundary>} />
