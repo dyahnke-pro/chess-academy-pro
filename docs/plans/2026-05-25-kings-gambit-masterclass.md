@@ -60,6 +60,25 @@ arise in the 3...g5 complex), classified by who plays the punishing move.
       named-traps, opening-walkthrough — TODO
 - [ ] DONE — merged to main + post-deploy audit green (playbook §0.5 DoD)
 
+## Checkpoint 4 (2026-05-25): stockfish-soundness CI green.
+The `stockfish-soundness` CI (mastersCoverage Hole 6b) flagged 2 plies:
+- **Classical d5 (−144cp):** the masters most-played 5.O-O exchange-sac line
+  leaves White objectively ~−1 — dubious, not a teachable White win. REBUILT the
+  Classical variation on the sound `h4` maneuvering line (Bc4 Bg7 h4 h6 d4 d6 c3
+  Nc6 O-O Qe7 b4 Bd7 Na3 g4 Ne1 f3), re-narrated honestly as a double-edged
+  fight. Verified 0 cp-loss flags (Hole 6b green).
+- **Allgaier O-O (−235cp):** the gambit is objectively unsound by design (the
+  lesson's verdict beat says so). Added a documented `SOUNDNESS_BASELINE` entry
+  (playbook §9) — engine-correct flag IS the teaching point.
+Also fixed a lint error (unused `VIS` after the Classical re-author). ship-check
+READY TO PUSH; mastersCoverage 6b green for both lessons.
+
+## Checkpoint 3 (2026-05-25): + punish-gem weapon section.
+Mined 26 engine-first gems (Stockfish 16 apt-installed at /usr/games/stockfish;
+amateur explorer proxy reachable). Hand-narrated 6 curated confirmed crushes
+(`punishGemNarration.ts`); only narrated weapon-tier gems surface, rest stay dark.
+591 punishGems tests green.
+
 ## Checkpoint 2 (2026-05-25): + model games + pitfalls + quizzes.
 - STEP 7 model games: 6 REAL White-winning master games sourced from the live
   explorer + export endpoint (no fabrication), one per major tab:
