@@ -164,6 +164,12 @@ describe('Learn short-cue length — sayShort is a terse cue, not a lecture', ()
     expect(stale, 'GRANDFATHERED_OPENINGS has ids with no lessons — remove them').toEqual([]);
   });
 
+  it('grandfather list is SEALED empty — no new cue-cap exemptions (David 2026-05-25)', () => {
+    // The cue-cap escape hatch is closed. Every opening's Learn cues must be
+    // ≤8 words; a future build cannot grandfather its way past the cap.
+    expect(GRANDFATHERED_OPENINGS.size, 'No new grandfather exemptions — tighten the cues to ≤8 words instead').toBe(0);
+  });
+
   // Both registers must be authored: a beat with full Watch prose (say) must
   // also carry a short Learn cue (sayShort). Otherwise Learn falls to bare
   // move-dictation for that beat — the regression we just fixed. Intermediate

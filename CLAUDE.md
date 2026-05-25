@@ -1194,10 +1194,24 @@ playbook holds the rules you MUST follow, in particular:
     `commonMistakeNarration.test` (Pitfalls), each with a shrinking baseline
     (`punishGemSources` / `middlegamePlanSources` / `commonMistakeSources`).
     A gate can't prove the prose was truly derived from the source, but no
-    recorded+resolvable source = no ship. STILL TO WIRE: beat-lessons
-    (`ruyTrapLessons.ts` etc.) — add the same `sources` gate when sourcing them.
+    recorded+resolvable source = no ship.
     The gem move/advantage is already independently verified by the engine eval
     (G3 + tier); `sources[]` covers the IDEAS/framing.
+  - **🔒 THE GATES ARE SEALED — NON-NEGOTIABLE, NO ESCAPE (David 2026-05-25).**
+    Every masterclass narration/build rule is enforced with NO bypass:
+    - **Source-verification gates are baseline-FREE** — gems, plan lines, common
+      mistakes, main-line beat-lessons (`lessonSources.test`), and model games
+      each require a resolvable `sources` on EVERY masterclass unit, no baseline
+      file to game (all were 100% sourced 2026-05-25).
+    - **Coverage backlogs have hard size CEILINGS that can only shrink, never
+      grow:** gem-narration baseline ≤8, plan-theme ≤4, plan-short ≤119,
+      lessonDepth `KNOWN_SHORTFALLS` ≤0, narrationGrounding `BASELINE_VIOLATIONS`
+      ≤0 / `BARE_BEAT_BASELINE` ≤2, repertoire-orientation allowlist ≤161,
+      wlppNarration grandfather list sealed =0. A future build CANNOT add a new
+      entry to any allowlist/baseline to bypass a rule — it must fix the content.
+      Lower a ceiling when you clear backlog; NEVER raise one.
+    - `pro-repertoires-orientation`, `modelGames-orientation`, wlppNarration
+      "every `say` has a `sayShort`" are pure hard-fail (already no escape).
   - **Practice = silent. Play = the coach room LOCKED to the exact line**
     (pass the line as `customLine` to `OpeningPlayMode` — never the opening's
     generic main line).

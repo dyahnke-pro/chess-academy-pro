@@ -95,3 +95,9 @@ describe('lesson depth gate — variations must reach the middlegame', () => {
     });
   }
 });
+
+describe('depth allowlist is SEALED (David 2026-05-25)', () => {
+  it('KNOWN_SHORTFALLS never grows — a new shallow lesson must be deepened, not allowlisted', () => {
+    expect(KNOWN_SHORTFALLS.size, 'KNOWN_SHORTFALLS grew — deepen the lesson instead of allowlisting').toBeLessThanOrEqual(0);
+  });
+});

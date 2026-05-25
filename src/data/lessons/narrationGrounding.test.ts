@@ -123,3 +123,12 @@ describe('lead-the-eye present — a beat that names squares carries ≥1 marker
     });
   }
 });
+
+describe('lead-the-eye baselines are SEALED (David 2026-05-25)', () => {
+  it('BASELINE_VIOLATIONS never grows — fix the markers, never baseline', () => {
+    expect(Object.keys(BASELINE_VIOLATIONS).length, 'BASELINE_VIOLATIONS grew — ground the markers instead').toBeLessThanOrEqual(0);
+  });
+  it('BARE_BEAT_BASELINE never grows', () => {
+    expect(BARE_BEAT_BASELINE.size, 'BARE_BEAT_BASELINE grew — add lead-the-eye markers instead').toBeLessThanOrEqual(2);
+  });
+});

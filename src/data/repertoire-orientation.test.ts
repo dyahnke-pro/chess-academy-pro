@@ -215,3 +215,9 @@ describe('repertoire.json trap/warning orientation contract', () => {
     expect(broken, broken.join('\n')).toEqual([]);
   });
 });
+
+describe('orientation allowlist is SEALED (David 2026-05-25)', () => {
+  it('allowlist never grows — a new inverted/unanchored trap must be fixed, not allowlisted', () => {
+    expect(Object.keys(baseline).length, 'orientation allowlist grew — fix the trap instead of allowlisting').toBeLessThanOrEqual(161);
+  });
+});
