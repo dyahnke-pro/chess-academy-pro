@@ -209,14 +209,26 @@ SINGLE-LINE questions ("is THIS line sound?"), never the scope question
 ("how many variations should I build?") — the count is never David's to
 answer (§0 point 1): build ALL validated variations.**
 
-**🔒 DEFINITION OF DONE — a branch build is NOT done at the draft PR (locked
-2026-05-24).** Web/cloud sessions develop on a branch and open a PR — but the
-build is not complete, and you do NOT declare it done, until BOTH:
-1. **It lands on `main`.** The work has to be MERGED (per CLAUDE.md Deployment
-   Policy + G1's "MERGING A PR IS NOT THE END"). A green draft PR sitting
-   unmerged is a half-finished build, not a shipped one. If you lack merge
-   rights or there's an open question, say so and hand David the merge — don't
-   walk away calling it done.
+**🔒 ALWAYS PUSH MASTERCLASS BUILDS STRAIGHT TO `main` — NO branch, NO PR
+(David 2026-05-25, emphatic: "always push to main!!! make sure that is on the
+rules").** A masterclass build is a `main`-production change like any other
+(CLAUDE.md Deployment Policy: push to `main` by default, previews are opt-in).
+Do NOT develop it on a feature branch or behind a draft PR unless David
+explicitly asks for one — that hides the work behind a preview URL he can't
+use and burns the build cap. If the harness spins up a feature branch by
+default, OVERRIDE it: commit on `main` and `git push origin main`. When a
+session DID start on a branch with a PR (older default), the build is not done
+until that PR is MERGED to `main` — a green unmerged PR is a half-finished
+build; merge it yourself (don't hand it off) unless you lack rights or there's
+an open question.
+
+**🔒 DEFINITION OF DONE — NOT done until it's on `main` AND audited (locked
+2026-05-24, reaffirmed 2026-05-25).** The build is not complete, and you do NOT
+declare it done, until BOTH:
+1. **It is on `main`.** Pushed directly (the default above) or, if a PR was
+   used, MERGED (per CLAUDE.md Deployment Policy + G1's "MERGING A PR IS NOT
+   THE END"). Work that only exists on a branch / unmerged PR is a
+   half-finished build, not a shipped one.
 2. **The post-deploy audit runs against `main` and is green.** G1 is
    NON-NEGOTIABLE: after the merge lands, run the surface's audit matrix
    (`audit-punish-gems-loop.mjs` 3-pass, `audit-openings-interactive-loop.mjs`,

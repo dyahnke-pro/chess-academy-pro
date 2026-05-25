@@ -1075,6 +1075,13 @@ standard (David 2026-05-21: "lock in everything … 38 more openings plus
 the gambits").** Forged on the Ruy + Pirc; the wiring is opening-agnostic
 and done, so a new opening = author the curated data and it lights up. The
 playbook holds the rules you MUST follow, in particular:
+- **🚨 ALWAYS PUSH MASTERCLASS BUILDS STRAIGHT TO `main` — no branch, no PR
+  (David 2026-05-25, emphatic).** A masterclass is a `main`-production change
+  like everything else (see Deployment Policy). Commit on `main`, `git push
+  origin main` — do NOT develop on a feature branch or behind a draft PR unless
+  David explicitly asks. If the harness defaults to a branch, override it. If a
+  session DID start on a branch+PR, it is not done until that PR is MERGED to
+  `main`. See playbook §0.5 DEFINITION OF DONE.
 - **§0.5 — the AUTONOMOUS DECISION PROCESS (locked 2026-05-22).** David wants
   builds done autonomously: you make the picks (variations, order, model
   games, traps, key ideas) WITHOUT asking him each time. Safe because every
