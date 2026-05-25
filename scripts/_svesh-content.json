@@ -1,0 +1,193 @@
+[
+  {
+    "_out": "main",
+    "openingId": "sicilian-sveshnikov",
+    "title": "The Sicilian Sveshnikov — A Master Class",
+    "minutes": 9,
+    "orientation": "black",
+    "beats": [
+      {
+        "id": "svesh-born",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5",
+        "say": "The Sveshnikov — once dismissed as anti-positional, now a main weapon at every level. With e5 Black kicks the d4-knight and stakes a bold claim: I will accept a hole on d5 and a backward d-pawn, and in return I take the bishop pair, piece activity, and the thundering f5 break.",
+        "sayShort": "e5 — claim activity for the d5 hole.",
+        "highlights": [{ "square": "e5", "color": "KEY" }, { "square": "d5", "color": "SOFT" }]
+      },
+      {
+        "id": "nb5",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6",
+        "say": "The knight leaps to b5, eyeing the d6 and c7 squares, and Black must spend a move on d6 to deny it. This is the price of e5 — a slightly loose d6-pawn — but the b5-knight has nowhere stable to land and will soon be chased to the rim.",
+        "sayShort": "d6 stops the knight hitting c7.",
+        "arrows": [{ "from": "b5", "to": "c7", "color": "ATK" }, { "from": "b5", "to": "d6", "color": "ATK" }]
+      },
+      {
+        "id": "chase",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5",
+        "say": "Bg5 pins the f6-knight and leans on d5; Black calmly plays a6, chasing the b5-knight to the miserable a3-square, then b5 grabs queenside space and pens the offside knight in. With each move Black's pieces come alive.",
+        "sayShort": "a6 and b5 — chase the knight to a3.",
+        "highlights": [{ "square": "a3", "color": "KEY" }, { "square": "b5", "color": "KEY" }]
+      },
+      {
+        "id": "nd5",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6",
+        "say": "White plants the knight on the d5-hole — the position's defining feature. But Black is unfazed: after the bishops trade on f6, the dark-squared bishop sits on f6 raking toward White's queenside, and Black owns the bishop pair with a clear plan.",
+        "sayShort": "Nd5 lands; the f6-bishop eyes the dark squares.",
+        "highlights": [{ "square": "d5", "color": "KEY" }, { "square": "f6", "color": "KEY" }]
+      },
+      {
+        "id": "plan",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5",
+        "say": "White supports the centre with c3 and reroutes the knight to c2 to fight for the dark squares; Black castles and swings the bishop to g5, preparing the f5 break. The battle is set: White nurses the d5-outpost, Black strikes with f5 and unleashes the two bishops.",
+        "sayShort": "Bg5 and f5 — Black's bishops and break.",
+        "highlights": [{ "square": "g5", "color": "KEY" }, { "square": "f5", "color": "SOFT" }]
+      },
+      {
+        "id": "verdict",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 O-O Nc2 Bg5",
+        "say": "This is the Sveshnikov's bargain: hand White the d5-square, and in return take the bishop pair, the half-open c-file, and the thundering f5 break. For decades it was called unsound; today it is one of Black's most trusted answers to the king's-pawn, precisely because the activity outweighs the hole.",
+        "sayShort": "Activity and f5 outweigh the d5 hole.",
+        "highlights": [{ "square": "d5", "color": "KEY" }, { "square": "f5", "color": "SOFT" }]
+      }
+    ]
+  },
+  {
+    "_out": "variation",
+    "_key": "Sveshnikov: 9.Bxf6 gxf6 Early Exchange",
+    "openingId": "sicilian-sveshnikov",
+    "title": "Sveshnikov — The 9.Bxf6 Early Exchange",
+    "minutes": 6,
+    "orientation": "black",
+    "beats": [
+      {
+        "id": "exchange",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Bxf6 gxf6",
+        "say": "Instead of retreating, White grabs the knight with Bxf6. After gxf6 Black's kingside pawns are doubled and battered — but look closer: Black gains the bishop pair, the half-open g-file, and a massive pawn centre with e5 and f5 still to come.",
+        "sayShort": "gxf6 — doubled pawns, but bishops and centre.",
+        "highlights": [{ "square": "f6", "color": "KEY" }, { "square": "e5", "color": "SOFT" }]
+      },
+      {
+        "id": "nd5-f5",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Bxf6 gxf6 Nd5 f5",
+        "say": "White rushes the knight to the d5-hole; Black answers with f5, the thematic break, blasting open the centre and the f-file for the rook. The ugly doubled f-pawn turns into a battering ram.",
+        "sayShort": "f5 — the doubled pawn becomes a battering ram.",
+        "highlights": [{ "square": "d5", "color": "KEY" }, { "square": "f5", "color": "KEY" }]
+      },
+      {
+        "id": "bishops",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Bxf6 gxf6 Nd5 f5 Bd3 Be6 Qh5 Bg7",
+        "say": "Both sides develop toward the fight — Bd3 and Qh5 eye Black's loosened king, but Be6 challenges the proud d5-knight and Bg7 rakes the long diagonal toward White's king. Black's two bishops and open lines bring dangerous attacking chances of his own.",
+        "sayShort": "Be6 hits d5; Bg7 rakes the long diagonal.",
+        "arrows": [{ "from": "e6", "to": "d5", "color": "ATK" }],
+        "highlights": [{ "square": "g7", "color": "KEY" }]
+      },
+      {
+        "id": "verdict",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Bxf6 gxf6 Nd5 f5 Bd3 Be6 Qh5 Bg7",
+        "say": "The early exchange is a true test of understanding: Black's structure looks wrecked, but the bishop pair, the open g-file, and the e5 and f5 pawn duo generate ferocious activity. Modern theory trusts Black fully — the dynamic factors more than pay for the doubled pawns.",
+        "sayShort": "Dynamics pay for the doubled pawns.",
+        "highlights": [{ "square": "e5", "color": "KEY" }, { "square": "f5", "color": "SOFT" }]
+      }
+    ]
+  },
+  {
+    "_out": "variation",
+    "_key": "Sveshnikov: Chelyabinsk (c4 System)",
+    "openingId": "sicilian-sveshnikov",
+    "title": "Sveshnikov — The Chelyabinsk c4 Bind",
+    "minutes": 6,
+    "orientation": "black",
+    "beats": [
+      {
+        "id": "c4",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c4",
+        "say": "The Chelyabinsk approach: instead of the modest c3, White slams down c4 — the bind. The idea is to clamp the b5-pawn and the queenside light squares, freeze Black's expansion, and cement the powerful knight on d5.",
+        "sayShort": "c4 — the bind, clamping b5 and d5.",
+        "highlights": [{ "square": "c4", "color": "KEY" }, { "square": "d5", "color": "SOFT" }]
+      },
+      {
+        "id": "b4",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c4 b4",
+        "say": "Black refuses to be squeezed: b4. The pawn jabs at the c3-square and gains queenside space, carving out a protected post on c5 for a piece. The bind is challenged the moment it appears.",
+        "sayShort": "b4 — jab the bind, grab c5.",
+        "highlights": [{ "square": "b4", "color": "KEY" }, { "square": "c5", "color": "SOFT" }]
+      },
+      {
+        "id": "castle",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c4 b4 Nc2 O-O",
+        "say": "White reroutes the knight to c2 to target the b4-pawn; Black castles, completing development with the bishop pair and a ready a5 and Be6 to follow. Against the bind, Black's trumps are the two bishops and the eternal f5 break.",
+        "sayShort": "Castle — the two bishops fight the bind.",
+        "highlights": [{ "square": "c2", "color": "KEY" }, { "square": "b4", "color": "SOFT" }]
+      }
+    ]
+  },
+  {
+    "_out": "variation",
+    "_key": "Anti-Sveshnikov: 6.Nf3 Quiet Retreat",
+    "openingId": "sicilian-sveshnikov",
+    "title": "Sveshnikov — The Anti-Sveshnikov 6.Nf3",
+    "minutes": 6,
+    "orientation": "black",
+    "beats": [
+      {
+        "id": "nf3",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3",
+        "say": "Not wanting a theoretical battle, White simply retreats the knight to f3 — the Anti-Sveshnikov. It is solid but unambitious: Black keeps the big e5 centre, develops freely, and reaches equal chances without memorising any deep theory.",
+        "sayShort": "Nf3 retreat — Black equalises easily.",
+        "highlights": [{ "square": "e5", "color": "KEY" }, { "square": "f3", "color": "SOFT" }]
+      },
+      {
+        "id": "develop",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 h6 Bc4 Be7 O-O O-O",
+        "say": "Black plays the useful h6 to deny g5, then develops naturally with Be7 and castling. With the centre secure and no White knight on d5, this is a comfortable, classical Sicilian where Black has nothing at all to fear.",
+        "sayShort": "h6 and Be7 — comfortable development.",
+        "highlights": [{ "square": "h6", "color": "KEY" }, { "square": "e7", "color": "SOFT" }]
+      },
+      {
+        "id": "equal",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 h6 Bc4 Be7 O-O O-O Qe2 Bc5 Be3 Bxe3",
+        "say": "Black even seizes the initiative — Bc5 develops actively, and after Be3 the trade on e3 leaves White with no advantage whatsoever. The Anti-Sveshnikov has handed Black a free, equal game; White's caution earned nothing.",
+        "sayShort": "Bxe3 — trade off, fully equal.",
+        "highlights": [{ "square": "e3", "color": "KEY" }, { "square": "c5", "color": "SOFT" }]
+      }
+    ]
+  },
+  {
+    "_out": "variation",
+    "_key": "Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)",
+    "openingId": "sicilian-sveshnikov",
+    "title": "Sveshnikov — The Kalashnikov",
+    "minutes": 6,
+    "orientation": "black",
+    "beats": [
+      {
+        "id": "kalash",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5",
+        "say": "The Kalashnikov — Black plays e5 immediately, before developing the knight to f6. It is the Sveshnikov's bolder cousin: Black grabs the centre at once and dares White to try to exploit the d5-hole.",
+        "sayShort": "e5 at once — the bold Kalashnikov.",
+        "highlights": [{ "square": "e5", "color": "KEY" }, { "square": "d5", "color": "SOFT" }]
+      },
+      {
+        "id": "bind",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb5 d6 c4 Be7",
+        "say": "White checks in with Nb5 and clamps down with c4 — a Maroczy-style bind, since Black has no quick b5 here. Black develops calmly with d6 and Be7, and the game becomes a patient maneuvering struggle around the d5-square.",
+        "sayShort": "c4 binds; Black develops patiently.",
+        "highlights": [{ "square": "c4", "color": "KEY" }, { "square": "d5", "color": "SOFT" }]
+      },
+      {
+        "id": "develop",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb5 d6 c4 Be7 N1c3 a6 Na3 Be6",
+        "say": "The knights shuffle — a6 chases the b5-knight to the offside a3-square — and Be6 challenges the key d5-square head-on. Black's pieces find their squares while White's a3-knight sits stranded on the rim.",
+        "sayShort": "Be6 — challenge d5, a3-knight offside.",
+        "arrows": [{ "from": "e6", "to": "d5", "color": "VIS" }],
+        "highlights": [{ "square": "a3", "color": "KEY" }]
+      },
+      {
+        "id": "plan",
+        "moves": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb5 d6 c4 Be7 N1c3 a6 Na3 Be6 Nc2 Nf6 Be2 Rc8",
+        "say": "White reroutes to c2; Black completes with Nf6 and Rc8 onto the half-open c-file. The verdict: the bind gives White a pull, but Black is solid and active, with the c-file, the d5-fight, and a later f5 or b5 break for full counterplay.",
+        "sayShort": "Rc8 — the c-file and the d5-fight.",
+        "highlights": [{ "square": "c8", "color": "KEY" }, { "square": "d5", "color": "SOFT" }]
+      }
+    ]
+  }
+]

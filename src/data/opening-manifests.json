@@ -81,11 +81,74 @@
     "warnings": 0,
     "keyIdeas": 4
   },
+  "sicilian-najdorf": {
+    "variations": 9,
+    "middlegamePlans": 9,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "sicilian-sveshnikov": {
+    "variations": 8,
+    "middlegamePlans": 5,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "sicilian-alapin": {
+    "variations": 8,
+    "middlegamePlans": 2,
+    "endgamePlans": 0,
+    "modelGames": 0,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "kings-indian-attack": {
+    "variations": 8,
+    "middlegamePlans": 2,
+    "endgamePlans": 0,
+    "modelGames": 2,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
   "four-knights-game": {
     "variations": 9,
     "middlegamePlans": 5,
     "endgamePlans": 0,
     "modelGames": 5,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "evans-gambit": {
+    "variations": 8,
+    "middlegamePlans": 4,
+    "endgamePlans": 0,
+    "modelGames": 4,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "reti-opening": {
+    "variations": 8,
+    "middlegamePlans": 2,
+    "endgamePlans": 0,
+    "modelGames": 2,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "english-opening": {
+    "variations": 8,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 3,
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
@@ -104,42 +167,6 @@
     "middlegamePlans": 3,
     "endgamePlans": 0,
     "modelGames": 3,
-    "weapons": 0,
-    "warnings": 0,
-    "keyIdeas": 4
-  },
-  "english-opening": {
-    "variations": 8,
-    "middlegamePlans": 3,
-    "endgamePlans": 0,
-    "modelGames": 3,
-    "weapons": 0,
-    "warnings": 0,
-    "keyIdeas": 4
-  },
-  "reti-opening": {
-    "variations": 8,
-    "middlegamePlans": 2,
-    "endgamePlans": 0,
-    "modelGames": 2,
-    "weapons": 0,
-    "warnings": 0,
-    "keyIdeas": 4
-  },
-  "kings-indian-attack": {
-    "variations": 8,
-    "middlegamePlans": 2,
-    "endgamePlans": 0,
-    "modelGames": 2,
-    "weapons": 0,
-    "warnings": 0,
-    "keyIdeas": 4
-  },
-  "evans-gambit": {
-    "variations": 8,
-    "middlegamePlans": 4,
-    "endgamePlans": 0,
-    "modelGames": 4,
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4

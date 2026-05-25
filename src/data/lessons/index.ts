@@ -29,6 +29,12 @@ import { KINGS_INDIAN_ATTACK_LESSON } from './kingsIndianAttack';
 import { KINGS_INDIAN_ATTACK_VARIATION_LESSONS } from './kingsIndianAttackVariations';
 import { EVANS_GAMBIT_LESSON } from './evansGambit';
 import { EVANS_GAMBIT_VARIATION_LESSONS } from './evansGambitVariations';
+import { SICILIAN_NAJDORF_LESSON } from './sicilianNajdorf';
+import { SICILIAN_NAJDORF_VARIATION_LESSONS } from './sicilianNajdorfVariations';
+import { SICILIAN_SVESHNIKOV_LESSON } from './sicilianSveshnikov';
+import { SICILIAN_SVESHNIKOV_VARIATION_LESSONS } from './sicilianSveshnikovVariations';
+import { SICILIAN_ALAPIN_LESSON } from './sicilianAlapin';
+import { SICILIAN_ALAPIN_VARIATION_LESSONS } from './sicilianAlapinVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -61,6 +67,9 @@ const LESSONS: Record<string, LessonScript> = {
   [RETI_OPENING_LESSON.openingId]: RETI_OPENING_LESSON,
   [KINGS_INDIAN_ATTACK_LESSON.openingId]: KINGS_INDIAN_ATTACK_LESSON,
   [EVANS_GAMBIT_LESSON.openingId]: EVANS_GAMBIT_LESSON,
+  [SICILIAN_NAJDORF_LESSON.openingId]: SICILIAN_NAJDORF_LESSON,
+  [SICILIAN_SVESHNIKOV_LESSON.openingId]: SICILIAN_SVESHNIKOV_LESSON,
+  [SICILIAN_ALAPIN_LESSON.openingId]: SICILIAN_ALAPIN_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -79,6 +88,9 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...RETI_OPENING_VARIATION_LESSONS,
   ...KINGS_INDIAN_ATTACK_VARIATION_LESSONS,
   ...EVANS_GAMBIT_VARIATION_LESSONS,
+  ...SICILIAN_NAJDORF_VARIATION_LESSONS,
+  ...SICILIAN_SVESHNIKOV_VARIATION_LESSONS,
+  ...SICILIAN_ALAPIN_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
