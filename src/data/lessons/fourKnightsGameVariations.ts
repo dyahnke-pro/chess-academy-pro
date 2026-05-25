@@ -28,6 +28,7 @@ function b(init: BeatInit): LessonBeat {
 export const FOUR_KNIGHTS_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
   "four-knights-game::Scotch Four Knights: 4.d4 exd4 5.Nxd4": {
   openingId: "four-knights-game",
+  sources: ['book:four-knights-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
   title: "Four Knights — The Scotch Four Knights",
   minutes: 11,
   orientation: "white",
@@ -42,6 +43,7 @@ export const FOUR_KNIGHTS_GAME_VARIATION_LESSONS: Record<string, LessonScript> =
 
   "four-knights-game::Glek System: 4.g3": {
   openingId: "four-knights-game",
+  sources: ['book:four-knights-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
   title: "Four Knights — The Glek System",
   minutes: 11,
   orientation: "white",
@@ -56,6 +58,7 @@ export const FOUR_KNIGHTS_GAME_VARIATION_LESSONS: Record<string, LessonScript> =
 
   "four-knights-game::Italian Four Knights: 4.Bc4": {
   openingId: "four-knights-game",
+  sources: ['book:four-knights-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
   title: "Four Knights — The Italian Four Knights",
   minutes: 10,
   orientation: "white",
@@ -70,6 +73,7 @@ export const FOUR_KNIGHTS_GAME_VARIATION_LESSONS: Record<string, LessonScript> =
 
   "four-knights-game::Rubinstein Variation: 4.Bb5 Nd4": {
   openingId: "four-knights-game",
+  sources: ['book:four-knights-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
   title: "Four Knights — The Rubinstein Counter",
   minutes: 11,
   orientation: "white",

@@ -26,6 +26,7 @@ function b(init: BeatInit): LessonBeat {
 export const RETI_OPENING_VARIATION_LESSONS: Record<string, LessonScript> = {
   "reti-opening::Reti: Anti-Slav": {
   openingId: "reti-opening",
+  sources: ['concept:pos-development', 'concept:pos-space', 'https://en.wikipedia.org/wiki/R%C3%A9ti_Opening'],
   title: "Réti — The Anti-Slav (...Bf5)",
   minutes: 11,
   orientation: "white",

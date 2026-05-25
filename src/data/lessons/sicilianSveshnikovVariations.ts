@@ -29,6 +29,7 @@ function b(init: BeatInit): LessonBeat {
 export const SICILIAN_SVESHNIKOV_VARIATION_LESSONS: Record<string, LessonScript> = {
   "sicilian-sveshnikov::Sveshnikov: 9.Bxf6 gxf6 Early Exchange": {
   openingId: "sicilian-sveshnikov",
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
   title: "Sveshnikov — The 9.Bxf6 Early Exchange",
   minutes: 6,
   orientation: "black",
@@ -42,6 +43,7 @@ export const SICILIAN_SVESHNIKOV_VARIATION_LESSONS: Record<string, LessonScript>
 
   "sicilian-sveshnikov::Sveshnikov: Chelyabinsk (c4 System)": {
   openingId: "sicilian-sveshnikov",
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
   title: "Sveshnikov — The Chelyabinsk c4 Bind",
   minutes: 6,
   orientation: "black",
@@ -54,6 +56,7 @@ export const SICILIAN_SVESHNIKOV_VARIATION_LESSONS: Record<string, LessonScript>
 
   "sicilian-sveshnikov::Anti-Sveshnikov: 6.Nf3 Quiet Retreat": {
   openingId: "sicilian-sveshnikov",
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
   title: "Sveshnikov — The Anti-Sveshnikov 6.Nf3",
   minutes: 6,
   orientation: "black",
@@ -66,6 +69,7 @@ export const SICILIAN_SVESHNIKOV_VARIATION_LESSONS: Record<string, LessonScript>
 
   "sicilian-sveshnikov::Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)": {
   openingId: "sicilian-sveshnikov",
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
   title: "Sveshnikov — The Kalashnikov",
   minutes: 6,
   orientation: "black",

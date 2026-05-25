@@ -25,6 +25,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const LONDON_SYSTEM_LESSON: LessonScript = {
   openingId: "london-system",
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
   title: "The London System — A Master Class",
   minutes: 13,
   orientation: "white",

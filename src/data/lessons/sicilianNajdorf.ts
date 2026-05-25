@@ -27,6 +27,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const SICILIAN_NAJDORF_LESSON: LessonScript = {
   openingId: "sicilian-najdorf",
+  sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
   title: "The Sicilian Najdorf — A Master Class",
   minutes: 9,
   orientation: "black",

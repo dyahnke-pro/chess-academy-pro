@@ -25,6 +25,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const CATALAN_OPENING_LESSON: LessonScript = {
   openingId: "catalan-opening",
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
   title: "The Catalan — A Master Class",
   minutes: 13,
   orientation: "white",

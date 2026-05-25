@@ -26,6 +26,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const FOUR_KNIGHTS_GAME_LESSON: LessonScript = {
   openingId: "four-knights-game",
+  sources: ['book:four-knights-game', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
   title: "The Four Knights Game — A Master Class",
   minutes: 13,
   orientation: "white",

@@ -23,6 +23,7 @@ function b(init: BeatInit): LessonBeat {
 export const KINGS_INDIAN_ATTACK_VARIATION_LESSONS: Record<string, LessonScript> = {
   "kings-indian-attack::KIA vs KID-Style Response": {
   openingId: "kings-indian-attack",
+  sources: ['concept:att-kingside-storm', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
   title: "King's Indian Attack — vs the ...g6 Response",
   minutes: 11,
   orientation: "white",

@@ -27,6 +27,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const SICILIAN_SVESHNIKOV_LESSON: LessonScript = {
   openingId: "sicilian-sveshnikov",
+  sources: ['concept:pos-outpost', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation'],
   title: "The Sicilian Sveshnikov — A Master Class",
   minutes: 9,
   orientation: "black",

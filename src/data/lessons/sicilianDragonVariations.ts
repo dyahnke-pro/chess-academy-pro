@@ -29,6 +29,7 @@ function b(init: BeatInit): LessonBeat {
 export const SICILIAN_DRAGON_VARIATION_LESSONS: Record<string, LessonScript> = {
   "sicilian-dragon::Yugoslav Attack: Soltis Variation": {
   openingId: "sicilian-dragon",
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation'],
   title: "Sicilian Dragon — The Soltis Variation",
   minutes: 7,
   orientation: "black",
@@ -43,6 +44,7 @@ export const SICILIAN_DRAGON_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "sicilian-dragon::Yugoslav Attack: Chinese Dragon": {
   openingId: "sicilian-dragon",
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation'],
   title: "Sicilian Dragon — The Chinese Dragon",
   minutes: 7,
   orientation: "black",
@@ -56,6 +58,7 @@ export const SICILIAN_DRAGON_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "sicilian-dragon::Classical Variation": {
   openingId: "sicilian-dragon",
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation'],
   title: "Sicilian Dragon — The Classical Variation",
   minutes: 7,
   orientation: "black",
@@ -69,6 +72,7 @@ export const SICILIAN_DRAGON_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "sicilian-dragon::Levenfish Variation": {
   openingId: "sicilian-dragon",
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation'],
   title: "Sicilian Dragon — The Levenfish Variation",
   minutes: 7,
   orientation: "black",
@@ -82,6 +86,7 @@ export const SICILIAN_DRAGON_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "sicilian-dragon::Accelerated Dragon": {
   openingId: "sicilian-dragon",
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation'],
   title: "Sicilian Dragon — The Accelerated Dragon",
   minutes: 7,
   orientation: "black",
@@ -95,6 +100,7 @@ export const SICILIAN_DRAGON_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "sicilian-dragon::Anti-Dragon: Bg5 Line": {
   openingId: "sicilian-dragon",
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation'],
   title: "Sicilian Dragon — The Anti-Dragon Bg5 Line",
   minutes: 7,
   orientation: "black",

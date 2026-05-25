@@ -26,6 +26,7 @@ function b(init: BeatInit): LessonBeat {
 export const EVANS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   "evans-gambit::Evans Gambit Declined": {
   openingId: "evans-gambit",
+  sources: ['book:evans-gambit', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
   title: "Evans Gambit — Declined (...Bb6)",
   minutes: 11,
   orientation: "white",
@@ -39,6 +40,7 @@ export const EVANS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "evans-gambit::Evans Gambit: Compromised Defence": {
   openingId: "evans-gambit",
+  sources: ['book:evans-gambit', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
   title: "Evans Gambit — The Compromised Defence",
   minutes: 11,
   orientation: "white",
@@ -52,6 +54,7 @@ export const EVANS_GAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "evans-gambit::Evans Gambit: Lasker Defence": {
   openingId: "evans-gambit",
+  sources: ['book:evans-gambit', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
   title: "Evans Gambit — Lasker's Defence",
   minutes: 11,
   orientation: "white",

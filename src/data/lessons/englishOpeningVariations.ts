@@ -26,6 +26,7 @@ function b(init: BeatInit): LessonBeat {
 export const ENGLISH_OPENING_VARIATION_LESSONS: Record<string, LessonScript> = {
   "english-opening::English: Symmetrical Variation": {
   openingId: "english-opening",
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/English_Opening'],
   title: "English — The Symmetrical Variation",
   minutes: 11,
   orientation: "white",
@@ -40,6 +41,7 @@ export const ENGLISH_OPENING_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "english-opening::Mikenas Attack": {
   openingId: "english-opening",
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/English_Opening'],
   title: "English — The Mikenas-Carls Attack",
   minutes: 11,
   orientation: "white",

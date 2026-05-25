@@ -27,6 +27,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const SICILIAN_ALAPIN_LESSON: LessonScript = {
   openingId: "sicilian-alapin",
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation'],
   title: "The Alapin Sicilian — A Master Class",
   minutes: 8,
   orientation: "black",

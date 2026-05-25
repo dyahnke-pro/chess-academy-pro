@@ -28,6 +28,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const SICILIAN_DRAGON_LESSON: LessonScript = {
   openingId: "sicilian-dragon",
+  sources: ['concept:att-queenside-attack', 'concept:pos-open-file', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation'],
   title: "The Sicilian Dragon — A Master Class",
   minutes: 9,
   orientation: "black",

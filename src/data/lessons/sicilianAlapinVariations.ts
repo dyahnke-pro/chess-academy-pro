@@ -28,6 +28,7 @@ function b(init: BeatInit): LessonBeat {
 export const SICILIAN_ALAPIN_VARIATION_LESSONS: Record<string, LessonScript> = {
   "sicilian-alapin::Alapin: 2...d5 Central Counter (IQP Play)": {
   openingId: "sicilian-alapin",
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation'],
   title: "Alapin — The 2...d5 Central Counter",
   minutes: 6,
   orientation: "black",

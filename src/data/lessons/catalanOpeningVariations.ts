@@ -27,6 +27,7 @@ function b(init: BeatInit): LessonBeat {
 export const CATALAN_OPENING_VARIATION_LESSONS: Record<string, LessonScript> = {
   "catalan-opening::Closed Catalan: ...c6 System": {
   openingId: "catalan-opening",
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
   title: "Catalan — The Closed System",
   minutes: 11,
   orientation: "white",
@@ -41,6 +42,7 @@ export const CATALAN_OPENING_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "catalan-opening::Catalan vs Slav Setup: ...c6 and ...dxc4": {
   openingId: "catalan-opening",
+  sources: ['concept:pos-center', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Catalan_Opening'],
   title: "Catalan — vs the Slav Move-Order",
   minutes: 11,
   orientation: "white",

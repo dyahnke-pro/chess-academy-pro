@@ -25,6 +25,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const EVANS_GAMBIT_LESSON: LessonScript = {
   openingId: "evans-gambit",
+  sources: ['book:evans-gambit', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Evans_Gambit'],
   title: "The Evans Gambit — A Master Class",
   minutes: 13,
   orientation: "white",

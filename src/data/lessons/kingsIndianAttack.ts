@@ -25,6 +25,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const KINGS_INDIAN_ATTACK_LESSON: LessonScript = {
   openingId: "kings-indian-attack",
+  sources: ['concept:att-kingside-storm', 'concept:pos-development', 'https://en.wikipedia.org/wiki/King%27s_Indian_Attack'],
   title: "The King's Indian Attack — A Master Class",
   minutes: 13,
   orientation: "white",

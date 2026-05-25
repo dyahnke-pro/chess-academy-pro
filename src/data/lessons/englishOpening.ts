@@ -25,6 +25,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const ENGLISH_OPENING_LESSON: LessonScript = {
   openingId: "english-opening",
+  sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/English_Opening'],
   title: "The English Opening — A Master Class",
   minutes: 13,
   orientation: "white",

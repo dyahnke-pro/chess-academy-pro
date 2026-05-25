@@ -27,6 +27,7 @@ function b(init: BeatInit): LessonBeat {
 export const LONDON_SYSTEM_VARIATION_LESSONS: Record<string, LessonScript> = {
   "london-system::London vs King's Indian": {
   openingId: "london-system",
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
   title: "London System — vs the King's Indian Fianchetto",
   minutes: 11,
   orientation: "white",
@@ -41,6 +42,7 @@ export const LONDON_SYSTEM_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   "london-system::Jobava London": {
   openingId: "london-system",
+  sources: ['concept:pos-development', 'concept:pos-center', 'https://en.wikipedia.org/wiki/London_System'],
   title: "London System — The Jobava (Nc3) Attack",
   minutes: 11,
   orientation: "white",

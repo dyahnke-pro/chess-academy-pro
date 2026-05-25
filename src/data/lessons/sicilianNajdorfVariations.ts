@@ -29,6 +29,7 @@ function b(init: BeatInit): LessonBeat {
 export const SICILIAN_NAJDORF_VARIATION_LESSONS: Record<string, LessonScript> = {
   "sicilian-najdorf::Najdorf: Classical (6.Be2 with ...e5)": {
   openingId: "sicilian-najdorf",
+  sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
   title: "Najdorf — The Classical 6.Be2",
   minutes: 6,
   orientation: "black",
@@ -41,6 +42,7 @@ export const SICILIAN_NAJDORF_VARIATION_LESSONS: Record<string, LessonScript> = 
 
   "sicilian-najdorf::Najdorf: 6.Bg5 Main Line (with e6 and f4)": {
   openingId: "sicilian-najdorf",
+  sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
   title: "Najdorf — The 6.Bg5 Main Line",
   minutes: 7,
   orientation: "black",
@@ -54,6 +56,7 @@ export const SICILIAN_NAJDORF_VARIATION_LESSONS: Record<string, LessonScript> = 
 
   "sicilian-najdorf::Najdorf: Poisoned Pawn (6.Bg5 Qb6)": {
   openingId: "sicilian-najdorf",
+  sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
   title: "Najdorf — The Poisoned Pawn",
   minutes: 7,
   orientation: "black",
@@ -66,6 +69,7 @@ export const SICILIAN_NAJDORF_VARIATION_LESSONS: Record<string, LessonScript> = 
 
   "sicilian-najdorf::Najdorf: 6.f3 English Attack Move Order": {
   openingId: "sicilian-najdorf",
+  sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
   title: "Najdorf — The 6.f3 Move Order",
   minutes: 6,
   orientation: "black",
@@ -78,6 +82,7 @@ export const SICILIAN_NAJDORF_VARIATION_LESSONS: Record<string, LessonScript> = 
 
   "sicilian-najdorf::Najdorf: Fischer-Sozin Attack (6.Bc4)": {
   openingId: "sicilian-najdorf",
+  sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
   title: "Najdorf — The Fischer-Sozin Attack",
   minutes: 6,
   orientation: "black",
@@ -90,6 +95,7 @@ export const SICILIAN_NAJDORF_VARIATION_LESSONS: Record<string, LessonScript> = 
 
   "sicilian-najdorf::Najdorf: Adams Attack (6.g3 Fianchetto)": {
   openingId: "sicilian-najdorf",
+  sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
   title: "Najdorf — The 6.g3 Fianchetto",
   minutes: 6,
   orientation: "black",
@@ -102,6 +108,7 @@ export const SICILIAN_NAJDORF_VARIATION_LESSONS: Record<string, LessonScript> = 
 
   "sicilian-najdorf::Najdorf: 6.Be3 ...Ng4 (Bishop Trade Attempt)": {
   openingId: "sicilian-najdorf",
+  sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
   title: "Najdorf — The 6.Be3 Ng4 Line",
   minutes: 6,
   orientation: "black",
@@ -114,6 +121,7 @@ export const SICILIAN_NAJDORF_VARIATION_LESSONS: Record<string, LessonScript> = 
 
   "sicilian-najdorf::Najdorf: Anti-Najdorf (6.a4)": {
   openingId: "sicilian-najdorf",
+  sources: ['concept:att-queenside-attack', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
   title: "Najdorf — The Anti-Najdorf 6.a4",
   minutes: 6,
   orientation: "black",

@@ -12,6 +12,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 export const DUTCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
   'dutch-defence::Stonewall d5 e6 Bd6': {
     openingId: 'dutch-defence', title: 'Dutch — The Stonewall', minutes: 11, orientation: 'black',
+    sources: ['book:dutch-defence', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
     beats: [
       b({ id: 's1', moves: 'd4 f5 g3 Nf6 Bg2 e6 Nf3 d5', say: "The Stonewall — Black builds an immovable pawn wall on d5, e6 and f5. It looks committal, but it is rock-solid and deeply strategic: the wall clamps the e4-square and hands Black a permanent kingside attacking structure. Carlsen himself wields the Stonewall as a winning weapon.", sayShort: '…d5 — build the Stonewall wall.', highlights: [H('d5'), H('f5', SOFT)] }),
       b({ id: 's2', moves: 'd4 f5 g3 Nf6 Bg2 e6 Nf3 d5 O-O Bd6', say: "…Bd6 — the key Stonewall bishop. Rather than a passive piece behind the wall, it points straight at h2 and the white king, the spearhead of the coming kingside attack. The Stonewall's whole point is this bishop plus a knight landing on e4.", sayShort: '…Bd6 — aim the bishop at h2.', highlights: [H('h2', SOFT), H('d6')] }),
@@ -22,6 +23,7 @@ export const DUTCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'dutch-defence::Classical Be7 Line': {
     openingId: 'dutch-defence', title: 'Dutch — The Classical (…Be7)', minutes: 10, orientation: 'black',
+    sources: ['book:dutch-defence', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
     beats: [
       b({ id: 'c1', moves: 'd4 f5 g3 Nf6 Bg2 e6 Nf3 Be7', say: "The Classical Dutch — the most flexible system. Black develops …e6 and …Be7, keeping options open between a later Stonewall with …d5 or a central …d6 and …e5 break. Solid and adaptable, it sidesteps the sharpest theory while keeping the Dutch's attacking spirit.", sayShort: '…Be7 — the flexible Classical setup.', highlights: [H('e6')] }),
       b({ id: 'c2', moves: 'd4 f5 g3 Nf6 Bg2 e6 Nf3 Be7 O-O O-O c4 d5', say: "Both castle and Black plays …d5, choosing a Stonewall-like structure but with the bishop comfortably on e7. The f5-pawn controls e4, and Black has a sound, harmonious position with the familiar kingside-attacking potential.", sayShort: '…d5 — clamp e4, sound structure.', highlights: [H('d5'), H('e4', SOFT)] }),
@@ -32,6 +34,7 @@ export const DUTCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'dutch-defence::Ilyin-Zhenevsky System': {
     openingId: 'dutch-defence', title: 'Dutch — The Ilyin-Zhenevsky', minutes: 10, orientation: 'black',
+    sources: ['book:dutch-defence', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
     beats: [
       b({ id: 'i1', moves: 'd4 f5 g3 Nf6 Bg2 e6 Nf3 Be7 O-O O-O c4 d5', say: "The Ilyin-Zhenevsky — a Classical Dutch combining the solid …e6/…Be7/…d5 structure with active piece play and the trademark …Qe8 manoeuvre. Named after the Soviet pioneer, it is a fighting, flexible way to play the Dutch without the rigid Stonewall.", sayShort: '…d5 — the Classical base.', highlights: [H('d5')] }),
       b({ id: 'i2', moves: 'd4 f5 g3 Nf6 Bg2 e6 Nf3 Be7 O-O O-O c4 d5 Nc3 c6 Qc2 Qe8', say: "…c6 supports the centre, then …Qe8 — the Ilyin-Zhenevsky signature. The queen reroutes toward the kingside (h5 or g6) to fuel an attack and clears d8 for a rook. It is the same idea as the Leningrad's …Qe8, here in the solid Classical structure.", sayShort: '…Qe8 — reroute the queen for the attack.', highlights: [H('e8'), H('h5', SOFT)] }),
@@ -42,6 +45,7 @@ export const DUTCH_DEFENCE_VARIATION_LESSONS: Record<string, LessonScript> = {
 
   'dutch-defence::Leningrad e5 Break': {
     openingId: 'dutch-defence', title: 'Dutch — The Leningrad …e5 Break', minutes: 10, orientation: 'black',
+    sources: ['book:dutch-defence', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
     beats: [
       b({ id: 'e1', moves: 'd4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 c6', say: "A Leningrad where Black prepares the other central break. Instead of …Qe8 and a kingside storm, Black plays …c6 to support a quick …e5, striking the centre directly. It is the most classical, principled Leningrad plan — meet White's space with a central counterstrike.", sayShort: '…c6 — prepare the …e5 central break.', highlights: [H('c6'), H('e5', SOFT)] }),
       b({ id: 'e2', moves: 'd4 f5 g3 Nf6 Bg2 g6 Nf3 Bg7 O-O O-O c4 d6 Nc3 c6 d5 e5', say: "d5 grabs space, and Black strikes with …e5! — the thematic break. Black challenges the centre head-on, opening lines for the g7-bishop and freeing the position exactly where White just committed pawns. The Leningrad's central counterpunch.", sayShort: '…e5 — the central counterstrike.', highlights: [H('e5')] }),

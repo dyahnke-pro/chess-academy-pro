@@ -9,6 +9,7 @@ function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return
 
 export const DUTCH_DEFENCE_LESSON: LessonScript = {
   openingId: 'dutch-defence',
+  sources: ['book:dutch-defence', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Dutch_Defence'],
   title: 'The Dutch Defence — A Master Class',
   minutes: 12,
   orientation: 'black',
