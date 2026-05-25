@@ -31,6 +31,7 @@ import { getKingsGambitTabPlanIds } from '../../services/kingsGambitMasterclassT
 import { getSicilianDragonTabPlanIds } from '../../services/sicilianDragonMasterclassTabs';
 import { getFourKnightsTabPlanIds } from '../../services/fourKnightsMasterclassTabs';
 import { getLondonTabPlanIds } from '../../services/londonMasterclassTabs';
+import { getCatalanTabPlanIds } from '../../services/catalanMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
@@ -1048,6 +1049,7 @@ export function OpeningDetailPage(): JSX.Element {
     getSicilianDragonTabPlanIds(opening.id, tabKey) ??
     getFourKnightsTabPlanIds(opening.id, tabKey) ??
     getLondonTabPlanIds(opening.id, tabKey) ??
+    getCatalanTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).

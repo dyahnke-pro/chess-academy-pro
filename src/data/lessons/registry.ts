@@ -40,6 +40,8 @@ import { FOUR_KNIGHTS_GAME_LESSON } from './fourKnightsGame';
 import { FOUR_KNIGHTS_GAME_VARIATION_LESSONS } from './fourKnightsGameVariations';
 import { LONDON_SYSTEM_LESSON } from './londonSystem';
 import { LONDON_SYSTEM_VARIATION_LESSONS } from './londonSystemVariations';
+import { CATALAN_OPENING_LESSON } from './catalanOpening';
+import { CATALAN_OPENING_VARIATION_LESSONS } from './catalanOpeningVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -70,6 +72,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: SICILIAN_DRAGON_LESSON, variations: SICILIAN_DRAGON_VARIATION_LESSONS },
   { main: FOUR_KNIGHTS_GAME_LESSON, variations: FOUR_KNIGHTS_GAME_VARIATION_LESSONS },
   { main: LONDON_SYSTEM_LESSON, variations: LONDON_SYSTEM_VARIATION_LESSONS },
+  { main: CATALAN_OPENING_LESSON, variations: CATALAN_OPENING_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

@@ -503,30 +503,30 @@
   ],
   "catalan-opening": [
     {
-      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
-      "correctMove": "d5",
-      "hint": "Stake a claim in the center before White completes the fianchetto.",
-      "concept": "Central counter-play with d5 in the Catalan"
+      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "correctMove": "g3",
+      "hint": "Fianchetto the bishop — the Catalan signature.",
+      "concept": "The Catalan setup"
     },
     {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/6P1/PP2PPBP/RNBQK1NR w KQkq d6 0 4",
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2pP4/6P1/PP2PPBP/RNBQK1NR w KQkq - 0 5",
       "correctMove": "Nf3",
-      "hint": "Develop the knight to its natural square before castling.",
-      "concept": "Standard kingside development in the Catalan setup"
+      "hint": "Don't chase the pawn — develop; you recover c4 at leisure.",
+      "concept": "Open Catalan recovery"
     },
     {
-      "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 4 6",
+      "fen": "r2qkb1r/1ppb1ppp/p1n1pn2/8/2pP4/4PNP1/PP2QPBP/RNB2RK1 b kq - 2 8",
       "type": "plan",
-      "question": "What is the best plan for White in this Catalan middlegame?",
+      "question": "What is White's plan with the pawn on c4?",
       "choices": [
-        "Play Qc2 and prepare e4 to open the center and activate the g2 bishop",
-        "Push b4 and a4 for an immediate queenside pawn storm",
-        "Play Nc3 and push e4 immediately on the next move",
-        "Trade queens with Qb3 and steer toward an endgame"
+        "Undermine it with b3 and recover it with the bishop pair",
+        "Sacrifice a piece for a kingside attack",
+        "Trade queens and steer for a draw",
+        "Storm the king with h4-h5"
       ],
       "correctIndex": 0,
-      "hint": "The g2 bishop thrives on an open long diagonal.",
-      "concept": "Central expansion to activate the Catalan bishop"
+      "hint": "The Catalan pawn is recovered by undermining, not chasing.",
+      "concept": "Pawn recovery by undermining"
     }
   ],
   "slav-defence": [

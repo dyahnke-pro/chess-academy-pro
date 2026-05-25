@@ -67,6 +67,15 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /king's indian|kings indian/i, label: 'vs KID' },
     { test: /jobava/i, label: 'Jobava' },
   ],
+  // Catalan Opening — White's fianchetto bind (Kramnik/Carlsen/Ding weapon).
+  // Main-line pill = the Open Catalan (…dxc4) with the pawn-recovery squeeze
+  // (the showcase, exempt). The two DB-anchored, structurally-distinct tabs
+  // with student-winning master games: the Closed Catalan and the Slav move-
+  // order. (Other repertoire sub-lines fold into the Open main structure.)
+  'catalan-opening': [
+    { test: /closed catalan/i, label: 'Closed' },
+    { test: /vs slav|slav setup/i, label: 'vs Slav' },
+  ],
   // Scotch Game — hand-picked tabs, frequency-ordered (repertoire weights).
   // Main-line pill = the Classical 4…Bc5 Be3 Qf6 line (the repertoire pgn), so
   // the "Classical" variation is omitted as a tab (it'd duplicate the pill).

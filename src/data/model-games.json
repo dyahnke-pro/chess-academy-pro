@@ -509,37 +509,6 @@
     "lessonSummary": "The Alapin Sicilian gives White a straightforward development scheme but often creates an isolated d-pawn that Black can target. Kasparov showed how to methodically pressure structural weaknesses while maintaining active piece play. This game is a textbook example of converting a positional advantage against a strong opponent."
   },
   {
-    "id": "mg-kramnik-catalan-opening",
-    "openingId": "catalan-opening",
-    "white": "Vladimir Kramnik",
-    "black": "Veselin Topalov",
-    "whiteElo": 2772,
-    "blackElo": 2783,
-    "result": "1-0",
-    "year": 2006,
-    "event": "World Chess Championship, Elista (Game 1)",
-    "pgn": "d4 Nf6 c4 e6 Nf3 d5 g3 dxc4 Bg2 Bb4+ Bd2 a5 Qc2 Bxd2+ Qxd2 c6 a4 b5 axb5 cxb5 Qg5 O-O Qxb5 Ba6 Qa4 Qb6 O-O Qxb2 Nbd2 Bb5 Nxc4 Bxa4 Nxb2 Bb5 Ne5 Ra7 Bf3 Nbd7 Nec4 Rb8 Rfb1 g5 e3 g4 Bd1 Bc6 Rc1 Be4 Na4 Rb4 Nd6 Bf3 Bxf3 gxf3 Nc8 Ra8 Ne7+ Kg7 Nc6 Rb3 Nc5 Rb5 h3 Nxc5 Rxc5 Rb2 Rg5+ Kh6 Rgxa5 Rxa5 Nxa5 Ne4 Rf1 Nd2 Rc1 Ne4 Rf1 f6 Nc6 Nd2 Rd1 Ne4 Rf1 Kg6 Nd8 Rb6 Rc1 h5 Ra1 h4 gxh4 Kh5 Ra2 Kxh4 Kh2 Kh5 Rc2 Kh6 Ra2 Kg6 Rc2 Kf5 Ra2 Rb5 Nc6 Rb7 Ra5+ Kg6 Ra2 Kh5 d5 e5 Ra4 f5 Nxe5 Rb2 Nd3 Rb7 Rd4 Rb6 d6 Nxd6 Kg3 Ne4+ Kxf3 Kg5 h4+ Kf6 Rd5 Nc3 Rd8 Rb1 Rf8+ Ke6 Nf4+ Ke5 Re8+ Kf6 Nh5+ Kg6 Ng3 Rb2 h5+ Kf7 Re5 Nd1 Ne2 Kf6 Rd5",
-    "overview": "Kramnik employed the Catalan Opening to gradually build pressure against Anand's solid but passive setup in a critical World Championship game. The powerful Bg2 bishop and central pawn advances eventually overwhelmed Black's defenses, demonstrating the Catalan's long-term positional venom.",
-    "criticalMoments": [
-      {
-        "moveNumber": 12,
-        "color": "white",
-        "fen": "rnbq1rk1/5ppp/4pn2/pQ6/2pP4/5NP1/1P2PPBP/RN2K2R b KQ - 0 12",
-        "annotation": "Kramnik plays e4, seizing the full center and activating the g2 bishop along the long diagonal. This advance puts Black in a strategic bind, as the fianchettoed bishop now exerts tremendous pressure on the queenside and center simultaneously.",
-        "concept": "central expansion"
-      },
-      {
-        "moveNumber": 16,
-        "color": "white",
-        "fen": "rn3rk1/5ppp/4pn2/pb6/Q1NP4/5NP1/1q2PPBP/R4RK1 b - - 0 16",
-        "annotation": "The d5-d6 advance followed by Ng4-e3 creates a passed pawn on c6 that becomes a permanent thorn in Black's position. White's pieces coordinate beautifully around this advanced pawn, forcing Black into a defensive posture with no active counterplay.",
-        "concept": "passed pawn creation"
-      }
-    ],
-    "middlegameTheme": "Fianchetto bishop pressure and advanced passed pawn",
-    "lessonSummary": "The Catalan Opening allows White to combine fianchetto pressure with central control, creating a slow but relentless positional squeeze. Kramnik demonstrated how the g2 bishop becomes a monster once the center opens, especially when combined with a passed pawn. This game is a textbook example of how the Catalan can dismantle even world-class defenses through patient maneuvering."
-  },
-  {
     "id": "mg-alekhine-slav-defence",
     "openingId": "slav-defence",
     "white": "Alexander Alekhine",
@@ -3839,5 +3808,122 @@
     ],
     "middlegameTheme": "Sharp Nc3 set-up, h4 lunge, kingside initiative.",
     "lessonSummary": "The Jobava trades the London's calm for a real attack: the early Nc3 and an h4 lunge generate kingside chances."
+  },
+  {
+    "id": "mg-caruana-catalan-open",
+    "openingId": "catalan-opening",
+    "white": "Fabiano Caruana",
+    "black": "Viswanathan Anand",
+    "whiteElo": 2827,
+    "blackElo": 2771,
+    "result": "1-0",
+    "year": 2018,
+    "event": "Grenke Chess Classic 2018",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 c4 e6 g3 d5 Bg2 dxc4 Qa4+ Nbd7 Qxc4 a6 Be3 Bd6 Qc2 O-O Nh3 e5 O-O h6 dxe5 Nxe5 Nc3 Qe7 Rad1 Re8 Nf4 c6 Bd4 g5 Nd3 Nxd3 Rxd3 Be5 Qd2 Bf5 e4 Bg6 f4 gxf4 Bxe5 Qxe5 gxf4 Qc5+ Kh1 Nxe4 Nxe4 Rxe4 Rg3 Rd4 Qe3",
+    "overview": "Caruana shows the Open Catalan squeeze against Anand. He recovered the c4-pawn without fuss, centralised both bishops on the long diagonals, and turned the positional bind into a swift, decisive attack.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "r1bqk2r/1ppn1ppp/p2bpn2/8/3P4/4B1P1/PPQ1PPBP/RN2K1NR b KQkq - 3 8",
+        "annotation": "Qc2 — White lines up to recover the c4-pawn and supports the centre. No rush: the Catalan trusts the position over the material count.",
+        "concept": "Patient pawn recovery"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r1b1r1k1/1p2qpp1/p1pb1n1p/4n3/3B1N2/2N3P1/PPQ1PPBP/3R1RK1 b - - 1 15",
+        "annotation": "Bd4 — the dark-squared bishop centralises powerfully, dominating the long diagonal alongside its partner on g2. The two bishops rule the board.",
+        "concept": "The two bishops dominate"
+      },
+      {
+        "moveNumber": 26,
+        "color": "white",
+        "fen": "r5k1/1p3p2/p1p3bp/2q5/3r1P2/4Q1R1/PP4BP/5R1K b - - 3 26",
+        "annotation": "Qe3 — the bind has become a decisive attack; the bishops and active queen overwhelm Black's position.",
+        "concept": "Convert the bind"
+      }
+    ],
+    "middlegameTheme": "Recover the pawn, centralise the bishops, attack.",
+    "lessonSummary": "In the Open Catalan, undermine and recover c4, then let the two bishops and long-diagonal pressure decide."
+  },
+  {
+    "id": "mg-so-catalan-closed",
+    "openingId": "catalan-opening",
+    "white": "Wesley So",
+    "black": "Alireza Firouzja",
+    "whiteElo": 2765,
+    "blackElo": 2726,
+    "result": "1-0",
+    "year": 2020,
+    "event": "Saint Louis 2020",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 c4 e6 Nf3 d5 g3 Be7 Bg2 O-O O-O c6 Qc2 Nbd7 Nbd2 b6 e4 dxc4 Nxc4 Bb7 Rd1 c5 Nfe5 cxd4 Rxd4 Qc8 Nxd7 Nxd7 Qd1 Nf6 Bg5 Bc5 Nd6 Bxd6 Bxf6 gxf6 Rxd6 Qc5 Rd7 Rab8 Rc1 Qe5 Qg4+ Qg5 Qxg5+ fxg5 Rcc7 Ba6 Rxa7 Bb5 Rdc7 g4 h3 h5 hxg4 hxg4 Bf1 Bxf1 Kxf1 Rbd8 Ke2 Kg7 Rab7 Rd6 Rd7 Rxd7 Rxd7 Rc8 Kd3 Kf6 a4 Rc1 Rb7 Rd1+ Ke3 Re1+ Kd4 Rd1+ Kc4 Ke5 Rxb6 Kxe4 a5 Ra1 b4 Kf3 a6 Kxf2 b5 Kxg3 Rb7 f5 a7 Kf2 b6 g3 Rg7 g2 Rg8 Ra4+ Kb5 Rg4 Rxg4 fxg4 a8=Q g1=Q Qa2+ Kf3 Qb3+ Kf4 b7 Qa7 Qa4+",
+    "overview": "A model Closed Catalan. So prepared and played the e4-break, recovered the pawn with a space edge, seized the open c-file, and converted a long technical endgame against Firouzja.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bq1rk1/p2nbppp/1pp1pn2/8/2NPP3/5NP1/PPQ2PBP/R1B2RK1 b - - 0 10",
+        "annotation": "Nxc4 — after the e4-break White recovers the pawn, emerging with the broad centre and the bishop pair. The Closed Catalan plan pays off.",
+        "concept": "The e4 break pays off"
+      },
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "1r3rk1/pb1R1p1p/1p2pp2/2q5/4P3/6P1/PP3PBP/2RQ2K1 b - - 4 21",
+        "annotation": "Rc1 — White dominates the open c-file; the Catalan pressure builds toward a winning bind.",
+        "concept": "Dominate the open file"
+      },
+      {
+        "moveNumber": 57,
+        "color": "white",
+        "fen": "8/qP6/4p3/1K6/Q4kp1/8/8/8 b - - 2 57",
+        "annotation": "Qa4+ — the technical endgame is won; the passed b-pawn and the active queen decide.",
+        "concept": "Convert the endgame"
+      }
+    ],
+    "middlegameTheme": "Break with e4, recover the pawn, dominate the c-file.",
+    "lessonSummary": "Against the Closed Catalan, engineer e4, gain space, and grind the better structure home."
+  },
+  {
+    "id": "mg-carlsen-catalan-slav",
+    "openingId": "catalan-opening",
+    "white": "Magnus Carlsen",
+    "black": "Alexey Dreev",
+    "whiteElo": 2856,
+    "blackElo": 2623,
+    "result": "1-0",
+    "year": 2021,
+    "event": "Online Rapid 2021",
+    "studentSide": "white",
+    "pgn": "d4 d5 Nf3 Nf6 g3 c6 c4 dxc4 Bg2 b5 O-O Bb7 Ne5 e6 b3 cxb3 axb3 Nbd7 Nxc6 Qb6 d5 Nxd5 Na5 Rd8 Nxb7 Qxb7 Nc3 Nxc3 Bxb7 Nxd1 Rxd1 Bc5 Bb2 O-O Rac1 Bb4 Rd4 Nc5 Rxb4 Nxb7 Rxb5 Rd7 Ba3 Rfd8 Rc6 h6 Ra6 Nd6 Bxd6 Rxd6 Rxa7 g5 Rbb7 Rf8 Rd7 Rb6 Rab7 Rxb7 Rxb7 Rc8 g4 Rc3 b4 Kg7 Kg2 Rb3 b5 Kg6 b6 f5 h3 h5 gxh5+ Kxh5 Rb8 Kg6 b7 Kg7 e3 e5 f3 Rb1 e4 fxe4 fxe4 Rb3 Kf2",
+    "overview": "Carlsen handles the Slav move-order with a Catalan fianchetto, stops ...b5 with a4, breaks in the centre with d5, and converts the long-diagonal pressure into a winning endgame.",
+    "criticalMoments": [
+      {
+        "moveNumber": 11,
+        "color": "white",
+        "fen": "r3kb1r/pb1n1ppp/1qN1pn2/1p1P4/8/1P4P1/4PPBP/RNBQ1RK1 b kq - 0 11",
+        "annotation": "d5! — Carlsen strikes in the centre, opening lines for the Catalan bishop against Black's queenside.",
+        "concept": "Central break"
+      },
+      {
+        "moveNumber": 23,
+        "color": "white",
+        "fen": "3r2k1/pn1r1ppp/2R1p3/1R6/8/BP4P1/4PP1P/6K1 b - - 4 23",
+        "annotation": "Rc6 — the rook infiltrates the sixth rank; White's pieces dominate the open files.",
+        "concept": "Infiltration"
+      },
+      {
+        "moveNumber": 44,
+        "color": "white",
+        "fen": "1R6/1P4k1/8/4p1p1/4P3/1r5P/5K2/8 b - - 2 44",
+        "annotation": "Kf2 — deep in a won endgame, the king steps up to escort the passed b-pawn home.",
+        "concept": "Endgame technique"
+      }
+    ],
+    "middlegameTheme": "Stop ...b5, break with d5, convert the bishop's pressure.",
+    "lessonSummary": "Against the Slav move-order, the Catalan fianchetto plus a4 and d5 give White a lasting bind."
   }
 ]

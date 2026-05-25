@@ -10064,63 +10064,6 @@
     ]
   },
   {
-    "id": "mp-catalan-open-pressure",
-    "openingId": "catalan-opening",
-    "criticalPositionFen": "r1bqkb1r/1pp2ppp/p1n1pn2/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 w kq - 2 7",
-    "title": "Open Catalan — diagonal pressure with …dxc4",
-    "overview": "Open Catalan (Black takes the c-pawn). White's plan: long-term pressure on the long diagonal via Bg2, force Black to give back the c-pawn with active piece play, and exploit Black's slightly weakened queenside structure. The Bg2 is the most powerful Catalan piece — its diagonal reaches deep into Black's territory and supports virtually every White plan.",
-    "pawnBreaks": [
-      {
-        "move": "e4",
-        "explanation": "After Black gives back the c-pawn (usually with …b5 + …Bb7), e4 opens the center and lets the Bg2 fire on the long diagonal. The break creates immediate central pressure."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Queen",
-        "route": "Qd1-c2 attacking c-pawn",
-        "explanation": "Qc2 attacks the c4-pawn that Black grabbed, forcing Black to either return it with …b5 or defend awkwardly."
-      },
-      {
-        "piece": "Knight",
-        "route": "Nbd2-c4 or -e4",
-        "explanation": "The b1-knight reroutes through d2 to c4 (attacking …e5 or …b6) or e4 (the central outpost). Flexibility is the Catalan's strength."
-      }
-    ],
-    "typicalMistakes": [
-      "Forgetting to play Qc2 — Black consolidates the extra pawn comfortably.",
-      "Trading the Bg2 without compensation — eliminates the entire Catalan attacking concept."
-    ]
-  },
-  {
-    "id": "mp-catalan-closed-positional",
-    "openingId": "catalan-opening",
-    "criticalPositionFen": "r1bq1rk1/pppnbppp/4pn2/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 6 7",
-    "title": "Closed Catalan — slow maneuvering",
-    "overview": "Closed Catalan (Black keeps the central tension). White's plan: complete development, then build queenside pressure with Nc3 + b3 + Bb2 or Qc2 + Rd1. The Bg2 supports a future e4 break that opens the long diagonal. The position is strategically rich — many master games end with White converting a small positional edge into a winning endgame.",
-    "pawnBreaks": [
-      {
-        "move": "cxd5",
-        "explanation": "The Exchange Catalan trades the central tension for clear positional play. Black is left with an isolated d-pawn or symmetric structure where the Bg2 dominates."
-      },
-      {
-        "move": "e4",
-        "explanation": "After completing development, e4 challenges the d5 pawn and opens the long diagonal for the Bg2."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc1-b2 fianchetto",
-        "explanation": "The dark-squared bishop fianchettos to b2, controlling the long h1-a8 diagonal alongside the Bg2. Double-bishop pressure on the central squares."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing e4 before completing development — Black's …c5 destabilizes the center.",
-      "Trading the Bg2 too early — without it, the Catalan loses its main attacking weapon."
-    ]
-  },
-  {
     "id": "mp-slav-bf5-active-development",
     "openingId": "slav-defence",
     "criticalPositionFen": "rn1qk2r/pp3ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P3PPP/R1BQK2R w KQkq - 1 8",
@@ -19334,6 +19277,159 @@
           "…Qb6 — Black eyes the b2-pawn and the queenside.",
           "a3 — White calmly anchors and prepares to expand.",
           "…c5 — Black strikes at the d4-centre."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-catalanopening-main",
+    "openingId": "catalan-opening",
+    "title": "Open Catalan: Undermine and Recover the Pawn",
+    "criticalPositionFen": "r2qkb1r/1ppb1ppp/p1n1pn2/8/2pP4/4PNP1/PP2QPBP/RNB2RK1 b kq - 2 8",
+    "overview": "In the Open Catalan, White does not chase the c4-pawn — he undermines its base with b3, recovers it with interest, and emerges with the bishop pair, the open a-file, and the long-diagonal bishop bearing on the queenside.",
+    "pawnBreaks": [
+      {
+        "move": "b3",
+        "explanation": "b3 strikes the base of the ...b5/c4 chain, dissolving Black's extra pawn on White's terms.",
+        "fen": "r2qkb1r/1ppb1ppp/p1n1pn2/8/2pP4/4PNP1/PP2QPBP/RNB2RK1 b kq - 2 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc1-b2",
+        "explanation": "The dark-squared bishop joins its partner on the long diagonal, both bearing toward b7."
+      }
+    ],
+    "strategicThemes": [
+      "Undermine the c4-pawn with b3 rather than capturing directly.",
+      "Recover the pawn with the bishop pair and open lines.",
+      "Squeeze with the g2-bishop and pressure down the a- and c-files."
+    ],
+    "endgameTransitions": [
+      "The bishop pair and queenside pressure carry into a pleasant endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Open Catalan: Undermine and Recover the Pawn",
+        "fen": "r2qkb1r/1ppb1ppp/p1n1pn2/8/2pP4/4PNP1/PP2QPBP/RNB2RK1 b kq - 2 8",
+        "moves": [
+          "b5",
+          "b3",
+          "cxb3",
+          "axb3",
+          "Be7",
+          "Bb2"
+        ],
+        "annotations": [
+          "…b5 — Black props the c4-pawn with b5.",
+          "b3! — White undermines the base of the c4-pawn.",
+          "…cxb3 — Black releases the tension on b3.",
+          "axb3 — White recaptures on b3, opening lines.",
+          "…Be7 — Black develops the bishop to e7.",
+          "Bb2 — the dark-squared bishop joins the long diagonal toward b7."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-catalanopening-closed",
+    "openingId": "catalan-opening",
+    "title": "Closed Catalan: the e4 Break and Space",
+    "criticalPositionFen": "r1bq1rk1/p2nbppp/1pp1pn2/3p4/2PPP3/5NP1/PPQN1PBP/R1B2RK1 b - - 0 9",
+    "overview": "Against the solid Closed Catalan, White's whole plan is to engineer the e4-break, activate the g2-bishop, and gain space with e5. The wedge cramps Black and opens a kingside attack.",
+    "pawnBreaks": [
+      {
+        "move": "e4-e5",
+        "explanation": "e4 frees the g2-bishop; e5 gains space and kicks the f6-knight back.",
+        "fen": "r1bq1rk1/p2nbppp/1pp1pn2/3p4/2PPP3/5NP1/PPQN1PBP/R1B2RK1 b - - 0 9"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf1-e3-f5",
+        "explanation": "After the space gain the knight reroutes via e3 toward the f5-outpost and the kingside."
+      }
+    ],
+    "strategicThemes": [
+      "Engineer the e4-break to free the position.",
+      "Gain space with e5 and cramp Black.",
+      "Reroute knights toward f5 for a kingside attack."
+    ],
+    "endgameTransitions": [
+      "The space edge and better bishop keep an enduring pull."
+    ],
+    "playableLines": [
+      {
+        "title": "Closed Catalan: the e4 Break and Space",
+        "fen": "r1bq1rk1/p2nbppp/1pp1pn2/3p4/2PPP3/5NP1/PPQN1PBP/R1B2RK1 b - - 0 9",
+        "moves": [
+          "Bb7",
+          "e5",
+          "Ne8",
+          "cxd5",
+          "cxd5",
+          "Re1"
+        ],
+        "annotations": [
+          "…Bb7 — Black develops on the long diagonal.",
+          "e5! — White gains space and kicks the f6-knight.",
+          "…Ne8 — the knight retreats to e8, cramped.",
+          "cxd5 — White clarifies the centre.",
+          "…cxd5 — Black recaptures on d5.",
+          "Re1 — the rook supports the e5-wedge."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-catalanopening-slav",
+    "openingId": "catalan-opening",
+    "title": "Catalan-Slav: the Broad Centre and Pawn Recovery",
+    "criticalPositionFen": "rnbqk2r/pp2ppbp/2pn2p1/8/P1pPP3/5NP1/1PQ2PBP/RNB2RK1 b kq - 0 9",
+    "overview": "Against the Slav move-order, White answers ...dxc4 with a4 to stop ...b5, builds a broad centre with e4, and rounds up the c4-pawn while keeping the long-diagonal bishop's grip — the Catalan-Slav squeeze.",
+    "pawnBreaks": [
+      {
+        "move": "e4",
+        "explanation": "e4 builds the broad pawn centre, backing the g2-bishop and gaining space.",
+        "fen": "rnbqk2r/pp2ppbp/2pn2p1/8/P1pPP3/5NP1/1PQ2PBP/RNB2RK1 b kq - 0 9"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nb1-a3-c4",
+        "explanation": "The b1-knight routes via a3 to round up the c4-pawn."
+      }
+    ],
+    "strategicThemes": [
+      "Stop ...b5 with a4 and recover c4 at leisure.",
+      "Build a broad centre with e4.",
+      "Keep the long-diagonal bishop's pressure into the squeeze."
+    ],
+    "endgameTransitions": [
+      "The centre and bishop pair convert into a comfortable edge."
+    ],
+    "playableLines": [
+      {
+        "title": "Catalan-Slav: the Broad Centre and Pawn Recovery",
+        "fen": "rnbqk2r/pp2ppbp/2pn2p1/8/P1pPP3/5NP1/1PQ2PBP/RNB2RK1 b kq - 0 9",
+        "moves": [
+          "Na6",
+          "Na3",
+          "O-O",
+          "Rd1",
+          "Nb4",
+          "Qe2"
+        ],
+        "annotations": [
+          "…Na6 — Black develops the knight to a6.",
+          "Na3 — the knight heads via a3 to round up the c4-pawn.",
+          "…O-O — Black castles.",
+          "Rd1 — White centralises the rook on d1.",
+          "…Nb4 — the knight hops to b4.",
+          "Qe2 — White completes development, ready to regain c4."
         ]
       }
     ]

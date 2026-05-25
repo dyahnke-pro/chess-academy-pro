@@ -215,22 +215,25 @@
   ],
   "catalan-opening": [
     {
-      "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
-      "wrongMove": "Bb4+",
-      "correctMove": "d5",
-      "explanation": "Bb4+ transposes into unfavorable lines where White's fianchettoed bishop gains power on the long diagonal. Playing d5 stakes a claim in the center and challenges White's pawn structure directly."
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2pP4/6P1/PP2PPBP/RNBQK1NR w KQkq - 0 5",
+      "wrongMove": "Na3",
+      "correctMove": "Nf3",
+      "explanation": "Lunging after the c4-pawn with Na3 wastes time and misplaces the knight on the rim. Nf3 develops naturally — White recovers the pawn later with the bishop pair and long-diagonal pressure.",
+      "shortNarration": "Nf3 — develop, recover c4 later"
     },
     {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/6P1/PP2PPBP/RNBQK1NR b KQkq - 1 4",
-      "wrongMove": "dxc4",
-      "correctMove": "Be7",
-      "explanation": "Capturing on c4 gives White a powerful center and the Catalan bishop devastating scope on the long diagonal. Developing with Be7 keeps the position solid and prepares to castle without conceding the center."
+      "fen": "r2qkb1r/2pb1ppp/p1n1pn2/1p6/2pP4/4PNP1/PP2QPBP/RNB2RK1 w kq - 0 9",
+      "wrongMove": "Qxc4",
+      "correctMove": "b3",
+      "explanation": "Qxc4 loses the queen to ...bxc4 — the b5-pawn guards c4! Undermine the base of the chain with b3 instead, recovering the pawn under far better circumstances.",
+      "shortNarration": "b3 — undermine, b5 guards c4"
     },
     {
-      "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/6P1/PP1NPPBP/R1BQK1NR b KQkq - 3 5",
-      "wrongMove": "Nc6",
-      "correctMove": "O-O",
-      "explanation": "Nc6 blocks the c-pawn and commits the knight before the pawn structure is clarified. Castling immediately brings the king to safety and connects the rooks for flexible development."
+      "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/5NP1/PPQ1PPBP/RNB2RK1 w - - 0 8",
+      "wrongMove": "cxd5",
+      "correctMove": "Nbd2",
+      "explanation": "Releasing the tension with cxd5 hands Black an easy game and a clear structure. Keep the tension and prepare the thematic e4-break with Nbd2 — that is how White plays for the advantage.",
+      "shortNarration": "Nbd2 — prepare e4, keep tension"
     }
   ],
   "slav-defence": [
