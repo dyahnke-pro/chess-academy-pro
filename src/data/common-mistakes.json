@@ -287,19 +287,22 @@
       "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
       "wrongMove": "Nxd4",
       "correctMove": "exd4",
-      "explanation": "Nxd4 Nxd4 exd4 leaves Black with an isolated d-pawn and no compensation. exd4 Nxd4 gives Black active piece play."
+      "explanation": "Nxd4 Nxd4 exd4 leaves Black with an isolated d-pawn and no compensation. exd4 Nxd4 gives Black active piece play.",
+      "shortNarration": "exd4 — recapture for active piece play"
     },
     {
       "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
       "wrongMove": "Nxe4",
       "correctMove": "Bd6",
-      "explanation": "Nxe4 loses to d5 forking the knight and bishop. Bd6 attacks the knight and develops naturally."
+      "explanation": "Nxe4 loses to d5 forking the knight and bishop. Bd6 attacks the knight and develops naturally.",
+      "shortNarration": "Bd6 — attack the knight, develop"
     },
     {
       "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
       "wrongMove": "e5",
       "correctMove": "Bd3",
-      "explanation": "e5 pushes the pawn forward without support and the knight retreats to safety. Bd3 develops calmly with a lead in development."
+      "explanation": "e5 pushes the pawn forward without support and the knight retreats to safety. Bd3 develops calmly with a lead in development.",
+      "shortNarration": "Bd3 — develop calmly, keep your lead"
     }
   ],
   "vienna-game": [
