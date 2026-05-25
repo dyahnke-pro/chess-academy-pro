@@ -50,6 +50,12 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
   const fens = useMemo(() => beats.map((b) => fenForMoves(b.moves)), [beats]);
 
   const [beatIndex, setBeatIndex] = useState(0);
+  // Bumped on every applyStep so the animation effect re-runs even when the
+  // beat index is UNCHANGED (pause→resume re-applies the same step). Without
+  // this, applyStep arms a fresh animPromiseRef that the animation effect
+  // never resolves — Promise.all in `speak` hangs forever and auto-advance
+  // dies after the first resume (David 2026-05-25 autoplay-after-pause bug).
+  const [applyNonce, setApplyNonce] = useState(0);
   // The board is animated independently of the beat index: we play a
   // beat's moves one at a time (see the effect below), so `displayFen`
   // lags `beatIndex` while the sequence runs.
@@ -103,6 +109,7 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
     // Voice off → no narration to pace the reveal, so show every marker now.
     setRevealedSquares(voiceEnabledRef.current ? new Set() : new Set(beatSquares(b)));
     setBeatIndex(i);
+    setApplyNonce((n) => n + 1);
   }, [beats, beatSquares, clearRevealTimers]);
   const getNarration = useCallback((i: number) => beats[i]?.say ?? '', [beats]);
 
@@ -204,7 +211,10 @@ export function LessonPlayer({ script, onExit, onComplete, onContinueToNext }: L
       delay += STEP_MS;
     }
     return () => { timersRef.current.forEach((t) => clearTimeout(t)); };
-  }, [idx, beat, beats, fens]);
+    // applyNonce is included so a pause→resume that re-applies the SAME beat
+    // index still re-runs this effect (otherwise the snap branch never fires
+    // and the freshly-armed animPromiseRef is never resolved).
+  }, [idx, beat, beats, fens, applyNonce]);
 
   // Trail arrows stay on the board; authored vision arrows + highlights add
   // once the moves have settled AND the sentence naming their square has been

@@ -1,7 +1,8 @@
 // SAN → spoken move, for Learn mode's voice (David 2026-05-23: "the tts
 // narrations only stating moves"). Learn dictates WHAT to play ("Bishop to
 // f5"); the lesson prose stays on-screen as the WHY. Disambiguation letters
-// are dropped for speech (they don't help the ear). Pure + unit-tested.
+// are SPOKEN (David 2026-05-25: "ALL narrations say rook a to d8") so the
+// ear knows which piece moves. Pure + unit-tested.
 
 const PIECE: Record<string, string> = {
   N: 'Knight', B: 'Bishop', R: 'Rook', Q: 'Queen', K: 'King',
@@ -30,7 +31,11 @@ export function sanToSpeech(sanRaw: string | undefined | null): string {
   const dest = s.slice(-2);
   const piece = PIECE[s[0]];
   if (piece) {
-    return `${piece} ${takes ? 'takes ' : 'to '}${spellSquare(dest)}${promo}${suffix}`;
+    // Disambiguation = the file/rank between the piece letter and dest
+    // (minus any capture 'x'). Spoken so "Rad8" → "Rook a to d 8".
+    const mid = s.slice(1, -2).replace('x', '');
+    const disamb = mid ? `${mid.split('').join(' ')} ` : '';
+    return `${piece} ${disamb}${takes ? 'takes ' : 'to '}${spellSquare(dest)}${promo}${suffix}`;
   }
   // Pawn move (no piece letter). Capture form: "exd5" → "e takes d 5".
   if (takes) {

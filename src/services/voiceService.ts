@@ -191,11 +191,14 @@ const PIECE_LETTER_NAMES: Record<string, string> = {
   P: 'pawn', N: 'knight', B: 'bishop', R: 'rook', Q: 'queen', K: 'king',
 };
 
-/** SAN-ish move pattern — captures piece+capture+square/square+promo.
- *  Used to expand shorthand SAN like "Nxf7" or "Bc4" into plain
- *  English before TTS. Kept simple on purpose: false-positives here
- *  just produce slightly odd speech, never crashes. */
-const SAN_MOVE_RE = /\b([NBRQK])(x?)([a-h][1-8])\b/g;
+/** SAN-ish move pattern — captures piece + optional disambiguation
+ *  (file and/or rank) + capture + destination square. Used to expand
+ *  shorthand SAN like "Nxf7", "Bc4", or the disambiguated "Rad8" /
+ *  "Nbd7" into plain English before TTS. The disambiguation group is
+ *  spoken (David 2026-05-25: "ALL narrations say rook a to d8") so the
+ *  ear knows WHICH rook/knight. Kept simple on purpose: false-positives
+ *  here just produce slightly odd speech, never crashes. */
+const SAN_MOVE_RE = /\b([NBRQK])([a-h]?[1-8]?)(x?)([a-h][1-8])\b/g;
 /** Pawn-capture SAN (e.g. "exd5", "fxe6") — no piece letter. */
 const PAWN_CAPTURE_RE = /\b([a-h])x([a-h][1-8])\b/g;
 /** Piece letter immediately followed by a square in any bracketing —
@@ -313,9 +316,12 @@ export function sanitizeForTTS(text: string): string {
   });
   // Piece SAN: "Nxf7" → "knight takes f7", "Bc4" → "bishop to c4"
   const pieceExpansions: Array<{ san: string; spoken: string }> = [];
-  out = out.replace(SAN_MOVE_RE, (san: string, piece: string, capture: string, dest: string) => {
+  out = out.replace(SAN_MOVE_RE, (san: string, piece: string, disambig: string, capture: string, dest: string) => {
     const name = PIECE_LETTER_NAMES[piece] ?? piece;
-    const spoken = capture === 'x' ? `${name} takes ${dest}` : `${name} to ${dest}`;
+    // Speak the disambiguation char(s) so "Rad8" → "rook a to d8",
+    // "R1e2" → "rook 1 to e2" (space-joined so each is read on its own).
+    const dis = disambig ? `${disambig.split('').join(' ')} ` : '';
+    const spoken = capture === 'x' ? `${name} ${dis}takes ${dest}` : `${name} ${dis}to ${dest}`;
     pieceExpansions.push({ san, spoken });
     return spoken;
   });

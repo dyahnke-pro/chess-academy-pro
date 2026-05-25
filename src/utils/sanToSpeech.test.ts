@@ -8,10 +8,12 @@ describe('sanToSpeech — Learn dictates the move', () => {
     expect(sanToSpeech('Be4')).toBe('Bishop to e 4');
     expect(sanToSpeech('Qd6')).toBe('Queen to d 6');
   });
-  it('drops disambiguation letters/digits', () => {
-    expect(sanToSpeech('Ngf6')).toBe('Knight to f 6');
-    expect(sanToSpeech('N2f3')).toBe('Knight to f 3');
-    expect(sanToSpeech('Nbd7')).toBe('Knight to d 7');
+  it('speaks disambiguation letters/digits', () => {
+    expect(sanToSpeech('Ngf6')).toBe('Knight g to f 6');
+    expect(sanToSpeech('N2f3')).toBe('Knight 2 to f 3');
+    expect(sanToSpeech('Nbd7')).toBe('Knight b to d 7');
+    expect(sanToSpeech('Rad8')).toBe('Rook a to d 8');
+    expect(sanToSpeech('Nbxd2')).toBe('Knight b takes d 2');
   });
   it('captures', () => {
     expect(sanToSpeech('Nxd4')).toBe('Knight takes d 4');

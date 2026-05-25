@@ -61,6 +61,15 @@ describe('sanitizeForTTS', () => {
     it('"Bc4" → "bishop to c4"', () => {
       expect(sanitizeForTTS('play Bc4')).toBe('play bishop to c4');
     });
+    it('disambiguated "Rad8" → "rook a to d8"', () => {
+      expect(sanitizeForTTS('Rad8 centralises the rook')).toBe('rook a to d8 centralises the rook');
+    });
+    it('disambiguated capture "Nbxd2" → "knight b takes d2"', () => {
+      expect(sanitizeForTTS('then Nbxd2')).toBe('then knight b takes d2');
+    });
+    it('rank-disambiguated "R1e2" → "rook 1 to e2"', () => {
+      expect(sanitizeForTTS('R1e2 holds')).toBe('rook 1 to e2 holds');
+    });
     it('pawn capture "exd5" → "e-pawn takes d5"', () => {
       expect(sanitizeForTTS('exd5 opens the center')).toBe('e-pawn takes d5 opens the center');
     });
