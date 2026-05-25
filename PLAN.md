@@ -80,3 +80,21 @@ Start the Dragon: walk its spines (`1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 
 → Yugoslav Attack `6.Be3 Bg7 7.f3 O-O 8.Qd2 Nc6 9.Bc4 …` and the Classical/other
 tabs) from masters-db + Stockfish-extend, BLACK-oriented. Then author
 `_dragon-content.json`. Reuse the QG/Scotch pipeline scripts.
+
+## SESSION 2026-05-25 (autonomous Black-opening program)
+Merged origin/main (Dragon + King's Gambit) into the branch, then built COMPLETE
+Black masterclasses (David's rule: only build if ALL model games sourceable):
+- [x] French Defence — 10 vars, 10 plans, 9 models, 9 gems, pitfalls, quizzes
+- [x] Scandinavian Defence — 6 tabs, 7 plans, 7 models, 7 gems, pitfalls, quizzes
+- [x] Alekhine's Defence — 5 tabs, 6 plans, 6 models, 4 gems, pitfalls, quizzes
+- [x] Benko Gambit — 3 tabs, 4 plans, 4 models, 3 gems, pitfalls
+All gate-green (lessonIntegrity/narration/depth/tabIntegrity/wlpp/manifest/
+modelGames-orientation/middlegamePlanner/commonMistakeNarration/punishGems).
+
+### Vetted COMPLETE, not yet built (all variations have Black-win model games):
+- Dutch Defence (7 vars) — NEXT
+- Nimzo-Indian (8 vars)
+### Vetted INCOMPLETE (skip — a variation lacks a Black-win model game):
+- KID (Averbakh), Grünfeld (Exchange lines)
+### Off-limits (done on main / in flight): ruy, pirc, vienna, caro, italian, scotch,
+kings-gambit, sicilian-dragon, najdorf + Sicilian program; QGD/QGA/Slav/Semi-Slav (#669).
