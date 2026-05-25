@@ -179,13 +179,15 @@
       "fen": "r1bqk2r/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R b KQkq - 0 7",
       "wrongMove": "a5",
       "correctMove": "O-O",
-      "explanation": "a5 is premature queenside expansion before castling. O-O gets the king safe first — in the Dragon, a single tempo can decide the game."
+      "explanation": "a5 is premature queenside expansion before castling. O-O gets the king safe first — in the Dragon, a single tempo can decide the game.",
+      "shortNarration": "O-O first — king safe before a5."
     },
     {
       "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/2KR1B1R b - - 0 8",
       "wrongMove": "Be6",
       "correctMove": "Qa5",
-      "explanation": "Be6 allows Nxe6 fxe6 with a weakened pawn structure. Qa5 starts immediate queenside counterplay which is critical in the Yugoslav Attack."
+      "explanation": "Be6 allows Nxe6 fxe6 with a weakened pawn structure. Qa5 starts immediate queenside counterplay which is critical in the Yugoslav Attack.",
+      "shortNarration": "Qa5 — immediate queenside counterplay."
     }
   ],
   "scandinavian-defence": [

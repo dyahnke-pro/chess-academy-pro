@@ -47,7 +47,8 @@ understanding, board-truth-gated (CLAUDE.md modern-opening note).
   - All 8 tabs reach ≥20 plies (masters-anchored + Stockfish-extend):
     - Yugoslav Main (pill) 22 · Soltis 24 · Chinese Dragon 22 · Classical 22 · Dragadorf 20 (all deeply masters-anchored)
     - Levenfish / Accelerated / Anti-Dragon Bg5 → Stockfish-extended tail.
-  - **Re-steer in P1:** Levenfish should walk Black's `6...Nbd7` antidote (current spine walks into White's `e5` idea); Accelerated lands in the Maroczy Bind (White ~+0.5 is honest — teach Black's …f5/…b5/…a5 counterplay). Chinese Dragon `…b5` is thin in masters (4g) — verify it's sound theory.
+  - **Spine fixes (done):** Levenfish re-steered to Black's `6...Nbd7` antidote → equal (`…Qc7 …Bg7 …O-O …Nc5`, eval ≈0). Accelerated = Maroczy Bind (White ~+0.5, honest; teach Black's …f5/…b5/…a5 counterplay).
+  - **🚩 DRAGADORF DEFERRED** — the naive `…a6 …b5` then `h4` line evals **−1.5 for Black** at depth 16 and the masters-db is too thin to walk the sound move order. NOT shipping an unsound "Black is great" line. Source the real theory via CI explorer (deeper) before adding this tab. Until then the Dragon ships with the main pill + **6 vetted variation tabs**: Soltis, Chinese Dragon, Classical, Levenfish, Accelerated, Anti-Dragon Bg5.
 - NAJDORF … pending
 - SVESHNIKOV … pending
 - ALAPIN … pending
@@ -59,6 +60,10 @@ P5 model games → P6 manifest/quizzes → P7 gates+audits → land on main.)
 - 2026-05-25 — Program = 4 Sicilians (the repertoire set). Build order: Dragon →
   Najdorf → Sveshnikov → Alapin (cleanest-teaching first, anti-Sicilian last).
 - 2026-05-25 — QG abandoned (owned by another session); QG planning docs retired.
+- 2026-05-25 — **ALL FOUR ARE BLACK (David).** Student is a Black Sicilian player;
+  every lesson `orientation: 'black'`, taught from Black's side. The Alapin stays
+  in the set but as "how BLACK meets White's 2.c3" (the anti-Sicilian chapter) —
+  NOT a White opening. Build one fully at a time, stay focused.
 
 ## Next-session pickup
 Start the Dragon: walk its spines (`1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 g6`

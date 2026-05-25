@@ -56,6 +56,19 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
     { test: /nb3|kasparov/i, label: 'Kasparov Nb3' },
     { test: /steinitz|qh4/i, label: 'Steinitz' },
   ],
+  // Sicilian Dragon — Black-oriented masterclass. Main-line pill = the
+  // Yugoslav Attack main line (the showcase), so it's exempt from this tab
+  // list. The Dragadorf is DEFERRED (its sound move order needs deeper theory
+  // than the local masters-db carries — no unsound tab). Order: the Yugoslav
+  // sub-systems first, then the quieter White tries.
+  'sicilian-dragon': [
+    { test: /soltis/i, label: 'Soltis' },
+    { test: /chinese/i, label: 'Chinese Dragon' },
+    { test: /^classical/i, label: 'Classical' },
+    { test: /levenfish/i, label: 'Levenfish' },
+    { test: /accelerated/i, label: 'Accelerated' },
+    { test: /bg5|anti-dragon/i, label: 'Anti-Dragon Bg5' },
+  ],
   // Italian Game — hand-picked tabs, ordered by reasoned amateur prevalence
   // (the explorer freq query was unavailable when this was built; ordering is
   // flagged for prod verification). The Giuoco Piano main line is the "Main
