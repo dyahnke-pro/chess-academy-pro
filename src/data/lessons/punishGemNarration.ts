@@ -1660,6 +1660,41 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
     ],
   },
+  'scandinavian-defence:e4_d5_exd5_Qxd5_Nc3_Qa5_d4_c6_Bd2_Qc7_Nf3_Nf6_Bc4_Bg4:Bxf7+': {
+    // e4 d5 exd5 Qxd5 Nc3 Qa5 d4 c6 Bd2 Qc7 Nf3 Nf6 Bc4 Bg4 Bxf7+ Kxf7 h3 Bxf3 Qxf3 Kg8 g4 e6 g5
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bxf7+? An unsound sacrifice. White gives up the bishop hoping to expose the king, but Black has everything covered — there is no real follow-up.', 'Kxf7 — just take it. Black is a clean piece up and the king is perfectly safe, ready to tuck back to g8.', '', 'Bxf3 trades off White\'s one active piece, snuffing the last spark of the bluff.', '', 'Kg8 tucks the king away — Black is simply a piece up with no danger at all.', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Kxf7 — take the piece, king is safe.', '', 'Bxf3 — trade off the attacker.', '', 'Kg8 — king safe, up a piece.', '', '', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_d4_Nxd5_Nf3_g6_Be2_Bg7_O-O_O-O_c4_Nb6:b3': {
+    // e4 d5 exd5 Nf6 d4 Nxd5 Nf3 g6 Be2 Bg7 O-O O-O c4 Nb6 b3 c5 Bb2 Nc6 a4 Bf5 a5 Nc8 b4
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'b3? Too slow. In this King\'s-Indian structure White cannot afford to dawdle — Black strikes the centre at once.', 'c5! Hitting d4 and opening the long diagonal for the g7-bishop. Black seizes the initiative against White\'s broad but loose centre.', '', 'Nc6 piles onto d4; White\'s centre is creaking and Black is already the more comfortable side.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'c5 — strike d4, open the diagonal.', '', 'Nc6 — pile onto d4.', '', '', '', '', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_c4_e6_dxe6_Bxe6:b3': {
+    // e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 b3 Nc6 Nf3 Ne4 Nc3 Qf6 Bb2 O-O-O Qb1
+    watch: ['', '', '', '', '', '', '', '', 'b3? Far too slow against a gambit. White must hurry to develop and consolidate the extra pawn; instead this hands Black free rein.', 'Nc6 develops with tempo, eyeing d4 and the centre. Black\'s lead in development is already worth far more than the pawn.', '', 'Ne4 leaps to a dominating central outpost; every black piece is firing while White flounders.', '', '', '', 'O-O-O throws the rook onto the open d-file with threats — the gambit has paid off in full.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', 'Nc6 — develop, seize the initiative.', '', 'Ne4 — dominate the centre.', '', '', '', 'O-O-O — rook to the d-file.', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_c4_e6_dxe6_Bxe6_d4_Bb4+_Bd2_Qe7:Qa4+': {
+    // e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+ Bd2 Qe7 Qa4+ Bd7+ Be2 Bxa4 Nc3 O-O Kf1 Nc6 Nf3
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', 'Qa4+?? A blunder. The check looks natural, but Black has a devastating in-between reply.', 'Bd7+! A zwischenzug — Black blocks the check WITH check, and the bishop now also attacks the white queen on a4. White must answer the check first, and the queen is lost.', '', 'Bxa4 — and the queen falls. Black is up a full queen; the game is effectively over.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', 'Bd7+ — block with check, hit the queen.', '', 'Bxa4 — win the queen.', '', '', '', '', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_c4_e6_dxe6_Bxe6_d4_Bb4+_Bd2_Qe7_Bxb4_Qxb4+_Qd2_Nc6:a3': {
+    // e4 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 d4 Bb4+ Bd2 Qe7 Bxb4 Qxb4+ Qd2 Nc6 a3 Qxd2+ Nxd2 Nxd4 O-O-O Ng4 Nh3 O-O-O b4
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'a3? A wasted move that walks into a tactic and drops the d4-pawn.', 'Qxd2+ — take the queen with check. After the recapture Black grabs the d4-pawn too, regaining the gambit material with the better game.', '', 'Nxd4 collects the central pawn; Black has the material back and an active, comfortable position.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qxd2+ — trade favourably with check.', '', 'Nxd4 — win back the pawn.', '', '', '', '', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_d4_Bg4_Be2_Bxe2_Qxe2_Qxd5:c3': {
+    // e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 c3 Qxg2 Qf3 Qxf3 Nxf3 e6 a4 Nc6 Nbd2
+    watch: ['', '', '', '', '', '', '', '', '', '', 'c3? This leaves the g2-pawn hanging on the long diagonal — a costly oversight.', 'Qxg2! The queen snatches g2 and rakes the h1-rook down the diagonal. Black wins material out of nowhere.', '', 'Qxf3 forces the trade on Black\'s terms; Black emerges a clean pawn up with the safer position.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Qxg2 — grab the pawn, hit the rook.', '', 'Qxf3 — trade, stay a pawn up.', '', '', '', '', ''],
+  },
+  'scandinavian-defence:e4_d5_exd5_Nf6_d4_Bg4_Be2_Bxe2_Qxe2_Qxd5_Nf3_e6_O-O_Nc6:c4': {
+    // e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 e6 O-O Nc6 c4 Nxd4 Nxd4 Qxd4 Nc3 a6 Qf3 c6 b3
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'c4? The most common try here, but it abandons the d4-pawn\'s defender — and Black pounces.', 'Nxd4! The little tactic: the knight grabs d4 because c4 left it undefended. If White recaptures, the queen takes back and Black is a pawn up.', '', 'Qxd4 regains the piece, leaving Black a clean pawn ahead with an active centralised queen.', '', '', '', '', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxd4 — grab the loose pawn.', '', 'Qxd4 — recapture, a pawn up.', '', '', '', '', ''],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
