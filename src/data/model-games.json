@@ -2156,54 +2156,6 @@
     "source": "lichess-masters"
   },
   {
-    "id": "mg-lichess-UayafTnB",
-    "openingId": "evans-gambit",
-    "white": "Caruana, Fabiano",
-    "black": "So, Wesley",
-    "whiteElo": 2835,
-    "blackElo": 2770,
-    "result": "0-1",
-    "year": 2020,
-    "event": "2020-2020-06 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Bd3 d6 dxe5 dxe5 Nxe5 Nf6 O-O O-O Qc2 Bd6 Nf3 Nc6 Bg5 h6 Bh4 g5 Bg3 Bxg3 hxg3 g4 Nh4 Ne5 Be2 Re8 Nd2 b6 Rad1 Qe7 Rfe1 Be6 Nf1 Rad8 Ne3 Qc5 Nef5 Rxd1 Rxd1 h5 Rd4 Qf8 Qd2 Nh7 a4 Nc6 Nh6+ Kg7 N4f5+ Kg6 Bd3 Ng5 Qf4 f6 Bb5 Nxd4 Bxe8+ Qxe8 cxd4 Bxf5 Nxf5 Qxe4 Nh4+ Kf7 Qxc7+ Qe7 Qc4+ Qe6 d5 Qd6 Qd3 Qe5 Qg6+ Ke7 Nf5+ Kd8 Kh2 Ne4 Qg8+ Kd7 Qf7+ Kd8 Ng7 h4 Ne6+ Kc8 Qg8+ Kb7 Qh7+ Ka6 Qxh4 Nxf2 Qh8 Qe1 Nc5+ Ka5",
-    "overview": "Master game from the Lichess masters database. Caruana, Fabiano vs So, Wesley, 2020. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/UayafTnB",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-l2qKTr1O",
-    "openingId": "evans-gambit",
-    "white": "Grischuk, A.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2750,
-    "blackElo": 2832,
-    "result": "0-1",
-    "year": 2017,
-    "event": "2017-2017-11 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 Nc3 Nf6 Nd5 d6 Nxb6 cxb6 d3 O-O O-O Nxb4 c3 Nc6 Bg5 h6 Bh4 Be6 Bxe6 fxe6 Rb1 Na5 d4 Qc7 Qd3 Rac8 Rfc1 Nh5 Bg3 Nf4 Bxf4 exf4 c4 Nxc4 d5 e5 Qb3 Qc5 h3 b5 axb5 axb5 Qxb5 Qxb5 Rxb5 Rc7 Nh4 Rfc8 Nf5 Nd2 Rxc7 Rxc7 f3 Nc4 Kf2 h5 Ke2 g6 Nh4 Kg7 Kd3 Kf6 Rb4 b5 Rxb5 Kg5 Rb4 Kxh4 Rxc4 Rxc4 Kxc4 Kg3 Kb5 Kxg2 Kc6 Kxf3 Kxd6 Kxe4 Kc6 f3 d6 f2 d7 f1=Q d8=Q Qc4+",
-    "overview": "Master game from the Lichess masters database. Grischuk, A. vs Carlsen, M., 2017. Result: 0-1. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/l2qKTr1O",
-    "source": "lichess-masters"
-  },
-  {
-    "id": "mg-lichess-oVs5EH8m",
-    "openingId": "evans-gambit",
-    "white": "Grischuk, A.",
-    "black": "Carlsen, M.",
-    "whiteElo": 2750,
-    "blackElo": 2832,
-    "result": "1-0",
-    "year": 2017,
-    "event": "2017-2017-11 master game",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a5 b5 Nd4 Nc3 d6 Nd5 Bg4 c3 Nxf3+ gxf3 Bh5 Rg1 Ne7 Nxb6 cxb6 Rxg7 d5 exd5 Nf5 Rg1 Qh4 Qe2 Qxh2 Rg5 Qh1+ Qf1 Qxf3 Be2 Qxe2+ Qxe2 Bxe2 Kxe2 Nd6 Rxe5+ Kd7 Ba3 Rae8 Rxe8 Rxe8+ Kd3 Ne4 f3 Nf2+ Kd4 h5 Rg1 Re2 d3 h4 Rg7 Ke8 Rg8+ Kd7 Rf8 h3 Rxf7+ Ke8 Rf8+ Kd7 Rf7+ Ke8 Rh7 Rd2 Ke3 Ra2 Bd6 Nd1+ Kd4 Rxa4+ c4 Ra2 Bc7 a4 d6",
-    "overview": "Master game from the Lichess masters database. Grischuk, A. vs Carlsen, M., 2017. Result: 1-0. Walk through the moves to see how masters handled this position from the opening.",
-    "criticalMoments": [],
-    "sourceUrl": "https://lichess.org/oVs5EH8m",
-    "source": "lichess-masters"
-  },
-  {
     "id": "mg-lichess-GjkiRzzC",
     "openingId": "french-defence",
     "white": "Karjakin, Sergey",
@@ -4064,5 +4016,161 @@
     ],
     "middlegameTheme": "Pivot to the queenside, manoeuvre, convert.",
     "lessonSummary": "Against ...g6 the KIA's strength is flexibility — switch wings and outplay slowly."
+  },
+  {
+    "id": "mg-mvl-evans-accepted",
+    "openingId": "evans-gambit",
+    "white": "Maxime Vachier-Lagrave",
+    "black": "Wesley So",
+    "whiteElo": 2779,
+    "blackElo": 2767,
+    "result": "1-0",
+    "year": 2019,
+    "event": "Saint Louis Rapid 2019",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nge7 cxd4 d6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Qf6 Bxd5+ Ke7 Qe4+ Kd8 Be3 Bf5 Qf3 Bb6 Nc3 Bg6 Qg3 Qd6 Bf4 Qd7 Rfe1 Nxd4 Rad1 Re8 Rxe8+ Qxe8 Be5 c6 Bc4 Qd7 Bxd4 Bxd4 Qh4+ Bf6 Rxd7+ Kxd7 Qh3+ Kc7 Qg3+ Kb6 Na4+ Ka5 Nc5 b5 Qa3+ Kb6 Nd7+ Kc7 Nxf6 gxf6 Qa5+ Kb7 Bxb5 cxb5 Qxb5+ Kc7 Qc5+ Kb7 Qd5+ Kb8 Qc6 a5 Qxf6 Ra7 g4 Rb7 Qe5+ Kc8 Qxa5 Be4 Qc3+ Rc7 Qe3 Bg6 h4 Rc6 h5 Bf7 Qf3 Rc7 Qf5+ Rd7 Qxh7 Kc7 Qc2+ Kd8 h6 Bg8 g5 Bh7 g6 Bxg6 Qxg6 Ke7 h7 Rd6 Qxd6+ Kxd6 h8=Q Kd5 f4 Kc4 Qe5 Kb4 f5 Ka3 f6 Kxa2 Qb5 Ka1 f7 Ka2 f8=Q Ka1 Qa8#",
+    "overview": "MVL revives the romantic Evans against an elite opponent: he sacrificed the b-pawn, swarmed f7 with the bishop and the g5-knight, and rode the initiative all the way to a queen-mate.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r1bqk2r/ppp1nppp/2np4/b5N1/2BPP3/8/P4PPP/RNBQ1RK1 b kq - 1 9",
+        "annotation": "Ng5 — the knight joins the c4-bishop in attacking f7; the gambit's development lead becomes a concrete threat.",
+        "concept": "Pile onto f7"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "r2k3r/ppp3pp/1bn2q2/3B1b2/3P4/2N1BQ2/P4PPP/R4RK1 b - - 8 17",
+        "annotation": "Nc3 — every White piece is developed and active while Black's king is stuck in the centre; the initiative is overwhelming.",
+        "concept": "Initiative for the pawn"
+      },
+      {
+        "moveNumber": 67,
+        "color": "white",
+        "fen": "Q7/8/8/1Q6/8/8/8/k5K1 b - - 2 67",
+        "annotation": "Qa8# — checkmate. The romantic gambit's attack carried all the way to the end.",
+        "concept": "Convert the attack"
+      }
+    ],
+    "middlegameTheme": "Sac the b-pawn, storm f7, mate.",
+    "lessonSummary": "The Evans is an attacking machine: sacrifice the pawn, swarm f7, and let the initiative decide."
+  },
+  {
+    "id": "mg-kasparov-evans-declined",
+    "openingId": "evans-gambit",
+    "white": "Garry Kasparov",
+    "black": "Jeroen Piket",
+    "whiteElo": 2805,
+    "blackElo": 2630,
+    "result": "1-0",
+    "year": 1995,
+    "event": "Amsterdam 1995",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a5 b5 Nd4 Nxd4 Bxd4 c3 Bb6 d4 exd4 O-O Ne7 Bg5 h6 Bxe7 Qxe7 cxd4 Qd6 Nc3 Bxd4 Nd5 Bxa1 Qxa1 O-O e5 Qc5 Rc1 c6 Ba2 Qa3 Nb6 d5 Nxa8 Kh8 Nb6 Be6 h3 Rd8 bxc6 bxc6 Rc3 Qb4 Rxc6 Rb8 Nxd5 Qxa4 Rc1 Qa3 Bc4",
+    "overview": "Kasparov, who revived the Evans for modern play, shows that declining it with ...Bb6 brings no peace: he grabbed space, dominated the d5-square, and ground Piket down.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "r1bqk1nr/1ppp1ppp/8/pP2p3/P1BbP3/2P5/3P1PPP/RNBQK2R b KQkq - 0 8",
+        "annotation": "c3 — White builds the centre and gains space; declining the gambit has not freed Black's game.",
+        "concept": "Space from the gambit"
+      },
+      {
+        "moveNumber": 15,
+        "color": "white",
+        "fen": "r1b1k2r/1ppp1pp1/3q3p/pP1N4/P1BbP3/8/5PPP/R2Q1RK1 b kq - 1 15",
+        "annotation": "Nd5 — the knight dominates the central outpost, the hallmark of the declined lines.",
+        "concept": "The d5 outpost"
+      },
+      {
+        "moveNumber": 29,
+        "color": "white",
+        "fen": "1r5k/5pp1/4b2p/p2NP3/2B5/q6P/5PP1/Q1R3K1 b - - 3 29",
+        "annotation": "Bc4 — White's pieces dominate and the bishop rakes toward the king; Kasparov closes in.",
+        "concept": "Convert the bind"
+      }
+    ],
+    "middlegameTheme": "Gain space, seize d5, squeeze.",
+    "lessonSummary": "Declining the Evans avoids the attack but concedes space and the d5-outpost — White still presses."
+  },
+  {
+    "id": "mg-evans-compromised-win",
+    "openingId": "evans-gambit",
+    "white": "Keith A Rodriguez",
+    "black": "Alberto F Dillenburg",
+    "whiteElo": 2400,
+    "blackElo": 2300,
+    "result": "1-0",
+    "year": 2012,
+    "event": "Continental 2012",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O dxc3 Qb3 Qf6 e5 Qg6 Nxc3 Nge7 Ba3 O-O Rad1 Bb6 Rfe1 Na5 Qa4 Nxc4 Qxc4 Re8 Bxe7 Rxe7 Nd5 Re8 Qh4 Kh8 Ne7 Qh6 Ng5 Rf8 Qf4 d5 Nxc8 Bxf2+ Kxf2 f6 exf6 Qxf6 Qxf6 Rxf6+ Kg1 Rxc8 Re7 Rf5 Ne6 Re5 Rxc7 Rxc7 Nxc7 Kg8 Rxd5 Re7 Nb5 a6 Nd6 g6 Kf2 Kg7 Rd3 Kf6 Re3 Rd7 Ne4+ Kf7 Rb3 Kf8 Ke3",
+    "overview": "A model Compromised Defence: two pawns down, White built the Qb3+Bc4 battery on f7, brought the rooks to the centre, and let the overwhelming activity crash through.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1b1k1nr/pppp1ppp/2n3q1/b3P3/2B5/1QN2N2/P4PPP/R1B2RK1 b kq - 0 10",
+        "annotation": "Nxc3 — White regains one pawn fully developed, the Qb3+Bc4 battery already trained on f7.",
+        "concept": "The f7 battery"
+      },
+      {
+        "moveNumber": 18,
+        "color": "white",
+        "fen": "r1b1r1k1/pppp1ppp/1b4q1/3NP3/7Q/5N2/P4PPP/3RR1K1 b - - 3 18",
+        "annotation": "Qh4 — the rooks are centralised and the queen swings to the kingside; the attack is decisive despite the pawn deficit.",
+        "concept": "Activity over material"
+      },
+      {
+        "moveNumber": 39,
+        "color": "white",
+        "fen": "5k2/1p1r3p/p5p1/8/4N3/1R2K3/P5PP/8 b - - 11 39",
+        "annotation": "Ke3 — the attack has won material; White converts the resulting endgame.",
+        "concept": "Convert"
+      }
+    ],
+    "middlegameTheme": "Battery on f7, central rooks, attack.",
+    "lessonSummary": "In the Compromised Defence, ignore the material — the Qb3+Bc4 battery and central rooks decide."
+  },
+  {
+    "id": "mg-kasparov-evans-lasker",
+    "openingId": "evans-gambit",
+    "white": "Garry Kasparov",
+    "black": "Viswanathan Anand",
+    "whiteElo": 2795,
+    "blackElo": 2725,
+    "result": "1-0",
+    "year": 1995,
+    "event": "PCA World Championship 1995",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Be7 d4 Na5 Be2 exd4 Qxd4 Nf6 e5 Nc6 Qh4 Nd5 Qg3 g6 O-O Nb6 c4 d6 Rd1 Nd7 Bh6 Ncxe5 Nxe5 Nxe5 Nc3 f6 c5 Nf7 cxd6 cxd6 Qe3 Nxh6 Qxh6 Bf8 Qe3+ Kf7 Nd5 Be6 Nf4 Qe7 Re1",
+    "overview": "The famous game that put the Evans back on the map: against Lasker's solid ...Be7, Kasparov recovered the pawn, kept the more active pieces, and outplayed Anand from a small, pleasant edge.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bqk2r/ppppbppp/2n2n2/4P3/7Q/2P2N2/P3BPPP/RNB1K2R b KQkq - 2 10",
+        "annotation": "Qh4 — White has regained the pawn and the e5-wedge cramps Black; the more active position tells.",
+        "concept": "Recover the pawn, stay active"
+      },
+      {
+        "moveNumber": 19,
+        "color": "white",
+        "fen": "r1bqk2r/ppp1bn1p/3P1ppB/8/8/2N3Q1/P3BPPP/R2R2K1 b kq - 0 19",
+        "annotation": "cxd6 — White's pieces swarm and the passed d-pawn bites; Kasparov turns the small edge into a bind.",
+        "concept": "Press the edge"
+      },
+      {
+        "moveNumber": 25,
+        "color": "white",
+        "fen": "r4b1r/pp2qk1p/3pbpp1/8/5N2/4Q3/P3BPPP/R3R1K1 b - - 8 25",
+        "annotation": "Re1 — the rooks dominate the open files and Black's king is exposed; White converts the famous game.",
+        "concept": "Convert against the best"
+      }
+    ],
+    "middlegameTheme": "Recover the pawn, keep activity, grind.",
+    "lessonSummary": "Even against Lasker's accurate defence the Evans gives a pleasant pull — Kasparov beat Anand from it."
   }
 ]

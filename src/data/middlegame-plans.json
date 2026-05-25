@@ -8444,69 +8444,6 @@
     ]
   },
   {
-    "id": "mp-evans-central-avalanche",
-    "openingId": "evans-gambit",
-    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 b kq - 1 7",
-    "title": "Central Avalanche with c3 + d4",
-    "overview": "The defining plan of the Evans Gambit. The b-pawn was sacrificed to gain a tempo for c3 + d4, blasting open the center while every White piece develops with a threat. After O-O the cxd4 recapture is coming next; the e-file will swing open and the Bc4 + Re1 battery will hammer e8.",
-    "pawnBreaks": [
-      {
-        "move": "cxd4",
-        "explanation": "The recapture that completes the gambit's central thrust. White gets a broad pawn center on d4+e4 with two extra tempi over Black's development. The d-file opens for the queen's rook; the c-file opens for Nc3 and the d4 pawn supports e4-e5.",
-        "pgnDelta": "cxd4"
-      },
-      {
-        "move": "e5",
-        "explanation": "Once the center is established, e4-e5 kicks the knight from f6 and cramps Black's kingside. The pawn on e5 also unblocks the b1-h7 diagonal for the d1-queen swing to h5 or d3."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc1-a3 or Bc1-b2",
-        "explanation": "The dark-squared bishop has two good homes. Ba3 controls the f8-a3 diagonal and prevents Black from castling kingside easily — a classical Evans theme. Bb2 supports the central avalanche on the long diagonal and aims at g7."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd1-b3",
-        "explanation": "Qb3 is the classic attacking battery move: the queen targets f7 in cooperation with the Bc4, threatening Bxf7+ Kf8 and a king-hunt. It also pressures b7 — Black is rarely free to castle queenside in the Evans because of this."
-      }
-    ],
-    "typicalMistakes": [
-      "Playing d4 before c3 has solidified — Black's dxc3 skewers c3 if the c-pawn isn't on c3 yet.",
-      "Allowing Nf6 to land before e4-e5 — once Black's knight controls the kingside, the central crash loses much of its bite."
-    ]
-  },
-  {
-    "id": "mp-evans-f7-battery",
-    "openingId": "evans-gambit",
-    "criticalPositionFen": "r1bqk1nr/ppp2ppp/2np4/b3p3/2BPP3/1QP2N2/P4PPP/RNB1K2R b KQkq - 1 7",
-    "title": "f7 Battery — Bxf7 attacks",
-    "overview": "The Bc4 + Qb3 battery is the Evans Gambit's signature attacking weapon. Both pieces aim at f7 — Black's most vulnerable square in the opening. When Black castles kingside a well-timed Bxf7+ Kxf7 followed by Ng5+ or Qxb7 leads to a devastating attack. Even when the sacrifice isn't sound, the threat alone restricts Black's options.",
-    "pawnBreaks": [
-      {
-        "move": "d5",
-        "explanation": "Pushing d4-d5 opens the b3-f7 diagonal completely. Once d5 fires, Bxf7+ becomes a calculation Black must always check."
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Queen",
-        "route": "Qd1-b3-a4 swing",
-        "explanation": "Qb3 stares at f7; if Black defends with Qe7, the queen swings to a4 to pin the c6-knight against the king. The Qa4 pin is a common Evans transition into endgame pressure."
-      },
-      {
-        "piece": "Knight",
-        "route": "Nb1-c3-d5",
-        "explanation": "Once Bb2 or Ba3 is in place, the b1-knight develops to c3 with tempo. From c3 it eyes d5 — a great outpost in the Evans because Black's c-pawn rarely defends it."
-      }
-    ],
-    "typicalMistakes": [
-      "Pushing d5 before development is complete — the diagonal opens but Black gets time to play Qf6 defending f7 indirectly.",
-      "Trading queens early — the f7 battery only works with both pieces; after Qxd1 White's attack evaporates."
-    ]
-  },
-  {
     "id": "mp-kings-gambit-open-f-file",
     "openingId": "kings-gambit",
     "criticalPositionFen": "rnbqk1nr/ppp2pbp/3p4/6p1/2BPPp2/5N2/PPP3PP/RNBQ1RK1 b kq - 1 6",
@@ -19473,6 +19410,210 @@
           "…h6 — Black makes luft.",
           "b4 — White expands on the queenside.",
           "…Be6 — Black develops the bishop to e6."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-evansgambit-main",
+    "openingId": "evans-gambit",
+    "title": "Evans Accepted: Storm f7 and the King",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 b kq - 1 7",
+    "overview": "In the Accepted Evans, White has sacrificed the b-pawn for a development lead and a big centre. The plan is direct: castle, bring a knight to g5, and hammer f7 with the c4-bishop and the knight before Black can untangle.",
+    "pawnBreaks": [
+      {
+        "move": "d4-d5",
+        "explanation": "The d5 thrust rips open lines toward Black's king while the pieces swarm.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 b kq - 1 7"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-g5",
+        "explanation": "The knight jumps to g5 to join the bishop's assault on f7."
+      }
+    ],
+    "strategicThemes": [
+      "Trade the b-pawn for time and a centre.",
+      "Pile pieces onto f7.",
+      "Open lines before Black develops."
+    ],
+    "endgameTransitions": [
+      "If the attack is parried, the centre keeps White active."
+    ],
+    "playableLines": [
+      {
+        "title": "Evans Accepted: Storm f7 and the King",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 b kq - 1 7",
+        "moves": [
+          "Nge7",
+          "Ng5",
+          "d5",
+          "exd5",
+          "Ne5",
+          "Qxd4"
+        ],
+        "annotations": [
+          "…Nge7 — Black develops, shielding f7.",
+          "Ng5 — the knight joins the attack on f7.",
+          "…d5 — Black strikes back in the centre.",
+          "exd5 — White opens lines toward the king.",
+          "…Ne5 — Black returns material to ease the pressure.",
+          "Qxd4 — the queen recaptures, centralised and dominant."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-evansgambit-declined",
+    "openingId": "evans-gambit",
+    "title": "Evans Declined: Space and the d5 Outpost",
+    "criticalPositionFen": "r1bqk1nr/1ppp1ppp/pbn5/4p3/PPB1P3/2N2N2/2PP1PPP/R1BQK2R b KQkq - 1 6",
+    "overview": "When Black declines with ...Bb6, White doesn't get the attack for free but keeps a space edge. The plan: expand with a4, jump a knight to the d5-outpost, and press the slightly cramped Black position.",
+    "pawnBreaks": [
+      {
+        "move": "a4-a5",
+        "explanation": "a4-a5 gains queenside space and harasses the b6-bishop.",
+        "fen": "r1bqk1nr/1ppp1ppp/pbn5/4p3/PPB1P3/2N2N2/2PP1PPP/R1BQK2R b KQkq - 1 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3-d5",
+        "explanation": "The knight occupies the d5-outpost, dominating the declined lines."
+      }
+    ],
+    "strategicThemes": [
+      "Keep the space gained by b4.",
+      "Plant a knight on d5.",
+      "Harass the b6-bishop with a4-a5."
+    ],
+    "endgameTransitions": [
+      "The space edge carries into a comfortable game."
+    ],
+    "playableLines": [
+      {
+        "title": "Evans Declined: Space and the d5 Outpost",
+        "fen": "r1bqk1nr/1ppp1ppp/pbn5/4p3/PPB1P3/2N2N2/2PP1PPP/R1BQK2R b KQkq - 1 6",
+        "moves": [
+          "Nf6",
+          "Nd5",
+          "Nxd5",
+          "exd5",
+          "Nd4",
+          "a5"
+        ],
+        "annotations": [
+          "…Nf6 — Black develops the knight.",
+          "Nd5 — White seizes the d5-outpost.",
+          "…Nxd5 — Black trades off the strong knight.",
+          "exd5 — White gains the d5-pawn wedge.",
+          "…Nd4 — Black centralises a knight.",
+          "a5 — White gains space and harasses the bishop."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-evansgambit-compromised",
+    "openingId": "evans-gambit",
+    "title": "Compromised Defence: Overwhelming Activity",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/b7/2B1P3/2p2N2/P4PPP/RNBQ1RK1 w kq - 0 8",
+    "overview": "Black has grabbed a second pawn with ...dxc3. White is two pawns down but enjoys a colossal development lead. The plan is pure attack: Qb3 builds a battery on f7, e5 gains space, and every piece pours toward the king.",
+    "pawnBreaks": [
+      {
+        "move": "e4-e5",
+        "explanation": "e5 gains space with tempo and opens lines for the attack.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2B1P3/2p2N2/P4PPP/RNBQ1RK1 w kq - 0 8"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-b3",
+        "explanation": "The queen joins the bishop in a battery aimed at f7."
+      }
+    ],
+    "strategicThemes": [
+      "Ignore the two-pawn deficit; play for the attack.",
+      "Build the Qb3+Bc4 battery on f7.",
+      "Bring both rooks to the central files."
+    ],
+    "endgameTransitions": [
+      "The attack must decide; the endgame favours Black on material."
+    ],
+    "playableLines": [
+      {
+        "title": "Compromised Defence: Overwhelming Activity",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2B1P3/2p2N2/P4PPP/RNBQ1RK1 w kq - 0 8",
+        "moves": [
+          "Qb3",
+          "Qf6",
+          "e5",
+          "Qg6",
+          "Nxc3",
+          "Nge7"
+        ],
+        "annotations": [
+          "Qb3 — the queen joins the battery aimed at f7.",
+          "…Qf6 — Black defends f7 with the queen.",
+          "e5 — White gains space and hits the queen.",
+          "…Qg6 — the queen is shoved to g6.",
+          "Nxc3 — White regains a pawn, fully developed.",
+          "…Nge7 — Black tries to untangle."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-evansgambit-lasker",
+    "openingId": "evans-gambit",
+    "title": "Lasker's Defence: a Small, Sound Edge",
+    "criticalPositionFen": "r1bqk1nr/ppppbppp/2n5/4p3/2B1P3/2P2N2/P2P1PPP/RNBQK2R w KQkq - 1 6",
+    "overview": "Against Lasker's accurate ...Be7, White cannot land a knockout, but by recovering the pawn with a centralised game he keeps a small, pleasant pull — more active pieces and easier development, just as Kasparov showed against Anand.",
+    "pawnBreaks": [
+      {
+        "move": "d4 then dxe5",
+        "explanation": "Building and then resolving the centre lets White regain the pawn with activity.",
+        "fen": "r1bqk1nr/ppppbppp/2n5/4p3/2B1P3/2P2N2/P2P1PPP/RNBQK2R w KQkq - 1 6"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-e5",
+        "explanation": "After dxe5 the knight centralises on e5, eyeing f7."
+      }
+    ],
+    "strategicThemes": [
+      "Build the centre with d4.",
+      "Recover the pawn with Qa4+ and dxe5.",
+      "Keep the more active pieces for a small edge."
+    ],
+    "endgameTransitions": [
+      "A pleasant, risk-free pull carries into the endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Lasker's Defence: a Small, Sound Edge",
+        "fen": "r1bqk1nr/ppppbppp/2n5/4p3/2B1P3/2P2N2/P2P1PPP/RNBQK2R w KQkq - 1 6",
+        "moves": [
+          "d4",
+          "Na5",
+          "Be2",
+          "d6",
+          "Qa4+",
+          "c6"
+        ],
+        "annotations": [
+          "d4 — White builds the big pawn centre.",
+          "…Na5 — Black trades off the c4-bishop.",
+          "Be2 — White keeps the bishop pair tension.",
+          "…d6 — Black blunts the centre.",
+          "Qa4+ — the check sets up regaining the pawn.",
+          "…c6 — Black blocks the check."
         ]
       }
     ]

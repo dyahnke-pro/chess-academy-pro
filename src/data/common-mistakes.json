@@ -698,22 +698,18 @@
   ],
   "evans-gambit": [
     {
-      "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 b kq - 1 7",
-      "wrongMove": "dxc3",
-      "correctMove": "d6",
-      "explanation": "Compromised Defence — dxc3 is engine-fine but a defensive nightmare in practice. After 8.Qb3 Black has TEN+ only moves to hold equality against the f7 + b7 double-pressure. 7…d6 is the calm modern way: give back the pawn, keep the king safe, and let White overextend. The slim engine edge is on Black's side either way, but the human winning percentages with d6 (60% Black) crush those with dxc3 (35% Black)."
+      "fen": "r1bqk1nr/pppp1ppp/2n5/b3p3/2B1P3/2P2N2/P2P1PPP/RNBQK2R w KQkq - 1 6",
+      "wrongMove": "Nxe5",
+      "correctMove": "d4",
+      "explanation": "Grabbing the pawn back with Nxe5 throws away the whole point of the gambit. d4! builds the towering centre and keeps the initiative — that is exactly what the b-pawn bought.",
+      "shortNarration": "d4 — build the centre, keep the attack"
     },
     {
-      "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
-      "wrongMove": "Ng5",
-      "correctMove": "b4",
-      "explanation": "Ng5 (Fried Liver intentions) is premature against the Italian Bc5 setup — Black isn't committed to Nf6 yet and can simply castle. The Evans 4.b4 is the principled gambit: sacrifice the pawn for the c3+d4 break before Black completes development."
-    },
-    {
-      "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/1PB1P3/5N2/P1PP1PPP/RNBQK2R b KQkq - 0 4",
-      "wrongMove": "Bb6",
-      "correctMove": "Bxb4",
-      "explanation": "Declining with 4…Bb6 is theoretically dubious — it cedes the principled gambit position without claiming compensation. White's a4-a5 follow-up will harass the bishop and Black ends up in a passive Italian-like position without the natural …Bc5 squares. Accept the pawn with Bxb4 and refute the gambit if you can."
+      "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2B1P3/2p2N2/P4PPP/RNBQ1RK1 w kq - 0 8",
+      "wrongMove": "Nxc3",
+      "correctMove": "Qb3",
+      "explanation": "In the Compromised Defence, meekly regaining the pawn with Nxc3 lets Black consolidate the extra material. Qb3! is the point — the queen and bishop train on f7 and the attack roars on, worth far more than a pawn.",
+      "shortNarration": "Qb3 — the battery on f7, not the pawn"
     }
   ],
   "kings-gambit": [

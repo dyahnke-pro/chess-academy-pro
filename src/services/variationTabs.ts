@@ -100,6 +100,15 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
   'kings-indian-attack': [
     { test: /kid-style/i, label: 'KID-style' },
   ],
+  // Evans Gambit — the romantic 4.b4 attacking gambit. Main-line pill = the
+  // Accepted main (...Bxb4 c3 Ba5 d4, the f7 attack, exempt). Three DB-anchored
+  // distinct tabs: Declined (...Bb6), the wild Compromised Defence (...dxc3),
+  // and Lasker's solid antidote (...Be7).
+  'evans-gambit': [
+    { test: /declined/i, label: 'Declined' },
+    { test: /compromised/i, label: 'Compromised' },
+    { test: /lasker/i, label: 'Lasker' },
+  ],
   // Scotch Game — hand-picked tabs, frequency-ordered (repertoire weights).
   // Main-line pill = the Classical 4…Bc5 Be3 Qf6 line (the repertoire pgn), so
   // the "Classical" variation is omitted as a tab (it'd duplicate the pill).

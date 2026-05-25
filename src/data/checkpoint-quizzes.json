@@ -641,28 +641,24 @@
   ],
   "evans-gambit": [
     {
-      "fen": "r1bqk1nr/pppp1ppp/2n5/b3p3/2BPP3/2P2N2/P4PPP/RNBQK2R b KQkq - 0 6",
-      "correctMove": "exd4",
-      "hint": "White just played d4, sacrificing tempo for the central crash. What is the principled reply?",
-      "concept": "Accepting the central pawn"
-    },
-    {
-      "fen": "r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 b kq - 1 7",
-      "correctMove": "d6",
-      "hint": "White has castled. Black is up a pawn but behind in development. Which move keeps the structure flexible and prepares safe development?",
-      "concept": "Modern Evans defence with d6"
-    },
-    {
-      "fen": "r1bqk2r/pppp1ppp/2n2n2/b7/2BpP3/2P2N2/P4PPP/RNBQ1RK1 w kq - 2 8",
-      "correctMove": "e5",
-      "hint": "Black has developed Nf6 and is preparing to castle. What pawn push kicks the knight before it cements the kingside?",
-      "concept": "Central pawn push e5"
-    },
-    {
       "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
       "correctMove": "b4",
-      "hint": "The hallmark sacrifice of this opening. Which move offers the b-pawn to deflect Blacks bishop and gain central tempi?",
-      "concept": "The Evans pawn sacrifice"
+      "hint": "Sacrifice the b-pawn for time and a big centre — the Evans!",
+      "concept": "The Evans Gambit"
+    },
+    {
+      "fen": "r1bqk1nr/pppp1ppp/2n5/b3p3/2B1P3/2P2N2/P2P1PPP/RNBQK2R w KQkq - 1 6",
+      "type": "plan",
+      "question": "What did the b-pawn sacrifice buy White?",
+      "choices": [
+        "Time and a big centre — play d4 and attack f7",
+        "Nothing; recover the pawn at once with Nxe5",
+        "A safe, drawish endgame",
+        "A kingside fortress"
+      ],
+      "correctIndex": 0,
+      "hint": "The gambit is all about the central pawn-storm and the attack on f7.",
+      "concept": "The gambit's compensation"
     }
   ],
   "kings-gambit": [

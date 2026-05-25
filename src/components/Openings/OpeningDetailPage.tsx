@@ -35,6 +35,7 @@ import { getCatalanTabPlanIds } from '../../services/catalanMasterclassTabs';
 import { getEnglishTabPlanIds } from '../../services/englishMasterclassTabs';
 import { getRetiTabPlanIds } from '../../services/retiMasterclassTabs';
 import { getKiaTabPlanIds } from '../../services/kiaMasterclassTabs';
+import { getEvansTabPlanIds } from '../../services/evansMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
@@ -1056,6 +1057,7 @@ export function OpeningDetailPage(): JSX.Element {
     getEnglishTabPlanIds(opening.id, tabKey) ??
     getRetiTabPlanIds(opening.id, tabKey) ??
     getKiaTabPlanIds(opening.id, tabKey) ??
+    getEvansTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).
