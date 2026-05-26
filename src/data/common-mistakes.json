@@ -61,6 +61,75 @@
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/French_Defence"
       ]
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4p3/8/4n3/1P6/PBPP2PP/RN1QKBNR w KQkq - 0 6",
+      "wrongMove": "Qe2",
+      "correctMove": "Nf3",
+      "explanation": "This is the b3 anti-French gambit (the Horwitz Attack / Papa-Ticulat Gambit): White hands over e4 for the Bb2 diagonal, and here White has just won the pawn back so the knight on e4 is attacked. Qe2 looks like it wins that knight for free — but the king is still on e1, and after Qh4+! the only block is g3, when Nxg3 forks the queen on e2 and the rook on h1 (hxg3 then drops the rook to Qxh1). Develop with Nf3 instead: the gambit pawn is already recovered and the king can finally castle. The deeper lesson outlives this gambit — a knight on e4, propped by a pawn, is one leap from g3, and against a king stranded on e1 that leap forks or rips the kingside open. The same shot is Black's whole plan in the Dutch Stonewall, and it punishes any opening where you grab material with the king still at home.",
+      "shortNarration": "Nf3 — develop and castle, don't chase",
+      "sources": [
+        "book:french-defence",
+        "concept:tac-double-attack",
+        "concept:pos-king-safety",
+        "https://en.wikipedia.org/wiki/French_Defence"
+      ],
+      "punishmentLine": {
+        "fen": "rnbqkb1r/ppp2ppp/4p3/8/4n3/1P6/PBPP2PP/RN1QKBNR w KQkq - 0 6",
+        "title": "Why Qe2 loses — Qh4+ and the knight crashes into g3",
+        "moves": ["Qe2", "Qh4+", "g3", "Nxg3", "hxg3", "Qxh1"],
+        "annotations": [
+          "Qe2 hits the knight on e4 and looks like a free tempo to win the gambit pawn back. But the king is still sitting on e1, and the e-file is a dead end for the queen.",
+          "Qh4+ — the king has no pawn cover, and the only legal block is g3. Everything flows from the king being stuck in the centre.",
+          "g3 is forced; Kd1 walks into a fork and Qf2 is mated. But the pawn move hands Black the g3-square.",
+          "Nxg3 — the double attack. The knight forks the queen on e2 and the rook on h1 at once, and it cannot be ignored.",
+          "hxg3 saves the queen but the rook is still hanging in the corner.",
+          "Qxh1 collects the rook. Black is up the exchange and the white king will never find shelter — the price of chasing a pawn with the king at home."
+        ],
+        "arrows": [
+          [],
+          [{ "from": "h4", "to": "e1", "color": "rgba(34, 197, 94, 0.85)" }],
+          [],
+          [
+            { "from": "g3", "to": "e2", "color": "rgba(34, 197, 94, 0.85)" },
+            { "from": "g3", "to": "h1", "color": "rgba(34, 197, 94, 0.85)" }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            { "square": "d1", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "e2", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "e4", "color": "rgba(255, 235, 59, 0.5)" },
+            { "square": "e1", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "d8", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "h4", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "e1", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "g2", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "g3", "color": "rgba(255, 165, 0, 0.55)" }
+          ],
+          [
+            { "square": "e4", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "g3", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "e2", "color": "rgba(255, 235, 59, 0.5)" },
+            { "square": "h1", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "h2", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "g3", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "h1", "color": "rgba(255, 235, 59, 0.5)" }
+          ],
+          [
+            { "square": "h4", "color": "rgba(255, 165, 0, 0.55)" },
+            { "square": "h1", "color": "rgba(255, 165, 0, 0.55)" }
+          ]
+        ]
+      }
     }
   ],
   "caro-kann": [
