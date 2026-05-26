@@ -11,7 +11,7 @@ import { scaledShadow } from '../../utils/neonColors';
 import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
 import { getUnlearnedFavoriteOpenings } from '../../services/openingService';
 import { getSrsDueOpenings } from '../../services/srsOpeningService';
-import { buildTodaysReps } from '../../services/trainingPlanSelector';
+import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
 import { getDueTodayTracks, type DueTrack } from '../../services/dueToday';
 
 interface SectionItem {
@@ -63,9 +63,28 @@ const SECTIONS: SectionItem[] = [
  *  reps from the same three sources as the Training Plan (unified
  *  weaknesses + SRS-due + new lines) and routes into the hub. Renders
  *  nothing until there's something to do, so a fresh user isn't nagged. */
+/** Route a Today's rep into its drill — same logic as the Training Plan hub
+ *  (TrainingPlanRolodexPage) so the dashboard tasks and the plan agree. */
+function navigateToRep(navigate: ReturnType<typeof useNavigate>, rep: RepCandidate): void {
+  if (rep.kind !== 'weakness') {
+    void navigate(`/openings/${rep.openingId ?? ''}`);
+    return;
+  }
+  if (rep.puzzleThemes && rep.puzzleThemes.length > 0) {
+    void navigate('/tactics/adaptive', {
+      state: {
+        forcedWeakThemes: rep.puzzleThemes,
+        misconceptionTag: rep.tag && !rep.tag.startsWith('analysis:') ? rep.tag : undefined,
+      },
+    });
+  } else {
+    void navigate('/weaknesses');
+  }
+}
+
 function TodayStatus(): JSX.Element | null {
   const navigate = useNavigate();
-  const [planReps, setPlanReps] = useState<number | null>(null);
+  const [reps, setReps] = useState<RepCandidate[] | null>(null);
   const [tracks, setTracks] = useState<DueTrack[]>([]);
 
   useEffect(() => {
@@ -78,35 +97,46 @@ function TodayStatus(): JSX.Element | null {
         getDueTodayTracks(),
       ]);
       if (cancelled) return;
-      setPlanReps(buildTodaysReps({ weaknesses, srsDue, newLines, total: 5 }).length);
+      setReps(buildTodaysReps({ weaknesses, srsDue, newLines, total: 5 }));
       setTracks(dueTracks);
     })();
     return () => { cancelled = true; };
   }, []);
 
-  if (planReps === null) return null;
-  if (planReps === 0 && tracks.length === 0) return null;
+  if (reps === null) return null;
+  if (reps.length === 0 && tracks.length === 0) return null;
 
   return (
     <div className="max-w-lg mx-auto w-full flex flex-col gap-2" data-testid="dashboard-due-board">
-      {planReps > 0 && (
+      {reps.length > 0 && (
+        <div className="flex items-center gap-2 px-1 pt-1" data-testid="dashboard-today-status">
+          <Target size={16} className="text-theme-accent shrink-0" />
+          <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
+            Today&apos;s training
+          </span>
+          <button
+            onClick={() => void navigate('/coach/plan')}
+            className="ml-auto text-xs text-theme-text-muted hover:text-theme-accent transition-colors"
+            data-testid="dashboard-today-seeall"
+          >
+            See plan
+          </button>
+        </div>
+      )}
+      {reps.map((rep) => (
         <button
-          onClick={() => void navigate('/coach/plan')}
+          key={rep.key}
+          onClick={() => navigateToRep(navigate, rep)}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-theme-accent/10 border border-theme-accent/30 hover:opacity-80 transition-all"
-          data-testid="dashboard-today-status"
+          data-testid={`dashboard-rep-${rep.kind}`}
         >
-          <Target size={18} className="text-theme-accent shrink-0" />
           <div className="flex-1 text-left min-w-0">
-            <span className="text-sm font-semibold" style={{ color: 'var(--color-text)' }}>
-              {planReps} {planReps === 1 ? 'rep' : 'reps'} ready today
-            </span>
-            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-              Your Training Plan — lines to learn, weaknesses to drill.
-            </p>
+            <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{rep.label}</span>
+            <p className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>{rep.subtitle}</p>
           </div>
           <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
         </button>
-      )}
+      ))}
       {tracks.map((t) => (
         <button
           key={t.key}
