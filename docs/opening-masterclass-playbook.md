@@ -395,6 +395,44 @@ lead-the-eye markers (grounded + legality-gated). Gate: `middlegamePlanner.test`
 >   pull + hand-author the narration locally. The miner MERGES (a scoped
 >   `OPENINGS=<id>` run keeps other openings' gems), so it won't wipe the set.
 
+> 🔒 **LOCK-IN — direct sandbox mining (token) + the false-weapon gate
+> (VALIDATED 2026-05-26). Supersedes "must use CI" above whenever a token is
+> available; the miner already implements all of this (`scripts/mine-punish-gems.mjs`).**
+> - **The sandbox CAN reach the explorer — authed.** `explorer.lichess.ovh`
+>   `401`s anonymous datacenter traffic but returns `200` with a Lichess PAT
+>   (the host is reachable; only auth was missing). The miner hits the explorer
+>   directly when a token is in env (`LICHESS` / `LICHESS_API_KEY` /
+>   `LICHESS_TOKEN`), else falls back to the Vercel proxy. Run it with:
+>   ```bash
+>   LICHESS=lip_… STOCKFISH_PATH=/usr/games/stockfish \
+>   NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt \
+>   OPENINGS=<id> node scripts/mine-punish-gems.mjs
+>   ```
+>   - `NODE_EXTRA_CA_CERTS=/etc/ssl/certs/ca-certificates.crt` is REQUIRED —
+>     Node's `fetch` doesn't trust the Anthropic egress-inspection CA by default
+>     (curl does); without it every fetch fails. (The egress mints per-connection
+>     certs at ~now, so an odd `CERT_NOT_YET_VALID` skew can flash — retry it.)
+> - **The masters-DB false-weapon gate (in `mine()`) — why raw mining is NOT
+>   shippable.** Stockfish-only grading OVER-RATES dynamic compensation in
+>   sharp/gambit lines: it flagged known-balanced theory as +2 "weapons" (Evans
+>   `8.Ba4` = comp for a pawn; Two-Knights Max Lange `6.exf6`). The gate cross-
+>   checks the bundled offline `MASTERS_DB` (4-field-FEN keyed), two parts:
+>   1. **`mastersMovesAt` veto** — if masters play the opponent's "inaccuracy",
+>      it's theory, not a blunder (doctrine §7); drop it.
+>   2. **`materialDelta` check** — a `confirmed` weapon must win REAL material at
+>      the quiet end; an engine `+cp` with the learner NOT up material is
+>      over-rated initiative, dropped rather than mislabeled a crush.
+> - 🚫 **THE MINER IS A CANDIDATE GENERATOR, NOT A SHIP PIPELINE — NEVER bulk-
+>   ship raw mined gems.** The gate is NECESSARY, NOT SUFFICIENT: it only fires
+>   where masters HAVE data; deep off-book positions still pass and can be engine
+>   over-ratings. So **per-gem GOOGLE/THEORY verify stays MANDATORY before
+>   authoring `GEM_NARRATION`** (§6). Un-narrated gems stay dark
+>   (`isSurfaceableGem`), so committing raw mined output as a checkpoint is inert
+>   and safe — but NOT shipped until each gem is theory-vetted + hand-narrated.
+>   (Forced mates / clear material wins — Albin Lasker `…exf2+`, Budapest
+>   Kieninger `…Nd3#` — are the safe core; bare positional evals in gambit lines
+>   are what to scrutinize.)
+
 **STEP 7 — model games (per variation, student WINNING).**
 `src/data/model-games.json`: add REAL sourced games (web-identify; NEVER
 fabricate a PGN — major chess sites 403 the sandbox, so get the PGN from a
