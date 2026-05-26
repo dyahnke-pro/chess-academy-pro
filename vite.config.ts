@@ -40,8 +40,14 @@ export default defineConfig(({ mode }) => {
         skipWaiting: true,
         clientsClaim: true,
         cleanupOutdatedCaches: true,
-        // TODO: Replace with code-splitting + exclude Stockfish WASM from precache — see backlog item WO-PERF-BUNDLE-01.
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+        // The main `index` chunk is ~10.5 MB (puzzles.json alone is ~5 MB,
+        // statically bundled). It crossed the old 10 MiB cap and broke every
+        // Vercel deploy — Workbox escalates "asset too big to precache" into a
+        // fatal build error. 16 MiB gives headroom for ongoing content growth.
+        // TODO (WO-PERF-BUNDLE-01): the real fix is code-splitting the data
+        // monolith (lazy-load puzzles.json) + excluding Stockfish WASM from
+        // precache, so this cap stops being a moving target.
+        maximumFileSizeToCacheInBytes: 16 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         globIgnores: ['stockfish/**'],
         navigateFallbackDenylist: [/^\/api\//, /^\/voice-packs\//],
