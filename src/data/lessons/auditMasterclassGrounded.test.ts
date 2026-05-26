@@ -69,18 +69,21 @@ async function auditLine(moves: string[], studentChar: 'w' | 'b', startFen: stri
 describe.runIf(RUN && !!SF)('grounded masterclass audit (diagnostic)', () => {
   it('reports student-side genuinely-wrong content (neither master-played nor sound)', async () => {
     const wrong: { type: string; key: string; plies: string[] }[] = [];
+    const note = (type: string, key: string, plies: string[]) => {
+      if (plies.length) { wrong.push({ type, key, plies }); console.log(`  WRONG [${type}] ${key}: ${plies.join(' ')}`); }
+      else console.log(`  ok   [${type}] ${key}`);
+    };
     // PLANS
     for (const p of plans) {
       if (!MC.has(p.openingId)) continue;
       const col = planColor[p.openingId]; const sc = col === 'black' ? 'b' : col === 'white' ? 'w' : 'w';
-      for (const l of p.playableLines ?? []) { const b = await auditLine(l.moves, sc, l.fen); if (b.length) wrong.push({ type: 'plan', key: p.id, plies: b }); }
+      for (const l of p.playableLines ?? []) note('plan', p.id, await auditLine(l.moves, sc, l.fen));
     }
     // LESSONS + TRAPS
     for (const { scope, key, lesson } of ALL_LESSONS as Array<{ scope: string; key: string; lesson: { openingId: string; orientation: 'white' | 'black'; beats: { moves: string[] }[] } }>) {
       if (!MC.has(lesson.openingId)) continue;
       const sc = lesson.orientation === 'black' ? 'b' : 'w';
-      const b = await auditLine(deepestBeat(lesson.beats), sc, null);
-      if (b.length) wrong.push({ type: scope, key, plies: b });
+      note(scope, key, await auditLine(deepestBeat(lesson.beats), sc, null));
     }
     console.log(`\n===== GROUNDED MASTERCLASS AUDIT =====`);
     const byType: Record<string, typeof wrong> = {};
