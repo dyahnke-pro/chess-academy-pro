@@ -13228,36 +13228,296 @@
   {
     "id": "mp-viennagame-gambit",
     "openingId": "vienna-game",
-    "title": "Vienna Gambit: the Bardeleben Qf3 Squeeze",
+    "title": "Vienna Gambit: the Qf3 Main Line — honest verdict + practical squeeze",
     "criticalPositionFen": "rnbqkb1r/ppp3pp/8/3pPp2/4n3/2NP1Q2/PPP3PP/R1B1KBNR b KQkq - 0 6",
-    "overview": "The modern Vienna Gambit main line — after Qf3! (the Bardeleben Variation, the trendy Eric Rosen weapon) the queen hits the e4-knight AND threatens Qxd5 with tempo. Black is forced into f5 to defend both, creating a permanent structural weakness on the light squares. White opens the b-file, plants the king-knight on f4 via h3, and dominates the centre with the e5-pawn and active Qf3.",
+    "overview": "After 5.Qf3 (Eric Rosen's modern Vienna Gambit weapon) the queen hits the e4-knight and threatens Qxd5, forcing Black to commit with …f5. Black trades on c3 and White recaptures with the b-pawn — doubling the c-pawns but opening the b-file and keeping the bishop pair and the broad e5-wedge. The honest verdict: with the precise …d4 Black strikes the doubled pawn, wins it straight back, and equalizes; but when Black develops naturally instead, White's Nh3-f4 manoeuvre and active queen take over the practical middlegame.",
     "pawnBreaks": [
       {
-        "move": "b-file open after bxc3",
-        "explanation": "The doubled-c-pawn structure that comes from bxc3 looks like a structural cost, but the open b-file for the rook is the actual prize. Rb1 + active queen-on-f3 set up the kingside attack.",
+        "move": "bxc3 opens the b-file",
+        "explanation": "Recapturing toward the centre opens the b-file for the rook and preserves the bishop pair; the doubled c3-pawn is the structural cost, which Black regains after …d4 …dxc3.",
         "fen": "rnbqkb1r/ppp3pp/8/3pPp2/8/2PP1Q2/P1P3PP/R1B1KBNR b KQkq - 0 7"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Queen",
-        "route": "Qd1-f3 (active centre)",
-        "explanation": "The Qf3 is the line's defining piece — attacks e4, threatens d5, stays on an active central square for the rest of the middlegame. Eric Rosen calls it the engine of the whole setup."
+        "piece": "Knight",
+        "route": "Ng1-h3-f4",
+        "explanation": "The king-knight reroutes by the rim to f4, where it grips d5 and guards the e5-wedge — the practical line's key manoeuvre, not blocking the queen on f3."
       },
       {
-        "piece": "Knight",
-        "route": "Ng1-h3-f4 (the curious detour)",
-        "explanation": "The king-knight goes to h3 — not f3, where the queen lives — then routes to f4 to support the e5-pawn and pressure d5. The h3-square looks ugly but the f4-destination is gold."
+        "piece": "Bishop",
+        "route": "Bf1-e2-f3",
+        "explanation": "In the …d4 main line the king-bishop swings to f3 on the long diagonal, pressing b7 and offering to trade off Black's knight."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qf3-g3",
+        "explanation": "After …d4 the queen steps to g3, hitting g7 and c7 and vacating f3 for the bishop."
       }
     ],
     "strategicThemes": [
-      "The Qf3 attacks the e4-knight on move 5, forcing f5 which permanently weakens Black's light squares (especially f6 and e6).",
-      "The open b-file after bxc3 gives White's rook a permanent file; combined with the doubled-c structure, this is a structural exchange for the bishop pair.",
-      "The Nh3-f4 manoeuvre is the line's signature — supports e5, pressures d5, and clears the king-knight's starting square for the rook to come to f1."
+      "5.Qf3 attacks the e4-knight and threatens Qxd5, forcing …f5 and a permanent light-square commitment on f6 and e6.",
+      "After bxc3 the open b-file, the bishop pair and the e5-wedge are White's compensation for the doubled, ultimately loose c3-pawn — full compensation against the freeing …d4, not an advantage.",
+      "The Nh3-f4 manoeuvre is White's practical try: from f4 the knight grips d5 and guards e5 while the queen on f3 and the open b-file pressure Black's king — strongest when Black declines the equalizing …d4."
     ],
     "playableLines": [
       {
-        "title": "Bardeleben: Qf3 hits the knight, bxc3 opens the b-file",
+        "title": "The principled equalizer: …d4 frees the game",
+        "fen": "rnbqkb1r/ppp3pp/8/3pPp2/4n3/2NP1Q2/PPP3PP/R1B1KBNR b KQkq - 0 6",
+        "moves": [
+          "Nxc3",
+          "bxc3",
+          "d4",
+          "Be2",
+          "dxc3",
+          "Qg3",
+          "Be6",
+          "Bf3",
+          "Nc6",
+          "Bxc6+"
+        ],
+        "annotations": [
+          "…Nxc3 — Black trades the e4-knight; with the d3-pawn and the e5-wedge bearing down there is no way to hold it.",
+          "bxc3 — the recapture opens the b-file and doubles the c-pawns. The pawn on c3 is the cost; the bishop pair and the half-open b-file are the compensation.",
+          "…d4! — the freeing break. Black strikes the c3-pawn at once, refusing to let White consolidate the broad centre.",
+          "Be2 — White develops and points the bishop toward f3 on the long diagonal; the c3-pawn is left to its fate.",
+          "…dxc3 — Black wins the doubled pawn back. Material is level; the gambit has bought activity, not a pawn.",
+          "Qg3 — the queen swings to g3, hitting g7 and c7 and clearing f3 for the bishop.",
+          "…Be6 — Black completes development and shores up d5 and the kingside.",
+          "Bf3 — the bishop reaches f3 on the long diagonal, pressing b7 and offering the trade on c6.",
+          "…Nc6 — the queen-knight develops, defending and contesting the centre.",
+          "Bxc6+ — the trade damages Black's queenside pawns, but the bishop pair is gone and the c-file is open: a balanced middlegame where White's b-file and centre offset Black's structure."
+        ],
+        "learnCues": [
+          "Nxc3 — trade off the knight",
+          "bxc3 — open the b-file, keep bishops",
+          "d4 — strike the doubled pawn",
+          "Be2 — develop toward f3",
+          "dxc3 — win the pawn back",
+          "Qg3 — hit g7, clear f3",
+          "Be6 — finish developing",
+          "Bf3 — long diagonal, press b7",
+          "Nc6 — develop and contest",
+          "Bxc6+ — trade off, level game"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e2",
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "g3",
+              "to": "g7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "f3",
+              "to": "b7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f3",
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "book:vienna-game",
+          "concept:pawn-doubled",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
+        ],
+        "intro": {
+          "say": "Black holds the balance with …d4 — striking the doubled c3-pawn and winning it straight back. White's gambit does not buy a pawn; it buys the open b-file, the bishop pair and the broad e5-centre. Full compensation, and no more: a level, double-edged middlegame.",
+          "sayShort": "…d4 wins the c-pawn back — balanced.",
+          "arrows": [
+            {
+              "from": "d5",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e4",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
+      },
+      {
+        "title": "The practical squeeze: punishing the natural setup",
         "fen": "rnbqkb1r/ppp3pp/8/3pPp2/4n3/2NP1Q2/PPP3PP/R1B1KBNR b KQkq - 0 6",
         "moves": [
           "Nxc3",
@@ -13270,20 +13530,42 @@
           "Nf4"
         ],
         "annotations": [
-          "…Nxc3 — Black is FORCED to trade the e4-knight. The d3-pawn attacks it a second time, the …f5 push has already used up his defending pawn, and there's no third defender.",
-          "bxc3 — White recaptures with the b-pawn. The b-file opens for the rook, the c-pawns double, but the bishop pair is preserved and the centre stays huge.",
-          "…Nc6 — Black's queen-knight comes out with no good attacking square. The natural Nc6 just develops; the …Bd6 or …Bb4 ideas come later.",
-          "Bd2 — the queen-bishop completes development on d2, preparing Bb4 ideas and clearing c1 for the rook if needed.",
-          "…Be7 — Black's king-bishop develops modestly. Be7 is the safest square; Bd6 would walk into e5-tactics.",
-          "Nh3! — the curious knight-to-the-rim move that defines the Bardeleben's middlegame. From h3 the knight heads to f4, supporting e5 and pressing d5.",
-          "…O-O — Black castles into safety. The position is now a pure positional fight: White's structure vs Black's active pieces.",
-          "Nf4! — the knight arrives at its dream square. From f4 it attacks the d5-pawn AND defends the e5-pawn, while the Qf3 and Bd2 stay aimed at Black's kingside. The Bardeleben middlegame is fully realized."
+          "…Nxc3 — Black trades the e4-knight off.",
+          "bxc3 — the b-file opens and the c-pawns double; White keeps the bishop pair and the e5-wedge.",
+          "…Nc6 — Black develops naturally. Objectively …d4 is stronger, freeing the game at once; this line shows how White punishes the slower setup.",
+          "Bd2 — the queen-bishop comes to d2, eyeing the a5-e1 diagonal and clearing c1 for the rook.",
+          "…Be7 — a modest post for the bishop; …Bd6 would walk into e5-tactics.",
+          "Nh3 — the knight heads for f4 by the rim route, leaving the queen unobstructed on f3.",
+          "…O-O — Black castles into a purely positional fight.",
+          "Nf4 — the knight lands on f4, gripping d5 and guarding e5 while the queen on f3 and the open b-file aim at Black's king. With the slow setup, White's pieces dominate the practical middlegame."
+        ],
+        "learnCues": [
+          "Nxc3 — trade off the knight",
+          "bxc3 — open the b-file",
+          "Nc6 — natural, but …d4 is best",
+          "Bd2 — develop, clear c1",
+          "Be7 — the safe square",
+          "Nh3 — rim route to f4",
+          "O-O — castle to safety",
+          "Nf4 — grip d5, guard e5"
         ],
         "arrows": [
           [],
           [],
-          [],
-          [],
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "e1",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           [
             {
@@ -13310,14 +13592,6 @@
             {
               "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -13328,6 +13602,10 @@
             {
               "square": "b2",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -13338,6 +13616,10 @@
             {
               "square": "b8",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -13348,6 +13630,14 @@
             {
               "square": "c1",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -13378,11 +13668,7 @@
               "color": "rgba(255, 235, 59, 0.5)"
             },
             {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d5",
+              "square": "f3",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
@@ -13412,24 +13698,44 @@
             {
               "square": "e5",
               "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
         "sources": [
           "book:vienna-game",
-          "concept:pos-development",
+          "concept:pos-initiative",
+          "concept:pos-center",
           "https://en.wikipedia.org/wiki/Vienna_Game"
         ],
-        "learnCues": [
-          "Nxc3 — forced to trade",
-          "bxc3 — open the b-file, keep bishops",
-          "Nc6 — develop, no attacking square",
-          "Bd2 — complete development",
-          "Be7 — the safest square",
-          "Nh3 — heading to f4",
-          "O-O — castle to safety",
-          "Nf4 — dream square, hits d5"
-        ]
+        "intro": {
+          "say": "When Black develops naturally instead of the freeing …d4, White's setup hums. The king-knight reroutes by the rim — h3 then f4 — to grip d5 and prop the e5-wedge, the queen presses from f3, and the open b-file feeds the rook. Slow play by Black hands White a lasting initiative.",
+          "sayShort": "Knight to f4, queen on f3 — White presses.",
+          "arrows": [
+            {
+              "from": "g1",
+              "to": "f4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
       }
     ]
   },
