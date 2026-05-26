@@ -3214,5 +3214,80 @@
     "engineCp": 141,
     "tier": "confirmed",
     "why": "At your level opponents play O-O here in 10% of games. Punish with the best move Nxc3 — the engine has Black winning (+1.4)."
+  },
+  {
+    "openingId": "two-knights-defence",
+    "lineMoves": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 e5 d5 Bb5 Ne4",
+    "inaccuracy": "Qxd4",
+    "freqPct": 2.5,
+    "games": 18045,
+    "practicalScore": 66,
+    "mainMove": "Nxd4",
+    "punish": "Bc5",
+    "punishSeq": [
+      "Bc5",
+      "Qa4",
+      "Bxf2+",
+      "Ke2",
+      "O-O",
+      "Nc3",
+      "Nxc3+",
+      "bxc3"
+    ],
+    "playLine": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 e5 d5 Bb5 Ne4 Qxd4 Bc5 Qa4 Bxf2+ Ke2 O-O Nc3 Nxc3+ bxc3",
+    "engineCp": 230,
+    "materialDelta": 1,
+    "tier": "confirmed",
+    "why": "At your level opponents play Qxd4 here in 2% of games. Punish with the best move Bc5 — the engine has Black winning (+2.3, +1 material)."
+  },
+  {
+    "openingId": "two-knights-defence",
+    "lineMoves": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6",
+    "inaccuracy": "f3",
+    "freqPct": 3.2,
+    "games": 9751,
+    "practicalScore": 69,
+    "mainMove": "O-O",
+    "punish": "Qh4+",
+    "punishSeq": [
+      "Qh4+",
+      "g3",
+      "Nxg3",
+      "Bg5",
+      "Qxg5",
+      "hxg3",
+      "Qxg3+",
+      "Kd2"
+    ],
+    "playLine": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 f3 Qh4+ g3 Nxg3 Bg5 Qxg5 hxg3 Qxg3+ Kd2",
+    "engineCp": 559,
+    "materialDelta": 2,
+    "tier": "confirmed",
+    "why": "At your level opponents play f3 here in 3% of games. Punish with the best move Qh4+ — the engine has Black winning (+5.6, +2 material)."
+  },
+  {
+    "openingId": "two-knights-defence",
+    "lineMoves": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Bxf7+ Ke7",
+    "inaccuracy": "O-O",
+    "freqPct": 7.5,
+    "games": 22154,
+    "practicalScore": 67,
+    "mainMove": "Bb3",
+    "punish": "h6",
+    "punishSeq": [
+      "h6",
+      "Nh7",
+      "Kxf7",
+      "Nxf6",
+      "Qxf6",
+      "Nc3",
+      "Qg6",
+      "d4"
+    ],
+    "playLine": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Bxf7+ Ke7 O-O h6 Nh7 Kxf7 Nxf6 Qxf6 Nc3 Qg6 d4",
+    "engineCp": 347,
+    "materialDelta": 2,
+    "tier": "confirmed",
+    "why": "At your level opponents play O-O here in 7% of games. Punish with the best move h6 — the engine has Black winning (+3.5, +2 material)."
   }
 ]

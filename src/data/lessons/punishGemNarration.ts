@@ -23,6 +23,99 @@ export interface GemNarration {
 }
 
 export const GEM_NARRATION: Record<string, GemNarration> = {
+  // Two Knights (student = Black). Max Lange: 6.Bb5 Ne4, White lunges f3? —
+  // ...Qh4+ rips open the uncastled king. Engine-confirmed, Black wins material.
+  'two-knights-defence:e4_e5_Nf3_Nc6_Bc4_Nf6_d4_exd4_e5_d5_Bb5_Ne4_Nxd4_Bd7_Bxc6_bxc6:f3': {
+    sources: ['concept:pos-king-safety', 'concept:tac-sacrifice', 'https://en.wikipedia.org/wiki/Two_Knights_Defense,_Max_Lange_Attack'],
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      '…Ne4 — Black plants the knight on the central e4-outpost, already eyeing f2 and g3.',
+      '', '', '', '',
+      'f3? White jabs at the e4-knight, but with the king still stuck in the centre this only tears open the h4-diagonal.',
+      '…Qh4+ — the queen lands with check on the freshly-opened diagonal; White has no safe shelter.',
+      '',
+      '…Nxg3 — the knight crashes in; after hxg3 …Qxg3+ the White king is stripped bare and Black stays up material.',
+      '',
+      '…Qxg5 — the bishop lunge just hangs a piece; Black scoops it up.',
+      '',
+      '…Qxg3+ — material to the good with the White king marooned on d2. The f3 push lost on the spot.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Ne4 — central outpost, eye f2/g3', '', '', '', '',
+      '',
+      'Qh4+ — strike the open diagonal',
+      '',
+      'Nxg3 — crash in, strip the king',
+      '',
+      'Qxg5 — take the free bishop',
+      '',
+      'Qxg3+ — up material, king stranded',
+      '',
+    ],
+  },
+  // Two Knights — Traxler Counterattack (4…Bc5). After 5.Bxf7+ Ke7, White
+  // must save the bishop with 6.Bd5/Bb3; 6.O-O? lets …h6 trap the g5-knight.
+  'two-knights-defence:e4_e5_Nf3_Nc6_Bc4_Nf6_Ng5_Bc5_Bxf7+_Ke7:O-O': {
+    sources: ['concept:tac-trap', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Two_Knights_Defense,_Traxler_Counterattack'],
+    watch: [
+      '', '', '', '', '', '', '',
+      '…Bc5 — the Traxler Counterattack: Black ignores the threat to f7 and aims his own pieces at White’s king.',
+      '',
+      '…Ke7 — declining the bishop; now the f7-bishop and the g5-knight are both loose, and …h6 is coming.',
+      'O-O? White castles into the storm instead of rescuing a piece with Bd5 — the g5-knight has no escape.',
+      '…h6 — the knight is trapped: it must abandon the f7-bishop, and Black wins material.',
+      '',
+      '…Kxf7 — collecting the bishop; the stranded h7-knight is dead weight.',
+      '',
+      '…Qxf6 — Black emerges a clean piece up with a safe king and the full centre.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '',
+      'Bc5 — the Traxler, hit back', '',
+      'Ke7 — decline, leave them loose',
+      '',
+      'h6 — trap the g5-knight',
+      '',
+      'Kxf7 — win the bishop',
+      '',
+      'Qxf6 — a piece up, consolidate',
+      '', '', '',
+    ],
+  },
+  // Two Knights — Max Lange: 6.Bb5 Ne4 7.Qxd4? grabs the pawn in the open
+  // centre — …Bc5 hits the queen with tempo and …Bxf2+ drags the king out.
+  'two-knights-defence:e4_e5_Nf3_Nc6_Bc4_Nf6_d4_exd4_e5_d5_Bb5_Ne4:Qxd4': {
+    sources: ['concept:tac-double-attack', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Two_Knights_Defense,_Max_Lange_Attack'],
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      '…Ne4 — the knight seizes the central outpost; the Max Lange tension is set.',
+      'Qxd4? grabbing the pawn drags the queen into the open centre, inviting a hit with tempo.',
+      '…Bc5 — attacking the d4-queen with gain of tempo, the bishop already raking toward f2.',
+      '',
+      '…Bxf2+ — crashing through with check; the White king is dragged out onto e2.',
+      '',
+      '…O-O — Black tucks the king away while White’s is stranded in the centre.',
+      '',
+      '…Nxc3+ — ripping open the king’s cover; Black is up a pawn with a winning attack.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Ne4 — central outpost',
+      '',
+      'Bc5 — hit the queen, tempo',
+      '',
+      'Bxf2+ — crash in with check',
+      '',
+      'O-O — your king safe, his isn’t',
+      '',
+      'Nxc3+ — tear open the king',
+      '',
+    ],
+  },
   // Caro — White's f3 (Fantasy) but f3?? offered too loosely: exf3 just
   // wins a pawn. playLine: e4 c6 d4 d5 Nc3 dxe4 f3 exf3 Nxf3 Nf6 Bd3 Bg4 h3 Bxf3 Qxf3
   'caro-kann:e4_c6_d4_d5_Nc3_dxe4:f3': {
