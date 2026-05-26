@@ -404,23 +404,18 @@ describe('GameChapterPage', () => {
     // No hint text before clicking
     expect(screen.queryByTestId('chapter-hint-text')).not.toBeInTheDocument();
 
-    // Click 1: level 0→1 (arrows only, no text yet). Wrap in `act` so
-    // React flushes the synchronous tier bump AND the async IIFE inside
-    // requestHint (the post-await setHintState that lands nudgeText)
-    // before the next assertion fires. The previous synchronous
-    // fireEvent.click pattern raced the disable-on-isAnalyzing render
-    // and blocked click 2; mirroring PracticeMode's `await act` flow.
+    // David 2026-05-26: one tap → the answer. The first press jumps
+    // straight to Tier 3 (move arrow + nudge text), no escalation ladder.
+    // Wrap in `act` so React flushes the synchronous tier bump AND the
+    // async IIFE inside requestHint (the post-await setHintState that
+    // lands nudgeText) before the assertions fire.
     await act(async () => {
       fireEvent.click(screen.getByTestId('hint-button'));
     });
-    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
-
-    // Click 2: level 1→2 (nudge text appears)
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('hint-button'));
+    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '3');
+    await waitFor(() => {
+      expect(screen.getByTestId('chapter-hint-text')).toBeInTheDocument();
     });
-    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '2');
-    expect(screen.getByTestId('chapter-hint-text')).toBeInTheDocument();
   });
 
   it('correct puzzle move shows success feedback', async () => {

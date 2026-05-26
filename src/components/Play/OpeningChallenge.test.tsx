@@ -172,12 +172,12 @@ describe('OpeningChallenge', () => {
     expect(screen.getByTestId('opening-challenge')).toBeInTheDocument();
   });
 
-  it('hint button increments level when clicked', () => {
+  it('one tap reveals the full answer (jumps straight to level 3)', () => {
     render(<OpeningChallenge {...defaultProps} />);
     const hintBtn = screen.getByTestId('hint-button');
     expect(hintBtn.getAttribute('data-level')).toBe('0');
     fireEvent.click(hintBtn);
-    expect(hintBtn.getAttribute('data-level')).toBe('1');
+    expect(hintBtn.getAttribute('data-level')).toBe('3');
   });
 
   it('takeback button is disabled when at move 0', () => {

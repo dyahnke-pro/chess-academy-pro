@@ -16,12 +16,12 @@ import { useAppStore } from '../../stores/appStore';
  *   1. Tap "Send Feedback" from Settings → About
  *   2. Pick category + rating + type message
  *   3. Tap Submit → opens their mail client with subject + body
- *      pre-filled and addressed to support@chessacademy.pro
+ *      pre-filled and addressed to chessacademypro@gmail.com
  *
  * IMPORTANT: Update SUPPORT_EMAIL before launch if you change
  * support addresses.
  */
-const SUPPORT_EMAIL = 'support@chessacademy.pro';
+const SUPPORT_EMAIL = 'chessacademypro@gmail.com';
 
 type FeedbackCategory = 'bug' | 'feature' | 'praise' | 'other';
 

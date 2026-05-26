@@ -313,32 +313,20 @@ describe('PracticeMode', () => {
   it('shows hint button on player turn', () => {
     renderPractice();
     expect(screen.getByTestId('hint-button')).toBeInTheDocument();
-    expect(screen.getByText('Get a Hint')).toBeInTheDocument();
+    expect(screen.getByText('Show Answer')).toBeInTheDocument();
     expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '0');
   });
 
-  it('clicking hint advances through levels', async () => {
+  it('one tap reveals the full answer (jumps straight to level 3)', async () => {
     renderPractice();
 
-    // Click 1: level 0→1 (arrows). useHintSystem flips isAnalyzing=true
-    // one microtask later, which sets button.disabled=true on
-    // HintButton — so a back-to-back click would be a silent no-op.
-    // Wait for the level bump AND for the button to be re-enabled
-    // before issuing the second click.
+    // David 2026-05-26: one tap → the answer. No WHY/WHICH ladder; the
+    // first press jumps straight to Tier 3 (move + arrow).
     await act(async () => {
       screen.getByTestId('hint-button').click();
     });
     await waitFor(() => {
-      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
-      expect(screen.getByTestId('hint-button')).not.toBeDisabled();
-    });
-
-    // Click 2: level 1→2 (nudge text appears)
-    await act(async () => {
-      screen.getByTestId('hint-button').click();
-    });
-    await waitFor(() => {
-      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '2');
+      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '3');
     });
   });
 
@@ -349,7 +337,9 @@ describe('PracticeMode', () => {
     await act(async () => {
       screen.getByTestId('hint-button').click();
     });
-    expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '1');
+    await waitFor(() => {
+      expect(screen.getByTestId('hint-button')).toHaveAttribute('data-level', '3');
+    });
 
     // Make correct move
     await act(async () => {

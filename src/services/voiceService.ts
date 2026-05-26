@@ -354,6 +354,40 @@ export function sanitizeForTTS(text: string): string {
   return normalizePieceShorthand(out);
 }
 
+/** A tiny, fully-silent 8-bit PCM WAV as an object URL. Used only to
+ *  "bless" the reused streaming <audio> element inside a user gesture on
+ *  iOS — playing any real clip once inside a tap grants the element
+ *  programmatic-play permission for the timer-driven narrations that
+ *  follow (Watch-mode auto-play). Built lazily, once. */
+let _silentClipUrl: string | null = null;
+function getSilentClipUrl(): string | null {
+  if (_silentClipUrl) return _silentClipUrl;
+  if (typeof URL === 'undefined' || typeof Blob === 'undefined') return null;
+  const sampleRate = 8000;
+  const numSamples = 1;
+  const buf = new ArrayBuffer(44 + numSamples);
+  const view = new DataView(buf);
+  const writeStr = (off: number, s: string): void => {
+    for (let i = 0; i < s.length; i++) view.setUint8(off + i, s.charCodeAt(i));
+  };
+  writeStr(0, 'RIFF');
+  view.setUint32(4, 36 + numSamples, true);
+  writeStr(8, 'WAVE');
+  writeStr(12, 'fmt ');
+  view.setUint32(16, 16, true); // PCM fmt chunk size
+  view.setUint16(20, 1, true); // PCM
+  view.setUint16(22, 1, true); // mono
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate, true); // byteRate = sampleRate * blockAlign
+  view.setUint16(32, 1, true); // blockAlign
+  view.setUint16(34, 8, true); // bits per sample
+  writeStr(36, 'data');
+  view.setUint32(40, numSamples, true);
+  view.setUint8(44, 128); // 8-bit silence midpoint
+  _silentClipUrl = URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+  return _silentClipUrl;
+}
+
 class VoiceService {
   private currentSource: AudioBufferSourceNode | null = null;
   /** Set when the streaming-progressive-playback path (MediaSource +
@@ -369,6 +403,11 @@ class VoiceService {
    *  were silently blocked. Reusing one element keeps the unlock the
    *  first gesture earned, so the lecture keeps speaking on its own. */
   private streamAudioEl: HTMLAudioElement | null = null;
+  /** True once the streaming element has been play()'d inside a real
+   *  user gesture (iOS programmatic-play permission earned). */
+  private streamingAudioPrimed = false;
+  /** True once the global first-gesture bless listeners are attached. */
+  private gestureUnlockInstalled = false;
   private abortController: AbortController | null = null;
   private playing = false;
   /** Monotonic counter incremented on every `stop()`. Speech chains
@@ -526,6 +565,10 @@ class VoiceService {
     const prefs = await this.loadPrefs();
     // Prime the AudioContext so first decode isn't cold
     getSharedAudioContext();
+    // Attach the first-gesture bless for the streaming <audio> element so
+    // Watch-mode auto-play (timer-driven, no tap) isn't silently blocked
+    // on iOS. Idempotent — only the first call installs the listeners.
+    this.installStreamingAudioUnlock();
 
     if (prefs?.pollyEnabled && prefs.voiceEnabled) {
       // Probe Polly availability with a short timeout
@@ -549,6 +592,68 @@ class VoiceService {
       } catch {
         // Polly unreachable — stays disabled
       }
+    }
+  }
+
+  /** iOS grants an <audio> element programmatic-play permission only
+   *  after it has been play()'d inside a user gesture. Watch-mode
+   *  lessons fire their FIRST narration from a timer (~800ms after the
+   *  tap that opened the lesson), so the reused streaming element was
+   *  never user-activated and stayed silent on iPhone. We attach
+   *  one-shot capture listeners on the first interaction anywhere in the
+   *  app — playing a silent clip on the element blesses it for every
+   *  timer-driven narration that follows. Mirrors the AudioContext
+   *  unlock in audioContextManager. */
+  installStreamingAudioUnlock(): void {
+    if (this.gestureUnlockInstalled || typeof document === 'undefined') return;
+    this.gestureUnlockInstalled = true;
+    const handler = (): void => {
+      this.primeStreamingAudio();
+      if (this.streamingAudioPrimed) {
+        document.removeEventListener('touchstart', handler, true);
+        document.removeEventListener('mousedown', handler, true);
+        document.removeEventListener('keydown', handler, true);
+      }
+    };
+    document.addEventListener('touchstart', handler, { passive: true, capture: true });
+    document.addEventListener('mousedown', handler, { passive: true, capture: true });
+    document.addEventListener('keydown', handler, { capture: true });
+  }
+
+  /** Play a silent clip on the streaming element inside a user gesture to
+   *  earn iOS programmatic-play permission. No-op once primed, or while a
+   *  real narration is already in flight (don't clobber live playback). */
+  private primeStreamingAudio(): void {
+    if (this.streamingAudioPrimed || this.isPlaying()) return;
+    const url = getSilentClipUrl();
+    if (!url) return;
+    try {
+      const audio = this.streamAudioEl ?? new Audio();
+      this.streamAudioEl = audio;
+      audio.muted = true;
+      audio.src = url;
+      // HTMLMediaElement.play() returns Promise<void> in every browser
+      // we target — resolve = element is now user-activated.
+      void audio
+        .play()
+        .then(() => {
+          audio.pause();
+          audio.muted = false;
+          try {
+            audio.removeAttribute('src');
+            audio.load();
+          } catch {
+            /* fresh element */
+          }
+          this.streamingAudioPrimed = true;
+        })
+        .catch(() => {
+          // Gesture wasn't sufficient (rare) — leave unprimed so the
+          // next interaction retries.
+          audio.muted = false;
+        });
+    } catch {
+      /* best-effort — never let priming break the app */
     }
   }
 

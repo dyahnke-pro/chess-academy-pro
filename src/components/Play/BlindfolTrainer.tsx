@@ -201,19 +201,19 @@ export function BlindfolTrainer({ onExit }: BlindfolTrainerProps): JSX.Element {
   // Hint system
   const handleHint = useCallback((): void => {
     if (currentMoveIndex >= expectedMoves.length) return;
+    if (hintLevel >= 3) return;
 
-    const nextLevel = Math.min(hintLevel + 1, 3) as HintLevel;
-    setHintLevel(nextLevel);
+    // One tap → show the answer (David 2026-05-26). Jump straight to the
+    // move-arrow reveal instead of the three-step ladder.
+    setHintLevel(3 as HintLevel);
     setHintsUsed((prev) => prev + 1);
 
     const expected = expectedMoves[currentMoveIndex];
-    if (nextLevel === 3) {
-      setHintArrows([{
-        startSquare: expected.from,
-        endSquare: expected.to,
-        color: 'rgba(245, 158, 11, 0.7)',
-      }]);
-    }
+    setHintArrows([{
+      startSquare: expected.from,
+      endSquare: expected.to,
+      color: 'rgba(245, 158, 11, 0.7)',
+    }]);
   }, [currentMoveIndex, expectedMoves, hintLevel]);
 
   // Start a new opening

@@ -789,6 +789,7 @@ export function OpeningDetailPage(): JSX.Element {
           mode="learn"
           onComplete={() => { void markRungComplete(opening.id, learnLineIdx, 'learn').then(() => loadOpening()); }}
           onExit={handleExit}
+          onContinuePlaying={() => setViewMode(viewMode === 'variation-learn' ? 'variation-play' : 'play')}
         />
       );
     }
@@ -834,6 +835,7 @@ export function OpeningDetailPage(): JSX.Element {
         variationIndex={viewMode === 'variation-practice' ? activeVariationIndex : undefined}
         onComplete={() => { void markRungComplete(opening.id, practiceLineIdx, 'practice').then(() => loadOpening()); }}
         onExit={handleExit}
+        onContinuePlaying={() => setViewMode(viewMode === 'variation-practice' ? 'variation-play' : 'play')}
       />
     );
   }

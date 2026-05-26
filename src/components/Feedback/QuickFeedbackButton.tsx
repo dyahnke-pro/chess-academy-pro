@@ -21,7 +21,7 @@ import { useAppStore } from '../../stores/appStore';
  *
  * IMPORTANT: Update SUPPORT_EMAIL when the real address is decided.
  */
-const SUPPORT_EMAIL = 'support@chessacademy.pro';
+const SUPPORT_EMAIL = 'chessacademypro@gmail.com';
 
 type SubmitState = 'idle' | 'capturing' | 'sending' | 'sent';
 

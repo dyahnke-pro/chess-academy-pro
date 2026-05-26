@@ -156,9 +156,9 @@ afterEach(() => {
 // is legal and Tier 3 can render the arrow.
 const FEN_AFTER_E4 = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
-describe('useHintSystem — Tier 1 (the WHY)', () => {
-  it('sends HINT_TIER_1_ADDITION via coachService.ask on first tap and renders no arrows', async () => {
-    spineResponses.push('Your center is begging for reinforcement — find the piece that can defend it.');
+describe('useHintSystem — one tap reveals the full answer', () => {
+  it('first tap sends HINT_TIER_3_ADDITION, sets level 3, and renders the move arrow', async () => {
+    spineResponses.push('Nf3 develops the knight and fights for the center.');
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
@@ -178,16 +178,19 @@ describe('useHintSystem — Tier 1 (the WHY)', () => {
     expect(spineCalls[0].surface).toBe('hint');
     expect(spineCalls[0].maxToolRoundTrips).toBe(2);
     expect(spineCalls[0].fen).toBe(FEN_AFTER_E4);
-    expect(spineCalls[0].ask).toContain(HINT_TIER_1_ADDITION);
-    await waitFor(() => expect(result.current.hintState.level).toBe(1));
-    expect(result.current.hintState.arrows).toEqual([]);
-    expect(result.current.hintState.ghostMove).toBeNull();
+    // One tap jumps straight to the full-answer tier.
+    expect(spineCalls[0].ask).toContain(HINT_TIER_3_ADDITION);
+    await waitFor(() => expect(result.current.hintState.level).toBe(3));
+    // The move arrow is revealed immediately on the first press.
+    expect(result.current.hintState.arrows).toHaveLength(1);
+    expect(result.current.hintState.arrows[0].startSquare).toBe('g1');
+    expect(result.current.hintState.arrows[0].endSquare).toBe('f3');
     // Sentence-streamed via Polly as the first sentence (chunk-driven).
     expect(speakRecords.some((r) => r.method === 'speakForced')).toBe(true);
   });
 
-  it('records the request to coach memory via the brain-emitted tool call', async () => {
-    spineResponses.push('Your center is collapsing.');
+  it('records the request to coach memory at tier 3 via the brain-emitted tool call', async () => {
+    spineResponses.push('Nf3 is the move.');
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
@@ -203,10 +206,10 @@ describe('useHintSystem — Tier 1 (the WHY)', () => {
       result.current.requestHint();
     });
 
-    await waitFor(() => expect(result.current.hintState.level).toBe(1));
+    await waitFor(() => expect(result.current.hintState.level).toBe(3));
     const records = useCoachMemoryStore.getState().hintRequests;
     expect(records).toHaveLength(1);
-    expect(records[0].tierReached).toBe(1);
+    expect(records[0].tierReached).toBe(3);
     expect(records[0].fen).toBe(FEN_AFTER_E4);
     expect(records[0].userPlayedBestMove).toBeNull();
     // Surface fires the migration audit; store action fires the
@@ -214,11 +217,9 @@ describe('useHintSystem — Tier 1 (the WHY)', () => {
     expect(auditCalls.some((c) => c.kind === 'coach-surface-migrated')).toBe(true);
     expect(auditCalls.some((c) => c.kind === 'coach-memory-hint-requested')).toBe(true);
   });
-});
 
-describe('useHintSystem — Tier 2 escalation (the WHICH)', () => {
-  it('uses HINT_TIER_2_ADDITION on second tap, still no arrow', async () => {
-    spineResponses.push('Tier 1 prose.', 'Tier 2 prose.');
+  it('does not fire again once the answer is shown (subsequent taps are no-ops)', async () => {
+    spineResponses.push('Nf3.', 'b', 'c');
     const { result } = renderHook(() =>
       useHintSystem({
         fen: FEN_AFTER_E4,
@@ -230,83 +231,19 @@ describe('useHintSystem — Tier 2 escalation (the WHICH)', () => {
       }),
     );
 
-    act(() => {
-      result.current.requestHint();
-    });
-    await waitFor(() => expect(result.current.hintState.level).toBe(1));
-
-    act(() => {
-      result.current.requestHint();
-    });
-    await waitFor(() => expect(result.current.hintState.level).toBe(2));
-    expect(spineCalls[1].ask).toContain(HINT_TIER_2_ADDITION);
-    expect(result.current.hintState.arrows).toEqual([]);
-    // Memory store records the same FEN once with escalated tier
-    // (the store ratchets monotonically on the same FEN).
-    const records = useCoachMemoryStore.getState().hintRequests;
-    expect(records).toHaveLength(1);
-    expect(records[0].tierReached).toBe(2);
-  });
-});
-
-describe('useHintSystem — Tier 3 (the FULL ANSWER)', () => {
-  it('uses HINT_TIER_3_ADDITION on third tap and renders an arrow', async () => {
-    spineResponses.push('Tier 1 prose.', 'Tier 2 prose.', 'Tier 3 prose.');
-    const { result } = renderHook(() =>
-      useHintSystem({
-        fen: FEN_AFTER_E4,
-        playerColor: 'black',
-        enabled: true,
-        gameId: 'g-1',
-        moveNumber: 1,
-        ply: 1,
-      }),
-    );
-
-    act(() => { result.current.requestHint(); });
-    await waitFor(() => expect(result.current.hintState.level).toBe(1));
-    act(() => { result.current.requestHint(); });
-    await waitFor(() => expect(result.current.hintState.level).toBe(2));
     act(() => { result.current.requestHint(); });
     await waitFor(() => expect(result.current.hintState.level).toBe(3));
-
-    expect(spineCalls[2].ask).toContain(HINT_TIER_3_ADDITION);
-    expect(result.current.hintState.arrows).toHaveLength(1);
-    expect(result.current.hintState.arrows[0].startSquare).toBe('g1');
-    expect(result.current.hintState.arrows[0].endSquare).toBe('f3');
-    const records = useCoachMemoryStore.getState().hintRequests;
-    expect(records[0].tierReached).toBe(3);
-  });
-
-  it('does not escalate beyond Tier 3 on additional taps', async () => {
-    spineResponses.push('a', 'b', 'c');
-    const { result } = renderHook(() =>
-      useHintSystem({
-        fen: FEN_AFTER_E4,
-        playerColor: 'black',
-        enabled: true,
-        gameId: 'g-1',
-        moveNumber: 1,
-        ply: 1,
-      }),
-    );
-
+    // Extra taps are no-ops — the answer is already on the board.
     act(() => { result.current.requestHint(); });
-    await waitFor(() => expect(result.current.hintState.level).toBe(1));
-    act(() => { result.current.requestHint(); });
-    await waitFor(() => expect(result.current.hintState.level).toBe(2));
-    act(() => { result.current.requestHint(); });
-    await waitFor(() => expect(result.current.hintState.level).toBe(3));
-    // Extra tap is a no-op.
     act(() => { result.current.requestHint(); });
     expect(result.current.hintState.level).toBe(3);
-    expect(spineCalls.length).toBe(3);
+    expect(spineCalls.length).toBe(1);
   });
 });
 
 describe('useHintSystem — FEN-change finalization', () => {
   it('finalizes the pending hint record when the FEN changes', async () => {
-    spineResponses.push('Tier 1 prose.');
+    spineResponses.push('Nf3.');
     const { result, rerender } = renderHook(
       (props: Parameters<typeof useHintSystem>[0]) => useHintSystem(props),
       {
@@ -322,7 +259,7 @@ describe('useHintSystem — FEN-change finalization', () => {
     );
 
     act(() => { result.current.requestHint(); });
-    await waitFor(() => expect(result.current.hintState.level).toBe(1));
+    await waitFor(() => expect(result.current.hintState.level).toBe(3));
     expect(useCoachMemoryStore.getState().hintRequests[0].userPlayedBestMove).toBeNull();
 
     // Simulate the next move: parent rerenders with a new FEN.

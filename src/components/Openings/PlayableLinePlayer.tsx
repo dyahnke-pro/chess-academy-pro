@@ -39,6 +39,10 @@ interface PlayableLinePlayerProps {
    *  - 'practice' — same board, SILENT: you replay the line from memory with
    *                 no voice and no hint. (David 2026-05-21.) */
   mode?: PlayMode;
+  /** When provided, the Learn/Practice completion screen shows a
+   *  "Continue Playing" button that hands off to Play mode locked to
+   *  this same line (David 2026-05-26). */
+  onContinuePlaying?: () => void;
 }
 
 export type PlayMode = 'watch' | 'learn' | 'practice';
@@ -62,6 +66,7 @@ export function PlayableLinePlayer({
   onComplete,
   onExit,
   mode = 'watch',
+  onContinuePlaying,
 }: PlayableLinePlayerProps): JSX.Element {
   const { playMoveSound, playCelebration, playEncouragement } = usePieceSound();
 
@@ -556,6 +561,17 @@ export function PlayableLinePlayer({
             <h2 className="text-xl font-bold text-theme-text">Line Mastered!</h2>
             <p className="text-sm text-theme-text-muted mt-1">{line.title}</p>
           </div>
+
+          {onContinuePlaying && (
+            <button
+              onClick={onContinuePlaying}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
+              data-testid="line-continue-playing"
+            >
+              <Play size={16} />
+              Continue Playing
+            </button>
+          )}
 
           <div className="flex gap-3">
             <button
