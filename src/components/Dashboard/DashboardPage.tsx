@@ -192,6 +192,7 @@ export function DashboardPage(): JSX.Element {
         <div className="absolute right-0 top-1/2 -translate-y-1/2">
           <PageHelp
             helpId="dashboard"
+            suppressAutoOpen={activeProfile?.strengthCalibrated === false}
             title="The order of operations"
             steps={[
               { label: '1. Pick an opening', body: 'Go to Openings → Masterclasses and pick one you actually play as White or Black — not at random. This is where everything starts.' },

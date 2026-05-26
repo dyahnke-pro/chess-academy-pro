@@ -11,8 +11,15 @@ export async function getOrCreateMainProfile(): Promise<UserProfile> {
     id: 'main',
     name: 'Player',
     isKidMode: false,
-    currentRating: 1420,
-    puzzleRating: 1400,
+    // Beginner-safe defaults. These are only ever live until calibration
+    // runs at boot (imported games, else the first-run skill picker) and
+    // seeds the player's real strength. `strengthCalibrated: false` is
+    // what triggers that calibration — including retroactively for
+    // existing profiles that predate this field. See
+    // strengthCalibrationService.
+    currentRating: 800,
+    puzzleRating: 800,
+    strengthCalibrated: false,
     xp: 0,
     level: 1,
     currentStreak: 0,
