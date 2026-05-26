@@ -43,11 +43,16 @@ const GEMS = JSON.parse(await readFile('src/data/punish-gems.json', 'utf-8'));
 const WEAPON = new Set(['confirmed', 'positional']);
 // POST-DEPLOY: this is THE masterclass post-deploy audit (David 2026-05-24) —
 // it must verify EVERY masterclass line is integrated, not just today's gem
-// work. Walk all four masterclass openings and every variation tab's WLPP.
-// AUDIT_OPENING=<id> scopes a run to ONE opening so the four can run in
+// work. Walk EVERY masterclass opening and every variation tab's WLPP. The
+// scope is derived from opening-manifests.json (the canonical masterclass
+// list) so a NEW masterclass opening is auto-in-scope — no hardcoded list to
+// drift (was the original 4 openings; widened 2026-05-26 per the living-audit
+// rule when the manifest grew to 39).
+// AUDIT_OPENING=<id> scopes a run to ONE opening so they can run in
 // parallel (one audit per opening — David OK'd that).
 const ONLY = (process.env.AUDIT_OPENING || '').trim();
-let MASTERCLASS = ['caro-kann', 'ruy-lopez', 'pirc-defence', 'vienna-game'];
+const MANIFESTS = JSON.parse(await readFile('src/data/opening-manifests.json', 'utf-8'));
+let MASTERCLASS = Object.keys(MANIFESTS).filter((k) => !k.startsWith('_'));
 let GEM_OPENINGS = [...new Set(GEMS.filter((g) => WEAPON.has(g.tier)).map((g) => g.openingId))];
 if (ONLY) { MASTERCLASS = MASTERCLASS.filter((o) => o === ONLY); GEM_OPENINGS = GEM_OPENINGS.filter((o) => o === ONLY); }
 const PRIMARY = GEM_OPENINGS[0]; // opening used for the deep voice/WLPP probes
