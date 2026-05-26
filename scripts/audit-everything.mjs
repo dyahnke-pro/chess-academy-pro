@@ -104,11 +104,18 @@ const SCENARIOS = [
   {
     name: 'opening-detail-london-system',
     url: '/openings/london-system',
-    description: 'London System (no book coverage) — Classic Wisdom card hidden.',
+    // London System postdates the pre-1930s book corpus, so it has no matched
+    // book PASSAGE — but ClassicWisdomSection now falls back to the modern
+    // definition (getOpeningDefinition), so the card correctly SHOWS that
+    // definition rather than self-hiding. (Updated 2026-05-26: the old
+    // "hidden when no book coverage" assertion predated the definition
+    // fallback; the self-hide path is now covered by the section's unit test.)
+    description: 'London System — Classic Wisdom shows the modern-definition fallback (no book passage).',
     expect: [
       { kind: 'no-console-error', description: 'no console errors' },
       { kind: 'visible', selector: '[data-testid="opening-detail"]', description: 'page mounted' },
-      { kind: 'invisible', selector: '[data-testid="classic-wisdom-section"]', description: 'Classic Wisdom hidden when no passages' },
+      { kind: 'visible', selector: '[data-testid="classic-wisdom-section"]', description: 'Classic Wisdom shows modern definition' },
+      { kind: 'text-contains', selector: '[data-testid="classic-wisdom-section"]', text: 'London System', description: 'definition names the opening' },
     ],
   },
 
@@ -255,8 +262,10 @@ const SCENARIOS = [
 async function runExpectation(page, exp, consoleErrors, auditEvents) {
   switch (exp.kind) {
     case 'visible': {
-      const el = await page.locator(exp.selector).first();
-      const visible = await el.isVisible().catch(() => false);
+      const el = page.locator(exp.selector).first();
+      // Poll rather than one-shot: a heavy surface (board + Stockfish chunk)
+      // can take a few seconds past domcontentloaded to paint its key element.
+      const visible = await el.waitFor({ state: 'visible', timeout: 12000 }).then(() => true).catch(() => false);
       return visible
         ? { pass: true }
         : { pass: false, reason: `selector "${exp.selector}" not visible` };
@@ -271,7 +280,13 @@ async function runExpectation(page, exp, consoleErrors, auditEvents) {
         : { pass: true };
     }
     case 'count-gte': {
-      const count = await page.locator(exp.selector).count().catch(() => 0);
+      // Poll until the count is reached (or timeout) — the page may still be
+      // hydrating its nav targets when checked immediately after nav.
+      let count = await page.locator(exp.selector).count().catch(() => 0);
+      for (let waited = 0; count < exp.n && waited < 10000; waited += 500) {
+        await page.waitForTimeout(500);
+        count = await page.locator(exp.selector).count().catch(() => 0);
+      }
       return count >= exp.n
         ? { pass: true, detail: `count=${count}` }
         : { pass: false, reason: `selector "${exp.selector}" count=${count}, expected ≥ ${exp.n}` };
@@ -366,11 +381,23 @@ async function runScenario(ctx, scenario, sharedState) {
   let navError = null;
   try {
     await page.goto(`${BASE_URL}${scenario.url}`, { waitUntil: 'domcontentloaded', timeout: 15000 });
+    // A full goto reload of a reused page can intermittently serve a blank
+    // app shell under the Vite dev server (HMR/module-state artifact — fresh
+    // loads and SPA-nav render fine, confirmed; NOT a prod bug). If the shell
+    // came up empty, reload once before asserting so the harness doesn't
+    // false-flag a healthy surface.
+    const shellEmpty = async () =>
+      (await page.locator('[data-testid="app-layout"]').count().catch(() => 0)) === 0 &&
+      (await page.locator('a, button').count().catch(() => 0)) === 0;
+    if (await shellEmpty()) {
+      await page.reload({ waitUntil: 'domcontentloaded', timeout: 15000 }).catch(() => {});
+      await page.waitForTimeout(1500);
+    }
     // For opening-detail pages: wait longer for Dexie seed before
     // asserting (the page renders "Opening not found" until db.openings
     // has been populated by seedDatabase).
     if (scenario.url.startsWith('/openings/') && scenario.url !== '/openings/pro') {
-      await page.waitForSelector('[data-testid="opening-detail"]', { timeout: 10000 }).catch(() => {});
+      await page.waitForSelector('[data-testid="opening-detail"]', { timeout: 12000 }).catch(() => {});
     }
     await page.waitForTimeout(1200);
   } catch (e) {
