@@ -3339,5 +3339,80 @@
     "materialDelta": 1,
     "tier": "positional",
     "why": "At your level opponents play Bg5 here in 10% of games. Punish with the best move Nxe4 — the engine has Black clearly better (+0.9, +1 material)."
+  },
+  {
+    "openingId": "petrov-defence",
+    "lineMoves": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4",
+    "inaccuracy": "Qa4+",
+    "freqPct": 7.7,
+    "games": 1526,
+    "practicalScore": 59,
+    "mainMove": "Be2",
+    "punish": "b5",
+    "punishSeq": [
+      "b5",
+      "Qd1",
+      "bxc4",
+      "Be2",
+      "O-O",
+      "Nc3",
+      "Bf5",
+      "Ne5"
+    ],
+    "playLine": "e4 e5 Nf3 Nf6 Nxe5 d6 Nf3 Nxe4 d4 d5 Bd3 Nc6 O-O Be7 c4 Nb4 Qa4+ b5 Qd1 bxc4 Be2 O-O Nc3 Bf5 Ne5",
+    "engineCp": 175,
+    "materialDelta": 1,
+    "tier": "confirmed",
+    "why": "At your level opponents play Qa4+ here in 8% of games. Punish with the best move b5 — the engine has Black winning (+1.8, +1 material)."
+  },
+  {
+    "openingId": "petrov-defence",
+    "lineMoves": "e4 e5 Nf3 Nf6 d4 Nxe4",
+    "inaccuracy": "Bc4",
+    "freqPct": 3,
+    "games": 33436,
+    "practicalScore": 54,
+    "mainMove": "dxe5",
+    "punish": "d5",
+    "punishSeq": [
+      "d5",
+      "Bd3",
+      "exd4",
+      "Nxd4",
+      "Nc5",
+      "O-O",
+      "Be7",
+      "Re1"
+    ],
+    "playLine": "e4 e5 Nf3 Nf6 d4 Nxe4 Bc4 d5 Bd3 exd4 Nxd4 Nc5 O-O Be7 Re1",
+    "engineCp": 117,
+    "materialDelta": 1,
+    "tier": "confirmed",
+    "why": "At your level opponents play Bc4 here in 3% of games. Punish with the best move d5 — the engine has Black winning (+1.2, +1 material)."
+  },
+  {
+    "openingId": "petrov-defence",
+    "lineMoves": "e4 e5 Nf3 Nf6 Nxe5 d6 Nxf7 Kxf7 d4 Be7",
+    "inaccuracy": "Bc4+",
+    "freqPct": 47.4,
+    "games": 18204,
+    "practicalScore": 47,
+    "mainMove": "Bc4+",
+    "punish": "d5",
+    "punishSeq": [
+      "d5",
+      "Bb3",
+      "Nxe4",
+      "Qh5+",
+      "Kf8",
+      "Bxd5",
+      "Nd6",
+      "O-O"
+    ],
+    "playLine": "e4 e5 Nf3 Nf6 Nxe5 d6 Nxf7 Kxf7 d4 Be7 Bc4+ d5 Bb3 Nxe4 Qh5+ Kf8 Bxd5 Nd6 O-O",
+    "engineCp": 138,
+    "materialDelta": 1,
+    "tier": "confirmed",
+    "why": "At your level opponents play Bc4+ here in 47% of games. Punish with the best move d5 — the engine has Black winning (+1.4, +1 material)."
   }
 ]

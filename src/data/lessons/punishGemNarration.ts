@@ -173,6 +173,75 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
     ],
   },
+  // Petrov (student = Black). Main line: after …Nb4, White's Qa4+? walks into
+  // …b5 forking the queen and c4.
+  'petrov-defence:e4_e5_Nf3_Nf6_Nxe5_d6_Nf3_Nxe4_d4_d5_Bd3_Nc6_O-O_Be7_c4_Nb4:Qa4+': {
+    sources: ['book:petrov-defence', 'concept:tac-fork', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'],
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      '…Nb4 — the knight leaps in, eyeing c2 and d3; Black is already comfortable.',
+      'Qa4+? — the check walks straight into a pawn fork; the queen has no good post on a4.',
+      '…b5 — forking the a4-queen and the c4-pawn at once; White must lose time and a pawn.',
+      '',
+      '…bxc4 — collecting the pawn; Black is a clean pawn up with the freer game.',
+      '', '', '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nb4 — leap in, eye c2/d3',
+      '',
+      'b5 — fork the queen and c4',
+      '',
+      'bxc4 — a clean pawn up',
+      '', '', '', '', '',
+    ],
+  },
+  // Petrov — Cochrane Gambit (4.Nxf7?!). White sacs the knight for two pawns
+  // and Black's open king; it is unsound — accurate defence keeps the piece.
+  'petrov-defence:e4_e5_Nf3_Nf6_Nxe5_d6_Nxf7_Kxf7_d4_Be7:Bc4+': {
+    sources: ['book:petrov-defence', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence,_Cochrane_Gambit'],
+    watch: [
+      '', '', '', '', '', '',
+      'Nxf7 — the Cochrane Gambit: White gives up the knight for two pawns and your exposed king. It is unsound; defend with care and the extra piece tells.',
+      '', '', '',
+      'Bc4+? — the most-played check, but it only invites …d5, blunting it with tempo.',
+      '…d5 — slamming the door on the check and hitting the bishop; the extra material stays.',
+      '',
+      '…Nxe4 — snapping another central pawn; Black consolidates a winning edge.',
+      '', '', '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      '',
+      'd5 — block the check, hit the bishop',
+      '',
+      'Nxe4 — grab the centre, stay up',
+      '', '', '', '', '',
+    ],
+  },
+  // Petrov — Steinitz 3.d4 Nxe4 4.Bc4? — …d5 hits the bishop with tempo and
+  // anchors the e4-knight; Black wins the d4-pawn.
+  'petrov-defence:e4_e5_Nf3_Nf6_d4_Nxe4:Bc4': {
+    sources: ['book:petrov-defence', 'concept:pos-center', 'https://en.wikipedia.org/wiki/Petrov%27s_Defence'],
+    watch: [
+      '', '', '', '', '',
+      '…Nxe4 — grabbing the e4-pawn; in this 3.d4 line the knight is well supported.',
+      'Bc4? — the bishop lunges, but …d5 hits it with tempo while shoring up the e4-knight.',
+      '…d5 — gaining a tempo on the bishop and locking the e4-knight into place.',
+      '',
+      '…exd4 — pocketing the d4-pawn; Black emerges a clean pawn ahead.',
+      '', '', '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '',
+      'Nxe4 — grab e4, it holds',
+      '',
+      'd5 — hit the bishop, hold e4',
+      '',
+      'exd4 — a clean pawn up',
+      '', '', '', '', '',
+    ],
+  },
   // Caro — White's f3 (Fantasy) but f3?? offered too loosely: exf3 just
   // wins a pawn. playLine: e4 c6 d4 d5 Nc3 dxe4 f3 exf3 Nxf3 Nf6 Bd3 Bg4 h3 Bxf3 Qxf3
   'caro-kann:e4_c6_d4_d5_Nc3_dxe4:f3': {
