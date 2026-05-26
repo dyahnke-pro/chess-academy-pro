@@ -161,7 +161,10 @@ async function main() {
       { label: 'opening-explorer mount', fn: () => visible('opening-explorer') },
       { label: 'title "Openings"', fn: () => hasText('openings') },
       { label: 'tab-toggle present', fn: () => visible('tab-toggle') },
-      { label: 'tab-repertoire visible', fn: () => visible('tab-repertoire') },
+      // WO-HOME-HIDE-COMMON-OPENING: the "Most Common" (repertoire) tab is
+      // hidden by default — Masterclasses is now the default landing tab.
+      { label: 'tab-repertoire HIDDEN (Most Common removed)', fn: async () => !(await visible('tab-repertoire')) },
+      { label: 'tab-masterclasses visible', fn: () => visible('tab-masterclasses') },
       { label: 'tab-pro visible', fn: () => visible('tab-pro') },
       { label: 'tab-gambits visible', fn: () => visible('tab-gambits') },
       { label: 'tab-all visible', fn: () => visible('tab-all') },
@@ -253,8 +256,10 @@ async function main() {
   await scenario(
     '07-search-typing',
     async () => {
-      await page.locator('[data-testid="tab-repertoire"]').click();
-      await page.waitForTimeout(500);
+      // Most Common tab is hidden (WO-HOME-HIDE-COMMON-OPENING); search the
+      // "All" tab where in-page result filtering still applies.
+      await page.locator('[data-testid="tab-all"]').click();
+      await waitUntil(() => visible('all-tab-ready').then((v) => v), 30_000);
       const input = page.locator('input[placeholder*="Search"]').first();
       await input.fill('Sicilian');
       await page.waitForTimeout(1500);
@@ -268,12 +273,13 @@ async function main() {
   );
 
   // ═══════════════════════════════════════════════════════════════════
-  // Click into an opening from Most Common
+  // Click into an opening from the default (Masterclasses) tab
+  // (Most Common is hidden — WO-HOME-HIDE-COMMON-OPENING)
   // ═══════════════════════════════════════════════════════════════════
   await clickOpeningsNav();
   const input = page.locator('input[placeholder*="Search"]').first();
   if ((await input.inputValue().catch(() => '')) !== '') await input.fill('');
-  await page.locator('[data-testid="tab-repertoire"]').click();
+  await page.locator('[data-testid="tab-masterclasses"]').click().catch(() => {});
   await page.waitForTimeout(800);
   await scenario(
     '08-click-opening-card',
@@ -480,7 +486,7 @@ async function main() {
       await page.goto(`${BASE_URL}/openings`, { waitUntil: 'domcontentloaded' });
       // Cold-seed headroom — see clickOpeningsNav (~42s first-run seed).
       await page.locator('[data-testid="opening-explorer"]').waitFor({ timeout: 60_000 }).catch(() => {});
-      await page.locator('[data-testid="tab-repertoire"]').click().catch(() => {});
+      await page.locator('[data-testid="tab-masterclasses"]').click().catch(() => {});
       await page.waitForTimeout(500);
       const firstCardTid = await page.evaluate(() => {
         const els = Array.from(document.querySelectorAll('[data-testid]'));

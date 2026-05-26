@@ -87,6 +87,7 @@ vi.mock('../../services/openingService', () => ({
   searchOpenings: (...args: unknown[]): unknown => mockSearchOpenings(...args),
   getOpeningsByEcoLetter: (...args: unknown[]): unknown => mockGetOpeningsByEcoLetter(...args),
   getMasterclassOpeningIds: (...args: unknown[]): unknown => mockGetMasterclassOpeningIds(...args),
+  getMasterclassOpenings: vi.fn().mockResolvedValue([]),
   toggleFavorite: vi.fn().mockResolvedValue(true),
   getMasteryPercent: (o: typeof whiteOpening) => Math.round(o.drillAccuracy * 100),
   needsReview: (o: typeof whiteOpening) => o.drillAttempts > 0 && o.drillAccuracy < 0.7,
@@ -122,7 +123,7 @@ describe('OpeningExplorerPage', () => {
   // ids, so each new masterclass auto-drops out the moment its manifest lands.
   it('excludes masterclass openings from the Most Common tab', async () => {
     mockGetMasterclassOpeningIds.mockReturnValue(['vienna-game']);
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       // The non-masterclass opening still shows…
       expect(screen.getByTestId('opening-card-sicilian-najdorf')).toBeInTheDocument();
@@ -132,14 +133,14 @@ describe('OpeningExplorerPage', () => {
   });
 
   it('renders the page title', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('Openings')).toBeInTheDocument();
     });
   });
 
   it('renders opening cards after loading', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
       expect(screen.getByTestId('opening-card-sicilian-najdorf')).toBeInTheDocument();
@@ -147,14 +148,14 @@ describe('OpeningExplorerPage', () => {
   });
 
   it('shows search input', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByTestId('smart-search-input')).toBeInTheDocument();
     });
   });
 
   it('shows mastery ring with percentage on drilled openings', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       const percents = screen.getAllByTestId('mastery-percent');
       const values = percents.map((el) => el.textContent);
@@ -163,34 +164,34 @@ describe('OpeningExplorerPage', () => {
   });
 
   it('shows needs-review indicator for weak openings', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByTestId('needs-review')).toBeInTheDocument();
     });
   });
 
   it('shows woodpecker reps on card when reps > 0', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('3 reps')).toBeInTheDocument();
     });
   });
 
   it('shows loading state initially', () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     expect(screen.getByText('Loading openings...')).toBeInTheDocument();
   });
 
   it('shows "No openings found" when repertoire is empty', async () => {
     mockGetRepertoireOpenings.mockResolvedValue([]);
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('No openings found.')).toBeInTheDocument();
     });
   });
 
   it('shows My White Openings and My Black Openings section headings', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('My White Openings')).toBeInTheDocument();
       expect(screen.getByText('My Black Openings')).toBeInTheDocument();
@@ -198,7 +199,7 @@ describe('OpeningExplorerPage', () => {
   });
 
   it('displays ECO code and opening name in each card', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('C25')).toBeInTheDocument();
       expect(screen.getByText('Vienna Game')).toBeInTheDocument();
@@ -208,7 +209,7 @@ describe('OpeningExplorerPage', () => {
   });
 
   it('displays style tag in opening cards', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('Classical, Flexible')).toBeInTheDocument();
       expect(screen.getByText('Aggressive, Tactical')).toBeInTheDocument();
@@ -219,7 +220,7 @@ describe('OpeningExplorerPage', () => {
     const user = userEvent.setup();
     mockSearchOpenings.mockResolvedValue([whiteOpening]);
 
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByTestId('smart-search-input')).toBeInTheDocument();
     });
@@ -236,7 +237,7 @@ describe('OpeningExplorerPage', () => {
     const user = userEvent.setup();
     mockSearchOpenings.mockResolvedValue([whiteOpening]);
 
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
     });
@@ -251,14 +252,14 @@ describe('OpeningExplorerPage', () => {
   });
 
   it('displays last studied date on card', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('Today')).toBeInTheDocument();
     });
   });
 
   it('shows "Not studied" when lastStudied is null', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('Not studied')).toBeInTheDocument();
     });
@@ -271,7 +272,7 @@ describe('OpeningExplorerPage', () => {
       { ...whiteOpening, isFavorite: true },
       blackOpening,
     ]);
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('Favorites')).toBeInTheDocument();
       expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
@@ -283,7 +284,7 @@ describe('OpeningExplorerPage', () => {
       { ...whiteOpening, isFavorite: true },
       blackOpening,
     ]);
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('Favorites')).toBeInTheDocument();
       // White section should not appear since the only white opening is favorited
@@ -294,7 +295,7 @@ describe('OpeningExplorerPage', () => {
   });
 
   it('does not show Favorites section when no openings are favorited', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('My White Openings')).toBeInTheDocument();
       expect(screen.queryByText('Favorites')).not.toBeInTheDocument();
@@ -304,7 +305,7 @@ describe('OpeningExplorerPage', () => {
   // ─── Tab toggle tests ──────────────────────────────────────────────────────
 
   it('shows tab toggle with "My Repertoire" and "All Openings"', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByTestId('tab-repertoire')).toBeInTheDocument();
       expect(screen.getByTestId('tab-all')).toBeInTheDocument();
@@ -312,7 +313,7 @@ describe('OpeningExplorerPage', () => {
   });
 
   it('defaults to Repertoire tab', async () => {
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
     await waitFor(() => {
       expect(screen.getByText('My White Openings')).toBeInTheDocument();
     });
@@ -320,7 +321,7 @@ describe('OpeningExplorerPage', () => {
 
   it('switches to All Openings tab and shows ECO groups', async () => {
     const user = userEvent.setup();
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
 
     await waitFor(() => {
       expect(screen.getByTestId('tab-all')).toBeInTheDocument();
@@ -336,7 +337,7 @@ describe('OpeningExplorerPage', () => {
 
   it('ECO group toggle expands to show openings', async () => {
     const user = userEvent.setup();
-    render(<OpeningExplorerPage />);
+    render(<OpeningExplorerPage showMostCommon />);
 
     await waitFor(() => {
       expect(screen.getByTestId('tab-all')).toBeInTheDocument();
@@ -352,6 +353,42 @@ describe('OpeningExplorerPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Amar Opening')).toBeInTheDocument();
+    });
+  });
+
+  // ─── Hidden "Most Common" tab (WO-HOME-HIDE-COMMON-OPENING) ──────────────────
+  // The tab is hidden behind SHOW_MOST_COMMON_OPENING (default false), not
+  // deleted. The default-off render (mirrors production) must surface neither
+  // the "Most Common" chip nor its repertoire content; flipping the flag back
+  // on restores both. queryBy* + .not.toBeInTheDocument() is the RTL idiom for
+  // asserting absence (getBy throws before the assertion can run).
+  describe('Most Common tab hidden by default', () => {
+    it('does not render the "Most Common" tab chip', async () => {
+      render(<OpeningExplorerPage showMostCommon={false} />);
+      await waitFor(() => {
+        expect(screen.getByTestId('tab-all')).toBeInTheDocument();
+      });
+      expect(screen.queryByTestId('tab-repertoire')).not.toBeInTheDocument();
+      expect(screen.queryByText('Most Common')).not.toBeInTheDocument();
+    });
+
+    it('does not render the repertoire (Most Common) content', async () => {
+      render(<OpeningExplorerPage showMostCommon={false} />);
+      await waitFor(() => {
+        expect(screen.getByTestId('tab-all')).toBeInTheDocument();
+      });
+      expect(screen.queryByText('My White Openings')).not.toBeInTheDocument();
+      expect(screen.queryByText('My Black Openings')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('opening-card-vienna-game')).not.toBeInTheDocument();
+    });
+
+    it('restores the tab and its content when re-enabled', async () => {
+      render(<OpeningExplorerPage showMostCommon />);
+      await waitFor(() => {
+        expect(screen.getByTestId('tab-repertoire')).toBeInTheDocument();
+        expect(screen.getByText('Most Common')).toBeInTheDocument();
+        expect(screen.getByText('My White Openings')).toBeInTheDocument();
+      });
     });
   });
 });
