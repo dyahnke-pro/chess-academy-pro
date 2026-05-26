@@ -1,5 +1,24 @@
 # Middlegame-Plan Deepening — build plan & todos
 
+> **🚨 PRIORITY (David 2026-05-26): this is now THE most important part of the
+> app — above the openings.** Intermediate players struggle most in the
+> middlegame and spend the most time here. Goal = **as many grounded lines and
+> variations as possible, per opening AND per variation.** Breadth + depth.
+> Hard rule unchanged: **never make anything up** — every move chess.js-verified
+> and sourced (masters DB / explorer / documented plan maneuver); ideas
+> independently verified (books / online). When unsure: skip or ask.
+
+> **Access reality (verified 2026-05-26):** the live Lichess explorer is the
+> depth unlock but is **network-blocked in-session** (`Host not in allowlist`
+> for both `explorer.lichess.ovh` and the `chess-academy-pro.vercel.app`
+> proxy). This is the **environment NETWORK/egress allowlist**, NOT an env var —
+> pasting the URL into env vars does nothing. Fix: add the host to the
+> environment's network allowlist, then **start a fresh session** (the egress
+> set is sealed at container boot). UNTIL then, the **bundled
+> `public/data/openings-masters-db.json` (131,895 positions) is usable offline
+> and reaches ply ~13–28 on mainlines** — enough to ground early-middlegame
+> lines/variations NOW. Only the deepest extensions need the live explorer.
+
 David, 2026-05-26: *"deepen the middle game plans! Like the best we possibly
 can!! … go as deeply as you can and touch different possibilities. Use the
 master DB and any other tools at your disposal. Stay grounded!"* and *"stay
