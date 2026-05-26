@@ -26746,13 +26746,25 @@
           "Bg5",
           "Ba6",
           "Qa4",
-          "h6"
+          "h6",
+          "Bh4",
+          "c5",
+          "dxc5",
+          "bxc5",
+          "Rd1",
+          "Qb6"
         ],
         "annotations": [
           "Bg5 pins the f6-knight and leans on the weakened light squares.",
           "…Ba6 spears the c4-pawn down the a6-f1 diagonal, hitting White where the doubled pawns ache.",
           "Qa4 props up the loose c4-pawn.",
-          "…h6 puts the question to the g5-bishop; either way Black owns the light squares around c4 and e4."
+          "…h6 puts the question to the g5-bishop; either way Black owns the light squares around c4 and e4.",
+          "Bh4 — White keeps the bishop's pin on the f6-knight along the h4–d8 diagonal.",
+          "…c5 — the thematic break, striking at d4 and prising open lines in the centre.",
+          "dxc5 — White captures, opening the centre.",
+          "…bxc5 — recapturing toward the centre and opening the b-file for Black's rook.",
+          "Rd1 — White seizes the now fully open d-file.",
+          "…Qb6 — the queen swings to an active post, defending c5 and bearing down the open b-file at the b2-pawn; Black's pieces are alive and the position is balanced."
         ],
         "title": "Nimzo Classical: Files and Light Squares",
         "arrows": [
@@ -26771,7 +26783,30 @@
             }
           ],
           [],
-          []
+          [],
+          [
+            {
+              "from": "h4",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b6",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b6",
+              "to": "b2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
         ],
         "highlights": [
           [
@@ -26837,13 +26872,99 @@
               "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "learnCues": [
           "Bg5 — pin f6",
           "Ba6 — spear c4",
           "Qa4 — defend c4",
-          "h6 — own the light squares"
+          "h6 — own the light squares",
+          "Bh4 — maintain the pin.",
+          "…c5 — strike at d4.",
+          "dxc5 — White captures.",
+          "…bxc5 — open the b-file.",
+          "Rd1 — seize the d-file.",
+          "…Qb6 — active queen, eye b2."
         ],
         "sources": [
           "concept:pawn-doubled",
