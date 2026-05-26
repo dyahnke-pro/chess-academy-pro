@@ -27,7 +27,6 @@ import { getPircTabPlanIds } from '../../services/pircMasterclassTabs';
 import { getViennaTabPlanIds } from '../../services/viennaMasterclassTabs';
 import { getItalianTabPlanIds } from '../../services/italianMasterclassTabs';
 import { getScotchTabPlanIds } from '../../services/scotchMasterclassTabs';
-import { getQueensGambitTabPlanIds } from '../../services/queensGambitMasterclassTabs';
 import { getFrenchDefenceTabPlanIds } from '../../services/frenchDefenceMasterclassTabs';
 import { getScandinavianDefenceTabPlanIds } from '../../services/scandinavianDefenceMasterclassTabs';
 import { getAlekhineDefenceTabPlanIds } from '../../services/alekhineDefenceMasterclassTabs';
@@ -1079,7 +1078,6 @@ export function OpeningDetailPage(): JSX.Element {
     getViennaTabPlanIds(opening.id, tabKey) ??
     getItalianTabPlanIds(opening.id, tabKey) ??
     getScotchTabPlanIds(opening.id, tabKey) ??
-    getQueensGambitTabPlanIds(opening.id, tabKey) ??
     getFrenchDefenceTabPlanIds(opening.id, tabKey) ??
     getScandinavianDefenceTabPlanIds(opening.id, tabKey) ??
     getAlekhineDefenceTabPlanIds(opening.id, tabKey) ??

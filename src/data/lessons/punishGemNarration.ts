@@ -2173,32 +2173,6 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '', '', 'Bc4 — aim at f7', '', 'Bxh6 — shatter the kingside', '', '', '', 'Qxh6 — grab it, press the king', ''],
     sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
   },
-  'queens-gambit:d4_d5_c4_e6_Nc3_Nf6_cxd5_exd5_Bg5_Be7_e3_O-O_Bd3:b6': {
-    watch: [
-      '', '', '', '', '', '', '', '', '', '', '', '', '',
-      "b6? — too slow. It frees the queenside bishop, but the d5-pawn's only real guard is the f6-knight, and White strikes before Black is ready.",
-      'Bxf6 — first remove the knight; it was the lone defender of d5.',
-      '…Bxf6 — Black must recapture.',
-      'Qh5 — the queen darts out to attack the undefended d5-pawn, with a glance at h7.',
-      '…g6 — Black shoos the queen and shields h7, but d5 is still hanging.',
-      'Qxd5 — the queen sidesteps the kick by grabbing d5. A clean central pawn, and White is on top.',
-      '…c6 — chasing the queen off the post.',
-      'Qxd8 — simplest: trade into a pawn-up endgame.',
-      '…Rxd8 — and White sets about grinding the extra pawn home.',
-    ],
-    learn: [
-      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
-      "Bxf6 — remove d5's only guard.",
-      '',
-      'Qh5 — hit d5; eye h7.',
-      '',
-      'Qxd5 — win the centre pawn.',
-      '',
-      'Qxd8 — trade into a pawn-up ending.',
-      '',
-    ],
-    sources: ['concept:pos-development', 'concept:pawn-isolated', 'https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined'],
-  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

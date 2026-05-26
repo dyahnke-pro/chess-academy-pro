@@ -17,14 +17,6 @@ export interface VariationTab {
 // 4 (amateur-frequency order, playbook §1); everything else shows all of its
 // variations.
 const CURATED: Record<string, { test: RegExp; label: string }[]> = {
-  'queens-gambit': [
-    { test: /exchange/i, label: 'Exchange' },
-    { test: /accepted/i, label: 'QGA' },
-    { test: /slav defence/i, label: 'Slav' },
-    { test: /semi-slav/i, label: 'Semi-Slav' },
-    { test: /tartakower/i, label: 'Tartakower' },
-    { test: /bf4|anti-qgd/i, label: 'Anti-Bf4' },
-  ],
   'ruy-lopez': [
     { test: /berlin/i, label: 'Berlin' },
     { test: /open/i, label: 'Open' },

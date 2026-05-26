@@ -3214,29 +3214,5 @@
     "engineCp": 141,
     "tier": "confirmed",
     "why": "At your level opponents play O-O here in 10% of games. Punish with the best move Nxc3 — the engine has Black winning (+1.4)."
-  },
-  {
-    "openingId": "queens-gambit",
-    "lineMoves": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3",
-    "inaccuracy": "b6",
-    "freqPct": 6.5,
-    "games": 30713,
-    "practicalScore": 55,
-    "mainMove": "c6",
-    "punish": "Bxf6",
-    "punishSeq": [
-      "Bxf6",
-      "Bxf6",
-      "Qh5",
-      "g6",
-      "Qxd5",
-      "c6",
-      "Qxd8",
-      "Rxd8"
-    ],
-    "playLine": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 b6 Bxf6 Bxf6 Qh5 g6 Qxd5 c6 Qxd8 Rxd8",
-    "engineCp": 127,
-    "tier": "confirmed",
-    "why": "At your level opponents play b6 here in 7% of games. Punish with the best move Bxf6 — the engine has White winning (+1.3)."
   }
 ]
