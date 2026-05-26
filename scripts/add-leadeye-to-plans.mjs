@@ -32,6 +32,18 @@ import { Chess } from 'chess.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PLANS_PATH = join(__dirname, '..', 'src', 'data', 'middlegame-plans.json');
+const MANIFEST_PATH = join(__dirname, '..', 'src', 'data', 'opening-manifests.json');
+
+// Manifest-driven scope (David 2026-05-26): every masterclass opening is in
+// scope automatically, so a NEW masterclass opening gets lead-the-eye arrows
+// without editing this script. Replaces the old hardcoded allowlist that had
+// drifted from the manifest and silently skipped evans-gambit, english-opening,
+// london-system, catalan-opening, kings-indian-attack, four-knights-game,
+// reti-opening, queens-gambit, etc. (leaving their plan lines arrow-less).
+const MANIFEST = JSON.parse(readFileSync(MANIFEST_PATH, 'utf8'));
+const MASTERCLASS_OPENINGS = new Set(
+  Object.keys(MANIFEST).filter((k) => !k.startsWith('_')),
+);
 
 const VISION_ARROW_COLOR = 'rgba(34, 197, 94, 0.85)'; // green — piece vision
 const HL_MOVE = 'rgba(255, 165, 0, 0.55)'; // orange — the move's two squares
@@ -165,7 +177,7 @@ function main() {
   let touchedLines = 0;
 
   for (const plan of plans) {
-    if (plan.openingId !== 'ruy-lopez' && plan.openingId !== 'pirc-defence' && plan.openingId !== 'vienna-game' && plan.openingId !== 'italian-game' && plan.openingId !== 'scotch-game' && plan.openingId !== 'kings-gambit' && plan.openingId !== 'sicilian-dragon' && plan.openingId !== 'sicilian-najdorf' && plan.openingId !== 'sicilian-sveshnikov' && plan.openingId !== 'sicilian-alapin' && plan.openingId !== 'french-defence' && plan.openingId !== 'scandinavian-defence' && plan.openingId !== 'alekhine-defence' && plan.openingId !== 'benko-gambit' && plan.openingId !== 'dutch-defence' && plan.openingId !== 'nimzo-indian' && plan.openingId !== 'caro-kann' && plan.openingId !== 'petrov-defence' && plan.openingId !== 'philidor-defence' && plan.openingId !== 'qgd' && plan.openingId !== 'qga' && plan.openingId !== 'slav-defence' && plan.openingId !== 'semi-slav' && plan.openingId !== 'kings-indian-defence' && plan.openingId !== 'grunfeld-defence' && plan.openingId !== 'benoni-defence' && plan.openingId !== 'queens-indian' && plan.openingId !== 'old-indian-defence' && plan.openingId !== 'two-knights-defence' && plan.openingId !== 'budapest-gambit' && plan.openingId !== 'albin-countergambit' && plan.openingId !== 'schliemann-defence') continue;
+    if (!MASTERCLASS_OPENINGS.has(plan.openingId)) continue;
     const lines = plan.playableLines ?? [];
     if (lines.length === 0) continue;
     let planTouched = false;
