@@ -24768,9 +24768,8 @@
       "…Nxd4 tactics when c4 over-extends"
     ],
     "pieceManeuvers": [
-      "…Nc6 pressing d4",
-      "active queen on d5/f5",
-      "…O-O-O or …Be7 and …O-O"
+      "…Bd6 active development toward the kingside",
+      "…Qh5 keeping the queen active after c4"
     ],
     "strategicThemes": [
       "Pawn regained with activity",
@@ -24785,25 +24784,25 @@
         "fen": "r3kb1r/ppp2ppp/2n1pn2/3q4/3P4/5N2/PPP1QPPP/RNB2RK1 w kq - 2 8",
         "moves": [
           "Be3",
-          "e5",
-          "dxe5",
-          "Nxe5"
+          "Bd6",
+          "c4",
+          "Qh5",
+          "Nc3",
+          "O-O-O"
         ],
         "annotations": [
-          "Be3 develops and bolsters d4.",
-          "…e5 strikes the d4-pawn, opening the position for the bishop pair and the active queen.",
-          "dxe5 — the centre opens.",
-          "…Nxe5 seizes the central outpost; with the bishop pair and a lead in development, the gambit pawn has bought a roaring initiative."
+          "Be3 — White develops the bishop.",
+          "…Bd6 — Black develops actively, the bishop trained on the kingside.",
+          "c4 — White gains a tempo, hitting the d5-queen.",
+          "…Qh5 — the queen sidesteps to an active post on h5.",
+          "Nc3 — White develops the last knight.",
+          "…O-O-O — Black castles long, the rooks ready on the central files; the Portuguese setup is fully developed and equal."
         ],
         "title": "Scandinavian: The Portuguese Equaliser",
         "arrows": [
-          [
-            {
-              "from": "e3",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           [],
           [],
           []
@@ -24817,57 +24816,74 @@
             {
               "square": "c1",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d4",
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "e5",
+              "square": "h5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e5",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c6",
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Be3 — bolster d4",
-          "e5 — strike d4",
-          "dxe5 — open it",
-          "Nxe5 — central outpost"
-        ],
         "sources": [
-          "book:scandinavian-defence",
-          "concept:pos-development",
+          "concept:pos-initiative",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ],
+        "learnCues": [
+          "Be3 — develop the bishop.",
+          "…Bd6 — active development.",
+          "c4 — tempo on the queen.",
+          "…Qh5 — active queen.",
+          "Nc3 — develop the knight.",
+          "…O-O-O — castle long, equal."
         ]
       }
     ]
@@ -25887,9 +25903,9 @@
       "…c4 fixing the queenside"
     ],
     "pieceManeuvers": [
-      "…Nbd7–b6 hitting c4",
-      "…Bg7 long diagonal",
-      "…Rb8 on the half-open file"
+      "…Ba6 to trade off the bad light-squared bishop",
+      "…Nb8–a6–c7 rerouting toward b5 and d5",
+      "…Nf6–d7 toward the e5- and c5-squares"
     ],
     "strategicThemes": [
       "The grip without risk",
@@ -25903,90 +25919,179 @@
       {
         "fen": "rnbq1rk1/p3ppbp/3p1np1/2pP4/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w - - 3 9",
         "moves": [
-          "Re1",
-          "e6",
-          "dxe6",
-          "Bxe6"
+          "h3",
+          "Ba6",
+          "Bxa6",
+          "Nxa6",
+          "Qe2",
+          "Nc7",
+          "Rd1",
+          "Nd7"
         ],
         "annotations": [
-          "Re1 backs the e4-pawn.",
-          "…e6 challenges the d5-spearhead at its base.",
-          "dxe6 opens the centre.",
-          "…Bxe6 recaptures, and the light-squared bishop rakes the long diagonal while the half-open files fall to Black — risk-free Benko pressure, the gambit pawn long forgotten."
+          "h3 — White makes luft.",
+          "…Ba6 — Black offers to trade the bad light-squared bishop for White's good one.",
+          "Bxa6 — White accepts the trade.",
+          "…Nxa6 — recapturing; the knight heads for c7 and the queenside.",
+          "Qe2 — White connects the rooks.",
+          "…Nc7 — the knight reroutes toward b5 and d5, supporting the …b5 break.",
+          "Rd1 — White centralises a rook.",
+          "…Nd7 — the other knight reroutes toward e5 and c5; with the bad bishop gone, Black has the easy, comfortable Benko pressure."
         ],
         "title": "Benko Declined: Easy Pressure",
         "arrows": [
+          [],
+          [],
+          [],
           [
             {
-              "from": "e1",
-              "to": "e4",
+              "from": "a6",
+              "to": "c7",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [],
+          [
+            {
+              "from": "c7",
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c7",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
-          []
+          [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "e1",
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
+              "square": "h2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e6",
+              "square": "a6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
-        "learnCues": [
-          "Re1 — back e4",
-          "e6 — hit the base",
-          "dxe6 — open it",
-          "Bxe6 — rake the diagonal"
-        ],
         "sources": [
-          "concept:att-queenside-attack",
-          "concept:pos-open-file",
+          "concept:pos-initiative",
           "https://en.wikipedia.org/wiki/Benko_Gambit"
+        ],
+        "learnCues": [
+          "h3 — make luft.",
+          "…Ba6 — trade the bad bishop.",
+          "Bxa6 — White accepts.",
+          "…Nxa6 — recapture, head queenside.",
+          "Qe2 — connect the rooks.",
+          "…Nc7 — reroute toward b5/d5.",
+          "Rd1 — centralise the rook.",
+          "…Nd7 — toward e5/c5."
         ]
       }
     ]
@@ -30158,12 +30263,10 @@
     "title": "Benoni: The …b5 Queenside Break",
     "overview": "The Modern Benoni has reached its strategic core: White holds the centre, but Black owns the queenside pawn majority and the long-diagonal g7-bishop. The plan is the thematic …b5 break — swing a rook behind the b-pawn, prepare with …a6, and surge the majority forward, prying open lines for the rooks and the g7-bishop straight at White's queenside and the loose pawns around it.",
     "pawnBreaks": [
-      "…b5 — the queenside pawn-majority break",
-      "…a6 to prepare and support …b5"
+      "…b5 the Benko-style queenside break striking c4"
     ],
     "pieceManeuvers": [
-      "…Rb8 behind the b-pawn",
-      "…Nc7 supporting the …b5 break"
+      "…Rb8 the rook behind the advancing b-pawn"
     ],
     "strategicThemes": [
       "The …b5 queenside break",
@@ -30177,44 +30280,67 @@
       {
         "fen": "r1bqr1k1/ppn2pbp/3p1np1/2pP4/P3P3/2N5/1P1NBPPP/R1BQR1K1 b - - 0 12",
         "moves": [
-          "Rb8",
+          "b6",
           "h3",
-          "b5",
-          "axb5"
+          "Rb8",
+          "Bb5",
+          "Re7",
+          "Bf1",
+          "a6",
+          "Nc4",
+          "b5"
         ],
         "annotations": [
-          "…Rb8 — the rook swings behind the b-pawn, loading the queenside break.",
-          "h3 — White makes luft and waits.",
-          "…b5! the thematic Benoni break — the queenside pawn majority surges forward, prying open lines for the rook and the g7-bishop.",
-          "axb5 opens the a-file, and Black recaptures into a dynamic position with the queenside opening up in Black’s favour."
-        ],
-        "learnCues": [
-          "…Rb8 — load the b-pawn.",
+          "…b6 — preparing the queenside expansion with …a6 and …b5.",
           "h3 — White makes luft.",
-          "…b5 — the queenside break.",
-          "axb5 — lines open for Black."
-        ],
-        "sources": [
-          "concept:pawn-majority",
-          "concept:pos-initiative",
-          "https://en.wikipedia.org/wiki/Modern_Benoni"
+          "…Rb8 — the rook swings behind the b-pawn.",
+          "Bb5 — White's bishop jumps out to b5.",
+          "…Re7 — Black lifts the rook, flexible on the seventh rank.",
+          "Bf1 — the bishop retreats, clearing the b5-square.",
+          "…a6 — taking b5 from White's pieces and readying the break.",
+          "Nc4 — White's knight hops to c4, eyeing d6 and b6.",
+          "…b5 — the break lands: Black hits the c4-knight and tears open the queenside files for the rooks."
         ],
         "title": "Benoni: The …b5 Queenside Break",
         "arrows": [
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c4",
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c4",
+              "to": "b6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "b8",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "a8",
+              "square": "b7",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -30229,15 +30355,73 @@
           ],
           [
             {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b7",
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "g7",
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b6",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
@@ -30247,10 +30431,29 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "a4",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Modern_Benoni"
+        ],
+        "learnCues": [
+          "…b6 — ready the expansion.",
+          "h3 — make luft.",
+          "…Rb8 — rook behind the pawn.",
+          "Bb5 — White's bishop out.",
+          "…Re7 — flexible rook.",
+          "Bf1 — bishop retreats.",
+          "…a6 — clamp b5, ready the break.",
+          "Nc4 — knight to c4.",
+          "…b5 — the break lands."
         ]
       }
     ]
