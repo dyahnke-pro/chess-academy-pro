@@ -1,0 +1,6 @@
+explorer reachability probe (GitHub Actions runner) Tue May 26 22:38:51 UTC 2026
+runner egress IP: 48.214.54.96
+LICHESS secret set: no
+masters  anon: 401
+amateur  anon: 401
+amateur  auth: 401
