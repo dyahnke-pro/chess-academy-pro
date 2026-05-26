@@ -36,113 +36,15 @@
  */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FolderOpen, Sparkles, Target, ChevronRight, Lock } from 'lucide-react';
+import { FolderOpen, Sparkles, ChevronRight, Lock } from 'lucide-react';
 import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
-import { getFavoriteOpenings, getUnlearnedFavoriteOpenings } from '../../services/openingService';
-import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
-import { getSrsDueOpenings } from '../../services/srsOpeningService';
-import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
-import { logAppAudit } from '../../services/appAuditor';
+import { getFavoriteOpenings } from '../../services/openingService';
 import { RolodexCardStack } from './RolodexCardStack';
+import { TodaysReps } from './TodaysReps';
 import { PageHelp } from '../Layout/PageHelp';
 import type { OpeningRecord } from '../../types';
 
 type RolodexColor = 'white' | 'black';
-
-/** "Today's reps" — the prioritised drill feed over the weakness bucket
- *  (money M3). Advises; the full rolodex below stays browsable. A
- *  weakness rep deep-links to the Weaknesses hub; an opening rep to its
- *  masterclass. Empty bucket → an empty-state-as-teacher prompt. */
-function TodaysReps(): JSX.Element | null {
-  const navigate = useNavigate();
-  const [reps, setReps] = useState<RepCandidate[]>([]);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    const flag = { cancelled: false };
-    void (async () => {
-      // The plan is the hub: pull from ALL three sources so it reflects
-      // the whole loop. Weaknesses = unified coach+Analyze profile
-      // (weaknessSpine); SRS-due = enrolled opening cards due today;
-      // new lines = favorited openings with an un-learned line.
-      const [weaknesses, srsDue, newLines] = await Promise.all([
-        getUnifiedWeaknessProfile(),
-        getSrsDueOpenings(),
-        getUnlearnedFavoriteOpenings(),
-      ]);
-      if (flag.cancelled) return;
-      const built = buildTodaysReps({ weaknesses, srsDue, newLines, total: 5 });
-      setReps(built);
-      setLoaded(true);
-      void logAppAudit({
-        kind: 'todays-reps-built',
-        category: 'subsystem',
-        source: 'TrainingPlanRolodexPage.TodaysReps',
-        summary: `reps=${built.length} weaknesses=${weaknesses.length} due=${weaknesses.filter((w) => w.openCount > 0).length} srsDue=${srsDue.length} newLines=${newLines.length}`,
-        details: JSON.stringify({
-          repKinds: built.map((r) => r.kind),
-          topWeaknesses: weaknesses.slice(0, 5).map((w) => ({ tag: w.tag, openCount: w.openCount, total: w.total })),
-        }),
-      });
-    })();
-    return () => { flag.cancelled = true; };
-  }, []);
-
-  if (!loaded) return null;
-
-  return (
-    <div className="mt-6 rounded-2xl border-2 border-theme-accent/30 bg-theme-accent/5 p-4" data-testid="todays-reps">
-      <div className="flex items-center gap-2 mb-3">
-        <Target size={16} className="text-theme-accent" />
-        <h2 className="text-sm font-bold text-theme-text">Today's reps</h2>
-      </div>
-      {reps.length === 0 ? (
-        <p className="text-sm text-theme-text-muted leading-relaxed" data-testid="todays-reps-empty">
-          Play a game with the coach or review one of yours — once I spot the patterns you keep
-          missing, your drills show up here.
-        </p>
-      ) : (
-        <ul className="space-y-2">
-          {reps.map((rep) => (
-            <li key={rep.key}>
-              <button
-                type="button"
-                onClick={() => {
-                  if (rep.kind !== 'weakness') {
-                    void navigate(`/openings/${rep.openingId ?? ''}`);
-                    return;
-                  }
-                  // A weakness rep drills its motif: deep-link into the
-                  // adaptive tactical drill scoped to the tag's themes. The
-                  // real misconception tag (not an analysis:* cluster) rides
-                  // along so the drill can space it out on completion.
-                  if (rep.puzzleThemes && rep.puzzleThemes.length > 0) {
-                    void navigate('/tactics/adaptive', {
-                      state: {
-                        forcedWeakThemes: rep.puzzleThemes,
-                        misconceptionTag: rep.tag && !rep.tag.startsWith('analysis:') ? rep.tag : undefined,
-                      },
-                    });
-                  } else {
-                    void navigate('/weaknesses');
-                  }
-                }}
-                className="w-full flex items-center gap-3 text-left p-3 rounded-xl bg-theme-surface border border-theme-border hover:border-theme-accent/40 transition-colors"
-                data-testid={`todays-rep-${rep.kind}`}
-              >
-                <div className="flex-1 min-w-0">
-                  <span className="text-sm font-medium text-theme-text">{rep.label}</span>
-                  <p className="text-xs text-theme-text-muted mt-0.5">{rep.subtitle}</p>
-                </div>
-                <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
 
 /** Resolve which card should be at the front of a color's stack.
  *  Prefer the persisted `activeOpeningCardId` for that color when
@@ -480,7 +382,7 @@ export function TrainingPlanRolodexPage(): JSX.Element {
       </p>
 
       {/* Today's reps — prioritised drills over the weakness bucket */}
-      <TodaysReps />
+      <TodaysReps source="TrainingPlanRolodexPage.TodaysReps" className="mt-6" />
 
       {/* The plan is the hub, but the standalone coach-recommendations view
           stays reachable on demand (David 2026-05-25). */}
