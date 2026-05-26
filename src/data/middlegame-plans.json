@@ -28746,62 +28746,57 @@
     "id": "mp-carokann-tartakower",
     "openingId": "caro-kann",
     "criticalPositionFen": "r1bqrnk1/pp3pp1/2pb1p2/8/3P3p/2PB3P/PPQBNPP1/R4RK1 w - - 3 13",
-    "title": "Caro Tartakower: The Doubled-Pawn Clamp",
-    "overview": "Black paid with doubled f-pawns for the bishop pair, the open e-file, and a structure White cannot attack. The plan: clamp White's king with …h4-h3, reroute the knight to the kingside, and use the bishop pair and the e-file to seize the initiative.",
+    "title": "Caro Tartakower: Bishop Pair and Queenside Expansion",
+    "overview": "In the Tartakower (…gxf6), Black accepts doubled f-pawns for the bishop pair and a rock-solid centre — the f6/f7 pawns clamp e5 and g5, freezing the position. With the centre static, the game is decided on the queenside: Black develops the light bishop and rolls …a5-…b5, gaining space and opening lines for the two bishops. Dynamically balanced.",
     "pawnBreaks": [
-      "…f5 to roll the kingside majority later",
+      "…b5 to expand and open lines on the queenside",
       "the doubled f-pawns clamp e5 and g5"
     ],
     "pieceManeuvers": [
-      "…Nf8-g6 to the kingside",
-      "…Be6 developing the bishop pair",
-      "…Re8 on the open file"
+      "…Bc8-d7 completing the bishop pair",
+      "…a5 and …b5 gaining queenside space",
+      "…g6 securing the kingside"
     ],
     "strategicThemes": [
-      "Clamp the king with …h4-h3",
-      "The bishop pair and open e-file",
-      "Doubled pawns as central clamps"
+      "The bishop pair",
+      "The doubled f-pawns as a central clamp",
+      "Queenside expansion with …a5-…b5"
     ],
     "endgameTransitions": [
-      "The two bishops shine as the position opens"
+      "The two bishops outweigh the doubled pawns as the game opens"
     ],
     "playableLines": [
       {
         "fen": "r1bqrnk1/pp3pp1/2pb1p2/8/3P3p/2PB3P/PPQBNPP1/R4RK1 w - - 3 13",
         "moves": [
           "Rae1",
-          "Ng6",
-          "Ng3",
-          "Be6"
+          "g6",
+          "c4",
+          "Bd7",
+          "Bc3",
+          "a5",
+          "Qd2",
+          "b5"
         ],
         "annotations": [
-          "Rae1 contests the open e-file.",
-          "…Ng6 reroutes the knight to the kingside, eyeing f4 and h4.",
-          "Ng3 covers f5.",
-          "…Be6 develops the second bishop into a harmonious setup; with both bishops active, the cramping h4-pawn squeezing White's king and the rook on the open e-file, Black holds a real initiative — the doubled f-pawns bought genuine, lasting assets."
+          "Rae1 centralises the rook.",
+          "…g6 secures the kingside and the f5-square.",
+          "c4 stakes space.",
+          "…Bd7 completes Black’s development — the bishop pair is ready.",
+          "Bc3 eyes the long diagonal.",
+          "…a5 begins the queenside expansion.",
+          "Qd2 reorganises.",
+          "…b5! Black gains queenside space and opens lines for the two bishops — the doubled f-pawns hold the centre while the play is made on the wing. Dynamically balanced."
         ],
-        "title": "Caro Tartakower: The Doubled-Pawn Clamp",
+        "title": "Caro Tartakower: Bishop Pair and Queenside Expansion",
         "arrows": [
           [],
-          [
-            {
-              "from": "g6",
-              "to": "f4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "g6",
-              "to": "h4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "g3",
-              "to": "f5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
         "highlights": [
@@ -28821,25 +28816,7 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "h4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e2",
+              "square": "g7",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -28849,16 +28826,62 @@
           ],
           [
             {
-              "square": "e6",
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "h4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
@@ -28868,11 +28891,45 @@
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ],
         "learnCues": [
-          "Rae1 — contest the e-file",
-          "Ng6 — reroute, eye f4/h4",
-          "Ng3 — cover f5",
-          "Be6 — harmonious setup, initiative"
-        ]
+          "Rae1 — centralise",
+          "…g6 — secure the kingside",
+          "c4 — stake space",
+          "…Bd7 — finish the bishop pair",
+          "Bc3 — eye the diagonal",
+          "…a5 — start the queenside",
+          "Qd2 — reorganise",
+          "…b5 — expand, open lines for the bishops"
+        ],
+        "intro": {
+          "say": "Black’s trumps are the bishop pair and the doubled f-pawns — which clamp e5 and g5 and freeze the centre. With the centre static, Black plays on the queenside: …a5 and …b5 gain space and open lines for the two bishops.",
+          "sayShort": "Centre clamped — expand with …a5-…b5.",
+          "arrows": [
+            {
+              "from": "a7",
+              "to": "a5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
       }
     ]
   },
