@@ -154,18 +154,28 @@ export function PlayableLinePlayer({
   }, [demoMoveIndex, demoFenAtIndex, line.fen]);
 
   const currentDemoArrows = useMemo((): Array<{ startSquare: string; endSquare: string; color: string }> => {
-    if (demoMoveIndex < 0 || demoMoveIndex >= line.arrows.length) return [];
+    // Intro beat: the plan's idea arrows (breaks + future-open lines) on the
+    // static critical position, before any move.
+    if (demoMoveIndex < 0) return arrowsToBoard(line.intro?.arrows);
+    if (demoMoveIndex >= line.arrows.length) return [];
     return arrowsToBoard(line.arrows[demoMoveIndex]);
-  }, [demoMoveIndex, line.arrows]);
+  }, [demoMoveIndex, line.arrows, line.intro]);
 
   // Lead-the-eye highlights — light up exactly the squares the current
   // annotation names so the student looks where the words point instead
   // of hunting for the piece. Authored per-move alongside the arrows.
   const currentDemoHighlights = useMemo((): Record<string, React.CSSProperties> => {
-    const perMove: AnnotationHighlight[][] | undefined = line.highlights;
-    if (!perMove || demoMoveIndex < 0 || demoMoveIndex >= perMove.length) return {};
+    // Intro beat → the plan's key squares (targets + outpost/maneuver
+    // destinations); else the current move's lead-the-eye highlights.
+    const source: AnnotationHighlight[] | undefined =
+      demoMoveIndex < 0
+        ? line.intro?.highlights
+        : line.highlights && demoMoveIndex < line.highlights.length
+          ? line.highlights[demoMoveIndex]
+          : undefined;
+    if (!source) return {};
     const styles: Record<string, React.CSSProperties> = {};
-    for (const h of perMove[demoMoveIndex] ?? []) {
+    for (const h of source) {
       const color = h.color ?? 'rgba(255, 235, 59, 0.5)';
       styles[h.square] = {
         background: color,
@@ -173,11 +183,12 @@ export function PlayableLinePlayer({
       };
     }
     return styles;
-  }, [demoMoveIndex, line.highlights]);
+  }, [demoMoveIndex, line.highlights, line.intro]);
 
   const currentAnnotation = useMemo((): string => {
     if (phase === 'demo') {
-      if (demoMoveIndex < 0 || demoMoveIndex >= line.annotations.length) return '';
+      if (demoMoveIndex < 0) return line.intro?.say ?? '';
+      if (demoMoveIndex >= line.annotations.length) return '';
       return line.annotations[demoMoveIndex];
     }
     return '';
@@ -190,13 +201,13 @@ export function PlayableLinePlayer({
   useEffect(() => {
     void voiceService.warmup();
     if (mode === 'watch') {
-      const prose = line.annotations.filter(Boolean);
+      const prose = [line.intro?.say, ...line.annotations].filter((s): s is string => Boolean(s));
       if (prose.length > 0) void voiceService.prefetchAudio(prose);
     } else if (mode === 'learn') {
       void voiceService.prefetchAudio(line.moves.map((m) => sanToSpeech(m)));
     }
     // mode === 'practice' → silent: no prefetch.
-  }, [mode, line.annotations, line.moves]);
+  }, [mode, line.annotations, line.moves, line.intro]);
 
   // ─── Demonstration Phase: VOICE-GATED auto-play ──────────────────────────
   // Speak the move's annotation, then advance only when the voice promise
@@ -222,9 +233,20 @@ export function PlayableLinePlayer({
       else setDemoMoveIndex(next);
     };
 
-    // Intro beat before the first move.
+    // Intro beat before the first move — narrate the plan's IDEA on the static
+    // board (arrows/highlights lead the eye to the breaks, future-open lines,
+    // and the squares pieces want to reach), then advance when the voice
+    // RESOLVES (no fixed-timer race). Silent fallback when no intro authored.
     if (demoMoveIndex < 0) {
-      if (isPlaying) autoPlayTimerRef.current = setTimeout(advance, 800);
+      const introSay = line.intro?.say;
+      if (!introSay) {
+        if (isPlaying) autoPlayTimerRef.current = setTimeout(advance, 800);
+        return () => { cancelled = true; clearTimer(); };
+      }
+      void voiceService.speak(introSay).catch(() => { /* keep playing */ }).finally(() => {
+        if (cancelled || !isPlaying) return;
+        autoPlayTimerRef.current = setTimeout(advance, 600);
+      });
       return () => { cancelled = true; clearTimer(); };
     }
     if (demoMoveIndex >= line.moves.length) return;
@@ -242,7 +264,7 @@ export function PlayableLinePlayer({
     });
 
     return () => { cancelled = true; clearTimer(); };
-  }, [phase, isPlaying, demoMoveIndex, line.moves.length, line.annotations]);
+  }, [phase, isPlaying, demoMoveIndex, line.moves.length, line.annotations, line.intro]);
 
   // Play piece sound during demo
   useEffect(() => {
