@@ -100,6 +100,10 @@ import { SCHLIEMANN_DEFENCE_LESSON } from './schliemannDefence';
 import { SCHLIEMANN_DEFENCE_VARIATION_LESSONS } from './schliemannDefenceVariations';
 import { QUEENS_GAMBIT_LESSON } from './queensGambit';
 import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
+import { TROMPOWSKY_ATTACK_LESSON } from './trompowskyAttack';
+import { TROMPOWSKY_ATTACK_VARIATION_LESSONS } from './trompowskyAttackVariations';
+import { BIRDS_OPENING_LESSON } from './birdsOpening';
+import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -160,6 +164,8 @@ const OPENINGS: OpeningLessons[] = [
   { main: ALBIN_COUNTERGAMBIT_LESSON, variations: ALBIN_COUNTERGAMBIT_VARIATION_LESSONS },
   { main: SCHLIEMANN_DEFENCE_LESSON, variations: SCHLIEMANN_DEFENCE_VARIATION_LESSONS },
   { main: QUEENS_GAMBIT_LESSON, variations: QUEENS_GAMBIT_VARIATION_LESSONS },
+  { main: TROMPOWSKY_ATTACK_LESSON, variations: TROMPOWSKY_ATTACK_VARIATION_LESSONS },
+  { main: BIRDS_OPENING_LESSON, variations: BIRDS_OPENING_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

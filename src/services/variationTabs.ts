@@ -17,6 +17,21 @@ export interface VariationTab {
 // 4 (amateur-frequency order, playbook §1); everything else shows all of its
 // variations.
 const CURATED: Record<string, { test: RegExp; label: string }[]> = {
+  'birds-opening': [
+    { test: /leningrad/i, label: 'Leningrad' },
+    { test: /from.s gambit accepted/i, label: "From's" },
+    { test: /nimzo-larsen/i, label: 'Nimzo-Larsen' },
+    { test: /stonewall/i, label: 'Stonewall' },
+    { test: /williams/i, label: 'Williams' },
+  ],
+  'trompowsky-attack': [
+    { test: /doubled pawns/i, label: 'exf6' },
+    { test: /french-type/i, label: '2...e6' },
+    { test: /raptor/i, label: 'Raptor' },
+    { test: /g6 fianchetto/i, label: '2...g6' },
+    { test: /vaganian/i, label: 'Vaganian' },
+    { test: /gxf6/i, label: 'gxf6' },
+  ],
   'queens-gambit': [
     { test: /exchange/i, label: 'Exchange' },
     { test: /slav defence response/i, label: 'Slav' },

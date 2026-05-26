@@ -80,6 +80,10 @@ import { SCHLIEMANN_DEFENCE_LESSON } from './schliemannDefence';
 import { SCHLIEMANN_DEFENCE_VARIATION_LESSONS } from './schliemannDefenceVariations';
 import { QUEENS_GAMBIT_LESSON } from './queensGambit';
 import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
+import { TROMPOWSKY_ATTACK_LESSON } from './trompowskyAttack';
+import { TROMPOWSKY_ATTACK_VARIATION_LESSONS } from './trompowskyAttackVariations';
+import { BIRDS_OPENING_LESSON } from './birdsOpening';
+import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -137,6 +141,8 @@ const LESSONS: Record<string, LessonScript> = {
   [ALBIN_COUNTERGAMBIT_LESSON.openingId]: ALBIN_COUNTERGAMBIT_LESSON,
   [SCHLIEMANN_DEFENCE_LESSON.openingId]: SCHLIEMANN_DEFENCE_LESSON,
   [QUEENS_GAMBIT_LESSON.openingId]: QUEENS_GAMBIT_LESSON,
+  [TROMPOWSKY_ATTACK_LESSON.openingId]: TROMPOWSKY_ATTACK_LESSON,
+  [BIRDS_OPENING_LESSON.openingId]: BIRDS_OPENING_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -180,6 +186,8 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...ALBIN_COUNTERGAMBIT_VARIATION_LESSONS,
   ...SCHLIEMANN_DEFENCE_VARIATION_LESSONS,
   ...QUEENS_GAMBIT_VARIATION_LESSONS,
+  ...TROMPOWSKY_ATTACK_VARIATION_LESSONS,
+  ...BIRDS_OPENING_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
