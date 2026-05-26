@@ -32883,5 +32883,416 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-slavdefence-activebishop",
+    "openingId": "slav-defence",
+    "criticalPositionFen": "rn1q1rk1/pp3ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P3PPP/R1BQ1RK1 w - - 3 9",
+    "title": "Slav Main Line: the Active Bishop and the d5-Outpost",
+    "overview": "The Slav's whole point is to develop the light-squared bishop ACTIVELY to f5 before locking it in with …e6 — the problem the Queen's Gambit Declined never solves. After grabbing c4 and playing …Bf5, Black tucks the bishop to g6 and h5 when White expands with e4, pins the f3-knight, and meets White's space with the …Nd5 outpost. The result is a rock-solid d5-pawn and a comfortable game with no bad bishop. The lesson: in the Slav, get the bishop out first, then sit behind a solid centre.",
+    "pawnBreaks": [
+      "…cxd5 to establish a solid central pawn"
+    ],
+    "pieceManeuvers": [
+      "…Bf5–g6–h5 developing the bishop outside the pawn chain",
+      "…Nf6–d5 to the central outpost"
+    ],
+    "strategicThemes": [
+      "The good light-squared bishop",
+      "The d5-outpost and a solid centre",
+      "Comfortable equality without weaknesses"
+    ],
+    "endgameTransitions": [
+      "The solid structure and active bishop give Black a safe, balanced endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/pp3ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P3PPP/R1BQ1RK1 w - - 3 9",
+        "moves": [
+          "Qe2",
+          "Nbd7",
+          "e4",
+          "Bg6",
+          "Bd3",
+          "Bh5",
+          "e5",
+          "Nd5",
+          "Nxd5",
+          "cxd5"
+        ],
+        "annotations": [
+          "Qe2 — White connects the rooks and prepares the central e4 advance.",
+          "…Nbd7 — completing development, the knight eyeing the e5- and b6-squares.",
+          "e4 — White grabs the centre and questions the f5-bishop.",
+          "…Bg6 — the bishop slides to safety on g6, keeping its post on the b1–h7 diagonal.",
+          "Bd3 — White bolsters the e4-pawn and eyes the kingside, readying the e5 push.",
+          "…Bh5 — the bishop pins the f3-knight to the queen, leaning on White's central support.",
+          "e5 — White advances, gaining space and driving the f6-knight off.",
+          "…Nd5 — the knight leaps to the strong d5-outpost in front of White's pawn chain.",
+          "Nxd5 — White trades off the proud knight.",
+          "…cxd5 — recapturing onto a rock-solid d5-pawn; Black is comfortable, the light-squared bishop developed safely outside the pawn chain — the whole point of the Slav."
+        ],
+        "title": "Slav Main Line: the Active Bishop and the d5-Outpost",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "b6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "g6",
+              "to": "h7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d3",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "h5",
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Slav_Defense"
+        ],
+        "learnCues": [
+          "Qe2 — prepare e4.",
+          "…Nbd7 — develop.",
+          "e4 — centre, hits f5.",
+          "…Bg6 — bishop to safety.",
+          "Bd3 — bolster e4.",
+          "…Bh5 — pin the f3-knight.",
+          "e5 — White pushes on.",
+          "…Nd5 — the d5-outpost.",
+          "Nxd5 — White trades.",
+          "…cxd5 — solid and comfortable."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-semislav-meran",
+    "openingId": "semi-slav",
+    "criticalPositionFen": "r1bqkb1r/pp1n1ppp/2p1pn2/8/2BP4/2N1PN2/PP3PPP/R1BQK2R b KQkq - 0 7",
+    "title": "Semi-Slav Meran: Queenside Expansion with …b5–b4",
+    "overview": "The Meran is the Semi-Slav's most ambitious plan. Black gives up the centre tension with …dxc4, then expands on the queenside with …b5 and …b4, gaining space and harassing White's pieces. The bishop comes to b7 on the long diagonal, and the whole structure is geared toward the …c5 break that frees Black's game with active piece play. The lesson: in the Meran, Black answers White's central build-up with a fast queenside pawn advance and the …c5 lever.",
+    "pawnBreaks": [
+      "…b5 the Meran queenside expansion",
+      "…b4 to drive off the c3-knight",
+      "…c5 the freeing break"
+    ],
+    "pieceManeuvers": [
+      "…Bb7 the long-diagonal bishop",
+      "…Bd6 active development toward the kingside"
+    ],
+    "strategicThemes": [
+      "Queenside pawn expansion …b5–b4",
+      "The …c5 freeing break",
+      "Active piece play on the half-open files"
+    ],
+    "endgameTransitions": [
+      "The queenside pawn majority is a long-term asset if the position simplifies"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/pp1n1ppp/2p1pn2/8/2BP4/2N1PN2/PP3PPP/R1BQK2R b KQkq - 0 7",
+        "moves": [
+          "b5",
+          "Bd3",
+          "b4",
+          "Ne4",
+          "Nxe4",
+          "Bxe4",
+          "Bb7"
+        ],
+        "annotations": [
+          "…b5 — the Meran's signature: Black gains queenside space and hits the c4-bishop with tempo.",
+          "Bd3 — the bishop retreats to its best diagonal, eyeing the kingside.",
+          "…b4 — driving the c3-knight away and seizing more queenside space.",
+          "Ne4 — White's knight leaps into the centre rather than retreat to the rim.",
+          "…Nxe4 — Black trades off the centralised knight.",
+          "Bxe4 — White recaptures with the bishop, taking aim down the long diagonal.",
+          "…Bb7 — the bishop takes the long diagonal behind the c6-pawn, completing a harmonious Meran setup with queenside space, half-open lines and active pieces."
+        ],
+        "title": "Semi-Slav Meran: Queenside Expansion with …b5–b4",
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b7",
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Semi-Slav_Defense"
+        ],
+        "learnCues": [
+          "…b5 — Meran expansion.",
+          "Bd3 — bishop to d3.",
+          "…b4 — kick the knight.",
+          "Ne4 — knight to the centre.",
+          "…Nxe4 — trade it off.",
+          "Bxe4 — White recaptures.",
+          "…Bb7 — the long-diagonal bishop."
+        ]
+      }
+    ]
   }
 ]
