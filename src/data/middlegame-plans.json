@@ -17970,57 +17970,189 @@
   {
     "id": "mp-siciliannajdorf-fischer",
     "openingId": "sicilian-najdorf",
-    "title": "Fischer-Sozin: Queenside Counterattack",
+    "title": "Najdorf Fischer-Sozin: Queenside & the Long Diagonal",
     "criticalPositionFen": "rnbq1rk1/4bppp/p2ppn2/8/1p1NP3/1BN1BP2/PPP1Q1PP/R3K2R w KQ - 0 11",
-    "overview": "Against the Bc4 battery aimed at f7, Black walls up with e6 and counterattacks fast with b5 and b4, opening the b-file and the long diagonal before White's kingside play lands.",
+    "overview": "In the Fischer-Sozin (6.Bc4), Black’s counterplay flows to the queenside and the long light diagonal. Black trades the knights on d4, swings the light bishop d7-b5-c6 to bear down on e4 and White’s king, and expands with …b4/…Rb8. Roughly level — concrete counterplay for both sides.",
     "pawnBreaks": [
-      {
-        "move": "b5-b4",
-        "explanation": "b4 chases the c3-knight and opens lines.",
-        "fen": "rnbq1rk1/4bppp/p2ppn2/8/1p1NP3/1BN1BP2/PPP1Q1PP/R3K2R w KQ - 0 11"
-      }
+      "…b4 already played — roll the queenside",
+      "…d5 once the bishop controls e4"
     ],
     "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nf6-d5",
-        "explanation": "After b4 hits c3, exchanges on d5 open the position."
-      }
+      "…Nc6xd4 trading off White’s strong knight",
+      "…Bd7-b5-c6 onto the a8-h1 diagonal",
+      "…Rb8 behind the b-pawn"
     ],
     "strategicThemes": [
-      "Wall off the c4-bishop with e6.",
-      "b5-b4 counterattacks fast.",
-      "Open the b-file at the king."
+      "Queenside expansion",
+      "The light bishop on the long diagonal",
+      "Pressure on e4"
     ],
     "endgameTransitions": [
-      "The queenside initiative carries into the endgame."
+      "The bishop pair and queenside majority matter if it simplifies"
     ],
     "playableLines": [
       {
-        "title": "Fischer-Sozin: Queenside Counterattack",
+        "title": "Najdorf Fischer-Sozin: Queenside & the Long Diagonal",
         "fen": "rnbq1rk1/4bppp/p2ppn2/8/1p1NP3/1BN1BP2/PPP1Q1PP/R3K2R w KQ - 0 11",
         "moves": [
-          "Nd5",
-          "Nxd5",
-          "Bxd5",
-          "exd5"
+          "Na4",
+          "Bd7",
+          "O-O",
+          "Nc6",
+          "c3",
+          "Nxd4",
+          "Bxd4",
+          "Bb5",
+          "c4",
+          "Bc6"
         ],
         "annotations": [
-          "Nd5 — the attacked knight jumps to d5.",
-          "Nxd5 — Black trades it off.",
-          "Bxd5 — White recaptures with the bishop.",
-          "exd5 — Black opens the e-file, queenside rolling."
+          "Na4 eyes the b6/c5 squares.",
+          "",
+          "",
+          "…Nc6 develops and challenges the d4-knight.",
+          "c3 props up d4.",
+          "…Nxd4! trade off White’s best-placed piece.",
+          "Bxd4 recaptures.",
+          "…Bb5 swings the light bishop toward its real post.",
+          "c4 gains space.",
+          "…Bc6 — the bishop lands on the long diagonal, raking e4 and the squares around White’s king. Black has easy queenside play and full equality."
         ],
         "arrows": [
+          [
+            {
+              "from": "a4",
+              "to": "b6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "a4",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           [],
           [],
-          []
+          [],
+          [],
+          [
+            {
+              "from": "c6",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "d5",
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -18030,32 +18162,16 @@
           ],
           [
             {
-              "square": "d5",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
@@ -18065,11 +18181,52 @@
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ],
         "learnCues": [
-          "Nd5 — the attacked knight jumps",
-          "Nxd5 — trade it off",
-          "Bxd5 — recapture with the bishop",
-          "exd5 — open the e-file, queenside rolls"
-        ]
+          "Na4 — eye b6/c5",
+          "",
+          "",
+          "…Nc6 — challenge d4",
+          "c3 — prop up d4",
+          "…Nxd4 — trade the strong knight",
+          "Bxd4 — recapture",
+          "…Bb5 — reroute the bishop",
+          "c4 — gain space",
+          "…Bc6 — onto the long diagonal"
+        ],
+        "intro": {
+          "say": "In the Fischer-Sozin, Black’s counterplay is the queenside and the long light diagonal. Black trades the knights on d4, then swings the light bishop to c6 to rake e4 and White’s king, rolling the queenside behind it.",
+          "sayShort": "Trade on d4, bishop to c6, roll the queenside.",
+          "arrows": [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c6",
+              "to": "g2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
       }
     ]
   },
