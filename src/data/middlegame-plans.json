@@ -31730,5 +31730,511 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-grunfelddefence-exchange",
+    "openingId": "grunfeld-defence",
+    "criticalPositionFen": "rnbqk2r/pp2ppbp/6p1/2p5/2BPP3/2P5/P3NPPP/R1BQK2R b KQkq - 1 8",
+    "title": "Grünfeld Exchange: Besieging the Big Centre",
+    "overview": "The Exchange Variation is the main test of the Grünfeld: White takes a broad d4–e4 pawn centre, and Black sets out to prove it is a target, not a strength. The plan is pure Grünfeld — develop with hits (…Nc6 on d4, …Bg4 pinning its knight-defender, …Na5 on the c4-bishop), then crack it open with …cxd4 to leave White an isolated d-pawn. From there Black blockades and besieges with the long-diagonal bishop. The lesson: meet the big centre with piece pressure and a timely …cxd4, not passivity.",
+    "pawnBreaks": [
+      "…c5 to strike White's broad centre",
+      "…cxd4 to saddle White with an isolated d-pawn"
+    ],
+    "pieceManeuvers": [
+      "…Nc6 then …Na5 hitting d4 and the c4-bishop",
+      "…Bg4 to pin the e2-knight, d4's defender"
+    ],
+    "strategicThemes": [
+      "Piece pressure on a broad pawn centre",
+      "Isolating White's d-pawn",
+      "The long-diagonal bishop as blockading besieger"
+    ],
+    "endgameTransitions": [
+      "The isolated d4-pawn is a lasting endgame target if Black trades into a simplified position"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/pp2ppbp/6p1/2p5/2BPP3/2P5/P3NPPP/R1BQK2R b KQkq - 1 8",
+        "moves": [
+          "Nc6",
+          "Be3",
+          "O-O",
+          "O-O",
+          "Bg4",
+          "f3",
+          "Na5",
+          "Bd3",
+          "cxd4",
+          "cxd4"
+        ],
+        "annotations": [
+          "…Nc6 — the knight develops with purpose, training its fire on d4, the front pawn of White's broad centre.",
+          "Be3 — White props up d4, the pawn Black is already pressing.",
+          "…O-O — Black castles, finishing development before the assault on the centre.",
+          "O-O — White castles too; the battle now revolves entirely around the d4–e4 pawns.",
+          "…Bg4 pins the e2-knight to the queen — and that knight is a key defender of d4.",
+          "f3 — White breaks the pin and questions the g4-bishop.",
+          "…Na5 — the knight leaps to the rim with tempo, hitting the c4-bishop, the pride of White's setup.",
+          "Bd3 — the bishop retreats, and Black has gained the time to pile onto the centre.",
+          "…cxd4 — Black cashes the pressure in, ripping the centre open and leaving White an isolated d-pawn to nurse.",
+          "cxd4 — White recaptures; there it is — the classic Grünfeld picture: White's broad but isolated d4–e4 centre against Black's long-diagonal bishop and relentless pressure. Black's task is to blockade and besiege it."
+        ],
+        "title": "Grünfeld Exchange: Besieging the Big Centre",
+        "arrows": [
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "g4",
+              "to": "e2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "a5",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"
+        ],
+        "learnCues": [
+          "…Nc6 — hit d4.",
+          "Be3 — prop up d4.",
+          "…O-O — castle, then strike.",
+          "O-O — White castles.",
+          "…Bg4 — pin d4's guard.",
+          "f3 — break the pin.",
+          "…Na5 — hit the c4-bishop.",
+          "Bd3 — bishop retreats.",
+          "…cxd4 — open the centre.",
+          "cxd4 — the centre to besiege."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-grunfelddefence-russian",
+    "openingId": "grunfeld-defence",
+    "criticalPositionFen": "rnbq1rk1/ppp1ppbp/5np1/8/2QPP3/2N2N2/PP3PPP/R1B1KB1R b KQ - 0 7",
+    "title": "Grünfeld Russian System: Queenside Expansion and the …c5 Break",
+    "overview": "In the Russian System White grabs the centre and the c4-square with an early Qb3. Black answers with the Hungarian plan: …a6 and …b5 to expand and harass the queen, then the thematic …c5 break against d4. White often snatches the c5-pawn, but it is a true gambit — Black gets a clear development lead, the bishop raking the queenside from e6, and rooks pouring onto the half-open c-file (engine-checked roughly level). The lesson: don't fear the pawn — queenside space and activity pay for it.",
+    "pawnBreaks": [
+      "…c5 the central break against d4",
+      "…b5 to expand and harass the queen"
+    ],
+    "pieceManeuvers": [
+      "…Be6 harassing the queen with tempo",
+      "…Rc8 onto the half-open c-file"
+    ],
+    "strategicThemes": [
+      "Queenside expansion with …a6 and …b5",
+      "The …c5 break against the big centre",
+      "A sound pawn gambit for activity"
+    ],
+    "endgameTransitions": [
+      "If White consolidates the pawn matters; Black keeps the initiative rather than trading into passivity"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp1ppbp/5np1/8/2QPP3/2N2N2/PP3PPP/R1B1KB1R b KQ - 0 7",
+        "moves": [
+          "a6",
+          "Be2",
+          "b5",
+          "Qb3",
+          "c5",
+          "dxc5",
+          "Be6",
+          "Qc2",
+          "Nbd7",
+          "Be3",
+          "Rc8"
+        ],
+        "annotations": [
+          "…a6 — preparing …b5, the start of Black's queenside expansion against the Russian System.",
+          "Be2 — White completes development behind the broad centre.",
+          "…b5 — gaining queenside space and hitting the c4-queen with tempo.",
+          "Qb3 — the queen steps back, eyeing b7 and the d5-square.",
+          "…c5 — the central break. Black strikes at d4, the standard Grünfeld blow against the big centre.",
+          "dxc5 — White grabs the pawn rather than allow …cxd4.",
+          "…Be6 — developing with tempo; the bishop harasses the b3-queen and rakes the queenside.",
+          "Qc2 — the queen dodges to c2, out of the bishop's reach.",
+          "…Nbd7 — the knight comes to recapture on c5 and join the pressure.",
+          "Be3 — White bolsters the extra c5-pawn.",
+          "…Rc8 — the rook swings to the half-open c-file, bearing down on c5 and the queen; Black's lead in development and active pieces are full value for the pawn."
+        ],
+        "title": "Grünfeld Russian System: Queenside Expansion and the …c5 Break",
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b3",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "e6",
+              "to": "b3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e3",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"
+        ],
+        "learnCues": [
+          "…a6 — prepare …b5.",
+          "Be2 — White develops.",
+          "…b5 — space, hit the queen.",
+          "Qb3 — queen retreats.",
+          "…c5 — strike d4.",
+          "dxc5 — White takes c5.",
+          "…Be6 — harass the queen.",
+          "Qc2 — queen dodges.",
+          "…Nbd7 — eye the c5-pawn.",
+          "Be3 — guard c5.",
+          "…Rc8 — pile on the c-file."
+        ]
+      }
+    ]
   }
 ]
