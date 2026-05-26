@@ -16816,50 +16816,49 @@
   {
     "id": "mp-siciliandragon-levenfish",
     "openingId": "sicilian-dragon",
-    "title": "Levenfish: Develop and Equalise",
+    "title": "Dragon vs Levenfish: Trade and Expand on the Queenside",
     "criticalPositionFen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10",
-    "overview": "After the Nbd7 antidote has defused White's early f4, Black develops smoothly and swings the knight to the active c5 square, hitting e4, then expands on the queenside with full, comfortable equality.",
+    "overview": "Against the Levenfish (early f4), Black plays the standard Dragon counterplay: the knight comes to c5 hitting White’s centre and bishop, the light bishop trades itself for the f3-knight to ease the pressure, and Black expands with …a6-…b5. The fianchettoed g7-bishop and the half-open c-file are Black’s long-term assets. Balanced.",
     "pawnBreaks": [
-      {
-        "move": "b5-b4",
-        "explanation": "b5 and b4 expand on the queenside and harass the c3-knight.",
-        "fen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10"
-      }
+      "…b5 to expand on the queenside",
+      "…a6 to prepare it"
     ],
     "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nd7-c5",
-        "explanation": "The knight jumps to c5, hitting e4 and eyeing d3."
-      }
+      "…Nd7-c5 hitting e4 and the d3-bishop",
+      "…Bc8-g4 to trade the f3-knight",
+      "…a6 and …b5 queenside expansion"
     ],
     "strategicThemes": [
-      "Nbd7 already killed the f4-push's venom.",
-      "The c5-knight is active, pressing e4.",
-      "Queenside expansion gives Black the easier game."
+      "Queenside expansion with …a6-…b5",
+      "Trade the f3-knight to ease the centre",
+      "The Dragon bishop on g7"
     ],
     "endgameTransitions": [
-      "Sound and active, Black is at least equal heading into the endgame."
+      "The g7-bishop and queenside majority tell as the game opens"
     ],
     "playableLines": [
       {
-        "title": "Levenfish: Develop and Equalise",
+        "title": "Dragon vs Levenfish: Trade and Expand on the Queenside",
         "fen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10",
         "moves": [
           "Qe1",
           "Nc5",
-          "Be2",
-          "b5",
-          "Qh4",
-          "b4"
+          "a4",
+          "Bg4",
+          "Be3",
+          "Bxf3",
+          "Rxf3",
+          "a6"
         ],
         "annotations": [
-          "Qe1 — White reroutes the queen toward the kingside.",
-          "Nc5 — the knight jumps to an active post, hitting e4.",
-          "Be2 — White preserves the light-squared bishop.",
-          "b5 — Black expands on the queenside.",
-          "Qh4 — White eyes the kingside.",
-          "b4 — the pawn hits the c3-knight; Black is fully equal."
+          "Qe1 reroutes the queen toward the kingside.",
+          "…Nc5 leaps to the outpost, hitting e4 and the d3-bishop.",
+          "a4 restrains …b5 for now.",
+          "…Bg4 pins and prepares to trade the f3-knight.",
+          "Be3 challenges the c5-knight.",
+          "…Bxf3 trades — easing White’s pressure and exchanging an attacker.",
+          "Rxf3 recaptures.",
+          "…a6 — Black prepares …b5 anyway; the queenside expansion and the g7-bishop are Black’s trumps in a balanced game."
         ],
         "arrows": [
           [],
@@ -16868,9 +16867,28 @@
               "from": "c5",
               "to": "e4",
               "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c5",
+              "to": "d3",
+              "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [],
+          [
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e3",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           [],
           []
@@ -16898,49 +16916,89 @@
             {
               "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "b5",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b4",
+              "square": "a2",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c3",
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g7",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
@@ -16951,13 +17009,46 @@
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ],
         "learnCues": [
-          "Qe1 — reroute toward the kingside",
-          "Nc5 — active post, hits e4",
-          "Be2 — preserve the light bishop",
-          "b5 — queenside expansion",
-          "Qh4 — eye the kingside",
-          "b4 — hit Nc3; fully equal"
-        ]
+          "Qe1 — reroute the queen",
+          "…Nc5 — leap to the outpost",
+          "a4 — restrain …b5",
+          "…Bg4 — pin, prep the trade",
+          "Be3 — challenge the knight",
+          "…Bxf3 — trade the attacker",
+          "Rxf3 — recapture",
+          "…a6 — prepare …b5"
+        ],
+        "intro": {
+          "say": "Against the Levenfish, Black plays standard Dragon counterplay: the knight to c5 hitting the centre, the light bishop trades off the f3-knight to ease White’s pressure, and Black rolls …a6-…b5 on the queenside behind the g7-bishop.",
+          "sayShort": "Knight to c5, trade on f3, expand with …b5.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c8",
+              "to": "g4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b7",
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
       }
     ]
   },
