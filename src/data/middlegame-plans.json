@@ -31342,5 +31342,242 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-kingsindiandefence-petrosian",
+    "openingId": "kings-indian-defence",
+    "criticalPositionFen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQK2R b KQ - 0 7",
+    "title": "King's Indian Petrosian System: Maneuvering after an Early d5",
+    "overview": "In the Petrosian System White closes the centre immediately with d5, denying Black the usual …Nc6 pressure and steering into a slow maneuvering battle. Black's plan: clamp the queenside with …a5 to stop White's b4, route the knight via …Na6 toward the c5-outpost where it bites at e4, then regroup with …Qe8 and …Nh7 to free the f-pawn for the eventual kingside break. The lesson: against the early d5, win the maneuvering race first — secure c5 and a5 before opening the kingside.",
+    "pawnBreaks": [
+      "…a5 to clamp the queenside and fix b4"
+    ],
+    "pieceManeuvers": [
+      "…Na6 toward the c5-outpost",
+      "…Nh7 to free the f-pawn for …f5"
+    ],
+    "strategicThemes": [
+      "Queenside clamp with …a5",
+      "The …Na6–c5 knight maneuver",
+      "Slow regrouping before the kingside break"
+    ],
+    "endgameTransitions": [
+      "The …a5 clamp and the c5-outpost remain assets if the game simplifies"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQK2R b KQ - 0 7",
+        "moves": [
+          "a5",
+          "Bg5",
+          "h6",
+          "Bh4",
+          "Na6",
+          "Nd2",
+          "Qe8",
+          "O-O",
+          "Nh7"
+        ],
+        "annotations": [
+          "…a5 — Black clamps the queenside, fixing the b4-square so White cannot expand there. The Petrosian is the slow-maneuvering King's Indian.",
+          "Bg5 — White pins the f6-knight to the queen, probing before Black gets organised.",
+          "…h6 — putting the question to the bishop.",
+          "Bh4 — White keeps the pin, the bishop holding the f6-knight along the h4–d8 diagonal.",
+          "…Na6 — the knight heads for the c5-outpost, the square from which it will hit e4 and b3.",
+          "Nd2 — White reroutes the knight toward b3 to challenge the c5-square and guard c4.",
+          "…Qe8 — sidestepping the pin; the queen reroutes toward the kingside where Black's play will come.",
+          "O-O — White castles, content to sit on the space advantage and maneuver.",
+          "…Nh7 — the knight steps aside, freeing the f-pawn; the slow Petrosian maneuvering has done its work and the kingside is unlocked."
+        ],
+        "title": "King's Indian Petrosian System: Maneuvering after an Early d5",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "h4",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "a6",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d2",
+              "to": "b3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d2",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ],
+        "learnCues": [
+          "…a5 — clamp the queenside.",
+          "Bg5 — White pins f6.",
+          "…h6 — question the bishop.",
+          "Bh4 — pin maintained.",
+          "…Na6 — toward c5.",
+          "Nd2 — reroute to b3.",
+          "…Qe8 — unpin, regroup.",
+          "O-O — White castles.",
+          "…Nh7 — free the f-pawn."
+        ]
+      }
+    ]
   }
 ]
