@@ -1,0 +1,31 @@
+name: _explorer-probe
+on:
+  push:
+    branches: [ _explorer-probe ]
+permissions:
+  contents: write
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: probe explorer reachability from a GitHub runner
+        env:
+          LICHESS: ${{ secrets.LICHESS }}
+        run: |
+          {
+            echo "explorer reachability probe (GitHub Actions runner) $(date -u)"
+            echo "runner egress IP: $(curl -s -m 15 https://api.ipify.org || echo '?')"
+            echo "LICHESS secret set: $([ -n "$LICHESS" ] && echo "yes (len ${#LICHESS})" || echo no)"
+            echo "masters  anon: $(curl -s -m 25 -o /dev/null -w '%{http_code}' 'https://explorer.lichess.ovh/masters?play=e2e4,e7e5')"
+            echo "amateur  anon: $(curl -s -m 25 -o /dev/null -w '%{http_code}' 'https://explorer.lichess.ovh/lichess?variant=standard&speeds=blitz,rapid&ratings=1600,1800,2000&play=e2e4,e7e5')"
+            echo "amateur  auth: $(curl -s -m 25 -o /dev/null -w '%{http_code}' -H "Authorization: Bearer ${LICHESS}" 'https://explorer.lichess.ovh/lichess?variant=standard&speeds=blitz,rapid&ratings=1600,1800,2000&play=e2e4,e7e5')"
+          } > explorer-probe-result.txt
+          cat explorer-probe-result.txt
+      - name: commit result back
+        run: |
+          git config user.name "explorer-probe"
+          git config user.email "probe@local"
+          git add explorer-probe-result.txt
+          git commit -m "probe: explorer reachability result [skip ci]" || true
+          git push origin HEAD:_explorer-probe || true
