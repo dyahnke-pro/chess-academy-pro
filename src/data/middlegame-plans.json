@@ -16769,103 +16769,108 @@
   {
     "id": "mp-siciliandragon-levenfish",
     "openingId": "sicilian-dragon",
-    "title": "Levenfish: Develop and Equalise",
-    "criticalPositionFen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10",
-    "overview": "After the Nbd7 antidote has defused White's early f4, Black develops smoothly and swings the knight to the active c5 square, hitting e4, then expands on the queenside with full, comfortable equality.",
+    "title": "Sicilian Dragon: the …d5 Central Break",
+    "criticalPositionFen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/2KR1B1R b - - 4 9",
+    "overview": "Against the Yugoslav Attack (f3, Qd2, 0-0-0) the Dragon player's golden rule is: meet the coming kingside pawn storm by breaking in the centre with …d5. The break frees Black's game, trades off the heavy pieces and the dark-squared bishops, and steers into a balanced, simplified middlegame before White's attack can land. The lesson: in the Dragon, …d5 is the great equaliser — strike the centre before the storm arrives.",
     "pawnBreaks": [
-      {
-        "move": "b5-b4",
-        "explanation": "b5 and b4 expand on the queenside and harass the c3-knight.",
-        "fen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10"
-      }
+      "…d5 the central freeing break — the Dragon's antidote to the attack"
     ],
     "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nd7-c5",
-        "explanation": "The knight jumps to c5, hitting e4 and eyeing d3."
-      }
+      "…Nf6xd5 recapturing on the central square",
+      "…Bg7 the Dragon bishop trading on the long diagonal"
     ],
     "strategicThemes": [
-      "Nbd7 already killed the f4-push's venom.",
-      "The c5-knight is active, pressing e4.",
-      "Queenside expansion gives Black the easier game."
+      "The …d5 central break",
+      "Simplifying before the kingside storm",
+      "Trading the dark-squared bishops"
     ],
     "endgameTransitions": [
       "Sound and active, Black is at least equal heading into the endgame."
     ],
     "playableLines": [
       {
-        "title": "Levenfish: Develop and Equalise",
-        "fen": "r1b2rk1/ppqnppbp/3p1np1/8/4PP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 7 10",
+        "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/2KR1B1R b - - 4 9",
         "moves": [
-          "Qe1",
-          "Nc5",
-          "Be2",
-          "b5",
-          "Qh4",
-          "b4"
+          "d5",
+          "exd5",
+          "Nxd5",
+          "Nxc6",
+          "bxc6",
+          "Bd4",
+          "Bxd4",
+          "Qxd4"
         ],
         "annotations": [
-          "Qe1 — White reroutes the queen toward the kingside.",
-          "Nc5 — the knight jumps to an active post, hitting e4.",
-          "Be2 — White preserves the light-squared bishop.",
-          "b5 — Black expands on the queenside.",
-          "Qh4 — White eyes the kingside.",
-          "b4 — the pawn hits the c3-knight; Black is fully equal."
+          "…d5 — the central break, the Dragon's classic antidote: Black strikes the centre before White's kingside storm can roll.",
+          "exd5 — White captures.",
+          "…Nxd5 — Black recaptures, centralising the knight.",
+          "Nxc6 — White trades on c6.",
+          "…bxc6 — recapturing toward the centre and opening the b-file.",
+          "Bd4 — White offers to trade the dark-squared bishops, challenging the Dragon bishop.",
+          "…Bxd4 — Black trades it off.",
+          "Qxd4 — White recaptures; the dust settles into a balanced, simplified middlegame — the …d5 break has equalised."
         ],
+        "title": "Sicilian Dragon: the …d5 Central Break",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           [
             {
-              "from": "c5",
-              "to": "e4",
+              "from": "d4",
+              "to": "d5",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ],
-          [],
-          [],
-          [],
-          []
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "e1",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d1",
+              "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e2",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d3",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b5",
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -16875,41 +16880,52 @@
           ],
           [
             {
-              "square": "h4",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e1",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b4",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b5",
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c3",
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
         "sources": [
-          "concept:att-queenside-attack",
-          "concept:pos-open-file",
+          "concept:pos-initiative",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ],
         "learnCues": [
-          "Qe1 — reroute toward the kingside",
-          "Nc5 — active post, hits e4",
-          "Be2 — preserve the light bishop",
-          "b5 — queenside expansion",
-          "Qh4 — eye the kingside",
-          "b4 — hit Nc3; fully equal"
+          "…d5 — the central break.",
+          "exd5 — White captures.",
+          "…Nxd5 — centralise the knight.",
+          "Nxc6 — White trades.",
+          "…bxc6 — recapture, open b-file.",
+          "Bd4 — challenge the Dragon bishop.",
+          "…Bxd4 — trade it off.",
+          "Qxd4 — equalised, simplified."
         ]
       }
     ]
