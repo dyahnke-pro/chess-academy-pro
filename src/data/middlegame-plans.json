@@ -18828,54 +18828,43 @@
   {
     "id": "mp-siciliansveshnikov-9bxf6",
     "openingId": "sicilian-sveshnikov",
-    "title": "9.Bxf6: Doubled Pawns, Roaring Bishops",
+    "title": "Sveshnikov 9.Bxf6: The Bishop Pair and the g-file",
     "criticalPositionFen": "r2qkb1r/5p1p/p1npb3/1p1Npp2/4P3/N2B4/PPP2PPP/R2QK2R w KQkq - 2 12",
-    "overview": "After the early exchange Black's pawns are doubled, but the bishop pair, the open g-file and the e5/f5 duo give ferocious activity — trade the d5-knight and roll the f-pawn.",
+    "overview": "After 9.Bxf6 gxf6, Black accepts damaged kingside pawns in return for two lasting trumps: the bishop pair and the half-open g-file. The dark bishop belongs on g7, raking the long diagonal at White’s centre and king; the king castles short straight onto the open g-file. The d5-knight is White’s one good piece — Black keeps …Bxd5 in reserve to trade it. Dynamically balanced, with long-term trumps Black is happy to nurse.",
     "pawnBreaks": [
-      {
-        "move": "f4",
-        "explanation": "After f5, the f4 push gains kingside space and attacking lines.",
-        "fen": "r2qkb1r/5p1p/p1npb3/1p1Npp2/4P3/N2B4/PPP2PPP/R2QK2R w KQkq - 2 12"
-      }
+      "…f5-f4 to gain kingside space",
+      "…b4 to chase the a3-knight"
     ],
     "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Be6xd5",
-        "explanation": "Trade off the strong d5-knight."
-      }
+      "…Bf8-g7 onto the long diagonal",
+      "…O-O onto the half-open g-file",
+      "…Bxd5 in reserve to trade White’s strong knight"
     ],
     "strategicThemes": [
-      "The bishop pair pays for the doubled pawns.",
-      "Trade the d5-knight.",
-      "Roll the f-pawn for the attack."
+      "The bishop pair",
+      "The half-open g-file",
+      "Trading off White’s d5-knight"
     ],
     "endgameTransitions": [
-      "The bishops dominate once lines open."
+      "The two bishops are the trump if the game simplifies"
     ],
     "playableLines": [
       {
-        "title": "9.Bxf6: Doubled Pawns, Roaring Bishops",
+        "title": "Sveshnikov 9.Bxf6: The Bishop Pair and the g-file",
         "fen": "r2qkb1r/5p1p/p1npb3/1p1Npp2/4P3/N2B4/PPP2PPP/R2QK2R w KQkq - 2 12",
         "moves": [
-          "Qh5",
+          "c3",
           "Bg7",
-          "O-O",
-          "Bxd5",
-          "exd5",
-          "f4"
+          "Qh5",
+          "O-O"
         ],
         "annotations": [
-          "Qh5 — White probes the loose kingside.",
-          "Bg7 — the bishop rakes the long diagonal.",
-          "O-O — White tucks the king away.",
-          "Bxd5 — Black trades the strong knight.",
-          "exd5 — White recaptures.",
-          "f4 — the f-pawn rolls, gaining space."
+          "c3 supports d4 and restrains …b4.",
+          "…Bg7 — the bishop takes the long diagonal, the heart of Black’s setup, bearing down on the centre.",
+          "Qh5 probes the kingside.",
+          "…O-O — the king castles right onto the half-open g-file, ready to use it. Black’s bishop pair and the g-file are the long-term trumps in a dynamically balanced position."
         ],
         "arrows": [
-          [],
-          [],
           [],
           [],
           [],
@@ -18884,12 +18873,20 @@
         "highlights": [
           [
             {
-              "square": "h5",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d1",
+              "square": "c2",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -18904,41 +18901,21 @@
           ],
           [
             {
-              "square": "g1",
+              "square": "h5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e1",
+              "square": "d1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d5",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
@@ -18949,13 +18926,37 @@
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
         ],
         "learnCues": [
+          "c3 — support d4",
+          "…Bg7 — onto the long diagonal",
           "Qh5 — probe the kingside",
-          "Bg7 — rake the long diagonal",
-          "O-O — king to safety",
-          "Bxd5 — trade the strong knight",
-          "exd5 — recapture",
-          "f4 — roll the f-pawn"
-        ]
+          "…O-O — castle onto the g-file"
+        ],
+        "intro": {
+          "say": "After the early Bxf6, Black’s trumps are the bishop pair and the half-open g-file. The dark bishop swings to g7 on the long diagonal, bearing down on White’s centre, and the king castles right onto the g-file.",
+          "sayShort": "Bishop to g7, castle onto the g-file.",
+          "arrows": [
+            {
+              "from": "f8",
+              "to": "g7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g7",
+              "to": "b2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
       }
     ]
   },
