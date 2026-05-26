@@ -40,8 +40,12 @@ export default defineConfig(({ mode }) => {
         skipWaiting: true,
         clientsClaim: true,
         cleanupOutdatedCaches: true,
-        // TODO: Replace with code-splitting + exclude Stockfish WASM from precache — see backlog item WO-PERF-BUNDLE-01.
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024,
+        // Safety ceiling on precached file size. The heavy data JSON are now
+        // split into `appdata-*` chunks (see manualChunks below), so no single
+        // file comes close to this — it's a guard against an accidental giant
+        // asset, not the load-bearing limit it used to be when everything
+        // inlined into one ~10 MB `index` chunk (WO-PERF-BUNDLE-01).
+        maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         globIgnores: ['stockfish/**'],
         navigateFallbackDenylist: [/^\/api\//, /^\/voice-packs\//],
@@ -130,11 +134,32 @@ export default defineConfig(({ mode }) => {
     target: 'esnext',
     rollupOptions: {
       output: {
-        manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'chess-vendor': ['chess.js', 'react-chessboard'],
-          'ui-vendor': ['framer-motion', 'recharts', 'lucide-react'],
-          'data-vendor': ['dexie', 'zustand'],
+        // WO-PERF-BUNDLE-01: split the heavy static data JSON into their own
+        // `appdata-*` chunks. They used to inline into the single `index`
+        // chunk, which crept past the Workbox precache cap and broke every
+        // deploy. As named chunks no single precached file approaches the
+        // limit, the index stays lean, and content growth lands in the
+        // matching data chunk instead of re-bloating the entry. Pure
+        // chunking — every import stays synchronous, no behaviour change.
+        manualChunks(id: string): string | undefined {
+          if (id.includes('/src/data/')) {
+            if (id.includes('puzzles.json')) return 'appdata-puzzles';
+            if (id.includes('openings-lichess.json')) return 'appdata-eco';
+            if (id.includes('middlegame-plans.json')) return 'appdata-plans';
+            if (id.includes('repertoire.json') || id.includes('pro-repertoires.json')) {
+              return 'appdata-repertoire';
+            }
+            if (id.includes('chess-concepts.json') || id.includes('opening-book-pages.json')) {
+              return 'appdata-book';
+            }
+          }
+          if (id.includes('/node_modules/')) {
+            if (/\/node_modules\/(react|react-dom|react-router-dom)\//.test(id)) return 'react-vendor';
+            if (/\/node_modules\/(chess\.js|react-chessboard)\//.test(id)) return 'chess-vendor';
+            if (/\/node_modules\/(framer-motion|recharts|lucide-react)\//.test(id)) return 'ui-vendor';
+            if (/\/node_modules\/(dexie|zustand)\//.test(id)) return 'data-vendor';
+          }
+          return undefined;
         },
       },
     },

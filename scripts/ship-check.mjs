@@ -267,6 +267,10 @@ function changedSourceTests(changed) {
   const tests = new Set();
   for (const f of changed) {
     if (!/^src\/.*\.(ts|tsx)$/.test(f)) continue;
+    // Mirror vitest.config.ts `exclude` — the benchmark suite is opt-in
+    // (`npm run test:perf` / its own config), so running it via the default
+    // config yields "No test files found" and falsely fails the step.
+    if (f.startsWith('src/test/benchmarks/')) continue;
     if (/\.test\.(ts|tsx)$/.test(f)) { if (existsSync(f)) tests.add(f); continue; }
     const base = f.replace(/\.(ts|tsx)$/, '');
     for (const t of [`${base}.test.ts`, `${base}.test.tsx`]) if (existsSync(t)) tests.add(t);

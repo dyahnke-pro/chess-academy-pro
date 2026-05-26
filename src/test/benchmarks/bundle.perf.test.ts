@@ -11,10 +11,12 @@ const ROOT = join(__dirname, '..', '..', '..');
 const DIST_ASSETS = join(ROOT, 'dist', 'assets');
 
 // Thresholds — annotation JSON files are lazy-loaded as separate chunks,
-// so we separate the "app code + vendor" from "annotation data" chunks.
-const MAX_APP_JS_SIZE = 7_800_000;          // 7.8 MB for app index + vendors (includes inlined ECO/repertoire JSON + annotation data)
+// and the heavy shared data JSON are split into `appdata-*` chunks
+// (WO-PERF-BUNDLE-01), so we separate "app code + vendor" from both.
+const MAX_APP_JS_SIZE = 7_000_000;          // 7 MB for app index + vendors (data JSON now split into appdata-* chunks; was ~11 MB pre-split)
 const MAX_VENDOR_CHUNK_SIZE = 600_000;      // 600 KB per vendor chunk
-const MAX_ANNOTATION_CHUNK_SIZE = 300_000;  // 300 KB per lazy annotation chunk (raised for deepened variation annotations)
+const MAX_ANNOTATION_CHUNK_SIZE = 350_000;  // 350 KB per lazy annotation chunk (raised for deepened Najdorf/variation annotations)
+const MAX_DATA_CHUNK_SIZE = 8 * 1024 * 1024; // 8 MiB per appdata chunk — matches the Workbox precache cap
 const MAX_CSS_SIZE = 100_000;               // 100 KB CSS
 const EXPECTED_VENDOR_CHUNKS = ['react-vendor', 'chess-vendor', 'ui-vendor', 'data-vendor'];
 
@@ -49,12 +51,17 @@ function getAssetFiles(): { name: string; size: number; path: string }[] {
   }
 }
 
+function isDataChunk(name: string): boolean {
+  // Heavy shared data JSON split out by manualChunks (WO-PERF-BUNDLE-01).
+  return name.startsWith('appdata-') && name.endsWith('.js');
+}
+
 function isAnnotationChunk(name: string): boolean {
   // Annotation chunks are named after openings (e.g. "italian-game-CRMlRswp.js")
-  // They are NOT vendor chunks and NOT the index chunk
+  // They are NOT vendor chunks, NOT the index chunk, and NOT appdata chunks.
   const isVendor = EXPECTED_VENDOR_CHUNKS.some((v) => name.includes(v));
   const isIndex = name.startsWith('index-');
-  return name.endsWith('.js') && !isVendor && !isIndex;
+  return name.endsWith('.js') && !isVendor && !isIndex && !isDataChunk(name);
 }
 
 describe('Bundle Size', () => {
@@ -67,7 +74,7 @@ describe('Bundle Size', () => {
     ensureBuild();
     const files = getAssetFiles();
     const appFiles = files.filter((f) =>
-      f.name.endsWith('.js') && !isAnnotationChunk(f.name),
+      f.name.endsWith('.js') && !isAnnotationChunk(f.name) && !isDataChunk(f.name),
     );
     const totalSize = appFiles.reduce((sum, f) => sum + f.size, 0);
 
@@ -94,7 +101,25 @@ describe('Bundle Size', () => {
     }
   });
 
-  it('no annotation chunk exceeds 150 KB', () => {
+  it('heavy data JSON are split into appdata-* chunks under the precache cap', () => {
+    ensureBuild();
+    const files = getAssetFiles();
+    const dataFiles = files.filter((f) => isDataChunk(f.name));
+
+    // The split must actually happen — puzzles/eco/plans/repertoire/book.
+    expect(dataFiles.length).toBeGreaterThanOrEqual(4);
+    console.log(`  ${dataFiles.length} appdata chunks`);
+
+    for (const f of dataFiles) {
+      console.log(`    ${f.name}: ${(f.size / 1024).toFixed(1)} KB`);
+      expect(
+        f.size,
+        `Data chunk ${f.name} is ${(f.size / 1048576).toFixed(2)} MiB — exceeds the ${(MAX_DATA_CHUNK_SIZE / 1048576).toFixed(0)} MiB precache cap`,
+      ).toBeLessThan(MAX_DATA_CHUNK_SIZE);
+    }
+  });
+
+  it('no annotation chunk exceeds 350 KB', () => {
     ensureBuild();
     const files = getAssetFiles();
     const annoFiles = files.filter((f) => isAnnotationChunk(f.name));
@@ -140,8 +165,8 @@ describe('Bundle Size', () => {
     // There should be many separate annotation chunks (one per opening)
     expect(annoFiles.length).toBeGreaterThan(30);
 
-    // The index chunk should be large but not absurdly so (it includes
-    // openings-lichess.json and repertoire.json which are statically imported)
+    // The index chunk holds app code only now — the heavy data JSON
+    // (puzzles/eco/plans/repertoire/book) are split into appdata-* chunks.
     if (indexFile) {
       console.log(`  Index chunk: ${(indexFile.size / 1024).toFixed(0)} KB`);
     }

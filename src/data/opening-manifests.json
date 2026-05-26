@@ -359,5 +359,32 @@
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
+  },
+  "queens-gambit": {
+    "variations": 7,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 3,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "trompowsky-attack": {
+    "variations": 6,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 3,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
+  },
+  "birds-opening": {
+    "variations": 5,
+    "middlegamePlans": 3,
+    "endgamePlans": 0,
+    "modelGames": 3,
+    "weapons": 0,
+    "warnings": 0,
+    "keyIdeas": 4
   }
 }

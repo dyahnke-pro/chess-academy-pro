@@ -977,7 +977,7 @@
       "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 4",
       "wrongMove": "h6",
       "correctMove": "Be7",
-      "explanation": "4…h6 is a common but weakening reply — after 5.Bxf6 Qxf6 Black accepts an isolated pawn structure without compensation. The mainline 4…Be7 develops and unpins the f6-knight indirectly.",
+      "explanation": "4…h6 spends a tempo on the wing before developing — after 5.Bxf6 Qxf6 White completes development with a small edge while Black's light-squared bishop is still hemmed in behind the e6-pawn. The mainline 4…Be7 develops and breaks the pin, so the f6-knight is no longer tied to the queen.",
       "shortNarration": "Be7 — develop, avoid the …h6 weakening",
       "sources": [
         "concept:pos-development",
@@ -1098,22 +1098,15 @@
   ],
   "trompowsky-attack": [
     {
-      "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
-      "wrongMove": "c5",
-      "correctMove": "Ne4",
-      "explanation": "Engine sees 2…c5 as roughly OK — but humans struggle: after 3.Bxf6 gxf6 (or exf6) Black has cracked pawn structure AND must commit the d-pawn to challenge the center. 2…Ne4 escapes the pin with tempo (attacks Bg5) and keeps Black's structure pristine. Practical edge: Ne4 leads to natural development; c5 forces Black to defend cracked pawns AND solve the pin."
-    },
-    {
       "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
       "wrongMove": "Bh4",
       "correctMove": "Bf4",
-      "explanation": "3.Bh4? leaves the bishop on a poor square — Black plays …d5 or …c5 to gain a free tempo against the bishop. 3.Bf4 keeps the bishop active and pressures c7/e7."
-    },
-    {
-      "fen": "rnbqkb1r/ppp1pppp/5B2/3p4/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
-      "wrongMove": "exf6",
-      "correctMove": "gxf6",
-      "explanation": "Engine sees both recaptures as similar (small disagreement in either direction). But pedagogically gxf6 is the modern preference: it preserves the e-pawn for central play, opens the g-file for the rook after …Bg7, and gives the bishop a long-diagonal route. exf6 cracks the e-pawn structure and gives White's queenside knight a clean Nc3-d5 outpost. Practical edge: gxf6 lets Black play for an attack; exf6 reduces Black to passive defence."
+      "explanation": "3.Bh4? leaves the bishop on a poor square — Black plays …d5 or …c5 to gain a free tempo against the bishop. 3.Bf4 keeps the bishop active and pressures c7/e7.",
+      "shortNarration": "Bf4 — active square, not passive Bh4",
+      "sources": [
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+      ]
     }
   ],
   "benoni-defence": [
