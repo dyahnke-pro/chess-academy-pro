@@ -23,6 +23,7 @@ Status legend: ✅ shipped · 🟡 partial · 🚧 in flight (another session) �
 | Surface | Status | UX contract | Audit script | E2E spec | Notes |
 |---|---|---|---|---|---|
 | Settings | ✅ | — | — | — | PR #502, #503 + Coach Narration unification (2026-05) |
+| First-run strength calibration (boot + Dashboard bubble) | ✅ | — | [`scripts/audit-strength-calibration.mjs`](../scripts/audit-strength-calibration.mjs) | `strengthCalibrationService.test.ts`, `StrengthCalibrationBubble.test.tsx`, `PageHelp.test.tsx` | 2026-05-26. Makes difficulty adaptive for beginners. Imported games seed strength silently at boot (`calibrateStrength`); with no imports the skill-band bubble pops first (PageHelp-style, blocking) and seeds BOTH `currentRating` + `puzzleRating` (they used to diverge — engine read one, puzzles the other). 4/4 sandbox scenarios green: bubble-first + help-suppressed, both-ratings-written, help-pops-second, sticky-no-repop. Live-commit slow in sandbox (IDB write-stall) — unit tests prove the write logic. |
 | Learn-with-Coach (`/coach/teach`) | ✅ | — | — | — | PR #499 + Phase 1+2 narration overhaul. Locked at tag `learn-stable-2026-05-08`. |
 | Endgame (`/coach/endgame`) | ✅ | [`docs/endgame-ux-contract.md`](endgame-ux-contract.md) | — | `e2e/coach-endgame.spec.ts` | PR #500. 24 specs passing, 2 skipped. |
 | Opening Traps (`/openings/traps`) | ✅ | — | — | — | PR #494 + classification taxonomy (`trap` / `mistake` / `theme`). |

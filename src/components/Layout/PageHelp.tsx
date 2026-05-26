@@ -26,18 +26,26 @@ interface PageHelpProps {
    * Omit to disable auto-open (manual-only).
    */
   helpId?: string;
+  /**
+   * Hold the first-visit auto-open. Used so a higher-priority first-run
+   * bubble (the strength picker) pops first; when this flips back to false
+   * the auto-open runs, making this the SECOND bubble in sequence.
+   */
+  suppressAutoOpen?: boolean;
 }
 
 function metaKey(helpId: string): string {
   return `pagehelp-seen-${helpId}`;
 }
 
-export function PageHelp({ title, steps, className = '', helpId }: PageHelpProps): JSX.Element {
+export function PageHelp({ title, steps, className = '', helpId, suppressAutoOpen = false }: PageHelpProps): JSX.Element {
   const [open, setOpen] = useState(false);
 
-  // First-visit auto-open: check Dexie once on mount; if unseen, open + mark seen.
+  // First-visit auto-open: check Dexie once on mount; if unseen, open + mark
+  // seen. Held while suppressAutoOpen is true (re-runs when it flips false),
+  // so the strength bubble can claim the first slot.
   useEffect(() => {
-    if (!helpId) return;
+    if (!helpId || suppressAutoOpen) return;
     let cancelled = false;
     void db.meta.get(metaKey(helpId)).then((rec) => {
       if (cancelled || rec) return;
@@ -45,7 +53,7 @@ export function PageHelp({ title, steps, className = '', helpId }: PageHelpProps
       void db.meta.put({ key: metaKey(helpId), value: '1' });
     });
     return () => { cancelled = true; };
-  }, [helpId]);
+  }, [helpId, suppressAutoOpen]);
 
   useEffect(() => {
     if (!open) return;

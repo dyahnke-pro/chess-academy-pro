@@ -1852,6 +1852,7 @@ After every `git push origin main`:
    | `src/data/pro-repertoires.json` trap/warning content | `scripts/audit-trap-orientation.mjs` (data-only — runs without a browser) |
    | `/` (dashboard) + SmartSearchBar | `scripts/audit-dashboard.mjs` |
    | settings toggles | `scripts/audit-settings-behavior.mjs` |
+   | first-run strength calibration (boot rating + skill bubble) | `scripts/audit-strength-calibration.mjs` |
    | Cross-surface UI scaffolding | run multiple of the above |
 
    Every script in `scripts/audit-*.mjs` targets the live prod URL

@@ -30,8 +30,9 @@ describe('dbService', () => {
       const profile = await getOrCreateMainProfile();
       expect(profile.id).toBe('main');
       expect(profile.name).toBe('Player');
-      expect(profile.currentRating).toBe(1420);
-      expect(profile.puzzleRating).toBe(1400);
+      expect(profile.currentRating).toBe(800);
+      expect(profile.puzzleRating).toBe(800);
+      expect(profile.strengthCalibrated).toBe(false);
       expect(profile.level).toBe(1);
       expect(profile.xp).toBe(0);
     });
@@ -70,7 +71,7 @@ describe('dbService', () => {
       expect(updated?.name).toBe('New Name');
       expect(updated?.currentRating).toBe(1600);
       // Other fields unchanged
-      expect(updated?.puzzleRating).toBe(1400);
+      expect(updated?.puzzleRating).toBe(800);
     });
   });
 
