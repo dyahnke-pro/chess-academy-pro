@@ -28092,21 +28092,18 @@
     "id": "mp-carokann-advance",
     "openingId": "caro-kann",
     "criticalPositionFen": "r2qkb1r/pp3ppp/2n1p1n1/3pP3/3Nb3/4BN2/PPP1BPPP/R2Q1RK1 w kq - 7 11",
-    "title": "Caro Advance: Pressure the e5-Chain",
-    "overview": "Black has undermined White's chain with …c5, freed the light bishop to e4, and stands well coordinated. The plan: train the dark bishop on the e5-pawn, pile the queen behind it, and use the half-open c-file — Black presses the over-extended chain rather than defending.",
+    "title": "Caro Advance: Trade Down and Clamp e4",
+    "overview": "In this Advance line Black has developed actively and lands a bishop on e4. The plan is simplification: trade the knights, concede the e4-bishop for White's knight, and recapture with the d-pawn to leave a protected, cramping pawn on e4. The queen centralises on d5 to hold it. The lesson: when pieces come off, the advanced e4-pawn and central queen give Black a comfortable, equal game.",
     "pawnBreaks": [
-      "…f6 to challenge the e5-pawn later",
-      "keep the c-file half-open"
+      "…dxe4 to plant a protected, cramping pawn on e4"
     ],
     "pieceManeuvers": [
-      "…Bd6 hitting e5",
-      "…Qe7 behind the break",
-      "…Rc8 on the c-file"
+      "…Qd5 centralising the queen on the d5-blockade"
     ],
     "strategicThemes": [
-      "Besiege the e5-spearhead",
-      "Dominate the e4-square",
-      "Half-open c-file pressure"
+      "Simplifying into a comfortable structure",
+      "The cramping e4-pawn",
+      "Central queen on d5"
     ],
     "endgameTransitions": [
       "The free pieces and better bishop tell in simplification"
@@ -28115,72 +28112,86 @@
       {
         "fen": "r2qkb1r/pp3ppp/2n1p1n1/3pP3/3Nb3/4BN2/PPP1BPPP/R2Q1RK1 w kq - 7 11",
         "moves": [
-          "c3",
-          "Bd6",
-          "Bf4",
-          "Qe7"
+          "Nxc6",
+          "bxc6",
+          "Ng5",
+          "Be7",
+          "Nxe4",
+          "dxe4",
+          "Qd4",
+          "Qd5"
         ],
         "annotations": [
-          "c3 shores up the queenside.",
-          "…Bd6 trains the dark bishop on the e5-pawn — the head of White’s chain.",
-          "Bf4 defends e5.",
-          "…Qe7 stacks the queen behind the pressure on e5; with the light bishop entrenched on e4 and the dark bishop and both knights all trained on the e5-spearhead, Black besieges White's over-extended pawn. Black has the easier game and the clearer plan — pile up on e5 until it falls."
+          "Nxc6 — White trades off Black's active c6-knight.",
+          "…bxc6 — recapturing toward the centre and opening the b-file.",
+          "Ng5 — the knight jumps to g5, attacking the e4-bishop.",
+          "…Be7 — Black develops the bishop, content to give it for the knight.",
+          "Nxe4 — White takes on e4, winning the bishop pair.",
+          "…dxe4 — Black recaptures with the d-pawn, planting a protected, cramping pawn on e4.",
+          "Qd4 — White centralises, attacking the e4-pawn.",
+          "…Qd5 — the queen centralises on d5, defending e4 and offering a trade; Black is comfortable with the e4-pawn cramping White."
         ],
-        "title": "Caro Advance: Pressure the e5-Chain",
+        "title": "Caro Advance: Trade Down and Clamp e4",
         "arrows": [
+          [],
           [],
           [
             {
-              "from": "d6",
-              "to": "e5",
+              "from": "g5",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d4",
+              "to": "e4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [
             {
-              "from": "f4",
-              "to": "e5",
+              "from": "d5",
+              "to": "e4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ],
-          []
+          ]
         ],
         "highlights": [
           [
             {
-              "square": "c3",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c2",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d6",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f8",
+              "square": "b7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "f4",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e3",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e5",
+              "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
@@ -28190,12 +28201,52 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d8",
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e5",
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e4",
@@ -28204,15 +28255,18 @@
           ]
         ],
         "sources": [
-          "book:caro-kann",
-          "concept:pos-center",
+          "concept:pos-initiative",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ],
         "learnCues": [
-          "c3 — shore the queenside",
-          "Bd6 — train on the e5-pawn",
-          "Bf4 — defend e5",
-          "Qe7 — besiege e5, the easier game"
+          "Nxc6 — trade the knight.",
+          "…bxc6 — recapture, open b-file.",
+          "Ng5 — hit the e4-bishop.",
+          "…Be7 — develop, concede e4.",
+          "Nxe4 — White takes the bishop.",
+          "…dxe4 — cramping pawn on e4.",
+          "Qd4 — hit the e4-pawn.",
+          "…Qd5 — centralise, hold e4."
         ]
       }
     ]
@@ -28444,9 +28498,8 @@
       "fix d4 as the target"
     ],
     "pieceManeuvers": [
-      "blockade d5",
-      "…Bf6 and …Rc8 pressing d4",
-      "…Bd7-c6 reinforcing the blockade"
+      "…Nd5 the blockading knight in front of the isolated pawn",
+      "…Nxc3 to shatter White's queenside structure"
     ],
     "strategicThemes": [
       "Blockade the isolani on d5",
@@ -28460,38 +28513,82 @@
       {
         "fen": "r1bq1rk1/pp3p1p/2n1pbp1/3n4/3P4/P1NB1N2/1PQB1PPP/R4RK1 w - - 0 13",
         "moves": [
-          "h3",
-          "Bd7",
-          "Rfe1",
-          "Rc8"
+          "Bh6",
+          "Re8",
+          "Rad1",
+          "Nxc3",
+          "bxc3",
+          "Bd7"
         ],
         "annotations": [
-          "h3 makes luft.",
-          "…Bd7 develops, eyeing c6 to reinforce the d5-blockade.",
-          "Rfe1 centralises.",
-          "…Rc8 takes the c-file; with the d5-blockade and pressure on d4, Black is the one playing for the win."
+          "Bh6 — White's bishop eyes the kingside dark squares.",
+          "…Re8 — the rook takes the half-open e-file.",
+          "Rad1 — White piles support behind the isolated d4-pawn.",
+          "…Nxc3 — Black trades off the blockading knight to shatter White's queenside pawns.",
+          "bxc3 — White recaptures, now saddled with doubled c-pawns alongside the isolated d-pawn.",
+          "…Bd7 — completing development; the d4-pawn is fixed as a target and White's structure is damaged — a comfortable blockade."
         ],
         "title": "Caro Panov: Blockade the Isolani",
         "arrows": [
           [],
-          [
-            {
-              "from": "d7",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "h3",
+              "square": "h6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "h2",
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -28505,11 +28602,107 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c6",
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+        ],
+        "learnCues": [
+          "Bh6 — eye the dark squares.",
+          "…Re8 — take the e-file.",
+          "Rad1 — prop the d-pawn.",
+          "…Nxc3 — shatter the queenside.",
+          "bxc3 — doubled c-pawns.",
+          "…Bd7 — develop, blockade set."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-carokann-fantasy",
+    "openingId": "caro-kann",
+    "criticalPositionFen": "r4rk1/ppqn1ppp/2pb1n2/4p1Bb/2BPP3/2P2N2/PP1N2PP/R3QRK1 w - - 7 12",
+    "title": "Caro Fantasy: Develop and Expand on the Queenside",
+    "overview": "In the Fantasy Variation Black has reached a solid, fully-developed structure. With the centre stable, the plan turns to the queenside: reposition the bishop to safety on g6, expand with …b5 to hit White's light-squared bishop, and complete development with the rooks centralised. The lesson: once the centre is secure, Black equalises by gaining queenside space and activating every piece.",
+    "pawnBreaks": [
+      "…b5 to gain queenside space and hit the c4-bishop"
+    ],
+    "pieceManeuvers": [
+      "…Bg6 repositioning the bishop to safety",
+      "…Rae8 centralising on the e-file"
+    ],
+    "strategicThemes": [
+      "Queenside expansion with …b5",
+      "Full, harmonious development",
+      "Comfortable equality from a solid centre"
+    ],
+    "endgameTransitions": [
+      "The freer position favours Black if it simplifies"
+    ],
+    "playableLines": [
+      {
+        "fen": "r4rk1/ppqn1ppp/2pb1n2/4p1Bb/2BPP3/2P2N2/PP1N2PP/R3QRK1 w - - 7 12",
+        "moves": [
+          "Qh4",
+          "Bg6",
+          "Rae1",
+          "b5",
+          "Bb3",
+          "Rae8"
+        ],
+        "annotations": [
+          "Qh4 — White swings the queen to the kingside.",
+          "…Bg6 — the bishop drops to g6, safe and eyeing the b1–h7 diagonal.",
+          "Rae1 — White centralises a rook.",
+          "…b5 — Black expands on the queenside, hitting the c4-bishop with tempo.",
+          "Bb3 — the bishop retreats.",
+          "…Rae8 — the rook takes the e-file; Black is fully developed and comfortable."
+        ],
+        "title": "Caro Fantasy: Develop and Expand on the Queenside",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "g6",
+              "to": "h7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
               "color": "rgba(255, 235, 59, 0.5)"
             },
             {
-              "square": "d5",
+              "square": "h7",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
@@ -28519,122 +28712,31 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f1",
+              "square": "a1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c8",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "a8",
+              "square": "b7",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d4",
+              "square": "c4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
-          ]
-        ],
-        "sources": [
-          "book:caro-kann",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-        ],
-        "learnCues": [
-          "h3 — make luft",
-          "Bd7 — eye c6, reinforce d5",
-          "Rfe1 — centralise",
-          "Rc8 — take the c-file, press"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-carokann-fantasy",
-    "openingId": "caro-kann",
-    "criticalPositionFen": "r4rk1/ppqn1ppp/2pb1n2/4p1Bb/2BPP3/2P2N2/PP1N2PP/R3QRK1 w - - 7 12",
-    "title": "Caro Fantasy: Open the Centre",
-    "overview": "Black's early …e5 has handed back a free, classical game with the better coordination. The plan: complete development, keep the pin on f3 alive, and open the centre with …exd4 at the right moment so the active pieces and rooks crash down the e-file.",
-    "pawnBreaks": [
-      "…exd4 to open the centre",
-      "…f6 only if needed to bolster e5"
-    ],
-    "pieceManeuvers": [
-      "…Rae8 down the e-file",
-      "…Bh5 keeping the f3-pin",
-      "…Bd6 aiming at the kingside"
-    ],
-    "strategicThemes": [
-      "Open the centre while better developed",
-      "Pin and pressure f3",
-      "Active classical piece play"
-    ],
-    "endgameTransitions": [
-      "The freer position favours Black if it simplifies"
-    ],
-    "playableLines": [
-      {
-        "fen": "r4rk1/ppqn1ppp/2pb1n2/4p1Bb/2BPP3/2P2N2/PP1N2PP/R3QRK1 w - - 7 12",
-        "moves": [
-          "Kh1",
-          "exd4",
-          "cxd4",
-          "Rae8"
-        ],
-        "annotations": [
-          "Kh1 steps off the diagonal.",
-          "…exd4 opens the centre while Black is the better-developed side.",
-          "cxd4 recaptures.",
-          "…Rae8 swings the rook to the e-file, bearing down on e4 — Black’s pieces spring to life."
-        ],
-        "title": "Caro Fantasy: Open the Centre",
-        "arrows": [
-          [],
-          [],
-          [],
-          [
-            {
-              "from": "e8",
-              "to": "e4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
-        ],
-        "highlights": [
-          [
-            {
-              "square": "h1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
           ],
           [
             {
-              "square": "d4",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -28646,23 +28748,20 @@
             {
               "square": "a8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
         "sources": [
-          "book:caro-kann",
-          "concept:pos-center",
+          "concept:pos-space",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ],
         "learnCues": [
-          "Kh1 — step off the diagonal",
-          "exd4 — open the centre",
-          "cxd4 — recapture",
-          "Rae8 — swing to the e-file, hit e4"
+          "Qh4 — queen to the kingside.",
+          "…Bg6 — bishop to safety.",
+          "Rae1 — centralise the rook.",
+          "…b5 — queenside space, hit the bishop.",
+          "Bb3 — bishop retreats.",
+          "…Rae8 — take the e-file."
         ]
       }
     ]
@@ -28674,13 +28773,10 @@
     "title": "Caro Tartakower: The Doubled-Pawn Clamp",
     "overview": "Black paid with doubled f-pawns for the bishop pair, the open e-file, and a structure White cannot attack. The plan: clamp White's king with …h4-h3, reroute the knight to the kingside, and use the bishop pair and the e-file to seize the initiative.",
     "pawnBreaks": [
-      "…f5 to roll the kingside majority later",
-      "the doubled f-pawns clamp e5 and g5"
+      "…g5 to clamp the kingside behind the advanced h4-pawn"
     ],
     "pieceManeuvers": [
-      "…Nf8-g6 to the kingside",
-      "…Be6 developing the bishop pair",
-      "…Re8 on the open file"
+      "…Bc7 to the active b8–h2 diagonal"
     ],
     "strategicThemes": [
       "Clamp the king with …h4-h3",
@@ -28695,38 +28791,44 @@
         "fen": "r1bqrnk1/pp3pp1/2pb1p2/8/3P3p/2PB3P/PPQBNPP1/R4RK1 w - - 3 13",
         "moves": [
           "Rae1",
-          "Ng6",
-          "Ng3",
-          "Be6"
+          "Bc7",
+          "f4",
+          "g6",
+          "f5",
+          "g5",
+          "c4",
+          "b6"
         ],
         "annotations": [
-          "Rae1 contests the open e-file.",
-          "…Ng6 reroutes the knight to the kingside, eyeing f4 and h4.",
-          "Ng3 covers f5.",
-          "…Be6 develops the second bishop into a harmonious setup; with both bishops active, the cramping h4-pawn squeezing White's king and the rook on the open e-file, Black holds a real initiative — the doubled f-pawns bought genuine, lasting assets."
+          "Rae1 — White centralises the rook.",
+          "…Bc7 — the bishop repositions to the active b8–h2 diagonal.",
+          "f4 — White grabs kingside space.",
+          "…g6 — Black braces the kingside.",
+          "f5 — White pushes on, trying to crack the kingside open.",
+          "…g5 — Black clamps, fixing the kingside with the advanced h4-pawn behind it.",
+          "c4 — White expands on the queenside instead.",
+          "…b6 — Black develops the queenside, the kingside clamp secure."
         ],
         "title": "Caro Tartakower: The Doubled-Pawn Clamp",
         "arrows": [
           [],
           [
             {
-              "from": "g6",
-              "to": "f4",
+              "from": "c7",
+              "to": "b8",
               "color": "rgba(34, 197, 94, 0.85)"
             },
             {
-              "from": "g6",
-              "to": "h4",
+              "from": "c7",
+              "to": "h2",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
-          [
-            {
-              "from": "g3",
-              "to": "f5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
         "highlights": [
@@ -28742,16 +28844,60 @@
           ],
           [
             {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f8",
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "f4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "h4",
@@ -28760,43 +28906,38 @@
           ],
           [
             {
-              "square": "g3",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e2",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "e6",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c8",
+              "square": "b7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
         "sources": [
-          "book:caro-kann",
-          "concept:pos-center",
+          "concept:pos-space",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ],
         "learnCues": [
-          "Rae1 — contest the e-file",
-          "Ng6 — reroute, eye f4/h4",
-          "Ng3 — cover f5",
-          "Be6 — harmonious setup, initiative"
+          "Rae1 — centralise the rook.",
+          "…Bc7 — active diagonal.",
+          "f4 — White's space.",
+          "…g6 — brace the kingside.",
+          "f5 — White pushes on.",
+          "…g5 — clamp the kingside.",
+          "c4 — White's queenside.",
+          "…b6 — develop, clamp holds."
         ]
       }
     ]
