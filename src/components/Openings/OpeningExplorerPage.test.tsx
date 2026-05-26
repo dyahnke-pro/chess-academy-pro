@@ -8,7 +8,6 @@ import { OpeningExplorerPage } from './OpeningExplorerPage';
 const mockGetRepertoireOpenings = vi.fn();
 const mockSearchOpenings = vi.fn();
 const mockGetOpeningsByEcoLetter = vi.fn();
-const mockGetMasterclassOpeningIds = vi.fn();
 
 const whiteOpening = {
   id: 'vienna-game',
@@ -86,8 +85,6 @@ vi.mock('../../services/openingService', () => ({
   getRepertoireOpenings: (...args: unknown[]): unknown => mockGetRepertoireOpenings(...args),
   searchOpenings: (...args: unknown[]): unknown => mockSearchOpenings(...args),
   getOpeningsByEcoLetter: (...args: unknown[]): unknown => mockGetOpeningsByEcoLetter(...args),
-  getMasterclassOpeningIds: (...args: unknown[]): unknown => mockGetMasterclassOpeningIds(...args),
-  toggleFavorite: vi.fn().mockResolvedValue(true),
   getMasteryPercent: (o: typeof whiteOpening) => Math.round(o.drillAccuracy * 100),
   needsReview: (o: typeof whiteOpening) => o.drillAttempts > 0 && o.drillAccuracy < 0.7,
 }));
@@ -100,6 +97,19 @@ vi.mock('../../services/dataLoader', () => ({
   whenFullySeeded: vi.fn().mockResolvedValue(undefined),
 }));
 
+// Stub the sibling tab components so this page's unit test stays focused on
+// its own structure (tab toggle + All Openings ECO catalog) without pulling
+// each tab's full data/service tree in.
+vi.mock('./MasterclassesTab', () => ({
+  MasterclassesTab: () => <div data-testid="masterclasses-tab-stub">Masterclasses</div>,
+}));
+vi.mock('./ProRepertoiresTab', () => ({
+  ProRepertoiresTab: () => <div data-testid="pro-tab-stub">Pro</div>,
+}));
+vi.mock('./GambitsTab', () => ({
+  GambitsTab: () => <div data-testid="gambits-tab-stub">Gambits</div>,
+}));
+
 vi.mock('../../services/coachApi', () => ({
   getCoachChatResponse: vi.fn().mockResolvedValue(''),
 }));
@@ -109,40 +119,16 @@ describe('OpeningExplorerPage', () => {
     vi.clearAllMocks();
     mockGetRepertoireOpenings.mockResolvedValue([whiteOpening, blackOpening]);
     mockSearchOpenings.mockResolvedValue([]);
-    mockGetMasterclassOpeningIds.mockReturnValue([]);
     mockGetOpeningsByEcoLetter.mockImplementation((letter: string) => {
       if (letter === 'A') return Promise.resolve([ecoOpening]);
       return Promise.resolve([]);
     });
   });
 
-  // De-dup contract (David 2026-05-24): masterclass openings live ONLY on the
-  // Masterclasses tab — they must NOT also appear in the Most Common list, even
-  // though they're still repertoire records. Exclusion is keyed on the manifest
-  // ids, so each new masterclass auto-drops out the moment its manifest lands.
-  it('excludes masterclass openings from the Most Common tab', async () => {
-    mockGetMasterclassOpeningIds.mockReturnValue(['vienna-game']);
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      // The non-masterclass opening still shows…
-      expect(screen.getByTestId('opening-card-sicilian-najdorf')).toBeInTheDocument();
-    });
-    // …but the masterclass one is gone from Most Common.
-    expect(screen.queryByTestId('opening-card-vienna-game')).not.toBeInTheDocument();
-  });
-
   it('renders the page title', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
       expect(screen.getByText('Openings')).toBeInTheDocument();
-    });
-  });
-
-  it('renders opening cards after loading', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
-      expect(screen.getByTestId('opening-card-sicilian-najdorf')).toBeInTheDocument();
     });
   });
 
@@ -153,168 +139,52 @@ describe('OpeningExplorerPage', () => {
     });
   });
 
-  it('shows mastery ring with percentage on drilled openings', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      const percents = screen.getAllByTestId('mastery-percent');
-      const values = percents.map((el) => el.textContent);
-      expect(values).toContain('75');
-    });
-  });
-
-  it('shows needs-review indicator for weak openings', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByTestId('needs-review')).toBeInTheDocument();
-    });
-  });
-
-  it('shows woodpecker reps on card when reps > 0', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('3 reps')).toBeInTheDocument();
-    });
-  });
-
   it('shows loading state initially', () => {
     render(<OpeningExplorerPage />);
     expect(screen.getByText('Loading openings...')).toBeInTheDocument();
   });
 
-  it('shows "No openings found" when repertoire is empty', async () => {
-    mockGetRepertoireOpenings.mockResolvedValue([]);
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('No openings found.')).toBeInTheDocument();
-    });
-  });
-
-  it('shows My White Openings and My Black Openings section headings', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('My White Openings')).toBeInTheDocument();
-      expect(screen.getByText('My Black Openings')).toBeInTheDocument();
-    });
-  });
-
-  it('displays ECO code and opening name in each card', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('C25')).toBeInTheDocument();
-      expect(screen.getByText('Vienna Game')).toBeInTheDocument();
-      expect(screen.getByText('B90')).toBeInTheDocument();
-      expect(screen.getByText('Sicilian Najdorf')).toBeInTheDocument();
-    });
-  });
-
-  it('displays style tag in opening cards', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('Classical, Flexible')).toBeInTheDocument();
-      expect(screen.getByText('Aggressive, Tactical')).toBeInTheDocument();
-    });
-  });
-
-  it('search query calls searchOpenings after debounce', async () => {
-    const user = userEvent.setup();
-    mockSearchOpenings.mockResolvedValue([whiteOpening]);
-
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByTestId('smart-search-input')).toBeInTheDocument();
-    });
-
-    const searchInput = screen.getByTestId('smart-search-input');
-    await user.type(searchInput, 'Vienna');
-
-    await waitFor(() => {
-      expect(mockSearchOpenings).toHaveBeenCalledWith('Vienna');
-    });
-  });
-
-  it('search results filter displayed openings', async () => {
-    const user = userEvent.setup();
-    mockSearchOpenings.mockResolvedValue([whiteOpening]);
-
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
-    });
-
-    const searchInput = screen.getByTestId('smart-search-input');
-    await user.type(searchInput, 'Vienna');
-
-    await waitFor(() => {
-      expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
-      expect(screen.queryByTestId('opening-card-sicilian-najdorf')).not.toBeInTheDocument();
-    });
-  });
-
-  it('displays last studied date on card', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('Today')).toBeInTheDocument();
-    });
-  });
-
-  it('shows "Not studied" when lastStudied is null', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('Not studied')).toBeInTheDocument();
-    });
-  });
-
-  // ─── Favorites section tests ────────────────────────────────────────────────
-
-  it('shows Favorites section when a repertoire opening is favorited', async () => {
-    mockGetRepertoireOpenings.mockResolvedValue([
-      { ...whiteOpening, isFavorite: true },
-      blackOpening,
-    ]);
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('Favorites')).toBeInTheDocument();
-      expect(screen.getByTestId('opening-card-vienna-game')).toBeInTheDocument();
-    });
-  });
-
-  it('does not show favorited opening under its color section', async () => {
-    mockGetRepertoireOpenings.mockResolvedValue([
-      { ...whiteOpening, isFavorite: true },
-      blackOpening,
-    ]);
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('Favorites')).toBeInTheDocument();
-      // White section should not appear since the only white opening is favorited
-      expect(screen.queryByText('My White Openings')).not.toBeInTheDocument();
-      // Black section still appears
-      expect(screen.getByText('My Black Openings')).toBeInTheDocument();
-    });
-  });
-
-  it('does not show Favorites section when no openings are favorited', async () => {
-    render(<OpeningExplorerPage />);
-    await waitFor(() => {
-      expect(screen.getByText('My White Openings')).toBeInTheDocument();
-      expect(screen.queryByText('Favorites')).not.toBeInTheDocument();
-    });
-  });
-
   // ─── Tab toggle tests ──────────────────────────────────────────────────────
 
-  it('shows tab toggle with "My Repertoire" and "All Openings"', async () => {
+  // David asked (three times) to remove the generic "Most Common" repertoire
+  // tab from the Openings page. The page now opens on Masterclasses and never
+  // surfaces a `tab-repertoire` toggle.
+  it('does not render a Most Common / repertoire tab', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByTestId('tab-repertoire')).toBeInTheDocument();
+      expect(screen.getByTestId('tab-masterclasses')).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('tab-repertoire')).not.toBeInTheDocument();
+    expect(screen.queryByText('My White Openings')).not.toBeInTheDocument();
+    expect(screen.queryByText('My Black Openings')).not.toBeInTheDocument();
+  });
+
+  it('renders the remaining tab toggle entries', async () => {
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      expect(screen.getByTestId('tab-masterclasses')).toBeInTheDocument();
+      expect(screen.getByTestId('tab-pro')).toBeInTheDocument();
+      expect(screen.getByTestId('tab-gambits')).toBeInTheDocument();
       expect(screen.getByTestId('tab-all')).toBeInTheDocument();
     });
   });
 
-  it('defaults to Repertoire tab', async () => {
+  it('defaults to the Masterclasses tab', async () => {
     render(<OpeningExplorerPage />);
     await waitFor(() => {
-      expect(screen.getByText('My White Openings')).toBeInTheDocument();
+      expect(screen.getByTestId('masterclasses-tab-stub')).toBeInTheDocument();
+    });
+  });
+
+  it('switches to the Pro tab', async () => {
+    const user = userEvent.setup();
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      expect(screen.getByTestId('tab-pro')).toBeInTheDocument();
+    });
+    await user.click(screen.getByTestId('tab-pro'));
+    await waitFor(() => {
+      expect(screen.getByTestId('pro-tab-stub')).toBeInTheDocument();
     });
   });
 
@@ -352,6 +222,23 @@ describe('OpeningExplorerPage', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Amar Opening')).toBeInTheDocument();
+    });
+  });
+
+  it('search query calls searchOpenings after debounce', async () => {
+    const user = userEvent.setup();
+    mockSearchOpenings.mockResolvedValue([whiteOpening]);
+
+    render(<OpeningExplorerPage />);
+    await waitFor(() => {
+      expect(screen.getByTestId('smart-search-input')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('smart-search-input');
+    await user.type(searchInput, 'Vienna');
+
+    await waitFor(() => {
+      expect(mockSearchOpenings).toHaveBeenCalledWith('Vienna');
     });
   });
 });

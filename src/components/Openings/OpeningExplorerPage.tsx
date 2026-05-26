@@ -1,13 +1,10 @@
 import { PageHelp } from '../Layout/PageHelp';
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import {
   getRepertoireOpenings,
-  getMasterclassOpeningIds,
   getOpeningsByEcoLetter,
   searchOpenings,
-  toggleFavorite,
 } from '../../services/openingService';
 import { seedDatabase, whenFullySeeded } from '../../services/dataLoader';
 import { db } from '../../db/schema';
@@ -19,7 +16,7 @@ import { MasterclassesTab } from './MasterclassesTab';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { BookOpen, Library, ChevronDown, ChevronRight, Users, Swords, Sparkles, GraduationCap } from 'lucide-react';
 
-type TabMode = 'common' | 'masterclasses' | 'pro' | 'gambits' | 'all';
+type TabMode = 'masterclasses' | 'pro' | 'gambits' | 'all';
 
 const ECO_LETTERS = ['A', 'B', 'C', 'D', 'E'] as const;
 
@@ -37,7 +34,7 @@ export function OpeningExplorerPage(): JSX.Element {
   const [repertoire, setRepertoire] = useState<OpeningRecord[]>([]);
   const [searchResultIds, setSearchResultIds] = useState<Set<string> | null>(null);
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState<TabMode>('common');
+  const [tab, setTab] = useState<TabMode>('masterclasses');
   const [allOpenings, setAllOpenings] = useState<OpeningRecord[]>([]);
 
   // ECO groups for "All Openings" tab
@@ -93,11 +90,11 @@ export function OpeningExplorerPage(): JSX.Element {
     if (tab !== 'all' || Object.keys(ecoGroups).length > 0) return;
     setAllLoading(true);
     async function loadAll(): Promise<void> {
-      // The full 3641-entry ECO catalog now seeds in the background
-      // (dataLoader.startDeferredSeed) so the default "Most Common"
-      // tab can paint instantly. Wait for that backfill before
-      // reading per-letter groups, else a fresh user lands on a blank
-      // "All" tab until the seed silently finishes.
+      // The full 3641-entry ECO catalog seeds in the background
+      // (dataLoader.startDeferredSeed) so the default tab can paint
+      // instantly. Wait for that backfill before reading per-letter
+      // groups, else a fresh user lands on a blank "All" tab until the
+      // seed silently finishes.
       await whenFullySeeded();
       const groups: Record<string, OpeningRecord[]> = {};
       for (const letter of ECO_LETTERS) {
@@ -133,28 +130,6 @@ export function OpeningExplorerPage(): JSX.Element {
       return next;
     });
   }, []);
-
-  const handleToggleFavorite = useCallback(async (id: string): Promise<void> => {
-    const newVal = await toggleFavorite(id);
-    setRepertoire((prev) =>
-      prev.map((o) => (o.id === id ? { ...o, isFavorite: newVal } : o)),
-    );
-  }, []);
-
-  // Common/repertoire display (with optional search). Masterclass openings are
-  // EXCLUDED here — they live on the Masterclasses tab, not the Most Common
-  // list (David 2026-05-24: the main-40 repertoire is being replaced opening-
-  // by-opening with masterclasses, so a masterclass must NOT also appear as a
-  // plain "common" entry). Source of truth = the manifest keys, so each new
-  // masterclass auto-drops out of this list the moment its manifest is declared.
-  const masterclassIds = useMemo(() => new Set(getMasterclassOpeningIds()), []);
-  const displayCommon = useMemo((): OpeningRecord[] => {
-    const base = repertoire.filter((o) => !masterclassIds.has(o.id));
-    if (searchResultIds && tab === 'common') {
-      return base.filter((o) => searchResultIds.has(o.id));
-    }
-    return base;
-  }, [repertoire, masterclassIds, searchResultIds, tab]);
 
   // All openings search results
   const displayAllSearch = useMemo((): OpeningRecord[] | null => {
@@ -209,9 +184,8 @@ export function OpeningExplorerPage(): JSX.Element {
       </button>
 
       {/* Tab toggle */}
-      <div className="grid grid-cols-5 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
+      <div className="grid grid-cols-4 gap-1 mb-4 p-1 bg-theme-surface rounded-xl" data-testid="tab-toggle">
         {([
-          { id: 'common' as const, label: 'Most Common', icon: BookOpen, testId: 'tab-repertoire', activeClasses: 'bg-blue-500/25 text-blue-200', borderColor: 'border-blue-400/80 shadow-[0_0_6px_rgba(59,130,246,0.7),0_0_14px_rgba(59,130,246,0.45),0_0_24px_rgba(59,130,246,0.25)]' },
           { id: 'masterclasses' as const, label: 'Masterclasses', icon: GraduationCap, testId: 'tab-masterclasses', activeClasses: 'bg-amber-500/25 text-amber-200', borderColor: 'border-amber-400/80 shadow-[0_0_6px_rgba(245,158,11,0.7),0_0_14px_rgba(245,158,11,0.45),0_0_24px_rgba(245,158,11,0.25)]' },
           { id: 'pro' as const, label: 'Pro', icon: Users, testId: 'tab-pro', activeClasses: 'bg-emerald-500/25 text-emerald-200', borderColor: 'border-emerald-400/80 shadow-[0_0_6px_rgba(16,185,129,0.7),0_0_14px_rgba(16,185,129,0.45),0_0_24px_rgba(16,185,129,0.25)]' },
           { id: 'gambits' as const, label: 'Gambits', icon: Swords, testId: 'tab-gambits', activeClasses: 'bg-rose-500/25 text-rose-200', borderColor: 'border-rose-400/80 shadow-[0_0_6px_rgba(244,63,94,0.7),0_0_14px_rgba(244,63,94,0.45),0_0_24px_rgba(244,63,94,0.25)]' },
@@ -240,96 +214,6 @@ export function OpeningExplorerPage(): JSX.Element {
           onResultsChange={handleSearchResults}
         />
       </div>
-
-      {/* ─── Most Common / Repertoire tab ─────────────────────────────── */}
-      {tab === 'common' && (
-        <>
-          {displayCommon.length === 0 ? (
-            <div className="flex flex-1 items-center justify-center text-theme-text-muted">
-              No openings found.
-            </div>
-          ) : (
-            <>
-              {/* Favorites section */}
-              {displayCommon.some((o) => o.isFavorite) && (
-                <>
-                  <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
-                    Favorites
-                  </h2>
-                  <div className="space-y-2 mb-5">
-                    {displayCommon.filter((o) => o.isFavorite).map((opening, i) => (
-                      <motion.div
-                        key={opening.id}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.03, duration: 0.25 }}
-                      >
-                        <OpeningCard
-                          opening={opening}
-                          onClick={() => void navigate(`/openings/${opening.id}`)}
-                          onToggleFavorite={() => void handleToggleFavorite(opening.id)}
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                </>
-              )}
-
-              {/* White openings (excluding favorites) */}
-              {displayCommon.filter((o) => o.color === 'white' && !o.isFavorite).length > 0 && (
-                <>
-                  <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-white border border-theme-border" />
-                    My White Openings
-                  </h2>
-                  <div className="space-y-2 mb-5">
-                    {displayCommon.filter((o) => o.color === 'white' && !o.isFavorite).map((opening, i) => (
-                      <motion.div
-                        key={opening.id}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.03, duration: 0.25 }}
-                      >
-                        <OpeningCard
-                          opening={opening}
-                          onClick={() => void navigate(`/openings/${opening.id}`)}
-                          onToggleFavorite={() => void handleToggleFavorite(opening.id)}
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                </>
-              )}
-
-              {/* Black openings (excluding favorites) */}
-              {displayCommon.filter((o) => o.color === 'black' && !o.isFavorite).length > 0 && (
-                <>
-                  <h2 className="text-xs font-bold text-theme-text-muted uppercase tracking-widest mb-2 flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-neutral-800 border border-theme-border" />
-                    My Black Openings
-                  </h2>
-                  <div className="space-y-2">
-                    {displayCommon.filter((o) => o.color === 'black' && !o.isFavorite).map((opening, i) => (
-                      <motion.div
-                        key={opening.id}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.03, duration: 0.25 }}
-                      >
-                        <OpeningCard
-                          opening={opening}
-                          onClick={() => void navigate(`/openings/${opening.id}`)}
-                          onToggleFavorite={() => void handleToggleFavorite(opening.id)}
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                </>
-              )}
-            </>
-          )}
-        </>
-      )}
 
       {/* ─── Masterclasses tab ───────────────────────────────────────────── */}
       {tab === 'masterclasses' && <MasterclassesTab />}
