@@ -5,6 +5,7 @@ import { useAppStore } from '../../stores/appStore';
 import { seedPuzzles, recordAttempt, getPuzzleStats } from '../../services/puzzleService';
 import type { PuzzleStats } from '../../services/puzzleService';
 import { recordTagDrillResult } from '../../services/misconceptionService';
+import { markRepCompletedToday } from '../../services/repCompletion';
 import {
   createAdaptiveSession,
   processAdaptiveResult,
@@ -26,7 +27,7 @@ import { AdaptiveSessionPanel } from './AdaptiveSessionPanel';
 import { AdaptiveSessionSummary } from './AdaptiveSessionSummary';
 import { db } from '../../db/schema';
 
-type Phase = 'select' | 'loading' | 'solving' | 'checkpoint' | 'summary';
+type Phase = 'select' | 'loading' | 'solving' | 'checkpoint' | 'rep-complete' | 'summary';
 
 const CHECKPOINT_INTERVAL = 10;
 
@@ -40,15 +41,25 @@ export function AdaptivePuzzlePage(): JSX.Element {
   const setActiveProfile = useAppStore((s) => s.setActiveProfile);
   const location = useLocation();
   const navigate = useNavigate();
-  const navState = location.state as { forcedWeakThemes?: string[]; misconceptionTag?: string } | null;
+  const navState = location.state as {
+    forcedWeakThemes?: string[];
+    misconceptionTag?: string;
+    repKey?: string;
+    repCap?: number;
+  } | null;
   const forcedWeakThemes = navState?.forcedWeakThemes;
   // When the Training Plan deep-links a weakness rep here, the real
   // misconception tag rides along so completing the drill spaces it out
   // (closes the capture → drill → space loop). analysis:* clusters carry
   // no tag and don't space.
   const misconceptionTag = navState?.misconceptionTag;
+  // Dashboard rep deep-link: cap the drill at repCap puzzles, then offer to
+  // continue or return to the Dashboard with this rep checked off.
+  const repKey = navState?.repKey;
+  const repCap = navState?.repCap;
   const autoStartedRef = useRef(false);
   const spacedTagRef = useRef(false);
+  const repCapReachedRef = useRef(false);
 
   // Mount audit — see PR #504 F1 fix lineage; tactics tab was
   // observability-blind to the audit stream before this.
@@ -176,6 +187,31 @@ export function AdaptivePuzzlePage(): JSX.Element {
       void db.profiles.update(activeProfile.id, { puzzleRating: newRating });
     }
 
+    // Capped rep drill (from a Dashboard rep): once the cap is hit, mark the
+    // rep done for today, space its misconception tag, and offer to continue
+    // or return to the Dashboard. Fires once — extra puzzles fall back to the
+    // normal open-session checkpoint cadence.
+    if (
+      repKey &&
+      repCap &&
+      repCap > 0 &&
+      !repCapReachedRef.current &&
+      updatedSession.totalPuzzles >= repCap
+    ) {
+      repCapReachedRef.current = true;
+      voiceService.stop();
+      void markRepCompletedToday(repKey);
+      if (misconceptionTag && !spacedTagRef.current) {
+        spacedTagRef.current = true;
+        const accuracy = updatedSession.totalPuzzles > 0
+          ? updatedSession.puzzlesSolved / updatedSession.totalPuzzles
+          : 0;
+        void recordTagDrillResult(misconceptionTag, accuracy >= 0.6);
+      }
+      setPhase('rep-complete');
+      return;
+    }
+
     // Check if checkpoint
     if (updatedSession.totalPuzzles > 0 && updatedSession.totalPuzzles % CHECKPOINT_INTERVAL === 0) {
       setPhase('checkpoint');
@@ -184,7 +220,12 @@ export function AdaptivePuzzlePage(): JSX.Element {
 
     // Fetch next puzzle
     await fetchNextPuzzle(updatedSession);
-  }, [session, currentPuzzle, playerRating, userRating, activeProfile, setActiveProfile, fetchNextPuzzle]);
+  }, [session, currentPuzzle, playerRating, userRating, activeProfile, setActiveProfile, fetchNextPuzzle, repKey, repCap, misconceptionTag]);
+
+  const handleContinueAfterRepCap = useCallback(async (): Promise<void> => {
+    if (!session) return;
+    await fetchNextPuzzle(session);
+  }, [session, fetchNextPuzzle]);
 
   const handleContinueAfterCheckpoint = useCallback(async (): Promise<void> => {
     if (!session) return;
@@ -339,6 +380,39 @@ export function AdaptivePuzzlePage(): JSX.Element {
               onClick={() => void handleContinueAfterCheckpoint()}
               className="px-4 py-2 rounded-lg bg-theme-accent text-white font-medium hover:opacity-90 transition-opacity"
               data-testid="checkpoint-continue"
+            >
+              Keep Going
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Rep cap reached — capped Dashboard-rep drill */}
+      {phase === 'rep-complete' && session && (
+        <div className="flex flex-col items-center justify-center flex-1 gap-6" data-testid="rep-complete">
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-theme-text">
+              {session.totalPuzzles} puzzles done!
+            </h2>
+            <p className="text-sm text-theme-text-muted mt-1">
+              {session.puzzlesSolved} solved, {session.puzzlesFailed} missed
+            </p>
+            <p className="text-sm text-theme-text-muted mt-2">
+              That&apos;s today&apos;s set. Keep going, or head back to the dashboard?
+            </p>
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={() => void navigate('/')}
+              className="px-4 py-2 rounded-lg border border-theme-border text-theme-text hover:bg-theme-surface transition-colors"
+              data-testid="rep-complete-dashboard"
+            >
+              Back to Dashboard
+            </button>
+            <button
+              onClick={() => void handleContinueAfterRepCap()}
+              className="px-4 py-2 rounded-lg bg-theme-accent text-white font-medium hover:opacity-90 transition-opacity"
+              data-testid="rep-complete-continue"
             >
               Keep Going
             </button>

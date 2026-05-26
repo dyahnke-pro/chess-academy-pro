@@ -256,6 +256,61 @@ async function main() {
     await page.waitForTimeout(600);
   }
 
+  // Close any open "How X works" page-help modal (auto-opens on a surface's
+  // first visit; intercepts clicks until dismissed).
+  async function closeHelp() {
+    const m = page.locator('[data-testid="page-help-modal"]');
+    for (let i = 0; i < 4; i++) {
+      if (!(await m.count().catch(() => 0))) return;
+      await page.keyboard.press('Escape').catch(() => {});
+      await page.locator('[data-testid="page-help-close"]').first().click({ timeout: 1500 }).catch(() => {});
+      if (await m.first().waitFor({ state: 'detached', timeout: 1500 }).then(() => 1).catch(() => 0)) return;
+      await page.waitForTimeout(300);
+    }
+  }
+
+  // Dismiss the first-run onboarding overlays (app-global, rendered outside
+  // the router). On a fresh profile the strength-calibration bubble pops first
+  // and intercepts every click — blocking nav and difficulty-picks across the
+  // whole audit. Picking a skill band calibrates + dismisses it (writes to the
+  // profiles store; the sandbox IndexedDB commit can be slow, hence the
+  // generous detached timeout). After that, every surface's first visit
+  // auto-opens its own page-help modal (gated on a `pagehelp-seen-<id>` meta
+  // key) which also intercepts clicks — so we pre-seed those flags in one shot
+  // to suppress them everywhere, then close whatever is already open.
+  const HELP_IDS = [
+    'coach-home', 'coach-review', 'dashboard', 'games', 'games-import',
+    'opening-detail', 'openings', 't1', 't2', 't3', 'tactics',
+    'tactics-mistakes', 'tactics-profile', 'tactics-setup', 'training-plan',
+    'weakness-themes', 'weaknesses',
+  ];
+  async function dismissOnboarding() {
+    const calBubble = page.locator('[data-testid="strength-calibration-bubble"]');
+    await calBubble.waitFor({ state: 'visible', timeout: 4000 }).catch(() => {});
+    if (await calBubble.count() > 0) {
+      const band = page.locator('[data-testid^="skill-band-"]').first();
+      if (await band.count() > 0) await band.click().catch(() => {});
+      await calBubble.waitFor({ state: 'detached', timeout: 45_000 }).catch(() => {});
+    }
+    // Pre-seed all pagehelp-seen flags so no surface auto-opens its help.
+    await page.evaluate((ids) => new Promise((resolve) => {
+      try {
+        const open = indexedDB.open('ChessAcademyDB');
+        open.onsuccess = () => {
+          const db = open.result;
+          if (!db.objectStoreNames.contains('meta')) { resolve(false); return; }
+          const tx = db.transaction('meta', 'readwrite');
+          const store = tx.objectStore('meta');
+          for (const id of ids) store.put({ key: `pagehelp-seen-${id}`, value: '1' });
+          tx.oncomplete = () => resolve(true);
+          tx.onerror = () => resolve(false);
+        };
+        open.onerror = () => resolve(false);
+      } catch { resolve(false); }
+    }), HELP_IDS).catch(() => {});
+    await closeHelp();
+  }
+
   // ═══════════════════════════════════════════════════════════════════
   // BOOT
   // ═══════════════════════════════════════════════════════════════════
@@ -283,6 +338,9 @@ async function main() {
       { label: 'app boot', fn: () => hasText('chess academy pro') },
     ],
   );
+
+  // Clear the first-run onboarding overlays before any click-driven scenario.
+  await dismissOnboarding();
 
   // ═══════════════════════════════════════════════════════════════════
   // /tactics — Hub

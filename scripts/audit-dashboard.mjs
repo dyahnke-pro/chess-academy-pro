@@ -203,6 +203,36 @@ async function main() {
     { kind: 'visible', selector: '[data-testid="section-weaknesses"]', label: 'Weaknesses tile' },
   ]);
 
+  // Dismiss the first-run onboarding overlays. On a fresh profile two
+  // blocking dialogs appear in sequence and intercept every click, which
+  // would fail every nav/search scenario below:
+  //   1. strength-calibration-bubble (strengthCalibrated === false) —
+  //      picking a skill band calibrates + dismisses it (writes to the
+  //      profiles store, not openings, so no sandbox openings-write stall);
+  //   2. page-help-modal ("order of operations") — auto-opens once
+  //      calibration completes (its suppressAutoOpen flips false), closed
+  //      via its close button.
+  // The bubble can appear a tick after mount, so wait for it. Called after
+  // every reload since the overlays can re-show until the write commits.
+  const dismissOnboarding = async () => {
+    const calBubble = page.locator('[data-testid="strength-calibration-bubble"]');
+    await calBubble.waitFor({ state: 'visible', timeout: 4000 }).catch(() => {});
+    if (await calBubble.count() > 0) {
+      const band = page.locator('[data-testid^="skill-band-"]').first();
+      if (await band.count() > 0) await band.click().catch(() => {});
+      // Generous timeout: the sandbox IndexedDB write (CLAUDE.md G1) can
+      // delay the profiles.update commit that flips needsCalibration.
+      await calBubble.waitFor({ state: 'detached', timeout: 45_000 }).catch(() => {});
+    }
+    const help = page.locator('[data-testid="page-help-modal"]');
+    await help.waitFor({ state: 'visible', timeout: 3000 }).catch(() => {});
+    if (await help.count() > 0) {
+      await page.locator('[data-testid="page-help-close"]').click().catch(() => {});
+      await help.waitFor({ state: 'detached', timeout: 4000 }).catch(() => {});
+    }
+  };
+  await dismissOnboarding();
+
   // ── SmartSearchBar typing → dropdown surfaces ───────────────────
   await record('search-typing-surfaces-dropdown', async () => {
     const input = page.locator('[data-testid="smart-search-input"]');
@@ -257,6 +287,7 @@ async function main() {
       // Without this the reload after the previous nav races React and
       // the tile waitFor times out even though the tile renders fine.
       await page.locator('[data-testid="dashboard"]').waitFor({ timeout: BOOT_TIMEOUT_MS });
+      await dismissOnboarding();
       const btn = page.locator(`[data-testid="${tile.testid}"]`);
       await btn.waitFor({ timeout: 8000 });
       await btn.scrollIntoViewIfNeeded().catch(() => undefined);
@@ -282,6 +313,7 @@ async function main() {
   await record('nav-import-games', async () => {
     await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: BOOT_TIMEOUT_MS });
     await page.locator('[data-testid="dashboard"]').waitFor({ timeout: BOOT_TIMEOUT_MS });
+    await dismissOnboarding();
     await page.locator('[data-testid="import-games-btn"]').waitFor({ timeout: 8000 });
     await page.locator('[data-testid="import-games-btn"]').click();
     const t0 = Date.now();

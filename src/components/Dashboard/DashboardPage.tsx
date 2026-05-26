@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '../../stores/appStore';
 import { updateStreak } from '../../services/sessionGenerator';
 import { seedDatabase } from '../../services/dataLoader';
-import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight } from 'lucide-react';
+import { BookOpen, GraduationCap, Target, AlertTriangle, Upload, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
 import { useSettings } from '../../hooks/useSettings';
@@ -12,6 +12,7 @@ import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
 import { getUnlearnedFavoriteOpenings } from '../../services/openingService';
 import { getSrsDueOpenings } from '../../services/srsOpeningService';
 import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
+import { getCompletedRepKeysToday, REP_PUZZLE_CAP } from '../../services/repCompletion';
 
 interface SectionItem {
   label: string;
@@ -74,6 +75,10 @@ function navigateToRep(navigate: ReturnType<typeof useNavigate>, rep: RepCandida
       state: {
         forcedWeakThemes: rep.puzzleThemes,
         misconceptionTag: rep.tag && !rep.tag.startsWith('analysis:') ? rep.tag : undefined,
+        // Capped rep drill: stop after REP_PUZZLE_CAP puzzles and offer to
+        // continue or return to the Dashboard with this rep checked off.
+        repKey: rep.key,
+        repCap: REP_PUZZLE_CAP,
       },
     });
   } else {
@@ -84,17 +89,20 @@ function navigateToRep(navigate: ReturnType<typeof useNavigate>, rep: RepCandida
 function TodayStatus(): JSX.Element | null {
   const navigate = useNavigate();
   const [reps, setReps] = useState<RepCandidate[] | null>(null);
+  const [completedKeys, setCompletedKeys] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const [weaknesses, srsDue, newLines] = await Promise.all([
+      const [weaknesses, srsDue, newLines, done] = await Promise.all([
         getUnifiedWeaknessProfile(),
         getSrsDueOpenings(),
         getUnlearnedFavoriteOpenings(),
+        getCompletedRepKeysToday(),
       ]);
       if (cancelled) return;
       setReps(buildTodaysReps({ weaknesses, srsDue, newLines, total: 5 }));
+      setCompletedKeys(done);
     })();
     return () => { cancelled = true; };
   }, []);
@@ -119,20 +127,26 @@ function TodayStatus(): JSX.Element | null {
           </button>
         </div>
       )}
-      {reps.map((rep) => (
-        <button
-          key={rep.key}
-          onClick={() => navigateToRep(navigate, rep)}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-theme-accent/10 border border-theme-accent/30 hover:opacity-80 transition-all"
-          data-testid={`dashboard-rep-${rep.kind}`}
-        >
-          <div className="flex-1 text-left min-w-0">
-            <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{rep.label}</span>
-            <p className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>{rep.subtitle}</p>
-          </div>
-          <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
-        </button>
-      ))}
+      {reps.map((rep) => {
+        const done = completedKeys.has(rep.key);
+        return (
+          <button
+            key={rep.key}
+            onClick={() => navigateToRep(navigate, rep)}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all hover:opacity-80 ${done ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-theme-accent/10 border-theme-accent/30'}`}
+            data-testid={`dashboard-rep-${rep.kind}`}
+            data-rep-done={done ? 'true' : 'false'}
+          >
+            <div className="flex-1 text-left min-w-0">
+              <span className={`text-sm font-medium ${done ? 'line-through opacity-70' : ''}`} style={{ color: 'var(--color-text)' }}>{rep.label}</span>
+              <p className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>{done ? 'Done for today — tap for more.' : rep.subtitle}</p>
+            </div>
+            {done
+              ? <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+              : <ChevronRight size={16} className="text-theme-text-muted shrink-0" />}
+          </button>
+        );
+      })}
     </div>
   );
 }
