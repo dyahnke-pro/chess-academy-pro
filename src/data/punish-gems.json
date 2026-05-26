@@ -3289,5 +3289,55 @@
     "materialDelta": 2,
     "tier": "confirmed",
     "why": "At your level opponents play O-O here in 7% of games. Punish with the best move h6 — the engine has Black winning (+3.5, +2 material)."
+  },
+  {
+    "openingId": "philidor-defence",
+    "lineMoves": "e4 e5 Nf3 d6 Bc4 Be7 d4 exd4 Nxd4 Nf6 Nc3 O-O",
+    "inaccuracy": "Bg5",
+    "freqPct": 5.6,
+    "games": 79923,
+    "practicalScore": 54,
+    "mainMove": "O-O",
+    "punish": "Nxe4",
+    "punishSeq": [
+      "Nxe4",
+      "Bxe7",
+      "Qxe7",
+      "Nd5",
+      "Qd8",
+      "Bd3",
+      "Re8",
+      "O-O"
+    ],
+    "playLine": "e4 e5 Nf3 d6 Bc4 Be7 d4 exd4 Nxd4 Nf6 Nc3 O-O Bg5 Nxe4 Bxe7 Qxe7 Nd5 Qd8 Bd3 Re8 O-O",
+    "engineCp": 109,
+    "materialDelta": 1,
+    "tier": "confirmed",
+    "why": "At your level opponents play Bg5 here in 6% of games. Punish with the best move Nxe4 — the engine has Black winning (+1.1, +1 material)."
+  },
+  {
+    "openingId": "philidor-defence",
+    "lineMoves": "e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7",
+    "inaccuracy": "Bg5",
+    "freqPct": 10.4,
+    "games": 308148,
+    "practicalScore": 50,
+    "mainMove": "Bc4",
+    "punish": "Nxe4",
+    "punishSeq": [
+      "Nxe4",
+      "Bxe7",
+      "Qxe7",
+      "Bb5+",
+      "c6",
+      "Nxe4",
+      "Qxe4+",
+      "Qe2"
+    ],
+    "playLine": "e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3 Be7 Bg5 Nxe4 Bxe7 Qxe7 Bb5+ c6 Nxe4 Qxe4+ Qe2",
+    "engineCp": 93,
+    "materialDelta": 1,
+    "tier": "positional",
+    "why": "At your level opponents play Bg5 here in 10% of games. Punish with the best move Nxe4 — the engine has Black clearly better (+0.9, +1 material)."
   }
 ]

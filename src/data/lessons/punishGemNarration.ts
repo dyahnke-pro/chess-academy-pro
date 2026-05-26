@@ -116,6 +116,63 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
     ],
   },
+  // Philidor (student = Black). White's premature Bg5 is a FAKE pin — the
+  // f6-knight only screens the e7-bishop, not the king, and e4 hangs: …Nxe4
+  // wins the pawn. Two common move orders.
+  'philidor-defence:e4_e5_Nf3_d6_Bc4_Be7_d4_exd4_Nxd4_Nf6_Nc3_O-O:Bg5': {
+    sources: ['book:philidor-defence', 'concept:tac-pin', 'https://en.wikipedia.org/wiki/Philidor_Defence'],
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'Bg5? — the pin is an illusion: the f6-knight only screens the e7-bishop, not the king, and the e4-pawn is left undefended.',
+      '…Nxe4 — snapping off the loose e4-pawn; the “pinned” knight was never truly pinned.',
+      '',
+      '…Qxe7 — recapturing the bishop, a clean pawn to the good.',
+      '',
+      '…Qd8 — calmly sidestepping the Nd5 fork; the knight bites on granite.',
+      '',
+      '…Re8 — Black consolidates the extra pawn with a comfortable game.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      '',
+      'Nxe4 — the pin is fake, take e4',
+      '',
+      'Qxe7 — a clean pawn up',
+      '',
+      'Qd8 — dodge the Nd5 fork',
+      '',
+      'Re8 — consolidate',
+      '',
+    ],
+  },
+  'philidor-defence:e4_e5_Nf3_d6_d4_exd4_Nxd4_Nf6_Nc3_Be7:Bg5': {
+    sources: ['book:philidor-defence', 'concept:tac-pin', 'https://en.wikipedia.org/wiki/Philidor_Defence'],
+    watch: [
+      '', '', '', '', '', '', '', '', '', '',
+      'Bg5? — the pin is only skin-deep: Nf6 screens the e7-bishop, not the king, and e4 hangs.',
+      '…Nxe4 — taking the free e4-pawn; the knight even eyes the g5-bishop in passing.',
+      '',
+      '…Qxe7 — a clean pawn up after the trade.',
+      '',
+      '…c6 — blunting the Bb5 check; the extra pawn stands.',
+      '',
+      '…Qxe4+ — regaining everything with check, a pawn ahead and the better centre.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      '',
+      'Nxe4 — fake pin, grab e4',
+      '',
+      'Qxe7 — a clean pawn up',
+      '',
+      'c6 — block the check',
+      '',
+      'Qxe4+ — a pawn ahead, with check',
+      '',
+    ],
+  },
   // Caro — White's f3 (Fantasy) but f3?? offered too loosely: exf3 just
   // wins a pawn. playLine: e4 c6 d4 d5 Nc3 dxe4 f3 exf3 Nxf3 Nf6 Bd3 Bg4 h3 Bxf3 Qxf3
   'caro-kann:e4_c6_d4_d5_Nc3_dxe4:f3': {
