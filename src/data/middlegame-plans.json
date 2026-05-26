@@ -3,191 +3,89 @@
     "id": "mp-ruylopez-d4",
     "openingId": "ruy-lopez",
     "criticalPositionFen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
-    "title": "d4 Central Break",
-    "overview": "This is the d4 Central Break in the Closed Ruy Lopez. White prepares d2-d4 to open the center at the ideal moment when White's pieces are better coordinated — the Bb3 pressures f7, the Nf3 controls d4, and the rooks are ready for open files. The resulting open position favors White's piece activity and central control.",
+    "title": "Ruy Lopez: Prepare and Land the d4 Break",
+    "overview": "The d4-break is White’s thematic central lever in the Closed Ruy — but played raw it achieves nothing. White first builds the Spanish bind: Re1, c3 (supporting d4), Bc2 (retreating the bishop onto the b1-h7 diagonal), and h3 (a luft and a clamp on g4). Only THEN does d4 land with full force, seizing the centre.",
     "pawnBreaks": [
-      {
-        "move": "d2-d4",
-        "explanation": "The d4 break opens the center at the perfect moment — White's Bb3 is already pressuring f7 on the a2-g8 diagonal, the Nf3 controls the d4 square, and the rooks are prepared to seize the open d-file and e-file. This timing advantage is what makes the Ruy Lopez d4 break so effective.",
-        "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8"
-      }
+      "d4 — the central break, prepared by c3",
+      "meet …c5 with d4-d5 or capture"
     ],
     "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nb1-d2-f1-g3-f5",
-        "explanation": "The classic Ruy Lopez knight maneuver — Nb1 reroutes through d2, f1, and g3 to reach the devastating f5 outpost. On f5, the knight attacks e7, g7, d6, and h6, creating enormous pressure near Black's king. This maneuver is one of the most important plans in the entire Ruy Lopez."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bb3 (pressure on f7)",
-        "explanation": "The Bb3 is a cornerstone of the Ruy Lopez attack. It targets f7 — the weakest square in Black's camp — along the a2-g8 diagonal. Combined with a potential d5 advance, the Bb3 can become a devastating attacking piece that threatens both tactical strikes on f7 and positional pressure on the center."
-      }
+      "Bb3-c2 onto the diagonal",
+      "Nb1-d2-f1-g3 (the Spanish knight)",
+      "Re1 behind the e-pawn"
     ],
     "strategicThemes": [
-      "Central control is the foundation of the Ruy Lopez d4 plan. With the c4+d4 pawn center (or d4+e4 after exchanges), White dominates the key central squares and restricts Black's pieces from finding active posts.",
-      "After d4 opens the center, White's pieces become dramatically more active. The Bb3 fires along the a2-g8 diagonal, the rooks seize the d-file and e-file, and the knight can maneuver to f5 — all combining for a potent middlegame initiative.",
-      "The Bb3's pressure on f7 is a constant theme in the Ruy Lopez. The f7 pawn is only defended by the king, making it a natural target for tactical blows (Bxf7+ sacrifices) and positional pressure that ties down Black's pieces.",
-      "With the center open and pieces actively placed, White naturally transitions to a kingside attack. The Nf5 maneuver, Bb3 pressure on f7, and rooks on central files combine to create serious threats against Black's castled king."
+      "Prepare d4 before playing it",
+      "The Spanish centre",
+      "Bishop on the b1-h7 diagonal"
     ],
     "endgameTransitions": [
-      "In simplified positions, White's central pawn majority (d4+e4 vs Black's queenside pawns) provides a structural advantage. The central pawns can advance to create a passed pawn while Black's queenside majority is slower.",
-      "The Ruy Lopez often leads to positions where White retains the bishop pair after exchanges. In open endgames, two bishops outperform bishop+knight, especially when there are pawns on both flanks."
+      "The central majority carries into the ending"
     ],
     "playableLines": [
       {
         "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
         "moves": [
+          "Re1",
+          "d6",
+          "c3",
+          "Na5",
+          "Bc2",
+          "c5",
+          "h3",
+          "Bb7",
           "d4",
           "exd4",
-          "Nxd4",
-          "Nxd4",
-          "Qxd4",
-          "d6",
-          "Nc3",
-          "Be6"
+          "cxd4",
+          "cxd4",
+          "Nxd4"
         ],
         "annotations": [
-          "This is the Closed Ruy Lopez's main central break. White strikes with d4, challenging Black's e5 pawn at the moment when White's Bb3 targets f7 and all pieces are optimally coordinated for the open position that follows.",
-          "Black captures exd4, opening the center. This gives White the open d-file and e-file — exactly what White wanted. The Bb3 now has an unobstructed diagonal and the rooks can immediately contest the central files.",
-          "White recaptures Nxd4, centralizing the knight powerfully on d4. The Nd4 controls c6, e6, f5, and b5, and can later jump to f5 for a direct attack on Black's king.",
-          "Black exchanges Nxd4 to relieve the pressure from the dominant centralized knight. Without the trade, the Nd4 would be too powerful — but the exchange also removes one of Black's defenders.",
-          "The queen recaptures Qxd4, occupying a commanding central post. From d4, the queen controls the long diagonal toward a7, pressures d7, and can swing to the kingside for attacking chances.",
-          "Black plays d6, solidifying the center but conceding that the position is now fully open for White's pieces. The d6 pawn is solid but passive — Black is playing for defense rather than counterplay.",
-          "White develops Nc3, completing minor piece development with a strong central setup. The Nc3 supports d5, eyes the b5 and d5 squares, and keeps all options open for the middlegame.",
-          "Black develops the bishop to e6, trying to challenge the Bb3 and simplify. However, White maintains a clear advantage in piece activity — the open center and diagonal pressure give White a lasting initiative."
+          "Re1 puts the rook behind the e-pawn — preparation, not yet the break.",
+          "",
+          "c3 — the key prep: it builds the pawn-support for d4.",
+          "…Na5 hits the bishop, a standard Ruy regrouping.",
+          "Bc2 retreats onto the long b1-h7 diagonal, eyeing Black’s king.",
+          "",
+          "h3 makes luft and denies …Bg4 — the last prep before the break.",
+          "",
+          "d4! now the break lands with full support — White seizes the centre.",
+          "",
+          "",
+          "",
+          "Nxd4 — White stands in the centre with the freer game and the better bishop. The break worked because it was prepared."
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [],
           [
             {
-              "from": "b3",
-              "to": "f7",
+              "from": "c2",
+              "to": "b1",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [],
-          [
-            {
-              "from": "d4",
-              "to": "c6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "d4",
-              "to": "e6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
-          [
-            {
-              "from": "d4",
-              "to": "a7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "d4",
-              "to": "d7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
-          [
-            {
-              "from": "c3",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "c3",
-              "to": "b5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "Immediate d4 Central Break",
+        "title": "Ruy Lopez: Prepare and Land the d4 Break",
         "highlights": [
           [
             {
-              "square": "d4",
+              "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d2",
+              "square": "f1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f7",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "e6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a7",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d7",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -206,25 +104,119 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b1",
+              "square": "c2",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "b5",
+              "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "e6",
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
@@ -235,15 +227,51 @@
           "https://en.wikipedia.org/wiki/Ruy_Lopez"
         ],
         "learnCues": [
-          "d4 — the central break",
-          "exd4 — open the centre",
-          "Nxd4 — centralise the knight",
-          "Nxd4 — trade off the monster",
-          "Qxd4 — a commanding central post",
-          "d6 — solid but passive",
-          "Nc3 — complete development",
-          "Be6 — challenge Bb3; White presses"
-        ]
+          "Re1 — rook behind the e-pawn",
+          "",
+          "c3 — support the coming d4",
+          "…Na5 — hit the bishop",
+          "Bc2 — onto the diagonal",
+          "",
+          "h3 — luft, deny …Bg4",
+          "",
+          "d4 — now the break lands",
+          "",
+          "",
+          "",
+          "Nxd4 — centre seized, freer game"
+        ],
+        "intro": {
+          "say": "White’s thematic lever is the d4-break — but raw it’s nothing. First build the Spanish bind: rook to e1, c3 to support the push, the bishop back to c2 on the long diagonal, h3 for luft. THEN d4 lands and seizes the centre.",
+          "sayShort": "Prepare with c3/Bc2/Re1 — then d4 lands.",
+          "arrows": [
+            {
+              "from": "d2",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b3",
+              "to": "c2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c2",
+              "to": "h7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
       },
       {
         "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQ1RK1 w - - 0 8",
@@ -26854,24 +26882,24 @@
     "id": "mp-nimzoindian-leningrad",
     "openingId": "nimzo-indian",
     "criticalPositionFen": "rnbqk2r/pp3pp1/3p1n1p/2pPp3/2P4B/2P1P3/P4PPP/R2QKBNR w KQkq - 0 9",
-    "title": "Nimzo Leningrad: Clamp and Storm",
-    "overview": "Against 4.Bg5, Black has doubled the c-pawns and clamped the centre with …e5. The plan: blockade the doubled pawns, then grab kingside space with …g5 to entomb the h4-bishop and launch a pawn storm with …g5-g4. A closed position where every trump is Black's.",
+    "title": "Nimzo Leningrad: Lock the Centre, Storm the Kingside",
+    "overview": "The centre is bolted shut — Black’s d6-e5 against White’s c4-d5 — so the game shifts to the wings. With no central counterplay available to White, Black expands on the kingside: …g5 and …Nh5 gain space and target White’s king, while the king tucks toward the queenside. Black is comfortable, even a shade better.",
     "pawnBreaks": [
-      "…g5-g4 the kingside storm",
-      "keep the centre locked"
+      "…g5-…g4 to prise open the kingside",
+      "centre stays locked"
     ],
     "pieceManeuvers": [
-      "…Nbd7 development",
-      "…Qe7 connecting",
-      "…g5 to entomb the bishop"
+      "…Nf6-h5 to hit the dark squares / a g3-bishop",
+      "…Nbd7 supporting the storm",
+      "…Kd8 stepping off the centre"
     ],
     "strategicThemes": [
-      "Blockade + kingside storm",
-      "The locked centre favours Black",
-      "Doubled c-pawn target"
+      "Locked centre → play on the wing",
+      "Kingside pawn storm",
+      "The h5-knight and …g4"
     ],
     "endgameTransitions": [
-      "The structural edge persists if it simplifies"
+      "The kingside space tells if queens stay on"
     ],
     "playableLines": [
       {
@@ -26881,22 +26909,34 @@
           "Qe7",
           "Nf3",
           "Nbd7",
+          "Nd2",
+          "Kd8",
           "Bd3",
-          "g5"
+          "g5",
+          "Bg3",
+          "Nh5"
         ],
         "annotations": [
-          "Qc2 eyes the c-file and the e4-square.",
-          "…Qe7 connects the rooks and clears d8.",
-          "Nf3 develops toward the centre.",
-          "…Nbd7 finishes development — every black piece is home and the doubled c-pawns are blockaded.",
-          "Bd3 eyes the kingside, but the position is bolted shut.",
-          "…g5 — the storm breaks. The pawn lunges at the h4-bishop and rolls toward g4, prying open the kingside where every black trump lies."
+          "",
+          "…Qe7 connects the rooks and eyes the kingside.",
+          "",
+          "",
+          "Nd2 reroutes toward the kingside and the e4-break.",
+          "…Kd8 steps the king off the centre — there is no open file to fear, so the king is safe and the rook frees for the g-file.",
+          "Bd3 clamps and watches the kingside.",
+          "…g5! the storm begins — Black gains space and chases White’s pieces from the kingside.",
+          "Bg3 sidesteps.",
+          "…Nh5 hits the bishop and clears f6 for the f-pawn — Black’s kingside initiative rolls on, with the better chances."
         ],
-        "title": "Nimzo Leningrad: Clamp and Storm",
+        "title": "Nimzo Leningrad: Lock the Centre, Storm the Kingside",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
           [
             {
-              "from": "c2",
+              "from": "d2",
               "to": "e4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
@@ -26916,10 +26956,6 @@
             {
               "square": "d1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -26954,6 +26990,30 @@
           ],
           [
             {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
@@ -26970,30 +27030,77 @@
             {
               "square": "g7",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "h4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "g4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
         "learnCues": [
-          "Qc2 — eye e4",
-          "Qe7 — connect rooks",
-          "Nf3 — develop",
-          "Nbd7 — blockade set",
-          "Bd3 — locked out",
-          "g5 — the storm breaks"
+          "",
+          "…Qe7 — connect, eye the kingside",
+          "",
+          "",
+          "Nd2 — reroute the knight",
+          "…Kd8 — king off the centre",
+          "Bd3 — clamp",
+          "…g5 — storm the kingside",
+          "Bg3 — sidestep",
+          "…Nh5 — hit the bishop, roll on"
         ],
         "sources": [
           "concept:pawn-doubled",
           "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
-        ]
+        ],
+        "intro": {
+          "say": "The centre is locked — Black’s d6 and e5 against White’s c4 and d5 — so the battle moves to the wings. With the centre shut, Black storms the kingside: …g5 and …Nh5 grab space and bear down on White’s king.",
+          "sayShort": "Locked centre — storm the kingside with …g5.",
+          "arrows": [
+            {
+              "from": "g7",
+              "to": "g5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g5",
+              "to": "g4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f6",
+              "to": "h5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
       }
     ]
   },
