@@ -130,6 +130,36 @@ async function explorer(source, sans) {
 function gamesOf(m) { return m.white + m.draws + m.black; }
 function studentScore(m, sc) { const t = gamesOf(m); return t ? ((sc === 'w' ? m.white : m.black) + m.draws / 2) / t : 0; }
 
+// ── Masters-DB grounding (David 2026-05-26): the LEARNER's side is validated
+// against the MASTERS DB, the OPPONENT's inaccuracies come from the amateur DB.
+// Two gates fix the engine over-rating sharp/gambit lines theory calls balanced:
+//   (1) masters move-set VETO — if masters play the opponent's "inaccuracy", it
+//       is theory, not a blunder (doctrine §7: masters don't play refutable
+//       blunders). Bundled DB, offline, keyed by 4-field FEN.
+//   (2) MATERIAL check at the quiet end — a `confirmed` weapon must win real
+//       material; an engine `+cp` with the learner NOT up material is initiative
+//       the engine over-rates (the 5…Na5 gambit, the Max Lange), so it is
+//       dropped rather than mislabeled a crush.
+const MASTERS_DB = (() => {
+  try { return JSON.parse(readFileSync('public/data/openings-masters-db.json', 'utf-8')).positions || {}; }
+  catch { return {}; }
+})();
+function mastersMovesAt(chess) {
+  const key = chess.fen().split(' ').slice(0, 4).join(' ');
+  const entry = MASTERS_DB[key];
+  return Array.isArray(entry) ? entry.map((m) => m.san) : null; // null = masters never reached here
+}
+const PIECE_VAL = { p: 1, n: 3, b: 3, r: 5, q: 9 };
+function materialDelta(chess, studentChar) {
+  let w = 0, b = 0;
+  for (const row of chess.board()) for (const sq of row) {
+    if (!sq) continue;
+    const v = PIECE_VAL[sq.type] || 0;
+    if (sq.color === 'w') w += v; else b += v;
+  }
+  return studentChar === 'w' ? w - b : b - w; // learner material minus opponent
+}
+
 // Walk a FULL line (a curated variation pgn, or a short seed that then extends
 // down the amateur trunk), scanning every opponent node for engine-refutable
 // inaccuracies. `scanned` is shared across lines so overlapping variations
@@ -161,8 +191,12 @@ async function mine(openingId, studentChar, walkLine, eng, scanned, extraPlies =
           .filter((m) => m.pct >= FREQ_FLOOR && m.games >= MIN_GAMES)
           .slice(0, CANDIDATES);
 
+        // GATE 1 — masters move-set veto: drop candidates masters actually
+        // play (theory-fine alternatives, not blunders).
+        const mastersHere = mastersMovesAt(c);
         let best = null;
         for (const cand of cands) {
+          if (mastersHere && mastersHere.includes(cand.san)) continue; // master-played = theory
           const cc = new Chess(c.fen());
           let mv; try { mv = cc.move(cand.san); } catch { continue; }
           // After the opponent's move it's the student to move → eval is the
@@ -197,18 +231,28 @@ async function mine(openingId, studentChar, walkLine, eng, scanned, extraPlies =
             }
             const fin = await eng.eval(pc.fen());
             const engineCp = fin.cp === null ? best.E1 : (pc.turn() === studentChar ? fin.cp : -fin.cp);
-            // Final, honest gate: still clearly better AND still a real jump
-            // from the pre-inaccuracy baseline.
-            if (engineCp >= EDGE_CP && (engineCp - E0) >= JUMP_CP) {
-              const tier = engineCp >= WEAPON_CP ? 'confirmed' : 'positional';
+            // GATE 2 — material reality at the quiet end. The engine over-rates
+            // dynamic initiative in gambit/sharp lines (5…Na5, Max Lange) that
+            // theory calls balanced. A real weapon WON material; require it:
+            //   confirmed → learner up ≥ a full pawn of material (or it's mate)
+            //   positional → learner at least NOT down material
+            // An engine `+cp` with the learner down material is over-rated
+            // initiative — drop it rather than ship a false weapon.
+            const matDelta = materialDelta(pc, studentChar);
+            const isMate = fin.cp === null && fin.best === null; // mate-ish terminal
+            // Final, honest gate: still clearly better, a real jump from the
+            // baseline, AND backed by material (not just engine initiative).
+            if (engineCp >= EDGE_CP && (engineCp - E0) >= JUMP_CP && (matDelta >= 0 || isMate)) {
+              const materialCrush = matDelta >= 1 || isMate;
+              const tier = (engineCp >= WEAPON_CP && materialCrush) ? 'confirmed' : 'positional';
               const playLine = [...line, best.cand.san, ...punishSeq];
               gems.push({
                 openingId, lineMoves: line.join(' '), inaccuracy: best.cand.san,
                 freqPct: +(best.cand.pct * 100).toFixed(1), games: best.cand.games,
                 practicalScore: +(best.cand.s * 100).toFixed(0), mainMove: main.san,
                 punish: punishSan, punishSeq, playLine: playLine.join(' '),
-                engineCp, tier,
-                why: `At your level opponents play ${best.cand.san} here in ${(best.cand.pct * 100).toFixed(0)}% of games. Punish with the best move ${punishSan} — the engine has ${sideWord} ${engineCp >= WEAPON_CP ? 'winning' : 'clearly better'} (${engineCp >= 0 ? '+' : ''}${(engineCp / 100).toFixed(1)}).`,
+                engineCp, materialDelta: matDelta, tier,
+                why: `At your level opponents play ${best.cand.san} here in ${(best.cand.pct * 100).toFixed(0)}% of games. Punish with the best move ${punishSan} — the engine has ${sideWord} ${tier === 'confirmed' ? 'winning' : 'clearly better'} (${engineCp >= 0 ? '+' : ''}${(engineCp / 100).toFixed(1)}${matDelta >= 1 ? `, +${matDelta} material` : ''}).`,
               });
             }
           }
