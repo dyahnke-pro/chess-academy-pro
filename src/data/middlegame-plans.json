@@ -33294,5 +33294,186 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-qgd-tartakower",
+    "openingId": "qgd",
+    "criticalPositionFen": "rn1q1rk1/pbp2pp1/1p3b1p/3p4/3P4/2N1PN2/PP2BPPP/R2QK2R w KQ - 0 11",
+    "title": "QGD Tartakower: …b6, …Bb7 and the …c5 Break",
+    "overview": "The Tartakower is the modern answer to the Queen's Gambit Declined's central problem — the passive light-squared bishop. Black fianchettoes it with …b6 and …Bb7, trades off the dark-squared bishops, and then frees the whole position with the …c5 break. White typically tries the minority attack (b4–b5) to weaken c6; Black meets it with …a5 and the timely …c5, reaching an open, comfortable game with the bishop pair. The lesson: solve the QGD bad-bishop problem with …b6/…Bb7, then break with …c5.",
+    "pawnBreaks": [
+      "…c5 the freeing break against d4",
+      "…a5 to challenge White's queenside expansion"
+    ],
+    "pieceManeuvers": [
+      "…Bb7 the fianchettoed light-squared bishop",
+      "…Bf6 trading the dark bishops into an open game"
+    ],
+    "strategicThemes": [
+      "Solving the bad bishop with …b6/…Bb7",
+      "The …c5 freeing break",
+      "Meeting the minority attack with …a5 and …c5"
+    ],
+    "endgameTransitions": [
+      "The bishop pair and open position give Black a pleasant, balanced endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/pbp2pp1/1p3b1p/3p4/3P4/2N1PN2/PP2BPPP/R2QK2R w KQ - 0 11",
+        "moves": [
+          "b4",
+          "c6",
+          "O-O",
+          "a5",
+          "b5",
+          "c5",
+          "Ne5",
+          "cxd4",
+          "exd4"
+        ],
+        "annotations": [
+          "b4 — White launches the minority attack, the thematic queenside pawn advance designed to manufacture a weakness on c6.",
+          "…c6 — Black braces the d5-pawn; this solid wall is the heart of the Tartakower setup.",
+          "O-O — White completes development.",
+          "…a5 — striking back at White's queenside pawns before the minority attack can roll.",
+          "b5 — White pushes past, fixing the queenside pawn structure.",
+          "…c5 — the freeing break. With the queenside settled, Black strikes at d4 and opens the position for the pieces.",
+          "Ne5 — White posts the knight centrally, eyeing the kingside.",
+          "…cxd4 — Black opens the centre, content with the freed position and the two bishops.",
+          "exd4 — White recaptures; Black has reached the Tartakower's goal — the dark-squared bishops traded, an open position and easy development. Comfortable equality."
+        ],
+        "title": "QGD Tartakower: …b6, …Bb7 and the …c5 Break",
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ],
+        "learnCues": [
+          "b4 — minority attack.",
+          "…c6 — brace d5.",
+          "O-O — White castles.",
+          "…a5 — hit the b4-pawn.",
+          "b5 — White pushes by.",
+          "…c5 — the freeing break.",
+          "Ne5 — central knight.",
+          "…cxd4 — open the centre.",
+          "exd4 — Tartakower equality."
+        ]
+      }
+    ]
   }
 ]
