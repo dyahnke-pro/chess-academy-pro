@@ -12,7 +12,6 @@ import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
 import { getUnlearnedFavoriteOpenings } from '../../services/openingService';
 import { getSrsDueOpenings } from '../../services/srsOpeningService';
 import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
-import { getDueTodayTracks, type DueTrack } from '../../services/dueToday';
 
 interface SectionItem {
   label: string;
@@ -85,26 +84,23 @@ function navigateToRep(navigate: ReturnType<typeof useNavigate>, rep: RepCandida
 function TodayStatus(): JSX.Element | null {
   const navigate = useNavigate();
   const [reps, setReps] = useState<RepCandidate[] | null>(null);
-  const [tracks, setTracks] = useState<DueTrack[]>([]);
 
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      const [weaknesses, srsDue, newLines, dueTracks] = await Promise.all([
+      const [weaknesses, srsDue, newLines] = await Promise.all([
         getUnifiedWeaknessProfile(),
         getSrsDueOpenings(),
         getUnlearnedFavoriteOpenings(),
-        getDueTodayTracks(),
       ]);
       if (cancelled) return;
       setReps(buildTodaysReps({ weaknesses, srsDue, newLines, total: 5 }));
-      setTracks(dueTracks);
     })();
     return () => { cancelled = true; };
   }, []);
 
   if (reps === null) return null;
-  if (reps.length === 0 && tracks.length === 0) return null;
+  if (reps.length === 0) return null;
 
   return (
     <div className="max-w-lg mx-auto w-full flex flex-col gap-2" data-testid="dashboard-due-board">
@@ -133,22 +129,6 @@ function TodayStatus(): JSX.Element | null {
           <div className="flex-1 text-left min-w-0">
             <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>{rep.label}</span>
             <p className="text-xs truncate" style={{ color: 'var(--color-text-muted)' }}>{rep.subtitle}</p>
-          </div>
-          <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
-        </button>
-      ))}
-      {tracks.map((t) => (
-        <button
-          key={t.key}
-          onClick={() => void navigate(t.route)}
-          className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-theme-surface border border-theme-border hover:border-theme-accent/40 transition-all"
-          data-testid={`dashboard-due-${t.key}`}
-        >
-          <div className="flex-1 text-left min-w-0">
-            <span className="text-sm font-medium" style={{ color: 'var(--color-text)' }}>
-              {t.label} <span className="text-theme-text-muted">· {t.count} due</span>
-            </span>
-            <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>{t.sublabel}</p>
           </div>
           <ChevronRight size={16} className="text-theme-text-muted shrink-0" />
         </button>
