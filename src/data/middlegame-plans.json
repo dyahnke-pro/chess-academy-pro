@@ -33475,5 +33475,172 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-philidordefence-hanham",
+    "openingId": "philidor-defence",
+    "criticalPositionFen": "r1bq1rk1/pp1nbppp/2pp1n2/4p3/P1BPP3/2N2N2/1PP2PPP/R1BQR1K1 b - - 0 8",
+    "title": "Philidor Hanham: the …exd4 Release and e5-Outpost",
+    "overview": "The Hanham Philidor is solid but cramped, and Black's cleanest plan is to release the tension with …exd4 and post a knight on the e5-outpost, hitting White's c4-bishop with tempo. The rook swings to the half-open e-file to press e4, and Black completes a harmonious, sturdy setup. The lesson: when the Philidor feels passive, trade with …exd4 and use the e5-square — the knight there is worth its weight.",
+    "pawnBreaks": [
+      "…exd4 to free the cramped position",
+      "…d5 the thematic central freeing break"
+    ],
+    "pieceManeuvers": [
+      "…Ne5 to the central outpost hitting the bishop",
+      "…Re8 onto the half-open e-file"
+    ],
+    "strategicThemes": [
+      "Releasing the cramp with …exd4",
+      "The e5-outpost knight",
+      "Pressure on the e-file"
+    ],
+    "endgameTransitions": [
+      "The sound structure and well-placed pieces keep a safe, balanced endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1nbppp/2pp1n2/4p3/P1BPP3/2N2N2/1PP2PPP/R1BQR1K1 b - - 0 8",
+        "moves": [
+          "exd4",
+          "Nxd4",
+          "Ne5",
+          "Ba2",
+          "Re8",
+          "h3",
+          "Bd7"
+        ],
+        "annotations": [
+          "…exd4 — Black releases the central tension, trading to free the famously cramped Philidor position.",
+          "Nxd4 — White recaptures and takes the open centre.",
+          "…Ne5 — the knight jumps to the fine e5-outpost, hitting the c4-bishop with tempo.",
+          "Ba2 — the bishop tucks back to a2, still raking the a2–g8 diagonal.",
+          "…Re8 — the rook takes the half-open e-file, bearing down on the e4-pawn.",
+          "h3 — White makes luft and denies the g4-square.",
+          "…Bd7 — completing development; Black has a solid, harmonious Philidor with a strong knight on e5 and pressure down the e-file."
+        ],
+        "title": "Philidor Hanham: the …exd4 Release and e5-Outpost",
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Philidor_Defence"
+        ],
+        "learnCues": [
+          "…exd4 — free the position.",
+          "Nxd4 — White recaptures.",
+          "…Ne5 — outpost, hit the bishop.",
+          "Ba2 — bishop retreats.",
+          "…Re8 — seize the e-file.",
+          "h3 — make luft.",
+          "…Bd7 — complete development."
+        ]
+      }
+    ]
   }
 ]
