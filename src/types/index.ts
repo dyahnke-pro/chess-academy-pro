@@ -386,6 +386,21 @@ export interface PlayableMiddlegameLine {
    *  dictation. Every cue is hand-authored and verified against its move —
    *  never generated. Parallel to `moves`. */
   learnCues?: string[];
+  /** Idea-first prelude rendered on the STATIC critical position before any
+   *  move fires (David 2026-05-26). Shown at the intro beat (demoMoveIndex < 0):
+   *  narrate the plan's concept while markers lead the eye — GREEN `arrows` for
+   *  the breaks + the long diagonals/files that open once the position cracks,
+   *  and YELLOW `highlights` for BOTH the target weaknesses AND the key squares
+   *  the pieces want to reach (outposts / maneuver destinations). Then the moves
+   *  play the idea out. */
+  intro?: {
+    say: string;
+    sayShort?: string;
+    arrows?: AnnotationArrow[];
+    highlights?: AnnotationHighlight[];
+  };
+  /** Independent-verification source refs (book:/concept:/reputable URL). */
+  sources?: string[];
   title: string;
 }
 

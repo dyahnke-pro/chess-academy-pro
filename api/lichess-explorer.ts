@@ -50,7 +50,7 @@ async function attemptUpstream(
   // function range and get higher rate limits. Audit (build 23b9b15)
   // showed all three UA fallbacks 401'd anonymously; auth fixes it.
   // Also accepts the legacy LICHESS_TOKEN name from the first wiring.
-  const token = process.env.LICHESS_API_KEY ?? process.env.LICHESS_TOKEN;
+  const token = process.env.LICHESS_API_KEY ?? process.env.LICHESS_TOKEN ?? process.env.LICHESS;
   const headers: Record<string, string> = {
     Accept: 'application/json',
     'User-Agent': userAgent,
