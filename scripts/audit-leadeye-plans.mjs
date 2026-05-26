@@ -101,6 +101,16 @@ async function sampleBoard(page, testid) {
 async function openDetail(page, openingId) {
   await page.goto(`${BASE_URL}/openings/${openingId}`, { waitUntil: 'domcontentloaded' });
   await page.locator('[data-testid="variation-tabs"]').waitFor({ state: 'visible', timeout: 30_000 });
+  // First-run strength-calibration bubble (added 2026-05-26) blocks every
+  // click until a skill band is picked. It writes to the profiles store (not
+  // openings), so it dismisses cleanly even under the sandbox openings-write
+  // stall. Must clear it before the page-help modal / plan buttons.
+  const calBubble = page.locator('[data-testid="strength-calibration-bubble"]');
+  await calBubble.waitFor({ state: 'visible', timeout: 4_000 }).catch(() => {});
+  if (await calBubble.count() > 0) {
+    await page.locator('[data-testid^="skill-band-"]').first().click({ timeout: 5_000 }).catch(() => {});
+    await calBubble.waitFor({ state: 'detached', timeout: 45_000 }).catch(() => {});
+  }
   // The "How to use a Masterclass" PageHelp modal auto-opens on first visit
   // and intercepts clicks. In the sandbox the "seen" flag can't persist
   // (IndexedDB write-stall, CLAUDE.md G1), so it re-opens every load — dismiss
