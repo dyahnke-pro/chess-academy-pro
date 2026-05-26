@@ -32236,5 +32236,191 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-benonidefence-kingside",
+    "openingId": "benoni-defence",
+    "criticalPositionFen": "rnbqr1k1/pp3pbp/3p1np1/2pP4/4P3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 6 10",
+    "title": "Modern Benoni: The e5-Outpost and Kingside Expansion",
+    "overview": "When White clamps the queenside with a4 (stopping …b5), the Modern Benoni player switches wings. The plan: route the knight via …Nbd7 to the magnificent e5-outpost — a square no White pawn can ever challenge — then expand on the kingside with …g5 and the thematic …f5 break. With one wing frozen, Black throws the kingside pawns forward. The lesson: a Benoni without …b5 is not passive — the e5-knight and the …f5 storm are Black's compensation for the space deficit.",
+    "pawnBreaks": [
+      "…f5 the thematic kingside break",
+      "…g5 to gain space and prepare …f5"
+    ],
+    "pieceManeuvers": [
+      "…Nbd7–e5 to the great Benoni outpost",
+      "…Re8 supporting the centre and …e-file play"
+    ],
+    "strategicThemes": [
+      "The unassailable e5-outpost",
+      "Kingside expansion with …g5 and …f5",
+      "Switching wings when …b5 is stopped"
+    ],
+    "endgameTransitions": [
+      "The e5-knight and queenside majority remain trumps if the game simplifies"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqr1k1/pp3pbp/3p1np1/2pP4/4P3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 6 10",
+        "moves": [
+          "Nd2",
+          "Nbd7",
+          "a4",
+          "Ne5",
+          "Ra3",
+          "g5"
+        ],
+        "annotations": [
+          "Nd2 — White reroutes the knight toward c4, where it will eye the backward d6-pawn.",
+          "…Nbd7 — the knight heads for e5, the great Benoni outpost right in front of White's d5-pawn.",
+          "a4 — White clamps the queenside, stopping Black's …b5 break.",
+          "…Ne5 — the knight lands on its dream square: the e5-outpost, immune to any pawn, eyeing c4, d3 and g4.",
+          "Ra3 — White lifts the rook, ready to swing it along the third rank to defend or join in.",
+          "…g5 — with the queenside clamped, Black turns to the other wing: …g5 grabs kingside space and prepares the thematic …f5 break. The kingside is where Black plays."
+        ],
+        "title": "Modern Benoni: The e5-Outpost and Kingside Expansion",
+        "arrows": [
+          [
+            {
+              "from": "d2",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e5",
+              "to": "d3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Modern_Benoni"
+        ],
+        "learnCues": [
+          "Nd2 — heading to c4.",
+          "…Nbd7 — toward e5.",
+          "a4 — stop …b5.",
+          "…Ne5 — the dream outpost.",
+          "Ra3 — the rook lift.",
+          "…g5 — kingside space for …f5."
+        ]
+      }
+    ]
   }
 ]
