@@ -27304,13 +27304,11 @@
     "title": "Nimzo Leningrad: Clamp and Storm",
     "overview": "Against 4.Bg5, Black has doubled the c-pawns and clamped the centre with …e5. The plan: blockade the doubled pawns, then grab kingside space with …g5 to entomb the h4-bishop and launch a pawn storm with …g5-g4. A closed position where every trump is Black's.",
     "pawnBreaks": [
-      "…g5-g4 the kingside storm",
-      "keep the centre locked"
+      "…g5 to clamp the kingside and harry the h4-bishop"
     ],
     "pieceManeuvers": [
-      "…Nbd7 development",
-      "…Qe7 connecting",
-      "…g5 to entomb the bishop"
+      "…Nbd7 developing the knight",
+      "…Nh5 to hit the bishop and storm the kingside"
     ],
     "strategicThemes": [
       "Blockade + kingside storm",
@@ -27328,23 +27326,28 @@
           "Qe7",
           "Nf3",
           "Nbd7",
-          "Bd3",
-          "g5"
+          "Nd2",
+          "g5",
+          "Bg3",
+          "Nh5"
         ],
         "annotations": [
-          "Qc2 eyes the c-file and the e4-square.",
-          "…Qe7 connects the rooks and clears d8.",
-          "Nf3 develops toward the centre.",
-          "…Nbd7 finishes development — every black piece is home and the doubled c-pawns are blockaded.",
-          "Bd3 eyes the kingside, but the position is bolted shut.",
-          "…g5 — the storm breaks. The pawn lunges at the h4-bishop and rolls toward g4, prying open the kingside where every black trump lies."
+          "Qc2 — White develops the queen.",
+          "…Qe7 — Black backs the e5-pawn and connects.",
+          "Nf3 — White develops.",
+          "…Nbd7 — the knight comes out, supporting the centre.",
+          "Nd2 — White reroutes the knight.",
+          "…g5 — Black clamps the kingside, gaining space and hitting the h4-bishop.",
+          "Bg3 — the bishop retreats.",
+          "…Nh5 — the knight hits the g3-bishop and joins the kingside clamp; Black has seized the dark squares and the kingside initiative."
         ],
         "title": "Nimzo Leningrad: Clamp and Storm",
         "arrows": [
+          [],
           [
             {
-              "from": "c2",
-              "to": "e4",
+              "from": "e7",
+              "to": "e5",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
@@ -27352,7 +27355,14 @@
           [],
           [],
           [],
-          []
+          [],
+          [
+            {
+              "from": "h5",
+              "to": "g3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
         ],
         "highlights": [
           [
@@ -27363,10 +27373,6 @@
             {
               "square": "d1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -27377,6 +27383,10 @@
             {
               "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -27401,11 +27411,11 @@
           ],
           [
             {
-              "square": "d3",
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f1",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -27421,25 +27431,46 @@
             {
               "square": "h4",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "g4",
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
-        "learnCues": [
-          "Qc2 — eye e4",
-          "Qe7 — connect rooks",
-          "Nf3 — develop",
-          "Nbd7 — blockade set",
-          "Bd3 — locked out",
-          "g5 — the storm breaks"
-        ],
         "sources": [
-          "concept:pawn-doubled",
-          "concept:pos-outpost",
+          "concept:pos-space",
           "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+        ],
+        "learnCues": [
+          "Qc2 — develop the queen.",
+          "…Qe7 — back the e5-pawn.",
+          "Nf3 — White develops.",
+          "…Nbd7 — develop the knight.",
+          "Nd2 — reroute the knight.",
+          "…g5 — clamp the kingside.",
+          "Bg3 — bishop retreats.",
+          "…Nh5 — hit the bishop, storm on."
         ]
       }
     ]
@@ -27448,21 +27479,19 @@
     "id": "mp-nimzoindian-kasparov",
     "openingId": "nimzo-indian",
     "criticalPositionFen": "rnbq1rk1/pp3ppp/4p3/3n4/1b1N4/2N3P1/PP2PPBP/R1BQK2R w KQ - 0 9",
-    "title": "Nimzo Kasparov: Strike the Fianchetto",
-    "overview": "Against 4.Nf3/g3, Black has struck the centre with …d5 and centralised the knight on d5. The plan: trade …Bxc3 to fracture White's queenside, activate …Ba6 on the open light-squared diagonal, and centralise the queen — full equality with active play against the smoothest White setup.",
+    "title": "Nimzo Kasparov: Trade Down into White's Weak Pawns",
+    "overview": "In the Kasparov/g3 Nimzo, Black has the bishop on b4 and a knight on d5. The plan is structural: challenge and trade the d4-knight, then exchange the dark-squared bishop for the c3-knight to saddle White with doubled, weak c-pawns. With the better pawn structure and a well-placed knight, Black reaches a comfortable, equal middlegame. The lesson: in this line Black plays for White's structure, not for an attack.",
     "pawnBreaks": [
-      "…e5 or …c5 to free the position",
-      "the doubled c-pawns are the target"
+      "…bxc6 to recapture toward the centre and open the b-file"
     ],
     "pieceManeuvers": [
-      "…Bxc3 fracturing the queenside",
-      "…Ba6 on the a6-f1 diagonal",
-      "…Qc5 centralising"
+      "…Nd5 the central outpost knight",
+      "…Bxc3 to damage White's queenside pawns"
     ],
     "strategicThemes": [
-      "Strike the fianchetto's centre",
-      "Doubled c-pawn target",
-      "Active light-squared play"
+      "Trading to inflict doubled c-pawns",
+      "The central knight outpost",
+      "Playing against the structure"
     ],
     "endgameTransitions": [
       "The structural target carries into the ending"
@@ -27471,25 +27500,115 @@
       {
         "fen": "rnbq1rk1/pp3ppp/4p3/3n4/1b1N4/2N3P1/PP2PPBP/R1BQK2R w KQ - 0 9",
         "moves": [
+          "Qb3",
+          "Nc6",
+          "Nxc6",
+          "bxc6",
           "O-O",
-          "e5",
-          "Nf3",
-          "Bxc3"
+          "Qa5",
+          "Bd2",
+          "Bxc3",
+          "bxc3"
         ],
         "annotations": [
-          "O-O castles, but the d4-knight sits loose in the centre.",
-          "…e5 strikes the centre, kicking the d4-knight and seizing space.",
-          "Nf3 retreats the knight.",
-          "…Bxc3 fractures White’s queenside, fixing the doubled c-pawns as permanent targets while Black keeps the bishop pair."
+          "Qb3 — White's queen hits the b4-bishop and the d5-knight at once.",
+          "…Nc6 — Black develops and challenges the d4-knight.",
+          "Nxc6 — White trades on c6.",
+          "…bxc6 — recapturing toward the centre and opening the b-file.",
+          "O-O — White castles.",
+          "…Qa5 — the queen swings to an active post, eyeing the queenside.",
+          "Bd2 — White develops and unpins the c3-knight.",
+          "…Bxc3 — Black trades the bishop for the knight to wreck White's queenside pawns.",
+          "bxc3 — White recaptures into doubled c-pawns; Black's healthier structure and central knight give a comfortable game."
         ],
-        "title": "Nimzo Kasparov: Strike the Fianchetto",
+        "title": "Nimzo Kasparov: Trade Down into White's Weak Pawns",
         "arrows": [
+          [
+            {
+              "from": "b3",
+              "to": "b4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b3",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           [],
+          [],
+          [],
+          [
+            {
+              "from": "d2",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           []
         ],
         "highlights": [
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "g1",
@@ -27498,34 +27617,30 @@
             {
               "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "e5",
+              "square": "a5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e6",
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "f3",
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d4",
+              "square": "c1",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -27537,18 +27652,32 @@
               "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
-        "learnCues": [
-          "O-O — loose knight",
-          "e5 — strike the centre",
-          "Nf3 — retreat",
-          "Bxc3 — fracture the pawns"
-        ],
         "sources": [
-          "concept:pawn-doubled",
-          "concept:pos-outpost",
+          "concept:pos-initiative",
           "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+        ],
+        "learnCues": [
+          "Qb3 — hit b4 and d5.",
+          "…Nc6 — challenge d4.",
+          "Nxc6 — White trades.",
+          "…bxc6 — recapture, open b-file.",
+          "O-O — White castles.",
+          "…Qa5 — active queen.",
+          "Bd2 — unpin c3.",
+          "…Bxc3 — wreck the structure.",
+          "bxc3 — doubled c-pawns."
         ]
       }
     ]
