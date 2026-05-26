@@ -46,6 +46,24 @@ function vis(locator, ms = 15_000) {
   return locator.waitFor({ state: 'visible', timeout: ms }).then(() => true).catch(() => false);
 }
 
+// The PageHelp modal ("How Weaknesses works" / "How to use a Masterclass" /
+// "How the Training Plan works") auto-opens on first visit to a surface and is
+// a focus-trapping dialog that intercepts pointer events — dismiss it after a
+// navigation so it can't swallow the next click. Escape + close-button + force,
+// retried, since it can re-assert during the open animation.
+async function closeHelp(page) {
+  const modal = page.locator('[data-testid="page-help-modal"]');
+  for (let attempt = 0; attempt < 4; attempt++) {
+    if (!(await modal.count().catch(() => 0))) return;
+    await page.keyboard.press('Escape').catch(() => {});
+    await page.locator('[data-testid="page-help-close"]').first().click({ timeout: 1500 }).catch(() => {});
+    const gone = await modal.first().waitFor({ state: 'detached', timeout: 2000 }).then(() => true).catch(() => false);
+    if (gone) return;
+    await page.locator('[data-testid="page-help-close"]').first().click({ force: true, timeout: 1500 }).catch(() => {});
+    await page.waitForTimeout(300);
+  }
+}
+
 const FEN = 'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3';
 
 /** Synthetic bucket — exactly what the three faucets would log. Three sources,
@@ -222,6 +240,7 @@ async function main() {
     }
     record('MIRROR: Thinking Errors tab present on /weaknesses', onTabs);
     if (onTabs) {
+      await closeHelp(page);
       await tab.click();
       await page.locator('[data-testid="misconceptions-tab"]').waitFor({ state: 'visible', timeout: 8000 }).catch(() => {});
       const dom = await page.evaluate(() => {
@@ -261,6 +280,7 @@ async function main() {
       o.onerror = () => res(false);
     }));
     await page.goto(`${BASE_URL}/coach/plan`, { waitUntil: 'domcontentloaded' });
+    await closeHelp(page);
     // Confirm we're not on the locked hard-stop (favourites exist), then wait
     // for Today's reps (TodaysReps renders after getMisconceptionProfile).
     await page.locator('[data-testid="training-plan-rolodex-page"]').waitFor({ state: 'visible', timeout: 25_000 }).catch(() => {});
@@ -281,9 +301,17 @@ async function main() {
     }
 
     // ── FAUCET UIs mount (wiring present; live LLM tag is device-only, G7) ──
-    await page.goto(`${BASE_URL}/coach/play?side=white`, { waitUntil: 'domcontentloaded' });
-    await page.waitForTimeout(3000);
-    const playOk = await page.evaluate(() => !!document.querySelector('[data-square], canvas, [data-testid*="board"], [data-testid*="coach"]'));
+    // CoachGamePage is a heavy chunk (board + Stockfish). On a full goto reload
+    // of a reused page after many prior navigations, the Vite dev server can
+    // serve a momentarily-blank shell (HMR/module-state artifact — NOT a prod
+    // bug; a fresh load and SPA-nav both render fine). So poll for the mount,
+    // and reload once if the first paint is blank, before asserting.
+    let playOk = false;
+    for (let attempt = 0; attempt < 2 && !playOk; attempt++) {
+      await page.goto(`${BASE_URL}/coach/play?side=white`, { waitUntil: 'networkidle' });
+      playOk = await vis(page.locator('[data-testid="coach-game-page"]'), 15_000);
+      if (!playOk) await page.waitForTimeout(1000);
+    }
     record('FAUCET: /coach/play (Discussion Practice host) mounts without crash', playOk);
 
     // Openings linkage already proven by the Ruy-tagged rows flowing to the
