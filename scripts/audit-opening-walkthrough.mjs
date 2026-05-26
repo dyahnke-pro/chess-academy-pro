@@ -26,10 +26,34 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // PageHelp feature) and is a modal — dismiss it so it doesn't intercept clicks.
 async function closeHelp(page) {
   const modal = page.locator('[data-testid="page-help-modal"]');
-  if (await modal.count()) {
-    await page.locator('[data-testid="page-help-close"]').first().click().catch(() => {});
-    await modal.first().waitFor({ state: 'detached', timeout: 4000 }).catch(() => {});
+  for (let attempt = 0; attempt < 4; attempt++) {
+    if (!(await modal.count().catch(() => 0))) return;
+    // Escape first (cheap), then the explicit close button, then force-click it.
+    await page.keyboard.press('Escape').catch(() => {});
+    await page.locator('[data-testid="page-help-close"]').first().click({ timeout: 1500 }).catch(() => {});
+    const gone = await modal.first().waitFor({ state: 'detached', timeout: 2000 }).then(() => true).catch(() => false);
+    if (gone) return;
+    await page.locator('[data-testid="page-help-close"]').first().click({ force: true, timeout: 1500 }).catch(() => {});
+    await sleep(300);
   }
+}
+
+// Click a tab defensively: the help modal can (re-)intercept pointer events,
+// so dismiss it and retry rather than letting a single intercepted click abort
+// the whole opening's run.
+async function clickTab(page, testid) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await closeHelp(page);
+    try {
+      await page.locator(`[data-testid="${testid}"]`).click({ timeout: 8000 });
+      return true;
+    } catch {
+      await closeHelp(page);
+      await sleep(400);
+    }
+  }
+  // last resort: force through any overlay
+  return page.locator(`[data-testid="${testid}"]`).click({ force: true, timeout: 4000 }).then(() => true).catch(() => false);
 }
 
 async function main() {
@@ -73,8 +97,7 @@ async function main() {
   const lessonTitles = [];
   for (const tab of tabs) {
     log(`\n=== TAB: ${tab.label} ===`);
-    await closeHelp(page);
-    await page.locator(`[data-testid="${tab.testid}"]`).click();
+    if (!(await clickTab(page, tab.testid))) { log(`  ⚠ could not select tab (overlay/intercept) — skipping`); continue; }
     await sleep(700);
 
     // Gems
@@ -104,10 +127,20 @@ async function main() {
 
     // Watch the lesson for this tab — capture the lesson title + TTS prose
     tts.length = 0;
-    await page.locator('[data-testid="walkthrough-btn"]').click();
+    await closeHelp(page);
+    await page.locator('[data-testid="walkthrough-btn"]').click({ timeout: 8000 }).catch(async () => {
+      await closeHelp(page);
+      await page.locator('[data-testid="walkthrough-btn"]').click({ force: true, timeout: 4000 }).catch(() => {});
+    });
     await page.locator('[data-testid="lesson-player"]').waitFor({ timeout: 12000 }).catch(() => {});
     const title = (await page.locator('[data-testid="lesson-title"]').innerText().catch(() => '(no title)')).trim();
-    await sleep(6500);
+    // Poll up to 14s for the first real narration line so a slow first-TTS
+    // isn't misreported as "silent" (a fixed 6.5s window was too tight on
+    // some heavier tabs); break early once prose fires.
+    for (let waited = 0; waited < 14000; waited += 700) {
+      if (tts.some((r) => r.text && !isWarmup(r.text))) break;
+      await sleep(700);
+    }
     const prose = tts.map((r) => r.text).filter((t) => t && !isWarmup(t));
     const uniqProse = [...new Set(prose)];
     lessonTitles.push({ tab: tab.label, title, firstProse: uniqProse[0] || '(none)', count: uniqProse.length });
