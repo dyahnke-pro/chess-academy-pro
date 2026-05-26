@@ -56,6 +56,8 @@ export type AuditKind =
   | 'error-boundary'
   | 'navigation-error'
   | 'fen-desync'
+  // First-run / retroactive strength calibration (imports or skill picker)
+  | 'strength-calibrated'
   // Voice instrumentation (WO-LEGACY-VOICE-01)
   | 'voice-speak-invoked'
   | 'voice-speak-silenced'

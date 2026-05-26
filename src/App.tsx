@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAppStore } from './stores/appStore';
 import { getOrCreateMainProfile } from './services/dbService';
+import { calibrateStrength } from './services/strengthCalibrationService';
+import { StrengthCalibrationBubble } from './components/Settings/StrengthCalibrationBubble';
 import { getThemeById, applyTheme } from './services/themeService';
 import { seedDatabase } from './services/dataLoader';
 import { seedVerifiedLibraryNote } from './services/coachMemoryService';
@@ -89,6 +91,7 @@ export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
     useAppStore();
   const [onboardingSkipped, setOnboardingSkipped] = useState(true);
+  const [needsCalibration, setNeedsCalibration] = useState(false);
 
   // Unlock Web Speech API on first user gesture (required on iOS/WKWebView)
   useEffect(() => {
@@ -167,6 +170,24 @@ export function App(): JSX.Element {
         setActiveTheme(theme);
         setActiveProfile(profile);
 
+        // Establish baseline strength so difficulty is adaptive from the
+        // first session. Imported games are the source of truth; with no
+        // import signal the first-run skill picker supplies the band.
+        // Both write currentRating AND puzzleRating (they used to diverge).
+        // Profiles predating calibration lack `strengthCalibrated`, so the
+        // existing beta cohort gets calibrated on next boot too.
+        try {
+          const { result, profile: calibrated } = await calibrateStrength(profile);
+          if (result.needsPicker) {
+            setNeedsCalibration(true);
+          } else if (calibrated !== profile) {
+            setActiveProfile(calibrated);
+          }
+        } catch (e) {
+          // Never block boot on calibration — fall through to defaults.
+          console.error('[calibration] failed:', e);
+        }
+
         // Hydrate the audit-stream config cache from Dexie (with
         // one-time localStorage migration if any pre-Dexie values
         // are still present). `appAuditor.streamAuditEntry` reads
@@ -237,6 +258,7 @@ export function App(): JSX.Element {
     Boolean(activeProfile?.preferences.anthropicApiKeyEncrypted);
 
   return (
+    <>
     <BrowserRouter>
       <Routes>
         <Route element={<AppLayout />}>
@@ -386,5 +408,12 @@ export function App(): JSX.Element {
       <BuildVersionWidget />
       <StarAnimationLayer />
     </BrowserRouter>
+    {/* First-run strength bubble — the first coach-mark to pop, blocking
+        until answered, so a beginner's difficulty is set before anything
+        else. Imports bypass it (calibrated silently at boot). */}
+    {needsCalibration && activeProfile && (
+      <StrengthCalibrationBubble onDone={() => setNeedsCalibration(false)} />
+    )}
+    </>
   );
 }

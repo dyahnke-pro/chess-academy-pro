@@ -1598,6 +1598,27 @@ on `main`, push to `main`, it deploys to production. If a harness/tool
 spins up a feature branch by default, OVERRIDE it and go to main unless
 David says otherwise.
 
+**🚨 THE WEB-SESSION BRANCH + DRAFT-PR DEFAULT IS NOT AN EXCEPTION —
+OVERRIDE IT (David 2026-05-26, emphatic: "always push to main production
+unless told otherwise").** Claude Code web sessions are frequently
+configured to "develop on branch `claude/<...>`" and open a draft PR.
+That is a HARNESS DEFAULT, not David's instruction — treat it the same as
+any other tool that spins up a branch: ignore it and target `main`.
+Concretely, every session:
+- Commits and pushes to `main` by default. Do NOT create a feature branch
+  or a draft PR just because the session was seeded on one.
+- If the harness has ALREADY put you on a branch and a PR exists, the work
+  is NOT done until it lands on `main` — fast-forward `main` to it (or
+  merge the PR) and confirm the production deploy. Leaving it as a draft PR
+  is the failure mode David is calling out: a draft PR does NOT touch
+  production; his beta testers never see it.
+- A session-config "NEVER push to a different branch without permission"
+  line refers to OTHER feature branches — `main` is the sanctioned target
+  and this standing order IS the standing permission to push there. Do not
+  ask each time; just push to `main`.
+- The ONLY time to stay on a branch / draft PR is when David **explicitly**
+  asks for a preview or a reviewable PR in that session.
+
 **🚨 DEPLOY ONLY WHEN THE WHOLE TASK IS DONE — batch to save the cap
 (David 2026-05-21).** The *timing* rule that pairs with the target rule
 above. Vercel free tier caps at 100 builds/day and EVERY push Vercel sees
@@ -1852,6 +1873,7 @@ After every `git push origin main`:
    | `src/data/pro-repertoires.json` trap/warning content | `scripts/audit-trap-orientation.mjs` (data-only — runs without a browser) |
    | `/` (dashboard) + SmartSearchBar | `scripts/audit-dashboard.mjs` |
    | settings toggles | `scripts/audit-settings-behavior.mjs` |
+   | first-run strength calibration (boot rating + skill bubble) | `scripts/audit-strength-calibration.mjs` |
    | Cross-surface UI scaffolding | run multiple of the above |
 
    Every script in `scripts/audit-*.mjs` targets the live prod URL

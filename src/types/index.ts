@@ -918,6 +918,14 @@ export interface UserProfile {
    *  weapons stay gated on every OTHER opening and nobody can click past the
    *  ladder for free. Undefined ⇒ both passes still available. */
   weaponUnlockPasses?: { white?: string; black?: string };
+  /** Whether the player's baseline strength has been established (from
+   *  imported games or the first-run skill picker). Absent/false ⇒ the
+   *  app still runs on the seeded default and must calibrate on next
+   *  boot — this is how the retroactive fix reaches the existing cohort
+   *  whose profiles predate calibration. Set true once a real signal
+   *  (imports) or an explicit picker choice has seeded BOTH currentRating
+   *  and puzzleRating. See strengthCalibrationService. */
+  strengthCalibrated?: boolean;
   preferences: UserPreferences;
 }
 
