@@ -19,6 +19,13 @@ on:
         description: 'Comma-separated opening ids to mine (blank = all masterclass openings)'
         required: false
         default: ''
+  # Scoped push trigger so a session can fire a mining run without
+  # workflow_dispatch access: push the opening list as a one-line file to the
+  # ci-mine-gems branch. (GitHub runners reach explorer.lichess.ovh where the
+  # sandbox + Vercel can't; the explorer now 401s anonymous, so the LICHESS
+  # token secret below is required — see scripts/mine-punish-gems.mjs.)
+  push:
+    branches: [ ci-mine-gems ]
   schedule:
     # 06:30 UTC on the 1st of every month — just after the masters-DB refresh.
     - cron: '30 6 1 * *'
@@ -47,8 +54,18 @@ jobs:
       - name: Mine punish-gems with engine confirmation
         env:
           STOCKFISH_PATH: /usr/games/stockfish
+          # workflow_dispatch input, else the ci-mine-openings.txt file
+          # (push-trigger path), else blank = all masterclass openings.
           OPENINGS: ${{ inputs.openings }}
-        run: node scripts/mine-punish-gems.mjs
+          LICHESS: ${{ secrets.LICHESS }}
+        run: |
+          if [ -z "$OPENINGS" ] && [ -f ci-mine-openings.txt ]; then
+            OPENINGS="$(tr -d '\n' < ci-mine-openings.txt)"
+            export OPENINGS
+          fi
+          echo "LICHESS token present: $([ -n "$LICHESS" ] && echo yes || echo NO — explorer will 401)"
+          echo "Mining openings: ${OPENINGS:-all masterclass}"
+          node scripts/mine-punish-gems.mjs
       - name: Gate the refreshed gems
         run: npx vitest run src/data/punishGems.test.ts
       - name: Open PR with engine-confirmed gems

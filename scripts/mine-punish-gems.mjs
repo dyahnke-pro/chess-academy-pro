@@ -16,6 +16,13 @@ import { existsSync, readFileSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 
 const PROXY = 'https://chess-academy-pro.vercel.app/api/lichess-explorer';
+// The Vercel-edge proxy can't reach explorer.lichess.ovh from a datacenter
+// (connection-refused), and the explorer now 401s anonymous requests. When a
+// LICHESS token is present (GitHub Actions secret / local env), hit the
+// explorer host DIRECTLY with a Bearer header — the WO §1 fallback. GitHub
+// runners reach explorer.lichess.ovh; the sandbox egress does not.
+const LICHESS_TOKEN = process.env.LICHESS || process.env.LICHESS_API_KEY || process.env.LICHESS_TOKEN || '';
+const EXPLORER_DIRECT = 'https://explorer.lichess.ovh';
 // Rating buckets matched to the student's level (~1400-1600) — that's where
 // the natural blunders David means (grab the gambit pawn, walk into Bxf7+)
 // actually get played. Master buckets hide them.
@@ -109,7 +116,15 @@ function applyUci(chess, uci) {
 function toUci(sans) { const c = new Chess(); return sans.map((m) => { const mv = c.move(m); return mv.from + mv.to + (mv.promotion ?? ''); }); }
 async function explorer(source, sans) {
   const extra = source === 'lichess' ? `&ratings=${RATINGS}&speeds=${SPEEDS}` : '';
-  const r = await fetch(`${PROXY}?source=${source}&play=${toUci(sans).join(',')}${extra}`);
+  const play = toUci(sans).join(',');
+  if (LICHESS_TOKEN) {
+    const variant = source === 'lichess' ? 'variant=standard&' : '';
+    const r = await fetch(`${EXPLORER_DIRECT}/${source}?${variant}play=${play}${extra}`, {
+      headers: { Authorization: `Bearer ${LICHESS_TOKEN}` },
+    });
+    return r.ok ? r.json() : null;
+  }
+  const r = await fetch(`${PROXY}?source=${source}&play=${play}${extra}`);
   return r.ok ? r.json() : null;
 }
 function gamesOf(m) { return m.white + m.draws + m.black; }
