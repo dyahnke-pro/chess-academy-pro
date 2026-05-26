@@ -32422,5 +32422,466 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-queensindian-ne4",
+    "openingId": "queens-indian",
+    "criticalPositionFen": "rn1q1rk1/pbppbppp/1p2p3/8/2PPn3/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 7 8",
+    "title": "Queen's Indian: the …Ne4 Blockade and Light-Square Grip",
+    "overview": "The purest Queen's Indian idea: plant a knight on e4, the central blockading square, and back it with …f5 in Dutch fashion. With the b7-bishop already raking the long diagonal, Black builds a vice-grip on the light squares e4/d5/c4. The knights settle on e4 and c5, the bishop pressures the c3-knight, and White's space is offset by Black's piece activity. The lesson: in the Queen's Indian you fight for e4 with pieces and the …f5 pawn, not by occupying the centre with pawns.",
+    "pawnBreaks": [
+      "…f5 to support the e4-knight and grip the light squares"
+    ],
+    "pieceManeuvers": [
+      "…Ne4 the blockading knight on the central outpost",
+      "…Na6–c5 to the queenside outpost"
+    ],
+    "strategicThemes": [
+      "The e4-knight blockade",
+      "Light-square control with …f5 and the b7-bishop",
+      "Knights on e4 and c5"
+    ],
+    "endgameTransitions": [
+      "The light-square grip and active knights carry into the middlegame even after exchanges"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/pbppbppp/1p2p3/8/2PPn3/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 7 8",
+        "moves": [
+          "Bd2",
+          "f5",
+          "d5",
+          "Bf6",
+          "Rc1",
+          "Na6",
+          "a3",
+          "Nac5"
+        ],
+        "annotations": [
+          "Bd2 — White develops, keeping the option of recapturing on c3 with the bishop to hold the pawns sound.",
+          "…f5 — Black cements the e4-knight Dutch-style, building a grip on the central light squares.",
+          "d5 — White strikes back in the centre, challenging the e6-pawn and opening lines.",
+          "…Bf6 — the bishop swings to the long diagonal, bearing down on the c3-knight and White's queenside.",
+          "Rc1 — White brings the rook behind the c-pawn, supporting a future c-file break.",
+          "…Na6 — the last knight develops, heading for the c5-outpost.",
+          "a3 — White takes b4 away from Black's pieces and readies queenside expansion.",
+          "…Nac5 — the knight reaches c5, a strong outpost supporting the e4-knight and eyeing d3; with knights on e4 and c5, Black's pieces dominate the central light squares."
+        ],
+        "title": "Queen's Indian: the …Ne4 Blockade and Light-Square Grip",
+        "arrows": [
+          [
+            {
+              "from": "d2",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "f6",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "a6",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "c5",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c5",
+              "to": "d3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense"
+        ],
+        "learnCues": [
+          "Bd2 — guard c3 with the bishop.",
+          "…f5 — cement the e4-knight.",
+          "d5 — White hits back.",
+          "…Bf6 — the long diagonal.",
+          "Rc1 — back the c-pawn.",
+          "…Na6 — toward c5.",
+          "a3 — control b4.",
+          "…Nac5 — knights dominate the centre."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-queensindian-ba6",
+    "openingId": "queens-indian",
+    "criticalPositionFen": "rn1qk2r/p3bppp/bpp1pn2/3p4/2PP4/1PB2NP1/P3PPBP/RN1QK2R w KQkq - 0 9",
+    "title": "Queen's Indian 4.g3 Ba6: Pressuring the c4-Pawn",
+    "overview": "The modern …Ba6 line aims the bishop straight at White's c4-pawn from move four. Black follows with …d5 to challenge c4, piles a rook onto the c-file, and eventually breaks with …b5 to hit the pawn directly. White's c4-pawn — the head of the queenside — becomes a lasting target, and every Black piece is aimed at it. The lesson: in the …Ba6 Queen's Indian, the c4-pawn is the story; build the pressure with …d5, …Rc8 and …b5 until it cracks.",
+    "pawnBreaks": [
+      "…d5 to challenge White's c4-pawn",
+      "…b5 to strike at c4 directly"
+    ],
+    "pieceManeuvers": [
+      "…Ba6 pressuring the c4-pawn from the start",
+      "…Rc8 onto the c-file behind the c-pawn"
+    ],
+    "strategicThemes": [
+      "The c4-pawn as a permanent target",
+      "…d5 and …b5 to undermine the queenside",
+      "Piece pressure converging on c4"
+    ],
+    "endgameTransitions": [
+      "A weakened White c-pawn or backward queenside is a lasting endgame edge"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1qk2r/p3bppp/bpp1pn2/3p4/2PP4/1PB2NP1/P3PPBP/RN1QK2R w KQkq - 0 9",
+        "moves": [
+          "Ne5",
+          "Nfd7",
+          "Nxd7",
+          "Nxd7",
+          "Nd2",
+          "O-O",
+          "O-O",
+          "Rc8",
+          "e4",
+          "b5"
+        ],
+        "annotations": [
+          "Ne5 — White posts the knight aggressively in the centre.",
+          "…Nfd7 — challenging the e5-knight and unblocking the f-pawn.",
+          "Nxd7 — White trades the centralised knight off.",
+          "…Nxd7 — recapturing, the knight rerouting toward the queenside fight.",
+          "Nd2 — White develops the last knight, bolstering c4 and preparing e4.",
+          "…O-O — Black castles, ready to turn to the queenside.",
+          "O-O — White castles; the whole struggle now centres on the c4-pawn.",
+          "…Rc8 — the rook lines up on the c-file behind the c6-pawn, building toward …c5 and pressure on c4.",
+          "e4 — White grabs the full centre, putting the d5-pawn under fire.",
+          "…b5 — the queenside break, striking directly at the c4-pawn Black has pressured since …Ba6; after a capture the a6-bishop springs back to life."
+        ],
+        "title": "Queen's Indian 4.g3 Ba6: Pressuring the c4-Pawn",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "d2",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d2",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "c8",
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense"
+        ],
+        "learnCues": [
+          "Ne5 — central knight.",
+          "…Nfd7 — challenge e5.",
+          "Nxd7 — White trades.",
+          "…Nxd7 — recapture.",
+          "Nd2 — bolster c4.",
+          "…O-O — castle.",
+          "O-O — White castles.",
+          "…Rc8 — load the c-file.",
+          "e4 — White's big centre.",
+          "…b5 — strike at c4."
+        ]
+      }
+    ]
   }
 ]
