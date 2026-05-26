@@ -20660,7 +20660,12 @@
           "cxb3",
           "axb3",
           "Be7",
-          "Bb2"
+          "Bb2",
+          "O-O",
+          "Rc1",
+          "Nb4",
+          "Ne5",
+          "Nfd5"
         ],
         "annotations": [
           "…b5 — Black props the c4-pawn with b5.",
@@ -20668,7 +20673,12 @@
           "…cxb3 — Black releases the tension on b3.",
           "axb3 — White recaptures on b3, opening lines.",
           "…Be7 — Black develops the bishop to e7.",
-          "Bb2 — the dark-squared bishop joins the long diagonal toward b7."
+          "Bb2 — the dark-squared bishop joins the long diagonal toward b7.",
+          "…O-O — Black completes development, the pawn long since handed back and the position comfortable.",
+          "Rc1 — White contests the half-open c-file.",
+          "…Nb4 — the knight heads for the strong d5-square, eyeing d3 along the way.",
+          "Ne5 — White centralises the knight with tempo, hitting the d7-bishop.",
+          "…Nfd5 — the knight settles on the fine d5-outpost in front of White's centre; Black's pieces are harmonious and the Catalan's extra-pawn pressure is fully neutralised. Comfortable equality."
         ],
         "sources": [
           "concept:pos-center",
@@ -20681,7 +20691,12 @@
           "cxb3 — release the tension",
           "axb3 — recapture, open lines",
           "Be7 — develop the bishop",
-          "Bb2 — the long diagonal to b7"
+          "Bb2 — the long diagonal to b7",
+          "…O-O — castle.",
+          "Rc1 — White's c-file.",
+          "…Nb4 — toward d5.",
+          "Ne5 — central knight.",
+          "…Nfd5 — the d5-outpost."
         ],
         "arrows": [
           [],
@@ -20689,6 +20704,28 @@
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b4",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b4",
+              "to": "d3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "e5",
+              "to": "d7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           []
         ],
         "highlights": [
@@ -20762,6 +20799,68 @@
             {
               "square": "b7",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
