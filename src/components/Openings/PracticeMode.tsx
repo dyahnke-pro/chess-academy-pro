@@ -32,6 +32,7 @@ import {
   CheckCircle,
   XCircle,
   Trophy,
+  Play,
 } from 'lucide-react';
 
 export interface PracticeModeProps {
@@ -40,6 +41,10 @@ export interface PracticeModeProps {
   customLine?: OpeningVariation;
   onComplete: (correct: boolean) => void;
   onExit: () => void;
+  /** When provided, the completion screen shows a "Continue Playing"
+   *  button that hands off to Play mode locked to this line
+   *  (David 2026-05-26). */
+  onContinuePlaying?: () => void;
 }
 
 interface MoveInfo {
@@ -48,7 +53,7 @@ interface MoveInfo {
   to: string;
 }
 
-export function PracticeMode({ opening, variationIndex, customLine, onComplete, onExit }: PracticeModeProps): JSX.Element {
+export function PracticeMode({ opening, variationIndex, customLine, onComplete, onExit, onContinuePlaying }: PracticeModeProps): JSX.Element {
   const isVariation = variationIndex !== undefined && variationIndex >= 0;
   const variation = customLine ?? (isVariation ? opening.variations?.[variationIndex] : undefined);
   const activePgn = variation ? variation.pgn : opening.pgn;
@@ -374,6 +379,17 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
             <p className="text-sm text-theme-text-muted text-center">
               {totalMistakes} mistake{totalMistakes !== 1 ? 's' : ''} — practice again to perfect it!
             </p>
+          )}
+
+          {onContinuePlaying && (
+            <button
+              onClick={onContinuePlaying}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-theme-accent text-white font-semibold hover:opacity-90 transition-opacity"
+              data-testid="practice-continue-playing"
+            >
+              <Play size={16} />
+              Continue Playing
+            </button>
           )}
 
           <div className="flex gap-3">

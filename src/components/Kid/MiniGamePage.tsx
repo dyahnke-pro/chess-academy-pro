@@ -160,15 +160,12 @@ export function MiniGamePage({ gameId }: MiniGamePageProps): JSX.Element {
 
   const handleHint = useCallback((): void => {
     if (phase !== 'playing' || isAiTurn) return;
-    const newLevel = Math.min(hintLevel + 1, 2);
-    setHintLevel(newLevel);
-    if (newLevel === 1) {
-      setHintsUsed((h) => h + 1);
-      void voiceService.speak('Watch out for the enemy pawns!');
-    } else if (newLevel === 2) {
-      setHintsUsed((h) => h + 1);
-      void voiceService.speak('Try moving this pawn forward!');
-    }
+    // One tap → show the answer (David 2026-05-26). Jump straight to the
+    // full move-arrow reveal instead of the two-step nudge ladder.
+    if (hintLevel >= 2) return;
+    setHintLevel(2);
+    setHintsUsed((h) => h + 1);
+    void voiceService.speak('Try moving this pawn forward!');
   }, [phase, isAiTurn, hintLevel]);
 
   // AI turn execution
@@ -364,7 +361,7 @@ export function MiniGamePage({ gameId }: MiniGamePageProps): JSX.Element {
               data-testid="mini-game-hint"
             >
               <Lightbulb size={14} />
-              Hint {hintLevel > 0 ? `(${hintLevel}/2)` : ''}
+              Hint
             </button>
             <button
               onClick={handleRestart}

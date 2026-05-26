@@ -234,7 +234,10 @@ export function useHintSystem(config: UseHintSystemConfig): UseHintSystemReturn 
     if (!enabled) return;
     if (levelRef.current >= 3) return;
 
-    const nextLevel = (levelRef.current + 1) as 1 | 2 | 3;
+    // One tap → the full answer (David 2026-05-26: "All hint sources I
+    // want to just show the answer on first press"). Skip the WHY/WHICH
+    // ladder and jump straight to Tier 3 (move + green arrow + rationale).
+    const nextLevel = 3 as 1 | 2 | 3;
     levelRef.current = nextLevel;
     // Bump the tier synchronously so the UI reflects the user's click
     // immediately. The brain call below populates nudgeText / arrows

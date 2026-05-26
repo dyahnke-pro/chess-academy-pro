@@ -9,10 +9,10 @@ interface HintButtonProps {
 }
 
 const LEVEL_LABELS: Record<HintLevel, string> = {
-  0: 'Get a Hint',
-  1: 'Show Nudge',
-  2: 'Show Move',
-  3: 'Hints Used',
+  0: 'Show Answer',
+  1: 'Show Answer',
+  2: 'Show Answer',
+  3: 'Answer Shown',
 };
 
 const LEVEL_COLORS: Record<HintLevel, { className: string; rgb: string | null; glow: string; glowHover: string }> = {
@@ -70,17 +70,6 @@ export function HintButton({
     >
       <Lightbulb size={16} />
       <span>{LEVEL_LABELS[currentLevel]}</span>
-      {/* Level dots */}
-      <div className="flex gap-1 ml-1">
-        {([1, 2, 3] as const).map((level) => (
-          <span
-            key={level}
-            className={`w-1.5 h-1.5 rounded-full ${
-              level <= currentLevel ? 'bg-current' : 'bg-theme-border'
-            }`}
-          />
-        ))}
-      </div>
     </button>
   );
 }

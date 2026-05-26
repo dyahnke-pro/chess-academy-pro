@@ -173,22 +173,19 @@ describe('MiniGamePage', () => {
     );
   });
 
-  // 5. Hint button increments hint level
-  it('hint button increments hint level', () => {
+  // 5. Hint button reveals the answer in one tap (David 2026-05-26)
+  it('one tap reveals the hint and disables the button', () => {
     render(<MiniGamePage gameId="pawn-wars" />);
 
     fireEvent.click(screen.getByTestId('mini-game-start'));
 
     const hintBtn = screen.getByTestId('mini-game-hint');
     expect(hintBtn).toBeInTheDocument();
+    expect(hintBtn).not.toBeDisabled();
 
-    // First click: hint level 0 -> 1
+    // One tap → full reveal; button disables afterward (no ladder).
     fireEvent.click(hintBtn);
-    expect(screen.getByText(/Hint \(1\/2\)/)).toBeInTheDocument();
-
-    // Second click: hint level 1 -> 2
-    fireEvent.click(hintBtn);
-    expect(screen.getByText(/Hint \(2\/2\)/)).toBeInTheDocument();
+    expect(hintBtn).toBeDisabled();
   });
 
   // 6. Restart button resets the game
@@ -197,15 +194,15 @@ describe('MiniGamePage', () => {
 
     fireEvent.click(screen.getByTestId('mini-game-start'));
 
-    // Use hint to change state
+    // Use hint to change state — one tap disables it
     fireEvent.click(screen.getByTestId('mini-game-hint'));
-    expect(screen.getByText(/Hint \(1\/2\)/)).toBeInTheDocument();
+    expect(screen.getByTestId('mini-game-hint')).toBeDisabled();
 
     // Restart
     fireEvent.click(screen.getByTestId('mini-game-restart'));
 
-    // Hint level resets — no "(X/2)" shown
-    expect(screen.queryByText(/Hint \(1\/2\)/)).not.toBeInTheDocument();
+    // Hint resets — button is enabled again
+    expect(screen.getByTestId('mini-game-hint')).not.toBeDisabled();
     expect(screen.getByTestId('mock-chessboard')).toBeInTheDocument();
   });
 
