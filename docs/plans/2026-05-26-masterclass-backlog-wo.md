@@ -45,14 +45,36 @@ Branch `claude/gracious-hawking-5YDuq`, commits after the #684 squash:
 - `0e1d027` — qga prefix fix (an edit had dropped its first two plies).
 These need a **new PR** to land (PR #684 is already merged).
 
-### Known residual (NOT a bug — a sanctioned concession)
-A few moderate plans (notably **qga**) read slightly over 120cp **even on the
-engine's own best line**, because those openings are genuinely a touch worse
-for the student — "best play" still reads as minor drift at the gate's depth.
-David's explicit rule: *concessions to illustrate the idea are fine, as long
-as the narration is honest.* Do NOT chase these to ≤120 with contrived moves.
-The hard contract is only: **no plan teaches a LOSING position** (eval flips
-to clearly lost). All of those are fixed.
+### Exact plan-soundness residual (definitive 7b sweep, 2026-05-26)
+12 plan-moves still read >120cp — ALL moderate (≤268), NONE teach a losing
+position. These plans were NOT re-authored (not in the severe or moderate
+batches). Triage:
+
+| Plan | flagged | verdict |
+| :--- | :--- | :--- |
+| `mp-viennagame-gambit` | Nc6 152 · Bd2 198 · Be7 197 · Nh3 239 · O-O 268 · Nf4 183 | **FIX** — sustained 6-move drift (the whole line is off, not a single concession). Re-author via 3.B-plan. Explorer-independent. |
+| `mp-viennagame-vs-nc6` | Qd7 232 | borderline — fix or accept |
+| `mp-qga-main` | O-O 169 · Bg5 145 · Nc5 226 | **concession** — engine-BEST moves read this in a slightly-worse opening; eval-noise. Do NOT chase to ≤120 with contrived moves. |
+| `mp-queensgambit-minority` | cxb5 158 | **concession** — the opponent's natural inferior reply, not a student move. |
+| `mp-viennagame-paulsen` | Bb6 133 | **concession** — single move, just over. |
+
+David's rule: *concessions to illustrate the idea are fine if the narration is
+honest.* The hard contract is only **no plan teaches a LOSING position** —
+satisfied (all >300cp/losing plans are fixed on main). `engine-soundness.yml`
+(the 120cp CI gate) will flag the above; either fix vienna-gambit + accept the
+rest, OR (if you want the CI fully green) re-author all 5 to engine-best lines.
+
+### Plan-soundness build method (3.B-plan)
+For a drifting plan: keep the sound prefix up to the first flagged move →
+continue with the engine's best line from there (`scripts/mine`-style walk:
+get `bestmove` per ply, apply, repeat ~6 plies) → author honest narration +
+idea-first prelude that MATCHES the moves → `node scripts/add-leadeye-to-plans.mjs`
+→ verify `RUN_MASTERS_AUDIT=1 STOCKFISH_PATH=/usr/games/stockfish npx vitest
+run src/data/lessons/mastersCoverage.test.ts -t "<openingId>: no plan move loses"`.
+If the engine's best from the position is sharp/sac-y and you can't narrate it
+accurately, TRIM to the sound narratable chunk (don't fabricate). Whose-move
+matters: a STUDENT move flipping the eval to losing = real defect; an OPPONENT
+inferior reply or eval-noise on an engine-best move = concession.
 
 ---
 
