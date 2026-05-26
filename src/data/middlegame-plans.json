@@ -27265,42 +27265,66 @@
     "id": "mp-nimzoindian-kasparov",
     "openingId": "nimzo-indian",
     "criticalPositionFen": "rnbq1rk1/pp3ppp/4p3/3n4/1b1N4/2N3P1/PP2PPBP/R1BQK2R w KQ - 0 9",
-    "title": "Nimzo Kasparov: Strike the Fianchetto",
-    "overview": "Against 4.Nf3/g3, Black has struck the centre with …d5 and centralised the knight on d5. The plan: trade …Bxc3 to fracture White's queenside, activate …Ba6 on the open light-squared diagonal, and centralise the queen — full equality with active play against the smoothest White setup.",
+    "title": "Nimzo Kasparov: Simplify and Activate the Bishop",
+    "overview": "Against White’s fianchetto setup in the Kasparov (4.Nf3 g3), Black’s soundest course is to neutralise rather than overreach. Black trades the dark bishop for the c3-knight, simplifies the centre, and frees the light bishop to a6, where it eyes White’s queenside light squares. The result is a balanced, comfortable game — full equality, no weaknesses.",
     "pawnBreaks": [
-      "…e5 or …c5 to free the position",
-      "the doubled c-pawns are the target"
+      "…c6/…cxd5 already fixed the centre",
+      "no committal break needed — keep it solid"
     ],
     "pieceManeuvers": [
-      "…Bxc3 fracturing the queenside",
-      "…Ba6 on the a6-f1 diagonal",
-      "…Qc5 centralising"
+      "…Bxc3 trading the dark bishop",
+      "…Qa5 pinning and pressing c3",
+      "…Bc8-a6 activating the light bishop"
     ],
     "strategicThemes": [
-      "Strike the fianchetto's centre",
-      "Doubled c-pawn target",
-      "Active light-squared play"
+      "Simplify to equality",
+      "Trade the dark bishop for the knight",
+      "Activate the light bishop on a6"
     ],
     "endgameTransitions": [
-      "The structural target carries into the ending"
+      "The symmetric structure heads to a drawish, comfortable ending"
     ],
     "playableLines": [
       {
         "fen": "rnbq1rk1/pp3ppp/4p3/3n4/1b1N4/2N3P1/PP2PPBP/R1BQK2R w KQ - 0 9",
         "moves": [
+          "Qb3",
+          "Nc6",
+          "Nxc6",
+          "bxc6",
           "O-O",
-          "e5",
-          "Nf3",
-          "Bxc3"
+          "Qa5",
+          "Bd2",
+          "Bxc3",
+          "Bxc3",
+          "Nxc3",
+          "bxc3",
+          "Ba6"
         ],
         "annotations": [
-          "O-O castles, but the d4-knight sits loose in the centre.",
-          "…e5 strikes the centre, kicking the d4-knight and seizing space.",
-          "Nf3 retreats the knight.",
-          "…Bxc3 fractures White’s queenside, fixing the doubled c-pawns as permanent targets while Black keeps the bishop pair."
+          "",
+          "",
+          "",
+          "",
+          "",
+          "…Qa5 pins the c3-knight and prepares to trade on it.",
+          "",
+          "…Bxc3 trades the dark bishop for the knight — the standard Nimzo simplification.",
+          "Bxc3 recaptures.",
+          "…Nxc3 removes another piece.",
+          "bxc3 recaptures.",
+          "…Ba6 — the light bishop swings out to eye White’s queenside light squares. Black has simplified to a balanced, weakness-free game with full equality."
         ],
-        "title": "Nimzo Kasparov: Strike the Fianchetto",
+        "title": "Nimzo Kasparov: Simplify and Activate the Bishop",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
@@ -27309,39 +27333,75 @@
         "highlights": [
           [
             {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d4",
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "e5",
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "c1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -27354,19 +27414,93 @@
               "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
         "learnCues": [
-          "O-O — loose knight",
-          "e5 — strike the centre",
-          "Nf3 — retreat",
-          "Bxc3 — fracture the pawns"
+          "",
+          "",
+          "",
+          "",
+          "",
+          "…Qa5 — pin and press c3",
+          "",
+          "…Bxc3 — trade the dark bishop",
+          "Bxc3 — recapture",
+          "…Nxc3 — trade more",
+          "bxc3 — recapture",
+          "…Ba6 — activate the light bishop"
         ],
         "sources": [
           "concept:pawn-doubled",
           "concept:pos-outpost",
           "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
-        ]
+        ],
+        "intro": {
+          "say": "Against White’s fianchetto in the Kasparov, Black neutralises rather than overreaches: trade the dark bishop for the c3-knight, simplify, and swing the light bishop to a6 against White’s queenside. A balanced, comfortable game — no weaknesses, full equality.",
+          "sayShort": "Trade the dark bishop, activate …Ba6, equalise.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c8",
+              "to": "a6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
       }
     ]
   },
