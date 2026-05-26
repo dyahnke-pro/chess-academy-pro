@@ -25400,16 +25400,22 @@
           "b3",
           "e5",
           "dxe5",
-          "dxe5"
+          "dxe5",
+          "Qxd8",
+          "Rxd8"
         ],
         "annotations": [
           "b3 props c4.",
           "…e5! the thematic break, challenging d4 and opening the g7-bishop's diagonal.",
           "dxe5 opens the centre.",
-          "…dxe5 — Black has the central break in, the fianchettoed bishop firing, and dynamic King's-Indian play ahead."
+          "…dxe5 — Black has the central break in, the fianchettoed bishop firing, and dynamic King's-Indian play ahead.",
+          "Qxd8 — White offers the queen trade to take the sting out of Black’s initiative.",
+          "…Rxd8 recaptures, landing the rook on the open d-file. Even without queens Black is comfortable: the e5-pawn stakes out the centre."
         ],
         "title": "Alekhine: The Voronezh …e5 Break",
         "arrows": [
+          [],
+          [],
           [],
           [],
           [],
@@ -25467,6 +25473,30 @@
               "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
@@ -25478,7 +25508,9 @@
           "b3 — prop c4",
           "e5 — the thematic break",
           "dxe5 — open the centre",
-          "dxe5 — break in, bishop firing"
+          "dxe5 — break in, bishop firing",
+          "Qxd8 — White trades queens",
+          "Rxd8 — open d-file, central pawn"
         ]
       }
     ]
@@ -27180,13 +27212,17 @@
           "e4",
           "Ne8",
           "O-O",
-          "Ba6"
+          "Ba6",
+          "f4",
+          "Nd6"
         ],
         "annotations": [
           "e4 builds the big centre.",
           "…Ne8 reroutes toward d6 to blockade c4 and watch f5.",
           "White castles.",
-          "…Ba6 trains the light bishop on the weak c4-pawn — the blockade takes shape."
+          "…Ba6 trains the light bishop on the weak c4-pawn — the blockade takes shape.",
+          "f4 — White grabs more space, the very e4-f4 advance the blockade is built to contain.",
+          "…Nd6 lands the knight on its blockade square. Knight d6 and bishop a6 both clamp the weak c4-pawn, and from d6 the knight also eyes e4 and f5."
         ],
         "title": "Nimzo Sämisch: Blockade the Big Centre",
         "arrows": [
@@ -27203,6 +27239,19 @@
             {
               "from": "a6",
               "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "d6",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d6",
+              "to": "e4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
@@ -27263,6 +27312,46 @@
               "square": "c4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
@@ -27274,7 +27363,9 @@
           "e4 — build the big centre",
           "Ne8 — reroute to d6, blockade c4",
           "O-O — castle",
-          "Ba6 — train on the weak c4-pawn"
+          "Ba6 — train on the weak c4-pawn",
+          "f4 — White expands the centre",
+          "Nd6 — blockade c4, eye e4"
         ]
       }
     ]
