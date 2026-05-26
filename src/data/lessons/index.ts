@@ -78,6 +78,8 @@ import { ALBIN_COUNTERGAMBIT_LESSON } from './albinCountergambit';
 import { ALBIN_COUNTERGAMBIT_VARIATION_LESSONS } from './albinCountergambitVariations';
 import { SCHLIEMANN_DEFENCE_LESSON } from './schliemannDefence';
 import { SCHLIEMANN_DEFENCE_VARIATION_LESSONS } from './schliemannDefenceVariations';
+import { QUEENS_GAMBIT_LESSON } from './queensGambit';
+import { QUEENS_GAMBIT_VARIATION_LESSONS } from './queensGambitVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -134,6 +136,7 @@ const LESSONS: Record<string, LessonScript> = {
   [BUDAPEST_GAMBIT_LESSON.openingId]: BUDAPEST_GAMBIT_LESSON,
   [ALBIN_COUNTERGAMBIT_LESSON.openingId]: ALBIN_COUNTERGAMBIT_LESSON,
   [SCHLIEMANN_DEFENCE_LESSON.openingId]: SCHLIEMANN_DEFENCE_LESSON,
+  [QUEENS_GAMBIT_LESSON.openingId]: QUEENS_GAMBIT_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -176,6 +179,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...BUDAPEST_GAMBIT_VARIATION_LESSONS,
   ...ALBIN_COUNTERGAMBIT_VARIATION_LESSONS,
   ...SCHLIEMANN_DEFENCE_VARIATION_LESSONS,
+  ...QUEENS_GAMBIT_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

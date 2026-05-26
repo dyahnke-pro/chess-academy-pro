@@ -30213,5 +30213,495 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-queensgambit-minority",
+    "openingId": "queens-gambit",
+    "title": "Exchange QGD: the Minority Attack",
+    "criticalPositionFen": "r1bqr1k1/1p2bppp/2p2nn1/p2p2B1/3P4/P1NBPN2/1PQ2PPP/1R3RK1 w - - 1 13",
+    "overview": "In the Carlsbad structure White attacks where he has FEWER pawns. The lone b-pawn marches b4-b5 to smash Black's c6, opening the c-file and leaving a backward pawn to besiege — the most elegant plan in the Queen's Gambit.",
+    "pawnBreaks": [
+      {
+        "move": "b4",
+        "explanation": "b4 advances the minority pawn toward its target.",
+        "fen": "r1bqr1k1/1p2bppp/2p2nn1/p2p2B1/3P4/P1NBPN2/1PQ2PPP/1R3RK1 w - - 1 13"
+      },
+      {
+        "move": "b5",
+        "explanation": "b5 strikes the base of Black's c6-pawn, forcing a structural weakness.",
+        "fen": "r1bqr1k1/1p2bppp/2p2nn1/p2p2B1/3P4/P1NBPN2/1PQ2PPP/1R3RK1 w - - 1 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Ra1-b1",
+        "explanation": "The a-rook backs the b-pawn before it advances."
+      }
+    ],
+    "strategicThemes": [
+      "Push the b-pawn b4-b5 to assault Black's c6.",
+      "Open the c-file and besiege the resulting backward pawn.",
+      "Trade into a better minor-piece game with the lasting structural plus."
+    ],
+    "endgameTransitions": [
+      "The queenside weakness carries into a pleasant rook or minor-piece ending."
+    ],
+    "playableLines": [
+      {
+        "title": "Exchange QGD: the Minority Attack",
+        "fen": "r1bqr1k1/1p2bppp/2p2nn1/p2p2B1/3P4/P1NBPN2/1PQ2PPP/1R3RK1 w - - 1 13",
+        "moves": [
+          "b4",
+          "axb4",
+          "axb4",
+          "Bd6",
+          "b5",
+          "cxb5",
+          "Bxb5"
+        ],
+        "annotations": [
+          "b4 — the minority attack begins; the lone b-pawn advances toward c6.",
+          "…axb4 — Black trades to open the a-file, but the plan rolls on.",
+          "axb4 — White recaptures and the b-pawn stands ready on b4.",
+          "…Bd6 — Black eyes the kingside, hunting counterplay before the queenside cracks.",
+          "b5 — the break! The pawn strikes c6 and forces a concession.",
+          "…cxb5 — Black captures, and the c-file swings open onto his position.",
+          "Bxb5 — White owns the open c-file and the lone d5-pawn to besiege; the minority attack has done its work."
+        ],
+        "learnCues": [
+          "b4 — start the minority attack",
+          "…axb4 — Black opens the a-file",
+          "axb4 — recapture, b-pawn ready",
+          "…Bd6 — Black seeks kingside play",
+          "b5 — the break hits c6",
+          "…cxb5 — the c-file opens",
+          "Bxb5 — open file, d5 weak"
+        ],
+        "sources": [
+          "book:queens-gambit",
+          "concept:pawn-minority-attack",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Minority_attack"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-queensgambit-accepted",
+    "openingId": "queens-gambit",
+    "title": "QGA: the d5 Break and the Open d-File",
+    "criticalPositionFen": "rq2kb1r/1b1n1ppp/p3pn2/1pp5/3P4/1BN1PN2/PP2QPPP/R1BR2K1 w kq - 6 11",
+    "overview": "Black accepted the gambit and ceded the centre. White develops fully, then rips it open with d4-d5; a chain of trades leaves White's rook dominating the open d-file in the heart of Black's position.",
+    "pawnBreaks": [
+      {
+        "move": "d5",
+        "explanation": "d5 detonates the centre when White is fully developed and Black is loose.",
+        "fen": "rq2kb1r/1b1n1ppp/p3pn2/1pp5/3P4/1BN1PN2/PP2QPPP/R1BR2K1 w kq - 6 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Rf1-d1",
+        "explanation": "The rook stacks behind the d-pawn before the break."
+      }
+    ],
+    "strategicThemes": [
+      "Hold the recovered pawn back, then strike with d4-d5.",
+      "Trade into control of the open d-file.",
+      "Press with the more active pieces and the safer king."
+    ],
+    "endgameTransitions": [
+      "The d-file and piece activity convert into a favourable endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "QGA: the d5 Break and the Open d-File",
+        "fen": "rq2kb1r/1b1n1ppp/p3pn2/1pp5/3P4/1BN1PN2/PP2QPPP/R1BR2K1 w kq - 6 11",
+        "moves": [
+          "d5",
+          "exd5",
+          "Nxd5",
+          "Nxd5",
+          "Bxd5",
+          "Bxd5",
+          "Rxd5"
+        ],
+        "annotations": [
+          "d5 — the central break detonates while Black's queen sits offside on b8.",
+          "…exd5 — Black opens the centre he had tried to avoid.",
+          "Nxd5 — the knight recaptures in the heart of the position.",
+          "…Nxd5 — Black trades knights to relieve the pressure.",
+          "Bxd5 — the bishop recaptures, raking toward b7 and f7.",
+          "…Bxd5 — Black surrenders his proud light bishop.",
+          "Rxd5 — the rook dominates the open d-file; White has the activity and the safer king."
+        ],
+        "learnCues": [
+          "d5 — the central break",
+          "…exd5 — the centre opens",
+          "Nxd5 — recapture in the centre",
+          "…Nxd5 — Black trades knights",
+          "Bxd5 — bishop rakes to b7",
+          "…Bxd5 — Black trades bishops",
+          "Rxd5 — the rook rules d5"
+        ],
+        "sources": [
+          "book:queens-gambit",
+          "concept:pos-center",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "b7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d5",
+              "to": "f7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-queensgambit-slav",
+    "openingId": "queens-gambit",
+    "title": "Slav: Build the Big Centre with e4",
+    "criticalPositionFen": "r2q1rk1/pp1n1ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P2QPPP/R1B2RK1 w - - 5 10",
+    "overview": "Against the solid Slav, White recovers the pawn and then claims the full centre with e4, gaining the space and the bishop pair. The e4-e5 advance cramps Black and hands White a durable spatial pull.",
+    "pawnBreaks": [
+      {
+        "move": "e4",
+        "explanation": "e4 builds the d4+e4 centre and hits the f5-bishop, gaining time and space.",
+        "fen": "r2q1rk1/pp1n1ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P2QPPP/R1B2RK1 w - - 5 10"
+      },
+      {
+        "move": "e5",
+        "explanation": "e5 advances the centre, cramping Black and opening lines toward his king.",
+        "fen": "r2q1rk1/pp1n1ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P2QPPP/R1B2RK1 w - - 5 10"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc4-d3",
+        "explanation": "The bishop reroutes to d3 to challenge the g6-bishop once the centre advances."
+      }
+    ],
+    "strategicThemes": [
+      "Meet the Slav with a4 to keep the pawn, then e4 to claim the centre.",
+      "Advance e4-e5 to gain space and cramp Black.",
+      "Exploit the bishop pair and central majority."
+    ],
+    "endgameTransitions": [
+      "The space and bishop pair give White the easier game into an endgame."
+    ],
+    "playableLines": [
+      {
+        "title": "Slav: Build the Big Centre with e4",
+        "fen": "r2q1rk1/pp1n1ppp/2p1pn2/5b2/PbBP4/2N1PN2/1P2QPPP/R1B2RK1 w - - 5 10",
+        "moves": [
+          "e4",
+          "Bg6",
+          "Bd3",
+          "Re8",
+          "e5",
+          "Nd5"
+        ],
+        "annotations": [
+          "e4 — White claims the broad centre and hits the f5-bishop.",
+          "…Bg6 — the bishop retreats to safety along the diagonal.",
+          "Bd3 — White lines up to challenge the g6-bishop once the centre advances.",
+          "…Re8 — Black contests the e-file before the storm.",
+          "e5 — the pawn storms on, cramping Black and clearing the road toward g6.",
+          "…Nd5 — Black blockades on d5, but White's space advantage is real and lasting."
+        ],
+        "learnCues": [
+          "e4 — claim the big centre",
+          "…Bg6 — the bishop retreats",
+          "Bd3 — challenge the g6-bishop",
+          "…Re8 — Black holds the e-file",
+          "e5 — the storm advances",
+          "…Nd5 — Black blockades, White has space"
+        ],
+        "sources": [
+          "book:queens-gambit",
+          "concept:pos-center",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Slav_Defense"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]

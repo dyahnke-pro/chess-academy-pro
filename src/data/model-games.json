@@ -4671,5 +4671,74 @@
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
     ]
+  },
+  {
+    "id": "mg-queensgambit-exchange-carlsen-kramnik-2016",
+    "openingId": "queens-gambit",
+    "white": "Magnus Carlsen",
+    "black": "Vladimir Kramnik",
+    "whiteElo": 2851,
+    "blackElo": 2801,
+    "result": "1-0",
+    "year": 2016,
+    "event": "Norway Chess 2016",
+    "studentSide": "white",
+    "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 c6 e3 Bf5 Qf3 Bg6 Bxf6 Qxf6 Qxf6 gxf6 Nf3 Nd7 Nh4 Be7 Ne2 Nb6 Ng3 Bb4+ Kd1 Na4 Ngf5 Kd7 Rb1 Ke6 Bd3 Rhc8 Ke2 Bf8 g4 c5 Ng2 cxd4 exd4 Bd6 h4 h5 Ng7+ Ke7 gxh5 Bxd3+ Kxd3 Kd7 Ne3 Nb6 Ng4 Rh8 Rhe1 Be7 Nf5 Bd8 h6 Rc8 b3 Rc6 Nge3 Bc7 Rbc1 Rxc1 Rxc1 Bf4 Rc5 Ke6 Ng7+ Kd6 Ng4 Nd7 Rc2 f5 Nxf5+ Ke6 Ng7+ Kd6 Re2 Kc6 Re8 Rxe8 Nxe8 Nf8 Ne5+ Bxe5 dxe5 Kd7 Nf6+ Ke6 h5 Kxe5 Nd7+ Nxd7 h7 Nc5+ Ke2",
+    "middlegameTheme": "Exchange QGD — queen trade, f5 outpost, and the grind",
+    "overview": "A textbook Exchange QGD by the World Champion. Carlsen trades queens early on f6, saddling Kramnik with doubled, broken kingside pawns, then patiently maneuvers his knights to the Lasker f5-outpost and presses the structural plus. There is no combination — just the relentless Queen's Gambit squeeze, converted into a winning ending against one of the great defenders.",
+    "lessonSummary": "Even without the minority attack, the Exchange QGD wins on structure: damage Black's pawns, plant a knight on f5, and grind. Watch how Carlsen never hurries.",
+    "sources": [
+      "book:queens-gambit",
+      "concept:pos-outpost",
+      "concept:pawn-doubled",
+      "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined,_Exchange_Variation"
+    ],
+    "criticalMoments": []
+  },
+  {
+    "id": "mg-queensgambit-qga-kramnik-kasparov-2001",
+    "openingId": "queens-gambit",
+    "white": "Vladimir Kramnik",
+    "black": "Garry Kasparov",
+    "whiteElo": 2802,
+    "blackElo": 2838,
+    "result": "1-0",
+    "year": 2001,
+    "event": "Botvinnik Memorial (blitz) 2001",
+    "studentSide": "white",
+    "pgn": "d4 d5 c4 dxc4 Nf3 e6 e3 a6 Bxc4 c5 O-O Nf6 Bd3 cxd4 exd4 Be7 Ne5 Nc6 Nxc6 bxc6 Be3 Nd5 Nc3 O-O Rc1 Nxe3 fxe3 c5 dxc5 Bxc5 Bxh7+ Kxh7 Qh5+ Kg8 Qxc5 Bb7 Rcd1 Rc8 Rxd8 Rxc5 Rd7 Bc8 Rd6 a5 e4 Bb7 Rfd1 g5 Rb6 Bc6 Rd6 Rc8 Kf2 Kg7 Ke3 Be8 Rb7 Kf6 Ra6 Kg7 Rba7 Rb8 Rxa5 Rxa5 Rxa5 Rxb2 Rxg5+ Kf6 h4 Rc2 e5+ Ke7 Kd3 Rb2 h5 Rb4 g3 Rb2 Rg4 f5 exf6+ Kxf6 Ne4+ Ke7 h6",
+    "middlegameTheme": "QGA Classical — central majority and piece activity",
+    "overview": "Kramnik beats Kasparov from the white side of the Queen's Gambit Accepted. Black takes the pawn and concedes the centre; Kramnik develops smoothly, recovers the pawn, and uses his central pawns and the more active pieces to outplay the all-time great. The model for how White profits when the gambit is accepted: don't chase the pawn, take the centre.",
+    "lessonSummary": "In the QGA, give Black the pawn and take the centre. Kramnik's harmonious development and central control beat even Kasparov.",
+    "sources": [
+      "book:queens-gambit",
+      "concept:pos-center",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
+    ],
+    "criticalMoments": []
+  },
+  {
+    "id": "mg-queensgambit-slav-carlsen-nakamura-2014",
+    "openingId": "queens-gambit",
+    "white": "Magnus Carlsen",
+    "black": "Hikaru Nakamura",
+    "whiteElo": 2877,
+    "blackElo": 2787,
+    "result": "1-0",
+    "year": 2014,
+    "event": "Sinquefield Cup 2014",
+    "studentSide": "white",
+    "pgn": "d4 d5 c4 c6 Nc3 dxc4 e3 b5 a4 b4 Ne4 Qd5 Nd2 c3 bxc3 bxc3 Nb1 Qa5 Qc2 e5 Nf3 Na6 Nxe5 Nb4 Qb3 Be6 Bc4 c2 Bxe6 Nd3+ Ke2 Nxe5 dxe5 fxe6 Qxe6+ Ne7 Nd2 Qd5 Qxd5 Nxd5 Ne4 Rb8 Bd2 Bb4 Rhc1 Bxd2 Nxd2 Nb4 Nf3 Ke7 Ne1 Rhd8 f4 c5 Nxc2 Nd3 Rcb1 Nb2 Ra2 Nxa4 Rxb8 Nc3+ Kf3 Nxa2 Rb5 Nb4 Nxb4 cxb4 Rxb4 Ra8 Ke4 a5 Ra4 Kf7 g4 Ke7 f5 h6 h4 Kf7 e6+ Kf6 Rd4 Ke7 Rd7+ Kf8 e7+ Ke8 Rd8+ Rxd8 exd8=Q+ Kxd8 Kd5 Ke7 g5 a4 Kc4 hxg5 hxg5 Kd6 e4 Ke5 Kb4",
+    "middlegameTheme": "Slav — central space against the solid set-up",
+    "overview": "Carlsen dismantles Nakamura's Slav. Black grabs the c4-pawn and lunges with ...b5-b4, but Carlsen meets the solidity with central energy and superior coordination, converting a space and activity edge into a clean win. A showcase of the masterclass plan: answer the Slav by claiming the centre and outplaying from there.",
+    "lessonSummary": "Against the Slav, fight with the centre and piece activity, not memorised theory. Carlsen turns a small edge into a full point against a 2780.",
+    "sources": [
+      "book:queens-gambit",
+      "concept:pos-center",
+      "concept:pos-space",
+      "https://en.wikipedia.org/wiki/Slav_Defense"
+    ],
+    "criticalMoments": []
   }
 ]
