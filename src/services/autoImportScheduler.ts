@@ -1,6 +1,7 @@
 /**
- * autoImportScheduler — biweekly background sync of chess.com and
- * lichess games. Runs once per app boot after the profile loads.
+ * autoImportScheduler — weekly background sync of chess.com and
+ * lichess games, then auto-analyzes the new ones. Runs once per app
+ * boot after the profile loads.
  *
  * Contract: a service is "due" when (a) a username is configured for
  * it, and (b) `lastXxxAutoImportAt` is older than
@@ -19,7 +20,7 @@ import { importLichessGames } from './lichessService';
 import { logAppAudit } from './appAuditor';
 import type { UserProfile } from '../types';
 
-export const AUTO_IMPORT_INTERVAL_MS = 14 * 24 * 60 * 60 * 1000; // 14 days
+export const AUTO_IMPORT_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days (weekly)
 
 export interface AutoImportResult {
   service: 'chesscom' | 'lichess';
@@ -67,11 +68,13 @@ export function runAutoImportIfDue(
       results.push({ service: 'chesscom', username: ccUser, imported: 0, skipped: 'too-soon' });
     } else {
       try {
-        // skipPostProcessing avoids queueing hundreds of games into
-        // Stockfish via runBackgroundAnalysis(); maxArchives=2 covers
-        // the 14-day biweekly window without re-pulling years of games.
+        // Auto-analyze: let the import run its post-processing (mistake
+        // puzzles + background Stockfish analysis → weakness profile), so the
+        // new games actually feed the Training Plan. Analysis is backgrounded,
+        // singleton-gated, and aborts when the app is backgrounded, so it
+        // won't starve the coach. maxArchives=2 covers the weekly window
+        // without re-pulling years of games on every boot.
         const imported = await importChessComGames(ccUser, undefined, {
-          skipPostProcessing: true,
           maxArchives: 2,
         });
         updates.lastChessComAutoImportAt = now;
@@ -102,10 +105,9 @@ export function runAutoImportIfDue(
       results.push({ service: 'lichess', username: liUser, imported: 0, skipped: 'too-soon' });
     } else {
       try {
-        // Same opt-out as chess.com — keep Stockfish free for the coach.
-        const imported = await importLichessGames(liUser, undefined, {
-          skipPostProcessing: true,
-        });
+        // Same as chess.com — run post-processing so imported games are
+        // analyzed and feed the Training Plan.
+        const imported = await importLichessGames(liUser, undefined, {});
         updates.lastLichessAutoImportAt = now;
         results.push({ service: 'lichess', username: liUser, imported, skipped: null });
         void logAppAudit({
