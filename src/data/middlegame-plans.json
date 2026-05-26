@@ -18485,50 +18485,49 @@
   {
     "id": "mp-siciliannajdorf-6a4",
     "openingId": "sicilian-najdorf",
-    "title": "Anti-Najdorf 6.a4: Central Play",
+    "title": "Najdorf 6.a4: Central Play and the c5-Outpost",
     "criticalPositionFen": "r2q1rk1/1p1nbppp/p2pbn2/4p3/P3P3/1NN1B3/1PP1BPPP/R2Q1RK1 w - - 8 11",
-    "overview": "With b5 restrained by a4, Black shifts plans — the rook to c8 for the half-open file, trade off the d5-knight, and reroute toward c5 and the central d5 break, keeping a sound equal game.",
+    "overview": "White’s 6.a4 clamps the queenside and rules out …b5, so Black turns to the centre and pieces. The d7-knight reroutes to the c5-outpost — immune to a pawn and hitting e4 — while the rooks swing to c8 and e8 to press White’s centre. Roughly level with comfortable, natural counterplay for Black.",
     "pawnBreaks": [
-      {
-        "move": "d5 (eventual)",
-        "explanation": "With b5 held back, Black aims for the central d5 break instead.",
-        "fen": "r2q1rk1/1p1nbppp/p2pbn2/4p3/P3P3/1NN1B3/1PP1BPPP/R2Q1RK1 w - - 8 11"
-      }
+      "…d5 once the pieces back it",
+      "centre stays tense — piece play first"
     ],
     "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nd7-b6",
-        "explanation": "The knight reroutes to b6, pressing d5 and a4."
-      }
+      "…Nd7-c5 to the protected outpost (hits e4)",
+      "…Rc8 onto the half-open c-file",
+      "…Rfe8 supporting …d5/…e-file play"
     ],
     "strategicThemes": [
-      "a4 stops b5, so play the centre and the c-file.",
-      "Trade the d5-knight.",
-      "Reroute toward c5 and b6."
+      "The c5-outpost",
+      "Pressure on e4",
+      "Central piece play vs the clamped queenside"
     ],
     "endgameTransitions": [
-      "A sound structure equalises comfortably."
+      "The outpost knight and central control hold the balance"
     ],
     "playableLines": [
       {
-        "title": "Anti-Najdorf 6.a4: Central Play",
+        "title": "Najdorf 6.a4: Central Play and the c5-Outpost",
         "fen": "r2q1rk1/1p1nbppp/p2pbn2/4p3/P3P3/1NN1B3/1PP1BPPP/R2Q1RK1 w - - 8 11",
         "moves": [
           "a5",
           "Rc8",
-          "Nd5",
-          "Bxd5",
-          "exd5",
-          "Nb6"
+          "Qd3",
+          "Qc7",
+          "Rfd1",
+          "Rfe8",
+          "h3",
+          "Nc5"
         ],
         "annotations": [
-          "a5 — White clamps the queenside.",
-          "Rc8 — Black takes the half-open c-file.",
-          "Nd5 — White occupies the outpost.",
-          "Bxd5 — Black trades it off.",
-          "exd5 — White recaptures, closing the centre.",
-          "Nb6 — the knight presses d5 and the a4-pawn."
+          "a5 clamps the queenside and fixes b6 as a hole.",
+          "…Rc8 takes the half-open c-file.",
+          "Qd3 centralises.",
+          "…Qc7 connects and eyes the c-file and e5.",
+          "Rfd1 contests the centre.",
+          "…Rfe8 backs up …d5 and the e-file.",
+          "h3 makes luft.",
+          "…Nc5! the knight reaches its outpost — protected, immune to a pawn, and hitting e4 and b3. Black has easy, natural counterplay and full equality."
         ],
         "arrows": [
           [],
@@ -18536,15 +18535,17 @@
           [],
           [],
           [],
+          [],
+          [],
           [
             {
-              "from": "b6",
-              "to": "d5",
+              "from": "c5",
+              "to": "e4",
               "color": "rgba(34, 197, 94, 0.85)"
             },
             {
-              "from": "b6",
-              "to": "a4",
+              "from": "c5",
+              "to": "b3",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ]
@@ -18558,6 +18559,10 @@
             {
               "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -18572,37 +18577,65 @@
           ],
           [
             {
-              "square": "d5",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c3",
+              "square": "d1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d5",
+              "square": "c7",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e6",
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d5",
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e4",
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b6",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -18610,11 +18643,11 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d5",
+              "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
             },
             {
-              "square": "a4",
+              "square": "b3",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
@@ -18626,12 +18659,45 @@
         ],
         "learnCues": [
           "a5 — clamp the queenside",
-          "Rc8 — take the half-open c-file",
-          "Nd5 — occupy the outpost",
-          "Bxd5 — trade it off",
-          "exd5 — recapture, close the centre",
-          "Nb6 — press d5 and a4"
-        ]
+          "…Rc8 — take the c-file",
+          "Qd3 — centralise",
+          "…Qc7 — connect, eye e5",
+          "Rfd1 — contest the centre",
+          "…Rfe8 — back the centre",
+          "h3 — luft",
+          "…Nc5 — knight to the outpost, hit e4"
+        ],
+        "intro": {
+          "say": "White’s a4 clamps the queenside, so Black plays in the centre and with pieces: the d7-knight heads to the c5-outpost — protected and biting at e4 — while the rooks take the c-file and the e-file to press White’s centre.",
+          "sayShort": "Knight to the c5-outpost, rooks to the centre.",
+          "arrows": [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c5",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f8",
+              "to": "c8",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
       }
     ]
   },
