@@ -29145,23 +29145,24 @@
     "id": "mp-slavdefence-main",
     "openingId": "slav-defence",
     "criticalPositionFen": "r2q1rk1/pp1n1pp1/2p1pnbp/8/PbBPP2B/2N2N2/1P2QPPP/R4RK1 b - - 1 12",
-    "title": "Slav: Trade on c3, then Break with …c5",
-    "overview": "Black has the classical Slav: the rock-solid c6/e6 wall, the good light bishop already developed on g6, and no weaknesses. The plan converts that solidity into pressure — trade the dark bishop for the c3-knight to saddle White with doubled c-pawns, then strike the centre with the thematic …c5 break, opening lines for Black's harmonious pieces against a damaged white structure.",
+    "title": "Slav: Trade on c3, then Win the e4-Pawn",
+    "overview": "A concrete tactical plan: Black trades the dark bishop on c3 to fracture White’s queenside pawns, and the same move loosens White’s centre — the e4-pawn falls to …Bxe4, because Qxe4 runs into …Nxe4, the f6-knight winning the queen. Black emerges a clean pawn up.",
     "pawnBreaks": [
-      "…c5 to strike the d4-centre and free the position",
-      "…e5 once fully prepared"
+      "…Bxc3 fractures White’s queenside",
+      "win the loose e4-pawn"
     ],
     "pieceManeuvers": [
-      "…Bxc3 to damage White’s queenside structure",
-      "…Qa5 pressuring the doubled c-pawns"
+      "…Bxc3 damaging the structure",
+      "…Bxe4 grabbing the centre pawn",
+      "…Nf6 guarding e4 / hitting the queen"
     ],
     "strategicThemes": [
-      "Doubling White’s c-pawns",
-      "The …c5 freeing break",
-      "The good bishop on g6"
+      "Damage the queenside structure",
+      "Win the loose e4-pawn",
+      "The …Nxe4 tactic on the queen"
     ],
     "endgameTransitions": [
-      "The doubled c-pawns are a lasting target into the endgame"
+      "The extra pawn tells in simplification"
     ],
     "playableLines": [
       {
@@ -29169,29 +29170,25 @@
         "moves": [
           "Bxc3",
           "bxc3",
-          "c5",
-          "e5"
+          "Bxe4"
         ],
         "annotations": [
-          "…Bxc3 trades the dark bishop for the knight, doubling White’s c-pawns and handing Black a clean structural target.",
-          "bxc3 recaptures, accepting the doubled, isolated c-pawns.",
-          "…c5! the thematic Slav break, striking at the d4-centre and opening lines for Black’s harmonious pieces.",
-          "e5 pushes past to grab space, but Black has forced the freeing break and kept the structurally superior position."
+          "…Bxc3 trades the dark bishop to fracture White’s queenside pawns — and it loosens the centre.",
+          "bxc3 recaptures, but now the e4-pawn is only defended by the queen.",
+          "…Bxe4! wins the central pawn. Qxe4 fails to …Nxe4 — the f6-knight snaps off the queen. Black is a clean pawn to the good."
         ],
         "learnCues": [
-          "…Bxc3 — double the c-pawns.",
-          "bxc3 — White recaptures.",
-          "…c5 — the freeing break on d4.",
-          "e5 — White grabs space."
+          "…Bxc3 — fracture the queenside",
+          "bxc3 — recapture, e4 loose",
+          "…Bxe4 — win the pawn (Qxe4? …Nxe4)"
         ],
         "sources": [
           "concept:pos-center",
           "concept:pawn-doubled",
           "https://en.wikipedia.org/wiki/Slav_Defense"
         ],
-        "title": "Slav: Trade on c3, then Break with …c5",
+        "title": "Slav: Trade on c3, then Win the e4-Pawn",
         "arrows": [
-          [],
           [],
           [],
           []
@@ -29215,33 +29212,58 @@
             {
               "square": "b2",
               "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "e5",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e4",
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
-        ]
+        ],
+        "intro": {
+          "say": "Black’s plan is concrete: trade the dark bishop on c3 to damage White’s structure, then snap off the loose e4-pawn — Qxe4 runs into …Nxe4, the knight winning the queen.",
+          "sayShort": "Trade on c3, then win the e4-pawn.",
+          "arrows": [
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g6",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          "highlights": [
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        }
       }
     ]
   },
