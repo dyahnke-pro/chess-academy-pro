@@ -33642,5 +33642,170 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-twoknightsdefence-polerio",
+    "openingId": "two-knights-defence",
+    "criticalPositionFen": "r1bqkb1r/p4ppp/2p2n2/nB2p1N1/8/8/PPPP1PPP/RNBQK2R w KQkq - 0 8",
+    "title": "Two Knights …Na5: the Modern Gambit for Activity",
+    "overview": "After 4.Ng5 d5 5.exd5, Black declines to grovel for the pawn and instead gambits it with …Na5, hitting the c4-bishop and seizing the initiative. Black opens the b-file with …c6/…bxc6, centralises a knight on d5, develops every piece, and rolls the kingside with …f5 — a raging lead in development for one pawn (engine-checked roughly level). The lesson: meet the Ng5 raid with …Na5 and play for activity, not material.",
+    "pawnBreaks": [
+      "…c6 to challenge White's d5-pawn",
+      "…f5 the kingside expansion"
+    ],
+    "pieceManeuvers": [
+      "…Na5 to chase the c4/b5-bishop",
+      "…Nf6–d5 to the central outpost"
+    ],
+    "strategicThemes": [
+      "A pawn gambit for a development lead",
+      "The open b-file and central knight",
+      "Kingside expansion with …f5"
+    ],
+    "endgameTransitions": [
+      "Black must keep the initiative; trading into a quiet endgame leaves White's extra pawn telling"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/p4ppp/2p2n2/nB2p1N1/8/8/PPPP1PPP/RNBQK2R w KQkq - 0 8",
+        "moves": [
+          "Bd3",
+          "Nd5",
+          "Nf3",
+          "Bd6",
+          "O-O",
+          "O-O",
+          "Re1",
+          "f5"
+        ],
+        "annotations": [
+          "Bd3 — the bishop retreats from b5 to safety, and Black has gained yet more time for the pawn.",
+          "…Nd5 — the knight bounds to the centre, the strong d5-outpost, eyeing f4 and the queenside.",
+          "Nf3 — White's adventurous g5-knight finally retreats; Black's lead in development is taking shape.",
+          "…Bd6 — developing with purpose, the bishop trained on the kingside.",
+          "O-O — White castles, trying to consolidate the extra pawn.",
+          "…O-O — Black castles too, every piece in play for the sacrificed pawn.",
+          "Re1 — White contests the e-file and shores up the position.",
+          "…f5 — Black rolls the kingside pawns forward; the lead in development and the active pieces are full value for the pawn."
+        ],
+        "title": "Two Knights …Na5: the Modern Gambit for Activity",
+        "arrows": [
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "f4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Two_Knights_Defense"
+        ],
+        "learnCues": [
+          "Bd3 — bishop retreats.",
+          "…Nd5 — centralize the knight.",
+          "Nf3 — knight retreats.",
+          "…Bd6 — develop, aim kingside.",
+          "O-O — White castles.",
+          "…O-O — fully developed.",
+          "Re1 — White's e-file.",
+          "…f5 — kingside expansion."
+        ]
+      }
+    ]
   }
 ]
