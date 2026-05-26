@@ -29622,6 +29622,8 @@
       {
         "fen": "r2qk2r/1b1nbppp/p3pn2/1p6/3NP3/1BN5/PP2QPPP/R1BR2K1 b kq - 0 12",
         "moves": [
+          "O-O",
+          "Bg5",
           "Nc5",
           "Nxe6",
           "Nxe6",
@@ -29630,14 +29632,18 @@
           "Bxe6"
         ],
         "annotations": [
+          "…O-O tucks the king safely.",
+          "Bg5 pins the f6-knight.",
           "…Nc5 leaps to the outpost, hitting e4 and eyeing the queenside.",
           "Nxe6 forces simplification.",
           "…Nxe6 recaptures.",
           "Rxd8",
           "…Raxd8 — the rooks come off.",
-          "Bxe6 — and the dust settles on a balanced, weakness-free position. Black has comfortably equalised."
+          "Bxe6 — the dust settles on a balanced, weakness-free position. Black has comfortably equalised."
         ],
         "learnCues": [
+          "…O-O — castle",
+          "Bg5 — White pins",
           "…Nc5 — to the outpost",
           "Nxe6 — White simplifies",
           "…Nxe6 — recapture",
@@ -29652,6 +29658,14 @@
         ],
         "title": "QGA: The c5-Outpost, then Simplify",
         "arrows": [
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [
             {
               "from": "c5",
@@ -29666,6 +29680,30 @@
           []
         ],
         "highlights": [
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
           [
             {
               "square": "c5",
