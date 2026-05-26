@@ -30724,5 +30724,623 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-kingsindiandefence-fourpawns",
+    "openingId": "kings-indian-defence",
+    "criticalPositionFen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
+    "title": "King's Indian Four Pawns Attack: the Benoni Counter-strike",
+    "overview": "The Four Pawns Attack (f4) is White's most ambitious King's Indian: a huge c4–d4–e4–f4 pawn front. Black does NOT try to storm a wing here — Black attacks the over-extended centre directly with …c5 and …e6, steering into a Modern Benoni structure where White's space is balanced by Black's queenside pawn majority, the long-diagonal bishop, and pressure on the e4-pawn. The lesson: meet the broad centre with a central break, not a pawn-storm.",
+    "pawnBreaks": [
+      "…c5 the Benoni strike against d4",
+      "…e6 to lever the d5-pawn"
+    ],
+    "pieceManeuvers": [
+      "…Bg4 onto f3, the e4-pawn's defender",
+      "…Nbd7 toward the e5 and c5 outposts"
+    ],
+    "strategicThemes": [
+      "Modern Benoni structure",
+      "Queenside pawn majority versus central space",
+      "Pressure on the e4-pawn"
+    ],
+    "endgameTransitions": [
+      "The queenside majority is a long-term endgame trump if the middlegame simplifies"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
+        "moves": [
+          "c5",
+          "d5",
+          "e6",
+          "Be2",
+          "exd5",
+          "cxd5",
+          "Bg4",
+          "O-O",
+          "Nbd7"
+        ],
+        "annotations": [
+          "…c5 — the Benoni strike. Black hits the broad pawn front at its base, refusing to sit while White piles up f4–e4–d4.",
+          "d5 — White pushes past and grabs a big space advantage; the position takes on Modern Benoni contours.",
+          "…e6 — Black chips at the d5-pawn, the standard Benoni lever to crack the centre open.",
+          "Be2 — White finishes development, ready to castle behind the broad centre.",
+          "…exd5 — Black cracks the centre, trading off the spearhead to get the pieces breathing.",
+          "cxd5 — White rebuilds the wedge on d5; now it is a true Modern Benoni — White's space against Black's queenside pawn majority and active pieces.",
+          "…Bg4 — the bishop trains on f3, ready to swap off the knight that guards e4 and loosen White's centre.",
+          "O-O — White tucks the king away; the middlegame lines are drawn, space versus counterplay.",
+          "…Nbd7 — the last piece joins in, the knight routing toward the e5- and c5-outposts at the heart of the Benoni."
+        ],
+        "title": "King's Indian Four Pawns Attack: the Benoni Counter-strike",
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ],
+        "learnCues": [
+          "…c5 — the Benoni strike.",
+          "d5 — White grabs space.",
+          "…e6 — chip at d5.",
+          "Be2 — White develops.",
+          "…exd5 — crack the centre.",
+          "cxd5 — true Benoni now.",
+          "…Bg4 — pressure e4's guard.",
+          "O-O — White castles.",
+          "…Nbd7 — toward e5/c5."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-kingsindiandefence-averbakh",
+    "openingId": "kings-indian-defence",
+    "criticalPositionFen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N5/PP2BPPP/R2QK1NR b KQ - 3 6",
+    "title": "King's Indian Averbakh: the …c5 Gambit",
+    "overview": "The Averbakh (Be2 + Bg5) pins down …e5 by eyeing f6, so Black answers in the centre with …c5. After d5 e6, the d6-pawn often falls to Bxd6 — but it is a true gambit: Black gets a clear lead in development, the bishop pair pointing at White's position, and pressure on e4 down the half-open e-file. Engine-checked, the compensation is full (roughly level). The lesson: don't fear the pawn — activity is the price White pays.",
+    "pawnBreaks": [
+      "…c5 the Benoni strike against the centre",
+      "…e6 to lever the d5-pawn open"
+    ],
+    "pieceManeuvers": [
+      "…Bxe6 to the active e6-diagonal",
+      "…Re8 to the half-open e-file"
+    ],
+    "strategicThemes": [
+      "A sound pawn gambit for the initiative",
+      "Lead in development and the bishop pair",
+      "Pressure on the e4-pawn"
+    ],
+    "endgameTransitions": [
+      "If White consolidates the extra pawn matters; Black must keep the initiative alive, not trade into a passive endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N5/PP2BPPP/R2QK1NR b KQ - 3 6",
+        "moves": [
+          "c5",
+          "d5",
+          "h6",
+          "Bf4",
+          "e6",
+          "dxe6",
+          "Bxe6",
+          "Bxd6",
+          "Re8"
+        ],
+        "annotations": [
+          "…c5 — Black challenges the centre at once; against the Averbakh's bishop sortie the Benoni thrust is the principled reply.",
+          "d5 — White grabs space, the g5-bishop eyeing the f6-knight and the h6-square.",
+          "…h6 — putting the question to the bishop, gaining a tempo and a little kingside space.",
+          "Bf4 — the bishop slides back to f4, now glaring down the diagonal at the backward d6-pawn.",
+          "…e6 — Black strikes at d5 anyway, prising the centre open and accepting that d6 may fall.",
+          "dxe6 — White cashes in and opens the position.",
+          "…Bxe6 — recapturing, the bishop springing to an active diagonal with Black already ahead in development.",
+          "Bxd6 — White snatches the pawn; but this is the gambit Black wanted — White's pieces are scattered and a tempo behind.",
+          "…Re8 — the rook takes the half-open e-file behind the e6-bishop, building the pressure on e4 that pays for the pawn; the development lead is full value."
+        ],
+        "title": "King's Indian Averbakh: the …c5 Gambit",
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f4",
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e8",
+              "to": "e6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ],
+        "learnCues": [
+          "…c5 — challenge the centre.",
+          "d5 — White grabs space.",
+          "…h6 — question the bishop.",
+          "Bf4 — eyeing d6.",
+          "…e6 — strike at d5.",
+          "dxe6 — White opens it.",
+          "…Bxe6 — active bishop.",
+          "Bxd6 — White takes the pawn.",
+          "…Re8 — pile on e4."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-kingsindiandefence-exchange",
+    "openingId": "kings-indian-defence",
+    "criticalPositionFen": "rnbq1rk1/ppp2pbp/3p1np1/4P3/2P1P3/2N2N2/PP2BPPP/R1BQK2R b KQ - 0 7",
+    "title": "King's Indian Exchange: Equalizing the Endgame",
+    "overview": "White's Exchange line (dxe5 followed by the queen trade) is the great frustrater: it dodges the famous King's Indian attacking chances and steers into a near-symmetrical endgame. Black should not panic. The plan is simple and exact — recapture on the open d-file, slide the rook to e8 to unpin the f6-knight, trade off White's outpost knight, then strike d5 with …c6. The result is a balanced endgame with active rooks, not a passive cramp. The lesson: the Exchange is met with precise technique, not a search for a non-existent attack.",
+    "pawnBreaks": [
+      "…c6 to challenge and undermine the d5-pawn"
+    ],
+    "pieceManeuvers": [
+      "…Rxd8 onto the open d-file",
+      "…Re8 to unpin the f6-knight"
+    ],
+    "strategicThemes": [
+      "Equalizing the Exchange endgame",
+      "Unpinning and activating the rooks",
+      "Undermining White's d5-pawn"
+    ],
+    "endgameTransitions": [
+      "This IS the endgame — Black aims for full equality with the more active rooks and the …c6 break"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp2pbp/3p1np1/4P3/2P1P3/2N2N2/PP2BPPP/R1BQK2R b KQ - 0 7",
+        "moves": [
+          "dxe5",
+          "Qxd8",
+          "Rxd8",
+          "Bg5",
+          "Re8",
+          "Nd5",
+          "Nxd5",
+          "cxd5",
+          "c6"
+        ],
+        "annotations": [
+          "…dxe5 recaptures; with the centre half-cleared, White heads straight for a queen trade.",
+          "Qxd8 — White forces the queens off, hoping an early endgame takes the sting out of Black's kingside.",
+          "…Rxd8 — the rook recaptures onto the open d-file.",
+          "Bg5 — White pins the f6-knight against the rook on d8, the one little needle of pressure in the position.",
+          "…Re8 — the rook steps off the d-file to unpin the knight, the simplest way to snuff out White's only threat.",
+          "Nd5 — White plants the knight on the central outpost and offers a trade.",
+          "…Nxd5 — Black takes it off rather than tolerate a strong knight on d5.",
+          "cxd5 — White recaptures, gaining a space-grabbing pawn on d5.",
+          "…c6 — the equalizer. Black strikes at the d5-pawn, undermining White's last claim to an edge; the game levels into a balanced endgame with active rooks."
+        ],
+        "title": "King's Indian Exchange: Equalizing the Endgame",
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ],
+        "learnCues": [
+          "…dxe5 — recapture.",
+          "Qxd8 — queens off.",
+          "…Rxd8 — take the d-file.",
+          "Bg5 — White pins f6.",
+          "…Re8 — unpin the knight.",
+          "Nd5 — outpost knight.",
+          "…Nxd5 — trade it off.",
+          "cxd5 — White's d5-pawn.",
+          "…c6 — hit d5, equalize."
+        ]
+      }
+    ]
   }
 ]
