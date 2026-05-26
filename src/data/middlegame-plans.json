@@ -29160,19 +29160,37 @@
           "c5",
           "Ng6",
           "Rc1",
-          "Rf7"
+          "Rf7",
+          "Kh1",
+          "Bf8",
+          "Rg1",
+          "h5",
+          "g3",
+          "fxg3"
         ],
         "annotations": [
           "c5 — White’s queenside break, racing on the opposite wing.",
           "…Ng6 — the knight swings toward f4 and h4, the squares right beside the white king, joining the assault.",
           "Rc1 lines the rook up on the c-file for White’s own play.",
-          "…Rf7 lifts the rook to the seventh rank, pouring the heavy pieces into the kingside storm against the white king. There is the King’s Indian race in pure form — both sides attack, and Black’s target is the king itself."
+          "…Rf7 lifts the rook to the seventh rank, pouring the heavy pieces into the kingside storm against the white king. There is the King’s Indian race in pure form — both sides attack, and Black’s target is the king itself.",
+          "Kh1 — White tucks the king into the corner, off the g1–a7 diagonal, bracing the position before Black's storm makes contact.",
+          "…Bf8 — the bishop peels back off g7, clearing the square so the king's rook and the g-pawn can pour into the attack; the bishop regroups for the kingside fight.",
+          "Rg1 backs the g2-pawn, preparing g3 to strike at Black's f4-spearhead and contest the g-file before it is pried open.",
+          "…h5 feeds the storm — the rook's pawn marches up to lever with …h4, prying open the cover in front of the white king.",
+          "g3 strikes at the f4-pawn, White trying to jam the spearhead and trade the storm down before it gathers full force.",
+          "…fxg3 smashes a pawn onto g3, right at the white king's doorstep — it attacks f2 and h2 and tears at the pawn shield. The King's Indian storm has made contact."
         ],
         "learnCues": [
           "c5 — White’s queenside break.",
           "…Ng6 — knight toward f4/h4.",
           "Rc1 — White’s c-file.",
-          "…Rf7 — the rook-lift."
+          "…Rf7 — the rook-lift.",
+          "Kh1 — king off the diagonal.",
+          "…Bf8 — clears g7 for the storm.",
+          "Rg1 — prepares g3 vs f4.",
+          "…h5 — feed the storm.",
+          "g3 — strike at f4.",
+          "…fxg3 — pawn at the king's door."
         ],
         "sources": [
           "concept:pos-initiative",
@@ -29194,6 +29212,18 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g1",
+              "to": "g2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
           [],
           []
         ],
@@ -29244,6 +29274,98 @@
             {
               "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -30210,6 +30332,395 @@
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-kingsindiandefence-samisch-panno",
+    "openingId": "kings-indian-defence",
+    "criticalPositionFen": "1rbq1rk1/1pp1ppbp/p1np1np1/8/2PPP3/2N1BP2/PP1QN1PP/R3KB1R w KQ - 2 9",
+    "title": "King's Indian Sämisch: The Panno Queenside Storm",
+    "overview": "Against the Sämisch (5.f3), the kingside storm is slowed by White's f3-wall, so the Panno turns the tables: Black develops with …Nc6, …a6 and …Rb8, then storms the QUEENSIDE with …b5–b4 — the exact mirror of White's play in the Classical. The rook on b8 backs the b-pawn, …b4 grips c3 and a3, and Black takes the initiative on the wing while the centre stays locked.",
+    "pawnBreaks": [
+      "…b5 — the queenside break striking c4",
+      "…b4 to clamp the queenside and grip c3"
+    ],
+    "pieceManeuvers": [
+      "…Rb8 the rook behind the advancing b-pawn",
+      "…Bd7 completing the queenside development"
+    ],
+    "strategicThemes": [
+      "The Panno queenside pawn-storm",
+      "Mirror of the Classical: Black storms the wing",
+      "Initiative on the flank with a locked centre"
+    ],
+    "endgameTransitions": [
+      "The queenside space and open lines carry into a comfortable middlegame even if the storm is contained"
+    ],
+    "playableLines": [
+      {
+        "fen": "1rbq1rk1/1pp1ppbp/p1np1np1/8/2PPP3/2N1BP2/PP1QN1PP/R3KB1R w KQ - 2 9",
+        "moves": [
+          "Rc1",
+          "Bd7",
+          "Nd1",
+          "b5",
+          "c5",
+          "e6",
+          "Nf2",
+          "b4"
+        ],
+        "annotations": [
+          "Rc1 swings the rook behind the c-pawn, bracing White's own queenside thrust.",
+          "…Bd7 — the bishop steps off c8, completing Black's queenside build-up before the pawns roll.",
+          "Nd1 sidesteps the knight before …b4 can hit it, rerouting via f2 toward the kingside.",
+          "…b5 — the queenside break. Black strikes at the c4-pawn, opening the wing where the rook on b8 and the a6-pawn already wait. This is the Panno's mirror image of the Classical: here it is Black who storms the queenside.",
+          "c5 clamps the d6-pawn, White declining the trade to keep the wing half-closed.",
+          "…e6 props the centre, readying the …d5 undermine while the queenside keeps rolling.",
+          "Nf2 completes the regrouping, the knight eyeing g4 and d3 behind White's clamp.",
+          "…b4 drives deep, seizing queenside space and gripping the a3- and c3-squares; behind it the rook on b8 and the a-pawn drive the advance. The Panno's queenside storm is in full flow."
+        ],
+        "title": "King's Indian Sämisch: The Panno Queenside Storm",
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "d1",
+              "to": "f2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f2",
+              "to": "g4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "f2",
+              "to": "d3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ],
+        "learnCues": [
+          "Rc1 — back the c-pawn.",
+          "…Bd7 — finish the build-up.",
+          "Nd1 — dodge the coming …b4.",
+          "…b5 — the queenside break.",
+          "c5 — White clamps d6.",
+          "…e6 — prop the centre.",
+          "Nf2 — knight regroups.",
+          "…b4 — clamp the queenside."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-kingsindiandefence-fianchetto",
+    "openingId": "kings-indian-defence",
+    "criticalPositionFen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b - - 3 7",
+    "title": "King's Indian Fianchetto: …e5 and the Kingside Break",
+    "overview": "The fianchetto (g3, Bg2) is White's calmest King's Indian: no early f3, no pawn-storm race, just quiet pressure on the long diagonal. Black answers in the centre with …e5; when White locks with d5, the position becomes a familiar closed King's Indian, and Black's plan comes home the usual way — reroute the knights (…Ne7, …Nd7) to free the f-pawn, then break with …f5 and storm the kingside. The lesson: even against the quiet setup, the King's Indian player gets the same attack.",
+    "pawnBreaks": [
+      "…e5 striking at d4",
+      "…f5 the kingside break"
+    ],
+    "pieceManeuvers": [
+      "…Nd7 clearing the f-pawn for …f5",
+      "…Ne7 rerouting toward the kingside"
+    ],
+    "strategicThemes": [
+      "…e5 then …f5 against the fianchetto",
+      "Reaching the kingside storm by a quieter road",
+      "Closed centre, opposite-wing play"
+    ],
+    "endgameTransitions": [
+      "If the storm is held the closed centre keeps a sound, double-edged middlegame"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b - - 3 7",
+        "moves": [
+          "e5",
+          "d5",
+          "Ne7",
+          "e4",
+          "Nd7",
+          "Ne1",
+          "f5"
+        ],
+        "annotations": [
+          "…e5 — Black strikes at the centre, challenging White's d4 head-on before the fianchettoed bishop settles into the long diagonal.",
+          "d5 — White locks the centre and kicks the c6-knight; this closed structure is the heart of the King's Indian.",
+          "…Ne7 — the knight steps back, rerouting toward the kingside where Black's real play lies.",
+          "e4 — White claims the full pawn centre, content to take space and expand on the far wing.",
+          "…Nd7 — the f6-knight clears the way, unblocking the f-pawn for the coming storm.",
+          "Ne1 — White reroutes the knight toward d3, eyeing the c5-break and the e5-square.",
+          "…f5 — the break that defines the King's Indian. Even against the quiet fianchetto Black's plan comes home: the f-pawn strikes and the kingside storm is underway, the pieces pouring toward the white king."
+        ],
+        "title": "King's Indian Fianchetto: …e5 and the Kingside Break",
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e1",
+              "to": "d3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ],
+        "learnCues": [
+          "…e5 — strike the centre.",
+          "d5 — White locks the centre.",
+          "…Ne7 — reroute kingside.",
+          "e4 — White takes the centre.",
+          "…Nd7 — clear f for …f5.",
+          "Ne1 — heading to d3.",
+          "…f5 — the kingside break."
         ]
       }
     ]
