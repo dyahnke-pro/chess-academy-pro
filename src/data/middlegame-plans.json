@@ -22812,13 +22812,25 @@
           "Rg1",
           "Nf5",
           "Qf2",
-          "Qc6"
+          "Qc6",
+          "Bd3",
+          "Qd5",
+          "Rb1",
+          "Bc6",
+          "Rb3",
+          "O-O-O"
         ],
         "annotations": [
           "White contests the open g-file with Rg1, trying to blunt the rook on g8.",
           "Black plants the knight on f5 — the dream square, hitting d4 and the dark squares around White, impossible to chase with a pawn.",
           "White untangles with Qf2, eyeing the f-file and the kingside.",
-          "Black centralises with …Qc6, raking the long light diagonal toward g2 and supporting the passed c3-pawn — every piece now points at White."
+          "Black centralises with …Qc6, raking the long light diagonal toward g2 and supporting the passed c3-pawn — every piece now points at White.",
+          "Bd3 — White challenges the f5-knight and eyes the kingside light squares.",
+          "…Qd5 centralises the queen on the d5-blockade, eyeing g2 and binding the position while the passed c3-pawn keeps cramping White.",
+          "Rb1 swings the rook to the half-open b-file, probing b7 for counterplay.",
+          "…Bc6 drops the bishop back to guard b7 and reinforce the d5-queen on the long diagonal.",
+          "Rb3 piles onto the c3-pawn, White straining to win the passer that has cramped him all game.",
+          "…O-O-O tucks the king onto the queenside behind the passed c3-pawn and connects the rooks; the c3-pawn shields its own king and keeps White tied down."
         ],
         "title": "The c3-Passer Attack",
         "arrows": [
@@ -22842,7 +22854,48 @@
               "to": "c3",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [
+            {
+              "from": "d3",
+              "to": "f5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d5",
+              "to": "g2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "b7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "b7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c6",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b3",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
         ],
         "highlights": [
           [
@@ -22900,6 +22953,98 @@
               "square": "c3",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
@@ -22911,7 +23056,13 @@
           "Rg1 — contest the g-file",
           "Nf5 — the dream square, hits d4",
           "Qf2 — untangle, eye the f-file",
-          "Qc6 — rake g2, back the c3-passer"
+          "Qc6 — rake g2, back the c3-passer",
+          "Bd3 — hit the f5-knight.",
+          "…Qd5 — centralise on d5.",
+          "Rb1 — pressure the b-file.",
+          "…Bc6 — guard b7, back d5.",
+          "Rb3 — attack the c3-pawn.",
+          "…O-O-O — king behind the passer."
         ]
       }
     ]
