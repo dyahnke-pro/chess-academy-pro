@@ -20,6 +20,9 @@ Size keys: S (under 30 min) / M (30-90 min) / L (90+ min, multi-session)
 3. **BRAIN-05c — Migrate phase narration + live coach interjections** (multi-file, L)
    The remaining two surfaces. Both timing-driven. Higher complexity than chat-style migrations. May incidentally fix the phase suppression bug.
 
+4. **WO-WEAKNESS-HEATMAP — Heat map as the Training Plan source of truth** (M/L)
+   Format the user's training-plan + mistake data into a heat map that builds over time (sections accumulate "heat" from logged mistakes/misconceptions). The Training Plan should pull its reps from the heat map's HOTTEST sections, not the current selection logic. Heat persists + grows across sessions.
+
 ---
 
 ## Brain Foundation
