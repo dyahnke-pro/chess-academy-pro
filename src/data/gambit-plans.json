@@ -890,5 +890,425 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-scotchgambit-attack",
+    "openingId": "scotch-gambit",
+    "title": "The Scotch Gambit: the Max Lange Attack",
+    "criticalPositionFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "overview": "The Scotch Gambit hands over the d-pawn for one thing: a head start in development that lets White attack before Black is ready. Played soundly by both sides it's balanced — its bite is practical, and its signature is the Max Lange Attack. The plan is pure initiative: Bc4 eyes f7, castle straight into the attack, then the e5 thrust and exf6 rip open the centre while Re1+ seizes the open e-file against a king still stuck at home. With precise defence Black survives a pawn down with a healthy White edge (+0.5); with anything less it's crushing. This is how you turn a gambit pawn into a raging, sound attack.",
+    "pawnBreaks": [
+      {
+        "move": "d4",
+        "explanation": "The gambit strike. d4 challenges the centre; after ...exd4 White leaves the pawn and races ahead in development — speed is the currency, not material."
+      },
+      {
+        "move": "e5",
+        "explanation": "The thematic thrust: e5 kicks the f6-knight and grabs space, and the follow-up exf6 keeps the initiative rolling rather than pausing to regain the pawn."
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Rf1-e1",
+        "explanation": "The reward for castling early: Re1 crashes onto the open e-file with check, pinning Black to the file and the uncastled king."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2-e4",
+        "explanation": "The last piece into the attack: Nbd2 then Ne4 lands the knight on the central outpost, hitting Black's pieces and completing White's mobilisation."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bf1-c4 / Bc1-g5",
+        "explanation": "Both bishops join with tempo: Bc4 hits f7 from move four; Bg5 develops with a pin while Black is still untangling."
+      }
+    ],
+    "strategicThemes": [
+      "Speed over material — the gambit pawn buys a development lead and the attack.",
+      "Castle early so the rook lands on the open e-file with Re1+.",
+      "The e5 thrust and exf6 pawn wedge tear open lines against the stuck king.",
+      "Keep the initiative rolling; recover material only when it costs no time."
+    ],
+    "playableLines": [
+      {
+        "title": "Max Lange Attack: a pawn for the assault",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "d4",
+          "exd4",
+          "Bc4",
+          "Nf6",
+          "O-O",
+          "Bc5",
+          "e5",
+          "d5",
+          "exf6",
+          "dxc4",
+          "Re1+",
+          "Be6",
+          "fxg7",
+          "Rg8",
+          "Bg5",
+          "Qd7",
+          "Nbd2",
+          "Rxg7",
+          "Ne4"
+        ],
+        "annotations": [
+          "",
+          "",
+          "",
+          "",
+          "d4 — the Scotch Gambit strikes the centre; after ...exd4 White won't rush to regain the pawn. A lead in development is worth more.",
+          "",
+          "Bc4 — straight away the bishop eyes f7. Develop and pressure first; the d4-pawn can wait.",
+          "",
+          "O-O — White castles right into the attack, the rook already poised for the e-file that's about to blow open.",
+          "",
+          "e5 — the thematic thrust, kicking the f6-knight and seizing space. The Scotch Gambit lives on this central lunge.",
+          "",
+          "exf6 — slipping the pawn past instead of recapturing on c4: White keeps the initiative rolling rather than grabbing the bishop back.",
+          "",
+          "Re1+ — the payoff for castling early: the rook crashes onto the open e-file with check, pinning Black to the file and the stranded king.",
+          "",
+          "fxg7 — the passed f-pawn marches to g7, a thorn that shreds Black's kingside and ties down the h8-rook.",
+          "",
+          "Bg5 — developing with a pin on the queen; every white piece joins with tempo while Black scrambles to untangle.",
+          "",
+          "Nbd2 — the last piece comes out, bound for the e4 outpost: White completes development with the enemy king still stuck in the centre.",
+          "",
+          "Ne4 — the knight lands on the central outpost, hitting Black's bishop and dominating. Fully mobilised, the safer king, a lasting initiative — the gambit pawn has bought a powerful, sound attack."
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "",
+          "d4 — strike the centre, gambit the pawn",
+          "",
+          "Bc4 — aim at f7, develop first",
+          "",
+          "O-O — castle into the attack",
+          "",
+          "e5 — the thematic central thrust",
+          "",
+          "exf6 — push past, keep the initiative",
+          "",
+          "Re1+ — seize the open e-file with check",
+          "",
+          "fxg7 — the f-pawn shreds the kingside",
+          "",
+          "Bg5 — develop with a pin",
+          "",
+          "Nbd2 — last piece out, toward e4",
+          "",
+          "Ne4 — central outpost, dominate"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-initiative",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Max_Lange_Attack"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d2",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
