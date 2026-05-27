@@ -3423,5 +3423,619 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-englundgambit-trap",
+    "openingId": "englund-gambit",
+    "title": "The Englund Gambit: the famous mating trap",
+    "criticalPositionFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "overview": "Be honest up front: the Englund Gambit is objectively dubious — give White a few accurate moves and Black is just worse for a pawn. You don't play it to be sound; you play it for the traps, and this is the most famous one in chess. Black lures White into the natural-looking Bf4/Bd2 setup, then the queen raids b2 and a checkmating net snaps shut on c1 in just eight moves. Know this pattern cold: it's a one-shot weapon that wins games against anyone who hasn't seen it, and a reminder of why you respect the gambit even as you decline it.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd8-e7-b4-xb2-c1",
+        "explanation": "The whole trap rides on the queen: ...Qe7 sets the hook, ...Qb4+ forks, ...Qxb2 raids, and ...Qc1 delivers mate — a queen tour from home square to checkmate."
+      }
+    ],
+    "strategicThemes": [
+      "Objectively dubious — a pure trap weapon, played for the swindle, not soundness.",
+      "...Qe7 invites the natural Bf4; ...Qb4+ then ...Qxb2 sends the queen raiding.",
+      "...Bb4 pins the c3-bishop and the mating net on c1 closes.",
+      "Honest: against accurate defence Black is simply worse — know the trap, don't bank on it."
+    ],
+    "playableLines": [
+      {
+        "title": "...Qc1# in eight moves",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "d4",
+          "e5",
+          "dxe5",
+          "Nc6",
+          "Nf3",
+          "Qe7",
+          "Bf4",
+          "Qb4+",
+          "Bd2",
+          "Qxb2",
+          "Bc3",
+          "Bb4",
+          "Qd2",
+          "Bxc3",
+          "Qxc3",
+          "Qc1#"
+        ],
+        "annotations": [
+          "",
+          "...e5 — the Englund Gambit. Black throws a pawn at the Queen's Pawn to drag White into sharp, tricky water. Honest truth: it's objectively dubious — you play it for the traps, and this is the most famous one.",
+          "",
+          "...Nc6 — developing and hitting the e5-pawn, inviting White to defend it naturally.",
+          "",
+          "...Qe7 — the key trap move: the queen eyes e5 and sets up a check on b4. White's natural Bf4, defending the pawn, walks straight in.",
+          "",
+          "...Qb4+ — the hook. The check hits the king and forks the loose b2-pawn; White blocks, and the queen goes hunting.",
+          "",
+          "...Qxb2 — snatching b2 and attacking the a1-rook. White scrambles to trap the raiding queen, exactly as Black wants.",
+          "",
+          "...Bb4 — pinning the c3-bishop to the queen. The net tightens: White can't save the bishop and stop the mate at once.",
+          "",
+          "...Bxc3 — removing the last defender of the back rank.",
+          "",
+          "...Qc1#! — mate. The Englund trap in full: from a 'losing' gambit to checkmate in eight moves, purely because White answered with natural-looking developing moves. That's the whole point — dubious in theory, deadly when White hasn't seen it."
+        ],
+        "learnCues": [
+          "",
+          "...e5 — the Englund; play for the trap",
+          "",
+          "...Nc6 — hit e5, invite Bf4",
+          "",
+          "...Qe7 — set the b4 hook",
+          "",
+          "...Qb4+ — fork king and b2",
+          "",
+          "...Qxb2 — grab b2, hit the rook",
+          "",
+          "...Bb4 — pin the c3-bishop",
+          "",
+          "...Bxc3 — remove the defender",
+          "",
+          "...Qc1# — mate!"
+        ],
+        "sources": [
+          "concept:tac-decoy",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Englund_Gambit"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e7",
+              "to": "b4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "b4",
+              "to": "b2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "b2",
+              "to": "a1",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "b4",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-staffordgambit-trap",
+    "openingId": "stafford-gambit",
+    "title": "The Stafford Gambit: the queen-grab mating trap",
+    "criticalPositionFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "overview": "The Stafford Gambit is objectively bad — a sound White player keeps a clear extra pawn. But it is the deadliest trap weapon in the 1.e4 e5 world: Black gets every piece out in a flash, points them all at f2 and the white king, and waits for a natural greedy move. This is its showcase: White wins Black's QUEEN with Bxd8 — and gets checkmated two moves later by the bishops. You play the Stafford to set traps like this, not to equalize; know the pattern and you'll score brilliancies against the unprepared.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bf8-c5 / Bc8-g4",
+        "explanation": "Both bishops swarm the king: ...Bc5 aims at f2, and after the trap springs ...Bxf2+ and ...Bg4 mate together — even with Black's queen hanging."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nf6xe4",
+        "explanation": "...Nxe4! is the trigger: it opens lines and baits the queen-grab Bxd8, after which the bishops deliver mate."
+      }
+    ],
+    "strategicThemes": [
+      "Objectively losing — a pure trap weapon for the unprepared, not a sound equalizer.",
+      "...dxc6 opens lines; every piece develops at once toward f2 and the king.",
+      "...Nxe4! springs the trap — if White grabs the queen, the bishops mate.",
+      "Honest: accurate White play keeps a clear extra pawn; this is a swindle, know it as one."
+    ],
+    "playableLines": [
+      {
+        "title": "White wins the queen and gets mated",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nf6",
+          "Nxe5",
+          "Nc6",
+          "Nxc6",
+          "dxc6",
+          "d3",
+          "Bc5",
+          "Bg5",
+          "Nxe4",
+          "Bxd8",
+          "Bxf2+",
+          "Ke2",
+          "Bg4#"
+        ],
+        "annotations": [
+          "",
+          "",
+          "",
+          "...Nf6 — the Stafford move order, inviting White to grab the e5-pawn.",
+          "",
+          "...Nc6!? — the Stafford Gambit. Black gives the e-pawn for a blistering lead in development and a maze of traps. Honest truth: objectively it's just bad — but it's a vicious practical weapon, and this is its showcase.",
+          "",
+          "...dxc6 — recapturing toward the centre, throwing open lines for the bishops and queen. Black is fully mobilised in a handful of moves.",
+          "",
+          "...Bc5 — the bishop trains on f2, White's softest square; the pieces gather around the king.",
+          "",
+          "...Nxe4! — the trap springs. The knight grabs a pawn and bares lines toward the king; the tempting Bxd8, winning Black's queen, loses by force.",
+          "",
+          "...Bxf2+ — the bishop crashes in with check, dragging the king into the open — and Black's queen is still hanging on d8.",
+          "",
+          "...Bg4#! — mate, queen and all. The Stafford trap in full: White won a whole queen and got checkmated. Objectively a bad gambit, lethally trappy — and that is exactly what you play it for."
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "...Nf6 — the Stafford move order",
+          "",
+          "...Nc6!? — the Stafford gambit",
+          "",
+          "...dxc6 — open lines, develop fast",
+          "",
+          "...Bc5 — aim the bishop at f2",
+          "",
+          "...Nxe4! — spring the trap",
+          "",
+          "...Bxf2+ — crash in with check",
+          "",
+          "...Bg4# — mate, queen and all!"
+        ],
+        "sources": [
+          "concept:tac-decoy",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Stafford_Gambit"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c5",
+              "to": "f2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
