@@ -1,0 +1,4624 @@
+{
+  "generatedAt": "2026-05-27T13:06:47.426Z",
+  "note": "Most-played variations per pro from full chess.com+lichess history. games=total played, serious=rapid/classical/daily, score=player perf%. Wave-1=naroditsky,gothamchess,ericrosen,carlsen.",
+  "totalGamesHarvested": 136880,
+  "players": {
+    "annacramling": {
+      "type": "teacher",
+      "total": 12085,
+      "cc": 12085,
+      "li": 0,
+      "white": [
+        {
+          "v": "Van t Kruijs Opening",
+          "eco": "A00",
+          "games": 69,
+          "serious": 2,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/166012215945",
+            "https://www.chess.com/game/live/148399732716"
+          ]
+        },
+        {
+          "v": "Indian Game Pawn Indian Variation 3.Nc3 c5 4.d5 b5 5.cxb5",
+          "eco": "A50",
+          "games": 67,
+          "serious": 2,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/163935701718",
+            "https://www.chess.com/game/live/143822971798"
+          ]
+        },
+        {
+          "v": "Englund Gambit 2.dxe5",
+          "eco": "A40",
+          "games": 62,
+          "serious": 1,
+          "score": 45,
+          "urls": [
+            "https://www.chess.com/game/live/172228215945",
+            "https://www.chess.com/game/live/172311616699"
+          ]
+        },
+        {
+          "v": "Englund Gambit 2.dxe5 Nc6 3.Nf3 Qe7",
+          "eco": "A40",
+          "games": 62,
+          "serious": 0,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/165772381902",
+            "https://www.chess.com/game/live/166379447712"
+          ]
+        },
+        {
+          "v": "Nimzo Indian Defense Classical Variation 4...O O 5.e4 d5",
+          "eco": "E32",
+          "games": 62,
+          "serious": 3,
+          "score": 56,
+          "urls": [
+            "https://www.chess.com/game/live/148226926256",
+            "https://www.chess.com/game/live/136020753564"
+          ]
+        },
+        {
+          "v": "Grunfeld Defense Exchange Variation 5.e4 Nxc3 6.bxc3 Bg7 7.Qa4",
+          "eco": "D85",
+          "games": 57,
+          "serious": 1,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/170499649259",
+            "https://www.chess.com/game/live/165066367490"
+          ]
+        },
+        {
+          "v": "Dutch Defense Staunton Gambit Accepted 3.Nc3 Nf6 4.Bg5",
+          "eco": "A83",
+          "games": 54,
+          "serious": 3,
+          "score": 53,
+          "urls": [
+            "https://www.chess.com/game/live/165380203870",
+            "https://www.chess.com/game/live/166470014334"
+          ]
+        },
+        {
+          "v": "Van t Kruijs Opening 1...d5",
+          "eco": "A00",
+          "games": 45,
+          "serious": 0,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/151501081909",
+            "https://www.chess.com/game/live/143400034540"
+          ]
+        },
+        {
+          "v": "Benoni Defense Modern Pawn Storm Taimanov Variation 8...Nfd7 9.Be2 O O 10.Nf3",
+          "eco": "A67",
+          "games": 44,
+          "serious": 0,
+          "score": 73,
+          "urls": [
+            "https://www.chess.com/game/live/168013100802",
+            "https://www.chess.com/game/live/145037129318"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening",
+          "eco": "A40",
+          "games": 44,
+          "serious": 0,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/164452190255",
+            "https://www.chess.com/game/live/145032204780"
+          ]
+        },
+        {
+          "v": "Nimzo Indian Defense Classical Variation 4...O O 5.e4",
+          "eco": "E32",
+          "games": 43,
+          "serious": 0,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/172229415805",
+            "https://www.chess.com/game/live/168010434908"
+          ]
+        },
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 42,
+          "serious": 1,
+          "score": 56,
+          "urls": [
+            "https://www.chess.com/game/live/168993136002",
+            "https://www.chess.com/game/live/109188612523"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Normal Variation 4.e4 d6 5.Nf3 O O 6.h3",
+          "eco": "E90",
+          "games": 42,
+          "serious": 1,
+          "score": 51,
+          "urls": [
+            "https://www.chess.com/game/live/166009816965",
+            "https://www.chess.com/game/live/143824221098"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Exchange Positional Line...6.Nf3 Be7 7.e3 O O 8.Bd3",
+          "eco": "D35",
+          "games": 41,
+          "serious": 1,
+          "score": 50,
+          "urls": [
+            "https://www.chess.com/game/live/148398790058",
+            "https://www.chess.com/game/live/128211571575"
+          ]
+        },
+        {
+          "v": "Van t Kruijs Opening 1...e5",
+          "eco": "A00",
+          "games": 41,
+          "serious": 2,
+          "score": 48,
+          "urls": [
+            "https://www.chess.com/game/live/132273630583",
+            "https://www.chess.com/game/live/132273661959"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Sicilian Defense Four Knights Variation",
+          "eco": "B45",
+          "games": 73,
+          "serious": 2,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/168230116530",
+            "https://www.chess.com/game/live/172228211057"
+          ]
+        },
+        {
+          "v": "Pirc Defense 2.d4",
+          "eco": "B07",
+          "games": 62,
+          "serious": 0,
+          "score": 45,
+          "urls": [
+            "https://www.chess.com/game/live/133648160415",
+            "https://www.chess.com/game/live/133653548249"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Smith Morra Gambit Accepted...5.Nf3 e6 6.Bc4 Qc7",
+          "eco": "B21",
+          "games": 60,
+          "serious": 1,
+          "score": 65,
+          "urls": [
+            "https://www.chess.com/game/live/168855270561",
+            "https://www.chess.com/game/live/166007413731"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Four Knights Variation 6.Be3 Bb4",
+          "eco": "B45",
+          "games": 51,
+          "serious": 4,
+          "score": 52,
+          "urls": [
+            "https://www.chess.com/game/live/168702449484",
+            "https://www.chess.com/game/live/128209730377"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Four Knights Variation 6.Be3",
+          "eco": "B45",
+          "games": 49,
+          "serious": 0,
+          "score": 48,
+          "urls": [
+            "https://www.chess.com/game/live/165379449792",
+            "https://www.chess.com/game/live/165067130622"
+          ]
+        },
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 45,
+          "serious": 0,
+          "score": 68,
+          "urls": [
+            "https://www.chess.com/game/live/168992878174",
+            "https://www.chess.com/game/live/168683670779"
+          ]
+        },
+        {
+          "v": "Sicilian Defense French Variation",
+          "eco": "B40",
+          "games": 39,
+          "serious": 1,
+          "score": 76,
+          "urls": [
+            "https://www.chess.com/game/live/143675040914",
+            "https://www.chess.com/game/live/132436825119"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Taimanov Variation 5.Nc3 Bb4",
+          "eco": "B45",
+          "games": 35,
+          "serious": 0,
+          "score": 44,
+          "urls": [
+            "https://www.chess.com/game/live/48347340285",
+            "https://www.chess.com/game/live/48596960759"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Bowdler Attack 2...e6 3.Nc3 Nc6",
+          "eco": "B20",
+          "games": 34,
+          "serious": 0,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/168279472812",
+            "https://www.chess.com/game/live/148399031982"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Exchange Positional Line Reshevsky Variation...7.e3 h6 8.Bh4 O O 9.Bd3",
+          "eco": "D36",
+          "games": 33,
+          "serious": 1,
+          "score": 56,
+          "urls": [
+            "https://www.chess.com/game/live/168078019535",
+            "https://www.chess.com/game/live/166469726524"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Exchange Positional Line...6.Nf3 Be7 7.e3 O O 8.Bd3",
+          "eco": "D35",
+          "games": 31,
+          "serious": 2,
+          "score": 45,
+          "urls": [
+            "https://www.chess.com/game/live/165994538088",
+            "https://www.chess.com/game/live/147009484046"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Four Knights Variation 6.Bg5",
+          "eco": "B45",
+          "games": 29,
+          "serious": 1,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/173088056011",
+            "https://www.chess.com/game/live/163937507818"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian Defense...6.Nf3 d6 7.Nc3 Nxc3 8.bxc3 Qc7 9.Bd2",
+          "eco": "B22",
+          "games": 28,
+          "serious": 0,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/147667855040",
+            "https://www.chess.com/game/live/144968260558"
+          ]
+        },
+        {
+          "v": "Kings Fianchetto Opening Reversed Modern Defense",
+          "eco": "A00",
+          "games": 28,
+          "serious": 1,
+          "score": 52,
+          "urls": [
+            "https://www.chess.com/game/live/145036468982",
+            "https://www.chess.com/game/live/157800450361"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Four Knights Variation 6.Nxc6 bxc6 7.Bd3",
+          "eco": "B45",
+          "games": 28,
+          "serious": 0,
+          "score": 39,
+          "urls": [
+            "https://www.chess.com/game/live/144400041412",
+            "https://www.chess.com/game/live/139770748826"
+          ]
+        }
+      ]
+    },
+    "carlsen": {
+      "type": "elite",
+      "total": 9623,
+      "cc": 9014,
+      "li": 609,
+      "white": [
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 66,
+          "serious": 2,
+          "score": 84,
+          "urls": [
+            "https://www.chess.com/game/live/164450987777",
+            "https://www.chess.com/game/live/164033987091"
+          ]
+        },
+        {
+          "v": "Sicilian Defense",
+          "eco": "B20",
+          "games": 64,
+          "serious": 0,
+          "score": 80,
+          "urls": [
+            "https://www.chess.com/game/live/162826026191",
+            "https://www.chess.com/game/live/144258877562"
+          ]
+        },
+        {
+          "v": "Caro-Kann Defense",
+          "eco": "B10",
+          "games": 33,
+          "serious": 0,
+          "score": 82,
+          "urls": [
+            "https://lichess.org/dFcSAJ57",
+            "https://lichess.org/YbDwcu66"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Orthodox Variation 6...e5 7.O O",
+          "eco": "E94",
+          "games": 21,
+          "serious": 0,
+          "score": 79,
+          "urls": [
+            "https://www.chess.com/game/live/164362502644",
+            "https://www.chess.com/game/live/159012447515"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense 2.Nf3 d5 3.d3",
+          "eco": "B10",
+          "games": 21,
+          "serious": 0,
+          "score": 79,
+          "urls": [
+            "https://www.chess.com/game/live/164423864454",
+            "https://www.chess.com/game/live/146758218856"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense",
+          "eco": "B10",
+          "games": 20,
+          "serious": 0,
+          "score": 80,
+          "urls": [
+            "https://www.chess.com/game/live/154181798977",
+            "https://www.chess.com/game/live/136982232934"
+          ]
+        },
+        {
+          "v": "Nimzo-Larsen Attack",
+          "eco": "A01",
+          "games": 19,
+          "serious": 0,
+          "score": 89,
+          "urls": [
+            "https://lichess.org/kx7aGZB0",
+            "https://lichess.org/Zjo5ckAr"
+          ]
+        },
+        {
+          "v": "English Opening",
+          "eco": "A10",
+          "games": 18,
+          "serious": 0,
+          "score": 72,
+          "urls": [
+            "https://lichess.org/prWUXogW",
+            "https://lichess.org/wHITl7NG"
+          ]
+        },
+        {
+          "v": "Closed Sicilian Defense Grand Prix Attack 3...g6 4.Nf3 Bg7",
+          "eco": "B23",
+          "games": 17,
+          "serious": 0,
+          "score": 85,
+          "urls": [
+            "https://www.chess.com/game/live/164367623158",
+            "https://www.chess.com/game/live/165664817847"
+          ]
+        },
+        {
+          "v": "Sicilian Defense...3.Bc4 Nf6 4.d3 Nc6 5.O O",
+          "eco": "B50",
+          "games": 17,
+          "serious": 0,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/164421166366",
+            "https://www.chess.com/game/live/163932246850"
+          ]
+        },
+        {
+          "v": "French Defense",
+          "eco": "C00",
+          "games": 17,
+          "serious": 0,
+          "score": 85,
+          "urls": [
+            "https://www.chess.com/game/live/100371293861",
+            "https://lichess.org/YXOWlp4b"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Old Sicilian Variation 3.Bc4 e6 4.O O",
+          "eco": "B30",
+          "games": 16,
+          "serious": 0,
+          "score": 72,
+          "urls": [
+            "https://www.chess.com/game/live/143318559810",
+            "https://www.chess.com/game/live/131132468839"
+          ]
+        },
+        {
+          "v": "King's Indian Attack",
+          "eco": "A07",
+          "games": 16,
+          "serious": 0,
+          "score": 75,
+          "urls": [
+            "https://lichess.org/44Va28FK",
+            "https://lichess.org/hI1Ez4kM"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation 2...Nf6 3.Bf4 a6 4.e3",
+          "eco": "D00",
+          "games": 15,
+          "serious": 1,
+          "score": 67,
+          "urls": [
+            "https://www.chess.com/game/live/169035043685",
+            "https://www.chess.com/game/live/139845845916"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Sicilian Defense",
+          "eco": "B22",
+          "games": 43,
+          "serious": 0,
+          "score": 71,
+          "urls": [
+            "https://lichess.org/hy0zu5gJ",
+            "https://lichess.org/i3ByBei5"
+          ]
+        },
+        {
+          "v": "English Opening",
+          "eco": "A10",
+          "games": 34,
+          "serious": 0,
+          "score": 84,
+          "urls": [
+            "https://www.chess.com/game/live/160819629447",
+            "https://www.chess.com/game/live/143899216031"
+          ]
+        },
+        {
+          "v": "Kings Pawn Opening St George Defense 2.d4",
+          "eco": "B00",
+          "games": 25,
+          "serious": 1,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/165668472308",
+            "https://www.chess.com/game/live/146300600809"
+          ]
+        },
+        {
+          "v": "Kings Pawn Opening",
+          "eco": "B00",
+          "games": 24,
+          "serious": 0,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/164453988065",
+            "https://www.chess.com/game/live/157543650015"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian Defense 2...d5 3.exd5 Nf6",
+          "eco": "B22",
+          "games": 24,
+          "serious": 0,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/136651187495",
+            "https://www.chess.com/game/live/121825775197"
+          ]
+        },
+        {
+          "v": "King's Indian Defense",
+          "eco": "E73",
+          "games": 24,
+          "serious": 0,
+          "score": 85,
+          "urls": [
+            "https://lichess.org/JJrtd8Xw",
+            "https://lichess.org/4MvuNRfu"
+          ]
+        },
+        {
+          "v": "Caro-Kann Defense",
+          "eco": "B10",
+          "games": 22,
+          "serious": 0,
+          "score": 82,
+          "urls": [
+            "https://lichess.org/j0WvPVrU",
+            "https://lichess.org/VEI1SrgG"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense 2.Nf3 d5 3.d3",
+          "eco": "B10",
+          "games": 21,
+          "serious": 0,
+          "score": 86,
+          "urls": [
+            "https://www.chess.com/game/live/141036475344",
+            "https://www.chess.com/game/live/134017747867"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense",
+          "eco": "B01",
+          "games": 20,
+          "serious": 0,
+          "score": 65,
+          "urls": [
+            "https://lichess.org/kHzZLMXD",
+            "https://lichess.org/sQdwJKn5"
+          ]
+        },
+        {
+          "v": "French Defense Advance Paulsen Euwe Variation...7.Na3 cxd4 8.cxd4 Nf5 9.Nc2",
+          "eco": "C02",
+          "games": 19,
+          "serious": 0,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/164153304356",
+            "https://www.chess.com/game/live/147930813036"
+          ]
+        },
+        {
+          "v": "French Defense Normal Variation 2...d5 3.Nc3",
+          "eco": "C10",
+          "games": 19,
+          "serious": 0,
+          "score": 84,
+          "urls": [
+            "https://www.chess.com/game/live/158399850977",
+            "https://www.chess.com/game/live/145972076690"
+          ]
+        },
+        {
+          "v": "Alekhines Defense Brooklyn Variation 3.d4 d6",
+          "eco": "B02",
+          "games": 19,
+          "serious": 0,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/151490283087",
+            "https://www.chess.com/game/live/151492688363"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation 2...Nf6 3.Bf4 c5",
+          "eco": "D00",
+          "games": 18,
+          "serious": 1,
+          "score": 50,
+          "urls": [
+            "https://www.chess.com/game/live/169139589344",
+            "https://www.chess.com/game/live/148309483650"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Mieses Kotrc Gubinsky Melts Defense 4.d4 Nf6",
+          "eco": "B01",
+          "games": 16,
+          "serious": 0,
+          "score": 84,
+          "urls": [
+            "https://www.chess.com/game/live/143976751358",
+            "https://www.chess.com/game/live/121556987615"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Alburt Defense",
+          "eco": "D00",
+          "games": 16,
+          "serious": 0,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/121559985665",
+            "https://www.chess.com/game/live/105919745405"
+          ]
+        }
+      ]
+    },
+    "caruana": {
+      "type": "elite",
+      "total": 6517,
+      "cc": 6517,
+      "li": 0,
+      "white": [
+        {
+          "v": "Mieses Opening",
+          "eco": "A00",
+          "games": 65,
+          "serious": 0,
+          "score": 92,
+          "urls": [
+            "https://www.chess.com/game/live/111775947963",
+            "https://www.chess.com/game/live/1525413301"
+          ]
+        },
+        {
+          "v": "Indian Game Knights",
+          "eco": "A46",
+          "games": 41,
+          "serious": 0,
+          "score": 74,
+          "urls": [
+            "https://www.chess.com/game/live/139886214464",
+            "https://www.chess.com/game/live/136055008164"
+          ]
+        },
+        {
+          "v": "Ruy Lopez Opening Berlin",
+          "eco": "C65",
+          "games": 39,
+          "serious": 15,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/136744020302",
+            "https://www.chess.com/game/live/122142035629"
+          ]
+        },
+        {
+          "v": "Four Knights Game",
+          "eco": "C47",
+          "games": 34,
+          "serious": 6,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/169458639141",
+            "https://www.chess.com/game/live/171291023451"
+          ]
+        },
+        {
+          "v": "Kings Pawn Opening Leonardis Variation",
+          "eco": "C20",
+          "games": 32,
+          "serious": 1,
+          "score": 86,
+          "urls": [
+            "https://www.chess.com/game/live/174126548857",
+            "https://www.chess.com/game/live/169457439191"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Canal",
+          "eco": "B51",
+          "games": 32,
+          "serious": 6,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/171702649425",
+            "https://www.chess.com/game/live/167991615283"
+          ]
+        },
+        {
+          "v": "Modern Defense with",
+          "eco": "B06",
+          "games": 29,
+          "serious": 0,
+          "score": 86,
+          "urls": [
+            "https://www.chess.com/game/live/147501236502",
+            "https://www.chess.com/game/live/144923376600"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo",
+          "eco": "B30",
+          "games": 28,
+          "serious": 2,
+          "score": 79,
+          "urls": [
+            "https://www.chess.com/game/live/174124751361",
+            "https://www.chess.com/game/live/165663615699"
+          ]
+        },
+        {
+          "v": "London",
+          "eco": "D02",
+          "games": 26,
+          "serious": 2,
+          "score": 83,
+          "urls": [
+            "https://www.chess.com/game/live/167580900720",
+            "https://www.chess.com/game/live/146150426444"
+          ]
+        },
+        {
+          "v": "Indian Game East Indian Przepiorka",
+          "eco": "A49",
+          "games": 26,
+          "serious": 0,
+          "score": 75,
+          "urls": [
+            "https://www.chess.com/game/live/147453823078",
+            "https://www.chess.com/game/live/145517452436"
+          ]
+        },
+        {
+          "v": "Sicilian",
+          "eco": "B50",
+          "games": 25,
+          "serious": 1,
+          "score": 76,
+          "urls": [
+            "https://www.chess.com/game/live/174121753675",
+            "https://www.chess.com/game/live/148011139640"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Exchange Positional",
+          "eco": "D35",
+          "games": 24,
+          "serious": 2,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/170081448899",
+            "https://www.chess.com/game/live/167543952302"
+          ]
+        },
+        {
+          "v": "English Opening Kings English Variation",
+          "eco": "A20",
+          "games": 24,
+          "serious": 1,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/167682614943",
+            "https://www.chess.com/game/live/145102710368"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Catalan",
+          "eco": "D30",
+          "games": 24,
+          "serious": 2,
+          "score": 77,
+          "urls": [
+            "https://www.chess.com/game/live/137690294796",
+            "https://www.chess.com/game/live/137923078372"
+          ]
+        },
+        {
+          "v": "London System",
+          "eco": "D02",
+          "games": 23,
+          "serious": 0,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/157987054875",
+            "https://www.chess.com/game/live/132609014761"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo",
+          "eco": "B30",
+          "games": 46,
+          "serious": 2,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/167579619310",
+            "https://www.chess.com/game/live/145513130782"
+          ]
+        },
+        {
+          "v": "Modern Defense with",
+          "eco": "B06",
+          "games": 38,
+          "serious": 3,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/165120566750",
+            "https://www.chess.com/game/live/147501384904"
+          ]
+        },
+        {
+          "v": "Ruy Lopez Opening Morphy Defense Columbus",
+          "eco": "C78",
+          "games": 37,
+          "serious": 3,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/123309521862",
+            "https://www.chess.com/game/live/116712650061"
+          ]
+        },
+        {
+          "v": "French Defense Normal Variation",
+          "eco": "C00",
+          "games": 35,
+          "serious": 0,
+          "score": 80,
+          "urls": [
+            "https://www.chess.com/game/live/164017188531",
+            "https://www.chess.com/game/live/164017785747"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian",
+          "eco": "B22",
+          "games": 31,
+          "serious": 4,
+          "score": 74,
+          "urls": [
+            "https://www.chess.com/game/live/172913455777",
+            "https://www.chess.com/game/live/145076787612"
+          ]
+        },
+        {
+          "v": "Indian Game",
+          "eco": "A45",
+          "games": 30,
+          "serious": 1,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/171288025263",
+            "https://www.chess.com/game/live/167478615493"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Open Pelikan and Sveshnikov",
+          "eco": "B33",
+          "games": 30,
+          "serious": 7,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/168595467121",
+            "https://www.chess.com/game/live/150557892129"
+          ]
+        },
+        {
+          "v": "Indian Game Black Knights Tango",
+          "eco": "A50",
+          "games": 29,
+          "serious": 4,
+          "score": 83,
+          "urls": [
+            "https://www.chess.com/game/live/171104428231",
+            "https://www.chess.com/game/live/164986937100"
+          ]
+        },
+        {
+          "v": "Indian Game Knights",
+          "eco": "A46",
+          "games": 28,
+          "serious": 0,
+          "score": 80,
+          "urls": [
+            "https://www.chess.com/game/live/171098427239",
+            "https://www.chess.com/game/live/168686069737"
+          ]
+        },
+        {
+          "v": "English Opening Reversed Sicilian Kramnik Shirov Counterattack",
+          "eco": "A21",
+          "games": 27,
+          "serious": 6,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/170082046873",
+            "https://www.chess.com/game/live/167581091698"
+          ]
+        },
+        {
+          "v": "Indian",
+          "eco": "A45",
+          "games": 27,
+          "serious": 1,
+          "score": 74,
+          "urls": [
+            "https://www.chess.com/game/live/162828425155",
+            "https://www.chess.com/game/live/144492572819"
+          ]
+        },
+        {
+          "v": "French Defense Exchange",
+          "eco": "C01",
+          "games": 27,
+          "serious": 1,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/139730979940",
+            "https://www.chess.com/game/live/137814693636"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Horwitz Defense",
+          "eco": "A40",
+          "games": 27,
+          "serious": 0,
+          "score": 83,
+          "urls": [
+            "https://www.chess.com/game/live/40162160083",
+            "https://www.chess.com/game/live/516732678"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Catalan",
+          "eco": "D30",
+          "games": 25,
+          "serious": 9,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/168601472393",
+            "https://www.chess.com/game/live/145737539570"
+          ]
+        },
+        {
+          "v": "English Opening Anglo Indian Queens Knight",
+          "eco": "A16",
+          "games": 25,
+          "serious": 1,
+          "score": 80,
+          "urls": [
+            "https://www.chess.com/game/live/136743888724",
+            "https://www.chess.com/game/live/123233442722"
+          ]
+        }
+      ]
+    },
+    "chesswithakeem": {
+      "type": "teacher",
+      "total": 12215,
+      "cc": 12177,
+      "li": 38,
+      "white": [
+        {
+          "v": "Sicilian Defense Normal Line...7.O O d5 8.e5 Nd7",
+          "eco": "B40",
+          "games": 117,
+          "serious": 12,
+          "score": 51,
+          "urls": [
+            "https://www.chess.com/game/live/172480214563",
+            "https://www.chess.com/game/live/172518611079"
+          ]
+        },
+        {
+          "v": "French Defense Advance Paulsen Milner Barry Gambit 6...Bd7 7.O O cxd4",
+          "eco": "C02",
+          "games": 95,
+          "serious": 5,
+          "score": 47,
+          "urls": [
+            "https://www.chess.com/game/live/168325815786",
+            "https://www.chess.com/game/live/168462876990"
+          ]
+        },
+        {
+          "v": "Scotch Game Classical Blumenfeld Attack 6...Bxe3 7.fxe3",
+          "eco": "C45",
+          "games": 70,
+          "serious": 5,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/168424996938",
+            "https://www.chess.com/game/live/168428322234"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Tartakower Variation...10.O O h4 11.h3 Nd7",
+          "eco": "B15",
+          "games": 62,
+          "serious": 9,
+          "score": 36,
+          "urls": [
+            "https://www.chess.com/game/live/168319487650",
+            "https://www.chess.com/game/live/172479613491"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Tartakower Variation...8.Qc2 Re8 9.Ne2 h6 10.O O",
+          "eco": "B15",
+          "games": 62,
+          "serious": 4,
+          "score": 45,
+          "urls": [
+            "https://www.chess.com/game/live/168423965542",
+            "https://www.chess.com/game/live/168913517274"
+          ]
+        },
+        {
+          "v": "Scotch Game Classical Variation 5.Be3",
+          "eco": "C45",
+          "games": 59,
+          "serious": 7,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/168428774412",
+            "https://www.chess.com/game/live/168428912498"
+          ]
+        },
+        {
+          "v": "Scotch Game Classical Blumenfeld Attack 6...Bxe3 7.fxe3 Qh4 8.g3",
+          "eco": "C45",
+          "games": 59,
+          "serious": 7,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/168472027464",
+            "https://www.chess.com/game/live/169252137776"
+          ]
+        },
+        {
+          "v": "Scotch Game Schmidt Mieses Variation...9.b3 g6 10.Bb2 Bg7",
+          "eco": "C45",
+          "games": 52,
+          "serious": 4,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/172483214903",
+            "https://www.chess.com/game/live/168460129956"
+          ]
+        },
+        {
+          "v": "Four Knights Game",
+          "eco": "C47",
+          "games": 42,
+          "serious": 25,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/169632647065",
+            "https://www.chess.com/game/live/171449451255"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Main Line 4...Nf6",
+          "eco": "B15",
+          "games": 40,
+          "serious": 33,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/172660854941",
+            "https://www.chess.com/game/live/172660857777"
+          ]
+        },
+        {
+          "v": "Kings Pawn Opening Kings Knight Variation",
+          "eco": "C40",
+          "games": 40,
+          "serious": 6,
+          "score": 43,
+          "urls": [
+            "https://www.chess.com/game/live/168475538344",
+            "https://www.chess.com/game/live/168912468830"
+          ]
+        },
+        {
+          "v": "French Defense Exchange Variation 3...exd5 4.Nc3 Nf6",
+          "eco": "C01",
+          "games": 38,
+          "serious": 0,
+          "score": 46,
+          "urls": [
+            "https://www.chess.com/game/live/168913198630",
+            "https://www.chess.com/game/live/168913315888"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Tartakower Variation...8.Qc2 Re8 9.Ne2 h5 10.O O",
+          "eco": "B15",
+          "games": 36,
+          "serious": 4,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/168339453100",
+            "https://www.chess.com/game/live/168439842352"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Tartakower Variation...7.Bd3 O O 8.Ne2 Re8 9.Qc2",
+          "eco": "B15",
+          "games": 36,
+          "serious": 1,
+          "score": 40,
+          "urls": [
+            "https://www.chess.com/game/live/172516812571",
+            "https://www.chess.com/game/live/168988832210"
+          ]
+        },
+        {
+          "v": "Alekhines Defense Scandinavian Variation...4.Bc4 Nxc3 5.Qf3 e6",
+          "eco": "B02",
+          "games": 35,
+          "serious": 1,
+          "score": 41,
+          "urls": [
+            "https://www.chess.com/game/live/169250451020",
+            "https://www.chess.com/game/live/170236847789"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "French Defense Franco Sicilian Defense",
+          "eco": "C00",
+          "games": 85,
+          "serious": 0,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/168912709806",
+            "https://www.chess.com/game/live/168912930022"
+          ]
+        },
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 67,
+          "serious": 41,
+          "score": 23,
+          "urls": [
+            "https://www.chess.com/game/live/172480211543",
+            "https://www.chess.com/game/live/168911969742"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation 2...Nf6 3.Bf4 c5",
+          "eco": "D00",
+          "games": 62,
+          "serious": 10,
+          "score": 35,
+          "urls": [
+            "https://www.chess.com/game/live/172516214025",
+            "https://www.chess.com/game/live/168475866168"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation...5.exd4 a6 6.Nf3 Nc6",
+          "eco": "D00",
+          "games": 55,
+          "serious": 16,
+          "score": 43,
+          "urls": [
+            "https://www.chess.com/game/live/169253196200",
+            "https://www.chess.com/game/live/166853445746"
+          ]
+        },
+        {
+          "v": "Petrovs Defense Classical Variation",
+          "eco": "C42",
+          "games": 47,
+          "serious": 46,
+          "score": 77,
+          "urls": [
+            "https://www.chess.com/game/live/168501979756",
+            "https://www.chess.com/game/live/168502447570"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Indian Variation...3.Bxf6 exf6 4.c4 Bg7 5.Nc3",
+          "eco": "A01",
+          "games": 30,
+          "serious": 0,
+          "score": 52,
+          "urls": [
+            "https://www.chess.com/game/live/169262090572",
+            "https://www.chess.com/game/live/167489348090"
+          ]
+        },
+        {
+          "v": "French Defense Exchange Variation...5.Bd3 Be7 6.O O O O",
+          "eco": "C01",
+          "games": 29,
+          "serious": 0,
+          "score": 33,
+          "urls": [
+            "https://www.chess.com/game/live/173866753587",
+            "https://www.chess.com/game/live/173871551467"
+          ]
+        },
+        {
+          "v": "French Defense Advance Paulsen Attack...6.Na3 cxd4 7.cxd4 Nf5 8.Nc2",
+          "eco": "C02",
+          "games": 28,
+          "serious": 3,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/172659653933",
+            "https://www.chess.com/game/live/172660853745"
+          ]
+        },
+        {
+          "v": "Kings Indian Attack Yugoslav Variation...4.O O Be7 5.d3 O O",
+          "eco": "A07",
+          "games": 28,
+          "serious": 0,
+          "score": 27,
+          "urls": [
+            "https://www.chess.com/game/live/169127881614",
+            "https://www.chess.com/game/live/169270326612"
+          ]
+        },
+        {
+          "v": "Italian Game",
+          "eco": "C50",
+          "games": 26,
+          "serious": 24,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/168222131388",
+            "https://www.chess.com/game/live/168222616586"
+          ]
+        },
+        {
+          "v": "Old Benoni Defense Franco Benoni Defense 3...exd5 4.exd5 d6",
+          "eco": "A43",
+          "games": 26,
+          "serious": 0,
+          "score": 35,
+          "urls": [
+            "https://www.chess.com/game/live/168913226144",
+            "https://www.chess.com/game/live/166852582368"
+          ]
+        },
+        {
+          "v": "Colle System 3...e6",
+          "eco": "D05",
+          "games": 26,
+          "serious": 0,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/169125861672",
+            "https://www.chess.com/game/live/165934248514"
+          ]
+        },
+        {
+          "v": "English Opening Neo Catalan Defense Declined 5.O O O O 6.cxd5 exd5",
+          "eco": "A13",
+          "games": 25,
+          "serious": 0,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/168438135236",
+            "https://www.chess.com/game/live/168438178156"
+          ]
+        },
+        {
+          "v": "French Defense Tarrasch Open Chistyakov Defense...9.Nbxd4 Nxd4 10.Nxd4 Be7 11.c3",
+          "eco": "C07",
+          "games": 25,
+          "serious": 3,
+          "score": 50,
+          "urls": [
+            "https://www.chess.com/game/live/165436235928",
+            "https://www.chess.com/game/live/165437758052"
+          ]
+        },
+        {
+          "v": "French Defense Winawer Delayed Exchange Variation 4...exd5",
+          "eco": "C15",
+          "games": 24,
+          "serious": 1,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/168424674742",
+            "https://www.chess.com/game/live/168428513888"
+          ]
+        }
+      ]
+    },
+    "dubov": {
+      "type": "elite+streamer",
+      "total": 6109,
+      "cc": 6064,
+      "li": 45,
+      "white": [
+        {
+          "v": "Reti Opening Nimzowitsch Larsen Attack",
+          "eco": "A06",
+          "games": 145,
+          "serious": 1,
+          "score": 80,
+          "urls": [
+            "https://www.chess.com/game/live/167362367002",
+            "https://www.chess.com/game/live/167565291768"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Normal",
+          "eco": "E61",
+          "games": 91,
+          "serious": 4,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/172915855973",
+            "https://www.chess.com/game/live/174122353593"
+          ]
+        },
+        {
+          "v": "Reti Opening Sicilian",
+          "eco": "A04",
+          "games": 62,
+          "serious": 0,
+          "score": 80,
+          "urls": [
+            "https://www.chess.com/game/live/165679312362",
+            "https://www.chess.com/game/live/165714167940"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Catalan",
+          "eco": "A13",
+          "games": 60,
+          "serious": 13,
+          "score": 77,
+          "urls": [
+            "https://www.chess.com/game/live/168564649766",
+            "https://www.chess.com/game/live/173517772775"
+          ]
+        },
+        {
+          "v": "Catalan Opening",
+          "eco": "E04",
+          "games": 47,
+          "serious": 3,
+          "score": 77,
+          "urls": [
+            "https://www.chess.com/game/live/173519571023",
+            "https://www.chess.com/game/live/174121153483"
+          ]
+        },
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 41,
+          "serious": 0,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/168095982474",
+            "https://www.chess.com/game/live/168096424756"
+          ]
+        },
+        {
+          "v": "Sicilian",
+          "eco": "B50",
+          "games": 40,
+          "serious": 0,
+          "score": 74,
+          "urls": [
+            "https://www.chess.com/game/live/168093893970",
+            "https://www.chess.com/game/live/168326420454"
+          ]
+        },
+        {
+          "v": "Reti Opening Kings Indian Attack Symmetrical",
+          "eco": "A05",
+          "games": 38,
+          "serious": 0,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/167543353850",
+            "https://www.chess.com/game/live/167591428456"
+          ]
+        },
+        {
+          "v": "Modern Defense with",
+          "eco": "B06",
+          "games": 37,
+          "serious": 0,
+          "score": 80,
+          "urls": [
+            "https://www.chess.com/game/live/169261877960",
+            "https://www.chess.com/game/live/165678959932"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Traditional Variation",
+          "eco": "D30",
+          "games": 37,
+          "serious": 1,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/166164232834",
+            "https://www.chess.com/game/live/164638142956"
+          ]
+        },
+        {
+          "v": "Bishops Opening Berlin Vienna Hybrid Variation",
+          "eco": "C28",
+          "games": 33,
+          "serious": 1,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/168944221270",
+            "https://www.chess.com/game/live/167580414254"
+          ]
+        },
+        {
+          "v": "Reti Opening Nimzowitsch Larsen",
+          "eco": "A06",
+          "games": 32,
+          "serious": 1,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/167734937756",
+            "https://www.chess.com/game/live/166301004842"
+          ]
+        },
+        {
+          "v": "English Opening Caro Kann Defensive",
+          "eco": "A11",
+          "games": 32,
+          "serious": 0,
+          "score": 83,
+          "urls": [
+            "https://www.chess.com/game/live/146159512354",
+            "https://www.chess.com/game/live/146160039138"
+          ]
+        },
+        {
+          "v": "Reti Opening Nimzo Larsen Variation",
+          "eco": "A04",
+          "games": 31,
+          "serious": 0,
+          "score": 85,
+          "urls": [
+            "https://www.chess.com/game/live/167164660334",
+            "https://www.chess.com/game/live/166025991800"
+          ]
+        },
+        {
+          "v": "Nimzo Indian Defense Romanishin Kasparov",
+          "eco": "E20",
+          "games": 28,
+          "serious": 0,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/168550019568",
+            "https://www.chess.com/game/live/168552755764"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Sicilian Defense Open Dragon Variation",
+          "eco": "B72",
+          "games": 131,
+          "serious": 0,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/168327147522",
+            "https://www.chess.com/game/live/168551979868"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Orthodox Variation",
+          "eco": "E91",
+          "games": 66,
+          "serious": 2,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/168550278822",
+            "https://www.chess.com/game/live/168685844348"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo",
+          "eco": "B30",
+          "games": 62,
+          "serious": 0,
+          "score": 75,
+          "urls": [
+            "https://www.chess.com/game/live/168188192100",
+            "https://www.chess.com/game/live/166852725758"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Catalan",
+          "eco": "A13",
+          "games": 41,
+          "serious": 1,
+          "score": 74,
+          "urls": [
+            "https://www.chess.com/game/live/173518372443",
+            "https://www.chess.com/game/live/167164421470"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation",
+          "eco": "D00",
+          "games": 41,
+          "serious": 3,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/168599069597",
+            "https://www.chess.com/game/live/164874519274"
+          ]
+        },
+        {
+          "v": "English Opening Symmetrical Double Fianchetto",
+          "eco": "A30",
+          "games": 39,
+          "serious": 0,
+          "score": 79,
+          "urls": [
+            "https://www.chess.com/game/live/168897984124",
+            "https://www.chess.com/game/live/167164810668"
+          ]
+        },
+        {
+          "v": "Italian Game Two Knights Modern Bishops",
+          "eco": "C55",
+          "games": 37,
+          "serious": 5,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/166930809580",
+            "https://www.chess.com/game/live/167580678478"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Exchange Positional",
+          "eco": "D35",
+          "games": 34,
+          "serious": 1,
+          "score": 56,
+          "urls": [
+            "https://www.chess.com/game/live/168549743446",
+            "https://www.chess.com/game/live/169068311932"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Canal",
+          "eco": "B51",
+          "games": 34,
+          "serious": 0,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/174121753695",
+            "https://www.chess.com/game/live/165051511108"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Mieses Kotrc Main Line",
+          "eco": "B01",
+          "games": 33,
+          "serious": 0,
+          "score": 73,
+          "urls": [
+            "https://www.chess.com/game/live/168094394296",
+            "https://www.chess.com/game/live/168094856340"
+          ]
+        },
+        {
+          "v": "English Opening Anglo Indian Kings Knight Queens Indian",
+          "eco": "A15",
+          "games": 32,
+          "serious": 0,
+          "score": 75,
+          "urls": [
+            "https://www.chess.com/game/live/173520772125",
+            "https://www.chess.com/game/live/167165215706"
+          ]
+        },
+        {
+          "v": "Queens Indian Defense Kasparov Variation Petrosian Variation",
+          "eco": "E12",
+          "games": 31,
+          "serious": 0,
+          "score": 65,
+          "urls": [
+            "https://www.chess.com/game/live/168358446766",
+            "https://www.chess.com/game/live/167590997994"
+          ]
+        },
+        {
+          "v": "Trompowsky Attack",
+          "eco": "A45",
+          "games": 30,
+          "serious": 2,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/168538736320",
+            "https://www.chess.com/game/live/168539011190"
+          ]
+        },
+        {
+          "v": "Sicilian",
+          "eco": "B50",
+          "games": 28,
+          "serious": 0,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/164549966704",
+            "https://www.chess.com/game/live/164767559968"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Normal Variation",
+          "eco": "E90",
+          "games": 27,
+          "serious": 0,
+          "score": 67,
+          "urls": [
+            "https://www.chess.com/game/live/167383338332",
+            "https://www.chess.com/game/live/167535240138"
+          ]
+        }
+      ]
+    },
+    "ericrosen": {
+      "type": "teacher",
+      "total": 12057,
+      "cc": 12057,
+      "li": 0,
+      "white": [
+        {
+          "v": "Indian Game...3.Nc3 Bg7 4.e4 d6 5.Qd2",
+          "eco": "A45",
+          "games": 182,
+          "serious": 1,
+          "score": 72,
+          "urls": [
+            "https://www.chess.com/game/live/173124052909",
+            "https://www.chess.com/game/live/168912498220"
+          ]
+        },
+        {
+          "v": "Indian Game...4.Nf3 Bd6 5.Ne5 O O",
+          "eco": "A45",
+          "games": 152,
+          "serious": 1,
+          "score": 68,
+          "urls": [
+            "https://www.chess.com/game/live/172311015765",
+            "https://www.chess.com/game/live/168893082664"
+          ]
+        },
+        {
+          "v": "Indian Game...4.e3 Bg7 5.h4 h5 6.Nf3",
+          "eco": "A45",
+          "games": 130,
+          "serious": 6,
+          "score": 67,
+          "urls": [
+            "https://www.chess.com/game/live/168249995660",
+            "https://www.chess.com/game/live/173103056003"
+          ]
+        },
+        {
+          "v": "Indian Game 2.Bf4 e6 3.e3 b6",
+          "eco": "A45",
+          "games": 114,
+          "serious": 1,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/168905643106",
+            "https://www.chess.com/game/live/168910617054"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Accelerated London Steinitz Countergambit",
+          "eco": "D00",
+          "games": 107,
+          "serious": 3,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/168628978170",
+            "https://www.chess.com/game/live/173103654199"
+          ]
+        },
+        {
+          "v": "Indian Game...6.Nbd2 c5 7.c3 Nc6 8.Bb5",
+          "eco": "A45",
+          "games": 93,
+          "serious": 1,
+          "score": 72,
+          "urls": [
+            "https://www.chess.com/game/live/172306814131",
+            "https://www.chess.com/game/live/172497613629"
+          ]
+        },
+        {
+          "v": "Indian Game...3.e3 d5 4.Nf3 Bd6 5.Ne5",
+          "eco": "A45",
+          "games": 84,
+          "serious": 0,
+          "score": 74,
+          "urls": [
+            "https://www.chess.com/game/live/172500616675",
+            "https://www.chess.com/game/live/168912471244"
+          ]
+        },
+        {
+          "v": "London System 3...c5 4.e3 Nc6 5.Nbd2",
+          "eco": "D02",
+          "games": 83,
+          "serious": 2,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/173518372447",
+            "https://www.chess.com/game/live/173709174135"
+          ]
+        },
+        {
+          "v": "Indian Game 2.Bf4 d6 3.Nc3 Nbd7",
+          "eco": "A45",
+          "games": 82,
+          "serious": 0,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/172308014699",
+            "https://www.chess.com/game/live/168757872772"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Accelerated London System 2...e6 3.e3 Bd6",
+          "eco": "D00",
+          "games": 79,
+          "serious": 0,
+          "score": 72,
+          "urls": [
+            "https://www.chess.com/game/live/166910696652",
+            "https://www.chess.com/game/live/171911445907"
+          ]
+        },
+        {
+          "v": "Indian Game 2.Bf4 e6 3.e3",
+          "eco": "A45",
+          "games": 74,
+          "serious": 2,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/171912646009",
+            "https://www.chess.com/game/live/165864601182"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Horwitz Defense 2.Bf4",
+          "eco": "A40",
+          "games": 67,
+          "serious": 2,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/167740924528",
+            "https://www.chess.com/game/live/167478015709"
+          ]
+        },
+        {
+          "v": "Indian Game...3.Nc3 d5 4.e3 Bg7 5.h4",
+          "eco": "A45",
+          "games": 62,
+          "serious": 1,
+          "score": 65,
+          "urls": [
+            "https://www.chess.com/game/live/170686846583",
+            "https://www.chess.com/game/live/165697782108"
+          ]
+        },
+        {
+          "v": "Indian Game 2.Bf4 g6 3.Nc3 Bg7 4.e4",
+          "eco": "A45",
+          "games": 61,
+          "serious": 0,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/172480211487",
+            "https://www.chess.com/game/live/169293619294"
+          ]
+        },
+        {
+          "v": "London System...5.Nbd2 Bg4 6.c3 e6",
+          "eco": "D02",
+          "games": 61,
+          "serious": 0,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/171288622997",
+            "https://www.chess.com/game/live/167059817859"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Petrovs Defense Classical Variation",
+          "eco": "C42",
+          "games": 378,
+          "serious": 4,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/172500010279",
+            "https://www.chess.com/game/live/173104252049"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Exchange Positional Line 5...c6 6.e3 Bd6 7.Bd3",
+          "eco": "D35",
+          "games": 122,
+          "serious": 1,
+          "score": 50,
+          "urls": [
+            "https://www.chess.com/game/live/168722758268",
+            "https://www.chess.com/game/live/168914407126"
+          ]
+        },
+        {
+          "v": "Catalan Opening Closed...5.Nf3 Bb4 6.Bd2 c5",
+          "eco": "E04",
+          "games": 104,
+          "serious": 1,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/173725972279",
+            "https://www.chess.com/game/live/169056060560"
+          ]
+        },
+        {
+          "v": "Petrovs Defense Three Knights Game",
+          "eco": "C42",
+          "games": 80,
+          "serious": 4,
+          "score": 73,
+          "urls": [
+            "https://www.chess.com/game/live/168723072152",
+            "https://www.chess.com/game/live/173693573943"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Modern Variation 2.Bb2 Nc6 3.e3 Nf6 4.Bb5",
+          "eco": "A01",
+          "games": 59,
+          "serious": 0,
+          "score": 38,
+          "urls": [
+            "https://www.chess.com/game/live/168767849852",
+            "https://www.chess.com/game/live/169475438881"
+          ]
+        },
+        {
+          "v": "Indian Game Knights Variation...4.Bg2 d5 5.O O Be7",
+          "eco": "A46",
+          "games": 54,
+          "serious": 0,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/150556695689",
+            "https://www.chess.com/game/live/130032571079"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation...3.Bf4 c5 4.e3 cxd4 5.exd4",
+          "eco": "D00",
+          "games": 48,
+          "serious": 0,
+          "score": 51,
+          "urls": [
+            "https://www.chess.com/game/live/172483813615",
+            "https://www.chess.com/game/live/173711570963"
+          ]
+        },
+        {
+          "v": "Kings Indian Attack Yugoslav Variation...5.d3 O O 6.Nbd2 b6 7.e4",
+          "eco": "A07",
+          "games": 39,
+          "serious": 0,
+          "score": 49,
+          "urls": [
+            "https://www.chess.com/game/live/167076012239",
+            "https://www.chess.com/game/live/161617626547"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Cambridge Springs Bogoljubov Variation",
+          "eco": "D52",
+          "games": 38,
+          "serious": 2,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/164386784906",
+            "https://www.chess.com/game/live/161600828931"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Three Knights Barmen Variation 5.Bf4 Bb4",
+          "eco": "D37",
+          "games": 36,
+          "serious": 0,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/173123451517",
+            "https://www.chess.com/game/live/171289823803"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation 2...Nf6 3.Bf4 c5",
+          "eco": "D00",
+          "games": 36,
+          "serious": 2,
+          "score": 56,
+          "urls": [
+            "https://www.chess.com/game/live/167666413473",
+            "https://www.chess.com/game/live/167681414055"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Three Knights Barmen Variation 5.e3 a6",
+          "eco": "D37",
+          "games": 34,
+          "serious": 0,
+          "score": 51,
+          "urls": [
+            "https://www.chess.com/game/live/173123453957",
+            "https://www.chess.com/game/live/165697956010"
+          ]
+        },
+        {
+          "v": "Catalan Opening Closed...6.Bd2 c5 7.Bxb4 cxb4",
+          "eco": "E04",
+          "games": 34,
+          "serious": 0,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/167079014163",
+            "https://www.chess.com/game/live/163411027671"
+          ]
+        },
+        {
+          "v": "Kings Pawn Opening Kings Knight Variation",
+          "eco": "C40",
+          "games": 34,
+          "serious": 0,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/134200145147",
+            "https://www.chess.com/game/live/106377972049"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Canal Attack...9.Qxf3 e6 10.d3 Be7",
+          "eco": "B51",
+          "games": 33,
+          "serious": 2,
+          "score": 44,
+          "urls": [
+            "https://www.chess.com/game/live/166870186928",
+            "https://www.chess.com/game/live/171288627951"
+          ]
+        }
+      ]
+    },
+    "firouzja": {
+      "type": "elite",
+      "total": 6596,
+      "cc": 6012,
+      "li": 584,
+      "white": [
+        {
+          "v": "Trompowsky",
+          "eco": "A45",
+          "games": 54,
+          "serious": 0,
+          "score": 76,
+          "urls": [
+            "https://www.chess.com/game/live/137229058121",
+            "https://www.chess.com/game/live/107978362481"
+          ]
+        },
+        {
+          "v": "Center Game Accepted Normal Variation",
+          "eco": "C22",
+          "games": 42,
+          "serious": 0,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/143903413363",
+            "https://www.chess.com/game/live/137231455691"
+          ]
+        },
+        {
+          "v": "Alekhines Defense Exchange Variation",
+          "eco": "B03",
+          "games": 38,
+          "serious": 0,
+          "score": 68,
+          "urls": [
+            "https://www.chess.com/game/live/154505199865",
+            "https://www.chess.com/game/live/151751280041"
+          ]
+        },
+        {
+          "v": "Ruy Lopez Opening Berlin Defense",
+          "eco": "C65",
+          "games": 35,
+          "serious": 1,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/166502336238",
+            "https://www.chess.com/game/live/154773997419"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Open Najdorf Variation",
+          "eco": "B90",
+          "games": 31,
+          "serious": 3,
+          "score": 68,
+          "urls": [
+            "https://www.chess.com/game/live/145751423668",
+            "https://www.chess.com/game/live/145752274072"
+          ]
+        },
+        {
+          "v": "Trompowsky Attack",
+          "eco": "A45",
+          "games": 30,
+          "serious": 0,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/102209645689",
+            "https://www.chess.com/game/live/102813060993"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Levitsky Attack",
+          "eco": "D00",
+          "games": 28,
+          "serious": 0,
+          "score": 80,
+          "urls": [
+            "https://www.chess.com/game/live/104016687159",
+            "https://www.chess.com/game/live/97950132809"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation",
+          "eco": "D00",
+          "games": 26,
+          "serious": 1,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/165708549714",
+            "https://www.chess.com/game/live/143269039538"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo Attack",
+          "eco": "B30",
+          "games": 26,
+          "serious": 1,
+          "score": 73,
+          "urls": [
+            "https://www.chess.com/game/live/154511802385",
+            "https://www.chess.com/game/live/154511806095"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo",
+          "eco": "B30",
+          "games": 26,
+          "serious": 2,
+          "score": 73,
+          "urls": [
+            "https://www.chess.com/game/live/154517801693",
+            "https://www.chess.com/game/live/154521398501"
+          ]
+        },
+        {
+          "v": "Ruy Lopez Opening Morphy Defense Modern Steinitz",
+          "eco": "C76",
+          "games": 26,
+          "serious": 1,
+          "score": 81,
+          "urls": [
+            "https://www.chess.com/game/live/154528004899",
+            "https://www.chess.com/game/live/154529201099"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Goldman Variation",
+          "eco": "B10",
+          "games": 26,
+          "serious": 0,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/139044654687",
+            "https://www.chess.com/game/live/110047814449"
+          ]
+        },
+        {
+          "v": "Ruy Lopez Opening Berlin",
+          "eco": "C65",
+          "games": 25,
+          "serious": 1,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/146907207281",
+            "https://www.chess.com/game/live/146909602605"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin",
+          "eco": "D00",
+          "games": 25,
+          "serious": 2,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/119394962832",
+            "https://www.chess.com/game/live/120327650895"
+          ]
+        },
+        {
+          "v": "Ruy Lopez Opening Morphy Defense Deferred Classical Defense",
+          "eco": "C70",
+          "games": 24,
+          "serious": 0,
+          "score": 77,
+          "urls": [
+            "https://www.chess.com/game/live/163934415470",
+            "https://www.chess.com/game/live/154532197291"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Pirc Defense",
+          "eco": "B07",
+          "games": 66,
+          "serious": 0,
+          "score": 73,
+          "urls": [
+            "https://www.chess.com/game/live/165707188518",
+            "https://www.chess.com/game/live/164106342938"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian",
+          "eco": "B22",
+          "games": 55,
+          "serious": 0,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/164422523176",
+            "https://www.chess.com/game/live/164422859634"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Canal",
+          "eco": "B51",
+          "games": 45,
+          "serious": 1,
+          "score": 72,
+          "urls": [
+            "https://www.chess.com/game/live/165708119026",
+            "https://www.chess.com/game/live/157795054949"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation",
+          "eco": "D00",
+          "games": 43,
+          "serious": 0,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/154508196849",
+            "https://www.chess.com/game/live/149327908563"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense",
+          "eco": "B10",
+          "games": 40,
+          "serious": 0,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/164423864454",
+            "https://www.chess.com/game/live/153565599267"
+          ]
+        },
+        {
+          "v": "Indian Game East Indian Przepiorka",
+          "eco": "A49",
+          "games": 39,
+          "serious": 0,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/154522004357",
+            "https://www.chess.com/game/live/144481496434"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Two Knights Attack",
+          "eco": "B10",
+          "games": 35,
+          "serious": 0,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/151743484495",
+            "https://www.chess.com/game/live/144841180305"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Catalan",
+          "eco": "D30",
+          "games": 30,
+          "serious": 5,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/154525599635",
+            "https://www.chess.com/game/live/151141697157"
+          ]
+        },
+        {
+          "v": "Modern Defense with",
+          "eco": "B06",
+          "games": 28,
+          "serious": 0,
+          "score": 75,
+          "urls": [
+            "https://www.chess.com/game/live/149324909275",
+            "https://www.chess.com/game/live/143556619165"
+          ]
+        },
+        {
+          "v": "English Opening Anglo Indian Kings Indian",
+          "eco": "A15",
+          "games": 27,
+          "serious": 1,
+          "score": 72,
+          "urls": [
+            "https://www.chess.com/game/live/143565614177",
+            "https://www.chess.com/game/live/143631014121"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Normal",
+          "eco": "E90",
+          "games": 26,
+          "serious": 0,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/166147715022",
+            "https://www.chess.com/game/live/144493778535"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Exchange Variation",
+          "eco": "B13",
+          "games": 24,
+          "serious": 0,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/151750678991",
+            "https://www.chess.com/game/live/143630428605"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Orthodox Glek Defense",
+          "eco": "E94",
+          "games": 24,
+          "serious": 1,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/137255460231",
+            "https://www.chess.com/game/live/123321152366"
+          ]
+        },
+        {
+          "v": "Trompowsky Attack",
+          "eco": "A45",
+          "games": 23,
+          "serious": 1,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/157383455661",
+            "https://www.chess.com/game/live/143627407597"
+          ]
+        },
+        {
+          "v": "London",
+          "eco": "D02",
+          "games": 22,
+          "serious": 0,
+          "score": 39,
+          "urls": [
+            "https://www.chess.com/game/live/166503359634",
+            "https://www.chess.com/game/live/154502204955"
+          ]
+        }
+      ]
+    },
+    "gothamchess": {
+      "type": "teacher",
+      "total": 12261,
+      "cc": 12261,
+      "li": 0,
+      "white": [
+        {
+          "v": "Sicilian Defense Mengarini Variation",
+          "eco": "B20",
+          "games": 380,
+          "serious": 2,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/168098427152",
+            "https://www.chess.com/game/live/168603925234"
+          ]
+        },
+        {
+          "v": "Trompowsky Attack",
+          "eco": "A45",
+          "games": 344,
+          "serious": 2,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/168097974884",
+            "https://www.chess.com/game/live/168754916828"
+          ]
+        },
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 237,
+          "serious": 0,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/168099711820",
+            "https://www.chess.com/game/live/168107413760"
+          ]
+        },
+        {
+          "v": "Trompowsky Attack Raptor Variation",
+          "eco": "A45",
+          "games": 227,
+          "serious": 1,
+          "score": 68,
+          "urls": [
+            "https://www.chess.com/game/live/173711574205",
+            "https://www.chess.com/game/live/169191784586"
+          ]
+        },
+        {
+          "v": "Trompowsky",
+          "eco": "A45",
+          "games": 211,
+          "serious": 5,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/168109224506",
+            "https://www.chess.com/game/live/168748113104"
+          ]
+        },
+        {
+          "v": "Trompowsky Attack Classical Defense",
+          "eco": "A45",
+          "games": 163,
+          "serious": 0,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/168953282100",
+            "https://www.chess.com/game/live/169237090454"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Levitsky Attack",
+          "eco": "D00",
+          "games": 151,
+          "serious": 0,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/168085330060",
+            "https://www.chess.com/game/live/168098279628"
+          ]
+        },
+        {
+          "v": "Modern Defense with",
+          "eco": "A40",
+          "games": 140,
+          "serious": 1,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/168748222850",
+            "https://www.chess.com/game/live/168765615868"
+          ]
+        },
+        {
+          "v": "Vienna Game Main Line Paulsen Attack",
+          "eco": "C29",
+          "games": 103,
+          "serious": 4,
+          "score": 68,
+          "urls": [
+            "https://www.chess.com/game/live/168856140046",
+            "https://www.chess.com/game/live/168857441092"
+          ]
+        },
+        {
+          "v": "Indian",
+          "eco": "A45",
+          "games": 83,
+          "serious": 4,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/161617024875",
+            "https://www.chess.com/game/live/163413424117"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Advance Tal Variation",
+          "eco": "B12",
+          "games": 79,
+          "serious": 1,
+          "score": 67,
+          "urls": [
+            "https://www.chess.com/game/live/168620169188",
+            "https://www.chess.com/game/live/169237778544"
+          ]
+        },
+        {
+          "v": "Closed Sicilian Defense",
+          "eco": "B23",
+          "games": 74,
+          "serious": 0,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/141815285812",
+            "https://www.chess.com/game/live/108861039055"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation",
+          "eco": "D00",
+          "games": 70,
+          "serious": 0,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/145971075928",
+            "https://www.chess.com/game/live/143980275964"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Modern Variation",
+          "eco": "A01",
+          "games": 69,
+          "serious": 0,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/168108400468",
+            "https://www.chess.com/game/live/168505714368"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Classical Variation",
+          "eco": "A01",
+          "games": 69,
+          "serious": 1,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/168571659136",
+            "https://www.chess.com/game/live/168765945280"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "French Defense Rubinstein Variation",
+          "eco": "C10",
+          "games": 315,
+          "serious": 0,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/168505504100",
+            "https://www.chess.com/game/live/168603859208"
+          ]
+        },
+        {
+          "v": "Modern Defense with",
+          "eco": "A40",
+          "games": 290,
+          "serious": 4,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/168109457514",
+            "https://www.chess.com/game/live/168181936844"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Mieses Kotrc Main Line",
+          "eco": "B01",
+          "games": 187,
+          "serious": 8,
+          "score": 56,
+          "urls": [
+            "https://www.chess.com/game/live/168842617664",
+            "https://www.chess.com/game/live/168843207874"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Modern Portuguese Variation",
+          "eco": "B01",
+          "games": 140,
+          "serious": 2,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/168527899368",
+            "https://www.chess.com/game/live/97953049293"
+          ]
+        },
+        {
+          "v": "Owens Defense",
+          "eco": "B00",
+          "games": 129,
+          "serious": 4,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/168333982206",
+            "https://www.chess.com/game/live/168619528984"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Modern Variation",
+          "eco": "B01",
+          "games": 122,
+          "serious": 4,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/169042570922",
+            "https://www.chess.com/game/live/169087921214"
+          ]
+        },
+        {
+          "v": "Reti Opening Kingside Fianchetto Variation",
+          "eco": "A04",
+          "games": 115,
+          "serious": 0,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/168368273902",
+            "https://www.chess.com/game/live/168748167836"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Two Knights Attack",
+          "eco": "B10",
+          "games": 104,
+          "serious": 0,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/169085191556",
+            "https://www.chess.com/game/live/169183852780"
+          ]
+        },
+        {
+          "v": "Englund Gambit",
+          "eco": "A40",
+          "games": 100,
+          "serious": 1,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/168099887810",
+            "https://www.chess.com/game/live/168754376376"
+          ]
+        },
+        {
+          "v": "Alekhines Defense Scandinavian Variation",
+          "eco": "B02",
+          "games": 98,
+          "serious": 6,
+          "score": 56,
+          "urls": [
+            "https://www.chess.com/game/live/166373281568",
+            "https://www.chess.com/game/live/122142035857"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense De Bruycker Defense",
+          "eco": "A40",
+          "games": 87,
+          "serious": 0,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/168107127096",
+            "https://www.chess.com/game/live/168367977250"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Mieses Kotrc Variation",
+          "eco": "B01",
+          "games": 86,
+          "serious": 5,
+          "score": 75,
+          "urls": [
+            "https://www.chess.com/game/live/168704146668",
+            "https://www.chess.com/game/live/169085048648"
+          ]
+        },
+        {
+          "v": "Modern Defense Standard Line",
+          "eco": "B06",
+          "games": 83,
+          "serious": 0,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/168368131514",
+            "https://www.chess.com/game/live/168604018496"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Mieses Kotrc Main",
+          "eco": "B01",
+          "games": 80,
+          "serious": 3,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/146201636750",
+            "https://www.chess.com/game/live/146285918190"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Advance Botvinnik Carls Defense",
+          "eco": "B12",
+          "games": 79,
+          "serious": 10,
+          "score": 68,
+          "urls": [
+            "https://www.chess.com/game/live/166690797286",
+            "https://www.chess.com/game/live/119724647095"
+          ]
+        }
+      ]
+    },
+    "gukesh": {
+      "type": "elite",
+      "total": 5637,
+      "cc": 5637,
+      "li": 0,
+      "white": [
+        {
+          "v": "Kings Indian Attack Yugoslav",
+          "eco": "A07",
+          "games": 91,
+          "serious": 0,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/80594492673",
+            "https://www.chess.com/game/live/76175686377"
+          ]
+        },
+        {
+          "v": "Indian Game East Indian Przepiorka",
+          "eco": "A49",
+          "games": 66,
+          "serious": 0,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/80596997663",
+            "https://www.chess.com/game/live/5730162365"
+          ]
+        },
+        {
+          "v": "Kings Indian",
+          "eco": "A07",
+          "games": 58,
+          "serious": 1,
+          "score": 47,
+          "urls": [
+            "https://www.chess.com/game/live/80398372285",
+            "https://www.chess.com/game/live/80596251117"
+          ]
+        },
+        {
+          "v": "English Opening Caro Kann Defensive",
+          "eco": "A11",
+          "games": 33,
+          "serious": 1,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/5409978617",
+            "https://www.chess.com/game/live/5436248566"
+          ]
+        },
+        {
+          "v": "Kings Indian Attack French",
+          "eco": "A08",
+          "games": 32,
+          "serious": 0,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/5361991426",
+            "https://www.chess.com/game/live/4576397250"
+          ]
+        },
+        {
+          "v": "English Opening Agincourt",
+          "eco": "A13",
+          "games": 29,
+          "serious": 1,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/71598816111",
+            "https://www.chess.com/game/live/73755834047"
+          ]
+        },
+        {
+          "v": "Indian",
+          "eco": "A45",
+          "games": 26,
+          "serious": 1,
+          "score": 79,
+          "urls": [
+            "https://www.chess.com/game/live/137485241645",
+            "https://www.chess.com/game/live/88266642577"
+          ]
+        },
+        {
+          "v": "London",
+          "eco": "D02",
+          "games": 25,
+          "serious": 2,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/80402474377",
+            "https://www.chess.com/game/live/73754637677"
+          ]
+        },
+        {
+          "v": "Van t Kruijs Opening",
+          "eco": "A00",
+          "games": 25,
+          "serious": 0,
+          "score": 52,
+          "urls": [
+            "https://www.chess.com/game/live/5438639747",
+            "https://www.chess.com/game/live/5438655374"
+          ]
+        },
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 24,
+          "serious": 0,
+          "score": 48,
+          "urls": [
+            "https://www.chess.com/game/live/27704983241",
+            "https://www.chess.com/game/live/4947531331"
+          ]
+        },
+        {
+          "v": "Kings Indian Attack Yugoslav Variation",
+          "eco": "A07",
+          "games": 24,
+          "serious": 0,
+          "score": 67,
+          "urls": [
+            "https://www.chess.com/game/live/18031972635",
+            "https://www.chess.com/game/live/18032540391"
+          ]
+        },
+        {
+          "v": "Modern Defense Standard",
+          "eco": "B06",
+          "games": 22,
+          "serious": 0,
+          "score": 43,
+          "urls": [
+            "https://www.chess.com/game/live/15323596267",
+            "https://www.chess.com/game/live/6210061133"
+          ]
+        },
+        {
+          "v": "Reti Opening Kings Indian Attack Symmetrical",
+          "eco": "A05",
+          "games": 22,
+          "serious": 0,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/5974731531",
+            "https://www.chess.com/game/live/4833057013"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Tartakower",
+          "eco": "B15",
+          "games": 22,
+          "serious": 0,
+          "score": 52,
+          "urls": [
+            "https://www.chess.com/game/live/5291553348",
+            "https://www.chess.com/game/live/4693430894"
+          ]
+        },
+        {
+          "v": "Reti Opening",
+          "eco": "A04",
+          "games": 22,
+          "serious": 0,
+          "score": 36,
+          "urls": [
+            "https://www.chess.com/game/live/4865257426",
+            "https://www.chess.com/game/live/3604548067"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo Fianchetto",
+          "eco": "B31",
+          "games": 73,
+          "serious": 1,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/139044051429",
+            "https://www.chess.com/game/live/88258736699"
+          ]
+        },
+        {
+          "v": "Indian",
+          "eco": "A45",
+          "games": 55,
+          "serious": 1,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/80939019195",
+            "https://www.chess.com/game/live/15323543733"
+          ]
+        },
+        {
+          "v": "Closed Sicilian Defense Traditional",
+          "eco": "B23",
+          "games": 52,
+          "serious": 0,
+          "score": 48,
+          "urls": [
+            "https://www.chess.com/game/live/76173826285",
+            "https://www.chess.com/game/live/73150558817"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Open Pelikan and Sveshnikov Chelyabinsk",
+          "eco": "B33",
+          "games": 52,
+          "serious": 2,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/6210615012",
+            "https://www.chess.com/game/live/5383566625"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian",
+          "eco": "B22",
+          "games": 46,
+          "serious": 0,
+          "score": 53,
+          "urls": [
+            "https://www.chess.com/game/live/88270260515",
+            "https://www.chess.com/game/live/73756479031"
+          ]
+        },
+        {
+          "v": "Catalan Opening",
+          "eco": "E04",
+          "games": 43,
+          "serious": 1,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/73411853181",
+            "https://www.chess.com/game/live/73759380313"
+          ]
+        },
+        {
+          "v": "Modern Defense with",
+          "eco": "B06",
+          "games": 35,
+          "serious": 1,
+          "score": 50,
+          "urls": [
+            "https://www.chess.com/game/live/74272183585",
+            "https://www.chess.com/game/live/27704412335"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Open Pelikan and Sveshnikov",
+          "eco": "B33",
+          "games": 29,
+          "serious": 0,
+          "score": 48,
+          "urls": [
+            "https://www.chess.com/game/live/80400193411",
+            "https://www.chess.com/game/live/73154105097"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Fianchetto Debrecen Classical Main Line",
+          "eco": "E68",
+          "games": 28,
+          "serious": 0,
+          "score": 38,
+          "urls": [
+            "https://www.chess.com/game/live/18031333165",
+            "https://www.chess.com/game/live/5366902479"
+          ]
+        },
+        {
+          "v": "Indian Game East Indian Przepiorka",
+          "eco": "A49",
+          "games": 27,
+          "serious": 0,
+          "score": 52,
+          "urls": [
+            "https://www.chess.com/game/live/6210097601",
+            "https://www.chess.com/game/live/6284633550"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Advance Short Variation with",
+          "eco": "B12",
+          "games": 24,
+          "serious": 0,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/147512614563",
+            "https://www.chess.com/game/live/88259957529"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Normal",
+          "eco": "E90",
+          "games": 24,
+          "serious": 0,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/73413844211",
+            "https://www.chess.com/game/live/18031888927"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Two Knights Attack",
+          "eco": "B10",
+          "games": 23,
+          "serious": 0,
+          "score": 50,
+          "urls": [
+            "https://www.chess.com/game/live/73416245943",
+            "https://www.chess.com/game/live/5947538184"
+          ]
+        },
+        {
+          "v": "Tarrasch Defense Two Knights Rubinstein Prague Variation",
+          "eco": "D33",
+          "games": 23,
+          "serious": 1,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/12586704809",
+            "https://www.chess.com/game/live/5736175775"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Tartakower Variation",
+          "eco": "B15",
+          "games": 23,
+          "serious": 0,
+          "score": 67,
+          "urls": [
+            "https://www.chess.com/game/live/5046530389",
+            "https://www.chess.com/game/live/3520203829"
+          ]
+        }
+      ]
+    },
+    "hikaru": {
+      "type": "elite+streamer",
+      "total": 12264,
+      "cc": 12264,
+      "li": 0,
+      "white": [
+        {
+          "v": "Nimzowitsch Larsen Attack Classical Variation 2.Bb2 Nf6",
+          "eco": "A01",
+          "games": 171,
+          "serious": 1,
+          "score": 94,
+          "urls": [
+            "https://www.chess.com/game/live/168657220528",
+            "https://www.chess.com/game/live/168788898324"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Two Knights Attack 3...dxe4 4.Nxe4 Nf6 5.Ng3",
+          "eco": "B10",
+          "games": 158,
+          "serious": 0,
+          "score": 89,
+          "urls": [
+            "https://www.chess.com/game/live/172051812777",
+            "https://www.chess.com/game/live/172053017257"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Classical Variation 2.Bb2 Bf5",
+          "eco": "A01",
+          "games": 104,
+          "serious": 0,
+          "score": 88,
+          "urls": [
+            "https://www.chess.com/game/live/172054212415",
+            "https://www.chess.com/game/live/168657348874"
+          ]
+        },
+        {
+          "v": "Bishops Opening Berlin Vienna Hybrid Variation 4...Bc5",
+          "eco": "C28",
+          "games": 92,
+          "serious": 0,
+          "score": 92,
+          "urls": [
+            "https://www.chess.com/game/live/172056015639",
+            "https://www.chess.com/game/live/173267573793"
+          ]
+        },
+        {
+          "v": "Indian Game Knights Variation East Indian Defense...4.Bb2 d5 5.e3 O O",
+          "eco": "A48",
+          "games": 67,
+          "serious": 0,
+          "score": 96,
+          "urls": [
+            "https://www.chess.com/game/live/168296129682",
+            "https://www.chess.com/game/live/168612324494"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Modern Variation 2.Bb2 Nc6 3.c4 Nf6",
+          "eco": "A01",
+          "games": 66,
+          "serious": 0,
+          "score": 92,
+          "urls": [
+            "https://www.chess.com/game/live/172054810895",
+            "https://www.chess.com/game/live/168568240862"
+          ]
+        },
+        {
+          "v": "Indian Game Knights Variation East Indian Defense...4.Bb2 O O 5.e3 d6 6.Be2",
+          "eco": "A48",
+          "games": 62,
+          "serious": 0,
+          "score": 94,
+          "urls": [
+            "https://www.chess.com/game/live/168244326322",
+            "https://www.chess.com/game/live/168809835776"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Indian Variation 2.Bb2 g6 3.Bxf6 exf6",
+          "eco": "A01",
+          "games": 59,
+          "serious": 0,
+          "score": 92,
+          "urls": [
+            "https://www.chess.com/game/live/147680405962",
+            "https://www.chess.com/game/live/147681656174"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Modern Variation 2.Bb2 Nc6 3.e3 Nf6 4.Bb5",
+          "eco": "A01",
+          "games": 58,
+          "serious": 0,
+          "score": 84,
+          "urls": [
+            "https://www.chess.com/game/live/144026185436",
+            "https://www.chess.com/game/live/141613088084"
+          ]
+        },
+        {
+          "v": "Reti Opening Nimzo Larsen Variation...5.Be2 d6 6.d4 Nbd7 7.O O",
+          "eco": "A04",
+          "games": 52,
+          "serious": 0,
+          "score": 88,
+          "urls": [
+            "https://www.chess.com/game/live/168666980648",
+            "https://www.chess.com/game/live/168803810286"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Classical Variation 2.Bb2 c6",
+          "eco": "A01",
+          "games": 48,
+          "serious": 0,
+          "score": 94,
+          "urls": [
+            "https://www.chess.com/game/live/173261573449",
+            "https://www.chess.com/game/live/168808070896"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Classical Variation 2.Bb2 Bg4",
+          "eco": "A01",
+          "games": 45,
+          "serious": 0,
+          "score": 92,
+          "urls": [
+            "https://www.chess.com/game/live/173868554443",
+            "https://www.chess.com/game/live/173869150955"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Closed 2...dxe4 3.Nxe4 Nf6",
+          "eco": "B01",
+          "games": 43,
+          "serious": 0,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/172057813169",
+            "https://www.chess.com/game/live/173264575667"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack Modern Variation 2.Bb2 Nc6 3.e3 d5 4.Bb5",
+          "eco": "A01",
+          "games": 40,
+          "serious": 0,
+          "score": 95,
+          "urls": [
+            "https://www.chess.com/game/live/165169814424",
+            "https://www.chess.com/game/live/146863424674"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack",
+          "eco": "A01",
+          "games": 38,
+          "serious": 0,
+          "score": 97,
+          "urls": [
+            "https://www.chess.com/game/live/168296284070",
+            "https://www.chess.com/game/live/173261574299"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Reti Opening Kingside Fianchetto Variation 2.g3 Bg7 3.Bg2 d6 4.O O",
+          "eco": "A04",
+          "games": 115,
+          "serious": 0,
+          "score": 91,
+          "urls": [
+            "https://www.chess.com/game/live/172056613357",
+            "https://www.chess.com/game/live/172057811389"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening...2.g3 g6 3.Bg2 Bg7 4.Nf3",
+          "eco": "A41",
+          "games": 103,
+          "serious": 0,
+          "score": 88,
+          "urls": [
+            "https://www.chess.com/game/live/168623919870",
+            "https://www.chess.com/game/live/173267571609"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Gurgenidze System 4.Nf3",
+          "eco": "B15",
+          "games": 72,
+          "serious": 0,
+          "score": 85,
+          "urls": [
+            "https://www.chess.com/game/live/165059390657",
+            "https://www.chess.com/game/live/144874043088"
+          ]
+        },
+        {
+          "v": "Modern Defense with 1 d4 2.c4 Bg7 3.Nf3 d6 4.g3",
+          "eco": "A40",
+          "games": 55,
+          "serious": 0,
+          "score": 92,
+          "urls": [
+            "https://www.chess.com/game/live/173516572323",
+            "https://www.chess.com/game/live/167828728260"
+          ]
+        },
+        {
+          "v": "Modern Defense with 1 e4",
+          "eco": "B06",
+          "games": 54,
+          "serious": 0,
+          "score": 95,
+          "urls": [
+            "https://www.chess.com/game/live/172056615459",
+            "https://www.chess.com/game/live/173266973025"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Gurgenidze System 4.e5",
+          "eco": "B15",
+          "games": 54,
+          "serious": 0,
+          "score": 90,
+          "urls": [
+            "https://www.chess.com/game/live/167856463566",
+            "https://www.chess.com/game/live/154163204851"
+          ]
+        },
+        {
+          "v": "Alekhines Defense Scandinavian Variation 3.exd5 Nxd5 4.Nf3",
+          "eco": "B02",
+          "games": 52,
+          "serious": 0,
+          "score": 84,
+          "urls": [
+            "https://www.chess.com/game/live/161776621357",
+            "https://www.chess.com/game/live/162379028937"
+          ]
+        },
+        {
+          "v": "Modern Defense with 1 e4 2.d4 Bg7 3.Nf3",
+          "eco": "B06",
+          "games": 46,
+          "serious": 0,
+          "score": 90,
+          "urls": [
+            "https://www.chess.com/game/live/172052412589",
+            "https://www.chess.com/game/live/172308615713"
+          ]
+        },
+        {
+          "v": "Modern Defense Standard Line 3...c6 4.Be3 d5 5.e5",
+          "eco": "B06",
+          "games": 46,
+          "serious": 0,
+          "score": 92,
+          "urls": [
+            "https://www.chess.com/game/live/167856783074",
+            "https://www.chess.com/game/live/144030657806"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation...3.Bf4 a6 4.e3 e6",
+          "eco": "D00",
+          "games": 44,
+          "serious": 0,
+          "score": 73,
+          "urls": [
+            "https://www.chess.com/game/live/172056013975",
+            "https://www.chess.com/game/live/168983874916"
+          ]
+        },
+        {
+          "v": "Modern Defense Standard Line...7.Nxf6 exf6 8.Bc4 O O 9.O O",
+          "eco": "B06",
+          "games": 39,
+          "serious": 0,
+          "score": 88,
+          "urls": [
+            "https://www.chess.com/game/live/162383821369",
+            "https://www.chess.com/game/live/159359852685"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation 2...Nf6 3.Bf4 a6 4.e3",
+          "eco": "D00",
+          "games": 36,
+          "serious": 2,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/173266374297",
+            "https://www.chess.com/game/live/163942818012"
+          ]
+        },
+        {
+          "v": "English Opening Great Snake Variation 2.g3 Bg7 3.Bg2 d6 4.Nf3",
+          "eco": "A10",
+          "games": 35,
+          "serious": 0,
+          "score": 79,
+          "urls": [
+            "https://www.chess.com/game/live/164570240436",
+            "https://www.chess.com/game/live/165303858628"
+          ]
+        },
+        {
+          "v": "English Opening Great Snake Variation...3.Bg2 d6 4.Nc3 Nc6",
+          "eco": "A10",
+          "games": 34,
+          "serious": 0,
+          "score": 90,
+          "urls": [
+            "https://www.chess.com/game/live/173870353659",
+            "https://www.chess.com/game/live/152703400279"
+          ]
+        },
+        {
+          "v": "Modern Defense with 1 e4...3.Nf3 c6 4.Bd3 d5",
+          "eco": "B06",
+          "games": 33,
+          "serious": 0,
+          "score": 80,
+          "urls": [
+            "https://www.chess.com/game/live/173265774201",
+            "https://www.chess.com/game/live/163589710473"
+          ]
+        }
+      ]
+    },
+    "naroditsky": {
+      "type": "teacher+elite",
+      "total": 12269,
+      "cc": 12269,
+      "li": 0,
+      "white": [
+        {
+          "v": "Four Knights Game",
+          "eco": "C47",
+          "games": 409,
+          "serious": 3,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/143768217448",
+            "https://www.chess.com/game/live/153651402209"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation",
+          "eco": "D00",
+          "games": 164,
+          "serious": 0,
+          "score": 53,
+          "urls": [
+            "https://www.chess.com/game/live/143792059228",
+            "https://www.chess.com/game/live/143801635306"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian",
+          "eco": "B22",
+          "games": 163,
+          "serious": 0,
+          "score": 67,
+          "urls": [
+            "https://www.chess.com/game/live/143769925980",
+            "https://www.chess.com/game/live/153650798491"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian Defense",
+          "eco": "B22",
+          "games": 85,
+          "serious": 0,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/143774725978",
+            "https://www.chess.com/game/live/143776190306"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Exchange Variation",
+          "eco": "B13",
+          "games": 73,
+          "serious": 0,
+          "score": 56,
+          "urls": [
+            "https://www.chess.com/game/live/143791838724",
+            "https://www.chess.com/game/live/144113929130"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Canal",
+          "eco": "B51",
+          "games": 67,
+          "serious": 0,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/143779036644",
+            "https://www.chess.com/game/live/144390028134"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin",
+          "eco": "D00",
+          "games": 67,
+          "serious": 0,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/143878546808",
+            "https://www.chess.com/game/live/153908806019"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Open Najdorf Variation",
+          "eco": "B90",
+          "games": 59,
+          "serious": 1,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/143871049122",
+            "https://www.chess.com/game/live/144371575002"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian Defense Barmen",
+          "eco": "B22",
+          "games": 58,
+          "serious": 0,
+          "score": 65,
+          "urls": [
+            "https://www.chess.com/game/live/143803202908",
+            "https://www.chess.com/game/live/153908799995"
+          ]
+        },
+        {
+          "v": "Indian Game",
+          "eco": "A45",
+          "games": 56,
+          "serious": 0,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/143776812238",
+            "https://www.chess.com/game/live/143777086530"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Mieses Kotrc Variation",
+          "eco": "B01",
+          "games": 54,
+          "serious": 0,
+          "score": 56,
+          "urls": [
+            "https://www.chess.com/game/live/154162604431",
+            "https://www.chess.com/game/live/142611784350"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Fantasy Variation",
+          "eco": "B12",
+          "games": 48,
+          "serious": 0,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/153650197403",
+            "https://www.chess.com/game/live/143789792390"
+          ]
+        },
+        {
+          "v": "French Defense Advance Nimzowitsch System",
+          "eco": "C02",
+          "games": 48,
+          "serious": 1,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/143789212772",
+            "https://www.chess.com/game/live/144152798744"
+          ]
+        },
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 47,
+          "serious": 0,
+          "score": 33,
+          "urls": [
+            "https://www.chess.com/game/live/143778283706",
+            "https://www.chess.com/game/live/143803076128"
+          ]
+        },
+        {
+          "v": "French Defense Exchange",
+          "eco": "C01",
+          "games": 46,
+          "serious": 0,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/143777907312",
+            "https://www.chess.com/game/live/143778598982"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Sicilian Defense Open Accelerated Dragon Maroczy Bind Formation",
+          "eco": "B38",
+          "games": 169,
+          "serious": 1,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/143766628716",
+            "https://www.chess.com/game/live/153908202869"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Orthodox Glek Defense",
+          "eco": "E94",
+          "games": 137,
+          "serious": 1,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/154525601417",
+            "https://www.chess.com/game/live/154527997663"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian Defense",
+          "eco": "B22",
+          "games": 119,
+          "serious": 0,
+          "score": 45,
+          "urls": [
+            "https://www.chess.com/game/live/143952876492",
+            "https://www.chess.com/game/live/143954009226"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Hyperaccelerated Dragon Variation",
+          "eco": "B27",
+          "games": 117,
+          "serious": 0,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/154528002977",
+            "https://www.chess.com/game/live/144381687116"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation",
+          "eco": "D00",
+          "games": 106,
+          "serious": 0,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/153649001335",
+            "https://www.chess.com/game/live/143903111360"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Open Accelerated Dragon Modern",
+          "eco": "B35",
+          "games": 94,
+          "serious": 0,
+          "score": 46,
+          "urls": [
+            "https://www.chess.com/game/live/143767506220",
+            "https://www.chess.com/game/live/153913005165"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian Defense Barmen",
+          "eco": "B22",
+          "games": 90,
+          "serious": 0,
+          "score": 48,
+          "urls": [
+            "https://www.chess.com/game/live/144191078474",
+            "https://www.chess.com/game/live/144382177432"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo",
+          "eco": "B30",
+          "games": 75,
+          "serious": 0,
+          "score": 67,
+          "urls": [
+            "https://www.chess.com/game/live/143871021260",
+            "https://www.chess.com/game/live/143906326298"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Fianchetto Yugoslav Kavalek Bronstein Larsen Defense",
+          "eco": "E62",
+          "games": 67,
+          "serious": 0,
+          "score": 62,
+          "urls": [
+            "https://www.chess.com/game/live/144345141692",
+            "https://www.chess.com/game/live/144347063412"
+          ]
+        },
+        {
+          "v": "Kings Indian Defense Normal",
+          "eco": "E90",
+          "games": 65,
+          "serious": 0,
+          "score": 51,
+          "urls": [
+            "https://www.chess.com/game/live/143779189218",
+            "https://www.chess.com/game/live/144201023688"
+          ]
+        },
+        {
+          "v": "Indian Game",
+          "eco": "A45",
+          "games": 61,
+          "serious": 1,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/153907601679",
+            "https://www.chess.com/game/live/153914204183"
+          ]
+        },
+        {
+          "v": "English Opening Reversed Sicilian Kramnik Shirov Counterattack",
+          "eco": "A21",
+          "games": 60,
+          "serious": 0,
+          "score": 53,
+          "urls": [
+            "https://www.chess.com/game/live/143778040358",
+            "https://www.chess.com/game/live/154167999339"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nimzowitsch Advance",
+          "eco": "B29",
+          "games": 55,
+          "serious": 0,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/143775623180",
+            "https://www.chess.com/game/live/144149680916"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Hyperaccelerated Dragon Fianchetto",
+          "eco": "B27",
+          "games": 55,
+          "serious": 0,
+          "score": 46,
+          "urls": [
+            "https://www.chess.com/game/live/143787551286",
+            "https://www.chess.com/game/live/153908803153"
+          ]
+        },
+        {
+          "v": "Closed Sicilian Defense Traditional",
+          "eco": "B23",
+          "games": 53,
+          "serious": 0,
+          "score": 43,
+          "urls": [
+            "https://www.chess.com/game/live/143767804922",
+            "https://www.chess.com/game/live/143775197426"
+          ]
+        }
+      ]
+    },
+    "niemann": {
+      "type": "elite",
+      "total": 7177,
+      "cc": 7177,
+      "li": 0,
+      "white": [
+        {
+          "v": "Queens Pawn Opening Chigorin Variation",
+          "eco": "D00",
+          "games": 155,
+          "serious": 11,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/145011574467",
+            "https://www.chess.com/game/live/145012169939"
+          ]
+        },
+        {
+          "v": "Giuoco Piano",
+          "eco": "C50",
+          "games": 118,
+          "serious": 15,
+          "score": 68,
+          "urls": [
+            "https://www.chess.com/game/live/172911654283",
+            "https://www.chess.com/game/live/171101427587"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin",
+          "eco": "D00",
+          "games": 117,
+          "serious": 2,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/145020579499",
+            "https://www.chess.com/game/live/145021169999"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Canal",
+          "eco": "B51",
+          "games": 69,
+          "serious": 2,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/145013977253",
+            "https://www.chess.com/game/live/145094371315"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense",
+          "eco": "B10",
+          "games": 62,
+          "serious": 0,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/153565599267",
+            "https://www.chess.com/game/live/145717769797"
+          ]
+        },
+        {
+          "v": "Italian Game Two Knights Modern Bishops Opening",
+          "eco": "C55",
+          "games": 52,
+          "serious": 9,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/168595467127",
+            "https://www.chess.com/game/live/157799849325"
+          ]
+        },
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 48,
+          "serious": 1,
+          "score": 50,
+          "urls": [
+            "https://www.chess.com/game/live/171703851497",
+            "https://www.chess.com/game/live/145798456900"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Westerinen Attack",
+          "eco": "B40",
+          "games": 42,
+          "serious": 1,
+          "score": 75,
+          "urls": [
+            "https://www.chess.com/game/live/145797939508",
+            "https://www.chess.com/game/live/154164998499"
+          ]
+        },
+        {
+          "v": "Indian Game",
+          "eco": "A45",
+          "games": 41,
+          "serious": 1,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/145011578767",
+            "https://www.chess.com/game/live/145020564119"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo",
+          "eco": "B30",
+          "games": 38,
+          "serious": 1,
+          "score": 51,
+          "urls": [
+            "https://www.chess.com/game/live/145792965574",
+            "https://www.chess.com/game/live/154167999341"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo Attack",
+          "eco": "B30",
+          "games": 37,
+          "serious": 0,
+          "score": 72,
+          "urls": [
+            "https://www.chess.com/game/live/173517172647",
+            "https://www.chess.com/game/live/169290041195"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Canal Main Line",
+          "eco": "B52",
+          "games": 35,
+          "serious": 2,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/168768267303",
+            "https://www.chess.com/game/live/145698572759"
+          ]
+        },
+        {
+          "v": "Petrovs Defense Classical Variation",
+          "eco": "C42",
+          "games": 33,
+          "serious": 2,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/140274053469",
+            "https://www.chess.com/game/live/127810784991"
+          ]
+        },
+        {
+          "v": "Modern Defense with",
+          "eco": "B06",
+          "games": 31,
+          "serious": 0,
+          "score": 56,
+          "urls": [
+            "https://www.chess.com/game/live/133052332497",
+            "https://www.chess.com/game/live/130612898661"
+          ]
+        },
+        {
+          "v": "Old Benoni Defense",
+          "eco": "A43",
+          "games": 30,
+          "serious": 0,
+          "score": 68,
+          "urls": [
+            "https://www.chess.com/game/live/145013370463",
+            "https://www.chess.com/game/live/87420047423"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Modern Defense with",
+          "eco": "B06",
+          "games": 63,
+          "serious": 0,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/145012173595",
+            "https://www.chess.com/game/live/145012180629"
+          ]
+        },
+        {
+          "v": "Queens Pawn Opening Chigorin Variation",
+          "eco": "D00",
+          "games": 46,
+          "serious": 0,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/162034022661",
+            "https://www.chess.com/game/live/150559092805"
+          ]
+        },
+        {
+          "v": "Modern Defense Standard",
+          "eco": "B06",
+          "games": 44,
+          "serious": 0,
+          "score": 76,
+          "urls": [
+            "https://www.chess.com/game/live/145011563089",
+            "https://www.chess.com/game/live/145011567631"
+          ]
+        },
+        {
+          "v": "Kings Indian",
+          "eco": "A07",
+          "games": 41,
+          "serious": 2,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/157795656085",
+            "https://www.chess.com/game/live/157797449955"
+          ]
+        },
+        {
+          "v": "Italian Game Two Knights Modern Bishops",
+          "eco": "C55",
+          "games": 35,
+          "serious": 1,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/168685469181",
+            "https://www.chess.com/game/live/154165604711"
+          ]
+        },
+        {
+          "v": "Kings Indian Attack",
+          "eco": "A07",
+          "games": 33,
+          "serious": 0,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/162031022573",
+            "https://www.chess.com/game/live/150552495759"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense",
+          "eco": "B10",
+          "games": 33,
+          "serious": 0,
+          "score": 65,
+          "urls": [
+            "https://www.chess.com/game/live/153560198323",
+            "https://www.chess.com/game/live/150555494709"
+          ]
+        },
+        {
+          "v": "Kings Pawn Opening",
+          "eco": "B00",
+          "games": 32,
+          "serious": 1,
+          "score": 47,
+          "urls": [
+            "https://www.chess.com/game/live/168602672661",
+            "https://www.chess.com/game/live/90139731097"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo Fianchetto Variation",
+          "eco": "B31",
+          "games": 32,
+          "serious": 3,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/168689069597",
+            "https://www.chess.com/game/live/150536894299"
+          ]
+        },
+        {
+          "v": "Queens Gambit Declined Catalan",
+          "eco": "D30",
+          "games": 30,
+          "serious": 8,
+          "score": 53,
+          "urls": [
+            "https://www.chess.com/game/live/157190855675",
+            "https://www.chess.com/game/live/144797181174"
+          ]
+        },
+        {
+          "v": "Four Knights Game",
+          "eco": "C47",
+          "games": 30,
+          "serious": 3,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/144493173573",
+            "https://www.chess.com/game/live/144510564289"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense",
+          "eco": "B01",
+          "games": 30,
+          "serious": 0,
+          "score": 72,
+          "urls": [
+            "https://www.chess.com/game/live/114460873855",
+            "https://www.chess.com/game/live/5688197064"
+          ]
+        },
+        {
+          "v": "Modern Defense Standard Line",
+          "eco": "B06",
+          "games": 28,
+          "serious": 0,
+          "score": 66,
+          "urls": [
+            "https://www.chess.com/game/live/145013367375",
+            "https://www.chess.com/game/live/101224336035"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo Fianchetto",
+          "eco": "B31",
+          "games": 27,
+          "serious": 2,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/157798056483",
+            "https://www.chess.com/game/live/121015266163"
+          ]
+        },
+        {
+          "v": "Indian Game Knights Variation East Indian",
+          "eco": "A48",
+          "games": 27,
+          "serious": 0,
+          "score": 61,
+          "urls": [
+            "https://www.chess.com/game/live/149932693759",
+            "https://www.chess.com/game/live/114462021321"
+          ]
+        }
+      ]
+    },
+    "praggnanandhaa": {
+      "type": "elite",
+      "total": 9479,
+      "cc": 9479,
+      "li": 0,
+      "white": [
+        {
+          "v": "Old Benoni Defense",
+          "eco": "A43",
+          "games": 31,
+          "serious": 0,
+          "score": 42,
+          "urls": [
+            "https://www.chess.com/game/live/82225783937",
+            "https://www.chess.com/game/live/77873570703"
+          ]
+        },
+        {
+          "v": "Van t Kruijs Opening",
+          "eco": "A00",
+          "games": 28,
+          "serious": 0,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/24671438603",
+            "https://www.chess.com/game/live/22778431661"
+          ]
+        },
+        {
+          "v": "Nimzowitsch Larsen Attack",
+          "eco": "A01",
+          "games": 26,
+          "serious": 0,
+          "score": 71,
+          "urls": [
+            "https://www.chess.com/game/live/41022641015",
+            "https://www.chess.com/game/live/41023112329"
+          ]
+        },
+        {
+          "v": "Modern Defense with 1 e4 2.Nc3 Bg7",
+          "eco": "B06",
+          "games": 24,
+          "serious": 0,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/144941372868",
+            "https://www.chess.com/game/live/144941658834"
+          ]
+        },
+        {
+          "v": "Mieses Opening",
+          "eco": "A00",
+          "games": 23,
+          "serious": 0,
+          "score": 46,
+          "urls": [
+            "https://www.chess.com/game/live/144289166541",
+            "https://www.chess.com/game/live/127028979455"
+          ]
+        },
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 21,
+          "serious": 0,
+          "score": 38,
+          "urls": [
+            "https://www.chess.com/game/live/93106877495",
+            "https://www.chess.com/game/live/68918440901"
+          ]
+        },
+        {
+          "v": "Closed Sicilian Defense Traditional Line",
+          "eco": "B23",
+          "games": 16,
+          "serious": 0,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/142083642329",
+            "https://www.chess.com/game/live/142084239107"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Reti Opening Kingside Fianchetto Variation 2.g3 Bg7 3.Bg2 d6 4.O O",
+          "eco": "A04",
+          "games": 35,
+          "serious": 0,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/139466565684",
+            "https://www.chess.com/game/live/140602259753"
+          ]
+        },
+        {
+          "v": "Reti Opening Kingside Fianchetto Variation",
+          "eco": "A04",
+          "games": 33,
+          "serious": 0,
+          "score": 45,
+          "urls": [
+            "https://www.chess.com/game/live/144197369037",
+            "https://www.chess.com/game/live/144289766409"
+          ]
+        },
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 27,
+          "serious": 0,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/143979770158",
+            "https://www.chess.com/game/live/144289169355"
+          ]
+        },
+        {
+          "v": "Reti Opening Kings Indian Attack Symmetrical Defense...4.O O d6 5.d3 O O",
+          "eco": "A05",
+          "games": 25,
+          "serious": 0,
+          "score": 44,
+          "urls": [
+            "https://www.chess.com/game/live/127028967385",
+            "https://www.chess.com/game/live/111602554383"
+          ]
+        },
+        {
+          "v": "Van t Kruijs Opening",
+          "eco": "A00",
+          "games": 23,
+          "serious": 0,
+          "score": 70,
+          "urls": [
+            "https://www.chess.com/game/live/135509969451",
+            "https://www.chess.com/game/live/135510568461"
+          ]
+        },
+        {
+          "v": "Mieses Opening 1...g6",
+          "eco": "A00",
+          "games": 20,
+          "serious": 0,
+          "score": 50,
+          "urls": [
+            "https://www.chess.com/game/live/164053775976",
+            "https://www.chess.com/game/live/111851004961"
+          ]
+        },
+        {
+          "v": "Kings Fianchetto Opening",
+          "eco": "A00",
+          "games": 17,
+          "serious": 0,
+          "score": 53,
+          "urls": [
+            "https://www.chess.com/game/live/23534392343",
+            "https://www.chess.com/game/live/19325193703"
+          ]
+        },
+        {
+          "v": "Modern Defense with 1 e4",
+          "eco": "B06",
+          "games": 16,
+          "serious": 0,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/157540050383",
+            "https://www.chess.com/game/live/144289772679"
+          ]
+        },
+        {
+          "v": "Reti Opening Kingside Fianchetto Variation 2.e4 Bg7",
+          "eco": "A04",
+          "games": 16,
+          "serious": 0,
+          "score": 38,
+          "urls": [
+            "https://www.chess.com/game/live/129726545069",
+            "https://www.chess.com/game/live/79679466237"
+          ]
+        },
+        {
+          "v": "Modern Defense with 1 d4 2.Nf3 Bg7",
+          "eco": "A40",
+          "games": 15,
+          "serious": 0,
+          "score": 57,
+          "urls": [
+            "https://www.chess.com/game/live/157544850931",
+            "https://www.chess.com/game/live/121280424573"
+          ]
+        },
+        {
+          "v": "Van t Kruijs Opening 1...g6",
+          "eco": "A00",
+          "games": 15,
+          "serious": 0,
+          "score": 47,
+          "urls": [
+            "https://www.chess.com/game/live/144941708926",
+            "https://www.chess.com/game/live/111771845895"
+          ]
+        }
+      ]
+    },
+    "samayraina": {
+      "type": "teacher",
+      "total": 12591,
+      "cc": 12284,
+      "li": 307,
+      "white": [
+        {
+          "v": "Undefined",
+          "eco": "A00",
+          "games": 83,
+          "serious": 23,
+          "score": 48,
+          "urls": [
+            "https://www.chess.com/game/live/145323527268",
+            "https://www.chess.com/game/live/146122609162"
+          ]
+        },
+        {
+          "v": "Bishops Opening 2...Nc6",
+          "eco": "C23",
+          "games": 74,
+          "serious": 2,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/107458346351",
+            "https://www.chess.com/game/live/107648008639"
+          ]
+        },
+        {
+          "v": "Kings Gambit Accepted Bishops Gambit",
+          "eco": "C33",
+          "games": 64,
+          "serious": 51,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/113472618527",
+            "https://www.chess.com/game/live/57254903429"
+          ]
+        },
+        {
+          "v": "Italian Game",
+          "eco": "C50",
+          "games": 58,
+          "serious": 51,
+          "score": 53,
+          "urls": [
+            "https://www.chess.com/game/live/166722013556",
+            "https://www.chess.com/game/live/167487123784"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Accelerated Panov Attack...4.cxd5 Qxd5 5.Nc3 Qd8",
+          "eco": "B10",
+          "games": 56,
+          "serious": 39,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/165260241310",
+            "https://www.chess.com/game/live/143833147360"
+          ]
+        },
+        {
+          "v": "Kings Gambit Declined Queens Knight Defense 3.Nf3",
+          "eco": "C30",
+          "games": 53,
+          "serious": 44,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/167940991164",
+            "https://www.chess.com/game/live/165559438980"
+          ]
+        },
+        {
+          "v": "Ruy Lopez Opening Old Steinitz Defense",
+          "eco": "C62",
+          "games": 51,
+          "serious": 40,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/144015612138",
+            "https://www.chess.com/game/live/144042884452"
+          ]
+        },
+        {
+          "v": "English Opening",
+          "eco": "A10",
+          "games": 45,
+          "serious": 10,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/98422511287",
+            "https://lichess.org/iM36btwd"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense",
+          "eco": "B10",
+          "games": 39,
+          "serious": 3,
+          "score": 40,
+          "urls": [
+            "https://www.chess.com/game/live/164433330070",
+            "https://www.chess.com/game/live/65184119779"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense",
+          "eco": "B01",
+          "games": 36,
+          "serious": 12,
+          "score": 33,
+          "urls": [
+            "https://www.chess.com/game/live/142665441970",
+            "https://www.chess.com/game/live/142156404364"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Mieses Kotrc Variation 3.Nc3 Qd8 4.Nf3",
+          "eco": "B01",
+          "games": 36,
+          "serious": 16,
+          "score": 72,
+          "urls": [
+            "https://www.chess.com/game/live/142828564606",
+            "https://www.chess.com/game/live/137981762354"
+          ]
+        },
+        {
+          "v": "Giuoco Piano Game 4.O O Nf6",
+          "eco": "C50",
+          "games": 35,
+          "serious": 28,
+          "score": 47,
+          "urls": [
+            "https://www.chess.com/game/live/167487824650",
+            "https://www.chess.com/game/live/146580092312"
+          ]
+        },
+        {
+          "v": "Caro Kann Defense Accelerated Panov Attack...4.cxd5 Qxd5 5.Nc3 Qa5",
+          "eco": "B10",
+          "games": 35,
+          "serious": 23,
+          "score": 69,
+          "urls": [
+            "https://www.chess.com/game/live/145004510286",
+            "https://www.chess.com/game/live/144435692000"
+          ]
+        },
+        {
+          "v": "Scandinavian Defense Modern Marshall Tomalty Gambit Center Counter Variation",
+          "eco": "B01",
+          "games": 34,
+          "serious": 22,
+          "score": 53,
+          "urls": [
+            "https://www.chess.com/game/live/166151812586",
+            "https://www.chess.com/game/live/137477831152"
+          ]
+        },
+        {
+          "v": "Philidor Defense 3.Bc4",
+          "eco": "C41",
+          "games": 33,
+          "serious": 26,
+          "score": 58,
+          "urls": [
+            "https://www.chess.com/game/live/144025229854",
+            "https://www.chess.com/game/live/142848352524"
+          ]
+        }
+      ],
+      "black": [
+        {
+          "v": "Sicilian Defense OKelly Normal System",
+          "eco": "B28",
+          "games": 428,
+          "serious": 255,
+          "score": 51,
+          "urls": [
+            "https://www.chess.com/game/live/134873939963",
+            "https://www.chess.com/game/live/123339855400"
+          ]
+        },
+        {
+          "v": "Sicilian Defense OKelly Variation",
+          "eco": "B28",
+          "games": 149,
+          "serious": 95,
+          "score": 53,
+          "urls": [
+            "https://www.chess.com/game/live/123556230764",
+            "https://www.chess.com/game/live/89248149911"
+          ]
+        },
+        {
+          "v": "Budapest Gambit",
+          "eco": "A51",
+          "games": 141,
+          "serious": 82,
+          "score": 44,
+          "urls": [
+            "https://www.chess.com/game/live/166843221812",
+            "https://www.chess.com/game/live/165260092336"
+          ]
+        },
+        {
+          "v": "Sicilian Defense",
+          "eco": "B20",
+          "games": 112,
+          "serious": 68,
+          "score": 63,
+          "urls": [
+            "https://www.chess.com/game/live/164686600108",
+            "https://www.chess.com/game/live/141669772030"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Old Sicilian Variation 3.Bc4 e6",
+          "eco": "B30",
+          "games": 101,
+          "serious": 61,
+          "score": 60,
+          "urls": [
+            "https://www.chess.com/game/live/165569665588",
+            "https://www.chess.com/game/live/164521153248"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Bowdler Attack 2...e6",
+          "eco": "B20",
+          "games": 100,
+          "serious": 72,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/165568450176",
+            "https://www.chess.com/game/live/165570024014"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Old Sicilian Variation 3.Bc4 e6 4.Nc3",
+          "eco": "B30",
+          "games": 90,
+          "serious": 56,
+          "score": 53,
+          "urls": [
+            "https://www.chess.com/game/live/168986454234",
+            "https://www.chess.com/game/live/164656673920"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Open Lowenthal Variation 5.Nxc6 bxc6",
+          "eco": "B32",
+          "games": 73,
+          "serious": 48,
+          "score": 51,
+          "urls": [
+            "https://www.chess.com/game/live/169159989730",
+            "https://www.chess.com/game/live/164799075744"
+          ]
+        },
+        {
+          "v": "Alapin Sicilian Defense 2...d5",
+          "eco": "B22",
+          "games": 65,
+          "serious": 49,
+          "score": 43,
+          "urls": [
+            "https://www.chess.com/game/live/169140747362",
+            "https://www.chess.com/game/live/166715470408"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Open Pelikan and Sveshnikov Exchange Variation 6...bxc6",
+          "eco": "B33",
+          "games": 64,
+          "serious": 34,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/165567862462",
+            "https://www.chess.com/game/live/165838784932"
+          ]
+        },
+        {
+          "v": "Sicilian Defense OKelly Venice System 3...d5",
+          "eco": "B28",
+          "games": 60,
+          "serious": 36,
+          "score": 64,
+          "urls": [
+            "https://www.chess.com/game/live/75063865299",
+            "https://www.chess.com/game/live/71522837279"
+          ]
+        },
+        {
+          "v": "Budapest Gambit Adler Variation 4...Nc6",
+          "eco": "A52",
+          "games": 49,
+          "serious": 38,
+          "score": 59,
+          "urls": [
+            "https://www.chess.com/game/live/146267703038",
+            "https://www.chess.com/game/live/138020357876"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Nyezhmetdinov Rossolimo Attack 3...Nd4 4.Nxd4 cxd4",
+          "eco": "B30",
+          "games": 49,
+          "serious": 37,
+          "score": 55,
+          "urls": [
+            "https://www.chess.com/game/live/144834758408",
+            "https://www.chess.com/game/live/143596395900"
+          ]
+        },
+        {
+          "v": "Old Benoni Defense",
+          "eco": "A43",
+          "games": 49,
+          "serious": 1,
+          "score": 46,
+          "urls": [
+            "https://www.chess.com/game/live/141398534244",
+            "https://www.chess.com/game/live/138023417334"
+          ]
+        },
+        {
+          "v": "Sicilian Defense Bowdler Attack 2...e6 3.Nc3 Nc6",
+          "eco": "B20",
+          "games": 48,
+          "serious": 39,
+          "score": 54,
+          "urls": [
+            "https://www.chess.com/game/live/147405146562",
+            "https://www.chess.com/game/live/144347500658"
+          ]
+        }
+      ]
+    }
+  }
+}
