@@ -20,6 +20,8 @@
 import { db } from '../db/schema';
 import { getMisconceptionProfile, type MisconceptionAggregate } from './misconceptionService';
 import { detectConversionFailures, type ConversionFailure } from './conversionDetector';
+import { getAddressedConversions } from './conversionProgress';
+import { detectTimeTrouble, type TimeTroubleHit } from './timeTroubleDetector';
 import { getSquareHeatmap, type SquareHeatmapEntry } from './findSquareService';
 import { useAppStore } from '../stores/appStore';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
@@ -29,6 +31,7 @@ import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot
 const WEAKSPOT_STALE_MS = 3 * 24 * 60 * 60 * 1000;
 const CONVERSION_TAG = 'analysis:conversion';
 const BOARD_VISION_TAG = 'analysis:boardvision';
+const TIME_TROUBLE_TAG = 'analysis:timetrouble';
 /** A square needs >= this many attempts before it can count as weak. */
 const BOARD_VISION_MIN_ATTEMPTS = 3;
 /** Missing >= a third of the time, or slower than this, marks a weak square. */
@@ -61,6 +64,9 @@ export interface UnifiedWeakness extends WeaknessRepInput {
   /** The student's own flubbed positions (newest first) — replay material. */
   positions: { fen: string; playedSan?: string; bestSan?: string; openingId?: string }[];
   lastSeenAt: number;
+  /** A single position to drill (conversion: the winning peak FEN). Lets the
+   *  rep deep-link into "play out this position" without carrying positions. */
+  fen?: string;
 }
 
 /** Position identity for dedup: piece placement + side + castling + ep
@@ -271,6 +277,26 @@ export function aggregateConversionFailures(failures: ConversionFailure[]): Unif
     puzzleThemes: [],
     positions: failures.slice(0, 8).map((f) => ({ fen: f.fen, openingId: f.openingName ?? undefined })),
     lastSeenAt,
+    fen: failures[0]?.fen, // the most-recent blown win — drill this one
+  }];
+}
+
+/** Roll up blunders made in time trouble into one weakness, routed to timed
+ *  practice. Sourced from the per-ply clock now captured on clocked games. */
+export function aggregateTimeTrouble(hits: TimeTroubleHit[]): UnifiedWeakness[] {
+  if (hits.length === 0) return [];
+  return [{
+    key: TIME_TROUBLE_TAG,
+    tag: TIME_TROUBLE_TAG,
+    label: 'Blunders in time trouble',
+    bucket: 'general',
+    openCount: hits.length,
+    total: hits.length,
+    severity: Math.min(95, hits.length * 10),
+    sources: ['analysis'],
+    puzzleThemes: [],
+    positions: hits.slice(0, 8).map((h) => ({ fen: h.fen, openingId: undefined })),
+    lastSeenAt: Date.now(),
   }];
 }
 
@@ -337,7 +363,7 @@ function mergeByKey(rows: UnifiedWeakness[]): UnifiedWeakness[] {
  *  conversion detector are all folded in here so no captured signal is dead.
  *  Ranked by open/due count, then severity, then recency. */
 export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
-  const [misAgg, allMis, mistakes, weakSpots, tactics, games, heatmap] = await Promise.all([
+  const [misAgg, allMis, mistakes, weakSpots, tactics, games, heatmap, addressedConv] = await Promise.all([
     getMisconceptionProfile(),
     db.misconceptionTags.toArray(),
     db.mistakePuzzles.toArray(),
@@ -345,13 +371,14 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
     db.classifiedTactics.toArray(),
     db.games.toArray(),
     getSquareHeatmap(),
+    getAddressedConversions(),
   ]);
 
   const prefs = useAppStore.getState().activeProfile?.preferences;
   const conversions = detectConversionFailures(games, {
     lichessUsername: prefs?.lichessUsername,
     chessComUsername: prefs?.chessComUsername,
-  });
+  }).filter((c) => !addressedConv.has(c.fen.split(' ').slice(0, 4).join(' ')));
 
   const coachKeys = new Set(allMis.map((m) => posKey(m.fen, m.playedSan)));
   const coachRows = misAgg.map(fromMisconception);
@@ -361,6 +388,7 @@ export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
     ...aggregateOpeningWeakSpots(weakSpots),
     ...aggregateConversionFailures(conversions),
     ...aggregateBoardVision(heatmap),
+    ...aggregateTimeTrouble(detectTimeTrouble(games, mistakes)),
   ]);
 
   const merged = [...coachRows, ...analysisRows];

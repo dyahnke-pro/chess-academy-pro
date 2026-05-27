@@ -82,6 +82,17 @@ function navigateToRep(navigate: ReturnType<typeof useNavigate>, rep: RepCandida
     void navigate('/tactics/find-square');
     return;
   }
+  // Time-trouble blunders → practice under the clock (the play timer feature).
+  if (rep.tag === 'analysis:timetrouble') {
+    void navigate('/coach/play?time=blitz-5-0');
+    return;
+  }
+  // Conversion failures → play out the winning position you blew, vs the
+  // engine. Winning it (conv=1) marks the conversion addressed.
+  if (rep.tag === 'analysis:conversion' && rep.fen) {
+    void navigate(`/coach/play?fen=${encodeURIComponent(rep.fen)}&conv=1`);
+    return;
+  }
   if (rep.puzzleThemes && rep.puzzleThemes.length > 0) {
     void navigate('/tactics/adaptive', {
       state: {

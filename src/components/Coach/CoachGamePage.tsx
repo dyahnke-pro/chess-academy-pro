@@ -65,6 +65,7 @@ import {
   saveCoachPlayChat,
 } from '../../services/coachPlayPersistence';
 import { fetchLichessExplorer, fetchCloudEval } from '../../services/lichessExplorerService';
+import { addAddressedConversion } from '../../services/conversionProgress';
 import { detectTrapInPosition, formatTrapForPrompt, type MoveEvaluation } from '../../services/openingTrapDetector';
 
 /** Max wall-clock for any Lichess lookup during opening teaching.
@@ -493,6 +494,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // standard start. The book-move auto-play driven by `subject` is
   // suppressed when `fen` is set — we're not starting from move 1.
   const fenParam = searchParams.get('fen');
+  // Conversion-drill flag: when set, winning this game (started from a blown
+  // winning position) marks that conversion addressed (weaknessSpine close).
+  const convDrill = searchParams.get('conv') === '1';
   const initialDifficulty: CoachDifficulty =
     difficultyParam === 'easy' || difficultyParam === 'medium' || difficultyParam === 'hard'
       ? difficultyParam
@@ -1827,6 +1831,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const finalizeGame = useCallback((result: 'win' | 'loss' | 'draw', endReason?: 'time'): void => {
     if (gameState.status !== 'playing') return;
 
+    // Conversion-drill close: if this game was launched from a blown winning
+    // position and the student won it, that conversion is addressed.
+    if (result === 'win' && convDrill && initialGameFen) {
+      void addAddressedConversion(initialGameFen);
+    }
+
     const keyMoments = findKeyMoments(gameState.moves);
 
     // Show the final board position with game-over overlay before transitioning
@@ -1881,7 +1891,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         void computeWeaknessProfile(activeProfile);
       });
     });
-  }, [gameState.status, gameState.moves, gameState.hintsUsed, gameState.gameId, playerColor, difficulty, game.history, activeProfile, playerRating, targetStrength, detectedOpening, timeControl]);
+  }, [gameState.status, gameState.moves, gameState.hintsUsed, gameState.gameId, playerColor, difficulty, game.history, activeProfile, playerRating, targetStrength, detectedOpening, timeControl, convDrill, initialGameFen]);
 
   // Live game clock. Paused while exploring variations / practice positions so
   // the player isn't flagged for time spent off the main game board.

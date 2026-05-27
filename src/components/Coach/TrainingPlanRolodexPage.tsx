@@ -123,6 +123,16 @@ function TodaysReps(): JSX.Element | null {
                     void navigate('/tactics/find-square');
                     return;
                   }
+                  // Time-trouble blunders → practice under the clock.
+                  if (rep.tag === 'analysis:timetrouble') {
+                    void navigate('/coach/play?time=blitz-5-0');
+                    return;
+                  }
+                  // Conversion failures → play out the winning position you blew.
+                  if (rep.tag === 'analysis:conversion' && rep.fen) {
+                    void navigate(`/coach/play?fen=${encodeURIComponent(rep.fen)}&conv=1`);
+                    return;
+                  }
                   // A weakness rep drills its motif: deep-link into the
                   // adaptive tactical drill scoped to the tag's themes. The
                   // real misconception tag (not an analysis:* cluster) rides

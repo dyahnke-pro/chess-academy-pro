@@ -8,9 +8,11 @@ import {
   aggregateClassifiedTactics,
   aggregateConversionFailures,
   aggregateBoardVision,
+  aggregateTimeTrouble,
 } from './weaknessSpine';
 import type { SquareHeatmapEntry } from './findSquareService';
-import { buildMistakePuzzle } from '../test/factories';
+import type { TimeTroubleHit } from './timeTroubleDetector';
+import { buildMistakePuzzle, buildGameRecord } from '../test/factories';
 import type { ClassifiedTactic, MistakePuzzle, OpeningWeakSpot } from '../types';
 import type { ConversionFailure } from './conversionDetector';
 
@@ -21,6 +23,23 @@ async function reset(): Promise<void> {
   await db.classifiedTactics.clear();
   await db.games.clear();
   await db.findSquareAttempts.clear();
+  await db.table('meta').clear();
+}
+
+// White (player) peaks at +450 then collapses to a draw — a conversion failure.
+function analyzedConversionGame(id: string): ReturnType<typeof buildGameRecord> {
+  const sans: [string, 'white' | 'black'][] = [
+    ['e4', 'white'], ['e5', 'black'], ['Nf3', 'white'], ['Nc6', 'black'],
+    ['Bb5', 'white'], ['a6', 'black'], ['Ba4', 'white'], ['Nf6', 'black'],
+  ];
+  const evals = [80, 70, 120, 110, 450, 200, 60, 20];
+  return buildGameRecord({
+    id, source: 'coach', white: 'David', black: 'Stockfish Bot', result: '1/2-1/2', fullyAnalyzed: true,
+    annotations: sans.map(([san, color], i) => ({
+      moveNumber: Math.floor(i / 2) + 1, color, san, evaluation: evals[i],
+      bestMove: null, bestMoveEval: null, classification: 'good', comment: null,
+    })),
+  });
 }
 
 function heat(square: string, attempts: number, correct: number, avgCorrectMs: number): SquareHeatmapEntry {
@@ -170,6 +189,21 @@ describe('aggregateConversionFailures (new signal)', () => {
   });
 });
 
+describe('aggregateTimeTrouble (new signal off the play clock)', () => {
+  function hit(o: Partial<TimeTroubleHit> = {}): TimeTroubleHit {
+    return { gameId: 'g1', moveNumber: 10, playerColor: 'white', cpLoss: 300, remainingMs: 8000, fen: FEN_A, ...o };
+  }
+  it('rolls blunders-under-the-clock into one weakness', () => {
+    const out = aggregateTimeTrouble([hit(), hit({ moveNumber: 14, remainingMs: 4000 })]);
+    expect(out).toHaveLength(1);
+    expect(out[0].tag).toBe('analysis:timetrouble');
+    expect(out[0].openCount).toBe(2);
+  });
+  it('is empty with no hits', () => {
+    expect(aggregateTimeTrouble([])).toEqual([]);
+  });
+});
+
 describe('aggregateBoardVision (was read only by its own page)', () => {
   it('flags slow and error-prone squares with enough attempts', () => {
     const out = aggregateBoardVision([
@@ -199,6 +233,27 @@ describe('getUnifiedWeaknessProfile', () => {
     expect(tags).toContain('hung-material'); // coach pipeline
     expect(tags).toContain('analysis:tactic:fork'); // Analyze pipeline
     expect(profile.every((p) => p.openCount > 0)).toBe(true);
+  });
+
+  it('surfaces a conversion failure, then drops it once addressed (loop close)', async () => {
+    const { addAddressedConversion } = await import('./conversionProgress');
+    await db.games.add(analyzedConversionGame('conv-g1'));
+    const conv = (await getUnifiedWeaknessProfile()).find((p) => p.tag === 'analysis:conversion');
+    expect(conv).toBeDefined();
+    expect(conv?.fen).toBeTruthy();
+    await addAddressedConversion(conv!.fen!);
+    const after = (await getUnifiedWeaknessProfile()).map((p) => p.tag);
+    expect(after).not.toContain('analysis:conversion');
+  });
+
+  it('surfaces a time-trouble blunder from a clocked game', async () => {
+    // White move 10 → ply 18; put 9s on the clock there.
+    const clock = new Array(40).fill(120_000);
+    clock[18] = 9_000;
+    await db.games.add(buildGameRecord({ id: 'tt-game', source: 'coach', clockRemainingMs: clock }));
+    await db.mistakePuzzles.add(buildMistakePuzzle({ sourceGameId: 'tt-game', moveNumber: 10, playerColor: 'white', cpLoss: 320, classification: 'blunder', status: 'unsolved' }));
+    const tags = (await getUnifiedWeaknessProfile()).map((p) => p.tag);
+    expect(tags).toContain('analysis:timetrouble');
   });
 
   it('surfaces previously-dead opening weak spots in the unified profile', async () => {

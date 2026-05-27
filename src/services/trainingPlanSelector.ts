@@ -18,6 +18,8 @@ export interface WeaknessRep {
   /** puzzles.json themes to drill this weakness against (may be empty —
    *  then the rep falls back to the Weaknesses overview). */
   puzzleThemes?: string[];
+  /** A single position to play out (conversion: the winning peak FEN). */
+  fen?: string;
 }
 
 export interface RepCandidate {
@@ -32,6 +34,8 @@ export interface RepCandidate {
   openingId?: string;
   /** Present for weakness reps — themes to deep-link into a tactical drill. */
   puzzleThemes?: string[];
+  /** Present for the conversion rep — the winning peak FEN to play out. */
+  fen?: string;
 }
 
 export interface BuildTodaysRepsInput {
@@ -65,6 +69,7 @@ function weaknessRep(w: WeaknessRep, rank: number): RepCandidate {
     subtitle: `${lead} — seen ${timesPhrase(w.openCount)}.`,
     tag: w.tag,
     puzzleThemes: w.puzzleThemes,
+    fen: w.fen,
   };
 }
 

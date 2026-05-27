@@ -60,6 +60,28 @@ convert-this-position drill + close; time-trouble detector off the captured
 per-ply clock data. Both are NEW features, held until the existing loops are
 confirmed closed on-device.
 
+## NEXT BUILDS (2026-05-27, unblocked — loops closed + verified on prod)
+
+### Build A — Time-trouble detector  [status: DONE — detector+spine+route, 7 tests]
+Use the per-ply `clockRemainingMs` now persisted on clocked coach games.
+- `timeTroubleDetector.ts`: cross-reference `mistakePuzzles` (moveNumber +
+  playerColor → ply index) with the game's `clockRemainingMs[ply]`; a blunder
+  made at/under LOW_TIME_MS is a time-trouble hit. Pure + tested.
+- Fold into `getUnifiedWeaknessProfile` (it already loads games + mistakes) as
+  `analysis:timetrouble`, bucket general.
+- Route the rep to timed play (`/coach/play?time=blitz-5-0`) — practice under
+  the clock. Closes as the player stops blundering low on time.
+- Note: coach-game clock is opt-in, so data is sparse until played; imported-
+  game `[%clk]` extraction (analysis pipeline) is a follow-up bonus source.
+
+### Build B — Conversion drill + close  [status: DONE — drill route + addressed-close, tested]
+The conversion weakness surfaces but routes to the `/weaknesses` hub (soft).
+- Route the conversion rep to play out the blown winning position
+  (`/coach/play?fen=<peakFen>`) against the engine — "you were winning here,
+  convert it."
+- Persist addressed conversions (a `meta` key set of gameId/posKey) so a
+  converted position spaces out of the profile — the close.
+
 ## Phased plan (each phase = one shippable chunk)
 
 ### Phase 1 — Play-with-Coach time control  [status: DONE — wired + tested, not yet deployed]
