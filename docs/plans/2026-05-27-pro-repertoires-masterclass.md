@@ -306,6 +306,22 @@ orientation/manifest/tab-integrity/themes gate bridges to pro-repertoires.json;
 trap-ladder + tab→plan wiring accept pro ids; provenance harvest + confirmer
 scripts.
 
+## 6f. ERIC ROSEN LONDON — data grounded, lessons DRAFTED (not registered)
+
+- ✅ Data grounded: `pro-ericrosen-london` pgn (22-ply vs-…d5 main), 3 provenance-
+  tagged variations (vs …d5 / vs KID / vs …c5), 4 key ideas, provenance `both`
+  (plays 1352g / teaches). Lives in pro-repertoires.json now.
+- ✅ Lessons authored + self-verified (legality, grounded arrows, ≥20-ply, two
+  registers): `proEricRosenLondon.ts` + `proEricRosenLondonVariations.ts`.
+- 🚧 NOT registered — held as DRAFTS. The London transposes, and my accelerated
+  2.Bf4 spine order doesn't anchor ≥6 plies in openings-lichess.json (G3 /
+  lessonIntegrity), which orders it `d4 Nf6 Nf3 d5 Bf4 c5 e3 Qb6 Nc3` (vs …c5) and
+  `d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 Be2` (vs KID). **TO FINISH:** re-derive each beat's
+  move array to follow a real DB line for ≥6 plies (positions are identical —
+  pure transposition), keep narration aligned, then re-register in index.ts /
+  registry.ts / opening-manifests.json and run lessonIntegrity. Gates stay green
+  meanwhile (drafts are unimported).
+
 ## 7. Next-session pickup
 Decisions D1–D4 are the gate. Once set, start Phase 0 (provenance harvest) — all
 sources verified reachable in-sandbox 2026-05-27; no laptop handoff needed.

@@ -4069,15 +4069,15 @@
       "playerId": "ericrosen",
       "eco": "D02",
       "name": "London System (Rosen)",
-      "pgn": "d4 d5 Bf4 Nf6 Nf3 e6 e3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6 O-O Bb7",
+      "pgn": "d4 d5 Bf4 Nf6 Nf3 e6 e3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6 O-O Bb7 Ne5 Ne7 f4 Nf5",
       "color": "white",
       "style": "Solid, System-Based",
       "overview": "Alongside the Stafford Gambit, the London System is Eric Rosen's other signature opening — a calm, principled foundation he leans on when he wants positional chess. The London takes its name from the 1922 London tournament where the world's best players experimented with it; Capablanca employed it occasionally; Petrosian and Botvinnik used it as ultra-solid drawing weapons. The modern boom came when Carlsen began playing it at the elite level in the 2010s — proving systems-based openings could compete with sharp theoretical lines. Rosen teaches it as the perfect first opening for club players because it lets you focus on middlegame plans instead of memorising theory.",
       "keyIdeas": [
-        "Build the exact same setup every game: Bf4 (before e3 so the bishop isn't hemmed in), then e3 + c3 + Bd3 + Nbd2 + O-O — this consistency lets you focus on middlegame plans rather than opening prep",
-        "Bf4 controls the e5 square — preventing Black from establishing a strong central pawn or knight outpost there is the London's core positional theme",
-        "Look for the central e4 break once development is complete — this transforms the quiet London setup into an open game where White's piece coordination tells",
-        "When Black trades the dark-squared bishop on f4, recapture with the e-pawn (exf4) to open lines for the rook on e1 and create a kingside pawn lever"
+        "The London is a SYSTEM: Bf4 comes out early and you reach the same harmonious setup — Bf4, e3, Nf3, c3, Nbd2, Bd3 — against almost anything Black tries. Learn the structure once, play it forever.",
+        "The Bf4–Bg3 retreat is the engine. When Black challenges with …Bd6, you tuck the bishop to g3 (or trade), keep the diagonal toward Black's king, and never let the trade ruin your structure.",
+        "Ne5 is the thematic leap. Once you're castled and set up, the knight jumps to e5 — supported by f4 in the sharper lines — and the kingside attack begins with the bishops aimed at h7.",
+        "Patience beats Black's …c5 break. Meet it with c3 and the solid pawn triangle; you're never worse, and against a careless Black setup the kingside attack (Ne5, f4, Qf3/Rf3 lift) just rolls in."
       ],
       "traps": [
         "If Black plays an early ...Nh5 to chase the Bf4, retreat to g3 (or h2 in some lines) rather than e5 — the bishop is worth more than the tempo lost",
@@ -4090,33 +4090,36 @@
       "variations": [
         {
           "name": "Standard Setup vs ...d5",
-          "pgn": "d4 d5 Bf4 Nf6 Nf3 e6 e3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6 O-O Bb7",
-          "explanation": "The bread-and-butter London. White builds the standard pawn triangle e3-d4-c3 and develops minor pieces to natural squares. Black's ...c5 is the most common challenge; White meets it with c3 to maintain the d4 outpost.",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/London_System"
-          ]
+          "pgn": "d4 d5 Bf4 Nf6 Nf3 e6 e3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6 O-O Bb7 Ne5 Ne7 f4 Nf5",
+          "explanation": "The mainline London against Black's most solid …d5/…e6/…c5 setup. White builds the standard structure, castles, and launches Ne5 + f4 with the bishops trained on the kingside.",
+          "provenance": "both",
+          "provenanceRef": {
+            "games": 1352,
+            "score": 71,
+            "source": "lichess /player"
+          }
         },
         {
           "name": "vs King's Indian Setup",
-          "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 h3 O-O Be2 Nbd7 O-O c5 c3",
-          "explanation": "When Black plays the KID fianchetto, Rosen keeps the system simple — h3 to prevent ...Nh5 chasing the bishop, then standard development with Be2 + O-O + c3 holding the central structure.",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/London_System"
-          ]
+          "pgn": "d4 Nf6 Bf4 g6 e3 Bg7 Nf3 O-O Be2 d6 O-O Nbd7 h3 Re8 c4 e5 dxe5 dxe5 Nxe5 Nxe5",
+          "explanation": "When Black fianchettoes with …g6/…Bg7, White adds c4 for a broad centre and meets …e5 with a clean central trade, emerging comfortable. Eric Rosen's accelerated 2.Bf4 move order shines here.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 182,
+            "score": 72,
+            "source": "lichess /player"
+          }
         },
         {
-          "name": "Jobava-Style Aggressive Hybrid",
-          "pgn": "d4 d5 Nc3 Nf6 Bf4 a6 e3 e6 Nf3 c5 dxc5 Bxc5 Bd3 Nc6 O-O O-O",
-          "explanation": "When Rosen wants more bite, he plays the Jobava setup with Nc3 before Nf3. The knight on c3 hits e4 and supports later e4-d5 pawn breaks. This line resembles Naroditsky's Jobava London teaching.",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/London_System"
-          ]
+          "name": "vs ...c5 Defense",
+          "pgn": "d4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 c3 Qb6 Qb3 c4 Qxb6 axb6 Nbd2 b5 Be2 b4 O-O Bf5",
+          "explanation": "Black hits the centre early with …c5 and probes b2 with …Qb6. White offers the queen trade with Qb3; the resulting endgame is balanced and easy to handle with the solid c3 triangle.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 107,
+            "score": 64,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
@@ -4125,7 +4128,14 @@
         "concept:pos-development",
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/London_System"
-      ]
+      ],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 1352,
+        "score": 71,
+        "source": "lichess /player",
+        "taughtUrl": "https://lichess.org/video/NKPsysr5Qqw"
+      }
     },
     {
       "id": "pro-ericrosen-stafford",
