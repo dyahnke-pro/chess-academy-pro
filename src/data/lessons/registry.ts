@@ -122,6 +122,8 @@ import { PRO_NARODITSKY_SCOTCH_LESSON } from './proNaroditskyScotch';
 import { PRO_NARODITSKY_SCOTCH_VARIATION_LESSONS } from './proNaroditskyScotchVariations';
 import { PRO_NARODITSKY_VIENNA_LESSON } from './proNaroditskyVienna';
 import { PRO_NARODITSKY_VIENNA_VARIATION_LESSONS } from './proNaroditskyViennaVariations';
+import { PRO_NARODITSKY_JOBAVA_LESSON } from './proNaroditskyJobava';
+import { PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS } from './proNaroditskyJobavaVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -193,6 +195,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: PRO_ERICROSEN_LONDON_LESSON, variations: PRO_ERICROSEN_LONDON_VARIATION_LESSONS },
   { main: PRO_NARODITSKY_SCOTCH_LESSON, variations: PRO_NARODITSKY_SCOTCH_VARIATION_LESSONS },
   { main: PRO_NARODITSKY_VIENNA_LESSON, variations: PRO_NARODITSKY_VIENNA_VARIATION_LESSONS },
+  { main: PRO_NARODITSKY_JOBAVA_LESSON, variations: PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

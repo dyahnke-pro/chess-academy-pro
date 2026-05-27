@@ -100,6 +100,8 @@ import { PRO_NARODITSKY_SCOTCH_LESSON } from './proNaroditskyScotch';
 import { PRO_NARODITSKY_SCOTCH_VARIATION_LESSONS } from './proNaroditskyScotchVariations';
 import { PRO_NARODITSKY_VIENNA_LESSON } from './proNaroditskyVienna';
 import { PRO_NARODITSKY_VIENNA_VARIATION_LESSONS } from './proNaroditskyViennaVariations';
+import { PRO_NARODITSKY_JOBAVA_LESSON } from './proNaroditskyJobava';
+import { PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS } from './proNaroditskyJobavaVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -168,6 +170,7 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_ERICROSEN_LONDON_LESSON.openingId]: PRO_ERICROSEN_LONDON_LESSON,
   [PRO_NARODITSKY_SCOTCH_LESSON.openingId]: PRO_NARODITSKY_SCOTCH_LESSON,
   [PRO_NARODITSKY_VIENNA_LESSON.openingId]: PRO_NARODITSKY_VIENNA_LESSON,
+  [PRO_NARODITSKY_JOBAVA_LESSON.openingId]: PRO_NARODITSKY_JOBAVA_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -221,6 +224,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_ERICROSEN_LONDON_VARIATION_LESSONS,
   ...PRO_NARODITSKY_SCOTCH_VARIATION_LESSONS,
   ...PRO_NARODITSKY_VIENNA_VARIATION_LESSONS,
+  ...PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
