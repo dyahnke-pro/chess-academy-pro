@@ -32970,19 +32970,49 @@
           "a3",
           "Bxd2+",
           "Qxd2",
-          "O-O-O"
+          "O-O-O",
+          "e3",
+          "Nh6",
+          "Bd3",
+          "Nxe5",
+          "Nxe5",
+          "Qxe5",
+          "e4",
+          "g5",
+          "h4",
+          "Ng4"
         ],
         "annotations": [
           "a3 questions the b4-bishop.",
           "…Bxd2+ trades the bishop off, removing a defender and clearing the way to castle.",
           "Qxd2 recaptures.",
-          "…O-O-O! the king tucks to c8 and the rook swings to the open d-file, right behind the d4-wedge — rook and pawn pressing deep into White’s position. Black has full attacking compensation for the gambit pawn: the lead in development, the cramping wedge, and the files toward the white king."
+          "…O-O-O! the king tucks to c8 and the rook swings to the open d-file, right behind the d4-wedge — rook and pawn pressing deep into White's position.",
+          "",
+          "…Nh6 — developing the knight toward f5 or g4, eyeing the kingside; Black finishes mobilising before striking.",
+          "",
+          "…Nxe5 — regaining the gambit pawn, Black's pieces flooding to active posts with the d4-wedge still cramping White.",
+          "",
+          "…Qxe5 — the queen recaptures on a dominant central square, eyeing the kingside and the open lines toward White's king.",
+          "",
+          "…g5! — the kingside pawn storm begins, the d8-rook already raking the d-file behind the wedge. This is the Albin's dream: pressure on both wings while White is still untangling.",
+          "",
+          "…Ng4 — the knight leaps to g4, spearheading the attack at f2 and h2, rooks ready to pour down the g- and d-files. Honest truth: with precise play White keeps the extra pawn and a small edge — but the Albin hands Black a cramping wedge, a lead in development, and a real practical attack for it."
         ],
         "learnCues": [
           "a3 — White questions the bishop.",
           "…Bxd2 — trade, clear for castling.",
           "Qxd2 — White recaptures.",
-          "…O-O-O — rook behind the wedge."
+          "…O-O-O — rook behind the wedge.",
+          "",
+          "…Nh6 — develop toward f5/g4",
+          "",
+          "…Nxe5 — regain the pawn, active",
+          "",
+          "…Qxe5 — queen to the centre",
+          "",
+          "…g5! — storm the kingside",
+          "",
+          "…Ng4 — the knight spearheads the attack"
         ],
         "sources": [
           "concept:pos-initiative",
@@ -32994,7 +33024,39 @@
           [],
           [],
           [],
-          []
+          [],
+          [],
+          [
+            {
+              "from": "h6",
+              "to": "f5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "h6",
+              "to": "g4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g4",
+              "to": "f2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g4",
+              "to": "h2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
         ],
         "highlights": [
           [
@@ -33042,6 +33104,130 @@
             },
             {
               "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h2",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]

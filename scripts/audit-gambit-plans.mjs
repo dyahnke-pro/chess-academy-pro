@@ -66,9 +66,13 @@ async function leadEyePainted(page) {
       r.line = await page.locator(`[data-testid="plan-line-${plan}"]`).isVisible().catch(() => false);
       if (r.line) {
         await page.locator(`[data-testid="plan-watch-${plan}"]`).click().catch(() => {});
-        await page.waitForTimeout(3500);
-        r.watchNarration = await page.locator('text=/gambit|centre|attack|pawn|develop|king|bishop|knight/i').first().isVisible().catch(() => false);
-        r.leadEye = await leadEyePainted(page);
+        // Poll as the line auto-plays — some plans open with intentionally
+        // silent moves, so narration only appears once a narrated beat is reached.
+        for (let k = 0; k < 12 && !r.watchNarration; k++) {
+          await page.waitForTimeout(1200);
+          r.watchNarration = await page.locator('text=/gambit|centre|attack|pawn|develop|king|bishop|knight|trap|outpost|file/i').first().isVisible().catch(() => false);
+          if (r.leadEye === 0) r.leadEye = await leadEyePainted(page);
+        }
         await page.goto(`${BASE}/openings/${id}`, { waitUntil: 'domcontentloaded' }); await dismiss(page);
         await page.locator(`[data-testid="plan-learn-${plan}"]`).click().catch(() => {});
         await page.waitForTimeout(2000);

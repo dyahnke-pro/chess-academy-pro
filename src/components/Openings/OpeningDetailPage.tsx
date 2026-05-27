@@ -259,7 +259,15 @@ export function OpeningDetailPage(): JSX.Element {
 
   const loadOpening = useCallback(async (): Promise<void> => {
     if (!id) return;
-    const result = await getOpeningById(id);
+    let result = await getOpeningById(id);
+    // Cold-load seeding race: on a first visit the base opening data may still
+    // be seeding into Dexie, so a fast navigation can find nothing and wrongly
+    // cache "Opening not found" with no retry. Retry briefly (loading stays
+    // true, so the user sees a spinner, not a false miss) before giving up.
+    for (let i = 0; i < 10 && !result; i++) {
+      await new Promise((r) => setTimeout(r, 400));
+      result = await getOpeningById(id);
+    }
     setOpening(result ?? null);
     setLoading(false);
   }, [id]);
