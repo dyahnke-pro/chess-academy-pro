@@ -28,6 +28,10 @@ const EXPLORER_DIRECT = 'https://explorer.lichess.ovh';
 // actually get played. Master buckets hide them.
 const RATINGS = '1600,1800,2000';
 const SPEEDS = 'blitz,rapid,classical';
+// Output store. Defaults to the masterclass gem file; the gambit-tab lane sets
+// GEM_OUT=src/data/gambit-punish-gems.json so gambit gems never touch the
+// masterclass punish-gems.json (separate-lane contract, David 2026-05-27).
+const GEM_OUT = process.env.GEM_OUT || 'src/data/punish-gems.json';
 // ENGINE-FIRST discovery (David 2026-05-24): the amateur DB only says what's
 // COMMON; STOCKFISH says what's PUNISHABLE. A move that loses by force often
 // still scores fine in amateur practice (the winner doesn't find the refutation),
@@ -333,12 +337,16 @@ const seedKey = (s) => s.join(' ');
   if (!STOCKFISH) { console.error('[mine] ENGINE REQUIRED — engine-first discovery refutes with best moves. Set STOCKFISH_PATH.'); process.exit(2); }
   const eng = startEngine(STOCKFISH);
   const repertoire = loadRepertoire();
+  // Gambit-tab openings live in gambits.json (same shape: color + variations[].pgn).
+  // Fall back to it so OPENINGS=gambit-<id> mines under the gambit-tab id.
+  let gambits = [];
+  try { gambits = JSON.parse(readFileSync('src/data/gambits.json', 'utf-8')); } catch { /* none */ }
   const only = (process.env.OPENINGS || '').split(',').map((s) => s.trim()).filter(Boolean);
   const ids = only.length ? only : Object.keys(OPENING_SEEDS);
   const all = [];
   const seen = new Set(); // dedupe gems across overlapping lines
   for (const id of ids) {
-    const opening = repertoire.find((o) => o.id === id);
+    const opening = repertoire.find((o) => o.id === id) || gambits.find((o) => o.id === id);
     // Hand-tuned seed if present, else auto-derive from the repertoire entry
     // (color → studentChar, common variation prefix → baseSeed). Only truly
     // un-deriveable openings (not in repertoire / no variations) are skipped.
@@ -370,10 +378,10 @@ const seedKey = (s) => s.join(' ');
   // ids, so this still regenerates the whole file).
   const minedIds = new Set(ids);
   let existing = [];
-  try { existing = JSON.parse(readFileSync('src/data/punish-gems.json', 'utf-8')); } catch { /* none yet */ }
+  try { existing = JSON.parse(readFileSync(GEM_OUT, 'utf-8')); } catch { /* none yet */ }
   const kept = existing.filter((g) => !minedIds.has(g.openingId));
   const merged = [...kept, ...all];
-  await writeFile('src/data/punish-gems.json', JSON.stringify(merged, null, 2) + '\n');
+  await writeFile(GEM_OUT, JSON.stringify(merged, null, 2) + '\n');
   console.log(`[mine] wrote ${all.length} new gems (kept ${kept.length} from other openings) → ${merged.length} total`);
   for (const g of all) console.log(`  ${g.openingId} | ${g.lineMoves} | ${g.inaccuracy} (${g.freqPct}%) → ${g.punish} [${g.tier} ${g.engineCp}cp]`);
 })();
