@@ -31816,5 +31816,196 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pronaroditskyjobava-bishoppair",
+    "openingId": "pro-naroditsky-jobava-london",
+    "criticalPositionFen": "r4rk1/pp1bbppp/1qn1pn2/2pp4/3P1B2/2N1PN1P/PPP1BPP1/1R1Q1RK1 w - - 6 12",
+    "title": "Jobava London: Win the Bishop Pair",
+    "overview": "From the Jobava setup (d4, Nc3, Bf4), White converts the early initiative into a concrete edge. Na4 forks the queen and the c5-pawn; the forced trades on c5 strip Black of his dark-squared bishop and hand White the bishop pair. With c4 and Rc1, White claims the half-open c-file and the two bishops — a small, durable squeeze.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Na4 — hit the queen and win the bishop pair via Nxc5"
+    ],
+    "strategicThemes": [
+      "Convert the Jobava's early initiative into the bishop pair",
+      "Squeeze with the two bishops and the half-open c-file"
+    ],
+    "playableLines": [
+      {
+        "fen": "r4rk1/pp1bbppp/1qn1pn2/2pp4/3P1B2/2N1PN1P/PPP1BPP1/1R1Q1RK1 w - - 6 12",
+        "title": "Win the bishop pair",
+        "moves": [
+          "Na4",
+          "Qa5",
+          "Nxc5",
+          "Bxc5",
+          "dxc5",
+          "Qxc5",
+          "c4",
+          "Rfd8",
+          "Rc1"
+        ],
+        "annotations": [
+          "Na4 — the knight swings to a4, attacking the queen on b6 and the c5-pawn at once.",
+          "…Qa5 — the queen steps aside, keeping an eye on the a4-knight.",
+          "Nxc5 — the knight grabs the c5-pawn, forcing a sequence that nets White the bishop pair.",
+          "…Bxc5 — Black must recapture with the dark-squared bishop, the very piece White wants off the board.",
+          "dxc5 — White's pawn takes the bishop; Black's dark-squared bishop is gone and White keeps both of his.",
+          "…Qxc5 — Black regains the pawn, but the bishop pair is White's for keeps.",
+          "c4 — White challenges the centre and opens lines for the two bishops.",
+          "…Rfd8 — Black centralises a rook on the d-file, seeking activity to offset the bishops.",
+          "Rc1 — White claims the half-open c-file. With the bishop pair and the more harmonious pieces, this is the durable Jobava edge — small, but White's to squeeze."
+        ],
+        "learnCues": [
+          "Na4 — hit the queen and c5",
+          "…Qa5 — sidestep, watch a4",
+          "Nxc5 — start the bishop-pair trade",
+          "…Bxc5 — recapture, but...",
+          "dxc5 — win the bishop pair",
+          "…Qxc5 — regain the pawn",
+          "c4 — open it for the bishops",
+          "…Rfd8 — contest the d-file",
+          "Rc1 — claim the c-file"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "a4",
+              "to": "b6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "a4",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "a5",
+              "to": "a4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "https://www.chess.com/game/live/143878546808",
+          "https://www.youtube.com/watch?v=pzAJJEysViA",
+          "concept:pos-initiative"
+        ]
+      }
+    ]
   }
 ]
