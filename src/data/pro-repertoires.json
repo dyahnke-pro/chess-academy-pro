@@ -669,15 +669,15 @@
       "playerId": "gothamchess",
       "eco": "D02",
       "name": "London System (GothamChess)",
-      "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Bd3 b6 O-O Bb7",
+      "pgn": "d4 Nf6 Nf3 d5 Bf4 c5 e3 Qb6 Nc3 a6 Rb1 Nc6 Be2 Bf5 O-O e6 Na4 Qa5 Nxc5 Bxc5 dxc5 Qxc5",
       "color": "white",
       "style": "Solid, Systematic",
       "overview": "Levy's signature d4 opening — the system that built an empire. The London System takes its name from the 1922 London tournament where the world's best players experimented with it; Capablanca employed it occasionally, but it remained a tournament sideline for decades until Russian masters Petrosian and Botvinnik used it for ultra-solid drawing weapons. The modern boom came when Carlsen began playing it at the elite level in the 2010s — proving that 'systems' could compete with sharp theoretical lines. The London works against literally anything Black plays: d5, Nf6, g6, c5. You set up the same pieces every game (d4, Nf3, Bf4, e3, Bd3, Nbd2, c3, O-O), learn five typical plans, and play 200 games before you ever have to think about move 6. The trade-off: against precise opponents Black equalises easily, so the London is a winning weapon at 1500 and a drawing weapon at 2200. Pick your battles.",
       "keyIdeas": [
-        "Bf4 BEFORE e3 — non-negotiable. If you play e3 first the dark-squared bishop is trapped behind its own pawn chain forever. The whole opening pivots on this move order.",
-        "The pyramid d4–e3–c3 is the London's structural backbone. It's nearly unbreakable from the front; Black has to find counterplay on the flanks instead of the centre, which most amateurs can't do.",
-        "Ne5 is the attacking piece. Once you've got Nf3 + Bd3 + O-O, the manoeuvre Nf3–e5 plants a knight in the heart of the position with support from f4 and Bd3 — combined with a future Qf3 or Rf3 lift, this becomes a real kingside attack.",
-        "The e4 break is the late-middlegame trick. After everyone's developed and Black thinks the position is locked, you suddenly play e3–e4 opening the centre with all your pieces aimed at the kingside — and the Bd3 finally gets to do its job."
+        "The London is Levy's go-to recommendation: Bf4 out early and the same harmonious setup against almost everything — one plan to learn instead of twenty lines.",
+        "When Black hits b2 with …c5/…Qb6, don't panic: Nc3 and Rb1 defend with developing moves and keep White's pleasant position. This antidote is the must-know.",
+        "Against the King's Indian fianchetto, Levy goes aggressive: Qd2 + Bh6 to trade off the g7-bishop, then Ng5 and h4–h5 storm the bared king. Not the quiet London — a kingside hunt.",
+        "The whole pitch is simplicity with bite: a system you learn in ten minutes that still produces real attacks when the opponent plays naturally."
       ],
       "traps": [
         "If Black tries to trade your prized Bf4 with …Nh5 hitting it, just retreat to g3 — the bishop stays useful AND now …Nh5 has wasted Black's time. Often you can follow up with Ne5 punishing the misplaced knight."
@@ -688,34 +688,15 @@
       ],
       "variations": [
         {
-          "name": "Standard Setup vs d5",
-          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Bd3 b6 O-O Bb7 Qe2 Bxg3 hxg3 Qc7 dxc5 bxc5 e4 h6 Rad1 Rfe8",
-          "explanation": "The textbook London vs Black's …d5 setup. Both sides develop sensibly; the Bxg3 trade (forced after Bd6) gives White the h-file for the rook AND opens the f-file for the queen lift. The thematic e4 break opens the centre at exactly the right moment — once Black has committed to …b6/…Bb7 and can't easily reroute pieces back. The resulting middlegame favours the side that knows the plan, which is you.",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/London_System"
-          ]
-        },
-        {
-          "name": "vs King's Indian (Bh6 + Opposite-Side Castle Attack)",
-          "pgn": "d4 Nf6 Bf4 g6 Nc3 Bg7 Qd2 O-O Bh6 Bxh6 Qxh6 c5 O-O-O",
-          "explanation": "Levy's anti-KID weapon — NOT the quiet Be2/e3 London. Against …g6, you play sharply with Nc3 + Qd2 + Bh6! to trade off Black's fianchettoed bishop (the heart of KID defence), then castle queenside so your own kingside pawns can storm forward with h4–h5. The structural trade-off (giving up the dark-squared bishop) is worth it because Black's Bg7 was the only piece defending the king's dark squares. Source: Levy's 'London vs KID/Grünfeld Complete Guide' (YouTube/Lichess).",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/London_System"
-          ]
-        },
-        {
-          "name": "Aggressive Jobava-London Hybrid",
-          "pgn": "d4 d5 Nc3 Nf6 Bf4 e6 e3 c5 Nf3 a6 Be2 Nc6 O-O Bd6 Bxd6 Qxd6 Na4 cxd4 exd4 O-O",
-          "explanation": "A more aggressive setup blending London structure with Jobava ideas — Nc3 instead of the calm Nbd2. The Na4 manoeuvre is the kicker: after the dark-bishop trade, the knight reaches a4 from where it eyes b6 and c5 — gripping the queenside dark squares. White concedes the bishop pair but gets lasting positional pressure on a half-open c-file.",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/London_System"
-          ]
+          "name": "vs King's Indian (Bh6 Attack)",
+          "pgn": "d4 Nf6 Nf3 g6 Nc3 d5 Bf4 Bg7 Qd2 O-O Bh6 Ne4 Nxe4 dxe4 Bxg7 Kxg7 Ng5 f5 h4 h6 Nh3 Nc6",
+          "explanation": "The aggressive anti-KID Levy teaches: Qd2 and Bh6 trade off Black's g7-bishop — the key dark-square defender — then Ng5 and the h4 pawn storm hunt the exposed king. Not the quiet trade; a direct attack.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 50,
+            "score": 62,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
@@ -724,7 +705,14 @@
         "concept:pos-development",
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/London_System"
-      ]
+      ],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 151,
+        "score": 60,
+        "source": "lichess /player",
+        "taughtUrl": "https://www.youtube.com/@GothamChess"
+      }
     },
     {
       "id": "pro-gothamchess-stafford-refute",
