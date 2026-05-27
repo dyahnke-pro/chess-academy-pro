@@ -398,7 +398,7 @@
   },
   "pro-naroditsky-alapin": {
     "variations": 1,
-    "middlegamePlans": 0,
+    "middlegamePlans": 1,
     "endgamePlans": 0,
     "modelGames": 1,
     "weapons": 0,
@@ -407,7 +407,7 @@
   },
   "pro-naroditsky-najdorf": {
     "variations": 2,
-    "middlegamePlans": 0,
+    "middlegamePlans": 1,
     "endgamePlans": 0,
     "modelGames": 1,
     "weapons": 0,

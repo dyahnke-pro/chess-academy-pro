@@ -1062,88 +1062,6 @@
     ]
   },
   {
-    "id": "mp-pro-naroditsky-alapin-e5",
-    "openingId": "pro-naroditsky-alapin",
-    "criticalPositionFen": "r1b1kb1r/pp2pppp/1nn5/4P3/8/1B3N2/PP3PPP/RNBK3R b kq - 0 10",
-    "title": "e5 Space Wedge",
-    "overview": "In Naroditsky's Alapin Sicilian, White has traded queens but retains the powerful e5 pawn wedge. This advanced pawn cramps Black's entire position — the knights on b6 and c6 lack good squares, and Black's dark-squared bishop is locked behind the e5 pawn. White's plan is to castle by hand (Ke2 or even keep the king central), develop the remaining pieces, and use the e5 pawn as a permanent positional anchor.",
-    "pawnBreaks": [
-      {
-        "move": "f2-f4",
-        "explanation": "The f4 push reinforces the e5 pawn with a second pawn, making it nearly impossible to challenge. It also opens the f-file for White's rook after castling and creates the threat of f5, gaining even more space.",
-        "fen": "r1b1kb1r/pp2pppp/1nn5/4P3/8/1B3N2/PP3PPP/RNBK3R b kq - 0 10"
-      },
-      {
-        "move": "a2-a4",
-        "explanation": "The a4 push gains queenside space and threatens a5, kicking the Nb6 from its only reasonable square. After a5 Na8, Black's knight is completely out of play on the rim, giving White a huge positional advantage.",
-        "fen": "r1b1kb1r/pp2pppp/1nn5/4P3/8/1B3N2/PP3PPP/RNBK3R b kq - 0 10"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "King",
-        "route": "Kd1-e2",
-        "explanation": "In this queenless middlegame the king is safe in the center. Ke2 connects the rooks, completes development, and avoids wasting time on castling. The king on e2 also supports e5 and guards d3."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bc1-e3 or Bc1-f4",
-        "explanation": "The dark-squared bishop develops to e3 or f4, reinforcing the e5 pawn and controlling key dark squares. On f4 it directly guards e5 and eyes the b8-h2 diagonal. On e3 it supports a potential d4 push."
-      }
-    ],
-    "strategicThemes": [
-      "The e5 pawn is White's most valuable asset. It restricts Black's bishop development, cramps the knights, and controls d6 and f6. Never trade this pawn unless forced.",
-      "Without queens, the position is not about attack but about slow positional grinding. White's plan is to improve piece placement methodically while Black struggles with passive pieces.",
-      "Black's knights on b6 and c6 have no good squares — b6 blocks the b-pawn and c6 is unstable. White should avoid trades that free Black's pieces and instead maintain the cramp.",
-      "White's Bb3 is a strong piece on the a2-g8 diagonal, eyeing f7. Combined with Nf3 and the e5 wedge, White has lasting pressure on the light squares."
-    ],
-    "endgameTransitions": [
-      "This IS an endgame already (queens are off). White's advantage is structural — the e5 pawn gives a permanent space edge. The key is to avoid simplifying further until White has maximized piece placement.",
-      "In a pure minor piece endgame, White's bishop pair (Bb3 + dark bishop) outperforms Black's knights, which lack outposts. The open position favors bishops over knights."
-    ]
-  },
-  {
-    "id": "mp-pro-naroditsky-alapin-rooks",
-    "openingId": "pro-naroditsky-alapin",
-    "criticalPositionFen": "r1b1kb1r/pp2pppp/1nn5/4P3/8/1B3N2/PP3PPP/RNBK3R b kq - 0 10",
-    "title": "Rook Activation on Open Files",
-    "overview": "With the d-file already open from the queen trade and the potential for the f-file to open after f4, White's rooks are the key to converting the positional advantage. The plan is to seize the d-file with Rd1 (or use the h-rook via Ke2+Rhd1), post a rook on d6 to target Black's weaknesses, and potentially double rooks for maximum pressure.",
-    "pawnBreaks": [
-      {
-        "move": "f2-f4",
-        "explanation": "Besides reinforcing e5, f4 prepares to open the f-file after f5. Once the f-file opens, White's rook on f1 becomes a powerful attacking piece even in this queenless position.",
-        "fen": "r1b1kb1r/pp2pppp/1nn5/4P3/8/1B3N2/PP3PPP/RNBK3R b kq - 0 10"
-      },
-      {
-        "move": "c2-c3",
-        "explanation": "A quiet but important move that secures the d4 square for a knight or prevents ...Nd5 ideas. It also prepares b4 for queenside expansion if needed.",
-        "fen": "r1b1kb1r/pp2pppp/1nn5/4P3/8/1B3N2/PP3PPP/RNBK3R b kq - 0 10"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Rook",
-        "route": "Rh1-d1 (after Ke2) or Ra1-d1",
-        "explanation": "Whichever rook reaches d1 first claims the open d-file. The ideal setup is Rd1 + Rd6, planting a rook on the sixth rank where it attacks a7/b7 pawns and restricts Black's king."
-      },
-      {
-        "piece": "Knight",
-        "route": "Nb1-d2-c4",
-        "explanation": "The Nb1 develops to d2 and then to the powerful c4 outpost, where it targets d6, e5 (supports the pawn), and a5. From c4 the knight is nearly impossible to dislodge and dominates the position."
-      }
-    ],
-    "strategicThemes": [
-      "Rook invasion on the d-file is White's primary winning plan. A rook on d6 attacks backward pawns and restricts Black's rook activity.",
-      "The Nc4 outpost is a dream square — it attacks in multiple directions and can't be kicked by Black's pawns. Combined with Bb3 and the e5 wedge, it creates complete positional domination.",
-      "Black's dark-squared bishop is permanently bad, locked behind e5 and its own pawns on e7/f7. White should keep the position closed on the kingside to maintain this advantage.",
-      "Time is on White's side. There's no rush — improve pieces to their ideal squares before committing to any pawn advances."
-    ],
-    "endgameTransitions": [
-      "A rook endgame with the e5 pawn is very favorable for White. The space advantage means White's rook is more active, and Black's rook is tied to defending weak pawns.",
-      "If minor pieces are traded, White should aim for a rook + bishop vs rook + knight endgame, where the bishop's long range dominates the cramped knight."
-    ]
-  },
-  {
     "id": "mp-pro-naroditsky-fantasy-caro-center",
     "openingId": "pro-naroditsky-fantasy-caro",
     "criticalPositionFen": "r2q1rk1/pp1n1ppp/2pb1n2/4p1B1/2BPP1b1/2P2N2/PP1N2PP/R2Q1RK1 b - - 4 10",
@@ -1223,88 +1141,6 @@
     "endgameTransitions": [
       "Even if the attack doesn't checkmate, the kingside pawn advances create passed pawns or structural damage that persist into the endgame.",
       "If Black trades pieces to relieve pressure, White's space advantage and better pawn structure give a comfortable endgame edge."
-    ]
-  },
-  {
-    "id": "mp-pro-naroditsky-najdorf-b5",
-    "openingId": "pro-naroditsky-najdorf",
-    "criticalPositionFen": "r3k2r/1pqnbppp/p2pbn2/4p3/P3PP2/1NN5/1PP1B1PP/R1BQ1RK1 w kq - 1 11",
-    "title": "Queenside Expansion with ...b5",
-    "overview": "In Naroditsky's Najdorf, Black has the classic setup with ...e5, ...Be7, ...Be6, ...Qc7, and ...Nbd7. The primary plan is the thematic ...b5 break on the queenside. This gains space, opens the b-file for the rook, activates the Bb7 (after ...Bb7 or keeping Be6), and creates counterplay against White's queenside while White tries to attack on the kingside.",
-    "pawnBreaks": [
-      {
-        "move": "b7-b5",
-        "explanation": "The ...b5 break is the Najdorf's signature queenside counter. It challenges White's a4 pawn, gains space, and opens the b-file for Black's rook. After ...b5 axb5 axb5, Black has an active rook on a8 and a dangerous b-pawn.",
-        "fen": "r3k2r/1pqnbppp/p2pbn2/4p3/P3PP2/1NN5/1PP1B1PP/R1BQ1RK1 w kq - 1 11"
-      },
-      {
-        "move": "d6-d5",
-        "explanation": "When the timing is right, ...d5 strikes at the heart of White's center. After exd5 Nxd5 or ...Bxd5, Black activates every piece and obtains central equality. This break works best when White's f4 pawn has advanced to f5, leaving e4 unguarded.",
-        "fen": "r3k2r/1pqnbppp/p2pbn2/4p3/P3PP2/1NN5/1PP1B1PP/R1BQ1RK1 w kq - 1 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "...Nf6-d7-b6 or ...Nd7-f6-d5",
-        "explanation": "Black's knights need to reach active squares. ...Nb6 pressures a4 and c4, supporting the ...b5 break. Alternatively, ...Nf6 can reach d5 — the most powerful outpost in the Najdorf — where it dominates the center."
-      },
-      {
-        "piece": "Rook",
-        "route": "...Ra8-b8 (after ...b5)",
-        "explanation": "After ...b5, the a-file or b-file opens for Black's rook. ...Rb8 pressures b2 and supports the b-pawn's advance. This rook activity is Black's main source of counterplay."
-      }
-    ],
-    "strategicThemes": [
-      "The Najdorf is about queenside counterplay versus kingside attack. Black must generate ...b5 pressure before White's kingside attack (f5, g4-g5) becomes overwhelming.",
-      "Timing is everything. Black should play ...b5 when it creates real threats, not prematurely. Usually ...O-O first, then ...b5 when the rook can use the open file.",
-      "The ...e5 pawn controls d4 and f4, limiting White's central options. Black should maintain this pawn as it anchors the entire defensive setup.",
-      "Black's Be6 is a multi-purpose piece: it supports ...d5, guards f7, and after ...b5 can swing to b3 or c4. Do not trade it unless absolutely necessary."
-    ],
-    "endgameTransitions": [
-      "If Black achieves ...d5 successfully, the resulting position often simplifies into an equal or better endgame where Black's active pieces outperform White's scattered army.",
-      "In endgames, Black's queenside pawn majority (after ...b5 axb5 axb5) can create a dangerous passed b-pawn. This is Black's main winning try in simplified positions."
-    ]
-  },
-  {
-    "id": "mp-pro-naroditsky-najdorf-d5",
-    "openingId": "pro-naroditsky-najdorf",
-    "criticalPositionFen": "r3k2r/1pqnbppp/p2pbn2/4p3/P3PP2/1NN5/1PP1B1PP/R1BQ1RK1 w kq - 1 11",
-    "title": "Central ...d5 Counter-strike",
-    "overview": "The ...d5 break is Black's most principled response in the Najdorf. When White overextends with f4-f5, the e4 pawn becomes vulnerable and ...d5 blows open the center. This transforms the position from a kingside attack into a tactical battle where Black's well-placed pieces (Be6, Be7, Qc7, Nf6) come alive. Naroditsky emphasizes timing this break when White's pieces are committed to the kingside.",
-    "pawnBreaks": [
-      {
-        "move": "d6-d5",
-        "explanation": "The defining counter-strike. After exd5 Nxd5, Black's knight reaches the dominant d5 outpost and the position opens in Black's favor. If White plays e5 instead, ...Nd5 is even stronger as the knight is untouchable.",
-        "fen": "r3k2r/1pqnbppp/p2pbn2/4p3/P3PP2/1NN5/1PP1B1PP/R1BQ1RK1 w kq - 1 11"
-      },
-      {
-        "move": "e5xf4",
-        "explanation": "If White pushes f4xe5, Black can recapture with ...dxe5 and obtain a strong e5 pawn center. Alternatively, taking ...exf4 opens the e-file for Black's rook and exposes White's king via the e1-e8 diagonal.",
-        "fen": "r3k2r/1pqnbppp/p2pbn2/4p3/P3PP2/1NN5/1PP1B1PP/R1BQ1RK1 w kq - 1 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "...Nf6-d5 (after ...d5 exd5)",
-        "explanation": "The Nd5 is the Najdorf's dream piece. It controls c3, b4, e3, f4, and can never be attacked by White's pawns. It's both a defensive and offensive piece that dominates the entire board."
-      },
-      {
-        "piece": "Bishop",
-        "route": "...Be7-f6 or ...Be7-c5",
-        "explanation": "After the center opens, the Be7 becomes active. ...Bf6 controls the dark squares and defends the kingside. ...Bc5 targets f2 and puts pressure on White's king position."
-      }
-    ],
-    "strategicThemes": [
-      "The ...d5 break works best when White has pushed f5, overextending the pawn structure. With the f5 pawn far from home, e4 lacks support and ...d5 is crushing.",
-      "After ...d5, Black's piece coordination is typically superior. The Be6, Nd5, and active rooks create multi-directional threats that are hard to handle.",
-      "Black should castle before playing ...d5 to ensure king safety. The ...O-O + ...d5 combination is the standard Najdorf recipe.",
-      "If White avoids f5 and plays slowly, Black has time for ...b5 instead. The flexibility between ...b5 and ...d5 is what makes the Najdorf so powerful."
-    ],
-    "endgameTransitions": [
-      "After a successful ...d5 break, Black often emerges with better pieces and a solid pawn structure. The resulting endgames are comfortable for Black due to the active Nd5 and bishop pair.",
-      "A knight on d5 in the endgame is worth more than a rook — it controls so many squares that the opponent is paralyzed. Aim to keep this knight if pieces get traded."
     ]
   },
   {
@@ -36811,6 +36647,466 @@
             },
             {
               "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroditskynajdorf-queenside",
+    "openingId": "pro-naroditsky-najdorf",
+    "title": "Najdorf: The Queenside Counter-Storm",
+    "criticalPositionFen": "r2q1rk1/1p1nbppp/p2pbn2/4p3/4P3/1NN1BP2/PPPQ2PP/2KR1B1R w - - 5 11",
+    "overview": "The defining Najdorf plan against the English Attack. White castles long and storms the kingside with g4–g5–f4; Black answers move-for-move on the queenside — …b5, …b4, …a5, …a4 — ripping open lines at White's king. It's a pure race, and Black's attack is engineered to arrive first.",
+    "pawnBreaks": [
+      "...b5 then b4 — the queenside pawn storm at White's king",
+      "...a5 and a4 — pry open lines toward the white king"
+    ],
+    "pieceManeuvers": [
+      "...Ne8 reroutes the knight to free the kingside and guard the king"
+    ],
+    "strategicThemes": [
+      "Race the opposite-side attacks — open lines fastest at the enemy king",
+      "Trade nothing that slows the queenside pawns"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2q1rk1/1p1nbppp/p2pbn2/4p3/4P3/1NN1BP2/PPPQ2PP/2KR1B1R w - - 5 11",
+        "moves": [
+          "g4",
+          "b5",
+          "g5",
+          "b4",
+          "Ne2",
+          "Ne8",
+          "f4",
+          "a5",
+          "f5",
+          "a4",
+          "fxe6",
+          "axb3"
+        ],
+        "annotations": [
+          "g4 — White's storm begins on the kingside.",
+          "b5 — Black answers instantly on the queenside; the race is on.",
+          "g5 kicks the knight and gains more kingside space.",
+          "b4 — the pawn drives at the c3-knight, prying open the b-file toward White's king.",
+          "Ne2 sidesteps the attack on the knight.",
+          "Ne8 reroutes, clearing the way and guarding the kingside dark squares.",
+          "f4 keeps White's storm rolling.",
+          "a5 — the second queenside pawn joins the assault.",
+          "f5 strikes at the e6-bishop.",
+          "a4 — the spearhead; the pawn lunges at the b3-knight and the lines crack open.",
+          "fxe6 grabs a piece, but it's too slow.",
+          "axb3 — Black's pawn crashes through to b3, tearing open White's king. The queenside storm has won the race, exactly as the Najdorf intends."
+        ],
+        "learnCues": [
+          "g4 — White storms",
+          "…b5 — race begins",
+          "g5 — gain space",
+          "…b4 — hit the knight",
+          "Ne2 — sidestep",
+          "…Ne8 — reroute",
+          "f4 — keep rolling",
+          "…a5 — second pawn",
+          "f5 — hit the bishop",
+          "…a4 — spearhead",
+          "fxe6 — too slow",
+          "…axb3 — crash through"
+        ],
+        "sources": [
+          "https://www.chess.com/game/live/143773369094",
+          "concept:pos-center"
+        ],
+        "title": "The queenside counter-storm",
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroditskyalapin-wedge",
+    "openingId": "pro-naroditsky-alapin",
+    "title": "Alapin: The e5 Wedge Squeeze",
+    "criticalPositionFen": "r1bqkb1r/pp2pppp/1nn5/4P3/8/1B3N2/PP3PPP/RNBQK2R b KQkq - 0 9",
+    "overview": "Even with queens off, the Alapin's e5-pawn wedge keeps Black cramped. White develops the bishop to f4 to guard the wedge and eye c7, castles, and gains kingside space with h3 and g4 — a slow, risk-free squeeze where every white piece is a touch more active. The small edge becomes a winning bind.",
+    "pawnBreaks": [
+      "g4 — gain kingside space and kick the bishop"
+    ],
+    "pieceManeuvers": [
+      "Bf4 — the bishop swings to f4, propping the e5-wedge and bearing down on c7"
+    ],
+    "strategicThemes": [
+      "The e5-pawn cramps Black for the whole game",
+      "Convert space + activity into a winning endgame bind"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/pp2pppp/1nn5/4P3/8/1B3N2/PP3PPP/RNBQK2R b KQkq - 0 9",
+        "moves": [
+          "Qxd1+",
+          "Bxd1",
+          "Bg4",
+          "Bf4",
+          "e6",
+          "O-O",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "h3",
+          "Bh5",
+          "g4"
+        ],
+        "annotations": [
+          "Qxd1 — Black trades queens, hoping the ending defuses White's space.",
+          "Bxd1 recaptures; even queenless, the e5-wedge keeps Black cramped.",
+          "Bg4 develops and pins nothing — White's structure is too solid.",
+          "Bf4 — the key maneuver: the bishop guards the e5-wedge and rakes toward c7.",
+          "e6 shores up the light squares but stays passive behind the wedge.",
+          "O-O tucks the king away and connects the rooks.",
+          "Be7 finishes Black's development, but the pieces have no targets.",
+          "Nc3 develops with tempo, eyeing the d5 and b5 holes.",
+          "O-O — Black is solid but cramped, and White holds the initiative.",
+          "h3 prepares to expand on the kingside where White owns the space.",
+          "Bh5 keeps the bishop active for the moment.",
+          "g4 — White grabs kingside space and kicks the bishop; the squeeze tightens into a lasting bind. The Alapin's small edge has become a real one."
+        ],
+        "learnCues": [
+          "…Qxd1 — trade queens",
+          "Bxd1 — wedge stays",
+          "…Bg4 — develop",
+          "Bf4 — guard the wedge",
+          "…e6 — passive prop",
+          "O-O — king safe",
+          "…Be7 — no targets",
+          "Nc3 — eye d5/b5",
+          "…O-O — cramped but solid",
+          "h3 — prep g4",
+          "…Bh5 — stay active",
+          "g4 — the squeeze tightens"
+        ],
+        "sources": [
+          "https://www.chess.com/game/live/143776190306",
+          "concept:pos-center"
+        ],
+        "title": "The e5 wedge squeeze",
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c3",
+              "to": "b5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
