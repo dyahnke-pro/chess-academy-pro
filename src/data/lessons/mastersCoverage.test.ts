@@ -286,6 +286,7 @@ const PLAN_SUSPECT_BASELINE = new Set<string>([
   'mp-siciliandragon-classical::5:Bxc4',  // masters: Bd3/Nxa5/e5/Kh1 — sound
   'mp-siciliandragon-levenfish::3:a4',    // masters: Kh1 — sound
   'mp-siciliandragon-antibg5::1:a6',      // masters: Be6/e5/g5/a5 — sound
+  'mp-scandinaviandefence-portuguese::2:Qh5', // masters: Bd6/O-O-O — sound
   'mp-siciliannajdorf-6a4::8:Nc5',        // masters: h6/Nf8 — sound
   'mp-siciliannajdorf-ng4::5:Kb1',        // masters: Nd4/f3/h4 — sound
 ]);
