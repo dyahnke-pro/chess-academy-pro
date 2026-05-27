@@ -305,6 +305,81 @@ describe('voiceService', () => {
     });
   });
 
+  describe('isIosUserAgent (element-playback gate)', () => {
+    const UA = {
+      iphone: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1',
+      ipad: 'Mozilla/5.0 (iPad; CPU OS 16_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Mobile/15E148 Safari/604.1',
+      ipadDesktopMode: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15',
+      desktopMac: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15',
+      androidChrome: 'Mozilla/5.0 (Linux; Android 14; SM-S908B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36',
+      desktopChrome: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+    };
+
+    it('iPhone / iPad → iOS (routes Polly through the <audio> element)', async () => {
+      const { isIosUserAgent } = await import('./voiceService');
+      expect(isIosUserAgent(UA.iphone, false)).toBe(true);
+      expect(isIosUserAgent(UA.ipad, false)).toBe(true);
+    });
+
+    it('iPad in desktop-UA mode + touch → still detected as iOS', async () => {
+      const { isIosUserAgent } = await import('./voiceService');
+      expect(isIosUserAgent(UA.ipadDesktopMode, true)).toBe(true);
+    });
+
+    it('real desktop Mac (no touch) → not iOS', async () => {
+      const { isIosUserAgent } = await import('./voiceService');
+      expect(isIosUserAgent(UA.desktopMac, false)).toBe(false);
+    });
+
+    it('Android + desktop Chrome → not iOS', async () => {
+      const { isIosUserAgent } = await import('./voiceService');
+      expect(isIosUserAgent(UA.androidChrome, false)).toBe(false);
+      expect(isIosUserAgent(UA.desktopChrome, false)).toBe(false);
+    });
+  });
+
+  describe('createTimeoutSignal (iOS < 16 AbortSignal.timeout guard)', () => {
+    it('uses native AbortSignal.timeout when present', async () => {
+      const spy = vi.spyOn(AbortSignal, 'timeout');
+      const { createTimeoutSignal } = await import('./voiceService');
+      const sig = createTimeoutSignal(5000);
+      expect(sig).toBeInstanceOf(AbortSignal);
+      expect(spy).toHaveBeenCalledWith(5000);
+      spy.mockRestore();
+    });
+
+    it('falls back to a manual controller when AbortSignal.timeout is missing (old iOS)', async () => {
+      const original = (AbortSignal as unknown as { timeout?: unknown }).timeout;
+      // Simulate iOS < 16 where AbortSignal.timeout does not exist.
+      delete (AbortSignal as unknown as { timeout?: unknown }).timeout;
+      try {
+        const { createTimeoutSignal } = await import('./voiceService');
+        // Must NOT throw, and must return a usable AbortSignal.
+        const sig = createTimeoutSignal(5000);
+        expect(sig).toBeInstanceOf(AbortSignal);
+        expect(sig.aborted).toBe(false);
+      } finally {
+        (AbortSignal as unknown as { timeout?: unknown }).timeout = original;
+      }
+    });
+
+    it('the manual fallback signal aborts after the timeout elapses', async () => {
+      vi.useFakeTimers();
+      const original = (AbortSignal as unknown as { timeout?: unknown }).timeout;
+      delete (AbortSignal as unknown as { timeout?: unknown }).timeout;
+      try {
+        const { createTimeoutSignal } = await import('./voiceService');
+        const sig = createTimeoutSignal(1000);
+        expect(sig.aborted).toBe(false);
+        vi.advanceTimersByTime(1000);
+        expect(sig.aborted).toBe(true);
+      } finally {
+        (AbortSignal as unknown as { timeout?: unknown }).timeout = original;
+        vi.useRealTimers();
+      }
+    });
+  });
+
   describe('getManagedMediaSource (iOS Safari 17.1+ detection)', () => {
     it('returns null when window.ManagedMediaSource is undefined (jsdom baseline)', async () => {
       const { getManagedMediaSource } = await import('./voiceService');

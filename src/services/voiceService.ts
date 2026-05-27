@@ -27,6 +27,31 @@ export function getManagedMediaSource(): ManagedMediaSourceCtor | null {
   return mms ?? null;
 }
 
+/** True for any iOS / iPadOS device (incl. iPad in desktop-UA mode and
+ *  the Capacitor WKWebView). Pure so it can be unit-tested across UA
+ *  strings. iOS is where Web Audio output is unreliable but the
+ *  `<audio>` element always works — so it gates the element-playback
+ *  path in speakPolly. */
+export function isIosUserAgent(userAgent: string, hasTouchAndMac: boolean): boolean {
+  return /iPhone|iPad|iPod/.test(userAgent) || (userAgent.includes('Mac') && hasTouchAndMac);
+}
+
+/** Build a fetch-abort signal that fires after `ms`. Uses the native
+ *  `AbortSignal.timeout` when present (Safari 16+/Chrome) and falls
+ *  back to a manual `AbortController` + `setTimeout` on older engines.
+ *  iOS < 16 lacks `AbortSignal.timeout`; calling it there throws a
+ *  `TypeError` synchronously, which previously killed every Polly fetch
+ *  (and prefetch) on those devices and dead-ended in silence. */
+export function createTimeoutSignal(ms: number): AbortSignal {
+  const AS = AbortSignal as unknown as { timeout?: (ms: number) => AbortSignal };
+  if (typeof AS.timeout === 'function') {
+    return AS.timeout(ms);
+  }
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(new DOMException('Timeout', 'TimeoutError')), ms);
+  return controller.signal;
+}
+
 /** Pure decision function — does the runtime support progressive
  *  MP3 streaming? Extracted from the class so unit tests can probe
  *  every UA + capability combination without spinning a VoiceService.
@@ -1253,6 +1278,85 @@ class VoiceService {
     );
   }
 
+  /** True on iOS / iPadOS (incl. Capacitor WKWebView). On iOS the shared
+   *  Web Audio AudioContext is unreliable — it can resume yet produce no
+   *  audible output (a known footgun when the context is created before a
+   *  user gesture, which `warmup()` does at mount). The `<audio>` element,
+   *  by contrast, plays reliably once primed. So iOS Polly playback routes
+   *  through `playViaElement` instead of `playAudioBuffer`. */
+  private isIosPlatform(): boolean {
+    if (typeof navigator === 'undefined' || typeof document === 'undefined') return false;
+    return isIosUserAgent(navigator.userAgent, 'ontouchend' in document);
+  }
+
+  /** Play a complete MP3 via the persistent, gesture-primed `<audio>`
+   *  element — the same mechanism the Settings voice-test button uses,
+   *  which is the ONLY audio path proven to work on the affected older
+   *  iPhones (iOS where Web Audio output is dead). `src` may be a direct
+   *  `/api/tts` URL (native progressive streaming, no fetch) or an
+   *  object URL created from cached bytes; pass `isObjectUrl` so we
+   *  revoke it when playback settles. Returns true on clean playback,
+   *  false on error / autoplay rejection / a `stop()` mid-flight.
+   *
+   *  Bypasses Web Audio (`decodeAudioData` + AudioContext) entirely, so
+   *  it is immune to both the silent-output footgun above AND the iOS
+   *  hardware-mute switch (element playback counts as media). */
+  private async playViaElement(src: string, isObjectUrl: boolean): Promise<boolean> {
+    const myGen = this.stopGeneration;
+    const audio = this.streamAudioEl ?? new Audio();
+    this.streamAudioEl = audio;
+    // Tear down any prior stream/MediaSource wiring on the shared element.
+    try { audio.pause(); audio.removeAttribute('src'); audio.load(); } catch { /* fresh element */ }
+    // Dispose a different in-flight element if one is live.
+    if (this.currentAudioElement && this.currentAudioElement !== audio) {
+      try { this.currentAudioElement.pause(); this.currentAudioElement.removeAttribute('src'); this.currentAudioElement.load(); } catch { /* gone */ }
+    }
+    audio.preload = 'auto';
+    audio.src = src;
+    audio.playbackRate = this.speed;
+    this.currentAudioElement = audio;
+    this.playing = true;
+
+    return new Promise<boolean>((resolve) => {
+      let settled = false;
+      const finish = (ok: boolean): void => {
+        if (settled) return;
+        settled = true;
+        this.playing = false;
+        if (this.currentAudioElement === audio) this.currentAudioElement = null;
+        audio.onended = null;
+        audio.onerror = null;
+        if (isObjectUrl) { try { URL.revokeObjectURL(src); } catch { /* already revoked */ } }
+        resolve(ok);
+      };
+      audio.onended = (): void => finish(true);
+      audio.onerror = (): void => {
+        const err = audio.error;
+        this.lastSpeakDiagnostic.error = `element playback error: code=${err?.code ?? '?'} ${err?.message ?? ''}`.trim();
+        finish(false);
+      };
+      // A stop() (or rapid Next-press) between entry and here makes this
+      // element stale — bail before it can overlap the next narration.
+      if (myGen !== this.stopGeneration) {
+        try { audio.pause(); audio.removeAttribute('src'); audio.load(); } catch { /* gone */ }
+        finish(false);
+        return;
+      }
+      void audio.play()
+        .then(() => {
+          // Re-check after the play() microtask — stop() may have fired.
+          if (myGen !== this.stopGeneration) {
+            try { audio.pause(); } catch { /* gone */ }
+            finish(false);
+          }
+        })
+        .catch((err: unknown) => {
+          this.lastSpeakDiagnostic.error = `element play() rejected: ${err instanceof Error ? err.message : String(err)}`;
+          finish(false);
+        });
+    });
+  }
+
   /** Stream Polly's MP3 chunks into a `<audio>` element via
    *  MediaSource so playback starts AS chunks arrive instead of
    *  after the full body downloads. Phase A.5 of the streaming-TTS
@@ -1495,28 +1599,52 @@ class VoiceService {
       const key = this.pollyKey(text, voice) + (style ? `|${style}` : '');
       const cachedBuffer = this.touchAudioCacheEntry(key);
 
-      // Cache hit → play the buffered audio directly (no streaming,
-      // no fetch). This stays on the existing decodeAudioData path
-      // because we already have the complete MP3 in memory.
+      // Cache hit → play the buffered audio directly (no fetch). On iOS
+      // (incl. prefetched lesson beats, which ALL land here) route the
+      // cached bytes through the `<audio>` element via an object URL —
+      // Web Audio is silent on the affected older iPhones. Desktop keeps
+      // the decodeAudioData path, which is reliable there.
       if (cachedBuffer) {
         this.lastSpeakDiagnostic.pollyOk = true;
         this.lastSpeakDiagnostic.pollyStatus = 200;
-        const played = await this.playAudioBuffer(cachedBuffer.slice(0));
+        let played: boolean;
+        if (this.isIosPlatform()) {
+          const blobUrl = URL.createObjectURL(new Blob([cachedBuffer], { type: 'audio/mpeg' }));
+          played = await this.playViaElement(blobUrl, true);
+        } else {
+          played = await this.playAudioBuffer(cachedBuffer.slice(0));
+        }
         if (!played) {
-          this.lastSpeakDiagnostic.error = 'AudioContext suspended (need user gesture)';
+          this.lastSpeakDiagnostic.error ??= 'cached audio playback failed';
           return false;
         }
         return true;
       }
 
+      const url = getTtsUrl(text, voice, true, style);
+
+      // Older iOS (no MediaSource / ManagedMediaSource streaming): play
+      // straight from the /api/tts URL via the primed <audio> element.
+      // Native progressive streaming — playback starts as bytes arrive,
+      // so no added lag — and it sidesteps BOTH the dead Web Audio output
+      // and the AbortSignal.timeout footgun (there's no fetch here at
+      // all). This is the path the Settings voice-test button proves
+      // works on the affected devices. Repeats are served from the
+      // browser HTTP cache (the endpoint sets max-age=86400).
+      if (!this.canStreamProgressivePlayback() && this.isIosPlatform()) {
+        this.lastSpeakDiagnostic.pollyOk = true;
+        const ok = await this.playViaElement(url, false);
+        if (ok) this.lastSpeakDiagnostic.pollyStatus = 200;
+        return ok;
+      }
+
       // Cache miss → fetch from /api/tts.
       this.abortController = new AbortController();
-      const timeoutSignal = AbortSignal.timeout(10_000);
+      const timeoutSignal = createTimeoutSignal(10_000);
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       const combinedSignal = AbortSignal.any
         ? AbortSignal.any([this.abortController.signal, timeoutSignal])
         : this.abortController.signal;
-      const url = getTtsUrl(text, voice, true, style);
       const response = await fetch(url, { signal: combinedSignal });
       this.lastSpeakDiagnostic.pollyStatus = response.status;
       this.lastSpeakDiagnostic.pollyOk = response.ok;
@@ -1603,7 +1731,7 @@ class VoiceService {
         batch.map(async (text) => {
           try {
             const url = getTtsUrl(text, voice);
-            const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+            const res = await fetch(url, { signal: createTimeoutSignal(5000) });
             if (res.ok) {
               this.setAudioCacheEntry(this.pollyKey(text, voice), await res.arrayBuffer());
             }
