@@ -29,10 +29,10 @@ describe('VoiceSettingsPanel', () => {
     expect(screen.getByTestId('voice-settings-panel')).toBeInTheDocument();
   });
 
-  it('shows Cloud Voice (AI) section', () => {
+  it('shows the Cloud Voice (Polly) section', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({ id: 'main' }));
     render(<VoiceSettingsPanel />);
-    expect(screen.getByText('Cloud Voice (AI)')).toBeInTheDocument();
+    expect(screen.getByText('Cloud voice (Polly) priority')).toBeInTheDocument();
   });
 
   it('shows Polly toggle', () => {

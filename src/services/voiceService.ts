@@ -3,7 +3,6 @@
 // Only this file may call TTS APIs.
 
 import { speechService } from './speechService';
-import { voicePackService } from './voicePackService';
 import { getSharedAudioContext } from './audioContextManager';
 import { stripCoachMarkup, formatForSpeech } from './sanitizeCoachText';
 import { db } from '../db/schema';
@@ -203,7 +202,7 @@ const POLLY_COOLDOWN_MS = 15_000;
 /** Voice delivery tier currently serving speak() calls. Exposed for
  *  UI so the Settings screen can show "Polly active" vs "Web Speech
  *  fallback". */
-export type VoiceTier = 'polly' | 'voice-pack' | 'web-speech' | 'muted';
+export type VoiceTier = 'polly' | 'web-speech' | 'muted';
 
 /** Map piece letters to spoken names. Applied right before TTS so
  *  nothing reaches the speech engine as "P" / "N" / "B" / "R" / "Q" /
@@ -1055,17 +1054,7 @@ class VoiceService {
       }
     }
 
-    // Tier 2: Offline voice packs.
-    if (voicePackService.isReady()) {
-      const played = await voicePackService.speak(text, this.speed);
-      if (played) {
-        this.lastTier = 'voice-pack';
-        this.lastSpeakDiagnostic.tier = 'voice-pack';
-        return;
-      }
-    }
-
-    // Tier 3: Web Speech API. Skipped when the caller asked for
+    // Tier 2: Web Speech API. Skipped when the caller asked for
     // Polly-only mode (the streaming chain on /coach/teach passes
     // `noFallback: true` so a Polly cooldown doesn't cause the iOS
     // Safari speech-synth tail to overlap with the next Polly
@@ -1074,13 +1063,13 @@ class VoiceService {
       this.lastTier = 'muted';
       this.lastSpeakDiagnostic.tier = 'muted';
       this.lastSpeakDiagnostic.error =
-        'noFallback set; Polly+voice-pack failed; sentence skipped audibly';
+        'noFallback set; Polly failed; sentence skipped audibly';
       void import('./appAuditor').then(({ logAppAudit }) => {
         void logAppAudit({
           kind: 'polly-fallback',
           category: 'subsystem',
           source: 'voiceService.speakInternal',
-          summary: 'Polly+voice-pack failed; noFallback skipped web-speech',
+          summary: 'Polly failed; noFallback skipped web-speech',
           details: `text: ${text.slice(0, 80)}`,
         });
       }).catch(() => undefined);
@@ -1113,7 +1102,7 @@ class VoiceService {
     this.lastSpeakDiagnostic.tier = 'web-speech';
     if (!this.lastSpeakDiagnostic.error) {
       this.lastSpeakDiagnostic.error =
-        'fell through to web-speech (Polly + voice-packs both failed; web-speech is disabled)';
+        'fell through to web-speech (Polly failed; web-speech is disabled)';
     }
   }
 
@@ -1743,13 +1732,13 @@ class VoiceService {
     }
   }
 
-  /** Tier-3 fallback: Web Speech API (system speech synthesizer).
+  /** Tier-2 fallback: Web Speech API (system speech synthesizer).
    *
-   *  This path is reached ONLY when Polly + voice-packs both fail —
-   *  there's no "dual engine overlap" concern because by the time we
-   *  get here, no other tier produced audio. Always-on so iOS audio-
-   *  device failures (where AudioContext can't unlock) don't produce
-   *  total silence — the user at least hears native speech.
+   *  This path is reached ONLY when Polly fails — there's no "dual
+   *  engine overlap" concern because by the time we get here, no other
+   *  tier produced audio. Always-on so iOS audio-device failures (where
+   *  AudioContext can't unlock) don't produce total silence — the user
+   *  at least hears native speech.
    *
    *  The flag-gated paths (speakFast / speakQueuedForced) still
    *  respect WEB_SPEECH_FALLBACK_ENABLED so the original streaming-

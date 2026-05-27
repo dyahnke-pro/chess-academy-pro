@@ -76,16 +76,6 @@ vi.mock('../../services/voiceService', () => ({
   },
 }));
 
-vi.mock('../../services/voicePackService', () => ({
-  voicePackService: {
-    speak: vi.fn().mockResolvedValue(false),
-    stop: vi.fn(),
-    isReady: vi.fn().mockReturnValue(false),
-    getStatus: vi.fn().mockReturnValue('idle'),
-    onStatusChange: vi.fn(),
-    isPlaying: vi.fn().mockReturnValue(false),
-  },
-}));
 
 vi.mock('../../services/stockfishEngine', () => ({
   stockfishEngine: {

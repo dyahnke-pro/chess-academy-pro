@@ -484,12 +484,6 @@ function describeTier(
         description: 'Premium AI voice is serving the coach audio.',
         color: '#22c55e',
       };
-    case 'voice-pack':
-      return {
-        label: 'Pre-recorded voice pack',
-        description: 'Offline clip — works without network.',
-        color: '#3b82f6',
-      };
     case 'web-speech':
       return {
         label: 'System voice (fallback)',

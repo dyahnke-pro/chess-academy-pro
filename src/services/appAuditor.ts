@@ -357,7 +357,7 @@ export type AuditKind =
   // TTS overlap detection. Fires from voiceService.speakInternal when
   // a new speak() arrives while a previous utterance is still playing.
   // Captures the new utterance preview, the previous-tier (polly /
-  // web-speech / voice-pack), and the caller source if available.
+  // web-speech), and the caller source if available.
   // Diagnoses "two voices at once" reports — every overlap leaves a
   // record so we can see which surfaces are racing.
   | 'tts-concurrent-speak'

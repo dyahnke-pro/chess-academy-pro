@@ -19,7 +19,6 @@ export function VoiceDebugPanel(): JSX.Element | null {
 
   const tierColor: Record<string, string> = {
     polly: 'text-emerald-400',
-    'voice-pack': 'text-emerald-400',
     'web-speech': 'text-amber-400',
     muted: 'text-rose-400',
   };
