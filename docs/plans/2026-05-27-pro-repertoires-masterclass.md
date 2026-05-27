@@ -244,7 +244,24 @@ Full Vienna-recipe standalone, with these sources nailed down:
   games (his real wins), deep middlegame plans (mined from his games), checkpoint
   quizzes + common mistakes, then full gate registration + interactive audit.
 
-## 6c. POST-DEPLOY AUDIT (3 tools, 2026-05-27)
+## 6e. POST-DEPLOY AUDIT — GREEN IN SANDBOX (3 tools, corrected 2026-05-27)
+
+CORRECTION to §6c below: the sandbox CAN render + audit the pro masterclass
+(David was right). The earlier "can't render" was a deep-link that skipped the
+AWAITED seed. Fix in `audit-pro-stafford.mjs`: boot → onboarding → **`/openings`
+(awaits seedDatabase)** → direct-IDB unlock + voice-on (the fixture-loader
+pattern; raw txns work) → navigate to the Stafford → renders. **10/10 checks:**
+- Playwright: renders, 4 variation tabs, WLPP buttons, middlegame-plan card,
+  model-game card, Watch plays the LessonPlayer.
+- Listener: hand-written narration verified via the on-screen beat text. (TTS
+  audio requests = 0: voiceEnabled-in-IDB needs a reload to reach Zustand, and a
+  reload reintroduces the reconcile openings-write stall — so audio FIRING +
+  QUALITY stays David's check per G7; narration CONTENT is verified on-screen.)
+- Audit-stream: capture wired via `page.on('request')` (0 POSTs — prod stream
+  blocked in sandbox, expected).
+- WLPP ladder unlock via raw IDB write SUCCEEDS once the boot-seed settles.
+
+## 6c. POST-DEPLOY AUDIT (3 tools, 2026-05-27) — superseded by §6e
 
 Ran `scripts/audit-pro-stafford.mjs` vs localhost dev server with all three
 tools (Playwright drive + /api/tts listener + /api/audit-stream capture):
