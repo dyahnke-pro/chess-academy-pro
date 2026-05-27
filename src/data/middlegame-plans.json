@@ -31319,5 +31319,196 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pronaroditskyfantasycaro-f7sac",
+    "openingId": "pro-naroditsky-fantasy-caro",
+    "criticalPositionFen": "rnbqk2r/pp3ppp/2p2n2/2b5/2BpP3/5N2/PPP3PP/RNBQ1RK1 w kq - 2 8",
+    "title": "Fantasy Caro: The f7 Sacrifice",
+    "overview": "After 3.f3 and the big e4/d4 centre, Black grabs space with ...e5 and ...exd4 and over-extends. Naroditsky pounces: Ng5 trains on f7, the knight sacrifices to tear open the king, and Qh5+ collects the loose pieces. By the time the queen takes on c5, White has emerged from the sacrifice with at least equal material and a stranded enemy king.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Nf7 — the knight sacrifice that cracks the king",
+      "Qxc5 — collect the loose bishop"
+    ],
+    "strategicThemes": [
+      "Punish Black's ...e5/...exd4 over-extension with a sacrifice on f7",
+      "Drag the king into the open and harvest the loose pieces with checks"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/pp3ppp/2p2n2/2b5/2BpP3/5N2/PPP3PP/RNBQ1RK1 w kq - 2 8",
+        "title": "The f7 sacrifice",
+        "moves": [
+          "Ng5",
+          "O-O",
+          "Nxf7",
+          "Rxf7",
+          "Bxf7+",
+          "Kxf7",
+          "Qh5+",
+          "Kg8",
+          "Qxc5"
+        ],
+        "annotations": [
+          "Ng5 — the knight leaps to g5, training on f7; Black's broad pawn-grab on d4 has left the king's cover thin.",
+          "…O-O — Black castles, walking the king onto the very square the attack targets.",
+          "Nxf7 — the sacrifice. The knight rips the f7-pawn off; whatever Black recaptures with, the king is dragged into the open.",
+          "…Rxf7 — the rook recaptures, the only way; now the bishop crashes in.",
+          "Bxf7+ — the bishop takes the rook with check, hauling the king out to f7.",
+          "…Kxf7 — the king must take; it stands on f7 with no pawns around it.",
+          "Qh5+ — the queen joins with check, driving the king back and lining up the loose bishop on c5.",
+          "…Kg8 — the king scuttles back, but the damage is done and the c5-bishop hangs.",
+          "Qxc5 — the sacrifice pays off. White scoops the loose bishop, comes out with at least equal material, and Black's king sits on g8 with no shelter. The Fantasy's attack has done its work."
+        ],
+        "learnCues": [
+          "Ng5 — aim at f7",
+          "…O-O — castle into the fire",
+          "Nxf7 — the sacrifice lands",
+          "…Rxf7 — forced recapture",
+          "Bxf7+ — drag the king out",
+          "…Kxf7 — the king is exposed",
+          "Qh5+ — check, eye the c5-bishop",
+          "…Kg8 — retreat, bishop hangs",
+          "Qxc5 — collect the bishop"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "g5",
+              "to": "f7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "h5",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "https://www.chess.com/game/live/143451496330",
+          "https://www.youtube.com/watch?v=zprg2WbmgzQ",
+          "concept:tac-sacrifice"
+        ]
+      }
+    ]
   }
 ]

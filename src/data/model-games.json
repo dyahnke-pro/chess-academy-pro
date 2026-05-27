@@ -3815,10 +3815,11 @@
     "studentSide": "white",
     "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Nf6 Bc4 exd4 O-O Bc5 Ng5 O-O Nxf7 Rxf7 Bxf7+ Kxf7 Qh5+ Kg8 Qxc5 Nxe4 Qc4+ Qd5 Qxd5+ cxd5 Bf4 Nc6 Nd2 Bf5 Nb3 Nf6 Bg5 Bxc2 Bxf6 gxf6 Rxf6 d3 Re1 a5 Rf2 a4 Na1 Nd4 Re5 Rd8 Kf1 Bb1 Ke1 Bxa2 Kd2 Bc4 Rf4 Nc6 Rg5+ Kh8 Rf7 Re8 Rxb7 Re2+ Kd1 h6 Rg6 Nd4 Rxh6+ Kg8 Rd6 Re8 Kd2 Nf5 Rg6+ Kh8 Kc3 Rc8 Kd2 Re8 Rf6 Nd4 Rf2 Nc6 Rc7 Ne5 h3 Bb5 b3 a3 Ra7 d4 Rxa3 Nc6 Kd1 Re3 Ra8+ Kg7 Raf8 Ne5 R8f5 Bc6 Rg5+ Kh6 Rxe5 Rxe5 Kd2 Bb5 b4 Kg5 Nb3 Rd5 Nc5 Kh4 Rf3 Re5 Nxd3 Re3 Rxe3 dxe3+ Kxe3",
     "sources": [
-      "https://www.chess.com/member/danielnaroditsky",
+      "https://www.chess.com/game/live/143451496330",
+      "https://www.youtube.com/watch?v=zprg2WbmgzQ",
       "concept:tac-sacrifice"
     ],
-    "overview": "Naroditsky's Fantasy Variation in full flow — 3.f3 builds the broad e4/d4 centre, and when Black grabs space with …e5 and …exd4, Danya pounces. Ng5 and a knight sacrifice on f7 tear open the king: 9.Nxf7 Rxf7 10.Bxf7+ Kxf7 11.Qh5+ and the queen harvests the loose pieces. By move 12 White is up material with Black's king stranded in the centre, and the conversion is clinical.",
+    "overview": "Naroditsky's Fantasy Variation in full flow — the 3.f3 line he teaches in his Caro speedruns. It builds the broad e4/d4 centre, and when Black grabs space with …e5 and …exd4, Danya pounces. Ng5 and a knight sacrifice on f7 tear open the king: 9.Nxf7 Rxf7 10.Bxf7+ Kxf7 11.Qh5+ and the queen harvests the loose pieces. By move 12 White has emerged from the sacrifice up material with Black's king stranded on g8, and the conversion is clinical.",
     "middlegameTheme": "The big f3-centre, then a sacrifice on f7 to exploit the exposed king.",
     "lessonSummary": "Build the centre with f3, and when Black overreaches in the open position, the f7-sacrifice is the punishment.",
     "criticalMoments": [
