@@ -2478,5 +2478,325 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-marshallattack-attack",
+    "openingId": "marshall-attack",
+    "title": "The Marshall Attack: a pawn for a storm at the king",
+    "criticalPositionFen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1BP2N2/PP1P1PPP/RNBQR1K1 b - - 0 8",
+    "overview": "The Marshall is Black's most famous gambit: deep in a quiet Ruy Lopez, Black throws in ...d5, sacrificing a central pawn to blow the position open and hurl every piece at White's king. Be straight about it — with a long string of only-moves White can hold the extra pawn — but the initiative is so fierce and the defence so hard that the Marshall has scored brilliancies for over a century. The plan is pure attack: both bishops swing onto the kingside diagonals aimed at h2 and h7, the queen and rooks pour in behind them, and White spends the game defending. This is how Black turns a pawn into a hurricane.",
+    "pawnBreaks": [
+      {
+        "move": "d5",
+        "explanation": "The Marshall Gambit itself: ...d5 blasts the centre open and frees Black's pieces for the attack. The pawn is a down payment on the initiative — the whole point of the Ruy Marshall."
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Be7-d6 / Bc8-f5-g6",
+        "explanation": "Both bishops aim at the king: ...Bd6 takes the b8-h2 diagonal pointing at h2, ...Bf5-g6 takes the b1-h7 diagonal. Two bishops trained on the white kingside."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd8-d7-h3",
+        "explanation": "Behind the bishops the queen swings to the kingside (the classic ...Qd7-h3 / ...Qh4 routes) to spearhead the mating attack."
+      }
+    ],
+    "strategicThemes": [
+      "...d5 sacrifices a pawn for a lasting, fearsome kingside attack — initiative over material.",
+      "Both bishops onto the kingside diagonals: ...Bd6 at h2, ...Bf5/g6 at h7.",
+      "The queen and rooks pour in behind the bishops; White is pinned to defence.",
+      "Honest caveat: precise only-move defence holds the pawn — but the practical attack is brutal."
+    ],
+    "playableLines": [
+      {
+        "title": "The Marshall storm",
+        "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1BP2N2/PP1P1PPP/RNBQR1K1 b - - 0 8",
+        "moves": [
+          "d5",
+          "exd5",
+          "Nxd5",
+          "Nxe5",
+          "Nxe5",
+          "Rxe5",
+          "c6",
+          "Re1",
+          "Bd6",
+          "d3",
+          "Bf5",
+          "Nd2",
+          "Bxd3",
+          "Nf3",
+          "Bg6"
+        ],
+        "annotations": [
+          "...d5! — the Marshall Gambit. Black throws a central pawn into the fire to blast the position open and unleash the pieces at White's king. This one move is the whole point of the Ruy Marshall.",
+          "",
+          "...Nxd5 — recapturing; the knight sits proudly in the centre, ready to swing to f4 or back to f6 supporting the storm.",
+          "",
+          "...Nxe5 — the knights come off, but Black's whole army is about to descend on the kingside. Material is a side issue now.",
+          "",
+          "...c6 — quietly shoring up the d5-knight so every other piece is free to attack. The calm before the storm.",
+          "",
+          "...Bd6 — the key Marshall bishop swings to the b8-h2 diagonal, pointing straight at h2, the door to White's king.",
+          "",
+          "...Bf5 — the second bishop joins on the b1-h7 diagonal; both bishops now rake the white kingside.",
+          "",
+          "...Bxd3 — collecting the pawn back while keeping the bishop on its attacking diagonal: the attack now costs Black nothing.",
+          "",
+          "...Bg6 — the bishop holds the deadly diagonal toward h7, and behind it the queen and rooks are ready to pour in. The Marshall is in full swing: a pawn invested, both bishops trained on the king, the initiative Black's. White can survive with only-moves — but over the board this attack has produced brilliancies for a century."
+        ],
+        "learnCues": [
+          "...d5! — the Marshall sac, blast it open",
+          "",
+          "...Nxd5 — centralise the knight",
+          "",
+          "...Nxe5 — trade; the attack is what matters",
+          "",
+          "...c6 — shore up d5, free the pieces",
+          "",
+          "...Bd6 — aim the bishop at h2",
+          "",
+          "...Bf5 — second bishop to the kingside",
+          "",
+          "...Bxd3 — regain the pawn, keep the diagonal",
+          "",
+          "...Bg6 — keep the diagonal live; pieces pour in"
+        ],
+        "sources": [
+          "book:ruy-lopez",
+          "concept:pos-initiative",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Marshall_Attack"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "f4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d6",
+              "to": "b8",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "d6",
+              "to": "h2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "f5",
+              "to": "h7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g6",
+              "to": "h7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
