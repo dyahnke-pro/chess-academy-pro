@@ -1,94 +1,129 @@
 [
   {
-    "id": "mp-gambitkingsgambit-modern",
+    "id": "mp-gambitkingsgambit-attack",
     "openingId": "gambit-kings-gambit",
-    "title": "Modern Defense: grind the development lead",
-    "criticalPositionFen": "rnb1k2r/ppp2ppp/3bqn2/8/5p2/2N2N2/PPPPB1PP/R1BQ1RK1 w kq - 6 8",
-    "overview": "Against the sound 3...d5, Black grabs the f4-pawn but spends two tempi shuffling the queen (Qxd5, Qe6+) and leaves the king in the centre. This is not a sacrifice — it's a positional plan: develop with tempo, wreck Black's castling with Bb5+, clamp the centre with d4 and c4, and grind two permanent pluses — a big development lead and the weak, stranded f4-pawn — into a lasting bind. No risk, no material down: just a better position you can squeeze.",
+    "title": "The King's Gambit attack: a pawn for the initiative",
+    "criticalPositionFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "overview": "The King's Gambit is a fighting opening, not a quiet one — and trying to play it 'soundly' for a small edge actually leaves White worse, because Black just holds the extra pawn. Played the right way, you give the pawn ON PURPOSE and never look back: develop every piece with tempo, plant a broad e4+d4 centre, aim the bishop at f7, and walk the king to f1 rather than weaken the kingside. The pawn buys a lead in development and the initiative — and you convert that into a real, lasting advantage. This plan walks the Bishop's Gambit main line move by move, showing how the sacrifice turns into the two bishops, a dominating centre, a wrecked Black structure, and an attack — White is close to winning out of the opening, and every move is engine-sound.",
     "pawnBreaks": [
       {
         "move": "d4",
-        "explanation": "With Black's king chased to f8 and unable to castle, d4 seizes the centre White already controls — opening lines for both bishops while Black's pieces stay passive.",
-        "fen": "rnb2k1r/ppp2ppp/3bqn2/1B6/5p2/2N2N2/PPPP2PP/R1BQ1RK1 w - - 8 9"
-      },
-      {
-        "move": "c4",
-        "explanation": "Once the centre is fixed, c4 grabs queenside space and clamps d5, denying Black's knight and bishop any active outpost — the bind tightens with no counterplay allowed."
+        "explanation": "The second half of the compensation. With e4 already there, d4 builds a broad centre that grabs space, opens both bishops, and denies Black's pieces any good square. The gambit pawn is gone; the centre is permanent."
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Bishop",
-        "route": "Be2-b5+-d3",
-        "explanation": "The light-squared bishop's two jobs: first Bb5+ to drive the king to f8 (castling gone for good), then Bd3 onto the b1-h7 diagonal, aiming at Black's airy kingside."
+        "piece": "Knight",
+        "route": "Nb1-c3-d5",
+        "explanation": "The attacking knight reroute. Nc3 develops, then Nd5 leaps to the central outpost WITH TEMPO on Black's queen, forcing it to retreat and cementing White's grip on the centre."
       },
       {
-        "piece": "Knight",
-        "route": "Nc3-e4",
-        "explanation": "Ne4 occupies the central outpost and offers a trade that only improves White — every simplification leaves the development lead and the f4 weakness intact."
+        "piece": "Bishop",
+        "route": "Bf1-c4 / Bxf4 / Bf1-d3",
+        "explanation": "Both bishops attack. The light bishop hits f7 from c4 (and later swings to d3, the b1-h7 diagonal at Black's king); the dark bishop recovers the gambit pawn on f4 onto an active diagonal eyeing d6 and c7."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-e1-h4",
+        "explanation": "The quiet retreat Qe1 reroutes the queen toward h4 and the kingside, linking up with the h1-rook and the half-open f-file for the attack."
       }
     ],
     "strategicThemes": [
-      "Punish the early queen sorties (Qxd5, Qe6+) with rapid, tempo-gaining development.",
-      "Bb5+ permanently denies Black castling — the king never finds safety.",
-      "The f4-pawn is a fixed, long-term weakness White rounds up at leisure.",
-      "Central and queenside space (d4, c4) leave Black's pieces with no active squares."
+      "Give the pawn on purpose: the King's Gambit's edge is dynamic — a lead in development and the initiative, not material.",
+      "King safety through activity, not castling — Kf1 keeps the centre intact; the attacker doesn't need to hide.",
+      "The broad e4+d4 centre and the bishop on f7 are the standing compensation for the pawn.",
+      "Recover the gambit pawn only once it lands a piece actively (Bxf4), never at the cost of the initiative.",
+      "Trade off Black's good pieces and damage the structure (Nxb6 -> doubled b-pawns), then turn to the king."
     ],
     "playableLines": [
       {
-        "title": "Modern Defense: the development-lead squeeze",
-        "fen": "rnb1k2r/ppp2ppp/3bqn2/8/5p2/2N2N2/PPPPB1PP/R1BQ1RK1 w kq - 6 8",
+        "title": "Bishop's Gambit: the sacrifice converted",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
         "moves": [
-          "Bb5+",
-          "Kf8",
+          "e4",
+          "e5",
+          "f4",
+          "exf4",
+          "Bc4",
+          "Qh4+",
+          "Kf1",
+          "Bc5",
           "d4",
-          "a6",
+          "Bb6",
+          "Nf3",
+          "Qe7",
+          "Nc3",
+          "d6",
+          "Nd5",
+          "Qd8",
+          "Bxf4",
+          "c6",
+          "Nxb6",
+          "axb6",
+          "Qe1",
+          "b5",
           "Bd3",
-          "Qg4",
-          "Ne4",
-          "Nxe4",
-          "Bxe4",
-          "Nd7",
-          "c4",
           "Nf6",
-          "Bd3",
-          "g5"
+          "Bxd6"
         ],
         "annotations": [
-          "Bb5+ — before touching the centre, exploit the stranded king: the check on b5 forces it to f8, and Black gives up castling for the whole game.",
-          "…Kf8 — the king is nailed to f8, the h8-rook is dead, and Black will spend the game trying to untangle.",
-          "d4 — now the big centre pawn lands on d4, seizing space and opening the diagonals for both White bishops.",
           "",
-          "Bd3 — the bishop swings to the b1-h7 diagonal, pointing straight at h7 and Black's exposed kingside.",
           "",
-          "Ne4 — the knight takes the central e4-outpost and offers a trade; every swap leaves White's pieces the better-placed ones.",
+          "The King's Gambit: White offers the f-pawn — not to win it straight back, but to trade a pawn for open lines, the centre, and a raging initiative.",
           "",
-          "Bxe4 — recapturing toward the centre, the bishop now rakes the long diagonal toward b7.",
+          "Bc4 — development before recovery. The bishop takes dead aim at f7, the eternal target, while White ignores the pawn and gets the pieces out.",
           "",
-          "c4 — White grabs queenside space and clamps d5, so Black's knight and bishop never find an active square.",
+          "Kf1 — the signature move. White refuses to weaken the kingside with g3 to block the check; the king just steps aside. Castling is beside the point when you're the one attacking — safety comes from the centre and the initiative.",
           "",
-          "Bd3 — White retreats to keep the h7 diagonal live and simply sits: the development lead, the safer king, and the weak f4-pawn are permanent — Black has no counterplay, and White rounds up f4 at leisure.",
-          ""
+          "d4 — the broad e4+d4 centre, the rest of the compensation: space, open diagonals for both bishops, and no breathing room for Black. The pawn is gone; the centre is forever.",
+          "",
+          "Nf3 — developing and nudging the queen, gaining time while Black still shuffles.",
+          "",
+          "Nc3 — every White piece is out and aimed at Black's king while the queen wanders and Black's kingside sleeps. That lead in development is exactly what the pawn bought.",
+          "",
+          "Nd5! — the knight jumps to the central outpost with tempo, kicking the queen home to d8. Black is shoved into full retreat and White owns the centre.",
+          "",
+          "Bxf4 — only now, with Black tangled, does White calmly take the pawn back — and the bishop lands actively on f4, eyeing d6 and c7. Material is level, the position dominant: the gambit has paid in full.",
+          "",
+          "Nxb6 — trading off Black's one good piece; the forced ...axb6 leaves Black with doubled, isolated b-pawns, a permanent wound.",
+          "",
+          "Qe1 — the quiet retreat that reroutes the queen toward h4 and the kingside, where the h1-rook and the half-open f-file are waiting.",
+          "",
+          "Bd3 — the light bishop swings onto the b1-h7 diagonal, the classic artery toward Black's king.",
+          "",
+          "Bxd6 — and White harvests the d6-pawn and the dark squares. Count the position: the bishop pair, a dominating centre, a healthier structure, the safer king, the initiative. From one pawn given up, White is close to winning — the King's Gambit done right."
         ],
         "learnCues": [
-          "Bb5+ — wreck Black's castling",
           "",
-          "d4 — clamp the centre",
           "",
-          "Bd3 — onto the h7 diagonal",
+          "f4 — offer the pawn for the initiative",
           "",
-          "Ne4 — central outpost, offer the trade",
+          "Bc4 — aim at f7, develop first",
           "",
-          "Bxe4 — toward the long diagonal",
+          "Kf1 — step aside; attack, don't castle",
           "",
-          "c4 — grab queenside space",
+          "d4 — build the broad centre",
           "",
-          "Bd3 — sit tight; f4 won't run",
-          ""
+          "Nf3 — develop with tempo",
+          "",
+          "Nc3 — every piece into the attack",
+          "",
+          "Nd5 — outpost, hit the queen",
+          "",
+          "Bxf4 — recover the pawn, actively",
+          "",
+          "Nxb6 — trade off Black's good bishop",
+          "",
+          "Qe1 — reroute the queen to the kingside",
+          "",
+          "Bd3 — onto the b1-h7 attacking diagonal",
+          "",
+          "Bxd6 — collect d6; White dominates"
         ],
         "sources": [
+          "book:kings-gambit",
+          "concept:pos-initiative",
           "concept:pos-development",
-          "concept:pos-king-safety",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/King%27s_Gambit"
         ],
@@ -99,8 +134,26 @@
           [],
           [
             {
-              "from": "d3",
-              "to": "h7",
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f4",
+              "to": "d6",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
@@ -109,50 +162,103 @@
           [],
           [
             {
-              "from": "e4",
-              "to": "b7",
+              "from": "e1",
+              "to": "h4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
           [],
           [],
           [],
-          [
-            {
-              "from": "d3",
-              "to": "h7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "b5",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f8",
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
               "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h8",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -163,11 +269,127 @@
             {
               "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "a6",
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -177,11 +399,39 @@
           ],
           [
             {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b5",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -195,107 +445,21 @@
           ],
           [
             {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b7",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
               "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d7",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d3",
+              "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h7",
-              "color": "rgba(255, 235, 59, 0.5)"
             },
             {
               "square": "f4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
