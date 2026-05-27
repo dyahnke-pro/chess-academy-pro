@@ -455,10 +455,10 @@
       "style": "Gambit, Aggressive",
       "overview": "Think of the Vienna as the King's Gambit reformed by someone who learned from the King's Gambit's mistakes. Named after the Viennese chess club where Wilhelm Steinitz (the first official World Champion) and his students experimented with it in the 1860s-80s, the Vienna was a popular tournament weapon through the early 1900s before falling into obscurity. Modern preparation has resurrected it as a surprise weapon; Vassily Ivanchuk plays it occasionally at elite level. The order matters: 1.e4 e5 2.Nc3 develops first, defending e4 and controlling d5; only THEN 3.f4 — which now means something different because the Nc3 already protects everything the King's Gambit leaves hanging. Most 1...e5 players have spent zero hours studying the Vienna; they see 2.Nc3 and reach for autopilot, only to face f4 on move 3 and immediately blunder.",
       "keyIdeas": [
-        "f4 is the move. The whole opening is built around it — open the f-file, undermine e5, and turn the game into a tactical brawl while Black is still trying to remember move 4.",
-        "Against 2…Nf6 (the most testing reply), the standard plan is 3.f4 d5 (the principled refutation) 4.fxe5 Nxe4 and you accept the pawn deficit for active piece play. Without this knowledge, the gambit is unsound.",
-        "Bc4 + f4 + Qf3 is the attacking trio. The bishop targets f7, the f-pawn opens the file, the queen swings to the kingside. Once you've set this up, the attack on the black king is automatic.",
-        "Even if Black equalises material, you keep the bishop pair and the centre. The Vienna's worst-case outcome is a slightly worse but very playable position — not the disaster you'd think for a gambit."
+        "The Vienna starts with Nc3 — queen-knight first — keeping the king-knight free so White can choose between three attacking setups. The sharpest is the f4 gambit.",
+        "f4 is the gambit thrust: attack e5 from the side like a King's Gambit, but with Nc3 already developed. The aim is a big centre and an open f-file at Black's king.",
+        "Black's best is the …d5 counter; after fxe5 Nxe4 the centre ignites. White keeps the e5-spearhead, the bishop pair, and the freer pieces into a pleasant middlegame.",
+        "The Vienna is weapon-rich: against 2…Nc6 the …g5 grab walks into Nd5/Nxc7+ forks, and against 3.Bc4 Nxe4 the Frankenstein-Dracula Qh5 hits the knight and threatens f7 at once."
       ],
       "traps": [
         "After 3…d5 4.fxe5 Nxe4 5.Nf3, if Black plays the natural 5…Bc5? (eyeing f2 like the Italian) instead of the correct 5…Bg4 or 5…Be7, you have 6.d4! kicking the bishop and gaining a HUGE tempo — Black's pieces tangle and the gambit pawn becomes irrelevant."
@@ -469,34 +469,26 @@
       ],
       "variations": [
         {
-          "name": "Vienna Gambit 3.f4 d5",
-          "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bg4 Qe2 Nc5 d4 Bxf3 Qxf3 Qh4+ Qf2 Qxf2+ Kxf2 Ne6 Be3 c6 Bd3 Be7",
-          "explanation": "The theoretical mainline. Black's …d5 is the only critical reply — accept it with fxe5 and let the knight come to e4 with tempo. Your Qe2 prepares to pin the knight on e4 if it moves, and after the forced …Bxf3 Qxf3 Qh4+ Qf2! the queens trade off and Kxf2 keeps the structure intact. The resulting middlegame has the bishop pair, an active king on f2 (yes, actively placed!), and central control — full compensation for the pawn deficit.",
-          "sources": [
-            "book:vienna-game",
-            "concept:pos-development",
-            "https://en.wikipedia.org/wiki/Vienna_Game"
-          ]
+          "name": "Copycat 2...Nc6",
+          "pgn": "e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 g4 O-O gxf3 Qxf3 Qf6 Nd5 Qd4+ Kh1 Qxc4 Nxc7+ Kd8 Nxa8",
+          "explanation": "When Black copies with 2…Nc6 3.f4 exf4 and tries to hold the pawn with …g5, White sacrifices a knight to blast open the f-file, then Nd5 and Nxc7+ fork king and rook — a devastating attack for the piece.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 40,
+            "score": 62,
+            "source": "lichess /player"
+          }
         },
         {
-          "name": "Vienna Game 3.Bc4 Quiet",
-          "pgn": "e4 e5 Nc3 Nf6 Bc4 Bc5 d3 d6 Nf3 O-O O-O c6 Bb3 Nbd7 Ne2 Bb6 c3 Nc5 Bc2 Bg4 Ng3 Nh5",
-          "explanation": "When you don't want a sharp game, the Vienna can slide into a Bc4 Italian-style setup. The Ne2 reroute (heading to g3 to support a future kingside attack) is the Vienna's distinctive idea — it preserves the option of a slow f4 push while developing harmoniously. The resulting middlegame is calm but with all the strategic plusses (better central control, easier piece placement) on White's side.",
-          "sources": [
-            "book:vienna-game",
-            "concept:pos-development",
-            "https://en.wikipedia.org/wiki/Vienna_Game"
-          ]
-        },
-        {
-          "name": "Vienna Copycat 2...Nc6 3.f4",
-          "pgn": "e4 e5 Nc3 Nc6 f4 exf4 Nf3 g5 Bc4 g4 O-O gxf3 Qxf3 Bc5+ Kh1 Qh4 Nd5 Ne5 Qe2 Ng4",
-          "explanation": "Black plays …Nc6 mirroring you, then accepts the gambit with 3...exf4 4.Nf3 g5 (the King's Gambit-style pawn grab attempting to defend f4) 5.Bc4 g4 — and on 6.O-O! you ABANDON the knight on f3. After 6...gxf3 7.Qxf3 Bc5+ 8.Kh1, you've sacrificed a knight for total board domination: open f-file aimed at f7, bishop on c4 also at f7, queen on f3 aimed at f7. Black's king is still on e8 and there's no good way to defend against the mating threats. The line is theoretically unsound (Black can find moves to survive), but practically lethal — most opponents have to find six perfect defensive moves under clock pressure to escape, which they don't.",
-          "sources": [
-            "book:vienna-game",
-            "concept:pos-development",
-            "https://en.wikipedia.org/wiki/Vienna_Game"
-          ]
+          "name": "Frankenstein-Dracula 3.Bc4",
+          "pgn": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Be7 Nf3 Nc6 Nxe5 Nxe5 Qxe5 O-O O-O Bf6 Qf4 Bg5",
+          "explanation": "If Black grabs e4 after 3.Bc4 Nxe4, White uncorks Qh5 — hitting the knight and threatening mate on f7. After Nd6 Bb3 White regains the pawn on e5 with the better game and a lasting initiative.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 30,
+            "score": 61,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
@@ -505,7 +497,14 @@
         "book:vienna-game",
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Vienna_Game"
-      ]
+      ],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 90,
+        "score": 60,
+        "source": "lichess /player",
+        "taughtUrl": "https://www.youtube.com/@DanielNaroditskyGM"
+      }
     },
     {
       "id": "pro-naroditsky-semi-slav",
