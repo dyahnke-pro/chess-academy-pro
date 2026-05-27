@@ -17,7 +17,21 @@ No invented or assumed lines.
 
 ---
 
-## 1. Current state (the inventory)
+## 0. BUILD FRESH — discard current data (David 2026-05-27)
+
+"The current stuff will ALL get replaced. We are building fresh." The existing
+`pro-repertoires.json` (82 openings, flat schema) is NOT a source of truth and
+will be fully replaced. Do NOT audit/preserve/migrate it. Every pro opening's
+line set is determined ONLY from:
+1. **What they actually play** — the harvested most-played-variation rankings
+   (`docs/audit-runs/2026-05-27-pro-provenance/rankings.json`, 136,880 games).
+2. **What they explicitly teach/recommend** — web/YouTube (for the teachers;
+   honor a named taught line even if their blitz favors something else, e.g.
+   Gotham teaches the London while personally blitzing the Trompowsky).
+Each shipped line carries a `provenance` record (§4). Elites ground on their
+serious/OTB games (online blitz is NOT their real repertoire — Carlsen proof).
+
+## 1. (reference) Prior state being replaced
 
 - `src/data/pro-repertoires.json`: 14 players → **82 openings** across 45
   opening families. Flat pre-masterclass schema: `overview` + 4 `keyIdeas` +
@@ -135,6 +149,38 @@ A/C), or a player-flavored entry into openings already taught generically
 (implies B)? D1 follows from this.
 
 ---
+
+## 5b. WAVE-1 BUILD LIST (from harvest + taught recs, 2026-05-27)
+
+Grounded in `rankings.json` (games/serious/score) + web-confirmed taught lines.
+"played" = data-dominant; "taught" = web/YouTube recommendation. Each opening
+becomes a full standalone masterclass built from the player's own line.
+
+**Naroditsky** (teacher+elite, 12,269 games)
+- White: Alapin Sicilian (300g+, taught ✓), Four Knights Scotch (409g C47, taught
+  "Four Knights Scotch" ✓), Jobava/London (164g+), Caro-Kann Exchange (73g),
+  Sicilian Canal (67g)
+- Black: Accelerated Dragon (220g+), King's Indian Defence (200g+)
+
+**GothamChess** (teacher, 12,261 games)
+- White: Trompowsky (950g — signature, played), Vienna C29 Paulsen (103g, NAMED by
+  David ✓, played+taught), London System + anti-KID plan (taught ✓, NAMED by David
+  — 3.Nc3/Qd2/Bh6/h4), Levitsky/Jobava (151g)
+- Black: Scandinavian (450g+, signature taught ✓), French Rubinstein (315g),
+  Modern Defence (290g), Caro-Kann Two-Knights (104g)
+
+**Eric Rosen** (teacher, 12,057 games)
+- White: London System / Accelerated London (dominant, signature taught ✓)
+- Black: Stafford Gambit / Petrov (378g C42, signature taught ✓), QGD Exchange,
+  Catalan
+
+**Carlsen** (elite, 9,623 games) — ⚠️ online = varied blitz, NOT his real
+repertoire (0 serious per line). DO NOT build from online blitz. Needs OTB /
+masters-DB sourcing first; propose his OTB mainstays (Ruy Lopez as White, etc.)
+pending that grounding step. Flagged as the elite-path proof.
+
+Build order (cleanest-grounded first): Eric Rosen Stafford → Naroditsky Alapin →
+Gotham Vienna/London → Carlsen (after OTB sourcing).
 
 ## 6. Phased plan (once decisions land)
 
