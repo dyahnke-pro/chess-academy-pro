@@ -1,6 +1,6 @@
 import { db } from '../db/schema';
 import type { GameRecord, PlatformStats } from '../types';
-import { detectOpening, detectBlunders } from './gameImportUtils';
+import { detectOpening, detectBlunders, extractClockMs } from './gameImportUtils';
 import { generateMistakePuzzlesForBatch } from './mistakePuzzleService';
 import { runBackgroundAnalysis } from './gameAnalysisService';
 
@@ -89,9 +89,11 @@ export async function importLichessGames(
       game.winner === 'black' ? '0-1' :
       game.winner ? '1-0' : '1/2-1/2';
 
+    const pgn = game.pgn ?? '';
+    const clockRemainingMs = extractClockMs(pgn);
     const record: GameRecord = {
       id: `lichess-${game.id}`,
-      pgn: game.pgn ?? '',
+      pgn,
       white: game.players.white.user?.name ?? 'Anonymous',
       black: game.players.black.user?.name ?? 'Anonymous',
       result: result as GameRecord['result'],
@@ -105,6 +107,7 @@ export async function importLichessGames(
       coachAnalysis: null,
       isMasterGame: false,
       openingId: null,
+      ...(clockRemainingMs.length ? { clockRemainingMs } : {}),
     };
 
     // Dedupe by ID

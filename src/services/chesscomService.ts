@@ -1,6 +1,6 @@
 import { db } from '../db/schema';
 import type { GameRecord, PlatformStats, TimeControlStats } from '../types';
-import { detectOpening, detectBlunders } from './gameImportUtils';
+import { detectOpening, detectBlunders, extractClockMs } from './gameImportUtils';
 import { generateMistakePuzzlesForBatch } from './mistakePuzzleService';
 import { runBackgroundAnalysis } from './gameAnalysisService';
 
@@ -48,6 +48,7 @@ function parseChessComGame(game: ChessComGame): GameRecord {
     '1/2-1/2';
 
   const ecoMatch = game.pgn.match(/\[ECO\s+"([^"]+)"\]/);
+  const clockRemainingMs = extractClockMs(game.pgn);
 
   return {
     id: `chesscom-${gameId}`,
@@ -65,6 +66,7 @@ function parseChessComGame(game: ChessComGame): GameRecord {
     coachAnalysis: null,
     isMasterGame: false,
     openingId: null,
+    ...(clockRemainingMs.length ? { clockRemainingMs } : {}),
   };
 }
 

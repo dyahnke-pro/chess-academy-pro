@@ -12,7 +12,8 @@ import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
 import { getUnlearnedFavoriteOpenings } from '../../services/openingService';
 import { getSrsDueOpenings } from '../../services/srsOpeningService';
 import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
-import { getCompletedRepKeysToday, REP_PUZZLE_CAP } from '../../services/repCompletion';
+import { getCompletedRepKeysToday } from '../../services/repCompletion';
+import { resolveRepRoute } from '../../services/repRouting';
 
 interface SectionItem {
   label: string;
@@ -66,47 +67,8 @@ const SECTIONS: SectionItem[] = [
 /** Route a Today's rep into its drill — same logic as the Training Plan hub
  *  (TrainingPlanRolodexPage) so the dashboard tasks and the plan agree. */
 function navigateToRep(navigate: ReturnType<typeof useNavigate>, rep: RepCandidate): void {
-  if (rep.kind !== 'weakness') {
-    void navigate(`/openings/${rep.openingId ?? ''}`);
-    return;
-  }
-  // Opening weak spots drill on the opening's own page (its DrillMode
-  // resurfaces the failed positions), not the tactical puzzle queue.
-  if (rep.tag?.startsWith('analysis:weakspot:')) {
-    void navigate(`/openings/${rep.tag.slice('analysis:weakspot:'.length)}`);
-    return;
-  }
-  // Board-vision blind spots drill on the Find-the-Square trainer, which
-  // records fresh attempts and shrinks the weak-square set as vision improves.
-  if (rep.tag === 'analysis:boardvision') {
-    void navigate('/tactics/find-square');
-    return;
-  }
-  // Time-trouble blunders → practice under the clock (the play timer feature).
-  if (rep.tag === 'analysis:timetrouble') {
-    void navigate('/coach/play?time=blitz-5-0');
-    return;
-  }
-  // Conversion failures → play out the winning position you blew, vs the
-  // engine. Winning it (conv=1) marks the conversion addressed.
-  if (rep.tag === 'analysis:conversion' && rep.fen) {
-    void navigate(`/coach/play?fen=${encodeURIComponent(rep.fen)}&conv=1`);
-    return;
-  }
-  if (rep.puzzleThemes && rep.puzzleThemes.length > 0) {
-    void navigate('/tactics/adaptive', {
-      state: {
-        forcedWeakThemes: rep.puzzleThemes,
-        misconceptionTag: rep.tag && !rep.tag.startsWith('analysis:') ? rep.tag : undefined,
-        // Capped rep drill: stop after REP_PUZZLE_CAP puzzles and offer to
-        // continue or return to the Dashboard with this rep checked off.
-        repKey: rep.key,
-        repCap: REP_PUZZLE_CAP,
-      },
-    });
-  } else {
-    void navigate('/weaknesses');
-  }
+  const route = resolveRepRoute(rep);
+  void navigate(route.path, route.state ? { state: route.state } : undefined);
 }
 
 function TodayStatus(): JSX.Element | null {

@@ -1,6 +1,27 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { detectOpening, detectBlunders } from './gameImportUtils';
+import { detectOpening, detectBlunders, extractClockMs } from './gameImportUtils';
 import { db } from '../db/schema';
+
+describe('extractClockMs', () => {
+  it('parses H:MM:SS clock tags in move order to ms', () => {
+    const pgn = '1. e4 { [%clk 0:03:00] } e5 { [%clk 0:02:58] } 2. Nf3 { [%clk 0:02:55] } Nc6 { [%clk 0:02:50] } *';
+    expect(extractClockMs(pgn)).toEqual([180_000, 178_000, 175_000, 170_000]);
+  });
+
+  it('handles tenths and M:SS / SS forms', () => {
+    const pgn = '1. e4 { [%clk 0:00:09.3] } e5 { [%clk 1:05] } 2. Nf3 { [%clk 8] } *';
+    expect(extractClockMs(pgn)).toEqual([9_300, 65_000, 8_000]);
+  });
+
+  it('returns [] for an untimed game with no clock tags', () => {
+    expect(extractClockMs('1. e4 e5 2. Nf3 Nc6 *')).toEqual([]);
+  });
+
+  it('coexists with [%eval] comments without confusion', () => {
+    const pgn = '1. e4 { [%eval 0.2] [%clk 0:03:00] } e5 { [%clk 0:02:59] [%eval 0.1] } *';
+    expect(extractClockMs(pgn)).toEqual([180_000, 179_000]);
+  });
+});
 
 describe('gameImportUtils', () => {
   describe('detectOpening', () => {

@@ -42,6 +42,7 @@ import { getFavoriteOpenings, getUnlearnedFavoriteOpenings } from '../../service
 import { getUnifiedWeaknessProfile } from '../../services/weaknessSpine';
 import { getSrsDueOpenings } from '../../services/srsOpeningService';
 import { buildTodaysReps, type RepCandidate } from '../../services/trainingPlanSelector';
+import { resolveRepRoute } from '../../services/repRouting';
 import { logAppAudit } from '../../services/appAuditor';
 import { RolodexCardStack } from './RolodexCardStack';
 import { PageHelp } from '../Layout/PageHelp';
@@ -108,45 +109,8 @@ function TodaysReps(): JSX.Element | null {
               <button
                 type="button"
                 onClick={() => {
-                  if (rep.kind !== 'weakness') {
-                    void navigate(`/openings/${rep.openingId ?? ''}`);
-                    return;
-                  }
-                  // Opening weak spots drill on the opening's own page (its
-                  // DrillMode resurfaces the failed positions).
-                  if (rep.tag?.startsWith('analysis:weakspot:')) {
-                    void navigate(`/openings/${rep.tag.slice('analysis:weakspot:'.length)}`);
-                    return;
-                  }
-                  // Board-vision blind spots drill on the Find-the-Square trainer.
-                  if (rep.tag === 'analysis:boardvision') {
-                    void navigate('/tactics/find-square');
-                    return;
-                  }
-                  // Time-trouble blunders → practice under the clock.
-                  if (rep.tag === 'analysis:timetrouble') {
-                    void navigate('/coach/play?time=blitz-5-0');
-                    return;
-                  }
-                  // Conversion failures → play out the winning position you blew.
-                  if (rep.tag === 'analysis:conversion' && rep.fen) {
-                    void navigate(`/coach/play?fen=${encodeURIComponent(rep.fen)}&conv=1`);
-                    return;
-                  }
-                  // A weakness rep drills its motif: deep-link into the
-                  // adaptive tactical drill scoped to the tag's themes. The
-                  // real misconception tag (not an analysis:* cluster) rides
-                  // along so the drill can space it out on completion.
-                  if (rep.puzzleThemes && rep.puzzleThemes.length > 0) {
-                    void navigate('/tactics/adaptive', {
-                      state: {
-                        forcedWeakThemes: rep.puzzleThemes,
-                        misconceptionTag: rep.tag && !rep.tag.startsWith('analysis:') ? rep.tag : undefined,
-                      },
-                    });
-                  } else {
-                    void navigate('/weaknesses');
-                  }
+                  const route = resolveRepRoute(rep);
+                  void navigate(route.path, route.state ? { state: route.state } : undefined);
                 }}
                 className="w-full flex items-center gap-3 text-left p-3 rounded-xl bg-theme-surface border border-theme-border hover:border-theme-accent/40 transition-colors"
                 data-testid={`todays-rep-${rep.kind}`}

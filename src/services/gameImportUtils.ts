@@ -134,6 +134,29 @@ interface EvalEntry {
  * Parse eval annotations from PGN comments.
  * Supports: {[%eval 1.23]}, {[%eval -0.5]}, {[%eval #3]}, {[%eval #-2]}
  */
+/**
+ * Per-ply remaining clock (ms) from `[%clk H:MM:SS(.f)]` move comments, in move
+ * order — index i = remaining time for the side that played ply i, which is
+ * exactly what `GameRecord.clockRemainingMs` (and the time-trouble detector)
+ * expect. Returns [] for untimed games / PGNs without clock tags. Lichess and
+ * Chess.com emit a `[%clk]` on every move of a timed game, so the document
+ * order of the tags lines up with ply order.
+ */
+export function extractClockMs(pgn: string): number[] {
+  const out: number[] = [];
+  const re = /\[%clk\s+([0-9]+(?::[0-9]+){0,2}(?:\.[0-9]+)?)\]/g;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(pgn)) !== null) {
+    const parts = match[1].split(':').map(Number);
+    let secs: number;
+    if (parts.length === 3) secs = parts[0] * 3600 + parts[1] * 60 + parts[2];
+    else if (parts.length === 2) secs = parts[0] * 60 + parts[1];
+    else secs = parts[0];
+    if (Number.isFinite(secs)) out.push(Math.round(secs * 1000));
+  }
+  return out;
+}
+
 function parseEvalComments(pgn: string): EvalEntry[] {
   const evals: EvalEntry[] = [];
   const evalRegex = /\[%eval\s+([#\-\d.]+)\]/g;
