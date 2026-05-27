@@ -3717,12 +3717,13 @@
     "studentSide": "white",
     "pgn": "d4 Nf6 Bf4 d5 e3 c5 Nf3 Nc6 Nbd2 Bf5 dxc5 e6 Nd4 Bxc5 Nxf5 exf5 c3 O-O Bd3 Ne4 O-O Qf6 Nf3 Rfe8 Qb3 Bb6 Qxd5 Rad8 Qb5 Nc5 Bg5 Qg6 Bxd8 Rxd8 Bc2 Ne7 Rad1 Rc8 Rd2 h6 Rfd1 a6 Qf1 Bc7 b4 Ne4 Bxe4 fxe4 Nd4 Qh5 g3 Nd5 Nf5 Qxf5 Rxd5 Qf6 c4 Be5 c5 Bc3 Qc4 Kh7 Qxe4+",
     "sources": [
-      "https://www.chess.com/member/gothamchess",
-      "concept:pos-bishop-pair"
+      "https://www.chess.com/game/live/124562322039",
+      "https://en.wikipedia.org/wiki/London_System",
+      "concept:pos-center"
     ],
-    "overview": "Levy Rozman with the London, against the …Bf5 setup club players reach for to free their bad bishop. He doesn't allow it: Nd4 then Nxf5 trades the knight for that bishop, leaving Black with a passive piece and a weak d5-pawn. Once the pawn falls to Qxd5, it's a clean technical grind — the London's harmonious pieces converting a structural edge into a won middlegame.",
-    "middlegameTheme": "Trade off the …Bf5, win the d5-pawn, convert the structural edge.",
-    "lessonSummary": "Exchange the bishop that frees Black, target the central pawn, and grind — the London rewards patience over fireworks.",
+    "overview": "Levy Rozman with the London, against the …Bf5 setup club players reach for to free the bishop the London usually leaves bad. He doesn't allow it: Nd4 then Nxf5 trades the knight for that bishop, saddling Black with doubled f-pawns and a weak d5-pawn. Then White plays Capablanca's principle — control of the centre ensures the initiative — and the queen collects the d5-pawn. From there it's a clean technical grind, the London's harmonious pieces converting a structural edge.",
+    "middlegameTheme": "Trade off the …Bf5, win the weak d5-pawn, convert the structural edge.",
+    "lessonSummary": "Exchange the bishop that frees Black, take the central pawn, and grind — the London rewards patience over fireworks.",
     "criticalMoments": [
       {
         "moveNumber": 8,

@@ -30794,5 +30794,308 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-progothamchesslondon-bishoptrade",
+    "openingId": "pro-gothamchess-london",
+    "criticalPositionFen": "r2qkb1r/pp3ppp/2n1pn2/2Pp1b2/5B2/4PN2/PPPN1PPP/R2QKB1R w KQkq - 0 7",
+    "title": "London: Trade the Rival Bishop",
+    "overview": "Black's …Bf5 frees the light bishop the London usually leaves bad. Levy doesn't allow it: Nd4 then Nxf5 trades the knight for that bishop, leaving Black with doubled f-pawns and a weak d5-pawn. White finishes development and the queen collects the central pawn — a structural edge converted by patience, not fireworks.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Nf5 — trade off Black's freed light bishop",
+      "Qxd5 — collect the weak central pawn"
+    ],
+    "strategicThemes": [
+      "Trade Black's good bishop, leave him the bad one and doubled f-pawns",
+      "Convert the structural edge and the extra pawn in a quiet position"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qkb1r/pp3ppp/2n1pn2/2Pp1b2/5B2/4PN2/PPPN1PPP/R2QKB1R w KQkq - 0 7",
+        "title": "Trade the rival bishop",
+        "moves": [
+          "Nd4",
+          "Bxc5",
+          "Nxf5",
+          "exf5",
+          "c3",
+          "O-O",
+          "Bd3",
+          "Ne4",
+          "O-O",
+          "Qf6",
+          "Nf3",
+          "Rfe8",
+          "Qb3",
+          "Bb6",
+          "Qxd5"
+        ],
+        "annotations": [
+          "Nd4 — the knight reroutes to f5, where it will trade off Black's freed light bishop.",
+          "…Bxc5 regains the gambit pawn; Black's bishop is active, for now.",
+          "Nxf5 — the key trade. Black's good bishop, the one piece that escaped the London's pawn chain, comes off the board.",
+          "…exf5 — the recapture saddles Black with doubled, isolated f-pawns and a hole on e5.",
+          "c3 — a quiet prop, securing the structure before White targets Black's weak d5-pawn.",
+          "…O-O — Black castles into safety, but the pawn weaknesses remain.",
+          "Bd3 — the bishop eyes the f5-pawn and the kingside light squares Black just weakened.",
+          "…Ne4 — Black seeks the outpost, blocking the bishop's view of f5.",
+          "O-O — White completes development in no hurry; the structural edge isn't going anywhere.",
+          "…Qf6 — the queen defends and eyes the kingside, but Black has no real target.",
+          "Nf3 — the knight develops toward the e5-hole Black created.",
+          "…Rfe8 — Black centralises a rook, still searching for counterplay that isn't there.",
+          "Qb3 — the queen swings to hit b7 and, on the diagonal, the d5-pawn.",
+          "…Bb6 — the bishop sidesteps and defends, but can't cover everything.",
+          "Qxd5 — the central pawn falls. Black's good bishop is long gone, his f-pawns are doubled, and White is a clean pawn up with the superior structure."
+        ],
+        "learnCues": [
+          "Nd4 — head for f5",
+          "…Bxc5 — regain the pawn",
+          "Nxf5 — trade the good bishop",
+          "…exf5 — doubled f-pawns",
+          "c3 — solidify, eye d5",
+          "…O-O — king to safety",
+          "Bd3 — pressure f5",
+          "…Ne4 — block the bishop",
+          "O-O — finish developing",
+          "…Qf6 — defend, seek play",
+          "Nf3 — eye the e5-hole",
+          "…Rfe8 — centralise the rook",
+          "Qb3 — target b7 and d5",
+          "…Bb6 — sidestep and defend",
+          "Qxd5 — win the centre pawn"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "d4",
+              "to": "f5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d3",
+              "to": "f5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "b3",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "https://www.chess.com/game/live/124562322039",
+          "https://en.wikipedia.org/wiki/London_System",
+          "concept:pos-center"
+        ]
+      }
+    ]
   }
 ]
