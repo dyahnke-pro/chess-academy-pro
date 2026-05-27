@@ -255,9 +255,37 @@ async function main() {
     ).catch(() => undefined);
   }, 6000);
 
+  // First-run cold cache shows TWO sequential full-screen modals that
+  // intercept EVERY click until cleared: the strength-calibration bubble
+  // (z-[110], answer it) then the PageHelp "How the Coach works"
+  // coach-mark (z-100, Escape). Both silently swallowed this audit's
+  // hub→play navigation on a cold cache, so it never reached the board
+  // and "square not on board" fired (diagnosed 2026-05-27). Clear
+  // whatever's open before each click.
+  async function clearFirstRunOverlays() {
+    const calib = page.locator('[data-testid="strength-calibration-bubble"]');
+    if (await calib.count()) {
+      await page.getByText('Intermediate', { exact: false }).first().click({ timeout: 4000 }).catch(() => undefined);
+      await calib.waitFor({ state: 'detached', timeout: 20000 }).catch(() => undefined);
+    }
+    const help = page.locator('[data-testid="page-help-modal"]');
+    if (await help.count()) {
+      await page.keyboard.press('Escape');
+      await help.waitFor({ state: 'detached', timeout: 10000 }).catch(() => undefined);
+    }
+  }
+
+  await record('unlock-first-run', async () => {
+    // The calibration bubble can pop a beat after boot — give it a moment.
+    await page.locator('[data-testid="strength-calibration-bubble"]')
+      .waitFor({ state: 'visible', timeout: 8000 }).catch(() => undefined);
+    await clearFirstRunOverlays();
+  });
+
   await record('coach-hub', async () => {
     await page.getByRole('link', { name: 'Coach' }).first().click();
     await page.locator('[data-testid="coach-home-page"]').waitFor({ timeout: 15000 });
+    await clearFirstRunOverlays(); // PageHelp "How the Coach works" pops here
   });
 
   await record('coach-play-render', async () => {
@@ -265,10 +293,31 @@ async function main() {
     // Wait for the play surface to settle — the board takes time to
     // render plus the brain emits app-init and surface-migrated audits.
     await page.waitForTimeout(2000);
+    await clearFirstRunOverlays(); // PageHelp can re-open on the play surface
   }, MOVE_SETTLE_MS, [
     { kind: 'coach-hub-tile-clicked', match: 'presence', op: 'present', why: 'tile click audited' },
     { kind: 'route-changed', match: 'presence', op: 'present', why: 'router transitions to /coach/play' },
   ]);
+
+  // ── Time control / clock (2026-05-27 feature) ───────────────────
+  // Select a blitz control and assert both player clocks render and the
+  // side-to-move ticks down. Must run BEFORE any move — the select is
+  // disabled once moves are played.
+  await record('clock-time-control', async () => {
+    const select = page.locator('[data-testid="time-control-select"]');
+    if (await select.count() === 0) throw new Error('time-control-select missing on /coach/play');
+    await select.selectOption('blitz-5-0');
+    await page.waitForTimeout(500);
+    const chips = page.locator('[data-testid="player-clock"]');
+    const n = await chips.count();
+    if (n < 2) throw new Error(`expected 2 player-clock chips, got ${n}`);
+    const before = await chips.allInnerTexts();
+    await page.waitForTimeout(2500);
+    const after = await chips.allInnerTexts();
+    if (JSON.stringify(before) === JSON.stringify(after)) {
+      throw new Error(`clock did not tick (before=${JSON.stringify(before)} after=${JSON.stringify(after)})`);
+    }
+  });
 
   // ── Helper: click-to-move (matches audit-tactics.mjs pattern).
   // react-chessboard's drag-from-pointer events don't fire cleanly in
