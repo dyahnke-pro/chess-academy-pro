@@ -242,6 +242,30 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '', '', '', '', '',
     ],
   },
+  // Four Knights (student = White). Spanish Four Knights symmetry-break: after
+  // 5…a6?, Bxc6 removes e5's only defender, then Nxe5 wins the pawn outright.
+  'four-knights-game:e4_e5_Nf3_Nc6_Nc3_Nf6_Bb5_Bb4_O-O:a6': {
+    sources: ['book:four-knights-game', 'concept:pos-tempo', 'https://en.wikipedia.org/wiki/Four_Knights_Game'],
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      '…a6? — Black breaks the symmetry first, but it loosens c6 and gifts White a concrete tempo.',
+      'Bxc6 — striking first: the c6-knight was the sole defender of e5.',
+      '',
+      'Nxe5 — collecting the pawn. After …Bxc3 dxc3 everything holds; White is simply up material.',
+      '', '', '',
+      'd4 — rolling the centre, a clean pawn to the good.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '',
+      'Bxc6 — remove e5’s defender',
+      '',
+      'Nxe5 — win the pawn',
+      '', '', '',
+      'd4 — roll the centre, a pawn up',
+      '',
+    ],
+  },
   // Caro — White's f3 (Fantasy) but f3?? offered too loosely: exf3 just
   // wins a pawn. playLine: e4 c6 d4 d5 Nc3 dxe4 f3 exf3 Nxf3 Nf6 Bd3 Bg4 h3 Bxf3 Qxf3
   'caro-kann:e4_c6_d4_d5_Nc3_dxe4:f3': {
