@@ -23566,13 +23566,29 @@
           "Rg1",
           "Nf5",
           "Qf2",
-          "Qc6"
+          "Qc6",
+          "Bd3",
+          "Qd5",
+          "Rb1",
+          "Bc6",
+          "Rb3",
+          "O-O-O",
+          "Rxc3",
+          "Kb8"
         ],
         "annotations": [
           "White contests the open g-file with Rg1, trying to blunt the rook on g8.",
           "Black plants the knight on f5 — the dream square, hitting d4 and the dark squares around White, impossible to chase with a pawn.",
           "White untangles with Qf2, eyeing the f-file and the kingside.",
-          "Black centralises with …Qc6, raking the long light diagonal toward g2 and supporting the passed c3-pawn — every piece now points at White."
+          "Black centralises with …Qc6, raking the long light diagonal toward g2 and supporting the passed c3-pawn — every piece now points at White.",
+          "Bd3 — White develops and eyes h7, hunting kingside counterplay.",
+          "…Qd5 — the queen seizes the centre on the long light diagonal, hitting g2 and freezing White in place.",
+          "Rb1 — White swings the rook to the b-file, angling to round up the c3-passer.",
+          "…Bc6 — the bishop lines up behind the queen; the battery glares down the diagonal at g2.",
+          "Rb3 — attacking the c3-pawn a second time; White is determined to win it.",
+          "…O-O-O — castling long lands the rook on the open files and tucks the king behind its pawns; every piece in Black's plan is now home.",
+          "Rxc3 — White finally collects the passer, but only after Black has activated every piece.",
+          "…Kb8 — the king tucks away; level material, but the open g-file, the centralized queen and the active rooks keep Black pressing."
         ],
         "title": "The c3-Passer Attack",
         "arrows": [
@@ -23596,7 +23612,27 @@
               "to": "c3",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "g2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "b3",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          []
         ],
         "highlights": [
           [
@@ -23654,18 +23690,128 @@
               "square": "c3",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
         "sources": [
           "book:french-defence",
           "concept:pos-center",
-          "https://en.wikipedia.org/wiki/French_Defence"
+          "https://en.wikipedia.org/wiki/French_Defence",
+          "concept:pos-initiative",
+          "concept:pos-open-file"
         ],
         "learnCues": [
           "Rg1 — contest the g-file",
           "Nf5 — the dream square, hits d4",
           "Qf2 — untangle, eye the f-file",
-          "Qc6 — rake g2, back the c3-passer"
+          "Qc6 — rake g2, back the c3-passer",
+          "Bd3 — White eyes h7",
+          "Qd5 — centre, the long diagonal",
+          "Rb1 — White hunts c3",
+          "Bc6 — back the battery on g2",
+          "Rb3 — second hit on c3",
+          "O-O-O — rooks to the open files",
+          "Rxc3 — White regains the pawn",
+          "Kb8 — king safe, pressure stays"
         ]
       }
     ]

@@ -266,6 +266,11 @@ const PLAN_SUSPECT_BASELINE = new Set<string>([
   'mp-italiangame-modern::4:Nf1',  // the Nbd2-f1-g3 Pianissimo manoeuvre (masters: Nc4/Bxe6)
   'mp-italiangame-modern::5:Bxb3', // Black trades the bishop (masters keep tension, Re8/Qd7)
   'mp-italiangame-evans::7:Nc3',   // develop the knight (masters: Qd2) — both sound
+  // Fort Knox French plan-demo: solid developing moves (castle, rook to d1)
+  // that masters pass over for the sharper Qd5/Bxf6. Both pass 7b (≤120cp);
+  // the plan teaches the Fort Knox setup, not the forcing master line.
+  'mp-frenchdefence-fortknox::2:O-O',   // masters: Qd5 — both sound
+  'mp-frenchdefence-fortknox::3:Rad1',  // masters: Bxf6 — both sound
 ]);
 
 // Soundness baseline for plan lines (7b) — same rationale as SOUNDNESS_BASELINE
