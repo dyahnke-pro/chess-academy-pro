@@ -281,6 +281,13 @@ const PLAN_SUSPECT_BASELINE = new Set<string>([
   'mp-siciliansveshnikov-antisvesh::1:Qe2', // masters: Re1/a3 — sound
   'mp-siciliansveshnikov-chelyabinsk::5:a5', // masters: Bxd5 — sound
   'mp-siciliansveshnikov-main::2:Qd3',    // masters: a4/h4/Be2/g3 — sound
+  'mp-fourknightsgame-glek::4:Nf5',       // masters: Qe2/d4/Kh2 — sound
+  'mp-siciliandragon-chinese::3:b4',      // masters: Na5/a5/Ne5 — sound
+  'mp-siciliandragon-classical::5:Bxc4',  // masters: Bd3/Nxa5/e5/Kh1 — sound
+  'mp-siciliandragon-levenfish::3:a4',    // masters: Kh1 — sound
+  'mp-siciliandragon-antibg5::1:a6',      // masters: Be6/e5/g5/a5 — sound
+  'mp-siciliannajdorf-6a4::8:Nc5',        // masters: h6/Nf8 — sound
+  'mp-siciliannajdorf-ng4::5:Kb1',        // masters: Nd4/f3/h4 — sound
 ]);
 
 // Soundness baseline for plan lines (7b) — same rationale as SOUNDNESS_BASELINE
