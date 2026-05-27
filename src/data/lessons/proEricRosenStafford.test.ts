@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { getLessonScript, getVariationLessonScript } from './index';
 import { expectedOrientation } from './registry';
+import { getStaffordTrapsForTab, getStaffordTrapPlayableLine } from './proEricRosenStaffordTrapLessons';
 import proRepertoire from '../pro-repertoires.json';
 
 // G1-sanctioned proof of the pro-masterclass WRITE/RESOLVE logic: the sandbox
@@ -43,5 +44,14 @@ describe('Eric Rosen Stafford — pro masterclass wiring', () => {
       titles.add(l!.title);
     }
     expect(titles.size).toBe(4); // main + 3 variations
+  });
+
+  it('the named Stafford trap surfaces as a weapon on the main line + resolves a playable line', () => {
+    const traps = getStaffordTrapsForTab('main');
+    expect(traps.length).toBeGreaterThanOrEqual(1);
+    expect(traps.some((t) => t.kind === 'weapon')).toBe(true);
+    const line = getStaffordTrapPlayableLine('stafford-bxf2-mate');
+    expect(line).toBeTruthy();
+    expect(line!.moves[line!.moves.length - 1]).toBe('Bg4#');
   });
 });
