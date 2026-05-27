@@ -1,0 +1,83 @@
+[
+  {
+    "id": "mp-gambitkingsgambit-modern",
+    "openingId": "gambit-kings-gambit",
+    "title": "Modern Defense: grind the development lead",
+    "criticalPositionFen": "rnb1k2r/ppp2ppp/3bqn2/8/5p2/2N2N2/PPPPB1PP/R1BQ1RK1 w kq - 6 8",
+    "overview": "Against the sound 3...d5, Black grabs the f4-pawn but spends two tempi shuffling the queen (Qxd5, Qe6+) and leaves the king in the centre. This is not a sacrifice — it's a positional plan: develop with tempo, wreck Black's castling with Bb5+, clamp the centre with d4 and c4, and grind two permanent pluses — a big development lead and the weak, stranded f4-pawn — into a lasting bind. No risk, no material down: just a better position you can squeeze.",
+    "pawnBreaks": [
+      {
+        "move": "d4",
+        "explanation": "With Black's king chased to f8 and unable to castle, d4 seizes the centre White already controls — opening lines for both bishops while Black's pieces stay passive.",
+        "fen": "rnb2k1r/ppp2ppp/3bqn2/1B6/5p2/2N2N2/PPPP2PP/R1BQ1RK1 w - - 8 9"
+      },
+      {
+        "move": "c4",
+        "explanation": "Once the centre is fixed, c4 grabs queenside space and clamps d5, denying Black's knight and bishop any active outpost — the bind tightens with no counterplay allowed."
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Be2-b5+-d3",
+        "explanation": "The light-squared bishop's two jobs: first Bb5+ to drive the king to f8 (castling gone for good), then Bd3 onto the b1-h7 diagonal, aiming at Black's airy kingside."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nc3-e4",
+        "explanation": "Ne4 occupies the central outpost and offers a trade that only improves White — every simplification leaves the development lead and the f4 weakness intact."
+      }
+    ],
+    "strategicThemes": [
+      "Punish the early queen sorties (Qxd5, Qe6+) with rapid, tempo-gaining development.",
+      "Bb5+ permanently denies Black castling — the king never finds safety.",
+      "The f4-pawn is a fixed, long-term weakness White rounds up at leisure.",
+      "Central and queenside space (d4, c4) leave Black's pieces with no active squares."
+    ],
+    "playableLines": [
+      {
+        "title": "Modern Defense: the development-lead squeeze",
+        "fen": "rnb1k2r/ppp2ppp/3bqn2/8/5p2/2N2N2/PPPPB1PP/R1BQ1RK1 w kq - 6 8",
+        "moves": ["Bb5+", "Kf8", "d4", "a6", "Bd3", "Qg4", "Ne4", "Nxe4", "Bxe4", "Nd7", "c4", "Nf6", "Bd3", "g5"],
+        "annotations": [
+          "Bb5+ — before touching the centre, exploit the stranded king: the check on b5 forces it to f8, and Black gives up castling for the whole game.",
+          "…Kf8 — the king is nailed to f8, the h8-rook is dead, and Black will spend the game trying to untangle.",
+          "d4 — now the big centre pawn lands on d4, seizing space and opening the diagonals for both White bishops.",
+          "",
+          "Bd3 — the bishop swings to the b1-h7 diagonal, pointing straight at h7 and Black's exposed kingside.",
+          "",
+          "Ne4 — the knight takes the central e4-outpost and offers a trade; every swap leaves White's pieces the better-placed ones.",
+          "",
+          "Bxe4 — recapturing toward the centre, the bishop now rakes the long diagonal toward b7.",
+          "",
+          "c4 — White grabs queenside space and clamps d5, so Black's knight and bishop never find an active square.",
+          "",
+          "Bd3 — White retreats to keep the h7 diagonal live and simply sits: the development lead, the safer king, and the weak f4-pawn are permanent — Black has no counterplay, and White rounds up f4 at leisure.",
+          ""
+        ],
+        "learnCues": [
+          "Bb5+ — wreck Black's castling",
+          "",
+          "d4 — clamp the centre",
+          "",
+          "Bd3 — onto the h7 diagonal",
+          "",
+          "Ne4 — central outpost, offer the trade",
+          "",
+          "Bxe4 — toward the long diagonal",
+          "",
+          "c4 — grab queenside space",
+          "",
+          "Bd3 — sit tight; f4 won't run",
+          ""
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-king-safety",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/King%27s_Gambit"
+        ]
+      }
+    ]
+  }
+]
