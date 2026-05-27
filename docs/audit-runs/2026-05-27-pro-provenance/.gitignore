@@ -1,0 +1,4 @@
+# Heavy raw per-player game records (re-derivable via scripts/harvest-pro-games-bulk.mjs).
+# The compact ranking summary (rankings.json) IS committed for the build decision.
+games/
+wave1.json
