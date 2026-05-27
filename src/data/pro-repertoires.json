@@ -408,10 +408,10 @@
       "style": "Dynamic, Counter-attacking",
       "overview": "Austrian master Ernst Grünfeld invented this defence in 1922 against Aron Nimzowitsch — letting White have the centre, then attacking it from the wings. It became Bobby Fischer's main weapon against 1.d4 (he played it in his 1972 World Championship match), and the Kasparov-Karpov World Championship matches of 1986-1990 featured intense Grünfeld battles where Kasparov's preparation pushed the theory deeper than anyone had imagined. Today it's Magnus Carlsen's main wins-with-Black weapon. Instead of fighting for the centre, you LET White build a massive d4+e4+c3 pawn front, then you spend the rest of the game proving that front is a target. The Bg7 fianchetto stares at d4 forever, the …c5 break demolishes the base of White's pawn chain, and the resulting middlegames are concrete enough that calculation — not pattern-matching — decides the game. Danya plays it because it's the sharpest principled answer to 1.d4 without going into Najdorf-level memorisation hell.",
       "keyIdeas": [
-        "The whole opening is about ATTACKING White's centre, not avoiding it. Every Black move in the Grünfeld — …d5, …Bg7, …c5, …Nc6, …Qa5 — is calibrated to dismantle the d4–e4–c3 trio.",
-        "Bg7 is the most important piece. It snipes d4 from across the board, supports the …Nc6–Nxd4 idea, and keeps the long diagonal as a permanent attacking lane. Never trade it lightly.",
-        "…c5 is the lever, and the timing is precise: usually played the move AFTER White has committed to Nf3 and a piece blocks the queen from defending d4. Once cxd4 happens, the c-file is yours.",
-        "Trade into endgames where you have the bishop pair. The exchange-variation endings (after the …c5/…cxd4 sequence) are slightly worse on paper but practically excellent for Black — the bishops dominate on open diagonals."
+        "The Grünfeld is hypermodern: invite White to build a big pawn centre with …d5, then prove it's a target, not a strength — surround it and tear it down.",
+        "The g7-bishop is the engine. Fianchettoed on the long diagonal, it bears down on d4 and the centre from move six onward; everything Black does serves that bishop.",
+        "…c5 (and often …Nc6, …Bg4, …Qa5) strikes the base of White's centre. If it falls, the proud pawns become weak ones; if it holds, Black keeps piling on.",
+        "Against the Russian System (Qb3), expand with …a6/…b5 to kick the queen and grab queenside space, then hit the centre with …c5 — dynamic counterplay over passive defence."
       ],
       "traps": [
         "After 7.Bc4 (the Exchange Variation with the bishop on c4), 7…c5 8.Ne2 Nc6 9.Be3 — if White ever plays 10.O-O without first dealing with the queenside, …Qa5! pins a3 and grabs structure. The standard improvement is 10.Rb1 or 10.O-O Qc7 first."
@@ -422,28 +422,26 @@
       ],
       "variations": [
         {
-          "name": "Exchange Variation Main Line",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 Bg7 Nf3 c5 Be3 Qa5 Qd2 O-O Rc1 Rd8 d5 e6 Bg5 f6 Be3 Nc6 Bd3 exd5",
-          "explanation": "The most theoretical battlefield in chess. White takes both pawns (cxd5 then bxc3) and builds the dream centre — d4, e4, c3. Black's reply is automatic and brutal: …Bg7, …c5, …Qa5, …Rd8 putting every piece against d4 and c3. The …e6 break forces a structural concession; once White plays d5 to maintain the centre, you crack it with …exd5 and the resulting open position favours your active pieces. This is the line you MUST know — every other Black system is a sideline."
-        },
-        {
           "name": "Russian System",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 Qb3 dxc4 Qxc4 O-O e4 a6 Be2 b5 Qb3 c5 dxc5 Be6 Qc2 Nbd7 Be3 Rc8 Rd1 b4 Nd5 Bxd5",
-          "explanation": "When White plays the early Qb3 supporting the c4 pawn, Black gives up the centre but creates counterplay on the queenside with …a6, …b5, …c5. The position becomes more about piece play than pawn structure — you fight for the c-file, the d5 outpost, and the queenside pawn majority. After Nd5 Bxd5, the bishop pair dominates the long diagonals and the position is dynamically balanced."
-        },
-        {
-          "name": "Fianchetto Grunfeld",
-          "pgn": "d4 Nf6 c4 g6 g3 d5 Bg2 Bg7 cxd5 Nxd5 Nf3 Nb6 Nc3 Nc6 e3 O-O O-O Re8 Re1 e5 d5 Na5 e4 c6 b3 cxd5 exd5 Bg4 Ba3 e4 Nxe4 Qxd5",
-          "explanation": "Against the calm Fianchetto system, the standard …Bg7 vs …c5 dynamic doesn't work because Bg2 contests the long diagonal. Black switches plans entirely: …e5 to challenge d4, then …c6/…cxd5 to undermine the d-pawn. The forced sequence ending in Qxd5 leaves a roughly equal middlegame, but with the bishop pair and the more harmonious development."
-        },
-        {
-          "name": "4.Bf4 Anti-Grunfeld",
-          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Bf4 Bg7 e3 O-O cxd5 Nxd5 Nxd5 Qxd5 Bxc7 Na6 Bxa6 bxa6 Nf3 Bf5 Qb3 Qc6 Bg3 Be4 O-O Rfc8 Qa3 e6",
-          "explanation": "A nasty sideline — White trades on c7 to win a pawn, but the cost is huge: doubled a-pawns for Black, sure, but the bishop pair and the half-open b-file. Black's …Bf5, …Be4 manoeuvre activates everything and the …Rfc8 grabs the c-file. Practically Black scores well; the pawn deficit is more than compensated by the dynamic resources."
+          "pgn": "d4 Nf6 c4 g6 Nc3 d5 Nf3 Bg7 Qb3 dxc4 Qxc4 O-O e4 a6 Be2 b5 Qb3 c5 dxc5 Be6",
+          "explanation": "White's most respected try: Qb3 hits d5 and recaptures the pawn on c4. Black expands with …a6/…b5 to kick the queen, then strikes with …c5 — rich counterplay against White's broad centre while the g7-bishop rakes the long diagonal.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 40,
+            "score": 57,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
-      "warningLines": []
+      "warningLines": [],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 90,
+        "score": 58,
+        "source": "lichess /player",
+        "taughtUrl": "https://www.youtube.com/@DanielNaroditskyGM"
+      }
     },
     {
       "id": "pro-naroditsky-vienna",
