@@ -2098,5 +2098,385 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-smithmorragambit-attack",
+    "openingId": "smith-morra-gambit",
+    "title": "The Smith-Morra: the open-file bind",
+    "criticalPositionFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "overview": "The Smith-Morra meets the Sicilian by giving a pawn to rip open the c- and d-files before Black gets the usual Sicilian counterplay going. The currency is open lines and development, not material. The plan is the famous Morra bind: recapture on c3 to open the c-file, develop fast with the bishop on c4 eyeing f7, castle, lift the queen to e2 and a rook to d1, and bury Black under pressure on the central files and the backward d6-pawn. Be honest — with accurate defence Black equalizes — but the bind is a relentless practical weapon that scores far above its objective worth.",
+    "pawnBreaks": [
+      {
+        "move": "d4",
+        "explanation": "On move two White strikes the centre and offers the pawn — the whole Sicilian fight is reframed as an open, attacking game."
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-e2",
+        "explanation": "The signature Morra square: Qe2 clears d1 for a rook and supports the Bc4 and the central thrusts."
+      },
+      {
+        "piece": "Rook",
+        "route": "Ra1-c1 / Rf1-d1",
+        "explanation": "The reward for the gambit: rooks pour onto the open c-file and half-open d-file, hammering c7 and the backward d6-pawn."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bf1-c4",
+        "explanation": "The thematic Morra bishop on c4, aimed at f7 and propping up the d5-square for a knight."
+      }
+    ],
+    "strategicThemes": [
+      "A pawn for two open files and a development lead — a practical weapon, not an objective edge.",
+      "Recapture on c3 to swing the c-file open for a rook.",
+      "Bc4 on f7, Qe2, Rd1: the Morra bind piles on d6 and the centre.",
+      "Honest caveat: accurate defence equalizes — but the bind wins games over the board."
+    ],
+    "playableLines": [
+      {
+        "title": "The Morra bind",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "c5",
+          "d4",
+          "cxd4",
+          "c3",
+          "dxc3",
+          "Nxc3",
+          "Nc6",
+          "Nf3",
+          "e6",
+          "Bc4",
+          "d6",
+          "O-O",
+          "Nf6",
+          "Qe2",
+          "Be7",
+          "Rd1",
+          "e5",
+          "Bg5"
+        ],
+        "annotations": [
+          "",
+          "",
+          "The Smith-Morra — against the Sicilian, White strikes d4 and offers a pawn to blow the position open before Black's counterplay gets rolling.",
+          "",
+          "c3 — the gambit pawn. The point isn't winning it back; it's the open files the recapture hands White.",
+          "",
+          "Nxc3 — recapturing toward the centre: the knight develops and the c-file swings wide open for a rook. The Morra runs on lines, not pawns.",
+          "",
+          "Nf3 — developing, eyeing the e5-square and the kingside.",
+          "",
+          "Bc4 — the thematic Morra bishop, trained on f7 and propping up the d5-square.",
+          "",
+          "O-O — castled and ready; now the rooks head for the open files.",
+          "",
+          "Qe2 — the signature Morra square: the queen clears d1 for a rook and backs up Bc4 and the central squares.",
+          "",
+          "Rd1 — the rook seizes the half-open d-file, piling onto Black's backward d6-pawn, the standard Morra target.",
+          "",
+          "Bg5 — the last piece joins with a pin on the f6-knight that guards d5 and e4. The bind is complete: both central files, the bishop on f7, pressure on d6. Honest truth — accurate defence equalizes — but this bind is a relentless practical weapon that wins well above its objective worth."
+        ],
+        "learnCues": [
+          "",
+          "",
+          "d4 — strike, offer the pawn",
+          "",
+          "c3 — gambit the pawn for open files",
+          "",
+          "Nxc3 — open the c-file, develop",
+          "",
+          "Nf3 — develop toward e5",
+          "",
+          "Bc4 — the Morra bishop, hit f7",
+          "",
+          "O-O — castle, rooks to the files",
+          "",
+          "Qe2 — clear d1, support the centre",
+          "",
+          "Rd1 — the open d-file, hit d6",
+          "",
+          "Bg5 — pin f6; the bind is set"
+        ],
+        "sources": [
+          "concept:pos-open-file",
+          "concept:pos-development",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Smith-Morra_Gambit"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "c4",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d1",
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
