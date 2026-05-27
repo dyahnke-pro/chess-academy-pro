@@ -31,7 +31,9 @@ import { dirname, join } from 'node:path';
 import { Chess } from 'chess.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const PLANS_PATH = join(__dirname, '..', 'src', 'data', 'middlegame-plans.json');
+const PLANS_PATH = process.env.LEADEYE_PLANS_PATH
+  ? join(__dirname, '..', process.env.LEADEYE_PLANS_PATH)
+  : join(__dirname, '..', 'src', 'data', 'middlegame-plans.json');
 const MANIFEST_PATH = join(__dirname, '..', 'src', 'data', 'opening-manifests.json');
 
 // Manifest-driven scope (David 2026-05-26): every masterclass opening is in
@@ -177,7 +179,9 @@ function main() {
   let touchedLines = 0;
 
   for (const plan of plans) {
-    if (!MASTERCLASS_OPENINGS.has(plan.openingId)) continue;
+    // When pointed at a specific file (the gambit lane), process every plan in
+    // it; the masterclass-only filter applies only to the default plan store.
+    if (!process.env.LEADEYE_PLANS_PATH && !MASTERCLASS_OPENINGS.has(plan.openingId)) continue;
     const lines = plan.playableLines ?? [];
     if (lines.length === 0) continue;
     let planTouched = false;

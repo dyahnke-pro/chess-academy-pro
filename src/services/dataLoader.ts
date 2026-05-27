@@ -7,6 +7,10 @@ import proRepertoireData from '../data/pro-repertoires.json';
 import gambitData from '../data/gambits.json';
 import modelGamesData from '../data/model-games.json';
 import middlegamePlansData from '../data/middlegame-plans.json';
+// Separate-lane gambit-tab plans (David 2026-05-27): own file so the masterclass
+// lane never touches them; merged into the shared plan store here at load time,
+// keyed by gambit-tab openingIds (gambit-*) so they never collide.
+import gambitPlansData from '../data/gambit-plans.json';
 import { CURATED_NARRATIONS } from '../data/opening-narrations';
 import type { OpeningRecord, FlashcardRecord, ModelGame, MiddlegamePlan } from '../types';
 
@@ -429,7 +433,7 @@ export async function loadModelGamesData(): Promise<void> {
 // ─── Middlegame Plans Loader ─────────────────────────────────────────────────
 
 export async function loadMiddlegamePlansData(): Promise<void> {
-  const records = (middlegamePlansData as MiddlegamePlan[]).map((entry) => ({
+  const records = ([...(middlegamePlansData as MiddlegamePlan[]), ...(gambitPlansData as MiddlegamePlan[])]).map((entry) => ({
     ...entry,
   }));
   await db.middlegamePlans.bulkPut(records);
