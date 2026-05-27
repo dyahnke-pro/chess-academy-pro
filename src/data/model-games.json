@@ -3962,10 +3962,11 @@
     "studentSide": "white",
     "pgn": "e4 e5 d4 exd4 Nf3 Nc6 Nxd4 Bb4+ c3 Bc5 Be3 Bb6 Nd2 Nf6 Nc2 Bxe3 Nxe3 O-O Bd3 d5 O-O dxe4 Nxe4 Nxe4 Bxe4 Qxd1 Raxd1 Be6 Bd5 Rfd8 Bxe6 fxe6 Rfe1 Kf7 Kf1 Rxd1 Rxd1 Ke7 Re1 a5 Nf5+ Kf6 Ng3 Re8 Ne4+ Ke7 Ke2 b6 f4 h6 g4 Rd8 Ke3 Rd5 Re2 e5 f5 Kf7 h4 Rd8 g5 hxg5 hxg5 Ne7 Rf2 Nd5+ Kf3 Nf4 Kg4 Rh8 g6+ Ke7 Ng3 Kf6 Ne4+ Ke7 Rf1 Rh2 Kf3 Rxb2 Rd1 Nh5 Re1 Nf6 Ng3 e4+ Nxe4 Nxe4 Rxe4+ Kf6 Kg4 Rb5 Re6#",
     "sources": [
-      "https://www.chess.com/member/danielnaroditsky",
+      "https://www.chess.com/game/live/144060025627",
+      "https://www.youtube.com/watch?v=H0Fln-ujA3w",
       "concept:pos-development"
     ],
-    "overview": "Naroditsky's Scotch — 3.d4 blows the centre open immediately. Against …Bc5 he plays the principled Be3, offering to trade the active bishop and straighten his development. The middlegame trades into a same-coloured endgame where White's better king and more active rook and knight grind Black down on the kingside, the g-pawn rolls to g6, and the rook delivers mate on e6. A model of converting a small opening edge.",
+    "overview": "Naroditsky's Scotch — 3.d4 blows the centre open immediately. Against …Bc5 he plays the principled Be3, offering to trade the active bishop, and reroutes his knight to e3. The middlegame trades into an endgame where White's better king and more active rook and knight grind Black down on the kingside, the g-pawn rolls to g6, and the rook delivers mate on e6. A model of converting a small opening edge.",
     "middlegameTheme": "Open the centre, neutralise …Bc5 with Be3, and convert a development edge into a winning endgame.",
     "lessonSummary": "The Scotch opens the game on move three — trade into a better endgame and let activity do the rest.",
     "criticalMoments": [

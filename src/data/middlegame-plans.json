@@ -32007,5 +32007,323 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pronaroditskyscotch-be3",
+    "openingId": "pro-naroditsky-scotch",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b5/3NP3/2P5/PP3PPP/RNBQKB1R w KQkq - 1 6",
+    "title": "Scotch: Neutralise ...Bc5 with Be3",
+    "overview": "The Scotch opens the centre on move three. Against the active ...Bc5, White plays Be3 to challenge it, then reroutes the d4-knight via c2 to e3 — a superb square eyeing d5 and f5. After the trades and ...d5, the position simplifies toward an endgame where White's more active pieces and cleaner structure give a lasting, grindable pull.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Be3 — challenge the c5-bishop",
+      "Ne3 — reroute the knight to its best square"
+    ],
+    "strategicThemes": [
+      "Neutralise ...Bc5 with Be3 and a knight reroute to e3",
+      "Simplify into a better endgame with the more active pieces"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b5/3NP3/2P5/PP3PPP/RNBQKB1R w KQkq - 1 6",
+        "title": "Neutralise ...Bc5 with Be3",
+        "moves": [
+          "Be3",
+          "Bb6",
+          "Nd2",
+          "Nf6",
+          "Nc2",
+          "Bxe3",
+          "Nxe3",
+          "O-O",
+          "Bd3",
+          "d5",
+          "O-O",
+          "dxe4",
+          "Nxe4",
+          "Nxe4",
+          "Bxe4",
+          "Qxd1",
+          "Raxd1"
+        ],
+        "annotations": [
+          "Be3 — White offers to trade Black's active bishop on c5, the standard Scotch challenge.",
+          "…Bb6 — Black declines the trade and tucks the bishop back, keeping the tension.",
+          "Nd2 — the last minor piece develops, supporting a later regrouping.",
+          "…Nf6 — Black develops and eyes the e4-pawn.",
+          "Nc2 — White reroutes the d4-knight toward e3, where it will eye d5 and f5.",
+          "…Bxe3 — Black finally trades on e3, but White is happy: the recapture lands the knight superbly.",
+          "Nxe3 — the knight recaptures on e3, now perfectly placed to hit d5 and f5.",
+          "…O-O — Black castles; the position is sound but White is the more comfortable.",
+          "Bd3 — the bishop takes aim at the kingside light squares and prepares to castle.",
+          "…d5 — Black strikes in the centre to free his game and ease the tension.",
+          "O-O — White castles, fully developed and a touch more active.",
+          "…dxe4 — Black opens the centre, heading for mass simplification.",
+          "Nxe4 — White recaptures, the knights and queens about to come off.",
+          "…Nxe4 — Black trades a pair of knights.",
+          "Bxe4 — White recaptures; the bishop dominates the long diagonal.",
+          "…Qxd1 — Black forces the queen trade to reach a defensible endgame.",
+          "Raxd1 — queens are off and White stands better: the more active rook, a bishop raking the long diagonal, and the cleaner structure. The Scotch's small opening plus, banked into a better endgame to grind."
+        ],
+        "learnCues": [
+          "Be3 — challenge the c5-bishop",
+          "…Bb6 — decline, keep the bishop",
+          "Nd2 — develop the knight",
+          "…Nf6 — develop, eye e4",
+          "Nc2 — reroute toward e3",
+          "…Bxe3 — trade the bishops",
+          "Nxe3 — knight to a great square",
+          "…O-O — castle to safety",
+          "Bd3 — develop, eye the kingside",
+          "…d5 — strike in the centre",
+          "O-O — complete development",
+          "…dxe4 — open and simplify",
+          "Nxe4 — recapture, trades coming",
+          "…Nxe4 — trade knights",
+          "Bxe4 — bishop on the long diagonal",
+          "…Qxd1 — trade queens",
+          "Raxd1 — a better endgame to grind"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f6",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c2",
+              "to": "e3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "e3",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e3",
+              "to": "f5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "https://www.chess.com/game/live/144060025627",
+          "https://www.youtube.com/watch?v=H0Fln-ujA3w",
+          "concept:pos-development"
+        ]
+      }
+    ]
   }
 ]
