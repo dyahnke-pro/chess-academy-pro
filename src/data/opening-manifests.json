@@ -400,7 +400,7 @@
     "variations": 1,
     "middlegamePlans": 0,
     "endgamePlans": 0,
-    "modelGames": 0,
+    "modelGames": 1,
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
@@ -409,7 +409,7 @@
     "variations": 2,
     "middlegamePlans": 0,
     "endgamePlans": 0,
-    "modelGames": 0,
+    "modelGames": 1,
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4

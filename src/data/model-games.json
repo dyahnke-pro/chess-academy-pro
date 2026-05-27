@@ -4769,5 +4769,101 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mg-pro-naroditsky-alapin",
+    "openingId": "pro-naroditsky-alapin",
+    "white": "DanielNaroditsky",
+    "black": "opponent",
+    "whiteElo": 3100,
+    "blackElo": 2700,
+    "result": "1-0",
+    "year": 2024,
+    "event": "Chess.com",
+    "studentSide": "white",
+    "pgn": "e4 c5 c3 e6 d4 cxd4 cxd4 d5 exd5 exd5 Nc3 Nc6 Nf3 Bb4 Bd3 Nge7 O-O O-O h3 Bf5 Bxf5 Nxf5 Qd3 Bxc3 bxc3 Nd6 Ng5 g6 Re1 Re8 Bf4 Nc4 Qf3 Qd7 Qg3 f6 Nf3 Rxe1+ Rxe1 Re8 Rxe8+ Qxe8 Qg4 Kf7 Kh2 Qe6 Qh4 h5 Qg3 Ne7 Bc1 Qd6 Bf4 Qa3 Bh6 Nf5 Qf4 Qd6 Qxd6 Nfxd6 Bd2 Ne4 Be1 b5 Ng1 g5 Ne2 a5 g4 hxg4 hxg4 Ke6 Kg2 f5 gxf5+ Kxf5 f3 Ne3+ Kg1 Nf6 Ng3+ Ke6 Kf2 Nc4 Ke2 g4 fxg4 Nxg4 Nf1 Nf6 Kd3 Ne4 Ng3 Nxg3 Bxg3 Kf5 Bc7 Kg4 Ke2 Kf5 Kd3 a4 Bb8 a3 Bc7 Nb2+ Kc2 Ke4 Bd6 Nc4 Bb4 Ke3 Bc5 Ke2 Bb4 Ne3+ Kb3 Kd3 Bxa3 Nc4 Bc1 Nd6 Kb4 Ne4 a3 Nxc3 Bb2 Nd1 Ba1 Ne3 Kxb5 Nc2 a4 Nxa1 a5 Nb3 a6 Nxd4+ Kb6",
+    "sources": [
+      "https://www.chess.com/game/live/143776190306",
+      "concept:pos-center"
+    ],
+    "overview": "Naroditsky himself with the Alapin. Against 2…e6 he reaches a classic isolated-queen's-pawn middlegame, where his d-pawn is not a weakness but a spearhead controlling c5 and e5. He nurses the tiny structural edge, trades into a superior ending, and grinds out the full point with textbook technique — the exact 'turn a small edge into a win' lesson he preaches.",
+    "middlegameTheme": "The isolated d-pawn as a dynamic spearhead, converted into a winning endgame.",
+    "lessonSummary": "The Alapin gives a small, durable pull; Naroditsky shows how to convert it with patient technique.",
+    "criticalMoments": [
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bq1rk1/pp2nppp/2n5/3p4/1b1P4/2NB1N1P/PP3PP1/R1BQ1RK1 b - - 0 10",
+        "annotation": "The isolated d-pawn structure is set. The pawn on d4 looks weak, but it grips c5 and e5 and gives White the freer pieces and the initiative — the classic IQP bargain, and White is the one calling the shots.",
+        "concept": "The Isolated Queen-Pawn Spearhead",
+        "highlights": [
+          {
+            "square": "d4",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 25,
+        "color": "white",
+        "fen": "8/pp3k2/2n1qpp1/3p3p/2nP1B2/2P2NQP/P4PPK/8 b - - 1 25",
+        "annotation": "Queens come off and White carries the edge into the ending — better minor piece, better king, the d-pawn still a thorn. From here it's pure technique, and Naroditsky's is flawless.",
+        "concept": "Converting to a Better Ending",
+        "highlights": [
+          {
+            "square": "d4",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-naroditsky-najdorf",
+    "openingId": "pro-naroditsky-najdorf",
+    "white": "opponent",
+    "black": "DanielNaroditsky",
+    "whiteElo": 2700,
+    "blackElo": 3100,
+    "result": "0-1",
+    "year": 2024,
+    "event": "Chess.com",
+    "studentSide": "black",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 h3 e5 Nb3 Be7 Qf3 Nbd7 Bd2 b5 O-O-O Bb7 Nd5 Nxd5 exd5 Nb6 Ba5 Qc7 Kb1 O-O g4 Rac8 Bd3 Bxd5 Qxd5 Nxd5 Bxc7 Nxc7 Na5 d5 Rhe1 Bb4 Nc6 Bxe1 Ne7+ Kh8 Nxc8 Bxf2 Nd6 Kg8 b4 Bb6 c3 g6 Rf1 f6 a4 bxa4 Ka2 a5 Ka3 axb4+ cxb4 e4 Bb1 Rd8 Nb7 Rf8 Kxa4 f5 g5 f4 Nd6 e3",
+    "sources": [
+      "https://www.chess.com/game/live/143773369094",
+      "concept:pos-center"
+    ],
+    "overview": "Naroditsky's own Najdorf, the …a6/…e5 setup in full flow. White goes for the kingside with O-O-O and g4; Naroditsky counters with …b5 and piece pressure, wins the central fight, and converts the initiative into a clean win. The Najdorf creed made concrete by the man himself: meet the attack with faster counterplay.",
+    "middlegameTheme": "The …e5/…b5 counterplay against the opposite-side-castling attack, turned into a winning initiative.",
+    "lessonSummary": "Answer White's storm with …b5 and central pressure — the Najdorf's activity wins the race.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "black",
+        "fen": "r1bqk2r/3nbppp/p2p1n2/1p2p3/4P3/1NN2Q1P/PPPB1PP1/R3KB1R w KQkq - 0 10",
+        "annotation": "…b5 — the queenside expansion fires the moment White commits to the kingside. Black grabs space and opens lines toward White's coming king while the attack is still being set up. The race is on, and Black moved first.",
+        "concept": "Queenside Counter-Expansion",
+        "highlights": [
+          {
+            "square": "b5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 16,
+        "color": "black",
+        "fen": "2r2rk1/2q1bppp/pn1p4/Bp1bp3/6P1/1N1B1Q1P/PPP2P2/1K1R3R w - - 0 17",
+        "annotation": "…Bxd5 — Black resolves the centre on his terms, trading into a position where his pieces are the more active and White's king is the more exposed. The Najdorf's bet — dynamism over structure — is paying off.",
+        "concept": "Central Resolution with the Initiative",
+        "highlights": [
+          {
+            "square": "d5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ]
   }
 ]
