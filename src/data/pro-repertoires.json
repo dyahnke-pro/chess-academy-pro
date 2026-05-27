@@ -4027,15 +4027,15 @@
       "playerId": "ericrosen",
       "eco": "D02",
       "name": "London System (Rosen)",
-      "pgn": "d4 d5 Bf4 Nf6 Nf3 e6 e3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6 O-O Bb7 Ne5 Ne7 f4 Nf5",
+      "pgn": "d4 Nf6 Nf3 d5 Bf4 c5 e3 Qb6 Nc3 a6 Rb1 Nc6 Be2 Bf5 O-O e6 Na4 Qa5 Nxc5 Bxc5 dxc5 Qxc5",
       "color": "white",
       "style": "Solid, System-Based",
       "overview": "Alongside the Stafford Gambit, the London System is Eric Rosen's other signature opening — a calm, principled foundation he leans on when he wants positional chess. The London takes its name from the 1922 London tournament where the world's best players experimented with it; Capablanca employed it occasionally; Petrosian and Botvinnik used it as ultra-solid drawing weapons. The modern boom came when Carlsen began playing it at the elite level in the 2010s — proving systems-based openings could compete with sharp theoretical lines. Rosen teaches it as the perfect first opening for club players because it lets you focus on middlegame plans instead of memorising theory.",
       "keyIdeas": [
-        "The London is a SYSTEM: Bf4 comes out early and you reach the same harmonious setup — Bf4, e3, Nf3, c3, Nbd2, Bd3 — against almost anything Black tries. Learn the structure once, play it forever.",
-        "The Bf4–Bg3 retreat is the engine. When Black challenges with …Bd6, you tuck the bishop to g3 (or trade), keep the diagonal toward Black's king, and never let the trade ruin your structure.",
-        "Ne5 is the thematic leap. Once you're castled and set up, the knight jumps to e5 — supported by f4 in the sharper lines — and the kingside attack begins with the bishops aimed at h7.",
-        "Patience beats Black's …c5 break. Meet it with c3 and the solid pawn triangle; you're never worse, and against a careless Black setup the kingside attack (Ne5, f4, Qf3/Rf3 lift) just rolls in."
+        "The London is a SYSTEM: Bf4 comes out early and you reach the same harmonious setup — Bf4, e3, Nf3, c3 or Nc3, Be2 — against almost everything. Learn the structure once, play it forever.",
+        "Meet Black's …c5/…Qb6 probe calmly: Nc3 and Rb1 defend the b2-pawn with developing moves. Never panic into a passive defence; let Black's provocation cost him time.",
+        "When Black plays passively, the system shows its teeth: Ne5 followed by f4, with both bishops trained on the kingside, turns the quiet London into a real attack.",
+        "Patience converts the edge. The London hands the opponent no targets and keeps a small, durable structural pull into a comfortable middlegame or a better ending."
       ],
       "traps": [
         "If Black plays an early ...Nh5 to chase the Bf4, retreat to g3 (or h2 in some lines) rather than e5 — the bishop is worth more than the tempo lost",
@@ -4047,35 +4047,13 @@
       ],
       "variations": [
         {
-          "name": "Standard Setup vs ...d5",
-          "pgn": "d4 d5 Bf4 Nf6 Nf3 e6 e3 c5 c3 Nc6 Nbd2 Bd6 Bg3 O-O Bd3 b6 O-O Bb7 Ne5 Ne7 f4 Nf5",
-          "explanation": "The mainline London against Black's most solid …d5/…e6/…c5 setup. White builds the standard structure, castles, and launches Ne5 + f4 with the bishops trained on the kingside.",
-          "provenance": "both",
-          "provenanceRef": {
-            "games": 1352,
-            "score": 71,
-            "source": "lichess /player"
-          }
-        },
-        {
           "name": "vs King's Indian Setup",
-          "pgn": "d4 Nf6 Bf4 g6 e3 Bg7 Nf3 O-O Be2 d6 O-O Nbd7 h3 Re8 c4 e5 dxe5 dxe5 Nxe5 Nxe5",
-          "explanation": "When Black fianchettoes with …g6/…Bg7, White adds c4 for a broad centre and meets …e5 with a clean central trade, emerging comfortable. Eric Rosen's accelerated 2.Bf4 move order shines here.",
+          "pgn": "d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 Be2 O-O O-O Nbd7 h3 Re8 c4 e5 dxe5 dxe5 Nxe5 Nxe5 Qxd8 Rxd8",
+          "explanation": "When Black fianchettoes with …g6/…Bg7, White's setup barely changes — the f4-bishop already leans on d6. White adds c4 for a broad centre, meets …e5 with a clean central trade, and emerges comfortable.",
           "provenance": "plays",
           "provenanceRef": {
             "games": 182,
             "score": 72,
-            "source": "lichess /player"
-          }
-        },
-        {
-          "name": "vs ...c5 Defense",
-          "pgn": "d4 d5 Bf4 c5 e3 Nc6 Nf3 Nf6 c3 Qb6 Qb3 c4 Qxb6 axb6 Nbd2 b5 Be2 b4 O-O Bf5",
-          "explanation": "Black hits the centre early with …c5 and probes b2 with …Qb6. White offers the queen trade with Qb3; the resulting endgame is balanced and easy to handle with the solid c3 triangle.",
-          "provenance": "plays",
-          "provenanceRef": {
-            "games": 107,
-            "score": 64,
             "source": "lichess /player"
           }
         }
