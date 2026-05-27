@@ -345,3 +345,43 @@ sources verified reachable in-sandbox 2026-05-27; no laptop handoff needed.
   containing an apostrophe; (b) a vision arrow's origin piece must still be on
   that square at the beat's FINAL position; (c) every arrow endpoint + highlight
   square must be named bare in the prose (SAN like "Nf6"/"Bxf7" does NOT count).
+
+## 9. TODO / PUNCH-LIST (flagged 2026-05-27 — before "done")
+
+### A. NEEDS FIXING on already-shipped content
+1. **Parity gap — 9 of 13 registered openings have NO model game + NO playable
+   plan** (lessons + keyIdeas only): fantasy-caro, ericrosen-london, scotch,
+   vienna, jobava-london, grunfeld, semi-slav, gothamchess-scandinavian,
+   gothamchess-london. Only Stafford/KID/Alapin/Najdorf have the full set.
+   → Backfill each with the pro's OWN real-game model game + a real playable
+   middlegame plan (the §8 standard).
+2. **Leftover auto-import JUNK still in the data:** 60 boilerplate pro model
+   games (no studentSide, thin "Daniel Naroditsky as White vs…" overviews, some
+   are student-side LOSSES) + 136 zero-ply SHELL plans, all for UNREGISTERED pro
+   openings. They're not gated (those openings aren't in the manifest) but can
+   render thin/losing content on those pro pages. → Scrap all pro boilerplate
+   model games + shell plans (per "scrap preexisting").
+
+### B. INFRA planned but NOT built
+3. `proLineProvenance.test.ts` gate (machine-checkable "the pro actually plays
+   this line") — never built. Provenance tags ARE on the built openings'
+   pro-repertoires.json entries; the gate isn't.
+4. ProPlayerPage **provenance badge + filter** UX (D5: plays/teaches/both chip +
+   All/Plays/Teaches filter) — never built.
+
+### C. SCOPE remaining (69 of 82 openings)
+5. GothamChess ×8 more, Eric Rosen ×1 (Englund), then the ELITES (Carlsen,
+   Caruana, Firouzja, Gukesh, Pragg, Niemann ×8 each) — masters-DB/OTB grounded,
+   their OWN games for model games — and the streamers (Dubov, Hikaru, Anna,
+   Akeem, Samay).
+6. **Traps**: only Stafford has one. The engine gem-miner (mine-punish-gems) has
+   NOT been run on any pro opening — should run it on the sharp ones (Vienna,
+   Scotch, Najdorf, Fantasy Caro) to surface verified weapons (or confirm none).
+
+### D. DEPLOY / VERIFY
+7. All work is on branch `claude/pro-repertoires-masterclass-audit-SPrGW`, NOT
+   merged to `main`. Per CLAUDE.md masterclass builds ship to main — merge when
+   David judges the set ready.
+8. Full-set post-deploy 3-tool audit (only Stafford/Alapin/Najdorf/KID audited
+   individually) + David's prod-device check (G1: sandbox can't verify the
+   IndexedDB unlock-write persistence or audio quality).
