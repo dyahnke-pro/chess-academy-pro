@@ -3766,10 +3766,11 @@
     "studentSide": "black",
     "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Ne5 c6 Bc4 e6 g4 Bg6 h4 Nbd7 Nxd7 Nxd7 h5 Be4 Rh3 Bd5 Bd3 c5 dxc5 Qxc5 Nxd5 Qxd5 Be3 a6 Qe2 Bc5 Bxc5 Nxc5 Bc4 Qg2 Rg3 Qh1+ Qf1 Qe4+ Qe2 O-O-O Qxe4 Nxe4 Re3 Nf6 Be2 Nd5 Re4 g6 O-O-O g5 Red4 h6 Bf3 Nf4 c3 Rxd4 Rxd4 Kc7 Kc2 f5 a4 a5 b4 b6 Rc4+ Kd7 Rd4+ Kc7 Rc4+ Kd6 Rd4+ Ke5 Rc4 fxg4 Bxg4 Rf8 Rc6 Nd5 Rxe6+ Kf4 f3 axb4 cxb4 Nxb4+ Kb3 Nd5 Rxh6 Ne3 Rxb6 Nxg4 fxg4 Kxg4 h6 Kh5 a5 g4 a6 g3 Rb5+ Kxh6 Rb4 Kg5 Rb5+ Kg4 Ka4 g2 Rb4+ Rf4 Rxf4+ Kxf4 a7 g1=Q a8=Q Qa1+",
     "sources": [
-      "https://www.chess.com/member/gothamchess",
+      "https://www.chess.com/game/live/146201636750",
+      "https://www.365chess.com/opening.php?m=39&n=141429",
       "concept:pawn-passed"
     ],
-    "overview": "Levy Rozman with the Black side of his Scandinavian, the …Qa5 main line. White throws the whole kitchen sink — g4, h4, h5 — at the light-squared bishop, but the …Bf5-g6 retreat weathers it and Black emerges with a sound structure. The game becomes a long technical battle that Black steers into a king-and-pawn race, and a passed pawn promotes to settle it. The lesson: the Scandinavian's solidity outlasts the attack.",
+    "overview": "Levy Rozman with the Black side of his Scandinavian, the …Qa5 main line. He follows the book order — …Bf5 out before …e6 — and when White throws the whole kitchen sink (g4, h4, h5) at the bishop, the standard …Bg6 retreat weathers it and the advanced pawns turn into weaknesses. The game becomes a long technical battle Black steers into a king-and-pawn race, and a passed pawn promotes to settle it. The lesson: the Scandinavian's solidity outlasts the attack.",
     "middlegameTheme": "Survive the kingside pawn-storm with …Bg6, then out-technique White in the endgame.",
     "lessonSummary": "The …Qa5 Scandinavian is built to absorb aggression — tuck the bishop on g6, trade down, and win the resulting endgame.",
     "criticalMoments": [

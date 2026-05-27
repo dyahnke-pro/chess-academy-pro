@@ -31097,5 +31097,227 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-progothamchessscandinavian-weather",
+    "openingId": "pro-gothamchess-scandinavian",
+    "criticalPositionFen": "rn2kb1r/pp2pppp/2p2n2/q3Nb2/2BP4/2N5/PPP2PPP/R1BQK2R b KQkq - 1 7",
+    "title": "Scandinavian: Weather the Storm",
+    "overview": "After 3...Qa5, Black develops ...Bf5 before ...e6 and meets White's g4-h4 pawn-storm with the calm ...Bg6 retreat. The advanced White pawns become weaknesses, not threats; Black trades off White's e5-knight, centralises the bishop, and emerges with the safer structure. The Scandinavian's solidity outlasts the aggression.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Bg6 — retreat the bishop out of the g4-h4 storm",
+      "Bd5 — centralise the bishop on the long diagonal"
+    ],
+    "strategicThemes": [
+      "Meet the kingside pawn-storm with the ...Bg6 retreat, turning White's pawns into weaknesses",
+      "Trade White's e5-outpost and out-coordinate him into a safer structure"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn2kb1r/pp2pppp/2p2n2/q3Nb2/2BP4/2N5/PPP2PPP/R1BQK2R b KQkq - 1 7",
+        "title": "Weather the storm",
+        "moves": [
+          "e6",
+          "g4",
+          "Bg6",
+          "h4",
+          "Nbd7",
+          "Nxd7",
+          "Nxd7",
+          "h5",
+          "Be4",
+          "Rh3",
+          "Bd5"
+        ],
+        "annotations": [
+          "…e6 — only now, with the bishop safely outside on f5, does Black free the kingside and lock the structure.",
+          "g4 — White lunges at the f5-bishop, the start of the kingside pawn-storm Black must weather.",
+          "…Bg6 — the bishop tucks into g6, out of the pawns' reach; White's advanced g- and h-pawns are now weaknesses to target, not threats.",
+          "h4 — the storm rolls on, threatening h5 to trap the g6-bishop.",
+          "…Nbd7 — Black develops and offers to trade White's strong e5-knight.",
+          "Nxd7 — White trades before the knight is kicked, but the powerful e5-outpost is gone.",
+          "…Nxd7 — the recapture keeps Black rock-solid; the storm has cost White structure, not Black his position.",
+          "h5 — the pawn finally lunges, but the g6-bishop just steps forward; the storm is running out of targets.",
+          "…Be4 — the bishop springs to the centre, seizing the long diagonal and eyeing g2.",
+          "Rh3 — White lifts the rook hoping to swing it into an attack, but there's nothing there.",
+          "…Bd5 — the bishop dominates from d5; White's pawn-storm has spent itself and left only weaknesses, and Black stands at least equal with by far the safer structure."
+        ],
+        "learnCues": [
+          "…e6 — bishop's out, free the position",
+          "g4 — White's storm begins",
+          "…Bg6 — dodge the storm, stay active",
+          "h4 — threatens h5",
+          "…Nbd7 — challenge the e5-knight",
+          "Nxd7 — trade off the outpost",
+          "…Nxd7 — stay solid",
+          "h5 — the storm hits air",
+          "…Be4 — centralise, eye g2",
+          "Rh3 — a hopeful rook lift",
+          "…Bd5 — the bishop dominates"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e4",
+              "to": "g2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "https://www.chess.com/game/live/146201636750",
+          "https://www.365chess.com/opening.php?m=39&n=141429"
+        ]
+      }
+    ]
   }
 ]
