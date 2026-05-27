@@ -325,3 +325,23 @@ scripts.
 ## 7. Next-session pickup
 Decisions D1–D4 are the gate. Once set, start Phase 0 (provenance harvest) — all
 sources verified reachable in-sandbox 2026-05-27; no laptop handoff needed.
+
+## 8. BUILD METHOD REFINEMENTS (David, mid-build)
+
+- **Only build TAUGHT/PLAYED lines.** Each line must be what the pro actually
+  teaches or plays — grounded in their game-frequency + their stated teaching +
+  a ≥6-ply DB anchor (openings-lichess.json). NOT a generic engine/most-popular
+  line if it isn't what they do (e.g. Gotham's anti-KID is the aggressive
+  Qd2/Bh6 attack he teaches, NOT the quiet central trade).
+- **DEEPEN lines using real PGN DATA**, not just the explorer's per-ply most-
+  popular move. Follow a real game PGN (the pro's own game where possible, else a
+  masters-DB game) past the opening into the middlegame so the deep beat is a
+  genuine played continuation, ≥20 plies.
+- **FLAG issues to David.** Distinguish cosmetic/syntax bugs (stale arrow origin
+  after a piece trades off the square; apostrophe inside a single-quoted cue
+  breaking the parse) — caught by the gates, fixed in place — from genuine
+  content problems (an untaught line, an unsound move), which must be surfaced.
+- Recurring authoring gotchas to pre-empt: (a) double-quote any sayShort/say
+  containing an apostrophe; (b) a vision arrow's origin piece must still be on
+  that square at the beat's FINAL position; (c) every arrow endpoint + highlight
+  square must be named bare in the prose (SAN like "Nf6"/"Bxf7" does NOT count).
