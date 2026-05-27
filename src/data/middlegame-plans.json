@@ -22362,7 +22362,12 @@
           "Ne8",
           "cxd5",
           "cxd5",
-          "Re1"
+          "Re1",
+          "Rc8",
+          "Qa4",
+          "Nc7",
+          "Nf1",
+          "b5"
         ],
         "annotations": [
           "…Bb7 — Black develops on the long diagonal.",
@@ -22370,12 +22375,18 @@
           "…Ne8 — the knight retreats to e8, cramped.",
           "cxd5 — White clarifies the centre.",
           "…cxd5 — Black recaptures on d5.",
-          "Re1 — the rook supports the e5-wedge."
+          "Re1 — the rook supports the e5-wedge.",
+          "…Rc8 — Black contests the c-file.",
+          "Qa4 — the queen swings out, pressuring a7 and supporting the queenside.",
+          "…Nc7 — Black reroutes the knight to defend.",
+          "Nf1 — the knight begins the Nf1-e3-f5 manoeuvre, heading for the kingside outpost behind the e5-wedge.",
+          "…b5 — Black grabs queenside space; meanwhile White’s knight reroute and the e5-clamp give a lasting space edge."
         ],
         "sources": [
           "concept:pos-center",
           "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Catalan_Opening"
+          "https://en.wikipedia.org/wiki/Catalan_Opening",
+          "concept:pos-outpost"
         ],
         "learnCues": [
           "Bb7 — the long diagonal",
@@ -22383,7 +22394,12 @@
           "Ne8 — cramped retreat",
           "cxd5 — clarify the centre",
           "cxd5 — recapture",
-          "Re1 — support the e5-wedge"
+          "Re1 — support the e5-wedge",
+          "Rc8 — contest the c-file",
+          "Qa4 — pressure a7",
+          "Nc7 — reroute to defend",
+          "Nf1 — start the Nf1-e3-f5 route",
+          "b5 — Black grabs space"
         ],
         "arrows": [
           [],
@@ -22397,7 +22413,24 @@
               "to": "e5",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [],
+          [
+            {
+              "from": "a4",
+              "to": "a7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "f1",
+              "to": "e3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
         ],
         "highlights": [
           [
@@ -22467,6 +22500,76 @@
               "square": "e5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ]
       }
@@ -22510,7 +22613,13 @@
           "O-O",
           "Rd1",
           "Nb4",
-          "Qe2"
+          "Qe2",
+          "Bg4",
+          "Nxc4",
+          "a5",
+          "Bf4",
+          "f5",
+          "e5"
         ],
         "annotations": [
           "…Na6 eyes the c4-pawn, daring White to prove the gambit of a tempo.",
@@ -22518,7 +22627,13 @@
           "…O-O tucks the king safely behind the fianchetto.",
           "Rd1 swings the rook behind the d-pawn, bracing the broad centre.",
           "…Nb4 lunges at c2 and d3, but leaves the c4-pawn undefended.",
-          "Qe2 connects the rooks; the centre stands broad and the a3-knight scoops up c4 — a pawn and a mobile mass for White."
+          "Qe2 connects the rooks; the centre stands broad and the a3-knight scoops up c4 — a pawn and a mobile mass for White.",
+          "…Bg4 — Black pins the f3-knight.",
+          "Nxc4 — the Na3-c4 manoeuvre recovers the gambit pawn, the knight landing actively.",
+          "…a5 — Black gains queenside space and eyes b4.",
+          "Bf4 — the bishop develops with tempo, eyeing c7 and d6.",
+          "…f5 — Black tries to clamp the centre.",
+          "e5 — the central break lands, the broad pawn centre rolling forward with a clear space edge."
         ],
         "learnCues": [
           "Na6 — eye c4",
@@ -22526,7 +22641,13 @@
           "O-O — king safe",
           "Rd1 — brace the centre",
           "Nb4 — hit c2/d3",
-          "Qe2 — pawn and centre"
+          "Qe2 — pawn and centre",
+          "Bg4 — pin the knight",
+          "Nxc4 — recover the gambit pawn",
+          "a5 — queenside space",
+          "Bf4 — develop with tempo",
+          "f5 — clamp the centre",
+          "e5 — central break, big centre"
         ],
         "arrows": [
           [],
@@ -22557,7 +22678,25 @@
               "to": "c4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "f4",
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
         ],
         "highlights": [
           [
@@ -22646,6 +22785,82 @@
             {
               "square": "c4",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
@@ -27719,13 +27934,27 @@
           "Nc3",
           "Bg4",
           "b3",
-          "Bf6"
+          "Bf6",
+          "Be3",
+          "d5",
+          "c5",
+          "Nc8",
+          "h3",
+          "Be6",
+          "Qd2"
         ],
         "annotations": [
           "Nc3 defends the d4-c4 centre and eyes d5.",
           "…Bg4 pins the f3-knight, leaning on the d4-pawn behind it.",
           "b3 props up the c4-pawn and frees the c1-bishop.",
-          "…Bf6 swings onto the long diagonal, doubling the pressure on d4 — Black is fully active and the centre is under siege."
+          "…Bf6 swings onto the long diagonal, doubling the pressure on d4 — Black is fully active and the centre is under siege.",
+          "Be3 — White develops and bolsters the d4-pawn.",
+          "…d5 — the freeing break, fixing the centre and claiming equal space.",
+          "c5 — White grabs queenside space.",
+          "…Nc8 — the knight reroutes toward d6 and the blockade.",
+          "h3 — White makes luft.",
+          "…Be6 — the light bishop takes an active post, eyeing c4 and holding d5; Black has reached comfortable, active equality.",
+          "Qd2 — White connects the rooks; the position is balanced."
         ],
         "title": "Alekhine: Active Equality in the Exchange",
         "arrows": [
@@ -27750,7 +27979,32 @@
               "to": "d4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "c8",
+              "to": "d6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "e6",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          []
         ],
         "highlights": [
           [
@@ -27824,13 +28078,106 @@
               "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
         "learnCues": [
           "Nc3 — guard the centre",
           "Bg4 — pin f3",
           "b3 — prop c4",
-          "Bf6 — siege d4"
+          "Bf6 — siege d4",
+          "Be3 — bolster d4",
+          "d5 — the freeing break",
+          "c5 — White grabs space",
+          "Nc8 — reroute to the blockade",
+          "h3 — White makes luft",
+          "Be6 — active bishop, hold d5",
+          "Qd2 — balanced"
         ],
         "sources": [
           "concept:pos-center",
@@ -34950,19 +35297,40 @@
           "Qe2",
           "Nf6",
           "Nxa7+",
-          "Bd7"
+          "Bd7",
+          "Bxd7+",
+          "Nxd7",
+          "f4",
+          "Qc5",
+          "Nb5",
+          "Qxc2",
+          "d4"
         ],
         "annotations": [
           "Qe2 defends and pressures the e4-pawn.",
           "…Nf6 develops with tempo, guarding the e4-pawn and eyeing the centre.",
           "Nxa7+ snatches a second pawn — but the knight lands offside on the rim.",
-          "…Bd7 develops, and the offside a7-knight becomes a target to round up. There is the Schliemann’s compensation: the bishop pair, the open f-file for the rook, a lead in development, and a rim-stuck knight — full activity for the pawns."
+          "…Bd7 develops, and the offside a7-knight becomes a target to round up. There is the Schliemann’s compensation: the bishop pair, the open f-file for the rook, a lead in development, and a rim-stuck knight — full activity for the pawns.",
+          "Bxd7+ — White trades to relieve the pressure.",
+          "…Nxd7 — recapturing and developing; White’s a7-knight is still stranded offside.",
+          "f4 — White lashes out in the centre.",
+          "…Qc5 — the queen swings to an active diagonal, hitting c2 and the loose pieces.",
+          "Nb5 — the knight scrambles back from a7.",
+          "…Qxc2 — snatching the pawn with initiative; Black’s lead in development and White’s exposed king give full value.",
+          "d4 — White stakes out the centre, but Black’s active queen and extra pawn keep the initiative."
         ],
         "learnCues": [
           "Qe2 — White guards e4.",
           "…Nf6 — develop, guard e4.",
           "Nxa7+ — White grabs the rim pawn.",
-          "…Bd7 — develop, target a7."
+          "…Bd7 — develop, target a7.",
+          "Bxd7+ — White trades",
+          "Nxd7 — recapture, develop",
+          "f4 — White lashes out",
+          "Qc5 — active queen, hit c2",
+          "Nb5 — knight scrambles back",
+          "Qxc2 — grab the pawn, initiative",
+          "d4 — Black keeps the initiative"
         ],
         "sources": [
           "concept:pos-initiative",
@@ -34985,6 +35353,19 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c5",
+              "to": "c2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
           [],
           []
         ],
@@ -35039,6 +35420,84 @@
             {
               "square": "a7",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
