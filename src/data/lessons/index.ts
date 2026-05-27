@@ -84,6 +84,7 @@ import { TROMPOWSKY_ATTACK_LESSON } from './trompowskyAttack';
 import { TROMPOWSKY_ATTACK_VARIATION_LESSONS } from './trompowskyAttackVariations';
 import { BIRDS_OPENING_LESSON } from './birdsOpening';
 import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
+import { PRO_ERICROSEN_STAFFORD_LESSON } from './proEricRosenStafford';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -143,6 +144,8 @@ const LESSONS: Record<string, LessonScript> = {
   [QUEENS_GAMBIT_LESSON.openingId]: QUEENS_GAMBIT_LESSON,
   [TROMPOWSKY_ATTACK_LESSON.openingId]: TROMPOWSKY_ATTACK_LESSON,
   [BIRDS_OPENING_LESSON.openingId]: BIRDS_OPENING_LESSON,
+  // Pro masterclasses (David 2026-05-27) — keyed by `pro-<player>-<line>`.
+  [PRO_ERICROSEN_STAFFORD_LESSON.openingId]: PRO_ERICROSEN_STAFFORD_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {

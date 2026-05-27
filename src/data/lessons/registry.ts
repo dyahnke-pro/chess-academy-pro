@@ -14,6 +14,7 @@
 
 import type { LessonScript } from '../../types';
 import repertoire from '../repertoire.json';
+import proRepertoire from '../pro-repertoires.json';
 
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
@@ -190,9 +191,14 @@ export const ALL_LESSONS: RegisteredLesson[] = build();
  *  opening — so a new opening can't ship without declared content floors. */
 export const FIRST_CLASS_OPENING_IDS: string[] = OPENINGS.map((o) => o.main.openingId);
 
-const COLOR_BY_ID = new Map<string, 'white' | 'black'>(
-  (repertoire as Array<{ id: string; color: 'white' | 'black' }>).map((o) => [o.id, o.color]),
-);
+// Pro-opening masterclasses (David 2026-05-27) live in pro-repertoires.json,
+// not repertoire.json — so orientation/gates must read BOTH sources. Merge pro
+// colors in so a pro lesson (openingId `pro-<player>-<line>`) resolves its
+// student side the same way a base masterclass does.
+const COLOR_BY_ID = new Map<string, 'white' | 'black'>([
+  ...(repertoire as Array<{ id: string; color: 'white' | 'black' }>).map((o) => [o.id, o.color] as const),
+  ...((proRepertoire as { openings: Array<{ id: string; color: 'white' | 'black' }> }).openings).map((o) => [o.id, o.color] as const),
+]);
 
 /** The side the student plays for an opening, read from repertoire.json's
  *  `color` field — the DB-driven source of truth. Lessons must orient to

@@ -223,6 +223,27 @@ Full Vienna-recipe standalone, with these sources nailed down:
   `proLineProvenance.test.ts` + per-opening interactive audits (3 clean rounds),
   audit-stream pull. Push to `main`, post-deploy audit (G1).
 
+## 6b. BUILD PROGRESS — Eric Rosen Stafford (first opening)
+
+- ✅ **Main lesson built + verified + LIVE.** `src/data/lessons/proEricRosenStafford.ts`
+  (`PRO_ERICROSEN_STAFFORD_LESSON`, openingId `pro-ericrosen-stafford`, black,
+  8 beats, two-register, 10-ply). Spine chess.js-verified
+  (`scripts/verify-stafford-spine.mjs`); arrows/highlights all grounded +
+  sight-line-legal (self-checked with the gate logic). Wired into runtime
+  `lessons/index.ts` LESSONS → renders via LessonPlayer (Watch/Learn) instead of
+  the legacy fallback. Grounded in his 688 real Stafford games (~80%).
+- ✅ **Orientation bridge.** `registry.ts` COLOR_BY_ID now merges
+  pro-repertoires.json colors so pro lessons resolve their student side + pass
+  the orientation gate.
+- ⏳ **NOT yet done for this opening:** gate-registry registration
+  (`registry.ts` ALL_LESSONS) + manifest entry — DEFERRED until the manifest/gate
+  bridge lands (openingManifests + content gates must read pro-repertoires.json),
+  to avoid red gates mid-build. Lesson is self-verified in the interim.
+  Remaining content: variation lessons (Stafford 4.Nf3 / 5.Nc3 lines), punish-gems
+  (the …Nxe4 / …Bxf2+ traps — MINE + verify, don't author from memory), model
+  games (his real wins), deep middlegame plans (mined from his games), checkpoint
+  quizzes + common mistakes, then full gate registration + interactive audit.
+
 ## 7. Next-session pickup
 Decisions D1–D4 are the gate. Once set, start Phase 0 (provenance harvest) — all
 sources verified reachable in-sandbox 2026-05-27; no laptop handoff needed.
