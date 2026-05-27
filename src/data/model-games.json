@@ -4776,5 +4776,52 @@
       "https://en.wikipedia.org/wiki/Bird%27s_Opening"
     ],
     "criticalMoments": []
+  },
+  {
+    "id": "mg-pro-ericrosen-stafford-bxf2",
+    "openingId": "pro-ericrosen-stafford",
+    "white": "g4rdenhe4d",
+    "black": "EricRosen",
+    "whiteElo": 1949,
+    "blackElo": 2575,
+    "result": "0-1",
+    "year": 2026,
+    "event": "Lichess Blitz Arena",
+    "studentSide": "black",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 h3 Bxf2+ Kxf2 Nxe4+ Kg1 Qd4+ Kh2 Qe5+ Kg1 Qd4+ Kh2 Qe5+ Kg1 Ng3 Rh2 Qd4+ Be3 Qxe3#",
+    "overview": "Eric Rosen himself, playing the Stafford he made famous, against a 1949-rated opponent. The whole game is one idea paid in full: after the quiet 6.h3, Black immolates the bishop with Bxf2+, drags the white king into the open, and hunts it down with queen and knight — finishing with Qxe3 checkmate in just fourteen moves. The purest demonstration of the Stafford's promise: rapid development and the f2-square matter more than a pawn.",
+    "middlegameTheme": "Sacrifice on f2 to expose the uncastled king, then a queen-and-knight mating hunt.",
+    "lessonSummary": "The Stafford pays off when White plays naturally and slowly: …Bxf2+ rips open the king and the queen+knight finish it.",
+    "criticalMoments": [
+      {
+        "moveNumber": 6,
+        "color": "black",
+        "fen": "r1bqk2r/ppp2ppp/2p2n2/8/4P3/3P3P/PPP2bP1/RNBQKB1R w KQkq - 0 7",
+        "annotation": "After the slow 6.h3, Black strikes: Bxf2+. The bishop is given up to drag the white king off its castling square and into the open — the f2-point was defended only by the king, exactly the weakness the Stafford targets.",
+        "concept": "Bishop Sacrifice on f2",
+        "highlights": [
+          {
+            "square": "f2",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 14,
+        "color": "black",
+        "fen": "r1b1k2r/ppp2ppp/2p5/8/8/3Pq1nP/PPP3PR/RN1Q1BK1 w kq - 0 15",
+        "annotation": "Qxe3 — checkmate. The knight on g3 and the queen on e3 weave a net around the boxed-in white king while White's queenside still sleeps on its starting squares. Material was never the point; the exposed king was.",
+        "concept": "Queen-and-Knight Mating Net",
+        "highlights": [
+          {
+            "square": "e3",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ],
+    "sources": [
+      "https://lichess.org/abZzbeTM"
+    ]
   }
 ]
