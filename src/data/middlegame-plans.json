@@ -36456,5 +36456,215 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proericrosenstafford-main",
+    "openingId": "pro-ericrosen-stafford",
+    "title": "Stafford: Kingside Space & the f2 Hunt",
+    "criticalPositionFen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
+    "overview": "With the knights traded and White settling for the quiet Be2, Black turns the Stafford's lead in development into a concrete plan: grab kingside space with …h5, jump the knight into g4 to harass f2 and e3, and keep both bishops trained on the white king. Material is even, but every black piece has a job pointing at the same target.",
+    "pawnBreaks": [
+      "...h5 — grab kingside space and pry open the h-file toward White's king"
+    ],
+    "pieceManeuvers": [
+      "...Ng4 — the knight leaps to g4, hitting f2 and e3 and forcing White to react"
+    ],
+    "strategicThemes": [
+      "The bishop pair and the open d-file are Black's long-term trumps",
+      "Every black piece points at f2 and the white king's shelter"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
+        "moves": [
+          "h5",
+          "c3",
+          "Ng4",
+          "d4",
+          "Bb6",
+          "h3",
+          "Nf6",
+          "Bg5",
+          "Qd7"
+        ],
+        "annotations": [
+          "h5 grabs kingside space and prepares to pry open the h-file — in this wide-open Stafford position the white king is always the real target.",
+          "c3 props up a future d4 push.",
+          "Ng4 — the knight leaps in, striking at f2 and e3 and forcing White to spend time kicking it.",
+          "d4 seizes the centre and hits the c5-bishop.",
+          "Bb6 slides the bishop onto the long diagonal, still glaring at the d4-pawn and the centre.",
+          "h3 kicks the knight back.",
+          "Nf6 retreats, but the h5-pawn has already loosened White's kingside for good.",
+          "Bg5 pins the knight to the queen.",
+          "Qd7 connects the rooks; the two bishops, the open d-file, and the loosened white kingside leave Black with the easier, more active game."
+        ],
+        "learnCues": [
+          "…h5 — kingside space",
+          "c3 — props up d4",
+          "…Ng4 — hit f2 and e3",
+          "d4 — grabs the centre",
+          "…Bb6 — bishop eyes d4",
+          "h3 — kicks the knight",
+          "…Nf6 — drop back, h5 stays",
+          "Bg5 — pins the knight",
+          "…Qd7 — connect, bishops rule"
+        ],
+        "sources": [
+          "https://lichess.org/study/SSWMLB7R/K9ptMklR",
+          "concept:pos-development"
+        ],
+        "title": "Kingside space and the f2 hunt",
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "g4",
+              "to": "f2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g4",
+              "to": "e3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "b6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "f6",
+              "to": "h5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]

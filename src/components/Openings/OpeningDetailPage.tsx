@@ -64,6 +64,7 @@ import { getSchliemannDefenceTabPlanIds } from '../../services/schliemannDefence
 import { getQueensGambitTabPlanIds } from '../../services/queensGambitMasterclassTabs';
 import { getTrompowskyAttackTabPlanIds } from '../../services/trompowskyAttackMasterclassTabs';
 import { getBirdsOpeningTabPlanIds } from '../../services/birdsOpeningMasterclassTabs';
+import { getStaffordTabPlanIds } from '../../services/staffordMasterclassTabs';
 import { LessonPlayer } from './LessonPlayer';
 import { getLessonScript, getVariationLessonScript, lessonToPlayableLine } from '../../data/lessons';
 import {
@@ -1135,6 +1136,7 @@ export function OpeningDetailPage(): JSX.Element {
     getQueensGambitTabPlanIds(opening.id, tabKey) ??
     getTrompowskyAttackTabPlanIds(opening.id, tabKey) ??
     getBirdsOpeningTabPlanIds(opening.id, tabKey) ??
+    getStaffordTabPlanIds(opening.id, tabKey) ??
     (isVariation ? [`${planPrefix}-${tabKey}`] : undefined);
 
   // HAND-PICKED named traps for this tab (hand-authored beat lessons).
