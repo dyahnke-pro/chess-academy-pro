@@ -514,10 +514,10 @@
       "style": "Solid, Flexible",
       "overview": "The Semi-Slav is the Goldilocks defence: not too sharp (like the Grünfeld), not too quiet (like the QGD), just right. Frank Marshall popularized the structure in the early 1900s; Mikhail Botvinnik's exhaustive analysis in the 1940s elevated it to the highest level, and his namesake Botvinnik System (with …dxc4 and …b5) became the sharpest defence in tournament chess. The Moscow Variation has been World Championship material in every era from the 1950s to today. The structure — pawns on c6, d5, e6 forming a defensive triangle around d5 — is the most over-protected centre Black can build. Three pawns reinforce d5. The c8-bishop can come out via …b6+…Bb7 or stay home; the f8-bishop chooses between …Be7 (solid) or …Bd6 (active) based on what White does. The only way to lose is to fall into a sharp tactical line you haven't studied — so don't.",
       "keyIdeas": [
-        "c6+d5 is the spine. The d5-pawn is overprotected three times (c6, e6, Nf6) and basically immune to attack. The cost: the c8-bishop is locked in until you commit to either …dxc4 (Slav/Meran) or …Bg7 fianchetto (KID transposition).",
-        "Pick your structure based on White's 5th move. If White plays Bg5 (Moscow), Black aims for …Bg7 + …e5. If e3 (Meran), Black plays …dxc4 + …b5 grabbing queenside space. If g3 (Catalan-like), Black plays …Bb4 hitting the queenside.",
-        "The …b5 expansion in the Meran is the Semi-Slav's most aggressive idea. After …dxc4 Bxc4 b5, you have queenside space, the c8-bishop comes out via …Bb7, and the …c5 break is on the cards.",
-        "Don't auto-pilot. The Semi-Slav has six major systems (Moscow, Anti-Moscow, Meran, Anti-Meran, Botvinnik, Stoltz) — committing to a plan before seeing White's setup leads to inferior positions in 4 out of 6 of them."
+        "The Semi-Slav fuses the Slav and the QGD into the most solid pawn triangle in chess — c6, d5, e6. The d5-pawn is bombproof and every piece has a natural home.",
+        "Against the quiet e3, play the Meran: …dxc4 then …b5 grabs queenside space with tempo, the light bishop goes to b7 raking e4, and the solid setup turns sharply active.",
+        "…c5 is the freeing break that opens the centre and the long diagonal for the b7-bishop, converting the triangle into a real counterattack.",
+        "For the brave, the Botvinnik (5.Bg5 dxc4 6.e4 b5) is the sharpest line in chess — Black holds the extra pawn through forced fireworks; preparation decides it."
       ],
       "traps": [
         "In the Meran, after 6…dxc4 7.Bxc4 b5, if White grabs the pawn with 8.Bxb5? cxb5 9.Nxb5 — Black has Bb4+! 10.Bd2 a6 trapping the knight. Standard Meran gambit punishment."
@@ -528,23 +528,26 @@
       ],
       "variations": [
         {
-          "name": "Moscow Variation 5.Bg5 h6",
-          "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 h6 Bxf6 Qxf6 e3 Nd7 Bd3 dxc4 Bxc4 g6 O-O Bg7 e4 e5 d5 Nb6 Bb3 Bg4 Rc1 O-O h3 Bxf3",
-          "explanation": "Danya's go-to system. You let White double your pawns with Bxf6 Qxf6 — but you get the bishop pair AND the f6-queen actively placed. The plan is then …g6/…Bg7/…e5 transposing to a King's Indian-style structure but with the better-placed queen. The Bxf3 trade gives up the bishop pair but neutralises White's most active piece; the resulting middlegame is dynamically balanced with chances for both sides."
-        },
-        {
-          "name": "Meran Variation",
-          "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 Bb7 O-O a6 e4 c5 d5 e5 b3 Bd6 Re1 O-O Bf1 h6",
-          "explanation": "The Semi-Slav's most ambitious system. Once you've played …dxc4 + …b5 + …Bb7 + …a6, the queenside is fully developed and aimed at White's centre. The …c5 break challenges d4; after the dust settles, you have queenside pawn majority and active piece play. Theoretical to a fault — you need to know the …b5 / …a6 / …c5 move order cold, but the lines are forcing and the payoff is real counterplay."
-        },
-        {
-          "name": "Anti-Moscow 5.Bg5 dxc4",
-          "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 dxc4 e4 b5 e5 h6 Bh4 g5 Nxg5 hxg5 Bxg5 Nbd7 exf6 Bb7 g3 c5 d5 Qb6 Bg2 O-O-O",
-          "explanation": "The Anti-Moscow is what happens when both players have spent 200 hours studying the same opening and refuse to back down. Black plays 5...dxc4 grabbing material; White responds 6.e4 b5 7.e5 h6 8.Bh4 g5 9.Nxg5! — burning a knight to crack Black's kingside open. After 9...hxg5 10.Bxg5 Nbd7 11.exf6 Bb7 12.g3 c5 13.d5 Qb6 14.Bg2, the dust settles into a position where White is a piece down but has crushing kingside pressure plus a passed f6-pawn. Black's only path to safety is the precise sequence above — 14...O-O-O is the key move that saves the day. Engines call it dynamic equality; over the board it's checkmate in 5 if Black forgets one move. Study or skip."
+          "name": "Botvinnik Variation",
+          "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 dxc4 e4 b5 e5 h6 Bh4 g5 Nxg5 hxg5 Bxg5 Nbd7",
+          "explanation": "The sharpest line in chess: after 5.Bg5 dxc4 6.e4 b5 Black clings to the pawn; White sacrifices a knight on g5 to rip the position open, and Black emerges down a piece but up two pawns with a solid structure. Pure preparation and nerve.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 25,
+            "score": 55,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
-      "warningLines": []
+      "warningLines": [],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 60,
+        "score": 57,
+        "source": "lichess /player",
+        "taughtUrl": "https://www.youtube.com/@DanielNaroditskyGM"
+      }
     },
     {
       "id": "pro-naroditsky-jobava-london",

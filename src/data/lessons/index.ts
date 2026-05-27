@@ -104,6 +104,8 @@ import { PRO_NARODITSKY_JOBAVA_LESSON } from './proNaroditskyJobava';
 import { PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS } from './proNaroditskyJobavaVariations';
 import { PRO_NARODITSKY_GRUNFELD_LESSON } from './proNaroditskyGrunfeld';
 import { PRO_NARODITSKY_GRUNFELD_VARIATION_LESSONS } from './proNaroditskyGrunfeldVariations';
+import { PRO_NARODITSKY_SEMI_SLAV_LESSON } from './proNaroditskySemiSlav';
+import { PRO_NARODITSKY_SEMI_SLAV_VARIATION_LESSONS } from './proNaroditskySemiSlavVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -174,6 +176,7 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_NARODITSKY_VIENNA_LESSON.openingId]: PRO_NARODITSKY_VIENNA_LESSON,
   [PRO_NARODITSKY_JOBAVA_LESSON.openingId]: PRO_NARODITSKY_JOBAVA_LESSON,
   [PRO_NARODITSKY_GRUNFELD_LESSON.openingId]: PRO_NARODITSKY_GRUNFELD_LESSON,
+  [PRO_NARODITSKY_SEMI_SLAV_LESSON.openingId]: PRO_NARODITSKY_SEMI_SLAV_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -229,6 +232,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_NARODITSKY_VIENNA_VARIATION_LESSONS,
   ...PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS,
   ...PRO_NARODITSKY_GRUNFELD_VARIATION_LESSONS,
+  ...PRO_NARODITSKY_SEMI_SLAV_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
