@@ -895,10 +895,10 @@
       "style": "Practical, Provocative",
       "overview": "Here's the dirty secret of opening theory: half of chess writing says 'don't bring your queen out early'. The Scandinavian says: 'I will, and your move'. The opening's pedigree is ancient — it appears in chess manuscripts from 1475 (one of the oldest analyzed openings in the historical record); modern revival came from Larsen and Tony Miles, who beat Karpov with the Scandinavian in 1980 (a major upset at the time). Levy made this Black's anti-1.e4 weapon for the YouTube generation because there's almost no theory beyond move 8. After 1.e4 d5 2.exd5 Qxd5 — yes, your queen is on d5 in the open — but White's natural 3.Nc3 attacks the queen, which means White has to ASK you where she goes (3...Qa5 is the answer, hitting the e1-h4 diagonal). You've used your one queen move to gain three things: developed your queen with tempo, decoyed White's knight to c3 where it commits, and signalled you're playing fast and direct.",
       "keyIdeas": [
-        "Qxd5 → Qa5 is one move sequence, not two. Don't recapture with the queen on d5 thinking you'll figure out where to put her later — the only good square is a5 (the c-file gets defended by the queen, and Qa5 pins the c3-knight against the e1-king if the bishop ever comes off c1).",
-        "Bf5 BEFORE e6 is mandatory. The whole point of the Scandinavian over the Caro-Kann is that the queen comes out instead of the c-pawn — preserving the option to develop the c8-bishop OUTSIDE the pawn chain. Lock the bishop in with …e6 first and you've played a Caro-Kann a tempo down.",
-        "c6 has TWO purposes. It supports an eventual …d5 break (regaining centre control) AND it prepares …Bb4 hitting the c3-knight WITH the queen on a5 pinning it — a pin-and-attack combo that wins material if White isn't careful.",
-        "Don't let White play d5. Once you've castled, watch for any moment where White's d4-d5 push could fork your queen on a5 and a piece on b5 or c6. Pre-empt with …Bd7 + …Nc6-b4 reroute if needed."
+        "The Scandinavian cuts through 1.e4 theory: …d5 trades off White's centre pawn immediately and reaches a clear, low-theory structure — Levy's pick for players who don't want to memorize.",
+        "After …Qxd5 Nc3, the queen retreats to a5 (classical) or d6 (modern). Don't fear the tempo loss — the queen lands on a safe, useful square and Black develops normally.",
+        "The setup is always the same: …Nf6, …c6 (luft for the queen + holds d5), …Bf5 or …Bg4 to free the light bishop before …e6 locks it in. Easy, repeatable moves.",
+        "Black ends up rock-solid with no weaknesses. When White over-presses (g4/h4), the bishop steps to safety and White's pawn storm only loosens his own king."
       ],
       "traps": [
         "After 4.Nf3 Bf5 5.Bd3 — White attacks the f5-bishop hoping for the trade. Don't trade! Move the bishop with 5...Bg6 or accept 5...Bxd3 6.Qxd3 only if it suits your structure. The Bd3 is a Caro-Kann move, not a Scandinavian move — White hasn't earned the bishop trade yet."
@@ -909,24 +909,15 @@
       ],
       "variations": [
         {
-          "name": "Main Line Qa5",
-          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4 O-O-O Nbd7",
-          "explanation": "The full mainline as Levy teaches it. 3.Nc3 Qa5 places the queen on the magic square; 4.d4 Nf6 5.Nf3 Bf5 — the bishop comes out BEFORE …e6 (this is the Scandinavian's whole point). 6.Bc4 e6 7.Bd2 (preparing O-O-O) c6 8.Qe2 Bb4! — there's the pin and attack: Bb4 hits Nc3, which is pinned by Qa5 against the king on e1. White's response: 9.O-O-O Nbd7 reaches the critical position. Both kings have committed: White queenside, Black kingside (after …Be7 and …O-O). The game becomes opposite-side castle race, but Black is fully developed and has the …c5 break ready. Levy's signature line — easy to play, easy to remember, gets you a real game from move 1.",
-          "sources": [
-            "book:scandinavian-defence",
-            "concept:pos-development",
-            "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-          ]
-        },
-        {
-          "name": "2...Nf6 Scandinavian",
-          "pgn": "e4 d5 exd5 Nf6 d4 Nxd5 c4 Nb6 Nf3 g6 Nc3 Bg7 Be3 O-O Be2 Nc6 O-O e5",
-          "explanation": "The 'modern' Scandinavian — instead of bringing the queen out, develop the knight directly. After 2...Nf6 3.d4 (White grabs even more centre) Nxd5 4.c4 Nb6 (the knight retreats, but the c-pawn has advanced and White has committed pieces), the position takes on a Grünfeld feel: Black fianchettos with 4...g6 and 5...Bg7, fights for d4 with 9...Nc6 and the eventual 10...e5 break. The opening costs nothing positionally — Black just chose a slightly slower but more flexible setup than the queen-out main line.",
-          "sources": [
-            "book:scandinavian-defence",
-            "concept:pos-development",
-            "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-          ]
+          "name": "Modern ...Qd6",
+          "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3 a6 Bc4 b5 Bb3 Bb7 O-O e6 Re1 Be7 Bg5 O-O",
+          "explanation": "The modern queen retreat to d6 — flexible and solid. Black expands with …a6/…b5, fianchettoes to b7, and completes a harmonious setup with …e6/…Be7/…O-O, no weaknesses and easy play.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 140,
+            "score": 55,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
@@ -935,7 +926,14 @@
         "book:scandinavian-defence",
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-      ]
+      ],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 450,
+        "score": 56,
+        "source": "lichess /player",
+        "taughtUrl": "https://www.youtube.com/@GothamChess"
+      }
     },
     {
       "id": "pro-gothamchess-qgd",

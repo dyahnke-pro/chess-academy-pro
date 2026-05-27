@@ -128,6 +128,8 @@ import { PRO_NARODITSKY_GRUNFELD_LESSON } from './proNaroditskyGrunfeld';
 import { PRO_NARODITSKY_GRUNFELD_VARIATION_LESSONS } from './proNaroditskyGrunfeldVariations';
 import { PRO_NARODITSKY_SEMI_SLAV_LESSON } from './proNaroditskySemiSlav';
 import { PRO_NARODITSKY_SEMI_SLAV_VARIATION_LESSONS } from './proNaroditskySemiSlavVariations';
+import { PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON } from './proGothamScandinavian';
+import { PRO_GOTHAMCHESS_SCANDINAVIAN_VARIATION_LESSONS } from './proGothamScandinavianVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -202,6 +204,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: PRO_NARODITSKY_JOBAVA_LESSON, variations: PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS },
   { main: PRO_NARODITSKY_GRUNFELD_LESSON, variations: PRO_NARODITSKY_GRUNFELD_VARIATION_LESSONS },
   { main: PRO_NARODITSKY_SEMI_SLAV_LESSON, variations: PRO_NARODITSKY_SEMI_SLAV_VARIATION_LESSONS },
+  { main: PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON, variations: PRO_GOTHAMCHESS_SCANDINAVIAN_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {
