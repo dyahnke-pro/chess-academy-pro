@@ -7,7 +7,9 @@
 // from explorer numbers / the engine — nothing invented (G3).
 import { Chess } from 'chess.js';
 import gemsData from '../punish-gems.json';
+import gambitGemsData from '../gambit-punish-gems.json';
 import { getGemNarration, hasGemNarration } from './punishGemNarration';
+import { GAMBIT_GEM_NARRATION } from './gambitGemNarration';
 import type { PlayableMiddlegameLine, AnnotationArrow } from '../../types';
 
 export interface PunishGem {
@@ -31,7 +33,21 @@ export interface PunishGem {
   why: string;
 }
 
-const GEMS = gemsData as PunishGem[];
+// Masterclass gems + the SEPARATE-LANE gambit gems (David 2026-05-27). Sourced
+// from distinct files (gambit-punish-gems.json is never touched by the
+// masterclass lane); merged only here in the consumer, and they never collide
+// because they're keyed by distinct openingIds (gambit-* vs masterclass ids).
+const GEMS = [...(gemsData as PunishGem[]), ...(gambitGemsData as PunishGem[])];
+
+// Narration lookup that also covers the gambit-lane narration map, so gambit
+// gems surface + play through the same WLPP path without the masterclass
+// punishGemNarration.ts depending on the gambit file.
+function gemNarrationFor(id: string): ReturnType<typeof getGemNarration> {
+  return GAMBIT_GEM_NARRATION[id] ?? getGemNarration(id);
+}
+function hasNarrationFor(id: string): boolean {
+  return id in GAMBIT_GEM_NARRATION || hasGemNarration(id);
+}
 
 /** The tiers that earn a place in the weapon section: engine-verified REAL
  *  benefit (≥ +0.5). Practical (unverified) and weak (< +0.5) are not weapons
@@ -47,7 +63,7 @@ export function isWeaponGem(gem: PunishGem): boolean {
  *  narration — no thin-narration gems ship (David 2026-05-24). As each gem's
  *  Watch script + Learn cues are hand-written, it lights up. */
 export function isSurfaceableGem(gem: PunishGem): boolean {
-  return isWeaponGem(gem) && hasGemNarration(gemId(gem));
+  return isWeaponGem(gem) && hasNarrationFor(gemId(gem));
 }
 
 /** A stable id for state/keys — opening + the inaccuracy's position + the slip. */
@@ -114,7 +130,7 @@ export function gemToPlayableLine(gem: PunishGem): PlayableMiddlegameLine | null
   // present it's used verbatim; otherwise the line falls back to a minimal
   // factual annotation (and won't surface — see isWeaponGem usage / the
   // narration gate). NEVER generated.
-  const narration = getGemNarration(gemId(gem));
+  const narration = gemNarrationFor(gemId(gem));
 
   const chess = new Chess(START_FEN);
   const arrows: AnnotationArrow[][] = [];
