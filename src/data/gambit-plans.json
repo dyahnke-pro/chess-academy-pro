@@ -1743,5 +1743,360 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-danishgambit-attack",
+    "openingId": "danish-gambit",
+    "title": "The Danish Gambit: two pawns for two bishops",
+    "criticalPositionFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "overview": "The Danish is the boldest of the romantic gambits: White offers TWO pawns on moves two and three, not to win them back, but to plant both bishops on the great long diagonals aimed at Black's king. Be honest about it — with precise defence Black can hand a pawn back and equalize, so this is a practical weapon, not an objective edge. But the setup is genuinely dangerous: Bc4 and a battery on f7, Bb2 raking g7, every piece out while Black scrambles. Know the plan and you'll score with it far more often than the engine says you should. This teaches that plan: the two-bishop battery and the development lead.",
+    "pawnBreaks": [
+      {
+        "move": "d4",
+        "explanation": "Move two, and White already throws the centre open — the first pawn offered to clear lines for rapid development."
+      },
+      {
+        "move": "c3",
+        "explanation": "The second pawn. The Danish doesn't want material back; c3 (and the bishop recaptures that follow) is about handing the bishops their diagonals."
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bf1-c4 / Bc1xb2",
+        "explanation": "The whole point: one bishop to c4 on the a2-g8 diagonal drilling at f7, the other to b2 on the a1-h8 diagonal glaring at g7. Two raking bishops are the compensation."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-b3",
+        "explanation": "Qb3 joins the c4-bishop in a battery on f7, Black's softest square — three pieces trained on the king."
+      }
+    ],
+    "strategicThemes": [
+      "Two pawns for two bishops and a development lead — a practical weapon, not an objective plus.",
+      "Both bishops on the long diagonals: Bc4 at f7, Bb2 at g7.",
+      "Qb3 + Bc4 battery hammers f7 before Black is organised.",
+      "Honest caveat: precise defence returns a pawn and equalizes — but few find it over the board."
+    ],
+    "playableLines": [
+      {
+        "title": "The two-bishop battery",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "e5",
+          "d4",
+          "exd4",
+          "c3",
+          "dxc3",
+          "Bc4",
+          "cxb2",
+          "Bxb2",
+          "Bb4+",
+          "Nc3",
+          "Nf6",
+          "Qb3",
+          "Qe7",
+          "Nge2",
+          "O-O",
+          "O-O"
+        ],
+        "annotations": [
+          "",
+          "",
+          "The Danish Gambit — d4 throws the centre open on move two, the first of up to two pawns offered for blazing development.",
+          "",
+          "c3 — offering a second pawn. The Danish doesn't want the pawns back; it wants the bishops aimed at Black's king.",
+          "",
+          "Bc4 — the first bishop takes the a2-g8 diagonal, drilling straight at f7.",
+          "",
+          "Bxb2 — and the second bishop seizes the great a1-h8 diagonal, glaring all the way to g7. Two pawns down, two raking bishops: this is the Danish's whole idea.",
+          "",
+          "Nc3 — development pours in with tempo while Black is still untangling.",
+          "",
+          "Qb3 — the queen joins the c4-bishop in a battery on f7, Black's tender point. Three pieces now bear on the king.",
+          "",
+          "Nge2 — the last knight develops, keeping the f-pawn free to storm later; every white piece is in play.",
+          "",
+          "O-O — White is fully mobilised and castled, the two bishops and queen trained on Black's king. Honest truth: precise defence returns a pawn and equalizes — but over the board this battery is a practical nightmare. That's the Danish bargain."
+        ],
+        "learnCues": [
+          "",
+          "",
+          "d4 — blast the centre open",
+          "",
+          "c3 — offer a second pawn for the bishops",
+          "",
+          "Bc4 — the a2-g8 diagonal, hit f7",
+          "",
+          "Bxb2 — the a1-h8 diagonal, hit g7",
+          "",
+          "Nc3 — develop with tempo",
+          "",
+          "Qb3 — battery with Bc4 on f7",
+          "",
+          "Nge2 — last piece out, f-pawn free",
+          "",
+          "O-O — castle; the battery is set"
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-development",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/Danish_Gambit"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c4",
+              "to": "a2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "b2",
+              "to": "a1",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b2",
+              "to": "g7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b3",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
