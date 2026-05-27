@@ -267,6 +267,28 @@ tools (Playwright drive + /api/tts listener + /api/audit-stream capture):
 hand-written Stafford narration speaks and the board leads the eye; confirm the
 unlock ladder persists.
 
+## 6d. ERIC ROSEN STAFFORD — COMPLETE (2026-05-27)
+
+Full Vienna-standard standalone masterclass, all built fresh from his real games
++ verified, all gated (12 content-gate files, 4397 tests green; typecheck clean):
+- ✅ Main lesson + 3 variation lessons (Nxc6 / 4.Nf3 Retreat / 4.Nxf7 Sac) —
+  two-register, ≥20-ply, grounded arrows.
+- ✅ Named weapon: the …Bxf2+ forced-mate trap (chess.js-verified), full WLPP.
+- ✅ Model game: real Eric Rosen win abZzbeTM (…Bxf2+ → Qxe3#), studentSide black.
+- ✅ Deep middlegame plan: kingside-space + f2-hunt, theme-demonstrating,
+  lead-the-eye, two-register, sourced.
+- ✅ 4 grounded key ideas; provenance `both` (plays 688g/~80% + teaches).
+- ⏳ Optional/self-hiding not yet built (enhancements): checkpoint quizzes,
+  common-mistakes (Pitfalls), endgame plan — all manifest floor 0, section
+  self-hides; add when a genuine one exists.
+- 🔔 PROD VERIFY (David): the full Stafford page render + WLPP + voice can't be
+  checked in-sandbox (G1 openings-write stall) — confirm on prod/device.
+
+Reusable pro-opening INFRA now in place (every future pro build inherits):
+orientation/manifest/tab-integrity/themes gate bridges to pro-repertoires.json;
+trap-ladder + tab→plan wiring accept pro ids; provenance harvest + confirmer
+scripts.
+
 ## 7. Next-session pickup
 Decisions D1–D4 are the gate. Once set, start Phase 0 (provenance harvest) — all
 sources verified reachable in-sandbox 2026-05-27; no laptop handoff needed.
