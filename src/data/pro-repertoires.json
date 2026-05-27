@@ -391,15 +391,15 @@
       "playerId": "naroditsky",
       "eco": "E90",
       "name": "King's Indian Defense (Naroditsky)",
-      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 f3 f5 g4 Kh8 Nd3 Ng8 Kh1 a5 Rg1 b6 Bd2 Nc5",
+      "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 Be3 f5 f3 f4",
       "color": "black",
       "style": "Aggressive, Dynamic",
       "overview": "The King's Indian is the opening you reach for when a draw is the worst possible result. Pioneered by the hypermoderns Réti and Nimzowitsch in the 1920s, perfected as a winning weapon by David Bronstein and Mikhail Tal in the 1950s, then immortalized by Bobby Fischer (his 1972 World Championship Match included KID wins) and Garry Kasparov (his weapon against Karpov for a decade) — the KID's reputation as Black's most violent answer to 1.d4 spans 100 years. You give White the centre on a silver platter, then spend the entire game proving that the centre doesn't matter — what matters is the king on g1 you're going to mate. Danya teaches the classical Mar del Plata setup because the plans are clear, the attack is automatic once the centre closes, and the wins are spectacular.",
       "keyIdeas": [
-        "The Bg7 fianchetto is non-negotiable — it's a long-range sniper on the a1–h8 diagonal aimed at d4 and b2. NEVER trade this bishop unless you're winning material; without it the KID structure is just bad.",
-        "Close the centre with …e5, accept White's d5 push, and then go full kingside-attack: …f5, …f4, …g5, …Nh5–f4, …Rf6–Rh6. The closed centre is what makes the attack work — without it, your king on g8 is more exposed than White's on g1.",
-        "The knight on f4 is the most violent piece in chess. The route is Nf6–h5–f4 (or Nf6–e8–g7–f5–f4). Once it lands on f4, it attacks d3, e2, g2, h3 simultaneously and almost always cracks the kingside open.",
-        "Forget about d4–c4–e4 in the centre. Once you've played …e5 and White has played d5, the centre is FROZEN — you're playing for mate on g1, full stop. Any move that doesn't contribute to the kingside attack is wasted."
+        "The King's Indian is a deal with the devil: Black hands White the centre and queenside space, betting everything on a kingside mating attack. If you're not willing to throw your king's pawns forward, play something else.",
+        "After d5 closes the centre, the battle lines are drawn: White attacks on the queenside with c5 and b4, Black storms the kingside with …f5–f4 and …g5–g4. It's a race to the enemy king, and Black is often faster.",
+        "The maneuver …Ne7, …Nd7, …Ne8 reroutes the knights out of the way so the f- and g-pawns can roll. Patience in the setup, then violence: every black piece points at White's castled king.",
+        "…f4 is the trigger. Once the pawn locks on f4, Black follows with …g5–g4, sacrifices open lines if needed, and hunts the king down the g- and h-files. Material is secondary; the attack is everything."
       ],
       "traps": [
         "If White panics and plays dxe5? hoping to trade off your attacking potential, calmly recapture …dxe5 and Black's pieces (Bg7 on the open diagonal, knight on c6 hitting d4) suddenly dominate the centre."
@@ -410,23 +410,26 @@
       ],
       "variations": [
         {
-          "name": "Mar del Plata Main Line",
-          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 Ne1 Nd7 f3 f5 g4 Kh8 Nd3 Ng8 Kh1 a5 Rg1 b6 Bd2 Nc5",
-          "explanation": "This is the heart of the King's Indian — the position every KID player dreams about reaching. Walk it carefully. After 6...e5 7.O-O Nc6 8.d5! (the move that closes the centre permanently — d5 is what makes the whole opening work) 8...Ne7, both sides know the future: White attacks the queenside, Black attacks the kingside, the king that gets caught first loses. 9.Ne1 (rerouting the f3-knight out of the way of f-pawn) 9...Nd7 10.f3 (preparing g4) 10...f5! — your signature break. Now White plays 11.g4 trying to slow you down, but you play 11...Kh8 (tucking the king away from a possible bishop check) and the dance begins: 12.Nd3 (White's knight redeployed to support the queenside) 12...Ng8 (your knight reroutes via g8 to h6 or f6 to support …f4), 13.Kh1 (mirror) 13...a5 (challenges b4), 14.Rg1 b6 (overprotecting the c5-square that White wants), 15.Bd2 Nc5 (knight reaches its outpost). Pause and look: Black has three knights aimed at the kingside, a rook ready for the lift Rf6-h6, and the bishop on g7 waiting. White has slow queenside development. The attack will break through; the game is essentially decided strategically."
-        },
-        {
-          "name": "Classical 9.b4 Line",
-          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O Nc6 d5 Ne7 b4 Nh5 Re1 f5 Ng5 Nf6 Bf3 c6 Be3 h6 Ne6 Bxe6",
-          "explanation": "Kramnik's anti-KID weapon — White grabs queenside space with b4 immediately to outrace Black's kingside storm. Black's reply is automatic: …Nh5 preparing …f5, then meet Ng5 with …Nf6 forcing the trade. After Ne6 Bxe6 the f-file opens for Black's rook — exactly the lane Black needs for the attack. Tense and double-edged."
-        },
-        {
           "name": "Fianchetto Variation",
-          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 g3 O-O Bg2 d6 Nf3 Nbd7 O-O e5 e4 c6 h3 Qb6 Re1 exd4 Nxd4 Re8 Nc2 Nc5 b4 Ne6 Be3 Qc7",
-          "explanation": "When White fianchettos with g3+Bg2, the kingside is too well-defended for a normal pawn storm — the bishop on g2 plus a pawn on g3 makes …f5–f4 toothless. So Black changes plans entirely: play …exd4 (opening the centre!), then …Nc5/…Ne6 hitting the d4-knight and the b4-pawn. Different structure, different feel — more positional than the Mar del Plata, but Black still has excellent winning chances against accurate White play."
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O g3 Nbd7 Bg2 e5 O-O exd4 Nxd4 Re8 Re1 Nc5",
+          "explanation": "When White fianchettoes with g3 and Bg2, the kingside attack is blunted — so Black changes plans, trades in the centre with …exd4 and plays for piece activity and the …Nc5/…a5 queenside counterplay instead. Know which plan each White setup demands.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 48,
+            "score": 58,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
-      "warningLines": []
+      "warningLines": [],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 137,
+        "score": 64,
+        "source": "lichess /player",
+        "taughtUrl": "https://www.youtube.com/@DanielNaroditskyGM"
+      }
     },
     {
       "id": "pro-naroditsky-grunfeld",
