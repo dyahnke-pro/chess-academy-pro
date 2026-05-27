@@ -110,6 +110,8 @@ import { PRO_ERICROSEN_STAFFORD_VARIATION_LESSONS } from './proEricRosenStafford
 import { PRO_ERICROSEN_STAFFORD_TRAP_LESSONS } from './proEricRosenStaffordTrapLessons';
 import { PRO_NARODITSKY_ALAPIN_LESSON } from './proNaroditskyAlapin';
 import { PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS } from './proNaroditskyAlapinVariations';
+import { PRO_NARODITSKY_NAJDORF_LESSON } from './proNaroditskyNajdorf';
+import { PRO_NARODITSKY_NAJDORF_VARIATION_LESSONS } from './proNaroditskyNajdorfVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -175,6 +177,7 @@ const OPENINGS: OpeningLessons[] = [
   // ── Pro masterclasses (David 2026-05-27) ──
   { main: PRO_ERICROSEN_STAFFORD_LESSON, variations: PRO_ERICROSEN_STAFFORD_VARIATION_LESSONS, traps: PRO_ERICROSEN_STAFFORD_TRAP_LESSONS },
   { main: PRO_NARODITSKY_ALAPIN_LESSON, variations: PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS },
+  { main: PRO_NARODITSKY_NAJDORF_LESSON, variations: PRO_NARODITSKY_NAJDORF_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

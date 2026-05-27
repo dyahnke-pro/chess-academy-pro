@@ -330,15 +330,15 @@
       "playerId": "naroditsky",
       "eco": "B90",
       "name": "Sicilian Najdorf (Naroditsky)",
-      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O Be6 f4 Qc7 a4 Nbd7",
+      "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 f4 exf4 Bxf4 Nc6",
       "color": "black",
       "style": "Sharp, Dynamic",
       "overview": "Pick this opening and you've enrolled in a four-year degree program. Argentine GM Miguel Najdorf systematized the …a6 setup in the 1940s after he was stranded in Argentina by WWII; Fischer used it to crush Reshevsky and dominate his 1972 path to the World Championship; Kasparov played it for thirty years against the world's best including the entire 1985 Karpov match; Carlsen has it as Black's emergency must-win-with-Black weapon. The reason: …a6 (move 5) creates the most flexible Black setup in chess. You delay your committal — you don't say where the king goes, which bishop comes out first, where the queen lives — until you've seen White's complete plan. Then you counter. Danya teaches it because it's the only Sicilian where intuition beats memorisation: you must UNDERSTAND why every move exists, because Black has too many possible setups to memorise them all. If you're going to spend years learning one opening, make it this one.",
       "keyIdeas": [
-        "…a6 isn't slow — it's a forcing move in disguise. By denying White's knight the b5-square, you take away every fork tactic the rest of the Sicilian permits AND you've prepped …b5 (the queenside lever) AND you've made room for …Bb7 fianchetto if you want it. Three pieces of work for one pawn move.",
-        "…e5 is the Najdorf's defining break, but it's tactical, not automatic. Play it only after White has committed Nb3 or Be3 — playing …e5 with the white knight on d4 hangs the e-pawn to Nf5. The d5-square becomes your one weakness, defended by …Nbd7, …Nb6, eventually …Nc4 if needed.",
-        "Castling is a commitment, not a development move. In the English Attack (Be3 + Qd2 + O-O-O), White is racing to your kingside — castling short is suicide. Pry open the queenside with …b5–b4 FIRST, then decide where the king goes (often Black castles short later, AFTER White's attack has stalled).",
-        "The c-file is Black's freeway. After cxd4 the file is half-open for both sides, but Black's a8-rook reaches it instantly via …Rc8; White's a1-rook needs three moves to mobilise. Combine …Rc8 with …Qa5 or …Qb6 and the pressure on c2/c3 forces White to spend tempos defending instead of attacking."
+        "...a6 is the soul of the Najdorf: a tiny prophylactic move that denies White's pieces the b5-square and prepares Black's own ...b5 queenside expansion. Flexibility first — Black commits to nothing until White shows his hand.",
+        "...e5 grabs the centre and kicks the d4-knight. Yes it concedes the d5-square, but Black's pieces swarm to cover it (…Be6, …Nbd7-f8-e6) and the dynamic counterplay is worth far more than the static hole.",
+        "Black's plan is queenside play with …b5–b4 and pressure down the half-open c-file, while White attacks on the kingside. It's a race — and the Najdorf player calculates sharper and counters faster.",
+        "Meet every White 6th move on its own terms: …e5 against Be2/Be3, …e6 against Bg5. Knowing WHICH central break to choose against each setup is the whole craft of the opening."
       ],
       "traps": [
         "If White lashes out with an early f4–f5 before completing development, …d5! is the standard reply — opening the centre when YOU'RE the better developed side. The d5 break is the Najdorf player's eternal threat."
@@ -349,54 +349,26 @@
       ],
       "variations": [
         {
-          "name": "6.Be2 English Attack",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O Be6 f4 Qc7 a4 Nbd7 Kh1 O-O Be3 exf4 Rxf4 Ne5 a5 Rac8",
-          "explanation": "When White plays the modest 6.Be2 — the safest sixth move — your plan unfolds in textbook order. 6...e5 forces 7.Nb3 (the d4-knight has nowhere safe), 8.O-O lets you mirror with 8...Be7 and 9.O-O. Then comes the strategic battle for d5: 10.Be6 puts your bishop on a square no minor piece can dislodge it from, 11.Nbd7 covers the d5 outpost twice. White's 12.f4 is the standard try for activity; you reply 12...exf4 (yes, give up the e5-pawn) 13.Rxf4 Ne5! — your knight reaches the absolute centre, defended, with no White piece able to remove it. 14.a5 (Black hits the b3-knight; White already played 13.a4 earlier to stop …b5) is met by 14...Rac8 — the c-file is yours. The position is more than equal; with a stable knight on e5, an open c-file, and no weaknesses, all the winning chances belong to Black.",
-          "sources": [
-            "concept:att-queenside-attack",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-          ]
-        },
-        {
           "name": "6.Bg5 Classical",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 g4 b5 Bxf6 Nxf6 g5 Nd7 f5 Bxg5+ Kb1 Ne5",
-          "explanation": "The opposite-side castling race — the most violent line in chess. White plays 6.Bg5 e6 7.f4 Be7 8.Qf3 Qc7 9.O-O-O Nbd7, and now both sides commit to a pawn race against the opponent's king. White launches with 10.g4 b5 11.Bxf6 Nxf6 12.g5 Nd7 13.f5 — three pawn moves in a row, all attacking. Black's counter is …b5–b4 prying open the queenside before White can break through on the kingside. Memorise the …Bxg5+ resource at move 13: after 13...Bxg5+! White's only square is 14.Kb1, but that's exactly what you want — Kb1 unpins the g-pawn, letting Black's …Ne5 attacking move land with crushing effect. Win-or-lose decided within ten moves; whoever forgot their theory dies first.",
-          "sources": [
-            "concept:att-queenside-attack",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-          ]
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 g4 b5 Bxf6 Nxf6",
+          "explanation": "White's most aggressive try — Bg5 pins the f6-knight and aims for f4 and a kingside pawn storm. Black answers …e6, develops solidly, and races with …b5 on the queenside in the sharpest battleground in all of chess.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 120,
+            "score": 55,
+            "source": "lichess /player"
+          }
         },
         {
-          "name": "6.Be3 English Attack (Danya's ...a5)",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 a5 Qd2 Nbd7 O-O-O Be7",
-          "explanation": "Danya's specialty against the English Attack — instead of the textbook …Be7/…O-O/…Nbd7 setup, you play the early …a5 to harass the Nb3. Engines historically rate …a5 as slightly inferior, but practical results are excellent: the knight on b3 is permanently stuck (a4 is now a hole), and you've gained queenside space to prepare …Nb6 and eventually …b5 with tempo. After O-O-O the position becomes a typical opposite-side-castled race, but you're ahead in the queenside attack because of the early …a5. Direct from his Top Theory Speedrun (YouTube).",
-          "sources": [
-            "concept:att-queenside-attack",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-          ]
-        },
-        {
-          "name": "6.f3 English Attack",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nb3 Be6 Be3 Be7 Qd2 Nbd7 O-O-O b5 g4 b4 Nd5 Bxd5 exd5 Nb6 Qxb4 Nfxd5",
-          "explanation": "The most theoretical White system — f3 supports a future g4–g5 storm and rules out a tempo-losing Ng4. Black's plan is on autopilot: …e5, …Be6, …Be7, …Nbd7, then …b5 storming the queenside. The critical position is after …b4 — White's only good answer is the Nd5 sacrifice, which Black accepts with …Bxd5 exd5 Nb6 followed by Qxb4 Nfxd5. The resulting position has Black with two pieces and active counterplay for the rook and pawn — engines call it slightly worse, but it's eminently playable.",
-          "sources": [
-            "concept:att-queenside-attack",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-          ]
-        },
-        {
-          "name": "6.Bc4 Fischer Attack",
-          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 b5 O-O Be7 Qf3 Qc7 Qg3 O-O Bh6 Ne8 f4",
-          "explanation": "Bobby Fischer's pet weapon — Bc4 puts the bishop on the long diagonal aimed at f7 and e6. The CRITICAL move order is …e6 BEFORE …b5 — get it backward and Bxe6! is winning. After natural development on both sides, White plays Qf3–g3 and Bh6 building a kingside attack; Black has to defend with …Ne8 (covering h6) and counterattack with …b5–b4 on the queenside. The line is a knife-fight; both sides win lots of games.",
-          "sources": [
-            "concept:att-queenside-attack",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-          ]
+          "name": "6.Be3 English Attack",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Be7 Qd2 O-O O-O-O Nbd7 g4 b5",
+          "explanation": "The English Attack: Be3, f3, Qd2 and 0-0-0, then g4-g5 storming the kingside. Black strikes back with …e5, …Be6 and …b5–b4, a pure race of opposite-side attacks where calculation decides everything.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 96,
+            "score": 54,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
@@ -405,7 +377,14 @@
         "concept:att-queenside-attack",
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-      ]
+      ],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 59,
+        "score": 58,
+        "source": "lichess /player",
+        "taughtUrl": "https://www.youtube.com/@DanielNaroditskyGM"
+      }
     },
     {
       "id": "pro-naroditsky-kid",
