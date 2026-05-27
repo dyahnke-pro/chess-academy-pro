@@ -4011,11 +4011,12 @@
     "studentSide": "white",
     "pgn": "e4 e5 Nc3 Nc6 f4 exf4 Nf3 Nf6 e5 Nh5 d4 d6 Bb5 Bd7 O-O Be7 d5 Nb8 Bxd7+ Nxd7 e6 fxe6 Ng5 Bxg5 Qxh5+ g6 Qh3 e5 Ne4 Qe7 Bd2 O-O-O c4 Kb8 b4 h6 c5 Nf6 Nxf6 Qxf6 c6 Qf5 Qb3 e4 Qc4 f3 Qb5 b6 Bxg5 hxg5 Qa6 Qc8 Qxc8+ Rxc8 gxf3 Rce8 Rae1 e3 Re2 Rh4 Rfe1 Rxb4 Rxe3 Rc8 Re8",
     "sources": [
-      "https://www.chess.com/member/danielnaroditsky",
+      "https://www.chess.com/game/live/142771511888",
+      "https://www.youtube.com/watch?v=NkfhN1_sC4E",
       "concept:att-kingside-storm"
     ],
-    "overview": "Naroditsky's Vienna Gambit. After 3.f4 Black takes on f4, and 5.e5 punches a pawn into Black's face, gaining space and kicking the f6-knight to the rim. White castles into a powerful centre, throws in e6 to crack the kingside, and Qxh5+ collects the offside knight. With a clean extra piece and the safer king, Danya converts against a strong opponent.",
-    "middlegameTheme": "The Vienna Gambit space grab with e5, then e6 and Qxh5+ to exploit the loose kingside.",
+    "overview": "Naroditsky's Vienna Gambit. After 3.f4 Black takes on f4, and 5.e5 punches a pawn into Black's face, gaining space and kicking the f6-knight to the rim. White castles, throws in e6 to crack the kingside, and Qxh5+ wins the offside knight back with check. Down a pawn or two but with Black's king stuck in the centre and his pawns shattered, Danya's attack carries the day against a strong opponent.",
+    "middlegameTheme": "The Vienna Gambit space grab with e5, then e6 and Qxh5+ to blow open the loose kingside.",
     "lessonSummary": "The Vienna Gambit trades a pawn for a roaring initiative — e5 and e6 pry open Black before he can develop.",
     "criticalMoments": [
       {
@@ -4035,7 +4036,7 @@
         "moveNumber": 13,
         "color": "white",
         "fen": "r2qk2r/pppn2pp/3pp3/3P2bQ/5p2/2N5/PPP3PP/R1B2RK1 b kq - 0 13",
-        "annotation": "Qxh5+ — the e6 break did its job, the kingside is open, and the queen scoops the stranded h5-knight with check. A clean piece up with the safer king; the gambit pawn was a bargain.",
+        "annotation": "Qxh5+ — the e6 break did its job, the kingside is open, and the queen wins the stranded h5-knight back with check. White has invested a pawn or two, but Black's king is stuck in the centre with shattered pawns — the attack is decisive.",
         "concept": "The Attack Lands",
         "highlights": [
           {

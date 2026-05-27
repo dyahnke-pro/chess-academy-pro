@@ -32325,5 +32325,326 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pronaroditskyvienna-gambit",
+    "openingId": "pro-naroditsky-vienna",
+    "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n2/8/4Pp2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 5",
+    "title": "Vienna Gambit: e5 Space and the e6 Break",
+    "overview": "The Vienna Gambit trades a pawn for a roaring initiative. e5 grabs space and kicks the f6-knight to the rim; d4-d5 keep gaining space and tangling Black's pieces; then e6 smashes open the kingside. White invests a pawn or two, but Black's king is stuck in the centre with shattered pawns, and the attack — capped by Qxh5+ — is decisive.",
+    "pawnBreaks": [
+      "e5 — seize space and kick the knight",
+      "e6 — pry open the kingside"
+    ],
+    "pieceManeuvers": [
+      "Ng5 — open the queen's path to h5 and hit f7"
+    ],
+    "strategicThemes": [
+      "Gain space with e5/d5 and tangle Black's pieces",
+      "Crack the king with the e6-break and attack down the open lines"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/4Pp2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 5",
+        "title": "The Vienna Gambit attack",
+        "moves": [
+          "e5",
+          "Nh5",
+          "d4",
+          "d6",
+          "Bb5",
+          "Bd7",
+          "O-O",
+          "Be7",
+          "d5",
+          "Nb8",
+          "Bxd7+",
+          "Nxd7",
+          "e6",
+          "fxe6",
+          "Ng5",
+          "Bxg5",
+          "Qxh5+"
+        ],
+        "annotations": [
+          "e5 — the gambit's energy. The pawn seizes space and shoves the f6-knight to the rim.",
+          "…Nh5 — the knight is driven to the edge, offside and out of play.",
+          "d4 — White builds the big centre behind the e5-wedge.",
+          "…d6 — Black strikes at the e5-pawn to free his cramped position.",
+          "Bb5 — White pins the c6-knight and prepares to trade a defender before opening the centre.",
+          "…Bd7 — Black breaks the pin, offering to trade light bishops.",
+          "O-O — White castles; the king is safe and the rook eyes the half-open f-file toward Black's loose f4-pawn.",
+          "…Be7 — Black develops and prepares to castle, but he's badly behind.",
+          "d5 — the pawn jabs forward, kicking the c6-knight and grabbing yet more space.",
+          "…Nb8 — the knight is driven all the way home; Black's pieces are in a tangle.",
+          "Bxd7+ — White trades the light bishops with check, dragging another piece off its post.",
+          "…Nxd7 — the knight recaptures, finally untangling, but it's too late.",
+          "e6 — the break. The pawn smashes into the kingside, ripping open the f7-square and the king's cover.",
+          "…fxe6 — forced; the recapture shatters Black's pawns and bares the king on the f-file.",
+          "Ng5 — the knight jumps in, hitting f7 and, by vacating f3, opening the queen's path to the offside h5-knight.",
+          "…Bxg5 — Black grabs the knight, but this opens the d1-h5 diagonal — exactly what White wanted.",
+          "Qxh5+ — the payoff. The e6-break cracked the kingside, and the queen wins the h5-knight back with check. White has invested a pawn or two, but Black's king is stuck in the centre with shattered pawns and the attack is decisive."
+        ],
+        "learnCues": [
+          "e5 — grab space, kick the knight",
+          "…Nh5 — knight to the rim",
+          "d4 — build the centre",
+          "…d6 — challenge e5",
+          "Bb5 — pin the c6-knight",
+          "…Bd7 — break the pin",
+          "O-O — castle, eye the f-file",
+          "…Be7 — develop, try to catch up",
+          "d5 — gain space, kick c6",
+          "…Nb8 — driven home in a tangle",
+          "Bxd7+ — trade with check",
+          "…Nxd7 — untangle, too late",
+          "e6 — the break, crack the kingside",
+          "…fxe6 — pawns shattered",
+          "Ng5 — hit f7, open the queen's path",
+          "…Bxg5 — takes the bait",
+          "Qxh5+ — win the knight, attack decisive"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b5",
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "f7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "sources": [
+          "https://www.chess.com/game/live/142771511888",
+          "https://www.youtube.com/watch?v=NkfhN1_sC4E",
+          "concept:att-kingside-storm"
+        ]
+      }
+    ]
   }
 ]
