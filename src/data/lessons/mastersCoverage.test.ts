@@ -271,6 +271,10 @@ const PLAN_SUSPECT_BASELINE = new Set<string>([
   // the plan teaches the Fort Knox setup, not the forcing master line.
   'mp-frenchdefence-fortknox::2:O-O',   // masters: Qd5 — both sound
   'mp-frenchdefence-fortknox::3:Rad1',  // masters: Bxf6 — both sound
+  // Dutch plan-demo: thematic Dutch moves masters pass over for sharper picks;
+  // both pass 7b (≤120cp). The plans teach the Dutch setup, not a master line.
+  'mp-dutchdefence-main::2:a5',         // masters: Qf7/e5/Nc6/c6 — queenside luft, sound
+  'mp-dutchdefence-classical::5:Ne4',   // masters: Nbd7/Bh5/a5 — the Stonewall-style Ne4, sound
 ]);
 
 // Soundness baseline for plan lines (7b) — same rationale as SOUNDNESS_BASELINE

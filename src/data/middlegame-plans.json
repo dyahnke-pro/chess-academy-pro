@@ -27528,13 +27528,29 @@
           "dxe6",
           "Bxe6",
           "b3",
-          "Na6"
+          "Na6",
+          "Ng5",
+          "Bc8",
+          "Bb2",
+          "Qe7",
+          "Qc2",
+          "Bd7",
+          "Rad1",
+          "Rad8"
         ],
         "annotations": [
           "dxe6 opens the centre.",
           "…Bxe6 recaptures actively, the bishop eyeing c4 and the queenside.",
           "b3 props c4.",
-          "…Na6 develops toward c5; Black has free, active piece play with the fianchettoed bishop firing down the open diagonal."
+          "…Na6 develops toward c5; Black has free, active piece play with the fianchettoed bishop firing down the open diagonal.",
+          "Ng5 — White prods the active e6-bishop, trying to chase it off or win the bishop pair.",
+          "…Bc8 — the bishop steps back rather than be traded; it will re-emerge on d7, keeping the pair.",
+          "Bb2 — White's bishop takes the long diagonal, eyeing the e5 and d4 dark squares.",
+          "…Qe7 — the queen connects the rooks and stands behind a later …e5 or …c5 advance.",
+          "Qc2 — White centralizes the queen, contesting e4 and the long light diagonal.",
+          "…Bd7 — the bishop settles on d7, eyeing the queenside and freeing e6 for a knight or pawn.",
+          "Rad1 — White's rook takes the half-open d-file.",
+          "…Rad8 — Black answers on the d-file; a balanced Leningrad middlegame, the …c6/…e5 structure sound and the pieces harmonious."
         ],
         "title": "Dutch Leningrad: The …e5 Counterstrike",
         "arrows": [
@@ -27553,7 +27569,45 @@
               "to": "c5",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [
+            {
+              "from": "g5",
+              "to": "e6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c8",
+              "to": "d7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c2",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "d7",
+              "to": "e6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          []
         ],
         "highlights": [
           [
@@ -27607,18 +27661,147 @@
               "square": "c5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
           "book:dutch-defence",
           "concept:att-kingside-storm",
-          "https://en.wikipedia.org/wiki/Dutch_Defence"
+          "https://en.wikipedia.org/wiki/Dutch_Defence",
+          "concept:pos-bishop-pair"
         ],
         "learnCues": [
           "dxe6 — open the centre",
           "Bxe6 — recapture actively",
           "b3 — prop c4",
-          "Na6 — toward c5, active play"
+          "Na6 — toward c5, active play",
+          "Ng5 — White prods the bishop",
+          "Bc8 — keep the bishop pair",
+          "Bb2 — long diagonal",
+          "Qe7 — connect rooks, prep breaks",
+          "Qc2 — contest e4",
+          "Bd7 — reroute, free e6",
+          "Rad1 — White grabs the d-file",
+          "Rad8 — contest the d-file"
         ]
       }
     ]
