@@ -1310,5 +1310,438 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-viennagambit-attack",
+    "openingId": "vienna-gambit",
+    "title": "The Vienna Gambit: the e5 thrust and the big centre",
+    "criticalPositionFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "overview": "The Vienna Gambit develops the knight FIRST (Nc3) and only then strikes with f4 — so the pawn offer comes with a piece already aimed at the centre. When Black accepts, White's reply is brutal in its simplicity: e5 thrusts forward and chases the f6-knight all the way home to g8, then d4 builds a broad centre while Black is still untangling. White recovers the pawn on a dominant square, the bishops rake Black's soft spots on f7 and e6, and the result is a lasting, sound edge (around +0.9). The careful 3...d5 keeps Black level — but anyone who grabs the pawn walks into exactly this squeeze.",
+    "pawnBreaks": [
+      {
+        "move": "e5",
+        "explanation": "The thematic thrust. e5 lunges into Black's camp and chases the f6-knight back to g8 — Black's development thrown into reverse while White piles into the centre."
+      },
+      {
+        "move": "d4",
+        "explanation": "With the knight chased away, d4 completes the broad e5+d4 centre — the gambit's compensation: space, open lines, and a cramped opponent."
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bf1-b5+ / Bf1-c4",
+        "explanation": "The light bishop develops with check (Bb5+) to grab a tempo, then later swings to c4 onto the a2-g8 diagonal, hammering Black's soft f7 and e6 squares."
+      },
+      {
+        "piece": "Knight",
+        "route": "Ng1-f3xe5",
+        "explanation": "Nf3 heads for the e5 outpost and recovers the gambit pawn there on a dominating central square, with White's whole army developed."
+      }
+    ],
+    "strategicThemes": [
+      "Knight before pawn: Nc3 first means the f4 gambit comes with a piece already bearing on the centre.",
+      "The e5 thrust chases the f6-knight home — reverse Black's development, then build the centre.",
+      "Recover the pawn only on a dominant square (Ne5); keep the lead in development.",
+      "The bishops target f7 and e6 — Bxe6 wrecks Black's pawns and exposes the king."
+    ],
+    "playableLines": [
+      {
+        "title": "Vienna Gambit Accepted: the central squeeze",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "e5",
+          "Nc3",
+          "Nf6",
+          "f4",
+          "exf4",
+          "e5",
+          "Ng8",
+          "Nf3",
+          "d6",
+          "d4",
+          "dxe5",
+          "Bb5+",
+          "Bd7",
+          "Qe2",
+          "Bb4",
+          "Nxe5",
+          "Ne7",
+          "Bc4",
+          "Be6",
+          "Bxe6",
+          "fxe6",
+          "O-O"
+        ],
+        "annotations": [
+          "",
+          "",
+          "",
+          "",
+          "The Vienna Gambit — the knight is already on c3, so when White strikes with f4 the pawn offer comes with a piece bearing on the centre.",
+          "",
+          "e5 — the thematic thrust. The pawn lunges and the f6-knight has nowhere to go but all the way home to g8: Black's development thrown into reverse.",
+          "",
+          "Nf3 — developing toward the e5 outpost, the natural square the knight is heading for.",
+          "",
+          "d4 — the broad e5+d4 centre, the gambit's compensation: space, open lines, and no room for Black.",
+          "",
+          "Bb5+ — developing with check, snatching a tempo and forcing a concession before Black can get organised.",
+          "",
+          "Qe2 — linking the pieces toward the centre and the e-file, everything coordinated for the squeeze.",
+          "",
+          "Nxe5 — the knight recovers the gambit pawn on a dominating central square; White's lead in development is total.",
+          "",
+          "Bc4 — the bishop swings to the a2-g8 diagonal, hammering Black's soft squares on f7 and e6.",
+          "",
+          "Bxe6 — smashing into e6; the recapture ...fxe6 leaves Black with a wrecked, doubled e-pawn structure and a draughty king.",
+          "",
+          "O-O — White completes development and counts the gains: a dominating centre, the bishops' pressure, a healthier structure, a safer king. The gambit pawn has bought a lasting, sound edge."
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "",
+          "f4 — gambit the pawn, open the centre",
+          "",
+          "e5 — thrust; chase the knight to g8",
+          "",
+          "Nf3 — develop toward e5",
+          "",
+          "d4 — the broad e5+d4 centre",
+          "",
+          "Bb5+ — develop with check, gain time",
+          "",
+          "Qe2 — coordinate on the e-file",
+          "",
+          "Nxe5 — recover the pawn, centralised",
+          "",
+          "Bc4 — hit f7 and e6",
+          "",
+          "Bxe6 — wreck the e-pawns",
+          "",
+          "O-O — complete; a lasting sound edge"
+        ],
+        "sources": [
+          "book:vienna-game",
+          "concept:pos-initiative",
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c4",
+              "to": "a2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c4",
+              "to": "f7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
