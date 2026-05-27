@@ -3052,5 +3052,376 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-gambitbudapestgambit-attack",
+    "openingId": "gambit-budapest-gambit",
+    "title": "The Budapest Gambit: active pieces for a pawn",
+    "criticalPositionFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "overview": "The Budapest answers White's slow 1.d4 2.c4 with a jolt: ...e5, sacrificing a pawn for immediate, easy piece activity. Black doesn't try to hold the gambit long — the knight hops to g4, a second piece hits e5, and Black simply wins the pawn back with everything already developed and a knight bound for the superb e5 outpost. Be honest: with careful play White keeps a small pull — but the Budapest is a delight to play, sidesteps tons of theory, and hands Black an active, comfortable game where White must stay accurate. This plan shows the regain-and-activate method.",
+    "pawnBreaks": [
+      {
+        "move": "e5",
+        "explanation": "The gambit itself: ...e5 on move two throws White's quiet centre into a fight and offers the pawn for fast, active development."
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf6-g4xe5",
+        "explanation": "The Budapest knight: ...Ng4 immediately harasses the e5-pawn and, after support arrives, recaptures on e5 — the dominant central outpost that anchors all of Black's activity."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bf8-b4+",
+        "explanation": "...Bb4+ develops with check, a free tempo that drags a White piece to a passive square before Black rounds up the pawn."
+      }
+    ],
+    "strategicThemes": [
+      "A pawn for instant, easy piece activity — Black is developed and humming at once.",
+      "...Ng4 + ...Nc6 + ...Qe7 gang up on e5; the pawn comes back with pieces already active.",
+      "The e5-knight outpost is the hub of Black's game.",
+      "Honest caveat: careful play keeps White a small pull — but the Budapest is comfortable and theory-light for Black."
+    ],
+    "playableLines": [
+      {
+        "title": "Regain and activate",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "d4",
+          "Nf6",
+          "c4",
+          "e5",
+          "dxe5",
+          "Ng4",
+          "Bf4",
+          "Nc6",
+          "Nf3",
+          "Bb4+",
+          "Nbd2",
+          "Qe7",
+          "a3",
+          "Ngxe5",
+          "Nxe5",
+          "Nxe5",
+          "e3",
+          "Bxd2+",
+          "Qxd2",
+          "d6"
+        ],
+        "annotations": [
+          "",
+          "",
+          "",
+          "...e5! — the Budapest Gambit. Black offers a pawn on move two to seize the initiative and active piece play in a normally slow d4 opening.",
+          "",
+          "...Ng4 — the knight pounces, attacking the e5-pawn and refusing to let White settle with the extra material.",
+          "",
+          "...Nc6 — a second attacker on e5; Black will win the pawn back with the pieces already humming.",
+          "",
+          "...Bb4+ — developing with check, a free tempo that drags a White piece to a passive square.",
+          "",
+          "...Qe7 — the queen joins the assault on e5 and eyes the e-file. The pawn cannot be held.",
+          "",
+          "...Ngxe5 — the pawn comes back, and the knight lands on the magnificent e5 outpost, the hub of all Black's activity.",
+          "",
+          "...Nxe5 — keeping a knight planted on e5, dominating the centre.",
+          "",
+          "...Bxd2+ — trading to clear the way; Black's pieces are the active ones.",
+          "",
+          "...d6 — solidifying the e5-knight. Honest truth: careful White play keeps a small pull — but Black has easy, active development and a dominant e5-knight for the pawn, a fighting, theory-light gambit that's a pleasure to play."
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "...e5! — the Budapest, seize activity",
+          "",
+          "...Ng4 — pounce on e5",
+          "",
+          "...Nc6 — second attacker on e5",
+          "",
+          "...Bb4+ — develop with check",
+          "",
+          "...Qe7 — pile on e5 and the e-file",
+          "",
+          "...Ngxe5 — regain the pawn, e5 outpost",
+          "",
+          "...Nxe5 — keep the knight on e5",
+          "",
+          "...Bxd2+ — trade, stay active",
+          "",
+          "...d6 — solidify the e5-knight"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-initiative",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Budapest_Gambit"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g4",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e7",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
