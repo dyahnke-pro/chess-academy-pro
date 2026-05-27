@@ -78,14 +78,35 @@ For each gambit id, author and home in the gambit-scoped files:
    or token export), hand-authored overview. Win only; empty > losing/draw.
 8. **Sources** on every authored narration unit (book corpus / reputable URL).
 
-## Wiring
+## Wiring (data-source findings, 2026-05-27)
 
-`OpeningDetailPage.tsx`: a single `gambitContentResolver(opening.id)` that, when
-`opening.isGambit`, returns `{ lesson, variationLessons, plans, gems, traps,
-mistakes, modelGames }` from the gambit-scoped sources — mirroring the
-masterclass resolver's SHAPE so the existing WLPP players / sections render
-unchanged. Sections self-hide on empty (inherited). No manifest entry → stays in
-the gambit tab only.
+Consumers split by where they read content, which decides how much shared-file
+touching the rendering needs:
+- **Dexie-backed** — `getPlansForOpening` (`db.middlegamePlans`) and
+  `getModelGamesForOpening` (`loadModelGamesData`). Loading the gambit-scoped
+  files into those stores keyed by gambit ids makes the EXISTING lookups return
+  gambit content with NO `OpeningDetailPage` change. ⚠️ `loadMiddlegamePlansData`
+  PRUNES rows absent from `middlegame-plans.json` — it must also keep the
+  gambit-plan ids, so the gambit loader has to register them with the prune (one
+  `dataLoader.ts` touch).
+- **Static imports** — `common-mistakes.json` (read directly in
+  `OpeningDetailPage.tsx:1017` as `commonMistakesData[opening.id]`), the
+  `LESSONS`/`VARIATION_LESSONS` maps (`lessons/index.ts`), and gems
+  (`getPunishGemsForTab`). These need an explicit merge point for the gambit
+  files → unavoidable touches to `OpeningDetailPage.tsx` + `lessons/index.ts`.
+
+**⚠️ COORDINATION:** the rendering wiring touches `dataLoader.ts`,
+`OpeningDetailPage.tsx`, `lessons/index.ts` — the SAME hot files the parallel
+masterclass-structures session edits. Do the wiring as ONE small additive,
+isolated branch per file, coordinate via `main` rebase, and do it LAST (after
+the collision-free content is authored), to minimise conflict. Mirror the
+masterclass resolver's SHAPE so the WLPP players/sections render unchanged;
+sections self-hide on empty; no manifest entry → stays gambit-tab only.
+
+**Work split to avoid collision:** author all gambit CONTENT first (new files in
+`src/data/gambit-*.json` + `lessons/gambits/` — zero collision, gateable by the
+new gambit gates), then land the small shared-file wiring in one coordinated
+pass.
 
 ## Gates (gambit-scoped)
 
