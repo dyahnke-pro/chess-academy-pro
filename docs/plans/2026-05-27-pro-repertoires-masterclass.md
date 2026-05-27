@@ -119,6 +119,12 @@ machine-checkable form of "make sure the pro actually played it."
   so both grounding paths get exercised).
 - D3 (frequency floor) / D4 follow during Phase 0; draft floor ≥3% at fork AND
   ≥20 games in tree, OR a documented recommendation.
+- **D5 = PLAY/TEACH UX = BADGE + FILTER (David 2026-05-27).** Build a LARGE pro
+  repertoire using BOTH played + taught lines. Each pro opening gets a
+  `provenance: 'plays' | 'teaches' | 'both'` tag (+ game-count + video URL).
+  ProPlayerPage keeps White/Black grouping, adds a provenance chip per card + a
+  filter toggle (All / Plays / Teaches). NOT separate tabs — most signature lines
+  are BOTH, which a hard split would orphan/duplicate.
 
 ### (archived) D1. Architecture: standalone vs inherit-base vs hybrid
 45 of 82 families already have a full generic masterclass (Scotch, Vienna, Caro,
@@ -181,6 +187,24 @@ pending that grounding step. Flagged as the elite-path proof.
 
 Build order (cleanest-grounded first): Eric Rosen Stafford → Naroditsky Alapin →
 Gotham Vienna/London → Carlsen (after OTB sourcing).
+
+## 5c. BUILD DOCTRINE per pro opening (David 2026-05-27)
+
+Full Vienna-recipe standalone, with these sources nailed down:
+- **Deep middlegame plans — always.** Every pro masterclass carries deep
+  middlegame plans ("no reason not to"). Plan IDEAS + structures are mined from
+  the pro's OWN games in the harvested 136k-game DB (the structures they actually
+  reach and how they play them), oriented to the student side, lead-the-eye +
+  Stockfish-sound.
+- **Trap/weapon section = the masters-vs-amateur gem miner.** Keep the
+  engine-first punish-gem pipeline: amateur-explorer blunders refuted by
+  Stockfish, masters-DB false-weapon veto. Named traps layered on top.
+- **Model games = the pro's REAL wins.** We HAVE these — the harvested games +
+  the local pro-game cache. Source each variation's model game from the player's
+  actual student-side wins (never fabricate; never a loss/draw).
+- **The harvested game DB feeds variation DISCOVERY too** — beyond the
+  top-frequency lines, mine the pro's games for additional real variations they
+  play, each provenance-bound.
 
 ## 6. Phased plan (once decisions land)
 

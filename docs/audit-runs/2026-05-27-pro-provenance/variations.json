@@ -1,0 +1,266 @@
+{
+  "generatedAt": "2026-05-27T13:17:48.671Z",
+  "floor": 20,
+  "lines": {
+    "ericrosen::black::Stafford Gambit": {
+      "pro": "ericrosen",
+      "color": "black",
+      "label": "Stafford Gambit",
+      "uci": [
+        "e2e4",
+        "e7e5",
+        "g1f3",
+        "g8f6",
+        "f3e5",
+        "b8c6"
+      ],
+      "games": 688,
+      "score": 80,
+      "provenance": "both",
+      "taughtUrl": "https://lichess.org/study/SSWMLB7R/K9ptMklR",
+      "sampleGames": [
+        "https://lichess.org/0zY5QGQE",
+        "https://lichess.org/gfmreg2Q",
+        "https://lichess.org/abZzbeTM",
+        "https://lichess.org/B2spPTQ4",
+        "https://lichess.org/kRS8afWF",
+        "https://lichess.org/KqSVpsx6"
+      ],
+      "topReplies": [
+        {
+          "san": "Nxc6",
+          "games": 527
+        },
+        {
+          "san": "Nf3",
+          "games": 114
+        },
+        {
+          "san": "d4",
+          "games": 29
+        },
+        {
+          "san": "Nxf7",
+          "games": 9
+        }
+      ]
+    },
+    "ericrosen::black::Stafford: 4.Nxc6 main": {
+      "pro": "ericrosen",
+      "color": "black",
+      "label": "Stafford: 4.Nxc6 main",
+      "uci": [
+        "e2e4",
+        "e7e5",
+        "g1f3",
+        "g8f6",
+        "f3e5",
+        "b8c6",
+        "e5c6",
+        "d7c6"
+      ],
+      "games": 545,
+      "score": 81,
+      "provenance": "plays",
+      "taughtUrl": null,
+      "sampleGames": [
+        "https://lichess.org/0zY5QGQE",
+        "https://lichess.org/gfmreg2Q",
+        "https://lichess.org/abZzbeTM",
+        "https://lichess.org/qInKI5L8",
+        "https://lichess.org/kRS8afWF",
+        "https://lichess.org/KqSVpsx6"
+      ],
+      "topReplies": [
+        {
+          "san": "d3",
+          "games": 289
+        },
+        {
+          "san": "Nc3",
+          "games": 159
+        },
+        {
+          "san": "e5",
+          "games": 36
+        },
+        {
+          "san": "f3",
+          "games": 21
+        }
+      ]
+    },
+    "ericrosen::black::Petrov Classical": {
+      "pro": "ericrosen",
+      "color": "black",
+      "label": "Petrov Classical",
+      "uci": [
+        "e2e4",
+        "e7e5",
+        "g1f3",
+        "g8f6",
+        "f3e5",
+        "d7d6"
+      ],
+      "games": 0,
+      "score": 0,
+      "provenance": "unverified",
+      "taughtUrl": null,
+      "sampleGames": [],
+      "topReplies": []
+    },
+    "ericrosen::black::QGD": {
+      "pro": "ericrosen",
+      "color": "black",
+      "label": "QGD",
+      "uci": [
+        "d2d4",
+        "d7d5",
+        "c2c4",
+        "e7e6"
+      ],
+      "games": 438,
+      "score": 71,
+      "provenance": "plays",
+      "taughtUrl": null,
+      "sampleGames": [
+        "https://lichess.org/I6lMUEJN",
+        "https://lichess.org/yUfQ1eBj",
+        "https://lichess.org/UMa9ZsmJ",
+        "https://lichess.org/0TT85SkJ",
+        "https://lichess.org/KqWmqy7R",
+        "https://lichess.org/xfLkyyfb"
+      ],
+      "topReplies": [
+        {
+          "san": "Nc3",
+          "games": 253
+        },
+        {
+          "san": "Nf3",
+          "games": 142
+        },
+        {
+          "san": "cxd5",
+          "games": 24
+        },
+        {
+          "san": "g3",
+          "games": 9
+        }
+      ]
+    },
+    "ericrosen::black::Catalan (as black)": {
+      "pro": "ericrosen",
+      "color": "black",
+      "label": "Catalan (as black)",
+      "uci": [
+        "d2d4",
+        "g8f6",
+        "c2c4",
+        "e7e6",
+        "g2g3"
+      ],
+      "games": 9,
+      "score": 78,
+      "provenance": "unverified",
+      "taughtUrl": null,
+      "sampleGames": [
+        "https://lichess.org/5ltjD2sD",
+        "https://lichess.org/HgDRfWDX",
+        "https://lichess.org/lYE65QMu",
+        "https://lichess.org/ziDeKnpv",
+        "https://lichess.org/kliKjQye",
+        "https://lichess.org/WzwdYV7W"
+      ],
+      "topReplies": [
+        {
+          "san": "d5",
+          "games": 9
+        }
+      ]
+    },
+    "ericrosen::white::London System": {
+      "pro": "ericrosen",
+      "color": "white",
+      "label": "London System",
+      "uci": [
+        "d2d4",
+        "d7d5",
+        "g1f3",
+        "g8f6",
+        "c1f4"
+      ],
+      "games": 108,
+      "score": 67,
+      "provenance": "both",
+      "taughtUrl": "https://lichess.org/video/NKPsysr5Qqw",
+      "sampleGames": [
+        "https://lichess.org/KpZuQpDM",
+        "https://lichess.org/5ufk1KeX",
+        "https://lichess.org/Nf7Y3uPs",
+        "https://lichess.org/sS5ETs2r",
+        "https://lichess.org/vrRPYano",
+        "https://lichess.org/9VsiWvyF"
+      ],
+      "topReplies": [
+        {
+          "san": "e6",
+          "games": 49
+        },
+        {
+          "san": "c5",
+          "games": 44
+        },
+        {
+          "san": "Bf5",
+          "games": 4
+        },
+        {
+          "san": "Nc6",
+          "games": 3
+        }
+      ]
+    },
+    "ericrosen::white::Accelerated London": {
+      "pro": "ericrosen",
+      "color": "white",
+      "label": "Accelerated London",
+      "uci": [
+        "d2d4",
+        "g8f6",
+        "c1f4"
+      ],
+      "games": 1352,
+      "score": 71,
+      "provenance": "plays",
+      "taughtUrl": null,
+      "sampleGames": [
+        "https://lichess.org/0tBNUxEJ",
+        "https://lichess.org/zGUmg1d4",
+        "https://lichess.org/wZC6Kj9l",
+        "https://lichess.org/howHATcw",
+        "https://lichess.org/OwU50KYW",
+        "https://lichess.org/5C9dChL4"
+      ],
+      "topReplies": [
+        {
+          "san": "g6",
+          "games": 382
+        },
+        {
+          "san": "d5",
+          "games": 294
+        },
+        {
+          "san": "e6",
+          "games": 271
+        },
+        {
+          "san": "c5",
+          "games": 188
+        }
+      ]
+    }
+  }
+}
