@@ -3439,5 +3439,55 @@
     "materialDelta": 1,
     "tier": "confirmed",
     "why": "At your level opponents play a6 here in 3% of games. Punish with the best move Bxc6 — the engine has White winning (+1.4, +1 material)."
+  },
+  {
+    "openingId": "sicilian-najdorf",
+    "lineMoves": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5",
+    "inaccuracy": "Nf5",
+    "freqPct": 3.8,
+    "games": 21919,
+    "practicalScore": 55,
+    "mainMove": "Nb3",
+    "punish": "d5",
+    "punishSeq": [
+      "d5",
+      "Ng3",
+      "d4",
+      "Nd5",
+      "Nxd5",
+      "exd5",
+      "Qxd5",
+      "Bd3"
+    ],
+    "playLine": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 f3 e5 Nf5 d5 Ng3 d4 Nd5 Nxd5 exd5 Qxd5 Bd3",
+    "engineCp": 106,
+    "materialDelta": 1,
+    "tier": "confirmed",
+    "why": "At your level opponents play Nf5 here in 4% of games. Punish with the best move d5 — the engine has Black winning (+1.1, +1 material)."
+  },
+  {
+    "openingId": "sicilian-najdorf",
+    "lineMoves": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 Ng4",
+    "inaccuracy": "Bf4",
+    "freqPct": 6.8,
+    "games": 13124,
+    "practicalScore": 72,
+    "mainMove": "Bg5",
+    "punish": "e5",
+    "punishSeq": [
+      "e5",
+      "Nf5",
+      "Nxf2",
+      "Kxf2",
+      "exf4",
+      "Nd5",
+      "Nc6",
+      "Qg4"
+    ],
+    "playLine": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 Ng4 Bf4 e5 Nf5 Nxf2 Kxf2 exf4 Nd5 Nc6 Qg4",
+    "engineCp": 96,
+    "materialDelta": 1,
+    "tier": "positional",
+    "why": "At your level opponents play Bf4 here in 7% of games. Punish with the best move e5 — the engine has Black clearly better (+1.0, +1 material)."
   }
 ]

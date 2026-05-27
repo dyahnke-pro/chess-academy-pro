@@ -266,6 +266,68 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
       '',
     ],
   },
+  // Najdorf (student = Black). English Attack 6.f3 e5: White's Nf5? has no
+  // support — …d5 strikes the centre, chases the knights, and wins a pawn.
+  'sicilian-najdorf:e4_c5_Nf3_d6_d4_cxd4_Nxd4_Nf6_Nc3_a6_f3_e5:Nf5': {
+    sources: ['concept:pos-center', 'concept:pos-space', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      '…e5 — the Najdorf thrust, kicking the d4-knight off its perch.',
+      'Nf5? — the knight lunges to f5 instead of the steady Nb3, but it has no support there.',
+      '…d5 — striking the centre with tempo; the c3-knight is hit and the f5-knight is stranded.',
+      '',
+      '…d4 — rolling the pawn on, chasing the c3-knight and seizing space.',
+      '',
+      '…Nxd5 — trading down; Black emerges with the bigger centre.',
+      '',
+      '…Qxd5 — collecting the pawn, a clean material edge in hand.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'e5 — kick the d4-knight',
+      '',
+      'd5 — strike, hit c3 and f5',
+      '',
+      'd4 — chase, grab space',
+      '',
+      'Nxd5 — trade, stay ahead',
+      '',
+      'Qxd5 — a pawn up',
+      '',
+    ],
+  },
+  // Najdorf (student = Black). 6.Be3 Ng4: White's Bf4? walks into …e5 forking
+  // the bishop and the d4-knight, with the …Nxf2! fork resource.
+  'sicilian-najdorf:e4_c5_Nf3_d6_d4_cxd4_Nxd4_Nf6_Nc3_a6_Be3_Ng4:Bf4': {
+    sources: ['concept:tac-fork', 'concept:pos-king-safety', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation'],
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      '…Ng4 — challenging the e3-bishop, daring it to pick a square.',
+      'Bf4? — the bishop sidesteps to f4 and walks straight into a central break.',
+      '…e5 — forking the f4-bishop and the d4-knight; White cannot save both cleanly.',
+      '',
+      '…Nxf2! — the knight crashes in, forking the d1-queen and the h1-rook.',
+      '',
+      '…exf4 — Black has won the f2-pawn and the bishop for the knight: a clean extra pawn, White’s king flushed out.',
+      '',
+      '…Nc6 — developing with tempo; the king stranded on f2 has no shelter.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Ng4 — challenge the bishop',
+      '',
+      'e5 — fork bishop and knight',
+      '',
+      'Nxf2 — crash in, fork Q+R',
+      '',
+      'exf4 — win bishop and pawn',
+      '',
+      'Nc6 — develop, king exposed',
+      '',
+    ],
+  },
   // Caro — White's f3 (Fantasy) but f3?? offered too loosely: exf3 just
   // wins a pawn. playLine: e4 c6 d4 d5 Nc3 dxe4 f3 exf3 Nxf3 Nf6 Bd3 Bg4 h3 Bxf3 Qxf3
   'caro-kann:e4_c6_d4_d5_Nc3_dxe4:f3': {
