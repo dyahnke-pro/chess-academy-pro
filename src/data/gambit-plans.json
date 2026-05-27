@@ -2798,5 +2798,259 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-gambitbenkogambit-attack",
+    "openingId": "gambit-benko-gambit",
+    "title": "The Benko Gambit: queenside pressure for a pawn",
+    "criticalPositionFen": "r2q1rk1/3nppbp/b2p1np1/2pP4/8/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 5 11",
+    "overview": "The Benko is the model of POSITIONAL compensation. Black gives a wing pawn, but in return the a- and b-files open for the rooks and the long diagonal opens for the g7-bishop — and all of it points at White's queenside, where Black will press for the entire game. There's nothing flashy here and no quick attack: just relentless, easy-to-play pressure that's notoriously hard to meet. Be honest — White's modern g3 fianchetto can hold a small edge with care — but practically the Benko bind wins games and teaches a concept every player needs: long-term pressure as full value for a pawn. This plan shows that bind being built.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd8-a5",
+        "explanation": "Qa5 opens the Benko plan, swinging to the queenside to pin White's pieces and eye a2 — pressure exactly where the pawn was given."
+      },
+      {
+        "piece": "Rooks",
+        "route": "Ra8-b8 / Rf8-b8",
+        "explanation": "Both rooks pile onto the half-open a- and b-files — the heart of the Benko: doubled pressure down the queenside that never relents."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Ba6-c4",
+        "explanation": "The light bishop infiltrates to c4, disrupting White's coordination and clamping the queenside light squares; the g7-bishop rakes the long diagonal behind it."
+      }
+    ],
+    "strategicThemes": [
+      "A wing pawn for the open a/b-files and the long diagonal — pure positional compensation.",
+      "Queen to a5, both rooks to the a/b-files: relentless queenside pressure.",
+      "Easy to play, hard to meet — the Benko bind wins on practical terms.",
+      "Honest caveat: White's g3 setup holds a small edge with care, but the pressure is full value over the board."
+    ],
+    "playableLines": [
+      {
+        "title": "Building the Benko bind",
+        "fen": "r2q1rk1/3nppbp/b2p1np1/2pP4/8/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 5 11",
+        "moves": [
+          "Qc2",
+          "Qa5",
+          "Bd2",
+          "Qc7",
+          "Rfd1",
+          "Nb6",
+          "Be1",
+          "Rfb8",
+          "Rab1",
+          "Bc4",
+          "b3",
+          "Bxd5"
+        ],
+        "annotations": [
+          "",
+          "...Qa5 — the Benko plan begins. The queen swings to the queenside, pinning White's pieces and eyeing a2: relentless pressure exactly where Black gave up the pawn.",
+          "",
+          "...Qc7 — repositioning to keep the queen flexible behind the coming rook lift, still trained on the queenside.",
+          "",
+          "...Nb6 — the knight heads for c4 or a4, probing White's queenside light squares.",
+          "",
+          "...Rfb8 — both rooks now sit on the half-open a- and b-files. Every Black piece points at White's queenside: this bind IS the Benko, pressure worth more than the pawn.",
+          "",
+          "...Bc4 — the light bishop infiltrates, disrupting White's coordination and clamping the queenside light squares.",
+          "",
+          "...Bxd5 — regaining the central pawn and trading into a position where Black's pressure fully compensates. Honest truth: White's modern g3 setup can claim a small edge with care — but the Benko's queenside bind is famously easy to play and hard to meet, the model of long-term positional compensation."
+        ],
+        "learnCues": [
+          "",
+          "...Qa5 — start the queenside pressure",
+          "",
+          "...Qc7 — flexible behind the rooks",
+          "",
+          "...Nb6 — knight toward c4/a4",
+          "",
+          "...Rfb8 — both rooks on the a/b-files",
+          "",
+          "...Bc4 — infiltrate the light squares",
+          "",
+          "...Bxd5 — regain the pawn; full comp"
+        ],
+        "sources": [
+          "concept:pos-open-file",
+          "concept:pos-initiative",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Benko_Gambit"
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "a5",
+              "to": "a2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b6",
+              "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b6",
+              "to": "a4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
