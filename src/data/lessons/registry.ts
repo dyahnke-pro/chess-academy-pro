@@ -105,6 +105,8 @@ import { TROMPOWSKY_ATTACK_LESSON } from './trompowskyAttack';
 import { TROMPOWSKY_ATTACK_VARIATION_LESSONS } from './trompowskyAttackVariations';
 import { BIRDS_OPENING_LESSON } from './birdsOpening';
 import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
+import { PRO_ERICROSEN_STAFFORD_LESSON } from './proEricRosenStafford';
+import { PRO_ERICROSEN_STAFFORD_VARIATION_LESSONS } from './proEricRosenStaffordVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -167,6 +169,8 @@ const OPENINGS: OpeningLessons[] = [
   { main: QUEENS_GAMBIT_LESSON, variations: QUEENS_GAMBIT_VARIATION_LESSONS },
   { main: TROMPOWSKY_ATTACK_LESSON, variations: TROMPOWSKY_ATTACK_VARIATION_LESSONS },
   { main: BIRDS_OPENING_LESSON, variations: BIRDS_OPENING_VARIATION_LESSONS },
+  // ── Pro masterclasses (David 2026-05-27) ──
+  { main: PRO_ERICROSEN_STAFFORD_LESSON, variations: PRO_ERICROSEN_STAFFORD_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

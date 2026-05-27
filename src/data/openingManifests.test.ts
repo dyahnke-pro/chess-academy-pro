@@ -21,6 +21,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import manifests from './opening-manifests.json';
 import repertoireRaw from './repertoire.json';
+import proRepertoireRaw from './pro-repertoires.json';
 import middlegamePlansRaw from './middlegame-plans.json';
 import modelGamesRaw from './model-games.json';
 import { FIRST_CLASS_OPENING_IDS } from './lessons/registry';
@@ -37,7 +38,12 @@ interface ManifestEntry {
   keyIdeas: number;
 }
 
-const repertoire = repertoireRaw as OpeningRecord[];
+// Pro masterclasses (David 2026-05-27) live in pro-repertoires.json — merge
+// them so their variation/keyIdea counts resolve the same as base openings.
+const repertoire = [
+  ...(repertoireRaw as OpeningRecord[]),
+  ...((proRepertoireRaw as { openings: OpeningRecord[] }).openings),
+];
 const middlegamePlans = middlegamePlansRaw as MiddlegamePlan[];
 const modelGames = modelGamesRaw as ModelGameLike[];
 

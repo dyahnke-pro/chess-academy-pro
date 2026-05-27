@@ -4132,15 +4132,15 @@
       "playerId": "ericrosen",
       "eco": "C42",
       "name": "Stafford Gambit (Rosen)",
-      "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6",
+      "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5",
       "color": "black",
       "style": "Gambit, Trappy",
       "overview": "The Stafford Gambit is Eric Rosen's signature weapon — and the opening he turned from a forgotten footnote into a YouTube phenomenon. Invented by American master Joseph Stafford in the 1950s and dismissed as unsound for nearly 70 years, the gambit lived in obscurity until Rosen began posting Stafford trap videos in 2018-2019; his content quickly accumulated millions of views and made the opening a household name among online chess players. After 1.e4 e5 2.Nf3 Nf6 3.Nxe5 Nc6 (instead of the standard 3...d6), Black sacrifices a pawn for explosive tactical play. The traps are everywhere — most players at club level fall into one of them. Rosen has scored hundreds of brilliant wins with this gambit, proving that even theoretically dubious openings can be devastating when played with creativity.",
       "keyIdeas": [
-        "Sacrifice the e5-pawn for rapid development and tactical chances. The gambit's whole philosophy: tempo > material when the opponent doesn't know the theory.",
-        "After 4.Nxc6 dxc6 (Black recaptures with the d-pawn — keeping the c-pawn structure), Black has open lines for the queen and bishop AND immediate threats against f2.",
-        "Bc5 + …Ng4 + …Qh4 is the standard attacking battery. Three pieces aimed at f2 with the queen joining via the h4-square — opponents who haven't studied the antidote get mated quickly.",
-        "Play for tricks and complications. The Stafford isn't about equality — it's about WINNING with Black on move 12 because your opponent walks into a trap."
+        "Offer the knight trade with …Nc6 — you give back nothing on material in the main line, and in return you get the bishop pair, the open d-file, and a clear lead in development.",
+        "The f2-square is the target. The bishop on c5, a knight hop to g4, and the queen swinging out all converge on the weakest point in front of White's king.",
+        "Speed beats structure here. The doubled c-pawns are a permanent but tiny cost; your whole game is to develop fast, castle, and attack before White untangles.",
+        "Know the punishments cold. Natural-looking White moves (Bg5, h3, Nc3 then a careless develop) walk into …Nxe4 and …Bxf2+ ideas — that's where the Stafford wins games outright."
       ],
       "traps": [
         "After 4.Nxc6 dxc6 5.Nc3?? (a natural-looking developing move), Black plays 5...Nd4! threatening …Nxf3+ AND …Nxc2+ forks. White loses material immediately.",
@@ -4152,23 +4152,48 @@
       ],
       "variations": [
         {
-          "name": "Main Trap Line",
+          "name": "Nxc6 Main Line",
           "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5",
-          "explanation": "The famous Stafford Gambit setup. After d3 Bc5, Black has the Bxf2+ + Bg4+ trap available — the queen capture on d8 looks winning for White but is actually a disaster."
+          "explanation": "White trades on c6 and settles with d3 — the most-played, soundest try (Eric Rosen faced 4.Nxc6 in ~545 of his Stafford games). Material is even; Black develops the bishops, lands the queen on the open d-file, and aims everything at f2.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 545,
+            "score": 81,
+            "source": "lichess /player"
+          }
         },
         {
-          "name": "Nxc6 dxc6 Best Play",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4",
-          "explanation": "White's best response avoiding all traps. After d4 the position is better for White objectively, but the positions remain messy and rewarding for Black's creative play."
+          "name": "Knight Retreat 4.Nf3",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nf3 Nxe4",
+          "explanation": "If White retreats the knight to f3 instead of trading, Black simply takes on e4 — regaining the pawn with an easy, comfortable game and the same fast development. The simplest equalizer in the Stafford.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 313,
+            "score": 66,
+            "source": "lichess /player"
+          }
         },
         {
-          "name": "Nc3 Blunder",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5 Be2 h5 d3 Ng4 Bxg4 hxg4 Qxg4 Qd4",
-          "explanation": "If White plays the natural Nc3, Black gets a strong initiative. The position becomes sharp and White must navigate carefully to avoid falling into one of Rosen's tactical tricks."
+          "name": "f7 Sacrifice 4.Nxf7",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxf7 Kxf7",
+          "explanation": "The greedy 4.Nxf7 grabs a pawn and forks queen and rook — but after …Kxf7 Black is simply up a knight for a pawn, and the exposed king is easy to tuck away. A try Black should welcome, not fear.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 23,
+            "score": 67,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
-      "warningLines": []
+      "warningLines": [],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 688,
+        "score": 80,
+        "source": "lichess /player",
+        "taughtUrl": "https://lichess.org/study/SSWMLB7R/K9ptMklR"
+      }
     },
     {
       "id": "pro-ericrosen-englund",

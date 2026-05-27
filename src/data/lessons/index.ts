@@ -85,6 +85,7 @@ import { TROMPOWSKY_ATTACK_VARIATION_LESSONS } from './trompowskyAttackVariation
 import { BIRDS_OPENING_LESSON } from './birdsOpening';
 import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
 import { PRO_ERICROSEN_STAFFORD_LESSON } from './proEricRosenStafford';
+import { PRO_ERICROSEN_STAFFORD_VARIATION_LESSONS } from './proEricRosenStaffordVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -191,6 +192,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...QUEENS_GAMBIT_VARIATION_LESSONS,
   ...TROMPOWSKY_ATTACK_VARIATION_LESSONS,
   ...BIRDS_OPENING_VARIATION_LESSONS,
+  ...PRO_ERICROSEN_STAFFORD_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

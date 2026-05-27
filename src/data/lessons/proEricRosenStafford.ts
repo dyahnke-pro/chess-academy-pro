@@ -29,7 +29,7 @@ export const PRO_ERICROSEN_STAFFORD_LESSON: LessonScript = {
       moves: ['e4', 'e5'],
       highlights: [{ square: 'e4', color: KEY }, { square: 'e5', color: KEY }],
       say: "We're learning the opening Eric Rosen has turned into an internet legend — and won with again and again. It starts the most ordinary way imaginable: e4 met by e5. Nothing here hints at the ambush. That's the point. Everything looks like a quiet Italian or Petrov until Black springs a move most opponents have never seen.",
-      sayShort: '…e5 — the Stafford ambush starts as a normal game.',
+      sayShort: '…e5 — the Stafford ambush begins.',
     },
     {
       id: 'petrov-shell',
@@ -75,7 +75,15 @@ export const PRO_ERICROSEN_STAFFORD_LESSON: LessonScript = {
       arrows: [{ from: 'c8', to: 'g4', color: VIS }, { from: 'd8', to: 'd3', color: VIS }],
       highlights: [{ square: 'g4', color: KEY }, { square: 'd3', color: KEY }],
       say: "Here is the whole engine of the gambit. The light bishop comes to g4 to pin and pester; the queen leans on the d3-pawn down the open file; the f6-knight eyes the holes around White's king. Castle, pile onto f2 and the light squares, and a careless White move — there are many — hands Black a winning attack. That is why Eric Rosen scores around eighty percent from this position against everyone short of a titled player.",
-      sayShort: 'Bishop to g4, queen on the d-file, swarm f2.',
+      sayShort: 'Bishop g4, queen on d3, swarm f2.',
+    },
+    {
+      id: 'mainline-middlegame',
+      moves: ['e4', 'e5', 'Nf3', 'Nf6', 'Nxe5', 'Nc6', 'Nxc6', 'dxc6', 'd3', 'Bc5', 'Be2', 'h5', 'c3', 'Ng4', 'd4', 'Bb6', 'h3', 'Nf6', 'Bg5', 'Qd7'],
+      arrows: [{ from: 'b6', to: 'd4', color: VIS }],
+      highlights: [{ square: 'd4', color: KEY }, { square: 'd7', color: SOFT }, { square: 'h5', color: SOFT }],
+      say: "Run the most-played line out to the middlegame and the picture is unmistakable. White builds the big centre with d4, but Black's dark bishop on the long diagonal bites straight into the d4-pawn, the queen swings to d7 to link the rooks and eye the open file, and the h5-pawn has already poked a hole in White's kingside. Two bishops, an open file, a target on d4 — this is the Stafford's promise paid off: structure for White, but every active piece for Black.",
+      sayShort: 'Middlegame: bishops bite d4, queen on d7.',
     },
   ],
 };

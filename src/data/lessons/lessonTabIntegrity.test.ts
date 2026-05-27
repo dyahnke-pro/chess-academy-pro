@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import repertoireData from '../repertoire.json';
+import proRepertoireData from '../pro-repertoires.json';
 import { buildVariationTabs } from '../../services/variationTabs';
 import { getLessonScript, getVariationLessonScript } from './index';
 import { FIRST_CLASS_OPENING_IDS } from './registry';
@@ -19,8 +20,12 @@ import { FIRST_CLASS_OPENING_IDS } from './registry';
 // it ever ships.
 
 interface RepOpening { id: string; variations?: Array<{ name: string }> }
-// repertoire.json is an array of opening records.
-const OPENINGS = repertoireData as unknown as RepOpening[];
+// repertoire.json is an array of opening records; pro masterclasses live in
+// pro-repertoires.json (David 2026-05-27) — merge so pro tabs resolve too.
+const OPENINGS = [
+  ...(repertoireData as unknown as RepOpening[]),
+  ...((proRepertoireData as unknown as { openings: RepOpening[] }).openings),
+];
 
 describe('masterclass tabs resolve to distinct lessons — no dup/fallback lines', () => {
   for (const id of FIRST_CLASS_OPENING_IDS) {
