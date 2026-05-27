@@ -21815,7 +21815,14 @@
           "Nc3",
           "Qb6",
           "a3",
-          "c5"
+          "c5",
+          "Ne5",
+          "Bd7",
+          "Rh3",
+          "Rac8",
+          "Bg5",
+          "Nb8",
+          "Ng4"
         ],
         "annotations": [
           "h4 — the signature Jobava lunge, grabbing kingside space.",
@@ -21823,12 +21830,21 @@
           "Nc3 — the knight retreats to c3, ready to support e4.",
           "…Qb6 — Black eyes the b2-pawn and the queenside.",
           "a3 — White calmly anchors and prepares to expand.",
-          "…c5 — Black strikes at the d4-centre."
+          "…c5 — Black strikes at the d4-centre.",
+          "Ne5 — the knight grabs the central outpost, the spearhead of the Jobava attack.",
+          "…Bd7 — Black develops, contesting the e5-knight’s support.",
+          "Rh3 — the rook lifts to the third rank, swinging toward the kingside.",
+          "…Rac8 — Black seeks counterplay on the c-file.",
+          "Bg5 — the bishop joins the attack, pinning and pressing the kingside.",
+          "…Nb8 — Black reroutes the knight defensively.",
+          "Ng4 — the knight redeploys toward the kingside dark squares; White’s pieces swarm the king while Black is slow on the other wing."
         ],
         "sources": [
           "concept:pos-development",
           "concept:pos-center",
-          "https://en.wikipedia.org/wiki/London_System"
+          "https://en.wikipedia.org/wiki/London_System",
+          "concept:pos-outpost",
+          "concept:att-kingside-storm"
         ],
         "learnCues": [
           "h4 — the Jobava lunge",
@@ -21836,7 +21852,14 @@
           "Nc3 — retreat, support e4",
           "Qb6 — eye b2",
           "a3 — anchor, prepare to expand",
-          "c5 — strike at d4"
+          "c5 — strike at d4",
+          "Ne5 — central outpost, spearhead",
+          "Bd7 — Black develops",
+          "Rh3 — rook lift to the kingside",
+          "Rac8 — counterplay on the c-file",
+          "Bg5 — bishop joins the attack",
+          "Nb8 — reroute to defend",
+          "Ng4 — swarm the kingside"
         ],
         "arrows": [
           [],
@@ -21855,6 +21878,13 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
@@ -21933,6 +21963,80 @@
             {
               "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ]
@@ -22973,7 +23077,14 @@
           "Bd3",
           "Na6",
           "O-O",
-          "Bd6"
+          "Bd6",
+          "Bc2",
+          "Bg4",
+          "d4",
+          "Bxf3",
+          "Qxf3",
+          "Qxf3",
+          "gxf3"
         ],
         "annotations": [
           "Nf3 — White develops, eyeing the e5- and d4-squares.",
@@ -22981,12 +23092,20 @@
           "Bd3 — the bishop eyes the kingside.",
           "…Na6 — Black develops the knight to a6.",
           "O-O — White castles, ready to break with d4.",
-          "…Bd6 — Black develops the bishop to d6."
+          "…Bd6 — Black develops the bishop to d6.",
+          "Bc2 — the bishop completes the Bd3-c2 manoeuvre, eyeing the b1-h7 diagonal and freeing d3.",
+          "…Bg4 — Black pins the f3-knight to pre-empt d4.",
+          "d4 — the central break lands, the c3-c4-d4 pawn mass rolling forward.",
+          "…Bxf3 — Black removes the knight to ease the central pressure.",
+          "Qxf3 — White recaptures.",
+          "…Qxf3 — Black trades queens.",
+          "gxf3 — White’s kingside pawns double, but the broad c3-c4-d4 pawn mass and bishop pair dominate the centre — the Mikenas plan realized."
         ],
         "sources": [
           "concept:pos-center",
           "concept:pos-space",
-          "https://en.wikipedia.org/wiki/English_Opening"
+          "https://en.wikipedia.org/wiki/English_Opening",
+          "concept:pos-bishop-pair"
         ],
         "learnCues": [
           "Nf3 — eye e5 and d4",
@@ -22994,7 +23113,14 @@
           "Bd3 — eye the kingside",
           "Na6 — develop the knight",
           "O-O — ready the d4 break",
-          "Bd6 — develop the bishop"
+          "Bd6 — develop the bishop",
+          "Bc2 — finish the bishop manoeuvre",
+          "Bg4 — pin to stop d4",
+          "d4 — the central break lands",
+          "Bxf3 — ease the pressure",
+          "Qxf3 — recapture",
+          "Qxf3 — trade queens",
+          "gxf3 — pawn mass, bishop pair"
         ],
         "arrows": [
           [
@@ -23006,6 +23132,30 @@
             {
               "from": "f3",
               "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c2",
+              "to": "b1",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c2",
+              "to": "h7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "g4",
+              "to": "f3",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
@@ -23086,6 +23236,112 @@
             {
               "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -25741,16 +25997,31 @@
           "Rad1",
           "Qc7",
           "Bxf6",
-          "gxf6"
+          "gxf6",
+          "Be4",
+          "Rfd8",
+          "Bxb7",
+          "Qxb7",
+          "Rd3"
         ],
         "annotations": [
           "White centralises a rook on d1, eyeing the d-file.",
           "Black redeploys …Qc7, connecting the rooks and eyeing the half-open c-file.",
           "White trades on f6 to damage Black's kingside pawns.",
-          "…gxf6 recaptures toward the centre: the doubled f-pawns clamp e5 and g5, the half-open g-file feeds the rook at White's king, and the b7-bishop rakes the long diagonal — concrete attacking assets, not just a tidy structure."
+          "…gxf6 recaptures toward the centre: the doubled f-pawns clamp e5 and g5, the half-open g-file feeds the rook at White's king, and the b7-bishop rakes the long diagonal — concrete attacking assets, not just a tidy structure.",
+          "Be4 — White offers to trade the light bishops.",
+          "…Rfd8 — the rook takes the open d-file, centralizing as the plan calls for.",
+          "Bxb7 — White trades on b7.",
+          "…Qxb7 — recapturing; this is the sound, balanced equality Black aimed for, every piece harmoniously placed.",
+          "Rd3 — White doubles toward the d-file, but Black is fully equal."
         ],
         "title": "Sound Equality",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
@@ -25808,18 +26079,74 @@
               "square": "b7",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
         "sources": [
           "book:french-defence",
           "concept:pos-center",
-          "https://en.wikipedia.org/wiki/French_Defence"
+          "https://en.wikipedia.org/wiki/French_Defence",
+          "concept:pos-open-file"
         ],
         "learnCues": [
           "Rad1 — eye the d-file",
           "Qc7 — connect, eye the c-file",
           "Bxf6 — damage the kingside pawns",
-          "gxf6 — clamp e5/g5; attacking assets"
+          "gxf6 — clamp e5/g5; attacking assets",
+          "Be4 — offer the trade",
+          "Rfd8 — rook to the open d-file",
+          "Bxb7 — White trades",
+          "Qxb7 — sound equality reached",
+          "Rd3 — Black stays equal"
         ]
       }
     ]
@@ -26491,13 +26818,27 @@
           "O-O",
           "O-O-O",
           "d5",
-          "Ne5"
+          "Ne5",
+          "Bf4",
+          "Nxf3+",
+          "Bxf3",
+          "Bxf3",
+          "Qxf3",
+          "e5",
+          "dxe6"
         ],
         "annotations": [
           "White castles short.",
           "…O-O-O castles long, the rook landing on the open d-file behind the flexible …Qd6 queen.",
           "d5 chases the c6-knight and grabs space.",
-          "…Ne5 centralises on a powerful square, hitting f3 and c4, while the rook already sits on the half-open d-file behind White's advanced d5-pawn. Black has active, fully-equal play and a ready-made target — the over-extended d5-pawn."
+          "…Ne5 centralises on a powerful square, hitting f3 and c4, while the rook already sits on the half-open d-file behind White's advanced d5-pawn. Black has active, fully-equal play and a ready-made target — the over-extended d5-pawn.",
+          "Bf4 — White develops, eyeing c7 and d6.",
+          "…Nxf3+ — trading off to release the pin’s tension and damage White’s kingside.",
+          "Bxf3 — White recaptures.",
+          "…Bxf3 — eliminating the defender of d4 and the light squares.",
+          "Qxf3 — White recaptures with the queen.",
+          "…e5 — the thematic break, striking White’s centre and freeing Black’s game.",
+          "dxe6 — White grabs the pawn en passant, but Black recaptures into a comfortable, equal middlegame, the …e5 break achieved."
         ],
         "title": "Scandinavian: The Flexible …Qd6 Setup",
         "arrows": [
@@ -26515,7 +26856,14 @@
               "to": "c4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
         "highlights": [
           [
@@ -26573,18 +26921,112 @@
               "square": "d5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
           "book:scandinavian-defence",
           "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense",
+          "concept:pos-center"
         ],
         "learnCues": [
           "O-O — castle short",
           "O-O-O — rook to the d-file",
           "d5 — chase the knight, grab space",
-          "Ne5 — centralise; target d5"
+          "Ne5 — centralise; target d5",
+          "Bf4 — eye c7/d6",
+          "Nxf3+ — trade, damage the kingside",
+          "Bxf3 — White recaptures",
+          "Bxf3 — remove d4’s defender",
+          "Qxf3 — queen recaptures",
+          "e5 — the thematic break",
+          "dxe6 — break achieved, equal"
         ]
       }
     ]
@@ -30562,13 +31004,27 @@
           "Ne2",
           "Nc6",
           "g4",
-          "Na5"
+          "Na5",
+          "Bg2",
+          "Nb3",
+          "Ra2",
+          "O-O",
+          "O-O",
+          "b5",
+          "Ng3"
         ],
         "annotations": [
           "Ne2 develops awkwardly.",
           "…Nc6 develops, eyeing the queenside weaknesses.",
           "g4 lunges for space but loosens the kingside.",
-          "…Na5 swarms the c4-clamp and White's shattered queenside — Black is clearly better."
+          "…Na5 swarms the c4-clamp and White's shattered queenside — Black is clearly better.",
+          "Bg2 — White fianchettoes behind the f3-pawn.",
+          "…Nb3 — the knight burrows in from a5, harassing the rook and clamping White’s queenside light squares.",
+          "Ra2 — the rook is driven to an awkward square.",
+          "…O-O — Black tucks the king away, the …c4-clamp secure.",
+          "O-O — White castles.",
+          "…b5 — rolling the queenside pawns to cement the c4-clamp and open lines.",
+          "Ng3 — White redeploys; Black’s c4-clamp and queenside space give a lasting bind."
         ],
         "title": "Nimzo 4.f3: Clamp and Exploit",
         "arrows": [
@@ -30581,7 +31037,20 @@
               "to": "c4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [
+            {
+              "from": "g2",
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
         "highlights": [
           [
@@ -30627,18 +31096,112 @@
               "square": "c4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
           "concept:pawn-doubled",
           "concept:pos-outpost",
-          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence",
+          "concept:pos-space"
         ],
         "learnCues": [
           "Ne2 — develop awkwardly",
           "Nc6 — eye the queenside weaknesses",
           "g4 — space but loosens the king",
-          "Na5 — swarm c4; clearly better"
+          "Na5 — swarm c4; clearly better",
+          "Bg2 — White fianchettoes",
+          "Nb3 — burrow in, clamp queenside",
+          "Ra2 — rook driven back",
+          "O-O — king safe, clamp held",
+          "O-O — White castles",
+          "b5 — roll the queenside",
+          "Ng3 — Black’s bind holds"
         ]
       }
     ]
