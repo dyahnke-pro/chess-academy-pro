@@ -17108,7 +17108,7 @@
           "Na5 — the knight heads for the c4 outpost.",
           "f5 — White pushes on, hitting the e6-bishop.",
           "Bc4 — Black trades off White's good bishop.",
-          "Bxc4 — White recaptures on c4.",
+          "Bxc4 — forced; White must part with the good light bishop Black hunted down.",
           "Nxc4 — Black is comfortably equal, every piece placed."
         ],
         "arrows": [
@@ -19132,7 +19132,7 @@
           "b4"
         ],
         "annotations": [
-          "Nb3 — White retreats the knight.",
+          "Nb3 — the knight retreats rather than trade, ceding Black the time to storm the queenside.",
           "Nge5 — the knight returns to the strong e5 square.",
           "O-O-O — White commits the king to the queenside.",
           "b5 — Black's queenside storm begins.",
@@ -19855,10 +19855,10 @@
           "a5"
         ],
         "annotations": [
-          "O-O — Black completes development.",
+          "…O-O — Black finishes developing, ready to fight for the d5- and c5-squares.",
           "Be2 — White develops toward the bind.",
           "Be6 — the bishop challenges the d5-knight.",
-          "O-O — White castles.",
+          "O-O — White castles; the struggle is now over the central light squares.",
           "a5 — Black cements b4 and the queenside."
         ],
         "arrows": [
@@ -19883,6 +19883,14 @@
             {
               "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -19990,11 +19998,11 @@
           "d6"
         ],
         "annotations": [
-          "Qe2 — White develops quietly.",
+          "Qe2 — a quiet, edgeless try that lets Black free his pieces.",
           "Bc5 — Black develops with bite.",
           "Be3 — White offers a trade.",
           "Bxe3 — Black takes off the dark bishop.",
-          "Qxe3 — White recaptures, no edge.",
+          "Qxe3 — recapturing into a symmetrical, dead-equal middlegame.",
           "d6 — free the bishop; Black is fully equal."
         ],
         "arrows": [
@@ -20122,9 +20130,9 @@
           "Nd4"
         ],
         "annotations": [
-          "O-O — White castles.",
-          "O-O — Black castles, fully developed.",
-          "Ne3 — White reroutes the knight.",
+          "O-O — White castles into the standard bind position.",
+          "…O-O — Black completes a harmonious setup, ready for the c-file.",
+          "Ne3 — the knight reroutes, but it surrenders the d4-square Black covets.",
           "Nd4 — Black seizes the d4 outpost."
         ],
         "arrows": [
@@ -20162,6 +20170,10 @@
             {
               "square": "c2",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -24260,7 +24272,7 @@
         ],
         "annotations": [
           "e4 — White stakes the centre.",
-          "…Nc6 — Black develops the knight.",
+          "…Nc6 — Black develops, eyeing the d4-square and central play.",
           "c3 — White prepares b4.",
           "…h6 — Black makes luft.",
           "b4 — White expands on the queenside.",
@@ -24281,7 +24293,13 @@
         ],
         "arrows": [
           [],
-          [],
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           [],
           [],
@@ -24306,6 +24324,10 @@
             {
               "square": "b8",
               "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
@@ -27283,7 +27305,7 @@
         "annotations": [
           "Be3 develops and shores up d4.",
           "…Qh5 swings the queen to an active post, eyeing the kingside.",
-          "Nbd2 develops.",
+          "Nbd2 — White completes development, trying to consolidate the extra pawn.",
           "…Bd6 — the dark bishop takes aim along the b8-h2 diagonal.",
           "h3 makes luft.",
           "…Rg8 lifts the rook toward the g-file — Black’s pieces are all active, full compensation for the pawn. Double-edged."
@@ -28220,9 +28242,9 @@
           "Nc6"
         ],
         "annotations": [
-          "Bd2 blocks the check.",
+          "Bd2 — White must block the check — another tempo Black banks.",
           "…O-O — Black is already better developed thanks to White's chase.",
-          "Bc4 develops.",
+          "Bc4 — White develops, but Black already leads in piece activity.",
           "…Nc6 hits the weak e5-pawn; Black surrounds it with the initiative White handed over."
         ],
         "title": "Alekhine: Collect the Chase's Tempi",
@@ -28331,9 +28353,9 @@
           "c5"
         ],
         "annotations": [
-          "Nc3 develops.",
+          "Nc3 — White develops; Black matches calmly, carrying no weakness.",
           "…e6 supports a future …d5.",
-          "Be2 develops.",
+          "Be2 — a modest post; White has nothing concrete against Black's solid setup.",
           "…c5 strikes d4 and frees Black's game entirely; once the tension resolves Black has a sound structure with no weaknesses and smooth development — a line that tried to trick Black into passivity, refuted into comfortable equality."
         ],
         "title": "Alekhine: Simplified Safety",
@@ -31170,7 +31192,7 @@
         "annotations": [
           "e4 builds the big centre.",
           "…Ne8 reroutes toward d6 to blockade c4 and watch f5.",
-          "White castles.",
+          "O-O — White castles; the doubled c-pawns stay the long-term target.",
           "…Ba6 trains the light bishop on the weak c4-pawn — the blockade takes shape.",
           "f4 — White grabs more space, the very e4-f4 advance the blockade is built to contain.",
           "…Nd6 lands the knight on its blockade square. Knight d6 and bishop a6 both clamp the weak c4-pawn, and from d6 the knight also eyes e4 and f5."
@@ -32146,7 +32168,7 @@
         "annotations": [
           "Ne5 jumps to the central square.",
           "…Nxe5 trades the active knight off.",
-          "Rxe5 recaptures.",
+          "Rxe5 — the rook recaptures actively, but Black's c-file plan rolls on.",
           "…Rfc8 seizes the open c-file behind the queen on c7 — Black controls the only open road."
         ],
         "title": "Caro Exchange: Own the c-File",
@@ -32257,7 +32279,7 @@
         "annotations": [
           "b3 prepares the long-diagonal bishop.",
           "…c5 strikes at d4 — the freeing break the Two Knights invites.",
-          "Bb2 develops.",
+          "Bb2 — White completes the fianchetto; Black has the freeing break ready.",
           "…cxd4 opens the centre on Black's terms: the d4-pawn cramps White and the half-open c-file invites the rooks, while Black carries not a single weakness. Comfortable equality with by far the more purposeful pieces."
         ],
         "title": "Caro Two Knights: Strike with …c5",
