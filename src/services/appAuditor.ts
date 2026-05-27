@@ -941,6 +941,21 @@ export async function loadAuditStreamConfig(): Promise<AuditStreamConfig | null>
       }
     }
 
+    // Bake-in fallback: when this device has no per-profile config (the
+    // common case for beta testers), default to the build-time
+    // audit-stream URL + secret so streaming is ON everywhere with zero
+    // setup. Per-profile values (David's own device, set in Settings)
+    // still win. Empty baked secret (e.g. a preview build without the
+    // env var) leaves streaming off, as before.
+    if (!url || !secret) {
+      const bakedUrl = typeof __AUDIT_STREAM_URL__ === 'string' ? __AUDIT_STREAM_URL__ : '';
+      const bakedSecret = typeof __AUDIT_STREAM_SECRET__ === 'string' ? __AUDIT_STREAM_SECRET__ : '';
+      if (bakedUrl && bakedSecret) {
+        url = url || bakedUrl;
+        secret = secret || bakedSecret;
+      }
+    }
+
     streamConfigHydrated = true;
     cachedStreamConfig = url && secret ? { url, secret } : null;
     // Fresh config → give streaming another chance (the secret may have

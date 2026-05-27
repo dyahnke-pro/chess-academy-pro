@@ -1321,7 +1321,12 @@ class VoiceService {
       audio.onended = (): void => finish(true);
       audio.onerror = (): void => {
         const err = audio.error;
-        this.lastSpeakDiagnostic.error = `element playback error: code=${err?.code ?? '?'} ${err?.message ?? ''}`.trim();
+        const detail = `element playback error: code=${err?.code ?? '?'} ${err?.message ?? ''}`.trim();
+        this.lastSpeakDiagnostic.error = detail;
+        // Observability: this is the iOS-audio failure mode. Emit a
+        // streamed audit so it surfaces in the audit-stream / cron watch
+        // instead of dying silently on the device.
+        this.logElementPlaybackFailure(detail, isObjectUrl);
         finish(false);
       };
       // A stop() (or rapid Next-press) between entry and here makes this
@@ -1340,10 +1345,32 @@ class VoiceService {
           }
         })
         .catch((err: unknown) => {
-          this.lastSpeakDiagnostic.error = `element play() rejected: ${err instanceof Error ? err.message : String(err)}`;
+          const detail = `element play() rejected: ${err instanceof Error ? err.message : String(err)}`;
+          this.lastSpeakDiagnostic.error = detail;
+          this.logElementPlaybackFailure(detail, isObjectUrl);
           finish(false);
         });
     });
+  }
+
+  /** Emit a streamed `tts-failure` audit when the iOS `<audio>`-element
+   *  path fails (decode error, autoplay rejection). This is the exact
+   *  failure mode behind "no audio on older iPhones," so it must reach
+   *  the audit-stream / cron watch rather than dying on-device. */
+  private logElementPlaybackFailure(detail: string, isObjectUrl: boolean): void {
+    void import('./appAuditor').then(({ logAppAudit }) => {
+      void logAppAudit({
+        kind: 'tts-failure',
+        category: 'subsystem',
+        source: 'voiceService.playViaElement',
+        summary: `iOS element playback failed: ${detail.slice(0, 80)}`,
+        details: JSON.stringify({
+          detail,
+          srcKind: isObjectUrl ? 'object-url' : 'tts-url',
+          userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
+        }),
+      });
+    }).catch(() => undefined);
   }
 
   /** Stream Polly's MP3 chunks into a `<audio>` element via

@@ -23,7 +23,7 @@ function resolveBuildId(): string {
 }
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), ['VITE_', 'ANTHROPIC_', 'DEEPSEEK_']);
+  const env = loadEnv(mode, process.cwd(), ['VITE_', 'ANTHROPIC_', 'DEEPSEEK_', 'AUDIT_']);
   const buildId = resolveBuildId();
   return {
   envPrefix: ['VITE_', 'ANTHROPIC_', 'DEEPSEEK_'],
@@ -31,6 +31,17 @@ export default defineConfig(({ mode }) => {
     __ANTHROPIC_KEY__: JSON.stringify(env.ANTHROPIC_KEY || process.env.ANTHROPIC_KEY || ''),
     __DEEPSEEK_KEY__: JSON.stringify(env.DEEPSEEK_KEY || process.env.DEEPSEEK_KEY || ''),
     __BUILD_ID__: JSON.stringify(buildId),
+    // Baked-in audit-stream defaults so EVERY device (beta testers
+    // included) streams audit events without per-device opt-in. The
+    // secret ships in the client bundle by design (David's call,
+    // 2026-05-27) — it's a low-stakes shared secret gated by a per-IP
+    // rate limit, traded for zero-setup tester telemetry. A device that
+    // has its own auditStreamUrl/Secret in profile prefs still overrides
+    // these (see loadAuditStreamConfig).
+    __AUDIT_STREAM_URL__: JSON.stringify(
+      env.AUDIT_STREAM_URL || process.env.AUDIT_STREAM_URL || 'https://chess-academy-pro.vercel.app/api/audit-stream',
+    ),
+    __AUDIT_STREAM_SECRET__: JSON.stringify(env.AUDIT_STREAM_SECRET || process.env.AUDIT_STREAM_SECRET || ''),
   },
   plugins: [
     react(),
