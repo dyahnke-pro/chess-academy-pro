@@ -138,10 +138,10 @@
       "style": "Tactical, Central",
       "overview": "Listen carefully — this is how Danya turns a 1500 into a 2200 over six months. The opening gets its name from the 1824 London–Edinburgh correspondence match (the Edinburgh club played 3.d4 and Scotland claimed the line); it was dismissed as 'too simple' for a century, then Kasparov revived it in the 1990s — including against Karpov in 1990 — proving the modern engines wrong about its supposed harmlessness. On move three, while everyone else is still arranging their c3/d3 quiet-life Italian, you play 3.d4 and FORCE the conversation. Black either takes (3...exd4 — that's the whole opening) or refuses (in which case they just lose a pawn). After 4.Nxd4 your knight sits on the most centralized square on the board, your queen is one step from d-file action, and Black has to choose between Bc5 (sharp, hits f2), Nf6 (solid, hits e4), or one of two suicide notes labelled Qh4+ and Qf6.",
       "keyIdeas": [
-        "Your knight on d4 is the prize, not a piece in the way. It eyes b5, c6, e6, f5, and most importantly — it's the piece Black's Bc5 attacks, which means every Black setup costs them a tempo dancing around it. Don't trade it lightly: Nxc6 only when bxc6 leaves Black wrecked.",
-        "The c3 + Be3 prison. After 5...Qf6 (or 5...Qh4 or any active queen), you play 6.c3 — not for d4 (that's already gone) but to seal the b4-square and prepare an eventual b3/Bb2 or Na3-c2 manoeuvre. The c3-pawn looks tiny; it's actually doing the work of two pieces.",
-        "When the Bxd4 trade happens — and it almost always does — recapture with the c-pawn. cxd4 gives you a protected pawn duo on d4-e4 and opens the c-file for your rook. Bxd4 (the bishop recapture) looks active but loses the pawn duo and the structure.",
-        "The f4 push is your attacking signal. You only play it AFTER castling short, AFTER both sides have committed pieces, and ONLY when Black has played ...d6 (locking in his light-squared bishop). Once f4 lands, the f-file becomes your invasion lane — rook lifts to f3, knight reroutes via Nd2-f1-g3, and Black's king starts sweating."
+        "The Scotch's whole point: 3.d4 forces the centre open immediately, trading the slow maneuvering of 1.e4 e5 for an open, piece-active game where White's central control speaks from move three.",
+        "The knight on d4 is the prize. Centralized, it eyes b5, c6, e6 and f5, and every Black setup spends tempo dancing around it. Don't trade it lightly — make Black pay for it.",
+        "The c3 + Be3 setup is the glue: c3 seals b4 and braces d4, Be3 reinforces the knight. Then Bc4 aims at f7 and f4 opens the kingside — the quiet centre becomes an attack.",
+        "Against 4…Nf6, Nxc6 + e5 (the Mieses) doubles Black's pawns and grabs space; the same Nxc6 trick in the Four Knights leaves Black with an isolated d-pawn. Structure is your long-term target."
       ],
       "traps": [
         "4...Qh4? is the classic amateur mistake — Black thinks they're 'attacking e4 and threatening Qxh2'. Play 5.Nb5! immediately. Now ...Qxe4+ is forced (the only move that doesn't lose to Nxc7+), and after 6.Be2 you're developing pieces with tempo. Black bought one pawn for the next ten moves of misery.",
@@ -153,54 +153,26 @@
       ],
       "variations": [
         {
-          "name": "Classical 4...Bc5",
-          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O O-O d6 f4 Bb6 Na3 Nxd4 Bxd4 Bd7 Qd2 Bxd4+ cxd4 d5 e5 Qb6",
-          "explanation": "Black's most ambitious answer — the Bc5 stares at f2 while Qf6 hits the d4-knight from behind. Watch the move order: 5.Be3 defends the knight first, then 6.c3 props up d4 against the Bc5, then 7.Bc4 develops with tempo on the queen-protected f7-pawn. Both sides castle short and Black plays ...d6 to free the queen. Now comes 9.f4! — the signal move. Black's natural ...Bb6 (clearing c5) lets you play the signature 10.Na3 rerouting toward c2 or c4. The bishop-trade sequence Nxd4 Bxd4 Bxd4+ cxd4 leaves you with a beautiful e4-d4 pawn duo, both bishops gone for Black's side too, and the e5 push on the cards. By move 14 your queen is on d2 ready to swing to the kingside; Black's queen is exiled to b6 with no follow-up. The position teaches itself from here.",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Scotch_Game"
-          ]
+          "name": "4...Nf6 Mieses Variation",
+          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Ba6 b3 g6 Bb2 Bg7 g3 O-O",
+          "explanation": "Against 4…Nf6 White plays Nxc6 to double Black's pawns, then e5 to grab space and a bind. White expands with c4 and the fianchetto, pressing the damaged structure — classic Scotch positional pressure.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 60,
+            "score": 58,
+            "source": "lichess /player"
+          }
         },
         {
-          "name": "4...Nf6 Schmidt Variation",
-          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Ba6 b3 g6 Ba3 Nb4 Bb2 Bg7 a3 Nd5 Nd2 O-O O-O-O Rfe8",
-          "explanation": "The most principled defence — Black hits e4 immediately. Now the lines branch sharply: 5.Nxc6 bxc6 6.e5! is the move that defines the Schmidt. The e5-pawn kicks the f6-knight and Black plays 6...Qe7 attacking e5 (the queen on e7 is awkward but forced — Nd5 hangs on e5). Your 7.Qe2 pins the knight against the queen, then 8.c4 kicks the knight to b6 (passive) or back to b4 (clumsy). Pay attention to the long manoeuvring sequence: Black aims for ...g6/...Bg7/...Ba6 trying to make sense of the doubled c-pawns, but every move Black plays, the c6-pawn just sits there as a permanent target. White castles long, opens queenside files with b3+Bb2, and grinds the c6-pawn down the file. The lesson: in the Schmidt, your structural advantage isn't a feeling — it's a pawn on c6 that never goes away.",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Scotch_Game"
-          ]
-        },
-        {
-          "name": "4...Qh4 Aggressive Line",
-          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Qxe4+ Be2 Bb4+ c3 Ba5 O-O Nge7 Nd2 Qg6 b4 a6 Na3 Bb6 Nac4 Ba7",
-          "explanation": "Black's most aggressive — and most punished — try. 4...Qh4 looks like it's hitting e4 AND threatening Qxh2#, but watch what 5.Nb5! does: it threatens Nxc7+ forking king and rook AND Nd6+ disrupting development. Black has to grab the pawn with 5...Qxe4+, accept 6.Be2 Bb4+ 7.c3 Ba5 (the only square that doesn't lose the bishop), and then watch what happens to your knight. 8.O-O Nge7 9.Nd2 Qg6 — Black's queen running for cover — 10.b4! kicking the bishop further, 11.Na3 (the knight comes back into play), 12.Nac4 — the knight has danced from b1 to a3 to c4 and now eyes b6/d6/e5. Meanwhile Black's queen and dark-squared bishop are still chasing safe squares. You're up 3-4 tempos of development for one pawn — that's not a gambit, that's a swindle paying dividends.",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Scotch_Game"
-          ]
-        },
-        {
-          "name": "Mieses Variation 4...Nf6 5.Nc3",
-          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6",
-          "explanation": "When you don't want the forcing Nxc6/e5 lines, the Mieses keeps more pieces on the board. 5.Nc3 develops and dares Black to play 5...Bb4 (almost forced — the only way to challenge your e4-pawn). Now comes the cute sequence: 6.Nxc6 (NOW we take, with the bishop committed) bxc6 7.Bd3 — and after 7...d5 8.exd5 cxd5, Black has an isolated d5-pawn. That's the whole Mieses: trade your way into a position where Black has the IQP and you have the pieces aimed at it. The 9.O-O O-O 10.Bg5 sequence pins the f6-knight which guards d5 — and the d5-pawn falls or weakens. Slower and more positional than the mainlines, but the technique is forgiving.",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Scotch_Game"
-          ]
-        },
-        {
-          "name": "Scotch Four Knights 4...Nf6 5.Nxc6",
-          "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Qe7 Qe2 Nd5 c4 Nb6 Nc3 Qe6 Qe4 Bb7 Bd3",
-          "explanation": "Danya's main speedrun line because it's nearly forced and the resulting structure is automatic. After 5.Nxc6 bxc6 6.e5 Qe7 7.Qe2, Black's only useful retreat for the f6-knight is 7...Nd5. Now 8.c4! kicks again — and Black has to choose between Nb6 (where it sits passively) or back to b4 (awkward). After 8...Nb6 9.Nc3 Black develops 9...Qe6 trying to trade queens, but 10.Qe4! refuses the trade AND defends c4 AND eyes the kingside. The position by move 12 is positional gold: White has a cramping e5-pawn, both knights deployed harmoniously, no weaknesses to defend; Black has doubled c-pawns and a queen that's already done two laps. From here you castle, double rooks on the e-file, and push f4-f5 when the time is right. The whole plan is on autopilot — exactly why Danya picks this line dozens of times per speedrun.",
-          "sources": [
-            "concept:pos-development",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Scotch_Game"
-          ]
+          "name": "Scotch Four Knights",
+          "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 d5 exd5 cxd5 O-O O-O Bg5 c6 Qf3 Be7",
+          "explanation": "When both knights come out first, White still breaks with d4. Nxc6 saddles Black with doubled pawns and after the trades White pins with Bg5 and pressures the isolated d5-pawn — the Scotch's low-risk pull via a different move order.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 85,
+            "score": 57,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
@@ -209,7 +181,14 @@
         "concept:pos-development",
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/Scotch_Game"
-      ]
+      ],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 120,
+        "score": 60,
+        "source": "lichess /player",
+        "taughtUrl": "https://www.youtube.com/@DanielNaroditskyGM"
+      }
     },
     {
       "id": "pro-naroditsky-alapin",
