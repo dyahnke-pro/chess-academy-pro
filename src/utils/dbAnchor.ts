@@ -16,8 +16,42 @@
 
 import { Chess } from 'chess.js';
 import openingsDb from '../data/openings-lichess.json';
+import mastersDb from '../../public/data/openings-masters-db.json';
 
 let prefixSet: Set<string> | null = null;
+
+// ── Masters DB as a grounding source (David 2026-05-27) ─────────────────────
+// "We teach how the masters play the line." A line is ALSO grounded when every
+// ply of its opening spine is a move masters actually played from that exact
+// position — read from openings-masters-db.json (FEN-keyed, first-4-fields).
+// This sits alongside the lichess-subset prefix anchor: a beat is grounded if
+// EITHER source backs it ≥ MIN_DB_ANCHOR_PLY, so existing lessons keep their
+// lichess anchor while new masters-sourced lines (e.g. the Jobava …c5/…Bf5/…a6
+// sidelines the lichess subset lacks) anchor on real master play instead.
+type MastersPositions = Record<string, Array<{ san: string }>>;
+const mastersPositions: MastersPositions =
+  (mastersDb as { positions?: MastersPositions }).positions ?? {};
+
+/** Position-FEN key the masters DB is keyed by: first 4 FEN fields. */
+function positionKey(fen: string): string {
+  return fen.trim().split(/\s+/).slice(0, 4).join(' ');
+}
+
+/** Longest run of opening plies (from move 1) where each move is one masters
+ *  actually played from that exact position in openings-masters-db.json. */
+export function longestMastersAnchorPly(sans: string[]): number {
+  const c = new Chess();
+  let count = 0;
+  for (const san of sans) {
+    const key = positionKey(c.fen());
+    let mv;
+    try { mv = c.move(san); } catch { break; }
+    const moves = mastersPositions[key];
+    if (moves && moves.some((m) => m.san === mv.san)) count += 1;
+    else break;
+  }
+  return count;
+}
 
 /** Lazily build the set of every move-prefix present in the canonical DB. */
 export function dbPrefixSet(): Set<string> {
@@ -68,7 +102,7 @@ export function longestAnchorPly(sans: string[]): number {
 export function maxAnchorPly(beatMoveLists: string[][]): number {
   let max = 0;
   for (const moves of beatMoveLists) {
-    const a = longestAnchorPly(moves);
+    const a = Math.max(longestAnchorPly(moves), longestMastersAnchorPly(moves));
     if (a > max) max = a;
   }
   return max;

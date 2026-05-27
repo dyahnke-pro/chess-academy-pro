@@ -2,3 +2,6 @@
 # The compact ranking summary (rankings.json) IS committed for the build decision.
 games/
 wave1.json
+
+# Full-PGN per-player dumps (re-derivable via scripts/harvest-pro-full-pgns.mjs)
+full-pgns/
