@@ -276,6 +276,11 @@ const PLAN_SUSPECT_BASELINE = new Set<string>([
   'mp-dutchdefence-main::2:a5',         // masters: Qf7/e5/Nc6/c6 — queenside luft, sound
   'mp-dutchdefence-classical::5:Ne4',   // masters: Nbd7/Bh5/a5 — the Stonewall-style Ne4, sound
   'mp-retiopening-antislav::3:Bf4',     // masters: Nc3/Nd4 — a sound developing move, ≤120cp
+  // More pre-existing plan-demo moves masters pass over; all pass 7b (≤120cp).
+  'mp-alekhinedefence-fourpawns::2:f6',   // masters: Be7/Bg4/Qd7/Bb4 — sound
+  'mp-siciliansveshnikov-antisvesh::1:Qe2', // masters: Re1/a3 — sound
+  'mp-siciliansveshnikov-chelyabinsk::5:a5', // masters: Bxd5 — sound
+  'mp-siciliansveshnikov-main::2:Qd3',    // masters: a4/h4/Be2/g3 — sound
 ]);
 
 // Soundness baseline for plan lines (7b) — same rationale as SOUNDNESS_BASELINE
