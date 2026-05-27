@@ -21664,7 +21664,13 @@
           "a3",
           "O-O",
           "b4",
-          "Be6"
+          "Be6",
+          "Rb1",
+          "f6",
+          "d3",
+          "a5",
+          "b5",
+          "Nd4"
         ],
         "annotations": [
           "O-O — White castles, the reversed-Dragon setup complete.",
@@ -21672,12 +21678,20 @@
           "a3 — White prepares the b4 expansion.",
           "…O-O — Black castles.",
           "b4 — the queenside pawn storm rolls forward.",
-          "…Be6 — Black develops the bishop to e6."
+          "…Be6 — Black develops the bishop to e6.",
+          "Rb1 — the rook slides in behind the b-pawn, loading the queenside lever before it fires.",
+          "…f6 — Black props up the e5-pawn and frees f7, but it does nothing against the queenside roll.",
+          "d3 — quietly underpinning e4 and c4 so the expansion needs no pieces left behind to babysit the centre.",
+          "…a5 — striking at b4 to try to freeze the expansion before it gathers speed.",
+          "b5 — the lever lands: the pawn jabs at c6, prising open the queenside exactly where White already presses.",
+          "…Nd4 — Black centralizes the knight for activity, but White's queenside initiative rolls on down the half-open b-file."
         ],
         "sources": [
           "concept:pos-center",
           "concept:pos-space",
-          "https://en.wikipedia.org/wiki/English_Opening"
+          "https://en.wikipedia.org/wiki/English_Opening",
+          "concept:att-queenside-attack",
+          "concept:pos-open-file"
         ],
         "learnCues": [
           "O-O — reversed-Dragon setup",
@@ -21685,9 +21699,21 @@
           "a3 — prepare b4",
           "O-O — castle",
           "b4 — the queenside storm",
-          "Be6 — develop the bishop"
+          "Be6 — develop the bishop",
+          "Rb1 — load the b-pawn lever",
+          "f6 — Black bolsters e5",
+          "d3 — underpin the centre",
+          "a5 — Black hits b4",
+          "b5 — the lever lands, lines open",
+          "Nd4 — Black centralizes"
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
@@ -21757,6 +21783,86 @@
             },
             {
               "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
@@ -22349,7 +22455,15 @@
           "Nd7",
           "Nf1",
           "a5",
-          "h4"
+          "h4",
+          "b4",
+          "N1h2",
+          "a4",
+          "a3",
+          "bxa3",
+          "bxa3",
+          "Ba6",
+          "Bg5"
         ],
         "annotations": [
           "…b5 — Black expands on the queenside.",
@@ -22357,12 +22471,21 @@
           "…Nd7 — the f6-knight is shoved back to d7.",
           "Nf1 — the knight begins its trek to g4.",
           "…a5 — Black pushes on the queenside.",
-          "h4 — White starts the kingside pawn storm."
+          "h4 — White starts the kingside pawn storm.",
+          "…b4 — Black strikes first on the queenside, the standard KIA race: he attacks where White is quiet.",
+          "N1h2 — the knight begins its trademark reroute Nf1-h2-g4, steering toward the kingside attack.",
+          "…a4 — Black rolls the queenside pawns on, fixing White's structure on that wing.",
+          "a3 — White steadies the queenside so the pieces stay free for the kingside push.",
+          "…bxa3 — opening the b-file, but it costs Black the time the kingside attack will exploit.",
+          "bxa3 — recapturing; the queenside is stable and the kingside is now White's to storm.",
+          "…Ba6 — offering to trade the light bishops to ease Black's cramped position.",
+          "Bg5 — the dark bishop swings into the attack, eyeing the kingside dark squares as the storm gathers."
         ],
         "sources": [
           "concept:att-kingside-storm",
           "concept:pos-development",
-          "https://en.wikipedia.org/wiki/King's_Indian_Attack"
+          "https://en.wikipedia.org/wiki/King's_Indian_Attack",
+          "concept:pos-space"
         ],
         "learnCues": [
           "b5 — queenside expansion",
@@ -22370,9 +22493,31 @@
           "Nd7 — shoved back",
           "Nf1 — reroute toward g4",
           "a5 — push on the queenside",
-          "h4 — the kingside storm"
+          "h4 — the kingside storm",
+          "b4 — Black's queenside race",
+          "N1h2 — reroute toward g4",
+          "a4 — Black rolls on",
+          "a3 — steady the queenside",
+          "bxa3 — opens the b-file",
+          "bxa3 — queenside stable",
+          "Ba6 — Black trades bishops",
+          "Bg5 — bishop joins the attack"
         ],
         "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "h2",
+              "to": "g4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           [],
           [],
@@ -22442,6 +22587,90 @@
             },
             {
               "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
