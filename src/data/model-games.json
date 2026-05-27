@@ -3654,5 +3654,389 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mg-pro-ericrosen-london-b2grab",
+    "openingId": "pro-ericrosen-london",
+    "white": "IMRosen",
+    "black": "mattisan2011",
+    "whiteElo": 2879,
+    "blackElo": 2696,
+    "result": "1-0",
+    "year": 2026,
+    "event": "Chess.com Blitz",
+    "studentSide": "white",
+    "pgn": "d4 d5 Bf4 Nf6 Nf3 c5 e3 Nc6 Nbd2 Qb6 dxc5 Qxb2 Rb1 Qc3 Bb5 e6 O-O Be7 e4 O-O e5 Nd7 Nb3 Qb4 Nfd4 Nxd4 Nxd4 Qxc5 Bd3 g6 Nb3 Qc7 Re1 Nc5 Nxc5 Bxc5 Qg4 Re8 h4 f5 exf6 e5 Qg5 Bd6 Bxg6 Rf8 Bxe5 Bxe5 Bf7+ Kxf7 Qg7+ Ke6 Qxc7",
+    "sources": [
+      "https://www.chess.com/member/imrosen",
+      "concept:pos-development"
+    ],
+    "overview": "Eric Rosen with White, showing the London answer to Black's most testing try — …c5 and …Qb6 hitting b2. Rosen ignores the grab: 6.dxc5 Qxb2 7.Rb1 chases the queen, and the two tempi Black spends grabbing a pawn become a crushing lead in development. With the centre rolling forward (e4-e5) and the queen still homeless, Rosen builds a kingside attack that ends with a bishop sacrifice winning the queen outright.",
+    "middlegameTheme": "The …Qb6/…Qxb2 pawn-grab refuted by rapid development and a central break.",
+    "lessonSummary": "Don't fear the b2-grab — Rb1, develop with tempo, and let the centre and the open b-file do the work.",
+    "criticalMoments": [
+      {
+        "moveNumber": 7,
+        "color": "white",
+        "fen": "r1b1kb1r/pp2pppp/2n2n2/2Pp4/5B2/4PN2/PqPN1PPP/1R1QKB1R b Kkq - 1 7",
+        "annotation": "Rb1 — the whole point. Black's queen has to scramble back from b2, and every tempo she loses is a tempo White pours into the centre and the open b-file. The pawn meant nothing; the time means everything.",
+        "concept": "Greed Punished",
+        "highlights": [
+          {
+            "square": "b1",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 25,
+        "color": "white",
+        "fen": "r1b2rk1/ppq2B1p/5P2/3pb1Q1/7P/8/P1P2PP1/1R2R1K1 b - - 1 25",
+        "annotation": "Bf7+ rips the king into the open. After …Kxf7 the queen check on g7 wins Black's queen on c7 — the development lead Rosen banked on move 7 finally collects.",
+        "concept": "The Bishop Sacrifice",
+        "highlights": [
+          {
+            "square": "f7",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-london-bishoptrade",
+    "openingId": "pro-gothamchess-london",
+    "white": "GothamChess",
+    "black": "BashirovKemal",
+    "whiteElo": 2791,
+    "blackElo": 2586,
+    "result": "1-0",
+    "year": 2024,
+    "event": "Chess.com Blitz",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 Bf4 d5 e3 c5 Nf3 Nc6 Nbd2 Bf5 dxc5 e6 Nd4 Bxc5 Nxf5 exf5 c3 O-O Bd3 Ne4 O-O Qf6 Nf3 Rfe8 Qb3 Bb6 Qxd5 Rad8 Qb5 Nc5 Bg5 Qg6 Bxd8 Rxd8 Bc2 Ne7 Rad1 Rc8 Rd2 h6 Rfd1 a6 Qf1 Bc7 b4 Ne4 Bxe4 fxe4 Nd4 Qh5 g3 Nd5 Nf5 Qxf5 Rxd5 Qf6 c4 Be5 c5 Bc3 Qc4 Kh7 Qxe4+",
+    "sources": [
+      "https://www.chess.com/member/gothamchess",
+      "concept:pos-bishop-pair"
+    ],
+    "overview": "Levy Rozman with the London, against the …Bf5 setup club players reach for to free their bad bishop. He doesn't allow it: Nd4 then Nxf5 trades the knight for that bishop, leaving Black with a passive piece and a weak d5-pawn. Once the pawn falls to Qxd5, it's a clean technical grind — the London's harmonious pieces converting a structural edge into a won middlegame.",
+    "middlegameTheme": "Trade off the …Bf5, win the d5-pawn, convert the structural edge.",
+    "lessonSummary": "Exchange the bishop that frees Black, target the central pawn, and grind — the London rewards patience over fireworks.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "r2qk2r/pp3ppp/2n1pn2/2bp1N2/5B2/4P3/PPPN1PPP/R2QKB1R b KQkq - 0 8",
+        "annotation": "Nxf5 — the London move. Black developed the light bishop outside the pawn chain to escape its bad-bishop fate; White trades it off and leaves Black with the worse minor piece and a brittle centre.",
+        "concept": "Trading the Rival Bishop",
+        "highlights": [
+          {
+            "square": "f5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 14,
+        "color": "white",
+        "fen": "r3r1k1/pp3ppp/1bn2q2/3Q1p2/4nB2/2PBPN2/PP3PPP/R4RK1 b - - 0 14",
+        "annotation": "Qxd5 collects the central pawn. With the better bishop gone and the structure cracked, Black has no compensation — from here it's pure technique.",
+        "concept": "The d5-Pawn Falls",
+        "highlights": [
+          {
+            "square": "d5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-scandinavian-qa5",
+    "openingId": "pro-gothamchess-scandinavian",
+    "white": "FarewellToKings2112",
+    "black": "GothamChess",
+    "whiteElo": 2828,
+    "blackElo": 2916,
+    "result": "0-1",
+    "year": 2025,
+    "event": "Chess.com Blitz",
+    "studentSide": "black",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Ne5 c6 Bc4 e6 g4 Bg6 h4 Nbd7 Nxd7 Nxd7 h5 Be4 Rh3 Bd5 Bd3 c5 dxc5 Qxc5 Nxd5 Qxd5 Be3 a6 Qe2 Bc5 Bxc5 Nxc5 Bc4 Qg2 Rg3 Qh1+ Qf1 Qe4+ Qe2 O-O-O Qxe4 Nxe4 Re3 Nf6 Be2 Nd5 Re4 g6 O-O-O g5 Red4 h6 Bf3 Nf4 c3 Rxd4 Rxd4 Kc7 Kc2 f5 a4 a5 b4 b6 Rc4+ Kd7 Rd4+ Kc7 Rc4+ Kd6 Rd4+ Ke5 Rc4 fxg4 Bxg4 Rf8 Rc6 Nd5 Rxe6+ Kf4 f3 axb4 cxb4 Nxb4+ Kb3 Nd5 Rxh6 Ne3 Rxb6 Nxg4 fxg4 Kxg4 h6 Kh5 a5 g4 a6 g3 Rb5+ Kxh6 Rb4 Kg5 Rb5+ Kg4 Ka4 g2 Rb4+ Rf4 Rxf4+ Kxf4 a7 g1=Q a8=Q Qa1+",
+    "sources": [
+      "https://www.chess.com/member/gothamchess",
+      "concept:pawn-passed"
+    ],
+    "overview": "Levy Rozman with the Black side of his Scandinavian, the …Qa5 main line. White throws the whole kitchen sink — g4, h4, h5 — at the light-squared bishop, but the …Bf5-g6 retreat weathers it and Black emerges with a sound structure. The game becomes a long technical battle that Black steers into a king-and-pawn race, and a passed pawn promotes to settle it. The lesson: the Scandinavian's solidity outlasts the attack.",
+    "middlegameTheme": "Survive the kingside pawn-storm with …Bg6, then out-technique White in the endgame.",
+    "lessonSummary": "The …Qa5 Scandinavian is built to absorb aggression — tuck the bishop on g6, trade down, and win the resulting endgame.",
+    "criticalMoments": [
+      {
+        "moveNumber": 8,
+        "color": "black",
+        "fen": "rn2kb1r/pp3ppp/2p1pnb1/q3N3/2BP2P1/2N5/PPP2P1P/R1BQK2R w KQkq - 1 9",
+        "annotation": "…Bg6 — the bishop steps out of the g4-h5 pawn-storm and keeps eyeing the b1-h7 diagonal. White's flank pawns look menacing, but they're also weaknesses for later; Black's pieces stay coordinated.",
+        "concept": "Weathering the Storm",
+        "highlights": [
+          {
+            "square": "g6",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 58,
+        "color": "black",
+        "fen": "8/P7/8/8/K4k2/8/8/6q1 w - - 0 59",
+        "annotation": "…g1=Q. The long grind pays off — Black's passed pawn costs White the rook to stop it, and a new queen ends the game. The Scandinavian's solidity converted into a winning endgame.",
+        "concept": "The Passed Pawn Queens",
+        "highlights": [
+          {
+            "square": "g1",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-naroditsky-fantasy-caro-f7sac",
+    "openingId": "pro-naroditsky-fantasy-caro",
+    "white": "DanielNaroditsky",
+    "black": "Parhamov",
+    "whiteElo": 3171,
+    "blackElo": 3175,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Chess.com Blitz",
+    "studentSide": "white",
+    "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Nf6 Bc4 exd4 O-O Bc5 Ng5 O-O Nxf7 Rxf7 Bxf7+ Kxf7 Qh5+ Kg8 Qxc5 Nxe4 Qc4+ Qd5 Qxd5+ cxd5 Bf4 Nc6 Nd2 Bf5 Nb3 Nf6 Bg5 Bxc2 Bxf6 gxf6 Rxf6 d3 Re1 a5 Rf2 a4 Na1 Nd4 Re5 Rd8 Kf1 Bb1 Ke1 Bxa2 Kd2 Bc4 Rf4 Nc6 Rg5+ Kh8 Rf7 Re8 Rxb7 Re2+ Kd1 h6 Rg6 Nd4 Rxh6+ Kg8 Rd6 Re8 Kd2 Nf5 Rg6+ Kh8 Kc3 Rc8 Kd2 Re8 Rf6 Nd4 Rf2 Nc6 Rc7 Ne5 h3 Bb5 b3 a3 Ra7 d4 Rxa3 Nc6 Kd1 Re3 Ra8+ Kg7 Raf8 Ne5 R8f5 Bc6 Rg5+ Kh6 Rxe5 Rxe5 Kd2 Bb5 b4 Kg5 Nb3 Rd5 Nc5 Kh4 Rf3 Re5 Nxd3 Re3 Rxe3 dxe3+ Kxe3",
+    "sources": [
+      "https://www.chess.com/member/danielnaroditsky",
+      "concept:tac-sacrifice"
+    ],
+    "overview": "Naroditsky's Fantasy Variation in full flow — 3.f3 builds the broad e4/d4 centre, and when Black grabs space with …e5 and …exd4, Danya pounces. Ng5 and a knight sacrifice on f7 tear open the king: 9.Nxf7 Rxf7 10.Bxf7+ Kxf7 11.Qh5+ and the queen harvests the loose pieces. By move 12 White is up material with Black's king stranded in the centre, and the conversion is clinical.",
+    "middlegameTheme": "The big f3-centre, then a sacrifice on f7 to exploit the exposed king.",
+    "lessonSummary": "Build the centre with f3, and when Black overreaches in the open position, the f7-sacrifice is the punishment.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "rnbq1rk1/pp3Npp/2p2n2/2b5/2BpP3/8/PPP3PP/RNBQ1RK1 b - - 0 9",
+        "annotation": "Nxf7 — the thematic blow. Black's king has no shelter once the f7-pawn goes; the rook recapture only drags the king onto the open files where the queen waits.",
+        "concept": "The f7 Sacrifice",
+        "highlights": [
+          {
+            "square": "f7",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "rnbq2k1/pp4pp/2p2n2/2Q5/3pP3/8/PPP3PP/RNB2RK1 b - - 0 12",
+        "annotation": "Qxc5 — the dust settles with White up material and Black's king marooned on g8 with no pawns in front of it. The sacrifice was an investment; this is the dividend.",
+        "concept": "Material Recouped, King Exposed",
+        "highlights": [
+          {
+            "square": "c5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-naroditsky-grunfeld-d4pressure",
+    "openingId": "pro-naroditsky-grunfeld",
+    "white": "Little_Skib",
+    "black": "DanielNaroditsky",
+    "whiteElo": 2985,
+    "blackElo": 3134,
+    "result": "0-1",
+    "year": 2025,
+    "event": "Chess.com Blitz",
+    "studentSide": "black",
+    "pgn": "d4 Nf6 Nf3 g6 c4 Bg7 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 O-O Be2 c5 Be3 Qa5 O-O cxd4 cxd4 Bg4 Rb1 Nc6 d5 Bxf3 Bxf3 Ne5 Rxb7 Qxa2 Rxe7 a5 d6 Rad8 Be2 Qa3 Rc7 Rxd6 Bc5 Rxd1 Bxa3 Rxf1+ Kxf1 Rb8 f4 h5 fxe5 Bxe5 Rd7 Rb3 Bd6 Rb1+ Kf2 Bd4+ Kg3 Rb3+ Bf3 a4 Ra7 Bxa7 e5 a3 e6 fxe6 Kf4 a2 Kg5 a1=Q",
+    "sources": [
+      "https://www.chess.com/member/danielnaroditsky",
+      "concept:pawn-passed"
+    ],
+    "overview": "Naroditsky with the Grünfeld he teaches, against the Exchange Variation's big centre. The whole point of the opening is on display: Black lets White build the e4/d4 pawn duo, then chips at it — …c5, …Bg4 pinning the f3-knight, …cxd4 — until the centre is a target, not a strength. When it cracks, Black's pieces pour into White's position, win the b- and a-pawns, and race a passed a-pawn home to promote.",
+    "middlegameTheme": "Provoke the big centre, undermine it with …c5 and …Bg4, then counterattack on the queenside.",
+    "lessonSummary": "The Grünfeld bargain: hand White the centre, then prove it overextended — pressure d4, win material, and queen the passer.",
+    "criticalMoments": [
+      {
+        "moveNumber": 11,
+        "color": "black",
+        "fen": "rn3rk1/pp2ppbp/6p1/q7/3PP1b1/4BN2/P3BPPP/R2Q1RK1 w - - 1 12",
+        "annotation": "…Bg4 pins the knight that guards d4 — the Grünfeld's signature lever. White's proud centre is suddenly a liability, and the pawns on c3/d4 become the things Black plays against.",
+        "concept": "Pressure on d4",
+        "highlights": [
+          {
+            "square": "g4",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 34,
+        "color": "black",
+        "fen": "6k1/b7/3Bp1p1/6Kp/8/1r3B2/6PP/q7 w - - 0 35",
+        "annotation": "…a1=Q. The queenside counterplay the Grünfeld promises arrives in full — the a-pawn that survived every White attempt finally promotes, and the game is over.",
+        "concept": "The Counterattack Queens",
+        "highlights": [
+          {
+            "square": "a1",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-naroditsky-jobava-nb5",
+    "openingId": "pro-naroditsky-jobava-london",
+    "white": "DanielNaroditsky",
+    "black": "rezamahdavi2008",
+    "whiteElo": 3120,
+    "blackElo": 3026,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Chess.com Blitz",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 Nc3 d5 Bf4 e6 Nb5 Na6 e3 Be7 Nf3 O-O h3 Bd7 Be2 c5 Nc3 Qb6 Rb1 Nb4 O-O Nc6 Na4 Qa5 Nxc5 Bxc5 dxc5 Qxc5 c4 Rfd8 Rc1 Qa5 a3 dxc4 Bxc4 Be8 Qe2 Rac8 Rfd1 h6 Rxd8 Rxd8 Rd1 Ne7 Be5 Bc6 Bc3 Qc7 Ne5 Rxd1+ Qxd1 Bd5 Bd3 Ne4 Bxe4 Bxe4 Qd4 Bb1 Qxa7 Nc6 Qc5 Be4 f3 Bd5 e4 b6 Qe3 Ba2 Ng4 e5 b4 Be6 Nf2 Na7 a4 Nc8 b5 f6 Qd2 Nd6 Nd3 Nc4 Qf2 Qd6 Qe2 Qa3 Be1 Qxa4 f4 Qxb5 f5 Bf7 Nf2 Qc6 Qd3 b5 Bb4 Qb6 Qd7 Qe3 Qxb5 Nd2 Bxd2 Qxd2 Qd3 Qe1+ Qf1 Qe3 Qd1 Bc4 Qd8+ Kh7 Qd1 Bb5 Qf3 Qe1+ Kh2 Bc6 Qg3 Bxe4 Qg6+ Kh8 Ng4 Qf1 Qe8+ Kh7 Nxf6+ gxf6 Qe7+ Kh8 Qxf6+ Kh7 Qe7+ Kg8 Qe6+ Kh7 Qg6+ Kh8 Qxh6+ Kg8 Qe6+ Kh7 Qe7+ Kg8 Qg5+ Kf8 Qf6+ Kg8 Qg6+ Kh8 Qh5+ Kg8 Qg4+ Kf7 Qxe4 Kf6 Qh4+ Kxf5 Qh7+ Ke6 Qg8+ Qf7 Qxf7+ Kxf7 Kg3",
+    "sources": [
+      "https://www.chess.com/member/danielnaroditsky",
+      "concept:pos-initiative"
+    ],
+    "overview": "Naroditsky's Jobava London — d4, Nc3 and Bf4, the aggressive cousin of the classical London. The early Nb5 jab pokes at c7 and d6 and yanks Black's pieces to awkward squares before they're developed. Danya keeps the initiative with Na4 to win the bishop pair, presses on the d-file and the light squares, and slowly squeezes a higher-rated opponent until the position collapses in a long queen ending.",
+    "middlegameTheme": "The aggressive Nb5/Na4 knight tour, the bishop pair, and a long initiative on the light squares.",
+    "lessonSummary": "The Jobava trades the London quiet life for an early initiative — Nb5 and Na4 keep Black off balance from move four.",
+    "criticalMoments": [
+      {
+        "moveNumber": 4,
+        "color": "white",
+        "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 4",
+        "annotation": "Nb5 — the move that separates the Jobava from the sleepy London. It hits c7 and d6, forces …Na6 to a rotten square, and White is already dictating before Black has a piece out.",
+        "concept": "The Jobava Jab",
+        "highlights": [
+          {
+            "square": "b5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r4rk1/pp1bbppp/1qn1pn2/2pp4/N2P1B2/4PN1P/PPP1BPP1/1R1Q1RK1 b - - 7 12",
+        "annotation": "Na4 chases the queen and forks the c5-point; the knight trade nets White the bishop pair and a lasting pull on the light squares. Small edges, relentlessly pressed.",
+        "concept": "Winning the Bishop Pair",
+        "highlights": [
+          {
+            "square": "a4",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-naroditsky-scotch-be3",
+    "openingId": "pro-naroditsky-scotch",
+    "white": "DanielNaroditsky",
+    "black": "JakubPulpan",
+    "whiteElo": 3132,
+    "blackElo": 2974,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Chess.com Blitz",
+    "studentSide": "white",
+    "pgn": "e4 e5 d4 exd4 Nf3 Nc6 Nxd4 Bb4+ c3 Bc5 Be3 Bb6 Nd2 Nf6 Nc2 Bxe3 Nxe3 O-O Bd3 d5 O-O dxe4 Nxe4 Nxe4 Bxe4 Qxd1 Raxd1 Be6 Bd5 Rfd8 Bxe6 fxe6 Rfe1 Kf7 Kf1 Rxd1 Rxd1 Ke7 Re1 a5 Nf5+ Kf6 Ng3 Re8 Ne4+ Ke7 Ke2 b6 f4 h6 g4 Rd8 Ke3 Rd5 Re2 e5 f5 Kf7 h4 Rd8 g5 hxg5 hxg5 Ne7 Rf2 Nd5+ Kf3 Nf4 Kg4 Rh8 g6+ Ke7 Ng3 Kf6 Ne4+ Ke7 Rf1 Rh2 Kf3 Rxb2 Rd1 Nh5 Re1 Nf6 Ng3 e4+ Nxe4 Nxe4 Rxe4+ Kf6 Kg4 Rb5 Re6#",
+    "sources": [
+      "https://www.chess.com/member/danielnaroditsky",
+      "concept:pos-development"
+    ],
+    "overview": "Naroditsky's Scotch — 3.d4 blows the centre open immediately. Against …Bc5 he plays the principled Be3, offering to trade the active bishop and straighten his development. The middlegame trades into a same-coloured endgame where White's better king and more active rook and knight grind Black down on the kingside, the g-pawn rolls to g6, and the rook delivers mate on e6. A model of converting a small opening edge.",
+    "middlegameTheme": "Open the centre, neutralise …Bc5 with Be3, and convert a development edge into a winning endgame.",
+    "lessonSummary": "The Scotch opens the game on move three — trade into a better endgame and let activity do the rest.",
+    "criticalMoments": [
+      {
+        "moveNumber": 6,
+        "color": "white",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b5/3NP3/2P1B3/PP3PPP/RN1QKB1R b KQkq - 2 6",
+        "annotation": "Be3 — offering to trade Black's active …Bc5. White is happy to swap the dark-squared bishops: it leaves him a touch better developed with the half-open position favouring his pieces.",
+        "concept": "Be3 Challenges the Bishop",
+        "highlights": [
+          {
+            "square": "e3",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 47,
+        "color": "white",
+        "fen": "8/2p3p1/1p2RkP1/pr3P2/6K1/2P5/P7/8 b - - 4 47",
+        "annotation": "Re6 is mate. The endgame edge — better king, more active rook, the g6-pawn cramping Black — funnels into a mating net. The Scotch's small opening plus, banked all the way to checkmate.",
+        "concept": "Rook Delivers Mate",
+        "highlights": [
+          {
+            "square": "e6",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-naroditsky-vienna-gambit",
+    "openingId": "pro-naroditsky-vienna",
+    "white": "DanielNaroditsky",
+    "black": "GM_dmitrij",
+    "whiteElo": 3139,
+    "blackElo": 3102,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Chess.com Blitz",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nc3 Nc6 f4 exf4 Nf3 Nf6 e5 Nh5 d4 d6 Bb5 Bd7 O-O Be7 d5 Nb8 Bxd7+ Nxd7 e6 fxe6 Ng5 Bxg5 Qxh5+ g6 Qh3 e5 Ne4 Qe7 Bd2 O-O-O c4 Kb8 b4 h6 c5 Nf6 Nxf6 Qxf6 c6 Qf5 Qb3 e4 Qc4 f3 Qb5 b6 Bxg5 hxg5 Qa6 Qc8 Qxc8+ Rxc8 gxf3 Rce8 Rae1 e3 Re2 Rh4 Rfe1 Rxb4 Rxe3 Rc8 Re8",
+    "sources": [
+      "https://www.chess.com/member/danielnaroditsky",
+      "concept:att-kingside-storm"
+    ],
+    "overview": "Naroditsky's Vienna Gambit. After 3.f4 Black takes on f4, and 5.e5 punches a pawn into Black's face, gaining space and kicking the f6-knight to the rim. White castles into a powerful centre, throws in e6 to crack the kingside, and Qxh5+ collects the offside knight. With a clean extra piece and the safer king, Danya converts against a strong opponent.",
+    "middlegameTheme": "The Vienna Gambit space grab with e5, then e6 and Qxh5+ to exploit the loose kingside.",
+    "lessonSummary": "The Vienna Gambit trades a pawn for a roaring initiative — e5 and e6 pry open Black before he can develop.",
+    "criticalMoments": [
+      {
+        "moveNumber": 5,
+        "color": "white",
+        "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/5p2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 0 5",
+        "annotation": "e5 — the gambit's energy. The pawn shoves the f6-knight to h5 on the rim and seizes the centre; Black is already cramped and his best piece is parked uselessly on the edge.",
+        "concept": "The Space Punch",
+        "highlights": [
+          {
+            "square": "e5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 13,
+        "color": "white",
+        "fen": "r2qk2r/pppn2pp/3pp3/3P2bQ/5p2/2N5/PPP3PP/R1B2RK1 b kq - 0 13",
+        "annotation": "Qxh5+ — the e6 break did its job, the kingside is open, and the queen scoops the stranded h5-knight with check. A clean piece up with the safer king; the gambit pawn was a bargain.",
+        "concept": "The Attack Lands",
+        "highlights": [
+          {
+            "square": "h5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
+    ]
   }
 ]
