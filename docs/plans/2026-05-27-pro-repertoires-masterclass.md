@@ -244,6 +244,29 @@ Full Vienna-recipe standalone, with these sources nailed down:
   games (his real wins), deep middlegame plans (mined from his games), checkpoint
   quizzes + common mistakes, then full gate registration + interactive audit.
 
+## 6c. POST-DEPLOY AUDIT (3 tools, 2026-05-27)
+
+Ran `scripts/audit-pro-stafford.mjs` vs localhost dev server with all three
+tools (Playwright drive + /api/tts listener + /api/audit-stream capture):
+- ✅ App boots, first-run strength-calibration handled, pro Stafford route loads.
+- ⚠️ Opening does NOT render in-sandbox — stuck "Loading opening…" because the
+  pro-opening Dexie seed (`startDeferredSeed` → openings-store WRITE) hits the
+  **documented G1 sandbox IndexedDB write-stall**. NOT a code bug (base
+  masterclasses hit the same stall). → Live render + narration firing + audio
+  quality + unlock persistence MUST be verified by DAVID on prod / a real device.
+- ✅ Write/resolve LOGIC proven instead (G1-sanctioned) via
+  `proEricRosenStafford.test.ts` (4 tests): opening record well-formed
+  (black, verified spine, 3 provenance-tagged variations), orientation bridges
+  to black, main + 3 variation lessons resolve to distinct LessonPlayer scripts.
+- ✅ All content gates green (lessonIntegrity / narrationAccuracy /
+  narrationGrounding / lessonDepth / wlppNarration / lessonTabIntegrity /
+  openingManifests + orientation/theme gates).
+
+🔔 FOR DAVID — prod verification needed (sandbox can't): open
+`/openings/pro/ericrosen/pro-ericrosen-stafford`, tap Watch + Learn, confirm the
+hand-written Stafford narration speaks and the board leads the eye; confirm the
+unlock ladder persists.
+
 ## 7. Next-session pickup
 Decisions D1–D4 are the gate. Once set, start Phase 0 (provenance harvest) — all
 sources verified reachable in-sandbox 2026-05-27; no laptop handoff needed.
