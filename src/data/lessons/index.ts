@@ -86,6 +86,8 @@ import { BIRDS_OPENING_LESSON } from './birdsOpening';
 import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
 import { PRO_ERICROSEN_STAFFORD_LESSON } from './proEricRosenStafford';
 import { PRO_ERICROSEN_STAFFORD_VARIATION_LESSONS } from './proEricRosenStaffordVariations';
+import { PRO_NARODITSKY_ALAPIN_LESSON } from './proNaroditskyAlapin';
+import { PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS } from './proNaroditskyAlapinVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -147,6 +149,7 @@ const LESSONS: Record<string, LessonScript> = {
   [BIRDS_OPENING_LESSON.openingId]: BIRDS_OPENING_LESSON,
   // Pro masterclasses (David 2026-05-27) — keyed by `pro-<player>-<line>`.
   [PRO_ERICROSEN_STAFFORD_LESSON.openingId]: PRO_ERICROSEN_STAFFORD_LESSON,
+  [PRO_NARODITSKY_ALAPIN_LESSON.openingId]: PRO_NARODITSKY_ALAPIN_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -193,6 +196,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...TROMPOWSKY_ATTACK_VARIATION_LESSONS,
   ...BIRDS_OPENING_VARIATION_LESSONS,
   ...PRO_ERICROSEN_STAFFORD_VARIATION_LESSONS,
+  ...PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

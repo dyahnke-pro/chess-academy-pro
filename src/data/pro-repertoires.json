@@ -221,10 +221,10 @@
       "style": "Positional, Solid",
       "overview": "Now this — this is patience chess. The 2.c3 move was systematized by Russian master Semyon Alapin in the late 1800s, used as a positional sidestep against the dynamic Sicilian; it stayed a sideline until Sveshnikov championed it in the 1980s, and Sergei Tiviakov made it his lifework — winning thousands of games and earning the nickname 'Mr. Alapin.' The Sicilian player wants chaos: open the c-file, drop pieces on the kingside, calculate tactics until White cracks. Your reply is to refuse that conversation entirely. 2.c3 says: 'we're going to play a French Defence today, and I'm White.' You support an eventual d4, build the e4–d4 duo, and then spend forty moves squeezing a position that's a quarter-pawn better. The Alapin doesn't win games on move ten — it wins games on move forty when the c8-bishop is still on c8 and the rook on a8 still doesn't have a useful square. Danya plays it because the resulting endgames are technique gold.",
       "keyIdeas": [
-        "The d4-pawn is the entire opening. Every Black move that allows you to play d4 in good conditions is a Black mistake. 2…Nf6 lets you play 3.e5 first kicking the knight; 2…d5 lets you play 3.exd5 trading off Black's centre. Either way, you're getting d4 in.",
-        "Watch the c4-bishop walk. Bc4 → Bb3 → sometimes Ba4 → sometimes Bxc6. In the main line the bishop visits FOUR squares (c4, b3, d1 after Bxd1, then a4) before Black even finishes development. Each move is a tempo on Black's pieces. The bishop is the working man of this opening.",
-        "If Black offers the queen trade — TAKE IT. The Alapin endgame with e5+d4 cramping Black's kingside and your king walking actively into the centre is the whole strategic justification. Many amateurs play the Alapin reflexively without realizing the QUEENLESS middlegame is where the points come.",
-        "The e5-pawn is your structural anchor. It cramps the c8-bishop (locked behind …e6 or …d6), it controls f6/d6 (denying knight squares to Black), and it supports a future f4–f5 kingside thrust. Defend it like it's a king."
+        "The Alapin's whole point: meet the Sicilian with c3 so you can play d4 and build the big classical centre Black tried to avoid. You get the open, piece-flowing positions Naroditsky loves to teach.",
+        "After 2...Nf6 3.e5 Nd5 4.d4, Black's knight gets kicked around while you develop with tempo. Don't rush — Nf3, Bc4/Bb5, castle, and let your central majority do the talking.",
+        "Against 2...d5 3.exd5 Qxd5, the queen is a target: 4.d4 and Nf3 gain time, and you reach a comfortable, slightly-better IQP-style game with easy development.",
+        "Trade into good endgames when offered. The Alapin often reaches a queens-off middlegame where your space and better structure give a risk-free pull — exactly the 'turn a 1500 into a 2200' grind Danya preaches."
       ],
       "traps": [
         "After 2…d5 3.exd5 Qxd5 4.d4 — Black's queen is now a target. Every developing move (4.d4 hits implicitly, 5.Nf3 hits via the discovered attack if Black isn't careful, 5.Be3) drives the queen back. Black's most popular 4…Nf6 lets you play 5.Nf3 with calm — by move 8, Black has moved the queen twice and you've completed development. Pure tempo arithmetic.",
@@ -236,34 +236,15 @@
       ],
       "variations": [
         {
-          "name": "Main Line 2...Nf6",
-          "pgn": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 cxd4 d6 Nf3 Nc6 Bc4 Nb6 Bb3 dxe5 dxe5 Qxd1+ Bxd1 Nc4 Ba4 Bd7 Bxc6 Bxc6 Nbd2 Nb6 O-O e6",
-          "explanation": "Watch the dance unfold. Black challenges e4 with 2...Nf6, you kick with 3.e5 — knight goes to d5, the most centralized but loneliest square for Black. 4.d4 cxd4 5.cxd4 d6 reaches the Alapin structure: e5+d4 White centre, Black trying to dismantle. 6.Nf3 Nc6 7.Bc4 Nb6 — Black hits the bishop hoping for a tempo, but 8.Bb3 keeps it on the same diagonal aimed at f7. Now comes the key sequence: 8...dxe5 9.dxe5 Qxd1+ — Black offers the queen trade thinking the endgame's drawn. Don't be tempted to recapture with the king. 10.Bxd1! (yes, the bishop walks b3–c2–d1 along the diagonal — both squares are clear) keeps your king's options open and puts the bishop on a clean re-routing square. Black's 10...Nc4 attacks nothing important; 11.Ba4 swings to hit c6. 12.Bxc6 Bxc6 trades off the light-squared bishops — and that's the moment Black quietly loses. Without the light-squared bishop, every light square around Black's king (especially f7, g6, h5) is permanently soft. 13.Nbd2 develops the last piece, 14.O-O castles. Now look at the position: Black has a passive bishop on c6, a knight on b6 with no future, a king still on e8, and a rook on a8 that can't find a useful square. White has the e5-pawn cramping everything, both knights ready to reroute, and a king already safe. This endgame plays itself for the next 25 moves — push f4, double rooks on the d-file, win the structural game.",
-          "sources": [
-            "concept:pos-center",
-            "concept:pos-development",
-            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
-          ]
-        },
-        {
           "name": "2...d5 Center Counter",
-          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Qd8 Nc4 Be7 Be2 O-O O-O b6 Bf4 Bb7 Qb3 Nbd7 a4 Bd5 a5 cxd4 cxd4 bxa5",
-          "explanation": "Black tries the Scandinavian-style 2...d5 hoping to dissolve your centre before it forms. After 3.exd5 Qxd5, the queen is exposed — every move you play now comes with the threat of harassing her. 4.d4 Nf6 5.Nf3 e6 is the principled defence. Now watch the knight tour: 6.Na3! — looks weird, but the knight is heading to c4. 6...Qd8 (the queen finally finds peace, back at home) 7.Nc4 reaches a fantastic outpost. The bishop on c4 you'd usually play is replaced by Nc4 here, freeing the c-bishop for f4/g5 development. After 8.Be2 O-O 9.O-O b6 (Black fianchettos), 10.Bf4 11.Qb3 builds slow pressure on the queenside. The 12.a4 13.a5 plan opens the a-file with tempo on b6. By move 14, you have an open a-file for the rook, a knight on c4 you can't dislodge, and Black's queenside is in tatters. Pure positional crush.",
-          "sources": [
-            "concept:pos-center",
-            "concept:pos-development",
-            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
-          ]
-        },
-        {
-          "name": "2...e6 French Structure",
-          "pgn": "e4 c5 c3 e6 d4 d5 e5 Nc6 Nf3 Bd7 Be2 cxd4 cxd4 Nge7 O-O Nf5 Nc3 Be7 g4 Nh4 Nxh4 Bxh4 Be3 O-O f4 f6 Qd2 fxe5",
-          "explanation": "When Black plays 2...e6, they're signalling 'I want a French Defence'. Give it to them — but as White. After 3.d4 d5 4.e5, you've reached the Advance French structure with one tiny advantage: your c-pawn is on c3 (not c2), which means an extra reserve for d4 defence. 4...Nc6 5.Nf3 Bd7 6.Be2 (modest — saving the c4-square) cxd4 7.cxd4 Nge7 (the standard French knight route, heading to f5). 8.O-O Nf5 9.Nc3 Be7 reaches a classical French position — but you've played accurately. The critical move is 10.g4! — gain the f5-knight, get space. After 10...Nh4 11.Nxh4 Bxh4, Black's bishop is decoyed away from defence. 12.Be3 O-O 13.f4 fortifies e5 and prepares the kingside expansion. When Black plays the standard French counter 14...f6, you take 15.exf5 (or accept fxe5 and recapture with f-pawn) opening the centre with all your pieces ready. The French player thought they were getting a comfortable structure; instead they're a tempo down with no plan.",
-          "sources": [
-            "concept:pos-center",
-            "concept:pos-development",
-            "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
-          ]
+          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O Nc6 Be3 cxd4 cxd4 Be7 Nc3 Qd6 h3 Bh5",
+          "explanation": "Black hits back in the centre with 2...d5; after 3.exd5 Qxd5 4.d4 White gains time on the queen and develops naturally into a pleasant, slightly-better game with the bishop pair and easy play.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 140,
+            "score": 62,
+            "source": "lichess /player"
+          }
         }
       ],
       "trapLines": [],
@@ -272,7 +253,14 @@
         "concept:pos-center",
         "concept:pos-development",
         "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
-      ]
+      ],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 306,
+        "score": 64,
+        "source": "lichess /player",
+        "taughtUrl": "https://www.youtube.com/watch?v=ktoa6lk6qNk"
+      }
     },
     {
       "id": "pro-naroditsky-fantasy-caro",
