@@ -19721,7 +19721,15 @@
           "Nxe5",
           "Bd7",
           "Nxd7",
-          "Qxd7"
+          "Qxd7",
+          "Nc3",
+          "e6",
+          "O-O",
+          "Be7",
+          "Qg4",
+          "O-O",
+          "Bxc6",
+          "bxc6"
         ],
         "annotations": [
           "Bb5 — White pins the c6-knight.",
@@ -19729,7 +19737,15 @@
           "Nxe5 — White recaptures.",
           "Bd7 — Black offers trades to ease the game.",
           "Nxd7 — pieces come off.",
-          "Qxd7 — Black is fully equal, the queen active."
+          "Qxd7 — Black is fully equal, the queen active.",
+          "Nc3 — White develops, eyeing d5 and e4.",
+          "…e6 — a small, solid move shoring up d5 and opening the f8-bishop’s path.",
+          "O-O — White castles.",
+          "…Be7 — the bishop takes its natural square; Black’s setup is rock-solid.",
+          "Qg4 — White probes the kingside, hoping for play against g7.",
+          "…O-O — Black castles; there is nothing real against the king.",
+          "Bxc6 — White trades to damage Black’s pawns.",
+          "…bxc6 — recapturing toward the centre; the doubled c-pawns cover d5 and b5, and the comfortable, equal game is reached exactly as planned."
         ],
         "arrows": [
           [
@@ -19741,6 +19757,31 @@
           ],
           [],
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c3",
+              "to": "e4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g4",
+              "to": "g7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           [],
           []
@@ -19809,6 +19850,114 @@
               "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
@@ -19822,7 +19971,15 @@
           "Nxe5 — recapture",
           "Bd7 — offer trades",
           "Nxd7 — pieces off",
-          "Qxd7 — fully equal, active queen"
+          "Qxd7 — fully equal, active queen",
+          "Nc3 — White develops",
+          "e6 — shore up d5",
+          "O-O — White castles",
+          "Be7 — solid setup",
+          "Qg4 — White probes g7",
+          "O-O — castle, king safe",
+          "Bxc6 — White trades",
+          "bxc6 — centre control, equal"
         ]
       }
     ]
@@ -22203,7 +22360,15 @@
           "b6",
           "Nc3",
           "Bb7",
-          "cxd5"
+          "cxd5",
+          "Nxd5",
+          "Nxd5",
+          "Qxd5",
+          "d4",
+          "Rad8",
+          "Ne5",
+          "Qd6",
+          "dxc5"
         ],
         "annotations": [
           "…Nc6 — Black develops the knight to c6.",
@@ -22211,12 +22376,23 @@
           "…b6 — Black prepares his own fianchetto.",
           "Nc3 — White completes development.",
           "…Bb7 — Black fianchettoes on b7, mirroring.",
-          "cxd5 — White opens lines at the right moment."
+          "cxd5 — White opens lines at the right moment.",
+          "…Nxd5 — Black recaptures on d5.",
+          "Nxd5 — White trades knights, clearing the centre for the long-diagonal bishops.",
+          "…Qxd5 — Black’s queen recaptures, exposed in the centre.",
+          "d4 — the second break! With the pieces ideally placed, White strikes the centre, hitting c5 and opening lines for both bishops.",
+          "…Rad8 — Black contests the d-file.",
+          "Ne5 — the knight leaps to the central outpost, eyeing c6 and f7 with the g2-bishop behind it.",
+          "…Qd6 — the queen steps back to safety.",
+          "dxc5 — opening the position; White’s harmonious development and bishop pair give a pleasant pull, the hypermodern plan fully realized."
         ],
         "sources": [
           "concept:pos-development",
           "concept:pos-space",
-          "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
+          "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening",
+          "concept:pos-bishop-pair",
+          "concept:pos-center",
+          "concept:pos-outpost"
         ],
         "learnCues": [
           "Nc6 — develop the knight",
@@ -22224,13 +22400,40 @@
           "b6 — prepare the fianchetto",
           "Nc3 — finish development",
           "Bb7 — mirror on b7",
-          "cxd5 — open lines at the right time"
+          "cxd5 — open lines at the right time",
+          "Nxd5 — Black recaptures",
+          "Nxd5 — clear the centre",
+          "Qxd5 — exposed in centre",
+          "d4 — the second break",
+          "Rad8 — contest the d-file",
+          "Ne5 — central outpost",
+          "Qd6 — retreat to safety",
+          "dxc5 — open it, bishops rule"
         ],
         "arrows": [
           [],
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "c6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "e5",
+              "to": "f7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
           [],
           []
         ],
@@ -22296,6 +22499,102 @@
             },
             {
               "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
@@ -27836,13 +28135,29 @@
           "Bg5",
           "Ba6",
           "Qa4",
-          "h6"
+          "h6",
+          "Bh4",
+          "c5",
+          "dxc5",
+          "bxc5",
+          "Rd1",
+          "Qb6",
+          "Bxf6",
+          "gxf6"
         ],
         "annotations": [
           "Bg5 pins the f6-knight and leans on the weakened light squares.",
           "…Ba6 spears the c4-pawn down the a6-f1 diagonal, hitting White where the doubled pawns ache.",
           "Qa4 props up the loose c4-pawn.",
-          "…h6 puts the question to the g5-bishop; either way Black owns the light squares around c4 and e4."
+          "…h6 puts the question to the g5-bishop; either way Black owns the light squares around c4 and e4.",
+          "Bh4 — White keeps the pin on the f6-knight.",
+          "…c5 — the thematic break, levering open the centre the bishop-trade prepared.",
+          "dxc5 — White releases the central tension.",
+          "…bxc5 — recapturing toward the centre; Black gets the half-open b-file and a mobile c5-pawn.",
+          "Rd1 — White’s rook takes the d-file.",
+          "…Qb6 — the queen eyes b2 and props up c5, pressing the queenside light squares.",
+          "Bxf6 — White trades off the pinned knight.",
+          "…gxf6 — recapturing toward the centre; the doubled f-pawns grip e5 and open the g-file, and Black holds the bishop pair and the light squares."
         ],
         "title": "Nimzo Classical: Files and Light Squares",
         "arrows": [
@@ -27857,6 +28172,31 @@
             {
               "from": "a6",
               "to": "c4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "from": "h4",
+              "to": "f6",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b6",
+              "to": "b2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "b6",
+              "to": "c5",
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
@@ -27927,18 +28267,124 @@
               "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "learnCues": [
           "Bg5 — pin f6",
           "Ba6 — spear c4",
           "Qa4 — defend c4",
-          "h6 — own the light squares"
+          "h6 — own the light squares",
+          "Bh4 — keep the pin",
+          "c5 — the thematic break",
+          "dxc5 — tension released",
+          "bxc5 — half-open b-file",
+          "Rd1 — White takes the d-file",
+          "Qb6 — press b2 and c5",
+          "Bxf6 — trade the knight",
+          "gxf6 — grip e5, open g-file"
         ],
         "sources": [
           "concept:pawn-doubled",
           "concept:pos-outpost",
-          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
+          "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence",
+          "concept:pos-bishop-pair",
+          "concept:pos-open-file"
         ]
       }
     ]
