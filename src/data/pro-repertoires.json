@@ -267,15 +267,15 @@
       "playerId": "naroditsky",
       "eco": "B12",
       "name": "Fantasy Caro-Kann (Naroditsky)",
-      "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6 Bg5 O-O Nbd2",
+      "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6 Bg5 O-O Nbd2 Qc7 Qe1 Rae8",
       "color": "white",
       "style": "Aggressive, Sharp",
       "overview": "Here's the thing about Caro-Kann players — they signed up for chess therapy. Solid pawn chain, easy development, equalise by move 15, draw by move 35. The Fantasy Variation 3.f3 was introduced into serious practice by Hungarian GM Maroczy in the early 1900s as an aggressive sidestep; it stayed an obscure surprise weapon until Bronstein and later Tal experimented with it, and modern theoreticians have brought it back as a way to drag Caro players out of their comfort zone. When you play 1.e4 c6 2.d4 d5 3.f3, you're not just playing a chess move — you're cancelling their therapy session. f3 is a pawn move that screams 'we're going to fight'. You're telling Black: I'll build e4+d4+f3 into a brick wall, and either you take with 3...dxe4 (where I get the open f-file and three pawns aimed at your king) or you sit on it (where I play e5, suffocate your bishop on c8, and win in 40 moves). Danya runs this in speedruns because Caro players have studied the Classical for years and the Fantasy for fifteen minutes.",
       "keyIdeas": [
-        "If Black plays 3...dxe4, the rule is fxe4, NOT Nxe4. The open f-file is the whole reason 3.f3 exists — recapturing with the knight gives you a worse French where the f3-square is also weakened. Pawn captures up. Always.",
-        "Bc4 is the king of the diagonal. f3 created a permanent home for it on c4 (the e4-pawn defends nothing on the a2-g8 diagonal now). From c4 the bishop aims at f7 — combined with a rook on f1 after castling, you have two pieces pointing at f7 with nothing on it but the king.",
-        "Don't fear the …e5 break. After 3...dxe4 4.fxe4 e5, Black is trying to dissolve your centre — but 5.Nf3 calmly defends e5 (the f1-rook will defend it again after castling), and after exd4 6.Nxd4 you reach a position where you have the better pieces and the open f-file. Engines call this equal; in practice you win.",
-        "The queen's manoeuvre is Qe1-h4. This is the Fantasy's signature attacking move — you lift the queen to h4 hitting the kingside while preparing to swing the rook to f3. Most amateurs forget the queen can swing this way."
+        "The Fantasy Variation (3.f3) is the most aggressive anti-Caro there is: White props up e4 with f3 and dares Black to take it, planning to recapture with the f-pawn and own a giant e4+d4 centre plus the open f-file.",
+        "After 3...dxe4 4.fxe4 e5, White doesn't fear the central tension — Nf3, Bc4 and quick castling develop with tempo and the open f-file points straight at f7.",
+        "This is a fighting, attacking system, not a sterile one. Naroditsky picks it to drag the solid Caro player into a sharp, double-edged middlegame where understanding beats memorization.",
+        "Develop fast and keep the centre mobile: the bishops rake toward Black's king, the f1-rook joins on the open file, and a well-timed d5 or e5 break opens lines while Black is still untangling."
       ],
       "traps": [
         "3...e6? is the worst Caro-Kann response — 4.e5! immediately. Now Black has reached a French Defence by force, but a TERRIBLE French where the light-squared bishop is locked on c8 with no Caro-Kann …Bf5 escape route. Strategically the position is dead at move 4.",
@@ -285,45 +285,21 @@
         "f3 weakens the dark squares around your king — the e3-square especially, and the a7-g1 diagonal. Once Bf4 leaves c1, BE CAREFUL: Black's …Qb6 hits b2 AND f2 is no longer defended by the queen. Always have Nc3 or b3 ready before moving the queen.",
         "Don't blunder a piece to the …Bg4 pin. After Nf3, the f3-square is weak (no pawn defends it!), so …Bg4 is a real threat. The standard prophylactic is to either play h3 early or to never put the queen on d1 without considering Qxg4 sequences."
       ],
-      "variations": [
-        {
-          "name": "Main Line 3...dxe4 4.fxe4 e5",
-          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Ngf6 c3 Bd6 Bg5 O-O Nbd2 Qc7 Qe1 Bh5 Qh4 Bg6 Rae1 b5 Bb3 Rae8",
-          "explanation": "The principled mainline — Black plays the only critical reply: 3...dxe4 4.fxe4 e5, attacking your d4-pawn and trying to dissolve the centre. Don't get clever. 5.Nf3 defends d4 calmly. Black's natural 5...Bg4 pins the knight — fine, you don't have to break the pin yet. 6.Bc4 develops with tempo on f7. After 7.O-O Ngf6 8.c3 Bd6 9.Bg5 (pinning the f6-knight, threatening to wreck Black's structure with Bxf6), the position settles. Now the signature move: 10.Nbd2 Qc7 11.Qe1! — the queen lifts. 12.Qh4 reaches the attacking square, aiming at h7 alongside Bc4. Black's standard defence is 12...Bg6 13.Rae1 b5 (queenside counterplay) 14.Bb3 Rae8. Both sides have fully developed. Your assets: the open f-file (rook on f1 already), the queen on h4 eyeing h7, both bishops aimed at the king. Black's assets: a healthy pawn structure with no weaknesses and active piece play. The position is dynamically equal — but you've reached it via memorised theory while Black's been improvising since move 5. That ten-minute clock advantage is your real edge.",
-          "sources": [
-            "book:caro-kann",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-          ]
-        },
-        {
-          "name": "3...e6 Solid Response",
-          "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 Nf6 e5 Nfd7 a3 Be7 Be3 c5 f4 cxd4 Qxd4 Nc6 Qd2 Ndxe5 fxe5 d4",
-          "explanation": "When Black plays 3...e6 — the 'safe' move — they've actually committed a strategic crime: the c8-bishop will never reach an active square. You punish immediately: 4.Nc3 (developing) Bb4 (pinning the knight) 5.Bf4! — the bishop comes out before the centre closes. Black's most natural reply 5...Nf6 6.e5! cramps the knight back to 6...Nfd7. After 7.a3 Be7 8.Be3 — now you're prepared for the c5 break which Black plays on 8...c5 9.f4! — using the f3-pawn's preparation to support an even bigger centre. The pawn chain e5+f4+d4 is monumental. Black's typical French counter-play with …f6 attacking e5 doesn't help — you've already mobilised heavy pieces. By move 11, Black's bishop on c8 is still on c8, the d-file is opening for your queen, and you have a winning structure.",
-          "sources": [
-            "book:caro-kann",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-          ]
-        },
-        {
-          "name": "3...Qb6 Queen Sortie",
-          "pgn": "e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5 Nf3 exd4 Qxd4 Qxd4 Nxd4 Bc5 Be3 Nf6 O-O-O Nbd7 h3 Ne5 Bf4 Ng6 Bh2 O-O e5 Nd5",
-          "explanation": "Black tries the aggressive 3...Qb6 hitting b2 immediately. The natural fear is 4.Nc3 (defending b2 via Nb1-Nc3, which defends b2 indirectly through the rook). After Black grabs the centre with 4...dxe4 5.fxe4 e5, you challenge the centre with 6.Nf3 — and after 6...exd4 7.Qxd4 (centralising the queen with tempo on b6), Black is forced to trade queens with 7...Qxd4 8.Nxd4. The resulting endgame favours you: better development, no real structural weaknesses (the f-file is open as planned), and Black's queen excursion cost two full tempos. Now 9.Be3 Nf6 10.O-O-O castles queenside; the typical plan from here is h3 + Bh2 maintaining the bishop, then e5 cramping the f6-knight to d5. Slowly the noose tightens.",
-          "sources": [
-            "book:caro-kann",
-            "concept:pos-center",
-            "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-          ]
-        }
-      ],
+      "variations": [],
       "trapLines": [],
       "warningLines": [],
       "sources": [
         "book:caro-kann",
         "concept:pos-center",
         "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-      ]
+      ],
+      "provenance": "both",
+      "provenanceRef": {
+        "games": 63,
+        "score": 60,
+        "source": "lichess /player",
+        "taughtUrl": "https://www.youtube.com/@DanielNaroditskyGM"
+      }
     },
     {
       "id": "pro-naroditsky-najdorf",
