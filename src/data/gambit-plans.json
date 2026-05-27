@@ -466,5 +466,429 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-gambitevansgambit-attack",
+    "openingId": "gambit-evans-gambit",
+    "title": "The Evans Gambit: two pawns for a crushing attack",
+    "criticalPositionFen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+    "overview": "The Evans is the purest attacking gambit: White hands over the b-pawn — and often a second pawn too — to rip open the centre and throw every piece at Black's king before it can castle. Don't count material; count tempo and targets. The plan is always the same and it's beautiful in its simplicity: c3 and d4 build a broad centre, the bishop and queen aim a battery at f7, Ba3 freezes the king in the middle, and the attack rolls in. Even two pawns down, White's initiative is worth far more — this is the romantic chess of Morphy and Anderssen, and at the board it scores.",
+    "pawnBreaks": [
+      {
+        "move": "d4",
+        "explanation": "The whole point of the b4/c3 sacrifice: with the bishop deflected and c3 ready, d4 builds a broad centre and tears open lines for every White piece. One pawn buys the middle of the board."
+      },
+      {
+        "move": "e5",
+        "explanation": "The follow-up lunge — kicks Black's defending knight off f6 and rips open the lines pointing at the uncastled king."
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bf1-c4 / Bc1-a3",
+        "explanation": "Both bishops aim at the king. Bc4 hits f7; Ba3 rakes the a3-f8 diagonal and makes castling illegal, freezing Black's king in the centre — the signature Evans idea."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qd1-b3-c3",
+        "explanation": "Qb3 forms the queen+bishop battery on f7; after recapturing on c3 the queen swings onto the long dark diagonal toward the king."
+      }
+    ],
+    "strategicThemes": [
+      "Sacrifice material on purpose — the Evans buys tempo, the centre, and the attack, not a pawn back.",
+      "The Bc4 + Qb3 battery on f7 is the recurring pressure point.",
+      "Ba3 freezes the black king in the centre — deny castling, then attack.",
+      "A lead in development with open lines beats two extra pawns when the enemy king is stuck."
+    ],
+    "playableLines": [
+      {
+        "title": "Compromised Defence: the attack rolls in",
+        "fen": "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+        "moves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bc4",
+          "Bc5",
+          "b4",
+          "Bxb4",
+          "c3",
+          "Ba5",
+          "d4",
+          "exd4",
+          "O-O",
+          "dxc3",
+          "Qb3",
+          "Qe7",
+          "Nxc3",
+          "Bxc3",
+          "Qxc3",
+          "Nf6",
+          "e5",
+          "Ne4",
+          "Qe3",
+          "Nc5",
+          "Ba3"
+        ],
+        "annotations": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "The Evans Gambit: b4 throws in a pawn to deflect Black's bishop and win the tempo White needs to build a centre.",
+          "",
+          "c3 — the soul of the gambit: it kicks the bishop and prepares d4. Every Evans idea flows from this quiet little move.",
+          "",
+          "d4 — the broad centre crashes open. For a pawn, White already controls the middle of the board and lines for every piece.",
+          "",
+          "O-O — king tucked away, rooks connected. White is fully mobilised while Black's queenside is still asleep.",
+          "",
+          "Qb3 — the signature Evans battery: queen and bishop both glare at f7, the soft spot in Black's camp.",
+          "",
+          "Nxc3 — White doesn't stop to count pawns; the knight develops with tempo and joins the swarm. Two pawns down, every white piece in the attack.",
+          "",
+          "Qxc3 — recapturing toward the centre, the queen slides onto the long dark diagonal aimed at Black's king.",
+          "",
+          "e5 — the centre pawn lunges, kicking the f6-knight and prising open the lines toward the uncastled king.",
+          "",
+          "Qe3 — the queen stays central and flexible, eyeing the kingside as the attack gathers.",
+          "",
+          "Ba3 — the dark-squared bishop rakes the a3-f8 diagonal and makes ...O-O illegal: Black's king is frozen in the centre. Two pawns down, but every white piece attacks, the enemy king is trapped, and the initiative is overwhelming — the Evans Gambit's promise paid in full."
+        ],
+        "learnCues": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "b4 — deflect the bishop, buy a tempo",
+          "",
+          "c3 — kick the bishop, prepare d4",
+          "",
+          "d4 — crash the centre open",
+          "",
+          "O-O — castle, connect, mobilise",
+          "",
+          "Qb3 — queen+bishop battery on f7",
+          "",
+          "Nxc3 — develop; ignore the pawn count",
+          "",
+          "Qxc3 — queen onto the dark diagonal",
+          "",
+          "e5 — lunge, kick the knight, open lines",
+          "",
+          "Qe3 — central, flexible, eye the king",
+          "",
+          "Ba3 — freeze the king in the centre"
+        ],
+        "sources": [
+          "book:evans-gambit",
+          "concept:pos-initiative",
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ]
+      }
+    ]
   }
 ]
