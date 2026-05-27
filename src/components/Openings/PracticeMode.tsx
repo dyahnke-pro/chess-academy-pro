@@ -21,7 +21,7 @@ import { voiceService } from '../../services/voiceService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
-import { recordWeakSpot } from '../../services/weakSpotService';
+import { recordWeakSpot, markWeakSpotDrilled } from '../../services/weakSpotService';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -257,6 +257,7 @@ export function PracticeMode({ opening, variationIndex, customLine, onComplete, 
           setTimeout(() => setMoveFlash(null), 600);
         }
         setTimeout(() => setShowCorrectFlash(false), 400);
+        void markWeakSpotDrilled(`${opening.id}-${currentMoveIndex}`);
         setCurrentMoveIndex((prev) => prev + 1);
       } else {
         // Wrong

@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Undo2, Eye, ChevronsLeft, ChevronLeft, ChevronRight, ChevronsRight, Loader2, Lightbulb, AlertTriangle, GraduationCap, Compass, RotateCcw, Volume2, MessageCircle, Timer } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Chess } from 'chess.js';
+import { Chess, type Color } from 'chess.js';
 import { safeChessFromFen } from '../../services/chessSafe';
 import { useChessGame } from '../../hooks/useChessGame';
 import { usePracticePosition } from '../../hooks/usePracticePosition';
@@ -46,6 +46,8 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getRandomLegalMove, getTargetStrength } from '../../services/coachGameEngine';
+import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById } from '../../services/chessClock';
+import { useChessClock } from '../../hooks/useChessClock';
 import { coachService } from '../../coach/coachService';
 import { withTimeout } from '../../coach/withTimeout';
 import { emergencyPickMove } from '../../coach/coachTurnFallback';
@@ -359,7 +361,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   const coachTipsOn = useAppStore((s) => s.coachTipsOn);
   const toggleCoachTips = useAppStore((s) => s.toggleCoachTips);
-  const setActiveProfile = useAppStore((s) => s.setActiveProfile);
 
   // Ref to inject messages into GameChatPanel (hints, takeback msgs)
   const gameChatRef = useRef<GameChatPanelHandle>(null);
@@ -500,6 +501,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   const [difficulty, setDifficulty] = useState<CoachDifficulty>(initialDifficulty);
   const targetStrength = getTargetStrength(playerRating, difficulty);
+
+  // Time control selection (disabled once the game has started). Defaults to
+  // Unlimited unless a `?time=` intent param requests a clocked game.
+  const timeParam = searchParams.get('time');
+  const [timeControlId, setTimeControlId] = useState<string>(
+    () => getTimeControlById(timeParam ?? DEFAULT_TIME_CONTROL_ID).id,
+  );
+  const timeControl = getTimeControlById(timeControlId);
 
   // Player color selection (disabled once game has started)
   const [playerColor, setPlayerColor] = useState<'white' | 'black'>(initialSide);
@@ -741,6 +750,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       if (moveCountRef.current > 0) return;
       setDifficulty(saved.difficulty);
       setPlayerColor(saved.playerColor);
+      setTimeControlId(getTimeControlById(saved.timeControlId).id);
       const ok = game.loadFen(saved.fen);
       if (!ok) {
         // Saved FEN is corrupt — drop it and start fresh.
@@ -770,6 +780,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       fen: game.fen,
       playerColor,
       difficulty,
+      timeControlId,
       subject: subjectParam ?? null,
       halfMoveCount: moveCountRef.current,
       updatedAt: Date.now(),
@@ -782,6 +793,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     gameState.moves.length,
     playerColor,
     difficulty,
+    timeControlId,
     subjectParam,
   ]);
 
@@ -1803,68 +1815,124 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     }
   }, [discussion.phase, discussion.teach]);
 
+  // Per-ply remaining-clock snapshots (ms left for the side that just moved,
+  // BEFORE their increment). Parallel to annotations; seeds the time-trouble
+  // detector. Reset on every fresh game.
+  const clockHistoryRef = useRef<number[]>([]);
+  const prevMovesLenRef = useRef(0);
+
+  // Finalize a finished game (checkmate/stalemate OR flag-on-time) — shared by
+  // the chess.js game-over effect and the clock's onFlag so both paths persist
+  // identically. `endReason` distinguishes a time-out for the saved tags.
+  const finalizeGame = useCallback((result: 'win' | 'loss' | 'draw', endReason?: 'time'): void => {
+    if (gameState.status !== 'playing') return;
+
+    const keyMoments = findKeyMoments(gameState.moves);
+
+    // Show the final board position with game-over overlay before transitioning
+    setGameState((prev) => ({
+      ...prev,
+      status: 'gameover',
+      result,
+      keyMoments,
+    }));
+
+    // Save game to DB
+    const playerWon = result === 'win';
+    const playerLost = result === 'loss';
+    const pgnResult: GameResult = playerColor === 'white'
+      ? (playerWon ? '1-0' : playerLost ? '0-1' : '1/2-1/2')
+      : (playerWon ? '0-1' : playerLost ? '1-0' : '1/2-1/2');
+    const tags: string[] = [
+      difficulty === 'hard' ? 'Hard' : '',
+      gameState.hintsUsed === 0 ? 'NoHints' : '',
+      endReason === 'time' ? 'Time' : '',
+    ].filter(Boolean);
+
+    const annotations = movesToAnnotations(gameState.moves, playerColor);
+    const summary = buildAnalysisSummary(gameState.moves, keyMoments, playerColor, result);
+
+    const playerName = activeProfile?.name ?? 'Player';
+    const clocked = timeControl.id !== DEFAULT_TIME_CONTROL_ID;
+    const gameRecord = {
+      id: gameState.gameId,
+      pgn: game.history.join(' '),
+      white: playerColor === 'white' ? playerName : 'Stockfish Bot',
+      black: playerColor === 'black' ? playerName : 'Stockfish Bot',
+      result: pgnResult,
+      date: new Date().toISOString().split('T')[0],
+      event: `Coach Game ${tags.join(' ')}`.trim(),
+      eco: detectedOpening?.eco ?? null,
+      whiteElo: playerColor === 'white' ? playerRating : targetStrength,
+      blackElo: playerColor === 'black' ? playerRating : targetStrength,
+      source: 'coach' as const,
+      annotations,
+      coachAnalysis: JSON.stringify(summary),
+      isMasterGame: false,
+      openingId: detectedOpening?.name ?? null,
+      timeControlId: clocked ? timeControl.id : undefined,
+      clockRemainingMs: clocked ? [...clockHistoryRef.current] : undefined,
+    };
+
+    void db.games.add(gameRecord).then(() => {
+      if (!activeProfile) return;
+      void detectBadHabitsFromGame(gameState.moves, activeProfile);
+      void generateMistakePuzzlesFromGame(gameRecord.id).then(() => {
+        void computeWeaknessProfile(activeProfile);
+      });
+    });
+  }, [gameState.status, gameState.moves, gameState.hintsUsed, gameState.gameId, playerColor, difficulty, game.history, activeProfile, playerRating, targetStrength, detectedOpening, timeControl]);
+
+  // Live game clock. Paused while exploring variations / practice positions so
+  // the player isn't flagged for time spent off the main game board.
+  const clockRunning =
+    gameState.status === 'playing' && !game.isGameOver && !temporaryFen && !practicePosition && !isExploreMode;
+  const { clock: clockState, enabled: clockEnabled, recordMove: recordClockMove, reset: resetClock } = useChessClock({
+    timeControl,
+    turn: game.turn,
+    running: clockRunning,
+    onFlag: (flagged) => {
+      const playerFlagged = (flagged === 'w') === (playerColor === 'white');
+      finalizeGame(playerFlagged ? 'loss' : 'win', 'time');
+    },
+  });
+  const clockStateRef = useRef(clockState);
+  clockStateRef.current = clockState;
+
+  // Reset the clock + per-ply history whenever a fresh game starts.
+  useEffect(() => {
+    resetClock();
+    prevMovesLenRef.current = 0;
+    clockHistoryRef.current = [];
+  }, [gameState.gameId, resetClock]);
+
+  // Apply the increment + snapshot remaining time for the side that just moved.
+  // Driven off moves.length so neither commit site has to be touched. Reads the
+  // clock via ref so the 100ms tick doesn't re-run this effect.
+  useEffect(() => {
+    const len = gameState.moves.length;
+    const prev = prevMovesLenRef.current;
+    if (len === 0) {
+      clockHistoryRef.current = [];
+    } else if (len > prev && gameState.status === 'playing') {
+      const mover: Color = game.turn === 'w' ? 'b' : 'w';
+      if (clockEnabled) {
+        clockHistoryRef.current.push(mover === 'w' ? clockStateRef.current.whiteMs : clockStateRef.current.blackMs);
+      }
+      recordClockMove(mover);
+    }
+    prevMovesLenRef.current = len;
+  }, [gameState.moves.length, gameState.status, game.turn, clockEnabled, recordClockMove]);
+
   // Check for game over — transition to 'gameover' first to show final position
   useEffect(() => {
     if (game.isGameOver && gameState.status === 'playing') {
       const result: 'win' | 'loss' | 'draw' = game.isCheckmate
         ? (game.turn === 'w' && playerColor === 'white' ? 'loss' : 'win')
         : 'draw';
-
-      const keyMoments = findKeyMoments(gameState.moves);
-
-      // Show the final board position with game-over overlay before transitioning
-      setGameState((prev) => ({
-        ...prev,
-        status: 'gameover',
-        result,
-        keyMoments,
-      }));
-
-      // Save game to DB
-      const playerWon = result === 'win';
-      const playerLost = result === 'loss';
-      const pgnResult: GameResult = playerColor === 'white'
-        ? (playerWon ? '1-0' : playerLost ? '0-1' : '1/2-1/2')
-        : (playerWon ? '0-1' : playerLost ? '1-0' : '1/2-1/2');
-      const tags: string[] = [difficulty === 'hard' ? 'Hard' : '', gameState.hintsUsed === 0 ? 'NoHints' : ''].filter(Boolean);
-
-      const annotations = movesToAnnotations(gameState.moves, playerColor);
-      const summary = buildAnalysisSummary(gameState.moves, keyMoments, playerColor, result);
-
-      const playerName = activeProfile?.name ?? 'Player';
-      const gameRecord = {
-        id: gameState.gameId,
-        pgn: game.history.join(' '),
-        white: playerColor === 'white' ? playerName : 'Stockfish Bot',
-        black: playerColor === 'black' ? playerName : 'Stockfish Bot',
-        result: pgnResult,
-        date: new Date().toISOString().split('T')[0],
-        event: `Coach Game ${tags.join(' ')}`.trim(),
-        eco: detectedOpening?.eco ?? null,
-        whiteElo: playerColor === 'white' ? playerRating : targetStrength,
-        blackElo: playerColor === 'black' ? playerRating : targetStrength,
-        source: 'coach' as const,
-        annotations,
-        coachAnalysis: JSON.stringify(summary),
-        isMasterGame: false,
-        openingId: detectedOpening?.name ?? null,
-      };
-
-      void db.games.add(gameRecord).then(() => {
-        if (!activeProfile) return;
-
-        // Detect bad habits from game moves
-        void detectBadHabitsFromGame(gameState.moves, activeProfile);
-
-        // Generate mistake puzzles and refresh weakness profile
-        void generateMistakePuzzlesFromGame(gameRecord.id).then(() => {
-          // Refresh weakness profile with new game data and generated puzzles
-          void computeWeaknessProfile(activeProfile);
-        });
-
-      });
+      finalizeGame(result);
     }
-  }, [game.isGameOver, game.isCheckmate, game.turn, gameState.status, gameState.moves, playerColor, difficulty, gameState.hintsUsed, gameState.gameId, game.history, activeProfile, playerRating, targetStrength, setActiveProfile, detectedOpening]);
+  }, [game.isGameOver, game.isCheckmate, game.turn, gameState.status, playerColor, finalizeGame]);
 
   // Auto-transition from gameover overlay to postgame review after showing final position
   useEffect(() => {
@@ -3867,6 +3935,8 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const playerName = activeProfile?.name ?? 'Player';
   const opponentName = 'Stockfish Bot';
   const isPlayerTurn = (isPlayerWhite && game.turn === 'w') || (!isPlayerWhite && game.turn === 'b');
+  const playerClockMs = clockEnabled ? (isPlayerWhite ? clockState.whiteMs : clockState.blackMs) : undefined;
+  const opponentClockMs = clockEnabled ? (isPlayerWhite ? clockState.blackMs : clockState.whiteMs) : undefined;
 
   // Guided Lesson Mode — review a past game
   if (reviewGameId) {
@@ -3946,6 +4016,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               capturedPieces={isPlayerWhite ? capturedPieces.black : capturedPieces.white}
               materialAdvantage={isPlayerWhite ? Math.max(0, -materialAdv) : Math.max(0, materialAdv)}
               isActive={false}
+              clockMs={opponentClockMs}
             />
           </div>
 
@@ -3996,6 +4067,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               capturedPieces={isPlayerWhite ? capturedPieces.white : capturedPieces.black}
               materialAdvantage={isPlayerWhite ? Math.max(0, materialAdv) : Math.max(0, -materialAdv)}
               isActive={false}
+              clockMs={playerClockMs}
             />
           </div>
 
@@ -4133,11 +4205,29 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               per user request — both coach tabs surface the chat
               opener in the same place. */}
           <div className="flex items-center justify-between pl-12 md:pl-14">
-            <DifficultyToggle
-              value={difficulty}
-              onChange={setDifficulty}
-              disabled={gameState.moves.length > 0}
-            />
+            <div className="flex items-center gap-2">
+              <DifficultyToggle
+                value={difficulty}
+                onChange={setDifficulty}
+                disabled={gameState.moves.length > 0}
+              />
+              <label className="flex items-center gap-1 text-sm" style={{ color: 'var(--color-text-muted)' }}>
+                <Timer size={14} />
+                <select
+                  value={timeControlId}
+                  onChange={(e) => setTimeControlId(e.target.value)}
+                  disabled={gameState.moves.length > 0}
+                  data-testid="time-control-select"
+                  aria-label="Time control"
+                  className="rounded-lg px-2 py-1 text-sm font-medium disabled:opacity-50"
+                  style={{ background: 'var(--color-surface)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}
+                >
+                  {TIME_CONTROLS.map((tc) => (
+                    <option key={tc.id} value={tc.id}>{tc.label}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => useAppStore.getState().setCoachDrawerOpen(true)}
@@ -4191,6 +4281,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             capturedPieces={isPlayerWhite ? capturedPieces.black : capturedPieces.white}
             materialAdvantage={isPlayerWhite ? Math.max(0, -materialAdv) : Math.max(0, materialAdv)}
             isActive={!isPlayerTurn && !game.isGameOver}
+            clockMs={opponentClockMs}
           />
         </div>
 
@@ -4566,6 +4657,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
             capturedPieces={isPlayerWhite ? capturedPieces.white : capturedPieces.black}
             materialAdvantage={isPlayerWhite ? Math.max(0, materialAdv) : Math.max(0, -materialAdv)}
             isActive={isPlayerTurn && !game.isGameOver}
+            clockMs={playerClockMs}
           />
         </div>
 

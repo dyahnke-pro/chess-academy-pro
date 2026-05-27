@@ -41,6 +41,8 @@ export interface CoachPlayActiveState {
    *  the concrete levels; 'auto' from the URL flow is normalized to
    *  'medium' before this interface sees it. */
   difficulty: 'easy' | 'medium' | 'hard';
+  /** Time control id (chessClock TIME_CONTROLS). Undefined = unlimited. */
+  timeControlId?: string;
   /** Optional opening / subject that seeded the game ("Sicilian Najdorf"). */
   subject: string | null;
   /** Number of half-moves played so far. Lets the UI say "resume —

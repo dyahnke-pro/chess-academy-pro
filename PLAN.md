@@ -1,100 +1,113 @@
-# PLAN — Build out the remaining BLACK opening masterclasses (2026-05-25)
+# PLAN — Strengthen the personal weakness engine (2026-05-27)
 
-> Prior Sicilian plan archived → `docs/plans/2026-05-25-sicilian-masterclass.md`.
+> Prior black-openings masterclass plan archived →
+> `docs/plans/2026-05-25-black-opening-masterclasses.md`.
 
-David: "Build out the rest of the black openings. Start with replacing what is
-in the main-40 opening tab. Then add other good black openings missing. FOLLOW
-THE RULES — NO EXCEPTIONS. Only OK to leave undone is the model game if none
-can be found."
+David: stop touching openings (masterclass authoring is done + exhausting).
+Improve the PER-USER WEAKNESS engine instead — it reads signals we already
+collect; it does NOT require authoring any opening content.
 
-Standard = the **Vienna keystone** (playbook §0.7) — replicate file-by-file.
-Moves come from the existing `repertoire.json` curated pgn lines (already
-DB-anchored, ≥20 plies in most variations); the LLM writes PROSE only (G3).
-Gates are the safety net; never invent moves. Push straight to `main`.
+## Framing — what we learned reading the WHOLE loop
 
-## Target set — 13 black openings in the main-40 (convert → masterclass)
+The collect→fuse→act→coach loop ALREADY EXISTS and works:
+- `weaknessSpine.ts:getUnifiedWeaknessProfile()` merges `mistakePuzzles` +
+  `misconceptionTags` into one ranked profile.
+- That profile feeds the Training Plan (`trainingPlanSelector.ts`, 60/20/20
+  weakness/SRS/new) AND the dashboard "Today's training" reps
+  (`DashboardPage.tsx:89-150`).
+- The LLM coach reads top weaknesses + skillRadar + badHabits EVERY turn
+  (`coachContextSnapshot.ts:105-134`).
 
-Declaring the manifest moves each OUT of "Most Common" → "Masterclasses"
-(§0.7 STEP-9). All 13 already have repertoire records (keyIdeas×4 + 7-8
-variations with explanations + pgn).
+So the work is NOT "build a brain." It's: **plug the stranded/dead sensors
+into the brain, and add two missing sensors (conversion, time-trouble).**
 
-| # | id | corpus source | status |
-|---|----|------|--------|
-| 1 | petrov-defence | book:petrov-defence | DONE (4 tabs) |
-| 2 | philidor-defence | book:philidor-defence | DONE (4 tabs; dropped d3 hybrid — DB-anchor 4p) |
-| 3 | qgd | book:qgd | DONE (4 tabs) |
-| 4 | qga | wiki+concepts | DONE (3 tabs) |
-| 5 | slav-defence | wiki+concepts | DONE (2 tabs — Geller/Schlechter; rest <20p) |
-| 6 | semi-slav | wiki+concepts | DONE (4 tabs) |
-| 7 | kings-indian-defence | wiki+concepts | DONE (3 tabs; Sämisch/Petrosian/Averbakh deferred) |
-| 8 | grunfeld-defence | wiki+concepts | DONE (3 tabs) |
-| 9 | benoni-defence | wiki+concepts | DONE (3 tabs) |
-| 10 | queens-indian | wiki+concepts | DONE (3 tabs) |
-| 11 | budapest-gambit | wiki+concepts | DONE (2 roadmap tabs — gambit lines short) |
-| 12 | old-indian-defence | book:old-indian-defence | DONE (2 tabs) |
-| 13 | two-knights-defence | book:two-knights-defence | DONE (3 tabs; Ulvestad/Traxler deferred) |
+## Open findings (the real gaps)
 
-### ALL 13 BLACK MAIN-40 OPENINGS CONVERTED TO MASTERCLASSES.
-- #1–10 merged to main via PR #676; #12,#13 pushed direct to main; #11 (Budapest) pending final push.
-- **Deferred per-opening items** (flagged, not bugs): per-tab middlegame plans
-  (only main plan built each — other tabs self-hide gracefully); model games
-  (omitted — no verified Black WIN sourced; David's carve-out); a handful of
-  SHARP variation tabs deferred pending engine-soundness verification (KID
-  Sämisch/Petrosian/Averbakh, Two Knights Ulvestad/Traxler) — when unsure, skip.
-- **Remaining black openings NOT in main-40** (David's "add other good black
-  openings missing"): none outstanding — the 25 black repertoire entries are now
-  all either masterclasses or fold-ins. (If new ones are wanted, they'd need
-  fresh repertoire records first.)
+- **F1 — `openingWeakSpots` is DEAD.** `weakSpotService.ts:8-36` writes
+  `failCount` on every missed opening-drill move. Read fns exist
+  (`getTopWeakSpots`/`getStaleWeakSpots`, `:51-84`) but have ZERO callers.
+  Never re-drilled, rescheduled, or surfaced.
+- **F2 — fusion is partial.** Only `mistakePuzzles` + `misconceptionTags`
+  reach the unified profile. `classifiedTactics` only feeds the skillRadar
+  chart (no drill gating). `findSquareAttempts` (board-vision heatmap) has no
+  found consumer — likely dead.
+- **F3 — no conversion signal.** Per-move evals ARE persisted
+  (`MoveAnnotation.evaluation`, cp White-POV; `gameAnalysisService.ts:241-260`)
+  but nothing scans the trajectory for "was winning → let it slip."
+  `weaknessAnalyzer.ts:907` only INFERS conversion from endgame-puzzle accuracy.
+- **F4 — no time-trouble signal.** No clock data tied to mistakes. Imported
+  Lichess/Chess.com PGNs carry `[%clk]` tags; we don't mine them. Play-with-
+  Coach has no clock at all (David forgot to add it).
 
-### Per-opening notes (done)
-- Each: main lesson + variation tabs (≥20p, two registers, sources, lead-the-eye
-  grounded), 1 theme-demonstrating middlegame plan (mp-<idnodash>-main with
-  learnCues+sources+leadeye), manifest (modelGames floor 0 — see below), full
-  wiring (registry+index+variationTabs+masterclassTabs+chain).
-- **Removed pre-existing auto-gen junk** per opening: stub plans w/o playableLines,
-  orphan plans w/o cues/sources, and WRONG-ORIENTATION model games (White wins /
-  draws vs the Black opening — e.g. Philidor Opera Game). Model games omitted
-  (floor 0) where no real Black WIN exists (David's carve-out).
-- **add-leadeye-to-plans.mjs allowlist** extended to petrov/philidor/qgd/qga.
-- Per-tab middlegame plans (beyond -main) are a deepening item — those tabs'
-  plan sections gracefully self-hide for now (no empty shells).
+## STATUS (2026-05-27) — no-dead-ends + loop-closure DONE
 
-## Per-opening recipe (Vienna §0.7)
-1. `lessons/<camel>.ts` — main `<CONST>_LESSON` (≥20-ply deepest beat,
-   orientation black, two registers say + sayShort≤8w, sources[], lead-the-eye:
-   GREEN vision arrow + YELLOW highlight on EVERY named square — grounding gate
-   is sealed-empty so no bare named squares).
-2. `lessons/<camel>Variations.ts` — one LessonScript per tab, key
-   `"<id>::<Exact Variation Name>"`, ≥20p each.
-3. `registry.ts` — 2 imports + 1 OPENINGS line.
-4. `variationTabs.ts` — `CURATED['<id>']` (every §0.1-valid variation).
-5. `services/<camel>MasterclassTabs.ts` + OpeningDetailPage chain branch.
-6. `middlegame-plans.json` — one plan per tab `mp-<idnodash>-<tab>`; run
-   `scripts/add-leadeye-to-plans.mjs`.
-7. punish-gems — only if weapon-rich + mineable (network). Else skip.
-8. model-games.json — REAL student-side WINS only; else omit (David's carve-out).
-9. checkpoint-quizzes.json + common-mistakes.json keyed '<id>' (Pitfalls need
-   shortNarration ≤8w + sources — commonMistakeNarration gate).
-10. opening-manifests.json — honest floors (modelGames floor = actual found).
+Every captured weakness sensor now feeds `getUnifiedWeaknessProfile` (which
+drives the Training Plan + Dashboard reps) AND routes back to a real drill:
 
-## Gates (ship-check) — all green before push
-lessonIntegrity, narrationAccuracy, narrationGrounding (SEALED — no bare named
-squares), lessonDepth (≥20p, SEALED), lessonTabIntegrity, wlppNarration
-(every say has ≤8w sayShort), lessonSources (every lesson resolvable source),
-openingManifests, modelGames-orientation, punishGems, middlegamePlanner,
-middlegamePlanThemes, commonMistakeNarration, OpeningDetailPage.wiring,
-openingWiring.
+| Sensor | Was | Now | Loop |
+|--------|-----|-----|------|
+| openingWeakSpots | DEAD (write-only) | fused + routed to /openings/:id drill | CLOSED — `markWeakSpotDrilled` on a correct drill move spaces it out |
+| classifiedTactics | display-only (radar) | fused (merged into tactic clusters) → /tactics/adaptive | closes via tactic-puzzle drilling |
+| findSquareAttempts | read only by its own page | fused as board-vision weakness → /tactics/find-square | closes — drilling records attempts, weak-square set shrinks |
+| conversion (NEW) | not captured | detector + fused → surfaces as a rep | SURFACED (dedicated convert-drill deferred per "don't add yet") |
+| Play clock (NEW) | none | full clock + per-ply time capture persisted | seeds time-trouble (detector deferred) |
+
+Tests: chessClock (7), useChessClock (5), conversionDetector (10),
+weaknessSpine (+8 new), all green. typecheck 0, lint 0.
+
+DEFERRED (David's rule: close the loop before adding): conversion's own
+convert-this-position drill + close; time-trouble detector off the captured
+per-ply clock data. Both are NEW features, held until the existing loops are
+confirmed closed on-device.
+
+## Phased plan (each phase = one shippable chunk)
+
+### Phase 1 — Play-with-Coach time control  [status: DONE — wired + tested, not yet deployed]
+David's ask #1. Net-new feature.
+- Add a time-control picker to the Play-with-Coach start UI (e.g. Unlimited /
+  10+0 / 5+0 / 3+2 — confirm options against existing difficulty UI).
+- Tick a clock during the game; detect flag/timeout → game ends, recorded as
+  a loss-on-time.
+- Persist the chosen time control on the saved `games` record.
+- Capture per-move time spent (front half of F4 / Phase 4).
+- Add loading/empty/error states per standing orders. Tests.
+- Files: CoachPlayPage + `coachPlaySession.ts` + game-save path + profile pref
+  default. (Surface map pending — exploration was interrupted; redo it.)
+
+### Phase 2 — Conversion-failure detector  [status: pending]
+David's ask #2. Pure post-process on already-stored evals.
+- New detector: walk a fully-analyzed game's per-move evals from the player's
+  POV; flag when eval reached ≥ +X (winning) then fell to ≤ +Y with a
+  non-win result. Player color inferred per `mistakePuzzleService` logic.
+- WIRE INTO `weaknessSpine` so it drives the Training Plan + dashboard, not a
+  display-only tab. Decide the rep routing (which drill surface a conversion
+  weakness sends you to — likely endgame/technique).
+- Tests + thresholds tuned (avoid flagging dead-drawn or already-lost games).
+
+### Phase 3 — Resurrect `openingWeakSpots` (F1)  [status: pending]
+- Read `failCount` to reorder opening-drill positions and/or fold top weak
+  spots into the unified profile so they surface in the plan.
+- Decide: reorder within an opening drill, OR add as a rep type. (Respects
+  "don't touch openings" — this is drill SCHEDULING, not content authoring.)
+
+### Phase 4 — Fold stranded sensors + time-trouble (F2/F4)  [status: pending]
+- Bring `classifiedTactics` + `findSquareAttempts` into the unified profile.
+- Time-trouble detector from per-move time (Phase 1 for coach games; PGN
+  `[%clk]` mining for imported games) → unified profile.
 
 ## Decisions log
-- 2026-05-25: model games — source from local pro-game cache
-  (`docs/audit-runs/2026-05-19-pro-games-gen/raw-fetched.json`) where a real
-  student-side WIN exists; else omit + floor 0 (David's carve-out).
-- 2026-05-25: gems — skip unless an opening is genuinely weapon-rich AND
-  mineable; explorer is firewalled in-sandbox → CI only. Empty > generic.
+- 2026-05-27: Openings frozen — no masterclass/content authoring this effort.
+  All work is weakness-engine plumbing that consumes existing signals.
+- 2026-05-27: The "fusion brain" already exists (`weaknessSpine`); earlier
+  claim that "nothing fuses it" was wrong. Work = plug in stranded sensors +
+  add 2 new ones, not rebuild.
 
 ## Sequencing / next-session pickup
-- Build COMPLETE openings one at a time; each fully gate-passing before moving on.
-- Petrov first as the gate-passing exemplar, then scale the pattern.
-- Commit+push to main in batches (ephemeral container).
-- Post-deploy audit (G1) localhost matrix after pushes; route openings-store
-  WRITE persistence + audio quality to David (sandbox can't verify).
+- Phase 1 first (David asked, self-contained, seeds the time signal).
+- Re-run the Play-with-Coach surface exploration (the agent call was
+  interrupted) before editing — need CoachPlayPage + session + save path
+  file:lines.
+- Push to `main` per Deployment Policy (override the web-session branch
+  default). Batch the deploy at chunk completion, not per commit.
+- ship-check + the relevant audit matrix (`audit-coach-play.mjs`,
+  `audit-weaknesses.mjs`) green before claiming done.

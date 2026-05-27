@@ -70,6 +70,18 @@ function navigateToRep(navigate: ReturnType<typeof useNavigate>, rep: RepCandida
     void navigate(`/openings/${rep.openingId ?? ''}`);
     return;
   }
+  // Opening weak spots drill on the opening's own page (its DrillMode
+  // resurfaces the failed positions), not the tactical puzzle queue.
+  if (rep.tag?.startsWith('analysis:weakspot:')) {
+    void navigate(`/openings/${rep.tag.slice('analysis:weakspot:'.length)}`);
+    return;
+  }
+  // Board-vision blind spots drill on the Find-the-Square trainer, which
+  // records fresh attempts and shrinks the weak-square set as vision improves.
+  if (rep.tag === 'analysis:boardvision') {
+    void navigate('/tactics/find-square');
+    return;
+  }
   if (rep.puzzleThemes && rep.puzzleThemes.length > 0) {
     void navigate('/tactics/adaptive', {
       state: {
