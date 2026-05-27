@@ -3,7 +3,7 @@ import type { LessonScript } from '../../types';
 const VIS = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
-const SRC = ['https://www.youtube.com/watch?v=ktoa6lk6qNk', 'concept:pos-center'];
+const SRC = ['https://www.youtube.com/@DanielNaroditskyGM', 'concept:pos-center'];
 
 // Naroditsky's Alapin Sicilian (2.c3). White-oriented; spine chess.js +
 // explorer-verified, DB-anchored (B22).

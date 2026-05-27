@@ -424,40 +424,6 @@
     "lessonSummary": "The Jobava London's f3-g4-h4 plan is devastatingly effective against Bf5. Jobava showed that even a world-class player like Mamedyarov can be overwhelmed when White commits fully to the kingside attack."
   },
   {
-    "id": "mg-pro-naroditsky-alapin-0",
-    "openingId": "pro-naroditsky-alapin",
-    "white": "DanielNaroditsky",
-    "black": "wonderfultime",
-    "whiteElo": 3238,
-    "blackElo": 3075,
-    "result": "0-1",
-    "year": 2023,
-    "event": "Chess.com bullet Game",
-    "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 e6 Bc4 Nb6 Bb3 d6 exd6 Bxd6 d4 cxd4 cxd4 Nc6 Nc3 O-O O-O Be7 Bc2 Nb4 Bb1 Bd7 a3 N4d5 Ne5 Rc8 Ne4 Bb5 Re1 Re8 Nxf7 Kxf7 Qh5+ Kg8 Ng5 Nf6 Qf7+ Kh8 Nxe6 Bf8 Bh6 Rxe6 Rxe6 Bc4 Ba2 Bxe6 Bxe6 Rc7",
-    "sourceUrl": "https://www.chess.com/game/live/92808699055",
-    "overview": "Daniel Naroditsky as White vs wonderfultime (3075) — Alapin Sicilian (Naroditsky), bullet 2023.",
-    "criticalMoments": [],
-    "middlegameTheme": "Alapin Sicilian (Naroditsky)",
-    "lessonSummary": "Full game by Daniel Naroditsky in the Alapin Sicilian (Naroditsky) line. Watch how the pro handles the position end to end."
-  },
-  {
-    "id": "mg-pro-naroditsky-alapin-1",
-    "openingId": "pro-naroditsky-alapin",
-    "white": "DanielNaroditsky",
-    "black": "wonderfultime",
-    "whiteElo": 3231,
-    "blackElo": 3082,
-    "result": "0-1",
-    "year": 2023,
-    "event": "Chess.com bullet Game",
-    "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 e6 d4 cxd4 cxd4 d6 Bc4 Nb6 Bd3 dxe5 dxe5 Nc6 O-O Be7 Nc3 O-O Qe2 Nd5 Rd1 Nxc3 bxc3 Qc7 Bh6 gxh6 Qe4 f5 exf6 Bxf6 Bc4 Kh8 Re1 Qg7 g3 Bxc3",
-    "sourceUrl": "https://www.chess.com/game/live/92808730435",
-    "overview": "Daniel Naroditsky as White vs wonderfultime (3082) — Alapin Sicilian (Naroditsky), bullet 2023.",
-    "criticalMoments": [],
-    "middlegameTheme": "Alapin Sicilian (Naroditsky)",
-    "lessonSummary": "Full game by Daniel Naroditsky in the Alapin Sicilian (Naroditsky) line. Watch how the pro handles the position end to end."
-  },
-  {
     "id": "mg-pro-naroditsky-fantasy-caro-0",
     "openingId": "pro-naroditsky-fantasy-caro",
     "white": "DanielNaroditsky",
@@ -490,74 +456,6 @@
     "criticalMoments": [],
     "middlegameTheme": "Fantasy Caro-Kann (Naroditsky)",
     "lessonSummary": "Full game by Daniel Naroditsky in the Fantasy Caro-Kann (Naroditsky) line. Watch how the pro handles the position end to end."
-  },
-  {
-    "id": "mg-pro-naroditsky-najdorf-0",
-    "openingId": "pro-naroditsky-najdorf",
-    "white": "0gZPanda",
-    "black": "DanielNaroditsky",
-    "whiteElo": 3112,
-    "blackElo": 3268,
-    "result": "0-1",
-    "year": 2023,
-    "event": "Chess.com bullet Game",
-    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 h3 e5 Nde2 Be7 g3 O-O Bg2 Be6 O-O a6 f4 Rc8 f5 Bc4 g4 b5 g5 Nd7 h4 Nc5 Kh2 b4 Ng3 bxc3 Qg4 Bxf1 Bxf1 cxb2 Bxb2 Nd4 c3 Rb8 Bc1 Nc6 f6 Bxf6 gxf6 Qxf6 Bg5 Qf2+ Bg2 Rb2 Rg1 Kh8 h5 h6 Bh4 Ne6 Nf5 Qf4+ Qxf4 Nxf4 Ne3 Re2 Bg3 Rxe3 Bf1 Rf3 Bg2 Nxg2 Kxg2 Rf6 Rd1 Re6 Rd3 Rfe8 Bh4 f6 Rf3 Kg8 Rd3 Kf7 c4 Ne7 Rxd6 Rc8 Rd7 Rxc4 Bf2 Rxe4 Ra7 Rg4+ Kf3 Ra4 Bc5 Ra3+ Ke4 Ra4+ Kd3 f5 Bd6 e4+ Ke3 Rxd6 Ra8 Rad4 Rd8 Rd3+ Kf4 Rxd8 Ke5 Rf3 a4 Rd5#",
-    "sourceUrl": "https://www.chess.com/game/live/92813467591",
-    "overview": "Daniel Naroditsky as Black vs 0gZPanda (3112) — Sicilian Najdorf (Naroditsky), bullet 2023.",
-    "criticalMoments": [],
-    "middlegameTheme": "Sicilian Najdorf (Naroditsky)",
-    "lessonSummary": "Full game by Daniel Naroditsky in the Sicilian Najdorf (Naroditsky) line. Watch how the pro handles the position end to end."
-  },
-  {
-    "id": "mg-pro-naroditsky-najdorf-1",
-    "openingId": "pro-naroditsky-najdorf",
-    "white": "wonderfultime",
-    "black": "DanielNaroditsky",
-    "whiteElo": 3052,
-    "blackElo": 3261,
-    "result": "0-1",
-    "year": 2023,
-    "event": "Chess.com bullet Game",
-    "pgn": "e4 c5 Nf3 d6 Bc4 Nc6 h3 Nf6 Nc3 e6 d3 Be7 O-O a6 a4 O-O Re1 b6 Bg5 Bb7 Qd2 Nd7 Bxe7 Qxe7 Rad1 Nde5 Nxe5 dxe5 Ne2 Rad8 Qe3 Kh8 c3 f5 f4 exf4 Nxf4 Ne5 Bxe6 fxe4 Ba2 Qh4 Ne6 Nf3+ gxf3 Qg3+ Kh1 Qxh3+ Kg1 Qg3+ Kh1 exf3",
-    "sourceUrl": "https://www.chess.com/game/live/92810538965",
-    "overview": "Daniel Naroditsky as Black vs wonderfultime (3052) — Sicilian Najdorf (Naroditsky), bullet 2023.",
-    "criticalMoments": [],
-    "middlegameTheme": "Sicilian Najdorf (Naroditsky)",
-    "lessonSummary": "Full game by Daniel Naroditsky in the Sicilian Najdorf (Naroditsky) line. Watch how the pro handles the position end to end."
-  },
-  {
-    "id": "mg-pro-naroditsky-kid-0",
-    "openingId": "pro-naroditsky-kid",
-    "white": "dinhnhokiet",
-    "black": "DanielNaroditsky",
-    "whiteElo": 2763,
-    "blackElo": 3164,
-    "result": "0-1",
-    "year": 2023,
-    "event": "Chess.com blitz Game",
-    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Be3 Nc6 d5 Ne5 h3 e6 f4 Ned7 Bf3 exd5 cxd5 Re8 Nge2 Nb6 Qd3 c6 dxc6 bxc6 O-O Be6 b3 Qc7 Nd4 Bd7 Rac1 Rac8 Rfd1 Qb8 Nde2 d5 e5 Bf5 Qd2 Nfd7 g4 Be6 Nd4 a6 b4 Nc4 Qe2 Qxb4 Nxc6 Rxc6 Nxd5 Bxd5 Bxd5 Nxe3 Bxf7+ Kxf7 Rxd7+ Kg8 Rxc6 Qxf4 Qf2 Qxe5 Rcc7 Qa1+",
-    "sourceUrl": "https://www.chess.com/game/live/92724092353",
-    "overview": "Daniel Naroditsky as Black vs dinhnhokiet (2763) — King's Indian Defense (Naroditsky), blitz 2023.",
-    "criticalMoments": [],
-    "middlegameTheme": "King's Indian Defense (Naroditsky)",
-    "lessonSummary": "Full game by Daniel Naroditsky in the King's Indian Defense (Naroditsky) line. Watch how the pro handles the position end to end."
-  },
-  {
-    "id": "mg-pro-naroditsky-kid-1",
-    "openingId": "pro-naroditsky-kid",
-    "white": "BrandonJacobson",
-    "black": "DanielNaroditsky",
-    "whiteElo": 3087,
-    "blackElo": 3135,
-    "result": "1-0",
-    "year": 2023,
-    "event": "Chess.com blitz Game",
-    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Bd3 e5 d5 a5 O-O Na6 Re1 Nc5 Bc2 Nh5 h3 Nf4 Kh2 Bd7 Be3 Qf6 Ng1 g5 g3 Ng6 Qh5 h6 Rf1 b6 Kg2 Qe7 Nf3 Be8 Qg4 Bd7 Qh5 Be8 Qg4 Nd7 Nh2 Nf6 Qf3 Bd7 Ng4 Nh7 Bd2 Qe8 Ne3 Ne7 Nf5 Nxf5 exf5 Nf6 Ne4 Qe7 Rh1 Nxe4 Bxe4 Bf6 h4 Kg7 hxg5 hxg5 Rh5 Rh8 Rah1 Rag8 Qg4 Rxh5 Rxh5 Kf8 Rh6 Ke8 Qh5 g4 Rh7 Qf8 Bh6 Qe7 Be3 Qf8 b3 Qe7 a3 Qf8 b4 axb4 axb4 Qe7 c5 bxc5 bxc5 dxc5 Bxc5",
-    "sourceUrl": "https://www.chess.com/game/live/93244314481",
-    "overview": "Daniel Naroditsky as Black vs BrandonJacobson (3087) — King's Indian Defense (Naroditsky), blitz 2023.",
-    "criticalMoments": [],
-    "middlegameTheme": "King's Indian Defense (Naroditsky)",
-    "lessonSummary": "Full game by Daniel Naroditsky in the King's Indian Defense (Naroditsky) line. Watch how the pro handles the position end to end."
   },
   {
     "id": "mg-pro-naroditsky-grunfeld-0",
@@ -4822,6 +4720,54 @@
     ],
     "sources": [
       "https://lichess.org/abZzbeTM"
+    ]
+  },
+  {
+    "id": "mg-pro-naroditsky-kid-classical",
+    "openingId": "pro-naroditsky-kid",
+    "white": "dinhnhokiet",
+    "black": "DanielNaroditsky",
+    "whiteElo": 2763,
+    "blackElo": 3100,
+    "result": "0-1",
+    "year": 2023,
+    "event": "Chess.com Blitz",
+    "studentSide": "black",
+    "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Be3 Nc6 d5 Ne5 h3 e6 f4 Ned7 Bf3 exd5 cxd5 Re8 Nge2 Nb6 Qd3 c6 dxc6 bxc6 O-O Be6 b3 Qc7 Nd4 Bd7 Rac1 Rac8 Rfd1 Qb8 Nde2 d5 e5 Bf5 Qd2 Nfd7 g4 Be6 Nd4 a6 b4 Nc4 Qe2 Qxb4 Nxc6 Rxc6 Nxd5 Bxd5 Bxd5 Nxe3 Bxf7+ Kxf7 Rxd7+ Kg8 Rxc6 Qxf4 Qf2 Qxe5 Rcc7 Qa1+",
+    "sources": [
+      "https://www.chess.com/member/danielnaroditsky",
+      "concept:pos-center"
+    ],
+    "overview": "Naroditsky himself with the black pieces, showing the King's Indian dream in full. White closes the centre with d5 and Black calmly maneuvers — …Ne5, …Ned7, …Nb6 — before the position cracks open. When the centre finally breaks, Black's better-coordinated pieces and the …d5 thrust hand him a kingside-flavoured attack, and a cascade of tactics on the c- and f-files finishes White off. The whole game is the KID's promise: give White the space, then out-attack him.",
+    "middlegameTheme": "Closed-centre maneuvering, the …d5 break, and a piece-storm down the c/f-files.",
+    "lessonSummary": "Let White build the centre, regroup the knights, then break and attack — the KID converts space into a mating initiative.",
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r1bq1rk1/ppp2pbp/3ppnp1/3Pn3/2P1PP2/2N1B2P/PP2B1P1/R2QK1NR b KQ - 0 9",
+        "annotation": "With f4 White grabs maximum space and the centre is locked. The KID battle is set: White pushes the queenside and centre, Black regroups his knights and prepares to strike where White is loosest. Patience, not panic.",
+        "concept": "Closed Centre, Battle Lines Set",
+        "highlights": [
+          {
+            "square": "f4",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      },
+      {
+        "moveNumber": 20,
+        "color": "black",
+        "fen": "1qr1r1k1/p2b1pbp/1np2np1/3p4/4PP2/1PNQBB1P/P3N1P1/2RR2K1 w - - 0 21",
+        "annotation": "…d5 — the freeing break. Black throws the pawn into the centre to rip it open while his pieces are the better-placed. From here the c- and f-files become highways for Black's rooks and queen, and the attack crashes through.",
+        "concept": "The …d5 Central Break",
+        "highlights": [
+          {
+            "square": "d5",
+            "color": "rgba(255,214,0,0.88)"
+          }
+        ]
+      }
     ]
   }
 ]

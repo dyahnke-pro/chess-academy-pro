@@ -1308,88 +1308,6 @@
     ]
   },
   {
-    "id": "mp-pro-naroditsky-kid-f5",
-    "openingId": "pro-naroditsky-kid",
-    "criticalPositionFen": "r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/2P1P3/2N2P2/PP2B1PP/R1BQNRK1 w - - 0 11",
-    "title": "Kingside Storm with ...f4+...g5",
-    "overview": "In Naroditsky's KID, Black has played ...f5 and is ready to launch the classic kingside pawn storm. After ...f4, the g3 square is weakened and Black prepares ...g5-g4 to blow open lines toward White's king. The Ne7 reroutes to g6 and the Nd7 to f6 to join the attack. This is the King's Indian's signature plan — a direct kingside assault while White expands on the queenside.",
-    "pawnBreaks": [
-      {
-        "move": "f5-f4",
-        "explanation": "The ...f4 advance seals the kingside and prepares ...g5-g4. It takes away the f4 and g3 squares from White's pieces and creates a battering ram. Once ...g5 and ...g4 follow, the f3 pawn is attacked and White's king shelter crumbles.",
-        "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/2P1P3/2N2P2/PP2B1PP/R1BQNRK1 w - - 0 11"
-      },
-      {
-        "move": "g6-g5-g4",
-        "explanation": "The ...g5-g4 advance is the battering ram that opens the g-file. After ...g4 fxg4, Black opens the f-file and g-file simultaneously. The Bg7 and Rf8 become attacking monsters on these open lines.",
-        "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/2P1P3/2N2P2/PP2B1PP/R1BQNRK1 w - - 0 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "...Ne7-g6-h4 or f4",
-        "explanation": "The Ne7 reroutes to g6, a natural attacking square. From g6 it can jump to h4 (threatening Nf3+ or Nxg2 sacrifices) or wait for f4 to open. The knight on g6 also controls f4 and h4."
-      },
-      {
-        "piece": "Knight",
-        "route": "...Nd7-f6-h5",
-        "explanation": "The Nd7 returns to f6 and then to h5, where it eyes f4 and g3. From h5, the knight can sacrifice on f4 or g3 to rip open White's king shelter."
-      }
-    ],
-    "strategicThemes": [
-      "The KID is a race: Black attacks the kingside while White expands on the queenside. Black must generate threats fast enough that White cannot break through with c5 first.",
-      "After ...f4, Black's dark-squared bishop on g7 becomes a monster. It controls the h6-c1 diagonal and supports the ...g5-g4 advance from behind.",
-      "The Rf8 is already on the half-open f-file. After ...g4 opens lines, this rook becomes a primary attacking piece without needing to move.",
-      "Black should NOT exchange dark-squared bishops. The Bg7 is the most important attacking piece and losing it removes most of Black's kingside threats."
-    ],
-    "endgameTransitions": [
-      "If the attack runs out of steam, Black's advanced kingside pawns may become weak. However, the ...f4+e5 pawn chain gives Black lasting space on the kingside.",
-      "In a rook endgame, the open f-file and g-file give Black active rook play. Combined with the space advantage from the kingside pawns, Black has good practical chances."
-    ]
-  },
-  {
-    "id": "mp-pro-naroditsky-kid-Nf6",
-    "openingId": "pro-naroditsky-kid",
-    "criticalPositionFen": "r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/2P1P3/2N2P2/PP2B1PP/R1BQNRK1 w - - 0 11",
-    "title": "Piece Regrouping for the Attack",
-    "overview": "Before launching the pawn storm, Black must regroup the knights to optimal attacking squares. The Ne7 needs to reach g6, and the Nd7 needs to return to f6. This regrouping phase is critical — attacking without proper piece placement leads to a premature assault. Naroditsky emphasizes patience: get the knights right, THEN push the pawns.",
-    "pawnBreaks": [
-      {
-        "move": "h7-h5",
-        "explanation": "An alternative to the ...g5-g4 plan. The ...h5-h4 advance attacks White's kingside from a different angle, often forcing g3 or g4 from White which creates new weaknesses.",
-        "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/2P1P3/2N2P2/PP2B1PP/R1BQNRK1 w - - 0 11"
-      },
-      {
-        "move": "c7-c5",
-        "explanation": "A positional alternative: ...c5 locks the queenside and prevents White's c5 break entirely. This slows White's counterplay and gives Black more time for the kingside attack. Used when Black wants a slower buildup.",
-        "fen": "r1bq1rk1/pppnn1bp/3p2p1/3Ppp2/2P1P3/2N2P2/PP2B1PP/R1BQNRK1 w - - 0 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "...Bc8-d7 or ...Bc8-h3",
-        "explanation": "The light-squared bishop needs to become active. ...Bd7 prepares ...c6 or supports the queenside. More aggressively, ...Bh3 targets g2, and if White's bishop moves, Bh3 combined with ...Ng6 creates mating threats."
-      },
-      {
-        "piece": "Queen",
-        "route": "...Qd8-e8-h5 or ...Qd8-e7",
-        "explanation": "The queen reroutes via e8 to h5 to join the kingside attack. On h5 it combines with ...Ng6 and ...Bh3 to create direct mating threats. ...Qe7 is a more restrained option supporting both flanks."
-      }
-    ],
-    "strategicThemes": [
-      "Piece placement before pawn pushes. The ...Ng6, ...Nf6, ...Bh3, ...Qh5 setup creates a critical mass of attacking pieces before committing to ...g5-g4.",
-      "White's queenside attack with c5 is slow in the main line because of the d5 pawn. Black has time to regroup IF the regrouping is efficient — every tempo counts.",
-      "The Bg7 is Black's best piece and should never be traded. It supports the entire kingside attack and controls the dark squares around White's king.",
-      "Avoid ...exf3 — trading the e5 pawn opens the center for White, which is exactly what White wants. Keep the center closed to support the flanking attack."
-    ],
-    "endgameTransitions": [
-      "The KID rarely reaches a peaceful endgame. If it does, Black's kingside space advantage and active pieces usually provide sufficient compensation.",
-      "If White trades queens to defuse the attack, Black's minor pieces (Bg7 + knight on d5 or f4) often dominate in the resulting middlegame/endgame hybrid."
-    ]
-  },
-  {
     "id": "mp-pro-naroditsky-grunfeld-c5",
     "openingId": "pro-naroditsky-grunfeld",
     "criticalPositionFen": "rnb2rk1/pp2ppbp/6p1/8/3PP3/4B3/P2N1PPP/2R1KB1R b K - 0 12",
@@ -36660,6 +36578,239 @@
             },
             {
               "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroditskykid-storm",
+    "openingId": "pro-naroditsky-kid",
+    "title": "KID: The Kingside Pawn Storm",
+    "criticalPositionFen": "r1bq1rk1/pppnnpbp/3p2p1/3Pp3/2P1P3/2N1B3/PP2BPPP/R2QNRK1 b - - 4 10",
+    "overview": "The defining King's Indian plan. With the centre locked by d5, Black ignores White's queenside play and hurls the kingside pawns forward — …f5, …f4, then …g5–g4 — to pry open lines straight at White's castled king. It's a race, and Black's attack arrives first.",
+    "pawnBreaks": [
+      "...f5 — open the f-file and ignite the kingside storm",
+      "...g5 then g4 — roll the pawns at White's king"
+    ],
+    "pieceManeuvers": [
+      "...Ng6 — reroute the knight toward the f4 and h4 attacking squares"
+    ],
+    "strategicThemes": [
+      "Trade space for a direct attack on the enemy king",
+      "Close the centre so the flank storm can't be punished by a central break"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pppnnpbp/3p2p1/3Pp3/2P1P3/2N1B3/PP2BPPP/R2QNRK1 b - - 4 10",
+        "moves": [
+          "f5",
+          "f3",
+          "f4",
+          "Bf2",
+          "g5",
+          "Rc1",
+          "Ng6",
+          "c5",
+          "Nxc5",
+          "b4",
+          "Na6",
+          "Nb5"
+        ],
+        "annotations": [
+          "f5 — the storm begins, striking at e4 and opening the f-file.",
+          "f3 props up e4 and braces for the assault.",
+          "f4 — the pawn locks in, fixing White's bishop and clamping the kingside dark squares.",
+          "Bf2 retreats the bishop out of the coming pawn avalanche.",
+          "g5 — the second wave; the pawns roll toward White's king.",
+          "Rc1 readies White's own queenside counterplay.",
+          "Ng6 reroutes toward f4 and h4, adding a piece to the attack.",
+          "c5 — White strikes back on the queenside; the race is joined.",
+          "Nxc5 grabs the pawn and keeps lines clear for the storm.",
+          "b4 chases the knight, White racing on his wing.",
+          "Na6 sidesteps; the knight stays useful for the kingside.",
+          "Nb5 — White's counter lands, but Black's pawns are already crashing in on the king. Black strikes first, and that is the whole bet of the King's Indian."
+        ],
+        "learnCues": [
+          "…f5 — storm begins",
+          "f3 — props up e4",
+          "…f4 — lock the kingside",
+          "Bf2 — bishop dodges",
+          "…g5 — second wave",
+          "Rc1 — White's counter",
+          "…Ng6 — knight to the attack",
+          "c5 — White hits back",
+          "…Nxc5 — grab it",
+          "b4 — chases the knight",
+          "…Na6 — sidestep",
+          "Nb5 — Black strikes first"
+        ],
+        "sources": [
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ],
+        "title": "The kingside pawn storm",
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g6",
+              "to": "f4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "g6",
+              "to": "h4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]

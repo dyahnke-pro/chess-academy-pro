@@ -416,9 +416,9 @@
   },
   "pro-naroditsky-kid": {
     "variations": 1,
-    "middlegamePlans": 0,
+    "middlegamePlans": 1,
     "endgamePlans": 0,
-    "modelGames": 0,
+    "modelGames": 1,
     "weapons": 0,
     "warnings": 0,
     "keyIdeas": 4
