@@ -112,6 +112,17 @@ function TodaysReps(): JSX.Element | null {
                     void navigate(`/openings/${rep.openingId ?? ''}`);
                     return;
                   }
+                  // Opening weak spots drill on the opening's own page (its
+                  // DrillMode resurfaces the failed positions).
+                  if (rep.tag?.startsWith('analysis:weakspot:')) {
+                    void navigate(`/openings/${rep.tag.slice('analysis:weakspot:'.length)}`);
+                    return;
+                  }
+                  // Board-vision blind spots drill on the Find-the-Square trainer.
+                  if (rep.tag === 'analysis:boardvision') {
+                    void navigate('/tactics/find-square');
+                    return;
+                  }
                   // A weakness rep drills its motif: deep-link into the
                   // adaptive tactical drill scoped to the tag's themes. The
                   // real misconception tag (not an analysis:* cluster) rides

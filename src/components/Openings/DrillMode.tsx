@@ -19,7 +19,7 @@ import { voiceService } from '../../services/voiceService';
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { fetchCloudEval } from '../../services/lichessExplorerService';
 import { loadAnnotations, loadSubLineAnnotations } from '../../services/annotationService';
-import { recordWeakSpot } from '../../services/weakSpotService';
+import { recordWeakSpot, markWeakSpotDrilled } from '../../services/weakSpotService';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
 import { useBoardContext } from '../../hooks/useBoardContext';
 import type { MoveResult } from '../../hooks/useChessGame';
@@ -314,6 +314,9 @@ export function DrillMode({ opening, variationIndex, customLine, onComplete, onE
         setShowCorrectFlash(true);
         setShowWrongMove(false);
         setWrongSquare(null);
+        // Close the loop: mark any weak-spot at this position as drilled so it
+        // spaces out of the unified weakness profile (no-op if none recorded).
+        void markWeakSpotDrilled(`${opening.id}-${currentMoveIndex}`);
         setTimeout(() => {
           setShowCorrectFlash(false);
           setCorrectSquare(null);

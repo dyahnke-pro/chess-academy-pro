@@ -609,6 +609,13 @@ export interface GameRecord {
    *  annotation density (the old `annotations.length >= moves/2`
    *  heuristic). */
   fullyAnalyzed?: boolean;
+  /** Time control the game was played under (chessClock TIME_CONTROLS id).
+   *  Undefined for unlimited / untimed games. */
+  timeControlId?: string;
+  /** Per-ply remaining clock (ms) for the side that just moved, BEFORE their
+   *  increment. Parallel to annotations. Seeds the time-trouble detector.
+   *  Undefined for untimed games. */
+  clockRemainingMs?: number[];
 }
 
 // ─── Flashcards ──────────────────────────────────────────────────────────────

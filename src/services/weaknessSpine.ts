@@ -19,8 +19,21 @@
 
 import { db } from '../db/schema';
 import { getMisconceptionProfile, type MisconceptionAggregate } from './misconceptionService';
+import { detectConversionFailures, type ConversionFailure } from './conversionDetector';
+import { getSquareHeatmap, type SquareHeatmapEntry } from './findSquareService';
+import { useAppStore } from '../stores/appStore';
 import type { MisconceptionBucket } from '../data/misconceptionTags';
-import type { MistakePuzzle, MistakeGamePhase, TacticType } from '../types';
+import type { ClassifiedTactic, MistakePuzzle, MistakeGamePhase, OpeningWeakSpot, TacticType } from '../types';
+
+/** A weak spot not re-drilled within this window is "open" again. */
+const WEAKSPOT_STALE_MS = 3 * 24 * 60 * 60 * 1000;
+const CONVERSION_TAG = 'analysis:conversion';
+const BOARD_VISION_TAG = 'analysis:boardvision';
+/** A square needs >= this many attempts before it can count as weak. */
+const BOARD_VISION_MIN_ATTEMPTS = 3;
+/** Missing >= a third of the time, or slower than this, marks a weak square. */
+const BOARD_VISION_ERROR_RATE = 0.34;
+const BOARD_VISION_SLOW_MS = 3000;
 
 /** The minimal shape both pipelines satisfy, consumed by buildTodaysReps
  *  and any other ranking surface. A structural superset of the fields
@@ -170,21 +183,185 @@ function fromMisconception(a: MisconceptionAggregate): UnifiedWeakness {
   };
 }
 
-/** The unified, ranked weakness profile across BOTH capture pipelines,
- *  deduped by position. Coach-caught rows win the dedup (they carry the
- *  richer "why" context); Analyze positions already represented in a
- *  misconception are dropped so nothing is counted twice. Ranked by
- *  open/due count, then severity, then recency. */
+/** Cluster opening-drill weak spots (failCount per repertoire position) by
+ *  opening. PREVIOUSLY DEAD: recordWeakSpot wrote these on every missed drill
+ *  move and nothing ever read them. Now they surface as `opening` weaknesses
+ *  routed back to the opening's own drill. A spot not re-drilled within the
+ *  stale window counts as open. */
+export function aggregateOpeningWeakSpots(spots: OpeningWeakSpot[], now: number = Date.now()): UnifiedWeakness[] {
+  const groups = new Map<string, OpeningWeakSpot[]>();
+  for (const s of spots) {
+    const g = groups.get(s.openingId);
+    if (g) g.push(s);
+    else groups.set(s.openingId, [s]);
+  }
+  const out: UnifiedWeakness[] = [];
+  for (const [openingId, rows] of groups) {
+    rows.sort((a, b) => b.failCount - a.failCount);
+    const open = rows.filter((r) => !r.lastDrilledAt || now - Date.parse(r.lastDrilledAt) > WEAKSPOT_STALE_MS).length;
+    const totalFails = rows.reduce((s, r) => s + r.failCount, 0);
+    const lastSeenAt = rows.reduce((m, r) => Math.max(m, Date.parse(r.lastFailedAt) || 0), 0);
+    out.push({
+      key: `analysis:weakspot:${openingId}`,
+      tag: `analysis:weakspot:${openingId}`,
+      label: `Weak spots in ${rows[0]?.openingName ?? openingId}`,
+      bucket: 'opening',
+      openCount: open,
+      total: rows.length,
+      severity: Math.min(95, totalFails * 8 + rows.length * 4),
+      sources: ['analysis'],
+      puzzleThemes: [],
+      positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, bestSan: r.correctMoveSan, openingId: r.openingId })),
+      lastSeenAt,
+    });
+  }
+  return out;
+}
+
+/** Cluster classified tactics (motifs missed in real games) by tactic type.
+ *  PREVIOUSLY DISPLAY-ONLY (fed the skill radar, never drove a drill). Keyed
+ *  on the SAME `analysis:tactic:<type>` cluster id as the mistake-puzzle tactic
+ *  rows so mergeByKey folds the two together rather than double-listing. An
+ *  un-solved tactic (no puzzle success yet) counts as open. */
+export function aggregateClassifiedTactics(tactics: ClassifiedTactic[]): UnifiedWeakness[] {
+  const groups = new Map<TacticType, ClassifiedTactic[]>();
+  for (const t of tactics) {
+    const g = groups.get(t.tacticType);
+    if (g) g.push(t);
+    else groups.set(t.tacticType, [t]);
+  }
+  const out: UnifiedWeakness[] = [];
+  for (const [type, rows] of groups) {
+    rows.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    const open = rows.filter((r) => r.puzzleSuccesses === 0).length;
+    const lastSeenAt = rows[0] ? Date.parse(rows[0].createdAt) || 0 : 0;
+    out.push({
+      key: `analysis:tactic:${type}`,
+      tag: `analysis:tactic:${type}`,
+      label: `Missed ${tacticLabel(type)}`,
+      bucket: 'tactical',
+      openCount: open,
+      total: rows.length,
+      severity: Math.min(95, rows.length * 6),
+      sources: ['analysis'],
+      puzzleThemes: themesForTactic(type),
+      positions: rows.slice(0, 8).map((r) => ({ fen: r.fen, playedSan: r.playerMoveSan, bestSan: r.bestMoveSan, openingId: r.openingName ?? undefined })),
+      lastSeenAt,
+    });
+  }
+  return out;
+}
+
+/** Roll up blown-winning-position games into a single conversion weakness.
+ *  PREVIOUSLY MISSING: per-move evals were stored but never scanned for the
+ *  "was winning, didn't convert" pattern. */
+export function aggregateConversionFailures(failures: ConversionFailure[]): UnifiedWeakness[] {
+  if (failures.length === 0) return [];
+  const lastSeenAt = failures.reduce((m, f) => Math.max(m, f.date ? Date.parse(f.date) || 0 : 0), 0);
+  const avgPeak = Math.round(failures.reduce((s, f) => s + f.peakCp, 0) / failures.length);
+  return [{
+    key: CONVERSION_TAG,
+    tag: CONVERSION_TAG,
+    label: 'Letting winning positions slip',
+    bucket: 'general',
+    openCount: failures.length,
+    total: failures.length,
+    severity: Math.min(95, failures.length * 12 + Math.round(avgPeak / 60)),
+    sources: ['analysis'],
+    puzzleThemes: [],
+    positions: failures.slice(0, 8).map((f) => ({ fen: f.fen, openingId: f.openingName ?? undefined })),
+    lastSeenAt,
+  }];
+}
+
+/** Surface board-vision blind spots (squares the student is slow or wrong to
+ *  locate). PREVIOUSLY DEAD: getSquareHeatmap was written + aggregated but
+ *  only ever read inside the Find-the-Square page itself. Now a weak-square
+ *  set drives a rep routed back to /tactics/find-square, which records fresh
+ *  attempts and shrinks the set as vision improves (the loop closes itself). */
+export function aggregateBoardVision(heatmap: SquareHeatmapEntry[]): UnifiedWeakness[] {
+  const weak = heatmap.filter(
+    (e) => e.attempts >= BOARD_VISION_MIN_ATTEMPTS &&
+      (e.errorRate >= BOARD_VISION_ERROR_RATE || (Number.isFinite(e.avgCorrectMs) && e.avgCorrectMs > BOARD_VISION_SLOW_MS)),
+  );
+  if (weak.length === 0) return [];
+  weak.sort((a, b) => b.errorRate - a.errorRate);
+  const names = weak.slice(0, 3).map((e) => e.square).join(', ');
+  const avgError = weak.reduce((s, e) => s + e.errorRate, 0) / weak.length;
+  return [{
+    key: BOARD_VISION_TAG,
+    tag: BOARD_VISION_TAG,
+    label: `Board vision — slow on ${names}`,
+    bucket: 'general',
+    openCount: weak.length,
+    total: weak.length,
+    severity: Math.min(95, weak.length * 6 + Math.round(avgError * 40)),
+    sources: ['analysis'],
+    puzzleThemes: [],
+    positions: [],
+    lastSeenAt: Date.now(),
+  }];
+}
+
+/** Fold rows sharing a key into one (e.g. a tactic motif caught by both the
+ *  mistake-puzzle pass and the classified-tactics pass). Counts add; severity
+ *  takes the max; positions concat (deduped, capped); sources union. */
+function mergeByKey(rows: UnifiedWeakness[]): UnifiedWeakness[] {
+  const byKey = new Map<string, UnifiedWeakness>();
+  for (const r of rows) {
+    const existing = byKey.get(r.key);
+    if (!existing) {
+      byKey.set(r.key, { ...r, positions: [...r.positions], sources: [...r.sources] });
+      continue;
+    }
+    existing.openCount += r.openCount;
+    existing.total += r.total;
+    existing.severity = Math.max(existing.severity, r.severity);
+    existing.lastSeenAt = Math.max(existing.lastSeenAt, r.lastSeenAt);
+    for (const s of r.sources) if (!existing.sources.includes(s)) existing.sources.push(s);
+    if (existing.puzzleThemes.length === 0 && r.puzzleThemes.length > 0) existing.puzzleThemes = r.puzzleThemes;
+    const seen = new Set(existing.positions.map((p) => posKey(p.fen, p.playedSan)));
+    for (const p of r.positions) {
+      const k = posKey(p.fen, p.playedSan);
+      if (!seen.has(k) && existing.positions.length < 8) { existing.positions.push(p); seen.add(k); }
+    }
+  }
+  return [...byKey.values()];
+}
+
+/** The unified, ranked weakness profile across EVERY capture pipeline,
+ *  deduped by position (coach-caught) and by cluster key (analysis). Coach-
+ *  caught rows win the position dedup (they carry the richer "why" context);
+ *  Analyze positions already represented in a misconception are dropped so
+ *  nothing is counted twice. openingWeakSpots, classifiedTactics and the
+ *  conversion detector are all folded in here so no captured signal is dead.
+ *  Ranked by open/due count, then severity, then recency. */
 export async function getUnifiedWeaknessProfile(): Promise<UnifiedWeakness[]> {
-  const [misAgg, allMis, mistakes] = await Promise.all([
+  const [misAgg, allMis, mistakes, weakSpots, tactics, games, heatmap] = await Promise.all([
     getMisconceptionProfile(),
     db.misconceptionTags.toArray(),
     db.mistakePuzzles.toArray(),
+    db.openingWeakSpots.toArray(),
+    db.classifiedTactics.toArray(),
+    db.games.toArray(),
+    getSquareHeatmap(),
   ]);
+
+  const prefs = useAppStore.getState().activeProfile?.preferences;
+  const conversions = detectConversionFailures(games, {
+    lichessUsername: prefs?.lichessUsername,
+    chessComUsername: prefs?.chessComUsername,
+  });
 
   const coachKeys = new Set(allMis.map((m) => posKey(m.fen, m.playedSan)));
   const coachRows = misAgg.map(fromMisconception);
-  const analysisRows = aggregateMistakePuzzles(mistakes, coachKeys);
+  const analysisRows = mergeByKey([
+    ...aggregateMistakePuzzles(mistakes, coachKeys),
+    ...aggregateClassifiedTactics(tactics),
+    ...aggregateOpeningWeakSpots(weakSpots),
+    ...aggregateConversionFailures(conversions),
+    ...aggregateBoardVision(heatmap),
+  ]);
 
   const merged = [...coachRows, ...analysisRows];
   merged.sort((a, b) => {
