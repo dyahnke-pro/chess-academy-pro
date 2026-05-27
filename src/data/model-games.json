@@ -3668,18 +3668,19 @@
     "studentSide": "white",
     "pgn": "d4 d5 Bf4 Nf6 Nf3 c5 e3 Nc6 Nbd2 Qb6 dxc5 Qxb2 Rb1 Qc3 Bb5 e6 O-O Be7 e4 O-O e5 Nd7 Nb3 Qb4 Nfd4 Nxd4 Nxd4 Qxc5 Bd3 g6 Nb3 Qc7 Re1 Nc5 Nxc5 Bxc5 Qg4 Re8 h4 f5 exf6 e5 Qg5 Bd6 Bxg6 Rf8 Bxe5 Bxe5 Bf7+ Kxf7 Qg7+ Ke6 Qxc7",
     "sources": [
-      "https://www.chess.com/member/imrosen",
-      "concept:pos-development"
+      "https://www.chess.com/game/live/168161971860",
+      "https://lichess.org/study/nkcITD7J/YgnvMZhD",
+      "concept:pos-initiative"
     ],
-    "overview": "Eric Rosen with White, showing the London answer to Black's most testing try — …c5 and …Qb6 hitting b2. Rosen ignores the grab: 6.dxc5 Qxb2 7.Rb1 chases the queen, and the two tempi Black spends grabbing a pawn become a crushing lead in development. With the centre rolling forward (e4-e5) and the queen still homeless, Rosen builds a kingside attack that ends with a bishop sacrifice winning the queen outright.",
-    "middlegameTheme": "The …Qb6/…Qxb2 pawn-grab refuted by rapid development and a central break.",
-    "lessonSummary": "Don't fear the b2-grab — Rb1, develop with tempo, and let the centre and the open b-file do the work.",
+    "overview": "Eric Rosen with White, against the London's most testing try — the …c5/…Qb6 thrust at the loose b2-pawn that his own lichess London course flags as the critical line. Rosen doesn't defend the pawn; he plays for Capablanca's initiative — keep harassing the enemy, force him to spend his pieces on nothing. 6.dxc5 Qxb2 7.Rb1 hounds the queen, and the tempi Black burns grabbing the pawn turn into a lead in development. White rolls the centre with e4-e5, the queen never finds a home, and a bishop sacrifice on f7 finishes by winning her outright.",
+    "middlegameTheme": "Ignore the b2-grab; convert the development lead into a central clamp and a kingside attack.",
+    "lessonSummary": "Don't defend b2 — Rb1, harass the queen, build the centre; the extra tempi outweigh the pawn.",
     "criticalMoments": [
       {
         "moveNumber": 7,
         "color": "white",
         "fen": "r1b1kb1r/pp2pppp/2n2n2/2Pp4/5B2/4PN2/PqPN1PPP/1R1QKB1R b Kkq - 1 7",
-        "annotation": "Rb1 — the whole point. Black's queen has to scramble back from b2, and every tempo she loses is a tempo White pours into the centre and the open b-file. The pawn meant nothing; the time means everything.",
+        "annotation": "Rb1 — Rosen's course answer to the critical …Qb6 line. He doesn't rescue b2; he chases the queen. Every tempo she burns retreating is a tempo White pours into development and the open b-file — Capablanca's initiative made concrete: keep the enemy busy defending.",
         "concept": "Greed Punished",
         "highlights": [
           {
@@ -3692,7 +3693,7 @@
         "moveNumber": 25,
         "color": "white",
         "fen": "r1b2rk1/ppq2B1p/5P2/3pb1Q1/7P/8/P1P2PP1/1R2R1K1 b - - 1 25",
-        "annotation": "Bf7+ rips the king into the open. After …Kxf7 the queen check on g7 wins Black's queen on c7 — the development lead Rosen banked on move 7 finally collects.",
+        "annotation": "Bf7+ tears the king into the open. After …Kxf7, Qg7+ and Qxc7 collect the queen — the development lead Rosen banked back on move seven, finally cashed.",
         "concept": "The Bishop Sacrifice",
         "highlights": [
           {

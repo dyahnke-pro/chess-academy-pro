@@ -30592,5 +30592,207 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proericrosenlondon-clamp",
+    "openingId": "pro-ericrosen-london",
+    "criticalPositionFen": "r1b1k2r/pp2bppp/2n1pn2/1BPp4/5B2/2q1PN2/P1PN1PPP/1R1Q1RK1 w kq - 2 10",
+    "title": "London: The b2-Grab Refuted",
+    "overview": "After the …c5/…Qb6 grab, White gives back nothing and takes the initiative: ignore b2, chase the queen with Rb1, then clamp the centre with e4-e5 and reroute a knight to the d4 outpost. Black's queen never recovers her wasted tempi, and White's extra pawn plus the central bind decide.",
+    "pawnBreaks": [
+      "e5 — clamp the centre and gain space"
+    ],
+    "pieceManeuvers": [
+      "Nd4 — reroute a knight to the d4 outpost the clamp creates"
+    ],
+    "strategicThemes": [
+      "The e5-pawn clamps the centre and buries Black's light bishop on c8",
+      "Convert the development lead and the extra pawn into a winning bind"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1k2r/pp2bppp/2n1pn2/1BPp4/5B2/2q1PN2/P1PN1PPP/1R1Q1RK1 w kq - 2 10",
+        "title": "The b2-grab refuted",
+        "moves": [
+          "e4",
+          "O-O",
+          "e5",
+          "Nd7",
+          "Nb3",
+          "Qb4",
+          "Nfd4",
+          "Nxd4",
+          "Nxd4"
+        ],
+        "annotations": [
+          "e4 — Rosen cashes the development lead into the centre. With Black's queen still stranded on c3, White expands while the offside lady looks on.",
+          "…O-O — Black tucks the king away, but the queen on c3 is a spectator, not an attacker.",
+          "e5 — the clamp. The pawn seizes space, kicks the f6-knight, and seals Black's bishop on c8 behind its own pawns.",
+          "…Nd7 — the knight retreats; in front of the e5-pawn it had no squares and no future.",
+          "Nb3 — the knight reroutes toward d4, the great outpost the e5-clamp has handed White.",
+          "…Qb4 — the queen finally seeks activity, far too late; she's a target now, and White just keeps improving.",
+          "Nfd4 — White grabs the d4 outpost, a square no black pawn can ever challenge.",
+          "…Nxd4 — Black trades off the monster knight, but the recapture only improves White.",
+          "Nxd4 — the bind is complete: a knight on d4, the e5-pawn clamping the centre, an extra pawn on c5, and a queen still scrambling. The London squeeze, in full."
+        ],
+        "learnCues": [
+          "e4 — cash the lead, take the centre",
+          "…O-O — king safe, queen offside",
+          "e5 — the clamp, hit f6",
+          "…Nd7 — forced retreat",
+          "Nb3 — reroute to d4",
+          "…Qb4 — too late for activity",
+          "Nfd4 — seize the d4 outpost",
+          "…Nxd4 — trade the monster",
+          "Nxd4 — the squeeze complete"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b3",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "https://lichess.org/study/nkcITD7J/YgnvMZhD",
+          "https://www.chess.com/game/live/168161971860",
+          "concept:pos-center"
+        ]
+      }
+    ]
   }
 ]
