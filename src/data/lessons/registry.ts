@@ -114,6 +114,8 @@ import { PRO_NARODITSKY_NAJDORF_LESSON } from './proNaroditskyNajdorf';
 import { PRO_NARODITSKY_NAJDORF_VARIATION_LESSONS } from './proNaroditskyNajdorfVariations';
 import { PRO_NARODITSKY_KID_LESSON } from './proNaroditskyKid';
 import { PRO_NARODITSKY_KID_VARIATION_LESSONS } from './proNaroditskyKidVariations';
+import { PRO_NARODITSKY_FANTASY_CARO_LESSON } from './proNaroditskyFantasyCaro';
+import { PRO_NARODITSKY_FANTASY_CARO_VARIATION_LESSONS } from './proNaroditskyFantasyCaroVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -181,6 +183,7 @@ const OPENINGS: OpeningLessons[] = [
   { main: PRO_NARODITSKY_ALAPIN_LESSON, variations: PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS },
   { main: PRO_NARODITSKY_NAJDORF_LESSON, variations: PRO_NARODITSKY_NAJDORF_VARIATION_LESSONS },
   { main: PRO_NARODITSKY_KID_LESSON, variations: PRO_NARODITSKY_KID_VARIATION_LESSONS },
+  { main: PRO_NARODITSKY_FANTASY_CARO_LESSON, variations: PRO_NARODITSKY_FANTASY_CARO_VARIATION_LESSONS },
 ];
 
 function build(): RegisteredLesson[] {

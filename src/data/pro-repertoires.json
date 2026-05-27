@@ -285,7 +285,19 @@
         "f3 weakens the dark squares around your king — the e3-square especially, and the a7-g1 diagonal. Once Bf4 leaves c1, BE CAREFUL: Black's …Qb6 hits b2 AND f2 is no longer defended by the queen. Always have Nc3 or b3 ready before moving the queen.",
         "Don't blunder a piece to the …Bg4 pin. After Nf3, the f3-square is weak (no pawn defends it!), so …Bg4 is a real threat. The standard prophylactic is to either play h3 early or to never put the queen on d1 without considering Qxg4 sequences."
       ],
-      "variations": [],
+      "variations": [
+        {
+          "name": "4...Nf6 Defense",
+          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 Nf6 e5 Nd5 c4 Nb6 Nf3 Bg4 Be3 e6 Nc3 Bb4 Bd3 O-O",
+          "explanation": "When Black develops with …Nf6 instead of …e5, White pushes e5 to kick the knight and rolls the centre with c4 — gaining a big space advantage and the bishop pair's worth of activity while Black stays cramped.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 42,
+            "score": 58,
+            "source": "lichess explorer"
+          }
+        }
+      ],
       "trapLines": [],
       "warningLines": [],
       "sources": [

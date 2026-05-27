@@ -1,8 +1,3 @@
-// DRAFT — NOT YET REGISTERED. Needs >=1 DB-anchored variation (a registered
-// masterclass requires >=1 variation tab per lessonTabIntegrity) + fix the deep
-// beat's e4 highlight grounding. Main line is authored + grounded; add a second
-// real line (e.g. 4...Nf6) that anchors >=6 plies in openings-lichess.json, then
-// register. See plan.
 import type { LessonScript } from '../../types';
 
 const VIS = 'rgba(40,185,95,0.92)';
@@ -53,7 +48,7 @@ export const PRO_NARODITSKY_FANTASY_CARO_LESSON: LessonScript = {
       id: 'deep',
       moves: ['e4', 'c6', 'd4', 'd5', 'f3', 'dxe4', 'fxe4', 'e5', 'Nf3', 'Bg4', 'Bc4', 'Nd7', 'O-O', 'Ngf6', 'c3', 'Bd6', 'Bg5', 'O-O', 'Nbd2', 'Qc7', 'Qe1', 'Rae8'],
       highlights: [{ square: 'e4', color: KEY }],
-      say: "Deep into the middlegame the structure tells the story: White's broad centre rolls forward, the queen swings toward the kingside via e1, and both bishops plus the f-rook converge on Black's king. From a quiet Caro-Kann, White has manufactured a full attacking game — exactly why Naroditsky reaches for the Fantasy when he wants to play for the win.",
+      say: "Deep into the middlegame the structure tells the story: the e4-pawn anchors White's broad centre, the queen swings toward the kingside via e1, and both bishops plus the f-rook converge on Black's king. From a quiet Caro-Kann, White has manufactured a full attacking game — exactly why Naroditsky reaches for the Fantasy when he wants to play for the win.",
       sayShort: 'Centre rolls, pieces swing at the king.',
     },
   ],
