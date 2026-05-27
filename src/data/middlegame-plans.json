@@ -31510,5 +31510,311 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pronaroditskygrunfeld-d4pressure",
+    "openingId": "pro-naroditsky-grunfeld",
+    "criticalPositionFen": "rnbq1rk1/ppp1ppbp/6p1/8/3PP3/2P2N2/P3BPPP/R1BQK2R b KQ - 2 8",
+    "title": "Grünfeld: Pressure the d4-Centre",
+    "overview": "The Grünfeld bargain: let White build the e4/d4 centre, then prove it overextended. Black strikes with ...c5, props the queen on a5, cracks the centre with ...cxd4, and pins the d4-defender with ...Bg4. When White lunges d5 to escape, the d-pawn becomes a target and the e5 outpost falls to Black's knight — the centre is a weakness, not a strength.",
+    "pawnBreaks": [
+      "c5 — break at White's d4-centre"
+    ],
+    "pieceManeuvers": [
+      "Bg4 — pin the f3-knight that guards d4",
+      "Ne5 — the knight grabs the e5 outpost"
+    ],
+    "strategicThemes": [
+      "Let White build the centre, then undermine it with ...c5 and ...Bg4",
+      "Win the d4-square and the e5 outpost as the centre overextends"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp1ppbp/6p1/8/3PP3/2P2N2/P3BPPP/R1BQK2R b KQ - 2 8",
+        "title": "Pressure the d4-centre",
+        "moves": [
+          "c5",
+          "Be3",
+          "Qa5",
+          "O-O",
+          "cxd4",
+          "cxd4",
+          "Bg4",
+          "Rb1",
+          "Nc6",
+          "d5",
+          "Bxf3",
+          "Bxf3",
+          "Ne5"
+        ],
+        "annotations": [
+          "…c5 — the Grünfeld bargain begins. Black lets White build the big centre, then immediately strikes at the d4-pawn.",
+          "Be3 — White props up d4 with the bishop, defending the pawn Black just challenged.",
+          "…Qa5 — the queen piles onto c3 and keeps White's centre under fire.",
+          "O-O — White tucks the king away and hopes to consolidate the centre.",
+          "…cxd4 — Black cracks the centre open, forcing White to accept an isolated d-pawn.",
+          "cxd4 — White recaptures, but the d4-pawn is now isolated and weak, exactly the Grünfeld's target.",
+          "…Bg4 — the bishop pins the f3-knight, the last defender of d4.",
+          "Rb1 — White grabs the open b-file, eyeing the b7-pawn for counterplay.",
+          "…Nc6 — the knight develops, hitting d4 again and heading for the e5 outpost.",
+          "d5 — White pushes the pawn forward to escape the pressure, but it surrenders the e5 outpost.",
+          "…Bxf3 — Black trades the bishop for the knight, removing a defender as the centre opens.",
+          "Bxf3 — White recaptures, but the d5-pawn is overextended and the dark squares are weak.",
+          "…Ne5 — the knight grabs the e5 outpost, hits the f3-bishop, and Black's pieces swarm the position White overextended. The Grünfeld bargain has paid: the centre is a target, not a strength."
+        ],
+        "learnCues": [
+          "…c5 — strike at the d4-centre",
+          "Be3 — prop up d4",
+          "…Qa5 — pile on c3",
+          "O-O — White castles",
+          "…cxd4 — open the centre",
+          "cxd4 — isolated d-pawn",
+          "…Bg4 — pin d4's defender",
+          "Rb1 — pressure the b-file",
+          "…Nc6 — hit d4, eye e5",
+          "d5 — push, but concede e5",
+          "…Bxf3 — trade off the knight",
+          "Bxf3 — but d5 overextends",
+          "…Ne5 — outpost, hit the bishop"
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "e3",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "a5",
+              "to": "c3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g4",
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "b1",
+              "to": "b7",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            },
+            {
+              "from": "c6",
+              "to": "e5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "f3",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "sources": [
+          "https://www.chess.com/game/live/141818605004",
+          "https://www.chess.com/openings/Grunfeld-Defense",
+          "concept:pos-center"
+        ]
+      }
+    ]
   }
 ]

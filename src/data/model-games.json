@@ -3864,10 +3864,11 @@
     "studentSide": "black",
     "pgn": "d4 Nf6 Nf3 g6 c4 Bg7 Nc3 d5 cxd5 Nxd5 e4 Nxc3 bxc3 O-O Be2 c5 Be3 Qa5 O-O cxd4 cxd4 Bg4 Rb1 Nc6 d5 Bxf3 Bxf3 Ne5 Rxb7 Qxa2 Rxe7 a5 d6 Rad8 Be2 Qa3 Rc7 Rxd6 Bc5 Rxd1 Bxa3 Rxf1+ Kxf1 Rb8 f4 h5 fxe5 Bxe5 Rd7 Rb3 Bd6 Rb1+ Kf2 Bd4+ Kg3 Rb3+ Bf3 a4 Ra7 Bxa7 e5 a3 e6 fxe6 Kf4 a2 Kg5 a1=Q",
     "sources": [
-      "https://www.chess.com/member/danielnaroditsky",
+      "https://www.chess.com/game/live/141818605004",
+      "https://www.chess.com/openings/Grunfeld-Defense",
       "concept:pawn-passed"
     ],
-    "overview": "Naroditsky with the Grünfeld he teaches, against the Exchange Variation's big centre. The whole point of the opening is on display: Black lets White build the e4/d4 pawn duo, then chips at it — …c5, …Bg4 pinning the f3-knight, …cxd4 — until the centre is a target, not a strength. When it cracks, Black's pieces pour into White's position, win the b- and a-pawns, and race a passed a-pawn home to promote.",
+    "overview": "Naroditsky with the Grünfeld he plays as Black, against the Exchange Variation's big centre. The whole point of the opening is on display: Black lets White build the e4/d4 pawn duo, then chips at it — …c5, …Qa5, …cxd4, …Bg4 pinning the f3-knight — until the centre is a target, not a strength. When it cracks, Black's pieces pour into White's position, win the b- and a-pawns, and race a passed a-pawn home to promote.",
     "middlegameTheme": "Provoke the big centre, undermine it with …c5 and …Bg4, then counterattack on the queenside.",
     "lessonSummary": "The Grünfeld bargain: hand White the centre, then prove it overextended — pressure d4, win material, and queen the passer.",
     "criticalMoments": [
