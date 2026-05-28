@@ -4216,5 +4216,39 @@
         "concept": "The ...c5 central break"
       }
     ]
+  },
+  {
+    "id": "mg-pro-gothamchess-caro-kann",
+    "openingId": "pro-gothamchess-caro-kann",
+    "white": "Titled opponent",
+    "black": "Levy Rozman (GothamChess)",
+    "whiteElo": 2649,
+    "blackElo": 2788,
+    "result": "0-1",
+    "year": 2021,
+    "event": "Online (chess.com) / 2021",
+    "studentSide": "black",
+    "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nh3 e6 Nf4 Bh7 Bc4 Nf6 c3 Qc7 Qe2 Bd6 Bxe6 Bxf4 Bh3+ Kd8 Qf3 Re8+ Kd1 Bxc1 Rxc1 Nbd7 Kd2 Qd6 Rhe1 Ne5 Rxe5 Rxe5 Bf5 Bxf5 Nxf5 Qd5 Qg3 Ne4+",
+    "overview": "GothamChess in his signature Caro-Kann Classical: Bf5 — the Capablanca move — develops the light bishop OUTSIDE the pawn chain before ...e6 cramps it. Black emerges with a sound structure, the bishop pair traded down, and a comfortable position; precise play converts the small but durable edge.",
+    "sources": [
+      "https://lichess.org/study/HnDkcRZY",
+      "https://www.chess.com/game/live/31693867525"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 4,
+        "color": "black",
+        "fen": "rn1qkbnr/pp2pppp/2p5/5b2/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+        "annotation": "...Bf5 — the Capablanca idea. The light bishop comes out BEFORE Black plays ...e6, the move that would otherwise lock the bishop behind the pawn chain. The cardinal sin of the French — burying the c8-bishop — is exactly what the Caro avoids.",
+        "concept": "Bf5 before ...e6"
+      },
+      {
+        "moveNumber": 5,
+        "color": "black",
+        "fen": "rn1qkbnr/pp2pppp/2p3b1/8/3P4/6N1/PPP2PPP/R1BQKBNR w KQkq - 3 6",
+        "annotation": "...Bg6 — the bishop drops back, daring White to chase it. White's pawn-storm h4-h5 will eventually force ...h6/...Bh7, but Black has lost no tempo and emerges with a rock-solid structure: pawn pyramid on c6/d5 (or d4 after exchanges), pieces harmoniously placed, no weaknesses.",
+        "concept": "The Caro pyramid: c6-d5 fortress"
+      }
+    ]
   }
 ]
