@@ -12,57 +12,137 @@ app, built for him. No multi-tenancy, no other accounts.
 These are HARD requirements — not "best effort." Skipping them is a
 ship-blocking failure no matter how trivial the change looks.
 
-### G1. Playwright audit after EVERY merge to main — yes, even in the sandbox.
+### G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).
 
-After every push that lands on `main`, run the relevant
-`scripts/audit-*.mjs` Playwright script per the matrix below. No
-exceptions. The matrix lives in §Post-Deploy Audit (MANDATORY). Unit
-tests + typecheck + lint are NOT sufficient — they don't catch deploy
-pipeline issues. The 2026-05-14 back-button incident proved this:
-green local tests, broken on prod, only the audit caught it.
+After every push that lands on `main`, run the post-deploy audit
+**with all three instruments together** — not just one. Each
+instrument verifies a different layer; missing one leaves a gap that
+the others can't see.
 
-**🚨 MERGING A PR IS NOT THE END OF THE WORK.** When you merge a PR
-via `mcp__github__merge_pull_request` (or any other path that lands
-code on `main`), your work IS NOT DONE. The very next thing you do
-— before any wrap-up text, before any "green light" message, before
-declaring success — is run the audit matrix scripts for the surfaces
-you changed. Then report results to David. The 2026-05-18 incident
-proved this: a 16-commit PR landed on main and the session moved on
-without running the audit; David had to call it out. If you find
-yourself about to say "PR merged — try it on your phone", STOP and
-run the audits first. The audit step is the merge's COMPLETION, not
-a follow-up step.
+The three instruments (use them on EVERY post-deploy audit, no
+exceptions):
 
-**You CAN run Playwright in the Claude Code sandbox.** Don't claim
-you can't. The pattern (battle-tested 2026-05-16):
+1. **Playwright** drives the live UI — taps, types, navigates,
+   asserts on DOM state. Verifies the surface RENDERS and CLICKS
+   correctly. Uses the pre-installed Chromium at
+   `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` via the
+   `scripts/audit-lib/chromium.mjs` resolver. **Set
+   `AUDIT_SANDBOX=1`** when running from the Claude Code sandbox so
+   `sandboxLaunchArgs()` adds `--ignore-certificate-errors` (the
+   Anthropic egress inspector signs certs Chromium doesn't trust by
+   default — without the flag, every prod navigation fails with
+   `ERR_CERT_AUTHORITY_INVALID`). Also pass `sandboxContextOptions()`
+   to `browser.newContext()` for `ignoreHTTPSErrors: true`.
+
+2. **Live audit-stream pull** — `GET https://chess-academy-pro.vercel.app/api/audit-stream?since=<ms>`
+   with the `x-audit-secret` header (env var `AUDIT_STREAM_SECRET`).
+   Captures every `logAppAudit()` event the app emitted during the
+   run: brain calls, navigation, tool calls, narration, errors.
+   Verifies what the app actually DID internally. **Pull before AND
+   after the Playwright run** so the delta = exactly this run's
+   events. Empty pulls = "app not open" (informational).
+
+3. **Narration listener sidecar** — `scripts/audit-lib/audit-listener.mjs`
+   (`startAuditListener()`). Spins up a local HTTP server, point the
+   page's `auditStreamUrl` localStorage at it, and the listener
+   captures every voice/speak/narration event with its source +
+   verbosity tag. Verifies WHAT the voice spoke, in what order, at
+   what register (full / brief / silent). The narration accuracy
+   gate checks the text against the board; the listener checks it
+   ACTUALLY FIRED in the running app — silence where a keystone
+   should speak is a bug (this is exactly what would catch a
+   ModelGameViewer-never-calls-voiceService regression).
+
+**All three on every run — DOM behavior + emitted events + voice.**
+A green Playwright pass alone is NOT a complete audit; the
+audit-stream and the listener must be inspected too.
+
+The reference 3-instrument audit script:
+`scripts/audit-pro-naroditsky-prod.mjs` — sample structure for new
+audits. The Naroditsky build (2026-05-28) proved this end-to-end:
+Playwright drove the player page + Watch click, the audit-stream
+captured `coach-narration-spoken` events, the listener confirmed the
+exact text Ruth spoke through `voiceService.speakPolly`.
+
+Unit tests + typecheck + lint are NOT sufficient — they don't catch
+deploy-pipeline issues. The 2026-05-14 back-button incident proved
+this: green local tests, broken on prod, only the audit caught it.
+
+**🚨 MERGING/PUSHING IS NOT THE END OF THE WORK.** When code lands on
+`main` (whether via `git push origin HEAD:main` or
+`mcp__github__merge_pull_request`), your work IS NOT DONE. The very
+next thing you do — before any wrap-up text, before any "green
+light" message, before declaring success — is run the 3-instrument
+audit for the surfaces you changed. Then report results to David.
+The 2026-05-18 incident proved this: a 16-commit PR landed on main
+and the session moved on without running the audit; David had to
+call it out. If you find yourself about to say "pushed to main —
+try it on your phone", STOP and run the audits first. The audit
+step is the merge's COMPLETION, not a follow-up step.
+
+**Sandbox CAN reach prod for the audit** (corrects an outdated
+2026-05-15 note — David 2026-05-28). `curl` to
+`chess-academy-pro.vercel.app` succeeds; Chromium succeeds with
+`AUDIT_SANDBOX=1`. The 3-instrument audit runs from the Claude Code
+sandbox against the LIVE prod URL with no proxy required. The
+audit-stream endpoint pulls from prod directly (HTTP 200). Per-pro
+egress allowlists may vary — `curl` test first and fall back to a
+local dev server (`npm run dev` on :5173) only if prod is genuinely
+blocked in that container.
+
+The pattern (battle-tested 2026-05-16 + 2026-05-28):
 
 1. **Browser binary is pre-installed** at
-   `/opt/pw-browsers/chromium-1194/chrome-linux/chrome` (and a
-   headless shell next to it). `npx playwright install` fails because
-   the CDN is blocked, but you don't need it — the resolver helper
-   `scripts/audit-lib/chromium.mjs` finds the pre-installed binary.
+   `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`. The
+   resolver `scripts/audit-lib/chromium.mjs` finds it via
+   `resolveChromiumExecutable()`.
 
-2. **Prod URL is blocked from the sandbox** (`x-deny-reason:
-   host_not_allowed`). Run the audit against a **local dev server**
-   instead:
-   ```bash
-   npm run dev > /tmp/vite.log 2>&1 &
-   sleep 8                                 # wait for "ready"
-   AUDIT_SMOKE_URL=http://localhost:5173 \
-   PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome \
-   node scripts/audit-<surface>.mjs
-   ```
-   The script's audit-stream POSTs go to the blocked prod URL and
-   fail silently, but `page.on('request', ...)` intercepts the
-   bodies, so captured events are intact in the report.
+2. **Run against prod by default.** Set `AUDIT_SANDBOX=1` and use
+   `sandboxLaunchArgs()` + `sandboxContextOptions()` so Chromium
+   accepts the resigned cert. Pull the audit-stream from prod.
+   Listener can still attach (override `auditStreamUrl` in
+   localStorage on first load).
 
-3. **Localhost-audit vs prod-audit caveat.** Local = code is the same
-   as what merged but Vercel hasn't deployed yet. If you want
-   true prod verification (cache, env vars, edge functions), David
-   has to run the audit from his machine after Vercel finishes
-   building. Localhost catches code regressions; prod catches deploy
-   regressions. Run localhost ALWAYS; tell David when only he can
-   run prod.
+3. **Fall back to localhost** ONLY if prod is unreachable from this
+   container (curl test returns `host_not_allowed`). In that case
+   run `npm run dev > /tmp/vite.log 2>&1 &` first; intercept audit
+   POSTs via `page.on('request', ...)` since they can't reach prod.
+
+4. **🚨 SANDBOX IndexedDB WRITE-STALL — don't burn hours on it (learned
+   2026-05-24).** In the sandbox-browser audits, IndexedDB *writes* to the
+   `openings` store STALL (a Dexie `db.openings.update`/`.get` from a click
+   handler never resolves; even a raw `indexedDB.open` times out). READS work
+   — which is why most audits pass — so any audit that drives a UI action
+   which WRITES openings (unlock ladder, favorites, rung completion via
+   `markRungComplete`, drill progress) will appear to "hang" or silently not
+   persist. This is the SANDBOX env, NOT a feature bug (reproduced with the
+   feature stashed). Do NOT debug it as app code. Instead: prove the write
+   LOGIC with a fake-indexeddb unit test (e.g. `openingService.ladder.test.ts`),
+   verify the UI up to the write (button states, arming), and route the
+   live-commit + persistence check to David on a real device / prod. When you
+   write a NEW audit that exercises an openings write, seed via
+   `loadFixtureIntoIDB` and expect the commit assertion to fail in-sandbox —
+   say so in the script header (see `audit-wlpp-unlock-budget.mjs`).
+
+5. **Onboarding bubble blocks fresh-context audits.** A fresh
+   Playwright context shows the strength-calibration bubble before any
+   surface mounts. Dismiss it FIRST: wait for
+   `[data-testid="strength-calibration-bubble"]`, click
+   `[data-testid="skill-band-intermediate"]`, wait for `detached`
+   (the bubble's `applyStrength` is async — 15s timeout is safe).
+   Then dismiss any `[data-testid="page-help-modal"]` that
+   auto-opens on the destination surface. Without these dismissals,
+   every click `intercepts pointer events` and the audit times out.
+
+6. **Deferred-seed timing.** On a cold context, `runSeedOnce` →
+   `startDeferredSeed` runs `loadEcoData` (~25s for 3300 entries)
+   + `loadProRepertoireData` + `loadGambitData` + `loadModelGamesData`
+   + `loadMiddlegamePlansData` + `seedFlashcardsForRepertoire` +
+   `loadOpeningNarrations`. Allow **at least 45-60s** after first
+   navigation before checking Dexie state for any non-base-repertoire
+   content. Pro-rep entries land at ~30s in; full seed completes by
+   ~50s. The 35s wait was too tight for the 2026-05-28 Naroditsky
+   rebuild audit (only Caro-Kann had landed in Dexie); bumped to 60s.
 
 4. **🚨 SANDBOX IndexedDB WRITE-STALL — don't burn hours on it (learned
    2026-05-24).** In the sandbox-browser audits, IndexedDB *writes* to the
