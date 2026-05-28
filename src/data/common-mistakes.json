@@ -1310,5 +1310,50 @@
         "https://www.chess.com/openings/Caro-Kann-Defense"
       ]
     }
+  ],
+  "pro-naroditsky-alapin": [
+    {
+      "fen": "r1bqkb1r/pp1ppppp/1nn5/2p1P3/8/1BP2N2/PP1P1PPP/RNBQK2R b KQkq - 6 6",
+      "wrongMove": "d5",
+      "correctMove": "e6",
+      "explanation": "After 6.Bb3 — Black's tempting d5 push (looking to challenge the e5-pawn and free pieces) actually walks into 7.exd6 e.p.! Qxd6 8.O-O when White has a development lead and the bishop on b3 stares at f7. The better move is the patient e6, supporting d5 only after pieces are out.",
+      "shortNarration": "e6 — develop first, push d5 later",
+      "sources": [
+        "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+        "https://www.chess.com/openings/Alapin-Sicilian-Defense"
+      ]
+    },
+    {
+      "fen": "rnb1kb1r/pp2pppp/5n2/2pq4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+      "wrongMove": "Nf3",
+      "correctMove": "Na3",
+      "explanation": "After 4...Nf6 in the d5-open line — the natural Nf3 is fine, but Naroditsky's signature is Na3! heading to b5 for the queen-fork outpost. Nf3 develops too modestly; Na3 wins concrete tempi on the c7 prize square. His 13% pick at this position scores 71.3% vs 66% for routine Nf3.",
+      "shortNarration": "Na3 — heading for Nb5 outpost",
+      "sources": [
+        "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+        "https://www.chess.com/openings/Alapin-Sicilian-Defense"
+      ]
+    },
+    {
+      "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "cxd4",
+      "correctMove": "Nf6",
+      "explanation": "After 3.d4 in the d6-mainline — Black's natural cxd4 just helps White (open c-file, central pawn duo). The principled move is Nf6 first, forcing White to declare the centre. After Nf6 White plays e5 kicking the knight or Nc3 developing; either way Black's structure is more flexible than after the trade.",
+      "shortNarration": "Nf6 — force White to declare",
+      "sources": [
+        "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+        "https://en.chessbase.com/post/svitlana-demchenko-silence-the-sicilian-win-with-the-alapin-variation-2-c3"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/8/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+      "wrongMove": "Nxd5",
+      "correctMove": "cxd4",
+      "explanation": "In a transposition where Black's knight on f6 reaches a position with the d5-pawn — taking with Nxd5 puts the knight on the WRONG square (vulnerable to Bc4) when cxd4 keeps the structure flexible. The data shows Nxd5 leads to the Alapin's signature crushing positions; cxd4 keeps Black in the game.",
+      "shortNarration": "cxd4 — keep structure flexible",
+      "sources": [
+        "https://www.chess.com/openings/Alapin-Sicilian-Defense"
+      ]
+    }
   ]
 }
