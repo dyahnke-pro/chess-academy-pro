@@ -57,13 +57,13 @@ describe('Pro Repertoire PGN Legality', () => {
   });
 
   it('has the expected number of openings', () => {
-    // 73 carry-over entries + Naroditsky's 9 rebuilt openings = 82.
+    // 73 carry-over entries + Naroditsky's 10 rebuilt openings = 83.
     // Naroditsky was rebuilt 2026-05-28 under the new pro-rep doctrine
     // (PGN games = source of truth, voice paraphrased from sourced
     // teaching principles): Caro-Kann, Alapin, Najdorf, KID, Alekhine,
-    // KIA, Rossolimo, Jobava London, Ruy Lopez. Bump this when other
-    // players get rebuilt.
-    expect(proRepertoire.openings).toHaveLength(82);
+    // KIA, Rossolimo, Jobava London, Ruy Lopez, Fantasy Caro. Bump this
+    // when other players get rebuilt.
+    expect(proRepertoire.openings).toHaveLength(83);
   });
 
   it('every opening has a valid playerId', () => {
