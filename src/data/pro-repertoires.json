@@ -599,6 +599,20 @@
           "sources": [
             "https://lichess.org/study/N3XOjphc"
           ]
+        },
+        {
+          "name": "vs ...Bf5",
+          "pgn": "d4 d5 Nc3 Nf6 Bf4 Bf5 e3 e6 Nf3 Bd6 Ne5 Nfd7 g4 Bg6 h4 Bxe5 dxe5 h5 gxh5 Bxh5 Be2",
+          "explanation": "The Symmetrical Jobava: Black mirrors with ...Bf5/...e6/...Bd6. Naroditsky grabs the e5 outpost (Ne5) and storms with g4!-h4, kicking the light bishop. The trades leave White a cramping e5-pawn and an open g-file — a lasting space-and-activity pull.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 163,
+            "score": 45,
+            "source": "his game dump + study N3XOjphc"
+          },
+          "sources": [
+            "https://lichess.org/study/N3XOjphc"
+          ]
         }
       ],
       "trapLines": [],

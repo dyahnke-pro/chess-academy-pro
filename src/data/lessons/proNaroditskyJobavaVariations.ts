@@ -55,4 +55,27 @@ export const PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS: Record<string, LessonScrip
       },
     ],
   },
+  'pro-naroditsky-jobava-london::vs ...Bf5': {
+    openingId: 'pro-naroditsky-jobava-london',
+    sources: ['https://lichess.org/study/N3XOjphc', 'concept:pos-space'],
+    title: 'Jobava — vs ...Bf5 (Ne5 & the g4 storm)',
+    minutes: 6,
+    orientation: 'white',
+    beats: [
+      {
+        id: 'bf5-ne5',
+        moves: ['d4', 'd5', 'Nc3', 'Nf6', 'Bf4', 'Bf5', 'e3', 'e6', 'Nf3', 'Bd6', 'Ne5'],
+        highlights: [{ square: 'e5', color: KEY }],
+        say: "The Symmetrical Jobava: Black mirrors White, parking the light bishop on f5 outside the e6-d5 pawn chain. Naroditsky heads straight for the e5-square — Ne5 plants a knight on the board's best outpost, supported and hard to challenge, the springboard for everything that follows.",
+        sayShort: '...Bf5? — seize the e5 outpost with Ne5.',
+      },
+      {
+        id: 'bf5-g4-storm',
+        moves: ['d4', 'd5', 'Nc3', 'Nf6', 'Bf4', 'Bf5', 'e3', 'e6', 'Nf3', 'Bd6', 'Ne5', 'Nfd7', 'g4', 'Bg6', 'h4', 'Bxe5', 'dxe5', 'h5', 'gxh5', 'Bxh5', 'Be2'],
+        highlights: [{ square: 'e5', color: KEY }, { square: 'h4', color: SOFT }],
+        say: "Then the kingside storm rolls: g4! kicks the bishop and h4 piles in. When the trades clear White owns a cramping pawn on e5 and an open g-file for his rook, the h-pawn on h4 still rolling. Black is solid but boxed in; White's space and the half-open lines are the lasting edge the Symmetrical Jobava promises.",
+        sayShort: 'g4-h4 storm; the e5 wedge cramps Black.',
+      },
+    ],
+  },
 };
