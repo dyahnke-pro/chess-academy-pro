@@ -220,6 +220,134 @@ PLANS.push({
   sources: ['https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation', ...BASE_SOURCES],
 });
 
+// ============== TROMPOWSKY (1823 games, 61.5%) — HIS TOP OPENING ==============
+PLANS.push({
+  openingId: 'pro-gothamchess-trompowsky',
+  treeId: 'trompowsky',
+  id: 'mp-progothamchess-trompowsky-main-system',
+  prefix: 'd4 Nf6 Bg5 e6 Nd2 h6 Bh4',
+  depth: 8,
+  title: "Trompowsky main — Bh4 pin + classical setup",
+  overview: "Gotham's top opening: 1,823 games at 61.5% score. After the Bg5 pin, Black plays …e6 / …h6 / White holds with Bh4. The plan: Bd3 + c3 + O-O reaching a quiet middlegame where the bishop pair + space advantage gradually win.",
+  pawnBreaks: ["…d5 by Black challenging the centre","e3-e4 timed central break","c3 reinforcing d4"],
+  pieceManeuvers: ["Bh4 holding the pin","Bd3 + O-O classical development","Nd2 supports central play"],
+  strategicThemes: ["Pin pressure on the f6-knight cramps Black's setup","Patient positional accumulation"],
+  endgameTransitions: ["R+minor+P endgames where the bishop pair or extra space converts"],
+  sources: ['book:trompowsky', 'https://www.chess.com/openings/Trompowsky-Attack', ...BASE_SOURCES],
+});
+
+// ============== ENGLISH OPENING (1597 games, 62.2%) ==============
+PLANS.push({
+  openingId: 'pro-gothamchess-english',
+  treeId: 'english',
+  id: 'mp-progothamchess-english-botvinnik-main',
+  prefix: 'c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 d5',
+  depth: 6,
+  title: "English Botvinnik — d5 closed-centre + flank attack",
+  overview: "Gotham's English at 1,597 games / 62.2%. The classical setup vs Black's KID structure reaches a closed centre after d5; the flank attack with g4 + h4 + Nh3 grabs the kingside. KID-reversed pattern with the extra tempo.",
+  pawnBreaks: ["g4 kingside pawn storm","h4 supporting the flank attack","f3 reinforcing the closed centre"],
+  pieceManeuvers: ["…a5 by Black expanding queenside","…Na6 reroute","Be3 + Be2 classical development"],
+  strategicThemes: ["Closed-centre flank attack — KID structure reversed","White's extra tempo decides on the kingside"],
+  endgameTransitions: ["R+minor+P endgames where the kingside space advantage carries through"],
+  sources: ['book:english-opening', 'https://www.chess.com/openings/English-Opening', ...BASE_SOURCES],
+});
+
+// ============== KIA WHITE (771 games, 71.1%) ==============
+PLANS.push({
+  openingId: 'pro-gothamchess-kia',
+  treeId: 'kia',
+  id: 'mp-progothamchess-kia-system-attack',
+  prefix: 'Nf3 d5 e3',
+  depth: 6,
+  title: "KIA — system development + e3 reinforcement",
+  overview: "Gotham's KIA system at 771 games / 71.1% — his highest-scoring opening. After Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4, the system is the same every game. The e3 supports central play before the e4 push.",
+  pawnBreaks: ["e3 reinforcing central squares","e4 central thrust later","c4 in some lines"],
+  pieceManeuvers: ["…Nf6 + …e6 classical development","Bg2 on the long diagonal","Knight reroute via Nbd2 → Nf1 → Ng3"],
+  strategicThemes: ["System play — same setup every game","Long-diagonal pressure from Bg2"],
+  endgameTransitions: ["Often R+minor+P with the Bg2 dominating the long diagonal"],
+  sources: ['book:kings-indian-attack', 'https://www.chess.com/openings/Kings-Indian-Attack', ...BASE_SOURCES],
+});
+
+// ============== VIENNA (649 games, 67.8%) ==============
+PLANS.push({
+  openingId: 'pro-gothamchess-vienna',
+  treeId: 'vienna',
+  id: 'mp-progothamchess-vienna-gambit-main',
+  prefix: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3',
+  depth: 6,
+  title: "Vienna Gambit — Qf3 + Nxc3 exchange",
+  overview: "Levy's Vienna Gambit at 649 games / 67.8% — one of his highest scores. After f4 + fxe5 + …Nxe4, the queen on f3 attacks both f7 and e4. The Nxc3 exchange leaves doubled c-pawns but excellent piece activity.",
+  pawnBreaks: ["…Nxc3 — Black trades the central knight","bxc3 recapture — White accepts doubled pawns for open b-file"],
+  pieceManeuvers: ["Qf3 — central queen attacking f7","Nxc3 trades the centre","Bc4 + Qf3 battery aiming at f7"],
+  strategicThemes: ["Sharp tactical positions — Levy's specialty","Doubled c-pawns trade structure for piece activity"],
+  endgameTransitions: ["Sharp middlegames — endgames rare in this gambit line"],
+  sources: ['book:vienna-game', 'https://www.chess.com/openings/Vienna-Game', ...BASE_SOURCES],
+});
+
+// ============== CARO-ADVANCE-WHITE (423 games, 73.2%) ==============
+PLANS.push({
+  openingId: 'pro-gothamchess-caro-advance-white',
+  treeId: 'caro-advance-white',
+  id: 'mp-progothamchess-caro-advance-h4-pin',
+  prefix: 'e4 c6 d4 d5 e5 Bf5 h4 h5 Bg5',
+  depth: 6,
+  title: "Caro-Advance — h4 + Bg5 cramping setup",
+  overview: "Gotham's anti-Caro from White's side at 423 games / 73.2% score. The h4-h5 pin fixes Black's kingside; Bg5 pressures the king's knight; the Bxd3 trade simplifies favourably for White.",
+  pawnBreaks: ["c2-c4 expanding the queenside","f2-f4 supporting the kingside attack"],
+  pieceManeuvers: ["…Qb6 by Black putting pressure on b2","Bd3 + Bxd3 trade-down","Knight reroute via Nd2"],
+  strategicThemes: ["h4 fixes Black's kingside structure permanently","Bishop pair vs Black's locked-in pieces"],
+  endgameTransitions: ["R+minor+P endgames where Black's structural weaknesses tell"],
+  sources: ['book:caro-kann', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation', ...BASE_SOURCES],
+});
+
+// ============== CLOSED SICILIAN (333 games, 68.0%) ==============
+PLANS.push({
+  openingId: 'pro-gothamchess-closed-sicilian',
+  treeId: 'closed-sicilian',
+  id: 'mp-progothamchess-closed-sicilian-bb5-trade',
+  prefix: 'e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3',
+  depth: 6,
+  title: "Closed Sicilian — Bb5 + Nxb5 simplification",
+  overview: "Levy's Closed Sicilian at 333 games / 68.0%. The 2.Nc3 sidesteps Open Sicilian theory; Bb5 + the knight exchange on b5 leaves Black with doubled a-pawns and a structural weakness for the long endgame conversion.",
+  pawnBreaks: ["…a6 doubling White's b-pawn","d4 central break"],
+  pieceManeuvers: ["Bb5 + Nxb5 trade","Knight reroute via Nbd2","Queen activation"],
+  strategicThemes: ["Sidestep Sicilian theory","Doubled a-pawns are the long-term weakness"],
+  endgameTransitions: ["R+minor+P endings where the structural weakness converts"],
+  sources: ['https://www.chess.com/openings/Closed-Sicilian-Defense', ...BASE_SOURCES],
+});
+
+// ============== FRENCH BLACK (1596 games, 62.7%) — separate entry from Milner-Barry ==============
+PLANS.push({
+  openingId: 'pro-gothamchess-french-defense',
+  treeId: 'french-black',
+  id: 'mp-progothamchess-french-defense-rubinstein',
+  prefix: 'e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3',
+  depth: 8,
+  title: "French Rubinstein — broken kingside + bishop pair",
+  overview: "Gotham's French Defense — 1,596 games at 62.7%. The Rubinstein 4...dxe4 accepts doubled f-pawns for the bishop pair and active piece play. After …Nc6 + …e5 + …Bg4, Black coordinates around the open g-file.",
+  pawnBreaks: ["…e5 striking back at White's centre","…c5 challenging d4"],
+  pieceManeuvers: ["…Nc6 developing the queen's knight","…Bg4 pinning and trading the f3-knight","Active queen swings"],
+  strategicThemes: ["Bishop pair compensates for the doubled pawns","Open g-file is the recurring attacking lever"],
+  endgameTransitions: ["Endings with the bishop pair plus active king on the g-file"],
+  sources: ['book:french-defence', 'https://www.chess.com/openings/French-Defense', ...BASE_SOURCES],
+});
+
+// ============== PIRC DEFENSE BLACK (351 games, 69.2%) ==============
+PLANS.push({
+  openingId: 'pro-gothamchess-pirc-defense',
+  treeId: 'pirc-black',
+  id: 'mp-progothamchess-pirc-c5-break',
+  prefix: 'e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 c5 Bb5+ Nc6 e5',
+  depth: 6,
+  title: "Pirc Austrian Attack — …c5 break + …Nd7 redirect",
+  overview: "Levy's Pirc Defense — 351 games at 69.2%, his highest Black opening score. Against the Austrian Attack with f4, Black strikes immediately with …c5; the Bb5+ check is blocked by …Nc6; after e5 by White, the knight redirects to d7.",
+  pawnBreaks: ["…c5 the critical break against f4","…d5 freeing the centre in some lines"],
+  pieceManeuvers: ["…Nd7 redirect after e5","…Nc6 blocking the Bb5+ check","Bg7 fianchetto holding the long diagonal"],
+  strategicThemes: ["Counter-attacking — let White overextend then strike","Bg7 + active piece play decides"],
+  endgameTransitions: ["R+minor+P endings where Black's piece activity converts"],
+  sources: ['book:pirc-defence', 'https://www.chess.com/openings/Pirc-Defense', ...BASE_SOURCES],
+});
+
 // ============== QGD BLACK (113 games, 52.7%) ==============
 PLANS.push({
   openingId: 'pro-gothamchess-qgd',

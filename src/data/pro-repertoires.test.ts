@@ -57,13 +57,14 @@ describe('Pro Repertoire PGN Legality', () => {
   });
 
   it('has the expected number of openings', () => {
-    // 73 carry-over entries + Naroditsky's 10 rebuilt openings = 83.
-    // Naroditsky was rebuilt 2026-05-28 under the new pro-rep doctrine
-    // (PGN games = source of truth, voice paraphrased from sourced
-    // teaching principles): Caro-Kann, Alapin, Najdorf, KID, Alekhine,
-    // KIA, Rossolimo, Jobava London, Ruy Lopez, Fantasy Caro. Bump this
-    // when other players get rebuilt.
-    expect(proRepertoire.openings).toHaveLength(83);
+    // 73 carry-over + Naroditsky's 10 + Gotham's 8 new entries = 91.
+    // Naroditsky was rebuilt 2026-05-28 under the new pro-rep doctrine;
+    // Gotham was extended 2026-05-28 with 8 missing high-game-count
+    // openings: Trompowsky (1823 games), English (1597), French-Black
+    // (1596), KIA (771), Vienna (649), Caro-Advance-White (423), Pirc-
+    // Black (351), Closed Sicilian (333). Bump this when other players
+    // get expanded or rebuilt.
+    expect(proRepertoire.openings).toHaveLength(91);
   });
 
   it('every opening has a valid playerId', () => {

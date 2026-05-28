@@ -21252,6 +21252,136 @@
     ]
   },
   {
+    "id": "mp-progothamchess-caro-advance-h4-pin",
+    "openingId": "pro-gothamchess-caro-advance-white",
+    "criticalPositionFen": "rn1qkbnr/pp2ppp1/2p5/3pPbBp/3P3P/8/PPP2PP1/RN1QKBNR b KQkq - 1 5",
+    "title": "Caro-Advance — h4 + Bg5 cramping setup",
+    "overview": "Gotham's anti-Caro from White's side at 423 games / 73.2% score. The h4-h5 pin fixes Black's kingside; Bg5 pressures the king's knight; the Bxd3 trade simplifies favourably for White.",
+    "pawnBreaks": [
+      "c2-c4 expanding the queenside",
+      "f2-f4 supporting the kingside attack"
+    ],
+    "pieceManeuvers": [
+      "…Qb6 by Black putting pressure on b2",
+      "Bd3 + Bxd3 trade-down",
+      "Knight reroute via Nd2"
+    ],
+    "strategicThemes": [
+      "h4 fixes Black's kingside structure permanently",
+      "Bishop pair vs Black's locked-in pieces"
+    ],
+    "endgameTransitions": [
+      "R+minor+P endgames where Black's structural weaknesses tell"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1qkbnr/pp2ppp1/2p5/3pPbBp/3P3P/8/PPP2PP1/RN1QKBNR b KQkq - 1 5",
+        "moves": [
+          "Qb6",
+          "Bd3",
+          "Bxd3",
+          "Qxd3",
+          "e6",
+          "Nd2"
+        ],
+        "annotations": [
+          "Qb6 — Black's queen to b6 — standard development.",
+          "Bd3 — White's bishop to d3 — standard development.",
+          "Bxd3 — Black's bishop captures on d3 — material exchange.",
+          "Qxd3 — White's queen captures on d3 — material exchange.",
+          "e6 — Black's pawn to e6 — standard development.",
+          "Nd2 — White's knight to d2 — standard development."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Qb6 — queen to b6",
+          "Bd3 — bishop to d3",
+          "Bxd3 — bishop to d3",
+          "Qxd3 — queen to d3",
+          "e6 — pawn to e6",
+          "Nd2 — knight to d2"
+        ],
+        "title": "Caro-Advance — h4 + Bg5 cramping setup",
+        "intro": "Gotham's anti-Caro from White's side at 423 games / 73.2% score. The h4-h5 pin fixes Black's kingside; Bg5 pressures the king's knight; the Bxd3 trade simplifies favourably for White.",
+        "sources": [
+          "book:caro-kann",
+          "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://www.chess.com/member/gothamchess"
+        ]
+      }
+    ]
+  },
+  {
     "id": "mp-progothamchess-caro-bf5-trade",
     "openingId": "pro-gothamchess-caro-kann",
     "criticalPositionFen": "rn1qkbnr/pp3pp1/2p1p3/3pP1Bp/3P3P/3Q4/PPP2PP1/RN2K1NR b KQkq - 1 7",
@@ -21347,6 +21477,224 @@
         "sources": [
           "book:caro-kann",
           "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://www.chess.com/member/gothamchess"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-closed-sicilian-bb5-trade",
+    "openingId": "pro-gothamchess-closed-sicilian",
+    "criticalPositionFen": "r1bqkbnr/pp1ppppp/8/1Bp5/3nP3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+    "title": "Closed Sicilian — Bb5 + Nxb5 simplification",
+    "overview": "Levy's Closed Sicilian at 333 games / 68.0%. The 2.Nc3 sidesteps Open Sicilian theory; Bb5 + the knight exchange on b5 leaves Black with doubled a-pawns and a structural weakness for the long endgame conversion.",
+    "pawnBreaks": [
+      "…a6 doubling White's b-pawn",
+      "d4 central break"
+    ],
+    "pieceManeuvers": [
+      "Bb5 + Nxb5 trade",
+      "Knight reroute via Nbd2",
+      "Queen activation"
+    ],
+    "strategicThemes": [
+      "Sidestep Sicilian theory",
+      "Doubled a-pawns are the long-term weakness"
+    ],
+    "endgameTransitions": [
+      "R+minor+P endings where the structural weakness converts"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkbnr/pp1ppppp/8/1Bp5/3nP3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+        "moves": [
+          "Nxb5",
+          "Nxb5",
+          "a6",
+          "Nc3",
+          "d6",
+          "d4"
+        ],
+        "annotations": [
+          "Nxb5 — Black's knight captures on b5 — material exchange.",
+          "Nxb5 — White's knight captures on b5 — material exchange.",
+          "a6 — Black's pawn to a6 — standard development.",
+          "Nc3 — White's knight to c3 — standard development.",
+          "d6 — Black's pawn to d6 — standard development.",
+          "d4 — White's pawn to d4 — standard development."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nxb5 — knight to b5",
+          "Nxb5 — knight to b5",
+          "a6 — pawn to a6",
+          "Nc3 — knight to c3",
+          "d6 — pawn to d6",
+          "d4 — pawn to d4"
+        ],
+        "title": "Closed Sicilian — Bb5 + Nxb5 simplification",
+        "intro": "Levy's Closed Sicilian at 333 games / 68.0%. The 2.Nc3 sidesteps Open Sicilian theory; Bb5 + the knight exchange on b5 leaves Black with doubled a-pawns and a structural weakness for the long endgame ",
+        "sources": [
+          "https://www.chess.com/openings/Closed-Sicilian-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://www.chess.com/member/gothamchess"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-english-botvinnik-main",
+    "openingId": "pro-gothamchess-english",
+    "criticalPositionFen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1B3/PP2BPPP/R2QK1NR b KQ - 0 7",
+    "title": "English Botvinnik — d5 closed-centre + flank attack",
+    "overview": "Gotham's English at 1,597 games / 62.2%. The classical setup vs Black's KID structure reaches a closed centre after d5; the flank attack with g4 + h4 + Nh3 grabs the kingside. KID-reversed pattern with the extra tempo.",
+    "pawnBreaks": [
+      "g4 kingside pawn storm",
+      "h4 supporting the flank attack",
+      "f3 reinforcing the closed centre"
+    ],
+    "pieceManeuvers": [
+      "…a5 by Black expanding queenside",
+      "…Na6 reroute",
+      "Be3 + Be2 classical development"
+    ],
+    "strategicThemes": [
+      "Closed-centre flank attack — KID structure reversed",
+      "White's extra tempo decides on the kingside"
+    ],
+    "endgameTransitions": [
+      "R+minor+P endgames where the kingside space advantage carries through"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1B3/PP2BPPP/R2QK1NR b KQ - 0 7",
+        "moves": [
+          "a5",
+          "g4",
+          "Na6"
+        ],
+        "annotations": [
+          "a5 — Black's pawn to a5 — standard development.",
+          "g4 — White's pawn to g4 — standard development.",
+          "Na6 — Black's knight to a6 — standard development."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "a5 — pawn to a5",
+          "g4 — pawn to g4",
+          "Na6 — knight to a6"
+        ],
+        "title": "English Botvinnik — d5 closed-centre + flank attack",
+        "intro": "Gotham's English at 1,597 games / 62.2%. The classical setup vs Black's KID structure reaches a closed centre after d5; the flank attack with g4 + h4 + Nh3 grabs the kingside. KID-reversed pattern wit",
+        "sources": [
+          "book:english-opening",
+          "https://www.chess.com/openings/English-Opening",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://www.chess.com/member/gothamchess"
         ]
@@ -21537,6 +21885,150 @@
         "intro": "Levy's Fantasy Caro from 95 games at 72.1%. The f3 line invites Black to challenge with …e6/Bb4/Bxc3+/bxc3. After …dxe4, White's Nh3 develops via the rim square (rerouting to Nf2 → Ng4 later), and fxe",
         "sources": [
           "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://www.chess.com/member/gothamchess"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-french-defense-rubinstein",
+    "openingId": "pro-gothamchess-french-defense",
+    "criticalPositionFen": "rnbqkb1r/ppp2p1p/4pp2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 6",
+    "title": "French Rubinstein — broken kingside + bishop pair",
+    "overview": "Gotham's French Defense — 1,596 games at 62.7%. The Rubinstein 4...dxe4 accepts doubled f-pawns for the bishop pair and active piece play. After …Nc6 + …e5 + …Bg4, Black coordinates around the open g-file.",
+    "pawnBreaks": [
+      "…e5 striking back at White's centre",
+      "…c5 challenging d4"
+    ],
+    "pieceManeuvers": [
+      "…Nc6 developing the queen's knight",
+      "…Bg4 pinning and trading the f3-knight",
+      "Active queen swings"
+    ],
+    "strategicThemes": [
+      "Bishop pair compensates for the doubled pawns",
+      "Open g-file is the recurring attacking lever"
+    ],
+    "endgameTransitions": [
+      "Endings with the bishop pair plus active king on the g-file"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/ppp2p1p/4pp2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 6",
+        "moves": [
+          "Nc6",
+          "g3",
+          "e5",
+          "Bg2",
+          "Bg4",
+          "h3",
+          "Bxf3"
+        ],
+        "annotations": [
+          "Nc6 — Black's knight to c6 — standard development.",
+          "g3 — White's pawn to g3 — standard development.",
+          "e5 — Black's pawn to e5 — standard development.",
+          "Bg2 — White's bishop to g2 — standard development.",
+          "Bg4 — Black's bishop to g4 — standard development.",
+          "h3 — White's pawn to h3 — standard development.",
+          "Bxf3 — Black's bishop captures on f3 — material exchange."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nc6 — knight to c6",
+          "g3 — pawn to g3",
+          "e5 — pawn to e5",
+          "Bg2 — bishop to g2",
+          "Bg4 — bishop to g4",
+          "h3 — pawn to h3",
+          "Bxf3 — bishop to f3"
+        ],
+        "title": "French Rubinstein — broken kingside + bishop pair",
+        "intro": "Gotham's French Defense — 1,596 games at 62.7%. The Rubinstein 4...dxe4 accepts doubled f-pawns for the bishop pair and active piece play. After …Nc6 + …e5 + …Bg4, Black coordinates around the open g-",
+        "sources": [
+          "book:french-defence",
+          "https://www.chess.com/openings/French-Defense",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://www.chess.com/member/gothamchess"
         ]
@@ -21806,6 +22298,95 @@
     ]
   },
   {
+    "id": "mp-progothamchess-kia-system-attack",
+    "openingId": "pro-gothamchess-kia",
+    "criticalPositionFen": "rnbqkbnr/ppp1pppp/8/3p4/8/4PN2/PPPP1PPP/RNBQKB1R b KQkq - 0 2",
+    "title": "KIA — system development + e3 reinforcement",
+    "overview": "Gotham's KIA system at 771 games / 71.1% — his highest-scoring opening. After Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4, the system is the same every game. The e3 supports central play before the e4 push.",
+    "pawnBreaks": [
+      "e3 reinforcing central squares",
+      "e4 central thrust later",
+      "c4 in some lines"
+    ],
+    "pieceManeuvers": [
+      "…Nf6 + …e6 classical development",
+      "Bg2 on the long diagonal",
+      "Knight reroute via Nbd2 → Nf1 → Ng3"
+    ],
+    "strategicThemes": [
+      "System play — same setup every game",
+      "Long-diagonal pressure from Bg2"
+    ],
+    "endgameTransitions": [
+      "Often R+minor+P with the Bg2 dominating the long diagonal"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4PN2/PPPP1PPP/RNBQKB1R b KQkq - 0 2",
+        "moves": [
+          "Nf6",
+          "c4",
+          "e6"
+        ],
+        "annotations": [
+          "Nf6 — Black's knight to f6 — standard development.",
+          "c4 — White's pawn to c4 — standard development.",
+          "e6 — Black's pawn to e6 — standard development."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nf6 — knight to f6",
+          "c4 — pawn to c4",
+          "e6 — pawn to e6"
+        ],
+        "title": "KIA — system development + e3 reinforcement",
+        "intro": "Gotham's KIA system at 771 games / 71.1% — his highest-scoring opening. After Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4, the system is the same every game. The e3 supports central play before the e4 push.",
+        "sources": [
+          "book:kings-indian-attack",
+          "https://www.chess.com/openings/Kings-Indian-Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://www.chess.com/member/gothamchess"
+        ]
+      }
+    ]
+  },
+  {
     "id": "mp-progothamchess-london-classical-attack",
     "openingId": "pro-gothamchess-london",
     "criticalPositionFen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 3 5",
@@ -21873,6 +22454,66 @@
         "sources": [
           "book:london-system",
           "https://www.chess.com/openings/London-System",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://www.chess.com/member/gothamchess"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-pirc-c5-break",
+    "openingId": "pro-gothamchess-pirc-defense",
+    "criticalPositionFen": "r1bqk2r/pp2ppbp/2np1np1/1Bp1P3/3P1P2/2N2N2/PPP3PP/R1BQK2R b KQkq - 0 7",
+    "title": "Pirc Austrian Attack — …c5 break + …Nd7 redirect",
+    "overview": "Levy's Pirc Defense — 351 games at 69.2%, his highest Black opening score. Against the Austrian Attack with f4, Black strikes immediately with …c5; the Bb5+ check is blocked by …Nc6; after e5 by White, the knight redirects to d7.",
+    "pawnBreaks": [
+      "…c5 the critical break against f4",
+      "…d5 freeing the centre in some lines"
+    ],
+    "pieceManeuvers": [
+      "…Nd7 redirect after e5",
+      "…Nc6 blocking the Bb5+ check",
+      "Bg7 fianchetto holding the long diagonal"
+    ],
+    "strategicThemes": [
+      "Counter-attacking — let White overextend then strike",
+      "Bg7 + active piece play decides"
+    ],
+    "endgameTransitions": [
+      "R+minor+P endings where Black's piece activity converts"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/pp2ppbp/2np1np1/1Bp1P3/3P1P2/2N2N2/PPP3PP/R1BQK2R b KQkq - 0 7",
+        "moves": [
+          "Nd7"
+        ],
+        "annotations": [
+          "Nd7 — Black's knight to d7 — standard development."
+        ],
+        "arrows": [
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nd7 — knight to d7"
+        ],
+        "title": "Pirc Austrian Attack — …c5 break + …Nd7 redirect",
+        "intro": "Levy's Pirc Defense — 351 games at 69.2%, his highest Black opening score. Against the Austrian Attack with f4, Black strikes immediately with …c5; the Bb5+ check is blocked by …Nc6; after e5 by White",
+        "sources": [
+          "book:pirc-defence",
+          "https://www.chess.com/openings/Pirc-Defense",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://www.chess.com/member/gothamchess"
         ]
@@ -22297,6 +22938,281 @@
         "sources": [
           "book:trompowsky",
           "https://www.chess.com/openings/Trompowsky-Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://www.chess.com/member/gothamchess"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-trompowsky-main-system",
+    "openingId": "pro-gothamchess-trompowsky",
+    "criticalPositionFen": "rnbqkb1r/pppp1pp1/4pn1p/8/3P3B/8/PPPNPPPP/R2QKBNR b KQkq - 1 4",
+    "title": "Trompowsky main — Bh4 pin + classical setup",
+    "overview": "Gotham's top opening: 1,823 games at 61.5% score. After the Bg5 pin, Black plays …e6 / …h6 / White holds with Bh4. The plan: Bd3 + c3 + O-O reaching a quiet middlegame where the bishop pair + space advantage gradually win.",
+    "pawnBreaks": [
+      "…d5 by Black challenging the centre",
+      "e3-e4 timed central break",
+      "c3 reinforcing d4"
+    ],
+    "pieceManeuvers": [
+      "Bh4 holding the pin",
+      "Bd3 + O-O classical development",
+      "Nd2 supports central play"
+    ],
+    "strategicThemes": [
+      "Pin pressure on the f6-knight cramps Black's setup",
+      "Patient positional accumulation"
+    ],
+    "endgameTransitions": [
+      "R+minor+P endgames where the bishop pair or extra space converts"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/pppp1pp1/4pn1p/8/3P3B/8/PPPNPPPP/R2QKBNR b KQkq - 1 4",
+        "moves": [
+          "d5",
+          "e3",
+          "Be7",
+          "Bd3",
+          "b6",
+          "c3",
+          "O-O"
+        ],
+        "annotations": [
+          "d5 — Black's pawn to d5 — standard development.",
+          "e3 — White's pawn to e3 — standard development.",
+          "Be7 — Black's bishop to e7 — standard development.",
+          "Bd3 — White's bishop to d3 — standard development.",
+          "b6 — Black's pawn to b6 — standard development.",
+          "c3 — White's pawn to c3 — standard development.",
+          "O-O — Black castles short, king to safety."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "d5 — pawn to d5",
+          "e3 — pawn to e3",
+          "Be7 — bishop to e7",
+          "Bd3 — bishop to d3",
+          "b6 — pawn to b6",
+          "c3 — pawn to c3",
+          "O-O — king to g8"
+        ],
+        "title": "Trompowsky main — Bh4 pin + classical setup",
+        "intro": "Gotham's top opening: 1,823 games at 61.5% score. After the Bg5 pin, Black plays …e6 / …h6 / White holds with Bh4. The plan: Bd3 + c3 + O-O reaching a quiet middlegame where the bishop pair + space ad",
+        "sources": [
+          "book:trompowsky",
+          "https://www.chess.com/openings/Trompowsky-Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://www.chess.com/member/gothamchess"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-vienna-gambit-main",
+    "openingId": "pro-gothamchess-vienna",
+    "criticalPositionFen": "rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N2Q2/PPPP2PP/R1B1KBNR b KQkq - 1 5",
+    "title": "Vienna Gambit — Qf3 + Nxc3 exchange",
+    "overview": "Levy's Vienna Gambit at 649 games / 67.8% — one of his highest scores. After f4 + fxe5 + …Nxe4, the queen on f3 attacks both f7 and e4. The Nxc3 exchange leaves doubled c-pawns but excellent piece activity.",
+    "pawnBreaks": [
+      "…Nxc3 — Black trades the central knight",
+      "bxc3 recapture — White accepts doubled pawns for open b-file"
+    ],
+    "pieceManeuvers": [
+      "Qf3 — central queen attacking f7",
+      "Nxc3 trades the centre",
+      "Bc4 + Qf3 battery aiming at f7"
+    ],
+    "strategicThemes": [
+      "Sharp tactical positions — Levy's specialty",
+      "Doubled c-pawns trade structure for piece activity"
+    ],
+    "endgameTransitions": [
+      "Sharp middlegames — endgames rare in this gambit line"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N2Q2/PPPP2PP/R1B1KBNR b KQkq - 1 5",
+        "moves": [
+          "Nxc3",
+          "bxc3",
+          "c5",
+          "Qg3",
+          "Nc6",
+          "Nf3"
+        ],
+        "annotations": [
+          "Nxc3 — Black's knight captures on c3 — material exchange.",
+          "bxc3 — White's pawn captures on c3 — material exchange.",
+          "c5 — Black's pawn to c5 — standard development.",
+          "Qg3 — White's queen to g3 — standard development.",
+          "Nc6 — Black's knight to c6 — standard development.",
+          "Nf3 — White's knight to f3 — standard development."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nxc3 — knight to c3",
+          "bxc3 — pawn to c3",
+          "c5 — pawn to c5",
+          "Qg3 — queen to g3",
+          "Nc6 — knight to c6",
+          "Nf3 — knight to f3"
+        ],
+        "title": "Vienna Gambit — Qf3 + Nxc3 exchange",
+        "intro": "Levy's Vienna Gambit at 649 games / 67.8% — one of his highest scores. After f4 + fxe5 + …Nxe4, the queen on f3 attacks both f7 and e4. The Nxc3 exchange leaves doubled c-pawns but excellent piece act",
+        "sources": [
+          "book:vienna-game",
+          "https://www.chess.com/openings/Vienna-Game",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://www.chess.com/member/gothamchess"
         ]

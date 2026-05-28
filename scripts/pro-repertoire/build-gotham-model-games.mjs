@@ -92,6 +92,55 @@ const OPENINGS = [
     name: 'French Defense',
     overview: "Levy's French Defense as Black — the Rubinstein 4...dxe4 line. Doubled f-pawns from the gxf6 recapture but the bishop pair compensates. Active development with …Nc6 / …Bg4 / …e5 creates dynamic chances.",
   },
+  // ===== NEW ENTRIES (2026-05-28) =====
+  {
+    openingId: 'pro-gothamchess-trompowsky',
+    treeId: 'trompowsky',
+    name: 'Trompowsky Attack',
+    overview: "Gotham's TOP opening in action — the Trompowsky Bg5 pin against a strong opponent. Watch how the bishop pair plus space slowly dominates; quiet positional grinding that converts in the endgame. This is the Trompowsky pattern Levy teaches in his YouTube tournaments and speedrun content.",
+  },
+  {
+    openingId: 'pro-gothamchess-english',
+    treeId: 'english',
+    name: 'English Opening',
+    overview: "Levy's English Opening with the classical Botvinnik setup — Nc3 + e4 + d4 vs Black's KID structure. The g4-g5 kingside attack arrives faster than Black's queenside counterplay. Classic flank-attack-with-closed-centre conversion.",
+  },
+  {
+    openingId: 'pro-gothamchess-vienna',
+    treeId: 'vienna',
+    name: 'Vienna Game',
+    overview: "Gotham's Vienna Gambit in full flight — 3.f4 challenging the centre, Qf3 attacking f7, doubled c-pawns but excellent piece activity on the b- and f-files. The kind of sharp tactical melee Levy specialises in.",
+  },
+  {
+    openingId: 'pro-gothamchess-kia',
+    treeId: 'kia',
+    name: "King's Indian Attack",
+    overview: "Levy's KIA at full power — same Nf3+g3+Bg2+d3+Nbd2+e4 setup every game. The e4-e5 push grabs space, then f4-f5 builds the kingside attack. 71.1% score across 771 games — his most consistent winning system.",
+  },
+  {
+    openingId: 'pro-gothamchess-caro-advance-white',
+    treeId: 'caro-advance-white',
+    name: 'Caro-Kann Advance (White)',
+    overview: "Gotham's anti-Caro from White's side — 423 games at 73.2%. The h4-h5 thrust fixes Black's kingside, Bg5 pins the king's knight, and queenside castling sets up the attack. Sharp structural commitment that punishes imprecise defence.",
+  },
+  {
+    openingId: 'pro-gothamchess-closed-sicilian',
+    treeId: 'closed-sicilian',
+    name: 'Closed Sicilian',
+    overview: "Levy's Closed Sicilian sidesteps Open Sicilian theory entirely. The 2.Nc3 + Bb5 + exchange sequence simplifies into a quiet positional middlegame where structural advantages decide. Anti-theoretical and effective.",
+  },
+  {
+    openingId: 'pro-gothamchess-french-defense',
+    treeId: 'french-black',
+    name: 'French Defense',
+    overview: "Gotham's French Defense Rubinstein — accepting doubled f-pawns for the bishop pair and active piece play. The …e5 break liberates Black's position; the open g-file becomes a real attacking lever. Dynamic Black defence in action.",
+  },
+  {
+    openingId: 'pro-gothamchess-pirc-defense',
+    treeId: 'pirc-black',
+    name: 'Pirc Defense',
+    overview: "Levy's Pirc Defense at 69.2% score — invite White to overextend, then strike back with …c5. The fianchetto bishop coordinates with …Nd7 + active piece play; counter-attacking chess at its best.",
+  },
 ];
 
 const existing = JSON.parse(fs.readFileSync(MG_PATH, 'utf8'));
