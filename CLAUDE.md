@@ -607,6 +607,427 @@ representative-game walks for the deep tail and his teaching
 content threaded throughout. Every move chess.js-validated; every
 beat sources both data and voice.
 
+### G9.2 The PRO-REP BUILD PROCEDURE — step-by-step (locked David 2026-05-28).
+
+David: *"i need you to build the rules in a way that guides future
+session to build this correctly the first time without me needing
+to baby sit like this in the future."*
+
+This is the procedural playbook. Follow these steps in order for
+every new pro-rep opening build. Skip nothing. Don't reinvent.
+
+#### STEP 0 — Verify the player's data is on disk
+
+```bash
+ls data/sources/<player>-chesscom/ | wc -l   # should be ~149 months for Naroditsky
+```
+
+If missing, pull it (one-time, ~70 seconds for 140k games):
+```bash
+node scripts/pro-repertoire/fetch-chesscom.mjs <chesscom-username>
+```
+Raw archives go to `data/sources/<player>-chesscom/` — gitignored.
+
+#### STEP 1 — Add the opening to the extractor
+
+Edit `scripts/pro-repertoire/extract-opening-tree.mjs` `OPENINGS`
+map. Add a new entry with:
+- `name`: the canonical opening name
+- `color`: 'white' or 'black' (the student's side)
+- `minPrefix`: SAN array, the minimum prefix that identifies the
+  opening (e.g. `['e4', 'c6']` for the Caro)
+- `maxDepth: 80` (always)
+
+#### STEP 2 — Extract the tree + model games
+
+```bash
+node scripts/pro-repertoire/extract-opening-tree.mjs <player> <openingId>
+node scripts/pro-repertoire/pick-model-games.mjs <player> <openingId>
+```
+Output goes to `data/sources/<player>-trees/<openingId>.json` +
+`<openingId>-model-games.json`. The tree carries:
+- root + per-position game counts, W/D/L
+- spine (most-played path with MIN_BRANCH_GAMES ≥ 5)
+- variations off the spine (≥5 games each)
+- bestUrls per node (≥2400 opponent wins, top 5)
+
+#### STEP 3 — Identify the variations (named tabs)
+
+Inspect the tree's top-level branches. Each branch with ≥30
+games + a CANONICAL name (textbook variation name) is a
+masterclass tab candidate. Aim for 4-8 tabs. Examples from the
+Naroditsky Caro pilot:
+- Two Knights (2.Nc3) — 738 games
+- KIA / Réti (2.Nf3) — 627 games
+- Advance (3.e5) — 603 games (further splits into Botvinnik-
+  Carls 3...c5 sub-line, the masterclass spine)
+- Exchange (3.exd5) — 372 games
+- Classical (3.Nc3) — 295 games
+- Fantasy (3.f3) — 189 games
+- Modern transposition (2.d4 g6) — 185 games
+- d3 sideline (2.d3) — 157 games
+
+#### STEP 4 — Deep-build the per-variation data
+
+For each variation, add a key to `OPENINGS` in
+`scripts/pro-repertoire/deep-build-data.mjs` and run:
+```bash
+for v in advance-c5 two-knights kia-reti exchange classical fantasy modern-transposition; do
+  node scripts/pro-repertoire/deep-build-data.mjs <player> <openingId> $v
+done
+```
+Output per variation at `data/sources/<player>-deep/<openingId>-<variationKey>.json`:
+- Opening spine (aggregate) walked to terminus with per-ply choices
+- Middlegame patterns: frequency-ranked moves at plies 12-25
+  across games-at-terminus
+- Endgame structure breakdown: classified board states at the END
+  of each game (R+P / R+B+P / K+P / etc.)
+- Top 5 model games with full PGNs
+
+#### STEP 5 — Count the middlegame + endgame plans HONESTLY (per variation)
+
+🚨 **THE WIDER-CORPUS RULE (David 2026-05-28, locked after Caro
+build incident).** Every plan-counting, endgame-classification, or
+structural analysis MUST run across the FULL set of games matching
+the variation's identifying prefix — typically hundreds of games —
+**NEVER on the 3-4 games that reach the deep aggregate terminus**.
+The terminus is for spine construction only; everything ELSE is
+broader-corpus analysis.
+
+The 2026-05-28 mistake to NEVER repeat: I (an earlier session)
+classified the Fantasy Caro variation as having "no endgame plans
+— most games end mid-board" based on the 3 games at the deep
+terminus. The actual answer across the 189 Fantasy games was 56%
+reach real endgames (R+minor+P 24%, Q+P 13%, etc.) including a
+132-ply decisive Q+P win vs 0gZPanda 3201. David caught it; the
+rule below was locked the same hour.
+
+**Procedure (use the wider corpus, always):**
+
+```bash
+# Middlegame plan counting — across hundreds of games per variation
+node scripts/pro-repertoire/count-plans.mjs
+
+# Endgame classification — across ALL games (>=25 plies) matching
+# the variation prefix, classified at the final position. The
+# deep-build-data.mjs default uses only games-at-terminus — write a
+# parallel pass or extend that script to classify across the wider
+# corpus before relying on its output. (Same goes for any future
+# "what does the data show" question — if it filters to games-at-
+# terminus only, ZOOM OUT before drawing conclusions.)
+```
+
+**The plan-count rule:** each cluster with ≥10% frequency at a
+key middlegame ply is ONE candidate middlegame plan. **For
+endgames:** each endgame TYPE reached by ≥10% of games (across
+the wider corpus) is a candidate endgame plan. Build that many
+plans. Don't fabricate. Don't leave any out.
+
+Document the plan count BEFORE authoring. Example from the
+Naroditsky Caro pilot (CORRECTED with wider-corpus data):
+
+| Variation | MG plans | Endgame plans |
+|---|---|---|
+| Advance c5 | 2 (knight reroute + queen coordination) | R+minor+P (22%) + R+P (9%) — 2 endgame patterns |
+| Two Knights | 2 (Nd7 path + Bd6 path) | R+minor+P (21%) + R+P (11%) — 2 endgame patterns |
+| KIA/Réti | 2 (Nd7 + e6 setups) | R+minor+P (22%) + R+P (12%) — 2 endgame patterns |
+| Exchange | 3 (g6/Qc7/Bg4) | R+minor+P (19%) + R+P (10%) — 2 endgame patterns |
+| Classical | 1 (Bd6 dominant 58%) | R+minor+P (15%) + minor+P (14%) — 2 endgame patterns |
+| Fantasy | 1 (f2 attack) | R+minor+P (24%) + Q+P (13%) — 2 endgame patterns |
+| Modern | 2 (Nf6/O-O orderings) | R+minor+P (24%) + minor+P (12%) — 2 endgame patterns |
+
+#### STEP 6 — Gather voice corpus (BEFORE authoring beat narration)
+
+Voice content makes the build accurate. Author from his actual
+words/ideas, not imagination. Sources accessible from sandbox:
+
+```bash
+# Search per opening
+WebSearch "Naroditsky <opening name> teaching key ideas"
+WebSearch "Naroditsky <opening name> speedrun summary principles"
+
+# Fetch accessible content
+WebFetch <listudy URL>       # always reachable; general principles
+WebFetch <lichess study URL>  # Gordima distillation, accessible
+WebFetch <chess blog URL>     # third-party Naroditsky-content summaries
+```
+
+**Save the gathered content** to
+`data/sources/<player>-voice/per-opening/<opening>.md` with
+per-source attribution. Reference these in lesson `sources[]`
+arrays.
+
+**YouTube transcripts are sandbox-blocked** (Google bot-check on
+datacenter IPs, confirmed 2026-05-28). When transcript-level voice
+is needed, route to David's machine via yt-dlp:
+```bash
+# David runs on his Mac:
+yt-dlp --write-auto-sub --skip-download --sub-format vtt \
+  --sub-langs en <youtube-url>
+# drops the .en.vtt into data/sources/<player>-voice/transcripts/
+```
+Don't burn time fighting YouTube from sandbox — accept the
+limitation, work with what's reachable, route the rest to David.
+
+#### STEP 7 — Author the lessons
+
+Per opening: ONE main lesson file at `src/data/lessons/pro<Player><Opening>.ts`
++ a variations file at `src/data/lessons/pro<Player><Opening>Variations.ts`.
+
+**Main lesson** (~12-20 beats):
+- Opening phase: walk the aggregate spine, cite per-ply game counts
+- 1 middlegame pattern beat
+- 1 endgame structure beat
+
+**Per-variation lessons** (~8-12 beats each):
+- Each variation tab gets its own deep beat lesson
+- Same opening → middlegame → endgame chain
+- Keyed `${openingId}::${variation.name}` in the VARIATION_LESSONS map
+
+**Every beat:**
+- `say`: full Watch prose (60-120 words, references game counts
+  + his voice principles + sources)
+- `sayShort`: ≤8-word Learn cue (move + 3-5 word echo)
+- `arrows`: green vision arrows only, never from a pawn, clear
+  sight-line verified (lessonIntegrity gate enforces)
+- `highlights`: orange move squares are AUTO-painted (don't author);
+  yellow for key squares the narration names; blue for context
+- `sources`: array referencing the voice notes file + URLs +
+  book:<openingId> when in the corpus
+
+**Voice register:**
+- NO move-number prefixes ("2.Nc3" → "Nc3" or "the queen's knight
+  to c3"). Polly reads "2." as "two" — robotic.
+- Stats STAY ("his 92% pick", "528 games", "his BEST-scoring
+  variation at 75%"). These ARE the masterclass spine.
+- Naroditsky's catchphrases when applicable: "very natural
+  developing move" (Tartakower), "wild positions" (Fantasy),
+  "discreet preemptive" (KIA Qc7), etc.
+
+#### STEP 8 — Register the lesson (runtime only)
+
+```ts
+// src/data/lessons/index.ts
+import { PRO_<PLAYER>_<OPENING>_LESSON } from './pro<Player><Opening>';
+import { PRO_<PLAYER>_<OPENING>_VARIATION_LESSONS } from './pro<Player><Opening>Variations';
+
+const LESSONS: Record<string, LessonScript> = {
+  ...,
+  [PRO_<PLAYER>_<OPENING>_LESSON.openingId]: PRO_<PLAYER>_<OPENING>_LESSON,
+};
+
+const VARIATION_LESSONS: Record<string, LessonScript> = {
+  ...,
+  ...PRO_<PLAYER>_<OPENING>_VARIATION_LESSONS,
+};
+```
+
+**Do NOT** register in `registry.ts` `OPENINGS` array. That's the
+masterclass gate registry; pro-rep currently lives in `LESSONS`
+only (the runtime map). Future promotion path: when the build
+clears every masterclass gate (depth, source-verification,
+narration-grounding, etc.), promote it. NOT a prerequisite.
+
+#### STEP 9 — Author middlegame + endgame plans (per the data)
+
+For each plan identified in STEP 5, add to `src/data/middlegame-plans.json`:
+
+```json
+{
+  "id": "mp-pro<player><opening>-<variation>-<plan-name>",
+  "openingId": "pro-<player>-<opening>",
+  "criticalPositionFen": "...",
+  "title": "...",
+  "overview": "...",
+  "pawnBreaks": ["..."],
+  "pieceManeuvers": ["..."],
+  "strategicThemes": ["..."],
+  "endgameTransitions": ["..."],
+  "playableLines": [{
+    "fen": "...",
+    "moves": [...],
+    "annotations": [...],
+    "arrows": [[], ...],
+    "highlights": [[], ...],
+    "learnCues": [...],
+    "title": "...",
+    "intro": "...",
+    "sources": [...]
+  }]
+}
+```
+
+For endgame plans, suffix the id with `-endgame` —
+EndgamePlansSection filters by that suffix and renders under the
+middlegame plans with its own WLPP section per plan.
+
+Each plan's `playableLines[0]` is a 6-12-move sequence with
+per-move annotations (full prose) + per-move learnCues (≤8w).
+These render as their own WLPP card.
+
+**Plan count rule (G9.1): only what the data shows.** If a
+variation has 1 plan, build 1. If it has 3, build 3. Never
+fabricate.
+
+#### STEP 10 — Author the pro-repertoires.json entry
+
+Add (or update) the opening entry with:
+- `id: 'pro-<player>-<opening>'`
+- `playerId: '<player>'`
+- `eco`, `name`, `pgn` (the spine), `color`, `style`
+- `overview` (paraphrased from voice corpus, citing his data)
+- `keyIdeas[]` (4 items, each grounded in data + voice)
+- `traps[]` (string array, prose blurbs)
+- `warnings[]` (string array, prose blurbs)
+- `variations[]` — each with `name` matching the variation tab,
+  `pgn`, `explanation`, `sources`
+- `trapLines[]` — only REAL drillable traps (chess.js-legal,
+  ≥6 plies, oriented correctly)
+- `warningLines[]` — anti-traps where the student is the one who
+  slips
+- `sources[]` (allowed: `book:<id>`, `concept:<id>`, reputable
+  https URL per narrationSources allowlist)
+
+#### STEP 11 — Add model games (multi-game per variation)
+
+Per G9.1 multi-game directive: **3-5 model games per variation**,
+not 1. Pulled from `pick-model-games.mjs` output (highest
+opponent + decisive + deepest). Each entry in `src/data/model-games.json`:
+- `id: 'mg-pro-<player>-<opening>-<variation>-<game-idx>'`
+- `openingId: 'pro-<player>-<opening>'`
+- `studentSide` = the player's color
+- `white` / `black` (with the player's actual chess.com username)
+- `pgn` = bare moves only (strip headers via `stripPgn` helper)
+- `overview` = hand-authored (≥40 chars to pass `isNarratedModelGame`)
+- `criticalMoments[]` — optional at first; can add per-game later
+
+#### STEP 12 — Add common-mistakes entries (pitfalls)
+
+3-5 pitfalls per opening in `src/data/common-mistakes.json` keyed
+by openingId. Each entry: `fen`, `wrongMove`, `correctMove`,
+`explanation` (full Watch prose), `shortNarration` (≤8w cue),
+`sources[]`. Surface automatically as WLPP via
+`commonMistakeToPlayableLine`.
+
+#### STEP 13 — Update the masterclass map (if source-gating applies)
+
+Add to `src/data/proRepertoireOpeningMap.json` ONLY if there's a
+matching masterclass openingId (the `caro-kann`, `vienna-game`,
+`italian-game`, etc. masterclass set). The map keys the
+source-verification gate.
+
+```json
+"pro-<player>-<opening>": "<masterclass-opening-id>"
+```
+
+If no masterclass exists for this opening (e.g. Rossolimo), don't
+add to the map.
+
+#### STEP 14 — Bump PRO_DATA_REVISION
+
+```ts
+// src/services/dataLoader.ts
+const PRO_DATA_REVISION = '<YYYY-MM-DD>-<short-topic>';
+```
+
+This triggers `reconcileProRepertoires()` on already-seeded
+devices. The reconciler also DELETES orphans (G8) — entries we
+scrapped from the JSON get cleaned out of Dexie on next boot.
+
+#### STEP 15 — Validate
+
+```bash
+npx vitest run src/data/lessons/ src/data/pro-repertoires.test.ts \
+  src/data/proRepertoireSources.test.ts \
+  src/data/pro-repertoires-orientation.test.ts \
+  src/data/modelGames.test.ts src/data/modelGames-orientation.test.ts \
+  src/data/middlegamePlanThemes.test.ts
+npm run ship-check       # must print READY TO PUSH
+```
+
+Common gate trips and their fixes:
+- **lessonSources** baseline-free: every lesson cites a
+  resolvable source. Don't use `listudy.org` directly — not in
+  `narrationSources` allowlist. Use book:<id> + chess.com /
+  lichess.org / chessable.com / wikipedia.org URLs.
+- **proRepertoireSources**: every masterclass-mapped pro opening
+  + variation has a resolvable source. Same allowlist.
+- **wlppNarration**: every beat has both `say` and `sayShort`.
+- **modelGames-orientation**: every model game's `studentSide`
+  matches a win or draw for that side. No losing model games.
+- **opening-manifest count**: if you registered in
+  `opening-manifests.json` (pro-rep typically doesn't), the
+  declared floors must hold.
+
+#### STEP 16 — Push to main + run the 3-INSTRUMENT AUDIT (G1)
+
+```bash
+git add -A
+git commit -m "feat(pro-rep): <opening> at full G9.1 depth"
+git push origin HEAD:main
+
+# Wait for Vercel (~30s; watch the bundle hash change)
+curl -sS https://chess-academy-pro.vercel.app/ | grep -oE '/assets/index-[A-Za-z0-9]+\.js'
+
+# Run the 3-instrument audit
+AUDIT_SANDBOX=1 node scripts/audit-pro-naroditsky-prod.mjs
+# (clone the script for other pros)
+```
+
+**Done = 14+ audit checks green + voice fires + Dexie has entries.**
+
+---
+
+### Golden rules (the most important — read these every time)
+
+1. **Data first.** Never author without the extraction output in hand.
+   You need to KNOW the game counts, the spine, the plan count, the
+   endgame structures — and CITE them — for the build to be honest.
+
+2. **Don't fabricate.** Only author plans the data clearly supports
+   (≥10% frequency at a key middlegame ply). When unsure, leave it out.
+
+3. **Don't leave gaps.** If the data shows N plans, build N. Don't
+   ship 2 plans when 3 exist in the data because you got lazy.
+
+4. **Voice corpus FIRST.** Gather his words/ideas from fan-curated +
+   accessible sources (Gordima Lichess study, TheChessLobster pieces,
+   Listudy distillation, Chessable threads) BEFORE authoring beat
+   narration. Don't invent his voice from imagination.
+
+5. **Stats STAY.** Game counts, win percentages, "his 92% pick" —
+   that's the masterclass spine. Strip ONLY move-number prefixes
+   ("1." / "2." / "1...").
+
+6. **Two registers on every beat.** `say` (full Watch) +
+   `sayShort` (≤8-word Learn cue). Both route through
+   `voiceService.speakInternal` which enforces the verbosity
+   contract (G5).
+
+7. **Sources on every narration unit.** `sources[]` array with
+   `book:<id>` | `concept:<id>` | reputable https URL (per
+   `narrationSources.ts` allowlist). No exceptions.
+
+8. **Push to main, run the 3-instrument audit, THEN claim done.**
+   Don't say "build complete" until the post-deploy audit is green.
+
+9. **Endgame plans only when data supports — using the WIDER CORPUS.**
+   If the games typically stay middlegame (Q+pieces), don't fabricate
+   an endgame. Let the section self-hide. Empty > generic > invented.
+   BUT — always classify endgames across the FULL variation corpus
+   (hundreds of games), NEVER on the 3-4 games at the deep terminus.
+   The 2026-05-28 mistake was reporting "Fantasy has no endgame data"
+   based on 3 terminus games — when 56% of the 189 Fantasy games
+   actually reach a real endgame. Zoom out before drawing
+   structural-pattern conclusions.
+
+10. **When the user has to babysit, you failed.** The procedure above
+    exists so a future session can build a new pro-rep opening end-
+    to-end without back-and-forth. Follow the steps. Verify the
+    output. Don't skip the data extraction or the plan-count step.
+    Especially: don't trust a small-sample analysis when a larger
+    sample is available with the same scripts.
+
 Violating these gates wastes David's money and erodes trust faster
 than missing the underlying task. The shallow-work failure mode IS
 the harm here.
