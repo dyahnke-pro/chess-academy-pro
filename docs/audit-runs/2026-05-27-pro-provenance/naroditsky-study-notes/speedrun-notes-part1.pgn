@@ -1,0 +1,856 @@
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.1: Scotch Game"]
+[Date "2020.12.04"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C45"]
+[Opening "Scotch Game: Classical Variation, Intermezzo Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.1: Scotch Game"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/cPEVO6QB"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.04"]
+[UTCTime "16:35:17"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 { The idea of the Scotch is to immediately contest the centre and open up the diagonal for the bishop. } 3... exd4 { Respond to the tension on the centre. } 4. Nxd4 Bc5 { Develop with tempo } 5. Nxc6 Qf6! { Threatened mate in 1 } 6. f3? { Stop mate in 1 threat but weakened king side: white can't castle king side due to bc5. } (6. Qf3 { Correct response for white. (Goes into end game) } 6... Qxf3 7. gxf3 dxc6) 6... dxc6 { Development is more important than small deficiency in the pawn structure like double pawns. } (6... Qxc6 7. Nc3?? d6 8. Bb5 { [%cal Gb5e8] }) 7. Bc4 Ne7 8. Bf4?? { Perhaps tunnel vision on the undefended c7 pawn. } (8. Qe2 { Prepare to develop bishop to e3 to castle king side. Also possible to develop all the pieces to castle queen side. } 8... O-O 9. Nc3 Bd7 10. Be3 Rad8 11. O-O) 8... Qxf4 9. Qd2 Qe5 10. f4 { [%csl Ge4,Gb2][%cal Ge5e4,Ge5b2] } 10... Qxb2 11. f5 Qxa1 12. Ke2 Qe5 { Avoid getting trapped.
+White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.2: Scholar's Mate"]
+[Date "2020.12.06"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C20"]
+[Opening "King's Pawn Game: Wayward Queen Attack"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.2: Scholar's Mate"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/DPsZIWFH"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.06"]
+[UTCTime "15:52:14"]
+
+1. e4 e5 2. Qh5 Nc6 { [%cal Gc6e5] } 3. Bc4 g6 4. Qf3 Nf6 5. d3 Nd4 { Centralising the knight and chasing the queen away } 6. Qe3?? (6. Qd1 Bg7 7. c3 Nc6 8. Nf3) 6... Nxc2+ 7. Ke2 Nxe3 8. Bxe3 d5 { Start opening up the centre to weakened the exposed king. (Converting material advantages) } 9. exd5 Nxd5 10. Nf3 { [%cal Gf3e5] } 10... Bg7 { [%cal Gg7e5] } 11. Nc3 Nxc3+ 12. bxc3 O-O 13. d4 exd4 14. cxd4 Re8!! { [%cal Ge8e2] } 15. Rhd1 Bg4 16. h3 Bxf3+ { Removing the defender of the d4 pawn. } 17. gxf3 Bxd4 18. Rab1 Qf6 { No need to get fixated on materials since black is up in material losing a pawn is not a big deal. } { [%csl Gb7][%cal Gb1b7] } 19. Rxd4 Qxd4 { [%cal Ge8e2] } 20. Rc1 Rad8 { Involve all pieces to ochrestrate an attack. } 21. Kf1 Rxe3!? { Sacrificing to simplify the position even more. } 22. fxe3 Qxe3 23. Re1 Qxf3+ 24. Kg1 Rd2 25. Re2 Rd1+ 26. Kh2 Rh1# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.3: Bishop's opening"]
+[Date "2020.12.06"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C24"]
+[Opening "Bishop's Opening: Ponziani Gambit"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.3: Bishop's opening"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/YA5I0Oq8"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.06"]
+[UTCTime "20:05:35"]
+
+1. e4 e5 2. Bc4 Nf6 3. d4 { Plans to open up the centre immediately. } 3... exd4 4. e5 d5!? 5. exf6 (5. Bb5+ Nfd7 { [%cal Gc7c6,Gg1f3] }) (5. Bb3 Ne4 6. Qxd4 (6. f3 Qh4+ 7. g3 Nxg3 8. hxg3 Qxh1) 6... Be6) (5. exd6 Bxd6 6. Qxd4 Bb4+!! (6... O-O 7. Nh3 a6 8. O-O Bxh2+ 9. Kxh2 Qxd4) 7. c3 Qxd4!!) 5... dxc4 6. Qe2+ Be6 7. fxg7 Bxg7 8. Qh5 Nc6 9. Nf3 Qd7 { Prepare to castle queen side } (9... O-O { Castling kingside is very dangerous as the g7 pawn is no longer there and white can start threatening checkmate. } 10. Ng5) (9... Qe7? 10. O-O O-O-O 11. Bg5 (11. a4 Bd5 12. Re1) 11... f6) 10. Ng5 O-O-O 11. O-O Bd5 { Centralising } { [%cal Gd5h1] } 12. a4 Rdg8!? { x-ray white's king } { [%cal Gg8g1,Gd5h1] } 13. Nxf7 Bxf7 14. Qb5 Bd5 { Re-centralising the bishop to add more pressure on the g2 pawn } 15. a5 a6 { Prophylaxis move to prevent white from going a6 } 16. Qc5 (16. Qa4 Qh3!! 17. gxh3 Bf6+ 18. Bg5 Rxg5#) 16... Bf8 17. Na3 Rxg2+ (17... Bxc5 { Capturing the queen is good but...
+"When you see a good move, look for a better one." }) 18. Kh1 Rg1+!! (18... Rxf2+ { Windmill technique } 19. Kg1 Rg2+ 20. Kh1 Rg4+ 21. Rf3 Bxf3#) 19. Kxg1 Qg4# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.4 Random Pawn move (Game 1)"]
+[Date "2020.12.06"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A00"]
+[Opening "Barnes Opening"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.4 Random Pawn move (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/rZnjCLL3"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.06"]
+[UTCTime "20:11:00"]
+
+1. f3 e5 2. d3 d5 3. e4 Nf6 4. exd5 Nxd5 5. c4 Nf6 6. Bg5 (6. Be3 { Preventing black from playing bc5 } { [%csl Gc5][%cal Ge3c5] }) 6... Bc5! { Stop white from castling kingside in the long-term } 7. h4 Nc6 { Ignore white's terrible moves and continue developing } 8. Nc3 h6 { Either force bishop away or trade pieces to erased the pin-threat } 9. Bxf6 Qxf6 10. Nd5 { [%cal Gd5c7] } 10... Qd8 { Defend the c7 pawn } { [%cal Gd8c7,Gd5c7] } 11. Rb1 { Planning to advance pawn to b4 } { [%cal Gb2b4] } 11... a5 { Preventing b4 } 12. a3 { Try to reinforce b4 } { [%cal Gb2b4,Ga3b4] } 12... a4 { Preventing b4 again by en-passant } 13. b4 axb3 14. Rxb3 Nd4 { Improving the knight's position and also planning to advance the pawn to c6 to chase away the knight on d5 } 15. Rc3 c6 16. Ne3 Bxa3 17. g4 Bb4! { [%cal Gb4e1] } 18. Qb3 Nxb3 { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.4: Reverse French (Game 2)"]
+[Date "2020.12.06"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A00"]
+[Opening "Van't Kruijs Opening"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.4: Reverse French (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/eQHp9uAB"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.06"]
+[UTCTime "20:16:48"]
+
+1. e3 e5 2. Nc3 d5 3. d4 e4 { Close the centre } 4. Bb5+?! c6 5. Be2 Bd6 6. Bg4 f5 7. Bh5+ g6 8. Be2 Nf6 9. Nh3 O-O 10. Ng5 (10. O-O h6 11. a3 g5 12. b3 f4 13. exf4 Bxh3 14. gxh3 gxf4) 10... h6 11. Ne6 Bxe6 12. f3 { Offers to open up the centre } 12... exf3 { Open up the centre because black is up in material and development which helps black attack faster. } 13. Bxf3 Ne4 14. Bxe4 fxe4 { Prevent white from castling } { [%cal Gf8f1] } 15. Rf1 Qh4+ 16. g3 Rxf1+ { Draws white king closer to kingside to exposed/weakened it even more. } 17. Kxf1 Qxh2 18. Ke1 Bxg3+ 19. Kf1 { [%csl Gf2,Gh3][%cal Gh2f2,Ge6h3] } 19... Bh3# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.5: Italian Game (Game 1)"]
+[Date "2020.12.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C50"]
+[Opening "Italian Game: Paris Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.5: Italian Game (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/Nk9zNNS0"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.08"]
+[UTCTime "01:56:29"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 d6? $14 { Obstruct the bishop from developing albeit black could still fianchetto his bishop at a cost of extra moves. } { [%cal Gf8d6] } 4. c3 { Prepare to control the centre } 4... Be6 (4... Bg4 5. Qb3 Bxf3 6. Bxf7+ Kd7 7. Qe6#) 5. Bxe6 { Ruining black's kingside pawn structure } 5... fxe6 6. d4 exd4 7. cxd4 e5 8. Nc3 (8. d5 { Generally closing the centre is a bad idea because it makes it harder for ourselves to attack the weakened king.
+In this case, it is justify for us to close to centre because we have created a monster outpost on e6 for the knight. } 8... Nce7 9. Ng5 Nf6 10. Ne6 Qd7!! { Preventing Black from castling either side } { [%cal Ge6f8,Ge6d8] } 11. Nc3 c6 12. O-O cxd5 13. exd5 Nexd5 14. Nxd5 Nxd5 (14... Qxe6 15. Nc7+ { [%cal Gc7e8,Gc7e6,Gc7a8] }) 15. Qxd5) 8... exd4 9. Nxd4 Nxd4 10. Qxd4 Nf6 (10... c5 { Weakened the d5 square. It will be a great outpost for white's knight } { [%csl Gd5] } 11. Qc4 Nf6 12. Bg5 Be7 { Remove the defender of d5 square } 13. Bxf6 Bxf6 14. Nd5) 11. O-O Ng4 12. Bf4 { [%csl Gh4][%cal Gf4h2,Gd8h4,Gh4h2] } 12... g5 13. Qxh8 gxf4 14. Qxh7 Qf6 15. Qh5+ { Black resign } { [%cal Gh5e8,Gh5g4] } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.5: Borg Gambit (Game 2)"]
+[Date "2020.12.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A40"]
+[Opening "Borg Defense: Borg Gambit"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.5: Borg Gambit (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/eFXjhN7x"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.08"]
+[UTCTime "02:12:34"]
+
+1. d4 g5 2. Bxg5 f6 (2... Bg7 3. c3 c5 4. e3) 3. e4 h5 (3... fxg5 4. Qh5# { [%cal Gh5e8] }) 4. Be2 e5 (4... fxg5 5. Bxh5+ Rxh5 6. Qxh5#) 5. Bxh5+ Ke7 6. Be3 d6 7. Nc3 c6 8. Be2 { The bishop has already done it's job, white drop it back to allow further development. } 8... Bh6 9. Bxh6 Nxh6 10. Nf3 Ng4 11. Qd2 Na6 12. h3 { Forcing the knight away to remove the threat on the f2 pawn which allows the white to castle queen side } 12... Nh6 (12... Nc7 { [%cal Gh3g4,Gh8h1] } 13. Rg1 { Remove the pin threat and potentially supervise a pawn storm in the long term. } { [%cal Gg2g4,Gg4g5] } 13... Nh6 14. O-O-O) 13. O-O-O { Castle queen side to prevent black from starting an attack on king side. } { [%cal Gh8h3,Gd8g8,Gc8h3,Gg8g2] } 13... Nb4 14. a3 Na6 15. dxe5 fxe5?? { Weakened the g5 square which allows a devastating tactic as the rook is x-raying black's queen and white can give a check on the g5 square. } { [%cal Gd2g5,Gd1d8] } 16. Nxe5 dxe5 17. Qg5+ Ke8 18. Bh5+ Nf7 19. Rxd8# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.6: Four Knights Scotch"]
+[Date "2020.12.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C47"]
+[Opening "Four Knights Game: Scotch Variation Accepted"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.6: Four Knights Scotch"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/XFOr4FC0"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.08"]
+[UTCTime "02:18:43"]
+
+1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. d4 exd4 5. Nxd4 Bc5 (5... Nxd4? 6. Qxd4 c5 7. Qd1 { [%csl Gd5][%cal Gc3d5] }) (5... Bb4 6. Nxc6 bxc6 7. Bd3) 6. Be3 Bb6 { Defend bishop to prevent tactical blunder. (Check sideline) } (6... O-O?? 7. Nxc6 dxc6 (7... Bxe3 8. Nxd8) 8. Bxc5) 7. Qf3?? (7. Nxc6 bxc6 8. Bxb6 axb6 { [%cal Ga8a1] } 9. Qd2 O-O 10. O-O-O Nxe4 (10... b5 { [%cal Gb5b4,Ga8a2,Gc3b1] }) 11. Nxe4 Rxa2) 7... Nxd4 8. Bxd4 Bxd4 9. Qg3 O-O 10. O-O-O Bxc3 11. Qxc3 Nxe4 12. Qd4 d5! { Protect the knight and open up the diagonal to develop the bishop. } 13. Bd3 (13. Qxd5 { Note: Whenever there's a x-ray between a rook and a queen and there is a bunch of pieces in the way, you have to pay close attention to the x-ray because x-ray tactics are amongst the most easily and most often missed tactics on the chessboard. } 13... Qxd5 14. Rxd5 { [%cal Ge4f2] }) (13. Qxe4?? { [%cal Gd1d8] } 13... Qg5+ (13... dxe4 14. Rxd8 Rxd8 { [%csl Gd8,Ga8,Gh1] }) 14. f4 (14. Qe3 { [%cal Gg5e3] })) 13... Bf5 14. Qe5 (14. f3 Nd6 { [%cal Gd6f5] }) 14... Bg6 15. Rhe1 Qg5+ { White pieces are more active than black; trading queens will benefit black. } 16. Qxg5 Nxg5 17. Bb5 c6 18. Bxc6 bxc6 19. Rd4 Rfe8 { Black is up in materials trading pieces gives black more advantage and helps to simplify the game further. } 20. Rxe8+ Rxe8 21. b3 h6 { Avoid any chances for back-rank mate. } 22. f3 Re2 23. Kb2 Rxc2+ 24. Ka3 Ne6 { Removing the rook (Blockader) from d file to potentially promote the past pawn or trade white's rook for a past pawn. } 25. Rb4 d4 26. Rb8+ Kh7 27. h4 d3 28. Rb4 { [%cal Gb4d4,Ge6d4] } 28... d2 29. g4 d1=Q 30. g5 Qc1+ 31. Ka4 Rxa2# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.7: Scotch (Game 1)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C45"]
+[Opening "Scotch Game: Classical Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.7: Scotch (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/vny0bxpI"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "16:36:02"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5 5. Nxc6 bxc6 { Avoid going into the end game and potentially utilize the b file to attack white's queen side in the long run } 6. Nc3 d6 { Prepare to play nf6 } { [%cal Gd6e5,Gg8f6,Ge4e5] } 7. Bc4 Nf6 8. Bg5 h6 9. Bxf6? (9. Bh4 { [%cal Gh4d8] } 9... O-O 10. O-O Qe7 { To later get rid of the pin } { [%cal Ge7e5] }) 9... Qxf6 10. O-O (10. Qd2 Rb8 { [%cal Gb8b2] } 11. b3?? (11. Bb3) 11... Bb4) 10... O-O 11. b3?? Qxc3 12. Re1 Be6! 13. Re3 (13. Bxe6 fxe6 { [%cal Gf8f2,Gc5f2] } 14. Re2 Rxf2 15. Rxf2 Rf8 16. Qf1 Rxf2 17. Qxf2 Qxa1#) (13. Bd3 f5 { To open up the f file }) 13... Bxe3 { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.7: Rat Defense (Game 2)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "Rat Defense: Small Center Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.7: Rat Defense (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/osbCMaBv"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "16:36:09"]
+
+1. e4 d6 2. d4 e6 3. c4 Bd7 4. Nc3 Nf6 5. Nf3 Be7 6. Bd3 O-O 7. O-O c5 8. dxc5 { Taking to avoid central tension } 8... dxc5 9. e5 Nh5 (9... Ne8 { [%cal Gd3h7] } 10. Qe2 Nc6 (10... Bc6 { [%csl Ge4][%cal Gc6e4] } 11. Rd1 { [%cal Gd1d8,Gd3h7] } 11... Qb6 12. Ng5 { [%cal Ge2h5] }) 11. Qe4 { [%cal Ge4h7] } 11... g6 12. Bh6 Ng7) 10. g4 { Breaking principles to win the trapped knight since black cannot exploit the weakness by white pushing the pawn } 10... Nf6 11. exf6 Bxf6 12. g5 Bd4 13. Nxd4 cxd4 14. Ne4 Bc6 15. Qh5 Nd7 { Bringing more pieces to black's kingside to start an attack. } { [%cal Ge4f6,Gd3h7,Gh5h7] } 16. Nf6+ Nxf6 17. gxf6 g6 18. Qh4 { [%cal Gh4f6] } 18... Rc8 19. Bg5 { [%cal Gg5f6] } 19... b5 (19... h5 { [%csl Gf6][%cal Gg5d8] } 20. Bxg6 fxg6 21. f7+) 20. Qh6 Qxf6 21. Bxf6 { Black resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.8: Scandinavian (Game 1)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B01"]
+[Opening "Scandinavian Defense: Valencian Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.8: Scandinavian (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/hmczEnle"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "16:36:23"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 { Occupying the centre } 4... Nc6 5. Nf3 Nf6? 6. d5 { Violate principles to punish the fact that black has not push a single pawn in the centre } 6... Nxd5 (6... Nb4 7. Bc4 { [%cal Gc4d5] } 7... Bf5 { [%cal Gb4c2,Gf5c2] } 8. Bb3 (8. Nd4 Bg6 9. O-O Nbxd5 10. Nxd5 Nxd5 11. Bb5+ c6 12. Nxc6 bxc6 13. Bxc6+ Qd7 14. Bxd7+ Kxd7 15. Qxd5+ { [%cal Gd5a8] })) 7. Nxd5 Bg4 8. Be2 { Un-pinning and preparing to castle } 8... e5 9. O-O Bc5 (9... e4 10. Ne1 { [%cal Gd1d5,Gd1e2] } (10. Nd4 { [%cal Gd4e2,Gd1d5] } 10... Bxe2 (10... Qxd5 11. Bxg4 Qxd4) 11. Nxe2) (10. Bf4 exf3 11. Nxc7+ Ke7 12. Nxa8 (12. gxf3 { [%cal Gf3g4,Gc7a8] }) 12... fxe2 { [%cal Ge2f1,Ge2d1] }) 10... Bxe2 11. Qxe2 Qxd5) 10. Be3 Bxe3 11. Nxe3 { Forcing a queen trade } 11... e4 (11... Bd7 12. Qd5 { [%cal Gf3e5] }) 12. Qxd8+ Rxd8 13. Nxg4 exf3 14. Bxf3 O-O 15. Bxc6 bxc6 { Simplifying the position and ruin black's pawn structure } 16. Rad1 Rxd1 17. Rxd1 h5 18. Ne5 g5 19. Nxc6 Re8 20. Rd8 Kf8 21. Rxe8+ Kxe8 22. Nxa7 f5 23. Kf1 { Black resign } 23... Kd7 24. Ke2 Kd6 25. Kd3 Kd5 26. a4 Kc5 27. Nb5 c6 28. Nc3 Kb4 29. Kd4 { [%csl Ga4][%cal Gb4a5,Gd4e5,Ge5f5,Gf5g5,Gg5h5,Gh2h8] } 29... Ka5 30. Kc4 Kb6 31. b4 { [%cal Ga4a5,Gc4c5] } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.8: Hungarian Opening (Game 2)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A00"]
+[Opening "Hungarian Opening"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.8: Hungarian Opening (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/CaxRdnrW"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "16:57:47"]
+
+1. g3 e5 2. Bg2 d5 3. e3 Nf6 4. d4 { Allow black to decide to have an open or close game. } 4... e4 { Closing the centre } 5. c4! { Attacking base of the pawn chain } 5... c6 6. Qc2 $15 { Aimless move } 6... Bd6 { Continue developing } 7. h4? { Weakened the g4 square } { [%csl Gg4] } 7... O-O 8. a3 Bg4 { Taking advantage of the weakness created by white pushing pawn to h4 } 9. b4 dxc4! { *Key moment
+White is so undeveloped that black can afford to sacrifice the integrity of the pawn chain and open up the centre.
+If black allows white to close the centre with c5, white can just comfortably develop his pieces. } 10. Bxe4?! { Bad mistake - White is giving up his only piece that can defend all of the weak light squares around his king } 10... Nxe4 11. Qxe4 f5 { Defending with tempo } 12. Qe6+ Kh8 13. Qxc4 a5 { Continue with the plan of opening up the position to infiltrate white's king that is still in the centre and also not giving white any chances to develop his pieces.
+The more black opens up, the harder it is for white to protect their pieces and their weak pawns. } 14. b5 cxb5 15. Qxb5 Qc7 { Occupy the open c file } { [%cal Gc7c1,Gc7g3,Gc7b7] } 16. Nd2 Bxg3 { Again white is so undeveloped that sacrificing a piece to open up the position to white's king is a small price to pay. } 17. fxg3 Qxg3+ 18. Kf1 f4 { Plan to open up the f file for a discover attack from the rook } { [%cal Gf8f1] } 19. Ndf3 (19. e4 f3 { If white decide to not open up the f file, simply just advance the pawn to participate in the attack. } 20. Ngxf3 { If white takes, black just essentially open up the f file. } 20... Bxf3) 19... Bxf3 20. Nxf3 Qxf3+ 21. Ke1 Qxh1+ 22. Kd2 fxe3+ 23. Kxe3 Nc6 { Bringing the rest of the pieces into the game to make it easier for black to deliver a checkmate rather than hunting for a mate with very few pieces } 24. Bb2 Rae8+ 25. Kd3 Qf3+ 26. Kc4 Qe2+ { Whenever the king and queen is in the same diagonal always look for tactics to win the queen. } 27. Kc5 Rf5+ 28. d5 Rxd5+ { Distracting the king from defending the queen.
+(Note: The two worse defenders of a piece are the king and the queen. When the king or the queen defends a piece, that piece is generally vulnerable - The moment the queen is attack it has to move and abandon the piece it's defending.) } { [%cal Gc5b5,Gc5d5] } 29. Kxd5 Qxb5+ 30. Kd6 Qxb2 31. Rd1 Qe5+ 32. Kd7 Qe7# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.8: Queen's Pawn Game (Game 3)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D00"]
+[Opening "Queen's Pawn Game"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.8: Queen's Pawn Game (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/zx1gJ5aT"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "17:35:07"]
+
+1. d4 d5 2. a3 Nf6 3. Nf3 Bf5 4. Nc3 e6 5. Ne5 Bd6 6. Nxf7?! { White has no pieces to exploit the slight weakness of the king } (6. e3 O-O 7. Be2 c5 { Undermine the d4 square which is defending the knight on e5 } 8. O-O Nbd7 { [%cal Gd7e5] } 9. Nxd7 Nxd7 { [%cal Gd8h4,Ga8c8,Gc8c1,Gc5d4] }) 6... Kxf7 7. Bg5 h6 { Probing what white wants to do with his bishop. } 8. Bxf6 Qxf6 9. e3 Rf8 { Pseudo castling } 10. Nb5 Kg8 11. Nxd6 cxd6 12. Bb5 Qg6! { *Key moment } { [%cal Gg6g2] } (12... Be4 13. O-O Qg6 14. f3) (12... Bxc2?? 13. Qxc2 { [%cal Gf6f2,Gc2f2] }) (12... Bh3 13. O-O Qg6) (12... Bd3 13. Qxd3 Qxf2+ 14. Kd1 Qxg2) 13. O-O Bh3 14. Qf3 (14. g3 Bxf1 15. Bxf1) 14... Rxf3 15. Bd7 Qxg2# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.9: Scholar's Mate (Game 1)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C20"]
+[Opening "King's Pawn Game: Napoleon Attack"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.9: Scholar's Mate (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/cmz8J0jU"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "17:39:03"]
+
+1. e4 e5 2. Qf3 Nc6 3. Bc4 Nf6 4. Qb3 Nd4 { [%cal Gd4b3,Gc4f7,Ge8e7,Gf6d5] } 5. Qd3 (5. Bxf7+ Ke7 6. Qc4 b5 { [%csl Ge6,Gd5,Gf7,Gc4,Gb3] } 7. Qc3 Kxf7) 5... d5 { *Key moment
+Striking open the centre for a potential chance to pressure white's queen as it is out in the open. } 6. exd5 Bf5 { [%cal Gd4c2,Gc2e1,Gc2a1] } 7. Qxf5 Nxf5 8. d3 Nxd5 9. Nf3 Bc5 { Black is up a whole queen they don't have to worry about defending every single pawn. Also, if white takes the e5 pawn, it only benefit black by opening the centre. } 10. Nxe5 O-O 11. Nf3?! Re8+ 12. Be3 Nfxe3 13. fxe3 Nxe3! { Preparing a discover check - "The threat is strong than the execution." } 14. Kd2?? { [%cal Gd8d2,Ge3c4] } 14... Nxc4+ { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.9: Philidor Defence (Game 2)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C41"]
+[Opening "Philidor Defense: Exchange Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.9: Philidor Defence (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/FSyEKmgk"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "18:11:41"]
+
+1. e4 e5 2. Nf3 d6?! { Perhaps not a mistake but it's a poor move as:
+1. Has not develop a piece.
+2. Obstruct dark-square bishop from developing.
+Both of these has serious concession. } 3. d4 { To exploit the serious concession white opens up the centre } 3... exd4 $14 4. Nxd4 Nc6 5. Nc3 Nxd4 6. Qxd4 Bd7 7. Bc4 Ne7 8. O-O Nc6 9. Qd1 (9. Qd5 Be6 10. Qd1 Bxc4) (9. Qd3 Ne5 { [%cal Ge5c4,Ge5d3] }) 9... Be7 10. Nd5 { Centralising and improving the knight's position } { [%cal Gc7c6] } 10... O-O 11. f4 { Increasing central control } 11... Be6 12. Bd2 { Prepare to transfer the bishop to c3 looking at the beautiful diagonal towards black's king } { [%cal Gd2c3,Gc3g7] } 12... Na5?? 13. Bxa5 b6 14. Bc3 c6 15. Qd4!? cxd5?? 16. Qxg7# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.9: French Defence (Game 3)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C02"]
+[Opening "French Defense: Advance Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.9: French Defence (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/VoJBizxI"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "18:11:53"]
+
+1. e4 e6 2. d4 d5 3. e5 f6? { Black should be attacking the base rather than the tip of the pawn chain.
+(Note: What happen in most of the case when you attack the tip of the pawn chain - the opposing pawn (tip) can capture the attacking pawn which create/leaves behind an outpost to utilize later on) } (3... c5 4. c3 { [%cal Gc5d4,Gc3d4] }) 4. exf6 { Capturing to create a great outpost on e5 to later occupy with a piece } { [%csl Ge5] } 4... Nxf6 5. Nf3 Bd6 6. Bd3 (6. Ne5 { There's no need to rush to occupy the e5 square, it's just a square that is available to white in the future at a specific point } 6... Bxe5 7. dxe5) 6... Nbd7? { Obstruct the bishop from defending e6 } { [%cal Gc8e6] } 7. O-O b6 8. Re1 { [%cal Ge1e8] } 8... Nf8 9. Bg5 { Preparing to manoeuvre bishop to g3 to trade off black's bishop which is controlling the e5 outpost } { [%csl Ge5][%cal Gg5h4,Gh4g3,Gf3e5] } 9... Bd7 10. Bh4 Be7 11. Ne5 Ng6 { Looking to trade white's powerful knight } 12. Bxg6+ hxg6 13. Qd3 { Looking to potentially checkmate on f7 } { [%cal Gd3g6,Gg6f7] } 13... Rxh4 (13... Rh6 14. Bg5 { [%cal Gg5h6] }) 14. Qxg6+ Kf8 15. Qf7# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.10: Italian Game (Game 1)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C54"]
+[Opening "Italian Game: Classical Variation, Giuoco Pianissimo"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.10: Italian Game (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/nkVBS2NB"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "18:20:00"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3 h6 5. O-O Bc5 6. c3 { Preparing d4 } 6... O-O 7. Nbd2 a6 { Preparing b5 to attack white's bishop } 8. Bb3 b5 9. Re1 d6 10. Nf1 Ng4 11. d4 exd4 12. cxd4 { [%cal Gd4c5,Gd4e5,Ge4d5,Ge4f5] } 12... Ba7 13. h3 Nf6 14. Ng3 Re8 15. Bf4 (15. Be3 Nxe4?? 16. Nxe4 Rxe4 17. Bd5!!) 15... Bb7 { Relinquish the control of f5 } { [%csl Gf5] } 16. Qd2 { Preparing a sacrificial idea to bust open black's kingside because majority of black's pieces are on the queen side } { [%csl Gc6,Gb7,Ga7,Ga8][%cal Gf4h6] } 16... Qd7 17. Bxh6 gxh6 18. Qxh6 { Black's king is now wide open } 18... Nh7 19. Nf5 { [%cal Gf5g7] } (19. Nh5 { [%cal Gh5g7] } 19... Qg4 20. hxg4 Bxd4 { [%cal Gd4g7] } 21. Nxd4 b4 22. Qg7#) 19... Qxf5 $7 { Black has to sacrifice queen to avoid being checkmated } 20. exf5 Rxe1+ 21. Rxe1 Kh8 22. Ng5 { [%cal Gh6h8] } (22. f6 Rg8 23. Re8 b4 24. Qg7#) 22... Kg8 23. Qxh7+ Kf8 24. Qxf7# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.10: Philidor Defence (Game 2)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C41"]
+[Opening "Philidor Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.10: Philidor Defence (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/VjjYg1Vz"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "18:20:02"]
+
+1. e4 e5 2. Nf3 d6 3. d4 Bg4 4. dxe5 Bxf3 { Has to take the knight to recapture the pawn } { [%cal Gd6e5,Gd1f3] } 5. Qxf3 dxe5 6. Bc4 Qe7 { Obstructing the development of the bishop } 7. Nc3 { [%cal Gc3d5] } 7... c6 8. O-O h6 9. Rd1 { Occupying the d-file while also restricting black even further } 9... Qf6 { Offering a trade of queens to remove some of the tension } 10. Qh3 { [%cal Gh3c8] } 10... Na6?? (10... Ne7 { [%cal Ge7c8,Gh3c8,Gc1e3,Ge3c5,Gc5e7] }) 11. Qd7# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.10: Sicilian: Bowdler Attack (Game 3)"]
+[Date "2020.12.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B20"]
+[Opening "Sicilian Defense: Bowdler Attack"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.10: Sicilian: Bowdler Attack (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/3xA1Sl6b"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.09"]
+[UTCTime "18:20:08"]
+
+1. e4 c5 2. Bc4 $15 Nc6 3. a3 e6 { Blunt white's light square bishop and furthermore prepare d5 to occupy the centre with a tempo } 4. Nf3 d5 5. exd5 exd5 { Now white's bishop is just staring at the well defended pawn } 6. Ba2 Nf6 7. O-O Be7 8. Nc3 O-O 9. d3 Bg4 10. h3 Bh5 11. g4 Nxg4?! { (Probably unsound)
+Sacrificing to open up the g-file and potentially the h-file if white recapture which exposes white's king to attack. } 12. hxg4 Bxg4 { [%cal Gg4d1] } 13. Bf4 Nd4 14. Kg2? Bxf3+ 15. Qxf3 Nxf3 16. Kxf3 Bg5 { Planning to remove the last defender around the white's king } 17. Nxd5 Bxf4 18. Nxf4 Qf6 { [%cal Gf6f4,Gf6b2] } 19. c3 g5 20. Rg1 Qxf4+ 21. Ke2 { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.11: Sicilian: Bowdler Attack (Game 1)"]
+[Date "2020.12.11"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B20"]
+[Opening "Sicilian Defense: Bowdler Attack"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.11: Sicilian: Bowdler Attack (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/PJgdjxnh"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.11"]
+[UTCTime "01:58:31"]
+
+1. e4 c5 2. Bc4 Nc6 3. Nf3 e6 { Blunt white's light square bishop and prepare for d5 with tempo } { [%cal Gc4e6] } 4. d4 { Playing it open sicilian } 4... cxd4 5. Nxd4 Nf6 6. Nxc6 bxc6 7. e5? Qa5+ { [%cal Ga5e1,Ga5e5] } 8. Bd2 Qxe5+ 9. Be2 Qxb2 10. Nc3 Bb4 { Developed with tempo.
+Although it would had been better to retreat the queen. If not the queen can turn into a liability where black will have to respond to all of the white's threat on the queen } (10... Qb6) 11. Rb1 Qa3 { [%cal Gb1b4,Ga3b4,Gc3d5,Gd2b4,Gd5b4] } 12. Rb3 (12. Rxb4 Qxb4 13. Nb5 { [%cal Gd2b4,Ge2b5,Gb5c7,Gc7e8,Gc7a8] } 13... Qxd2+ 14. Qxd2 cxb5) 12... Qa5 { Need to be cautious about the x-ray (Possible discovery from white) } { [%cal Gd2a5] } 13. O-O O-O 14. a3 Be7 15. Ne4 Qc7 16. Nxf6+ Bxf6 17. Bb4 c5 (17... Re8 18. Bd6 { [%cal Gd1d6,Gd6f8,Gd6b8] } 18... Qd8) 18. Bc3 Bxc3 19. Rxc3 d5 { Continue to expand central control } 20. Rb3 Bb7 { [%cal Gb7h1,Gd5d4] } 21. Bf3 Bc6 22. Rb2 { [%cal Gb2b8] } 22... Rab8 23. Rxb8 Rxb8 24. c4 d4 25. Bxc6 Qxc6 26. Qc2 g6 { Make some space for the king to avoid future back-rank mate } 27. h3 e5 28. f4 { [%cal Gf4e5] } 28... e4 29. Re1 e3 30. Re2 Qd6 31. g3 d3 { [%cal Gd3e2,Gd3c2] } 32. Qd1 dxe2 { [%cal Ge2e1] } 33. Qxe2 Qd2 34. Kf1 Rb1+ 35. Qe1 Rxe1# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.11: Open Sicilian (Game 2)"]
+[Date "2020.12.11"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B32"]
+[Opening "Sicilian Defense: Open"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.11: Open Sicilian (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/8UQimtmO"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.11"]
+[UTCTime "01:58:35"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 d6? { Mistake - It allows white to expand the centre with a tempo kicking black's knight away.
+In Open Sicilian you want to take d4 instead. } { [%cal Gc5d4] } 4. d5 Ne5 5. Nxe5 { Ruining black's pawn structure } 5... dxe5 6. Nd2 { Preparing to jump to f3 or c4 to add tension to the weak pawn on e5 } { [%csl Ge5][%cal Gd2f3,Gf3e5,Gd2c4,Gc4e5] } 6... Nf6 7. Bd3 e6 { [%cal Ge6d5] } 8. c4 { [%cal Gc4d5,Ge6d5] } 8... Be7 9. Nf3 O-O 10. Nxe5 Nd7 { Offering a trade of white's centralise knight } 11. Nf3 { Declining trade as white has a space advantage in addition to being up an extra pawn so trading will only benefit black by lightening the tension. } 11... e5 12. O-O Bd6 { Defending the e5-pawn so that the knight on d7 is not tie down to defending the pawn and can re-locate to not obstruct the light square bishop } 13. h3 Nf6 14. a3 { [%cal Gb2b4] } 14... Bd7 15. Bd2 Qc8 { [%cal Gd7h3] } 16. b4 b6 17. Rc1 { [%cal Gc1c8] } 17... Bxh3 18. gxh3 Qxh3 19. Re1 { Create an escape route for the king } { [%cal Gg1f1,Gf1e2] } 19... Ng4 { [%cal Gg4h2,Gf3h2] } 20. Bf1 Qh5 21. Bg2 f5 22. Rc3 { Prepare to add more defender towards the king side } { [%cal Gc3g3] } 22... Rf7 { Preparing to bring more attackers towards white's king side } { [%cal Ga8f8] } 23. Ng5 Rf6 (23... Qh2+ 24. Kf1 { [%cal Gg2h3] } 24... Raf8 25. Rh3) 24. Rh3 Qg6 25. Nxh7 Rf7 26. Ng5 Rf6 27. exf5 Rxf5 28. Qxg4 Raf8 29. Qh4 { Black resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.11: Ruy Lopez (Game 3)"]
+[Date "2020.12.11"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C77"]
+[Opening "Ruy Lopez: Morphy Defense, Anderssen Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.11: Ruy Lopez (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/x95yH2JW"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.11"]
+[UTCTime "01:58:38"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. d3 b5 { Removing the tension on black's knight } 6. Bb3 Bc5 7. O-O d6 8. c3 O-O 9. d4 Bb6 { Taking the pawn would result in white having more control of the centre } (9... exd4 10. cxd4 Bb6 11. Bg5 { [%cal Ge4e5,Gg5d8] }) 10. d5? { White close off the diagonal to his own bishop and opens the diagonal for black's bishop } { [%cal Gb3d5,Gb6f2] } (10. dxe5 dxe5 11. Qxd8 Rxd8) 10... Ne7 11. Nbd2 Ng6 12. Bc2 Nh5 { Preparing to push f5 to start opening up white's king side } { [%cal Gf7f5] } 13. h3 { This weakens white's position as black could perhaps use it to tear open the h-file or g-file } 13... Nhf4 { [%cal Gc8h3,Gf4h3] } 14. Nb3 Bxh3 { Black could even prepare a queen and bishop battery before sacrificing though it's too slow as it allows white to bring in more defender } (14... Bd7 15. Kh2 Qc8 16. Ng1 { [%cal Gg1h3,Gh2h3] }) (14... f5 15. exf5 Bxf5 16. Bxf5 Rxf5 { [%cal Gd8f6,Ga8f8] }) 15. Bxf4 Nxf4 { [%cal Gd8d7,Gd7h3] } 16. gxh3 Qd7 17. Nh2 Qxh3 18. Qf3 Qh6 19. Nc1 f5 { Offer a trade to open up the file to bring more pieces to the attack } 20. Ne2 (20. exf5 Rae8 21. a4 e4 22. Bxe4 Nh3+ 23. Kh1 Ng5 { [%cal Gg5f3,Gg5e4,Ge8e4] } 24. Qg2 Rxe4 { [%cal Ge4h4,Gh4h1] }) 20... fxe4 21. Bxe4?? { [%cal Gf8f3,Gf4h3] } (21. Qxe4 Nh3+ (21... Qg6+ 22. Qxg6 Nxe2+ { [%cal Gh7g6] }) 22. Kh1 (22. Kg2 Nxf2 23. Qxh7+ Qxh7 24. Bxh7+ Kxh7) 22... Nxf2+) 21... Nh3+ 22. Qxh3 Qxh3 23. Bg2 Qh4 24. Rae1 Rxf2 25. Rxf2 Qxf2+ 26. Kh1 Qxe1+ 27. Nf1 Qxe2 { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.12: Italian: Anti-Fried Liver (Game 1)"]
+[Date "2020.12.11"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C50"]
+[Opening "Italian Game: Anti-Fried Liver Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.12: Italian: Anti-Fried Liver (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/2BKMzuiK"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.11"]
+[UTCTime "14:14:08"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 h6 $14 { Black wasted move here instead of occupying the centre } 4. c3 Bc5 5. d4 exd4 6. cxd4 Bb6 7. Nc3 Ba5 8. O-O d6 9. Qb3 { [%cal Gc4f7] } (9. d5 Nce7 { Black is weakening his own queen } { [%cal Gd8e7] } 10. Qa4+ c6 { [%cal Gd8a5] } 11. dxc6 bxc6 12. Qb3 { Using black's own weakness against him since black's knight on e7 prevents the queen from defending the pawn on f7 } { [%cal Gc4f7] } 12... f6 13. Nd4) 9... Bb6 (9... Qe7 { [%cal Ge7f7] } 10. Nd5 Qd8) 10. Bxf7+ Kf8 11. Bh5 Nf6 (11... Qf6 12. Nd5 Qd8 13. Nxb6 Qf6 { Black has to prevent checkmate at a cost of two piece } 14. Nxa8) 12. Qf7# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.12: Elephant Gambit (Game 2)"]
+[Date "2020.12.11"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C40"]
+[Opening "Elephant Gambit"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.12: Elephant Gambit (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/n2my2oBs"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.11"]
+[UTCTime "14:14:10"]
+
+1. e4 e5 2. Nf3 d5 3. exd5 c6 4. Nxe5 { If white capture the c6 pawn it would had helped black develop } { [%cal Gd5c6] } 4... Qxd5 5. d4 c5 6. Bb5+ { Develop with tempo } 6... Nc6 7. O-O cxd4 8. Bc4 Qxe5 9. Re1 { [%cal Ge1e8] } 9... Nf6 10. Rxe5+ Nxe5 11. Bb5+ Ned7 12. Qxd4 Bc5 13. Qxc5 { Black resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.12: Queen's Gambit Declined (Game 3)"]
+[Date "2020.12.11"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D37"]
+[Opening "Queen's Gambit Declined: Harrwitz Attack, Main Line"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.12: Queen's Gambit Declined (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/KTCHgV2r"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.11"]
+[UTCTime "14:14:15"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. Nc3 Be7 5. Bf4 O-O 6. e3 c5 { Create tension in the centre } 7. dxc5 Bxc5 8. cxd5 exd5 { (Note: The lesser the pieces there are the weaker the isolated queens pawn. The reason is that there are not enough pieces to defend the pawn.)
+Often times the battle of the isolated queen's pawn (IQB) is occurring on the square that is in front of it. Is the side that is playing against the IQB going to be able to establish a blockade on that square or is the side that has the IQB going to be able to push the IQB forward, absolve themselves of the IQB and as a consequence, develop with a tremendous initiative. } 9. Bg5 { Pinning the defender of d5 pawn } { [%cal Gg5d8,Gf6d5] } (9. Be2 { One of the possible way to utilize the isolated queen's pawn is to prepare a pawn push } 9... Nc6 10. O-O d4) 9... Be6 { Adding a defender to the d5 pawn as the knight on f3 no longer defends it due to the pin } 10. Bxf6 Qxf6 11. Nxd5? Qxb2 12. Nf4?? Bb4+ 13. Nd2 { White's queen is overloaded, this move allows black to move white's queen from defending the rook } { [%cal Gd1a1,Gd1d2,Gb4d2,Gb2a1] } 13... Bxd2+ 14. Qxd2 Qxa1+ 15. Qd1 Qxd1+ 16. Kxd1 Bxa2 17. Bd3 Nc6 18. Ke2 a5 { Identify and advance the past pawn } { [%cal Ga5a4,Ga4a3,Ga3a2,Ga2a1] } 19. Ra1 Bb3 20. Rb1 a4 21. Bb5 a3 22. Bxc6 bxc6 23. Kd3 a2 24. Ra1 Rfd8+ 25. Kc3 Rd1 { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.13: King's Gambit Accepted (Game 1)"]
+[Date "2020.12.11"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C36"]
+[Opening "King's Gambit Accepted: Abbazia Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.13: King's Gambit Accepted (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/nyDMwNcS"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.11"]
+[UTCTime "14:57:10"]
+
+1. e4 e5 2. f4 { White is weakening his king side } 2... exf4 3. Nf3 d5 { (Note: By principles when your opponent has weakened their kingside you generally want to start opening up the centre in order to be able to exploit that.) } 4. exd5 Nf6 5. d4 Nxd5 6. Bc4 Be7 { Continue developing naturally } 7. O-O O-O 8. Ne5 (8. Bxd5 Qxd5 9. Bxf4 c6) 8... Be6 9. Bd3 Nc6 { Contest control of the centre } { [%cal Gc6d4,Gc6e5] } 10. Nxc6 bxc6 11. Qf3 c5 12. Bxf4 Nxf4 13. Qxf4 Qxd4+ { Sacrificing the queen to remedy/correct the pawn structure. } 14. Qxd4 (14. Kh1 Qxb2 15. Nd2 Qd4) 14... cxd4 15. Nd2 Rab8 16. b3 Bg5 { Preparing to move to the e3 outpost where the bishop can be most active } { [%csl Ge3] } 17. Nf3 Be3+ 18. Kh1 f6 { Stop white's knight from centralising on e5 (Active square) } { [%cal Gf3e5] } 19. Nh4 { Prepare to centralise on f5 } { [%cal Gh4f5] } 19... g6 { Again preventing white's knight from moving to an active square in this case the f4 square } { [%cal Gg6f5,Gh4f5] } 20. a4 { [%cal Ga4a5] } 20... a5 { Preventing white's pawn from advancing to a5 } 21. Rf3 Bd5 { Centralising and improving the position of the bishop } 22. Rff1 f5 { Prepare to support the dark square bishop on e3 } { [%cal Gf5f4,Gf4e3] } 23. Nf3 { Again preparing to centralise the knight of e5 } { [%csl Ge5][%cal Gf3e5] } 23... Rfe8 { Preventing white's knight from centralising } 24. h3 c5 25. Nh2 Kg7 { Improving the king } 26. Rfe1 Rbc8 { Preparing to support c4 pawn break } { [%cal Gc5c4] } 27. Bb5 Re4 { Potentially get onto the 2nd rank when possible } { [%cal Ge4f4,Gf4f2] } 28. Rac1?? Bxc1 29. Rxc1 c4 { The idea of this pawn break is to open the position up as all black's pieces are positionally thus allowing black to dominate more squares. } 30. bxc4 Bxc4 31. Nf3 Bxb5 32. axb5 d3 33. c4 Rexc4 { Offering the trade so that black can promote his past pawn } 34. Rb1 Rc1+ 35. Rxc1 Rxc1+ { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.13: Italian Game (Game 2)"]
+[Date "2020.12.11"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C50"]
+[Opening "Italian Game: Paris Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.13: Italian Game (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/uoRvVUu2"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.11"]
+[UTCTime "14:57:14"]
+
+1. e4 e5 (1... d5) 2. Nf3 Nc6 3. Bc4 d6 4. c3 h6 $14 5. d4 Bg4? { [%csl Gb7,Gf7] } 6. Qb3 { Exploiting the fact that the b7 and f7 pawn are weak } { [%csl Gb7,Gf7][%cal Gc8g4,Gc8b7] } 6... Qd7 7. Qxb7 (7. Bxf7+ { A better forcing variation } 7... Qxf7 8. Qxb7 { [%cal Gb7a8,Gb7c6] }) 7... Rb8 8. Qa6 Bxf3 9. gxf3 exd4 10. Bb5 { Pinning to remove the defender of the d5 square so that white can recapture and gain control of the centre } { [%cal Gc6d4,Gb5d7] } 10... Rb6 11. Qa4 { Reinforce the pressure on the diagonal } 11... Nge7 12. cxd4 { Black's knight can't recapture the pawn due to the pin } 12... d5 13. Nc3 { Keep the tension in the centre and continue to develop } 13... g6 14. Be3 Bg7 15. O-O-O O-O 16. h4 { White is starting a pawn storm due to opposite side castling to try to tear open black's kingside defence. (Maybe unsound) } 16... Qd6 17. h5 Ra8 { Black prepare to start his own attack on the queenside. Unfortunately it's slower than white's attack. } { [%cal Ga7a6] } 18. hxg6 fxg6 19. e5 { Remove any potential threat of black forking white's king and a piece with check } { [%cal Gd6f4] } (19. Bxh6 Bxh6+ 20. Rxh6 Qf4+) 19... Qe6 20. Bxh6 a6 { This is not a threat to white because the pawn is pinned } { [%cal Ga4a8,Ga6b5] } 21. Bxg7 Kxg7 22. Bxc6 { Capturing black piece to absolve the role of white's queen being a defending piece so that white can bring his queen to participate in an attacking role on the kingside. } { [%cal Ga4c2,Gc2d2,Gd2h6] } 22... Qxc6 23. Qc2 { [%cal Gc2d2,Gd2h6] } 23... Rab8 24. b3 { Taking care of the b-file pressure } { [%cal Gb8b3] } 24... Qe6 25. Na4 { [%cal Ga4c5] } 25... Rb5 26. Nc5 Qc6 27. Rh3 { [%cal Gd1h1] } 27... a5 28. Rdh1 { Black resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.14: Sicilian: Accelerated Dragon (Game 1)"]
+[Date "2020.12.11"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B32"]
+[Opening "Sicilian Defense: Accelerated Dragon"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.14: Sicilian: Accelerated Dragon (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/ml4kDYyn"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.11"]
+[UTCTime "14:57:58"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Be3 Bg7 6. c3 { Not a great move - It takes away the natural development square off his knight } { [%cal Gb1c3] } 6... Nf6 7. f3 { White is pushing a bunch of pawns which is weakening his position.
+(Note: This should alert black to open up the centre ASAP to exploit the weakening of white's position.) } 7... O-O { King safety is number one priority before rushing to open up the centre. } 8. Be2 d5 { With the idea of opening up the centre to exposed the weaknesses of white's position } 9. exd5 Nxd5 10. Bf2 Nf4 { Applying more pressure to white's position } 11. O-O Nxd4 { With the tactical fork idea to trade every piece on the d4 square. At the end of trade-fest black would be up a piece and a pawn. } { [%cal Gf4e2,Ge2g1,Ge2d4] } 12. Bxd4 Bxd4+ 13. Kh1 (13. cxd4 Qxd4+ 14. Qxd4 (14. Kh1 Qxb2 { [%cal Gb2e2,Gb2a1] }) 14... Nxe2+ { [%cal Ge2g1,Ge2d4] }) 13... Bb6 14. Qxd8 Rxd8 15. Bc4 Bf5 16. Na3 Rd2 { Infiltrate the second rank } 17. g3 Bh3 { [%cal Gb6g1,Gd2g2,Gh3g2] } 18. gxf4 Bg2# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.14: Modern Defence (Game 2)"]
+[Date "2020.12.12"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B06"]
+[Opening "Modern Defense: Standard Line"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.14: Modern Defence (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/7ted85VL"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.12"]
+[UTCTime "01:11:20"]
+
+1. e4 g6 2. d4 Bg7 3. Nc3 e6 4. h4 { This is a multipurpose pawn push:
+1. It can support the bishop on g5.
+2. It can also be use as a battering ramp to advance to h5 to threaten opening up the h-file or it can be use to advance to h6 } { [%cal Gh4h5,Gc1g5,Gh5g6,Gh7g6] } 4... h5 { Weakened the g5 square } { [%csl Gg5] } (4... d6 5. h5 Nd7 6. h6 Bf6 { [%cal Gg8f6] } (6... Bf8)) (4... h6 5. h5 g5 6. f4 gxf4 7. Bxf4 { [%cal Gd1g4,Gg4g7] }) 5. Bg5 { Utilize the outpost gifted by black } 5... Bf6 6. Bxf6 Qxf6 7. e5 { White is cementing his control of the dark square as black has tremendously weakened it by playing e6 and g6. } { [%csl Gg7,Ge7,Gg5][%cal Ge7e6,Gg7g6] } 7... Qe7 8. Bd3 { Continue development } 8... Nh6 9. Nf3 O-O 10. Qd2 { Develop with tempo and prepare to castle queen side } { [%cal Gd2h6] } 10... Kg7 11. Ne4 { Prepare to manoeuvre the knight to the beautiful outpost on f6 } { [%csl Gf6][%cal Ge4f6,Ge5f6] } 11... d6 12. Nf6? dxe5 13. dxe5 Nd7 { Offering a trade to remove white's knight from occupying such a strong outpost } 14. Ne4 { Retreating } 14... b6 15. O-O-O a5 16. Qf4 { Improving to a more active square } { [%cal Gf4e5] } 16... Ba6 17. Bxa6 Rxa6 18. Rd2 { Prepare to double rooks on the d-file to bring more pieces to execute an attack on black's king } 18... Nf5 19. Rhd1 Rd8? 20. Nf6 Raa8 (20... Nxf6 21. exf6+ Qxf6 22. Rxd8) 21. Rxd7 Rxd7 22. Rxd7 Qb4 23. Qxb4 axb4 24. Ng5 { Bringing the final piece into the attack } 24... Nh6 25. Nxe6+ { Black resign } { [%cal Gd7g7] } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.14: Sicilian: Smith-Morra Gambit (Game 3)"]
+[Date "2020.12.12"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B21"]
+[Opening "Sicilian Defense: Smith-Morra Gambit"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.14: Sicilian: Smith-Morra Gambit (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/EFPsL6Mf"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.12"]
+[UTCTime "01:11:24"]
+
+1. e4 c5 2. d4 cxd4 3. Qxd4? Nc6 4. Qe3 Nf6 5. h3 d5 { With the idea of opening up the centre to exploit the fact the white's queen is in the centre of the board and also opening up the diagonal to develop the light square bishop. } 6. Bd3 e5 { Control some more of the centre and again open up the diagonal for the other bishop } 7. Nf3 Be7 (7... d4? { Closing up the centre would give white time to develop and white don't have to worry about queen being attack as it can sit comfortably on e2 } 8. Qe2) 8. O-O (8. exd5 Nxd5) 8... O-O 9. Qd2?? { (Perhaps mouse slipped?) } 9... dxe4 { [%cal Ge4d3,Ge4f3,Gf6e4] } 10. Bb5 exf3 { Winning a piece and ruining's white's pawn structure } 11. gxf3 Nd4 { Close the avenue of negotiation between the queen, so that black can use his queen to start an attack later on. } { [%cal Gd2d8,Gd4f3,Gd4b5] } 12. Bd3?? Nxf3+ { White resign } { [%cal Gf3g1,Gf3d2] } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.15: Sicilian: Bowdler Attack (Game 1)"]
+[Date "2020.12.12"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B20"]
+[Opening "Sicilian Defense: Bowdler Attack"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.15: Sicilian: Bowdler Attack (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/XUVPlGIo"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.12"]
+[UTCTime "01:23:38"]
+
+1. e4 c5 2. Bc4 $15 Nc6 3. Nc3 Nf6 4. f3 e6 5. d3 d5 { Blunting white's bishop and prepare to open up the centre to later exploit white's weakening of his position from pushing the f pawn. } { [%csl Gf3] } 6. Bb5 Bd7 { Black does not want to ruin his pawn structure } 7. Bxc6 Bxc6 8. Bg5 Qb6 { [%cal Gb6b2,Gb6g1] } 9. Bxf6 gxf6 10. b3 c4 11. Rb1 Bb4 { [%cal Gb4e1] } 12. exd5 Bxc3+ 13. Ke2 exd5 14. dxc4 O-O-O 15. Nh3 Rhe8+ 16. Kf1 dxc4 { The idea is not to just win the pawn but to open up as many files and diagonal as possible to attack white's king } { [%cal Gd8d1,Ge8e1] } 17. bxc4?? Rxd1+ 18. Rxd1 Qe3 { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.15: Closed Sicilian (Game 2)"]
+[Date "2020.12.12"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B23"]
+[Opening "Sicilian Defense: Closed, Traditional"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.15: Closed Sicilian (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/ACCQrSqh"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.12"]
+[UTCTime "01:23:41"]
+
+1. e4 c5 2. Nc3 Nc6 3. Nf3 g6 4. d3 $15 { Blunt the light square bishop } { [%cal Gf1d3] } 4... Bg7 5. Be3 d6 6. Be2 { Developing passively } 6... Nf6 7. O-O O-O 8. Nd5 Nxd5 { Ruining white's pawn structure and weakening white's central control } 9. exd5 Nb4 { [%cal Gb4d5] } 10. c4 Bxb2 11. Rb1 Bg7 12. a3 Na2 { Prepare to move to the beautiful c3 outpost } { [%csl Gc3][%cal Ga2c3,Gc3d1,Gc3b1,Gc3e2,Gg7c3] } 13. Rb2?? Bxb2 { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.15: Ruy Lopez: Bird Variation (Game 3)"]
+[Date "2020.12.12"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C61"]
+[Opening "Ruy Lopez: Bird Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.15: Ruy Lopez: Bird Variation (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/I1y7OK3z"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.12"]
+[UTCTime "01:23:43"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 Nd4 4. Nxd4 exd4 5. O-O c6 6. Bc4 b5 7. Bb3 Nf6? 8. e5 Nd5?! 9. Bxd5 cxd5 $16 { [%csl Gd5,Gd4,Gd7] } 10. b3 { Prepare to fianchetto the bishop to attack the d4 pawn } { [%cal Gc1b2,Gb2d4] } 10... Bb7 11. Bb2 Bc8 12. Bxd4 Be7 13. Nc3 { [%cal Gc3b5,Gc3d5] } 13... Bb7 14. Qg4 { Develop the queen to potentially accumulate the chances on attacking black's kingside } 14... O-O 15. f4 { Prepare either a rook lift to bring more pieces to execute an attack or just a pawn push to f6 to potentially execute a lobster pincer mate on g7. } { [%cal Gf1f3,Gf3g3,Gf4f5,Gf5f6,Gg4g7] } 15... a6 16. f5 f6 17. Rae1 { Again bringing more pieces to execute an attack } 17... Qc7 18. exf6 Bxf6 19. Re7!! { It would checkmate in 1 if black captures white's rook } { [%cal Gf6e7,Gg4g7,Gd4g7] } 19... Bxd4+ 20. Qxd4 { Repositioning to threaten checkmate } { [%cal Gd4g7,Ge7g7] } 20... Rf6 21. Nxd5 { [%cal Gd5c7,Gd5f6] } 21... Bxd5 22. Qxd5+ { [%cal Gd5g8,Gd5a8] } 22... Kf8 23. Qxa8+ Kxe7 24. Re1+ { Starting a king hunt to bring the black's king towards the centre where there are less pieces to shield the king. } 24... Kd6 25. Qxa6+ Kc5 26. b4+ Kd5 27. Qxb5+ Kd6 28. c4 { [%cal Gb5d5] } 28... Qc6 29. Qe5# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.15: Owen Defence (Game 4)"]
+[Date "2020.12.12"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B00"]
+[Opening "Owen Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.15: Owen Defence (Game 4)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/AYbPBRnU"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.12"]
+[UTCTime "01:38:05"]
+
+1. e4 b6 2. d4 Bb7 3. Nc3 g6 4. h4 { Planning shove the pawn down black's throat. } { [%cal Gh4h5,Gh5h6] } 4... Bg7 5. h5 e6 6. h6 Bf8 7. Nf3 Be7 8. e5 d5 9. exd6 { Keeping the centre open } 9... cxd6 10. d5 e5 11. Bb5+ Nd7 { Planning to go the the c6 outpost } { [%csl Gc6] } 12. Bc6 Bxc6 13. dxc6 Nb8 14. Qd5 { Again just utilizing the weakness left behind by black } 14... Qc7 15. Nb5 Qxc6 16. Nc7+ Qxc7 17. Qxa8 Nf6 18. Bg5 O-O 19. Bxf6 Bxf6 20. Qd5 Qc6 21. O-O-O Qxd5 22. Rxd5 Be7 23. Nd2 { Prepare to attack the weak pawn on d6 } { [%cal Gd2e4,Ge4d6] } 23... Bg5 24. Rxd6 Bxd2+ 25. Kxd2 f5 26. Rh3 { Bringing the rook into the game as piece activity is crucial in the end game. } { [%cal Gh3c3,Gc3c7] } 26... Kf7 27. Rc3 Re8 28. Rc7+ Re7 29. Rxe7+ Kxe7 30. Rxg6 { Sacrificing to promote the past pawn } 30... hxg6 31. h7 Kf7 32. h8=Q Nd7 33. Qa8 a5 34. Qc6 Ke7 35. Qxg6 f4 36. g4 fxg3 37. fxg3 Nf6 38. g4 e4 39. g5 Ke6 40. Qxf6+ Kd5 41. g6 Kc5 42. g7 Kd5 43. g8=Q+ Kc5 44. Qe5+ Kc6 45. Qgd5# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.15: Closed Sicilian (Game 5)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B23"]
+[Opening "Sicilian Defense: Closed, Traditional"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.15: Closed Sicilian (Game 5)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/H8WUv3sW"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "00:21:50"]
+
+1. e4 c5 2. Nc3 Nc6 3. Nf3 g6 4. Bb5 Bg7 5. Bxc6 dxc6 { Breaking the principles to open up the bishop } { [%csl Gg4][%cal Gc8g4] } 6. O-O e5 { Control the centre } { [%cal Ge5d4,Gc5d4] } 7. d3 Ne7 8. h3 O-O 9. Bg5 h6 10. Bxe7 Qxe7 11. Qe2 f5 12. exf5 gxf5 13. Rae1 Re8 14. Nh2 Be6 15. f3?! { Open up the diagonal to the king } { [%cal Ga7g1] } 15... c4 { Open up the c5 square so that black can utilize the weakening of white's position } { [%csl Gc5][%cal Gc5g1,Ge7c5] } 16. dxc4 Qc5+ 17. Kh1 Bxc4 18. Qf2 Bf8 { Prepare to trade queens on black terms thus improving the bishop's position } 19. Ne2 Qxf2 20. Rxf2 Bc5 21. Rff1 Rad8 22. b3 Ba6 23. c4 b5 24. Rc1 bxc4 25. bxc4 Rd2 26. Ng3 Bc8 27. Nh5 Kf7 { [%cal Gh5f6] } 28. f4 e4 29. Ng3 Be6 30. Rfd1 e3 { [%cal Ge3d2] } 31. Re1 (31. Rxd2 exd2 32. Rd1 Bxc4 33. Rxd2 Re1+ { [%cal Gc4f1] }) 31... Rg8 { Attacking undefended piece } { [%cal Gg8g3] } 32. Nhf1 Rxa2 33. Nxe3?? Rxg3 { [%cal Gg3g2,Gg3e3] } 34. Rc2 Rxe3 35. Rxa2 Rxe1+ 36. Kh2 Re4 37. g3 Rxc4 38. Ra6 Bb6 { [%cal Ga6c6] } 39. Ra1 Rc2+ 40. Kh1 Bd5# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.16: Philidor Defence (Game 1)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C41"]
+[Opening "Philidor Defense: Exchange Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.16: Philidor Defence (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/admUichI"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "00:39:39"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Nxd4 Nf6 5. Nc3 Be7 6. Bc4 O-O (6... Nxe4 7. Qh5 { [%cal Gh5f7,Gc4f7] } 7... d5 8. Nxd5 O-O 9. O-O Bd6 10. Re1 Nf6 11. Nxf6+ Qxf6 12. Nb5) 7. Bb3 { Avoid fork trap } (7. Be3 Nxe4 8. Nxe4 d5 { [%cal Gd5c4,Gd5e4] }) 7... a6 8. O-O b5 { Preparing to trap white's bishop with tempo } { [%cal Gc7c5,Gc5c4] } 9. Bd5 { Avoid getting trap } { [%cal Gd5a8] } 9... Nxd5 10. Nxd5 (10. exd5 { Taking with pawn is also reasonable to secure an outpost on c6 } { [%cal Gd5c6,Gd4c6] }) 10... Bb7 11. Nf5 Bf6 12. Qg4 { Develop the queen to potentially accumulate the chances on attacking black's kingside } 12... Bxd5 13. exd5 Nd7 14. Bh6 { [%cal Gh6g7] } 14... g6 (14... Ne5 { This would had been a better move for black to prepare to shield black's kingside structure and unpinning. } { [%cal Ge5g6] } 15. Qg3 Ng6 { [%cal Gg3g6] }) 15. Bxf8 Qxf8 16. Nh6+ { Forcing a trade of knight in a tactical way } 16... Kg7?? 17. Qxd7 Kxh6 18. Rae1 { Bringing more pieces into the game } 18... Bxb2 19. Re7 Kg7 20. Qxc7 Rc8? { Tactical mistake } 21. Rxf7+ Qxf7 22. Qxc8 Qxd5 23. Qxa6 Qc5 24. Qb7+ { Prepare to centralise the queen and defend the c2 pawn with tempo } { [%csl Ge4][%cal Gb7e4,Ge4c2,Gb7g7] } 24... Kh6 25. Qe4 { [%cal Ge4c2] } 25... Be5 26. Rd1 { Bringing white's last piece into the game } 26... b4 27. g3 { Make room for the king to avoid back-rank threats } 27... Kg7 28. Kg2 { Unpinning and potentially allow f4 push (Weakens white's king) } { [%cal Gc5g1] } 28... Qa5 29. f4 { Since black's queen has moved away from white's king, they are not able to exploit the weakness created by advancing the pawn } 29... Bc3 30. Rxd6 Qc7 31. Qe6 { Prepare to support the rook on d7 if possible } { [%cal Gd6d7] } 31... Qb7+ 32. Qd5 Qxd5+ 33. Rxd5 h5 34. Kf3 Kf6 35. h3 Ke6 36. Ke4 Be1 37. g4 hxg4 38. hxg4 Bg3 39. f5+ gxf5+ 40. gxf5+ Kf6 41. Kd3 { Using the past pawn as a decoy to tie down black's king so that white can go to capture black's pawn to create another past pawn } { [%cal Gf6f5,Gd3c4,Gc4b4,Ga2a8] } 41... Be5 42. Rxe5 Kxe5 43. Kc4 Kxf5 44. Kxb4 Ke6 45. Kc5 Kd7 46. Kb6 Kc8 47. c4 Kb8 48. c5 Ka8 49. c6 Kb8 50. c7+ Kc8 51. a4 Kd7 { Black resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.16: Sicilian: Accelerated Dragon (Game 2)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B34"]
+[Opening "Sicilian Defense: Accelerated Dragon, Exchange Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.16: Sicilian: Accelerated Dragon (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/0jThqA6Z"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "00:39:42"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nxc6? bxc6 6. Bd2 Bg7 7. Bc3 Nf6 8. f3 $17 O-O 9. Bc4 d5 10. exd5 cxd5 11. Bd3 Qb6 { Temporally prevent white from castling - Exploiting the move f3 } { [%cal Gb6g1,Gf2f3] } 12. Qc1 e5 { Expanding on the centre } 13. Bd2 { Preparing bishop e3 to cut off black's queen diagonal though it is too slow } { [%cal Gd2e3,Ge3b6] } 13... e4 14. fxe4 dxe4 15. Bc4 Ng4 { Prevent white's bishop from going e3 } { [%cal Gg4e3,Gg7b2] } 16. Rf1 Bxb2 { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.16: Elephant Gambit (Game 3)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C40"]
+[Opening "Elephant Gambit"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.16: Elephant Gambit (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/T110FuW2"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "00:39:43"]
+
+1. e4 e5 2. Nf3 d5 3. exd5 Bg4? 4. h3 { Ask what black wants to do with his bishop } 4... Bh5 5. Nc3 { Developing to prevent black from pushing pawn to e4 } { [%cal Gc3e4,Gc3d5] } 5... e4 6. Nxe4 Qe7 7. Qe2 { Unpinning } 7... Bxf3 8. Qxf3 Nf6 9. Bd3 Nxd5 10. O-O Qd8 11. Re1 Ne7? { Obstructing the development of the bishop and weakening the f7 pawn because black queen cannot move to defend it } { [%csl Gf7][%cal Gf8e7] } 12. Bc4 { Threatening to win the undefended pawn } { [%cal Gc4f7,Gf3f7] } 12... f6 (12... f5 13. Qxf5 Nxf5 14. Nf6# { [%cal Gc4f7,Gf6d7,Ge1e8,Gf6e8] }) 13. Qxf6 (13. Qh5+ { Force mate variation } 13... Kd7 14. Be6+ Kxe6 15. Nc5+ Kd6 16. Re6#) 13... gxf6 14. Nxf6# { [%cal Gc4f7,Gf6d7] } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.17: Instructive odds game (Game 1)"]
+[Date "2020.12.14"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C40"]
+[Opening "King's Knight Opening"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.17: Instructive odds game (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/wlFBxTWo"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.14"]
+[UTCTime "03:02:54"]
+
+1. e4 e5 2. Nf3 Ba3 { To demonstrate playing with a piece down } 3. bxa3 Nc6 4. Bb2 d6 5. d4 exd4 6. Nxd4 Nf6 7. Nxc6 bxc6 8. Qf3 Qe7 { Using the knowledge that white wants trade the bishop for black's knight to potentially get onto e5 utilizing the diagonal that white has given up by trading.
+Also pinning white's e4 pawn to the king to supervise a pawn push towards the centre knowing that white's pawn cannot capture it. } { [%cal Gb2f6,Ge7e1,Gd6d5] } 9. Bxf6 gxf6 10. Bc4 d5 { To try accumulate pressure on white's central pawn while white's king is in the centre } 11. Bb3 f5 { Prepare to capture with f-pawn to establish a pawn chain which allows helps to lock up the centre. As long as black has central control with the pawn chain, it is difficult for white to exploit the fact that black's king is still in the centre. } 12. O-O fxe4 { [%cal Gd5e4,Gc6d5] } 13. Qe3 Rg8 { x-raying } { [%cal Gg8g1] } 14. Kh1 f5 { Improving the pawn chain } 15. Nc3 Be6 16. Rae1 Qg7 { Accumulating pressure on the g2 pawn } { [%cal Gg7g2] } 17. Qg3 (17. g3 d4 18. Qe2 Bxb3 (18... dxc3 19. Bxe6) 19. axb3 dxc3) 17... Qf6 { Keeping the tension } { [%cal Gf6c3,Gg8g3] } 18. Qh3 O-O-O { Castling to remove the threat of white's rook x-ray to later prepare a pawn push without putting black's king at risk of a cross-fire } { [%cal Gf5f4,Gc3e4,Gd5e4,Ge1e8,Ge6h3] } (18... f4 { [%cal Ge6h3,Ge1e8] } 19. Nxe4 { [%cal Ge4f6] } 19... Bxh3 (19... dxe4 20. Qxe6+ (20. Rxe4 { [%cal Gh3e6,Ge4e6,Gb3e6] }) 20... Qxe6 21. Rxe4 { [%cal Ge4e8] }) 20. Nxf6+ { [%cal Ge1e8,Gf6e8,Gf6g8] }) 19. Ne2 f4 20. Qc3 f3!! { Botez Gambit to set up a mating trap } { [%cal Gc3f6] } 21. Qxf6 (21. g3 fxe2 (21... Qxc3 22. Nxc3) (21... Qh6 { [%cal Gf3g2,Gh6h3,Ge2f4,Gd8f8] } 22. Nf4 { [%cal Gf4g2] } 22... Bh3 23. a4 Qxf4 24. gxf4 Bg2+ 25. Kg1 Bh3+ 26. Kh1 Bg2+ 27. Kg1 Bh3+ 28. Kh1 { Perpetual }) 22. Qxf6) 21... fxg2+ 22. Kg1 gxf1=Q+ 23. Kxf1 Bh3# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.17: Ruy Lopez: Steinitz Defence (Game 2)"]
+[Date "2020.12.14"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C62"]
+[Opening "Ruy Lopez: Steinitz Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.17: Ruy Lopez: Steinitz Defence (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/qpZWusBP"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.14"]
+[UTCTime "03:03:09"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 d6 4. c3 { Preparing central pawn push } 4... Bg4 5. d4 a6 6. Bxc6+ { Removing the defender of black's central pawn } 6... bxc6 7. h3 Bxf3 8. Qxf3 exd4 9. cxd4 c5 10. dxc5 { Open up the centre to exploit that black can't castle yet } 10... dxc5 11. O-O Bd6 12. e5 { [%cal Gf3a8] } 12... Be7 { Sacrificing the pawn to open up the centre even more } 13. Rd1 Qc8 14. Nc3 Qe6?? 15. Qxa8+ Bd8 16. Qxd8# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.17: Advance Caro-Kann (Game 3)"]
+[Date "2020.12.14"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Advance Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.17: Advance Caro-Kann (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/DwZhqkmO"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.14"]
+[UTCTime "03:03:13"]
+
+1. e4 c6 2. d4 d5 3. e5 Bf5 4. Bd3 Bxd3 5. Qxd3 e6 6. Ne2 { White has a plan to undermine black's central pawn chain by pushing the f-pawn so developing the knight to e2 square allows white to push his f-pawn without blockading it } { [%cal Gf2f4,Gf4f5,Gf5e6] } 6... c5 7. c3 cxd4 8. cxd4 Nc6 9. Nbc3 Nge7 10. O-O Nf5 11. Be3 { Adding a defender to the d4 pawn first with the idea of relocating white's knight to the g3 square offering a trade to remove black's knight from occupying the f5 square so that white can push the f-pawn } { [%cal Ge3d4,Ge2g3,Gg3f5,Gf2f4,Gf4f5] } 11... Bb4 12. Ng3 Nxe3 13. fxe3 { Change of plan because it's stronger to open up the f-file for white's rook than pushing the pawn. Capturing also helps to defend the central pawn with a pawn rather than a piece. } { [%cal Gf1f8,Ge3d4] } 13... O-O 14. Rf4 { Doubling the rook } { [%cal Ga1f1] } 14... Bxc3 15. bxc3 Ne7 16. Raf1 Ng6 17. Rg4 { [%cal Gg4g8] } 17... Rc8 18. h4 { White is sacrificing pawn to buy himself some time to reposition his knight for a rook lift to the h-file to execute a strong attack. Since black already has a plan of his own to capture white's undefended c3 pawn. (Unsound) } { [%cal Gd8c7,Gc7c3,Gg3h5,Gf1f3,Gf3h3,Gg6h4] } 18... Nxh4 19. Nh5 Ng6 { These two moves it took black allowed white to } 20. Rf3 Kh8 21. Rh3 { [%cal Gh3h8] } 21... Rg8 22. Rxg6 { Sacrificing with the idea of mating black's king } 22... fxg6 23. Qxg6 h6 (23... Rc7 24. Qxh7+ Kxh7 25. Nf4+ { [%csl Gg6,Gh5] } 25... Qh4 26. Rxh4#) (23... hxg6 24. Nf6#) 24. Nf6 gxf6 25. Rxh6# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.18: Modern Defence transpose into Pterodactyl Defence (Game 1)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B06"]
+[Opening "Pterodactyl Defense: Eastern, Pterodactyl"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.18: Modern Defence transpose into Pterodactyl Defence (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/81R6vrbQ"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "12:32:53"]
+
+1. e4 g6 2. d4 Bg7 3. Nc3 c5 4. dxc5 Qa5 { [%cal Ga5c5,Ga5c3,Gg7c3] } 5. Bd2 { Giving back the pawn to avoid allowing a fork on the king and the rook } 5... Qxc5 6. Nd5 { Centralising the knight with the idea of aiming on the c7 square } { [%csl Gc7][%cal Gc7a8,Gc7e8] } 6... Bxb2 7. Rb1 Bg7 8. Bb4 { Trying to chase away black's queen from defending the c7 square } { [%csl Gc7] } 8... Qc6 9. Bb5 { Black resign } 9... Qxb5 { Black can't capture because of the royal fork } (9... Bc3+ 10. Bxc3 { [%cal Gd5c3,Gc3h8] }) 10. Nc7+ { [%cal Gc7b5,Gc7e8,Gc7a8] } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.18: Indian Game versus Cheater (Game 2)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.18: Indian Game versus Cheater (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/CMJ2IrdH"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "12:32:57"]
+
+1. d4 Nf6 2. e3 g6 3. Bd3 Bg7 4. c3 O-O 5. Nf3 d6 { Start to prepare the move e5 (King's Indian main idea) } { [%csl Ge5][%cal Gd6e5] } 6. Na3 Nc6 { [%csl Ge5][%cal Gc6e5,Gd6e5] } 7. Bd2 e5 8. dxe5 dxe5 9. Qc2 Qe7 { Prepare the move e4 } { [%cal Ge5e4] } 10. e4 Bg4 11. Be2 Rad8 12. h3 Be6 13. O-O Nh5 { Prepare the f5 pawn break } 14. Bg5 f6 15. Be3 f5 16. Ng5 Bc8 17. exf5 Bxf5 18. Qb3+ { [%cal Gb3g8,Gb3b7] } 18... Kh8 19. Qxb7 Nf4 { Intercept the defence of the knight by the bishop } { [%cal Ge3g5] } 20. Bxf4 exf4 21. Qxc6 Qxg5 22. Rad1 Bxh3 23. Rxd8 { [%cal Gg2h3,Gg5g1] } 23... Rxd8 24. Rd1 Rf8 { Retreating (Declining the trade) with the potential to supervise a pawn push. } { [%cal Gf4f3] } 25. Nb5 Be5 { Improving the bishop } { [%cal Ge5c7] } 26. Nd4 f3 27. Bxf3 Bc8 { Dropping the bishop back to pave a path for the queen to h2 } { [%cal Gg5h4,Gh4h2] } 28. Kf1 Qh4 29. Ne6 Rg8 30. Nxc7 Bxc7 31. Qxc7 Ba6+ 32. Kg1 Re8 33. Qc6 Qe7 34. Qxa6 g5 35. Qa4 Qe5 36. Rd5 Qe1+ 37. Kh2 g4 38. Qd4+ Kg8 39. Rg5+ Kf8 40. Qf6# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.18: Indian Game (Game 3)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.18: Indian Game (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/xHGFMUl0"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "12:33:00"]
+
+1. d4 Nf6 2. b3 g6 3. a3 Bg7 4. Bb2 O-O 5. Nd2 d6 { Preparing e5 (King's Indian main idea) } { [%cal Ge7e5] } 6. Ngf3 Nbd7 { Again preparing e5 } { [%cal Gd7e5,Gd6e5] } 7. e3 e5 8. e4 exd4 { Open up the centre because white's king is still in the centre } 9. Bxd4 Re8 10. Bd3 d5 { Winning the pinned pawn } 11. e5 Ng4 { Moving the knight to win the pawn } { [%cal Gg4e5] } 12. O-O Ngxe5 13. Re1 c5 { Chasing away white's strong bishop/forcing a trade if white captures the knight on e5. } { [%cal Gd4b2,Gd4e5] } 14. Bxe5 Nxe5 { [%cal Gg7a1] } 15. Ra2 Nxd3 { Removing white last bishop so that black will have a bishop pair against white's knight pair } 16. cxd3 Bf5 { Develop the bishop while eyeing the undefended pawn } { [%cal Gf5d3] } 17. Nf1 Rxe1 18. Qxe1?? Bxd3 19. Ng3 c4 { With the idea of creating a past pawn on the c-file since black's bishop is already controlling the c3 and c2 square } { [%cal Gg7c3,Gd3c2,Gc4c3,Gc3c2] } 20. bxc4 dxc4 21. h3 c3 22. Qc1 Rc8 { *Patient move
+Bring more pieces into the game } 23. Ne1 c2 (23... Bc4 24. Rc2 Bb3 25. Re2 Qd1 { [%cal Gb3d1] } (25... c2 26. Nxc2 Qc7) 26. Qxd1 Bxd1 { [%cal Gc3c2] }) 24. Nf1 (24. Nxc2 Qc7 { [%cal Gc7c1] }) 24... Bxf1 25. Kxf1 Bh6 { Sacrificing the bishop to dislodge white's queen from c1 so that black can make a second queen } 26. Qxc2 Rxc2 27. Rxc2 Qd1 28. g3 Bd2 29. Rxd2 Qxd2 30. Nf3 Qc1+ 31. Kg2 Qxa3 32. h4 b5 33. Nd4 b4 34. Kf1 Qd3+ 35. Ne2 b3 36. Ke1 b2 37. Nf4 b1=Q# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.19: Philidor Defence (Game 1)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C41"]
+[Opening "Philidor Defense: Exchange Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.19: Philidor Defence (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/27eD23wl"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "14:04:26"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Nxd4 Be7 5. Nc3 Nf6 6. Bc4 O-O 7. Bb3 { Avoiding fork trap } { [%cal Gc3e4,Gf6e4,Gd6d5,Gd5c4,Gd5e4] } 7... Nbd7 8. O-O Ne5? 9. f4 { Chasing the knight away } 9... Ned7 10. Nf3 { Preparing a pawn break on e5 } { [%cal Gf3e5] } 10... Nc5 11. Qe1 { Moving the queen to avoid queen trade after e5 pawn break } { [%cal Ge4e5,Gd6e5,Gd8d1,Gf4e5] } 11... Bg4 12. e5 dxe5 13. fxe5 Nh5 14. Be3 { Continue with development } 14... Ne6 (14... Nxb3 { Black should had taken the bishop } 15. axb3 { [%cal Ga1d1,Gh2h3] }) 15. Rd1 Qe8 16. Nd5? { Centralising the knight } 16... c6 17. Nc3 { Retreating } 17... Bb4 18. h3 { With the idea to get rid of the pin } 18... Bxf3 19. Rxf3 Rd8 20. g4 { Attack the trapped knight } { [%csl Gf6,Gf4,Gg3] } 20... f5?? { *Tactical blunder
+The pawn used to defend the knight of e6 } { [%cal Gf7e6] } 21. Rxd8 { Distract the overloaded queen from defending the knight of e6 } { [%cal Ge8e6,Ge8d8] } 21... Qxd8 22. Bxe6+ Kh8 23. gxh5 f4 24. Bxf4 Bc5+ 25. Kg2 Qe7 26. Bc4 { Prepare to build a battery targeting the h7 square } { [%cal Gc4d3,Gd3h7,Ge1e4] } 26... b5 27. Bd3 b4 28. Qe4 { [%cal Ge4h7] } 28... g6 29. Ne2 gxh5 30. Rg3 { Bringing the rook to participate in the attack } { [%cal Gg3g8] } 30... Rg8 31. Rxg8+ Kxg8 32. Ng3 { Bringing the knight into the attack } { [%cal Gg3f5] } 32... Qg7 { Threatening h4 due to white's knight being pinned } { [%cal Gh5h4,Gg7g2] } 33. Qc4+ Kh8 34. Qxc5 h4 35. Qd6 hxg3 36. Qd8+ Qg8 37. Qf6+ Qg7 38. Bh6 Kg8 39. Qxg7# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.19: Elephant Gambit (Game 2)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C40"]
+[Opening "Elephant Gambit: Paulsen Countergambit"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.19: Elephant Gambit (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/phwR8QXD"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "14:33:59"]
+
+1. e4 e5 2. Nf3 d5 3. exd5 e4 4. Qe2 { Pinning the pawn } { [%cal Ge2e8] } 4... f5 5. d3 { [%cal Gd3e4] } 5... Nf6 { [%cal Gf6e4,Gf5e4] } 6. Nc3 { [%cal Gd3e4,Gc3e4,Ge2e4] } 6... Bb4 7. dxe4 Bxc3+ { Take away the defender of the e4 square } { [%cal Gc3e4] } 8. bxc3 fxe4 9. Ba3 { Developing while preventing black from castling to equalize the playing field because white's bishop is obstructed preventing him from castling king side } { [%csl Ge2,Gg2][%cal Ga3f8] } 9... Qxd5 10. Rd1 Qa5 { [%cal Ga5c3,Ga5a3] } 11. Bb4 Qb6 12. Ng5 { [%cal Gg5e4] } 12... c5 13. Nxe4 { [%cal Ge2e8,Gc5b4,Ge4f6] } 13... O-O (13... cxb4 14. Nxf6+ { [%cal Ge2e8,Gf6e8] }) 14. Bxc5 { [%cal Gc5f8,Gc5b6] } 14... Qc6 15. Bxf8 Nxe4 16. Bb4 { Retreating while defending the hanging bishop and pawn } { [%csl Gf8,Gc3][%cal Gb4c3,Ge4c3] } 16... Bf5 17. Rd8+ Kf7 18. Rf8+ Kg6 19. g4 { Attack the bishop with tempo and make room to develop the light square bishop } { [%cal Gg4f5,Gf1g2] } 19... Be6 20. Bg2 Bd5 21. O-O { Castling to avoid potential threat } 21... Nd7 22. Rxa8 b5! { [%cal Gc6a8] } 23. Re1?? { Black resign } { [%cal Gc6a8] } 23... Qxa8 24. Qxe4+ Bxe4 25. Bxe4+ Qxe4 26. Rxe4 *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.19: Stafford Gambit (Game 3)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C42"]
+[Opening "Petrov's Defense: Stafford Gambit"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.19: Stafford Gambit (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/FyJlrWZz"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "14:34:02"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 Nc6 4. Nxc6 dxc6 5. d3 Bc5 6. Be2 h5 7. c3 { Preparing d4 to blunt black's bishop } { [%cal Gd3d4,Gc5f2] } 7... Ng4 8. d4 { [%cal Gc5f2] } 8... Be7 9. h3 Nf6 10. Bd3 { [%cal Gd3e4,Gf6e4] } 10... Be6 11. Bf4 Qd7 12. Nd2 O-O-O 13. b4 { Prevent black from playing c5 to undermine the centre, which also secure the c5 square as an outpost for white's knight } { [%cal Gb4c5,Gc6c5,Gc5d4,Gd2b3,Gb3c5] } 13... Bxb4 14. cxb4 Qxd4 { [%cal Gd4d3] } 15. Bc2 Bc4 { Preventing white from castling } 16. Be3 (16. Nxc4 Qxc4 { [%cal Gd8d1] } 17. Qe2 (17. Qc1 Nxe4 { [%cal Gh8e8,Ge8e1] }) 17... Qc3+ { [%cal Gc3a1,Gc3e1] }) 16... Qc3 17. Rc1 { [%cal Gc1c3] } 17... Qxb4 18. a3 Qb5 19. Ba4 Rxd2 20. Bxd2 Qa6 21. Bb3 { Trading black's strong bishop } 21... Bxb3 22. Qxb3 Nxe4 23. Qc4 { Offering a trade of queen so that white can safely castle } 23... Qxa3 24. Qxe4 { Black resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.20: Sicilian: Accelerated Dragon (Game 1)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B32"]
+[Opening "Sicilian Defense: Accelerated Dragon"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.20: Sicilian: Accelerated Dragon (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/rLBdG5nY"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "20:02:07"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. c3 { Takes away the knight's natural developing square } { [%cal Gb1c3] } 5... Bg7 6. Be2 Nf6 7. f3? { Defend the e4 pawn at a cost of weakening the squares around white's king } { [%csl Gf2,Ge3][%cal Gf3e4] } 7... d5 { With the idea of opening up the centre to exploit the weakening } 8. Nd2 O-O { Continue with development while keeping the tension in the centre } { [%csl Ge4,Gd5] } 9. O-O Nxd4 { Tactical trade to win a pawn } 10. cxd4 dxe4 11. Nxe4 Nxe4 12. fxe4 Bxd4+ { Winning the pawn } 13. Kh1 Be6 14. Qc2?! Rc8 15. Qa4 Qb6 { Moving the queen away from a potential pin threat, also allows the rook on f8 to go to d8 where it will be more active controlling the open file. } { [%cal Gf1d1,Gd1d8] } 16. Bh6 Rfd8 17. Rab1 Be3 { With the idea of trading white's annoying bishop } 18. Bf3 (18. Bxe3 Qxe3 { [%cal Ge3e2,Ge3e4] }) 18... Bxh6 { White resign } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.20: Alapin Sicilian (Game 2)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B22"]
+[Opening "Sicilian Defense: Alapin Variation, Barmen Defense, Modern Line"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.20: Alapin Sicilian (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/rpHbtxML"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "20:02:10"]
+
+1. e4 c5 2. c3 d5 { Immediately strikes the centre } 3. exd5 Qxd5 4. d4 { Control the centre } 4... Nf6 5. Nf3 Bg4 6. Be2 e6 7. Na3 { Prepare to go b5 } { [%cal Ga3b5] } 7... a6 { Preventing white's knight from going d5 but weakens the b6 square } 8. Nc4 { Aiming for the b6 outpost } { [%cal Gc4b6,Gb6d5] } 8... Qd8 9. Qb3 { With the idea to try to provoke black to play b5 which weakens the pawn - It makes the pawn more vulnerable because it's more difficult to defend them with pieces when the pawns are not on its starting square. } 9... b5 10. Nce5 c4 11. Qd1 Bd6 12. Nxg4 Nxg4 13. a4 { Trying to undermine the base of the pawn chain to exploit the fact that it's overextended. } { [%cal Ga4b5] } 13... Nd7 14. Ng5 { Open up a discover attack on black's knight on g4 and also with the potential of improving the bishop on a more active square } { [%cal Ge2f3,Gf3g4,Gf3a8] } 14... Ngf6 15. Bf3 Rb8 16. axb5 axb5 17. O-O O-O 18. Re1 Qc7 { Attacking the pawn } { [%cal Gd6h2] } 19. h3 h6 20. Ne4 Nxe4 21. Bxe4 f5? { Weakens the pawn on e6 } { [%cal Gf7e6] } 22. Bf3 Rbe8 23. Ra6 { With the idea of occupying c6 square } 23... Nf6 24. Bc6 { [%cal Gc6b5,Gc6e8] } 24... Re7 25. Bxb5 Ne4 { Centralising the knight } 26. Bc6 { Trying to trade off black's centralise knight } { [%cal Gc6e4] } 26... Ref7 27. Bxe4 fxe4 28. Be3 { Defending } { [%cal Ge3f2] } 28... Bf4 { Trying to remove the defender of the f2 square } 29. Qg4 { Improving the queen to perhaps manouevre to a better square to help defend the king } 29... Bxe3 30. fxe3 Qb7 31. Rxe6 Qxb2 { [%cal Gb2f2,Gf2e1,Gf2g1] } 32. Kh2 { Avoiding fork } 32... Rf2 33. Rg6 { Black lost on time } { [%cal Gg6g7] } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.21: King's Indian Defence (Game 1)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "E61"]
+[Opening "King's Indian Defense"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.21: King's Indian Defence (Game 1)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/gTjL8dpT"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "20:02:13"]
+
+1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. Bg5 O-O 5. e4 d6 6. f4? { Positional mistake
+White is breaking the principles of pushing to many pawns in the opening.
+White us also overextending his pawns - white has a great central control with 4 pawns but he is not able to defend this many pawns at once. } 6... c5 { Striking white's centre not giving white a chance to develop and defend his central pawns. } 7. e5 cxd4 8. exf6 { tactical mistake } 8... exf6 { Now black is attacking white's bishop and knight, he is also ready to bring his rook into the open e-file } { [%cal Gf6g5,Gd4c3,Gf8e8,Ge8e1] } 9. Bxf6 Bxf6 10. Ne4 Re8 { [%cal Ge8e1] } 11. Nf3?? Rxe4+ 12. Be2 Qe7 { Quite move to accumulate more pressure in the centre towards white's king to tempolary stopping white's from castling. } 13. Qd3 (13. O-O Rxe2 14. Qxe2 Qxe2) 13... Re3 { [%cal Ge3d3] } 14. Qd2 d3 { Bringing the pawn to participate in the attack } { [%cal Gd3e2,Ge3e2] } 15. O-O dxe2 16. Rfe1 Nc6 { Continue developing to bring more pieces involve } 17. Rad1?? exd1=Q 18. Rxd1 Bg4 19. Ne1 Bxd1 20. Qxd1 Rxe1+ 21. Qxe1 Qxe1# *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.21: Sicilian: Accelerated Dragon (Game 2)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B20"]
+[Opening "Sicilian Defense: Bowdler Attack"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.21: Sicilian: Accelerated Dragon (Game 2)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/qm3Vx6Vv"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "20:32:08"]
+
+1. e4 c5 2. Bc4 Nc6 3. Nf3 e6 4. d3 d5 5. exd5 exd5 6. Bb3 Nf6 7. Qe2+ Be7 8. h3 O-O 9. Bf4 Re8 { [%cal Ge8e2] } 10. O-O Bf5 11. Qd2 { [%cal Gd2f4] } 11... Qd7 { Prepare to tear open white's kings side } { [%cal Gf5h3] } 12. Re1 Bxh3 13. gxh3 Qxh3 { [%cal Gh3f3] } 14. Qd1 { [%cal Gd1f3] } 14... Ng4 { Bringing more piece to the attack } 15. Bxd5 { [%cal Gd5f3] } 15... Nd4 { Trying to distract the knight (Unsound) } { [%cal Gf3d4,Ge7h4,Gh4f2] } 16. c3 (16. Nxd4 Bh4 { [%cal Gh4f2] } 17. Bg2 { [%cal Gg2h3,Gg1f1] } 17... Bxf2+ 18. Kf1 Rxe1+ 19. Qxe1 { [%cal Ge1f2,Gg2h3] } 19... Qxg2+ 20. Kxg2 Bxe1 21. Nf3) 16... Nf5 { Repositioning the knight to still be relevant with the attack } { [%cal Gf5h4] } 17. Ne5 Bh4 { Open up the rook to prepare a tactical trade } { [%cal Ge8e1] } 18. Bxf7+ Kh8 19. Qxg4 Qxg4+ 20. Nxg4 Rxe1+ { End of tactical trade } 21. Kg2 Rf8 22. Bd5 Ne7 { [%cal Ge7d5,Gf8f4] } 23. Bd6 { [%cal Gd6f8] } 23... Rf5 { Unpinning and preparing to move to rook to g5 pinning white's knight } { [%cal Gf5g5,Gg5g2] } 24. Bxe7 Bxe7 25. Ne3 Rg5+ 26. Kf3 Rgg1 { White lose on time } { [%cal Ge1a1] } *
+
+
+[Event "Daniel Naroditsky Speedrun Notes (Part 1): Pt.21: Scandanavian (Game 3)"]
+[Date "2020.12.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B01"]
+[Opening "Scandinavian Defense: Valencian Variation"]
+[StudyName "Daniel Naroditsky Speedrun Notes (Part 1)"]
+[ChapterName "Pt.21: Scandanavian (Game 3)"]
+[ChapterURL "https://lichess.org/study/vEEsw5wy/1zJ5Gea3"]
+[Annotator "https://lichess.org/@/Ka-Ko"]
+[UTCDate "2020.12.13"]
+[UTCTime "20:32:13"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3 Qd8 4. d4 c6 5. Nf3 b5 6. Bd3 Nf6 7. O-O e6 8. Ne5 { Centralising the knight } 8... Bb7 (8... Qxd4 { Tactical blunder } { [%cal Gd1d4] } 9. Nxf7 { Forcing black's king onto a square where white can give a check to win black's queen } 9... Kxf7 10. Bg6+ hxg6 11. Qxd4) 9. Bg5 Be7 10. Qf3 { [%cal Gf3a8,Gf3f7] } 10... O-O (10... Qxd4 11. Rfe1 { [%cal Ge1e5] } 11... O-O 12. Rad1 { [%cal Gd1d4,Ge1e5,Gd3h7,Gf3h3,Gh3h7] }) 11. Nxb5 { [%cal Gf3b7] } 11... Nd5 12. Bxe7 Qxe7 13. Nc3 Nxc3 14. bxc3 f6 15. Qh3 { Making a counter threat which is greater than the black's threat } { [%cal Gd3h7,Gh3h7] } 15... g6 (15... fxe5 16. Bxh7+ Kf7 17. Qh5+ Kf6 18. Qg6# (18. dxe5#)) 16. Ng4 Kh8 17. Bxg6 { [%cal Gh3h8] } 17... Rg8 18. Bd3 Qg7 19. Nxf6 { Winning the free pawn because black's queen is stuck defending against checkmate. White queen is also defending against checkmate } { [%cal Gg7f6,Gh3h7,Gh3g2,Gg7g2] } 19... Nd7 20. Nxh7 { [%cal Gh3h8] } 20... Rgf8 21. Nf6+ { Black resign } *
+
+

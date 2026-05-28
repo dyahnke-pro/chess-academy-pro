@@ -1,0 +1,1422 @@
+[Event "The Rapport Jobava London System: Complete Repertoire: Symmetrical Jobava System"]
+[Site "https://lichess.org/study/VEy8acWf/eIG3my4Y"]
+[Date "????.??.??"]
+[White "White"]
+[Black "Black"]
+[Result "*"]
+[Annotator "Fatty"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Jobava London System - Introduction and Acknowledgement"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/RDGyaPxt"]
+
+1. d4 d5 2. Nc3 Nf6 3. Bf4! { Welcome to my Chess Opening Course of the
+Rapport-Jobava London System! The Rapport-Jobava London System is a infallible
+opening which is moderately low and theory and quite easy to play. This
+Opening system is very flexible. Bf4 Nc3 Targets are on the queenside. This
+Opening System meets both aggressive and positional player's desire and
+objective. Either tamed or bewildered the choice is up to you! } 3... Bf5 4. Nb5 { Nb5 might sound elementary but
+either ways it actually part well! Why is that? What's the purpose behind the
+move Nb5? Doesn't that sound elementary? SGM Hikaru Nakamura once threw a
+tantrum and said this was garbage when Naroditsky successfully forked Hikaru
+due to premove. Funny enough Nb5 is actually a very good idea in the
+Rapport-Jobava London System. First it forces black to make this horrible move
+Na6!? The only saving move thus a misplaced knight! This messes up black's
+structure. It would take at least two tempos before black would be able to
+bring his knight into a better square! Nb3 forces black to do the uncanny.
+Keep that in your mind! } { [%csl Rb5,Rc7][%cal Rb5c7,Rf4c7,Yb8a6,Ya6c7] } (4. e3 { continuum: This is my recommendation. White immediately prepares f3-g4-h4: } 4... e6 5. f3 c5 6. g4 Bg6 7. h4 { For example } 7... h6 (7... h5 8. g5 Nfd7 9. Nb5) 8. Nb5) 4... Na6 { An uncanny and crampy move. Would take at least
+two tempos before black could reroute his knight to a better place. Knight on
+the rim Nh6!? A forced defensive move! } 5. a3 { a3! To avoid complications
+since the position follows the same idea of the Rapport Jobava London System
+with black having to step forward with Nb4! After c6! Pawn to a3 is pretty
+much forced in here. } 5... c6 { The only good move is c6 in here. Everything else is
+too passive. Pawn to c6 of course threatens to take the knight thus forcing it
+to be evicted to the b5 square. } (5... c5 { c5 is another provacative move
+which doesn't really sound very well because this further opens up the dark
+squares around b8-f4. Position looks exploitable for white. Black needed to
+counter white's dark square bishop before commiting to the move c5! } 6. dxc5 Ne4 7. b4 { White at ease was able to anchor the c5 pawn. White is up a piece
+whereas black gets little compensation for the pawn sacrifice. } 7... g5 8. Be5 f6 9. Bc3) (5... e6 { e6 strengthens the center and black is planning to counter
+white's dark square bishop with c6 thus kicking away the knight followed by
+Bd6! } 6. e3 c6 7. Nc3 Bd6 8. Bxd6 { Other ideas includes the move Bg3, but I
+prefer bishop takes bishop followed by f4! To strengthen white's control on
+the e5 square. } 8... Qxd6 9. f4 O-O 10. Nf3 Nc7 11. Bd3) 6. Nc3 e6 { Now black gets
+some sort of a Semi-Slav with the bishop on f5 and a knight on a rim a6 } 7. e3 Be7 8. Be2 O-O 9. g4 { More of a provacative move I have to admit. White lashes
+out on the kingside with ideas of launching a pawn storm on the kingside. } 9... Be4 10. f3 Bg6 11. h4 h5 12. Nh3 b5 13. O-O *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ____Chapter #3 \"HORWITZ DEFENCE\" Standard System____"]
+[Site "https://lichess.org/study/AnndoYt3/CT7xqouJ"]
+[Date "????.??.??"]
+[White "Horwitz, Anti, Standard Defence #1"]
+[Black "1. d4 d5 2. Nc3 (c5) Nf6 3. Bf4 e6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Horwitz, Anti, Standard Defence #1 - 1. d4 d5 2. Nc3 (c5) Nf6 3. Bf4 e6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/Rmw2Nk2u"]
+
+1. d4 d5 2. Nc3 Nf6 3. Bf4 { This particular chapter is dedicated to the"One" and "Only" main line
+Horwitz Defence against the Jobava London. The Horwitz Defence can
+basically be played against everything. By everything I mean "Everything". It can be played against the Queen's Gambit, Catalan Opening, English
+Opening, London System, King's Indian Attack, and so on.Basically in here black's simple plan is to occupy the center, reinforce a hasty attack either on the center or the queenside depending on white's play. So on and so forth in the Jobava, the system remains very different. The idea
+of Bf4 Nd5 is one of the key factor why the Horwitz's auto piloted move order wouldn't fit very well. Remember the idea of Bf4 Nd5! huh? Black either have to play a6 or Na6 just to stop this. Thus a tempo ahead and a complicatedly matter on the queenside makes this position quite unbearable! } 3... e6 { This moved has been played most of the time. The standard Horwitz Defence
+against every system. Problem in here is that black allowed white to play
+Nb5! Which is the reason why black cannot go auto pilot against the Jobava London unless the Nb5 threat has been covered. } (3... a6 4. e3 b5 { Black expands with a few ideas of attacking chances. In particular the
+queenside. } (4... c5!? { Black challenges white's center. But in exchange white gets an extra
+tempo whereas black would get little compensation on the prized center. } 5. dxc5 e6 (5... Qa5?! { Unnecessary since moving your queen on the rim would only waste a tempo.
+Besides black has to make plans which piece will he use to recapture the c
+pawn. With the queen?! Loses two tempos. } 6. Nf3 Qxc5 7. Qd3 { Flexible position, white is free to castle on the queenside which in this
+case gives black attacking chances on the kingside. } 7... Nbd7 8. O-O-O) 6. Bd3! { Favorable position, flexible and stable development. White should make
+plans when to castle. } 6... Bxc5 7. Nf3 Nc6 8. O-O b5 { White's objective is to open up the center with the move e4! } 9. e4 O-O 10. a3) (4... Bf5 5. Nf3 e6 6. Be2 Be7 7. Ne5 { The e5 square is often a good outpost. Keep that idea in mind would you? } 7... O-O 8. O-O Nc6 9. g4! { With attacking chances on tbe kingside but not necessarily what you
+should do. You can leave the position before g4 and stick with your plans
+and objectives. }) 5. Bd3 { Favorable position, flexible and stable development. White should make
+plans when to castle. } 5... e6 6. Nce2 c5 7. c3 Nbd7 8. Nf3 Be7 9. O-O O-O 10. h3) (3... g6 { Some sort of a Semi-Grunfeld. White should just continue with his
+standard set up. But aside from that everything is working well from here. } 4. e3 Bg7 5. Nb5 Na6 6. Nf3 c6 7. Nc3 Qb6 8. Rb1 Bg4 9. Be2 O-O 10. O-O) 4. Nb5! { The threat of fork between the king and rook can only be stopped by Na6. This horribly looking move makes the knight dislodged from the game. It is misplaced, stuck on the rim and has to spend two tempos just to reinforce the knight into a better square. } { [%cal Rb8a6,Rb5c7] } 4... Na6 (4... Bd6?! { Another alternative which doesn't require the move Na6 to defend. This
+may seem like a good option since this also strengthens black's center in
+the future. But either ways you can't sleep too much on a sleep over! The problem behind this is that after knight takes bishop. White would have
+the bishop pair. } 5. Nxd6+ cxd6 6. e3 Nc6 7. Nf3 O-O 8. h3 Re8 9. c3 e5 10. Bh2 { Despite of black's effort in breaking up the center. There's really not
+much to be done in here for black since white's center is well fortified. }) (4... Bb4+ { Bb4+ is what @BossStephen usually plays against the Jobava London (Thanks for his recommendation!) pretty much } 5. c3 { l } 5... Ba5 6. e3 a6 (6... Nbd7 7. a4 a6 8. Na3 c5 9. Nf3 Bc7) 7. Na3 O-O (7... Bb6 8. Nf3 c5 9. Bd3 O-O 10. Ne5 Nc6 { This is the simple move, the alternate Bc7, sacrificing the c-pawn is also playable. } (10... Bc7 11. dxc5 Nbd7 12. Nxd7 Bxd7 13. Bg3 Rc8 14. b4!? { Moves like Nc2 or Bh4 are engine's top moves, suggesting to give up the extra pawn. } 14... b6 15. cxb6 Bxg3! 16. hxg3 Rxc3 17. Nb1! (17. Bxh7+?! { Equal according to engine, and looks cool! } 17... Nxh7 18. Qh5 f6 19. Qxh7+ Kf7 20. Nc2 { [%csl Bc2][%cal Bh7c2] } 20... Qc8 21. Nd4 e5 22. Ne2 Rc2 23. O-O Bf5 24. Qh5+ Bg6 25. Qf3 Be4 { Draw by repetition. }))) 8. Nf3 Nbd7 9. Be2 { Just continue with your normal development and you'll be fine. } 9... Ne4 (9... c5 10. dxc5 { Simply t } 10... Ne4) 10. Nb1 g5 { Brave berserk for black to ever try playing something like g5 then h5. But in exchange black weakens his king safety on the kingside. } 11. Bg3 h5 12. Bd3 h4 13. Nxh4 gxh4 14. Bxe4 dxe4 15. Qg4+! Kh7 16. Bxh4 f6 17. Qh5+) 5. e3 Be7 (5... c6 { Black sets up a Semi-Slav formation with the knight misplaced on a6!?
+Would take several moves before black would be able to reinforce it in a
+better place. } 6. Nc3 Qb6!? { Queen to b6 would often be met with the move Rb1! Everything would be
+going in order. Would have been a very good position for white. } (6... Bd6 7. Bxd6!? { White is planning to set up a Semi-Stonewall Dutch formation against
+black's wobbly position. } 7... Qxd6 8. Bxa6 bxa6 { Damages black's pawn structure plus we get a knight pair! } 9. Na4 Nd7 10. f4 Qb4+ 11. c3 Qb5 12. Nf3 O-O 13. b3 c5 14. Qd2 cxd4 15. cxd4 Bb7 16. Kf2 Nf6 17. Nc3 Qb4 18. Rhc1) 7. Rb1 c5 8. Nf3 Be7 9. g4! { With ideas of attacking chances on the kingside. We would win our pawn
+shortly. } 9... Nxg4 (9... cxd4 10. exd4 Nb4 { Knight takes g pawn would be met with Rg1! Thus black's kingside would
+crumble apart. } 11. a3 Nc6 12. g5 Nh5 13. Be3) 10. Rg1 h5 11. h3 Nh6 12. Rxg7) 6. Nf3 Nh5 { With obvious plan of simply removing the Jobava London bishop out of the
+game. If that's the case then Bg3! } 7. Be5 f6 8. Bg3 Nxg3 9. hxg3 c5 10. c3 *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ____Chapter #1: \"ANTI-JOBAVA LONDON SYSTEM\" With Steinitz Countergambit____"]
+[Site "https://lichess.org/study/AnndoYt3/xmCjae8w"]
+[Date "2022.08.28"]
+[White "Horwitz, Anti, Standard Defence #2"]
+[Black "1. d4 d5 2. Nc3 (c5) Nf6 3. Bf4 e6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Horwitz, Anti, Standard Defence #2 - 1. d4 d5 2. Nc3 (c5) Nf6 3. Bf4 e6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/sMKULrKk"]
+
+1. d4 d5 2. Nc3 Nf6 3. Bf4 c5 { In this particular chapter we would be talking about the "Steinitz Countergambit"This effective Anti-London is known to quickly equalize or even have a better position against the London System. That is because after c5 all what white can do is react and defend consequently. After c5 Black would proceed with Qb6! White has to defend the b pawn or otherwise lose a piece.Despite of this, today's modern theory had successfully repealed and made amends to the Anti-London "Steinitz Countergambit" where white sacrifice a pawn for piece activity.But does this "Stenitz Countergambit" be an effective Anti-London against the Rapport-Jobava? We'll see... } { [%cal Gc3b5] } 4. e3 { The Anti-London "Steinitz Countergambit" wouldn't ever be an effective as
+it is against the London System. That is because the knight is on f3, with
+move such as Rb1 the b pawn is finally protected. Now black's queen end up being misplaced on b6 without anything better to do. } 4... cxd4 { Let's take a look at this wing c pawn takes center d pawn. Black has
+successfully take away one of white's center pawn against a wing pawn.
+Leaving black with a strong initiative with the d and e center pawns.But not to worry! White's aim is piece development. White is ahead of
+development and white's play would divert on the center. } (4... Bg4 { An energetic move which provokes white to either move the queen out or
+f3! Two choices in here, but f3 is the most strongest amongst the purist
+since this forces black's bishop to be evicted. } 5. f3 Bd7 (5... Bh5?! { Would be of no use since g4! Black would have wasted two tempos and
+white's devastating blow on the kingside would provoke black's kingside. } 6. g4 Bg6 7. g5! { White has a very strong initiative and attack on the kingside. Black
+would have a difficult time handling white's initiative on the kingside
+since white's attack has been fueled by black's own tempos. } 7... Nh5 (7... cxd4 8. Nb5 Qa5+ 9. c3 dxc3 10. Nc7+) 8. Bxb8!! { Please, never EVER do this without any tactical justification. Bishop
+takes knight forces black to take with the queen this losing the central d
+pawn. Otherwise if rook takes bishop then Bb4+! Black is obligated to sacrifice a queen for it is the only option to continue the game. } 8... Qxb8 (8... Rxb8 9. Bb5+ Qd7 10. Bxd7+) 9. Bb5+ Kd8 10. Nxd5 { White Is already up a piece thus winning. Black's pieces are a
+laughingstock. With no Incentive or initiative of the pawn sacrifice and
+delayed development. Might as well as just resign in here. }) 6. Qd2! { Qd2! With clear intention of castling queenside. White's play would
+divert on the kingside. With the help of the f3 pawn g4 h4 would come in
+blitz maneuver. } 6... Nc6 7. O-O-O e6 8. g4! { "Attack Attack Attack Attack!" Push em baby yeah? Don't forget h4 soon.
+Would have been a great idea to play later on. } 8... Be7 9. Nge2 O-O 10. h4) (4... e6?! { Pretty much straightforward. Black wants to avoid complication and
+settled for e6?! to protect the c pawn. Why is this inaccurate you might
+ask? Well Nb5 and black is forced to give in with Na6. A knight on a rim. Misplaced and horrible. Wouldn't want that would you? } 5. Nb5 Na6 { Na6 the only good move to stop the threat of knight on c2+ with a fork.
+Na6 although force is an unfeasible and ugly move since the knight is on
+the rim and it is misplaced! Would take two tempos just to straighten it up. } (5... Qa5+?? { b4! Black is forced to take with a check! Nc2 is inevitable in here.
+Black's queen is forced to take the pawn. After queen takes pawn with a
+check c3! Thus black cannot stop the idea of fork. The fork with the king and rook with the knight cannot be stopped. } 6. b4 { Black is forced to take the knight thus losing a tempo and the fork on c2
+with the knight cannot be stopped } 6... Qxb4+ 7. c3 Qb2 8. Rb1 Qxa2 9. Nc7+) 6. c3 { Pyramid pawn structure as always seen in the London, Colle System or even
+the Slav Defence. White has a powerful center in here. } 6... Bd7 7. a4 c4 { Since white's pawn is on a4. c4 was made possible. Threat of b3 wouldn't
+be of any danger for black since he can simply take followed by Nc2 and
+onwards. } 8. Na3 { Na3 just to shift away the knight from being taken by black's light
+square bishop thus creating a double b pawn. Although the pressure on the
+queenside would give white some attacking changes... I'm afraid the double b pawn creates more of a problem and risk since it would be hard to
+defend or anchor it. } 8... Be7 9. Be2 O-O 10. Nf3 Nc7 11. O-O) (4... Nc6 5. Nb5 Qa5+ 6. c3 e5 7. Bxe5 Nxe5 8. dxe5 c4 9. exf6 Qxb5 10. Qd2 gxf6 11. Ne2) (4... Qb6 { Many "Anti-London" plays Qb6 against the London System. But in here it
+doesn't work because it's the Jobava for Pete's sake! Rb1 is reinforcable
+and Nb5! Is a grand idea in here. } 5. Nb5 Na6 6. dxc5 { Only good move is to take with the queen. Knight takes pawn is bad
+because Nc2+! Losing the rook. } 6... Qxc5 7. Be5 { With clear intention of Be4 then Nxa7. } 7... Bd7 8. Bd4 Qc8 9. Nxa7 Qb8 10. Bxf6 gxf6 11. Nb5 { White wins a piece! }) 5. exd4 Bg4 { An energetic move which provokes white to either move the queen out or
+f3! Two choices in here, but f3 is the most strongest amongst the purist
+since this forces black's bishop to be evicted. } 6. f3 (6. Be2 { Another safer approach would have been to play Be2, just to keep things
+straight without risk I guess. } 6... Bxe2 7. Ngxe2 Nc6 8. Nc1!? { With idea of Ne3! To centralize the pawn onwards! } 8... e6 9. O-O Be7 10. N3e2 { Knight maneuver to keep in touch with the f4 square. } 10... O-O 11. Nd3 b5 12. c3 a5 13. Rc1 Qb6 14. Bg5) 6... Bd7 7. Bd3 { Nb5!? Isn't really useful since bishop takes knight, black would easily equalize and keep things balanced or under control.We play Bd3 to control the f5 square. Black's light square bishop would have been stuck down there under the gutter (Black's pyramid) } { [%csl Ye6,Yf7,Yd5,Yf5][%cal Yd3f5,Yf7d5,Ye7e6] } 7... Nc6 (7... Qb6! { As mentioned before Qb6 doesn't generally work because of Nb5 and the
+"Reinforcable" Rb1. But in here with the light square bishop on e6 Nb5
+isn't possible. To make amends to this simply Qd2 long castle 0-0-0 is a way to go! } 8. Nge2 a6 9. Qd2 e6 10. O-O-O Nc6 { With ideas of Nb4 and of course simply winning the d pawn. White has to
+defend. } 11. Qe3 { Supports the d4 pawn. } 11... Nb4 12. a3 Nxd3+ 13. Rxd3 Qc6 14. g4 { Black has the queenside, White has the kingside. Interesting position
+indeed! }) 8. Nge2 { Anchors the d4 pawn. Bg3 and Nf4 is quite a lovely idea in the near
+future. } 8... Rc8 9. g4! { An energetic move in which white wants to shove a devastating attack on
+black's kingside! What else could you ask for huh? } 9... e6 10. Qd2 Nb4 11. Nc1 { Nc1, in case of knight takes bishop we would successfully get our knight
+centralized. Feasible and favorable! } 11... Nxd3+ 12. Nxd3 Be7 { Attack, attack, attack, attack! } { [%csl Yh4][%cal Yh2h4] } 13. h4 O-O 14. O-O-O { White does not have to worry about getting attacked by black. White's attack on the kingside would have been a devastating blow which provokes black to make amends and postpone the attack on the queenside. } { [%cal Yh1h8,Yd1g1,Ra7a5,Yh4h5,Rb7b5,Yg2g8,Yg4g5] } *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ____Chapter #2: SYMMETRICAL JOBAVA LONDON SYSTEM\" Copycat Move Order____"]
+[Site "https://lichess.org/study/AnndoYt3/ZawKbKRg"]
+[Date "????.??.??"]
+[White "Horwitz, Anti, Standard Defence #3"]
+[Black "1. d4 d5 2. Nc3 (c5) Nf6 3. Bf4 e6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Horwitz, Anti, Standard Defence #3 - 1. d4 d5 2. Nc3 (c5) Nf6 3. Bf4 e6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/hd9ybqIP"]
+
+1. d4 d5 (1... c5 2. d5 Nf6 3. Nc3 d6 4. e4 e6 { This move is where lots of variations begin } 5. Nf3 exd5 6. exd5 Be7 7. Be2 O-O 8. O-O Re8 9. Nd2 Bf8 10. Nc4) 2. Nc3 Nf6 3. Bf4! { Welcome to my Chess Opening Course of the Rapport-Jobava London System!
+The Rapport-Jobava London System is a infallible opening which is
+moderately low and theory and quite easy to play. This Opening system is very flexible. Bf4 Nc3 Targets are on the queenside. This Opening System
+meets both aggressive and positional player's desire and objective. Either tamed or bewildered the choice is up to you! } 3... Bf5 { In this particular chapter we are going to talk about the one and only "Bf5" Symmetrical Jobava London."Black is following the same basic objective of the Rapport-Jobava. But in this scenario Black may have some ideas with putting off the light square bishop behind the pawn pyramid. e6-d5. But in here despite of black's logical idea Nb5! and Black would be forced to defend with Na6!? } { [%cal Re7e6,Rb7d5,Rc7c6,Rf7d5] } 4. Nb5 { Nb5 might sound elementary but either ways it actually part well! Why is
+that? What's the purpose behind the move Nb5? Doesn't that sound
+elementary? SGM Hikaru Nakamura once threw a tantrum and said this was garbagr when Naroditsky successfully forked Hikaru due to premove. Funny enough
+Nb5 is actually a very good idea in the Rapport-Jobava London System. First it forces black to make this horrible move Na6!? The only saving move thus a misplaced knight! This messes up black's structure. It would take at least two tempos before black would be able to bring his knight into
+a better square! Nb3 forces black to do the uncanny. Keep that in your mind! } 4... Na6 { An uncanny and crampy move. Would take at least two tempos before black
+could reroute his knight to a better place. Knight on the rim Nh6!? A
+forced defensive move! } 5. a3 { a3 needs to be Played because after c6 Nc3 Nb5! That would have been a
+horrible smack down don't you think? Black is the one who's on offense. } 5... c6 (5... c5 { White's goal is to weaken and take over one of white's central pawns.
+Well since everything is forced Nb5! Black is once again forced to defend
+with Na6! } 6. dxc5 Ne4 7. b4 { Despite all the odds the pawn has successfully been anchored. White would
+have been up a piece and winning in here. } 7... g5 8. Be5 f6 9. Bc3) (5... e6 { defensive move amongst positional players. Pawn to c6 and we are back to
+the Slav Defence. } 6. e3 c6 7. Nc3 Qb6 { Rb1 is the best move in here. } 8. Rb1 Be7 9. Be2 O-O 10. Nf3) 6. Nc3 e6 7. e3 { Both opposing sides fixates their pawn structure... } { [%cal Rf2d4,Rb7d5,Rf7d5] } 7... Be7 8. Be2 O-O 9. g4! { White is now launching a devastating attack on the kingside! This would
+have been a horrible and uncanny situation for black who's gonna be fixated
+in defensive position! } 9... Be4 { Be4 is black's most finest defence in here. But hold on can't black just
+drop back to g6 maybe? Well... We will get to that in a minute or so. } (9... Bg6 { Bg6 is also possible. But this forces black to make this weakening move h6!? Which is very uncanny since pawn to g5 would have forced black to take away one of his key defensive piece. Without the pawn to f3 I'm afraid the defensive h5 maneuver was made impossible. } { [%csl Rf3,Rh5][%cal Bf2f3,Rh5d1] } 10. h4 h6 11. g5 hxg5 12. hxg5 Nh7 13. Bd3) 10. f3 Bg6 11. h4 { h5 black has a strong fortified kingside. Although opening up the h file
+for black might seem as a weakening move. It's for the best just so to
+extinguish part of white's attack. } 11... h5 12. Nh3 b5 13. O-O { No fear of death! To triumph without risk is to triumph without glory! } *
+
+
+[Event "The New London System - London Buckingham System: Anti-Slav Defence #1 - 1. d4 c6 Bf4 f3 (e5, Bf4)"]
+[Site "https://lichess.org/study/bUhH2SrO/2pCymKn3"]
+[Date "????.??.??"]
+[White "Anti-Slav Defence #1"]
+[Black "1. d4 c6 Bf4 f3 (e5, Bf4)"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "D00"]
+[Opening "Blackmar-Diemer Gambit Declined: O'Kelly Defense"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Anti-Slav Defence #1 - 1. d4 c6 Bf4 f3 (e5, Bf4)"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/FzG4eIUl"]
+
+1. d4 c6 { This is the Slav Defence. The Slav Defence is known for it's dynamic and
+positional play. Despite it's reputation black's counterplay heavily relies
+on breakthroughs such as on the "Center" or "Queenside." In here the main line is usually c4 followed by a "Catalan" structure. But instead of c4
+which is heavily theoretical. We would go for Nc3! Our Rapport-Jobava structure! } 2. Nc3 d5 3. f3!? { e4 is straight up possible in here but that would eventually transpose
+into the "Classical Caro Kann". In the Classical Caro Kann white would get
+a slight edge but position would have been opened and would give black a quite flexible position. Instead of transposing into the Classical Caro
+Kann let's go for f3!? In the move pawn to f3 at least white would be able to recapture with the f pawn thus having a powerful center. A semi opened f file, and of course white gets a easy and flexible play with chances of attacking black's kingside. } 3... Nf6 (3... e6 4. e4 { With the knight and the f pawn supporting the e pawn thrust. White would
+dominate on the center with an absolute advantage! } 4... Nf6 5. Nh3! { With ideas of placing the knight to f2 to protect the e4 thrust. White
+has to do whatever it takes to keep the center fortified. } 5... Be7 (5... c5! { Black tries to mess up white's well structured center. Of course white
+needs to defend this by Be3! } 6. Be3 Nc6 7. Bb5 { Pins the knight thus loosen up black's control on the center. } 7... cxd4 8. Qxd4 Bd7 9. Qd2 Bb4 10. Bxc6 Bxc6 11. e5 Nd7 12. Bd4 O-O 13. O-O-O) 6. Be2 O-O 7. Nf2 Nbd7 8. O-O dxe4 { Pawn takes e4 would help white since the f pawn would eventually be
+opened. } 9. Ncxe4 c5 10. c3 { Everything is holding up pretty well against black's less fortified
+center. } 10... cxd4 11. Qxd4 Nxe4 12. Qxe4 Nf6 13. Qc2 Qc7 14. Bg5 Ng4 15. Nxg4 Bxg5 16. Rad1) 4. e4! { With the knight and the f pawn supporting the e pawn thrust. White would
+dominate on the center with an absolute advantage! } 4... dxe4 { White cannot take with the f pawn since pawn takes pawn would lead into a
+complicated position with e5! For black. White wouldn't be able to savour
+the center and an open f file for long unless white makes amendments with knight takes e pawn! } 5. Nxe4 e5 6. Nxf6+ Qxf6 7. Be3 Bd6 8. Qd2 { White can shift his counterplay both on the kingside and center. White
+can now safely castle on the queenside. } 8... O-O 9. O-O-O { Chapter #10 - Slav Defence - 1. d4 c6 2. Bf4 d5 } *
+
+
+[Event "The New London System - London Buckingham System: Anti-Slav Defence #2 - 1. d4 c6 Bf4 f3 (e5, Bf4)"]
+[Site "https://lichess.org/study/bUhH2SrO/G32M38Vi"]
+[Date "????.??.??"]
+[White "Anti-Slav Defence #2"]
+[Black "1. d4 c6 Bf4 f3 (e5, Bf4)"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "B13"]
+[Opening "Caro-Kann Defense: Exchange Variation, Rubinstein Variation"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Anti-Slav Defence #2 - 1. d4 c6 Bf4 f3 (e5, Bf4)"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/tWLZKYsP"]
+
+1. e4 { Apologies if I started with the move e4. This was taken from my study
+"Unorthodox e4 Collection" And I have an extensive repertoire on playing
+against the Caro Kann. The Exchange Variation is one of them. However the theory pretty much remains the same after 1. d4 c6 2. e4! d5 } (1. d4 c6 2. e4 { After d4 and then c6 white could play e4 and everything would transpose
+into the old fashioned Caro Kann Defence. Just don't confuse this with e4
+at first move. Play d4, if black plays c6 then play e4! }) 1... c6 2. d4 { e4! Effectively transposing into Caro Kann. Wait hold on why e4? Isn't
+this the Caro Kann and not the London System? What does this have to do
+with the London System? Wait hold up, before you have any doubts on this particular variation. We are going to settle for an Exchange Caro Kann
+followed by the improvised London System via Bd3 and c3! } 2... d5 { The Caro Kann Defence The Caro Kann Defence is the most solid opening
+choice against the move e4. The Caro Kann Defence starts with the move e4
+c6 d4 d5! The Caro Kann is favoured amongst Chess legends such as Smyslov, Karpov, Botvinnik, Tal, and even Magnus Carlsen! } 3. exd5 cxd5 4. Bd3 { The Exchanged Caro Kann is the simplest and easiest way to handle the Caro Kann Defence. White is settling for a Rubinstein structure or the Improvised London System. White is planning to play c3 Bf4 Nf3 Nd2 0-0 and is headed for a very nice game! } { [%csl Rf5][%cal Rd3f5] } 4... Nc6 5. c3 { [%csl Rd4][%cal Rb2d4] } 5... Nf6 (5... Qc7 { Perhaps a bit provacative, first of all black wants to control the f4
+square which dislodges white from making progress with the dark square
+bishop. Black is heavily invested upon the e5! Breakthrough aswell. } 6. Na3! { With intention of course playing this Nc2 idea which strengthen white's
+d4 pawn. Useful for black's threat of e5! } (6. h3! { Another idea is to play this particular move h3! Which by then prevent
+black from playing Bg4. By then white can play Be3 Nd2 Nf3! } 6... e5 7. dxe5 Nxe5 8. Bc2 { Slides the light square bishop away from the danger. White can now play
+Nd2 and of couse Nf3 followed by short castle 0-0. } 8... Nf6 9. Nd2 Bd6 10. Ngf3 Ng6 11. O-O O-O 12. Re1) (6. g3 { Perhaps a bit unorthodox but quite a reasonable idea. White wants to play
+Bf4 and remove the queen from controlling the f4 square. Black has to play
+e5 to try and give some challenges to white but may backfire since black is under-developed, } 6... e5 { [%csl Ye5] } 7. dxe5 Nxe5 8. Bf4 Nxd3+ 9. Qxd3 Qb6 10. Nf3 Qxb2 11. O-O Qxa1 { Despite of white's loss on the rook. Black's queen is pretty much stuck in here and soon we would eventually be able to win it back. } { [%csl Ra1,Rb1,Rb5,Re8][%cal Rd3b5,Rb5e8,Rb8b1] } 12. Qb5+ Bd7 13. Qxb7 Rc8 14. Ne5 Be6 15. Nxf7 Bxf7 16. Qxc8+ { Effectively winning a piece! }) 6... a6 { Of course black doesn't want white to play Nb5! So he plays a6 for safe
+measures. } 7. Nc2 Nf6 8. h3 { Prevents the standard idea of Bg4! } 8... e6 9. Qe2 Bd6 10. Nf3 O-O 11. O-O Re8 12. Bg5 { Trying to dislodge black's control on the e4 square. } 12... Nh5 13. Rfe1 Nf4 14. Bxf4 Bxf4 15. a4 e5 16. dxe5 Nxe5 17. Nxe5 Qxe5 18. Qxe5 Rxe5 19. Rxe5 Bxe5 20. Re1 { With a slight advantage for white due to his piece activity. }) 6. Bf4 { We are going to develop our bishops first before knight. Although this might contradict the opening principal of developing knight before bishop. We are controlling the important f4 square and d6 square! Black has four major response in here which would all be covered in this particular course. Bg4, e6, g6, Qb6. } { [%csl Rd6,Gg6,Ge6,Gg4,Gb6][%cal Rf4d6,Rc1f4,Gc8g4,Gd8b6,Ge7e6,Gg7g6] } 6... Bg4 { Black is settling for a French Defence like position with the c pawn
+missing. It would be difficult for black to find counterplay in this
+particular position due to the fact that the queenside is the only minority outbreak in which would give black counterplay. } (6... g6 7. Nf3 Bg7 8. O-O O-O 9. Re1 { The line recommended by GothamChess's Caro Kann Course. Black wants to
+voluntarily open the g file thus weakening his kingside if white takes the
+light square bishop. As usual white may have fallen for an illusion in which white is actually the one penetrating black in here since black's
+kingside is weakened. But Kh8 Rg8 followed by a stack up of rooks leaves white's kingside vulnerable. } 9... Bf5! 10. Bxf5 (10. Bb5 { We wouldn't wanna exchange bishops in here. That would effectively give
+black the e4 square and black has a strong attack using the g file for his
+rook to take advantage of. Instead we can play something like Bb5! Or even Be2! } 10... Qb6 11. Qa4) (10. Be2)) 7. Qb3 Na5 8. Qa4+ Nc6 (8... Bd7 { Quite necessary for black to bring back his bishop to d7 to attack the
+queen and parry white's check on black's king. } 9. Qc2 Qb6 10. Nf3 e6 11. Nbd2 Bb5 12. Ne5 Be7 13. O-O Bxd3 14. Nxd3 O-O 15. Rfe1 Rac8 16. Nf3 Ne4 17. h4 Nc4 18. Re2 Bd6 19. Rae1 Bxf4 20. Nxf4 Qd6 21. g3 h6 22. Kg2 b5 23. a3 a5 24. Nd3 Rc7 25. Nfe5 Rfc8 26. f3 Nf6 27. g4) 9. Nd2 e6 10. Ngf3 Bd6 11. Bxd6 Qxd6 12. O-O { Chapter #11 - Slav Defence - 1. d4 c6 2. Bf4 d5 } *
+
+
+[Event "Shreksify's Study: Chapter 49"]
+[Site "https://lichess.org/study/VoPY0SsE/xrK0q1br"]
+[Date "????.??.??"]
+[White "Anti-Slav Defence #3"]
+[Black "1. d4 c6 Bf4 f3 (e5, Bf4)"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A40"]
+[Opening "Queen's Pawn Game"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Anti-Slav Defence #3 - 1. d4 c6 Bf4 f3 (e5, Bf4)"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/gTrpTO7O"]
+
+1. d4 c6 2. Nc3 d5 3. Bf4 { In here we are going to take a look at another alternative in which can
+be applied against the Slav Defence. This time we are going to stick with
+our Jobava London set up. I'm actually very hesitant to share something like this since this would effectively give you part of my opening prep. But
+for the love of God I'm willing to share this regardless of my disadvantage. I wouldn't wanna hinder any important information! } 3... Nf6 4. e3 e6 5. g4! { Once black plays something like e6 pawn to g4! Should be accounted here. Grob idea! Basmanic indeed! Point in here is white wanna play something like g5! Followed by h4! } { [%csl Gg4,Gg5,Gh4,Gh3,Gf3,Ge5][%cal Gg2g4,Gg4g5,Gh2h4,Gg1h3,Gg1f3,Gf3e5] } 5... Qa5 { Black has two alternatives in here. Either he plays something like Qa5
+trying to create havoc on the queenside or Bb4. Both of which doesn't
+really help dislodge white's attack. } (5... Bb4 6. f3 O-O (6... Bxc3+ 7. bxc3 Qa5 8. Kf2! { Bongcloud theory! Point in here is as soon as black takes the c3 pawn
+black pretty much commits his queen on the queenside leaving the kingside
+compromised. } 8... Qxc3 (8... c5 9. h4 Nc6 10. g5 Nh5 11. Bd6 { [%csl Gf4][%cal Gf3f4] } 11... b6 12. f4 g6 13. Nf3) 9. g5 Nfd7 10. Bd6 Qa5 11. h4 Qd8 12. Qc1 Nb6 13. Qa3 Na6 14. Rb1 Nc7 15. h5 Nb5 16. Rxb5 cxb5 17. h6 g6 (17... Qxg5 18. f4 Qg6 19. Bd3 f5 20. Be2 { [%csl Gh5][%cal Ge2h5] } 20... Bd7 21. Bh5) 18. Be5 Qxg5 19. Bxh8) 7. h4 Re8 8. h5 { I don't care regardless of what other people would say. I want you to
+shove the h pawn on black's kingside. Bust it open! Black would probably
+play something like h6 to avoid such ideas. } 8... Nfd7 (8... h6!? { Opens up thousands of attacking chances. I wouldn't wanna be black in
+situations like this. It would suck to be black in here I have to admit. I
+wouldn't wanna be stuck defending! } 9. Qd2 Nbd7 10. O-O-O b5 11. g5! { Bust open black's kingside! This is just horrendous for black. } 11... e5 12. dxe5 hxg5 13. h6! { White doesn't care about that bishop. As long as we bust open the
+position we would be winning! } (13. Bxg5?! { I mean, goal in here is to bust open black's kingside no matter the cost.
+If white simply took the pawn then this would give black the opportunity to
+loosen up white's furious attack. } 13... Nxe5 14. h6 Ne4) 13... gxf4 { White can move his queen to g2 or h2 to give a devastating blow on black's kingside. But regardless of black's state with accurate play black can try to hold on a bit longer. } { [%csl Gh2][%cal Gd2h2,Gd2g2] } 14. hxg7 Kxg7 15. exf4 Rg8 16. Nge2 Kf8 17. Nd4 Bc5 18. Nce2 Ne8 19. Rh6 { Attacking the c6 pawn. } { [%csl Gc6][%cal Gh6c6,Gd4c6] } 19... Nb8 20. Bh3 { [%csl Gh3][%cal Gf1h3] } 20... Bxh3 21. Rxh3 Nc7 22. Rh7 Ne6 23. Nxe6+ fxe6 24. Nc3 { White pretty much has all the fun in here. Black's king safety is compromised. } { [%csl Gh1,Gf5][%cal Gd1h1,Gd2d3,Gf4f5] }) 9. Qd2 e5 10. dxe5 Nxe5 11. h6 g6 12. Bxe5 Rxe5 13. Qd4) 6. a3 Ne4 { The problem with Ne4 is that white would play f3 soon which would then
+fuel white's wrath on the kingside. Keep in mind that if black doesn't
+really do anything serious then simply play something like f3 then h4! } 7. Ne2 Be7 8. f3 Nd6 (8... Bh4+ 9. Bg3 Nxg3 10. hxg3 Be7 11. f4 Qb6 12. Rb1 O-O 13. g5 { [%csl Gd3,Gh5][%cal Ge2c1,Gc1d3,Gd1h5] }) 9. Ng3 O-O 10. e4! { White here wants to secure his advantage by playing e4! Controls the f5 square. Black cannot longer play f5 to loosen up tension. Other than that, this effectively forcing black to either exchange pawns which would then open hundreds of opportunities for white to unleash his fury or simply hold this off and call this a day. } { [%csl Gf5,Ge4,Gg4][%cal Ge4f5,Gg4f5] } 10... b5 { In situations like this you wouldn't really wanna play e5 since this
+would open up an opportunity for black to breakout with f6! } (10... dxe4 11. fxe4 f6 12. Qd2 c5 13. dxc5 Qxc5 14. O-O-O) 11. Qd2 Nd7 12. g5 Nc4 13. Bxc4 bxc4 14. O-O Qd8 15. Kh1 Bb7 { [%csl Ge5][%cal Ge4e5] } 16. e5 { White now controls the f6 square which makes f6 not possible. We can play e5 in here since black doesn't have enough manpower to create possible counterplay on the queenside. Everything is pretty much shut down. One thing we know for sure is white has a good attacking chance on the kingside. } { [%csl Ge5,Gf6][%cal Ge4e5,Ge5f6,Gg5f6] } *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ____Chapter #4 \"KID/PIRC DEFENCE\" Tamed or Agressive Move Order____"]
+[Site "https://lichess.org/study/AnndoYt3/zeAqNvqQ"]
+[Date "????.??.??"]
+[White "King's Indian, Pirc, Grunfeld #1"]
+[Black "1. d4 Nf6 2. Bf4 g6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "Standard"]
+[ECO "B07"]
+[Opening "Pirc Defense"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "King's Indian, Pirc, Grunfeld #1 - 1. d4 Nf6 2. Bf4 g6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/CUipVcqR"]
+
+1. d4 Nf6 { Nf6 black wants to divert the game into a King's Indian or a
+Semi-Grunfeld structure. But in here after the move Nc3! Black would have
+to play d4 thus transposing back to the position we studied with the Horwitz Defence. Well other than that if black refuses and play g6!?
+Then simply e4! The move pawn to e4 was made possible because of the knight on c3. Black would have to play d5 or d6!? We'll get into that. } 2. Nc3 { White wants to play e4! Black has to play d5 or otherwise if let's say
+for example g6!? Aiming for a Grunfeld or King's Indian structure. Then
+simply e4! Then white is roughly doing better than black with his central advantage. } 2... g6!? { The move g6!? Allows the move e4! Giving white spacious and central advantage. } { [%csl Ge4,Gf4][%cal Ge2e4,Gf2f4] } 3. e4 { Simply taking over the center. Was made possible because of the knight to
+c3 move order. } 3... d6 { There are two particular variations in which I recommend in here. The
+Austrian Attack or the "English" or "Yugoslavia" Attack structure.
+Everything heavily depends on your decision. } 4. Be3! { Be3! Is a very suitable and feasible system against the King's Indian or
+pirc with the Jobava London System. White is settling for the "English"
+or"Yugoslavia" structure where white castles queenside. Plays f3 followed by g4! and h4! A continuous attack on the devastated kingside! } (4. f4 { f4! The Austrian Attack. The Austrian attack is suitable for positional
+players who want to gain spacious advantage. White's attack would either
+divert on the center or kingside (Via Bird/Dutch Kingside Attack). } 4... Bg7 5. Nf3 { Bishop to e2 followed by short castle 0-0 should be enough and feasible
+for white's particular position. I do believe that white has the advantage
+in here because of the spacious advantage. } 5... O-O 6. Bd3 { Two main moves, either Nc6 or even c5!? Both of which are included in
+here.For starters knight to c6 prevents black from making progress on the
+central breakthrough since the c5 pawn is blockaded. On the other hand c5 tempts white to exchange pieces and simplify. } 6... Nbd7 { Let's just say black doesn't really do anything aside from going forward
+with his usual King's Indian or Pirc structure and idea. That is the
+breakthroughs with c5 or Re8 e5! Well simply e5! White gains a favorable position with a spacious advantage. } (6... Nc6!? { White should play e4! With the help of the Nc6!? Move order black would
+have quite a problem with pawn breakthroughs in here. } 7. e5 dxe5 8. fxe5 Nd7 9. Ne2 Nb4 10. Be4 f5 11. Bd3 Nxd3+ 12. Qxd3 c5 13. Qb3+ Kh8 14. c3) (6... c5 { Quick tip in the Austrian Attack: It would perhaps be better if white
+were to give up the center if black's main objective is to throw as much
+pieces as possible in breaking up the center. I've been through many positions such as the Advance Caro Kann, French, and even Pirc. I've gotten
+the spacious advantage but the problem is black's main objective shifted on the center. I've tried to hold unto it until it became my untimely downfall.So general rule would have been to '"Give up the center if necessary". } 7. dxc5 dxc5 8. e5 { Wherever the knight goes. White's idea is Qe2 Bd2 0-0-0 followed by g4! Attacking black's center. } { [%cal Rd1e2,Rc1d2,Re1c1] } 8... Ng4 9. h3 Nh6 10. Be3 Qa5 11. g4 Rd8 12. Qe2 Nc6 13. O-O-O) 7. e5 Ne8 { Be3 0-0 is one heck of a good idea in here. Simply develop and stick with your opening principals and fundamentals. You can't just heavily anchor your pawn journey with openings. Cannot be fixated like that. You can't sleep too much on a sleep over! } { [%cal Rc1e3,Re1g1] } 8. Be3 c5 9. O-O { As a general advice "Give up the center of necessary" White has to give
+up the center or otherwise have some dents and iniquities on the center.
+I'm the Pirc or King's Indian black heavily relies on the pawn breakthroughs with c5, e5, or even f5! You cannot just defend and defend and defend!
+You wouldn't like that!Rather than being busy defending and giving out tenacious fortification which is roughly exhausting. Simply give up the center an d you'll be fine. } 9... cxd4 10. Bxd4 dxe5 11. fxe5 Nxe5 12. Bxe5 Bxe5 13. Nxe5 { Qd4 with a check and fork is the main idea in here. But nevertheless the
+f file is open and white has a very good position in here. } 13... Qd4+ 14. Kh1 Qxe5 15. Qd2 Nf6 { [%csl Re1][%cal Ra1e1] } 16. Rae1 { White is up in development and roughly dominating black's position.
+Black's forces is outmatched against white's active and we'll placed
+forces. }) 4... Bg7 5. Qd2 Nbd7 { Simply castle queenside and you would most likely be fine. Black would
+aim for the queenside whereas white would aim for the kingside. A double
+edged sword indeed! } 6. O-O-O Ng4 { One of the most common idea amongst positional players. Chop off the
+pieces who are currently active in participation on the objectified goal. } (6... b6!? { We would take a look at what would happen if black were to ignore
+everything else on the plate and decided to go for a quiet but simple
+objective with Re8 and e5! } 7. f3 { Simply f3 followed by g4! b4! and h4! Quick reminder that you should
+first develop your pieces and organize them in according divisions but with
+same objective of winning. The others will defend whereas the others would attack! } 7... Bb7 8. Kb1 O-O 9. Nge2 { Could be reinforced to c1 in case black shoves a pawn storm on the
+queenside. } 9... Rc8 10. g4! { "To Be Continued" }) 7. Bf4 { We can't exchange our precious and noble dark square bishop! That's our
+key piece in attacking black's well fortified kingside! } 7... e5 { Time to give up the center! } 8. dxe5 dxe5 9. Bg3 { White dominates on the d file. } 9... Bh6 10. f4 O-O 11. Be2 Ngf6 (11... f5 { A logical continuation but heavily weakens the light squares around black's position. } { [%cal Ya2g8] } 12. exf5 gxf5 13. Nf3 c6 14. Ng5) 12. h4 { The Attack continues! } 12... Qe7 13. h5 exf4 14. Bxf4 Bxf4 15. Qxf4 c6 16. Rf1 { I would prefer white in here. Although the opening sequences and move
+order is quite dubious. White's idea of attacking kingside has never been
+so difficult indeed! } *
+
+
+[Event "The New London System - London Buckingham System: King's Indian, Pirc, Grunfeld #1 - 1. d4 Nf6 2. Bf4 g6"]
+[Site "https://lichess.org/study/bUhH2SrO/AykazhHy"]
+[Date "????.??.??"]
+[White "King's Indian, Pirc, Grunfeld #2"]
+[Black "1. d4 Nf6 2. Bf4 g6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense: Accelerated London System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "King's Indian, Pirc, Grunfeld #2 - 1. d4 Nf6 2. Bf4 g6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/qwrJgof3"]
+
+1. d4 Nf6 2. Bf4 { [diagram] } (2. Nc3 { Nc3 was originally the move order in here. From my previous Jobava London
+System course Nc3 is much preferable since it is flexible. However it can
+be applied in the Accelerated London System aswell. White could have played something like d4 Nf6 e3 and then there goes b6! After b6 white should play
+Nc3! } 2... e6 (2... d6 { [#] } 3. Nf3 (3. e4 e5) 3... Nbd7 { Black may try to play d5-the Black Lion } 4. Bf4 { We would be going for our normal London System } 4... c6 5. e3 Qb6 6. Rb1 g6 7. Bd3 Bg7 8. O-O O-O) (2... g6 { [diagram] } 3. e4 { This is another interestine. We will treat the King's Indian Defence as
+the Sicilian Dragon. } 3... d6 4. Be3 Bg7 5. Nf3 (5. Qd2? { This move loses the bishop pair } 5... Ng4) (5. f3 { This is the Yugoslav or the English Attack. We would be launching a
+devastating attack against black. } 5... O-O 6. Qd2 Nc6 7. O-O-O e5 8. d5 Ne7 9. g4 { [%cal Rh2h4,Rh4h5,Rh5h6] } 9... Ne8 (9... Kh8 { [%eval 32766,0] Example game } 10. h4 h5 11. Nge2 hxg4 12. h5 gxh5 13. Ng3 Ng6 14. Nxh5 Nxh5 15. Qh2 Nh4 16. Qxh4 Qxh4 17. Rxh4 gxf3 18. Rxh5+ Kg8 19. Bd3 f6 20. Rg1 Bd7 21. Bh6 Rf7 22. Nd1 Kf8 23. Rxg7 Rxg7 { 1-0 (23) Sargissyan,S (2283)-Warkentin,J (1878) Lille 2014 }) 10. Bd3 { [%eval 32764,0] Example Game } 10... c6 11. dxc6 bxc6 12. Bc4 Be6 13. Qd3 Qa5 { 1-0 (13) Ponkratov,P (2530) -Losev,D (2381) Zvenigorod 2008 }) 5... O-O 6. Qd2 Ng4) (2... d5 { The only way the Grunfeld is possibly employable in here is if white goes
+with the Horwitz move order with d5 before jumping to the conclusion with
+Bg7?! Followed by d5?! } 3. Bf4 g6 4. Nb5! { The threat of fork between the king and rook can only be stopped by Na6. This horribly looking move makes the knight dislodged from the game. It is misplaced, stuck on the rim and has to spend two tempos just to reinforce the knight into a better square. } { [%cal Rb8a6,Rb5c7] } 4... Na6 5. Nf3 Nh5 6. Bd2 Bg7 7. e3 c6 8. Nc3 Nc7 9. Be2 O-O 10. O-O) 3. Bf4 b6 { A solid opening, the Queen's Indian is a reputable option for players who
+seek a "risk-free" game. Players of all levels can play the Queen's Indian,
+although it is advisable to have a basic understanding of positional concepts before venturing into this opening. } 4. e4 { Of course white needs to take over the center but if you don't like this.
+Well continue with your standard Jobava-London System set up and you'll
+most likely be fine. } 4... Bb7 5. Bd3 Bb4 (5... c5 6. Nge2 { Protect the center at all might! Black would take the d pawn of course
+but either ways white would recapture with the knight. } 6... cxd4 7. Nxd4 d6 (7... Bc5 8. Ndb5 d6 9. O-O O-O 10. Na4 Bb4 11. c3 Bc5 12. Nxc5 dxc5 13. Nc7) 8. Bg5 Nbd7 9. Qe2 Be7 10. O-O-O) 6. f3 { White anchors the center, this is much easier to play and safer I have to
+admit. White doesn't really have to fear much with black's assault on the
+center. } 6... d5 7. Ne2 O-O 8. O-O) 2... g6 { [diagram] [#] This chapter is dedicated to the King's Indian Defence, the
+Czech Defence, and of course the Grunfeld. } 3. Nc3 { Generally speaking, black would often play d5 since e4 is coming. In that case we are back into the grunfeld line. But if black is faithful to the king's indian defence then play this. } { [%cal Rc3e4,Re2e4] } (3. e3 Bg7 4. Nf3 O-O 5. Be2 d6 6. O-O Nbd7 7. h3 Re8 8. c4 { equality after White plays c4 instead of Nd2 (0.0) } 8... e5 9. dxe5 dxe5 10. Nxe5 Nxe5 11. Qxd8 Rxd8 12. Bxe5 { Trap losing a pawn after Black mistimes e5 move (+1.2) }) (3. Nf3 { This is a normal London Buckingham System line. } 3... d5 (3... Bg7 4. g3 O-O 5. Bg2 d6 6. O-O { Generally, if I meet the King's Indian with the accelerated London, I
+prefer to control the center than to play the Buckingham since controlling
+the center is much mor efficient and easier. }) 4. g3 { This is another London buckingham System line } 4... Bg7 5. Bg2 O-O 6. O-O) 3... Bg7 { Playing the obvious 3... Bg7 instead of d5 allows White to play the very
+strong move e4, Rosen also offers a tactic for attacking even if Black
+defends with 3... d5 and then castles too early instead of blocking the advance of the h-pawn } (3... d5 4. e3 { [%csl Gh5][%cal Gh2h5] } (4. g3 Bg7 5. Bg2 O-O 6. Nf3 { We are back in the grunfeld line, I actually prefer to play the
+Buckingham in here since this is no longer the King's Indian but rather the
+Grunfeld } 6... c5 7. e3 Nc6 (7... Qb6 { Just wanna show you what happens after Qb6 since in the grunfeld line our
+knight is often on d2 not on c3. } 8. Qc1 cxd4 (8... Nc6 { [%csl Rb6,Rc6,Rd4][%cal Rb6d4,Rc6d4] } 9. O-O cxd4 10. exd4 Nxd4 11. Nxd4 Qxd4 12. Nb5 Qb6 13. Nc7 Rb8 14. Nxd5 { We take back our pawn. }) 9. exd4 Nc6 10. O-O { Generally we are fine in here }) 8. O-O) 4... Bg7 5. h4 O-O (5... h5 6. Be2 O-O 7. Nf3 c5 { (-0.1) } 8. dxc5 Qa5 9. O-O Qxc5 10. Na4 Qa5 11. c4 Bf5 12. Nc3 dxc4 13. Bxc4 Nc6) 6. h5 Nxh5 7. Rxh5 gxh5 8. Qxh5 { (+2.2) }) 4. e4 { IM Eric Rosen recommends this position for White to play with a variation of the London System against the King's Indian Defense, opening up a strong kingside attack where the Black king is expected to be castled soon } { [%csl Gf2][%cal Gf4h6,Gh2h4,Gf2f3,Gd1d2,Ge1c1] } 4... c5 (4... d5 5. e5 Ne4 6. Nxe4 { We can simply capture the knight } 6... dxe4 7. Bc4 c5 8. c3 O-O 9. Ne2 Nc6 10. O-O { You are already doing good in here. Just make sure to guard the d4 pawn. } 10... Qb6 11. Qc2 { We are fine in here } { [%cal Rc2e4] }) (4... d6 { The King's Indian on the board } 5. Qd2 { This is the most safest line to play } (5. h4 O-O 6. h5 (6. d5 Nbd7 7. h5 gxh5 8. Rxh5 Nxh5 9. Qxh5) 6... Nxh5 7. Rxh5 gxh5 8. Qxh5 { Personally, this is one of my favorite line } 8... Bxd4 { White sacrifices a pawn and rook for a knight but eventually ruin's the
+kingside structure of black } 9. Nf3! Bxc3+ 10. bxc3 f6 11. Bc4+ e6 12. O-O-O Qe8 13. Qh3 Nc6 14. Rh1 Rf7 15. Qh5 Bd7 16. Bh6 Qe7) 5... O-O { [diagram] } (5... c6 { [#] This is the Czech Defence } 6. Nf3 O-O 7. O-O-O Nbd7 8. Be2 { We get a desirable position! } 8... b5 9. e5 b4 (9... dxe5 10. dxe5 Ng4 11. Ne4 f5 12. Neg5 Nxf2 13. e6) 10. Na4 Ne4 11. Qe3 Qa5 12. b3) 6. O-O-O c5 (6... Nbd7 { Black has two moves now, c5 or e5 } 7. Nf3 { Prevents e5! } 7... c5 8. Bh6 Qc7 9. h4 { We launch an attack right away! }) (6... Bg4? 7. f3 { Bg4 only helps us }) 7. d5 Nbd7 8. Nf3 a6 (8... Rb8 { Black wants to expand on the queenside! } 9. e5 dxe5 10. Nxe5 Nxe5 11. Bxe5 Ne4 12. Qf4 Nxc3 13. Bxg7 Kxg7 14. Qe5+ Kg8 15. Qxc3 { Comfortable position for us! }) (8... a5 { What if black tries to attack us on queenside? Well play Bb5 } 9. Bb5) (8... b6 9. Bb5 a6 (9... Bb7 10. Bh6 a6 11. Bc6 Bxc6 12. dxc6 Nb8 13. Bxg7 Kxg7 14. e5 { Another variation }) 10. Bc6 { b6 gives us the opportunity to play this }) 9. h3 b5 10. Re1) 5. d5 O-O 6. Nf3 d6 7. a4 Nh5 8. Be3 Bg4 9. Be2 Nd7 10. O-O Bxf3 11. Bxf3 Bxc3 12. bxc3 Nhf6 13. Qe2 Re8 14. a5 Ne5 15. c4 { Chapter #9 - King's Indian, Pirc, Grunfeld - 1. d4 Nf6 2. Bf4 g6 3. e3 d6 } *
+
+
+[Event "The New London System - London Buckingham System: King's Indian. Pirc, Grunfeld #3 - 1. d4 Nf6 2. Bf4 g6"]
+[Site "https://lichess.org/study/bUhH2SrO/iSQaS3GJ"]
+[Date "????.??.??"]
+[White "King's Indian. Pirc, Grunfeld #3"]
+[Black "1. d4 Nf6 2. Bf4 g6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense: Accelerated London System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "King's Indian. Pirc, Grunfeld #3 - 1. d4 Nf6 2. Bf4 g6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/AihkF25G"]
+
+1. d4 Nf6 2. Bf4 { [diagram] } (2. Nc3 g6 { [diagram] } (2... d5 { d5 only leads to a transposition of the Horwitz Defence. } 3. Bf4 { Black may play d5 transposing to the Grunfeld defence. Thus we would be
+going for the Jobava London and we are good to go. }) (2... d6 { [#] } 3. Nf3 (3. e4 e5) 3... Nbd7 { Black may try to play d5-the Black Lion } 4. Bf4 { We would be going for our normal London System } 4... c6 5. e3 Qb6 6. Rb1 g6 7. Bd3 Bg7 8. O-O O-O) 3. e4 { This is another interestine. We will treat the King's Indian Defence as
+the Sicilian Dragon. } 3... d6 4. Be3 Bg7 5. Nf3 (5. Qd2? { This move loses the bishop pair } 5... Ng4) (5. f3 { This is the Yugoslav or the English Attack. We would be launching a
+devastating attack against black. } 5... O-O 6. Qd2 Nc6 7. O-O-O e5 8. d5 Ne7 9. g4 { [%cal Rh2h4,Rh4h5,Rh5h6] } 9... Ne8 (9... Kh8 { [%eval 32766,0] Example game } 10. h4 h5 11. Nge2 hxg4 12. h5 gxh5 13. Ng3 Ng6 14. Nxh5 Nxh5 15. Qh2 Nh4 16. Qxh4 Qxh4 17. Rxh4 gxf3 18. Rxh5+ Kg8 19. Bd3 f6 20. Rg1 Bd7 21. Bh6 Rf7 22. Nd1 Kf8 23. Rxg7 Rxg7 { 1-0 (23) Sargissyan,S (2283)-Warkentin,J (1878) Lille 2014 }) 10. Bd3 { [%eval 32764,0] Example Game } 10... c6 11. dxc6 bxc6 12. Bc4 Be6 13. Qd3 Qa5 { 1-0 (13) Ponkratov,P (2530) -Losev,D (2381) Zvenigorod 2008 }) 5... O-O 6. Qd2 Ng4) 2... g6 { [diagram] [#] This chapter is dedicated to the King's Indian Defence, the
+Czech Defence, and of course the Grunfeld. } 3. Nc3 { Generally speaking, black would often play d5 since e4 is coming. In that case we are back into the grunfeld line. But if black is faithful to the king's indian defence then play this. } { [%cal Rc3e4,Re2e4] } (3. Nf3 { This is a normal London Buckingham System line. } 3... d5 (3... Bg7 4. g3 O-O 5. Bg2 d6 6. O-O { Generally, if I meet the King's Indian with the accelerated London, I
+prefer to control the center than to play the Buckingham since controlling
+the center is much mor efficient and easier. }) 4. g3 { This is another London buckingham System line } 4... Bg7 5. Bg2 O-O 6. O-O) 3... Bg7 (3... d5 { [#] This is a grunfeld line } 4. g3 Bg7 5. Bg2 O-O 6. Nf3 { We are back in the grunfeld line, I actually prefer to play the
+Buckingham in here since this is no longer the King's Indian but rather the
+Grunfeld } 6... c5 7. e3 Nc6 (7... Qb6 { Just wanna show you what happens after Qb6 since in the grunfeld line our
+knight is often on d2 not on c3. } 8. Qc1 cxd4 (8... Nc6 { [%csl Rb6,Rc6,Rd4][%cal Rb6d4,Rc6d4] } 9. O-O cxd4 10. exd4 Nxd4 11. Nxd4 Qxd4 12. Nb5 Qb6 13. Nc7 Rb8 14. Nxd5 { We take back our pawn. }) 9. exd4 Nc6 10. O-O { Generally we are fine in here }) 8. O-O) 4. e4 d6 { The King's Indian on the board } (4... d5 5. e5 Ne4 6. Nxe4 { We can simply capture the knight } 6... dxe4 7. Bc4 c5 8. c3 O-O 9. Ne2 Nc6 10. O-O { You are already doing good in here. Just make sure to guard the d4 pawn. } 10... Qb6 11. Qc2 { We are fine in here } { [%cal Rc2e4] }) 5. Qd2 { This is the most safest line to play } (5. h4 O-O 6. h5 (6. d5 Nbd7 7. h5 gxh5 8. Rxh5 Nxh5 9. Qxh5) 6... Nxh5 7. Rxh5 gxh5 8. Qxh5 { Personally, this is one of my favorite line } 8... Bxd4 { White sacrifices a pawn and rook for a knight but eventually ruin's the
+kingside structure of black } 9. Nf3! Bxc3+ 10. bxc3 f6 11. Bc4+ e6 12. O-O-O Qe8 13. Qh3 Nc6 14. Rh1 Rf7 15. Qh5 Bd7 16. Bh6 Qe7) 5... O-O { [diagram] } (5... c6 { [#] This is the Czech Defence } 6. Nf3 O-O 7. O-O-O Nbd7 8. Be2 { We get a desirable position! } 8... b5 9. e5 b4 (9... dxe5 10. dxe5 Ng4 11. Ne4 f5 12. Neg5 Nxf2 13. e6) 10. Na4 Ne4 11. Qe3 Qa5 12. b3) 6. O-O-O c5 (6... Nbd7 { Black has two moves now, c5 or e5 } 7. Nf3 { Prevents e5! } 7... c5 8. Bh6 Qc7 9. h4 { We launch an attack right away! }) (6... Bg4? 7. f3 { Bg4 only helps us }) 7. d5 Nbd7 8. Nf3 a6 (8... Rb8 { Black wants to expand on the queenside! } 9. e5 dxe5 10. Nxe5 Nxe5 11. Bxe5 Ne4 12. Qf4 Nxc3 13. Bxg7 Kxg7 14. Qe5+ Kg8 15. Qxc3 { Comfortable position for us! }) (8... a5 { What if black tries to attack us on queenside? Well play Bb5 } 9. Bb5) (8... b6 9. Bb5 a6 (9... Bb7 10. Bh6 a6 11. Bc6 Bxc6 12. dxc6 Nb8 13. Bxg7 Kxg7 14. e5 { Another variation }) 10. Bc6 { b6 gives us the opportunity to play this }) 9. h3 b5 10. Re1 { Chapter #7 - King's Indian, Pirc, Grunfeld - 1. d4 Nf6 2. Bf4 g6 3. e3 d6 } *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ________Chapter #6: \"The GRUNFELD DEFENCE\" Move Order Against________"]
+[Site "https://lichess.org/study/AnndoYt3/tSwtEo9W"]
+[Date "????.??.??"]
+[White "King's Indian. Pirc, Grunfeld #4"]
+[Black "1. d4 Nf6 2. Bf4 g6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "King's Indian. Pirc, Grunfeld #4 - 1. d4 Nf6 2. Bf4 g6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/4W7Vvgic"]
+
+1. d4 Nf6 2. Nc3 g6 (2... d5 { The only way the Grunfeld is possibly employable in here is if white goes
+with the Horwitz move order with d5 before jumping to the conclusion with
+Bg7?! Followed by d5?! } 3. Bf4 g6 4. Nb5! { The threat of fork between the king and rook can only be stopped by Na6. This horribly looking move makes the knight dislodged from the game. It is misplaced, stuck on the rim and has to spend two tempos just to reinforce the knight into a better square. } { [%cal Rb8a6,Rb5c7] } 4... Na6 5. Nf3 Nh5 6. Bd2 Bg7 7. e3 c6 8. Nc3 Nc7 9. Be2 O-O 10. O-O) 3. e4 d5?! { This particular chapter is dedicated to none other than the Grunfeld
+Defence. The Grunfeld Defence stadts with Nf6 g6 and then d4! But in here
+the Grunfeld doesn't work once white occupies the center with Nc3 and e4! If black refuses to make amends with e6 and follows up with d5?! Then as
+you can probably guess e5! White dominates on the center and black has a misplaced knight. } 4. e5 Ne4 (4... Ng8 { Black waste a tempo moving his knight twice in the opening. Nothing much
+to cover in here aside from developing onwards. } 5. h3 e6 6. Nf3 c5 { Of course black would respond violently with c5. But either ways black is
+under developed and the kingside is at large stake. } 7. dxc5 Bxc5 8. Bd3 Nc6 9. O-O Nge7 10. Bg5 O-O 11. Bf6) (4... Nh5! { Some sort of a wierd and unorthodox Norweigian variation of the King's
+Indian except the pawn is fixated in d5. } 5. Be3 c6 6. h3 Qb6 7. b3 Ng7 8. Nf3 f6 9. Bd3 fxe5 10. Nxe5 Nd7 11. f4) 5. Nxe4 dxe4 6. c3 Bg7 (6... c5 7. d5 Bg7 8. Qa4+ Bd7 9. Qxe4) 7. Bb5+ c6 8. Ba4 O-O 9. Bc2 c5 10. Bxe4 *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ____Chapter #7 \"BENONI SYSTEMS\" Repertoire Against____"]
+[Site "https://lichess.org/study/AnndoYt3/P9fcVOFD"]
+[Date "????.??.??"]
+[White "Other Variant, Benoni Defence #1"]
+[Black "1. d4 e6 (c5) 2. Bf4 c5"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "Standard"]
+[ECO "A40"]
+[Opening "Horwitz Defense"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Other Variant, Benoni Defence #1 - 1. d4 e6 (c5) 2. Bf4 c5"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/U1ZccJUP"]
+
+1. d4 e6 (1... c5 { This is the Old Benoni Defence. The old Benoni Defence's main objective
+is of course to try and disrupt white's center thus the main objective of
+white is to either respond with passive maneuvers or extend the pawn to the fifth-rank. } 2. d5 { Eventually there's no other better move other than pushing the pawn
+forward thus gaining a spacious advantage. But black would constantly
+pressurize white's extended pawns. Should be wary of black's assault. } 2... Nf6 3. Nc3 d6 (3... e6 { Black would constantly pressurize white's extended pawns. Should be wary
+of black's assault. White should of course defend with e4! } 4. e4 d6 5. Bc4 { White should hold on to his spacious advantage until it is uneasy and
+impossible to maintain. } 5... exd5 6. Nxd5 { Nxd4?? Qe2! Followed by f3! Thus losing a piece for black. } 6... Nbd7 7. Nf3 Be7 8. Nxf6+ { Exchanging Knights would loosen black's assault on the center. } 8... Nxf6 9. Qe2 O-O 10. O-O) 4. e4 g6 { Black sets up a King's Indian Structure. This is going to feel uneasy
+since black's counterplay would heavily rely both on the kingside and
+queenside. } 5. Be2 Bg7 6. Nf3 O-O 7. O-O e6 (7... a6 { If black doesn't really do anything aside from getting some sort of
+counterplay on the queenside with a6 b5! White would attack black's weakest
+link. The kingside! } 8. a4 Bg4 9. h3 Bxf3 10. Bxf3 Qa5 11. g4 { White's attention would be to attack white's kingside. Black would aim
+for the queenside whereas white's would be the kingside. }) 8. Bf4 exd5 9. exd5 { White's e pawn would be a bit of a burden to defend. Which is why white
+is going to place the rooks on e and d file and of course to provoke
+weaknesses. } 9... Na6 10. Nb5 Ne8 11. c3) 2. Nc3 c5 { This is the new Benoni system. The usual Franco-Sicilian or
+Speilmann-Benoni. Black's standard objective is of course to counter
+white's central expansion. But aside from that to have a some sort of a Sicilian like position. Simplest solution is to exchange pawns
+and go easy alongside with our life. If black refuses and play e5 Simplest solution is to exchange pawns and go easy alongside with our life. If black refuses and play e5 then e4! We are back to the usual Old Benoni. } 3. d5 { Advancing the pawn is the best move in here since this gives white a bit
+of a spacious advantage. But since our knight is on c3 we cannot really
+establish a well fortified spacious advantage. } 3... exd5 4. Nxd5 Nf6 5. Nxf6+ { Black's pawn structure is a wee bit difficult to manage. Backward d pawn,
+remains a heavy target for white. } 5... Qxf6 6. e4 { Everything seems to simplified very well. We get some sort of a "Drunk"
+Sicilian Defence. } 6... Nc6 7. Ne2 Be7 8. Nc3 O-O 9. Bd3 Nb4 10. O-O *
+
+
+[Event "The New London System - London Buckingham System: Other Variant, Benoni Defence #2 - 1. d4 e6 (c5) 2. Bf4 c5"]
+[Site "https://lichess.org/study/bUhH2SrO/pH44Zi5Y"]
+[Date "????.??.??"]
+[White "Other Variant, Benoni Defence #2"]
+[Black "1. d4 e6 (c5) 2. Bf4 c5"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A43"]
+[Opening "Benoni Defense: Benoni-Indian Defense"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Other Variant, Benoni Defence #2 - 1. d4 e6 (c5) 2. Bf4 c5"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/RsYuMTcQ"]
+
+1. d4 c5 { This is the Old Benoni Defence. The old Benoni Defence's main objective
+is of course to try and disrupt white's center thus the main objective of
+white is to either respond with passive maneuvers or extend the pawn to the fifth-rank. This was taken from @FunnyAnimatorJimTv
+https://lichess.org/study/KjivNw7F } (1... Nf6 2. Bf4 c5 { Nf6 + c5 = Benoni Okay here you have two main options as white: e3/c3 (you are ready to accept a draw) or d5 (you play for a win). We want to play for a win as white, so let's play d5 } { [%cal Gd4d5,Re2e3,Rc2c3] } 3. d5 { The idea is that we want to play into the Benoni Pawn Structures Here black has two moves. Qb6 is more critical, but I cover d6 too } { [%csl Gd5][%cal Rd7d6,Rd8b6] } (3. e3 { As white, at this point you just have to hope and pray black doesn't play Qb6. If they play any other move then you just play c3 in a flash. (That way in case black ever plays Qb6 in the future, you can meet it with Qb3.) } { [%csl Gc3][%cal Bd8b6,Gc2c3,Gd1b3] } 3... Qb6 { OK......Black played Qb6. Now what? I really don't recommend playing b3
+here. Instead we should try to sacrifice a pawn with Nc3. } 4. Nc3 Qxb2 5. Nb5 { Na6 is worse; Nd5 is better } { [%cal Rb8a6,Gf6d5] } 5... Na6 (5... Nd5 6. Rb1 { Despite of white's temporary pawn sacrifice theres no denying that black
+is down on development and constant struggle on white's countless threat
+would give black a headache. } (6. a3 a6 7. Rb1 Qa2 8. Ra1 Qb2 9. Rb1) 6... Qxa2 7. Ra1 Qb2 { Reasonable repetition of a draw, but if you do not want a draw then I
+suggest another line which can be of risk but definetely worth trying. } 8. Rb1 Qa2 9. Ra1 Qb2) 6. a3 { Idea is to play Bc4 and Ra2 trapping the queen. Black is going to lose material here } { [%cal Gf1c4,Ga1a2] } 6... d6 (6... cxd4 7. Be5 e6 8. Bxd4 Bb4+ 9. axb4 Qxb4+ 10. c3 Qe7) (6... Nd5 7. Rb1 Qa2 8. Bg3 d6) 7. Bc4 Bf5 8. Ra2 Bxc2 9. Qxc2 Qxc2 10. Rxc2) 3... Qb6 { Here we don't want to play moves like Bc1, so the only other option is Nc3. } { [%cal Bb1c3,Rf4c1] } (3... d6 4. Nc3 e5 5. Bd2 (5. Bg5 Bf5 (5... h6 6. Bxf6 Qxf6 7. e4 Be7 8. Bd3 O-O 9. Nge2 a6 10. a4 Bg4))) (3... b5 4. c4 d6 5. cxb5 a6 6. bxa6 Bxa6) 4. Nc3 { Here as white we must be willing to sacrifice the pawn and play aggressively. } { [%csl Rb2] } (4. Bc1 d6 (4... c4 { Another alternative in which black dislodges the b3 pawn break. Rare
+sideline but has some killer punch behind it. } 5. Nc3 Qa5 6. g3 { Theres really not much for white to do aside from getting his center well
+fortified. } 6... b5 7. Bg2 Bb7 8. e4 d6 9. a3 g6 10. Ne2 Bg7 11. O-O O-O) 5. Nc3 g6 6. e4 Bg7 7. Nf3 O-O 8. Nd2 Nbd7 9. a4 Qc7 10. Be2 b6 11. O-O) 4... Qxb2 { Here black got 1 pawn, but he's going to have to waste 3-4 tempi in exchange for it. As white here, that's usually a decent deal. } { [%csl Rb2][%cal Bd8b6,Bb6b2,Bb2b6,Bb6d8] } 5. Bd2 { Here black has to play Qb6- if he doesn't he will lose material (Qb4 and a6 still do work but they are inferior) } { [%csl Rb6][%cal Rb2b6,Yb2b4,Ya7a6] } 5... Qb6 (5... a6 6. Rb1 Qa3 7. e4 d6) 6. e4 d6 7. f4 { As white we must play aggressively and actively, so we need to attack in the center } { [%csl Ge5][%cal Gf2f4,Ge4e5] } 7... g6 { I will show you how one line can go } 8. e5 dxe5 9. fxe5 Nfd7 10. Nf3 Bg7 11. Rb1 Qd8 12. e6 fxe6 13. Ng5 Nf6 14. Bb5+ Kf8 15. dxe6 Kg8 16. O-O) 2. d5 { Eventually there's no other better move other than pushing the pawn
+forward thus gaining a spacious advantage. But black would constantly
+pressurize white's extended pawns. Should be wary of black's assault. } 2... Nf6 3. Nc3 e6 { Black would constantly pressurize white's extended pawns. Should be wary
+of black's assault. White should of course defend with e4! } 4. e4 d6 5. Bc4 { White should hold on to his spacious advantage until it is uneasy and
+impossible to maintain. } 5... exd5 6. Nxd5 { Nxd4?? Qe2! Followed by f3! Thus losing a piece for black. } 6... Nbd7 7. Nf3 Be7 8. Nxf6+ { Exchanging Knights would loosen black's assault on the center. } 8... Nxf6 9. Qe2 O-O 10. O-O { Chapter #14 - Benoni Defence - 1. d4 e6 (1... c5) 2. Bf4 c5 } *
+
+
+[Event "The New London System - London Buckingham System: Other Variant, Benoni Defence #1 - 1. d4 e6 (c5) 2. Bf4 c5"]
+[Site "https://lichess.org/study/bUhH2SrO/136MFdib"]
+[Date "????.??.??"]
+[White "Other Variant, Benoni Defence #3"]
+[Black "1. d4 e6 (c5) 2. Bf4 c5"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A43"]
+[Opening "Benoni Defense: Benoni-Indian Defense"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Other Variant, Benoni Defence #3 - 1. d4 e6 (c5) 2. Bf4 c5"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/Ht9gQJmy"]
+
+1. d4 c5 { This is the Old Benoni Defence. The old Benoni Defence's main objective
+is of course to try and disrupt white's center thus the main objective of
+white is to either respond with passive maneuvers or extend the pawn to the fifth-rank. } (1... e6 2. Bf4 { [diagram] } 2... c5 { [#] The Franco Sicilian, I suggest a simplified and less complication set
+up against this. } 3. e3 Qb6 4. b3 Nc6 5. dxc5 Bxc5 6. a3 Nf6 7. Nf3 O-O 8. Be2 d5 9. Nbd2 a5 10. O-O { Chapter #6: - Benoni Systems and Sidelines, London Buckingham System:
+Complete Repertoire Guide: London Buckingham Systen: Benoni Defence and
+Other Systems, https://lichess.org/study/uT7Q2OHt/h512yd9W, 2022.01.08 }) 2. d5 { Eventually there's no other better move other than pushing the pawn
+forward thus gaining a spacious advantage. But black would constantly
+pressurize white's extended pawns. Should be wary of black's assault. } 2... Nf6 3. Nc3 d6 (3... e6 { Black would constantly pressurize white's extended pawns. Should be wary
+of black's assault. White should of course defend with e4! } 4. e4 d6 5. Bc4 { White should hold on to his spacious advantage until it is uneasy and
+impossible to maintain. } 5... exd5 6. Nxd5 { Nxd4?? Qe2! Followed by f3! Thus losing a piece for black. } 6... Nbd7 7. Nf3 Be7 8. Nxf6+ { Exchanging Knights would loosen black's assault on the center. } 8... Nxf6 9. Qe2 O-O 10. O-O) 4. e4 g6 { Black sets up a King's Indian Structure. This is going to feel uneasy
+since black's counterplay would heavily rely both on the kingside and
+queenside. } 5. Be2 Bg7 6. Nf3 O-O 7. O-O e6 (7... a6 { If black doesn't really do anything aside from getting some sort of
+counterplay on the queenside with a6 b5! White would attack black's weakest
+link. The kingside! } 8. a4 Bg4 9. h3 Bxf3 10. Bxf3 Qa5 11. g4 { White's attention would be to attack white's kingside. Black would aim
+for the queenside whereas white's would be the kingside. }) 8. Bf4 exd5 9. exd5 { White's e pawn would be a bit of a burden to defend. Which is why white
+is going to place the rooks on e and d file and of course to provoke
+weaknesses. } 9... Na6 10. Nb5 Ne8 11. c3 { Chapter #13 - Benoni Defence - 1. d4 e6 (1... c5) 2. Bf4 c5 } *
+
+
+[Event "The New London System - London Buckingham System: Anti-Dutch Defence #1 - 1. d4 f5 f3 (Bg5)"]
+[Site "https://lichess.org/study/bUhH2SrO/xtI4JARx"]
+[Date "????.??.??"]
+[White "Anti-Dutch Defence #1"]
+[Black "1. d4 f5 f3 (Bg5)"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A80"]
+[Opening "Dutch Defense"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Anti-Dutch Defence #1 - 1. d4 f5 f3 (Bg5)"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/hpaDq9OZ"]
+
+1. d4 f5 { The Dutch Defence is a chess opening characterised by the moves: 1. d4 f5
+Black's 1...f5 stakes a claim to the e4-square and envisions an attack in
+the middlegame on White's kingside; however, it also weakens Black's kingside to an extent. } 2. f3!? { My idea against the Dutch Defence is quite a bit unorthodox but playable.
+I've played this myself with success. The move pawn to f3!? fights for the
+e4 square. White can also open up the position with e4! But this would become complicated and to sum it all up, it offers a lot of risk. I suggest
+developing all of your pieces first before attacking the center with e4. } 2... Nf6 3. Nc3 d5 { [%csl Rd5,Re4,Ye5,Rf5][%cal Yd4e5,Rf5e4,Rd5e4] } (3... e6 4. Be3! { White is planning to tuck in the dark square bishop to f2 to cover up the
+dark squares around the kingside. Adds up in aid against the Dutch's
+dangerous attack! } 4... Be7 5. Qd2 O-O 6. O-O-O { White was able to castle in ease in the queenside. White can now play the
+move Bf2 and of course the breakthrough e4! } 6... Nc6 7. Bf2 d6 { White has to play Kb1 first in order to avoid complications on the
+center. Just to keep things safe for short. } (7... d5 { Stonewall Dutch The Stonewall Dutch is a setup where Black creates pawn
+"teeth" in the center on the light squares f5, e6, d5, and c6. This gives
+Black a great amount of space and control of e4, at the expense of a certain weakness of the dark-squares. Pros: Black does not lack space. Control
+of e4 might lead to a kingside attack. } 8. e3 a6 9. Nge2 b5 10. Kb1 { It would be nice if white was able to centralize his knight via Nf4 and
+Nd3! Just to increase the pressure on the e5 square. } 10... Bd7 { [%cal Re2f4,Rf4d3] } 11. Nf4 Rb8 12. Nd3 { [%csl Re5,Yc6][%cal Yc6e5,Rd3e5,Rd4e5] } 12... Bd6 13. Ne2 e5 14. dxe5 Nxe5 15. Nxe5 Bxe5 16. Nf4 c6 17. h4 { Black does have some good attacking chances on the queenside. White has
+to shift his attention to the kingside by launching a devastating attack
+starting with shoving the h pawn! }) 8. Kb1 a5 9. e4 fxe4 10. Nxe4 Nxe4 { White has a strong central pawn but either ways black would throw a heavy
+assault on white's wobbly center. } 11. fxe4 { [%csl Re4,Rd4] } 11... Bg5 12. Qe1 e5 13. Bc4+ Kh8 14. d5 { White now dominates on the center. White can then shift his attention to
+the kingside by launching a devastating attack starting with shoving the h
+pawn! } 14... Nd4 15. h4) (3... g6 { Anyone playing the Dutch Defence on a regular basis will undoubtedly
+suffer the occasional disaster. It is a tough opening to handle and one
+needs to be on good form to harness the particular type of energy it creates. Yet it is an excellent way to unbalance the situation and to play
+for a win against 1 d4. People who like to draw games need to look elsewhere. } 4. e4 fxe4 (4... e6 5. Bg5 Be7 6. Qd2 Nc6 7. O-O-O) 5. fxe4 d5 6. e5 Ne4 7. Nxe4 dxe4 8. Bc4 Bg7 9. Be3 Rf8 10. Ne2 c5 11. c3 Nc6 12. Qb3) 4. Be3! { White is planning to tuck in the dark square bishop to f2 to cover up the
+dark squares around the kingside. Adds up in aid against the Dutch's
+dangerous attack! } 4... e6 5. Bf2 { White has certain ideas with Nh3 Nf4 and Nd3 to centralize the knight and
+of course to increase the pressure on the e5 square. } 5... Be7 { [%cal Rg1h3,Rh3f4,Rf4d3] } 6. Nh3 O-O 7. Nf4 c5 (7... c6 8. e3 Qc7 9. Qd2 c5 10. dxc5 Bxc5 11. O-O-O) 8. e3 Nc6 9. Be2 Qb6 10. Rb1 cxd4 11. exd4 Bd7 12. O-O { Chapter #17 - Dutch Defence - 1. d4 f5 2. Bf4 (2. Nc3) (2. f3) } *
+
+
+[Event "The New London System - London Buckingham System: Anti-Dutch Defence #2 - 1. d4 f5 f3 (Bg5)"]
+[Site "https://lichess.org/study/bUhH2SrO/yi0ZnQuz"]
+[Date "????.??.??"]
+[White "Anti-Dutch Defence #2"]
+[Black "1. d4 f5 f3 (Bg5)"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A80"]
+[Opening "Dutch Defense: Raphael Variation"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Anti-Dutch Defence #2 - 1. d4 f5 f3 (Bg5)"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/LIXopEC1"]
+
+1. d4 { [%eval 0,0] } 1... f5 { The Dutch Defence is a chess opening characterised by the moves: 1. d4 f5
+Black's 1...f5 stakes a claim to the e4-square and envisions an attack in
+the middlegame on White's kingside; however, it also weakens Black's kingside to an extent. [diagram] As of this chapter we would be talking about the
+Dutch Defence. The Dutch Defence is a very aggressive opening which aims for a kingside attack at the expense of his safety. This opening has a reputation of a quick kindside attack after d4 c4 Nf3 g3 Bf2 0-0 for white. Black will simply play f5 Nf6 e6 Be7 0-0 Qe8 then Qh5 followed by multiple
+attacking chances. The good news in here is that we do not have to worry about black launching a devastating attack towards our castled king. We would twist the opening and force black to comply towards our commands. } (1... d5 2. Bf4 { [diagram] } 2... f5 { [#] } 3. Nc3 Nf6 { the line with the stonewall dutch could also be first met with d5. Our
+opponent may be full of surprise but we would be going for our normal
+development of the London System. } (3... e6 { "Black intends a7-a6." "Think about moving your knight to b5, ." "In this
+position it is possible to consider Nc3-b5." } 4. e3 Nf6 5. Nb5 (5. Nf3 { If you do not like the Nb5 move you can simply aim for the classical
+London set up. } 5... Bd6 6. Bd3 Bxf4 7. exf4 O-O 8. O-O { This is the kind of position we are going to try to achieve. }) 5... Bd6 6. Nxd6+ cxd6 7. h3 O-O 8. Nf3 { Our position is alright }) (3... a6 { If black is well prepared against us, we can simply aim for our Classical
+London Set up. } 4. Nf3 e6 5. e3 Nf6 { "Have you forgotten about your bishop, ?" Your opponent intends to play
+c7-c5. " "Bf1-d3 would be one idea..." } 6. Bd3 Be7 7. O-O O-O) 4. Nb5 { [#] } 4... Na6 5. e3 c6 6. Nc3 Nb8 7. Bd3 e6 8. Nf3 Nbd7 9. Ne2 Ne4 10. O-O { [%eval 68,14] [%wdl 162,832,6] } (10. h3 $16 { [%eval 112,11] [%wdl 365,633,2] }) 10... g5 $14 11. Bxe4 gxf4 12. Bd3 fxe3 { [%eval 109,8] [%wdl 333,664,3] } 13. fxe3 { [%cal Rf1f8] }) (1... g6 { "Why don't you move your pawn to e4, ." Well the move e4 is possible but
+I guess this course is focused on the London System. We are playing
+positionally. } 2. Bf4 { [diagram] } 2... f5 { [#] The move g6 is either headed for a Grunfeld or a KID. That is covered
+in the previous chapter. We are focusing in the transpositional idea of f5.
+The leningrad Dutch. } 3. h4 Nc6 4. h5 { Attack black's kingside right away! } 4... Bg7 5. e3 d6 6. Nf3 e6 7. Nc3 Nf6 8. hxg6 { [%eval 135,9] }) (1... e6 { This move could transpose to the Horwitz Defence. That has been discussed
+in the previous chapter the move d5. But you can also try the move c4 then
+transpose into an impovised London System. } 2. c4 d5 3. Nf3 Nf6 4. cxd5 exd5 5. Bf4 c5 6. Nc3 { "Are you never going to move your your knight, ?" }) 2. Nc3! { The Raphael Variation. We immediately plan an e4 break! } { [%cal Ge2e4] } 2... Nf6 { Logical, preventing e4 } { [%cal Gf6e4] } (2... d5!? { Covered in a short manner } 3. Bf4 { Controlling e5 } { [%cal Gf4e5] } 3... Nf6 4. e3 e6 5. Nf3 { [%cal Gf3e5] } 5... Be7 6. Ne5 O-O 7. h3! { Planning g4! Klaric, Zlatko - Palatnik, Semon, 1-0, Chianciano tt, 1989,
+https://lichess.org/rJ9iWwzE } 7... b6 8. g4!) 3. Bg5 { This is like the Veresov Attack but it is against the Dutch Defence! } { [%cal Gg5d8] } 3... e6 { Now the Black knight is pinned. } (3... d5 { [#] "Moving your pawn to e3 might be a good idea" "Your opponent is
+planning e7-e6." "The move e2-e3 looks plausible to me" } 4. Bxf6 exf6 { A simple line, but example line is given: } 5. e3 { [%cal Gf1d3] } (5. h4 Nc6 6. e3 Be6 7. Qf3 Qd7 8. Nge2 O-O-O 9. Nf4 Bf7 10. h5 Bb4 { Chapter #8 - Dutch Systems and Sidelines, London Buckingham System:
+Complete Repertoire Guide: London Buckingham System: Dutch Defence and
+Other Systems., https://lichess.org/study/uT7Q2OHt/bRqU2iyD, 2022.01.08 }) 5... Be6 6. Bd3 { Easy development: } 6... Nc6 7. Qf3 Qd7 8. a3 { controls b4 } { [%cal Ga3b4] } 8... O-O-O 9. Nge2 g6 10. Nf4 { Zakhartsov, Viacheslav V - Heidrich, Manfred, 1-0, Pardubice Czech op-A, 2009, https://lichess.org/cnDSZHvu } { [%cal Gf4e6] }) (3... g6 { Black tries for a "Leningrad" setup Take a look at the black bishop.
+Notice anything?" } 4. Bxf6 { White will soon just be better } (4. h4 Bg7 5. h5 Nxh5 6. Rxh5 gxh5 7. Nd5 Nc6 { [%eval 144,11] [%csl Rf5,Rf7,Rg6,Rh5] } 8. e3 { Chapter #8 - Dutch Systems and Sidelines, London Buckingham System:
+Complete Repertoire Guide: London Buckingham System: Dutch Defence and
+Other Systems., https://lichess.org/study/uT7Q2OHt/bRqU2iyD, 2022.01.08 }) 4... exf6 5. e3 d5 6. Bd3 { [%cal Gh2h4,Gh4h5] } 6... c6 7. Qf3 Bd6 8. O-O-O $16 { Golod, Vitali - Murey, Jacob, 1-0, Rishon Le Ziyyon 9798, 1997,
+https://lichess.org/SzECCn3Y }) (3... h6 4. Bxf6 exf6 5. e4 Qe7 (5... fxe4 { [%csl Re8,Rf7,Rg6,Rh5][%cal Rd1h5,Rh5e8] } 6. Qh5+ Ke7 7. Nd5+ Kd6 8. c4) 6. Qh5+ Qf7 7. Qxf7+ Kxf7 8. Bc4+ Ke8 9. exf5 d6 10. Nd5 { Chapter #8 - Dutch Systems and Sidelines, London Buckingham System:
+Complete Repertoire Guide: London Buckingham System: Dutch Defence and
+Other Systems., https://lichess.org/study/uT7Q2OHt/bRqU2iyD, 2022.01.08 }) 4. e4 { [%cal Gg5d8] } 4... fxe4 5. Nxe4 Be7 6. Bxf6 Bxf6 7. Nf3 $14 { Chapter #18 - Dutch Defence - 1. d4 f5 2. Bf4 (2. Nc3) (2. f3) } *
+
+
+[Event "The New London System - London Buckingham System: Anti-Dutch Defence #3 - 1. d4 f5 f3 (Bg5)"]
+[Site "https://lichess.org/study/bUhH2SrO/hZSc4yFx"]
+[Date "????.??.??"]
+[White "Anti-Dutch Defence #3"]
+[Black "1. d4 f5 f3 (Bg5)"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A80"]
+[Opening "Dutch Defense: Raphael Variation"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Anti-Dutch Defence #3 - 1. d4 f5 f3 (Bg5)"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/BY5KmT2t"]
+
+1. d4 { [%eval 0,0] } 1... f5 { [diagram] As of this chapter we would be talking about the Dutch Defence.
+The Dutch Defence is a very aggressive opening which aims for a kingside
+attack at the expense of his safety. This opening has a reputation of a quick kindside attack after d4 c4 Nf3 g3 Bf2 0-0 for white. Black will simply
+play f5 Nf6 e6 Be7 0-0 Qe8 then Qh5 followed by multiple attacking chances. The good news in here is that we do not have to worry about black launching a devastating attack towards our castled king. We would twist the opening and force black to comply towards our commands. } (1... d5 2. Bf4 { [diagram] } 2... f5 { [#] } 3. Nc3 Nf6 { the line with the stonewall dutch could also be first met with d5. Our
+opponent may be full of surprise but we would be going for our normal
+development of the London System. } (3... e6 { "Black intends a7-a6." "Think about moving your knight to b5, ." "In this
+position it is possible to consider Nc3-b5." } 4. e3 Nf6 5. Nb5 (5. Nf3 { If you do not like the Nb5 move you can simply aim for the classical
+London set up. } 5... Bd6 6. Bd3 Bxf4 7. exf4 O-O 8. O-O { This is the kind of position we are going to try to achieve. }) 5... Bd6 6. Nxd6+ cxd6 7. h3 O-O 8. Nf3 { Our position is alright }) (3... a6 { If black is well prepared against us, we can simply aim for our Classical
+London Set up. } 4. Nf3 e6 5. e3 Nf6 { "Have you forgotten about your bishop, ?" Your opponent intends to play
+c7-c5. " "Bf1-d3 would be one idea..." } 6. Bd3 Be7 7. O-O O-O) 4. Nb5 { [#] } 4... Na6 5. e3 c6 6. Nc3 Nb8 7. Bd3 e6 8. Nf3 Nbd7 9. Ne2 Ne4 10. O-O { [%eval 68,14] [%wdl 162,832,6] } (10. h3 $16 { [%eval 112,11] [%wdl 365,633,2] }) 10... g5 $14 11. Bxe4 gxf4 12. Bd3 fxe3 { [%eval 109,8] [%wdl 333,664,3] } 13. fxe3 { [%cal Rf1f8] }) (1... g6 { "Why don't you move your pawn to e4, ." Well the move e4 is possible but
+I guess this course is focused on the London System. We are playing
+positionally. } 2. Bf4 { [diagram] } 2... f5 { [#] The move g6 is either headed for a Grunfeld or a KID. That is covered
+in the previous chapter. We are focusing in the transpositional idea of f5.
+The leningrad Dutch. } 3. h4 Nc6 4. h5 { Attack black's kingside right away! } 4... Bg7 5. e3 d6 6. Nf3 e6 7. Nc3 Nf6 8. hxg6 { [%eval 135,9] }) (1... e6 { This move could transpose to the Horwitz Defence. That has been discussed
+in the previous chapter the move d5. But you can also try the move c4 then
+transpose into an impovised London System. } 2. c4 d5 3. Nf3 Nf6 4. cxd5 exd5 5. Bf4 c5 6. Nc3 { "Are you never going to move your your knight, ?" }) 2. Nc3 Nf6 3. Bg5 { This is like the Veresov Attack but it is against the Dutch Defence! } 3... h6 (3... d5 { [#] "Moving your pawn to e3 might be a good idea" "Your opponent is
+planning e7-e6." "The move e2-e3 looks plausible to me" } 4. Bxf6 exf6 5. h4 Nc6 6. e3 Be6 7. Qf3 Qd7 8. Nge2 O-O-O 9. Nf4 Bf7 10. h5 Bb4 { [%eval 103,18] "Moving your knight to d3 might be a good idea" } { [%cal Re1c1,Re1g1,Rf1b5,Rf1d3] }) (3... e6 { You must cover the square d5, " "Black intends d7-d5" "The silicon entity
+strongly suggests e2-e4" } 4. e4 fxe4 5. Nxe4 Be7 6. Bxf6 Bxf6 7. c3 O-O 8. Nf3 Be7) (3... g6 { Take a look at the black bishop. Notice anything?" } 4. h4 Bg7 5. h5 Nxh5 6. Rxh5 gxh5 7. Nd5 Nc6 { [%eval 144,11] [%csl Rf5,Rf7,Rg6,Rh5] } 8. e3 { [%csl Rh5][%cal Rd1h5] }) 4. Bxf6 exf6 5. e4 Qe7 (5... fxe4 { [%csl Re8,Rf7,Rg6,Rh5][%cal Rd1h5,Rh5e8] } 6. Qh5+ Ke7 7. Nd5+ Kd6 8. c4) 6. Qh5+ Qf7 7. Qxf7+ Kxf7 8. Bc4+ Ke8 9. exf5 d6 10. Nd5 { Chapter #8 - Dutch Systems and Sidelines, London Buckingham System:
+Complete Repertoire Guide: London Buckingham System: Dutch Defence and
+Other Systems., https://lichess.org/study/uT7Q2OHt/bRqU2iyD, 2022.01.08 } *
+
+
+[Event "The New London System - London Buckingham System: Queen's Indian, Nimzo, English Defence #1 - 1. d4 Nf6 (b6) 2. Bf4 b6"]
+[Site "https://lichess.org/study/bUhH2SrO/K2ukJpH1"]
+[Date "????.??.??"]
+[White "Queen's Indian, Nimzo, English Defence #1"]
+[Black "1. d4 Nf6 (b6) 2. Bf4 b6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Queen's Indian, Nimzo, English Defence #1 - 1. d4 Nf6 (b6) 2. Bf4 b6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/3QcnjHbc"]
+
+1. d4 { [diagram] } 1... Nf6 (1... b6 { [#] This is the English Defence. Usually tranposes to the Owen Defence
+after the move e4. } 2. e4 { The Owen Defence is considerably one of the most solid and dynamic
+opening. The Owen Defence may look ridiculous at first but no. You see
+Black has the opportunity to strike back towards white's expansion towards the center. The fight towards the center is fierce and intense. White
+may have a hard time to tackle black and keep the advanrage. Thereby Im giving you a opening line in which should provide you enough resources to battle against the Owen Defence } 2... Bb7 { [diagram] } (2... c5 { Black's center strike is considerably bad since white can safely advance
+the pawn forward to d5 giving white a comfortable play. } 3. d5 d6 (3... e6 { Black may immediately strike towards our expansion of our center at the
+cost of an extra tempo. } 4. Nf3 a6 (4... exd5? 5. Qxd5! { [%csl Ra8][%cal Rd5a8] } 5... Nc6 6. Ne5 Qf6 7. Bc4 { We already have a superior position in here, } { [%csl Rc4,Yc6,Yc8,Rd7,Re5,Ye8,Yf6,Rf7][%cal Rd5d7,Rd5f7] }) 5. a4 d6 6. dxe6 fxe6 7. Ng5 { [%eval 186,8] The weaknesses around white's kingside really tells everything you need to know about this line. } { [%cal Rh5e8] }) 4. Bb5+ Bd7 (4... Nd7 { Black's another alternative in which does not prevent white from
+exploting black's weaknesses around the position. } 5. Bc6 Rb8 6. Nc3 Bb7 7. Bxb7 Rxb7 8. a4 g6 9. f4 Bg7 10. Nf3 { [%eval 199,11] } 10... Ngf6 11. O-O O-O) 5. a4 Bxb5 6. axb5 { We lock down the weaknesses around black's position } { [%csl Rb7,Yb8,Rc6][%cal Ra1a8,Rb5c6,Rd5c6] } 6... g6 7. f4 Bg7 8. Nf3 Nf6 9. Qe2 O-O 10. c4 Nbd7 11. O-O) 3. Bd3 { [%csl Rg2][%cal Rb7g2] } (3. Nc3 { Nc3 is another alternative, but most probably the mov c3 was better since
+it sustains the d4 pawn all through out the middlegame. } 3... e6 4. Nf3 d6 5. a4 a6 6. Bd3 Nd7 7. O-O h6 8. Re1 Ngf6 9. h3 Be7 10. Bf4 { This is the kind of set up we are usually aiming for with the move
+Nc3.0-1 (51) Nepomniachtchi,I (2784) -Radjabov,T (2765) chess24.com INT
+2020 }) 3... e6 (3... f5 { This is a gambit, black exploits the fact that the g pawn is unprotecterd
+and if white accepts the pawn capture. Black would be winning the rook.
+Problem with this position for black is that he is risking his king's safety for the sake of an illusion. Theres a clear refutation along in thi line. } 4. exf5 Bxg2 5. Qh5+ g6 6. fxg6 Bg7 7. gxh7+ Kf8 8. Ne2 Nf6 9. Qh4 Bxh1 10. Bg5 { You see, black would have to sacrifice two pawns and a knight in order to
+bring his king to safety. AThis is just a huge gamble for black especially
+the fact that his king is at the edge of the cliff. } 10... d5 11. Nf4 Qd6 12. Ng6+ Ke8 13. Nxh8 Qe6+ 14. Kf1 Bxh8 15. Nd2 Be4 16. Nxe4 dxe4 17. Re1 Nc6 18. Bxf6 Bxf6 19. Qh5+ Qf7 20. h8=Q+ Bxh8 21. Qxh8+ { Black's position was hopeless. Certain sacrifices was be made just to
+keep black's king from execution! } 21... Kd7 22. Qxa8 exd3 23. cxd3 Qf3 24. Qg8 Qxd3+ 25. Kg1 Nxd4 26. Qg4+ Ke8 27. Kg2 Nc2 28. Rd1 Qh7 29. Rd5 Kf7 30. Rf5+ Ke8 31. Qa4+ Kd8 32. Rf8# { 1-0 (32) Slibar,M (2166)-Borisek,A (1915) Ljubljana 2021 }) 4. Nf3 c5 (4... d6 { Thus, this line couuld also transpose into a Hippo System. A solid wating
+move for black. } 5. Nbd2 Nd7 6. Nf1 Ngf6 7. Ng3 Be7 8. O-O O-O 9. Re1 e5 10. c3 { This is the line that needs to be addressed. We would be using this set
+up against black's Hippo System. } 10... Re8 11. h3 Bf8 12. Qc2 g6 13. Be3 Qe7 14. Rad1 Bg7 { 1-0 (39) Giri,A (2777)-Radjabov,T (2763) chess24.com INT 2021 }) 5. c3 Nf6 6. Nbd2 Be7 7. O-O O-O { [#] This is the kind of set up we are going to aim for almost all the
+time. }) (1... e6 { This kind of opening could lead into certain transpositions. One is the
+Queen's Indian, one is the Horwitz and many other variations. } 2. e4 { [diagram] } (2. Nc3 { If you do not want to go for a transposition of the French Defence, then
+this is what you need to do. } 2... d5 3. Bf4 Nf6 4. g3 Be7 5. Bg2 O-O 6. Nf3 Nc6 7. O-O { We are back from our London Buckingham System. }) 2... b6 { [#] } (2... f5 { Bad Opening line for black, heres how we will punish this. } 3. exf5 exf5 4. Qh5+) (2... Nf6 3. e5 Nd5 4. c4 { Stockfish 14.1: } 4... Ne7 5. Nf3 d6 6. exd6 cxd6 7. Nc3 { This line isn't considerably bad, but either ways this is how we deal
+with it. } 7... d5 { [%eval 126,8] }) (2... d5 { Transposes to the French Defence, I'll give you a bit of an idea what you
+should be playing against the French Defence. } 3. Nc3 Bb4 4. e5 c5 5. a3 Bxc3+ 6. bxc3 Nc6 7. Nf3 Nge7 8. Be2 O-O (8... Qa5 9. Bd2 O-O 10. O-O) 9. O-O) 3. Nf3 Bb7 4. Bd3 Nf6 5. Nbd2 (5. e5 { Another alternative choice for white } 5... Ne4 6. O-O f5 7. c4 Be7 8. Re1 O-O 9. Nbd2 Nxd2 10. Bxd2 c5 { [%eval 137,9] }) 5... c5 6. c3 Be7 7. e5 Nd5 { Stockfish 14.1: } 8. Nc4 O-O 9. O-O f5 10. exf6 Nxf6 11. Re1 Nc6 { Chapter #7: - English-QID-Systems, London Buckingham System: Complete
+Repertoire Guide: London Buckingham System: Queen's Indian Defence,
+https://lichess.org/study/uT7Q2OHt/CyPq17LP, 2022.01.08 }) 2. Nc3 (2. Bf4 { How does this apply to the Accelerated London System? Well for example as
+soon as black plays something like b6! White would have to play Nc3! But
+what if black plays Bb4! } 2... e6 3. e3 b6 4. Nc3 Bb4) 2... e6 3. Bf4 Bb4 { In here we are going to talk about the Nimzo-Indian. Nimzo Indian is
+usually effective against the d4 c4 and Catalan or English systems. But in
+here against the Jobava, well... Not really but playable! The Nimzo-Indian Defence is a chess opening characterised by the moves: 1. d4 Nf6 2. c4
+e6 3. Nc3 Bb4 Other move orders, such as 1.c4 e6 2.Nc3 Nf6 3.d4 Bb4, are also feasible. In the Encyclopaedia of Chess Openings, the Nimzo-Indian is classified as E20–E59. } 4. e3 O-O (4... Nc6 5. Bd3 b6 6. Ne2 { White should proceed with his usual standard Jobava London set up. Theres
+really not much to address in here aside from develop your pieces. } 6... O-O 7. O-O Bb7 8. a3 Be7 9. e4 d6 10. f3 e5 11. Be3 exd4 12. Nxd4 Nxd4 13. Bxd4) 5. Bd3 b6 6. Ne2 { White should proceed with his usual standard Jobava London set up. Theres
+really not much to address in here aside from develop your pieces. } 6... Bb7 { Black has some sort of a "Queen's Indian Defence" structure but with a
+move order of the Nimzo-Indian. I guess it is say that making an individual
+chapter for this is quite unecessary but I'm afraid I have to insist. } 7. O-O d5 8. Nb5 Na6 9. a3 Bd6 10. Nxd6 cxd6 11. Rc1 Rc8 12. c3 { Chapter #15 - Queen's Indian Defence - 1. d4 Nf6 2. Bf4 e6 3. e3 b6 } *
+
+
+[Event "The New London System - London Buckingham System: Queen's Indian, Nimzo, English Defence #2 - 1. d4 Nf6 (b6) 2. Bf4 b6"]
+[Site "https://lichess.org/study/bUhH2SrO/ZizzU5pR"]
+[Date "????.??.??"]
+[White "Queen's Indian, Nimzo, English Defence #2"]
+[Black "1. d4 Nf6 (b6) 2. Bf4 b6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Queen's Indian, Nimzo, English Defence #2 - 1. d4 Nf6 (b6) 2. Bf4 b6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/8zXx8jZA"]
+
+1. d4 Nf6 2. Nc3 e6 3. Bf4 Bb4 { In here we are going to talk about the Nimzo-Indian. Nimzo Indian is
+usually effective against the d4 c4 and Catalan or English systems. But in
+here against the Jobava, well... Not really but playable! The Nimzo-Indian Defence is a chess opening characterised by the moves: 1. d4 Nf6 2. c4
+e6 3. Nc3 Bb4 Other move orders, such as 1.c4 e6 2.Nc3 Nf6 3.d4 Bb4, are also feasible. In the Encyclopaedia of Chess Openings, the Nimzo-Indian is classified as E20–E59. } 4. e3 O-O (4... Nc6 5. Bd3 b6 6. Ne2 { White should proceed with his usual standard Jobava London set up. Theres
+really not much to address in here aside from develop your pieces. } 6... O-O 7. O-O Bb7 8. a3 Be7 9. e4 d6 10. f3 e5 11. Be3 exd4 12. Nxd4 Nxd4 13. Bxd4) 5. Bd3 b6 6. Ne2 { White should proceed with his usual standard Jobava London set up. Theres
+really not much to address in here aside from develop your pieces. } 6... Bb7 { Black has some sort of a "Queen's Indian Defence" structure but with a
+move order of the Nimzo-Indian. I guess it is say that making an individual
+chapter for this is quite unecessary but I'm afraid I have to insist. } 7. O-O d5 8. Nb5 Na6 9. a3 Bd6 10. Nxd6 cxd6 11. Rc1 Rc8 12. c3 { Chapter #16 - Nimzo-Indian Defence - 1. d4 Nf6 2. Bf4 e6 3. e3 b6 4. Nc3
+Bb4 } *
+
+
+[Event "The New London System - London Buckingham System: Queen's Indian, Nimzo, English Defence #3 - 1. d4 Nf6 (b6) 2. Bf4 b6"]
+[Site "https://lichess.org/study/bUhH2SrO/ELyheMqb"]
+[Date "????.??.??"]
+[White "Queen's Indian, Nimzo, English Defence #3"]
+[Black "1. d4 Nf6 (b6) 2. Bf4 b6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "C00"]
+[Opening "French Defense: Normal Variation"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Queen's Indian, Nimzo, English Defence #3 - 1. d4 Nf6 (b6) 2. Bf4 b6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/pE2Tu7Ct"]
+
+1. d4 { [diagram] } 1... e6 { This kind of opening could lead into certain transpositions. One is the
+Queen's Indian, one is the Horwitz and many other variations. } (1... b6 { [#] This is the English Defence. Usually tranposes to the Owen Defence
+after the move e4. } 2. e4 { The Owen Defence is considerably one of the most solid and dynamic
+opening. The Owen Defence may look ridiculous at first but no. You see
+Black has the opportunity to strike back towards white's expansion towards the center. The fight towards the center is fierce and intense. White
+may have a hard time to tackle black and keep the advanrage. Thereby Im giving you a opening line in which should provide you enough resources to battle against the Owen Defence } 2... Bb7 { [diagram] } (2... c5 { Black's center strike is considerably bad since white can safely advance
+the pawn forward to d5 giving white a comfortable play. } 3. d5 d6 (3... e6 { Black may immediately strike towards our expansion of our center at the
+cost of an extra tempo. } 4. Nf3 a6 (4... exd5? 5. Qxd5! { [%csl Ra8][%cal Rd5a8] } 5... Nc6 6. Ne5 Qf6 7. Bc4 { We already have a superior position in here, } { [%csl Rc4,Yc6,Yc8,Rd7,Re5,Ye8,Yf6,Rf7][%cal Rd5d7,Rd5f7] }) 5. a4 d6 6. dxe6 fxe6 7. Ng5 { [%eval 186,8] The weaknesses around white's kingside really tells everything you need to know about this line. } { [%cal Rh5e8] }) 4. Bb5+ Bd7 (4... Nd7 { Black's another alternative in which does not prevent white from
+exploting black's weaknesses around the position. } 5. Bc6 Rb8 6. Nc3 Bb7 7. Bxb7 Rxb7 8. a4 g6 9. f4 Bg7 10. Nf3 { [%eval 199,11] } 10... Ngf6 11. O-O O-O) 5. a4 Bxb5 6. axb5 { We lock down the weaknesses around black's position } { [%csl Rb7,Yb8,Rc6][%cal Ra1a8,Rb5c6,Rd5c6] } 6... g6 7. f4 Bg7 8. Nf3 Nf6 9. Qe2 O-O 10. c4 Nbd7 11. O-O) 3. Bd3 { [%csl Rg2][%cal Rb7g2] } (3. Nc3 { Nc3 is another alternative, but most probably the mov c3 was better since
+it sustains the d4 pawn all through out the middlegame. } 3... e6 4. Nf3 d6 5. a4 a6 6. Bd3 Nd7 7. O-O h6 8. Re1 Ngf6 9. h3 Be7 10. Bf4 { This is the kind of set up we are usually aiming for with the move
+Nc3.0-1 (51) Nepomniachtchi,I (2784) -Radjabov,T (2765) chess24.com INT
+2020 }) 3... e6 (3... f5 { This is a gambit, black exploits the fact that the g pawn is unprotecterd
+and if white accepts the pawn capture. Black would be winning the rook.
+Problem with this position for black is that he is risking his king's safety for the sake of an illusion. Theres a clear refutation along in thi line. } 4. exf5 Bxg2 5. Qh5+ g6 6. fxg6 Bg7 7. gxh7+ Kf8 8. Ne2 Nf6 9. Qh4 Bxh1 10. Bg5 { You see, black would have to sacrifice two pawns and a knight in order to
+bring his king to safety. AThis is just a huge gamble for black especially
+the fact that his king is at the edge of the cliff. } 10... d5 11. Nf4 Qd6 12. Ng6+ Ke8 13. Nxh8 Qe6+ 14. Kf1 Bxh8 15. Nd2 Be4 16. Nxe4 dxe4 17. Re1 Nc6 18. Bxf6 Bxf6 19. Qh5+ Qf7 20. h8=Q+ Bxh8 21. Qxh8+ { Black's position was hopeless. Certain sacrifices was be made just to
+keep black's king from execution! } 21... Kd7 22. Qxa8 exd3 23. cxd3 Qf3 24. Qg8 Qxd3+ 25. Kg1 Nxd4 26. Qg4+ Ke8 27. Kg2 Nc2 28. Rd1 Qh7 29. Rd5 Kf7 30. Rf5+ Ke8 31. Qa4+ Kd8 32. Rf8# { 1-0 (32) Slibar,M (2166)-Borisek,A (1915) Ljubljana 2021 }) 4. Nf3 c5 (4... d6 { Thus, this line couuld also transpose into a Hippo System. A solid wating
+move for black. } 5. Nbd2 Nd7 6. Nf1 Ngf6 7. Ng3 Be7 8. O-O O-O 9. Re1 e5 10. c3 { This is the line that needs to be addressed. We would be using this set
+up against black's Hippo System. } 10... Re8 11. h3 Bf8 12. Qc2 g6 13. Be3 Qe7 14. Rad1 Bg7 { 1-0 (39) Giri,A (2777)-Radjabov,T (2763) chess24.com INT 2021 }) 5. c3 Nf6 6. Nbd2 Be7 7. O-O O-O { [#] This is the kind of set up we are going to aim for almost all the
+time. }) (1... Nf6 2. Nf3 e6 3. Bf4 (3. c4 b6 4. a3 Bb7 5. Nc3 d5 (5... Be7 6. d5 d6 7. e4 exd5 8. cxd5 O-O 9. Be2 c6 10. O-O { [%eval 148,10] }) 6. e3 Be7 7. Qc2 O-O 8. Be2 Nbd7 9. O-O) 3... b6 4. e3 Bb7 5. Be2 Nh5 6. Bg3 Nxg3 7. hxg3 Be7 8. Nc3 O-O) 2. e4 { [diagram] } (2. Nc3 { If you do not want to go for a transposition of the French Defence, then
+this is what you need to do. } 2... d5 3. Bf4 Nf6 4. g3 Be7 5. Bg2 O-O 6. Nf3 Nc6 7. O-O { We are back from our London Buckingham System. }) 2... b6 { [#] } (2... f5 { Bad Opening line for black, heres how we will punish this. } 3. exf5 exf5 4. Qh5+) (2... Nf6 3. e5 Nd5 4. c4 { Stockfish 14.1: } 4... Ne7 5. Nf3 d6 6. exd6 cxd6 7. Nc3 { This line isn't considerably bad, but either ways this is how we deal
+with it. } 7... d5 { [%eval 126,8] }) (2... d5 { Transposes to the French Defence, I'll give you a bit of an idea what you
+should be playing against the French Defence. } 3. Nc3 Bb4 4. e5 c5 5. a3 Bxc3+ 6. bxc3 Nc6 7. Nf3 Nge7 8. Be2 O-O (8... Qa5 9. Bd2 O-O 10. O-O) 9. O-O) 3. Nf3 Bb7 4. Bd3 Nf6 5. Nbd2 (5. e5 { Another alternative choice for white } 5... Ne4 6. O-O f5 7. c4 Be7 8. Re1 O-O 9. Nbd2 Nxd2 10. Bxd2 c5 { [%eval 137,9] }) 5... c5 6. c3 Be7 7. e5 Nd5 { Stockfish 14.1: } 8. Nc4 O-O 9. O-O f5 10. exf6 Nxf6 11. Re1 Nc6 { Chapter #7: - English-QID-Systems, London Buckingham System: Complete
+Repertoire Guide: London Buckingham System: Queen's Indian Defence,
+https://lichess.org/study/uT7Q2OHt/CyPq17LP, 2022.01.08 } *
+
+
+[Event "The New London System - London Buckingham System: Englund Gambit At Higher Depth #1 - 1 d4 e5"]
+[Site "https://lichess.org/study/bUhH2SrO/VyU3DToT"]
+[Date "????.??.??"]
+[White "Englund Gambit At Higher Depth #1"]
+[Black "1 d4 e5"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A40"]
+[Opening "Englund Gambit"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Englund Gambit At Higher Depth #1 - 1 d4 e5"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/tLU147al"]
+
+1. d4 e5 { As part of my extensive London Buckingham course. I think that this
+particular gambit needs to be covered. I've faced this so many times and I
+have to admit I didn't really know the refutation into this and I didn't seem to care (Too lazy to study it.) As a result I've lost many games. I
+didn't want those things to happen aswell to you. So as I result I included the refutation to the Englund Gambit aswell! The Englund Gambit is a well recognized trap in which black sacrifices a pawn after the move d4 then e5! Black would be aggrevated and would try his best to prove his
+initiative. } 2. dxe5 Bc5 { Black's intended move sequence of d6 and Ne7 makes for a comical aside. A
+common snare that International Master Eric Rosen and other chess material
+creators have discussed at length. } (2... d6 3. exd6 Bxd6 4. Nc3 Nf6 5. Nf3 O-O 6. e4 Nc6 7. Bd3 Ne5 8. O-O Bg4 9. Bg5) 3. Nf3 d6 4. exd6 { What, the pawn beat the knight? Bishop captures the f2 pawn! This means
+the queen has been dethroned. } 4... Ne7 { [%cal Rc5f2,Rd8d1,Rd6e7] } 5. e3 { Covered the threat and the idea. } 5... Bxd6 6. Bc4 O-O 7. O-O { Englund Gambit - Jobava London System } *
+
+
+[Event "The New London System - London Buckingham System: Englund Gambit At Higher Depth #2 - 1.d4 e5"]
+[Site "https://lichess.org/study/bUhH2SrO/SXi3uPtd"]
+[Date "????.??.??"]
+[White "Englund Gambit At Higher Depth #2"]
+[Black "1.d4 e5"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A40"]
+[Opening "Englund Gambit: Hartlaub-Charlick Gambit"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Englund Gambit At Higher Depth #2 - 1.d4 e5"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/JJ9IHYX8"]
+
+1. d4 e5 { As part of my extensive London Buckingham course. I think that this
+particular gambit needs to be covered. I've faced this so many times and I
+have to admit I didn't really know the refutation into this and I didn't seem to care (Too lazy to study it.) As a result I've lost many games. I
+didn't want those things to happen aswell to you. So as I result I included the refutation to the Englund Gambit aswell! The Englund Gambit is a well recognized trap in which black sacrifices a pawn after the move d4 then e5! Black would be aggrevated and would try his best to prove his
+initiative. As part of my extensive Jobava course. I think that this particular gambit needs to be covered. I've faced this so many times and I have to admit I didn't really know the refutation into this and I didn't seem to care (Too lazy to study it.) As a result I've lost many games. I didn't want those things to happen aswell to you. So as I result I included the refutation to the Englund Gambit aswell! The Englund Gambit is a well recognized trap in which black sacrifices a pawn after the move d4 then e5! Black would be aggrevated and would try his best to prove his
+initiative. } 2. dxe5 d6 (2... Bc5 { A funny sideline where black is planning to play d6 and Ne7! A well known
+trap covered by IM Eric Rosen and other various Chess content makers. } 3. Nf3 d6 4. exd6 { Pawn takes knight?? Bishop takes f2 pawn! Thus the queen is gone! } 4... Ne7 { [%cal Rc5f2,Rd8d1,Rd6e7] } 5. e3 { Covered the threat and the idea. } 5... Bxd6 6. Bc4 O-O 7. O-O { [%cal Rb1c3,Rc1d2,Rd1e2,Ra1d1] }) (2... f6 { Another alternativr in which deals with opening up the f file. In here
+white should simply just develop and he'll be fine. } 3. exf6 Nxf6 4. Nf3 Bc5 5. Bf4 O-O 6. e3 Nc6 7. Bd3 d6 8. Nbd2 Be6 9. O-O) 3. exd6 Bxd6 4. Nc3 Nf6 5. Nf3 O-O 6. e4 Nc6 7. Bd3 Ne5 8. O-O Bg4 9. Bg5 *
+
+
+[Event "The New London System - London Buckingham System: Englund Gambit At Higher Depth #3 - 1.d4 e5"]
+[Site "https://lichess.org/study/bUhH2SrO/uyQJYiQH"]
+[Date "????.??.??"]
+[White "Englund Gambit At Higher Depth #3"]
+[Black "1.d4 e5"]
+[Result "*"]
+[Annotator "https://lichess.org/@/Shreksify"]
+[Variant "Standard"]
+[ECO "A40"]
+[Opening "Englund Gambit: Main Line"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Englund Gambit At Higher Depth #3 - 1.d4 e5"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/mBow5vA3"]
+
+1. d4 e5 2. dxe5 Nc6 (2... d6 3. exd6 Bxd6 4. Nc3 Nf6 5. Nf3 O-O 6. e4 Nc6 7. Bd3 Ne5 8. O-O Bg4 9. Bg5) 3. Nf3 Qe7 4. Bf4 Qb4+ 5. Bd2 Qxb2 6. Nc3! { This is the key move to refute black's dubious opening. } 6... Bb4 { [%cal Rb4c3] } (6... Nb4 { [%csl Rc2][%cal Rb4c2] } 7. Nd4 { [%cal Gd4c2] } 7... c5 { Don't worry about the knight, the move Rb1! Would save the day! } { [%csl Rd4] } 8. Rb1 { [%csl Rb2] } 8... Qa3 9. Ndb5 { [%csl Ra3] } 9... Qa5 10. a3 { [%csl Rb4] } 10... Na6 (10... Nc6 11. Ne4 (11. Nd5 { [%csl Ra5][%cal Rd2a5,Rb5c7] })) 11. Ne4 Qd8 12. Nbd6+ Bxd6 13. Nxd6+ Kf8 14. e4) 7. Rb1 { [%csl Rb2] } 7... Qa3 (7... Bxc3 8. Rxb2 Bxb2 9. c3 Ba3 10. Qb3 Be7 11. e4) (7... Qxc3!? { Quite a strong gambit, despite of black's tactical sacrifice for the
+queen in exchange for two minor pieces its still quite hard to play against
+this. Black doesn't really have a problem on the opening. } 8. Bxc3 Bxc3+ 9. Nd2 Bxe5 10. e4 (10. e3 $18) 10... Nge7 11. Bb5 O-O 12. O-O) 8. Nd5 { It's the Queen's wanderings that make the pawn on c7 so vulnerable. } { [%csl Rb4,Rc7][%cal Rd5c7] } 8... Bxd2+ (8... Ba5 9. Rb5! { Trying to eliminate one of black's only defender against the c7 threat of fork. } { [%csl Rc7][%cal Rd2a5] } 9... Bb6 10. Rxb6 axb6 11. Nxc7+ Kd8 12. Nxa8 Qxa8 13. Qb1) 9. Qxd2 { [%csl Rc7][%cal Rd5c7] } 9... Kd8 (9... Qxa2 { Trying to put the fire out. } { [%csl Rb1] } 10. Rd1 { [%csl Rc7][%cal Rd5c7] } 10... Kd8 11. Ng5 { In a manner similar to the variants seen in the Morra Gambit, white also assaults from the other side! } { [%csl Rf7][%cal Rg5f7] } 11... Nh6 12. e6! { Black's position being braded on the center should be one of black's
+takeaway target in here. We have to bust open the positin then! } 12... d6 { An attempt to keep things closed for the time being. } (12... fxe6 13. Nxe6+! dxe6 14. Nc3+ $18 { This nasty discovered check decides. } { [%csl Ra2,Rd8][%cal Rc3a2,Rd2d8] }) 13. e7+ { A move that is a little bit odd? The main idea is that an early Nxc7 is
+doomed to failure because to the threat posed by Kxc7 Qxd6+, Kb6! in a
+position in which the black King is unexpectedly not in danger. After the move e7+ Nxe7, it is now impossible for Nxc7 to save the game since Kxc7
+Qxd6 is checkmate. } 13... Kd7 (13... Nxe7? 14. Nxc7! { [%csl Rd6,Ra8][%cal Rd2d6,Rc7a8] } 14... Kxc7 15. Qxd6#) 14. Nxh7!! { One more really great move! White makes the threat Nf8+, and if the rook enters the game, the square e8 will be weakened, allowing for a forced mate to occur. } { [%cal Rh7f8] } 14... Rxh7 15. e8=Q+ Kxe8 16. Nxc7+ Kf8 (16... Ke7 17. Qxd6#) (16... Kd7 17. Qxd6#) 17. Qxd6+ Kg8 (17... Ne7 18. Qd8#) 18. Qd8+! { You can't escape the wrath of "GRU!" } { [%csl Rg8,Rh7][%cal Gg8h7] } 18... Nxd8 19. Rxd8#) 10. Qg5+ Nge7 11. Nxe7 Qxe7 12. Qxg7 Rf8 13. Ng5 f5 14. exf6 Qxf6 15. Qxf6+ Rxf6 16. Nxh7 *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ________Anti-Jobava \"Tips and Tricks\" #1: \"Steinitz's Anti-London System\"_______"]
+[Site "https://lichess.org/study/AnndoYt3/UED8FJDe"]
+[Date "????.??.??"]
+[White "Starting Up: Tips, Tricks, Ideas"]
+[Black "Jobava London Guide #1"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "From Position"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Starting Up: Tips, Tricks, Ideas - Jobava London Guide #1"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/QU2NHcUC"]
+[FEN "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4"]
+[SetUp "1"]
+[ChapterMode "gamebook"]
+
+{ The move c5! The Steinitz Countergambit would often be met with the move
+e3! }
+4. e3 Qb6? { This common idea in the standard London System does not work in the
+Rapport Jobava London System! (Sorry for the long name I like to keep it
+that way) Have black missed the move Nb5! } 5. Nb5 Na6 { Black is really cramped in here :( What a pity! } 6. dxc5 Qxc5 7. Be5 e6 8. Bd4! Qc6 9. a4 { With white's misplaced queen and rook I'm afraid its gonna take a bit of
+a little pre arrangements in here. Black's position is cramped and white
+would continue with flexible development. } *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: _______Anti Jobava \"Tips and Tricks\" #3: \"A Little Plan\"_______"]
+[Site "https://lichess.org/study/AnndoYt3/INoiCORN"]
+[Date "????.??.??"]
+[White "Starting Up: Tips, Tricks, Ideas"]
+[Black "Jobava London Guide #2"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "From Position"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Starting Up: Tips, Tricks, Ideas - Jobava London Guide #2"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/7UBYHpdC"]
+[FEN "r2qkb1r/pp1b1ppp/2n1pn2/2pp4/3P1B2/2N1PP2/PPPQ2PP/2KR1BNR w kq - 0 8"]
+[SetUp "1"]
+[ChapterMode "gamebook"]
+
+{ Black just played e6 in here, what should white do next? }
+8. g4! { Attack Attack Attack Attack! } *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ________Symmetrical Line: \"Tips and Tricks\" #1: \"Our Usual Plans\"________"]
+[Site "https://lichess.org/study/AnndoYt3/COwPREkX"]
+[Date "????.??.??"]
+[White "Starting Up: Tips, Tricks, Ideas"]
+[Black "Jobava London Guide #3"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "From Position"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Starting Up: Tips, Tricks, Ideas - Jobava London Guide #3"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/1yLrRQgJ"]
+[FEN "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 4 4"]
+[SetUp "1"]
+[ChapterMode "gamebook"]
+
+{ I'm guessing that you already know what to do in here. }
+4. Nb5! { Nb5 might sound elementary but either ways it actually part well! Why is
+that? What's the purpose behind the move Nb5? Doesn't that sound
+elementary? SGM Hikaru Nakamura once threw a tantrum and said this was garbagr when Naroditsky successfully forked Hikaru due to premove. Funny enough
+Nb5 is actually a very good idea in the Rapport-Jobava London System. First it forces black to make this horrible move Na6!? The only saving move thus a misplaced knight! This messes up black's structure. It would take at least two tempos before black would be able to bring his knight into
+a better square! Nb3 forces black to do the uncanny. Keep that in your mind! } 4... Na6 5. e3 c6 6. Nc3 { Don't worry about losing a tempo! Black's knight is literally on the rim!
+Would take a lot of time to organize his knight! } *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ________Symmetrical Line: \"Tips and Tricks\" #2: \"Attacking Plans\"________"]
+[Site "https://lichess.org/study/AnndoYt3/bpg3cOBc"]
+[Date "????.??.??"]
+[White "Starting Up: Tips, Tricks, Ideas"]
+[Black "Jobava London Guide #4"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "From Position"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Starting Up: Tips, Tricks, Ideas - Jobava London Guide #4"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/Yh6Rym0u"]
+[FEN "r2q1rk1/pp2bppp/n1p1pn2/3p1b2/3P1B2/P1N1P3/1PP1BPPP/R2QK1NR w KQ - 3 9"]
+[SetUp "1"]
+[ChapterMode "gamebook"]
+
+{ I'm guessing that you already know what to do in here. }
+9. g4! { White lashes out on the kingside! } 9... Bg6 10. h4! { With a strong attack on the kingside! } *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ________Symmetrical Line: \"Tips and Tricks\" #3: \"What to Do\"_______"]
+[Site "https://lichess.org/study/AnndoYt3/QIqjyQg3"]
+[Date "????.??.??"]
+[White "Starting Up: Tips, Tricks, Ideas"]
+[Black "Jobava London Guide #5"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "From Position"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Starting Up: Tips, Tricks, Ideas - Jobava London Guide #5"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/Z0L80Gyc"]
+[FEN "r2qkb1r/pp2pppp/n4n2/1Npp1b2/3P1B2/P7/1PP1PPPP/R2QKBNR w KQkq - 0 6"]
+[SetUp "1"]
+[ChapterMode "gamebook"]
+
+{ White just played c5?! Sacrificing a pawn for little compensation. What
+should white do? }
+6. dxc5 { Yes take the pawn, would later be anchored with b4! } 6... e6 7. b4 { Pawn is anchored } *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ________Horwitz's Line \"Tips and Tricks\" #2: \"Attacking Plans\"________"]
+[Site "https://lichess.org/study/AnndoYt3/647eTmgw"]
+[Date "????.??.??"]
+[White "Starting Up: Tips, Tricks, Ideas"]
+[Black "Jobava London Guide #6"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "From Position"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Starting Up: Tips, Tricks, Ideas - Jobava London Guide #6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/ivBFUVWX"]
+[FEN "r2q1rk1/pp2bppp/n1p1pn2/3p1b2/3P1B2/P1N1P3/1PP1BPPP/R2QK1NR w KQ - 3 9"]
+[SetUp "1"]
+[ChapterMode "gamebook"]
+
+{ I'm guessing you already know what to do in here }
+9. g4! { Attack Attack Attack Attack! } 9... Bg6 10. h4! { With good attacking chances on the kingside! } *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ________\"Tips and Tricks\" #2: \"Annoying and Pesky Knight\"________"]
+[Site "https://lichess.org/study/AnndoYt3/lBcMHiqT"]
+[Date "????.??.??"]
+[White "Starting Up: Tips, Tricks, Ideas"]
+[Black "Jobava London Guide #7"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "From Position"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Starting Up: Tips, Tricks, Ideas - Jobava London Guide #7"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/pLnvmRme"]
+[FEN "r1bqk2r/pppnppbp/3p2p1/8/3PP1n1/2N1B3/PPPQ1PPP/2KR1BNR w kq - 6 7"]
+[SetUp "1"]
+[ChapterMode "gamebook"]
+
+{ Black just played Ng4! In here, what must white do to amend this? }
+7. Bg5! { Yes! We can't exchange bishop for knight! That would extinguish our
+potential attack on the kingside! } 7... h6 8. Bh4 { No fear of losing a tempo, black's kingside has been weakened! } 8... O-O 9. h3 Ngf6? 10. e5! { With good prospects on the center and the kingside! } *
+
+
+[Event "The Rapport Jobava System: Complete Repertoire: ________\"Tips and Tricks\" #3: \"Give Up the Center!\"________"]
+[Site "https://lichess.org/study/AnndoYt3/76xPtyZ9"]
+[Date "????.??.??"]
+[White "Starting Up: Tips, Tricks, Ideas"]
+[Black "Jobava London Guide #8"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "From Position"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Starting Up: Tips, Tricks, Ideas - Jobava London Guide #8"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/RYz8JoUG"]
+[FEN "r1bqnrk1/pp1nppbp/3p2p1/2p1P3/3P1P2/2NBBN2/PPP3PP/R2QK2R w KQ - 0 9"]
+[SetUp "1"]
+[ChapterMode "gamebook"]
+
+{ Black just played c5! In here, white has to play Qe2! To be fully
+developed and maximized. }
+9. Qe2 cxd4 { If you feel heavily pressured and black's assault is a burdening you, I
+suggest you simply give up the center and focus on your piece activity! } *
+
+
+[Event "The Rapport Jobava London System: Complete Repertoire: ________\"Tips and Tricks\" #3: \"Give Up the Center!\"________"]
+[Site "https://lichess.org/study/VEy8acWf/yw1nXe0R"]
+[Date "????.??.??"]
+[White "Starting Up: Tips, Tricks, Ideas"]
+[Black "Jobava London Guide #9"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "From Position"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Starting Up: Tips, Tricks, Ideas - Jobava London Guide #9"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/TKMFdTVw"]
+[FEN "r1bqnrk1/pp1nppbp/3p2p1/2p1P3/3P1P2/2NBBN2/PPP3PP/R2QK2R w KQ - 0 9"]
+[SetUp "1"]
+[ChapterMode "gamebook"]
+
+{ Black just played c5! In here, white has to play Qe2! To be fully
+developed and maximized. }
+9. Qe2 cxd4 { If you feel heavily pressured and black's assault is a burdening you, I
+suggest you simply give up the center and focus on your piece activity! } *
+
+
+[Event "Rapport Jobava System: Interactive Leson - Complete Repertoire: Rapport-Jobava Slav Defence - Variation line #2"]
+[Site "https://lichess.org/study/imNmCNJ2/2JrsnidQ"]
+[Date "2022.09.14"]
+[White "Starting Up: Tips, Tricks, Ideas"]
+[Black "Jobava London Guide #10"]
+[Result "*"]
+[Annotator "https://lichess.org/@/ShreksGonGiveItToYa"]
+[Variant "Standard"]
+[ECO "A40"]
+[Opening "Queen's Pawn Game"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Starting Up: Tips, Tricks, Ideas - Jobava London Guide #10"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/KmgZqURM"]
+[ChapterMode "gamebook"]
+
+1. d4 c6 2. Nc3 d5 3. f3!? { e4 is straight up possible in here but that would eventually transpose
+into the "Classical Caro Kann". In the Classical Caro Kann white would get
+a slight edge but position would have been opened and would give black a quite flexible position. Instead of transposing into the Classical Caro
+Kann let's go for f3!? In the move pawn to f3 at least white would be able to recapture with the f pawn thus having a powerful center. A semi opened f file, and of course white gets a easy and flexible play with chances of attacking black's kingside. } 3... e6 4. e4 { With the knight and the f pawn supporting the e pawn thrust. White would
+dominate on the center with an absolute advantage! } 4... Nf6 5. Nh3! { With ideas of placing the knight to f2 to protect the e4 thrust. White
+has to do whatever it takes to keep the center fortified. } 5... c5! 6. Be3 Nc6 7. Bb5 { Pins the knight thus loosen up black's control on the center. } 7... cxd4 8. Qxd4 Bd7 9. Qd2 Bb4 10. Bxc6 Bxc6 11. e5 Nd7 12. Bd4 O-O 13. O-O-O *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Plans and Ideas - Middlegame Guide #1"]
+[Date "????.??.??"]
+[White "Middlegame Plans - Plans and Ideas"]
+[Black "Middlegame Guide #1"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Plans and Ideas - Middlegame Guide #1"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/lhQqeviS"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 d5 2. Nc3 Nf6 3. Bf4 c5 4. e3 e6 5. Nb5 { Nb5 is often a good plan against c5. } { [%cal Gb5c7,Gf4c7,Gc7e8,Gc7a8] } 5... Na6 { Black's knight is tied up defending our fork threat . The rook tied up to the a pawn as a defense. We disabled two of black's pieces with our knight. } { [%cal Ra6c7,Ra8a7,Gb5a7,Gb5c7] } 6. c3 Be7 7. Bd3 O-O 8. a4 b6 9. Nf3 Bb7 10. Ne5 Nd7 11. Qh5 { [%cal Gh5h7,Gd3h7] } 11... f5 12. g4 *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Plans and Ideas - Middlegame Guide #2"]
+[Date "????.??.??"]
+[White "Middlegame Plans - Plans and Ideas"]
+[Black "Middlegame Guide #2"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Plans and Ideas - Middlegame Guide #2"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/p1eKpleG"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 d5 2. Nc3 Nf6 3. Bf4 Bf5 4. f3 { Pawn storm against Bf5. } 4... e6 5. g4! { Keep in mind that whenever white has the opportunity to attack black's
+kingside. Sieze it and capitalize towards it! } 5... Bg6 6. h4 h6 7. e3 c5 8. h5 Bh7 9. Nb5 { Common ideas are f3, g4, and h4-h5. You will then build up enough
+concentrated attack on black's kingside. } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Plans and Ideas - Middlegame Guide #3"]
+[Date "????.??.??"]
+[White "Middlegame Plans - Plans and Ideas"]
+[Black "Middlegame Guide #3"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Plans and Ideas - Middlegame Guide #3"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/zw4BPLQD"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 { http://www.viewchess.com/cbreader/2014/6/26/Game127724859.html } 1... Nf6 2. Nc3 d5 3. Bf4 { This London/Veresov hybrid will probably gain increased attention, as not
+only Jobava but other elite GMs have tried it the past several years,
+including Mamedyarov himself a couple of times, and especially Hikaru Nakamura (at least seven times!). } 3... Bf5 4. f3 e6 5. g4 Bg6 6. h4 h6 7. e3 c5 { Rare, but it had hitherto been successful in the earlier, non-GM trials. } (7... a6 { was tried by Ian Nepomniachtchi against Nakamura in round 9; that game
+eventually finished in a draw. "Nepo" also played it against Jobava in
+round 13 of the same event, but lost that game. }) 8. h5 { Oddly, this obvious move was a novelty. } 8... Bh7 9. Nb5 Na6 10. c3 Be7 11. Bd3 Bxd3 12. Qxd3 Nd7 { Aiming to prevent g4-g5 so he can safely castle. } 13. Ne2 (13. Nd6+?! Bxd6 14. Bxd6 Qb6 { is not what White had in mind. }) 13... O-O 14. a4 Bf6 15. Bd6 Re8 16. f4 Nb6? { Way too optimistic. Mamedyarov's king is inadequately guarded, but in his
+defense it took some brilliant play by Jobava to prove it! } (16... Bh4+ { is playable, but White isn't really harmed by the loss of castling
+privileges, and the position remains complicated after Kf1 or Kd1. }) 17. g5! hxg5 18. h6! g6 19. fxg5 Bxg5 20. h7+ { Not allowing the pawn to be blockaded on a light square. In that case it
+would be very difficult to get at Black's king. } 20... Kg7 21. Be5+! f6 (21... Bf6 22. Nd6 Bxe5 23. dxe5 Qe7 (23... Qg5 24. Nf4! $16) 24. O-O-O { is also extremely dangerous for Black. White has more than enough for the
+sacrificed pawn, and will not be in any hurry to swap the knight on d6 for
+the rook. }) 22. Nd6 { White had better, though this is still strong - especially if Black
+doesn't give up his queen. } (22. Bf4! $16) (22. Nf4 $16) 22... Rh8? (22... fxe5 { was essentially forced. } 23. Nxe8+ Qxe8 24. h8=Q+ Qxh8 25. Rxh8 Rxh8 26. O-O-O $14) 23. Nf4! Bxf4 24. Bxf4 { A normal and good move, and the sequel shows that Jobava knew what he was
+doing. There was a flashy and faster win available though. } (24. Rg1! g5 25. exf4 fxe5 26. Rxg5+ Qxg5 (26... Kf8 27. Rg8+! Rxg8 28. hxg8=Q+ Kxg8 29. Qg6+ { and mate next move. }) 27. fxg5 Rxh7 28. O-O-O $18) 24... g5 25. O-O-O! Nc4 { It might seem as if White's attack is falling apart, as Black is
+threatening White's minor pieces, and the kingside remains closed. If so,
+the appearance is deceiving, and Jobava shows that Black's status is desperate. } (25... gxf4 26. Qg6+!! (26. Rdg1+ Kf8 27. Rg8+ $18 { is more than good enough, but Qg6+ is prettier and faster. }) 26... Kxg6 (26... Kf8 27. Qf7#) 27. Rdg1# { If the game ended like this it would be in combination books for the next
+ten years. }) 26. Rh6! (26. Nxc4 dxc4 27. Qc2 $18) 26... Kxh6 (26... gxf4 27. Qg6+ Kf8 28. Qf7#) (26... Nxd6 27. Qg6+ Kf8 28. Bxd6+ Qxd6 29. Qxf6+ $18) 27. Nf7+ Kg7 28. Nxd8 Raxd8 29. b3 (29. Rg1) 29... Nb6 (29... Nd6 30. Bxd6 Rxd6 31. Qb5 $18) 30. Rg1 Rxh7 { Here White has two ways to win, and Jobava chooses the subtler method. } 31. e4! (31. Rxg5+? fxg5 32. Be5+ Kh6!) (31. Bxg5! fxg5 32. Rxg5+ Kh8 33. dxc5 Nd7 34. c6! Nac5 35. Qg6 bxc6 36. Rh5 Rxh5 37. Qxh5+ Kg7 38. Qg5+ Kf7 39. Qxd8 $18) 31... Kh8?! { It looks natural, and were it not for the problem that shows up at the
+very end it would be Black's best try. } 32. e5!! gxf4 (32... Nd7 33. exf6) 33. Qg6 Rf8 34. exf6 { 1-0, Jobava,Baadur 2713 - Mamedyarov,Shakhriyar 2743, FIDE World Rapid
+Ch, Dubai UAE (3.1), 2014.06.16 } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Plans and Ideas - Middlegame Guide #4"]
+[Date "????.??.??"]
+[White "Middlegame Plans - Plans and Ideas"]
+[Black "Middlegame Guide #4"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Plans and Ideas - Middlegame Guide #4"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/T8C0fU3L"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 Nf6 2. Nc3 d5 3. Bf4 Bf5 4. f3 (4. e3 e6 5. Nf3 { e.g. } 5... a6 (5... c5?! 6. Bxb8!? (6. Nb5 Na6 7. c3 $14 { is good again }) 6... Qxb8 7. Bb5+ Kd8 8. Ne5 Qc7) 6. Ne5 { planning g4 and h4 again }) 4... e6 5. g4 Bg6 6. h4 h6 (6... h5 7. g5 Nfd7 8. e3 (8. e4) 8... Bd6 (8... c5?! 9. Nb5 Na6 10. c3 Be7 11. Bd3 { with an edge for White }) 9. Nh3 Nc6 10. Nb5 Bxf4 11. Nxf4 Bf5 12. Bd3 Ne7 { White for preference }) 7. e3 c5 (7... a6 { is an alternative e.g. } 8. Bd3 Bxd3 9. cxd3!? c5 10. dxc5 Bxc5 11. d4 Bd6 12. Nge2 { White can put his king on f2 and await developments }) 8. h5 Bh7 9. Nb5 Na6 10. c3 Be7 11. Bd3 Bxd3 12. Qxd3 Nd7 13. Ne2 O-O 14. a4 Bf6 15. Bd6 Re8 16. f4 Nb6 17. g5 hxg5 18. h6 g6 19. fxg5 Bxg5 20. h7+ Kg7 21. Be5+ f6 22. Nd6 Rh8 23. Nf4 Bxf4 24. Bxf4 g5 25. O-O-O Nc4 26. Rh6 Kxh6 27. Nf7+ Kg7 28. Nxd8 Raxd8 { 1 d4 Nf6 2 Nc3 d5 3 Bf4 Bf5 - ?, A complete repertoire on the London
+System with Nc3: Chapter 3, https://lichess.org/study/Kp6cbyEp/WkCEIATy, } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Plans and Ideas - Middlegame Guide #5"]
+[Date "????.??.??"]
+[White "Middlegame Plans - Plans and Ideas"]
+[Black "Middlegame Guide #5"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Plans and Ideas - Middlegame Guide #5"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/OPbUkpuF"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 Nf6 2. Nc3 d5 3. Bf4 Bf5 4. f3 e6 5. g4 Bg6 6. h4 h5 (6... h6 { Alternative. } 7. e3 c5 8. h5) 7. g5 { Kicking the knight. } { [%cal Rg5f6] } 7... Nfd7 8. e3 { Making the room for a bishop. } { [%cal Bf1d3] } 8... Bd6 9. Nh3! { Protects bishop on f4 and in future can make a pressure on Bg6. } { [%cal Gh3f4,Yf4g6] } 9... Nc6 10. Nb5 { [%cal Rb5d6] } 10... Bxf4 { Might be slightly inaccurate to take and give white tempo on bishop, but leaves Nb5 a bit a dubious. } { [%csl Yb5][%cal Rh3f4,Yf4g6] } 11. Nxf4 Bf5 12. Bd3 Ne7 { [%cal Ge7f5] } 13. Qd2 { Simply develops the queen. With long caste in plan. } { [%cal Be1c1] } 13... a6 { Kicking the knight and grabbing space queen side. } { [%cal Ra6b5,Bc7c5] } 14. Nc3 c5 15. O-O-O cxd4 16. exd4 { Opens c file towards white king. } { [%cal Yc8c3,Ba8c8,Bd8c8] } 16... Bxd3 17. Nxd3 Qb6 18. Ne2 g6 19. Kb1 Nf5 20. c3 Qd6 21. f4 b5 22. Ng1 { Great outpost for the knight on e5. } { [%csl Be5][%cal Bg1f3,Bf3e5] } 22... a5 23. Nf3 Nb6 24. Nfe5 Nc4 25. Qf2 O-O 26. Rc1 Rfc8 27. Rhe1 b4 28. Nc5 bxc3 29. bxc3 Rab8+ 30. Ka1 Na3 31. Re2 Rb5 32. Rb2 Rcb8 33. Rxb5 Rxb5 34. Ned7 Qc7 35. Qe2 Qxf4 36. Nd3 Qe3 37. Qd1 Nc4 38. Rb1 Rxb1+ 39. Qxb1 Kg7 40. N7c5 Qd2 41. Qb3 Nxh4 42. a4 Nf3 43. Nxe6+ Kh7 44. Nef4 Nxg5 45. Kb1 Qxd3+ 46. Nxd3 Nd2+ 47. Kc2 Nxb3 48. Kxb3 Ne4 49. Nf4 h4 50. c4 Nd2+ 51. Kc3 Nxc4 52. Nxd5 h3 53. Nf6+ Kg7 54. Ng4 Nb6 55. Kd3 f5 56. Nh2 Kf6 57. Ke3 g5 58. Kf3 Nxa4 59. Kg3 g4 60. Kf4 Nc3 61. Kg3 a4 { 0-1, Baadur Aleksandrovich Jobava 2713 - Sergei Zhigalko 2678, World
+Blitz Championship, Dubai UAE (17.30), 2014.06.20 } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Plans and Ideas - Middlegame Guide #6"]
+[Date "????.??.??"]
+[White "Middlegame Plans - Plans and Ideas"]
+[Black "Middlegame Guide #6"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Plans and Ideas - Middlegame Guide #6"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/KJvP6SjF"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 Nf6 2. Bf4 d5 3. Nc3 a6 { Stops Nb5. } { [%cal Ra6b5,Bc3b5] } 4. e3 e6 5. g4!? { Interesting idea - kick black knight and grab some space on king side with g & h pawns. } { [%cal Bg4g5,Yg5f6] } 5... c5 6. g5 Nfd7 7. Nf3 { Simply develops. } 7... Nc6 8. a3 b5 { Black in principle counterattacks on the opposite side. } 9. h4 Bb7 { Good square for the bishop, also it can helps to castle queen side since white pushed g & h pawns already. } { [%cal Yb7g2] } 10. h5 Nb6 11. Ne5 Nxe5 12. Bxe5 Nc4 13. Bxc4 { Damages the pawn structure and eliminates knight that took long path to the c4 square. } { [%cal Bb8d7,Bd7b6,Bb6c4] } 13... dxc4 14. Rg1 f6 15. Bf4 Qd7 16. h6 O-O-O 17. Qe2 cxd4 18. exd4 Qxd4 19. Rd1 Qxf4 20. Qxe6+ Kc7 21. Qf7+ Be7?? 22. Qxe7+ Kc8 23. hxg7 Rxd1+ 24. Nxd1 Rg8 25. Qf8+ Kc7 26. Qxg8 { 1-0, Carlsen, M. (2832) - Caruana, F. (2808), Import,
+https://lichess.org/toKk31dU, 2017.11.05 } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Plans and Ideas - Middlegame Guide #7"]
+[Date "????.??.??"]
+[White "Middlegame Plans - Plans and Ideas"]
+[Black "Middlegame Guide #7"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Plans and Ideas - Middlegame Guide #7"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/bLzMP130"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 Nf6 2. Nc3 d5 3. Bf4 Bf5 4. f3 { With plan of pushing black light-squared bishop around and grabbing some space on king side. } { [%cal Bg2g4,Bh2h4] } 4... e6 5. g4 Bg6 6. h4 { [%cal Bh4h5,Rh5g6] } 6... h6 (6... h5 { Alternative. } 7. g5 { [%cal Rg5f6] }) 7. e3 c5 8. h5 Bh7 9. Nb5 { Standard plan. } { [%csl Yc7][%cal Yb5c7,Yf4c7,Rc7e8,Rc7a8] } 9... Na6 { Knight on a6 is stupid, has to guard c7 square. } { [%csl Ya6][%cal Ga6c7] } 10. c3 Be7 { It makes sense to exchange light-squared bishop and develop queen to d3. } { [%cal Bf1d3,Rd1d3] } 11. Bd3 Bxd3 12. Qxd3 Nd7 13. Ne2 O-O 14. a4 { Cements knight on b5. It cannot be easy kicked from the outpost and controls good squares. } { [%csl Rc7,Rd6][%cal Ga4b5,Ya7a6,Rb5d6,Rb5c7] } 14... Bf6 { Losing control over d6 square. } { [%csl Yd6][%cal Bf4d6] } 15. Bd6 Re8 16. f4 { White starts attack on king side. } { [%cal Bf4f5,Bg4g5,Bh5h6] } 16... Nb6 17. g5 $140 { With an idea of shred open black king. } { [%cal Be1c1,Ba1g1,Yg1g8,Yh1h8] } 17... hxg5 18. h6 g6 19. fxg5 { [%csl Bg5,Bh6] } 19... Bxg5 20. h7+ Kg7 21. Be5+ f6 22. Nd6 Rh8 (22... fxe5 23. dxe5 { Powerful knight, controlling a lot of squares in black camp. } { [%csl Rd6][%cal Yd6f7,Yd6e8,Yd6c8,Yd6f5] }) 23. Nf4 Bxf4 24. Bxf4 g5 { Stoping Bh6. } 25. O-O-O { White simple continues with plan of bringing heavy pieces to the attack. } { [%cal Bd1g1] } 25... Nc4 (25... gxf4 26. Qg6+ Kxg6 27. Rdg1#) 26. Rh6 Kxh6 (26... Kf8 27. Rxf6+ Kg7 (27... Ke7 28. Rf7#) 28. Qg6#) 27. Nf7+ Kg7 28. Nxd8 Raxd8 29. b3 Nb6 30. Rg1 Rxh7 31. e4 Kh8 32. e5 gxf4 33. Qg6 Rf8 34. exf6 { 1-0, Baadur Aleksandrovich Jobava 2688 - Shakhriyar Mamedyarov 2799,
+World Rapid Championship, Dubai UAE (3.1), 2014.06.16 } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Plans and Ideas - Middlegame Guide #8"]
+[Date "????.??.??"]
+[White "Middlegame Plans - Plans and Ideas"]
+[Black "Middlegame Guide #8"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Plans and Ideas - Middlegame Guide #8"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/9HrXELjx"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 Nf6 2. Nc3 d5 3. Bf4 { London bishop } { [%cal Rf4b8] } 3... c5 4. e3 cxd4 5. exd4 a6 { Prevents Nb5 } { [%cal Ra6b5,Bc3b5] } (5... Nc6 6. Nb5 e5 7. Bxe5 Nxe5 8. dxe5 Ng4 9. Qxd5 Qxd5 10. Nc7+ Kd7 11. Nxd5 Kc6 $16) 6. Bd3 Nc6 { Bd3 can be a target in future. } { [%cal Bc6b4,Rb4d3] } 7. Nge2 e6 { Solid. } 8. Qd2 { Castle on both sides is possible. } { [%cal Be1c1,Be1g1] } 8... b5 9. O-O { Black threatens pawn storm. Black Queen can quickly join attack on queen side. } { [%cal Yb5b4,Ya6a5,Yb4b3,Ya5a4,Bd8a5] } 9... Be7 10. a3 { Stops any Nb4 ideas. } { [%cal Ra3b4,Bc6b4] } 10... Bd7 11. h3 { Controls g5, make some room for a Bishop and King. } { [%cal Rh3g4,Bf4h2,Gg1h2] } 11... O-O 12. Rfe1 Na5 13. Rad1 { Centralising. } 13... Qb6 { Go to Puzzle V } { [%cal Rb6d4] } 14. Ng3 { [%cal Bg3f5,Ye1e7] } 14... Rfc8!? $140 { Loose bishop. } { [%csl Ye7] } (14... Qxd4 15. Bxh7+ Kxh7 16. Qxd4 $18) (14... Rfe8 $10) 15. Nf5 { Loose bishop. } { [%csl Ye7] } 15... exf5! (15... Bf8 16. Nh6+ gxh6 17. Bxh6 Bxh6 18. Qxh6 Ne8 { #4 }) 16. Rxe7 Be6 { With the idea of getting Re7 trapped. What should white do now? } { [%cal Ba5c6,Rc6e7] } 17. Bh6!! { Black has options take Bishop, attack rook, protect with knight or bring Queen back to defence. } { [%cal Rg7h6,Bg8f8,Rf8e7,Bf6h5,Gh5g7,Bb6d8,Rd8e7] } 17... gxh6?! (17... Kf8 18. Bxg7+ Kxe7 19. Bxf6+ Kd7 $16 { White pieces are well coordinated and King is very safe behind pawn wall on 1st rank. Black King is exposed on the center with weak, doubled pawns on f file. Be6 has no prospects. Na5 out of the game. } { [%csl Gf6,Gd3,Gc3,Gd2,Gd1,Gg1,Yd7,Ye6,Ya5,Yb6,Yc8,Ya8,Rf7,Rf5] } (19... Kxf6 { Puzzle VI } 20. Qh6+ Ke7 21. Nxd5+ Bxd5 22. Qxb6 $18)) (17... Qd8 { Even though Rook and Bishop are hanging white is great position now. } 18. Bxg7 Kxg7 19. Qg5+ Kh8 (19... Kf8 20. Qxf6 Qxe7 21. Qh8#) 20. Qxf6+ Kg8 21. Bxf5 Qxe7 (21... Bxf5 22. Qxf7+ Kh8 23. Qg7#) 22. Qxe7 Bxf5 $18 { [%csl Ge7] }) 18. Qxh6 Rxc3 19. Qg5+ Kf8 20. Qxf6 Rxd3 21. cxd3 { 1-0 Black resigns. } 21... Qd8 22. Re1 Nc6 23. R1xe6 Nxe7 24. Rxe7 Qxe7 (24... Qe8 25. Rxe8+ Rxe8) 25. Qh8# { 1-0, Baadur Aleksandrovich Jobava 2665 - Ruslan Ponomariov 2709, Chess
+Olympiad, Baku AZE (8.2), 2016.09.10 } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Plans and Ideas - Middlegame Guide #9"]
+[Date "????.??.??"]
+[White "Middlegame Plans - Plans and Ideas"]
+[Black "Middlegame Guide #9"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Plans and Ideas - Middlegame Guide #9"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/MvPlyLsU"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 Nf6 2. Nc3 d5 3. Bf4 c6 { Dare I say this is probably not the greatest challenge to White's opening, but in Kasparov's defence he has been away from competitive chess for a number of years and it demonstrates that even a chess legend can be caught somewhat cold by an unexpected opening such as this. That should make any potential player of this line very optimistic! } 4. e3 Bf5 5. f3 e6 6. g4 { David knows his stuff and goes for the classic Kingside thrust. } 6... Bg6 7. h4 h5 8. g5 Ng8 $14 (8... Nfd7 { is arguably better (and is examined in the larger course) but White already has what he wants. He has gained space and time on the Kingside and at the same time pushed Black's pieces back. }) 9. Bd3 Nd7 (9... Ne7 10. e4 dxe4 11. fxe4 Qxd4? 12. Nb5!!) 10. Bxg6 $16 { Imagine getting this position from the opening against a legend. The Jobava puts another player under the cosh. Black's Kingside structure is shattered and he will need to be vigilant for the rest of the game. White is assuredly on the front foot. } 10... fxg6 11. Nge2 Bb4 12. Qd3 { Developing with threat to the g6-pawn. } 12... Ne7 13. Bh2 { The Bishop vacates the f4-square should the e2-Knight wish to occupy it with threats against e6 and g6. } (13. e4 { was probably the most accurate, dominating the centre and preventing Nf5 before Black can gain any sense of counterplay. }) 13... c5 14. a3 c4 15. Qd2 Ba5 16. e4 b5?! { This turns out to be dubious as Black needed to shore up his defences before carrying out his counterplay. This move is entirely understandable especially from Kasparov who had no desire to sit and wait. } 17. Qe3 O-O 18. O-O Bb6 19. Kg2 { Sensibly getting off the diagonal of the b6-bishop. An excellent and practical move. Prophylaxis to perfection! } 19... Kh7 20. Rad1 a6 21. Nf4 $16 { The totality of White's opening is a success. Black has many problems to overcome. } 21... e5 22. Ne6 exd4 23. Rxd4 (23. Qd2! $18 { , as pointed out by David himself, is the smoothest way to a material gain when } 23... dxc3 24. Qxc3 { threatens both the Queen on d8 and mate on g7. Black would be forced to play } 24... d4 { , and after } 25. Rxd4!! { Black cannot keep everything together due to the potential of moving the d4 Rook and once again threatening g7 with mate. }) 23... Qe8 24. Qd2 Rf7 25. Nxd5 Nxd5 26. exd5 Bxd4 27. Qxd4 Nf8 28. Nc7 Rxc7 29. Bxc7 Qf7 30. Be5 Nd7 31. Re1 Re8 32. Bg3 Rxe1 33. Bxe1 Qf5 34. Qe4 Nb6 35. Qxf5 $18 { The rest of the game shows how fantastic David's technique is but its outside the scope of this course. } 35... gxf5 36. d6 g6 37. Kg3 Kg7 38. Kf4 Nd7 39. Ke3 Kf7 40. Kd4 Ke6 41. Bg3 Nb8 42. Kc5 Kd7 43. Kd5 Nc6 44. Be1 Nd8 45. Bg3 Nc6 46. c3 Na5 47. Ke5 Nb3 48. Kf6 Nc5 49. Kxg6 Nd3 50. Kf7 { 1-0, Model Game: Howell, David - Kasparov, G., Short & Sweet: The Jobava London System, S&S The Jobava London, } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Plans and Ideas - Middlegame Guide #10"]
+[Date "????.??.??"]
+[White "Middlegame Plans - Plans and Ideas"]
+[Black "Middlegame Guide #10"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Plans and Ideas - Middlegame Guide #10"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/Ay4ZoUTV"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 d5 2. Nc3 Nf6 3. Bf4 c5 4. e3 a6 (4... Nc6?? { literally played in 36 of my 92 games }) (4... cxd4 5. exd4 a6 6. Nf3 Nc6 7. Ne5 { i seem to only remember this a third of the time } (7. Be2 Bg4 8. O-O e6 9. Ne5 Bxe2 10. Nxe2 Bd6 11. c4 dxc4 12. Nxc6 bxc6 13. Qa4 Bxf4 14. Nxf4 Qxd4? { K_A_L_E - NM GMcanty, 0-1, -, https://lichess.org/VdLttwJh } (14... O-O!)) 7... Qb6 8. Nxc6 Qxc6 9. Bd3 Bg4 10. Qd2 { K_A_L_E - Sadegh_mahmoody1971, 1/2-1/2, -, https://lichess.org/cFFB4duU } (10. f3 { [%cal Gg2g4] })) (4... e6 5. Nf3 (5. Nb5 Na6 6. a4 Be7 7. Be2 { K_A_L_E - darlenhalo, 1-0, -, https://lichess.org/zLu6rjCP }) 5... Bd6! { this is a nice point, i could have avoided this if i remembered the Nb5 point K_A_L_E - Selensky_Andrey, 0-1, -, https://lichess.org/bELhCgCU }) 5. dxc5 Nc6 { far and away most common response } (5... e6 6. Na4 Bxc5 (6... Qa5+ 7. c3 Bd7?? 8. Nb6 { K_A_L_E - laikom, 1-0, -, https://lichess.org/2qaXhfBP }) 7. Nxc5 Qa5+ 8. c3 Qxc5 9. Nf3 Nc6 10. Qd2? { [%cal Gf6e4] } (10. Bd3 { crucial }) 10... Ne4 { K_A_L_E - ghazzarian, 0-1, -, https://lichess.org/3gQGOVAI }) 6. Nf3 Bg4 7. Be2 e6 8. Na4 Bxc5? (8... Nh5 9. c3 $16 { K_A_L_E - FM chesszerorfl, 0-1, -, https://lichess.org/IHXmG78A }) 9. Nxc5 Qa5+ 10. c3? (10. Nd2! Bxe2 11. Nxb7! { very cool idea }) *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Example Games #1 - Hikaru Nakamura 2767 - Anish Giri 2776"]
+[Date "????.??.??"]
+[White "Example Games #1"]
+[Black "Hikaru Nakamura 2767 - Anish Giri 2776"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D00"]
+[Opening "Queen's Pawn Game: Accelerated London System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Example Games #1 - Hikaru Nakamura 2767 - Anish Giri 2776"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/8ogq2VEO"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 { This was a game played by Hikaru Nakamura against Anish Giri. Both opposing sides played very well in the opening. Tremendous performance by both opposing sides until Anish made a huge blunder which eventually gave in the game. } 1... d5 2. Bf4 Nf6 3. e3 c5 { In this particular chapter we would be talking about the "Steinitz Countergambit"This effective Anti-London is known to quickly equalize or even have a better position against the London System. That is because after c5 all what white can do is react and defend consequently. After c5 Black would proceed with Qb6! White has to defend the b pawn or otherwise lose a piece.Despite of this, today's modern theory had successfully repealed and made amends to the Anti-London "Steinitz Countergambit" where white sacrifice a pawn for piece activity.But does this "Stenitz Countergambit" be an effective Anti-London against the Rapport-Jobava? We'll see... } 4. Nc3 cxd4 5. exd4 { Both opposing sides exchange pawns, black has two central pawns against white's one and only d central pawn. White's play would ultimately divert on the queenside. } 5... a6 { A fantastic move by Anish giri, prevents the Nb5 threat! } 6. Nf3 Bg4 7. Be2 e6 { Light square bishop out of the game! } 8. h3 Bxf3 9. Bxf3 { White gains a bishop pair but in exchange black gains the knight pair and also loosens white's grasp on the center. The knight on f3 is an effective support to pressurize the e5 square. } 9... Nc6 10. Ne2 Bd6 11. Be3 O-O 12. O-O Ne7 13. g3 { I know for a fact that Hikaru Nakamura often likes the find an outpost and reinforce his pieces in places which may sometimes seem unorthodox. } 13... Nf5 14. Bc1 Rc8 15. c3 b5 16. Qd3 Qc7 17. Bg5 Qc4 18. Rfd1 Be7 19. Nf4 { Exchanging queens would only benefit black since black's counterplay heavily relies on the queenside now. White would have to aim for the kingside but exchanging queens now would only extinguish part of white's attack. } 19... Nd7 20. Bxe7 Nxe7 21. Qd2 a5 22. Be2 Qc6 23. Bd3 Qb6 24. a4 bxa4 25. Rxa4 Rb8 26. Bc2 Qc7 27. Rda1 { The tables have turned, white is now attacking on the queenside. Successfully extinguished black's attack on the queenside. } 27... g6 28. Nd3 Nc6 29. R4a2 Nb6 30. h4 Rfe8 31. Qf4 Qxf4 32. Nxf4 { We are on the endgame now, white's attack would heavily rely on the queenside. Black's goal is to defend. White is on assault in here. } 32... Rec8 33. Bd1 Nc4 34. Nd3 Rb6 35. Ba4 Kg7 36. Kg2 Rc7 37. Re1 Nd8 38. Bd1 Nc6 39. Re2 h6 40. Nc5 Re7 41. Ba4 { Hikaru shuffles his pieces on the board hoping to find some chaos and counterplay which would ultimately result into his win. } 41... Ra7 42. Bb3 Nd6 43. Bc2 Re7 44. Bd3 Rb8 45. Re1 Rb6 46. Bc2 Ra7 47. Rea1 Rc7 48. Re1 Ra7 49. g4 Nb5 50. Ba4 Nd6 51. Rea1 Nd8 52. Bc2 Rc7 53. Ba4 N6b7 54. Nd7 Rd6 55. Ne5 Rb6 56. Re1 Nd6 57. Nd7 Rbb7 58. Nc5 Rb6 59. Bc2 N6b7 60. Na4 Rbc6 61. Ra3 Nd6 62. Bd3 N8b7 63. Rb3 Nc4 64. Bxc4 Rxc4 65. Ra1 R4c6 66. Rb5 Kf6 67. Kf3 { Warrior kings, trying to outflank one another. More of a waiting move I guess... } 67... Ke7 68. Ke2 Kf6 69. Kd3 g5 70. hxg5+ Kxg5 71. f3 f5 72. gxf5 Kxf5 73. Rh1 Rh7 74. b3 h5 75. c4 Kf4 76. cxd5 exd5 77. Rxd5 h4 78. Rh3? { +0.54/16 } (78. Nc3 { +2.08/15 } 78... Rb6 79. Ne2+ Kxf3 80. Rf5+ Kg4 81. Rf4+ Kg5 82. Rg1+ Kh5 83. Kd2 Rg6 84. Rxh4+ Kxh4 85. Rxg6 Rd7 86. Ke3) 78... Rg6?? { Interesting idea, black wants to exchange rooks with Rg3! But white's knight on a4 is dangerous. Nc3 Ne2! White is going to dislodge black's king from the kingside. } (78... Re6 { +0.54/16 } 79. Nc5 Rd6 80. Re5 Nxc5+ 81. Rxc5 Re6 82. Kc4 Re3 83. Rc8 Re1 84. Rf8+ Kg5 85. Kb5 Rc1 86. Kb6 Rd1 87. Rd8 Kf6) 79. Nc3 Rg3?! { +8.48/16 } (79... Re7 { +6.72/16 } 80. Ne2+ Rxe2 81. Kxe2 Rh6 82. Rd7 Nd6 83. Rg7 Kf5 84. Rg4 Re6+ 85. Kd3 Ne8 86. Re4 Rxe4 87. fxe4+ Kg4 88. Rh1 Nd6 89. e5 Nf5) 80. Ne2+ Kxf3 81. Nxg3 Kg4 82. Ne4 Kxh3 83. Ng5+ { 1-0, Hikaru Nakamura 2767 - Anish Giri 2776, London Chess Classic (Rapid Open), London ENG (8.1), 2014.12.07 } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Example Games #2 - Magnus Carlsen 2863 - Jeffery Xiong 2709"]
+[Date "????.??.??"]
+[White "Example Games #2"]
+[Black "Magnus Carlsen 2863 - Jeffery Xiong 2709"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Example Games #2 - Magnus Carlsen 2863 - Jeffery Xiong 2709"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/DFhyAxfU"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 { This was a game played by Magnus Carlsen with the white pieces against Jeffery Xiong with the black pieces, played on Lichess.org. Jeffery Xiong made a mistake in the opening in which Magnus Carlsen pressed and took the initiative. Black went on to resign the game. } 1... Nf6 2. Nc3 d5 3. Bf4 { D01 Rapport-Jobava System } 3... e6 4. e3 Bb4 5. Ne2 O-O 6. a3 Be7 7. Ng1?! { Perhaps unnecessary, but Magnus is Magnus, I think he was playing drunk in here This is how you play Chess after two bottles of wine. } 7... c5 8. Nf3 Nh5 9. dxc5 Nxf4 10. exf4 Bxc5 11. Bd3 { Uncanny, weakens the kingside. Prone to attack. } 11... g6?! { (-0.71 → -0.03) Inaccuracy. Qf6 was best. } (11... Qf6) 12. h4 Nc6 13. h5 { Magnus went on and shoved the h pawn over the board. } 13... Qf6 14. Qd2 { White's assault continues up to this day! } 14... e5?? { (0.70 → 5.34) Blunder. Rb8 was best. } (14... Rb8 15. Kf1 b5 16. g3 b4 17. axb4 Rxb4 18. Kg2 Bd6 19. Qe3 Rxb2 20. Nb5 Bb8 21. hxg6) 15. Nxd5 Qd6 16. Bc4 b5 17. Ba2 exf4 18. O-O-O b4 19. hxg6 hxg6 20. Ng5 Bf5 { g4 is perhaps stronger since this eventually adds up the pressure on the kingside. But who knows white is already winning in here. Black is forced to give up the rook. } 21. Nh7? { (7.50 → 4.09) Mistake. g4 was best. } (21. g4) 21... Rfd8? { Black is forced to give up the rook but nyeah? (4.09 → 7.46) Mistake. Bd4 was best. } (21... Bd4 22. g4) 22. Nhf6+ Kf8 23. Rh8+ Kg7 24. Rh7+ Kf8 25. Rdh1 { 1-0, Magnus Carlsen 2863 - Jeffery Xiong 2709, The Rapport Jobava System: Complete Repertoire: ____Example Game #2 Magnus Carlsen - Jeffery Xiong____, Lichess.org, } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Example Games #3 - R Rapport 2700 - Getz N 2423"]
+[Date "????.??.??"]
+[White "Example Games #3"]
+[Black "R Rapport 2700 - Getz N 2423"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense: Accelerated London System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Example Games #3 - R Rapport 2700 - Getz N 2423"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/kTxeaCKY"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 Nf6 { A45 Indian Defense } 2. Bf4 g6 { Nf6 black wants to divert the game into a King's Indian or a Semi-Grunfeld structure. But in here after the move Nc3! Black would have to play d4 thus transposing back to the position we studied with the Horwitz Defence. Well other than that if black refuses and play g6!? Then simply e4! The move pawn to e4 was made possible because of the knight on c3. Black would have to play d5 or d6!? We'll get into that. } 3. Nc3 Bg7 4. e4 { There are two particular variations in which I recommend in here. The Austrian Attack or the "English" or "Yugoslavia" Attack structure. Everything heavily depends on your decision. } 4... d6 5. Qd2 O-O 6. O-O-O Nbd7 7. e5 Nh5 8. Bh6 c5?! { (0.52 → 1.28) Inaccuracy. Nb6 was best. } (8... Nb6 9. Bxg7 Nxg7 10. f4 { White expands... } 10... c6 11. Kb1 dxe5 12. fxe5 Nd5 13. Nf3 Bg4 14. Bc4 Nf5 15. Bxd5) 9. Bxg7 Nxg7 10. exd6 exd6 11. Nf3 Qa5 12. Kb1 Nf6 13. dxc5 { Queen takes a pawn is preferable in here. This would also support black's furious attack on the kingside. } 13... Be6?! { (1.27 → 1.87) Inaccuracy. Qxc5 was best. } (13... Qxc5 14. Qxd6 Qxd6 15. Rxd6 Be6 16. Be2 Nf5 17. Rdd1 Rad8 18. Rhe1 Rfe8 19. Bb5 Rxd1+ 20. Rxd1) 14. Nd5 Qd8 15. Nxf6+ Qxf6 16. cxd6 Nf5?? { (1.73 → 4.22) Blunder. Rad8 was best. } (16... Rad8 17. Qg5 Ne8 18. Qxf6 Nxf6 19. Rd4 Ne8 20. Be2 Rxd6 21. Rhd1 Rxd4 22. Nxd4 Ng7 23. c4) 17. Qf4 { The knight is pinned. Nowhere else to go after g4! } 17... h5 18. h3 h4 19. g4 hxg3 20. fxg3 Rac8 21. g4 Rc5 { The Attack was too much, losing the knight, free to resign. } 22. Bd3 { R Rapport 2700 - Getz N 2423, 2nd Vergani Cup 2018, https://lichess.org/study/AnndoYt3/k4tceEhw, } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Example Games #4 - Radjabov T 2724 - Anton Guijarro D 2631"]
+[Date "????.??.??"]
+[White "Example Games #4"]
+[Black "Radjabov T 2724 - Anton Guijarro D 2631"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Example Games #4 - Radjabov T 2724 - Anton Guijarro D 2631"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/uDbaaa1a"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 Nf6 2. Nc3 d5 { This particular chapter is dedicated to the"One" and "Only" main line Horwitz Defence against the Jobava London. The Horwitz Defence can basically be played against everything. By everything I mean "Everything". It can be played against the Queen's Gambit, Catalan Opening, English Opening, London System, King's Indian Attack, and so on.Basically in here black's simple plan is to occupy the center, reinforce a hasty attack either on the center or the queenside depending on white's play. So on and so forth in the Jobava, the system remains very different. The idea of Bf4 Nd5 is one of the key factor why the Horwitz's auto piloted move order wouldn't fit very well. Remember the idea of Bf4 Nd5! huh? Black either have to play a6 or Na6 just to stop this. Thus a tempo ahead and a complicatedly matter on the queenside makes this position quite unbearable! } 3. Bf4 { D01 Rapport-Jobava System D01 Rapport-Jobava System In this particular chapter we are going to talk about the one and only "Bf5" Symmetrical Jobava London."Black is following the same basic objective of the Rapport-Jobava. But in this scenario Black may have some ideas with putting off the light square bishop behind the pawn pyramid. e6-d5. But in here despite of black's logical idea Nb5! and Black would be forced to defend with Na6!? } { [%cal Re7e6,Rb7d5,Rc7c6,Rf7d5] } 3... c6 4. e3 Bf5 5. Nf3 e6 { This is the Slav Defence. The Slav Defence is known for it's dynamic and positional play. Despite it's reputation black's counterplay heavily relies on breakthroughs such as on the "Center" or "Queenside." In here the main line is usually c4 followed by a "Catalan" structure. But instead of c4 which is heavily theoretical. We would go for Nc3! Our Rapport-Jobava structure! } 6. Be2 h6 7. O-O Nbd7 8. Bd3 Bxd3 9. Qxd3 Bb4 10. a3 Bxc3 11. Qxc3 Ne4 12. Qd3 g5 13. Bg3 h5 14. Nd2 Nxd2 15. Qxd2 h4 16. Be5 f6 17. Bd6 Kf7 { Expands on the queenside... } 18. a4?! { (-0.01 → -0.67) Inaccuracy. h3 was best. } (18. h3 Nb6 19. Bh2 Nc4 20. Qe2 a5 21. b3 Nd6 22. c4 Ne4 23. Qb2 Qe7 24. c5 Rae8) 18... Nb6 19. Bb4 Nc4 20. Qc1 a5 21. Ba3 Nd6?! { (-0.87 → -0.29) Inaccuracy. h3 was best. } (21... h3) 22. Bxd6 Qxd6 23. Qd2 e5 24. Rad1 e4 25. f3 Qe6 26. f4 g4 { Black's attack on the kingside is dangerous! How can white make amends? } 27. b3 g3 28. h3 { White shuts down black's attack! } 28... Qf5 29. c4 Rhd8 30. Qe2 Kg6 31. Rc1 Qh5?? { (-0.05 → 1.87) Blunder. Rac8 was best. } (31... Rac8 32. Qd2) 32. f5+ Kh6 33. Qb2 Rd7 34. Rf4 Rg8?! { (1.95 → 2.73) Inaccuracy. Kg7 was best. } (34... Kg7 35. cxd5 cxd5 36. Qc3 Kf7 37. Qc2 Kg8 38. Re1 Qe8 39. Rxh4 Rg7 40. Rf1 Rc8 41. Qd2) 35. Rcf1 { Opens up the position for white. As black's pieces are wobby and badly organized. White would penetrate on the center. } 35... c5?? { (2.00 → 4.72) Blunder. Kg7 was best. } (35... Kg7 36. Qc3) 36. cxd5 Rxd5 37. dxc5 Rf8 38. Rxe4? { (5.26 → 3.33) Mistake. Qc2 was best. } (38. Qc2 Re8 39. c6 bxc6 40. Qxc6 Qf7 41. Rxh4+ Kg7 42. Rg4+ Kh7 43. Rxg3 Rg8 44. Rxg8 Kxg8) 38... Rd1 39. Rf4 Rxf1+ 40. Rxf1 { White has now successfuly extinguish black's counterplay on the center. White would now penetrate on the 7th rank. Although black's kingside safety is managable. Remember that the queenside pawns would all be sniped off. } 40... Kg7 41. Qd4!? { (4.17 → 1.71) Blunder. Qd2 was best. } (41. Qd2) 41... Rf7?? { (1.71 → 10.96) Blunder. Qe2 was best. } (41... Qe2 42. b4 axb4 43. Qxb4 Qxe3+ 44. Kh1 Rf7 45. Qxh4 Re7 46. Qg4+ Kf8 47. Qf3 Re4 48. Qxe3) 42. Rf4 Re7 43. Rg4+ Kf7?! { (15.13 → Mate in 3) Checkmate is now unavoidable. Qxg4 was best. } (43... Qxg4 44. Qxg4+) 44. Qd5+ { Radjabov T 2724 - Anton Guijarro D 2631, Fide World Blitz 2014, Dubai UAE, } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Example Games #5 - Baadur Aleksandrovich Jobava 2688-Shakhriyar Mamedyarov 2790"]
+[Date "????.??.??"]
+[White "Example Games #5"]
+[Black "Baadur Aleksandrovich Jobava 2688 - Shakhriyar Mamedyarov 2799"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Example Games #5 - Baadur Aleksandrovich Jobava 2688-Shakhriyar Mamedyarov 2790"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/XBKaizfR"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 { @Tangobob's "Jobava London System Game Collections" Come check it out! https://lichess.org/study/puCV36lu } 1... Nf6 2. Nc3 d5 3. Bf4 Bf5 4. f3 { "By not having developed the Knight to f3 [attacking d4 P], White can play the pawn [here on f3] and look towards a quick Kingside pawn advance which both gains space and pushes Black's pieces back." } 4... e6 5. g4 { "This natural follow up threatens to trap Black's light-squared Bishop. As you will know, when I can push 'Harry' (the h-pawn) I will, especially when it is the objectively best move." } 5... Bg6 6. h4 h6 7. e3 c5 { "This is the most active response [for black] but it is not without risk. As we will see in the theory section, 7...a6 is safer." } 8. h5 (8. Nb5 { GGM recommends this instead. }) 8... Bh7 9. Nb5 Na6 10. c3 Be7 11. Bd3 Bxd3 12. Qxd3 Nd7 13. Ne2 O-O 14. a4 Bf6 15. Bd6 Re8 16. f4 Nb6 17. g5 hxg5 18. h6 g6 19. fxg5 Bxg5 20. h7+ Kg7 21. Be5+ f6 22. Nd6 Rh8 23. Nf4 Bxf4 24. Bxf4 g5 25. O-O-O Nc4 26. Rh6 Kxh6 27. Nf7+ Kg7 28. Nxd8 Raxd8 29. b3 Nb6 30. Rg1 Rxh7 31. e4 Kh8 32. e5 gxf4 33. Qg6 Rf8 34. exf6 { 1-0, Baadur Aleksandrovich Jobava 2688 - Shakhriyar Mamedyarov 2799, World Rapid Championship, Dubai UAE (3.1), 2014.06.16 } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Example Games #6 - Daniel Naroditsky - Keaton F Kiewra"]
+[Date "????.??.??"]
+[White "Example Games #6"]
+[Black "Daniel Naroditsky - Keaton F Kiewra"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Example Games #6 - Daniel Naroditsky - Keaton F Kiewra"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/IQsPBwNg"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 { [%eval 0.0] } 1... Nf6 { [%eval 0.19] } 2. Nc3 { [%eval -0.17] } 2... d5 { [%eval -0.17] } 3. Bf4 { [%eval -0.4] } 3... Bf5 { [%eval 0.0] } 4. f3 { [%eval -0.21] } 4... e6 { [%eval 0.0] } 5. g4 { [%eval 0.0] } 5... Bg6 { [%eval 0.0] } 6. h4 { [%eval -0.06] } 6... h6 { [%eval -0.11] } 7. e3 { [%eval -0.24] } 7... a6 { [%eval 0.0] Same as previous model game till here. } 8. Bd3 { [%eval -0.16] } 8... Bxd3 { [%eval -0.3] } 9. cxd3 { [%eval -0.16] } (9. Qxd3 { SF prefers this move, taking w/ Q rather than P, though GGM discusses rationale for cxd3. } 9... c5) 9... c5 { [%eval -0.22] } 10. dxc5 { [%eval -0.3] } 10... Bxc5 { [%eval -0.14] } 11. d4 { [%eval -0.23] } 11... Bd6 { [%eval -0.16] } 12. Nge2 { [%eval -0.06] } 12... Nc6 { [%eval -0.03] } 13. Kf2 { [%eval -0.32] "This move shows the wealth of possibilities in this line. White's King should be entirely safe on f2 and he keeps his Rook on h1 which strongly retains the prospect of further Kingside advances. These advances are, repeating myself again, a key theme of this whole opening." } 13... Rc8 { [%eval -0.06] } 14. Rc1 { [%eval -0.17] } 14... b5 { [%eval 0.23] } 15. Bxd6 { [%eval 0.26] } 15... Qxd6 { [%eval 0.18] } 16. Nf4 { [%eval 0.35] } 16... Ne7 { [%eval 0.19] } 17. g5 { [%eval 0.17] } 17... Nd7 { [%eval 0.1] } 18. gxh6 { [%eval 0.0] } 18... Rxh6 { [%eval 0.0] } 19. Qg1 { [%eval -0.18] } 19... Kf8 { [%eval 0.0] } 20. Qg5 { [%eval 0.0] } 20... Nf6 { [%eval 0.0] } 21. Rhg1 { [%eval 0.0] } 21... Ne8 { [%eval 0.05] } 22. h5 { [%eval 0.4] } 22... Rc4 { [%eval 0.48] } 23. b3 { [%eval 0.3] } 23... Rc6 { [%eval 0.69] } 24. Nce2 { [%eval 0.69] } 24... Rf6 { [%eval 0.63] } 25. Rxc6 { [%eval 0.55] } 25... Nxc6 { [%eval 0.49] } 26. Rc1 { [%eval 0.69] } 26... Ne7 { [%eval 0.47] } 27. Ng3 { [%eval 0.69] } 27... Nf5 { [%eval 0.72] } 28. Rc8 { [%eval 0.44] } 28... Qd7 { [%eval 0.27] } 29. Ra8 { [%eval 0.0] } 29... Nxg3 { [%eval 0.1] } 30. Kxg3 { [%eval 0.0] } 30... Qc6 { [%eval 0.09] } 31. Rd8 { [%eval 0.0] } 31... Qc1 { [%eval 0.0] } 32. Qe5 { [%eval 0.0] } 32... Qe1+ { [%eval 0.09] } 33. Kg2 { [%eval 0.0] } 33... Qd2+?? { [%eval 8.52] Blunder. Rxf4 was best. } (33... Rxf4 34. exf4 Qd2+ 35. Kf1 Qd1+ 36. Kf2 Qc2+ 37. Qe2 Qc7 38. Ra8 Qb7 39. Rxe8+ Kxe8 40. Qe5) 34. Kh3 { [%eval 8.21] } 34... Qb4 { [%eval 11.94] } 35. Nxd5 { 1-0, Daniel Naroditsky - Keaton F Kiewra, US Chess League, ICC INT (2), 2015.09.02 } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Example Games #7 - Birkic Josip - Babler Jan"]
+[Date "????.??.??"]
+[White "Example Games #7"]
+[Black "Birkic Josip - Babler Jan"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense: Accelerated London System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Example Games #7 - Birkic Josip - Babler Jan"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/kgUEjlVZ"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 Nf6 2. Bf4 g6 3. Nc3 { here i don't know the best move in this position is d5 and with normal position,and after my Bg7 white destroy me in attack } 3... Bg7 { now it is PIRC defense after white move e4,i don't know PIRC and white destroy me in his attack. } 4. e4 d6 5. Qd2 { with Qd2,white idea is go with bishop on h6 and take my g7 bishop,my defense bishop. } { [%cal Bf4h6] } 5... O-O 6. O-O-O { now white attack start. } 6... Nc6 7. h4 { [%cal Bh4h5,Bf2f3,Bg2g4] } 7... Bd7 8. Bh6 { now white go take black g7 bishop.defense bishop. } 8... e5 9. d5 Ne7? { my first mistake.better move is Nd4 with unclear position and with good d4 knight,but i play here and thats not good because this knight on e have 1 move and this move is not good move. } { [%csl Re7][%cal Re7f5,Re7d5,Re7c6,Re7c8,Re7g6,Re7g8] } 10. f3 { [%csl Gh5,Gg4,Gf3,Ge4,Gd5,Gc2,Gb2,Ga2][%cal Bg2g4,Bh4h5] } 10... a6 { with this move i try to do attack on queen site,but i can't do anything here. } 11. g4 Bxh6 12. Qxh6 { here is see dangerous attack and i give piece for try to defend position,but thats blunder } { [%cal Bh4h5,Bg4h5,Bh1h2,Bh2g2,Bh6g7,Bg1h3] } 12... Bxg4?? 13. fxg4 Nxg4 14. Qd2 Nf6 15. Be2 { [%cal Bh4h5] } 15... h5? { my new mistake.the best move is b5 with try to do action. } 16. Nh3 Kg7 17. Rdf1 Neg8 18. Rhg1 Qd7 19. Qe3 b5 { try to do action. } 20. Ng5 b4 21. Nd1 c6? 22. Bc4 cxd5 23. Bxd5 Nxd5 24. exd5 Rac8 25. Qe4 a5 26. Ne3 Nf6 27. Qg2 Ng8 28. Nxf7!! Rxf7 29. Qxg6+ Kh8 30. Rxf7 *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Example Games #8 - Bianka Havanecz 2610 - Taha Özkan 2364"]
+[Date "????.??.??"]
+[White "Example Games #8"]
+[Black "Bianka Havanecz - Taha Özkan"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D00"]
+[Opening "Queen's Pawn Game: Chigorin Variation, Irish Gambit"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Example Games #8 - Bianka Havanecz 2610 - Taha Özkan 2364"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/Oy0MoQDx"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 { [%clk 0:15:00] } 1... d5 { [%clk 0:15:00] } 2. Nc3 { [%clk 0:15:13] } 2... c5 { [%clk 0:15:13] } 3. Bf4 { [%clk 0:15:26] } 3... Nc6 { [%clk 0:15:25] } 4. e3 { [%clk 0:15:31] } 4... Nf6?? { Exact trap we covered in first chapter! } { [%clk 0:15:33] } 5. h4!! { (?) An extremely kind move, giving the opponent a chance in order to humiliate them more. } { [%clk 0:15:36] } 5... h5?? { Allows Nb5 } { [%clk 0:15:33] } 6. Nb5 { And Casabianka proceeds to win } { [%clk 0:15:49] } 6... Kd7 { [%clk 0:14:21] } 7. Nf3 { [%clk 0:15:23] } 7... e6 { [%clk 0:14:23] } 8. Ng5 { [%clk 0:15:16] } 8... Ke7 { [%clk 0:13:06] } 9. Bd6+ { [%clk 0:15:16] } 9... Ke8 { [%clk 0:13:18] } 10. Nc7+ { [%clk 0:15:27] } 10... Kd7 { [%clk 0:13:32] } 11. Nxf7 { 1-0, Casabianka 2610 - tahaozkan2007 2364, Rated Classical game, https://lichess.org/xjMb6V5A, 2022.07.14 } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Example Games #9 - Jobava, Ba 2713 - Yudin, S. 2546"]
+[Date "????.??.??"]
+[White "Example Games #9"]
+[Black "Jobava, Ba 2713 - Yudin, S. 2546"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D01"]
+[Opening "Rapport-Jobava System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Example Games #9 - Jobava, Ba 2713 - Yudin, S. 2546"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/YQYD4HRS"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 d5 2. Nc3 Nf6 3. Bf4 { D01 Rapport-Jobava System } 3... e6 { For example } 4. e3 (4. Nb5 Na6 (4... Bd6) 5. a3 { Prevents Bb4 } (5. e3 c6 (5... Bb4+) 6. Nc3 Bb4 7. Bxa6 bxa6 8. Nf3 O-O) 5... c6 6. Nc3 Be7 7. e3 O-O 8. Bd3 (8. Qf3) (8. g4) (8. f3) (8. h4 b5 9. Nf3 Bb7 10. Ne5) (8. Qd2 b5 9. Bd3 b4 10. axb4 Nxb4 11. O-O-O) 8... c5) (4. a3 { Also possible for Bb4 prevention. }) 4... c5 (4... a6 { Preventing Nb5, is often played by people who know what they're doing. } { [%cal Gc3b5] } 5. g4! { The queen is already protecting this square so we can push g4. } 5... c5 6. g5 Nfd7 7. h4 Nc6 8. Nf3 { Casabianka - Precise_Chess, 1-0, -, https://lichess.org/QXLVYoEW See the game attached to understand this line better. }) (4... Bb4 { Is an annoying move for Black. }) 5. Nb5 { Is a common line: } 5... Na6 6. c3 Be7 7. a4 { This knight is excellent on b5! Jobava, Ba - Yudin, S., 1/2-1/2, FIDE World Rapid 2014, https://lichess.org/8fxMtqrW } { [%csl Bb5][%cal Ga4b5] } 7... O-O 8. h3 Ne8 9. Nf3 Nac7 10. Nxc7 Nxc7 11. Bd3 Ne8 12. a5?! { (1.03 → 0.42) Inaccuracy. dxc5 was best. } (12. dxc5 Bxc5 13. O-O Nf6 14. Qc2 Bd6 15. Rfd1 h6 16. a5 Bxf4 17. exf4 Qc7 18. Qa4 Bd7) 12... Nf6 13. O-O Bd7 14. Ne5 a6 15. Qb1?! { (0.99 → 0.22) Inaccuracy. b3 was best. } (15. b3) 15... Bb5 16. dxc5 Bxc5 17. Bxb5 axb5 18. Bg5?! { (0.17 → -0.71) Inaccuracy. Qd3 was best. } (18. Qd3) 18... Be7 19. Qd3 Rxa5 20. Rxa5 Qxa5 21. b4?! { (-0.92 → -1.62) Inaccuracy. Bxf6 was best. } (21. Bxf6 gxf6 22. Nf3 b4 23. Qd4 h6 24. Qg4+ Kh7 25. cxb4 Qxb4 26. Qxb4 Bxb4 27. Ra1 Kg6) 21... Qc7 22. Nf3 Qc4 23. Qxc4 bxc4 24. Ra1 h6 25. Bxf6 Bxf6 26. Nd4 Rb8 27. Kf1 Kf8 28. Ke2 Ke7 29. Kd2 Bxd4 30. exd4 Kd6 31. h4 f6?! { (-1.72 → -1.13) Inaccuracy. g5 was best. } (31... g5) 32. f4?! { (-1.13 → -1.85) Inaccuracy. h5 was best. } (32. h5 e5) 32... h5 33. Ra7 Kc6 34. Ra5?! { (-1.67 → -2.68) Inaccuracy. Ke3 was best. } (34. Ke3 Rd8) 34... Re8?! { (-2.68 → -1.58) Inaccuracy. g5 was best. } (34... g5) 35. Rc5+ Kd6 36. Rb5 Re7 37. g3 g6 38. Ke3 Kc7 39. Ra5 Re8 40. Rc5+ Kb6 41. Ra5 Rb8 42. Ra1 Kc6 43. Ra5 Kd6 44. Ra1 e5 45. fxe5+ fxe5 46. dxe5+ Kxe5 47. Ra5 Rf8?! { (-1.82 → -0.68) Inaccuracy. b6 was best. } (47... b6) 48. Rb5 Rf1 49. Rxb7 Rd1 50. Ke2 Rg1 51. Re7+ Kd6 52. Re3 Rb1 53. Kf3?! { (0.00 → -0.92) Inaccuracy. Kd2 was best. } (53. Kd2 Rb2+ 54. Kc1 Rg2 55. Rf3 Rg1+ 56. Kc2 Kc7 57. Kd2 Rg2+ 58. Kc1 Kd6 59. Re3 Rf2) 53... Rf1+?! { (-0.92 → 0.00) Inaccuracy. Rb2 was best. } (53... Rb2 54. g4) 54. Ke2 { ½-½, Jobava, Ba 2713 - Yudin, S. 2546, FIDE World Rapid 2014, Dubai UAE (7.14), 2014.06.17 } *
+
+
+[Event "The Jobava London System (Rapport-Jobava System) - Complete Repertoire: Example Games #10 - Vlasenko, Miroslav 2393 - Sadykov, Ramil 2214"]
+[Date "????.??.??"]
+[White "Example Games #10"]
+[Black "Vlasenko, Miroslav 2393 - Sadykov, Ramil 2214"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense: Accelerated London System"]
+[StudyName "The Jobava London System (Rapport-Jobava System) - Complete Repertoire"]
+[ChapterName "Example Games #10 - Vlasenko, Miroslav 2393 - Sadykov, Ramil 2214"]
+[ChapterURL "https://lichess.org/study/HaFTAegs/lZS8wAnB"]
+[Annotator "https://lichess.org/@/Shreksify"]
+
+1. d4 Nf6 { A45 Indian Defense } (1... d5 2. Nc3 Nf6 3. Bf4 c5 (3... g6 { doesn't need much explanation. You'll see: } 4. h4! Bg7 5. Nb5 Na6 6. e3 { Casabianka - alidehghani198022, 1-0, -, https://lichess.org/HeLJJI7h Most players above 1500 should know how to play these positions. h4-h5 attack and queenside castles. You can check out game attached } { [%cal Gh4h5,Gf2f3,Gg2g4,Ge1c1] }) (3... a6 4. e3 e6 { e6 with a6 } 5. a3 { Preventing Bb4 } { [%cal Ga3b4] } 5... c5 6. Nf3 { [%cal Gf1e2,Gf3e5] }) 4. e3 a6 { Is a possible line by Black: } (4... cxd4 5. exd4 a6 6. Nf3 { Rapport, R. - Sutovsky, E., 1-0, 41st Olympiad Open 2014, https://lichess.org/Jyfea7SP Check cited game }) 5. Nf3 { Is a simpler line than dxc5 } (5. dxc5 { If you want to study the mainline, I recommend you use lichess opening explorer. }) 5... Nc6 (5... cxd4 6. exd4) 6. Be2) 2. Bf4 d5 3. e3 c5 4. Nc3 a6 5. Nf3 Nc6?! { (-0.35 → 0.48) Inaccuracy. e6 was best. } (5... e6 6. dxc5 Bxc5 7. Bd3 Be7 8. e4 dxe4 9. Nxe4 Nd5 10. Bd2) 6. Be2 e6 7. O-O b5 8. Ne5 Bb7 9. Bf3 Bd6 10. a4 b4 11. Nxc6 Bxc6 12. Ne2 O-O 13. Bg5 h6 14. Bh4 g5?! { (-1.02 → -0.21) Inaccuracy. c4 was best. } (14... c4 15. Bg3 a5 16. Re1 Rb8 17. Bxd6 Qxd6 18. Ng3 Qc7 19. Nh5 Nh7 20. g3 g6 21. Nf4) 15. dxc5 Bxc5 16. Bg3 Qe7 17. Nd4 Bd7 18. a5 Rad8?! { (-0.48 → 0.25) Inaccuracy. Bd6 was best. } (18... Bd6 19. Bxd6 Qxd6 20. Nb3 e5 21. Be2 Rfe8 22. Nd2 Qc7 23. Nb3 Rec8 24. Rc1 Qd6 25. f4) 19. Be2 e5 20. Nb3 Ba7 21. Bxa6 Bc6 22. Bd3 Ne8?! { (0.40 → 1.19) Inaccuracy. Ne4 was best. } (22... Ne4) 23. Qe2 f5 24. f3 Nd6 25. Bf2?! { (0.56 → -0.09) Inaccuracy. Kh1 was best. } (25. Kh1) 25... Kh8 26. Rad1 Rf7?! { (0.25 → 0.93) Inaccuracy. e4 was best. } (26... e4 27. Ba6) 27. Kh1 h5 28. f4 h4 29. fxe5 Qxe5 30. Nd4 Bxd4 31. exd4 Qxe2 32. Bxe2 Nc4?! { (0.99 → 1.93) Inaccuracy. Ra7 was best. } (32... Ra7 33. Ra1 Rb8 34. Rfc1 Bb5 35. Bf3 Ne4 36. Bxe4 fxe4 37. Be1 Bd7 38. Kg1 Kg7 39. Bd2) 33. b3 Na3?! { (1.72 → 2.58) Inaccuracy. Nd6 was best. } (33... Nd6 34. Ra1 Rb8 35. Bd3 Kg7 36. Be1 Kf6 37. Kg1 Ra7 38. g3 h3 39. g4 f4 40. Rf3) 34. Bd3 Bb5 35. Bxb5 Nxb5 36. Be1 Rc8 37. Bxb4 Rxc2 38. Bc5 h3 39. gxh3 Rf6? { (2.35 → 4.21) Mistake. Rh7 was best. } (39... Rh7 40. Rd3) 40. Be7 Rh6 41. Rxf5 Rxh3 42. Bf6+ Kh7 43. Be5 Nc3? { (3.14 → 5.33) Mistake. Kg6 was best. } (43... Kg6) 44. Rdf1?? { (5.33 → 2.19) Blunder. Ra1 was best. } (44. Ra1 Ra2) 44... Ne4 45. a6?? { (2.34 → 0.15) Blunder. Ra1 was best. } (45. Ra1 g4) 45... Ra2 46. Rf7+ Kg6 47. a7 g4?? { (0.53 → 5.56) Blunder. Rxb3 was best. } (47... Rxb3) 48. Rg7+ Kh6 49. Rxg4 Rxa7?! { (4.83 → 7.20) Inaccuracy. Rxb3 was best. } (49... Rxb3 50. Rh4+ Kg6 51. Rg1+ Kf5 52. Rh5+ Ke6 53. Rh6+ Kf5 54. Rf1+ Kg5 55. Rh8 Rba3 56. Rg1+) 50. Rf8?? { (7.20 → 2.53) Blunder. Rf5 was best. } (50. Rf5 Nd2) 50... Rh7?? { (2.53 → 13.30) Blunder. Kh5 was best. } (50... Kh5 51. Rg1) 51. Kg2 Rxb3?! { (11.75 → Mate in 12) Checkmate is now unavoidable. Ng5 was best. } (51... Ng5 52. Rf5) 52. Bf4+?? { (Mate in 12 → 6.56) Lost forced checkmate sequence. Rfg8 was best. } (52. Rfg8 Kh5 53. Bg3 Rg7 54. R4xg7 Rb2+ 55. Kh3 Rb6 56. Rg4 Nf2+ 57. Bxf2 Rg6 58. Rh8+ Rh6) 52... Kh5 53. h3 Rb2+ 54. Kf3 Rb3+ 55. Be3 Nd6 56. Ke2?? { (7.75 → 3.44) Blunder. Rf6 was best. } (56. Rf6 Rxe3+) 56... Rb2+ 57. Kf3? { (3.43 → 1.49) Mistake. Bd2 was best. } (57. Bd2 Re7+ 58. Kd1 Re8 59. Rf3 Ra8 60. Rg5+ Kh4 61. Rg7 Rxd2+ 62. Kxd2 Nc4+ 63. Kd3 Ra3+) 57... Rb3?? { (1.49 → 7.71) Blunder. Rf7+ was best. } (57... Rf7+) 58. Rf6 Rf7?! { (6.46 → 10.17) Inaccuracy. Rxe3+ was best. } (58... Rxe3+ 59. Kxe3) 59. Rg5+ Kh4 60. Rxf7 Nxf7 61. Rxd5 Nh8 62. Rd8 Ng6 63. Rg8? { (7.13 → 3.51) Mistake. Rd6 was best. } (63. Rd6 Kh5) 63... Kh5 64. Rg7 Nh4+ 65. Kf4 Ng6+?? { (2.99 → 7.03) Blunder. Rxe3 was best. } (65... Rxe3) 66. Ke4 Nf8 67. d5 Kh4?? { (4.46 → 66.03) Blunder. Rb8 was best. } (67... Rb8 68. Bc5) 68. Bc5 Rb8?! { (18.48 → Mate in 49) Checkmate is now unavoidable. Ng6 was best. } (68... Ng6 69. Rxg6) 69. Bxf8 Rxf8 70. d6 Kh5 71. Ke5 { 1-0, Vlasenko, Miroslav 2393 - Sadykov, Ramil 2214, Privolzhskogo FO-ch, Kazan (4), 2012.03.01 } *
+
+
