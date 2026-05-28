@@ -811,6 +811,81 @@ The DB is the brain for all four stages; LLM only writes prose.
 Only `concepts` remains LLM-only — by design, since it's
 prose-question-with-prose-answers and has no SANs to invert.
 
+## 🔒 PRO REPERTOIRE TAB — LOCKED BUILD PROCESS (David 2026-05-28)
+
+**HIS DATABASE IS THE ONLY AUTHORITY FOR HIS TAB.** Not the masters DB, not
+the lichess subset, not theoretical lines, not your training memory. Every
+pro opening (Naroditsky / GothamChess / Eric Rosen / Carlsen / Hikaru /
+Caruana / Firouzja / Dubov / Gukesh / Pragg / Niemann / Anna / Akeem /
+Samay) is built from HIS REAL GAMES in his harvested dump — period. The
+infrastructure to do this is in place and you MUST use it every single
+time:
+
+- **The dump:** `docs/audit-runs/2026-05-27-pro-provenance/full-pgns/<proId>.json`
+  (gitignored, ~20k full-PGN games per pro). Harvest via
+  `scripts/harvest-pro-full-pgns.mjs PLAYERS=<proId>` if missing.
+- **The anchor index:** `src/data/pro-game-anchors/<proId>.json` (his
+  position-frequency map, FEN-keyed). Rebuild via
+  `scripts/build-pro-anchor-index.mjs PLAYERS=<proId>` after a fresh harvest.
+- **The gate:** `lessonIntegrity` now passes `proId` through `dbAnchor.ts`
+  (`longestProGameAnchorPly` + `proIdFromOpeningId`). A pro line anchors
+  the moment each ply of the spine is one HE played from that exact
+  position in ≥2 of his games. Masters DB and lichess subset are bonuses;
+  HIS dump is the canon for HIS tab.
+
+**THE 8-STEP BUILD (every pro opening, no shortcuts):**
+
+1. **Take ALL his games for the opening.** Wins + losses + draws. Filter
+   by color, the opening's defining first moves, and your candidate ECO if
+   useful. Print the total count.
+2. **Map his variations by the branching ply** (typically Black's 2nd or
+   3rd move, sometimes White's 3rd against a Black opening). Group by that
+   move + show games/win% per branch. **Each branch with ≥30 games is a
+   variation tab.** Smaller branches are sub-variations or noise — do not
+   pretend they don't exist; surface the count.
+3. **For each variation tab, mine his deepest most-common deep line** —
+   find the longest prefix that ≥3 of his games share. That's his real
+   middlegame, not theory.
+4. **Pgn = that real deep line.** Cross-check by walking it through the
+   per-pro anchor index — pgn length must equal anchor depth or you've
+   gone past his real play; either truncate or find a deeper real game.
+   **Never invent moves past where his dump stops.**
+5. **Lesson = 4 beats teaching the line + middlegame transition.** Watch
+   register full prose, Learn short cues, every named square bare-named for
+   the markers (gotcha §8c), apostrophes in double-quoted strings (§8a),
+   deep beat ≥20 plies. Sources: a real source per opening (his lichess
+   study if it exists in `src/data/pro-study-notes.json`, else a
+   reputable URL + concept ids — never the generic YouTube channel SRC).
+6. **Middlegame plan = his REAL post-spine play** (plies ~20-30+) of the
+   same deep line as a `playableLines[0]` entry with annotations +
+   learnCues + sources. Critical position FEN = the position at the spine
+   endpoint. This is the plan from his games, not from theory.
+7. **Model game = his real winning game on this exact variation.** Top
+   opponent elo, 2 critical moments with computed FENs, his side's
+   character in the overview. studentSide must match orientation.
+8. **Verify with the gates before committing:** `lessonIntegrity` +
+   `narrationAccuracy` + `narrationGrounding` + `lessonDepth` +
+   `wlppNarration` + `lessonTabIntegrity` + `lessonSources` +
+   `modelGames-orientation` + `pro-repertoires-orientation` +
+   `middlegamePlanThemes` + `openingManifests`. Anything red = fix before
+   pushing.
+
+**FAILURE MODES TO STOP MAKING:**
+- Picking ONE of his variations and treating it as the whole opening (e.g.
+  building Mengarini on 2...g6 when 2...Nc6 is his 69%-win wing-gambit
+  main).
+- Extending the pgn past where his dump anchors — that's invention.
+- Building a lesson but NO middlegame plan, when his games have the
+  middlegame already played out in front of you.
+- Citing "masters DB" or generic YouTube as the authority when HIS games
+  are the database for HIS tab.
+- Asking permission to keep going on a build you already started — the
+  task IS the instruction to finish.
+
+This process WAS Mengarini build #2 (2026-05-28) — and it took David
+shouting it three times before it landed. Lock it. Use it on every pro
+opening, every time. No more shallow builds.
+
 ## 🧒 Kids section — non-negotiables
 
 The kid section (`/kid/*`) is for David's young brother. Adult-app
