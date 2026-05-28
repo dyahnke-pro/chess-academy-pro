@@ -43,7 +43,7 @@ export const PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS: Record<string, LessonScrip
         id: 'c5-e4',
         moves: ['d4', 'd5', 'Nc3', 'Nf6', 'Bf4', 'c5', 'e4'],
         highlights: [{ square: 'e4', color: KEY }],
-        say: "Black's sharpest anti-Jobava is ...c5, the Steinitz-style hit at the centre. Naroditsky doesn't defend — he attacks: e4! He throws the centre wide open at once. In his own words it forces Black to exchange and lets White unleash his fury, or leaves Black sitting passively while White's pieces come flooding out.",
+        say: "Black's sharpest anti-Jobava is ...c5, the Steinitz-style hit at the centre. Naroditsky doesn't defend — he attacks: e4! He throws the centre wide open at once. Now Black is forced to start trading, and every exchange tears another line open for White's pieces; hold still instead, and White simply pours out his development while Black stays cramped.",
         sayShort: '...c5? — answer e4, rip the centre open.',
       },
       {
