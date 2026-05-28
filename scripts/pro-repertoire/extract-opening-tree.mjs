@@ -23,14 +23,14 @@ const OPENINGS = {
   'caro-kann': {
     name: 'Caro-Kann Defense',
     color: 'black',
-    studentMoves: ['c6'],                          // student plays as black
+    studentMoves: ['c6'],
     minPrefix: ['e4', 'c6'],
     maxDepth: 30,
   },
   'alapin-sicilian': {
     name: 'Alapin Sicilian',
     color: 'white',
-    studentMoves: [],                              // student plays as white
+    studentMoves: [],
     minPrefix: ['e4', 'c5', 'c3'],
     maxDepth: 30,
   },
@@ -41,18 +41,46 @@ const OPENINGS = {
     minPrefix: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'],
     maxDepth: 30,
   },
-  'kia': {
-    name: "King's Indian Attack",
-    color: 'white',
-    studentMoves: [],
-    minPrefix: [],                                 // KIA is identified by structure not opening move
-    maxDepth: 30,
-  },
   'kid': {
     name: "King's Indian Defense",
     color: 'black',
     studentMoves: [],
     minPrefix: ['d4', 'Nf6', 'c4', 'g6'],
+    maxDepth: 30,
+  },
+  'alekhine': {
+    name: "Alekhine's Defense",
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'Nf6'],
+    maxDepth: 30,
+  },
+  'kia': {
+    name: "King's Indian Attack",
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['Nf3'],
+    maxDepth: 30,
+  },
+  'rossolimo': {
+    name: 'Anti-Sicilian Rossolimo/Moscow',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'Nf3'],
+    maxDepth: 30,
+  },
+  'jobava-london': {
+    name: 'Jobava London',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['d4', 'd5', 'Nc3'],
+    maxDepth: 30,
+  },
+  'ruy-lopez': {
+    name: 'Ruy Lopez',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'],
     maxDepth: 30,
   },
 };

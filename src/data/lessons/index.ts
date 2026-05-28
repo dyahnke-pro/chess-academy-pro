@@ -2,6 +2,11 @@ import { Chess } from 'chess.js';
 import type { LessonScript, AnnotationArrow, AnnotationHighlight, PlayableMiddlegameLine } from '../../types';
 import { PRO_NARODITSKY_CARO_KANN_LESSON } from './proNaroditskyCaroKann';
 import { PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS } from './proNaroditskyCaroKannVariations';
+import {
+  PRO_NAR_ALAPIN_LESSON, PRO_NAR_NAJDORF_LESSON, PRO_NAR_KID_LESSON,
+  PRO_NAR_ALEKHINE_LESSON, PRO_NAR_KIA_LESSON, PRO_NAR_ROSSOLIMO_LESSON,
+  PRO_NAR_JOBAVA_LESSON, PRO_NAR_RUY_LESSON,
+} from './proNaroditskyAllRemaining';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
@@ -155,6 +160,14 @@ const LESSONS: Record<string, LessonScript> = {
   // don't apply. The verbosity contract (G5 — long/short on every beat)
   // does apply and is enforced at the file level.
   [PRO_NARODITSKY_CARO_KANN_LESSON.openingId]: PRO_NARODITSKY_CARO_KANN_LESSON,
+  [PRO_NAR_ALAPIN_LESSON.openingId]: PRO_NAR_ALAPIN_LESSON,
+  [PRO_NAR_NAJDORF_LESSON.openingId]: PRO_NAR_NAJDORF_LESSON,
+  [PRO_NAR_KID_LESSON.openingId]: PRO_NAR_KID_LESSON,
+  [PRO_NAR_ALEKHINE_LESSON.openingId]: PRO_NAR_ALEKHINE_LESSON,
+  [PRO_NAR_KIA_LESSON.openingId]: PRO_NAR_KIA_LESSON,
+  [PRO_NAR_ROSSOLIMO_LESSON.openingId]: PRO_NAR_ROSSOLIMO_LESSON,
+  [PRO_NAR_JOBAVA_LESSON.openingId]: PRO_NAR_JOBAVA_LESSON,
+  [PRO_NAR_RUY_LESSON.openingId]: PRO_NAR_RUY_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {

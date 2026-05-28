@@ -56,6 +56,13 @@
     "pro-chesswithakeem-caro-kann": "caro-kann",
     "pro-samayraina-italian": "italian-game",
     "pro-samayraina-najdorf": "sicilian-najdorf",
-    "pro-samayraina-nimzo": "nimzo-indian"
+    "pro-samayraina-nimzo": "nimzo-indian",
+    "pro-naroditsky-alapin": "sicilian-alapin",
+    "pro-naroditsky-najdorf": "sicilian-najdorf",
+    "pro-naroditsky-kid": "kings-indian-defence",
+    "pro-naroditsky-alekhine": "alekhine-defence",
+    "pro-naroditsky-kia": "kings-indian-attack",
+    "pro-naroditsky-jobava-london": "london-system",
+    "pro-naroditsky-ruy-lopez": "ruy-lopez"
   }
 }
