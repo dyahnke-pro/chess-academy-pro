@@ -4742,9 +4742,9 @@
     {
       "id": "pro-gothamchess-mengarini",
       "color": "white",
-      "name": "Sicilian Defense: Mengarini Variation",
+      "name": "Sicilian: Mengarini Wing Gambit (2.a3 + b4!)",
       "player": "gothamchess",
-      "pgn": "e4 c5 a3 g6 Nc3 Bg7 Bc4 Nc6 d3 Nf6 Ba2 d6 h4 Bg4 f3 Bd7 g4 h5 g5 Nh7 f4 Bg4",
+      "pgn": "e4 c5 a3 Nc6 b4 cxb4 axb4 Nxb4 c3 Nc6 d4 d5 exd5 Qxd5 Na3 Nf6 Nb5 Qd8 d5 Ne5 Bf4 Nfd7",
       "provenance": "plays",
       "provenanceRef": {
         "games": 488,
@@ -4753,7 +4753,18 @@
       "sources": [
         "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation"
       ],
-      "variations": []
+      "variations": [
+        {
+          "name": "vs 2...g6 Hyper-Accelerated",
+          "pgn": "e4 c5 a3 g6 Nc3 Bg7 Bc4 Nc6 d3 Nf6 Ba2 e6 h4 Bg4 f3 Bd7 g4 h5",
+          "explanation": "When Black avoids the b4 gambit by playing the Hyper-Accelerated ...g6, Gotham retreats Bc4-Ba2 (still aimed at f7) and storms the kingside with h4/f3/g4 instead.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 145,
+            "source": "his game dump"
+          }
+        }
+      ]
     },
     {
       "id": "pro-gothamchess-vienna",
