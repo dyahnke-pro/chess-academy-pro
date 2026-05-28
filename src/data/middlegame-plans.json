@@ -32646,5 +32646,78 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pronaroditskysemislav-e5break",
+    "openingId": "pro-naroditsky-semi-slav",
+    "criticalPositionFen": "r1b1k2r/pp1n1pb1/2p1pqpp/8/2BP4/2N1PN2/PP3PPP/R2Q1RK1 w kq - 2 11",
+    "title": "Semi-Slav Moscow: the ...e5 break and ...Bg4 pin",
+    "overview": "After the Moscow exchange on f6, Black emerges with the bishop pair and a flexible structure. The plan: complete the kingside fianchetto, break with ...e5 to challenge White's centre, redeploy the d7-knight to b6 hitting the c4-bishop, then activate the light bishop with ...Bg4 — pinning the f3-knight and creating concrete piece play.",
+    "pawnBreaks": [
+      {
+        "move": "...e5",
+        "explanation": "Black's central break: hits d4, frees the g7-bishop's long diagonal, and claims a share of the centre.",
+        "fen": "r1b1k2r/pp1n1pb1/2p1pqpp/8/2BP4/2N1PN2/PP3PPP/R2Q1RK1 w kq - 2 11"
+      }
+    ],
+    "pieceManeuvers": [
+      "Nd7-b6 — redeploy the knight to b6 hitting the c4-bishop and eyeing the d5-pawn.",
+      "Bc8-g4 — develop the light bishop with a pin on the f3-knight, the engine of White defence."
+    ],
+    "strategicThemes": [
+      "Use the bishop pair from the Moscow exchange to dominate long diagonals.",
+      "Break with ...e5 to challenge White's centre and unleash the g7-bishop.",
+      "Pin and trade White's f3-knight to weaken his central grip."
+    ],
+    "endgameTransitions": [
+      "If pieces trade off, the bishop pair and sound structure leave Black a comfortable endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1k2r/pp1n1pb1/2p1pqpp/8/2BP4/2N1PN2/PP3PPP/R2Q1RK1 w kq - 2 11",
+        "title": "The ...e5 break and ...Bg4 pin",
+        "moves": [
+          "e4",
+          "e5",
+          "d5",
+          "Nb6",
+          "Bb3",
+          "Bg4",
+          "Rc1",
+          "O-O",
+          "h3",
+          "Bxf3"
+        ],
+        "annotations": [
+          "e4 — White claims the centre, daring Black to challenge it.",
+          "...e5 — the central break. Black hits d4 and frees the g7-bishop along the long diagonal.",
+          "d5 — White locks the centre rather than trade pawns, conceding the dark squares to Black.",
+          "...Nb6 — the d7-knight redeploys, attacking the c4-bishop and eyeing the d5-pawn and the c4-square.",
+          "Bb3 — the bishop slides one square back, keeping its aim at f7 and avoiding the trade.",
+          "...Bg4 — the light bishop comes out with a pin, fixing the f3-knight against the queen.",
+          "Rc1 — White centralises a rook on the half-open c-file.",
+          "...O-O — Black tucks the king to safety, ready to swing rooks to the centre.",
+          "h3 — White questions the pinning bishop, asking it to commit.",
+          "...Bxf3 — Black trades the light bishop for the f3-knight, weakening White central grip; the dark squares belong to the g7-bishop and the structure favours Black slow build."
+        ],
+        "learnCues": [
+          "e4 — claim the centre",
+          "...e5 — strike back, free the g7-bishop",
+          "d5 — White locks the centre",
+          "...Nb6 — hit the bishop, eye c4",
+          "Bb3 — sidestep, keep aim at f7",
+          "...Bg4 — pin the f3-knight",
+          "Rc1 — claim the c-file",
+          "...O-O — king to safety",
+          "h3 — question the bishop",
+          "...Bxf3 — break the pin, take the knight"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Semi-Slav_Defense"
+        ]
+      }
+    ]
   }
 ]
