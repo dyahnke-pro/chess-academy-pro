@@ -170,6 +170,56 @@ try {
     rec('rebuilt overview renders ("Naroditsky has actually played")', /Naroditsky has actually played/.test(detailBody) ? 'PASS' : 'FAIL');
     rec('key idea about c6-pawn renders', /c6-pawn|wedge/.test(detailBody) ? 'PASS' : 'FAIL');
     rec('variation tabs render (Advance / Two Knights / Exchange / Classical / Fantasy)', /Advance|Two Knights|Exchange|Classical|Fantasy/i.test(detailBody) ? 'PASS' : 'FAIL');
+
+    // Track TTS network activity — Polly streamed audio hits /api/tts.
+    // Also track Web Speech utterance starts (the fallback path).
+    let ttsRequests = 0;
+    page.on('request', (r) => { if (/\/api\/tts/.test(r.url())) ttsRequests++; });
+
+    // Dismiss any open page-help-modal (auto-opens on first visit per
+    // CLAUDE.md; otherwise blocks every interaction below).
+    const helpModal = page.locator('[data-testid="page-help-modal"]');
+    if (await helpModal.count() > 0) {
+      console.log('\n  dismissing page-help-modal');
+      // Click outside the modal or press Escape
+      await page.keyboard.press('Escape').catch(() => null);
+      await helpModal.waitFor({ state: 'detached', timeout: 5000 }).catch(async () => {
+        // Try clicking the modal backdrop (the outer div)
+        await page.locator('[data-testid="page-help-modal"]').click({ position: { x: 10, y: 10 }, force: true });
+        await helpModal.waitFor({ state: 'detached', timeout: 5000 }).catch(() => null);
+      });
+      console.log('   help modal dismissed');
+    }
+
+    // Find + click the Watch button to launch the LessonPlayer
+    console.log('\n  looking for Watch / Learn buttons');
+    const watchBtnSelectors = [
+      'button:has-text("Watch")',
+      '[data-testid*="watch"]',
+      'button:has-text("Listen")',
+    ];
+    let watchClicked = false;
+    for (const sel of watchBtnSelectors) {
+      const el = page.locator(sel).first();
+      if (await el.count() > 0 && await el.isVisible()) {
+        await el.click().catch((e) => { console.log('   click error:', e.message); });
+        watchClicked = true;
+        console.log(`   clicked via "${sel}"`);
+        break;
+      }
+    }
+    rec('Watch button found + clicked', watchClicked ? 'PASS' : 'FAIL');
+
+    if (watchClicked) {
+      console.log('  waiting 12s for narration to fire');
+      await page.waitForTimeout(12_000);
+      rec('TTS network requests fired (/api/tts streaming)', ttsRequests > 0 ? 'PASS' : 'FAIL', `${ttsRequests} requests`);
+      // Filter listener captures for voice-related events
+      const allListenerEvents = listener.getCapturedEvents();
+      const voiceCaptured = allListenerEvents.filter((e) => /voice|speak|narration|tts/i.test(e.kind || ''));
+      rec('voice/narration audit events captured', voiceCaptured.length > 0 ? 'PASS' : 'FAIL', `${voiceCaptured.length} voice events`);
+      for (const v of voiceCaptured.slice(0, 6)) console.log(`     ${v.kind} | ${(v.summary || '').slice(0, 90)} | source=${v.source || ''}`);
+    }
   } else {
     rec('Caro-Kann card clickable', 'FAIL', 'no card heading found');
   }
