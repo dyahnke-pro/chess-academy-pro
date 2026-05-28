@@ -3,7 +3,7 @@ import { Chess, type Square } from 'chess.js';
 import { RUY_TRAP_LESSONS, RUY_TRAP_DEFS, getRuyTrapPlayableLine } from './ruyTrapLessons';
 import { buildLessonReferenceBlock } from './index';
 import { ALL_LESSONS, expectedOrientation } from './registry';
-import { maxAnchorPly, longestAnchorPly, MIN_DB_ANCHOR_PLY } from '../../utils/dbAnchor';
+import { maxAnchorPly, longestAnchorPly, proIdFromOpeningId, MIN_DB_ANCHOR_PLY } from '../../utils/dbAnchor';
 
 // Universal masterclass-lesson integrity gate. Sweeps the WHOLE lesson
 // registry (ALL_LESSONS) — main + variation + trap, every opening — so a
@@ -95,11 +95,14 @@ describe('masterclass integrity — legal moves + valid arrows (all lessons)', (
 describe('masterclass G3 — every lesson anchors a real DB opening line', () => {
   for (const { scope, key, lesson } of ALL_LESSONS) {
     it(`[${scope}] ${key}: spine anchors ≥ ${MIN_DB_ANCHOR_PLY} plies in openings-lichess.json`, () => {
-      const anchor = maxAnchorPly(lesson.beats.map((b) => b.moves));
+      // Pro lessons anchor on the pro's own game dump too — his real games ARE
+      // the database for his tab (David 2026-05-28, LOCKED rule).
+      const proId = proIdFromOpeningId(lesson.openingId) ?? undefined;
+      const anchor = maxAnchorPly(lesson.beats.map((b) => b.moves), proId);
       expect(
         anchor,
-        `${key}: deepest DB anchor is only ${anchor} plies — no beat's opening spine matches a real line in openings-lichess.json. ` +
-          `Either the line is invented (G3 violation — remove it) or it's a real sub-line the DB lacks (then it doesn't exist for us).`,
+        `${key}: deepest DB anchor is only ${anchor} plies — no beat's opening spine matches a real line in openings-lichess.json / masters DB / the pro's own game dump. ` +
+          `Either the line is invented (G3 violation — remove it) or it's a real sub-line none of our DBs cover.`,
       ).toBeGreaterThanOrEqual(MIN_DB_ANCHOR_PLY);
     });
   }

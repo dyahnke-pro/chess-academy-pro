@@ -17,6 +17,8 @@
 import { Chess } from 'chess.js';
 import openingsDb from '../data/openings-lichess.json';
 import mastersDb from '../../public/data/openings-masters-db.json';
+import gothamAnchor from '../data/pro-game-anchors/gothamchess.json';
+import naroditskyAnchor from '../data/pro-game-anchors/naroditsky.json';
 
 let prefixSet: Set<string> | null = null;
 
@@ -51,6 +53,42 @@ export function longestMastersAnchorPly(sans: string[]): number {
     else break;
   }
   return count;
+}
+
+// ── PRO'S OWN GAMES as the grounding source for HIS tab (David 2026-05-28) ──
+// "Use his real games. That's the database." LOCKED RULE — the pro's
+// harvested game dump (via scripts/build-pro-anchor-index.mjs) is the
+// authoritative grounding source for any opening built around HIM. A line
+// anchors when each ply's position was one he reached AND the move played
+// was one he actually played in ≥2 of his games. Sits alongside lichess +
+// masters as a third (and PRIMARY for pro openings) anchor source.
+const PRO_ANCHORS: Record<string, Record<string, string[]>> = {
+  gothamchess: (gothamAnchor as { positions: Record<string, string[]> }).positions,
+  naroditsky: (naroditskyAnchor as { positions: Record<string, string[]> }).positions,
+};
+
+/** Longest run of opening plies where each move is one the named pro
+ *  actually played from that exact position in his harvested game dump. */
+export function longestProGameAnchorPly(sans: string[], proId: string): number {
+  const anchor = PRO_ANCHORS[proId];
+  if (!anchor) return 0;
+  const c = new Chess();
+  let count = 0;
+  for (const san of sans) {
+    const key = positionKey(c.fen());
+    let mv;
+    try { mv = c.move(san); } catch { break; }
+    const moves = anchor[key];
+    if (moves && moves.includes(mv.san)) count += 1;
+    else break;
+  }
+  return count;
+}
+
+/** Extract `proId` from a `pro-<proId>-<rest>` opening id, else null. */
+export function proIdFromOpeningId(openingId: string): string | null {
+  const m = openingId.match(/^pro-([a-z]+)-/);
+  return m ? m[1] : null;
 }
 
 /** Lazily build the set of every move-prefix present in the canonical DB. */
@@ -98,11 +136,16 @@ export function longestAnchorPly(sans: string[]): number {
 /** The deepest DB anchor any single beat of a lesson reaches. A lesson is
  *  grounded if SOME beat's spine is real theory ≥ the floor — trap-branch
  *  beats that show a "what if they blunder" tail don't drag the score
- *  down, because a sibling beat carries the real line. */
-export function maxAnchorPly(beatMoveLists: string[][]): number {
+ *  down, because a sibling beat carries the real line.
+ *
+ *  When `proId` is passed (e.g. derived from a `pro-<proId>-<opening>` id),
+ *  the pro's own game dump joins lichess + masters as a grounding source —
+ *  per David's LOCKED rule: "Use his real games. That's the database." */
+export function maxAnchorPly(beatMoveLists: string[][], proId?: string): number {
   let max = 0;
   for (const moves of beatMoveLists) {
-    const a = Math.max(longestAnchorPly(moves), longestMastersAnchorPly(moves));
+    let a = Math.max(longestAnchorPly(moves), longestMastersAnchorPly(moves));
+    if (proId) a = Math.max(a, longestProGameAnchorPly(moves, proId));
     if (a > max) max = a;
   }
   return max;
