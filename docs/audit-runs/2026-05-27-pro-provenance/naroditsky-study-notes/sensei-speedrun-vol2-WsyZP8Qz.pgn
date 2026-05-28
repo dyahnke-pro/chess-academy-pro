@@ -1,0 +1,724 @@
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Budapest Gambit Declined | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A51"]
+[Opening "Indian Defense: Budapest Defense"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Budapest Gambit Declined | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/vICVUqF1"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.08.25"]
+[UTCTime "08:53:00"]
+
+1. d4 Nf6 2. c4 e5 3. e3 Nc6 4. d5 Ne7 5. Nc3 Ng6 6. Bd3 Bc5 7. Nf3 d6 8. a3 a6 9. b4 Ba7 10. O-O O-O 11. Qc2 Re8 12. Nd2 Ng4 13. h3 Nh6 14. Nb3 Qh4 15. c5 f5 16. Qe2 e4 17. Bc2 Ne5 18. Bb2 Rf8 19. Nd4 dxc5 20. Ne6 Bxe6 21. dxe6 c6 (21... c4 22. Nd5 Nd3 23. Bxd3 cxd3 24. Qe1) 22. Bb3 (22. Nxe4 fxe4 23. Bxe5) 22... Kh8 23. Na4 Nf3+ 24. gxf3 Qxh3 25. Be5 (25. f4 Rf6 26. Bxf6 gxf6 27. e7 c4 28. Bxc4 Ng4 29. f3 Bxe3+) 25... exf3 26. Qc4 Qg2# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): French; Steinitz Variation | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.08.26"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C02"]
+[Opening "French Defense: Advance Variation, Nimzowitsch System"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "French; Steinitz Variation | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/ZOwToce5"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.08.26"]
+[UTCTime "10:11:42"]
+
+1. e4 e6 2. d4 d5 3. e5 c5 4. Nf3 Bd7 5. Bd3 Nc6 (5... c4 6. Be2 Nc6 7. O-O Nge7) 6. O-O cxd4 7. Bf4 (7. Re1) 7... Qb6 8. Nbd2 Nb4 9. Nb3 Nxd3 10. cxd3 Rc8 11. Rc1 Ne7 12. Nfxd4 Nc6 13. Be3 { [%cal Gf2f4,Gf4f5] } 13... Qa6 (13... Nxe5 14. Nc6 Qc7 15. Nxa7) 14. Nxc6 Bxc6 15. Nd4 Qxa2 16. Qe2 Qa5 17. f4 Bb4 (17... Bc5 18. Rxc5 Qxc5 19. Nxe6 Qa5 20. Nxg7+ Kf8 21. Nf5) 18. f5 O-O 19. fxe6 fxe6 20. Nxe6 Rxf1+ 21. Rxf1 Bd7 22. Nxg7 Kxg7 23. e6 Bxe6 24. Bd4+ Kg8 (24... Kh6 25. Qxe6+ Kh5 26. Rf5+ Kg4 27. h3+ Kg3 28. Bf2#) 25. Qxe6# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Scotch Gambit (AMAZING Game) | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.08.27"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C44"]
+[Opening "Scotch Game: Scotch Gambit, Advance Variation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Scotch Gambit (AMAZING Game) | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/Gfjp3uSD"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.08.27"]
+[UTCTime "02:41:27"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d4 exd4 5. e5 d5 6. Bb5 Nd7 7. O-O (7. Bxc6 bxc6 8. Nxd4 Nb8) 7... Be7 8. Nbd2 O-O 9. Re1 f6 10. Bxc6 bxc6 11. e6 Ne5 12. Nxd4 (12. Nxe5 fxe5 13. Rxe5 Bd6 14. Re1 Qh4) 12... c5 13. Nf5 g6 (13... Bxe6 14. Nxe7+ Qxe7 15. f4 Bg4 16. Qxg4 Nf3+ 17. Nxf3) 14. Nh6+ Kg7 15. Nf3 Nc6 (15... Bd6 16. Nxe5 fxe5 17. Qxd5) (15... Qd6 16. Bf4) 16. Nf7 Rxf7 17. exf7 Kxf7 18. Bf4 d4 19. c3 Qd5 20. cxd4 cxd4 21. Rc1 Bb7 22. Qb3 (22. Bxc7) 22... Qxb3 23. axb3 Rd8 24. Rc4 g5 25. Bxc7 Rd7 26. Bg3 d3 27. Rd1 Nb4 28. Rc7 Rxc7 29. Bxc7 Bd5 30. Nd2 Bc5 31. Nc4 Ke6 32. Ba5 Be4 33. Kf1 Nc2 34. Bc3 Bg6 35. Nd2 g4 36. h3 g3 37. b4 Bxf2 38. Nc4 Be4 39. b3 f5 40. Bd2 Kd5 41. b5 Kd4 42. Nd6 Be3 43. Ba5 Bf4 44. Nc4 Bd5 45. b6 axb6 46. Bxb6+ Kc3 47. Ba5+ Kxb3 48. Nd2+ Ka4 49. Bb6 Be3 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): WHY!? YOU'RE CHEATING?!?? | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.08.28"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D35"]
+[Opening "Queen's Gambit Declined: Exchange Variation, Positional Variation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "WHY!? YOU'RE CHEATING?!?? | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/pBeinuIY"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.08.28"]
+[UTCTime "06:23:57"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. cxd5 exd5 5. Bg5 c6 6. e3 Be7 7. Qc2 O-O 8. Bd3 Nbd7 9. Nge2 Re8 10. O-O Nf8 11. Rae1 h6 12. Bh4 Ne6 13. f3 b6 14. Bg3 Bb7 15. Rc1 c5 16. Be5 Nd7 17. Rcd1 Nxe5 18. dxe5 Qc7 19. Bh7+ Kh8 20. Nxd5 Qxe5 21. f4 Qb8 22. Be4 Bf8 23. Ng3 b5 24. Nc3 c4 25. Rd7 Bxe4 26. Ngxe4 Re7 27. Rxe7 Bxe7 28. f5 Ng5 29. f6 Bxf6 30. Nxf6 gxf6 31. h4 Nh7 32. Qe4 Qe8 33. Qxe8+ Rxe8 34. Nxb5 a6 35. Nd6 Rxe3 36. Rc1 Re2 37. Rxc4 Nf8 38. Rc7 Rxb2 39. Nxf7+ Kg7 40. Ne5+ Kh8 41. Ng4 Rxa2 42. Rf7 Nh7 43. Nxh6 Ra4 44. g3 Ra2 45. Ra7 a5 46. Nf7+ Kg8 47. Kf1 a4 48. Nh6+ Kh8 49. Nf5 Nf8 50. Ne3 a3 51. Ng4 Nh7 52. Ke1 Ra1+ 53. Kf2 f5 54. Ne3 a2 55. Ra8+ Kg7 56. Nxf5+ Kf7 57. Ne3 Nf6 58. Nc2 Ne4+ 59. Kf3 Rc1 60. Rxa2 Nf6 61. Ne3 Rc7 62. g4 Nd7 63. g5 Ne5+ 64. Ke4 Ng6 65. h5 Re7+ 66. Kd4 Rd7+ 67. Kc5 Ne5 68. Ra6 Nd3+ 69. Kb5 Re7 70. g6+ Ke8 71. Ra8+ Kd7 72. g7 Rxg7 73. Ra7+ Ke6 74. Rxg7 Ne5 75. h6 Kf6 76. Ng4+ Nxg4 77. Rxg4 Kf5 78. Rg1 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Philidor Defence | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.08.29"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C46"]
+[Opening "Three Knights Opening"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Philidor Defence | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/nvjhhqUi"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.08.29"]
+[UTCTime "01:35:12"]
+
+1. e4 e5 2. Nf3 Nc6 3. Nc3 d6 4. d4 exd4 5. Nxd4 Nxd4 6. Qxd4 Qf6 7. Qe3 c6 8. Bd2 Be6 9. O-O-O b6 10. Ba6 Bc8 11. Bb5 Bb7 (11... cxb5 12. Nxb5 Qd8 13. Bb4) 12. Nd5 Qd8 13. e5 dxe5 14. Qxe5+ Ne7 15. Bg5 f6 16. Nc7+ (16. Qe6 cxb5 (16... fxg5) 17. Nxf6+ gxf6 18. Rxd8+ Rxd8) 16... Qxc7 17. Qxc7 cxb5 18. Qxb7 Rc8 19. Rhe1 fxg5 20. Qxc8+ *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Owen's Defense + Ruy Lopez (Morphy Defense) | The Sensei Speedrun - G1"]
+[Date "2024.08.30"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B00"]
+[Opening "Owen Defense"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Owen's Defense + Ruy Lopez (Morphy Defense) | The Sensei Speedrun - G1"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/SZ7Fiiyd"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.08.30"]
+[UTCTime "07:32:33"]
+
+1. e4 b6 2. d4 Bb7 3. Nc3 e6 4. Bd3 Bb4 5. Ne2 Nf6 (5... d5 6. e5 Bf8 7. Nb1 c5 8. c3) 6. a3 Bxc3+ (6... Be7) 7. Nxc3 O-O 8. Bg5 d6 9. e5 dxe5 10. dxe5 Bxg2 (10... h6 11. exf6 (11. Bh4 g5 12. exf6 gxh4 13. Qg4+ Kh8 14. Qg7#) 11... hxg5 12. Qh5 g6 13. Bxg6 fxg6 14. Qxg6+ Kh8 15. Qg7#) 11. Rg1 h6 12. Bxf6 gxf6 13. Rxg2+ Kh8 14. Qh5 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Owen's Defense + Ruy Lopez (Morphy Defense) | The Sensei Speedrun - G2"]
+[Date "2024.08.30"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C89"]
+[Opening "Ruy Lopez: Marshall Attack, Modern Main Line"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Owen's Defense + Ruy Lopez (Morphy Defense) | The Sensei Speedrun - G2"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/MoBY5PrL"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.08.30"]
+[UTCTime "07:45:59"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 O-O 8. c3 d5 9. exd5 Nxd5 10. Nxe5 Nxe5 11. Rxe5 c6 12. d4 Bd6 13. Re1 Qh4 14. g3 Qh3 15. Be3 (15. Re4 g5 16. Bxg5 Qf5) 15... Bf5 (15... Bg4 16. Qd3 Rae8 17. Nd2 Re6 18. a4) 16. Qe2 Rae8 17. Qf1 Qh5 18. Nd2 g5 19. a4 Nf4 20. Bxf4 gxf4 21. Rxe8 Rxe8 22. Re1 Rd8 23. axb5 axb5 24. Bd1 Qg6 25. Bf3 c5 26. Qxb5 fxg3 27. Re8+ (27. hxg3 cxd4 28. cxd4 Bxg3 29. fxg3 Qxg3+ 30. Kf1) 27... Kg7 28. fxg3 Bd7 29. Bc6 Bxe8 30. Bxe8 Qe6 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Budapest Gambit | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.08.31"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A51"]
+[Opening "Indian Defense: Budapest Defense"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Budapest Gambit | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/wCa9UmR1"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.08.31"]
+[UTCTime "08:09:35"]
+
+1. d4 Nf6 2. c4 e5 3. d5 Bc5 4. Nc3 d6 5. e4 (5. Bg5 Bxf2+) 5... Ng4 6. Nh3 O-O 7. Qf3 (7. f3 Ne3 8. Bxe3 Bxe3) 7... f5 8. Be3 fxe4 9. Qxe4 Nxe3 (9... Bxe3 10. fxe3 Na6 11. O-O-O Nc5 12. Qb1 Nxe3 13. Re1 Bxh3 14. gxh3 Qg5) 10. fxe3 Bf5 11. Qf3 Nd7 12. O-O-O Bc2 13. Qg3 Bxd1 14. Kxd1 Qf6 15. Bd3 e4 16. Bxe4 Ne5 17. Ng5 Nxc4 18. Bxh7+ Kh8 19. Qh4 Nxe3+ 20. Ke2 Qh6 21. Qg3 Rae8 22. Kd3 Nf1 23. Qg4 Re3+ 24. Kc2 Rf2+ 25. Kb3 Nd2+ 26. Ka4 Re8 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.09.02"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B21"]
+[Opening "Sicilian Defense: Smith-Morra Gambit Accepted, Morphy Defense"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/AGnMVrO8"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.02"]
+[UTCTime "04:15:28"]
+
+1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 Nc6 5. Nf3 e6 6. Bc4 Bc5 7. O-O a6 { [%csl Gd6] } 8. Bf4 Nge7 9. e5 O-O 10. Ne4 Ba7 11. Qd2 Ng6 12. Bg3 b5 13. Bb3 Qb6 14. Rad1 Bb8 15. Qg5 h6 16. Qh5 Bc7 17. Bc2 Qb8 18. Nf6+ Kh8 19. Bxg6 fxg6 20. Qxg6 gxf6 21. Qxh6+ Kg8 22. Qg6+ Kh8 23. exf6 Bxg3 24. Qg7# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.09.03"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B21"]
+[Opening "Sicilian Defense: Smith-Morra Gambit Accepted"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/vokZEAI3"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.03"]
+[UTCTime "06:24:05"]
+
+1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 Nc6 5. Nf3 e6 6. Bc4 Nge7 7. O-O (7. Nb5 d5 8. Bf4 Ng6 9. Nc7+ Ke7) 7... Ng6 8. Nd5 exd5 9. exd5 Na5 (9... Nce5 10. Nxe5 Nxe5 11. d6 Nxc4 12. Re1+ Be7 13. Rxe7+ Kf8 14. Bg5 (14. Qd5?? Nxd6 15. Qxd6 Qxe7)) 10. Bb5 (10. Re1+ Be7 11. d6 Nxc4 12. dxe7 Qc7 (12... Nxe7 13. Qd4 O-O 14. Qxc4 d5) 13. b3 Nb6 14. Nd4 Nxe7 15. Ba3) 10... a6 11. Re1+ Be7 12. d6 axb5 13. Nh4 Nc6 14. dxe7 Ncxe7 15. Bg5 f6 16. Nf5 fxg5 (16... O-O 17. Nxe7+ Nxe7 18. Be3) 17. Nd6+ Kf8 18. Qb3 Qe8 19. Nxe8 Kxe8 20. Qxb5 Rf8 21. Qxg5 Rf5 22. Qxf5 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Four Knights Scotch | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.09.07"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C48"]
+[Opening "Four Knights Game: Spanish Variation, Rubinstein Variation Accepted"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Four Knights Scotch | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/ZxJgoFKz"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.07"]
+[UTCTime "13:04:17"]
+
+1. e4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. Bb5 Nd4 5. Nxd4 (5. Ba4 Bc5 6. Nxe5 O-O 7. Nd3 Bb6) 5... exd4 6. e5 dxc3 7. exf6 Qxf6 8. dxc3 Bc5 9. O-O O-O 10. a4 (10. Bxd7 Rd8 (10... Bxd7 11. Qxd7 Rae8 12. Be3 Bxe3 13. fxe3 Qb6) 11. Qh5 Bxd7 12. Qxc5 Bc6) (10. Qh5 d6 11. Qg5 Qxg5 12. Bxg5) 10... c6 11. Bd3 d5 12. b4 Bxb4 13. Bg5 Qxg5 14. cxb4 Bf5 15. f4 Qf6 16. Bxf5 Qxf5 17. Qd3 Qf6 18. b5 Rfe8 19. g3 Re4 20. Rfe1 Rae8 21. Qd2 g6 22. Rab1 Qe7 23. Rxe4 Qxe4 24. bxc6 bxc6 25. a5 d4 26. a6 (26. Rb7 c5 27. Rxa7 Qf3 28. Rc7 (28. Qg2) 28... Re2) 26... c5 27. Rb7 c4 28. Rd7 (28. Rxa7 Qf3 (28... c3 29. Qf2 d3 30. cxd3 Qxd3 31. Rc7 Qd1+ 32. Kg2 Re2 33. a7 Qd5+ 34. Kg1 Rxf2 35. Kxf2 Qa2+ 36. Ke3 c2) 29. Rd7 Re2 30. Qxe2 Qxe2 31. a7 Qe8 32. Rb7 Qe1+ 33. Kg2 Qe4+) 28... c3 29. Qxd4 Qxc2 30. Rd8 Rxd8 31. Qxd8+ Kg7 32. Qd4+ Kh6 33. Qxa7 (33. Qe3 Qd1+ 34. Kf2 Qd2+ 35. Qxd2 cxd2 36. Ke2 Kh5 (36... g5 37. fxg5+ Kxg5 38. Kxd2 Kg4 39. Kd3 Kh3 40. Kd4 Kxh2 41. Kd5 Kxg3 42. Kc6 h5 43. Kb7 h4 44. Kxa7 h3 45. Kb8 h2 46. a7 h1=Q 47. a8=Q Qxa8+) 37. h3) 33... Qd1+ 34. Kg2 c2 35. Qxf7 c1=Q 36. Kh3 Qh5+ 37. Kg2 Qd2+ *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.09.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B21"]
+[Opening "Sicilian Defense: Smith-Morra Gambit Accepted, Paulsen Formation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/FwOQP4IA"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.08"]
+[UTCTime "13:29:40"]
+
+1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 Nc6 5. Nf3 e6 6. Bc4 a6 7. O-O b5 8. Bb3 Bb7 9. Nd5 Nge7 (9... Na5 10. Bg5 (10. Bf4 exd5) 10... Be7 11. Nxe7 Nxe7 12. Qd6 Nxb3 13. axb3 f6) (9... exd5 10. exd5 Na5 11. Re1+ Be7 12. d6 Nxb3 13. Qxb3) 10. Bg5 (10. Be3 exd5 11. exd5 Na5 12. d6 Nxb3 13. axb3 Nf5 14. Re1) 10... h6 11. Bh4 g5 (11... d6 12. Rc1 (12. Re1 exd5 13. exd5 Na5 14. Nd4 g5 15. Bg3 Qd7 16. Bc2 O-O-O 17. a4 b4 18. Qd2 Bg7 19. Qxb4 Nxd5 20. Qxa5 Bxd4) 12... Rc8 13. Re1 exd5 14. exd5 Ne5 15. Nxe5 dxe5 16. Rxe5 Rxc1 17. Qxc1) 12. Nf6# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): French Defense: Advance, Steinitz | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.09.12"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C02"]
+[Opening "French Defense: Advance Variation, Nimzowitsch System"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "French Defense: Advance, Steinitz | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/7sHXgv74"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.12"]
+[UTCTime "07:35:57"]
+
+1. e4 e6 2. d4 d5 3. e5 c5 4. Nf3 Qb6 5. Bd3 Nc6 6. dxc5 Bxc5 7. O-O Nge7 8. Nc3 Qc7 9. Nb5 Qb6 10. Nd6+ Bxd6 11. exd6 Ng6 12. Re1 Nb4 13. Bxg6 hxg6 14. Bf4 O-O 15. Ng5 Bd7 16. Re3 (16. Qg4 f6 17. Nxe6 Rfe8 18. Qxg6 Bxe6 19. Bh6) (16. Qf3 e5 17. Bxe5 f6) (16. h4 Rae8 17. h5 Nc6 18. hxg6 fxg6 19. Qg4) 16... Rac8 (16... Rae8 17. Qg4 (17. Rb3) 17... f6 18. Nxe6 Nxc2) 17. Qg4 f6 18. Nxe6 Nxc2 (18... Rfe8 19. Qxg6 Bxe6 20. Bh6) (18... g5 19. Qf5 Rfe8 20. Rae1 gxf4 21. Qg6 Bxe6 22. Rxe6 Rxe6 23. Rxe6 Nc6 24. d7 Rf8 25. Re8 Qc5 26. h4 Ne5 27. Rxf8+ Qxf8 28. Qe8 Nxd7 29. Qxd7) 19. Qxg6 Nxa1 (19... Bxe6 20. Rxe6 Nxa1 21. Re7 Qxf2+ 22. Kxf2) 20. Qxg7# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Sicilian Defense | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.09.13"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B30"]
+[Opening "Sicilian Defense: Old Sicilian"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Sicilian Defense | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/S8z21ris"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.13"]
+[UTCTime "07:51:19"]
+
+1. e4 c5 2. Nf3 Nc6 3. c3 d5 4. e5 (4. exd5 Qxd5 5. d4 cxd4 6. cxd4 e5 7. dxe5 (7. Nc3 Bb4 8. Bd2 Bxc3 9. Bxc3 e4 10. Ne5 Nxe5 11. dxe5 Ne7) 7... Qxd1+ 8. Kxd1 Bg4) 4... Bg4 5. Bb5 Qc7 6. Bxc6+ Qxc6 7. d4 e6 8. Be3 Ne7 9. O-O Nf5 10. Nbd2 Be7 11. h3 Bh5 12. Rc1 c4 13. b3 b5 (13... Ba3 14. Rb1 Nxe3 15. fxe3 Bg6 16. e4 dxe4 17. Nh4) 14. a4 bxa4 15. bxa4 O-O 16. Re1 Rab8 17. Nf1 Ba3 18. Ra1 (18. Rb1 Rxb1 19. Qxb1 Bxf3 20. gxf3 Qxa4) 18... Bb2 19. Ra2 Bxc3 20. Ree2 Bxf3 21. gxf3 Rb3 22. Ng3 Rfb8 23. Kg2 Nh4+ 24. Kh2 Rb1 25. Qc2 Bxd4 26. Ra3 (26. f4 Bxe3 27. fxe3 d4 28. exd4 Qg2+ 29. Rxg2 Nf3#) 26... Nxf3+ 27. Kg2 Nh4+ 28. Kh2 Bxe3 29. Rexe3 R8b2 30. Qxb2 Rxb2 31. Kg1 Rb1+ 32. Kh2 d4 33. Re4 g5 34. Ra2 c3 35. f3 c2 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Shutting DOWN The Stonewall Attack | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.09.16"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Canard Opening"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Shutting DOWN The Stonewall Attack | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/TqeL6EV3"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.16"]
+[UTCTime "13:25:07"]
+
+1. d4 Nf6 2. f4 { [%csl Gf4,Gd4] } 2... g6 3. e3 Bg7 4. Nf3 d6 5. Bd3 O-O 6. O-O Nc6 7. c3 e5 8. fxe5 dxe5 9. Nbd2 Re8 10. Qc2 b6 11. Ng5 Bb7 12. Nde4 Nxe4 13. Nxf7 (13. Nxe4) 13... Qh4 (13... Qe7 14. Bxe4) 14. Bxe4 (14. Qb3 Na5 (14... h6) 15. Nh6+ Kh8 16. Qg8+ Rxg8 17. Nf7#) 14... Nxd4 15. exd4 Qxe4 (15... Bxe4 16. Qb3) 16. Qf2 (16. Qxe4 Bxe4 17. Nxe5 Bxe5 18. dxe5 Rxe5 19. Bf4 Re7 20. Rae1) 16... Rf8 17. Bd2 Qd5 18. Nxe5 Rxf2 19. Rxf2 Rf8 20. Nf3 c5 21. dxc5 Qxc5 22. Re1 Bxf3 23. gxf3 Rxf3 24. Rf1 Rxf2 25. Rxf2 Be5 26. Kg2 Bxh2 27. b4 Qd6 28. Bh6 Qg3+ 29. Kf1 Qh3+ *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): When to Sac for Mate | Caro; Fantasy Variation | The Sensei Speedrun | GM Narodi"]
+[Date "2024.09.18"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Maróczy Variation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "When to Sac for Mate | Caro; Fantasy Variation | The Sensei Speedrun | GM Narodi"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/naI1wjEt"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.18"]
+[UTCTime "08:16:29"]
+
+1. e4 c6 2. d4 d5 3. f3 dxe4 (3... Qb6 4. Nc3 e5 5. dxe5 Bc5 6. Na4 Bf2+ 7. Ke2 Qd4 8. Qxd4 Bxd4) (3... e6 4. Nc3 Bb4) 4. fxe4 e5 5. Nf3 Bg4 6. Bc4 Nf6 (6... Nd7 7. O-O Ngf6 8. c3 Bd6 9. Qb3 O-O 10. Qxb7) 7. Bxf7+ Kxf7 8. Nxe5+ Kg8 9. Nxg4 Nbd7 10. Nc3 Bb4 11. O-O Qc7 12. e5 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Power of Qb6 In Caro Kann!! | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.09.18"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B10"]
+[Opening "Caro-Kann Defense"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Power of Qb6 In Caro Kann!! | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/qPVDdo3Y"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.18"]
+[UTCTime "08:43:21"]
+
+1. e4 c6 2. Nc3 d5 3. exd5 cxd5 4. d4 Nf6 5. Bg5 Nc6 6. Bb5 Bg4 7. f3 Bf5 8. Nge2 e6 9. Ng3 Bg6 10. O-O Be7 11. f4 h6 12. Bh4 Bh7 13. Bxf6 (13. f5 O-O 14. fxe6 g5) 13... Bxf6 14. f5 O-O 15. fxe6 fxe6 (15... Bxd4+ 16. Kh1 fxe6 17. Rxf8+ Qxf8 18. Bxc6 Bxc3 19. Bxb7 Bxb2 20. Rb1) 16. Nce2 Qb6 17. Bxc6 bxc6 18. c3 Qxb2 19. Qa4 Qb5 20. Qa3 (20. Qxb5 cxb5) 20... Bd3 21. Qd6 Rae8 22. Rfe1 Bg5 23. Rad1 Be3+ 24. Kh1 Bf2 25. Nh5 (25. Rf1 Bxe2) 25... Bxe2 26. Qe5 Bxh5 27. Qxh5 Bxe1 28. Rxe1 Qf1+ 29. Rxf1 Rxf1# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Same Color Bishop Endgame | 4 Knights Scotch | The Sensei Speedrun | GM Narodits"]
+[Date "2024.09.19"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C47"]
+[Opening "Four Knights Game: Scotch Variation Accepted"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Same Color Bishop Endgame | 4 Knights Scotch | The Sensei Speedrun | GM Narodits"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/hNMxt3fh"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.19"]
+[UTCTime "07:16:15"]
+
+1. e4 e5 2. Nc3 Nf6 3. Nf3 Nc6 4. d4 exd4 5. Nxd4 Bc5 6. Nxc6 (6. Be3) 6... bxc6 7. Bg5 (7. Bd3 d6) 7... O-O 8. Be2 h6 9. Bh4 d6 10. O-O Re8 11. Bf3 (11. Kh1 g5 12. Bg3 Nxe4 13. Nxe4 Rxe4 14. Bf3 Rd4) 11... g5 12. Bg3 g4 13. e5 gxf3 14. exf6 Qxf6 15. Qxf3 Qxf3 16. gxf3 Bf5 17. Ne4 Bxe4 18. fxe4 Rxe4 19. Rfe1 Rae8 20. Kf1 Kg7 21. Rxe4 Rxe4 22. Re1 Rxe1+ 23. Kxe1 Bd4 24. c3 Be5 25. Ke2 (25. f4 Bf6 26. Kf2 Kg6 27. Ke3 Kf5) 25... Bxg3 26. hxg3 Kf6 27. Kf3 (27. Ke3 Ke5 28. f4+ Kf5 29. Kf3 h5 30. Kf2 Kg4) 27... Ke5 28. Kg4 c5 29. Kh5 d5 30. f4+ Ke4 31. Kxh6 d4 32. cxd4 cxd4 33. Kg7 f5 34. Kg6 d3 35. g4 fxg4 36. f5 d2 37. f6 d1=Q 38. f7 Qd6+ 39. Kg7 Qe7 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Attacking F7 Early W/ Theory | QGA | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.09.23"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D20"]
+[Opening "Queen's Gambit Accepted: Central Variation, McDonnell Defense"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Attacking F7 Early W/ Theory | QGA | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/JgGDuWEO"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.23"]
+[UTCTime "07:48:59"]
+
+1. d4 d5 2. c4 dxc4 3. e4 (3. Nf3 Nf6 4. e3 e6 5. Bxc4 c5 6. O-O) (3. Nc3 e5!) 3... e5 4. Nf3 exd4 5. Bxc4 Bg4 6. Qb3 Be6 7. Bxe6 fxe6 8. Qxe6+ Be7 (8... Qe7 9. Qc8+ Qd8 10. Qxb7 Nd7 11. Nxd4) 9. Ne5 Nh6 (9... Qd6 10. Qf7+ Kd8 11. Qxg7 Qf6 12. Qxh8 Qxh8 13. Nf7+) 10. Bxh6 Rf8 11. Bxg7 Qd6 12. Qc8+ Bd8 13. Bxf8 Qxf8 14. Qxb7 Qc5 15. O-O Qxe5 16. Qxa8 c5 17. Nd2 Bc7 18. f4 Qh5 19. e5 Qe2 20. Ne4 Qe3+ 21. Kh1 d3 22. Nf6+ Kf8 23. Qd5 d2 24. Qg8+ Ke7 25. Nd5+ Kd7 26. Nxe3 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): The Risks of Queenside Castle | Scandinavian Defence | The Sensei Speedrun | GM"]
+[Date "2024.09.26"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B01"]
+[Opening "Scandinavian Defense: Main Line"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "The Risks of Queenside Castle | Scandinavian Defence | The Sensei Speedrun | GM"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/tLUKFqAx"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.26"]
+[UTCTime "06:45:14"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. g3 Nf6 5. Bg2 Bg4 6. Nge2 c6 7. h3 Bh5 8. O-O (8. b4 Qxb4 9. Rb1) 8... Nbd7 9. d3 O-O-O (9... e6 10. a3 Be7 11. Be3 O-O 12. b4 Qc7 13. b5 c5 14. a4) 10. b4 Qc7 (10... Qxb4 11. g4 Bg6 12. Rb1 Qa5 13. a4 e5 14. Bd2) 11. b5 c5 12. a4 b6 (12... e6 13. a5 Be7 14. b6 (14. a6 b6) 14... axb6 15. Nb5 Qb8 16. axb6) 13. a5 e6 14. Bf4 Bd6 (14... e5 15. Be3 Be7 (15... h6 16. g4 Bg6 17. f4 exf4 18. Nxf4) 16. g4 Bg6 17. g5 Ng8 18. Nd5) 15. Bxd6 Qxd6 16. axb6 Nxb6 17. Rxa7 Rd7 18. Ra6 Nfd5 19. Nxd5 exd5 20. g4 Bg6 21. Qa1 Rb7 22. Nc3 Rd8 23. Nxd5 Kb8 24. Nxb6 Qxb6 25. Rxb6 Rxb6 26. Qa8+ Kc7 27. Qa7+ *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Where's the Threat?! Calculate!! | King's Indian | The Sensei Speedrun | GM Naro"]
+[Date "2024.09.27"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "E61"]
+[Opening "King's Indian Defense"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Where's the Threat?! Calculate!! | King's Indian | The Sensei Speedrun | GM Naro"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/epwJlObL"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.27"]
+[UTCTime "09:42:08"]
+
+1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. Nf3 (4. e4 d6 5. f4 O-O 6. Nf3 c5 7. d5 e6) 4... O-O 5. Bf4 d6 6. e3 c5 (6... Nc6 7. d5 (7. Be2 Re8?! (7... Qe8) (7... Nd7 8. O-O e5 9. Bg3 f5) 8. O-O e5 9. dxe5 dxe5 10. Qxd8) 7... e5) 7. Be2 (7. dxc5 dxc5 8. Qxd8 (8. Be2 Nc6 9. O-O Be6) 8... Rxd8) 7... Nc6 8. O-O (8. d5 Na5 9. O-O a6 10. Nd2 b5 (10... Bd7 11. a4 e6) 11. cxb5 axb5 12. Bxb5 Ba6) 8... Bf5 9. a3 Ne4 10. Nxe4 Bxe4 11. Rc1 (11. d5 Na5 12. Nd2 Bf5 13. e4 Bd7 { [%cal Ga7a6,Gb7b5] }) 11... cxd4 12. exd4 Bxf3 13. Bxf3 Nxd4 14. b4 Nxf3+ 15. Qxf3 Qd7 16. Rfe1 (16. Rfd1 Rfd8) 16... Rac8 17. Qe4 (17. Qe3 e5) 17... Rfe8 18. Rc2 Qa4 19. Qd3 a5 20. bxa5 d5 21. Rec1 d4 22. Bd2 e5 23. Bb4 (23. Qe4 Qd7 24. Rb1) 23... e4 24. Qg3 d3 25. Ra2 Qb3 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): CRUSHING Bc4 with e6 | Sicilian: Grand Prix | The Sensei Speedrun | GM Naroditsk"]
+[Date "2024.09.28"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B20"]
+[Opening "Sicilian Defense: Bowdler Attack"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "CRUSHING Bc4 with e6 | Sicilian: Grand Prix | The Sensei Speedrun | GM Naroditsk"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/z2NfDRU2"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.28"]
+[UTCTime "13:41:40"]
+
+1. e4 c5 2. Bc4 Nc6 3. f4 e6 4. Nf3 (4. Nc3 a6) (4. e5 Nxe5 5. fxe5 Qh4+) 4... d5 5. exd5 exd5 6. Bb3 (6. Bb5 Bd6 7. O-O Ne7) 6... Nf6 7. O-O c4 8. Ba4 (8. Re1+ Be7 9. Ba4) 8... b5 9. Ne5 bxa4 10. Nxc6 Qb6+ 11. Nd4 Qxd4+ 12. Kh1 Ne4 13. Qf3 Bc5 14. h3 (14. Nc3 Bg4 15. Qxg4 Qg1+ 16. Rxg1 Nf2#) 14... h5 15. Nc3 Bg4 16. Qe3 Qxe3 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Four Pawns Attack | Alekhine's Defence | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.09.30"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B03"]
+[Opening "Alekhine Defense: Four Pawns Attack, Main Line"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Four Pawns Attack | Alekhine's Defence | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/lCvL1Bge"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.09.30"]
+[UTCTime "08:22:06"]
+
+1. e4 Nf6 2. e5 Nd5 3. d4 d6 4. c4 Nb6 5. f4 dxe5 6. fxe5 Nc6 7. Be3 Bf5 8. Nc3 e6 9. Nf3 Be7 10. Be2 O-O 11. O-O f6 12. exf6 Bxf6 13. Qd2 Bg4 (13... Qe7 14. Rad1 Rad8 15. Qc1 (15. Kh1 e5 (15... h6 16. h3 Rd7 17. Qc1) 16. d5 Nd4 17. Nxd4 exd4 18. Bxd4 Bg5 19. Qe1 Bc2 20. Ra1) 15... e5 16. d5 Nd4 17. Nxd4 exd4 18. Bxd4 Bg5 19. Qa1 c5 20. dxc6 (20. Bf2 Bc2 21. Rde1 Rxf2 22. Rxf2 Be3) 20... Rxd4 21. Rxd4 Be3+) 14. Rad1 Qe7 15. Ne4 Bxf3 16. Rxf3 h6 17. Rdf1 Rad8 (17... Nd7) 18. Nxf6+ Rxf6 19. Rxf6 gxf6 20. Rf3 Ne5 21. Rg3+ Kh8 (21... Kf8 22. Bxh6+ Ke8 23. Rg8+ Kd7 24. dxe5+) 22. Bxh6 Nf7 23. Bg7+ Kh7 24. Bd3+ f5 25. Qf4 Nd6 26. Qh6+ Kg8 27. Bf6+ *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Calculating A BRUTAL Bishop Sac | Smith–Morra Gambit | The Sensei Speedrun | GM"]
+[Date "2024.10.02"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B21"]
+[Opening "Sicilian Defense: Smith-Morra Gambit Accepted, Kan Formation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Calculating A BRUTAL Bishop Sac | Smith–Morra Gambit | The Sensei Speedrun | GM"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/mtwKLxT0"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.10.02"]
+[UTCTime "08:40:56"]
+
+1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 e6 5. Nf3 a6 (5... d6) (5... Bb4) 6. Bc4 { [%csl Gd5][%cal Gc3d5] } 6... Be7 7. O-O d6 8. Qe2 Nd7 (8... Nc6 9. Rd1) 9. Rd1 Qc7 (9... Ngf6 10. e5 dxe5 11. Nxe5) 10. Bf4 Ngf6 (10... Ne5 11. Bxe5 dxe5 12. Rac1 Qb8 13. Bb5+ axb5 14. Nxb5 f6 15. Nc7+ Kf7 16. Nxa8 Qxa8 17. Rc7) 11. Rac1 e5 12. Bxf7+ (12. Nb5 axb5 (12... Qb8 13. Nc7+ Qxc7 (13... Kf8 14. Bxf7 Kxf7 15. Qc4+ { [%cal Gf3g5] } 15... Kf8 16. Ng5) 14. Bxf7+) 13. Bxf7+) 12... Kxf7 13. Ng5+ Ke8 (13... Kg6 14. Nd5 Nxd5 15. Ne6 Nxf4 16. Nxf4+ exf4 17. Rxc7) 14. Nb5 Qxc1 15. Nxd6+ Bxd6 16. Bxc1 Ke7 (16... h6 17. Ne6 Ke7 18. Nxg7 Nc5) 17. Qc4 Nc5 18. Qf7+ Kd8 19. Rxd6+ Bd7 20. Be3 h6 21. Bxc5 hxg5 22. Bb6+ Kc8 23. Qc4+ (23. Rxf6 gxf6 24. Qd5 { [%cal Gd5d6,Gd6c7] }) 23... Bc6 24. Rxc6+ bxc6 25. Qxc6+ Kb8 26. Qc7# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Breaking Down F4 Weaknesses | Sicilian Defence | The Sensei Speedrun | GM Narodi"]
+[Date "2024.10.04"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B21"]
+[Opening "Sicilian Defense: McDonnell Attack, Tal Gambit"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Breaking Down F4 Weaknesses | Sicilian Defence | The Sensei Speedrun | GM Narodi"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/I2NDMIBO"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.10.04"]
+[UTCTime "06:09:21"]
+
+1. e4 c5 2. f4 d5 3. exd5 Nf6 4. c4 { [%csl Gd4] } 4... e6 5. dxe6 Bxe6 6. Nf3 Nc6 7. a3 Bd6 8. d3 Qc7 9. Be2 (9. g3 h5 10. Bg2 O-O-O 11. O-O h4) 9... Bxf4 10. O-O O-O-O 11. Qc2 Ng4 12. Qc3 (12. Bxf4 Qxf4 13. Qd2 Nd4 14. Qxf4 (14. Bd1 Nxf3+) 14... Nxe2+) 12... Nd4 13. Nxd4 Be3+ *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): F2 is a HUGE Weakness...Here's Why! | Scotch Game | The Sensei Speedrun | GM Nar"]
+[Date "2024.10.06"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C45"]
+[Opening "Scotch Game: Classical Variation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "F2 is a HUGE Weakness...Here's Why! | Scotch Game | The Sensei Speedrun | GM Nar"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/MR3LWmbl"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.10.06"]
+[UTCTime "13:51:16"]
+
+1. e4 e5 2. Nf3 Nc6 3. d4 exd4 4. Nxd4 Bc5 5. Nxc6 bxc6 (5... Qf6 6. Qd2 dxc6 7. Nc3) 6. Bc4 (6. Bd3 Qh4 7. Qe2 Nf6 8. h3 O-O 9. g3 Qh5) 6... Qh4 7. O-O Nf6 8. Nd2 O-O (8... Ng4 9. Nf3 Bxf2+ (9... Nxf2 10. Nxh4 Nxd1+ 11. Kh1 Nf2+ 12. Kg1 Nxe4+ 13. Kh1) 10. Kh1 Qh5 11. Qe2 Bc5) 9. Nf3 Qxe4 10. b3 d5 11. Re1 Qg4 12. h3 Qg6 13. Bd3 (13. Nh4 Qg3 14. Be3 Bxe3 15. Rxe3 Qxh4) (13. Ne5 Qf5) 13... Ne4 14. Bxe4 (14. Be3 Bxe3 15. Rxe3 Bxh3 (15... f5) 16. Nh4) 14... dxe4 15. Ne5 Qg3 16. Rxe4 Bxf2+ 17. Kf1 (17. Kh1 Bxh3 18. gxh3 (18. Qf3 Qxf3 19. Nxf3 Be6) 18... Qxh3#) 17... Bb6 18. Bf4 (18. Qf3 Qh2) 18... Qf2# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Recovering After a Blunder!! | Scandinavian | The Sensei Speedrun | GM Naroditsk"]
+[Date "2024.10.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B01"]
+[Opening "Scandinavian Defense: Modern Variation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Recovering After a Blunder!! | Scandinavian | The Sensei Speedrun | GM Naroditsk"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/KqQ2Pcpj"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.10.08"]
+[UTCTime "05:34:01"]
+
+1. e4 d5 2. exd5 Nf6 3. Bb5+ Bd7 4. Be2 e6 (4... Nxd5 5. d4 Bf5 6. Nf3 e6 7. O-O Be7 8. a3 O-O 9. c4 Nb6 10. Nc3) 5. dxe6 Bxe6 6. d4 Bd6 (6... c5 7. Nf3 Nc6 { [%cal Gc2c3,Gc1e3] }) 7. Nf3 O-O 8. O-O Nc6 9. Bg5 (9. c4 Bg4 10. Nc3 Bxf3 11. Bxf3 Nxd4 12. Qxd4 Bxh2+) 9... Bg4 10. c3 Qd7 11. Nbd2 (11. Bxf6 gxf6 12. Nh4 Bxe2 13. Qxe2) 11... Rae8 12. Re1 Re6 13. Bxf6 (13. h3 Bh5 14. Nc4) 13... Rxf6 14. Bf1 (14. Ne5 Bxe5 (14... Nxe5 15. dxe5 Bxe2 16. Rxe2 (16. Qxe2 Bxe5) 16... Bxe5 17. Rxe5 Rd6 18. Re2 Rd8) 15. Bxg4) 14... Rh6 15. h3 Bh5 16. g4 Bxg4 17. hxg4 Qxg4+ 18. Bg2 Rg6 19. Nh4 Qxh4 20. Qf3 Rf6 21. Qe2 Ne7 22. Ne4 Rg6 23. Nxd6 Re6 24. Ne4 Nd5 25. Qf3 Nf6 26. Qg3 Qh6 27. Nxf6+ (27. Ng5 Nh5 28. Qg4 (28. Rxe6 fxe6 29. Qg4 Nf4) 28... Rg6 29. f4 Nxf4) 27... Rxf6 28. Qxc7 Qd2 29. Rf1 Qxb2 30. Rab1 Qxa2 31. Rxb7 Rg6 32. c4 Qe2 33. Rb3 (33. Rb8 Rxg2+ 34. Kxg2 Qg4+) 33... Qe4 34. Rg3 Rxg3 35. Qxg3 Qxd4 36. Rc1 h6 37. c5 Qb2 38. Qc3 Qb8 39. c6 Qc7 40. Qg3 Qb6 41. c7 Qa6 42. Bh3 f5 43. Bxf5 Rxf5 44. c8=Q+ Qxc8 45. Rxc8+ Kh7 46. Qd3 Kg6 47. Rf8 h5 48. Qxf5+ Kh6 49. Rh8# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Queenside Vs Kingside Castle!! | Alekhine's Defense | The Sensei Speedrun | GM N"]
+[Date "2024.10.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B02"]
+[Opening "Alekhine Defense: Scandinavian Variation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Queenside Vs Kingside Castle!! | Alekhine's Defense | The Sensei Speedrun | GM N"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/fyZQnUa0"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.10.09"]
+[UTCTime "08:21:11"]
+
+1. e4 Nf6 2. Nc3 (2. e5) 2... d5 3. exd5 (3. e5 d4 (3... Nfd7 4. d4 e6)) 3... Nxd5 4. Nxd5 (4. Bc4 Nb6 5. Bb3 c5 6. d3 Nc6) 4... Qxd5 5. Nf3 (5. c4) 5... Bg4 6. Be2 Nc6 7. d3 (7. d4 O-O-O (7... Bxf3 8. Bxf3 Qxd4 9. Bxc6+ bxc6 10. Qxd4) 8. c3 e5 9. dxe5 Qe4) 7... O-O-O 8. O-O e5 9. Be3 f5 (9... Kb8 10. Nxe5 Bxe2 11. Nxc6+ Qxc6 12. Qxe2) 10. Ng5 (10. a3 Kb8 11. h3 Bh5 (11... Bxf3 12. Bxf3) (11... h5 12. hxg4 hxg4)) 10... Bxe2 11. Qxe2 h6 12. Nf3 g5 13. Ne1 Bd6 14. Bd2 Rhe8 15. Bc3 g4 16. Rd1 h5 17. g3 h4 18. Ng2 (18. gxh4 e4 19. dxe4 Qxd1 20. Qxd1 Bxh2+ 21. Kxh2 Rxd1) 18... Nd4 (18... h3 19. Ne3 Qf7 20. f3 Nd4 21. Bxd4 exd4) 19. Bxd4 exd4 20. Qd2 h3 21. Nh4 Be7 22. f4 Bxh4 23. gxh4 Re3 24. c3 (24. Rde1 Rde8 25. Rxe3 Rxe3 26. h5 g3 (26... Qe6) 27. h6 Qg8) 24... dxc3 25. bxc3 Rxd3 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): \"2.3 Seconds=20 moves\" | Four Knights Scotch | The Sensei Speedrun | GM Narodits"]
+[Date "2024.10.10"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C47"]
+[Opening "Four Knights Game: Scotch Variation Accepted"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "\"2.3 Seconds=20 moves\" | Four Knights Scotch | The Sensei Speedrun | GM Narodits"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/hODzXN8v"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.10.10"]
+[UTCTime "08:28:10"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nc3 Nc6 4. d4 exd4 5. Nxd4 Bc5 6. Be3 Bb6 7. Nf5 Bxe3 8. Nxe3 O-O 9. Bd3 d6 10. O-O a6 11. f4 b5 12. Qd2 Bb7 13. Rae1 Qd7 14. Qf2 { [%cal Gc3d5,Ge4d5,Gd3h7,Gf2h4] } 14... Rfe8 15. Qh4 Nd4 16. Ncd5 Bxd5 17. exd5 c5 18. c3 c4 19. Bb1 Rxe3 20. Rxe3 Nf5 21. Bxf5 Qxf5 22. Rfe1 Qxd5 23. g4 Qc5 24. Qf2 g6 25. g5 Nh5 26. Re8+ Rxe8 27. Rxe8+ Kg7 28. Qxc5 dxc5 29. Re4 h6 30. Kf2 hxg5 31. fxg5 Kf8 32. Kf3 f5 33. Re6 Kf7 34. Rxa6 Ng7 35. Rb6 Ne6 36. h4 b4 37. cxb4 Nd4+ 38. Kf2 cxb4 39. Rxb4 Ke6 40. a4 Kd5 41. a5 Nc6 42. Rb5+ Kd6 43. a6 Kc7 44. Rb7+ Kc8 45. h5 gxh5 46. g6 c3 47. g7 cxb2 48. g8=Q+ Nd8 49. Qc4+ Nc6 50. Qxc6+ Kd8 51. Qd7# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Tactics and Combinations | Sicilian; Delayed Alapin | The Sensei Speedrun | GM N"]
+[Date "2024.10.12"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B50"]
+[Opening "Sicilian Defense: Delayed Alapin Variation, with d6"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Tactics and Combinations | Sicilian; Delayed Alapin | The Sensei Speedrun | GM N"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/TRk1GaZH"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.10.12"]
+[UTCTime "05:43:48"]
+
+1. Nf3 c5 2. e4 d6 3. c3 Nf6 4. e5 (4. Be2 Nxe4 (4... Bd7) 5. Qa4+) 4... dxe5 5. Nxe5 Nbd7 (5... Nc6 6. Nxc6 (6. Bb5) 6... bxc6) 6. Nxd7 (6. Bb5 a6 (6... e6)) 6... Bxd7 7. Bc4 Bc6 8. O-O e6 9. Na3 (9. d4 cxd4 10. cxd4) 9... a6 (9... Bd6 10. Nb5 Bb8) 10. Bb3 b5 11. Nc2 Bd6 12. c4 h5 13. d4 bxc4 14. Bxc4 Ng4 15. h3 Qc7 16. Ne3 Bh2+ 17. Kh1 Bg1 18. Nxg4 hxg4 19. Kxg1 gxh3 20. d5 hxg2 21. Kxg2 Qh2+ 22. Kf3 Rh3+ 23. Ke2 exd5 24. Bd3 Kf8 25. Kd2 Re8 26. Kc2 c4 27. Bf5 Ba4+ 28. b3 cxb3+ 29. Kb1 bxa2+ 30. Rxa2 Bxd1 31. Rxd1 Rb3+ 32. Rb2 Rxb2+ 33. Bxb2 Qxf2 34. Bc2 Re1 35. Rc1 Rxc1+ 36. Kxc1 g5 37. Ba3+ *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Dealing With Annoying Pieces | Sicilian | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.10.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B50"]
+[Opening "Sicilian Defense: Modern Variations"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Dealing With Annoying Pieces | Sicilian | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/ztL7Cfzp"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.10.25"]
+[UTCTime "06:17:23"]
+
+1. e4 c5 2. Nf3 d6 3. c4 Nf6 4. Nc3 Bg4 5. Be2 Nc6 6. O-O e6 7. Re1 Be7 8. d4 Bxf3 9. Bxf3 cxd4 10. e5 dxc3 11. exf6 Bxf6 12. Rb1 cxb2 13. Bf4 O-O 14. Bxd6 Re8 15. c5 Rc8 16. Be4 b6 17. Qa4 Qd7 18. Red1 bxc5 19. Bxc5 Qc7 20. Bd6 Qb6 21. Rd3 Nd4 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Smith-Morra Gambit Accepted!!! | The Sensei Speedrun | GM Naroditsky (Reupload N"]
+[Date "2024.11.02"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B21"]
+[Opening "Sicilian Defense: Smith-Morra Gambit Accepted"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Smith-Morra Gambit Accepted!!! | The Sensei Speedrun | GM Naroditsky (Reupload N"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/XFGzP7kh"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.11.02"]
+[UTCTime "13:47:05"]
+
+1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 Nc6 5. Nf3 d6 6. Bc4 Nf6 7. e5 dxe5 (7... Ng4 8. exd6 Qxd6 9. O-O Qxd1 10. Rxd1 Bf5 11. Nb5 Rc8 12. h3 Nge5 13. Nxe5 Nxe5 14. Bd5 Rc5 15. a4) (7... Nxe5 8. Nxe5 dxe5 9. Bxf7+ Kxf7 10. Qxd8) 8. Qxd8+ Kxd8 9. Ng5 Nd4 (9... Na5 10. Bb5 Be6 11. Nxe6+ fxe6) 10. Nxf7+ Ke8 11. O-O (11. Nxh8 Nc2+ 12. Ke2 Nxa1 13. Nb5 Kd8 (13... Nc2) 14. Nf7+ Kd7) 11... Rg8 (11... b5 12. Nxb5 Nxb5 13. Nxh8) 12. Nxe5 Rh8 (12... Be6 13. Bxe6 Nxe6 14. Re1) 13. Rd1 Ne6 14. Bb5+ Bd7 15. Nxd7 Nxd7 16. Bxd7+ Kf7 17. Bxe6+ Kxe6 18. Bf4 g6 19. Re1+ Kf7 20. Rad1 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Developing With Tempo!! | Smith-Morra Gambit | The Sensei Speedrun | GM Narodits"]
+[Date "2024.11.03"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B21"]
+[Opening "Sicilian Defense: Smith-Morra Gambit Accepted, Scheveningen Formation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Developing With Tempo!! | Smith-Morra Gambit | The Sensei Speedrun | GM Narodits"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/suPPatQW"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.11.03"]
+[UTCTime "01:37:34"]
+
+1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 Nc6 5. Nf3 d6 6. Bc4 e6 7. O-O Nf6 8. Qe2 Be7 9. Rd1 O-O (9... e5 10. h3 O-O 11. Be3 Be6 12. Bxe6 fxe6) 10. e5 Ne8 11. exd6 Bxd6 12. Nb5 Qe7 13. Nxd6 (13. Bg5 f6 14. Be3 Bb8 15. Rac1 a6 (15... b6 16. Bb3 Bb7 17. Bc5 bxc5 18. Bxe6+ Kh8 19. Rd7) 16. Bc5) 13... Nxd6 14. Bb3 b6 15. Bg5 f6 16. Bf4 Nf7 17. Rac1 Na5 (17... Bd7 18. Qd3 (18. Rxd7 Qxd7 19. Bxe6 Qe8 20. Bxf7+) 18... Rfd8 (18... Be8 19. Bd6 Nxd6 20. Qxd6 Qxd6 21. Rxd6) 19. Bc7) 18. Bd5 Ba6 19. Qxe6 Qxe6 20. Bxe6 Rae8 21. Nd4 Bc8 (21... Kh8 22. b4 Nb7 23. Bxf7 Rxf7 24. b5) 22. Bd5 Bb7 23. Ne6 Bxd5 24. Nxf8 Kxf8 25. Rxd5 Nc4 26. Rd7 Nxb2 27. h4 Rd8 28. Rxa7 Nd3 29. Rcc7 Nxf4 30. Rxf7+ Kg8 31. Rxg7+ Kh8 32. Rxh7+ Kg8 33. Rag7+ Kf8 34. Rh8+ Kxg7 35. Rxd8 Ne6 36. Rd6 Nc5 37. Rxb6 Na4 38. Rb4 Nc5 39. a4 Kg6 40. a5 Kf7 41. g3 Kg6 42. Rb6 Na4 43. Rc6 Kf7 44. a6 Ke7 45. a7 Nb6 46. Rxb6 Kd7 47. a8=Q Kc7 48. Qa7+ Kd8 49. Rb8# *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Converting Winning Positions | Sicilian Defense | The Sensei Speedrun | GM Narod"]
+[Date "2024.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B50"]
+[Opening "Sicilian Defense: Modern Variations"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Converting Winning Positions | Sicilian Defense | The Sensei Speedrun | GM Narod"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/Yri1YEfy"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.11.05"]
+[UTCTime "08:52:31"]
+
+1. e4 c5 2. Nf3 d6 3. Bc4 Nf6 4. d3 Nc6 5. c3 e6 6. O-O Be7 7. Be3 O-O 8. Nbd2 { [%cal Gd6d5,Ga7a6,Gb7b5,Gb7b6] } 8... d5 9. exd5 Nxd5 10. Ne4 b6 11. Bb5 Bb7 12. Nfg5 Nxe3 13. fxe3 Bxg5 14. Nxg5 Qxg5 15. e4 Rad8 16. Qe2 Rd7 17. Rf3 a6 18. Ba4 Rfd8 19. Rg3 Qe7 20. Qg4 g6 21. Bc2 Ne5 22. Qe2 a5 23. Rf1 Ba6 24. c4 Nc6 25. Qe3 Nb4 26. Bb1 Nxd3 27. b3 Bb7 28. Rh3 Ne5 29. Qh6 f6 30. Re3 Ng4 31. Qh3 Nxe3 32. Qxe3 Rd1 33. Bc2 Rxf1+ 34. Kxf1 Qd6 35. g3 Qd2 36. Qe2 Qc1+ *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Sacrifice The Knight!!! \"OK, NP\" | Three Knights Game | The Sensei Speedrun | GM"]
+[Date "2024.11.06"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C46"]
+[Opening "Three Knights Opening"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Sacrifice The Knight!!! \"OK, NP\" | Three Knights Game | The Sensei Speedrun | GM"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/BqmZ8Cur"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.11.06"]
+[UTCTime "07:28:12"]
+
+1. e4 e5 2. Nf3 Nc6 3. Nc3 Bc5 4. Bc4 d6 5. Nxe5 dxe5 6. d3 Qf6 7. O-O Nge7 8. Kh1 O-O 9. f4 exf4 10. Bxf4 Qg6 11. Bxc7 Bg4 12. Qd2 Nd4 13. Be5 Qh5 (13... Nec6) 14. Bg3 Ng6 15. Nd5 Ne2 16. Qe1 Nxg3+ 17. Qxg3 Rad8 18. h3 Be6 19. c3 Bd6 20. Qf2 Bxh3 21. gxh3 Qxh3+ 22. Kg1 Nh4 23. Qe2 Qg3+ 24. Kh1 Qh3+ 25. Kg1 Be5 26. Ne7+ Kh8 27. Nf5 Ng6 28. Rf3 Qg4+ 29. Qg2 Qxg2+ 30. Kxg2 Nf4+ 31. Kf2 g5 32. d4 Bc7 33. Rg3 f6 34. Rh1 h5 35. Rg4 Rd7 36. Rgg1 Rh7 37. Be2 h4 38. Bg4 Nd3+ 39. Ke3 Nxb2 40. Rb1 Bf4+ 41. Ke2 Nc4 42. Kd3 Na5 43. Rb5 b6 44. Rd5 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Analyzing Absolutely STUNNING Engine Ideas | Position 1"]
+[Date "2024.11.12"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Analyzing Absolutely STUNNING Engine Ideas | Position 1"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/QuoKLzwm"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[FEN "8/p2qk2p/1p3p2/4n1b1/P1p1Pp1r/2P5/1P2B1KN/R3Q2R w - - 0 1"]
+[SetUp "1"]
+[UTCDate "2024.11.12"]
+[UTCTime "05:35:40"]
+
+1. Qf1 h5 2. Rd1 (2. Nf3 Qg4+ 3. Kf2 Qg3#) (2. Qf2 Qh3+ 3. Kg1 f3 4. Bxf3 Nxf3+ 5. Qxf3 Be3+) (2. Kf2 Qd2) 2... Qh3+ 3. Kg1 Qe3+ 4. Qf2 f3 5. Bxf3 Nxf3+ 6. Kg2 Rxh2+ 7. Rxh2 Qxf2+ 8. Kxf2 Nxh2 9. Kg3 Ng4 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Analyzing Absolutely STUNNING Engine Ideas | Position 2"]
+[Date "2024.11.12"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Analyzing Absolutely STUNNING Engine Ideas | Position 2"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/imsRwVI8"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[FEN "4r1k1/2b3pp/2p5/1p1n1p1q/3P4/2PQ1NP1/1P1BrP1P/R2R2K1 b - - 0 1"]
+[SetUp "1"]
+[UTCDate "2024.11.12"]
+[UTCTime "05:40:12"]
+
+1... R8e3 2. Ra8+ (2. Ne5 Bxe5 3. Bxe3 Qf3 (3... Bxg3 4. hxg3 Qf3 5. Ra8+ Kf7 6. Ra7+ Kg6 7. Rxg7+ Kxg7 8. Bh6+) 4. dxe5 Nxe3 5. Qd8+ Kf7 6. Ra7+ Kg6 7. Rd6+ Kh5 8. Qh4#) (2. fxe3 Qxf3 3. Ra8+ Kf7) (2. Bxe3 Qxf3) 2... Kf7 3. Ng5+ Kg6 4. Bxe3 Nxe3 5. Rf1 Bf4 6. Ne6 Bh6 7. Re8 Qf3 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Double Dose of Speedrun! | Queens Gambit Accepted | The Sensei Speedrun | G1"]
+[Date "2024.11.14"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C47"]
+[Opening "Four Knights Game: Scotch Variation Accepted"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Double Dose of Speedrun! | Queens Gambit Accepted | The Sensei Speedrun | G1"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/sO1pUGPq"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.11.14"]
+[UTCTime "08:45:06"]
+
+1. e4 e5 2. Nf3 Nc6 3. Nc3 Nf6 4. d4 exd4 5. Nxd4 Nxd4 6. Qxd4 b6 7. e5 Bc5 8. Qf4 Nh5 9. Qf3 g6 10. Qxa8 O-O 11. Qf3 Qh4 12. Be3 d6 13. Bxc5 dxc5 14. Be2 Be6 15. O-O-O Qb4 16. Qe4 Ng7 17. Qxb4 cxb4 18. Nd5 c5 19. Nf6+ Kh8 20. g4 a5 21. Rd6 Rb8 22. Rhd1 Bxa2 23. Rd8+ Rxd8 24. Rxd8+ Ne8 25. Rxe8+ Kg7 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Double Dose of Speedrun! | Queens Gambit Accepted | The Sensei Speedrun | G2"]
+[Date "2024.11.26"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A13"]
+[Opening "English Opening: Neo-Catalan"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Double Dose of Speedrun! | Queens Gambit Accepted | The Sensei Speedrun | G2"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/61J3zJWr"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.11.26"]
+[UTCTime "12:52:36"]
+
+1. c4 e6 2. Nf3 d5 3. g3 Nf6 4. cxd5 (4. d4) (4. Bg2 Be7 5. O-O O-O 6. b3 d4 (6... c5) (6... a5) 7. e3 c5) 4... exd5 5. d4 Bd6 6. Bg2 O-O 7. O-O c6 8. Qc2 Re8 9. Nc3 Bg4 10. h3 Bh5 11. Bg5 Nbd7 12. a3 h6 13. Be3 Bxg3 14. fxg3 (14. Bxh6) 14... Rxe3 15. Rae1 Qc7 16. Kf2 Rae8 17. Nd1 R3e7 18. b4 Ne4+ 19. Kg1 Qxg3 20. Nf2 Nxf2 21. Rxf2 Bxf3 22. Ref1 Rxe2 23. Rxe2 Rxe2 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): \"Let Switch It Up and Play D4!!\" | Catalan Opening | The Sensei Speedrun | GM Na"]
+[Date "2024.12.23"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "E06"]
+[Opening "Catalan Opening: Closed"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "\"Let Switch It Up and Play D4!!\" | Catalan Opening | The Sensei Speedrun | GM Na"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/DadP4kkX"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.12.23"]
+[UTCTime "03:22:22"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Nf6 4. g3 Be7 5. Bg2 O-O 6. O-O a6 7. Qc2 Nc6 (7... dxc4 8. Qxc4 b5 9. Qc2 Bb7 10. Bd2 Be4 11. Qc1 Bb7) 8. Rd1 (8. Nbd2 Nb4 9. Qb1 dxc4 10. Nxc4 b5 11. Nfe5 Rb8 12. Na5) 8... Nb4 9. Qb3 dxc4 10. Qxc4 b5 11. Qb3 Bb7 12. Nc3 Nbd5 13. Bg5 h6 (13... Nxc3 14. Qxc3 (14. bxc3 c5 15. dxc5 Qc7) 14... Ne4 15. Bxe7 Nxc3 16. Bxd8 Nxd1) 14. Bxf6 Bxf6 (14... Nxf6 { [%cal Gc3e4,Rf6e4] } 15. Ne5 Bxg2 16. Kxg2 { [%cal Ge5c6] } 16... c5 17. dxc5 Qc7) 15. Ne4 Be7 16. Rac1 Nb6 17. Ne5 Bd5 18. Qc2 Nc4 19. Nxc4 bxc4 20. e3 Rb8 21. Nd2 Bxg2 22. Kxg2 Qd5+ 23. Kg1 c5 24. dxc5 Qxc5 25. Nxc4 Rfc8 26. b3 { [%csl Gd7] } 26... a5 27. Qd2 a4 (27... Ra8 28. Nxa5 Qxa5 29. Rxc8+) 28. Nb2 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Tempo Vs Pawns | French Defence: Tarrasch Variation | The Sensei Speedrun | GM N"]
+[Date "2024.12.24"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C05"]
+[Opening "French Defense: Tarrasch Variation, Closed Variation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Tempo Vs Pawns | French Defence: Tarrasch Variation | The Sensei Speedrun | GM N"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/HBmMEGKo"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.12.24"]
+[UTCTime "08:38:55"]
+
+1. e4 e6 2. d4 d5 3. Nd2 Nf6 4. e5 Nfd7 5. Bd3 c5 6. c3 Nc6 7. Ngf3 Qb6 (7... Be7 8. O-O a5 9. Re1 cxd4 10. cxd4 Qb6 11. a4 Nxd4 12. Nxd4 Qxd4 13. Nf3 Qb6 14. Be3 Nc5 15. Bb5+ Bd7 16. Nd4 Bxb5 17. Nxb5 O-O 18. Qg4 Rfc8 19. Bd4 Qa6 20. Nd6 Nb3 21. Nxc8 Rxc8 22. Rad1 Qc4 23. h3 h5 24. Qf4 Qxa4 25. Rd3 Qb4 26. Rb1 Rc7 27. Qe3 a4 28. Bc3 Qe4 29. Qxe4 dxe4 30. Re3 b5 31. Rd1 Rc4 32. Be1 b4 33. Rd7 Bg5 34. Re2 Nc1) 8. O-O cxd4 9. cxd4 Nxd4 10. Nxd4 Qxd4 11. Nf3 Qb6 12. Qa4 Be7 13. Qg4 g6 14. Bh6 Bf8 15. Qf4 Bxh6 (15... Qb4 16. Qc1 Qc5 17. Qf4 Qb4 18. Qxb4 Bxb4 19. Rac1) (15... Qxb2 16. Rac1 (16. Ng5 Nxe5 17. Rab1 Qc3 18. Bb5+ Bd7 (18... Kd8 19. Rfc1)) 16... Qxa2) 16. Qxh6 Qd8 17. Rac1 a6 18. h4 b6 19. h5 Nc5 (19... gxh5 20. Ng5 Nxe5 21. Qg7 Nxd3 22. Qxf7#) 20. hxg6 Nxd3 21. g7 Rg8 22. Qxh7 Kd7 23. Qxd3 Rxg7 24. Qa3 Qe7 25. Rc7+ Kxc7 26. Qxe7+ Kb8 27. Rc1 Ra7 28. Qd6+ *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Nimzo-Indian Positional Break Down | Queen's Indian | The Sensei Speedrun |"]
+[Date "2024.12.26"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "E20"]
+[Opening "Nimzo-Indian Defense"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Nimzo-Indian Positional Break Down | Queen's Indian | The Sensei Speedrun |"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/rwacQ9sz"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.12.26"]
+[UTCTime "03:43:34"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. Bd2 (4. e3) (4. Qc2) (4. g3) (4. Bg5) 4... O-O 5. a3 Bxc3 6. Bxc3 b6 7. e3 Bb7 8. Nf3 d6 9. Be2 Nbd7 10. O-O Ne4 11. Qc2 (11. Be1 f5 12. d5 e5) 11... f5 12. Rad1 Nxc3 13. Qxc3 Nf6 14. Qc2 (14. d5 exd5 15. cxd5 Bxd5 16. Qc4 (16. Rxd5 Nxd5 17. Bc4 (17. Qc4 c6 18. Qxc6 Nf6) 17... c6) 16... c6) 14... Ne4 15. Nd2 Qg5 16. f3 (16. Bf3 Nxd2 17. Bxb7 Nxf1 18. Bxa8 Nxe3 19. fxe3 Qxe3+) (16. g3 Rf6) 16... Qxe3+ 17. Kh1 { [%cal Ge4g3,Gh2g3,Gf8f6] } 17... Ng3+ 18. hxg3 Rf6 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Tearing Down The Slavic Wall | Slav Defense | The Sensei Speedrun | GM Naroditsk"]
+[Date "2024.12.27"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D15"]
+[Opening "Slav Defense: Chebanenko Variation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Tearing Down The Slavic Wall | Slav Defense | The Sensei Speedrun | GM Naroditsk"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/vhsznmIx"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.12.27"]
+[UTCTime "03:07:08"]
+
+1. d4 c6 2. c4 d5 3. Nf3 Nf6 4. Nc3 a6 5. g3 Bg4 (5... dxc4 6. Bg2 b5 7. O-O e6 8. e4) 6. Ne5 Bh5 7. Qb3 b6 (7... b5 8. cxd5 cxd5 9. Bg2 e6 10. e4 dxe4 11. Nxe4 Nxe4 12. Bxe4 Ra7 13. Be3) 8. cxd5 Nxd5 9. Bg2 (9. Nxc6 Nxc6 10. Nxd5 Nxd4) 9... e6 10. O-O Bd6 11. e4 (11. Nc4 Bc7 12. e4 Nxc3) 11... Nxc3 12. Qxc3 Bxe5 13. dxe5 O-O 14. b4 Qc7 15. Be3 Nd7 16. f4 a5 (16... Rfd8 17. h3 Be2 18. Rf2) 17. a3 axb4 18. axb4 Be2 19. Rfe1 Bb5 (19... Rxa1 20. Qxa1 Bb5 21. Rd1 c5) 20. Rad1 Rfd8 21. Rd6 Nf8 (21... c5 22. Red1) 22. Red1 Rd7 23. Qd4 Rxd6 24. exd6 Qd8 25. Qxb6 Nd7 26. Qxd8+ Rxd8 27. Ra1 f6 28. Ra7 Kf8 29. Bh3 Bc4 30. Rc7 Nb8 31. Bc5 Kg8 32. Kf2 h5 33. Ke3 Kh7 34. Kd4 Ba2 35. e5 fxe5+ 36. fxe5 Bd5 37. Bf1 Nd7 38. b5 cxb5 39. Bxb5 Nxc5 40. Kxc5 Kg6 41. d7 Kf7 42. Kd6 Rb8 43. d8=Q+ *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Taking Down the Benko Gambit!! | The Sensei Speedrun | GM Naroditsky"]
+[Date "2024.12.30"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A57"]
+[Opening "Benko Gambit Declined: Quiet Line"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Taking Down the Benko Gambit!! | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/5mY2XxLV"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2024.12.30"]
+[UTCTime "08:10:31"]
+
+1. d4 Nf6 2. c4 c5 3. d5 b5 4. Nd2 (4. cxb5 a6 5. bxa6 g6 6. Nc3 Bxa6 7. e4 Bxf1 8. Kxf1 d6 9. Nf3 Bg7 10. g3 O-O 11. Kg2) 4... bxc4 5. e4 d6 6. Bxc4 g6 7. Ngf3 Nbd7 8. O-O Bg7 9. h3 O-O 10. Re1 Nb6 11. Qc2 Nfd7 12. Bb5 a5 13. a4 Ba6 14. Bxa6 Rxa6 15. Ra3 e6 16. dxe6 fxe6 17. Rd3 Qe7 18. b3 Ne5 19. Nxe5 Bxe5 20. Nf3 Nd7 21. Red1 Rb6 22. Nxe5 Nxe5 23. Rg3 Qf6 24. Bh6 Rfb8 25. Qd2 c4 26. bxc4 Nxc4 27. Qe2 Rb2 28. Qxc4 *
+
+
+[Event "Daniel Naroditsky - The Sensei SpeedRun (Vol.2): Smith–Morra Gambit | Deep Dive Breakdown!! | The Sensei Speedrun | GM Naroditsky"]
+[Date "2025.01.02"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B21"]
+[Opening "Sicilian Defense: Smith-Morra Gambit Accepted, Kan Formation"]
+[StudyName "Daniel Naroditsky - The Sensei SpeedRun (Vol.2)"]
+[ChapterName "Smith–Morra Gambit | Deep Dive Breakdown!! | The Sensei Speedrun | GM Naroditsky"]
+[ChapterURL "https://lichess.org/study/WsyZP8Qz/PXpwJkG6"]
+[Annotator "https://lichess.org/@/zenchess90"]
+[UTCDate "2025.01.02"]
+[UTCTime "08:14:03"]
+
+1. e4 c5 2. d4 cxd4 3. c3 dxc3 4. Nxc3 e6 5. Nf3 a6 6. Bc4 b5 7. Bb3 Bb7 8. O-O Nc6 (8... b4 9. Nd5) 9. Qe2 (9. Re1 d6 10. a4 b4 11. Nd5 Be7 (11... Na5 12. Nxb4 Qb6) 12. Be3 exd5 13. Qxd5) 9... Rc8 (9... Nge7 10. Bg5 f6 11. Rfd1 fxg5 12. Nxg5 Qc7 13. Rxd7 Qxd7 14. Bxe6) 10. Rd1 Na5 11. Ne5 (11. Bd5 exd5 12. exd5+) 11... Nf6 (11... d6 12. Nxb5 axb5 (12... Qb6) 13. Qxb5+) 12. Bg5 Nxb3 13. axb3 (13. Rxd7 Nxd7 14. Bxd8 Nxa1) 13... d6 14. Ng4 (14. Nxb5 Qb6 15. Nxd6+ Bxd6 16. Nc4 Rxc4 17. bxc4 Nxe4) (14. Nxf7 Kxf7 15. e5 h6 16. Bh4 g5) 14... h6 (14... Be7 15. Bxf6 gxf6 (15... Bxf6 16. Nxf6+ Qxf6 (16... gxf6 17. Qh5) 17. Rxd6)) 15. Nxf6+ gxf6 16. Bf4 h5 17. Rd2 b4 18. Na4 Qc7 19. Rad1 e5 20. Be3 f5 (20... Bxe4 21. Nb6 Rd8 22. Nd5 Bxd5 23. Rxd5) 21. exf5 Rg8 22. f3 h4 23. Nb6 Rd8 24. Rc2 Qb8 (24... Bxf3 25. Qxf3 Qxc2 26. Rc1 Qd3 (26... e4 27. Qh3 Qe2 (27... Qd3 28. f6 d5 29. Rc7 d4 (29... Qb1+ 30. Kf2 Bd6 31. Qe6+ fxe6 32. f7+ Kf8 33. Bh6+ Rg7) 30. Qe6+ fxe6 31. f7#)) 27. Qc6+ Ke7 28. Nd5+) 25. Nd5 Bxd5 26. Rxd5 h3 27. g4 f6 28. Qxa6 e4 29. Qc6+ Kf7 30. Rb5 Qa8 31. Rb7+ Be7 32. Qd5+ Kf8 33. Bh6+ *
+
+

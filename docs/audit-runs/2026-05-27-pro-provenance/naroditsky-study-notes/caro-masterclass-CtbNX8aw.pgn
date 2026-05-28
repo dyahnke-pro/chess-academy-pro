@@ -1,0 +1,48 @@
+[Event "Daniel Naroditsky - Masterclasses on Caro-Kann: Caro-Kann, Tartakower (1660 ELO)"]
+[Date "2021.10.20"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B15"]
+[Opening "Caro-Kann Defense: Tartakower Variation"]
+[StudyName "Daniel Naroditsky - Masterclasses on Caro-Kann"]
+[ChapterName "Caro-Kann, Tartakower (1660 ELO)"]
+[ChapterURL "https://lichess.org/study/CtbNX8aw/wNhKr6bB"]
+[Annotator "https://lichess.org/@/ananimalstolemypants"]
+[UTCDate "2021.10.20"]
+[UTCTime "00:45:03"]
+
+1. e4 c6 2. d4 d5 3. Nc3 (3. e5 { Advance Variation }) 3... dxe4 4. Nxe4 Nf6 (4... Bf5 { Main Line }) (4... Nd7 { Older version (Karpov?) }) 5. Nxf6+ exf6 { Played by Horatio Caro, 1898. Then Tartakower, and became popular in the '70s. } (5... gxf6 { Bronstein Variation (considered unsound) }) 6. Nf3 { Inaccurate, as it allows the later pin, and creates a hook for Black to attack if White plays h3. } (6. c3 { Defend the pawn. } 6... Bd6 7. Bd3 O-O 8. Qc2 { Move away from the queen pin if I played nf3 first. Force Black to play h6, which is another hook for White to attack. } { [%cal Gg1f3,Rc8g4,Rg4d1] } 8... h5 { Newer move. Prevents quicker g4 move and provides time to attack White's king. } { [%cal Gg2g4,Bh5g4] } (8... h6 { Allows for White to break open the position more easily with h3, g4. } { [%cal Rg2g4,Rh2h4,Rg4g5] } 9. Be3 Nd7 10. O-O-O Re8 11. Ne2 Nf8 { With a pawn on h5, White cannot immediately go g4 } 12. g4 Bxg4 13. Rhg1) 9. Be3 Nd7 10. Ne2 Re8 11. O-O-O Nf8 (11... b5 { Carlsen - Duda (0-1). } { [%cal Rb5b4] })) 6... Bd6 7. Bd3 (7. c3) 7... O-O 8. O-O Bg4 9. Be3 (9. h3 Bh5 10. g4 { Tremendously weakening }) 9... Nd7 { Black's plan frequently involves improving the position of the knight on d7. Use the same plan as for white with the Ruy Lopez. Either relocate to the kingside with rook e8, then to g6 or e7, or to the queenside, with kb6. } { [%csl Be8,Gg6,Ge6,Rb6][%cal Gd7f8,Bf8e8,Gf8g6,Gf8e6,Rd7b6] } 10. h3 (10. c3 { King is very safe with this pawn. Only improved by the later pawn cube. } { [%csl Bf6][%cal Bf6f5,Bf5f4,Bf6e5,Bf6g5] }) 10... Bh5 11. Bf5 Re8 12. Bg4 { Odd idea, could trade the bishops, or drop the bishop back. Trading seems good from the perspective of weakening the king. However, he wants the pawn cube for defense / attack, as well as threaten trapping the light square bishop, so drop it back. } 12... Bg6 { [%cal Gf6f5] } 13. Nh4 Nb6 { [%csl Rd6,Rc7][%cal Gb6d5,Rd6c7,Rd8d6] } 14. Nxg6 hxg6 15. b3 { Very weakening. No need to push the pawns with a focus on bc7 and qd6 as the more threatening idea. } (15. c3 f5 16. Be2 g5 17. Re1 f4 { Can attack and the king is still safely defended. Pawn cube benefit. Drawback in that an endgame, it could be slower to push the pawns. } { [%csl Bg7,Bf7] }) 15... Bc7 16. c4 (16. Re1 f5 17. Bf3 Qh4 { Solid pressure on White's position. Defended from the initial tactic, but lots of ideas here. }) 16... Qd6 17. g3 Rxe3 18. Qd2 (18. c5 Rxg3+ 19. fxg3 Qxg3+ 20. Kh1 Qh2#) 18... Re4 19. Bf3 Rxd4 20. Qe2 Nd7 21. Rad1 Bb6 22. Kg2 Ne5 23. Be4 Rd8 24. Rc1 Rd2 25. Qe1 Qd4 26. c5 Bxc5 { Resigns. } *
+
+
+[Event "Daniel Naroditsky - Masterclasses on Caro-Kann: Caro-Kann, Exchange Variation (1640)"]
+[Date "2021.10.20"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B13"]
+[Opening "Caro-Kann Defense: Exchange Variation"]
+[StudyName "Daniel Naroditsky - Masterclasses on Caro-Kann"]
+[ChapterName "Caro-Kann, Exchange Variation (1640)"]
+[ChapterURL "https://lichess.org/study/CtbNX8aw/MacP20v9"]
+[Annotator "https://lichess.org/@/ananimalstolemypants"]
+[UTCDate "2021.10.20"]
+[UTCTime "01:54:08"]
+
+1. e4 c6 2. Nf3 d5 3. exd5 cxd5 4. d4 { Bishop on c8 often doesn't have a good home. Aim to develop the bishop quickly. } 4... Nc6 5. c3 { Drawback of Bg6 right now is Qb3 } { [%csl Bb7][%cal Rg8f6,Rc8g4,Bd1b3,Bb3b7] } 5... Nf6 6. Bb5 { Not common. But not afraid of the pin very much. Bg4 prevents ne5 } { [%csl Rc8] } 6... Bg4 7. Qd3 Bxf3 { Trade the bishop and eliminate the piece that could get trapped behind the pawns. } 8. Qxf3 e6 9. O-O { [%cal Gf8d6,Rc1g5,Bf8e7,Gh7h6] } 9... h6 (9... Bd6 { Slightly inaccurate as it allows Bg5. }) 10. Nd2 Bd6 11. Nb3 { [%csl Rc5][%cal Rc1f4,Rb3c5,Bd8c7] } 11... Qc7 { Prevents the bishop from developing out to f4, allowing a trade of the bishops and then White's knight arriving on c5. However, the knight is now a bit loose. } 12. g3 O-O 13. Bxh6 gxh6 14. Qxf6 *
+
+
+[Event "Daniel Naroditsky - Masterclasses on Caro-Kann: IQP Caro-Kann"]
+[Date "2022.09.14"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B13"]
+[Opening "Caro-Kann Defense: Exchange Variation"]
+[StudyName "Daniel Naroditsky - Masterclasses on Caro-Kann"]
+[ChapterName "IQP Caro-Kann"]
+[ChapterURL "https://lichess.org/study/CtbNX8aw/njcQ2L5J"]
+[Annotator "https://lichess.org/@/ananimalstolemypants"]
+[UTCDate "2022.09.14"]
+[UTCTime "02:42:27"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Bd3 Nf6 (4... Nc6 5. h3) 5. h3 Nc6 6. Nf3 (6. c3 e5 7. dxe5 Nxe5 8. Nf3 (8. Qe2 Ne4 9. Bxe4 dxe4 10. Qxe4 Qe7) 8... Nxd3+ 9. Qxd3 Bd6 10. Bg5 (10. O-O O-O 11. Bg5 h6 12. Bxf6 (12. Bh4 g5 13. Bg3 Ne4 (13... Bxg3 14. fxg3 g4 (14... Ne4))) 12... Qxf6 13. Qxd5 Rd8 14. Qh5 g6 15. Qxh6 (15. Qh4 g5 16. Qh5 Bf5 17. Nbd2 Kg7 18. Ne4 Bxe4 19. Qg4 Bxf3 20. gxf3 Qf4 21. Qxf4 Bxf4) 15... Bf4 16. Qh4 g5 17. Qh5 Kg7 18. Nbd2 (18. Nxg5 Qxg5 19. Qxg5+ Bxg5 20. Na3 Rd2) 18... Rh8) 10... O-O 11. Bxf6 Qxf6 12. Qxd5) 6... g6 7. O-O Bf5 8. Bxf5 gxf5 *
+
+

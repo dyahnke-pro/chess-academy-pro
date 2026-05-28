@@ -1,0 +1,17 @@
+[Event "Fantasy Variation Crash Course! | Caro-Kann | GM Naroditsky’s Top Theory Speedrun: Game 1"]
+[Date "2023.10.16"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Maróczy Variation"]
+[StudyName "Fantasy Variation Crash Course! | Caro-Kann | GM Naroditsky’s Top Theory Speedrun"]
+[ChapterName "Game 1"]
+[ChapterURL "https://lichess.org/study/Od05RXPe/UyG7oycM"]
+[Annotator "https://lichess.org/@/black-yousef"]
+[UTCDate "2023.10.16"]
+[UTCTime "15:52:40"]
+
+{ https://www.youtube.com/watch?v=k4T6TJGOSA0 }
+1. e4 c6 2. d4 d5 3. f3 dxe4 4. fxe4 Nf6 (4... e5 5. Nf3 { [%csl Gh4][%cal Gd8h4] } 5... Bg4 (5... exd4 { [%csl Rd4] } 6. Bc4 { [%csl Rf7][%cal Gc4f7] } 6... Nf6 (6... Be6 7. Bxe6 fxe6 8. O-O { [%csl Re8][%cal Gf1f7] } 8... Be7 (8... Nf6 9. e5 Ne4 { [%csl Gf3][%cal Gf1f8,Gd1f3] } 10. Ne1 { [%csl Ge1,Ge4,Gg4][%cal Gd1f3,Gf3f7,Gf3e4] } 10... Qd5 11. Qf3 Kd8 12. Nd3 { [%csl Gd3] } 12... Nd7 13. Nf4 Qxe5 14. Re1 { [%cal Ge1e6] } 14... Ng5 { [%csl Ge6][%cal Gf4e6] } 15. Nxe6+ Qxe6 (15... Kc8 16. Qf1 { [%csl Re5,Rg5] }) 16. Bxg5+) 9. Nxd4 { [%csl Re6][%cal Gd4e6] } 9... Qd6 10. Na3 { [%cal Ga3c4] }) 7. O-O Be7 (7... Nbd7 8. Qe1 Be7 9. e5 Nd5 10. Bxd5 cxd5 11. Qg3 { [%csl Gg3,Gf3,Rg7] } 11... O-O (11... g6 { [%csl Rf6,Rg7,Rh6] }) 12. Bh6) 8. Ng5 O-O 9. Nxf7 Rxf7 10. Bxf7+ Kxf7 11. e5 { [%csl Rf6][%cal Ge5f6] }) (5... Be6 6. Nbd2 { [%cal Gf1c4] }) 6. Bc4 { [%cal Gc4f7] } 6... Nd7 7. O-O Ngf6 8. c3 { [%csl Gd4,Gc3] } 8... Nxe4 (8... Bd6) 9. Bxf7+) 5. e5 Nd5 6. c4 Nb4 { [%csl Rc3][%cal Rb1c3,Ga2a3] } (6... Nb6 7. Nc3 Bf5 8. Nf3 e6 9. Be2 Be7 10. O-O O-O 11. Be3 a5 { [%cal Gd1e1,Ge1g3] } 12. Qe1 { [%cal Ga1d1] } 12... Na6 13. a3 { [%csl Rb4] } 13... Qc7 14. Rd1 Rad8 15. Qg3 { [%cal Rc6c5,Bd4d5] } 15... c5 (15... Rd7 { [%csl Bd6][%cal Gf3g5,Gg5e4,Bf3d2,Bd2e4,Be4d6] } 16. Nd2 (16. Ng5 { [%cal Gg5e4,Ge4d6] } 16... Bxg5 (16... Rfd8 17. Nge4 { [%csl Gd6][%cal Ge4d6,Gc4c5] } (17. Nxf7 Kxf7 18. d5 cxd5 19. Nb5 Qc6 20. Nd4 Qc8 21. Nxe6 Kxe6 22. Rxf5 { [%cal Ge2g4] }) 17... c5 18. d5 Bxe4 19. d6 (19. Nxe4 exd5 20. Bh6 Bf8 (20... g6 21. Rxf7 Kxf7 (21... dxe4 22. Rdf1 { [%csl Gf1,Gf7,Gg7,Gh6,Gg3] }) 22. Rf1+ Kg8 23. Qf4 { [%csl Gf1][%cal Gf4f7] } 23... Bf8 (23... Kh8 24. Ng5 { [%csl Ra6,Rb6,Rc7,Rd7,Rd8] } 24... Bxg5 25. Qf8+) 24. Qxf8+) 21. Nf6+ Kh8 22. Bd3 dxc4 23. Bxg7+ Bxg7 { [%csl Gd3] } 24. Qh3 h6 25. Qf5 { [%csl Gd3] }) 19... Bxd6 (19... Qc6 20. dxe7 Re8 { [%csl Gd6] } 21. Rd6 { collinear move } 21... Rxd6 22. exd6 { [%csl Gd6,Ge7] }) 20. exd6 Rxd6 (20... Qc6 21. Nxe4 Qxe4 22. Bd3 { [%csl Gd3,Ge3][%cal Gd3h7,Ge3h6] } 22... Qc6 { [%csl Rh6][%cal Ge3g5] } 23. Bg5 { [%csl Gf6][%cal Gg5f6] } (23. Bh6 f5 { [%csl Rg7][%cal Gd7g7] }) 23... Re8 24. Bf6 { [%csl Rf7] } 24... g6 25. Qg5 { [%cal Gg5h6] } 25... Qxd6 { [%cal Gd6f8] } 26. Bxg6 { [%cal Gd1d7] }) 21. Nb5 (21. Nxe4 Rxd1 (21... Nc8 22. Nxd6 Qe7 23. Rxf7) 22. Rxd1 Rxd1+ 23. Bxd1 Qxg3 24. hxg3 Nxc4 25. Bc1 { [%csl Gd1,Gc1,Ra5,Rb7,Rc5,Ra6,Rc4] })) 17. Bxg5 { [%csl Gg5,Rd8][%cal Gg5d8,Rf8d8] } 17... Bg6 18. h4 { [%cal Gh4h5] } 18... h5 (18... h6 19. Bxh6 gxh6 20. h5) 19. Bf6 gxf6 20. Ne4 { [%csl Ge4][%cal Ge4f6] } 20... fxe5 21. Nf6+ Kh8 22. Qg5 { [%cal Gg5h6] } 22... Kg7 23. Nxh5+ Kh7 24. Nf6+ Kg7 25. h5) 16... c5 17. d5 exd5 18. Rxf5 d4 19. Bh6 { [%cal Gh6g7,Gg3g7] }) 16. d5) 7. Nc3 (7. a3 { [%csl Rb4] } 7... Qxd4 8. axb4 Qh4+ 9. Kd2 { [%cal Gd2c2] }) 7... Qxd4 8. Qxd4 Nc2+ 9. Kd1 Nxd4 *
+
+

@@ -1,0 +1,354 @@
+[Event "Naroditsky -Beginner to Master Speed Run: Master Class - ELO 400 - A New Start -"]
+[Date "2023.10.29"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C20"]
+[Opening "King's Pawn Game: Mengarini's Opening"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Master Class - ELO 400 - A New Start -"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/8805vsJk"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.10.29"]
+[UTCTime "06:38:02"]
+
+1. a3 e5 2. e4 Nf6 3. Ba6 bxa6 4. Nc3 Bb7 5. Nb5 axb5 6. b4 Nxe4 7. a4 Bxb4 8. Ba3 Bxd2+ 9. Ke2 Nc3+ 10. Kf1 Nxd1 11. c4 Nxf2 12. Ne2 Nxh1 13. Nd4 Qf6+ 14. Ke2 Qf2+ 15. Kd3 Qxd4+ 16. Kc2 Be4+ 17. Kb3 Qc3+ 18. Ka2 Qxc4+ 19. Kb2 Qc2# *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: Master Class - ELO 400 - A New Start - Pincer Mate"]
+[Date "2023.10.29"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "?"]
+[Opening "?"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Master Class - ELO 400 - A New Start - Pincer Mate"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/lnBolWeK"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[FEN "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 1"]
+[SetUp "1"]
+[UTCDate "2023.10.29"]
+[UTCTime "07:00:20"]
+
+1. Be3 d6 2. Qd2 Nf6 3. Nc3 O-O 4. Bh6 Bh8 (4... Bxh6 5. Qxh6 e6 6. e5 Qd7 7. exf6 { Lobster Pincer Mate }) (4... Nc6 { Correct Move }) 5. Bxf8 *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: Master Class - ELO 420 Principles of the Gambit - Danish Gambit"]
+[Date "2023.10.29"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C21"]
+[Opening "Danish Gambit"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Master Class - ELO 420 Principles of the Gambit - Danish Gambit"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/sLVEv77R"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.10.29"]
+[UTCTime "09:06:32"]
+
+1. e4 e5 2. d4 exd4 3. c3 c5 (3... Nf6) (3... dxc3 4. Bc4 cxb2 5. Bxb2) 4. Bc4 (4. cxd4 cxd4 5. Nf3) 4... Nf6 5. Nf3 Nxe4 6. O-O a6 7. Qb3 (7. Qe2 d5) 7... b5 8. Bxf7+ Ke7 9. Re1 (9. Qd5) 9... c4 10. Bxc4 (10. Bg5+ Kxf7 { Tunnel Vision }) 10... bxc4 11. Rxe4+ Kf6 (11... Kf7 12. Qxc4+ d5 { Black Defense - Fork Rook and Queen } 13. Qb3 { Tactics - Move the Queen and Maintain the Pin } (13. Rf4+) (13. Qxd4 dxe4 14. Qxd8 { Tactics - EST Equal })) 12. Bg5+ Kf7 13. Qxc4+ Kg6 14. Bxd8 Nc6 15. Rg4+ Kf5 16. Qd5+ (16. Qf7+ Kxg4 17. h3# { Fastest Check Mate }) 16... Kxg4 17. Qg5# *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: Master CLass - ELO 500 - Developing with Flexibility"]
+[Date "2023.10.30"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B00"]
+[Opening "Nimzowitsch Defense: Kennedy Variation, Keres Attack"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Master CLass - ELO 500 - Developing with Flexibility"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/h2kS4oWQ"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.10.30"]
+[UTCTime "01:06:32"]
+
+1. e4 e5 2. d4 Nc6 { Nimzovitsch Position } 3. dxe5 (3. Nf3 { Scotch transposition }) 3... Nxe5 4. Nc3 d6 5. Be3 Bg4 6. f3 Bh5 7. Qd2 c5 8. O-O-O Nf6 9. g4 Bxg4 10. fxg4 Nfxg4 11. Bb5+ Ke7 12. Nd5+ Ke6 13. Nh3 Nxe3 14. Nhf4# *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: Master Class - ELO 600 - Never Play the F6 Pawn"]
+[Date "2023.10.31"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C20"]
+[Opening "Center Game"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Master Class - ELO 600 - Never Play the F6 Pawn"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/0UBGwlEg"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.10.31"]
+[UTCTime "02:33:57"]
+
+1. e4 e5 2. d4 (2. Nf3 f6 3. Nxe5 fxe5 4. Qh5+ g6 5. Qxe5+) 2... b6 3. dxe5 f6 4. Bc4 Ne7 (4... fxe5 5. Qh5+ g6 6. Qxe5+) 5. Qh5+ g6 (5... Ng6 6. Nf3 a6 7. Nh4 fxe5 8. Nxg6 hxg6 9. Qxg6+ Ke7 10. Bg5#) 6. exf6 gxh5 7. f7# *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: Master Class 640 - Controlling the Centre"]
+[Date "2023.10.31"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A00"]
+[Opening "Van't Kruijs Opening"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Master Class 640 - Controlling the Centre"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/7me4Yyjp"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.10.31"]
+[UTCTime "02:38:12"]
+
+1. e3 (1. e4 Nf6 2. e5 (2. Nc3 { Transpostion to Vienna } 2... d5 { Transposition to Scandanavian }) 2... Ng4 (2... Nd5) 3. Qxg4) 1... e5 2. Bc4 d5 3. Bb3 Nf6 4. Nc3 c6 5. Nf3 Bd6 6. Ng5 O-O 7. e4 h6 8. Nh3 dxe4 9. Rf1 Bg4 10. f3 exf3 11. Kf2 fxg2 12. Kxg2 Bxd1 *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: Master Class - 700 - Game 1 - Philidor Analysis 1"]
+[Date "2023.11.02"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C41"]
+[Opening "Philidor Defense"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Master Class - 700 - Game 1 - Philidor Analysis 1"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/ZowcJYco"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.02"]
+[UTCTime "03:56:52"]
+
+1. e4 e5 2. d4 d6 3. Nf3 (3. dxe5 dxe5 4. Qxd8+ Kxd8 5. Nc3 c6 6. Bg5+ Kc7 { Best move for Black afteter Queeen Trade }) 3... Bg4 4. dxe5 dxe5 (4... Bxf3 5. Qxf3 dxe5 6. Bc4 Nf6 7. Qb3 { The Opera Game }) 5. Qxd8+ Kxd8 6. Nxe5 Be6 *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: Master Class - 700 - Game 2 - Philidor Analysis 2"]
+[Date "2023.11.02"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C20"]
+[Opening "Center Game"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Master Class - 700 - Game 2 - Philidor Analysis 2"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/A9ZCjbul"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.02"]
+[UTCTime "04:10:40"]
+
+1. e4 e5 2. d4 c6 3. dxe5 Qa5+ 4. Nc3 Qxe5 5. Nf3 Qe6 6. Ng5 Qe5 7. Bc4 b5 (7... d5 { Black's best move } 8. Bb3 h6 (8... d4 9. Nxf7) 9. Nf3 Qc7 (9... Qe7 10. O-O dxe4 11. Nxe4 Qxe4 12. Re1 Qe7 13. Rxe7+ Nxe7) 10. exd5) 8. Nxf7 (8. Bxf7+ Ke7 (8... Kd8 9. Bxg8 Rxg8 10. Nf7+) 9. O-O h6 10. Nf3) 8... b4 (8... Qe7 9. Bb3) 9. Nxe5 bxc3 10. Qh5+ Kd8 (10... g6 11. Nxg6 hxg6 12. Qxh8) 11. Nf7+ Kc7 12. Qa5+ Kb7 13. Nd8# *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: Master Class - 790 - Game 1 - Philosophy of the Fianchetto"]
+[Date "2023.11.04"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D00"]
+[Opening "Queen's Pawn Game"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Master Class - 790 - Game 1 - Philosophy of the Fianchetto"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/odbGh9CQ"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.04"]
+[UTCTime "04:46:01"]
+
+1. d4 d5 2. g3 Nf6 3. Bh3 (3. Bg2 { Sound way to respond } 3... Bf5 4. Nf3) 3... Bxh3 4. Nxh3 c5 5. Be3 (5. dxc5 Nc6 6. O-O e5 7. Bg5 Bxc5 8. Bxf6 Qxf6 (8... gxf6 { Black can castle queeenside. }) 9. Qxd5 { Do not capture the bishop with the queen; it hangs the bishop }) 5... Nc6 6. c3 e6 7. dxc5 Ng4 8. Bg5 (8. Bd4 e5 (8... Nxd4 9. cxd4 { Capturing with the knight enables white to secure the pawn chain }) 9. Be3 { Playing E5 forces the Bishop back; this enables the capture of the bishop and doubling up of the pawns in front of the king } 9... Nxe3 10. fxe3 Bxc5) 8... f6 (8... Be7 { Be7 - you allow white the opportunity to cling to the pawn } 9. Bxe7 Qxe7 10. b4) 9. Bf4 Bxc5 10. b4 Bb6 11. b5 Nce5 12. Na3 O-O 13. O-O Rc8 14. Qd2 Qe8 15. Rac1 Qh5 16. Kg2 Bc5 17. Qb2 (17. Nc2 Nc4 18. Qd3 e5 { E5 dops D5 with the a check to the queen } (18... Bxf2 { Tactic to win } 19. Nxf2 (19. Rxf2 Qxh3+ 20. Kxh3 Nxf2+ 21. Kg2 Nxd3 22. exd3) 19... Qxh2+ 20. Kf3 Nge5+ 21. Bxe5 fxe5+ 22. Kg4 Rf5 23. Qxf5 exf5+ 24. Kf3 e4+ 25. Nxe4 dxe4+ 26. Kf4 Qh6+ 27. Kxf5 Qg6+ 28. Kf4 Rf8#) 19. Qxd5+ Kh8) 17... Bxa3 18. Qxa3 Nc4 19. Qxa7 e5 20. Qc5 (20. Be3 d4 21. cxd4 Ngxe3+ 22. fxe3 Nxe3+ 23. Kf2 Qxh3 24. Kxe3 Qh6+ 25. Kf3 Rxc1 26. Rxc1 Qxc1 27. Qc5 Qh1+ 28. Ke3 exd4+ 29. Kxd4 Rd8+ 30. Kc3 Qe1+ 31. Kb3 Qb1+ 32. Kc3 Kh8 33. Qc4 Re8 34. Kd2 b6 35. a3 Qg1 36. a4 Qxh2 37. Qd3 Qg1 38. Kc3 Qe1+ 39. Kc4 Qc1+ 40. Kb3 Qa1 41. g4 Qe5 42. e3 Qg3 43. Kc4 Qc7+ 44. Kb3 Qc1 45. e4 Qa1 46. Kc2 Qxa4+ 47. Kd2 Qa2+ 48. Ke3 Qg2 49. g5 fxg5 50. Qd5 Rf8 51. Kd4 Qf2+ 52. Kc4 Rc8+ 53. Qc6 Rd8 54. Qd5 Rxd5 55. exd5 Qc5+ 56. Kd3 Qxd5+ 57. Ke3 Qe5+ 58. Kd2 g4 59. Kd3 g3 60. Kc4 g2 61. Kb3 g1=Q 62. Kc2 Qf2+ 63. Kb3 Qfb2+ 64. Kc4 Qbxb5#) 20... Rxc5 21. b6 exf4 22. gxf4 Nce3+ 23. fxe3 Nxe3+ 24. Kf2 Qxh3 25. Rc2 Nxc2 26. Rc1 Qe3+ 27. Kg2 Qxc1 28. e3 Nxe3+ { White Resigns } *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: Master Class - 790 - Game 2 - Philosophy of the Fianchetto"]
+[Date "2023.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A00"]
+[Opening "Van't Kruijs Opening"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Master Class - 790 - Game 2 - Philosophy of the Fianchetto"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/OfFjr5cs"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.05"]
+[UTCTime "07:59:59"]
+
+1. e3 e5 2. Qe2 d5 3. e4 dxe4 4. Qxe4 Nc6 5. Nf3 Nf6 6. Qc4 Be6 7. Qe2 Bc5 8. b3 (8. Nxe5 Nxe5 9. Qxe5 Bxf2+ (9... Bb6) 10. Kxf2 Ng4+) 8... e4 9. Ng1 Nd4 10. Qb5+ (10. Qd1 Bg4 11. Ne2 Bf3 12. gxf3 (12. Ba3 Bxa3 13. Nxa3 Ng4 14. h3 Qh4 15. g3 Qf6 16. hxg4 Nxe2 17. Bxe2 Bxh1 18. d4 exd3 19. cxd3 O-O 20. Nc2 Rfe8 21. Ne3 c5 22. Rb1 Qh6 23. Kd2 Bc6 24. b4 c4 25. b5 Bg2 26. Qg1 Bd5 27. dxc4 Be4 28. Bd3 Red8 29. Rb3 Qf6 30. Qf1 a6 31. bxa6 Rxa6 32. a3 Qd4 33. Qe2 Rad6 34. Nd5 Bxd5 35. cxd5 Rxd5 36. Qf3 R5d6 37. Rb4 Qxd3+ 38. Qxd3 Rxd3+ 39. Ke2 Rd2+ 40. Ke1 Rd1+ 41. Ke2 R8d2+ 42. Ke3 Rd7 43. Ke4 R1d2 44. a4 Re7+ 45. Kf3 g5 46. Kg2 Ra2 47. Rb5 f6 48. Kf3 Rxa4 49. Kg2 Rxg4 50. Kh3 Ra4 51. f4 gxf4 52. gxf4 Rxf4 53. Kg3 Ra4 54. Kf3 Kf7 55. Rb3 Rae4 56. Kf2 Kg6 57. Rb5 Re2+ 58. Kf3 f5 59. Rxb7 Rxb7 60. Kxe2 Rd7 61. Kf3 Re7 62. Kf4 Re4+ 63. Kf3 Kg5 64. Kg3 Rf4 65. Kh3 Rg4 66. Kh2 Kh4 67. Kh1 Kg3 68. Kg1 Rf4 69. Kh1 Rf1#) 12... Nxf3#) 10... Nxb5 11. Nc3 Nd4 12. d3 Nxc2+ 13. Kd1 Nxa1 14. Bb2 Nxb3 15. Kc2 Nd4+ 16. Kd2 exd3 17. Bxd3 O-O 18. Nge2 Nxe2 19. Kxe2 Qd4 20. Re1 Qxf2+ 21. Kd1 Rad8 22. Ne2 Rxd3+ 23. Kc2 Qxe1 24. Kxd3 Qd1+ 25. Kc3 Ne4# *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: ELO - 860 - Master Class - Danish Gambit Declined"]
+[Date "2023.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B00"]
+[Opening "Nimzowitsch Defense: Kennedy Variation, Keres Attack"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "ELO - 860 - Master Class - Danish Gambit Declined"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/YHBj36LY"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.05"]
+[UTCTime "08:51:46"]
+
+1. e4 e5 2. d4 Nc6 3. dxe5 Nxe5 4. Nc3 Nf6 5. f4 Nc6 6. e5 Ng8 7. Nf3 d6 (7... Bb4 8. Bc4 Bxc3+ 9. bxc3 Nge7 10. Ba3 { This line gives white the two bishop advantage and black will never be able to play D6 } (10. Ng5 O-O 11. Qh5 h6 12. Nxf7 Rxf7 13. Bxf7+ Kh7 14. O-O Qf8 15. Ba3 d6 16. Bc4 Bf5 17. Rae1 Rd8 18. Rf2 Ng6 19. Bf1 Nce7 20. g3 a6 21. c4 b5 22. Qe2 Qg8 23. e6 bxc4 24. g4 Bxe6 25. Qxe6 Qxe6 26. Rxe6 Nd5 27. Bc1 Rf8 28. Re4 Nb6 29. Bb2 Rf7 30. Bxc4 d5 31. Bb3 a5 32. f5 Nh4 33. Rfe2 a4 34. Re7 Kg8 35. Re8+ Rf8 36. Ba3 Rxe8 37. Rxe8+ Kh7 38. Re7 axb3 39. axb3 d4 40. f6 Nf3+ 41. Kg2 Ng5 42. Rxg7+ Kh8 43. f7 Nd7 44. Rg8+ Kh7 45. Rd8 Nxf7 46. Rxd7 Kg6 47. Kg3 Ng5 48. Rxc7 Ne6 49. Rc8 Kf7 50. Bb2 Kg7 51. Bc1 Kg6 52. Rc6 Kf7 53. Bxh6 Ke7 54. Rc4 Kf6 55. g5+ Kf5 56. Rc8 d3 57. cxd3 Nd4 58. b4 Ne2+ 59. Kf2 Nd4 60. Rc4 Ne6 61. Kg3 Nd8 62. Rc5+ Kg6 63. Kg4 Kf7 64. Rc7+ Ke8 65. Rc8 Kd7 66. Rxd8+ Kxd8 67. g6 Ke8 68. g7 Kf7 69. Kf5 Kg8 70. Kf6 Kh7 71. Kf7 Kxh6 72. g8=Q Kh5 73. h3 Kh6 74. Qg6#)) 8. Bb5 Bd7 (8... dxe5 9. Qxd8+ Kxd8 10. Bxc6 { The Bishop immobolizes the black knight and enables the development of the white knight forking the pawns } 10... bxc6 11. Nxe5) 9. O-O dxe5 10. fxe5 Bc5+ 11. Kh1 Nge7 12. Ne4 Bf5 (12... Bb6 13. Bg5 O-O { Tacticle sequence } 14. Nf6+ gxf6 15. Bxf6 Qe8 16. Qd2 (16. Ng5 Nf5 17. Qh5 h6 18. Rxf5 Qxe5 19. Qxh6 Qe1+ 20. Rxe1 a6 21. Qg7#) 16... Nd4 17. Nxd4 Bh3 18. Qh6 Bxg2+ 19. Kxg2 Qc6+ 20. Nxc6 Nf5 21. Rxf5 a6 22. Qg5#) 13. Nxc5 a6 14. Bc4 Qxd1 15. Rxd1 O-O 16. c3 Rfd8 17. Bg5 Bc2 18. Rxd8+ Rxd8 19. Nxb7 Rd1+ 20. Rxd1 Bxd1 21. Bxa6 h6 22. Bxe7 Nxe7 23. Nc5 Nf5 24. e6 Ne3 25. e7 Ng4 26. e8=Q+ Kh7 27. Bd3+ g6 28. Qxf7+ Kh8 29. Ne6 Nf2+ 30. Kg1 Nxd3 31. Qg7# *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: ELO - 875 - Blackmar-Diemer Gambit"]
+[Date "2023.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D00"]
+[Opening "Blackmar-Diemer Gambit Declined: Lamb Defense"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "ELO - 875 - Blackmar-Diemer Gambit"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/l73JF7VA"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.05"]
+[UTCTime "10:13:19"]
+
+1. d4 d5 2. e4 dxe4 3. Nc3 (3. f3 { The refutation of the blackmar-Diemer Gambit } 3... e5 4. dxe5 Qxd1+ 5. Kxd1 Nc6) 3... Nf6 4. f3 Nc6 5. Bf4 (5. d5 { White should have played D5 } 5... Ne5 6. fxe4 e6 { The black bishop can now come out and prevent castling }) 5... Nxd4 6. Nb5 (6. fxe4 { White should have played fxe4 } 6... Bg4) 6... Nxb5 7. Qxd8+ Kxd8 8. O-O-O+ (8. Bxb5 { The light squared bishop should have captured the knight } 8... c6 9. O-O-O+ Ke8 { The follow for black is to advance the D7 pawn and develop the dark squared bishop }) 8... Nd6 9. Bb5 Bd7 10. Bxd7 Kxd7 11. Nh3 exf3 12. gxf3 h6 13. Rhe1 e6 14. Re2 Be7 15. Nf2 Rad8 16. Ne4 Nxe4 17. Rxe4 Kc8 18. Bxd6 Rxd6 19. Red4 Rhd8 20. Rxd6 Rxd6 21. Rxd6 Bxd6 22. b4 Bxh2 23. c4 h5 24. Kd1 h4 25. Ke1 h3 26. Kf1 Bf4 27. Kf2 f5 28. a4 g5 29. c5 g4 30. b5 g3+ 31. Kg1 Be3+ 32. Kh1 g2+ 33. Kh2 g1=Q+ 34. Kxh3 Bf2 35. c6 Qg3#!? *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: ELO - 875 - Game 2 - The Danish Gambit Declined"]
+[Date "2023.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C20"]
+[Opening "Center Game"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "ELO - 875 - Game 2 - The Danish Gambit Declined"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/G9g2IXnA"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.05"]
+[UTCTime "11:06:22"]
+
+1. e4 e5 2. d4 Nf6 3. dxe5 Nxe4 4. Bc4 c6 (4... Bc5 5. Qd5 Bxf2+ 6. Kf1 O-O 7. Qxe4 d5 8. Bxd5 c6 9. Bb3 Bxg1 10. Rxg1 Nd7 11. Be3 Qa5 12. Nd2 Nxe5 13. Bd4 Ng4 14. h3 Qxd2 15. hxg4 Qg5 16. Rh1 h6 17. Kg1 Qxg4 18. Qxg4 Bxg4 19. Rh4 h5 20. Rf1 b6 21. a4 c5 22. Bc3 Rae8 23. Rf4 Re3 24. Bc4 Bd1 25. Rh1 g6 26. Kf2 Rxc3 27. bxc3 Bxc2 28. Re1 Kg7 29. Re7 Kh6 30. Rxa7 Rd8 31. Rfxf7 Rd2+ 32. Kg1 Be4 33. Rf2 Rd1+ 34. Kh2 Rc1 35. Re7 Bf5 36. Bb5 Rxc3 37. Rb7 Kg5 38. Rxb6 Ra3 39. Rc6 c4 40. Rxc4 Kf6 41. Rb2 Ke7 42. Rc6 Kf7 43. Rc7+ Kf6 44. Be8 h4 45. Rb6+ Ke5 46. Rc4 Bd3 47. Rxh4 Ra1 48. Rhb4 Kd5 49. Bb5 Bf5 50. Bc6+ Kc5 51. R4b5+ Kd4 52. Rd5+ Kc3 53. a5 Bd3 54. Rg5 Bf5 55. a6 Kd4 56. Bb7 Ke3 57. Rb4 Kd2 58. Rg3 Ra5 59. Rd4+ Kc2 60. Rf3 Be6 61. g4 Kc1 62. Rf6 Ra2+ 63. Kg1 Bb3 64. Rc6+ Kb1 65. Rb4 Kb2 66. Rcb6 Kc3 67. Rxb3+ Kc4 68. Rf3 g5 69. Rf5 Ra4 70. Kf2 Ra2+ 71. Kg3 Ra3+ 72. Bf3 Ra2 73. Rf8 Ra5 74. Rc6+ Kb4 75. Rb8+ Ka4 76. a7 Ka3 77. a8=Q Rxa8 78. Rc3+ Ka2 79. Bd5+ Ka1 80. Rc1#) 5. Qe2 (5. Qf3 d5 6. exd6 Nxd6 { Moving the pawn to D5 enables en passant protecting the knight , but black is equal when capturing the white pawn back. The black knight attacks white's light squared bishop, and protecting the F7 pawn. }) 5... Nc5 6. Nc3 d5 7. exd6+ Kd7 (7... Be6 { Black should have covered the F7 pawn with his bishop } 8. Be3) 8. Be3 { Play the dark squared bishop to E3 to stop the queen trade and attack the knight on c5 - let him take the pawn on d6 } 8... Bxd6 9. O-O-O Ke8 (9... Ne6 { If Black had played knight E6, the clinical move would have been } 10. Ne4 Kc7 11. Nxd6 Qf6 12. Qd2 b6 13. Nf3 Rd8 14. Rhe1 Nd7 15. Bxe6 Nc5 16. Bg5 Nxe6 17. Bxf6 gxf6 18. c3 Rb8 19. Nh4 Rd7 20. Nhf5 Rb7 21. Qh6 Kb8 22. Qxh7 Rbc7 23. Qh8 c5 24. Re3 a5 25. g3 c4 26. f3 Rd8 27. Qxf6 a4 28. h4 a3 29. bxa3 Rcd7 30. Qe5 Nc7 31. Qd4 Na8 32. h5 Rf8 33. a4 Rdd8 34. Ne7 Bb7 35. Qxc4 Rd7 36. Nxb7 Rxd1+ 37. Kxd1 Kxb7 38. Nd5 Kb8 39. Re7 Rd8 40. Rxf7 Rxd5+ 41. Qxd5 Nc7 42. Qd8+ Ka7 43. Qxc7+ Ka6 44. Qa7#) 10. Bg5+ { Black resigns } *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: ELO - 900 - Game 1 - Karo Kan v Queen's Wayward Attack"]
+[Date "2023.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B10"]
+[Opening "Caro-Kann Defense"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "ELO - 900 - Game 1 - Karo Kan v Queen's Wayward Attack"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/30UMkugs"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.05"]
+[UTCTime "12:09:57"]
+
+1. e4 c6 2. Qh5 Nf6 { Knight f6 is an error black can push the whit pawn to d5; playing c5 was more flexible } (2... d5) 3. Qe2 d5 4. exd5 (4. e5 { By playing KF3 early black can build something resembling an advanced Caro Kan } 4... Nfd7 5. d4) 4... cxd5 5. Qd1 Nc6 6. Bb5 Bg4 { Bishop g4 is a great move, as it provokes f3 weakness } 7. f3 Bf5 8. g4 Bg6 9. g5 Nh5 10. d3 Qa5+ 11. Nc3 d4 12. a4 dxc3 13. Bxc6+ bxc6 14. bxc3 Qxc3+ 15. Bd2 Qe5+ 16. Ne2 e6 17. Bc3 Qxg5 18. f4 Nxf4 19. Nxf4 Qxf4 20. Rf1 Qe3+ 21. Qe2 { Playing russian school of chess - we play very disciplined very boring chess - force the queen trade ! } 21... Qxe2+ 22. Kxe2 f6 23. a5 Bd6 24. h4 Kd7 25. d4 Bxc2 26. Ra2 Bb3 27. Rb2 Bc4+ 28. Kd2 Bxf1 29. Rb7+ Bc7 30. Rb4 Rab8 31. Rxb8 Rxb8 32. a6 Bxa6 33. Ke3 g5 34. hxg5 fxg5 35. Kf3 Rb3 36. Ke3 Rxc3+ *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: ELO - 900 - Danish Gambit Declined with early F3"]
+[Date "2023.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C20"]
+[Opening "Center Game"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "ELO - 900 - Danish Gambit Declined with early F3"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/oFLB5wDM"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.05"]
+[UTCTime "12:58:52"]
+
+1. e4 e5 2. d4 f6 3. dxe5 fxe5 4. Qh5+ g6 5. Qxe5+ Qe7 6. Qxh8 Nf6 7. Bh6 Nc6 8. Nc3 Ne5 9. O-O-O Nf7 10. Qxf8+ Qxf8 11. Bxf8 Kxf8 12. f4 Ng4 13. Rd2 Nd6 14. Nf3 b6 15. h3 Nf6 16. e5 Nfe4 17. exd6 Nxd2 18. Kxd2 cxd6 19. Bd3 Bb7 20. Re1 h5 21. Bxg6 Kg7 22. f5 { Black resigns } *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: ELO - 975 - Central Control - Game 1 - A43 Benoni Defense, Grench Benoni"]
+[Date "2023.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A43"]
+[Opening "Benoni Defense: French Benoni"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "ELO - 975 - Central Control - Game 1 - A43 Benoni Defense, Grench Benoni"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/MeJmmcqA"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.05"]
+[UTCTime "13:28:43"]
+
+1. e4 c5 2. d4 e6 3. d5 d6 4. Nc3 Ne7 (4... Nf6 { Black should have developed the Knight to F6 - Black is playing to passively }) 5. Nf3 h6 (5... e5 { Black should have play E5 to close down white's advantage } 6. Nd2 { Knight to d6 is white's continuation to pave the way for pawn to f4 }) 6. Bb5+ Bd7 7. dxe6 Bxb5 8. exf7+ Kxf7 9. Nxb5 Qb6 (9... Qa5+ 10. Nc3) 10. Nxd6+ Kf6 11. e5+ Ke6 12. Ng5+ Kxe5 (12... hxg5 { Continuation to for the black queen and king if black h6 pawn captured the knight on g5 } 13. Qg4+ Kxe5 14. Nc4+) 13. O-O (13. Qe2+ Kd5 14. Qe4+ Kxd6 15. Qe6+ Kc7 16. Bf4+ Kd8 17. O-O-O+ Qd6 (17... Ke8 18. Qf7#) 18. Rxd6+ Nd7 19. Qxd7#) 13... Kf6 14. Re1 hxg5 15. Qf3+ Kg6 16. Re6+ Kh7 17. Qh5+ Kg8 18. Qf7+ Kh7 19. Bxg5 Ng8 20. Qg6# *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: ELO - 975 - Central Control - Game 2 Caro-Kann Defense Main Line"]
+[Date "2023.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B15"]
+[Opening "Caro-Kann Defense: Main Line"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "ELO - 975 - Central Control - Game 2 Caro-Kann Defense Main Line"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/BAVnWPzd"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.05"]
+[UTCTime "14:46:14"]
+
+1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nf6 { Black's continuation of KF6 is the Caro Kann - Tartakower Variation } (4... Bf5) (4... Nd7) 5. f3 (5. Nxf6+ exf6 6. c3 Bd6 7. Bd3 O-O 8. Qc2 Re8+ 9. Ne2 h5) 5... Bf5 (5... Nxe4 { White Knight capturing the e4 pawn is another alternative line that black could have played } 6. fxe4 e5 7. dxe5 Qh4+) 6. Bc4 Nbd7 (6... Nxe4 { If black's knight had taken the e4 pawn, this is a possible continuation that white could have played } 7. fxe4 Bxe4 8. Nf3 e6 9. O-O Be7 10. Ne5 O-O 11. Nxf7 Rxf7 12. Bxe6) 7. Ng5 (7. Qe2 { Famous Trap } 7... h6 8. Nd6#) 7... e6 8. d5 (8. Ne2 { White should have played Knight to e2 and not d5 } 8... h6) 8... cxd5 9. Bb5 Qa5+ { Black Resigns } *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: ELO - 1000 - Game 1 - Attacking the Philidor"]
+[Date "2023.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C41"]
+[Opening "Philidor Defense"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "ELO - 1000 - Game 1 - Attacking the Philidor"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/thaRXJnq"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.05"]
+[UTCTime "16:00:38"]
+
+1. e4 e5 2. d4 d6 3. Nf3 f6 4. Bc4 Nc6 5. c3 a5 6. a4 (6. Qb3 a4 7. Bf7+ Kd7 (7... Ke7 8. Qd5 Ra5) 8. Qe6#) 6... Nh6 7. Bxh6 gxh6 8. Nh4 (8. Nxe5 fxe5 (8... dxe5 { The problem with Knight capturing e5 pawn is that check mate is not guaranteed } 9. Qh5+ Kd7 (9... Ke7 10. Qf7+ Kd6) 10. Qf7+ Qe7 11. Qd5+ Qd6) 9. Qh5+ Ke7 (9... Kd7 10. Qf5+ Ke8 11. Qf7#) 10. Qf7#) (8. Ng5 { The problem the Knight to g5 there is simply no checkmate } 8... hxg5 9. Qh5+) 8... h5 (8... Qe7 { Black queen to E7 enables the d7 square to be vacated for the protection of the black king } 9. Qh5+ Kd8) 9. Qxh5+ Kd7 10. Nf5 Qe8 11. Bf7 Qd8 12. d5 Ne7 13. Be6# *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: Chapter 20"]
+[Date "2023.11.05"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B10"]
+[Opening "Caro-Kann Defense: Hillbilly Attack"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "Chapter 20"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/TPEjLJq0"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.05"]
+[UTCTime "16:54:27"]
+
+1. e4 c6 2. Bc4 d5 3. exd5 cxd5 4. Bb5+ Bd7 5. Nc3 Bxb5 6. Nxb5 Nc6 (6... e5 7. Nf3 Nc6 (7... e4 8. Nfd4 { Just pushing pawns gives up space for your opponents pieces }) 8. d4) 7. c3 a6 8. Nd4 Nxd4 9. cxd4 e6 10. Nf3 Bd6 11. d3 Ne7 12. O-O O-O 13. Re1 Qb6 14. a3 Nf5 15. b4 a5 { This would have been black's best optimal move } (15... Rfc8 { This would also have been a good alternative move }) 16. Bd2 (16. bxa5 Rxa5 { If white had taken the a5 pawn we would have created another weakness. Black also has a weakness : the A7 pawn; but beacause black's pieces are more active, black is in a better position to attack white's weakness. }) 16... axb4 17. axb4 Nxd4 { This has created a specific weakness - the knight attack the C4 pawn, an isolated pawn } (17... Ra6 18. Rxa6 Qxa6 { Alternative strategy 1 to control the A File - The Queen controls the A file after the capture. If he does not capture the rook and decides to move the white rook away from the a file, then black doubles up rooks onto the a file. }) 18. Rxa8 Rxa8 19. Nxd4 (19. Bc3 { Bishop to c3 would have been white's best move } 19... Nxf3+ { Knight to f3 would have been blacks best play in this situation } 20. Qxf3 Bxb4 21. Rb1 Bxc3 22. Rxb6 Ra1+ 23. Rb1 Rxb1+ 24. Qd1 Rxd1#) 19... Qxd4 20. Qe2 Bxb4 (20... Ra2 { This would also have been an alternative workable strategy }) 21. Bxb4 Qxb4 22. g3 Qc3 23. Kg2 b5 (23... Ra1 { Trading the black rook for the white rook, gives scope for the white queen to attack and capture the b7 pawn. } 24. Rxa1 Qxa1 25. Qc2 g6 (25... Qa8 { Black queen to a8 is black's best move to protect the pawn on b7. } 26. Qc7 { White's best reply is queen to C7. This position is very difficult to win for white. } 26... h6 27. Qd7 Qb8 28. Qa4 b5 29. Qb4 Qb6 30. h4 Qa6 31. Qe7) 26. Qc8+ Kg7 27. Qxb7 { This is position is very hard to win. }) 24. Rb1 b4 25. Qb2 Qxb2 26. Rxb2 Rb8 27. Kf3 Kf8 28. d4 b3 29. Ke3 Ke7 30. Kd3 Kd6 (30... Kf6 { King f6 is also a fine alternative }) 31. Kc3 f6 (31... e5 32. dxe5+ Kxe5 33. Rxb3 (33. Re2+ Kd6 34. Kb2) 33... Rxb3+ 34. Kxb3) 32. f4 (32. Re2 b2 33. Rxb2 Rxb2 34. Kxb2) 32... Rb7 { This is a waiting move. } (32... e5 33. dxe5+ fxe5 34. fxe5+ Kxe5 35. Re2+) 33. h4 (33. Kd3 e5 34. dxe5+ fxe5 35. fxe5+ Kxe5 36. Re2+ Kd6 37. Rb2) 33... h5 34. Rxb3 (34. Rb1 b2 35. Rxb2) 34... Rxb3+ 35. Kxb3 e5 36. fxe5+ fxe5 37. dxe5+ Kxe5 38. Kc3 Ke4 39. Kd2 Kf3 40. Kd3 Kxg3 41. Kd4 Kxh4 42. Kxd5 Kg3 43. Ke4 h4 44. Ke3 h3 45. Ke2 h2 46. Kf1 h1=Q+ 47. Ke2 Qf3+ 48. Kd2 Kf4 49. Ke1 Qg2 50. Kd1 Ke3 51. Kc1 Kd3 52. Kd1 Qd2# *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: ELO - 1050 - Will the danish gambit be accepted"]
+[Date "2023.11.07"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B00"]
+[Opening "Nimzowitsch Defense: Kennedy Variation, Keres Attack"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "ELO - 1050 - Will the danish gambit be accepted"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/lIKmEZTi"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.07"]
+[UTCTime "04:58:39"]
+
+1. e4 e5 2. d4 Nc6 3. dxe5 (3. Nf3!! { Knight to f3 transposes to the Scotch }) (3. d5 { D5 is not bad but leads to closed positions }) 3... Nxe5 4. Nc3 Nf6 { Playing KF3 is a big mistake } 5. f4 Nc6 6. e5 Ng8 7. Nf3 d6 8. Bb5 Bd7 (8... dxe5 { The drawback of this move is that whit might be cashing in too soon as the bishop is given up too soon. } 9. Qxd8+ (9. fxe5 { Taking with the pawn is advisable as white has huge initiative }) 9... Kxd8 10. Bxc6 bxc6 11. Nxe5) 9. O-O dxe5 10. fxe5 Qe7 (10... Bc5+ 11. Kh1 Nge7 12. Ng5 { This line would have been blacks best response but it does not really help }) 11. Nd5 Qc5+ 12. Be3 Nd4 13. Bxd7+ Kxd7 14. Nc3 Rd8 15. Bxd4 Qc6 16. e6+ fxe6 (16... Qxe6 17. Ne5+ (17. Bf6+ { Bishop to f6 is a better move } 17... Kc8 18. Qxd8#) 17... Kc8 18. Nxf7) 17. Ne5+ Kc8 18. Nxc6 bxc6 19. Rxf8 Rxf8 20. Bxg7 Rd8 21. Qg4 Nh6 22. Qxe6+ Kb7 23. Bxh8 Rxh8 *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: The Alekhine's Defense"]
+[Date "2023.11.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B02"]
+[Opening "Alekhine Defense: Scandinavian Variation"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "The Alekhine's Defense"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/aKLKODpn"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.08"]
+[UTCTime "02:31:17"]
+
+1. e4 Nf6 2. Nc3 d5 3. e5 d4 4. exf6 dxc3 5. fxe7 (5. fxg7 cxb2 6. gxh8=Q bxa1=Q) 5... cxd2+ 6. Qxd2 Qxd2+ (6... Qxe7+ { Qeeen E7 blocks the bishop for black. White's bishop may be blocked by the white queen but white can castle and black cannot }) 7. Bxd2 Bxe7 8. O-O-O O-O 9. Nf3 Bg4 10. Bf4 c6 11. h3 { The white bishop } *
+
+
+[Event "Naroditsky -Beginner to Master Speed Run: The Englund Gambit"]
+[Date "2023.11.19"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A40"]
+[Opening "Englund Gambit: Main Line"]
+[StudyName "Naroditsky -Beginner to Master Speed Run"]
+[ChapterName "The Englund Gambit"]
+[ChapterURL "https://lichess.org/study/cTDltTbP/iAjiIJcw"]
+[Annotator "https://lichess.org/@/Hector0201"]
+[UTCDate "2023.11.19"]
+[UTCTime "19:28:11"]
+
+1. d4 e5 2. dxe5 Nc6 3. Nf3 Qe7 4. Bf4 Qb4+ 5. Bd2 Qxb2 6. Nc3 Bb4 7. Rb1 Qa3 8. Nd5 Qa5 9. Nxb4 Nxb4 10. Bxb4 Qxa2 11. e4 Nh6 12. Nd4 b6 13. Qc1 Qa4 14. Bb5 Qa2 *
+
+
