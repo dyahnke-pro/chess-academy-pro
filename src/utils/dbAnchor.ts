@@ -19,6 +19,7 @@ import openingsDb from '../data/openings-lichess.json';
 import mastersDb from '../../public/data/openings-masters-db.json';
 import gothamAnchor from '../data/pro-game-anchors/gothamchess.json';
 import naroditskyAnchor from '../data/pro-game-anchors/naroditsky.json';
+import ericrosenAnchor from '../data/pro-game-anchors/ericrosen.json';
 
 let prefixSet: Set<string> | null = null;
 
@@ -65,6 +66,7 @@ export function longestMastersAnchorPly(sans: string[]): number {
 const PRO_ANCHORS: Record<string, Record<string, string[]>> = {
   gothamchess: (gothamAnchor as { positions: Record<string, string[]> }).positions,
   naroditsky: (naroditskyAnchor as { positions: Record<string, string[]> }).positions,
+  ericrosen: (ericrosenAnchor as { positions: Record<string, string[]> }).positions,
 };
 
 /** Longest run of opening plies where each move is one the named pro
@@ -138,14 +140,17 @@ export function longestAnchorPly(sans: string[]): number {
  *  beats that show a "what if they blunder" tail don't drag the score
  *  down, because a sibling beat carries the real line.
  *
- *  When `proId` is passed (e.g. derived from a `pro-<proId>-<opening>` id),
- *  the pro's own game dump joins lichess + masters as a grounding source —
- *  per David's LOCKED rule: "Use his real games. That's the database." */
+ *  **Pro tab vs masterclass tab are independent data sources** (David
+ *  2026-05-28). For pro openings (`proId` provided), the ONLY anchor is
+ *  the pro's own game dump — lichess subset and masters DB don't apply
+ *  because they belong to the masterclass tab's data sources, not the
+ *  pro tab's. For base masterclasses, lichess + masters union as before. */
 export function maxAnchorPly(beatMoveLists: string[][], proId?: string): number {
   let max = 0;
   for (const moves of beatMoveLists) {
-    let a = Math.max(longestAnchorPly(moves), longestMastersAnchorPly(moves));
-    if (proId) a = Math.max(a, longestProGameAnchorPly(moves, proId));
+    const a = proId
+      ? longestProGameAnchorPly(moves, proId)
+      : Math.max(longestAnchorPly(moves), longestMastersAnchorPly(moves));
     if (a > max) max = a;
   }
   return max;

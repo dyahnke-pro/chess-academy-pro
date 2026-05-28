@@ -813,13 +813,20 @@ prose-question-with-prose-answers and has no SANs to invert.
 
 ## 🔒 PRO REPERTOIRE TAB — LOCKED BUILD PROCESS (David 2026-05-28)
 
-**HIS DATABASE IS THE ONLY AUTHORITY FOR HIS TAB.** Not the masters DB, not
-the lichess subset, not theoretical lines, not your training memory. Every
-pro opening (Naroditsky / GothamChess / Eric Rosen / Carlsen / Hikaru /
-Caruana / Firouzja / Dubov / Gukesh / Pragg / Niemann / Anna / Akeem /
-Samay) is built from HIS REAL GAMES in his harvested dump — period. The
-infrastructure to do this is in place and you MUST use it every single
-time:
+**PURPOSE: learn from the pros — learn what THEY do.** The pro tab is a
+fundamentally different artifact from the masterclass tab (Ruy, Pirc,
+Najdorf, … in `repertoire.json` + `opening-manifests.json`). The
+masterclass tab teaches general opening theory; **the pro tab teaches
+each pro's actual repertoire and middlegame play.** These are
+INDEPENDENT data sources — do not pull from one into the other.
+
+**HIS DATABASE IS THE ONLY AUTHORITY FOR HIS TAB.** Not the masters DB,
+not the lichess subset, not theoretical lines, not your training memory,
+not the masterclass tab's data. Every pro opening (Naroditsky /
+GothamChess / Eric Rosen / Carlsen / Hikaru / Caruana / Firouzja / Dubov /
+Gukesh / Pragg / Niemann / Anna / Akeem / Samay) is built from HIS REAL
+GAMES in his harvested dump — period. The infrastructure to do this is
+in place and you MUST use it every single time:
 
 - **The dump:** `docs/audit-runs/2026-05-27-pro-provenance/full-pgns/<proId>.json`
   (gitignored, ~20k full-PGN games per pro). Harvest via
