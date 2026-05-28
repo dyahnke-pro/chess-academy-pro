@@ -1,0 +1,862 @@
+# Pro-Repertoire Deep Build Doctrine
+
+**Status:** LOCKED (David 2026-05-28). This document is the procedure for
+any session that builds a pro-rep opening at full G9.1 depth. Read it
+front-to-back before writing a line of code. The Naroditsky Alapin
+build (the reference) was executed against this doctrine; its files are
+the canonical pattern.
+
+---
+
+## §0. THE VOCABULARY LOCK — non-negotiable
+
+When working on pro-rep, **do NOT use these words** anywhere — not in
+commit messages, not in code comments, not in lesson narration, not in
+internal reasoning, not in chat replies:
+
+- "masterclass" / "masterclass-shaped" / "masterclass-level"
+- "masterclass-quality" / "masterclass-grade"
+- "promote into the masterclass" / "matches the masterclass standard"
+
+**Why this matters:** the M-word, applied to pro-rep work, primes the
+session to (a) treat the M-system as the higher tier and pro-rep as
+something climbing toward it, (b) reach for M-lesson files as templates
+instead of the player's game data, (c) worry about M-gates that don't
+apply, (d) conflate two separate code paths that just happen to share
+UI components. The M-system and pro-rep are SEPARATE SYSTEMS with
+SEPARATE source data, SEPARATE gates, and SEPARATE quality bars.
+
+**The pro-rep quality bar has its own name:** *G9.1 deep build*. The
+shared UI shape (WLPP, `PlayableLinePlayer`, variation tabs) is *the
+pro-rep build shape* or *the pro opening detail shape*. Use "M-word"
+ONLY when literally referring to the M-system files (the lesson files
+registered in `registry.ts OPENINGS`, the M-gates, the masters-DB
+spine). G9's phrase *"look and feel like masterclass"* is a one-time
+directional analogy for the UI; it is NOT a license to use the word
+as the quality target's name inside pro-rep work.
+
+If you catch yourself typing "masterclass" while authoring pro-rep:
+**stop, delete the sentence, rewrite using "pro-rep" or "G9.1 deep
+build" instead.** The vocabulary discipline IS the doctrine.
+
+---
+
+## §1. THE CARDINAL RULE — NO FABRICATED MOVES
+
+This is a hard, no-exceptions rule:
+
+**Every move in every lesson, plan, trap, model game, warning, and
+pitfall MUST come from one of these sources:**
+
+1. The player's chess.com archive at `data/sources/<player>-chesscom/`
+2. The extracted tree at `data/sources/<player>-trees/<opening>.json`
+3. The deep-build per variation at `data/sources/<player>-deep/<opening>-<variation>.json`
+4. Pulled from chess.js when computing a recapture/check/castle that's
+   a deterministic legal move from a position derived from the above
+
+**You will NEVER:**
+
+- Pull a move from training memory ("the theoretical reply is…")
+- Pull a move from book knowledge ("the textbook continuation is…")
+- Pull a move from your own play intuition ("I'd play…")
+- Pull a move from an LLM-generated continuation
+- Pull a move from a third-party theory database that isn't in his archive
+
+**If the data doesn't show the move he plays, the move DOES NOT EXIST
+for this build.** A variation with insufficient data gets dropped, not
+filled in with imagination. A trap that can't be anchored to his actual
+games gets dropped, not fabricated. A model game with no overview you
+can write from real data gets skipped, not boilerplated.
+
+**LLMs cannot play chess.** This rule is the spine of every gate that
+follows. If you find yourself about to type a chess move without
+checking the tree first — stop, pull the tree, verify the move is in
+his data, then type it. No exceptions. None.
+
+---
+
+## §2. THE 16-STEP PROCEDURE
+
+Each step has explicit success criteria. Do not advance to step N+1
+until step N is verified.
+
+### STEP 0 — Verify the player's data is on disk
+
+```bash
+ls data/sources/<player>-chesscom/ | wc -l
+```
+
+Expected: ≥1 monthly archive file (the player has games on chess.com).
+A prolific player like Naroditsky has 149 months / 140k+ games; a
+smaller creator may have 20-50 months / 5k-20k games.
+
+If missing:
+```bash
+node scripts/pro-repertoire/fetch-chesscom.mjs <chesscom-username>
+```
+
+One-time, ~70 seconds for 140k games. Raw archives go to
+`data/sources/<player>-chesscom/` (gitignored).
+
+**Success criterion:** `ls data/sources/<player>-chesscom/*.jsonl | wc -l`
+returns a number > 0.
+
+### STEP 1 — Add the opening to the tree extractor
+
+Edit `scripts/pro-repertoire/extract-opening-tree.mjs` `OPENINGS` map.
+Each entry needs:
+- `name`: the canonical opening name
+- `color`: 'white' or 'black' — the student's side
+- `minPrefix`: SAN array, the minimum prefix that identifies the opening
+- `maxDepth: 80` (always 80)
+
+**Verification:**
+```bash
+node scripts/pro-repertoire/extract-opening-tree.mjs <player> <openingId>
+```
+
+Output goes to `data/sources/<player>-trees/<openingId>.json` and
+`<openingId>-model-games.json`.
+
+The tree carries: `root`, per-position game counts (W/D/L), `spine`
+(most-played path with `MIN_BRANCH_GAMES ≥ 5`), `variations` array
+(branches off the spine with ≥5 games), `bestUrls` per node.
+
+**Success criterion:** the JSON file exists and has `totals.gamesMatchingOpening > 30`.
+If < 30, the player doesn't really play this opening — drop it.
+
+### STEP 2 — Identify named variations from the tree data
+
+Inspect the tree's `variations` array. Filter for entries with `games >= 30`
+that have a CANONICAL name (textbook variation name). Aim for 4–8
+variation tabs.
+
+```bash
+node -e "
+const t = JSON.parse(require('fs').readFileSync('data/sources/<player>-trees/<opening>.json','utf8'));
+for (const v of t.variations.slice(0, 10)) {
+  console.log(v.depthFromOriginPrefix, v.prefixToHere.join(' '), v.branchSan, v.games + 'g', v.scorePct + '%');
+}
+"
+```
+
+**The variation count rule (David 2026-05-25 locked):** build ALL
+validated variations — every line passing the (a)–(d) test:
+
+- (a) ≥30 games in the player's archive
+- (b) the line is a CANONICAL named variation (Tartakower, Mar del
+  Plata, English Attack, etc.) OR an idiosyncratic line the player
+  plays very frequently (e.g. his 80%+ score sub-line)
+- (c) structurally distinct from the other variations (not just a
+  transposition of an already-listed line)
+- (d) at least one student-side-winning model game exists in the
+  data
+
+**Do NOT ask the user how many variations to build.** Build all that
+qualify. No cap. No "is six enough."
+
+### STEP 3 — Deep-build per variation
+
+For each variation, add a key to `OPENINGS` in
+`scripts/pro-repertoire/deep-build-data.mjs` with:
+- `prefix`: the SAN array identifying that variation (≥3 plies past
+  the opening's `minPrefix`)
+- `label`: human-readable name for the deep-build output
+
+Then run:
+```bash
+for v in <variation-keys>; do
+  node scripts/pro-repertoire/deep-build-data.mjs <player> <opening> $v
+done
+```
+
+Output per variation at `data/sources/<player>-deep/<opening>-<variation>.json`:
+- `spineMoves`: the data-derived spine for THIS variation
+- Aggregate per-ply choices: every move he plays at each ply with
+  game counts
+- Middlegame patterns: frequency-ranked moves at plies 12-25 across
+  games-at-terminus
+- Endgame structure breakdown: classified board states at the END
+  of each game
+- Top 5 model games with full PGNs
+
+**Verification check (catches the prefix-mismatch bug):**
+```bash
+node -e "
+const f = JSON.parse(require('fs').readFileSync('data/sources/<player>-deep/<opening>-<variation>.json','utf8'));
+console.log(f.totalGames, 'games |', f.spineMoves.length, 'plies in spine');
+"
+```
+
+**Success criterion:** `totalGames >= 30` AND `spineMoves.length >= 8`.
+If either fails, the variation prefix needs adjusting (probably too
+specific or wrong move order).
+
+### STEP 4 — Count plans HONESTLY using the WIDER CORPUS rule
+
+🚨 **THIS IS THE NON-NEGOTIABLE WIDER-CORPUS RULE (David 2026-05-28,
+locked after the Fantasy Caro endgame mistake):**
+
+Every plan-counting, endgame-classification, or structural analysis
+MUST run across the FULL set of games matching the variation's
+identifying prefix — typically hundreds of games — **NEVER on the 3-4
+games that reach the deep aggregate terminus**.
+
+The terminus is for spine construction only; everything ELSE
+(middlegame patterns, endgame structures, plan counts) is broader-
+corpus analysis. A previous session classified the Fantasy Caro as
+"no endgame plans — most games end mid-board" based on 3 games at the
+deep terminus. The actual answer across the 189 Fantasy games was 56%
+reach real endgames including a 132-ply decisive Q+P win.
+
+Use the wider-corpus templates already on disk:
+
+```bash
+# Generic adaptable templates from the Alapin build:
+node scripts/pro-repertoire/wider-corpus-endgame-alapin.mjs
+node scripts/pro-repertoire/count-plans-alapin.mjs
+```
+
+These hardcode the Alapin variation prefixes — copy them, rename to
+`<opening>-` variants, and edit the `VARIATIONS` map at the top to
+match the new opening's prefixes.
+
+**The plan-count rule:** each cluster with ≥10% frequency at a key
+middlegame ply (12, 14, 16, 18, 20) is ONE candidate middlegame plan.
+**For endgames:** each endgame TYPE reached by ≥10% of games (across
+the wider corpus, not just terminus games) is a candidate endgame plan.
+
+Document the plan count BEFORE authoring. Example output from the
+Alapin reference build:
+
+| Variation | MG plans | EG plans |
+|-----------|----------|----------|
+| nf6-main (1,105g) | 5 (exd6 / Bc4 / Bc2 / Qe2 / Nc3) | 3 (R+min+P 29% / Q+P 11% / R+P 9%) |
+| d5-open (783g)    | 3 (Be3 / Nb5 / Nf3) | 4 (R+min+P 27% / Q+P 12% / R+P 12% / min+P 10%) |
+| e6-french (344g)  | 3 (O-O / dxc5 / Bg5) | 2 (R+min+P 22% / Q+P 12%) |
+| d6-mainline (173g)| 2 (h3 / Nf3) | 2 (R+min+P 30% / Q+P 11%) |
+| g6-dragon (125g)  | 3 (Nf3 / Nc3 / Bb5) | 2 (R+min+P 26% / Q+P 10%) |
+| nc6-line (116g)   | 2 (Nc3+Bd3 / d5) | 3 (R+min+P 34% / Q+P 13% / min+P 11%) |
+
+### STEP 5 — Gather voice corpus
+
+Voice content makes the build accurate. Author from his actual
+words/ideas, not imagination.
+
+Sources accessible from sandbox:
+```bash
+WebSearch "<player> <opening> teaching key ideas"
+WebSearch "<player> <opening> speedrun summary principles"
+WebFetch <listudy URL>           # general principles
+WebFetch <lichess study URL>     # community-curated distillation
+WebFetch <chess blog URL>        # third-party content summaries
+```
+
+**Save gathered content** to
+`data/sources/<player>-voice/per-opening/<opening>.md` with per-source
+attribution. Reference these in lesson `sources[]` arrays.
+
+**YouTube transcripts are sandbox-blocked** (Google bot-check on
+datacenter IPs, confirmed 2026-05-28). When transcript-level voice is
+needed, the URLs themselves go in `sources[]` (youtube.com is NOT in
+the narrationSources allowlist currently — see §3 below — so beat text
+referencing his YouTube content should use neutral framing without
+verbatim quotes). Don't burn time fighting YouTube from sandbox.
+
+**Success criterion:** at least 2-3 distinct URLs that resolve under
+the narrationSources allowlist (§3) — lichess.org, chess.com,
+chessbase.com, chessable.com, wikipedia.org, 365chess.com, etc.
+
+### STEP 6 — Author the per-variation lessons
+
+File: `src/data/lessons/pro<Player><Opening>Variations.ts`
+
+Reference pattern: `src/data/lessons/proNaroditskyAlapinVariations.ts`
+(the canonical Alapin build).
+
+Each variation gets a `LessonScript` with 7-12 beats. Each beat:
+- `id`: short kebab-case
+- `moves`: SAN sequence from the start of the opening, MUST be
+  chess.js-legal (verify with `new Chess(); for (m of moves) chess.move(m);`)
+- `say`: full Watch register prose (60-150 words, references game
+  counts + his voice principles + sources). NO move-number prefixes
+  in prose ("3.Nc3" → "Nc3" or "the queen's knight to c3").
+- `sayShort`: ≤8-word Learn cue (move + 3-5 word echo)
+- `arrows`: green vision arrows only, never from a pawn, clear
+  sight-line (the `lessonIntegrity` gate enforces)
+- `highlights`: orange move squares (auto-painted, don't author);
+  yellow for key squares the narration names; blue for context
+- `sources`: array with `concept:<id>` | reputable https URL (from
+  the narrationSources allowlist). NO `book:<id>` unless the opening
+  is in the corpus.
+
+Export pattern:
+```ts
+export const PRO_<PLAYER>_<OPENING>_VARIATION_LESSONS: Record<string, LessonScript> = {
+  'pro-<player>-<opening>::<Variation Name 1>': VAR1,
+  'pro-<player>-<opening>::<Variation Name 2>': VAR2,
+  // ...
+};
+```
+
+The key MUST match exactly the `name` field of the corresponding
+variation in `pro-repertoires.json`.
+
+### STEP 7 — Register the variation lessons
+
+Edit `src/data/lessons/index.ts`:
+
+```ts
+import { PRO_<PLAYER>_<OPENING>_VARIATION_LESSONS } from './pro<Player><Opening>Variations';
+// ...
+const VARIATION_LESSONS: Record<string, LessonScript> = {
+  // ...existing...
+  ...PRO_<PLAYER>_<OPENING>_VARIATION_LESSONS,
+};
+```
+
+**This is the fix for the "smaller board on variation tabs" UX gap.**
+Without a `LessonScript` for the variation key, the variation tab
+falls through to the legacy `WalkthroughMode` (smaller board, eval
+bar). WITH a registered lesson, the tab renders `PlayableLinePlayer`
+(the consistent bigger board).
+
+**Verification:** `npx tsc --noEmit` — must pass.
+
+### STEP 8 — Expand the pro-repertoires.json entry
+
+Edit `src/data/pro-repertoires.json`. The entry needs:
+
+```json
+{
+  "id": "pro-<player>-<opening>",
+  "playerId": "<player>",
+  "eco": "<ECO code>",
+  "name": "<Opening Name> (<Player>)",
+  "pgn": "<the main spine PGN, ≥15 plies>",
+  "color": "white|black",
+  "style": "<short style descriptor>",
+  "overview": "<300-500 chars, paraphrased from voice corpus, citing data fingerprint>",
+  "keyIdeas": [
+    "<4-6 strings, each grounded in data + voice>"
+  ],
+  "traps": [
+    "<2-4 prose blurbs about opponent tactical traps>"
+  ],
+  "warnings": [
+    "<2-4 prose blurbs about pitfalls his side could fall into>"
+  ],
+  "variations": [
+    {
+      "name": "<MUST exactly match the LessonScript record key suffix>",
+      "pgn": "<the full data-derived variation spine, ≥15 plies>",
+      "explanation": "<200-400 chars, paraphrased + cites game count + score>",
+      "sources": [
+        "<URL from narrationSources allowlist>",
+        "https://api.chess.com/pub/player/<player>/games/archives"
+      ]
+    }
+  ],
+  "trapLines": [
+    {
+      "name": "<the trap's distinguishing idea>",
+      "pgn": "<≥6 plies, chess.js-legal, ends with student gaining material/decisive position>",
+      "explanation": "<full prose explaining the trap mechanism>"
+    }
+  ],
+  "warningLines": [
+    {
+      "name": "<the slip's distinguishing idea>",
+      "pgn": "<≥6 plies, chess.js-legal, ends with student losing material/positionally lost>",
+      "explanation": "<full prose explaining what goes wrong>"
+    }
+  ],
+  "sources": [
+    "<URL from narrationSources allowlist>",
+    "https://api.chess.com/pub/player/<player>/games/archives"
+  ]
+}
+```
+
+### STEP 9 — Author middlegame plans
+
+Reference pattern: `scripts/pro-repertoire/build-alapin-plans.mjs`.
+
+Per the data from STEP 4, build N plans where N is what the data shows.
+Each plan has a chess.js-derived continuation from a real position in
+the tree. The build script (build-<opening>-plans.mjs):
+
+1. Loads the tree
+2. For each plan, walks the prefix into the tree
+3. Pulls the most-played continuation for `depth` plies
+4. Validates every move with chess.js from the prefix's FEN
+5. Generates annotations + arrows + highlights from the validated moves
+6. Writes to `src/data/middlegame-plans.json`
+
+**The themes-must-match-line rule (David 2026-05-28, locked after the
+Classical Tartakower mismatch):**
+
+When you derive a continuation from tree data, INSPECT the actual
+moves before authoring `pawnBreaks` and `pieceManeuvers`. Declare
+themes that the line ACTUALLY demonstrates. Don't author themes that
+match your imagination of the position — author themes that match the
+data-derived moves.
+
+The `middlegamePlanThemes.test` gate enforces this: the test reads
+goal-squares from declared `pawnBreaks` and `pieceManeuvers` strings,
+then walks the playable line and checks at least one student move
+LANDS on a goal square. Themes that don't match the line → gate fails.
+
+### STEP 10 — Author endgame plans (when data supports them)
+
+The R+min+P endgame is dominant across most variations (22-34% of
+decisive games in the Alapin reference). Each endgame plan:
+- `id` ending in `-endgame` (the EndgamePlansSection filters by this)
+- `criticalPositionFen`: a real endgame position from one of his games
+- `playableLines[0]`: a 6-12 move conversion sequence with annotations
+- `pawnBreaks`/`pieceManeuvers`: themes the actual conversion demonstrates
+
+**Endgame plans only when data supports — using the WIDER CORPUS.** If
+< 10% of decisive games reach a structural endgame, don't fabricate
+one. Empty > generic > invented.
+
+### STEP 11 — Common-mistakes / pitfalls
+
+3-5 entries per opening in `src/data/common-mistakes.json` keyed by
+`pro-<player>-<opening>`. Each entry:
+
+```json
+{
+  "fen": "<position FEN where the mistake occurs>",
+  "wrongMove": "<SAN of the bad move>",
+  "correctMove": "<SAN of the principled reply>",
+  "explanation": "<200-400 chars explaining WHY the wrong move fails>",
+  "shortNarration": "<≤8-word echo cue>",
+  "sources": [
+    "<URL from narrationSources allowlist>"
+  ]
+}
+```
+
+Each FEN must be a real position reachable from the data; each
+`wrongMove` and `correctMove` must be chess.js-legal from that FEN.
+
+### STEP 12 — Multi-game model games
+
+3-5 model games PER variation. NOT 1 — David's directive: *"wins only.
+replace the draws!"*
+
+Use the picker output already on disk:
+`data/sources/<player>-trees/<opening>-model-games.json`
+
+For each variation, pick the top games where:
+- `studentColor` matches the opening's `color`
+- `result` matches student winning (1-0 for white, 0-1 for black)
+- `opponentRating` is highest available
+
+Then for each game, hand-author an overview (≥40 chars, NOT
+templated, NOT "Full game by X in Y, watch how the pro handles…").
+The `isNarratedModelGame` filter checks the overview for boilerplate
+patterns; templated games get filtered out at display.
+
+Reference pattern: `scripts/pro-repertoire/build-alapin-model-games.mjs`.
+
+The hand-authored overviews tie each game to the variation's themes
+from the lesson — cite the opponent + rating + the specific structural
+or tactical pattern the game showcases.
+
+### STEP 13 — Update proRepertoireOpeningMap.json
+
+If the opening exists as an entry in `src/data/proRepertoireOpeningMap.json`:
+
+```json
+{
+  "_doc": "...",
+  "map": {
+    // ...
+    "pro-<player>-<opening>": "<canonical-opening-id>"
+  }
+}
+```
+
+The canonical-opening-id is the one tagged in `chess-concepts.json`'s
+`openings` map (caro-kann, ruy-lopez, french-defence, italian-game,
+etc.). This enables source-verification gating.
+
+If no canonical mapping exists (modern openings like Trompowsky,
+Alapin, KIA, etc.), DO NOT add a mapping. The opening is non-mapped
+and the proRepertoireSources gate skips it.
+
+### STEP 14 — Bump PRO_DATA_REVISION
+
+```ts
+// src/services/dataLoader.ts
+const PRO_DATA_REVISION = '<YYYY-MM-DD>-<player>-<opening>-deep-build';
+```
+
+This triggers `reconcileProRepertoires()` on already-seeded devices.
+Per G8, the reconciler ALSO deletes per-player orphans, so any entries
+scrapped from the JSON get cleaned out of Dexie on next boot.
+
+### STEP 15 — Validate
+
+```bash
+npx vitest run \
+  src/data/lessons/ \
+  src/data/pro-repertoires.test.ts \
+  src/data/pro-repertoires-orientation.test.ts \
+  src/data/proRepertoireSources.test.ts \
+  src/data/modelGames.test.ts \
+  src/data/modelGames-orientation.test.ts \
+  src/data/middlegamePlanThemes.test.ts \
+  src/data/commonMistakeNarration.test.ts
+
+npm run ship-check       # must print READY TO PUSH
+```
+
+All gates must be green before pushing. The most common trips and
+their fixes are catalogued in §4 below.
+
+### STEP 16 — Push to main + 3-instrument audit
+
+```bash
+git push origin HEAD:main
+
+# Wait for Vercel (~2-3 min; bundle hash changes when ready)
+curl -s "https://chess-academy-pro.vercel.app/?b=$(date +%s)" | grep -oE 'index-[A-Za-z0-9\-]+\.js'
+
+# Run the 3-instrument audit
+AUDIT_SANDBOX=1 node scripts/audit-pro-<player>-<opening>-prod.mjs
+```
+
+The 3-instrument audit drives:
+1. **Playwright** — clicks variation tabs, presses Watch, asserts the
+   bigger-board `PlayableLinePlayer` renders, verifies `/api/tts`
+   streaming fires
+2. **Audit-stream pull** — verifies coach-narration-spoken / voice-
+   speak-invoked events emitted from the live app
+3. **Local listener sidecar** — captures voice events with source +
+   verbosity tag so we know exactly what got spoken
+
+Reference pattern: `scripts/audit-pro-naroditsky-alapin-prod.mjs`.
+
+**Done = audit checks green + voice fires + Dexie has all variations.**
+
+---
+
+## §3. THE GATE ROSTER
+
+Every gate that protects pro-rep content from drift or fabrication.
+
+### Hard-fail gates (block ship)
+
+1. **`pro-repertoires.test.ts`** — PGN legality
+   - Every variation's PGN must be chess.js-legal start-to-finish
+   - Every trapLine's PGN must be chess.js-legal
+   - Every warningLine's PGN must be chess.js-legal
+   - The opening's overall PGN must be chess.js-legal
+   - The count of openings in the entry array matches the test's
+     expected length (update the test when adding entries)
+
+2. **`pro-repertoires-orientation.test.ts`** — trap/warning orientation
+   - No warningLine ends with the student up clear material (then it
+     would be a trap, not a warning)
+   - No entry under either array ends in checkmate AGAINST the student
+   - trapLines must end with the student gaining material / decisive
+     position (or a known position the data shows is winning)
+
+3. **`proRepertoireSources.test.ts`** — source resolvability
+   - Every variation has a non-empty `sources` array
+   - EVERY source resolves: `book:<id>` (where `<id>` is in the
+     `openings` map of `chess-concepts.json`), OR `concept:<id>`
+     (where `<id>` is in `concepts`), OR a URL whose host is in the
+     `REPUTABLE_DOMAINS` allowlist (`wikipedia.org`, `chess.com`,
+     `chessable.com`, `lichess.org`, `365chess.com`, `chessgames.com`,
+     `britannica.com`, `chesstempo.com`, `chessbase.com`, `chess24.com`,
+     `thechessworld.com`, `gameknot.com`, `chesspathways.com`)
+   - 🚫 youtube.com is NOT in the allowlist — beat text can reference
+     his YouTube content via neutral framing, but `sources[]` arrays
+     must cite an allowlist domain
+
+4. **`modelGames-orientation.test.ts`** — model game wins-only
+   - No model game with `studentSide` set shows that side LOSING or
+     DRAWING
+   - All games surfaced via `isNarratedModelGame` must have hand-
+     authored overviews (≥40 chars, not boilerplate)
+
+5. **`middlegamePlanThemes.test.ts`** — themes match actual moves
+   - Each playable line MUST play a student move that LANDS on a
+     square named in the plan's `pawnBreaks` or `pieceManeuvers`
+     strings
+   - No bare-promise endings ("Black is ready for …e5" without
+     actually playing …e5)
+
+6. **`commonMistakeNarration.test.ts`** — pitfall narration coverage
+   - Every common mistake has both `explanation` and `shortNarration`
+   - `wrongMove` and `correctMove` must be chess.js-legal from the
+     declared `fen`
+
+7. **`lessonIntegrity.test.ts`** — lesson arrow / highlight legality
+   - Arrows never originate from a pawn
+   - Arrows have clear sight-lines (no piece blocking)
+   - Highlights reference valid squares
+
+### Informational gates (warn but don't block)
+
+8. **Sources allowlist** for narration units — each authored beat
+   should cite at least 1 resolvable source
+
+9. **Wider-corpus check** — when claiming a structural pattern, the
+   pattern must be supported by ≥10% of games (per wider-corpus
+   classification, not just terminus games)
+
+---
+
+## §4. THE FAILURE-MODE CATALOG
+
+Every failure I've personally hit this session + the fix. Read this
+before starting any new opening — most of these will trip you too.
+
+### Failure: PGN illegal moves
+**Symptom:** `pro-repertoires.test.ts` fails with `'Error: Illegal move "X" at half-move N in: <pgn>'`
+
+**Cause:** authored a variation PGN from memory ("the textbook
+continuation is..."), didn't verify with chess.js.
+
+**Fix:** Open chess.js or a local script, play the PGN move-by-move,
+find the illegal move, replace with the actual move from the tree's
+spineMoves. Never copy-paste a PGN from theory text; always derive
+from `deep-build-data.mjs` output.
+
+### Failure: theme-empty plan
+**Symptom:** `middlegamePlanThemes.test.ts` fails with
+`mp-<id>#0 {"themeEmpty":true}`.
+
+**Cause:** declared `pieceManeuvers` like "Nd7 → Nf8 → Ng6 reroute"
+but the tree-derived continuation starts with `O-O h4 Nf4`. The
+themes don't match the moves.
+
+**Fix:** Inspect the actual moves the build script produced BEFORE
+authoring themes. Edit `pawnBreaks` and `pieceManeuvers` to name
+squares the line ACTUALLY plays into. The themes-must-match-line
+rule is in STEP 9 above.
+
+### Failure: source unresolvable
+**Symptom:** `proRepertoireSources.test.ts` fails listing variations
+"missing a resolvable source".
+
+**Cause:** cited `book:sicilian-alapin` but `sicilian-alapin` is in
+`chess-concepts.json`'s `openingDefinitions`, NOT in the `openings`
+map that `bookOpenings` is built from. Modern openings (Trompowsky,
+Alapin, KIA, Pirc Austrian, etc.) generally don't have book corpus
+entries.
+
+**Fix:** Drop the `book:<id>` ref and rely on URL sources from the
+allowlist domains. Don't ever cite YouTube URLs (not allowed). The
+Naroditsky Alapin Bc4-Gambit variation hit this exact bug.
+
+### Failure: wider-corpus underestimate
+**Symptom:** declared "no endgame plans" because the 3-4 terminus
+games happened not to reach an endgame. David caught this on the
+Fantasy Caro after I had moved on.
+
+**Cause:** ran endgame classification on terminus games only, not
+the wider variation corpus. The terminus is for spine construction;
+endgame distribution needs the FULL prefix-matching corpus
+(hundreds of games).
+
+**Fix:** Use the wider-corpus script template
+(`wider-corpus-endgame-alapin.mjs`), adapt to the new opening's
+prefixes, run across ALL games matching the variation prefix. Bucket
+endgame types at the final position. Anything ≥10% across the wider
+corpus is a candidate plan.
+
+### Failure: variation tabs show smaller board
+**Symptom:** clicking a variation tab on `/openings/pro/<player>/<opening>`
+shows a small board with eval bar on the right (the legacy
+`WalkthroughMode`), not the consistent bigger board.
+
+**Cause:** the variation has a `name` in `pro-repertoires.json` but
+no matching key in the `VARIATION_LESSONS` map. The fallback is
+intentional for non-curated openings but undesired for the deep build.
+
+**Fix:** Author a `LessonScript` for each variation, export from
+`pro<Player><Opening>Variations.ts`, register in
+`lessons/index.ts`. The record key must EXACTLY match
+`pro-<player>-<opening>::<variation.name>`.
+
+### Failure: pro-rep entry count test
+**Symptom:** `pro-repertoires.test.ts` fails:
+`expected length 91 but got 89`.
+
+**Cause:** added or removed entries; didn't update the test count.
+
+**Fix:** Read the test's expected count in `pro-repertoires.test.ts`,
+update to the new count, update the comment explaining what's in
+the count.
+
+### Failure: variation pgn matched 0 games in deep-build
+**Symptom:** running `deep-build-data.mjs <player> <opening> <variation>`
+prints `Games matched: 0`.
+
+**Cause:** the variation prefix is too long or includes a move that
+isn't in the tree's most-played path. Or you confused a sub-branch
+inside the spine with a Black 2nd-move alternative.
+
+**Fix:** Inspect the tree's `variations` array to see the
+`prefixToHere` and `branchSan` for each branch. Build the variation
+prefix as `minPrefix + prefixToHere + [branchSan]` to match the
+exact data path.
+
+### Failure: trap line "TOOTHLESS"
+**Symptom:** `pro-repertoires-orientation.test.ts` flags a trap line
+as `TOOTHLESS_WARNING` — the PGN doesn't end with the student up
+material.
+
+**Cause:** the trapLine PGN doesn't go far enough — stops mid-tactic
+before the material is won.
+
+**Fix:** Extend the PGN with the rest of the punish sequence, or
+move the entry to `warningLines[]` (where the student LOSING is the
+expected outcome).
+
+### Failure: claimed verbatim quote from YouTube transcript
+**Symptom:** the build authors a beat narration with quotation
+marks around a "his words" passage but the URL doesn't actually
+back the quote.
+
+**Cause:** YouTube transcripts are blocked from the sandbox.
+Authored "what he probably said" instead of "what he actually said."
+
+**Fix:** Drop the verbatim quotation marks. Use neutral framing:
+"per his speedrun coverage" / "in his style" / "consistent with
+his approach." The URL can stay in `sources[]` to prove the video
+exists, but don't claim verbatim text without transcript backing.
+
+### Failure: used the M-word in pro-rep work
+**Symptom:** session loops — David corrects you, you apologize, you
+slip again 3 messages later.
+
+**Cause:** read `CLAUDE.md` G9's phrase "look and feel like
+masterclass" and started using "masterclass" as a quality adjective.
+
+**Fix:** §0 vocabulary lock above. Catch yourself, delete the
+sentence, rewrite. The discipline IS the fix.
+
+---
+
+## §5. THE FILE-MANIFEST CHECKLIST
+
+Every artifact that should exist when a pro-rep deep build is "done."
+
+- [ ] `data/sources/<player>-chesscom/*.jsonl` — raw archives (gitignored)
+- [ ] `data/sources/<player>-trees/<opening>.json` — extracted tree
+- [ ] `data/sources/<player>-trees/<opening>-model-games.json` — picks
+- [ ] `data/sources/<player>-deep/<opening>-<variation>.json` — per variation (one file per data-supported variation)
+- [ ] `data/sources/<player>-voice/per-opening/<opening>.md` — voice corpus
+- [ ] `scripts/pro-repertoire/extract-opening-tree.mjs` — opening added to OPENINGS map
+- [ ] `scripts/pro-repertoire/deep-build-data.mjs` — variations added to OPENINGS map
+- [ ] `scripts/pro-repertoire/wider-corpus-endgame-<opening>.mjs` — adapted from Alapin template
+- [ ] `scripts/pro-repertoire/count-plans-<opening>.mjs` — adapted from Alapin template
+- [ ] `scripts/pro-repertoire/build-<opening>-plans.mjs` — generates middlegame plans
+- [ ] `scripts/pro-repertoire/build-<opening>-model-games.mjs` — generates model games
+- [ ] `scripts/audit-pro-<player>-<opening>-prod.mjs` — 3-instrument audit
+- [ ] `src/data/lessons/pro<Player><Opening>Variations.ts` — variation lessons
+- [ ] `src/data/lessons/index.ts` — imports + spread
+- [ ] `src/data/pro-repertoires.json` — entry with 4-8 variations + traps + warnings
+- [ ] `src/data/middlegame-plans.json` — plans (one per data-supported cluster)
+- [ ] `src/data/model-games.json` — 3-5 games per variation (real wins, hand-authored)
+- [ ] `src/data/common-mistakes.json` — 3-5 pitfalls under the openingId key
+- [ ] `src/data/proRepertoireOpeningMap.json` — mapping if classical opening
+- [ ] `src/services/dataLoader.ts` — `PRO_DATA_REVISION` bumped
+
+---
+
+## §6. THE REFERENCE BUILD
+
+When in doubt about how something should look, consult the **Naroditsky
+Alapin build** (shipped 2026-05-28 against this doctrine). The build
+files in their canonical form:
+
+- Tree: `data/sources/danielnaroditsky-trees/alapin-sicilian.json`
+- Deep-build per variation: `data/sources/danielnaroditsky-deep/alapin-sicilian-{nf6-spine,d5-open,e6-french,d6-mainline,g6-dragon,nc6-line,nf6-d6-sub,nf6-e6-sub}.json`
+- Voice: `data/sources/danielnaroditsky-voice/per-opening/alapin.md`
+- Variation lessons: `src/data/lessons/proNaroditskyAlapinVariations.ts` (7 variations × 7-12 beats)
+- Main spine lesson: `PRO_NAR_ALAPIN_LESSON` in `proNaroditskyAllRemaining.ts` (12 beats)
+- Pro-rep entry: `pro-naroditsky-alapin` in `src/data/pro-repertoires.json` (7 variations + 3 trapLines + 2 warningLines)
+- Plans: 8 entries in `src/data/middlegame-plans.json` matching `pro-naroditsky-alapin`
+- Model games: 12 real wins in `src/data/model-games.json` matching `pro-naroditsky-alapin` (incl. Carlsen, Hikaru ×2, Firouzja ×2, Hans Niemann, Wesley So)
+- Pitfalls: 4 entries in `src/data/common-mistakes.json` under `pro-naroditsky-alapin`
+- Audit: `scripts/audit-pro-naroditsky-alapin-prod.mjs` (13 PASS / 0 FAIL / 5 WARN on first prod run)
+
+The **Naroditsky Caro-Kann build** is the other deep-build reference,
+shipped earlier. It additionally demonstrates per-variation endgame
+plans (R+P conversions) that the Alapin build deferred.
+
+---
+
+## §7. WHAT TO DO IF SOMETHING DOESN'T FIT THIS PROCEDURE
+
+The doctrine is a default, not a cage. If the player has unusual data
+characteristics (e.g. very few games, multiple distinct repertoires
+across time periods, openings the tree extractor doesn't recognize):
+
+1. **Note the deviation in the commit message and a TODO in the lesson
+   file's header comment.**
+2. **Build what the data supports, drop what it doesn't.** Empty >
+   generic > invented.
+3. **Flag it to David for review** before pushing.
+
+Specifically:
+- If a player has < 50 games in an opening, the variation count
+  threshold (STEP 2 part a) may need to drop to "≥10 games" to
+  surface meaningful sub-lines.
+- If a player has < 5 winning games per variation, the multi-game
+  model games rule (STEP 12) drops to "as many as the data shows."
+- If voice corpus is sparse (no Lichess study, no third-party blog
+  coverage), beat narration leans more on data-fingerprint citations
+  ("his X% pick at this position") and less on paraphrased voice
+  framing.
+
+The cardinal rules (§1 NO FABRICATION, §0 VOCABULARY LOCK) NEVER
+flex. The procedural steps flex where the data requires.
+
+---
+
+## §8. ENDING THE SESSION
+
+When the build is "done" per the file-manifest checklist:
+
+1. Commit the work with a structured message:
+   ```
+   feat(pro-rep): <player> <opening> G9.1 deep build — N variations + M plans + traps
+
+   - data extraction: <bullet list>
+   - per-variation lessons: <bullet list of variations + beat counts>
+   - pro-repertoires.json: <variation count> + <trap count> + <warning count>
+   - middlegame plans: <count> new plans
+   - model games: <count> real wins (top opponents)
+   - common-mistakes: <count> pitfalls
+   - gates: all green / ship-check READY TO PUSH
+
+   PRO_DATA_REVISION → <date>-<player>-<opening>-deep-build
+   ```
+
+2. Push to `main` (NOT a feature branch — per CLAUDE.md deployment
+   policy, the harness branch default is overridden by the
+   standing-permission to push to main).
+
+3. Wait for Vercel deploy (~2-3 min; bundle hash changes).
+
+4. Run the 3-instrument audit. Report PASS/FAIL/WARN counts to David.
+
+5. If any FAIL: investigate the root cause, fix, re-push, re-audit.
+   Don't claim "shipped" until the audit is green.
+
+6. Update CLAUDE.md's PRO-REP DEEP BUILD section if any new failure
+   mode was discovered (per "any mistake like that you find, plug
+   in the fix to rules" — David 2026-05-28).
+
+---
+
+**End of doctrine. The Alapin build IS the proof this works.**
