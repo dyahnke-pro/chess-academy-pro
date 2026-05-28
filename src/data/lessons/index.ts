@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import type { LessonScript, AnnotationArrow, AnnotationHighlight, PlayableMiddlegameLine } from '../../types';
 import { PRO_NARODITSKY_CARO_KANN_LESSON } from './proNaroditskyCaroKann';
+import { PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS } from './proNaroditskyCaroKannVariations';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
@@ -199,6 +200,8 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...QUEENS_GAMBIT_VARIATION_LESSONS,
   ...TROMPOWSKY_ATTACK_VARIATION_LESSONS,
   ...BIRDS_OPENING_VARIATION_LESSONS,
+  // Pro repertoires
+  ...PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

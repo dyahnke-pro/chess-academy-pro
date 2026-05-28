@@ -864,26 +864,6 @@
       ]
     }
   ],
-  "pro-naroditsky-jobava-london": [
-    {
-      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
-      "wrongMove": "e3",
-      "correctMove": "Nb5",
-      "explanation": "Playing the quiet e3 misses the key moment! After 3...e6, Black's c7 square is undefended and the knight can jump to b5 threatening Nc7+ fork. This is the signature Jobava tactic — don't miss it."
-    },
-    {
-      "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 5",
-      "wrongMove": "Nf3",
-      "correctMove": "h4",
-      "explanation": "Nf3 is a normal developing choice but misses the chance to exploit Black's fianchetto. After g6 and Bg7, the h4-h5 push creates an immediate kingside attack. The weakened dark squares around Black's king make h4 far stronger than routine development."
-    },
-    {
-      "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 4 4",
-      "wrongMove": "e3",
-      "correctMove": "f3",
-      "explanation": "Playing e3 is the standard London move but it's passive here. When Black develops the bishop to f5, we have the unique opportunity to launch the bishop hunt with f3 followed by g4-h4. This aggressive pawn storm gains massive space and traps or displaces Black's bishop."
-    }
-  ],
   "evans-gambit": [
     {
       "fen": "r1bqk1nr/pppp1ppp/2n5/b3p3/2B1P3/2P2N2/P2P1PPP/RNBQK2R w KQkq - 1 6",
@@ -1293,6 +1273,41 @@
         "book:dutch-defence",
         "concept:att-kingside-storm",
         "https://en.wikipedia.org/wiki/Dutch_Defence"
+      ]
+    }
+  ],
+  "pro-naroditsky-caro-kann": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "Bf5",
+      "correctMove": "c5",
+      "explanation": "After 3.e5 the textbook reflex everyone knows is Bf5 — get the bishop out before the chain locks. But we're playing Naroditsky's line, where c5 strikes the centre at d4 BEFORE developing the bishop. The principle: when your opponent grabs space on the flank, hit them in the centre. Bf5 just lets White play h4-h5 / g4 chasing the bishop around for the next ten moves; c5 forces White to clarify and our score with it is 64%.",
+      "shortNarration": "Wrong: …Bf5. Right: …c5 — Botvinnik-Carls.",
+      "sources": [
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    },
+    {
+      "fen": "rnbqkbnr/pp2pppp/8/2PpP3/8/8/PPP2PPP/RNBQKBNR b KQkq - 0 4",
+      "wrongMove": "Qa5+",
+      "correctMove": "e6",
+      "explanation": "After 4.dxc5 White's grabbed the pawn and instinct says win it back — Qa5+ checks AND threatens c5. But after Nc3, the queen has to retreat empty-handed and we've burned two moves of development. The right move is e6: it unlocks our c8-bishop's diagonal (the famously locked Caro bishop), prepares Bxc5 next move with the full bishop diagonal alive, and the c5-pawn isn't actually defended yet — we'll recapture cleanly. Patience wins the pawn back AND develops a piece; the shortcut just loses time.",
+      "shortNarration": "Wrong: …Qa5+ check. Right: …e6 first.",
+      "sources": [
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    },
+    {
+      "fen": "r1bqk1nr/pp3ppp/2n1p3/2bpP3/8/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 3 7",
+      "wrongMove": "Nf6",
+      "correctMove": "Nge7",
+      "explanation": "Reflex says Nf6 — develop the knight to its 'normal' square. Look at the board: the e5-pawn already CONTROLS f6. The knight on f6 has no good squares to go to and is just blocking our own king's view of the kingside. Nge7 is the canonical Naroditsky reroute: from e7 the knight has two beautiful jumps — f5 hitting the centre, or g6 pressuring e5 and prepping a kingside attack. The 'normal' move is the wrong one here.",
+      "shortNarration": "Wrong: …Nf6 (e5 blocks). Right: …Nge7.",
+      "sources": [
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
       ]
     }
   ]

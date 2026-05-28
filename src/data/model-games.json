@@ -4566,7 +4566,22 @@
     "sourceUrl": "https://www.chess.com/game/live/8670383717",
     "studentSide": "black",
     "overview": "Naroditsky vs Arambai (3176), 2021. 188-ply marathon in the Advance Variation 3...c5 line — exactly the spine. After the standard 14-move opening Naroditsky executes the textbook plan: …Nge7, …Ng6 reroute, …Bd7, queenside expansion. The game shows how a small structural edge converts in a deep endgame: Naroditsky outplays his opponent in the king-and-pawn race after every piece comes off. The lesson: the Caro doesn't win in the opening; the opening wins the endgame for you.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 7,
+        "color": "black",
+        "fen": "r1bqk2r/pp2nppp/2n1p3/2bpP3/8/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 4 8",
+        "annotation": "End of opening, start of plan. White has just castled; Naroditsky's …Nge7 closes the book on the spine. Look at the structure: our c6-d5-e6 chain holds the centre, the Bc5 is active, and the Nge7-Ng6 reroute is teed up.",
+        "concept": "Opening → Middlegame Transition"
+      },
+      {
+        "moveNumber": 12,
+        "color": "black",
+        "fen": "r1b1k2r/pp3ppp/2n1p1n1/3pP3/q7/3B1N2/PPP2KPP/R1BQR3 w kq - 0 13",
+        "annotation": "Mid-middlegame: pieces have coordinated. The kingside structure is a wall, the queenside files are starting to open, and Black's plan has emerged — opposite-side castling games favor whoever attacks first, and Naroditsky's attack is already faster.",
+        "concept": "Coordination Wins Files"
+      }
+    ],
     "middlegameTheme": "Long-Term Endgame Conversion from a Clean Caro Structure",
     "lessonSummary": "A masterclass in patience. The Caro is an opening that EARNS you the endgame; this game shows what that looks like over 188 plies of accurate play."
   },
