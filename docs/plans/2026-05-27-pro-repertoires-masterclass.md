@@ -326,6 +326,68 @@ scripts.
 Decisions D1–D4 are the gate. Once set, start Phase 0 (provenance harvest) — all
 sources verified reachable in-sandbox 2026-05-27; no laptop handoff needed.
 
+## 10. SESSION CHECKPOINT (2026-05-28) — study-notes corpus + Jobava variations
+
+**New grounding infra (all committed + pushed to the branch):**
+- **STUDY NOTES = new grounding source (David: "from his perspective, tell a
+  story").** Harvested each teacher's lichess studies (their lines + IDEAS, in
+  text) as a cite-and-translate reference. Paths:
+  `docs/audit-runs/2026-05-27-pro-provenance/naroditsky-study-notes/` (12 studies)
+  + `…/study-notes/<pro>/` (ericrosen 7 — his OWN verbatim, gothamchess 5, anna 1,
+  samay 1). PDF: `…/naroditsky-study-notes/Naroditsky-Study-Notes.pdf`; builder
+  `scripts/build-study-notes-pdf.mjs`. Emailed (Gmail DRAFT, not auto-sent) to
+  chessacademypro@gmail.com.
+  - **🔒 LICENSING — cite-not-copy (David confirmed).** These are NOT public
+    domain (unlike the Gutenberg book corpus). Use the MOVES + IDEAS, write our
+    OWN narration, CITE the study (`https://lichess.org/study/<id>` resolves in
+    narrationSources). NEVER ship their verbatim prose. Citation ≠ a copyright
+    licence. Fan-compiled studies = "his lines/ideas", not verbatim; Eric Rosen's
+    are his own.
+  - **Elites (Carlsen/Caruana/Firouzja/Gukesh/Pragg/Niemann/Dubov/Hikaru/Akeem)
+    have NO teaching studies** — ground them on master games (the dumps + masters
+    DB), which IS the right source. Don't keep searching for fan derivatives.
+  - **TODO (B-item):** wire study notes into the app "book section" as
+    `src/data/pro-study-notes.json` + a `study:<id>` source type + BookReader —
+    cite/translate surface only, never verbatim.
+- **MASTERS DB is the G3 anchor now (David: "we teach how masters play it").**
+  `dbAnchor.ts` unions `longestMastersAnchorPly` (each ply a move masters played
+  from that position in `public/data/openings-masters-db.json`) with the lichess
+  prefix anchor. Lets real Jobava sidelines (…c5/…Bf5/…a6, absent from the 3,653
+  lichess subset but heavily played by masters) anchor ≥6. Existing lessons keep
+  their lichess anchor.
+- **FULL-PGN harvest tool:** `scripts/harvest-pro-full-pgns.mjs`
+  (`PLAYERS=<pro>`) → `…/full-pgns/<pro>.json` (gitignored). Naroditsky done
+  (20,549 games, full SAN). ⚠️ Stores color/result/elo/date/pgn but **NOT player
+  names** — for model games, Naroditsky = `g.color` side; opponent name not in
+  dump (re-fetch via `scripts/fetch-chesscom-game.mjs <id>` if a model game needs
+  the name). Each OTHER pro needs this harvest run before building their openings.
+
+**JOBAVA — variation tabs DONE (research-first, his voice, cited, gate-green):**
+- Process locked: pull his study line FIRST → confirm against his game dump →
+  author narration as a STORY in OUR words → cite his study. (David: "research
+  BEFORE building.")
+- …c5 = **4.e4!** (study N3XOjphc); …Bf5 = Ne5 + **g4! storm** (N3XOjphc SEC 6);
+  …a6 = **a3 clamp + e4 break** (N3XOjphc SEC 2); …g6 = **h4!** (HaFTAegs).
+  Main line …e6/Nb5 lesson already built. All in
+  `proNaroditskyJobavaVariations.ts` + pro-repertoires.json variations[].
+
+**JOBAVA — REMAINING (next session, build order: plans → model games → traps):**
+- **Plan per variation** from each bucket's aggregate ideas (already mined):
+  …c5 → e4/Bd3/Ne5; …Bf5 → Ne5 + g4-h4-h5 storm; …a6 → a3/b4 + e4; …g6 →
+  h4-h5 + Qd2/Bh6 + Ne5. Two-register + lead-the-eye (`add-leadeye-to-plans.mjs`),
+  theme-demo, cite his study.
+- **Model game per variation** (his real wins, in the dump):
+  …c5 `139555012928` (b3289), …Bf5 `143802846266` (b3142), …a6 `133330743613`
+  (b3177), …g6 `150885490597` (b3192). studentSide white; overview + 2 critical
+  moments (compute FENs from the dump PGN); cite game URL + his study. (The OLD
+  main-line model game `mg-pro-naroditsky-jobava-nb5` + plan
+  `mp-pronaroditskyjobava-bishoppair` predate study-grounding — refresh them.)
+- **Traps:** run `mine-punish-gems` on the Jobava (test the explorer proxy
+  first; CI fallback) — engine-first, amateur-data, masters-veto.
+
+Then: full ship-check + interactive audit, and apply the SAME research-first
+process to the rest of Naroditsky (then other pros, frequency-floor ≤10/colour).
+
 ## 8. BUILD METHOD REFINEMENTS (David, mid-build)
 
 - **Only build TAUGHT/PLAYED lines.** Each line must be what the pro actually
