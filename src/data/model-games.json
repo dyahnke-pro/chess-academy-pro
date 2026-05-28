@@ -4250,5 +4250,203 @@
         "concept": "The Caro pyramid: c6-d5 fortress"
       }
     ]
+  },
+  {
+    "id": "mg-pro-gothamchess-italian",
+    "openingId": "pro-gothamchess-italian",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 2803,
+    "blackElo": 2767,
+    "result": "1-0",
+    "year": 2021,
+    "event": "Online (chess.com) / 2021",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 O-O Nf6 d4 Bxd4 Nxd4 Nxd4 Bg5 h6 Bh4 g5 f4 d6 fxg5 Bg4 Bxf7+ Kf8 Qd2 Ne2+ Kh1 Nf4 g6 Kg7 Rxf4 exf4 Qxf4 Bh5 Qf5 Rf8 Nc3 Rxf7 gxf7 Bg6 Qf3 Bh5 Bxf6+",
+    "overview": "Gotham's Italian Game: classical development with Bc4 aimed at f7, then the central d4 break to crack the position open. The line liquidates into a comfortable middlegame where his lead in development squeezes a positional win out of a quiet structure.",
+    "sources": [
+      "https://www.chess.com/game/live/10373188699"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 5,
+        "color": "white",
+        "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+        "annotation": "Bc4 — the Italian's hallmark, the bishop trained on f7 right out of the gate.",
+        "concept": "Italian Bc4 aim at f7"
+      },
+      {
+        "moveNumber": 5,
+        "color": "black",
+        "fen": "r1bqk2r/pppp1ppp/2n2n2/4p3/2BbP3/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 6",
+        "annotation": "...Bc5 — Black mirrors; symmetry that the central d4 break will soon shatter.",
+        "concept": "The classical symmetric Italian"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-stafford-refute",
+    "openingId": "pro-gothamchess-stafford-refute",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 2799,
+    "blackElo": 2668,
+    "result": "1-0",
+    "year": 2024,
+    "event": "Online (chess.com) / 2024",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nxe4 d3 Qe7 dxe4 Qxe5 Nc3 Bb4 Bd3 O-O O-O Bxc3 bxc3 Nc6 Kh1 d6 f4 Qe7 f5 f6 Rb1 Ne5 Bf4 b6 Bxe5 Qxe5 Qh5 d5 Rbe1 Qd6 exd5 Bd7 c4 Rae8 Re6 Qb4 h3 Re7 Qe2 Bxe6 fxe6 g6 h4 Qc3 Qg4 Qe5 Rf5 Qe1+ Rf1 Qe5 Rf5 Qe1+ Kh2 Qe3 h5 g5 h6 a5 a4 Qe1 Qg3 Qxg3+ Kxg3 Rd8 Rxf6 Rf8 Rxf8+ Kxf8 Kg4 c6 Kxg5 cxd5 cxd5 Rc7 Kf6",
+    "overview": "How to refuse to die in the Stafford: Nxe5 grabs the pawn, then d3 instead of the greedy Nxc6 declines the trap and returns the piece on simple terms. White's solid structure + extra pawn convert quietly while the Stafford's whole point — a wild attack — never materialises.",
+    "sources": [
+      "https://www.chess.com/game/live/110071862503"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "rnbqkb1r/pppp1ppp/5n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
+        "annotation": "Nxe5 — White accepts the pawn, daring the gambit.",
+        "concept": "Take the gambit pawn"
+      },
+      {
+        "moveNumber": 4,
+        "color": "white",
+        "fen": "rnbqkb1r/pppp1ppp/8/4N3/4n3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+        "annotation": "d3 — the calm move. Refusing the second pawn Nxc6 sidesteps the Stafford's whole attacking idea; the e4-knight will fall but the structure holds.",
+        "concept": "d3 — refuse the second pawn"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-qgd",
+    "openingId": "pro-gothamchess-qgd",
+    "white": "Titled opponent",
+    "black": "Levy Rozman (GothamChess)",
+    "whiteElo": 2885,
+    "blackElo": 2750,
+    "result": "0-1",
+    "year": 2025,
+    "event": "Online (chess.com) / 2025",
+    "studentSide": "black",
+    "pgn": "d4 d5 c4 e6 Nf3 Nf6 cxd5 exd5 Nc3 h6 Bf4 c6 Qc2 Nh5 Be5 Nd7 e3 Nxe5 Nxe5 Bd6 f4 Qh4+ Qf2 Qxf2+ Kxf2 Nf6 Bd3 Be6 h3 g5 g3 Rg8 Rag1 Ke7 a3 Rg7 g4 Rh8 Kf3 h5 gxh5 Rxh5 Rxg5 Rgxg5 fxg5 Rxg5 h4 Rg8 Ne2 Bxe5 dxe5 Ng4 Bc2 Nxe5+ Kf2 Nc4 Nf4 b5 b3 Nxa3 Bd3 b4 h5 c5 Rc1 Rc8 h6 c4 h7 Rh8 bxc4 dxc4 Be4 b3 Rg1 Kf8 Ne2 f5 Nd4 fxe4 Nxe6+ Ke7 Nd4 b2 Rg7+ Kf6 Rb7 b1=Q Rxb1 Nxb1 Nb5 Rxh7 Nxa7 Rxa7",
+    "overview": "GothamChess in the QGD Exchange: the classical c6-d5-e6 fortress, dark-bishop trade, and minority attack are all on the menu. Solid, low-risk, and grinds down impatient opponents — exactly the kind of structure Gotham loves to demonstrate.",
+    "sources": [
+      "https://www.chess.com/game/live/147531211313"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 4,
+        "color": "white",
+        "fen": "rnbqkb1r/ppp2ppp/4pn2/3P4/3P4/5N2/PP2PPPP/RNBQKB1R b KQkq - 0 4",
+        "annotation": "cxd5 exd5 — the Exchange variation. The pawn structure is fixed; the rest of the game is plan vs plan.",
+        "concept": "The QGD Exchange structure"
+      },
+      {
+        "moveNumber": 6,
+        "color": "white",
+        "fen": "rnbqkb1r/ppp2pp1/5n1p/3p4/3P1B2/2N2N2/PP2PPPP/R2QKB1R b KQkq - 1 6",
+        "annotation": "Bf4 — White brings the bishop out before e3, an aggressive QGD Exchange setup. Black's plan: complete development and target the queenside.",
+        "concept": "QGD Exchange w/ Bf4"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-ponziani",
+    "openingId": "pro-gothamchess-ponziani",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 2711,
+    "blackElo": 2908,
+    "result": "1-0",
+    "year": 2024,
+    "event": "Online (chess.com) / 2024",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5 Qb3 Nb6 cxd4 d6 Bb5 Be6 Qc2 Qd7 O-O a6 Bxc6 Qxc6 Qxc6+ bxc6 Bf4 Nd5 Bg3 h6 Rc1 Kd7 Nbd2 Be7 Nc4 a5 Nfd2 Bf5 Ne3 Nxe3 fxe3 Rhb8 b3 a4 Kf2 Be6 bxa4 Rxa4 Rc2 Rba8 Ne4 Bf5 Kf3 d5 Nc5+ Bxc5 Rxc5 Be4+ Kg4 Rxa2 Rf1 Bg6 Kh3 Re2 Rf3 Raa2 Rc1 Rxg2 Rc3 Rgb2 Kg4 Rc2 Rb3 Ke6 Rb7 Bd3 Rf4 Bg6 Rxc7 Ra3 Bh4 Bf5+ Rxf5 Rg2+ Kh3 Kxf5 Kxg2 Rxe3 Bf2 Re2 Rxf7+ Kg6 Rf3 Re4 Rg3+ Kf7 Kf3 g5 Rg4 Rxg4 Kxg4 Kg6 h4 h5+ Kf3 Kf5 hxg5 Kxg5 Be3+ Kf5 Bf2 c5 dxc5 Kxe5 Ke2 Ke6 Kd3 Kd7 Kd4 Ke6 Bg3",
+    "overview": "The Ponziani: 3.c3 prepares a d4 push without commiting the queen's knight. Gotham uses the central pawn duo, the Qb3 pressure on f7/b7, and the resulting open d-file to outplay a higher-rated opponent in classical style.",
+    "sources": [
+      "https://www.chess.com/game/live/100999372447"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+        "annotation": "c3 — the Ponziani's quiet hallmark, preparing d4 without blocking the c-pawn.",
+        "concept": "3.c3 prepares d4"
+      },
+      {
+        "moveNumber": 5,
+        "color": "white",
+        "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/3p4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+        "annotation": "e5 — the central pawn duo lunges. Black's f6-knight is kicked and White claims central space before Black is fully developed.",
+        "concept": "The e5 lunge in the Ponziani"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-fantasy-caro",
+    "openingId": "pro-gothamchess-fantasy-caro",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 2977,
+    "blackElo": 3069,
+    "result": "1-0",
+    "year": 2026,
+    "event": "Online (chess.com) / 2026",
+    "studentSide": "white",
+    "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Be6 Bxe6 fxe6 O-O Nf6 e5 Nd5 Ng5 Be7 Nxe6 Qb6 Nxg7+ Kd8 Ne6+ Kc8 Qg4 Nd7 Kh1 Nxe5 Qh3 Nd7 Nd2 Ne3 Rf7 Re8 Ne4 a5 Bxe3 dxe3 Qxh7 Qxb2 Rd1 e2 Re1 Qb4 Qf5 Kb8 Qf4+ Ka7 c3 Qc4 Qe3+ Nb6 Rb1 c5 Nd2 Qd5 Nf4 Qxf7 Nxe2 Bg5 Qxg5 Rxe2 Qxc5 Qe6 Nf3 Re8 h3 Re3 Qxa5+ Kb8 Rxb6 Qe4 Qg5 Rxf3 gxf3 Qxf3+ Qg2 Re1+ Kh2 Re2 Rg6 Qf4+ Rg3 Rxg2+ Kxg2 Qd2+ Kf3 Qxa2 Kg4 Qf7 Kh4 Qc4+ Rg4 Qxc3 Rg8+ Ka7 Rg3 Qf6+ Kg4 Qf7 Rf3 Qd7+ Kf4 Kb8 Kg3 Qd6+ Rf4 Qe5 Kg2 Qxf4 Kh1 Ka7 Kg1",
+    "overview": "Gotham's Fantasy Caro (3.f3): the aggressive anti-Caro that supports e4 with the f-pawn and prepares a big central wedge. The opening trades cleanly but White keeps a small structural pull and converts vs a 3000+ opponent.",
+    "sources": [
+      "https://www.chess.com/game/live/166416658870"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+        "annotation": "f3 — the Fantasy Variation. Supporting e4 with the f-pawn is provocative but sets up a broad pawn centre.",
+        "concept": "3.f3 — the Fantasy Caro"
+      },
+      {
+        "moveNumber": 5,
+        "color": "black",
+        "fen": "rnbqkbnr/pp3ppp/2p5/8/3pP3/5N2/PPP3PP/RNBQKB1R w KQkq - 0 6",
+        "annotation": "...e5 — Black strikes back at the centre. White will need to navigate the trades carefully to preserve the structural edge.",
+        "concept": "...e5 break vs the Fantasy"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-milner-barry",
+    "openingId": "pro-gothamchess-milner-barry",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 2665,
+    "blackElo": 2862,
+    "result": "1-0",
+    "year": 2023,
+    "event": "Online (chess.com) / 2023",
+    "studentSide": "white",
+    "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 Bd7 dxc5 Bxc5 O-O a5 Nbd2 a4 b4 axb3 Nxb3 Ba3 Bxa3 Rxa3 Qc1 Ra4 Qg5 Nge7 Qxg7 Rg8 Qxh7 Rag4 g3 Nf5 Bxf5 exf5 Nbd4 Ne7 Rab1 Qc7 Rfe1 f4 Qd3 fxg3 hxg3 Be6 Nb5 Qc5 Nd6+ Kf8 Nd4 Nc6 Nxe6+ fxe6 Qf3+ Kg7 Qxg4+ Kh8 Qh5+ Kg7 Qf7+ Kh8 Kg2",
+    "overview": "The Milner-Barry Gambit (French Advance): White hands Black the d-pawn after dxc5 to gain time and target Black's queen and the e6/d5 pawn-chain. A speculative but practically nasty weapon — Gotham converts the initiative vs 2862.",
+    "sources": [
+      "https://www.chess.com/game/live/74360656363"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 7,
+        "color": "white",
+        "fen": "r3kbnr/pp1b1ppp/1qn1p3/2PpP3/8/2PB1N2/PP3PPP/RNBQK2R b KQkq - 0 7",
+        "annotation": "dxc5 — the gambit pawn. White trades the d-pawn to displace the queen on b6 and harass Black's awkward setup.",
+        "concept": "The Milner-Barry gambit pawn"
+      },
+      {
+        "moveNumber": 7,
+        "color": "black",
+        "fen": "r3k1nr/pp1b1ppp/1qn1p3/2bpP3/8/2PB1N2/PP3PPP/RNBQK2R w KQkq - 0 8",
+        "annotation": "...Bxc5 — Black accepts; now White will hammer the queen and pry open lines with Nb-d2 / O-O and the central c4/d4 break ideas.",
+        "concept": "Accept the gambit"
+      }
+    ]
   }
 ]
