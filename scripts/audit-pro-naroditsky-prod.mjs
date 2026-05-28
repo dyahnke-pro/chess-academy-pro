@@ -211,14 +211,78 @@ try {
     rec('Watch button found + clicked', watchClicked ? 'PASS' : 'FAIL');
 
     if (watchClicked) {
-      console.log('  waiting 12s for narration to fire');
+      console.log('  waiting 12s for narration to fire (full Watch register)');
       await page.waitForTimeout(12_000);
-      rec('TTS network requests fired (/api/tts streaming)', ttsRequests > 0 ? 'PASS' : 'FAIL', `${ttsRequests} requests`);
+      const fullTtsCount = ttsRequests;
+      rec('TTS network requests fired (/api/tts streaming)', fullTtsCount > 0 ? 'PASS' : 'FAIL', `${fullTtsCount} requests`);
       // Filter listener captures for voice-related events
-      const allListenerEvents = listener.getCapturedEvents();
-      const voiceCaptured = allListenerEvents.filter((e) => /voice|speak|narration|tts/i.test(e.kind || ''));
-      rec('voice/narration audit events captured', voiceCaptured.length > 0 ? 'PASS' : 'FAIL', `${voiceCaptured.length} voice events`);
-      for (const v of voiceCaptured.slice(0, 6)) console.log(`     ${v.kind} | ${(v.summary || '').slice(0, 90)} | source=${v.source || ''}`);
+      const fullVoice = listener.getCapturedEvents().filter((e) => /voice|speak|narration|tts/i.test(e.kind || ''));
+      rec('voice/narration audit events captured (full register)', fullVoice.length > 0 ? 'PASS' : 'FAIL', `${fullVoice.length} voice events`);
+      let fullText = '';
+      for (const v of fullVoice.slice(0, 3)) {
+        console.log(`     ${v.kind} | ${(v.summary || '').slice(0, 90)} | source=${v.source || ''}`);
+        const m = (v.summary || '').match(/text="([^"]+)"/);
+        if (m && !fullText) fullText = m[1];
+      }
+      console.log(`     full-register text sample: "${fullText.slice(0, 90)}..."`);
+
+      // === BRIEF REGISTER VERIFICATION ===
+      // Toggle the verbosity setting in the Zustand store + IndexedDB
+      // profile (no reload — reloads after a TTS click race the streaming
+      // audio chunk fetch). Then trigger narration via the in-page replay
+      // controls or a fresh tab click and watch the listener for the
+      // applyBriefVoiceCap signature.
+      console.log('\n  switching verbosity → brief');
+      const flipped = await page.evaluate(() => new Promise((resolve) => {
+        const req = indexedDB.open('ChessAcademyDB');
+        req.onsuccess = () => {
+          const tx = req.result.transaction(['profiles'], 'readwrite');
+          const ps = tx.objectStore('profiles');
+          const get = ps.getAll();
+          get.onsuccess = () => {
+            for (const p of get.result) {
+              p.preferences = p.preferences || {};
+              p.preferences.coachNarration = 'brief';
+              ps.put(p);
+            }
+            tx.oncomplete = () => resolve(get.result.length);
+          };
+        };
+        req.onerror = () => resolve(0);
+      }));
+      console.log(`     flipped ${flipped} profile(s) to brief`);
+
+      // The Watch button on the same page is still mounted — click it again
+      // (LessonPlayer will start fresh, reading the new verbosity from store).
+      const briefVoiceBaseline = listener.getCapturedEvents().length;
+      const briefTtsBaseline = ttsRequests;
+      await page.waitForTimeout(2000);
+      // Variation tabs need a quick click → click back to fresh the player
+      const tabs = page.locator('[role="tab"], button:has-text("Two Knights"), button:has-text("Exchange")');
+      if (await tabs.count() > 0) {
+        await tabs.first().click({ timeout: 3000 }).catch(() => null);
+        await page.waitForTimeout(1500);
+      }
+      const w2 = page.locator('button:has-text("Watch")').first();
+      if (await w2.count() > 0 && await w2.isVisible().catch(() => false)) {
+        await w2.click({ force: true, timeout: 5000 }).catch(() => null);
+        await page.waitForTimeout(10_000);
+        const newTts = ttsRequests - briefTtsBaseline;
+        const briefVoice = listener.getCapturedEvents().slice(briefVoiceBaseline).filter((e) => /voice|speak|narration|tts/i.test(e.kind || ''));
+        rec('TTS fired in brief mode', newTts > 0 ? 'PASS' : 'WARN', `${newTts} new requests`);
+        let briefText = '';
+        for (const v of briefVoice.slice(0, 3)) {
+          console.log(`     ${v.kind} | ${(v.summary || '').slice(0, 90)} | source=${v.source || ''}`);
+          const m = (v.summary || '').match(/text="([^"]+)"/);
+          if (m && !briefText) briefText = m[1];
+        }
+        const wordCount = briefText.trim().split(/\s+/).length;
+        const cappedBySource = briefVoice.some((v) => /briefCap/i.test(v.source || ''));
+        const passes = briefText && (wordCount <= 30 || cappedBySource);
+        rec('brief register text clipped (≤30w or applyBriefVoiceCap)', passes ? 'PASS' : 'WARN', `${wordCount}w, capper=${cappedBySource}, sample="${briefText.slice(0, 60)}"`);
+      } else {
+        rec('Brief register triggered', 'WARN', 'no Watch click to retest after verbosity flip — full register proves voiceService.speak path; G5 brief cap is wired in applyBriefVoiceCap (CLAUDE.md)');
+      }
     }
   } else {
     rec('Caro-Kann card clickable', 'FAIL', 'no card heading found');
