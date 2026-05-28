@@ -465,6 +465,55 @@ The hand-authored overviews tie each game to the variation's themes
 from the lesson — cite the opponent + rating + the specific structural
 or tactical pattern the game showcases.
 
+### STEP 12.5 — Route plans to their variation tabs (CRITICAL)
+
+🚨 **This step was missed in the Alapin reference build — David caught
+it post-deploy. Plans were authored correctly but ALL surfaced under
+the main opening tab; the variation tabs were showing zero plans.**
+
+The fix:
+
+1. Create `src/services/pro<Player><Opening>TabPlans.ts`:
+   ```ts
+   export const PRO_<PLAYER>_<OPENING>_TAB_PLAN_IDS: Record<string, string[]> = {
+     main: ['<plan-id>', '<plan-id>'],
+     '<variation name lowercased>': ['<plan-id>'],
+     // one entry per variation; [] for variations without plans yet
+   };
+
+   export function getPro<Player><Opening>TabPlanIds(
+     openingId: string,
+     tabKey: string
+   ): string[] | null {
+     if (openingId !== 'pro-<player>-<opening>') return null;
+     return PRO_<PLAYER>_<OPENING>_TAB_PLAN_IDS[tabKey] ?? null;
+   }
+   ```
+
+   The variation key is the EXACT `variation.name` field from
+   `pro-repertoires.json`, lower-cased (including the … character
+   U+2026 if used, NOT three dots).
+
+2. Import + register in `src/components/Openings/OpeningDetailPage.tsx`:
+   ```ts
+   import { getPro<Player><Opening>TabPlanIds } from '../../services/pro<Player><Opening>TabPlans';
+   // ...
+   const subjectPlanIds =
+     // ...existing resolver chain...
+     getPro<Player><Opening>TabPlanIds(opening.id, pircTabKey) ??
+     // ...
+   ```
+
+   **Use `pircTabKey` (the full variation name, NOT `tabKey`)** — the
+   display label is sometimes truncated ("Spine 4…d6 Bc4 Ga…") which
+   wouldn't match the full-name key. Pirc set this pattern.
+
+3. Verify on prod: navigate to each variation tab + check the
+   Middlegame Plans section shows the right plans.
+
+**Reference:** `src/services/proNaroditskyAlapinTabPlans.ts` — the
+canonical pro-rep tab-plan resolver.
+
 ### STEP 13 — Update proRepertoireOpeningMap.json
 
 If the opening exists as an entry in `src/data/proRepertoireOpeningMap.json`:
@@ -733,6 +782,22 @@ Authored "what he probably said" instead of "what he actually said."
 his approach." The URL can stay in `sources[]` to prove the video
 exists, but don't claim verbatim text without transcript backing.
 
+### Failure: plans authored but all shown on main tab
+**Symptom:** all middlegame plans surface under the main opening tab;
+variation tabs show "no plans for this scope" (or worse, the
+`emptyNote` fallback). David caught this on the Alapin post-deploy.
+
+**Cause:** the plan's `openingId` is `pro-<player>-<opening>` but
+that's the OPENING-WIDE id. The OpeningDetailPage filters by
+`filterPlanIds` per tab, which is computed by a chain of
+`get<Opening>TabPlanIds(openingId, tabKey)` resolvers. No
+pro-rep-specific resolver existed.
+
+**Fix:** STEP 12.5 above — create a `pro<Player><Opening>TabPlans.ts`
+resolver mapping each variation name (lowercased) to its plan IDs;
+register it in `OpeningDetailPage.tsx` using `pircTabKey` (the full
+variation name).
+
 ### Failure: used the M-word in pro-rep work
 **Symptom:** session loops — David corrects you, you apologize, you
 slip again 3 messages later.
@@ -767,6 +832,8 @@ Every artifact that should exist when a pro-rep deep build is "done."
 - [ ] `src/data/middlegame-plans.json` — plans (one per data-supported cluster)
 - [ ] `src/data/model-games.json` — 3-5 games per variation (real wins, hand-authored)
 - [ ] `src/data/common-mistakes.json` — 3-5 pitfalls under the openingId key
+- [ ] `src/services/pro<Player><Opening>TabPlans.ts` — variation→plan-ids resolver (STEP 12.5)
+- [ ] `src/components/Openings/OpeningDetailPage.tsx` — import + add resolver to the chain
 - [ ] `src/data/proRepertoireOpeningMap.json` — mapping if classical opening
 - [ ] `src/services/dataLoader.ts` — `PRO_DATA_REVISION` bumped
 
