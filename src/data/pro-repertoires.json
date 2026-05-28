@@ -4736,6 +4736,32 @@
             "games": 327,
             "source": "his game dump"
           }
+        },
+        {
+          "name": "vs 2...g6",
+          "pgn": "d4 Nf6 Bg5 g6 Bxf6 exf6 c4 Bb4+ Nc3 Bxc3+ bxc3 O-O h4 h5 g4",
+          "explanation": "170 g6 games. The brutal h-storm: h4/h5 (52%/56%) wedges the kingside before Black finishes developing.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 170,
+            "source": "his game dump"
+          },
+          "sources": [
+            "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+          ]
+        },
+        {
+          "name": "vs 2...c5",
+          "pgn": "d4 Nf6 Bg5 c5 d5 Ne4 h4 Qb6 Nc3 Nxg5 hxg5 Qxb2 Rh3 Qb6 Rb1 Qa5 Qd2 d6 g6 fxg6 Rh1 e6 e4",
+          "explanation": "165 c5 games. The headline: e4 in 90% of his c5 games — builds the broad pawn centre supporting d4 + kingside attack.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 165,
+            "source": "his game dump"
+          },
+          "sources": [
+            "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+          ]
         }
       ]
     },

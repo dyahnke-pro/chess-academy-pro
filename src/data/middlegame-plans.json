@@ -33158,5 +33158,320 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pro-gothamchess-trompowsky-d5",
+    "openingId": "pro-gothamchess-trompowsky",
+    "criticalPositionFen": "r1b1kb1r/pp2pppp/1qn2n2/3p2B1/2pP4/2P1P3/PPQN1PPP/R3KBNR b KQkq - 1 7",
+    "title": "Trompowsky — Tromp d5: Bxf6 trade + Bd3/c3 setup",
+    "overview": "Across his 335 d5 games: Ngf3/c3/Bd3 setup (50-54%), then Bxf6 (47%) damages Black's structure. Aggregate pattern shows the calm-grind Trompowsky at its most positional.",
+    "pawnBreaks": [
+      {
+        "move": "Bxf6",
+        "explanation": "Bxf6 trade (47% of his d5 games) damages the structure or doubles pawns.",
+        "fen": "r1b1kb1r/pp2pppp/1qn2n2/3p2B1/2pP4/2P1P3/PPQN1PPP/R3KBNR b KQkq - 1 7"
+      }
+    ],
+    "pieceManeuvers": [
+      "Bxf6 trade (47% of his d5 games) damages the structure or doubles pawns."
+    ],
+    "strategicThemes": [
+      "Bxf6 trade (47% of his d5 games) damages the structure or doubles pawns.",
+      "Ngf3 + c3 + Bd3 (52-54%) is his quiet setup before the break.",
+      "c4 advance (34%) or f4 push (30%) crack the centre when development is complete."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1kb1r/pp2pppp/1qn2n2/3p2B1/2pP4/2P1P3/PPQN1PPP/R3KBNR b KQkq - 1 7",
+        "title": "Tromp d5: Bxf6 trade + Bd3/c3 setup",
+        "moves": [
+          "Bg4",
+          "Bxf6",
+          "gxf6",
+          "e4",
+          "e6",
+          "Be2",
+          "Bxe2",
+          "Nxe2"
+        ],
+        "annotations": [
+          "Bg4 — follow-up",
+          "Bxf6 — THE BREAK",
+          "gxf6 — follow-up",
+          "e4 — follow-up",
+          "e6 — follow-up",
+          "Be2 — follow-up",
+          "Bxe2 — follow-up",
+          "Nxe2 — follow-up"
+        ],
+        "learnCues": [
+          "Bg4",
+          "Bxf6",
+          "gxf6",
+          "e4",
+          "e6",
+          "Be2",
+          "Bxe2",
+          "Nxe2"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-pawn-island",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-gothamchess-trompowsky-e6",
+    "openingId": "pro-gothamchess-trompowsky",
+    "criticalPositionFen": "r1bqk2r/pp1nbpp1/4pB1p/2pp4/3P4/2PBP3/PP1N1PPP/R2QK1NR b KQkq - 0 8",
+    "title": "Trompowsky — Tromp e6: c3/Bd3 + f4 break",
+    "overview": "332 e6 games. c3/Bd3 setup (73-71%) is his bedrock; f4 (49%) and e5 (45%) are the dominant breaks. Pattern: build, then crack with a kingside lever.",
+    "pawnBreaks": [
+      {
+        "move": "f4",
+        "explanation": "c3 + Bd3 (73%/71%) — dominant setup.",
+        "fen": "r1bqk2r/pp1nbpp1/4pB1p/2pp4/3P4/2PBP3/PP1N1PPP/R2QK1NR b KQkq - 0 8"
+      }
+    ],
+    "pieceManeuvers": [
+      "c3 + Bd3 (73%/71%) — dominant setup."
+    ],
+    "strategicThemes": [
+      "c3 + Bd3 (73%/71%) — dominant setup.",
+      "f4 break (49%) opens lines while Bd3 aims at h7.",
+      "e5 push (45%) cramps Black's position further."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/pp1nbpp1/4pB1p/2pp4/3P4/2PBP3/PP1N1PPP/R2QK1NR b KQkq - 0 8",
+        "title": "Tromp e6: c3/Bd3 + f4 break",
+        "moves": [
+          "Nxf6",
+          "f4",
+          "O-O",
+          "Ngf3",
+          "b6",
+          "Ne5",
+          "Bb7",
+          "Qf3"
+        ],
+        "annotations": [
+          "Nxf6 — follow-up",
+          "f4 — THE BREAK",
+          "O-O — follow-up",
+          "Ngf3 — follow-up",
+          "b6 — follow-up",
+          "Ne5 — follow-up",
+          "Bb7 — follow-up",
+          "Qf3 — follow-up"
+        ],
+        "learnCues": [
+          "Nxf6",
+          "f4",
+          "O-O",
+          "Ngf3",
+          "b6",
+          "Ne5",
+          "Bb7",
+          "Qf3"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-pawn-island",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-gothamchess-trompowsky-Ne4",
+    "openingId": "pro-gothamchess-trompowsky",
+    "criticalPositionFen": "rnbqkb1r/pp3pp1/4pn1p/2pp4/3P1B1P/3BP3/PPPN1PP1/R2QK1NR w KQkq - 0 8",
+    "title": "Trompowsky — Tromp Ne4: Bd3 battery + c3 setup",
+    "overview": "314 Ne4 games. Bd3/Nd2/c3 (40-59%) is the central setup; from here White prepares e4/c4 breaks and ultimately a kingside attack.",
+    "pawnBreaks": [
+      {
+        "move": "c3",
+        "explanation": "Bd3 (59%) — central battery aimed at h7.",
+        "fen": "rnbqkb1r/pp3pp1/4pn1p/2pp4/3P1B1P/3BP3/PPPN1PP1/R2QK1NR w KQkq - 0 8"
+      }
+    ],
+    "pieceManeuvers": [
+      "Bd3 (59%) — central battery aimed at h7."
+    ],
+    "strategicThemes": [
+      "Bd3 (59%) — central battery aimed at h7.",
+      "Nd2 (47%) supports e4 push later.",
+      "c3 (40%) prepares the central push and shores up the d4-pawn."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/pp3pp1/4pn1p/2pp4/3P1B1P/3BP3/PPPN1PP1/R2QK1NR w KQkq - 0 8",
+        "title": "Tromp Ne4: Bd3 battery + c3 setup",
+        "moves": [
+          "c3",
+          "Bd6",
+          "Qf3",
+          "Nc6",
+          "Ne2",
+          "e5",
+          "dxe5",
+          "Nxe5"
+        ],
+        "annotations": [
+          "c3 — THE BREAK",
+          "Bd6 — follow-up",
+          "Qf3 — follow-up",
+          "Nc6 — follow-up",
+          "Ne2 — follow-up",
+          "e5 — follow-up",
+          "dxe5 — follow-up",
+          "Nxe5 — follow-up"
+        ],
+        "learnCues": [
+          "c3",
+          "Bd6",
+          "Qf3",
+          "Nc6",
+          "Ne2",
+          "e5",
+          "dxe5",
+          "Nxe5"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-pawn-island",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-gothamchess-trompowsky-g6",
+    "openingId": "pro-gothamchess-trompowsky",
+    "criticalPositionFen": "rnbq1rk1/pppp1p1p/5pp1/8/2PP4/2P5/P3PPPP/R2QKBNR w KQ - 1 7",
+    "title": "Trompowsky — Tromp g6: h4-h5 storm vs fianchetto",
+    "overview": "170 g6 games. The pattern is brutal: h4 (52%) + h5 (56%) wedge the kingside before Black can finish development. Aggregate frequency rivals his Mengarini g6.",
+    "pawnBreaks": [
+      {
+        "move": "h5",
+        "explanation": "h4 + h5 (52%/56%) — the trademark Tromp kingside storm vs fianchetto.",
+        "fen": "rnbq1rk1/pppp1p1p/5pp1/8/2PP4/2P5/P3PPPP/R2QKBNR w KQ - 1 7"
+      }
+    ],
+    "pieceManeuvers": [
+      "h4 + h5 (52%/56%) — the trademark Tromp kingside storm vs fianchetto."
+    ],
+    "strategicThemes": [
+      "h4 + h5 (52%/56%) — the trademark Tromp kingside storm vs fianchetto.",
+      "Bxf6 + open the g-file (when Black recaptures with the e-pawn).",
+      "g4 pawn lever to pry the kingside open."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pppp1p1p/5pp1/8/2PP4/2P5/P3PPPP/R2QKBNR w KQ - 1 7",
+        "title": "Tromp g6: h4-h5 storm vs fianchetto",
+        "moves": [
+          "h4",
+          "h5",
+          "g4",
+          "hxg4",
+          "h5",
+          "Kg7",
+          "hxg6",
+          "fxg6"
+        ],
+        "annotations": [
+          "h4 — follow-up",
+          "h5 — THE BREAK",
+          "g4 — follow-up",
+          "hxg4 — follow-up",
+          "h5 — THE BREAK",
+          "Kg7 — follow-up",
+          "hxg6 — follow-up",
+          "fxg6 — follow-up"
+        ],
+        "learnCues": [
+          "h4",
+          "h5",
+          "g4",
+          "hxg4",
+          "h5",
+          "Kg7",
+          "hxg6",
+          "fxg6"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-pawn-island",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-gothamchess-trompowsky-c5",
+    "openingId": "pro-gothamchess-trompowsky",
+    "criticalPositionFen": "rnb1kb1r/pp4pp/3pp1p1/q1pP4/8/2N5/P1PQPPP1/1R2KBNR w kq - 0 12",
+    "title": "Trompowsky — Tromp c5: e4 centre + a4/f4 expansion",
+    "overview": "165 c5 games. The headline: e4 in 90% of his c5 games — it builds the broad pawn centre. Then a4 (32%) queenside, f4 (33%) kingside flexibility.",
+    "pawnBreaks": [
+      {
+        "move": "e4",
+        "explanation": "e4 (90%!) — White builds the broad pawn centre supporting d4.",
+        "fen": "rnb1kb1r/pp4pp/3pp1p1/q1pP4/8/2N5/P1PQPPP1/1R2KBNR w kq - 0 12"
+      }
+    ],
+    "pieceManeuvers": [
+      "e4 (90%!) — White builds the broad pawn centre supporting d4."
+    ],
+    "strategicThemes": [
+      "e4 (90%!) — White builds the broad pawn centre supporting d4.",
+      "a4 (32%) expands the queenside.",
+      "f4 (33%) opens kingside lines once development is set."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnb1kb1r/pp4pp/3pp1p1/q1pP4/8/2N5/P1PQPPP1/1R2KBNR w kq - 0 12",
+        "title": "Tromp c5: e4 centre + a4/f4 expansion",
+        "moves": [
+          "e4",
+          "Be7",
+          "Bb5+",
+          "Kd8",
+          "dxe6",
+          "Bxe6",
+          "Nf3",
+          "h6"
+        ],
+        "annotations": [
+          "e4 — THE BREAK",
+          "Be7 — follow-up",
+          "Bb5+ — follow-up",
+          "Kd8 — follow-up",
+          "dxe6 — follow-up",
+          "Bxe6 — follow-up",
+          "Nf3 — follow-up",
+          "h6 — follow-up"
+        ],
+        "learnCues": [
+          "e4",
+          "Be7",
+          "Bb5+",
+          "Kd8",
+          "dxe6",
+          "Bxe6",
+          "Nf3",
+          "h6"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-pawn-island",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+        ]
+      }
+    ]
   }
 ]
