@@ -36,3 +36,16 @@ docs/audit-runs/2026-05-19-openings-interactive-loop/checkpoint*.json
 
 # ship-check local watermark (green-run SHA + timestamp; used by --summary)
 .ship-check-log/
+
+# Pro-repertoire raw game corpora — regeneratable via
+# scripts/pro-repertoire/fetch-chesscom.mjs (~500MB per pro).
+data/sources/*-chesscom/
+# Per-signature stats are huge (~100MB for a prolific player). They're
+# regeneratable via scripts/pro-repertoire/analyze-games.mjs once the
+# raw corpus is in place. The committed derived artifacts are the
+# family rollup + per-opening trees + voice notes (all <600KB each).
+data/sources/*-stats.json
+data/sources/*-families.json
+# Voice research: only the raw transcript pulls are ignored; the
+# hand-curated *.md notes are committed.
+data/sources/*-voice/transcripts/

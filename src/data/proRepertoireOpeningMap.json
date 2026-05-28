@@ -1,12 +1,7 @@
 {
   "_doc": "Curated map: pro-repertoire opening id -> the masterclass openingId whose verified grounding applies. Hand-reviewed (Giuoco Piano->italian-game, Berlin/Anti-Marshall->ruy-lopez, Tarrasch/Milner-Barry French->french-defence). Pro openings NOT here are non-masterclass (KID/Grunfeld/QGD/Petroff/Benoni/Rossolimo/…) and are not source-gated. David 2026-05-25.",
   "map": {
-    "pro-naroditsky-scotch": "scotch-game",
-    "pro-naroditsky-alapin": "sicilian-alapin",
-    "pro-naroditsky-fantasy-caro": "caro-kann",
-    "pro-naroditsky-najdorf": "sicilian-najdorf",
-    "pro-naroditsky-vienna": "vienna-game",
-    "pro-naroditsky-jobava-london": "london-system",
+    "pro-naroditsky-caro-kann": "caro-kann",
     "pro-gothamchess-italian": "italian-game",
     "pro-gothamchess-london": "london-system",
     "pro-gothamchess-caro-kann": "caro-kann",
