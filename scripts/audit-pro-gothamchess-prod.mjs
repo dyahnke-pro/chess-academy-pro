@@ -121,7 +121,7 @@ try {
   });
   console.log(`  Dexie: ${dex.total} openings, ${dex.gothamCount} gothamchess → ${dex.gothamIds.join(', ')}`);
 
-  // Expected Gotham IDs
+  // Expected Gotham IDs (10 original + 8 new = 18)
   const expectedIds = [
     'pro-gothamchess-italian',
     'pro-gothamchess-london',
@@ -133,6 +133,15 @@ try {
     'pro-gothamchess-fantasy-caro',
     'pro-gothamchess-milner-barry',
     'pro-gothamchess-anti-sicilian',
+    // 2026-05-28 new entries:
+    'pro-gothamchess-trompowsky',
+    'pro-gothamchess-english',
+    'pro-gothamchess-vienna',
+    'pro-gothamchess-kia',
+    'pro-gothamchess-caro-advance-white',
+    'pro-gothamchess-closed-sicilian',
+    'pro-gothamchess-french-defense',
+    'pro-gothamchess-pirc-defense',
   ];
   for (const id of expectedIds) {
     rec(`Dexie has ${id}`, dex.gothamIds.includes(id) ? 'PASS' : 'FAIL');
