@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { getPlayerById, getPlayerOpenings } from '../../services/proRepertoireService';
 import { toggleFavorite } from '../../services/openingService';
+import { proDataScore } from '../../services/proCoverage';
 import { OpeningCard } from './OpeningCard';
 import type { OpeningRecord, ProPlayer } from '../../types';
 
@@ -47,8 +48,11 @@ export function ProPlayerPage(): JSX.Element {
     );
   }
 
-  const whites = openings.filter((o) => o.color === 'white');
-  const blacks = openings.filter((o) => o.color === 'black');
+  // Sort each colour by data richness (masterclass + study notes + gems +
+  // variations + plan) descending — richest curated openings surface first.
+  const byData = (a: OpeningRecord, b: OpeningRecord): number => proDataScore(b.id) - proDataScore(a.id);
+  const whites = openings.filter((o) => o.color === 'white').sort(byData);
+  const blacks = openings.filter((o) => o.color === 'black').sort(byData);
 
   return (
     <div className="flex flex-col flex-1 p-4 md:p-6 pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-6 overflow-y-auto" data-testid="pro-player-page">

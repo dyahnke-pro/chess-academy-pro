@@ -1,10 +1,11 @@
 import { MasteryRing } from './MasteryRing';
 import { getMasteryPercent, needsReview } from '../../services/openingService';
 import type { OpeningRecord } from '../../types';
-import { Repeat, AlertCircle, Heart } from 'lucide-react';
+import { Repeat, AlertCircle, Heart, BookOpen, GraduationCap } from 'lucide-react';
 import { useStarAnimationStore } from '../../stores/starAnimationStore';
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
 import { useSettings } from '../../hooks/useSettings';
+import { hasStudyNotes, hasMasterclassTier, getStudyNotesFor } from '../../services/proCoverage';
 
 interface OpeningCardProps {
   opening: OpeningRecord;
@@ -101,6 +102,26 @@ export function OpeningCard({ opening, onClick, onToggleFavorite }: OpeningCardP
               <span className="flex items-center gap-1">
                 <Repeat size={10} />
                 {opening.woodpeckerReps} reps
+              </span>
+            )}
+            {opening.id.startsWith('pro-') && hasMasterclassTier(opening.id) && (
+              <span
+                className="flex items-center gap-1 text-emerald-400"
+                title="Masterclass: lessons, variations, and a real model-game win"
+                data-testid={`masterclass-badge-${opening.id}`}
+              >
+                <GraduationCap size={10} />
+                Masterclass
+              </span>
+            )}
+            {opening.id.startsWith('pro-') && hasStudyNotes(opening.id) && (
+              <span
+                className="flex items-center gap-1 text-amber-400"
+                title={`${getStudyNotesFor(opening.id).length} lichess study note${getStudyNotesFor(opening.id).length > 1 ? 's' : ''} available`}
+                data-testid={`study-notes-badge-${opening.id}`}
+              >
+                <BookOpen size={10} />
+                Notes
               </span>
             )}
           </div>

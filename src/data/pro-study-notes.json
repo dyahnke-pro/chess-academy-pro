@@ -1,0 +1,33 @@
+{
+  "$schema": "Maps openingId -> array of lichess studies that complement the opening. Used by ProPlayerPage to surface a 'study notes available' indicator. Cite-not-copy: link to the study; do NOT reproduce verbatim text in the shipped UI.",
+  "openings": {
+    "pro-naroditsky-jobava-london": [
+      { "studyId": "HaFTAegs", "url": "https://lichess.org/study/HaFTAegs", "title": "Jobava — Complete Repertoire", "role": "primary" },
+      { "studyId": "N3XOjphc", "url": "https://lichess.org/study/N3XOjphc", "title": "Jobava — Danya Edition", "role": "primary" },
+      { "studyId": "2qFlkuKD", "url": "https://lichess.org/study/2qFlkuKD", "title": "Jobava (notes)", "role": "supplementary" }
+    ],
+    "pro-naroditsky-fantasy-caro": [
+      { "studyId": "Od05RXPe", "url": "https://lichess.org/study/Od05RXPe", "title": "Fantasy Caro", "role": "primary" },
+      { "studyId": "CtbNX8aw", "url": "https://lichess.org/study/CtbNX8aw", "title": "Caro-Kann Masterclass", "role": "supplementary" }
+    ],
+    "pro-ericrosen-stafford": [
+      { "studyId": "SSWMLB7R", "url": "https://lichess.org/study/SSWMLB7R", "title": "Stafford — Complete", "role": "primary" },
+      { "studyId": "WIaFWcza", "url": "https://lichess.org/study/WIaFWcza", "title": "Stafford Traps", "role": "supplementary" },
+      { "studyId": "34oRtfLM", "url": "https://lichess.org/study/34oRtfLM", "title": "Stafford Traps (Interactive)", "role": "supplementary" },
+      { "studyId": "whCVdUeM", "url": "https://lichess.org/study/whCVdUeM", "title": "Stafford Traps (notes)", "role": "supplementary" }
+    ],
+    "pro-ericrosen-london": [
+      { "studyId": "nkcITD7J", "url": "https://lichess.org/study/nkcITD7J", "title": "Eric Rosen — London Course", "role": "primary" },
+      { "studyId": "BcTMFsAb", "url": "https://lichess.org/study/BcTMFsAb", "title": "London System — Eric Rosen", "role": "supplementary" },
+      { "studyId": "7aX0o2iu", "url": "https://lichess.org/study/7aX0o2iu", "title": "Hidden Tricks & Traps of the London", "role": "supplementary" }
+    ],
+    "pro-gothamchess-london": [
+      { "studyId": "XcAFJ3hV", "url": "https://lichess.org/study/XcAFJ3hV", "title": "GothamChess — How to Win with the London System", "role": "primary" }
+    ],
+    "pro-gothamchess-caro-kann": [
+      { "studyId": "HnDkcRZY", "url": "https://lichess.org/study/HnDkcRZY", "title": "The Caro-Kann Defense (GothamChess)", "role": "primary" },
+      { "studyId": "Ov8HP8iB", "url": "https://lichess.org/study/Ov8HP8iB", "title": "Gotham's Caro-Kann Practice", "role": "supplementary" },
+      { "studyId": "tEDPa4gr", "url": "https://lichess.org/study/tEDPa4gr", "title": "Caro-Kann (GothamChess)", "role": "supplementary" }
+    ]
+  }
+}
