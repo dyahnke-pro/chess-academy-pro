@@ -4182,5 +4182,39 @@
         "concept": "The e5 outpost in the attack"
       }
     ]
+  },
+  {
+    "id": "mg-pro-naroditsky-semislav-botvinnik",
+    "openingId": "pro-naroditsky-semi-slav",
+    "white": "Titled opponent",
+    "black": "Daniel Naroditsky",
+    "whiteElo": 3179,
+    "blackElo": 3137,
+    "result": "0-1",
+    "year": 2025,
+    "event": "Online (chess.com) / 2025",
+    "studentSide": "black",
+    "pgn": "d4 d5 c4 c6 Nc3 Nf6 Nf3 dxc4 e4 b5 Be2 e6 O-O Bb7 Rb1 Bb4 e5 Nd5 Bd2 Bxc3 bxc3 Qe7 a4 a6 Qc1 h6 Re1 O-O Bd1 Nd7 Bc2 c5 axb5 axb5 Rxb5 Bc6 Rb1 Ra2 Be4 f5 exf6 N7xf6 Ne5 Nxe4 Rxe4 Nxc3 Re1 Nxb1 Nxc6 Qd7 Qxc4 Rxd2 Rxe6 Kh8 f3 Na3 Qxc5 Qxe6 Qxf8+ Kh7 Ne5 Nc4 Qf4 Rd1+ Kf2 Nxe5 dxe5 Qg6 h4 Ra1 Qc4 Qb1 Kg3 Qe1+ Kh3 Qh1+ Kg3 Qe1+ Kg4 Qxe5 Qd3+ g6 Qd7+ Qg7 Qd3 Ra7 h5 Qd7+",
+    "overview": "The sharp Botvinnik System: Naroditsky snatches the c4-pawn and clamps it with ...b5, the gambit's whole point. The b7-bishop rakes the long diagonal, ...c5 cracks the centre, and Black's queenside rooks pour through to overwhelm White.",
+    "sources": [
+      "https://lichess.org/study/HaFTAegs",
+      "https://www.chess.com/game/live/143438593820"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 5,
+        "color": "black",
+        "fen": "rnbqkb1r/p3pppp/2p2n2/1p6/2pPP3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+        "annotation": "...b5 — Black clamps the extra c4-pawn, the point of the ...dxc4 gambit, and frees the b7-bishop to rake the long diagonal.",
+        "concept": "Holding the gambit pawn with ...b5"
+      },
+      {
+        "moveNumber": 16,
+        "color": "black",
+        "fen": "r4rk1/1b1nqpp1/p3p2p/1ppnP3/P1pP4/2P2N2/2BB1PPP/1RQ1R1K1 w - - 0 17",
+        "annotation": "...c5 — the central counterstrike. Black hits d4 and pries open lines for the b7-bishop and the queenside pawn-mass.",
+        "concept": "The ...c5 central break"
+      }
+    ]
   }
 ]
