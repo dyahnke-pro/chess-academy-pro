@@ -4046,5 +4046,141 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mg-pro-naroditsky-jobava-c5",
+    "openingId": "pro-naroditsky-jobava-london",
+    "white": "Daniel Naroditsky",
+    "black": "Titled opponent",
+    "whiteElo": 3226,
+    "blackElo": 3289,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Online (chess.com) / 2025",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 Nc3 d5 Bf4 c5 Nf3 cxd4 Qxd4 Nc6 Qd3 Bg4 e4 Bxf3 gxf3 e5 Bg5 dxe4 fxe4 Qxd3 Bxd3 Be7 Bxf6 Bxf6 Nd5 O-O-O c3 Rhe8 O-O-O Bg5+ Kc2 f6 Rhg1 Ne7 Nxe7+ Rxe7 Be2 Red7 Bg4 Kc7 Rxd7+ Rxd7 Bxd7 Kxd7 h4 Bh6 h5 Ke6 Kd3 Kf7 Ke2 g6 Rd1 gxh5 Rd7+ Kg6 Rxb7 h4 Kf3 h3 Kg3 h2 Kxh2 a6 Kg2 Be3 fxe3",
+    "overview": "Against the critical ...c5, Naroditsky cracks the centre open. He trades into a queenless middlegame where his lead in development and the d5 outpost leave Black's king stuck in the centre, then converts the structural edge cleanly.",
+    "sources": [
+      "https://lichess.org/study/N3XOjphc",
+      "https://www.chess.com/game/live/139555012928"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 7,
+        "color": "white",
+        "fen": "r2qkb1r/pp2pppp/2n2n2/3p4/4PBb1/2NQ1N2/PPP2PPP/R3KB1R b KQkq - 0 7",
+        "annotation": "e4 — the central break. With Black's queen lured to d3 and pieces lagging, White rips the position open while he is the better-developed side.",
+        "concept": "Open the centre when ahead in development"
+      },
+      {
+        "moveNumber": 13,
+        "color": "white",
+        "fen": "r3k2r/pp3ppp/2n2b2/3Np3/4P3/3B4/PPP2P1P/R3K2R b KQkq - 1 13",
+        "annotation": "Nd5 — the dominating outpost. The knight plants itself on the hole Black left, hitting f6 and c7 while Black's king has nowhere safe to go.",
+        "concept": "The d5 outpost"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-naroditsky-jobava-bf5",
+    "openingId": "pro-naroditsky-jobava-london",
+    "white": "Daniel Naroditsky",
+    "black": "Titled opponent",
+    "whiteElo": 3149,
+    "blackElo": 3142,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Online (chess.com) / 2025",
+    "studentSide": "white",
+    "pgn": "d4 d5 Nc3 Nf6 Bf4 Bf5 e3 e6 Nf3 Bd6 Ne5 Nfd7 g4 Bg6 h4 Bxe5 dxe5 h5 gxh5 Bxh5 Be2 g6 Bg5 Qc8 f4 a6 Bxh5 Rxh5 Ne2 c5 Ng3 Rh8 h5 Nf8 Bf6 Rh7 h6 Nbd7 Bg7 Qc6 Qf3 a5 O-O-O O-O-O c4 Nb6 cxd5 exd5 f5 Nc4 b3 Nb6 e6 fxe6 fxg6 Nxg6 Nh5 c4 Kb1 cxb3 axb3 Qb5 e4 Nd7 Qg3 Ne7 Nf4 Nc5 Rc1 Kd7 exd5 Nxb3 Rc2 Nd2+ Kc1 Qb1+ Kxd2 Qxh1 Rc7+ Ke8 Rxe7+ Kxe7 Qg5+ Kd7 Nxe6 Qh2+ Kd3 Qh3+ Kd4 Rc8 Nc5+ Rxc5 Kxc5 b6+ Kxb6 Qb3+ Ka7 Qd3 Qg4+ Kd6 Qe6+ Kc5 Qc6+ Kb4 d6 Qe3+ Qb6+ Qxb6+ Kxb6 a4 d7 a3 d8=Q a2 Qd4+ Kb3 Qc3+ Ka4 Qa5+ Kb3 Qb5+ Ka3 Ka5 Rxg7 Qb4#",
+    "overview": "The Symmetrical Jobava: Black mirrors with ...Bf5/...e6/...Bd6, so Naroditsky grabs the e5 outpost and storms the kingside with g4!-h4. The trades leave him a cramping e5-pawn and open lines on the kingside, a lasting pull he grinds home.",
+    "sources": [
+      "https://lichess.org/study/N3XOjphc",
+      "https://www.chess.com/game/live/143802846266"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 7,
+        "color": "white",
+        "fen": "rn1qk2r/pppn1ppp/3bp3/3pNb2/3P1BP1/2N1P3/PPP2P1P/R2QKB1R b KQkq - 0 7",
+        "annotation": "g4 — the storm begins. The pawn kicks the light bishop off its diagonal before Black can get organized; h4 follows.",
+        "concept": "The g4-h4 kingside storm"
+      },
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "rn1qk2r/pppn1ppp/4p1b1/3pP3/5BPP/2N1P3/PPP2P2/R2QKB1R b KQkq - 0 9",
+        "annotation": "dxe5 — the wedge. After the trades White owns a cramping pawn on e5 and the half-open lines the storm pried apart.",
+        "concept": "The e5 pawn-wedge"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-naroditsky-jobava-a6",
+    "openingId": "pro-naroditsky-jobava-london",
+    "white": "Daniel Naroditsky",
+    "black": "Titled opponent",
+    "whiteElo": 2989,
+    "blackElo": 3177,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Online (chess.com) / 2025",
+    "studentSide": "white",
+    "pgn": "d4 d5 Nc3 Nf6 Bf4 a6 e3 e6 Nf3 c5 dxc5 Bxc5 Bd3 b5 O-O Bb7 a3 O-O Qe2 Nbd7 Rad1 Qb6 e4 dxe4 Nxe4 Bxe4 Bxe4 Nxe4 Qxe4 Nf6 Qe2 Rad8 b4 Be7 c4 bxc4 Qxc4 Nd5 Bg3 a5 b5 Bxa3 Ne5 Qc5 Qd3 Bb2 Nc6 Ra8 Rb1 Bf6 Rfc1 Nc3 Bd6 Qb6 Rxc3 Bxc3 Bxf8",
+    "overview": "Black's ...a6/...b5 queenside expansion is slow, so Naroditsky develops calmly, clamps the flank with a3, and detonates the centre with e4 the moment his rooks are centralized — opening the game for his better pieces while Black's flank play stalls.",
+    "sources": [
+      "https://lichess.org/study/N3XOjphc",
+      "https://www.chess.com/game/live/133330743613"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "rn1qk2r/1b3ppp/p3pn2/1pbp4/5B2/P1NBPN2/1PP2PPP/R2Q1RK1 b kq - 0 9",
+        "annotation": "a3 — the clamp. The little pawn move freezes Black's ...b5-b4 break and takes the sting out of the whole queenside plan.",
+        "concept": "Clamp the queenside before breaking the centre"
+      },
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r4rk1/1b1n1ppp/pq2pn2/1pbp4/4PB2/P1NB1N2/1PP1QPPP/3R1RK1 b - - 0 12",
+        "annotation": "e4 — the break. With rooks on d1 and the bishop on d3, White opens the centre exactly when Black's flank push has run out of steam.",
+        "concept": "The central e4 break"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-naroditsky-jobava-g6",
+    "openingId": "pro-naroditsky-jobava-london",
+    "white": "Daniel Naroditsky",
+    "black": "Titled opponent",
+    "whiteElo": 3134,
+    "blackElo": 3192,
+    "result": "1-0",
+    "year": 2025,
+    "event": "Online (chess.com) / 2025",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 Nc3 d5 Bf4 g6 e3 Bg7 h4 c5 Nb5 Na6 c3 Bd7 a4 O-O h5 Bf5 hxg6 Bxg6 Nf3 e6 Ne5 c4 Qf3 Ne4 Nxg6 hxg6 Qh3 Re8 f3 Nf6 g4 Qd7 Be5 Kf8 Bd6+ Kg8 Be5 Nb8 Qh4 Qe7 Nc7 Nc6 Nxe8 Rxe8 Bxf6 Bxf6 Qh7+ Kf8 Be2 e5 Rh2 exd4 exd4 Bg7 Kf1 Qe3 Qh4 Nxd4 cxd4 Bxd4 Qh6+ Qxh6 Rxh6 Bxb2 Rd1 c3 Rh8+ Ke7 Rxe8+ Kxe8 Bd3",
+    "overview": "Against the ...g6 fianchetto Naroditsky goes straight for the throat: h4! lunges at the long-diagonal bishop, h5 cracks open the kingside, and the e5 knight crowns a direct attack on the castled king.",
+    "sources": [
+      "https://lichess.org/study/HaFTAegs",
+      "https://www.chess.com/game/live/150885490597"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 5,
+        "color": "white",
+        "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B1P/2N1P3/PPP2PP1/R2QKBNR b KQkq - 0 5",
+        "annotation": "h4 — the lunge. Before Black finishes developing, the rook-pawn rushes up to pry open the fianchettoed king's cover.",
+        "concept": "The h4-h5 fianchetto attack"
+      },
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r2q1rk1/pp3pbp/n3pnb1/1NppN3/P2P1B2/2P1P3/1P3PP1/R2QKB1R b KQ - 1 12",
+        "annotation": "Ne5 — the outpost crowns the attack. The knight lands in Black's camp, eyeing g6 and f7 with the kingside already loosened.",
+        "concept": "The e5 outpost in the attack"
+      }
+    ]
   }
 ]
