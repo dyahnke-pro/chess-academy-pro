@@ -32786,5 +32786,377 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pro-gothamchess-mengarini-g6",
+    "openingId": "pro-gothamchess-mengarini",
+    "criticalPositionFen": "r2qk2r/pp1bppb1/2np1np1/2p3Pp/4P2P/P1NP1P2/BPP5/R1BQK1NR b KQkq - 0 10",
+    "title": "Mengarini — g6 Hyper-Accelerated: Ba2 + h4-h5-f4 kingside attack",
+    "overview": "After Ba2 stows the bishop and h4-h5 wedges the kingside, f4 cracks open lines for the heavy pieces. Aggregate pattern across his 236 g6 games.",
+    "pawnBreaks": [
+      {
+        "move": "f4",
+        "explanation": "f4 — break the pawn chain (38%) to open lines for the rook and dark-squared bishop.",
+        "fen": "r2qk2r/pp1bppb1/2np1np1/2p3Pp/4P2P/P1NP1P2/BPP5/R1BQK1NR b KQkq - 0 10"
+      }
+    ],
+    "pieceManeuvers": [
+      "Ba2 — bishop tucks safely (92% of his g6 games), aimed at f7 along the long diagonal."
+    ],
+    "strategicThemes": [
+      "Ba2 — bishop tucks safely (92% of his g6 games), aimed at f7 along the long diagonal.",
+      "h4 + h5 — the trademark storm (94%/92% of his games) cramps the kingside.",
+      "f4 — break the pawn chain (38%) to open lines for the rook and dark-squared bishop."
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qk2r/pp1bppb1/2np1np1/2p3Pp/4P2P/P1NP1P2/BPP5/R1BQK1NR b KQkq - 0 10",
+        "title": "g6 Hyper-Accelerated: Ba2 + h4-h5-f4 kingside attack",
+        "moves": [
+          "Nh7",
+          "f4",
+          "Bg4",
+          "Nf3",
+          "e6",
+          "Be3",
+          "Nd4",
+          "Bxd4"
+        ],
+        "annotations": [
+          "Nh7 — natural follow-up.",
+          "f4 — THE BREAK — Ba2.",
+          "Bg4 — natural follow-up.",
+          "Nf3 — natural follow-up.",
+          "e6 — natural follow-up.",
+          "Be3 — natural follow-up.",
+          "Nd4 — natural follow-up.",
+          "Bxd4 — natural follow-up."
+        ],
+        "learnCues": [
+          "Nh7",
+          "f4",
+          "Bg4",
+          "Nf3",
+          "e6",
+          "Be3",
+          "Nd4",
+          "Bxd4"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-gothamchess-mengarini-e6",
+    "openingId": "pro-gothamchess-mengarini",
+    "criticalPositionFen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/3P4/2PB4/5PPP/RNBQK1NR b KQkq - 0 8",
+    "title": "Mengarini — e6: d4 + Bd3 + f4 — dream centre attack",
+    "overview": "His e6 setup: d4 centre + Bd3 + e5 push, then f4 (41%) opens lines while every piece is pointed at Black king. Aggregate from 133 games.",
+    "pawnBreaks": [
+      {
+        "move": "f4",
+        "explanation": "f4 break (41%) opens the f-file with Bd3 already aimed at h7.",
+        "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/3P4/2PB4/5PPP/RNBQK1NR b KQkq - 0 8"
+      }
+    ],
+    "pieceManeuvers": [
+      "d4 + Bd3 — dream centre + b1-h7 battery (78%/65% of his e6 games)."
+    ],
+    "strategicThemes": [
+      "d4 + Bd3 — dream centre + b1-h7 battery (78%/65% of his e6 games).",
+      "e5 push (66%) cramps Black's kingside.",
+      "f4 break (41%) opens the f-file with Bd3 already aimed at h7."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/3P4/2PB4/5PPP/RNBQK1NR b KQkq - 0 8",
+        "title": "e6: d4 + Bd3 + f4 — dream centre attack",
+        "moves": [
+          "Nge7",
+          "f4",
+          "Nf5",
+          "Nf3",
+          "h5",
+          "O-O",
+          "Be7",
+          "Qe2"
+        ],
+        "annotations": [
+          "Nge7 — natural follow-up.",
+          "f4 — THE BREAK — d4 + Bd3.",
+          "Nf5 — natural follow-up.",
+          "Nf3 — natural follow-up.",
+          "h5 — natural follow-up.",
+          "O-O — natural follow-up.",
+          "Be7 — natural follow-up.",
+          "Qe2 — natural follow-up."
+        ],
+        "learnCues": [
+          "Nge7",
+          "f4",
+          "Nf5",
+          "Nf3",
+          "h5",
+          "O-O",
+          "Be7",
+          "Qe2"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-gothamchess-mengarini-d5",
+    "openingId": "pro-gothamchess-mengarini",
+    "criticalPositionFen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P5/P4N2/1P1P1PPP/RNBQKB1R b KQkq - 1 6",
+    "title": "Mengarini — d5 Center-Counter: positional + d4 break",
+    "overview": "A slow positional grind across his 74 d5 games: e6/Be7/d3/Re1 dominate (49-64%), then d4 (35%) breaks the centre with the structural edge already secured.",
+    "pawnBreaks": [
+      {
+        "move": "d4",
+        "explanation": "d4 break (35%) when development is complete opens the position.",
+        "fen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P5/P4N2/1P1P1PPP/RNBQKB1R b KQkq - 1 6"
+      }
+    ],
+    "pieceManeuvers": [
+      "Slow positional setup: e6/Be7/d3/Re1 dominate (49-64% of his games)."
+    ],
+    "strategicThemes": [
+      "Slow positional setup: e6/Be7/d3/Re1 dominate (49-64% of his games).",
+      "d4 break (35%) when development is complete opens the position.",
+      "Bb5 + Bxc6 to grab the bishop pair when Black gets too comfortable."
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P5/P4N2/1P1P1PPP/RNBQKB1R b KQkq - 1 6",
+        "title": "d5 Center-Counter: positional + d4 break",
+        "moves": [
+          "Nc6",
+          "Be2",
+          "Bd6",
+          "O-O",
+          "O-O",
+          "b4",
+          "cxb4",
+          "d4",
+          "Bg4"
+        ],
+        "annotations": [
+          "Nc6 — natural follow-up.",
+          "Be2 — natural follow-up.",
+          "Bd6 — natural follow-up.",
+          "O-O — natural follow-up.",
+          "O-O — natural follow-up.",
+          "b4 — natural follow-up.",
+          "cxb4 — natural follow-up.",
+          "d4 — THE BREAK — Slow positional setup: e6/Be7/d3/Re1 dominate (49-64% of his games)..",
+          "Bg4 — natural follow-up."
+        ],
+        "learnCues": [
+          "Nc6",
+          "Be2",
+          "Bd6",
+          "O-O",
+          "O-O",
+          "b4",
+          "cxb4",
+          "d4",
+          "Bg4"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-gothamchess-mengarini-d6",
+    "openingId": "pro-gothamchess-mengarini",
+    "criticalPositionFen": "rn2kb1r/pp1qpppp/3p1n2/2p5/4P3/P1NP4/1PP2PPP/R1BQK1NR b KQkq - 0 6",
+    "title": "Mengarini — d6: simplify + f4 lever",
+    "overview": "After Bb5+/Bxd7+ trade simplifies, 41% of his d6 games feature f4 + 44% feature e5 push. Solid pattern from his 73 d6 games.",
+    "pawnBreaks": [
+      {
+        "move": "f4",
+        "explanation": "f4 lever (41% of his d6 games) advances kingside.",
+        "fen": "rn2kb1r/pp1qpppp/3p1n2/2p5/4P3/P1NP4/1PP2PPP/R1BQK1NR b KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      "Bb5+ trade simplifies the position (his d6 setup)."
+    ],
+    "strategicThemes": [
+      "Bb5+ trade simplifies the position (his d6 setup).",
+      "f4 lever (41% of his d6 games) advances kingside.",
+      "e5 push (44%) creates the space + Bg5 pin."
+    ],
+    "playableLines": [
+      {
+        "fen": "rn2kb1r/pp1qpppp/3p1n2/2p5/4P3/P1NP4/1PP2PPP/R1BQK1NR b KQkq - 0 6",
+        "title": "d6: simplify + f4 lever",
+        "moves": [
+          "Nc6",
+          "f4",
+          "g6",
+          "Nf3",
+          "Bg7",
+          "O-O",
+          "O-O"
+        ],
+        "annotations": [
+          "Nc6 — natural follow-up.",
+          "f4 — THE BREAK — Bb5+ trade simplifies the position (his d6 setup)..",
+          "g6 — natural follow-up.",
+          "Nf3 — natural follow-up.",
+          "Bg7 — natural follow-up.",
+          "O-O — natural follow-up.",
+          "O-O — natural follow-up."
+        ],
+        "learnCues": [
+          "Nc6",
+          "f4",
+          "g6",
+          "Nf3",
+          "Bg7",
+          "O-O",
+          "O-O"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-gothamchess-mengarini-Nf6",
+    "openingId": "pro-gothamchess-mengarini",
+    "criticalPositionFen": "rnbqkb1r/ppnppppp/8/2p1P3/1PP5/P7/3P1PPP/RNBQKBNR b KQkq - 0 5",
+    "title": "Mengarini — Nf6 Alekhine: knight chase + b4 expansion",
+    "overview": "Across his 69 Nf6 games: e5+c4 chase the knight to c7, b4 expansion + exd6 (54%) opens the centre, Bb2 (55%) takes the long diagonal.",
+    "pawnBreaks": [
+      {
+        "move": "b4",
+        "explanation": "b4 expansion (queenside) + exd6 (54%) opens the centre.",
+        "fen": "rnbqkb1r/ppnppppp/8/2p1P3/1PP5/P7/3P1PPP/RNBQKBNR b KQkq - 0 5"
+      }
+    ],
+    "pieceManeuvers": [
+      "e5 + c4 — kick the knight to the rim (his standard ...Nf6 response)."
+    ],
+    "strategicThemes": [
+      "e5 + c4 — kick the knight to the rim (his standard ...Nf6 response).",
+      "b4 expansion (queenside) + exd6 (54%) opens the centre.",
+      "Bb2 long-diagonal aim at h8 (55%)."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/ppnppppp/8/2p1P3/1PP5/P7/3P1PPP/RNBQKBNR b KQkq - 0 5",
+        "title": "Nf6 Alekhine: knight chase + b4 expansion",
+        "moves": [
+          "cxb4",
+          "axb4",
+          "d6",
+          "exd6",
+          "Qxd6",
+          "Nf3",
+          "Bg4",
+          "Nc3",
+          "Nc6"
+        ],
+        "annotations": [
+          "cxb4 — natural follow-up.",
+          "axb4 — natural follow-up.",
+          "d6 — natural follow-up.",
+          "exd6 — natural follow-up.",
+          "Qxd6 — natural follow-up.",
+          "Nf3 — natural follow-up.",
+          "Bg4 — natural follow-up.",
+          "Nc3 — natural follow-up.",
+          "Nc6 — natural follow-up."
+        ],
+        "learnCues": [
+          "cxb4",
+          "axb4",
+          "d6",
+          "exd6",
+          "Qxd6",
+          "Nf3",
+          "Bg4",
+          "Nc3",
+          "Nc6"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-gothamchess-mengarini-e5",
+    "openingId": "pro-gothamchess-mengarini",
+    "criticalPositionFen": "r2qkbnr/pp3ppp/2npb3/2p1p3/2B1PP2/P1NP4/1PP3PP/R1BQK1NR b KQkq - 0 6",
+    "title": "Mengarini — e5: the universal f4 break",
+    "overview": "93% of his Mengarini-e5 games feature f4 — the universal lever. After ...exf4 Bxf4 the bishop lands actively, Black loses the e5-pawn, and the f-file opens.",
+    "pawnBreaks": [
+      {
+        "move": "f4",
+        "explanation": "f4 — almost universal break (93% of his e5 games).",
+        "fen": "r2qkbnr/pp3ppp/2npb3/2p1p3/2B1PP2/P1NP4/1PP3PP/R1BQK1NR b KQkq - 0 6"
+      }
+    ],
+    "pieceManeuvers": [
+      "f4 — almost universal break (93% of his e5 games)."
+    ],
+    "strategicThemes": [
+      "f4 — almost universal break (93% of his e5 games).",
+      "Bxf4 after exf4 recaptures actively (53%).",
+      "Bg5 pins the f6-knight to prevent ...Nd4 leaps."
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qkbnr/pp3ppp/2npb3/2p1p3/2B1PP2/P1NP4/1PP3PP/R1BQK1NR b KQkq - 0 6",
+        "title": "e5: the universal f4 break",
+        "moves": [
+          "Bxc4",
+          "dxc4",
+          "exf4",
+          "Bxf4",
+          "Ne5"
+        ],
+        "annotations": [
+          "Bxc4 — natural follow-up.",
+          "dxc4 — natural follow-up.",
+          "exf4 — natural follow-up.",
+          "Bxf4 — natural follow-up.",
+          "Ne5 — natural follow-up."
+        ],
+        "learnCues": [
+          "Bxc4",
+          "dxc4",
+          "exf4",
+          "Bxf4",
+          "Ne5"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:att-kingside-storm",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation"
+        ]
+      }
+    ]
   }
 ]
