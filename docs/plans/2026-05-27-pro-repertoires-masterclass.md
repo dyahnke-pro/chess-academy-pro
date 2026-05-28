@@ -461,7 +461,15 @@ process to the rest of Naroditsky (then other pros, frequency-floor ≤10/colour
    helper; `hasMasterclassTier(openingId)` helper; small badges in the
    ProPlayerPage opening list. **Cite, don't ship verbatim** (per §10 licensing
    rule).
-10. **Lesson-source refresh:** every Naroditsky opening EXCEPT Jobava still
-    cites the generic `youtube.com/@DanielNaroditskyGM` SRC. Replace with the
-    specific lichess-study URL per opening once §9 study-notes mapping lands
-    (Alapin/Vienna/Najdorf/KID/Grunfeld/Scotch/SemiSlav/FantasyCaro).
+10. **Lesson-source refresh:** every Naroditsky opening EXCEPT Jobava +
+    Fantasy-Caro still cites the generic `youtube.com/@DanielNaroditskyGM`
+    SRC. Replace with the specific lichess-study URL per opening once §9
+    study-notes mapping lands (Alapin/Vienna/Najdorf/KID/Grunfeld/Scotch/
+    SemiSlav). Fantasy-Caro done.
+11. **Jobava main lesson teaches the wrong line.** The main pgn now correctly
+    shows his h4-storm e6 line (research-first fix 2026-05-28), but the main
+    lesson `proNaroditskyJobava.ts` still teaches a different e6 sub-line
+    (...Bd6 Bxf4 exf4 — the dark-bishop trade with doubled f-pawns). Both are
+    real Jobava sub-lines, but the lesson should be rewritten to match the
+    headline pgn (the Nb5/h4-storm) so the canonical "main lesson" actually
+    teaches the canonical "main line." Fresh-session work.
