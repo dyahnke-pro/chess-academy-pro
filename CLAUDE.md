@@ -833,7 +833,7 @@ time:
   position in ≥2 of his games. Masters DB and lichess subset are bonuses;
   HIS dump is the canon for HIS tab.
 
-**THE 8-STEP BUILD (every pro opening, no shortcuts):**
+**THE 9-STEP BUILD (every pro opening, no shortcuts):**
 
 1. **Take ALL his games for the opening.** Wins + losses + draws. Filter
    by color, the opening's defining first moves, and your candidate ECO if
@@ -850,20 +850,30 @@ time:
    per-pro anchor index — pgn length must equal anchor depth or you've
    gone past his real play; either truncate or find a deeper real game.
    **Never invent moves past where his dump stops.**
-5. **Lesson = 4 beats teaching the line + middlegame transition.** Watch
+5. **SEARCH for his teaching content on THIS opening** — lichess studies,
+   personal writings, YouTube videos. WebSearch ("GothamChess Mengarini",
+   "Naroditsky Jobava", etc.) — surface specific videos / studies, not the
+   generic channel. Add the URLs to the lesson `sources` AND to
+   `src/data/pro-study-notes.json` so the "Notes" badge surfaces. **Ground
+   the narration IDEAS in his actual teaching** wherever possible (his
+   framing of why he plays this, what he's trying to accomplish — his
+   voice, our words, cite-not-copy per §10 licensing). If NO teaching
+   content exists, derive ideas from the games themselves: what each move
+   accomplishes structurally / tactically, what plan it serves, what
+   patterns repeat across multiple of his games on the variation.
+6. **Lesson = 4 beats teaching the line + middlegame transition.** Watch
    register full prose, Learn short cues, every named square bare-named for
    the markers (gotcha §8c), apostrophes in double-quoted strings (§8a),
-   deep beat ≥20 plies. Sources: a real source per opening (his lichess
-   study if it exists in `src/data/pro-study-notes.json`, else a
-   reputable URL + concept ids — never the generic YouTube channel SRC).
-6. **Middlegame plan = his REAL post-spine play** (plies ~20-30+) of the
+   deep beat ≥20 plies. Sources from step 5.
+7. **Middlegame plan = his REAL post-spine play** (plies ~20-30+) of the
    same deep line as a `playableLines[0]` entry with annotations +
    learnCues + sources. Critical position FEN = the position at the spine
    endpoint. This is the plan from his games, not from theory.
-7. **Model game = his real winning game on this exact variation.** Top
-   opponent elo, 2 critical moments with computed FENs, his side's
-   character in the overview. studentSide must match orientation.
-8. **Verify with the gates before committing:** `lessonIntegrity` +
+8. **Model game per variation = his real winning game on that variation.**
+   Top opponent elo, 2 critical moments with computed FENs, his side's
+   character in the overview. studentSide must match orientation. EVERY
+   variation tab gets its own model game from HIS games on THAT tab.
+9. **Verify with the gates before committing:** `lessonIntegrity` +
    `narrationAccuracy` + `narrationGrounding` + `lessonDepth` +
    `wlppNarration` + `lessonTabIntegrity` + `lessonSources` +
    `modelGames-orientation` + `pro-repertoires-orientation` +

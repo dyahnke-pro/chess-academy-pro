@@ -113,6 +113,7 @@ import { PRO_GOTHAMCHESS_LONDON_VARIATION_LESSONS } from './proGothamLondonVaria
 import { PRO_GOTHAMCHESS_TROMPOWSKY_LESSON } from './proGothamTrompowsky';
 import { PRO_GOTHAMCHESS_TROMPOWSKY_VARIATION_LESSONS } from './proGothamTrompowskyVariations';
 import { PRO_GOTHAMCHESS_MENGARINI_LESSON } from './proGothamMengarini';
+import { PRO_GOTHAMCHESS_MENGARINI_VARIATION_LESSONS } from './proGothamMengariniVariations';
 import { PRO_GOTHAMCHESS_VIENNA_LESSON } from './proGothamVienna';
 import { PRO_GOTHAMCHESS_FRENCH_RUBINSTEIN_LESSON } from './proGothamFrenchRubinstein';
 import { PRO_GOTHAMCHESS_CARO_KANN_LESSON } from './proGothamCaroKann';
@@ -253,6 +254,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_GOTHAMCHESS_SCANDINAVIAN_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_LONDON_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_TROMPOWSKY_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_MENGARINI_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

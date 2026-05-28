@@ -3,7 +3,12 @@ import type { LessonScript } from '../../types';
 const VIS = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
-const SRC = ['concept:pos-development', 'concept:att-kingside-storm', 'https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation'];
+const SRC = [
+  'https://www.youtube.com/watch?v=8n_VzaFGTdU',  // "a3 Sicilian, Gotham Style | Chapter 1 (Accepted)"
+  'https://www.youtube.com/watch?v=EU07BDvRv2c',  // "GothamChess Sicilian 1.e4 c5 2.a3"
+  'concept:pos-development',
+  'concept:att-kingside-storm',
+];
 
 // GothamChess's Mengarini Sicilian — his ACTUAL main is the a3+b4! WING
 // GAMBIT (64 games on the same 11-ply prefix, his most-played Mengarini line

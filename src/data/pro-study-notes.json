@@ -24,6 +24,10 @@
     "pro-gothamchess-london": [
       { "studyId": "XcAFJ3hV", "url": "https://lichess.org/study/XcAFJ3hV", "title": "GothamChess — How to Win with the London System", "role": "primary" }
     ],
+    "pro-gothamchess-mengarini": [
+      { "studyId": "yt:8n_VzaFGTdU", "url": "https://www.youtube.com/watch?v=8n_VzaFGTdU", "title": "a3 Sicilian, Gotham Style — Chapter 1 (Accepted)", "role": "primary" },
+      { "studyId": "yt:EU07BDvRv2c", "url": "https://www.youtube.com/watch?v=EU07BDvRv2c", "title": "GothamChess Sicilian 1.e4 c5 2.a3", "role": "supplementary" }
+    ],
     "pro-gothamchess-caro-kann": [
       { "studyId": "HnDkcRZY", "url": "https://lichess.org/study/HnDkcRZY", "title": "The Caro-Kann Defense (GothamChess)", "role": "primary" },
       { "studyId": "Ov8HP8iB", "url": "https://lichess.org/study/Ov8HP8iB", "title": "Gotham's Caro-Kann Practice", "role": "supplementary" },

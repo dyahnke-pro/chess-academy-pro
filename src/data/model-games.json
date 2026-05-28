@@ -4484,40 +4484,6 @@
     ]
   },
   {
-    "id": "mg-pro-gothamchess-mengarini",
-    "openingId": "pro-gothamchess-mengarini",
-    "white": "Levy Rozman (GothamChess)",
-    "black": "Titled opponent",
-    "whiteElo": 2985,
-    "blackElo": 3129,
-    "result": "1-0",
-    "year": 2026,
-    "event": "Online (chess.com) / 2026",
-    "studentSide": "white",
-    "pgn": "e4 c5 a3 g6 Nc3 Bg7 Bc4 Nc6 d3 Nf6 Ba2 d6 h4 Bg4 f3 Bd7 g4 h5 g5 Nh7 f4 Bg4 Nf3 e6 Be3 Nd4 Bxd4 Bxd4 Rf1 O-O Qd2 Bxf3 Rxf3 a6 f5 Qd7 O-O-O b5 Ne2 Be5 c3 Bh8 Nf4",
-    "overview": "Gotham's anti-Sicilian secret weapon: 2.a3 sidesteps all of Black's theory, the bishop maneuvers Bc4-Ba2 to safety while aimed at f7, then h4/f3/g4 storms the kingside. Crushing attack vs a 3129 opponent — proof the 'silly' a3 move is anything but.",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation",
-      "https://www.chess.com/game/live/168956387144"
-    ],
-    "criticalMoments": [
-      {
-        "moveNumber": 2,
-        "color": "white",
-        "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2",
-        "annotation": "a3 — the Mengarini. A move so unassuming that Black's Sicilian prep is instantly useless. The point is b4 and queenside expansion, but more importantly it's totally off Black's preparation.",
-        "concept": "2.a3 sidesteps Sicilian theory"
-      },
-      {
-        "moveNumber": 7,
-        "color": "white",
-        "fen": "r1bqk2r/pp2ppbp/2np1np1/2p5/4P2P/P1NP4/BPP2PP1/R1BQK1NR b KQkq - 0 7",
-        "annotation": "h4 — the kingside storm begins. With development complete and the bishop tucked safely on a2, the h-pawn lunges to crack open the fianchettoed king.",
-        "concept": "h4 storm vs the fianchetto"
-      }
-    ]
-  },
-  {
     "id": "mg-pro-gothamchess-vienna",
     "openingId": "pro-gothamchess-vienna",
     "white": "Levy Rozman (GothamChess)",
@@ -4582,6 +4548,168 @@
         "fen": "r1bqkb1r/ppp2p1p/5p2/3np3/8/P4NP1/1PP2P1P/R1BQKB1R w KQkq - 0 10",
         "annotation": "...Nxd5 — knight lands on the d5 outpost. With Be6/Qd7/O-O-O coming, the queenside is ready and the open g-file aims at White's king.",
         "concept": "Knight on d5 + opposite-side attack"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-mengarini-g6",
+    "openingId": "pro-gothamchess-mengarini",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 2985,
+    "blackElo": 3129,
+    "result": "1-0",
+    "year": 2026,
+    "event": "Online (chess.com) / 2026",
+    "studentSide": "white",
+    "pgn": "e4 c5 a3 g6 Nc3 Bg7 Bc4 Nc6 d3 Nf6 Ba2 d6 h4 Bg4 f3 Bd7 g4 h5 g5 Nh7 f4 Bg4 Nf3 e6 Be3 Nd4 Bxd4 Bxd4 Rf1 O-O Qd2 Bxf3 Rxf3 a6 f5 Qd7 O-O-O b5 Ne2 Be5 c3 Bh8 Nf4",
+    "overview": "GothamChess on his Mengarini vs 2...g6 Hyper-Accelerated — his real top-elo winning game on this variation, 236 total tab-games in his dump.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation",
+      "https://www.chess.com/game/live/168956387144"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 2,
+        "color": "white",
+        "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2",
+        "annotation": "a3 — the Mengarini. Sidesteps every line of Sicilian theory and quietly preps b4 for a gambit-style wing attack.",
+        "concept": "2.a3 — the Mengarini move"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-mengarini-e6",
+    "openingId": "pro-gothamchess-mengarini",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 3013,
+    "blackElo": 3001,
+    "result": "1-0",
+    "year": 2026,
+    "event": "Online (chess.com) / 2026",
+    "studentSide": "white",
+    "pgn": "e4 c5 a3 e6 b4 b6 bxc5 bxc5 Nc3 d6 Bb5+ Bd7 Nf3 Be7 Qe2 a6 Bc4 Nf6 e5 dxe5 Nxe5 O-O Nxd7 Nbxd7 O-O Qc7 a4 Ne5 Ba2 Rad8 h3 Ng6 d3 Nf4 Bxf4 Qxf4 Bc4 Qc7 Ne4 Nd5 Bxa6 Rfe8 Bb5 Rf8 a5 Ra8 a6 Ra7 Bc4 Nb4 Ng3 Rfa8 Qf3 Nxa6 Rfe1 h6 Nh5 Nb4 Qxa8+ Rxa8 Rxa8+ Kh7 c3 Nd5 Bxd5 exd5 d4 cxd4 cxd4 Bg5 Ng3 Kg6 Ra6+ f6 Ra3 Qc4 Rf3 Qxd4 Nf5 Qd2 Re7 Qc1+ Kh2 Kh7 Rxg7+ Kh8 Rd7 Qc6 Rd6 Qc7 g3 d4 Ra3 Qb7 Raa6 d3 Rab6 Qxb6 Rxb6 d2 Rb8+ Kh7 Rd8 Kg6 g4 h5 Ne7+ Kh6 Nf5+ Kg6 Rxd2 hxg4 Rd5 g3+ Kxg3 Bh6 Kg4 Kf7 h4 Bg5 h5 Bh6 Rd6 Bg5 Re6 Kxe6 Ng7+ Kf7 Ne6 Kg8 Nxg5 fxg5 Kf5 Kh8 Kxg5 Kg8 Kg4 Kh8 Kh4 Kg8 Kg5 Kh8 h6 Kg8 Kh5",
+    "overview": "GothamChess on his Mengarini vs 2...e6 — his real top-elo winning game on this variation, 133 total tab-games in his dump.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation",
+      "https://www.chess.com/game/live/166613712104"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 2,
+        "color": "white",
+        "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2",
+        "annotation": "a3 — the Mengarini. Sidesteps every line of Sicilian theory and quietly preps b4 for a gambit-style wing attack.",
+        "concept": "2.a3 — the Mengarini move"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-mengarini-d5",
+    "openingId": "pro-gothamchess-mengarini",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 3027,
+    "blackElo": 3060,
+    "result": "1-0",
+    "year": 2026,
+    "event": "Online (chess.com) / 2026",
+    "studentSide": "white",
+    "pgn": "e4 c5 a3 d5 exd5 Nf6 c4 e6 dxe6 Bxe6 Nf3 Nc6 Be2 Bd6 O-O O-O b4 cxb4 d4 Bg4 Be3 Re8 h3 Bh5 d5 Ne5 Nxe5 Bxe5 Ra2 b3 Qxb3 Bxe2 Rxe2 b6 Rd1 Qc7 Nc3 Rac8 c5 bxc5 Nb5 Qb6 Qc4 Ne4 a4 Nd6 Nxd6 Bxd6 Rc2 h6 Rdc1 Red8 Qb5 Bf8 Bxc5 Bxc5 Rxc5 Qxb5 axb5 Rb8 Kf1 g6 Ke2 Kg7 Kd3 Rb6 Kc4 Rf6 Rc2 Rf4+ Kb3 Rf5 Rd2 Rd6 Kc4 Rf4+ Rd4 Rxf2 Rc6 Rd7 Kc5 Rc2+ Rc4 Rb2 d6 Rd2 Rd4 Rc2+ Kd5 Rf2 Rc7 Rf5+ Kc6 Rd8 d7 Rf6+ Rd6 Rf2 Rc8 Rc2+ Kb7 Rxd7+ Rxd7 Rf2 Rcc7 h5 Kxa7 Ra2+ Kb7 Rf2 Re7 g5 Rxf7+ Rxf7 Rxf7+ Kxf7 Kc6 Kf6 b6 Kf5 b7 h4 b8=Q g4 Qh2 g3 Qg1 Ke4 Qf1 Ke3 Qf3+ Kd4 Kd7 Ke5 Ke7 Kd4 Kf7 Ke5 Kg6 Kd4 Kh5 Ke5 Kxh4 Kd4 Kxg3 Ke5 h4 Ke6 h5 Kd6 h6 Ke6 h7 Ke7 h8=Q Kd6 Qh4 Kc7 Qfg4 Kb6 Qgg5 Kc7 Qhh6 Kd7 Qgg7+ Ke8 Qhh8#",
+    "overview": "GothamChess on his Mengarini vs 2...d5 Center-Counter — his real top-elo winning game on this variation, 74 total tab-games in his dump.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation",
+      "https://www.chess.com/game/live/169084396794"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 2,
+        "color": "white",
+        "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2",
+        "annotation": "a3 — the Mengarini. Sidesteps every line of Sicilian theory and quietly preps b4 for a gambit-style wing attack.",
+        "concept": "2.a3 — the Mengarini move"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-mengarini-d6",
+    "openingId": "pro-gothamchess-mengarini",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 3048,
+    "blackElo": 2981,
+    "result": "1-0",
+    "year": 2026,
+    "event": "Online (chess.com) / 2026",
+    "studentSide": "white",
+    "pgn": "e4 c5 a3 d6 Nc3 Nd7 Bb5 g6 d3 Bg7 f4 Nf6 Nf3 O-O Bxd7 Bxd7 O-O e5 fxe5 dxe5 Bg5 Be6 Qd2 Qc7 Bxf6 Bxf6 Qh6 Bg7 Qh4 f6 Nd5 Bxd5 exd5 Qd7 c4 Rae8 Nd2 f5 Rae1 Bf6 Qh6 b6 b3 Qd8 Qh3 Bg5 Nf3 Bf6 Nd2 Qe7 g4 Bg5 Nf3 Bf4 gxf5 gxf5 Kf2 Kh8 Rg1 e4 Nh4 Rg8 Ng6+ Rxg6 Rxg6 e3+ Ke2 Qe5 Kf3 e2 Re6 Rxe6 dxe6 Qe3+ Kg2 Qd2 Qh4 Qxd3 Qf6+",
+    "overview": "GothamChess on his Mengarini vs 2...d6 — his real top-elo winning game on this variation, 73 total tab-games in his dump.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation",
+      "https://www.chess.com/game/live/147854622924"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 2,
+        "color": "white",
+        "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2",
+        "annotation": "a3 — the Mengarini. Sidesteps every line of Sicilian theory and quietly preps b4 for a gambit-style wing attack.",
+        "concept": "2.a3 — the Mengarini move"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-mengarini-Nf6",
+    "openingId": "pro-gothamchess-mengarini",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 2957,
+    "blackElo": 2943,
+    "result": "1-0",
+    "year": 2026,
+    "event": "Online (chess.com) / 2026",
+    "studentSide": "white",
+    "pgn": "e4 c5 a3 Nf6 e5 Nd5 c4 Nc7 b4 cxb4 axb4 d6 exd6 Qxd6 Nf3 Bg4 Nc3 Nc6 Be2 Nxb4 O-O Nc6 Ba3 Qd7 d4 e6 Bxf8 Kxf8 d5 exd5 cxd5 Bxf3 Bxf3 Ne5 Re1 Nxf3+ Qxf3 Ne8 d6 Nxd6 Rad1 Qc7 Qf4 Rd8 Nb5 Qc6 Rxd6",
+    "overview": "GothamChess on his Mengarini vs 2...Nf6 — his real top-elo winning game on this variation, 69 total tab-games in his dump.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation",
+      "https://www.chess.com/game/live/166516741654"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 2,
+        "color": "white",
+        "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2",
+        "annotation": "a3 — the Mengarini. Sidesteps every line of Sicilian theory and quietly preps b4 for a gambit-style wing attack.",
+        "concept": "2.a3 — the Mengarini move"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-mengarini-e5",
+    "openingId": "pro-gothamchess-mengarini",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 2775,
+    "blackElo": 2761,
+    "result": "1-0",
+    "year": 2022,
+    "event": "Online (chess.com) / 2022",
+    "studentSide": "white",
+    "pgn": "e4 c5 a3 e5 Nc3 d6 Bc4 Be6 d3 Nc6 f4 Bxc4 dxc4 exf4 Bxf4 Ne5 Nf3 Nxc4 Qd5 Na5 Bg5 Be7 O-O Nf6 Bxf6 Bxf6 Nb5 O-O Nxd6 Bxb2 Rab1 Bf6 e5 Be7 c4 Bxd6 exd6 Nc6 Rxb7 Rc8 Ng5",
+    "overview": "GothamChess on his Mengarini vs 2...e5 — his real top-elo winning game on this variation, 30 total tab-games in his dump.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation",
+      "https://www.chess.com/game/live/43099796331"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 2,
+        "color": "white",
+        "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/P7/1PPP1PPP/RNBQKBNR b KQkq - 0 2",
+        "annotation": "a3 — the Mengarini. Sidesteps every line of Sicilian theory and quietly preps b4 for a gambit-style wing attack.",
+        "concept": "2.a3 — the Mengarini move"
       }
     ]
   }
