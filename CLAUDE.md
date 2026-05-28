@@ -958,6 +958,27 @@ Common gate trips and their fixes:
 - **opening-manifest count**: if you registered in
   `opening-manifests.json` (pro-rep typically doesn't), the
   declared floors must hold.
+- **middlegamePlanThemes** (the "show the theme" gate): each
+  playable line MUST play a student move that LANDS on a square
+  named in the plan's pawnBreaks or pieceManeuvers strings. The
+  test reads goal-squares from those declared themes (e.g. "b5"
+  in pawnBreaks → goalSquare b5; "Nd7 → Nf8 → Ng6" in
+  pieceManeuvers → goalSquares d7, f8, g6). Then walks the
+  playable line and checks at least ONE Black move (for a Black
+  opening) lands on a goal square.
+  **🚨 2026-05-28 mistake to never repeat:** I authored the
+  Classical Tartakower plan's pieceManeuvers as "Nd7 → Nf8 → Ng6
+  reroute" — but the tree-derived continuation at that position
+  started with `O-O h4 Nf4`, not Nd7. The line's only Black move
+  was h4, which lands on h4 — not on any declared square. The
+  test flagged it `themeEmpty: true`.
+  **The rule:** When you derive a continuation from tree data,
+  INSPECT the actual moves before authoring `pawnBreaks` and
+  `pieceManeuvers`. Declare themes that the line ACTUALLY
+  demonstrates (in this case, "…h5-h4 kingside pawn storm" was
+  the right declaration). Don't author themes that match your
+  imagination of the position — author themes that match the
+  data-derived moves.
 
 #### STEP 16 — Push to main + run the 3-INSTRUMENT AUDIT (G1)
 

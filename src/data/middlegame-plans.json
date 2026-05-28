@@ -35994,70 +35994,167 @@
     ]
   },
   {
-    "id": "mp-pronaroditskycarokann-advance",
+    "id": "mp-pronarocaro-advance-knight-reroute",
     "openingId": "pro-naroditsky-caro-kann",
     "criticalPositionFen": "r1bqk2r/pp2nppp/2n1p3/2bpP3/8/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 4 8",
-    "title": "Caro-Kann Advance 3...c5 — Coordinate and Punish",
-    "overview": "The opening ends with us equal in development, behind in space, ahead in structure. This is the middlegame Naroditsky lives in: every piece has a job, the Ng6 reroute is automatic, the queen comes to b6 staring at b2, and we castle LONG behind the c-pawn shield to fight on every file. White's space looks impressive on move ten; by move twenty their pieces have nowhere to go and we've already opened the queenside.",
+    "title": "Advance — Ng6 → Nf4 knight reroute",
+    "overview": "The most-played knight-reroute plan from his Advance Caro games. The Nge7 → Ng6 → Nf4 three-move sequence lands on the prize square attacking Bd3 and pressuring White's centre.",
     "pawnBreaks": [
-      "...f6 challenging the e5-spearhead is the late-middlegame trump. Wait for White's pieces to commit, then crack the pawn chain.",
-      "...b5 expanding queenside, especially after long castling — undermine c4/Bd3 and open files toward White's king if they're caught in the centre."
+      "…f6 challenging e5 once the knight is established",
+      "…b5 expanding under cover of Nf4"
     ],
     "pieceManeuvers": [
-      "Nge7 → Ng6 — the canonical reroute. Knight from the back rank to the kingside, eyeing both f4 and pressuring e5.",
-      "Bc8 → Bd7 → maybe later Bf5 / Be8-h5 — the famous Caro problem-bishop activates either with the standard Bf5 or via the back rank.",
-      "Qd8 → Qb6 → queen activity targeting b2 while supporting queenside expansion."
+      "Nge7 → Ng6 → Nf4 in three moves",
+      "Queen lifts to c7 then to b6/a5 if needed",
+      "Bishop pair coordination from b6"
     ],
     "strategicThemes": [
-      "Kingside castle behind the strong pawn structure — c6-d5-e6 chain is a wall. Once tucked safe, we attack queenside and centre.",
-      "Half-open files: we'll usually own the c-file (from the cxd5 / c5 trades earlier) and the b-file pressure from Qb6. Two angles vs White's one.",
-      "The Bg5 problem: White's dark-squared bishop has limited targets in our structure. Push it back with h6 only when the tempo costs us nothing."
+      "The knight on f4 ties down the Bd3",
+      "Light-square outposts dominate the kingside"
     ],
     "endgameTransitions": [
-      "Opposite-side castling games often reach a queen-and-rook endgame where structure decides. Our c6-d5-e6 chain is rock-solid; White's e5-pawn is the chronic weakness."
+      "After the Nf4 / Bd3 trade, the bishop+knight endgame favors Black's solid pawn chain"
     ],
     "playableLines": [
       {
         "fen": "r1bqk2r/pp2nppp/2n1p3/2bpP3/8/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 4 8",
         "moves": [
-          "Re1",
-          "Ng6",
-          "c3",
-          "O-O",
-          "Bg5",
-          "h6",
-          "Bh4",
-          "Qb6",
-          "Bg3",
-          "Bd7",
           "Nbd2",
-          "Rac8",
-          "Rb1",
-          "a5"
+          "Ng6",
+          "Nb3",
+          "Bb6",
+          "Re1"
         ],
         "annotations": [
-          "Re1 — putting the rook on the half-open e-file behind the e5-pawn. White isn't threatening anything yet; they're setting up.",
-          "Ng6 — exactly the move the opening promised. The e7-knight reroutes to g6, eyeing both f4 and e5 (the white spearhead pawn). We bought this square ten moves ago with Nge7.",
-          "c3 from White — quietly clamping b4 and preparing to push d3-d4 later. A patient move that waits for our setup before committing.",
-          "O-O — kingside castle, king tucked safe. Our structure is rock-solid: c6-d5-e6 chain holding the centre, Bc5 active, knight on g6 looking for f4.",
-          "Bg5 from White — finally develops the dark-squared bishop, eyeing our king's flank. We have to respond.",
-          "h6 — kicking the bishop. White must commit: trade on f6 (gives us nothing — no piece there to take), or back off.",
-          "Bh4 — bishop slides back to the rim. The pin against e7 doesn't exist anymore (our knight is on g6 now). The bishop has lost direction.",
-          "Qb6 — the queen comes out aiming at b2, doubling on the b-file with our Bc5, and threatening complications on the queenside. This is the wishlist position.",
-          "Bg3 — White retreats again, trying to put the bishop on a useful diagonal. It doesn't have one yet.",
-          "Bd7 — quietly develops the famously locked Caro bishop. We have all our pieces out; White is still scrambling.",
-          "Nbd2 — White's last piece develops to a passive square. The Nb1 had nowhere better to go.",
-          "Rac8 — rook lifts to the c-file, the file that will open when c3 trades or we push c5 again. Our coordination is now the better one.",
-          "Rb1 — White's defensive move, preparing b3 to chase our queen. Their initiative is gone; they're reacting.",
-          "a5 — queenside expansion begins. We're taking the initiative and the b4-square is in our sights. The middlegame Naroditsky lives in."
+          "White's Nbd2 starts the reroute Nb1 → Nd2 → Nb3 aiming at our Bc5.",
+          "Ng6 — the prize-square reroute begins. Our Nge7 leaves the back rank, heading toward f4.",
+          "Nb3 — White's knight attacks our bishop.",
+          "Bb6 — bishop retreats one square, staying on the a7-g1 diagonal.",
+          "Re1 — White lifts the rook behind the e-pawn."
         ],
         "arrows": [
           [],
           [],
           [],
           [],
-          [],
-          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nbd2 — reroute toward b3.",
+          "Ng6 — to f4, the prize square.",
+          "Nb3 — White hits the bishop.",
+          "Bb6 — sidestep, keep diagonal.",
+          "Re1 — White consolidates."
+        ],
+        "title": "Advance — Ng6 → Nf4 knight reroute",
+        "intro": "The most-played knight-reroute plan from his Advance Caro games. The Nge7 → Ng6 → Nf4 three-move sequence lands on the prize square attacking Bd3 and pressuring White's centre.",
+        "sources": [
+          "book:caro-kann",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronarocaro-twoknights-b5-coord",
+    "openingId": "pro-naroditsky-caro-kann",
+    "criticalPositionFen": "r1bqkb1r/pp3ppp/2p1pn2/4N3/2B5/8/PPPPQPPP/R1B1K2R b KQkq - 1 9",
+    "title": "Two Knights — b5 + Qc7 queenside coordination",
+    "overview": "The dominant Two Knights middlegame plan from his 743-game corpus. The b5 push kicks the bishop to b3 and starts the queenside expansion; Qc7 + later …Bd6 coordinate the position. From here Black holds long-term structural advantages.",
+    "pawnBreaks": [
+      "…b4 expanding further",
+      "…a5 clamping White's queenside"
+    ],
+    "pieceManeuvers": [
+      "Bishop fianchetto Bb7 in some lines",
+      "Queen to c7 then often Qb6",
+      "Rook lifts to c8"
+    ],
+    "strategicThemes": [
+      "Queenside space + bishop pair compensation",
+      "White's pieces have nowhere to go after the queenside clamp"
+    ],
+    "endgameTransitions": [
+      "Often reaches R+minor+P with the queenside majority converting"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/pp3ppp/2p1pn2/4N3/2B5/8/PPPPQPPP/R1B1K2R b KQkq - 1 9",
+        "moves": [
+          "b5",
+          "Bb3",
+          "Qc7",
+          "d4",
+          "Bd6",
+          "O-O",
+          "O-O",
+          "Re1"
+        ],
+        "annotations": [
+          "b5 — kick the bishop to b3. Queenside expansion begins.",
+          "Bb3 — bishop retreats, staring at granite (the b5-pawn).",
+          "Qc7 — queen activates on the c-file.",
+          "a4 — White probes the queenside.",
+          "b4 — push through the queenside, gaining space.",
+          "Nbd1 — White reroutes the queen-knight.",
+          "a5 — clamp the queenside shut.",
+          "c4 — White tries the central break."
+        ],
+        "arrows": [
           [],
           [],
           [],
@@ -36068,12 +36165,519 @@
           []
         ],
         "highlights": [
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "b5 — kick the bishop.",
+          "Bb3 — bishop on granite.",
+          "Qc7 — c-file queen.",
+          "a4 — White probes.",
+          "b4 — expansion through.",
+          "Nbd1 — White reroutes.",
+          "a5 — clamp queenside.",
+          "c4 — White central break."
+        ],
+        "title": "Two Knights — b5 + Qc7 queenside coordination",
+        "intro": "The dominant Two Knights middlegame plan from his 743-game corpus. The b5 push kicks the bishop to b3 and starts the queenside expansion; Qc7 + later …Bd6 coordinate the position. From here Black hold",
+        "sources": [
+          "book:caro-kann",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronarocaro-kia-b5-expansion",
+    "openingId": "pro-naroditsky-caro-kann",
+    "criticalPositionFen": "rnb1kbnr/ppq2ppp/2p5/4p3/2B1P3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 6",
+    "title": "KIA — b5 expansion + Bb7 fianchetto",
+    "overview": "The most-played KIA middlegame plan. The b5 push starts queenside expansion; Bb7 fianchetto plus the c6-d5 chain dominates the long diagonal. White's KIA setup never gets off the ground.",
+    "pawnBreaks": [
+      "…b4 expanding further",
+      "…h5/h6 freezing kingside",
+      "…f5 in some lines"
+    ],
+    "pieceManeuvers": [
+      "Bb7 fianchetto",
+      "Knight reroute via Nbd7",
+      "Queen on c7 ties everything together"
+    ],
+    "strategicThemes": [
+      "The Bb7 + c6-d5 setup is rock-solid",
+      "White's KIA is too cramped to fight"
+    ],
+    "endgameTransitions": [
+      "Often middlegame finishes; when endgames happen, R+minor+P with structural advantage"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnb1kbnr/ppq2ppp/2p5/4p3/2B1P3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 6",
+        "moves": [
+          "b5",
+          "Bb3",
+          "h6",
+          "a4",
+          "b4",
+          "Ne2"
+        ],
+        "annotations": [
+          "b5 — queenside expansion. Now we own b5 forever.",
+          "Bb3 — bishop retreats to b3.",
+          "h6 — preventive move freezing kingside committal from White.",
+          "a4 — White probes the queenside.",
+          "Bb7 — bishop fianchettoes. The Bb7 + c6-d5 chain dominates.",
+          "axb5 — White trades pawns."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "b5 — queenside expansion.",
+          "Bb3 — bishop on granite.",
+          "h6 — freeze kingside.",
+          "a4 — White probes.",
+          "Bb7 — fianchetto bishop.",
+          "axb5 — trade pawns."
+        ],
+        "title": "KIA — b5 expansion + Bb7 fianchetto",
+        "intro": "The most-played KIA middlegame plan. The b5 push starts queenside expansion; Bb7 fianchetto plus the c6-d5 chain dominates the long diagonal. White's KIA setup never gets off the ground.",
+        "sources": [
+          "book:caro-kann",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronarocaro-exchange-bg4-pin",
+    "openingId": "pro-naroditsky-caro-kann",
+    "criticalPositionFen": "rnbqkb1r/pp2pppp/5n2/3p4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 0 5",
+    "title": "Exchange — Bg4 pin + structural pressure",
+    "overview": "The Exchange Caro middlegame plan that capitalizes on the symmetrical structure. Bg4 develops the problem-bishop with bite — pinning toward White's queen and threatening doubled f-pawns if the trade happens.",
+    "pawnBreaks": [
+      "…e6 supporting d5",
+      "…e5 if the position opens up",
+      "Queenside b5 push"
+    ],
+    "pieceManeuvers": [
+      "Bg4 pin",
+      "Queen on c7 covers b7",
+      "Knight via Nbd7 or Nc6"
+    ],
+    "strategicThemes": [
+      "Develop one tempo faster than the symmetrical position allows",
+      "Bishop pair often emerges from trades"
+    ],
+    "endgameTransitions": [
+      "Often R+minor+P or pure R+P with structural edge"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/pp2pppp/5n2/3p4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 0 5",
+        "moves": [
+          "Bg4",
+          "Qb3",
+          "Qc7",
+          "h3",
+          "Bh5",
+          "Ne2",
+          "Bxe2"
+        ],
+        "annotations": [
+          "Bg4 — develop the problem-bishop to an active diagonal. The pin pressure is set up.",
+          "Qb3 — White attacks b7.",
+          "Qc7 — quietly defends and prepares queenside coordination.",
+          "h3 — White challenges the bishop.",
+          "Bh5 — bishop retreats keeping the diagonal alive.",
+          "Ne2 — White develops the king-knight.",
+          "e6 — supporting d5, completing the structural base."
+        ],
+        "arrows": [
           [],
           [],
           [],
           [],
           [],
           [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bg4 — pin setup.",
+          "Qb3 — White attacks b7.",
+          "Qc7 — quiet defence.",
+          "h3 — challenge bishop.",
+          "Bh5 — keep diagonal.",
+          "Ne2 — White develops.",
+          "e6 — support d5."
+        ],
+        "title": "Exchange — Bg4 pin + structural pressure",
+        "intro": "The Exchange Caro middlegame plan that capitalizes on the symmetrical structure. Bg4 develops the problem-bishop with bite — pinning toward White's queen and threatening doubled f-pawns if the trade h",
+        "sources": [
+          "book:caro-kann",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronarocaro-classical-kingside-storm",
+    "openingId": "pro-naroditsky-caro-kann",
+    "criticalPositionFen": "rnbqr1k1/pp3pp1/2pb1p2/7p/3P4/2PB4/PPQ1NPPP/R1B1K2R w KQ - 0 10",
+    "title": "Classical Tartakower — kingside pawn storm + Nd7-Nf8-Ng6 reroute",
+    "overview": "The dominant Classical Tartakower plan. Per the third-party Naroditsky teaching source (TheChessLobster), he calls Bd6 'a very natural developing move' three times in his Tartakower masterclass. The kingside pawn storm (…h5-h4) combines with the Nd7-Nf8-Ng6 knight reroute (mirroring the Advance Caro pattern) for a coordinated attack.",
+    "pawnBreaks": [
+      "…h5-h4 — kingside pawn storm freezing White's structure",
+      "…h3 cracking open the kingside in some lines",
+      "…f5 once the structural setup is complete"
+    ],
+    "pieceManeuvers": [
+      "Nd7 → Nf8 → Ng6 reroute",
+      "Queen lifts via Qd6 or Qf6",
+      "Bishop pair stays active"
+    ],
+    "strategicThemes": [
+      "Doubled f-pawns become an asset through the half-open e-file",
+      "Kingside attack converges on h2/g3 squares"
+    ],
+    "endgameTransitions": [
+      "R+minor+P with the doubled f-pawns becoming a passed pawn lever"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqr1k1/pp3pp1/2pb1p2/7p/3P4/2PB4/PPQ1NPPP/R1B1K2R w KQ - 0 10",
+        "moves": [
+          "O-O",
+          "h4",
+          "Nf4"
+        ],
+        "annotations": [
+          "O-O — White finally castles.",
+          "h4 — Black continues the kingside pawn storm from h5. The h-pawn punches deeper, freezing White's kingside committal moves and preparing future …h3 cracks.",
+          "Nf4 — White's knight to the prize square. Defensive — blocks the h-pawn's path and parks on a strong central outpost."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "O-O — castle.",
+          "h4 — push the storm.",
+          "Nf4 — White blocks."
+        ],
+        "title": "Classical Tartakower — kingside pawn storm + Nd7-Nf8-Ng6 reroute",
+        "intro": "The dominant Classical Tartakower plan. Per the third-party Naroditsky teaching source (TheChessLobster), he calls Bd6 'a very natural developing move' three times in his Tartakower masterclass. The k",
+        "sources": [
+          "book:caro-kann",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronarocaro-fantasy-central-break",
+    "openingId": "pro-naroditsky-caro-kann",
+    "criticalPositionFen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+    "title": "Fantasy — central break refutation (the 75% plan)",
+    "overview": "The dominant Fantasy refutation plan. After the f3 wasted tempo, dxe4 + fxe4 + e5 cracks open the centre. Black's bishop pair + active pieces vs White's wrecked kingside structure converts at 75% — his highest-scoring Caro variation.",
+    "pawnBreaks": [
+      "…b5 once attack is firing",
+      "…c5 in some lines"
+    ],
+    "pieceManeuvers": [
+      "Bg4 pin",
+      "Knight via Nd7 then Ngf6",
+      "Bishop pair coordination"
+    ],
+    "strategicThemes": [
+      "f2 is the permanent weakness from f3",
+      "White's pieces have no good squares"
+    ],
+    "endgameTransitions": [
+      "Most games end mid-board; when endgames happen, R+minor+P or Q+P with material edge"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+        "moves": [
+          "dxe4",
+          "fxe4",
+          "e5",
+          "Nf3",
+          "Be6",
+          "Bd3",
+          "Nd7",
+          "O-O"
+        ],
+        "annotations": [
+          "dxe4 — the forcing reply. White's centre crumbles.",
+          "fxe4 — White recaptures, opening the f-file. White's kingside is wrecked from move 4.",
+          "e5 — central counter. Hit the d4-pawn directly.",
+          "Nf3 — White develops normally.",
+          "Bg4 — pin the f3-knight, double the pressure.",
+          "Bc4 — White develops.",
+          "Nd7 — develop the knight, prepare …Ngf6.",
+          "O-O — White castles."
+        ],
+        "arrows": [
           [],
           [],
           [],
@@ -36083,28 +36687,221 @@
           [],
           []
         ],
-        "learnCues": [
-          "Re1 — behind the e-pawn, prep.",
-          "…Ng6 — reroute for f4/e5.",
-          "c3 — quiet, waits.",
-          "…O-O — king tucked safe.",
-          "Bg5 — develops to the kingside.",
-          "…h6 — kick the bishop.",
-          "Bh4 — pin is gone, rim.",
-          "…Qb6 — aims at b2.",
-          "Bg3 — retreats again.",
-          "…Bd7 — locked bishop frees.",
-          "Nbd2 — passive last piece.",
-          "…Rac8 — lift for the c-file.",
-          "Rb1 — defensive, prep b3.",
-          "…a5 — queenside expansion."
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
         ],
-        "title": "Coordinate and punish — the canonical middlegame walk",
-        "intro": "Pick up from where the lesson ended: White just castled, we just played …Nge7 to prepare the knight reroute. Now we play the middlegame Naroditsky plays in this position thousands of times.",
+        "learnCues": [
+          "dxe4 — force the decision.",
+          "fxe4 — White structure cracked.",
+          "e5 — counter the centre.",
+          "Nf3 — White develops.",
+          "Bg4 — pin the knight.",
+          "Bc4 — White develops.",
+          "Nd7 — knight reroutes.",
+          "O-O — White castles."
+        ],
+        "title": "Fantasy — central break refutation (the 75% plan)",
+        "intro": "The dominant Fantasy refutation plan. After the f3 wasted tempo, dxe4 + fxe4 + e5 cracks open the centre. Black's bishop pair + active pieces vs White's wrecked kingside structure converts at 75% — hi",
         "sources": [
           "book:caro-kann",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
-          "https://www.chess.com/openings/Caro-Kann-Defense"
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronarocaro-modern-trade-and-develop",
+    "openingId": "pro-naroditsky-caro-kann",
+    "criticalPositionFen": "rnbqk1nr/pp2ppbp/2p3p1/3p4/3PP3/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 5",
+    "title": "Modern transposition — Nf6 trade + structural conversion",
+    "overview": "The Modern Transposition's main plan from his 185-game corpus. The Nf6 attack on the e4-knight forces trades; exf6 (not gxf6) keeps the Bg7's long diagonal alive. From here Black has the dominant bishop + half-open e-file.",
+    "pawnBreaks": [
+      "…dxe4 trades pawns and opens the e-file",
+      "…exf6 keeps the Bg7's diagonal alive"
+    ],
+    "pieceManeuvers": [
+      "Nf6 attack on the e4-knight",
+      "Re8 activates the rook on the half-open e-file",
+      "Bg7 dominates the long diagonal"
+    ],
+    "strategicThemes": [
+      "Bg7 + structured pawns",
+      "White's slightly easier development can't be converted"
+    ],
+    "endgameTransitions": [
+      "R+minor+P often with the Bg7 as the conversion piece"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk1nr/pp2ppbp/2p3p1/3p4/3PP3/2N2N1P/PPP2PP1/R1BQKB1R b KQkq - 0 5",
+        "moves": [
+          "dxe4",
+          "Nxe4",
+          "Nf6",
+          "Nxf6+",
+          "exf6"
+        ],
+        "annotations": [
+          "dxe4 — Black trades pawns.",
+          "Nxe4 — White recaptures.",
+          "Nf6 — attack the e4-knight.",
+          "Nxf6+ — White trades.",
+          "exf6 — recapture with the e-pawn, keeping the Bg7's diagonal intact."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "dxe4 — trade pawns.",
+          "Nxe4 — recapture.",
+          "Nf6 — attack knight.",
+          "Nxf6+ — trade.",
+          "exf6 — keep diagonal."
+        ],
+        "title": "Modern transposition — Nf6 trade + structural conversion",
+        "intro": "The Modern Transposition's main plan from his 185-game corpus. The Nf6 attack on the e4-knight forces trades; exf6 (not gxf6) keeps the Bg7's long diagonal alive. From here Black has the dominant bish",
+        "sources": [
+          "book:caro-kann",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
         ]
       }
     ]
