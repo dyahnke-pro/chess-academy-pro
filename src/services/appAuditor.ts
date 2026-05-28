@@ -138,6 +138,7 @@ export type AuditKind =
   | 'coach-brain-tool-skipped'
   | 'coach-brain-tool-threw'
   | 'coach-llm-model-selected'
+  | 'coach-llm-provider-error'
   | 'coach-brain-intent-routed'
   | 'coach-intent-router-input'
   | 'coach-brain-tool-parse-result'

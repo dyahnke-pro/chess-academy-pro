@@ -390,6 +390,39 @@ function markProviderDead(provider: AiProvider): void {
   providerDeadUntil[provider] = Date.now() + PROVIDER_COOLDOWN_MS;
 }
 
+/** Emit a structured audit event for a provider call failure so the
+ *  audit-stream captures WHY a fallback fired. Without this, the only
+ *  signal on the wire is a silent jump from one `coach-llm-model-selected`
+ *  to another, and the actual error (auth, quota, network, timeout) is
+ *  invisible — David's 2026-05-28 incident: buddy's iPhone saw a raw
+ *  Anthropic "credit balance too low" 400 dumped into the chat, and the
+ *  audit had no record of what DeepSeek threw first to trigger the
+ *  fallback. */
+function emitProviderFailureAudit(
+  role: 'primary' | 'fallback',
+  provider: AiProvider,
+  task: CoachTask,
+  error: unknown,
+): void {
+  const errMsg = error instanceof Error ? error.message : String(error);
+  const errName = error instanceof Error ? error.name : 'Unknown';
+  void import('./appAuditor').then(({ logAppAudit }) => {
+    void logAppAudit({
+      kind: 'coach-llm-provider-error',
+      category: 'subsystem',
+      source: `coachApi.${role}`,
+      summary: `${role} provider=${provider} task=${task} failed: ${errMsg.slice(0, 120)}`,
+      details: JSON.stringify({
+        role,
+        provider,
+        task,
+        errorName: errName,
+        errorMessage: errMsg.slice(0, 1000),
+      }),
+    });
+  }).catch(() => undefined);
+}
+
 function isProviderInCooldown(provider: AiProvider): boolean {
   return Date.now() < providerDeadUntil[provider];
 }
@@ -1447,6 +1480,7 @@ export async function getCoachChatResponse(
       return await callChatWithConfig(config, messages, systemPrompt, onStreamForCall, task, maxTokens);
     } catch (error) {
       console.warn(`[CoachAPI] ${config.provider} failed, trying fallback...`, error);
+      emitProviderFailureAudit('primary', config.provider, task, error);
       markProviderDead(config.provider);
       const fallback = getFallbackConfig(config.provider);
       if (fallback) {
@@ -1454,13 +1488,12 @@ export async function getCoachChatResponse(
           return await callChatWithConfig(fallback, messages, systemPrompt, onStreamForCall, task, maxTokens);
         } catch (fallbackError) {
           console.error('[CoachAPI] Fallback also failed:', fallbackError);
+          emitProviderFailureAudit('fallback', fallback.provider, task, fallbackError);
           markProviderDead(fallback.provider);
-          const errMsg = fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
-          return `⚠️ Coach error: ${errMsg}`;
+          return OFFLINE_FALLBACKS.default;
         }
       }
-      const errMsg = error instanceof Error ? error.message : String(error);
-      return `⚠️ Coach error: ${errMsg}`;
+      return OFFLINE_FALLBACKS.default;
     }
   };
 
@@ -1624,6 +1657,7 @@ export async function getCoachCommentary(
     return await callCommentaryWithConfig(config, task, userMessage, systemPrompt, onStream);
   } catch (error) {
     console.warn(`[CoachAPI] ${config.provider} failed for ${task}, trying fallback...`, error);
+    emitProviderFailureAudit('primary', config.provider, task, error);
     markProviderDead(config.provider);
     const fallback = getFallbackConfig(config.provider);
     if (fallback) {
@@ -1631,6 +1665,7 @@ export async function getCoachCommentary(
         return await callCommentaryWithConfig(fallback, task, userMessage, systemPrompt, onStream);
       } catch (fallbackError) {
         console.error('[CoachAPI] Fallback also failed:', fallbackError);
+        emitProviderFailureAudit('fallback', fallback.provider, task, fallbackError);
         markProviderDead(fallback.provider);
         return OFFLINE_FALLBACKS[task] ?? OFFLINE_FALLBACKS.default;
       }
