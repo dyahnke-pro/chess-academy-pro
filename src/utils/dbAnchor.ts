@@ -136,21 +136,20 @@ export function longestAnchorPly(sans: string[]): number {
 }
 
 /** The deepest DB anchor any single beat of a lesson reaches. A lesson is
- *  grounded if SOME beat's spine is real theory ≥ the floor — trap-branch
- *  beats that show a "what if they blunder" tail don't drag the score
- *  down, because a sibling beat carries the real line.
+ *  grounded if SOME beat's spine is real theory ≥ the floor.
  *
- *  **Pro tab vs masterclass tab are independent data sources** (David
- *  2026-05-28). For pro openings (`proId` provided), the ONLY anchor is
- *  the pro's own game dump — lichess subset and masters DB don't apply
- *  because they belong to the masterclass tab's data sources, not the
- *  pro tab's. For base masterclasses, lichess + masters union as before. */
+ *  **Pro tab = what he plays AND what he teaches** (David 2026-05-28).
+ *  When `proId` is passed, his game dump anchors his PLAY content; for
+ *  TAUGHT content (his videos/studies cover lines he doesn't personally
+ *  play often), the lichess + masters DB union provides the anchor that
+ *  the line is real, recognised opening theory. All three sources count
+ *  for pro openings; the narration text MUST tell the user which one
+ *  (plays / teaches / both) the lesson is grounded in. */
 export function maxAnchorPly(beatMoveLists: string[][], proId?: string): number {
   let max = 0;
   for (const moves of beatMoveLists) {
-    const a = proId
-      ? longestProGameAnchorPly(moves, proId)
-      : Math.max(longestAnchorPly(moves), longestMastersAnchorPly(moves));
+    let a = Math.max(longestAnchorPly(moves), longestMastersAnchorPly(moves));
+    if (proId) a = Math.max(a, longestProGameAnchorPly(moves, proId));
     if (a > max) max = a;
   }
   return max;
