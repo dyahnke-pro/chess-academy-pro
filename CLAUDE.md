@@ -860,7 +860,11 @@ time:
    voice, our words, cite-not-copy per §10 licensing). If NO teaching
    content exists, derive ideas from the games themselves: what each move
    accomplishes structurally / tactically, what plan it serves, what
-   patterns repeat across multiple of his games on the variation.
+   patterns repeat across multiple of his games on the variation. **You
+   may also WebSearch for general middlegame theory on the structure**
+   (e.g. "Trompowsky e6 main plans", "Caro-Kann Classical pawn structure")
+   to supplement — but the framing must always favour what HE actually
+   plays in the dump first; theory is the supplement, not the master.
 6. **Lesson = 4 beats teaching the line + middlegame transition.** Watch
    register full prose, Learn short cues, every named square bare-named for
    the markers (gotcha §8c), apostrophes in double-quoted strings (§8a),
