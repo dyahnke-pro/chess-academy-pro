@@ -613,6 +613,20 @@
           "sources": [
             "https://lichess.org/study/N3XOjphc"
           ]
+        },
+        {
+          "name": "vs ...a6",
+          "pgn": "d4 d5 Nc3 Nf6 Bf4 a6 e3 e6 Nf3 c5 dxc5 Bxc5 Bd3 b5 O-O Bb7 a3 O-O Qe2 Nbd7 Rad1 Qb6 e4",
+          "explanation": "...a6 prepares ...b5. Naroditsky develops calmly (dxc5, Bd3, O-O), clamps the queenside with a3 to stop ...b4, then breaks the centre with e4 once his rooks are centralized — opening the game for his better-placed pieces while Black's flank play stalls.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 69,
+            "score": 46,
+            "source": "his game dump + study N3XOjphc"
+          },
+          "sources": [
+            "https://lichess.org/study/N3XOjphc"
+          ]
         }
       ],
       "trapLines": [],

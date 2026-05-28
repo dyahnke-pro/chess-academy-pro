@@ -78,4 +78,27 @@ export const PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS: Record<string, LessonScrip
       },
     ],
   },
+  'pro-naroditsky-jobava-london::vs ...a6': {
+    openingId: 'pro-naroditsky-jobava-london',
+    sources: ['https://lichess.org/study/N3XOjphc', 'concept:pos-center'],
+    title: 'Jobava — vs ...a6 (clamp ...b5, break e4)',
+    minutes: 6,
+    orientation: 'white',
+    beats: [
+      {
+        id: 'a6-setup',
+        moves: ['d4', 'd5', 'Nc3', 'Nf6', 'Bf4', 'a6', 'e3', 'e6', 'Nf3', 'c5', 'dxc5', 'Bxc5', 'Bd3'],
+        highlights: [{ square: 'd3', color: KEY }],
+        say: "...a6 quietly prepares ...b5, a queenside pawn romp. Naroditsky isn't impressed — he just develops: dxc5 wins a tempo on the bishop, Bd3 aims at the kingside, and White keeps the central e4 break in his pocket. Black's flank plan is slow; White's centre and development come first.",
+        sayShort: '...a6 preps ...b5 — develop, eye e4.',
+      },
+      {
+        id: 'a6-a3-e4',
+        moves: ['d4', 'd5', 'Nc3', 'Nf6', 'Bf4', 'a6', 'e3', 'e6', 'Nf3', 'c5', 'dxc5', 'Bxc5', 'Bd3', 'b5', 'O-O', 'Bb7', 'a3', 'O-O', 'Qe2', 'Nbd7', 'Rad1', 'Qb6', 'e4'],
+        highlights: [{ square: 'e4', color: KEY }, { square: 'a3', color: SOFT }],
+        say: "Black expands with ...b5, so White clamps it: a3 freezes the queenside, and once the rooks are centralized White detonates the centre with e4. The break springs the position open for White's better-placed pieces — the bishop on d3, the rook on d1 — just as Black's queenside play has stalled.",
+        sayShort: 'a3 clamps ...b5, then e4 breaks the centre.',
+      },
+    ],
+  },
 };
