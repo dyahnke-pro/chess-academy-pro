@@ -608,6 +608,34 @@ async function main() {
   const cardCount = await page.locator('[data-testid="puzzle-card"]').count();
   record('mistake puzzle cards render in list', cardCount > 0, `count=${cardCount}`);
 
+  // F.5 View-in-game button surfaces the source-game deep-link.
+  // Every SAMPLE_PUZZLES entry has a non-empty `sourceGameId`, so
+  // every rendered card must show the button. Tapping it routes to
+  // /coach/review/<gameId>?move=<ply> — the canonical review surface
+  // jumped to the exact ply where the mistake landed. Wired so the
+  // student can see WHERE the mistake came from, not just re-solve
+  // the position in isolation.
+  if (cardCount > 0) {
+    log('\n▶ F.5 view-in-game button → /coach/review deep-link');
+    const buttonCount = await page.locator('[data-testid="view-in-game-button"]').count();
+    record('view-in-game button renders on every card with sourceGameId',
+      buttonCount === cardCount,
+      `buttons=${buttonCount}, cards=${cardCount}`);
+    if (buttonCount > 0) {
+      await page.locator('[data-testid="view-in-game-button"]').first().click({ force: true });
+      await page.waitForTimeout(800);
+      const url = page.url();
+      const matchesReviewDeepLink = /\/coach\/review\/[^/?]+\?move=\d+/.test(url);
+      record('clicking view-in-game routes to /coach/review/<gameId>?move=<ply>',
+        matchesReviewDeepLink,
+        `landed=${url}`);
+      // Go back to the mistakes list for downstream sections.
+      await page.goto(`${BASE_URL}/tactics/mistakes`, { waitUntil: 'domcontentloaded' });
+      await waitForMount(page, '[data-testid="my-mistakes-page"]', '/tactics/mistakes (post view-in-game)');
+      await page.waitForTimeout(1500);
+    }
+  }
+
   // G. Open a puzzle + verify tactic chip + Show Me + chat bar
   let solveButton = null;
   if (cardCount > 0) {

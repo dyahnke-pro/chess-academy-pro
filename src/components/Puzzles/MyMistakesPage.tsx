@@ -10,7 +10,7 @@ import {
   type MistakePuzzleStats,
   type ReanalysisProgress,
 } from '../../services/mistakePuzzleService';
-import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, RefreshCw, BookOpen, Swords, Crown, Search, X } from 'lucide-react';
+import { ArrowLeft, Trash2, AlertTriangle, Trophy, CheckCircle, CircleDot, RefreshCw, BookOpen, Swords, Crown, Search, X, Film } from 'lucide-react';
 import { logAppAudit } from '../../services/appAuditor';
 import { tacticTypeLabel } from '../../services/tacticAlertService';
 import { PageHelp } from '../Layout/PageHelp';
@@ -502,6 +502,27 @@ export function MyMistakesPage(): JSX.Element {
                 </p>
               )}
             </button>
+
+            {/* View in game — routes to /coach/review/<gameId>?move=<ply>
+                so the student lands on the exact ply where they erred,
+                with the full game context (eval bar, key moments, coach
+                narration). Gated on `sourceGameId` because coach-mode
+                puzzles can ship with an empty id and there's nothing to
+                open. */}
+            {puzzle.sourceGameId && (
+              <button
+                onClick={() => void navigate(
+                  `/coach/review/${encodeURIComponent(puzzle.sourceGameId)}?move=${puzzle.moveNumber}`,
+                  { state: { from: '/tactics/mistakes' } },
+                )}
+                className="p-1.5 text-theme-text-muted hover:text-theme-accent transition-colors"
+                aria-label="View in game"
+                title="View in game"
+                data-testid="view-in-game-button"
+              >
+                <Film size={14} />
+              </button>
+            )}
 
             {/* Delete */}
             <button

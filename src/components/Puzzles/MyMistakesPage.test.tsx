@@ -29,6 +29,12 @@ vi.mock('../../services/mistakePuzzleService', () => ({
   reanalyzeImportedGames: vi.fn(() => Promise.resolve(0)),
 }));
 
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return { ...actual, useNavigate: () => mockNavigate };
+});
+
 // Mock sound hooks
 vi.mock('../../hooks/usePieceSound', () => ({
   usePieceSound: () => ({
@@ -65,6 +71,7 @@ function setMockData(puzzles: MistakePuzzle[], stats?: Partial<MistakePuzzleStat
 describe('MyMistakesPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockNavigate.mockClear();
     resetFactoryCounter();
     setMockData([]);
   });
@@ -175,6 +182,51 @@ describe('MyMistakesPage', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('puzzle-card')).toHaveLength(1);
     });
+  });
+
+  it('shows view-in-game button when sourceGameId is present', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'p1', sourceGameId: 'g-123', moveNumber: 17 }),
+    ]);
+
+    render(<MyMistakesPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('view-in-game-button')).toBeInTheDocument();
+    });
+  });
+
+  it('hides view-in-game button when sourceGameId is empty', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'p1', sourceGameId: '', moveNumber: 17 }),
+    ]);
+
+    render(<MyMistakesPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('puzzle-card')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByTestId('view-in-game-button')).not.toBeInTheDocument();
+  });
+
+  it('routes to coach review with move deep-link when view-in-game is clicked', async () => {
+    setMockData([
+      buildMistakePuzzle({ id: 'p1', sourceGameId: 'g-456', moveNumber: 23 }),
+    ]);
+
+    render(<MyMistakesPage />);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('view-in-game-button')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('view-in-game-button'));
+
+    expect(mockNavigate).toHaveBeenCalledWith(
+      '/coach/review/g-456?move=23',
+      { state: { from: '/tactics/mistakes' } },
+    );
   });
 
   it('enters solving mode when clicking a puzzle', async () => {
