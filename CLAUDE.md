@@ -367,6 +367,46 @@ This is David's directive verbatim (2026-05-19):
 *"THE PLAYWRIGHT NEEDS TO BE INTERACTIVE!! NO EXCEPTIONS!! FILE
 THIS TO MEMORY!!"*
 
+### G8. Reconciliation MUST delete orphans, not just add/update (David 2026-05-28, locked).
+
+When a content JSON's reconciliation function runs on an
+already-seeded device, it MUST also delete entries that disappeared
+from the JSON — not just add new ones and update existing ones.
+Otherwise scrapped content lingers in Dexie and surfaces in the UI
+with stale fallback behavior.
+
+The 2026-05-28 incident proved this: the Naroditsky rebuild scrapped
+`pro-naroditsky-fantasy-caro` from `pro-repertoires.json`, but
+`reconcileProRepertoires()` only bulkPut'd the new entries — the old
+orphan stayed in Dexie. It then surfaced on `/openings/pro/naroditsky`
+and, with no `LessonScript` for that id, fell through to legacy
+`WalkthroughMode` with LLM-synthesised narration (NOT the
+hand-authored two-register beats). David's audit caught it; the fix
+was a per-player orphan sweep in `reconcileProRepertoires`.
+
+The rule applies to **every reconciliation function** that mirrors a
+JSON source into Dexie (`reconcileProRepertoires`,
+`reconcileBaseRepertoire`, and any future
+`reconcile<Whatever>Data`). Pattern:
+
+1. Build a set of ids the JSON carries (scoped sensibly — per-player
+   for pro-rep, per-opening for masterclass plans, etc. — so a
+   partial rebuild doesn't wipe unrelated content).
+2. Run the existing add/update bulkPut.
+3. Walk Dexie for the scoped scope, collect any id NOT in the JSON
+   set, `bulkDelete` it.
+4. Bump the revision key so already-seeded devices run the migration.
+
+When you add a new reconciler, copy this 4-step pattern. When you
+SCRAP entries from a reconciled JSON, you don't need to do anything
+extra — the reconciler's delete step handles it, provided you bump
+the revision. When you find a fallback-narration / fallback-surface
+behavior firing where it shouldn't, ALWAYS check Dexie for orphans
+before assuming a routing bug.
+
+This is the directive verbatim (2026-05-28):
+*"Lock that in to the rules."*
+
 Violating these gates wastes David's money and erodes trust faster
 than missing the underlying task. The shallow-work failure mode IS
 the harm here.
