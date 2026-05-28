@@ -8,20 +8,22 @@
 // invented". Add new variation-keyed plans here when authored.
 
 export const PRO_NARODITSKY_ALAPIN_TAB_PLAN_IDS: Record<string, string[]> = {
-  // Main spine (2...Nf6) — exd6 en passant + Bc4 f7 pressure
+  // Main spine (2…Nf6) — queenside crawl conversion + exd6 break
+  // (all plans now anchored AT or PAST the opening terminus with
+  // hand-written narration per move — rebuilt 2026-05-28)
   main: [
+    'mp-pronaroAlapin-queenside-crawl',
     'mp-pronaroAlapin-exd6-enpassant',
-    'mp-pronaroAlapin-bc4-f7-pressure',
   ],
-  // 2…d5 Open — Nb5 fork + Be3 buildup
+  // 2…d5 Open — Nb5 fork + Bb5+ king-fix
   '2…d5 open variation': [
     'mp-pronaroAlapin-d5open-nb5-fork',
     'mp-pronaroAlapin-d5open-be3-pressure',
   ],
-  // 2…e6 French — O-O castle + dxc5 trade
+  // 2…e6 French — O-O castle + Ng5 kingside tactics
   '2…e6 french-style': [
     'mp-pronaroAlapin-e6french-oo-castle',
-    'mp-pronaroAlapin-e6french-dxc5-trade',
+    'mp-pronaroAlapin-e6french-ng5-attack',
   ],
   // 2…d6 Mainline — h3 prophylaxis + g4 prep
   '2…d6 mainline': [
