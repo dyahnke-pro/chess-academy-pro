@@ -4700,6 +4700,44 @@
         "concept:pos-outpost",
         "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
       ]
+    },
+    {
+      "id": "pro-gothamchess-trompowsky",
+      "color": "white",
+      "name": "Trompowsky Attack",
+      "player": "gothamchess",
+      "pgn": "d4 Nf6 Bg5 d5 e3 c6 Nd2 g6 Bd3 Bg7 h4 h6 Bxf6 exf6 h5 g5 Qf3 Na6 c3 Be6 Ne2 Qd7",
+      "provenance": "plays",
+      "provenanceRef": {
+        "games": 1652,
+        "winPct": 60,
+        "source": "his game dump"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+      ],
+      "variations": [
+        {
+          "name": "vs 2...Ne4",
+          "pgn": "d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxd2 Bxd2 d6 Bc3 e6 e4 e5 Nf3 f5 exf5 Bxf5 Nd2",
+          "explanation": "Black's most ambitious try. Gotham answers with h4! protecting the bishop, then d5 to lock the centre and Bc3 to anchor on the long diagonal — central pull + structural edge.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 314,
+            "source": "his game dump"
+          }
+        },
+        {
+          "name": "vs 2...e6",
+          "pgn": "d4 Nf6 Bg5 e6 Nd2 h6 Bh4 d5 e3 Nbd7 c3 Be7 Bd3 c5 Bxf6 Nxf6 f4 O-O Ngf3 b6 Ne5",
+          "explanation": "The patient Tromp vs the solid ...e6 setup: Bh4 keeps the bishop alive, Bxf6 trades when it hurts, then f4 supports the Ne5 outpost — quieter route to the same crushing position.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 327,
+            "source": "his game dump"
+          }
+        }
+      ]
     }
   ]
 }

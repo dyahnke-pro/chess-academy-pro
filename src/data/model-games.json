@@ -4448,5 +4448,39 @@
         "concept": "Accept the gambit"
       }
     ]
+  },
+  {
+    "id": "mg-pro-gothamchess-trompowsky",
+    "openingId": "pro-gothamchess-trompowsky",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 2900,
+    "blackElo": 3019,
+    "result": "1-0",
+    "year": 2020,
+    "event": "Online (chess.com) / 2020",
+    "studentSide": "white",
+    "pgn": "d4 Nf6 Bg5 d5 e3 c6 Nd2 g6 Bd3 Bg7 h4 h6 Bxf6 exf6 h5 g5 Qf3 Na6 c3 Be6 Ne2 Qd7 O-O-O Bg4 Qg3 O-O f3 Be6 Kb1 Nc7 f4 Rae8 Rde1 Bf5 Nc1 Nb5 Qf3 Nd6 fxg5 fxg5 Rhf1 Bxd3+ Nxd3 Ne4 Kc2 f5 g4 fxg4 Qg2 Rxf1 Rxf1 Nxd2 Kxd2 Qe6 Re1 b6 Nf2 c5 Qxg4 Qf7 Qg2 cxd4 cxd4 Bf8 Ng4 Bb4+ Kd1 Kg7 Rf1 Qd7 Nf6 Qb5 Nxe8+ Qxe8 Qe2 Qe5 dxe5",
+    "overview": "Gotham's signature Trompowsky in full effect: 2.Bg5 pins the knight, Bxf6 trades into the doubled f-pawn structure, then h4-h5 lunges crack the kingside open. From an offbeat sortie to a positional grip — the Trompowsky's promise made good vs a 3000+ opponent.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+      "https://www.chess.com/game/live/5739040076"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 7,
+        "color": "white",
+        "fen": "rnbqk2r/pp2ppb1/2p2Bpp/3p4/3P3P/3BP3/PPPN1PP1/R2QK1NR b KQkq - 0 7",
+        "annotation": "Bxf6 — the deal. Trading the bishop for the knight forces Black into a doubled-pawn structure on the f-file: a permanent target for the rest of the game.",
+        "concept": "Bxf6 — damage the pawns"
+      },
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "rnbqk2r/pp3pb1/2p2ppp/3p3P/3P4/3BP3/PPPN1PP1/R2QK1NR b KQkq - 0 8",
+        "annotation": "h5 — the kingside wedge. The pawn jams up to h5 cramping Black's loose kingside; ...g5 to keep the file shut creates permanent weaknesses on f5 and h5.",
+        "concept": "h5 wedge"
+      }
+    ]
   }
 ]

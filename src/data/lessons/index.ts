@@ -110,6 +110,8 @@ import { PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON } from './proGothamScandinavian';
 import { PRO_GOTHAMCHESS_SCANDINAVIAN_VARIATION_LESSONS } from './proGothamScandinavianVariations';
 import { PRO_GOTHAMCHESS_LONDON_LESSON } from './proGothamLondon';
 import { PRO_GOTHAMCHESS_LONDON_VARIATION_LESSONS } from './proGothamLondonVariations';
+import { PRO_GOTHAMCHESS_TROMPOWSKY_LESSON } from './proGothamTrompowsky';
+import { PRO_GOTHAMCHESS_TROMPOWSKY_VARIATION_LESSONS } from './proGothamTrompowskyVariations';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -183,6 +185,7 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_NARODITSKY_SEMI_SLAV_LESSON.openingId]: PRO_NARODITSKY_SEMI_SLAV_LESSON,
   [PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON.openingId]: PRO_GOTHAMCHESS_SCANDINAVIAN_LESSON,
   [PRO_GOTHAMCHESS_LONDON_LESSON.openingId]: PRO_GOTHAMCHESS_LONDON_LESSON,
+  [PRO_GOTHAMCHESS_TROMPOWSKY_LESSON.openingId]: PRO_GOTHAMCHESS_TROMPOWSKY_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -241,6 +244,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_NARODITSKY_SEMI_SLAV_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_SCANDINAVIAN_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_LONDON_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_TROMPOWSKY_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
