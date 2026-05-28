@@ -1,0 +1,41 @@
+{
+  "player": "gothamchess",
+  "openingId": "stafford-refute",
+  "openingName": "Stafford Gambit (refutation as White)",
+  "color": "white",
+  "minPrefix": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6"
+  ],
+  "generatedAt": "2026-05-28T18:29:10.377Z",
+  "totals": {
+    "totalGamesScanned": 31960,
+    "gamesMatchingOpening": 1,
+    "minBranchGames": 5,
+    "minTrieGames": 5
+  },
+  "rootStats": {
+    "games": 1,
+    "wins": 1,
+    "draws": 0,
+    "losses": 0,
+    "scorePct": "100.0"
+  },
+  "spine": {
+    "sans": [],
+    "prefixPlies": 6,
+    "totalPlies": 6
+  },
+  "variations": [],
+  "tree": {
+    "games": 1,
+    "wins": 1,
+    "draws": 0,
+    "losses": 0,
+    "children": {}
+  }
+}

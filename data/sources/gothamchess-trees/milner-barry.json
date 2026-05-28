@@ -1,0 +1,92 @@
+{
+  "player": "gothamchess",
+  "openingId": "milner-barry",
+  "openingName": "Milner-Barry Gambit vs French",
+  "color": "white",
+  "minPrefix": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Qb6",
+    "Bd3"
+  ],
+  "generatedAt": "2026-05-28T18:29:09.722Z",
+  "totals": {
+    "totalGamesScanned": 31960,
+    "gamesMatchingOpening": 14,
+    "minBranchGames": 5,
+    "minTrieGames": 5
+  },
+  "rootStats": {
+    "games": 14,
+    "wins": 9,
+    "draws": 0,
+    "losses": 5,
+    "scorePct": "64.3"
+  },
+  "spine": {
+    "sans": [
+      "cxd4",
+      "O-O",
+      "Bd7",
+      "Re1",
+      "Rc8"
+    ],
+    "prefixPlies": 11,
+    "totalPlies": 16
+  },
+  "variations": [],
+  "tree": {
+    "games": 14,
+    "wins": 9,
+    "draws": 0,
+    "losses": 5,
+    "children": {
+      "cxd4": {
+        "games": 10,
+        "wins": 7,
+        "draws": 0,
+        "losses": 3,
+        "children": {
+          "O-O": {
+            "games": 8,
+            "wins": 5,
+            "draws": 0,
+            "losses": 3,
+            "children": {
+              "Bd7": {
+                "games": 8,
+                "wins": 5,
+                "draws": 0,
+                "losses": 3,
+                "children": {
+                  "Re1": {
+                    "games": 7,
+                    "wins": 4,
+                    "draws": 0,
+                    "losses": 3,
+                    "children": {
+                      "Rc8": {
+                        "games": 5,
+                        "wins": 3,
+                        "draws": 0,
+                        "losses": 2,
+                        "children": {}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
