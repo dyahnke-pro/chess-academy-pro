@@ -447,3 +447,21 @@ process to the rest of Naroditsky (then other pros, frequency-floor ≤10/colour
 8. Full-set post-deploy 3-tool audit (only Stafford/Alapin/Najdorf/KID audited
    individually) + David's prod-device check (G1: sandbox can't verify the
    IndexedDB unlock-write persistence or audio quality).
+
+### E. UX — pro main tab indicators (David 2026-05-28, before final completion)
+9. **On the ProPlayerPage main tab, identify per opening whether:**
+   - **study notes are available** for it (he has lichess studies in the
+     harvested corpus that cover the opening), and
+   - **a masterclass exists** for it (it's built to masterclass-tier — i.e.
+     has lessons + variations + model game + plan, or is registered in the
+     opening manifest).
+   Implementation sketch: `src/data/pro-study-notes.json` (openingId →
+   `[{ studyId, url, title, role }]`) from the harvested
+   `docs/audit-runs/.../*-study-notes/` corpus; a `getStudyNotesFor(openingId)`
+   helper; `hasMasterclassTier(openingId)` helper; small badges in the
+   ProPlayerPage opening list. **Cite, don't ship verbatim** (per §10 licensing
+   rule).
+10. **Lesson-source refresh:** every Naroditsky opening EXCEPT Jobava still
+    cites the generic `youtube.com/@DanielNaroditskyGM` SRC. Replace with the
+    specific lichess-study URL per opening once §9 study-notes mapping lands
+    (Alapin/Vienna/Najdorf/KID/Grunfeld/Scotch/SemiSlav/FantasyCaro).

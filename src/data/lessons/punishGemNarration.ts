@@ -2564,6 +2564,56 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:tac-fork', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/Vienna_Game'],
   },
+  // Alapin — Black's ...c4 pawn push looks like a space-grab but is
+  // overextended; Nbd2 reroutes the knight via d2 to chase the loose pawn
+  // (Nc4), then Bxc4 collects. Engine-confirmed +1 pawn.
+  'pro-naroditsky-alapin:e4_c5_c3_d5_exd5_Qxd5_d4_Nf6_Nf3_Bg4_Be2_e6_O-O_Nc6_Be3:c4': {
+    watch: [
+      "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+      "...c4? Looks like a space-grabbing pawn push, but the c4-pawn is overextended and outnumbered.",
+      "Nbd2 — the knight reroutes via d2 to chase the loose pawn on c4.",
+      "",
+      "Bxc4 — the bishop scoops the pawn. Black has no concrete compensation for it.",
+      "",
+      "",
+      "",
+      "Nc4 — the second piece arrives on c4. White is a clean pawn up with the better structure.",
+      "",
+    ],
+    learn: [
+      "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+      "Nbd2 — reroute via d2 toward c4",
+      "",
+      "Bxc4 — collect the loose pawn",
+      "",
+      "",
+      "",
+      "Nc4 — pile on, pawn up",
+      "",
+    ],
+    sources: ["concept:pos-development", "concept:pos-center", "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"],
+  },
+  // Semi-Slav / Anti-Moscow — White's exf6 (instead of the correct Bh4) loses
+  // the g5-bishop to the simple ...hxg5. After fxg7 Bxg7 Black has the bishop
+  // pair, the gambit c4-pawn, and an exposed enemy king. Engine-confirmed.
+  'pro-naroditsky-semi-slav:d4_d5_c4_c6_Nf3_Nf6_Nc3_e6_Bg5_dxc4_e4_b5_e5_h6:exf6': {
+    watch: [
+      "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+      "exf6? Taking the knight looks natural, but it ignores the loose bishop on g5.",
+      "...hxg5 — the killer counter. Black grabs the bishop and the f6-pawn is going nowhere.",
+      "",
+      "...Bxg7 — Black scoops the g7-pawn back. With the gambit c4-pawn still in hand and the white king exposed, Black is clearly winning.",
+      "", "", "", "", "",
+    ],
+    learn: [
+      "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+      "...hxg5 — grab the bishop, f6 can wait",
+      "",
+      "...Bxg7 — bishop pair, gambit pawn, king exposed",
+      "", "", "", "", "",
+    ],
+    sources: ["concept:pos-development", "concept:pos-king-safety", "https://en.wikipedia.org/wiki/Semi-Slav_Defense"],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
