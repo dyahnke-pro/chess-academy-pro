@@ -1,0 +1,88 @@
+{
+  "player": "danielnaroditsky",
+  "openingId": "caro-kann",
+  "variationKey": "panov",
+  "variation": {
+    "label": "Panov-Botvinnik (4.c4)",
+    "prefix": [
+      "e4",
+      "c6",
+      "d4",
+      "d5",
+      "exd5",
+      "cxd5",
+      "c4"
+    ]
+  },
+  "generatedAt": "2026-05-28T16:41:54.717Z",
+  "totalGames": 99,
+  "wins": 51,
+  "draws": 9,
+  "losses": 39,
+  "openingTerminusPly": 22,
+  "openingTerminusMove": 11,
+  "spineMoves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "exd5",
+    "cxd5",
+    "c4",
+    "Nf6",
+    "Nc3",
+    "Nc6",
+    "Bg5",
+    "Be6",
+    "Be2",
+    "Qa5",
+    "c5",
+    "Ne4",
+    "Bd2",
+    "Nxd2",
+    "Qxd2",
+    "g6",
+    "Nf3",
+    "Bg7"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "middlegame (Q + pieces)": 2,
+    "R + minor + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/21693583601",
+      "opponent": "Mykola-Bortnyk",
+      "opponentRating": 2912,
+      "studentRating": 3048,
+      "date": "2021-08-03",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 70,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2021.08.03\"]\n[Round \"-\"]\n[White \"Mykola-Bortnyk\"]\n[Black \"DanielNaroditsky\"]\n[Result \"0-1\"]\n[CurrentPosition \"6k1/R3pr1p/6p1/2P4r/2B3b1/P7/5bPK/4R3 w - -\"]\n[Timezone \"UTC\"]\n[ECO \"B13\"]\n[ECOUrl \"https://www.chess.com/openings/Caro-Kann-Defense-Panov-Modern-Defense-6.Bg5-Be6-7.Be2\"]\n[UTCDate \"2021.08.03\"]\n[UTCTime \"01:35:16\"]\n[WhiteElo \"2912\"]\n[BlackElo \"3048\"]\n[TimeControl \"180\"]\n[Termination \"DanielNaroditsky won by checkmate\"]\n[StartTime \"01:35:16\"]\n[EndDate \"2021.08.03\"]\n[EndTime \"01:39:36\"]\n[Link \"https://www.chess.com/game/live/21693583601\"]\n\n1. e4 {[%clk 0:03:00]} 1... c6 {[%clk 0:03:00]} 2. d4 {[%clk 0:02:59.6]} 2... d5 {[%clk 0:02:59.9]} 3. exd5 {[%clk 0:02:59.5]} 3... cxd5 {[%clk 0:02:59.5]} 4. c4 {[%clk 0:02:59.4]} 4... Nf6 {[%clk 0:02:58.1]} 5. Nc3 {[%clk 0:02:59.3]} 5... Nc6 {[%clk 0:02:57.7]} 6. Bg5 {[%clk 0:02:58.4]} 6... Be6 {[%clk 0:02:57]} 7. Be2 {[%clk 0:02:57.3]} 7... Qa5 {[%clk 0:02:55.5]} 8. c5 {[%clk 0:02:56.3]} 8... Ne4 {[%clk 0:02:53]} 9. Bd2 {[%clk 0:02:56]} 9... Nxd2 {[%clk 0:02:51.3]} 10. Qxd2 {[%clk 0:02:55.9]} 10... g6 {[%clk 0:02:50.7]} 11. Nf3 {[%clk 0:02:54.5]} 11... Bg7 {[%clk 0:02:50.2]} 12. h3 {[%clk 0:02:50.8]} 12... O-O {[%clk 0:02:49.6]} 13. O-O {[%clk 0:02:47.8]} 13... Rad8 {[%clk 0:02:48.6]} 14. a3 {[%clk 0:02:46.6]} 14... Qc7 {[%clk 0:02:46.1]} 15. b4 {[%clk 0:02:43.6]} 15... a6 {[%clk 0:02:45.5]} 16. Rfe1 {[%clk 0:02:36.5]} 16... Bf5 {[%clk 0:02:35.9]} 17. b5 {[%clk 0:02:34.3]} 17... axb5 {[%clk 0:02:26.5]} 18. Nxb5 {[%clk 0:02:33.4]} 18... Qb8 {[%clk 0:02:26]} 19. Bd3 {[%clk 0:02:32.7]} 19... Bc8 {[%clk 0:02:21.2]} 20. Rab1 {[%clk 0:02:28.4]} 20... Rfe8 {[%clk 0:02:20.9]} 21. Bf1 {[%clk 0:02:15.2]} 21... Bf5 {[%clk 0:02:19.5]} 22. Bd3 {[%clk 0:02:14.5]} 22... Bc8 {[%clk 0:02:16.3]} 23. Qa2 {[%clk 0:02:02]} 23... Qf4 {[%clk 0:02:08.9]} 24. Qb2 {[%clk 0:01:40.1]} 24... Bxh3 {[%clk 0:02:05.1]} 25. Qd2 {[%clk 0:01:36.7]} 25... Qg4 {[%clk 0:01:48.8]} 26. Qg5 {[%clk 0:01:35.6]} 26... Qxg5 {[%clk 0:01:41.3]} 27. Nxg5 {[%clk 0:01:35.5]} 27... Bg4 {[%clk 0:01:40.1]} 28. Nc7 {[%clk 0:01:22.6]} 28... Rf8 {[%clk 0:01:38.6]} 29. Rxb7 {[%clk 0:01:22.3]} 29... Bxd4 {[%clk 0:01:37.5]} 30. Bb5 {[%clk 0:01:19]} 30... Na5 {[%clk 0:01:25.8]} 31. Ra7 {[%clk 0:01:18.1]} 31... Nc4 {[%clk 0:01:16.4]} 32. Nxd5 {[%clk 0:01:13.7]} 32... Rxd5 {[%clk 0:01:11.3]} 33. Nxf7 {[%clk 0:01:06.3]} 33... Rxf7 {[%clk 0:01:00.2]} 34. Bxc4 {[%clk 0:01:03.3]} 34... Bxf2+ {[%clk 0:00:59.2]} 35. Kh2 {[%clk 0:01:00.8]} 35... Rh5# {[%clk 0:00:57.1]} 0-1\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/3011084685",
+      "opponent": "Mykola-Bortnyk",
+      "opponentRating": 2864,
+      "studentRating": 2922,
+      "date": "2018-08-16",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 60,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2018.08.16\"]\n[Round \"-\"]\n[White \"Mykola-Bortnyk\"]\n[Black \"DanielNaroditsky\"]\n[Result \"0-1\"]\n[CurrentPosition \"2q3k1/p4p1p/2P3p1/1p2Q3/4P3/P2r3P/3b1PK1/3R4 w - -\"]\n[Timezone \"UTC\"]\n[ECO \"B13\"]\n[ECOUrl \"https://www.chess.com/openings/Caro-Kann-Defense-Panov-Modern-Defense-6.Bg5-Be6-7.Be2\"]\n[UTCDate \"2018.08.16\"]\n[UTCTime \"22:40:03\"]\n[WhiteElo \"2864\"]\n[BlackElo \"2922\"]\n[TimeControl \"180\"]\n[Termination \"DanielNaroditsky won by resignation\"]\n[StartTime \"22:40:03\"]\n[EndDate \"2018.08.16\"]\n[EndTime \"22:43:20\"]\n[Link \"https://www.chess.com/game/live/3011084685\"]\n\n1. e4 {[%clk 0:02:59.9]} 1... c6 {[%clk 0:02:58.1]} 2. d4 {[%clk 0:02:58.8]} 2... d5 {[%clk 0:02:57.9]} 3. exd5 {[%clk 0:02:58.6]} 3... cxd5 {[%clk 0:02:57.2]} 4. c4 {[%clk 0:02:58.5]} 4... Nf6 {[%clk 0:02:56.7]} 5. Nc3 {[%clk 0:02:58.4]} 5... Nc6 {[%clk 0:02:56.2]} 6. Bg5 {[%clk 0:02:57.4]} 6... Be6 {[%clk 0:02:55.1]} 7. Be2 {[%clk 0:02:56.4]} 7... Qa5 {[%clk 0:02:52.7]} 8. c5 {[%clk 0:02:55.3]} 8... Ne4 {[%clk 0:02:51.1]} 9. Bd2 {[%clk 0:02:54.6]} 9... Nxd2 {[%clk 0:02:48.5]} 10. Qxd2 {[%clk 0:02:54.5]} 10... g6 {[%clk 0:02:46.8]} 11. Nf3 {[%clk 0:02:52.6]} 11... Bg7 {[%clk 0:02:46.4]} 12. h3 {[%clk 0:02:51.7]} 12... O-O {[%clk 0:02:45.8]} 13. O-O {[%clk 0:02:50]} 13... Rad8 {[%clk 0:02:44.9]} 14. a3 {[%clk 0:02:48.8]} 14... Bf5 {[%clk 0:02:44.3]} 15. b4 {[%clk 0:02:47.8]} 15... Qc7 {[%clk 0:02:44]} 16. Bb5 {[%clk 0:02:42.5]} 16... Be4 {[%clk 0:02:41.4]} 17. Bxc6 {[%clk 0:02:38.4]} 17... bxc6 {[%clk 0:02:41.3]} 18. Rfe1 {[%clk 0:02:34]} 18... Bxf3 {[%clk 0:02:39.7]} 19. gxf3 {[%clk 0:02:32.7]} 19... e5 {[%clk 0:02:39.5]} 20. Rad1 {[%clk 0:02:21]} 20... Rfe8 {[%clk 0:02:26.7]} 21. Kg2 {[%clk 0:02:17.1]} 21... Re6 {[%clk 0:02:02.4]} 22. dxe5 {[%clk 0:02:14.6]} 22... Bxe5 {[%clk 0:02:02.3]} 23. Ne4 {[%clk 0:02:12.8]} 23... Bf4 {[%clk 0:01:55.3]} 24. Qc3 {[%clk 0:02:12]} 24... dxe4 {[%clk 0:01:52.4]} 25. Rxd8+ {[%clk 0:02:07.2]} 25... Qxd8 {[%clk 0:01:52.3]} 26. fxe4 {[%clk 0:02:06.9]} 26... Bd2 {[%clk 0:01:51.4]} 27. Rd1 {[%clk 0:02:04.8]} 27... Rd6 {[%clk 0:01:34]} 28. Qe5 {[%clk 0:01:53.6]} 28... Rd3 {[%clk 0:01:31.5]} 29. b5 {[%clk 0:01:53]} 29... cxb5 {[%clk 0:01:25.9]} 30. c6 {[%clk 0:01:52.3]} 30... Qc8 {[%clk 0:01:24.8]} 0-1\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/4634149740",
+      "opponent": "Mykola-Bortnyk",
+      "opponentRating": 2910,
+      "studentRating": 3048,
+      "date": "2020-03-25",
+      "timeClass": "blitz",
+      "outcome": "loss",
+      "plyCount": 81,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2020.03.25\"]\n[Round \"-\"]\n[White \"Mykola-Bortnyk\"]\n[Black \"DanielNaroditsky\"]\n[Result \"1-0\"]\n[CurrentPosition \"5rk1/4R1PQ/1p5p/3b2qP/3p4/P7/1P4P1/6K1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"B13\"]\n[ECOUrl \"https://www.chess.com/openings/Caro-Kann-Defense-Panov-Modern-Defense-6.Bg5-Be6-7.Be2\"]\n[UTCDate \"2020.03.25\"]\n[UTCTime \"01:28:24\"]\n[WhiteElo \"2910\"]\n[BlackElo \"3048\"]\n[TimeControl \"180\"]\n[Termination \"Mykola-Bortnyk won by resignation\"]\n[StartTime \"01:28:24\"]\n[EndDate \"2020.03.25\"]\n[EndTime \"01:34:09\"]\n[Link \"https://www.chess.com/game/live/4634149740\"]\n\n1. e4 {[%clk 0:02:59.9]} 1... c6 {[%clk 0:02:59.9]} 2. d4 {[%clk 0:02:58.7]} 2... d5 {[%clk 0:02:59.8]} 3. exd5 {[%clk 0:02:57.9]} 3... cxd5 {[%clk 0:02:57.8]} 4. c4 {[%clk 0:02:57.8]} 4... Nf6 {[%clk 0:02:56.1]} 5. Nc3 {[%clk 0:02:57.5]} 5... Nc6 {[%clk 0:02:54.7]} 6. Bg5 {[%clk 0:02:56.8]} 6... Be6 {[%clk 0:02:49.6]} 7. Be2 {[%clk 0:02:56]} 7... Qa5 {[%clk 0:02:37.2]} 8. c5 {[%clk 0:02:55.3]} 8... Ne4 {[%clk 0:02:32.5]} 9. Bd2 {[%clk 0:02:54.5]} 9... Nxd2 {[%clk 0:02:30.5]} 10. Qxd2 {[%clk 0:02:54.4]} 10... g6 {[%clk 0:02:28.5]} 11. Nf3 {[%clk 0:02:52.8]} 11... Bg7 {[%clk 0:02:23.4]} 12. Bb5 {[%clk 0:02:49.1]} 12... O-O {[%clk 0:02:11.6]} 13. h3 {[%clk 0:02:44.4]} 13... Rac8 {[%clk 0:01:48.4]} 14. O-O {[%clk 0:02:40.7]} 14... b6 {[%clk 0:01:46.7]} 15. cxb6 {[%clk 0:02:12.8]} 15... axb6 {[%clk 0:01:40.6]} 16. a3 {[%clk 0:02:09.3]} 16... Qa8 {[%clk 0:01:30.5]} 17. Rfe1 {[%clk 0:02:08]} 17... Na5 {[%clk 0:01:26]} 18. Qg5 {[%clk 0:02:01.5]} 18... Rc7 {[%clk 0:01:13.3]} 19. Qg3 {[%clk 0:01:58.6]} 19... Qd8 {[%clk 0:01:09.3]} 20. Ng5 {[%clk 0:01:35.1]} 20... Bc8 {[%clk 0:00:57.9]} 21. Rad1 {[%clk 0:01:16.9]} 21... e6 {[%clk 0:00:55.5]} 22. Nf3 {[%clk 0:01:13.3]} 22... Nc4 {[%clk 0:00:52.6]} 23. Bxc4 {[%clk 0:01:10.7]} 23... Rxc4 {[%clk 0:00:52.5]} 24. h4 {[%clk 0:01:09.5]} 24... h6 {[%clk 0:00:43.2]} 25. h5 {[%clk 0:01:06.8]} 25... g5 {[%clk 0:00:42.7]} 26. Ne5 {[%clk 0:01:06.5]} 26... Rc7 {[%clk 0:00:42.2]} 27. f4 {[%clk 0:01:04.7]} 27... gxf4 {[%clk 0:00:42.1]} 28. Qxf4 {[%clk 0:01:03.9]} 28... Qg5 {[%clk 0:00:41.8]} 29. Qf3 {[%clk 0:00:59.5]} 29... Bb7 {[%clk 0:00:39.8]} 30. Re2 {[%clk 0:00:53]} 30... Rfc8 {[%clk 0:00:35.7]} 31. Rf1 {[%clk 0:00:52.2]} 31... f6 {[%clk 0:00:33.3]} 32. Ng6 {[%clk 0:00:47.6]} 32... e5 {[%clk 0:00:32.8]} 33. dxe5 {[%clk 0:00:46.1]} 33... d4 {[%clk 0:00:30.6]} 34. Nd5 {[%clk 0:00:43.8]} 34... Rd7 {[%clk 0:00:28.6]} 35. Nge7+ {[%clk 0:00:38.1]} 35... Kh8 {[%clk 0:00:25.1]} 36. exf6 {[%clk 0:00:37.6]} 36... Rxe7 {[%clk 0:00:18.3]} 37. Rxe7 {[%clk 0:00:34.5]} 37... Bxd5 {[%clk 0:00:15.8]} 38. fxg7+ {[%clk 0:00:33.7]} 38... Kh7 {[%clk 0:00:15.7]} 39. Qd3+ {[%clk 0:00:24.6]} 39... Kg8 {[%clk 0:00:15]} 40. Rf8+ {[%clk 0:00:22.6]} 40... Rxf8 {[%clk 0:00:14.2]} 41. Qh7+ {[%clk 0:00:22.2]} 1-0\n"
+    }
+  ]
+}
