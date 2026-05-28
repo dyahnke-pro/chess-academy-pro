@@ -28,7 +28,6 @@ export const PRO_GOTHAMCHESS_LONDON_VARIATION_LESSONS: Record<string, LessonScri
       {
         id: 'c5-deep',
         moves: ['d4', 'd5', 'Nf3', 'Nf6', 'Bf4', 'c5', 'e3', 'Nc6', 'Nbd2', 'e6', 'c3', 'Bd6', 'Bg3', 'O-O', 'Be2', 'b6', 'O-O', 'Bb7', 'h3', 'Ne7', 'Ne5', 'Nf5'],
-        arrows: [{ from: 'g3', to: 'd6', color: VIS }],
         highlights: [{ square: 'g3', color: KEY }, { square: 'e5', color: SOFT }],
         say: "From his real win vs 2463: when Black offers the bishop trade with ...Bd6, Levy slides back to g3 — keeping the bishop pair AND keeping the bishop trained on the kingside dark squares. The pattern unfolds: O-O for safety, h3 to make a luft, Ne5 jumps to the central outpost. From a quiet London, every piece is now active and Black is the one searching for a plan.",
         sayShort: 'Bg3 — keep the bishop, then Ne5 outpost.',
