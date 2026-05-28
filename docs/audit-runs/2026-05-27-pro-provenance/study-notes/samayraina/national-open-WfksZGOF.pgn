@@ -1,0 +1,366 @@
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "1.112"]
+[White "Nitin Vekhande, Kshatriya"]
+[Black "Raina, Samay"]
+[Result "1-0"]
+[WhiteElo "1782"]
+[BlackElo "850"]
+[Variant "Standard"]
+[ECO "B28"]
+[Opening "Sicilian Defense: O'Kelly Variation, Quiet System"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Nitin Vekhande, Kshatriya - Raina, Samay"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/uNrL08Sk"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. e4 { [%clk 0:15:05] } 1... c5 { [%clk 0:15:02] } 2. Nf3 { [%clk 0:15:06] } 2... a6 { [%clk 0:15:06] } 3. d3 { [%clk 0:15:04] } 3... Nc6 { [%clk 0:14:56] } 4. g3 { [%clk 0:15:04] } 4... e5 { [%clk 0:14:37] } 5. Bg2 { [%clk 0:15:05] } 5... h6 { [%clk 0:14:05] } 6. h4 { [%clk 0:15:04] } 6... Nf6 { [%clk 0:13:57] } 7. c3 { [%clk 0:15:02] } 7... Be7 { [%clk 0:11:32] } 8. Nbd2 { [%clk 0:14:47] } 8... b5 { [%clk 0:11:12] } 9. Nf1 { [%clk 0:14:40] } 9... O-O { [%clk 0:10:24] } 10. Ne3 { [%clk 0:14:41] } 10... d6 { [%clk 0:10:19] } 11. O-O { [%clk 0:13:52] } 11... Be6 { [%clk 0:10:05] } 12. d4 { [%csl Gd4] [%clk 0:13:24] } 12... cxd4 { [%clk 0:09:35] } 13. cxd4 { [%clk 0:13:26] } 13... Bg4 { [%clk 0:07:46] } 14. d5 { [%clk 0:12:59] } 14... Nd4 { [%clk 0:07:29] } 15. Nxg4 { [%clk 0:12:58] } 15... Nxg4 { [%clk 0:06:00] } 16. Nxd4 { [%clk 0:12:59] } 16... exd4 { [%clk 0:05:38] } 17. Qxg4 { [%clk 0:13:00] } 17... Bf6 { [%clk 0:05:39] } 18. Bxh6 { [%clk 0:12:51] } 18... Re8 { [%clk 0:05:19] } 19. h5 { [%clk 0:12:40] } 19... Rc8 { [%clk 0:04:52] } 20. Rac1 { [%clk 0:11:55] } 20... Rxc1 { [%clk 0:04:31] } 21. Rxc1 { [%clk 0:11:54] } 21... a5 { [%clk 0:04:27] } 22. Rd1 { [%clk 0:11:50] } 22... b4 { [%clk 0:04:15] } 23. Bxg7 { [%clk 0:11:52] } 23... Bxg7 { [%clk 0:04:11] } 24. h6 { [%clk 0:11:54] } 24... Kf8 { [%clk 0:03:27] } 25. Qxg7+ { [%clk 0:11:50] } 25... Ke7 { [%clk 0:03:30] } 26. h7 { [%clk 0:11:50] } 26... a4 { [%clk 0:03:23] } 27. Bh3 { [%clk 0:11:53] } 27... b3 { [%clk 0:02:52] } (27... Qc7) 28. Qg5+ { [%clk 0:11:56] } 28... f6 { [%clk 0:02:51] } 29. Qg7# { 1-0 White wins by checkmate. } { [%cal Gd4d5] [%clk 0:11:59] } 1-0
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "2.114"]
+[White "Raina, Samay"]
+[Black "Roy Chowdhury, Piyal"]
+[Result "1-0"]
+[WhiteElo "850"]
+[BlackElo "1464"]
+[Variant "Standard"]
+[ECO "E12"]
+[Opening "Queen's Indian Defense: Kasparov-Petrosian Variation, Main Line"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Raina, Samay - Roy Chowdhury, Piyal"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/K9WmF0ej"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. d4 { [%clk 0:15:05] } 1... Nf6 { [%clk 0:15:01] } 2. c4 { [%clk 0:15:05] } 2... e6 { [%clk 0:15:03] } 3. Nf3 { [%clk 0:15:02] } 3... b6 { [%clk 0:15:01] } 4. Nc3 { [%clk 0:15:00] } 4... Bb7 { [%clk 0:15:01] } 5. a3 { [%clk 0:15:00] } 5... d5 { [%clk 0:14:43] } 6. Bg5 { [%clk 0:14:53] } 6... Be7 { [%clk 0:14:42] } 7. e3 { [%clk 0:14:56] } 7... h5 { [%clk 0:14:43] } 8. Bd3 { [%clk 0:14:09] } 8... Ne4 { [%clk 0:14:37] } 9. Bxe7 { [%clk 0:14:11] } 9... Qxe7 { [%clk 0:14:38] } 10. Bxe4 { [%clk 0:14:12] } 10... dxe4 { [%clk 0:14:40] } 11. Nd2 { [%clk 0:14:01] } 11... f5 { [%clk 0:14:42] } 12. b4 { [%clk 0:10:27] } 12... Qg5 { [%clk 0:14:33] } 13. g3 { [%clk 0:09:25] } 13... h4 { [%clk 0:14:12] } 14. Rg1 { [%clk 0:08:46] } 14... Nd7 { [%clk 0:14:04] } 15. Ne2 { [%clk 0:07:56] } 15... Qf6 { [%clk 0:11:03] } 16. Qb3 { [%clk 0:06:23] } 16... hxg3 { [%clk 0:10:33] } 17. hxg3 { [%clk 0:06:09] } 17... e5 { [%clk 0:09:51] } 18. d5 { [%clk 0:04:55] } 18... a5 { [%clk 0:08:44] } 19. c5 { [%clk 0:04:41] } 19... a4 { [%clk 0:05:26] } (19... bxc5 20. bxc5 Ba6) 20. Qc3 { [%clk 0:03:48] } 20... Bxd5 { [%clk 0:05:00] } 21. O-O-O { [%clk 0:03:39] } 21... bxc5 { [%clk 0:04:50] } 22. bxc5 { [%clk 0:03:00] } 22... Qa6 { [%clk 0:04:32] } 23. Rge1 { [%clk 0:02:22] } 23... Rh2 { [%clk 0:03:54] } 24. Nf1 { [%clk 0:01:13] } 24... Rxf2 { [%clk 0:03:25] } 25. Rxd5 { [%clk 0:01:02] } 25... Rxe2 { [%clk 0:03:27] } 26. Red1 { [%clk 0:00:52] } 26... Rd8 { [%clk 0:00:34] } 27. c6 { [%clk 0:00:54] } 27... Qc8 { [%clk 0:00:11] } 28. cxd7+ { Black Resigned } { [%clk 0:00:55] } 1-0
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "1.88"]
+[White "Rakesh, Gurung"]
+[Black "Kalyan Rath, Biswa"]
+[Result "1-0"]
+[WhiteElo "1932"]
+[BlackElo "970"]
+[Termination "time forfeit"]
+[Variant "Standard"]
+[ECO "A07"]
+[Opening "King's Indian Attack, with e6"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Rakesh, Gurung - Kalyan Rath, Biswa"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/Ap6xJyxP"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+{ Clock started by Arbiter. Black stopped clock for 60 seconds. }
+1. Nf3 { [%clk 0:09:28] } 1... d5 { [%clk 0:14:58] } 2. g3 { [%clk 0:09:30] } 2... Nf6 { [%clk 0:14:57] } 3. Bg2 { [%clk 0:09:32] } 3... e6 { [%clk 0:14:57] } 4. O-O { [%clk 0:09:33] } 4... Be7 { [%clk 0:14:51] } 5. d3 { [%clk 0:09:33] } 5... O-O { [%clk 0:14:52] } 6. Nbd2 { [%clk 0:09:31] } 6... c5 { [%clk 0:14:45] } 7. e4 { [%clk 0:09:21] } 7... Nc6 { [%clk 0:14:13] } 8. e5 { [%clk 0:08:39] } 8... Ng4 { [%clk 0:13:55] } 9. Re1 { [%clk 0:08:40] } 9... Qc7 { [%clk 0:13:18] } 10. Qe2 { [%clk 0:08:31] } 10... f6 { [%clk 0:12:12] } 11. exf6 { [%clk 0:07:46] } 11... Bxf6 { [%clk 0:10:54] } 12. c3 { [%clk 0:06:53] } 12... Bd7 { [%clk 0:10:43] } 13. h3 { [%clk 0:06:49] } 13... Nge5 { [%clk 0:10:03] } 14. Nxe5 { [%clk 0:05:24] } 14... Bxe5 { [%clk 0:08:53] } 15. Nf3 { [%clk 0:05:04] } 15... Bd6 { [%clk 0:08:03] } 16. Bd2 { [%clk 0:03:14] } 16... Rae8 { [%clk 0:07:31] } 17. Ng5 { [%clk 0:01:30] } 17... h6 { [%clk 0:04:47] } 18. Nf3 { [%clk 0:01:24] } 18... e5 { [%clk 0:04:24] } 19. Nh2 { [%clk 0:00:56] } 19... e4 { [%clk 0:03:13] } 20. dxe4 { [%clk 0:00:48] } 20... dxe4 { [%clk 0:03:06] } 21. Ng4 { [%clk 0:00:16] } 21... h5 { [%clk 0:01:18] } 22. Nh2 { [%clk 0:00:18] } 22... Rf3 { [%clk 0:00:26] } 23. Nxf3 { [%clk 0:00:13] } 23... exf3 { [%clk 0:00:25] } 24. Qxf3 { [%clk 0:00:14] } 24... Rf8 { [%clk 0:00:07] } 25. Qxh5 { [%clk 0:00:15] } 25... Ne5 { [%clk 0:00:06] } 26. Bd5+ { Black Loss on Time } { [%clk 0:00:13] } 1-0
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "2.89"]
+[White "Kalyan Rath, Biswa"]
+[Black "Kapur, Shubh"]
+[Result "0-1"]
+[WhiteElo "970"]
+[BlackElo "1617"]
+[Variant "Standard"]
+[ECO "B22"]
+[Opening "Sicilian Defense: Alapin Variation, Smith-Morra Declined"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Kalyan Rath, Biswa - Kapur, Shubh"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/SnqiaNTH"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+{ Clock started by Arbiter. }
+1. e4 { [%clk 0:14:59] } 1... c5 { [%clk 0:15:02] } 2. d4 { [%clk 0:14:50] } 2... cxd4 { [%clk 0:15:04] } 3. c3 { [%clk 0:14:53] } 3... Nf6 { [%clk 0:15:08] } 4. e5 { [%clk 0:14:43] } 4... Nd5 { [%clk 0:15:09] } 5. cxd4 { [%clk 0:14:40] } 5... Nc6 { [%clk 0:15:10] } 6. Nf3 { [%clk 0:14:18] } 6... e6 { [%clk 0:15:11] } 7. Nc3 { [%clk 0:14:10] } 7... d6 { [%clk 0:15:04] } 8. Bb5 { [%clk 0:13:26] } 8... Bd7 { [%clk 0:14:18] } 9. O-O { [%clk 0:12:53] } 9... Nxc3 { [%clk 0:13:58] } 10. bxc3 { [%clk 0:12:46] } 10... dxe5 { [%clk 0:13:44] } 11. Bxc6 { [%clk 0:12:17] } 11... Bxc6 { [%clk 0:13:45] } 12. Nxe5 { [%clk 0:12:14] } 12... Qc7 { [%clk 0:13:26] } 13. Qg4 { [%clk 0:11:04] } 13... O-O-O { [%clk 0:12:14] } 14. Bf4 { [%clk 0:10:31] } 14... Bd6 { [%clk 0:11:36] } 15. c4 { [%clk 0:09:17] } 15... h5 { [%clk 0:10:24] } 16. Qh3 { [%clk 0:08:36] } 16... Bxe5 { [%clk 0:10:00] } 17. Bxe5 { [%clk 0:08:27] } 17... Qd7 { [%clk 0:09:35] } 18. Rfd1 { [%clk 0:06:37] } 18... f6 { [%clk 0:09:36] } 19. Bg3 { [%clk 0:06:28] } 19... h4 { [%clk 0:09:39] } 20. Bf4 { [%clk 0:05:59] } 20... g5 { [%clk 0:09:40] } 21. Be3 { [%clk 0:05:39] } 21... g4 { [%clk 0:09:27] } 22. Qxg4 { [%clk 0:05:31] } 22... Rdg8 { [%clk 0:09:29] } 23. Qf4 { [%clk 0:04:06] } 23... Bxg2 { [%clk 0:09:19] } 24. d5 { [%clk 0:03:08] } 24... Qg7 { White Resigned } { [%clk 0:08:55] } 0-1
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "3.91"]
+[White "Vivek, Tiwari"]
+[Black "Raina, Samay"]
+[Result "1/2-1/2"]
+[WhiteElo "1684"]
+[BlackElo "850"]
+[Variant "Standard"]
+[ECO "A46"]
+[Opening "Indian Defense: London System"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Vivek, Tiwari - Raina, Samay"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/fCZ3WNgv"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+{ Clock started by Arbiter. }
+1. d4 Nf6 2. Nf3 e6 3. Bf4 d5 4. e3 c5 5. c3 Nc6 6. Nbd2 Bd6 7. Ne5 Qc7 8. Ndf3 O-O 9. Bd3 Nh5 10. Bg3 Nxe5 11. Bxe5 f6 12. Bxd6 Qxd6 13. g4 e5 14. dxe5 fxe5 15. gxh5 e4 16. Bxe4 Bg4 17. Rg1 Bxf3 18. Bxf3 d4 19. cxd4 cxd4 20. Qxd4 Qxd4 21. exd4 Rxf3 22. O-O-O Rxf2 23. Rd2 Rc8+ 24. Kd1 Rcf8 25. Rg2 Rxg2 26. Rxg2 Rf4 27. Rd2 Rh4 28. d5 Kf8 29. Kc2 Rxh5 30. Kc3 Ke7 31. Kc4 Kd6 32. b4 Rh4+ 33. Kb5 a6+ 34. Ka5 Rh5 35. Kb6 Rxd5 36. Rxd5+ Kxd5 37. Kxb7 Kc4 38. Kxa6 Kxb4 39. Kb6 h5 40. Kc6 g5 41. Kd5 h4 42. Ke4 g4 43. Ke3 g3 44. hxg3 hxg3 45. Kf3 { Black offered a draw. } 45... Ka3 46. Kxg3 Kxa2 { Draw by Insufficient Material } 1/2-1/2
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "4.94"]
+[White "Aayush, Shirodkar"]
+[Black "Kalyan Rath, Biswa"]
+[Result "1-0"]
+[WhiteElo "1563"]
+[BlackElo "970"]
+[Variant "Standard"]
+[ECO "C45"]
+[Opening "Scotch Game: Modern Defense"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Aayush, Shirodkar - Kalyan Rath, Biswa"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/qwVE9bin"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. e4 { [%clk 0:15:05] } 1... e5 { [%clk 0:15:02] } 2. Nf3 { [%clk 0:15:07] } 2... Nc6 { [%clk 0:15:00] } 3. d4 { [%clk 0:14:51] } 3... exd4 { [%clk 0:14:56] } 4. Nxd4 { [%clk 0:14:53] } 4... Qh4 { [%clk 0:14:35] } 5. Nc3 { [%clk 0:12:55] } (5. Be2 Bb4+ (5... Nxd4 6. Qxd4 Bb4+ (6... Be7) (6... Nf6 7. Nc3)) 6. c3 Bc5 7. O-O) 5... Bb4 { [%clk 0:14:36] } 6. Nb5 { [%clk 0:12:15] } 6... Qxe4+ { [%clk 0:13:44] } (6... Ba5 { [%cal Gb4a5,Ga5d8] }) 7. Be3 { [%clk 0:11:50] } 7... Bxc3+ { [%clk 0:13:21] } 8. bxc3 { [%clk 0:10:44] } 8... Qe5 { [%clk 0:12:43] } 9. Qd5 { [%clk 0:09:39] } 9... Qxd5 { [%clk 0:10:50] } (9... Kd8 10. Qxe5 Nxe5) 10. Nxc7+ { [%clk 0:09:40] } 10... Kd8 { [%clk 0:10:49] } 11. Nxd5 { [%clk 0:09:44] } 11... Nge7 { [%clk 0:10:42] } 12. O-O-O { [%clk 0:07:56] } 12... b6 { [%clk 0:09:39] } 13. Bb5 { [%clk 0:06:53] } 13... Bb7 { [%clk 0:08:50] } 14. Nxe7 { [%clk 0:06:55] } 14... Kxe7 { [%clk 0:08:06] } 15. Rhe1 { [%clk 0:06:58] } 15... d6 { [%clk 0:05:15] } 16. Bf4+ { [%clk 0:06:33] } 16... Ne5 { [%clk 0:03:41] } 17. Bxe5 { [%clk 0:06:35] } 17... dxe5 { [%clk 0:03:44] } 18. Rd7+ { [%clk 0:06:38] } 18... Kf6 { [%clk 0:03:35] } 19. Rxb7 { [%clk 0:06:40] } 19... Rhc8 { [%clk 0:03:30] } 20. Re3 { [%clk 0:06:12] } 20... a6 { [%clk 0:03:18] } 21. Rxb6+ { [%clk 0:06:13] } 21... Kf5 { [%clk 0:03:14] } 22. Bd3+ { [%clk 0:06:15] } 22... Kf4 { [%clk 0:02:11] } 23. Re4+ { [%clk 0:05:30] } 23... Kf5 { [%clk 0:02:02] } 24. Rc4+ { [%clk 0:05:14] } 24... e4 { Black Resigned } { [%clk 0:01:53] } 1-0
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "4.67"]
+[White "Raina, Samay"]
+[Black "Amardeep S, Bartakke"]
+[Result "0-1"]
+[WhiteElo "850"]
+[BlackElo "2177"]
+[Variant "Standard"]
+[ECO "D38"]
+[Opening "Queen's Gambit Declined: Ragozin Defense"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Raina, Samay - Amardeep S, Bartakke"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/DHjPAtQ8"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. d4 { [%clk 0:15:05] } 1... Nf6 { [%clk 0:15:00] } 2. c4 { [%clk 0:15:08] } 2... e6 { [%clk 0:15:03] } 3. Nf3 { [%clk 0:15:12] } 3... d5 { [%clk 0:15:05] } 4. Nc3 { [%clk 0:15:06] } 4... Bb4 { [%clk 0:15:02] } 5. Bg5 { [%clk 0:15:09] } 5... c5 { [%clk 0:14:54] } 6. cxd5 { [%clk 0:15:06] } 6... Qxd5 { [%clk 0:14:54] } 7. Bxf6 { [%clk 0:14:56] } 7... gxf6 { [%clk 0:14:56] } 8. Qa4+ { [%clk 0:13:42] } 8... Qd7 { [%clk 0:13:46] } 9. Qd1 { [%clk 0:12:12] } 9... Nc6 { [%clk 0:13:32] } 10. e3 { [%clk 0:12:12] } 10... cxd4 { [%clk 0:13:32] } 11. Nxd4 { [%clk 0:11:45] } 11... Nxd4 { [%clk 0:13:33] } 12. Qxd4 { [%clk 0:11:34] } 12... Qxd4 { [%clk 0:13:34] } 13. exd4 { [%clk 0:11:37] } 13... Bd7 { [%clk 0:13:35] } 14. Be2 { [%clk 0:10:58] } 14... Bc6 { [%clk 0:13:35] } 15. f3 { [%clk 0:08:14] } 15... Rd8 { [%clk 0:13:19] } 16. Rd1 { [%clk 0:07:49] } 16... Rg8 { [%clk 0:13:16] } 17. O-O { [%clk 0:07:44] } 17... Ke7 { [%clk 0:12:49] } 18. a3 { [%clk 0:07:29] } 18... Ba5 { [%clk 0:12:48] } 19. Rd2 { [%clk 0:05:49] } 19... Rg5 { [%clk 0:12:25] } 20. Bd1 { [%clk 0:03:48] } 20... Bb6 { [%clk 0:11:59] } 21. Ne2 { [%clk 0:03:27] } 21... Rgd5 { [%clk 0:11:08] } 22. Bc2 { [%clk 0:03:18] } 22... Bxd4+ { [%clk 0:10:42] } 23. Nxd4 { [%clk 0:03:18] } 23... Rxd4 { [%clk 0:10:43] } 24. Rxd4 { [%clk 0:03:20] } 24... Rxd4 { [%clk 0:10:46] } 25. Bxh7 { [%clk 0:03:19] } 25... f5 { [%clk 0:10:45] } 26. Re1 { [%clk 0:02:42] } 26... Kf6 { [%clk 0:10:33] } 27. g4 { [%clk 0:02:03] } 27... fxg4 { [%clk 0:10:24] } 28. fxg4 { [%clk 0:02:05] } 28... Rxg4+ { [%clk 0:10:24] } 29. Kf2 { [%clk 0:02:07] } 29... Rh4 { [%clk 0:10:14] } 30. Bd3 { [%clk 0:01:58] } 30... Rxh2+ { [%clk 0:10:14] } 31. Ke3 { [%clk 0:01:58] } 31... Rxb2 { [%clk 0:10:15] } 32. Rf1+ { [%clk 0:02:01] } 32... Ke7 { [%clk 0:10:17] } 33. a4 { [%clk 0:01:49] } 33... Bxa4 { [%clk 0:10:02] } 34. Ra1 { [%clk 0:01:51] } 34... Rb4 { [%clk 0:09:54] } 35. Be4 { [%clk 0:01:50] } 35... b6 { [%clk 0:09:47] } 36. Bf3 { [%clk 0:01:38] } 36... a5 { [%clk 0:09:48] } 37. Bh5 { [%clk 0:01:35] } 37... f5 { [%clk 0:09:11] } 38. Re1 { [%clk 0:01:11] } 38... Re4+ { [%clk 0:09:08] } 39. Kd2 { [%clk 0:01:15] } 39... Rxe1 { [%clk 0:09:10] } 40. Kxe1 { [%clk 0:01:19] } 40... b5 { [%clk 0:09:12] } 41. Kd2 { [%clk 0:01:22] } 41... b4 { [%clk 0:09:16] } 42. Kd3 { [%clk 0:01:24] } 42... e5 { [%clk 0:09:18] } 43. Kc4 { [%clk 0:01:23] } 43... Kd6 { [%clk 0:09:17] } 44. Bg6 { [%clk 0:01:26] } 44... Bd7 { [%clk 0:09:14] } 45. Kb3 { [%clk 0:01:22] } 45... e4 { [%clk 0:09:16] } 46. Bh5 { [%clk 0:01:20] } 46... f4 { [%clk 0:09:18] } 47. Kc2 { [%clk 0:01:19] } 47... Ke5 { [%clk 0:09:18] } 48. Kd2 { [%clk 0:01:16] } 48... e3+ { [%clk 0:09:17] } 49. Ke2 { [%clk 0:01:17] } 49... Bb5+ { [%clk 0:09:20] } 50. Ke1 { [%clk 0:01:19] } 50... b3 { [%clk 0:09:14] } 51. Bg6 { [%clk 0:01:17] } 51... Kd4 { [%clk 0:09:14] } 52. Bc2 { [%clk 0:01:05] } 52... b2 { [%clk 0:09:09] } 53. Bb1 { [%clk 0:01:06] } 53... f3 { [%clk 0:09:11] } 54. Ba2 { [%clk 0:00:54] } 54... Kc3 { [%clk 0:09:01] } 55. Kd1 { [%clk 0:00:40] } 55... f2 { [%clk 0:08:53] } 56. Bc4 { [%clk 0:00:40] } 56... b1=Q+ { [%clk 0:08:42] } 57. Ke2 { [%clk 0:00:44] } 57... Qe1+ { [%clk 0:08:34] } 58. Kf3 { [%clk 0:00:46] } 58... Bxc4 { [%clk 0:08:38] } 59. Kg2 { [%clk 0:00:50] } 59... f1=Q+ { [%clk 0:08:37] } 60. Kh2 { [%clk 0:00:54] } 60... Qef2# { 0-1 Black wins by checkmate. } { [%clk 0:08:38] } 0-1
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "5.92"]
+[White "Kalyan Rath, Biswa"]
+[Black "Srithan, Saypuri"]
+[Result "0-1"]
+[WhiteElo "970"]
+[BlackElo "1824"]
+[Variant "Standard"]
+[ECO "C42"]
+[Opening "Petrov's Defense"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Kalyan Rath, Biswa - Srithan, Saypuri"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/rG8zA20F"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. e4 { [%clk 0:15:05] } 1... e5 { [%clk 0:15:02] } 2. Nf3 { [%clk 0:15:07] } 2... Nf6 { [%clk 0:15:04] } 3. Nxe5 { [%clk 0:15:08] } 3... d6 { [%clk 0:15:08] } 4. Nf3 { [%clk 0:14:35] } 4... Nxe4 { [%clk 0:15:11] } 5. Bc4 { [%clk 0:14:20] } (5. Nc3) 5... d5 { [%clk 0:15:11] } 6. Qe2 { [%clk 0:13:46] } 6... Be7 { [%clk 0:14:58] } 7. Bb3 { [%clk 0:13:39] } 7... O-O { [%clk 0:14:59] } 8. O-O { [%clk 0:13:36] } 8... Bg4 { [%clk 0:14:57] } 9. d3 { [%clk 0:13:19] } 9... Ng5 { [%clk 0:14:52] } 10. Bxg5 { [%clk 0:12:22] } 10... Bxg5 { [%clk 0:14:53] } 11. Nc3 { [%clk 0:11:38] } 11... c6 { [%clk 0:14:57] } 12. Rae1 { [%clk 0:10:53] } 12... Nd7 { [%clk 0:14:57] } 13. h3 { [%clk 0:10:37] } 13... Bh5 { [%clk 0:14:47] } 14. g4 { [%clk 0:09:40] } 14... Bg6 { [%clk 0:14:49] } 15. Nxg5 { [%clk 0:09:22] } 15... Qxg5 { [%clk 0:14:52] } 16. Qf3 { [%clk 0:08:15] } 16... Rae8 { [%clk 0:14:48] } 17. Ne2 { [%clk 0:07:55] } 17... h5 { [%clk 0:14:43] } 18. Kh2 { [%clk 0:07:23] } 18... Ne5 { [%clk 0:14:43] } 19. Qf4 { [%clk 0:06:08] } 19... Qxf4+ { [%clk 0:14:42] } 20. Nxf4 { [%clk 0:06:07] } 20... Nf3+ { [%clk 0:14:46] } 21. Kg3 { [%clk 0:06:00] } 21... Rxe1 { [%clk 0:14:49] } 22. Rxe1 { [%clk 0:05:34] } 22... Nxe1 { [%clk 0:14:52] } 23. gxh5 { [%clk 0:05:27] } 23... Bf5 { [%clk 0:14:55] } 24. a3 { [%clk 0:04:45] } 24... g5 { [%clk 0:14:44] } 25. Ne2 { [%clk 0:04:30] } 25... Bd7 { [%clk 0:14:41] } 26. f3 { [%clk 0:04:19] } 26... f5 { [%clk 0:14:43] } 27. Kf2 { [%clk 0:04:20] } 27... Nxf3 { [%clk 0:14:45] } 28. Kxf3 { [%clk 0:04:22] } 28... g4+ { [%clk 0:14:50] } 29. Kg3 { [%clk 0:03:53] } 29... gxh3 { [%clk 0:14:53] } 30. Nf4 { [%clk 0:03:43] } 30... Kg7 { [%clk 0:14:30] } 31. Kxh3 { [%clk 0:03:40] } 31... Re8 { [%clk 0:14:26] } 32. Kh4 { [%clk 0:03:17] } 32... Re1 { [%clk 0:14:18] } 33. c4 { [%clk 0:02:41] } 33... Rh1+ { [%clk 0:14:10] } 34. Kg5 { [%clk 0:02:40] } 34... Rg1+ { [%clk 0:14:12] } 35. Kh4 { [%clk 0:02:38] } 35... Rg4+ { [%clk 0:14:16] } 36. Kh3 { [%clk 0:02:30] } 36... Rxf4 { [%clk 0:14:20] } 37. cxd5 { [%clk 0:02:13] } 37... Rf3+ { [%clk 0:14:23] } 38. Kh4 { [%clk 0:02:15] } 38... Rxd3 { [%clk 0:14:26] } 39. Ba2 { [%clk 0:01:58] } 39... cxd5 { [%clk 0:14:28] } 40. Kg5 { [%clk 0:01:56] } 40... Rg3+ { [%clk 0:14:32] } 41. Kh4 { [%clk 0:01:55] } 41... Rg4+ { [%clk 0:14:35] } 42. Kh3 { [%clk 0:01:54] } 42... d4 { [%clk 0:14:39] } 43. Bb1 { [%clk 0:01:47] } 43... Rg1 { [%clk 0:14:35] } 44. Bd3 { [%clk 0:01:33] } 44... f4+ { [%clk 0:14:38] } 45. Kh2 { [%clk 0:01:32] } 45... Rg3 { [%clk 0:14:41] } 46. Bg6 { [%clk 0:01:18] } 46... d3 { White Resigned } { [%clk 0:14:44] } 0-1
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "5.87"]
+[White "G, Aakash"]
+[Black "Raina, Samay"]
+[Result "1-0"]
+[WhiteElo "1572"]
+[BlackElo "850"]
+[Variant "Standard"]
+[ECO "A52"]
+[Opening "Indian Defense: Budapest Defense, Adler Variation"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "G, Aakash - Raina, Samay"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/bxlOHDdg"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. d4 { [%clk 0:15:05] } 1... Nf6 { [%clk 0:15:03] } 2. c4 { [%clk 0:15:07] } 2... e5 { [%clk 0:15:07] } 3. dxe5 { [%clk 0:15:09] } 3... Ng4 { [%clk 0:15:11] } 4. Nf3 { [%clk 0:15:11] } 4... Nc6 { [%clk 0:15:13] } 5. Bf4 { [%clk 0:15:12] } 5... Bb4+ { [%clk 0:15:16] } 6. Nbd2 { [%clk 0:15:11] } 6... Qe7 { [%clk 0:15:18] } 7. e3 { [%clk 0:15:05] } 7... f6 { [%clk 0:14:43] } 8. exf6 { [%clk 0:14:52] } 8... Nxf6 { [%clk 0:14:45] } 9. Be2 { [%clk 0:14:45] } 9... d6 { [%clk 0:14:07] } 10. O-O { [%clk 0:14:45] } 10... b6 { [%clk 0:13:08] } 11. Nd4 { [%clk 0:14:37] } 11... Bb7 { [%clk 0:12:46] } 12. Bf3 { [%clk 0:14:35] } 12... Qd7 { [%clk 0:12:07] } 13. a3 { [%clk 0:13:48] } 13... Bxd2 { [%clk 0:12:02] } 14. Qxd2 { [%clk 0:13:49] } 14... O-O-O { [%clk 0:11:49] } 15. b4 { [%clk 0:13:28] } 15... Nxd4 { [%clk 0:11:50] } 16. Bxb7+ { [%clk 0:13:29] } 16... Kxb7 { [%clk 0:11:53] } 17. exd4 { [%clk 0:13:30] } 17... g5 { [%clk 0:11:31] } 18. Bg3 { [%clk 0:13:09] } 18... Ne4 { [%clk 0:11:17] } 19. Qd3 { [%clk 0:12:53] } 19... Qf5 { [%clk 0:10:41] } 20. c5 { [%clk 0:12:44] } 20... Nxg3 { [%clk 0:10:38] } 21. Qxg3 { [%clk 0:12:44] } 21... dxc5 { [%clk 0:10:24] } 22. dxc5 { [%clk 0:12:26] } 22... Rd3 { [%clk 0:10:05] } 23. f3 { [%clk 0:12:26] } 23... h5 { [%clk 0:09:39] } 24. cxb6 { [%clk 0:12:04] } 24... axb6 { [%clk 0:09:36] } 25. a4 { [%clk 0:10:40] } 25... g4 { [%clk 0:08:29] } 26. a5 { [%clk 0:09:51] } 26... Qf6 { [%clk 0:04:26] } 27. a6+ { [%clk 0:09:02] } 27... Ka7 { [%clk 0:04:18] } 28. Qxc7+ { [%clk 0:09:01] } 28... Ka8 { [%clk 0:04:20] } 29. Qb7# { 1-0 White wins by checkmate. } { [%clk 0:09:02] } 1-0
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "6.100"]
+[White "Raina, Samay"]
+[Black "Kulkarni, Rakesh"]
+[Result "0-1"]
+[WhiteElo "850"]
+[BlackElo "1409.4"]
+[Variant "Standard"]
+[ECO "C33"]
+[Opening "King's Gambit Accepted: Bishop's Gambit, Boden Variation"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Raina, Samay - Kulkarni, Rakesh"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/shlhnXsy"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. e4 { [%clk 0:15:05] } 1... e5 { [%clk 0:14:58] } 2. f4 { [%clk 0:15:08] } 2... exf4 { [%clk 0:14:58] } 3. Bc4 { [%clk 0:15:11] } 3... Qh4+ { [%clk 0:14:51] } 4. Kf1 { [%clk 0:15:15] } 4... Nc6 { [%clk 0:14:22] } 5. Nf3 { [%clk 0:15:17] } 5... Qe7 { [%clk 0:14:14] } 6. Nc3 { [%clk 0:15:02] } 6... Nf6 { [%clk 0:14:12] } 7. d3 { [%clk 0:13:50] } 7... d6 { [%clk 0:14:09] } 8. Bxf4 { [%clk 0:13:34] } 8... Bg4 { [%clk 0:14:08] } 9. Qd2 { [%clk 0:11:52] } 9... Bxf3 { [%clk 0:13:36] } 10. gxf3 { [%clk 0:11:53] } 10... Nd4 { [%clk 0:13:28] } 11. Nd5 { [%clk 0:11:33] } 11... Nxd5 { [%clk 0:13:23] } 12. exd5 { [%clk 0:11:36] } 12... Nxf3 { [%clk 0:13:13] } 13. Qf2 { [%clk 0:11:36] } 13... Ne5 { [%clk 0:13:04] } 14. Bxe5 { [%clk 0:11:37] } 14... dxe5 { [%clk 0:13:05] } 15. Bb5+ { [%clk 0:11:32] } 15... Kd8 { [%clk 0:13:03] } 16. d4 { [%clk 0:11:03] } 16... a6 { [%clk 0:12:51] } 17. Ba4 { [%clk 0:10:37] } 17... b5 { [%clk 0:12:48] } 18. Bb3 { [%clk 0:10:40] } 18... exd4 { [%clk 0:12:41] } 19. Re1 { [%clk 0:10:32] } 19... Qc5 { [%clk 0:12:37] } 20. c3 { [%clk 0:08:58] } 20... dxc3 { [%clk 0:12:31] } 21. Qxc5 { [%clk 0:07:08] } 21... Bxc5 { [%clk 0:12:28] } 22. bxc3 { [%clk 0:07:11] } 22... f6 { [%clk 0:12:16] } 23. Re6 { [%clk 0:06:54] } 23... Re8 { [%clk 0:12:01] } 24. Kg2 { [%clk 0:06:44] } 24... Rxe6 { [%clk 0:12:02] } 25. dxe6 { [%clk 0:06:47] } 25... Ke7 { [%clk 0:12:03] } 26. Rd1 { [%clk 0:06:50] } 26... Rd8 { [%clk 0:12:02] } 27. Rxd8 { [%clk 0:06:46] } 27... Kxd8 { [%clk 0:12:04] } 28. a4 { [%clk 0:06:46] } 28... bxa4 { [%clk 0:12:01] } 29. Bxa4 { [%clk 0:06:48] } 29... Ke7 { [%clk 0:12:03] } 30. Bd7 { [%clk 0:06:26] } 30... Kd6 { [%clk 0:12:00] } 31. Kf3 { [%clk 0:06:21] } 31... c6 { [%clk 0:11:51] } 32. Ke4 { [%clk 0:06:09] } 32... a5 { [%clk 0:11:50] } 33. Kd3 { [%clk 0:06:08] } 33... a4 { [%clk 0:11:51] } 34. Kc2 { [%clk 0:05:14] } 34... f5 { [%clk 0:11:49] } 35. Bc8 { [%clk 0:05:07] } 35... f4 { [%clk 0:11:47] } 36. e7 { [%clk 0:05:01] } 36... Kxe7 { [%clk 0:11:47] } 37. Bg4 { [%clk 0:05:01] } 37... g6 { [%clk 0:11:43] } 38. h4 { [%clk 0:05:04] } 38... h5 { [%clk 0:11:43] } 39. Bf3 { [%clk 0:05:06] } 39... Kd6 { [%clk 0:11:40] } 40. c4 { [%clk 0:05:08] } 40... Bf2 { [%clk 0:11:30] } 41. Kc3 { [%clk 0:05:00] } 41... Bxh4 { [%clk 0:11:28] } 42. Kb4 { [%clk 0:05:01] } 42... Bg3 { [%clk 0:11:24] } 43. Kxa4 { [%clk 0:04:51] } 43... h4 { [%clk 0:11:13] } 44. Kb3 { [%clk 0:04:53] } 44... h3 { [%clk 0:11:09] } 45. Kc3 { [%clk 0:04:53] } 45... g5 { [%clk 0:11:08] } 46. Bh1 { [%clk 0:04:53] } 46... g4 { [%clk 0:11:06] } 47. Kd4 { [%clk 0:04:53] } 47... Bf2+ { [%clk 0:10:57] } 48. Ke4 { [%clk 0:04:54] } 48... g3 { [%clk 0:10:55] } 49. Kf3 { [%clk 0:04:50] } 49... g2 { [%clk 0:10:44] } 50. Bxg2 { [%clk 0:04:51] } 50... hxg2 { [%clk 0:10:45] } 51. Kxf2 { [%clk 0:04:54] } 51... Kc5 { [%clk 0:10:43] } 52. Kxg2 { [%clk 0:04:58] } 52... Kxc4 { [%clk 0:10:45] } 53. Kf3 { [%clk 0:05:02] } 53... Kd3 { [%clk 0:10:47] } 54. Kxf4 { [%clk 0:05:06] } 54... c5 { [%clk 0:10:49] } 55. Kf3 { [%clk 0:05:09] } 55... c4 { [%clk 0:10:50] } 56. Kf2 { [%clk 0:05:13] } 56... Kd2 { [%clk 0:10:52] } 57. Kf3 { [%clk 0:05:16] } 57... c3 { [%clk 0:10:54] } 58. Ke4 { [%clk 0:05:21] } 58... c2 { White Resigned } { [%clk 0:10:57] } 0-1
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "6.115"]
+[White "Menon, Sarath"]
+[Black "Kalyan Rath, Biswa"]
+[Result "1/2-1/2"]
+[WhiteElo "840"]
+[BlackElo "970"]
+[Variant "Standard"]
+[ECO "D06"]
+[Opening "Queen's Gambit Declined: Marshall Defense"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Menon, Sarath - Kalyan Rath, Biswa"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/gPvXpgWw"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. d4 { [%clk 0:15:05] } 1... d5 { [%clk 0:15:01] } 2. c4 { [%clk 0:15:08] } 2... Nf6 { [%clk 0:15:00] } 3. Nc3 { [%clk 0:15:05] } 3... Bf5 { [%clk 0:14:52] } 4. c5 { [%clk 0:14:48] } 4... e6 { [%clk 0:14:47] } 5. Nf3 { [%clk 0:14:39] } 5... h6 { [%clk 0:14:48] } 6. h3 { [%clk 0:14:31] } 6... Be7 { [%clk 0:14:49] } 7. Bf4 { [%clk 0:14:32] } 7... O-O { [%clk 0:14:48] } 8. Nb5 { [%clk 0:14:05] } 8... Na6 { [%clk 0:14:22] } 9. a3 { [%clk 0:13:52] } 9... c6 { [%clk 0:14:19] } 10. Nd6 { [%clk 0:13:25] } 10... Bxd6 { [%clk 0:13:32] } 11. Bxd6 { [%clk 0:13:20] } 11... Re8 { [%clk 0:13:29] } 12. e3 { [%clk 0:13:16] } 12... Ne4 { [%clk 0:12:48] } 13. Bh2 { [%clk 0:12:04] } 13... Nc7 { [%clk 0:12:18] } 14. Bd3 { [%clk 0:11:32] } 14... b6 { [%clk 0:11:09] } 15. Rc1 { [%clk 0:10:53] } 15... bxc5 { [%clk 0:10:44] } 16. dxc5 { [%clk 0:10:53] } 16... Qe7 { [%clk 0:09:50] } 17. Bd6 { [%clk 0:10:44] } 17... Nxd6 { [%clk 0:09:37] } 18. cxd6 { [%clk 0:10:41] } 18... Qxd6 { [%clk 0:09:36] } 19. Nd4 { [%clk 0:10:17] } 19... Bxd3 { [%clk 0:08:34] } 20. Rxc6 { [%clk 0:09:46] } 20... Qd7 { [%clk 0:07:37] } 21. Qxd3 { [%clk 0:09:25] } 21... e5 { [%clk 0:06:32] } 22. Qf5 { [%clk 0:09:24] } 22... Ne6 { [%clk 0:05:58] } 23. Nxe6 { [%clk 0:06:07] } 23... fxe6 { [%clk 0:05:37] } 24. Qc2 { [%clk 0:05:54] } 24... Rac8 { [%clk 0:05:25] } 25. Rxc8 { [%clk 0:05:42] } 25... Rxc8 { [%clk 0:05:28] } 26. Qd2 { [%clk 0:05:28] } 26... Qb5 { [%clk 0:05:02] } 27. f3 { [%clk 0:05:00] } 27... Qc4 { [%clk 0:04:06] } 28. Kf2 { [%clk 0:04:53] } 28... d4 { [%clk 0:03:08] } 29. exd4 { [%clk 0:04:37] } 29... Qxd4+ { [%clk 0:03:05] } 30. Qxd4 { [%clk 0:04:37] } 30... exd4 { [%clk 0:03:09] } 31. b4 { [%clk 0:04:04] } 31... Kf7 { [%clk 0:02:53] } 32. Ke2 { [%clk 0:03:42] } 32... e5 { [%clk 0:02:51] } 33. Kd3 { [%clk 0:03:44] } 33... Ke6 { [%clk 0:02:53] } 34. f4 { [%clk 0:03:38] } 34... Rc3+ { [%clk 0:02:26] } 35. Kd2 { [%clk 0:03:33] } 35... Rxa3 { [%clk 0:02:21] } 36. fxe5 { [%clk 0:03:34] } 36... Kxe5 { [%clk 0:02:21] } 37. Re1+ { [%clk 0:03:38] } 37... Re3 { [%clk 0:01:49] } 38. Rxe3+ { [%clk 0:03:31] } 38... dxe3+ { [%clk 0:01:52] } 39. Kxe3 { [%clk 0:03:34] } 39... Kd5 { [%clk 0:01:55] } 40. Kd3 { [%clk 0:03:37] } 40... Kc6 { [%clk 0:01:42] } 41. Kc4 { [%clk 0:03:33] } 41... g5 { [%clk 0:01:37] } 42. g3 { [%clk 0:03:29] } 42... a6 { [%clk 0:01:32] } 43. g4 { [%clk 0:03:27] } 43... Kb6 { [%clk 0:01:18] } 44. Kb3 { [%clk 0:03:21] } 44... Kb5 { [%clk 0:01:14] } 45. Kc3 { [%clk 0:03:24] } 45... Kc6 { [%clk 0:00:49] } 46. Kc4 { [%clk 0:03:24] } 46... Kb6 { [%clk 0:00:50] } 47. Kc3 { [%clk 0:02:34] } 47... Kb5 { [%clk 0:00:44] } 48. Kb3 { [%clk 0:02:34] } 48... Kc6 { Black offered a draw. } { [%clk 0:00:28] } 49. Ka4 { [%clk 0:02:07] } 49... Kb6 { [%clk 0:00:26] } 50. Kb3 { [%clk 0:02:10] } 50... Kb5 { [%clk 0:00:21] } 51. Kc3 { [%clk 0:02:12] } 51... Kb6 { [%clk 0:00:13] } 52. Kc4 { [%clk 0:02:12] } 52... Kc6 { [%clk 0:00:14] } 53. Kc3 { [%clk 0:02:11] } 53... Kb5 { [%clk 0:00:17] } 54. Kb3 { [%clk 0:02:13] } 54... Kc6 { [%clk 0:00:20] } 55. Kc4 { Draw by Repetition } { [%clk 0:01:47] } 1/2-1/2
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "7.109"]
+[White "Kalyan Rath, Biswa"]
+[Black "Raina, Samay"]
+[Result "0-1"]
+[WhiteElo "970"]
+[BlackElo "850"]
+[Variant "Standard"]
+[ECO "B30"]
+[Opening "Sicilian Defense: Old Sicilian"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Kalyan Rath, Biswa - Raina, Samay"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/TA0LQmz4"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. e4 { [%clk 0:15:05] } 1... c5 { [%clk 0:15:03] } 2. Nf3 { [%clk 0:15:01] } 2... Nc6 { [%clk 0:15:06] } 3. Be2 { [%clk 0:14:55] } 3... e6 { [%clk 0:15:00] } 4. c3 { [%clk 0:13:59] } 4... d5 { [%clk 0:15:00] } 5. e5 { [%clk 0:13:53] } 5... Nge7 { [%clk 0:14:48] } 6. O-O { [%clk 0:13:52] } 6... Ng6 { [%clk 0:14:51] } 7. d4 { [%clk 0:13:45] } 7... cxd4 { [%clk 0:14:46] } 8. cxd4 { [%clk 0:13:41] } 8... Be7 { [%clk 0:14:21] } 9. Nc3 { [%clk 0:13:11] } 9... O-O { [%clk 0:13:26] } 10. Be3 { [%clk 0:13:08] } 10... f6 { [%clk 0:13:14] } 11. Qb3 { [%clk 0:11:34] } 11... fxe5 { [%clk 0:12:39] } 12. dxe5 { [%clk 0:11:06] } 12... Ngxe5 { [%clk 0:12:11] } 13. Nxe5 { [%clk 0:10:45] } 13... Nxe5 { [%clk 0:11:57] } 14. Rad1 { [%clk 0:09:39] } 14... Ng6 { [%clk 0:07:35] } 15. Bg4 { [%clk 0:08:55] } (15. Nxd5 exd5 16. Rxd5 { [%cal Gd8e8,Ge8f7] }) 15... Qe8 { [%clk 0:05:10] } 16. Rfe1 { [%clk 0:07:38] } 16... Ne5 { [%clk 0:05:06] } 17. Bh3 { [%clk 0:06:53] } 17... Qg6 { [%clk 0:04:50] } 18. Nxd5 { [%clk 0:05:45] } 18... Nf3+ { [%clk 0:03:53] } 19. Kh1 { [%clk 0:05:26] } 19... exd5 { [%clk 0:03:42] } 20. Rxd5 { [%clk 0:04:02] } 20... Kh8 { [%clk 0:01:54] } 21. Bxc8 { [%clk 0:03:29] } 21... Nxe1 { [%clk 0:01:53] } 22. Bh3 { [%clk 0:02:20] } 22... Rac8 { [%clk 0:00:50] } 23. g3 { [%clk 0:01:39] } 23... Qe4+ { [%clk 0:00:38] } 24. Kg1 { [%clk 0:01:21] } 24... Nf3+ { [%clk 0:00:42] } 25. Kf1 { [%clk 0:01:02] } 25... Nxh2+ { [%clk 0:00:42] } 26. Ke2 { [%clk 0:00:35] } 26... Rc2+ { [%clk 0:00:39] } 27. Kd1 { [%clk 0:00:23] } 27... Rc6 { [%clk 0:00:11] } 28. Rd4 { [%clk 0:00:14] } 28... Qh1+ { [%clk 0:00:10] } 29. Ke2 { [%clk 0:00:13] } 29... Rcf6 { [%clk 0:00:09] } 30. Kd3 { [%clk 0:00:14] } 30... Qc6 { [%clk 0:00:09] } 31. Rc4 { [%clk 0:00:11] } 31... Qd6+ { [%clk 0:00:10] } 32. Rd4 { [%clk 0:00:13] } 32... Qa6+ { [%clk 0:00:12] } 33. Kd2 { [%clk 0:00:14] } 33... Rb6 { [%clk 0:00:10] } 34. Qd3 { [%clk 0:00:13] } 34... Rxb2+ { [%clk 0:00:13] } 35. Kd1 { [%clk 0:00:12] } 35... Qxd3+ { [%clk 0:00:12] } 36. Rxd3 { [%clk 0:00:15] } 36... Rxa2 { [%clk 0:00:10] } 37. Rd7 { [%clk 0:00:12] } 37... Rd8 { [%clk 0:00:12] } 38. Rxd8+ { [%clk 0:00:13] } 38... Bxd8 { [%clk 0:00:16] } 39. Ke1 { [%clk 0:00:12] } 39... Nf3+ { [%clk 0:00:19] } 40. Kf1 { [%clk 0:00:13] } 40... a5 { [%clk 0:00:19] } 41. Kg2 { [%clk 0:00:15] } 41... Ne5 { [%clk 0:00:21] } 42. Be6 { [%clk 0:00:13] } 42... Rb2 { [%clk 0:00:14] } 43. Bd4 { [%clk 0:00:15] } 43... Rb5 { [%clk 0:00:18] } 44. Be3 { [%clk 0:00:12] } 44... a4 { [%clk 0:00:15] } 45. f4 { [%clk 0:00:09] } 45... Nc6 { [%clk 0:00:09] } 46. Bd7 { [%clk 0:00:12] } 46... Rb2+ { [%clk 0:00:12] } 47. Kf3 { [%clk 0:00:14] } 47... a3 { [%clk 0:00:15] } 48. Bc1 { [%clk 0:00:13] } 48... Rb3+ { [%clk 0:00:17] } 49. Kg4 { [%clk 0:00:11] } 49... a2 { [%clk 0:00:21] } 50. Be6 { [%clk 0:00:06] } 50... Rb1 { [%clk 0:00:22] } 51. Bxa2 { [%clk 0:00:06] } 51... Rxc1 { White Resigned } { [%clk 0:00:26] } 0-1
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "8.96"]
+[White "P S, Satish"]
+[Black "Raina, Samay"]
+[Result "1-0"]
+[WhiteElo "1473"]
+[BlackElo "850"]
+[Variant "Standard"]
+[ECO "A52"]
+[Opening "Indian Defense: Budapest Defense, Adler Variation"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "P S, Satish - Raina, Samay"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/SqwtW48e"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. d4 { [%clk 0:15:05] } 1... Nf6 { [%clk 0:14:55] } 2. c4 { [%clk 0:15:06] } 2... e5 { [%clk 0:14:59] } 3. dxe5 { [%clk 0:14:30] } 3... Ng4 { [%clk 0:15:01] } 4. Nf3 { [%clk 0:14:30] } 4... Nc6 { [%clk 0:15:05] } 5. Bf4 { [%clk 0:14:06] } 5... Bb4+ { [%clk 0:15:06] } 6. Nc3 { [%clk 0:13:58] } 6... Qe7 { [%clk 0:14:51] } 7. Bd2 { [%clk 0:11:32] } 7... Ngxe5 { [%clk 0:14:24] } 8. e3 { [%clk 0:11:32] } 8... Bxc3 { [%clk 0:14:13] } 9. Bxc3 { [%clk 0:11:34] } 9... d6 { [%clk 0:14:13] } 10. Be2 { [%clk 0:11:34] } 10... O-O { [%clk 0:14:14] } 11. O-O { [%clk 0:11:35] } 11... Be6 { [%clk 0:14:06] } 12. b3 { [%clk 0:11:36] } 12... Rad8 { [%clk 0:14:06] } 13. Qc2 { [%clk 0:11:18] } 13... Bg4 { [%clk 0:11:49] } 14. Nd4 { [%clk 0:10:59] } 14... Bxe2 { [%clk 0:11:45] } 15. Nxe2 { [%clk 0:10:23] } 15... d5 { [%clk 0:11:34] } 16. Bb2 { [%clk 0:07:15] } 16... dxc4 { [%clk 0:11:30] } 17. bxc4 { [%clk 0:07:16] } 17... Nb4 { [%clk 0:10:18] } 18. Qc3 { [%clk 0:00:38] } 18... Ned3 { [%clk 0:10:12] } 19. Qxg7# { 1-0 White wins by checkmate. } { [%clk 0:00:40] } 1-0
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "8.112"]
+[White "Das, Nirmal"]
+[Black "Kalyan Rath, Biswa"]
+[Result "0-1"]
+[WhiteElo "905"]
+[BlackElo "970"]
+[Termination "time forfeit"]
+[Variant "Standard"]
+[ECO "C50"]
+[Opening "Italian Game: Giuoco Piano"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Das, Nirmal - Kalyan Rath, Biswa"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/wUlE9BHP"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. e4 { [%clk 0:15:05] } 1... e5 { [%clk 0:15:02] } 2. Nf3 { [%clk 0:15:01] } 2... Nc6 { [%clk 0:15:05] } 3. Bc4 { [%clk 0:15:00] } 3... Bc5 { [%clk 0:15:05] } 4. O-O { [%clk 0:14:58] } 4... Nf6 { [%clk 0:15:07] } 5. d3 { [%clk 0:14:53] } 5... h6 { [%clk 0:15:09] } 6. h3 { [%clk 0:14:45] } 6... O-O { [%clk 0:15:11] } 7. a3 { [%clk 0:14:45] } 7... a6 { [%clk 0:15:14] } 8. b4 { [%clk 0:14:45] } 8... Ba7 { [%clk 0:15:16] } 9. Be3 { [%clk 0:14:22] } 9... Bxe3 { [%clk 0:15:17] } 10. fxe3 { [%clk 0:14:23] } 10... d6 { [%clk 0:15:17] } 11. c3 { [%clk 0:13:59] } 11... Ne7 { [%clk 0:15:15] } 12. d4 { [%clk 0:13:40] } 12... Ng6 { [%clk 0:15:06] } 13. d5 { [%clk 0:13:23] } 13... Nxe4 { [%clk 0:14:47] } 14. Bd3 { [%clk 0:12:17] } 14... Ng3 { [%clk 0:13:59] } 15. Rf2 { [%clk 0:11:41] } 15... e4 { [%clk 0:14:01] } 16. Bxe4 { [%clk 0:10:11] } 16... Nxe4 { [%clk 0:14:02] } 17. Qd4 { [%clk 0:09:13] } 17... Nxf2 { [%clk 0:13:46] } 18. Kxf2 { [%clk 0:09:09] } 18... Bf5 { [%clk 0:12:06] } 19. Nbd2 { [%clk 0:08:38] } 19... f6 { [%clk 0:11:46] } 20. e4 { [%clk 0:08:27] } 20... Bd7 { [%clk 0:11:33] } 21. Re1 { [%clk 0:08:12] } 21... Ne5 { [%clk 0:11:34] } 22. c4 { [%clk 0:07:08] } 22... b5 { [%clk 0:09:30] } 23. c5 { [%clk 0:06:43] } 23... a5 { [%clk 0:09:22] } 24. c6 { [%clk 0:06:29] } 24... Bc8 { [%clk 0:09:19] } 25. Re3 { [%clk 0:05:19] } 25... axb4 { [%clk 0:09:08] } 26. Qxb4 { [%clk 0:04:45] } 26... Ba6 { [%clk 0:08:14] } 27. a4 { [%clk 0:04:16] } 27... bxa4 { [%clk 0:08:05] } 28. Qxa4 { [%clk 0:04:18] } 28... Be2 { [%clk 0:07:23] } 29. Qd4 { [%clk 0:03:39] } 29... Bxf3 { [%clk 0:07:21] } 30. Nxf3 { [%clk 0:03:32] } 30... Qb8 { [%clk 0:07:15] } 31. Re2 { [%clk 0:03:16] } 31... Qb3 { [%clk 0:06:43] } 32. Nd2 { [%clk 0:02:46] } 32... Qb6 { [%clk 0:05:43] } 33. Qxb6 { [%clk 0:02:27] } 33... cxb6 { [%clk 0:05:46] } 34. g4 { [%clk 0:02:25] } 34... b5 { [%clk 0:05:03] } 35. Nb3 { [%clk 0:01:56] } 35... Ra3 { [%clk 0:04:54] } 36. Re3 { [%clk 0:01:46] } 36... Ra2+ { [%clk 0:04:41] } 37. Ke1 { [%clk 0:01:35] } 37... Rfa8 { [%clk 0:04:38] } 38. c7 { [%clk 0:01:29] } 38... Nc4 { [%clk 0:04:20] } 39. Rf3 { [%clk 0:01:12] } 39... Kf7 { [%clk 0:04:09] } 40. Rf2 { [%clk 0:01:12] } 40... Rxf2 { [%clk 0:04:06] } 41. Kxf2 { [%clk 0:01:14] } 41... Rc8 { [%clk 0:04:00] } 42. Ke2 { [%clk 0:01:04] } 42... Rxc7 { [%clk 0:04:03] } 43. Kd3 { [%clk 0:01:06] } 43... Ra7 { [%clk 0:03:58] } 44. Nd4 { [%clk 0:01:06] } 44... Ne5+ { [%clk 0:03:40] } 45. Kc3 { [%clk 0:01:04] } 45... Ra3+ { [%clk 0:03:12] } 46. Kb4 { [%clk 0:01:04] } 46... Ra4+ { [%clk 0:03:04] } 47. Kc3 { [%clk 0:00:44] } 47... b4+ { [%clk 0:03:05] } 48. Kb3 { [%clk 0:00:45] } 48... Ra3+ { [%clk 0:02:57] } 49. Kxb4 { [%clk 0:00:47] } 49... Rxh3 { [%clk 0:02:59] } 50. Nf5 { [%clk 0:00:42] } 50... Nxg4 { [%clk 0:02:34] } 51. Nxd6+ { [%clk 0:00:42] } 51... Ke7 { [%clk 0:02:35] } 52. Nf5+ { [%clk 0:00:44] } 52... Kf7 { [%clk 0:02:32] } 53. d6 { [%clk 0:00:44] } 53... Ne5 { [%clk 0:02:31] } 54. Kc5 { [%clk 0:00:44] } 54... Rd3 { [%clk 0:02:18] } 55. Nd4 { [%clk 0:00:33] } 55... h5 { [%clk 0:02:18] } 56. Ne2 { [%clk 0:00:15] } 56... h4 { [%clk 0:02:18] } 57. Nf4 { [%clk 0:00:15] } 57... Rd1 { White Loss on Time } { [%clk 0:02:12] } 0-1
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "9.104"]
+[White "Kalyan Rath, Biswa"]
+[Black "Kulkarni, Rakesh"]
+[Result "*"]
+[WhiteElo "970"]
+[BlackElo "1409.4"]
+[Variant "Standard"]
+[ECO "B00"]
+[Opening "King's Pawn Game"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Kalyan Rath, Biswa - Kulkarni, Rakesh"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/sBiMNdyd"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+{ Clock started by Arbiter. }
+1. e4 { [%clk 0:15:02] } *
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "9.105"]
+[White "Raina, Samay"]
+[Black "Ganesh, Rai"]
+[Result "0-1"]
+[WhiteElo "850"]
+[BlackElo "1211"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Advance Variation, Short Variation"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Raina, Samay - Ganesh, Rai"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/pTmOYDr7"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. e4 { [%eval 0.24] [%clk 0:15:05] } 1... c6 { [%eval 0.13] [%clk 0:14:57] } 2. d4 { [%eval 0.17] [%clk 0:15:08] } 2... d5 { [%eval 0.25] [%clk 0:15:00] } 3. e5 { [%eval 0.23] [%clk 0:15:13] } 3... Bf5 { [%eval 0.21] [%clk 0:15:03] } 4. Nf3 { [%eval 0.36] [%clk 0:15:10] } 4... e6 { [%eval 0.24] [%clk 0:15:00] } 5. Bd3 { [%eval 0.0] [%clk 0:15:13] } 5... Ne7 { [%eval 0.02] [%clk 0:15:02] } 6. Bg5 { [%eval -0.35] [%clk 0:15:12] } 6... Bxd3 { [%eval -0.21] [%clk 0:14:57] } 7. Qxd3 { [%eval -0.03] [%clk 0:15:12] } 7... h6 { [%eval 0.0] [%clk 0:15:00] } 8. Bh4?! { [%eval -1.0] } { Inaccuracy. Be3 was best. } { [%clk 0:15:15] } (8. Be3 Nf5 9. O-O Be7 10. a3 Qb6 11. Nc3 Qa6 12. Qxa6 Nxa6) 8... Qb6 { [%eval -0.6] [%clk 0:14:59] } 9. Bxe7 { [%eval -0.86] [%clk 0:14:58] } 9... Bxe7 { [%eval -0.7] [%clk 0:14:19] } 10. Nc3? { [%eval -1.93] } { Mistake. Nbd2 was best. } { [%clk 0:14:10] } (10. Nbd2 O-O 11. O-O c5 12. dxc5 Bxc5 13. Nb3 Rc8 14. c3 a5 15. Nxc5 Rxc5 16. Rab1 Rc4) 10... Qxb2 { [%eval -1.86] [%clk 0:13:17] } 11. O-O { [%eval -1.79] [%clk 0:14:10] } 11... Qa3 { [%eval -2.1] [%clk 0:11:43] } 12. Rab1 { [%eval -2.64] [%clk 0:13:35] } 12... b5 { [%eval -2.25] [%clk 0:11:15] } 13. Rb3 { [%eval -2.52] [%clk 0:13:01] } 13... Qa6 { [%eval -2.55] [%clk 0:11:01] } 14. Nd2?! { [%eval -3.41] } { Inaccuracy. a3 was best. } { [%clk 0:10:55] } (14. a3 Qb6) 14... O-O { [%eval -2.87] [%clk 0:10:52] } 15. f4?! { [%eval -3.8] } { Inaccuracy. a3 was best. } { [%clk 0:10:55] } (15. a3 c5 16. dxc5 Nd7 17. Qxb5 Qxb5 18. Nxb5 Bxc5 19. Re1 a6 20. Nc3 Rac8 21. Na4 Be7) 15... b4 { [%eval -3.84] [%clk 0:09:22] } 16. Qxa6 { [%eval -3.89] [%clk 0:10:49] } 16... Nxa6 { [%eval -3.76] [%clk 0:09:24] } 17. Na4?! { [%eval -4.99] } { Inaccuracy. Ne2 was best. } { [%clk 0:09:52] } (17. Ne2 c5 18. Rbf3 cxd4 19. Nxd4 Bc5 20. Nb3 Bb6 21. Kh1 Nc5 22. Nc6 Ne4 23. f5 Rfe8) 17... c5 { [%eval -5.06] [%clk 0:07:57] } 18. dxc5 { [%eval -4.63] [%clk 0:09:38] } 18... Nxc5 { [%eval -4.64] [%clk 0:07:58] } 19. Nxc5 { [%eval -5.25] [%clk 0:09:32] } 19... Bxc5+ { [%eval -5.1] [%clk 0:08:00] } 20. Kh1 { [%eval -5.01] [%clk 0:09:35] } 20... a5 { [%eval -4.92] [%clk 0:07:51] } 21. g4 { [%eval -6.01] [%clk 0:09:35] } 21... Rfc8 { [%eval -5.07] [%clk 0:07:31] } 22. f5 { [%eval -5.69] [%clk 0:08:46] } 22... Bd4 { [%eval -5.75] [%clk 0:07:16] } 23. Nf3 { [%eval -5.4] [%clk 0:08:24] } 23... Bc3 { [%eval -5.66] [%clk 0:07:07] } 24. h4 { [%eval -6.84] [%cal Gc8c4] [%clk 0:06:55] } 24... Rc4 { [%eval -6.61] [%csl Ge4][%cal Gc4e4] [%clk 0:06:56] } 25. g5 { [%eval -7.09] [%clk 0:06:44] } 25... h5 { [%eval -7.07] [%clk 0:06:41] } 26. a4 { [%eval -7.75] [%clk 0:05:30] } 26... exf5 { [%eval -7.97] [%clk 0:06:17] } 27. Kg2 { [%eval -8.12] [%clk 0:05:02] } 27... Re4 { [%eval -8.51] [%clk 0:06:01] } 28. Rbb1 { [%eval -8.0] [%clk 0:04:19] } 28... Bxe5 { [%eval -7.65] [%clk 0:05:48] } 29. Nxe5 { [%eval -7.97] [%clk 0:04:14] } 29... Rxe5 { [%eval -7.69] [%clk 0:05:50] } 30. Rbe1 { [%eval -7.58] [%clk 0:04:06] } 30... Rae8 { [%eval -8.06] [%clk 0:05:51] } 31. Rxe5 { [%eval -7.92] [%clk 0:04:03] } 31... Rxe5 { [%eval -8.29] [%clk 0:05:53] } 32. Kf3 { [%eval -9.13] [%clk 0:04:01] } 32... g6 { [%eval -8.45] [%clk 0:05:55] } 33. Rd1 { [%eval -8.65] [%clk 0:03:57] } 33... Re8?? { [%eval -3.36] } { Blunder. Kf8 was best. } { [%clk 0:05:14] } (33... Kf8) 34. Rxd5 { [%eval -3.15] [%clk 0:03:52] } 34... Ra8 { [%eval -3.34] [%clk 0:05:17] } 35. Kf4 { [%eval -4.15] [%clk 0:03:31] } 35... Ra6 { [%eval -3.47] [%clk 0:05:11] } 36. Rc5 { [%eval -3.55] [%clk 0:03:10] } 36... Kf8 { [%eval -3.53] [%clk 0:05:09] } 37. Ke5?! { [%eval -5.31] } { Inaccuracy. Re5 was best. } { [%clk 0:03:03] } (37. Re5 Rc6) 37... Re6+ { [%eval -3.95] [%clk 0:05:03] } 38. Kd5? { [%eval -7.45] } { Mistake. Kf4 was best. } { [%clk 0:03:07] } (38. Kf4 Re4+) 38... f4 { [%eval -7.07] [%clk 0:04:31] } 39. Rc4 { [%eval -7.28] [%clk 0:02:45] } 39... f3 { [%eval -7.48] [%clk 0:04:27] } 40. Rf4 { [%eval -7.55] [%clk 0:02:42] } 40... Re3 { [%eval -6.34] [%clk 0:04:27] } 41. Kc5 { [%eval -7.77] [%clk 0:02:38] } 41... Rc3+?! { [%eval -5.51] } { Inaccuracy. Re5+ was best. } { [%clk 0:04:27] } (41... Re5+) 42. Kb5 { [%eval -5.75] [%clk 0:02:41] } 42... Rxc2?? { [%eval -2.52] } { Blunder. f5 was best. } { [%clk 0:04:23] } (42... f5) 43. Rxf3 { [%eval -3.95] [%clk 0:02:43] } 43... Rc3 { [%eval -2.13] [%clk 0:04:23] } 44. Rf1 { [%eval -3.49] [%clk 0:02:34] } 44... Rh3?? { [%eval -0.3] } { Blunder. b3 was best. } { [%clk 0:03:49] } (44... b3) 45. Kxa5? { [%eval -1.35] } { Mistake. Rf4 was best. } { [%clk 0:02:17] } (45. Rf4 b3) 45... Rxh4 { [%eval -1.71] [%clk 0:03:50] } 46. Rb1 { [%eval -1.5] [%clk 0:02:14] } 46... Ke7 { [%eval -1.73] [%clk 0:03:27] } 47. Rxb4?? { [%eval -73.28] } { Blunder. Kb6 was best. } { [%clk 0:02:16] } (47. Kb6 f6) 47... Rxb4 { [%eval -71.82] [%clk 0:03:19] } 48. Kxb4 { [%eval -73.28] [%clk 0:02:20] } 48... h4 { [%eval -73.41] [%clk 0:03:13] } 49. a5?! { [%eval #-44] } { Checkmate is now unavoidable. Kc3 was best. } { [%clk 0:02:18] } (49. Kc3 h3) 49... h3 { [%eval -73.29] [%clk 0:03:17] } 50. a6 { [%eval #-32] [%clk 0:02:21] } 50... h2 { [%eval -74.02] [%clk 0:03:20] } 51. a7?! { [%eval #-16] } { Checkmate is now unavoidable. Kc5 was best. } { [%clk 0:02:24] } (51. Kc5 h1=Q) 51... h1=Q { [%eval #-15] [%clk 0:03:22] } 52. a8=N { [%eval #-11] [%clk 0:02:25] } 52... Qxa8 { [%eval #-11] } { White Resigned } { [%clk 0:03:24] } 0-1
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "11.107"]
+[White "Sriram, Aditya"]
+[Black "Raina, Samay"]
+[Result "1-0"]
+[WhiteElo "1082"]
+[BlackElo "850"]
+[Variant "Standard"]
+[ECO "B23"]
+[Opening "Sicilian Defense: Grand Prix Attack"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Sriram, Aditya - Raina, Samay"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/XPgGZ0JX"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. e4 { [%clk 0:15:05] } 1... c5 { [%clk 0:15:02] } 2. Nc3 { [%clk 0:15:06] } 2... Nc6 { [%clk 0:15:03] } 3. f4 { [%clk 0:15:06] } 3... e6 { [%clk 0:15:06] } 4. Nf3 { [%clk 0:15:07] } 4... d5 { [%clk 0:15:09] } 5. Bb5 { [%clk 0:15:09] } 5... Bd7 { [%clk 0:15:12] } 6. exd5 { [%clk 0:15:10] } 6... Nd4 { [%clk 0:15:13] } 7. Nxd4 { [%clk 0:14:53] } 7... cxd4 { [%clk 0:15:15] } 8. dxe6 { [%clk 0:13:42] } 8... Bxb5 { [%clk 0:14:58] } 9. exf7+ { [%clk 0:13:43] } 9... Kxf7 { [%clk 0:14:54] } 10. Nxb5 { [%clk 0:13:44] } 10... Qe8+ { [%clk 0:14:52] } 11. Qe2 { [%clk 0:13:44] } 11... Qc6 { [%clk 0:14:50] } 12. Nxd4 { [%clk 0:13:39] } 12... Qd5 { [%clk 0:14:48] } 13. Nf3 { [%clk 0:13:09] } 13... Re8 { [%clk 0:14:47] } 14. Ne5+ { [%clk 0:13:10] } 14... Ke7 { [%clk 0:14:46] } 15. c4 { [%clk 0:12:44] } 15... Qe6 { [%clk 0:14:39] } 16. d4 { [%clk 0:12:23] } 16... Nf6 { [%clk 0:14:23] } 17. b3 { [%clk 0:11:56] } 17... Nd7 { [%clk 0:13:42] } 18. O-O { [%clk 0:11:31] } 18... Nxe5 { [%clk 0:13:44] } 19. fxe5 { [%clk 0:11:28] } 19... Kd7 { [%clk 0:13:31] } 20. Qf2 { [%clk 0:11:11] } 20... Be7 { [%clk 0:13:12] } 21. Qf7 { [%clk 0:10:44] } 21... Qb6 { [%clk 0:13:01] } 22. Qd5+ { [%clk 0:10:37] } 22... Kc8 { [%clk 0:12:54] } 23. Be3 { [%clk 0:09:41] } 23... g5 { [%clk 0:12:33] } 24. e6 { [%clk 0:09:20] } 24... h5 { [%clk 0:11:29] } 25. c5 { [%clk 0:09:17] } 25... Qa6 { [%clk 0:10:47] } 26. Bxg5 { [%clk 0:09:03] } 26... Bxg5 { [%clk 0:10:48] } 27. Qxg5 { [%clk 0:09:06] } 27... Rxe6 { [%clk 0:10:35] } 28. Qf5 { [%clk 0:08:50] } 28... Re8 { [%clk 0:10:20] } 29. d5 { Black Resigned } { [%clk 0:08:52] } 1-0
+
+
+[Event "National Senior Open Online Chess Championship 2021 - Senior Open"]
+[Site "India"]
+[Date "2021.07.26"]
+[Round "10.108"]
+[White "Raina, Samay"]
+[Black "Satapathy, Akagat"]
+[Result "1/2-1/2"]
+[WhiteElo "850"]
+[BlackElo "1067"]
+[Variant "Standard"]
+[ECO "D38"]
+[Opening "Queen's Gambit Declined: Ragozin Defense"]
+[StudyName "Samay raina - AT NATIONAL OPEN"]
+[ChapterName "Raina, Samay - Satapathy, Akagat"]
+[ChapterURL "https://lichess.org/study/WfksZGOF/0iFpTNxj"]
+[Annotator "https://lichess.org/@/c4_slayer"]
+
+1. d4 { [%clk 0:15:05] } 1... d5 { [%clk 0:15:01] } 2. c4 { [%clk 0:15:09] } 2... e6 { [%clk 0:14:59] } 3. Nc3 { [%clk 0:15:12] } 3... Nf6 { [%clk 0:14:57] } 4. Nf3 { [%clk 0:15:15] } 4... Bb4 { [%clk 0:14:59] } 5. Bd2 { [%clk 0:15:16] } 5... dxc4 { [%clk 0:14:58] } 6. e3 { [%clk 0:15:08] } 6... O-O { [%clk 0:14:45] } 7. Bxc4 { [%clk 0:15:10] } 7... Nc6 { [%clk 0:14:37] } 8. O-O { [%clk 0:15:06] } 8... Bxc3 { [%clk 0:14:19] } 9. Bxc3 { [%clk 0:15:08] } 9... Ne4 { [%clk 0:14:20] } 10. Bd3 { [%clk 0:15:08] } 10... Nxc3 { [%clk 0:14:05] } 11. bxc3 { [%clk 0:15:11] } 11... Re8 { [%clk 0:14:04] } 12. h4 { [%clk 0:15:08] } 12... e5 { [%clk 0:14:02] } 13. Bxh7+ { [%clk 0:15:09] } 13... Kxh7 { [%clk 0:13:46] } 14. Ng5+ { [%clk 0:15:13] } 14... Kg8 { [%clk 0:13:43] } 15. Qh5 { [%clk 0:15:15] } 15... Be6 { [%clk 0:12:36] } (15... Qf6 16. Qh8+ (16. Qh7+ Kf8 17. d5 Ke7)) 16. d5 { [%clk 0:14:34] } (16. Qh7+ Kf8) 16... Qxd5 { [%clk 0:11:46] } 17. Rad1 { [%clk 0:14:33] } 17... Qe4 { [%clk 0:11:41] } 18. Rd7 { [%clk 0:14:30] } 18... Qg6 { [%clk 0:11:24] } 19. Qxg6 { [%clk 0:14:23] } 19... fxg6 { [%clk 0:11:24] } 20. Rxc7 { [%clk 0:13:55] } 20... Re7 { [%clk 0:10:01] } 21. Rxe7 { [%clk 0:13:54] } 21... Nxe7 { [%clk 0:10:03] } 22. Nxe6 { [%clk 0:13:58] } 22... Rc8 { [%clk 0:09:58] } 23. f4 { [%clk 0:13:45] } 23... Rxc3 { [%clk 0:09:53] } 24. fxe5 { [%clk 0:13:48] } 24... Rc8 { [%clk 0:08:32] } 25. g4 { [%clk 0:13:25] } 25... Nc6 { [%clk 0:08:34] } 26. Rc1 { [%clk 0:13:23] } 26... Re8 { [%clk 0:08:32] } 27. Nd4 { [%clk 0:13:21] } 27... Rxe5 { [%clk 0:08:24] } 28. Nxc6 { [%clk 0:13:24] } 28... bxc6 { [%clk 0:08:22] } 29. Rxc6 { [%clk 0:13:26] } 29... Rxe3 { [%clk 0:08:25] } 30. g5 { [%clk 0:13:06] } 30... Re4 { [%clk 0:08:19] } 31. Rc8+ { [%clk 0:13:00] } 31... Kh7 { [%clk 0:08:16] } 32. Rc7 { [%clk 0:12:56] } 32... Rxh4 { [%clk 0:08:17] } 33. Rxa7 { [%clk 0:12:57] } 33... Rg4+ { [%clk 0:08:20] } 34. Kf2 { [%clk 0:12:59] } 34... Rxg5 { [%clk 0:08:22] } 35. a4 { [%clk 0:13:03] } 35... Rf5+ { [%clk 0:08:25] } 36. Kg3 { [%clk 0:13:04] } 36... g5 { [%clk 0:08:07] } 37. Ra8 { [%clk 0:13:01] } 37... Rf4 { [%clk 0:08:02] } 38. a5 { [%clk 0:13:03] } 38... Ra4 { [%clk 0:07:58] } 39. a6 { [%clk 0:13:04] } 39... Kg6 { [%clk 0:07:57] } 40. a7 { [%clk 0:13:07] } 40... Ra3+ { [%clk 0:07:47] } 41. Kg4 { [%clk 0:13:09] } 41... Ra4+ { [%clk 0:07:50] } 42. Kf3 { [%clk 0:13:12] } 42... g4+ { [%clk 0:07:45] } 43. Kg3 { [%clk 0:13:03] } 43... Kg5 { [%clk 0:07:46] } 44. Kf2 { [%clk 0:13:00] } 44... Ra2+ { [%clk 0:07:34] } 45. Kg3 { [%clk 0:13:02] } 45... Ra3+ { [%clk 0:07:36] } 46. Kg2 { [%clk 0:13:01] } 46... Ra2+ { [%clk 0:06:48] } 47. Kg3 { [%clk 0:13:03] } 47... Ra3+ { [%clk 0:06:50] } 48. Kg2 { [%clk 0:12:37] } 48... Ra2+ { [%clk 0:06:42] } 49. Kg3 { Draw by Repetition } { [%clk 0:12:31] } 1/2-1/2
+
+

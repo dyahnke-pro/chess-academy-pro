@@ -1,0 +1,64 @@
+[Event "The Caro-Kann Defense [GothamChess]: The Caro-Kann Defense"]
+[Date "2023.02.04"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense"]
+[StudyName "The Caro-Kann Defense [GothamChess]"]
+[ChapterName "The Caro-Kann Defense"]
+[ChapterURL "https://lichess.org/study/HnDkcRZY/IvPRgd1F"]
+[Annotator "https://lichess.org/@/sensitize"]
+[UTCDate "2023.02.04"]
+[UTCTime "17:05:59"]
+
+1. e4 c6 2. d4 d5 { Three options for white: push it, take on d5, or defend it (or forget it hehe) } { [%csl Ge4][%cal Ge4e5,Ge4d5] } *
+
+
+[Event "The Caro-Kann Defense [GothamChess]: Caro-Kann Defense: Exchange Variation"]
+[Date "2023.02.04"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B13"]
+[Opening "Caro-Kann Defense: Exchange Variation"]
+[StudyName "The Caro-Kann Defense [GothamChess]"]
+[ChapterName "Caro-Kann Defense: Exchange Variation"]
+[ChapterURL "https://lichess.org/study/HnDkcRZY/ubgHd27y"]
+[Annotator "https://lichess.org/@/sensitize"]
+[UTCDate "2023.02.04"]
+[UTCTime "17:09:05"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 { Start of the Exchange Variation } { [%cal Gc2c4,Gg1f3] } 4. Nf3 { [%csl Rc8][%cal Gb8c6,Gg8f6,Rc8f5,Rf5g4,Bf1b5,Bb5e8,Bc8d7,Ye7e6,Yf8d6,Ye8g8] } (4. c4 Nf6 { [%csl Ge6][%cal Ge7e6] } 5. Nf3 e6 { [%csl Ge6][%cal Gc8b7] } 6. Nc3 Be7 7. Be2 O-O (7... dxc4 8. Bxc4 { Wins a tempo } 8... O-O { [%cal Gc8b7,Gb7b6] }) 8. O-O { [%cal Gb7b6,Gc8b7] }) 4... Nc6 5. Nc3 Nf6 6. Be2 Bf5 { g4 is not a good move right now, because there is no pin on the queen } { [%csl Gg4,Ge2][%cal Gf5g4,Gg4d1] } 7. O-O e6 8. Bf4 { [%cal Gf8e7,Ge7d6] } 8... Be7 9. Re1 O-O { [%csl Re4][%cal Ga8c8,Ga7a6,Gb7b5,Rf6e4] } *
+
+
+[Event "The Caro-Kann Defense [GothamChess]: Caro-Kann Defense: Classical Variation, Fantasy, and the Blackmar-Diemer Gambit"]
+[Date "2023.02.04"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B18"]
+[Opening "Caro-Kann Defense: Classical Variation, Main Line"]
+[StudyName "The Caro-Kann Defense [GothamChess]"]
+[ChapterName "Caro-Kann Defense: Classical Variation, Fantasy, and the Blackmar-Diemer Gambit"]
+[ChapterURL "https://lichess.org/study/HnDkcRZY/Ug19Ulnp"]
+[Annotator "https://lichess.org/@/sensitize"]
+[UTCDate "2023.02.04"]
+[UTCTime "17:16:04"]
+
+1. e4 c6 2. d4 (2. Nf3 d5 { [%cal Ge4e5,Ge4d5] } 3. Nc3 dxe4 4. Nxe4 { Game plan is same as the Classical Variation } { [%cal Gg8f6,Gc8f5] }) 2... d5 3. Nc3 (3. Nd2 { [%cal Gg8f6,Gc8f5,Ge7e6] }) (3. f3 { Fantasy Variation } 3... g6 { [%cal Gf8g7] } (3... dxe4 4. fxe4 e5 5. dxe5? Qh4+! { [%cal Gh4e1,Gh4e4] }) (3... e6) 4. Be3 Bg7 5. Nc3 { [%cal Gd5e4,Gg8f6] }) 3... dxe4! { You always take here! } 4. Nxe4 (4. f3 { [%cal Ge4f3,Gd1f3] } 4... e3 5. Bxe3 { [%csl Gf3][%cal Gg8f6,Gc8f5] }) 4... Bf5 (4... Nf6 { [%csl Gf6,Ge4] } 5. Ng3 { [%cal Gg7g6,Gf8g7,Rc8g4,Bh7h5,Bh5h4] } (5. Nxf6+ { [%csl Gf6][%cal Ge7f6,Gg7f6] } 5... exf6 { Tartakower Variation } { [%csl Gf6,Gf7][%cal Gf8d6,Ge8g8,Gf6g5] } (5... gxf6 { Bronstein-Larsen Variation } { [%cal Gh8g8,Gg8g2,Rd8c7,Rc8f5,Rb8d7,Be8c8] }))) 5. Ng3 Bg6 6. h4 { [%cal Gh4h5] } 6... h6 { [%cal Gg6h7] } *
+
+
+[Event "The Caro-Kann Defense [GothamChess]: Caro-Kann Defense: Advanced Variation"]
+[Date "2023.02.04"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Advance Variation, Short Variation"]
+[StudyName "The Caro-Kann Defense [GothamChess]"]
+[ChapterName "Caro-Kann Defense: Advanced Variation"]
+[ChapterURL "https://lichess.org/study/HnDkcRZY/rfobBqxC"]
+[Annotator "https://lichess.org/@/sensitize"]
+[UTCDate "2023.02.04"]
+[UTCTime "17:25:51"]
+
+1. e4 c6 2. d4 d5 3. e5 Bf5 { [%csl Gf5][%cal Gc6c5,Ge7e6] } (3... c5 { [%cal Gc5d4,Gd4c5] } 4. c3 (4. dxc5 Nc6 { [%cal Gf2f4,Rg1f3,Rc8g4,Bc8f5,Be7e6,Bf8c5] }) 4... Nc6 { [%csl Gf5,Gg4][%cal Gc8f5,Gf5g4,Gg1f3] } 5. Nf3 Bg4 { [%cal Ge7e6,Rc5d4,Rc3d4] } 6. Be2 Bxf3 7. Bxf3 { [%cal Gf3d4] } 7... cxd4 8. cxd4 { [%csl Gd4] } 8... e6 { [%cal Gg8e7,Ge7f5,Ge7g6] }) 4. Nf3 { Short Variation } { [%cal Gf1e2,Ge1g1] } (4. Nc3 { Be careful not to get your bishop trapped } { [%cal Gg2g4,Gh2h3] }) (4. h4 { Tal Variation } 4... h5 (4... e6?? 5. g4 Be4 6. f3 Bg6 7. h5)) *
+
+

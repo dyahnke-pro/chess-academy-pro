@@ -1,0 +1,192 @@
+[Event "GothamChess 1. e4 // part 1: Scandinavian Defense"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B01"]
+[Opening "Scandinavian Defense: Mieses-Kotroc Variation"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Scandinavian Defense"]
+[ChapterURL "https://lichess.org/study/0M299viS/rdUKoR0g"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:03:59"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nf3 Qh5 4. Be2 Nc6 5. O-O e5 *
+
+
+[Event "GothamChess 1. e4 // part 1: Petroff Defense"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C42"]
+[Opening "Petrov's Defense: Damiano Variation, Kholmov Gambit"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Petroff Defense"]
+[ChapterURL "https://lichess.org/study/0M299viS/5ZAiteIJ"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:07:51"]
+
+1. e4 e5 2. Nf3 Nf6 3. Nxe5 Nxe4 4. Qe2 Qe7 5. Qxe4 d6 { [%cal Gd2d5] } 6. d4 *
+
+
+[Event "GothamChess 1. e4 // part 1: Caro-Kann Defense"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B13"]
+[Opening "Caro-Kann Defense: Exchange Variation"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Caro-Kann Defense"]
+[ChapterURL "https://lichess.org/study/0M299viS/ToBcAL3n"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:09:15"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. Nf3 Nc6 5. Bd3 Nf6 6. c3 Bg4 7. Bf4 e6 8. Nbd2 Be7 9. Qb3 b6 10. Bb5 Rc8 11. Ne5 *
+
+
+[Event "GothamChess 1. e4 // part 1: Closed Sicilian"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B23"]
+[Opening "Sicilian Defense: Closed"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Closed Sicilian"]
+[ChapterURL "https://lichess.org/study/0M299viS/Xgfliz8p"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:11:52"]
+
+1. e4 c5 2. Nc3 d6 3. g3 g6 4. Bg2 Bg7 5. d3 Nf6 6. f4 O-O 7. Nf3 *
+
+
+[Event "GothamChess 1. e4 // part 1: Scandinavian Defense #2"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B01"]
+[Opening "Scandinavian Defense: Valencian Variation"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Scandinavian Defense #2"]
+[ChapterURL "https://lichess.org/study/0M299viS/vlq4E350"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:13:57"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3 Qd8 4. Bc4 Nc6 5. Nf3 Bg4 6. Bxf7+ { [%cal Ge8f7] } 6... Kd7 7. Bd5 Kc8 8. Bxc6 bxc6 *
+
+
+[Event "GothamChess 1. e4 // part 1: Fried Liver Attack"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C57"]
+[Opening "Italian Game: Two Knights Defense, Fried Liver Attack"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Fried Liver Attack"]
+[ChapterURL "https://lichess.org/study/0M299viS/4l1UXqEq"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:16:39"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Nxd5 6. Nxf7 Kxf7 7. Qf3+ Ke6 8. Nc3 { [%cal Gc6b4] } *
+
+
+[Event "GothamChess 1. e4 // part 1: Scotch Opening"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C44"]
+[Opening "Scotch Game"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Scotch Opening"]
+[ChapterURL "https://lichess.org/study/0M299viS/EmLI4xIB"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:19:13"]
+
+1. e4 e5 2. Nf3 { [%cal Gd2d4] } 2... Nc6 3. d4 { [%cal Ge5d4] } 3... Nf6 4. dxe5 { [%cal Gf6e4] } 4... Nxe4 5. Bc4 Bc5 6. Qd5 Bxf2+ 7. Ke2 Qe7 8. Qxe4 Bb6 9. Nc3 O-O 10. Nd5 f5 11. Nxe7+ Kh8 12. Ng6+ hxg6 13. Qh4# *
+
+
+[Event "GothamChess 1. e4 // part 1: Caro-Kann #2 (Two Knights)"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B10"]
+[Opening "Caro-Kann Defense: Two Knights Attack"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Caro-Kann #2 (Two Knights)"]
+[ChapterURL "https://lichess.org/study/0M299viS/9ddQwDJY"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:23:53"]
+
+1. e4 c6 2. Nc3 d5 3. Nf3 dxe4 4. Nxe4 Bf5 5. Ng3 Bg6 6. h4 h5 7. Ne5 *
+
+
+[Event "GothamChess 1. e4 // part 1: Vienna Game"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C25"]
+[Opening "Vienna Game: Paulsen Variation"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Vienna Game"]
+[ChapterURL "https://lichess.org/study/0M299viS/AMqAXgqW"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:26:04"]
+
+1. e4 e5 2. Nc3 Nc6 3. g3 Nf6 4. Bg2 Bc5 5. d3 { [%cal Gc1g5] } 5... O-O 6. h3 d6 7. Nge2 Be6 8. O-O Nd4 9. Kh2 a5 10. f4 Nxe2 11. Qxe2 c6 12. f5 Bd7 13. g4 Ne8 14. g5 g6 15. f6 Nc7 16. Qe1 { [%csl Ge1] } 16... h5 17. Bf3 Ne6 18. Bxh5 gxh5 19. Qh4 Qe8 20. Qxh5 Nd4 21. Qh6 { [%csl Gh6] } 21... Ne6 22. Nd5 *
+
+
+[Event "GothamChess 1. e4 // part 1: Vienna Game #2"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "C25"]
+[Opening "Vienna Game: Stanley Variation, Meitner-Mieses Gambit"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Vienna Game #2"]
+[ChapterURL "https://lichess.org/study/0M299viS/uWsexehl"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:33:29"]
+
+1. e4 e5 2. Nc3 Bc5 3. Bc4 Nc6 4. Qg4 { [%cal Gd8f6] } 4... Qf6 5. Nd5 Qxf2+ 6. Kd1 Bf8 7. Nxc7+ Kd8 8. Nxa8 f6 { [%cal Gg1h3,Gg4e2] } 9. Qe2 { [%csl Ge2] } *
+
+
+[Event "GothamChess 1. e4 // part 1: Caro-Kann #3 (Advance Variation)"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Caro-Kann #3 (Advance Variation)"]
+[ChapterURL "https://lichess.org/study/0M299viS/B6rCvvQq"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:40:15"]
+
+1. e4 c6 2. d4 d5 3. e5 c5 4. dxc5 Nc6 5. f4 Bf5 6. Nf3 e6 7. Be3 Qa5+ { [%csl Ga5] } 8. c3 Bxc5 9. b4 Nxb4 10. cxb4 Bxb4+ 11. Nbd2 *
+
+
+[Event "GothamChess 1. e4 // part 1: Caro Kann #4 (Trick Line)"]
+[Date "2020.08.25"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B10"]
+[Opening "Caro-Kann Defense: Goldman Variation"]
+[StudyName "GothamChess 1. e4 // part 1"]
+[ChapterName "Caro Kann #4 (Trick Line)"]
+[ChapterURL "https://lichess.org/study/0M299viS/5SuBp81K"]
+[Annotator "https://lichess.org/@/Methadrone"]
+[UTCDate "2020.08.25"]
+[UTCTime "20:44:01"]
+
+1. e4 c6 2. Nc3 d5 3. Qf3 Nf6 4. e5 Bg4 5. Qg3 Ne4 6. Nxe4 Be6 7. Ng5 Bd7 8. Qf3 h6 9. Qxf7# *
+
+

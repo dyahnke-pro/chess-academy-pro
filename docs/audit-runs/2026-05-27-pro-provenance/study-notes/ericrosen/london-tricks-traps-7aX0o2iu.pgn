@@ -1,0 +1,65 @@
+[Event "The Hidden Tricks & Traps of the London Opening Eric Rosen: Early Deviations (2. Bf4 vs 2. Nf3) 1:17"]
+[Date "2021.04.14"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D02"]
+[Opening "Queen's Pawn Game: London System"]
+[StudyName "The Hidden Tricks & Traps of the London Opening Eric Rosen"]
+[ChapterName "Early Deviations (2. Bf4 vs 2. Nf3) 1:17"]
+[ChapterURL "https://lichess.org/study/7aX0o2iu/FJ879xDl"]
+[Annotator "https://lichess.org/@/lukecardoza"]
+[UTCDate "2021.04.14"]
+[UTCTime "22:12:57"]
+
+{ https://www.youtube.com/watch?v=VIIpCCsqePk }
+1. d4 Nf6 2. Nf3 d5 3. Bf4 c5 4. e3 Nc6 5. Nbd2 *
+
+
+[Event "The Hidden Tricks & Traps of the London Opening Eric Rosen: Tricky Ba6 TRAP 4:51"]
+[Date "2021.04.14"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D02"]
+[Opening "Queen's Pawn Game: London System"]
+[StudyName "The Hidden Tricks & Traps of the London Opening Eric Rosen"]
+[ChapterName "Tricky Ba6 TRAP 4:51"]
+[ChapterURL "https://lichess.org/study/7aX0o2iu/ZDA6jgi4"]
+[Annotator "https://lichess.org/@/lukecardoza"]
+[UTCDate "2021.04.14"]
+[UTCTime "22:15:48"]
+
+1. d4 Nf6 2. Nf3 d5 3. Bf4 c5 4. e3 Nc6 5. Nbd2 Bg4 6. c3 e6 7. Qa4 { [%cal Ga4e8,Ga4g4,Gf3e5,Gd4c5,Gf1b5] } 7... Bd6?? (7... Nd7 { best move }) 8. Ba6!! bxa6? (8... Bxf4 9. Bxb7 Rb8?? (9... O-O 10. Bxa8 Qxa8 11. exf4) 10. Bxc6+) 9. Qxc6+ Ke7 10. Qb7+ Qd7 11. Bxd6+ Kxd6 12. dxc5+ Kxc5 13. Qb4+ Kc6 14. Ne5+ *
+
+
+[Event "The Hidden Tricks & Traps of the London Opening Eric Rosen: The toughest line for Andrea (...Qb6) 21:57"]
+[Date "2021.04.15"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D02"]
+[Opening "Queen's Pawn Game: London System"]
+[StudyName "The Hidden Tricks & Traps of the London Opening Eric Rosen"]
+[ChapterName "The toughest line for Andrea (...Qb6) 21:57"]
+[ChapterURL "https://lichess.org/study/7aX0o2iu/5TzKyb83"]
+[Annotator "https://lichess.org/@/lukecardoza"]
+[UTCDate "2021.04.15"]
+[UTCTime "22:07:05"]
+
+1. d4 Nf6 2. Nf3 d5 3. Bf4 c5 4. e3 Nc6 5. Nbd2 Qb6 6. dxc5 Qxb2 7. Rb1 Qxa2 (7... Qc3 8. Bb5 Qxc5 9. c4) 8. Bb5 Bd7 9. c4 *
+
+
+[Event "The Hidden Tricks & Traps of the London Opening Eric Rosen: Agadmator's Anti-London (...c5/...Qb6) 34:16"]
+[Date "2021.04.15"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "A45"]
+[Opening "Indian Defense: Accelerated London System"]
+[StudyName "The Hidden Tricks & Traps of the London Opening Eric Rosen"]
+[ChapterName "Agadmator's Anti-London (...c5/...Qb6) 34:16"]
+[ChapterURL "https://lichess.org/study/7aX0o2iu/8A2cVuo0"]
+[Annotator "https://lichess.org/@/lukecardoza"]
+[UTCDate "2021.04.15"]
+[UTCTime "22:14:30"]
+
+1. d4 Nf6 2. Bf4 c5 3. e3 (3. dxc5 Na6 4. Nc3 Nxc5) 3... Qb6 4. Na3 Qxb2 (4... d6 5. Nc4) 5. Nb5 Nd5 6. e4 (6. Rb1 { forced draw } 6... Qxa2 7. Ra1 Qb2) 6... Nc3 7. Nc7+ Kd8 8. Qc1 Qxc1+ 9. Rxc1 e5 10. Bxe5 d6 11. Nxa8 dxe5 12. dxe5 *
+
+

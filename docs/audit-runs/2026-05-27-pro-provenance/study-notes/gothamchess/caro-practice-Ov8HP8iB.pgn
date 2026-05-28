@@ -1,0 +1,300 @@
+[Event "🦇Gotham's Caro-Kann Practice: Caro-Kann Intro"]
+[Date "2021.02.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Caro-Kann Intro"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/ROgCjcFV"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.08"]
+[UTCTime "13:50:25"]
+[ChapterMode "gamebook"]
+
+{ This study is designed to reinforce Levy Rozman's instruction on the Caro-Kann Defense in this video: https://youtu.be/rmbU97iftC8
+
+I recommend watching the video and then use this study to practice your Caro-Kann! }
+1. e4 { If you know the Caro-Kann, go ahead and play it. } 1... c6 2. d4 { Given the opportunity White likes to put two pawns in the center. What next? } 2... d5 { Rozman explains this opening as having three straightforward branches from this point based on what white does with this pawn.
+- Option 1 - White Captures
+- Option 2 - White Pushes
+- Option 3 - White Defends the Pawn
+The secret fourth option is that they forget that it is unguarded, in which case you take it. } { [%csl Ge4][%cal Ge4e5,Ge4d5] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 1 - White Captures #1"]
+[Date "2021.02.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B13"]
+[Opening "Caro-Kann Defense: Exchange Variation"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 1 - White Captures #1"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/5pCbPO1K"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.08"]
+[UTCTime "14:10:56"]
+[ChapterMode "gamebook"]
+
+{ Here we'll look at White's first option, to take your pawn. So go ahead and play the Caro-Kann up to that point. }
+1. e4 c6 2. d4 d5 3. exd5 { This is that first option - White decides to capture. How do you respond? } 3... cxd5 4. Nf3 { White chooses to develop normally. This only happens in 1/50 database games, but I suspect Rozman reviews this line because it is common at beginner and intermediate levels.
+Your next moves are automatic developing steps, knights before bishops yada yada.. } 4... Nc6 (4... Nf6 { People do this but one problem is it allows Harvey Dent to swoop into e5 early. } { [%cal Gf3e5] }) 5. Be2 Nf6 6. Nc3 { What bishop move did Gotham show in the video? } 6... Bf5 { Yep! If you had gotten pinned perhaps you would play Bd7. Bg4 is good if you can pin the knight, but right now White's bishop is preventing that. } { [%csl Gb5,Gg4][%cal Gc8d7] } (6... Bg4 { Another valid move mentioned by Rozman but not he one he demonstrated. }) 7. O-O { Now that our light-square bishop is out, we're permitted to play... } 7... e6 8. Bf4 Be7 { This bishop could also come to d6. } { [%cal Ge7d6] } 9. Re1 O-O { Cool, Levy got us to a position that the engine shows is slightly better for Black.
+He says then now you might want to play on the queenside or sometimes hop your night up to the middle of the board. } { [%cal Ga7a6,Gb7b5,Ga8c8,Gf6e4] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 1 - White Captures #2"]
+[Date "2021.02.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B13"]
+[Opening "Caro-Kann Defense: Panov Attack"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 1 - White Captures #2"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/s2wwbOFh"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.08"]
+[UTCTime "16:26:17"]
+[ChapterMode "gamebook"]
+
+{ Now we show what happens if White plays an early c4 instead of developing pieces. Play your Caro-Kann. }
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. c4 Nf6 5. Nf3 { Levy wants you to solidify the center. How can you do that? } 5... e6 6. Nc3 Be7 7. Be2 O-O { Rozman gives you another option here. If you had taken on c4 you force white's bishop to move twice. We'll run through that next. } { [%cal Gd5c4,Ge2c4,Gf1e2] } (7... dxc4 { Also good, make that bishop move twice. }) 8. O-O { Now your plan is to develop your bishop to b7. } { [%cal Gb7b6,Gc8b7] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 1 - White Captures #3"]
+[Date "2021.02.21"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B13"]
+[Opening "Caro-Kann Defense: Panov Attack"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 1 - White Captures #3"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/Yy4aj12V"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.21"]
+[UTCTime "14:49:48"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. exd5 cxd5 4. c4 Nf6 5. Nf3 e6 6. Nc3 Be7 (6... dxc4 { That's the trick, but not yet!!! now their bishop only have to move once. }) 7. Be2 { Remember the trick we we're going to try this time? } 7... dxc4 8. Bxc4 { Yep, we made their bishop move a second time. } 8... O-O { Now same plan to get this bishop out. } { [%cal Gb7b6,Gc8b7] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 2 - White Protects #1"]
+[Date "2021.02.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B15"]
+[Opening "Caro-Kann Defense: Rasa-Studier Gambit"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 2 - White Protects #1"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/A5MOuOkj"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.08"]
+[UTCTime "23:37:05"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. Nc3 dxe4 { Yes, Rozman says that any time white leaves their pawn on e4 you take it. } 4. f3 { Do you remember Rozman's recommendation in response to this gambit? } 4... e3 { Yep! White wanted you to take their pawn and help them develop with initiative... } { [%cal Gd1f3,Ge4f3] } (4... exf3 { Even the engine likes this jam, but Rozman has a different recommendation. }) 5. Bxe3 { ... And now you get on with your development. } { [%cal Gg8f6,Gc8f5] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 2 - White Protects #2"]
+[Date "2021.02.08"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B15"]
+[Opening "Caro-Kann Defense: Tartakower Variation"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 2 - White Protects #2"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/wjKAUbJB"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.08"]
+[UTCTime "23:58:36"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nf6 (4... Bf5 { That's the classical main line, but which response does Levy show first in the video? }) 5. Nxf6+ { Which recapture does Rozman consider more solid, leading to castling on the kingside? } 5... exf6 { Correct. the Tartakower Variation. now the plan is bishop out, castle and use those doubled pawns to defend against a kingside attack. } { [%csl Gf6,Gf7][%cal Gf8d6,Ge8g8] } (5... gxf6 { Nope, that one is the saucier option. }) *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 2 - White Protects #3"]
+[Date "2021.02.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B16"]
+[Opening "Caro-Kann Defense: Bronstein-Larsen Variation"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 2 - White Protects #3"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/YCP1TWgc"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.09"]
+[UTCTime "00:07:56"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 Nf6 5. Nxf6+ { And now the spicier recapture? } 5... gxf6 { Yes, the Bronstein-Larsen Variation. Gives you an open file for your rook and quick queenside development after which, you castle long. } { [%cal Gh8g8,Gg8g1,Gd8c7,Gb8d7,Ge8c8] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 2 - White Protects #4"]
+[Date "2021.02.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B18"]
+[Opening "Caro-Kann Defense: Classical Variation, Main Line"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 2 - White Protects #4"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/OJIOBOSq"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.09"]
+[UTCTime "00:17:31"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. Nc3 dxe4 4. Nxe4 { Okay, now try to play the main line of the classical variation. } 4... Bf5 5. Ng3 Bg6 6. h4 h6 { [%cal Gg6h7] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 2 - White Protects #5"]
+[Date "2021.02.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Maróczy Variation"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 2 - White Protects #5"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/c0zEKMlT"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.09"]
+[UTCTime "00:26:46"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. f3 { Try playing the really open fantasy variation. } 3... dxe4 4. fxe4 e5 5. dxe5 Qh4+ { Oof! got 'em } (5... Qxd1+ { There is a different nasty check you can give. }) *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 2 - White Protects #6"]
+[Date "2021.02.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Maróczy Variation"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 2 - White Protects #6"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/glPvdYAz"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.09"]
+[UTCTime "13:48:48"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. f3 { Play Rozman's safer fantasy recommendation. } 3... g6 (3... e6 { That is a very solid one, but Rozman showed something with the g pawn. }) 4. Be3 Bg7 5. Nc3 { Eventually take that pawn and develop } { [%cal Gg8f6,Gd5e4] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 2 - White Protects #7"]
+[Date "2021.02.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Maróczy Variation"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 2 - White Protects #7"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/fZgCB4Xx"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.09"]
+[UTCTime "13:53:00"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. f3 { Now play Rozman's most solid recommendation against the fantasy variation. } 3... e6 (3... dxe4 { Nope that's the crazy open variation. }) (3... g6 { Another of Rozman's recs, but what could you do with the king's pawn? }) *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 3 - White Advances #1"]
+[Date "2021.02.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 3 - White Advances #1"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/fkRxUWZ7"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.09"]
+[UTCTime "14:04:41"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. e5 { The Advance Variation. What does Rozman recommend here? } 3... c5 { Nice! } 4. c3 Nc6 5. Nf3 Bg4 6. Be2 Bxf3 7. Bxf3 { There used to be a knight on f3 but we got rid of it so we can chip away at white's center. } { [%csl Gf3,Gd4] } 7... cxd4 8. cxd4 e6 { Now it takes the knight a couple moves to develop, but that's alright. } { [%cal Gg8e7,Ge7f5,Ge7g6,Ge1h1] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 3 - White Advances #2"]
+[Date "2021.02.21"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 3 - White Advances #2"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/OqmaSZnh"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.21"]
+[UTCTime "15:17:09"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. e5 c5 4. dxc5 Nc6 { Same deal - if the knight comes out the bishop follows and then we want to play e6 } { [%cal Gg1f3,Gc8g4,Ge7e6] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 3 - White Advances #3"]
+[Date "2021.02.21"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Advance Variation, Short Variation"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 3 - White Advances #3"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/XATKV9eH"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.21"]
+[UTCTime "15:23:41"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. e5 { If you don't want to play c5, what does Gotham suggest? } 3... Bf5 { Yes ! the idea is to still play e6 and c5 } { [%cal Ge7e6,Gc6c5] } 4. Nf3 e6 5. Be2 c5 *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Option 3 - White Advances #4"]
+[Date "2021.02.21"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Advance Variation, Tal Variation"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Option 3 - White Advances #4"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/re7b2l2k"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.21"]
+[UTCTime "15:28:55"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. d4 d5 3. e5 Bf5 4. h4 { Alarm bells! what do we have to do here to avoid disaster? } 4... h5 { Yep, if we had just carried on with e6 our bishop would get trapped. } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Conclusion"]
+[Date "2021.02.09"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "B10"]
+[Opening "Caro-Kann Defense: Two Knights Attack"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Conclusion"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/gLNLhWhc"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.09"]
+[UTCTime "13:59:22"]
+[ChapterMode "gamebook"]
+
+1. e4 c6 2. Nf3 { Oh that's unexpected! Levy notes that if there's a Knight move, all the same stuff applies. } 2... d5 { Ya. and now white has the same options. continue as normal based on which one they choose. } { [%csl Ge4][%cal Ge4d5,Ge4e5,Gb1c3] } 3. Nc3 dxe4 { Good Job. } 4. Nxe4 { Again, same options for you here. } { [%cal Gc8f5,Gg8f6] } *
+
+
+[Event "🦇Gotham's Caro-Kann Practice: Post Script"]
+[Date "2021.02.21"]
+[Result "*"]
+[Variant "Standard"]
+[ECO "D10"]
+[Opening "Slav Defense"]
+[StudyName "🦇Gotham's Caro-Kann Practice"]
+[ChapterName "Post Script"]
+[ChapterURL "https://lichess.org/study/Ov8HP8iB/2mkNbbhB"]
+[Annotator "https://lichess.org/@/fletchgraham"]
+[UTCDate "2021.02.21"]
+[UTCTime "15:31:45"]
+[ChapterMode "gamebook"]
+
+1. d4 { If you still want to practice Caro-Kann structures but your opponent plays d4, you can play the Slav Defense. } 1... d5 (1... c6 { The Slav starts with 1. d4 d5 }) 2. c4 c6 *
+
+
