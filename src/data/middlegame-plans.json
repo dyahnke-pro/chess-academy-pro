@@ -32719,5 +32719,72 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pro-gothamchess-mengarini-d5wedge",
+    "openingId": "pro-gothamchess-mengarini",
+    "criticalPositionFen": "r1bqkb1r/pp1npppp/8/1N1Pn3/5B2/2P5/5PPP/R2QKBNR w KQkq - 3 12",
+    "title": "Mengarini: the d5 wedge + Nxe5 trade-down",
+    "overview": "Once the wing gambit has wrenched open the queenside and the d5 wedge + Nb5 outpost + Bf4 trio are in place, Gotham continues centralising: Qd4 swings the queen to the strong central square (both supports the d5 pawn AND eyes f6), then Nf3 develops the last knight. With Black tied up defending e5, Nxe5 begins a piece-trade where every White exchange leaves the d5 wedge stronger.",
+    "pawnBreaks": [
+      {
+        "move": "d5",
+        "explanation": "The wedge already on d5 cramps Black's whole queenside; further breaks (later f4/c4) follow naturally.",
+        "fen": "r1bqkb1r/pp1npppp/8/1N1Pn3/5B2/2P5/5PPP/R2QKBNR w KQkq - 3 12"
+      }
+    ],
+    "pieceManeuvers": [
+      "Qd1-d4 — centralise the queen on the d-file behind the d5-pawn.",
+      "Nb5 staying on the rim — eyes c7/d6 and prevents ...d6 freeing moves."
+    ],
+    "strategicThemes": [
+      "Trade pieces to leave the d5 wedge as a permanent structural plus.",
+      "Use the half-open a-file (after axb4) for the a1-rook.",
+      "The Nb5 outpost is irreplaceable while Black has no light-squared bishop trade ready."
+    ],
+    "endgameTransitions": [
+      "Trade-downs into endgames favour White: extra space, half-open a-file, and the d5 pawn is more cramping than weak."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/pp1npppp/8/1N1Pn3/5B2/2P5/5PPP/R2QKBNR w KQkq - 3 12",
+        "title": "Qd4 + Nxe5 trade-down (his real middlegame)",
+        "moves": [
+          "Qd4",
+          "f6",
+          "Nf3",
+          "a6",
+          "Nxe5",
+          "fxe5",
+          "Bxe5",
+          "Nxe5"
+        ],
+        "annotations": [
+          "Qd4 — White centralises the queen on d4 behind the d5-pawn. Multiple jobs: defends d5, eyes f6, controls the dark squares.",
+          "...f6 — Black tries to evict the e5-knight, but the move weakens the e6/g6 light squares around his king.",
+          "Nf3 — White develops the last knight, hitting e5 a second time.",
+          "...a6 — kicking Nb5 back, but the knight is heading to a productive square anyway.",
+          "Nxe5 — White starts the trade-down. With pieces traded, the d5 wedge remains as the permanent positional plus.",
+          "...fxe5 — Black has to recapture with the pawn, locking in the doubled e-pawn weakness on top of his other structural issues.",
+          "Bxe5 — second trade. Black has no good way to keep the dark-squared bishop on the board.",
+          "...Nxe5 — Black recaptures the bishop with his last knight, equalising material but ending up with a horrible structure."
+        ],
+        "learnCues": [
+          "Qd4 — centralise behind d5",
+          "...f6 — try to evict the knight",
+          "Nf3 — develop, hit e5",
+          "...a6 — kick the knight",
+          "Nxe5 — start the trade-down",
+          "...fxe5 — forced recapture",
+          "Bxe5 — second trade",
+          "...Nxe5 — material even, structure ruined"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-pawn-island",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation"
+        ]
+      }
+    ]
   }
 ]

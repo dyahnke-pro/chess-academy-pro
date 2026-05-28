@@ -4744,7 +4744,7 @@
       "color": "white",
       "name": "Sicilian: Mengarini Wing Gambit (2.a3 + b4!)",
       "player": "gothamchess",
-      "pgn": "e4 c5 a3 Nc6 b4 cxb4 axb4 Nxb4 c3 Nc6 d4 d5 exd5 Qxd5 Na3 Nf6 Nb5 Qd8 d5 Ne5 Bf4 Nfd7",
+      "pgn": "e4 c5 a3 Nc6 b4 cxb4 axb4 Nxb4 c3 Nc6 d4 d5 exd5 Qxd5 Na3 Nf6 Nb5 Qd8 d5 Ne5 Bf4 Nfd7 Qd4 f6 Nf3 a6 Nxe5 fxe5 Bxe5 Nxe5",
       "provenance": "plays",
       "provenanceRef": {
         "games": 488,
