@@ -1,0 +1,32 @@
+{
+  "player": "danielnaroditsky",
+  "openingId": "alapin-sicilian",
+  "variationKey": "d6-bc4",
+  "variation": {
+    "label": "2...d6 with Bc4 (sharp)",
+    "prefix": [
+      "e4",
+      "c5",
+      "c3",
+      "d6",
+      "Bc4"
+    ]
+  },
+  "generatedAt": "2026-05-28T22:11:06.049Z",
+  "totalGames": 0,
+  "wins": 0,
+  "draws": 0,
+  "losses": 0,
+  "openingTerminusPly": 5,
+  "openingTerminusMove": 3,
+  "spineMoves": [
+    "e4",
+    "c5",
+    "c3",
+    "d6",
+    "Bc4"
+  ],
+  "gamesAtTerminus": 0,
+  "endgameTypeBreakdown": {},
+  "topModelGames": []
+}

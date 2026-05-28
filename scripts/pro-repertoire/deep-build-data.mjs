@@ -47,6 +47,22 @@ const OPENINGS = {
       'd3-sideline':      { label: 'd3 sideline (2.d3)',                         prefix: ['e4','c6','d3'] },
     },
   },
+  'alapin-sicilian': {
+    color: 'white',
+    studentUsername: 'DanielNaroditsky',
+    variations: {
+      // Black 2nd-move alternatives (all rooted at e4 c5 c3 ?)
+      'nf6-spine':    { label: '2...Nf6 main line spine (1,105 games)',           prefix: ['e4','c5','c3','Nf6','e5','Nd5','Nf3'] },
+      'd5-open':      { label: '2...d5 Open Variation (783 games)',               prefix: ['e4','c5','c3','d5','exd5','Qxd5'] },
+      'e6-french':    { label: '2...e6 French-style (344 games)',                 prefix: ['e4','c5','c3','e6','d4'] },
+      'd6-mainline':  { label: '2...d6 main line (173 games)',                    prefix: ['e4','c5','c3','d6','d4'] },
+      'g6-dragon':    { label: '2...g6 Hyper-Dragon (125 games)',                 prefix: ['e4','c5','c3','g6'] },
+      'nc6-line':     { label: '2...Nc6 line (116 games)',                        prefix: ['e4','c5','c3','Nc6'] },
+      // Sub-branches inside the Nf6 spine after 4.Nf3
+      'nf6-d6-sub':   { label: '2...Nf6 spine, Black\'s 4...d6 (394 games)',      prefix: ['e4','c5','c3','Nf6','e5','Nd5','Nf3','d6'] },
+      'nf6-e6-sub':   { label: '2...Nf6 spine, Black\'s 4...e6 (185 games)',      prefix: ['e4','c5','c3','Nf6','e5','Nd5','Nf3','e6'] },
+    },
+  },
 };
 
 const opening = OPENINGS[OPENING_ID];

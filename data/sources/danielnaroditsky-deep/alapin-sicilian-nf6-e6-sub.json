@@ -1,0 +1,68 @@
+{
+  "player": "danielnaroditsky",
+  "openingId": "alapin-sicilian",
+  "variationKey": "nf6-e6-sub",
+  "variation": {
+    "label": "2...Nf6 spine, Black's 4...e6 (185 games)",
+    "prefix": [
+      "e4",
+      "c5",
+      "c3",
+      "Nf6",
+      "e5",
+      "Nd5",
+      "Nf3",
+      "e6"
+    ]
+  },
+  "generatedAt": "2026-05-28T22:12:54.839Z",
+  "totalGames": 185,
+  "wins": 122,
+  "draws": 24,
+  "losses": 39,
+  "openingTerminusPly": 23,
+  "openingTerminusMove": 12,
+  "spineMoves": [
+    "e4",
+    "c5",
+    "c3",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "Nf3",
+    "e6",
+    "d4",
+    "cxd4",
+    "cxd4",
+    "d6",
+    "Bc4",
+    "Be7",
+    "O-O",
+    "O-O",
+    "Qe2",
+    "Bd7",
+    "Rd1",
+    "Bc6",
+    "Nc3",
+    "Nxc3",
+    "bxc3"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "minor pieces + P": 2,
+    "middlegame (Q + pieces)": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/122964252115",
+      "opponent": "chessawp",
+      "opponentRating": 3009,
+      "studentRating": 3046,
+      "date": "2024-10-18",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 57,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2024.10.18\"]\n[Round \"-\"]\n[White \"DanielNaroditsky\"]\n[Black \"chessawp\"]\n[Result \"1-0\"]\n[CurrentPosition \"r7/pp4pk/3nqp1b/6N1/3Q3R/7P/PB3PP1/6K1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"B22\"]\n[ECOUrl \"https://www.chess.com/openings/Alapin-Sicilian-Defense...7.Nf3-Be7-8.O-O-O-O-9.Qe2\"]\n[UTCDate \"2024.10.18\"]\n[UTCTime \"04:21:16\"]\n[WhiteElo \"3046\"]\n[BlackElo \"3009\"]\n[TimeControl \"180\"]\n[Termination \"DanielNaroditsky won by resignation\"]\n[StartTime \"04:21:16\"]\n[EndDate \"2024.10.18\"]\n[EndTime \"04:25:37\"]\n[Link \"https://www.chess.com/game/live/122964252115\"]\n\n1. e4 {[%clk 0:03:00]} 1... c5 {[%clk 0:03:00]} 2. c3 {[%clk 0:02:59.3]} 2... Nf6 {[%clk 0:02:58.7]} 3. e5 {[%clk 0:02:58.8]} 3... Nd5 {[%clk 0:02:58.1]} 4. Nf3 {[%clk 0:02:58.7]} 4... e6 {[%clk 0:02:55.7]} 5. d4 {[%clk 0:02:48.4]} 5... cxd4 {[%clk 0:02:54.2]} 6. cxd4 {[%clk 0:02:44.7]} 6... d6 {[%clk 0:02:53.7]} 7. Bc4 {[%clk 0:02:43.8]} 7... Be7 {[%clk 0:02:52.8]} 8. O-O {[%clk 0:02:42.9]} 8... O-O {[%clk 0:02:52.1]} 9. Qe2 {[%clk 0:02:42.6]} 9... Bd7 {[%clk 0:02:51.5]} 10. Rd1 {[%clk 0:02:41]} 10... Bc6 {[%clk 0:02:49.4]} 11. Nc3 {[%clk 0:02:40.6]} 11... Nxc3 {[%clk 0:02:48.2]} 12. bxc3 {[%clk 0:02:40.5]} 12... Nd7 {[%clk 0:02:47.6]} 13. exd6 {[%clk 0:02:35.1]} 13... Bxd6 {[%clk 0:02:46.7]} 14. Bd3 {[%clk 0:02:34.8]} 14... Qc7 {[%clk 0:02:39.6]} 15. h3 {[%clk 0:02:33.3]} 15... Bf4 {[%clk 0:02:37.7]} 16. Bb2 {[%clk 0:02:32.7]} 16... Bh6 {[%clk 0:02:03.8]} 17. c4 {[%clk 0:02:14.1]} 17... Qf4 {[%clk 0:02:02.7]} 18. d5 {[%clk 0:01:57.2]} 18... exd5 {[%clk 0:01:59.2]} 19. cxd5 {[%clk 0:01:56.3]} 19... Ba4 {[%clk 0:01:58.3]} 20. Bxh7+ {[%clk 0:01:50.5]} 20... Kxh7 {[%clk 0:01:45]} 21. Rd4 {[%clk 0:01:50.4]} 21... Qf5 {[%clk 0:01:39.5]} 22. Rxa4 {[%clk 0:01:48.1]} 22... Nc5 {[%clk 0:01:36.8]} 23. Rh4 {[%clk 0:01:45.1]} 23... Rfe8 {[%clk 0:01:34.6]} 24. Qd2 {[%clk 0:01:35]} 24... Ne4 {[%clk 0:01:19.6]} 25. Qd4 {[%clk 0:01:12.3]} 25... f6 {[%clk 0:01:13.3]} 26. Re1 {[%clk 0:01:04.4]} 26... Nd6 {[%clk 0:01:07.2]} 27. Re6 {[%clk 0:00:58.2]} 27... Rxe6 {[%clk 0:00:59.8]} 28. dxe6 {[%clk 0:00:58.1]} 28... Qxe6 {[%clk 0:00:59]} 29. Ng5+ {[%clk 0:00:56.4]} 1-0\n"
+    }
+  ]
+}

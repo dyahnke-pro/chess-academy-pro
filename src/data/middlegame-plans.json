@@ -23351,59 +23351,47 @@
     ]
   },
   {
-    "id": "mp-pronaroAlapin-queenside-crawl",
+    "id": "mp-pronaroAlapin-bc4-f7-pressure",
     "openingId": "pro-naroditsky-alapin",
-    "criticalPositionFen": "r1b1kb1r/pp2pppp/1nnq4/2p5/8/1BP2N2/PP1P1PPP/RNBQ1RK1 b kq - 1 8",
-    "title": "Alapin — a4-a5-a6 queenside crawl",
-    "overview": "Naroditsky's dominant Alapin middlegame plan from his 2,752-game corpus. After the standard exd6 en-passant + O-O, White launches the queenside crawl: a4 → a5 → a6 cramping Black's pawn structure while keeping the centre flexible. His score in this line is 74% — one of the highest of any opening he plays.",
+    "criticalPositionFen": "r1bqkb1r/pp1ppppp/2n5/2pnP3/2B5/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 4 5",
+    "title": "Alapin nf6-main — Bc4 hits d5 + f7",
+    "overview": "His 14% pick at move 7 (153 of 1,102 games). The Bc4 dual-purpose move attacks the knight on d5 AND eyes f7 — Black has to react every move that follows. This is the wishlist position the c3 setup builds toward.",
     "pawnBreaks": [
-      "a4 → a5 → a6 queenside expansion",
-      "d4 central push when timing allows"
+      "e5 stays cramping Black's kingside",
+      "Bb3 maintains the diagonal after …Nb6"
     ],
     "pieceManeuvers": [
-      "Bb3 stays on the long diagonal aiming at f7",
-      "Nb1 → Nc3 if not already developed",
-      "Queen activates flexibly"
+      "Bc4 — attack d5 AND f7",
+      "…Nb6 chases the bishop",
+      "Bb3 keeps the long diagonal"
     ],
     "strategicThemes": [
-      "Queenside cramping vs Black's natural development",
-      "Long-diagonal pressure from Bb3"
+      "Bishop on the f7 diagonal cramps Black",
+      "Tempo from Bc4 → Bb3 wins development"
     ],
     "endgameTransitions": [
-      "R+P endings with the queenside passer Black can't easily oppose"
+      "R+minor+P with the bishop pair as the conversion piece"
     ],
     "playableLines": [
       {
-        "fen": "r1b1kb1r/pp2pppp/1nnq4/2p5/8/1BP2N2/PP1P1PPP/RNBQ1RK1 b kq - 1 8",
+        "fen": "r1bqkb1r/pp1ppppp/2n5/2pnP3/2B5/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 4 5",
         "moves": [
-          "Be6",
-          "Bxe6",
-          "Qxe6",
-          "a4",
-          "Qd7",
-          "a5",
-          "Nd5",
-          "a6",
-          "b6",
-          "d4"
+          "Nb6",
+          "Bb3",
+          "d5",
+          "exd6",
+          "Qxd6",
+          "O-O"
         ],
         "annotations": [
-          "Be6 — Black's bishop to e6 — typical play at this position.",
-          "Bxe6 — White's bishop captures on e6 — material exchange.",
-          "Qxe6 — Black's queen captures on e6 — material exchange.",
-          "a4 — White's pawn to a4 — typical play at this position.",
-          "Qd7 — Black's queen to d7 — typical play at this position.",
-          "a5 — White's pawn to a5 — typical play at this position.",
-          "Nd5 — Black's knight to d5 — typical play at this position.",
-          "a6 — White's pawn to a6 — typical play at this position.",
-          "b6 — Black's pawn to b6 — typical play at this position.",
-          "d4 — White's pawn to d4 — typical play at this position."
+          "Nb6 — Black's knight to b6 — data-derived continuation.",
+          "Bb3 — White's bishop to b3 — data-derived continuation.",
+          "d5 — Black's pawn to d5 — data-derived continuation.",
+          "exd6 — White's pawn captures on d6 — material exchange.",
+          "Qxd6 — Black's queen captures on d6 — material exchange.",
+          "O-O — White castles short, king to safety."
         ],
         "arrows": [
-          [],
-          [],
-          [],
-          [],
           [],
           [],
           [],
@@ -23414,67 +23402,27 @@
         "highlights": [
           [
             {
-              "square": "c8",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "e6",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
             {
               "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -23484,27 +23432,231 @@
           ],
           [
             {
-              "square": "a5",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "a6",
+              "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b7",
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b6",
+              "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d2",
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nb6 — knight to b6",
+          "Bb3 — bishop to b3",
+          "d5 — pawn to d5",
+          "exd6 — pawn to d6",
+          "Qxd6 — queen to d6",
+          "O-O — king to g1"
+        ],
+        "title": "Alapin nf6-main — Bc4 hits d5 + f7",
+        "intro": "His 14% pick at move 7 (153 of 1,102 games). The Bc4 dual-purpose move attacks the knight on d5 AND eyes f7 — Black has to react every move that follows. This is the wishlist position the c3 setup bui",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-d5open-be3-pressure",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "r1b1kb1r/pp3ppp/2n1pn2/2pq4/3P4/N1P2N2/PP3PPP/R1BQKB1R w KQkq - 2 7",
+    "title": "Alapin d5-open — Be3 dark-square pressure",
+    "overview": "His 13% pick at move 7 in the d5-open line. The Be3 supports d4 AND coordinates with the upcoming Nb5 outpost. Slower than directly Nb5 but builds maximum piece pressure before forcing the tempo.",
+    "pawnBreaks": [
+      "cxd4 trade — opens c-file",
+      "d4 recapture maintains central pawn"
+    ],
+    "pieceManeuvers": [
+      "Be3 supports d4",
+      "Nb5 jump arrives next",
+      "Nbxd4 recaptures with the knight"
+    ],
+    "strategicThemes": [
+      "Build piece pressure before forcing tempo",
+      "Dark-square bishop coordinates with d4"
+    ],
+    "endgameTransitions": [
+      "R+minor+P endings where coordination decides"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pq4/3P4/N1P2N2/PP3PPP/R1BQKB1R w KQkq - 2 7",
+        "moves": [
+          "Be3",
+          "cxd4",
+          "Nb5",
+          "Qd7"
+        ],
+        "annotations": [
+          "Be3 — White's bishop to e3 — data-derived continuation.",
+          "cxd4 — Black's pawn captures on d4 — material exchange.",
+          "Nb5 — White's knight to b5 — data-derived continuation.",
+          "Qd7 — Black's queen to d7 — data-derived continuation."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Be3 — bishop to e3",
+          "cxd4 — pawn to d4",
+          "Nb5 — knight to b5",
+          "Qd7 — queen to d7"
+        ],
+        "title": "Alapin d5-open — Be3 dark-square pressure",
+        "intro": "His 13% pick at move 7 in the d5-open line. The Be3 supports d4 AND coordinates with the upcoming Nb5 outpost. Slower than directly Nb5 but builds maximum piece pressure before forcing the tempo.",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-d5open-nb5-fork",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "r1b1kb1r/pp3ppp/2n1pn2/2pq4/3P4/N1P1BN2/PP3PPP/R2QKB1R b KQkq - 3 7",
+    "title": "Alapin d5-open — Nb5 queen-fork outpost",
+    "overview": "After the d5-open trade sequence, the Na3 knight is heading for Nb5 — his signature trick (12% pick at move 8). The fork hits the queen AND the c7 prize square, forcing Black's queen retreat with structural damage.",
+    "pawnBreaks": [
+      "…cxd4 — Black liquidates the central tension",
+      "d4 recapture opens central files"
+    ],
+    "pieceManeuvers": [
+      "Nb5 — fork queen + c7",
+      "…Qd7 — only safe queen retreat",
+      "Nbxd4 recaptures with tempo"
+    ],
+    "strategicThemes": [
+      "Knight outpost wins tempi",
+      "Queen retreat to d7 blocks Black's bishop"
+    ],
+    "endgameTransitions": [
+      "R+minor+P (27.4% of d5-open decisive games)"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pq4/3P4/N1P1BN2/PP3PPP/R2QKB1R b KQkq - 3 7",
+        "moves": [
+          "cxd4",
+          "Nb5",
+          "Qd7",
+          "Nbxd4"
+        ],
+        "annotations": [
+          "cxd4 — Black's pawn captures on d4 — material exchange.",
+          "Nb5 — White's knight to b5 — data-derived continuation.",
+          "Qd7 — Black's queen to d7 — data-derived continuation.",
+          "Nbxd4 — White's knight captures on d4 — material exchange."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -23514,24 +23666,467 @@
           ]
         ],
         "learnCues": [
-          "Be6 — bishop to e6",
-          "Bxe6 — bishop to e6",
-          "Qxe6 — queen to e6",
-          "a4 — pawn to a4",
+          "cxd4 — pawn to d4",
+          "Nb5 — knight to b5",
           "Qd7 — queen to d7",
-          "a5 — pawn to a5",
-          "Nd5 — knight to d5",
-          "a6 — pawn to a6",
-          "b6 — pawn to b6",
-          "d4 — pawn to d4"
+          "Nbxd4 — knight to d4"
         ],
-        "title": "Alapin — a4-a5-a6 queenside crawl",
-        "intro": "Naroditsky's dominant Alapin middlegame plan from his 2,752-game corpus. After the standard exd6 en-passant + O-O, White launches the queenside crawl: a4 → a5 → a6 cramping Black's pawn structure whil",
+        "title": "Alapin d5-open — Nb5 queen-fork outpost",
+        "intro": "After the d5-open trade sequence, the Na3 knight is heading for Nb5 — his signature trick (12% pick at move 8). The fork hits the queen AND the c7 prize square, forcing Black's queen retreat with stru",
         "sources": [
-          "book:sicilian-alapin",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
           "https://www.chess.com/openings/Alapin-Sicilian-Defense",
-          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
-          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-d6main-h3-prophylaxis",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "rnbqkb1r/pp2pp1p/3p1np1/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 6",
+    "title": "Alapin d6-mainline — h3 prophylaxis + g4 prep",
+    "overview": "His 18% pick at move 7 — the highest of any move at this position. h3 stops …Bg4 (the natural pin) AND prepares g4-g5 expansion. Slow but principled — exactly the KID-reversed treatment that scores 80.6% in this line.",
+    "pawnBreaks": [
+      "h3 prophylaxis",
+      "g4 expansion follows",
+      "d5 or e5 break later"
+    ],
+    "pieceManeuvers": [
+      "…Bg7 fianchetto by Black",
+      "Nf3 + Bd3 classical development",
+      "O-O for king safety"
+    ],
+    "strategicThemes": [
+      "KID-reversed with extra tempo",
+      "Slow positional accumulation"
+    ],
+    "endgameTransitions": [
+      "R+minor+P (30.1% of d6-mainline decisive games)"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 6",
+        "moves": [
+          "h3",
+          "Bg7",
+          "Nf3",
+          "O-O"
+        ],
+        "annotations": [
+          "h3 — White's pawn to h3 — data-derived continuation.",
+          "Bg7 — Black's bishop to g7 — data-derived continuation.",
+          "Nf3 — White's knight to f3 — data-derived continuation.",
+          "O-O — Black castles short, king to safety."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "h3 — pawn to h3",
+          "Bg7 — bishop to g7",
+          "Nf3 — knight to f3",
+          "O-O — king to g8"
+        ],
+        "title": "Alapin d6-mainline — h3 prophylaxis + g4 prep",
+        "intro": "His 18% pick at move 7 — the highest of any move at this position. h3 stops …Bg4 (the natural pin) AND prepares g4-g5 expansion. Slow but principled — exactly the KID-reversed treatment that scores 80",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-e6french-dxc5-trade",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/2PB1N2/PP3PPP/RNBQ1RK1 b kq - 1 7",
+    "title": "Alapin e6-french — dxc5 central exchange",
+    "overview": "His 12% pick at move 8. After the castled position, the dxc5 capture grabs material and opens the c-file simultaneously. Black has to deal with both the missing centre AND the open file.",
+    "pawnBreaks": [
+      "dxc5 grabs material",
+      "c-file opens for the rook"
+    ],
+    "pieceManeuvers": [
+      "…dxc3 by Black wins back",
+      "Nxc3 recapture activates",
+      "Bishop pair maintained"
+    ],
+    "strategicThemes": [
+      "Material grab opens lines",
+      "Active piece play decides the middlegame"
+    ],
+    "endgameTransitions": [
+      "Sharp positions — endgames rare here"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/2PB1N2/PP3PPP/RNBQ1RK1 b kq - 1 7",
+        "moves": [
+          "dxc3",
+          "Nxc3"
+        ],
+        "annotations": [
+          "dxc3 — Black's pawn captures on c3 — material exchange.",
+          "Nxc3 — White's knight captures on c3 — material exchange."
+        ],
+        "arrows": [
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "dxc3 — pawn to c3",
+          "Nxc3 — knight to c3"
+        ],
+        "title": "Alapin e6-french — dxc5 central exchange",
+        "intro": "His 12% pick at move 8. After the castled position, the dxc5 capture grabs material and opens the c-file simultaneously. Black has to deal with both the missing centre AND the open file.",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-e6french-oo-castle",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/2PB1N2/PP3PPP/RNBQK2R w KQkq - 0 7",
+    "title": "Alapin e6-french — O-O castle-before-recapture",
+    "overview": "His 32% pick at move 7 — castle FIRST, recapture the pawn later. O-O is the pragmatic move: king safety beats material grab, and Black can't win the d4-pawn cleanly without strategic disaster.",
+    "pawnBreaks": [
+      "…cxd4 — Black liquidates",
+      "…dxc3 grabs the pawn but invites Nxc3 activity"
+    ],
+    "pieceManeuvers": [
+      "O-O — king to safety FIRST",
+      "Nxc3 recaptures with active piece play",
+      "Re1 follows on the e-file"
+    ],
+    "strategicThemes": [
+      "King safety before material",
+      "Open lines compensate for the pawn"
+    ],
+    "endgameTransitions": [
+      "R+minor+P endings with the bishop pair"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/2PB1N2/PP3PPP/RNBQK2R w KQkq - 0 7",
+        "moves": [
+          "O-O",
+          "dxc3",
+          "Nxc3"
+        ],
+        "annotations": [
+          "O-O — White castles short, king to safety.",
+          "dxc3 — Black's pawn captures on c3 — material exchange.",
+          "Nxc3 — White's knight captures on c3 — material exchange."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "O-O — king to g1",
+          "dxc3 — pawn to c3",
+          "Nxc3 — knight to c3"
+        ],
+        "title": "Alapin e6-french — O-O castle-before-recapture",
+        "intro": "His 32% pick at move 7 — castle FIRST, recapture the pawn later. O-O is the pragmatic move: king safety beats material grab, and Black can't win the d4-pawn cleanly without strategic disaster.",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-exd6-enpassant",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "r1bqkb1r/pp2pppp/1nn5/2ppP3/8/1BP2N2/PP1P1PPP/RNBQK2R w KQkq d6 0 7",
+    "title": "Alapin nf6-main — exd6 en passant break",
+    "overview": "His 25% pick (273 of 1,102 games) at move 7. After Black's …d5 try, the exd6 en-passant capture opens the central files immediately and brings the queen to d6 where it's exposed to development tempo.",
+    "pawnBreaks": [
+      "exd6 en-passant — open the centre",
+      "d4 follows once the centre is clear"
+    ],
+    "pieceManeuvers": [
+      "Qxd6 — Black's queen comes to d6, exposed",
+      "O-O follows for king safety",
+      "Bb3 stays on the diagonal"
+    ],
+    "strategicThemes": [
+      "En-passant capture opens files",
+      "Black's queen on d6 is a tempo target"
+    ],
+    "endgameTransitions": [
+      "R+minor+P (27% of nf6-main decisive games) — bishop pair converts"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/pp2pppp/1nn5/2ppP3/8/1BP2N2/PP1P1PPP/RNBQK2R w KQkq d6 0 7",
+        "moves": [
+          "exd6",
+          "Qxd6",
+          "O-O",
+          "Be6"
+        ],
+        "annotations": [
+          "exd6 — White's pawn captures on d6 — material exchange.",
+          "Qxd6 — Black's queen captures on d6 — material exchange.",
+          "O-O — White castles short, king to safety.",
+          "Be6 — Black's bishop to e6 — data-derived continuation."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "exd6 — pawn to d6",
+          "Qxd6 — queen to d6",
+          "O-O — king to g1",
+          "Be6 — bishop to e6"
+        ],
+        "title": "Alapin nf6-main — exd6 en passant break",
+        "intro": "His 25% pick (273 of 1,102 games) at move 7. After Black's …d5 try, the exd6 en-passant capture opens the central files immediately and brings the queen to d6 where it's exposed to development tempo.",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-nc6-bd3-buildup",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "r1bqkbnr/pp3ppp/2n1p3/8/3P4/2NB1N2/PP3PPP/R1BQK2R b KQkq - 3 8",
+    "title": "Alapin nc6-line — Nc3 tempo + Bd3 buildup",
+    "overview": "After Nc3 forces the queen back to d8, White plays Bd3 (24% pick) for classical development. The queenside expansion with a3-b4 follows. This is why the nc6-line scores 86.2% — Black has lost two tempi and faces a long structural game.",
+    "pawnBreaks": [
+      "a3 prepares b4 expansion",
+      "b4 grabs queenside space"
+    ],
+    "pieceManeuvers": [
+      "Nf6 + Be7 quiet Black development",
+      "O-O for king safety",
+      "a3 + b4 attacking setup"
+    ],
+    "strategicThemes": [
+      "Two tempi gained on the queen",
+      "Long structural conversion"
+    ],
+    "endgameTransitions": [
+      "R+minor+P (33.7% of nc6-line decisive games)"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkbnr/pp3ppp/2n1p3/8/3P4/2NB1N2/PP3PPP/R1BQK2R b KQkq - 3 8",
+        "moves": [
+          "Nf6",
+          "O-O",
+          "Be7"
+        ],
+        "annotations": [
+          "Nf6 — Black's knight to f6 — data-derived continuation.",
+          "O-O — White castles short, king to safety.",
+          "Be7 — Black's bishop to e7 — data-derived continuation."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nf6 — knight to f6",
+          "O-O — king to g1",
+          "Be7 — bishop to e7"
+        ],
+        "title": "Alapin nc6-line — Nc3 tempo + Bd3 buildup",
+        "intro": "After Nc3 forces the queen back to d8, White plays Bd3 (24% pick) for classical development. The queenside expansion with a3-b4 follows. This is why the nc6-line scores 86.2% — Black has lost two temp",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
         ]
       }
     ]
