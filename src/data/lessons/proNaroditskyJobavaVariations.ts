@@ -3,14 +3,13 @@ import type { LessonScript } from '../../types';
 const VIS = 'rgba(40,185,95,0.92)';
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
-const SRC = ['https://www.youtube.com/@DanielNaroditskyGM', 'concept:pos-development'];
 
 // Jobava variation tab — keyed `pro-naroditsky-jobava-london::<name>`. White,
 // DB-anchored (d4 d5 Nc3 Nf6 Bf4 g6, anchors 6), chess.js-verified.
 export const PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-naroditsky-jobava-london::vs ...g6 Fianchetto': {
     openingId: 'pro-naroditsky-jobava-london',
-    sources: SRC,
+    sources: ['https://lichess.org/study/HaFTAegs', 'concept:att-kingside-storm'],
     title: 'Jobava — vs …g6 Fianchetto (h4!)',
     minutes: 6,
     orientation: 'white',

@@ -584,7 +584,10 @@
             "games": 30,
             "score": 61,
             "source": "lichess /player"
-          }
+          },
+          "sources": [
+            "https://lichess.org/study/HaFTAegs"
+          ]
         },
         {
           "name": "vs ...c5",
