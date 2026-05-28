@@ -249,11 +249,10 @@ describe('seedDatabase', () => {
 describe('reconcileProRepertoires — pick up JSON updates without wiping progress', () => {
   it('preserves user-progress fields when refreshing static content', async () => {
     await seedFully();
-    // Pick a pro opening that exists in the seeded data AND still carries
-    // trapLines (the line-293 assertion checks they survive reconcile).
-    // pro-firouzja-ruy-lopez was used originally but its auto-mined traps were
-    // purged, leaving trapLines: [] → switch to one that genuinely has them.
-    const id = 'pro-gukesh-najdorf';
+    // Pick a kept pro opening that exists in the seeded data AND still
+    // carries trapLines (the line-293 assertion checks they survive
+    // reconcile). pro-naroditsky-alapin carries 3 curated trapLines.
+    const id = 'pro-naroditsky-alapin';
     const before = await db.openings.get(id);
     expect(before).toBeDefined();
     if (!before) return;
@@ -299,7 +298,7 @@ describe('reconcileProRepertoires — pick up JSON updates without wiping progre
   it('inserts brand-new pro entries with default progress fields', async () => {
     await seedFully();
     // Wipe a known pro entry to simulate it being added in this revision.
-    const id = 'pro-firouzja-ruy-lopez';
+    const id = 'pro-naroditsky-caro-kann';
     await db.openings.delete(id);
     expect(await db.openings.get(id)).toBeUndefined();
 
@@ -316,9 +315,31 @@ describe('reconcileProRepertoires — pick up JSON updates without wiping progre
     expect(after.isRepertoire).toBe(false);
   }, 60000);
 
+  it('sweeps orphans for a player whose openings were wiped entirely (G8)', async () => {
+    await seedFully();
+    // Simulate an already-seeded device still carrying a slate-wiped
+    // player's openings (e.g. Carlsen) that no longer exist in the JSON.
+    // The roster-wide orphan sweep must delete them even though the
+    // player carries zero current JSON entries.
+    const template = await db.openings.get('pro-naroditsky-caro-kann');
+    expect(template).toBeDefined();
+    if (!template) return;
+    const orphanId = 'pro-carlsen-ruy-lopez';
+    await db.openings.put({ ...template, id: orphanId, proPlayerId: 'carlsen' });
+    expect(await db.openings.get(orphanId)).toBeDefined();
+
+    // Force reconcile.
+    await db.meta.delete('pro_data_revision');
+    await reconcileProRepertoires();
+
+    // The wiped-player orphan is gone; a kept opening survives.
+    expect(await db.openings.get(orphanId)).toBeUndefined();
+    expect(await db.openings.get('pro-naroditsky-caro-kann')).toBeDefined();
+  }, 60000);
+
   it('is a no-op when revision matches (no Dexie writes)', async () => {
     await seedFully();
-    const before = await db.openings.get('pro-firouzja-ruy-lopez');
+    const before = await db.openings.get('pro-naroditsky-caro-kann');
     expect(before).toBeDefined();
     if (!before) return;
 
@@ -330,7 +351,7 @@ describe('reconcileProRepertoires — pick up JSON updates without wiping progre
     // Second call — revision is current, should no-op.
     await reconcileProRepertoires();
 
-    const after = await db.openings.get('pro-firouzja-ruy-lopez');
+    const after = await db.openings.get('pro-naroditsky-caro-kann');
     expect(after?.style).toBe('TEST-MARKER-DO-NOT-OVERWRITE');
   }, 60000);
 });

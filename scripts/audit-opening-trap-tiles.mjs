@@ -37,22 +37,10 @@ const OUT_DIR = `audit-reports/opening-trap-tiles-${stamp}`;
 // rendered DOM — we count tiles and read their visible names.
 const EXPECTATIONS = [
   {
-    openingId: 'pro-firouzja-ruy-lopez',
-    description: 'white Ruy Lopez (Firouzja) — added Open Tarrasch Trap, deleted Noah\'s Ark',
-    mustContain: ['Open Tarrasch Trap'],
-    mustNotContain: ["Noah's Ark Trap"],
-  },
-  {
-    openingId: 'pro-carlsen-ruy-lopez',
-    description: 'white Ruy Lopez (Carlsen) — added Berlin Tarrasch Trap, deleted Noah\'s Ark',
-    mustContain: ['Berlin Tarrasch Trap'],
-    mustNotContain: ["Noah's Ark Trap"],
-  },
-  {
-    openingId: 'pro-praggnanandhaa-ruy-lopez',
-    description: 'white Ruy Lopez (Pragg) — added Bird\'s Defense Refutation, deleted Noah\'s Ark',
-    mustContain: ["Bird's Defense Refutation"],
-    mustNotContain: ["Noah's Ark Trap"],
+    openingId: 'pro-naroditsky-alapin',
+    description: 'Alapin (Naroditsky) — Nb5 queen-fork trap surfaces as a red TRAP tile',
+    mustContain: ['Nb5 Queen-Fork Trap (d5 Open)'],
+    mustNotContain: [],
   },
   {
     openingId: 'pro-gothamchess-caro-kann',
@@ -60,13 +48,6 @@ const EXPECTATIONS = [
     mustContain: [], // trapLines side — only checks Qb6 isn't in traps
     mustNotContainInTraps: ['Advance Variation Qb6 Fork'],
     mustContainInWarnings: ['Advance Variation Qb6 Fork'],
-  },
-  {
-    openingId: 'pro-firouzja-grunfeld',
-    description: 'Grunfeld (Firouzja) — Nxc3 Qa5+ moved from traps to warnings',
-    mustContain: [],
-    mustNotContainInTraps: ['Nxc3 Qa5+ Exchange Trick'],
-    mustContainInWarnings: ['Nxc3 Qa5+ Exchange Trick'],
   },
 ];
 
@@ -233,11 +214,11 @@ async function main() {
     }
   }
 
-  // ─── End-to-end: click the new Open Tarrasch Trap tile and verify
-  //                the walkthrough runtime mounts.
-  console.log(`\n── walkthrough-click: pro-firouzja-ruy-lopez Open Tarrasch Trap`);
+  // ─── End-to-end: click the Alapin Nb5 trap tile and verify the
+  //                walkthrough runtime mounts.
+  console.log(`\n── walkthrough-click: pro-naroditsky-alapin Nb5 Queen-Fork Trap`);
   await scenario('walkthrough-click :: navigate', async () => {
-    await page.goto(`${BASE_URL}/openings/pro-firouzja-ruy-lopez`, { timeout: 20_000 });
+    await page.goto(`${BASE_URL}/openings/pro-naroditsky-alapin`, { timeout: 20_000 });
     await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 15_000 });
     await page.waitForTimeout(1000);
     return 'mounted';
@@ -245,20 +226,20 @@ async function main() {
 
   await scenario('walkthrough-click :: click trap-line-0', async () => {
     // The tiles are sorted by the order they appear in
-    // pro-repertoires.json. We can't be sure which index Open
-    // Tarrasch lands at, so find the tile whose label matches.
+    // pro-repertoires.json. We can't be sure which index the Nb5
+    // fork lands at, so find the tile whose label matches.
     const tiles = await page.$$('[data-testid^="trap-line-"]');
     let clicked = false;
     for (const t of tiles) {
       const label = (await t.$eval('span', (el) => el.textContent?.trim())) || '';
-      if (label === 'Open Tarrasch Trap') {
+      if (label === 'Nb5 Queen-Fork Trap (d5 Open)') {
         const watchBtn = await t.$('[data-testid^="trap-walkthrough-"]');
         await (watchBtn ?? t).click();
         clicked = true;
         break;
       }
     }
-    if (!clicked) throw new Error('Open Tarrasch Trap tile not found to click');
+    if (!clicked) throw new Error('Nb5 Queen-Fork Trap tile not found to click');
     return 'clicked';
   });
 

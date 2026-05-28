@@ -45,25 +45,22 @@ const SUMMARY_PATH = join(OUT_DIR, 'report.md');
 // ─── Sample selection ──────────────────────────────────────────────
 
 const SAMPLE_SUBLINES = [
-  // ─── Pro repertoire mains ────────────────────────────────────────
-  { openingId: 'pro-naroditsky-scotch', sublineType: 'main', sublineIndex: null },
-  { openingId: 'pro-hikaru-najdorf',    sublineType: 'main', sublineIndex: null },
-  { openingId: 'pro-carlsen-catalan',   sublineType: 'main', sublineIndex: null },
-  { openingId: 'pro-caruana-ruy-lopez', sublineType: 'main', sublineIndex: null },
-  { openingId: 'pro-firouzja-vienna',   sublineType: 'main', sublineIndex: null },
+  // ─── Pro repertoire mains (kept: Naroditsky + GothamChess) ───────
+  { openingId: 'pro-naroditsky-najdorf',  sublineType: 'main', sublineIndex: null },
+  { openingId: 'pro-naroditsky-ruy-lopez', sublineType: 'main', sublineIndex: null },
+  { openingId: 'pro-naroditsky-alapin',   sublineType: 'main', sublineIndex: null },
+  { openingId: 'pro-gothamchess-vienna',  sublineType: 'main', sublineIndex: null },
+  { openingId: 'pro-gothamchess-english', sublineType: 'main', sublineIndex: null },
   // ─── Pro repertoire variations ───────────────────────────────────
-  { openingId: 'pro-naroditsky-scotch', sublineType: 'variation', sublineIndex: 0 },
-  { openingId: 'pro-hikaru-najdorf',    sublineType: 'variation', sublineIndex: 1 },
-  { openingId: 'pro-naroditsky-alapin', sublineType: 'variation', sublineIndex: 0 },
-  { openingId: 'pro-gothamchess-london',sublineType: 'variation', sublineIndex: 0 },
-  { openingId: 'pro-naroditsky-vienna', sublineType: 'variation', sublineIndex: 5 },
-  // ─── Pro trap lines ──────────────────────────────────────────────
-  { openingId: 'pro-naroditsky-alapin', sublineType: 'trap', sublineIndex: 0 },
-  { openingId: 'pro-gothamchess-italian', sublineType: 'trap', sublineIndex: 0 },
-  { openingId: 'pro-carlsen-catalan',   sublineType: 'trap', sublineIndex: 0 },
-  { openingId: 'pro-gothamchess-scandinavian', sublineType: 'trap', sublineIndex: 0 },
+  { openingId: 'pro-naroditsky-caro-kann', sublineType: 'variation', sublineIndex: 0 },
+  { openingId: 'pro-naroditsky-alapin',   sublineType: 'variation', sublineIndex: 0 },
+  { openingId: 'pro-gothamchess-london',  sublineType: 'variation', sublineIndex: 0 },
+  { openingId: 'pro-gothamchess-italian', sublineType: 'variation', sublineIndex: 0 },
+  // ─── Pro trap lines (only Alapin + Caro-Kann carry trapLines) ────
+  { openingId: 'pro-naroditsky-alapin',   sublineType: 'trap', sublineIndex: 0 },
+  { openingId: 'pro-naroditsky-caro-kann', sublineType: 'trap', sublineIndex: 0 },
   // ─── Pro warning lines ──────────────────────────────────────────
-  { openingId: 'pro-naroditsky-vienna', sublineType: 'warning', sublineIndex: 0 },
+  { openingId: 'pro-naroditsky-alapin',   sublineType: 'warning', sublineIndex: 0 },
   // ─── Repertoire mains ────────────────────────────────────────────
   { openingId: 'italian-game',          sublineType: 'main', sublineIndex: null },
   { openingId: 'sicilian-najdorf',      sublineType: 'main', sublineIndex: null },

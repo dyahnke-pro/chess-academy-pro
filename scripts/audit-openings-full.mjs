@@ -59,15 +59,15 @@ const PICK_MAIN = [
 ];
 
 const PICK_PRO = [
-  'pro-naroditsky-scotch',
-  'pro-hikaru-najdorf',
-  'pro-carlsen-catalan',
-  'pro-caruana-ruy-lopez',
-  'pro-firouzja-vienna',
+  'pro-naroditsky-najdorf',
+  'pro-naroditsky-ruy-lopez',
+  'pro-naroditsky-kid',
+  'pro-naroditsky-alekhine',
+  'pro-gothamchess-vienna',
   'pro-gothamchess-london',
-  'pro-praggnanandhaa-ruy-lopez',
-  'pro-dubov-sveshnikov',
-  'pro-niemann-anti-marshall',
+  'pro-gothamchess-italian',
+  'pro-gothamchess-english',
+  'pro-gothamchess-caro-kann',
   'pro-naroditsky-alapin',
 ];
 

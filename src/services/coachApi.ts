@@ -961,7 +961,7 @@ export interface MasterGroundingOptions {
    *  Used by integration tests; production surfaces leave undefined. */
   forceEngage?: boolean;
   /** Canonical opening ID the user is studying (e.g. 'italian-game',
-   *  'pro-carlsen-catalan'). When set, the grounding pipeline injects
+   *  'pro-naroditsky-caro-kann'). When set, the grounding pipeline injects
    *  pre-baked best-counter stats + a representative master game from
    *  src/services/bestCounterService so the coach has instant
    *  concept-level narration material per CLAUDE.md narration rule

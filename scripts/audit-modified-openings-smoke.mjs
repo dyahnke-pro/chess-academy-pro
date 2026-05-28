@@ -33,10 +33,10 @@ const OPENINGS = [
   'benoni-defence',
   'benko-gambit',
   'pro-gothamchess-anti-sicilian',
-  'pro-firouzja-rossolimo',
+  'pro-naroditsky-rossolimo',
   // Sample of pro-* whose shortNarration was fixed:
-  'pro-carlsen-catalan',
-  'pro-naroditsky-scotch',
+  'pro-gothamchess-english',
+  'pro-naroditsky-alapin',
   // Sample of openings whose shortNarration fianchetto was rewritten:
   'kings-indian-defence',
   'caro-kann',

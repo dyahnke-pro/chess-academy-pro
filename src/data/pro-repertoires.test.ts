@@ -57,14 +57,13 @@ describe('Pro Repertoire PGN Legality', () => {
   });
 
   it('has the expected number of openings', () => {
-    // 73 carry-over + Naroditsky's 10 + Gotham's 8 new entries = 91.
-    // Naroditsky was rebuilt 2026-05-28 under the new pro-rep doctrine;
-    // Gotham was extended 2026-05-28 with 8 missing high-game-count
-    // openings: Trompowsky (1823 games), English (1597), French-Black
-    // (1596), KIA (771), Vienna (649), Caro-Advance-White (423), Pirc-
-    // Black (351), Closed Sicilian (333). Bump this when other players
-    // get expanded or rebuilt.
-    expect(proRepertoire.openings).toHaveLength(91);
+    // Slate-wipe 2026-05-28 (David): every player except Naroditsky
+    // and GothamChess (Levy Rozman) had their pro-rep builds cleared
+    // back to a names-only roster entry, pending a ground-up rebuild
+    // under the G9.1 deep-build doctrine. Naroditsky carries 10 +
+    // GothamChess 18 = 28. Bump this as each remaining player is
+    // rebuilt.
+    expect(proRepertoire.openings).toHaveLength(28);
   });
 
   it('every opening has a valid playerId', () => {
@@ -74,21 +73,24 @@ describe('Pro Repertoire PGN Legality', () => {
     }
   });
 
-  it('every player has at least 1 opening', () => {
-    // 2026-05-28: floor lowered from 3 → 1 because Naroditsky is
-    // mid-rebuild against the new pro-rep doctrine. His 9 prior
-    // entries were scrapped (the prior session's structural work was
-    // hollow — voice OK, no model games, no plans, no per-variation
-    // WLPP). One opening (Caro-Kann) is rebuilt fully; the rest are
-    // pending. Other 13 players still carry their original ≥3 entries
-    // until their own rebuild lands. Bump the floor back to 3 once
-    // every player has been rebuilt.
+  it('only the kept players (Naroditsky + GothamChess) carry openings', () => {
+    // Slate-wipe 2026-05-28 (David): "clear the pro repertoire builds
+    // for all players except Naroditsky and Levy Rozman — everything
+    // wiped clean except for their names." So the other 12 players
+    // remain in the roster (names only) with ZERO openings until they
+    // get rebuilt under the G9.1 doctrine. Only Naroditsky and
+    // GothamChess carry builds for now.
+    const KEPT = new Set(['naroditsky', 'gothamchess']);
     const counts: Record<string, number> = {};
     for (const opening of entries) {
       counts[opening.playerId] = (counts[opening.playerId] ?? 0) + 1;
     }
     for (const player of proRepertoire.players) {
-      expect(counts[player.id]).toBeGreaterThanOrEqual(1);
+      if (KEPT.has(player.id)) {
+        expect(counts[player.id]).toBeGreaterThanOrEqual(1);
+      } else {
+        expect(counts[player.id] ?? 0).toBe(0);
+      }
     }
   });
 

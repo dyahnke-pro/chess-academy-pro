@@ -34,8 +34,8 @@ const OPENINGS = (process.env.OPENINGS ?? [
   'kings-gambit',
   'queens-gambit',
   'london-system',
-  'pro-firouzja-vienna',
-  'pro-naroditsky-scotch',
+  'pro-gothamchess-vienna',
+  'pro-naroditsky-alapin',
 ].join(',')).split(',');
 
 const QUESTIONS = [

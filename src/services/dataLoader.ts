@@ -107,7 +107,7 @@ const SEED_KEY = 'db_seeded_v12';
  * compared byte-for-byte to the meta key, so any change triggers a
  * full content refresh.
  */
-const PRO_DATA_REVISION = '2026-05-28-alapin-tab-plan-routing';
+const PRO_DATA_REVISION = '2026-05-28-slate-wipe-naroditsky-gothamchess';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
@@ -268,9 +268,11 @@ export async function loadProRepertoireData(): Promise<void> {
  *   eco, name, pgn, uci, fen, color, style, proPlayerId, overview,
  *   keyIdeas, traps, warnings, variations, trapLines, warningLines.
  *
- * Entries that disappear from the JSON are left in Dexie untouched
- * (orphaned records won't surface in the player-list UI but a user
- * who had stats on them keeps that history).
+ * Entries that disappear from the JSON are DELETED from Dexie (the
+ * orphan sweep below), scoped to every player in the roster — so a
+ * player whose openings are wiped entirely (slate-wipe) gets cleaned
+ * out on already-seeded devices, not just players who still carry
+ * some JSON content (G8, David 2026-05-28).
  */
 export async function reconcileProRepertoires(): Promise<void> {
   const meta = await db.meta.get(PRO_REVISION_KEY);
@@ -343,8 +345,13 @@ export async function reconcileProRepertoires(): Promise<void> {
   // LessonScript no longer exists (David 2026-05-28, audit caught
   // pro-naroditsky-fantasy-caro lingering after the Naroditsky rebuild).
   // Scoped per player so a partial rebuild doesn't accidentally delete
-  // other players' content.
+  // other players' content. Seed the map from the full player roster
+  // (not just players who still have openings) so a player whose builds
+  // were wiped entirely gets an empty valid-set → all their Dexie rows
+  // are swept as orphans (slate-wipe, David 2026-05-28).
   const idsByPlayer: Record<string, Set<string>> = {};
+  const roster = (proRepertoireData as { players: { id: string }[] }).players;
+  for (const player of roster) idsByPlayer[player.id] = new Set();
   for (const entry of entries) {
     if (!idsByPlayer[entry.playerId]) idsByPlayer[entry.playerId] = new Set();
     idsByPlayer[entry.playerId].add(entry.id);

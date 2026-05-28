@@ -4,16 +4,15 @@ import { findTrapTilesForCanonicalLine, getTrapLineKind } from './proRepertoireS
 import { buildTrapWalkthroughTreeFromPgn } from './openingGenerator';
 
 describe('findTrapTilesForCanonicalLine', () => {
-  it('surfaces curated traps for the Italian Game bare line', () => {
-    // Italian Game's canonical bare PGN is `e4 e5 Nf3 Nc6 Bc4`. The
-    // pro-repertoire catalog carries Italian-family traps (Caruana's
-    // Italian, Firouzja's Italian, etc.) whose PGN starts with this
-    // prefix. The student should see at least one when typing
-    // "Italian Game" in the line picker.
-    const traps = findTrapTilesForCanonicalLine('e4 e5 Nf3 Nc6 Bc4');
+  it('surfaces curated traps for the Alapin Open Variation line', () => {
+    // Naroditsky's Alapin carries the Nb5 queen-fork trap, classified
+    // 'trap', whose PGN starts with the Open Variation prefix
+    // `e4 c5 c3 d5`. The student should see it when typing into the
+    // line picker.
+    const traps = findTrapTilesForCanonicalLine('e4 c5 c3 d5');
     expect(traps.length).toBeGreaterThan(0);
     for (const t of traps) {
-      expect(t.pgn.startsWith('e4 e5 Nf3 Nc6 Bc4')).toBe(true);
+      expect(t.pgn.startsWith('e4 c5 c3 d5')).toBe(true);
       expect(t.trapName.length).toBeGreaterThan(0);
       expect(t.parentOpeningName.length).toBeGreaterThan(0);
       expect(t.explanation.length).toBeGreaterThan(0);
@@ -46,31 +45,26 @@ describe('findTrapTilesForCanonicalLine', () => {
     expect(findTrapTilesForCanonicalLine('e4 e5 Nf3')).toEqual([]);
   });
 
-  it('caps trap tiles at the picker maximum even when many curated traps qualify', () => {
-    // Italian Game (5-ply canonical) has 5+ curated trap lines
-    // across multiple pro repertoires (Caruana, Firouzja). Without
-    // the cap the picker would surface them all and squeeze out the
-    // variation tiles. Cap should clip to a single-screen-friendly
-    // count.
-    const traps = findTrapTilesForCanonicalLine('e4 e5 Nf3 Nc6 Bc4');
+  it('never surfaces more than the picker maximum of trap tiles', () => {
+    // The picker caps at MAX_TRAP_TILES_PER_PICKER (4) so curated
+    // traps never squeeze out the variation tiles. The kept catalog
+    // currently has a single trap line (the Alapin Nb5 fork); the cap
+    // is still enforced structurally regardless of catalog size.
+    const traps = findTrapTilesForCanonicalLine('e4 c5 c3 d5');
     expect(traps.length).toBeGreaterThan(0);
     expect(traps.length).toBeLessThanOrEqual(4);
   });
 
   it('only surfaces trap-classified entries — filters out mistake / theme lessons', () => {
     // Production audit (build 1f1aa7a): the picker was surfacing
-    // every trapLine including "exf4 Central Domination" (a
-    // gambit-accepted positional plus, classified 'mistake') and
-    // "Bishop Pair in Berlin Wall" (a long middlegame plan,
-    // classified 'theme'). Only true tactical traps should reach
-    // the red TRAP tile.
+    // every trapLine including positional gambit-accepted plusses
+    // (classified 'mistake') and long middlegame plans (classified
+    // 'theme'). Only true tactical traps should reach the red TRAP
+    // tile. GothamChess's Italian carries only 'mistake'-classified
+    // lines under `e4 e5 Nf3 Nc6 Bc4`, so the picker must surface
+    // NONE of them.
     const traps = findTrapTilesForCanonicalLine('e4 e5 Nf3 Nc6 Bc4');
-    const names = traps.map((t) => t.trapName);
-    // No "Central Domination" / "Storm" / "Compensation" /
-    // "Steamroll" / "Long Diagonal" — all classified non-trap.
-    for (const n of names) {
-      expect(n).not.toMatch(/Central Domination|Storm After|Compensation|Steamroll|Long Diagonal/i);
-    }
+    expect(traps).toEqual([]);
   });
 });
 
@@ -78,25 +72,22 @@ describe('getTrapLineKind classification lookup', () => {
   it('returns "trap" for classic forced-tactical lines', () => {
     // Sample known true traps. If the classification file ever drops
     // these to non-trap, this test fires.
-    expect(getTrapLineKind('pro-ericrosen-stafford', 'Oh No My Queen Trap')).toBe('trap');
-    expect(getTrapLineKind('pro-samayraina-italian', "Legal's Mate Setup")).toBe('trap');
-    expect(getTrapLineKind('pro-firouzja-ruy-lopez', 'Open Tarrasch Trap')).toBe('trap');
-    expect(getTrapLineKind('pro-naroditsky-jobava-london', 'Nb5-Nc7 Fork Trap')).toBe('trap');
+    expect(getTrapLineKind('pro-naroditsky-alapin', 'Nb5 Queen-Fork Trap (d5 Open)')).toBe('trap');
+    expect(getTrapLineKind('pro-gothamchess-london', 'Qb6 Walks Into Nb5')).toBe('trap');
+    expect(getTrapLineKind('pro-gothamchess-scandinavian', 'Bf5 e6 Bb4 Pin Trap')).toBe('trap');
   });
 
-  it('returns "mistake" for the Vienna exf4 entry the user flagged as not-a-trap', () => {
-    // User: "I saw a trap line in the Vienna ... that is not a trap"
-    // — the exf4 gambit-accepted line gets a structural plus, not a
-    // forced material win.
-    expect(getTrapLineKind('pro-naroditsky-vienna', 'exf4 Central Domination')).toBe('mistake');
-    expect(getTrapLineKind('pro-firouzja-vienna', 'exf4 Opens the f-file')).toBe('mistake');
-    expect(getTrapLineKind('pro-firouzja-vienna', 'Bg4 Pin Broken by f5')).toBe('mistake');
+  it('returns "mistake" for gambit-accepted / tempo entries (no forced material win)', () => {
+    // A gambit accepted for a structural plus or a tempo gain on the
+    // queen is "now you're better," not a forced tactical refutation.
+    expect(getTrapLineKind('pro-gothamchess-italian', 'Fried Liver Setup')).toBe('mistake');
+    expect(getTrapLineKind('pro-naroditsky-alapin', 'Bc4-Gambit + exf7+ Break (4…d6 sub-line)')).toBe('mistake');
+    expect(getTrapLineKind('pro-naroditsky-alapin', 'Nc3 Queen-Tempo (2…Nc6 Line)')).toBe('mistake');
   });
 
   it('returns "theme" for long middlegame-plan entries', () => {
-    expect(getTrapLineKind('pro-caruana-berlin', 'Bishop Pair in Berlin Wall')).toBe('theme');
-    expect(getTrapLineKind('pro-dubov-dutch', 'Stonewall d5 Fortress')).toBe('theme');
-    expect(getTrapLineKind('pro-hikaru-kid', 'Kingside ...f5 Pawn Storm')).toBe('theme');
+    expect(getTrapLineKind('pro-gothamchess-milner-barry', 'cxd4 cxd4 Powerful Center')).toBe('theme');
+    expect(getTrapLineKind('pro-naroditsky-caro-kann', 'The …Bg4 Pin When White Develops Nf3 Early')).toBe('theme');
   });
 
   it('defaults unmapped entries to "mistake" (safe — no red TRAP surface)', () => {
