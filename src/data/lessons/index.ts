@@ -113,6 +113,8 @@ import { PRO_GOTHAMCHESS_LONDON_VARIATION_LESSONS } from './proGothamLondonVaria
 import { PRO_GOTHAMCHESS_TROMPOWSKY_LESSON } from './proGothamTrompowsky';
 import { PRO_GOTHAMCHESS_TROMPOWSKY_VARIATION_LESSONS } from './proGothamTrompowskyVariations';
 import { PRO_GOTHAMCHESS_MENGARINI_LESSON } from './proGothamMengarini';
+import { PRO_GOTHAMCHESS_VIENNA_LESSON } from './proGothamVienna';
+import { PRO_GOTHAMCHESS_FRENCH_RUBINSTEIN_LESSON } from './proGothamFrenchRubinstein';
 import { resolveOpeningIdFromName } from '../../services/chessConceptService';
 import repertoire from '../repertoire.json';
 
@@ -188,6 +190,8 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_GOTHAMCHESS_LONDON_LESSON.openingId]: PRO_GOTHAMCHESS_LONDON_LESSON,
   [PRO_GOTHAMCHESS_TROMPOWSKY_LESSON.openingId]: PRO_GOTHAMCHESS_TROMPOWSKY_LESSON,
   [PRO_GOTHAMCHESS_MENGARINI_LESSON.openingId]: PRO_GOTHAMCHESS_MENGARINI_LESSON,
+  [PRO_GOTHAMCHESS_VIENNA_LESSON.openingId]: PRO_GOTHAMCHESS_VIENNA_LESSON,
+  [PRO_GOTHAMCHESS_FRENCH_RUBINSTEIN_LESSON.openingId]: PRO_GOTHAMCHESS_FRENCH_RUBINSTEIN_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {

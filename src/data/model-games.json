@@ -4516,5 +4516,73 @@
         "concept": "h4 storm vs the fianchetto"
       }
     ]
+  },
+  {
+    "id": "mg-pro-gothamchess-vienna",
+    "openingId": "pro-gothamchess-vienna",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 3044,
+    "blackElo": 3039,
+    "result": "1-0",
+    "year": 2026,
+    "event": "Online (chess.com) / 2026",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 f5 d3 Nxc3 bxc3 d4 Qg3 Nc6 Nf3 dxc3 Rb1 Be6 Bg5 Qd7 Rxb7 Bd5 Be2 Nd4 Nxd4 Bxb7 Qh4 h6 Bh5+ Qf7 Bxf7+ Kxf7 e6+ Kg6 Be7 Bxe7 Qxe7 Rad8 Qf7+ Kh7 Nxf5 Rhg8 e7 Rde8 Nxg7 Rxe7+ Qxe7 Rxg7 Qb4 Bxg2 Rg1",
+    "overview": "Gotham's Vienna Gambit (3.f4!) in full flight: fxe5 wins the centre pawn, Qf3 pins the knight, then bxc3 + Qg3 lines every piece up at the black king. From an offbeat gambit to a textbook attacking position vs a 3000+ opponent.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Vienna_Game",
+      "https://www.chess.com/game/live/169092161810"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
+        "annotation": "f4 — the Vienna Gambit. The pawn lunges, daring Black to take. White will trade the f-pawn for a centre, open lines, and a free attack.",
+        "concept": "3.f4 — the Vienna Gambit"
+      },
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "rnbqkb1r/ppp3pp/8/4Pp2/3p4/2PP2Q1/P1P3PP/R1B1KBNR b KQkq - 1 8",
+        "annotation": "Qg3 — the queen swings to g3 where she hits g7 AND the e5-pawn wedge. Every piece is now pointed at the black king while Black is still finding his pieces.",
+        "concept": "Qg3 dual-target battery"
+      }
+    ]
+  },
+  {
+    "id": "mg-pro-gothamchess-french-rubinstein",
+    "openingId": "pro-gothamchess-french-rubinstein",
+    "white": "Titled opponent",
+    "black": "Levy Rozman (GothamChess)",
+    "whiteElo": 3099,
+    "blackElo": 2889,
+    "result": "0-1",
+    "year": 2020,
+    "event": "Online (chess.com) / 2020",
+    "studentSide": "black",
+    "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 d5 Nb4 a3 Nxd5 Bg2 Be6 O-O Qd7 Qe2 O-O-O Bd2 h5 h4 Rg8 Rad1 Nb6 Be3 Bd6 Nd2 Bh3 c4 Bxg2 Kxg2 Qc6+ Kg1 Be7 b4 Na4 b5 Nc3 Qxh5 Qe6 Rc1 Na4 Qe2 f5 Bxa7 Bxh4 Kg2 f4 Ne4 f5 Nc5 Nxc5 Bxc5 e4 Qh5 Bxg3 fxg3 Rxg3+ Kf2 e3+ Ke1 Qe4 b6 f3 Qf7 f2+ Rxf2 exf2+ Kxf2 Rg2+ Kf1 Qe2#",
+    "overview": "Gotham's French Rubinstein at full speed: ...dxe4 trades into a clean piece-play game, ...gxf6 accepts doubled pawns for the open g-file + bishop pair, then ...e5 break + ...Nxd5 outpost + queenside castling set up an opposite-side attack. Beating a 3099 opponent shows the Rubinstein's practical bite.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/French_Defence,_Rubinstein_Variation",
+      "https://www.chess.com/game/live/5739337924"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 5,
+        "color": "black",
+        "fen": "rnbqkb1r/ppp2p1p/4pp2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+        "annotation": "...gxf6 — the trademark Rubinstein recapture. Doubled f-pawns, but the g-file opens for Black's rook and the bishop pair is in hand. Function beats form.",
+        "concept": "gxf6 — open the g-file"
+      },
+      {
+        "moveNumber": 9,
+        "color": "black",
+        "fen": "r1bqkb1r/ppp2p1p/5p2/3np3/8/P4NP1/1PP2P1P/R1BQKB1R w KQkq - 0 10",
+        "annotation": "...Nxd5 — knight lands on the d5 outpost. With Be6/Qd7/O-O-O coming, the queenside is ready and the open g-file aims at White's king.",
+        "concept": "Knight on d5 + opposite-side attack"
+      }
+    ]
   }
 ]
