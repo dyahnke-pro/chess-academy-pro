@@ -2478,6 +2478,92 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '', '', 'Bc4 — aim at f7', '', 'Bxh6 — shatter the kingside', '', '', '', 'Qxh6 — grab it, press the king', ''],
     sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
   },
+  // Vienna — Bishop trap: …Bg4 h3 Bh5?? g4! snares the h5-bishop. Engine-
+  // confirmed, White wins a clean piece for two pawns.
+  'pro-naroditsky-vienna:e4_e5_Nc3_Nc6_Bc4_Nf6_d3_Bc5_f4_d6_Nf3_Bg4_h3:Bh5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      '…Bg4 — Black pins the f3-knight against the queen.',
+      'h3 — politely asking the bishop its intentions; the only good answer is to retreat.',
+      '…Bh5? — keeping the pin, but the bishop now sits on the h5-g4 line with no safe square.',
+      'g4 — the pawn fork springs the trap: the h5-bishop is snared with nowhere to go.',
+      '',
+      '',
+      '…Bxg4 — Black scrapes two pawns back, but he has given up a knight to do it.',
+      'Bb5 — pinning the c6-knight, White consolidates the extra piece.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'h3 — question the bishop',
+      '',
+      "g4 — spring the trap, the bishop's snared",
+      '', '', '',
+      'Bb5 — pin and bank the extra piece',
+      '', '', '',
+    ],
+    sources: ['concept:tac-trap', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  },
+  // Vienna — the famous …Nxe4 Qh5 g6?? Qxe5+ fork (king + h8-rook). Black
+  // must answer Qh5 with the only move …Nd6.
+  'pro-naroditsky-vienna:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5:g6': {
+    watch: [
+      '', '', '', '', '',
+      '…Nxe4 — Black grabs the e4-pawn, the greedy capture that walks into the trap.',
+      'Qh5! — the queen leaps out hitting f7 with mate AND the loose e5-pawn at the same time. The only move that holds is …Nd6.',
+      '…g6? — shooing the queen feels natural, but it ignores the threat on e5.',
+      'Qxe5+ — the fork: check from e5 rakes the king and the rook in the far corner. White wins material outright.',
+      '',
+      '',
+      '',
+      'Nxe4 — and the stranded knight falls too. White is up a clean piece, game effectively over.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '',
+      'Qh5 — hit f7 and e5 at once',
+      '',
+      'Qxe5+ — fork the king and the corner rook',
+      '', '', '',
+      'Nxe4 — win the stranded knight',
+      '', '', '',
+    ],
+    sources: ['concept:tac-fork', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  },
+  // Vienna — Qf6?? defending walks into Nd5 fork (queen + c7); then Nxc7+
+  // forks king + rook for the exchange.
+  'pro-naroditsky-vienna:e4_e5_Nc3_Nf6_Bc4_Nxe4_Qh5_Nd6_Bb3:Qf6': {
+    watch: [
+      '', '', '', '', '',
+      '…Nxe4 — the greedy capture again; this time Black tries to hold with …Nd6.',
+      'Qh5 — the same double attack on f7 and e5.',
+      '…Nd6 — the correct blocker, covering f7 and hitting the bishop.',
+      'Bb3 — sidestepping, the bishop keeps its aim at f7.',
+      '…Qf6? — defending e5 and eyeing f2, but it walks into a knight fork.',
+      'Nd5 — the knight leaps in, forking the queen on f6 and the c7-pawn — and c7 means the king and the a8-rook next.',
+      '',
+      'Nxc7+ — the fork crashes home: check, and the corner rook is the next course.',
+      '',
+      '',
+      '',
+      'Nxa8 — the rook falls. White is up the exchange and more.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '',
+      'Qh5 — double attack, f7 and e5',
+      '',
+      'Bb3 — keep the bishop on f7',
+      '',
+      'Nd5 — fork the queen and c7',
+      '',
+      'Nxc7+ — fork the king and rook',
+      '', '', '',
+      'Nxa8 — win the rook',
+      '',
+    ],
+    sources: ['concept:tac-fork', 'concept:tac-double-attack', 'https://en.wikipedia.org/wiki/Vienna_Game'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

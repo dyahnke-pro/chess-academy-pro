@@ -3489,5 +3489,80 @@
     "materialDelta": 1,
     "tier": "positional",
     "why": "At your level opponents play Bf4 here in 7% of games. Punish with the best move e5 — the engine has Black clearly better (+1.0, +1 material)."
+  },
+  {
+    "openingId": "pro-naroditsky-vienna",
+    "lineMoves": "e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 f4 d6 Nf3 Bg4 h3",
+    "inaccuracy": "Bh5",
+    "freqPct": 13.5,
+    "games": 7288,
+    "practicalScore": 49,
+    "mainMove": "Bxf3",
+    "punish": "g4",
+    "punishSeq": [
+      "g4",
+      "Nxg4",
+      "hxg4",
+      "Bxg4",
+      "Bb5",
+      "f5",
+      "Qe2",
+      "Qd7"
+    ],
+    "playLine": "e4 e5 Nc3 Nc6 Bc4 Nf6 d3 Bc5 f4 d6 Nf3 Bg4 h3 Bh5 g4 Nxg4 hxg4 Bxg4 Bb5 f5 Qe2 Qd7",
+    "engineCp": 176,
+    "materialDelta": 1,
+    "tier": "confirmed",
+    "why": "At your level opponents play Bh5 here in 13% of games. Punish with the best move g4 — the engine has White winning (+1.8, +1 material)."
+  },
+  {
+    "openingId": "pro-naroditsky-vienna",
+    "lineMoves": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5",
+    "inaccuracy": "g6",
+    "freqPct": 5.5,
+    "games": 3122,
+    "practicalScore": 85,
+    "mainMove": "Nd6",
+    "punish": "Qxe5+",
+    "punishSeq": [
+      "Qxe5+",
+      "Qe7",
+      "Qxe7+",
+      "Bxe7",
+      "Nxe4",
+      "c6",
+      "Ng3",
+      "d5"
+    ],
+    "playLine": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 g6 Qxe5+ Qe7 Qxe7+ Bxe7 Nxe4 c6 Ng3 d5",
+    "engineCp": 472,
+    "materialDelta": 3,
+    "tier": "confirmed",
+    "why": "At your level opponents play g6 here in 6% of games. Punish with the best move Qxe5+ — the engine has White winning (+4.7, +3 material)."
+  },
+  {
+    "openingId": "pro-naroditsky-vienna",
+    "lineMoves": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3",
+    "inaccuracy": "Qf6",
+    "freqPct": 5.4,
+    "games": 1386,
+    "practicalScore": 71,
+    "mainMove": "Nc6",
+    "punish": "Nd5",
+    "punishSeq": [
+      "Nd5",
+      "Qg6",
+      "Nxc7+",
+      "Kd8",
+      "Qxg6",
+      "hxg6",
+      "Nxa8",
+      "Nc6"
+    ],
+    "playLine": "e4 e5 Nc3 Nf6 Bc4 Nxe4 Qh5 Nd6 Bb3 Qf6 Nd5 Qg6 Nxc7+ Kd8 Qxg6 hxg6 Nxa8 Nc6",
+    "engineCp": 301,
+    "materialDelta": 5,
+    "tier": "confirmed",
+    "why": "At your level opponents play Qf6 here in 5% of games. Punish with the best move Nd5 — the engine has White winning (+3.0, +5 material)."
   }
 ]
