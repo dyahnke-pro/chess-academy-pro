@@ -1,0 +1,77 @@
+[
+  {
+    "openingId": "pro-naroditsky-alapin",
+    "lineMoves": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O",
+    "inaccuracy": "Bd6",
+    "freqPct": 2.4,
+    "games": 1783,
+    "practicalScore": 50,
+    "mainMove": "Nc6",
+    "punish": "h3",
+    "punishSeq": [
+      "h3",
+      "h5",
+      "Qa4+",
+      "Nbd7",
+      "Rd1",
+      "Qf5",
+      "Bd3",
+      "Qd5"
+    ],
+    "playLine": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O Bd6 h3 h5 Qa4+ Nbd7 Rd1 Qf5 Bd3 Qd5",
+    "engineCp": 190,
+    "materialDelta": 0,
+    "tier": "positional",
+    "why": "At your level opponents play Bd6 here in 2% of games. Punish with the best move h3 — the engine has White clearly better (+1.9)."
+  },
+  {
+    "openingId": "pro-naroditsky-alapin",
+    "lineMoves": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O Nc6 Be3",
+    "inaccuracy": "c4",
+    "freqPct": 2.5,
+    "games": 1395,
+    "practicalScore": 71,
+    "mainMove": "cxd4",
+    "punish": "Nbd2",
+    "punishSeq": [
+      "Nbd2",
+      "Bd6",
+      "Bxc4",
+      "Qa5",
+      "Be2",
+      "Qc7",
+      "Nc4",
+      "Be7"
+    ],
+    "playLine": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4 Be2 e6 O-O Nc6 Be3 c4 Nbd2 Bd6 Bxc4 Qa5 Be2 Qc7 Nc4 Be7",
+    "engineCp": 182,
+    "materialDelta": 1,
+    "tier": "confirmed",
+    "why": "At your level opponents play c4 here in 2% of games. Punish with the best move Nbd2 — the engine has White winning (+1.8, +1 material)."
+  },
+  {
+    "openingId": "pro-naroditsky-semi-slav",
+    "lineMoves": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 dxc4 e4 b5 e5 h6",
+    "inaccuracy": "exf6",
+    "freqPct": 17.5,
+    "games": 17902,
+    "practicalScore": 62,
+    "mainMove": "Bh4",
+    "punish": "hxg5",
+    "punishSeq": [
+      "hxg5",
+      "fxg7",
+      "Bxg7",
+      "a4",
+      "a6",
+      "h4",
+      "g4",
+      "Ne5"
+    ],
+    "playLine": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 Bg5 dxc4 e4 b5 e5 h6 exf6 hxg5 fxg7 Bxg7 a4 a6 h4 g4 Ne5",
+    "engineCp": 208,
+    "materialDelta": 1,
+    "tier": "confirmed",
+    "why": "At your level opponents play exf6 here in 18% of games. Punish with the best move hxg5 — the engine has Black winning (+2.1, +1 material)."
+  }
+]
