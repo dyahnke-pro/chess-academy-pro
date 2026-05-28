@@ -198,6 +198,12 @@ const WEB_SPEECH_FALLBACK_ENABLED = false;
  *  within a move or two; long enough to avoid hammering a broken
  *  endpoint. */
 const POLLY_COOLDOWN_MS = 15_000;
+/** Min cooldown floor when honoring a server-supplied `Retry-After`.
+ *  Below this, we still pause briefly so we don't pound the endpoint. */
+const POLLY_COOLDOWN_MIN_MS = 3_000;
+/** Max cooldown ceiling so a misconfigured Retry-After can't strand the
+ *  session on Web Speech for minutes. */
+const POLLY_COOLDOWN_MAX_MS = 120_000;
 
 /** Voice delivery tier currently serving speak() calls. Exposed for
  *  UI so the Settings screen can show "Polly active" vs "Web Speech
@@ -1183,15 +1189,21 @@ class VoiceService {
   }
 
   /** Mark Polly as temporarily unavailable. Cleared automatically once
-   *  POLLY_COOLDOWN_MS elapses (see isPollyLive). Replaces the legacy
+   *  the cooldown elapses (see isPollyLive). Replaces the legacy
    *  permanent-kill behavior that stranded users on Web Speech for the
-   *  rest of the session after one transient failure. */
-  private coolDownPolly(reason: string): void {
+   *  rest of the session after one transient failure.
+   *
+   *  `cooldownMs` defaults to POLLY_COOLDOWN_MS but callers can pass a
+   *  shorter value when the server returned `Retry-After` — a Polly
+   *  throttle that says "retry in 5s" shouldn't burn 15s of fallback
+   *  voice. Clamped to [POLLY_COOLDOWN_MIN_MS, POLLY_COOLDOWN_MAX_MS]. */
+  private coolDownPolly(reason: string, cooldownMs: number = POLLY_COOLDOWN_MS): void {
+    const ms = Math.max(POLLY_COOLDOWN_MIN_MS, Math.min(POLLY_COOLDOWN_MAX_MS, cooldownMs));
     this.pollyAvailable = false;
-    this.pollyCooldownUntil = Date.now() + POLLY_COOLDOWN_MS;
+    this.pollyCooldownUntil = Date.now() + ms;
     if (import.meta.env.DEV) {
       console.warn(
-        `[VoiceService] Polly cooling down for ${Math.round(POLLY_COOLDOWN_MS / 1000)}s — ${reason}`,
+        `[VoiceService] Polly cooling down for ${Math.round(ms / 1000)}s — ${reason}`,
       );
     }
     // Fire the app auditor so Polly degradation is visible post-launch
@@ -1202,7 +1214,7 @@ class VoiceService {
         kind: 'polly-fallback',
         category: 'subsystem',
         source: 'voiceService.speakPolly',
-        summary: `Polly cooling down for ${Math.round(POLLY_COOLDOWN_MS / 1000)}s`,
+        summary: `Polly cooling down for ${Math.round(ms / 1000)}s`,
         details: reason,
       });
     });
@@ -1665,8 +1677,25 @@ class VoiceService {
       this.lastSpeakDiagnostic.pollyStatus = response.status;
       this.lastSpeakDiagnostic.pollyOk = response.ok;
       if (!response.ok) {
-        this.coolDownPolly(`API error ${response.status}`);
-        this.lastSpeakDiagnostic.error = `Polly /api/tts returned ${response.status}`;
+        // Pull the AWS error code + Retry-After hint the server now
+        // attaches on failure (api/tts.ts catch block). Audit log
+        // (2026-05-28) showed 10 generic "API error 500" cooldowns
+        // with zero signal on what AWS was actually complaining about.
+        // Capturing the error name + tuning the cooldown to the
+        // server-supplied Retry-After fixes that: throttles back off
+        // briefly, auth failures back off longer, and David's audit
+        // pull now shows the AWS cause directly.
+        const awsError = response.headers.get('X-TTS-Error-Name') ?? 'Unknown';
+        const retryAfterRaw = response.headers.get('Retry-After');
+        const retryAfterSec = retryAfterRaw ? Number(retryAfterRaw) : NaN;
+        const cooldownMs = Number.isFinite(retryAfterSec) && retryAfterSec > 0
+          ? retryAfterSec * 1000
+          : POLLY_COOLDOWN_MS;
+        this.coolDownPolly(
+          `API error ${response.status} aws=${awsError}${retryAfterRaw ? ` retry-after=${retryAfterRaw}s` : ''}`,
+          cooldownMs,
+        );
+        this.lastSpeakDiagnostic.error = `Polly /api/tts returned ${response.status} (${awsError})`;
         return false;
       }
 

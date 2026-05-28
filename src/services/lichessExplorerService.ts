@@ -153,6 +153,47 @@ export function _resetLichessCircuitBreaker(): void {
   circuitOpen = false;
   circuitOpenedAt = null;
   openCircuitLogged = false;
+  lichessRateLimitedUntil = null;
+}
+
+/** Shared rate-limit cooldown across the explorer + cloud-eval
+ *  endpoints. Both fan out to lichess.org behind the same edge proxy,
+ *  so a 429 on one endpoint usually means the next call to the OTHER
+ *  endpoint will also 429. Audit log (2026-05-27, 00:41 UTC) showed 6
+ *  parallel cloud-eval calls all 429ing simultaneously — pointless
+ *  hammering with no chance of success. When any Lichess call returns
+ *  429, every Lichess call (explorer + cloud-eval) short-circuits to
+ *  a cheap empty result until the Retry-After window expires. */
+const LICHESS_RATE_LIMIT_DEFAULT_MS = 30_000;
+const LICHESS_RATE_LIMIT_MAX_MS = 5 * 60 * 1000;
+let lichessRateLimitedUntil: number | null = null;
+
+function isLichessRateLimited(): boolean {
+  if (lichessRateLimitedUntil === null) return false;
+  if (Date.now() >= lichessRateLimitedUntil) {
+    lichessRateLimitedUntil = null;
+    return false;
+  }
+  return true;
+}
+
+function recordLichessRateLimit(response: Response, source: string): void {
+  // Honor the upstream Retry-After header (seconds) when present; clamp
+  // to [5s, 5min] so a misformatted value can't strand the session.
+  // Fallback to LICHESS_RATE_LIMIT_DEFAULT_MS when no header.
+  const raw = response.headers?.get?.('Retry-After') ?? null;
+  const sec = raw ? Number(raw) : NaN;
+  const ms = Number.isFinite(sec) && sec > 0
+    ? Math.max(5_000, Math.min(LICHESS_RATE_LIMIT_MAX_MS, sec * 1000))
+    : LICHESS_RATE_LIMIT_DEFAULT_MS;
+  lichessRateLimitedUntil = Date.now() + ms;
+  void logAppAudit({
+    kind: 'lichess-error',
+    category: 'subsystem',
+    source,
+    summary: `rate-limit cooldown ${Math.round(ms / 1000)}s (retry-after=${raw ?? 'none'})`,
+    details: JSON.stringify({ cooldownMs: ms, retryAfter: raw }),
+  });
 }
 
 /**
@@ -163,6 +204,10 @@ export async function fetchLichessExplorer(
   fen: string,
   source: ExplorerSource = 'lichess',
 ): Promise<LichessExplorerResult> {
+  // Shared rate-limit cooldown — see fetchCloudEval.
+  if (isLichessRateLimited()) {
+    throw new Error('lichess-rate-limited');
+  }
   if (isCircuitOpen()) {
     // Log the open-circuit state once per open-cycle so the audit
     // log reflects "we stopped trying" rather than going silent. A
@@ -213,6 +258,9 @@ export async function fetchLichessExplorer(
   }
   if (!response.ok) {
     recordExplorerFailure();
+    if (response.status === 429) {
+      recordLichessRateLimit(response, 'lichessExplorerService.fetchLichessExplorer');
+    }
     // Read the body so the audit captures Lichess's actual error
     // payload — the proxy passes upstream bodies through verbatim,
     // so 401 / 429 / Cloudflare challenge messages from Lichess
@@ -246,6 +294,10 @@ export async function fetchCloudEval(
   fen: string,
   multiPv: number = 3,
 ): Promise<LichessCloudEval | null> {
+  // Short-circuit while the shared Lichess rate-limit cooldown is
+  // active — see audit 2026-05-27 (6 parallel cloud-eval 429s). The
+  // caller's "no cloud eval available" branch already handles null.
+  if (isLichessRateLimited()) return null;
   const params = new URLSearchParams({ fen, multiPv: String(multiPv) });
   const url = withApiBase(`${CLOUD_EVAL_PROXY_PATH}?${params.toString()}`);
   let response: Response;
@@ -260,6 +312,9 @@ export async function fetchCloudEval(
   }
   if (response.status === 404) return null;
   if (!response.ok) {
+    if (response.status === 429) {
+      recordLichessRateLimit(response, 'lichessExplorerService.fetchCloudEval');
+    }
     let body: string | null = null;
     try {
       body = await response.text();

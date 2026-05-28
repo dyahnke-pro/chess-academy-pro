@@ -303,7 +303,32 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
     const msg = error instanceof Error ? error.message : String(error);
     const name = error instanceof Error ? error.name : '';
     console.error('[TTS] Polly error:', name, msg);
-    return new Response(`TTS error [${name}]: ${msg}`, { status: 500, headers: cors });
+
+    // Classify AWS Polly errors so the client can pick the right backoff.
+    // Audit log (2026-05-27/28) showed 10 generic "API error 500" cooldowns
+    // with no signal whether Polly was throttling, the credentials were
+    // wrong, or the service was down — every failure looked the same and
+    // got the same 15s cooldown. Map throttle → 429 (short backoff,
+    // retry-after), service / internal failure → 503, auth → 503 long,
+    // anything else → 500. Surface the AWS error name in a response header
+    // so the client audit captures the actual cause without parsing the body.
+    const isThrottle = name === 'ThrottlingException' || name === 'TooManyRequestsException';
+    const isServiceUnavail = name === 'ServiceUnavailableException' || name === 'InternalServiceException';
+    const isAuth = name === 'AccessDeniedException' || name === 'InvalidSignatureException' || name === 'UnrecognizedClientException';
+
+    const errHeaders: Record<string, string> = { ...cors, 'X-TTS-Error-Name': name || 'Unknown' };
+    let status = 500;
+    if (isThrottle) {
+      status = 429;
+      errHeaders['Retry-After'] = '5';
+    } else if (isServiceUnavail) {
+      status = 503;
+      errHeaders['Retry-After'] = '10';
+    } else if (isAuth) {
+      status = 503;
+      errHeaders['Retry-After'] = '60';
+    }
+    return new Response(`TTS error [${name}]: ${msg}`, { status, headers: errHeaders });
   }
 }
 

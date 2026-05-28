@@ -40,10 +40,20 @@ const loggedAssetFailures = new Set<string>();
  *  picker — confirmed in the prod audit log (100+
  *  asset-load-error rows). jsdelivr serves the GitHub source
  *  directly with proper Content-Type + CORS, identical directory
- *  layout, and no auth. Pinned to a commit so this URL never silently
- *  regresses. */
+ *  layout, and no auth. */
 export const LICHESS_CDN =
   'https://cdn.jsdelivr.net/gh/lichess-org/lila@master/public/piece';
+
+/** Fallback CDN for the same assets — served by GitHack (separate
+ *  infrastructure from jsdelivr, so a regional jsdelivr outage or
+ *  edge cache miss doesn't take board rendering down). Audit log
+ *  (2026-05-27/28) showed 48 asset-load-errors all on the jsdelivr
+ *  primary; with no second CDN we'd previously retry the SAME URL
+ *  with a cache-bust query that DEFEATED jsdelivr's edge cache and
+ *  forced another cold fetch. The fallback path now tries a wholly
+ *  different CDN before surrendering to the alt-text fallback. */
+export const LICHESS_CDN_FALLBACK =
+  'https://raw.githack.com/lichess-org/lila/master/public/piece';
 
 export interface PieceFilterOptions {
   whitePieceFilter?: string;
@@ -85,9 +95,12 @@ export function buildPieceRenderer(
           // ("bR", "wP", etc.) until the user closes + reopens the
           // app. Symptoms match a CDN cold-start race — jsdelivr is
           // momentarily slow / throttled and the browser caches the
-          // failed response. Retry once with a cache-busting query
-          // before giving up to the alt-text fallback. Second failure
-          // logs the audit row and surrenders.
+          // failed response. We now retry on a DIFFERENT CDN
+          // (raw.githack.com) instead of a cache-bust query on the
+          // same one — the previous cache-bust DEFEATED jsdelivr's
+          // edge cache and forced another cold fetch on the very
+          // CDN that just failed. Second failure logs the audit row
+          // and surrenders to the alt-text fallback.
           //
           // Dedup (2026-05-19): without per-URL dedup this fires once
           // PER FAILED SPRITE PER BOARD RENDER. A walkthrough animating
@@ -100,7 +113,7 @@ export function buildPieceRenderer(
           const img = e.currentTarget as HTMLImageElement;
           if (!img.dataset.retried) {
             img.dataset.retried = '1';
-            img.src = `${url}?retry=${Date.now()}`;
+            img.src = `${LICHESS_CDN_FALLBACK}/${setName}/${file}.svg`;
             return;
           }
           if (loggedAssetFailures.has(url)) return;
@@ -109,7 +122,7 @@ export function buildPieceRenderer(
             kind: 'asset-load-error',
             category: 'subsystem',
             source: 'pieceSetService',
-            summary: `piece=${key} set=${setName} url=${url} (retry exhausted)`,
+            summary: `piece=${key} set=${setName} url=${url} (retry exhausted, fallback CDN also failed)`,
           });
         }}
         style={{

@@ -189,8 +189,29 @@ describe('lichessExplorerService', () => {
       vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
         ok: false,
         status: 429,
-      } as Response);
+        headers: { get: () => null },
+        text: () => Promise.resolve(''),
+      } as unknown as Response);
       await expect(fetchCloudEval('fen')).rejects.toThrow('Cloud eval API error: 429');
+    });
+
+    it('short-circuits subsequent calls after a 429 (shared rate-limit cooldown)', async () => {
+      // Audit (2026-05-27, 00:41 UTC): 6 parallel cloud-eval requests
+      // all 429'd in the same second. Hammering Lichess after a 429
+      // burns network time for nothing — wait until Retry-After elapses.
+      const fetchSpy = vi.spyOn(globalThis, 'fetch')
+        .mockResolvedValueOnce({
+          ok: false,
+          status: 429,
+          headers: { get: (k: string) => (k === 'Retry-After' ? '5' : null) },
+          text: () => Promise.resolve(''),
+        } as unknown as Response);
+      await expect(fetchCloudEval('fen')).rejects.toThrow('Cloud eval API error: 429');
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+      // Next call must return null without hitting the network.
+      const result = await fetchCloudEval('fen-2');
+      expect(result).toBeNull();
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
 
     it('passes multiPv parameter', async () => {
