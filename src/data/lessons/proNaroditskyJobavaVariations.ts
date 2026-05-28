@@ -32,4 +32,28 @@ export const PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS: Record<string, LessonScrip
       },
     ],
   },
+  'pro-naroditsky-jobava-london::vs ...c5': {
+    openingId: 'pro-naroditsky-jobava-london',
+    sources: ['https://www.youtube.com/@DanielNaroditskyGM', 'concept:pos-center'],
+    title: 'Jobava — vs ...c5 (Qxd4 & the e4 break)',
+    minutes: 6,
+    orientation: 'white',
+    beats: [
+      {
+        id: 'c5-qxd4',
+        moves: ['d4', 'd5', 'Nc3', 'Nf6', 'Bf4', 'c5', 'Nf3', 'cxd4', 'Qxd4'],
+        highlights: [{ square: 'd4', color: KEY }],
+        say: "Black's sharpest try is ...c5, hitting the centre before White is set up. The Jobava answer is calm: let the d-pawn go and recapture with the queen on d4. With Nc3 and Bf4 already developed, the few tempi the queen spends dodging Black's knights are a fair price for a centralized piece and a clear lead in development.",
+        sayShort: '...c5 — recapture on d4, stay centralized.',
+      },
+      {
+        id: 'c5-e4-break',
+        moves: ['d4', 'd5', 'Nc3', 'Nf6', 'Bf4', 'c5', 'Nf3', 'cxd4', 'Qxd4', 'Nc6', 'Qd3', 'Bg4', 'e4', 'Bxf3', 'gxf3', 'e5', 'Bg5', 'dxe4', 'fxe4', 'Qxd3', 'Bxd3', 'Be7', 'Bxf6', 'Bxf6', 'Nd5'],
+        arrows: [{ from: 'd5', to: 'f6', color: VIS }],
+        highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: SOFT }],
+        say: "White's plan is the e4 break. The pawns come off, the centre opens, and the knight settles on the d5 outpost — hitting the f6-bishop and dominating the board — while the bishop rakes from d3. Black is solid but passive; White's pieces are simply more active. That small, durable pull is exactly what the Jobava is after.",
+        sayShort: 'e4 break; knight to the d5 outpost.',
+      },
+    ],
+  },
 };
