@@ -4738,6 +4738,22 @@
           }
         }
       ]
+    },
+    {
+      "id": "pro-gothamchess-mengarini",
+      "color": "white",
+      "name": "Sicilian Defense: Mengarini Variation",
+      "player": "gothamchess",
+      "pgn": "e4 c5 a3 g6 Nc3 Bg7 Bc4 Nc6 d3 Nf6 Ba2 d6 h4 Bg4 f3 Bd7 g4 h5 g5 Nh7 f4 Bg4",
+      "provenance": "plays",
+      "provenanceRef": {
+        "games": 488,
+        "source": "his game dump (1.e4 c5 2.a3 wins)"
+      },
+      "sources": [
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Mengarini_Variation"
+      ],
+      "variations": []
     }
   ]
 }
