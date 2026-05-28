@@ -865,10 +865,18 @@ time:
    register full prose, Learn short cues, every named square bare-named for
    the markers (gotcha §8c), apostrophes in double-quoted strings (§8a),
    deep beat ≥20 plies. Sources from step 5.
-7. **Middlegame plan = his REAL post-spine play** (plies ~20-30+) of the
-   same deep line as a `playableLines[0]` entry with annotations +
-   learnCues + sources. Critical position FEN = the position at the spine
-   endpoint. This is the plan from his games, not from theory.
+7. **Middlegame plan PER VARIATION — themes mined from ALL his games on
+   that variation, not just the top winner.** For each variation tab:
+   (a) take ALL his games on that variation from the dump; (b) count
+   move-frequency in plies 10-24 (his pawn breaks + key piece moves);
+   (c) the moves appearing in ≥35% of games ARE the variation's themes
+   (e.g., Mengarini g6 → Ba2 92%, h4 92%, h5 94%, f4 38% — those four
+   moves are the plan); (d) pick a top winning game where the dominant
+   break actually plays and set the plan's critical FEN BEFORE the break
+   so the playable line DEMONSTRATES it (gate requirement —
+   `middlegamePlanThemes`); (e) annotations cite the % frequencies so the
+   plan reads as "this is what he does HERE" backed by numbers. Plans
+   from theory or one cherry-picked game fail the rule.
 8. **Model game per variation = his real winning game on that variation.**
    Top opponent elo, 2 critical moments with computed FENs, his side's
    character in the overview. studentSide must match orientation. EVERY
