@@ -588,14 +588,17 @@
         },
         {
           "name": "vs ...c5",
-          "pgn": "d4 d5 Nc3 Nf6 Bf4 c5 Nf3 cxd4 Qxd4 Nc6 Qd3 Bg4",
-          "explanation": "Black's sharpest try, ...c5, hits the centre at once. White lets the d-pawn go, recaptures with the queen and reroutes it to d3, banking the lead in development. Then e4 breaks the centre open and a knight lands on the d5 outpost — a small, lasting pull.",
+          "pgn": "d4 d5 Nc3 Nf6 Bf4 c5 e4 Nxe4 Nxe4 dxe4 dxc5 Qa5+ c3 Qxc5 Qa4+ Nc6 Qxe4 g6 Nf3 Bg7 Rd1",
+          "explanation": "Black's sharpest anti-Jobava, ...c5, hits the centre. Naroditsky's answer is to attack with 4.e4! — ripping the centre open at once. The pawns trade off, Qa4+ and Qxe4 regain the pawn with the queen centralized, and White's faster development (Nf3, Rd1) gives a lasting pull.",
           "provenance": "plays",
           "provenanceRef": {
             "games": 254,
             "score": 54,
             "source": "his game dump + masters DB"
-          }
+          },
+          "sources": [
+            "https://lichess.org/study/N3XOjphc"
+          ]
         }
       ],
       "trapLines": [],
