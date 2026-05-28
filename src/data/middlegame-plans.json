@@ -36905,5 +36905,1316 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pronaroAlapin-queenside-crawl",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "r1b1kb1r/pp2pppp/1nnq4/2p5/8/1BP2N2/PP1P1PPP/RNBQ1RK1 b kq - 1 8",
+    "title": "Alapin — a4-a5-a6 queenside crawl",
+    "overview": "Naroditsky's dominant Alapin middlegame plan from his 2,752-game corpus. After the standard exd6 en-passant + O-O, White launches the queenside crawl: a4 → a5 → a6 cramping Black's pawn structure while keeping the centre flexible. His score in this line is 74% — one of the highest of any opening he plays.",
+    "pawnBreaks": [
+      "a4 → a5 → a6 queenside expansion",
+      "d4 central push when timing allows"
+    ],
+    "pieceManeuvers": [
+      "Bb3 stays on the long diagonal aiming at f7",
+      "Nb1 → Nc3 if not already developed",
+      "Queen activates flexibly"
+    ],
+    "strategicThemes": [
+      "Queenside cramping vs Black's natural development",
+      "Long-diagonal pressure from Bb3"
+    ],
+    "endgameTransitions": [
+      "R+P endings with the queenside passer Black can't easily oppose"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1kb1r/pp2pppp/1nnq4/2p5/8/1BP2N2/PP1P1PPP/RNBQ1RK1 b kq - 1 8",
+        "moves": [
+          "Be6",
+          "Bxe6",
+          "Qxe6",
+          "a4",
+          "Qd7",
+          "a5",
+          "Nd5",
+          "a6",
+          "b6",
+          "d4"
+        ],
+        "annotations": [
+          "Be6 — Black's bishop to e6 — typical play at this position.",
+          "Bxe6 — White's bishop captures on e6 — material exchange.",
+          "Qxe6 — Black's queen captures on e6 — material exchange.",
+          "a4 — White's pawn to a4 — typical play at this position.",
+          "Qd7 — Black's queen to d7 — typical play at this position.",
+          "a5 — White's pawn to a5 — typical play at this position.",
+          "Nd5 — Black's knight to d5 — typical play at this position.",
+          "a6 — White's pawn to a6 — typical play at this position.",
+          "b6 — Black's pawn to b6 — typical play at this position.",
+          "d4 — White's pawn to d4 — typical play at this position."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Be6 — bishop to e6",
+          "Bxe6 — bishop to e6",
+          "Qxe6 — queen to e6",
+          "a4 — pawn to a4",
+          "Qd7 — queen to d7",
+          "a5 — pawn to a5",
+          "Nd5 — knight to d5",
+          "a6 — pawn to a6",
+          "b6 — pawn to b6",
+          "d4 — pawn to d4"
+        ],
+        "title": "Alapin — a4-a5-a6 queenside crawl",
+        "intro": "Naroditsky's dominant Alapin middlegame plan from his 2,752-game corpus. After the standard exd6 en-passant + O-O, White launches the queenside crawl: a4 → a5 → a6 cramping Black's pawn structure whil",
+        "sources": [
+          "book:sicilian-alapin",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroNajdorf-opposite-castle-race",
+    "openingId": "pro-naroditsky-najdorf",
+    "criticalPositionFen": "r1b1k2r/1pqnbpp1/p2ppn1p/6B1/3NPPP1/2N2Q2/PPP4P/2KR1B1R w kq - 0 11",
+    "title": "Najdorf — opposite-castle race + queenside trade",
+    "overview": "His Najdorf English Attack middlegame from 1,475 games. The opposite-side-castling race is on. After 10…h6 forces White's bishop decision, Naroditsky's most-played continuation goes: 11.Bxf6 Bxf6 12.h4 Nb6 13.g5 Bxd4 14.Rxd4 Qc5 — Black trades the d4 knight to relieve White's central pressure while White hammers kingside with h4-g5. 65% score in his games here.",
+    "pawnBreaks": [
+      "…h6 forcing White's Bg5 decision",
+      "…g5 — White's kingside pawn storm",
+      "h4 + g5 — White's attacking levers"
+    ],
+    "pieceManeuvers": [
+      "Nbd7 → Nb6 — knight to the queenside",
+      "…Bxd4 trading the central knight to relieve attacking pressure",
+      "Queen swings to c5 + Bd7 development"
+    ],
+    "strategicThemes": [
+      "Opposite-castled races favour whoever opens lines faster",
+      "Black trades pieces to slow White's kingside while staying solid"
+    ],
+    "endgameTransitions": [
+      "Sharp middlegame finishes — endgames are rare in his Najdorf games"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1k2r/1pqnbpp1/p2ppn1p/6B1/3NPPP1/2N2Q2/PPP4P/2KR1B1R w kq - 0 11",
+        "moves": [
+          "Bxf6",
+          "Bxf6",
+          "h4",
+          "Nb6",
+          "g5",
+          "Bxd4",
+          "Rxd4",
+          "Qc5",
+          "Rd2",
+          "Bd7"
+        ],
+        "annotations": [
+          "Bxf6 — White's bishop captures on f6 — material exchange.",
+          "Bxf6 — Black's bishop captures on f6 — material exchange.",
+          "h4 — White's pawn to h4 — typical play at this position.",
+          "Nb6 — Black's knight to b6 — typical play at this position.",
+          "g5 — White's pawn to g5 — typical play at this position.",
+          "Bxd4 — Black's bishop captures on d4 — material exchange.",
+          "Rxd4 — White's rook captures on d4 — material exchange.",
+          "Qc5 — Black's queen to c5 — typical play at this position.",
+          "Rd2 — White's rook to d2 — typical play at this position.",
+          "Bd7 — Black's bishop to d7 — typical play at this position."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bxf6 — bishop to f6",
+          "Bxf6 — bishop to f6",
+          "h4 — pawn to h4",
+          "Nb6 — knight to b6",
+          "g5 — pawn to g5",
+          "Bxd4 — bishop to d4",
+          "Rxd4 — rook to d4",
+          "Qc5 — queen to c5",
+          "Rd2 — rook to d2",
+          "Bd7 — bishop to d7"
+        ],
+        "title": "Najdorf — opposite-castle race + queenside trade",
+        "intro": "His Najdorf English Attack middlegame from 1,475 games. The opposite-side-castling race is on. After 10…h6 forces White's bishop decision, Naroditsky's most-played continuation goes: 11.Bxf6 Bxf6 12.h",
+        "sources": [
+          "book:sicilian-najdorf",
+          "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKID-mar-del-plata-attack",
+    "openingId": "pro-naroditsky-kid",
+    "criticalPositionFen": "r1bqr1k1/ppp2pbp/2np2p1/8/2PNPn2/2N1BP2/PP1QB1PP/R4RK1 w - - 5 12",
+    "title": "KID Mar del Plata — …Nf4 prize-square + …c5",
+    "overview": "Naroditsky's most-played KID middlegame plan from 4,432 games. The Mar del Plata mainline: after …exd4 + …Re8 + …Nh5 + …Nf4, the knight lands on the prize square attacking Be2. White typically trades with Bxf4, knight re-coordinates, and Black opens the queenside with …c5. 65% score across the whole sample.",
+    "pawnBreaks": [
+      "…c5 opening the queenside after the …Nf4 exchange",
+      "…f5 expanding kingside in some lines"
+    ],
+    "pieceManeuvers": [
+      "Nh5 → Nf4 prize-square outpost — provokes the exchange",
+      "Bishop pair coordination via Bg7 + Bf8",
+      "Rook to e8 for central pressure"
+    ],
+    "strategicThemes": [
+      "Bg7 + kingside pawn structure dominates",
+      "Knight on f4 forces White to trade — restructures the position in Black's favour"
+    ],
+    "endgameTransitions": [
+      "R+minor+P with the Bg7 as the conversion piece"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqr1k1/ppp2pbp/2np2p1/8/2PNPn2/2N1BP2/PP1QB1PP/R4RK1 w - - 5 12",
+        "moves": [
+          "Bxf4",
+          "Nxd4",
+          "Bd3",
+          "c5"
+        ],
+        "annotations": [
+          "Bxf4 — White's bishop captures on f4 — material exchange.",
+          "Nxd4 — Black's knight captures on d4 — material exchange.",
+          "Bd3 — White's bishop to d3 — typical play at this position.",
+          "c5 — Black's pawn to c5 — typical play at this position."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bxf4 — bishop to f4",
+          "Nxd4 — knight to d4",
+          "Bd3 — bishop to d3",
+          "c5 — pawn to c5"
+        ],
+        "title": "KID Mar del Plata — …Nf4 prize-square + …c5",
+        "intro": "Naroditsky's most-played KID middlegame plan from 4,432 games. The Mar del Plata mainline: after …exd4 + …Re8 + …Nh5 + …Nf4, the knight lands on the prize square attacking Be2. White typically trades ",
+        "sources": [
+          "book:kings-indian-defence",
+          "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlekhine-modern-development",
+    "openingId": "pro-naroditsky-alekhine",
+    "criticalPositionFen": "r2qkb1r/pp1npppp/2p5/3nNb2/3P4/8/PPP1BPPP/RNBQ1RK1 w kq - 4 8",
+    "title": "Alekhine Modern — Bf5 + Nd7 development",
+    "overview": "Naroditsky's Alekhine Modern Variation plan from 2,830 games — his highest-percentage Black opening at 68.7% score. After the trade-and-clarify on e5, Black develops with Bf5 + Nd7, finishing with …e6/Bd6/O-O to reach a healthy structure with active pieces.",
+    "pawnBreaks": [
+      "…c5 challenging White's centre",
+      "…e6 supporting d5 (the Nd5 retreat target)",
+      "…f6 in some lines"
+    ],
+    "pieceManeuvers": [
+      "Bf5 to its active diagonal",
+      "Nd7 develops, often heading to Nb6/Nc4",
+      "Bishop pair retained from late trades"
+    ],
+    "strategicThemes": [
+      "Provoke White's pawns then undermine the centre",
+      "Active piece play vs cramped White position"
+    ],
+    "endgameTransitions": [
+      "Bishop-and-knight endgames where Black's pair dominates"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qkb1r/pp1npppp/2p5/3nNb2/3P4/8/PPP1BPPP/RNBQ1RK1 w kq - 4 8",
+        "moves": [
+          "Nf3",
+          "e6",
+          "c4",
+          "N5f6",
+          "Nc3",
+          "Bd6",
+          "Nh4",
+          "Bg6",
+          "g3",
+          "O-O"
+        ],
+        "annotations": [
+          "Nf3 — White's knight to f3 — typical play at this position.",
+          "e6 — Black's pawn to e6 — typical play at this position.",
+          "c4 — White's pawn to c4 — typical play at this position.",
+          "N5f6 — Black's knight to f6 — typical play at this position.",
+          "Nc3 — White's knight to c3 — typical play at this position.",
+          "Bd6 — Black's bishop to d6 — typical play at this position.",
+          "Nh4 — White's knight to h4 — typical play at this position.",
+          "Bg6 — Black's bishop to g6 — typical play at this position.",
+          "g3 — White's pawn to g3 — typical play at this position.",
+          "O-O — Black castles kingside, king safe."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nf3 — knight to f3",
+          "e6 — pawn to e6",
+          "c4 — pawn to c4",
+          "N5f6 — knight to f6",
+          "Nc3 — knight to c3",
+          "Bd6 — bishop to d6",
+          "Nh4 — knight to h4",
+          "Bg6 — bishop to g6",
+          "g3 — pawn to g3",
+          "O-O — castle short"
+        ],
+        "title": "Alekhine Modern — Bf5 + Nd7 development",
+        "intro": "Naroditsky's Alekhine Modern Variation plan from 2,830 games — his highest-percentage Black opening at 68.7% score. After the trade-and-clarify on e5, Black develops with Bf5 + Nd7, finishing with …e6",
+        "sources": [
+          "book:alekhine-defence",
+          "https://www.chess.com/openings/Alekhines-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKIA-classical-attack",
+    "openingId": "pro-naroditsky-kia",
+    "criticalPositionFen": "r1bq1rk1/pp2ppbp/2n2np1/2pp4/4P3/2PP1NP1/PP1N1PBP/R1BQ1RK1 b - - 0 8",
+    "title": "KIA — central exchange + queen activation",
+    "overview": "Naroditsky's most-played opening overall — 18,216 games. The system: develop Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4 every game. After Black challenges with …d5, the central exchange …dxe4 / dxe4 opens lines and the queens activate — Black's queen swings to c7 while White's queen lifts to e2 supporting a kingside buildup. Score: 69.7% across 18k games.",
+    "pawnBreaks": [
+      "…dxe4 / dxe4 — central exchange opening the position",
+      "e4-e5 push when timing allows in later phases"
+    ],
+    "pieceManeuvers": [
+      "Queen lifts via Qe2 to support the kingside",
+      "Nh4 reroute to f5 squares in some lines",
+      "Bg2 on the long diagonal stays the system anchor"
+    ],
+    "strategicThemes": [
+      "System play — same setup every game means deep pattern knowledge",
+      "After …dxe4 exchange the d-file becomes the contested artery"
+    ],
+    "endgameTransitions": [
+      "Often R+minor+P with the Bg2 dominating the long diagonal"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp2ppbp/2n2np1/2pp4/4P3/2PP1NP1/PP1N1PBP/R1BQ1RK1 b - - 0 8",
+        "moves": [
+          "dxe4",
+          "dxe4",
+          "Qc7",
+          "Qe2"
+        ],
+        "annotations": [
+          "dxe4 — Black's pawn captures on e4 — material exchange.",
+          "dxe4 — White's pawn captures on e4 — material exchange.",
+          "Qc7 — Black's queen to c7 — typical play at this position.",
+          "Qe2 — White's queen to e2 — typical play at this position."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "dxe4 — pawn to e4",
+          "dxe4 — pawn to e4",
+          "Qc7 — queen to c7",
+          "Qe2 — queen to e2"
+        ],
+        "title": "KIA — central exchange + queen activation",
+        "intro": "Naroditsky's most-played opening overall — 18,216 games. The system: develop Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4 every game. After Black challenges with …d5, the central exchange …dxe4 / dxe4 opens ",
+        "sources": [
+          "book:kings-indian-attack",
+          "https://www.chess.com/openings/Kings-Indian-Attack",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroRossolimo-bishop-reroute",
+    "openingId": "pro-naroditsky-rossolimo",
+    "criticalPositionFen": "r2qkb1r/1b1n1ppp/pp1ppn2/2p5/2P1P3/2N2N2/PP1P1PPP/R1BQRBK1 b kq - 2 9",
+    "title": "Rossolimo — Bb5 → Bd3 → Bf1 bishop reroute + Maroczy bind",
+    "overview": "Naroditsky's Rossolimo/Moscow anti-Sicilian middlegame plan from 4,151 games. After the Bb5+ check disrupts Black's setup, the bishop reroutes via Bd3 back to Bf1, then the c4 + Nc3 setup creates a Maroczy bind structure. 66% score — outplays Sicilian specialists by avoiding their theory.",
+    "pawnBreaks": [
+      "c4-c5 push if Black plays …d6 / …d5 sequences",
+      "b3 + Bb2 setup in some lines"
+    ],
+    "pieceManeuvers": [
+      "Bishop reroute Bb5 → Bd3 → Bf1 (three moves)",
+      "Re1 supports e-file pressure",
+      "Nc3 finishes development"
+    ],
+    "strategicThemes": [
+      "Sidestep Sicilian theory",
+      "Maroczy bind cramps Black's pieces"
+    ],
+    "endgameTransitions": [
+      "R+minor+P endgames where the bind structure carries forward"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qkb1r/1b1n1ppp/pp1ppn2/2p5/2P1P3/2N2N2/PP1P1PPP/R1BQRBK1 b kq - 2 9",
+        "moves": [
+          "Be7",
+          "d4",
+          "cxd4",
+          "Nxd4",
+          "O-O",
+          "b3"
+        ],
+        "annotations": [
+          "Be7 — Black's bishop to e7 — typical play at this position.",
+          "d4 — White's pawn to d4 — typical play at this position.",
+          "cxd4 — Black's pawn captures on d4 — material exchange.",
+          "Nxd4 — White's knight captures on d4 — material exchange.",
+          "O-O — Black castles kingside, king safe.",
+          "b3 — White's pawn to b3 — typical play at this position."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Be7 — bishop to e7",
+          "d4 — pawn to d4",
+          "cxd4 — pawn to d4",
+          "Nxd4 — knight to d4",
+          "O-O — castle short",
+          "b3 — pawn to b3"
+        ],
+        "title": "Rossolimo — Bb5 → Bd3 → Bf1 bishop reroute + Maroczy bind",
+        "intro": "Naroditsky's Rossolimo/Moscow anti-Sicilian middlegame plan from 4,151 games. After the Bb5+ check disrupts Black's setup, the bishop reroutes via Bd3 back to Bf1, then the c4 + Nc3 setup creates a Ma",
+        "sources": [
+          "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroJobava-central-queen-attack",
+    "openingId": "pro-naroditsky-jobava-london",
+    "criticalPositionFen": "r1bqkb1r/pp2pppp/2n2n2/3p4/5B2/2NQ1N2/PPP1PPPP/R3KB1R b KQkq - 2 6",
+    "title": "Jobava London — Qxd4 + Qd3 central queen + kingside attack",
+    "overview": "Naroditsky's Jobava London middlegame plan from 2,170 games. After …c5/cxd4/Qxd4 the queen sits in the centre attacking d8 with tempo, then Qd3 swings to the h7-diagonal supporting an eventual e4 push. The Bf4 (not e3) aiming at c7 plus the central queen creates an aggressive setup. Score: 70.3%.",
+    "pawnBreaks": [
+      "e4 opening the centre",
+      "e5 cramping Black's pieces if the centre stays closed"
+    ],
+    "pieceManeuvers": [
+      "Queen on d3 aiming at h7",
+      "Bf4 attacking c7 and the long a1-h8 diagonal",
+      "Knight reroute via Nb5 in tactical lines"
+    ],
+    "strategicThemes": [
+      "Bf4 placement (not e3) is the system's identity",
+      "Central queen + Bf4 create immediate threats"
+    ],
+    "endgameTransitions": [
+      "R+minor+P endings where the Bf4 + central control wins"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/pp2pppp/2n2n2/3p4/5B2/2NQ1N2/PPP1PPPP/R3KB1R b KQkq - 2 6",
+        "moves": [
+          "e6",
+          "e4",
+          "Bb4",
+          "O-O-O"
+        ],
+        "annotations": [
+          "e6 — Black's pawn to e6 — typical play at this position.",
+          "e4 — White's pawn to e4 — typical play at this position.",
+          "Bb4 — Black's bishop to b4 — typical play at this position.",
+          "O-O-O — White castles queenside, opposite-side play."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "e6 — pawn to e6",
+          "e4 — pawn to e4",
+          "Bb4 — bishop to b4",
+          "O-O-O — castle long"
+        ],
+        "title": "Jobava London — Qxd4 + Qd3 central queen + kingside attack",
+        "intro": "Naroditsky's Jobava London middlegame plan from 2,170 games. After …c5/cxd4/Qxd4 the queen sits in the centre attacking d8 with tempo, then Qd3 swings to the h7-diagonal supporting an eventual e4 push",
+        "sources": [
+          "book:london-system",
+          "https://www.chess.com/openings/Jobava-London-System",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroRuyLopez-d4-break",
+    "openingId": "pro-naroditsky-ruy-lopez",
+    "criticalPositionFen": "r1bqnrk1/2ppbppp/p7/1p2P3/3p4/1BP5/PP3PPP/RNBQR1K1 b - - 0 11",
+    "title": "Ruy Lopez Closed — …c5 expansion + …d5 break",
+    "overview": "Naroditsky's Ruy Lopez Closed Spanish plan from 2,922 games. After the d4 break and …Nxd4/Nxd4/exd4 sequence, the most-played continuation is the Marshall-style …c5 + …cxd4 followed by White's c4 cramping, and Black's …d5 central counter. Score: 62.5% — slightly lower than other openings because the Ruy is the most-theoretical opening Black can prepare for.",
+    "pawnBreaks": [
+      "…c5 expansion + …cxd4 capturing",
+      "…d5 central counter-break",
+      "White's c4 cramping push"
+    ],
+    "pieceManeuvers": [
+      "Bishop on b3 reroutes to c2 via the Bb3-Bc2 manoeuvre",
+      "Knight reroute via …Nc7 to support …d5",
+      "Queen on h5 in tactical lines"
+    ],
+    "strategicThemes": [
+      "Patient build then central crack",
+      "After the central trade, pawn structure decides — …c5/…d5 challenges White's bind"
+    ],
+    "endgameTransitions": [
+      "R+minor+P with the slight space advantage converting"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqnrk1/2ppbppp/p7/1p2P3/3p4/1BP5/PP3PPP/RNBQR1K1 b - - 0 11",
+        "moves": [
+          "c5",
+          "cxd4",
+          "c4",
+          "Bc2",
+          "d5",
+          "Nc3",
+          "Nc7",
+          "Qh5"
+        ],
+        "annotations": [
+          "c5 — Black's pawn to c5 — typical play at this position.",
+          "cxd4 — White's pawn captures on d4 — material exchange.",
+          "c4 — Black's pawn to c4 — typical play at this position.",
+          "Bc2 — White's bishop to c2 — typical play at this position.",
+          "d5 — Black's pawn to d5 — typical play at this position.",
+          "Nc3 — White's knight to c3 — typical play at this position.",
+          "Nc7 — Black's knight to c7 — typical play at this position.",
+          "Qh5 — White's queen to h5 — typical play at this position."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "c5 — pawn to c5",
+          "cxd4 — pawn to d4",
+          "c4 — pawn to c4",
+          "Bc2 — bishop to c2",
+          "d5 — pawn to d5",
+          "Nc3 — knight to c3",
+          "Nc7 — knight to c7",
+          "Qh5 — queen to h5"
+        ],
+        "title": "Ruy Lopez Closed — …c5 expansion + …d5 break",
+        "intro": "Naroditsky's Ruy Lopez Closed Spanish plan from 2,922 games. After the d4 break and …Nxd4/Nxd4/exd4 sequence, the most-played continuation is the Marshall-style …c5 + …cxd4 followed by White's c4 cram",
+        "sources": [
+          "book:ruy-lopez",
+          "https://www.chess.com/openings/Ruy-Lopez-Opening",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroFantasyCaro-bishop-pair-attack",
+    "openingId": "pro-naroditsky-fantasy-caro",
+    "criticalPositionFen": "rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
+    "title": "Fantasy Caro — Bc4, c3, weather Black's …e5",
+    "overview": "Naroditsky's Fantasy Variation as White, from 370 games at 73.4% score (111 of those branched on 5...dxe4 at 78% score). After fxe4 recaptures, Black challenges the centre with …e5 and the plan is: Nf3 holding the d-pawn, Bc4 targeting f7, fast castling, then c3 reinforcing d4 against the central tension. The whole structure rests on the big e4+d4 centre — collapse it and Black equalises; hold it and White owns the squares.",
+    "pawnBreaks": [
+      "c3 reinforcing d4 against Black's …e5",
+      "d4 stays — the central anchor"
+    ],
+    "pieceManeuvers": [
+      "Bc4 targeting f7 — the Fantasy bishop's diagonal",
+      "Nf3 holds the centre and eyes e5",
+      "Fast O-O for king safety"
+    ],
+    "strategicThemes": [
+      "Central tension favours the side that holds the centre",
+      "Bc4 + Nf3 coordinate against f7 and e5"
+    ],
+    "endgameTransitions": [
+      "R+minor+P with the central pawn-couple as the conversion piece"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
+        "moves": [
+          "e5",
+          "Nf3",
+          "Bg4",
+          "Bc4",
+          "Nd7",
+          "O-O",
+          "Ngf6",
+          "c3"
+        ],
+        "annotations": [
+          "e5 — Black's pawn to e5 — typical play at this position.",
+          "Nf3 — White's knight to f3 — typical play at this position.",
+          "Bg4 — Black's bishop to g4 — typical play at this position.",
+          "Bc4 — White's bishop to c4 — typical play at this position.",
+          "Nd7 — Black's knight to d7 — typical play at this position.",
+          "O-O — White castles kingside, king safe.",
+          "Ngf6 — Black's knight to f6 — typical play at this position.",
+          "c3 — White's pawn to c3 — typical play at this position."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "e5 — pawn to e5",
+          "Nf3 — knight to f3",
+          "Bg4 — bishop to g4",
+          "Bc4 — bishop to c4",
+          "Nd7 — knight to d7",
+          "O-O — castle short",
+          "Ngf6 — knight to f6",
+          "c3 — pawn to c3"
+        ],
+        "title": "Fantasy Caro — Bc4, c3, weather Black's …e5",
+        "intro": "Naroditsky's Fantasy Variation as White, from 370 games at 73.4% score (111 of those branched on 5...dxe4 at 78% score). After fxe4 recaptures, Black challenges the centre with …e5 and the plan is: Nf",
+        "sources": [
+          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR"
+        ]
+      }
+    ]
   }
 ]
