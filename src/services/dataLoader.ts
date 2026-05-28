@@ -107,7 +107,7 @@ const SEED_KEY = 'db_seeded_v12';
  * compared byte-for-byte to the meta key, so any change triggers a
  * full content refresh.
  */
-const PRO_DATA_REVISION = '2026-05-28-naroditsky-full-repertoire';
+const PRO_DATA_REVISION = '2026-05-28-orphan-cleanup';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
@@ -335,6 +335,32 @@ export async function reconcileProRepertoires(): Promise<void> {
   }
 
   await db.openings.bulkPut(toPut);
+
+  // Delete orphan pro-rep entries: for each player we have current JSON
+  // data for, drop any Dexie row with that proPlayerId whose id isn't in
+  // the current JSON. Prevents scrapped entries from surfacing in the
+  // player list with stale LLM-synthesised narration when their
+  // LessonScript no longer exists (David 2026-05-28, audit caught
+  // pro-naroditsky-fantasy-caro lingering after the Naroditsky rebuild).
+  // Scoped per player so a partial rebuild doesn't accidentally delete
+  // other players' content.
+  const idsByPlayer: Record<string, Set<string>> = {};
+  for (const entry of entries) {
+    if (!idsByPlayer[entry.playerId]) idsByPlayer[entry.playerId] = new Set();
+    idsByPlayer[entry.playerId].add(entry.id);
+  }
+  // proPlayerId isn't a Dexie-indexed column — full-table scan + filter.
+  // ~3,400 rows total at steady state; cost is negligible.
+  const allOpenings = await db.openings.toArray();
+  for (const [playerId, validIds] of Object.entries(idsByPlayer)) {
+    const orphanIds = allOpenings
+      .filter((o) => o.proPlayerId === playerId && !validIds.has(o.id))
+      .map((o) => o.id);
+    if (orphanIds.length > 0) {
+      await db.openings.bulkDelete(orphanIds);
+    }
+  }
+
   await db.meta.put({ key: PRO_REVISION_KEY, value: PRO_DATA_REVISION });
 }
 
