@@ -21,7 +21,7 @@ export const PRO_GOTHAMCHESS_VIENNA_LESSON: LessonScript = {
       id: 'f4-gambit',
       moves: ['e4', 'e5', 'Nc3', 'Nf6', 'f4'],
       highlights: [{ square: 'f4', color: KEY }],
-      say: "The Vienna Game is Gotham's favourite e4 weapon — and the Vienna GAMBIT (3.f4!) is his real toy. The pawn lunge to f4 looks like an oversight, but it's an old gambit that nearly always catches Black off-guard. White will trade the f-pawn for a roaring centre and a free attack on the king.",
+      say: "The Vienna Game is Gotham's favourite e4 weapon — and the Vienna GAMBIT (3.f4!) is his real toy. The pawn lunge to f4 looks like an oversight, but it's an old gambit that nearly always catches Black off-guard. White will trade the f-pawn for a roaring centre and a free attack on the king. This is what Levy PLAYS — 628 wins in his game dump, 198 in the f4 gambit specifically.",
       sayShort: 'f4 — the Vienna Gambit, free attack ahead.',
     },
     {

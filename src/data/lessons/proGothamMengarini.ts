@@ -25,7 +25,7 @@ export const PRO_GOTHAMCHESS_MENGARINI_LESSON: LessonScript = {
       id: 'a3',
       moves: ['e4', 'c5', 'a3'],
       highlights: [{ square: 'a3', color: KEY }],
-      say: "Gotham's anti-Sicilian secret weapon: a3 on move 2. The little pawn looks like nothing, but it sidesteps every line of Sicilian theory Black has prepared — and it's setting up the real point: b4, throwing the wing pawn at the c5-pawn for an early gambit. Off-book, off-balance, and 488 wins in his dump.",
+      say: "Gotham's anti-Sicilian secret weapon: a3 on move 2. The little pawn looks like nothing, but it sidesteps every line of Sicilian theory Black has prepared — and it's setting up the real point: b4, throwing the wing pawn at the c5-pawn for an early gambit. Off-book, off-balance, and Levy plays it: 488 wins in his game dump. He also teaches it directly in his 'a3 Sicilian, Gotham Style' video — so this is what he plays AND what he teaches.",
       sayShort: 'a3 — sidestep Sicilian theory, prep b4.',
     },
     {

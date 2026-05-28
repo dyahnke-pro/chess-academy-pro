@@ -21,7 +21,7 @@ export const PRO_GOTHAMCHESS_CARO_KANN_LESSON: LessonScript = {
       moves: ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Bf5'],
       arrows: [{ from: 'f5', to: 'e4', color: VIS }],
       highlights: [{ square: 'f5', color: KEY }],
-      say: "Gotham's #1 black weapon. The Caro-Kann's signature: ...c6 prepares ...d5, then after the central trade Black develops the light-squared bishop OUTSIDE the pawn chain with Bf5. This is the move the French cannot play and is exactly why the Caro is the solid French replacement Gotham loves — the bishop gets out before ...e6 traps it.",
+      say: "Gotham's #1 Black weapon — Levy plays this 1,504 times in his dump AND he TEACHES it in three separate Caro-Kann lichess studies. The Caro-Kann's signature: ...c6 prepares ...d5, then after the central trade Black develops the light-squared bishop OUTSIDE the pawn chain with Bf5. This is the move the French cannot play and is exactly why the Caro is the solid French replacement Gotham loves — the bishop gets out before ...e6 traps it.",
       sayShort: '...Bf5 — bishop out before ...e6.',
     },
     {

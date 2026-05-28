@@ -21,7 +21,7 @@ export const PRO_GOTHAMCHESS_TROMPOWSKY_LESSON: LessonScript = {
       moves: ['d4', 'Nf6', 'Bg5'],
       arrows: [{ from: 'g5', to: 'f6', color: VIS }],
       highlights: [{ square: 'g5', color: KEY }],
-      say: "The Trompowsky is GothamChess's #1 weapon: the bishop swings out to g5 on move 2, pinning the f6-knight before Black has finished thinking. There's no theory race here — the whole opening is built on one trade: Bxf6 to damage Black's structure, then squeeze the weak squares for the rest of the game.",
+      say: "The Trompowsky is GothamChess's #1 White weapon — Levy plays it 1,381 times in his game dump (808 wins). The bishop swings out to g5 on move 2, pinning the f6-knight before Black has finished thinking. There's no theory race here — the whole opening is built on one trade: Bxf6 to damage Black's structure, then squeeze the weak squares for the rest of the game.",
       sayShort: 'Bg5 — pin the knight, plan the trade.',
     },
     {

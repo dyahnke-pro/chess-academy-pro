@@ -22,7 +22,7 @@ export const PRO_GOTHAMCHESS_FRENCH_RUBINSTEIN_LESSON: LessonScript = {
       moves: ['e4', 'e6', 'd4', 'd5', 'Nc3', 'dxe4'],
       arrows: [{ from: 'd5', to: 'e4', color: VIS }],
       highlights: [{ square: 'e4', color: KEY }],
-      say: "The Rubinstein: instead of the cramped main lines, Black trades on e4 right away. No locked French structure, no bad bishop entombed — just a clean exchange that leaves Black with sound piece play and a flexible setup. Gotham's go-to vs every 1.e4: practical, principled, and out of every White player's prep.",
+      say: "The Rubinstein: instead of the cramped main lines, Black trades on e4 right away. No locked French structure, no bad bishop entombed — just a clean exchange that leaves Black with sound piece play and a flexible setup. This is what Levy PLAYS as Black vs every 1.e4 — 451 games in his dump, 245 wins. Practical, principled, out of every White player's prep.",
       sayShort: '...dxe4 — sidestep the cramped French.',
     },
     {
