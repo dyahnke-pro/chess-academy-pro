@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import type { LessonScript, AnnotationArrow, AnnotationHighlight, PlayableMiddlegameLine } from '../../types';
+import { PRO_NARODITSKY_CARO_KANN_LESSON } from './proNaroditskyCaroKann';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
@@ -143,6 +144,16 @@ const LESSONS: Record<string, LessonScript> = {
   [QUEENS_GAMBIT_LESSON.openingId]: QUEENS_GAMBIT_LESSON,
   [TROMPOWSKY_ATTACK_LESSON.openingId]: TROMPOWSKY_ATTACK_LESSON,
   [BIRDS_OPENING_LESSON.openingId]: BIRDS_OPENING_LESSON,
+  // Pro repertoires — players' actual lines (PGN games = source of truth).
+  // Registered HERE (runtime LESSONS map) but NOT in registry.ts's OPENINGS
+  // (gate registry). Pro-rep doctrine has a different rule set from
+  // masterclass: voice paraphrases the pro's recurring teaching framing
+  // (sourced), spine derived from the player's actual game frequency
+  // (not theory), and the masterclass-specific gates (depth, masters-
+  // coverage, narration-grounding baselines, variation-tab coverage)
+  // don't apply. The verbosity contract (G5 — long/short on every beat)
+  // does apply and is enforced at the file level.
+  [PRO_NARODITSKY_CARO_KANN_LESSON.openingId]: PRO_NARODITSKY_CARO_KANN_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
