@@ -4800,5 +4800,23 @@
     "criticalMoments": [],
     "middlegameTheme": "Classical, Patient",
     "lessonSummary": "Naroditsky vs Nihal Sarin (3142), 93-ply Closed Spanish. Patient Ruy build to a winning middlegame attack on the kingside."
+  },
+  {
+    "id": "mg-pro-naroditsky-fantasy-caro",
+    "openingId": "pro-naroditsky-fantasy-caro",
+    "white": "Daniel Naroditsky",
+    "black": "nihalsarin",
+    "whiteElo": 3102,
+    "blackElo": 3204,
+    "result": "1-0",
+    "year": 2023,
+    "event": "chess.com blitz (2023-12-18)",
+    "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 Ne7 Bd3 b6 Ne2 Ba6 O-O O-O Bg5 h6 Bh4 c5 Bxa6 Nxa6 Qd3 Nc7 Rad1 Qd7 Qe3 cxd4 cxd4 Rac8 Nf4 Rfe8 Nh5 dxe4 fxe4 f5 Qg3 Ncd5 Qxg7#",
+    "sourceUrl": "https://www.chess.com/game/live/96628687557",
+    "studentSide": "white",
+    "overview": "Naroditsky's Fantasy Variation against Nihal Sarin (3204) — a clean kingside attack with the doubled-pawn bishop pair handling everything classical theory says shouldn't work. Demonstrates the e5 push at the right moment and the diagonal attack once Black's c8-bishop stays locked.",
+    "criticalMoments": [],
+    "middlegameTheme": "Centre Build + Bishop Pair Attack",
+    "lessonSummary": "The Fantasy isn't bluff — when Black plays the standard French-style setup, our bishop pair and big centre add up to a real attacking middlegame. This game shows the conversion."
   }
 ]

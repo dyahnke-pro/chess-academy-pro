@@ -37,7 +37,7 @@ function b(init: BeatInit): LessonBeat {
 
 export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
   openingId: 'pro-naroditsky-caro-kann',
-  title: "Naroditsky's Caro-Kann — Advance with 3...c5",
+  title: "Naroditsky's Caro-Kann — Advance with c5",
   minutes: 8,
   orientation: 'black',
   kind: 'variation',

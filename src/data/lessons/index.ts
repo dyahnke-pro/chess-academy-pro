@@ -7,6 +7,7 @@ import {
   PRO_NAR_ALEKHINE_LESSON, PRO_NAR_KIA_LESSON, PRO_NAR_ROSSOLIMO_LESSON,
   PRO_NAR_JOBAVA_LESSON, PRO_NAR_RUY_LESSON,
 } from './proNaroditskyAllRemaining';
+import { PRO_NAR_FANTASY_CARO_LESSON } from './proNaroditskyFantasyCaro';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
@@ -168,6 +169,7 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_NAR_ROSSOLIMO_LESSON.openingId]: PRO_NAR_ROSSOLIMO_LESSON,
   [PRO_NAR_JOBAVA_LESSON.openingId]: PRO_NAR_JOBAVA_LESSON,
   [PRO_NAR_RUY_LESSON.openingId]: PRO_NAR_RUY_LESSON,
+  [PRO_NAR_FANTASY_CARO_LESSON.openingId]: PRO_NAR_FANTASY_CARO_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {

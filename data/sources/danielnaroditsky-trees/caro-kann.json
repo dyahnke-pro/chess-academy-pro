@@ -7,11 +7,11 @@
     "e4",
     "c6"
   ],
-  "generatedAt": "2026-05-28T13:20:54.193Z",
+  "generatedAt": "2026-05-28T16:27:37.616Z",
   "totals": {
     "totalGamesScanned": 140530,
     "gamesMatchingOpening": 3546,
-    "minBranchGames": 20,
+    "minBranchGames": 5,
     "minTrieGames": 5
   },
   "rootStats": {
@@ -34,10 +34,15 @@
       "Bd3",
       "Nc6",
       "O-O",
-      "Nge7"
+      "Nge7",
+      "Nbd2",
+      "Ng6",
+      "Nb3",
+      "Bb6",
+      "Re1"
     ],
     "prefixPlies": 2,
-    "totalPlies": 14
+    "totalPlies": 19
   },
   "variations": [
     {
@@ -69,7 +74,10 @@
         "Bb3",
         "Qc7",
         "d4",
-        "Bd6"
+        "Bd6",
+        "O-O",
+        "O-O",
+        "Re1"
       ],
       "bestUrls": [
         {
@@ -122,7 +130,13 @@
         "dxe4",
         "dxe4",
         "e5",
-        "Bc4"
+        "Bc4",
+        "b5",
+        "Bb3",
+        "h6",
+        "a4",
+        "b4",
+        "Ne2"
       ],
       "bestUrls": [
         {
@@ -178,7 +192,10 @@
         "Bg4",
         "Qb3",
         "Qc7",
-        "h3"
+        "h3",
+        "Bh5",
+        "Ne2",
+        "Bxe2"
       ],
       "bestUrls": [
         {
@@ -241,7 +258,8 @@
         "Ne2",
         "h5",
         "O-O",
-        "h4"
+        "h4",
+        "Nf4"
       ],
       "bestUrls": [
         {
@@ -294,7 +312,10 @@
         "fxe4",
         "e5",
         "Nf3",
-        "Be6"
+        "Be6",
+        "Bd3",
+        "Nd7",
+        "O-O"
       ],
       "bestUrls": [
         {
@@ -345,7 +366,13 @@
         "Nc3",
         "Bg7",
         "Nf3",
-        "d5"
+        "d5",
+        "h3",
+        "dxe4",
+        "Nxe4",
+        "Nf6",
+        "Nxf6+",
+        "exf6"
       ],
       "bestUrls": [
         {
@@ -397,7 +424,18 @@
         "g3",
         "Bd6",
         "Bg2",
-        "Nf6"
+        "Nf6",
+        "Ngf3",
+        "O-O",
+        "O-O",
+        "Re8",
+        "b3",
+        "a5",
+        "a4",
+        "Na6",
+        "Bb2",
+        "Nb4",
+        "Re1"
       ],
       "bestUrls": [
         {
@@ -453,7 +491,8 @@
         "Nc6",
         "Qf4",
         "g6",
-        "Nc3"
+        "Nc3",
+        "Bg7"
       ],
       "bestUrls": [
         {
@@ -502,7 +541,11 @@
       "continuation": [
         "d6",
         "Nc3",
-        "Nf6"
+        "Nf6",
+        "f4",
+        "Qa5",
+        "Bd3",
+        "e5"
       ],
       "bestUrls": [
         {
@@ -552,7 +595,16 @@
         "cxd5",
         "cxd5",
         "exd5",
-        "Nf6"
+        "Nf6",
+        "Qa4+",
+        "Nbd7",
+        "Nc3",
+        "g6",
+        "Bc4",
+        "Bg7",
+        "d3",
+        "O-O",
+        "Nf3"
       ],
       "bestUrls": [
         {
@@ -607,7 +659,11 @@
         "a3",
         "Bxc5",
         "Qg4",
-        "Ne7"
+        "Ne7",
+        "Bd3",
+        "Nbc6",
+        "Nf3",
+        "Ng6"
       ],
       "bestUrls": [
         {
@@ -668,7 +724,9 @@
         "Qc2",
         "Re8+",
         "Ne2",
-        "h5"
+        "h5",
+        "O-O",
+        "h4"
       ],
       "bestUrls": [
         {
@@ -720,7 +778,8 @@
         "Bf5",
         "Nf3",
         "e6",
-        "Be2"
+        "Be2",
+        "c5"
       ],
       "bestUrls": [
         {
@@ -773,7 +832,14 @@
       "scorePct": "56.7",
       "continuation": [
         "Be3",
-        "Nd7"
+        "Nd7",
+        "Nf3",
+        "Bxc5",
+        "Bxc5",
+        "Nxc5",
+        "Nbd2",
+        "Ne7",
+        "Nb3"
       ],
       "bestUrls": [
         {
@@ -828,7 +894,9 @@
       "scorePct": "61.0",
       "continuation": [
         "a3",
-        "Nd7"
+        "Nd7",
+        "Bd3",
+        "f6"
       ],
       "bestUrls": [
         {
@@ -879,7 +947,9 @@
       "scorePct": "65.2",
       "continuation": [
         "c3",
-        "Nc6"
+        "Nc6",
+        "Nf3",
+        "Bg4"
       ],
       "bestUrls": [
         {
@@ -932,7 +1002,10 @@
       "continuation": [
         "Nc6",
         "f4",
-        "Bf5"
+        "Bf5",
+        "Be3",
+        "e6",
+        "c3"
       ],
       "bestUrls": [
         {
@@ -986,7 +1059,10 @@
       "continuation": [
         "Qg4",
         "Nd7",
-        "Nf3"
+        "Nf3",
+        "Nxc5",
+        "Nc3",
+        "a6"
       ],
       "bestUrls": [
         {
@@ -1043,7 +1119,10 @@
       "continuation": [
         "Nd7",
         "O-O",
-        "Ne7"
+        "Ne7",
+        "c4",
+        "dxc4",
+        "Bxc4"
       ],
       "bestUrls": [
         {
@@ -1088,7 +1167,9 @@
       "losses": 7,
       "scorePct": "68.2",
       "continuation": [
-        "e5"
+        "e5",
+        "d5",
+        "exd6"
       ],
       "bestUrls": [
         {
@@ -1141,7 +1222,13 @@
       "scorePct": "52.3",
       "continuation": [
         "Bd3",
-        "Bxc5"
+        "Bxc5",
+        "Qg4",
+        "Ne7",
+        "Nf3",
+        "Nbc6",
+        "O-O",
+        "Ng6"
       ],
       "bestUrls": [
         {
@@ -1173,6 +1260,539 @@
           "opp": "siciliannaga",
           "oppElo": 2836,
           "date": 1686295681
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "Bc4",
+      "games": 15,
+      "wins": 11,
+      "draws": 1,
+      "losses": 3,
+      "scorePct": "76.7",
+      "continuation": [
+        "Bc4",
+        "d5",
+        "exd5",
+        "cxd5",
+        "Bb3",
+        "Nc6"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/4192854698",
+          "opp": "Last7Samurai",
+          "oppElo": 2659,
+          "date": 1573268753
+        },
+        {
+          "url": "https://www.chess.com/game/live/25241405505",
+          "opp": "Traptical",
+          "oppElo": 2809,
+          "date": 1631502459
+        },
+        {
+          "url": "https://www.chess.com/game/live/113525387191",
+          "opp": "mbojan",
+          "oppElo": 2921,
+          "date": 1719786745
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 1,
+      "prefixToHere": [
+        "d4"
+      ],
+      "branchSan": "Na6",
+      "games": 11,
+      "wins": 7,
+      "draws": 1,
+      "losses": 3,
+      "scorePct": "68.2",
+      "continuation": [
+        "Na6",
+        "Nc3",
+        "Nc7"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/3302651113",
+          "opp": "1random",
+          "oppElo": 2980,
+          "date": 1545105819
+        },
+        {
+          "url": "https://www.chess.com/game/live/3302658859",
+          "opp": "1random",
+          "oppElo": 2958,
+          "date": 1545106111
+        },
+        {
+          "url": "https://www.chess.com/game/live/3302662589",
+          "opp": "1random",
+          "oppElo": 2956,
+          "date": 1545106315
+        },
+        {
+          "url": "https://www.chess.com/game/live/3302667235",
+          "opp": "1random",
+          "oppElo": 2946,
+          "date": 1545106507
+        },
+        {
+          "url": "https://www.chess.com/game/live/5360865114",
+          "opp": "Nowaybacksasha",
+          "oppElo": 2954,
+          "date": 1598576113
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 9,
+      "prefixToHere": [
+        "d4",
+        "d5",
+        "e5",
+        "c5",
+        "dxc5",
+        "e6",
+        "Nf3",
+        "Bxc5",
+        "Bd3"
+      ],
+      "branchSan": "Ne7",
+      "games": 10,
+      "wins": 7,
+      "draws": 1,
+      "losses": 2,
+      "scorePct": "75.0",
+      "continuation": [
+        "Ne7",
+        "O-O",
+        "Nbc6"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/7851303113",
+          "opp": "Firouzja2003",
+          "oppElo": 3339,
+          "date": 1614112379
+        },
+        {
+          "url": "https://www.chess.com/game/live/9665682747",
+          "opp": "NowayJosey",
+          "oppElo": 3065,
+          "date": 1615927154
+        },
+        {
+          "url": "https://www.chess.com/game/live/60674959749",
+          "opp": "0gZPanda",
+          "oppElo": 3099,
+          "date": 1666936046
+        },
+        {
+          "url": "https://www.chess.com/game/live/120518467727",
+          "opp": "gmcorrales",
+          "oppElo": 2851,
+          "date": 1726779903
+        },
+        {
+          "url": "https://www.chess.com/game/live/125126344833",
+          "opp": "wqws",
+          "oppElo": 2892,
+          "date": 1731387753
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "Ne2",
+      "games": 9,
+      "wins": 5,
+      "draws": 0,
+      "losses": 4,
+      "scorePct": "55.6",
+      "continuation": [
+        "Ne2",
+        "d5",
+        "e5"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/9284074571",
+          "opp": "Muisback26",
+          "oppElo": 3051,
+          "date": 1615545302
+        },
+        {
+          "url": "https://www.chess.com/game/live/59913585343",
+          "opp": "Baku_Boulevard",
+          "oppElo": 3094,
+          "date": 1666174860
+        },
+        {
+          "url": "https://www.chess.com/game/live/74067138423",
+          "opp": "theblitzchamp",
+          "oppElo": 2817,
+          "date": 1680328356
+        },
+        {
+          "url": "https://www.chess.com/game/live/123416382557",
+          "opp": "Andreikka",
+          "oppElo": 3052,
+          "date": 1729677542
+        },
+        {
+          "url": "https://www.chess.com/game/live/147863011315",
+          "opp": "PlayForWinAlways",
+          "oppElo": 2588,
+          "date": 1753549658
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 6,
+      "prefixToHere": [
+        "d4",
+        "d5",
+        "e5",
+        "c5",
+        "dxc5",
+        "e6"
+      ],
+      "branchSan": "c3",
+      "games": 8,
+      "wins": 5,
+      "draws": 2,
+      "losses": 1,
+      "scorePct": "75.0",
+      "continuation": [
+        "c3",
+        "Bxc5"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/74452465031",
+          "opp": "zimmm36",
+          "oppElo": 2645,
+          "date": 1680713761
+        },
+        {
+          "url": "https://www.chess.com/game/live/79204335577",
+          "opp": "Jospem",
+          "oppElo": 3049,
+          "date": 1685465744
+        },
+        {
+          "url": "https://www.chess.com/game/live/100080780323",
+          "opp": "Jospem",
+          "oppElo": 3220,
+          "date": 1706342011
+        },
+        {
+          "url": "https://www.chess.com/game/live/125800759639",
+          "opp": "aa175",
+          "oppElo": 2982,
+          "date": 1732062298
+        },
+        {
+          "url": "https://www.chess.com/game/live/137886042711",
+          "opp": "jefferyx",
+          "oppElo": 3054,
+          "date": 1743572825
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 3,
+      "prefixToHere": [
+        "d4",
+        "d5",
+        "e5"
+      ],
+      "branchSan": "Nf6",
+      "games": 7,
+      "wins": 2,
+      "draws": 0,
+      "losses": 5,
+      "scorePct": "28.6",
+      "continuation": [
+        "Nf6",
+        "exf6"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/3326670344",
+          "opp": "Genghis_K",
+          "oppElo": 2915,
+          "date": 1545894011
+        },
+        {
+          "url": "https://www.chess.com/game/live/5781750395",
+          "opp": "BrandonJacobson",
+          "oppElo": 3030,
+          "date": 1605856513
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 3,
+      "prefixToHere": [
+        "d4",
+        "d5",
+        "e5"
+      ],
+      "branchSan": "e6",
+      "games": 7,
+      "wins": 3,
+      "draws": 2,
+      "losses": 2,
+      "scorePct": "57.1",
+      "continuation": [
+        "e6",
+        "Nf3",
+        "c5",
+        "c3",
+        "Nc6",
+        "Bd3"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/4634792486",
+          "opp": "spicycaterpillar",
+          "oppElo": 2856,
+          "date": 1585118403
+        },
+        {
+          "url": "https://www.chess.com/game/live/5761564531",
+          "opp": "BrandonJacobson",
+          "oppElo": 3040,
+          "date": 1605600813
+        },
+        {
+          "url": "https://www.chess.com/game/live/38891942791",
+          "opp": "1random",
+          "oppElo": 3039,
+          "date": 1645152948
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 12,
+      "prefixToHere": [
+        "d4",
+        "d5",
+        "e5",
+        "c5",
+        "dxc5",
+        "e6",
+        "Nf3",
+        "Bxc5",
+        "Bd3",
+        "Nc6",
+        "O-O",
+        "Nge7"
+      ],
+      "branchSan": "Re1",
+      "games": 7,
+      "wins": 6,
+      "draws": 0,
+      "losses": 1,
+      "scorePct": "85.7",
+      "continuation": [
+        "Re1"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/8670383717",
+          "opp": "Arambai",
+          "oppElo": 3176,
+          "date": 1614931622
+        },
+        {
+          "url": "https://www.chess.com/game/live/61450840799",
+          "opp": "0gZPanda",
+          "oppElo": 3144,
+          "date": 1667712144
+        },
+        {
+          "url": "https://www.chess.com/game/live/61451387861",
+          "opp": "0gZPanda",
+          "oppElo": 3123,
+          "date": 1667712358
+        },
+        {
+          "url": "https://www.chess.com/game/live/61451398729",
+          "opp": "0gZPanda",
+          "oppElo": 3113,
+          "date": 1667712444
+        },
+        {
+          "url": "https://www.chess.com/game/live/61452030557",
+          "opp": "0gZPanda",
+          "oppElo": 3116,
+          "date": 1667713271
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "c3",
+      "games": 6,
+      "wins": 3,
+      "draws": 0,
+      "losses": 3,
+      "scorePct": "50.0",
+      "continuation": [
+        "c3",
+        "d5"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/5829334057",
+          "opp": "Mykola-Bortnyk",
+          "oppElo": 3138,
+          "date": 1606438764
+        },
+        {
+          "url": "https://www.chess.com/game/live/25394411375",
+          "opp": "Hikaru",
+          "oppElo": 3171,
+          "date": 1631655495
+        },
+        {
+          "url": "https://www.chess.com/game/live/85817385035",
+          "opp": "Mykola-Bortnyk",
+          "oppElo": 3074,
+          "date": 1692078427
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 0,
+      "prefixToHere": [],
+      "branchSan": "f3",
+      "games": 6,
+      "wins": 3,
+      "draws": 0,
+      "losses": 3,
+      "scorePct": "50.0",
+      "continuation": [
+        "f3",
+        "d5",
+        "d4"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/54454186087",
+          "opp": "0gZPanda",
+          "oppElo": 3038,
+          "date": 1660715317
+        },
+        {
+          "url": "https://www.chess.com/game/live/59034614263",
+          "opp": "0gZPanda",
+          "oppElo": 3104,
+          "date": 1665295858
+        },
+        {
+          "url": "https://www.chess.com/game/live/60673775399",
+          "opp": "0gZPanda",
+          "oppElo": 3130,
+          "date": 1666934949
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 10,
+      "prefixToHere": [
+        "d4",
+        "d5",
+        "e5",
+        "c5",
+        "dxc5",
+        "e6",
+        "Nf3",
+        "Bxc5",
+        "Bd3",
+        "Nc6"
+      ],
+      "branchSan": "a3",
+      "games": 6,
+      "wins": 5,
+      "draws": 1,
+      "losses": 0,
+      "scorePct": "91.7",
+      "continuation": [
+        "a3",
+        "Nge7"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/5914101446",
+          "opp": "BrandonJacobson",
+          "oppElo": 2862,
+          "date": 1607404472
+        },
+        {
+          "url": "https://www.chess.com/game/live/5914399417",
+          "opp": "BrandonJacobson",
+          "oppElo": 2862,
+          "date": 1607408502
+        },
+        {
+          "url": "https://www.chess.com/game/live/5930319914",
+          "opp": "BrandonJacobson",
+          "oppElo": 2892,
+          "date": 1607581122
+        },
+        {
+          "url": "https://www.chess.com/game/live/12099781431",
+          "opp": "spicycaterpillar",
+          "oppElo": 3025,
+          "date": 1618360925
+        },
+        {
+          "url": "https://www.chess.com/game/live/61018151271",
+          "opp": "VeryMasculineEgirl",
+          "oppElo": 2847,
+          "date": 1667279284
+        }
+      ]
+    },
+    {
+      "depthFromOriginPrefix": 3,
+      "prefixToHere": [
+        "d4",
+        "d5",
+        "e5"
+      ],
+      "branchSan": "Bg4",
+      "games": 5,
+      "wins": 2,
+      "draws": 1,
+      "losses": 2,
+      "scorePct": "50.0",
+      "continuation": [
+        "Bg4"
+      ],
+      "bestUrls": [
+        {
+          "url": "https://www.chess.com/game/live/4750989675",
+          "opp": "ThunderrPanda",
+          "oppElo": 2963,
+          "date": 1587461387
+        },
+        {
+          "url": "https://www.chess.com/game/live/4867252012",
+          "opp": "ThunderrPanda",
+          "oppElo": 2980,
+          "date": 1589694383
         }
       ]
     }

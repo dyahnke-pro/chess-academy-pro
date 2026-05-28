@@ -4232,25 +4232,25 @@
       "pgn": "e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7",
       "color": "black",
       "style": "Solid, Counter-Attacking",
-      "overview": "This is the Caro-Kann Naroditsky has actually played thousands of times — not a textbook diagram, his ACTUAL repertoire. The line he plays vs the Advance Variation (1.e4 c6 2.d4 d5 3.e5 c5!) is the modern 3...c5 break, also known as the Botvinnik-Carls Defense. In his 3,546 Caro-Kann games on chess.com he scores 64% with this — including against opponents rated over 3300. The whole opening rests on three ideas: (1) the c6-pawn is a wedge supporting d5 forever, (2) when White attacks on the flank we strike in the centre, and (3) the …Bg4 pin against an Nf3 knight is a recurring tactical motif we look for in every variation. The Caro isn't a defensive opening — it's a counter-attacking one. We let White over-commit, we keep our structure clean, and then we punish.",
+      "overview": "This is the Caro-Kann Naroditsky has actually played thousands of times — not a textbook diagram, his ACTUAL repertoire. The line he plays vs the Advance Variation (e4 c6 d4 d5 e5 c5!) is the modern c5 break, also known as the Botvinnik-Carls Defense. In his 3,546 Caro-Kann games on chess.com he scores 64% with this — including against opponents rated over 3300. The whole opening rests on three ideas: (1) the c6-pawn is a wedge supporting d5 forever, (2) when White attacks on the flank we strike in the centre, and (3) the …Bg4 pin against an Nf3 knight is a recurring tactical motif we look for in every variation. The Caro isn't a defensive opening — it's a counter-attacking one. We let White over-commit, we keep our structure clean, and then we punish.",
       "keyIdeas": [
         "The c6-pawn is not a weakness — it's a wedge. It supports d5 forever and lets us recapture toward the centre. The whole Caro philosophy comes down to this: we give White the early development tempo because the structure we earn is worth more. When you hear 'doubled pawns' (in the Classical's f-file) or 'passive bishop' (the c8-bishop), remember: those are static features. The game is decided by what we DO with them, not what they look like on move 5.",
         "When White plays on the flank, we counter in the centre. This is the rule that decides 90% of our middlegames. If White goes for h4-h5 on the kingside (Advance Variation) or pawn-storms with f3/g4, we hit them with …c5 or …e5 in the centre BEFORE the wing attack arrives. The flank attack only works if the centre is closed; we keep it open or open it ourselves.",
         "The wishlist method works here perfectly. Before you calculate, ask: what's my IDEAL position 5 moves from now? Usually it's: bishop on f5 or g4, knight on d7 or f6, queen on c7, rooks coordinated on the d- and e-files. Work backwards from that picture — that's how we find the right move. Don't search for tactics; search for the SHAPE we want, and the tactics will appear when the shape is right.",
-        "The light-squared bishop is the question mark of the Caro. It wants to be ACTIVE — Bf5 in the Advance mainlines, Bg4 in the Exchange and Classical, or rerouting via Bd7-Bc8-Bf5 in slower setups. The wrong answer is leaving it locked behind the pawn chain. The right move depends on White's move order: against c3 + Bd3 we play …Bg4 early; against the Bd3 + Nf3 setup we time …Bg4 to threaten Bxf3 (doubling White's pawns); in the Advance with 3...c5 it stays home until we've untangled with …Bxc5, …Nc6, …Nge7, and emerges late via the kingside. The rule: don't let the c8-bishop be a tombstone."
+        "The light-squared bishop is the question mark of the Caro. It wants to be ACTIVE — Bf5 in the Advance mainlines, Bg4 in the Exchange and Classical, or rerouting via Bd7-Bc8-Bf5 in slower setups. The wrong answer is leaving it locked behind the pawn chain. The right move depends on White's move order: against c3 + Bd3 we play …Bg4 early; against the Bd3 + Nf3 setup we time …Bg4 to threaten Bxf3 (doubling White's pawns); in the Advance with c5 it stays home until we've untangled with …Bxc5, …Nc6, …Nge7, and emerges late via the kingside. The rule: don't let the c8-bishop be a tombstone."
       ],
       "traps": [
         "If White plays an early Bg5 (in the Classical, after our …dxe4 and …Nf6), the …h6 push is not a question — it's a demand. White MUST commit (retreat to h4, trade on f6, or pretend nothing happened). The trick: if they retreat Bh4, our …g5 is now playable because their knight on f3 is committed and the dark squares we 'weaken' are squares we control with our bishop and queen anyway. Don't fear the loose look — the geometry favours us.",
-        "Against the Fantasy (3.f3), the GREEDY move 3...dxe4 4.fxe4 e5 5.Nf3 looks like it lets White off the hook — but after 5.Nf3 exd4 6.Nxd4 we have a fluid centre and White's e4-pawn is hanging in space, defended by no minor pieces yet. The trap is for WHITE: if they try to defend e4 with Bd3 or Qe2 too soon, we get …Nf6 with tempo on e4 and a comfortable game where their early f3 hurt them more than it helped."
+        "Against the Fantasy (f3), the GREEDY move dxe4 fxe4 e5 Nf3 looks like it lets White off the hook — but after Nf3 exd4 Nxd4 we have a fluid centre and White's e4-pawn is hanging in space, defended by no minor pieces yet. The trap is for WHITE: if they try to defend e4 with Bd3 or Qe2 too soon, we get …Nf6 with tempo on e4 and a comfortable game where their early f3 hurt them more than it helped."
       ],
       "warnings": [
-        "Don't auto-play …Bf5 in the Advance. It's the textbook move (Bf5 vs the Advance Variation), but in the 3...c5 line we play, the bishop belongs on g4 or stays on c8 until the …c5 / …Nc6 / …Nge7 setup is complete. Premature …Bf5 in the Botvinnik-Carls line lets White play h4-h5 with tempo on the bishop, and we end up dancing instead of developing. Trust the move order: c5 first, then pieces.",
-        "In the Two Knights (2.Nc3 line), don't get cute with early …dxe4 + …Nf6 hoping for a Petroff-style game. White's Nf3 + Nxe4 setup is FINE for them in those structures. Our move order — …d5, accept the trades, develop quietly — is the line that gives us the 64% score. The 'sharp' alternatives sacrifice the comfort we earned with the move order.",
+        "Don't auto-play …Bf5 in the Advance. It's the textbook move (Bf5 vs the Advance Variation), but in the c5 line we play, the bishop belongs on g4 or stays on c8 until the …c5 / …Nc6 / …Nge7 setup is complete. Premature …Bf5 in the Botvinnik-Carls line lets White play h4-h5 with tempo on the bishop, and we end up dancing instead of developing. Trust the move order: c5 first, then pieces.",
+        "In the Two Knights (Nc3 line), don't get cute with early …dxe4 + …Nf6 hoping for a Petroff-style game. White's Nf3 + Nxe4 setup is FINE for them in those structures. Our move order — …d5, accept the trades, develop quietly — is the line that gives us the 64% score. The 'sharp' alternatives sacrifice the comfort we earned with the move order.",
         "Watch the diagonal a2-g8 in the Exchange. After …Bg4 our king has castled short and White's Bd3 is staring through Bg4 at h7. If you ever let White trade dark-squared bishops AND keep the Bd3 alive, the h7 weakness becomes a real attacking target. Rule: in the Exchange, trade light-squared bishops (your Bg4 for their Nf3), and keep the dark-squared bishops on if possible. The dark squares around our king are not the issue; the light squares are."
       ],
       "variations": [
         {
-          "name": "Two Knights Variation (2.Nc3)",
+          "name": "Two Knights Variation (Nc3)",
           "pgn": "e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4 Nd7 Bc4 Nf6 Ne5 e6 Qe2 b5 Bb3 Qc7",
           "explanation": "When White plays Nc3 on move 2, they're sidestepping the main Caro mainlines and inviting a piece game. The point of this line for us as Black: play …d5 straight away, let the centre trade, and develop fast. After the early piece trades we end up with Bb3 vs …b5 / …Qc7 — a comfortable position where our queen and pieces are coordinated and White's bishop on b3 is staring at granite (the b5-pawn). From here we look to finish development with …Bb7 and …Be7, castle short, and consolidate. The number-one rule against the Two Knights: don't get cute, just play sound moves and reach a balanced middlegame. The position rewards patience — White ran out of useful moves first.",
           "sources": [
@@ -4260,7 +4260,7 @@
           ]
         },
         {
-          "name": "King's Indian Attack (2.Nf3)",
+          "name": "King's Indian Attack (Nf3)",
           "pgn": "e4 c6 Nf3 d5 d3 Qc7 Nc3 dxe4 dxe4 e5 Bc4",
           "explanation": "Against the KIA-style Nf3 + d3 setup, the trick is recognising what White is doing: they're not playing a real opening, they're playing a system. So we don't have to fear sharp theoretical lines — what we have to fear is letting them build slow comfort. Our answer: …d5, then …Qc7 to discourage e5, and when White trades on d5 we recapture with the e-pawn or open the centre with …e5 ourselves. Result: piece-for-piece development, no structural mess, a comfortable middle-game with the bishop pair often becoming ours. We score 62% here in real play. Don't overextend — the win comes from playing accurate, principled moves while White wanders.",
           "sources": [
@@ -4270,7 +4270,7 @@
           ]
         },
         {
-          "name": "Exchange Variation (3.exd5)",
+          "name": "Exchange Variation (exd5)",
           "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nf6 c3 Bg4 Qb3 Qc7 h3",
           "explanation": "When White trades on d5, they're trying to bleed the tension out of the position and reach a symmetrical pawn structure where their slightly easier development gives an edge. Our scheme — straight from the data — is the early …Bg4 development, …Qc7 covering b7, and quiet piece play. Bd3 has nothing to attack; the c3 / Qb3 / h3 plan looks active but accomplishes very little; we retreat the bishop (Bh5 keeps the diagonal alive, Be6 reroutes to f5 later) and finish development with …e6, …Nc6, …Bd6, …O-O. The point: a symmetrical position is only equal if both sides develop equally. We make sure ours is one tempo faster. 64% score in his actual games — the Exchange isn't dangerous, it's tedious for White.",
           "sources": [
@@ -4280,7 +4280,7 @@
           ]
         },
         {
-          "name": "Classical Variation (3.Nc3)",
+          "name": "Classical Variation (Nc3)",
           "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 c3 Bd6 Bd3 O-O Qc2 Re8+ Ne2 h5",
           "explanation": "The Classical Caro is the line where Black accepts doubled f-pawns (after …Nxf6 or …exf6) in exchange for active development and the half-open e-file. White's Bd3 + Qc2 setup is the standard plan — they want h-pawn pressure on our king. Our reply: don't let them. After castling we play …Re8+ to chase the knight (forcing Ne2, a passive square) and then …h5 ourselves, freezing their h-pawn before it lands on h4. The doubled f-pawns are NOT a weakness — they're a wedge. We control e5 forever and the open lines for our rook on e8 are real. Score: 62% — equal-but-active for Black, exactly what we want against a respected mainline.",
           "sources": [
@@ -4290,9 +4290,9 @@
           ]
         },
         {
-          "name": "Fantasy Variation (3.f3)",
+          "name": "Fantasy Variation (f3)",
           "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5",
-          "explanation": "The Fantasy is White's attempt to build a massive centre and just shove us off the board. The refutation: don't let the centre stand. After 3.f3 we play …dxe4 (open the file), 4.fxe4 …e5 (challenge it back), and immediately White has a decision — push d5 and lock the position with an awkward pawn chain, or trade on e5 and accept that their f3 was just a wasted tempo. Either way we equalise comfortably. Our score in the data is 75% — the highest of any Caro variation he plays — because White's whole premise (intimidation) collapses the moment we play forcing chess. Don't overthink this one: …dxe4, …e5, develop, win.",
+          "explanation": "The Fantasy is White's attempt to build a massive centre and just shove us off the board. The refutation: don't let the centre stand. After f3 we play …dxe4 (open the file), fxe4 …e5 (challenge it back), and immediately White has a decision — push d5 and lock the position with an awkward pawn chain, or trade on e5 and accept that their f3 was just a wasted tempo. Either way we equalise comfortably. Our score in the data is 75% — the highest of any Caro variation he plays — because White's whole premise (intimidation) collapses the moment we play forcing chess. Don't overthink this one: …dxe4, …e5, develop, win.",
           "sources": [
             "book:caro-kann",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
@@ -4300,7 +4300,7 @@
           ]
         },
         {
-          "name": "Modern Defense Transposition (2.d4 g6)",
+          "name": "Modern Defense Transposition (d4 g6)",
           "pgn": "e4 c6 d4 g6 Nc3 Bg7 Nf3 d5",
           "explanation": "Sometimes when we hit the Caro move-order against a d4 player who wasn't expecting it, the cleanest game is to transpose — fianchetto the dark-squared bishop, get a Pirc/Modern structure with the c-pawn already on c6 (which is FINE, not bad — it supports …d5 perfectly). After …Bg7 and …d5 we have a hybrid setup that's familiar to Modern players but with one extra useful tempo. White's pieces aim at a wall: the Bg7, the c6-d5 pawn chain, the well-defended king. 68% score in the data — White rarely plays this critically because they expected a Caro and got a Modern.",
           "sources": [
@@ -4321,7 +4321,7 @@
         {
           "name": "Premature …Bf5 in the Advance c5 Line",
           "pgn": "e4 c6 d4 d5 e5 Bf5 h4 h6 g4 Bd7",
-          "explanation": "Why we play …c5 first, not …Bf5. After 3.e5, the textbook move is …Bf5 — but in the line Naroditsky plays we instead play …c5 to challenge the centre. The reason: if we go …Bf5 first, White plays the h4-h5 / g4 plan and our bishop spends the next 10 moves dancing — Bd7-c8-d7 — while White seizes space. After the …Bd7 retreat shown here, Black is two tempi down on development and the position is just unpleasant."
+          "explanation": "Why we play …c5 first, not …Bf5. After e5, the textbook move is …Bf5 — but in the line Naroditsky plays we instead play …c5 to challenge the centre. The reason: if we go …Bf5 first, White plays the h4-h5 / g4 plan and our bishop spends the next 10 moves dancing — Bd7-c8-d7 — while White seizes space. After the …Bd7 retreat shown here, Black is two tempi down on development and the position is just unpleasant."
         }
       ],
       "sources": [
@@ -4339,42 +4339,42 @@
       "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O",
       "color": "white",
       "style": "Positional, Anti-Sicilian",
-      "overview": "The c3 anti-Sicilian — Naroditsky's most-played weapon vs 1...c5 (2,752 games, 73.8% score). The whole point is move three: d4, supported by the c3-pawn, building a classical centre instead of letting Black drag us into Sicilian theory. We score 73.8% across nearly 3,000 games here for one reason — opponents prepared for the Open Sicilian get a structural game instead, and they're outclassed positionally before they realize they're not in a sharp fight.",
+      "overview": "The c3 anti-Sicilian — Naroditsky's most-played weapon vs c5 (2,752 games, 73.8% score). The whole point is move three: d4, supported by the c3-pawn, building a classical centre instead of letting Black drag us into Sicilian theory. We score 73.8% across nearly 3,000 games here for one reason — opponents prepared for the Open Sicilian get a structural game instead, and they're outclassed positionally before they realize they're not in a sharp fight.",
       "keyIdeas": [
-        "c3 supports d4. The whole opening is setup for ONE move. After 1.e4 c5 2.c3, we WILL play d4 on move 3 (or move 4 after Black declares), and the centre will be ours. Black's …d5 challenges are met with a pawn-trade that opens the position favorably.",
+        "c3 supports d4. The whole opening is setup for ONE move. After e4 c5 c3, we WILL play d4 on move 3 (or move 4 after Black declares), and the centre will be ours. Black's …d5 challenges are met with a pawn-trade that opens the position favorably.",
         "Nf6 gets kicked to d5, then chased to b6. Black's natural development is punished by tempo — we push e5, the knight bounces to d5, our Bc4 hits it, and they retreat to b6. We've gained two tempi while developing pieces naturally.",
         "a4-a5-a6 cramps Black's queenside. After the typical trades around move 10, we play a4 starting the queenside crawl. Black's pawn on a7 becomes weak, the b6-knight has nowhere to go, and the c-file is half-open for us forever.",
         "Trade bishops on e6 when offered. Black's …Be6 is the standard development — we trade with Bxe6, removing Black's good piece and keeping our knight + bishop pair. Long-term structural advantage every time."
       ],
       "traps": [
-        "If Black plays the careless 4...Nf6?? attacking e4 again, we already have 4.e5 and the knight on f6 is en prise — that's why move-order matters. Black must play the central 2...d5 or accept the cramped 2...Nf6 / 2...e6 lines.",
-        "After the typical 6.Bb3 d5 Black tries to win the pawn back with 7...Nxe5? — but 8.Nxe5 Qa5+ 9.Nc3 wins on tempi; Black has to retreat the queen and we keep the extra pawn."
+        "If Black plays the careless Nf6?? attacking e4 again, we already have e5 and the knight on f6 is en prise — that's why move-order matters. Black must play the central d5 or accept the cramped Nf6 / e6 lines.",
+        "After the typical Bb3 d5 Black tries to win the pawn back with Nxe5? — but Nxe5 Qa5+ Nc3 wins on tempi; Black has to retreat the queen and we keep the extra pawn."
       ],
       "warnings": [
-        "Don't push d4 too early. After 2.c3, we must wait until Black's centre is committed (2...Nf6 e5 ...) before pushing d4. Premature 3.d4? cxd4 4.cxd4 d5! gives Black equality immediately.",
+        "Don't push d4 too early. After c3, we must wait until Black's centre is committed (Nf6 e5 ...) before pushing d4. Premature d4? cxd4 cxd4 d5! gives Black equality immediately.",
         "Don't trade Bb3 voluntarily. The bishop on b3 is staring at f7 for the rest of the game; it's our best piece. Let Black come to us — if they offer …Be6, we trade them; if they don't, the bishop stays and we attack with it."
       ],
       "variations": [
         {
-          "name": "2...d5 Open Variation",
+          "name": "d5 Open Variation",
           "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3",
-          "explanation": "Black's most-played 2...d5 (783 games, 71.3%). We trade pawns, develop Na3 with the c4 outpost in mind, and play a positional middlegame with the queens on the board.",
+          "explanation": "Black's most-played d5 (783 games, 71.3%). We trade pawns, develop Na3 with the c4 outpost in mind, and play a positional middlegame with the queens on the board.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         },
         {
-          "name": "2...e6 French-Style",
+          "name": "e6 French-Style",
           "pgn": "e4 c5 c3 e6 d4 d5 e5 Nc6 Nf3 Bd7",
-          "explanation": "Black tries to transpose to a French-style structure with 2...e6 (344 games, 74%). We push d4 immediately and build a Mar-Caro centre. The bishop on c8 stays passive forever.",
+          "explanation": "Black tries to transpose to a French-style structure with e6 (344 games, 74%). We push d4 immediately and build a Mar-Caro centre. The bishop on c8 stays passive forever.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         },
         {
-          "name": "2...d6 Najdorf-Avoiding",
+          "name": "d6 Najdorf-Avoiding",
           "pgn": "e4 c5 c3 d6 d4 cxd4 cxd4 Nf6 Nc3 g6",
-          "explanation": "Black plays Najdorf-style with 2...d6 (173 games, 80.6%). We push d4 immediately, accept the trade, and reach a clean classical position with the better centre.",
+          "explanation": "Black plays Najdorf-style with d6 (173 games, 80.6%). We push d4 immediately, accept the trade, and reach a clean classical position with the better centre.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
@@ -4396,12 +4396,12 @@
       "keyIdeas": [
         "…a6 claims b5 forever. The move that defines the Najdorf. We don't develop anything on move 5; we just stake out b5 so White's Bb5 ideas are dead, our b5 pawn-storm is queued, and the …Bb7 fianchetto is set up.",
         "Opposite-side castling = race. When White plays O-O-O, we castle short and attack on the queenside (it's their king side now). The race is won by whoever opens lines faster — and the Najdorf's queenside is half-open from move 2.",
-        "Trade pieces on the open files. The c-file is half-open for Black from the very start (after 2.Nf3 d6 3.d4 cxd4). Our queen on c7, our rook on c8, and trades around the c-file all favor us in the king-hunt.",
+        "Trade pieces on the open files. The c-file is half-open for Black from the very start (after Nf3 d6 d4 cxd4). Our queen on c7, our rook on c8, and trades around the c-file all favor us in the king-hunt.",
         "h6 forces White's bishop decision. After Bg5, …h6 makes White commit RIGHT NOW — trade on f6 (giving us the open g-file) or retreat Bh4 (passive). Either way the bishop is no longer pinning our knight effectively."
       ],
       "traps": [
-        "If White plays the careless 6.Qf3? before f4, we have 6...Nbd7 with the knight ready for …Nc5 (kicking the queen) and …Ne5 (centre outpost). The queen on f3 is bad in this position.",
-        "After 7.f4 the natural 7...Nbd7 sets up a trick: if White plays 8.Bc4? we have 8...Qb6! attacking b2 with no Nb3 to defend (the knight is on d4). White must defend laboriously."
+        "If White plays the careless Qf3? before f4, we have Nbd7 with the knight ready for …Nc5 (kicking the queen) and …Ne5 (centre outpost). The queen on f3 is bad in this position.",
+        "After f4 the natural Nbd7 sets up a trick: if White plays Bc4? we have Qb6! attacking b2 with no Nb3 to defend (the knight is on d4). White must defend laboriously."
       ],
       "warnings": [
         "Don't trade queens. Najdorf middlegames are sharp because the queens are on the board hunting kings. Trading queens lets White convert the structural battle, which favors them (better pawn structure).",
@@ -4409,15 +4409,15 @@
       ],
       "variations": [
         {
-          "name": "6.Be3 English Attack",
+          "name": "Be3 English Attack",
           "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 f3 Nbd7 Qd2 b5",
-          "explanation": "The English Attack proper (237 games, 67.3%). 6.Be3 + f3 + Qd2 + O-O-O. We answer with …e5, …Be6, …Nbd7, then …b5 racing. Same race, different White move-order.",
+          "explanation": "The English Attack proper (237 games, 67.3%). Be3 + f3 + Qd2 + O-O-O. We answer with …e5, …Be6, …Nbd7, then …b5 racing. Same race, different White move-order.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         },
         {
-          "name": "6.Be2 Classical",
+          "name": "Be2 Classical",
           "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 Be3 O-O Qd2 Be6",
           "explanation": "Classical mainline (214 games, 64.5%). Quieter — White castles short, both sides play classical chess. We get a comfortable middlegame with no immediate king-hunt.",
           "sources": [
@@ -4425,7 +4425,7 @@
           ]
         },
         {
-          "name": "6.h3 Adams Attack",
+          "name": "h3 Adams Attack",
           "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 h3 e5 Nde2 h5",
           "explanation": "The h3 sideline (164 games, 59.5%). White prepares g4 without committing to long castling. We answer …e5 and …h5 freezing the kingside before they push.",
           "sources": [
@@ -4453,8 +4453,8 @@
         "Kingside attack with …f5 + …f4. Late middlegame: once we've expanded with …f5 we have a pawn-storm queued. White's king is on the kingside, our pieces all aim there, and our space advantage is real."
       ],
       "traps": [
-        "After the typical 8.O-O exd4, the natural 9.Nxd4 lets us play 9...Re8 attacking e4 with tempo. White MUST respond — either f3 (passive) or e5 (loses material to our …Nh5 attacking e5). Either way we're better.",
-        "Beware the Bayonet Attack (9.b4) in the Classical: 9...Nh5 10.Re1 f5 immediately starts our counterattack. If White goes 10.g3? we have 10...f5 with a powerful attack on the centre."
+        "After the typical O-O exd4, the natural Nxd4 lets us play Re8 attacking e4 with tempo. White MUST respond — either f3 (passive) or e5 (loses material to our …Nh5 attacking e5). Either way we're better.",
+        "Beware the Bayonet Attack (b4) in the Classical: Nh5 Re1 f5 immediately starts our counterattack. If White goes g3? we have f5 with a powerful attack on the centre."
       ],
       "warnings": [
         "Don't play …c5 in the Mar del Plata. Once the centre is open (after …exd4 Nxd4), …c5 just gives White's knight a free target on a great square. Save …c5 for closed positions where White has pushed d5.",
@@ -4462,7 +4462,7 @@
       ],
       "variations": [
         {
-          "name": "7.Be2 Classical",
+          "name": "Be2 Classical",
           "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Nf3 e5 Be3",
           "explanation": "The Classical mainline (681 games, 65.9%). White builds the broad centre and develops Be2; we strike with …e5 and play the Mar del Plata.",
           "sources": [
@@ -4470,7 +4470,7 @@
           ]
         },
         {
-          "name": "7.h3 / Makogonov",
+          "name": "h3 / Makogonov",
           "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 h3 O-O Be3 c6 Nf3",
           "explanation": "Makogonov — White plays h3 first to prevent …Ng4 ideas (335 games, 62.5%). We answer with …c6 + …Nbd7 building a solid centre, then break with …e5.",
           "sources": [
@@ -4478,7 +4478,7 @@
           ]
         },
         {
-          "name": "6.Nf3 / 6.g3 Fianchetto",
+          "name": "Nf3 / g3 Fianchetto",
           "pgn": "d4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nc6",
           "explanation": "Fianchetto Variation (592 games, 65%). White fianchettos their own bishop. We answer with classical …Nc6 + …e5, fighting in the centre.",
           "sources": [
@@ -4506,32 +4506,32 @@
         "Open positions favor knights here. Counterintuitive but true: our Nd5 is so well-placed (controlling b6, c7, e7, f4) that we don't need to trade it. White's bishops will look bad without targets."
       ],
       "traps": [
-        "After 2.e5 Nd5 3.d4 d6 4.c4? Nb6 5.Nc3 Bg4! pins the f3-knight to the queen and wins material. Most amateur White players play 4.c4 by reflex; the punishment is forced.",
-        "If White plays the awkward 4.Nf3 Nb6 5.exd6? cxd6 (recapture the e-pawn back), White's chase has failed and we have free development. The …Nb6 retreat must be respected, not chased."
+        "After e5 Nd5 d4 d6 c4? Nb6 Nc3 Bg4! pins the f3-knight to the queen and wins material. Most amateur White players play c4 by reflex; the punishment is forced.",
+        "If White plays the awkward Nf3 Nb6 exd6? cxd6 (recapture the e-pawn back), White's chase has failed and we have free development. The …Nb6 retreat must be respected, not chased."
       ],
       "warnings": [
-        "Don't grab the e5-pawn too early. After 4.Nf3 the natural 4...dxe5 5.Nxe5 c6 is fine, but earlier captures (3...dxe5? after 3.d4) lose to the simple 4.exd5! winning a piece.",
+        "Don't grab the e5-pawn too early. After Nf3 the natural dxe5 Nxe5 c6 is fine, but earlier captures (dxe5? after d4) lose to the simple exd5! winning a piece.",
         "Don't get cute with the Nd5. The knight on d5 is well-placed but vulnerable to c4 chasing it. If White plays c4 early, we MUST move (usually to Nb6) — there's no point staying and getting captured."
       ],
       "variations": [
         {
-          "name": "2.Nc3 Two Knights",
+          "name": "Nc3 Two Knights",
           "pgn": "e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Bb4",
-          "explanation": "White declines the chase with 2.Nc3 (839 games, 68.9%). We get a Petroff-style game with a tempo for the …Nc6 / …Bb4 development. Solid, equal, and Black's score is excellent.",
+          "explanation": "White declines the chase with Nc3 (839 games, 68.9%). We get a Petroff-style game with a tempo for the …Nc6 / …Bb4 development. Solid, equal, and Black's score is excellent.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         },
         {
-          "name": "4.c4 Modern Main",
+          "name": "c4 Modern Main",
           "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6 exd6 Nc3",
-          "explanation": "The Modern Mainline with 4.c4 (290 games, 72.1%). We retreat Nb6, recapture with e-pawn, and reach a healthy structure with the open e-file.",
+          "explanation": "The Modern Mainline with c4 (290 games, 72.1%). We retreat Nb6, recapture with e-pawn, and reach a healthy structure with the open e-file.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         },
         {
-          "name": "4.Nf3 / Modern Quiet",
+          "name": "Nf3 / Modern Quiet",
           "pgn": "e4 Nf6 e5 Nd5 d4 d6 Nf3 Nb6 Be2 Bf5",
           "explanation": "White plays Nf3 instead of c4 (291 games, 70.3%). We get our pieces out: Nb6, Bf5, Nc6 etc. Classical development with the better pawn structure.",
           "sources": [
@@ -4559,7 +4559,7 @@
         "Kingside attack with Nh4 + f4. Late middlegame: rerouting the f3-knight to h4, then f4-f5 cracking Black's kingside. The Bg2 supports it all from the long diagonal."
       ],
       "traps": [
-        "If Black plays …d5 / …e6 / …c5 (the French-style setup), we play e4 challenging immediately. After …dxe4 5.dxe4 Black's e6-pawn becomes weak and our Bg2 + Nbd2 setup pressures it.",
+        "If Black plays …d5 / …e6 / …c5 (the French-style setup), we play e4 challenging immediately. After …dxe4 dxe4 Black's e6-pawn becomes weak and our Bg2 + Nbd2 setup pressures it.",
         "If Black plays …d5 / …c5 / …Nc6 / …Nf6, the most popular setup, we play d4! at the right moment — opening the long diagonal for Bg2 with crushing effect."
       ],
       "warnings": [
@@ -4568,7 +4568,7 @@
       ],
       "variations": [
         {
-          "name": "1...d5 KIA mainline",
+          "name": "d5 KIA mainline",
           "pgn": "Nf3 d5 g3 Nf6 Bg2 g6 O-O Bg7 d3 O-O Nbd2 c5 e4",
           "explanation": "The most-faced KIA setup (4,382 games, 66.3%). Black plays d5 first, we mirror our system, then the e4 break opens the centre when our development is complete.",
           "sources": [
@@ -4576,7 +4576,7 @@
           ]
         },
         {
-          "name": "1...g6 Modern setup",
+          "name": "g6 Modern setup",
           "pgn": "Nf3 g6 g3 Bg7 Bg2 Nf6 O-O O-O d3 d6",
           "explanation": "Black plays Modern (2,652 games, 69.3%). Mirror fianchettos, both kings castled — symmetrical-looking but we have the slight first-move advantage and our plan is clearer.",
           "sources": [
@@ -4584,7 +4584,7 @@
           ]
         },
         {
-          "name": "2.d4 KID transposition",
+          "name": "d4 KID transposition",
           "pgn": "Nf3 Nf6 d4 g6 c4 Bg7 Nc3 d6",
           "explanation": "Sometimes we play d4 instead of g3 (1,341 games, 71.2%) — transposing to a KID-style game with us as White. Same broad-centre middlegame as the regular KID, just from a slightly different move-order.",
           "sources": [
@@ -4612,8 +4612,8 @@
         "Re1 supports the centre permanently. Early Re1 backs up e4 and prepares the f1-bishop's return path. The rook on e1 is the spine of every Naroditsky Rossolimo middlegame."
       ],
       "traps": [
-        "If Black plays 3...Bd7 (the easy trade), 4.Bxd7+ Nxd7 leaves Black with a passive knight on d7 (no good squares) and us with the bishop pair starting to dominate.",
-        "After 3...Nc6 (the most-played reply), we play 4.Bxc6+ bxc6 5.O-O followed by Re1 and d4 — Black's doubled c-pawns become a chronic weakness for the rest of the game."
+        "If Black plays Bd7 (the easy trade), Bxd7+ Nxd7 leaves Black with a passive knight on d7 (no good squares) and us with the bishop pair starting to dominate.",
+        "After Nc6 (the most-played reply), we play Bxc6+ bxc6 O-O followed by Re1 and d4 — Black's doubled c-pawns become a chronic weakness for the rest of the game."
       ],
       "warnings": [
         "Don't play d4 in the Maroczy. Once we've committed to c4 + Nc3, the structure is locked positionally. Pushing d4 just opens lines for Black's pieces. Patience — let them crack first.",
@@ -4621,7 +4621,7 @@
       ],
       "variations": [
         {
-          "name": "3...Nc6 Rossolimo proper",
+          "name": "Nc6 Rossolimo proper",
           "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5",
           "explanation": "The Rossolimo proper (961 games, 66.2%). Black plays Nc6 immediately, we develop classically and reach a structure favoring our pieces.",
           "sources": [
@@ -4630,7 +4630,7 @@
           ]
         },
         {
-          "name": "3...e6 Open avoidance",
+          "name": "e6 Open avoidance",
           "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3",
           "explanation": "Black plays …e6 trying to transpose to Open Sicilian (793 games, 65.8%). We take with d4 — actually, here we DO play Open Sicilian, but reach the Taimanov where our prep is excellent.",
           "sources": [
@@ -4639,7 +4639,7 @@
           ]
         },
         {
-          "name": "4.Bxd7+ Trade",
+          "name": "Bxd7+ Trade",
           "pgn": "e4 c5 Nf3 d6 Bb5+ Bd7 Bxd7+ Qxd7 O-O Nf6 Re1",
           "explanation": "Black plays the easy Bd7 (401 games, 66.8%) — we trade immediately and play a quiet positional game with the bishop pair and centre advantage.",
           "sources": [
@@ -4669,8 +4669,8 @@
         "e4 break opens lines. Late opening / early middlegame: e3 / Nf3 / e4 cracks open the centre. Our developed pieces find targets, Black's pieces find each other."
       ],
       "traps": [
-        "If Black plays the careless 4...Nbd7? after 4.Bf4, we have 5.Nb5 attacking c7 and the threat of Nc7+ — Black must give up the bishop pair or shuffle awkwardly.",
-        "After Qxd4 Nc6 chasing the queen, 6.Qd3 hits h7 indirectly and prepares Qe4 with central dominance. The queen's escape route is also a re-attack."
+        "If Black plays the careless Nbd7? after Bf4, we have Nb5 attacking c7 and the threat of Nc7+ — Black must give up the bishop pair or shuffle awkwardly.",
+        "After Qxd4 Nc6 chasing the queen, Qd3 hits h7 indirectly and prepares Qe4 with central dominance. The queen's escape route is also a re-attack."
       ],
       "warnings": [
         "Don't put the bishop on e3 / d2 by reflex. This is NOT the regular London. The bishop's home is f4 — putting it elsewhere kills the opening's tactical potential.",
@@ -4678,23 +4678,23 @@
       ],
       "variations": [
         {
-          "name": "2...e6 French Setup",
+          "name": "e6 French Setup",
           "pgn": "d4 d5 Nc3 e6 Bf4 Nf6 e3 Bd6",
-          "explanation": "Black plays French-style with 2...e6 (528 games, 67.5%). We get a classical position with the Bf4 vs Bd6 trade and a slight space advantage.",
+          "explanation": "Black plays French-style with e6 (528 games, 67.5%). We get a classical position with the Bf4 vs Bd6 trade and a slight space advantage.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         },
         {
-          "name": "2...c6 Slav-Style",
+          "name": "c6 Slav-Style",
           "pgn": "d4 d5 Nc3 c6 Bf4 Nf6 e3 Bf5",
-          "explanation": "Black plays Slav-style with 2...c6 (390 games, 72.3%). The Bf5 / Bf4 face-off is classical; trades favor us positionally.",
+          "explanation": "Black plays Slav-style with c6 (390 games, 72.3%). The Bf5 / Bf4 face-off is classical; trades favor us positionally.",
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         },
         {
-          "name": "3...a6 with ...c5",
+          "name": "a6 with ...c5",
           "pgn": "d4 d5 Nc3 Nf6 Bf4 a6 e3 e6 Nf3 c5",
           "explanation": "Black prepares …c5 with the slow …a6 (261 games, 73%). We develop classically; once the c-file opens, our coordinated pieces dominate.",
           "sources": [
@@ -4722,8 +4722,8 @@
         "e5 push grabs space. In the spine, we play e5 after the d4 break, gaining a passed pawn and cramping Black's knight to a passive retreat. From here the long game is structural."
       ],
       "traps": [
-        "If Black plays the Marshall Attack (8...d5), we accept the gambit: 9.exd5 Nxd5 10.Nxe5 Nxe5 11.Rxe5 c6 — and now patient defense usually consolidates the extra material.",
-        "Against the Berlin Defense (3...Nf6 4.O-O Nxe4), we trade everything and play the endgame. Magnus Carlsen popularized this defense; the antidote is the patient bishop maneuver Bd3-Bg5 squeezing Black."
+        "If Black plays the Marshall Attack (d5), we accept the gambit: exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 — and now patient defense usually consolidates the extra material.",
+        "Against the Berlin Defense (Nf6 O-O Nxe4), we trade everything and play the endgame. Magnus Carlsen popularized this defense; the antidote is the patient bishop maneuver Bd3-Bg5 squeezing Black."
       ],
       "warnings": [
         "Don't push d4 too early. The break is the climax of our development, not the start. d4 before our pieces are coordinated lets Black trade favorably.",
@@ -4761,6 +4761,63 @@
       "sources": [
         "book:ruy-lopez",
         "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+      ]
+    },
+    {
+      "id": "pro-naroditsky-fantasy-caro",
+      "playerId": "naroditsky",
+      "eco": "B12",
+      "name": "Fantasy Caro-Kann (Naroditsky)",
+      "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3",
+      "color": "white",
+      "style": "Aggressive, Centre-Building",
+      "overview": "The Fantasy Variation — Naroditsky's aggressive white weapon against the Caro-Kann, scoring 73.4% across 370 chess.com games. After Black plays c6 and d5, we play f3, supporting the e4-pawn from below and committing to a massive pawn centre. The whole opening is a bet: that the broad e4-d4-f3 centre is worth more than the kingside structural concession. Black has a tough decision on every reply, and the most-played French-style e6 setup hands us exactly the kind of middlegame we want — bishop pair, big centre, attacking diagonals.",
+      "keyIdeas": [
+        "The f3 push builds the iron centre. The defining move — supports e4, prevents knight attacks on it, and prepares to advance with e5 later cramping Black's kingside. The pawn looks ugly on f3 but it's doing structural work.",
+        "Bishop pair through doubled pawns. When Black pins our queen's knight with Bb4, we kick with a3 and let them trade — bxc3 is fine. We swap structural purity for the bishop pair, which dominates Black's locked-in pieces all game.",
+        "The e5 push at the right moment. After the bishop pair lands, the e5 advance is the climax — it cramps Black, opens the diagonal for our light-squared bishop, and the kingside attack writes itself.",
+        "The c8-bishop is locked, forever. The Black e6 reply locks Black's Caro bishop behind the pawn chain. Our job is to keep it there — every trade that frees it costs us a tempo, every move that keeps it boxed wins us one."
+      ],
+      "traps": [
+        "If Black plays the careless dxe4 hoping to win the f3-pawn, we have fxe4 and now Black has voluntarily opened the f-file FOR us. Our king-rook lifts to f1 and the kingside attack starts immediately.",
+        "After Black's e6 and the Bb4 pin, the natural-looking Bxc3+ trade hands us bxc3 with the bishop pair — most amateur Black players don't realise they're trading their best piece for our worst, and we score heavily once they do."
+      ],
+      "warnings": [
+        "Don't push e5 too early. The pawn break is the climax, not the opening. e5 before our pieces are coordinated lets Black play c5 challenging the centre with tempo on our d4-pawn.",
+        "Don't auto-castle short. The kingside structure is weakened by the f3 push — sometimes Bd3, Qe2, and long castling is the right call, especially when Black opts for a queenside expansion plan."
+      ],
+      "variations": [
+        {
+          "name": "Black accepts with dxe4",
+          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7",
+          "explanation": "When Black accepts the pawn with dxe4, we recapture with the f-pawn opening the f-file — exactly what we wanted. Black scores 78.4% wins for us across 111 games in this line. Black then tries to challenge our centre with e5 and develop quickly, but the open f-file and our active piece placement give us the initiative through the middlegame.",
+          "sources": [
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+            "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation"
+          ]
+        },
+        {
+          "name": "Modern setup with g6",
+          "pgn": "e4 c6 d4 d5 f3 g6 Nc3 Bg7 Be3 dxe4 fxe4",
+          "explanation": "Black plays Modern-style with g6, fianchettoing the bishop and refusing the central commitment (48 games, 76% score). We develop Nc3 plus Be3 plus Bd3 in standard fashion, eventually castling and pushing e5 cramping the Bg7's scope.",
+          "sources": [
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+            "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation"
+          ]
+        },
+        {
+          "name": "Qb6 pressure sideline",
+          "pgn": "e4 c6 d4 d5 f3 Qb6 Nc3 dxe4 fxe4 e5",
+          "explanation": "The Qb6 sideline tries to hit b2 and disrupt our development (39 games, 73.1% score). We just develop normally with Nc3 and let Black exchange pawns — the queen on b6 ends up exposed and we gain tempo developing pieces with attacks on it.",
+          "sources": [
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+            "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation"
+          ]
+        }
+      ],
+      "sources": [
+        "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation"
       ]
     }
   ]

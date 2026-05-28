@@ -251,7 +251,7 @@ const MODERN: LessonScript = {
 
 export const PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-naroditsky-caro-kann::Two Knights Variation (2.Nc3)': TWO_KNIGHTS,
-  "pro-naroditsky-caro-kann::King's Indian Attack (2.Nf3)": KIA,
+  "pro-naroditsky-caro-kann::King's Indian Attack (Nf3)": KIA,
   'pro-naroditsky-caro-kann::Exchange Variation (3.exd5)': EXCHANGE,
   'pro-naroditsky-caro-kann::Classical Variation (3.Nc3)': CLASSICAL,
   'pro-naroditsky-caro-kann::Fantasy Variation (3.f3)': FANTASY,

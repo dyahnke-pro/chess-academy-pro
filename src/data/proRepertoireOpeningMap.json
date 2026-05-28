@@ -63,6 +63,7 @@
     "pro-naroditsky-alekhine": "alekhine-defence",
     "pro-naroditsky-kia": "kings-indian-attack",
     "pro-naroditsky-jobava-london": "london-system",
-    "pro-naroditsky-ruy-lopez": "ruy-lopez"
+    "pro-naroditsky-ruy-lopez": "ruy-lopez",
+    "pro-naroditsky-fantasy-caro": "caro-kann"
   }
 }

@@ -407,6 +407,206 @@ before assuming a routing bug.
 This is the directive verbatim (2026-05-28):
 *"Lock that in to the rules."*
 
+### G9. Pro-repertoire builds MUST look and feel like masterclass builds — only the spine source differs (David 2026-05-28, locked).
+
+David's directive verbatim: *"I want everything to look and feel like
+the masterclasses. The only difference is how we build the spine."*
+
+What this means concretely:
+
+- **The user-visible surface is masterclass-shaped.** A pro opening
+  detail page carries the same WLPP grammar (Watch/Learn/Practice/
+  Play), variation tabs with their own beat lessons, middlegame plan
+  section, pitfalls section, model game(s) per variation, named-trap
+  weapons where real, and the unlock ladder. The OpeningDetailPage
+  renders pro entries through the SAME components and code paths as
+  masterclass entries — that's not a coincidence; that's the design.
+
+- **The voice / narration register is masterclass-shaped.** Beats are
+  hand-authored with both registers (full Watch + ≤8-word Learn cue).
+  Lead-the-eye arrows + highlights on every move. Sentence-grained
+  reveal. No move-number prefixes in prose ("2.Nc3 instead of 2.Nf3"
+  → "the queen's knight to c3 instead of the king's knight to f3").
+  No robotic bare-SAN sequences that the TTS sanitizer expands into
+  awkward "knight to c3 instead of the boring knight to f3" lines.
+  Use the masterclass lessons (vienna.ts, caroKann.ts) as the voice
+  reference.
+
+- **Move TOWARD masterclass-shaped gates as a directional target,
+  not a sudden cliff (David 2026-05-28 clarification: "i don't want
+  to say something that will break the build/progress we have made.
+  it looks good so far! just need to make small changes to make it
+  look and feel the same").** Pro lessons are currently registered
+  in the runtime `LESSONS` map only, skipping the masterclass gate
+  registry (`registry.ts` OPENINGS array). That trade was made to
+  ship the Naroditsky build without rewriting every gate; **don't
+  reverse it in a single sweep** — small incremental changes that
+  ratchet toward masterclass parity (per-variation lessons here, a
+  middlegame plan there, narration polish per pass) are the right
+  cadence. When you AUTHOR a pro lesson, apply the masterclass
+  voice rules (two registers, lead-the-eye, no move-number prefixes,
+  no robotic bare-SAN strings). When you SHIP a content fix, run
+  the gates locally to confirm the build's existing position holds.
+  Promotion into `registry.ts` OPENINGS is a future step taken when
+  the build can clear the gates — not a prerequisite to keep
+  iterating on the pro content.
+
+- **The ONLY architectural difference is spine derivation.**
+  - Masterclass: spine built from `openings-lichess.json` + curator
+    picks (per §0.5 autonomous decision process in the playbook),
+    walked through the masters explorer for theoretical depth.
+  - Pro repertoire: spine built from the player's actual chess.com
+    game corpus (140k+ games for a prolific player like Naroditsky),
+    most-played continuation at every branch point — never theory
+    recall. Every move chess.js-validated; sources cite the player's
+    chess.com archive plus reputable theory URLs and book corpus
+    where applicable.
+
+### G9.1 The PRO-REP DEEP BUILD DOCTRINE — locked (David 2026-05-28, emphatic).
+
+David's directive verbatim across this session:
+- *"thats not deep enough either! since we have the real games,
+  hundreds of them we go deep into every line! deep opening, middle
+  game, we can even add end game theory!"*
+- *"i dont care how long it takes! i just care that it gets done
+  correctly, how i want it to be done!"*
+- *"we use all of the games to build one masterclass that captures
+  his ideas, moves, words! this is going to go deeper than our
+  previously built masterclasses! we are trying to capture their
+  exact games move by move."*
+- *"dont forget to dig through youtube and add openings and
+  teaching from that source! it is pure gold!"*
+- *"LOCK THIS IN!!"*
+
+**The data flow per opening:**
+
+1. **Use ALL his games.** A prolific player has tens or hundreds of
+   thousands of games on chess.com; we pull every single one. The
+   Naroditsky pilot used 140,530 games scanned, ~3,500 in the
+   Caro-Kann alone.
+
+2. **Identify named variations from data.** Each opening has 4-8
+   canonical variations (Two Knights, Advance, Exchange, Classical,
+   Fantasy, etc.). Count games per variation; rank by frequency;
+   pick the 6-8 that justify their own tab. Sub-variations inside
+   (Botvinnik-Carls under Advance, Panov under Exchange) get
+   sub-tabs when their game count warrants.
+
+3. **Opening phase = AGGREGATE SPINE.** Walk the most-played
+   continuation at every ply while ≥3-5 games stay on the path.
+   The terminus is the natural "opening depth" for that variation.
+   Examples from the Naroditsky Caro pilot:
+   - Two Knights: opening goes through move 13 (ply 25), 5 games
+     still on path
+   - Classical: through move 11 (ply 21), 12 games
+   - Advance: through move 10 (ply 19), 7 games
+   - At each ply, EVERY one of his choices is recorded with
+     frequency + win-rate — including the alternatives he sometimes
+     picks. The masterclass beat at each ply cites: "his choice
+     92% of the time" + "alternatives X and Y with their scores."
+
+4. **Middlegame = PATTERN-EXTRACT from the games that reach the
+   opening terminus.** The N games (5-15) at the deepest aggregate
+   position have all played the SAME opening; we then look at moves
+   13-30 across them and frequency-rank what they played next. The
+   patterns ARE his middlegame plan. Naroditsky Caro Two Knights
+   example: 3 of 5 played …a5 (queenside push), 4 of 5 played …c5
+   (central break) — his middlegame plan revealed in two data
+   points. Author the middlegame beats from those patterns.
+
+5. **Endgame = STRUCTURE-EXTRACT from how the games actually END.**
+   Walk each game to the final position; classify the endgame type
+   (R+P / R+minor+P / opposite-colour bishop / queens-only / K+P /
+   etc.); identify the recurring conversion pattern. Naroditsky
+   Caro Two Knights example: 3 of 4 decisive games converted in a
+   R+P endgame via queenside passed pawn (created by the …a5 push
+   from the middlegame). The masterclass beat ties the chain
+   together: "the opening teaches you the moves; the middlegame
+   teaches you …a5+…c5; the endgame is just collecting what the
+   first two phases set up."
+
+6. **Representative game per variation.** From the games at the
+   opening terminus, pick the deepest decisive one against the
+   highest-rated opponent — that becomes the model game walkthrough.
+   Walked move-by-move with narration in his voice.
+
+7. **Multi-game model games.** Not one per variation; 3-5 per
+   variation showing different facets of the same plan.
+
+8. **Voice research per opening.** Pull HIS specific teaching
+   content for THAT opening:
+   - YouTube speedrun videos for that opening (URLs from web
+     search; transcripts via WebFetch / third-party transcript
+     sites; yt-dlp blocked from sandbox by YouTube bot-check on
+     datacenter IPs — route to David's machine if direct
+     transcripts are needed)
+   - Chessable course pages
+   - Lichess studies he authored
+   - Chess.com articles he wrote
+   - Podcast / interview transcripts
+   - For Naroditsky baseline: the Listudy "25 Lessons" distilled
+     principles article as the floor; per-opening research is the
+     ceiling.
+
+9. **Every narration beat cites BOTH data AND voice.** Format:
+   the beat names what the position is + what his data shows
+   ("3 of 5 of his games at this position play …a5") + what he
+   TEACHES about it (paraphrased from sourced YouTube/Chessable/
+   blog content). Data without voice = dry stats. Voice without
+   data = unfounded claims. Both together = his masterclass.
+
+**The UI shape per opening (masterclass parity):**
+
+- WLPP grammar (Watch / Learn / Practice / Play)
+- Variation tabs, each with its own deep beat lesson (4 of those
+  tabs at full depth = real masterclass; 8 of those tabs = the
+  Vienna keystone)
+- Middlegame plan per variation, playable line + lead-the-eye
+- Pitfalls section — common mistakes as WLPP
+- Model games per variation — multiple games, his actual wins
+- Named-trap weapons section — if any real ones exist in his games
+- Endgame section — the recurring endgame structures + a
+  representative conversion
+- Unlock ladder + everything else the masterclass inherits
+
+**The voice register (apply to every beat):**
+
+- Two registers on every beat: full Watch + ≤8-word Learn cue
+- Lead-the-eye colour language — orange move squares (auto), green
+  vision arrows (non-pawn, clear sight-line), yellow key squares
+- Sentence-grained reveal via narrationSegments
+- `sources[]` array on every narration unit
+- NO move-number prefixes in prose ("2.Nc3" → "Nc3" or "the
+  queen's knight to c3")
+- NO bare-SAN sequences that sanitizeForTTS reads as awkward
+  "knight to c3 instead of the boring knight to f3" lines — use
+  natural piece names paired with file/rank for clarity
+- The masterclass voice (vienna.ts, caroKann.ts) is the reference
+
+**Effort:**
+
+- Hours per opening — David: *"i dont care how long it takes."*
+- Each opening done correctly per these 9 points beats two openings
+  shipped at half-depth.
+- The Naroditsky pilot establishes the depth standard; subsequent
+  openings (and subsequent pros — Carlsen, Hikaru, Caruana,
+  Firouzja, etc.) replicate the same shape.
+
+**Move-toward-gates is still incremental.** Pro-rep openings are
+currently registered in `LESSONS` only (skipping the masterclass
+gate registry in `registry.ts`). Don't rip up working content to
+chase gate compliance — incremental authoring of the 9-point
+doctrine above is the cadence. Promotion into the gate registry is
+a future step taken when the build can clear the gates.
+
+**The architectural difference (only one):** spine derivation.
+Masterclass = `openings-lichess.json` + curator picks + masters
+explorer. Pro-rep = the player's actual chess.com (and lichess)
+game corpus, aggregated for opening + middlegame, with
+representative-game walks for the deep tail and his teaching
+content threaded throughout. Every move chess.js-validated; every
+beat sources both data and voice.
+
 Violating these gates wastes David's money and erodes trust faster
 than missing the underlying task. The shallow-work failure mode IS
 the harm here.

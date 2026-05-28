@@ -25,63 +25,70 @@ const OPENINGS = {
     color: 'black',
     studentMoves: ['c6'],
     minPrefix: ['e4', 'c6'],
-    maxDepth: 30,
+    maxDepth: 80,
   },
   'alapin-sicilian': {
     name: 'Alapin Sicilian',
     color: 'white',
     studentMoves: [],
     minPrefix: ['e4', 'c5', 'c3'],
-    maxDepth: 30,
+    maxDepth: 80,
   },
   'najdorf': {
     name: 'Sicilian Najdorf',
     color: 'black',
     studentMoves: [],
     minPrefix: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'],
-    maxDepth: 30,
+    maxDepth: 80,
   },
   'kid': {
     name: "King's Indian Defense",
     color: 'black',
     studentMoves: [],
     minPrefix: ['d4', 'Nf6', 'c4', 'g6'],
-    maxDepth: 30,
+    maxDepth: 80,
   },
   'alekhine': {
     name: "Alekhine's Defense",
     color: 'black',
     studentMoves: [],
     minPrefix: ['e4', 'Nf6'],
-    maxDepth: 30,
+    maxDepth: 80,
   },
   'kia': {
     name: "King's Indian Attack",
     color: 'white',
     studentMoves: [],
     minPrefix: ['Nf3'],
-    maxDepth: 30,
+    maxDepth: 80,
   },
   'rossolimo': {
     name: 'Anti-Sicilian Rossolimo/Moscow',
     color: 'white',
     studentMoves: [],
     minPrefix: ['e4', 'c5', 'Nf3'],
-    maxDepth: 30,
+    maxDepth: 80,
   },
   'jobava-london': {
     name: 'Jobava London',
     color: 'white',
     studentMoves: [],
     minPrefix: ['d4', 'd5', 'Nc3'],
-    maxDepth: 30,
+    maxDepth: 80,
   },
   'ruy-lopez': {
     name: 'Ruy Lopez',
     color: 'white',
     studentMoves: [],
     minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'],
-    maxDepth: 30,
+    maxDepth: 80,
+  },
+  'fantasy-caro': {
+    name: 'Fantasy Variation vs Caro-Kann',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'c6', 'd4', 'd5', 'f3'],
+    maxDepth: 80,
   },
 };
 
@@ -183,7 +190,11 @@ function main() {
   }
 
   // Compute "spine" — at each branch take the most-played child until we drop below MIN_BRANCH_GAMES.
-  const MIN_BRANCH_GAMES = Math.max(20, Math.floor(root.games * 0.005));
+  // Lowered 2026-05-28 (David: "we go deep into every line!"). The aggregate
+  // spine extends as long as ≥5 of his games stayed on the most-played path;
+  // past that we transition to representative-game tracking for the
+  // middlegame/endgame tail.
+  const MIN_BRANCH_GAMES = Math.max(5, Math.floor(root.games * 0.001));
   function findSpine(node, accSans) {
     if (node.children.size === 0) return accSans;
     const sorted = [...node.children.entries()].sort((a,b) => b[1].games - a[1].games);

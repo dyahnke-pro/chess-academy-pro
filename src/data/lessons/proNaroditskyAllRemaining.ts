@@ -50,14 +50,14 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
     b({
       id: 'open', moves: 'e4 c5 c3',
       highlights: [{ square: 'c3', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Naroditsky's anti-Sicilian. 2.c3 isn't theory — it's setup. The whole point is move three: d4, with the pawn supported. We're refusing the Sicilian's tactical mess and building a classical centre instead. His score in this line is 73.8% across nearly 3,000 games.",
+      say: "Naroditsky's anti-Sicilian. c3 isn't theory — it's setup. The whole point is move three: d4, with the pawn supported. We're refusing the Sicilian's tactical mess and building a classical centre instead. His score in this line is 73.8% across nearly 3,000 games.",
       sayShort: 'c3 — sets up the d4 push.',
     }),
     b({
       id: 'response', moves: 'e4 c5 c3 Nf6 e5 Nd5',
       arrows: [{ from: 'e5', to: 'd6', color: VIS }],
       highlights: [{ square: 'e5', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "Black's main answer is 2...Nf6 attacking e4. We push e5, kicking the knight to d5 where it sits awkwardly — no support, no good retreat squares. Black has bought one tempo for the next ten moves of awkwardness.",
+      say: "Black's main answer is Nf6 attacking e4. We push e5, kicking the knight to d5 where it sits awkwardly — no support, no good retreat squares. Black has bought one tempo for the next ten moves of awkwardness.",
       sayShort: 'e5 — kick the knight to d5.',
     }),
     b({
@@ -319,7 +319,7 @@ export const PRO_NAR_JOBAVA_LESSON: LessonScript = {
     b({
       id: 'open', moves: 'd4 d5 Nc3',
       highlights: [{ square: 'c3', color: KEY }],
-      say: "The Jobava London. 2.Nc3 instead of the boring 2.Nf3 — we're saying we want a tactical fight, not a positional grind. Naroditsky popularized this for amateur play because it leads to sharp middlegames that punish under-prepared opponents.",
+      say: "The Jobava London. Nc3 instead of the boring Nf3 — we're saying we want a tactical fight, not a positional grind. Naroditsky popularized this for amateur play because it leads to sharp middlegames that punish under-prepared opponents.",
       sayShort: '2.Nc3 — tactical fight, not London grind.',
     }),
     b({
