@@ -4847,5 +4847,32 @@
         "concept": "2.Bg5 — the Tromp"
       }
     ]
+  },
+  {
+    "id": "mg-pro-gothamchess-italian-nf6",
+    "openingId": "pro-gothamchess-italian",
+    "white": "Levy Rozman (GothamChess)",
+    "black": "Titled opponent",
+    "whiteElo": 2741,
+    "blackElo": 2737,
+    "result": "1-0",
+    "year": 2022,
+    "event": "Online (chess.com) / 2022",
+    "studentSide": "white",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qa5 Nxe4 Be6 Bg5 Qd5 c3 d3 Qa4 f5 Ng3 Kf7 Bf4 h6 Rad1 Bd6 Re3 Bxf4 Qxf4 Rad8 h4 g6 Qxc7+ Rd7 Qf4 Qc4 Ne5+ Nxe5 Qxe5 Rhd8 h5 f4 hxg6+ Kxg6 Qxe6+ Qxe6 Rxe6+ Kf7 Rxh6 fxg3 Rh7+ Kg6 Rxd7 Rxd7 fxg3 Kg5 Kf2 Kg4 Ke3 Kxg3 Rxd3 Re7+ Kd4+ Kxg2 b4 Kf2 Kc4 Ke2 Rd8 Rc7+ Kb3 Ke3 a4 Ke4 b5 Ke5 Kb4 b6 Rd3 Ke6 c4 Ke5 a5 bxa5+ Kb3 Rxc4 Kxc4",
+    "overview": "GothamChess Italian vs 2...Nf6 (Two Knights). His real top-elo winning game on this branch — d4 break + Re1 piece pressure converts the lead in development.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Italian_Game",
+      "https://www.chess.com/game/live/60277343741"
+    ],
+    "criticalMoments": [
+      {
+        "moveNumber": 4,
+        "color": "white",
+        "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+        "annotation": "d4 — the central break vs the Two Knights. Black has to take, and the open files favour the better-developed side.",
+        "concept": "d4 break in the Italian"
+      }
+    ]
   }
 ]

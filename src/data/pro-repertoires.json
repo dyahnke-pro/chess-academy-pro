@@ -652,7 +652,7 @@
       "playerId": "gothamchess",
       "eco": "C54",
       "name": "Italian Game (GothamChess)",
-      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O",
+      "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 O-O Nf6 d4 Bxd4 Nxd4 Nxd4 Bg5 h6 Bh4 g5 f4 d6 fxg5 Bg4 Be2 Qf6",
       "color": "white",
       "style": "Classical, Solid",
       "overview": "The Italian Game is the first opening every chess player should learn — and the one most never stop playing. Documented in Pedro Damiano's 1512 chess treatise and refined by Greco's 1620s manuscripts, the Giuoco Piano ('Quiet Game') is one of the oldest analyzed openings in chess history. Paul Morphy demonstrated its devastating attacking potential in his 1858 European tour; in the modern era, Carlsen revived the slow d3 system as White's main weapon, and the c3+d4 IQP lines have become standard tournament fare. Why is 1.e4 e5 2.Nf3 Nc6 3.Bc4 so timeless? Because it develops two perfect pieces in two moves, points the bishop at the weakest square in chess (f7), and asks Black: 'What's your plan?' Most Black players don't have one. Levy teaches this as his foundational 1.e4 weapon because the strategic ideas are timeless. The bonus: club players almost always blunder by move 12 if they haven't studied the c3+d4 break.",
@@ -699,6 +699,20 @@
             "concept:pos-center",
             "https://www.chess.com/openings/Italian-Game"
           ]
+        },
+        {
+          "name": "vs 2...Nf6 (Two Knights)",
+          "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1 d5 Bxd5 Qxd5 Nc3 Qa5 Nxe4 Be6 Bg5 Qd5",
+          "games": 30,
+          "explanation": "30 games (15 wins) in his dump. When Black plays the Two Knights, Levy strikes with d4 immediately — central break + Re1 piece pressure converts the lead in development.",
+          "provenance": "plays",
+          "provenanceRef": {
+            "games": 30,
+            "source": "his game dump"
+          },
+          "sources": [
+            "https://en.wikipedia.org/wiki/Italian_Game"
+          ]
         }
       ],
       "trapLines": [],
@@ -731,7 +745,23 @@
         "DON'T play e3 before Bf4 — the bishop is locked behind the pawn chain permanently, and at that point you're playing a worse Colle System instead of a London.",
         "The …Qb6 / b2 weakness is the London's only structural soft spot. Always play c3 early — without it, Black's …Qb6 can win the b2-pawn or force awkward defensive moves."
       ],
-      "variations": [],
+      "variations": [
+        {
+          "name": "vs 2...c5 (Anti-London)",
+          "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Be2 b6 O-O Bb7 h3 Ne7 Ne5 Nf5",
+          "games": 4,
+          "explanation": "4 games in his dump — the c5 anti-London. Levy also teaches London in his \"How to Win with the London System!\" YouTube video. Bg3 retreat + Ne5 outpost is his pattern.",
+          "provenance": "both",
+          "provenanceRef": {
+            "games": 4,
+            "source": "his game dump + YouTube"
+          },
+          "sources": [
+            "https://www.youtube.com/watch?v=ECMMct_jnEM",
+            "https://en.wikipedia.org/wiki/London_System"
+          ]
+        }
+      ],
       "trapLines": [],
       "warningLines": [],
       "sources": [
