@@ -11,8 +11,14 @@ NO `gothamchess-deep/`, NO `gothamchess-voice/`, NO variation `LessonScript`s,
 NO tab-plan routing. The voice/depth layer is the missing ~90%.
 
 ## Locked decisions (David, 2026-05-29)
-- **D1. Meme/speedrun lines FILTERED OUT.** No 1.b3 Larsen (1,977g), no
-  2.a3 anti-Sicilian (864g), no 1.Na3 (373g). Principled teaching lines only.
+- **D1. (REVISED) Filter PURE trolls only; KEEP his taught New-York-Style systems.**
+  The Chessly "E4 New York Style" course revealed the **a3 Sicilian (864g, his
+  #1 anti-Sicilian)**, **b3 Sicilian**, and **b3 French** are FEATURED course
+  chapters — his signature aggressive repertoire, NOT memes. RE-INCLUDED as real
+  openings (need extraction). Still DROPPED: 1.Na3 (373g), bongcloud, pure
+  troll speedruns with no course chapter. The pure 1.b3 Larsen as a first move
+  is ambiguous — his b3 is taught vs Sicilian/French specifically; a standalone
+  1.b3 system only if a course chapter backs it.
 - **D2. Modern Defense (1,066g) + Dutch Defense (814g) as Black ADDED** to scope
   (not yet extracted — need OPENINGS-map entries + trees).
 - **D3. Build order = most-popular-on-down** (see ranked list).
@@ -44,10 +50,21 @@ Each row: total games / score / the structurally-distinct variations ≥30g
 | 14 | QGD | B | 113 | 53 | thin + his only sub-60% line — 1 tab, low priority |
 | — | Rossolimo (102) / Fantasy Caro (95) / Ponziani (82) / Italian (75) | — | | marginal, buildable last |
 
+**Re-included per D1 revision (need tree extraction + deep-build):**
+- **a3 Sicilian** (~864g) — E4 NY ch 5-9; his #1 anti-Sicilian. Ranks ~#6 by volume.
+- **b3 Sicilian** — E4 NY ch 10-12.
+- **b3 French** — E4 NY ch 13-14B (+ the Milner-Barry, see below).
+
 **DROP (fail ≥30-game threshold, doctrine STEP 1):**
 - `pro-gothamchess-stafford-refute` — 1 game.
-- `pro-gothamchess-milner-barry` — 14 games.
-Remove from `pro-repertoires.json` (reconciler G8 sweeps Dexie on revision bump).
+- `pro-gothamchess-milner-barry` — 14 games IN DATA, but it's a featured E4 NY
+  weapon. KEEP as a thin/taught entry (his published gambit) rather than drop —
+  build from the few games + course framing, flag if data too sparse.
+
+**Voice corpus:** every in-scope opening has a Chessly course — full
+catalog + per-opening chapter mapping in
+`data/sources/gothamchess-voice/per-opening/_sources.md`. Course names the
+variation; his game data supplies the moves (the marry-method).
 
 ## Per-opening procedure (every entry, in order)
 Follow the doctrine 16 steps. Per-opening checklist (Pass A):
