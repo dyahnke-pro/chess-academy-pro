@@ -354,7 +354,12 @@ export function OpeningDetailPage(): JSX.Element {
 
   const handleExit = useCallback((): void => {
     setViewMode('detail');
-    setActiveVariationIndex(-1);
+    // NOTE: DO NOT reset activeVariationIndex here. The user who Watched
+    // a variation should land back on the SAME variation's WLPP buttons
+    // to continue the ladder (Learn → Practice → Play). Resetting to -1
+    // dumped them on the main-line buttons and forced a tab re-select,
+    // which silently broke the progression (David 2026-05-29 audit
+    // caught this — variation Learn "not rendered" after Watch exit).
     setActiveTrapLineIndex(-1);
     setActiveWarningLineIndex(-1);
     setActiveMiddlegamePlan(null);
