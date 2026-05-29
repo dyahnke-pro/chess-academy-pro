@@ -41232,5 +41232,677 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pronaroKID-classical-c5",
+    "openingId": "pro-naroditsky-kid",
+    "criticalPositionFen": "r1bqr1k1/pp3pbp/3p2p1/2p5/2PnPB2/2NB1P2/PP1Q2PP/R4RK1 w - - 0 14",
+    "title": "Classical Mar del Plata — ...c5 lock + Bh6 response",
+    "overview": "Alternative to the trade-down sequence: anchoring at ...c5 (Black's queenside lock), Black handles White's Bh6 differently by NOT immediately taking the trade. The …Be6 develops first, then Black chooses whether to accept the bishop trade based on White's setup.",
+    "pawnBreaks": [
+      "...c5 queenside lock"
+    ],
+    "pieceManeuvers": [
+      "...Be6 active light-square bishop"
+    ],
+    "strategicThemes": [
+      "Endgame transition with active pieces"
+    ],
+    "endgameTransitions": [
+      "R+min+P (26.4% of decisive Classical games)"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqr1k1/pp3pbp/3p2p1/2p5/2PnPB2/2NB1P2/PP1Q2PP/R4RK1 w - - 0 14",
+        "moves": [
+          "Bh6",
+          "Be6",
+          "Bxg7",
+          "Kxg7"
+        ],
+        "annotations": [
+          "Bh6 — White offers the dark-square bishop trade, hoping to weaken Black's king.",
+          "...Be6 — Black develops the light-square bishop first, NOT immediately trading. The Bh6 hangs while Black improves piece placement.",
+          "Bxg7 — White goes through with the trade.",
+          "...Kxg7 — Black recaptures with the king, transitioning into the R+min+P endgame structure with active piece placement on e6 and central control."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bh6 offer",
+          "...Be6 develop",
+          "Bxg7 trade",
+          "...Kxg7 endgame"
+        ],
+        "title": "Classical Mar del Plata — ...c5 lock + Bh6 response",
+        "intro": "Alternative to the trade-down sequence: anchoring at ...c5 (Black's queenside lock), Black handles White's Bh6 differently by NOT immediately taking the trade. The …Be6 develops first, then Black chooses whether to accept the bishop trade based on White's setup.",
+        "sources": [
+          "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKID-fianchetto-simplify",
+    "openingId": "pro-naroditsky-kid",
+    "criticalPositionFen": "r1bq1rk1/pppn1pbp/3p1np1/8/2PNP3/2N3P1/PP3PBP/R1BQ1RK1 b - - 0 9",
+    "title": "Fianchetto — early ...exd4 simplification",
+    "overview": "Alternative to the slow Yugoslav queenside push: the immediate ...exd4 trade opening lines for the rook + bishop pair on the e-file.",
+    "pawnBreaks": [
+      "...a5 queenside push"
+    ],
+    "pieceManeuvers": [
+      "...Nbd7-Nc5 reroute"
+    ],
+    "strategicThemes": [
+      "Central simplification + queenside"
+    ],
+    "endgameTransitions": [
+      "R+B+N with active minor pieces"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pppn1pbp/3p1np1/8/2PNP3/2N3P1/PP3PBP/R1BQ1RK1 b - - 0 9",
+        "moves": [
+          "Nc5",
+          "Qc2",
+          "a5",
+          "Rd1"
+        ],
+        "annotations": [
+          "...Nc5 — Black's knight to c5 outpost, attacks e4-pawn.",
+          "Qc2 — White's queen defends e4 indirectly AND eyes the kingside.",
+          "...a5 — Black's queenside expansion begins.",
+          "Rd1 — White's rook to the central file. The position is balanced with Black having the better minor piece on c5."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "...Nc5 outpost",
+          "Qc2 defend",
+          "...a5 expand",
+          "Rd1 central"
+        ],
+        "title": "Fianchetto — early ...exd4 simplification",
+        "intro": "Alternative to the slow Yugoslav queenside push: the immediate ...exd4 trade opening lines for the rook + bishop pair on the e-file.",
+        "sources": [
+          "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKID-antikidnf3-rooklift",
+    "openingId": "pro-naroditsky-kid",
+    "criticalPositionFen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQR1K1 b - - 2 10",
+    "title": "Anti-KID Nf3 — Re8 + ...Bg4 pin counter",
+    "overview": "Alternative to the Yugoslav plan: the ...Re8 + ...Bg4 setup pinning White's f3-knight against the queen, forcing concessions.",
+    "pawnBreaks": [
+      "...exd4 open the file"
+    ],
+    "pieceManeuvers": [
+      "...Re8 rook lift"
+    ],
+    "strategicThemes": [
+      "Central pressure setup"
+    ],
+    "endgameTransitions": [
+      "R+B+N central files"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQR1K1 b - - 2 10",
+        "moves": [
+          "Re8",
+          "Qc2",
+          "exd4",
+          "Nxd4"
+        ],
+        "annotations": [
+          "...Re8 — Black's rook to the e-file pressuring the e4-pawn.",
+          "Qc2 — White's queen supports e4 AND prepares queenside development.",
+          "...exd4 — Black opens the e-file with the trade.",
+          "Nxd4 — White recaptures. The rook on e8 now has full pressure on e4 and the position is balanced."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "...Re8 pressure",
+          "Qc2 defend",
+          "...exd4 open",
+          "Nxd4 recapture"
+        ],
+        "title": "Anti-KID Nf3 — Re8 + ...Bg4 pin counter",
+        "intro": "Alternative to the Yugoslav plan: the ...Re8 + ...Bg4 setup pinning White's f3-knight against the queen, forcing concessions.",
+        "sources": [
+          "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKID-makogonov-nc5",
+    "openingId": "pro-naroditsky-kid",
+    "criticalPositionFen": "r1bq1rk1/pp3pbp/n1pp2p1/3Pp3/2P1Pn2/2N1BN1P/PP2BPP1/R2Q1RK1 w - - 3 11",
+    "title": "Makogonov — ...Nc5 queenside outpost",
+    "overview": "Alternative to the kingside storm: the ...Nc5 outpost on the queenside hitting e4 and dominating dark squares.",
+    "pawnBreaks": [
+      "...f5-f4 kingside storm"
+    ],
+    "pieceManeuvers": [
+      "...Na6-Nc5 reroute"
+    ],
+    "strategicThemes": [
+      "Kingside attack + queenside outpost"
+    ],
+    "endgameTransitions": [
+      "R+B+N kingside attack"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp3pbp/n1pp2p1/3Pp3/2P1Pn2/2N1BN1P/PP2BPP1/R2Q1RK1 w - - 3 11",
+        "moves": [
+          "Re1",
+          "f5",
+          "Bxf4",
+          "exf4"
+        ],
+        "annotations": [
+          "Re1 — White's rook supports the e-file.",
+          "...f5 — Black's pawn storm launches with the knight already on f4.",
+          "Bxf4 — White trades the dark-square bishop for the Nf4.",
+          "...exf4 — Black's e5-pawn captures back diagonally, opening the e-file for the rook AND fixing the f4-pawn as a structural target. The kingside attack continues with the open e-file and the half-open f-file."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Re1 support",
+          "...f5 storm",
+          "Bxf4 trade",
+          "...exf4 — open f-file"
+        ],
+        "title": "Makogonov — ...Nc5 queenside outpost",
+        "intro": "Alternative to the kingside storm: the ...Nc5 outpost on the queenside hitting e4 and dominating dark squares.",
+        "sources": [
+          "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKID-saemisch-central",
+    "openingId": "pro-naroditsky-kid",
+    "criticalPositionFen": "rnbq1rk1/1p2ppbp/p2p1np1/2p5/2PPP3/2N1BP2/PP1Q2PP/R3KBNR w KQ - 0 8",
+    "title": "Sämisch — ...c5 central counter early",
+    "overview": "Alternative to the Bronstein/Panno trade-down: the active ...c5 central counter-strike before White's kingside attack lands.",
+    "pawnBreaks": [
+      "...b5 queenside expansion"
+    ],
+    "pieceManeuvers": [
+      "...a-file rook activation"
+    ],
+    "strategicThemes": [
+      "Counter-attack queenside before White attack lands"
+    ],
+    "endgameTransitions": [
+      "R+B+N with queenside majority"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/1p2ppbp/p2p1np1/2p5/2PPP3/2N1BP2/PP1Q2PP/R3KBNR w KQ - 0 8",
+        "moves": [
+          "d5",
+          "b5",
+          "cxb5",
+          "axb5"
+        ],
+        "annotations": [
+          "d5 — White closes the centre, gaining queenside space.",
+          "...b5 — Black's queenside expansion immediately challenges the c4-pawn.",
+          "cxb5 — White trades the c-pawn.",
+          "...axb5 — Black recaptures with the a-pawn, opening the a-file for the rook AND creating queenside pawn majority."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "d5 lock",
+          "...b5 expand",
+          "cxb5 trade",
+          "...axb5 — open a-file"
+        ],
+        "title": "Sämisch — ...c5 central counter early",
+        "intro": "Alternative to the Bronstein/Panno trade-down: the active ...c5 central counter-strike before White's kingside attack lands.",
+        "sources": [
+          "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKID-petrosian-re8",
+    "openingId": "pro-naroditsky-kid",
+    "criticalPositionFen": "rnbq1rk1/5pbp/p1pp1np1/1p6/3PP3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 0 10",
+    "title": "Petrosian — ...Re8 + ...h5 kingside expansion",
+    "overview": "Alternative to the long-diagonal Bxd4 raid: the ...Re8 + ...h5 setup gaining kingside space.",
+    "pawnBreaks": [
+      "...h5-h4 kingside expansion"
+    ],
+    "pieceManeuvers": [
+      "...Re8 rook lift"
+    ],
+    "strategicThemes": [
+      "Slow kingside expansion + queenside space"
+    ],
+    "endgameTransitions": [
+      "R+B+N positional grind"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/5pbp/p1pp1np1/1p6/3PP3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 0 10",
+        "moves": [
+          "Nf4",
+          "Re8",
+          "Be2",
+          "h5"
+        ],
+        "annotations": [
+          "Nf4 — White's knight to the central outpost.",
+          "...Re8 — Black coordinates the rook on the e-file.",
+          "Be2 — White completes development.",
+          "...h5 — Black's kingside expansion begins. The h5 push prepares ...h4 cramping White's kingside."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nf4 outpost",
+          "...Re8 coordinate",
+          "Be2 develop",
+          "...h5 expand"
+        ],
+        "title": "Petrosian — ...Re8 + ...h5 kingside expansion",
+        "intro": "Alternative to the long-diagonal Bxd4 raid: the ...Re8 + ...h5 setup gaining kingside space.",
+        "sources": [
+          "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKID-fourpawns-counter",
+    "openingId": "pro-naroditsky-kid",
+    "criticalPositionFen": "r1bq1rk1/pp1n1pbp/3n2p1/2pPp3/2P1P3/2NBBN2/PP4PP/R2Q1RK1 w - - 6 12",
+    "title": "Four Pawns — ...Nbd7-Nb6 reroute attacking c4",
+    "overview": "Alternative to the kingside storm: the ...Nbd7-Nb6 reroute targeting White's c4-pawn directly.",
+    "pawnBreaks": [
+      "...c5 wedge"
+    ],
+    "pieceManeuvers": [
+      "...Nd7-Nb6 reroute"
+    ],
+    "strategicThemes": [
+      "Target c4 in the Four Pawns chain"
+    ],
+    "endgameTransitions": [
+      "R+B+N with active minor pieces"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1n1pbp/3n2p1/2pPp3/2P1P3/2NBBN2/PP4PP/R2Q1RK1 w - - 6 12",
+        "moves": [
+          "Qd2",
+          "Nb6",
+          "a4",
+          "a5"
+        ],
+        "annotations": [
+          "Qd2 — White's queen connects the rooks.",
+          "...Nb6 — Black's second knight reroutes to b6 attacking c4.",
+          "a4 — White prevents ...a5 expansion.",
+          "...a5 — Black mirrors with the queenside push, fixing the a-pawn structure AND preparing ...Na6-Nc5 reroute toward the c4-pawn. The locked queenside doesn't help White's space advantage and Black has the better minor pieces."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Qd2 connect",
+          "...Nb6 attack c4",
+          "a4 prevent",
+          "...a5 — counter"
+        ],
+        "title": "Four Pawns — ...Nbd7-Nb6 reroute attacking c4",
+        "intro": "Alternative to the kingside storm: the ...Nbd7-Nb6 reroute targeting White's c4-pawn directly.",
+        "sources": [
+          "https://www.chess.com/openings/Kings-Indian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
   }
 ]
