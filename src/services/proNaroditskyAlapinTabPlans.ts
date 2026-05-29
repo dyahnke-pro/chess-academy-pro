@@ -8,30 +8,35 @@
 // invented". Add new variation-keyed plans here when authored.
 
 export const PRO_NARODITSKY_ALAPIN_TAB_PLAN_IDS: Record<string, string[]> = {
-  // Main spine (2…Nf6) — queenside crawl conversion + exd6 break
-  // (all plans now anchored AT or PAST the opening terminus with
-  // hand-written narration per move — rebuilt 2026-05-28)
+  // Main spine (2…Nf6) — plans anchored at the FULL 32-ply spine end
+  // (where the opening actually finishes), walking real middlegame +
+  // endgame play from his game vs FaustinoOro (2971). Hand-written
+  // narration per move. Rebuilt 2026-05-28 after David caught both
+  // bugs (auto-generated narration + mid-opening anchors).
   main: [
-    'mp-pronaroAlapin-queenside-crawl',
-    'mp-pronaroAlapin-exd6-enpassant',
+    'mp-pronaroAlapin-nf6main-mg',
+    'mp-pronaroAlapin-nf6main-endgame',
   ],
-  // 2…d5 Open — Nb5 fork + Bb5+ king-fix
+  // 2…d5 Open — plans anchored at the 25-ply spine end (Bb5+ Kf8 Nf3)
+  // walking the conversion vs Sam Shankland (2934).
   '2…d5 open variation': [
-    'mp-pronaroAlapin-d5open-nb5-fork',
-    'mp-pronaroAlapin-d5open-be3-pressure',
+    'mp-pronaroAlapin-d5open-mg',
+    'mp-pronaroAlapin-d5open-endgame',
   ],
-  // 2…e6 French — O-O castle + Ng5 kingside tactics
+  // 2…e6 French — plan anchored at the 19-ply spine end (Ng5)
+  // walking the Bxh6 sacrifice from vs Niko Theodorou (3131).
   '2…e6 french-style': [
-    'mp-pronaroAlapin-e6french-oo-castle',
-    'mp-pronaroAlapin-e6french-ng5-attack',
+    'mp-pronaroAlapin-e6french-mg',
   ],
-  // 2…d6 Mainline — h3 prophylaxis + g4 prep
+  // 2…d6 Mainline — plan anchored at the 17-ply spine end (O-O)
+  // walking the Bg5 + Bh4 pin sequence from vs Riley (2984).
   '2…d6 mainline': [
-    'mp-pronaroAlapin-d6main-h3-prophylaxis',
+    'mp-pronaroAlapin-d6main-mg',
   ],
-  // 2…Nc6 Line — Nc3 tempo + Bd3 buildup
+  // 2…Nc6 Line — plan anchored at the 20-ply spine end (a3 O-O)
+  // walking the Bc2 + Qd3 battery sequence from vs Zanyglobal (2899).
   '2…nc6 line': [
-    'mp-pronaroAlapin-nc6-bd3-buildup',
+    'mp-pronaroAlapin-nc6-mg',
   ],
   // 2…g6 Hyper-Dragon — no plans authored yet (data supports 3)
   '2…g6 hyper-dragon': [],
