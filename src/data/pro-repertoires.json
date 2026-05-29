@@ -1373,6 +1373,33 @@
           ]
         }
       ],
+      "trapLines": [
+        {
+          "name": "Nge7 walks into Bxc6 doubled-pawns",
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 b3 a6 Bxc6 Nxc6 Bb2",
+          "explanation": "Mined from 58 games — the biggest Rossolimo trap. Black's natural ...Nge7 development walks into b3 + Bxc6 trade with the Bb2 dominating the long diagonal. Named 2700+ victim: Firouzja2003 (3068)."
+        },
+        {
+          "name": "...a6 in Moscow Bb5+ Nd7 line",
+          "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 O-O a6 Bxd7+ Bxd7 b3 Nf6 e5",
+          "explanation": "Mined from 36 games. Premature ...a6 lets Bxd7+ simplify into a positional bind with e5 cramping the f6-knight. Named 2700+ victims: Salem-AR (2946), Kriari (2861)."
+        },
+        {
+          "name": "Nge7 in the early b3 Rossolimo",
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 b3 Nge7 Bb2 Qb6 Bxc6 Nxc6 Na3",
+          "explanation": "Mined from 25 games. Same Nge7 trap from a different move order (immediate b3 instead of O-O). Named victims: ManuDavid2910 (2763), Lordillidan (2879)."
+        },
+        {
+          "name": "cxd4 lets us recapture with the queen",
+          "pgn": "e4 c5 Nf3 d6 Bb5+ Nd7 d4 cxd4 Qxd4 a6 Bxd7+ Bxd7 O-O",
+          "explanation": "Mined from 13 games. In the sharp Moscow with 4.d4, ...cxd4 lets Qxd4 sit centrally with no need to redeploy. Named 2700+ victims: Firouzja2003 (2907), Jospem (2968), daro94 (2904)."
+        },
+        {
+          "name": "...a6 walks into Bg5 + Bxf6 (Open Sicilian)",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 Qd2 h6 Bxf6",
+          "explanation": "Mined from 12 games — when Black declines the Rossolimo with ...d6 and we transpose to Open Sicilian, ...a6 walks into Bg5 + Bxf6 timing. Named victim: GM Wesley So (2824), Genghis_K (2925)."
+        }
+      ],
       "sources": [
         "book:sicilian-rossolimo",
         "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
