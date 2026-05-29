@@ -8,7 +8,6 @@ import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } f
 const KEY = 'rgba(255,214,0,0.88)';
 const ATK = 'rgba(40,185,95,0.92)';
 const VIS = 'rgba(40,185,95,0.92)';
-const INTENT = 'rgba(40,185,95,0.92)';
 const SOFT = 'rgba(80,140,255,0.32)';
 
 const A = (from: string, to: string, color: string): AnnotationArrow => ({ from, to, color });
@@ -28,23 +27,6 @@ function b(init: BeatInit): LessonBeat {
 }
 
 export const ITALIAN_GAME_VARIATION_LESSONS: Record<string, LessonScript> = {
-  "italian-game::Giuoco Pianissimo: Modern d3 System": {
-  openingId: "italian-game",
-  sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
-  title: "Italian Game — The Modern d3 System",
-  minutes: 11,
-  orientation: "white",
-  beats: [
-    b({ id: "m1", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 d3", say: "Welcome to the Giuoco Pianissimo — the \"quietest game\" — and the single most important Italian for the modern player. This is the weapon of Carlsen, Caruana, and So at the very top. Instead of the immediate c3-and-d4 break, White plays d3: a small, patient move that overprotects e4 and refuses to release the central tension. The whole point is to avoid early theory and reach a rich, slow middlegame where understanding beats memorisation.", sayShort: "d3 — the patient modern Italian, no early break.", highlights: [H("e4", KEY), H("d4", SOFT)] }),
-    b({ id: "m2", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6", say: "Nf6 O-O d6 — both sides build the same modest structure. Black mirrors with …d6, propping e5 just as White propped e4. Nothing is forced, nothing is resolved. In the Pianissimo the opening doesn't decide the game; the manoeuvring that follows does. White's plan from here is a slow, specific knight journey that every strong player knows by heart.", sayShort: "O-O d6 — quiet symmetry; the manoeuvre decides.", highlights: [H("e5", KEY), H("e4", SOFT)] }),
-    b({ id: "m3", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6", say: "c3 — still preparing d4, but on White's own terms, only when the pieces are ready. Black replies a6, a useful little move that takes the b5-square away from White's pieces and prepares to meet a future bishop pin. Both armies are coiling. The tension is the message: whoever forces the d4 break at the right moment gets the better game.", sayShort: "c3 a6 — coil up; d4 comes when ready.", highlights: [H("d4", KEY), H("b5", SOFT)] }),
-    b({ id: "m4", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7", say: "a4 grabs queenside space and stops Black's …b5 expansion before it starts — pure prophylaxis. Black tucks the bishop away with Ba7, a key Pianissimo idea: the bishop steps off c5 onto a7, out of reach of any future d4-d5 fork, while keeping its glare down the a7-g1 diagonal toward f2 and White's king. Now both bishops sit on the long diagonals, fully loaded, waiting for the centre to open.", sayShort: "a4 Ba7 — stop …b5; bishop hides, eyes f2.", arrows: [A("a7", "f2", ATK)], highlights: [H("a7", KEY), H("f2", SOFT)] }),
-    b({ id: "m5", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O", say: "Nbd2 — and here begins the manoeuvre that defines the modern Italian. The queen-knight develops to d2, but d2 is only a waypoint. Its destination is the kingside: d2 to f1 to g3, and from g3 it eyes the beautiful f5-outpost. Edward Lasker's old rule applies word-for-word — a knight on f5 cannot be driven away by a pawn. White is willing to spend three tempi to get there. Black castles into safety; the slow squeeze is on.", sayShort: "Nbd2 — the knight starts the f1-g3-f5 trek.", arrows: [A("d2", "f1", INTENT)], highlights: [H("f1", KEY), H("g3", SOFT)] }),
-    b({ id: "m6", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O Re1 Be6", say: "Re1 puts the rook behind the e-pawn, supporting the e4-point and bracing the e-file for when it opens. Black develops Be6, offering to trade the light-squared bishops. This is a critical decision for White: allowing the trade eases Black's game, so White will usually slide his bishop back a square rather than give it up — the same bishop dance you saw in the main line and the Ruy.", sayShort: "Re1 Be6 — brace the e-file; bishops face off.", highlights: [H("e6", KEY), H("e4", SOFT)] }),
-    b({ id: "m7", moves: "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O Re1 Be6 Bb3 h6", say: "Bb3 keeps the bishop alive on its favourite diagonal, still pressuring e6 and f7 and declining the trade. Black plays h6, a typical prophylactic move that denies White's pieces the g5-square and gives the king a flight square. We've arrived at the Pianissimo tabiya — and from here White's plan writes itself: complete the knight's journey to g3 and f5, recoil the bishop if needed, and strike with d4 only when every piece is aimed at the centre and the kingside. This is positional chess at its purest: small moves, deep plans, one eventual break.", sayShort: "Bb3 h6 — the tabiya; now Ng3-f5 and d4.", arrows: [A("b3", "e6", ATK)], highlights: [H("e6", KEY), H("f7", SOFT)] }),
-  ],
-},
-
   "italian-game::Italian: Two Knights with d4": {
   openingId: "italian-game",
   sources: ['book:italian-game', 'concept:pos-center', 'https://www.chess.com/openings/Italian-Game'],
