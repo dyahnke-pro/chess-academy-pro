@@ -494,7 +494,7 @@ try {
       await page.waitForTimeout(1000);
       // First plan WLPP buttons — look for any plan-level "Watch" button
       // (the plan tiles render their own WLPP grid)
-      const planWatchBtns = await page.locator('[data-testid="middlegame-plans-section"] button:has-text("Watch")').all();
+      const planWatchBtns = await page.locator('[data-testid^="plan-watch-"]').all();
       rec(`[middlegame/${openingId}] middlegame plan Watch buttons`, planWatchBtns.length > 0 ? 'PASS' : 'WARN', `${planWatchBtns.length} watch buttons`);
       if (planWatchBtns.length > 0) {
         await captureNarrationAfter(
@@ -517,7 +517,9 @@ try {
     if (await egEl.count() > 0) {
       await egEl.scrollIntoViewIfNeeded({ timeout: 3000 }).catch(() => null);
       await page.waitForTimeout(1000);
-      const egWatchBtns = await page.locator('[data-testid="endgame-plans-section"] button:has-text("Watch")').all();
+      // Endgame plans share the plan-watch-* testid pattern with middlegame
+      // plans; filter to those whose plan.id ends with '-endgame'
+      const egWatchBtns = await page.locator('[data-testid^="plan-watch-"][data-testid$="-endgame"]').all();
       rec(`[endgame/${openingId}] endgame plan Watch buttons`, egWatchBtns.length > 0 ? 'PASS' : 'WARN', `${egWatchBtns.length} watch buttons`);
       if (egWatchBtns.length > 0) {
         await captureNarrationAfter(
