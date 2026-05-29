@@ -11,12 +11,23 @@ const TAB_PLANS: Record<string, Record<string, string[]>> = {
     'g6 modern setup': ['mp-pronaroKIA-symmetric-attack', 'mp-pronaroKIA-symmetric-e5push'],
     'd5 kia mainline': ['mp-pronaroKIA-reti-attack', 'mp-pronaroKIA-reti-nc4'],
     'd4 kid transposition': ['mp-pronaroKIA-kid-transposition', 'mp-pronaroKIA-pirc-nh4'],
+    'vs ...e5 (reti gambit)': ['mp-pronaroKIA-vs-e5-conversion'],
+    'vs ...c6 (slav-like)': ['mp-pronaroKIA-vs-c6-attack'],
+    'vs ...b6 (owen)': ['mp-pronaroKIA-vs-b6-expand'],
+    'vs ...e6 (french-style)': ['mp-pronaroKIA-vs-e6-attack'],
   },
   'pro-naroditsky-rossolimo': {
     'main': [],
     'nc6 rossolimo proper': ['mp-pronaroRoss-nc6-maroczy', 'mp-pronaroRoss-nc6-b4push'],
     'e6 open avoidance': ['mp-pronaroRoss-e6-taimanov', 'mp-pronaroRoss-e6-ne5'],
     'bxd7+ trade': ['mp-pronaroRoss-bd7-conversion', 'mp-pronaroRoss-bd7-attack'],
+    'c3 sideline': ['mp-pronaroRoss-c3-spanish'],
+    'bc4 vs ...d6': ['mp-pronaroRoss-bc4-italian'],
+    'vs ...g6 (hyper dragon)': ['mp-pronaroRoss-g6-maroczy'],
+  },
+  'pro-naroditsky-fantasy-caro': {
+    'main': [],
+    'black accepts with dxe4': ['mp-pronaroFantasy-kingside-attack'],
   },
   'pro-naroditsky-najdorf': {
     'main': [],
