@@ -109,7 +109,7 @@ function checkNarrationUnit(
   const chess = startFen ? new Chess(startFen) : new Chess();
   for (const san of moves) {
     try { chess.move(san); }
-    catch (e) {
+    catch {
       errors.push({
         beatId, source, text,
         lastMove: { piece: '?', from: '?', to: '?', color: '?' },
@@ -121,7 +121,7 @@ function checkNarrationUnit(
   const history = chess.history({ verbose: true });
   if (history.length === 0) return [];
   const last = history.at(-1)!;
-  const lastSquare = last.to as Square;
+  const lastSquare = last.to;
   const lastColor = last.color as 'w' | 'b';
   const attackSet = attacksFrom(chess, lastSquare);
 

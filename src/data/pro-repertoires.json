@@ -1034,26 +1034,65 @@
       ],
       "variations": [
         {
-          "name": "Be2 Classical",
-          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Nf3 e5 Be3",
-          "explanation": "The Classical mainline (681 games, 65.9%). White builds the broad centre and develops Be2; we strike with …e5 and play the Mar del Plata.",
+          "name": "Classical Mar del Plata (Be2)",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nf4 Bxf4 Nxd4 Bd3 c5 Bh6 Be6 Bxg7 Kxg7",
+          "explanation": "TODO Pass B — Classical Mar del Plata mainline, 715 games. Spine walks through ply 30 with the canonical Be2 / Nf3 / Be3 / Qd2 setup vs Black's Nh5-Nf4 reroute + c5 + Be6 + Kxg7 endgame transition. Anchor to KID corpus voice.",
           "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Defense",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         },
         {
-          "name": "h3 / Makogonov",
-          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 h3 O-O Be3 c6 Nf3",
-          "explanation": "Makogonov — White plays h3 first to prevent …Ng4 ideas (335 games, 62.5%). We answer with …c6 + …Nbd7 building a solid centre, then break with …e5.",
+          "name": "Fianchetto Variation (g3)",
+          "pgn": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 c6 h3 Qa5 Be3 exd4 Nxd4 Re8",
+          "explanation": "TODO Pass B — Fianchetto Variation, 316 games. Spine walks through ply 22 with White's mirror fianchetto vs Black's Nbd7 → e5 → c6 → Qa5 → exd4 Yugoslav plan.",
           "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Defense-Fianchetto-Variation",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         },
         {
-          "name": "Nf3 / g3 Fianchetto",
-          "pgn": "d4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nc6",
-          "explanation": "Fianchetto Variation (592 games, 65%). White fianchettos their own bishop. We answer with classical …Nc6 + …e5, fighting in the centre.",
+          "name": "Anti-KID with Nf3 first",
+          "pgn": "d4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O Nbd7 Nc3 e5 e4 c6 h3 Qa5 Re1 exd4 Nxd4 Re8",
+          "explanation": "TODO Pass B — Anti-KID with Nf3 first, 592 games. White delays committing the centre by playing Nf3 before Nc3; transposes into Fianchetto-Yugoslav structures often.",
           "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Defense",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
+        },
+        {
+          "name": "Makogonov (h3)",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 h3 O-O Be3 c6 Nf3 Na6 Be2 e5 d5 Nh5 O-O Nf4 Re1 Nxe2+ Rxe2 c5 Qd2 f5 exf5 gxf5 Bg5 Qd7",
+          "explanation": "TODO Pass B — Makogonov Variation, 335 games. White plays h3 to deny ...Ng4 / ...Nh5 (but Black still gets ...Nh5 from f6 directly). Spine walks through ply 30 with Na6 reroute + d5 lock + Nh5-Nf4 + c5/f5 break plan.",
+          "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Defense-Makogonov-Variation",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
+        },
+        {
+          "name": "Sämisch (f3)",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 a6 Qd2 c5 Nge2 Nc6 Rd1 cxd4 Nxd4 Nxd4 Bxd4 Be6 b3 Rc8 Be2 Qa5 O-O Nd7 Bxg7 Kxg7",
+          "explanation": "TODO Pass B — Sämisch Variation, 292 games. White's f3 stops ...Ng4 / ...Nh5 and prepares Be3 + Qd2 + O-O-O kingside storm. Spine walks through ply 30 with Black's Panno-style ...a6 + ...c5 plan and the trade-down endgame transition.",
+          "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Defense-Saemisch-Variation",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
+        },
+        {
+          "name": "Petrosian / Nge2",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nge2 O-O f3 c6 Be3 a6 c5 b5 cxd6 exd6 Nf4 Re8 Be2 b4 Na4 Nd5 Bd2",
+          "explanation": "TODO Pass B — Petrosian / Nge2 setup, 167 games. White's Nge2 keeps the c1-h6 diagonal open. Spine walks through ply 25 with Black's a6 + b5 queenside expansion + Re8 + Nd5.",
+          "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Defense",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
+        },
+        {
+          "name": "Four Pawns Attack (f4)",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 e5 fxe5 dxe5 d5 c5 Bd3 Ne8 O-O Nd6 Be3 Nd7",
+          "explanation": "TODO Pass B — Four Pawns Attack, 106 games. White's most aggressive setup with c4-d4-e4-f4. Spine walks through ply 22 with Black's ...e5 challenge, the fxe5 trade, then ...Ne8-Nd6 reroute targeting c4/e4.",
+          "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Defense-Four-Pawns-Attack",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         }

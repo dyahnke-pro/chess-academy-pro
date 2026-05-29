@@ -73,39 +73,35 @@ for (const f of files) {
     if (!moves || !matches(moves, PREFIX)) continue;
     kidGames++;
 
-    // Replay the game ply by ply with material tracking; detect Black blunders.
-    // A blunder = Black's move (ply P) leaves a piece hanging that White then
-    // captures on White's next move (ply P+1) with no Black recapture
-    // available, OR Black's move opens a tactical sequence where the next
-    // 2-3 White moves win material.
+    // Replay the game ply by ply with material tracking; detect WHITE blunders
+    // (the opponent — student is Black here). A blunder = White's move (ply P)
+    // opens a tactical sequence where the next 2-3 Black moves win material;
+    // we measure the swing in BLACK's favor (negative diff means Black is up).
     const chess = new Chess();
     let ok = true;
-    const baselineDiff = 0; // game starts equal
     let lastDiff = 0;
     for (let ply = 0; ply < moves.length - 1; ply++) {
       try { chess.move(moves[ply]); }
       catch { ok = false; break; }
-      const isBlackMove = (ply % 2 === 1);
-      if (!isBlackMove) {
+      const isWhiteMove = (ply % 2 === 0);
+      if (!isWhiteMove) {
         lastDiff = materialBalance(chess).diff;
         continue;
       }
-      // Black just moved. Look ahead 1-3 White moves and see if material swings.
-      const afterBlackDiff = materialBalance(chess).diff;
-      // Replay next 3 White moves (with Black's intermediate response) on a clone
+      // White just moved. Look ahead 1-5 plies, track lowest diff (most negative
+      // = most in Black's favor).
+      const afterWhiteDiff = materialBalance(chess).diff;
       const clone = new Chess(chess.fen());
-      let swing = afterBlackDiff;
-      const punishWindow = [];
+      let swing = afterWhiteDiff;
       for (let k = 1; k <= 5 && ply + k < moves.length; k++) {
         try { clone.move(moves[ply + k]); }
         catch { break; }
-        punishWindow.push(moves[ply + k]);
         const d = materialBalance(clone).diff;
-        if (d > swing) swing = d;
+        if (d < swing) swing = d;
       }
-      const cliff = swing - lastDiff; // total material swing from BEFORE Black's blunder
-      // A blunder: 3+ point swing in White's favor within 5 plies AND in the
-      // opening/middlegame range (move 4-25).
+      const cliff = lastDiff - swing; // total swing toward Black from BEFORE White's blunder
+      // A blunder: 3+ point swing in Black's favor within 5 plies AND in the
+      // opening/middlegame range.
       if (cliff >= 3 && ply >= 6 && ply <= 50) {
         const beforeChess = new Chess();
         for (let k = 0; k < ply; k++) beforeChess.move(moves[k]);
@@ -116,8 +112,8 @@ for (const f of files) {
         if (!trapsByPattern.has(key)) trapsByPattern.set(key, []);
         trapsByPattern.get(key).push({
           url: g.url,
-          opponent: g.black?.username,
-          opponentRating: g.black?.rating,
+          opponent: g.white?.username,
+          opponentRating: g.white?.rating,
           ply,
           cliff,
           punish,
@@ -126,12 +122,12 @@ for (const f of files) {
         blundersFound++;
         break; // one trap per game
       }
-      lastDiff = afterBlackDiff;
+      lastDiff = afterWhiteDiff;
     }
   }
 }
 
-console.log(`Scanned ${totalGames} games; ${kidGames} are his KID wins as White; found ${blundersFound} blunder positions; ${trapsByPattern.size} unique trap patterns.`);
+console.log(`Scanned ${totalGames} games; ${kidGames} are his KID wins as Black; found ${blundersFound} White-blunder positions; ${trapsByPattern.size} unique trap patterns.`);
 console.log();
 
 // Sort patterns by frequency (most-fallen-into traps first)
@@ -146,7 +142,7 @@ for (const [key, games] of sorted) {
   const [beforeFen, blunderSan] = key.split('::');
   const sample = games[0];
   const moveNum = Math.ceil((sample.ply + 1) / 2);
-  console.log(`#${printed + 1} — ${games.length} games — Black blunder ${blunderSan} at move ${moveNum}`);
+  console.log(`#${printed + 1} — ${games.length} games — White blunder ${blunderSan} at move ${moveNum}`);
   console.log(`  before FEN: ${beforeFen}`);
   console.log(`  prefix:    ${sample.prefixMoves.join(' ')}`);
   console.log(`  blunder + punish: ${sample.punish.join(' ')}`);
