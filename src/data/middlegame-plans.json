@@ -18352,23 +18352,23 @@
     "id": "mp-pronaroAlapin-d5open-endgame",
     "openingId": "pro-naroditsky-alapin",
     "criticalPositionFen": "r1b5/1p3rkp/p2b2p1/2N1pp2/3P4/4P3/PPR1B1PP/2R3K1 w - - 0 26",
-    "title": "d5-open ENDGAME — R+B+N conversion vs the cramped king",
-    "overview": "Past move 20 in the Shankland game, the position has simplified to a R+B+N+P endgame with Black's king STILL stuck on g7 (it moved from f8 but never reached a real shelter). This plan shows the conversion technique: knight infiltration via Ng5 + Ne4, bishop reposition to f5/f3, and the cramped king finally cracks. The d5-open variant produces this exact endgame in 27.4% of decisive games.",
+    "title": "d5-open ENDGAME — R+B+N conversion vs the cramped king (vs Shankland 2934)",
+    "overview": "Past move 25 in the Shankland game, the position simplifies to a R+B+N+P endgame with Black's king STILL stuck near g7 (it moved from f8 but never reached real shelter). This plan shows the conversion: knight infiltration via Nc5, bishop reposition to f3 long-diagonal, and the cramped king finally cracks. 27.4% of d5-open decisive games reach this exact structure.",
     "pawnBreaks": [
-      "dxe5 — central exchange + open d-file",
-      "e5 by Black opens the position"
+      "dxe5 — capture opens lines",
+      "a4-a5 — queenside passer"
     ],
     "pieceManeuvers": [
-      "Be2 — quiet reposition",
-      "Rfc1 — double rooks on c-file",
-      "Bd3 → e2 for the long diagonal"
+      "Rxc5 — rook on the c-file",
+      "Bf3 long-diagonal later",
+      "Nc5 dominates dark squares"
     ],
     "strategicThemes": [
-      "Slow endgame conversion",
-      "Cramped king never reaches shelter"
+      "Slow conversion in R+B+N+P",
+      "Queenside passer + Black's stuck king"
     ],
     "endgameTransitions": [
-      "R+B+P endings — Black's structural weaknesses tell"
+      "Material wins on the queenside via the passer"
     ],
     "playableLines": [
       {
@@ -18467,8 +18467,8 @@
           "a4 — queenside passer marches",
           "…Re8 — Black tries activity"
         ],
-        "title": "d5-open ENDGAME — R+B+N conversion vs the cramped king",
-        "intro": "Past move 20 in the Shankland game, the position has simplified to a R+B+N+P endgame with Black's king STILL stuck on g7 (it moved from f8 but never reached a real shelter). This plan shows the conversion technique: knight infiltration via Ng5 + Ne4, bishop reposition to f5/f3, and the cramped king finally cracks. The d5-open variant produces this exact endgame in 27.4% of decisive games.",
+        "title": "d5-open ENDGAME — R+B+N conversion vs the cramped king (vs Shankland 2934)",
+        "intro": "Past move 25 in the Shankland game, the position simplifies to a R+B+N+P endgame with Black's king STILL stuck near g7 (it moved from f8 but never reached real shelter). This plan shows the conversion: knight infiltration via Nc5, bishop reposition to f3 long-diagonal, and the cramped king finally cracks. 27.4% of d5-open decisive games reach this exact structure.",
         "sources": [
           "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
           "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -18482,7 +18482,7 @@
     "openingId": "pro-naroditsky-alapin",
     "criticalPositionFen": "r1b2k1r/pp2bppp/4pn2/1B6/4q3/2P1BN2/PP3PPP/R2QK2R b KQ - 5 13",
     "title": "d5-open MIDDLEGAME — fxe3 + central conversion (vs Shankland 2934)",
-    "overview": "After the full 25-ply d5-open spine ending with Bb5+ Kf8 Nf3, Black's king is fixed on f8 forever. The middlegame plan: Black tries …Ng4 attacking our pieces, we trade off with fxe3 doubling but opening the f-file, then dominate with the rook on f1. From his win vs Shankland (2934) — exactly this conversion.",
+    "overview": "After the full 25-ply d5-open spine ending with Bb5+ Kf8 Nf3, Black's king is fixed on f8 forever. The middlegame plan: Black tries …Ng4 attacking our pieces, we trade off with fxe3 doubling but opening the f-file, then dominate with the rook on f1. From his win vs Shankland (2934).",
     "pawnBreaks": [
       "fxe3 — doubled pawns trade for open f-file",
       "e3 + cxd4 — central pawn structure"
@@ -18597,7 +18597,136 @@
           "Qd4 — central queen, force trade"
         ],
         "title": "d5-open MIDDLEGAME — fxe3 + central conversion (vs Shankland 2934)",
-        "intro": "After the full 25-ply d5-open spine ending with Bb5+ Kf8 Nf3, Black's king is fixed on f8 forever. The middlegame plan: Black tries …Ng4 attacking our pieces, we trade off with fxe3 doubling but opening the f-file, then dominate with the rook on f1. From his win vs Shankland (2934) — exactly this conversion.",
+        "intro": "After the full 25-ply d5-open spine ending with Bb5+ Kf8 Nf3, Black's king is fixed on f8 forever. The middlegame plan: Black tries …Ng4 attacking our pieces, we trade off with fxe3 doubling but opening the f-file, then dominate with the rook on f1. From his win vs Shankland (2934).",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-d6main-endgame",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "6k1/5pb1/B3b2p/4p1p1/P3Pn2/7P/1r3PPB/3RN1K1 w - - 0 26",
+    "title": "d6-mainline ENDGAME — R+B+B+N vs R+B+B+N (vs Riley 2984)",
+    "overview": "Past move 25 in the Riley game, the position reaches a pure R+B+B+N+P endgame with queens off — a very common Alapin endgame type (30.1% of d6-mainline decisive games). This plan walks the conversion: bishop activity on a6, slow piece improvement, and the eventual pawn-race finish that Naroditsky converted at move 60+.",
+    "pawnBreaks": [
+      "…gxf4 — Black gets doubled pawns",
+      "a4 stays as the queenside passer"
+    ],
+    "pieceManeuvers": [
+      "Bxf4 — trade the centralised knight",
+      "Nd3 — knight outpost prep",
+      "Bb5 — bishop reroute"
+    ],
+    "strategicThemes": [
+      "Trade pieces to highlight weak pawn structure",
+      "Slow technique in equal-material endgame"
+    ],
+    "endgameTransitions": [
+      "Pawn endgame after trades — passer decides"
+    ],
+    "playableLines": [
+      {
+        "fen": "6k1/5pb1/B3b2p/4p1p1/P3Pn2/7P/1r3PPB/3RN1K1 w - - 0 26",
+        "moves": [
+          "Bxf4",
+          "gxf4",
+          "Nd3",
+          "Ra2",
+          "Bb5",
+          "Bf8"
+        ],
+        "annotations": [
+          "Bxf4! — capture the knight with the bishop. We give up our dark-square bishop but win the centralised knight, breaking Black's piece coordination.",
+          "Black plays …gxf4 — forced recapture with the pawn. Now Black has doubled+isolated f-pawns and weakened the kingside structure.",
+          "Nd3 — the knight reroutes from e1 to d3 attacking the doubled pawn AND eyeing future Nb4 outposts. Slow technique pays off in the endgame.",
+          "Black plays …Ra2 swinging the rook to the a-file trying to create activity. The rook attacks our a-pawn but it's just defended.",
+          "Bb5 — slide the bishop from a6 to b5, defending the a4-pawn and preparing future trades. Quiet maneuvering converts the endgame slowly.",
+          "Black plays …Bf8 trying to bring the bishop back into the game. Naroditsky continued Nc1 + Be2 + Ba3 + Nd3 sequence with tempo on Black's awkward pieces, eventually winning the long endgame in 117 plies."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bxf4 — capture the centralised knight",
+          "…gxf4 — forced recapture",
+          "Nd3 — knight reroute",
+          "…Ra2 — Black tries activity",
+          "Bb5 — bishop reposition",
+          "…Bf8 — Black's defensive shuffling"
+        ],
+        "title": "d6-mainline ENDGAME — R+B+B+N vs R+B+B+N (vs Riley 2984)",
+        "intro": "Past move 25 in the Riley game, the position reaches a pure R+B+B+N+P endgame with queens off — a very common Alapin endgame type (30.1% of d6-mainline decisive games). This plan walks the conversion: bishop activity on a6, slow piece improvement, and the eventual pawn-race finish that Naroditsky converted at move 60+.",
         "sources": [
           "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
           "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -18611,7 +18740,7 @@
     "openingId": "pro-naroditsky-alapin",
     "criticalPositionFen": "r1bq1rk1/pp2ppbp/2np1np1/8/3PP3/2NB1N1P/PP3PP1/R1BQ1RK1 b - - 6 9",
     "title": "d6-mainline MIDDLEGAME — Bg5 + h3 + Be2 (vs Riley 2984)",
-    "overview": "After the 17-ply d6-mainline spine ends with both sides castled, the middlegame plan is the …e5 break by Black + Bg5 + Bh4 + Be2 quiet pieces. From his win vs Riley (2984) — this conversion goes a full 117 plies, but the middlegame inflection is clear in the first 6 moves past the spine.",
+    "overview": "After the 17-ply d6-mainline spine ends with both sides castled, the middlegame plan is the …e5 break by Black + Bg5 + Bh4 + Be2 quiet pieces. From his win vs Riley (2984).",
     "pawnBreaks": [
       "…e5 — Black's only freeing move",
       "dxe5 + …dxe5 — central exchange"
@@ -18626,7 +18755,7 @@
       "Pin pressure converts via piece play"
     ],
     "endgameTransitions": [
-      "R+minor+P endings — 30.1% of d6-mainline decisive games — long technical conversion"
+      "R+min+P endings — 30.1% of d6-mainline decisive games — long technical conversion"
     ],
     "playableLines": [
       {
@@ -18726,7 +18855,136 @@
           "Bh4 — maintain the pin"
         ],
         "title": "d6-mainline MIDDLEGAME — Bg5 + h3 + Be2 (vs Riley 2984)",
-        "intro": "After the 17-ply d6-mainline spine ends with both sides castled, the middlegame plan is the …e5 break by Black + Bg5 + Bh4 + Be2 quiet pieces. From his win vs Riley (2984) — this conversion goes a full 117 plies, but the middlegame inflection is clear in the first 6 moves past the spine.",
+        "intro": "After the 17-ply d6-mainline spine ends with both sides castled, the middlegame plan is the …e5 break by Black + Bg5 + Bh4 + Be2 quiet pieces. From his win vs Riley (2984).",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-e6french-endgame",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "1k6/1p2Qp1p/p3p3/3pP3/bP1q4/8/3KB2P/1R1R4 w - - 4 31",
+    "title": "e6-french ENDGAME — Q+R+B vs Q+B post-sac (vs Niko Theodorou 3131)",
+    "overview": "After the Bxh6 sacrifice plays out, the Theodorou game reaches a Q+R+R+B+P vs Q+B+P-mess position around move 30. Even though queens are still on, this is the CONVERSION PHASE — Black's king has no shelter, our pieces dominate every file. R+min+P endings appear in 22.3% of e6-french decisive games when tactics don't decide first; this plan shows the structural finishing technique.",
+    "pawnBreaks": [
+      "e5 stays as the structural anchor",
+      "b4 supports our queenside"
+    ],
+    "pieceManeuvers": [
+      "Bd3 — bishop activates",
+      "King walk breaks the perpetual",
+      "Black's queen harassment fails"
+    ],
+    "strategicThemes": [
+      "King walk converts material edge",
+      "Black has no real follow-up"
+    ],
+    "endgameTransitions": [
+      "Material conversion when queens finally trade"
+    ],
+    "playableLines": [
+      {
+        "fen": "1k6/1p2Qp1p/p3p3/3pP3/bP1q4/8/3KB2P/1R1R4 w - - 4 31",
+        "moves": [
+          "Bd3",
+          "Qf2+",
+          "Kc1",
+          "Qe3+",
+          "Kb2",
+          "Qd4+"
+        ],
+        "annotations": [
+          "Bd3 — bring the bishop into the attack, covering the king and threatening Bxh7. Black's queen on d4 has been the only active piece coordinating Black's defence.",
+          "Black plays …Qf2+ trying to keep the queens on and find perpetual ideas. The check forces our king to move.",
+          "Kc1 — sidestep the check to c1. Our king walks around the position but Black has no follow-up tactic — every check just costs Black another tempo with no gain.",
+          "Black plays …Qe3+ continuing the queen harassment. Looks scary but it's just a perpetual attempt — White is up material and the queens will eventually trade off.",
+          "Kb2 — keep walking. The king is safer on the queenside than it looks; Black's pieces all face the wrong direction.",
+          "Black plays …Qd4+ trying to force a draw by repetition. Naroditsky's response in the actual game broke the cycle and converted to win — the structural advantage from the opening pays off even in this tactical mess."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bd3 — bring the bishop",
+          "…Qf2+ — perpetual attempt",
+          "Kc1 — sidestep",
+          "…Qe3+ — keep checking",
+          "Kb2 — walk safely",
+          "…Qd4+ — Black tries draw"
+        ],
+        "title": "e6-french ENDGAME — Q+R+B vs Q+B post-sac (vs Niko Theodorou 3131)",
+        "intro": "After the Bxh6 sacrifice plays out, the Theodorou game reaches a Q+R+R+B+P vs Q+B+P-mess position around move 30. Even though queens are still on, this is the CONVERSION PHASE — Black's king has no shelter, our pieces dominate every file. R+min+P endings appear in 22.3% of e6-french decisive games when tactics don't decide first; this plan shows the structural finishing technique.",
         "sources": [
           "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
           "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -18740,7 +18998,7 @@
     "openingId": "pro-naroditsky-alapin",
     "criticalPositionFen": "r2qk1nr/1p1b1ppp/p1n1p3/2bpP1N1/8/2NB4/PP3PPP/R1BQR1K1 b kq - 3 10",
     "title": "e6-french MIDDLEGAME — Bxh6 sac + Qxh6 attack (vs Niko Theodorou 3131)",
-    "overview": "After the 19-ply e6-french spine ends with Ng5 threatening f7, Black tries defending with …Nh6. The middlegame plan: SACRIFICE the bishop on h6! After Bxh6 gxh6 Qxh6, Black's king is permanently exposed and the f-file points at his king. This is from his win vs NikoTheodorou (3131) — exactly this attacking sequence.",
+    "overview": "After the 19-ply e6-french spine ends with Ng5 threatening f7, Black tries defending with …Nh6. The middlegame plan: SACRIFICE the bishop on h6! After Bxh6 gxh6 Qxh6, Black's king is permanently exposed and the f-file points at his king. From his win vs NikoTheodorou (3131).",
     "pawnBreaks": [
       "e5 — central pawn supports the attack",
       "Bxh6 — sacrifice opens the kingside"
@@ -18855,7 +19113,265 @@
           "Bxh6 — bishop sacrifice!"
         ],
         "title": "e6-french MIDDLEGAME — Bxh6 sac + Qxh6 attack (vs Niko Theodorou 3131)",
-        "intro": "After the 19-ply e6-french spine ends with Ng5 threatening f7, Black tries defending with …Nh6. The middlegame plan: SACRIFICE the bishop on h6! After Bxh6 gxh6 Qxh6, Black's king is permanently exposed and the f-file points at his king. This is from his win vs NikoTheodorou (3131) — exactly this attacking sequence.",
+        "intro": "After the 19-ply e6-french spine ends with Ng5 threatening f7, Black tries defending with …Nh6. The middlegame plan: SACRIFICE the bishop on h6! After Bxh6 gxh6 Qxh6, Black's king is permanently exposed and the f-file points at his king. From his win vs NikoTheodorou (3131).",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-g6dragon-endgame",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "6k1/p3ppbp/1p6/4P2p/8/6BP/PPr2P2/R3R1K1 w - - 5 26",
+    "title": "2…g6 ENDGAME — R+B vs R+B post-tactics (vs Botez 2279)",
+    "overview": "Past move 25 in the Botez game, Naroditsky has reached a R+B+P vs R+B+P endgame with extra material — the conversion of the structural advantage. This is the kind of endgame the g6-dragon's 26.4% R+min+P stat refers to, and the technique is straightforward: active rook + the bishop pair coordinating to the queenside.",
+    "pawnBreaks": [
+      "e5 stays as the central pawn",
+      "b2 stays — no weaknesses"
+    ],
+    "pieceManeuvers": [
+      "Bf4 → Bg3 reposition",
+      "Rad1 — rook coordination",
+      "Black's rook activity neutralised"
+    ],
+    "strategicThemes": [
+      "Quiet maneuvering in equal-piece endgame",
+      "Material edge converts via rook activity"
+    ],
+    "endgameTransitions": [
+      "R+B+P endings finish with back-rank tactics"
+    ],
+    "playableLines": [
+      {
+        "fen": "6k1/p3ppbp/1p6/4P2p/8/6BP/PPr2P2/R3R1K1 w - - 5 26",
+        "moves": [
+          "Bf4",
+          "Rc4",
+          "Bg3",
+          "Rc2",
+          "Rad1",
+          "h6"
+        ],
+        "annotations": [
+          "Bf4 — repositions the dark-squared bishop to f4 attacking the d2-square indirectly. The bishop on g3 was passive; on f4 it controls more.",
+          "Black plays …Rc4 trying to activate the rook on the open c-file. The rook on c4 looks active but there's nothing to attack.",
+          "Bg3 — slide the bishop back. Quiet maneuvering; we're not in a hurry. Black has the worse position structurally and ANY trade benefits us.",
+          "Black plays …Rc2 doubling on the c-file. Trying to create chances on the 2nd rank — but our king is safe and the bishop covers everything.",
+          "Rad1 — both rooks now coordinate on the central files. We threaten Rd8+ ideas trapping Black's king.",
+          "Black plays …h6 giving the king a square. Too late — Rd8+ would have been crushing earlier. The Botez game ended with rooks invading on the back rank and Black resigning at move 30."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bf4 — bishop reposition",
+          "…Rc4 — Black's rook activity",
+          "Bg3 — quiet retreat",
+          "…Rc2 — double rooks",
+          "Rad1 — coordinate the rooks",
+          "…h6 — king escape too late"
+        ],
+        "title": "2…g6 ENDGAME — R+B vs R+B post-tactics (vs Botez 2279)",
+        "intro": "Past move 25 in the Botez game, Naroditsky has reached a R+B+P vs R+B+P endgame with extra material — the conversion of the structural advantage. This is the kind of endgame the g6-dragon's 26.4% R+min+P stat refers to, and the technique is straightforward: active rook + the bishop pair coordinating to the queenside.",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-g6dragon-mg",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "rnbq1rk1/pp2ppbp/1n4p1/8/3P4/1BN2N2/PP3PPP/R1BQK2R w KQ - 6 10",
+    "title": "2…g6 MIDDLEGAME — Bc4-Bb3 attack + knight harassment (vs Botez 2279)",
+    "overview": "After the 18-ply g6-dragon spine ending with O-O, the middlegame plan is the SAME Bc4-Bb3 setup as the main spine (different move order, same structure). Black tries …Nc6 / …Na5 trying to harass our bishop pair — we re-route around their threats and convert. From his win vs Alexandra Botez (2279).",
+    "pawnBreaks": [
+      "h3 + d4 — central+kingside support",
+      "c-file half-open from cxd4 earlier"
+    ],
+    "pieceManeuvers": [
+      "Be3 — dark-square coordination",
+      "Bc2 sidestep",
+      "Black's …Nc6 → …Na5 → …Nac4 wandering"
+    ],
+    "strategicThemes": [
+      "Bishop pair retention",
+      "Black wastes tempi on the wing"
+    ],
+    "endgameTransitions": [
+      "R+min+P endings — 26.4% of g6-dragon decisive games — Black's structural weaknesses tell"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pp2ppbp/1n4p1/8/3P4/1BN2N2/PP3PPP/R1BQK2R w KQ - 6 10",
+        "moves": [
+          "h3",
+          "Nc6",
+          "Be3",
+          "Na5",
+          "Bc2",
+          "Nac4"
+        ],
+        "annotations": [
+          "h3 — prophylaxis against …Bg4 pinning our Nf3. Same theme as the d6-mainline plan; the principles transfer across variations because the structure is similar.",
+          "Black plays …Nc6 developing the queen's knight to a natural square. Looks principled, but it commits the knight to a square where our pieces can harass it.",
+          "Be3 — completes development with the dark-squared bishop on its best diagonal. Note we play Be3 NOT Bg5 in this structure because Black has no pinnable knight on f6 anymore (the Nxd5 trade earlier).",
+          "Black plays …Na5 harassing our bishop pair on b3. The knight on a5 looks active but it's a rim square — it covers nothing useful.",
+          "Bc2 — sidestep the knight. The bishop on c2 stays on the b1-h7 diagonal, still pointing at the kingside. Black has wasted two moves on the …Nc6 → …Na5 maneuver.",
+          "Black plays …Nac4 trying to find a more active knight square. The Botez game continued Bc1 + Nd5 + O-O + Nxd5 + Re1 — slowly converting via piece coordination to a 1-0 in 59 plies."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "h3 — prophylaxis",
+          "…Nc6 — natural development",
+          "Be3 — dark-square coordination",
+          "…Na5 — knight to the rim",
+          "Bc2 — sidestep the harassment",
+          "…Nac4 — Black's second attempt"
+        ],
+        "title": "2…g6 MIDDLEGAME — Bc4-Bb3 attack + knight harassment (vs Botez 2279)",
+        "intro": "After the 18-ply g6-dragon spine ending with O-O, the middlegame plan is the SAME Bc4-Bb3 setup as the main spine (different move order, same structure). Black tries …Nc6 / …Na5 trying to harass our bishop pair — we re-route around their threats and convert. From his win vs Alexandra Botez (2279).",
         "sources": [
           "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
           "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -18868,8 +19384,8 @@
     "id": "mp-pronaroAlapin-nc6-mg",
     "openingId": "pro-naroditsky-alapin",
     "criticalPositionFen": "r1bq1rk1/pp2bppp/2n1pn2/8/3P4/P1NB1N2/1P3PPP/R1BQ1RK1 w - - 1 11",
-    "title": "nc6-line MIDDLEGAME — Bc2 + Bg5 + Bh6 attack (vs Zanyglobal 2899)",
-    "overview": "After the 20-ply nc6-line spine ends with Black castling, the middlegame plan is the Bc2 reposition + Bg5 + Bh6 sequence forcing Black's kingside knight to defend. From his win vs Zanyglobal (2899) — exactly this attacking buildup, leading to a 1-0 in 61 moves.",
+    "title": "2…Nc6 MIDDLEGAME — Bc2 + Bg5 + Bh6 attack (vs Zanyglobal 2899)",
+    "overview": "After the 20-ply nc6-line spine ends with Black castling, the middlegame plan is the Bc2 reposition + Bg5 + Bh6 sequence forcing Black's kingside knight to defend. From his win vs Zanyglobal (2899).",
     "pawnBreaks": [
       "Bc2 reroute precedes other breaks",
       "d5 break possible later"
@@ -18884,7 +19400,7 @@
       "Pin pressure + dark squares"
     ],
     "endgameTransitions": [
-      "R+minor+P endings — 33.7% of nc6-line decisive games — tactics decide before endgame"
+      "R+min+P endings — 33.7% of nc6-line decisive games — tactics decide before endgame"
     ],
     "playableLines": [
       {
@@ -18983,8 +19499,8 @@
           "Bg5 — pin the f6-knight",
           "…g6 — kingside weakening"
         ],
-        "title": "nc6-line MIDDLEGAME — Bc2 + Bg5 + Bh6 attack (vs Zanyglobal 2899)",
-        "intro": "After the 20-ply nc6-line spine ends with Black castling, the middlegame plan is the Bc2 reposition + Bg5 + Bh6 sequence forcing Black's kingside knight to defend. From his win vs Zanyglobal (2899) — exactly this attacking buildup, leading to a 1-0 in 61 moves.",
+        "title": "2…Nc6 MIDDLEGAME — Bc2 + Bg5 + Bh6 attack (vs Zanyglobal 2899)",
+        "intro": "After the 20-ply nc6-line spine ends with Black castling, the middlegame plan is the Bc2 reposition + Bg5 + Bh6 sequence forcing Black's kingside knight to defend. From his win vs Zanyglobal (2899).",
         "sources": [
           "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
           "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -18997,8 +19513,8 @@
     "id": "mp-pronaroAlapin-nf6main-endgame",
     "openingId": "pro-naroditsky-alapin",
     "criticalPositionFen": "3r2k1/p2qbp2/Pp2p1p1/1Np1n2p/2P5/4BQ1P/1P3PP1/R5K1 w - - 0 26",
-    "title": "nf6-main ENDGAME — R+B+P conversion via queenside passer",
-    "overview": "Past move 25, the FaustinoOro game reaches a R+B+N endgame with White's a-pawn on a6 — the SAME passer the queenside crawl created at move 11. This endgame plan shows the conversion: passive piece pressure + slow advance of the queenside pawn = decided endgame. 29.4% of nf6-main decisive games reach this R+minor+P structure.",
+    "title": "nf6-main ENDGAME — R+B+P conversion via queenside passer (vs FaustinoOro 2971)",
+    "overview": "Past move 25 in the FaustinoOro game, the position is a R+B+N endgame with the queenside passer (a6) — the SAME passer the queenside crawl created at move 11. R+minor+P endings appear in 29.4% of nf6-main decisive games; this is the conversion technique.",
     "pawnBreaks": [
       "a6 passer creates winning chances",
       "b3 supports c4 structure"
@@ -19112,8 +19628,8 @@
           "Re1 — finally the rook",
           "…Be5 — Black tries to trade"
         ],
-        "title": "nf6-main ENDGAME — R+B+P conversion via queenside passer",
-        "intro": "Past move 25, the FaustinoOro game reaches a R+B+N endgame with White's a-pawn on a6 — the SAME passer the queenside crawl created at move 11. This endgame plan shows the conversion: passive piece pressure + slow advance of the queenside pawn = decided endgame. 29.4% of nf6-main decisive games reach this R+minor+P structure.",
+        "title": "nf6-main ENDGAME — R+B+P conversion via queenside passer (vs FaustinoOro 2971)",
+        "intro": "Past move 25 in the FaustinoOro game, the position is a R+B+N endgame with the queenside passer (a6) — the SAME passer the queenside crawl created at move 11. R+minor+P endings appear in 29.4% of nf6-main decisive games; this is the conversion technique.",
         "sources": [
           "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
           "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -19243,6 +19759,393 @@
         ],
         "title": "nf6-main MIDDLEGAME — Rd1 + central conversion (vs FaustinoOro 2971)",
         "intro": "After the 32-ply Alapin spine ends with Qg4 g6, we're DONE with theory. The middlegame plan: bring the rook to d1 (the open file), force Black's queen to choose a square, then convert the structural edge. This walks the actual game vs FaustinoOro 2971 — moves 17-22 — where the conversion technique is on display.",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-spined6-mg",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "r2q2kr/pp4b1/2n1b2p/2Ppp1p1/2P5/5NQ1/PP3PPP/RNBR2K1 b - - 0 16",
+    "title": "Spine 4…d6 MIDDLEGAME — Rd1 + central push (vs Salem-AR 3141)",
+    "overview": "After the 31-ply 4…d6 Bc4 gambit spine ending with the exf7+ + Qxc4+ recovery, the middlegame plan: Rd1 + cxd5 + central push. Per Gordima's distillation, this is Naroditsky's signature treatment. From his win vs Salem-AR (3141) — a 181-ply technical win.",
+    "pawnBreaks": [
+      "cxd5 — material grab",
+      "Open f-file from exf3"
+    ],
+    "pieceManeuvers": [
+      "Qxf3 — queen on the open file",
+      "Qe2 retreat with tempo",
+      "Nb1 still to develop"
+    ],
+    "strategicThemes": [
+      "Tactical chaos benefits the prepared side",
+      "Material recovery via piece play"
+    ],
+    "endgameTransitions": [
+      "Long technical endgames — 181 plies vs Salem-AR"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2q2kr/pp4b1/2n1b2p/2Ppp1p1/2P5/5NQ1/PP3PPP/RNBR2K1 b - - 0 16",
+        "moves": [
+          "e4",
+          "cxd5",
+          "exf3",
+          "Qxf3",
+          "Ne5",
+          "Qe2"
+        ],
+        "annotations": [
+          "Black plays …e4 trying to attack our knight on f3 and create central activity. Looks active, but it loses time because our knight just takes the e4-pawn next.",
+          "cxd5! — capture the d5-pawn AHEAD of dealing with the e4 attack. Black's structure is collapsing; we're picking up material.",
+          "Black plays …exf3 grabbing our knight — material grab attempt. But this is exactly what we wanted: the open f-file + our queen ready to attack.",
+          "Qxf3 — recapture with the queen. Black thought he was winning a piece; he was just losing more material via the discovered tactics.",
+          "Black plays …Ne5 trying to coordinate the queen knight with central play. The knight on e5 attacks our queen but our pieces dominate.",
+          "Qe2 — quiet retreat preserving material. The queen sidesteps the knight threat AND aims at e6 (where Black's bishop is). From here the Salem-AR game continued for 150+ moves of technical conversion in the resulting Q+R+B+N+P endgame."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "…e4 — central activity attempt",
+          "cxd5 — grab the d-pawn",
+          "…exf3 — material grab",
+          "Qxf3 — recapture",
+          "…Ne5 — central knight",
+          "Qe2 — quiet retreat"
+        ],
+        "title": "Spine 4…d6 MIDDLEGAME — Rd1 + central push (vs Salem-AR 3141)",
+        "intro": "After the 31-ply 4…d6 Bc4 gambit spine ending with the exf7+ + Qxc4+ recovery, the middlegame plan: Rd1 + cxd5 + central push. Per Gordima's distillation, this is Naroditsky's signature treatment. From his win vs Salem-AR (3141) — a 181-ply technical win.",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-spinee6-endgame",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "r4r2/pp1n1ppk/7b/3P4/b4q2/5N1P/PB2QPP1/R2R2K1 w - - 0 21",
+    "title": "Spine 4…e6 ENDGAME — R+B+N+P conversion (vs chessawp 3009)",
+    "overview": "Past move 25 in the chessawp game, the position reaches a R+B+N+P+P endgame where the IQP structure has resolved favourably for White. The bishop pair + open d-file + the c-pawn + e-pawn duo create winning chances. This is the typical Spine 4…e6 conversion pattern.",
+    "pawnBreaks": [
+      "d5 still as the IQP",
+      "f-file potential later"
+    ],
+    "pieceManeuvers": [
+      "Rd4 — central invasion",
+      "Rxa4 — material grab",
+      "Rh4 — kingside swing"
+    ],
+    "strategicThemes": [
+      "Material gain converts in equal endgames",
+      "Active rooks dominate cramped pieces"
+    ],
+    "endgameTransitions": [
+      "R+B+B+N+P endings where material edge tells"
+    ],
+    "playableLines": [
+      {
+        "fen": "r4r2/pp1n1ppk/7b/3P4/b4q2/5N1P/PB2QPP1/R2R2K1 w - - 0 21",
+        "moves": [
+          "Rd4",
+          "Qf5",
+          "Rxa4",
+          "Nc5",
+          "Rh4",
+          "Rfe8"
+        ],
+        "annotations": [
+          "Rd4! — invade the central square with the rook. The rook on d4 attacks Black's bishop on a4 AND covers the e-file for our queen.",
+          "Black plays …Qf5 trying to keep the queen active and protect pieces. Reasonable defence but our position keeps improving.",
+          "Rxa4! — capture the bishop. We win material and Black's pieces become uncoordinated. The Bb2 + queen + knight + rook all coordinate now.",
+          "Black plays …Nc5 attacking our rook on a4 — trying to force a retreat that buys time. But we have many good squares.",
+          "Rh4 — sidestep the knight attack with tempo on the kingside. The rook on h4 supports the eventual Rxh6 sacrifice OR the queen swing.",
+          "Black plays …Rfe8 doubling on the e-file. Black's pieces look active but we're up material; conversion is just technique. The chessawp game ended at move 28 with material winning."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Rd4 — invade the centre",
+          "…Qf5 — defensive queen",
+          "Rxa4 — capture the bishop",
+          "…Nc5 — attack the rook",
+          "Rh4 — sidestep with tempo",
+          "…Rfe8 — double rooks"
+        ],
+        "title": "Spine 4…e6 ENDGAME — R+B+N+P conversion (vs chessawp 3009)",
+        "intro": "Past move 25 in the chessawp game, the position reaches a R+B+N+P+P endgame where the IQP structure has resolved favourably for White. The bishop pair + open d-file + the c-pawn + e-pawn duo create winning chances. This is the typical Spine 4…e6 conversion pattern.",
+        "sources": [
+          "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
+          "https://www.chess.com/openings/Alapin-Sicilian-Defense",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroAlapin-spinee6-mg",
+    "openingId": "pro-naroditsky-alapin",
+    "criticalPositionFen": "rn1q1rk1/pp2bppp/2bpp3/4P3/2BP4/2P2N2/P3QPPP/R1BR2K1 b - - 0 12",
+    "title": "Spine 4…e6 MIDDLEGAME — Bc4 + Qe2 + central play (vs chessawp 3009)",
+    "overview": "After the 23-ply 4…e6 IQP spine ending with bxc3, the middlegame plan is the Bc2 reposition + Qe2 + e5 break. The IQP structure favours White when piece activity is high; this conversion comes from his win vs chessawp (3009).",
+    "pawnBreaks": [
+      "exd6 — IQP structure transition",
+      "c3 + d4 chain support"
+    ],
+    "pieceManeuvers": [
+      "Bd3 — kingside attacker",
+      "exd6 — open e-file",
+      "Black's …Nd7 + …Bxd6 + …Qc7 coordination"
+    ],
+    "strategicThemes": [
+      "IQP active-piece play",
+      "Open e-file + bishop pair"
+    ],
+    "endgameTransitions": [
+      "R+B+B+P endings where bishop pair tells — 72.4% score in 185 games"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/pp2bppp/2bpp3/4P3/2BP4/2P2N2/P3QPPP/R1BR2K1 b - - 0 12",
+        "moves": [
+          "Nd7",
+          "exd6",
+          "Bxd6",
+          "Bd3",
+          "Qc7",
+          "h3"
+        ],
+        "annotations": [
+          "Black plays …Nd7 trying to develop the queen's knight to a useful square — the b8-knight had been passive. The development is solid but slow.",
+          "exd6! — capture the d-pawn opening the e-file. The pawn on e5 was holding tension; trading releases it on OUR terms.",
+          "Black plays …Bxd6 forced (the only recapture). Now the bishop is on d6 — active but vulnerable to future Bd3 ideas attacking h7.",
+          "Bd3 — completes the kingside attack setup. The bishop covers the h7-square; combined with the queen on e2 the attack is real.",
+          "Black plays …Qc7 trying to coordinate the queen with the bishop on d6 + control the c-file. Reasonable but slow.",
+          "h3 — prophylactic; stops …Bg4 ideas AND prepares Bg5 in some lines. From here the chessawp game continued with Bf4 + Bxd6 trade + c4 push to convert in 57 plies."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "…Nd7 — late development",
+          "exd6 — open the e-file",
+          "…Bxd6 — forced recapture",
+          "Bd3 — kingside attack setup",
+          "…Qc7 — Black coordinates",
+          "h3 — prophylaxis"
+        ],
+        "title": "Spine 4…e6 MIDDLEGAME — Bc4 + Qe2 + central play (vs chessawp 3009)",
+        "intro": "After the 23-ply 4…e6 IQP spine ending with bxc3, the middlegame plan is the Bc2 reposition + Qe2 + e5 break. The IQP structure favours White when piece activity is high; this conversion comes from his win vs chessawp (3009).",
         "sources": [
           "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
           "https://www.chess.com/openings/Alapin-Sicilian-Defense",

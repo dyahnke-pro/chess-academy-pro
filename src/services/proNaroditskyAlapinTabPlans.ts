@@ -17,33 +17,32 @@ export const PRO_NARODITSKY_ALAPIN_TAB_PLAN_IDS: Record<string, string[]> = {
     'mp-pronaroAlapin-nf6main-mg',
     'mp-pronaroAlapin-nf6main-endgame',
   ],
-  // 2…d5 Open — plans anchored at the 25-ply spine end (Bb5+ Kf8 Nf3)
-  // walking the conversion vs Sam Shankland (2934).
   '2…d5 open variation': [
     'mp-pronaroAlapin-d5open-mg',
     'mp-pronaroAlapin-d5open-endgame',
   ],
-  // 2…e6 French — plan anchored at the 19-ply spine end (Ng5)
-  // walking the Bxh6 sacrifice from vs Niko Theodorou (3131).
   '2…e6 french-style': [
     'mp-pronaroAlapin-e6french-mg',
+    'mp-pronaroAlapin-e6french-endgame',
   ],
-  // 2…d6 Mainline — plan anchored at the 17-ply spine end (O-O)
-  // walking the Bg5 + Bh4 pin sequence from vs Riley (2984).
   '2…d6 mainline': [
     'mp-pronaroAlapin-d6main-mg',
+    'mp-pronaroAlapin-d6main-endgame',
   ],
-  // 2…Nc6 Line — plan anchored at the 20-ply spine end (a3 O-O)
-  // walking the Bc2 + Qd3 battery sequence from vs Zanyglobal (2899).
+  '2…g6 hyper-dragon': [
+    'mp-pronaroAlapin-g6dragon-mg',
+    'mp-pronaroAlapin-g6dragon-endgame',
+  ],
   '2…nc6 line': [
     'mp-pronaroAlapin-nc6-mg',
   ],
-  // 2…g6 Hyper-Dragon — no plans authored yet (data supports 3)
-  '2…g6 hyper-dragon': [],
-  // Spine 4…d6 Bc4 Gambit — no plans authored yet
-  'spine 4…d6 bc4 gambit': [],
-  // Spine 4…e6 IQP Lines — no plans authored yet
-  'spine 4…e6 iqp lines': [],
+  'spine 4…d6 bc4 gambit': [
+    'mp-pronaroAlapin-spined6-mg',
+  ],
+  'spine 4…e6 iqp lines': [
+    'mp-pronaroAlapin-spinee6-mg',
+    'mp-pronaroAlapin-spinee6-endgame',
+  ],
 };
 
 export function getProNaroditskyAlapinTabPlanIds(openingId: string, tabKey: string): string[] | null {

@@ -99,10 +99,10 @@ const D5_OPEN: LessonScript = {
     b({
       id: 'd5-nb5',
       moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Nc6 Be3 cxd4 Nb5',
-      arrows: [{ from: 'a3', to: 'b5', color: ATK }, { from: 'b5', to: 'd6', color: VIS }],
-      highlights: [{ square: 'b5', color: KEY }, { square: 'd6', color: ATK }],
-      say: "Nb5! — the trip pays off. The knight attacks the queen and eyes c7 + d6. Black has to retreat the queen with tempo loss; we're already winning the opening battle even if Black's pieces are technically developed.",
-      sayShort: 'Nb5 — fork the queen + c7.',
+      arrows: [{ from: 'a3', to: 'b5', color: ATK }, { from: 'b5', to: 'd4', color: VIS }],
+      highlights: [{ square: 'b5', color: KEY }, { square: 'd4', color: ATK }, { square: 'c7', color: SOFT }, { square: 'd6', color: SOFT }],
+      say: "Nb5! — the trip pays off. The knight attacks the d4-pawn AND threatens the c7 + d6 outpost squares. Black has to defend d4 OR move the queen off d5 (where Nbxd4 next would attack her). Either way we're already winning the opening battle.",
+      sayShort: 'Nb5 — attack d4, threaten c7.',
     }),
     b({
       id: 'd5-qd7',

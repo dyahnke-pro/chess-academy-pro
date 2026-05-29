@@ -9,16 +9,22 @@ import path from 'node:path';
 import { Chess } from 'chess.js';
 
 const TARGET_URLS = [
-  // nf6-main: vs FaustinoOro 2971, deep terminus
+  // nf6-main: FaustinoOro 2971 (already used)
   'https://www.chess.com/game/live/116409573563',
-  // d5-open: vs Shankland 2934
+  // d5-open: Shankland 2934 (already used)
   'https://www.chess.com/game/live/121145425383',
-  // e6-french: vs NikoTheodorou 3131
+  // e6-french: NikoTheodorou 3131 (need endgame position)
   'https://www.chess.com/game/live/122544854489',
-  // d6-mainline: vs Riley 2984
+  // d6-mainline: Riley 2984 (need endgame position)
   'https://www.chess.com/game/live/125110107435',
-  // nc6-line: vs Zanyglobal 2899
+  // nc6-line: Zanyglobal 2899 (need endgame position)
   'https://www.chess.com/game/live/99920640193',
+  // g6-dragon: Botez 2279 (full plan needed)
+  'https://www.chess.com/game/live/52091475569',
+  // nf6-d6-sub: Salem-AR 3141 (full plan needed)
+  'https://www.chess.com/game/live/144069607063',
+  // nf6-e6-sub: chessawp 3009 (full plan needed)
+  'https://www.chess.com/game/live/122964252115',
 ];
 
 const SRC_DIR = 'data/sources/danielnaroditsky-chesscom';
