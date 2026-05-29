@@ -41,6 +41,86 @@ build" instead.** The vocabulary discipline IS the doctrine.
 
 ---
 
+## §1a. THE TRAP RULE — TRAPS MUST BE MINED, NEVER AUTHORED (David 2026-05-28, locked after I shipped 3 fabricated trapLines)
+
+**Every `trapLine` entry MUST come from the trap mining pipeline. Never
+from general chess knowledge. Never from "typical [opening] tactical
+patterns." Never from "what usually happens in [opening]." If the
+specific blunder + punish pattern is not in the player's chess.com
+archive, the trap DOES NOT EXIST for this build.**
+
+The mining procedure:
+
+1. Build/use the per-opening miner:
+   `scripts/pro-repertoire/mine-<player>-<opening>-traps.mjs`
+2. The miner walks the player's actual chess.com archive, identifies
+   real blunder positions (Black's move opens a tactical sequence
+   where the next 3-5 White moves win material), and groups by
+   `(position FEN before blunder, blunder SAN)`.
+3. Output: a sorted list of patterns by frequency. Patterns occurring
+   in ≥3 games are strong candidates.
+4. The reference miner used for the Alapin
+   (`mine-alapin-traps.mjs`) yielded 1,648 blunder positions across
+   1,896 games and 1,336 unique trap patterns; top 6 patterns
+   account for ~156 games where opponents fell into the SAME trap
+   repeatedly.
+
+For each surfaced trap pattern that you author into
+`pro-repertoires.json`:
+
+- **`pgn`** = the prefix moves (reaching the position before the
+  blunder) + the blunder SAN + the next 4-6 plies of the actual
+  punishment, ALL taken directly from one of the games in the cluster.
+  Never reconstruct the punish from "what the principled line would
+  be"; copy it from the real game.
+- **`explanation`** = describes the trap pattern with reference to the
+  REAL OPPONENT COUNT ("62 opponents fell into this in his archive,
+  including HansOnTwitch 3161 and ckgchess 2888") — those are the
+  receipts that prove this is data-grounded.
+- **`name`** = describes the blunder + punish in chess terms ("Nc6
+  Block fails to exf7+", not "common Alapin tactical motif").
+
+🚨 **The 3-game-minimum convention.** A pattern that appears in <3
+games is too rare to be a teaching trap — it may be an over-the-board
+accident or a 1-off mistake. Skip patterns with <3 games unless one
+of them is a marquee opponent (≥2700-rated) AND you can verify it's
+the same idea, not a transposition.
+
+🚨 **The false-positive filter.** Material-swing miners produce false
+positives when:
+- The "blunder" is the main-line continuation (Black plays the
+  principled move; the temporary material swing is normal
+  exchange dynamics)
+- The "punish" is a simple trade where material balance returns to
+  even within 2-3 plies
+- The position is a known book-correct line
+
+When inspecting mined patterns, ALWAYS verify by replaying the punish
+sequence in chess.js and checking that AFTER the punish, the material
+balance favors White by ≥2 points net (not just temporarily).
+
+🚨 **Acknowledge what mining doesn't find.** If the miner returns
+fewer trap patterns than you'd intuitively expect, that's the answer
+— the player doesn't have those traps in their archive. Don't fill
+the gap with fabricated tactical motifs. Pro-rep is what the data
+shows, not what theory says.
+
+The 6 traps in the Alapin reference build break down as:
+- 2 spine-derived (Nb5 fork, Bc4-Gambit) — extracted from the spine
+  variations in the deep-build output; data-grounded
+- 1 lifted from mining (Bc4-Gambit + exf7+ Nc6 blunder, 62 games)
+- 3 FABRICATED tonight (Nxe5 pawn grab, premature Nxe4, Wing-grab
+  Qxb2) — VIOLATION, scheduled for removal + replacement with
+  mined patterns
+
+The cardinal rule (§1 below) was always supposed to cover this; the
+trap-specific carve-out exists because trapLines are easy to
+fabricate when you "know" common opening tactics. The mining
+pipeline is the enforcement: if the miner doesn't surface it, the
+trap doesn't ship.
+
+---
+
 ## §1. THE CARDINAL RULE — NO FABRICATED MOVES
 
 This is a hard, no-exceptions rule:

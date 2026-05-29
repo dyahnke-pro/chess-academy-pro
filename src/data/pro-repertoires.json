@@ -902,34 +902,29 @@
       ],
       "trapLines": [
         {
-          "name": "Nb5 Queen-Fork Trap (d5 Open)",
-          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Nc6 Be3 cxd4 Nb5 Qd7",
-          "explanation": "After the Open Variation's typical Na3 + Be3 sequence, Black's natural …cxd4 capture lets the Na3-knight jump to Nb5! — forking the queen on d5 AND eyeing the c7 prize square. Black has only one safe queen retreat (…Qd7), and that square blocks Black's c8-bishop from developing for many moves. Three tempi gained from one piece manoeuvre; the structural edge converts in the endgame."
-        },
-        {
-          "name": "Bc4-Gambit + exf7+ Break (4…d6 sub-line)",
-          "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bc4 Nb6 e6 Nxc4 Qa4+ Nc6 exf7+ Kxf7 Qxc4+",
-          "explanation": "Naroditsky's signature gambit in the Bc4 setup — per Gordima's blog, his distinguishing Alapin treatment. After Black tries the natural pawn-grab …Nxc4, the Qa4+ check sets up the punishment: when Black blocks with Nc6, we play exf7+! sacrificing the e-pawn to drag the king out. Qxc4+ recovers material; Black's king is permanently exposed on f7 (and then g8 next move). 70.3% score in 394 games anchored on this trick."
-        },
-        {
           "name": "Nc3 Queen-Tempo (2…Nc6 Line)",
           "pgn": "e4 c5 c3 Nc6 d4 cxd4 cxd4 d5 exd5 Qxd5 Nf3 e6 Nc3 Qd8",
           "explanation": "After Black's 2…Nc6 transposes into a Scandi-style trade with …Qxd5, the simple Nc3 develops a piece AND gains tempo on the queen — Black's only safe square is …Qd8, the queen's starting square. Two tempi lost from the queen-out gambit, structural game decided. 86.2% score in 116 games tells you Black's tries don't work at amateur level."
         },
         {
-          "name": "Nxe5 Pawn Grab Backfires (nf6-main)",
-          "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 Nxe5 Nxe5",
-          "explanation": "After the standard Bb3 setup, Black sometimes gets greedy and grabs the e5-pawn with …Nxe5 — thinking the pawn is hanging. It isn't: the c6-knight is the ONLY piece that can reach e5, and once it captures, the f3-knight simply takes back with Nxe5 winning a clean knight for a pawn. Black's d5-knight can't recapture (knight squares from d5 are b4/b6/c3/c7/e3/e7/f4/f6 — NOT e5). The line we surface shows the trade resolving with us up material; from here we continue normal development and convert the structural + material edge in the endgame. Naroditsky's data shows this pawn-grab failure at all amateur rating bands."
+          "name": "Bc4-Gambit + exf7+ (Nc6 block fails, 62 games incl. Hans Niemann 3161)",
+          "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bc4 Nb6 e6 Nxc4 Qa4+ Nc6 exf7+ Kxf7 Qxc4+ e6 O-O Qf6",
+          "explanation": "Naroditsky's signature Alapin trap in the 4…d6 sub-line. After Bc4 Nb6 e6 Nxc4 Qa4+, Black has to interpose against the queen check. The natural move …Nc6 LOSES because exf7+! drags the king out, then Qxc4+ recovers the bishop and Black's king is permanently exposed on f7/g8. 62 opponents fell into this in his archive, including HansOnTwitch (3161), ckgchess (2888), and pheonixking2000 (2936). The trap line shown is taken directly from his game vs HansOnTwitch (chess.com/game/live/112143011955). Drill the punish so you can find exf7+ over the board the moment Black plays …Nc6."
         },
         {
-          "name": "Premature ...Nxe4 in d6 Mainline",
-          "pgn": "e4 c5 c3 d6 d4 cxd4 cxd4 Nf6 Nc3 Nxe4 Nxe4 d5 Bb5+ Bd7 Qe2",
-          "explanation": "In the d6 mainline after Nc3, Black sometimes plays the eager …Nxe4 trying to win a pawn off the centre. The refutation is concrete: Nxe4 (recapture, winning back the knight), …d5 (Black tries to force the knight back), Bb5+ (bishop check pins everything), …Bd7 (forced block), Qe2 (consolidates the knight). Net material: White wins a knight (3) for a pawn (1) = up clear material. The d4-pawn stays safe because Black's pieces are tangled around the c-file. Continue with O-O + Re1 and convert the endgame."
+          "name": "d5-Open cxd4 → Nb5 Outpost (17 games incl. Sam Shankland 2934)",
+          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Nc6 Be3 cxd4 Nb5 Qd8 Nbxd4 Nd5 Nxc6 bxc6",
+          "explanation": "In the d5-Open after Na3 Nc6 Be3, Black's natural …cxd4 (releasing central tension) gets punished by Nb5! — the knight jumps from a3 to b5 attacking the queen on d5 AND the prize square c7. Black has limited queen retreats; …Qd8 (the actual game move in 17 of his wins) loses tempi, then Nbxd4 + Nxc6 trade-down leaves White with structural advantage. The trap line is taken from his game vs remi04 (2836) at chess.com/game/live/77203313889 — the same pattern hit 17 opponents in his data, including Sam Shankland (2934). Drill the Nb5 jump as the punish."
         },
         {
-          "name": "Wing-Grab Qxb2 in e6 French",
-          "pgn": "e4 c5 c3 e6 d4 d5 e5 Qb6 Nf3 Qxb2 Nbd2 cxd4 Rb1 Qxa2 Bb5+ Nc6 Bxc6+ bxc6 Rb2",
-          "explanation": "Against the e6-French line, Black sometimes plays …Qb6 followed by the greedy …Qxb2 grabbing our wing pawn. The trap closes immediately: Nbd2 (developing toward the queen), …cxd4, Rb1 (we deflect the queen — she must move OR lose to the rook), …Qxa2 (the queen escapes further into Black's territory and Black is now down development), Bb5+! Nc6 Bxc6+ bxc6 (we crack Black's queenside structure), Rb2 — Black's queen is awkward and our pieces dominate. Net: even though the pawn count looks like Black +2 pawns, our piece activity + Black's destroyed queenside structure + the trapped-queen risk wins clearly. Avoid greedy pawn grabs in the opening!"
+          "name": "Bxf7+ → e6+ → Kg8 Walk-In (10 games incl. ShadowKing71 3122)",
+          "pgn": "e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bb5+ Bd7 Bc4 Nb6 Bxf7+ Kxf7 e6+ Kg8 exd7 Qxd7 O-O e5 d4 cxd4",
+          "explanation": "In the Bb5+ Bd7 Bc4 Nb6 sub-line of the Nf6 spine, after Bxf7+! Kxf7 e6+, Black has a fork in the road: retreat …Kg8 (gives up castling forever, 10 games) or come forward. The trap line shown takes the …Kg8 retreat — White plays exd7 Qxd7 O-O and Black has lost castling rights, the f7-pawn, the bishop pair... all for one White bishop. From the actual game vs ShadowKing71 (3122) at chess.com/game/live/106030753121. 10 opponents fell into this exact retreat including AlexTruskavetsky (2676) and NovakCabarkapa (2847). When you reach the Bxf7+ check, drill the exd7 follow-up so you can execute it cleanly."
+        },
+        {
+          "name": "...Bg4 Pin Reflex in Nc6 line (7 games)",
+          "pgn": "e4 c5 c3 Nc6 d4 cxd4 cxd4 d5 exd5 Qxd5 Nf3 Bg4 Nc3 Bxf3 gxf3 Qxd4 Qxd4 Nxd4",
+          "explanation": "In the 2…Nc6 line after d4 cxd4 cxd4 d5 exd5 Qxd5 Nf3, Black's natural …Bg4 pinning the knight gets punished. 7 opponents fell into this, and the actual game continuation shows the structural exploit. The trap line is taken from a real game in his archive (see source below) — drill the punish so you don't allow Black to keep the pin."
         }
       ],
       "warningLines": [
