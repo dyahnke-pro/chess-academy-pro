@@ -48,7 +48,14 @@ albin-countergambit (B), benko (B).
 - **P5 — Verify WLPP + verbosity.** Gems route getPunishGemsForTab ->  [DONE]
   gemToPlayableLine -> PlayableLinePlayer (Watch=full, Learn=short, Practice=
   silent, Play=locked). Confirm play-out reaches the punishment on the board.
-- **P6 — ship-check + push to main + 3-instrument audit** (G1).
+- **P6 — ship-check + push to main + 3-instrument audit** (G1).  [DONE]
+  - Shipped on main (a5ece2d); prod bundle index-CByvKJsn carries the narration.
+  - 3-instrument PROD audit: Playwright 13/13 (KG/Vienna/Stafford/Englund gem
+    cards surface, Watch mounts the played-out line, narration renders);
+    audit-stream captured coach-narration-spoken (voice=ruth) with the authored
+    text; weapons section unlocked via load-time linesUnlockedAll seed (the
+    progression lock + sandbox click-write-stall, per G1). Script:
+    scripts/audit-gambit-gems-prod.mjs.
 
 ## Decisions log
 - 2026-05-29: Separate-lane held — gambit gems never mix with masterclass gems.
