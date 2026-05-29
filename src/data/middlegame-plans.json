@@ -42702,5 +42702,1080 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pronaroKIA-vs-e5-endgame",
+    "openingId": "pro-naroditsky-kia",
+    "criticalPositionFen": "2k5/ppp1n1p1/1b2p3/4PP1r/3P4/2P4P/PP4B1/R1B2RK1 w - - 0 30",
+    "title": "KIA vs ...e5 \u2014 R+min+P conversion (vs penguingm1 3291)",
+    "overview": "R+min+P endgame from his win over penguingm1 (3291) in the Reti-gambit-accepted line. KEY SQUARES: e6 (Black's weak pawn cluster), f7 (rook infiltration). PIECE ROUTE: Rf1-Rf7 \u2014 the rook infiltrates the 7th rank. The conversion theme: trade off Black's defenders + cash in the pawn-up structure.",
+    "pawnBreaks": [
+      "fxe6 central cash-in"
+    ],
+    "pieceManeuvers": [
+      "Rf1 \u2192 Rf7 7th-rank infiltration",
+      "Raf1 doubling"
+    ],
+    "strategicThemes": [
+      "R+min+P conversion",
+      "7th-rank infiltration"
+    ],
+    "endgameTransitions": [
+      "R+B+N \u2192 won R+P endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "2k5/ppp1n1p1/1b2p3/4PP1r/3P4/2P4P/PP4B1/R1B2RK1 w - - 0 30",
+        "moves": [
+          "fxe6",
+          "Rh8",
+          "Rf7",
+          "Ng6",
+          "Bg5",
+          "Nf8",
+          "Raf1",
+          "Nxe6"
+        ],
+        "annotations": [
+          "fxe6 \u2014 White cashes in on the central pawn cluster, opening the f-file for the rook.",
+          "...Rh8 \u2014 Black retreats the rook back to defend the kingside; pieces are now pinned to passive defense.",
+          "Rf7! \u2014 KEY SQUARE f7. The rook lands on the 7th rank with check threats and immobilizes Black's coordination.",
+          "...Ng6 \u2014 Black tries to bring the knight to a defensive square via g6.",
+          "Bg5 \u2014 White's bishop joins the attack, hitting the knight and eyeing the back rank.",
+          "...Nf8 \u2014 Black defends with the knight; pieces are passive.",
+          "Raf1! \u2014 PIECE ROUTE Ra1-Rf1. Both rooks on the f-file, doubling on the 7th rank threat.",
+          "...Nxe6 \u2014 Black plays the desperate trade. White is still up material with an unstoppable structure."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "fxe6 \u2014 cash in",
+          "...Rh8 \u2014 passive",
+          "Rf7! \u2014 7th rank",
+          "...Ng6 \u2014 defend",
+          "Bg5 \u2014 attack joins",
+          "...Nf8 \u2014 defend",
+          "Raf1 \u2014 double up",
+          "...Nxe6 \u2014 desperate"
+        ],
+        "title": "KIA vs ...e5 \u2014 R+min+P conversion (vs penguingm1 3291)",
+        "intro": "R+min+P endgame from his win over penguingm1 (3291) in the Reti-gambit-accepted line. KEY SQUARES: e6 (Black's weak pawn cluster), f7 (rook infiltration). PIECE ROUTE: Rf1-Rf7 \u2014 the rook infiltrates the 7th rank. The conversion theme: trade off Black's defenders + cash in the pawn-up structure.",
+        "sources": [
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/game/live/12208619821"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKIA-vs-c6-endgame",
+    "openingId": "pro-naroditsky-kia",
+    "criticalPositionFen": "3rr1k1/pp3ppp/2p5/4Pb2/4NP2/4B1P1/P3R1B1/7K b - - 0 24",
+    "title": "KIA vs ...c6 \u2014 bishop pair conversion (vs wonderfultime 3218)",
+    "overview": "Two bishops vs rook-and-bishop endgame from his win over wonderfultime (3218) in the Slav-like setup. KEY SQUARES: a7 (Black's queenside weakness), c5 (bishop outpost on dark squares). PIECE COORDINATION: Be3-Bc5-Bd6 dark-square dominance. The two-bishop pair grinds the queenside down move by move.",
+    "pawnBreaks": [
+      "Bxa7 queenside cash-in"
+    ],
+    "pieceManeuvers": [
+      "Be3 \u2192 Bc5 \u2192 Bd6 dark-square reroute"
+    ],
+    "strategicThemes": [
+      "Two-bishop conversion",
+      "Dark-square domination"
+    ],
+    "endgameTransitions": [
+      "B+B+P grinding win"
+    ],
+    "playableLines": [
+      {
+        "fen": "3rr1k1/pp3ppp/2p5/4Pb2/4NP2/4B1P1/P3R1B1/7K b - - 0 24",
+        "moves": [
+          "Bxe4",
+          "Bxe4",
+          "g6",
+          "Bxa7",
+          "Ra8",
+          "Bc5",
+          "Ra4",
+          "Bd6"
+        ],
+        "annotations": [
+          "...Bxe4 \u2014 Black trades a bishop hoping to simplify.",
+          "Bxe4 \u2014 White recaptures with the long-diagonal bishop, retaining the bishop pair advantage.",
+          "...g6 \u2014 Black plays a kingside structural move, conceding the queenside.",
+          "Bxa7! \u2014 KEY SQUARE a7. White cashes in on the weak queenside pawn, ahead in material.",
+          "...Ra8 \u2014 Black tries to chase the bishop off.",
+          "Bc5 \u2014 KEY SQUARE c5. The dark-squared bishop lands on a strong outpost, dominating the queenside.",
+          "...Ra4 \u2014 Black's rook tries to gain activity.",
+          "Bd6! \u2014 PIECE ROUTE Bc5-Bd6. The bishop continues its dark-square infiltration; Black's pieces are gradually overwhelmed."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "...Bxe4 \u2014 trade",
+          "Bxe4 \u2014 pair kept",
+          "...g6 \u2014 concede",
+          "Bxa7! \u2014 pawn grab",
+          "...Ra8 \u2014 chase",
+          "Bc5 \u2014 outpost",
+          "...Ra4 \u2014 activate",
+          "Bd6 \u2014 dark-square reign"
+        ],
+        "title": "KIA vs ...c6 \u2014 bishop pair conversion (vs wonderfultime 3218)",
+        "intro": "Two bishops vs rook-and-bishop endgame from his win over wonderfultime (3218) in the Slav-like setup. KEY SQUARES: a7 (Black's queenside weakness), c5 (bishop outpost on dark squares). PIECE COORDINATION: Be3-Bc5-Bd6 dark-square dominance. The two-bishop pair grinds the queenside down move by move.",
+        "sources": [
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/game/live/6077652201"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKIA-vs-b6-endgame",
+    "openingId": "pro-naroditsky-kia",
+    "criticalPositionFen": "8/2p1n3/5k2/p1p4p/8/2P3B1/PP3P2/4R1K1 w - - 0 44",
+    "title": "KIA vs ...b6 \u2014 bishop end (vs penguingm1 3301)",
+    "overview": "Bishop endgame from his win over penguingm1 (3301) in the Owen setup. KEY SQUARES: e7 (Black knight target), c5 (Black pawn target). PIECE ROUTE: Bg3-Bh4-Be7-Bxc5 \u2014 a winding diagonal mop-up. The conversion idea: collect Black's pieces one by one while the king walk-up wins.",
+    "pawnBreaks": [
+      "Bxc5 mop-up"
+    ],
+    "pieceManeuvers": [
+      "Bg3 \u2192 Bh4 \u2192 Be7 \u2192 Bxc5 collection route"
+    ],
+    "strategicThemes": [
+      "Bishop collecting weakness",
+      "King + bishop conversion"
+    ],
+    "endgameTransitions": [
+      "B+P \u2192 K+P winning endgame"
+    ],
+    "playableLines": [
+      {
+        "fen": "8/2p1n3/5k2/p1p4p/8/2P3B1/PP3P2/4R1K1 w - - 0 44",
+        "moves": [
+          "Bh4+",
+          "Kf5",
+          "Bxe7",
+          "Kg4",
+          "Bxc5",
+          "Kf3",
+          "Be3",
+          "Kg4"
+        ],
+        "annotations": [
+          "Bh4+! \u2014 checks the Black king AND clears the diagonal toward the knight on e7.",
+          "...Kf5 \u2014 the king is forced into the centre, exposing more weaknesses.",
+          "Bxe7! \u2014 KEY SQUARE e7. White wins the knight; material balance now decisively favors White.",
+          "...Kg4 \u2014 Black's king tries to chase the bishop but it's just running.",
+          "Bxc5! \u2014 KEY SQUARE c5. Another pawn falls. White converts the material AND positional edge.",
+          "...Kf3 \u2014 Black tries activity but is too far behind.",
+          "Be3 \u2014 PIECE ROUTE: the bishop steps back to defensive coordination with the rook.",
+          "...Kg4 \u2014 Black's king has nowhere productive to go; White's technique wins."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bh4+! \u2014 check + open",
+          "...Kf5 \u2014 exposed",
+          "Bxe7! \u2014 win knight",
+          "...Kg4 \u2014 chase",
+          "Bxc5! \u2014 win pawn",
+          "...Kf3 \u2014 activity",
+          "Be3 \u2014 coordinate",
+          "...Kg4 \u2014 nowhere"
+        ],
+        "title": "KIA vs ...b6 \u2014 bishop end (vs penguingm1 3301)",
+        "intro": "Bishop endgame from his win over penguingm1 (3301) in the Owen setup. KEY SQUARES: e7 (Black knight target), c5 (Black pawn target). PIECE ROUTE: Bg3-Bh4-Be7-Bxc5 \u2014 a winding diagonal mop-up. The conversion idea: collect Black's pieces one by one while the king walk-up wins.",
+        "sources": [
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/game/live/12207998661"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroKIA-vs-e6-endgame",
+    "openingId": "pro-naroditsky-kia",
+    "criticalPositionFen": "3rr1k1/pp1n4/4b1p1/2pppn2/6N1/2PP2PP/PP3PB1/R1B1R1K1 w - - 0 24",
+    "title": "KIA vs ...e6 \u2014 trade-down crush (vs wonderfultime 3254)",
+    "overview": "R+min+P endgame from his win over wonderfultime (3254) in the French-style setup. KEY SQUARES: e5 (central pawn target), d4 (pawn break). PIECE COORDINATION: Nxe5 + Rxe5 \u2014 trade knight + recapture to anchor the rook in the centre. PAWN BREAK: d4 opens the position when Black is uncoordinated.",
+    "pawnBreaks": [
+      "d4 central break"
+    ],
+    "pieceManeuvers": [
+      "Bc1 \u2192 Bf4 activation",
+      "Re1 \u2192 Rxe5 central anchor"
+    ],
+    "strategicThemes": [
+      "Trade-down conversion",
+      "Centre-file domination"
+    ],
+    "endgameTransitions": [
+      "R+B+P winning conversion"
+    ],
+    "playableLines": [
+      {
+        "fen": "3rr1k1/pp1n4/4b1p1/2pppn2/6N1/2PP2PP/PP3PB1/R1B1R1K1 w - - 0 24",
+        "moves": [
+          "Nxe5",
+          "Nxe5",
+          "Rxe5",
+          "Bf7",
+          "Bf4",
+          "b6",
+          "d4",
+          "cxd4"
+        ],
+        "annotations": [
+          "Nxe5! \u2014 White starts the trade-down. The knight grabs the central pawn AND offers the trade.",
+          "...Nxe5 \u2014 Black is forced to recapture or lose a clear pawn.",
+          "Rxe5! \u2014 KEY SQUARE e5. The rook lands on a powerful central square, dominating the e-file.",
+          "...Bf7 \u2014 Black retreats the bishop to a defensive post.",
+          "Bf4 \u2014 PIECE ROUTE Bc1-Bf4. The dark-squared bishop activates, eyeing both flanks.",
+          "...b6 \u2014 Black makes a structural concession on the queenside.",
+          "d4! \u2014 KEY SQUARE d4. PAWN BREAK opening the centre when Black has weak pieces.",
+          "...cxd4 \u2014 Black is forced to trade; the position opens AND White's pieces dominate."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nxe5! \u2014 start trade",
+          "...Nxe5 \u2014 forced",
+          "Rxe5 \u2014 central",
+          "...Bf7 \u2014 retreat",
+          "Bf4 \u2014 activate",
+          "...b6 \u2014 concede",
+          "d4! \u2014 break",
+          "...cxd4 \u2014 opens"
+        ],
+        "title": "KIA vs ...e6 \u2014 trade-down crush (vs wonderfultime 3254)",
+        "intro": "R+min+P endgame from his win over wonderfultime (3254) in the French-style setup. KEY SQUARES: e5 (central pawn target), d4 (pawn break). PIECE COORDINATION: Nxe5 + Rxe5 \u2014 trade knight + recapture to anchor the rook in the centre. PAWN BREAK: d4 opens the position when Black is uncoordinated.",
+        "sources": [
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/game/live/6193715955"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroRoss-c3-endgame",
+    "openingId": "pro-naroditsky-rossolimo",
+    "criticalPositionFen": "2r1r2k/1p1N1p1p/3P2pB/p7/8/7P/1P1R1PPK/8 b - - 0 35",
+    "title": "Rossolimo c3 \u2014 N + B + passed-d-pawn conversion (vs lachesisQ 3069)",
+    "overview": "Knight+Bishop+passed-pawn endgame from his win over lachesisQ (3069) in the c3 Sideline. KEY SQUARES: b7 (Black queenside weakness), c5 (knight outpost). PIECE ROUTE: Nd7-Nc5-Nxb7 \u2014 the knight wins a queenside pawn. The conversion theme: passed d6-pawn + knight raid combine to crush.",
+    "pawnBreaks": [
+      "Nxb7 queenside raid"
+    ],
+    "pieceManeuvers": [
+      "Nd7 \u2192 Nc5 \u2192 Nxb7 raiding route",
+      "Bh6 \u2192 Bf4 diagonal activation"
+    ],
+    "strategicThemes": [
+      "Passed-pawn + knight raid",
+      "Outpost domination"
+    ],
+    "endgameTransitions": [
+      "N+B+P winning conversion"
+    ],
+    "playableLines": [
+      {
+        "fen": "2r1r2k/1p1N1p1p/3P2pB/p7/8/7P/1P1R1PPK/8 b - - 0 35",
+        "moves": [
+          "Rcd8",
+          "Nc5",
+          "f6",
+          "Nxb7",
+          "Rd7",
+          "Nc5",
+          "Rdd8",
+          "Bf4"
+        ],
+        "annotations": [
+          "...Rcd8 \u2014 Black tries to blockade the passed d-pawn.",
+          "Nc5! \u2014 KEY SQUARE c5. The knight lands on an outpost, eyeing both b7 AND e6.",
+          "...f6 \u2014 Black tries to chase the bishop with a structural concession.",
+          "Nxb7! \u2014 PIECE ROUTE Nd7-Nc5-Nxb7. The knight wins the queenside pawn; material advantage grows.",
+          "...Rd7 \u2014 Black tries to defend the back rank from the d-file.",
+          "Nc5 \u2014 the knight retreats to the outpost, ready to redeploy.",
+          "...Rdd8 \u2014 Black tries to coordinate the rooks.",
+          "Bf4! \u2014 KEY ROUTE: the bishop activates on the f4-c1 diagonal, threatening to support the passed d-pawn's advance."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "...Rcd8 \u2014 blockade",
+          "Nc5! \u2014 outpost",
+          "...f6 \u2014 concede",
+          "Nxb7! \u2014 pawn raid",
+          "...Rd7 \u2014 defend",
+          "Nc5 \u2014 return",
+          "...Rdd8 \u2014 coordinate",
+          "Bf4! \u2014 activate"
+        ],
+        "title": "Rossolimo c3 \u2014 N + B + passed-d-pawn conversion (vs lachesisQ 3069)",
+        "intro": "Knight+Bishop+passed-pawn endgame from his win over lachesisQ (3069) in the c3 Sideline. KEY SQUARES: b7 (Black queenside weakness), c5 (knight outpost). PIECE ROUTE: Nd7-Nc5-Nxb7 \u2014 the knight wins a queenside pawn. The conversion theme: passed d6-pawn + knight raid combine to crush.",
+        "sources": [
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/game/live/5305046990"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroRoss-bc4-endgame",
+    "openingId": "pro-naroditsky-rossolimo",
+    "criticalPositionFen": "5R2/6bk/3p2Bp/p2P4/P7/8/1P3PP1/4R1K1 b - - 0 36",
+    "title": "Rossolimo Bc4 vs ...d6 \u2014 rook + bishop mating attack (vs artooon 3092)",
+    "overview": "Rook+Bishop endgame mating attack from his win over artooon (3092) in the Bc4 Italian-style line. KEY SQUARES: f5, g6, h5 (mating net squares). PIECE COORDINATION: Rf8 + Re1 \u2192 Re6+ + Rf5+ \u2014 the rook batteries shepherd the king into a mating net. The conversion theme: two rooks + bishop ruthless king hunt.",
+    "pawnBreaks": [
+      "Re6+ + Rg6+ king-hunt sequence"
+    ],
+    "pieceManeuvers": [
+      "Re1 \u2192 Re6 + Rf8 \u2192 Rf5 \u2192 Rf7 rook-battery"
+    ],
+    "strategicThemes": [
+      "King-hunt with two rooks",
+      "Active-rook mating attack"
+    ],
+    "endgameTransitions": [
+      "R+R+B \u2192 mate"
+    ],
+    "playableLines": [
+      {
+        "fen": "5R2/6bk/3p2Bp/p2P4/P7/8/1P3PP1/4R1K1 b - - 0 36",
+        "moves": [
+          "Kxg6",
+          "Re6+",
+          "Kh5",
+          "Rf5+",
+          "Kg4",
+          "Rf7",
+          "Bxb2",
+          "Rg6+"
+        ],
+        "annotations": [
+          "...Kxg6 \u2014 Black grabs the bishop hoping to consolidate.",
+          "Re6+! \u2014 KEY SQUARE e6. The rook check forces the king toward the edge.",
+          "...Kh5 \u2014 Black's king is pushed further toward the corner.",
+          "Rf5+! \u2014 DOUBLE-CHECK COORDINATION: the second rook joins the attack.",
+          "...Kg4 \u2014 Black's king has nowhere to escape.",
+          "Rf7 \u2014 PIECE ROUTE: the rook lifts to threaten mate AND keeps Black's king on the run.",
+          "...Bxb2 \u2014 Black tries to create counterplay by grabbing material.",
+          "Rg6+! \u2014 KEY SQUARE g6. The mate net closes; Black's king is hunted."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "...Kxg6 \u2014 grab",
+          "Re6+! \u2014 push edge",
+          "...Kh5 \u2014 corner",
+          "Rf5+! \u2014 battery",
+          "...Kg4 \u2014 nowhere",
+          "Rf7 \u2014 lift",
+          "...Bxb2 \u2014 desperate",
+          "Rg6+ \u2014 net closes"
+        ],
+        "title": "Rossolimo Bc4 vs ...d6 \u2014 rook + bishop mating attack (vs artooon 3092)",
+        "intro": "Rook+Bishop endgame mating attack from his win over artooon (3092) in the Bc4 Italian-style line. KEY SQUARES: f5, g6, h5 (mating net squares). PIECE COORDINATION: Rf8 + Re1 \u2192 Re6+ + Rf5+ \u2014 the rook batteries shepherd the king into a mating net. The conversion theme: two rooks + bishop ruthless king hunt.",
+        "sources": [
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/game/live/122456059241"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pronaroRoss-g6-endgame",
+    "openingId": "pro-naroditsky-rossolimo",
+    "criticalPositionFen": "2r1rk2/pp3NB1/4p3/3bP2P/3n4/P7/1P3PP1/RB2R1K1 b - - 0 32",
+    "title": "Rossolimo vs ...g6 \u2014 trade-down to R+P (vs wonderfultime 3212)",
+    "overview": "R+min+P trade-down endgame from his win over wonderfultime (3212) in the Hyper-Accelerated Dragon. KEY SQUARES: c2 (queenside trade), f6 (bishop infiltration). PIECE ROUTE: Bg7-Bf6 + the trade sequence simplifies into a winning rook endgame. The conversion theme: forced trades + technique.",
+    "pawnBreaks": [
+      "Bxc2 + Rxc2 trade-down"
+    ],
+    "pieceManeuvers": [
+      "Bg7 \u2192 Bf6 dark-square outpost",
+      "Re1 \u2192 Rxc2 simplification"
+    ],
+    "strategicThemes": [
+      "Trade-down to R+P",
+      "Dark-square bishop activity"
+    ],
+    "endgameTransitions": [
+      "R+B+N \u2192 won R+P"
+    ],
+    "playableLines": [
+      {
+        "fen": "2r1rk2/pp3NB1/4p3/3bP2P/3n4/P7/1P3PP1/RB2R1K1 b - - 0 32",
+        "moves": [
+          "Kxf7",
+          "Bf6",
+          "Nc2",
+          "Bxc2",
+          "Rxc2",
+          "Rac1",
+          "Rec8",
+          "Rxc2"
+        ],
+        "annotations": [
+          "...Kxf7 \u2014 Black is forced to capture the knight to avoid bigger losses.",
+          "Bf6! \u2014 KEY SQUARE f6. The bishop lands on a strong dark-square outpost, supporting the e5-pawn AND eyeing the king.",
+          "...Nc2 \u2014 Black tries to win the bishop, creating counterplay.",
+          "Bxc2! \u2014 White trades the bishop for the knight, maintaining material balance.",
+          "Rxc2 \u2014 KEY SQUARE c2. The rook recaptures, coordinating with the rest.",
+          "...Rac1 \u2014 Black's rook joins the c-file battery.",
+          "Rec8 \u2014 PIECE ROUTE: Black tries to load the c-file.",
+          "Rxc2 \u2014 the trade-down completes; White has the structurally winning rook endgame."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "...Kxf7 \u2014 forced",
+          "Bf6! \u2014 outpost",
+          "...Nc2 \u2014 counter",
+          "Bxc2! \u2014 trade",
+          "Rxc2 \u2014 recapture",
+          "...Rac1 \u2014 battery",
+          "Rec8 \u2014 load",
+          "Rxc2 \u2014 simplify"
+        ],
+        "title": "Rossolimo vs ...g6 \u2014 trade-down to R+P (vs wonderfultime 3212)",
+        "intro": "R+min+P trade-down endgame from his win over wonderfultime (3212) in the Hyper-Accelerated Dragon. KEY SQUARES: c2 (queenside trade), f6 (bishop infiltration). PIECE ROUTE: Bg7-Bf6 + the trade sequence simplifies into a winning rook endgame. The conversion theme: forced trades + technique.",
+        "sources": [
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+          "https://www.chess.com/game/live/52033215551"
+        ]
+      }
+    ]
   }
 ]
