@@ -8,7 +8,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { Chess } from 'chess.js';
 
-const SRC_DIR = 'data/sources/danielnaroditsky-chesscom';
+const PLAYER = process.argv[2] || 'danielnaroditsky';
+const SRC_DIR = `data/sources/${PLAYER}-chesscom`;
 
 const VARIATIONS = {
   'two-knights':        { prefix: ['e4','c6','Nc3','d5','Nf3'], color: 'black' },
@@ -71,8 +72,8 @@ for (const [vKey, cfg] of Object.entries(VARIATIONS)) {
     for (const line of lines) {
       let g; try { g = JSON.parse(line); } catch { continue; }
       if (!g.pgn) continue;
-      const isWhite = (g.white?.username || '').toLowerCase() === 'danielnaroditsky';
-      const isBlack = (g.black?.username || '').toLowerCase() === 'danielnaroditsky';
+      const isWhite = (g.white?.username || '').toLowerCase() === PLAYER.toLowerCase();
+      const isBlack = (g.black?.username || '').toLowerCase() === PLAYER.toLowerCase();
       if (cfg.color === 'white' && !isWhite) continue;
       if (cfg.color === 'black' && !isBlack) continue;
       const m = pgnToSan(g.pgn);
