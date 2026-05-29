@@ -313,6 +313,35 @@ try {
     return false;
   }
 
+  // Helper: exit the lesson player back to the detail page. The
+  // LessonScaffold has NO Escape handler — only a Back button with
+  // aria-label="Back". Pressing Escape from the audit was a no-op.
+  // This helper clicks the Back button (or falls back to navigating
+  // fresh if the Back button isn't found).
+  async function exitLesson(openingId) {
+    // Help modal sometimes auto-opens; dismiss first
+    if (await page.locator('[data-testid="page-help-modal"]').count() > 0) {
+      await page.keyboard.press('Escape').catch(() => null);
+      await page.waitForTimeout(400);
+    }
+    const backBtn = page.locator('button[aria-label="Back"]').first();
+    if (await backBtn.isVisible().catch(() => false)) {
+      await backBtn.click({ timeout: 3000 }).catch(() => null);
+      await page.waitForTimeout(1200);
+      // After Back, verify we're back on the detail page
+      const onDetail = await page.locator('[data-testid="opening-detail"]').count();
+      if (onDetail > 0) return true;
+    }
+    // Fallback — navigate fresh
+    await safeGoto(`${PROD}/openings/pro/naroditsky/${openingId}`, openingId);
+    await page.waitForTimeout(3500);
+    if (await page.locator('[data-testid="page-help-modal"]').count() > 0) {
+      await page.keyboard.press('Escape').catch(() => null);
+      await page.waitForTimeout(400);
+    }
+    return false;
+  }
+
   // Per-opening walk
   for (const openingId of NARODITSKY_OPENINGS) {
     console.log(`\n===== OPENING: ${openingId} =====`);
@@ -376,11 +405,8 @@ try {
         `wlpp-${rungLabel.toLowerCase()}-main`,
         openingId,
       );
-      // Return to detail via Escape (twice if needed)
-      await page.keyboard.press('Escape').catch(() => null);
-      await page.waitForTimeout(800);
-      await page.keyboard.press('Escape').catch(() => null);
-      await page.waitForTimeout(1200);
+      // Click the Back button to return to detail (Escape is a no-op)
+      await exitLesson(openingId);
     }
 
     // ----- (D) Walk each variation tab — single navigation, all 4 rungs per variation -----
@@ -438,10 +464,18 @@ try {
           `variation-${i}-${rungLabel.toLowerCase()}`,
           openingId,
         );
-        await page.keyboard.press('Escape').catch(() => null);
-        await page.waitForTimeout(800);
-        await page.keyboard.press('Escape').catch(() => null);
-        await page.waitForTimeout(1000);
+        // Exit the lesson via Back button (Escape is a no-op)
+        await exitLesson(openingId);
+        // After exiting, re-select the variation tab so the next rung
+        // click targets the right variation's WLPP buttons
+        const tabAfterExit = page.locator(`[data-testid^="variation-tab-"]:not([data-testid="variation-tab-main"])`).nth(i);
+        if (await tabAfterExit.isVisible().catch(() => false)) {
+          const tabSelected = await tabAfterExit.getAttribute('aria-selected').catch(() => null);
+          if (tabSelected !== 'true') {
+            await tabAfterExit.click({ timeout: 3000, force: true }).catch(() => null);
+            await page.waitForTimeout(1500);
+          }
+        }
       }
     }
 
@@ -468,8 +502,7 @@ try {
           'middlegame-plan-watch',
           openingId,
         );
-        await page.keyboard.press('Escape').catch(() => null);
-        await page.waitForTimeout(1500);
+        await exitLesson(openingId);
       }
     }
 
@@ -492,8 +525,7 @@ try {
           'endgame-plan-watch',
           openingId,
         );
-        await page.keyboard.press('Escape').catch(() => null);
-        await page.waitForTimeout(1500);
+        await exitLesson(openingId);
       }
     }
 
@@ -516,8 +548,8 @@ try {
         const viewer = page.locator('[data-testid="model-game-viewer"]');
         const viewerVisible = await viewer.isVisible().catch(() => false);
         rec(`[model-games/${openingId}] viewer mounts`, viewerVisible ? 'PASS' : 'FAIL');
-        await page.keyboard.press('Escape').catch(() => null);
-        await page.waitForTimeout(1000);
+        // Model game viewer uses Back button too
+        await exitLesson(openingId);
       }
     }
   }
