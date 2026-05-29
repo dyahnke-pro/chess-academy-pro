@@ -19,7 +19,7 @@ nearly every opening in scope, so the voice grounding is unusually strong.
 | Gambits for White | 55e1f76a-7bde-4a1f-ab28-9d455a211fe0 | gambit weapons |
 | Gambits for Black | 7202910d-0467-46b1-83e8-dc4d77c330fe | gambit weapons |
 | Beginner / Intermediate Chess | 940dcdc1… / ce41ec54… | general framing |
-| Endgame / Middlegame / Tactics Masterclass | f79c9680… / e3716fbf… / fd553528… | phase framing |
+| Endgame / Middlegame / Tactics phase courses | f79c9680… / e3716fbf… / fd553528… | phase framing |
 
 Lecture: "Level Up The Vienna" — old.chessly.com/lectures/1c9f5a30-3493-46d9-9167-856e04e7583b
 
