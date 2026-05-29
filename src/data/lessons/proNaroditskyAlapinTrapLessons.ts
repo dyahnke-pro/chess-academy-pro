@@ -245,7 +245,7 @@ const PREMATURE_D4: LessonScript = {
   title: 'Watch out: Premature d4 — Black equalises with …d5',
   minutes: 3,
   orientation: 'white',
-  kind: 'warning',
+  kind: 'trap',
   sources: SRC,
   beats: [
     b({
@@ -284,7 +284,7 @@ const BC2_RETREAT: LessonScript = {
   title: 'Watch out: Bc2 retreat instead of Bxe6 trade',
   minutes: 3,
   orientation: 'white',
-  kind: 'warning',
+  kind: 'trap',
   sources: SRC,
   beats: [
     b({
@@ -323,7 +323,7 @@ const BE2_RETREAT_BG4: LessonScript = {
   title: 'Watch out: Be2 retreat against the …Bg4 pin (d5 Open)',
   minutes: 3,
   orientation: 'white',
-  kind: 'warning',
+  kind: 'trap',
   sources: SRC,
   beats: [
     b({
@@ -362,7 +362,7 @@ const NBXD4_OUTPOST: LessonScript = {
   title: 'Watch out: Nbxd4 surrenders the outpost early (d5 Open)',
   minutes: 3,
   orientation: 'white',
-  kind: 'warning',
+  kind: 'trap',
   sources: SRC,
   beats: [
     b({
