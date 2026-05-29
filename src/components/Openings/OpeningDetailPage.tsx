@@ -103,6 +103,9 @@ import {
   getProNaroditskyRuyTrapPlayableLine,
 } from '../../data/lessons/proNaroditskyRuyTrapLessons';
 import {
+  getProNaroditskyFantasyTrapPlayableLine,
+} from '../../data/lessons/proNaroditskyFantasyTrapLessons';
+import {
   VIENNA_TRAP_LESSONS,
   getViennaTrapsForTab,
   getViennaTrapPlayableLine,
@@ -813,7 +816,9 @@ export function OpeningDetailPage(): JSX.Element {
                       ? getProNaroditskyJobavaTrapPlayableLine(trap.name)
                       : opening.id === 'pro-naroditsky-ruy-lopez'
                         ? getProNaroditskyRuyTrapPlayableLine(trap.name)
-                        : null;
+                        : opening.id === 'pro-naroditsky-fantasy-caro'
+                          ? getProNaroditskyFantasyTrapPlayableLine(trap.name)
+                          : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -855,7 +860,9 @@ export function OpeningDetailPage(): JSX.Element {
                       ? getProNaroditskyJobavaTrapPlayableLine(warn.name)
                       : opening.id === 'pro-naroditsky-ruy-lopez'
                         ? getProNaroditskyRuyTrapPlayableLine(warn.name)
-                        : null;
+                        : opening.id === 'pro-naroditsky-fantasy-caro'
+                          ? getProNaroditskyFantasyTrapPlayableLine(warn.name)
+                          : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -935,7 +942,9 @@ export function OpeningDetailPage(): JSX.Element {
                       ? getProNaroditskyJobavaTrapPlayableLine(trap.name)
                       : opening.id === 'pro-naroditsky-ruy-lopez'
                         ? getProNaroditskyRuyTrapPlayableLine(trap.name)
-                        : null;
+                        : opening.id === 'pro-naroditsky-fantasy-caro'
+                          ? getProNaroditskyFantasyTrapPlayableLine(trap.name)
+                          : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -977,7 +986,9 @@ export function OpeningDetailPage(): JSX.Element {
                       ? getProNaroditskyJobavaTrapPlayableLine(warn.name)
                       : opening.id === 'pro-naroditsky-ruy-lopez'
                         ? getProNaroditskyRuyTrapPlayableLine(warn.name)
-                        : null;
+                        : opening.id === 'pro-naroditsky-fantasy-caro'
+                          ? getProNaroditskyFantasyTrapPlayableLine(warn.name)
+                          : null;
     if (curated) {
       return (
         <PlayableLinePlayer

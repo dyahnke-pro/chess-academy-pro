@@ -1675,6 +1675,23 @@
           ]
         }
       ],
+      "trapLines": [
+        {
+          "name": "O-O in Anti-Winawer line (Nihal Sarin victim 2x)",
+          "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 Ne7 Bd3 b6 Ne2 Ba6 O-O Bxd3 Qxd3 O-O e5",
+          "explanation": "Mined from 2 games — both with Nihal Sarin (3170 and 3204) falling into the same Anti-Winawer trap. Black's O-O lets the e5 push gain space + cramp + Qxd3 queen activation."
+        },
+        {
+          "name": "Bc5 in Italian-style Fantasy (Parhamov victim)",
+          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5 e5 Ng4",
+          "explanation": "Mined from 5 games featuring Parhamov (3175), LiamPutnam2008 (3131/3042), RaunakSadhwani2005 (3026). Italian-style ...Bc5 lets e5 attack Nf6 with central pressure."
+        },
+        {
+          "name": "Be7 in deep Fantasy (vi_pranav victim)",
+          "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Be7 Nxd4 O-O Nc3",
+          "explanation": "Mined from 2 games. Passive ...Be7 lets Nxd4 reach a textbook Fantasy middlegame with central control + bishop pair. Named 2700+ victim: vi_pranav (3089)."
+        }
+      ],
       "sources": [
         "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
         "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation"
