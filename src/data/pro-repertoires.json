@@ -830,6 +830,31 @@
       ],
       "trapLines": [
         {
+          "name": "Qe2 wastes a tempo (Two Knights KIA setup)",
+          "pgn": "e4 c6 Nf3 d5 Nc3 dxe4 Nxe4 Nf6 Qe2 Nxe4 Qxe4 e6",
+          "explanation": "Mined from his archive — 170 games (his biggest Caro trap pattern) where opponents played Qe2 instead of the principled Nxf6+/Ng3 in the Two Knights KIA setup. The Qe2 blocks the f1-bishop AND lets ...Nxe4 Qxe4 e6 develop with tempo. Named 2700+ victim: penguingm1 (3165)."
+        },
+        {
+          "name": "h3 hands Black the bishop pair (KIA Bg4 line)",
+          "pgn": "e4 c6 Nf3 d5 Nc3 Bg4 h3 Bxf3 Qxf3 e6",
+          "explanation": "Mined from 29 games. After the standard ...Bg4 pin, White's h3 forces the trade Black wanted — bishop pair + structurally healthier kingside go to Black. Named 2700+ victims: GM_dmitrij (2940), Mykola-Bortnyk (2953), wonderfultime (2905)."
+        },
+        {
+          "name": "dxe4 → Qxd1+ exposes White's king (d3 line)",
+          "pgn": "e4 c6 Nf3 d5 d3 dxe4 dxe4 Qxd1+ Kxd1",
+          "explanation": "Mined from 26 games. In the quiet 2.d3 sideline, after ...dxe4 White's recapture with the d-pawn (instead of the knight) loses to the immediate Qxd1+ queen trade — forcing the king to d1 where it's permanently exposed. Named 2700+ victims: BrandonJacobson (3136), TLTLTLTLTLTL (3207), Kriari (2910)."
+        },
+        {
+          "name": "Bd3 voluntary trade in the Exchange Caro",
+          "pgn": "e4 c6 d4 d5 exd5 cxd5 Nf3 Nf6 h3 Bf5 Bd3 Bxd3 Qxd3",
+          "explanation": "Mined from 20 games. After Exchange Caro Nf3+h3+Bd3, White's voluntary bishop trade lets Black equalise cleanly with no problem pieces — the Exchange's drawishness favours Black who has zero risk. Named 2700+ victims: Oleksandr_Bortnyk (3278), BrandonJacobson (2873), Mykola-Bortnyk (3135)."
+        },
+        {
+          "name": "Nxf6+ premature trade (Classical Caro)",
+          "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 c3 Bg4",
+          "explanation": "Mined from 6 games. After Classical Nc3+Nxe4 setup, White's premature Nxf6+ wastes a tempo because Black's ...exf6 opens the e-file AND ...Bg4 develops with the pin. Named 2700+ victims: Arambai (3161), Oleksandr_Bortnyk (3148)."
+        },
+        {
           "name": "The …Bg4 Pin When White Develops Nf3 Early",
           "pgn": "e4 c6 d4 d5 exd5 cxd5 Nf3 Nc6 Bd3 Bg4 c3 e6 Qb3 Qc7 h3 Bxf3 gxf3",
           "explanation": "When White's move order puts Nf3 BEFORE Bd3 — a frequent transposition — the …Bg4 develops with the pin live. After the natural Qb3 attacks b7 and Black covers with …Qc7, White's h3 forces the trade: …Bxf3 gxf3 wrecks the kingside pawn structure permanently. From here Black completes development with …Bd6, …O-O, …Rfe8 and a long-term structural edge: White's king is exposed, their pieces lack coordination, and the doubled f-pawns create a static weakness Black plays against for the rest of the game."

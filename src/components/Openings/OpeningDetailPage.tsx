@@ -82,6 +82,9 @@ import {
   getProNaroditskyKIDTrapPlayableLine,
 } from '../../data/lessons/proNaroditskyKIDTrapLessons';
 import {
+  getProNaroditskyCaroTrapPlayableLine,
+} from '../../data/lessons/proNaroditskyCaroTrapLessons';
+import {
   VIENNA_TRAP_LESSONS,
   getViennaTrapsForTab,
   getViennaTrapPlayableLine,
@@ -778,7 +781,9 @@ export function OpeningDetailPage(): JSX.Element {
         ? getProNaroditskyAlapinTrapPlayableLine(trap.name)
         : opening.id === 'pro-naroditsky-kid'
           ? getProNaroditskyKIDTrapPlayableLine(trap.name)
-          : null;
+          : opening.id === 'pro-naroditsky-caro-kann'
+            ? getProNaroditskyCaroTrapPlayableLine(trap.name)
+            : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -806,7 +811,9 @@ export function OpeningDetailPage(): JSX.Element {
         ? getProNaroditskyAlapinTrapPlayableLine(warn.name)
         : opening.id === 'pro-naroditsky-kid'
           ? getProNaroditskyKIDTrapPlayableLine(warn.name)
-          : null;
+          : opening.id === 'pro-naroditsky-caro-kann'
+            ? getProNaroditskyCaroTrapPlayableLine(warn.name)
+            : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -872,7 +879,9 @@ export function OpeningDetailPage(): JSX.Element {
         ? getProNaroditskyAlapinTrapPlayableLine(trap.name)
         : opening.id === 'pro-naroditsky-kid'
           ? getProNaroditskyKIDTrapPlayableLine(trap.name)
-          : null;
+          : opening.id === 'pro-naroditsky-caro-kann'
+            ? getProNaroditskyCaroTrapPlayableLine(trap.name)
+            : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -900,7 +909,9 @@ export function OpeningDetailPage(): JSX.Element {
         ? getProNaroditskyAlapinTrapPlayableLine(warn.name)
         : opening.id === 'pro-naroditsky-kid'
           ? getProNaroditskyKIDTrapPlayableLine(warn.name)
-          : null;
+          : opening.id === 'pro-naroditsky-caro-kann'
+            ? getProNaroditskyCaroTrapPlayableLine(warn.name)
+            : null;
     if (curated) {
       return (
         <PlayableLinePlayer
