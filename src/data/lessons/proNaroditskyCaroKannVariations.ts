@@ -601,6 +601,238 @@ const MODERN: LessonScript = {
   ],
 };
 
+// ============================================================
+// Advance Variation (3.e5) — 528 games c5 sub-line + 53 Bf5 sub-line.
+// Most-played White Advance treatment is c5 immediate; Black undermines
+// with ...e6 + ...Nc6 + ...Nge7-Ng6 reroute targeting f4 and the centre.
+// ============================================================
+const ADVANCE_C5: LessonScript = {
+  openingId: 'pro-naroditsky-caro-kann',
+  title: "Advance Variation (3.e5 c5) — immediate counter-strike",
+  minutes: 10,
+  orientation: 'black',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'adv-c5-open',
+      moves: 'e4 c6 d4 d5 e5',
+      highlights: [{ square: 'e5', color: KEY }, { square: 'd5', color: SOFT }],
+      say: "3.e5 — White's Advance Variation, locking the centre and cramping our kingside. The pawn on e5 looks threatening but it's also vulnerable: our coming ...c5 break + ...Nc6 + piece pressure will destabilise the whole chain.",
+      sayShort: 'e5 — Advance, prepare to undermine.',
+    }),
+    b({
+      id: 'adv-c5-strike',
+      moves: 'e4 c6 d4 d5 e5 c5',
+      highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: SOFT }],
+      say: "...c5! The immediate counter-strike. This is the modern way to handle the Advance — we challenge d4 directly instead of the slow ...Bf5 setup. The pawn break opens the c-file AND creates tactical motifs against d4.",
+      sayShort: '...c5 — counter d4 immediately.',
+    }),
+    b({
+      id: 'adv-c5-trade',
+      moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6',
+      highlights: [{ square: 'e6', color: KEY }],
+      say: "dxc5 ...e6 — White takes the c-pawn, Black calmly plays ...e6 preparing recapture. We're temporarily down a pawn but White's c5-pawn is loose AND we have the open e-file coming.",
+      sayShort: '...e6 — calm preparation.',
+    }),
+    b({
+      id: 'adv-c5-nc6',
+      moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5',
+      highlights: [{ square: 'c5', color: KEY }, { square: 'c6', color: SOFT }],
+      say: "Nf3 ...Bxc5 — Black recaptures the bishop ON c5 (NOT the knight from c6) because the bishop is the more active piece and the Bxc5 trade gives Black piece activity AND the open c-file for the rook later.",
+      sayShort: '...Bxc5 — bishop recaptures.',
+    }),
+    b({
+      id: 'adv-c5-develop',
+      moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O',
+      highlights: [{ square: 'd3', color: SOFT }, { square: 'g1', color: KEY }],
+      say: "Bd3 ...Nc6 O-O — both sides develop classically. White's Bd3 supports e4 indirectly via the bishop pair; Black's Nc6 attacks the e5-pawn AND prepares ...Nge7-Ng6 reroute.",
+      sayShort: 'O-O — both castle.',
+    }),
+    b({
+      id: 'adv-c5-knight-reroute',
+      moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7 Nbd2 Ng6',
+      highlights: [{ square: 'g6', color: KEY }, { square: 'f4', color: SOFT }],
+      say: "...Nge7 Nbd2 ...Ng6! The signature Advance Caro reroute — the knight goes Nge7-Ng6 instead of the natural ...Nf6 (which would block our queen). From g6 the knight pressures e5 and prepares jumps to f4 outpost square.",
+      sayShort: '...Ng6 — knight prizes square.',
+    }),
+    b({
+      id: 'adv-c5-conversion',
+      moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7 Nbd2 Ng6 Nb3 Bb6 Re1 Qc7',
+      highlights: [{ square: 'b6', color: KEY }, { square: 'c7', color: SOFT }],
+      say: "Nb3 ...Bb6 Re1 ...Qc7 — the position resolves. Black has the bishop pair, the queen on c7 controls the open file, and the Ng6+Nc6 knight pair is well-coordinated. Naroditsky wins 292 of 528 (55%) in this line — the structural pressure on e5 + the open c-file convert.",
+      sayShort: '...Qc7 — fully coordinated.',
+    }),
+  ],
+};
+
+// ============================================================
+// Advance Variation (3.e5 Bf5) — 53 games — the classical-looking
+// ...Bf5 development before ...c5. Same general plan but slower
+// development.
+// ============================================================
+const ADVANCE_BF5: LessonScript = {
+  openingId: 'pro-naroditsky-caro-kann',
+  title: "Advance Variation (3.e5 Bf5) — classical development",
+  minutes: 8,
+  orientation: 'black',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'adv-bf5-open',
+      moves: 'e4 c6 d4 d5 e5 Bf5',
+      highlights: [{ square: 'f5', color: KEY }],
+      say: "3.e5 ...Bf5 — the classical Advance treatment. Black develops the light-square bishop OUTSIDE the pawn chain (the Caro's defining advantage over the French Defense). The Bf5 supports the kingside AND prepares ...e6 + classical development.",
+      sayShort: '...Bf5 — bishop outside the chain.',
+    }),
+    b({
+      id: 'adv-bf5-nf3',
+      moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6',
+      highlights: [{ square: 'f3', color: SOFT }, { square: 'e6', color: KEY }],
+      say: "Nf3 ...e6 — both sides complete the central setup. The e6 supports d5 AND prepares ...c5 break or ...Nc6+Nge7 development.",
+      sayShort: '...e6 — support d5.',
+    }),
+    b({
+      id: 'adv-bf5-be2',
+      moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5',
+      highlights: [{ square: 'c5', color: KEY }],
+      say: "Be2 ...c5 — White develops quietly, Black strikes the centre. The Be2 setup avoids the tactical Bd3 lines; Black answers with the standard ...c5 break.",
+      sayShort: '...c5 — central break.',
+    }),
+    b({
+      id: 'adv-bf5-be3',
+      moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3',
+      highlights: [{ square: 'e3', color: SOFT }],
+      say: "Be3 — White's dark-square bishop develops, supports d4. The position is balanced: White has space, Black has development AND the bishop pair potential.",
+      sayShort: 'Be3 — balanced development.',
+    }),
+  ],
+};
+
+// ============================================================
+// Panov-Botvinnik Attack (4.c4) — 99 games — White's aggressive
+// counter-attacking treatment after exd5 cxd5 c4. Black answers
+// with Nf6/Nc6/Bg5 standard Panov defense.
+// ============================================================
+const PANOV: LessonScript = {
+  openingId: 'pro-naroditsky-caro-kann',
+  title: "Panov-Botvinnik Attack (4.c4) — IQP fight",
+  minutes: 10,
+  orientation: 'black',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'panov-open',
+      moves: 'e4 c6 d4 d5 exd5 cxd5 c4',
+      highlights: [{ square: 'c4', color: KEY }, { square: 'd5', color: SOFT }],
+      say: "Panov-Botvinnik Attack: 4.c4 challenges our d5-pawn directly. White accepts an Isolated Queen's Pawn structure in exchange for active piece play — this is the most aggressive way to play against the Caro-Kann.",
+      sayShort: 'c4 — Panov IQP fight.',
+    }),
+    b({
+      id: 'panov-nf6',
+      moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6',
+      highlights: [{ square: 'c6', color: KEY }],
+      say: "...Nf6 Nc3 ...Nc6 — both sides develop classically. The Nc6 attacks d4 putting pressure on White's IQP, AND prepares the standard ...Bg5 pin or ...e6 setup depending on White's continuation.",
+      sayShort: '...Nc6 — attack d4.',
+    }),
+    b({
+      id: 'panov-bg5',
+      moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6 Bg5 Be6',
+      highlights: [{ square: 'g5', color: SOFT }, { square: 'e6', color: KEY }],
+      say: "Bg5 ...Be6! White pins the f6-knight, Black develops the bishop to e6 supporting d5 AND eyeing the c4-pawn. The ...Be6 is the key move — it doesn't move the knight (yet) but threatens ...Bxc4 if White isn't careful.",
+      sayShort: '...Be6 — support + threat.',
+    }),
+    b({
+      id: 'panov-be2',
+      moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6 Bg5 Be6 Be2 Qa5',
+      highlights: [{ square: 'a5', color: KEY }],
+      say: "Be2 ...Qa5! Black's queen activates, pinning the c3-knight AND threatening ...Nxc4 or ...d4 ideas. The Qa5 is the Panov defense signature move.",
+      sayShort: '...Qa5 — queen pins c3.',
+    }),
+    b({
+      id: 'panov-c5',
+      moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6 Bg5 Be6 Be2 Qa5 c5',
+      highlights: [{ square: 'c5', color: SOFT }],
+      say: "c5 — White locks the centre, accepting that the IQP is no longer maintainable. The position becomes a closed Panov where Black's piece activity outweighs White's space.",
+      sayShort: 'c5 — White locks.',
+    }),
+    b({
+      id: 'panov-nxe4-trade',
+      moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6 Bg5 Be6 Be2 Qa5 c5 Ne4 Bd2 Nxd2 Qxd2',
+      highlights: [{ square: 'd2', color: KEY }],
+      say: "...Ne4 Bd2 ...Nxd2 Qxd2 — Black's knight jumps to the central outpost, trades the bishop AND simplifies. The resulting endgame favours Black's active queen on a5 + the better minor piece coordination.",
+      sayShort: '...Nxd2 — trade for clarity.',
+    }),
+    b({
+      id: 'panov-finish',
+      moves: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6 Bg5 Be6 Be2 Qa5 c5 Ne4 Bd2 Nxd2 Qxd2 g6 Nf3 Bg7',
+      highlights: [{ square: 'g7', color: KEY }],
+      say: "...g6 Nf3 ...Bg7 — Black completes development with the fianchetto. The Bg7 controls the long diagonal AND prepares O-O. Black has reached a comfortable middlegame where the locked centre + active queen + bishop pair give a slight edge. 51 of 99 wins.",
+      sayShort: '...Bg7 — fianchetto complete.',
+    }),
+  ],
+};
+
+// ============================================================
+// d3 Sideline (2.d3) — 158 games — White's quiet KIA-style treatment.
+// Black plays a Sicilian-style counter with central e5 + classical
+// development. Spine 25 plies showing how the symmetric setup converts.
+// ============================================================
+const D3_SIDELINE: LessonScript = {
+  openingId: 'pro-naroditsky-caro-kann',
+  title: "d3 Sideline (2.d3) — KIA reverse Sicilian",
+  minutes: 9,
+  orientation: 'black',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'd3-open',
+      moves: 'e4 c6 d3 d5 Nd2',
+      highlights: [{ square: 'd3', color: SOFT }, { square: 'd2', color: KEY }],
+      say: "2.d3 — White's quiet KIA-style sideline. The d3 supports e4 modestly; White will follow with Nd2 + g3 + Bg2 fianchetto. Black answers with classical central play.",
+      sayShort: 'd3 — KIA-style quiet.',
+    }),
+    b({
+      id: 'd3-e5',
+      moves: 'e4 c6 d3 d5 Nd2 e5',
+      highlights: [{ square: 'e5', color: KEY }],
+      say: "...e5! Black claims the centre. Since White hasn't pushed the e-pawn or set up tactical pressure, the ...e5 push is fully supported AND gains central space. This is a reversed-Sicilian-Scheveningen structure.",
+      sayShort: '...e5 — claim centre.',
+    }),
+    b({
+      id: 'd3-g3',
+      moves: 'e4 c6 d3 d5 Nd2 e5 g3 Bd6',
+      highlights: [{ square: 'd6', color: KEY }],
+      say: "g3 ...Bd6 — White fianchettos, Black develops the active dark-square bishop to d6. The Bd6 covers central squares AND prepares O-O.",
+      sayShort: '...Bd6 — active bishop.',
+    }),
+    b({
+      id: 'd3-castle',
+      moves: 'e4 c6 d3 d5 Nd2 e5 g3 Bd6 Bg2 Nf6 Ngf3 O-O O-O Re8',
+      highlights: [{ square: 'g8', color: SOFT }, { square: 'e8', color: KEY }],
+      say: "Bg2 ...Nf6 Ngf3 ...O-O O-O ...Re8 — both sides complete classical development. Black has the active piece placement (bishop on d6, rook on e8) and the position is structurally balanced.",
+      sayShort: 'Re8 — central rook.',
+    }),
+    b({
+      id: 'd3-a5',
+      moves: 'e4 c6 d3 d5 Nd2 e5 g3 Bd6 Bg2 Nf6 Ngf3 O-O O-O Re8 b3 a5 a4 Na6',
+      highlights: [{ square: 'a5', color: KEY }, { square: 'a6', color: SOFT }],
+      say: "b3 ...a5 a4 ...Na6 — Black begins queenside expansion. The Na6 supports c5 break AND prepares Nb4 outpost. The position favours Black's piece coordination + central control.",
+      sayShort: '...Na6 — queenside expansion.',
+    }),
+    b({
+      id: 'd3-trade',
+      moves: 'e4 c6 d3 d5 Nd2 e5 g3 Bd6 Bg2 Nf6 Ngf3 O-O O-O Re8 b3 a5 a4 Na6 Bb2 Nb4 Re1 dxe4 Nxe4 Nxe4 dxe4',
+      highlights: [{ square: 'e4', color: KEY }],
+      say: "Bb2 ...Nb4 Re1 ...dxe4 Nxe4 ...Nxe4 dxe4 — the central trade sequence simplifies the position favourably for Black. The Nb4 outpost remains, the centre is open, and Black's structure converts. 112 wins of 158 games.",
+      sayShort: 'dxe4 — central simplification.',
+    }),
+  ],
+};
+
 export const PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-naroditsky-caro-kann::Two Knights Variation (2.Nc3)': TWO_KNIGHTS,
   "pro-naroditsky-caro-kann::King's Indian Attack (2.Nf3)": KIA,
@@ -608,4 +840,8 @@ export const PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS: Record<string, LessonSc
   'pro-naroditsky-caro-kann::Classical Variation (3.Nc3)': CLASSICAL,
   'pro-naroditsky-caro-kann::Fantasy Variation (3.f3)': FANTASY,
   'pro-naroditsky-caro-kann::Modern Defense Transposition (2.d4 g6)': MODERN,
+  'pro-naroditsky-caro-kann::Advance Variation (3.e5 c5)': ADVANCE_C5,
+  'pro-naroditsky-caro-kann::Advance Variation (3.e5 Bf5)': ADVANCE_BF5,
+  'pro-naroditsky-caro-kann::Panov-Botvinnik Attack (4.c4)': PANOV,
+  'pro-naroditsky-caro-kann::d3 Sideline (2.d3)': D3_SIDELINE,
 };

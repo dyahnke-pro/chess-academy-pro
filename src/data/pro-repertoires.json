@@ -786,6 +786,46 @@
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
             "https://www.chess.com/openings/Caro-Kann-Defense"
           ]
+        },
+        {
+          "name": "Advance Variation (3.e5 c5)",
+          "pgn": "e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7 Nbd2 Ng6 Nb3 Bb6 Re1 Qc7 a4 a6",
+          "explanation": "The Advance Variation with immediate ...c5 counter-strike — 528 games in his archive, 55% score. Modern Caro theory says ...c5 is stronger than the classical ...Bf5 because it challenges White's centre directly. The 22-ply spine walks through the dxc5 trade, the Bxc5 recapture, and the Nge7-Ng6 reroute targeting the f4-e5 dark squares. The Black knight on g6 + bishop pair + open c-file gives steady positional pressure that converts in the R+min+P endgame.",
+          "sources": [
+            "book:caro-kann",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+            "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation"
+          ]
+        },
+        {
+          "name": "Advance Variation (3.e5 Bf5)",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3",
+          "explanation": "The classical Advance treatment: ...Bf5 developing the light-square bishop OUTSIDE the pawn chain (the Caro's structural advantage over the French Defense). 53 games — less common than the immediate ...c5 but still well-tested. The Bf5 supports the kingside while we prepare ...e6 + ...c5 break with full classical development. White's Be2 setup avoids the tactical Bd3 lines.",
+          "sources": [
+            "book:caro-kann",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+            "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation"
+          ]
+        },
+        {
+          "name": "Panov-Botvinnik Attack (4.c4)",
+          "pgn": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6 Bg5 Be6 Be2 Qa5 c5 Ne4 Bd2 Nxd2 Qxd2 g6 Nf3 Bg7",
+          "explanation": "The Panov-Botvinnik Attack — White's most aggressive treatment after the Exchange. 99 games, 51% win rate. White accepts an Isolated Queen's Pawn structure in exchange for active piece play; Black answers with the Nf6+Nc6+Bg5 pin response. The ...Be6+Qa5+...Ne4 sequence simplifies the position favorably, and Black ends with the fianchetto setup + bishop pair + active queen.",
+          "sources": [
+            "book:caro-kann",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+            "https://www.chess.com/openings/Caro-Kann-Defense-Panov-Attack"
+          ]
+        },
+        {
+          "name": "d3 Sideline (2.d3)",
+          "pgn": "e4 c6 d3 d5 Nd2 e5 g3 Bd6 Bg2 Nf6 Ngf3 O-O O-O Re8 b3 a5 a4 Na6 Bb2 Nb4 Re1 dxe4 Nxe4 Nxe4 dxe4",
+          "explanation": "White's quiet 2.d3 sideline — 158 games, 71% win rate (Black's BEST scoring Caro variation in the corpus). White treats the opening as a KIA-reversed Sicilian; Black answers with central ...e5 + classical ...Bd6 + ...Nbd7 development. The reversed-Sicilian-Scheveningen structure converts easily because Black has the active piece play AND the central simplification favors Black's coordination.",
+          "sources": [
+            "book:caro-kann",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives",
+            "https://www.chess.com/openings/Caro-Kann-Defense"
+          ]
         }
       ],
       "trapLines": [
