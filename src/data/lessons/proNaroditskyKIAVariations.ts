@@ -7,6 +7,7 @@ import type { LessonScript, LessonBeat, AnnotationHighlight } from '../../types'
 
 const KEY = 'rgba(255,214,0,0.88)';
 const SOFT = 'rgba(80,140,255,0.32)';
+const ATK = 'rgba(40,185,95,0.92)';
 
 interface BeatInit {
   id: string;

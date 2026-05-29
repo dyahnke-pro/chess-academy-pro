@@ -385,6 +385,18 @@ export const PRO_NAR_JOBAVA_LESSON: LessonScript = {
       say: "…Nc6 hits our queen, we slide to d3 — the queen lands on a beautiful diagonal aiming at h7. From here e4 opens lines, the Bf4 holds the dark squares, and the whole kingside is loaded for one tempo we don't have to wait long for. Every Jobava game funnels into this exact position eventually.",
       sayShort: 'Qd3 — diagonal to h7, attack queued.',
     }),
+    b({
+      id: 'develop', moves: 'd4 d5 Nc3 Nf6 Bf4 c5 Nf3 cxd4 Qxd4 Nc6 Qd3 e6 e3',
+      highlights: [{ square: 'e3', color: KEY }],
+      say: "...e6 e3 — Black develops the e-pawn supporting d5 and preparing ...Bd6 (the canonical Jobava bishop trade offer). We solidify with e3, keeping the structure flexible. KEY SQUARE: c7 (the Bf4 still aims here through any future trades).",
+      sayShort: 'e3 — solidify the centre.',
+    }),
+    b({
+      id: 'middlegame', moves: 'd4 d5 Nc3 Nf6 Bf4 c5 Nf3 cxd4 Qxd4 Nc6 Qd3 e6 e3 Bd6 Bxd6 Qxd6 O-O-O',
+      highlights: [{ square: 'c1', color: KEY }, { square: 'd6', color: SOFT }],
+      say: "...Bd6 Bxd6 ...Qxd6 O-O-O — Black offers the bishop trade, we accept giving Black the doubled-d-pawn vulnerability (well, actually they keep structural integrity here, but the trade is fine for us), then castle long. STRUCTURAL TARGET: the kingside attack via g4-g5 + h-pawn storm. PAWN BREAK: e4 in the centre, g4 on the wing. The Jobava middlegame is on.",
+      sayShort: 'O-O-O — kingside attack on.',
+    }),
   ],
 };
 

@@ -749,6 +749,46 @@ Edit `src/data/pro-repertoires.json`. The entry needs:
 
 ### STEP 9 — Author middlegame plans
 
+🚨 **THE STRUCTURAL TEACHING RULE (David 2026-05-29, locked).** Every
+middlegame plan MUST teach one or more of these STRUCTURAL ideas, not
+just walk moves:
+
+1. **Key squares** — outpost squares (typically protected from pawn
+   attack), critical squares for piece infiltration, weak squares
+   the opponent can't defend, transit squares for piece reroutes.
+   The narration must NAME the square and EXPLAIN why it matters.
+
+2. **Pawn breaks** — the specific pawn pushes that open or transform
+   the structure (e.g. ...c5 in the French, e4 in the KIA, f5 in the
+   KID Mar del Plata, b4 in the Maroczy Bind). The plan must name
+   the break + the position it creates.
+
+3. **Center vs wing attack** — the plan must declare which side it's
+   attacking on AND why (e.g. "kingside attack with Nh4+f5 because
+   White's queen-side castled" / "queenside expansion with a4+b4
+   because Black's pieces are tied to the kingside defence").
+
+4. **Pawn structure transformation** — IQP creation/exchange, doubled
+   pawns and their consequences, passed-pawn creation, pawn-chain
+   undermining. The plan should name the structural target.
+
+5. **Piece coordination patterns** — the specific reroute or
+   coordination chain (e.g. Nbd2-Nf1-Ng3-Nh5 KIA Italian reroute,
+   Nb1-Nd2-Nf1-Ne3 Ruy Lopez Spanish reroute, Bg7+Re8+Nf4 KID
+   Mar del Plata attack stack).
+
+**A plan that walks 4-6 moves without naming any of these is NOT
+a middlegame plan — it's just a sequence walk.** Reject and rewrite.
+The minimum check: read the plan's `pawnBreaks`, `pieceManeuvers`,
+and `strategicThemes` arrays. If they're empty or generic
+("development", "central control"), the plan is shallow. Each entry
+should name a SPECIFIC SQUARE or BREAK or PIECE ROUTE.
+
+**Diagnostic:** ask "could a student listen to this plan's narration
+and learn a structural idea they could apply in another opening?"
+If yes, the plan teaches. If the student only learned "Black plays
+this move, then White plays that move" — the plan doesn't teach.
+
 **Reference pattern (the CORRECT one — David 2026-05-28 locked after
 the prod audit caught the wrong pattern):**
 `scripts/pro-repertoire/rebuild-alapin-plans-hand-authored.mjs`

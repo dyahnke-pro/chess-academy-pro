@@ -505,6 +505,20 @@ const FANTASY: LessonScript = {
         "Endgame note: his Fantasy games rarely reach a quiet endgame. The 75% score comes from middlegame conversions — sharp tactics around f2, exchange sacrifices on the f-file, or simply better-coordinated pieces leading to direct mating attacks. The 'endgame' for the Fantasy is the post-mate handshake.",
       sayShort: 'Endgame: most games end mid-board.',
     }),
+    b({
+      id: 'fan-castle',
+      moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 e5 d5 Bc5 Nf3 Nf6 Nc3 O-O Bg5',
+      highlights: [{ square: 'c3', color: SOFT }, { square: 'g5', color: ATK }],
+      say: "Nc3 ...O-O Bg5 — White develops the queen knight, Black castles into the kingside attack zone, we pin the f6-knight. The structural plan from here: central control on the d5-e5 squares + kingside attack via Bg5 + Qd2 + O-O-O. KEY SQUARE: f6 (where the pin lands and tactical pressure converges).",
+      sayShort: 'Bg5 — pin + kingside attack queued.',
+    }),
+    b({
+      id: 'fan-middlegame',
+      moves: 'e4 c6 d4 d5 f3 dxe4 fxe4 e5 d5 Bc5 Nf3 Nf6 Nc3 O-O Bg5 h6 Bxf6 Qxf6',
+      highlights: [{ square: 'f6', color: KEY }],
+      say: "...h6 Bxf6 ...Qxf6 — Black asks the bishop, we trade (giving up the bishop pair but wrecking Black's pawn structure — Qxf6 vs gxf6, both bad). The middlegame is now defined: White's bishop pair (well, single bishop) vs the doubled pawns, opposite-side castling race. CONVERSION PLAN: Qd2 + O-O-O + g4-g5 kingside storm.",
+      sayShort: 'Bxf6 — convert via structural target.',
+    }),
   ],
 };
 
@@ -706,6 +720,20 @@ const ADVANCE_BF5: LessonScript = {
       highlights: [{ square: 'e3', color: SOFT }],
       say: "Be3 — White's dark-square bishop develops, supports d4. The position is balanced: White has space, Black has development AND the bishop pair potential.",
       sayShort: 'Be3 — balanced development.',
+    }),
+    b({
+      id: 'adv-bf5-nc6',
+      moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Nc6 O-O',
+      highlights: [{ square: 'g1', color: KEY }, { square: 'c6', color: SOFT }],
+      say: "...Nc6 O-O — Black develops the queen knight, we castle. Both sides committing to the classical structure. KEY SQUARE: d4 (under pressure from ...c5, ...Nc6, ...cxd4 in some lines). The pawn-break tension is now defined.",
+      sayShort: 'O-O — central tension set.',
+    }),
+    b({
+      id: 'adv-bf5-middlegame',
+      moves: 'e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Nc6 O-O Nge7 Nbd2 cxd4 Nxd4',
+      highlights: [{ square: 'd4', color: KEY }],
+      say: "...Nge7 Nbd2 ...cxd4 Nxd4 — both sides finish development, the central trade opens lines. The middlegame structure: White's e5-pawn cramps Black, Black's d5 supported by e6+c6 = closed-French-like position. PAWN BREAKS: White plays c4 (queenside expansion); Black plays ...f6 (undermining e5). The structural fight is set.",
+      sayShort: 'Nxd4 — middlegame defined.',
     }),
   ],
 };
