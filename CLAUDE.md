@@ -90,6 +90,21 @@ egress allowlists may vary — `curl` test first and fall back to a
 local dev server (`npm run dev` on :5173) only if prod is genuinely
 blocked in that container.
 
+**🔒 YOU CAN REACH `main`/PROD FOR A TRUE PLAYWRIGHT AUDIT — DON'T
+SETTLE FOR LOCALHOST WHEN PROD IS LIVE (David 2026-05-29, locked).**
+After landing on `main`, run the 3-instrument Playwright audit against
+the LIVE prod URL (`AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app
+AUDIT_SANDBOX=1 node scripts/audit-<surface>.mjs`) — that is the
+deploy-pipeline-verifying audit, not just a code check. A localhost
+run validates the CODE but NOT the deploy (wrong bundle aliased, env
+scoped wrong, CDN serving stale). So: ALWAYS verify the prod bundle
+hash advanced past your push first (`curl -s https://chess-academy-pro.vercel.app/?cb=$(date +%s) | grep -oE '/assets/index-[A-Za-z0-9]+\.js'`
+with a cache-buster), THEN run the audit against prod. localhost is the
+FALLBACK for when prod is genuinely unreachable/stale (e.g. the Vercel
+100-build/day cap is blocking the deploy) — say so explicitly and
+re-run against prod once it's live. Don't claim a surface shipped on
+prod evidence you only gathered from localhost.
+
 The pattern (battle-tested 2026-05-16 + 2026-05-28):
 
 1. **Browser binary is pre-installed** at

@@ -44,6 +44,7 @@ import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { parseCoachIntent } from '../../services/coachAgent';
 import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
 import { MiddlegamePlanInline } from './MiddlegamePlanInline';
+import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
 import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
@@ -263,6 +264,40 @@ function buildDeepDiveQuery(
   return `${parentName}, ${fallbackLabel}`;
 }
 
+/**
+ * Build a minimal OpeningRecord so OpeningPlayMode can play out a
+ * middlegame-plan position in-page. OpeningPlayMode derives the
+ * student's color from the FEN side-to-move and (with no customLine)
+ * plays adaptive Stockfish from `startFen`, so most fields are stubs.
+ */
+function syntheticOpeningFromSession(session: WalkthroughSession): OpeningRecord {
+  const fen = session.startFen ?? STARTING_FEN;
+  const color: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
+  return {
+    id: `play-out-${session.kind ?? 'plan'}`,
+    eco: '',
+    name: session.title,
+    pgn: session.steps.map((s) => s.san).join(' '),
+    uci: '',
+    fen,
+    color,
+    style: '',
+    isRepertoire: false,
+    overview: null,
+    keyIdeas: null,
+    traps: null,
+    warnings: null,
+    variations: null,
+    drillAccuracy: 0,
+    drillAttempts: 0,
+    lastStudied: null,
+    woodpeckerReps: 0,
+    woodpeckerSpeed: null,
+    woodpeckerLastDate: null,
+    isFavorite: false,
+  };
+}
+
 export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
   // Quick Tour mode: ?mode=tour in the URL flips lessons into a
@@ -304,6 +339,23 @@ export function CoachTeachPage(): JSX.Element {
       category: 'subsystem',
       source: 'CoachTeachPage.startMiddlegamePlan',
       summary: `in-page middlegame plan started: ${plan.id} (${plan.openingId})`,
+    });
+  }, []);
+
+  // "Play it out" — at the end of an in-page plan the student can play
+  // the position out against the coach WITHOUT leaving this tab (David
+  // 2026-05-29). We mount OpeningPlayMode (its own board + Stockfish,
+  // color derived from the FEN side-to-move) from the plan's starting
+  // position. `playOutSession` holds the session whose startFen we play.
+  const [playOutSession, setPlayOutSession] = useState<WalkthroughSession | null>(null);
+  const handlePlayOutPlan = useCallback((session: WalkthroughSession): void => {
+    setMiddlegameSession(null);
+    setPlayOutSession(session);
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachTeachPage.handlePlayOutPlan',
+      summary: `in-page play-out started from plan position ("${session.title}")`,
     });
   }, []);
 
@@ -1062,7 +1114,16 @@ export function CoachTeachPage(): JSX.Element {
         const intent = parseCoachIntent(text);
         if (intent.kind === 'continue-middlegame') {
           const contextOpening = walkthrough.tree?.openingName ?? null;
-          const subject = intent.subject ?? contextOpening ?? undefined;
+          // The opening the student NAMED (explicit subject) or is
+          // sitting in (walkthrough context). Used for clean messaging.
+          const namedSubject = intent.subject ?? contextOpening ?? null;
+          // What we actually resolve plans against: the named opening if
+          // we have one, else the raw ask — findPlansForOpening matches
+          // on DISTINCTIVE tokens only, so it pulls "caro kann" out of a
+          // bare "midgame plans caro kann" and returns nothing for an
+          // opening we don't cover (no fuzzy-matched wrong opening).
+          const probe = namedSubject ?? trimmedText;
+          const subject = namedSubject;
           const mgTurnId = `t-${Date.now()}-middlegame-intent`;
           setMessages((prev) => [...prev, {
             id: `${mgTurnId}-u`,
@@ -1078,10 +1139,10 @@ export function CoachTeachPage(): JSX.Element {
             trigger: null,
           });
 
-          const plans = subject ? findPlansForOpening(subject) : [];
-          if (subject && plans.length > 0) {
+          const plans = findPlansForOpening(probe);
+          if (plans.length > 0) {
             const side: 'white' | 'black' =
-              walkthrough.tree?.studentSide ?? inferStudentSide(subject);
+              walkthrough.tree?.studentSide ?? inferStudentSide(subject ?? probe);
             void logAppAudit({
               kind: 'coach-surface-migrated',
               category: 'subsystem',
@@ -1097,7 +1158,8 @@ export function CoachTeachPage(): JSX.Element {
               // Multiple plans for this opening — let the student pick
               // which variation's plan to walk (the Pirc has 8). A short
               // coach line + picker chips rendered below the board.
-              const prose = `The ${subject} has ${plans.length} middlegame plans. Pick one to walk through:`;
+              const label = subject ?? plans[0].openingId.replace(/-/g, ' ');
+              const prose = `The ${label} has ${plans.length} middlegame plans. Pick one to walk through:`;
               setMessages((prev) => [...prev, {
                 id: `${mgTurnId}-c`,
                 role: 'assistant',
@@ -2723,7 +2785,21 @@ export function CoachTeachPage(): JSX.Element {
         <MiddlegamePlanInline
           session={middlegameSession}
           onExit={() => setMiddlegameSession(null)}
+          onPlayOut={handlePlayOutPlan}
         />
+      )}
+      {/* In-page play-out (David 2026-05-29): after a plan, the student
+          can play the position out against the coach from its starting
+          position WITHOUT leaving this tab. OpeningPlayMode owns its own
+          board + adaptive Stockfish; "Back" returns to the lesson. */}
+      {playOutSession && (
+        <div className="absolute inset-0 z-40 bg-theme-bg overflow-y-auto" data-testid="coach-teach-playout">
+          <OpeningPlayMode
+            opening={syntheticOpeningFromSession(playOutSession)}
+            startFen={playOutSession.startFen}
+            onExit={() => setPlayOutSession(null)}
+          />
+        </div>
       )}
       {/* Plan picker — shown when the opening carries more than one
           authored plan (the Pirc has 8). Tap a chip to start that

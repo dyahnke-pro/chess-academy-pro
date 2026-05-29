@@ -225,8 +225,11 @@ export function parseCoachIntent(query: string): CoachIntent {
   //    so downstream resolution can find a matching DB plan instead of
   //    falling back to a generic Stockfish line.
   if (
-    /(middle\s*game|middlegame)/.test(lower) &&
-    /(run|walk|show|teach|plan|continue|through|explain)/.test(lower)
+    // Accept "middlegame", "middle game", "midgame", "mid game" — the
+    // 2026-05-29 audit caught "midgame plans caro kann" missing the
+    // gate entirely and falling through to the opening-name matcher.
+    /(middle\s*game|mid\s*game)/.test(lower) &&
+    /(run|walk|show|teach|plan|continue|through|explain|learn|want)/.test(lower)
   ) {
     const subjectMatch =
       lower.match(/middle\s*game\b[^.?!]*?\b(?:for|of|in|from)\s+(?:the\s+)?([a-z][a-z\s'-]+)/) ||

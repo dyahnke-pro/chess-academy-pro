@@ -26,11 +26,16 @@ interface MiddlegamePlanInlineProps {
   session: WalkthroughSession;
   /** Close the plan and return to the lesson board. */
   onExit: () => void;
+  /** Student tapped "Yes, play it out" at the end of the plan — hand
+   *  the session up so the parent can mount in-page play mode from the
+   *  plan's starting position (David 2026-05-29). */
+  onPlayOut?: (session: WalkthroughSession) => void;
 }
 
 export function MiddlegamePlanInline({
   session,
   onExit,
+  onPlayOut,
 }: MiddlegamePlanInlineProps): JSX.Element {
   const runner = useWalkthroughRunner(session);
   const step = runner.currentStep;
@@ -99,6 +104,36 @@ export function MiddlegamePlanInline({
           <p className="text-sm text-theme-text leading-snug w-full">
             {step.narration}
           </p>
+        )}
+
+        {/* End of the plan — offer to play the position out against the
+            coach, IN this tab (David 2026-05-29). Pickers for the
+            answer; no navigation. */}
+        {runner.isFinished && onPlayOut && (
+          <div
+            className="w-full rounded-2xl border-2 border-cyan-500/30 bg-cyan-500/10 p-4 flex flex-col gap-3"
+            data-testid="middlegame-plan-playout-prompt"
+          >
+            <p className="text-sm font-semibold text-theme-text">
+              Want to play this position out against me?
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <button
+                onClick={() => onPlayOut(session)}
+                className="flex-1 py-3 rounded-xl border-2 border-cyan-500/40 bg-cyan-500/20 text-cyan-100 font-semibold min-h-[44px]"
+                data-testid="middlegame-plan-playout-yes"
+              >
+                Yes, play it out
+              </button>
+              <button
+                onClick={onExit}
+                className="flex-1 py-3 rounded-xl border-2 border-theme-border bg-theme-surface text-theme-text min-h-[44px]"
+                data-testid="middlegame-plan-playout-no"
+              >
+                Back to lesson
+              </button>
+            </div>
+          </div>
         )}
 
         <div className="flex items-center justify-center gap-3 pt-1">

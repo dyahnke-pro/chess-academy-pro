@@ -56,19 +56,47 @@ export function findPlanForOpening(openingId: string): MiddlegamePlan | null {
 }
 
 /**
- * Resolve a free-text subject (bare token like "pirc", or a full
- * walkthrough name like "Pirc Defense: Austrian Attack") to the SET of
- * authored plans for that opening. Used by the Learn-with-Coach in-page
- * middlegame-plan surface to show a picker when an opening carries more
- * than one plan (the Pirc has 8: Austrian, 150, Classical, Czech, …).
- *
- * Strategy: pick a representative plan via the existing resolvers, take
- * its openingId, and return every plan sharing that openingId — sorted
- * so the best subject-match leads (so a query naming a variation shows
- * that variation first).
+ * Chess-generic NOISE words that must NOT drive subject→plan matching.
+ * The 2026-05-29 audit caught the old loose matcher resolving
+ * "Latvian Gambit" (no authored plan) to the ALBIN Countergambit purely
+ * on the shared word "gambit", and "Pirc" to a pro-specific tile — the
+ * SAME class of confident-wrong-answer bug as the original
+ * "Pirc"→"Pierce Defense" fuzzy garbage. Matching on these tokens is
+ * banned; only DISTINCTIVE opening-name tokens (pirc, caro, najdorf,
+ * latvian, …) count, so an opening's real identity is what resolves it.
+ */
+const PLAN_SUBJECT_NOISE = new Set<string>([
+  'middle', 'middlegame', 'midgame', 'game', 'games', 'plan', 'plans',
+  'opening', 'openings', 'defense', 'defence', 'attack', 'attacks',
+  'variation', 'variations', 'system', 'line', 'lines', 'main', 'gambit',
+  'countergambit', 'counter', 'the', 'and', 'for', 'with', 'teach', 'learn',
+  'show', 'walk', 'through', 'want', 'continue', 'explain', 'ideas', 'idea',
+  'strategy', 'plans?',
+]);
+
+/** Distinctive (non-noise, >2-char) tokens that identify an opening. */
+function distinctiveTokens(subject: string): string[] {
+  return subject
+    .toLowerCase()
+    .replace(/[^a-z0-9\s'-]/g, ' ')
+    .split(/\s+/)
+    .filter((t) => t.length > 2 && !PLAN_SUBJECT_NOISE.has(t));
+}
+
+/**
+ * Resolve a free-text subject (bare token like "pirc", a full
+ * walkthrough name like "Pirc Defense: Austrian Attack", or even a raw
+ * ask like "midgame plans caro kann") to the SET of authored plans for
+ * that opening — best subject-match first. Used by the Learn-with-Coach
+ * in-page middlegame-plan surface to show a picker when an opening
+ * carries more than one plan (the Pirc has 8: Austrian, 150, Classical,
+ * Czech, …). Empty array = no authored plan for that opening (the
+ * caller then says so honestly — never a fuzzy-matched wrong opening).
  */
 export function findPlansForOpening(subject: string): MiddlegamePlan[] {
-  const best = findPlanForOpening(subject) ?? findPlanBySubject(subject);
+  // Exact openingId wins outright.
+  const exact = PLANS.find((p) => p.openingId === subject.trim().toLowerCase());
+  const best = exact ?? findPlanBySubject(subject);
   if (!best) return [];
   const siblings = PLANS.filter((p) => p.openingId === best.openingId);
   // Lead with the best subject-match, keep the rest in source order.
@@ -76,15 +104,18 @@ export function findPlansForOpening(subject: string): MiddlegamePlan[] {
 }
 
 /**
- * Find a plan by matching a free-text subject (e.g. "italian" →
- * mp-italian-d4). Falls back to null if no match.
+ * Find a plan by matching a free-text subject on DISTINCTIVE opening
+ * tokens (chess noise words ignored — see PLAN_SUBJECT_NOISE). Returns
+ * null when no distinctive token matches, so a subject naming an
+ * opening we don't cover ("Latvian Gambit") resolves to NOTHING rather
+ * than a wrong opening. Ties prefer the canonical (non-`pro-`) opening
+ * so a bare "pirc" lands on the base masterclass plans, not a
+ * pro-specific tile — while "gothamchess pirc" still wins the pro one
+ * on the extra distinctive token.
  */
 export function findPlanBySubject(subject: string): MiddlegamePlan | null {
   if (!subject.trim()) return null;
-  const tokens = subject
-    .toLowerCase()
-    .split(/\s+/)
-    .filter((t) => t.length > 2);
+  const tokens = distinctiveTokens(subject);
   if (tokens.length === 0) return null;
 
   // A plan you can actually teach (has a usable playable line) beats a
@@ -92,16 +123,22 @@ export function findPlanBySubject(subject: string): MiddlegamePlan | null {
   // resolve to a plan that builds no session (e.g. the older pro-* tiles).
   const hasLine = (p: MiddlegamePlan): boolean =>
     (p.playableLines ?? []).some((l) => l.moves.length > 0 && l.annotations.length === l.moves.length);
+  const isPro = (p: MiddlegamePlan): boolean => p.openingId.startsWith('pro-');
 
-  let best: { plan: MiddlegamePlan; score: number; teachable: boolean } | null = null;
+  let best: { plan: MiddlegamePlan; score: number; teachable: boolean; pro: boolean } | null = null;
   for (const plan of PLANS) {
-    const blob = `${plan.openingId} ${plan.title} ${plan.overview}`.toLowerCase();
+    const blob = `${plan.openingId} ${plan.title} ${plan.overview ?? ''}`.toLowerCase();
     const score = tokens.reduce((s, t) => (blob.includes(t) ? s + 1 : s), 0);
     if (score === 0) continue;
     const teachable = hasLine(plan);
-    if (!best || score > best.score || (score === best.score && teachable && !best.teachable)) {
-      best = { plan, score, teachable };
-    }
+    const pro = isPro(plan);
+    const better =
+      !best ||
+      score > best.score ||
+      // Same score: prefer canonical (non-pro), then teachable.
+      (score === best.score && best.pro && !pro) ||
+      (score === best.score && best.pro === pro && teachable && !best.teachable);
+    if (better) best = { plan, score, teachable, pro };
   }
   return best?.plan ?? null;
 }
