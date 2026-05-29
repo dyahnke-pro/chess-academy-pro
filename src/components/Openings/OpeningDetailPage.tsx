@@ -91,6 +91,9 @@ import {
   getProNaroditskyRossolimoTrapPlayableLine,
 } from '../../data/lessons/proNaroditskyRossolimoTrapLessons';
 import {
+  getProNaroditskyNajdorfTrapPlayableLine,
+} from '../../data/lessons/proNaroditskyNajdorfTrapLessons';
+import {
   VIENNA_TRAP_LESSONS,
   getViennaTrapsForTab,
   getViennaTrapPlayableLine,
@@ -793,7 +796,9 @@ export function OpeningDetailPage(): JSX.Element {
               ? getProNaroditskyKIATrapPlayableLine(trap.name)
               : opening.id === 'pro-naroditsky-rossolimo'
                 ? getProNaroditskyRossolimoTrapPlayableLine(trap.name)
-                : null;
+                : opening.id === 'pro-naroditsky-najdorf'
+                  ? getProNaroditskyNajdorfTrapPlayableLine(trap.name)
+                  : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -827,7 +832,9 @@ export function OpeningDetailPage(): JSX.Element {
               ? getProNaroditskyKIATrapPlayableLine(warn.name)
               : opening.id === 'pro-naroditsky-rossolimo'
                 ? getProNaroditskyRossolimoTrapPlayableLine(warn.name)
-                : null;
+                : opening.id === 'pro-naroditsky-najdorf'
+                  ? getProNaroditskyNajdorfTrapPlayableLine(warn.name)
+                  : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -899,7 +906,9 @@ export function OpeningDetailPage(): JSX.Element {
               ? getProNaroditskyKIATrapPlayableLine(trap.name)
               : opening.id === 'pro-naroditsky-rossolimo'
                 ? getProNaroditskyRossolimoTrapPlayableLine(trap.name)
-                : null;
+                : opening.id === 'pro-naroditsky-najdorf'
+                  ? getProNaroditskyNajdorfTrapPlayableLine(trap.name)
+                  : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -933,7 +942,9 @@ export function OpeningDetailPage(): JSX.Element {
               ? getProNaroditskyKIATrapPlayableLine(warn.name)
               : opening.id === 'pro-naroditsky-rossolimo'
                 ? getProNaroditskyRossolimoTrapPlayableLine(warn.name)
-                : null;
+                : opening.id === 'pro-naroditsky-najdorf'
+                  ? getProNaroditskyNajdorfTrapPlayableLine(warn.name)
+                  : null;
     if (curated) {
       return (
         <PlayableLinePlayer

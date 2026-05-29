@@ -1070,6 +1070,33 @@
           ]
         }
       ],
+      "trapLines": [
+        {
+          "name": "Nc3 after ...e5 lets us trade with tempo",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 e5 Nc3 exd4 Qxd4 Nc6 Qd3 Nf6",
+          "explanation": "Mined from 18 games. After early ...e5 challenging the d4-knight, White's Nc3 (instead of Nb3 retreat) loses the d4-knight to exd4. Named 2700+ victim: Firouzja2003 (3139)."
+        },
+        {
+          "name": "Bxf6 trade in the English Attack race",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Be7 Qf3 Qc7 O-O-O Nbd7 g4 h6 Bxf6 Bxf6 h4 Nb6 g5 Bxd4",
+          "explanation": "Mined from 18 games. Deep in the English Attack race, White's premature Bxf6 trade gives up the dark-square bishop for nothing — Black recaptures with the bishop, maintains structure, and the race shifts. The Bxd4 trade wins material at the end."
+        },
+        {
+          "name": "...Ng4 trades for the dark-square bishop",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Be3 Ng4 Qd2 Nxe3",
+          "explanation": "Mined from 15 games. Early Be3 lets Black play ...Ng4 winning the dark-square bishop via Nxe3. Named 2700+ victim: AliceWells (3005)."
+        },
+        {
+          "name": "Bb5 in deep English Attack (queen-trade trap)",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be3 e5 Nb3 Be6 Qd2 Be7 O-O-O O-O f3 a5 Bb5 Na6 g4 Nc7 a4 Nxb5",
+          "explanation": "Mined from 9 games. Deep in the English Attack, White's Bb5 trying to harass the a-pawn loses to ...Na6-Nc7-Nxb5 winning the bishop. Named 2700+ victims: JamesG478 (2828), lucasmito (2846)."
+        },
+        {
+          "name": "Be3+Nd5 lets Black trade with ...Bxd5",
+          "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Nd5 Nbd7 Qd3 Bxd5",
+          "explanation": "Mined from 6 games. Classical Najdorf with early Be3 + Nd5 outpost lets ...Bxd5 trade for the bishop pair + damaged White structure. Named 2700+ victims: dropstoneDP (3015), sergoy (2986)."
+        }
+      ],
       "sources": [
         "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
       ]
