@@ -1309,6 +1309,26 @@
         "book:caro-kann",
         "https://www.chess.com/openings/Caro-Kann-Defense"
       ]
+    },
+    {
+      "fen": "rnbqkb1r/pp2pppp/2p2N2/8/3P4/8/PPP2PPP/R1BQKBNR b KQkq - 0 5",
+      "wrongMove": "exf6",
+      "correctMove": "gxf6",
+      "explanation": "After 5.Nxf6+ in the Classical Caro-Kann, the natural 5...exf6? gives Black doubled f-pawns AND a passive structure. The correct move is 5...gxf6 — counterintuitive but correct: opens the g-file for the rook AND maintains better pawn structure (f-pawns NOT doubled). The opening of the g-file becomes Black's main attacking asset.",
+      "shortNarration": "...gxf6 — open g-file",
+      "sources": [
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    },
+    {
+      "fen": "rn1qkbnr/pp3ppp/2p1p3/3pPb2/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+      "wrongMove": "Bd3",
+      "correctMove": "Be2",
+      "explanation": "After 4...e6 in the Advance Caro-Kann, the eager 5.Bd3? offers the bishop trade with Bxf5 — but the trade actually helps Black! Black recaptures with ...Bxd3 Qxd3 and Black's Bf5 (problem bishop) is exchanged for our active piece. The correct move is 5.Be2 keeping the bishop pair AND continuing classical development. Don't trade bishops voluntarily in this structure.",
+      "shortNarration": "Be2 — keep bishops on",
+      "sources": [
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
     }
   ],
   "pro-naroditsky-alapin": [
@@ -1354,6 +1374,16 @@
       "sources": [
         "https://www.chess.com/openings/Alapin-Sicilian-Defense"
       ]
+    },
+    {
+      "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+      "wrongMove": "Nf3",
+      "correctMove": "d4",
+      "explanation": "After 2...d6 in the Alapin, the over-cautious 3.Nf3? wastes the supported d4 push — Black has committed without ...Nf6 or ...d5, so White CAN play d4 immediately and reach the dream Alapin structure. The correct move is 3.d4! claiming the centre. After ...d6, the d4 push is justified (unlike after ...Nc6 where d4 is premature).",
+      "shortNarration": "d4 — claim centre after ...d6",
+      "sources": [
+        "https://www.chess.com/openings/Alapin-Sicilian-Defense"
+      ]
     }
   ],
   "pro-naroditsky-kid": [
@@ -1396,6 +1426,16 @@
       "sources": [
         "https://www.chess.com/openings/Kings-Indian-Defense"
       ]
+    },
+    {
+      "fen": "r1bq1rk1/1p2ppbp/p1np1np1/2p5/2PPP3/2N1BP2/PP1QN1PP/3RKB1R b K - 3 9",
+      "wrongMove": "cxd4",
+      "correctMove": "b5",
+      "explanation": "After 9.Rd1 in the Sämisch, the natural-looking 9...cxd4? simplifies prematurely — White recaptures with the knight and the trade-down sequence favours White's developed pieces. The correct move is 9...b5! continuing the Bronstein/Panno queenside push BEFORE simplifying. The b5 hits c4 and opens lines while Black still has full development tempo.",
+      "shortNarration": "...b5! — push, don't trade yet",
+      "sources": [
+        "https://www.chess.com/openings/Kings-Indian-Defense"
+      ]
     }
   ],
   "pro-naroditsky-kia": [
@@ -1425,6 +1465,26 @@
       "correctMove": "Nc6",
       "explanation": "After 7.e4 in the symmetric KIA, the over-aggressive 7...c5? weakens the d5-square AND gives White's Nbd2 the perfect outpost via Nc4. The correct move is 7...Nc6 developing classically and preparing ...Re8 + queenside expansion. The KIA symmetric structure rewards patience — Black's c-pawn should support, not race.",
       "shortNarration": "...Nc6 — develop, c-pawn supports",
+      "sources": [
+        "https://www.chess.com/openings/Kings-Indian-Attack"
+      ]
+    },
+    {
+      "fen": "r1bq1rk1/pp2bppp/2n1pn2/2p5/4P3/5NP1/PPPN1PBP/R1BQ1RK1 w - - 1 9",
+      "wrongMove": "Nc4",
+      "correctMove": "Re1",
+      "explanation": "After 8...O-O the over-eager 9.Nc4? puts the knight on a square where Black can kick it with ...b5 (gaining tempo) AND the knight on c4 doesn't have great follow-ups since Black hasn't committed any pieces yet. The correct move is 9.Re1 supporting e4 first, then deciding whether Nc4 or Nh4 is the right reroute based on Black's setup.",
+      "shortNarration": "Re1 — support e4 first",
+      "sources": [
+        "https://www.chess.com/openings/Kings-Indian-Attack"
+      ]
+    },
+    {
+      "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 0 7",
+      "wrongMove": "dxe5",
+      "correctMove": "Nc3",
+      "explanation": "After 6...e5 in the KIA vs Pirc, the careless 7.dxe5? trades the centre too early and hands Black the open e-file plus equality. The correct move is 7.Nc3 supporting the centre and keeping tension. The d4-pawn is fine where it is — let Black be the one to commit the exchange.",
+      "shortNarration": "Nc3 — keep tension",
       "sources": [
         "https://www.chess.com/openings/Kings-Indian-Attack"
       ]
@@ -1460,6 +1520,26 @@
       "sources": [
         "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
       ]
+    },
+    {
+      "fen": "rnbqkb1r/1p3ppp/p2ppn2/6B1/3NPP2/2N5/PPP3PP/R2QKB1R b KQkq - 0 7",
+      "wrongMove": "Nbd7",
+      "correctMove": "Be7",
+      "explanation": "After 7.f4 in the English Attack with Bg5, the natural 7...Nbd7? blocks the queen's d-file AND lets White play Bxf6 doubling Black's pawns without compensation. The correct move is 7...Be7 breaking the pin first AND completing kingside development. The Nbd7 reroute comes after the pin is broken.",
+      "shortNarration": "...Be7 — break the pin first",
+      "sources": [
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+      ]
+    },
+    {
+      "fen": "rnbqk2r/1p2bppp/p2p1n2/4p3/4P3/1NN1B3/PPP1BPPP/R2QK2R b KQkq - 3 8",
+      "wrongMove": "Ng4",
+      "correctMove": "O-O",
+      "explanation": "After 8.Be3 in the Classical, the tempting 8...Ng4? attacks the bishop but White just retreats Bg5 and Black has wasted tempi. The correct move is 8...O-O completing development first — the position is positional, not tactical, and knight excursions just lose tempo.",
+      "shortNarration": "...O-O — develop, not chase",
+      "sources": [
+        "https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation"
+      ]
     }
   ],
   "pro-naroditsky-rossolimo": [
@@ -1489,6 +1569,16 @@
       "correctMove": "Ngf6",
       "explanation": "After 4.O-O with the Nd7 blockade setup, the careless 4...a6? attacks the bishop too early — the bishop just retreats to Bd3 and we've wasted a tempo. The correct move is 4...Ngf6 completing development first; the bishop retreat will come naturally later (and the …a6 push can wait until it's actually useful, like preparing ...b5).",
       "shortNarration": "...Ngf6 — develop, then kick",
+      "sources": [
+        "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
+      ]
+    },
+    {
+      "fen": "r1bqk1nr/p2pppbp/2p3p1/2p5/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 6",
+      "wrongMove": "e5",
+      "correctMove": "Re1",
+      "explanation": "After 5.O-O in the Rossolimo vs ...g6, the tempting 5.e5? grabs space but Black answers ...Nh6-Nf5 reaching active piece play AND the e5-pawn is loose. The correct move is 5.Re1 supporting e4 AND preparing classical development. The space gain has to come slowly in the Rossolimo, not by force.",
+      "shortNarration": "Re1 — patient, not e5 push",
       "sources": [
         "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation"
       ]
@@ -1524,6 +1614,26 @@
       "sources": [
         "https://www.chess.com/openings/Alekhines-Defense"
       ]
+    },
+    {
+      "fen": "rn1qkb1r/pp2pppp/2p5/3nNb2/3P4/8/PPP1BPPP/RNBQ1RK1 b kq - 3 7",
+      "wrongMove": "Bg4",
+      "correctMove": "Nd7",
+      "explanation": "After 7.O-O the wrong-bishop development 7...Bg4? exposes the bishop to h3 ideas AND doesn't address Black's central setup. The correct move is 7...Nd7 challenging the centralised White knight on e5 AND preparing classical development. The Bf5 stays put.",
+      "shortNarration": "...Nd7 — challenge Ne5",
+      "sources": [
+        "https://www.chess.com/openings/Alekhines-Defense"
+      ]
+    },
+    {
+      "fen": "r1bq1rk1/ppp2ppp/2np1n2/1B2p3/1b2P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 7",
+      "wrongMove": "Bg5",
+      "correctMove": "Bxc6",
+      "explanation": "After 6...d6 in the Two Knights Alekhine, the natural-looking 7.Bg5? pins the f6-knight but Black just plays ...h6 and the position is unclear. The correct move is 7.Bxc6 trading immediately — the resulting Spanish-style pawn structure favours White's space advantage AND the bishop pair will compensate Black's doubled c-pawns insufficiently.",
+      "shortNarration": "Bxc6 — trade structurally",
+      "sources": [
+        "https://www.chess.com/openings/Alekhines-Defense"
+      ]
     }
   ],
   "pro-naroditsky-ruy-lopez": [
@@ -1544,6 +1654,39 @@
       "correctMove": "Be7",
       "explanation": "After 5.O-O, Black's 5...Nxe4? grabs the pawn but walks into the Open Ruy where White has the Tarrasch Trap and other tactics. Unless you've memorised 30 moves of Open Ruy theory, the safe move is 5...Be7 entering the Closed Spanish where Black has time to develop solidly before the centre opens.",
       "shortNarration": "...Be7 — Closed Spanish, safer",
+      "sources": [
+        "book:ruy-lopez",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n5/1B2p3/3Pn3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+      "wrongMove": "exd4",
+      "correctMove": "Nd6",
+      "explanation": "After 5.d4 in the Berlin Defense, the natural 5...exd4? loses material to 6.Re1 pinning the e4-knight (the Tarrasch Trap setup). The correct move is 5...Nd6 retreating the knight AND triggering the Berlin Endgame transition. The 5...exd4 grab is a classic Berlin trap — don't fall for it.",
+      "shortNarration": "...Nd6 — retreat, don't grab",
+      "sources": [
+        "book:ruy-lopez",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    },
+    {
+      "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BP2N2/PP1P1PPP/RNBQR1K1 w - - 1 9",
+      "wrongMove": "d4",
+      "correctMove": "h3",
+      "explanation": "After 8...O-O the immediate 9.d4? opens the position before White's setup is complete — Black answers ...exd4 cxd4 ...Bg4 with tactical pressure. The correct move is 9.h3 preventing ...Bg4 AND preparing the future d4 push at the right moment. Patience: the Ruy is a slow strangulation.",
+      "shortNarration": "h3 — patience first",
+      "sources": [
+        "book:ruy-lopez",
+        "https://www.chess.com/openings/Ruy-Lopez-Opening"
+      ]
+    },
+    {
+      "fen": "r2qk2r/1ppb1pbp/p1np1np1/4p3/B2PP3/2P2N2/PP1N1PPP/R1BQ1RK1 w kq - 4 9",
+      "wrongMove": "Re1",
+      "correctMove": "d5",
+      "explanation": "After 8...Nf6 in the Steinitz Defense Deferred, the developing 9.Re1 is fine but the active 9.d5! gains queenside space AND locks the centre favourably. The Re1 move is slow; d5 is the principled aggressive choice in this specific structure.",
+      "shortNarration": "d5 — aggressive space grab",
       "sources": [
         "book:ruy-lopez",
         "https://www.chess.com/openings/Ruy-Lopez-Opening"
@@ -1577,6 +1720,26 @@
       "correctMove": "Be7",
       "explanation": "After 6.Bd3, the immediate 6...Bxd3? simplifies prematurely — Black trades his most active piece (the Bf5) for White's developing bishop, AND White's Qxd3 lands centrally with a kingside attack on h7. The correct move is 6...Be7 completing development first; the bishop trade can wait until Black is ready for the resulting position with proper king safety.",
       "shortNarration": "...Be7 — develop before trading",
+      "sources": [
+        "https://www.chess.com/openings/Jobava-London-System"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/1p2pppp/p1n2n2/2pp4/3P1B2/2NBPN2/PPP2PPP/R2QK2R b KQkq - 1 6",
+      "wrongMove": "cxd4",
+      "correctMove": "h6",
+      "explanation": "After 6.Bd3 the over-eager 6...cxd4? opens the position too early — White recaptures with the knight (Nxd4) and develops with a clear tempo edge. The correct move is 6...h6 preventing future Bg5 pins AND preparing ...Bd6 development. Patience in the Jobava; Black has to develop before opening lines.",
+      "shortNarration": "...h6 — prep, don't trade yet",
+      "sources": [
+        "https://www.chess.com/openings/Jobava-London-System"
+      ]
+    },
+    {
+      "fen": "rn1qkb1r/pp2pppp/2p2n2/3p1b2/3P1B2/2N1PN2/PPP2PPP/R2QKB1R b KQkq - 2 5",
+      "wrongMove": "Qb6",
+      "correctMove": "e6",
+      "explanation": "After 5.Nf3 the over-active 5...Qb6? attacks b2 but White just plays Qb1 (or Nd2 defending) and Black's queen is exposed AND undeveloped. The correct move is 5...e6 completing classical development first. The queen excursions come later, after pieces are out.",
+      "shortNarration": "...e6 — develop, not raid",
       "sources": [
         "https://www.chess.com/openings/Jobava-London-System"
       ]
