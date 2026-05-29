@@ -1613,4 +1613,145 @@ When the build is "done" per the file-manifest checklist:
 
 ---
 
-**End of doctrine. The Alapin build IS the proof this works.**
+## §9. LOCKED GATES + RULES (David 2026-05-29)
+
+Additions to the gate roster + procedural rules, locked after errors
+hit during the 2026-05-29 Naroditsky completion session:
+
+### §9.1 Orphan-Lesson Gate (NEW — `orphanLessons.test.ts`)
+
+Catches name mismatches between `VARIATION_LESSONS` keys and
+`pro-repertoires.json` variation names. Two directions enforced:
+
+1. **Lesson without JSON entry** — silent orphan, never reaches UI.
+2. **JSON variation without lesson** — falls through to legacy
+   `WalkthroughMode` (smaller board + eval bar) instead of the
+   consistent bigger-board `PlayableLinePlayer`.
+
+Real bug caught: Naroditsky Caro lessons keyed
+`'pro-naroditsky-caro-kann::Two Knights Variation (2.Nc3)'` while
+JSON declared `'Two Knights Variation (Nc3)'` (no move-number
+prefix). 5 silent orphans, every Naroditsky Caro variation tab
+showing the wrong board mode.
+
+Baseline of grandfathered orphans (Gothamchess partial build) only
+shrinks; new orphans blocked.
+
+### §9.2 Tab-Plan Resolver Coverage Gate (NEW — `proRepTabPlanCoverage.test.ts`)
+
+Catches the STEP 12.5 failure mode where plans are authored but no
+resolver is wired up — plans surface only on the main tab,
+variation tabs show "no plans" or the `emptyNote` fallback.
+
+Test walks every (openingId, variationName) pair and confirms a
+resolver returns array (even `[]`). `null` = no resolver
+registered = the bug.
+
+Same baseline shrinks-only contract.
+
+### §9.3 FEN Side-to-Move Coherence Gate (NEW — `middlegamePlanFenCoherence.test.ts`)
+
+Catches FEN typos where the side-to-move field disagrees with the
+color of `moves[0]`. Hit on the Caro Advance c5 endgame: typo'd
+`b` into a FEN where the playable line started with a White move.
+chess.js caught it as "illegal SAN," but the actual root cause
+(FEN's side field wrong) was opaque.
+
+Gate now diagnoses directly:
+*"Plan X line[0] :: FEN says 'b' (Black to move) but moves[0]='c4'
+is a White move. Flip the FEN's side-to-move field."*
+
+### §9.4 URL → PGN Build Rule (NEW PROCEDURAL — LOCKED)
+
+🚨 **Build scripts that take PGN as input MUST accept URLs only +
+re-extract the PGN from `data/sources/<player>-chesscom/*.jsonl`.
+Pasted PGN strings are BANNED.**
+
+Failure mode this rule prevents (2026-05-29): I wrote a
+`build-additional-model-games.mjs` that accepted PGN strings as
+input. The extraction script's console output truncated PGNs at
+200 chars; I copied them into the build script and lost the tails.
+All 8 model games failed chess.js validation. Cost ~10 min of
+debugging that the rule eliminates by enforcement.
+
+The pattern:
+
+```js
+// In build-<thing>.mjs:
+const GAMES = [
+  { id: '...', sourceUrl: 'https://www.chess.com/game/live/12345', ... },
+  // ...
+];
+// At build time, look up the PGN from the .jsonl files:
+const pgnByUrl = loadPgnsFromArchive(GAMES.map(g => g.sourceUrl));
+for (const g of GAMES) {
+  g.pgn = pgnByUrl[g.sourceUrl];
+  // then chess.js validate
+}
+```
+
+NEVER do this:
+```js
+const GAMES = [
+  { pgn: 'Nf3 d5 d4 e6 c4 Nf6 ...' },  // ← truncation / typo risk
+];
+```
+
+This is the build-script-level enforcement of §1b show-your-work.
+The data source is the archive; the script copies; the human
+never touches PGN strings.
+
+### §9.5 OpeningDetailPage Test waitFor Uniform Timeout (NEW PROCEDURAL)
+
+Every `waitFor` call in `OpeningDetailPage.test.tsx` MUST pass
+`{ timeout: 6000 }` explicitly (or higher). The page's
+`loadOpening` retries 10× with 400ms intervals = 4s before
+giving up on a cold-load seeding race. waitFor's 1s default
+exceeds the test budget when retries actually fire (e.g. the
+"Opening not found" test).
+
+When you add a NEW waitFor to that test file, copy the timeout
+hint from any existing one in the file. Don't fight the
+intentional retry behavior — extend the budget.
+
+### §9.6 Audit Walks the Surface for Congruency (NEW — David 2026-05-29)
+
+🚨 **Playwright audits MUST walk the openings (not just spot-check
+Caro) AND assert congruency on every variation tab visited:**
+
+1. **Right pieces** — the rendered board state matches what the
+   narration claims is on the board. If a beat says "the knight
+   attacks the queen," there's actually a knight, and there's
+   actually a queen on a square the knight attacks.
+
+2. **Right squares** — square highlights / arrows match the
+   narration's referenced squares. If the narration names "c4
+   pawn break," there's actually a c4-orange highlight (the
+   automatic move-target paint) AND the move is c4.
+
+3. **Right narrations** — TTS actually fired AND the text
+   captured matches the beat's authored `say` (not stale, not
+   substituted by a fallback).
+
+The narrationAccuracy + narrationFactCheck gates check the
+DATA. The audit checks the RENDERED RUNTIME — that the right
+narration reaches the right surface and lines up with what's
+visible.
+
+Per-opening audits (or a walk-all-openings audit) should:
+- Visit every Naroditsky opening's detail page
+- Click into each variation tab
+- Press Watch, capture the first 2-3 narration beats
+- Assert the captured text matches the beat's `say` substring
+- Verify the move played on the board matches the beat's
+  expected SAN sequence
+- Inspect highlights/arrows match the move's expected squares
+
+When you find a divergence, FIX it at the data layer (the
+beat's say, the move sequence, the highlight) — never paper
+over with audit changes.
+
+---
+
+**End of doctrine. The Alapin build + Naroditsky completion are
+the proofs this works.**

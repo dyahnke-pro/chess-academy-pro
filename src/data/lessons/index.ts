@@ -244,6 +244,13 @@ export function hasLessonScript(openingId: string | undefined | null): boolean {
   return getLessonScript(openingId) !== null;
 }
 
+/** All registered variation-lesson keys ('<openingId>::<variationName>').
+ *  Exported for the orphan-lesson gate test — DO NOT use for runtime
+ *  routing (prefer getVariationLessonScript). */
+export function getAllVariationLessonKeys(): string[] {
+  return Object.keys(VARIATION_LESSONS);
+}
+
 export function getVariationLessonScript(
   openingId: string | undefined | null,
   variationName: string | undefined | null,
