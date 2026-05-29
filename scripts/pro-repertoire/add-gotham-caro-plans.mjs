@@ -129,6 +129,27 @@ const PLANS = [
     ],
     cues: ['g6 — fianchetto', 'Bf4 — White develops', 'Bg7 — Modern wall', 'dxc5 — White grabs a pawn', 'Nxc5 — recapture active'],
   },
+  {
+    id: 'mp-progothamchess-caro-panov',
+    title: 'Caro Panov: the …g6 Fianchetto vs the Isolani',
+    overview:
+      "Against the Panov's c4 — which hands White an isolated d-pawn — his 74-game plan is the fianchetto defence. The bishop goes to g7 to stare down the long diagonal straight at d4, the isolani's blockading square, while the …Nb6-Na5 manoeuvre hunts down White's most active piece, the light-squared bishop on b3. Trade that bishop, blockade the isolani, keep the bishop pair — practically Black scores very well.",
+    pawnBreaks: ['…e6 chipping at the d5-isolani once blockaded'],
+    pieceManeuvers: ['…Nb6-a5xb3 eliminating White’s active bishop', '…Bg7 raking the long diagonal at d4', '…Nc6-a5 to the b3-trade'],
+    strategicThemes: ['Fianchetto to pressure the isolated d-pawn', 'Trade off White’s active light bishop', 'Keep the bishop pair against the isolani'],
+    endgameTransitions: ['The bishop pair vs the isolani tells in simplification'],
+    anchor: 'e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 g6 cxd5 Nxd5 Bc4 Nb6 Bb3 Bg7 Nf3 O-O O-O',
+    cont: ['Nc6', 'd5', 'Na5', 'Re1', 'Nxb3', 'axb3'],
+    ann: [
+      '…Nc6 develops the knight and adds a second attacker to the d4-pawn, the head of White’s isolated-pawn structure.',
+      'd5 pushes the isolani forward to gain space and challenge the c6-knight.',
+      '…Na5 begins the key manoeuvre — the knight heads for b3, hunting White’s most active piece, the light-squared bishop.',
+      'Re1 centralises.',
+      '…Nxb3 strikes: Black eliminates the strong b3-bishop, the one piece that gave White’s isolani-position its bite.',
+      'axb3 recaptures, and Black is left with the bishop pair against an isolated, blockaded d-pawn — exactly the structure he hunts in the Panov.',
+    ],
+    cues: ['Nc6 — pressure d4', 'd5 — isolani advances', 'Na5 — hunt the bishop', 'Re1 — White centralises', 'Nxb3 — trade the active bishop', 'axb3 — bishop pair vs isolani'],
+  },
   // ── Endgame plans (id …-endgame) ─────────────────────────────────────────
   {
     id: 'mp-progothamchess-caro-exchange-endgame',

@@ -33,9 +33,10 @@ const TAB_PLANS: Record<string, string[]> = {
     'mp-progothamchess-caro-exchange-fianchetto',
     'mp-progothamchess-caro-exchange-endgame',
   ],
-  // Panov: data shows a real R+minor+P endgame (30%) — endgame plan deferred,
-  // no fabricated middlegame plan (honest gap, build later from the cluster data).
-  'panov-botvinnik attack 3.exd5 cxd5 4.c4': [],
+  // Panov: the …g6 fianchetto plan hunting the isolani + the b3-bishop trade.
+  // Endgame plan deferred — no clean Gotham-win conversion anchor surfaced yet
+  // (empty > confusing, per doctrine).
+  'panov-botvinnik attack 3.exd5 cxd5 4.c4': ['mp-progothamchess-caro-panov'],
   'fantasy variation 3.f3': [
     'mp-progothamchess-caro-fantasy-bd6',
     'mp-progothamchess-caro-fantasy-endgame',

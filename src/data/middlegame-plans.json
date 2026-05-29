@@ -46705,5 +46705,111 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-progothamchess-caro-panov",
+    "openingId": "pro-gothamchess-caro-kann",
+    "criticalPositionFen": "rnbq1rk1/pp2ppbp/1n4p1/8/3P4/1BN2N2/PP3PPP/R1BQ1RK1 b - - 7 10",
+    "title": "Caro Panov: the …g6 Fianchetto vs the Isolani",
+    "overview": "Against the Panov's c4 — which hands White an isolated d-pawn — his 74-game plan is the fianchetto defence. The bishop goes to g7 to stare down the long diagonal straight at d4, the isolani's blockading square, while the …Nb6-Na5 manoeuvre hunts down White's most active piece, the light-squared bishop on b3. Trade that bishop, blockade the isolani, keep the bishop pair — practically Black scores very well.",
+    "pawnBreaks": [
+      "…e6 chipping at the d5-isolani once blockaded"
+    ],
+    "pieceManeuvers": [
+      "…Nb6-a5xb3 eliminating White’s active bishop",
+      "…Bg7 raking the long diagonal at d4",
+      "…Nc6-a5 to the b3-trade"
+    ],
+    "strategicThemes": [
+      "Fianchetto to pressure the isolated d-pawn",
+      "Trade off White’s active light bishop",
+      "Keep the bishop pair against the isolani"
+    ],
+    "endgameTransitions": [
+      "The bishop pair vs the isolani tells in simplification"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pp2ppbp/1n4p1/8/3P4/1BN2N2/PP3PPP/R1BQ1RK1 b - - 7 10",
+        "moves": [
+          "Nc6",
+          "d5",
+          "Na5",
+          "Re1",
+          "Nxb3",
+          "axb3"
+        ],
+        "annotations": [
+          "…Nc6 develops the knight and adds a second attacker to the d4-pawn, the head of White’s isolated-pawn structure.",
+          "d5 pushes the isolani forward to gain space and challenge the c6-knight.",
+          "…Na5 begins the key manoeuvre — the knight heads for b3, hunting White’s most active piece, the light-squared bishop.",
+          "Re1 centralises.",
+          "…Nxb3 strikes: Black eliminates the strong b3-bishop, the one piece that gave White’s isolani-position its bite.",
+          "axb3 recaptures, and Black is left with the bishop pair against an isolated, blockaded d-pawn — exactly the structure he hunts in the Panov."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nc6 — pressure d4",
+          "d5 — isolani advances",
+          "Na5 — hunt the bishop",
+          "Re1 — White centralises",
+          "Nxb3 — trade the active bishop",
+          "axb3 — bishop pair vs isolani"
+        ],
+        "title": "Caro Panov: the …g6 Fianchetto vs the Isolani",
+        "intro": "Against the Panov's c4 — which hands White an isolated d-pawn — his 74-game plan is the fianchetto defence. The bishop goes to g7 to stare down the long diagonal straight at d4, the isolani's blockading square, while the …Nb6-Na5 manoeuvre hunts down White's most active piece, the light-squared bishop on b3. Trade that bishop, blockade the isolani, keep the bishop pair — practically Black scores very well.",
+        "sources": [
+          "book:caro-kann",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://www.chess.com/member/gothamchess"
+        ]
+      }
+    ]
   }
 ]
