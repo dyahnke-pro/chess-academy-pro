@@ -1,135 +1,83 @@
-# PLAN — Strengthen the personal weakness engine (2026-05-27)
+# PLAN — GothamChess (Levy Rozman) pro-rep deep build (2026-05-29)
 
-> Prior black-openings masterclass plan archived →
-> `docs/plans/2026-05-25-black-opening-masterclasses.md`.
+> Prior plan archived → `docs/plans/2026-05-27-weakness-engine-plan.md`.
+> Procedure of record: `docs/plans/2026-05-28-pro-rep-deep-build-doctrine.md`
+> (read §0 vocabulary lock + §1 no-fabrication first). Reference build:
+> Naroditsky Alapin. **Quality bar name = G9.1 deep build** (never the M-word).
 
-David: stop touching openings (masterclass authoring is done + exhausting).
-Improve the PER-USER WEAKNESS engine instead — it reads signals we already
-collect; it does NOT require authoring any opening content.
+David's task: build out GothamChess's pro-rep. Existing 18 entries are a
+SHELL — `pro-repertoires.json` rows + trees + 16 model games + 18 plans, but
+NO `gothamchess-deep/`, NO `gothamchess-voice/`, NO variation `LessonScript`s,
+NO tab-plan routing. The voice/depth layer is the missing ~90%.
 
-## Framing — what we learned reading the WHOLE loop
+## Locked decisions (David, 2026-05-29)
+- **D1. Meme/speedrun lines FILTERED OUT.** No 1.b3 Larsen (1,977g), no
+  2.a3 anti-Sicilian (864g), no 1.Na3 (373g). Principled teaching lines only.
+- **D2. Modern Defense (1,066g) + Dutch Defense (814g) as Black ADDED** to scope
+  (not yet extracted — need OPENINGS-map entries + trees).
+- **D3. Build order = most-popular-on-down** (see ranked list).
+- **D4. Two-pass build** (doctrine STEP 6, locked 2026-05-29): Pass A ships
+  skeletons with `TODO` narration placeholders; Pass B is voice-only, grounded
+  in his actual teaching notes. **No narration authored in Pass A.**
+- **D5. Player id = `gothamchess`; chess.com username = `GothamChess`.**
+  Corpus on disk: 31,994 games / 109 months at `data/sources/gothamchess-chesscom/`.
 
-The collect→fuse→act→coach loop ALREADY EXISTS and works:
-- `weaknessSpine.ts:getUnifiedWeaknessProfile()` merges `mistakePuzzles` +
-  `misconceptionTags` into one ranked profile.
-- That profile feeds the Training Plan (`trainingPlanSelector.ts`, 60/20/20
-  weakness/SRS/new) AND the dashboard "Today's training" reps
-  (`DashboardPage.tsx:89-150`).
-- The LLM coach reads top weaknesses + skillRadar + badHabits EVERY turn
-  (`coachContextSnapshot.ts:105-134`).
+## Build order + variation blueprint (from his real game data)
+Each row: total games / score / the structurally-distinct variations ≥30g
+(build ALL that pass doctrine STEP 2 (a)-(d); count is never David's call).
 
-So the work is NOT "build a brain." It's: **plug the stranded/dead sensors
-into the brain, and add two missing sensors (conversion, time-trouble).**
+| # | Opening | Side | g | % | Variations to build |
+|---|---|---|---|---|---|
+| 1 | Caro-Kann | B | 1944 | 63 | Advance/h4 (spine), Two Knights+Réti (Nc3/Nf3 ~600g), Exchange (247g), Advance …c5 sub (124g) |
+| 2 | Trompowsky | W | 1823 | 62 | 2…Ne4 (425g), 2…d5 (398g), 2…g6 (239g), 2…c5 (224g), 2…e6 spine (112g) |
+| 3 | English | W | 1597 | 62 | 1…e5 (290g), 1…e6 (233g), 1…c5 (182g), 1…c6 (145g), 1…g6/KID (138g), 1…d5 (64g) |
+| 4 | French | B | 1596 | 63 | Rubinstein (spine+271g+133g), Advance (138g), Exchange (137g), …b6 (123g) |
+| 5 | Scandinavian | B | 1176 | 65 | Classical …Qxd5/…Qa5 (449g), Modern …Nf6 (spine), Bb5+/Nc3 sidelines |
+| 6 | Modern | B | 1066 | — | **NOT EXTRACTED** — add to OPENINGS map first |
+| 7 | Dutch | B | 814 | — | **NOT EXTRACTED** — add to OPENINGS map first |
+| 8 | Vienna | W | 649 | 68 | Vienna Gambit (spine f4), 2…Nc6 Bc4 quiet (243g), 2…Nc6 Bb5 (61g), 2…f5 (57g) |
+| 9 | KIA | W | 538 | 72 | setup-based (Nf6/c5/g6/e6) — shallow opening, MUST walk deep into MG (STEP 3.5) |
+| 10 | Caro-Advance (White) | W | 423 | 73 | 3…c5 (116g), 3…h6 (50g), Qxd4 (38g) |
+| 11 | Pirc | B | 351 | 69 | Austrian Attack (spine f4), Classical Nf3/Nc3 |
+| 12 | Closed Sicilian | W | 333 | 68 | …d6, …e6 mains |
+| 13 | London | W | 327 | 70 | setup branches (~3-4 tabs) |
+| 14 | QGD | B | 113 | 53 | thin + his only sub-60% line — 1 tab, low priority |
+| — | Rossolimo (102) / Fantasy Caro (95) / Ponziani (82) / Italian (75) | — | | marginal, buildable last |
 
-## Open findings (the real gaps)
+**DROP (fail ≥30-game threshold, doctrine STEP 1):**
+- `pro-gothamchess-stafford-refute` — 1 game.
+- `pro-gothamchess-milner-barry` — 14 games.
+Remove from `pro-repertoires.json` (reconciler G8 sweeps Dexie on revision bump).
 
-- **F1 — `openingWeakSpots` is DEAD.** `weakSpotService.ts:8-36` writes
-  `failCount` on every missed opening-drill move. Read fns exist
-  (`getTopWeakSpots`/`getStaleWeakSpots`, `:51-84`) but have ZERO callers.
-  Never re-drilled, rescheduled, or surfaced.
-- **F2 — fusion is partial.** Only `mistakePuzzles` + `misconceptionTags`
-  reach the unified profile. `classifiedTactics` only feeds the skillRadar
-  chart (no drill gating). `findSquareAttempts` (board-vision heatmap) has no
-  found consumer — likely dead.
-- **F3 — no conversion signal.** Per-move evals ARE persisted
-  (`MoveAnnotation.evaluation`, cp White-POV; `gameAnalysisService.ts:241-260`)
-  but nothing scans the trajectory for "was winning → let it slip."
-  `weaknessAnalyzer.ts:907` only INFERS conversion from endgame-puzzle accuracy.
-- **F4 — no time-trouble signal.** No clock data tied to mistakes. Imported
-  Lichess/Chess.com PGNs carry `[%clk]` tags; we don't mine them. Play-with-
-  Coach has no clock at all (David forgot to add it).
+## Per-opening procedure (every entry, in order)
+Follow the doctrine 16 steps. Per-opening checklist (Pass A):
+- [ ] STEP 1 — opening in `extract-opening-tree.mjs` OPENINGS (most already are; Modern+Dutch need adding)
+- [ ] STEP 2 — re-extract tree vs FRESH archive; identify all ≥30g distinct variations
+- [ ] STEP −1/3 — add gotham variation config to `deep-build-data.mjs` (studentUsername `GothamChess`, his spine), deep-build each variation
+- [ ] STEP 4 — wider-corpus plan + endgame counts (fork `*-alapin.mjs` templates; hundreds of games, NOT terminus)
+- [ ] STEP 5 — voice corpus URLs → `data/sources/gothamchess-voice/per-opening/<opening>.md` (Pass A gathers URLs; Pass B authors prose)
+- [ ] STEP 6/7 — lesson SHELLS (`proGothamChess<Opening>Variations.ts`) with `TODO` say/sayShort, real moves/arrows/highlights/sources; register in `lessons/index.ts`
+- [ ] STEP 8 — `pro-repertoires.json` entry (deep spine + all variations + traps + warnings)
+- [ ] STEP 9/10 — middlegame + endgame plans (hand-authored annotations, anchored AT/PAST terminus, themes match moves)
+- [ ] STEP 11 — common-mistakes (3-5 pitfalls)
+- [ ] STEP 1a — mine traps (`mine-gothamchess-<opening>-traps.mjs`); NEVER author
+- [ ] STEP 12 — 3-5 model games per variation, real WINS only, hand-authored overviews
+- [ ] STEP 12.5 — `proGothamChess<Opening>TabPlans.ts` + register in `OpeningDetailPage.tsx`
+- [ ] STEP 13 — `proRepertoireOpeningMap.json` if classical mapping exists
+- [ ] STEP 14 — bump `PRO_DATA_REVISION`
+- [ ] STEP 15 — ship-check green
+- [ ] STEP 16 — push + `audit-pro-gothamchess-<opening>-prod.mjs` (3-instrument)
 
-## STATUS (2026-05-27) — no-dead-ends + loop-closure DONE
+## Sequencing logic
+Most-popular-first (D3) means the highest-traffic surfaces get depth soonest,
+and the Caro (his #1, deep clean theory) sets the depth template the rest copy.
+Modern+Dutch slot at their volume rank (6,7) but need extraction wiring first.
+Batch the deploy per doctrine — push when a coherent chunk (one opening's Pass A)
+is ship-check green; don't deploy per-commit (Vercel 100/day cap).
 
-Every captured weakness sensor now feeds `getUnifiedWeaknessProfile` (which
-drives the Training Plan + Dashboard reps) AND routes back to a real drill:
-
-| Sensor | Was | Now | Loop |
-|--------|-----|-----|------|
-| openingWeakSpots | DEAD (write-only) | fused + routed to /openings/:id drill | CLOSED — `markWeakSpotDrilled` on a correct drill move spaces it out |
-| classifiedTactics | display-only (radar) | fused (merged into tactic clusters) → /tactics/adaptive | closes via tactic-puzzle drilling |
-| findSquareAttempts | read only by its own page | fused as board-vision weakness → /tactics/find-square | closes — drilling records attempts, weak-square set shrinks |
-| conversion (NEW) | not captured | detector + fused → surfaces as a rep | SURFACED (dedicated convert-drill deferred per "don't add yet") |
-| Play clock (NEW) | none | full clock + per-ply time capture persisted | seeds time-trouble (detector deferred) |
-
-Tests: chessClock (7), useChessClock (5), conversionDetector (10),
-weaknessSpine (+8 new), all green. typecheck 0, lint 0.
-
-DEFERRED (David's rule: close the loop before adding): conversion's own
-convert-this-position drill + close; time-trouble detector off the captured
-per-ply clock data. Both are NEW features, held until the existing loops are
-confirmed closed on-device.
-
-## NEXT BUILDS (2026-05-27, unblocked — loops closed + verified on prod)
-
-### Build A — Time-trouble detector  [status: DONE — detector+spine+route, 7 tests]
-Use the per-ply `clockRemainingMs` now persisted on clocked coach games.
-- `timeTroubleDetector.ts`: cross-reference `mistakePuzzles` (moveNumber +
-  playerColor → ply index) with the game's `clockRemainingMs[ply]`; a blunder
-  made at/under LOW_TIME_MS is a time-trouble hit. Pure + tested.
-- Fold into `getUnifiedWeaknessProfile` (it already loads games + mistakes) as
-  `analysis:timetrouble`, bucket general.
-- Route the rep to timed play (`/coach/play?time=blitz-5-0`) — practice under
-  the clock. Closes as the player stops blundering low on time.
-- Note: coach-game clock is opt-in, so data is sparse until played; imported-
-  game `[%clk]` extraction (analysis pipeline) is a follow-up bonus source.
-
-### Build B — Conversion drill + close  [status: DONE — drill route + addressed-close, tested]
-The conversion weakness surfaces but routes to the `/weaknesses` hub (soft).
-- Route the conversion rep to play out the blown winning position
-  (`/coach/play?fen=<peakFen>`) against the engine — "you were winning here,
-  convert it."
-- Persist addressed conversions (a `meta` key set of gameId/posKey) so a
-  converted position spaces out of the profile — the close.
-
-## Phased plan (each phase = one shippable chunk)
-
-### Phase 1 — Play-with-Coach time control  [status: DONE — wired + tested, not yet deployed]
-David's ask #1. Net-new feature.
-- Add a time-control picker to the Play-with-Coach start UI (e.g. Unlimited /
-  10+0 / 5+0 / 3+2 — confirm options against existing difficulty UI).
-- Tick a clock during the game; detect flag/timeout → game ends, recorded as
-  a loss-on-time.
-- Persist the chosen time control on the saved `games` record.
-- Capture per-move time spent (front half of F4 / Phase 4).
-- Add loading/empty/error states per standing orders. Tests.
-- Files: CoachPlayPage + `coachPlaySession.ts` + game-save path + profile pref
-  default. (Surface map pending — exploration was interrupted; redo it.)
-
-### Phase 2 — Conversion-failure detector  [status: pending]
-David's ask #2. Pure post-process on already-stored evals.
-- New detector: walk a fully-analyzed game's per-move evals from the player's
-  POV; flag when eval reached ≥ +X (winning) then fell to ≤ +Y with a
-  non-win result. Player color inferred per `mistakePuzzleService` logic.
-- WIRE INTO `weaknessSpine` so it drives the Training Plan + dashboard, not a
-  display-only tab. Decide the rep routing (which drill surface a conversion
-  weakness sends you to — likely endgame/technique).
-- Tests + thresholds tuned (avoid flagging dead-drawn or already-lost games).
-
-### Phase 3 — Resurrect `openingWeakSpots` (F1)  [status: pending]
-- Read `failCount` to reorder opening-drill positions and/or fold top weak
-  spots into the unified profile so they surface in the plan.
-- Decide: reorder within an opening drill, OR add as a rep type. (Respects
-  "don't touch openings" — this is drill SCHEDULING, not content authoring.)
-
-### Phase 4 — Fold stranded sensors + time-trouble (F2/F4)  [status: pending]
-- Bring `classifiedTactics` + `findSquareAttempts` into the unified profile.
-- Time-trouble detector from per-move time (Phase 1 for coach games; PGN
-  `[%clk]` mining for imported games) → unified profile.
-
-## Decisions log
-- 2026-05-27: Openings frozen — no masterclass/content authoring this effort.
-  All work is weakness-engine plumbing that consumes existing signals.
-- 2026-05-27: The "fusion brain" already exists (`weaknessSpine`); earlier
-  claim that "nothing fuses it" was wrong. Work = plug in stranded sensors +
-  add 2 new ones, not rebuild.
-
-## Sequencing / next-session pickup
-- Phase 1 first (David asked, self-contained, seeds the time signal).
-- Re-run the Play-with-Coach surface exploration (the agent call was
-  interrupted) before editing — need CoachPlayPage + session + save path
-  file:lines.
-- Push to `main` per Deployment Policy (override the web-session branch
-  default). Batch the deploy at chunk completion, not per commit.
-- ship-check + the relevant audit matrix (`audit-coach-play.mjs`,
-  `audit-weaknesses.mjs`) green before claiming done.
+## Next-session pickup
+- Pass A in progress, opening #1 = **Caro-Kann**.
+- Deep-build config for gotham not yet added (Naroditsky's is hardcoded to his
+  username + Advance-c5 spine; Gotham's spine is the h4 Advance — needs its own).
+- After Caro Pass A ships + audits, descend the table. Pass B (narration) is a
+  SEPARATE effort across all openings once skeletons are live.
