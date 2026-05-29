@@ -11,8 +11,11 @@ const SRC_DIR = 'data/sources/gothamchess-chesscom';
 const ME = 'gothamchess';
 
 // variation label → identifying SAN prefix (Black). Matches the tabs.
+// `excludeAt`: a SAN at a given ply index that DISQUALIFIES the game — the
+// Exchange prefix (exd5/cxd5) is a subset of Panov's (exd5/cxd5/c4), so a
+// Panov game would wrongly match Exchange; exclude White's c4 at ply 6.
 const VARIATIONS = [
-  { key: 'exchange', prefix: ['e4','c6','d4','d5','exd5','cxd5'] },
+  { key: 'exchange', prefix: ['e4','c6','d4','d5','exd5','cxd5'], excludeAt: { idx: 6, san: 'c4' } },
   { key: 'classical', prefix: ['e4','c6','d4','d5','Nc3','dxe4','Nxe4'] },
   { key: 'advance-bf5', prefix: ['e4','c6','d4','d5','e5','Bf5'] },
   { key: 'advance-c5', prefix: ['e4','c6','d4','d5','e5','c5'] },
@@ -48,7 +51,8 @@ for (const f of fs.readdirSync(SRC_DIR).filter((x) => x.endsWith('.jsonl'))) {
 
 const out = {};
 for (const v of VARIATIONS) {
-  const pool = blackWins.filter((g) => matches(g.m, v.prefix));
+  const pool = blackWins.filter((g) =>
+    matches(g.m, v.prefix) && !(v.excludeAt && g.m[v.excludeAt.idx] === v.excludeAt.san));
   // validate legality + dedupe by opponent, prefer highest-rated distinct opps
   const seen = new Set();
   const valid = [];
