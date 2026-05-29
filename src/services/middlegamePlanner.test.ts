@@ -30,6 +30,27 @@ describe('middlegamePlanner', () => {
     expect(findPlanBySubject('  ')).toBeNull();
   });
 
+  // Regression: CoachTeachPage's middlegame-plan intent route hands the
+  // session page a `subject` that is EITHER a bare opening token ("pirc")
+  // OR the full in-context walkthrough opening name ("Pirc Defense:
+  // Austrian Attack"). Both must resolve to an authored Pirc plan — the
+  // 2026-05-29 prod bug was that Learn-with-Coach claimed it couldn't
+  // teach Pirc middlegame plans while these very plans sat reachable here.
+  it('resolves the Pirc by bare token and by full walkthrough name', () => {
+    const byToken = findPlanForOpening('pirc') ?? findPlanBySubject('pirc');
+    expect(byToken).not.toBeNull();
+    expect(byToken?.openingId).toContain('pirc');
+
+    const byFullName =
+      findPlanForOpening('Pirc Defense: Austrian Attack') ??
+      findPlanBySubject('Pirc Defense: Austrian Attack');
+    expect(byFullName).not.toBeNull();
+    expect(byFullName?.openingId).toContain('pirc');
+    // The full Austrian name should bias to the Austrian plan, not a
+    // random Pirc tile.
+    expect(byFullName?.id).toContain('austrian');
+  });
+
   it('builds a WalkthroughSession with a non-starting fen and middlegame kind', () => {
     const plan = findPlanForOpening('italian-game');
     expect(plan).not.toBeNull();

@@ -41,6 +41,8 @@ import {
   type LinePickerOption,
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
+import { parseCoachIntent } from '../../services/coachAgent';
+import { findPlanForOpening, findPlanBySubject } from '../../services/middlegamePlanner';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
@@ -1014,6 +1016,90 @@ export function CoachTeachPage(): JSX.Element {
         }
         return;
       }
+
+      // ─── Middlegame-plan intent (BYPASS opening-name resolution) ───
+      // "middle game plans in the Pirc" / "I want to learn middle game
+      // plans" / "teach me the middle game plans" must resolve to the
+      // opening's AUTHORED middlegame plans — NOT get fuzzy-matched as
+      // an opening NAME. Production audit (build 6384475, 2026-05-29)
+      // caught all three of those asks falling through to the brain,
+      // where the lone token "Pirc" fuzzy-matched Evans Gambit's
+      // "Pierce Defense" (0.56) and surfaced it as a "did you mean…",
+      // while the Pirc's 7 real plans (mp-pircdefence-*) sat
+      // unreachable. parseCoachIntent already classifies this as
+      // continue-middlegame and pulls an optional subject; we resolve
+      // the subject (explicit, else the in-context walkthrough opening)
+      // and hand off to /coach/session/middlegame, which owns the plan
+      // runner (lead-the-eye arrows + voice-gated advance). This runs
+      // BEFORE the fuzzy matcher so the garbage match can't happen.
+      {
+        const intent = parseCoachIntent(text);
+        if (intent.kind === 'continue-middlegame') {
+          const contextOpening = walkthrough.tree?.openingName ?? null;
+          const subject = intent.subject ?? contextOpening ?? undefined;
+          const mgTurnId = `t-${Date.now()}-middlegame-intent`;
+          setMessages((prev) => [...prev, {
+            id: `${mgTurnId}-u`,
+            role: 'user',
+            content: text,
+            timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'user',
+            text,
+            fen: opts?.fenOverride ?? gameRef.current.fen,
+            trigger: null,
+          });
+
+          const plan = subject
+            ? (findPlanForOpening(subject) ?? findPlanBySubject(subject))
+            : null;
+          if (subject && plan) {
+            const side = walkthrough.tree?.studentSide ?? inferStudentSide(subject);
+            const params = new URLSearchParams();
+            params.set('subject', subject);
+            if (side === 'black') params.set('side', 'black');
+            void logAppAudit({
+              kind: 'coach-surface-migrated',
+              category: 'subsystem',
+              source: 'CoachTeachPage.handleSubmit.surfaceRouting',
+              summary: `middlegame-plan intent "${text.slice(0, 50)}" → /coach/session/middlegame?subject=${subject} (plan ${plan.id})`,
+            });
+            void navigate(`/coach/session/middlegame?${params.toString()}`);
+            return;
+          }
+
+          // No subject, or no authored plan for it — be honest. Do NOT
+          // fall through to the opening-name fuzzy matcher (which is
+          // exactly what surfaced the "Pierce Defense" garbage). Empty
+          // > generic > invented.
+          const prose = subject
+            ? `I don't have hand-authored middlegame plans for "${subject}" yet. I do for openings like the Pirc, Italian, Caro-Kann and Sicilian — name one (e.g. "middle game plans in the Pirc") and I'll walk you through them.`
+            : `Which opening's middlegame plans? Name it — e.g. "middle game plans in the Pirc" — and I'll walk you through them.`;
+          setMessages((prev) => [...prev, {
+            id: `${mgTurnId}-c`,
+            role: 'assistant',
+            content: prose,
+            timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach',
+            role: 'coach',
+            text: prose,
+            fen: opts?.fenOverride ?? gameRef.current.fen,
+            trigger: null,
+          });
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.surfaceRouting',
+            summary: `middlegame-plan intent "${text.slice(0, 50)}" — no authored plan for subject="${subject ?? '(none)'}", asked user to name an opening`,
+          });
+          return;
+        }
+      }
+
       // Two-pass routing.
       // Pass 1 (verb-prefix): "teach me X", "walk me through X", etc.
       // Pass 2 (bare-name): if input is short and resolveWalkthroughTree
