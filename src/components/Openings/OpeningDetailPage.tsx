@@ -97,6 +97,9 @@ import {
   getProNaroditskyAlekhineTrapPlayableLine,
 } from '../../data/lessons/proNaroditskyAlekhineTrapLessons';
 import {
+  getProNaroditskyJobavaTrapPlayableLine,
+} from '../../data/lessons/proNaroditskyJobavaTrapLessons';
+import {
   VIENNA_TRAP_LESSONS,
   getViennaTrapsForTab,
   getViennaTrapPlayableLine,
@@ -803,7 +806,9 @@ export function OpeningDetailPage(): JSX.Element {
                   ? getProNaroditskyNajdorfTrapPlayableLine(trap.name)
                   : opening.id === 'pro-naroditsky-alekhine'
                     ? getProNaroditskyAlekhineTrapPlayableLine(trap.name)
-                    : null;
+                    : opening.id === 'pro-naroditsky-jobava-london'
+                      ? getProNaroditskyJobavaTrapPlayableLine(trap.name)
+                      : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -841,7 +846,9 @@ export function OpeningDetailPage(): JSX.Element {
                   ? getProNaroditskyNajdorfTrapPlayableLine(warn.name)
                   : opening.id === 'pro-naroditsky-alekhine'
                     ? getProNaroditskyAlekhineTrapPlayableLine(warn.name)
-                    : null;
+                    : opening.id === 'pro-naroditsky-jobava-london'
+                      ? getProNaroditskyJobavaTrapPlayableLine(warn.name)
+                      : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -917,7 +924,9 @@ export function OpeningDetailPage(): JSX.Element {
                   ? getProNaroditskyNajdorfTrapPlayableLine(trap.name)
                   : opening.id === 'pro-naroditsky-alekhine'
                     ? getProNaroditskyAlekhineTrapPlayableLine(trap.name)
-                    : null;
+                    : opening.id === 'pro-naroditsky-jobava-london'
+                      ? getProNaroditskyJobavaTrapPlayableLine(trap.name)
+                      : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -955,7 +964,9 @@ export function OpeningDetailPage(): JSX.Element {
                   ? getProNaroditskyNajdorfTrapPlayableLine(warn.name)
                   : opening.id === 'pro-naroditsky-alekhine'
                     ? getProNaroditskyAlekhineTrapPlayableLine(warn.name)
-                    : null;
+                    : opening.id === 'pro-naroditsky-jobava-london'
+                      ? getProNaroditskyJobavaTrapPlayableLine(warn.name)
+                      : null;
     if (curated) {
       return (
         <PlayableLinePlayer

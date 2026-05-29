@@ -1508,6 +1508,33 @@
           ]
         }
       ],
+      "trapLines": [
+        {
+          "name": "Nf6 lets Nxf6+ wreck Black's kingside (Firouzja 3x!)",
+          "pgn": "d4 d5 Nc3 e6 e4 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 b6 g3",
+          "explanation": "Mined from 29 games — the biggest Jobava trap. After dxe4 Nxe4, Black's natural ...Nf6 leads to Nxf6+ gxf6 with doubled f-pawns + permanent kingside damage. Named 2700+ victim: Firouzja2003 THREE TIMES (3020, 3016, 2997)."
+        },
+        {
+          "name": "Nd7 lets us trade both knights favorably",
+          "pgn": "d4 d5 Nc3 e6 e4 dxe4 Nxe4 Nd7 Nf3 Ngf6 Nxf6+ Nxf6 g3",
+          "explanation": "Mined from 18 games. Slow ...Nd7 development lets us trade knights with the Nxf6+ option, then complete the fianchetto setup. Named 2700+ victims: penguingm1 (2908), hansen (2955), AverageRecord (2944)."
+        },
+        {
+          "name": "...e6 after Bf5 lets f3+g4 kingside storm",
+          "pgn": "d4 d5 Nc3 Nf6 Bf4 Bf5 e3 e6 f3 Bd6 Bxd6 Qxd6 g4",
+          "explanation": "Mined from 15 games. In the Slav-style Jobava, ...e6 commits the kingside structure; f3 + g4 + Bxd6 wins the kingside fight. Named 2700+ victim: wonderfultime (3221!)."
+        },
+        {
+          "name": "Bg5 + dxe4 + Bxf6 doubles Black's pawns",
+          "pgn": "d4 d5 Nc3 e6 e4 Nf6 Bg5 dxe4 Nxe4 Be7 Bxf6 gxf6 Nf3",
+          "explanation": "Mined from 14 games. With Bg5 pin + ...dxe4 grab, Nxe4 doubles up + Bxf6 wrecks Black's structure. Named 2700+ victims: Msb2 (3059), tptagain (2995)."
+        },
+        {
+          "name": "Bd6 voluntary trade hands us c-file pressure",
+          "pgn": "d4 d5 Nc3 e6 Bf4 Nf6 e3 Bd6 Bd3 O-O Nf3 c5 Bxd6",
+          "explanation": "Mined from 13 games. Classical Bf4 + ...Bd6 trade gives White doubled d-pawns target + half-open c-file. Named 2700+ victims: Firouzja2003 (3169), penguingm1 (3081), idontknowchess75 (3068)."
+        }
+      ],
       "sources": [
         "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
       ]
