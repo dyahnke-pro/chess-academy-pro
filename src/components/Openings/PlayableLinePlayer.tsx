@@ -4,7 +4,6 @@ import type { Square } from 'chess.js';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Play,
-  Pause,
   SkipForward,
   CheckCircle,
   XCircle,
@@ -12,6 +11,7 @@ import {
   ArrowLeft,
   Lightbulb,
 } from 'lucide-react';
+import { LessonScaffold } from './LessonScaffold';
 import { voiceService } from '../../services/voiceService';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { resolveCoachNarration } from '../../utils/coachNarration';
@@ -322,6 +322,20 @@ export function PlayableLinePlayer({
     setIsPlaying((prev) => !prev);
   }, []);
 
+  // Manual move stepping in the demo (Watch) phase — forward & back buttons so
+  // the student can walk the line at their own pace, not just auto-play (David
+  // 2026-05-29). Stepping pauses auto-play; the voice-gated effect re-narrates
+  // the move it lands on (it speaks on every index change, only the auto-
+  // advance is gated on isPlaying — so a manual step narrates without racing).
+  const stepDemo = useCallback((delta: number): void => {
+    setIsPlaying(false);
+    if (autoPlayTimerRef.current !== null) {
+      clearTimeout(autoPlayTimerRef.current);
+      autoPlayTimerRef.current = null;
+    }
+    setDemoMoveIndex((i) => Math.max(-1, Math.min(line.moves.length - 1, i + delta)));
+  }, [line.moves.length]);
+
   const skipToMemory = useCallback((): void => {
     voiceService.stop();
     if (autoPlayTimerRef.current !== null) {
@@ -566,10 +580,6 @@ export function PlayableLinePlayer({
     completedRef.current = false;
   }, []);
 
-  const memoryProgress = expectedMoves.length > 0
-    ? Math.round((memoryMoveIndex / expectedMoves.length) * 100)
-    : 0;
-
   // ─── Memory Complete Screen ──────────────────────────────────────────────
 
   if (memoryComplete) {
@@ -622,240 +632,163 @@ export function PlayableLinePlayer({
 
   if (phase === 'demo') {
     return (
-      <div className="flex flex-col flex-1 overflow-hidden" data-testid="line-player-demo">
-        {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onExit}
-              className="p-1.5 rounded-lg hover:bg-theme-surface"
-              data-testid="line-player-back"
-            >
-              <ArrowLeft size={16} className="text-theme-text" />
-            </button>
-            <div>
-              <p className="text-sm font-semibold text-theme-text">{line.title}</p>
-              <p className="text-xs text-theme-text-muted">Watch &amp; Learn</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={togglePlayPause}
-              className="p-2 rounded-lg bg-theme-surface hover:bg-theme-border transition-colors"
-              aria-label={isPlaying ? 'Pause' : 'Play'}
-              data-testid="demo-play-pause"
-            >
-              {isPlaying ? (
-                <Pause size={16} className="text-theme-text" />
-              ) : (
-                <Play size={16} className="text-theme-text" />
-              )}
-            </button>
-            <button
-              onClick={skipToMemory}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-accent text-white text-xs font-medium hover:opacity-90 transition-opacity"
-              data-testid="skip-to-memory"
-            >
-              <SkipForward size={14} />
-              Practice
-            </button>
-          </div>
-        </div>
-
-        {/* Progress indicator */}
-        <div className="px-4 pt-2">
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] text-theme-text-muted uppercase font-medium">
-              Move {Math.max(0, demoMoveIndex + 1)} / {line.moves.length}
-            </span>
-          </div>
-          <div className="w-full h-1.5 bg-theme-surface rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-theme-accent rounded-full"
-              animate={{ width: `${line.moves.length > 0 ? Math.round(((demoMoveIndex + 1) / line.moves.length) * 100) : 0}%` }}
-              transition={{ duration: 0.3 }}
-              data-testid="demo-progress"
-            />
-          </div>
-        </div>
-
-        {/* Board */}
-        <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
-          <div className="w-full md:max-w-[420px]">
-            <ConsistentChessboard
-              fen={demoFen}
-              boardOrientation={boardOrientation}
-              arrows={currentDemoArrows}
-              squareStyles={currentDemoHighlights}
-              animationDurationInMs={BOARD_DEMO_ANIMATION_MS}
-              enableMoveSound={false}
-            />
-          </div>
-        </div>
-
-        {/* Annotation text */}
-        <div className="px-4 pb-4 min-h-[60px]">
-          <AnimatePresence mode="wait">
-            {currentAnnotation && (
-              <motion.div
-                key={demoMoveIndex}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="rounded-2xl bg-theme-surface/90 border border-white/15 p-3"
-                data-testid="demo-annotation"
-              >
-                <p className="text-sm text-theme-text leading-relaxed">{currentAnnotation}</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
+      <LessonScaffold
+        testId="line-player-demo"
+        backTestId="line-player-back"
+        narrationTestId="demo-annotation"
+        title={line.title}
+        subtitle="Watch & Learn"
+        onExit={onExit}
+        headerAction={
+          <button
+            onClick={skipToMemory}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-accent text-white text-xs font-medium hover:opacity-90 transition-opacity"
+            data-testid="skip-to-memory"
+          >
+            <SkipForward size={14} />
+            Practice
+          </button>
+        }
+        progress={{ current: Math.max(0, demoMoveIndex + 1), total: line.moves.length }}
+        board={
+          <ConsistentChessboard
+            fen={demoFen}
+            boardOrientation={boardOrientation}
+            arrows={currentDemoArrows}
+            squareStyles={currentDemoHighlights}
+            animationDurationInMs={BOARD_DEMO_ANIMATION_MS}
+            enableMoveSound={false}
+          />
+        }
+        narration={currentAnnotation}
+        controls={{
+          onPrev: () => stepDemo(-1),
+          onTogglePlay: togglePlayPause,
+          onNext: () => stepDemo(1),
+          isPlaying,
+          canPrev: demoMoveIndex >= 0,
+          canNext: demoMoveIndex < line.moves.length - 1,
+          playTestId: 'demo-play-pause',
+        }}
+      />
     );
   }
 
   // ─── Memory Phase Render ─────────────────────────────────────────────────
 
   return (
-    <div className="flex flex-col flex-1 overflow-hidden" data-testid="line-player-memory">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-theme-border">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onExit}
-            className="p-1.5 rounded-lg hover:bg-theme-surface"
-            data-testid="line-player-back"
-          >
-            <ArrowLeft size={16} className="text-theme-text" />
-          </button>
-          <div>
-            <p className="text-sm font-semibold text-theme-text">{line.title}</p>
-            <p className="text-xs text-theme-text-muted">
-              {mode === 'learn'
-                ? 'Learn — listen, then play the move'
-                : mode === 'practice'
-                  ? 'Practice — play the line from memory'
-                  : 'Your Turn — Replay from Memory'}
-            </p>
-          </div>
-        </div>
-        {mode === 'watch' && (
-          <button
-            onClick={handleReplayDemo}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-surface hover:bg-theme-border text-theme-text-muted text-xs font-medium transition-colors"
-            data-testid="replay-demo"
-          >
-            <RotateCcw size={14} />
-            Watch Again
-          </button>
-        )}
-        {mode === 'practice' && !memoryComplete && (
-          <button
-            onClick={() => setShowHint(true)}
-            disabled={showHint || showCorrectFlash || showWrongFlash}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-surface hover:bg-theme-border text-theme-text-muted text-xs font-medium transition-colors disabled:opacity-40"
-            data-testid="practice-hint"
-          >
-            <Lightbulb size={14} />
-            Hint
-          </button>
-        )}
-      </div>
-
-      {/* Progress bar */}
-      <div className="px-4 pt-2">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-[10px] text-theme-text-muted uppercase font-medium">
-            Move {memoryMoveIndex} / {expectedMoves.length}
-          </span>
-        </div>
-        <div className="w-full h-1.5 bg-theme-surface rounded-full overflow-hidden">
-          <motion.div
-            className="h-full bg-green-500 rounded-full"
-            animate={{ width: `${memoryProgress}%` }}
-            transition={{ duration: 0.3 }}
-            data-testid="memory-progress"
-          />
-        </div>
-      </div>
-
-      {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-start pt-2 px-2 py-2">
-        <div className="w-full md:max-w-[420px]">
-          <ConsistentChessboard
-            fen={memoryFen}
-            boardOrientation={boardOrientation}
-            interactive={!showWrongFlash && !showCorrectFlash}
-            squareStyles={memorySquareStyles}
-            arrows={memoryHintArrows}
-            onPieceDrop={handlePieceDrop}
-            onSquareClick={handleSquareClick}
-            enableMoveSound={false}
-            className={shakeBoard ? 'animate-[boardFlashError_400ms]' : ''}
-            overlay={
-              <>
-                <AnimatePresence>
-                  {showCorrectFlash && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                      data-testid="correct-flash"
-                    >
-                      <div className="w-12 h-12 rounded-full bg-green-500/30 flex items-center justify-center">
-                        <CheckCircle size={28} className="text-green-500" />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-                <AnimatePresence>
-                  {showWrongFlash && (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                      data-testid="wrong-flash"
-                    >
-                      <div className="w-12 h-12 rounded-full bg-red-500/30 flex items-center justify-center">
-                        <XCircle size={28} className="text-red-500" />
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </>
-            }
-          />
-        </div>
-      </div>
-
-      {/* Bottom hint area */}
-      <div className="px-4 pb-4 min-h-[60px]">
-        {showWrongFlash && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl bg-red-500/10 border border-red-500/30 p-3"
-            data-testid="wrong-hint"
-          >
-            <p className="text-sm text-red-400 font-medium">
-              Not quite — try to remember the correct move.
-            </p>
-          </motion.div>
-        )}
-        {!showWrongFlash && !showCorrectFlash && memoryMoveIndex < expectedMoves.length && (
-          <div className="rounded-2xl bg-theme-surface/90 border border-white/15 p-3">
-            <p className="text-sm text-theme-text-muted">
-              {mode === 'learn'
-                ? `Listen, then play the highlighted move — ${memoryMoveIndex + 1} of ${expectedMoves.length}.`
-                : `Play move ${memoryMoveIndex + 1} of ${expectedMoves.length} from memory.`}
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
+    <LessonScaffold
+      testId="line-player-memory"
+      backTestId="line-player-back"
+      title={line.title}
+      subtitle={
+        mode === 'learn'
+          ? 'Learn — listen, then play the move'
+          : mode === 'practice'
+            ? 'Practice — play the line from memory'
+            : 'Your Turn — Replay from Memory'
+      }
+      onExit={onExit}
+      headerAction={
+        <>
+          {mode === 'watch' && (
+            <button
+              onClick={handleReplayDemo}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-surface hover:bg-theme-border text-theme-text-muted text-xs font-medium transition-colors"
+              data-testid="replay-demo"
+            >
+              <RotateCcw size={14} />
+              Watch Again
+            </button>
+          )}
+          {mode === 'practice' && !memoryComplete && (
+            <button
+              onClick={() => setShowHint(true)}
+              disabled={showHint || showCorrectFlash || showWrongFlash}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-theme-surface hover:bg-theme-border text-theme-text-muted text-xs font-medium transition-colors disabled:opacity-40"
+              data-testid="practice-hint"
+            >
+              <Lightbulb size={14} />
+              Hint
+            </button>
+          )}
+        </>
+      }
+      progress={{ current: memoryMoveIndex, total: expectedMoves.length, tone: 'green' }}
+      board={
+        <ConsistentChessboard
+          fen={memoryFen}
+          boardOrientation={boardOrientation}
+          interactive={!showWrongFlash && !showCorrectFlash}
+          squareStyles={memorySquareStyles}
+          arrows={memoryHintArrows}
+          onPieceDrop={handlePieceDrop}
+          onSquareClick={handleSquareClick}
+          enableMoveSound={false}
+          className={shakeBoard ? 'animate-[boardFlashError_400ms]' : ''}
+          overlay={
+            <>
+              <AnimatePresence>
+                {showCorrectFlash && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                    data-testid="correct-flash"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-green-500/30 flex items-center justify-center">
+                      <CheckCircle size={28} className="text-green-500" />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <AnimatePresence>
+                {showWrongFlash && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                    data-testid="wrong-flash"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-red-500/30 flex items-center justify-center">
+                      <XCircle size={28} className="text-red-500" />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </>
+          }
+        />
+      }
+      narrationRaw={
+        <>
+          {showWrongFlash && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-2xl bg-red-500/10 border border-red-500/30 p-3"
+              data-testid="wrong-hint"
+            >
+              <p className="text-sm text-red-400 font-medium">
+                Not quite — try to remember the correct move.
+              </p>
+            </motion.div>
+          )}
+          {!showWrongFlash && !showCorrectFlash && memoryMoveIndex < expectedMoves.length && (
+            <div className="rounded-2xl bg-theme-surface/90 border border-white/15 p-3">
+              <p className="text-sm text-theme-text-muted">
+                {mode === 'learn'
+                  ? `Listen, then play the highlighted move — ${memoryMoveIndex + 1} of ${expectedMoves.length}.`
+                  : `Play move ${memoryMoveIndex + 1} of ${expectedMoves.length} from memory.`}
+              </p>
+            </div>
+          )}
+        </>
+      }
+    />
   );
 }

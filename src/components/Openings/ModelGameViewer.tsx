@@ -5,18 +5,18 @@ import { BoardVoiceOverlay } from '../Board/BoardVoiceOverlay';
 import { voiceService } from '../../services/voiceService';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  ArrowLeft,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
   ChevronsRight,
-  PlayCircle,
-  PauseCircle,
+  Play,
+  Pause,
   Star,
   Compass,
   RotateCcw,
 } from 'lucide-react';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { LessonScaffold } from './LessonScaffold';
 import type { ModelGame, ModelGameCriticalMoment, AnnotationArrow } from '../../types';
 
 interface ModelGameViewerProps {
@@ -269,48 +269,94 @@ export function ModelGameViewer({
     return () => clearTimeout(timer);
   }, [isAutoPlaying, currentIndex, moves.length, isCriticalMove]);
 
-  const progressPercent = moves.length > 0
-    ? Math.round(((currentIndex + 1) / moves.length) * 100)
-    : 0;
-
   const moveLabel = currentMove
     ? `${currentMove.moveNumber}${currentMove.isWhite ? '.' : '...'} ${currentMove.san}`
     : 'Starting Position';
 
-  return (
-    <div className="flex flex-col flex-1 overflow-hidden" data-testid="model-game-viewer">
-      {/* Header */}
-      <div className="flex items-center gap-3 p-4 pb-2">
+  const moveControls = (
+    <div className="flex items-center justify-center gap-2">
+      <button
+        onClick={goFirst}
+        disabled={isExploring}
+        className="p-2 rounded-full bg-theme-surface text-theme-text hover:bg-theme-border transition-colors disabled:opacity-30"
+        aria-label="First move"
+        data-testid="model-game-first"
+      >
+        <ChevronsLeft size={18} />
+      </button>
+      <button
+        onClick={goPrev}
+        disabled={isExploring || currentIndex < 0}
+        className="p-2.5 rounded-full bg-theme-surface text-theme-text hover:bg-theme-border transition-colors disabled:opacity-30"
+        aria-label="Previous move"
+        data-testid="model-game-prev"
+      >
+        <ChevronLeft size={22} />
+      </button>
+      <button
+        onClick={toggleAutoPlay}
+        disabled={isExploring}
+        className="p-3.5 rounded-full bg-theme-accent text-white shadow-lg hover:opacity-90 transition-opacity disabled:opacity-40"
+        aria-label={isAutoPlaying ? 'Pause' : 'Play'}
+        data-testid="model-game-autoplay"
+      >
+        {isAutoPlaying ? <Pause size={24} /> : <Play size={24} />}
+      </button>
+      <button
+        onClick={goNext}
+        disabled={isExploring || currentIndex >= moves.length - 1}
+        className="p-2.5 rounded-full bg-theme-surface text-theme-text hover:bg-theme-border transition-colors disabled:opacity-30"
+        aria-label="Next move"
+        data-testid="model-game-next"
+      >
+        <ChevronRight size={22} />
+      </button>
+      <button
+        onClick={goLast}
+        disabled={isExploring}
+        className="p-2 rounded-full bg-theme-surface text-theme-text hover:bg-theme-border transition-colors disabled:opacity-30"
+        aria-label="Last move"
+        data-testid="model-game-last"
+      >
+        <ChevronsRight size={18} />
+      </button>
+      <div className="w-px h-6 bg-theme-border mx-1" />
+      <button
+        onClick={toggleExplore}
+        className={`p-2 rounded-full border transition-colors ${
+          isExploring
+            ? 'bg-purple-500/20 border-purple-500/40 text-purple-400'
+            : 'hover:bg-theme-surface border-theme-border text-theme-text-muted'
+        }`}
+        aria-label={isExploring ? 'Exit explore mode' : 'Explore alternatives'}
+        title={isExploring ? 'Exit explore' : 'What if...?'}
+        data-testid="model-game-explore"
+      >
+        <Compass size={18} />
+      </button>
+      {isExploring && exploreMoves.length > 0 && (
         <button
-          onClick={onExit}
-          className="p-2 rounded-lg hover:bg-theme-surface transition-colors"
-          aria-label="Back"
-          data-testid="model-game-back"
+          onClick={undoExploreMove}
+          className="p-2 rounded-full hover:bg-theme-surface border border-theme-border transition-colors text-theme-text-muted"
+          aria-label="Undo explore move"
+          data-testid="model-game-explore-undo"
         >
-          <ArrowLeft size={18} className="text-theme-text" />
+          <RotateCcw size={18} />
         </button>
-        <div className="flex-1 min-w-0">
-          <h2 className="text-base font-bold text-theme-text truncate">
-            {game.white} vs {game.black}
-          </h2>
-          <p className="text-xs text-theme-text-muted">
-            {game.event}, {game.year} &middot; {game.result}
-          </p>
-        </div>
-      </div>
+      )}
+    </div>
+  );
 
-      {/* Progress bar */}
-      <div className="h-1 bg-theme-border mx-4 rounded-full overflow-hidden">
-        <motion.div
-          className="h-full bg-theme-accent rounded-full"
-          animate={{ width: `${progressPercent}%` }}
-          transition={{ duration: 0.3 }}
-        />
-      </div>
-
-      {/* Board */}
-      <div className="flex-1 flex flex-col items-center justify-center p-4 gap-3">
-        <BoardVoiceOverlay fen={currentFen} className="w-full max-w-[400px] aspect-square">
+  return (
+    <LessonScaffold
+      testId="model-game-viewer"
+      backTestId="model-game-back"
+      title={`${game.white} vs ${game.black}`}
+      subtitle={`${game.event}, ${game.year} · ${game.result}`}
+      onExit={onExit}
+      progress={{ current: currentIndex + 1, total: moves.length }}
+      board={
+        <BoardVoiceOverlay fen={currentFen} className="w-full aspect-square">
           <ConsistentChessboard
             fen={currentFen}
             boardOrientation={boardOrientation}
@@ -319,112 +365,32 @@ export function ModelGameViewer({
             arrows={isExploring ? [] : customArrows}
           />
         </BoardVoiceOverlay>
-
-        {/* Move label */}
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-mono font-bold text-theme-accent">
-            {moveLabel}
-          </span>
-          {isCriticalMove && (
-            <Star size={14} className="text-yellow-500 fill-yellow-500" />
-          )}
-        </div>
-
-        {/* Controls */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={goFirst}
-            disabled={isExploring}
-            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors disabled:opacity-40"
-            aria-label="First move"
-            data-testid="model-game-first"
-          >
-            <ChevronsLeft size={18} className="text-theme-text" />
-          </button>
-          <button
-            onClick={goPrev}
-            disabled={isExploring}
-            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors disabled:opacity-40"
-            aria-label="Previous move"
-            data-testid="model-game-prev"
-          >
-            <ChevronLeft size={18} className="text-theme-text" />
-          </button>
-          <button
-            onClick={toggleAutoPlay}
-            disabled={isExploring}
-            className="p-3 rounded-xl bg-theme-accent text-white hover:opacity-90 transition-opacity disabled:opacity-40"
-            aria-label={isAutoPlaying ? 'Pause' : 'Play'}
-            data-testid="model-game-autoplay"
-          >
-            {isAutoPlaying
-              ? <PauseCircle size={20} />
-              : <PlayCircle size={20} />
-            }
-          </button>
-          <button
-            onClick={goNext}
-            disabled={isExploring}
-            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors disabled:opacity-40"
-            aria-label="Next move"
-            data-testid="model-game-next"
-          >
-            <ChevronRight size={18} className="text-theme-text" />
-          </button>
-          <button
-            onClick={goLast}
-            disabled={isExploring}
-            className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors disabled:opacity-40"
-            aria-label="Last move"
-            data-testid="model-game-last"
-          >
-            <ChevronsRight size={18} className="text-theme-text" />
-          </button>
-          <div className="w-px h-6 bg-theme-border mx-1" />
-          <button
-            onClick={toggleExplore}
-            className={`p-2 rounded-lg border transition-colors ${
-              isExploring
-                ? 'bg-purple-500/20 border-purple-500/40 text-purple-400'
-                : 'hover:bg-theme-surface border-theme-border text-theme-text-muted'
-            }`}
-            aria-label={isExploring ? 'Exit explore mode' : 'Explore alternatives'}
-            title={isExploring ? 'Exit explore' : 'What if...?'}
-            data-testid="model-game-explore"
-          >
-            <Compass size={18} />
-          </button>
-          {isExploring && exploreMoves.length > 0 && (
-            <button
-              onClick={undoExploreMove}
-              className="p-2 rounded-lg hover:bg-theme-surface border border-theme-border transition-colors text-theme-text-muted"
-              aria-label="Undo explore move"
-              data-testid="model-game-explore-undo"
-            >
-              <RotateCcw size={18} />
-            </button>
-          )}
-        </div>
-
-        {/* Explore mode info bar */}
-        {isExploring && (
-          <div className="flex items-center justify-center gap-3 mt-2">
-            <span className="text-xs text-purple-400 font-medium">
-              Exploring: {exploreMoves.length > 0 ? exploreMoves.join(' ') : 'Make a move to see what happens'}
-            </span>
-            {exploreEval && (
-              <span className="text-xs font-mono font-bold text-theme-text-muted bg-theme-surface px-2 py-0.5 rounded">
-                {exploreEval}
-              </span>
-            )}
+      }
+      boardExtra={
+        <div className="flex flex-col items-center gap-2">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-mono font-bold text-theme-accent">{moveLabel}</span>
+            {isCriticalMove && <Star size={14} className="text-yellow-500 fill-yellow-500" />}
           </div>
-        )}
-      </div>
-
-      {/* Annotation panel */}
-      <div className="px-4 pb-4">
-        <AnimatePresence mode="wait">
-          {currentIndex === -1 ? (
+          {isExploring && (
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-xs text-purple-400 font-medium">
+                Exploring: {exploreMoves.length > 0 ? exploreMoves.join(' ') : 'Make a move to see what happens'}
+              </span>
+              {exploreEval && (
+                <span className="text-xs font-mono font-bold text-theme-text-muted bg-theme-surface px-2 py-0.5 rounded">
+                  {exploreEval}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+      }
+      customControls={moveControls}
+      narrationRaw={
+        <>
+          <AnimatePresence mode="wait">
+            {currentIndex === -1 ? (
             <motion.div
               key="overview"
               initial={{ opacity: 0, y: 20 }}
@@ -473,23 +439,24 @@ export function ModelGameViewer({
           )}
         </AnimatePresence>
 
-        {/* Lesson summary at end */}
-        {currentIndex === moves.length - 1 && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-3 rounded-2xl bg-theme-accent/10 border border-theme-accent/30 p-4"
-            data-testid="model-game-lesson"
-          >
-            <p className="text-xs font-semibold text-theme-accent uppercase tracking-wide mb-1">
-              Lesson
-            </p>
-            <p className="text-sm text-theme-text leading-relaxed">
-              {game.lessonSummary}
-            </p>
-          </motion.div>
-        )}
-      </div>
-    </div>
+          {/* Lesson summary at end */}
+          {currentIndex === moves.length - 1 && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-3 rounded-2xl bg-theme-accent/10 border border-theme-accent/30 p-4"
+              data-testid="model-game-lesson"
+            >
+              <p className="text-xs font-semibold text-theme-accent uppercase tracking-wide mb-1">
+                Lesson
+              </p>
+              <p className="text-sm text-theme-text leading-relaxed">
+                {game.lessonSummary}
+              </p>
+            </motion.div>
+          )}
+        </>
+      }
+    />
   );
 }
