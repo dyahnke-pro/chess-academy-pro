@@ -54,7 +54,7 @@ const D5_OPEN: LessonScript = {
       id: 'd5-open',
       moves: 'e4 c5 c3 d5',
       highlights: [{ square: 'd5', color: KEY }, { square: 'e4', color: SOFT }],
-      say: "2…d5 — Black's most principled try, his second-most-played reply in the corpus. The idea is to trade away the e4-pawn before White finishes setup, denying the queenside-crawl plan that wins from the main spine. Black gets a Scandinavian-style game; we accept the simplification because the structure still favours us and we know the resulting middlegame cold.",
+      say: "2…d5 — Black's most principled try, the move chess engines and theory both rank as the cleanest equalising attempt. The idea is to trade away the e4-pawn before White finishes setup, denying the queenside-crawl plan that defines the main spine. We accept the Scandinavian-style simplification because logical piece development still favours us here, and the resulting middlegame plays to practical chances rather than memorised theory — exactly the territory the Alapin is built for.",
       sayShort: '…d5 — Black\'s principled try.',
     }),
     b({
@@ -85,7 +85,7 @@ const D5_OPEN: LessonScript = {
       moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3',
       arrows: [{ from: 'b1', to: 'a3', color: VIS }, { from: 'a3', to: 'b5', color: ATK }],
       highlights: [{ square: 'a3', color: KEY }, { square: 'b5', color: SOFT }],
-      say: "Na3!? — the move that defines his treatment. Most players develop Nbd2 here; Danya prefers Na3 because the knight is heading to b5 attacking the queen and grabbing the c7 prize square. The knight on a3 isn't passive — it's en route.",
+      say: "Na3 — the rim-knight that gives this line its character. The textbook move at this position is Nbd2 developing toward the centre, but Danya routes the knight to b5 instead, attacking the queen on d5 and aiming at the c7 prize square. The knight on a3 looks passive but it's en route, and the moment Black moves the queen it lands on b5 with tempo.",
       sayShort: 'Na3 — knight heads for b5.',
     }),
     b({
@@ -147,7 +147,7 @@ const E6_FRENCH: LessonScript = {
       id: 'e6-open',
       moves: 'e4 c5 c3 e6',
       highlights: [{ square: 'e6', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "2…e6 — Black plays a French-style setup, preparing …d5 to challenge our centre next move. Of all the major Alapin replies this is the second-best-scoring for us, because Black voluntarily walks into a structure White knows cold: the classical d4 + e5 cramp transposes straight into French-Advance territory.",
+      say: "2…e6 — Black plays a French-style setup, preparing …d5 to challenge the centre next move. The trade we're getting here is exactly what the Alapin promises: Black voluntarily walks into French-Advance territory, and we trade Sicilian theory we don't want for French theory we know cold. Logical piece development, central control, practical positions — the consensus description of the Alapin lands beat for beat in this line.",
       sayShort: '…e6 — French setup invited.',
     }),
     b({
@@ -240,7 +240,7 @@ const D6_MAINLINE: LessonScript = {
       id: 'd6-open',
       moves: 'e4 c5 c3 d6',
       highlights: [{ square: 'd6', color: KEY }, { square: 'c5', color: SOFT }],
-      say: "2…d6 — Black tries to keep options open, refusing to commit to d5 OR Nf6. The problem is that the wait-and-see treatment gives White exactly what he wanted from move one: the dream classical centre, completely unchallenged. This is the highest-scoring Alapin variation for us, and the reason is that there's nothing for Black to do.",
+      say: "2…d6 — Black tries to keep his options open, refusing to commit to d5 OR Nf6. The Alapin's promise is to take control of the game as early as move two, and the wait-and-see reply hands us exactly that. The dream classical centre goes up unchallenged, our pieces find their squares with logical development, and Black ends up reacting to a setup he never tried to disrupt.",
       sayShort: '…d6 — Black plays passively.',
     }),
     b({
@@ -308,7 +308,7 @@ const G6_DRAGON: LessonScript = {
       id: 'g6-open',
       moves: 'e4 c5 c3 g6',
       highlights: [{ square: 'g6', color: KEY }, { square: 'g7', color: SOFT }],
-      say: "2…g6 — the Hyper-Accelerated Dragon. Black wants the fianchetto setup without committing to …d6 first, hoping to keep options open. We don't care about that flexibility — the Alapin structure is exactly the same whichever order Black moves in, and the c3-d4 plan keeps running.",
+      say: "2…g6 — the Hyper-Accelerated Dragon. Black wants the fianchetto setup without committing to …d6 first, hoping to keep his Dragon theory available later. The Alapin's whole point is that we don't need to know his theory: c3 supports d4, the pieces find their squares the same way regardless of move order, and we head for practical positions instead of memorisation. The flexibility he's preserving doesn't matter against a system.",
       sayShort: '…g6 — Dragon setup early.',
     }),
     b({
@@ -339,7 +339,7 @@ const G6_DRAGON: LessonScript = {
       moves: 'e4 c5 c3 g6 d4 cxd4 cxd4 d5 exd5 Nf6 Nc3 Nxd5 Bc4 Nb6 Bb3',
       arrows: [{ from: 'c4', to: 'b3', color: VIS }],
       highlights: [{ square: 'b3', color: KEY }],
-      say: "…Nb6 / Bb3 — the bishop slides to the SAME diagonal we use in the main spine. Same aim, same long-term piece, same plan. The Alapin's identity is HOW the pieces end up coordinated, not the specific move order.",
+      say: "…Nb6 chases, Bb3 keeps the diagonal. We've reached the same bishop placement as the main 2…Nf6 spine even though Black went through g6 and a different move order entirely. The Alapin is about HOW the pieces end up coordinated, not which order Black plays — once the bishop hits b3 the plan runs the same way regardless.",
       sayShort: 'Bb3 — bishop on the diagonal.',
     }),
     b({
@@ -370,7 +370,7 @@ const NC6_LINE: LessonScript = {
       id: 'nc6-open',
       moves: 'e4 c5 c3 Nc6',
       highlights: [{ square: 'c6', color: KEY }],
-      say: "2…Nc6 — Black develops a knight without committing the centre yet, hoping to keep his options open. The problem with that delay is the position transposes favourably for us regardless of what Black does next. We just play d4 immediately and the c3 setup keeps running.",
+      say: "2…Nc6 — Black develops a knight without committing the centre yet. This is a common practical try: keep flexibility, see what White does. The Alapin's answer is that the c3 setup runs the same way against ANY second move — solid yet flexible while remaining surprisingly aggressive once the centre opens. We just play d4 immediately and Black's wait-and-see commitment hands us tempi he can never recover.",
       sayShort: '…Nc6 — knight before the centre.',
     }),
     b({
@@ -424,7 +424,7 @@ const NF6_D6_SUB: LessonScript = {
       id: 'd6sub-open',
       moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 d6',
       highlights: [{ square: 'd6', color: KEY }],
-      say: "Inside the main 2…Nf6 spine — Black's 4…d6 attempt to challenge the e5-pawn. This is where Naroditsky's UNIQUE Alapin treatment lives. Instead of the textbook dxe5 trade, he answers with Bc4 and the whole position becomes a forcing tactical sequence that punishes Black's classical response.",
+      say: "Inside the main 2…Nf6 spine — Black's 4…d6 attempt to challenge the e5-pawn. This is the line where Gordima's distillation flags Danya's distinguishing trick: against this exact setup he mixes Bb5/Moscow ideas with the Alapin, then transposes to Bc4 once the pieces commit. Instead of the textbook dxe5 trade, the whole position becomes a forcing tactical sequence that punishes Black's classical response.",
       sayShort: '…d6 — challenge the e5-pawn.',
     }),
     b({
@@ -472,7 +472,7 @@ const NF6_D6_SUB: LessonScript = {
       moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 d6 Bc4 Nb6 e6 Nxc4 Qa4+ Nc6 exf7+ Kxf7 Qxc4+ d5 Qf4+ Kg8 d4',
       arrows: [{ from: 'd2', to: 'd4', color: VIS }],
       highlights: [{ square: 'd4', color: KEY }, { square: 'g8', color: SOFT }],
-      say: "After …d5 / Qf4+ / Kg8 / d4 — White opens the centre and Black's king sits on g8 without a normal pawn shield (the f7-pawn is gone, the e7-pawn next to fall). The d4 push tells the rest of the story: every White piece floods the board, Black drowns.",
+      say: "After …d5, our queen checks again with Qf4+, the king runs to g8, and now d4 opens the centre. Black's king sits on g8 with no f7-pawn, the e7-pawn falls next, and every white piece floods the board through the open lines. The whole point of the exf7+ sacrifice was to reach exactly this position with development on our side.",
       sayShort: 'd4 — flood the open centre.',
     }),
     b({
@@ -503,7 +503,7 @@ const NF6_E6_SUB: LessonScript = {
       id: 'e6sub-open',
       moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 e6',
       highlights: [{ square: 'e6', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "Inside the 2…Nf6 spine — Black's quieter 4…e6 setup. Black defends the d5-knight with e6 and prepares solid development, refusing the gambit complications of 4…d6. We respond with d4 entering a Panov-Botvinnik-like IQP structure where White's centre + piece activity outweigh Black's solidity.",
+      say: "Inside the 2…Nf6 spine — Black's quieter 4…e6 setup. Black defends the d5-knight with e6 and aims for solid development, refusing the gambit complications of 4…d6. We respond with d4 and the position transposes into Panov-Botvinnik-style IQP territory. The framework holds: logical piece development on our side, central control, and a practical middlegame where Black's solidity meets White's activity over the long haul.",
       sayShort: '…e6 — solid defence of d5-knight.',
     }),
     b({

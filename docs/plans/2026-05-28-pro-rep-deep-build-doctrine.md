@@ -505,6 +505,67 @@ chessbase.com, chessable.com, wikipedia.org, 365chess.com, etc.
 
 ### STEP 6 — Author the per-variation lessons
 
+🚨 **NARRATION SPLIT-PASS RULE — locked David 2026-05-29 ("FROM NOW ON
+ALL NARRATIONS ARE ONLY DONE AFTER THE BUILDS SO YOU CAN FULLY FOCUS ON
+USING THE PERSONAL NOTES OF EACH PRO FOR NARRATIONS").**
+
+A pro-rep build now ships in TWO PASSES, not one:
+
+**Pass A — Skeleton build.** Steps −1 through 16 produce: tree extraction
++ deep-build data + voice corpus on disk + lesson SHELLS (every beat has
+id/moves/arrows/highlights/sources but the `say` and `sayShort` text are
+PLACEHOLDERS — e.g. `say: "TODO narration — anchor: <position summary>"`,
+`sayShort: "TODO"`). Plans, traps, model games, common-mistakes, the
+audit script, ALL the data wiring lands and ships gated behind the
+placeholders. The build PUSHES to main with the placeholders explicit —
+they're easy to grep and surface a deliberate "not narrated yet" state
+in the UI rather than templated filler.
+
+**Pass B — Narration pass.** A separate session opens the voice corpus at
+`data/sources/<player>-voice/per-opening/<opening>.md`, opens the deep-
+build JSON, and hand-authors every beat's `say` + `sayShort` GROUNDED in
+the pro's actual notes/teaching content. No other work in this pass —
+just narration. The session can fully focus on his voice without
+context-switching to data wiring or gate fixes.
+
+Why split: the Naroditsky Alapin shipped with templated stat-drop
+phrasings ("X% in Y games tells you this works", "+ + + structural
+advantage") because the same session authoring narration was juggling
+data extraction + plan-line FEN validation + tree counting + gate fixes.
+Attention was split and the voice degraded. Splitting the passes lets
+each one go deep.
+
+What goes in Pass A `say` placeholders: a one-line position summary
+(what just happened) so the Pass B session can author without re-reading
+the tree. Example:
+
+```ts
+say: "TODO narration — after exd6 e.p. Qxd6 O-O: white has open
+centre, king safe, Bb3 stares at f7. Anchor to consensus framing
+(sidestep theory / practical chances).",
+sayShort: "TODO — cue for exd6 + O-O.",
+```
+
+What goes in Pass B `say`: full hand-authored prose drawn from his
+voice corpus (Gordima distillation, YouTube speedrun transcripts when
+on David's machine, consensus framings, Chessable course notes,
+podcast transcripts), with EVERY beat citing 1+ `sources[]` entries
+from the corpus.
+
+The audit script for the opening tests Pass A with placeholder
+narration (DOM mounts + plan walkthroughs + trap mining + sources
+present) AND Pass B with hand-authored narration (voice fires the
+sentence-grained reveal + the corpus framings show up in the actual
+spoken text).
+
+**Don't slip into narration during Pass A.** If a beat's TODO feels
+tempting to "just author quickly," STOP — that's the failure mode this
+rule prevents. The whole point is keeping Pass A focused on data
+fidelity (G3 + STEP −1 + §1b show-your-work) and reserving voice work
+for a dedicated session.
+
+---
+
 File: `src/data/lessons/pro<Player><Opening>Variations.ts`
 
 Reference pattern: `src/data/lessons/proNaroditskyAlapinVariations.ts`

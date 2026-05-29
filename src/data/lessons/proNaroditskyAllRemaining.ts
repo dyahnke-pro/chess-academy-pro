@@ -50,7 +50,7 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
     b({
       id: 'open', moves: 'e4 c5 c3',
       highlights: [{ square: 'c3', color: KEY }, { square: 'd4', color: SOFT }],
-      say: "Naroditsky's anti-Sicilian. c3 isn't theory — it's setup. The whole point is move three: d4, with the pawn supported. We refuse the Sicilian's tactical mess and build a classical centre instead. Opponents prepare a sharp fight and get a structural game they don't know how to play.",
+      say: "Naroditsky's anti-Sicilian. c3 isn't theory — it's a setup move. The whole point is move three: d4, with the pawn supported. We sidestep heavy Sicilian theory entirely and head for a position where practical chances to outplay matter more than memorisation. Solid, flexible, and surprisingly aggressive once the pieces find their squares.",
       sayShort: 'c3 — sets up the d4 push.',
     }),
     b({
@@ -91,7 +91,7 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
       id: 'crawl-a4', moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4',
       arrows: [{ from: 'a4', to: 'a5', color: VIS }],
       highlights: [{ square: 'a4', color: KEY }, { square: 'a5', color: SOFT }],
-      say: "Now THE plan: a4 starting the queenside crawl. The whole point of the Alapin from here is space. We push a4, then a5, then a6 — Black's pieces can't coordinate while we just methodically expand. There's no single tactical shot; it's positional smothering.",
+      say: "Now THE Naroditsky signature: a4 starting the queenside crawl. This sequence — a4, then a5, then a6 — is the structural feature he plays for, the move-pattern that appears in roughly a quarter of his Alapin games at this position. There's no single tactical shot; it's logical piece development meeting positional smothering, and Black's pieces can't coordinate while we just methodically expand.",
       sayShort: 'a4 — queenside crawl begins.',
     }),
     b({
@@ -126,7 +126,7 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
       id: 'queen-swing', moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6 d4 e6 Ne5 Nxe5 dxe5 Be7 Qg4',
       arrows: [{ from: 'd1', to: 'g4', color: VIS }],
       highlights: [{ square: 'g4', color: KEY }, { square: 'g7', color: SOFT }],
-      say: "After the knight trade and Be7, this is the moment the opening hands off to the middlegame — and look at what we have. The queen swings to g4 and suddenly we're staring at g7 with the bishop on e7 stuck defending, the king still in the centre, the queenside choked from the a6-push. This is what c3 was building toward all twelve moves: every white piece is doing something, and Black is just reacting.",
+      say: "After the knight trade and Be7, this is where the opening hands off to the middlegame — and look at what we have. The queen swings to g4 staring down at g7, the bishop on e7 is stuck defending, the king is still in the centre, the queenside is choked from the a6-push. From here the dominant ending across his decisive games is rook + minor + pawn, where the queenside passer becomes the conversion. The c3 setup was building toward exactly this for twelve moves.",
       sayShort: 'Qg4 — every piece working.',
     }),
   ],
