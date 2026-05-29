@@ -264,9 +264,11 @@ try {
     }
 
     // Sections live below the WLPP card. Even if they self-hide for
-    // empty data, they leave the *-empty placeholder.
+    // empty data, they leave the *-empty placeholder OR (for middlegame
+    // plans on a tab with no plans) a *-note explanatory message.
     const mgSection = await page.locator('[data-testid="middlegame-plans-section"]').count();
     const mgEmpty = await page.locator('[data-testid="middlegame-plans-empty"]').count();
+    const mgNote = await page.locator('[data-testid="middlegame-plans-note"]').count();
     const egSection = await page.locator('[data-testid="endgame-plans-section"]').count();
     const egEmpty = await page.locator('[data-testid="endgame-plans-empty"]').count();
     const mgameSection = await page.locator('[data-testid="model-games-section"]').count();
@@ -276,7 +278,7 @@ try {
     const body = await page.textContent('body').catch(() => '');
     const hasWatchOut = /watch out|warnings|things to avoid|pitfall/i.test(body || '');
 
-    return { mounted, variationLabels, mgSection, mgEmpty, egSection, egEmpty, mgameSection, mgameEmpty, hasWatchOut };
+    return { mounted, variationLabels, mgSection, mgEmpty, mgNote, egSection, egEmpty, mgameSection, mgameEmpty, hasWatchOut };
   }
 
   // Helper: capture TTS + listener voice events that fire after a click
@@ -365,7 +367,14 @@ try {
     const inv = await inspectDetailSections(openingId);
     rec(`[render] ${openingId} page mounts`, inv.mounted ? 'PASS' : 'FAIL');
     rec(`[render] ${openingId} variation tabs render`, inv.variationLabels.length > 0 ? 'PASS' : 'WARN', `${inv.variationLabels.length} tabs: ${inv.variationLabels.slice(0, 4).join(' | ')}${inv.variationLabels.length > 4 ? '…' : ''}`);
-    rec(`[render] ${openingId} middlegame plans section`, inv.mgSection > 0 ? 'PASS' : (inv.mgEmpty > 0 ? 'WARN' : 'FAIL'), inv.mgSection > 0 ? 'rendered' : (inv.mgEmpty > 0 ? 'empty placeholder' : 'no DOM marker at all'));
+    rec(
+      `[render] ${openingId} middlegame plans section`,
+      inv.mgSection > 0 ? 'PASS' : (inv.mgNote > 0 || inv.mgEmpty > 0 ? 'PASS' : 'FAIL'),
+      inv.mgSection > 0 ? 'rendered with plans'
+        : inv.mgNote > 0 ? 'rendered with main-tab note (plans live on variation tabs)'
+        : inv.mgEmpty > 0 ? 'empty placeholder (no plans authored)'
+        : 'no DOM marker at all',
+    );
     rec(`[render] ${openingId} endgame plans section`, inv.egSection > 0 ? 'PASS' : (inv.egEmpty > 0 ? 'WARN' : 'FAIL'), inv.egSection > 0 ? 'rendered' : (inv.egEmpty > 0 ? 'empty placeholder' : 'no DOM marker at all'));
     rec(`[render] ${openingId} model games section`, inv.mgameSection > 0 ? 'PASS' : (inv.mgameEmpty > 0 ? 'WARN' : 'FAIL'), inv.mgameSection > 0 ? 'rendered' : (inv.mgameEmpty > 0 ? 'empty placeholder' : 'no DOM marker at all'));
     rec(`[render] ${openingId} watch-out content`, inv.hasWatchOut ? 'PASS' : 'WARN', inv.hasWatchOut ? 'found' : 'no warning/pitfall prose');
