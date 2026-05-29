@@ -213,9 +213,15 @@ try {
             // Learn → linesLearned, Practice → linesPracticed.
             // Play has no separate persisted state — it's gated on
             // linesPracticed.
-            op.linesDiscovered = indices;
-            op.linesLearned = indices;
-            op.linesPracticed = indices;
+            // Per wlppLadder.ts isRungComplete: Practice gates on
+            // linesPerfected (NOT linesPracticed). Play gates on
+            // linesPlayed (only matters for weapons unlock). The
+            // Watch/Learn/Practice/Play button enablement comes from
+            // isRungUnlocked which checks the PRIOR rung's completion.
+            op.linesDiscovered = indices;  // Watch complete → Learn enabled
+            op.linesLearned = indices;     // Learn complete → Practice enabled
+            op.linesPerfected = indices;   // Practice complete → Play enabled
+            op.linesPlayed = indices;      // Play complete → Weapons unlocked
             store.put(op);
             modified++;
           }
@@ -243,8 +249,9 @@ try {
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' })).catch(() => null);
     await page.waitForTimeout(300);
 
-    const body = await page.textContent('body').catch(() => '');
-    const mounted = /Daniel Naroditsky/.test(body || '');
+    // Mount marker — wait for the detail container, not body text
+    const detailMount = await page.locator('[data-testid="opening-detail"]').count();
+    const mounted = detailMount > 0;
 
     // Variation tabs use VariationTabs.tsx — [data-testid="variation-tabs"]
     // is the tablist; individual tabs are [data-testid^="variation-tab-"]
@@ -266,9 +273,10 @@ try {
     const mgameEmpty = await page.locator('[data-testid="model-games-empty"]').count();
 
     // Watch-out section — search for the heading prose
+    const body = await page.textContent('body').catch(() => '');
     const hasWatchOut = /watch out|warnings|things to avoid|pitfall/i.test(body || '');
 
-    return { mounted, variationLabels, mgSection, mgEmpty, egSection, egEmpty, mgameSection, mgameEmpty, hasWatchOut, body };
+    return { mounted, variationLabels, mgSection, mgEmpty, egSection, egEmpty, mgameSection, mgameEmpty, hasWatchOut };
   }
 
   // Helper: capture TTS + listener voice events that fire after a click
@@ -291,12 +299,30 @@ try {
     return capturedText;
   }
 
+  // Helper: page.goto with retry on Vercel timeout/rate-limit
+  async function safeGoto(url, label = '') {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45_000 });
+        return true;
+      } catch (e) {
+        console.log(`  goto attempt ${attempt}/3 failed (${label}): ${e.message.slice(0, 80)}`);
+        if (attempt < 3) await page.waitForTimeout(3000 * attempt); // 3s, 6s backoff
+      }
+    }
+    return false;
+  }
+
   // Per-opening walk
   for (const openingId of NARODITSKY_OPENINGS) {
     console.log(`\n===== OPENING: ${openingId} =====`);
 
-    // Navigate fresh
-    await page.goto(`${PROD}/openings/pro/naroditsky/${openingId}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+    // Navigate fresh (with retry on Vercel hiccups)
+    const navOk = await safeGoto(`${PROD}/openings/pro/naroditsky/${openingId}`, openingId);
+    if (!navOk) {
+      rec(`[render] ${openingId} page navigation`, 'FAIL', 'goto failed 3x, skipping opening');
+      continue;
+    }
     await page.waitForTimeout(6000); // mount + sections render + variation tabs
 
     // Dismiss any auto-opened help modal
@@ -315,14 +341,18 @@ try {
     rec(`[render] ${openingId} model games section`, inv.mgameSection > 0 ? 'PASS' : (inv.mgameEmpty > 0 ? 'WARN' : 'FAIL'), inv.mgameSection > 0 ? 'rendered' : (inv.mgameEmpty > 0 ? 'empty placeholder' : 'no DOM marker at all'));
     rec(`[render] ${openingId} watch-out content`, inv.hasWatchOut ? 'PASS' : 'WARN', inv.hasWatchOut ? 'found' : 'no warning/pitfall prose');
 
-    // ----- (B) WLPP main rungs — all 4 (progression unlocked upfront) -----
+    // ----- (B) WLPP main rungs — all 4 (single page, Escape between) -----
     for (const rungLabel of ['Watch', 'Learn', 'Practice', 'Play']) {
-      // Each rung navigation reloads the detail page first to start clean
-      await page.goto(`${PROD}/openings/pro/naroditsky/${openingId}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-      await page.waitForTimeout(3500);
-      if (await page.locator('[data-testid="page-help-modal"]').count() > 0) {
-        await page.keyboard.press('Escape').catch(() => null);
-        await page.waitForTimeout(500);
+      // Verify we're back on the detail page (Escape should return us)
+      const stillOnDetail = await page.locator('[data-testid="opening-detail"]').count();
+      if (stillOnDetail === 0) {
+        // Lost the detail view — navigate fresh
+        await safeGoto(`${PROD}/openings/pro/naroditsky/${openingId}`, openingId);
+        await page.waitForTimeout(3000);
+        if (await page.locator('[data-testid="page-help-modal"]').count() > 0) {
+          await page.keyboard.press('Escape').catch(() => null);
+          await page.waitForTimeout(500);
+        }
       }
 
       const btn = page.locator(`button:has-text("${rungLabel}")`).first();
@@ -338,46 +368,58 @@ try {
       }
       rec(`[wlpp/main/${openingId}] ${rungLabel} button enabled`, 'PASS');
 
-      // Click + check narration fires (Practice/Play may stay silent —
-      // Practice is silent by G5 spec, Play hands off to the coach room)
+      // Click + check narration fires (Practice silent by G5; Play
+      // hands off to coach room — narration is informational only
+      // for those two rungs)
       await captureNarrationAfter(
         async () => btn.click({ timeout: 4000, force: true }).catch(() => null),
         `wlpp-${rungLabel.toLowerCase()}-main`,
         openingId,
       );
+      // Return to detail via Escape (twice if needed)
+      await page.keyboard.press('Escape').catch(() => null);
+      await page.waitForTimeout(800);
       await page.keyboard.press('Escape').catch(() => null);
       await page.waitForTimeout(1200);
     }
 
-    // ----- (D) Walk each variation tab — click + verify + WLPP all 4 -----
-    // Re-navigate to detail to get a clean state
-    await page.goto(`${PROD}/openings/pro/naroditsky/${openingId}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
-    await page.waitForTimeout(4000);
-    if (await page.locator('[data-testid="page-help-modal"]').count() > 0) {
-      await page.keyboard.press('Escape').catch(() => null);
-      await page.waitForTimeout(500);
-    }
-
+    // ----- (D) Walk each variation tab — single navigation, all 4 rungs per variation -----
     for (let i = 0; i < inv.variationLabels.length; i++) {
       const vlabel = inv.variationLabels[i];
       console.log(`\n  --- variation [${i}] "${vlabel}" ---`);
-      for (const rungLabel of ['Watch', 'Learn', 'Practice', 'Play']) {
-        // Each rung: navigate fresh + click variation tab + click rung
-        await page.goto(`${PROD}/openings/pro/naroditsky/${openingId}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+
+      // Click the variation tab once
+      const stillOnDetail = await page.locator('[data-testid="opening-detail"]').count();
+      if (stillOnDetail === 0) {
+        await safeGoto(`${PROD}/openings/pro/naroditsky/${openingId}`, openingId);
         await page.waitForTimeout(3000);
         if (await page.locator('[data-testid="page-help-modal"]').count() > 0) {
           await page.keyboard.press('Escape').catch(() => null);
           await page.waitForTimeout(500);
         }
+      }
 
-        const tab = page.locator(`[data-testid^="variation-tab-"]:not([data-testid="variation-tab-main"])`).nth(i);
-        const tabVisible = await tab.isVisible().catch(() => false);
-        if (!tabVisible) {
-          rec(`[variations/${openingId}] "${vlabel}" tab at index ${i}`, 'WARN', 'not visible');
-          break;
+      const tab = page.locator(`[data-testid^="variation-tab-"]:not([data-testid="variation-tab-main"])`).nth(i);
+      const tabVisible = await tab.isVisible().catch(() => false);
+      if (!tabVisible) {
+        rec(`[variations/${openingId}] "${vlabel}" tab at index ${i}`, 'WARN', 'not visible');
+        continue;
+      }
+      await tab.click({ timeout: 3000, force: true }).catch(() => null);
+      await page.waitForTimeout(1500);
+
+      // Walk all 4 rungs on this variation
+      for (const rungLabel of ['Watch', 'Learn', 'Practice', 'Play']) {
+        // Make sure variation tab is still active (it should be after Escape)
+        const tabStill = await page.locator(`[data-testid^="variation-tab-"]:not([data-testid="variation-tab-main"])`).nth(i).getAttribute('aria-selected').catch(() => null);
+        if (tabStill !== 'true') {
+          // Re-select the variation tab
+          const tabAgain = page.locator(`[data-testid^="variation-tab-"]:not([data-testid="variation-tab-main"])`).nth(i);
+          if (await tabAgain.isVisible().catch(() => false)) {
+            await tabAgain.click({ timeout: 3000, force: true }).catch(() => null);
+            await page.waitForTimeout(1200);
+          }
         }
-        await tab.click({ timeout: 3000, force: true }).catch(() => null);
-        await page.waitForTimeout(1800);
 
         const btn = page.locator(`button:has-text("${rungLabel}")`).first();
         const btnVisible = await btn.isVisible().catch(() => false);
@@ -397,13 +439,15 @@ try {
           openingId,
         );
         await page.keyboard.press('Escape').catch(() => null);
+        await page.waitForTimeout(800);
+        await page.keyboard.press('Escape').catch(() => null);
         await page.waitForTimeout(1000);
       }
     }
 
     // ----- (E) Middlegame Plans walkthrough -----
     // Re-navigate fresh + ensure default (main) tab
-    await page.goto(`${PROD}/openings/pro/naroditsky/${openingId}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+    await safeGoto(`${PROD}/openings/pro/naroditsky/${openingId}`, openingId);
     await page.waitForTimeout(4000);
     if (await page.locator('[data-testid="page-help-modal"]').count() > 0) {
       await page.keyboard.press('Escape').catch(() => null);
@@ -430,7 +474,7 @@ try {
     }
 
     // ----- (F) Endgame Plans walkthrough -----
-    await page.goto(`${PROD}/openings/pro/naroditsky/${openingId}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+    await safeGoto(`${PROD}/openings/pro/naroditsky/${openingId}`, openingId);
     await page.waitForTimeout(4000);
     if (await page.locator('[data-testid="page-help-modal"]').count() > 0) {
       await page.keyboard.press('Escape').catch(() => null);
@@ -454,7 +498,7 @@ try {
     }
 
     // ----- (G) Model Games walkthrough -----
-    await page.goto(`${PROD}/openings/pro/naroditsky/${openingId}`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
+    await safeGoto(`${PROD}/openings/pro/naroditsky/${openingId}`, openingId);
     await page.waitForTimeout(4000);
     if (await page.locator('[data-testid="page-help-modal"]').count() > 0) {
       await page.keyboard.press('Escape').catch(() => null);
