@@ -121,6 +121,125 @@ trap doesn't ship.
 
 ---
 
+## §1b. THE SHOW-YOUR-WORK RULE — every authored move must be traceable to a script's stdout (David 2026-05-28, locked after multiple fabrication incidents in a single session)
+
+**The §1 cardinal rule says "no fabrication." The §1a TRAP RULE says
+"traps must be mined." This §1b rule generalizes both:**
+
+🚨 **Every move in every PGN you ship to `pro-repertoires.json`,
+`middlegame-plans.json`, `model-games.json`, or
+`common-mistakes.json` MUST have been copied from a script's stdout
+within the same session.** If you're typing chess moves into a `pgn`
+or `moves` field from your head, you're fabricating. Period.
+
+The valid sources for each kind of move sequence:
+
+| Where the moves live | Source script (run first, then paste from stdout) |
+|---|---|
+| `variations[].pgn` (pro-rep entry) | `extract-opening-tree.mjs` — the spine + variations array |
+| `trapLines[].pgn` | `mine-<player>-<opening>-traps.mjs` — top mined patterns + sample game |
+| `warningLines[].pgn` | `extract-game-positions-<player>-<opening>.mjs` — a position from a real game where the player FELL into the pattern (their loss), OR a tested anti-pattern walked from a real game |
+| `playableLines[0].moves` (middlegame plans) | `middlegame-past-spine-<player>-<opening>.mjs` — the data-derived continuation past the spine end |
+| `playableLines[0].fen` (endgame plan FEN) | `extract-game-positions-<player>-<opening>.mjs` — a specific position from a real game |
+| `endgame plan moves` | `extract-game-positions-...` — the NEXT 4-6 plies of that game's actual play |
+| Model game `pgn` | The player's chess.com archive (raw PGN from `pick-model-games.mjs` output) |
+
+**The procedure when authoring an entry:**
+
+1. **Run the source script FIRST** (before authoring the prose).
+2. **Paste the move sequence verbatim** into the entry.
+3. **chess.js-validate it via the entry's build script** to catch typos.
+4. **Then write the prose** referring to specific moves in the sequence.
+
+🚨 **The "60-second rule":** if more than 60 seconds have passed
+between running the source script and pasting a move sequence, RE-RUN
+the script. The temptation to "I remember the right move was Nb5" or
+"I think the punish was exf7+" is exactly how fabrication happens.
+Treat the script output as a copy-paste source, not as memory aid.
+
+**Failure modes this rule prevents (all hit in the 2026-05-28
+session):**
+
+- **The "wing-grab Qxb2 in e6 French" trap.** I "knew" this was a
+  common Alapin pattern. The miner showed it doesn't appear in his
+  data. I shipped a fabricated trap.
+- **The "Nxe5 pawn grab" trap.** I "knew" this is what would happen
+  if a beginner grabbed the e-pawn. The miner showed the actual
+  patterns are different. Fabricated.
+- **The d6-mainline endgame plan with `Nc1`.** I wrote the moves
+  from memory of how the line "should continue." chess.js rejected
+  it as illegal — there was no knight that could reach c1.
+- **The e6-french endgame plan with `Rb3`.** Same pattern: I composed
+  the punish "based on what I'd play here." chess.js rejected it.
+- **The nc6-line endgame plan with `Bh6` from a position where the
+  bishop was already on h6.** Pure fabrication; never looked at the
+  FEN.
+- **The d5-open endgame plan with `Bd6` to a square that already
+  had a bishop.** Same.
+
+In ALL of these cases, the fix was to actually pull the next moves
+from the game text via `extract-game-positions-...mjs` and paste
+them verbatim. Once I did that, the moves were legal AND
+data-grounded.
+
+**If a script doesn't exist yet for the kind of move you need, CREATE
+THE SCRIPT FIRST.** Don't author from memory while "noting" that the
+script would have to be built. The script IS the authoring tool.
+
+**The cultural rule that drives this:** Pro-rep is the player's
+DATA, walked through templates. It is NOT "what a coach would author
+about this opening." If you find yourself thinking "this position
+SHOULD have this trap" or "the principled continuation here would
+be," STOP. That's the fabrication voice. The data either has it or
+it doesn't. Build = mine + extract + paste + validate. Repeat until
+the entry is built. No mental composition.
+
+---
+
+## §1c. THE NARRATION FACT-CHECK GATE — chess.js verifies every claim (David 2026-05-28, locked after the Nb5 narration bug)
+
+**Every authored "the X attacks Y" / "eyes Z" / "forks" / "pins"
+claim in narration MUST be verifiable by chess.js at the position
+the beat reaches.** If you write "the knight attacks the queen", the
+knight MUST actually attack the queen's square at that position.
+
+The gate that enforces this:
+`src/data/narrationFactCheck.test.ts`
+
+Patterns covered (V1):
+
+| Claim pattern | Verification |
+|---|---|
+| "the <piece> (attacks/threatens/hits) the <enemy piece>" | The just-moved piece's attack set must include a square holding an enemy piece of that type |
+| "eyes <square>" | The just-moved piece's attack set must include that square |
+| "fork(s)" | The just-moved piece must attack ≥2 non-pawn enemy pieces |
+
+When you author a beat or annotation, the gate runs against:
+1. Every `say` and `sayShort` in every lesson beat
+2. Every `annotations[i]` in every plan's `playableLines[0]`
+
+**Pre-author practice:** before writing prose about "what just
+happened on the board," play the move in chess.js and inspect:
+- What squares the just-moved piece now attacks (use
+  `chess.attackers(targetSq, color)` reversed)
+- What enemy pieces are on those attacked squares
+- What the actual chess facts are
+
+THEN write prose referring to verified facts. Don't write "the
+bishop on c4 eyes f7" and assume — confirm with chess.js that c4 to
+f7 isn't blocked by a piece on d5.
+
+**Baseline:** the gate has a `BASELINE_VIOLATIONS` set holding 22
+legacy violations in existing content (Scotch, French, Vienna,
+Sicilian Dragon, London, Albin, Queens Gambit, etc.). The baseline
+ONLY EVER SHRINKS — when a baseline entry is fixed, drop it from
+the list. No new violations may be added to the baseline.
+
+**Speed:** the gate is ~15s end-to-end. The 3 sub-tests have 30s
+timeouts.
+
+---
+
 ## §1. THE CARDINAL RULE — NO FABRICATED MOVES
 
 This is a hard, no-exceptions rule:
@@ -159,6 +278,43 @@ his data, then type it. No exceptions. None.
 
 Each step has explicit success criteria. Do not advance to step N+1
 until step N is verified.
+
+### STEP −1 — Build/copy the per-opening scripts BEFORE authoring anything (David 2026-05-28, locked)
+
+🚨 **The sequencing rule (§1b enforcement at the procedure level):**
+before you write ONE LINE of prose about this opening, the following
+scripts must exist on disk and have been RUN with their output saved:
+
+| Script | Run output goes to | What it produces |
+|---|---|---|
+| `mine-<player>-<opening>-traps.mjs` | candidates JSON file | Ranked mined trap patterns |
+| `middlegame-past-spine-<opening>.mjs` | stdout | Real middlegame continuations past each variation's spine end |
+| `wider-corpus-endgame-<opening>.mjs` | stdout | Endgame structure distribution per variation |
+| `count-plans-<opening>.mjs` | stdout | Middlegame plan cluster counts per variation |
+| `extract-game-positions-<player>-<opening>.mjs` | stdout (per model game) | FENs + next-N-plies for the endgame anchor positions |
+
+Each script is forked from the Alapin reference and edited to match
+the new opening's prefixes. The edit is mechanical — replace
+variation keys + prefix arrays. **DO NOT skip this step.** If you find
+yourself authoring trapLines without the miner having run, STOP and
+go back. If you find yourself writing playable-line moves for a plan
+without the middlegame-past-spine script having run, STOP. If you
+find yourself authoring an endgame plan FEN without
+extract-game-positions having run, STOP.
+
+The Alapin build broke when I tried to skip this step three times in
+one session (fabricated traps, fabricated endgame moves, fabricated
+narration). The scripts ARE the authoring tools. The build script's
+output IS your raw material. Authoring without running them = $1b
+violation.
+
+After the scripts have run and their output is on disk, the
+authoring task becomes mechanical: pick the top entries from each
+output, paste the move sequences verbatim, write prose that refers
+to the literal moves. No memory. No "principled play would be." No
+"the natural reply is."
+
+---
 
 ### STEP 0 — Verify the player's data is on disk
 
@@ -1050,6 +1206,108 @@ pro-rep-specific resolver existed.
 resolver mapping each variation name (lowercased) to its plan IDs;
 register it in `OpeningDetailPage.tsx` using `pircTabKey` (the full
 variation name).
+
+### Failure: fabricated trap content from "typical opening tactical patterns"
+**Symptom:** trap entries that look reasonable as chess BUT don't
+appear in the player's actual chess.com archive when you check the
+miner output. Detected post-hoc when David asks "how many were found
+by mining?" and the miner returns ZERO matches for your authored
+patterns.
+
+**Cause:** rationalizing fabrication as "based on common Alapin
+[or whatever] tactical motifs." The §1 cardinal rule says no
+fabrication; the §1a TRAP RULE says traps must be mined. Authoring
+"Nxe5 pawn grab" / "premature Nxe4" / "Wing-grab Qxb2" from chess
+intuition violates BOTH rules.
+
+**Fix:** §1a + §1b + STEP −1 above. The miner runs FIRST. Top
+patterns get authored. If the miner doesn't surface a pattern, that
+pattern does not exist for this build. Delete it.
+
+### Failure: endgame plan moves illegal because composed from memory
+**Symptom:** the build script for plans fails with `Invalid move:
+<SAN>` at move 2 or 3 of the endgame plan continuation. Multiple
+endgame plans broke this way in the Alapin build (Nc1 from a knight
+on e1, Rb3 illegal due to position state, Bd6 to a square already
+occupied by a bishop, Bh6 to a square already occupied).
+
+**Cause:** I was writing the endgame plan's `moves` array by
+composing "the natural continuation from this FEN" rather than
+extracting the literal next-N-plies of the actual game past the
+anchor position.
+
+**Fix:** ALWAYS use `extract-game-positions-<player>-<opening>.mjs`
+to pull the next 6-8 plies past the anchor FEN. Paste them verbatim
+into the plan. The endgame plan is anchored at ONE specific real
+game; the moves come from THAT game's continuation, not your
+composition.
+
+### Failure: warning line shows the CORRECT sequence not the wrong one
+**Symptom:** the warning line's PGN walks the move sequence Black
+SHOULD play / White SHOULD play, ending at a fine position. The
+warning becomes useless — the student watches the GOOD move sequence
+while being told it's the bad one. (The "Voluntary Bb3 Trade"
+warning had this exact bug.)
+
+**Cause:** authoring warningLines by walking the main continuation
+of the variation and labeling it "wrong." The author conflates
+"the line where the warning trigger appears" with "the line showing
+the bad move + bad consequence."
+
+**Fix:** every warning's PGN must walk the WRONG MOVE through to a
+position where the student is structurally WORSE OFF (or up
+material if the warning is about Black slipping into a trap). The
+explanation walks: ERROR (the bad move named explicitly) →
+CONSEQUENCE (the position the PGN ends at, where the student is
+visibly worse) → FIX (what to play instead). If the PGN ends at a
+position where material is even / position is equal, the warning
+doesn't show the consequence and should be rewritten.
+
+### Failure: middlegame plan anchored at beat N of M (mid-opening) instead of M of M (spine end)
+**Symptom:** the student opens a "middlegame plan" and the
+playable line just walks the next 4-6 moves of the opening spine
+they already saw in the variation lesson. The plan teaches NOTHING
+new — it restates the opening.
+
+**Cause:** I set the plan's `setupSans` to a short prefix (e.g.
+12-15 plies, mid-opening), then `moves` walked the next 4-6 plies
+of the spine. So the "plan" was a continuation of the OPENING, not
+the MIDDLEGAME.
+
+**Fix:** STEP 9 Rule 1 — `setupSans` MUST reach the full variation
+spine end (where the opening terminus is). `moves` then walks 4-6
+plies of REAL MIDDLEGAME play from one of the player's actual game
+continuations past that position (sourced from
+`extract-game-positions-...mjs`).
+
+### Failure: auto-generated annotation boilerplate ("X — data-derived continuation")
+**Symptom:** the prod audit shows TTS speaking robotic prose like
+"e-pawn takes d6 — White's pawn captures on d6 — material
+exchange" for every move. Sounds like a formula because it is one.
+
+**Cause:** the build script auto-generated annotations from
+`${san} — ${side}'s ${piece} to ${square} — data-derived
+continuation.` Templates.
+
+**Fix:** STEP 9 Rule 2 — every plan's `annotations[]` is HAND-WRITTEN
+data in the build script's `PLANS` array, not generated. The build
+script's job is to chess.js-validate and emit JSON; never to
+author prose.
+
+### Failure: narration claims chess facts that aren't true (Nb5 attacks the queen)
+**Symptom:** the narrationFactCheck gate fires with
+`claim "X attacks Y" — piece on <sq> does NOT attack any enemy Y`.
+
+**Cause:** I wrote prose like "the knight attacks the queen"
+without verifying with chess.js that the knight's attack set
+includes a queen's square. Knight squares are NOT intuitive (the
+knight on b5 attacks a3/a7/c3/c7/d4/d6 — NOT d5 where the queen
+sat).
+
+**Fix:** §1c — run chess.js BEFORE authoring narration. Inspect
+the attack set with `chess.attackers(targetSq, color)` reversed.
+Then write prose that matches the actual attacks. The
+`narrationFactCheck` gate catches violations post-hoc.
 
 ### Failure: used the M-word in pro-rep work
 **Symptom:** session loops — David corrects you, you apologize, you
