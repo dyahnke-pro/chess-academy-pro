@@ -1591,6 +1591,33 @@
           ]
         }
       ],
+      "trapLines": [
+        {
+          "name": "Nf6 in Ba4 line walks into Bxc6 doubled-pawns (Wesley So victim)",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Bxc6 dxc6 d3",
+          "explanation": "Mined from 106 games — the largest Ruy Lopez trap pattern. After Ba4, the classical ...Nf6 walks into the Bxc6 exchange variation timing that gives Black doubled c-pawns. Named 2700+ victim: GM Wesley So (2787). Other named victims: Coldplace (2833), GM_dmitrij (2878)."
+        },
+        {
+          "name": "Nd6 in Berlin Defense (Hikaru victim)",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Nd6 Bxc6 dxc6 dxe5 Nf5 Qxd8+",
+          "explanation": "Mined from 42 games. Classical Berlin Defense walks into the queen-trade endgame favoring White. Named 2700+ victim: Hikaru Nakamura (2894)."
+        },
+        {
+          "name": "Nc5 in Open Ruy lets us win the e5-pawn (Firouzja victim)",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 Re1 Nc5 Bxc6 dxc6 Nxe5 Be7 d4",
+          "explanation": "Mined from 30 games. Open Ruy with Re1 setup, Black's Nc5 retreat lets Bxc6+Nxe5 win the pawn outright. Named 2700+ victims: Firouzja2003 (3070), Shant_Sargsyan (3016), Jospem (3000)."
+        },
+        {
+          "name": "Bc5 in d3 Berlin (Hikaru victim 2990)",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 d3 Bc5 Bxc6 dxc6 Nbd2 Bg4 h3",
+          "explanation": "Mined from 22 games. d3 Berlin + ...Bc5 walks into Bxc6 trade + h3 breaking the Bg4 pin. Named 2700+ victims: Hikaru (2990), MichaelRoiz (2710)."
+        },
+        {
+          "name": "d6 in Steinitz lets Bxc6+ + d4 dominate",
+          "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 d6 Bxc6+ bxc6 d4 f6 O-O",
+          "explanation": "Mined from 22 games. Steinitz Deferred ...d6 walks into Bxc6+ bxc6 doubled b-pawns. Named victim: LudwigVanBendOver (2997)."
+        }
+      ],
       "sources": [
         "book:ruy-lopez",
         "https://api.chess.com/pub/player/danielnaroditsky/games/archives"

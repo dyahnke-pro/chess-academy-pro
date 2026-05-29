@@ -100,6 +100,9 @@ import {
   getProNaroditskyJobavaTrapPlayableLine,
 } from '../../data/lessons/proNaroditskyJobavaTrapLessons';
 import {
+  getProNaroditskyRuyTrapPlayableLine,
+} from '../../data/lessons/proNaroditskyRuyTrapLessons';
+import {
   VIENNA_TRAP_LESSONS,
   getViennaTrapsForTab,
   getViennaTrapPlayableLine,
@@ -808,7 +811,9 @@ export function OpeningDetailPage(): JSX.Element {
                     ? getProNaroditskyAlekhineTrapPlayableLine(trap.name)
                     : opening.id === 'pro-naroditsky-jobava-london'
                       ? getProNaroditskyJobavaTrapPlayableLine(trap.name)
-                      : null;
+                      : opening.id === 'pro-naroditsky-ruy-lopez'
+                        ? getProNaroditskyRuyTrapPlayableLine(trap.name)
+                        : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -848,7 +853,9 @@ export function OpeningDetailPage(): JSX.Element {
                     ? getProNaroditskyAlekhineTrapPlayableLine(warn.name)
                     : opening.id === 'pro-naroditsky-jobava-london'
                       ? getProNaroditskyJobavaTrapPlayableLine(warn.name)
-                      : null;
+                      : opening.id === 'pro-naroditsky-ruy-lopez'
+                        ? getProNaroditskyRuyTrapPlayableLine(warn.name)
+                        : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -926,7 +933,9 @@ export function OpeningDetailPage(): JSX.Element {
                     ? getProNaroditskyAlekhineTrapPlayableLine(trap.name)
                     : opening.id === 'pro-naroditsky-jobava-london'
                       ? getProNaroditskyJobavaTrapPlayableLine(trap.name)
-                      : null;
+                      : opening.id === 'pro-naroditsky-ruy-lopez'
+                        ? getProNaroditskyRuyTrapPlayableLine(trap.name)
+                        : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -966,7 +975,9 @@ export function OpeningDetailPage(): JSX.Element {
                     ? getProNaroditskyAlekhineTrapPlayableLine(warn.name)
                     : opening.id === 'pro-naroditsky-jobava-london'
                       ? getProNaroditskyJobavaTrapPlayableLine(warn.name)
-                      : null;
+                      : opening.id === 'pro-naroditsky-ruy-lopez'
+                        ? getProNaroditskyRuyTrapPlayableLine(warn.name)
+                        : null;
     if (curated) {
       return (
         <PlayableLinePlayer

@@ -1,0 +1,7337 @@
+[
+  {
+    "beforeFen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+    "blunderSan": "Nf6",
+    "count": 106,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/1837303928",
+        "opponent": "gmwesley_so",
+        "opponentRating": 2787,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Bxc6",
+          "dxc6",
+          "d3",
+          "Nd7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2326507435",
+        "opponent": "Dr-Bassem",
+        "opponentRating": 2646,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Nf6",
+          "Bxc6",
+          "dxc6",
+          "d3",
+          "Bd6",
+          "O-O",
+          "O-O"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2326544386",
+        "opponent": "Dr-Bassem",
+        "opponentRating": 2650,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Nf6",
+          "Bxc6",
+          "dxc6",
+          "d3",
+          "Nd7",
+          "O-O",
+          "Bd6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/3143730262",
+        "opponent": "Coldplace",
+        "opponentRating": 2833,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Nf6",
+          "Bxc6",
+          "dxc6",
+          "d3",
+          "Nd7",
+          "O-O",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/3834495185",
+        "opponent": "GM_dmitrij",
+        "opponentRating": 2878,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Nf6",
+          "Bxc6",
+          "dxc6",
+          "d3",
+          "Nd7",
+          "Nbd2",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/pppp1ppp/2n5/1B2p3/3Pn3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+    "blunderSan": "Nd6",
+    "count": 42,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/1710928811",
+        "opponent": "Hikaru",
+        "opponentRating": 2894,
+        "ply": 9,
+        "cliff": 10,
+        "punish": [
+          "Nd6",
+          "Bxc6",
+          "dxc6",
+          "dxe5",
+          "Nf5",
+          "Qxd8+",
+          "Kxd8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/1914674354",
+        "opponent": "LiemLe",
+        "opponentRating": 2716,
+        "ply": 9,
+        "cliff": 10,
+        "punish": [
+          "Nd6",
+          "Bxc6",
+          "dxc6",
+          "dxe5",
+          "Nf5",
+          "Qxd8+",
+          "Kxd8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/1922289817",
+        "opponent": "MichaelRoiz",
+        "opponentRating": 2698,
+        "ply": 9,
+        "cliff": 10,
+        "punish": [
+          "Nd6",
+          "Bxc6",
+          "dxc6",
+          "dxe5",
+          "Nf5",
+          "Qxd8+",
+          "Kxd8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/1922547546",
+        "opponent": "MichaelRoiz",
+        "opponentRating": 2689,
+        "ply": 9,
+        "cliff": 10,
+        "punish": [
+          "Nd6",
+          "Bxc6",
+          "dxc6",
+          "dxe5",
+          "Nf5",
+          "Qxd8+",
+          "Kxd8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2267175549",
+        "opponent": "TenisMaster",
+        "opponentRating": 2718,
+        "ply": 9,
+        "cliff": 10,
+        "punish": [
+          "Nd6",
+          "Bxc6",
+          "dxc6",
+          "dxe5",
+          "Nf5",
+          "Qxd8+",
+          "Kxd8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/1ppp1ppp/p1n5/4p3/B3n3/5N2/PPPP1PPP/RNBQR1K1 b kq - 1 6",
+    "blunderSan": "Nc5",
+    "count": 30,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/1077390208",
+        "opponent": "iFrancisco",
+        "opponentRating": 2209,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Nc5",
+          "Bxc6",
+          "dxc6",
+          "Nxe5",
+          "Be7",
+          "d4",
+          "Ne6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "Re1"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/4664672201",
+        "opponent": "Shant_Sargsyan",
+        "opponentRating": 3016,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Nc5",
+          "Bxc6",
+          "dxc6",
+          "d4",
+          "Ne6",
+          "Nxe5",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "Re1"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/5218591959",
+        "opponent": "Firouzja2003",
+        "opponentRating": 3070,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Nc5",
+          "Bxc6",
+          "dxc6",
+          "Nxe5",
+          "Be7",
+          "d4",
+          "Ne6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "Re1"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/5309062021",
+        "opponent": "Jospem",
+        "opponentRating": 3000,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Nc5",
+          "Bxc6",
+          "dxc6",
+          "d4",
+          "Ne6",
+          "Nxe5",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "Re1"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/6434830678",
+        "opponent": "spicycaterpillar",
+        "opponentRating": 2959,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Nc5",
+          "Bxc6",
+          "dxc6",
+          "d4",
+          "Ne6",
+          "Nxe5",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "Re1"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+    "blunderSan": "Bc5",
+    "count": 22,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/1702906491",
+        "opponent": "LiemLe",
+        "opponentRating": 2692,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "Bxc6",
+          "dxc6",
+          "Nbd2",
+          "Bg4",
+          "h3",
+          "Bh5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "d3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/1875192564",
+        "opponent": "MichaelRoiz",
+        "opponentRating": 2710,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "O-O",
+          "Nd4",
+          "Nxd4",
+          "Bxd4",
+          "Nd2",
+          "c6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "d3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2782770764",
+        "opponent": "Robert_Chessmood",
+        "opponentRating": 2733,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "Bxc6",
+          "dxc6",
+          "O-O",
+          "Be6",
+          "Nxe5",
+          "Qe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "d3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2932513941",
+        "opponent": "Hikaru",
+        "opponentRating": 2990,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "O-O",
+          "Nd4",
+          "Nxd4",
+          "Bxd4",
+          "Nd2",
+          "a6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "d3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2942716024",
+        "opponent": "Hikaru",
+        "opponentRating": 3028,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "Bxc6",
+          "dxc6",
+          "O-O",
+          "Be6",
+          "Bg5",
+          "h6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "d3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+    "blunderSan": "d6",
+    "count": 22,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/4663807735",
+        "opponent": "LudwigVanBendOver",
+        "opponentRating": 2997,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "Bxc6+",
+          "bxc6",
+          "d4",
+          "f6",
+          "O-O",
+          "Ne7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/4890688768",
+        "opponent": "Jumbo",
+        "opponentRating": 2927,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "Bxc6+",
+          "bxc6",
+          "d4",
+          "exd4",
+          "Nxd4",
+          "c5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/6201408909",
+        "opponent": "wonderfultime",
+        "opponentRating": 2955,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "Bxc6+",
+          "bxc6",
+          "d4",
+          "exd4",
+          "Nxd4",
+          "Bd7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/12890643673",
+        "opponent": "wonderfultime",
+        "opponentRating": 2958,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "c4",
+          "Bd7",
+          "Nc3",
+          "g6",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/57649850755",
+        "opponent": "BrandonJacobson",
+        "opponentRating": 2959,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "O-O",
+          "Bd7",
+          "Bxc6",
+          "Bxc6",
+          "d4",
+          "Nf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/ppppbppp/2nn4/4N3/B2Pp3/2N5/PPP2PPP/R1BQ1RK1 b kq - 3 8",
+    "blunderSan": "O-O",
+    "count": 18,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3066560600",
+        "opponent": "GMVallejo",
+        "opponentRating": 2845,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Bb3",
+          "Na5",
+          "Nd5",
+          "c6",
+          "Nxe7+",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/3071475137",
+        "opponent": "TigranLPetrosyan",
+        "opponentRating": 2841,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Nd5",
+          "Bf6",
+          "Bf4",
+          "Re8",
+          "Nxf6+",
+          "Qxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/3141053882",
+        "opponent": "Hikaru",
+        "opponentRating": 3116,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Bb3",
+          "Nf5",
+          "Nxf7",
+          "Rxf7",
+          "Bxf7+",
+          "Kxf7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/3148302876",
+        "opponent": "Hikaru",
+        "opponentRating": 3038,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Bb3",
+          "Nf5",
+          "Nxf7",
+          "Rxf7",
+          "Bxf7+",
+          "Kxf7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/3530842490",
+        "opponent": "nihalsarin",
+        "opponentRating": 2899,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Bf4",
+          "Bf6",
+          "Nd5",
+          "Re8",
+          "Nxf6+",
+          "Qxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/pppp1ppp/2n5/1n2P3/P7/5N2/1PP2PPP/RNBQ1RK1 b kq - 0 7",
+    "blunderSan": "Nbd4",
+    "count": 15,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/1996582470",
+        "opponent": "Hikaru",
+        "opponentRating": 2950,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Nbd4",
+          "Nxd4",
+          "Nxd4",
+          "Qxd4",
+          "d5",
+          "Qd3",
+          "c6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "dxe5",
+          "Nxb5",
+          "a4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2116780554",
+        "opponent": "Azeryahu",
+        "opponentRating": 2538,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Nbd4",
+          "Nxd4",
+          "Nxd4",
+          "Qxd4",
+          "d5",
+          "Qd3",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "dxe5",
+          "Nxb5",
+          "a4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2172670016",
+        "opponent": "Hikaru",
+        "opponentRating": 2876,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Nbd4",
+          "Nxd4",
+          "Nxd4",
+          "Qxd4",
+          "d5",
+          "Qd3",
+          "c6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "dxe5",
+          "Nxb5",
+          "a4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2208217455",
+        "opponent": "Robert_Chessmood",
+        "opponentRating": 2610,
+        "ply": 13,
+        "cliff": 6,
+        "punish": [
+          "Nbd4",
+          "Nxd4",
+          "d6",
+          "exd6",
+          "Bxd6",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "dxe5",
+          "Nxb5",
+          "a4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2268426275",
+        "opponent": "sergiochess83",
+        "opponentRating": 2689,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Nbd4",
+          "Nxd4",
+          "Nxd4",
+          "Qxd4",
+          "d5",
+          "Qd3",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "dxe5",
+          "Nxb5",
+          "a4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1r1k/ppppb1pp/2nn4/3NNp2/3Pp3/1B6/PPP2PPP/R1BQR1K1 b - - 3 11",
+    "blunderSan": "Nxe5",
+    "count": 11,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/4853321444",
+        "opponent": "Parhamov",
+        "opponentRating": 3043,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Nxe5",
+          "dxe5",
+          "Nf7",
+          "Bf4",
+          "d6",
+          "Nxe7",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+",
+          "Kh8",
+          "Nd5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/8791588293",
+        "opponent": "AryanTari",
+        "opponentRating": 2927,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Nxe5",
+          "dxe5",
+          "Nf7",
+          "Bf4",
+          "d6",
+          "Nxe7",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+",
+          "Kh8",
+          "Nd5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/57633619843",
+        "opponent": "AryanTari",
+        "opponentRating": 2879,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Nxe5",
+          "dxe5",
+          "Nf7",
+          "Bf4",
+          "d6",
+          "Nxe7",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+",
+          "Kh8",
+          "Nd5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/57634236187",
+        "opponent": "AryanTari",
+        "opponentRating": 2888,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Nxe5",
+          "dxe5",
+          "Nf7",
+          "Bf4",
+          "d6",
+          "Nxe7",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+",
+          "Kh8",
+          "Nd5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/107672592517",
+        "opponent": "FGHSMN",
+        "opponentRating": 2907,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Nxe5",
+          "dxe5",
+          "Nf7",
+          "Bf4",
+          "Bg5",
+          "Bxg5",
+          "Nxg5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+",
+          "Kh8",
+          "Nd5"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkbnr/1ppp2pp/p1n5/4Pp2/B2p4/5N2/PPP2PPP/RNBQK2R b KQkq - 0 6",
+    "blunderSan": "b5",
+    "count": 10,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/5627569390",
+        "opponent": "DannyNarogreanu",
+        "opponentRating": 3109,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "b5",
+          "Bb3",
+          "Bb7",
+          "O-O",
+          "Na5",
+          "Bxg8",
+          "Rxg8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "f5",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/6220644592",
+        "opponent": "NikoTheodorou",
+        "opponentRating": 2949,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "b5",
+          "Bb3",
+          "Na5",
+          "Bxg8",
+          "Rxg8",
+          "Nxd4",
+          "Bb7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "f5",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/16759521647",
+        "opponent": "CatsOfPeace",
+        "opponentRating": 2934,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "b5",
+          "Bb3",
+          "Na5",
+          "Bd5",
+          "c6",
+          "Bxg8",
+          "Rxg8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "f5",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/37503076447",
+        "opponent": "NikoTheodorou",
+        "opponentRating": 3071,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "b5",
+          "Bb3",
+          "Bb7",
+          "c3",
+          "Na5",
+          "Bxg8",
+          "Rxg8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "f5",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/53071212681",
+        "opponent": "BrandonJacobson",
+        "opponentRating": 3109,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "b5",
+          "Bb3",
+          "Bb7",
+          "c3",
+          "Na5",
+          "Bxg8",
+          "Rxg8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "f5",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1rk1/pppp1ppp/2nn1b2/4N3/B2PpB2/2N5/PPP2PPP/R2QR1K1 b - - 7 10",
+    "blunderSan": "Re8",
+    "count": 6,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3618008951",
+        "opponent": "TigranLPetrosyan",
+        "opponentRating": 2844,
+        "ply": 19,
+        "cliff": 4,
+        "punish": [
+          "Re8",
+          "Nxe4",
+          "Nxe4",
+          "Rxe4",
+          "d5",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Bf6",
+          "Bf4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/3981201788",
+        "opponent": "Kriari",
+        "opponentRating": 2939,
+        "ply": 19,
+        "cliff": 4,
+        "punish": [
+          "Re8",
+          "Nxe4",
+          "Nxe4",
+          "Rxe4",
+          "d5",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Bf6",
+          "Bf4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/6412527630",
+        "opponent": "champ2005",
+        "opponentRating": 2985,
+        "ply": 19,
+        "cliff": 4,
+        "punish": [
+          "Re8",
+          "Nxe4",
+          "Nxe4",
+          "Rxe4",
+          "d5",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Bf6",
+          "Bf4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/57646177929",
+        "opponent": "BrandonJacobson",
+        "opponentRating": 2995,
+        "ply": 19,
+        "cliff": 4,
+        "punish": [
+          "Re8",
+          "Nxe4",
+          "Nxe4",
+          "Rxe4",
+          "d5",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Bf6",
+          "Bf4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/114637758341",
+        "opponent": "Talibovv06",
+        "opponentRating": 2926,
+        "ply": 19,
+        "cliff": 4,
+        "punish": [
+          "Re8",
+          "Nxe4",
+          "Nxe4",
+          "Rxe4",
+          "d6",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Bf6",
+          "Bf4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/1ppp1ppp/p1n2n2/8/B2pP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 1 6",
+    "blunderSan": "Be7",
+    "count": 6,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3848144457",
+        "opponent": "Almas_Champ",
+        "opponentRating": 2289,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "e5",
+          "Ne4",
+          "Re1",
+          "Nc5",
+          "Bxc6",
+          "dxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/5033364607",
+        "opponent": "spicycaterpillar",
+        "opponentRating": 2989,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "e5",
+          "Ne4",
+          "Re1",
+          "Nc5",
+          "Bxc6",
+          "dxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/5822571658",
+        "opponent": "Jospem",
+        "opponentRating": 3010,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "e5",
+          "Ne4",
+          "Re1",
+          "Nc5",
+          "Bxc6",
+          "dxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/16512895105",
+        "opponent": "GM_dmitrij",
+        "opponentRating": 2940,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "e5",
+          "Ne4",
+          "Re1",
+          "Nc5",
+          "Bxc6",
+          "dxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/26797231337",
+        "opponent": "BrandonJacobson",
+        "opponentRating": 2956,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "e5",
+          "Ne4",
+          "Re1",
+          "Nc5",
+          "Bxc6",
+          "dxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "O-O"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1rk1/ppppb1pp/2nn4/4Np2/3Pp3/1BN5/PPP2PPP/R1BQR1K1 b - - 1 10",
+    "blunderSan": "Kh8",
+    "count": 6,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/4190620074",
+        "opponent": "amintabatabaei",
+        "opponentRating": 2855,
+        "ply": 19,
+        "cliff": 3,
+        "punish": [
+          "Kh8",
+          "Bf4",
+          "Bf6",
+          "Nd5",
+          "Ne7",
+          "Nxf6",
+          "gxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/69483352419",
+        "opponent": "Abund",
+        "opponentRating": 2832,
+        "ply": 19,
+        "cliff": 3,
+        "punish": [
+          "Kh8",
+          "Bf4",
+          "Nxe5",
+          "dxe5",
+          "Nf7",
+          "Bxf7",
+          "Rxf7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/69571973167",
+        "opponent": "Abund",
+        "opponentRating": 2845,
+        "ply": 19,
+        "cliff": 3,
+        "punish": [
+          "Kh8",
+          "Bf4",
+          "Nxe5",
+          "dxe5",
+          "Nf7",
+          "Bxf7",
+          "Rxf7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/75441059317",
+        "opponent": "SilviusGrotius",
+        "opponentRating": 2848,
+        "ply": 19,
+        "cliff": 3,
+        "punish": [
+          "Kh8",
+          "Bf4",
+          "Nxe5",
+          "dxe5",
+          "Nf7",
+          "Bxf7",
+          "Rxf7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/93760750051",
+        "opponent": "Antipov_Mikhail_Al",
+        "opponentRating": 2975,
+        "ply": 19,
+        "cliff": 3,
+        "punish": [
+          "Kh8",
+          "Nd5",
+          "Bf6",
+          "Bf4",
+          "g5",
+          "Nxf6",
+          "gxf4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+    "blunderSan": "Bc5",
+    "count": 5,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/5760283727",
+        "opponent": "PhishyPhantasy",
+        "opponentRating": 1647,
+        "ply": 7,
+        "cliff": 4,
+        "punish": [
+          "Bc5",
+          "Nxe5",
+          "O-O",
+          "Nc3",
+          "a6",
+          "Bxc6",
+          "dxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/26698777443",
+        "opponent": "nihalsarin",
+        "opponentRating": 3350,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "Bxc6",
+          "dxc6",
+          "d3",
+          "Qe7",
+          "Be3",
+          "Bd6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/59275211635",
+        "opponent": "MagnusCarlsen",
+        "opponentRating": 3240,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "d3",
+          "Nd4",
+          "Nxd4",
+          "Bxd4",
+          "Nd2",
+          "a6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/59281812425",
+        "opponent": "MagnusCarlsen",
+        "opponentRating": 3223,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "d3",
+          "Nd4",
+          "Nxd4",
+          "Bxd4",
+          "Nd2",
+          "O-O"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/85726142919",
+        "opponent": "BrandonJacobson",
+        "opponentRating": 2979,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "d3",
+          "Nd4",
+          "Nxd4",
+          "Bxd4",
+          "Nd2",
+          "c6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/ppppbppp/2nn4/8/B2P4/5N2/PP3PPP/RNBQ1RK1 b kq - 0 8",
+    "blunderSan": "O-O",
+    "count": 5,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/70162489319",
+        "opponent": "spicycaterpillar",
+        "opponentRating": 3208,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Nc3",
+          "Nc4",
+          "Nd5",
+          "Nb6",
+          "Nxe7+",
+          "Nxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/75700907565",
+        "opponent": "SilviusGrotius",
+        "opponentRating": 2876,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Nc3",
+          "Nc4",
+          "Nd5",
+          "Nb6",
+          "Nxe7+",
+          "Nxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/93761357969",
+        "opponent": "Antipov_Mikhail_Al",
+        "opponentRating": 2965,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Nc3",
+          "Nc4",
+          "Nd5",
+          "Nb6",
+          "Nxe7+",
+          "Nxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/108399611211",
+        "opponent": "GMWSO",
+        "opponentRating": 3063,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Nc3",
+          "Nc4",
+          "d5",
+          "N6e5",
+          "Nxe5",
+          "Nxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/144316769557",
+        "opponent": "NowayJosey",
+        "opponentRating": 3067,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Nc3",
+          "Nc4",
+          "Nd5",
+          "Nb6",
+          "Nxb6",
+          "axb6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/1pppbppp/p1n2n2/4P3/B2p4/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 7",
+    "blunderSan": "Ne4",
+    "count": 4,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/2275630678",
+        "opponent": "MichaelRoiz",
+        "opponentRating": 2721,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Ne4",
+          "Re1",
+          "Nc5",
+          "Bxc6",
+          "dxc6",
+          "Nxd4",
+          "O-O"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2521297572",
+        "opponent": "rookoco",
+        "opponentRating": 2680,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Ne4",
+          "Bxc6",
+          "dxc6",
+          "Re1",
+          "Nc5",
+          "Nxd4",
+          "Ne6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/5858930285",
+        "opponent": "penguingm1",
+        "opponentRating": 3464,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Ne4",
+          "Re1",
+          "Nc5",
+          "Bxc6",
+          "dxc6",
+          "Nxd4",
+          "O-O"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/126446407213",
+        "opponent": "Lembke407",
+        "opponentRating": 3177,
+        "ply": 13,
+        "cliff": 4,
+        "punish": [
+          "Ne4",
+          "Nxd4",
+          "O-O",
+          "Nf5",
+          "d5",
+          "Nxe7+",
+          "Nxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "O-O",
+          "Be7",
+          "e5"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/P3P3/1B3N2/1PPP1PPP/RNBQR1K1 b - - 0 8",
+    "blunderSan": "b4",
+    "count": 4,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/2899761444",
+        "opponent": "dogsofwar",
+        "opponentRating": 2961,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "b4",
+          "d4",
+          "d6",
+          "dxe5",
+          "Nxe5",
+          "Nxe5",
+          "dxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "O-O",
+          "a4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/64710748511",
+        "opponent": "Cayse",
+        "opponentRating": 2846,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "b4",
+          "d4",
+          "d6",
+          "dxe5",
+          "Nxe5",
+          "Nxe5",
+          "dxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "O-O",
+          "a4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/120708017151",
+        "opponent": "Semyon_Khanin",
+        "opponentRating": 2890,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "b4",
+          "d4",
+          "d6",
+          "dxe5",
+          "Nxe5",
+          "Nxe5",
+          "dxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "O-O",
+          "a4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/135321564735",
+        "opponent": "KuybokarovTemur",
+        "opponentRating": 3018,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "b4",
+          "d4",
+          "d6",
+          "dxe5",
+          "Nxe5",
+          "Nxe5",
+          "dxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "O-O",
+          "a4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1rk1/ppppbppp/2nn4/4N3/B2Pp3/2N5/PPP2PPP/R1BQR1K1 b - - 5 9",
+    "blunderSan": "Bf6",
+    "count": 4,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3266422077",
+        "opponent": "GMLazaroBruzon",
+        "opponentRating": 2896,
+        "ply": 17,
+        "cliff": 3,
+        "punish": [
+          "Bf6",
+          "Bf4",
+          "Nf5",
+          "Nxe4",
+          "Nfxd4",
+          "Nxf6+",
+          "Qxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Re1",
+          "Be7",
+          "Ne5",
+          "O-O",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/116747400405",
+        "opponent": "Mysterio47",
+        "opponentRating": 2816,
+        "ply": 17,
+        "cliff": 3,
+        "punish": [
+          "Bf6",
+          "Bf4",
+          "Nf5",
+          "Rxe4",
+          "Nfxd4",
+          "Nxc6",
+          "dxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Re1",
+          "O-O",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/119011187695",
+        "opponent": "maciek_92",
+        "opponentRating": 2955,
+        "ply": 17,
+        "cliff": 4,
+        "punish": [
+          "Bf6",
+          "Bf4",
+          "Nf5",
+          "Rxe4",
+          "d5",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/138540488146",
+        "opponent": "TenisMaster",
+        "opponentRating": 2938,
+        "ply": 17,
+        "cliff": 3,
+        "punish": [
+          "Bf6",
+          "Bf4",
+          "Ne7",
+          "Ng4",
+          "Ng6",
+          "Bxd6",
+          "cxd6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1r1k/pppp3p/2nn1bN1/3N1p1Q/3Ppp2/1B6/PPP2PPP/R3R1K1 b - - 1 14",
+    "blunderSan": "Kg7",
+    "count": 4,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3713251848",
+        "opponent": "Kriari",
+        "opponentRating": 2944,
+        "ply": 27,
+        "cliff": 5,
+        "punish": [
+          "Kg7",
+          "Nxf8",
+          "Qxf8",
+          "Nxf4",
+          "Qe8",
+          "Qh3",
+          "Bxd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+",
+          "Kh8",
+          "Nd5",
+          "Bf6",
+          "Bf4",
+          "g5",
+          "Qh5",
+          "gxf4",
+          "Ng6+"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/4655147802",
+        "opponent": "LudwigVanBendOver",
+        "opponentRating": 2975,
+        "ply": 27,
+        "cliff": 5,
+        "punish": [
+          "Kg7",
+          "Nxf8",
+          "Qxf8",
+          "Nxf4",
+          "Nxd4",
+          "Re3",
+          "Qh8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+",
+          "Kh8",
+          "Nd5",
+          "Bf6",
+          "Bf4",
+          "g5",
+          "Qh5",
+          "gxf4",
+          "Ng6+"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/4663787106",
+        "opponent": "LudwigVanBendOver",
+        "opponentRating": 2993,
+        "ply": 27,
+        "cliff": 5,
+        "punish": [
+          "Kg7",
+          "Nxf8",
+          "Qxf8",
+          "c3",
+          "Qe8",
+          "Nxf6",
+          "Kxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Nd5",
+          "Bf6",
+          "Bb3",
+          "Kh8",
+          "Bf4",
+          "g5",
+          "Qh5",
+          "gxf4",
+          "Ng6+"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/6127003028",
+        "opponent": "Firouzja2003",
+        "opponentRating": 3093,
+        "ply": 27,
+        "cliff": 5,
+        "punish": [
+          "Kg7",
+          "Nxf8",
+          "Qxf8",
+          "Nxf4",
+          "Nxd4",
+          "Re3"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+",
+          "Kh8",
+          "Nd5",
+          "Bf6",
+          "Bf4",
+          "g5",
+          "Qh5",
+          "gxf4",
+          "Ng6+"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2q1rk1/pbppbppp/8/nn6/3P4/3Q1N2/PPB2PPP/R1B2RK1 b - - 1 13",
+    "blunderSan": "g6",
+    "count": 4,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3949840151",
+        "opponent": "nihalsarin",
+        "opponentRating": 2965,
+        "ply": 25,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Qxb5",
+          "Bxf3",
+          "Qxa5",
+          "Bd6",
+          "Bg5",
+          "Bb4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "b5",
+          "Bb3",
+          "Be7",
+          "cxd4",
+          "Na5",
+          "Bc2",
+          "O-O",
+          "Nc3",
+          "Bb7",
+          "Nxb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/44983158301",
+        "opponent": "Robert_Chessmood",
+        "opponentRating": 2918,
+        "ply": 25,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Qxb5",
+          "Bxf3",
+          "Qxa5",
+          "Bb7",
+          "Bf4",
+          "d6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "O-O",
+          "Nc3",
+          "Na5",
+          "Bc2",
+          "Bb7",
+          "Nxb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/76483766183",
+        "opponent": "Semyon_Khanin",
+        "opponentRating": 2898,
+        "ply": 25,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Qxb5",
+          "Bxf3",
+          "Qxa5",
+          "Bb7",
+          "Bh6",
+          "Re8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "O-O",
+          "Nc3",
+          "b5",
+          "Bb3",
+          "Na5",
+          "Bc2",
+          "Bb7",
+          "Nxb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/113392823845",
+        "opponent": "DevikBronstein",
+        "opponentRating": 2915,
+        "ply": 25,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Qxb5",
+          "Bxf3",
+          "Qxa5",
+          "Bb7",
+          "Bh6",
+          "Re8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "O-O",
+          "Nc3",
+          "Na5",
+          "Bc2",
+          "Bb7",
+          "Nxb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/1pppbppp/p1n2n2/4p3/B3P3/3P1N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+    "blunderSan": "d6",
+    "count": 4,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/44749199239",
+        "opponent": "1977Ivan",
+        "opponentRating": 2720,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "c4",
+          "O-O",
+          "h3",
+          "Nd7",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/125523578355",
+        "opponent": "Neferpitou27",
+        "opponentRating": 2972,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "c4",
+          "O-O",
+          "Nc3",
+          "Bg4",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/129941952705",
+        "opponent": "mishanick",
+        "opponentRating": 3133,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "c4",
+          "O-O",
+          "Nc3",
+          "Nd7",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/130639193863",
+        "opponent": "HansOnTwitch",
+        "opponentRating": 3205,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "c4",
+          "O-O",
+          "Nc3",
+          "Bg4",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/1ppp1ppp/p1n2n2/4P3/B2p4/5N2/PPP2PPP/RNBQK2R b KQkq - 0 6",
+    "blunderSan": "Ne4",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/1932114904",
+        "opponent": "penguingm1",
+        "opponentRating": 2984,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Ne4",
+          "O-O",
+          "Nc5",
+          "Bxc6",
+          "dxc6",
+          "Nxd4",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/1932117514",
+        "opponent": "penguingm1",
+        "opponentRating": 2967,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Ne4",
+          "O-O",
+          "Nc5",
+          "Bxc6",
+          "dxc6",
+          "Nxd4",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/114238797531",
+        "opponent": "FGHSMN",
+        "opponentRating": 2995,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Ne4",
+          "O-O",
+          "Nc5",
+          "Bxc6",
+          "dxc6",
+          "Nxd4",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "e5"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/pppp1ppp/2nn4/1B2P3/8/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+    "blunderSan": "Nxb5",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/2056811549",
+        "opponent": "BogdanDeac",
+        "opponentRating": 2508,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Nxb5",
+          "a4",
+          "Nbd4",
+          "Nxd4",
+          "d5",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "dxe5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2288441872",
+        "opponent": "TenisMaster",
+        "opponentRating": 2780,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Nxb5",
+          "a4",
+          "Nbd4",
+          "Nxd4",
+          "d5",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "dxe5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2645187430",
+        "opponent": "Robert_Chessmood",
+        "opponentRating": 2838,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Nxb5",
+          "a4",
+          "Nbd4",
+          "Nxd4",
+          "d6",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "dxe5"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+    "blunderSan": "d6",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3924131334",
+        "opponent": "MathsMaths0",
+        "opponentRating": 1597,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "d4",
+          "exd4",
+          "Nxd4",
+          "Bd7",
+          "Bxc6",
+          "Bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/127067973677",
+        "opponent": "frederiksvane",
+        "opponentRating": 2989,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "d4",
+          "exd4",
+          "Nxd4",
+          "Bd7",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/133642154723",
+        "opponent": "Philippians46",
+        "opponentRating": 3190,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "d4",
+          "Bd7",
+          "Bxc6",
+          "Bxc6",
+          "Nc3",
+          "exd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1rk1/ppppbppp/2n5/3NN3/B2nR3/8/PPP2PPP/R1BQ2K1 b - - 1 11",
+    "blunderSan": "Ne6",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/4618443117",
+        "opponent": "Hikaru",
+        "opponentRating": 3223,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Ne6",
+          "Qh5",
+          "Nxe5",
+          "Rxe5",
+          "c6",
+          "Nxe7+",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Nf5",
+          "Rxe4",
+          "Nfxd4",
+          "Nd5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/4629024705",
+        "opponent": "Hikaru",
+        "opponentRating": 3181,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Ne6",
+          "Qh5",
+          "g6",
+          "Nxe7+",
+          "Qxe7",
+          "Qh6",
+          "Nxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Nf5",
+          "Rxe4",
+          "Nfxd4",
+          "Nd5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/147533604981",
+        "opponent": "Hikaru",
+        "opponentRating": 3392,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Ne6",
+          "c3",
+          "Bd6",
+          "Nc4",
+          "Nc5",
+          "Nxd6",
+          "cxd6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Nf5",
+          "Rxe4",
+          "Nfxd4",
+          "Nd5"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1rk1/ppppbppp/2nn4/4N3/B2Pp3/2N5/PPP2PPP/R1BQR1K1 b - - 5 9",
+    "blunderSan": "Nf5",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/5052187262",
+        "opponent": "Firouzja2003",
+        "opponentRating": 3110,
+        "ply": 17,
+        "cliff": 3,
+        "punish": [
+          "Nf5",
+          "Rxe4",
+          "Bf6",
+          "Nd5",
+          "Nfxd4",
+          "Nxf6+",
+          "Qxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/62152807283",
+        "opponent": "Njal28",
+        "opponentRating": 3160,
+        "ply": 17,
+        "cliff": 4,
+        "punish": [
+          "Nf5",
+          "Rxe4",
+          "a6",
+          "Nd5",
+          "d6",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/139597126066",
+        "opponent": "Parhamov",
+        "opponentRating": 3198,
+        "ply": 17,
+        "cliff": 3,
+        "punish": [
+          "Nf5",
+          "Rxe4",
+          "Bf6",
+          "Nd5",
+          "Nfxd4",
+          "Nxc6",
+          "Nxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqr1k1/pppp1ppp/2nn1b2/4N3/B2PNB2/8/PPP2PPP/R2QR1K1 b - - 0 11",
+    "blunderSan": "Nxe4",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/6412814312",
+        "opponent": "defenceboy",
+        "opponentRating": 2938,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Nxe4",
+          "Rxe4",
+          "Ne7",
+          "Ng4",
+          "Nd5",
+          "Nxf6+",
+          "Nxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Bf6",
+          "Bf4",
+          "Re8",
+          "Nxe4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/44145358309",
+        "opponent": "TigrVShlyape",
+        "opponentRating": 2829,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Nxe4",
+          "Rxe4",
+          "Bxe5",
+          "dxe5",
+          "d6",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Bf6",
+          "Bf4",
+          "Re8",
+          "Nxe4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/121587589987",
+        "opponent": "xiaotong2008",
+        "opponentRating": 2948,
+        "ply": 21,
+        "cliff": 5,
+        "punish": [
+          "Nxe4",
+          "Rxe4",
+          "Ne7",
+          "Ng4",
+          "Nd5",
+          "Rxe8+",
+          "Qxe8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Re8",
+          "Bf4",
+          "Bf6",
+          "Nxe4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/1pp2ppp/p1np1n2/4p3/B1P1P3/3P1N2/PP3PPP/RNBQK2R b KQkq - 0 6",
+    "blunderSan": "g6",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/16511164797",
+        "opponent": "GM_dmitrij",
+        "opponentRating": 2947,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Nc3",
+          "Bg7",
+          "d4",
+          "O-O",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d3",
+          "d6",
+          "c4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/132583831927",
+        "opponent": "korgissehc",
+        "opponentRating": 3093,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Nc3",
+          "Bg7",
+          "h3",
+          "O-O",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d3",
+          "d6",
+          "c4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/138477021930",
+        "opponent": "lachesisQ",
+        "opponentRating": 3090,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Nc3",
+          "Bg7",
+          "h3",
+          "O-O",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d3",
+          "d6",
+          "c4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+    "blunderSan": "Nge7",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/29293166033",
+        "opponent": "BrandonJacobson",
+        "opponentRating": 3073,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Nge7",
+          "Bxc6",
+          "Nxc6",
+          "O-O",
+          "d5",
+          "exd5",
+          "Qxd5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/45984599385",
+        "opponent": "BrandonJacobson",
+        "opponentRating": 2950,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Nge7",
+          "Nc3",
+          "d6",
+          "Bb3",
+          "Nd4",
+          "Nxd4",
+          "exd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/125565519761",
+        "opponent": "vi_pranav",
+        "opponentRating": 3129,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Nge7",
+          "Nc3",
+          "d6",
+          "O-O",
+          "Bd7",
+          "Bxc6",
+          "Nxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/1pppbppp/p1n5/4P3/B2Nn3/8/PPP2PPP/RNBQ1RK1 b kq - 0 8",
+    "blunderSan": "Nc5",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/29375999097",
+        "opponent": "penguingm1",
+        "opponentRating": 3214,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "Nc5",
+          "Nf5",
+          "O-O",
+          "Qg4",
+          "g6",
+          "Nxe7+",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "O-O",
+          "Be7",
+          "e5",
+          "Ne4",
+          "Nxd4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/52384205503",
+        "opponent": "Arambai",
+        "opponentRating": 3095,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "Nc5",
+          "Nf5",
+          "O-O",
+          "Qg4",
+          "g6",
+          "Nxe7+",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d4",
+          "exd4",
+          "e5",
+          "Ne4",
+          "Nxd4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/136196287490",
+        "opponent": "ElliotAldersonTwitch",
+        "opponentRating": 2886,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "Nc5",
+          "Nf5",
+          "O-O",
+          "Nc3",
+          "d5",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4",
+          "exd4",
+          "O-O",
+          "Be7",
+          "e5",
+          "Ne4",
+          "Nxd4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/2p1bppp/p1np1n2/1p2p3/4P3/PB1P1N2/1PP2PPP/RNBQ1RK1 b kq - 0 8",
+    "blunderSan": "O-O",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/61022960571",
+        "opponent": "WhiteKnight2612",
+        "opponentRating": 2755,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Nc3",
+          "Bg4",
+          "Be3",
+          "Nd4",
+          "Bxd4",
+          "exd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3",
+          "d6",
+          "a3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/79198417163",
+        "opponent": "PowerThinking2650",
+        "opponentRating": 2553,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Nc3",
+          "Bg4",
+          "Be3",
+          "Nd4",
+          "Bxd4",
+          "exd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3",
+          "d6",
+          "a3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/142736201622",
+        "opponent": "Semyon_Khanin",
+        "opponentRating": 2992,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Nc3",
+          "Bg4",
+          "Be3",
+          "Nd4",
+          "Bxd4",
+          "exd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3",
+          "d6",
+          "a3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2q1rk1/pbpp1ppp/5b2/1n2N3/2nP4/3Q4/PPB2PPP/R1B1R1K1 b - - 1 15",
+    "blunderSan": "g6",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/95158187169",
+        "opponent": "Robert_Chessmood",
+        "opponentRating": 2989,
+        "ply": 29,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Qxc4",
+          "Nd6",
+          "Qd3",
+          "Nf5",
+          "d5",
+          "Re8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "O-O",
+          "Nc3",
+          "Bb7",
+          "Re1",
+          "Na5",
+          "Bc2",
+          "Bf6",
+          "Ne5",
+          "Nac4",
+          "Nxb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/122165948327",
+        "opponent": "Checkmate-100",
+        "opponentRating": 2723,
+        "ply": 29,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Qxc4",
+          "Nd6",
+          "Qb3",
+          "Rb8",
+          "Qh3",
+          "Bg7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "O-O",
+          "Nc3",
+          "Bb7",
+          "Re1",
+          "Bf6",
+          "Ne5",
+          "Na5",
+          "Bc2",
+          "Nac4",
+          "Nxb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/148017805067",
+        "opponent": "Grischuk",
+        "opponentRating": 3095,
+        "ply": 29,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Qxc4",
+          "Nd6",
+          "Qc3",
+          "Bd5",
+          "Bf4",
+          "Re8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "O-O",
+          "Nc3",
+          "Bb7",
+          "Re1",
+          "Bf6",
+          "Ne5",
+          "Na5",
+          "Bc2",
+          "Nac4",
+          "Nxb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1rk1/pp3ppp/2pb4/5n2/4RB2/1BN5/PPP2PPP/R2Q2K1 b - - 1 14",
+    "blunderSan": "Bxf4",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/119120461345",
+        "opponent": "Volodar_Murzin",
+        "opponentRating": 2993,
+        "ply": 27,
+        "cliff": 3,
+        "punish": [
+          "Bxf4",
+          "Rxf4",
+          "Qxd1+",
+          "Rxd1",
+          "Be6",
+          "Bxe6",
+          "fxe6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Nf5",
+          "Rxe4",
+          "Nxe5",
+          "dxe5",
+          "c6",
+          "Bf4",
+          "d5",
+          "exd6",
+          "Bxd6",
+          "Bb3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/119279399631",
+        "opponent": "DanielDardha2005",
+        "opponentRating": 2912,
+        "ply": 27,
+        "cliff": 3,
+        "punish": [
+          "Bxf4",
+          "Rxf4",
+          "Be6",
+          "Bxe6",
+          "Qxd1+",
+          "Rxd1",
+          "fxe6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Nxe5",
+          "dxe5",
+          "Nf5",
+          "Rxe4",
+          "c6",
+          "Bf4",
+          "d5",
+          "exd6",
+          "Bxd6",
+          "Bb3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/123337896704",
+        "opponent": "ChristopherYoo",
+        "opponentRating": 3052,
+        "ply": 27,
+        "cliff": 3,
+        "punish": [
+          "Bxf4",
+          "Rxf4",
+          "Be6",
+          "Bxe6",
+          "fxe6",
+          "Qe1",
+          "Nd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Nf5",
+          "Rxe4",
+          "Nxe5",
+          "dxe5",
+          "c6",
+          "Bb3",
+          "d5",
+          "exd6",
+          "Bxd6",
+          "Bf4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/pppp1ppp/5n2/1B2b3/3p4/8/PPP2PPP/RNBQR1K1 b kq - 1 8",
+    "blunderSan": "O-O",
+    "count": 3,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/130521021915",
+        "opponent": "Philippians46",
+        "opponentRating": 3133,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Rxe5",
+          "c6",
+          "Bd3",
+          "d5",
+          "Re1",
+          "Be6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Bd6",
+          "d4",
+          "Nxd4",
+          "Nxd4",
+          "exd4",
+          "e5",
+          "Bxe5",
+          "Re1"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/136837790201",
+        "opponent": "Philippians46",
+        "opponentRating": 3195,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Rxe5",
+          "d5",
+          "Bd3",
+          "c5",
+          "Bg5",
+          "h6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Bd6",
+          "d4",
+          "Nxd4",
+          "Nxd4",
+          "exd4",
+          "e5",
+          "Bxe5",
+          "Re1"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/138934841285",
+        "opponent": "Philippians46",
+        "opponentRating": 3151,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Rxe5",
+          "c6",
+          "Bd3",
+          "d6",
+          "Re1",
+          "d5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Bd6",
+          "d4",
+          "Nxd4",
+          "Nxd4",
+          "exd4",
+          "e5",
+          "Bxe5",
+          "Re1"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/1pppnpb1/p1n2Bpp/3N4/B2pP3/5N2/PPP2PPP/R2QK2R b KQkq - 1 9",
+    "blunderSan": "Bxf6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/1077402075",
+        "opponent": "1stSecond",
+        "opponentRating": 2370,
+        "ply": 17,
+        "cliff": 4,
+        "punish": [
+          "Bxf6",
+          "Nxf6+",
+          "Kf8",
+          "Nxd4",
+          "Nf5",
+          "exf5",
+          "Qxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nge7",
+          "Nc3",
+          "g6",
+          "d4",
+          "exd4",
+          "Nd5",
+          "Bg7",
+          "Bg5",
+          "h6",
+          "Bf6"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2093339109",
+        "opponent": "JusticeBot",
+        "opponentRating": 2533,
+        "ply": 17,
+        "cliff": 4,
+        "punish": [
+          "Bxf6",
+          "Nxf6+",
+          "Kf8",
+          "Nxd4",
+          "Nf5",
+          "Bxc6",
+          "dxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nge7",
+          "Nc3",
+          "g6",
+          "d4",
+          "exd4",
+          "Nd5",
+          "Bg7",
+          "Bg5",
+          "h6",
+          "Bf6"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+    "blunderSan": "Be7",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/1454558589",
+        "opponent": "temporary-account",
+        "opponentRating": 1200,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "Re1",
+          "O-O",
+          "Bxc6",
+          "dxc6",
+          "Nxe5",
+          "Re8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/127329676239",
+        "opponent": "AmbartsumianTyhran2012",
+        "opponentRating": 2705,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "Bxc6",
+          "dxc6",
+          "d3",
+          "Bd6",
+          "Nc3",
+          "O-O"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/pppp2pp/2n2n2/1Bb1p3/4P3/5N2/PPP1QPPP/RNB2RK1 b kq - 4 7",
+    "blunderSan": "d6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/1875234705",
+        "opponent": "JSPrepz",
+        "opponentRating": 2560,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "Qc4",
+          "Bd7",
+          "Nc3",
+          "Qe7",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "f5",
+          "d3",
+          "fxe4",
+          "dxe4",
+          "Nf6",
+          "O-O",
+          "Bc5",
+          "Qe2"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2436223769",
+        "opponent": "AntonSmirnov",
+        "opponentRating": 2656,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "Qc4",
+          "Qe7",
+          "Nc3",
+          "a6",
+          "Bxc6+",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "f5",
+          "d3",
+          "fxe4",
+          "dxe4",
+          "Nf6",
+          "Qe2",
+          "Bc5",
+          "O-O"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2qkbnr/1ppb1ppp/p1np4/4p3/B3P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq - 0 6",
+    "blunderSan": "g6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/2170738344",
+        "opponent": "PaulPhoenix87",
+        "opponentRating": 2552,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "d4",
+          "Bg7",
+          "dxe5",
+          "Nxe5",
+          "Bxd7+",
+          "Qxd7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "d6",
+          "O-O",
+          "Bd7",
+          "c3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2615140484",
+        "opponent": "Annawel",
+        "opponentRating": 2895,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "d4",
+          "Bg7",
+          "dxe5",
+          "Nxe5",
+          "Nxe5",
+          "dxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "d6",
+          "O-O",
+          "Bd7",
+          "c3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2q1rk1/2p1bppp/p1n1b3/1p1pP3/4n3/1BP2N2/PP1N1PPP/R1BQR1K1 b - - 2 11",
+    "blunderSan": "Nc5",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/2594281085",
+        "opponent": "Mischuk_D",
+        "opponentRating": 2605,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Nc5",
+          "Bc2",
+          "d4",
+          "Ne4",
+          "d3",
+          "Nxc5",
+          "dxc2"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "O-O",
+          "c3",
+          "d5",
+          "d4",
+          "Nxe4",
+          "dxe5",
+          "Be6",
+          "Nbd2"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/3557363926",
+        "opponent": "Arystanner",
+        "opponentRating": 2727,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Nc5",
+          "Bc2",
+          "d4",
+          "cxd4",
+          "Nxd4",
+          "Nxd4",
+          "Qxd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "O-O",
+          "c3",
+          "d5",
+          "d4",
+          "Nxe4",
+          "dxe5",
+          "Be6",
+          "Nbd2"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2qkb1r/1bpp1ppp/p1n2n2/1p2p3/4P3/1BN2N2/PPPP1PPP/R1BQ1RK1 b kq - 3 7",
+    "blunderSan": "Be7",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/2598525023",
+        "opponent": "ShimanovAlex",
+        "opponentRating": 2738,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "d3",
+          "O-O",
+          "Nd5",
+          "d6",
+          "Nxe7+",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "b5",
+          "Bb3",
+          "Bb7",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/2796355820",
+        "opponent": "amintabatabaei",
+        "opponentRating": 2704,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "d3",
+          "O-O",
+          "Nd5",
+          "Na5",
+          "Nxe7+",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "b5",
+          "Bb3",
+          "Bb7",
+          "Nc3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1b1k2r/ppp1q1pp/2np1n2/1Bb1p3/2Q1P3/2N2N2/PPP2PPP/R1B2RK1 b kq - 3 9",
+    "blunderSan": "Bd7",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/2804796920",
+        "opponent": "AntonSmirnov",
+        "opponentRating": 2831,
+        "ply": 17,
+        "cliff": 3,
+        "punish": [
+          "Bd7",
+          "Nd5",
+          "Nxd5",
+          "exd5",
+          "Nd4",
+          "Bxd7+",
+          "Qxd7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "f5",
+          "d3",
+          "fxe4",
+          "dxe4",
+          "Nf6",
+          "Qe2",
+          "Bc5",
+          "O-O",
+          "d6",
+          "Qc4",
+          "Qe7",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/55657758877",
+        "opponent": "Doraemon7",
+        "opponentRating": 2822,
+        "ply": 17,
+        "cliff": 3,
+        "punish": [
+          "Bd7",
+          "Nd5",
+          "Nxd5",
+          "exd5",
+          "Nd4",
+          "Bxd7+",
+          "Qxd7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "f5",
+          "d3",
+          "fxe4",
+          "dxe4",
+          "Nf6",
+          "O-O",
+          "Bc5",
+          "Qd3",
+          "d6",
+          "Qc4",
+          "Qe7",
+          "Nc3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/2pp1pp1/p1n2n1p/1pb1p3/4P3/1BNP1N2/PPP2PPP/R1BQ1RK1 b kq - 1 8",
+    "blunderSan": "d6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/2860471238",
+        "opponent": "ChessQueen",
+        "opponentRating": 2608,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "Nd5",
+          "Bg4",
+          "c3",
+          "O-O",
+          "Nxf6+",
+          "Qxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d3",
+          "b5",
+          "Bb3",
+          "Bc5",
+          "Nc3",
+          "h6",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/6019514002",
+        "opponent": "spicycaterpillar",
+        "opponentRating": 3046,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "a3",
+          "O-O",
+          "h3",
+          "Nd4",
+          "Nxd4",
+          "Bxd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Bc5",
+          "d3",
+          "b5",
+          "Bb3",
+          "h6",
+          "Nc3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkbnr/ppp2ppp/2np4/1B2p3/3PP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+    "blunderSan": "exd4",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/2880730793",
+        "opponent": "KNVB",
+        "opponentRating": 2811,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "exd4",
+          "Nxd4",
+          "Bd7",
+          "Bxc6",
+          "bxc6",
+          "Nc3",
+          "g6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "d6",
+          "d4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/6494805827",
+        "opponent": "Firouzja2003",
+        "opponentRating": 3379,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "exd4",
+          "Nxd4",
+          "Bd7",
+          "Bxc6",
+          "bxc6",
+          "O-O",
+          "Nf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "d6",
+          "d4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/2pp1ppp/p1n2n2/1pb1p3/4P3/1B1P1N2/PPP2PPP/RNBQ1RK1 b kq - 1 7",
+    "blunderSan": "d6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/2964149767",
+        "opponent": "GM_dmitrij",
+        "opponentRating": 2765,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "Nc3",
+          "h6",
+          "Nd5",
+          "Na5",
+          "Nxf6+",
+          "Qxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Bc5",
+          "d3",
+          "b5",
+          "Bb3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/6076680117",
+        "opponent": "Shankland",
+        "opponentRating": 2882,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "Nc3",
+          "Bg4",
+          "Be3",
+          "Nd4",
+          "Bxd4",
+          "Bxd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Bc5",
+          "d3",
+          "b5",
+          "Bb3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1rk1/ppppbppp/2nn4/4N3/B2Pp3/2N5/PPP2PPP/R1BQR1K1 b - - 5 9",
+    "blunderSan": "a6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3268933456",
+        "opponent": "GMLazaroBruzon",
+        "opponentRating": 2897,
+        "ply": 17,
+        "cliff": 3,
+        "punish": [
+          "a6",
+          "Bb3",
+          "Nf5",
+          "Nxf7",
+          "Rxf7",
+          "Bxf7+",
+          "Kxf7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Re1",
+          "Be7",
+          "Ne5",
+          "O-O",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/4108474134",
+        "opponent": "Joshuachick",
+        "opponentRating": 2900,
+        "ply": 17,
+        "cliff": 4,
+        "punish": [
+          "a6",
+          "Bb3",
+          "Nf5",
+          "Rxe4",
+          "d6",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/pppp1ppp/2nn4/8/B2N4/8/PPP2PPP/RNBQ1RK1 b kq - 0 7",
+    "blunderSan": "Nxd4",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3492166384",
+        "opponent": "Robert_Chessmood",
+        "opponentRating": 2931,
+        "ply": 13,
+        "cliff": 9,
+        "punish": [
+          "Nxd4",
+          "Qxd4",
+          "Qf6",
+          "Re1+",
+          "Be7",
+          "Qxf6",
+          "gxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "Nxd4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/3492184216",
+        "opponent": "Robert_Chessmood",
+        "opponentRating": 2934,
+        "ply": 13,
+        "cliff": 9,
+        "punish": [
+          "Nxd4",
+          "Qxd4",
+          "Qf6",
+          "Re1+",
+          "Be7",
+          "Qxf6",
+          "gxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "Nxd4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkbnr/pppp1p1p/2n3p1/1B4B1/3pP3/5N2/PPP2PPP/RN1QK2R b KQkq - 1 5",
+    "blunderSan": "Be7",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3636687606",
+        "opponent": "lachesisQ",
+        "opponentRating": 3063,
+        "ply": 9,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "Bxe7",
+          "Qxe7",
+          "Bxc6",
+          "dxc6",
+          "Qxd4",
+          "Nf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "g6",
+          "d4",
+          "exd4",
+          "Bg5"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/4445529409",
+        "opponent": "Dr_Mortimer",
+        "opponentRating": 2938,
+        "ply": 9,
+        "cliff": 3,
+        "punish": [
+          "Be7",
+          "Bxc6",
+          "dxc6",
+          "Bxe7",
+          "Nxe7",
+          "Qxd4",
+          "Qxd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "g6",
+          "d4",
+          "exd4",
+          "Bg5"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/1pp1nppp/p1np4/4p3/B2PP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 0 6",
+    "blunderSan": "Bd7",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3728550048",
+        "opponent": "Hikaru",
+        "opponentRating": 3189,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Bd7",
+          "Bb3",
+          "Ng6",
+          "Ng5",
+          "Be6",
+          "Bxe6",
+          "fxe6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nge7",
+          "Nc3",
+          "a6",
+          "Ba4",
+          "d6",
+          "d4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/106370805789",
+        "opponent": "Jospem",
+        "opponentRating": 3182,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "Bd7",
+          "Bb3",
+          "Ng6",
+          "Ng5",
+          "Be6",
+          "Bxe6",
+          "fxe6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nge7",
+          "Nc3",
+          "d6",
+          "d4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/1pp1nppp/p1np4/4p3/4P3/1BN2N2/PPPP1PPP/R1BQK2R b KQkq - 1 6",
+    "blunderSan": "h6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/3839605098",
+        "opponent": "vugarrasulov",
+        "opponentRating": 2779,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "h6",
+          "d4",
+          "Ng6",
+          "dxe5",
+          "Ngxe5",
+          "Nxe5",
+          "dxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nge7",
+          "Nc3",
+          "a6",
+          "Ba4",
+          "d6",
+          "Bb3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/121158632289",
+        "opponent": "daro94",
+        "opponentRating": 2947,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "h6",
+          "d4",
+          "Ng6",
+          "dxe5",
+          "Ngxe5",
+          "Nxe5",
+          "dxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nge7",
+          "Nc3",
+          "d6",
+          "Bb3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2qr1k1/ppp1bppp/3p4/4Pn2/4RBQ1/1PN5/1PP2PPP/R5K1 b - - 2 15",
+    "blunderSan": "g6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/4076634681",
+        "opponent": "daro94",
+        "opponentRating": 2909,
+        "ply": 29,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Rd1",
+          "Qc8",
+          "Nd5",
+          "c6",
+          "Nxe7+",
+          "Rxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Nf5",
+          "Rxe4",
+          "Nxe5",
+          "dxe5",
+          "d6",
+          "Bf4",
+          "Be6",
+          "Bb3",
+          "Bxb3",
+          "axb3",
+          "Re8",
+          "Qg4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/93506297051",
+        "opponent": "BVB009",
+        "opponentRating": 2818,
+        "ply": 29,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Rd1",
+          "Qc8",
+          "Nd5",
+          "c6",
+          "Nxe7+",
+          "Rxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Nxe5",
+          "dxe5",
+          "Nf5",
+          "Rxe4",
+          "d6",
+          "Bf4",
+          "Be6",
+          "Bb3",
+          "Bxb3",
+          "axb3",
+          "Re8",
+          "Qg4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1r1k/ppppb1pp/2nn4/4Np2/3PpB2/1BN5/PPP2PPP/R2QR1K1 b - - 3 11",
+    "blunderSan": "Na5",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/4192431653",
+        "opponent": "Firouzja2003",
+        "opponentRating": 3042,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Na5",
+          "Nd5",
+          "Nxb3",
+          "axb3",
+          "c6",
+          "Nxe7",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+",
+          "Kh8",
+          "Bf4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/75718895647",
+        "opponent": "Murad_Ibrahimli",
+        "opponentRating": 2946,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Na5",
+          "Nd5",
+          "Nxb3",
+          "axb3",
+          "c6",
+          "Nxe7",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "f5",
+          "Bb3+",
+          "Kh8",
+          "Bf4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1rk1/pppp1ppp/2nn1b2/4N3/B2PpB2/2N5/PPP2PPP/R2QR1K1 b - - 7 10",
+    "blunderSan": "Nf5",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/4396160619",
+        "opponent": "GMLazaroBruzon",
+        "opponentRating": 2640,
+        "ply": 19,
+        "cliff": 3,
+        "punish": [
+          "Nf5",
+          "Rxe4",
+          "Nfxd4",
+          "Ng4",
+          "Ne6",
+          "Nxf6+",
+          "Qxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Re1",
+          "Be7",
+          "Ne5",
+          "O-O",
+          "Nc3",
+          "Bf6",
+          "Bf4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/113385582415",
+        "opponent": "NevorLegov",
+        "opponentRating": 2953,
+        "ply": 19,
+        "cliff": 3,
+        "punish": [
+          "Nf5",
+          "Rxe4",
+          "Nfxd4",
+          "Ng4",
+          "Ne6",
+          "Nxf6+",
+          "Qxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "e4",
+          "Ne5",
+          "Be7",
+          "Nc3",
+          "O-O",
+          "Re1",
+          "Bf6",
+          "Bf4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2q1rk1/2p1bppp/p2pbn2/np2p3/1P2P3/P1NP1N2/B1P2PPP/R1BQ1RK1 b - - 0 11",
+    "blunderSan": "Bxa2",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/4619741075",
+        "opponent": "Warzone2100",
+        "opponentRating": 2896,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Bxa2",
+          "Rxa2",
+          "Nc6",
+          "Bg5",
+          "Ng4",
+          "Bxe7",
+          "Nxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3",
+          "O-O",
+          "a3",
+          "d6",
+          "Nc3",
+          "Na5",
+          "Ba2",
+          "Be6",
+          "b4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/130734038691",
+        "opponent": "GM_dmitrij",
+        "opponentRating": 3037,
+        "ply": 21,
+        "cliff": 3,
+        "punish": [
+          "Bxa2",
+          "Rxa2",
+          "Nc6",
+          "Bg5",
+          "h6",
+          "Bxf6",
+          "Bxf6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3",
+          "d6",
+          "a3",
+          "O-O",
+          "Nc3",
+          "Na5",
+          "Ba2",
+          "Be6",
+          "b4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2q1rk1/pbppbppp/3n4/np6/3P4/2N2N2/PPB2PPP/R1BQR1K1 b - - 7 12",
+    "blunderSan": "Bf6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/5122934449",
+        "opponent": "spiritofwonder",
+        "opponentRating": 2963,
+        "ply": 23,
+        "cliff": 4,
+        "punish": [
+          "Bf6",
+          "Ne5",
+          "Re8",
+          "Nxb5",
+          "Nac4",
+          "Nxd6",
+          "Nxd6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "Bb7",
+          "Nc3",
+          "Na5",
+          "Bc2",
+          "O-O",
+          "Re1"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/116500191697",
+        "opponent": "legendisback1",
+        "opponentRating": 3066,
+        "ply": 23,
+        "cliff": 3,
+        "punish": [
+          "Bf6",
+          "Ne5",
+          "g6",
+          "Bh6",
+          "Bg7",
+          "Bxg7",
+          "Kxg7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "O-O",
+          "Nc3",
+          "Bb7",
+          "Re1",
+          "Na5",
+          "Bc2"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/B2PP3/2P2N2/PP3PPP/RNBQ1RK1 b kq - 2 7",
+    "blunderSan": "g6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/5309016454",
+        "opponent": "Jospem",
+        "opponentRating": 3000,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Bg5",
+          "Bg7",
+          "dxe5",
+          "Nxe5",
+          "Nxe5",
+          "dxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "d6",
+          "c3",
+          "Bd7",
+          "d4",
+          "Nf6",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/139048988784",
+        "opponent": "Little_Skib",
+        "opponentRating": 2955,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Bg5",
+          "Be7",
+          "Nbd2",
+          "O-O",
+          "Bxc6",
+          "Bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "d6",
+          "c3",
+          "Nf6",
+          "d4",
+          "Bd7",
+          "O-O"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/1pp2p1p/p1np1np1/4p3/B1P1P3/2NP1N2/PP3PPP/R1BQK2R b KQkq - 1 7",
+    "blunderSan": "Bg7",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/5859060747",
+        "opponent": "penguingm1",
+        "opponentRating": 3455,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Bg7",
+          "h3",
+          "O-O",
+          "O-O",
+          "Nd7",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d3",
+          "d6",
+          "c4",
+          "g6",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/139681947504",
+        "opponent": "TheeShelbyy",
+        "opponentRating": 2789,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Bg7",
+          "h3",
+          "O-O",
+          "Be3",
+          "h6",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d3",
+          "d6",
+          "c4",
+          "g6",
+          "Nc3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B2PP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+    "blunderSan": "exd4",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/6069142568",
+        "opponent": "vi_pranav",
+        "opponentRating": 2914,
+        "ply": 9,
+        "cliff": 3,
+        "punish": [
+          "exd4",
+          "O-O",
+          "d6",
+          "Nxd4",
+          "Bd7",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/61023583447",
+        "opponent": "WhiteKnight2612",
+        "opponentRating": 2759,
+        "ply": 9,
+        "cliff": 3,
+        "punish": [
+          "exd4",
+          "O-O",
+          "d6",
+          "Nxd4",
+          "Bd7",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkbnr/2pp2pp/p1n5/1p2Pp2/3p4/1B3N2/PPP2PPP/RNBQK2R b KQkq - 1 7",
+    "blunderSan": "Na5",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/6211179441",
+        "opponent": "NikoTheodorou",
+        "opponentRating": 2933,
+        "ply": 13,
+        "cliff": 4,
+        "punish": [
+          "Na5",
+          "Nxd4",
+          "Bb7",
+          "O-O",
+          "c5",
+          "Bxg8",
+          "Rxg8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "f5",
+          "d4",
+          "exd4",
+          "e5",
+          "b5",
+          "Bb3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/126258581129",
+        "opponent": "SpeedofLight0",
+        "opponentRating": 3073,
+        "ply": 13,
+        "cliff": 4,
+        "punish": [
+          "Na5",
+          "O-O",
+          "Bb7",
+          "Nxd4",
+          "c5",
+          "Bxg8",
+          "cxd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "f5",
+          "d4",
+          "exd4",
+          "e5",
+          "b5",
+          "Bb3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/ppppnpbp/2n3p1/1B6/3NP3/2N1B3/PPP2PPP/R2QK2R b KQkq - 2 7",
+    "blunderSan": "O-O",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/6499529091",
+        "opponent": "Sviridov_Valery",
+        "opponentRating": 2998,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "O-O",
+          "d5",
+          "exd5",
+          "Nxd5",
+          "Nxd5",
+          "Qxd5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nge7",
+          "Nc3",
+          "g6",
+          "d4",
+          "exd4",
+          "Nxd4",
+          "Bg7",
+          "Be3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/6596467121",
+        "opponent": "Sviridov_Valery",
+        "opponentRating": 3009,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "O-O",
+          "d5",
+          "exd5",
+          "Nxd5",
+          "Nxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nge7",
+          "Nc3",
+          "g6",
+          "d4",
+          "exd4",
+          "Nxd4",
+          "Bg7",
+          "Be3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2q1rk1/pbppbppp/8/nn6/1p1P4/3Q1N2/PPB2PPP/R1B1R1K1 b - - 1 14",
+    "blunderSan": "g6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/59910603601",
+        "opponent": "GilbertElroy",
+        "opponentRating": 2851,
+        "ply": 27,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Qxb5",
+          "Bxf3",
+          "Qxa5",
+          "Bb7",
+          "Bf4",
+          "Bd6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "O-O",
+          "Nc3",
+          "Bb7",
+          "Re1",
+          "Na5",
+          "Bc2",
+          "b4",
+          "Nb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/114446465249",
+        "opponent": "TRadjabov",
+        "opponentRating": 3034,
+        "ply": 27,
+        "cliff": 3,
+        "punish": [
+          "g6",
+          "Qxb5",
+          "Bxf3",
+          "Qxa5",
+          "Bb7",
+          "Bh6",
+          "Re8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "O-O",
+          "Nc3",
+          "Bb7",
+          "Re1",
+          "Na5",
+          "Bc2",
+          "b4",
+          "Nb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2q1rk1/pbpp1ppp/5b2/nn2N3/1p1P4/3Q4/PPB2PPP/R1B1R1K1 b - - 1 15",
+    "blunderSan": "g6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/60847109757",
+        "opponent": "Njal28",
+        "opponentRating": 3050,
+        "ply": 29,
+        "cliff": 4,
+        "punish": [
+          "g6",
+          "Qxb5",
+          "c6",
+          "Qxb4",
+          "Ba6",
+          "Bd2",
+          "Nb7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "O-O",
+          "Nc3",
+          "Bb7",
+          "Re1",
+          "Bf6",
+          "Ne5",
+          "Na5",
+          "Bc2",
+          "b4",
+          "Nb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/121754434095",
+        "opponent": "ChristopherYoo",
+        "opponentRating": 3022,
+        "ply": 29,
+        "cliff": 4,
+        "punish": [
+          "g6",
+          "Qxb5",
+          "c6",
+          "Qxb4",
+          "c5",
+          "Qa4",
+          "cxd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O",
+          "Nxe4",
+          "d4",
+          "Nd6",
+          "Ba4",
+          "exd4",
+          "c3",
+          "Be7",
+          "cxd4",
+          "b5",
+          "Bb3",
+          "O-O",
+          "Nc3",
+          "Bb7",
+          "Re1",
+          "Bf6",
+          "Ne5",
+          "Na5",
+          "Bc2",
+          "b4",
+          "Nb5",
+          "Nxb5",
+          "Qd3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bq1rk1/pppp1ppp/2n2n2/1Bb1p3/4P3/2PP1N2/PP3PPP/RNBQ1RK1 b - - 2 6",
+    "blunderSan": "d6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/87632496199",
+        "opponent": "artooon",
+        "opponentRating": 3051,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "Bg5",
+          "h6",
+          "Bh4",
+          "a6",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "d3",
+          "Bc5",
+          "c3",
+          "O-O",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/124876119169",
+        "opponent": "JustinWang1234",
+        "opponentRating": 2945,
+        "ply": 11,
+        "cliff": 3,
+        "punish": [
+          "d6",
+          "Bg5",
+          "h6",
+          "Bh4",
+          "a6",
+          "Bxc6",
+          "bxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "d3",
+          "Bc5",
+          "c3",
+          "O-O",
+          "O-O"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/1pp2pbp/p1np1np1/4p3/B1P1P3/2NP1N1P/PP3PP1/R1BQK2R b KQkq - 0 8",
+    "blunderSan": "O-O",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/88211452005",
+        "opponent": "HansOnTwitch",
+        "opponentRating": 3032,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Be3",
+          "Nd7",
+          "O-O",
+          "Nd4",
+          "Bxd4",
+          "exd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d3",
+          "d6",
+          "c4",
+          "g6",
+          "Nc3",
+          "Bg7",
+          "h3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/130037390007",
+        "opponent": "HansOnTwitch",
+        "opponentRating": 3228,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "Be3",
+          "Nd7",
+          "O-O",
+          "Nd4",
+          "Bxd7",
+          "Nxf3+"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "d3",
+          "d6",
+          "c4",
+          "g6",
+          "Nc3",
+          "Bg7",
+          "h3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/4bppp/p2p1n2/npp1p3/4P3/P1NP1N2/BPP2PPP/R1BQ1RK1 b kq - 1 10",
+    "blunderSan": "Be6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/88588240631",
+        "opponent": "BuLolo",
+        "opponentRating": 3041,
+        "ply": 19,
+        "cliff": 3,
+        "punish": [
+          "Be6",
+          "b4",
+          "cxb4",
+          "axb4",
+          "Nc6",
+          "Bxe6",
+          "fxe6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3",
+          "d6",
+          "a3",
+          "Na5",
+          "Ba2",
+          "c5",
+          "Nc3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/112137073705",
+        "opponent": "AlphaOdin",
+        "opponentRating": 2949,
+        "ply": 19,
+        "cliff": 3,
+        "punish": [
+          "Be6",
+          "b4",
+          "cxb4",
+          "axb4",
+          "Nc6",
+          "Bxe6",
+          "fxe6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3",
+          "d6",
+          "a3",
+          "Na5",
+          "Ba2",
+          "c5",
+          "Nc3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqnrk1/3pbppp/p7/1p2P3/2pP4/8/PPB2PPP/RNBQR1K1 b - - 1 13",
+    "blunderSan": "d5",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/89013659247",
+        "opponent": "BuLolo",
+        "opponentRating": 3060,
+        "ply": 25,
+        "cliff": 4,
+        "punish": [
+          "d5",
+          "Nc3",
+          "b4",
+          "Nxd5",
+          "a5",
+          "Nxe7+",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "O-O",
+          "d4",
+          "Nxd4",
+          "Nxd4",
+          "exd4",
+          "c3",
+          "c5",
+          "e5",
+          "Ne8",
+          "cxd4",
+          "c4",
+          "Bc2"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/117306020797",
+        "opponent": "scarabee43",
+        "opponentRating": 2914,
+        "ply": 25,
+        "cliff": 4,
+        "punish": [
+          "d5",
+          "Nc3",
+          "b4",
+          "Nxd5",
+          "Nc7",
+          "Nxe7+",
+          "Qxe7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "Re1",
+          "b5",
+          "Bb3",
+          "O-O",
+          "d4",
+          "Nxd4",
+          "Nxd4",
+          "exd4",
+          "e5",
+          "Ne8",
+          "c3",
+          "c5",
+          "cxd4",
+          "c4",
+          "Bc2"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/1pppnppp/p1n5/8/Bb1PP3/5N2/PP1B1PPP/RN1QK2R b KQkq - 2 8",
+    "blunderSan": "Bxd2+",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/96698292739",
+        "opponent": "wonderfultime",
+        "opponentRating": 3079,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "Bxd2+",
+          "Nbxd2",
+          "d5",
+          "e5",
+          "O-O",
+          "Bxc6",
+          "Nxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Bc5",
+          "c3",
+          "Nge7",
+          "d4",
+          "exd4",
+          "cxd4",
+          "Bb4+",
+          "Bd2"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/113560779883",
+        "opponent": "artin10862",
+        "opponentRating": 2956,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "Bxd2+",
+          "Nbxd2",
+          "d5",
+          "O-O",
+          "O-O",
+          "Bxc6",
+          "Nxc6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Bc5",
+          "c3",
+          "Nge7",
+          "d4",
+          "exd4",
+          "cxd4",
+          "Bb4+",
+          "Bd2"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+    "blunderSan": "Bc5",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/100065768959",
+        "opponent": "wonderfultime",
+        "opponentRating": 3062,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "Bxc6",
+          "dxc6",
+          "O-O",
+          "f6",
+          "c3",
+          "Bd6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/107367895721",
+        "opponent": "chess123456s",
+        "opponentRating": 2686,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "Bc5",
+          "Bxc6",
+          "dxc6",
+          "d3",
+          "f6",
+          "Be3",
+          "Ne7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/1pp1nppp/p2p4/n3p3/3PP3/1BN2N2/PPP2PPP/R1BQK2R b KQkq - 0 7",
+    "blunderSan": "Nxb3",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/107046635389",
+        "opponent": "Anton_Demchenko",
+        "opponentRating": 2962,
+        "ply": 13,
+        "cliff": 9,
+        "punish": [
+          "Nxb3",
+          "axb3",
+          "Nc6",
+          "dxe5",
+          "dxe5",
+          "Qxd8+",
+          "Kxd8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nge7",
+          "Nc3",
+          "d6",
+          "Bb3",
+          "Na5",
+          "d4"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/116248211611",
+        "opponent": "Valentin_Baidetskyi",
+        "opponentRating": 2863,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "Nxb3",
+          "axb3",
+          "Ng6",
+          "dxe5",
+          "Nxe5",
+          "Nxe5",
+          "dxe5"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nge7",
+          "Nc3",
+          "d6",
+          "Bb3",
+          "Na5",
+          "d4"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r2qkbnr/1pp3pp/p1np4/3P1b2/B7/2P2Q2/PP3PPP/RNB1K2R b KQkq - 0 9",
+    "blunderSan": "Qe7+",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/109733461137",
+        "opponent": "ChristopherYoo",
+        "opponentRating": 3023,
+        "ply": 17,
+        "cliff": 3,
+        "punish": [
+          "Qe7+",
+          "Be3",
+          "Be4",
+          "dxc6",
+          "Bxf3",
+          "cxb7+",
+          "Kd8"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "d6",
+          "c3",
+          "f5",
+          "exf5",
+          "Bxf5",
+          "d4",
+          "e4",
+          "d5",
+          "exf3",
+          "Qxf3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/109734060737",
+        "opponent": "ChristopherYoo",
+        "opponentRating": 3025,
+        "ply": 17,
+        "cliff": 3,
+        "punish": [
+          "Qe7+",
+          "Kd1",
+          "Be4",
+          "Qh3",
+          "b5",
+          "dxc6",
+          "bxa4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "d6",
+          "c3",
+          "f5",
+          "exf5",
+          "Bxf5",
+          "d4",
+          "e4",
+          "d5",
+          "exf3",
+          "Qxf3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/2ppbppp/p1n2n2/1p2p3/4P3/1B1P1N2/PPP2PPP/RNBQ1RK1 b kq - 1 7",
+    "blunderSan": "O-O",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/109922416797",
+        "opponent": "WhiteKnight2612",
+        "opponentRating": 2831,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "a3",
+          "d6",
+          "h3",
+          "Be6",
+          "Bxe6",
+          "fxe6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/121756789655",
+        "opponent": "bravehorse",
+        "opponentRating": 2787,
+        "ply": 13,
+        "cliff": 3,
+        "punish": [
+          "O-O",
+          "a3",
+          "d6",
+          "h3",
+          "Be6",
+          "Bxe6",
+          "fxe6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqk2r/2p1bppp/p1np1n2/1p2p3/4P3/PB1P1N2/1PP2PPP/RNBQ1RK1 b kq - 0 8",
+    "blunderSan": "Na5",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/111819184609",
+        "opponent": "AlphaOdin",
+        "opponentRating": 3021,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "Na5",
+          "Ba2",
+          "c5",
+          "Nc3",
+          "Be6",
+          "Bxe6",
+          "fxe6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3",
+          "d6",
+          "a3"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/143567099714",
+        "opponent": "Salem-AR",
+        "opponentRating": 3160,
+        "ply": 15,
+        "cliff": 3,
+        "punish": [
+          "Na5",
+          "Ba2",
+          "c5",
+          "Nc3",
+          "Be6",
+          "Bxe6",
+          "fxe6"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "a6",
+          "Ba4",
+          "Nf6",
+          "O-O",
+          "Be7",
+          "d3",
+          "b5",
+          "Bb3",
+          "d6",
+          "a3"
+        ]
+      }
+    ]
+  },
+  {
+    "beforeFen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+    "blunderSan": "a6",
+    "count": 2,
+    "samples": [
+      {
+        "url": "https://www.chess.com/game/live/114805137903",
+        "opponent": "Saveliy_Golubov",
+        "opponentRating": 3000,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "a6",
+          "Bxc6",
+          "dxc6",
+          "Nxe5",
+          "Bd6",
+          "Nf3",
+          "Be7"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      },
+      {
+        "url": "https://www.chess.com/game/live/141200717710",
+        "opponent": "NodariousBIG",
+        "opponentRating": 3006,
+        "ply": 7,
+        "cliff": 3,
+        "punish": [
+          "a6",
+          "Ba4",
+          "d6",
+          "Bxc6+",
+          "bxc6",
+          "d4",
+          "exd4"
+        ],
+        "prefixMoves": [
+          "e4",
+          "e5",
+          "Nf3",
+          "Nc6",
+          "Bb5",
+          "Nf6",
+          "O-O"
+        ]
+      }
+    ]
+  }
+]
