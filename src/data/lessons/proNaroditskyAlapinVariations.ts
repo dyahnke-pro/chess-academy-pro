@@ -124,7 +124,7 @@ const D5_OPEN: LessonScript = {
       moves: 'e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Nc6 Be3 cxd4 Nb5 Qd7 Nbxd4 Be7 Nxc6 Qxc6 Ne5 Qe4 Bb5+',
       arrows: [{ from: 'f1', to: 'b5', color: ATK }, { from: 'b5', to: 'e8', color: VIS }],
       highlights: [{ square: 'b5', color: KEY }, { square: 'e8', color: ATK }],
-      say: "After Qe4 we play Bb5+! — discovered attack the queen no longer defends e4, and the bishop check forces Kf8 (the only block). Black's king sits awkwardly on f8 for the rest of the game. 66.3% score in 783 games here, with the structural edge converting in the R+minor+P endgame (27% of decisive games).",
+      say: "After ...Qe4 [Black's queen attacks our knight on e5], we play Bb5+! — the check on the king forces Kf8 (the only legal response; no interposition saves both pieces). Black's king sits awkwardly on f8 for the rest of the game. Our knight retreats next, and the structural edge converts in the R+minor+P endgame (27% of decisive games).",
       sayShort: 'Bb5+ — fix Black\'s king on f8.',
     }),
   ],

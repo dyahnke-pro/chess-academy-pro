@@ -35,9 +35,11 @@ export const PRO_NARODITSKY_ALAPIN_TAB_PLAN_IDS: Record<string, string[]> = {
   ],
   '2…nc6 line': [
     'mp-pronaroAlapin-nc6-mg',
+    'mp-pronaroAlapin-nc6-endgame',
   ],
   'spine 4…d6 bc4 gambit': [
     'mp-pronaroAlapin-spined6-mg',
+    'mp-pronaroAlapin-spined6-endgame',
   ],
   'spine 4…e6 iqp lines': [
     'mp-pronaroAlapin-spinee6-mg',

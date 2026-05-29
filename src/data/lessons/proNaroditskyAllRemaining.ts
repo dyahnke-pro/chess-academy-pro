@@ -62,10 +62,10 @@ export const PRO_NAR_ALAPIN_LESSON: LessonScript = {
     }),
     b({
       id: 'centre', moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4',
-      arrows: [{ from: 'c4', to: 'f7', color: ATK }],
+      arrows: [{ from: 'c4', to: 'd5', color: ATK }],
       highlights: [{ square: 'c4', color: KEY }, { square: 'd5', color: SOFT }],
-      say: "Nf3 + Bc4. The bishop hits the knight on d5 AND eyes f7. Black has to react — every move from here is them reacting to us, not the other way around. This is the wishlist position we pictured on move two.",
-      sayShort: 'Bc4 — hit d5 and stare at f7.',
+      say: "Nf3 + Bc4. The bishop attacks the knight on d5 directly — once Black moves the knight, the diagonal opens up toward f7 for the long-term attacking plan. Black has to react; we keep the initiative throughout the opening.",
+      sayShort: 'Bc4 — hit the d5-knight.',
     }),
     b({
       id: 'displace', moves: 'e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5',

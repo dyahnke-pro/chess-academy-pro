@@ -177,10 +177,10 @@ export const PRO_NARODITSKY_CARO_KANN_LESSON: LessonScript = {
     b({
       id: 'queen-to-c7',
       moves: 'e4 c6 d4 d5 e5 c5 dxc5 e6 Nf3 Bxc5 Bd3 Nc6 O-O Nge7 Nbd2 Ng6 Nb3 Bb6 Re1 Qc7',
-      arrows: [{ from: 'c7', to: 'c2', color: VIS }],
-      highlights: [{ square: 'c7', color: KEY }],
+      arrows: [{ from: 'c7', to: 'c1', color: VIS }],
+      highlights: [{ square: 'c7', color: KEY }, { square: 'c8', color: SOFT }],
       say:
-        "Qc7 — and now our queenside machine is online. The queen on c7 pressures the c-file, eyes c2, defends b7 indirectly, and connects our rooks. The Caro-Kann is famous for the queen sitting on c7 in middlegames — it's one of his recurring patterns across his entire Caro repertoire, not just this variation.",
+        "Qc7 — and now our queenside machine is online. The queen on c7 pressures the c-file, defends b7 indirectly, and connects our rooks. The Caro-Kann is famous for the queen sitting on c7 in middlegames — it's one of his recurring patterns across his entire Caro repertoire, not just this variation.",
       sayShort: 'Qc7 — queen on the c-file machine.',
     }),
     b({
