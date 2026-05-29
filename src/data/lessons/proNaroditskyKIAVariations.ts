@@ -226,10 +226,22 @@ const VS_E5_OPEN: LessonScript = {
       sayShort: '...d5 — central try.',
     }),
     b({
-      id: 'e5-d4-development', moves: 'Nf3 e5 Nxe5 Nc6 Nf3 d5 d4',
-      highlights: [{ square: 'd4', color: KEY }],
-      say: "d4 — we play our own central pawn, blunting Black's compensation. With the extra pawn AND solid central structure, the conversion is straightforward. 72.2% score for us across 582 games.",
-      sayShort: 'd4 — extra pawn converts.',
+      id: 'e5-d4-development', moves: 'Nf3 e5 Nxe5 Nc6 Nf3 d5 d4 Bd6',
+      highlights: [{ square: 'd4', color: KEY }, { square: 'd6', color: SOFT }],
+      say: "d4 ...Bd6 — we play our own central pawn blunting Black's compensation, Black develops the bishop actively. The d4 fixes the centre, and Black has limited targets for the pawn deficit.",
+      sayShort: 'd4 — solid centre.',
+    }),
+    b({
+      id: 'e5-develop', moves: 'Nf3 e5 Nxe5 Nc6 Nf3 d5 d4 Bd6 e3 Nf6 Be2',
+      highlights: [{ square: 'e3', color: SOFT }, { square: 'e2', color: KEY }],
+      say: "e3 ...Nf6 Be2 — we play e3 supporting d4, Black develops the king knight, we develop the bishop to e2. The classical KIA-Reti structure is set up with the extra pawn AND piece coordination.",
+      sayShort: 'Be2 — develop.',
+    }),
+    b({
+      id: 'e5-middlegame', moves: 'Nf3 e5 Nxe5 Nc6 Nf3 d5 d4 Bd6 e3 Nf6 Be2 O-O O-O',
+      highlights: [{ square: 'g1', color: KEY }, { square: 'g8', color: SOFT }],
+      say: "...O-O O-O — both sides castle, completing development. White has reached the early middlegame UP A PAWN with a solid central structure. Conversion plan: Nbd2 + queenside expansion (c4 + b3) + slow conversion. 72.2% score across 582 games confirms the pawn-up technique.",
+      sayShort: 'O-O — middlegame, pawn up.',
     }),
   ],
 };
@@ -278,10 +290,16 @@ const VS_C6_SLAV: LessonScript = {
       sayShort: 'd3 — flexible setup.',
     }),
     b({
-      id: 'c6-middlegame', moves: 'Nf3 c6 g3 d5 Bg2 Nf6 O-O Bg4 d3 Nbd7 Nbd2 e6',
-      highlights: [{ square: 'd2', color: SOFT }, { square: 'e6', color: SOFT }],
-      say: "...Nbd7 Nbd2 ...e6 — both sides finish development. The middlegame plan: e4 break opening lines for the Bg2 + central squeeze. Black's c6-Nbd7-e6 setup is solid but completely passive. His 77.7% score in this line is the highest of any KIA variation.",
-      sayShort: 'Nbd2 — prep e4 break.',
+      id: 'c6-middlegame', moves: 'Nf3 c6 g3 d5 Bg2 Nf6 O-O Bg4 d3 Nbd7 Nbd2 e6 e4',
+      highlights: [{ square: 'e4', color: KEY }],
+      say: "...Nbd7 Nbd2 ...e6 e4 — both sides finish development AND we push e4 immediately. The e4 break is the climax: it challenges Black's d5-pawn AND opens lines for the Bg2.",
+      sayShort: 'e4 — central break.',
+    }),
+    b({
+      id: 'c6-castle', moves: 'Nf3 c6 g3 d5 Bg2 Nf6 O-O Bg4 d3 Nbd7 Nbd2 e6 e4 Be7 Re1 O-O',
+      highlights: [{ square: 'g8', color: SOFT }, { square: 'e1', color: KEY }],
+      say: "...Be7 Re1 ...O-O — Black completes development with Be7 + O-O, we lift the rook to e1 supporting the central pawn. Both kings safe, structure defined: White's central pressure vs Black's passive c6-Nbd7-Be7 setup. The middlegame plan from here: Qe2 + Nf1-Ng3 reroute toward kingside attack.",
+      sayShort: 'O-O — middlegame set.',
     }),
   ],
 };
@@ -332,8 +350,20 @@ const VS_B6_OWEN: LessonScript = {
     b({
       id: 'b6-c4', moves: 'Nf3 b6 g3 Bb7 Bg2 Nf6 O-O e6 d4 Be7 c4',
       highlights: [{ square: 'c4', color: KEY }],
-      say: "...Be7 c4 — Black completes development calmly, we expand on the queenside with c4. The c4 + d4 + Bg2 + Nf3 setup is a Reversed-Slav structure where White has all the active plans.",
+      say: "...Be7 c4 — Black develops, we expand with c4. The c4 + d4 + Bg2 + Nf3 setup is a Reversed-Slav structure where White has all the active plans.",
       sayShort: 'c4 — queenside expansion.',
+    }),
+    b({
+      id: 'b6-castle', moves: 'Nf3 b6 g3 Bb7 Bg2 Nf6 O-O e6 d4 Be7 c4 O-O Nc3',
+      highlights: [{ square: 'g8', color: SOFT }, { square: 'c3', color: KEY }],
+      say: "...O-O Nc3 — Black castles, we develop the queen knight to c3 completing the queenside setup. Both kings safe, full central structure.",
+      sayShort: 'Nc3 — finish development.',
+    }),
+    b({
+      id: 'b6-middlegame', moves: 'Nf3 b6 g3 Bb7 Bg2 Nf6 O-O e6 d4 Be7 c4 O-O Nc3 d5 cxd5',
+      highlights: [{ square: 'd5', color: SOFT }, { square: 'd5', color: ATK }],
+      say: "...d5 cxd5 — Black tries the central counter, we trade pawns opening the c-file for our rook AND keeping the central pressure. The Reversed-Slav middlegame favors White's space + active piece play. 75.8% score confirms.",
+      sayShort: 'cxd5 — central trade.',
     }),
   ],
 };

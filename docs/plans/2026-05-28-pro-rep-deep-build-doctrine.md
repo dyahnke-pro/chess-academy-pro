@@ -428,6 +428,78 @@ console.log(f.totalGames, 'games |', f.spineMoves.length, 'plies in spine');
 If either fails, the variation prefix needs adjusting (probably too
 specific or wrong move order).
 
+### STEP 3.5 — THE END-TO-END COVERAGE RULE (David 2026-05-29, locked)
+
+🚨 **NON-NEGOTIABLE.** Every opening + variation lesson MUST walk
+INTO THE MIDDLEGAME — wherever that is for the specific opening,
+not a fixed ply count. Some openings reach the middlegame at ply
+12 (sharp/forcing lines); others at ply 20+ (slow positional
+setups). The shipping criterion is qualitative, not numeric.
+
+**Why this matters (the bug that locked the rule):** when a variation
+ends mid-opening (still developing pieces, no structural commitments,
+no plan visible), the student finishes the lesson without grounding.
+The middlegame plan that's supposed to pick up from there starts at
+a FEN the student never reached in the lesson. End-to-end coverage
+breaks down, and the lesson feels disconnected.
+
+**The qualitative shipping criterion — does the variation reach a
+position where ALL of these are true?**
+
+1. **Both sides have castled (or made the king-safety commitment).**
+   No more development urgency around the king.
+2. **Both sides have completed minor piece development.** All
+   knights and bishops are out (or accounted for via trades).
+3. **The structural fight is defined.** Open / closed centre, pawn
+   chains, key squares, and which side attacks which flank — all
+   visible from the final position.
+4. **A clear middlegame plan is emerging for one or both sides.**
+   The narration in the final beat names the upcoming plan (e.g.
+   "kingside attack with f5", "queenside expansion with b4-b5",
+   "central break with d4").
+
+If all four are true, the variation has reached the middlegame and
+is done. If any of them is false, walk a few more plies.
+
+**The end-to-end teaching pipeline:**
+
+1. **Opening + variation lessons** walk to the early middlegame
+   (per the criterion above). The last beat anchors at a position
+   where the middlegame plan is about to start.
+
+2. **Middlegame plans** anchor AT or PAST the opening's terminus
+   (per STEP 9 Rule 1 below). The plan's setupSans END at the same
+   position the variation lesson ends at, or 4-6 plies past it.
+   The student transitions seamlessly: variation lesson → "now
+   let's see what comes next" → middlegame plan.
+
+3. **Endgame plans** anchor in the converted middlegame position
+   (typically past move 25-30, where pieces have traded down to
+   R+min+P / Q+P / similar structures). The endgame plan picks up
+   from the structural pattern the middlegame plan converted into.
+
+**Quick guideline for ply count (informational, NOT a hard rule):**
+- Sharp/forcing lines (gambits, Najdorf English Attack, etc.): 10-15
+  plies often reaches the middlegame
+- Classical lines (Caro Classical, Ruy Closed, KIA c6 Slav-like):
+  15-22 plies
+- Slow positional lines (KIA Reverse Sicilian, Ruy d3, slow Slavs):
+  20+ plies
+
+**Reference builds satisfy this rule:**
+- Alapin variations: 25-32 ply spines (sharp lines extended to
+  full middlegame conversion)
+- KID variations: 22-30 ply spines
+- Caro variations: 13-25 ply spines depending on sharpness
+
+**Newly authored variations that end mid-opening must be extended.**
+Do not ship a variation that stops at "and now both sides have
+their knights out" — keep walking until the middlegame plan is
+visible from the last position. The 7-ply KIA vs ...e5 gambit-accept
+that just reached the pawn-up position is NOT done; extend to show
+the conversion plan (development + Black's compensation attempt +
+how White consolidates).
+
 ### STEP 4 — Count plans HONESTLY using the WIDER CORPUS rule
 
 🚨 **THIS IS THE NON-NEGOTIABLE WIDER-CORPUS RULE (David 2026-05-28,

@@ -218,10 +218,16 @@ const C3_SIDELINE: LessonScript = {
       sayShort: 'd3 — flexibility.',
     }),
     b({
-      id: 'c3-middlegame', moves: 'e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 Bc2 Bg4 d3 e6 O-O Be7',
+      id: 'c3-develop', moves: 'e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 Bc2 Bg4 d3 e6 O-O Be7',
       highlights: [{ square: 'g1', color: KEY }],
-      say: "...e6 O-O ...Be7 — classical development for both. White's middlegame plan: Nbd2 + Re1 + Nf1 + Ng3 reroute toward the kingside attack. The slow Maroczy-Spanish squeeze converts steadily.",
-      sayShort: 'O-O — slow Spanish squeeze.',
+      say: "...e6 O-O ...Be7 — classical development for both. White's middlegame plan begins next: the Nbd2 reroute toward the kingside attack.",
+      sayShort: 'O-O — develop.',
+    }),
+    b({
+      id: 'c3-middlegame', moves: 'e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 Bc2 Bg4 d3 e6 O-O Be7 Nbd2 O-O Re1',
+      highlights: [{ square: 'd2', color: SOFT }, { square: 'e1', color: KEY }],
+      say: "Nbd2 ...O-O Re1 — White develops the queen knight to d2 (preparing Nf1-Ng3 reroute), Black castles, we lift the rook to e1. The middlegame structure is now defined: White's kingside attack plan vs Black's queenside ...b5 expansion. Closed Spanish-style squeeze.",
+      sayShort: 'Re1 — middlegame set.',
     }),
   ],
 };
@@ -258,10 +264,22 @@ const BC4_VS_D6: LessonScript = {
       sayShort: 'c3 — prep d4.',
     }),
     b({
-      id: 'bc4-middlegame', moves: 'e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 c3 e6 Bb3',
+      id: 'bc4-bb3', moves: 'e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 c3 e6 Bb3',
       highlights: [{ square: 'b3', color: KEY }],
-      say: "...e6 Bb3 — Black plays the French-like ...e6, we retreat the bishop to b3 keeping the diagonal alive. The Bb3 also avoids the future ...Bxc4 trade. From here Nbd2 + O-O completes development.",
+      say: "...e6 Bb3 — Black plays the French-like ...e6, we retreat the bishop to b3 keeping the diagonal alive. The Bb3 also avoids the future ...Bxc4 trade.",
       sayShort: 'Bb3 — keep the diagonal.',
+    }),
+    b({
+      id: 'bc4-castle', moves: 'e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 c3 e6 Bb3 Be7 O-O O-O',
+      highlights: [{ square: 'g1', color: KEY }, { square: 'g8', color: SOFT }],
+      say: "...Be7 O-O ...O-O — both develop calmly and castle. The structure is now a Closed Italian-like setup with c5 instead of e5 — Black's structure is slightly worse.",
+      sayShort: 'O-O — both safe.',
+    }),
+    b({
+      id: 'bc4-middlegame', moves: 'e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 c3 e6 Bb3 Be7 O-O O-O Re1 b5 Nbd2',
+      highlights: [{ square: 'd2', color: KEY }],
+      say: "Re1 ...b5 Nbd2 — White's rook supports the central squares, Black plays the queenside expansion ...b5, we develop the queen knight to d2 (ready for the Nf1-Ng3 reroute). Standard Italian-Spanish middlegame: White's kingside attack vs Black's queenside push.",
+      sayShort: 'Nbd2 — KIA reroute square.',
     }),
   ],
 };
@@ -306,8 +324,20 @@ const VS_G6_DRAGON: LessonScript = {
     b({
       id: 'g6-bg7', moves: 'e4 c5 Nf3 g6 c3 d5 exd5 Qxd5 d4 Bg7',
       highlights: [{ square: 'g7', color: KEY }],
-      say: "...Bg7 — Black completes the Dragon fianchetto. The position is now a Maroczy Bind with one extra tempo for us. The classical conversion plan: Nc3 (attacking the queen) + Be2 + O-O + queenside expansion.",
+      say: "...Bg7 — Black completes the Dragon fianchetto. The position is now a Maroczy Bind with one extra tempo for us.",
       sayShort: '...Bg7 — Maroczy Bind.',
+    }),
+    b({
+      id: 'g6-nbd2', moves: 'e4 c5 Nf3 g6 c3 d5 exd5 Qxd5 d4 Bg7 Nbd2 Nf6 dxc5',
+      highlights: [{ square: 'd2', color: SOFT }, { square: 'c5', color: ATK }],
+      say: "Nbd2 ...Nf6 dxc5 — we develop the queen knight to d2 (the c3-pawn blocks Nc3), Black develops the king knight, we trade off the c-pawn opening the centre.",
+      sayShort: 'dxc5 — open the centre.',
+    }),
+    b({
+      id: 'g6-middlegame', moves: 'e4 c5 Nf3 g6 c3 d5 exd5 Qxd5 d4 Bg7 Nbd2 Nf6 dxc5 Qxc5 Bc4 O-O O-O',
+      highlights: [{ square: 'g1', color: KEY }, { square: 'g8', color: SOFT }],
+      say: "...Qxc5 Bc4 ...O-O O-O — Black recaptures the c-pawn, both sides develop and castle. Middlegame structure: open centre + Black's queen on c5 (slightly exposed) + White's classical Bc4 piece coordination. White scores 74.6% from here.",
+      sayShort: 'O-O — middlegame structure.',
     }),
   ],
 };
