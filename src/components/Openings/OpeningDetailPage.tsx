@@ -85,6 +85,9 @@ import {
   getProNaroditskyCaroTrapPlayableLine,
 } from '../../data/lessons/proNaroditskyCaroTrapLessons';
 import {
+  getProNaroditskyKIATrapPlayableLine,
+} from '../../data/lessons/proNaroditskyKIATrapLessons';
+import {
   VIENNA_TRAP_LESSONS,
   getViennaTrapsForTab,
   getViennaTrapPlayableLine,
@@ -783,7 +786,9 @@ export function OpeningDetailPage(): JSX.Element {
           ? getProNaroditskyKIDTrapPlayableLine(trap.name)
           : opening.id === 'pro-naroditsky-caro-kann'
             ? getProNaroditskyCaroTrapPlayableLine(trap.name)
-            : null;
+            : opening.id === 'pro-naroditsky-kia'
+              ? getProNaroditskyKIATrapPlayableLine(trap.name)
+              : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -813,7 +818,9 @@ export function OpeningDetailPage(): JSX.Element {
           ? getProNaroditskyKIDTrapPlayableLine(warn.name)
           : opening.id === 'pro-naroditsky-caro-kann'
             ? getProNaroditskyCaroTrapPlayableLine(warn.name)
-            : null;
+            : opening.id === 'pro-naroditsky-kia'
+              ? getProNaroditskyKIATrapPlayableLine(warn.name)
+              : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -881,7 +888,9 @@ export function OpeningDetailPage(): JSX.Element {
           ? getProNaroditskyKIDTrapPlayableLine(trap.name)
           : opening.id === 'pro-naroditsky-caro-kann'
             ? getProNaroditskyCaroTrapPlayableLine(trap.name)
-            : null;
+            : opening.id === 'pro-naroditsky-kia'
+              ? getProNaroditskyKIATrapPlayableLine(trap.name)
+              : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -911,7 +920,9 @@ export function OpeningDetailPage(): JSX.Element {
           ? getProNaroditskyKIDTrapPlayableLine(warn.name)
           : opening.id === 'pro-naroditsky-caro-kann'
             ? getProNaroditskyCaroTrapPlayableLine(warn.name)
-            : null;
+            : opening.id === 'pro-naroditsky-kia'
+              ? getProNaroditskyKIATrapPlayableLine(warn.name)
+              : null;
     if (curated) {
       return (
         <PlayableLinePlayer

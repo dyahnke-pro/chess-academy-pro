@@ -1290,6 +1290,33 @@
           ]
         }
       ],
+      "trapLines": [
+        {
+          "name": "O-O lets us crash through with exf6 (Anti-Grünfeld)",
+          "pgn": "Nf3 Nf6 g3 g6 e4 Bg7 e5 O-O exf6 exf6 Be2 Re8 O-O",
+          "explanation": "Mined from his archive — 48 games where Black castled into the wedge instead of moving the f6-knight. Black's natural-looking O-O leads to exf6 exf6 with doubled f-pawns + locked Bg7. Named 2700+ victims: BrandonJacobson (3141), Oleksandr_Bortnyk (3155), Mykola-Bortnyk (3136), OminousOmen (3013)."
+        },
+        {
+          "name": "d6 + e5 trade hands us the better endgame",
+          "pgn": "Nf3 Nf6 c4 g6 Nc3 Bg7 e4 O-O d4 d6 Be2 e5 dxe5 dxe5 Qxd8",
+          "explanation": "Mined from 31 games. Black's natural ...d6 + ...e5 trade in the KIA-Grünfeld setup leads to Qxd8 forcing the rook recapture and a structurally favorable endgame. Named 2700+ victims: Firouzja (2989), wonderfultime (3182), Arambai (3154)."
+        },
+        {
+          "name": "Be7 vs Bg5 pin in QGD-style structure",
+          "pgn": "Nf3 Nf6 d4 d5 c4 e6 Nc3 Be7 Bg5 h6 Bxf6 Bxf6 cxd5",
+          "explanation": "Mined from 17 games. Premature ...Be7 walks into Bg5 + Bxf6 + cxd5 winning structurally. Named 2700+ victims: penguingm1 (3051/3064 twice), idontknowchess75 (3125)."
+        },
+        {
+          "name": "Be7 vs Bg5 pin (Hikaru victim)",
+          "pgn": "Nf3 d5 c4 e6 d4 Nf6 Nc3 Be7 Bg5 h6 Bxf6 Bxf6 e3",
+          "explanation": "Mined from 12 games — same Be7+Bg5 pin trap from a different move order. Named victim: Hikaru Nakamura (3121) himself fell into this exact pattern. Other 2700+ victims: penguingm1 (3138/2933/3310), Hrant_ChessMood (2947)."
+        },
+        {
+          "name": "Nb6 vs c5 cramping (Anti-Alekhine setup)",
+          "pgn": "Nf3 g6 e4 Nf6 e5 Nd5 c4 Nb6 c5 Nd5 Nc3 c6 Nxd5",
+          "explanation": "Mined from 12 games. After 4.c4 chasing the Nd5, Black's ...Nb6 retreat lets White's c5 push cramp the queenside permanently. Named 2700+ victims: Mykola-Bortnyk (3190/3115), OminousOmen (3007)."
+        }
+      ],
       "sources": [
         "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
       ]
