@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 // Orphan-Lesson Gate (David 2026-05-29, locked).
 //
 // Catches two failure modes that silently mis-route the UI:
