@@ -61,6 +61,20 @@ const OPENINGS = {
       'four-pawns':         { label: 'Four Pawns Attack',                      prefix: ['d4','Nf6','c4','g6','Nc3','Bg7','e4','d6','f4'] },
     },
   },
+  'kia': {
+    color: 'white',
+    studentUsername: 'DanielNaroditsky',
+    variations: {
+      'd5-reti':       { label: "vs ...d5 Reti structure (4,382 games)",  prefix: ['Nf3','d5','g3'] },
+      'g6-mirror':     { label: "vs ...g6 mirror fianchetto (2,652 games)", prefix: ['Nf3','g6','g3'] },
+      'd6-pirc':       { label: "vs ...d6 Pirc setup (1,155 games)",       prefix: ['Nf3','d6','g3'] },
+      'c5-sicilian':   { label: "vs ...c5 Sicilian (818 games)",           prefix: ['Nf3','c5','g3'] },
+      'e5-reti-open':  { label: "vs ...e5 Open (582 games)",               prefix: ['Nf3','e5'] },
+      'c6-slav':       { label: "vs ...c6 Slav-like (555 games)",          prefix: ['Nf3','c6','g3'] },
+      'b6-owen':       { label: "vs ...b6 Owen setup (530 games)",         prefix: ['Nf3','b6','g3'] },
+      'e6-french':     { label: "vs ...e6 French-Reti (451 games)",        prefix: ['Nf3','e6','g3'] },
+    },
+  },
   'alapin-sicilian': {
     color: 'white',
     studentUsername: 'DanielNaroditsky',
