@@ -173,6 +173,7 @@ const GATE_TESTS = [
   'src/data/lessons/pircIntegrity.test.ts',
   'src/data/repertoire-orientation.test.ts',
   'src/data/pro-repertoires-orientation.test.ts',
+  'src/data/variationMiddlegameDepth.test.ts',
   'src/data/openingManifests.test.ts',
   'src/data/modelGames.test.ts',
   'src/data/modelGames-orientation.test.ts',

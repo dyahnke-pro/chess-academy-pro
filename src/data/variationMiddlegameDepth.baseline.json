@@ -1,0 +1,28 @@
+{
+  "_doc": "Pro-rep variations whose PGN does not yet walk into the middlegame (uncastled, under-developed, short). Gate: variationMiddlegameDepth.test.ts. David 2026-05-29: every opening AND variation must reach the middlegame. This is the shrinking backlog — the list only SHRINKS; a NEW variation MUST reach the middlegame (extend its PGN to his data-derived spine), never be added here. Lower the count as you deepen these. Regenerate ONLY to remove entries: node scripts/pro-repertoire/gen-mg-depth-baseline.mjs",
+  "count": 22,
+  "keys": [
+    "pro-gothamchess-anti-sicilian::Accelerated Pawn Storm (Carlsen-inspired)",
+    "pro-gothamchess-english::Symmetric (…c5)",
+    "pro-gothamchess-english::Symmetric (…e5)",
+    "pro-gothamchess-pirc-defense::150 Attack (Be3 + f3)",
+    "pro-gothamchess-ponziani::3...d5 Central Counter",
+    "pro-gothamchess-stafford-refute::4...dxc6 5.e5 Line",
+    "pro-gothamchess-stafford-refute::<main>",
+    "pro-gothamchess-stafford-refute::Main Refutation d3",
+    "pro-gothamchess-trompowsky::Vaganian Attack (…Ne4)",
+    "pro-naroditsky-alekhine::c4 Modern Main",
+    "pro-naroditsky-caro-kann::Advance Variation (3.e5 Bf5)",
+    "pro-naroditsky-caro-kann::Exchange Variation (exd5)",
+    "pro-naroditsky-caro-kann::Fantasy Variation (f3)",
+    "pro-naroditsky-caro-kann::King's Indian Attack (Nf3)",
+    "pro-naroditsky-caro-kann::Modern Defense Transposition (d4 g6)",
+    "pro-naroditsky-fantasy-caro::<main>",
+    "pro-naroditsky-fantasy-caro::Modern setup with g6",
+    "pro-naroditsky-fantasy-caro::Qb6 pressure sideline",
+    "pro-naroditsky-jobava-london::a6 with ...c5",
+    "pro-naroditsky-kia::vs ...e5 (Reti gambit)",
+    "pro-naroditsky-rossolimo::e6 Open avoidance",
+    "pro-naroditsky-rossolimo::vs ...g6 (Hyper Dragon)"
+  ]
+}
