@@ -184,7 +184,7 @@ describe('WalkthroughMode', () => {
     render(<WalkthroughMode opening={testOpening} onExit={onExit} />);
 
     expect(screen.getByTestId('walkthrough-mode')).toBeInTheDocument();
-    expect(screen.getByText('Walkthrough: Test Opening')).toBeInTheDocument();
+    expect(screen.getByText('Test Opening')).toBeInTheDocument();
     expect(screen.getByTestId('walkthrough-play-pause')).toBeInTheDocument();
     expect(screen.getByTestId('walkthrough-speed-toggle')).toBeInTheDocument();
   });
@@ -315,7 +315,7 @@ describe('WalkthroughMode', () => {
       <WalkthroughMode opening={testOpening} variationIndex={0} onExit={onExit} />,
     );
 
-    expect(screen.getByText('Walkthrough: Variation A')).toBeInTheDocument();
+    expect(screen.getByText('Variation A')).toBeInTheDocument();
   });
 
   it('renders custom line walkthrough', async () => {
@@ -324,6 +324,6 @@ describe('WalkthroughMode', () => {
       <WalkthroughMode opening={testOpening} customLine={customLine} onExit={onExit} />,
     );
 
-    expect(screen.getByText('Walkthrough: Custom Trap')).toBeInTheDocument();
+    expect(screen.getByText('Custom Trap')).toBeInTheDocument();
   });
 });
