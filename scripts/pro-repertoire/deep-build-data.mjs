@@ -47,6 +47,20 @@ const OPENINGS = {
       'd3-sideline':      { label: 'd3 sideline (2.d3)',                         prefix: ['e4','c6','d3'] },
     },
   },
+  'kid': {
+    color: 'black',
+    studentUsername: 'DanielNaroditsky',
+    variations: {
+      'classical-mainline': { label: 'Classical Mar del Plata (Be2 mainline)', prefix: ['d4','Nf6','c4','g6','Nc3','Bg7','e4','d6','Nf3','O-O','Be2'] },
+      'fianchetto':         { label: 'Fianchetto Variation (g3)',              prefix: ['d4','Nf6','c4','g6','g3'] },
+      'anti-kid-nf3':       { label: 'Anti-KID with Nf3 first',                prefix: ['d4','Nf6','c4','g6','Nf3'] },
+      'makogonov':          { label: 'Makogonov Variation (h3)',               prefix: ['d4','Nf6','c4','g6','Nc3','Bg7','e4','d6','h3'] },
+      'saemisch':           { label: 'Sämisch Variation (f3)',                 prefix: ['d4','Nf6','c4','g6','Nc3','Bg7','e4','d6','f3'] },
+      'petrosian-nge2':     { label: 'Petrosian/Nge2 Setup',                   prefix: ['d4','Nf6','c4','g6','Nc3','Bg7','e4','d6','Nge2'] },
+      'early-oo':           { label: 'Early O-O Variation',                    prefix: ['d4','Nf6','c4','g6','Nc3','Bg7','e4','d6','Nf3','O-O'] },
+      'four-pawns':         { label: 'Four Pawns Attack',                      prefix: ['d4','Nf6','c4','g6','Nc3','Bg7','e4','d6','f4'] },
+    },
+  },
   'alapin-sicilian': {
     color: 'white',
     studentUsername: 'DanielNaroditsky',

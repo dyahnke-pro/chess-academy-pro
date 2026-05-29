@@ -1,0 +1,99 @@
+{
+  "player": "danielnaroditsky",
+  "openingId": "kid",
+  "variationKey": "makogonov",
+  "variation": {
+    "label": "Makogonov Variation (h3)",
+    "prefix": [
+      "d4",
+      "Nf6",
+      "c4",
+      "g6",
+      "Nc3",
+      "Bg7",
+      "e4",
+      "d6",
+      "h3"
+    ]
+  },
+  "generatedAt": "2026-05-29T02:39:55.198Z",
+  "totalGames": 335,
+  "wins": 196,
+  "draws": 27,
+  "losses": 112,
+  "openingTerminusPly": 30,
+  "openingTerminusMove": 15,
+  "spineMoves": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "h3",
+    "O-O",
+    "Be3",
+    "c6",
+    "Nf3",
+    "Na6",
+    "Be2",
+    "e5",
+    "d5",
+    "Nh5",
+    "O-O",
+    "Nf4",
+    "Re1",
+    "Nxe2+",
+    "Rxe2",
+    "c5",
+    "Qd2",
+    "f5",
+    "exf5",
+    "gxf5",
+    "Bg5",
+    "Qd7"
+  ],
+  "gamesAtTerminus": 4,
+  "endgameTypeBreakdown": {
+    "middlegame (Q + pieces)": 2,
+    "K+P": 1,
+    "R + minor + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/128862181429",
+      "opponent": "Tobias_Koelle",
+      "opponentRating": 2959,
+      "studentRating": 3132,
+      "date": "2024-12-25",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 66,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2024.12.25\"]\n[Round \"-\"]\n[White \"Tobias_Koelle\"]\n[Black \"DanielNaroditsky\"]\n[Result \"0-1\"]\n[CurrentPosition \"7k/p4b1p/3N4/2pP4/2P5/7p/PP3r2/7K w - -\"]\n[Timezone \"UTC\"]\n[ECO \"E90\"]\n[ECOUrl \"https://www.chess.com/openings/Kings-Indian-Defense-Normal-Variation...5.Nf3-O-O-6.h3-c6-7.Be3\"]\n[UTCDate \"2024.12.25\"]\n[UTCTime \"10:39:37\"]\n[WhiteElo \"2959\"]\n[BlackElo \"3132\"]\n[TimeControl \"180\"]\n[Termination \"DanielNaroditsky won by resignation\"]\n[StartTime \"10:39:37\"]\n[EndDate \"2024.12.25\"]\n[EndTime \"10:42:10\"]\n[Link \"https://www.chess.com/game/live/128862181429\"]\n\n1. d4 {[%clk 0:03:00]} 1... Nf6 {[%clk 0:03:00]} 2. c4 {[%clk 0:02:59.1]} 2... g6 {[%clk 0:02:59.9]} 3. Nc3 {[%clk 0:02:58.4]} 3... Bg7 {[%clk 0:02:59.7]} 4. e4 {[%clk 0:02:58.1]} 4... d6 {[%clk 0:02:59.5]} 5. h3 {[%clk 0:02:57.8]} 5... O-O {[%clk 0:02:59.2]} 6. Be3 {[%clk 0:02:57.5]} 6... c6 {[%clk 0:02:59]} 7. Nf3 {[%clk 0:02:57]} 7... Na6 {[%clk 0:02:58.9]} 8. Be2 {[%clk 0:02:55.5]} 8... e5 {[%clk 0:02:58.6]} 9. d5 {[%clk 0:02:55]} 9... Nh5 {[%clk 0:02:58.3]} 10. O-O {[%clk 0:02:54.7]} 10... Nf4 {[%clk 0:02:58]} 11. Re1 {[%clk 0:02:54.6]} 11... Nxe2+ {[%clk 0:02:57.7]} 12. Rxe2 {[%clk 0:02:54.5]} 12... c5 {[%clk 0:02:57.4]} 13. Qd2 {[%clk 0:02:53.5]} 13... f5 {[%clk 0:02:57]} 14. exf5 {[%clk 0:02:52.6]} 14... gxf5 {[%clk 0:02:56.9]} 15. Bg5 {[%clk 0:02:52.4]} 15... Qd7 {[%clk 0:02:56.5]} 16. g4 {[%clk 0:02:52.2]} 16... fxg4 {[%clk 0:02:55.9]} 17. Nh2 {[%clk 0:02:51.9]} 17... gxh3 {[%clk 0:02:55.8]} 18. Kh1 {[%clk 0:02:51]} 18... Kh8 {[%clk 0:02:53.7]} 19. Rg1 {[%clk 0:02:50.6]} 19... Qf7 {[%clk 0:02:53]} 20. Ne4 {[%clk 0:02:49.6]} 20... Qh5 {[%clk 0:02:49.4]} 21. Nxd6 {[%clk 0:02:45.2]} 21... Bf5 {[%clk 0:02:48.7]} 22. Be7 {[%clk 0:02:27.2]} 22... Bg6 {[%clk 0:02:45.5]} 23. Bxf8 {[%clk 0:02:24.4]} 23... Rxf8 {[%clk 0:02:45.4]} 24. Qe3 {[%clk 0:02:22]} 24... Nb4 {[%clk 0:02:33.6]} 25. f3 {[%clk 0:02:17]} 25... Nc2 {[%clk 0:02:18]} 26. Qg5 {[%clk 0:02:16.1]} 26... Qxg5 {[%clk 0:02:14.7]} 27. Rxg5 {[%clk 0:02:16]} 27... Nd4 {[%clk 0:02:13.5]} 28. Rexe5 {[%clk 0:02:14.4]} 28... Bxe5 {[%clk 0:02:06.6]} 29. Rxe5 {[%clk 0:02:14.3]} 29... Nxf3 {[%clk 0:02:06.1]} 30. Nxf3 {[%clk 0:02:12.8]} 30... Rxf3 {[%clk 0:02:06]} 31. Re7 {[%clk 0:02:11.3]} 31... Rf2 {[%clk 0:01:59.4]} 32. Rxb7 {[%clk 0:02:09.8]} 32... Bh5 {[%clk 0:01:57.4]} 33. Rf7 {[%clk 0:01:49.1]} 33... Bxf7 {[%clk 0:01:47.2]} 0-1\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/128861041133",
+      "opponent": "Tobias_Koelle",
+      "opponentRating": 2943,
+      "studentRating": 3148,
+      "date": "2024-12-25",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 72,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2024.12.25\"]\n[Round \"-\"]\n[White \"Tobias_Koelle\"]\n[Black \"DanielNaroditsky\"]\n[Result \"0-1\"]\n[CurrentPosition \"4n2k/p2b2Np/3p1rq1/2pP2P1/2P1pQ1B/8/P7/5RK1 w - -\"]\n[Timezone \"UTC\"]\n[ECO \"E90\"]\n[ECOUrl \"https://www.chess.com/openings/Kings-Indian-Defense-Normal-Variation...5.Nf3-O-O-6.h3-c6-7.Be3\"]\n[UTCDate \"2024.12.25\"]\n[UTCTime \"10:25:33\"]\n[WhiteElo \"2943\"]\n[BlackElo \"3148\"]\n[TimeControl \"180\"]\n[Termination \"DanielNaroditsky won by resignation\"]\n[StartTime \"10:25:33\"]\n[EndDate \"2024.12.25\"]\n[EndTime \"10:28:09\"]\n[Link \"https://www.chess.com/game/live/128861041133\"]\n\n1. d4 {[%clk 0:03:00]} 1... Nf6 {[%clk 0:03:00]} 2. c4 {[%clk 0:02:59.3]} 2... g6 {[%clk 0:02:59.9]} 3. Nc3 {[%clk 0:02:58.9]} 3... Bg7 {[%clk 0:02:59.8]} 4. e4 {[%clk 0:02:58.6]} 4... d6 {[%clk 0:02:59.6]} 5. h3 {[%clk 0:02:58.4]} 5... O-O {[%clk 0:02:59.2]} 6. Be3 {[%clk 0:02:58.3]} 6... c6 {[%clk 0:02:59]} 7. Nf3 {[%clk 0:02:57.4]} 7... Na6 {[%clk 0:02:58.3]} 8. Be2 {[%clk 0:02:56.6]} 8... e5 {[%clk 0:02:58.2]} 9. d5 {[%clk 0:02:56.1]} 9... Nh5 {[%clk 0:02:58]} 10. O-O {[%clk 0:02:55.8]} 10... Nf4 {[%clk 0:02:57.9]} 11. Re1 {[%clk 0:02:55.6]} 11... Nxe2+ {[%clk 0:02:57.8]} 12. Rxe2 {[%clk 0:02:55.5]} 12... c5 {[%clk 0:02:57.2]} 13. Qd2 {[%clk 0:02:55.2]} 13... f5 {[%clk 0:02:56]} 14. exf5 {[%clk 0:02:54.9]} 14... gxf5 {[%clk 0:02:55.9]} 15. Bg5 {[%clk 0:02:54.6]} 15... Qd7 {[%clk 0:02:55]} 16. Rae1 {[%clk 0:02:53]} 16... Nc7 {[%clk 0:02:54.5]} 17. g4 {[%clk 0:02:49.8]} 17... fxg4 {[%clk 0:02:52.3]} 18. Nh2 {[%clk 0:02:49.5]} 18... g3 {[%clk 0:02:49.6]} 19. fxg3 {[%clk 0:02:48.3]} 19... Qxh3 {[%clk 0:02:47.5]} 20. Ne4 {[%clk 0:02:45.2]} 20... Ne8 {[%clk 0:02:41]} 21. Bh4 {[%clk 0:02:37.8]} 21... Qf5 {[%clk 0:02:32.9]} 22. Rf2 {[%clk 0:02:36.7]} 22... Qg6 {[%clk 0:02:32.3]} 23. Rxf8+ {[%clk 0:02:35.3]} 23... Bxf8 {[%clk 0:02:32.2]} 24. Qe3 {[%clk 0:02:28]} 24... Bf5 {[%clk 0:02:31.7]} 25. g4 {[%clk 0:02:22.7]} 25... Bh6 {[%clk 0:02:29.7]} 26. g5 {[%clk 0:02:20.8]} 26... Bg7 {[%clk 0:02:23.5]} 27. Ng3 {[%clk 0:02:16.3]} 27... Bd7 {[%clk 0:02:22.3]} 28. Rf1 {[%clk 0:02:14.2]} 28... b5 {[%clk 0:02:17.1]} 29. b3 {[%clk 0:02:13.2]} 29... bxc4 {[%clk 0:02:16.3]} 30. bxc4 {[%clk 0:02:13.1]} 30... Rb8 {[%clk 0:02:16.1]} 31. Qf3 {[%clk 0:02:12.8]} 31... Nc7 {[%clk 0:02:14.9]} 32. Ng4 {[%clk 0:02:11.3]} 32... Rf8 {[%clk 0:02:13.6]} 33. Nf6+ {[%clk 0:02:10.3]} 33... Kh8 {[%clk 0:02:11.3]} 34. Ngh5 {[%clk 0:02:07.8]} 34... e4 {[%clk 0:02:07.9]} 35. Qf4 {[%clk 0:02:02.1]} 35... Ne8 {[%clk 0:02:04]} 36. Nxg7 {[%clk 0:01:47.8]} 36... Rxf6 {[%clk 0:01:59]} 0-1\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/128861609591",
+      "opponent": "Tobias_Koelle",
+      "opponentRating": 2959,
+      "studentRating": 3132,
+      "date": "2024-12-25",
+      "timeClass": "blitz",
+      "outcome": "loss",
+      "plyCount": 91,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2024.12.25\"]\n[Round \"-\"]\n[White \"Tobias_Koelle\"]\n[Black \"DanielNaroditsky\"]\n[Result \"1-0\"]\n[CurrentPosition \"8/p7/P2k4/1P3P2/2P2K1p/7P/8/8 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"E90\"]\n[ECOUrl \"https://www.chess.com/openings/Kings-Indian-Defense-Normal-Variation...5.Nf3-O-O-6.h3-c6-7.Be3\"]\n[UTCDate \"2024.12.25\"]\n[UTCTime \"10:32:23\"]\n[WhiteElo \"2959\"]\n[BlackElo \"3132\"]\n[TimeControl \"180\"]\n[Termination \"Tobias_Koelle won by resignation\"]\n[StartTime \"10:32:23\"]\n[EndDate \"2024.12.25\"]\n[EndTime \"10:34:10\"]\n[Link \"https://www.chess.com/game/live/128861609591\"]\n\n1. d4 {[%clk 0:03:00]} 1... Nf6 {[%clk 0:03:00]} 2. c4 {[%clk 0:02:59.1]} 2... g6 {[%clk 0:02:59.4]} 3. Nc3 {[%clk 0:02:58.8]} 3... Bg7 {[%clk 0:02:59.1]} 4. e4 {[%clk 0:02:58.5]} 4... d6 {[%clk 0:02:59]} 5. h3 {[%clk 0:02:58.1]} 5... O-O {[%clk 0:02:58.9]} 6. Be3 {[%clk 0:02:57.3]} 6... c6 {[%clk 0:02:58.6]} 7. Nf3 {[%clk 0:02:56.6]} 7... Na6 {[%clk 0:02:58.5]} 8. Be2 {[%clk 0:02:55.9]} 8... e5 {[%clk 0:02:58.4]} 9. d5 {[%clk 0:02:55.6]} 9... Nh5 {[%clk 0:02:58.2]} 10. O-O {[%clk 0:02:55.1]} 10... Nf4 {[%clk 0:02:58.1]} 11. Re1 {[%clk 0:02:54.9]} 11... Nxe2+ {[%clk 0:02:57.9]} 12. Rxe2 {[%clk 0:02:54.8]} 12... c5 {[%clk 0:02:57.8]} 13. Qd2 {[%clk 0:02:54.1]} 13... f5 {[%clk 0:02:57.4]} 14. exf5 {[%clk 0:02:50.7]} 14... gxf5 {[%clk 0:02:57.3]} 15. Bg5 {[%clk 0:02:48.7]} 15... Qd7 {[%clk 0:02:56.8]} 16. Nb5 {[%clk 0:02:48.4]} 16... Nc7 {[%clk 0:02:55.9]} 17. Nxc7 {[%clk 0:02:42.8]} 17... Qxc7 {[%clk 0:02:55.8]} 18. Bh6 {[%clk 0:02:42.5]} 18... Bxh6 {[%clk 0:02:52.5]} 19. Qxh6 {[%clk 0:02:42.4]} 19... Qg7 {[%clk 0:02:52.2]} 20. Qxg7+ {[%clk 0:02:40.9]} 20... Kxg7 {[%clk 0:02:52.1]} 21. Nxe5 {[%clk 0:02:40.5]} 21... Bd7 {[%clk 0:02:52]} 22. Nxd7 {[%clk 0:02:39.8]} 22... Rf7 {[%clk 0:02:50.4]} 23. Rae1 {[%clk 0:02:35]} 23... Rd8 {[%clk 0:02:47.1]} 24. Nxc5 {[%clk 0:02:33.2]} 24... dxc5 {[%clk 0:02:47]} 25. Re7 {[%clk 0:02:32.4]} 25... Rd7 {[%clk 0:02:46.9]} 26. Rxd7 {[%clk 0:02:31.4]} 26... Rxd7 {[%clk 0:02:46.8]} 27. a4 {[%clk 0:02:27.1]} 27... Kf6 {[%clk 0:02:45]} 28. f4 {[%clk 0:02:25.7]} 28... Rd6 {[%clk 0:02:43.8]} 29. Kf2 {[%clk 0:02:22.9]} 29... Rb6 {[%clk 0:02:43.2]} 30. Re6+ {[%clk 0:02:21.4]} 30... Rxe6 {[%clk 0:02:42.9]} 31. dxe6 {[%clk 0:02:21.3]} 31... Kxe6 {[%clk 0:02:42.8]} 32. Kg3 {[%clk 0:02:19.5]} 32... Kf6 {[%clk 0:02:40.2]} 33. Kh4 {[%clk 0:02:18.8]} 33... Kg6 {[%clk 0:02:40.1]} 34. a5 {[%clk 0:02:16.3]} 34... b6 {[%clk 0:02:36.7]} 35. a6 {[%clk 0:02:14.2]} 35... Kh6 {[%clk 0:02:36.3]} 36. g4 {[%clk 0:02:11.5]} 36... Kg6 {[%clk 0:02:36.2]} 37. b3 {[%clk 0:02:09.6]} 37... h6 {[%clk 0:02:32.2]} 38. Kg3 {[%clk 0:02:08.7]} 38... h5 {[%clk 0:02:29.8]} 39. gxf5+ {[%clk 0:02:04.4]} 39... Kxf5 {[%clk 0:02:28]} 40. Kf3 {[%clk 0:02:03.9]} 40... h4 {[%clk 0:02:25.5]} 41. Ke3 {[%clk 0:02:03.1]} 41... Kf6 {[%clk 0:02:25.1]} 42. Ke4 {[%clk 0:02:03]} 42... Ke6 {[%clk 0:02:24.8]} 43. f5+ {[%clk 0:02:02.7]} 43... Kd6 {[%clk 0:02:24.5]} 44. Kf4 {[%clk 0:02:02.6]} 44... b5 {[%clk 0:02:24.4]} 45. cxb5 {[%clk 0:02:00.3]} 45... c4 {[%clk 0:02:24.3]} 46. bxc4 {[%clk 0:01:59.3]} 1-0\n"
+    }
+  ]
+}
