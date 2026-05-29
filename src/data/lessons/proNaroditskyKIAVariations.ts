@@ -182,8 +182,220 @@ const VS_PIRC_D6: LessonScript = {
   ],
 };
 
+// ============================================================
+// vs ...e5 (Open) — 582 games, 72.2% score
+// Black plays ...e5 challenging the centre immediately. White accepts
+// the central gambit territory: Nxe5 grabbing the pawn.
+// ============================================================
+const VS_E5_OPEN: LessonScript = {
+  openingId: 'pro-naroditsky-kia',
+  title: 'vs ...e5 — Reti gambit accepted',
+  minutes: 7,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'e5-open', moves: 'Nf3 e5',
+      highlights: [{ square: 'e5', color: KEY }],
+      say: "1.Nf3 ...e5 — Black plays the most aggressive response, treating our Nf3 as if it were a regular 1.e4 opening. The pawn on e5 attacks our knight, but we grab it: 2.Nxe5 starts the Reti gambit-accepted line.",
+      sayShort: '...e5 — Black overcommits.',
+    }),
+    b({
+      id: 'e5-nxe5', moves: 'Nf3 e5 Nxe5',
+      highlights: [{ square: 'e5', color: ATK }],
+      say: "Nxe5 — we accept the pawn. Black's choices now are limited: ...d6 chasing the knight, or ...Nc6 attacking the knight. The most common reply is ...Nc6 attacking with tempo.",
+      sayShort: 'Nxe5 — accept the pawn.',
+    }),
+    b({
+      id: 'e5-nc6', moves: 'Nf3 e5 Nxe5 Nc6',
+      highlights: [{ square: 'c6', color: SOFT }],
+      say: "...Nc6 — Black develops with attack on the knight. We must move it back.",
+      sayShort: '...Nc6 — attacks Nxe5.',
+    }),
+    b({
+      id: 'e5-nf3', moves: 'Nf3 e5 Nxe5 Nc6 Nf3',
+      highlights: [{ square: 'f3', color: KEY }],
+      say: "Nf3 — knight retreats. We've won a clean pawn AND Black has to spend tempo proving compensation. The classical follow-up: d4 + e3 + Be2 + O-O, defending the extra pawn through the middlegame.",
+      sayShort: 'Nf3 — pawn safely won.',
+    }),
+    b({
+      id: 'e5-d5', moves: 'Nf3 e5 Nxe5 Nc6 Nf3 d5',
+      highlights: [{ square: 'd5', color: SOFT }],
+      say: "...d5 — Black plays the central pawn trying to gain space compensation for the lost pawn. The d5 supports c4 development plans but doesn't recover material.",
+      sayShort: '...d5 — central try.',
+    }),
+    b({
+      id: 'e5-d4-development', moves: 'Nf3 e5 Nxe5 Nc6 Nf3 d5 d4',
+      highlights: [{ square: 'd4', color: KEY }],
+      say: "d4 — we play our own central pawn, blunting Black's compensation. With the extra pawn AND solid central structure, the conversion is straightforward. 72.2% score for us across 582 games.",
+      sayShort: 'd4 — extra pawn converts.',
+    }),
+  ],
+};
+
+// ============================================================
+// vs ...c6 (Slav-like) — 555 games, 77.7% score (his BEST scoring KIA)
+// Black plays ...c6 supporting a future ...d5. We respond with the
+// classical KIA mirror fianchetto.
+// ============================================================
+const VS_C6_SLAV: LessonScript = {
+  openingId: 'pro-naroditsky-kia',
+  title: 'vs ...c6 — KIA Slav-like setup',
+  minutes: 7,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'c6-open', moves: 'Nf3 c6',
+      highlights: [{ square: 'c6', color: KEY }],
+      say: "1.Nf3 ...c6 — Black plays the Slav-like setup, supporting a future ...d5 push. The c6 is solid but slow; we develop our KIA system with full freedom.",
+      sayShort: '...c6 — Slav-like.',
+    }),
+    b({
+      id: 'c6-g3', moves: 'Nf3 c6 g3',
+      highlights: [{ square: 'g3', color: SOFT }],
+      say: "g3 — our standard KIA fianchetto setup. The Bg2 will dominate the long diagonal pointing at Black's queenside.",
+      sayShort: 'g3 — fianchetto.',
+    }),
+    b({
+      id: 'c6-d5', moves: 'Nf3 c6 g3 d5',
+      highlights: [{ square: 'd5', color: KEY }],
+      say: "...d5 — Black claims the centre, supported by the c6-pawn. This is the standard Slav setup but a tempo slower because of c6.",
+      sayShort: '...d5 — central pawn.',
+    }),
+    b({
+      id: 'c6-bg2', moves: 'Nf3 c6 g3 d5 Bg2 Nf6 O-O',
+      highlights: [{ square: 'g2', color: KEY }, { square: 'g1', color: SOFT }],
+      say: "Bg2 ...Nf6 O-O — we complete development with the fianchetto + castle. Black mirrors with knight development. So far symmetric, but we have the move advantage AND clearer KIA plans.",
+      sayShort: 'O-O — KIA setup done.',
+    }),
+    b({
+      id: 'c6-d3', moves: 'Nf3 c6 g3 d5 Bg2 Nf6 O-O Bg4 d3',
+      highlights: [{ square: 'd3', color: KEY }],
+      say: "...Bg4 d3 — Black tries the active ...Bg4 pin, we play the small d3 keeping flexibility. The d3 supports e4 later AND avoids the central trade that would help Black.",
+      sayShort: 'd3 — flexible setup.',
+    }),
+    b({
+      id: 'c6-middlegame', moves: 'Nf3 c6 g3 d5 Bg2 Nf6 O-O Bg4 d3 Nbd7 Nbd2 e6',
+      highlights: [{ square: 'd2', color: SOFT }, { square: 'e6', color: SOFT }],
+      say: "...Nbd7 Nbd2 ...e6 — both sides finish development. The middlegame plan: e4 break opening lines for the Bg2 + central squeeze. Black's c6-Nbd7-e6 setup is solid but completely passive. His 77.7% score in this line is the highest of any KIA variation.",
+      sayShort: 'Nbd2 — prep e4 break.',
+    }),
+  ],
+};
+
+// ============================================================
+// vs ...b6 (Owen/Hypermodern) — 530 games, 75.8% score
+// Black fianchettos the queen-bishop first. The b6 setup is
+// hypermodern and gives White free reign in the centre.
+// ============================================================
+const VS_B6_OWEN: LessonScript = {
+  openingId: 'pro-naroditsky-kia',
+  title: 'vs ...b6 — Owen-style fianchetto',
+  minutes: 7,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'b6-open', moves: 'Nf3 b6',
+      highlights: [{ square: 'b6', color: KEY }],
+      say: "1.Nf3 ...b6 — Black plays the Owen-style hypermodern setup, fianchettoing the queen-bishop first. The b6 gives White free central space.",
+      sayShort: '...b6 — hypermodern.',
+    }),
+    b({
+      id: 'b6-g3', moves: 'Nf3 b6 g3',
+      highlights: [{ square: 'g3', color: SOFT }],
+      say: "g3 — mirror fianchetto. Now both bishops will eye the central squares from the flanks. The structural fight will be decided in the centre.",
+      sayShort: 'g3 — mirror.',
+    }),
+    b({
+      id: 'b6-bb7', moves: 'Nf3 b6 g3 Bb7',
+      highlights: [{ square: 'b7', color: KEY }],
+      say: "...Bb7 — Black completes the queen-bishop fianchetto. The bishop aims at the centre + our kingside. Now we develop our own fianchetto AND claim the centre.",
+      sayShort: '...Bb7 — bishop developed.',
+    }),
+    b({
+      id: 'b6-bg2', moves: 'Nf3 b6 g3 Bb7 Bg2 Nf6',
+      highlights: [{ square: 'g2', color: KEY }, { square: 'f6', color: SOFT }],
+      say: "Bg2 ...Nf6 — mirror fianchettos complete. Black develops the knight. The position is symmetric on the fianchettos but the central play favors whoever expands first.",
+      sayShort: 'Bg2 ...Nf6 — symmetric.',
+    }),
+    b({
+      id: 'b6-castle', moves: 'Nf3 b6 g3 Bb7 Bg2 Nf6 O-O e6 d4',
+      highlights: [{ square: 'd4', color: KEY }],
+      say: "O-O ...e6 d4! — we castle, Black plays solidly with ...e6, and now we GRAB the centre with d4. The d4 push is justified because Black has no central counter-strike available. White's space advantage converts in 75.8% of his games.",
+      sayShort: 'd4 — claim the centre.',
+    }),
+    b({
+      id: 'b6-c4', moves: 'Nf3 b6 g3 Bb7 Bg2 Nf6 O-O e6 d4 Be7 c4',
+      highlights: [{ square: 'c4', color: KEY }],
+      say: "...Be7 c4 — Black completes development calmly, we expand on the queenside with c4. The c4 + d4 + Bg2 + Nf3 setup is a Reversed-Slav structure where White has all the active plans.",
+      sayShort: 'c4 — queenside expansion.',
+    }),
+  ],
+};
+
+// ============================================================
+// vs ...e6 (French-style) — 451 games, 67.0% score
+// Black plays ...e6 setting up a French Defense structure. We
+// transpose into a KIA-vs-French (which Naroditsky knows cold).
+// ============================================================
+const VS_E6_FRENCH: LessonScript = {
+  openingId: 'pro-naroditsky-kia',
+  title: 'vs ...e6 — KIA vs French structure',
+  minutes: 7,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'e6-open', moves: 'Nf3 e6',
+      highlights: [{ square: 'e6', color: KEY }],
+      say: "1.Nf3 ...e6 — Black plays a French-style setup, supporting a future ...d5. The e6 commits Black to a slow positional fight. We transpose into the KIA-vs-French structure where White's plans are well-known.",
+      sayShort: '...e6 — French setup.',
+    }),
+    b({
+      id: 'e6-g3', moves: 'Nf3 e6 g3 d5',
+      highlights: [{ square: 'd5', color: KEY }],
+      say: "g3 ...d5 — Black plays the central pawn, supported by the e6-pawn. This is the French Defense structure but with White's knight already on f3 and the fianchetto coming.",
+      sayShort: '...d5 — central pawn.',
+    }),
+    b({
+      id: 'e6-bg2', moves: 'Nf3 e6 g3 d5 Bg2 Nf6 O-O',
+      highlights: [{ square: 'g2', color: SOFT }, { square: 'g1', color: KEY }],
+      say: "Bg2 ...Nf6 O-O — we complete the fianchetto + castle. Black develops the knight. The position resembles a Catalan in structure but from a different move order.",
+      sayShort: 'O-O — Catalan-like.',
+    }),
+    b({
+      id: 'e6-be7', moves: 'Nf3 e6 g3 d5 Bg2 Nf6 O-O Be7 d3',
+      highlights: [{ square: 'd3', color: KEY }],
+      say: "...Be7 d3 — Black continues classical development, we play the small d3 keeping options open. The d3 supports e4 later AND avoids committing to d4 (which would block our Bg2's diagonal).",
+      sayShort: 'd3 — flexibility.',
+    }),
+    b({
+      id: 'e6-nbd2', moves: 'Nf3 e6 g3 d5 Bg2 Nf6 O-O Be7 d3 O-O Nbd2',
+      highlights: [{ square: 'd2', color: KEY }],
+      say: "...O-O Nbd2 — Black castles, we develop the queen knight to its KIA-square. From d2, the knight prepares e4 push AND can reroute via Nf1-Ng3 toward the kingside attack.",
+      sayShort: 'Nbd2 — KIA reroute square.',
+    }),
+    b({
+      id: 'e6-e4-break', moves: 'Nf3 e6 g3 d5 Bg2 Nf6 O-O Be7 d3 O-O Nbd2 c5 e4',
+      highlights: [{ square: 'e4', color: KEY }],
+      say: "...c5 e4 — Black plays the central counter, we strike with e4! The e4 challenges Black's centre AND opens lines for our Bg2 + future kingside attack. This is the standard KIA-vs-French middlegame where White's attack is faster than Black's.",
+      sayShort: 'e4 — central break.',
+    }),
+  ],
+};
+
 export const PRO_NARODITSKY_KIA_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-naroditsky-kia::g6 Modern setup': VS_SYMMETRIC,
   'pro-naroditsky-kia::d5 KIA mainline': VS_RETI_D5,
   'pro-naroditsky-kia::d4 KID transposition': VS_PIRC_D6,
+  'pro-naroditsky-kia::vs ...e5 (Reti gambit)': VS_E5_OPEN,
+  'pro-naroditsky-kia::vs ...c6 (Slav-like)': VS_C6_SLAV,
+  'pro-naroditsky-kia::vs ...b6 (Owen)': VS_B6_OWEN,
+  'pro-naroditsky-kia::vs ...e6 (French-style)': VS_E6_FRENCH,
 };

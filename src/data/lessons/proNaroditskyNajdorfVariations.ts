@@ -174,8 +174,61 @@ const H3_ADAMS: LessonScript = {
   ],
 };
 
+// ============================================================
+// Bc4 Sozin (Fischer Attack) — 124 games, 67.3% score
+// White's sharpest Najdorf attempt: Bc4 hitting e6 + f7. We answer
+// with ...e6 classical setup, ...Be7 development.
+// ============================================================
+const BC4_SOZIN: LessonScript = {
+  openingId: 'pro-naroditsky-najdorf',
+  title: 'Bc4 Sozin / Fischer Attack — classical defense',
+  minutes: 7,
+  orientation: 'black',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'sozin-open', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4',
+      highlights: [{ square: 'c4', color: KEY }, { square: 'f7', color: SOFT }],
+      say: "6.Bc4 — the Sozin / Fischer Attack. White aims the bishop directly at f7, threatening tactics with Bxf7+ in some lines. This is the most aggressive Najdorf treatment. The correct response is the calm ...e6 closing the diagonal.",
+      sayShort: 'Bc4 — Sozin/Fischer.',
+    }),
+    b({
+      id: 'sozin-e6', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6',
+      highlights: [{ square: 'e6', color: KEY }, { square: 'c4', color: SOFT }],
+      say: "...e6 — Black closes the Bc4 diagonal AND prepares ...Be7 development. The standard French-like defense to the Sozin.",
+      sayShort: '...e6 — close the diagonal.',
+    }),
+    b({
+      id: 'sozin-bb3', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3',
+      highlights: [{ square: 'b3', color: SOFT }],
+      say: "Bb3 — White retreats the bishop to b3, keeping the f7-pressure alive while avoiding the imminent ...d5 fork. The Bb3 also avoids being captured by ...Nxc4 trade.",
+      sayShort: 'Bb3 — keep the diagonal.',
+    }),
+    b({
+      id: 'sozin-be7', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 Be7',
+      highlights: [{ square: 'e7', color: KEY }],
+      say: "...Be7 — Black develops the bishop to e7, preparing castling AND defending the d6-pawn indirectly. The Be7 also covers f6 for the eventual ...Nbd7 development.",
+      sayShort: '...Be7 — classical setup.',
+    }),
+    b({
+      id: 'sozin-castle', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 Be7 O-O O-O',
+      highlights: [{ square: 'g8', color: KEY }, { square: 'g1', color: SOFT }],
+      say: "O-O ...O-O — both sides castle kingside. The classical Sozin position with both kings safe. Now the middlegame is decided by piece coordination AND the central pawn break timing.",
+      sayShort: 'O-O — both safe.',
+    }),
+    b({
+      id: 'sozin-middlegame', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bc4 e6 Bb3 Be7 O-O O-O f4 Nc6',
+      highlights: [{ square: 'f4', color: SOFT }, { square: 'c6', color: KEY }],
+      say: "f4 ...Nc6 — White starts the kingside expansion with f4, Black develops the knight to c6 hitting Nd4. The middlegame structural fight: White's f4-e4 kingside attack vs Black's queenside ...b5 + ...Bb7 setup. 67.3% score for Naroditsky across 124 games.",
+      sayShort: '...Nc6 — central attack.',
+    }),
+  ],
+};
+
 export const PRO_NARODITSKY_NAJDORF_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-naroditsky-najdorf::Be3 English Attack': BE3_ENGLISH,
   'pro-naroditsky-najdorf::Be2 Classical': BE2_CLASSICAL,
   'pro-naroditsky-najdorf::h3 Adams Attack': H3_ADAMS,
+  'pro-naroditsky-najdorf::Bc4 Sozin / Fischer Attack': BC4_SOZIN,
 };

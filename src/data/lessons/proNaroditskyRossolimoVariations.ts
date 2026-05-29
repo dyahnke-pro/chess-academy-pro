@@ -180,8 +180,143 @@ const BD7_TRADE: LessonScript = {
   ],
 };
 
+// ============================================================
+// c3 Sideline (vs ...d6) — 177 games, 63.6% score
+// Instead of Bb5+ we play c3 quietly, transposing into a Maroczy-
+// style setup. Firouzja2003 (3072) victim of this slow squeeze.
+// ============================================================
+const C3_SIDELINE: LessonScript = {
+  openingId: 'pro-naroditsky-rossolimo',
+  title: 'c3 Sideline — quiet Maroczy setup',
+  minutes: 6,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'c3-open', moves: 'e4 c5 Nf3 d6 c3',
+      highlights: [{ square: 'c3', color: KEY }],
+      say: "3.c3 — instead of the Bb5+ Moscow line, we play the quiet c3 sideline preparing d4. This is the Alapin-style structure where we accept slower piece play in exchange for a small structural edge.",
+      sayShort: 'c3 — quiet setup.',
+    }),
+    b({
+      id: 'c3-nf6', moves: 'e4 c5 Nf3 d6 c3 Nf6 Bd3',
+      highlights: [{ square: 'd3', color: SOFT }],
+      say: "...Nf6 Bd3 — Black develops the knight, we play Bd3 covering the kingside attack diagonal. The Bd3 supports e4 AND prepares a future kingside expansion.",
+      sayShort: 'Bd3 — kingside attacker.',
+    }),
+    b({
+      id: 'c3-nc6', moves: 'e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 Bc2',
+      highlights: [{ square: 'c2', color: KEY }],
+      say: "...Nc6 Bc2 — Black develops the queen knight, we retreat the bishop to c2 — the classical Spanish bishop dance. The Bc2 keeps the diagonal pointing at h7 AND avoids being exchanged.",
+      sayShort: 'Bc2 — Spanish dance.',
+    }),
+    b({
+      id: 'c3-bg4', moves: 'e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 Bc2 Bg4 d3',
+      highlights: [{ square: 'd3', color: SOFT }],
+      say: "...Bg4 d3 — Black tries the pin on our knight, we play d3 supporting the centre. The position now resembles a Closed Spanish with one extra tempo for us.",
+      sayShort: 'd3 — flexibility.',
+    }),
+    b({
+      id: 'c3-middlegame', moves: 'e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 Bc2 Bg4 d3 e6 O-O Be7',
+      highlights: [{ square: 'g1', color: KEY }],
+      say: "...e6 O-O ...Be7 — classical development for both. White's middlegame plan: Nbd2 + Re1 + Nf1 + Ng3 reroute toward the kingside attack. The slow Maroczy-Spanish squeeze converts steadily.",
+      sayShort: 'O-O — slow Spanish squeeze.',
+    }),
+  ],
+};
+
+// ============================================================
+// Bc4 vs ...d6 — 152 games, 65.1% score
+// Italian-style Bc4 instead of Bb5+ in the Moscow variation.
+// MichaelRoiz (2721) victim.
+// ============================================================
+const BC4_VS_D6: LessonScript = {
+  openingId: 'pro-naroditsky-rossolimo',
+  title: 'Bc4 vs ...d6 — Italian-style transposition',
+  minutes: 6,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'bc4-open', moves: 'e4 c5 Nf3 d6 Bc4',
+      highlights: [{ square: 'c4', color: KEY }],
+      say: "3.Bc4 — instead of Bb5+ checking, we play the Italian-style Bc4 aiming directly at f7. The bishop on c4 is more aggressive than Bb5+ but slower; Black gets time to develop AND we avoid the early trade.",
+      sayShort: 'Bc4 — Italian setup.',
+    }),
+    b({
+      id: 'bc4-nf6', moves: 'e4 c5 Nf3 d6 Bc4 Nf6 d3',
+      highlights: [{ square: 'd3', color: SOFT }],
+      say: "...Nf6 d3 — Black develops, we play d3 keeping the centre solid. The d3 also prepares Nbd2 + e4 expansion later.",
+      sayShort: 'd3 — solid setup.',
+    }),
+    b({
+      id: 'bc4-nc6', moves: 'e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 c3',
+      highlights: [{ square: 'c3', color: KEY }],
+      say: "...Nc6 c3 — both develop, we play c3 preparing d4 expansion. The setup looks like an Italian Game but with c5 instead of e5 by Black — slightly worse structure for Black.",
+      sayShort: 'c3 — prep d4.',
+    }),
+    b({
+      id: 'bc4-middlegame', moves: 'e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 c3 e6 Bb3',
+      highlights: [{ square: 'b3', color: KEY }],
+      say: "...e6 Bb3 — Black plays the French-like ...e6, we retreat the bishop to b3 keeping the diagonal alive. The Bb3 also avoids the future ...Bxc4 trade. From here Nbd2 + O-O completes development.",
+      sayShort: 'Bb3 — keep the diagonal.',
+    }),
+  ],
+};
+
+// ============================================================
+// vs ...g6 (Hyper-Accelerated Dragon) — 130 games, 74.6% score
+// Black plays Dragon-style ...g6 early. We answer with c3 + d4
+// reaching a Maroczy-like structure.
+// ============================================================
+const VS_G6_DRAGON: LessonScript = {
+  openingId: 'pro-naroditsky-rossolimo',
+  title: 'vs ...g6 — Maroczy-like Dragon answer',
+  minutes: 6,
+  orientation: 'white',
+  kind: 'variation',
+  sources: SRC,
+  beats: [
+    b({
+      id: 'g6-open', moves: 'e4 c5 Nf3 g6 c3',
+      highlights: [{ square: 'g6', color: SOFT }, { square: 'c3', color: KEY }],
+      say: "...g6 — Black plays Dragon-style fianchetto early. We answer with c3 preparing d4 — this is the Smith-Morra-style setup against the Hyper-Accelerated Dragon.",
+      sayShort: 'c3 — vs Hyper Dragon.',
+    }),
+    b({
+      id: 'g6-d5', moves: 'e4 c5 Nf3 g6 c3 d5',
+      highlights: [{ square: 'd5', color: KEY }],
+      say: "...d5 — Black challenges the centre. The d5 is the principled reply preventing our d4 expansion.",
+      sayShort: '...d5 — central try.',
+    }),
+    b({
+      id: 'g6-exd5', moves: 'e4 c5 Nf3 g6 c3 d5 exd5 Qxd5',
+      highlights: [{ square: 'd5', color: ATK }],
+      say: "exd5 ...Qxd5 — central trades, Black recaptures with the queen. The queen on d5 is centralised but exposed — we now play d4 with tempo.",
+      sayShort: '...Qxd5 — exposed queen.',
+    }),
+    b({
+      id: 'g6-d4', moves: 'e4 c5 Nf3 g6 c3 d5 exd5 Qxd5 d4',
+      highlights: [{ square: 'd4', color: KEY }],
+      say: "d4 — central push attacks the c5-pawn AND prepares Nc3 attacking the queen. The Maroczy-like position favors White's space.",
+      sayShort: 'd4 — Maroczy structure.',
+    }),
+    b({
+      id: 'g6-bg7', moves: 'e4 c5 Nf3 g6 c3 d5 exd5 Qxd5 d4 Bg7',
+      highlights: [{ square: 'g7', color: KEY }],
+      say: "...Bg7 — Black completes the Dragon fianchetto. The position is now a Maroczy Bind with one extra tempo for us. The classical conversion plan: Nc3 (attacking the queen) + Be2 + O-O + queenside expansion.",
+      sayShort: '...Bg7 — Maroczy Bind.',
+    }),
+  ],
+};
+
 export const PRO_NARODITSKY_ROSSOLIMO_VARIATION_LESSONS: Record<string, LessonScript> = {
   'pro-naroditsky-rossolimo::Nc6 Rossolimo proper': NC6_ROSSOLIMO,
   'pro-naroditsky-rossolimo::e6 Open avoidance': E6_TAIMANOV,
   'pro-naroditsky-rossolimo::Bxd7+ Trade': BD7_TRADE,
+  'pro-naroditsky-rossolimo::c3 Sideline': C3_SIDELINE,
+  'pro-naroditsky-rossolimo::Bc4 vs ...d6': BC4_VS_D6,
+  'pro-naroditsky-rossolimo::vs ...g6 (Hyper Dragon)': VS_G6_DRAGON,
 };

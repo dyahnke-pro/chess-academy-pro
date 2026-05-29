@@ -1342,6 +1342,42 @@
           "sources": [
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
+        },
+        {
+          "name": "vs ...e5 (Reti gambit)",
+          "pgn": "Nf3 e5 Nxe5 Nc6 Nf3 d5 d4",
+          "explanation": "Black plays the aggressive ...e5 challenging our knight (582 games, 72.2%). We accept the Reti gambit-style pawn with Nxe5. After the knight retreat and central play, White has a clean extra pawn AND a structurally solid position — the conversion runs reliably at amateur level.",
+          "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Attack",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
+        },
+        {
+          "name": "vs ...c6 (Slav-like)",
+          "pgn": "Nf3 c6 g3 d5 Bg2 Nf6 O-O Bg4 d3 Nbd7 Nbd2 e6",
+          "explanation": "Black plays a Slav-like setup with ...c6 supporting ...d5 (555 games, 77.7% — his BEST scoring KIA variation). The c6+d5+Nbd7+e6 structure is solid but completely passive; White's e4 break + Bg2 long-diagonal pressure converts smoothly.",
+          "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Attack",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
+        },
+        {
+          "name": "vs ...b6 (Owen)",
+          "pgn": "Nf3 b6 g3 Bb7 Bg2 Nf6 O-O e6 d4 Be7 c4",
+          "explanation": "Black plays the Owen-style hypermodern setup with ...b6 and ...Bb7 fianchetto (530 games, 75.8%). The b6 gives White free central space — we grab d4 + c4 setting up a Reversed-Slav structure where all the active plans are White's.",
+          "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Attack",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
+        },
+        {
+          "name": "vs ...e6 (French-style)",
+          "pgn": "Nf3 e6 g3 d5 Bg2 Nf6 O-O Be7 d3 O-O Nbd2 c5 e4",
+          "explanation": "Black plays a French-style setup with ...e6 + ...d5 (451 games, 67.0%). We transpose into the KIA-vs-French structure where White's kingside attack via Nbd2-Nf1-Ng3 + e4 break is faster than Black's queenside expansion.",
+          "sources": [
+            "https://www.chess.com/openings/Kings-Indian-Attack",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
         }
       ],
       "trapLines": [
@@ -1423,6 +1459,33 @@
           "explanation": "Black plays the easy Bd7 (401 games, 66.8%) — we trade immediately and play a quiet positional game with the bishop pair and centre advantage.",
           "sources": [
             "book:sicilian-rossolimo",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
+        },
+        {
+          "name": "c3 Sideline",
+          "pgn": "e4 c5 Nf3 d6 c3 Nf6 Bd3 Nc6 Bc2 Bg4 d3 e6 O-O Be7",
+          "explanation": "The quiet c3 sideline vs ...d6 (177 games, 63.6%). Instead of Bb5+ we play c3 reaching a Closed Spanish-style structure with one extra tempo. Named victim: Firouzja2003 (3072).",
+          "sources": [
+            "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
+        },
+        {
+          "name": "Bc4 vs ...d6",
+          "pgn": "e4 c5 Nf3 d6 Bc4 Nf6 d3 Nc6 c3 e6 Bb3",
+          "explanation": "Italian-style Bc4 vs the ...d6 move order (152 games, 65.1%). The Bc4 aims at f7 directly, the Bb3 retreat keeps the diagonal alive. Named victim: MichaelRoiz (2721).",
+          "sources": [
+            "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+            "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+          ]
+        },
+        {
+          "name": "vs ...g6 (Hyper Dragon)",
+          "pgn": "e4 c5 Nf3 g6 c3 d5 exd5 Qxd5 d4 Bg7",
+          "explanation": "Black plays Dragon-style ...g6 early (130 games, 74.6%). We answer with the Smith-Morra-style c3+d4 setup reaching a Maroczy Bind with the extra tempo.",
+          "sources": [
+            "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
             "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
           ]
         }
