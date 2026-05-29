@@ -2478,6 +2478,74 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '', '', 'Bc4 — aim at f7', '', 'Bxh6 — shatter the kingside', '', '', '', 'Qxh6 — grab it, press the king', ''],
     sources: ['concept:pos-king-safety', 'concept:pos-development', 'https://en.wikipedia.org/wiki/Scotch_Game'],
   },
+
+  // ── GothamChess Caro — Fantasy variation (student = Black) ────────────────
+  // Mined 2026-05-29 (engine-first, confirmed/positional tiers). All three sit
+  // on the Fantasy 3.f3 spine where White over-presses; the solid Caro punishes.
+  'pro-gothamchess-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7:Bxf7+': {
+    // 21 plies. Bxf7+ at 12 (White), Kxf7 punish at 13 (Black).
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      'Bxf7+? White throws the bishop at f7 hoping for a quick attack — but with no pieces ready to follow up, it’s just a piece sacrificed for one pawn.',
+      '…Kxf7 — take it. The king is perfectly safe here; nothing attacks it, and Black is simply up a whole bishop.',
+      'O-O — White castles, still hunting for an attack that isn’t there.',
+      '…Ke8 — the king strolls back to safety; the extra piece is decisive.',
+      '', '', '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '',
+      '',
+      'Kxf7 — just take it, up a piece',
+      '',
+      'Ke8 — king back, piece in pocket',
+      '', '', '', '', '',
+    ],
+    sources: ['concept:tac-sacrifice', 'concept:pos-king-safety', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
+  },
+  'pro-gothamchess-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7_O-O_Ngf6:Nc3': {
+    // 23 plies. Nc3 at 14 (White), exd4 punish at 15 (Black).
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nc3? White develops but leaves the d4-pawn loose — the centre White built with f3 is overextended.',
+      '…exd4 — strike the centre. Black wins the d4-pawn cleanly; the e5-pawn that cramped Black is gone and Black is a pawn up.',
+      'Ne2 — White tries to round the pawn back up.',
+      '…Bc5 — develop with tempo, defending the extra pawn and eyeing f2.',
+      '', '', '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      '',
+      'exd4 — take the loose centre pawn',
+      '',
+      'Bc5 — develop, guard the pawn',
+      '', '', '', '', '',
+    ],
+    sources: ['concept:pos-center', 'concept:pawn-majority', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
+  },
+  'pro-gothamchess-caro-kann:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4_Nd7_O-O_Ngf6_c3_Bd6:Qb3': {
+    // 25 plies. Qb3 at 16 (White), O-O punish at 17 (Black). Positional (+0.7).
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qb3? The queen eyes b7 and f7, but Black is fully developed and the threat is hollow — this just misplaces the queen.',
+      '…O-O — calmly castle. Everything is defended, the king is safe, and Black’s harmonious position is simply more pleasant.',
+      'Nbd2 — White brings the knight out.',
+      '…b5 — gain queenside space and shove the c4-bishop off the a2-g8 diagonal.',
+      'Bd3 — the bishop retreats.',
+      '…Nc5 — the knight jumps to a strong square hitting the d3-bishop; Black is clearly better.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      '',
+      'O-O — castle, the threat is hollow',
+      '',
+      'b5 — gain space, kick the bishop',
+      '',
+      'Nc5 — strong square, hit the bishop',
+      '', '', '',
+    ],
+    sources: ['concept:pos-development', 'concept:pos-outpost', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

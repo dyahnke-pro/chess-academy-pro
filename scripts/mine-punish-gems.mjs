@@ -341,12 +341,18 @@ const seedKey = (s) => s.join(' ');
   // Fall back to it so OPENINGS=gambit-<id> mines under the gambit-tab id.
   let gambits = [];
   try { gambits = JSON.parse(readFileSync('src/data/gambits.json', 'utf-8')); } catch { /* none */ }
+  // Pro-rep openings (pro-<player>-<opening>) live in pro-repertoires.json,
+  // same shape (color + variations[].pgn). Source them too so OPENINGS=
+  // pro-gothamchess-caro-kann mines a pro entry's variation tabs. Every gem is
+  // still DB-anchored by the gate; a pro seed just walks his curated lines.
+  let proRep = [];
+  try { proRep = JSON.parse(readFileSync('src/data/pro-repertoires.json', 'utf-8')).openings ?? []; } catch { /* none */ }
   const only = (process.env.OPENINGS || '').split(',').map((s) => s.trim()).filter(Boolean);
   const ids = only.length ? only : Object.keys(OPENING_SEEDS);
   const all = [];
   const seen = new Set(); // dedupe gems across overlapping lines
   for (const id of ids) {
-    const opening = repertoire.find((o) => o.id === id) || gambits.find((o) => o.id === id);
+    const opening = repertoire.find((o) => o.id === id) || gambits.find((o) => o.id === id) || proRep.find((o) => o.id === id);
     // Hand-tuned seed if present, else auto-derive from the repertoire entry
     // (color → studentChar, common variation prefix → baseSeed). Only truly
     // un-deriveable openings (not in repertoire / no variations) are skipped.
