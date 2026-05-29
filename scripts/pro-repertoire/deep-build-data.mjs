@@ -159,7 +159,9 @@ function* iterGames() {
   }
 }
 
-const dnLc = opening.studentUsername.toLowerCase();
+// Derive the student from the PLAYER arg so one opening config serves
+// every player (the per-opening studentUsername field is now a fallback).
+const dnLc = (PLAYER || opening.studentUsername).toLowerCase();
 const playerColor = opening.color;
 const prefix = variation ? variation.prefix : [];
 

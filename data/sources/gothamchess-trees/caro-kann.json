@@ -7,9 +7,9 @@
     "e4",
     "c6"
   ],
-  "generatedAt": "2026-05-28T18:29:00.410Z",
+  "generatedAt": "2026-05-29T18:58:27.023Z",
   "totals": {
-    "totalGamesScanned": 31960,
+    "totalGamesScanned": 31994,
     "gamesMatchingOpening": 1944,
     "minBranchGames": 5,
     "minTrieGames": 5
