@@ -245,9 +245,10 @@ describe('OpeningDetailPage', () => {
   it('shows "Opening not found" when opening does not exist', async () => {
     mockGetOpeningById.mockResolvedValue(undefined);
     renderWithRoute('nonexistent-id');
+    // loadOpening retries 10 × 400ms before giving up — wait long enough.
     await waitFor(() => {
       expect(screen.getByText('Opening not found.')).toBeInTheDocument();
-    });
+    }, { timeout: 6000 });
   });
 
   it('clicking LEARN enters learn/drill mode', async () => {
