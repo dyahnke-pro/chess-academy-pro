@@ -251,6 +251,17 @@ export function getAllVariationLessonKeys(): string[] {
   return Object.keys(VARIATION_LESSONS);
 }
 
+/** Every registered lesson (main-line + variations) with its registry key.
+ *  Exported for build-time tooling (the lesson-tail diagnostic) and gate
+ *  tests — NOT for runtime routing. The key is the openingId for main lessons
+ *  and '<openingId>::<variationName>' for variations. */
+export function getAllLessonScripts(): Array<{ key: string; lesson: LessonScript }> {
+  return [
+    ...Object.entries(LESSONS).map(([key, lesson]) => ({ key, lesson })),
+    ...Object.entries(VARIATION_LESSONS).map(([key, lesson]) => ({ key, lesson })),
+  ];
+}
+
 export function getVariationLessonScript(
   openingId: string | undefined | null,
   variationName: string | undefined | null,
