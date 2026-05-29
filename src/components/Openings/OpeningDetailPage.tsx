@@ -50,6 +50,7 @@ import { getProNaroditskyAlapinTabPlanIds } from '../../services/proNaroditskyAl
 import { getProNaroditskyKIDTabPlanIds } from '../../services/proNaroditskyKIDTabPlans';
 import { getProNaroditskyRemainingTabPlanIds } from '../../services/proNaroditskyRemainingTabPlans';
 import { getProNaroditskyCaroTabPlanIds } from '../../services/proNaroditskyCaroTabPlans';
+import { getProGothamchessCaroTabPlanIds } from '../../services/proGothamchessCaroTabPlans';
 import { getPetrovDefenceTabPlanIds } from '../../services/petrovDefenceMasterclassTabs';
 import { getPhilidorDefenceTabPlanIds } from '../../services/philidorDefenceMasterclassTabs';
 import { getQgdTabPlanIds } from '../../services/qgdMasterclassTabs';
@@ -1287,6 +1288,7 @@ export function OpeningDetailPage(): JSX.Element {
     getProNaroditskyKIDTabPlanIds(opening.id, pircTabKey) ??
     getProNaroditskyRemainingTabPlanIds(opening.id, pircTabKey) ??
     getProNaroditskyCaroTabPlanIds(opening.id, pircTabKey) ??
+    getProGothamchessCaroTabPlanIds(opening.id, pircTabKey) ??
     getPetrovDefenceTabPlanIds(opening.id, tabKey) ??
     getPhilidorDefenceTabPlanIds(opening.id, tabKey) ??
     getQgdTabPlanIds(opening.id, tabKey) ??
