@@ -9,6 +9,7 @@ import { PRO_NARODITSKY_ROSSOLIMO_VARIATION_LESSONS } from './proNaroditskyRosso
 import { PRO_NARODITSKY_NAJDORF_VARIATION_LESSONS } from './proNaroditskyNajdorfVariations';
 import { PRO_NARODITSKY_RUY_VARIATION_LESSONS } from './proNaroditskyRuyVariations';
 import { PRO_NARODITSKY_ALEKHINE_VARIATION_LESSONS } from './proNaroditskyAlekhineVariations';
+import { PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS } from './proNaroditskyJobavaVariations';
 import {
   PRO_NAR_ALAPIN_LESSON, PRO_NAR_NAJDORF_LESSON, PRO_NAR_KID_LESSON,
   PRO_NAR_ALEKHINE_LESSON, PRO_NAR_KIA_LESSON, PRO_NAR_ROSSOLIMO_LESSON,
@@ -231,6 +232,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_NARODITSKY_NAJDORF_VARIATION_LESSONS,
   ...PRO_NARODITSKY_RUY_VARIATION_LESSONS,
   ...PRO_NARODITSKY_ALEKHINE_VARIATION_LESSONS,
+  ...PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
