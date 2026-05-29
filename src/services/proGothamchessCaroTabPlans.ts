@@ -29,14 +29,18 @@ const TAB_PLANS: Record<string, string[]> = {
   'two knights 2.nc3 d5 3.nf3 bg4': ['mp-progothamchess-caro-two-knights'],
   'advance variation 3.e5 bf5': ['mp-progothamchess-caro-bf5-trade'],
   'advance variation 3.e5 c5': ['mp-progothamchess-caro-advance-c5'],
-  'exchange variation 3.exd5': [
-    'mp-progothamchess-caro-exchange-fianchetto',
-    'mp-progothamchess-caro-exchange-endgame',
+  // Exchange: middlegame fianchetto plan only. A true Exchange (non-Panov)
+  // endgame anchor is deferred — the cleanest R+B win in the corpus (vs Kobalia
+  // 2777) was a long grind without a sharp teachable conversion (empty >
+  // confusing, per doctrine).
+  'exchange variation 3.exd5': ['mp-progothamchess-caro-exchange-fianchetto'],
+  // Panov: the …g6 fianchetto plan hunting the isolani + the b3-bishop trade,
+  // and the R+B endgame from his win over GM Bortnyk (2780) — the fianchetto
+  // bishop converting against the isolani structure.
+  'panov-botvinnik attack 3.exd5 cxd5 4.c4': [
+    'mp-progothamchess-caro-panov',
+    'mp-progothamchess-caro-panov-endgame',
   ],
-  // Panov: the …g6 fianchetto plan hunting the isolani + the b3-bishop trade.
-  // Endgame plan deferred — no clean Gotham-win conversion anchor surfaced yet
-  // (empty > confusing, per doctrine).
-  'panov-botvinnik attack 3.exd5 cxd5 4.c4': ['mp-progothamchess-caro-panov'],
   'fantasy variation 3.f3': [
     'mp-progothamchess-caro-fantasy-bd6',
     'mp-progothamchess-caro-fantasy-endgame',

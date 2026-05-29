@@ -46312,131 +46312,6 @@
     ]
   },
   {
-    "id": "mp-progothamchess-caro-exchange-endgame",
-    "openingId": "pro-gothamchess-caro-kann",
-    "criticalPositionFen": "r7/1p3k1p/8/4B3/2b2pPP/4pP1B/1P1bK3/7R w - - 0 32",
-    "title": "Caro Exchange Endgame: R+B Conversion vs Bortnyk (2780)",
-    "overview": "How the Exchange's healthy structure cashes in. From his win over GM Mykola Bortnyk (2780), Black reaches a rook-and-bishop ending where the bishop dominates the long diagonal — exactly the piece the …g6 fianchetto put there. He centralises the rook, wins White's loose pawns, and the bishop's reach decides. The opening's wall becomes the endgame's engine.",
-    "pawnBreaks": [
-      "…f4-f3 the passed pawn that the active bishop shepherds"
-    ],
-    "pieceManeuvers": [
-      "…Rook to the d- and c-files invading the back rank",
-      "…light bishop dominating the a8-h1 diagonal to d5/f3"
-    ],
-    "strategicThemes": [
-      "The fianchetto bishop dominates the ending",
-      "Invade with the rook on the open files",
-      "Healthy structure converts"
-    ],
-    "endgameTransitions": [
-      "R+B vs R+B where the better bishop wins"
-    ],
-    "playableLines": [
-      {
-        "fen": "r7/1p3k1p/8/4B3/2b2pPP/4pP1B/1P1bK3/7R w - - 0 32",
-        "moves": [
-          "Kd1",
-          "Rd8",
-          "Kc2",
-          "Rc8",
-          "Bxf4",
-          "Bd5+",
-          "Kd3",
-          "Bxf3"
-        ],
-        "annotations": [
-          "Kd1 — White’s king shuffles, trying to stay near the passed e-pawn.",
-          "…Rd8 swings the rook to the open d-file, the first invasion route.",
-          "Kc2 sidesteps.",
-          "…Rc8+ chases the king and seizes the c-file with tempo.",
-          "Bxf4 grabs a pawn but opens the diagonal.",
-          "…Bd5+ — there it is: the light bishop spears down the long diagonal with check, the very diagonal the …g6 fianchetto fought for.",
-          "Kd3 blocks.",
-          "…Bxf3 collects another pawn; the bishop’s reach has decided the ending. This is what the Caro structure was always promising."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "Kd1 — White shuffles",
-          "Rd8 — open d-file",
-          "Kc2 — White sidesteps",
-          "Rc8+ — seize c-file",
-          "Bxf4 — White grabs a pawn",
-          "Bd5+ — the long diagonal!",
-          "Kd3 — White blocks",
-          "Bxf3 — bishop decides"
-        ],
-        "title": "Caro Exchange Endgame: R+B Conversion vs Bortnyk (2780)",
-        "intro": "How the Exchange's healthy structure cashes in. From his win over GM Mykola Bortnyk (2780), Black reaches a rook-and-bishop ending where the bishop dominates the long diagonal — exactly the piece the …g6 fianchetto put there. He centralises the rook, wins White's loose pawns, and the bishop's reach decides. The opening's wall becomes the endgame's engine.",
-        "sources": [
-          "book:caro-kann",
-          "https://www.chess.com/openings/Caro-Kann-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
-        ]
-      }
-    ]
-  },
-  {
     "id": "mp-progothamchess-caro-fantasy-endgame",
     "openingId": "pro-gothamchess-caro-kann",
     "criticalPositionFen": "8/7p/5k2/1n6/1P6/7P/P2K3P/2q5 w - - 0 54",
@@ -46803,6 +46678,131 @@
         ],
         "title": "Caro Panov: the …g6 Fianchetto vs the Isolani",
         "intro": "Against the Panov's c4 — which hands White an isolated d-pawn — his 74-game plan is the fianchetto defence. The bishop goes to g7 to stare down the long diagonal straight at d4, the isolani's blockading square, while the …Nb6-Na5 manoeuvre hunts down White's most active piece, the light-squared bishop on b3. Trade that bishop, blockade the isolani, keep the bishop pair — practically Black scores very well.",
+        "sources": [
+          "book:caro-kann",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://www.chess.com/member/gothamchess"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-caro-panov-endgame",
+    "openingId": "pro-gothamchess-caro-kann",
+    "criticalPositionFen": "r7/1p3k1p/8/4B3/2b2pPP/4pP1B/1P1bK3/7R w - - 0 32",
+    "title": "Caro Panov Endgame: R+B Conversion vs Bortnyk (2780)",
+    "overview": "How the Panov fianchetto cashes in. From his win over GM Mykola Bortnyk (2780), Black reaches a rook-and-bishop ending where the bishop dominates the long diagonal — exactly the piece the …g6/…Bg7 fianchetto put there to pressure the isolani. He centralises the rook, wins White's loose pawns, and the bishop's reach decides. The opening's plan becomes the endgame's engine.",
+    "pawnBreaks": [
+      "…f4-f3 the passed pawn that the active bishop shepherds"
+    ],
+    "pieceManeuvers": [
+      "…Rook to the d- and c-files invading the back rank",
+      "…light bishop dominating the a8-h1 diagonal to d5/f3"
+    ],
+    "strategicThemes": [
+      "The fianchetto bishop dominates the ending",
+      "Invade with the rook on the open files",
+      "Bishop pair vs the isolani converts"
+    ],
+    "endgameTransitions": [
+      "R+B vs R+B where the better bishop wins"
+    ],
+    "playableLines": [
+      {
+        "fen": "r7/1p3k1p/8/4B3/2b2pPP/4pP1B/1P1bK3/7R w - - 0 32",
+        "moves": [
+          "Kd1",
+          "Rd8",
+          "Kc2",
+          "Rc8",
+          "Bxf4",
+          "Bd5+",
+          "Kd3",
+          "Bxf3"
+        ],
+        "annotations": [
+          "Kd1 — White’s king shuffles, trying to stay near the passed e-pawn.",
+          "…Rd8 swings the rook to the open d-file, the first invasion route.",
+          "Kc2 sidesteps.",
+          "…Rc8+ chases the king and seizes the c-file with tempo.",
+          "Bxf4 grabs a pawn but opens the diagonal.",
+          "…Bd5+ — there it is: the light bishop spears down the long diagonal with check, the very diagonal the …g6 fianchetto fought for.",
+          "Kd3 blocks.",
+          "…Bxf3 collects another pawn; the bishop’s reach has decided the ending. This is what the Caro structure was always promising."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Kd1 — White shuffles",
+          "Rd8 — open d-file",
+          "Kc2 — White sidesteps",
+          "Rc8+ — seize c-file",
+          "Bxf4 — White grabs a pawn",
+          "Bd5+ — the long diagonal!",
+          "Kd3 — White blocks",
+          "Bxf3 — bishop decides"
+        ],
+        "title": "Caro Panov Endgame: R+B Conversion vs Bortnyk (2780)",
+        "intro": "How the Panov fianchetto cashes in. From his win over GM Mykola Bortnyk (2780), Black reaches a rook-and-bishop ending where the bishop dominates the long diagonal — exactly the piece the …g6/…Bg7 fianchetto put there to pressure the isolani. He centralises the rook, wins White's loose pawns, and the bishop's reach decides. The opening's plan becomes the endgame's engine.",
         "sources": [
           "book:caro-kann",
           "https://www.chess.com/openings/Caro-Kann-Defense",

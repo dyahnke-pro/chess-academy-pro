@@ -152,13 +152,13 @@ const PLANS = [
   },
   // ── Endgame plans (id …-endgame) ─────────────────────────────────────────
   {
-    id: 'mp-progothamchess-caro-exchange-endgame',
-    title: 'Caro Exchange Endgame: R+B Conversion vs Bortnyk (2780)',
+    id: 'mp-progothamchess-caro-panov-endgame',
+    title: 'Caro Panov Endgame: R+B Conversion vs Bortnyk (2780)',
     overview:
-      "How the Exchange's healthy structure cashes in. From his win over GM Mykola Bortnyk (2780), Black reaches a rook-and-bishop ending where the bishop dominates the long diagonal — exactly the piece the …g6 fianchetto put there. He centralises the rook, wins White's loose pawns, and the bishop's reach decides. The opening's wall becomes the endgame's engine.",
+      "How the Panov fianchetto cashes in. From his win over GM Mykola Bortnyk (2780), Black reaches a rook-and-bishop ending where the bishop dominates the long diagonal — exactly the piece the …g6/…Bg7 fianchetto put there to pressure the isolani. He centralises the rook, wins White's loose pawns, and the bishop's reach decides. The opening's plan becomes the endgame's engine.",
     pawnBreaks: ['…f4-f3 the passed pawn that the active bishop shepherds'],
     pieceManeuvers: ['…Rook to the d- and c-files invading the back rank', '…light bishop dominating the a8-h1 diagonal to d5/f3'],
-    strategicThemes: ['The fianchetto bishop dominates the ending', 'Invade with the rook on the open files', 'Healthy structure converts'],
+    strategicThemes: ['The fianchetto bishop dominates the ending', 'Invade with the rook on the open files', 'Bishop pair vs the isolani converts'],
     endgameTransitions: ['R+B vs R+B where the better bishop wins'],
     anchor: null,
     anchorFen: 'r7/1p3k1p/8/4B3/2b2pPP/4pP1B/1P1bK3/7R w - - 0 32',
