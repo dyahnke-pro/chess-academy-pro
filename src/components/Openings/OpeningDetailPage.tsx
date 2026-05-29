@@ -74,6 +74,9 @@ import {
   type RuyTrapDef,
 } from '../../data/lessons/ruyTrapLessons';
 import {
+  getProNaroditskyAlapinTrapPlayableLine,
+} from '../../data/lessons/proNaroditskyAlapinTrapLessons';
+import {
   VIENNA_TRAP_LESSONS,
   getViennaTrapsForTab,
   getViennaTrapPlayableLine,
@@ -759,22 +762,55 @@ export function OpeningDetailPage(): JSX.Element {
     return <OpeningPlayMode opening={opening} startFen={antidoteFen} onExit={handleExit} />;
   }
 
-  // Walkthrough mode (trap/warning lines)
+  // Walkthrough mode (trap/warning lines). Prefer the curated pro-rep
+  // trap/warning lesson (modern PlayableLinePlayer + hand-written per-beat
+  // narration); fall back to legacy WalkthroughMode when no curated lesson
+  // exists for the entry's name.
   if (viewMode === 'trap-walkthrough' && opening.trapLines?.[activeTrapLineIndex]) {
+    const trap = opening.trapLines[activeTrapLineIndex];
+    const curated = opening.id === 'pro-naroditsky-alapin'
+      ? getProNaroditskyAlapinTrapPlayableLine(trap.name)
+      : null;
+    if (curated) {
+      return (
+        <PlayableLinePlayer
+          line={curated}
+          boardOrientation={opening.color}
+          mode="watch"
+          onComplete={handleExit}
+          onExit={handleExit}
+        />
+      );
+    }
     return (
       <WalkthroughMode
         opening={opening}
-        customLine={opening.trapLines[activeTrapLineIndex]}
+        customLine={trap}
         subLineKey={`trap-${activeTrapLineIndex}`}
         onExit={handleExit}
       />
     );
   }
   if (viewMode === 'warning-walkthrough' && opening.warningLines?.[activeWarningLineIndex]) {
+    const warn = opening.warningLines[activeWarningLineIndex];
+    const curated = opening.id === 'pro-naroditsky-alapin'
+      ? getProNaroditskyAlapinTrapPlayableLine(warn.name)
+      : null;
+    if (curated) {
+      return (
+        <PlayableLinePlayer
+          line={curated}
+          boardOrientation={opening.color}
+          mode="watch"
+          onComplete={handleExit}
+          onExit={handleExit}
+        />
+      );
+    }
     return (
       <WalkthroughMode
         opening={opening}
-        customLine={opening.warningLines[activeWarningLineIndex]}
+        customLine={warn}
         subLineKey={`warning-${activeWarningLineIndex}`}
         onExit={handleExit}
       />
@@ -815,22 +851,54 @@ export function OpeningDetailPage(): JSX.Element {
     );
   }
 
-  // Learn mode (trap/warning lines)
+  // Learn mode (trap/warning lines). Same fallback chain as walkthrough:
+  // curated pro-rep lesson via PlayableLinePlayer first, legacy DrillMode
+  // when no curated lesson exists.
   if (viewMode === 'trap-learn' && opening.trapLines?.[activeTrapLineIndex]) {
+    const trap = opening.trapLines[activeTrapLineIndex];
+    const curated = opening.id === 'pro-naroditsky-alapin'
+      ? getProNaroditskyAlapinTrapPlayableLine(trap.name)
+      : null;
+    if (curated) {
+      return (
+        <PlayableLinePlayer
+          line={curated}
+          boardOrientation={opening.color}
+          mode="learn"
+          onComplete={handleComplete}
+          onExit={handleExit}
+        />
+      );
+    }
     return (
       <DrillMode
         opening={opening}
-        customLine={opening.trapLines[activeTrapLineIndex]}
+        customLine={trap}
         onComplete={handleComplete}
         onExit={handleExit}
       />
     );
   }
   if (viewMode === 'warning-learn' && opening.warningLines?.[activeWarningLineIndex]) {
+    const warn = opening.warningLines[activeWarningLineIndex];
+    const curated = opening.id === 'pro-naroditsky-alapin'
+      ? getProNaroditskyAlapinTrapPlayableLine(warn.name)
+      : null;
+    if (curated) {
+      return (
+        <PlayableLinePlayer
+          line={curated}
+          boardOrientation={opening.color}
+          mode="learn"
+          onComplete={handleComplete}
+          onExit={handleExit}
+        />
+      );
+    }
     return (
       <DrillMode
         opening={opening}
-        customLine={opening.warningLines[activeWarningLineIndex]}
+        customLine={warn}
         onComplete={handleComplete}
         onExit={handleExit}
       />
