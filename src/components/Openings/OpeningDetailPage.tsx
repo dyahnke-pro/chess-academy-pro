@@ -48,6 +48,7 @@ import { getSicilianSveshnikovTabPlanIds } from '../../services/sicilianSveshnik
 import { getSicilianAlapinTabPlanIds } from '../../services/sicilianAlapinMasterclassTabs';
 import { getProNaroditskyAlapinTabPlanIds } from '../../services/proNaroditskyAlapinTabPlans';
 import { getProNaroditskyKIDTabPlanIds } from '../../services/proNaroditskyKIDTabPlans';
+import { getProNaroditskyRemainingTabPlanIds } from '../../services/proNaroditskyRemainingTabPlans';
 import { getPetrovDefenceTabPlanIds } from '../../services/petrovDefenceMasterclassTabs';
 import { getPhilidorDefenceTabPlanIds } from '../../services/philidorDefenceMasterclassTabs';
 import { getQgdTabPlanIds } from '../../services/qgdMasterclassTabs';
@@ -1195,6 +1196,7 @@ export function OpeningDetailPage(): JSX.Element {
     getSicilianAlapinTabPlanIds(opening.id, tabKey) ??
     getProNaroditskyAlapinTabPlanIds(opening.id, pircTabKey) ??
     getProNaroditskyKIDTabPlanIds(opening.id, pircTabKey) ??
+    getProNaroditskyRemainingTabPlanIds(opening.id, pircTabKey) ??
     getPetrovDefenceTabPlanIds(opening.id, tabKey) ??
     getPhilidorDefenceTabPlanIds(opening.id, tabKey) ??
     getQgdTabPlanIds(opening.id, tabKey) ??
