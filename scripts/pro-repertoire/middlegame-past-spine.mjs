@@ -1,26 +1,26 @@
 #!/usr/bin/env node
-// GENERAL middlegame-past-spine walker (player + opening parameterized).
+// GENERAL middlegame-plan-line extractor (player + opening parameterized).
 //
-// For each deep-build variation file (data/sources/<player>-deep/
-// <opening>-<variation>.json), read its opening spine (spineMoves, which
-// ends at the opening terminus), find every one of the player's games
-// that followed that spine, then frequency-walk the DOMINANT continuation
-// for the next N plies. That continuation is the REAL middlegame play his
-// games reach past the opening — the data source for:
-//   • STEP 3.5: extending a variation lesson INTO the middlegame
-//   • STEP 9:   the playable line of a hand-authored middlegame plan
+// For each deep-build variation file, walk the player's WIDE game pool
+// (games matching the variation's identifying prefix — hundreds of games)
+// down the dominant opening line to where it branches (the opening
+// terminus). At that branch point, enumerate the top continuation
+// clusters (his real middlegame plans, ≥ minGames each) and for EACH,
+// walk its own dominant sub-line a few plies into the middlegame.
 //
-// Moves are copied from this stdout (§1b show-your-work) — never composed.
+// The clusters ARE his candidate middlegame plans (STEP 9); each printed
+// sub-line is a data-grounded playable line to paste (§1b show-your-work).
+// Moves are copied from this stdout — never composed.
 //
-// Usage: node scripts/pro-repertoire/middlegame-past-spine.mjs <player> <openingId> [extraPlies] [minGames]
+// Usage: node scripts/pro-repertoire/middlegame-past-spine.mjs <player> <openingId> [minBranch] [planPlies]
 
 import fs from 'node:fs';
 import path from 'node:path';
 
 const PLAYER = process.argv[2] || 'gothamchess';
 const OPENING = process.argv[3] || 'caro-kann';
-const EXTRA_PLIES = Number(process.argv[4] || 12);
-const MIN_GAMES = Number(process.argv[5] || 3);
+const MIN_BRANCH = Number(process.argv[4] || 5);   // pool floor to keep walking the single spine
+const PLAN_PLIES = Number(process.argv[5] || 8);   // how far to walk each plan branch
 
 const SRC_DIR = `data/sources/${PLAYER}-chesscom`;
 const DEEP_DIR = `data/sources/${PLAYER}-deep`;
@@ -41,8 +41,14 @@ function startsWith(moves, prefix) {
   for (let i = 0; i < prefix.length; i++) if (moves[i] !== prefix[i]) return false;
   return true;
 }
+// dominant move at `ply` across pool, plus the surviving sub-pool
+function dominant(pool, ply) {
+  const counts = {};
+  for (const m of pool) if (m.length > ply) counts[m[ply]] = (counts[m[ply]] || 0) + 1;
+  const ranked = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  return ranked;
+}
 
-// Pre-parse every game once (player's games only), keep SAN arrays.
 const games = [];
 for (const f of fs.readdirSync(SRC_DIR).filter((x) => x.endsWith('.jsonl'))) {
   for (const line of fs.readFileSync(path.join(SRC_DIR, f), 'utf8').split('\n')) {
@@ -64,31 +70,50 @@ console.log(`player=${PLAYER} opening=${OPENING} | ${games.length} of his games 
 
 for (const file of deepFiles) {
   let d; try { d = JSON.parse(fs.readFileSync(path.join(DEEP_DIR, file), 'utf8')); } catch { continue; }
-  const spine = d.spineMoves || [];
-  if (spine.length === 0) continue;
+  const prefix = d.variation?.prefix || [];
+  const label = d.variation?.label || d.variationKey || file;
+  if (prefix.length === 0) continue;
 
-  // Games that followed this spine to the terminus.
-  let pool = games.filter((m) => startsWith(m, spine));
-  const startN = pool.length;
-  const path0 = [...spine];
-  const perPly = [];
+  let pool = games.filter((m) => startsWith(m, prefix));
+  if (pool.length < MIN_BRANCH) continue;
+  const wideN = pool.length;
 
-  // Walk the dominant continuation ply-by-ply.
-  for (let depth = 0; depth < EXTRA_PLIES; depth++) {
-    const ply = spine.length + depth;
-    const counts = {};
-    for (const m of pool) if (m.length > ply) counts[m[ply]] = (counts[m[ply]] || 0) + 1;
-    const ranked = Object.entries(counts).sort((a, b) => b[1] - a[1]);
-    if (ranked.length === 0) break;
-    const [bestMove, bestCount] = ranked[0];
-    if (bestCount < MIN_GAMES) break;
-    path0.push(bestMove);
-    perPly.push(`${bestMove}(${bestCount})`);
-    pool = pool.filter((m) => m[ply] === bestMove);
+  // Walk dominant spine until the pool thins below MIN_BRANCH.
+  const spine = [...prefix];
+  let ply = prefix.length;
+  while (true) {
+    const ranked = dominant(pool, ply);
+    if (ranked.length === 0 || ranked[0][1] < MIN_BRANCH) break;
+    spine.push(ranked[0][0]);
+    pool = pool.filter((m) => m[ply] === ranked[0][0]);
+    ply++;
   }
 
-  const variation = d.variation || file.replace(`${OPENING}-`, '').replace('.json', '');
-  console.log(`### ${variation}  [${startN} games on spine, terminus ply ${spine.length}]`);
-  console.log(`  full line:  ${path0.join(' ')}`);
-  console.log(`  middlegame extension (move|games): ${perPly.join(' ') || '(branches below threshold immediately)'}\n`);
+  console.log(`### ${label}  [${wideN} games matched prefix]`);
+  console.log(`  spine to branch (move ${Math.ceil(spine.length / 2)}): ${spine.join(' ')}`);
+
+  // At the branch point, enumerate the top middlegame-plan clusters.
+  const branchRanked = dominant(pool, spine.length).slice(0, 4);
+  if (branchRanked.length === 0) { console.log('  (no further branches)\n'); continue; }
+
+  for (const [clusterMove, clusterCount] of branchRanked) {
+    if (clusterCount < 2) continue;
+    const pct = ((clusterCount / pool.length) * 100).toFixed(0);
+    // Walk this cluster's dominant sub-line into the middlegame.
+    let sub = pool.filter((m) => m[spine.length] === clusterMove);
+    const line = [...spine, clusterMove];
+    let p = spine.length + 1;
+    const tail = [`${clusterMove}(${clusterCount})`];
+    for (let k = 0; k < PLAN_PLIES - 1; k++) {
+      const r = dominant(sub, p);
+      if (r.length === 0 || r[0][1] < 2) break;
+      line.push(r[0][0]);
+      tail.push(`${r[0][0]}(${r[0][1]})`);
+      sub = sub.filter((m) => m[p] === r[0][0]);
+      p++;
+    }
+    console.log(`    • plan [${clusterMove} ${pct}% of branch]: ${line.join(' ')}`);
+    console.log(`        per-ply: ${tail.join(' ')}`);
+  }
+  console.log('');
 }
