@@ -77,6 +77,9 @@ import {
   getProNaroditskyAlapinTrapPlayableLine,
 } from '../../data/lessons/proNaroditskyAlapinTrapLessons';
 import {
+  getProNaroditskyKIDTrapPlayableLine,
+} from '../../data/lessons/proNaroditskyKIDTrapLessons';
+import {
   VIENNA_TRAP_LESSONS,
   getViennaTrapsForTab,
   getViennaTrapPlayableLine,
@@ -768,9 +771,12 @@ export function OpeningDetailPage(): JSX.Element {
   // exists for the entry's name.
   if (viewMode === 'trap-walkthrough' && opening.trapLines?.[activeTrapLineIndex]) {
     const trap = opening.trapLines[activeTrapLineIndex];
-    const curated = opening.id === 'pro-naroditsky-alapin'
-      ? getProNaroditskyAlapinTrapPlayableLine(trap.name)
-      : null;
+    const curated =
+      opening.id === 'pro-naroditsky-alapin'
+        ? getProNaroditskyAlapinTrapPlayableLine(trap.name)
+        : opening.id === 'pro-naroditsky-kid'
+          ? getProNaroditskyKIDTrapPlayableLine(trap.name)
+          : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -793,9 +799,12 @@ export function OpeningDetailPage(): JSX.Element {
   }
   if (viewMode === 'warning-walkthrough' && opening.warningLines?.[activeWarningLineIndex]) {
     const warn = opening.warningLines[activeWarningLineIndex];
-    const curated = opening.id === 'pro-naroditsky-alapin'
-      ? getProNaroditskyAlapinTrapPlayableLine(warn.name)
-      : null;
+    const curated =
+      opening.id === 'pro-naroditsky-alapin'
+        ? getProNaroditskyAlapinTrapPlayableLine(warn.name)
+        : opening.id === 'pro-naroditsky-kid'
+          ? getProNaroditskyKIDTrapPlayableLine(warn.name)
+          : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -856,9 +865,12 @@ export function OpeningDetailPage(): JSX.Element {
   // when no curated lesson exists.
   if (viewMode === 'trap-learn' && opening.trapLines?.[activeTrapLineIndex]) {
     const trap = opening.trapLines[activeTrapLineIndex];
-    const curated = opening.id === 'pro-naroditsky-alapin'
-      ? getProNaroditskyAlapinTrapPlayableLine(trap.name)
-      : null;
+    const curated =
+      opening.id === 'pro-naroditsky-alapin'
+        ? getProNaroditskyAlapinTrapPlayableLine(trap.name)
+        : opening.id === 'pro-naroditsky-kid'
+          ? getProNaroditskyKIDTrapPlayableLine(trap.name)
+          : null;
     if (curated) {
       return (
         <PlayableLinePlayer
@@ -881,9 +893,12 @@ export function OpeningDetailPage(): JSX.Element {
   }
   if (viewMode === 'warning-learn' && opening.warningLines?.[activeWarningLineIndex]) {
     const warn = opening.warningLines[activeWarningLineIndex];
-    const curated = opening.id === 'pro-naroditsky-alapin'
-      ? getProNaroditskyAlapinTrapPlayableLine(warn.name)
-      : null;
+    const curated =
+      opening.id === 'pro-naroditsky-alapin'
+        ? getProNaroditskyAlapinTrapPlayableLine(warn.name)
+        : opening.id === 'pro-naroditsky-kid'
+          ? getProNaroditskyKIDTrapPlayableLine(warn.name)
+          : null;
     if (curated) {
       return (
         <PlayableLinePlayer

@@ -1097,6 +1097,28 @@
           ]
         }
       ],
+      "trapLines": [
+        {
+          "name": "Mar del Plata Nh5-Nf4-Nxd4 conversion (30 games)",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 O-O exd4 Nxd4 Re8 f3 Nc6 Be3 Nh5 Qd2 Nxd4",
+          "explanation": "Mined from his archive — 30 games where opponents reached the standard Mar del Plata with f3 and watched Black win material via the Nh5-Nf4 reroute attacking d4 with tempo. The Classical KID's signature conversion."
+        },
+        {
+          "name": "Bf5 + Ne4 wins bishop pair (Fianchetto, GM Bok victim)",
+          "pgn": "d4 Nf6 c4 g6 Nf3 Bg7 g3 O-O Bg2 d6 O-O c6 Nc3 Bf5 b3 Ne4 Bb2 Nxc3 Bxc3",
+          "explanation": "Fianchetto trap — 10 opponents including GM Benjamin Bok at 2963 walked into this. Black's ...Bf5 + ...Ne4 + ...Nxc3 forces Bxc3, surrendering the bishop pair AND locking the b2-bishop behind White's queenside pawns."
+        },
+        {
+          "name": "Qxd8 trade hands Black the better endgame (Firouzja victim)",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 dxe5 dxe5 Qxd8 Rxd8 Bg5 Re8 Nd5 Nxd5 cxd5",
+          "explanation": "Mined endgame trap — 11 opponents including Firouzja 3087 and Nihal Sarin 2949. After the Qxd8 trade, the resulting endgame leaves White with doubled c-pawns and an isolated d5-pawn while Black's pieces have active squares and the Bg7 controls the long diagonal."
+        },
+        {
+          "name": "...Bg4 pin wins bishop pair (Four Pawns)",
+          "pgn": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 Bg4 Be2 Bxf3 Bxf3",
+          "explanation": "Four Pawns trap — Black's ...Bg4 pins the Nf3, forcing the trade with ...Bxf3 and giving White doubled f-pawns AND the bishop pair. The Four Pawns chain's structural weakness is exposed on move 7."
+        }
+      ],
       "sources": [
         "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
       ]
