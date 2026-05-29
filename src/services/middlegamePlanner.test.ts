@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import {
   findPlanForOpening,
   findPlanBySubject,
+  findPlansForOpening,
   sessionFromPlan,
   resolveMiddlegameSession,
   resolveMiddlegameSessionWithFallback,
@@ -49,6 +50,23 @@ describe('middlegamePlanner', () => {
     // The full Austrian name should bias to the Austrian plan, not a
     // random Pirc tile.
     expect(byFullName?.id).toContain('austrian');
+  });
+
+  // The in-page picker (CoachTeachPage) lists EVERY authored plan for
+  // the resolved opening, best subject-match first. The Pirc carries
+  // multiple plans, so a bare "pirc" must return them all; a query
+  // naming the Austrian must lead with the Austrian plan.
+  it('lists all plans for an opening, best match first', () => {
+    const all = findPlansForOpening('pirc');
+    expect(all.length).toBeGreaterThan(1);
+    expect(all.every((p) => p.openingId.includes('pirc'))).toBe(true);
+    // No duplicate ids in the list.
+    expect(new Set(all.map((p) => p.id)).size).toBe(all.length);
+
+    const austrianFirst = findPlansForOpening('Pirc Defense: Austrian Attack');
+    expect(austrianFirst[0]?.id).toContain('austrian');
+
+    expect(findPlansForOpening('totally-made-up-opening')).toEqual([]);
   });
 
   it('builds a WalkthroughSession with a non-starting fen and middlegame kind', () => {

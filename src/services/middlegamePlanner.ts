@@ -56,6 +56,26 @@ export function findPlanForOpening(openingId: string): MiddlegamePlan | null {
 }
 
 /**
+ * Resolve a free-text subject (bare token like "pirc", or a full
+ * walkthrough name like "Pirc Defense: Austrian Attack") to the SET of
+ * authored plans for that opening. Used by the Learn-with-Coach in-page
+ * middlegame-plan surface to show a picker when an opening carries more
+ * than one plan (the Pirc has 8: Austrian, 150, Classical, Czech, …).
+ *
+ * Strategy: pick a representative plan via the existing resolvers, take
+ * its openingId, and return every plan sharing that openingId — sorted
+ * so the best subject-match leads (so a query naming a variation shows
+ * that variation first).
+ */
+export function findPlansForOpening(subject: string): MiddlegamePlan[] {
+  const best = findPlanForOpening(subject) ?? findPlanBySubject(subject);
+  if (!best) return [];
+  const siblings = PLANS.filter((p) => p.openingId === best.openingId);
+  // Lead with the best subject-match, keep the rest in source order.
+  return [best, ...siblings.filter((p) => p.id !== best.id)];
+}
+
+/**
  * Find a plan by matching a free-text subject (e.g. "italian" →
  * mp-italian-d4). Falls back to null if no match.
  */

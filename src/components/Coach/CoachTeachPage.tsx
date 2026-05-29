@@ -42,7 +42,9 @@ import {
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { parseCoachIntent } from '../../services/coachAgent';
-import { findPlanForOpening, findPlanBySubject } from '../../services/middlegamePlanner';
+import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
+import { MiddlegamePlanInline } from './MiddlegamePlanInline';
+import type { WalkthroughSession } from '../../types/walkthrough';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
@@ -53,7 +55,7 @@ import {
 import { ChatMessage } from './ChatMessage';
 import { ChatInput } from './ChatInput';
 import { DifficultyToggle } from './DifficultyToggle';
-import type { CoachDifficulty } from '../../types';
+import type { CoachDifficulty, MiddlegamePlan } from '../../types';
 import { PlayerInfoBar } from './PlayerInfoBar';
 import { coachService } from '../../coach/coachService';
 import { logAppAudit, mintTurnId, setCurrentTurnId } from '../../services/appAuditor';
@@ -280,6 +282,30 @@ export function CoachTeachPage(): JSX.Element {
     setSearchParams(next, { replace: true });
   }, [pace, searchParams, setSearchParams]);
   const activeProfile = useAppStore((s) => s.activeProfile);
+
+  // In-page middlegame plan (David 2026-05-29): when the student asks
+  // "middle game plans in the Pirc" we resolve the opening's AUTHORED
+  // plans and play them HERE, on the Learn-with-Coach board — never a
+  // route hand-off. `middlegameSession` is the active plan; when an
+  // opening carries more than one plan, `middlegamePlanChoices` holds
+  // the picker options (tap to start one).
+  const [middlegameSession, setMiddlegameSession] = useState<WalkthroughSession | null>(null);
+  const [middlegamePlanChoices, setMiddlegamePlanChoices] = useState<{
+    plans: MiddlegamePlan[];
+    side: 'white' | 'black';
+  } | null>(null);
+  const startMiddlegamePlan = useCallback((plan: MiddlegamePlan, orientation: 'white' | 'black'): void => {
+    const session = sessionFromPlan(plan, { orientation });
+    if (!session) return;
+    setMiddlegamePlanChoices(null);
+    setMiddlegameSession(session);
+    void logAppAudit({
+      kind: 'coach-surface-migrated',
+      category: 'subsystem',
+      source: 'CoachTeachPage.startMiddlegamePlan',
+      summary: `in-page middlegame plan started: ${plan.id} (${plan.openingId})`,
+    });
+  }, []);
 
   // Game state via the canonical hook — same primitive Play uses. Gives
   // us click-to-move + legal dots + drag, plus loadFen/resetGame/undoMove
@@ -1052,21 +1078,41 @@ export function CoachTeachPage(): JSX.Element {
             trigger: null,
           });
 
-          const plan = subject
-            ? (findPlanForOpening(subject) ?? findPlanBySubject(subject))
-            : null;
-          if (subject && plan) {
-            const side = walkthrough.tree?.studentSide ?? inferStudentSide(subject);
-            const params = new URLSearchParams();
-            params.set('subject', subject);
-            if (side === 'black') params.set('side', 'black');
+          const plans = subject ? findPlansForOpening(subject) : [];
+          if (subject && plans.length > 0) {
+            const side: 'white' | 'black' =
+              walkthrough.tree?.studentSide ?? inferStudentSide(subject);
             void logAppAudit({
               kind: 'coach-surface-migrated',
               category: 'subsystem',
               source: 'CoachTeachPage.handleSubmit.surfaceRouting',
-              summary: `middlegame-plan intent "${text.slice(0, 50)}" → /coach/session/middlegame?subject=${subject} (plan ${plan.id})`,
+              summary:
+                `middlegame-plan intent "${text.slice(0, 50)}" → ${plans.length} in-page plan(s) for ${plans[0].openingId} ` +
+                (plans.length === 1 ? `(auto-start ${plans[0].id})` : '(picker)'),
             });
-            void navigate(`/coach/session/middlegame?${params.toString()}`);
+            if (plans.length === 1) {
+              // Single authored plan — play it straight away in-page.
+              startMiddlegamePlan(plans[0], side);
+            } else {
+              // Multiple plans for this opening — let the student pick
+              // which variation's plan to walk (the Pirc has 8). A short
+              // coach line + picker chips rendered below the board.
+              const prose = `The ${subject} has ${plans.length} middlegame plans. Pick one to walk through:`;
+              setMessages((prev) => [...prev, {
+                id: `${mgTurnId}-c`,
+                role: 'assistant',
+                content: prose,
+                timestamp: Date.now(),
+              }]);
+              useCoachMemoryStore.getState().appendConversationMessage({
+                surface: 'chat-teach',
+                role: 'coach',
+                text: prose,
+                fen: opts?.fenOverride ?? gameRef.current.fen,
+                trigger: null,
+              });
+              setMiddlegamePlanChoices({ plans, side });
+            }
             return;
           }
 
@@ -2666,9 +2712,66 @@ export function CoachTeachPage(): JSX.Element {
   // comes from the LLM via the teach-mode prompt.
   return (
     <div
-      className="flex flex-col md:flex-row h-full overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
+      className="relative flex flex-col md:flex-row h-full overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
       data-testid="coach-teach-page"
     >
+      {/* In-page middlegame plan (David 2026-05-29). When the student
+          asks for an opening's middlegame plans we play them HERE, on
+          this board — not via a route hand-off. Full-bleed overlay so
+          it owns the screen while the plan runs; "Lesson" returns. */}
+      {middlegameSession && (
+        <MiddlegamePlanInline
+          session={middlegameSession}
+          onExit={() => setMiddlegameSession(null)}
+        />
+      )}
+      {/* Plan picker — shown when the opening carries more than one
+          authored plan (the Pirc has 8). Tap a chip to start that
+          variation's plan in-page. */}
+      {middlegamePlanChoices && !middlegameSession && (
+        <div
+          className="absolute inset-0 z-30 flex flex-col justify-end bg-black/40"
+          data-testid="middlegame-plan-picker"
+          onClick={() => setMiddlegamePlanChoices(null)}
+        >
+          <div
+            className="bg-theme-bg border-t border-theme-border rounded-t-2xl p-4 max-h-[70%] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-semibold text-theme-text">
+                Pick a middlegame plan
+              </h3>
+              <button
+                onClick={() => setMiddlegamePlanChoices(null)}
+                className="p-2 rounded-lg hover:bg-theme-surface min-w-[44px] min-h-[44px] flex items-center justify-center"
+                aria-label="Dismiss plan picker"
+              >
+                <X size={18} className="text-theme-text" />
+              </button>
+            </div>
+            <div className="flex flex-col gap-2 max-w-lg mx-auto w-full">
+              {middlegamePlanChoices.plans.map((plan) => (
+                <button
+                  key={plan.id}
+                  onClick={() => startMiddlegamePlan(plan, middlegamePlanChoices.side)}
+                  className="text-left p-3 rounded-xl border-2 border-cyan-500/30 bg-cyan-500/10 hover:bg-cyan-500/20"
+                  data-testid={`middlegame-plan-choice-${plan.id}`}
+                >
+                  <div className="text-sm font-semibold text-theme-text">
+                    {plan.title}
+                  </div>
+                  {plan.overview && (
+                    <div className="text-xs text-theme-text-muted mt-0.5 line-clamp-2">
+                      {plan.overview}
+                    </div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
       {/* Left column: header + board. flex-none on mobile so this
           column is exactly board+header tall — without it the column
           grabbed flex-1 (half the screen) and left a big empty gap
