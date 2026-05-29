@@ -380,18 +380,143 @@ Edit `src/data/pro-repertoires.json`. The entry needs:
 
 ### STEP 9 — Author middlegame plans
 
-Reference pattern: `scripts/pro-repertoire/build-alapin-plans.mjs`.
+**Reference pattern (the CORRECT one — David 2026-05-28 locked after
+the prod audit caught the wrong pattern):**
+`scripts/pro-repertoire/rebuild-alapin-plans-hand-authored.mjs`
 
-Per the data from STEP 4, build N plans where N is what the data shows.
-Each plan has a chess.js-derived continuation from a real position in
-the tree. The build script (build-<opening>-plans.mjs):
+🚨 **DO NOT use `build-<opening>-plans.mjs` (the auto-annotation
+generator) as your reference.** That script emits boilerplate
+annotations like `${san} — ${sideName}'s ${pieceName} to ${to} —
+data-derived continuation.` which speaks robotically through the TTS
+("e-pawn takes d6 — White's pawn captures on d6 — material exchange").
+David caught this on the Alapin prod audit and the plans had to be
+rebuilt. The hand-authored script is the LOCKED reference; the auto-
+annotation script is a research tool that helps you discover the
+data-derived continuation, but the annotations you ship MUST be
+hand-written.
 
-1. Loads the tree
-2. For each plan, walks the prefix into the tree
-3. Pulls the most-played continuation for `depth` plies
-4. Validates every move with chess.js from the prefix's FEN
-5. Generates annotations + arrows + highlights from the validated moves
-6. Writes to `src/data/middlegame-plans.json`
+Per the data from STEP 4, build N plans where N is what the data
+shows. Each plan is fully hand-authored as a JSON-like object:
+
+```js
+{
+  id: 'mp-pro<player><opening>-<plan-name>',
+  openingId: 'pro-<player>-<opening>',
+  title: '<variation> — <plan name>',
+  overview: '<hand-written 2-4 sentence story explaining the plan idea>',
+  // setupSans takes the position from the starting position to the
+  // PLAN ANCHOR position. The anchor MUST be AT or PAST the opening
+  // terminus — never mid-opening (see "Two cardinal rules" below).
+  setupSans: ['<the moves that reach the plan anchor>'],
+  // moves[] is the playable line shown to the student — typically
+  // 4-8 moves of REAL middlegame play from his game data
+  moves: ['<middlegame move 1>', '<middlegame move 2>', ...],
+  // annotations[i] is HAND-WRITTEN prose explaining the plan's idea
+  // at move i. NOT generated. NOT formula. NOT "${piece} to ${square}
+  // — data-derived continuation". Real teaching prose specific to
+  // what's happening on the board.
+  annotations: [
+    '<2-4 sentences explaining move 1 in the plan>',
+    '<2-4 sentences explaining move 2>',
+    ...
+  ],
+  // learnCues[i] is the ≤8-word echo cue for the Learn mode register
+  learnCues: [
+    '<≤8 words capturing move 1\'s key idea>',
+    ...
+  ],
+  // declared themes — must match squares the moves[] line lands on
+  pawnBreaks: ['<theme strings that name squares the line visits>'],
+  pieceManeuvers: ['<theme strings>'],
+  strategicThemes: ['<higher-level themes>'],
+  endgameTransitions: ['<which endgame structures this plan converts to>'],
+  sources: [SRC],
+}
+```
+
+**The TWO CARDINAL RULES for plan authoring (David 2026-05-28, both
+locked after the Alapin prod audit caught violations):**
+
+#### Rule 1 — The plan MUST be anchored AT or PAST the opening terminus
+
+🚨 The "critical position FEN" of a middlegame plan must be a position
+where the OPENING IS OVER or just ending. The playable line must walk
+MIDDLEGAME play — not restate further opening moves.
+
+**Symptom of violation:** the plan's setupSans is short (8-12 plies),
+the moves[] continuation walks the next 4-8 plies of the opening
+spine, and the student hears prose like "Now we play Bc4 hitting the
+knight on d5 and eyeing f7" — that's STILL teaching the opening, not a
+middlegame plan.
+
+**Correct anchor positions** (using the Alapin nf6-main spine as the
+reference, 32-ply spine ending at `Qg4 g6`):
+
+- The queenside-crawl conversion plan anchors AFTER `a5` (move 11);
+  walks `Nd5 a6 b6 d4 e6 Ne5` — that's middlegame execution of the
+  cramping plan
+- The exd6 tempo-on-the-queen plan anchors AFTER `d5` by Black (move
+  6); walks `exd6 Qxd6 O-O Be6 Bxe6 Qxe6` — that's the late opening
+  through to the middlegame transition
+- The d5-open Nb5 fork plan anchors AFTER `Be3` (move 7); walks 8
+  middlegame moves through the trade-down sequence
+
+**Diagnostic:** if your plan's playable line is the OPENING SPINE
+continuation, you have NOT yet authored a middlegame plan — you've
+just restated the opening. Reposition the anchor 4-6 plies deeper,
+into territory where structural advantages are being CASHED IN, not
+SET UP.
+
+#### Rule 2 — Every annotation MUST be hand-written prose
+
+🚨 The build script must NOT auto-generate annotations from piece
+name + destination square. Every entry in `annotations[]` is
+hand-written, plan-specific teaching prose.
+
+**Symptom of violation:** the prod audit shows TTS speaking
+generic-sounding text like "knight to b6 — Black's knight to b6 —
+data-derived continuation" or "bishop to b3 — White's bishop to b3 —
+data-derived continuation". That's the auto-generator's signature.
+
+**Correct annotations:**
+
+- Are 2-4 sentences each, not 1 fragment
+- Reference the SPECIFIC tactical/strategic IDEA at that move
+- Cite a game-count or score percentage when relevant ("his 25% pick
+  at this position")
+- Name the squares/pieces the move CHANGES (not just "X to Y")
+- Connect to the plan's overall story (not standalone narration)
+
+Example HAND-AUTHORED annotation from the Alapin queenside-crawl
+plan, move 2 (`a6`):
+
+> *"The crawl reaches its destination: a6 fixes Black's b7-pawn
+> permanently. Every Black piece now has to consider the b7-weakness
+> for the rest of the game. Notice the rook on a1 sees the open
+> a-file directly."*
+
+Example WRONG (auto-generated, what NOT to ship):
+
+> *"a6 — White's pawn to a6 — data-derived continuation."*
+
+The hand-authored version is teaching; the auto-generated version is
+just describing the move the student already saw on the board.
+
+#### How the build script enforces these rules
+
+The `rebuild-<opening>-plans-hand-authored.mjs` pattern:
+
+1. Each plan in the `PLANS` array contains `setupSans`, `moves`,
+   `annotations`, and `learnCues` arrays — all hand-written.
+2. The script's job is to VALIDATE (not to author):
+   - chess.js validation that setupSans is legal
+   - chess.js validation that moves[] is legal from the resulting FEN
+   - Length check: `annotations.length === moves.length` (so every
+     move has a hand-written annotation)
+   - Length check: `learnCues.length === moves.length`
+3. Themes (pawnBreaks/pieceManeuvers) are still hand-written but
+   MUST match data-derived moves — see the themes-must-match-line
+   rule below.
 
 **The themes-must-match-line rule (David 2026-05-28, locked after the
 Classical Tartakower mismatch):**
@@ -677,6 +802,54 @@ find the illegal move, replace with the actual move from the tree's
 spineMoves. Never copy-paste a PGN from theory text; always derive
 from `deep-build-data.mjs` output.
 
+### Failure: plan annotations are auto-generated boilerplate
+**Symptom:** the prod audit (Polly TTS narration capture) shows
+each plan beat speaking robotic text like *"e-pawn takes d6 — White's
+pawn captures on d6 — material exchange"* or *"knight to b6 — Black's
+knight to b6 — data-derived continuation"*. Every annotation sounds
+like a formula: `${san} — ${side}'s ${piece} to ${square} —
+data-derived continuation.`
+
+**Cause:** the build script auto-generated annotations from piece
+name + destination square instead of letting the author write the
+narration. The `build-<opening>-plans.mjs` pattern (the FIRST Alapin
+build) did this — it walked the tree continuation and wrote prose
+per move using a template.
+
+**Fix:** STEP 9 Rule 2 above. Use the `rebuild-<opening>-plans-
+hand-authored.mjs` pattern instead — each plan in the `PLANS` array
+ships its OWN `annotations[]` and `learnCues[]` arrays, hand-written
+per move. The build script's job is to validate chess.js legality
+and array-length matches, NOT to author prose.
+
+If you find yourself typing a template like `prose = ${san} — ${side}
+... ${pieceName} to ${to} — ...` in a build script, STOP. That's
+the boilerplate path. Author the annotations as data instead.
+
+### Failure: plan restates opening play instead of middlegame
+**Symptom:** the plan's playable line walks moves that are STILL
+part of the opening spine — the student hears prose teaching opening
+ideas (e.g. "Bc4 hits the knight on d5 AND eyes f7") when the plan
+was supposed to teach a middlegame conversion.
+
+**Cause:** the plan's `setupSans` is short (8-12 plies, mid-opening)
+and the `moves[]` continuation walks the next 4-6 plies of the
+opening. The plan is sitting INSIDE the opening phase instead of
+past it.
+
+**Fix:** STEP 9 Rule 1 above. Reposition the plan's anchor 4-6
+plies deeper — into the position where the opening's structural
+advantages are about to be CASHED IN, not SET UP. Use the
+middlegame-past-spine analysis (see STEP 4 + the
+`middlegame-past-spine-<opening>.mjs` template) to find the actual
+middlegame moves his games play past the opening terminus, then
+walk THOSE in the playable line.
+
+**Diagnostic:** ask "is the line in this plan teaching the student
+HOW to enter this opening, or what to do AFTER they've reached the
+middlegame?" If it's the first, you have an opening lesson disguised
+as a plan. Reanchor.
+
 ### Failure: theme-empty plan
 **Symptom:** `middlegamePlanThemes.test.ts` fails with
 `mp-<id>#0 {"themeEmpty":true}`.
@@ -823,7 +996,8 @@ Every artifact that should exist when a pro-rep deep build is "done."
 - [ ] `scripts/pro-repertoire/deep-build-data.mjs` — variations added to OPENINGS map
 - [ ] `scripts/pro-repertoire/wider-corpus-endgame-<opening>.mjs` — adapted from Alapin template
 - [ ] `scripts/pro-repertoire/count-plans-<opening>.mjs` — adapted from Alapin template
-- [ ] `scripts/pro-repertoire/build-<opening>-plans.mjs` — generates middlegame plans
+- [ ] `scripts/pro-repertoire/middlegame-past-spine-<opening>.mjs` — finds real middlegame patterns past the opening terminus (STEP 4 / STEP 9 Rule 1)
+- [ ] `scripts/pro-repertoire/rebuild-<opening>-plans-hand-authored.mjs` — middlegame plan build with HAND-WRITTEN annotations (NOT the auto-annotation `build-<opening>-plans.mjs` pattern, which is banned per STEP 9 Rule 2)
 - [ ] `scripts/pro-repertoire/build-<opening>-model-games.mjs` — generates model games
 - [ ] `scripts/audit-pro-<player>-<opening>-prod.mjs` — 3-instrument audit
 - [ ] `src/data/lessons/pro<Player><Opening>Variations.ts` — variation lessons
@@ -851,7 +1025,9 @@ files in their canonical form:
 - Variation lessons: `src/data/lessons/proNaroditskyAlapinVariations.ts` (7 variations × 7-12 beats)
 - Main spine lesson: `PRO_NAR_ALAPIN_LESSON` in `proNaroditskyAllRemaining.ts` (12 beats)
 - Pro-rep entry: `pro-naroditsky-alapin` in `src/data/pro-repertoires.json` (7 variations + 3 trapLines + 2 warningLines)
-- Plans: 8 entries in `src/data/middlegame-plans.json` matching `pro-naroditsky-alapin`
+- Plans: 8 entries in `src/data/middlegame-plans.json` matching `pro-naroditsky-alapin` — REBUILT 2026-05-28 with hand-written annotations + post-opening anchors (see `scripts/pro-repertoire/rebuild-alapin-plans-hand-authored.mjs` — the LOCKED reference for STEP 9)
+- Plan→tab routing: `src/services/proNaroditskyAlapinTabPlans.ts` (STEP 12.5)
+- Middlegame-past-spine analysis: `scripts/pro-repertoire/middlegame-past-spine-alapin.mjs` (the data discovery tool for STEP 9 Rule 1)
 - Model games: 12 real wins in `src/data/model-games.json` matching `pro-naroditsky-alapin` (incl. Carlsen, Hikaru ×2, Firouzja ×2, Hans Niemann, Wesley So)
 - Pitfalls: 4 entries in `src/data/common-mistakes.json` under `pro-naroditsky-alapin`
 - Audit: `scripts/audit-pro-naroditsky-alapin-prod.mjs` (13 PASS / 0 FAIL / 5 WARN on first prod run)
