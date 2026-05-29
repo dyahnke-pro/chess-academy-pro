@@ -1264,6 +1264,33 @@
           ]
         }
       ],
+      "trapLines": [
+        {
+          "name": "Nc3 in Four Pawns lets ...Bb4 win the bishop pair",
+          "pgn": "e4 Nf6 e5 Nd5 d4 Nb6 c4 d6 f4 dxe5 fxe5 Bf5 Be3 e6 Nc3 Bb4 Nf3 O-O Bd3 Bxd3",
+          "explanation": "Mined from 20 games. In the deep Four Pawns Alekhine, White's Nc3 development walks into ...Bb4 pin + ...Bxd3 winning the bishop pair. Named 2700+ victims: spicycaterpillar (3157), vi_pranav (3087)."
+        },
+        {
+          "name": "Be3 + ...Bb4 wins structure (move-order variant)",
+          "pgn": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Bf5 Nc3 e6 Be3 Bb4 Nf3 c5 a3 Bxc3+",
+          "explanation": "Mined from 18 games — same Four Pawns Bb4 pin trap, different move order. Named 2700+ victims: Jospem (3093/3025 twice), spicycaterpillar (3066)."
+        },
+        {
+          "name": "fxe5 in Anti-Vienna f4 line (Hikaru victim)",
+          "pgn": "e4 Nf6 Nc3 e5 f4 d5 fxe5 Nxe4 Qf3 Nc6 Bb5 Nxc3",
+          "explanation": "Mined from 17 games. In the Anti-Vienna 3.f4, premature fxe5 loses to ...Nxe4 fork. Named 2700+ victims: Hikaru Nakamura (3316!), Konavets (3067)."
+        },
+        {
+          "name": "Bb5 in Anti-Vienna lets ...Nd4 fork",
+          "pgn": "e4 Nf6 Nc3 e5 Nf3 Nc6 Bb5 Nd4 O-O Nxb5 Nxb5 d6",
+          "explanation": "Mined from 15 games. Premature Ruy-style Bb5 lets ...Nd4 fork the bishop and knight. Black wins bishop pair."
+        },
+        {
+          "name": "Bc4 + Nd7 in Modern Alekhine",
+          "pgn": "e4 Nf6 e5 Nd5 Nf3 d6 d4 dxe5 Nxe5 c6 Bc4 Nd7 O-O Nxe5 dxe5 Be6",
+          "explanation": "Mined from 12 games. Modern Alekhine + aggressive Bc4 lets Black trade favorably with ...Nd7 + ...Nxe5 + ...Be6 attacking Bc4. Named 2700+ victim: RaunakSadhwani2005 (3080)."
+        }
+      ],
       "sources": [
         "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
       ]
