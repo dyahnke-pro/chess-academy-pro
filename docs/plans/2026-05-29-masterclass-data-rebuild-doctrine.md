@@ -78,6 +78,19 @@ an `ASK DAVID`, not a fabrication.
 - **STEP 2** — variation tabs = the spine builder's `branches[]` (every fork
   where the top move is a plurality and a sibling has ≥150 games). No
   hand-guessing the tab set; no asking David "how many" (playbook §0.1).
+  **🔑 REFINEMENT (Italian pilot, 2026-05-29): the modal walk TRANSPOSES — so
+  `branches[]` is the START of the tab set, not the whole of it.** After
+  `3...Nf6` the most-played move 4 is `d3` (transposes into the Pianissimo),
+  so the builder's top branch MISSES the structurally-distinct `4.Ng5` (Fried
+  Liver / Traxler) — a famous, faced, named line that is simply sub-modal
+  because the crowd transposes. So STEP 2 has TWO sources, both ground-bound:
+  (i) the builder's modal `branches[]`, AND (ii) structurally-distinct NAMED
+  lines from the explorer's move list at each fork that pass playbook §0.1
+  (a)–(d) (real named line + faced ≥~3% or canonical + structurally distinct
+  + student-side-winning game) even when they're not the #1 move. A sub-line
+  that merely transposes into another tab's structure folds INTO that tab
+  (playbook §0.1c); a sub-line with its OWN structure (4.Ng5) earns its own
+  tab. Verify each against the explorer — never add a tab from memory.
 - **STEP 3** — deep-build per variation: re-run the spine builder seeded at
   each branch's defining move to get THAT variation's data spine + counts.
 - **STEP 4** — count middlegame/endgame plans HONESTLY using the WIDER-CORPUS
