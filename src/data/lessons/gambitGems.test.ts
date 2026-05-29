@@ -39,15 +39,31 @@ describe('gambit punish-gems (separate lane)', () => {
     }
   });
 
-  it("King's Gambit surfaces exactly its narrated weapons and they build playable lines", () => {
-    const surf = getPunishGemsForOpening('gambit-kings-gambit').filter(isSurfaceableGem);
-    expect(surf.length).toBe(Object.keys(GAMBIT_GEM_NARRATION).length);
-    for (const gem of surf) {
-      const line = gemToPlayableLine(gem);
-      expect(line, `playable line for ${gemId(gem)}`).not.toBeNull();
-      // narration arrays drive annotations/learnCues — must match move count
-      expect(line!.annotations.length).toBe(line!.moves.length);
-      expect(line!.learnCues.length).toBe(line!.moves.length);
+  it('each gambit opening surfaces exactly its OWN narrated weapons, and they build playable lines', () => {
+    // Per-opening (not a single hardcoded KG count): for every opening, the
+    // surfaced set must equal the gems whose gemId has a narration entry.
+    const narratedIds = new Set(Object.keys(GAMBIT_GEM_NARRATION));
+    const openingIds = [...new Set(GEMS.map((g) => g.openingId))];
+    let surfacedTotal = 0;
+    for (const openingId of openingIds) {
+      const all = getPunishGemsForOpening(openingId);
+      const surf = all.filter(isSurfaceableGem);
+      const narratedHere = all.filter((g) => narratedIds.has(gemId(g)));
+      expect(
+        surf.map(gemId).sort(),
+        `surfaced gems for ${openingId} must equal its narrated gems`,
+      ).toEqual(narratedHere.map(gemId).sort());
+      surfacedTotal += surf.length;
+      for (const gem of surf) {
+        const line = gemToPlayableLine(gem);
+        expect(line, `playable line for ${gemId(gem)}`).not.toBeNull();
+        // narration arrays drive annotations/learnCues — must match move count
+        expect(line!.annotations.length).toBe(line!.moves.length);
+        expect(line!.learnCues.length).toBe(line!.moves.length);
+      }
     }
+    // Every narration key maps to a surfaced gem (none keyed to a dropped /
+    // non-weapon gem).
+    expect(surfacedTotal).toBe(narratedIds.size);
   });
 });
