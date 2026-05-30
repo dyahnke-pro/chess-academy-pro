@@ -1795,7 +1795,7 @@
         {
           "name": "Main line vs …e6",
           "pgn": "d4 Nf6 Bg5 e6 Nd2 h6 Bh4 d5 e3 Be7 Bd3 b6 c3 O-O",
-          "explanation": "Gotham's #1 most-played Trompowsky line — 1,823 games of his career. After …e6 the position becomes a quiet manoeuvring game where White's bishop pair plus space advantage gradually wins. The bishop on h4 holds the diagonal; the d4-e3-c3 pyramid covers all central squares; piece play decides.",
+          "explanation": "Gotham's #1 most-played Trompowsky line — 1,823 games of his career. After …e6 the position becomes a quiet manoeuvring game where White's space and the f4-storm plan (after Bxf6) plus the cramping space advantage gradually wins. The bishop on h4 holds the diagonal; the d4-e3-c3 pyramid covers all central squares; piece play decides.",
           "sources": [
             "concept:pos-development",
             "https://www.chess.com/openings/Trompowsky-Attack",
