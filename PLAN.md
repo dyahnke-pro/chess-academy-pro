@@ -49,7 +49,13 @@ Ship the whole batch at once when the Vercel cap clears.
 - [x] Wave 0: italian-game MAIN line rebuilt (Pianissimo data spine), tabs
       reconciled, gates + localhost 6/6. On main. Prod audit pending cap.
 - [ ] Finish italian-game::Modern Moller Attack variation (oh16)
-- [ ] philidor-defence (4 variations) — worst positional defects
+- [~] philidor-defence — data spines generated (phil-antoshin/exchange/
+      nimzowitsch/countergambit.json). Findings: Antoshin data=9.Qd5 (vs
+      lesson 9.Bd3) but 4...Nxe4 is a pawn sac — VERIFY soundness for Black
+      before showcasing; Counter-Gambit data=4.dxe5 (vs 4.Nc3); Nimzowitsch
+      CONVERGES with main 16 plies (may fold into main, §0.1c — drop tab?);
+      Exchange shares 13 plies then modern ...Re8. Per-line soundness judgment
+      pending before authoring.
 - [ ] alekhine, vienna(check), london, birds, scandinavian, four-knights,
       queens-gambit, pirc, scotch, petrov, trompowsky — then trims
 ## Nonnegotiables unchanged: data-chosen lines, reach middlegame, traps stay,
