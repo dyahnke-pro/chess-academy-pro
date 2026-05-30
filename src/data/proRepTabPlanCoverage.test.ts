@@ -1,0 +1,113 @@
+// Tab-Plan Resolver Coverage Gate (David 2026-05-29, locked).
+//
+// Catches the failure mode where a pro-rep variation has middlegame
+// plans authored but no resolver wired up — all plans then surface
+// under the MAIN opening tab and the variation tabs show "no plans
+// for this scope" (or the emptyNote fallback). Hit on the Alapin
+// build (per doctrine STEP 12.5 — "this step was missed in the
+// Alapin reference build — David caught it post-deploy").
+//
+// The test walks every pro-rep opening + variation and confirms a
+// resolver returns SOME result (even []) for each (openingId,
+// variationName) pair. An explicit [] declares "no plans for this
+// tab yet" — that's allowed. `null` means no resolver registered —
+// that's the bug.
+
+import { describe, it, expect } from 'vitest';
+import proRepertoires from './pro-repertoires.json' assert { type: 'json' };
+import { getProNaroditskyAlapinTabPlanIds } from '../services/proNaroditskyAlapinTabPlans';
+import { getProNaroditskyKIDTabPlanIds } from '../services/proNaroditskyKIDTabPlans';
+import { getProNaroditskyRemainingTabPlanIds } from '../services/proNaroditskyRemainingTabPlans';
+import { getProNaroditskyCaroTabPlanIds } from '../services/proNaroditskyCaroTabPlans';
+
+interface ProRepEntry {
+  id: string;
+  variations?: Array<{ name: string }>;
+}
+
+const PRO_OPENINGS: ProRepEntry[] = (proRepertoires.openings as ProRepEntry[]).filter(
+  (op) => op.id.startsWith('pro-'),
+);
+
+// The resolver chain mirrors OpeningDetailPage.tsx — keep in sync.
+const RESOLVERS: Array<(openingId: string, tabKey: string) => string[] | null> = [
+  getProNaroditskyAlapinTabPlanIds,
+  getProNaroditskyKIDTabPlanIds,
+  getProNaroditskyRemainingTabPlanIds,
+  getProNaroditskyCaroTabPlanIds,
+];
+
+function resolve(openingId: string, variationName: string): string[] | null {
+  const tabKey = variationName.toLowerCase();
+  for (const r of RESOLVERS) {
+    const result = r(openingId, tabKey);
+    if (result !== null) return result;
+  }
+  return null;
+}
+
+describe('tab-plan resolver coverage gate — every Naroditsky variation has a resolver', () => {
+  // Baseline of known-unresolved (Gothamchess pro-rep + other partial
+  // builds). Same shrinks-only contract as orphanLessons. Naroditsky
+  // openings have full resolver coverage per STEP 12.5 — no
+  // Naroditsky entries should appear in this baseline.
+  const BASELINE_UNRESOLVED = new Set<string>([
+    // Gothamchess pro-rep is a partial build — variations declared but
+    // tab-plan resolvers not yet authored.
+    'pro-gothamchess-anti-sicilian',
+    'pro-gothamchess-caro-advance-white',
+    'pro-gothamchess-caro-kann',
+    'pro-gothamchess-closed-sicilian',
+    'pro-gothamchess-english',
+    'pro-gothamchess-fantasy-caro',
+    'pro-gothamchess-french-defense',
+    'pro-gothamchess-italian',
+    'pro-gothamchess-kia',
+    'pro-gothamchess-london',
+    'pro-gothamchess-milner-barry',
+    'pro-gothamchess-pirc-defense',
+    'pro-gothamchess-ponziani',
+    'pro-gothamchess-qgd',
+    'pro-gothamchess-scandinavian',
+    'pro-gothamchess-stafford-refute',
+    'pro-gothamchess-trompowsky',
+    'pro-gothamchess-vienna',
+    // Fantasy Caro standalone — variations declared but no resolver
+    // (one variation 'Black accepts with dxe4' IS routed via the
+    // Remaining resolver to a Fantasy plan; the other 2 variations
+    // are not, awaiting middlegame plan authoring).
+    'pro-naroditsky-fantasy-caro',
+  ]);
+
+  it('every pro-rep (openingId, variationName) pair has a resolver returning array (not null)', () => {
+    const unresolved: string[] = [];
+    for (const opening of PRO_OPENINGS) {
+      if (BASELINE_UNRESOLVED.has(opening.id)) continue;
+      for (const v of opening.variations ?? []) {
+        const result = resolve(opening.id, v.name);
+        if (result === null) {
+          unresolved.push(`${opening.id}::${v.name}`);
+        }
+      }
+    }
+    expect(unresolved).toEqual([]);
+  });
+
+  it('baseline-unresolved openings only shrink — every baseline opening must still have at least one unresolved variation', () => {
+    const stale: string[] = [];
+    for (const openingId of BASELINE_UNRESOLVED) {
+      const opening = PRO_OPENINGS.find((op) => op.id === openingId);
+      if (!opening) {
+        stale.push(`${openingId} — opening not in pro-repertoires.json, drop from BASELINE_UNRESOLVED`);
+        continue;
+      }
+      const hasUnresolved = (opening.variations ?? []).some(
+        (v) => resolve(opening.id, v.name) === null,
+      );
+      if (!hasUnresolved && (opening.variations?.length ?? 0) > 0) {
+        stale.push(`${openingId} — every variation now resolves, drop from BASELINE_UNRESOLVED`);
+      }
+    }
+    expect(stale).toEqual([]);
+  });
+});
