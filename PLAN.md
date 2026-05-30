@@ -66,10 +66,29 @@ Ship the whole batch at once when the Vercel cap clears.
       antidote teaches the London's ideas); the data c3/Nbd2 line is more common
       but ends equal w/ the bishop traded, teaching the ideas worse. Playbook
       main-line showcase exemption → LEAVE.
-- [ ] Next: vienna(check sharp-showcase), birds, scandinavian, four-knights
-      Rubinstein, queens-gambit Anti-QGD, pirc, scotch Steinitz, petrov,
-      trompowsky. Plus the deep-tail TRIMS (nimzo/qgd/grunfeld/queens-indian).
-- [DECISION NEEDED] philidor Antoshin(-1.58)/Counter-Gambit(-1.68) dubious —
-      demote to warnings or drop? (left as-is pending a call)
+- [LEAVE] scotch-game MAIN — sound, well-authored Classical Scotch (4...Bc5)
+      that teaches the ideas (centralised Nd4, d4-battle, trade into doubled
+      c-pawns). oh9 is mild; the "tail" teaches the key structural payoff.
+      Trimming would remove instruction. Playbook showcase-exemption → LEAVE.
+
+## REFINED SCOPE INSIGHT (2026-05-30)
+After per-line judgment, the rebuild is MUCH more surgical than the 67-flag
+count. Most flagged lessons are SOUND INSTRUCTIVE SHOWCASES (London, Scotch
+Classical) that teach the opening's ideas well — the diagnostic flags their
+mild over-extension, but the playbook exempts a sound idea-teaching main from
+the frequency sort → LEAVE. Genuine rebuilds = lessons that teach a
+DEAD/uncommon line (Italian old d4 = 1 game at m18), a MISLABELED/DUBIOUS line
+(Philidor Antoshin), or cram a thinning tail into bad pedagogy (Alekhine's
+one-giant-beat). Those are DONE. The remaining genuine candidates to still
+triage case-by-case (most likely leaves): vienna(keystone, likely the sharp
+Vienna Gambit showcase=leave), four-knights Rubinstein, queens-gambit Anti-QGD,
+pirc Byrne, trompowsky, birds(offbeat). Verify each is dead/dubious before
+rebuilding; do NOT rebuild sound showcases to inflate a count.
+- [x] philidor Antoshin — FIXED via DB: the old lesson mislabeled the dubious
+      4.dxe5 Nxe4 (-1.58) and falsely claimed "dead-level"; rebuilt on the REAL
+      Antoshin (exd4 + g6 fianchetto, -0.40, sound sharp opposite-castling).
+- [KEEP] philidor Counter-Gambit (3...f5) — can't be made sound (-1.64, refuted),
+      but already honestly framed as a sharp surprise gambit (not claiming
+      equality); teaches the practical 4.Nc3 line. Kept per anti-drop preference.
 ## Nonnegotiables unchanged: data-chosen lines, reach middlegame, traps stay,
 ## narrations change, no invented moves, no cut corners. Batch-ship.
