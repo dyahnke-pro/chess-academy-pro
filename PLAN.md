@@ -165,3 +165,24 @@ NEEDS DAVID / DEEPER WORK (flagged, NOT risked autonomously):
   Botvinnik, old-indian, benoni Taimanov) — see SOUNDNESS SWEEP RESULTS above.
 - Endgame authoring across the ~6 structural openings (data prepped above).
 - London/Scotch/Vienna/Caro mains etc. = sound showcases, correctly LEFT.
+
+## LAYER STATUS VERIFIED (2026-05-30) — what's complete vs the remaining gap
+- MIDDLEGAME PLANS: COMPLETE. 42/42 masterclass openings have plans, 0 floor
+  gaps. Gate-verified (middlegamePlanner/Themes in ship-check).
+- NARRATIONS: re-authored on every rebuild; all pass narrationAccuracy/Grounding.
+- SOUNDNESS: comprehensively swept. 6 secretly-losing lessons FIXED; 5 hard/sharp
+  flagged (Pirc 150, Two Knights Max Lange, Semi-Slav Botvinnik, Old-Indian,
+  Benoni — need deeper theory / David's call). Sharp gambit showcases left.
+- OPENING SPINES: genuine defects rebuilt (Italian, Philidor x2, Alekhine);
+  sound showcases (London, Scotch, Vienna, Caro, Scandi mains) correctly LEFT.
+- ENDGAMES: the one genuinely-missing layer (only Ruy has them). DATA PREPPED
+  (R+minor+P characteristic). BLOCKER CONFIRMED: unlike the Berlin (forced
+  move-8 queen trade), the structural Black defenses (Caro/French/QGD/Slav)
+  have NO clean modal queenless line — their modal lines stay middlegames
+  (Caro Classical keeps queens through move 15), and the R+minor+P endings
+  arise via varied, game-specific deep simplifications. So each endgame plan
+  must be grounded in a SPECIFIC drawn/held master game (e.g. Anand-Leko Caro
+  Classical R+minor+P draw) + teach the Black-HOLDING technique — ~1hr each,
+  quality-critical. RECOMMENDED: a focused endgame pass, ideally with David
+  confirming the model games (removes the sourcing + holding-line risk), rather
+  than rushed autonomous authoring. (NOT a line that lies — empty > generic.)
