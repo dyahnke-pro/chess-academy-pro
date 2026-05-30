@@ -1920,7 +1920,7 @@
       "playerId": "gothamchess",
       "eco": "C28",
       "name": "Vienna Game (GothamChess)",
-      "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3",
+      "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3 Be6 Rb1",
       "color": "white",
       "style": "Aggressive, Tactical",
       "overview": "Gotham's Vienna at 649 games / 67.8% — one of his highest score rates. The 2.Nc3 + 3.f4 (Vienna Gambit) is the sharpest of his 1.e4 systems. After Black's …d5 reply and the fxe5 / Nxe4 / Qf3 forcing sequence, White trades pieces and ends up with doubled c-pawns but excellent piece activity and an open f-file aimed at f7.",
