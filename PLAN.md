@@ -54,8 +54,12 @@ Ship the whole batch at once when the Vercel cap clears.
       lesson 9.Bd3) but 4...Nxe4 is a pawn sac — VERIFY soundness for Black
       before showcasing; Counter-Gambit data=4.dxe5 (vs 4.Nc3); Nimzowitsch
       CONVERGES with main 16 plies (may fold into main, §0.1c — drop tab?);
-      Exchange shares 13 plies then modern ...Re8. Per-line soundness judgment
-      pending before authoring.
+      Exchange shares 13 plies then modern ...Re8. SOUNDNESS CHECKED (engine
+      depth 20): Exchange -0.10 (equal, SOUND → REBUILT on data spine, gates
+      green); Antoshin -1.58 + Counter-Gambit -1.68 (both clearly bad for Black
+      vs the critical reply — DUBIOUS showcases; left as-is for now, candidates
+      to demote to warnings/drop — flagged for a considered call); Nimzowitsch
+      converges with main (fold candidate).
 - [ ] alekhine, vienna(check), london, birds, scandinavian, four-knights,
       queens-gambit, pirc, scotch, petrov, trompowsky — then trims
 ## Nonnegotiables unchanged: data-chosen lines, reach middlegame, traps stay,
