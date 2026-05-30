@@ -1831,11 +1831,13 @@ export function OpeningDetailPage(): JSX.Element {
 
       {/* MODEL GAMES — watch a real master win with this opening. Self-hides
           when there's no student-side win sourced; the section drops any game
-          where the student's side loses (David 2026-05-21). Opening-level
-          (games aren't tagged per variation). */}
+          where the student's side loses (David 2026-05-21). On a variation tab
+          it narrows to games that played THAT variation; the main tab shows the
+          full library (David 2026-05-30, fix #1). */}
       <ModelGamesSection
         openingId={opening.id}
         studentColor={opening.color}
+        variationName={selectedVariation?.name ?? null}
         onSelectGame={(game) => { setActiveModelGame(game); setViewMode('model-game'); }}
       />
 

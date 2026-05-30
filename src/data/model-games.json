@@ -217,7 +217,8 @@
       "book:ruy-lopez",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Ruy_Lopez"
-    ]
+    ],
+    "variation": "Marshall Attack"
   },
   {
     "id": "mg-kasparov-karpov-wch85",
@@ -316,7 +317,8 @@
       "concept:pos-development",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Scotch_Game"
-    ]
+    ],
+    "variation": "Scotch: Mieses Variation 4...Nf6 (e5 Push)"
   },
   {
     "id": "mg-rubinstein-four-knights-game",
@@ -383,7 +385,8 @@
       "concept:pos-center",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
-    ]
+    ],
+    "variation": "Alapin: 2...d5 Central Counter (IQP Play)"
   },
   {
     "id": "mg-lichess-8I2YuiTC",
@@ -427,7 +430,8 @@
       "book:italian-game",
       "concept:pos-center",
       "https://www.chess.com/openings/Italian-Game"
-    ]
+    ],
+    "variation": "Giuoco Piano: Main Line with Nc3"
   },
   {
     "id": "mg-lichess-M2yAXpb3",
@@ -471,7 +475,8 @@
       "book:kings-gambit",
       "concept:tac-sacrifice",
       "https://en.wikipedia.org/wiki/King%27s_Gambit"
-    ]
+    ],
+    "variation": "Bishop's Gambit (3.Bc4)"
   },
   {
     "id": "mg-lichess-ZsJXLdvq",
@@ -515,7 +520,8 @@
       "book:kings-gambit",
       "concept:tac-sacrifice",
       "https://en.wikipedia.org/wiki/King%27s_Gambit"
-    ]
+    ],
+    "variation": "Bishop's Gambit (3.Bc4)"
   },
   {
     "id": "mg-lichess-jMVMo1Ua",
@@ -557,7 +563,8 @@
       "concept:att-queenside-attack",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-    ]
+    ],
+    "variation": "Najdorf: English Attack (6.Be3 Main Line)"
   },
   {
     "id": "mg-lichess-6ra0xjZ4",
@@ -665,7 +672,8 @@
       "book:vienna-game",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Vienna_Game"
-    ]
+    ],
+    "variation": "Stanley Variation"
   },
   {
     "id": "mg-lichess-2NIYGBtv",
@@ -749,7 +757,8 @@
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Advance Variation"
   },
   {
     "id": "mg-caro-exchange",
@@ -779,7 +788,8 @@
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Exchange Variation"
   },
   {
     "id": "mg-caro-two-knights",
@@ -869,7 +879,8 @@
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Fantasy Variation"
   },
   {
     "id": "mg-caro-tartakower",
@@ -923,7 +934,8 @@
       "book:kings-gambit",
       "concept:tac-sacrifice",
       "https://en.wikipedia.org/wiki/King%27s_Gambit"
-    ]
+    ],
+    "variation": "Falkbeer Counter-Gambit"
   },
   {
     "id": "mg-lichess-4OOofMO6",
@@ -947,7 +959,8 @@
       "book:kings-gambit",
       "concept:tac-sacrifice",
       "https://en.wikipedia.org/wiki/King%27s_Gambit"
-    ]
+    ],
+    "variation": "King's Knight Gambit Classical"
   },
   {
     "id": "mg-lichess-pIV55Pi8",
@@ -971,7 +984,8 @@
       "book:kings-gambit",
       "concept:tac-sacrifice",
       "https://en.wikipedia.org/wiki/King%27s_Gambit"
-    ]
+    ],
+    "variation": "Fischer Defense"
   },
   {
     "id": "mg-lichess-MxHHpDbg",
@@ -995,7 +1009,8 @@
       "book:kings-gambit",
       "concept:tac-sacrifice",
       "https://en.wikipedia.org/wiki/King%27s_Gambit"
-    ]
+    ],
+    "variation": "King's Gambit Declined"
   },
   {
     "id": "mg-lichess-x8zHWTWJ",
@@ -1019,7 +1034,8 @@
       "book:kings-gambit",
       "concept:tac-sacrifice",
       "https://en.wikipedia.org/wiki/King%27s_Gambit"
-    ]
+    ],
+    "variation": "Bishop's Gambit (3.Bc4)"
   },
   {
     "id": "mg-lichess-SivhQWtT",
@@ -1043,7 +1059,8 @@
       "book:kings-gambit",
       "concept:tac-sacrifice",
       "https://en.wikipedia.org/wiki/King%27s_Gambit"
-    ]
+    ],
+    "variation": "Kieseritzky Gambit"
   },
   {
     "id": "mg-sicilian-dragon-dubov-2024",
@@ -1168,7 +1185,8 @@
       "book:four-knights-game",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Four_Knights_Game"
-    ]
+    ],
+    "variation": "Scotch Four Knights: 4.d4 exd4 5.Nxd4"
   },
   {
     "id": "mg-mamedyarov-glek",
@@ -1212,7 +1230,8 @@
       "book:four-knights-game",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Four_Knights_Game"
-    ]
+    ],
+    "variation": "Glek System: 4.g3"
   },
   {
     "id": "mg-karthikeyan-italian-four-knights",
@@ -1344,7 +1363,8 @@
       "concept:pos-development",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/London_System"
-    ]
+    ],
+    "variation": "London vs Queen's Pawn"
   },
   {
     "id": "mg-carlsen-london-kid",
@@ -1388,7 +1408,8 @@
       "concept:pos-development",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/London_System"
-    ]
+    ],
+    "variation": "London vs King's Indian"
   },
   {
     "id": "mg-carlsen-london-jobava",
@@ -1476,7 +1497,8 @@
       "concept:pos-center",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Catalan_Opening"
-    ]
+    ],
+    "variation": "Open Catalan: dxc4 Qc2 Recovery"
   },
   {
     "id": "mg-so-catalan-closed",
@@ -1564,7 +1586,8 @@
       "concept:pos-center",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Catalan_Opening"
-    ]
+    ],
+    "variation": "Catalan vs Slav Setup: ...c6 and ...dxc4"
   },
   {
     "id": "mg-carlsen-english-revsic",
@@ -1652,7 +1675,8 @@
       "concept:pos-center",
       "concept:pos-space",
       "https://en.wikipedia.org/wiki/English_Opening"
-    ]
+    ],
+    "variation": "English: Symmetrical Variation"
   },
   {
     "id": "mg-caruana-english-mikenas",
@@ -1777,7 +1801,8 @@
       "concept:pos-development",
       "concept:pos-space",
       "https://en.wikipedia.org/wiki/R%C3%A9ti_Opening"
-    ]
+    ],
+    "variation": "Reti: KIA Setup g3 Bg2 d3 e4"
   },
   {
     "id": "mg-giri-kia-french",
@@ -1953,7 +1978,8 @@
       "book:evans-gambit",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Evans_Gambit"
-    ]
+    ],
+    "variation": "Evans Gambit Declined"
   },
   {
     "id": "mg-evans-compromised-win",
@@ -1997,7 +2023,8 @@
       "book:evans-gambit",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Evans_Gambit"
-    ]
+    ],
+    "variation": "Evans Gambit: Compromised Defence"
   },
   {
     "id": "mg-kasparov-evans-lasker",
@@ -2071,7 +2098,8 @@
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "Advance Variation"
   },
   {
     "id": "mg-french-winawer",
@@ -2101,7 +2129,8 @@
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "Winawer Variation"
   },
   {
     "id": "mg-french-classical",
@@ -2131,7 +2160,8 @@
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "Classical Variation"
   },
   {
     "id": "mg-french-tarrasch",
@@ -2161,7 +2191,8 @@
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "Tarrasch Variation"
   },
   {
     "id": "mg-french-exchange",
@@ -2191,7 +2222,8 @@
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "Exchange Variation"
   },
   {
     "id": "mg-french-burn",
@@ -2219,7 +2251,8 @@
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "Burn Variation"
   },
   {
     "id": "mg-french-fortknox",
@@ -2249,7 +2282,8 @@
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "Rubinstein Variation"
   },
   {
     "id": "mg-french-milnerbarry",
@@ -2279,7 +2313,8 @@
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "Advance: Milner-Barry Gambit"
   },
   {
     "id": "mg-french-mccutcheon",
@@ -2309,7 +2344,8 @@
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "McCutcheon Variation"
   },
   {
     "id": "mg-scandi-main",
@@ -2399,7 +2435,8 @@
       "book:scandinavian-defence",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-    ]
+    ],
+    "variation": "Nf6 Modern Variation"
   },
   {
     "id": "mg-scandi-icelandic",
@@ -2429,7 +2466,8 @@
       "book:scandinavian-defence",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-    ]
+    ],
+    "variation": "Icelandic Gambit"
   },
   {
     "id": "mg-scandi-tiviakov",
@@ -2459,7 +2497,8 @@
       "book:scandinavian-defence",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-    ]
+    ],
+    "variation": "Qd6 Tiviakov Variation"
   },
   {
     "id": "mg-scandi-portuguese",
@@ -2489,7 +2528,8 @@
       "book:scandinavian-defence",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-    ]
+    ],
+    "variation": "Portuguese Variation"
   },
   {
     "id": "mg-scandi-gubinsky",
@@ -2519,7 +2559,8 @@
       "book:scandinavian-defence",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Scandinavian_Defense"
-    ]
+    ],
+    "variation": "Gubinsky-Melts (3...Qd8)"
   },
   {
     "id": "mg-alekhine-main",
@@ -2579,7 +2620,8 @@
       "concept:pos-center",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
-    ]
+    ],
+    "variation": "Four Pawns Attack"
   },
   {
     "id": "mg-alekhine-exchange",
@@ -2609,7 +2651,8 @@
       "concept:pos-center",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
-    ]
+    ],
+    "variation": "Exchange Variation"
   },
   {
     "id": "mg-alekhine-chase",
@@ -2639,7 +2682,8 @@
       "concept:pos-center",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
-    ]
+    ],
+    "variation": "Chase Variation"
   },
   {
     "id": "mg-alekhine-voronezh",
@@ -2669,7 +2713,8 @@
       "concept:pos-center",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
-    ]
+    ],
+    "variation": "Two Pawns Attack"
   },
   {
     "id": "mg-alekhine-scandtrans",
@@ -2699,7 +2744,8 @@
       "concept:pos-center",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
-    ]
+    ],
+    "variation": "Scandinavian Transposition"
   },
   {
     "id": "mg-benko-main",
@@ -2729,7 +2775,8 @@
       "concept:att-queenside-attack",
       "concept:pos-open-file",
       "https://en.wikipedia.org/wiki/Benko_Gambit"
-    ]
+    ],
+    "variation": "Fianchetto Variation"
   },
   {
     "id": "mg-benko-declined",
@@ -2759,7 +2806,8 @@
       "concept:att-queenside-attack",
       "concept:pos-open-file",
       "https://en.wikipedia.org/wiki/Benko_Gambit"
-    ]
+    ],
+    "variation": "Benko Declined: Nf3 System"
   },
   {
     "id": "mg-benko-zaitsev",
@@ -2789,7 +2837,8 @@
       "concept:att-queenside-attack",
       "concept:pos-open-file",
       "https://en.wikipedia.org/wiki/Benko_Gambit"
-    ]
+    ],
+    "variation": "Zaitsev Variation"
   },
   {
     "id": "mg-benko-halfaccepted",
@@ -2819,7 +2868,8 @@
       "concept:att-queenside-attack",
       "concept:pos-open-file",
       "https://en.wikipedia.org/wiki/Benko_Gambit"
-    ]
+    ],
+    "variation": "Half-Accepted"
   },
   {
     "id": "mg-dutch-main",
@@ -2879,7 +2929,8 @@
       "book:dutch-defence",
       "concept:att-kingside-storm",
       "https://en.wikipedia.org/wiki/Dutch_Defence"
-    ]
+    ],
+    "variation": "Stonewall d5 e6 Bd6"
   },
   {
     "id": "mg-dutch-classical",
@@ -3029,7 +3080,8 @@
       "concept:pawn-doubled",
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
-    ]
+    ],
+    "variation": "Rubinstein System (4.e3)"
   },
   {
     "id": "mg-nimzo-huebner",
@@ -3059,7 +3111,8 @@
       "concept:pawn-doubled",
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
-    ]
+    ],
+    "variation": "Huebner Variation (4.e3 c5)"
   },
   {
     "id": "mg-nimzo-leningrad",
@@ -3089,7 +3142,8 @@
       "concept:pawn-doubled",
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
-    ]
+    ],
+    "variation": "Leningrad Variation (4.Bg5)"
   },
   {
     "id": "mg-nimzo-kasparov",
@@ -3149,7 +3203,8 @@
       "concept:pawn-doubled",
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
-    ]
+    ],
+    "variation": "Saemisch Variation (4.a3)"
   },
   {
     "id": "mg-nimzo-f3",
@@ -3179,7 +3234,8 @@
       "concept:pawn-doubled",
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
-    ]
+    ],
+    "variation": "4.f3 (Aggressive Center)"
   },
   {
     "id": "mg-nimzo-fischer",
@@ -3209,7 +3265,8 @@
       "concept:pawn-doubled",
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Nimzo-Indian_Defence"
-    ]
+    ],
+    "variation": "Kasparov Variation (4.Nf3)"
   },
   {
     "id": "mg-queensgambit-exchange-carlsen-kramnik-2016",
@@ -3232,7 +3289,8 @@
       "concept:pawn-doubled",
       "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined,_Exchange_Variation"
     ],
-    "criticalMoments": []
+    "criticalMoments": [],
+    "variation": "Exchange Variation"
   },
   {
     "id": "mg-queensgambit-qga-kramnik-kasparov-2001",
@@ -3255,7 +3313,8 @@
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Accepted"
     ],
-    "criticalMoments": []
+    "criticalMoments": [],
+    "variation": "Queen's Gambit Accepted"
   },
   {
     "id": "mg-queensgambit-slav-carlsen-nakamura-2014",
@@ -3278,7 +3337,8 @@
       "concept:pos-space",
       "https://en.wikipedia.org/wiki/Slav_Defense"
     ],
-    "criticalMoments": []
+    "criticalMoments": [],
+    "variation": "Slav Defence Response"
   },
   {
     "id": "mg-trompowsky-carlsen-kramnik-2013",
@@ -3300,7 +3360,8 @@
       "concept:pos-initiative",
       "https://en.wikipedia.org/wiki/Trompowsky_Attack"
     ],
-    "criticalMoments": []
+    "criticalMoments": [],
+    "variation": "2...d5 3.Bxf6 Doubled Pawns"
   },
   {
     "id": "mg-trompowsky-grischuk-giri-2013",
@@ -3322,7 +3383,8 @@
       "concept:pos-outpost",
       "https://en.wikipedia.org/wiki/Trompowsky_Attack"
     ],
-    "criticalMoments": []
+    "criticalMoments": [],
+    "variation": "2...Ne4 3.Bf4 c5 4.f3 Sideline"
   },
   {
     "id": "mg-trompowsky-mamedyarov-ding-2018",
@@ -3344,7 +3406,8 @@
       "concept:pawn-doubled",
       "https://en.wikipedia.org/wiki/Trompowsky_Attack"
     ],
-    "criticalMoments": []
+    "criticalMoments": [],
+    "variation": "2...d5 3.Bxf6 Doubled Pawns"
   },
   {
     "id": "mg-birds-carlsen-so-2017",
@@ -3410,7 +3473,8 @@
       "concept:pos-space",
       "https://en.wikipedia.org/wiki/Bird%27s_Opening"
     ],
-    "criticalMoments": []
+    "criticalMoments": [],
+    "variation": "Bird's: Leningrad Formation"
   },
   {
     "id": "mg-pro-naroditsky-caro-kann-advance",

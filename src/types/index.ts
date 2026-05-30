@@ -346,6 +346,11 @@ export interface ModelGame {
    *  side loses is excluded from coach grounding — a masterclass never cites
    *  its own opening losing (David 2026-05-21). */
   studentSide?: 'white' | 'black';
+  /** The variation this game played, matched deterministically to its opening's
+   *  variation by the game's identifying-prefix moves (classify-model-game-
+   *  variations.mjs). Absent = main line. Drives per-variation scoping in
+   *  ModelGamesSection so a variation tab shows games that played THAT line. */
+  variation?: string;
   overview: string;
   criticalMoments: ModelGameCriticalMoment[];
   middlegameTheme: string;

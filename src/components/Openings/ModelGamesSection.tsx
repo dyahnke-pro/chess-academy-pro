@@ -9,6 +9,11 @@ interface ModelGamesSectionProps {
    *  is never shown — a masterclass can't showcase its own opening losing
    *  (David 2026-05-21). Wins (and draws) only. */
   studentColor: 'white' | 'black';
+  /** The selected variation's canonical name, or null on the main tab. On a
+   *  variation tab the section narrows to games that played THAT variation
+   *  (game.variation === variationName); the main tab shows the full library
+   *  so no game is ever hidden (David 2026-05-30, fix #1). */
+  variationName?: string | null;
   onSelectGame: (game: ModelGame) => void;
 }
 
@@ -21,6 +26,7 @@ function studentLost(game: ModelGame, studentColor: 'white' | 'black'): boolean 
 export function ModelGamesSection({
   openingId,
   studentColor,
+  variationName,
   onSelectGame,
 }: ModelGamesSectionProps): JSX.Element {
   const [games, setGames] = useState<ModelGame[]>([]);
@@ -33,13 +39,23 @@ export function ModelGamesSection({
         // Surface only REAL games: drop any where the student's side loses
         // (never showcase the opening losing), AND drop thin/boilerplate games
         // with no authored overview (no thin-narration ships — David 2026-05-24).
-        // The section self-hides when nothing qualifies.
-        setGames(result.filter((g) => !studentLost(g, studentColor) && isNarratedModelGame(g)));
+        // On a variation tab, narrow to games that played THAT variation; the
+        // main tab (variationName null) shows the full library so nothing is
+        // hidden (David 2026-05-30, fix #1). The section self-hides when nothing
+        // qualifies.
+        setGames(
+          result.filter(
+            (g) =>
+              !studentLost(g, studentColor) &&
+              isNarratedModelGame(g) &&
+              (variationName == null || g.variation === variationName),
+          ),
+        );
         setLoading(false);
       }
     });
     return () => { cancelled = true; };
-  }, [openingId, studentColor]);
+  }, [openingId, studentColor, variationName]);
 
   if (loading || games.length === 0) return <div data-testid="model-games-empty" />;
 
