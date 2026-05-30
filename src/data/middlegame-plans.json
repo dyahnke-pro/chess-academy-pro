@@ -50730,5 +50730,236 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-progothamchess-pirc-austrian-c5",
+    "openingId": "pro-gothamchess-pirc-defense",
+    "criticalPositionFen": "r1bqk2r/pp2ppbp/2np1np1/1Bp1P3/3P1P2/2N2N2/PPP3PP/R1BQK2R b KQkq - 0 7",
+    "title": "vs Austrian Attack: …c5 Counter + …Nd4 Centralization",
+    "overview": "His main plan against the aggressive Austrian Attack (f4). Rather than passively defending, Black strikes the centre with …c5, and after Bb5+ and the central tension, jumps the knight into the dominant …Nd4 square. The trades that follow ease Black's position and leave a solid structure where the fianchettoed Bg7 and the active pieces fully neutralize White's space.",
+    "pawnBreaks": [
+      "…c5 striking the centre",
+      "…e5 a central break"
+    ],
+    "pieceManeuvers": [
+      "…Nc6-d4 the central knight",
+      "…Bf8-g7 the fianchetto",
+      "the trades easing the position"
+    ],
+    "strategicThemes": [
+      "Counter with …c5",
+      "Centralize with …Nd4",
+      "Neutralize the Austrian space"
+    ],
+    "endgameTransitions": [
+      "The trades reach a comfortable ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/pp2ppbp/2np1np1/1Bp1P3/3P1P2/2N2N2/PPP3PP/R1BQK2R b KQkq - 0 7",
+        "moves": [
+          "Nd7",
+          "d5",
+          "Nd4"
+        ],
+        "annotations": [
+          "…Nd7 — Black retreats the knight, sidestepping the e5-pawn and keeping the structure flexible.",
+          "d5 — White grabs space, kicking the c6-knight.",
+          "…Nd4 — the knight leaps to the dominant central d4-square, hitting the Nf3 and the Bb5. The trades that follow ease Black’s game; with the Bg7 raking the long diagonal and the active pieces, Black fully neutralizes the Austrian Attack’s space advantage."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nd7 — sidestep the e5-pawn",
+          "d5 — White grabs space",
+          "Nd4 — the dominant central knight"
+        ],
+        "title": "vs Austrian Attack: …c5 Counter + …Nd4 Centralization",
+        "intro": "His main plan against the aggressive Austrian Attack (f4). Rather than passively defending, Black strikes the centre with …c5, and after Bb5+ and the central tension, jumps the knight into the dominant …Nd4 square. The trades that follow ease Black's position and leave a solid structure where the fianchettoed Bg7 and the active pieces fully neutralize White's space.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/Pirc-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-pirc-classical-e5",
+    "openingId": "pro-gothamchess-pirc-defense",
+    "criticalPositionFen": "rnbq1rk1/ppp1ppbp/3p1np1/3P4/4P3/2N2N2/PPP1BPPP/R1BQ1RK1 w - - 1 8",
+    "title": "vs Classical: the …e5 Freeing Break",
+    "overview": "Against the Classical Nf3 setup, his plan is the King's-Indian-style …e5 break. After …Bg7, …O-O, and …Nc6, when White plays d5 the knight reroutes and Black strikes with …e5, challenging the centre and opening the position for the fianchettoed bishop. The …e5 break is the classic Pirc freeing maneuver, equalizing and creating kingside play.",
+    "pawnBreaks": [
+      "…e5 the central freeing break",
+      "…f5 a kingside expansion later"
+    ],
+    "pieceManeuvers": [
+      "…Bf8-g7 the long-diagonal bishop",
+      "…Nb8-c6 the development",
+      "…Bc8-e6 after the break"
+    ],
+    "strategicThemes": [
+      "Develop the KID-style setup",
+      "Break with …e5",
+      "Open the position for the bishop"
+    ],
+    "endgameTransitions": [
+      "The freed position equalizes"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/ppp1ppbp/3p1np1/3P4/4P3/2N2N2/PPP1BPPP/R1BQ1RK1 w - - 1 8",
+        "moves": [
+          "Be3",
+          "e5",
+          "dxe6"
+        ],
+        "annotations": [
+          "Be3 — White develops the bishop, reinforcing the d4-square.",
+          "…e5 — the freeing break! Black challenges the centre, the classic Pirc/King’s-Indian maneuver to open the position.",
+          "dxe6 — White takes en passant; after …Bxe6 Black has freed the position, activated the light-squared bishop, and equalized with active piece play. The …e5 break is the heart of the Pirc’s counterplay."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Be3 — White develops",
+          "e5 — the freeing break",
+          "dxe6 — open for the bishop, equalize"
+        ],
+        "title": "vs Classical: the …e5 Freeing Break",
+        "intro": "Against the Classical Nf3 setup, his plan is the King's-Indian-style …e5 break. After …Bg7, …O-O, and …Nc6, when White plays d5 the knight reroutes and Black strikes with …e5, challenging the centre and opening the position for the fianchettoed bishop. The …e5 break is the classic Pirc freeing maneuver, equalizing and creating kingside play.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/Pirc-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-pirc-150-b5",
+    "openingId": "pro-gothamchess-pirc-defense",
+    "criticalPositionFen": "rnbqkb1r/p3pp1p/2pp1np1/1p6/3PP3/2N1BP2/PPPQ2PP/R3KBNR b KQkq - 1 6",
+    "title": "vs 150 Attack: …c6 + …b5 Queenside Counterattack",
+    "overview": "Against the dangerous 150 Attack (Be3 + f3 + Qd2 + O-O-O), his plan is the standard opposite-side-castling counterattack: …c6 and …b5 expand on the queenside, …Nbd7-b6 supports the …b5-b4 advance, and Black races to open lines against White's king on the queenside. With both sides attacking opposite wings, it becomes a sharp race where Black's …b5-b4 break is fast.",
+    "pawnBreaks": [
+      "…b5-b4 the queenside pawn storm",
+      "…c6 supporting …b5"
+    ],
+    "pieceManeuvers": [
+      "…Nb8-d7-b6 supporting …b5",
+      "…Bc8-b7 the fianchetto",
+      "…a5-a4 the pawn storm"
+    ],
+    "strategicThemes": [
+      "Expand with …c6 and …b5",
+      "Reroute …Nb6 to support …b4",
+      "Race to attack White’s king"
+    ],
+    "endgameTransitions": [
+      "Keep attacking — opposite castling is a race"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqkb1r/p3pp1p/2pp1np1/1p6/3PP3/2N1BP2/PPPQ2PP/R3KBNR b KQkq - 1 6",
+        "moves": [
+          "Nbd7",
+          "g4",
+          "Nb6"
+        ],
+        "annotations": [
+          "…Nbd7 — Black develops the knight, heading for b6 to support the …b5-b4 advance.",
+          "g4 — White begins the kingside pawn storm, the standard 150-Attack plan.",
+          "…Nb6 — the knight reroutes to b6, supporting the …b5-b4 break and eyeing the c4-square. With …c6 and …b5 already played, Black’s queenside counterattack races against White’s kingside storm — and in these opposite-castling positions, Black’s …b4 break is fast and dangerous."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nbd7 — head for b6",
+          "g4 — White storms the kingside",
+          "Nb6 — support the …b4 break"
+        ],
+        "title": "vs 150 Attack: …c6 + …b5 Queenside Counterattack",
+        "intro": "Against the dangerous 150 Attack (Be3 + f3 + Qd2 + O-O-O), his plan is the standard opposite-side-castling counterattack: …c6 and …b5 expand on the queenside, …Nbd7-b6 supports the …b5-b4 advance, and Black races to open lines against White's king on the queenside. With both sides attacking opposite wings, it becomes a sharp race where Black's …b5-b4 break is fast.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/Pirc-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Pirc_Defence"
+        ]
+      }
+    ]
   }
 ]

@@ -3254,6 +3254,38 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:tac-fork', 'concept:pos-material', 'https://www.chess.com/openings/French-Defense-Tarrasch-Variation'],
   },
+
+  // ── GothamChess Pirc Defense (student = BLACK) ───────────────────────────
+  // After …b4 hits the knight, White's e5?! allows …bxc3! winning the queenside
+  // skirmish with the better structure (positional, +0.9). 25 plies; e5@16,
+  // bxc3@17.
+  'pro-gothamchess-pirc-defense:e4_d6_d4_Nf6_Nc3_g6_Nf3_Bg7_Bc4_O-O_O-O_c6_Bg5_b5_Bb3_b4:e5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'e5?! White lashes out at the f6-knight, but Black has the in-between move.',
+      '…bxc3 — the zwischenzug! Black grabs the c3-knight first, ignoring the attack on f6.',
+      'exf6 — White takes the knight back.',
+      '…exf6 — Black recaptures, and the dust settles in Black’s favour.',
+      'Bc1 — White saves the bishop.',
+      '…cxb2 — Black collects another pawn on the queenside.',
+      '',
+      '…d5 — Black strikes the centre; with the extra pawn and the better structure, Black is clearly better.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'e5 — lashes out, but…',
+      'bxc3 — the zwischenzug! grab the knight',
+      'exf6 — White takes back',
+      'exf6 — recapture, Black better',
+      'Bc1 — White saves the bishop',
+      'cxb2 — collect another pawn',
+      '',
+      'd5 — strike the centre, Black better',
+      '',
+    ],
+    sources: ['concept:tac-zwischenzug', 'concept:pos-material', 'https://www.chess.com/openings/Pirc-Defense'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

@@ -90,6 +90,13 @@ const OPENINGS = {
     minPrefix: ['e4', 'e6'],
     maxDepth: 80,
   },
+  'pirc': {
+    name: 'Pirc Defense',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'd6', 'd4', 'Nf6', 'Nc3', 'g6'],
+    maxDepth: 80,
+  },
   'rossolimo': {
     name: 'Anti-Sicilian Rossolimo/Moscow',
     color: 'white',

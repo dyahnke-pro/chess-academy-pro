@@ -13,12 +13,15 @@ pitfalls + tab routing). David's directive: don't stop until 100% done.
 7. Tab resolver `src/services/proGothamchess<X>TabPlans.ts` + wire into OpeningDetailPage.tsx
 8. Bump PRO_DATA_REVISION, ship-check, push to main + branch
 
-## Status (11/18 DONE)
-- [x] caro-kann (prior session)
-- [x] trompowsky, english, vienna, italian, london, ponziani, anti-sicilian,
-      milner-barry, fantasy-caro, stafford-refute  (this session)
-- [ ] caro-advance-white, closed-sicilian, kia (white positional — likely 0 gems)
-- [ ] scandinavian, qgd, french-defense, pirc-defense (black openings)
+## Status (18/18 DONE ✅)
+ALL 18 GothamChess openings built to full G9.1 depth:
+- White: italian, london, ponziani, anti-sicilian, milner-barry, fantasy-caro,
+  stafford-refute, caro-advance-white, kia, closed-sicilian, vienna, trompowsky, english
+- Black: caro-kann (prior session), scandinavian, qgd, french-defense, pirc-defense
+Each: data-anchored plans + his real model-game WINS + narrated gems (tactical
+openings) + pitfalls + tab routing. Marquee model-game wins captured incl.
+Naroditsky, Vidit, Hans Niemann, Anish Giri, GM Finegold, GM Bok, GM Barcenilla,
+IM Eric Rosen, Salem Saleh.
 
 ## ⚠️ DEPLOY CAP BLOCKED
 Vercel 100-build/day cap is HIT — prod bundle frozen at vienna's `C9F65Jim`.

@@ -4264,5 +4264,30 @@
     "materialDelta": 2,
     "tier": "confirmed",
     "why": "At your level opponents play c4 here in 77% of games. Punish with the best move Bf5 — the engine has Black winning (+2.1, +2 material)."
+  },
+  {
+    "openingId": "pro-gothamchess-pirc-defense",
+    "lineMoves": "e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Bc4 O-O O-O c6 Bg5 b5 Bb3 b4",
+    "inaccuracy": "e5",
+    "freqPct": 14.8,
+    "games": 3526,
+    "practicalScore": 53,
+    "mainMove": "Bxf6",
+    "punish": "bxc3",
+    "punishSeq": [
+      "bxc3",
+      "exf6",
+      "exf6",
+      "Bc1",
+      "cxb2",
+      "Bxb2",
+      "d5",
+      "c4"
+    ],
+    "playLine": "e4 d6 d4 Nf6 Nc3 g6 Nf3 Bg7 Bc4 O-O O-O c6 Bg5 b5 Bb3 b4 e5 bxc3 exf6 exf6 Bc1 cxb2 Bxb2 d5 c4",
+    "engineCp": 88,
+    "materialDelta": 1,
+    "tier": "positional",
+    "why": "At your level opponents play e5 here in 15% of games. Punish with the best move bxc3 — the engine has Black clearly better (+0.9, +1 material)."
   }
 ]

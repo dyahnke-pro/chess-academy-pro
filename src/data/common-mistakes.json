@@ -2508,5 +2508,43 @@
         "https://en.wikipedia.org/wiki/French_Defence"
       ]
     }
+  ],
+  "pro-gothamchess-pirc-defense": [
+    {
+      "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 2 5",
+      "wrongMove": "O-O",
+      "correctMove": "c5",
+      "explanation": "Against the aggressive Austrian Attack, the principled counter is …c5! — striking the centre immediately before White completes the kingside build-up. Castling passively with …O-O invites White's e5 and a crushing kingside pawn storm (f4-f5) against the king. Hit the centre first with …c5: it challenges d4, opens lines for counterplay, and stops White from getting a free attack. Counterattack, don't sit and defend.",
+      "shortNarration": "c5 — counter the centre, not passive O-O",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/Pirc-Defense",
+        "https://en.wikipedia.org/wiki/Pirc_Defence"
+      ]
+    },
+    {
+      "fen": "rnbqk2r/pp2ppbp/2pp1np1/8/3PP3/2N1BP2/PPPQ2PP/R3KBNR b KQkq - 1 6",
+      "wrongMove": "O-O",
+      "correctMove": "b5",
+      "explanation": "Against the 150 Attack (Be3 + f3 + Qd2 + O-O-O aiming for a kingside mate), castling kingside with …O-O walks straight into White's attack with h4-h5 and the Bh6 trade. The right plan is the immediate …b5! — striking out on the queenside, preparing …b4 to counterattack White's king on the queenside, where White intends to castle. In these opposite-side races, strike first on the queenside with …b5 and …b4 — don't castle into the storm.",
+      "shortNarration": "b5 — counter on the queenside, not O-O",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/Pirc-Defense",
+        "https://en.wikipedia.org/wiki/Pirc_Defence"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+      "wrongMove": "e5",
+      "correctMove": "g6",
+      "explanation": "The Pirc's whole idea is the kingside fianchetto: …g6! preparing …Bg7 to train the bishop on the long diagonal and pressure White's centre from afar. The premature …e5 opens the centre while Black is underdeveloped — after dxe5 dxe5 Qxd8+ Kxd8 Black loses castling rights for nothing. Stay true to the Pirc setup: …g6, …Bg7, …O-O, and counterattack the centre with …c5 or …e5 only when ready.",
+      "shortNarration": "g6 — the Pirc fianchetto setup",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/Pirc-Defense",
+        "https://en.wikipedia.org/wiki/Pirc_Defence"
+      ]
+    }
   ]
 }
