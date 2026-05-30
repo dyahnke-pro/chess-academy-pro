@@ -107,26 +107,57 @@ line + re-verified, gates green, shipped:
 - qga Smyslov: -1.75 -> White's best dxc5 queen-trade endgame, -0.18
 - philidor Nimzowitsch: -2.15 -> sound Qe2 ...exd4/...Re8/...Bf8, 0.00
 
-### FLAGGED — genuinely HARD/SHARP variations (NOT clean blundered-tails);
-### do NOT risk an unsound autonomous rebuild — need deeper theory or David's
-### call (rebuild on a sound line if one exists / relabel honestly / drop):
-- pirc 150 Attack: -2.92 (Black castled into the h4-h5 mating attack). Best
-  line I found (delay O-O, ...Qa5/...c5) is still -1.48 — the 150 is just
-  White's most dangerous anti-Pirc weapon. Current lesson at minimum must stop
-  showing Black walking into mate; honest reframe or a precise queenside-castle
-  defense needed.
-- two-knights Max Lange: -1.86 (the 5.O-O Max Lange; lesson's ...Qg6 defense
-  sub-optimal). The SOUND Two Knights main is 5.e5 (-0.05) but that's a
-  different line; the "Max Lange" tab needs Black's precise defense (deep) or
-  a relabel to the 5.e5 main.
-- semi-slav Botvinnik Deep: -2.93. One of the sharpest forced lines in chess —
-  too treacherous to rebuild unsupervised; verify it's not following a known
-  drawn-with-precision line, else needs theory.
-- old-indian Be2 (-1.39) / Czech (-1.11): the Old Indian is a passive, cramped,
-  slightly-worse-by-nature defense; bad-ish throughout (not a tail blunder).
-  Verify narration doesn't claim equality; otherwise it's the opening's reality.
-- benoni Taimanov f4/Bb5+ (-1.39): the Taimanov is the most dangerous anti-
-  Benoni; tough for Black throughout. Same treatment as above.
+### FLAGGED 5 — ALL RESOLVED 2026-05-30 (was "C"). Two rebuilt sound on data
+### spines; three given honest narration per the soundness rule (negative eval
+### is the opening's reality, not a lie). On main via cherry-pick (clean):
+- [x] pirc 150 Attack: -3.18 -> REBUILT on the masters-data antidote
+  (...c6/...b5/...e5/...Bb7, ...b4 buries the c3-knight on d1), -0.42 at 22p.
+  Commit b33ac5f. Verified every move = masters most-played at its ply.
+- [x] two-knights Max Lange: -2.82 -> REBUILT on Black's sound 5...Nxe4
+  antidote (decline the maze; ...d5, ...Qd8, Rxe4+ ...Be7 Nxd4, ...f5 ...O-O),
+  -0.39 at 22p. Commit 837628a.
+- [x] semi-slav Botvinnik Deep: -3.34 -> NARRATION-HONESTY fix (commit 3ab33b1).
+  Too treacherous to rebuild unsupervised; the bo4 beat no longer claims
+  "balanced / sound for both sides" — now states White holds the edge, Black
+  defends under pressure, high-risk surprise weapon. **FLAG FOR DAVID:** a true
+  rebuild would re-anchor to a precise modern drawing line in the main
+  Botvinnik (move-30 forced theory) — your call.
+- [x] old-indian Be2 (-1.26) / Czech (-1.11): NARRATION-HONESTY fix (commit
+  7ca21f7). The Old Indian is cramped/slightly-worse by nature; both terminal
+  beats now say plainly White has a real space pull and Black is a shade worse
+  but solid/resilient — no more false-equality claims.
+- [x] benoni Taimanov f4/Bb5+ (-1.98): NARRATION-HONESTY fix (commit f5b5b56).
+  The toughest anti-Benoni; the t4 beat no longer claims "fully equal" — now
+  says White's space gives a real pull, Black slightly worse but in a playable
+  double-edged fight with the ...b5 break.
+
+### "C" COMPLETION STATUS (2026-05-30)
+- [x] Connectivity checks: all openings reach the middlegame (lessonDepth green,
+  0 shallow); middlegame-plan coherence gates green (middlegamePlanner /
+  middlegamePlanThemes / middlegamePlanFenCoherence). Plans correctly start AT
+  or PAST the opening terminus — "pick up where the opening leaves off".
+- [x] 5 flagged variations fixed (above).
+- [x] Soundness re-sweep confirms pirc-150 + max-lange DROPPED off the flagged
+  list; the 3 narration-fixed lines stay engine-negative by design (honest now).
+- [x] ship-check: READY TO PUSH (typecheck + lint + all content gates green).
+- [x] Landed on main (5 commits cherry-picked clean onto fresh origin/main).
+- [ ] **G1 prod Playwright audit BLOCKED in this container (escalate):** (a) the
+  Chromium binary at /opt/pw-browsers/chromium-1194/... is ABSENT here
+  (/opt/pw-browsers empty), so the Playwright instrument cannot launch; (b) the
+  prod bundle hash had not advanced past the push within ~3min of polling —
+  deploy queued/capped behind today's heavy parallel-session pushes (many Gotham
+  commits). Audit-stream endpoint IS healthy (200, redis, empty=app-not-open).
+  NEXT SESSION / DAVID: once prod redeploys, run the 3-instrument audit
+  (AUDIT_SANDBOX=1 against the live URL) on /openings/pirc-defence (150 tab) +
+  /openings/two-knights-defence (Max Lange tab) to confirm the rebuilt content
+  renders + Watch/Learn voice fires. Content correctness already verified by
+  engine evals + content gates.
+
+### REMAINING engine-negative lessons (NOT in "C" scope — all sharp showcases /
+### opening-nature, correctly LEFT per the soundness rule): kings-gambit
+### Allgaier/Muzio/Classical, alekhine Four Pawns, sicilian-dragon Chinese,
+### schliemann, vienna vs 2...Nc6, KID Fianchetto, pirc Czech, philidor
+### Counter-Gambit. Negative eval is EXPECTED for a sac/gambit showcase.
 
 ### LEAVE (sharp gambit/sac showcases — negative eval EXPECTED, honest):
 kings-gambit Muzio/Allgaier/Classical, two-knights/scotch Max Lange gem lines,
