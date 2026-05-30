@@ -29,7 +29,6 @@ const PRO_OPENINGS: ProRepEntry[] = (proRepertoires.openings as ProRepEntry[]).f
 // LessonScript (STEP 7-8). This list may ONLY shrink, never grow — a new
 // pro-rep opening must ship WITH its lesson.
 const MISSING_LESSON_BASELINE = new Set<string>([
-  'pro-gothamchess-italian',
   'pro-gothamchess-london',
   'pro-gothamchess-stafford-refute',
   'pro-gothamchess-caro-kann',
