@@ -1,0 +1,146 @@
+{
+  "openingId": "scandi-qd8",
+  "seed": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qd8",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "Bg4",
+    "Bc4",
+    "e6",
+    "h3",
+    "Bh5",
+    "O-O",
+    "c6"
+  ],
+  "spine": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qd8",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "Bg4",
+    "Bc4",
+    "e6",
+    "h3",
+    "Bh5",
+    "O-O",
+    "c6",
+    "Bg5",
+    "Be7",
+    "Re1",
+    "O-O",
+    "Qd3",
+    "Nbd7",
+    "Ne5",
+    "Nxe5"
+  ],
+  "plies": 24,
+  "throughMove": 12,
+  "reachedMiddlegame": true,
+  "counts": [
+    {
+      "ply": 17,
+      "move": 9,
+      "gamesAtPosition": 2773,
+      "played": "Bg5",
+      "pct": 32,
+      "playedGames": 897,
+      "source": "lichess"
+    },
+    {
+      "ply": 18,
+      "move": 9,
+      "gamesAtPosition": 1051,
+      "played": "Be7",
+      "pct": 73,
+      "playedGames": 763,
+      "source": "lichess"
+    },
+    {
+      "ply": 19,
+      "move": 10,
+      "gamesAtPosition": 1327,
+      "played": "Re1",
+      "pct": 32,
+      "playedGames": 428,
+      "source": "lichess"
+    },
+    {
+      "ply": 20,
+      "move": 10,
+      "gamesAtPosition": 580,
+      "played": "O-O",
+      "pct": 62,
+      "playedGames": 362,
+      "source": "lichess"
+    },
+    {
+      "ply": 21,
+      "move": 11,
+      "gamesAtPosition": 536,
+      "played": "Qd3",
+      "pct": 23,
+      "playedGames": 125,
+      "source": "lichess"
+    },
+    {
+      "ply": 22,
+      "move": 11,
+      "gamesAtPosition": 149,
+      "played": "Nbd7",
+      "pct": 44,
+      "playedGames": 66,
+      "source": "lichess"
+    },
+    {
+      "ply": 23,
+      "move": 12,
+      "gamesAtPosition": 149,
+      "played": "Ne5",
+      "pct": 44,
+      "playedGames": 65,
+      "source": "lichess"
+    },
+    {
+      "ply": 24,
+      "move": 12,
+      "gamesAtPosition": 68,
+      "played": "Nxe5",
+      "pct": 69,
+      "playedGames": 47,
+      "source": "lichess"
+    }
+  ],
+  "branches": [
+    {
+      "afterMove": 8,
+      "main": "Bg5",
+      "mainPct": 32,
+      "alt": "Re1",
+      "altGames": 544
+    },
+    {
+      "afterMove": 9,
+      "main": "Re1",
+      "mainPct": 32,
+      "alt": "Qd3",
+      "altGames": 296
+    }
+  ],
+  "floors": {
+    "COMMON": 60,
+    "LOWFLOOR": 8,
+    "MIDGAME_PLY": 20
+  },
+  "generatedAt": "2026-05-30T02:10:36.817Z"
+}

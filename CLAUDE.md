@@ -1886,6 +1886,29 @@ only change is the spine SOURCE (masters DB, not one player's games).
 - Ship per the playbook (straight to `main`) and batch the deploy/audit when the
   Vercel build cap is in play. `PLAN.md` carries the live target list + status.
 
+**🔒 SOUNDNESS SWEEP — engine-eval every lesson's final position; a lesson can
+LOOK fine while teaching a secretly-losing line (locked David 2026-05-30).** The
+Philidor Antoshin proved the danger: its narration claimed "dead-level" while
+the line was actually −1.58 for the student (it only showed White's soft reply,
+hiding the critical refutation). `scripts/soundness-sweep.mjs` engine-evals the
+FINAL position of every masterclass lesson (main + variations) from the
+STUDENT's perspective and flags any worse than −1.0. Run it; it catches the
+hidden-dubious lines the tail-overhang diagnostic can't see.
+- **Distinguish, don't blindly fix:** a NEGATIVE eval is EXPECTED and CORRECT
+  for a sharp GAMBIT/sacrifice showcase (King's Gambit Muzio/Allgaier, Two
+  Knights Max Lange — the student sacrificed; the gambit is an honest historical
+  showcase, not a sound line) → LEAVE (like the Philidor Counter-Gambit). A
+  QUIET / positional line that leaves the student clearly worse (the Antoshin,
+  a passive Old-Indian/QGA sideline) is a GENUINE defect → rebuild it on a sound
+  data line, OR if no sound line exists, demote/relabel honestly (never let the
+  narration claim equality on a losing line).
+- **The eval is at the lesson's terminus** — verify the LINE is genuinely the
+  fault (the student's moves are sub-optimal) vs a deep-line eval artifact
+  before rebuilding; re-eval a few plies earlier / check the data's most-played
+  alternative. Empty > generic > a line that lies about its soundness.
+
+- Ship per the playbook (straight to `main`) and batch the deploy/audit.
+
 **🚨 BUILDING AN OPENING MASTERCLASS TAB → READ
 `docs/opening-masterclass-playbook.md` FIRST. It is the LOCKED build
 standard (David 2026-05-21: "lock in everything … 38 more openings plus
