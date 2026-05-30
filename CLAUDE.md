@@ -1846,6 +1846,46 @@ implementation is to treat every played line as a real beat sequence (say
 + arrows + highlights) through the voice-gated lesson player, so plans get
 the identical treatment the variation lessons have.
 
+**🔒 MASTERCLASS LESSON SPINES ARE DATA-CHOSEN, NEVER HAND-PICKED — the
+DATA-REBUILD doctrine (locked David 2026-05-30: "lock the rebuilds into
+memory"). Read `docs/plans/2026-05-29-masterclass-data-rebuild-doctrine.md`
+before touching any masterclass lesson line.** Deep theory = the line the most
+games actually follow; if no games reached a position it is NOT theory, it is
+invention. So every lesson's move backbone is walked by
+`scripts/build-opening-spine.mjs <id> "<seed>"` — the MOST-PLAYED master move
+at each ply while the position stays common, mandatory-extended along the
+most-played move (never below 8 games, NEVER to 0) until a middlegame is
+reached. The LLM authors prose ONLY; it never picks a move (G3). This is the
+pro-rep deep-build doctrine (§G9.1/§G9.2) applied to the masterclass set — the
+only change is the spine SOURCE (masters DB, not one player's games).
+
+- **NONNEGOTIABLE: every opening REACHES the middlegame** (the builder
+  guarantees it; the `lessonDepth` gate means "reachedMiddlegame via the data").
+- **It is SURGICAL, not wholesale (diagnostic-driven).**
+  `scripts/diagnose-lesson-tails.mjs` ranks every lesson by tail-overhang
+  (`audit-reports/lesson-tails.json`). MOST lessons are ALREADY on deep+common
+  data lines (overhang 0 — caro-kann main move 13/742g, italian's tabs, etc.) —
+  do NOT rebuild or "flip" those, and do NOT flip a sound showcase main line
+  (the playbook lets the main-line pill be a canonical showcase, exempt from
+  the frequency sort). Rebuild ONLY the over-extended / early-divergent lessons.
+- **Per-target JUDGMENT (not blind):** a genuinely divergent line (common ends
+  move 3-7, lesson marches to move 12-19 on an uncommon line) → REBUILD on its
+  data spine. A deep-common line with a modest tail → TRIM the tail to the
+  common terminus. A deliberate SHARP GAMBIT / named showcase (short forced
+  theory — the Møller `...Bxa1` sac, king's-gambit lines) → LEAVE it; rebuilding
+  would erase the line's identity.
+- **When a spine moves, the cascade follows** (doctrine §CASCADE): re-author the
+  narration, re-derive the variation tab set from the data branches (drop
+  duplicates — the Italian's old "Modern d3" tab was promoted to main), re-anchor
+  the middlegame-plan FENs, re-verify pitfalls/model-games, lower manifest floors
+  honestly. **TRAPS STAY THE SAME** (gem/named-trap data unchanged) — only
+  re-verify they still SURFACE on the right tab.
+- **Proven on the Italian (Wave 0):** old main taught the classical d4 Giuoco
+  Piano whose line died at move 18 on 1 master game; the data main is the modern
+  Pianissimo (move 20, 97 games). Italian is the template every rebuild follows.
+- Ship per the playbook (straight to `main`) and batch the deploy/audit when the
+  Vercel build cap is in play. `PLAN.md` carries the live target list + status.
+
 **🚨 BUILDING AN OPENING MASTERCLASS TAB → READ
 `docs/opening-masterclass-playbook.md` FIRST. It is the LOCKED build
 standard (David 2026-05-21: "lock in everything … 38 more openings plus
