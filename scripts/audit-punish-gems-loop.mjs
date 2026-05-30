@@ -30,7 +30,7 @@
  *   AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-punish-gems-loop.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -104,7 +104,7 @@ function destToken(spoken) {
 const lineSig = (dicts) => dicts.map(destToken).join('-');
 
 async function makeCtx(browser) {
-  const ctx = await browser.newContext();
+  const ctx = await browser.newContext(sandboxContextOptions());
   const page = await ctx.newPage();
   const ev = { pageerrors: [], consoleErrors: [], tts: [] };
   page.on('pageerror', (e) => ev.pageerrors.push(String(e).slice(0, 200)));
@@ -405,7 +405,7 @@ async function runPass(browser, level) {
     process.exit(2);
   }
   const exe = await resolveChromiumExecutable();
-  const browser = await chromium.launch({ executablePath: exe, headless: true });
+  const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
   const report = { url: URL, ts: new Date().toISOString(), passes: [] };
   let clean = 0;
   for (const level of [1, 2, 3]) {

@@ -152,12 +152,56 @@ line + re-verified, gates green, shipped:
   /openings/two-knights-defence (Max Lange tab) to confirm the rebuilt content
   renders + Watch/Learn voice fires. Content correctness already verified by
   engine evals + content gates.
+- [x] **A — DONE 2026-05-30 (this session): prod G1 render+voice audit GREEN.**
+  Prod bundle (index-CE2ym1Vc.js) confirmed to carry PR #693 (greps "buries the
+  knight on d1" + Max Lange markers). New focused instrument
+  `scripts/audit-masterclass-variation-watch-prod.mjs` (the heavy 3-tier
+  punish-gems loop times out against slow prod) ran AUDIT_SANDBOX=1 vs LIVE prod:
+  6/6 GREEN — pirc-150 + two-knights-Max-Lange BOTH mount the curated
+  LessonPlayer (positive [data-testid=lesson-player], NOT legacy
+  walkthrough-progress) and fire a real beat /api/tts (warmup `.` probe
+  excluded). Audit-stream pull corroborated: 2 coach-narration-spoken events
+  with the exact rebuilt text ("The 150 Attack — bishop to e3…", "The Max Lange
+  is one of the oldest…"), voice=ruth. Also fixed audit-punish-gems-loop.mjs to
+  use sandbox cert helpers (was plain launch → cert-fails vs prod). Chromium
+  binary IS present (corrects the PLAN's earlier "absent" note); only blocker
+  was node_modules needed `npm install` on a fresh clone, and pollyEnabled
+  defaults false in a fresh context (the audit flips it on the seeded profile).
 
 ### REMAINING engine-negative lessons (NOT in "C" scope — all sharp showcases /
 ### opening-nature, correctly LEFT per the soundness rule): kings-gambit
 ### Allgaier/Muzio/Classical, alekhine Four Pawns, sicilian-dragon Chinese,
 ### schliemann, vienna vs 2...Nc6, KID Fianchetto, pirc Czech, philidor
 ### Counter-Gambit. Negative eval is EXPECTED for a sac/gambit showcase.
+
+### C — NARRATION POLISH, DONE 2026-05-30 (this session).
+- Verified the sharp-showcase termini are HONEST, not equality-claiming:
+  Muzio ("the Muzio is not objectively sound… the line you play to WIN games"),
+  Allgaier (same honest register), Chinese Dragon ("trades a little soundness
+  for raw speed… attack first and ask questions never"). No fix needed.
+- Engine-evaled (depth 20, student perspective) the engine-negative lines that
+  ALSO claimed equality/comfort — the precise false-equality defect class:
+  KID Fianchetto -104cp claimed "fully equal" → **FIXED** (honest: "White's
+  extra central space gives a small lasting pull, Black a shade worse but the
+  c5-outpost keeps it a comfortable, fully playable fight"). alekhine Four
+  Pawns -99cp / vienna vs 2…Nc6 -64cp / pirc Czech -99cp claim NO equality →
+  honest, left. pirc Fianchetto -34cp legitimately equal → left.
+- Coverage-gate baselines at FLOOR for masterclass: middlegamePlanShort=0,
+  punishGemNarration=0 (both COMPLETE), middlegamePlanThemes=4 (all leave-
+  flagged "never fabricate a contrived move" deferrals — can't go lower
+  honestly). The 20 variationMiddlegameDepth entries are ALL pro-rep (pro-*),
+  a separate pro-rep-deepening effort (§G9.3 Gate B), NOT masterclass C-scope.
+- Gates re-run green: narrationAccuracy / lessonIntegrity / wlppNarration /
+  lessonDepth (3753+ tests).
+
+### B + D — PENDING DAVID (genuine forks, surfaced 2026-05-30):
+- B (Botvinnik): left HONEST (current state doesn't lie). A true re-anchor to
+  the 9.Nxg5 main needs move-30 forced drawing theory — G3 forbids authoring it
+  from memory, and it's too sharp to data-rebuild unsupervised. Asked David:
+  supply the line / keep honest / demote tab.
+- D (Endgames): pro/structural R+minor+P data prepped; each plan needs a
+  specific drawn master game + holding technique (~1hr/opening). Asked David to
+  confirm scope + model games before authoring.
 
 ### LEAVE (sharp gambit/sac showcases — negative eval EXPECTED, honest):
 kings-gambit Muzio/Allgaier/Classical, two-knights/scotch Max Lange gem lines,
