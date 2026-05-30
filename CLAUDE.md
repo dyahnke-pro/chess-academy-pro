@@ -2037,7 +2037,57 @@ hidden-dubious lines the tail-overhang diagnostic can't see.
 
 - Ship per the playbook (straight to `main`) and batch the deploy/audit.
 
-**🚨 BUILDING AN OPENING MASTERCLASS TAB → READ
+**🔒 ENDGAME LAYER — ground every endgame plan in a REAL master game that
+played the SAME VARIATION being taught; walk THAT game into its ending (locked
+David 2026-05-30: "find an [opening] game with the same variation as being
+taught and then use that endgame… Good! Lock that in for endgame rules!").**
+The masterclass/pro-rep endgame section is opening→middlegame→endgame as ONE
+continuous REAL line — never an invented endgame, never a generic structure
+pulled from memory (G3 + "empty > generic > invented"). The procedure:
+
+1. **Seed the masters explorer on the EXACT taught variation** — the same move
+   spine the lesson + middlegame plan use (e.g. the Italian Giuoco Pianissimo
+   `e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O`), so the games share the taught
+   middlegame STRUCTURE, not just the opening name.
+2. **Pull real master games + their FULL PGNs** via the proxies (both reachable
+   from the sandbox — test first per the explorer-proxy rule): topGames from
+   `/api/lichess-explorer?source=masters&play=<uci>`, full game from
+   `/api/lichess-game-export?id=<id>`. The masters DB
+   (`public/data/openings-masters-db.json`) is OPENING-PHASE ONLY (position
+   aggregates, no full games) — it CANNOT supply an endgame line; use the
+   game-export proxy.
+3. **Classify + pick** with `scripts/pick-endgame-game.mjs "<seed SAN>"
+   [type=R+minor+P] [result=draw|win|any]` — it walks each real game to its
+   final position, classifies the ending, finds the ply where the target
+   structure is first reached (the opening→endgame transition + that FEN), and
+   prints the real endgame move tail. Prefer a DRAW for a Black HOLDING lesson
+   (teach the defensive technique), a WIN for a conversion lesson; prefer the
+   deepest game (most technique to teach). `scripts/extract-endgame-structures.mjs`
+   gives the frequency breakdown of endgame TYPES first (only types reached by
+   ≥~15% of the variation's games are candidate plans — G9.1 step 5 / the
+   WIDER-CORPUS rule).
+4. **Author the plan from the REAL game's moves** — `criticalPositionFen` = the
+   transition FEN (where the taught structure becomes the ending, so the plan
+   picks up where the Watch/middlegame left off — G9.3 Gate C continuity);
+   `playableLines[0].moves` = the actual game's endgame tail; narration teaches
+   the holding/conversion TECHNIQUE grounded in the concept corpus
+   (`chess-concepts.json` — Capablanca/Lasker minor-piece + rook endings) with
+   `sources[]` citing `book:<id>` + `concept:<id>` + the real game (lichess
+   id / players / event). Suffix the id `-endgame` (EndgamePlansSection filters
+   on it). Lead-the-eye arrows+highlights per move, two registers, board-
+   verified (narrationAccuracy + lessonIntegrity gates).
+5. **No real game reaches the ending in that variation → the section self-hides
+   (empty > generic > invented).** Sharp/attacking openings (gambits, Dragon)
+   correctly get NONE. Never fabricate a holding line to fill the slot.
+
+The existing Berlin endgame plan (`mp-ruylopez-berlin-endgame`) is the
+STRUCTURAL shape (forced move-8 queen trade → short walk-in); the structural
+Black defenses (Caro/French/QGD/Slav) have NO forced simplification, so they
+follow steps 1-4 above — a specific real drawn game (e.g. a Carlsen R+bishop-vs-
+R Pianissimo hold) carried into its ending. Proven 2026-05-30 on the Italian
+Pianissimo (Carlsen–Erigaisi 2025, 234-ply R+B-vs-R draw, lichess 58PEF6OM).
+
+
 `docs/opening-masterclass-playbook.md` FIRST. It is the LOCKED build
 standard (David 2026-05-21: "lock in everything … 38 more openings plus
 the gambits").** Forged on the Ruy + Pirc; the wiring is opening-agnostic

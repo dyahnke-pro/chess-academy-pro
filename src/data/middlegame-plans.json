@@ -50961,5 +50961,217 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-carokann-main-endgame",
+    "openingId": "caro-kann",
+    "criticalPositionFen": "2r2rk1/pp3pp1/3bp2p/4N2P/2P5/8/PPR2PP1/1K5R w - - 0 30",
+    "title": "The Classical Caro Endgame",
+    "overview": "The Classical Caro's great virtue is soundness: the light-squared bishop is traded off early, leaving Black a rock-solid pawn structure with no weaknesses, and when the queens come off that structure carries Black safely into the ending. This is the exact position Anand reached against Topalov (Amber 2008) out of a Classical main line — White has a knight and a shade more central space, Black the bishop and two active rooks. Learn how Black holds it: contest the only open file, activate every piece, and fix the queenside until the half-point is never in doubt.",
+    "pawnBreaks": [
+      {
+        "move": "…a5 — fix the queenside",
+        "explanation": "Gain queenside space and freeze White's a- and b-pawns so the structure can never be cracked open against you.",
+        "fen": "2r2rk1/pp3pp1/3bp2p/4N2P/2P5/8/PPR2PP1/1K5R w - - 0 30"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "…Rf8-d8 and …Rc8-d8 — double on the d-file",
+        "explanation": "Seize the only open file with both rooks; whoever owns it dictates the ending."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Bd6-a3-b4 — the active diagonal",
+        "explanation": "Reroute the bishop to its most active post, tying White to the defence of the queenside and the back rank."
+      }
+    ],
+    "strategicThemes": [
+      "Black's trumps are activity and a flawless structure, not material — the bishop and active rooks fully offset White's knight and extra space.",
+      "Own the only open file: doubled rooks on the d-file are the backbone of the hold.",
+      "Fix the queenside with …a5 so White's majority can never roll — a frozen structure is a drawn structure."
+    ],
+    "endgameTransitions": [
+      "With the queens off, the Classical Caro's solid pawns give White no target — the draw is a matter of activity, not suffering.",
+      "Bishop plus active rooks hold comfortably against knight plus space when the pawn structure is symmetrical and fixed."
+    ],
+    "playableLines": [
+      {
+        "fen": "2r2rk1/pp3pp1/3bp2p/4N2P/2P5/8/PPR2PP1/1K5R w - - 0 30",
+        "moves": [
+          "Nd3",
+          "Rfd8",
+          "b3",
+          "Ba3",
+          "Ne5",
+          "Rd6",
+          "Re2",
+          "Rcd8",
+          "Kc2",
+          "Bb4",
+          "Nf3",
+          "a5",
+          "Rh4",
+          "Rd1"
+        ],
+        "annotations": [
+          "Anand pulls the knight back to d3, eyeing the c5- and e5-outposts and keeping his options open.",
+          "Black claims the open d-file with the first rook. In a queenless middlegame the one open file is the highway — seize it before White can.",
+          "b3 props up the c4-pawn and gives the white king a breathing square.",
+          "The bishop swings to a3, hitting the b2-pawn and tying White's rook to the back rank. Black answers White's extra space with sheer activity.",
+          "The knight bounds back to its dream square on e5.",
+          "A rook lift: …Rd6 guards the sixth rank and clears d8 for its partner.",
+          "White's rook contests the file from e2.",
+          "Both rooks stack on the d-file. Black owns the only open line in the position — the backbone of the hold.",
+          "Anand centralises his king, the correct endgame instinct.",
+          "…Bb4 finds the bishop's most active diagonal, freezing White's queenside pawns where they stand.",
+          "The knight repositions toward d4 and the centre.",
+          "…a5 nails the queenside shut: White's a- and b-pawns can never advance, so there is no break left to play against Black's structure — the position is frozen solid.",
+          "White's rook swings across the fourth rank, probing for any crack.",
+          "…Rd1 infiltrates the back rank. With both rooks active, the bishop on its best diagonal, and the queenside fixed, Black has neutralised everything — Anand and Topalov soon repeated for the draw. The Classical Caro's flawless structure did its job."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "a3",
+              "to": "b2",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "title": "The Classical Hold (Anand–Topalov, Amber 2008)",
+        "highlights": [
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "intro": "Black to neutralise White's knight and extra space with pure activity.",
+        "sources": [
+          "book:caro-kann",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+        ],
+        "learnCues": [
+          "",
+          "…Rfd8 — seize the open d-file",
+          "",
+          "…Ba3 — active bishop, tie White down",
+          "",
+          "…Rd6 — lift, clear d8 to double",
+          "",
+          "…Rcd8 — both rooks own the file",
+          "",
+          "…Bb4 — the active diagonal, freeze b-pawns",
+          "",
+          "…a5 — fix the queenside, draw in hand",
+          "",
+          "…Rd1 — infiltrate; Black holds the draw"
+        ]
+      }
+    ],
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   }
 ]

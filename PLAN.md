@@ -208,6 +208,28 @@ kings-gambit Muzio/Allgaier/Classical, two-knights/scotch Max Lange gem lines,
 albin/schliemann gambits, sicilian-dragon Yugoslav (sharp). Per the soundness
 rule: a sac showcase is meant to be engine-negative.
 
+## ENDGAME LAYER — METHOD LOCKED + FLAGSHIP AUTHORED (D, this session 2026-05-30)
+David locked the build method into CLAUDE.md ("🔒 ENDGAME LAYER" rule): ground
+every endgame plan in a REAL master game that played the SAME variation being
+taught, walked into its ending — opening→middlegame→endgame as ONE continuous
+real line (never invented; G3). Tooling: `scripts/pick-endgame-game.mjs` (built
+this session) seeds the masters explorer on the taught variation, pulls real
+full PGNs via the `/api/lichess-game-export` proxy (BOTH proxies reachable from
+the sandbox — confirmed 200), classifies the ending, and surfaces the specific
+game + its endgame move tail + transition FEN. Proven on the Italian Pianissimo
+(Carlsen–Erigaisi 2025 R+B-vs-R draw) and the Caro Classical (3 real drawn
+R+minor+P games incl. the WO's Anand–Leko 2008).
+FLAGSHIP SHIPPED: `mp-carokann-main-endgame` — the Classical Caro endgame,
+grounded in Anand–Topalov (Amber 2008), a clean R+B-vs-R+N hold: Black doubles
+on the d-file (…Rfd8/…Rd6/…Rcd8), reroutes the bishop (…Ba3-b4), and fixes the
+queenside (…a5). 14 real board-verified moves, two registers, lead-the-eye
+highlights, sources resolvable. Wired into the Caro main tab
+(caroKannMasterclassTabs). All gates green (middlegamePlanThemes / planner /
+EndgamePlansSection / ship-check). Live render audit runs post-merge.
+REMAINING (same locked method, turnkey): caro-advance, french, qgd, slav,
+caro-exchange — each: pick a real same-variation drawn game via the tool,
+author the holding plan, wire its tab, gate, ship.
+
 ## ENDGAME LAYER — DATA PREPPED (2026-05-30 overnight), authoring teed up
 Ran scripts/extract-endgame-structures.mjs on the structural openings. The
 characteristic endgame is consistently R+minor+P (the minority-attack /
