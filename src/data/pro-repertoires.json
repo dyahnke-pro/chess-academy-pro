@@ -505,7 +505,7 @@
       "playerId": "gothamchess",
       "eco": "C44",
       "name": "Ponziani Opening (GothamChess)",
-      "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 bxc6",
+      "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5 Qb3 Nb6 cxd4 d6 Bb5 Be6",
       "color": "white",
       "style": "Tactical, Tricky",
       "overview": "The Ponziani is the ambush specialist's dream. Named after Italian theoretician Domenico Lorenzo Ponziani, who analyzed the opening in his 1769 chess book — making it one of the oldest named openings in chess; despite this 250-year pedigree, it never took off in serious tournament play and was relegated to footnote status for centuries. Only in the YouTube era have streamers and content creators (Levy among them) revived it as a surprise weapon for amateur play. 1.e4 e5 2.Nf3 Nc6 3.c3 — and your opponent stares at the board confused. 'What is this? Is this just a slow Italian? Should I play …Nf6? …d5?' That confusion IS the opening. 3.c3 prepares d4 with extra support; if Black answers ANYTHING that doesn't immediately challenge the centre, you crash through with 4.d4 and reach a position no Italian player has prepared.",
@@ -525,7 +525,7 @@
       "variations": [
         {
           "name": "Main Line 3...Nf6 4.d4",
-          "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 Nxe4 d5 Bc5 dxc6 Bxf2+ Ke2 bxc6",
+          "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5 Qb3 Nb6 cxd4 d6 Bb5 Be6",
           "explanation": "The sharpest Ponziani line — Black accepts the gambit and grabs e4 with the knight. White responds with 5.d5 attacking the c6-knight. Black's only real try is 5...Bc5! threatening Bxf2+ with discovered tactics. After 6.dxc6 (winning a pawn) Bxf2+! 7.Ke2 — the king walks into the centre, but it's actually safe there. Why? Because after 7...bxc6 (Black recovers the pawn via the open b-file), the position is theoretically balanced but practically explosive. White has a king on e2 looking exposed but with all pieces ready to develop; Black has a slight material advantage (gained the e4-pawn) but a wrecked structure (doubled c-pawns). The position favours whoever has studied it more. If you've watched Levy's video — that's you."
         },
         {
