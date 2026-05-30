@@ -631,6 +631,84 @@ to baby sit like this in the future."*
 This is the procedural playbook. Follow these steps in order for
 every new pro-rep opening build. Skip nothing. Don't reinvent.
 
+### 🚨 G9.3 THE FOUR HARD GATES THAT MAKE A PRO-REP BUILD REAL — locked David 2026-05-31 (after the GothamChess "Bg5 pins the knight to the queen" incident). READ BEFORE EVERY PRO-REP BUILD.
+
+The 2026-05-31 incident: an 18-opening GothamChess build shipped plans +
+model games + gems + pitfalls + tab routing for every opening — and looked
+"done" — but the **centerpiece was missing**. None of the 18 openings had a
+hand-authored `LessonScript`, so the Watch lesson fell through to the legacy
+`WalkthroughMode`, which plays the short 8-move `repertoire.json` pgn with
+**ungated, board-INACCURATE auto-generated annotations** (`src/data/annotations/`).
+David opened the Caro-Advance on prod and saw "5. Bg5 — Bg5 pins the knight to
+the queen, pressuring e7" on a board with **no knight on f6** — a hallucinated
+claim, on a line that **stopped in the opening and never reached a middlegame**.
+The session's audits passed it green because they only checked "does the text
+appear," never "is the text TRUE" or "does the line reach a middlegame." These
+four gates close every gap that incident exposed. A pro-rep opening that misses
+ANY of them is NOT done — it's an incomplete build no matter how much supporting
+content (plans/models/gems/pitfalls) exists.
+
+**GATE A — EVERY pro-rep opening MUST have a hand-authored `LessonScript`; the
+Watch must NEVER fall back to legacy `WalkthroughMode`.** Plans/models/gems/
+pitfalls are the SUPPORTING cast; the deep main-line Watch lesson is the STAR,
+and it only exists if `getLessonScript(opening.id)` returns a script (STEP 7-8).
+Without it, `OpeningDetailPage` renders `WalkthroughMode`, which sources its
+per-move text from the LLM-bulk-generated `src/data/annotations/` files — these
+are NOT board-verified, NOT gated, and routinely hallucinate (the "pins the
+knight" with no knight). **The auto-generated annotations are BANNED as the
+narration source for any masterclass or pro-rep opening.** Detect the failure:
+the legacy mode renders `[data-testid="walkthrough-progress"]` / `[data-testid="walkthrough-back"]`
+and a "Move X / N" counter; the curated `LessonPlayer` does not. If Watch shows
+the walkthrough testids, the opening has no lesson — FAIL.
+
+**GATE B — THE OPENING LINE MUST REACH A MIDDLEGAME.** The entry's `pgn` (and
+EVERY variation's `pgn`, and the Watch LessonScript's main spine) must be the
+DEEP aggregate spine walked to a middlegame terminus per §G9.1 step 3 — NOT a
+short opening fragment. "Reaches the middlegame" = the `variationMiddlegameDepth`
+definition (both sides developed / castled, ≥ ~12 moves of real play). A Watch
+that shows "Move 5 / 8" and stops with pieces still on the back rank is the bug.
+Extend the spine from the player's most-played continuation until a middlegame
+is reached; never ship an 8-move opening fragment as the lesson.
+
+**GATE C — THE MIDDLEGAME PLANS PICK UP WHERE THE OPENING ENDS (continuity).**
+Opening → middlegame is ONE continuous line. Each variation's middlegame plan
+`criticalPositionFen` MUST be the opening spine's TERMINAL position (or a
+position directly continuing it), so the student watches the opening reach the
+middlegame and the plan resumes from that EXACT position. A plan anchored at a
+random unrelated FEN that doesn't connect to where the Watch left off is wrong —
+re-anchor it to the spine terminus.
+
+**GATE D — MOVE SKELETON BEFORE PROSE (the build ORDER, David 2026-05-31
+verbatim: "extend opening to the middle game and have the middle game plans pick
+up where openings left off BEFORE narrations are made").** The locked build
+order for every opening: **(1)** extend the opening spine to the middlegame from
+the player's games; **(2)** anchor/connect the middlegame plans at the spine
+terminus (Gate C); **(3)** ONLY THEN author the narration (LessonScript beats +
+plan/model/gem narration). Do not write a single word of narration until the
+move skeleton — opening→middlegame→plan continuity — is locked and verified.
+Narration over a broken skeleton is wasted work and hides the structural bug.
+
+**AUDITS VERIFY TRUTH, NOT TEXT-PRESENCE (the meta-lesson).** "Does the word
+'plan' appear in the DOM" is a worthless check. Every pro-rep audit MUST assert:
+(a) Watch renders the curated `LessonPlayer`, NOT `WalkthroughMode` (no
+`walkthrough-progress` testid); (b) the Watch line reaches a middlegame (move
+count ≥ threshold); (c) **narration board-accuracy** — replay the PGN to the
+displayed move and verify every piece/square claim in the spoken text is TRUE on
+the board (no "the knight on f6" when f6 is empty; no "pins the knight" when no
+knight is pinned). The `narrationAccuracy` gate enforces (c) for curated lessons
+at build time — which is exactly why Gate A (every pro-rep opening IS a curated
+lesson) is load-bearing: it brings the pro-rep narration UNDER the accuracy gate
+instead of leaving it in the ungated auto-annotation swamp. `scripts/audit-gotham-watch-depth-prod.mjs`
+is the runtime detector for Gates A + B; run it against PROD after every pro-rep
+deploy. **Prod IS reachable** — when a deploy looks cap-blocked, RE-CHECK the
+bundle hash before falling back to localhost; the 2026-05-31 session wrongly
+called prod "cap-blocked" for hours when the deploy had in fact landed.
+
+When you build (or REPAIR) a pro-rep opening, satisfy A→B→C→D in that order, then
+write the audit that proves all four, then run it on prod. Supporting content
+(plans/models/gems/pitfalls) is necessary but NOT sufficient — the curated,
+middlegame-reaching, continuous Watch lesson is what makes it a masterclass.
+
 #### STEP 0 — Verify the player's data is on disk
 
 ```bash
@@ -784,14 +862,27 @@ yt-dlp --write-auto-sub --skip-download --sub-format vtt \
 Don't burn time fighting YouTube from sandbox — accept the
 limitation, work with what's reachable, route the rest to David.
 
-#### STEP 7 — Author the lessons
+#### STEP 7 — Author the lessons (🚨 NOT OPTIONAL — see G9.3 Gate A)
+
+🚨 **This step is the STAR of the build, not a nice-to-have.** Skipping it (as
+the 2026-05-31 GothamChess build did) means the Watch falls back to the legacy
+`WalkthroughMode` with board-inaccurate auto-annotations — a broken masterclass
+no matter how many plans/models you authored. EVERY pro-rep opening MUST end
+this step with a registered `LessonScript`.
+
+🚨 **DO STEP 7 ONLY AFTER THE MOVE SKELETON IS LOCKED (G9.3 Gate D).** Before
+writing one word of `say`/`sayShort`: (1) the opening `pgn` reaches a middlegame
+(Gate B); (2) the middlegame plans are anchored at the opening's terminus
+(Gate C). Narration comes LAST.
 
 Per opening: ONE main lesson file at `src/data/lessons/pro<Player><Opening>.ts`
 + a variations file at `src/data/lessons/pro<Player><Opening>Variations.ts`.
 
-**Main lesson** (~12-20 beats):
-- Opening phase: walk the aggregate spine, cite per-ply game counts
-- 1 middlegame pattern beat
+**Main lesson** (~12-20 beats) — the spine MUST reach a middlegame (Gate B), and
+the final opening beat MUST hand off to the same position the main middlegame
+plan picks up from (Gate C — opening→middlegame is one continuous line):
+- Opening phase: walk the aggregate spine to the middlegame, cite per-ply counts
+- 1 middlegame pattern beat (continues from the opening terminus)
 - 1 endgame structure beat
 
 **Per-variation lessons** (~8-12 beats each):
@@ -844,6 +935,13 @@ clears every masterclass gate (depth, source-verification,
 narration-grounding, etc.), promote it. NOT a prerequisite.
 
 #### STEP 9 — Author middlegame + endgame plans (per the data)
+
+🚨 **CONTINUITY (G9.3 Gate C): each plan's `criticalPositionFen` MUST be the
+opening spine's TERMINAL position for that variation** (where the Watch lesson
+hands off) — or a position directly continuing it — so opening→middlegame is one
+unbroken line. Do NOT anchor a plan at an unrelated FEN that doesn't connect to
+where the opening leaves off. Derive the anchor by playing the variation's deep
+`pgn` (extended to the middlegame in Gate B) to its end and using that FEN.
 
 For each plan identified in STEP 5, add to `src/data/middlegame-plans.json`:
 
@@ -956,9 +1054,26 @@ npx vitest run src/data/lessons/ src/data/pro-repertoires.test.ts \
   src/data/proRepertoireSources.test.ts \
   src/data/pro-repertoires-orientation.test.ts \
   src/data/modelGames.test.ts src/data/modelGames-orientation.test.ts \
-  src/data/middlegamePlanThemes.test.ts
+  src/data/middlegamePlanThemes.test.ts \
+  src/data/narrationAccuracy.test.ts src/data/variationMiddlegameDepth.test.ts \
+  src/data/proRepLessonCoverage.test.ts   # G9.3 Gates A/B/C — see below
 npm run ship-check       # must print READY TO PUSH
 ```
+
+🚨 **G9.3 GATE CHECKS (the 2026-05-31 additions — must pass before ship):**
+- **Gate A — `proRepLessonCoverage`:** every `pro-*` opening in
+  `pro-repertoires.json` has a registered `LessonScript`
+  (`getLessonScript(id)` is non-null) so Watch never hits the legacy
+  `WalkthroughMode`. (Build this gate if it doesn't exist yet — it's the
+  ship-block that would have caught the GothamChess miss.)
+- **Gate B — `variationMiddlegameDepth`:** the main `pgn` AND every variation
+  `pgn` reach a middlegame (not an 8-move opening fragment).
+- **Gate C — continuity:** each variation's main plan `criticalPositionFen`
+  equals (or directly continues) that variation's deep-`pgn` terminal FEN.
+- **`narrationAccuracy`:** every curated lesson beat's board-claims are true on
+  the board — this is the gate that catches "pins the knight" with no knight,
+  but ONLY because Gate A forces the pro-rep narration to live in a curated
+  lesson instead of the ungated `src/data/annotations/` swamp.
 
 Common gate trips and their fixes:
 - **lessonSources** baseline-free: every lesson cites a
@@ -1008,9 +1123,22 @@ curl -sS https://chess-academy-pro.vercel.app/ | grep -oE '/assets/index-[A-Za-z
 # Run the 3-instrument audit
 AUDIT_SANDBOX=1 node scripts/audit-pro-naroditsky-prod.mjs
 # (clone the script for other pros)
+
+# AND the G9.3 Watch-depth audit (Gates A + B) against PROD — proves the Watch
+# uses the curated lesson and reaches a middlegame, per opening:
+AUDIT_SANDBOX=1 node scripts/audit-gotham-watch-depth-prod.mjs
 ```
 
-**Done = 14+ audit checks green + voice fires + Dexie has entries.**
+**Done = 14+ audit checks green + voice fires + Dexie has entries + the
+G9.3 Watch-depth audit is GREEN (every opening's Watch is a curated lesson
+reaching a middlegame — 0 legacy fallbacks, 0 short lines).**
+
+🚨 **Prod IS reachable — verify the bundle hash before claiming "cap-blocked."**
+The 2026-05-31 session spent hours calling prod "Vercel-cap-blocked" and
+auditing only localhost, when the deploy had in fact landed. Re-`curl` the live
+bundle hash (`/?cb=$(date +%s)`) and confirm it's stale vs your push BEFORE
+falling back to localhost. Localhost is the fallback ONLY when the bundle is
+provably stale; never claim a surface "shipped on prod" on localhost evidence.
 
 ---
 

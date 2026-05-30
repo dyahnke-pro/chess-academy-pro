@@ -173,6 +173,7 @@ const GATE_TESTS = [
   'src/data/lessons/pircIntegrity.test.ts',
   'src/data/repertoire-orientation.test.ts',
   'src/data/pro-repertoires-orientation.test.ts',
+  'src/data/proRepLessonCoverage.test.ts',     // G9.3 Gate A — every pro-rep opening has a curated LessonScript
   'src/data/variationMiddlegameDepth.test.ts',
   'src/data/openingManifests.test.ts',
   'src/data/modelGames.test.ts',
