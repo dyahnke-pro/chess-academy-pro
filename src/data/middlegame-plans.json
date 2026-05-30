@@ -3262,17 +3262,27 @@
   {
     "id": "mp-carokann-main",
     "openingId": "caro-kann",
-    "criticalPositionFen": "r2q1rk1/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/1K1R3R w - - 6 14",
+    "criticalPositionFen": "rn1qkbnr/pp3pp1/2p1p1bp/8/3P1P1P/6N1/PPP3P1/R1BQKBNR w KQkq - 0 8",
     "title": "Caro Classical: The …c5 Counter-Race",
     "overview": "Black has traded the problem light-bishop and built the c6-d5-e6 wall with no weak pieces. White castles long for a kingside storm; Black's answer is the …c5 break, prising open the c-file and the b-file at White's king while the rock-solid structure shrugs off the attack the other way.",
     "pawnBreaks": [
-      "…c5 to open lines at White’s king",
-      "…b5-b4 to follow up on the queenside"
+      {
+        "move": "…c6-c5 — the central break",
+        "explanation": "After trading the light-squared bishop and developing, …c5 strikes at d4 and opens lines for Black’s counterplay.",
+        "fen": "rn1qkbnr/pp3pp1/2p1p1bp/8/3P1P1P/6N1/PPP3P1/R1BQKBNR w KQkq - 0 8"
+      }
     ],
     "pieceManeuvers": [
-      "…Nc5 hitting the d3-queen with tempo",
-      "…Rc8/…Qa5 on the queenside",
-      "…Nb6-c4 to the outpost"
+      {
+        "piece": "Bishop",
+        "route": "…Bg6-h7 then trade on d3",
+        "explanation": "The good bishop reaches safety on h7, then trades off White’s dangerous attacking bishop."
+      },
+      {
+        "piece": "Queen",
+        "route": "…Qc7 — the b8-h2 diagonal and the c-file",
+        "explanation": "The queen eyes the kingside diagonal and supports queenside castling and the …c5 break."
+      }
     ],
     "strategicThemes": [
       "Opposite-side castling race",
@@ -3284,92 +3294,147 @@
     ],
     "playableLines": [
       {
-        "fen": "r2q1rk1/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/1K1R3R w - - 6 14",
+        "fen": "rn1qkbnr/pp3pp1/2p1p1bp/8/3P1P1P/6N1/PPP3P1/R1BQKBNR w KQkq - 0 8",
         "moves": [
-          "Rhe1",
-          "c5",
-          "dxc5",
-          "Nxc5"
+          "Nf3",
+          "Nd7",
+          "h5",
+          "Bh7",
+          "Bd3",
+          "Bxd3",
+          "Qxd3",
+          "Ngf6",
+          "Bd2",
+          "Qc7",
+          "O-O-O",
+          "c5"
         ],
         "annotations": [
-          "Rhe1 swings the rook to the centre.",
-          "…c5 is the thematic break, striking d4 and opening the c-file toward White’s king.",
-          "dxc5 accepts.",
-          "…Nxc5 recaptures and hits the queen on d3 with tempo — Black is first in the race."
+          "White completes development with Nf3, the kingside mobilized behind the h4-h5 space-grab.",
+          "…Nd7 develops toward f6 and prepares to challenge the centre — the Classical Caro's calm, sound setup.",
+          "White gains more kingside space with h5, fixing the g6-bishop.",
+          "…Bh7 tucks the light-squared bishop to safety; it has done its job on the b1-h7 diagonal.",
+          "White offers the bishop trade with Bd3.",
+          "…Bxd3 takes it — trading off White's attacking light-squared bishop eases Black's defence.",
+          "White recaptures with the queen.",
+          "…Ngf6 develops with tempo and completes the kingside.",
+          "White readies queenside castling with Bd2.",
+          "…Qc7 eyes the b8-h2 diagonal and prepares to castle queenside, contesting the c-file.",
+          "White castles long, committing to opposite wings.",
+          "…c5! The thematic central break: Black strikes at d4 and opens lines for counterplay. This is the Classical Caro's plan — trade the bad bishop, develop soundly, and hit back with …c5. Topalov outplayed Mamedyarov from this balanced footing."
         ],
-        "title": "Caro Classical: The …c5 Counter-Race",
         "arrows": [
           [],
           [],
           [],
-          [
-            {
-              "from": "c5",
-              "to": "d3",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
+        "title": "The Classical Plan (Mamedyarov–Topalov)",
         "highlights": [
           [
             {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h1",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
+        "intro": "Black develops soundly, trades the bad bishop, and breaks with …c5.",
         "sources": [
           "book:caro-kann",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ],
         "learnCues": [
-          "Rhe1 — swing the rook centrally",
-          "c5 — the thematic break",
-          "dxc5 — accept",
-          "Nxc5 — recapture, hit the queen"
+          "",
+          "…Nd7 — develop, eye the centre",
+          "",
+          "…Bh7 — bishop to safety",
+          "",
+          "…Bxd3 — trade White's attacker",
+          "",
+          "…Ngf6 — develop with tempo",
+          "",
+          "…Qc7 — eye b8-h2, ready O-O-O",
+          "",
+          "…c5 — the central break"
         ]
       }
     ]
