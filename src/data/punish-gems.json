@@ -3564,5 +3564,80 @@
     "materialDelta": 0,
     "tier": "positional",
     "why": "At your level opponents play Qb3 here in 26% of games. Punish with the best move O-O — the engine has Black clearly better (+0.7)."
+  },
+  {
+    "openingId": "pro-gothamchess-vienna",
+    "lineMoves": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3",
+    "inaccuracy": "Bc5",
+    "freqPct": 7.3,
+    "games": 9887,
+    "practicalScore": 65,
+    "mainMove": "Be6",
+    "punish": "d4",
+    "punishSeq": [
+      "d4",
+      "Be7",
+      "Bd3",
+      "O-O",
+      "h4",
+      "f6",
+      "Qh5",
+      "g6"
+    ],
+    "playLine": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 Bc5 d4 Be7 Bd3 O-O h4 f6 Qh5 g6",
+    "engineCp": 137,
+    "materialDelta": 0,
+    "tier": "confirmed",
+    "why": "At your level opponents play Bc5 here in 7% of games. Punish with the best move d4 — the engine has White clearly better (+1.4)."
+  },
+  {
+    "openingId": "pro-gothamchess-vienna",
+    "lineMoves": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3",
+    "inaccuracy": "d4",
+    "freqPct": 3,
+    "games": 124,
+    "practicalScore": 56,
+    "mainMove": "Nc6",
+    "punish": "Nf3",
+    "punishSeq": [
+      "Nf3",
+      "Nc6",
+      "Bb5",
+      "Qb6",
+      "Bc4",
+      "Na5",
+      "Bd5",
+      "Be6"
+    ],
+    "playLine": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 d4 Nf3 Nc6 Bb5 Qb6 Bc4 Na5 Bd5 Be6",
+    "engineCp": 85,
+    "materialDelta": 0,
+    "tier": "positional",
+    "why": "At your level opponents play d4 here in 3% of games. Punish with the best move Nf3 — the engine has White clearly better (+0.8)."
+  },
+  {
+    "openingId": "pro-gothamchess-vienna",
+    "lineMoves": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3",
+    "inaccuracy": "d4",
+    "freqPct": 7.5,
+    "games": 119,
+    "practicalScore": 50,
+    "mainMove": "Bf5",
+    "punish": "Bb5",
+    "punishSeq": [
+      "Bb5",
+      "Qb6",
+      "Bc4",
+      "Na5",
+      "Bd5",
+      "Be6",
+      "Bxe6",
+      "Qxe6"
+    ],
+    "playLine": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3 d4 Bb5 Qb6 Bc4 Na5 Bd5 Be6 Bxe6 Qxe6",
+    "engineCp": 73,
+    "materialDelta": 0,
+    "tier": "positional",
+    "why": "At your level opponents play d4 here in 7% of games. Punish with the best move Bb5 — the engine has White clearly better (+0.7)."
   }
 ]

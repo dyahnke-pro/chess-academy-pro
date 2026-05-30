@@ -2546,6 +2546,99 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:pos-development', 'concept:pos-outpost', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
   },
+
+  // ── GothamChess Vienna Gambit (student = WHITE) ──────────────────────────
+  // Bc5?! instead of Be6 in the gambit main: White grabs the centre with d4
+  // and gets a clear edge (positional, +1.4). 20 plies; Bc5 at 11, d4 at 12.
+  'pro-gothamchess-vienna:e4_e5_Nc3_Nf6_f4_d5_fxe5_Nxe4_Qf3_Nxc3_bxc3:Bc5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Bc5?! Black develops the bishop actively, but it bites on granite and leaves the d5-pawn and the centre to White.',
+      'd4 — the punish. White seizes the centre with tempo, hitting the c5-bishop and rolling the big pawn duo forward.',
+      '…Be7 — the bishop has to retreat, having achieved nothing.',
+      'Bd3 — White trains the bishop on the h7-square, building the kingside attack.',
+      '',
+      'h4 — the pawn storm begins; White is clearly better with the centre and the initiative.',
+      '',
+      'Qh5 — the queen joins the kingside build-up, eyeing f7 and h7.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Bc5 — bites on granite',
+      'd4 — seize the centre with tempo',
+      'Be7 — the bishop retreats',
+      'Bd3 — aim at h7',
+      '',
+      'h4 — storm, White is better',
+      '',
+      'Qh5 — join the attack',
+      '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-development', 'https://www.chess.com/openings/Vienna-Game-Vienna-Gambit'],
+  },
+
+  // …c5 then …d4?! early instead of …Nc6: White ignores it and develops Nf3,
+  // keeping the better structure and the c3/d3 clamp (positional, +0.85).
+  // 22 plies; d4 at 13, Nf3 at 14.
+  'pro-gothamchess-vienna:e4_e5_Nc3_Nf6_f4_d5_fxe5_Nxe4_Qf3_Nxc3_bxc3_c5_Qg3:d4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd4?! Black grabs space, but pushing past gives up the central tension and the d4-pawn will become a target rather than a strength.',
+      'Nf3 — White simply develops, eyeing the loose d4-pawn and refusing to be distracted by the advance.',
+      '…Nc6 — Black defends the pawn and develops.',
+      'Bb5 — the pin, tying the c6-knight to the defence of the over-extended pawn.',
+      '',
+      'Bc4 — the bishop repositions to hit the d5 and f7 squares.',
+      '',
+      'Bd5 — White clamps the strong central outpost; the bishop dominates and White is clearly better.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd4 — over-extends, becomes a target',
+      'Nf3 — develop, eye the d4-pawn',
+      'Nc6 — Black defends',
+      'Bb5 — pin the defender',
+      '',
+      'Bc4 — reposition the bishop',
+      '',
+      'Bd5 — clamp the outpost, White better',
+      '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-outpost', 'https://www.chess.com/openings/Vienna-Game-Vienna-Gambit'],
+  },
+
+  // …Nc6 then …d4?! instead of …Bf5: same premature push; White pins with Bb5
+  // and trades into the better structure (positional, +0.73).
+  // 24 plies; d4 at 15, Bb5 at 16.
+  'pro-gothamchess-vienna:e4_e5_Nc3_Nf6_f4_d5_fxe5_Nxe4_Qf3_Nxc3_bxc3_c5_Qg3_Nc6_Nf3:d4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd4?! Pushing the pawn again over-extends; it leaves d5 weak and hands White a clear target on d4.',
+      'Bb5 — the pin. White ties the c6-knight to the d4-pawn’s defence and prepares to pile on.',
+      '',
+      'Bc4 — the bishop swings to the a2-g8 diagonal, eyeing d5 and f7.',
+      '',
+      'Bd5 — the bishop reaches its dream square, clamping the centre.',
+      '',
+      'Bxe6 — White trades to damage the structure; after the recapture the d4-pawn is weak and White is clearly better.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd4 — over-extends, weakens d5',
+      'Bb5 — pin the defender',
+      '',
+      'Bc4 — swing to the diagonal',
+      '',
+      'Bd5 — the dream square',
+      '',
+      'Bxe6 — damage the structure, White better',
+      '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-outpost', 'https://www.chess.com/openings/Vienna-Game-Vienna-Gambit'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

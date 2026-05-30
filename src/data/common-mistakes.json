@@ -1940,5 +1940,55 @@
         "https://en.wikipedia.org/wiki/English_Opening"
       ]
     }
+  ],
+  "pro-gothamchess-vienna": [
+    {
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
+      "wrongMove": "g3",
+      "correctMove": "f4",
+      "explanation": "The whole point of the Vienna against …Nf6 is the gambit f4! — striking at the e5-pawn and opening the f-file for a kingside attack. The quiet g3 fianchetto is playable but throws away the Vienna's sting and lets Black equalise easily. When Black allows it, play the gambit: f4 is the move that makes the Vienna dangerous.",
+      "shortNarration": "f4 — the Vienna Gambit punch",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Vienna-Game",
+        "https://en.wikipedia.org/wiki/Vienna_Game"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
+      "wrongMove": "exd5",
+      "correctMove": "fxe5",
+      "explanation": "After the central clash with …d5, the principled capture is fxe5! — hitting the f6-knight and keeping the f-file open for the attack. The natural-looking exd5 instead opens the centre for Black's pieces and surrenders the whole point of the gambit. Take toward the centre with the f-pawn, chase the knight, and keep the initiative.",
+      "shortNarration": "fxe5 — chase the knight, keep the f-file",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Vienna-Game",
+        "https://en.wikipedia.org/wiki/Vienna_Game"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5",
+      "wrongMove": "Nxe4",
+      "correctMove": "Qf3",
+      "explanation": "When Black grabs on e4, the strong move is Qf3! — double-attacking the e4-knight and the f7-square, forcing favourable simplification. Recapturing immediately with Nxe4 lets Black play …dxe4 hitting nothing and equalising the structure. The Qf3 zwischenzug is the engine-approved heart of the Vienna Gambit main line — pressure first, recapture later.",
+      "shortNarration": "Qf3 — double-attack e4 and f7",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Vienna-Game",
+        "https://en.wikipedia.org/wiki/Vienna_Game"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
+      "wrongMove": "Bc4",
+      "correctMove": "e5",
+      "explanation": "When Black accepts the gambit with …exf4, the most testing reply is e5! — kicking the f6-knight back to g8 and grabbing a big space advantage while Black is undeveloped. The quiet Bc4 lets Black consolidate the extra pawn with …d5. Stake the centre at once: e5 cramps Black and gives White the lead in development that justifies the gambit.",
+      "shortNarration": "e5 — kick the knight, grab space",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Vienna-Game",
+        "https://en.wikipedia.org/wiki/Vienna_Game"
+      ]
+    }
   ]
 }

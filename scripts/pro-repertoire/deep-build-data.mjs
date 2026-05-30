@@ -31,6 +31,17 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 // SAN prefix that defines reaching its position. The "color" field
 // tells us which side the player is on (white/black).
 const OPENINGS = {
+  'vienna': {
+    color: 'white',
+    studentUsername: 'GothamChess',
+    variations: {
+      'gambit-main': { label: 'Vienna Gambit main (f4 d5)', prefix: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5'] },
+      'gambit-f5':   { label: 'Gambit with …f5',            prefix: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5', 'fxe5', 'Nxe4', 'Qf3', 'f5'] },
+      'gambit-nc6':  { label: 'Gambit with …Nc6',           prefix: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5', 'fxe5', 'Nxe4', 'Qf3', 'Nc6'] },
+      'quiet-bc4':   { label: 'Quiet Bc4 + d3 system',      prefix: ['e4', 'e5', 'Nc3', 'Nc6', 'Bc4'] },
+      'gambit-accepted': { label: 'Gambit accepted …exf4',  prefix: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'exf4'] },
+    },
+  },
   'english': {
     color: 'white',
     studentUsername: 'GothamChess',
