@@ -19,6 +19,7 @@ import { PRO_GOTHAMCHESS_KIA_LESSON } from './proGothamchessKIA';
 import { PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON } from './proGothamchessClosedSicilian';
 import { PRO_GOTHAMCHESS_FRENCH_DEFENSE_LESSON } from './proGothamchessFrenchDefense';
 import { PRO_GOTHAMCHESS_PIRC_DEFENSE_LESSON } from './proGothamchessPircDefense';
+import { PRO_GOTHAMCHESS_CARO_ADVANCE_VARIATION_LESSONS } from './proGothamchessCaroAdvanceVariations';
 import { PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS } from './proNaroditskyCaroKannVariations';
 import { PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS } from './proNaroditskyAlapinVariations';
 import { PRO_NARODITSKY_KID_VARIATION_LESSONS } from './proNaroditskyKIDVariations';
@@ -270,6 +271,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_NARODITSKY_RUY_VARIATION_LESSONS,
   ...PRO_NARODITSKY_ALEKHINE_VARIATION_LESSONS,
   ...PRO_NARODITSKY_JOBAVA_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_CARO_ADVANCE_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
