@@ -60,7 +60,16 @@ Ship the whole batch at once when the Vercel cap clears.
       vs the critical reply — DUBIOUS showcases; left as-is for now, candidates
       to demote to warnings/drop — flagged for a considered call); Nimzowitsch
       converges with main (fold candidate).
-- [ ] alekhine, vienna(check), london, birds, scandinavian, four-knights,
-      queens-gambit, pirc, scotch, petrov, trompowsky — then trims
+- [x] alekhine-defence MAIN — tail rebuilt on data ...Nc6 line (38p->30p,
+      engine -0.33, gates green).
+- [LEAVE] london-system MAIN — sound + instructive (the ...Qb6 b2-poisoned-pawn
+      antidote teaches the London's ideas); the data c3/Nbd2 line is more common
+      but ends equal w/ the bishop traded, teaching the ideas worse. Playbook
+      main-line showcase exemption → LEAVE.
+- [ ] Next: vienna(check sharp-showcase), birds, scandinavian, four-knights
+      Rubinstein, queens-gambit Anti-QGD, pirc, scotch Steinitz, petrov,
+      trompowsky. Plus the deep-tail TRIMS (nimzo/qgd/grunfeld/queens-indian).
+- [DECISION NEEDED] philidor Antoshin(-1.58)/Counter-Gambit(-1.68) dubious —
+      demote to warnings or drop? (left as-is pending a call)
 ## Nonnegotiables unchanged: data-chosen lines, reach middlegame, traps stay,
 ## narrations change, no invented moves, no cut corners. Batch-ship.
