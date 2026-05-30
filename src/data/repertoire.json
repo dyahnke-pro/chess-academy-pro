@@ -1241,7 +1241,7 @@
       },
       {
         "name": "Gubinsky-Melts (3...Qd8)",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 Bc4 e6 h3 Bh5 O-O",
+        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 Bg4 Bc4 e6 h3 Bh5 O-O c6 Bg5 Be7 Re1 O-O Qd3 Nbd7 Ne5 Nxe5",
         "explanation": "The Gubinsky-Melts retreat with 3...Qd8 looks passive but avoids all queen harassment lines and allows Black to develop naturally. The queen retreats only once instead of being chased around the board, saving tempo in the long run. Black plays ...Bg4 to pin the f3 knight and ...e6 supports the structure. The h3-Bh5 sequence is forced and Black completes development with ...Nc6 and ...Be7 next.",
         "shortExplanation": "Gubinsky-Melts ...Qd8 retreat avoids harassment. ...Bg4 pin + ...e6 + classical development."
       },
@@ -1814,7 +1814,7 @@
       },
       {
         "name": "Bf4 QGD",
-        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bf4 Be7 e3 O-O Nf3 Nbd7 c5 Nh5 Bd3 Nxf4 exf4 b6 b4 a5 a3 Ba6",
+        "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bf4 Be7 e3 O-O Nf3 Nbd7 c5 Nh5 Bd3 Nxf4 exf4 b6 b4 a5 a3 c6 O-O Qc7 g3 Ba6 Bxa6 Rxa6 Qe2 Raa8 Kg2 Bf6",
         "explanation": "When White avoids Bg5 entirely and plays Bf4, the character of the game changes significantly. Black doesn't face the pin on the Nf6, so the light-squared bishop problem is less acute. Black can aim for ...Nh5 to challenge the Bf4 directly, or develop with ...b6 and ...Ba6 exchanging light-squared bishops. The resulting positions are quieter but strategically rich, with play revolving around the queenside pawn structure and the fight for control of e5."
       }
     ],
