@@ -1355,7 +1355,7 @@
       },
       {
         "name": "Nimzowitsch Variation",
-        "pgn": "e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O Qe2 c6 Rd1 Qc7 a4 b6 dxe5 dxe5 Bg5 Bb7 Nh4 Nc5 Nf5 Rfe8 Nxe7+ Rxe7 Rd2 Rad8",
+        "pgn": "e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 O-O O-O Qe2 c6 a4 exd4 Nxd4 Re8 Ba2 Bf8 Qf3",
         "explanation": "In the Nimzowitsch setup, White plays Qe2 and Rd1 to control the d-file, aiming for a positional squeeze. Black responds with ...c6, ...Qc7, and ...b6 to develop the bishop to b7 where it supports the central ...d5 break. After White exchanges on e5, the position opens slightly but Black's pieces are well-coordinated. The light-squared bishop on b7 becomes a powerful piece once the center is contested, and ...Nc5 targets both e4 and a4."
       },
       {
@@ -1851,7 +1851,7 @@
       },
       {
         "name": "Smyslov Variation 3...a6",
-        "pgn": "d4 d5 c4 dxc4 Nf3 a6 e3 Nf6 Bxc4 e6 O-O c5 Qe2 Nc6 Rd1 b5 Bb3 cxd4 exd4 Be7 Nc3",
+        "pgn": "d4 d5 c4 dxc4 Nf3 a6 e3 Nf6 Bxc4 e6 O-O c5 dxc5 Bxc5 Qxd8+ Kxd8 Be2 Ke7 Nbd2 Bd7 b3 Bb5",
         "explanation": "Smyslov's idea of 3...a6 immediately prepares ...b5 to hold the c4 pawn or at least gain queenside space. The move is flexible, keeping Black's options open for various pawn structures. After ...Nf6, ...e6, and ...c5, the position transposes into a favorable version of the main line where Black's ...a6 is already in. The critical line involves d5 and piece exchanges leading to a balanced middlegame where Black's bishop pair provides long-term compensation."
       },
       {
