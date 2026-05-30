@@ -46078,8 +46078,8 @@
     "id": "mp-progothamchess-tromp-e6-bishoppair",
     "openingId": "pro-gothamchess-trompowsky",
     "criticalPositionFen": "rnbq1rk1/p1p1bpp1/1p2pn1p/3p4/3P3B/2PBP3/PP1N1PPP/R2QK1NR w KQ - 1 8",
-    "title": "Trompowsky vs …e6: Bishop-Pair + f4 Pawn Storm",
-    "overview": "His main-line plan against the solid …e6 setup, across 464 games. White trades the dark bishop for the f6-knight to claim the bishop pair, then rolls the kingside with f4 and lines the queen up behind the d3-bishop. Black's light-squared bishop gets traded off, leaving White with a space edge and the easier attacking plan. Classic Trompowsky: trade, then push.",
+    "title": "Trompowsky vs …e6: Trade on f6 + the f4 Pawn Storm",
+    "overview": "His main-line plan against the solid …e6 setup, across 464 games. White trades the dark-squared bishop for the f6-knight — not for the bishop pair (Black keeps two bishops), but to clear the way for the f4-f5 pawn storm. The bishop that recaptures on f6 lands right in the path of the f-pawn, becoming a target. White rolls the kingside with f4, lines the queen up behind the d3-bishop, and plays for a direct attack with the space edge. Classic Trompowsky: trade, then push.",
     "pawnBreaks": [
       "f2-f4 storming the kingside",
       "c3-c4 challenging the d5-centre later"
@@ -46090,7 +46090,7 @@
       "Ba6/Bxd3 trade-down"
     ],
     "strategicThemes": [
-      "Trade for the bishop pair on f6",
+      "Trade for the kingside storm on f6",
       "Storm with f4 on the kingside",
       "A space edge and the easier game"
     ],
@@ -46108,8 +46108,8 @@
           "Qe2"
         ],
         "annotations": [
-          "Bxf6 — White cashes in the dark bishop for the knight, taking the bishop pair before Black can untangle.",
-          "…Bxf6 recaptures; Black’s remaining bishop is the passive one.",
+          "Bxf6 — White cashes in the dark-squared bishop for the knight, clearing the f6-square for the f-pawn storm to come.",
+          "…Bxf6 recaptures; that bishop now sits directly in the path of our advancing f-pawn.",
           "f4 — the pawn storm begins. White grabs kingside space and prepares f5 to crack open Black’s king.",
           "…Ba6 — Black offers to trade the bad light bishop off via a6.",
           "Qe2 — White lines the queen up behind the d3-bishop and guards the trade square, keeping the attacking bishop. The space edge and the f-pawn roller give White the easier game."
