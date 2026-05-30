@@ -15581,124 +15581,143 @@
   {
     "id": "mp-progothamchess-caro-advance-h4-pin",
     "openingId": "pro-gothamchess-caro-advance-white",
-    "criticalPositionFen": "rn1qkbnr/pp2ppp1/2p5/3pPbBp/3P3P/8/PPP2PP1/RN1QKBNR b KQkq - 1 5",
-    "title": "Caro-Advance — h4 + Bg5 cramping setup",
-    "overview": "Gotham's anti-Caro from White's side at 423 games / 73.2% score. The h4-h5 pin fixes Black's kingside; Bg5 pressures the king's knight; the Bxd3 trade simplifies favourably for White.",
+    "criticalPositionFen": "r3k2r/pp1nbpp1/1q2p3/3pPnBp/3P3P/3Q1N2/PP1N1PP1/2R1K2R w Kkq - 2 13",
+    "title": "Caro-Advance Main Line: the c-File and the e5-Wedge",
+    "overview": "The main h4 line reaches a rich middlegame. A real GothamChess game (vs vpantev): castle, trade off the questioned bishop, reroute the knight to b3, and lift a rook to c3 to fight for the half-open c-file. Balanced and double-edged, with the e5-wedge as White’s long-term trump.",
     "pawnBreaks": [
-      "c2-c4 expanding the queenside",
-      "f2-f4 supporting the kingside attack"
+      {
+        "move": "e5-wedge",
+        "explanation": "The e5-pawn cramps Black and shields White’s kingside space (g4, h5).",
+        "fen": "r3k2r/pp1nbpp1/1q2p3/3pPnBp/3P3P/3Q1N2/PP1N1PP1/2R1K2R w Kkq - 2 13"
+      }
     ],
     "pieceManeuvers": [
-      "…Qb6 by Black putting pressure on b2",
-      "Bd3 + Bxd3 trade-down",
-      "Knight reroute via Nd2"
+      {
+        "piece": "Rook",
+        "route": "Rc1-c3",
+        "explanation": "A rook lift to c3 contests the half-open c-file and can swing across the third rank."
+      }
     ],
     "strategicThemes": [
-      "h4 fixes Black's kingside structure permanently",
-      "Bishop pair vs Black's locked-in pieces"
+      "Contest the half-open c-file with a rook lift.",
+      "Reroute the knight via b3 toward c5 and a5 outposts."
     ],
     "endgameTransitions": [
-      "R+minor+P endgames where Black's structural weaknesses tell"
+      "Control of the c-file and the e5-space give White the more comfortable simplification."
     ],
     "playableLines": [
       {
-        "fen": "rn1qkbnr/pp2ppp1/2p5/3pPbBp/3P3P/8/PPP2PP1/RN1QKBNR b KQkq - 1 5",
+        "fen": "r3k2r/pp1nbpp1/1q2p3/3pPnBp/3P3P/3Q1N2/PP1N1PP1/2R1K2R w Kkq - 2 13",
         "moves": [
-          "Qb6",
-          "Bd3",
-          "Bxd3",
-          "Qxd3",
-          "e6",
-          "Nd2"
+          "O-O",
+          "Bxg5",
+          "Nxg5",
+          "O-O",
+          "Nb3",
+          "Rac8",
+          "Rc3",
+          "Rc6"
         ],
         "annotations": [
-          "Qb6 — Black's queen to b6 — standard development.",
-          "Bd3 — White's bishop to d3 — standard development.",
-          "Bxd3 — Black's bishop captures on d3 — material exchange.",
-          "Qxd3 — White's queen captures on d3 — material exchange.",
-          "e6 — Black's pawn to e6 — standard development.",
-          "Nd2 — White's knight to d2 — standard development."
+          "O-O — White tucks the king away; the rook on c1 stays primed for the c-file.",
+          "…Bxg5 — Black trades off White’s active dark-squared bishop.",
+          "Nxg5 — recapturing; the knight eyes e6 and f7.",
+          "…O-O — Black finally castles into safety.",
+          "Nb3 — rerouting the knight toward the c5- and a5-outposts.",
+          "…Rac8 — Black contests the c-file.",
+          "Rc3 — a rook lift, building heavy pressure on the half-open c-file.",
+          "…Rc6 — Black blockades; the game is balanced, with White’s e5-wedge the long-term trump."
+        ],
+        "learnCues": [
+          "O-O — king safe, rook primed",
+          "Bxg5 — Black trades the bishop",
+          "Nxg5 — recapture, eye f7",
+          "O-O — Black castles",
+          "Nb3 — reroute the knight",
+          "Rac8 — contest the c-file",
+          "Rc3 — the rook lift",
+          "Rc6 — Black blockades"
         ],
         "arrows": [
           [],
           [],
+          [
+            {
+              "from": "f3",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
+          [
+            {
+              "from": "d2",
+              "to": "b3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
-          [],
+          [
+            {
+              "from": "c1",
+              "to": "c3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b6",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d3",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b1",
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d2",
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Qb6 — queen to b6",
-          "Bd3 — bishop to d3",
-          "Bxd3 — bishop to d3",
-          "Qxd3 — queen to d3",
-          "e6 — pawn to e6",
-          "Nd2 — knight to d2"
-        ],
-        "title": "Caro-Advance — h4 + Bg5 cramping setup",
-        "intro": "Gotham's anti-Caro from White's side at 423 games / 73.2% score. The h4-h5 pin fixes Black's kingside; Bg5 pressures the king's knight; the Bxd3 trade simplifies favourably for White.",
+        "title": "The c-File Battle",
+        "intro": "A real GothamChess game vs vpantev. Castle, trade the questioned bishop, reroute Nb3, and lift Rc3 to fight for the half-open c-file.",
         "sources": [
           "book:caro-kann",
           "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
@@ -49291,61 +49310,149 @@
   {
     "id": "mp-progothamchess-caroadv-c5-dxc5",
     "openingId": "pro-gothamchess-caro-advance-white",
-    "criticalPositionFen": "r1bqk2r/pp2nppp/2n1p3/2bpP3/8/P2B1N2/1PP2PPP/RNBQK2R w KQkq - 4 8",
-    "title": "Advance vs …c5: dxc5 + Quick Development",
-    "overview": "Against the …c5 break, his 240-game plan grabs the pawn with dxc5 and develops quickly to hold it (or return it for a lead in development). After …e6 and …Bxc5, White plays a3 and b4 to gain queenside space and harass the bishop, then Bd3 and O-O complete a harmonious setup. The e5-wedge stays as a cramping asset against Black's French-like structure.",
+    "criticalPositionFen": "r1bq1rk1/pp3ppp/1bn1p3/3pP3/1PP5/P1Nn1N2/1B3PPP/R2Q1RK1 w - - 0 13",
+    "title": "Caro-Advance vs …c5: the e5-Wedge Middlegame",
+    "overview": "After the …c5 break is met by dxc5 and the dust settles, White keeps the cramping e5-wedge and a lead in space. This is a real GothamChess win (vs worldwar66): the queen recovers material on c4, the rook swings to d1, and even after the trades White holds the easier, more active game.",
     "pawnBreaks": [
-      "b2-b4 the queenside space gain",
-      "a3 supporting b4"
+      {
+        "move": "e5-wedge",
+        "explanation": "The e5-pawn cramps Black and fixes the e6-pawn as a long-term target.",
+        "fen": "r1bq1rk1/pp3ppp/1bn1p3/3pP3/1PP5/P1Nn1N2/1B3PPP/R2Q1RK1 w - - 0 13"
+      }
     ],
     "pieceManeuvers": [
-      "d4xc5 grabbing the pawn",
-      "Bf1-d3 the kingside bishop",
-      "Nf3 supporting the centre"
+      {
+        "piece": "Rook",
+        "route": "Ra1-d1",
+        "explanation": "The rook swings to the d-file to pressure the centre and the d4-outpost."
+      }
     ],
     "strategicThemes": [
-      "Grab the pawn with dxc5",
-      "Gain queenside space with a3-b4",
-      "Keep the e5-wedge"
+      "Keep the e5-wedge — it is the engine of White’s space advantage.",
+      "Recover material with tempo, then occupy the open files."
     ],
     "endgameTransitions": [
-      "The space edge favours White in simplification"
+      "The space edge and Black’s weak e6-pawn carry into a pleasant endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqk2r/pp2nppp/2n1p3/2bpP3/8/P2B1N2/1PP2PPP/RNBQK2R w KQkq - 4 8",
+        "fen": "r1bq1rk1/pp3ppp/1bn1p3/3pP3/1PP5/P1Nn1N2/1B3PPP/R2Q1RK1 w - - 0 13",
         "moves": [
-          "b4",
-          "Bb6"
+          "Qxd3",
+          "dxc4",
+          "Qxc4",
+          "Nd4",
+          "Rad1",
+          "Nxf3+",
+          "gxf3",
+          "Qg5+"
         ],
         "annotations": [
-          "b4 — White gains queenside space with tempo, kicking the c5-bishop and clamping the queenside.",
-          "…Bb6 — the bishop retreats to a safe diagonal. With queenside space, the e5-wedge cramping Black, and a harmonious setup coming with Bd3 and O-O, White has the comfortable, space-gaining game against the …c5 break."
+          "Qxd3 — White scoops up the knight that had leapt to d3.",
+          "…dxc4 — Black grabs the c4-pawn to muddy the waters.",
+          "Qxc4 — the queen recovers it at once, raking toward e6 and f7.",
+          "…Nd4 — Black bounds the knight to the central outpost.",
+          "Rad1 — the rook lines up on the d-file behind the outpost knight.",
+          "…Nxf3+ — Black trades the knight off with check.",
+          "gxf3 — White recaptures; the g-file cracks open toward Black’s king.",
+          "…Qg5+ — a check, but the king steps aside and White’s space and open g-file give the easier game."
+        ],
+        "learnCues": [
+          "Qxd3 — take the knight",
+          "dxc4 — Black muddies it",
+          "Qxc4 — recover with tempo",
+          "Nd4 — the outpost knight",
+          "Rad1 — rook to the d-file",
+          "Nxf3+ — trade with check",
+          "gxf3 — open the g-file",
+          "Qg5+ — king sidesteps, White easier"
         ],
         "arrows": [
+          [
+            {
+              "from": "d1",
+              "to": "d3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
+          [
+            {
+              "from": "d3",
+              "to": "c4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "a1",
+              "to": "d1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "g2",
+              "to": "f3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "b4",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b6",
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "b4 — gain space with tempo",
-          "Bb6 — the bishop retreats"
-        ],
-        "title": "Advance vs …c5: dxc5 + Quick Development",
-        "intro": "Against the …c5 break, his 240-game plan grabs the pawn with dxc5 and develops quickly to hold it (or return it for a lead in development). After …e6 and …Bxc5, White plays a3 and b4 to gain queenside space and harass the bishop, then Bd3 and O-O complete a harmonious setup. The e5-wedge stays as a cramping asset against Black's French-like structure.",
+        "title": "The e5-Wedge Middlegame",
+        "intro": "A real GothamChess win vs worldwar66. The plan: recover material with tempo, occupy the d-file, and lean on the e5-wedge.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
@@ -49358,71 +49465,137 @@
   {
     "id": "mp-progothamchess-caroadv-h6-g4space",
     "openingId": "pro-gothamchess-caro-advance-white",
-    "criticalPositionFen": "rn1qkb1r/pp1bnpp1/2p1p2p/3pP2P/2PP2P1/2N5/PP3P2/R1BQKBNR b KQkq - 0 8",
-    "title": "Advance vs …h6: the g4 Space Grab + c4",
-    "overview": "When Black tries …h6 to question the bishop, his 52-game plan is the maximalist g4! — grabbing huge kingside space and chasing the light-squared bishop to passivity. Then c4 strikes the centre and h5 cements the space. After the central exchanges, White's space on both wings and the cramping e5-pawn give a dominating positional bind against the …h6 sideline.",
+    "criticalPositionFen": "rn2k2r/pp1b1pp1/1q2p2p/2bnP2P/2B1N1P1/P7/1P3P2/R1BQK1NR w KQkq - 0 13",
+    "title": "Caro-Advance …h6: Kingside Space + the b4-b5 Clamp",
+    "overview": "With pawns rolling on the kingside (g4-h5) and the e5-wedge cramping Black, White turns to the other wing. A real GothamChess win (vs aleksa74): finish developing, then expand with b4-b5 to clamp the queenside and harass Black’s bishops. White is clearly better (~+1).",
     "pawnBreaks": [
-      "g2-g4 the kingside space grab",
-      "c2-c4 the central break"
+      {
+        "move": "b4-b5 clamp",
+        "explanation": "b4 then b5 gains queenside space, fixes Black’s pawns and chases the bishops back.",
+        "fen": "rn2k2r/pp1b1pp1/1q2p2p/2bnP2P/2B1N1P1/P7/1P3P2/R1BQK1NR w KQkq - 0 13"
+      }
     ],
     "pieceManeuvers": [
-      "Bf1xc4 recapturing actively",
-      "Nb1-c3 supporting the centre",
-      "the e5/g4 space duo"
+      {
+        "piece": "Knight",
+        "route": "Ng1-f3",
+        "explanation": "The last piece develops to f3, propping up the e5-wedge before the queenside expansion."
+      }
     ],
     "strategicThemes": [
-      "Grab space with g4",
-      "Strike the centre with c4",
-      "Bind Black with space on both wings"
+      "Two-wing pressure: g4-h5 on the kingside, b4-b5 on the queenside, with e5 cramping the middle.",
+      "Develop fully before launching the pawn storms."
     ],
     "endgameTransitions": [
-      "The space bind wins the long game"
+      "The space on both wings squeezes Black into passivity well into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rn1qkb1r/pp1bnpp1/2p1p2p/3pP2P/2PP2P1/2N5/PP3P2/R1BQKBNR b KQkq - 0 8",
+        "fen": "rn2k2r/pp1b1pp1/1q2p2p/2bnP2P/2B1N1P1/P7/1P3P2/R1BQK1NR w KQkq - 0 13",
         "moves": [
-          "dxc4",
-          "Bxc4",
-          "Nd5"
+          "Nf3",
+          "Bc6",
+          "Qe2",
+          "Nd7",
+          "b4",
+          "Be7",
+          "b5",
+          "Nc3"
         ],
         "annotations": [
-          "…dxc4 — Black grabs the pawn, releasing the central tension.",
-          "Bxc4 — White recaptures actively, the bishop eyeing d5 and f7.",
-          "…Nd5 — Black centralises the knight, blockading. But with massive space from g4 and h5, the e5-wedge cramping, and active pieces, White has a dominating positional bind — the …h6 try has only loosened Black’s kingside."
+          "Nf3 — the last piece develops, propping up the e5-wedge.",
+          "…Bc6 — Black reroutes the bishop, clearing d7 for the knight.",
+          "Qe2 — connecting the rooks and eyeing both wings.",
+          "…Nd7 — the knight comes to d7 now that the bishop has moved.",
+          "b4! — gaining queenside space and hitting the c5-bishop.",
+          "…Be7 — the bishop retreats from the thrust.",
+          "b5 — clamping the queenside, fixing Black’s pawns and grabbing more space.",
+          "…Nc3 — Black lunges at the queen for counterplay, but White sidesteps and the space on both wings decides."
+        ],
+        "learnCues": [
+          "Nf3 — develop, hold e5",
+          "Bc6 — clear d7",
+          "Qe2 — connect the rooks",
+          "Nd7 — knight comes out",
+          "b4 — gain space, hit the bishop",
+          "Be7 — bishop retreats",
+          "b5 — clamp the queenside",
+          "Nc3 — White sidesteps, space decides"
         ],
         "arrows": [
           [],
           [],
+          [],
+          [],
+          [
+            {
+              "from": "b2",
+              "to": "b4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "b4",
+              "to": "b5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "c4",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c4",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d5",
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "dxc4 — Black releases tension",
-          "Bxc4 — recapture actively",
-          "Nd5 — Black blockades, White binds"
-        ],
-        "title": "Advance vs …h6: the g4 Space Grab + c4",
-        "intro": "When Black tries …h6 to question the bishop, his 52-game plan is the maximalist g4! — grabbing huge kingside space and chasing the light-squared bishop to passivity. Then c4 strikes the centre and h5 cements the space. After the central exchanges, White's space on both wings and the cramping e5-pawn give a dominating positional bind against the …h6 sideline.",
+        "title": "The b4-b5 Queenside Clamp",
+        "intro": "A real GothamChess win vs aleksa74. Develop, then expand b4-b5 to clamp the queenside while the kingside space and e5-wedge do the rest.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",

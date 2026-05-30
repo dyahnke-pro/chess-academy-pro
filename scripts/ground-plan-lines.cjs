@@ -39,33 +39,31 @@ function movesFromPgn(pgn) {
   return body.split(/\s+/).filter((t) => t && !/^(1-0|0-1|1\/2-1\/2|\*)$/.test(t));
 }
 function consider(sans, meta) {
-  if (sans.length < 14) return;
-  const maxH = Math.max(...targetPlies);
+  if (sans.length < 18) return;
+  // Replay the WHOLE game first so fens[k] is available at any depth.
   const c = new Chess();
   const fens = ['']; // fens[k] = fen after k halfmoves
   for (let i = 0; i < sans.length; i++) {
-    let r; try { r = c.move(sans[i]); } catch { return; }
-    if (!r) return;
+    let r; try { r = c.move(sans[i]); } catch { break; }
+    if (!r) break;
     fens.push(c.fen());
-    const H = i + 1;
-    if (H > maxH + 1) break;
-    if (targetPlies.has(H)) {
-      const k = fen4(fens[H]);
-      const m = byPly.get(H);
-      if (m && m.has(k)) {
-        // variation confirmed at ply H. Anchor at masterclass depth: A>=16, but
-        // keep H if already deep. Need 8 real plies after the anchor.
-        const A = Math.max(H, 16);
-        if (A + 8 <= sans.length) {
-          const next8 = sans.slice(A, A + 8);
-          for (const planId of m.get(k)) {
-            if (!result[planId] || (meta.preferred && !result[planId].preferred)) {
-              result[planId] = { fen: fens[A], anchorPly: A, matchPly: H, moves: next8, ...meta };
-            }
-            grounded.add(planId);
-          }
-        }
+  }
+  const len = fens.length - 1;
+  for (const H of targetPlies) {
+    if (H > len) continue;
+    const k = fen4(fens[H]);
+    const m = byPly.get(H);
+    if (!m || !m.has(k)) continue;
+    // variation confirmed at ply H. Anchor at masterclass depth (A>=16, keep H if
+    // already deep), need 8 real plies after the anchor.
+    const A = Math.max(H, 24);
+    if (A + 8 > len) continue;
+    const next8 = sans.slice(A, A + 8);
+    for (const planId of m.get(k)) {
+      if (!result[planId] || (meta.preferred && !result[planId].preferred)) {
+        result[planId] = { fen: fens[A], anchorPly: A, matchPly: H, moves: next8, ...meta };
       }
+      grounded.add(planId);
     }
   }
 }
