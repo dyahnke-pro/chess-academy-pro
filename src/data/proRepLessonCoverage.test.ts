@@ -15,9 +15,9 @@
 
 import { describe, it, expect } from 'vitest';
 import proRepertoires from './pro-repertoires.json' assert { type: 'json' };
-import { getLessonScript } from './lessons';
+import { getLessonScript, getVariationLessonScript } from './lessons';
 
-interface ProRepEntry { id: string }
+interface ProRepEntry { id: string; variations?: Array<{ name: string }> }
 
 const PRO_OPENINGS: ProRepEntry[] = (proRepertoires.openings as ProRepEntry[]).filter(
   (op) => op.id.startsWith('pro-'),
@@ -56,5 +56,49 @@ describe('G9.3 Gate A — every pro-rep opening has a curated LessonScript', () 
     const ids = new Set(PRO_OPENINGS.map((o) => o.id));
     const stale = [...MISSING_LESSON_BASELINE].filter((id) => !ids.has(id));
     expect(stale, `stale baseline ids (not in pro-repertoires.json): ${stale.join(', ')}`).toEqual([]);
+  });
+});
+
+// 🚨 SHRINKING BACKLOG — pro-rep VARIATION TABS that still lack a curated
+// per-variation LessonScript (key `${openingId}::${variationName}`). Without one,
+// the variation Watch falls back to the legacy WalkthroughMode auto-narration —
+// the same G9.3 Gate A defect, one surface deeper. The GothamChess set is fully
+// covered (0 entries); these three remaining are a pre-existing Naroditsky
+// backlog. DELETE an entry the moment you author its variation lesson. This list
+// may ONLY shrink, never grow — a new pro-rep variation tab must ship WITH its
+// lesson.
+const MISSING_VARIATION_LESSON_BASELINE = new Set<string>([
+  'pro-naroditsky-fantasy-caro::Black accepts with dxe4',
+  'pro-naroditsky-fantasy-caro::Modern setup with g6',
+  'pro-naroditsky-fantasy-caro::Qb6 pressure sideline',
+]);
+
+describe('G9.3 Gate A — every pro-rep VARIATION tab has a curated LessonScript', () => {
+  for (const op of PRO_OPENINGS) {
+    for (const v of op.variations ?? []) {
+      const key = `${op.id}::${v.name}`;
+      it(`${key}: variation Watch uses a curated lesson`, () => {
+        const hasLesson = getVariationLessonScript(op.id, v.name) !== null;
+        if (MISSING_VARIATION_LESSON_BASELINE.has(key)) {
+          if (hasLesson) {
+            throw new Error(
+              `${key} now HAS a variation lesson — remove it from MISSING_VARIATION_LESSON_BASELINE (the baseline only shrinks).`,
+            );
+          }
+        } else {
+          expect(
+            hasLesson,
+            `${key} has no per-variation LessonScript — the variation Watch will fall back to legacy auto-narration (G9.3 Gate A). Author it, or — only as a deliberate visible deferral — add it to MISSING_VARIATION_LESSON_BASELINE.`,
+          ).toBe(true);
+        }
+      });
+    }
+  }
+
+  it('variation baseline contains only real variation keys (no stale entries)', () => {
+    const keys = new Set<string>();
+    for (const op of PRO_OPENINGS) for (const v of op.variations ?? []) keys.add(`${op.id}::${v.name}`);
+    const stale = [...MISSING_VARIATION_LESSON_BASELINE].filter((k) => !keys.has(k));
+    expect(stale, `stale variation baseline keys: ${stale.join(', ')}`).toEqual([]);
   });
 });
