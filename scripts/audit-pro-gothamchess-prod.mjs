@@ -97,6 +97,51 @@ try {
   console.log('  waiting 35s for first-install deferred seed (pro-rep + ECO + plans + flashcards + narrations)');
   await page.waitForTimeout(35_000);
 
+  // ── Front-and-center placement check (2026-05-29) ───────────────────────
+  // His repertoire is pinned to the TOP of the Pro tab (featured section,
+  // White/Black), not buried behind a player-card click. Verify it renders.
+  console.log('  goto /openings (Pro tab) — featured placement check');
+  await page.goto(`${PROD}/openings`, { waitUntil: 'networkidle', timeout: 20_000 }).catch(() => null);
+  await page.waitForTimeout(2000);
+  // The Openings page auto-opens a page-help-modal that intercepts the Pro-tab
+  // click — dismiss it first (CLAUDE.md onboarding-modal contract) or the tab
+  // never activates and the featured section never mounts.
+  const openingsHelp = page.locator('[data-testid="page-help-modal"]');
+  if (await openingsHelp.count() > 0) {
+    await page.keyboard.press('Escape').catch(() => null);
+    await openingsHelp.waitFor({ state: 'detached', timeout: 5000 }).catch(async () => {
+      await openingsHelp.click({ position: { x: 10, y: 10 }, force: true }).catch(() => null);
+      await openingsHelp.waitFor({ state: 'detached', timeout: 5000 }).catch(() => null);
+    });
+    console.log('   dismissed /openings page-help-modal');
+  }
+  const proTab = page.locator('[data-testid="tab-pro"]');
+  if (await proTab.count() > 0) {
+    await proTab.first().click().catch(() => null);
+    // The featured section's getPlayerOpenings() is an async Dexie read; wait
+    // for the testid to attach (up to 12s) rather than racing a fixed delay.
+    await page.locator('[data-testid="featured-pro-openings"]')
+      .waitFor({ state: 'attached', timeout: 12_000 }).catch(() => null);
+    const featuredEl = page.locator('[data-testid="featured-pro-openings"]');
+    const featured = await featuredEl.count();
+    rec('GothamChess repertoire pinned to top of Pro tab', featured > 0 ? 'PASS' : 'FAIL', `${featured} featured section`);
+    // The cards come from an async getPlayerOpenings() Dexie read that resolves
+    // AFTER the section header renders — wait for the first card to attach
+    // before asserting on the split/cards (proven on dev: header is instant,
+    // cards land ~1-3s later).
+    await featuredEl.locator('[data-testid^="opening-card-pro-gothamchess"]').first()
+      .waitFor({ state: 'attached', timeout: 12_000 }).catch(() => null);
+    // Scope the White/Black check to the featured section (not whole-body, which
+    // would false-positive off the player page later in the run).
+    const sectionText = featured > 0 ? await featuredEl.innerText().catch(() => '') : '';
+    const asWhiteBlack = /As White/i.test(sectionText) && /As Black/i.test(sectionText);
+    rec('featured section split As White / As Black', asWhiteBlack ? 'PASS' : 'FAIL');
+    const featuredCards = featured > 0 ? await featuredEl.locator('[data-testid^="opening-card-pro-gothamchess"]').count() : 0;
+    rec('featured section lists his Caro cards', featuredCards > 0 ? 'PASS' : 'FAIL', `${featuredCards} cards`);
+  } else {
+    rec('Pro tab toggle present on /openings', 'WARN', 'tab-pro not found');
+  }
+
   console.log('  goto /openings/pro/gothamchess');
   await page.goto(`${PROD}/openings/pro/gothamchess`, { waitUntil: 'networkidle', timeout: 20_000 });
   const playerMount = await page.waitForSelector('[data-testid="pro-player-page"]', { timeout: 15_000 }).then(() => true).catch(() => false);
@@ -205,6 +250,18 @@ try {
         console.log(`     ${v.kind} | ${(v.summary || '').slice(0, 90)}`);
       }
     }
+
+    // ── New Caro content (2026-05-29): plans + model games + pitfalls ───────
+    // Scroll the detail page and assert the new sections render. These are the
+    // layers this session added; the audit is updated to the new contract
+    // (living-audit rule, G1) before running.
+    console.log('\n  verifying new Caro content sections');
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight)).catch(() => null);
+    await page.waitForTimeout(2500);
+    const detailBody = await page.evaluate(() => document.body.innerText).catch(() => '');
+    rec('Middlegame plans section present', /middlegame|plan/i.test(detailBody) ? 'PASS' : 'WARN');
+    rec('Model games section present (his wins)', /model game|Svidler|Hikaru|Bortnyk|Nakamura/i.test(detailBody) ? 'PASS' : 'WARN');
+    rec('Pitfalls / common-mistakes present', /pitfall|mistake|avoid/i.test(detailBody) ? 'PASS' : 'WARN');
   }
 
   const realErrors = pageErrors.filter((e) => !/ERR_CERT|Failed to load resource/.test(e));
