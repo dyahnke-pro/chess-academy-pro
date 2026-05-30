@@ -1804,7 +1804,7 @@
         },
         {
           "name": "Vaganian Attack (…Ne4)",
-          "pgn": "d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxg5 hxg5",
+          "pgn": "d4 Nf6 Bg5 Ne4 h4 c5 d5 Qb6 Nd2 Nxg5 hxg5 Qxb2 g6 fxg6 Ngf3 d6 e4",
           "explanation": "Black's sharpest reply — the Vaganian Attack chases the bishop with …Ne4 to capture and trade. The h4 reply opens the h-file for the rook; the d5 push grabs space; even after the exchange on g5 the doubled g-pawn is a kingside attacking weapon. Sharp positions favouring the side with the initiative — Levy's territory.",
           "sources": [
             "concept:pos-development",
