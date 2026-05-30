@@ -1877,7 +1877,7 @@
         },
         {
           "name": "Symmetric (…e5)",
-          "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 e3 Bb4 Qc2 Bxc3 Qxc3",
+          "pgn": "c4 e5 Nc3 Nf6 Nf3 Nc6 e3 Bb4 Qc2 Bxc3 Qxc3 Qe7 b3 d5 Bb2 d4",
           "explanation": "Black's mirror reply with …e5 produces a true English-Reversed structure. After …Bb4 / Qc2 / …Bxc3 / Qxc3, White has the bishop pair and a tempo from the English structure, often pressuring c-file weaknesses.",
           "sources": [
             "concept:pos-development",

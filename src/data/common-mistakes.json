@@ -1890,5 +1890,55 @@
         "https://en.wikipedia.org/wiki/Trompowsky_Attack"
       ]
     }
+  ],
+  "pro-gothamchess-english": [
+    {
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 2 3",
+      "wrongMove": "Nf3",
+      "correctMove": "g3",
+      "explanation": "In the Reversed Sicilian, 3.Nf3 invites …e4! kicking the knight and handing Black easy space — a reversed-Sicilian tempo trick. The cleaner move is g3, preparing Bg2 to fianchetto and hit the e5-pawn and the long diagonal first. Develop the kingside bishop before the knight commits, and Black never gets the …e4 lunge for free. Move order matters in the English.",
+      "shortNarration": "g3 — fianchetto first, avoid …e4",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/English-Opening",
+        "https://en.wikipedia.org/wiki/English_Opening"
+      ]
+    },
+    {
+      "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq - 0 4",
+      "wrongMove": "e4",
+      "correctMove": "d4",
+      "explanation": "Against the Symmetric …c5, the timid e4 lets Black equalise comfortably with a normal setup. The principled strike is d4! — challenging the centre at once. After …cxd4 Nxd4, White reaches a Maroczy-style bind with the c4-pawn clamping d5 and a clear space edge. Don't drift in the Symmetric; the d4 break is what gives White the pull.",
+      "shortNarration": "d4 — strike for the Maroczy bind",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/English-Opening",
+        "https://en.wikipedia.org/wiki/English_Opening"
+      ]
+    },
+    {
+      "fen": "rnbqkbnr/ppp3pp/4p3/3p1p2/2P5/2N1P3/PP1P1PPP/R1BQKBNR w KQkq - 0 4",
+      "wrongMove": "d4",
+      "correctMove": "g4",
+      "explanation": "When Black sets up the Stonewall with …f5, the routine d4 lets Black get the structure he wants — a solid, blocked position. The aggressive answer is g4! — striking at the f5-pawn before Black is ready. It rips open the kingside, exposes Black's weakened light squares, and gives White a dangerous initiative. Against the Stonewall, undermine the f5-pawn, don't play into the block.",
+      "shortNarration": "g4 — bust the Stonewall",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/English-Opening",
+        "https://en.wikipedia.org/wiki/English_Opening"
+      ]
+    },
+    {
+      "fen": "r1bqk1nr/pppn1pbp/3p2p1/4p3/2PPPP2/2N5/PP4PP/R1BQKBNR w KQkq - 0 6",
+      "wrongMove": "fxe5",
+      "correctMove": "Nf3",
+      "explanation": "In the Botvinnik System, the immediate fxe5 dxe5 d5 is one valid path, but the cleaner Botvinnik handling is Nf3 first — developing, defending d4, and keeping the central tension on White's terms. Premature captures release the tension before White is fully developed. Build the c4/d4/e4/f4 wall, get the pieces out, and only then resolve the centre and storm. Patience powers the avalanche.",
+      "shortNarration": "Nf3 — develop before resolving the centre",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/English-Opening",
+        "https://en.wikipedia.org/wiki/English_Opening"
+      ]
+    }
   ]
 }
