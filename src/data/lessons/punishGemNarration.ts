@@ -2741,6 +2741,34 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:tac-sacrifice', 'concept:pos-king-safety', 'https://www.chess.com/openings/Evans-Gambit'],
   },
+
+  // ── GothamChess London / Jobava (student = WHITE) ────────────────────────
+  // Jobava move-order: …Nc6?! allows the Nb5 raid; the knight harasses c7 and
+  // forces the king to move, costing castling (confirmed, +1.7). 18 plies;
+  // Nc6@9, Nb5@10.
+  'pro-gothamchess-london:d4_d5_Nc3_Nf6_Bf4_e6_e3_c5_Nf3:Nc6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      'Nc6?! A natural developing move, but it allows a strong knight raid into the weak c7-square.',
+      'Nb5 — the punish. The knight leaps to b5, threatening the Nc7 fork against the rook and king.',
+      '…Kd7 — Black’s king is forced to shuffle to defend c7, losing the right to castle.',
+      'Nc7 — the knight harasses, hitting the a8-rook and forcing another concession.',
+      '…Rb8 — Black tucks the rook away.',
+      'Ng5 — White switches the attack to the kingside, hitting f7. With Black’s king stranded on d7 and unable to castle, White is clearly better.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '',
+      'Nc6 — allows the c7-raid',
+      'Nb5 — leap at c7, threaten the fork',
+      'Kd7 — Black loses castling',
+      'Nc7 — harass the rook',
+      'Rb8 — Black tucks the rook',
+      'Ng5 — switch to f7, White better',
+      '', '', '',
+    ],
+    sources: ['concept:pos-king-safety', 'concept:tac-fork', 'https://www.chess.com/openings/London-System'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

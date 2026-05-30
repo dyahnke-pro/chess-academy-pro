@@ -8,9 +8,9 @@
     "d5",
     "Bf4"
   ],
-  "generatedAt": "2026-05-28T18:29:07.716Z",
+  "generatedAt": "2026-05-30T02:23:58.493Z",
   "totals": {
-    "totalGamesScanned": 31960,
+    "totalGamesScanned": 31994,
     "gamesMatchingOpening": 327,
     "minBranchGames": 5,
     "minTrieGames": 5

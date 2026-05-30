@@ -2040,5 +2040,55 @@
         "https://en.wikipedia.org/wiki/Italian_Game"
       ]
     }
+  ],
+  "pro-gothamchess-london": [
+    {
+      "fen": "rnb1kbnr/pp2pppp/1q6/2pp4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 1 4",
+      "wrongMove": "b3",
+      "correctMove": "Nc3",
+      "explanation": "When Black hits b2 with …Qb6, the passive b3 weakens the queenside and blunts White's own play. The principled answer is Nc3! — developing and offering the b2-pawn as a gambit: after …Qxb2 Nb5! traps the queen ideas and gives White a huge lead in development. Don't cower with b3; develop and let Black grab the poison if he dares.",
+      "shortNarration": "Nc3 — develop, offer the b-pawn",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/London-System",
+        "https://en.wikipedia.org/wiki/London_System"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+      "wrongMove": "Nf3",
+      "correctMove": "Nb5",
+      "explanation": "In the Jobava London, the point is the Nb5! raid — hitting the weak c7-square and provoking concessions like …Na6 and an awkward king move. The routine Nf3 throws away the whole idea and transposes to a tame position. When Black plays …e6 in the Jobava, jump the knight into b5 and harass: that's what makes this London hybrid dangerous.",
+      "shortNarration": "Nb5 — the c7-raid, not quiet Nf3",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/London-System",
+        "https://en.wikipedia.org/wiki/London_System"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 2 3",
+      "wrongMove": "e4",
+      "correctMove": "e3",
+      "explanation": "It's tempting to grab the centre with e4, but here it simply drops a pawn: …dxe4 and White has no easy way to regain it. The whole point of the London is the modest e3 — supporting the d4-pawn and the Bf4, building the solid pyramid behind which White develops harmoniously. Resist the e4 lunge; the London is a system of small, solid moves, not a centre grab.",
+      "shortNarration": "e3 — the solid London pyramid",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/London-System",
+        "https://en.wikipedia.org/wiki/London_System"
+      ]
+    },
+    {
+      "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 2 5",
+      "wrongMove": "Nf3",
+      "correctMove": "h4",
+      "explanation": "Against the …g6 fianchetto, the most testing try is h4! — launching the opposite-side-castling storm before Black is ready. The routine Nf3 commits to a quiet game and lets Black equalise comfortably with …O-O and …c5. When Black fianchettoes, consider the h4-h5 pawn storm: it's the London's most dangerous weapon against the King's Indian setup.",
+      "shortNarration": "h4 — launch the KID storm",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/London-System",
+        "https://en.wikipedia.org/wiki/London_System"
+      ]
+    }
   ]
 }
