@@ -92,3 +92,43 @@ rebuilding; do NOT rebuild sound showcases to inflate a count.
       equality); teaches the practical 4.Nc3 line. Kept per anti-drop preference.
 ## Nonnegotiables unchanged: data-chosen lines, reach middlegame, traps stay,
 ## narrations change, no invented moves, no cut corners. Batch-ship.
+
+## SOUNDNESS SWEEP RESULTS (2026-05-30 overnight) — scripts/soundness-sweep.mjs
+Engine-evaled every masterclass lesson's final position (student perspective).
+22 flagged < -1.0. Verdicts after per-line verification (eval progression +
+data alternative):
+
+### FIXED (6) — sound lines ruined by a blundered tail; rebuilt on the data
+line + re-verified, gates green, shipped:
+- philidor Antoshin: -1.58 -> real exd4+g6 Antoshin, -0.40
+- petrov Steinitz: -2.08 -> cxd5 + ...Qxc3 counterplay, -0.22
+- scandi Gubinsky-Melts: -1.58 -> White's calm Bg5/Re1/Qd3, -0.03
+- qgd Bf4: -1.39 -> ...c6/...Qc7 + bishop trade, -0.33
+- qga Smyslov: -1.75 -> White's best dxc5 queen-trade endgame, -0.18
+- philidor Nimzowitsch: -2.15 -> sound Qe2 ...exd4/...Re8/...Bf8, 0.00
+
+### FLAGGED — genuinely HARD/SHARP variations (NOT clean blundered-tails);
+### do NOT risk an unsound autonomous rebuild — need deeper theory or David's
+### call (rebuild on a sound line if one exists / relabel honestly / drop):
+- pirc 150 Attack: -2.92 (Black castled into the h4-h5 mating attack). Best
+  line I found (delay O-O, ...Qa5/...c5) is still -1.48 — the 150 is just
+  White's most dangerous anti-Pirc weapon. Current lesson at minimum must stop
+  showing Black walking into mate; honest reframe or a precise queenside-castle
+  defense needed.
+- two-knights Max Lange: -1.86 (the 5.O-O Max Lange; lesson's ...Qg6 defense
+  sub-optimal). The SOUND Two Knights main is 5.e5 (-0.05) but that's a
+  different line; the "Max Lange" tab needs Black's precise defense (deep) or
+  a relabel to the 5.e5 main.
+- semi-slav Botvinnik Deep: -2.93. One of the sharpest forced lines in chess —
+  too treacherous to rebuild unsupervised; verify it's not following a known
+  drawn-with-precision line, else needs theory.
+- old-indian Be2 (-1.39) / Czech (-1.11): the Old Indian is a passive, cramped,
+  slightly-worse-by-nature defense; bad-ish throughout (not a tail blunder).
+  Verify narration doesn't claim equality; otherwise it's the opening's reality.
+- benoni Taimanov f4/Bb5+ (-1.39): the Taimanov is the most dangerous anti-
+  Benoni; tough for Black throughout. Same treatment as above.
+
+### LEAVE (sharp gambit/sac showcases — negative eval EXPECTED, honest):
+kings-gambit Muzio/Allgaier/Classical, two-knights/scotch Max Lange gem lines,
+albin/schliemann gambits, sicilian-dragon Yugoslav (sharp). Per the soundness
+rule: a sac showcase is meant to be engine-negative.
