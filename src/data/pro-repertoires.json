@@ -2224,7 +2224,7 @@
         },
         {
           "name": "150 Attack (Be3 + f3)",
-          "pgn": "e4 d6 d4 Nf6 Nc3 g6 Be3 c6 f3 b5",
+          "pgn": "e4 d6 d4 Nf6 Nc3 g6 Be3 c6 f3 b5 a3 Nbd7 g4 Bg7",
           "explanation": "The 150 Attack with Be3 + f3 preparing queenside castling and a kingside pawn storm. Black meets it with …c6 + …b5 expanding the queenside, racing toward White's king.",
           "sources": [
             "concept:pos-development",

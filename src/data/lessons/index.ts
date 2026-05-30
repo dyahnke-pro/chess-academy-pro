@@ -31,6 +31,12 @@ import { PRO_GOTHAMCHESS_MILNER_BARRY_VARIATION_LESSONS } from './proGothamchess
 import { PRO_GOTHAMCHESS_FANTASY_CARO_VARIATION_LESSONS } from './proGothamchessFantasyCaroVariations';
 import { PRO_GOTHAMCHESS_STAFFORD_REFUTE_VARIATION_LESSONS } from './proGothamchessStaffordRefuteVariations';
 import { PRO_GOTHAMCHESS_CARO_KANN_VARIATION_LESSONS } from './proGothamchessCaroKannVariations';
+import { PRO_GOTHAMCHESS_SCANDINAVIAN_VARIATION_LESSONS } from './proGothamchessScandinavianVariations';
+import { PRO_GOTHAMCHESS_QGD_VARIATION_LESSONS } from './proGothamchessQGDVariations';
+import { PRO_GOTHAMCHESS_KIA_VARIATION_LESSONS } from './proGothamchessKIAVariations';
+import { PRO_GOTHAMCHESS_CLOSED_SICILIAN_VARIATION_LESSONS } from './proGothamchessClosedSicilianVariations';
+import { PRO_GOTHAMCHESS_FRENCH_DEFENSE_VARIATION_LESSONS } from './proGothamchessFrenchDefenseVariations';
+import { PRO_GOTHAMCHESS_PIRC_DEFENSE_VARIATION_LESSONS } from './proGothamchessPircDefenseVariations';
 import { PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS } from './proNaroditskyCaroKannVariations';
 import { PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS } from './proNaroditskyAlapinVariations';
 import { PRO_NARODITSKY_KID_VARIATION_LESSONS } from './proNaroditskyKIDVariations';
@@ -294,6 +300,12 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_GOTHAMCHESS_FANTASY_CARO_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_STAFFORD_REFUTE_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_CARO_KANN_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_SCANDINAVIAN_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_QGD_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_KIA_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_CLOSED_SICILIAN_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_FRENCH_DEFENSE_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_PIRC_DEFENSE_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {
