@@ -1990,5 +1990,55 @@
         "https://en.wikipedia.org/wiki/Vienna_Game"
       ]
     }
+  ],
+  "pro-gothamchess-italian": [
+    {
+      "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 1 5",
+      "wrongMove": "d3",
+      "correctMove": "d4",
+      "explanation": "After 4.c3 preparing the centre, the whole point is to follow with d4! — striking in the centre while Black's pieces are committed. The timid d3 wastes the c3-tempo and lets Black equalise comfortably with …d6 and …a6. When you've played c3, commit to d4: that's the Giuoco Piano's central break and the reason c3 was played.",
+      "shortNarration": "d4 — the central break c3 prepared",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Italian-Game",
+        "https://en.wikipedia.org/wiki/Italian_Game"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/ppp2ppp/2n5/3np1N1/2B5/8/PPPP1PPP/RNBQK2R w KQkq - 0 6",
+      "wrongMove": "Nf3",
+      "correctMove": "Nxf7",
+      "explanation": "Black's greedy 5…Nxd5?? walks into the famous Fried Liver Attack: Nxf7! sacrifices the knight to drag the king out into the open after …Kxf7 Qf3+, where White's attack is overwhelming in practice. The timid Nf3 retreat throws the whole point away and lets Black consolidate the extra piece. When Black recaptures on d5, know the Fried Liver cold — Nxf7 is the punishment.",
+      "shortNarration": "Nxf7 — the Fried Liver Attack",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Italian-Game",
+        "https://en.wikipedia.org/wiki/Italian_Game"
+      ]
+    },
+    {
+      "fen": "r1bqk1nr/pppp1ppp/2n5/4p3/1bB1P3/5N2/P1PP1PPP/RNBQK2R w KQkq - 0 5",
+      "wrongMove": "Nxe5",
+      "correctMove": "c3",
+      "explanation": "In the Evans Gambit after …Bxb4, the point is c3! — gaining a tempo on the bishop and preparing d4 to build the big centre. The greedy Nxe5 wins a pawn back immediately but throws away the entire gambit idea: after …Nxe5 Black is fine. The Evans is about development and the centre, not regaining the pawn. Play c3 and d4, and let the initiative do the work.",
+      "shortNarration": "c3 — gain tempo, prepare d4",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Italian-Game",
+        "https://en.wikipedia.org/wiki/Italian_Game"
+      ]
+    },
+    {
+      "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5",
+      "wrongMove": "Re1",
+      "correctMove": "d4",
+      "explanation": "After castling, White faces the key choice. The open d4! is his most testing try — striking the centre while Black's pieces are committed. After …Bxd4 Nxd4 Nxd4, White plays Bg5 pinning the f6-knight and f4 storming the kingside, exactly the attacking plan from his games. The passive Re1 just shuffles a rook and lets Black equalise with …d6 and …a6. Commit to d4 and the Bg5/f4 attack.",
+      "shortNarration": "d4 — open centre, then Bg5/f4",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Italian-Game",
+        "https://en.wikipedia.org/wiki/Italian_Game"
+      ]
+    }
   ]
 }

@@ -1,0 +1,50 @@
+{
+  "player": "gothamchess",
+  "openingId": "italian",
+  "variationKey": "slow-d3",
+  "variation": {
+    "label": "Slow Italian d3",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bc4",
+      "Bc5",
+      "d3"
+    ]
+  },
+  "generatedAt": "2026-05-30T02:09:38.062Z",
+  "totalGames": 1,
+  "wins": 1,
+  "draws": 0,
+  "losses": 0,
+  "openingTerminusPly": 7,
+  "openingTerminusMove": 4,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "d3"
+  ],
+  "gamesAtTerminus": 1,
+  "endgameTypeBreakdown": {
+    "middlegame (Q + pieces)": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/3350143107",
+      "opponent": "Neftegor",
+      "opponentRating": 2470,
+      "studentRating": 2545,
+      "date": "2019-01-04",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 43,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2019.01.04\"]\n[Round \"-\"]\n[White \"GothamChess\"]\n[Black \"Neftegor\"]\n[Result \"1-0\"]\n[CurrentPosition \"2r1kr2/1p3q2/pp2p2p/3pP1p1/3P4/1Q3PP1/PP4P1/2R1R1K1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C50\"]\n[ECOUrl \"https://www.chess.com/openings/Giuoco-Piano-Game-Giuoco-Pianissimo-Variation-4...Nf6-5.O-O-d6\"]\n[UTCDate \"2019.01.04\"]\n[UTCTime \"23:46:05\"]\n[WhiteElo \"2545\"]\n[BlackElo \"2470\"]\n[TimeControl \"180\"]\n[Termination \"GothamChess won by resignation\"]\n[StartTime \"23:46:05\"]\n[EndDate \"2019.01.04\"]\n[EndTime \"23:50:23\"]\n[Link \"https://www.chess.com/game/live/3350143107\"]\n\n1. e4 {[%clk 0:02:59.9]} 1... e5 {[%clk 0:02:57.3]} 2. Nf3 {[%clk 0:02:58.7]} 2... Nc6 {[%clk 0:02:56.1]} 3. Bc4 {[%clk 0:02:56.7]} 3... Bc5 {[%clk 0:02:54]} 4. d3 {[%clk 0:02:55.4]} 4... d6 {[%clk 0:02:52.5]} 5. O-O {[%clk 0:02:53.4]} 5... Nf6 {[%clk 0:02:46.9]} 6. Bg5 {[%clk 0:02:50.4]} 6... Be6 {[%clk 0:02:43.1]} 7. Nbd2 {[%clk 0:02:46.3]} 7... h6 {[%clk 0:02:40.8]} 8. Bh4 {[%clk 0:02:42.9]} 8... g5 {[%clk 0:02:36.6]} 9. Bg3 {[%clk 0:02:41.7]} 9... Rg8 {[%clk 0:02:35.6]} 10. c3 {[%clk 0:02:31.4]} 10... Bb6 {[%clk 0:02:30.2]} 11. Bxe6 {[%clk 0:02:27.6]} 11... fxe6 {[%clk 0:02:28.8]} 12. Nc4 {[%clk 0:02:27.5]} 12... a6 {[%clk 0:02:10.6]} 13. Nxb6 {[%clk 0:02:19.6]} 13... cxb6 {[%clk 0:02:09.5]} 14. d4 {[%clk 0:02:16.4]} 14... Nxe4 {[%clk 0:02:00.4]} 15. Re1 {[%clk 0:02:14.8]} 15... Nxg3 {[%clk 0:01:54.6]} 16. hxg3 {[%clk 0:02:14.7]} 16... Qc7 {[%clk 0:01:44.7]} 17. dxe5 {[%clk 0:01:59.2]} 17... d5 {[%clk 0:01:43]} 18. Nd4 {[%clk 0:01:57.6]} 18... Nxd4 {[%clk 0:01:34.7]} 19. cxd4 {[%clk 0:01:56.2]} 19... Qf7 {[%clk 0:01:29.1]} 20. Qb3 {[%clk 0:01:52]} 20... Rf8 {[%clk 0:01:17.9]} 21. f3 {[%clk 0:01:45.6]} 21... Rc8 {[%clk 0:00:50.7]} 22. Rac1 {[%clk 0:01:36.6]} 1-0\n"
+    }
+  ]
+}

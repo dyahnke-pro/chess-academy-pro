@@ -1,0 +1,75 @@
+{
+  "player": "gothamchess",
+  "openingId": "italian",
+  "variationKey": "evans",
+  "variation": {
+    "label": "Evans Gambit",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bc4",
+      "Bc5",
+      "b4"
+    ]
+  },
+  "generatedAt": "2026-05-30T02:09:39.182Z",
+  "totalGames": 3,
+  "wins": 2,
+  "draws": 0,
+  "losses": 1,
+  "openingTerminusPly": 9,
+  "openingTerminusMove": 5,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "b4",
+    "Bxb4",
+    "c3"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "middlegame (Q + pieces)": 1,
+    "R + minor + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/70321501365",
+      "opponent": "GummyFox",
+      "opponentRating": 2600,
+      "studentRating": 2735,
+      "date": "2023-02-16",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 64,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.02.16\"]\n[Round \"-\"]\n[White \"GothamChess\"]\n[Black \"GummyFox\"]\n[Result \"1-0\"]\n[CurrentPosition \"r1N3R1/pp5k/8/3Bn3/3K3p/5P2/P7/8 w - -\"]\n[Timezone \"UTC\"]\n[ECO \"C51\"]\n[ECOUrl \"https://www.chess.com/openings/Giuoco-Piano-Game-Evans-Accepted-Stone-Ware-Variation\"]\n[UTCDate \"2023.02.16\"]\n[UTCTime \"21:20:26\"]\n[WhiteElo \"2735\"]\n[BlackElo \"2600\"]\n[TimeControl \"180\"]\n[Termination \"GothamChess won by resignation\"]\n[StartTime \"21:20:26\"]\n[EndDate \"2023.02.16\"]\n[EndTime \"21:26:22\"]\n[Link \"https://www.chess.com/game/live/70321501365\"]\n\n1. e4 {[%clk 0:03:00]} 1... e5 {[%clk 0:02:59.9]} 2. Nf3 {[%clk 0:02:52.6]} 2... Nc6 {[%clk 0:02:58.8]} 3. Bc4 {[%clk 0:02:50.6]} 3... Bc5 {[%clk 0:02:57.5]} 4. b4 {[%clk 0:02:49.1]} 4... Bxb4 {[%clk 0:02:56.2]} 5. c3 {[%clk 0:02:46.7]} 5... Bd6 {[%clk 0:02:55.4]} 6. Na3 {[%clk 0:02:44.4]} 6... Nf6 {[%clk 0:02:47.1]} 7. Qe2 {[%clk 0:02:43]} 7... O-O {[%clk 0:02:45.7]} 8. g4 {[%clk 0:02:41.7]} 8... Nxg4 {[%clk 0:02:39.1]} 9. Rg1 {[%clk 0:02:40.7]} 9... Nf6 {[%clk 0:02:38.1]} 10. d4 {[%clk 0:02:39]} 10... exd4 {[%clk 0:02:33.6]} 11. Nb5 {[%clk 0:02:37.6]} 11... Nxe4 {[%clk 0:02:28.3]} 12. Bh6 {[%clk 0:02:27.1]} 12... Re8 {[%clk 0:01:51.2]} 13. Bxg7 {[%clk 0:02:14.4]} 13... Ng5 {[%clk 0:01:46.2]} 14. Rxg5 {[%clk 0:01:43.8]} 14... Rxe2+ {[%clk 0:01:35.9]} 15. Kxe2 {[%clk 0:01:43.7]} 15... Qxg5 {[%clk 0:01:31.7]} 16. Nxg5 {[%clk 0:01:43.6]} 16... Kxg7 {[%clk 0:01:31.6]} 17. Nxd6 {[%clk 0:01:38.4]} 17... cxd6 {[%clk 0:01:30.5]} 18. Rg1 {[%clk 0:01:32.4]} 18... dxc3 {[%clk 0:01:22.8]} 19. Nxf7+ {[%clk 0:01:22.9]} 19... Kf6 {[%clk 0:01:20.3]} 20. Nxd6 {[%clk 0:01:19.9]} 20... Ne5 {[%clk 0:01:09.8]} 21. Ne4+ {[%clk 0:01:16.8]} 21... Kf5 {[%clk 0:00:48.4]} 22. Bd5 {[%clk 0:01:16]} 22... h6 {[%clk 0:00:44.1]} 23. Ke3 {[%clk 0:01:15.4]} 23... Ng4+ {[%clk 0:00:40]} 24. Kd4 {[%clk 0:01:12.2]} 24... Nxh2 {[%clk 0:00:34.2]} 25. Nxc3 {[%clk 0:01:05.1]} 25... d6 {[%clk 0:00:30.1]} 26. Rg8 {[%clk 0:01:01.5]} 26... Ng4 {[%clk 0:00:25.7]} 27. Ne4 {[%clk 0:00:51]} 27... h5 {[%clk 0:00:09.5]} 28. Nxd6+ {[%clk 0:00:41.4]} 28... Kf6 {[%clk 0:00:08.9]} 29. f3 {[%clk 0:00:37.3]} 29... Ne5 {[%clk 0:00:05]} 30. Nxc8 {[%clk 0:00:33.4]} 30... h4 {[%clk 0:00:03.6]} 31. Rf8+ {[%clk 0:00:28]} 31... Kg7 {[%clk 0:00:02.5]} 32. Rg8+ {[%clk 0:00:23.6]} 32... Kh7 {[%clk 0:00:01.7]} 1-0\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/5984764615",
+      "opponent": "MiningMathGamer",
+      "opponentRating": 1142,
+      "studentRating": 2418,
+      "date": "2020-12-16",
+      "timeClass": "rapid",
+      "outcome": "win",
+      "plyCount": 43,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2020.12.16\"]\n[Round \"-\"]\n[White \"GothamChess\"]\n[Black \"MiningMathGamer\"]\n[Result \"1-0\"]\n[CurrentPosition \"r3Q1k1/pp3pqp/3p2p1/8/2BN2b1/7P/P4KP1/4R3 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C52\"]\n[ECOUrl \"https://www.chess.com/openings/Giuoco-Piano-Game-Evans-Accepted-Pierce-Anderssen-Defense\"]\n[UTCDate \"2020.12.16\"]\n[UTCTime \"23:06:12\"]\n[WhiteElo \"2418\"]\n[BlackElo \"1142\"]\n[TimeControl \"600\"]\n[Termination \"GothamChess won on time\"]\n[StartTime \"23:06:12\"]\n[EndDate \"2020.12.16\"]\n[EndTime \"23:22:31\"]\n[Link \"https://www.chess.com/game/live/5984764615\"]\n\n1. e4 {[%clk 0:09:58.6]} 1... e5 {[%clk 0:09:51.6]} 2. Nf3 {[%clk 0:09:54.1]} 2... Nc6 {[%clk 0:09:49.2]} 3. Bc4 {[%clk 0:09:52.2]} 3... Bc5 {[%clk 0:09:45.3]} 4. b4 {[%clk 0:09:44.1]} 4... Bxb4 {[%clk 0:09:39.5]} 5. c3 {[%clk 0:09:40.2]} 5... Ba5 {[%clk 0:09:33.3]} 6. d4 {[%clk 0:09:31.2]} 6... exd4 {[%clk 0:08:54.2]} 7. O-O {[%clk 0:09:28.3]} 7... Nf6 {[%clk 0:08:38.7]} 8. e5 {[%clk 0:09:23]} 8... Ne4 {[%clk 0:08:11.8]} 9. Re1 {[%clk 0:08:12.8]} 9... Nxc3 {[%clk 0:07:56.1]} 10. Nxc3 {[%clk 0:08:06.6]} 10... Bxc3 {[%clk 0:07:42.6]} 11. Bg5 {[%clk 0:07:36.1]} 11... Ne7 {[%clk 0:07:15.8]} 12. Nxd4 {[%clk 0:07:09.3]} 12... Bxe1 {[%clk 0:06:39]} 13. Qh5 {[%clk 0:06:52.7]} 13... Bxf2+ {[%clk 0:06:15]} 14. Kxf2 {[%clk 0:06:33]} 14... d5 {[%clk 0:05:06.5]} 15. exd6 {[%clk 0:06:04.7]} 15... O-O {[%clk 0:04:13.3]} 16. Bxe7 {[%clk 0:05:59.3]} 16... Qe8 {[%clk 0:03:50.2]} 17. Bxf8 {[%clk 0:05:36.8]} 17... Qxf8 {[%clk 0:03:50.1]} 18. Re1 {[%clk 0:05:21.5]} 18... g6 {[%clk 0:03:13]} 19. Qe5 {[%clk 0:04:55.2]} 19... cxd6 {[%clk 0:02:21.8]} 20. Qe7 {[%clk 0:04:23.1]} 20... Bg4 {[%clk 0:00:50.8]} 21. h3 {[%clk 0:04:15.7]} 21... Qg7 {[%clk 0:00:28.8]} 22. Qe8+ {[%clk 0:03:51.9]} 1-0\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/5917343870",
+      "opponent": "B0aty",
+      "opponentRating": 859,
+      "studentRating": 2415,
+      "date": "2020-12-08",
+      "timeClass": "rapid",
+      "outcome": "loss",
+      "plyCount": 17,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2020.12.08\"]\n[Round \"-\"]\n[White \"GothamChess\"]\n[Black \"B0aty\"]\n[Result \"0-1\"]\n[CurrentPosition \"r1bqr1k1/pppp1ppp/2n2n2/b3p3/2BPP3/BQP2N2/P4PPP/RN3RK1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C52\"]\n[ECOUrl \"https://www.chess.com/openings/Giuoco-Piano-Game-Evans-Accepted-Slow-Variation-6...Nf6-7.d4-O-O\"]\n[UTCDate \"2020.12.08\"]\n[UTCTime \"15:55:47\"]\n[WhiteElo \"2415\"]\n[BlackElo \"859\"]\n[TimeControl \"900+10\"]\n[Termination \"B0aty won by resignation\"]\n[StartTime \"15:55:47\"]\n[EndDate \"2020.12.08\"]\n[EndTime \"16:06:35\"]\n[Link \"https://www.chess.com/game/live/5917343870\"]\n\n1. e4 {[%clk 0:15:10]} 1... e5 {[%clk 0:15:10]} 2. Nf3 {[%clk 0:15:06.4]} 2... Nc6 {[%clk 0:15:10.3]} 3. Bc4 {[%clk 0:15:09.8]} 3... Bc5 {[%clk 0:15:02.8]} 4. b4 {[%clk 0:14:09.5]} 4... Bxb4 {[%clk 0:15:00.2]} 5. c3 {[%clk 0:14:09.7]} 5... Ba5 {[%clk 0:14:16.3]} 6. O-O {[%clk 0:14:09.4]} 6... Nf6 {[%clk 0:14:00.2]} 7. d4 {[%clk 0:14:03.5]} 7... O-O {[%clk 0:11:48.7]} 8. Ba3 {[%clk 0:14:03.1]} 8... Re8 {[%clk 0:10:43.5]} 9. Qb3 {[%clk 0:12:25.9]} 0-1\n"
+    }
+  ]
+}

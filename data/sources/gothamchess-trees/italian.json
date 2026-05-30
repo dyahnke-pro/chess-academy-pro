@@ -10,9 +10,9 @@
     "Nc6",
     "Bc4"
   ],
-  "generatedAt": "2026-05-28T18:29:08.371Z",
+  "generatedAt": "2026-05-30T02:09:02.680Z",
   "totals": {
-    "totalGamesScanned": 31960,
+    "totalGamesScanned": 31994,
     "gamesMatchingOpening": 75,
     "minBranchGames": 5,
     "minTrieGames": 5

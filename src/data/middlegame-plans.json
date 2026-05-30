@@ -15676,88 +15676,6 @@
     ]
   },
   {
-    "id": "mp-pro-gothamchess-italian-center",
-    "openingId": "pro-gothamchess-italian",
-    "criticalPositionFen": "r1bq1rk1/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2Q1RK1 w - - 2 11",
-    "title": "IQP Pressure on d4",
-    "overview": "In GothamChess's Italian, White has an isolated d4 pawn but excellent piece activity to compensate. The Bc4 targets f7, the Nd2 can reroute to e4 or f3, and the d4 pawn controls c5 and e5. The plan is to use the IQP as a dynamic asset — not a weakness — by keeping pieces active and creating kingside threats before Black can blockade d5.",
-    "pawnBreaks": [
-      {
-        "move": "d4-d5",
-        "explanation": "The d5 advance is the IQP's most powerful resource. If timed correctly (when Black's pieces are not well-placed), d5 blows open the center and creates a dangerous passed pawn or clears diagonals for the bishops.",
-        "fen": "r1bq1rk1/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2Q1RK1 w - - 2 11"
-      },
-      {
-        "move": "e2-e4",
-        "explanation": "If Black leaves the Nd5 in place, e4 kicks it with tempo and creates a powerful e4+d4 pawn duo. The center surges forward and Black's pieces are driven back.",
-        "fen": "r1bq1rk1/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2Q1RK1 w - - 2 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nd2-e4",
-        "explanation": "The Ne4 is a dream outpost — centralized, supporting d5 or heading to f6/g5 with tempo. It's White's most important maneuver in IQP positions."
-      },
-      {
-        "piece": "Queen",
-        "route": "Qd1-e2 or Qd1-d3",
-        "explanation": "The queen supports the center from e2 (eyeing e4 and the kingside) or d3 (targeting h7 along the b1-h7 diagonal when paired with Bc4)."
-      }
-    ],
-    "strategicThemes": [
-      "The IQP is a STRENGTH when pieces are active. White must avoid simplifications that turn it into a pure endgame weakness.",
-      "Piece activity > pawn structure in IQP positions. Keep the major pieces on the board and generate threats.",
-      "The Bc4+Qd3 battery on the b1-h7 diagonal is a classic attacking setup. Combined with Ne4-g5, it creates direct threats to Black's king.",
-      "Prevent Black from blockading d5 with a knight. If Black achieves a stable Nd5 blockade, White's position loses its dynamism."
-    ],
-    "endgameTransitions": [
-      "Avoid pure endgames where the IQP becomes a weakness. If entering an endgame, ensure active rooks and pieces compensate.",
-      "If the d-pawn advances to d5 and creates a passed pawn, even endgames can be favorable. The passed d-pawn ties down Black's pieces to blockading duties."
-    ]
-  },
-  {
-    "id": "mp-pro-gothamchess-italian-kside",
-    "openingId": "pro-gothamchess-italian",
-    "criticalPositionFen": "r1bq1rk1/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2Q1RK1 w - - 2 11",
-    "title": "Kingside Attack with Ne4-g5",
-    "overview": "White's pieces are perfectly placed for a kingside assault. The Bc4 targets f7, and once the knight reaches e4, the Nf6+ or Ng5 ideas become very dangerous. Combined with Qd3 eyeing h7, this creates a classic IQP attack that can lead to a direct mating assault.",
-    "pawnBreaks": [
-      {
-        "move": "h2-h4",
-        "explanation": "h4 supports Ng5 by preventing ...h6 from being effective (after Ng5 h6 Nxf7!). It also gains kingside space and can prepare h5 to weaken Black's king shelter.",
-        "fen": "r1bq1rk1/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2Q1RK1 w - - 2 11"
-      },
-      {
-        "move": "f2-f4",
-        "explanation": "f4 supports Ne4 and prepares f5, which would further cramp Black's kingside. The f4 push also opens the f-file for the rook after a future f5.",
-        "fen": "r1bq1rk1/ppp2ppp/2n5/3n4/2BP4/5N2/PP1N1PPP/R2Q1RK1 w - - 2 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Ne4-g5 threatening Nxf7",
-        "explanation": "The classic attacking maneuver. Ng5 threatens Nxf7 forking queen and rook, and if Black plays h6, White can sacrifice on f7 anyway with Bxf7+ Rxf7 Ng5xf7 winning material."
-      },
-      {
-        "piece": "Rook",
-        "route": "Rf1-e1 supporting e4",
-        "explanation": "Re1 supports a potential e4 push and controls the e-file. After the position opens, the rook becomes a powerful attacking piece on the e-file."
-      }
-    ],
-    "strategicThemes": [
-      "The Bc4+Ne4+Qd3 trio is one of the strongest attacking formations in chess. All three pieces coordinate against f7 and h7.",
-      "Black's Nd5 is the key defensive piece. If it can be exchanged or driven away, Black's kingside becomes very vulnerable.",
-      "Speed matters in IQP positions. Every move should either improve an attacking piece or create a direct threat.",
-      "If Black plays passively, White's attack builds naturally. If Black plays actively (...c5, ...b5), it creates weaknesses White can exploit."
-    ],
-    "endgameTransitions": [
-      "The attack should lead to material gain or checkmate, not an endgame. Only trade pieces when winning material.",
-      "If forced to simplify, keep at least one heavy piece (queen or two rooks) to maintain pressure against Black's king."
-    ]
-  },
-  {
     "id": "mp-pro-gothamchess-london-c4",
     "openingId": "pro-gothamchess-london",
     "criticalPositionFen": "r2q1rk1/pb3ppp/1pnbpn2/2pp4/3P4/2PBPNB1/PP1N1PPP/R2Q1RK1 w - - 2 10",
@@ -48120,6 +48038,200 @@
           "https://www.chess.com/openings/Vienna-Game",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://en.wikipedia.org/wiki/Vienna_Game"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-italian-twoknights-kside",
+    "openingId": "pro-gothamchess-italian",
+    "criticalPositionFen": "r1bqk2r/ppp2ppp/3p1n2/4p1B1/2BnPP2/8/PPP3PP/RN1Q1RK1 b kq - 0 8",
+    "title": "Italian Two Knights: the f4-f5 Kingside Attack",
+    "overview": "His most-played Italian middlegame across the 67-game Two Knights line. After the central trades on d4, White pins with Bg5 and rolls the f-pawn: f4 grabs space, f5 cramps Black and clamps the e6-square, opening lines toward the king. With the bishop on g5 pinning the f6-knight and the f-pawn storming, White generates a direct kingside initiative.",
+    "pawnBreaks": [
+      "f4-f5 the kingside storm",
+      "f4 grabbing space"
+    ],
+    "pieceManeuvers": [
+      "Bc1-g5 pinning the f6-knight",
+      "Bg5-h4 keeping the pin",
+      "the f-pawn roller toward f5"
+    ],
+    "strategicThemes": [
+      "Pin the f6-knight with Bg5",
+      "Storm with f4-f5",
+      "Open lines toward the king"
+    ],
+    "endgameTransitions": [
+      "The kingside space lingers as an asset"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/ppp2ppp/3p1n2/4p1B1/2BnPP2/8/PPP3PP/RN1Q1RK1 b kq - 0 8",
+        "moves": [
+          "Qe7",
+          "f5",
+          "h6",
+          "Bh4"
+        ],
+        "annotations": [
+          "…Qe7 — Black connects the pieces and eyes the e-file.",
+          "f5 — the storm. White clamps the e6-square, gains kingside space, and opens lines toward Black’s king.",
+          "…h6 — Black questions the g5-bishop.",
+          "Bh4 — White keeps the pin on the f6-knight; the f5-wedge and the pinned knight give White a strong, lasting kingside initiative."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Qe7 — Black eyes the e-file",
+          "f5 — clamp e6, storm",
+          "h6 — Black questions the bishop",
+          "Bh4 — keep the pin, press on"
+        ],
+        "title": "Italian Two Knights: the f4-f5 Kingside Attack",
+        "intro": "His most-played Italian middlegame across the 67-game Two Knights line. After the central trades on d4, White pins with Bg5 and rolls the f-pawn: f4 grabs space, f5 cramps Black and clamps the e6-square, opening lines toward the king. With the bishop on g5 pinning the f6-knight and the f-pawn storming, White generates a direct kingside initiative.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Italian-Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Italian_Game"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-italian-evans-bigcenter",
+    "openingId": "pro-gothamchess-italian",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/b3p3/2BPP3/2P2N2/P4PPP/RNBQK2R b KQkq - 0 6",
+    "title": "Evans Gambit: the d4 Big-Centre Initiative",
+    "overview": "The Evans Gambit, his sharpest Italian weapon. White sacrifices the b-pawn with b4 to deflect the bishop, then plays c3 and d4 to build a big pawn centre with a lead in development. After …Bxb4 c3 Ba5 d4, White's centre rolls forward and the open lines give a dangerous attacking initiative — the classic romantic gambit, a pawn for a raging position.",
+    "pawnBreaks": [
+      "d4 building the big centre",
+      "c3 supporting d4"
+    ],
+    "pieceManeuvers": [
+      "Nb1-c3 developing toward the centre",
+      "O-O tucking the king away",
+      "the c3/d4 pawn duo"
+    ],
+    "strategicThemes": [
+      "Sacrifice b4 to deflect the bishop",
+      "Build the c3/d4 big centre",
+      "A lead in development for the pawn"
+    ],
+    "endgameTransitions": [
+      "Keep attacking — the development lead is the compensation"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk1nr/pppp1ppp/2n5/b3p3/2BPP3/2P2N2/P4PPP/RNBQK2R b KQkq - 0 6",
+        "moves": [
+          "exd4",
+          "O-O",
+          "d6",
+          "cxd4",
+          "Bb6",
+          "Nc3"
+        ],
+        "annotations": [
+          "…exd4 — Black grabs the centre pawn, the principled acceptance.",
+          "O-O — White castles, prioritising development and king safety over recapturing immediately.",
+          "…d6 — Black props the centre and opens the light bishop.",
+          "cxd4 — White rebuilds the big pawn centre, the e4/d4 duo dominating the board.",
+          "…Bb6 — the bishop retreats to a safe diagonal.",
+          "Nc3 — White completes development; the big centre, open lines, and lead in development give a powerful initiative for the gambit pawn."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "exd4 — Black takes the centre",
+          "O-O — castle, develop first",
+          "d6 — Black props the centre",
+          "cxd4 — rebuild the big centre",
+          "Bb6 — the bishop retreats",
+          "Nc3 — complete development, attack"
+        ],
+        "title": "Evans Gambit: the d4 Big-Centre Initiative",
+        "intro": "The Evans Gambit, his sharpest Italian weapon. White sacrifices the b-pawn with b4 to deflect the bishop, then plays c3 and d4 to build a big pawn centre with a lead in development. After …Bxb4 c3 Ba5 d4, White's centre rolls forward and the open lines give a dangerous attacking initiative — the classic romantic gambit, a pawn for a raging position.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Italian-Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Italian_Game"
         ]
       }
     ]

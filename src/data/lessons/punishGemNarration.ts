@@ -2639,6 +2639,108 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:pos-center', 'concept:pos-outpost', 'https://www.chess.com/openings/Vienna-Game-Vienna-Gambit'],
   },
+
+  // ── GothamChess Italian Game (student = WHITE) ───────────────────────────
+  // Giuoco Piano: 5.c3 h6?! is a slow waiting move; White hits the centre with
+  // b4-b5 and wins a pawn (confirmed, +1.6 / +1). 16 plies; h6@7, b4@8.
+  'pro-gothamchess-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3:h6': {
+    watch: [
+      '', '', '', '', '', '', '',
+      'h6?! A slow waiting move that does nothing for the centre and hands White the initiative for free.',
+      'b4 — the punish. White gains queenside space with tempo, kicking the c5-bishop and preparing b5 to chase the knight.',
+      '…Bb6 — the bishop retreats; Black is already a step behind.',
+      'b5 — the pawn rolls on, forking the c6-knight and cramping Black.',
+      '…d5 — Black lashes out, but it loses a pawn by force.',
+      'Bxd5 — White scoops the pawn; the engine has White winning.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '',
+      'h6 — a slow waiting move',
+      'b4 — gain space with tempo',
+      'Bb6 — the bishop retreats',
+      'b5 — fork the knight, cramp Black',
+      'd5 — Black lashes out',
+      'Bxd5 — win the pawn, White winning',
+      '', '', '',
+    ],
+    sources: ['concept:pos-center', 'concept:tac-fork', 'https://www.chess.com/openings/Italian-Game-Giuoco-Piano'],
+  },
+
+  // Giuoco c3-d4: after the IQP arises, …Bb6?! lets White push d5 with a
+  // crushing space bind (confirmed, +2.1). 20 plies; Bb6@11, d5@12.
+  'pro-gothamchess-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4:Bb6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Bb6?! Retreating the bishop passively lets White seize the centre with a powerful pawn thrust.',
+      'd5 — the punish. The pawn jumps forward, kicking the c6-knight and clamping the whole board.',
+      '…Ne7 — the knight is shoved to a passive square.',
+      'e5 — the second pawn rolls up, hitting the f6-knight and grabbing a huge space bind.',
+      '…Ng4 — the knight scrambles for air.',
+      'd6 — the pawn wedge drives deeper, ripping Black’s position apart; White is clearly winning.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Bb6 — too passive',
+      'd5 — seize the centre, kick the knight',
+      'Ne7 — shoved back',
+      'e5 — roll the second pawn',
+      'Ng4 — scrambling',
+      'd6 — the wedge, White winning',
+      '', '', '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Italian-Game-Giuoco-Piano'],
+  },
+
+  // Giuoco c3-d4 Greco: …Nxc3?! grabs a pawn but Qe1+! wins it back with a
+  // decisive pin and a huge edge (confirmed, +4.8 / +1). 26 plies; Nxc3@17,
+  // Qe1+@18.
+  'pro-gothamchess-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_c3_Nf6_d4_exd4_cxd4_Bb4+_Nc3_Nxe4_O-O_Bxc3_bxc3:Nxc3': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxc3?! Black snatches the c3-pawn, but the knight is loose and the king is still in the centre — a fatal combination.',
+      'Qe1+ — the punish. The queen checks and skewers: it forks the king and the offside knight on c3.',
+      '…Ne7 — Black blocks the check, the only move.',
+      'Qxc3 — White scoops the knight back; material is even but White is utterly dominant with the centre and the lead in development. The engine reads it as winning.',
+      '', '', '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxc3 — the knight is loose',
+      'Qe1+ — check and skewer the knight',
+      'Ne7 — forced block',
+      'Qxc3 — win the knight back, dominant',
+      '', '', '', '', '',
+    ],
+    sources: ['concept:tac-pin', 'concept:tac-skewer', 'https://www.chess.com/openings/Italian-Game-Giuoco-Piano'],
+  },
+
+  // Evans Gambit Accepted: …Nge7?! is passive; Ng5! hits f7 and h7 and starts
+  // a winning kingside attack (confirmed, +2.5). 26 plies; Nge7@17, Ng5@18.
+  'pro-gothamchess-italian:e4_e5_Nf3_Nc6_Bc4_Bc5_b4_Bxb4_c3_Ba5_d4_exd4_O-O_d6_cxd4_Bb6_Nc3:Nge7': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nge7?! Developing the knight passively to e7 blocks the e-file and leaves f7 fatally weak.',
+      'Ng5 — the punish. The knight leaps to attack f7 and h7, the soft squares around Black’s king.',
+      '…Rf8 — Black scrambles to defend f7.',
+      'Qh5 — the queen piles onto the kingside, threatening mate on f7 and h7.',
+      '…Ng6 — the knight rushes back to defend.',
+      'Nxh7 — White crashes through, winning a pawn and shattering the king; the attack is decisive.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nge7 — passive, weakens f7',
+      'Ng5 — leap at f7 and h7',
+      'Rf8 — Black defends f7',
+      'Qh5 — pile on, threaten mate',
+      'Ng6 — rush back to defend',
+      'Nxh7 — crash through, decisive',
+      '', '', '',
+    ],
+    sources: ['concept:tac-sacrifice', 'concept:pos-king-safety', 'https://www.chess.com/openings/Evans-Gambit'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
