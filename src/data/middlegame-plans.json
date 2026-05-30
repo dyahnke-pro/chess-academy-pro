@@ -16156,7 +16156,7 @@
     "openingId": "pro-gothamchess-french-defense",
     "criticalPositionFen": "rnbqkb1r/ppp2p1p/4pp2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 6",
     "title": "French Rubinstein — broken kingside + bishop pair",
-    "overview": "Gotham's French Defense — 1,596 games at 62.7%. The Rubinstein 4...dxe4 accepts doubled f-pawns for the bishop pair and active piece play. After …Nc6 + …e5 + …Bg4, Black coordinates around the open g-file.",
+    "overview": "Gotham's French Defense — 1,596 games at 62.7%. The Rubinstein 4...dxe4 accepts doubled f-pawns for the open g-file and active piece play. After …Nc6 + …e5 + …Bg4, Black coordinates around the open g-file.",
     "pawnBreaks": [
       "…e5 striking back at White's centre",
       "…c5 challenging d4"
@@ -16285,7 +16285,7 @@
           "Bxf3 — bishop to f3"
         ],
         "title": "French Rubinstein — broken kingside + bishop pair",
-        "intro": "Gotham's French Defense — 1,596 games at 62.7%. The Rubinstein 4...dxe4 accepts doubled f-pawns for the bishop pair and active piece play. After …Nc6 + …e5 + …Bg4, Black coordinates around the open g-",
+        "intro": "Gotham's French Defense — 1,596 games at 62.7%. The Rubinstein 4...dxe4 accepts doubled f-pawns for the open g-file and active piece play. After …Nc6 + …e5 + …Bg4, Black coordinates around the open g-",
         "sources": [
           "book:french-defence",
           "https://www.chess.com/openings/French-Defense",
@@ -16300,7 +16300,7 @@
     "openingId": "pro-gothamchess-milner-barry",
     "criticalPositionFen": "rnbqkb1r/ppp2p1p/4pp2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 6",
     "title": "French Rubinstein — broken kingside + bishop pair",
-    "overview": "Levy's French Defense as Black — his Rubinstein 4...dxe4 line at 1,596 games / 62.7% score. After 5.Nxe4 Nf6 6.Nxf6+ gxf6, Black accepts doubled f-pawns in exchange for the bishop pair and active piece play. The plan: develop Nc6 / Bg4 with pressure on the open g-file.",
+    "overview": "Levy's French Defense as Black — his Rubinstein 4...dxe4 line at 1,596 games / 62.7% score. After 5.Nxe4 Nf6 6.Nxf6+ gxf6, Black accepts doubled f-pawns in exchange for the open g-file and active piece play. The plan: develop Nc6 / Bg4 with pressure on the open g-file.",
     "pawnBreaks": [
       "…e5 striking back at White's centre",
       "…c5 challenging d4",
@@ -17209,7 +17209,7 @@
     "openingId": "pro-gothamchess-trompowsky",
     "criticalPositionFen": "rnbqkb1r/pppp1pp1/4pn1p/8/3P3B/8/PPPNPPPP/R2QKBNR b KQkq - 1 4",
     "title": "Trompowsky main — Bh4 pin + classical setup",
-    "overview": "Gotham's top opening: 1,823 games at 61.5% score. After the Bg5 pin, Black plays …e6 / …h6 / White holds with Bh4. The plan: Bd3 + c3 + O-O reaching a quiet middlegame where the bishop pair + space advantage gradually win.",
+    "overview": "Gotham's top opening: 1,823 games at 61.5% score. After the Bg5 pin, Black plays …e6 / …h6 / White holds with Bh4. The plan: Bd3 + c3 + O-O reaching a quiet middlegame where the space advantage and the f4-storm plan gradually win.",
     "pawnBreaks": [
       "…d5 by Black challenging the centre",
       "e3-e4 timed central break",
@@ -18293,7 +18293,7 @@
           "Qh5! — the queen swings to the kingside threatening multiple tactics on f7 and h7. Black's defensive setup is creaking.",
           "Black plays …Qb6 trying to counter-attack our b2 pawn. Too slow — our kingside attack is faster than his queenside counterplay.",
           "Nh3 — the knight retreats but eyes Nf4 (where it would join the kingside attack) AND prepares the bishop sac. Slow-motion attack.",
-          "Black plays …Ne7 defending the e-pawn but blocking the f8-bishop's diagonal. Black's pieces are all uncoordinated.",
+          "Black plays …Ne7 defending the e-pawn but leaving his pieces passive and uncoordinated.",
           "Bxh6! — THE sacrifice. After …gxh6 Qxh6, Black's king has no pawn shield, the kingside is fully open, and Black's pieces all face the wrong direction. The Theodorou game continued to a 67-ply demolition."
         ],
         "arrows": [
@@ -18389,7 +18389,7 @@
     "openingId": "pro-naroditsky-alapin",
     "criticalPositionFen": "6k1/p3ppbp/1p6/4P2p/8/6BP/PPr2P2/R3R1K1 w - - 5 26",
     "title": "2…g6 ENDGAME — R+B vs R+B post-tactics (vs Botez 2279)",
-    "overview": "Past move 25 in the Botez game, Naroditsky has reached a R+B+P vs R+B+P endgame with extra material — the conversion of the structural advantage. This is the kind of endgame the g6-dragon's 26.4% R+min+P stat refers to, and the technique is straightforward: active rook + the bishop pair coordinating to the queenside.",
+    "overview": "Past move 25 in the Botez game, Naroditsky has reached a R+B+P vs R+B+P endgame with extra material — the conversion of the structural advantage. This is the kind of endgame the g6-dragon's 26.4% R+min+P stat refers to, and the technique is straightforward: active rook + the bishop coordinating to the queenside.",
     "pawnBreaks": [
       "e5 stays as the central pawn",
       "b2 stays — no weaknesses"
@@ -18504,7 +18504,7 @@
           "…h6 — king escape too late"
         ],
         "title": "2…g6 ENDGAME — R+B vs R+B post-tactics (vs Botez 2279)",
-        "intro": "Past move 25 in the Botez game, Naroditsky has reached a R+B+P vs R+B+P endgame with extra material — the conversion of the structural advantage. This is the kind of endgame the g6-dragon's 26.4% R+min+P stat refers to, and the technique is straightforward: active rook + the bishop pair coordinating to the queenside.",
+        "intro": "Past move 25 in the Botez game, Naroditsky has reached a R+B+P vs R+B+P endgame with extra material — the conversion of the structural advantage. This is the kind of endgame the g6-dragon's 26.4% R+min+P stat refers to, and the technique is straightforward: active rook + the bishop coordinating to the queenside.",
         "sources": [
           "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
           "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -18518,7 +18518,7 @@
     "openingId": "pro-naroditsky-alapin",
     "criticalPositionFen": "rnbq1rk1/pp2ppbp/1n4p1/8/3P4/1BN2N2/PP3PPP/R1BQK2R w KQ - 6 10",
     "title": "2…g6 MIDDLEGAME — Bc4-Bb3 attack + knight harassment (vs Botez 2279)",
-    "overview": "After the 18-ply g6-dragon spine ending with O-O, the middlegame plan is the SAME Bc4-Bb3 setup as the main spine (different move order, same structure). Black tries …Nc6 / …Na5 trying to harass our bishop pair — we re-route around their threats and convert. From his win vs Alexandra Botez (2279).",
+    "overview": "After the 18-ply g6-dragon spine ending with O-O, the middlegame plan is the SAME Bc4-Bb3 setup as the main spine (different move order, same structure). Black tries …Nc6 / …Na5 trying to harass our bishops — we re-route around their threats and convert. From his win vs Alexandra Botez (2279).",
     "pawnBreaks": [
       "h3 + d4 — central+kingside support",
       "c-file half-open from cxd4 earlier"
@@ -18550,7 +18550,7 @@
           "h3 — prophylaxis against …Bg4 pinning our Nf3. Same theme as the d6-mainline plan; the principles transfer across variations because the structure is similar.",
           "Black plays …Nc6 developing the queen's knight to a natural square. Looks principled, but it commits the knight to a square where our pieces can harass it.",
           "Be3 — completes development with the dark-squared bishop on its best diagonal. Note we play Be3 NOT Bg5 in this structure because Black has no pinnable knight on f6 anymore (the Nxd5 trade earlier).",
-          "Black plays …Na5 harassing our bishop pair on b3. The knight on a5 looks active but it's a rim square — it covers nothing useful.",
+          "Black plays …Na5 harassing our bishop on b3. The knight on a5 looks active but it's a rim square — it covers nothing useful.",
           "Bc2 — sidestep the knight. The bishop on c2 stays on the b1-h7 diagonal, still pointing at the kingside. Black has wasted two moves on the …Nc6 → …Na5 maneuver.",
           "Black plays …Nac4 trying to find a more active knight square. The Botez game continued Bc1 + Nd5 + O-O + Nxd5 + Re1 — slowly converting via piece coordination to a 1-0 in 59 plies."
         ],
@@ -18633,7 +18633,7 @@
           "…Nac4 — Black's second attempt"
         ],
         "title": "2…g6 MIDDLEGAME — Bc4-Bb3 attack + knight harassment (vs Botez 2279)",
-        "intro": "After the 18-ply g6-dragon spine ending with O-O, the middlegame plan is the SAME Bc4-Bb3 setup as the main spine (different move order, same structure). Black tries …Nc6 / …Na5 trying to harass our bishop pair — we re-route around their threats and convert. From his win vs Alexandra Botez (2279).",
+        "intro": "After the 18-ply g6-dragon spine ending with O-O, the middlegame plan is the SAME Bc4-Bb3 setup as the main spine (different move order, same structure). Black tries …Nc6 / …Na5 trying to harass our bishops — we re-route around their threats and convert. From his win vs Alexandra Botez (2279).",
         "sources": [
           "https://lichess.org/@/Gordima/blog/naroditskys-blitz-repertoire/O0IqPlQR",
           "https://www.chess.com/openings/Alapin-Sicilian-Defense",
@@ -20216,7 +20216,7 @@
     "openingId": "pro-naroditsky-caro-kann",
     "criticalPositionFen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
     "title": "Fantasy — central break refutation (the 75% plan)",
-    "overview": "The dominant Fantasy refutation plan. After the f3 wasted tempo, dxe4 + fxe4 + e5 cracks open the centre. Black's bishop pair + active pieces vs White's wrecked kingside structure converts at 75% — his highest-scoring Caro variation.",
+    "overview": "The dominant Fantasy refutation plan. After the f3 wasted tempo, dxe4 + fxe4 + e5 cracks open the centre. Black’s active pieces vs White’s wrecked kingside structure converts at 75% — his highest-scoring Caro variation.",
     "pawnBreaks": [
       "…b5 once attack is firing",
       "…c5 in some lines"
@@ -36385,7 +36385,7 @@
           "Rfd1 — White doubles on the d-file, hoping to use the central files. But the queenside is still bleeding pressure.",
           "...b4! The wedge. Black drives the Nc3 off its natural square AND opens the b-file for further pressure. White's pieces are getting pushed back.",
           "Nd5 — White's knight repositions to the centre, trying to find activity. The d5 square is the only central outpost left.",
-          "...Nxd5! Black trades the central knight. White recaptures with a damaged centre and Black has the easier endgame with queenside space and bishop pair."
+          "...Nxd5! Black trades the central knight. White recaptures with a damaged centre and Black has the easier endgame with queenside space and the more active pieces."
         ],
         "arrows": [
           [],
@@ -36701,7 +36701,7 @@
     "openingId": "pro-naroditsky-kid",
     "criticalPositionFen": "2r2r2/1p1nppkp/p2pb1p1/q7/2P1P3/1PN2P2/P2QB1PP/3R1RK1 w - - 0 16",
     "title": "Sämisch — Panno queenside trade-down",
-    "overview": "Past the trade-down sequence in the Sämisch, Black has reached a R+B+N endgame structure with the bishop pair (Bg7 traded but Be6 active). The plan from here is the central knight trade + the queenside conversion.",
+    "overview": "Past the trade-down sequence in the Sämisch, Black has reached a R+B+N endgame structure with the active bishop on e6 (the g7-bishop has been traded off). The plan from here is the central knight trade + the queenside conversion.",
     "pawnBreaks": [
       "queenside ...b5 expansion"
     ],
@@ -36800,7 +36800,7 @@
           "exd5 — isolated d-pawn"
         ],
         "title": "Sämisch — Panno queenside trade-down",
-        "intro": "Past the trade-down sequence in the Sämisch, Black has reached a R+B+N endgame structure with the bishop pair (Bg7 traded but Be6 active). The plan from here is the central knight trade + the queenside conversion.",
+        "intro": "Past the trade-down sequence in the Sämisch, Black has reached a R+B+N endgame structure with the active bishop on e6 (the g7-bishop has been traded off). The plan from here is the central knight trade + the queenside conversion.",
         "sources": [
           "https://www.chess.com/openings/Kings-Indian-Defense",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -36836,7 +36836,7 @@
           "Rb1"
         ],
         "annotations": [
-          "...Bxd4! Black grabs the d4-pawn. The pawn is undefended (the c3-knight moved to a4) and the Bg7 has been waiting for this entire opening to strike along the long diagonal.",
+          "...Bxd4! Black grabs the d4-pawn. The pawn is undefended (White’s knight has left c3 for a4) and the Bg7 has been waiting for this entire opening to strike along the long diagonal.",
           "Bxb4 — White takes the b4-pawn in return, removing Black's queenside wedge. Material is balanced after the trade, but Black's bishop on d4 is dominant.",
           "...Bxb2 — Black's bishop continues the diagonal raid, grabbing another pawn. White's queenside pawn structure is collapsing.",
           "Rb1 — White's rook attacks the bishop. The bishop will retreat next, but Black has converted the queenside expansion into material gain. Two pawns up + active bishop = winning position."
@@ -36909,7 +36909,7 @@
     "openingId": "pro-naroditsky-kid",
     "criticalPositionFen": "r1bq1rk1/pp1n1pbp/3n2p1/2pPp3/2P1P3/2NBBN2/PP4PP/R2Q1RK1 w - - 6 12",
     "title": "Four Pawns — ...f5 kingside storm + Nd6 prize square",
-    "overview": "Past the locked centre with d5, Black's …Ne8-Nd6 reroute has landed and the …f5 break is queued. The plan: undermine the e4-pawn, open the f-file, exploit the bishop pair.",
+    "overview": "Past the locked centre with d5, Black's …Ne8-Nd6 reroute has landed and the …f5 break is queued. The plan: undermine the e4-pawn, open the f-file, exploit the open lines and active pieces.",
     "pawnBreaks": [
       "...f5 kingside storm"
     ],
@@ -37020,7 +37020,7 @@
           "...Bf6 defend"
         ],
         "title": "Four Pawns — ...f5 kingside storm + Nd6 prize square",
-        "intro": "Past the locked centre with d5, Black's …Ne8-Nd6 reroute has landed and the …f5 break is queued. The plan: undermine the e4-pawn, open the f-file, exploit the bishop pair.",
+        "intro": "Past the locked centre with d5, Black's …Ne8-Nd6 reroute has landed and the …f5 break is queued. The plan: undermine the e4-pawn, open the f-file, exploit the open lines and active pieces.",
         "sources": [
           "https://www.chess.com/openings/Kings-Indian-Defense",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -37513,7 +37513,7 @@
     "openingId": "pro-naroditsky-rossolimo",
     "criticalPositionFen": "r3k2r/pp1qppbp/2np1np1/2p5/2P1P3/2NP1N2/PP3PPP/R1BQR1K1 b kq - 0 9",
     "title": "Bxd7+ Trade — slow bishop pair conversion",
-    "overview": "Past the trade with Bxd7+ and the Maroczy bind setup, the bishop pair is the structural edge. The plan: slow piece coordination + Nd5 outpost + queenside expansion.",
+    "overview": "Past the trade with Bxd7+ and the Maroczy bind setup, the bishop and the bind are the structural edge. The plan: slow piece coordination + Nd5 outpost + queenside expansion.",
     "pawnBreaks": [
       "e4-e5 central break"
     ],
@@ -37596,7 +37596,7 @@
           "Bg5 — pin"
         ],
         "title": "Bxd7+ Trade — slow bishop pair conversion",
-        "intro": "Past the trade with Bxd7+ and the Maroczy bind setup, the bishop pair is the structural edge. The plan: slow piece coordination + Nd5 outpost + queenside expansion.",
+        "intro": "Past the trade with Bxd7+ and the Maroczy bind setup, the bishop and the bind are the structural edge. The plan: slow piece coordination + Nd5 outpost + queenside expansion.",
         "sources": [
           "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -39151,7 +39151,7 @@
     "openingId": "pro-naroditsky-rossolimo",
     "criticalPositionFen": "r1b1k2r/1pqp1ppp/p1n1pn2/2b5/2P1P3/1NNB4/PP3PPP/R1BQ1RK1 b kq - 4 9",
     "title": "Taimanov — Ne5 central outpost",
-    "overview": "Alternative to the Maroczy bind: the Ne5 central outpost + bishop pair attack on Black's structure.",
+    "overview": "Alternative to the Maroczy bind: the Ne5 central outpost and active-piece attack on Black’s structure.",
     "pawnBreaks": [
       "e4-e5 + f4-f5 kingside"
     ],
@@ -39273,7 +39273,7 @@
           "...Rfe8 — Black coordinates the rook on the e-file.",
           "Ne5 — our knight to the central outpost.",
           "...Nxe5 — Black trades the centralised knight.",
-          "Bxe5 — White recaptures with the bishop, keeping piece pressure on the centre. The Bg7 trade is coming and the bishop pair conversion plan continues."
+          "Bxe5 — White recaptures with the bishop, keeping piece pressure on the centre. The Bg7 trade is coming and the conversion plan continues."
         ],
         "arrows": [
           [],
@@ -39753,7 +39753,7 @@
           "...Bf5 — Black's light-square bishop comes to active life.",
           "O-O — White castles, completing development.",
           "...Nb4 — Black's knight to b4, attacks c2-square and ties down White's pieces.",
-          "Rc1 — White's rook defends c2 indirectly. The position favours Black: bishop pair, active knight, no structural concessions."
+          "Rc1 — White's rook defends c2 indirectly. The position favours Black: active pieces, a strong knight, no structural concessions."
         ],
         "arrows": [
           [],
@@ -39823,7 +39823,7 @@
     "openingId": "pro-naroditsky-alekhine",
     "criticalPositionFen": "r2qk2r/ppp1bppp/1nnpp3/4Pb2/2PP4/2N2N2/PP2BPPP/R1BQ1RK1 w kq - 3 9",
     "title": "Modern Quiet — ...d5 central break",
-    "overview": "Alternative to the active ...Nb4: the central ...d5 break opening lines for the rook and bishop pair.",
+    "overview": "Alternative to the active ...Nb4: the central ...d5 break opening lines for the rook and the bishops.",
     "pawnBreaks": [
       "...d5 central break"
     ],
@@ -39849,7 +39849,7 @@
           "Be3 — White's dark-square bishop develops.",
           "...O-O — Black castles, completing development.",
           "Qd2 — White's queen prepares Rad1.",
-          "...d5 — Black's central break. The d5 challenges the c4-pawn AND opens lines for Black's bishop pair."
+          "...d5 — Black's central break. The d5 challenges the c4-pawn AND opens lines for Black’s bishops."
         ],
         "arrows": [
           [],
@@ -39906,7 +39906,7 @@
           "...d5 break"
         ],
         "title": "Modern Quiet — ...d5 central break",
-        "intro": "Alternative to the active ...Nb4: the central ...d5 break opening lines for the rook and bishop pair.",
+        "intro": "Alternative to the active ...Nb4: the central ...d5 break opening lines for the rook and the bishops.",
         "sources": [
           "https://www.chess.com/openings/Alekhines-Defense",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -40596,7 +40596,7 @@
     "openingId": "pro-naroditsky-kid",
     "criticalPositionFen": "r1bq1rk1/pppn1pbp/3p1np1/8/2PNP3/2N3P1/PP3PBP/R1BQ1RK1 b - - 0 9",
     "title": "Fianchetto — early ...exd4 simplification",
-    "overview": "Alternative to the slow Yugoslav queenside push: the immediate ...exd4 trade opening lines for the rook + bishop pair on the e-file.",
+    "overview": "Alternative to the slow Yugoslav queenside push: the immediate ...exd4 trade opening lines for the rook and bishops on the e-file.",
     "pawnBreaks": [
       "...a5 queenside push"
     ],
@@ -40679,7 +40679,7 @@
           "Rd1 central"
         ],
         "title": "Fianchetto — early ...exd4 simplification",
-        "intro": "Alternative to the slow Yugoslav queenside push: the immediate ...exd4 trade opening lines for the rook + bishop pair on the e-file.",
+        "intro": "Alternative to the slow Yugoslav queenside push: the immediate ...exd4 trade opening lines for the rook and bishops on the e-file.",
         "sources": [
           "https://www.chess.com/openings/Kings-Indian-Defense",
           "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
@@ -41786,7 +41786,7 @@
           "Bf4"
         ],
         "annotations": [
-          "...Nc6 — Black develops the queen knight, attacking the d4-pawn (already gone) and supporting c5/e5 squares.",
+          "...Nc6 — Black develops the queen knight, attacking on d4 (the pawn there is already gone) and supporting the c5/e5 squares.",
           "Nb3 — White's knight attacks Black's exposed queen on c5. KEY SQUARE: c5 (queen retreat needed).",
           "...Qb6 — Black's queen retreats to safety.",
           "Bf4 — White completes development with the dark-square bishop active. STRUCTURAL EDGE: Maroczy Bind pattern with extra tempo + active pieces vs Black's exposed queen."
@@ -41885,7 +41885,7 @@
         ],
         "annotations": [
           "Qd2 — connect the rooks, prepare O-O-O. KEY SQUARE: d2 — central coordination piece, then heading to the kingside via h6 once O-O-O is in.",
-          "...Nd7 — Black develops the knight, eyes e5 and b6 outposts. PIECE ROUTE: Nd7 → Nb6 hits the c4-pawn and queenside.",
+          "...Nd7 — Black develops the knight, eyes e5 and b6 outposts. PIECE ROUTE: Nd7 → Nb6 eyes the c4-square and the queenside.",
           "O-O-O! — White castles long. The race is ON: White's pawn storm against Black's king vs Black's pawn storm against White's. PAWN BREAK to come: g4-g5 ripping open the h-file.",
           "...a5! — Black throws the queenside pawn forward. Opposite-side-castling race: whoever's pawn storm lands first wins. KEY SQUARES: a4/b4 for Black's storm, g4/h4 for White's.",
           "g4! — KEY SQUARE g4. White's pawn break launches the kingside storm. Next g5 ripping open the h-file against Black's castled king. White's storm arrives first."
@@ -46488,7 +46488,7 @@
           "…fxg6 — Black takes, but now the h-file is wide open with White’s rook already on h1.",
           "Ngf3 — White develops with tempo, eyeing the e5- and g5-squares and the dark holes around Black’s king.",
           "…d6 — Black tries to free the position.",
-          "e4 — the centre surges forward; White has a roaring initiative, an open h-file, and Black’s king stuck in the middle. The b2-pawn was a cheap price."
+          "e4 — the centre surges forward; White has a roaring initiative, an open h-file, and Black’s king stuck in the middle. Giving up the b2 pawn was a cheap price."
         ],
         "arrows": [
           [],
@@ -47698,7 +47698,7 @@
         ],
         "annotations": [
           "…Bd6 — Black challenges the f4-bishop after the knight has been provoked to a6.",
-          "e3 — White completes the setup; the Nb5 raid has provoked …Na6 and …c6, leaving Black slightly tangled while White develops harmoniously with the bishop pair pointing kingside. A pleasant, provocative edge."
+          "e3 — White completes the setup; the Nb5 raid has provoked …Na6 and …c6, leaving Black slightly tangled while White develops harmoniously with both bishops aimed kingside. A pleasant, provocative edge."
         ],
         "arrows": [
           [],
@@ -47805,7 +47805,7 @@
     "openingId": "pro-gothamchess-london",
     "criticalPositionFen": "rnbqkb1r/pp2pppp/2p2n2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 2 4",
     "title": "London vs …c6: the c4 Central Break",
-    "overview": "Against the …c6 Slav-like setup, his 39-game plan switches gears: rather than the slow London, White strikes with c4! to challenge Black's centre directly. After …Bg4 developing, c4 opens the position and gives White active central play with the bishop pair. A more dynamic London treatment that exploits Black's passive …c6.",
+    "overview": "Against the …c6 Slav-like setup, his 39-game plan switches gears: rather than the slow London, White strikes with c4! to challenge Black's centre directly. After …Bg4 developing, c4 opens the position and gives White active central play and the freer position. A more dynamic London treatment that exploits Black's passive …c6.",
     "pawnBreaks": [
       "c2-c4 the central break challenging d5"
     ],
@@ -47831,7 +47831,7 @@
         ],
         "annotations": [
           "…Bg4 — Black develops the bishop actively, pinning the f3-knight.",
-          "c4 — the break. White challenges Black’s d5-centre directly, opening the position for the bishop pair and seizing active central play. Against the passive …c6, the c4 lever is the dynamic, ambitious choice — White gets the freer game."
+          "c4 — the break. White challenges Black’s d5-centre directly, opening the position and seizing active central play. Against the passive …c6, the c4 lever is the dynamic, ambitious choice — White gets the freer game."
         ],
         "arrows": [
           [],
@@ -47856,7 +47856,7 @@
           "c4 — strike the centre"
         ],
         "title": "London vs …c6: the c4 Central Break",
-        "intro": "Against the …c6 Slav-like setup, his 39-game plan switches gears: rather than the slow London, White strikes with c4! to challenge Black's centre directly. After …Bg4 developing, c4 opens the position and gives White active central play with the bishop pair. A more dynamic London treatment that exploits Black's passive …c6.",
+        "intro": "Against the …c6 Slav-like setup, his 39-game plan switches gears: rather than the slow London, White strikes with c4! to challenge Black's centre directly. After …Bg4 developing, c4 opens the position and gives White active central play and the freer position. A more dynamic London treatment that exploits Black's passive …c6.",
         "sources": [
           "book:chess-strategy",
           "https://www.chess.com/openings/London-System",
@@ -48647,7 +48647,7 @@
     "openingId": "pro-gothamchess-fantasy-caro",
     "criticalPositionFen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
     "title": "Fantasy 3…dxe4: the Big e4 Centre + Slow Build",
-    "overview": "His main Fantasy plan across the 44-game 3…dxe4 line. White recaptures fxe4 to build a broad pawn centre, develops Bc4 and Nf3, and castles. Then the slow squeeze: c3 supports d4, Be3 and Nbd2 complete development, and the Bd3 + Qc2 battery aims at the kingside. The Fantasy's point — a big centre and the bishop pair — gives White a comfortable space advantage.",
+    "overview": "His main Fantasy plan across the 44-game 3…dxe4 line. White recaptures fxe4 to build a broad pawn centre, develops Bc4 and Nf3, and castles. Then the slow squeeze: c3 supports d4, Be3 and Nbd2 complete development, and the Bd3 + Qc2 battery aims at the kingside. The Fantasy’s point — a big centre and extra space — gives White a comfortable, pleasant game.",
     "pawnBreaks": [
       "the e4/d4 big centre",
       "c3 supporting d4"
@@ -48676,7 +48676,7 @@
         "annotations": [
           "Be3 — White develops the bishop, reinforcing the d4-pawn and the big centre.",
           "…O-O — Black castles into a slightly cramped but solid position.",
-          "Nbd2 — White completes development; the broad centre, the bishop pair, and the harmonious setup give a pleasant, space-gaining edge. The Fantasy has delivered exactly the position White wanted."
+          "Nbd2 — White completes development; the broad centre, the extra space, and the harmonious setup give a pleasant, space-gaining edge. The Fantasy has delivered exactly the position White wanted."
         ],
         "arrows": [
           [],
@@ -48842,7 +48842,7 @@
           "…dxe4 — Black grabs a central pawn, trying to justify the offside queen.",
           "fxe4 — White recaptures, keeping the big centre intact.",
           "…Nf6 — Black develops, attacking the e4-pawn.",
-          "Nf3 — White develops with tempo, defending the centre and completing the harmonious setup. With the queen marooned on a3 and White’s pieces flowing out, the lead in development gives a powerful initiative for the b2-pawn."
+          "Nf3 — White develops with tempo, defending the centre and completing the harmonious setup. With the queen marooned on a3 and White’s pieces flowing out, the lead in development gives a powerful initiative — full compensation for the sacrificed b2 pawn."
         ],
         "arrows": [
           [],
@@ -50187,7 +50187,7 @@
     "openingId": "pro-gothamchess-scandinavian",
     "criticalPositionFen": "r1bqkb1r/2pnpppp/p4n2/1p1P4/8/P1N5/1PPPBPPP/R1BQK1NR b KQkq - 0 6",
     "title": "Scandinavian vs Bb5+: …b5 Expansion + …Ne5 Centralization",
-    "overview": "Against the 3.Bb5+ check, his 69-game plan blocks with …Nbd7, then expands on the queenside with …a6 and …b5, fianchettoes with …Bb7, and centralizes a knight on e5. The bishop pair and the queenside space give Black a dynamic, comfortable game — the Bb5+ check has only helped Black gain space and the two bishops.",
+    "overview": "Against the 3.Bb5+ check, his 69-game plan blocks with …Nbd7, then expands on the queenside with …a6 and …b5, fianchettoes with …Bb7, and centralizes a knight on e5. The active piece play and the queenside space give Black a dynamic, comfortable game — the Bb5+ check has only helped Black develop with tempo and gain space.",
     "pawnBreaks": [
       "…b5 the queenside expansion",
       "…a6 supporting …b5"
@@ -50249,7 +50249,7 @@
           "Ne5 — centralize the knight"
         ],
         "title": "Scandinavian vs Bb5+: …b5 Expansion + …Ne5 Centralization",
-        "intro": "Against the 3.Bb5+ check, his 69-game plan blocks with …Nbd7, then expands on the queenside with …a6 and …b5, fianchettoes with …Bb7, and centralizes a knight on e5. The bishop pair and the queenside space give Black a dynamic, comfortable game — the Bb5+ check has only helped Black gain space and the two bishops.",
+        "intro": "Against the 3.Bb5+ check, his 69-game plan blocks with …Nbd7, then expands on the queenside with …a6 and …b5, fianchettoes with …Bb7, and centralizes a knight on e5. The active piece play and the queenside space give Black a dynamic, comfortable game — the Bb5+ check has only helped Black develop with tempo and gain space.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Scandinavian-Defense",
