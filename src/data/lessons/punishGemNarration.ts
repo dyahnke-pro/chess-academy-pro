@@ -2769,6 +2769,119 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:pos-king-safety', 'concept:tac-fork', 'https://www.chess.com/openings/London-System'],
   },
+
+  // ── GothamChess Ponziani (student = WHITE) ───────────────────────────────
+  // Main line: …Be7?! is passive; Qb3 + d5 + e6 cramp Black badly (positional,
+  // +0.7). 20 plies; Be7@11, Qb3@12.
+  'pro-gothamchess-ponziani:e4_e5_Nf3_Nc6_c3_Nf6_d4_exd4_e5_Nd5_cxd4:Be7': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Be7?! A passive retreat that does nothing to fight White’s big centre.',
+      'Qb3 — White probes the d5-knight and eyes both b7 and f7, gaining time.',
+      '', 'd5 — the centre rolls forward, kicking the knight all the way back to b8 and cramping Black completely.',
+      '', '', '',
+      'e6 — the pawn wedge stabs into Black’s position; with a huge space bind White is clearly better.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'Be7 — too passive',
+      'Qb3 — probe, gain time',
+      '', 'd5 — cramp, knight back to b8',
+      '', '', '',
+      'e6 — the wedge, White better',
+      '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Ponziani-Opening'],
+  },
+
+  // Main line with …Bb4+: …Qe7?! is clumsy; White develops Nc3 with a smooth,
+  // better game (positional, +0.6). 22 plies; Qe7@13, Nc3@14.
+  'pro-gothamchess-ponziani:e4_e5_Nf3_Nc6_c3_Nf6_d4_exd4_e5_Nd5_cxd4_Bb4+_Bd2:Qe7': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qe7?! The queen blocks the f8-bishop and stands awkwardly in front of her own pieces.',
+      'Nc3 — White develops with tempo, hitting the d5-knight and completing the harmonious setup.',
+      '', '', '', 'Bd3 — the bishop trains on h7; White’s pieces flow out naturally while Black stays cramped and clumsy. White is comfortably better.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qe7 — awkward, blocks the bishop',
+      'Nc3 — develop with tempo',
+      '', '', '', 'Bd3 — aim at h7, White better',
+      '', '', '',
+    ],
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://www.chess.com/openings/Ponziani-Opening'],
+  },
+
+  // 4…Nxe4 5.d5 …Na5?? — the knight is trapped on the rim; b4! wins it
+  // (confirmed, +2.4 / piece). 18 plies; Na5@9, b4@10.
+  'pro-gothamchess-ponziani:e4_e5_Nf3_Nc6_c3_Nf6_d4_Nxe4_d5:Na5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      'Na5?? The knight flees to the rim, but there is no escape — it walks into a trap.',
+      'b4 — the punish. The pawn attacks the a5-knight, which has no safe square.',
+      '…b6 — Black tries to make a luft for the knight, but it is too late.',
+      'bxa5 — White simply wins the knight; a clean piece up.',
+      '', '', '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '',
+      'Na5 — flees to the rim, trapped',
+      'b4 — attack the knight',
+      'b6 — too late',
+      'bxa5 — win the piece',
+      '', '', '', '', '',
+    ],
+    sources: ['concept:tac-trapped-piece', 'concept:pos-knight-rim', 'https://www.chess.com/openings/Ponziani-Opening'],
+  },
+
+  // 4…Nxe4 5.d5 Bc5 6.dxc6 Bxf2+ 7.Ke2 …d5?! — White consolidates the extra
+  // piece with Nbd2 (confirmed, +2.1). 22 plies; d5@13, Nbd2@14.
+  'pro-gothamchess-ponziani:e4_e5_Nf3_Nc6_c3_Nf6_d4_Nxe4_d5_Bc5_dxc6_Bxf2+_Ke2:d5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd5?! Black throws another pawn forward for activity, but the material deficit is simply too great.',
+      'Nbd2 — White calmly develops, challenging the e4-knight and consolidating the extra piece from the gambit chaos.',
+      '', 'Nxe4 — White trades off Black’s active knight, simplifying toward a winning material edge.',
+      '', 'Kxf2 — the king mops up the bishop; White is up a piece with the storm weathered. Winning.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd5 — desperate activity',
+      'Nbd2 — consolidate the extra piece',
+      '', 'Nxe4 — trade off the active knight',
+      '', 'Kxf2 — mop up, a piece up',
+      '', '', '',
+    ],
+    sources: ['concept:pos-material', 'concept:pos-king-safety', 'https://www.chess.com/openings/Ponziani-Opening'],
+  },
+
+  // 3…d5 4.Qa4 Nf6 5.Nxe5 …Bd7?! — White grabs the e5-pawn and trades cleanly,
+  // a clear pawn up (confirmed, +1.2). 18 plies; Bd7@9, Nxd7@10.
+  'pro-gothamchess-ponziani:e4_e5_Nf3_Nc6_c3_d5_Qa4_Nf6_Nxe5:Bd7': {
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      'Bd7?! Black offers to trade, but this just helps White keep the extra e5-pawn cleanly.',
+      'Nxd7 — White trades off and stays a healthy pawn up.',
+      '', 'exd5 — White grabs a second central pawn, the position simplifying in his favour.',
+      '', '', '',
+      'd4 — White claims the centre; a clean pawn up with the better structure. Winning.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '',
+      'Bd7 — helps White keep the pawn',
+      'Nxd7 — trade, stay a pawn up',
+      '', 'exd5 — grab a second pawn',
+      '', '', '',
+      'd4 — claim the centre, a pawn up',
+      '',
+    ],
+    sources: ['concept:pos-material', 'concept:pos-center', 'https://www.chess.com/openings/Ponziani-Opening'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

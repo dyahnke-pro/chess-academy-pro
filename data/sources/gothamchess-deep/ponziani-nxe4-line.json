@@ -1,0 +1,89 @@
+{
+  "player": "gothamchess",
+  "openingId": "ponziani",
+  "variationKey": "nxe4-line",
+  "variation": {
+    "label": "4…Nxe4 line",
+    "prefix": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "c3",
+      "Nf6",
+      "d4",
+      "Nxe4"
+    ]
+  },
+  "generatedAt": "2026-05-30T02:36:39.911Z",
+  "totalGames": 13,
+  "wins": 9,
+  "draws": 1,
+  "losses": 3,
+  "openingTerminusPly": 22,
+  "openingTerminusMove": 11,
+  "spineMoves": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "d4",
+    "Nxe4",
+    "d5",
+    "Bc5",
+    "dxc6",
+    "Bxf2+",
+    "Ke2",
+    "Bb6",
+    "Qd5",
+    "Nf2",
+    "Rg1",
+    "O-O",
+    "cxb7",
+    "Bxb7",
+    "Qxb7",
+    "e4"
+  ],
+  "gamesAtTerminus": 3,
+  "endgameTypeBreakdown": {
+    "middlegame (Q + pieces)": 1,
+    "R + minor + P": 2
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/79887052807",
+      "opponent": "ZackyyD",
+      "opponentRating": 2727,
+      "studentRating": 2802,
+      "date": "2023-06-07",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 59,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.06.07\"]\n[Round \"-\"]\n[White \"GothamChess\"]\n[Black \"ZackyyD\"]\n[Result \"1-0\"]\n[CurrentPosition \"3br1k1/p2R1p1p/5p2/2p1pN2/2B3P1/1PP1KN1P/r7/6R1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C44\"]\n[ECOUrl \"https://www.chess.com/openings/Ponziani-Opening-Jaenisch-Vukovic-Gambit\"]\n[UTCDate \"2023.06.07\"]\n[UTCTime \"14:26:13\"]\n[WhiteElo \"2802\"]\n[BlackElo \"2727\"]\n[TimeControl \"180\"]\n[Termination \"GothamChess won by resignation\"]\n[StartTime \"14:26:13\"]\n[EndDate \"2023.06.07\"]\n[EndTime \"14:31:22\"]\n[Link \"https://www.chess.com/game/live/79887052807\"]\n\n1. e4 {[%clk 0:02:48.3]} 1... e5 {[%clk 0:02:58.5]} 2. Nf3 {[%clk 0:02:47.1]} 2... Nc6 {[%clk 0:02:55.7]} 3. c3 {[%clk 0:02:45.2]} 3... Nf6 {[%clk 0:02:52.8]} 4. d4 {[%clk 0:02:43.7]} 4... Nxe4 {[%clk 0:02:52.5]} 5. d5 {[%clk 0:02:42.2]} 5... Bc5 {[%clk 0:02:52.3]} 6. dxc6 {[%clk 0:02:35.9]} 6... Bxf2+ {[%clk 0:02:51.6]} 7. Ke2 {[%clk 0:02:35.5]} 7... Bb6 {[%clk 0:02:51.5]} 8. Qd5 {[%clk 0:02:33.7]} 8... Nf2 {[%clk 0:02:50.8]} 9. Rg1 {[%clk 0:02:29.8]} 9... O-O {[%clk 0:02:41.1]} 10. cxb7 {[%clk 0:02:26.9]} 10... Bxb7 {[%clk 0:02:38.5]} 11. Qxb7 {[%clk 0:02:25.6]} 11... e4 {[%clk 0:02:38.2]} 12. Nd4 {[%clk 0:02:20.3]} 12... Ng4 {[%clk 0:02:24.3]} 13. h3 {[%clk 0:01:59]} 13... Ne5 {[%clk 0:02:03.9]} 14. Qd5 {[%clk 0:01:52.6]} 14... Re8 {[%clk 0:01:57.6]} 15. Be3 {[%clk 0:01:48.6]} 15... c6 {[%clk 0:01:41.8]} 16. Qd6 {[%clk 0:01:40.8]} 16... Nc4 {[%clk 0:01:35.7]} 17. Qg3 {[%clk 0:01:36.1]} 17... Rb8 {[%clk 0:00:46.5]} 18. b3 {[%clk 0:01:29.3]} 18... Bc7 {[%clk 0:00:41.5]} 19. Bf4 {[%clk 0:01:23.1]} 19... Ne5 {[%clk 0:00:38.8]} 20. Nd2 {[%clk 0:01:18.3]} 20... e3 {[%clk 0:00:36]} 21. N2f3 {[%clk 0:01:15.7]} 21... Qf6 {[%clk 0:00:31.3]} 22. Rd1 {[%clk 0:01:07.8]} 22... d6 {[%clk 0:00:27.3]} 23. Qg5 {[%clk 0:01:05.2]} 23... c5 {[%clk 0:00:23]} 24. Qxf6 {[%clk 0:01:02.7]} 24... gxf6 {[%clk 0:00:22.9]} 25. Nf5 {[%clk 0:01:01.4]} 25... Rb6 {[%clk 0:00:22.7]} 26. Bxe5 {[%clk 0:00:58.6]} 26... dxe5 {[%clk 0:00:22.1]} 27. Rd7 {[%clk 0:00:57.1]} 27... Bd8 {[%clk 0:00:19.8]} 28. g4 {[%clk 0:00:54.4]} 28... Ra6 {[%clk 0:00:19]} 29. Kxe3 {[%clk 0:00:50.5]} 29... Rxa2 {[%clk 0:00:18.1]} 30. Bc4 {[%clk 0:00:50.2]} 1-0\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/73868949885",
+      "opponent": "MasterLeif",
+      "opponentRating": 2626,
+      "studentRating": 2700,
+      "date": "2023-03-29",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 59,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2023.03.29\"]\n[Round \"-\"]\n[White \"GothamChess\"]\n[Black \"MasterLeif\"]\n[Result \"1-0\"]\n[CurrentPosition \"5r1k/3p1qp1/5n1p/2Q1Np2/1P6/2PB3P/P2N2PK/4R3 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C44\"]\n[ECOUrl \"https://www.chess.com/openings/Ponziani-Opening-Jaenisch-Vukovic-Gambit\"]\n[UTCDate \"2023.03.29\"]\n[UTCTime \"22:42:26\"]\n[WhiteElo \"2700\"]\n[BlackElo \"2626\"]\n[TimeControl \"180\"]\n[Termination \"GothamChess won by resignation\"]\n[StartTime \"22:42:26\"]\n[EndDate \"2023.03.29\"]\n[EndTime \"22:48:16\"]\n[Link \"https://www.chess.com/game/live/73868949885\"]\n\n1. e4 {[%clk 0:03:00]} 1... e5 {[%clk 0:02:59.4]} 2. Nf3 {[%clk 0:02:58.3]} 2... Nc6 {[%clk 0:02:58.6]} 3. c3 {[%clk 0:02:57.5]} 3... Nf6 {[%clk 0:02:55.6]} 4. d4 {[%clk 0:02:53.9]} 4... Nxe4 {[%clk 0:02:54.9]} 5. d5 {[%clk 0:02:52.5]} 5... Bc5 {[%clk 0:02:52.3]} 6. dxc6 {[%clk 0:02:48.4]} 6... Bxf2+ {[%clk 0:02:42.7]} 7. Ke2 {[%clk 0:02:47.5]} 7... Bb6 {[%clk 0:02:30.2]} 8. Qd5 {[%clk 0:02:43.4]} 8... Nf2 {[%clk 0:02:08.3]} 9. Rg1 {[%clk 0:02:25]} 9... O-O {[%clk 0:01:59.4]} 10. cxb7 {[%clk 0:02:20.8]} 10... Bxb7 {[%clk 0:01:56.4]} 11. Qxb7 {[%clk 0:02:19.6]} 11... e4 {[%clk 0:01:55.2]} 12. Be3 {[%clk 0:01:58.4]} 12... Bxe3 {[%clk 0:01:19.3]} 13. Kxe3 {[%clk 0:01:46.8]} 13... Ng4+ {[%clk 0:01:05.1]} 14. Kxe4 {[%clk 0:01:39.1]} 14... Qe7+ {[%clk 0:00:59.4]} 15. Kf4 {[%clk 0:01:35.6]} 15... f5 {[%clk 0:00:39.8]} 16. Kg3 {[%clk 0:00:47.4]} 16... Qe3 {[%clk 0:00:36]} 17. Qd5+ {[%clk 0:00:45.3]} 17... Kh8 {[%clk 0:00:34.5]} 18. Qd4 {[%clk 0:00:38.8]} 18... Qe7 {[%clk 0:00:27.2]} 19. h3 {[%clk 0:00:36.8]} 19... Nf6 {[%clk 0:00:18.2]} 20. Kh2 {[%clk 0:00:35]} 20... Rab8 {[%clk 0:00:17.6]} 21. b4 {[%clk 0:00:34]} 21... Ne4 {[%clk 0:00:17]} 22. Nbd2 {[%clk 0:00:32]} 22... Nd6 {[%clk 0:00:15.1]} 23. Re1 {[%clk 0:00:30.7]} 23... Qf7 {[%clk 0:00:14.5]} 24. Bd3 {[%clk 0:00:29.9]} 24... Rbe8 {[%clk 0:00:12]} 25. Rxe8 {[%clk 0:00:28.4]} 25... Rxe8 {[%clk 0:00:11.9]} 26. Re1 {[%clk 0:00:27.3]} 26... Rf8 {[%clk 0:00:10.4]} 27. Qxa7 {[%clk 0:00:25.2]} 27... h6 {[%clk 0:00:09.3]} 28. Qxc7 {[%clk 0:00:24.1]} 28... Ne8 {[%clk 0:00:08.4]} 29. Qc5 {[%clk 0:00:22.1]} 29... Nf6 {[%clk 0:00:08.3]} 30. Ne5 {[%clk 0:00:20.2]} 1-0\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/100396917155",
+      "opponent": "Felix-Rose",
+      "opponentRating": 2404,
+      "studentRating": 2735,
+      "date": "2024-01-30",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 35,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2024.01.30\"]\n[Round \"-\"]\n[White \"GothamChess\"]\n[Black \"Felix-Rose\"]\n[Result \"1-0\"]\n[Tournament \"https://www.chess.com/tournament/live/late-titled-tuesday-blitz-january-30-2024-4532496\"]\n[CurrentPosition \"r2r2k1/p4ppp/8/5N2/2p1p3/2PnK3/PP1N2PP/R4BR1 b - -\"]\n[Timezone \"UTC\"]\n[ECO \"C44\"]\n[ECOUrl \"https://www.chess.com/openings/Ponziani-Opening-Jaenisch-Vukovic-Gambit\"]\n[UTCDate \"2024.01.30\"]\n[UTCTime \"23:37:11\"]\n[WhiteElo \"2735\"]\n[BlackElo \"2404\"]\n[TimeControl \"180+1\"]\n[Termination \"GothamChess won by resignation\"]\n[StartTime \"23:37:11\"]\n[EndDate \"2024.01.30\"]\n[EndTime \"23:41:42\"]\n[Link \"https://www.chess.com/game/live/100396917155\"]\n\n1. e4 {[%clk 0:03:00.9]} 1... e5 {[%clk 0:02:59.3]} 2. Nf3 {[%clk 0:02:59.6]} 2... Nc6 {[%clk 0:02:59.7]} 3. c3 {[%clk 0:02:59.6]} 3... Nf6 {[%clk 0:02:58]} 4. d4 {[%clk 0:02:59.1]} 4... Nxe4 {[%clk 0:02:56.6]} 5. d5 {[%clk 0:02:49.9]} 5... Bc5 {[%clk 0:02:56.8]} 6. dxc6 {[%clk 0:02:48]} 6... Bxf2+ {[%clk 0:02:57]} 7. Ke2 {[%clk 0:02:47.9]} 7... Bb6 {[%clk 0:02:57.7]} 8. Qd5 {[%clk 0:02:43.4]} 8... Nf2 {[%clk 0:02:53.9]} 9. Rg1 {[%clk 0:02:20.1]} 9... O-O {[%clk 0:02:44.4]} 10. cxb7 {[%clk 0:02:17.2]} 10... Bxb7 {[%clk 0:02:44.1]} 11. Qxb7 {[%clk 0:02:18.1]} 11... e4 {[%clk 0:02:32.2]} 12. Nd4 {[%clk 0:01:55.6]} 12... c5 {[%clk 0:02:04.5]} 13. Nf5 {[%clk 0:01:35.5]} 13... c4 {[%clk 0:01:49.1]} 14. Be3 {[%clk 0:01:28.3]} 14... Nd3 {[%clk 0:01:46.1]} 15. Nd2 {[%clk 0:01:19.2]} 15... d5 {[%clk 0:01:41.7]} 16. Qxd5 {[%clk 0:01:13.6]} 16... Bxe3 {[%clk 0:01:33.5]} 17. Qxd8 {[%clk 0:01:08.4]} 17... Rfxd8 {[%clk 0:01:29.4]} 18. Kxe3 {[%clk 0:01:03.6]} 1-0\n"
+    }
+  ]
+}

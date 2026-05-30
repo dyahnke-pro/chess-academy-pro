@@ -2090,5 +2090,43 @@
         "https://en.wikipedia.org/wiki/London_System"
       ]
     }
+  ],
+  "pro-gothamchess-ponziani": [
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 4",
+      "wrongMove": "d3",
+      "correctMove": "d4",
+      "explanation": "The whole idea of 3.c3 is to support d4! — striking the centre immediately. The timid d3 wastes the c3-move and leaves White with a passive Italian-like position a tempo down. After 4.d4 exd4 5.e5, White chases the f6-knight and grabs the centre. Commit to d4: that's the Ponziani's reason for being.",
+      "shortNarration": "d4 — the central strike c3 prepared",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Ponziani-Opening",
+        "https://en.wikipedia.org/wiki/Ponziani_Opening"
+      ]
+    },
+    {
+      "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+      "wrongMove": "exd5",
+      "correctMove": "Qa4",
+      "explanation": "Against the principled 3…d5, the routine exd5 Qxd5 just gives Black an easy game with the centralised queen. The critical try is Qa4! — pinning the c6-knight to the e5-pawn, the move that fights for an advantage. After …f6 or …Bd7, White follows with Bb5 and d4 to exploit the pin. Don't trade tamely; the Qa4 pin is the Ponziani's main weapon against …d5.",
+      "shortNarration": "Qa4 — pin the knight, fight for an edge",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Ponziani-Opening",
+        "https://en.wikipedia.org/wiki/Ponziani_Opening"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+      "wrongMove": "cxd4",
+      "correctMove": "e5",
+      "explanation": "Here White has just played e5, chasing the f6-knight before recapturing on d4. The move order matters: by inserting e5 first, White gains a tempo on the knight and keeps the option of Qb3 hitting the loose d5-knight. Rushing cxd4 immediately lets Black equalise. Chase with e5, provoke …Nd5, then Qb3 — the tempo-gaining sequence is the point.",
+      "shortNarration": "e5 — chase the knight before recapturing",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Ponziani-Opening",
+        "https://en.wikipedia.org/wiki/Ponziani_Opening"
+      ]
+    }
   ]
 }

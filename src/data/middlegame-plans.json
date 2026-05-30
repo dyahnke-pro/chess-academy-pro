@@ -15758,88 +15758,6 @@
     ]
   },
   {
-    "id": "mp-pro-gothamchess-ponziani-center",
-    "openingId": "pro-gothamchess-ponziani",
-    "criticalPositionFen": "r1b1k2r/p1ppqppp/1bp5/3Qp3/8/2P2N2/PP1B2PP/R2K1B1R b kq - 0 11",
-    "title": "Central Dominance with d4",
-    "overview": "White has emerged from the Ponziani complications with the queen actively placed on d5 and extra central control. The plan is to establish d4, develop the remaining pieces, and exploit White's central space advantage. The Qd5 controls key squares and White's pieces can develop naturally.",
-    "pawnBreaks": [
-      {
-        "move": "c3-c4",
-        "explanation": "c4 supports d5 and creates a broad pawn center. It also prepares Bc3 or Nc3 with tempo. The c4 pawn controls d5 and b5, limiting Black's counterplay.",
-        "fen": "r1b1k2r/p1ppqppp/1bp5/3Qp3/8/2P2N2/PP1B2PP/R2K1B1R b kq - 0 11"
-      },
-      {
-        "move": "d2-d4 (after Kc2)",
-        "explanation": "After relocating the king, d4 seizes the center. Combined with the Qd5 and the Nf3, White gets a commanding central position.",
-        "fen": "r1b1k2r/p1ppqppp/1bp5/3Qp3/8/2P2N2/PP1B2PP/R2K1B1R b kq - 0 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "King",
-        "route": "Kd1-c2 (safe haven)",
-        "explanation": "The king walks to c2 where it's safer than d1. From c2 it's out of any tactical tricks and the rooks can connect on d1 and e1."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bf1-e2 or Bf1-d3",
-        "explanation": "The bishop develops to support the center. Bd3 is more active, targeting the h7 pawn and the b1-h7 diagonal."
-      }
-    ],
-    "strategicThemes": [
-      "White's Qd5 is the dominant piece in the position. It controls the center and prevents Black from developing freely.",
-      "Black's Bb6 is passive, blocked by the e5 pawn. White should keep this bishop restricted.",
-      "The Ponziani rewards creative play. White's unusual king position (Kc2) is actually safe in this structure.",
-      "White's development advantage should be converted into lasting positional pressure before Black can untangle."
-    ],
-    "endgameTransitions": [
-      "White's central control and active queen give a lasting advantage. Even in endgames, the space advantage persists.",
-      "Trading queens when ahead in development isn't ideal — keep the queens on to maintain attacking chances."
-    ]
-  },
-  {
-    "id": "mp-pro-gothamchess-ponziani-piece",
-    "openingId": "pro-gothamchess-ponziani",
-    "criticalPositionFen": "r1b1k2r/p1ppqppp/1bp5/3Qp3/8/2P2N2/PP1B2PP/R2K1B1R b kq - 0 11",
-    "title": "Piece Activity and King Safety",
-    "overview": "White must balance development with king safety in this unusual position. The king is on d1 but this is temporary. The plan is to develop Bd3/Be2, relocate the king, and use the active Qd5 and Nf3 to create pressure while Black is still untangling.",
-    "pawnBreaks": [
-      {
-        "move": "b2-b4",
-        "explanation": "b4 gains queenside space and threatens b5, attacking the Bb6. It creates a broad pawn front and restricts Black's counterplay on the queenside.",
-        "fen": "r1b1k2r/p1ppqppp/1bp5/3Qp3/8/2P2N2/PP1B2PP/R2K1B1R b kq - 0 11"
-      },
-      {
-        "move": "a2-a4",
-        "explanation": "a4 prepares a5, driving the Bb6 further back. Combined with b4, White gets complete queenside control.",
-        "fen": "r1b1k2r/p1ppqppp/1bp5/3Qp3/8/2P2N2/PP1B2PP/R2K1B1R b kq - 0 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Rook",
-        "route": "Ra1-e1 or Rh1-e1",
-        "explanation": "A rook on e1 targets the e5 pawn and controls the e-file. This is especially strong with the Qd5 already active."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bd2-c3 targeting e5",
-        "explanation": "The bishop reroutes to c3 where it pressures e5 along the long diagonal. Combined with the Nf3, it creates dual threats on e5."
-      }
-    ],
-    "strategicThemes": [
-      "White's pieces are more active — the Qd5, Nf3, and developing bishops all have clear targets.",
-      "Black's e5 pawn is a potential weakness. With Bc3, Nf3, and Re1 all targeting it, Black must defend carefully.",
-      "The Ponziani is about catching the opponent off guard. White's unusual piece positions create unfamiliar problems for Black.",
-      "Don't let Black get ...d6 and ...Be6 in comfortably. Create threats to prevent smooth development."
-    ],
-    "endgameTransitions": [
-      "White's active pieces translate into endgame advantages. The better-placed minor pieces and pawns give lasting pressure.",
-      "If White wins the e5 pawn, the resulting position is winning due to the extra pawn and active pieces."
-    ]
-  },
-  {
     "id": "mp-pro-gothamchess-qgd-c5",
     "openingId": "pro-gothamchess-qgd",
     "criticalPositionFen": "r1b2rk1/pp2bppp/2n1pn2/q2p4/2P2B2/P1N1PN2/1PQ2PPP/3RKB1R w K - 3 11",
@@ -48543,6 +48461,225 @@
           "https://www.chess.com/openings/London-System",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://en.wikipedia.org/wiki/London_System"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-ponziani-main-qb3",
+    "openingId": "pro-gothamchess-ponziani",
+    "criticalPositionFen": "r1bqkb1r/pppp1ppp/1nn5/4P3/3P4/1Q3N2/PP3PPP/RNB1KB1R b KQkq - 0 7",
+    "title": "Ponziani Main: the Qb3 + Bb5 Centre Bind",
+    "overview": "His main Ponziani plan across the 40-game main line. After 3.c3 and 4.d4, White grabs the centre with e5, chases the knight to d5, then probes with Qb3 hitting the knight and b7. After …Nb6 and cxd4, White has a strong d4/e5 pawn duo and develops Bb5 to pin and pressure, the classic Ponziani central bind backed by the bishop.",
+    "pawnBreaks": [
+      "the e5/d4 pawn duo cramping Black"
+    ],
+    "pieceManeuvers": [
+      "Qd1-b3 probing the knight and b7",
+      "Bf1-b5 the pin on c6",
+      "the central pawn duo"
+    ],
+    "strategicThemes": [
+      "Build the e5/d4 centre",
+      "Probe with Qb3",
+      "Pin and pressure with Bb5"
+    ],
+    "endgameTransitions": [
+      "The space edge favours White in simplification"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/pppp1ppp/1nn5/4P3/3P4/1Q3N2/PP3PPP/RNB1KB1R b KQkq - 0 7",
+        "moves": [
+          "d6",
+          "Bb5",
+          "Be6"
+        ],
+        "annotations": [
+          "…d6 — Black strikes at the e5-pawn to free the position.",
+          "Bb5 — White develops with a pin, tying the c6-knight to the defence and adding pressure to the centre.",
+          "…Be6 — Black develops and challenges the Qb3. White’s big e5/d4 centre and the active bishop give a pleasant, space-gaining edge from this little-known opening."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "d6 — Black hits e5",
+          "Bb5 — pin the knight",
+          "Be6 — Black challenges the queen"
+        ],
+        "title": "Ponziani Main: the Qb3 + Bb5 Centre Bind",
+        "intro": "His main Ponziani plan across the 40-game main line. After 3.c3 and 4.d4, White grabs the centre with e5, chases the knight to d5, then probes with Qb3 hitting the knight and b7. After …Nb6 and cxd4, White has a strong d4/e5 pawn duo and develops Bb5 to pin and pressure, the classic Ponziani central bind backed by the bishop.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Ponziani-Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Ponziani_Opening"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-ponziani-d5-qa4",
+    "openingId": "pro-gothamchess-ponziani",
+    "criticalPositionFen": "r1b1kb1r/ppp1n1pp/2n2p2/1B1qp3/Q2P4/2P2N2/PP3PPP/RNB1K2R b KQkq - 0 7",
+    "title": "Ponziani vs 3…d5: the Qa4 Pin + d4 Centre",
+    "overview": "Against the principled 3…d5 counter, his 33-game plan is the critical Qa4 line: the queen pins the c6-knight to defend e5, Bb5 piles on the pin, and after the central exchanges White plays d4 to claim the centre. Black's …f6 weakens the kingside, and White's lead in development and central control give a comfortable game against the main Ponziani antidote.",
+    "pawnBreaks": [
+      "d2-d4 claiming the centre"
+    ],
+    "pieceManeuvers": [
+      "Qd1-a4 pinning the c6-knight",
+      "Bf1-b5 doubling the pin",
+      "Nf3-d2 rerouting after …e4"
+    ],
+    "strategicThemes": [
+      "Pin the knight with Qa4",
+      "Exploit the weakened …f6",
+      "Claim the centre with d4"
+    ],
+    "endgameTransitions": [
+      "Black’s kingside weaknesses linger into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1kb1r/ppp1n1pp/2n2p2/1B1qp3/Q2P4/2P2N2/PP3PPP/RNB1K2R b KQkq - 0 7",
+        "moves": [
+          "e4",
+          "Nfd2"
+        ],
+        "annotations": [
+          "…e4 — Black pushes the pawn to gain space and kick the f3-knight.",
+          "Nfd2 — White reroutes the knight toward the e4-pawn and the c4/b3 squares, eyeing the over-extended pawn as a target. With Black’s …f6 weakening the king and White’s pieces well-placed, White has the easier, more harmonious game against the 3…d5 counter."
+        ],
+        "arrows": [
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "e4 — Black gains space",
+          "Nfd2 — reroute, target e4"
+        ],
+        "title": "Ponziani vs 3…d5: the Qa4 Pin + d4 Centre",
+        "intro": "Against the principled 3…d5 counter, his 33-game plan is the critical Qa4 line: the queen pins the c6-knight to defend e5, Bb5 piles on the pin, and after the central exchanges White plays d4 to claim the centre. Black's …f6 weakens the kingside, and White's lead in development and central control give a comfortable game against the main Ponziani antidote.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Ponziani-Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Ponziani_Opening"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-ponziani-nxe4-gambit",
+    "openingId": "pro-gothamchess-ponziani",
+    "criticalPositionFen": "r2q1rk1/pbpp1ppp/1b6/3Qp3/8/2P2N2/PP2KnPP/RNB2BR1 w - - 0 11",
+    "title": "Ponziani 4…Nxe4: the dxc6 Gambit Refutation",
+    "overview": "Against the greedy 4…Nxe4, his 14-game forcing line is a sharp gambit refutation. White plays d5 and dxc6, and when Black tries the …Bxf2+ trick, the king walks to e2 and White's Qd5 and cxb7 win material by force, capturing the b7-bishop with Qxb7. The chaos resolves in White's favour — a concrete demonstration that 4…Nxe4 is dubious.",
+    "pawnBreaks": [
+      "d5 and dxc6 cracking the centre",
+      "cxb7 winning material"
+    ],
+    "pieceManeuvers": [
+      "Qd1-d5 the central queen",
+      "Qd5xb7 winning the bishop",
+      "Rg1 saving the rook"
+    ],
+    "strategicThemes": [
+      "Refute 4…Nxe4 with dxc6",
+      "Walk the king to safety on e2",
+      "Win material with Qxb7"
+    ],
+    "endgameTransitions": [
+      "White emerges up material from the forcing line"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2q1rk1/pbpp1ppp/1b6/3Qp3/8/2P2N2/PP2KnPP/RNB2BR1 w - - 0 11",
+        "moves": [
+          "Qxb7",
+          "e4",
+          "Nd4"
+        ],
+        "annotations": [
+          "Qxb7 — White snaps off the bishop, emerging from the wild complications a clear piece to the good.",
+          "…e4 — Black lashes out for activity, trying to generate threats against the exposed king.",
+          "…Nd4+ — Black checks, but White’s king is safe enough and the extra material decides. The forcing line has refuted 4…Nxe4: White is winning."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Qxb7 — win the bishop",
+          "e4 — Black seeks activity",
+          "Nd4 — White is up a piece"
+        ],
+        "title": "Ponziani 4…Nxe4: the dxc6 Gambit Refutation",
+        "intro": "Against the greedy 4…Nxe4, his 14-game forcing line is a sharp gambit refutation. White plays d5 and dxc6, and when Black tries the …Bxf2+ trick, the king walks to e2 and White's Qd5 and cxb7 win material by force, capturing the b7-bishop with Qxb7. The chaos resolves in White's favour — a concrete demonstration that 4…Nxe4 is dubious.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Ponziani-Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Ponziani_Opening"
         ]
       }
     ]
