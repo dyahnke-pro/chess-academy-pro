@@ -15594,88 +15594,6 @@
     ]
   },
   {
-    "id": "mp-pro-gothamchess-milner-barry-attack",
-    "openingId": "pro-gothamchess-milner-barry",
-    "criticalPositionFen": "r3kb1r/1p1bnppp/p3p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K b kq - 3 12",
-    "title": "Piece Pressure Against Uncastled King",
-    "overview": "White has sacrificed a pawn in the Milner-Barry Gambit for rapid development and attacking chances against Black's uncastled king. The Nc3, Bd3, Qe2, and the e5 pawn create enormous pressure. The plan is to keep Black's king in the center and open lines for the attack.",
-    "pawnBreaks": [
-      {
-        "move": "f2-f4",
-        "explanation": "f4 reinforces e5 and prepares f5. After f5, the position opens and Black's king in the center faces devastating threats along the e-file and f-file.",
-        "fen": "r3kb1r/1p1bnppp/p3p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K b kq - 3 12"
-      },
-      {
-        "move": "a2-a3",
-        "explanation": "A quiet but useful move preparing Bd2 and Rae1. It secures the queenside and prevents any ...Bb4 ideas. Sometimes the simplest moves are the most effective in gambit positions.",
-        "fen": "r3kb1r/1p1bnppp/p3p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K b kq - 3 12"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Rook",
-        "route": "Rf1-d1 or Ra1-d1",
-        "explanation": "A rook on d1 targets the Qd4 and the d5 pawn. If the queen moves, the rook controls the d-file and prevents Black from castling queenside."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bc1-e3 or Bc1-g5",
-        "explanation": "Be3 attacks the Qd4 with tempo and develops the last piece. Bg5 pins or pressures the Nd7/Ne7 and increases the tactical tension."
-      }
-    ],
-    "strategicThemes": [
-      "The pawn sacrifice is compensated by development and attacking chances. White must play actively — slow play lets Black consolidate.",
-      "Keeping Black's king in the center is priority one. Every move should either prevent castling or create threats if the king stays.",
-      "The e5 pawn is both a spatial advantage and an attacking tool. It controls f6 and d6, denying Black's pieces natural squares.",
-      "If Black returns the pawn to castle, White gets a free tempo and can continue pressing with superior piece placement."
-    ],
-    "endgameTransitions": [
-      "The gambit is about winning in the middlegame. If an endgame is reached, White may be a pawn down but active pieces should compensate.",
-      "If White wins material during the attack, any endgame is easily won. Keep attacking until material is recovered."
-    ]
-  },
-  {
-    "id": "mp-pro-gothamchess-milner-barry-Bg5",
-    "openingId": "pro-gothamchess-milner-barry",
-    "criticalPositionFen": "r3kb1r/1p1bnppp/p3p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K b kq - 3 12",
-    "title": "Bg5 Pin and Tactical Exploitation",
-    "overview": "White develops Bg5 to create pins and tactical threats. The bishop targets e7 and f6, and combined with Nc3, Bd3, and Qe2, it creates a web of threats. The idea is to increase pressure until something breaks in Black's position.",
-    "pawnBreaks": [
-      {
-        "move": "f2-f4-f5",
-        "explanation": "After Bg5, f4 and f5 rip open the kingside. The Bg5 prevents ...Nf6 from blocking, and the open f-file becomes a highway for White's rook to attack.",
-        "fen": "r3kb1r/1p1bnppp/p3p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K b kq - 3 12"
-      },
-      {
-        "move": "b2-b3",
-        "explanation": "b3 prepares Ba3 or Bb2, adding another piece to the attack. Ba3 would prevent kingside castling and Bb2 targets the long diagonal.",
-        "fen": "r3kb1r/1p1bnppp/p3p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K b kq - 3 12"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc1-g5 (pin on e7)",
-        "explanation": "Bg5 pins the knight on e7 or creates uncomfortable tension. Black must deal with this immediately — either ...f6 (weakening the kingside) or ...h6 (wasting time)."
-      },
-      {
-        "piece": "Knight",
-        "route": "Nc3-b5 targeting c7/d6",
-        "explanation": "Nb5 is a powerful jump threatening Nd6+ forking king and queen. Combined with Bg5 and Bd3, it creates multiple tactical threats simultaneously."
-      }
-    ],
-    "strategicThemes": [
-      "Multiple threats are harder to defend than one. The combination of Bg5, Nb5, Bd3, and Qe2 creates problems on every square.",
-      "Black's Qd4 is aggressively placed but could become trapped if White develops with tempo. Watch for Rd1 or Be3 ideas.",
-      "In gambit positions, every piece must be attacking. Passive development wastes the initiative.",
-      "If Black plays ...f6 to break the Bg5 pin, it weakens e6 and g6 permanently. White should welcome this."
-    ],
-    "endgameTransitions": [
-      "The tactical pressure should win material. Convert any material gain into a simple endgame victory.",
-      "If the attack doesn't immediately succeed, Nb5+Bg5+Bd3 gives White compensation that lasts into the endgame."
-    ]
-  },
-  {
     "id": "mp-pro-gothamchess-qgd-c5",
     "openingId": "pro-gothamchess-qgd",
     "criticalPositionFen": "r1b2rk1/pp2bppp/2n1pn2/q2p4/2P2B2/P1N1PN2/1PQ2PPP/3RKB1R w K - 3 11",
@@ -48828,6 +48746,226 @@
           "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://en.wikipedia.org/wiki/Rossolimo_Variation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-mb-main-fstorm",
+    "openingId": "pro-gothamchess-milner-barry",
+    "criticalPositionFen": "r3kb1r/1p1bnppp/p3p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K b kq - 3 12",
+    "title": "Milner-Barry Gambit: the f4-f5 Kingside Storm",
+    "overview": "The heart of the Milner-Barry: White sacrifices the d4-pawn for a lead in development and a kingside attack. With Black's queen offside and the e5-wedge cramping, White rolls the f-pawn — f4 and f5 pry open the king's position while the Bd3, Qe2, and Nc3 all point at the kingside. A pawn for a raging initiative against the French.",
+    "pawnBreaks": [
+      "f4-f5 the kingside storm",
+      "e5 the cramping wedge"
+    ],
+    "pieceManeuvers": [
+      "Bd3 the h7-battery bishop",
+      "Qe2 supporting the attack",
+      "Nc3 the developed knight"
+    ],
+    "strategicThemes": [
+      "Sacrifice d4 for the initiative",
+      "Storm with f4-f5",
+      "Attack the French king"
+    ],
+    "endgameTransitions": [
+      "Keep attacking — the gambit is for the initiative, not the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r3kb1r/1p1bnppp/p3p3/3pP3/3q4/2NB4/PP2QPPP/R1B2R1K b kq - 3 12",
+        "moves": [
+          "Rc8",
+          "f4"
+        ],
+        "annotations": [
+          "…Rc8 — Black develops the rook, trying to use the open c-file.",
+          "f4 — the storm begins. White grabs kingside space and prepares f5 to crack open Black’s king, the pieces all converging on the kingside. The gambit pawn has bought a powerful attacking initiative."
+        ],
+        "arrows": [
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Rc8 — Black eyes the c-file",
+          "f4 — the kingside storm"
+        ],
+        "title": "Milner-Barry Gambit: the f4-f5 Kingside Storm",
+        "intro": "The heart of the Milner-Barry: White sacrifices the d4-pawn for a lead in development and a kingside attack. With Black's queen offside and the e5-wedge cramping, White rolls the f-pawn — f4 and f5 pry open the king's position while the Bd3, Qe2, and Nc3 all point at the kingside. A pawn for a raging initiative against the French.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/French_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-mb-declines-na4",
+    "openingId": "pro-gothamchess-milner-barry",
+    "criticalPositionFen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/8/2NB4/PP3PPP/R1BQ1RK1 w kq - 2 11",
+    "title": "Milner-Barry Declined: Na4 Harasses the Queen",
+    "overview": "When Black declines the gambit and keeps the queen on b6, White exploits the exposed queen with Na4! — hitting the queen and rerouting toward c5 and the queenside dark squares. After the queen shuffles, Bd2 develops with tempo and White keeps the initiative with the better-coordinated pieces, the e5-wedge still cramping Black's French structure.",
+    "pawnBreaks": [
+      "e5 the cramping wedge"
+    ],
+    "pieceManeuvers": [
+      "Nc3-a4 harassing the b6-queen",
+      "Bc1-d2 developing with tempo",
+      "Na4-c5 the outpost route"
+    ],
+    "strategicThemes": [
+      "Harass the queen with Na4",
+      "Develop with tempo",
+      "Keep the e5 space bind"
+    ],
+    "endgameTransitions": [
+      "The better structure favours White in simplification"
+    ],
+    "playableLines": [
+      {
+        "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/8/2NB4/PP3PPP/R1BQ1RK1 w kq - 2 11",
+        "moves": [
+          "Na4",
+          "Qa5",
+          "Bd2"
+        ],
+        "annotations": [
+          "Na4 — White harasses the exposed b6-queen, gaining time and heading toward the c5-outpost.",
+          "…Qa5 — the queen slides away, still awkwardly placed.",
+          "Bd2 — White develops with tempo, hitting the a5-queen again. The pieces flow out with gain of time while Black’s queen wanders; White keeps a pleasant initiative and the e5-space bind."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Na4 — harass the queen",
+          "Qa5 — the queen wanders",
+          "Bd2 — develop with tempo"
+        ],
+        "title": "Milner-Barry Declined: Na4 Harasses the Queen",
+        "intro": "When Black declines the gambit and keeps the queen on b6, White exploits the exposed queen with Na4! — hitting the queen and rerouting toward c5 and the queenside dark squares. After the queen shuffles, Bd2 develops with tempo and White keeps the initiative with the better-coordinated pieces, the e5-wedge still cramping Black's French structure.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/French_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-mb-advance-battery",
+    "openingId": "pro-gothamchess-milner-barry",
+    "criticalPositionFen": "r2qk2r/pp2bppp/2n1b3/3pPp2/3P4/2N2N2/PP3PPP/R1BQ1RK1 w kq - 4 11",
+    "title": "French Advance vs …Nh6: the Bxf5 Doubling + Qd3 Battery",
+    "overview": "Against the …Nh6-f5 setup, White trades Bxf5 to saddle Black with a doubled, weak f5-pawn, then develops and builds the Qd3 battery toward the kingside. With Black's structure damaged and the e5-wedge cramping, White completes development with Re1 and pressures the weak f5-pawn and the kingside light squares, the classic French Advance squeeze.",
+    "pawnBreaks": [
+      "e5 the cramping wedge",
+      "the weak doubled f5-pawn as a target"
+    ],
+    "pieceManeuvers": [
+      "Bd3xf5 doubling the f-pawns",
+      "Qd1-d3 the kingside battery",
+      "Rf1-e1 completing development"
+    ],
+    "strategicThemes": [
+      "Double the f-pawns with Bxf5",
+      "Build the Qd3 battery",
+      "Press the weak f5-pawn"
+    ],
+    "endgameTransitions": [
+      "The doubled f-pawn is a long-term endgame target"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qk2r/pp2bppp/2n1b3/3pPp2/3P4/2N2N2/PP3PPP/R1BQ1RK1 w kq - 4 11",
+        "moves": [
+          "Re1",
+          "O-O",
+          "Qd3"
+        ],
+        "annotations": [
+          "Re1 — White completes development, the rook supporting the e5-wedge and eyeing the e-file.",
+          "…O-O — Black castles into the position White intends to attack.",
+          "Qd3 — the battery. The queen lines up toward h7 and the weak f5-pawn, pressuring Black’s damaged kingside. With the doubled f-pawn a permanent weakness and the e5-wedge cramping, White has the lasting structural edge and the attacking chances."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Re1 — support the wedge",
+          "O-O — Black castles in",
+          "Qd3 — the kingside battery"
+        ],
+        "title": "French Advance vs …Nh6: the Bxf5 Doubling + Qd3 Battery",
+        "intro": "Against the …Nh6-f5 setup, White trades Bxf5 to saddle Black with a doubled, weak f5-pawn, then develops and builds the Qd3 battery toward the kingside. With Black's structure damaged and the e5-wedge cramping, White completes development with Re1 and pressures the weak f5-pawn and the kingside light squares, the classic French Advance squeeze.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/French_Defence"
         ]
       }
     ]

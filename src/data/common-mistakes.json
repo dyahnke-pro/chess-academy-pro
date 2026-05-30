@@ -2166,5 +2166,43 @@
         "https://en.wikipedia.org/wiki/Rossolimo_Variation"
       ]
     }
+  ],
+  "pro-gothamchess-milner-barry": [
+    {
+      "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
+      "wrongMove": "a3",
+      "correctMove": "Bd3",
+      "explanation": "When Black hits d4 with …Qb6, the Milner-Barry idea is Bd3! — offering the d4-pawn as a gambit. After …cxd4 cxd4 Nxd4 Nxd4 Qxd4, White gets a huge lead in development and a kingside attack for the pawn. The passive a3 or Be2 defends tamely and surrenders the initiative. Play the gambit: Bd3 is the move that makes the Milner-Barry dangerous.",
+      "shortNarration": "Bd3 — offer the gambit pawn",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit",
+        "https://en.wikipedia.org/wiki/French_Defence"
+      ]
+    },
+    {
+      "fen": "r1b1kbnr/pp3ppp/4p3/3pP3/3q4/3B4/PP3PPP/RNBQK2R w KQkq - 0 9",
+      "wrongMove": "Qa4+",
+      "correctMove": "Nc3",
+      "explanation": "After Black grabs the gambit pawn with …Qxd4, the point is rapid development: Nc3! brings a piece out with tempo, eyeing d5 and b5, and prepares Qe2, Kh1, and the f-pawn storm. Chasing with Qa4+ to win the pawn back lets Black consolidate and defeats the gambit's purpose. Develop and attack — the lead in development IS the compensation, not the pawn.",
+      "shortNarration": "Nc3 — develop fast, don’t chase the pawn",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit",
+        "https://en.wikipedia.org/wiki/French_Defence"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/pp3ppp/2n1p3/3pPn2/3P4/3B1N2/PP3PPP/RNBQK2R w KQkq - 1 8",
+      "wrongMove": "O-O",
+      "correctMove": "Bxf5",
+      "explanation": "When Black reroutes the knight to f5 attacking d4, the principled move is Bxf5! — trading to saddle Black with a doubled, weak f5-pawn after …exf5. The casual O-O lets Black keep a strong knight on f5 blockading the position. Cash in the structural damage: Bxf5 gives White a permanent target on f5 and the better long-term game.",
+      "shortNarration": "Bxf5 — double the f-pawns",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit",
+        "https://en.wikipedia.org/wiki/French_Defence"
+      ]
+    }
   ]
 }

@@ -2929,6 +2929,105 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
   },
+
+  // ── GothamChess Milner-Barry Gambit (student = WHITE) ────────────────────
+  // French Advance: …c4?! releases the central tension early; b3! undermines
+  // the pawn chain for a clear edge (positional, +1.0). 16 plies; c4@7, b3@8.
+  'pro-gothamchess-milner-barry:e4_e6_d4_d5_e5_c5_c3:c4': {
+    watch: [
+      '', '', '', '', '', '', '',
+      'c4?! Releasing the central tension hands White a free hand — the c5-c4 push leaves the d4-pawn unchallenged and the pawn chain there to be undermined.',
+      'b3 — the punish. White strikes at the base of Black’s queenside pawn chain, opening lines against the over-extended pawns.',
+      '', 'Qf3 — White develops the queen actively, eyeing the kingside and the loosened light squares.',
+      '', 'a4 — White expands and undermines further; with the better structure and freer pieces White is clearly better.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '',
+      'c4 — releases the tension',
+      'b3 — undermine the chain',
+      '', 'Qf3 — develop actively',
+      '', 'a4 — expand, White better',
+      '', '', '',
+    ],
+    sources: ['concept:pos-pawn-structure', 'concept:pos-center', 'https://www.chess.com/openings/French-Defense-Advance-Variation'],
+  },
+
+  // Main gambit: …Nxd4?! grabs the pawn but Nxd4 then Nb5-Nd6+ wins material
+  // by force (confirmed, +3.5). 22 plies; Nxd4@13, Nxd4@14.
+  'pro-gothamchess-milner-barry:e4_e6_d4_d5_e5_c5_c3_Nc6_Nf3_Qb6_Bd3_cxd4_cxd4:Nxd4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxd4?! Grabbing the gambit pawn this way runs into a concrete refutation.',
+      'Nxd4 — White recaptures, and now the knight eyes b5 and the d6-square.',
+      '…Bc5 — Black hits the knight, hoping to win it.',
+      'Nb5 — the point! The knight jumps to b5, threatening the crushing Nd6+ fork.',
+      '…a6 — Black tries to chase it, but it is too late.',
+      'Nd6+ — the fork lands, winning the bishop pair and the exchange; White emerges clearly up material.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nxd4 — runs into a refutation',
+      'Nxd4 — recapture, eye b5/d6',
+      'Bc5 — Black hits the knight',
+      'Nb5 — threaten Nd6+',
+      'a6 — too late',
+      'Nd6+ — the fork, win material',
+      '', '', '',
+    ],
+    sources: ['concept:tac-fork', 'concept:tac-knight-outpost', 'https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit'],
+  },
+
+  // Declined with …Bd7: …Nge7?! is passive; dxc5! grabs the pawn back with a
+  // clear edge (positional, +1.0). 22 plies; Nge7@13, dxc5@14.
+  'pro-gothamchess-milner-barry:e4_e6_d4_d5_e5_c5_c3_Nc6_Nf3_Qb6_Bd3_Bd7_O-O:Nge7': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nge7?! Too passive — the knight blocks the e7-bishop and lets White resolve the centre favourably.',
+      'dxc5 — White grabs the c5-pawn, gaining time on the b6-queen and keeping the extra structure.',
+      '…Qxc5 — the queen recaptures, exposed in the centre.',
+      'b4 — White hits the queen with tempo, gaining queenside space.',
+      '…Qb6 — the queen retreats once more.',
+      'Qe2 — White completes development with a clear initiative; the gambit has transposed into a pleasant, better game.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Nge7 — too passive',
+      'dxc5 — grab the pawn with tempo',
+      'Qxc5 — the queen is exposed',
+      'b4 — hit the queen, gain space',
+      'Qb6 — the queen retreats',
+      'Qe2 — develop, clear edge',
+      '', '', '',
+    ],
+    sources: ['concept:pos-development', 'concept:pos-center', 'https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit'],
+  },
+
+  // vs …Nh6: …Qb6?! allows Nc3 + Bxf5 + Nxd5 winning the d5-pawn (confirmed,
+  // +1.0). 22 plies; Qb6@13, Nc3@14.
+  'pro-gothamchess-milner-barry:e4_e6_d4_d5_e5_c5_c3_Nc6_Nf3_Nh6_Bd3_cxd4_cxd4:Qb6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qb6?! The queen eyes d4 and b2, but it leaves the d5-pawn under-defended.',
+      'Nc3 — White develops, adding a defender to the centre and an attacker to d5.',
+      '', 'Bc2 — White repositions the bishop, unblocking and preparing to pile on d5.',
+      '', 'Bxf5 — White trades to damage the structure, then targets the loose d5-pawn.',
+      '', 'Nxd5 — the knight grabs the central pawn; White is a clean pawn up with the better game.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qb6 — leaves d5 loose',
+      'Nc3 — develop, defend and attack',
+      '', 'Bc2 — reposition, eye d5',
+      '', 'Bxf5 — damage the structure',
+      '', 'Nxd5 — win the pawn',
+      '',
+    ],
+    sources: ['concept:pos-center', 'concept:tac-overloaded-defender', 'https://www.chess.com/openings/French-Defense-Advance-Variation'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

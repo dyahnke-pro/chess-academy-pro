@@ -16,9 +16,9 @@
     "Qb6",
     "Bd3"
   ],
-  "generatedAt": "2026-05-28T18:29:09.722Z",
+  "generatedAt": "2026-05-30T02:58:00.469Z",
   "totals": {
-    "totalGamesScanned": 31960,
+    "totalGamesScanned": 31994,
     "gamesMatchingOpening": 14,
     "minBranchGames": 5,
     "minTrieGames": 5
