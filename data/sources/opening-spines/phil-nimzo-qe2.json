@@ -1,0 +1,125 @@
+{
+  "openingId": "phil-nimzo-qe2",
+  "seed": [
+    "e4",
+    "e5",
+    "Nf3",
+    "d6",
+    "d4",
+    "Nf6",
+    "Nc3",
+    "Nbd7",
+    "Bc4",
+    "Be7",
+    "O-O",
+    "O-O",
+    "Qe2"
+  ],
+  "spine": [
+    "e4",
+    "e5",
+    "Nf3",
+    "d6",
+    "d4",
+    "Nf6",
+    "Nc3",
+    "Nbd7",
+    "Bc4",
+    "Be7",
+    "O-O",
+    "O-O",
+    "Qe2",
+    "c6",
+    "a4",
+    "exd4",
+    "Nxd4",
+    "Re8",
+    "Ba2",
+    "Bf8",
+    "Qf3"
+  ],
+  "plies": 21,
+  "throughMove": 11,
+  "reachedMiddlegame": true,
+  "counts": [
+    {
+      "ply": 14,
+      "move": 7,
+      "gamesAtPosition": 350,
+      "played": "c6",
+      "pct": 82,
+      "playedGames": 288,
+      "source": "masters"
+    },
+    {
+      "ply": 15,
+      "move": 8,
+      "gamesAtPosition": 293,
+      "played": "a4",
+      "pct": 82,
+      "playedGames": 241,
+      "source": "masters"
+    },
+    {
+      "ply": 16,
+      "move": 8,
+      "gamesAtPosition": 449,
+      "played": "exd4",
+      "pct": 35,
+      "playedGames": 158,
+      "source": "masters"
+    },
+    {
+      "ply": 17,
+      "move": 9,
+      "gamesAtPosition": 158,
+      "played": "Nxd4",
+      "pct": 100,
+      "playedGames": 158,
+      "source": "masters"
+    },
+    {
+      "ply": 18,
+      "move": 9,
+      "gamesAtPosition": 158,
+      "played": "Re8",
+      "pct": 79,
+      "playedGames": 125,
+      "source": "masters"
+    },
+    {
+      "ply": 19,
+      "move": 10,
+      "gamesAtPosition": 125,
+      "played": "Ba2",
+      "pct": 53,
+      "playedGames": 66,
+      "source": "masters"
+    },
+    {
+      "ply": 20,
+      "move": 10,
+      "gamesAtPosition": 67,
+      "played": "Bf8",
+      "pct": 97,
+      "playedGames": 65,
+      "source": "masters"
+    },
+    {
+      "ply": 21,
+      "move": 11,
+      "gamesAtPosition": 65,
+      "played": "Qf3",
+      "pct": 77,
+      "playedGames": 50,
+      "source": "masters"
+    }
+  ],
+  "branches": [],
+  "floors": {
+    "COMMON": 60,
+    "LOWFLOOR": 8,
+    "MIDGAME_PLY": 20
+  },
+  "generatedAt": "2026-05-30T02:18:50.193Z"
+}
