@@ -226,9 +226,18 @@ queenside (…a5). 14 real board-verified moves, two registers, lead-the-eye
 highlights, sources resolvable. Wired into the Caro main tab
 (caroKannMasterclassTabs). All gates green (middlegamePlanThemes / planner /
 EndgamePlansSection / ship-check). Live render audit runs post-merge.
-REMAINING (same locked method, turnkey): caro-advance, french, qgd, slav,
-caro-exchange — each: pick a real same-variation drawn game via the tool,
-author the holding plan, wire its tab, gate, ship.
+ROLLOUT (this session, all grounded in real same-variation master games, gated):
+- [x] caro-kann main — Anand–Topalov 2008 (R+B-vs-R+N hold)
+- [x] slav-defence main — Topalov–Wang Yue 2009 (R+minor hold, c-file activity)
+- [x] caro-kann Advance — Leko–Anand 2009 (symmetric R+minor, d5-outpost hold)
+- [x] qgd main — Hertneck–Hübner 1994 (Orthodox, Black converts the structure)
+- [x] french-defence main — So–Nepomniachtchi 2021 (passed-pawn counterplay holds)
+- [SKIP] caro-kann Exchange — the only drawn R+minor game in the data
+  (Ding–Carlsen 2020) resolves by bare perpetual check; no holding/conversion
+  technique to teach, so the section self-hides (empty > a non-lesson).
+Masterclass openings with endgame plans now: ruy-lopez, caro-kann (main +
+Advance), slav-defence, qgd, french-defence. Same locked method extends to any
+other structural opening where a real same-variation teachable ending exists.
 
 ## ENDGAME LAYER — DATA PREPPED (2026-05-30 overnight), authoring teed up
 Ran scripts/extract-endgame-structures.mjs on the structural openings. The

@@ -51173,5 +51173,761 @@
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
     ]
+  },
+  {
+    "id": "mp-slavdefence-main-endgame",
+    "openingId": "slav-defence",
+    "criticalPositionFen": "r1r2nk1/1p4p1/1p2p2p/3pP3/P2P1R2/R3B3/1P4PP/6K1 b - - 0 27",
+    "title": "The Slav Endgame — Holding R+minor",
+    "overview": "The Slav's …c6/…d5 wall is built to last, and when the queens come off that soundness pays: Black's structure has no target, so the rook-and-minor endings the Slav produces are held by ACTIVITY, not suffering. This is the position Topalov reached against Wang Yue (Amber 2009) out of the main a4 Slav — White has the bishop and a touch more queenside space, Black the knight and a rock-solid pawn chain. Learn how Black holds it: own the open c-file with both rooks, infiltrate the seventh, reroute the knight to the queenside holes, and trade a pair of rooks into a fortress.",
+    "pawnBreaks": [
+      {
+        "move": "…b5 — the minority-attack lever",
+        "explanation": "When the moment is right, …b5 challenges White's queenside majority and frees Black's game without ever cracking the structure.",
+        "fen": "r1r2nk1/1p4p1/1p2p2p/3pP3/P2P1R2/R3B3/1P4PP/6K1 b - - 0 27"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "…Rc8-c2 — seize the c-file and the seventh rank",
+        "explanation": "Both rooks come to the open c-file and infiltrate the second rank, tying White to passive defence."
+      },
+      {
+        "piece": "Knight",
+        "route": "…Nd7 — reroute toward c5 and b6",
+        "explanation": "The knight heads for the queenside holes White's pawns left behind."
+      }
+    ],
+    "strategicThemes": [
+      "Black's trumps are active rooks and a flawless structure — they fully offset White's bishop and extra space.",
+      "Own the open c-file: doubled rooks on the seventh rank are the backbone of the hold.",
+      "Simplify when offered — trading a pair of rooks into the solid d5-e6-b6 wall kills White’s pressure."
+    ],
+    "endgameTransitions": [
+      "With queens off, the Slav structure gives White no target, so the R+minor ending is a draw of technique, not a defence under fire.",
+      "Knight plus active rooks hold against bishop plus space when the pawns are fixed and sound."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1r2nk1/1p4p1/1p2p2p/3pP3/P2P1R2/R3B3/1P4PP/6K1 b - - 0 27",
+        "moves": [
+          "Rc2",
+          "Rf2",
+          "Rac8",
+          "Rb3",
+          "Nd7",
+          "Rb5",
+          "h5",
+          "a5",
+          "Rxf2",
+          "Kxf2",
+          "Rc2+"
+        ],
+        "annotations": [
+          "Black seizes the seventh rank — …Rc2 plants the rook behind White's pawns. In this rook-and-minor ending Black's whole defence is activity: a rook on the second rank is worth a pawn of pressure.",
+          "White offers to trade the intruder with Rf2.",
+          "Black declines and doubles instead — …Rac8 brings the second rook to the open c-file, and now White can never relax.",
+          "The rook sidesteps to b3, eyeing the queenside.",
+          "…Nd7 reroutes the knight toward the c5- and b6-squares, the holes White's pawns left behind.",
+          "White probes with Rb5, leaning on the d5-pawn and the fifth rank.",
+          "…h5 grabs kingside space and makes luft, so no back-rank trick ever bites while Black defends.",
+          "White gains queenside space with a5.",
+          "Now the key simplification: …Rxf2 trades a pair of rooks. Fewer pieces, fewer threats — and the solid d5–e6–b6 wall still stands.",
+          "White recaptures on f2.",
+          "…Rc2+ — straight back to the seventh with the last rook. Active pieces against the intact d5–e6 wall: Black holds comfortably, and Topalov and Wang Yue went on to split the point."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d7",
+              "to": "c5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "title": "The Slav Hold (Topalov–Wang Yue, Amber 2009)",
+        "highlights": [
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "intro": "Black to neutralise White's bishop and space with pure rook activity.",
+        "sources": [
+          "concept:pos-center",
+          "concept:pawn-doubled",
+          "https://en.wikipedia.org/wiki/Slav_Defense"
+        ],
+        "learnCues": [
+          "…Rc2 — rook to the seventh",
+          "",
+          "…Rac8 — double on the c-file",
+          "",
+          "…Nd7 — reroute toward c5/b6",
+          "",
+          "…h5 — kingside space and luft",
+          "",
+          "…Rxf2 — trade, simplify the hold",
+          "",
+          "…Rc2+ — active rook; Black holds"
+        ]
+      }
+    ],
+    "sources": [
+      "concept:pos-center",
+      "concept:pawn-doubled",
+      "https://en.wikipedia.org/wiki/Slav_Defense"
+    ]
+  },
+  {
+    "id": "mp-carokann-advance-endgame",
+    "openingId": "caro-kann",
+    "criticalPositionFen": "2r1k3/3nb3/p3p3/1p6/8/3N4/PP1B3P/1K3R2 b - - 0 32",
+    "title": "The Advance Caro Endgame",
+    "overview": "The Advance Caro lets Black trade into clean, symmetrical endings where the early …Bf5 and …c5 leave no weakness behind. This is the position Anand defended against Leko (Miskolc 2009) out of the Advance main — a balanced rook-and-two-minor ending where activity decides. Learn the holding method: rush a knight to the d5-outpost, seize the open d-file, centralize the rook and the king, and a symmetric ending with no targets is a comfortable draw.",
+    "pawnBreaks": [
+      {
+        "move": "…a5 and …b4 — queenside expansion",
+        "explanation": "Black leans on the queenside majority to gain space and make luft when the moment calls for it.",
+        "fen": "2r1k3/3nb3/p3p3/1p6/8/3N4/PP1B3P/1K3R2 b - - 0 32"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "…Nf6-d5 — the central outpost",
+        "explanation": "The knight reroutes to the dominant d5-square, immune to pawns and eyeing White's pieces."
+      },
+      {
+        "piece": "Rook",
+        "route": "…Rd8-d5 — own the d-file and centralize",
+        "explanation": "The rook takes the open d-file and steps into the centre, its most active post."
+      }
+    ],
+    "strategicThemes": [
+      "In a symmetric R+minor ending, the more active army holds — race your pieces to their best squares first.",
+      "The d5-outpost is the prize: a knight there dominates and never needs defending.",
+      "Centralize the king the moment the queens are gone — it is a fighting piece in the endgame."
+    ],
+    "endgameTransitions": [
+      "The Advance Caro's …Bf5/…c5 structure leaves Black with no weakness, so the simplified ending is a draw of activity, not a defence under fire.",
+      "Symmetric material with the better-placed pieces equals a comfortable hold."
+    ],
+    "playableLines": [
+      {
+        "fen": "2r1k3/3nb3/p3p3/1p6/8/3N4/PP1B3P/1K3R2 b - - 0 32",
+        "moves": [
+          "Nf6",
+          "Bc1",
+          "Rd8",
+          "Ne5",
+          "Rd5",
+          "Nc6",
+          "Rh5",
+          "Re1",
+          "Kf7",
+          "Bf4",
+          "Nd5"
+        ],
+        "annotations": [
+          "Anand activates the knight — …Nf6 heads for the dominant d5-square and eyes e4. In a symmetric rook-and-two-minor ending, whoever reaches the better squares first holds the balance.",
+          "White's bishop drops back to c1.",
+          "…Rd8 grabs the open d-file — the only highway in the position.",
+          "White's knight jumps into e5.",
+          "…Rd5 centralizes with tempo, hitting the e5-knight and clamping the centre.",
+          "The knight reroutes to c6.",
+          "…Rh5 keeps the rook active, swinging to the kingside to tie White's pieces down.",
+          "White contests the centre with Re1.",
+          "…Kf7 — the king joins the fight; centralizing the monarch is the golden rule of the endgame.",
+          "White's bishop eyes the queenside from f4.",
+          "…Nd5! The knight lands on the great central outpost, hitting the f4-bishop and dominating the board. Every Black piece is active and there is no weakness to target — Black holds with ease, and Leko and Anand soon shook hands."
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f6",
+              "to": "d5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "title": "The Advance Hold (Leko–Anand, Miskolc 2009)",
+        "highlights": [
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "intro": "Black to hold the symmetric ending with pure piece activity.",
+        "sources": [
+          "book:caro-kann",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+        ],
+        "learnCues": [
+          "…Nf6 — knight toward the d5 outpost",
+          "",
+          "…Rd8 — seize the open d-file",
+          "",
+          "…Rd5 — centralize with tempo",
+          "",
+          "…Rh5 — keep the rook active",
+          "",
+          "…Kf7 — centralize the king",
+          "",
+          "…Nd5 — the central outpost; Black holds"
+        ]
+      }
+    ],
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
+  },
+  {
+    "id": "mp-qgd-main-endgame",
+    "openingId": "qgd",
+    "criticalPositionFen": "2b1rk2/pp3ppp/2p2n2/5N2/4P3/1B1R1P2/PP3KPP/8 b - - 0 24",
+    "title": "The QGD Endgame — Converting the Structure",
+    "overview": "The QGD's freeing system (…dxc4, …Nd5, exchanges) steers Black toward sound, simplified positions where the better structure decides. This is the ending Hübner reached against Hertneck (1994) out of the Orthodox main — a rook-and-two-minor middlegame where Black trades down, fixes a weakness in White's camp, and converts. Learn the technique: simplify into the ending, target the weak pawn from the side, centralize the king, and turn a sound structure into a clean extra pawn.",
+    "pawnBreaks": [
+      {
+        "move": "…a6 — shore up the queenside",
+        "explanation": "A small but vital prophylactic move so White’s active rook can never grab a loose queenside pawn during the conversion.",
+        "fen": "2b1rk2/pp3ppp/2p2n2/5N2/4P3/1B1R1P2/PP3KPP/8 b - - 0 24"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "…Re5xf5 — round up the weak pawn",
+        "explanation": "The rook attacks the isolated pawn from the side and wins it, the textbook winning method."
+      },
+      {
+        "piece": "Knight",
+        "route": "…Ne4-d6 — activate with tempo",
+        "explanation": "The knight jumps in with check, then blockades and hits White’s bishop — every piece joins the conversion."
+      }
+    ],
+    "strategicThemes": [
+      "Black's edge is the sounder structure — trade into the ending where that edge is permanent, not material fireworks.",
+      "Attack a weak pawn from the SIDE with the rook; pressure from behind or in front is slower.",
+      "Centralize the king and activate the knight with tempo — coordinated pieces convert the extra pawn."
+    ],
+    "endgameTransitions": [
+      "Simplifying the QGD reaches an ending where White's weakened pawns have no defence — the structure becomes a clean extra pawn.",
+      "Rook plus active knight convert a sound material edge against a passive defender."
+    ],
+    "playableLines": [
+      {
+        "fen": "2b1rk2/pp3ppp/2p2n2/5N2/4P3/1B1R1P2/PP3KPP/8 b - - 0 24",
+        "moves": [
+          "Bxf5",
+          "exf5",
+          "Re5",
+          "Rd8+",
+          "Ke7",
+          "Ra8",
+          "a6",
+          "Bc4",
+          "Rxf5",
+          "Ra7",
+          "Ne4+",
+          "Ke3",
+          "Nd6"
+        ],
+        "annotations": [
+          "Hübner simplifies — …Bxf5 trades a minor and damages White's structure. With queens long gone, the player with the sounder pawns and busier pieces grinds the point.",
+          "White must recapture with the pawn, leaving f5 weak and isolated.",
+          "…Re5 attacks the weak f5-pawn at once — the rook hits it from the side, the textbook way to win a pawn.",
+          "White checks with Rd8+ to gain time.",
+          "…Ke7 — the king strolls toward the centre, unbothered.",
+          "White's rook swings to the open a-file.",
+          "…a6 shores up the queenside pawns so the rook can't snack on them.",
+          "White tries Bc4, eyeing f7.",
+          "…Rxf5 collects the weak pawn — Black is up a clean pawn, and the conversion begins.",
+          "White's rook probes the seventh rank.",
+          "…Ne4+ activates the knight with check, winning a tempo to coordinate.",
+          "The king steps to e3.",
+          "…Nd6 hits the c4-bishop and blockades. Every Black piece works and the extra pawn tells — Hübner converted the clean pawn with smooth technique."
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "f5",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "title": "The QGD Conversion (Hertneck–Hübner, 1994)",
+        "highlights": [
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ]
+        ],
+        "intro": "Black to convert the sounder structure into a winning ending.",
+        "sources": [
+          "concept:pos-center",
+          "concept:pawn-doubled",
+          "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ],
+        "learnCues": [
+          "…Bxf5 — trade, weaken White's pawns",
+          "",
+          "…Re5 — attack the weak f5-pawn",
+          "",
+          "…Ke7 — king to the centre",
+          "",
+          "…a6 — shore up the queenside",
+          "",
+          "…Rxf5 — win the pawn",
+          "",
+          "…Ne4+ — activate with tempo",
+          "",
+          "…Nd6 — blockade; convert the edge"
+        ]
+      }
+    ],
+    "sources": [
+      "concept:pos-center",
+      "concept:pawn-doubled",
+      "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+    ]
+  },
+  {
+    "id": "mp-frenchdefence-main-endgame",
+    "openingId": "french-defence",
+    "criticalPositionFen": "2r3k1/4n2p/p1b2p2/2Np4/1P2pP1N/P7/1K4PP/2R5 b - - 0 30",
+    "title": "The French Endgame — Counterplay Holds",
+    "overview": "The French gives Black a cramped but resilient game, and its endings reward DYNAMISM, not passive defence. This is the position Nepomniachtchi held against So (FTX 2021) out of the Steinitz main — White owns more space, but Black has a passed d-pawn and active pieces. Learn the French way to hold a worse-looking ending: push the passer, centralize the knight, strike with the rook from behind, and generate counterplay fast enough to force the draw.",
+    "pawnBreaks": [
+      {
+        "move": "…d4-d3 — the passed-pawn counterplay",
+        "explanation": "The far-advanced passer cramps White and ties a piece to its blockade — active counterplay, the French antidote to a space disadvantage.",
+        "fen": "2r3k1/4n2p/p1b2p2/2Np4/1P2pP1N/P7/1K4PP/2R5 b - - 0 30"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "…Nd5 — the central outpost",
+        "explanation": "The knight dominates the d5-square, hits the b4-pawn, and supports the counterplay."
+      },
+      {
+        "piece": "Rook",
+        "route": "…Rc2-c3 — strike from behind with checks",
+        "explanation": "The active rook harasses the white king from the second and third ranks, fast enough to force the perpetual."
+      }
+    ],
+    "strategicThemes": [
+      "In a worse-looking ending, COUNTERPLAY beats passive defence — a far-advanced passed pawn is the great equalizer.",
+      "Centralize the knight on d5 and keep the rook active; coordinated, busy pieces make the draw.",
+      "Don't sit and suffer — push the passer and check the king until White must take the draw."
+    ],
+    "endgameTransitions": [
+      "The French's central pawns can become a dangerous passer in the ending — push it and the worse structure turns into active counterplay.",
+      "Passed pawn plus active rook generate enough threats to hold against extra space."
+    ],
+    "playableLines": [
+      {
+        "fen": "2r3k1/4n2p/p1b2p2/2Np4/1P2pP1N/P7/1K4PP/2R5 b - - 0 30",
+        "moves": [
+          "d4",
+          "Rc4",
+          "d3",
+          "Nxe4",
+          "Bxe4",
+          "Rxe4",
+          "Nd5",
+          "Rd4",
+          "Rc2+",
+          "Kb3",
+          "Rc3+"
+        ],
+        "annotations": [
+          "So has more space, but Nepomniachtchi holds a trump: the passed pawn. …d4 sets it rolling — in a sharp ending a far-advanced passer outweighs a quiet structure.",
+          "White blockades on c4 and eyes the pawns.",
+          "…d3! The passer charges on, cramping White and tying a piece to the blockade. This is the French counterpunch — Black does not defend, Black pushes.",
+          "White grabs the e4-pawn with the knight...",
+          "...but …Bxe4 recaptures, keeping the d3-pawn as a thorn in White's position.",
+          "White wins the bishop for the knight — material is level again.",
+          "…Nd5 centralizes the knight on the dominant outpost, hitting the b4-pawn and joining the counterplay.",
+          "White's rook swings to d4 to round up the passer.",
+          "…Rc2+ — the rook strikes from behind. With the d3-pawn and a rook on the second, Black's counterplay is too fast to ignore.",
+          "The king runs from the checks.",
+          "…Rc3+ keeps the king dancing. Black's active rook and passed pawn force the draw by perpetual — the French's dynamic resources held the balance against White's extra space."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "b4",
+              "color": "rgba(34, 197, 94, 0.85)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "title": "The French Hold (So–Nepomniachtchi, 2021)",
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "intro": "Black to hold the worse-looking ending with a passed pawn and active pieces.",
+        "sources": [
+          "book:french-defence",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/French_Defence"
+        ],
+        "learnCues": [
+          "…d4 — push the passed pawn",
+          "",
+          "…d3 — the passer charges, cramps White",
+          "",
+          "…Bxe4 — recapture, keep the d-passer",
+          "",
+          "…Nd5 — outpost, hit b4, join in",
+          "",
+          "…Rc2+ — rook strikes from behind",
+          "",
+          "…Rc3+ — perpetual; counterplay holds"
+        ]
+      }
+    ],
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   }
 ]
