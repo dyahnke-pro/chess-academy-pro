@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js';
 import type { LessonScript, AnnotationArrow, AnnotationHighlight, PlayableMiddlegameLine } from '../../types';
 import { PRO_NARODITSKY_CARO_KANN_LESSON } from './proNaroditskyCaroKann';
+import { PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON } from './proGothamchessCaroAdvance';
 import { PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS } from './proNaroditskyCaroKannVariations';
 import { PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS } from './proNaroditskyAlapinVariations';
 import { PRO_NARODITSKY_KID_VARIATION_LESSONS } from './proNaroditskyKIDVariations';
@@ -178,6 +179,8 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_NAR_JOBAVA_LESSON.openingId]: PRO_NAR_JOBAVA_LESSON,
   [PRO_NAR_RUY_LESSON.openingId]: PRO_NAR_RUY_LESSON,
   [PRO_NAR_FANTASY_CARO_LESSON.openingId]: PRO_NAR_FANTASY_CARO_LESSON,
+  // Pro GothamChess (Levy Rozman)
+  [PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON.openingId]: PRO_GOTHAMCHESS_CARO_ADVANCE_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {

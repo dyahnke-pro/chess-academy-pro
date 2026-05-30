@@ -2034,7 +2034,7 @@
       "playerId": "gothamchess",
       "eco": "B12",
       "name": "Caro-Kann Advance (GothamChess, White)",
-      "pgn": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bg5 Qb6 Bd3 Bxd3 Qxd3 e6 Nd2 Ne7",
+      "pgn": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bg5 Qb6 Bd3 Bxd3 Qxd3 e6 Nd2 Ne7 c4",
       "color": "white",
       "style": "Sharp, Space",
       "overview": "Gotham's anti-Caro from White's side — 423 games at 73.2% score, one of his BEST-scoring lines. The 3.e5 Advance grabs space immediately; the h4 thrust fixes Black's kingside structure with …h5; then Bg5 pins the king's knight and Bd3 + queen on d3 sets up the queenside-castle attack. Sharp, principled, hard to defend at speed.",
@@ -2052,7 +2052,7 @@
       "variations": [
         {
           "name": "Main line (vs …Bf5)",
-          "pgn": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bg5 Qb6 Bd3 Bxd3 Qxd3 e6 Nd2 Ne7",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bg5 Qb6 Bd3 Bxd3 Qxd3 e6 Nd2 Ne7 c4",
           "explanation": "Gotham's main anti-Caro line — 423 games at 73.2%. After fixing the kingside with h4, the bishop trade on d3 leaves White with central control and queenside attacking potential. Sharp structural commitment that punishes imprecise defence.",
           "sources": [
             "concept:pos-development",
