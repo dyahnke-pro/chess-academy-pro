@@ -1,0 +1,234 @@
+{
+  "openingId": "al__lasker-trap",
+  "seed": [
+    "d4",
+    "d5",
+    "c4",
+    "e5",
+    "dxe5",
+    "d4",
+    "e3",
+    "Bb4+"
+  ],
+  "spine": [
+    "d4",
+    "d5",
+    "c4",
+    "e5",
+    "dxe5",
+    "d4",
+    "e3",
+    "Bb4+",
+    "Bd2",
+    "dxe3",
+    "fxe3",
+    "Qh4+",
+    "g3",
+    "Qe4",
+    "Qf3",
+    "Bxd2+",
+    "Nxd2",
+    "Qxe5",
+    "O-O-O",
+    "Nf6",
+    "Bh3",
+    "Nc6",
+    "Bxc8",
+    "Rxc8",
+    "Ne2"
+  ],
+  "plies": 25,
+  "throughMove": 13,
+  "reachedMiddlegame": true,
+  "counts": [
+    {
+      "ply": 9,
+      "move": 5,
+      "gamesAtPosition": 34835,
+      "played": "Bd2",
+      "pct": 91,
+      "playedGames": 31557,
+      "source": "lichess"
+    },
+    {
+      "ply": 10,
+      "move": 5,
+      "gamesAtPosition": 31549,
+      "played": "dxe3",
+      "pct": 97,
+      "playedGames": 30681,
+      "source": "lichess"
+    },
+    {
+      "ply": 11,
+      "move": 6,
+      "gamesAtPosition": 30668,
+      "played": "fxe3",
+      "pct": 64,
+      "playedGames": 19602,
+      "source": "lichess"
+    },
+    {
+      "ply": 12,
+      "move": 6,
+      "gamesAtPosition": 19597,
+      "played": "Qh4+",
+      "pct": 44,
+      "playedGames": 8653,
+      "source": "lichess"
+    },
+    {
+      "ply": 13,
+      "move": 7,
+      "gamesAtPosition": 8652,
+      "played": "g3",
+      "pct": 95,
+      "playedGames": 8242,
+      "source": "lichess"
+    },
+    {
+      "ply": 14,
+      "move": 7,
+      "gamesAtPosition": 8242,
+      "played": "Qe4",
+      "pct": 90,
+      "playedGames": 7427,
+      "source": "lichess"
+    },
+    {
+      "ply": 15,
+      "move": 8,
+      "gamesAtPosition": 7421,
+      "played": "Qf3",
+      "pct": 46,
+      "playedGames": 3419,
+      "source": "lichess"
+    },
+    {
+      "ply": 16,
+      "move": 8,
+      "gamesAtPosition": 3417,
+      "played": "Bxd2+",
+      "pct": 90,
+      "playedGames": 3073,
+      "source": "lichess"
+    },
+    {
+      "ply": 17,
+      "move": 9,
+      "gamesAtPosition": 3073,
+      "played": "Nxd2",
+      "pct": 97,
+      "playedGames": 2993,
+      "source": "lichess"
+    },
+    {
+      "ply": 18,
+      "move": 9,
+      "gamesAtPosition": 2997,
+      "played": "Qxe5",
+      "pct": 93,
+      "playedGames": 2790,
+      "source": "lichess"
+    },
+    {
+      "ply": 19,
+      "move": 10,
+      "gamesAtPosition": 2841,
+      "played": "O-O-O",
+      "pct": 42,
+      "playedGames": 1196,
+      "source": "lichess"
+    },
+    {
+      "ply": 20,
+      "move": 10,
+      "gamesAtPosition": 1195,
+      "played": "Nf6",
+      "pct": 77,
+      "playedGames": 924,
+      "source": "lichess"
+    },
+    {
+      "ply": 21,
+      "move": 11,
+      "gamesAtPosition": 923,
+      "played": "Bh3",
+      "pct": 23,
+      "playedGames": 212,
+      "source": "lichess"
+    },
+    {
+      "ply": 22,
+      "move": 11,
+      "gamesAtPosition": 212,
+      "played": "Nc6",
+      "pct": 53,
+      "playedGames": 112,
+      "source": "lichess"
+    },
+    {
+      "ply": 23,
+      "move": 12,
+      "gamesAtPosition": 122,
+      "played": "Bxc8",
+      "pct": 81,
+      "playedGames": 99,
+      "source": "lichess"
+    },
+    {
+      "ply": 24,
+      "move": 12,
+      "gamesAtPosition": 99,
+      "played": "Rxc8",
+      "pct": 100,
+      "playedGames": 99,
+      "source": "lichess"
+    },
+    {
+      "ply": 25,
+      "move": 13,
+      "gamesAtPosition": 103,
+      "played": "Ne2",
+      "pct": 54,
+      "playedGames": 56,
+      "source": "lichess"
+    }
+  ],
+  "branches": [
+    {
+      "afterMove": 6,
+      "main": "Qh4+",
+      "mainPct": 44,
+      "alt": "Nc6",
+      "altGames": 6764
+    },
+    {
+      "afterMove": 7,
+      "main": "Qf3",
+      "mainPct": 46,
+      "alt": "Nf3",
+      "altGames": 2840
+    },
+    {
+      "afterMove": 9,
+      "main": "O-O-O",
+      "mainPct": 42,
+      "alt": "Qe4",
+      "altGames": 779
+    },
+    {
+      "afterMove": 10,
+      "main": "Bh3",
+      "mainPct": 23,
+      "alt": "Qf4",
+      "altGames": 176
+    }
+  ],
+  "floors": {
+    "COMMON": 60,
+    "LOWFLOOR": 8,
+    "MIDGAME_PLY": 20
+  },
+  "generatedAt": "2026-05-30T21:47:54.906Z"
+}
