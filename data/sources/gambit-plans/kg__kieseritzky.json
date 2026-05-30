@@ -1,0 +1,71 @@
+{
+  "id": "kg__kieseritzky",
+  "openingId": "kg__kieseritzky",
+  "student": "w",
+  "mgEntryMove": 12,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 13,
+      "fen": "rn3rk1/ppp2p1p/3b4/3PNb1n/2BP1pp1/2N5/PPP3P1/R1B1R1K1 w - - 3 13",
+      "corpus": 128,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Ne4",
+          "pct": 31,
+          "games": 40
+        },
+        {
+          "san": "Bd3",
+          "pct": 23,
+          "games": 29
+        },
+        {
+          "san": "Nb5",
+          "pct": 18,
+          "games": 23
+        },
+        {
+          "san": "Bb3",
+          "pct": 18,
+          "games": 23
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 13,
+    "fen": "rn3rk1/ppp2p1p/3b4/3PNb1n/2BPNpp1/8/PPP3P1/R1B1R1K1 b - - 4 13",
+    "games": 40,
+    "line": [
+      "e4",
+      "e5",
+      "f4",
+      "exf4",
+      "Nf3",
+      "g5",
+      "h4",
+      "g4",
+      "Ne5",
+      "Nf6",
+      "Bc4",
+      "d5",
+      "exd5",
+      "Bd6",
+      "d4",
+      "Nh5",
+      "O-O",
+      "Qxh4",
+      "Qe1",
+      "Qxe1",
+      "Rxe1",
+      "O-O",
+      "Nc3",
+      "Bf5",
+      "Ne4"
+    ]
+  },
+  "walkedTo": 13,
+  "generatedAt": "2026-05-30T23:16:56.603Z"
+}

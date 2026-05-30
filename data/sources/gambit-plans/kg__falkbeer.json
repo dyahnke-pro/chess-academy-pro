@@ -1,0 +1,90 @@
+{
+  "id": "kg__falkbeer",
+  "openingId": "kg__falkbeer",
+  "student": "w",
+  "mgEntryMove": 14,
+  "planCount": 2,
+  "planForks": [
+    {
+      "afterMove": 15,
+      "fen": "rn2k2r/pp3ppp/2p1b3/3n4/2B5/B4N2/PPP3PP/2KR3R w kq - 2 15",
+      "corpus": 147,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Rhe1",
+          "pct": 80,
+          "games": 118
+        },
+        {
+          "san": "Ng5",
+          "pct": 16,
+          "games": 23
+        }
+      ]
+    },
+    {
+      "afterMove": 16,
+      "fen": "r3k2r/pp1n1ppp/2p1b3/3n4/2B5/B4N2/PPP3PP/2KRR3 w kq - 4 16",
+      "corpus": 98,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Ng5",
+          "pct": 65,
+          "games": 64
+        },
+        {
+          "san": "Bxd5",
+          "pct": 27,
+          "games": 26
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 18,
+    "fen": "2kr3r/pp4pp/1np1R3/3n4/2B5/B7/PPP3PP/2KR4 w - - 1 19",
+    "games": 43,
+    "line": [
+      "e4",
+      "e5",
+      "f4",
+      "d5",
+      "exd5",
+      "e4",
+      "d3",
+      "Nf6",
+      "dxe4",
+      "Nxe4",
+      "Nf3",
+      "Bc5",
+      "Qe2",
+      "Bf5",
+      "Nc3",
+      "Qe7",
+      "Be3",
+      "Nxc3",
+      "Bxc5",
+      "Nxe2",
+      "Bxe7",
+      "Nxf4",
+      "Ba3",
+      "Nxd5",
+      "O-O-O",
+      "c6",
+      "Bc4",
+      "Be6",
+      "Rhe1",
+      "Nd7",
+      "Ng5",
+      "O-O-O",
+      "Nxe6",
+      "fxe6",
+      "Rxe6",
+      "N7b6"
+    ]
+  },
+  "walkedTo": 18,
+  "generatedAt": "2026-05-30T23:16:53.332Z"
+}

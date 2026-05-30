@@ -1,0 +1,66 @@
+{
+  "id": "bu__adler-nf3",
+  "openingId": "bu__adler-nf3",
+  "student": "b",
+  "mgEntryMove": 14,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 15,
+      "fen": "2bqr1k1/bppp1ppp/6r1/p3nN1B/2P5/1P2P3/PB3PPP/R2Q1RK1 b - - 9 15",
+      "corpus": 65,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Rg5",
+          "pct": 63,
+          "games": 41
+        },
+        {
+          "san": "Rf6",
+          "pct": 28,
+          "games": 18
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 15,
+    "fen": "2bqr1k1/bppp1ppp/8/p3nNrB/2P5/1P2P3/PB3PPP/R2Q1RK1 w - - 10 16",
+    "games": 41,
+    "line": [
+      "d4",
+      "Nf6",
+      "c4",
+      "e5",
+      "dxe5",
+      "Ng4",
+      "Nf3",
+      "Bc5",
+      "e3",
+      "Nc6",
+      "Be2",
+      "O-O",
+      "O-O",
+      "Re8",
+      "Nc3",
+      "Ngxe5",
+      "Nxe5",
+      "Nxe5",
+      "b3",
+      "a5",
+      "Bb2",
+      "Ra6",
+      "Ne4",
+      "Ba7",
+      "Ng3",
+      "Rh6",
+      "Nf5",
+      "Rg6",
+      "Bh5",
+      "Rg5"
+    ]
+  },
+  "walkedTo": 15,
+  "generatedAt": "2026-05-30T23:15:14.542Z"
+}

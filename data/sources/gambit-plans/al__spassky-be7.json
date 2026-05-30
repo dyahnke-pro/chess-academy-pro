@@ -1,0 +1,86 @@
+{
+  "id": "al__spassky-be7",
+  "openingId": "al__spassky-be7",
+  "student": "b",
+  "mgEntryMove": 13,
+  "planCount": 2,
+  "planForks": [
+    {
+      "afterMove": 13,
+      "fen": "5b1r/1ppk1ppp/p1n1b1n1/4P3/2PN4/P3BN2/1P3PPP/4KB1R b K - 1 13",
+      "corpus": 144,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Ngxe5",
+          "pct": 54,
+          "games": 78
+        },
+        {
+          "san": "Ncxe5",
+          "pct": 38,
+          "games": 55
+        }
+      ]
+    },
+    {
+      "afterMove": 16,
+      "fen": "5b1r/1pp2ppp/p3k3/4n3/2P5/P3B3/1P2BPPP/4K2R b K - 1 16",
+      "corpus": 65,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Be7",
+          "pct": 57,
+          "games": 37
+        },
+        {
+          "san": "Bd6",
+          "pct": 22,
+          "games": 14
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 16,
+    "fen": "7r/1pp1bppp/p3k3/4n3/2P5/P3B3/1P2BPPP/4K2R w K - 2 17",
+    "games": 37,
+    "line": [
+      "d4",
+      "d5",
+      "c4",
+      "e5",
+      "dxe5",
+      "d4",
+      "Nf3",
+      "Nc6",
+      "a3",
+      "Be6",
+      "e3",
+      "dxe3",
+      "Qxd8+",
+      "Rxd8",
+      "Bxe3",
+      "Nge7",
+      "Nc3",
+      "Ng6",
+      "Nb5",
+      "Rd7",
+      "Rd1",
+      "a6",
+      "Rxd7",
+      "Kxd7",
+      "Nbd4",
+      "Ngxe5",
+      "Nxe5+",
+      "Nxe5",
+      "Nxe6",
+      "Kxe6",
+      "Be2",
+      "Be7"
+    ]
+  },
+  "walkedTo": 16,
+  "generatedAt": "2026-05-30T23:14:51.289Z"
+}

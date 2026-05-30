@@ -1,0 +1,62 @@
+{
+  "id": "al__lasker-trap",
+  "openingId": "al__lasker-trap",
+  "student": "b",
+  "mgEntryMove": 11,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 13,
+      "fen": "2r1k2r/ppp2ppp/2n2n2/4q3/2P5/4PQP1/PP1NN2P/2KR3R b k - 1 13",
+      "corpus": 56,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "O-O",
+          "pct": 82,
+          "games": 46
+        },
+        {
+          "san": "Nb4",
+          "pct": 16,
+          "games": 9
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 13,
+    "fen": "2r2rk1/ppp2ppp/2n2n2/4q3/2P5/4PQP1/PP1NN2P/2KR3R w - - 2 14",
+    "games": 47,
+    "line": [
+      "d4",
+      "d5",
+      "c4",
+      "e5",
+      "dxe5",
+      "d4",
+      "e3",
+      "Bb4+",
+      "Bd2",
+      "dxe3",
+      "fxe3",
+      "Qh4+",
+      "g3",
+      "Qe4",
+      "Qf3",
+      "Bxd2+",
+      "Nxd2",
+      "Qxe5",
+      "O-O-O",
+      "Nf6",
+      "Bh3",
+      "Nc6",
+      "Bxc8",
+      "Rxc8",
+      "Ne2",
+      "O-O"
+    ]
+  },
+  "walkedTo": 13,
+  "generatedAt": "2026-05-30T23:14:35.821Z"
+}

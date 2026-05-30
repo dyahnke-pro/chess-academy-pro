@@ -1,0 +1,72 @@
+{
+  "id": "be__declined-nf3",
+  "openingId": "be__declined-nf3",
+  "student": "b",
+  "mgEntryMove": 15,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 15,
+      "fen": "r2q1rk1/4ppbp/1n1p1np1/pNpP4/P3P3/8/1P1NQPPP/R1B2RK1 b - - 3 15",
+      "corpus": 232,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Ne8",
+          "pct": 39,
+          "games": 91
+        },
+        {
+          "san": "Nfd7",
+          "pct": 28,
+          "games": 66
+        },
+        {
+          "san": "Qd7",
+          "pct": 20,
+          "games": 46
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 16,
+    "fen": "r2qnrk1/4ppbp/1n1p2p1/pNpP4/P1N1P3/8/1P2QPPP/R1B2RK1 b - - 5 16",
+    "games": 35,
+    "line": [
+      "d4",
+      "Nf6",
+      "c4",
+      "c5",
+      "d5",
+      "b5",
+      "Nf3",
+      "g6",
+      "cxb5",
+      "a6",
+      "b6",
+      "d6",
+      "Nc3",
+      "Nbd7",
+      "e4",
+      "Bg7",
+      "Be2",
+      "O-O",
+      "O-O",
+      "Nxb6",
+      "a4",
+      "a5",
+      "Nd2",
+      "Ba6",
+      "Bxa6",
+      "Rxa6",
+      "Qe2",
+      "Ra8",
+      "Nb5",
+      "Ne8",
+      "Nc4"
+    ]
+  },
+  "walkedTo": 16,
+  "generatedAt": "2026-05-30T23:14:54.769Z"
+}

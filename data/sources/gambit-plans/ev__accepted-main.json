@@ -1,0 +1,84 @@
+{
+  "id": "ev__accepted-main",
+  "openingId": "ev__accepted-main",
+  "student": "w",
+  "mgEntryMove": 11,
+  "planCount": 2,
+  "planForks": [
+    {
+      "afterMove": 12,
+      "fen": "r1b2rk1/pppqnppp/1b1p4/n3P3/2B1P3/2P2N2/P1QN1PPP/R1B2RK1 w - - 1 12",
+      "corpus": 101,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "exd6",
+          "pct": 53,
+          "games": 54
+        },
+        {
+          "san": "Ba3",
+          "pct": 26,
+          "games": 26
+        }
+      ]
+    },
+    {
+      "afterMove": 13,
+      "fen": "r1b2rk1/pp1qnppp/1b1p4/n7/2B1P3/2P2N2/P1QN1PPP/R1B2RK1 w - - 0 13",
+      "corpus": 55,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Bd3",
+          "pct": 31,
+          "games": 17
+        },
+        {
+          "san": "Ba3",
+          "pct": 27,
+          "games": 15
+        },
+        {
+          "san": "Be2",
+          "pct": 15,
+          "games": 8
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 13,
+    "fen": "r1b2rk1/pp1qnppp/1b1p4/n7/4P3/2PB1N2/P1QN1PPP/R1B2RK1 b - - 1 13",
+    "games": 24,
+    "line": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bc4",
+      "Bc5",
+      "b4",
+      "Bxb4",
+      "c3",
+      "Ba5",
+      "d4",
+      "d6",
+      "Qb3",
+      "Qd7",
+      "O-O",
+      "Bb6",
+      "Nbd2",
+      "Na5",
+      "Qc2",
+      "Ne7",
+      "dxe5",
+      "O-O",
+      "exd6",
+      "cxd6",
+      "Bd3"
+    ]
+  },
+  "walkedTo": 13,
+  "generatedAt": "2026-05-30T23:16:20.366Z"
+}

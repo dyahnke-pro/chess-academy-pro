@@ -1,0 +1,37 @@
+{
+  "id": "vi__accepted",
+  "openingId": "vi__accepted",
+  "student": "w",
+  "mgEntryMove": 10,
+  "planCount": 0,
+  "planForks": [],
+  "endgame": {
+    "afterMove": 10,
+    "fen": "r3kbnr/ppp1qppp/2n5/4p3/3P1B2/2N2P2/PPP1Q2P/2KR1B1R w kq - 1 11",
+    "games": 32,
+    "line": [
+      "e4",
+      "e5",
+      "Nc3",
+      "Nf6",
+      "f4",
+      "exf4",
+      "e5",
+      "Ng8",
+      "Nf3",
+      "d6",
+      "d4",
+      "dxe5",
+      "Qe2",
+      "Nc6",
+      "Bxf4",
+      "Bg4",
+      "O-O-O",
+      "Bxf3",
+      "gxf3",
+      "Qe7"
+    ]
+  },
+  "walkedTo": 10,
+  "generatedAt": "2026-05-30T23:18:26.354Z"
+}

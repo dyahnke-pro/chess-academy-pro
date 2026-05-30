@@ -1,0 +1,39 @@
+{
+  "id": "kg__bishops",
+  "openingId": "kg__bishops",
+  "student": "w",
+  "mgEntryMove": 10,
+  "planCount": 0,
+  "planForks": [],
+  "endgame": {
+    "afterMove": 11,
+    "fen": "rn1q1rk1/pp3pp1/3bbn1p/3p4/3P3B/1BN2P2/PPP1N2P/R2QK2R w KQ - 2 12",
+    "games": 30,
+    "line": [
+      "e4",
+      "e5",
+      "f4",
+      "exf4",
+      "Bc4",
+      "Nf6",
+      "Nc3",
+      "c6",
+      "Bb3",
+      "d5",
+      "exd5",
+      "cxd5",
+      "d4",
+      "Bd6",
+      "Nge2",
+      "f3",
+      "gxf3",
+      "O-O",
+      "Bg5",
+      "h6",
+      "Bh4",
+      "Be6"
+    ]
+  },
+  "walkedTo": 11,
+  "generatedAt": "2026-05-30T23:16:37.499Z"
+}

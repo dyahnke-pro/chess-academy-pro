@@ -1,0 +1,102 @@
+{
+  "id": "sc__max-lange",
+  "openingId": "sc__max-lange",
+  "student": "w",
+  "mgEntryMove": 15,
+  "planCount": 2,
+  "planForks": [
+    {
+      "afterMove": 16,
+      "fen": "2kr2r1/ppp2pPp/2n1b3/2bq2N1/2p1NPP1/3p4/PPP3KP/R1BQR3 w - - 1 16",
+      "corpus": 263,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "cxd3",
+          "pct": 33,
+          "games": 87
+        },
+        {
+          "san": "Kg3",
+          "pct": 21,
+          "games": 56
+        },
+        {
+          "san": "Qf3",
+          "pct": 20,
+          "games": 52
+        },
+        {
+          "san": "f5",
+          "pct": 12,
+          "games": 32
+        }
+      ]
+    },
+    {
+      "afterMove": 17,
+      "fen": "2kr2r1/ppp2pPp/2n1b3/2bq2N1/4NPP1/3p4/PP4KP/R1BQR3 w - - 0 17",
+      "corpus": 85,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Qf3",
+          "pct": 36,
+          "games": 31
+        },
+        {
+          "san": "Kg3",
+          "pct": 25,
+          "games": 21
+        },
+        {
+          "san": "f5",
+          "pct": 14,
+          "games": 12
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 17,
+    "fen": "2kr2r1/ppp2pPp/2n1b3/2bq2N1/4NPP1/3p1Q2/PP4KP/R1B1R3 b - - 1 17",
+    "games": 31,
+    "line": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "exd4",
+      "Bc4",
+      "Bc5",
+      "O-O",
+      "Nf6",
+      "e5",
+      "d5",
+      "exf6",
+      "dxc4",
+      "Re1+",
+      "Be6",
+      "Ng5",
+      "Qd5",
+      "Nc3",
+      "Qf5",
+      "Nce4",
+      "O-O-O",
+      "g4",
+      "Qe5",
+      "f4",
+      "d3+",
+      "Kg2",
+      "Qd5",
+      "fxg7",
+      "Rhg8",
+      "cxd3",
+      "cxd3",
+      "Qf3"
+    ]
+  },
+  "walkedTo": 17,
+  "generatedAt": "2026-05-30T23:17:40.714Z"
+}

@@ -1,0 +1,69 @@
+{
+  "id": "en__main-qb4",
+  "openingId": "en__main-qb4",
+  "student": "b",
+  "mgEntryMove": 14,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 14,
+      "fen": "r1b2rk1/pppp1ppp/2n3n1/2q1P3/8/PRBBPN2/2P2PPP/Q4RK1 b - - 6 14",
+      "corpus": 139,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Re8",
+          "pct": 32,
+          "games": 44
+        },
+        {
+          "san": "a6",
+          "pct": 27,
+          "games": 38
+        },
+        {
+          "san": "Qe7",
+          "pct": 21,
+          "games": 29
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 14,
+    "fen": "r1b1r1k1/pppp1ppp/2n3n1/2q1P3/8/PRBBPN2/2P2PPP/Q4RK1 w - - 7 15",
+    "games": 48,
+    "line": [
+      "d4",
+      "e5",
+      "dxe5",
+      "Nc6",
+      "Nf3",
+      "Qe7",
+      "Bf4",
+      "Qb4+",
+      "Bd2",
+      "Qxb2",
+      "Nc3",
+      "Bb4",
+      "Rb1",
+      "Qa3",
+      "Rb3",
+      "Qa5",
+      "a3",
+      "Bxc3",
+      "Bxc3",
+      "Qc5",
+      "e3",
+      "Nge7",
+      "Bd3",
+      "Ng6",
+      "O-O",
+      "O-O",
+      "Qa1",
+      "Re8"
+    ]
+  },
+  "walkedTo": 14,
+  "generatedAt": "2026-05-30T23:15:55.408Z"
+}

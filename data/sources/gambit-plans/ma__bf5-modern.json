@@ -1,0 +1,71 @@
+{
+  "id": "ma__bf5-modern",
+  "openingId": "ma__bf5-modern",
+  "student": "b",
+  "mgEntryMove": 14,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 14,
+      "fen": "r2q1rk1/5ppp/p1pb4/1p1n1b2/3P4/1BP5/PP1N1PPP/R1BQR1K1 b - - 4 14",
+      "corpus": 159,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Qh4",
+          "pct": 47,
+          "games": 75
+        },
+        {
+          "san": "Qf6",
+          "pct": 23,
+          "games": 36
+        },
+        {
+          "san": "Nf4",
+          "pct": 10,
+          "games": 16
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 15,
+    "fen": "r4rk1/5ppp/p1pb4/1p1n1b1q/3P4/1BP2N2/PP3PPP/R1BQR1K1 w - - 7 16",
+    "games": 48,
+    "line": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bb5",
+      "a6",
+      "Ba4",
+      "Nf6",
+      "O-O",
+      "Be7",
+      "Re1",
+      "b5",
+      "Bb3",
+      "O-O",
+      "c3",
+      "d5",
+      "exd5",
+      "Nxd5",
+      "Nxe5",
+      "Nxe5",
+      "Rxe5",
+      "c6",
+      "d4",
+      "Bd6",
+      "Re1",
+      "Bf5",
+      "Nd2",
+      "Qh4",
+      "Nf3",
+      "Qh5"
+    ]
+  },
+  "walkedTo": 15,
+  "generatedAt": "2026-05-30T23:17:06.817Z"
+}

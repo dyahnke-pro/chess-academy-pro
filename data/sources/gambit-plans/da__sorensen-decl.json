@@ -1,0 +1,79 @@
+{
+  "id": "da__sorensen-decl",
+  "openingId": "da__sorensen-decl",
+  "student": "w",
+  "mgEntryMove": 16,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 17,
+      "fen": "2k1r3/p1p2ppp/2pr4/5n2/1b1P4/2N1BK2/PP3PPP/2RR4 w - - 9 17",
+      "corpus": 296,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "g4",
+          "pct": 36,
+          "games": 106
+        },
+        {
+          "san": "g3",
+          "pct": 29,
+          "games": 87
+        },
+        {
+          "san": "Ne4",
+          "pct": 20,
+          "games": 59
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 19,
+    "fen": "2k1r3/p1p2ppp/2p4r/8/1b1P2P1/2N1P3/PP2K2P/2RR4 w - - 3 20",
+    "games": 34,
+    "line": [
+      "e4",
+      "e5",
+      "d4",
+      "exd4",
+      "c3",
+      "d5",
+      "exd5",
+      "Qxd5",
+      "cxd4",
+      "Nc6",
+      "Nf3",
+      "Bg4",
+      "Be2",
+      "Bb4+",
+      "Nc3",
+      "Bxf3",
+      "Bxf3",
+      "Qc4",
+      "Bxc6+",
+      "bxc6",
+      "Qe2+",
+      "Qxe2+",
+      "Kxe2",
+      "O-O-O",
+      "Be3",
+      "Ne7",
+      "Rhd1",
+      "Rhe8",
+      "Rac1",
+      "Nf5",
+      "Kf3",
+      "Rd6",
+      "g4",
+      "Nxe3",
+      "fxe3",
+      "Rf6+",
+      "Ke2",
+      "Rh6"
+    ]
+  },
+  "walkedTo": 19,
+  "generatedAt": "2026-05-30T23:15:46.878Z"
+}

@@ -1,0 +1,110 @@
+{
+  "id": "bu__fajarowicz",
+  "openingId": "bu__fajarowicz",
+  "student": "b",
+  "mgEntryMove": 17,
+  "planCount": 2,
+  "planForks": [
+    {
+      "afterMove": 17,
+      "fen": "1rb3k1/p1p2ppp/1p1p4/4r3/1PP5/P3PB2/5PPP/R2R2K1 b - - 0 17",
+      "corpus": 243,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "a5",
+          "pct": 25,
+          "games": 60
+        },
+        {
+          "san": "Bb7",
+          "pct": 24,
+          "games": 59
+        },
+        {
+          "san": "Be6",
+          "pct": 23,
+          "games": 55
+        },
+        {
+          "san": "Bf5",
+          "pct": 13,
+          "games": 32
+        }
+      ]
+    },
+    {
+      "afterMove": 18,
+      "fen": "1rb3k1/2p2ppp/1p1p4/p3r3/1PP5/P3PB2/5PPP/2RR2K1 b - - 1 18",
+      "corpus": 69,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "axb4",
+          "pct": 51,
+          "games": 35
+        },
+        {
+          "san": "Be6",
+          "pct": 13,
+          "games": 9
+        },
+        {
+          "san": "Kf8",
+          "pct": 12,
+          "games": 8
+        },
+        {
+          "san": "Bb7",
+          "pct": 10,
+          "games": 7
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 18,
+    "fen": "1rb3k1/2p2ppp/1p1p4/4r3/1pP5/P3PB2/5PPP/2RR2K1 w - - 0 19",
+    "games": 36,
+    "line": [
+      "d4",
+      "Nf6",
+      "c4",
+      "e5",
+      "dxe5",
+      "Ne4",
+      "Nf3",
+      "Bb4+",
+      "Nbd2",
+      "Nc6",
+      "a3",
+      "Bxd2+",
+      "Bxd2",
+      "Nxd2",
+      "Qxd2",
+      "Qe7",
+      "Qc3",
+      "O-O",
+      "e3",
+      "Re8",
+      "Be2",
+      "Nxe5",
+      "Nxe5",
+      "Qxe5",
+      "Qxe5",
+      "Rxe5",
+      "O-O",
+      "d6",
+      "Bf3",
+      "Rb8",
+      "Rfd1",
+      "b6",
+      "b4",
+      "a5",
+      "Rac1",
+      "axb4"
+    ]
+  },
+  "walkedTo": 18,
+  "generatedAt": "2026-05-30T23:15:30.077Z"
+}

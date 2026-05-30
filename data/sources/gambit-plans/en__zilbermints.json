@@ -1,0 +1,71 @@
+{
+  "id": "en__zilbermints",
+  "openingId": "en__zilbermints",
+  "student": "b",
+  "mgEntryMove": 13,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 15,
+      "fen": "r1b4r/pp2k2p/2p2p2/3pn3/8/4P1B1/PPP2PPP/2KR1B1R b - - 0 15",
+      "corpus": 64,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Bf5",
+          "pct": 44,
+          "games": 28
+        },
+        {
+          "san": "h5",
+          "pct": 34,
+          "games": 22
+        },
+        {
+          "san": "Be6",
+          "pct": 11,
+          "games": 7
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 15,
+    "fen": "r6r/pp2k2p/2p2p2/3pnb2/8/4P1B1/PPP2PPP/2KR1B1R w - - 1 16",
+    "games": 28,
+    "line": [
+      "d4",
+      "e5",
+      "dxe5",
+      "Nc6",
+      "Nf3",
+      "Nge7",
+      "Bf4",
+      "Ng6",
+      "Bg3",
+      "Qe7",
+      "Nc3",
+      "Ncxe5",
+      "Nxe5",
+      "Nxe5",
+      "Nd5",
+      "Qd6",
+      "Qd4",
+      "f6",
+      "O-O-O",
+      "c6",
+      "Nxf6+",
+      "gxf6",
+      "Qxd6",
+      "Bxd6",
+      "Rxd6",
+      "Ke7",
+      "Rd1",
+      "d5",
+      "e3",
+      "Bf5"
+    ]
+  },
+  "walkedTo": 15,
+  "generatedAt": "2026-05-30T23:16:09.624Z"
+}

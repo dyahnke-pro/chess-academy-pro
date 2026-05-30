@@ -1,0 +1,114 @@
+{
+  "id": "be__modern-bxa6",
+  "openingId": "be__modern-bxa6",
+  "student": "b",
+  "mgEntryMove": 13,
+  "planCount": 3,
+  "planForks": [
+    {
+      "afterMove": 13,
+      "fen": "rr4k1/3nppbp/b2p1np1/q1pP4/8/2N2NP1/PPQBPPBP/1R3RK1 b - - 10 13",
+      "corpus": 246,
+      "source": "masters",
+      "options": [
+        {
+          "san": "Qc7",
+          "pct": 33,
+          "games": 80
+        },
+        {
+          "san": "Ng4",
+          "pct": 26,
+          "games": 65
+        },
+        {
+          "san": "Ne8",
+          "pct": 17,
+          "games": 41
+        },
+        {
+          "san": "Nb6",
+          "pct": 13,
+          "games": 33
+        }
+      ]
+    },
+    {
+      "afterMove": 15,
+      "fen": "rr4k1/2q1ppbp/bn1p1np1/2pP4/7N/1PN3P1/P1QBPPBP/1R3RK1 b - - 2 15",
+      "corpus": 63,
+      "source": "masters",
+      "options": [
+        {
+          "san": "Qb7",
+          "pct": 56,
+          "games": 35
+        },
+        {
+          "san": "Bb7",
+          "pct": 32,
+          "games": 20
+        }
+      ]
+    },
+    {
+      "afterMove": 16,
+      "fen": "rr4k1/1q2ppbp/bn1p1np1/2pP4/7N/1PN3P1/P1QBPPBP/1R1R2K1 b - - 4 16",
+      "corpus": 82,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Nbxd5",
+          "pct": 44,
+          "games": 36
+        },
+        {
+          "san": "Nfxd5",
+          "pct": 33,
+          "games": 27
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 16,
+    "fen": "rr4k1/1q2ppbp/b2p1np1/2pn4/7N/1PN3P1/P1QBPPBP/1R1R2K1 w - - 0 17",
+    "games": 36,
+    "line": [
+      "d4",
+      "Nf6",
+      "c4",
+      "c5",
+      "d5",
+      "b5",
+      "cxb5",
+      "a6",
+      "bxa6",
+      "Bxa6",
+      "Nc3",
+      "d6",
+      "Nf3",
+      "g6",
+      "g3",
+      "Bg7",
+      "Bg2",
+      "Nbd7",
+      "Rb1",
+      "O-O",
+      "O-O",
+      "Qa5",
+      "Bd2",
+      "Rfb8",
+      "Qc2",
+      "Qc7",
+      "b3",
+      "Nb6",
+      "Nh4",
+      "Qb7",
+      "Rfd1",
+      "Nbxd5"
+    ]
+  },
+  "walkedTo": 16,
+  "generatedAt": "2026-05-30T23:15:10.623Z"
+}

@@ -1,0 +1,60 @@
+{
+  "id": "kg__modern",
+  "openingId": "kg__modern",
+  "student": "w",
+  "mgEntryMove": 9,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 10,
+      "fen": "rn1qk2r/ppp1bppp/4b3/8/2nP1p2/1B3N2/PP4PP/RNBQ1RK1 w kq - 0 10",
+      "corpus": 81,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Nc3",
+          "pct": 40,
+          "games": 32
+        },
+        {
+          "san": "Bxf4",
+          "pct": 35,
+          "games": 28
+        },
+        {
+          "san": "Qe2",
+          "pct": 17,
+          "games": 14
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 10,
+    "fen": "rn1qk2r/ppp1bppp/4b3/8/2nP1p2/1BN2N2/PP4PP/R1BQ1RK1 b kq - 1 10",
+    "games": 32,
+    "line": [
+      "e4",
+      "e5",
+      "f4",
+      "exf4",
+      "Nf3",
+      "d5",
+      "exd5",
+      "Nf6",
+      "Bc4",
+      "Nxd5",
+      "O-O",
+      "Be6",
+      "Bb3",
+      "Be7",
+      "c4",
+      "Nb6",
+      "d4",
+      "Nxc4",
+      "Nc3"
+    ]
+  },
+  "walkedTo": 10,
+  "generatedAt": "2026-05-30T23:17:01.891Z"
+}

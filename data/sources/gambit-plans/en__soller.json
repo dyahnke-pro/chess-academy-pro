@@ -1,0 +1,65 @@
+{
+  "id": "en__soller",
+  "openingId": "en__soller",
+  "student": "b",
+  "mgEntryMove": 9,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 12,
+      "fen": "r3q1k1/ppp3pp/2nbb2r/1B6/5N2/4PN2/PPP2PPP/R2Q1RK1 b - - 2 12",
+      "corpus": 68,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Rd8",
+          "pct": 57,
+          "games": 39
+        },
+        {
+          "san": "Bg4",
+          "pct": 28,
+          "games": 19
+        },
+        {
+          "san": "Bxf4",
+          "pct": 13,
+          "games": 9
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 12,
+    "fen": "3rq1k1/ppp3pp/2nbb2r/1B6/5N2/4PN2/PPP2PPP/R2Q1RK1 w - - 3 13",
+    "games": 39,
+    "line": [
+      "d4",
+      "e5",
+      "dxe5",
+      "Nc6",
+      "Nf3",
+      "f6",
+      "exf6",
+      "Nxf6",
+      "Bg5",
+      "d5",
+      "e3",
+      "Bd6",
+      "Nc3",
+      "Be6",
+      "Bb5",
+      "O-O",
+      "O-O",
+      "Qe8",
+      "Bxf6",
+      "Rxf6",
+      "Nxd5",
+      "Rh6",
+      "Nf4",
+      "Rd8"
+    ]
+  },
+  "walkedTo": 12,
+  "generatedAt": "2026-05-30T23:16:03.972Z"
+}

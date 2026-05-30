@@ -1,0 +1,85 @@
+{
+  "id": "ma__d4-decline",
+  "openingId": "ma__d4-decline",
+  "student": "b",
+  "mgEntryMove": 13,
+  "planCount": 2,
+  "planForks": [
+    {
+      "afterMove": 13,
+      "fen": "r2q1rk1/2p1bppp/p1n5/1p1pPb2/3P4/1BP2N2/P4PPP/R1BQR1K1 b - - 0 13",
+      "corpus": 129,
+      "source": "masters",
+      "options": [
+        {
+          "san": "Na5",
+          "pct": 80,
+          "games": 103
+        },
+        {
+          "san": "Qd7",
+          "pct": 17,
+          "games": 22
+        }
+      ]
+    },
+    {
+      "afterMove": 14,
+      "fen": "r2q1rk1/2p1bppp/p7/np1pPb2/3P4/2P2N2/P1B2PPP/R1BQR1K1 b - - 2 14",
+      "corpus": 96,
+      "source": "masters",
+      "options": [
+        {
+          "san": "Bxc2",
+          "pct": 75,
+          "games": 72
+        },
+        {
+          "san": "Qd7",
+          "pct": 25,
+          "games": 24
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 16,
+    "fen": "r2q1rk1/2p1bppp/p7/1p1pP3/2nP4/2P2N1P/P1Q2PP1/R1B1R1K1 b - - 0 16",
+    "games": 8,
+    "line": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bb5",
+      "a6",
+      "Ba4",
+      "Nf6",
+      "O-O",
+      "Be7",
+      "Re1",
+      "b5",
+      "Bb3",
+      "O-O",
+      "c3",
+      "d5",
+      "d4",
+      "exd4",
+      "e5",
+      "Ne4",
+      "cxd4",
+      "Bf5",
+      "Nc3",
+      "Nxc3",
+      "bxc3",
+      "Na5",
+      "Bc2",
+      "Bxc2",
+      "Qxc2",
+      "Nc4",
+      "h3"
+    ]
+  },
+  "walkedTo": 16,
+  "generatedAt": "2026-05-30T23:17:11.666Z"
+}

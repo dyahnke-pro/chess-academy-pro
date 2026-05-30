@@ -1,0 +1,63 @@
+{
+  "id": "st__bc4-trap",
+  "openingId": "st__bc4-trap",
+  "student": "b",
+  "mgEntryMove": 8,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 8,
+      "fen": "r1bqk2r/ppp2ppp/2p5/2b1n3/2B1P3/1Q6/PPPP1PPP/RNB2RK1 b kq - 7 8",
+      "corpus": 237,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "O-O",
+          "pct": 27,
+          "games": 63
+        },
+        {
+          "san": "Qh4",
+          "pct": 24,
+          "games": 56
+        },
+        {
+          "san": "Nxc4",
+          "pct": 22,
+          "games": 52
+        },
+        {
+          "san": "b5",
+          "pct": 11,
+          "games": 26
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 9,
+    "fen": "r1bq1rk1/ppp2ppp/2p5/2b1n3/2B1P3/1QP5/PP1P1PPP/RNB2RK1 b - - 0 9",
+    "games": 39,
+    "line": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nf6",
+      "Nxe5",
+      "Nc6",
+      "Nxc6",
+      "dxc6",
+      "Bc4",
+      "Bc5",
+      "O-O",
+      "Ng4",
+      "Qf3",
+      "Ne5",
+      "Qb3",
+      "O-O",
+      "c3"
+    ]
+  },
+  "walkedTo": 9,
+  "generatedAt": "2026-05-30T23:18:09.575Z"
+}

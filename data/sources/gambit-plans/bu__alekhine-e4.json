@@ -1,0 +1,63 @@
+{
+  "id": "bu__alekhine-e4",
+  "openingId": "bu__alekhine-e4",
+  "student": "b",
+  "mgEntryMove": 10,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 11,
+      "fen": "rn1qr1k1/ppp2ppp/2np4/8/1bP1PPb1/3BBN1P/PP1N2P1/R2Q1RK1 b - - 0 11",
+      "corpus": 66,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Bxf3",
+          "pct": 65,
+          "games": 43
+        },
+        {
+          "san": "Bxd2",
+          "pct": 17,
+          "games": 11
+        },
+        {
+          "san": "Bh5",
+          "pct": 11,
+          "games": 7
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 11,
+    "fen": "rn1qr1k1/ppp2ppp/2np4/8/1bP1PP2/3BBb1P/PP1N2P1/R2Q1RK1 w - - 0 12",
+    "games": 43,
+    "line": [
+      "d4",
+      "Nf6",
+      "c4",
+      "e5",
+      "dxe5",
+      "Ng4",
+      "e4",
+      "Nxe5",
+      "f4",
+      "Nec6",
+      "Be3",
+      "Bb4+",
+      "Nd2",
+      "O-O",
+      "Nf3",
+      "Re8",
+      "Bd3",
+      "d6",
+      "O-O",
+      "Bg4",
+      "h3",
+      "Bxf3"
+    ]
+  },
+  "walkedTo": 11,
+  "generatedAt": "2026-05-30T23:15:24.774Z"
+}

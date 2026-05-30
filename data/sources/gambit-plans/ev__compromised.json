@@ -1,0 +1,99 @@
+{
+  "id": "ev__compromised",
+  "openingId": "ev__compromised",
+  "student": "w",
+  "mgEntryMove": 13,
+  "planCount": 2,
+  "planForks": [
+    {
+      "afterMove": 14,
+      "fen": "r1b1k2r/p1ppqppp/1pn5/2n1P3/2B5/B3QN2/P4PPP/R4RK1 w kq - 0 14",
+      "corpus": 350,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Rfe1",
+          "pct": 25,
+          "games": 89
+        },
+        {
+          "san": "Ng5",
+          "pct": 22,
+          "games": 76
+        },
+        {
+          "san": "Rac1",
+          "pct": 15,
+          "games": 51
+        },
+        {
+          "san": "Bd5",
+          "pct": 13,
+          "games": 47
+        }
+      ]
+    },
+    {
+      "afterMove": 15,
+      "fen": "r1b2rk1/p1ppqppp/1pn5/2n1P3/2B5/B3QN2/P4PPP/R3R1K1 w - - 2 15",
+      "corpus": 82,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Rad1",
+          "pct": 50,
+          "games": 41
+        },
+        {
+          "san": "Ng5",
+          "pct": 15,
+          "games": 12
+        },
+        {
+          "san": "Rac1",
+          "pct": 13,
+          "games": 11
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 15,
+    "fen": "r4rk1/pbppqppp/1pn5/2n1P3/2B5/B3QN2/P4PPP/3RR1K1 w - - 4 16",
+    "games": 26,
+    "line": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "Bc4",
+      "Bc5",
+      "b4",
+      "Bxb4",
+      "c3",
+      "Ba5",
+      "d4",
+      "exd4",
+      "O-O",
+      "dxc3",
+      "Qb3",
+      "Qe7",
+      "Nxc3",
+      "Bxc3",
+      "Qxc3",
+      "Nf6",
+      "e5",
+      "Ne4",
+      "Qe3",
+      "Nc5",
+      "Ba3",
+      "b6",
+      "Rfe1",
+      "O-O",
+      "Rad1",
+      "Bb7"
+    ]
+  },
+  "walkedTo": 15,
+  "generatedAt": "2026-05-30T23:16:26.321Z"
+}

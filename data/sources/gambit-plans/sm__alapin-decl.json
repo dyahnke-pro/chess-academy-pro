@@ -1,0 +1,96 @@
+{
+  "id": "sm__alapin-decl",
+  "openingId": "sm__alapin-decl",
+  "student": "w",
+  "mgEntryMove": 18,
+  "planCount": 2,
+  "planForks": [
+    {
+      "afterMove": 19,
+      "fen": "r4r1k/p3qppp/1np1p3/6b1/3PN1Q1/8/PP3PPP/R2R2K1 w - - 0 19",
+      "corpus": 197,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Qxg5",
+          "pct": 56,
+          "games": 111
+        },
+        {
+          "san": "Nxg5",
+          "pct": 44,
+          "games": 86
+        }
+      ]
+    },
+    {
+      "afterMove": 21,
+      "fen": "r4r1k/p4pp1/1np1p2p/6N1/3P4/8/PP3PPP/R2R2K1 w - - 0 21",
+      "corpus": 61,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Nf3",
+          "pct": 85,
+          "games": 52
+        },
+        {
+          "san": "Ne4",
+          "pct": 15,
+          "games": 9
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 21,
+    "fen": "r2r3k/p4pp1/1np1p2p/8/3P4/5N2/PP3PPP/R2R2K1 w - - 2 22",
+    "games": 14,
+    "line": [
+      "e4",
+      "c5",
+      "d4",
+      "cxd4",
+      "c3",
+      "Nf6",
+      "e5",
+      "Nd5",
+      "Nf3",
+      "Nc6",
+      "cxd4",
+      "d6",
+      "Bc4",
+      "Nb6",
+      "Bb5",
+      "dxe5",
+      "Nxe5",
+      "Bd7",
+      "Nxd7",
+      "Qxd7",
+      "Nc3",
+      "e6",
+      "O-O",
+      "Be7",
+      "Qg4",
+      "O-O",
+      "Bxc6",
+      "bxc6",
+      "Bh6",
+      "Bf6",
+      "Rfd1",
+      "Kh8",
+      "Ne4",
+      "Qe7",
+      "Bg5",
+      "Bxg5",
+      "Qxg5",
+      "Qxg5",
+      "Nxg5",
+      "h6",
+      "Nf3",
+      "Rfd8"
+    ]
+  },
+  "walkedTo": 21,
+  "generatedAt": "2026-05-30T23:17:59.880Z"
+}

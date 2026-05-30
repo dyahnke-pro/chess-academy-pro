@@ -1,0 +1,76 @@
+{
+  "id": "sc__haxo-bc5",
+  "openingId": "sc__haxo-bc5",
+  "student": "w",
+  "mgEntryMove": 19,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 20,
+      "fen": "r2q1rk1/pp3ppp/1bp3b1/3pP3/N2P4/1Q2nN1P/PP3PP1/R3R1K1 w - - 0 20",
+      "corpus": 77,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Rxe3",
+          "pct": 82,
+          "games": 63
+        },
+        {
+          "san": "Qxe3",
+          "pct": 12,
+          "games": 9
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 20,
+    "fen": "r2q1rk1/pp3ppp/1bp5/3pP3/N2Pb3/1Q2RN1P/PP3PP1/R5K1 w - - 1 21",
+    "games": 26,
+    "line": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nc6",
+      "d4",
+      "exd4",
+      "Bc4",
+      "Bc5",
+      "c3",
+      "Nf6",
+      "e5",
+      "d5",
+      "Bb5",
+      "Ne4",
+      "cxd4",
+      "Bb6",
+      "Nc3",
+      "O-O",
+      "Be3",
+      "Bg4",
+      "h3",
+      "Bh5",
+      "Qc2",
+      "Bg6",
+      "Qb3",
+      "Ne7",
+      "O-O",
+      "c6",
+      "Bd3",
+      "Nd2",
+      "Nxd2",
+      "Bxd3",
+      "Rfe1",
+      "Bg6",
+      "Na4",
+      "Nf5",
+      "Nf3",
+      "Nxe3",
+      "Rxe3",
+      "Be4"
+    ]
+  },
+  "walkedTo": 20,
+  "generatedAt": "2026-05-30T23:17:23.912Z"
+}

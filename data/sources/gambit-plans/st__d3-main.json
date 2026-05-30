@@ -1,0 +1,71 @@
+{
+  "id": "st__d3-main",
+  "openingId": "st__d3-main",
+  "student": "b",
+  "mgEntryMove": 14,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 15,
+      "fen": "r1b1k3/ppp2pp1/2p5/2b5/3PP1Pq/2P1B3/PP1KB2p/RN5Q b q - 3 15",
+      "corpus": 80,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Be7",
+          "pct": 35,
+          "games": 28
+        },
+        {
+          "san": "Bd6",
+          "pct": 33,
+          "games": 26
+        },
+        {
+          "san": "Be6",
+          "pct": 18,
+          "games": 14
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 15,
+    "fen": "r1b1k3/ppp1bpp1/2p5/8/3PP1Pq/2P1B3/PP1KB2p/RN5Q w q - 4 16",
+    "games": 31,
+    "line": [
+      "e4",
+      "e5",
+      "Nf3",
+      "Nf6",
+      "Nxe5",
+      "Nc6",
+      "Nxc6",
+      "dxc6",
+      "d3",
+      "Bc5",
+      "Be2",
+      "h5",
+      "c3",
+      "Ng4",
+      "d4",
+      "Qh4",
+      "g3",
+      "Qf6",
+      "f3",
+      "h4",
+      "fxg4",
+      "hxg3",
+      "Be3",
+      "Rxh2",
+      "Rxh2",
+      "gxh2",
+      "Kd2",
+      "Qh4",
+      "Qh1",
+      "Be7"
+    ]
+  },
+  "walkedTo": 15,
+  "generatedAt": "2026-05-30T23:18:12.469Z"
+}

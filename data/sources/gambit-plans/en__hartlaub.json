@@ -1,0 +1,64 @@
+{
+  "id": "en__hartlaub",
+  "openingId": "en__hartlaub",
+  "student": "b",
+  "mgEntryMove": 12,
+  "planCount": 1,
+  "planForks": [
+    {
+      "afterMove": 14,
+      "fen": "2kr3r/ppp2pp1/2nb1n2/4q3/8/2N1PBPP/PPP3K1/R1B1QR2 b - - 0 14",
+      "corpus": 84,
+      "source": "lichess",
+      "options": [
+        {
+          "san": "Nh5",
+          "pct": 44,
+          "games": 37
+        },
+        {
+          "san": "Qe6",
+          "pct": 12,
+          "games": 10
+        }
+      ]
+    }
+  ],
+  "endgame": {
+    "afterMove": 14,
+    "fen": "2kr3r/ppp2pp1/2nb4/4q2n/8/2N1PBPP/PPP3K1/R1B1QR2 w - - 1 15",
+    "games": 37,
+    "line": [
+      "d4",
+      "e5",
+      "dxe5",
+      "d6",
+      "exd6",
+      "Bxd6",
+      "Nf3",
+      "Nc6",
+      "e3",
+      "Bg4",
+      "Be2",
+      "Qe7",
+      "O-O",
+      "O-O-O",
+      "Qe1",
+      "h5",
+      "h3",
+      "Nf6",
+      "Nc3",
+      "Bxf3",
+      "Bxf3",
+      "Qe5",
+      "g3",
+      "h4",
+      "Kg2",
+      "hxg3",
+      "fxg3",
+      "Nh5"
+    ]
+  },
+  "walkedTo": 14,
+  "generatedAt": "2026-05-30T23:15:52.999Z"
+}
