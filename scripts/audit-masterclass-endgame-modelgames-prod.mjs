@@ -48,29 +48,43 @@ await page.evaluate(() => new Promise((res) => {
 await page.reload({ waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => null);
 await page.waitForTimeout(2000);
 
-// ─── Caro main tab: endgame card + full model-game library ───
-await page.goto(`${PROD}/openings/caro-kann`, { waitUntil: 'networkidle', timeout: 30000 }).catch(() => null);
-await page.waitForTimeout(2500);
-await dismissOverlays();
-
-if (await page.locator('[data-testid="opening-detail"]').count() === 0) rec('caro-kann: detail page mounts', 'FAIL', 'no opening-detail');
-else rec('caro-kann: detail page mounts', 'PASS');
-
-const endgameCard = page.locator('[data-testid="plan-line-mp-carokann-main-endgame"]');
-if (await endgameCard.count() > 0) rec('Caro Classical endgame card renders on main tab', 'PASS');
-else rec('Caro Classical endgame card renders on main tab', 'FAIL', 'plan-line-mp-carokann-main-endgame not found');
-
-const mainGames = await page.locator('[data-testid^="model-game-card-"]').count();
-rec('caro-kann main tab shows the full model-game library', mainGames >= 4 ? 'PASS' : 'WARN', `${mainGames} games`);
-
-// Endgame Watch fires voice (the plan narrates live).
-const before = beatTts();
-await endgameCard.scrollIntoViewIfNeeded().catch(() => null);
-await page.locator('[data-testid="plan-watch-mp-carokann-main-endgame"]').click({ timeout: 5000 }).catch(() => null);
-await dismissOverlays();
-let fired = beatTts() > before;
-for (let i = 0; i < 14 && !fired; i++) { await page.waitForTimeout(750); fired = beatTts() > before; }
-rec('Caro endgame plan speaks (beat /api/tts fires)', fired ? 'PASS' : 'FAIL', fired ? `${beatTts() - before} beat req(s)` : 'no beat tts');
+// ─── Endgame cards: render + speak, across every opening in the rollout ───
+// Each: open the opening, select the tab carrying the endgame plan, assert the
+// plan-line renders, and (for the first) that its Watch fires a beat /api/tts.
+const ENDGAME_TARGETS = [
+  { id: 'caro-kann', tabLabel: null, planId: 'mp-carokann-main-endgame', name: 'Caro Classical', voice: true },
+  { id: 'caro-kann', tabLabel: 'Advance', planId: 'mp-carokann-advance-endgame', name: 'Caro Advance', voice: false },
+  { id: 'slav-defence', tabLabel: null, planId: 'mp-slavdefence-main-endgame', name: 'Slav', voice: true },
+  { id: 'qgd', tabLabel: null, planId: 'mp-qgd-main-endgame', name: 'QGD', voice: false },
+  { id: 'french-defence', tabLabel: null, planId: 'mp-frenchdefence-main-endgame', name: 'French', voice: false },
+];
+let mainGames = 0;
+for (const t of ENDGAME_TARGETS) {
+  await page.goto(`${PROD}/openings/${t.id}`, { waitUntil: 'networkidle', timeout: 30000 }).catch(() => null);
+  await page.waitForTimeout(2200);
+  await dismissOverlays();
+  if (t.tabLabel) {
+    await page.locator('[data-testid="variation-tabs"] [role="tab"]', { hasText: t.tabLabel }).first().click({ timeout: 8000 }).catch(() => null);
+    await page.waitForTimeout(1000);
+    await dismissOverlays();
+  }
+  const card = page.locator(`[data-testid="plan-line-${t.planId}"]`);
+  await card.scrollIntoViewIfNeeded().catch(() => null);
+  if (await card.count() > 0) rec(`${t.name} endgame card renders`, 'PASS');
+  else rec(`${t.name} endgame card renders`, 'FAIL', `${t.planId} not found`);
+  if (t.id === 'caro-kann' && t.tabLabel === null) {
+    mainGames = await page.locator('[data-testid^="model-game-card-"]').count();
+    rec('caro-kann main tab shows the full model-game library', mainGames >= 4 ? 'PASS' : 'WARN', `${mainGames} games`);
+  }
+  if (t.voice) {
+    const before = beatTts();
+    await page.locator(`[data-testid="plan-watch-${t.planId}"]`).click({ timeout: 5000 }).catch(() => null);
+    await dismissOverlays();
+    let fired = beatTts() > before;
+    for (let i = 0; i < 14 && !fired; i++) { await page.waitForTimeout(750); fired = beatTts() > before; }
+    rec(`${t.name} endgame plan speaks (beat /api/tts)`, fired ? 'PASS' : 'FAIL', fired ? `${beatTts() - before} beat req(s)` : 'no beat tts');
+  }
+}
 
 // ─── Advance tab: model games scoped to the variation ───
 await page.goto(`${PROD}/openings/caro-kann`, { waitUntil: 'networkidle', timeout: 30000 }).catch(() => null);
