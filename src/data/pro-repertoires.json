@@ -530,7 +530,7 @@
         },
         {
           "name": "3...d5 Central Counter",
-          "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6",
+          "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6 d3 O-O Be2 Re8 Nd2",
           "explanation": "The principled refutation — Black challenges the centre immediately. White's reply is the brilliant 4.Qa4! pinning the c6-knight against the e8-king (via the diagonal a4-d7-e8 with the d-pawn on d5 blocking). Black plays 4...Nf6 developing, but White grabs the loose e5-pawn with 5.Nxe5! — possible because c6 is pinned. Black tries 5...Bd6 hitting the knight on e5, but after 6.Nxc6 bxc6, White has won a pawn. The structural cost: Black has doubled c-pawns and the bishop pair. Theoretically balanced (Black has dynamic compensation), but at amateur level the extra pawn often holds."
         }
       ],
@@ -696,7 +696,7 @@
         },
         {
           "name": "Accelerated Pawn Storm (Carlsen-inspired)",
-          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 Bxc6 bxc6 d3 d5 e5",
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 Bxc6 bxc6 d3 d5 e5 Ne7 b3 Ng6 Bb2",
           "explanation": "Magnus Carlsen popularised this approach — trade on c6 IMMEDIATELY after Black's …e6 setup. After 4.Bxc6 bxc6 (Black takes with the b-pawn keeping the c-file under control) 5.d3 d5 6.e5! — you push the e-pawn to cramp Black, the c-pawn structure (now doubled and weak) is a permanent target. White's plan: develop with Nbd2, h3, O-O, then attack on the kingside while Black struggles to find counterplay with the broken queenside. Carlsen has won multiple games in this line at the highest level."
         }
       ],
