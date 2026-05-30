@@ -33,7 +33,6 @@ const MISSING_LESSON_BASELINE = new Set<string>([
   'pro-gothamchess-caro-kann',
   'pro-gothamchess-scandinavian',
   'pro-gothamchess-qgd',
-  'pro-gothamchess-fantasy-caro',
   'pro-gothamchess-anti-sicilian',
   'pro-gothamchess-kia',
   'pro-gothamchess-closed-sicilian',
