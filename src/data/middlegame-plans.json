@@ -2798,17 +2798,27 @@
   {
     "id": "mp-carokann-advance",
     "openingId": "caro-kann",
-    "criticalPositionFen": "r3kb1r/pp1n1ppp/1qn1p3/3pPb2/3P4/4BN2/PP1NBPPP/R2Q1RK1 w kq - 1 11",
+    "criticalPositionFen": "r2qk1nr/pp1n1ppp/2p1p3/b2pPb2/3P4/2P2N2/PP2BPPP/RNBQ1RK1 w kq - 3 8",
     "title": "Caro Advance: Counterplay on d4 and the c-file",
     "overview": "Black has reached the Caro Advance tabiya after …c5 and …cxd4 cxd4: the c-file is fully open and every black piece converges on White’s d4-pawn — the knight on c6, the queen on b6. White stands a shade better, but Black’s counterplay is concrete and well worth knowing: swarm d4 and contest the open c-file.",
     "pawnBreaks": [
-      "the …c5/…cxd4 break has already opened the c-file",
-      "…f6 later to chip at e5"
+      {
+        "move": "…f6 — the freeing break against the e5-wedge",
+        "explanation": "Undermining the head of White’s pawn chain frees Black’s cramped position and opens the f-file.",
+        "fen": "r2qk1nr/pp1n1ppp/2p1p3/b2pPb2/3P4/2P2N2/PP2BPPP/RNBQ1RK1 w kq - 3 8"
+      }
     ],
     "pieceManeuvers": [
-      "…Nxd4 / pile on the d4-pawn",
-      "…Rc8 onto the open c-file",
-      "…Ne7-f5 hitting d4 and e3"
+      {
+        "piece": "Bishop",
+        "route": "…Bc7 — reroute to the b8-h2 diagonal",
+        "explanation": "The bishop steps off a5 to its best diagonal, safe from a4-a5 and pointing at White’s king."
+      },
+      {
+        "piece": "Knight",
+        "route": "…Nh6 — head for the f5-outpost",
+        "explanation": "The knight reroutes toward f5, the strong square in front of White’s pawn chain."
+      }
     ],
     "strategicThemes": [
       "Pressure the isolated d4-pawn",
@@ -2820,164 +2830,128 @@
     ],
     "playableLines": [
       {
-        "fen": "r3kb1r/pp1n1ppp/1qn1p3/3pPb2/3P4/4BN2/PP1NBPPP/R2Q1RK1 w kq - 1 11",
+        "fen": "r2qk1nr/pp1n1ppp/2p1p3/b2pPb2/3P4/2P2N2/PP2BPPP/RNBQ1RK1 w kq - 3 8",
         "moves": [
-          "Nh4",
-          "Be7",
-          "Nxf5",
-          "exf5",
-          "f4",
-          "Nxd4"
+          "a4",
+          "Bc7",
+          "Nbd2",
+          "f6",
+          "Re1",
+          "Nh6",
+          "Nf1",
+          "fxe5",
+          "dxe5",
+          "O-O"
         ],
         "annotations": [
-          "Nh4 harasses the f5-bishop — Black’s one loose piece — hoping to win the bishop pair.",
-          "…Be7 develops and ignores the threat: the f5-bishop has done its job, and the real story is the pressure on d4.",
-          "Nxf5 takes the bishop.",
-          "…exf5 recaptures. Black accepts doubled f-pawns because the e-file opens and every piece springs toward the centre.",
-          "f4 braces the e5/d4 chain.",
-          "…Nxd4! the pressure on d4 finally tells — the knight crashes in and wins the central pawn. White keeps a small pull elsewhere, but Black has concrete compensation: the won pawn, active pieces, and the open c-file. A balanced, double-edged game."
+          "White grabs queenside space with a4, harassing the a5-bishop.",
+          "…Bc7 reroutes the bishop to the b8-h2 diagonal — safe from a4-a5 and eyeing White's kingside.",
+          "White develops the knight toward the f1-g3 regrouping.",
+          "…f6! The thematic Advance break: Black strikes the e5-wedge, the pawn that cramps the whole position. Undermine the chain at its head and the game comes alive.",
+          "White props up e5 with the rook.",
+          "…Nh6 develops the knight headed for f5 — the dream outpost in front of White's pawns.",
+          "White reroutes the knight via f1.",
+          "…fxe5 opens the f-file for the rook and dissolves White's cramping pawn.",
+          "White recaptures, keeping a pawn on e5 for the moment.",
+          "…O-O tucks the king away. Black has freed the position with …f6, owns the f-file, and stands comfortably — the Advance's cramp is gone. Carlsen went on to outplay Giri from here."
         ],
-        "title": "Caro Advance: Counterplay on d4 and the c-file",
         "arrows": [
-          [
-            {
-              "from": "h4",
-              "to": "f5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
           [],
           []
         ],
+        "title": "The …f6 Break (Giri–Carlsen)",
         "highlights": [
           [
             {
-              "square": "h4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "f5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h4",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
+              "square": "c7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f4",
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f2",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e5",
               "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "d4",
+              "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c6",
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black frees the Advance with the thematic …f6 break.",
         "sources": [
           "book:caro-kann",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ],
         "learnCues": [
-          "Nh4 — hit the f5-bishop",
-          "…Be7 — develop, eye d4",
-          "Nxf5 — White trades it off",
-          "…exf5 — recapture, pieces wake",
-          "f4 — brace the centre",
-          "…Nxd4 — crash in, win the pawn"
-        ],
-        "intro": {
-          "say": "Black has reached the Caro Advance tabiya: the c-file is wide open and every black piece is trained on White’s d4-pawn. White is a shade better, but the plan is concrete — pile on d4 and seize the open c-file.",
-          "sayShort": "Swarm d4, own the open c-file.",
-          "arrows": [
-            {
-              "from": "c6",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "b6",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "c8",
-              "to": "c1",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        }
+          "",
+          "…Bc7 — reroute to the b8-h2 diagonal",
+          "",
+          "…f6 — the freeing break vs e5",
+          "",
+          "…Nh6 — knight heads for f5",
+          "",
+          "…fxe5 — open the f-file",
+          "",
+          "…O-O — castle; the cramp is gone"
+        ]
       }
     ]
   },
