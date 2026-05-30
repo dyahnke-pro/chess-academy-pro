@@ -4189,5 +4189,30 @@
     "materialDelta": 0,
     "tier": "confirmed",
     "why": "At your level opponents play Qa5+ here in 2% of games. Punish with the best move Nc3 — the engine has White clearly better (+1.0)."
+  },
+  {
+    "openingId": "pro-gothamchess-scandinavian",
+    "lineMoves": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 c6 Bd2 Qc7 Nf3 Nf6 Bc4 Bg4",
+    "inaccuracy": "Bxf7+",
+    "freqPct": 4.6,
+    "games": 6765,
+    "practicalScore": 59,
+    "mainMove": "h3",
+    "punish": "Kxf7",
+    "punishSeq": [
+      "Kxf7",
+      "h3",
+      "Bxf3",
+      "Qxf3",
+      "Kg8",
+      "O-O",
+      "e6",
+      "Rfe1"
+    ],
+    "playLine": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 c6 Bd2 Qc7 Nf3 Nf6 Bc4 Bg4 Bxf7+ Kxf7 h3 Bxf3 Qxf3 Kg8 O-O e6 Rfe1",
+    "engineCp": 189,
+    "materialDelta": 2,
+    "tier": "confirmed",
+    "why": "At your level opponents play Bxf7+ here in 5% of games. Punish with the best move Kxf7 — the engine has Black winning (+1.9, +2 material)."
   }
 ]

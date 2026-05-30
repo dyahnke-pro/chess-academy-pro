@@ -3171,6 +3171,34 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
   },
+
+  // ── GothamChess Scandinavian (student = BLACK) ───────────────────────────
+  // White's Bxf7+?! sacrifice is unsound; …Kxf7 takes the bishop and after the
+  // trades Black keeps the extra piece (confirmed, +1.9). 23 plies; Bxf7+@14,
+  // Kxf7@15.
+  'pro-gothamchess-scandinavian:e4_d5_exd5_Qxd5_Nc3_Qa5_d4_c6_Bd2_Qc7_Nf3_Nf6_Bc4_Bg4:Bxf7+': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Bxf7+?! White lashes out with a speculative sacrifice, but there is no real attack to back it up.',
+      '…Kxf7 — Black simply takes the bishop. The king is safe enough and Black is up a piece.',
+      'h3 — White tries to win back material by questioning the g4-bishop.',
+      '…Bxf3 — Black trades it off, keeping the extra material.',
+      '',
+      '…Kg8 — Black tucks the king to safety; the dust has settled with Black a clean piece up.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Bxf7+ — an unsound sacrifice',
+      'Kxf7 — take the bishop, a piece up',
+      'h3 — White hunts the bishop',
+      'Bxf3 — trade, keep the material',
+      '',
+      'Kg8 — tuck the king, a piece up',
+      '', '', '',
+    ],
+    sources: ['concept:pos-king-safety', 'concept:pos-material', 'https://www.chess.com/openings/Scandinavian-Defense'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

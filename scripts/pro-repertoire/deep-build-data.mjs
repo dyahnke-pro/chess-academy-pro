@@ -31,6 +31,16 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 // SAN prefix that defines reaching its position. The "color" field
 // tells us which side the player is on (white/black).
 const OPENINGS = {
+  'scandinavian': {
+    color: 'black',
+    studentUsername: 'GothamChess',
+    variations: {
+      'qa5-main':  { label: 'Main 2…Qxd5 3…Qa5', prefix: ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qa5'] },
+      'nf6-bg4':   { label: 'Modern 2…Nf6 + …Bg4', prefix: ['e4', 'd5', 'exd5', 'Nf6', 'd4', 'Bg4'] },
+      'nf6-nc3':   { label: '2…Nf6 vs Nc3', prefix: ['e4', 'd5', 'exd5', 'Nf6', 'Nc3'] },
+      'bb5-line':  { label: 'vs Bb5+', prefix: ['e4', 'd5', 'exd5', 'Nf6', 'Bb5+'] },
+    },
+  },
   'closed-sicilian': {
     color: 'white',
     studentUsername: 'GothamChess',

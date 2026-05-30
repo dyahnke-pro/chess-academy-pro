@@ -69,6 +69,13 @@ const OPENINGS = {
     minPrefix: ['e4', 'c6', 'd4', 'd5', 'e5'],
     maxDepth: 80,
   },
+  'scandinavian': {
+    name: 'Scandinavian Defense',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'd5'],
+    maxDepth: 80,
+  },
   'rossolimo': {
     name: 'Anti-Sicilian Rossolimo/Moscow',
     color: 'white',

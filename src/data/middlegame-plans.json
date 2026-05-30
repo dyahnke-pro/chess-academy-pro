@@ -15594,88 +15594,6 @@
     ]
   },
   {
-    "id": "mp-pro-gothamchess-scandi-c5",
-    "openingId": "pro-gothamchess-scandinavian",
-    "criticalPositionFen": "r3k2r/pp1n1ppp/2p1pn2/q4b2/1bBP4/2N2N2/PPPBQPPP/2KR3R w kq - 4 10",
-    "title": "Queenside Pressure with ...c5",
-    "overview": "In GothamChess's Scandinavian, Black has developed actively with ...Qa5, ...Bb4, ...Bf5, and castling queenside is an option. The plan is ...c5 to target White's d4 pawn while both kings are on opposite wings, creating mutual attacking chances.",
-    "pawnBreaks": [
-      {
-        "move": "c6-c5",
-        "explanation": "Challenges d4 and opens the c-file. After dxc5 Nxc5, Black has an active knight on c5 and open lines for the rooks.",
-        "fen": "r3k2r/pp1n1ppp/2p1pn2/q4b2/1bBP4/2N2N2/PPPBQPPP/2KR3R w kq - 4 10"
-      },
-      {
-        "move": "b7-b5",
-        "explanation": "Gains queenside space and challenges the Bc4. After ...b5 Bd3 Bxd3 Qxd3, Black has equalized and opened the b-file for the rook.",
-        "fen": "r3k2r/pp1n1ppp/2p1pn2/q4b2/1bBP4/2N2N2/PPPBQPPP/2KR3R w kq - 4 10"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "...Nd7-b6 targeting c4",
-        "explanation": "The Nb6 pressures the Bc4 and prepares ...Nbd5 or ...Nc4, an outpost that attacks White's queenside."
-      },
-      {
-        "piece": "Queen",
-        "route": "...Qa5 stays active on a5",
-        "explanation": "The queen on a5 pins the Nc3 (if ...Bb4 is still there) and threatens ...Qa2 in some lines. It's already perfectly placed."
-      }
-    ],
-    "strategicThemes": [
-      "Black's pieces are actively developed in the Scandinavian. The Bf5, Bb4, Qa5 trio creates real pressure against White's position.",
-      "The ...c5 break is essential to avoid being cramped. Without it, White's center dominates.",
-      "Black should castle queenside if White castles queenside too — or castle kingside if White goes kingside. Match the opponent to reduce attacking chances.",
-      "Keep the Bf5 — it's Black's best piece and controls the light squares. Don't trade it unless forced."
-    ],
-    "endgameTransitions": [
-      "Black's active pieces give excellent endgame prospects. The Bf5 and centralized knights dominate in simplified positions.",
-      "After ...c5 and exchanges, Black's pawn structure is healthy and the minor pieces are active — ideal endgame conditions."
-    ]
-  },
-  {
-    "id": "mp-pro-gothamchess-scandi-dev",
-    "openingId": "pro-gothamchess-scandinavian",
-    "criticalPositionFen": "r3k2r/pp1n1ppp/2p1pn2/q4b2/1bBP4/2N2N2/PPPBQPPP/2KR3R w kq - 4 10",
-    "title": "Complete Development and Castle",
-    "overview": "The priority is getting the king safe. Black should castle kingside, play ...Bd6 or keep ...Bb4, and complete development. Once castled, Black has a flexible position with no weaknesses and can choose between ...c5, ...e5, or queenside play depending on White's setup.",
-    "pawnBreaks": [
-      {
-        "move": "e6-e5",
-        "explanation": "After castling, ...e5 is a central break that challenges d4 and opens the position for Black's actively placed pieces. After dxe5 Nxe5, the knight is powerfully centralized.",
-        "fen": "r3k2r/pp1n1ppp/2p1pn2/q4b2/1bBP4/2N2N2/PPPBQPPP/2KR3R w kq - 4 10"
-      },
-      {
-        "move": "a7-a5",
-        "explanation": "A useful prophylactic move that prevents b4 and secures the Qa5's position. It also prepares ...a4 in some lines, gaining queenside space.",
-        "fen": "r3k2r/pp1n1ppp/2p1pn2/q4b2/1bBP4/2N2N2/PPPBQPPP/2KR3R w kq - 4 10"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Rook",
-        "route": "...Rh8-e8 after ...O-O",
-        "explanation": "After castling, Re8 supports the ...e5 break and controls the e-file. A natural developing move."
-      },
-      {
-        "piece": "Bishop",
-        "route": "...Bb4-e7 or keep on b4",
-        "explanation": "If Bb4 is attacked, ...Be7 is a safe retreat that keeps the bishop useful. On b4 it pins the Nc3 which is very annoying for White."
-      }
-    ],
-    "strategicThemes": [
-      "King safety comes first. Once castled, Black's position is solid and flexible.",
-      "The pin on Nc3 (via Bb4) is a strategic asset. White may spend time breaking it (a3, Bd2) which gives Black tempo for development.",
-      "Black's position has no structural weaknesses. The c6+e6 pawn chain is solid and hard to attack.",
-      "Flexibility is key — wait for White to commit before choosing between ...c5, ...e5, or queenside play."
-    ],
-    "endgameTransitions": [
-      "The Scandinavian leads to healthy endgames for Black. The pawn structure is symmetrical and Black's pieces are actively placed.",
-      "Trading queens neutralizes White's first-move advantage. Black should welcome queen trades when they lead to comfortable endgames."
-    ]
-  },
-  {
     "id": "mp-progothamchess-caro-advance-h4-pin",
     "openingId": "pro-gothamchess-caro-advance-white",
     "criticalPositionFen": "rn1qkbnr/pp2ppp1/2p5/3pPbBp/3P3P/8/PPP2PP1/RN1QKBNR b KQkq - 1 5",
@@ -50112,6 +50030,313 @@
           "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-scand-qa5-bxc3",
+    "openingId": "pro-gothamchess-scandinavian",
+    "criticalPositionFen": "rn2k2r/ppp2ppp/4pn2/q4b2/1bBP4/P1N2N2/1PPB1PPP/R2QK2R b KQkq - 0 8",
+    "title": "Scandinavian Qa5: …Bxc3 Doubling + …Qb6 Pressure",
+    "overview": "His main Scandinavian plan across 297 games. After the …Qa5 and the …Bf5/…e6 development, Black plays …Bb4 and trades …Bxc3 to saddle White with doubled c-pawns, then redeploys the queen to b6 to pressure the d4-pawn and the doubled structure. With a rock-solid setup and a clear target, Black plays a comfortable, low-risk game against White's compromised pawns.",
+    "pawnBreaks": [
+      "…Bxc3 doubling the c-pawns",
+      "…c5 hitting the centre later"
+    ],
+    "pieceManeuvers": [
+      "…Bf8-b4xc3 the structural trade",
+      "…Qa5-b6 pressuring d4",
+      "…Bf5 the active bishop"
+    ],
+    "strategicThemes": [
+      "Double White’s c-pawns with …Bxc3",
+      "Pressure d4 with …Qb6",
+      "Play against the compromised structure"
+    ],
+    "endgameTransitions": [
+      "The doubled c-pawns are a long-term endgame target"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn2k2r/ppp2ppp/4pn2/q4b2/1bBP4/P1N2N2/1PPB1PPP/R2QK2R b KQkq - 0 8",
+        "moves": [
+          "Bxc3",
+          "Bxc3",
+          "Qb6"
+        ],
+        "annotations": [
+          "…Bxc3 — Black trades to saddle White with doubled c-pawns, a permanent structural weakness.",
+          "Bxc3 — White recaptures, accepting the damaged structure.",
+          "…Qb6 — the queen swings to b6, pressuring the d4-pawn and the doubled c-pawns at once. Black has a rock-solid position with a clear long-term target — exactly the comfortable, risk-free game the Scandinavian aims for."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bxc3 — double the c-pawns",
+          "Bxc3 — White recaptures",
+          "Qb6 — pressure d4 and the doubled pawns"
+        ],
+        "title": "Scandinavian Qa5: …Bxc3 Doubling + …Qb6 Pressure",
+        "intro": "His main Scandinavian plan across 297 games. After the …Qa5 and the …Bf5/…e6 development, Black plays …Bb4 and trades …Bxc3 to saddle White with doubled c-pawns, then redeploys the queen to b6 to pressure the d4-pawn and the doubled structure. With a rock-solid setup and a clear target, Black plays a comfortable, low-risk game against White's compromised pawns.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Scandinavian-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-scand-nf6bg4-oooattack",
+    "openingId": "pro-gothamchess-scandinavian",
+    "criticalPositionFen": "r3kb1r/ppp1pppp/2n2n2/3q4/3P4/4BN2/PPP1QPPP/RN2K2R b KQkq - 3 7",
+    "title": "Modern Scandinavian: …Bg4 Trade + …O-O-O Attack",
+    "overview": "The aggressive 2…Nf6 modern Scandinavian across 208 games. Black develops …Bg4 to pin and trade the white knight, recaptures the d5-pawn with the queen, then castles queenside with …O-O-O. From there Black launches a kingside pawn storm with …g5-g4 and the …Rg8 rook lift — an opposite-side-castling race where Black's attack is the more dangerous.",
+    "pawnBreaks": [
+      "…g5-g4 the kingside storm"
+    ],
+    "pieceManeuvers": [
+      "…Bc8-g4 the pin and trade",
+      "…O-O-O queenside castling",
+      "…Rd8-g8 the rook lift"
+    ],
+    "strategicThemes": [
+      "Trade the bishop with …Bg4",
+      "Castle queenside with …O-O-O",
+      "Storm the kingside with …g5 and …Rg8"
+    ],
+    "endgameTransitions": [
+      "Keep attacking — opposite castling is a race"
+    ],
+    "playableLines": [
+      {
+        "fen": "r3kb1r/ppp1pppp/2n2n2/3q4/3P4/4BN2/PPP1QPPP/RN2K2R b KQkq - 3 7",
+        "moves": [
+          "O-O-O",
+          "O-O",
+          "Rg8"
+        ],
+        "annotations": [
+          "…O-O-O — Black castles queenside, connecting the rooks and committing to the kingside attack.",
+          "O-O — White castles into the storm zone, opposite Black’s king.",
+          "…Rg8 — the rook lifts to support the …g5-g4 pawn storm against White’s king. With opposite-side castling, it becomes a race — and Black’s attack down the g-file is the more dangerous. The modern Scandinavian generates real winning chances."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "O-O-O — castle queenside",
+          "O-O — White castles opposite",
+          "Rg8 — lift the rook, prep …g5"
+        ],
+        "title": "Modern Scandinavian: …Bg4 Trade + …O-O-O Attack",
+        "intro": "The aggressive 2…Nf6 modern Scandinavian across 208 games. Black develops …Bg4 to pin and trade the white knight, recaptures the d5-pawn with the queen, then castles queenside with …O-O-O. From there Black launches a kingside pawn storm with …g5-g4 and the …Rg8 rook lift — an opposite-side-castling race where Black's attack is the more dangerous.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Scandinavian-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-scand-nf6nc3-bg4pin",
+    "openingId": "pro-gothamchess-scandinavian",
+    "criticalPositionFen": "r1bqkb1r/pp2pppp/1np2n2/8/3P4/1BN2Q2/PPP1NPPP/R1B1K2R b KQkq - 2 8",
+    "title": "Scandinavian vs Nc3: …Bg4 Pin + …Nb6 Rerouting",
+    "overview": "Against the 3.Nc3 line, his 110-game plan recaptures …Nxd5, develops solidly with …c6 and …Nf6, and reroutes the knight to b6 to hit the white bishop. The …Bg4 pin trades off a piece and eases Black's position, reaching a harmonious setup with no weaknesses. A clean, solid handling of the Nc3 Scandinavian where Black equalizes comfortably.",
+    "pawnBreaks": [
+      "…c6 supporting the centre",
+      "…e6 freeing the position"
+    ],
+    "pieceManeuvers": [
+      "…Bc8-g4 the pin",
+      "…Nd5-b6 hitting the bishop",
+      "…Bg4xe2 trading a piece"
+    ],
+    "strategicThemes": [
+      "Recapture with …Nxd5",
+      "Pin with …Bg4",
+      "Reroute …Nb6 and trade pieces"
+    ],
+    "endgameTransitions": [
+      "The solid structure equalizes into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/pp2pppp/1np2n2/8/3P4/1BN2Q2/PPP1NPPP/R1B1K2R b KQkq - 2 8",
+        "moves": [
+          "Bg4",
+          "Qg3",
+          "Bxe2"
+        ],
+        "annotations": [
+          "…Bg4 — Black develops the bishop with a pin, pressuring the white pieces and preparing to trade.",
+          "Qg3 — White sidesteps, keeping the queen active.",
+          "…Bxe2 — Black trades off a piece, easing the position and reaching a harmonious, solid setup with no weaknesses. The Nc3 Scandinavian is comfortably equalized — Black has the structure and the easier plan."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bg4 — develop with a pin",
+          "Qg3 — White sidesteps",
+          "Bxe2 — trade, ease the position"
+        ],
+        "title": "Scandinavian vs Nc3: …Bg4 Pin + …Nb6 Rerouting",
+        "intro": "Against the 3.Nc3 line, his 110-game plan recaptures …Nxd5, develops solidly with …c6 and …Nf6, and reroutes the knight to b6 to hit the white bishop. The …Bg4 pin trades off a piece and eases Black's position, reaching a harmonious setup with no weaknesses. A clean, solid handling of the Nc3 Scandinavian where Black equalizes comfortably.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Scandinavian-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-scand-bb5-ne5",
+    "openingId": "pro-gothamchess-scandinavian",
+    "criticalPositionFen": "r1bqkb1r/2pnpppp/p4n2/1p1P4/8/P1N5/1PPPBPPP/R1BQK1NR b KQkq - 0 6",
+    "title": "Scandinavian vs Bb5+: …b5 Expansion + …Ne5 Centralization",
+    "overview": "Against the 3.Bb5+ check, his 69-game plan blocks with …Nbd7, then expands on the queenside with …a6 and …b5, fianchettoes with …Bb7, and centralizes a knight on e5. The bishop pair and the queenside space give Black a dynamic, comfortable game — the Bb5+ check has only helped Black gain space and the two bishops.",
+    "pawnBreaks": [
+      "…b5 the queenside expansion",
+      "…a6 supporting …b5"
+    ],
+    "pieceManeuvers": [
+      "…Nb8-d7-e5 the central knight",
+      "…Bc8-b7 the fianchetto",
+      "the bishop pair after the trade"
+    ],
+    "strategicThemes": [
+      "Block the check with …Nbd7",
+      "Expand with …a6 and …b5",
+      "Centralize a knight on e5"
+    ],
+    "endgameTransitions": [
+      "The bishop pair and space favour Black"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/2pnpppp/p4n2/1p1P4/8/P1N5/1PPPBPPP/R1BQK1NR b KQkq - 0 6",
+        "moves": [
+          "Bb7",
+          "Bf3",
+          "Ne5"
+        ],
+        "annotations": [
+          "…Bb7 — Black fianchettoes, training the bishop on the long diagonal toward White’s king.",
+          "Bf3 — White challenges the long diagonal.",
+          "…Ne5 — Black centralizes the knight on the dominant e5-square, hitting the f3-bishop. With queenside space from …b5, the bishop on the long diagonal, and an active knight, Black has a dynamic, comfortable game — the Bb5+ check helped Black gain space and the initiative."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bb7 — fianchetto the long diagonal",
+          "Bf3 — White challenges",
+          "Ne5 — centralize the knight"
+        ],
+        "title": "Scandinavian vs Bb5+: …b5 Expansion + …Ne5 Centralization",
+        "intro": "Against the 3.Bb5+ check, his 69-game plan blocks with …Nbd7, then expands on the queenside with …a6 and …b5, fianchettoes with …Bb7, and centralizes a knight on e5. The bishop pair and the queenside space give Black a dynamic, comfortable game — the Bb5+ check has only helped Black gain space and the two bishops.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Scandinavian-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ]
       }
     ]
