@@ -1840,5 +1840,55 @@
         "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
       ]
     }
+  ],
+  "pro-gothamchess-trompowsky": [
+    {
+      "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
+      "wrongMove": "Bh4",
+      "correctMove": "h4",
+      "explanation": "When Black hits the bishop with …Ne4, the timid Bh4 lets Black off the hook — after …g5 the bishop is awkward and Black equalises comfortably. The principled Trompowsky answer is the aggressive h4! — supporting the bishop on g5 AND opening the rook's file for an attack. If Black grabs with …Nxg5, hxg5 opens the h-file straight at the king. Meet the knight hit with a punch, not a retreat.",
+      "shortNarration": "h4 — support the bishop, attack",
+      "sources": [
+        "book:queens-gambit",
+        "https://www.chess.com/openings/Trompowsky-Attack",
+        "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p2B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+      "wrongMove": "Bxf6",
+      "correctMove": "e3",
+      "explanation": "Trading on f6 immediately against …d5 is premature — after …exf6 (or …gxf6) Black gets the bishop pair and a solid centre for free, and White has given up the tension with nothing to show for it. The patient e3 keeps options open: build with c3 and Nd2, pressure the queenside with Qb3, and only take on f6 when it damages Black's structure. Don't trade your good bishop without a reason.",
+      "shortNarration": "e3 — keep the tension, don’t trade early",
+      "sources": [
+        "book:queens-gambit",
+        "https://www.chess.com/openings/Trompowsky-Attack",
+        "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+      ]
+    },
+    {
+      "fen": "rnb1kb1r/pp1ppppp/1q3n2/2pP2B1/8/8/PPP1PPPP/RN1QKBNR w KQkq - 1 4",
+      "wrongMove": "b3",
+      "correctMove": "Nc3",
+      "explanation": "When Black plays …Qb6 hitting b2, the passive b3 wastes a tempo and blunts White's own queenside. The Trompowsky idea is to GAMBIT the b2-pawn: Nc3 develops, and after …Qxb2 White gets a huge lead in development with Bd2, e4, and f4 building a big centre while the black queen gets chased around. The pawn is a small price for a raging initiative. Develop and let Black grab the poison.",
+      "shortNarration": "Nc3 — gambit b2, develop fast",
+      "sources": [
+        "book:queens-gambit",
+        "https://www.chess.com/openings/Trompowsky-Attack",
+        "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+      ]
+    },
+    {
+      "fen": "rnbqkb1r/pppp1p1p/5pp1/8/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 4",
+      "wrongMove": "e4",
+      "correctMove": "c4",
+      "explanation": "After doubling Black's f-pawns with Bxf6 exf6, lunging e4 gives Black exactly the central break and piece play he wants — the doubled pawns become dynamic. The cleaner plan is c4, claiming queenside space and clamping the d5-square so Black's structure stays static. Combined with g3, Bg2, and Ne2, White presses the long-term weakness of the doubled f-pawns. Keep Black's structure frozen, don't help it become active.",
+      "shortNarration": "c4 — clamp d5, keep pawns frozen",
+      "sources": [
+        "book:queens-gambit",
+        "https://www.chess.com/openings/Trompowsky-Attack",
+        "https://en.wikipedia.org/wiki/Trompowsky_Attack"
+      ]
+    }
   ]
 }
