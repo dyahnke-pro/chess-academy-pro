@@ -49614,5 +49614,179 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-progothamchess-kia-e5-kingside",
+    "openingId": "pro-gothamchess-kia",
+    "criticalPositionFen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQR1K1 b - - 2 8",
+    "title": "KIA vs …d5/…e6: the e5 Wedge + Nf1-h2-g4 Attack",
+    "overview": "The signature King's Indian Attack plan against the French-like …d5/…e6 setup. White plays e4-e5 to grab a space wedge that cramps Black's kingside, then reroutes the knight Nd2-f1-h2-g4 to pile onto the kingside. Combined with Qe2, h4, and the Bg2 on the long diagonal, White builds a slow but deadly attack against Black's king — the classic KIA kingside avalanche.",
+    "pawnBreaks": [
+      "e4-e5 the cramping space wedge",
+      "h4 supporting the attack"
+    ],
+    "pieceManeuvers": [
+      "Nd2-f1-h2-g4 the kingside reroute",
+      "Qd1-e2 supporting the push",
+      "the Bg2 on the long diagonal"
+    ],
+    "strategicThemes": [
+      "Grab space with the e5 wedge",
+      "Reroute Nf1-h2-g4 to the kingside",
+      "Build a slow kingside attack"
+    ],
+    "endgameTransitions": [
+      "Keep attacking — the KIA is built for the middlegame assault"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp2bppp/2n1pn2/2pp4/4P3/3P1NP1/PPPN1PBP/R1BQR1K1 b - - 2 8",
+        "moves": [
+          "b5",
+          "e5",
+          "Nd4",
+          "Nf1"
+        ],
+        "annotations": [
+          "…b5 — Black expands on the queenside, the standard plan against the KIA.",
+          "e5 — the wedge. White rams the pawn forward, kicking the f6-knight and grabbing a cramping space advantage on the kingside.",
+          "…Nd4 — Black centralises the knight, seeking counterplay.",
+          "Nf1 — the signature KIA reroute begins. The knight heads for h2 and g4, joining the kingside attack while the Bg2 rakes the long diagonal. White’s slow-building assault is exactly what the King’s Indian Attack is designed for."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "b5 — Black expands queenside",
+          "e5 — the space wedge",
+          "Nd4 — Black centralises",
+          "Nf1 — the kingside reroute"
+        ],
+        "title": "KIA vs …d5/…e6: the e5 Wedge + Nf1-h2-g4 Attack",
+        "intro": "The signature King's Indian Attack plan against the French-like …d5/…e6 setup. White plays e4-e5 to grab a space wedge that cramps Black's kingside, then reroutes the knight Nd2-f1-h2-g4 to pile onto the kingside. Combined with Qe2, h4, and the Bg2 on the long diagonal, White builds a slow but deadly attack against Black's king — the classic KIA kingside avalanche.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/Kings-Indian-Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-kia-sicilian-reroute",
+    "openingId": "pro-gothamchess-kia",
+    "criticalPositionFen": "r1bqk2r/pp2ppbp/2np1np1/2p5/4P3/3P1NP1/PPPN1PBP/R1BQ1RK1 b kq - 0 7",
+    "title": "KIA vs the …g6 Sicilian: Re1 + Nf1 Kingside Reroute",
+    "overview": "Against Black's …c5/…g6 Sicilian setup, White plays the closed King's Indian Attack: e4 stakes the centre, Re1 supports the coming e5 push and frees f1, and the knight reroutes Nf1-h2-g4 toward the kingside. While Black expands with …b5 on the queenside, White's pieces converge on the king — a race where the KIA's kingside attack is usually faster.",
+    "pawnBreaks": [
+      "e4 the central stake",
+      "a future e5 push"
+    ],
+    "pieceManeuvers": [
+      "Rf1-e1 freeing f1 for the knight",
+      "Nd2-f1-h2-g4 the kingside reroute",
+      "the Bg2 long-diagonal bishop"
+    ],
+    "strategicThemes": [
+      "Stake the centre with e4",
+      "Reroute the knight via f1",
+      "Attack the king on the wing"
+    ],
+    "endgameTransitions": [
+      "Keep attacking — win the wing race"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/pp2ppbp/2np1np1/2p5/4P3/3P1NP1/PPPN1PBP/R1BQ1RK1 b kq - 0 7",
+        "moves": [
+          "O-O",
+          "Re1",
+          "b5",
+          "Nf1"
+        ],
+        "annotations": [
+          "…O-O — Black castles into the position White intends to attack.",
+          "Re1 — White supports the centre and, crucially, frees the f1-square for the knight reroute.",
+          "…b5 — Black launches the standard queenside expansion.",
+          "Nf1 — the reroute begins, heading for h2 and g4. With the Bg2 on the long diagonal and the knight joining the kingside, White’s attack races against Black’s queenside play — and in the King’s Indian Attack, White’s wing usually wins the race."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "O-O — Black castles in",
+          "Re1 — free f1 for the knight",
+          "b5 — Black expands queenside",
+          "Nf1 — the kingside reroute"
+        ],
+        "title": "KIA vs the …g6 Sicilian: Re1 + Nf1 Kingside Reroute",
+        "intro": "Against Black's …c5/…g6 Sicilian setup, White plays the closed King's Indian Attack: e4 stakes the centre, Re1 supports the coming e5 push and frees f1, and the knight reroutes Nf1-h2-g4 toward the kingside. While Black expands with …b5 on the queenside, White's pieces converge on the king — a race where the KIA's kingside attack is usually faster.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/Kings-Indian-Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
+        ]
+      }
+    ]
   }
 ]

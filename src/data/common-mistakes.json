@@ -2318,5 +2318,43 @@
         "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
       ]
     }
+  ],
+  "pro-gothamchess-kia": [
+    {
+      "fen": "r1bqk2r/pp2bppp/2n1pn2/2pp4/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w kq - 3 7",
+      "wrongMove": "c3",
+      "correctMove": "e4",
+      "explanation": "The whole point of the King's Indian Attack is the e4 break! — striking the centre and preparing the e5 wedge and the kingside attack. The passive c3 drifts without a plan and lets Black seize the initiative with …d4 or queenside expansion. When your pieces are set (Nf3, g3, Bg2, d3, Nbd2), play e4 and follow with e5 and the Nf1-h2-g4 reroute. The KIA is an attacking system — commit to e4.",
+      "shortNarration": "e4 — the KIA central break",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/Kings-Indian-Attack",
+        "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
+      ]
+    },
+    {
+      "fen": "r1bq1rk1/p3bppp/2n1pn2/1ppp4/4P3/3P1NP1/PPPN1PBP/R1BQR1K1 w - - 0 9",
+      "wrongMove": "a4",
+      "correctMove": "e5",
+      "explanation": "When Black expands with …b5 against the KIA, the key is e5! — grabbing the kingside space wedge that defines the King's Indian Attack and starting the attack. Reacting on the queenside with a4 plays into Black's hands, where he is faster. Ignore the queenside and play on YOUR side: e5 cramps Black, the knight reroutes Nf1-h2-g4, and White's attack on the king outruns Black's counterplay.",
+      "shortNarration": "e5 — grab kingside space, attack",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/Kings-Indian-Attack",
+        "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
+      ]
+    },
+    {
+      "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/8/5NP1/PPPPPPBP/RNBQ1RK1 w kq - 2 5",
+      "wrongMove": "d4",
+      "correctMove": "d3",
+      "explanation": "Against the …c5/…g6 Sicilian setup, the KIA way is the modest d3! — keeping the centre closed for the slow kingside attack with e4, Re1, and Nf1-h2-g4. Lunging d4 opens the centre and transposes into an Open-Sicilian-like position where Black is comfortable. Stay true to the King's Indian Attack: play d3, build the kingside, and attack the king behind the closed centre.",
+      "shortNarration": "d3 — keep it closed for the KIA",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/Kings-Indian-Attack",
+        "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
+      ]
+    }
   ]
 }
