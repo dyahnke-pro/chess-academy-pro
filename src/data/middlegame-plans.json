@@ -3377,17 +3377,27 @@
   {
     "id": "mp-carokann-panov",
     "openingId": "caro-kann",
-    "criticalPositionFen": "r1bq1rk1/pp3p1p/2n1pbp1/3n4/3P4/P1NB1N2/1PQB1PPP/R4RK1 w - - 0 13",
+    "criticalPositionFen": "rnbqk2r/pp2bppp/4pn2/3P4/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 0 7",
     "title": "Caro Panov: Trade Dark Bishops, Blockade d5",
     "overview": "In the Panov, White’s isolated d-pawn (the IQP on d4) is the fight. Black neutralises White’s attacking chances by trading the dark-squared bishops, then plants pieces on the blockade square in front of the pawn and pressures it. A solid, balanced handling of the IQP.",
     "pawnBreaks": [
-      "the IQP on d4 is the fixed target",
-      "…play against d4, don’t rush a break"
+      {
+        "move": "…e6-e5 — the freeing break",
+        "explanation": "Once the blockade holds and the pieces are placed, …e5 strikes back at the centre and liberates Black’s game.",
+        "fen": "rnbqk2r/pp2bppp/4pn2/3P4/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 0 7"
+      }
     ],
     "pieceManeuvers": [
-      "…Bg7 then trade the dark bishops",
-      "…Bd7-e... light bishop to active squares",
-      "…Rc8 on the c-file"
+      {
+        "piece": "Knight",
+        "route": "…Nxd5 then …Nce7 — blockade and overprotect d5",
+        "explanation": "One knight blockades the isolani on d5; the other reroutes via e7 to f5/d5 to overprotect it."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Bf6 — pressure d4 on the long diagonal",
+        "explanation": "The dark-squared bishop adds a third attacker to the isolated d4-pawn."
+      }
     ],
     "strategicThemes": [
       "Trade pieces to defang the IQP",
@@ -3399,27 +3409,32 @@
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/pp3p1p/2n1pbp1/3n4/3P4/P1NB1N2/1PQB1PPP/R4RK1 w - - 0 13",
+        "fen": "rnbqk2r/pp2bppp/4pn2/3P4/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 0 7",
         "moves": [
-          "Bh6",
-          "Bg7",
-          "Bxg7",
-          "Kxg7",
-          "Rfe1",
-          "Bd7",
-          "Be4"
+          "Nxd5",
+          "Bd3",
+          "Nc6",
+          "O-O",
+          "O-O",
+          "Re1",
+          "Bf6",
+          "Be4",
+          "Nce7"
         ],
         "annotations": [
-          "Bh6 offers the trade of dark bishops.",
-          "…Bg7 — Black is happy to trade: fewer attackers for White’s IQP position.",
-          "Bxg7",
-          "…Kxg7 recaptures — the king is fine, and White has lost an attacking piece.",
-          "Rfe1 centralises.",
-          "…Bd7 develops, eyeing the queenside and the open lines.",
-          "Be4 — White centralises the bishop, but Black is solid: with the dark bishops gone, the IQP on d4 is a long-term target, not a launchpad. Balanced."
+          "…Nxd5 plants the knight on the blockade square. Against an isolated queen's pawn the first job is to sit a piece squarely in front of it on d5.",
+          "White develops the bishop aggressively toward Black's king.",
+          "…Nc6 develops and leans on the d4-pawn — the isolani must be pressured, never ignored.",
+          "White castles.",
+          "…O-O — Black tucks the king away, ready for the long siege.",
+          "White centralizes the rook on e1.",
+          "…Bf6 piles a third attacker onto d4 from the long diagonal; the isolated pawn feels the squeeze.",
+          "White's bishop swings to e4, eyeing the kingside.",
+          "…Nce7 reroutes the knight toward f5 and d5, overprotecting the d5-blockade and adding a defender. This is the anti-IQP masterclass — blockade d5, swarm d4, trade into the ending where the weak pawn falls. Karpov ground Anand down exactly so."
         ],
-        "title": "Caro Panov: Trade Dark Bishops, Blockade d5",
         "arrows": [
+          [],
+          [],
           [],
           [],
           [],
@@ -3428,42 +3443,37 @@
           [],
           []
         ],
+        "title": "Playing Against the IQP (Anand–Karpov, 1998)",
         "highlights": [
           [
             {
-              "square": "h6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d2",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g7",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "h6",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "g7",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
               "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -3473,73 +3483,52 @@
             {
               "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d7",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
               "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d3",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d4",
+              "square": "d5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
+        "intro": "Black blockades and besieges White's isolated queen's pawn.",
         "sources": [
           "book:caro-kann",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ],
         "learnCues": [
-          "Bh6 — offer the trade",
-          "…Bg7 — trade the dark bishops",
-          "Bxg7",
-          "…Kxg7 — recapture, defang the attack",
-          "Rfe1 — centralise",
-          "…Bd7 — develop",
-          "Be4 — solid; d4 is the target"
-        ],
-        "intro": {
-          "say": "White’s isolated d4-pawn is the whole fight in the Panov. Black defangs White’s attack by trading the dark-squared bishops, then plays against the IQP — blockade it, pressure it, and the long game favours the side without the weakness.",
-          "sayShort": "Trade dark bishops, play against the IQP on d4.",
-          "arrows": [
-            {
-              "from": "f8",
-              "to": "g7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "c8",
-              "to": "d7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        }
+          "…Nxd5 — blockade the isolani",
+          "",
+          "…Nc6 — pressure the d4-pawn",
+          "",
+          "…O-O — king safe for the siege",
+          "",
+          "…Bf6 — third attacker on d4",
+          "",
+          "…Nce7 — overprotect the d5-blockade"
+        ]
       }
     ]
   },
