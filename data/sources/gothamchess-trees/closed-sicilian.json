@@ -8,9 +8,9 @@
     "c5",
     "Nc3"
   ],
-  "generatedAt": "2026-05-28T18:29:07.027Z",
+  "generatedAt": "2026-05-30T03:51:31.027Z",
   "totals": {
-    "totalGamesScanned": 31960,
+    "totalGamesScanned": 31994,
     "gamesMatchingOpening": 333,
     "minBranchGames": 5,
     "minTrieGames": 5

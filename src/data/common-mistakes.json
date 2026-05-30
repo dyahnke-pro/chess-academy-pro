@@ -2356,5 +2356,43 @@
         "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
       ]
     }
+  ],
+  "pro-gothamchess-closed-sicilian": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/3p4/8/3pP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+      "wrongMove": "Nf3",
+      "correctMove": "Qxd4",
+      "explanation": "His signature anti-Sicilian is the early Qxd4! — recapturing with the queen to reach an Open-Sicilian-like position a tempo up, then castling queenside for a kingside attack. Recapturing with Nf3 transposes into normal Open Sicilian theory where Black is well-prepared. The Qxd4 approach sidesteps theory: the queen sits actively, Nc3 is already developed, and White heads for the O-O-O attack.",
+      "shortNarration": "Qxd4 — the early queen, sidestep theory",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+      ]
+    },
+    {
+      "fen": "r1bqkbnr/pp2pppp/2np4/8/3QP3/2N5/PPP2PPP/R1B1KBNR w KQkq - 1 5",
+      "wrongMove": "Qd1",
+      "correctMove": "Qd2",
+      "explanation": "After …Nc6 hits the queen, the move is Qd2! — keeping the queen active and connecting it to the kingside attack and the long diagonal. Retreating all the way to d1 wastes the tempo gained and undoes the whole point of the early Qxd4. The queen belongs on d2, supporting b3-Bb2, f4, and the O-O-O opposite-castling storm. Keep the queen active.",
+      "shortNarration": "Qd2 — keep the queen active",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+      ]
+    },
+    {
+      "fen": "r1bqk2r/pp2ppbp/2np1np1/8/4P3/1PN5/PBPQ1PPP/R3KBNR w KQkq - 3 8",
+      "wrongMove": "Nf3",
+      "correctMove": "O-O-O",
+      "explanation": "With the b3-Bb2 setup complete, the thematic move is O-O-O! — castling queenside to commit to the kingside pawn storm with f3 and g4-h4. Developing the knight to f3 instead blocks the f-pawn that White needs for the f3/g4 storm and delays the whole attacking plan (the knight belongs on e2, not f3). The Closed/Nc3 Sicilian with Qd2 is built for opposite-side castling: O-O-O first, then storm Black's king while yours stays safe behind the Bb2.",
+      "shortNarration": "O-O-O — castle opposite, then storm",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
+        "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+      ]
+    }
   ]
 }

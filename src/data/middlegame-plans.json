@@ -49788,5 +49788,332 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-progothamchess-closedsic-d6-oppositecastle",
+    "openingId": "pro-gothamchess-closed-sicilian",
+    "criticalPositionFen": "r1bq1rk1/pp2pp1p/2np1npb/8/4PP2/1PN5/PBPQ2PP/2KR1BNR b - - 4 9",
+    "title": "vs …d6: the Qd2 + O-O-O Opposite-Castle Attack",
+    "overview": "His signature against the …d6 Sicilian across 73 games. After d4 and Qxd4, White sets up the aggressive opposite-side-castling attack: Qd2, b3 and Bb2 train the bishop on the long diagonal, f4 grabs space, and O-O-O commits to a kingside pawn storm. With both sides castling on opposite wings, it becomes a race — and White's g3-h4-g4 storm against Black's king is the whole point.",
+    "pawnBreaks": [
+      "f2-f4 the kingside space",
+      "g3 supporting the f4-g4 storm"
+    ],
+    "pieceManeuvers": [
+      "Qd2 + O-O-O the opposite-castle setup",
+      "Bc1-b2 the long-diagonal bishop",
+      "Kb1 the prophylactic king tuck"
+    ],
+    "strategicThemes": [
+      "Castle opposite with O-O-O",
+      "Train the Bb2 on the long diagonal",
+      "Storm the kingside with g3-f4-g4"
+    ],
+    "endgameTransitions": [
+      "Keep attacking — opposite castling means win the race"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp2pp1p/2np1npb/8/4PP2/1PN5/PBPQ2PP/2KR1BNR b - - 4 9",
+        "moves": [
+          "e5",
+          "g3",
+          "Re8",
+          "Kb1"
+        ],
+        "annotations": [
+          "…e5 — Black strikes in the centre, trying to open lines before White’s storm arrives.",
+          "g3 — White reinforces the f4-pawn and prepares the g4-h4 pawn storm against Black’s king.",
+          "…Re8 — Black brings the rook to the centre.",
+          "Kb1 — the prophylactic king tuck, the final preparation before the storm. With the Bb2 raking the long diagonal and the kingside pawns set to roll, White’s attack on Black’s king is faster — exactly what the opposite-castle setup is built for."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "e5 — Black opens the centre",
+          "g3 — support f4, prep the storm",
+          "Re8 — Black centralises",
+          "Kb1 — tuck the king, then storm"
+        ],
+        "title": "vs …d6: the Qd2 + O-O-O Opposite-Castle Attack",
+        "intro": "His signature against the …d6 Sicilian across 73 games. After d4 and Qxd4, White sets up the aggressive opposite-side-castling attack: Qd2, b3 and Bb2 train the bishop on the long diagonal, f4 grabs space, and O-O-O commits to a kingside pawn storm. With both sides castling on opposite wings, it becomes a race — and White's g3-h4-g4 storm against Black's king is the whole point.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-closedsic-e6-oooattack",
+    "openingId": "pro-gothamchess-closed-sicilian",
+    "criticalPositionFen": "r1bqk2r/pp1p1ppp/2n1pn2/8/1b2PB2/2NQ4/PPP2PPP/2KR1BNR b kq - 6 7",
+    "title": "vs …e6: Qd3 + Bf4 + O-O-O Attack",
+    "overview": "Against the …e6 setup, his 59-game plan is the rapid O-O-O attack: d4 and Qxd4, then Qd3 and Bf4 develop with pressure, and O-O-O commits to the kingside assault. After Nge2 completes development, White is ready to roll the g- and h-pawns at Black's king. The early queen trade on d4 hasn't slowed White down — the initiative and the attacking setup carry the day.",
+    "pawnBreaks": [
+      "the kingside pawn storm",
+      "e5 a central clamp"
+    ],
+    "pieceManeuvers": [
+      "Qd1-d3 the active queen",
+      "Bc1-f4 developing with pressure",
+      "Ng1-e2 completing development"
+    ],
+    "strategicThemes": [
+      "Develop with Qd3 and Bf4",
+      "Castle opposite with O-O-O",
+      "Attack the king on the kingside"
+    ],
+    "endgameTransitions": [
+      "Keep attacking — opposite castling is a race"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/pp1p1ppp/2n1pn2/8/1b2PB2/2NQ4/PPP2PPP/2KR1BNR b kq - 6 7",
+        "moves": [
+          "O-O",
+          "Nge2",
+          "e5",
+          "Bg5"
+        ],
+        "annotations": [
+          "…O-O — Black castles kingside, directly into White’s attacking intentions.",
+          "Nge2 — White completes development, the knight heading toward g3 and the kingside.",
+          "…e5 — Black strikes back in the centre, seeking counterplay.",
+          "Bg5 — White pins the f6-knight, increasing the pressure on Black’s kingside. With pieces aimed at the castled king and the pawns set to storm, White has a dangerous attacking initiative — the early Qxd4 has cost nothing."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "O-O — Black castles into it",
+          "Nge2 — develop toward the king",
+          "e5 — Black counters",
+          "Bg5 — pin, increase pressure"
+        ],
+        "title": "vs …e6: Qd3 + Bf4 + O-O-O Attack",
+        "intro": "Against the …e6 setup, his 59-game plan is the rapid O-O-O attack: d4 and Qxd4, then Qd3 and Bf4 develop with pressure, and O-O-O commits to the kingside assault. After Nge2 completes development, White is ready to roll the g- and h-pawns at Black's king. The early queen trade on d4 hasn't slowed White down — the initiative and the attacking setup carry the day.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-closedsic-g6-nd5",
+    "openingId": "pro-gothamchess-closed-sicilian",
+    "criticalPositionFen": "r1bq1rk1/pp2ppbp/2np1np1/3N4/4P3/2PQ1N2/PP3PPP/R1B1KB1R w KQ - 1 9",
+    "title": "vs …g6: the Nd5 Outpost + Bg5 Bind",
+    "overview": "Against the …g6 Dragon-like setup, his 29-game plan uses the strong Nd5 outpost. After d4 and Qxd4, White plays Qd3, c3, and plants the knight on d5 — the dominant central square. The Bg5 pin adds pressure, and when Black trades on d5, the recapture exd5 gives White a protected passed pawn and a space bind. A positional squeeze against the fianchetto.",
+    "pawnBreaks": [
+      "e4xd5 creating the protected passed pawn",
+      "c3 supporting d4"
+    ],
+    "pieceManeuvers": [
+      "Nc3-d5 the dominant outpost",
+      "Bc1-g5 the pin",
+      "Qd1-d3 the centralised queen"
+    ],
+    "strategicThemes": [
+      "Plant the Nd5 outpost",
+      "Pin with Bg5",
+      "Win a space bind with exd5"
+    ],
+    "endgameTransitions": [
+      "The passed d5-pawn is an endgame asset"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp2ppbp/2np1np1/3N4/4P3/2PQ1N2/PP3PPP/R1B1KB1R w KQ - 1 9",
+        "moves": [
+          "Bg5",
+          "Nxd5",
+          "exd5"
+        ],
+        "annotations": [
+          "Bg5 — White pins the f6-knight, increasing the pressure on the d5-outpost and the kingside.",
+          "…Nxd5 — Black trades off the dominant knight, the only way to relieve the bind.",
+          "exd5 — White recaptures, gaining a protected passed pawn on d5 and a space advantage. The Nd5-outpost has converted into a permanent structural edge — White squeezes from a position of strength against the fianchetto setup."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bg5 — pin, pressure d5",
+          "Nxd5 — Black relieves the bind",
+          "exd5 — protected passed pawn"
+        ],
+        "title": "vs …g6: the Nd5 Outpost + Bg5 Bind",
+        "intro": "Against the …g6 Dragon-like setup, his 29-game plan uses the strong Nd5 outpost. After d4 and Qxd4, White plays Qd3, c3, and plants the knight on d5 — the dominant central square. The Bg5 pin adds pressure, and when Black trades on d5, the recapture exd5 gives White a protected passed pawn and a space bind. A positional squeeze against the fianchetto.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-closedsic-bb5-bg5",
+    "openingId": "pro-gothamchess-closed-sicilian",
+    "criticalPositionFen": "r1bqkb1r/1p2pppp/p2p1n2/8/3QP3/2N2N2/PPP2PPP/R1B1K2R w KQkq - 1 9",
+    "title": "Bb5 vs …Nc6: Trade, Qxd4 + Bg5 Initiative",
+    "overview": "The Bb5 line where Black plays …Nd4. After the knight trades on b5 and White recaptures, the d4 break and Qxd4 reach an open position with a slight lead in development. Bg5 pins the f6-knight and O-O-O sets up the attack. White's pieces are the more active, and the early queen on d4 controls key central squares — a comfortable, initiative-keeping handling of the Bb5 Sicilian.",
+    "pawnBreaks": [
+      "d4 opening the centre"
+    ],
+    "pieceManeuvers": [
+      "Bc1-g5 the pin",
+      "Qd4 the centralised queen",
+      "O-O-O setting up the attack"
+    ],
+    "strategicThemes": [
+      "Open the centre with d4",
+      "Pin with Bg5",
+      "Keep the initiative with the active queen"
+    ],
+    "endgameTransitions": [
+      "The active pieces favour White in simplification"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/1p2pppp/p2p1n2/8/3QP3/2N2N2/PPP2PPP/R1B1K2R w KQkq - 1 9",
+        "moves": [
+          "Bg5",
+          "e6",
+          "O-O-O"
+        ],
+        "annotations": [
+          "Bg5 — White pins the f6-knight, the active developing move that increases central and kingside pressure.",
+          "…e6 — Black solidifies, opening the dark bishop.",
+          "O-O-O — White castles queenside, connecting the rooks and setting up the kingside attack. The centralised queen on d4, the Bg5 pin, and the active pieces give White a pleasant, initiative-keeping game from the Bb5 Sicilian."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bg5 — pin the knight",
+          "e6 — Black solidifies",
+          "O-O-O — connect, set up the attack"
+        ],
+        "title": "Bb5 vs …Nc6: Trade, Qxd4 + Bg5 Initiative",
+        "intro": "The Bb5 line where Black plays …Nd4. After the knight trades on b5 and White recaptures, the d4 break and Qxd4 reach an open position with a slight lead in development. Bg5 pins the f6-knight and O-O-O sets up the attack. White's pieces are the more active, and the early queen on d4 controls key central squares — a comfortable, initiative-keeping handling of the Bb5 Sicilian.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+        ]
+      }
+    ]
   }
 ]
