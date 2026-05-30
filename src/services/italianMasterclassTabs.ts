@@ -8,8 +8,10 @@
 // labels, lower-cased. Values are exact ids from middlegame-plans.json.
 
 export const ITALIAN_TAB_PLAN_IDS: Record<string, string[]> = {
-  main: ['mp-italiangame-main'],
-  modern: ['mp-italiangame-modern'],
+  // Main line is the modern Giuoco Pianissimo (data spine, 2026-05-29) → its
+  // middlegame plan is the d3-structure plan. The classical d4 isolani plan
+  // (mp-italiangame-main) is retained in the JSON for a future Giuoco Piano tab.
+  main: ['mp-italiangame-modern'],
   'two knights': ['mp-italiangame-twoknights'],
   'evans gambit': ['mp-italiangame-evans'],
   'møller': ['mp-italiangame-moller'],

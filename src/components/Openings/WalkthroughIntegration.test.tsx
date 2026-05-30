@@ -195,8 +195,10 @@ describe('WalkthroughMode integration — real annotation data', () => {
       <WalkthroughMode opening={london} onExit={vi.fn()} />,
     );
 
-    // The title should be visible immediately
-    expect(screen.getByText(/walkthrough.*london/i)).toBeTruthy();
+    // The title should be visible immediately (the line name; the chrome was
+    // unified with the Watch & Learn standard, dropping the "Walkthrough:"
+    // prefix — David 2026-05-29).
+    expect(screen.getByText(/london/i)).toBeTruthy();
 
     // Overview card shows on move 0
     await waitFor(() => {

@@ -862,12 +862,12 @@ const D3_SIDELINE: LessonScript = {
 };
 
 export const PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS: Record<string, LessonScript> = {
-  'pro-naroditsky-caro-kann::Two Knights Variation (2.Nc3)': TWO_KNIGHTS,
-  "pro-naroditsky-caro-kann::King's Indian Attack (2.Nf3)": KIA,
-  'pro-naroditsky-caro-kann::Exchange Variation (3.exd5)': EXCHANGE,
-  'pro-naroditsky-caro-kann::Classical Variation (3.Nc3)': CLASSICAL,
-  'pro-naroditsky-caro-kann::Fantasy Variation (3.f3)': FANTASY,
-  'pro-naroditsky-caro-kann::Modern Defense Transposition (2.d4 g6)': MODERN,
+  'pro-naroditsky-caro-kann::Two Knights Variation (Nc3)': TWO_KNIGHTS,
+  "pro-naroditsky-caro-kann::King's Indian Attack (Nf3)": KIA,
+  'pro-naroditsky-caro-kann::Exchange Variation (exd5)': EXCHANGE,
+  'pro-naroditsky-caro-kann::Classical Variation (Nc3)': CLASSICAL,
+  'pro-naroditsky-caro-kann::Fantasy Variation (f3)': FANTASY,
+  'pro-naroditsky-caro-kann::Modern Defense Transposition (d4 g6)': MODERN,
   'pro-naroditsky-caro-kann::Advance Variation (3.e5 c5)': ADVANCE_C5,
   'pro-naroditsky-caro-kann::Advance Variation (3.e5 Bf5)': ADVANCE_BF5,
   'pro-naroditsky-caro-kann::Panov-Botvinnik Attack (4.c4)': PANOV,

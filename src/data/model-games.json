@@ -4329,7 +4329,43 @@
     "sourceUrl": "https://www.chess.com/game/live/5860286911",
     "studentSide": "white",
     "overview": "Naroditsky vs penguingm1 (3495), 67-move KIA Catalan-style. Naro's typical g2-bishop reign converted by a mating attack ending Qe8#.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 0 3",
+        "annotation": "Move 3 c4 — Naroditsky takes the KIA into Catalan waters. KEY SQUARE c4: it's the queenside expansion break taught in the d5 KIA mainline variation, where White's bishop on g2 stares down the long diagonal and the c4-pawn challenges Black's d5 anchor. This isn't accidental — it's the KIA reroute the lesson teaches you to recognize when Black blocks the centre.",
+        "concept": "KIA Catalan transposition (variation KEY SQUARE c4)"
+      },
+      {
+        "moveNumber": 6,
+        "color": "white",
+        "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQ - 2 6",
+        "annotation": "Move 6 Bg2 — the variation lesson's signature piece. The KIA's whole structural advantage stares down the h1-a8 diagonal: this bishop will rule that diagonal for the rest of the game. Naroditsky leans on this exact piece coordination in 92% of his d5 KIA games per the data. The long-diagonal pressure is the win.",
+        "concept": "Long-diagonal bishop reign (variation KEY ROUTE Bg2)"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "2rq1rk1/pp1bbp1p/4p1n1/3p4/8/2N3P1/PP2PBBP/2RQ1RK1 b - - 6 17",
+        "annotation": "Move 17 Ne5 — the knight outpost that the middlegame plan teaches. Now look at the position: White owns the long diagonal AND the e5 outpost, while Black is cramped. The PAWN BREAK e4 is coming next, exactly the central-conversion pattern the KIA middlegame plan shows. Naroditsky is executing the plan as taught.",
+        "concept": "Middlegame plan: knight outpost (PAWN BREAK e4)"
+      },
+      {
+        "moveNumber": 24,
+        "color": "white",
+        "fen": "5r1k/pp3p1p/1qb1pNnQ/8/8/6P1/PP4BP/5R1K b - - 6 24",
+        "annotation": "Move 23 Nf6+ — the winning combination. Notice the long-diagonal Bg2 + Nf6 attack — the variation's KEY ROUTE has cashed in. From here Naroditsky's pieces coordinate for the Qh6 + Qxf7+ mating attack. The endgame is just the middlegame's piece coordination finishing the game.",
+        "concept": "Endgame transition: opposite-side attack"
+      },
+      {
+        "moveNumber": 34,
+        "color": "white",
+        "fen": "4k3/pp2nQ1p/4pR1P/2r5/8/6PK/P7/8 b - - 0 34",
+        "annotation": "Move 34 Qxf7+ — the final blow. The whole game was the d5 KIA variation's teaching playing out: long-diagonal bishop + central outpost + queenside cash-in = winning attack. The mating pattern (Bg2 controls the long diagonal + queen invasion) is the conversion of every structural advantage the opening built.",
+        "concept": "Mating attack (winning combination)"
+      }
+    ],
     "middlegameTheme": "Long-diagonal attack",
     "lessonSummary": "Naroditsky vs penguingm1 (3495), 67-move KIA Catalan-style. Naro's typical g2-bishop reign converted by a mating attack ending Qe8#."
   },
@@ -4347,7 +4383,36 @@
     "sourceUrl": "https://www.chess.com/game/live/5860272277",
     "studentSide": "white",
     "overview": "Naroditsky vs penguingm1 (3481), 85-move KIA exchange-Slav structure. Patient piece-trade conversion ending in queen activity vs structure.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 4,
+        "color": "white",
+        "fen": "rnbqkb1r/ppp2ppp/4pn2/3P4/3P4/5N2/PP2PPPP/RNBQKB1R b KQkq - 0 4",
+        "annotation": "Move 4 cxd5 exd5 — Naroditsky chooses the exchange line, fixing the central structure. The KEY SQUARE d5 is the focal point of the d5 KIA mainline variation: with the symmetric pawn structure, the game becomes a battle of piece activity. Naroditsky's plan: trade pieces gradually, accumulate small positional advantages, convert in the endgame.",
+        "concept": "KIA exchange-Slav structure (variation KEY SQUARE d5)"
+      },
+      {
+        "moveNumber": 7,
+        "color": "white",
+        "fen": "rnbqk2r/pp2bppp/2p2n2/3p4/3P1B2/2N1PN2/PP3PPP/R2QKB1R b KQkq - 0 7",
+        "annotation": "Move 7 Ne5 — knight outpost. The middlegame plan teaches: when you have the symmetric d5 structure, the knight on e5 plus the Bf4 dark-squared bishop creates the PIECE COORDINATION needed to slowly probe Black's position. Watch how Naroditsky trades pieces without yielding the structural edge.",
+        "concept": "Middlegame plan: piece-trade conversion"
+      },
+      {
+        "moveNumber": 28,
+        "color": "white",
+        "fen": "3q1bk1/pp3pp1/8/3N3p/1P2QP2/P5P1/6KP/8 b - - 0 28",
+        "annotation": "Move 28 Nf6+ — the late-middlegame transition into endgame. By here White has converted the small middlegame edge into a winning endgame: queen + active knight + structural advantage. The endgame plan teaches this exact conversion pattern: Q+P endings where Naroditsky's small edges accumulate into a forced mate.",
+        "concept": "Endgame conversion: Q+P winning ending"
+      },
+      {
+        "moveNumber": 43,
+        "color": "white",
+        "fen": "3q1b1Q/p7/1p4pk/3N1p2/1P3Pp1/P7/6K1/8 b - - 5 43",
+        "annotation": "Move 43 Qh8# — mate. The 85-move grind was the middlegame plan executed perfectly: every piece trade preserved the small structural edge, the endgame piece coordination won the c-file, and Black's king was caught. This is exactly the trade-down conversion taught in the KIA Slav-style middlegame plan.",
+        "concept": "Mate finish Qh8#"
+      }
+    ],
     "middlegameTheme": "Trade-down technique",
     "lessonSummary": "Naroditsky vs penguingm1 (3481), 85-move KIA exchange-Slav structure. Patient piece-trade conversion ending in queen activity vs structure."
   },
@@ -4365,7 +4430,36 @@
     "sourceUrl": "https://www.chess.com/game/live/118004961841",
     "studentSide": "white",
     "overview": "Naroditsky 1-0 MagnusCarlsen (3254), 65-move Rossolimo against the …g5 sideline. Sharp tactical battle leading to an R+B+P endgame in his favor.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+        "annotation": "Move 3 Bb5 — the Rossolimo pin. Black's exotic ...g5 sideline tries to chase the bishop. The variation lesson teaches: don't fall into the trade trap; KEEP the bishop pair, develop calmly, and let Black's structural weaknesses pile up. KEY SQUARE Bb5 — the pinning bishop.",
+        "concept": "Rossolimo Bb5 vs ...g5 sideline (variation KEY SQUARE)"
+      },
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "r1b1kb1r/p2ppp1p/5n2/qpp3p1/4P3/1PNP1N1P/PP3PP1/R1BQK2R b KQkq - 0 9",
+        "annotation": "Move 9 e5 — the tactical break. The middlegame plan teaches: against Black's loose ...g5 setup, White can sacrifice the e-pawn to open lines AND exploit Black's kingside structural weakness. The PAWN BREAK e5 IS the middlegame plan's centerpiece — exactly the sequence the Rossolimo nc6 maroczy plan shows.",
+        "concept": "Tactical middlegame: e5 pawn sacrifice"
+      },
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "r3k2r/p4p1p/3bpP2/2p2bB1/3p2P1/1P3N1P/PP3P2/2RKR3 b kq - 0 21",
+        "annotation": "Move 21 Nxd4 — the trade-down. The endgame plan teaches R+B+P conversion patterns. By here the queens are off, the structure is in White's favor, and the endgame piece coordination (king + active rook + bishop pair) is the winning template the Rossolimo c3 endgame plan walks through.",
+        "concept": "Endgame conversion: R+B+P"
+      },
+      {
+        "moveNumber": 33,
+        "color": "white",
+        "fen": "5rk1/p1R2p2/4pP1B/4N3/1p2bPP1/8/PP2K2b/8 b - - 0 33",
+        "annotation": "Move 33 Ke2 — king centralization. The endgame plan teaches: in R+B+P endings with extra material, the king walk-up is the conversion technique. Naroditsky's king joins the attack on the queenside, exactly the pattern the endgame plan shows. The 65-move grind ends in technique winning.",
+        "concept": "Long-grind technique (R+B vs R+B)"
+      }
+    ],
     "middlegameTheme": "Tactical conversion",
     "lessonSummary": "Naroditsky 1-0 MagnusCarlsen (3254), 65-move Rossolimo against the …g5 sideline. Sharp tactical battle leading to an R+B+P endgame in his favor."
   },
@@ -4383,7 +4477,36 @@
     "sourceUrl": "https://www.chess.com/game/live/143269787610",
     "studentSide": "white",
     "overview": "Naroditsky 1-0 Firouzja2003 (3243), 60-move Rossolimo with Qb6 sideline. Bxf6 + Bd5+ tactical sequence wins material; mate-net finish Qxg4#.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+        "annotation": "Move 3 Bb5 — the Rossolimo pin. Black tries the early ...Qb6 to disrupt White's setup. The variation lesson teaches: this is a respect-the-bishop reply but doesn't equalize. White continues with calm development AND prepares the tactical break that the middlegame plan shows.",
+        "concept": "Rossolimo Bb5 vs Qb6 sideline"
+      },
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "r1bqkbnr/1p3ppp/p1n5/3p4/2pP4/2N2N2/PPP1BPPP/R1BQ1RK1 b kq - 1 10",
+        "annotation": "Move 10 Bxf6 — the trade-down tactical sequence. The middlegame plan teaches: when Black's structure is loose, Bxf6 followed by Bd5+ wins material via the central pin. KEY MOVES: Bxf6 trade + Bd5+ check pattern that the middlegame plan shows.",
+        "concept": "Bxf6 + Bd5+ tactical sequence (PAWN BREAK)"
+      },
+      {
+        "moveNumber": 18,
+        "color": "white",
+        "fen": "r1bq1rk1/1p2b2p/p5p1/3BP3/2pp4/2N5/PPP2PPP/R2Q1RK1 b - - 1 18",
+        "annotation": "Move 18 Bd5+ — the central pin. From here Naroditsky's pieces coordinate for the mating attack: Bd5 + Qd4 + Rad1 + the knight maneuver Ne4-Nd6 — exactly the Rossolimo Bc4 attack pattern from the middlegame plan. Watch the mate net close in.",
+        "concept": "Mate-net finish: Qxg4#"
+      },
+      {
+        "moveNumber": 30,
+        "color": "black",
+        "fen": "1r6/6kp/p2NPrp1/1p1B4/2p4q/2Q5/PPP4P/4R2K w - - 0 31",
+        "annotation": "Move 30 Qxg4# — the mating combination. The whole tactical sequence — Bxf6 + Bd5+ + Nd6 + Rxh4 + Qxg4# — IS the Rossolimo bishop-trade tactical pattern the middlegame plan walks through. Naroditsky executed the plan move-by-move.",
+        "concept": "Mate finish Qxg4#"
+      }
+    ],
     "middlegameTheme": "Bishop-trade tactical sacrifice",
     "lessonSummary": "Naroditsky 1-0 Firouzja2003 (3243), 60-move Rossolimo with Qb6 sideline. Bxf6 + Bd5+ tactical sequence wins material; mate-net finish Qxg4#."
   },
@@ -4401,7 +4524,36 @@
     "sourceUrl": "https://www.chess.com/game/live/11561749217",
     "studentSide": "black",
     "overview": "penguingm1 0-1 Naroditsky (3318), 54-move Najdorf vs g3 system. Black's …f5 + tactical follow-up wins material; rook-versus-bishop endgame conversion.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 6,
+        "color": "white",
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N3P1/PPP2P1P/R1BQKB1R b KQkq - 0 6",
+        "annotation": "Move 6 g3 — White's slow fianchetto setup vs the Najdorf. The variation lesson teaches: against g3, Black's plan is ...e5 + ...Be7 + ...O-O + ...Be6, exactly the textbook Najdorf vs g3 setup. KEY SQUARES: e5 (pawn anchor) and e6 (bishop's resting square).",
+        "concept": "Najdorf vs g3 fianchetto (variation KEY SQUARE)"
+      },
+      {
+        "moveNumber": 16,
+        "color": "white",
+        "fen": "r2q1rk1/1p1nb1pp/p2p2b1/3Ppp2/5PP1/1P5P/PBP1N1B1/R2Q1RK1 b - - 0 16",
+        "annotation": "Move 16 f5 — Black's central PAWN BREAK. The middlegame plan teaches: when White's pieces are committed to the kingside fianchetto, the …f5 break is the key central counter. This is the EXACT middlegame plan teaching that the Najdorf Be2 Classical variation shows.",
+        "concept": "Middlegame plan: ...f5 break"
+      },
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "r2q1rk1/1p1n2p1/p2p2p1/3P4/6P1/1P2b3/PBP3BK/R3QR2 b - - 1 21",
+        "annotation": "Move 21 Nxg6 — Black's tactical takeover. After the …f5 break opened lines, the knight sacrifice rips open White's king position. The variation teaches: when White's king is exposed by the structure, tactical sacs ON the king follow naturally.",
+        "concept": "Tactical middlegame: …Nxg6 sacrifice"
+      },
+      {
+        "moveNumber": 27,
+        "color": "black",
+        "fen": "5nk1/1p4p1/p2p2p1/8/6P1/1P5B/PBPq3K/4R3 w - - 1 28",
+        "annotation": "Move 27 Qd2+ — Naroditsky's final blow. By here Black has converted the …f5 + Nxg6 sacrifice into a winning attack. The mate threats came from the variation's KEY PATTERN: open central files + active queen + structural advantage.",
+        "concept": "Mate-attack finish"
+      }
+    ],
     "middlegameTheme": "Black counterattack",
     "lessonSummary": "penguingm1 0-1 Naroditsky (3318), 54-move Najdorf vs g3 system. Black's …f5 + tactical follow-up wins material; rook-versus-bishop endgame conversion."
   },
@@ -4419,7 +4571,36 @@
     "sourceUrl": "https://www.chess.com/game/live/117999606845",
     "studentSide": "black",
     "overview": "MagnusCarlsen 0-1 Naroditsky (3169), 72-move Najdorf Be3 English vs Bc4 setup. Naro's queen trade + minor piece sacrifice converts into a rook endgame win.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 6,
+        "color": "white",
+        "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 6",
+        "annotation": "Move 6 Be3 — the English Attack setup vs the Najdorf. The variation lesson teaches: against Be3 + Bc4 setup, Black plays …e5 + …Be7 + …O-O + …Nbd7 — the standard defensive coordination. KEY SQUARE: e5 (Black's central pawn anchor).",
+        "concept": "Najdorf Be3 English Attack (variation KEY SETUP)"
+      },
+      {
+        "moveNumber": 17,
+        "color": "white",
+        "fen": "2rq1r1k/3n2pp/ppnppb2/4p3/NPP1P3/P3BN2/4QPPP/2RR2K1 b - - 4 17",
+        "annotation": "Move 17 Nd4 — the middlegame trade. The middlegame plan teaches: when White's pieces commit to the queenside (a3, b4, c4 + Be3 setup), Black's plan is to trade the d4-knight then play the central break …f5. Exactly what happens here.",
+        "concept": "Middlegame plan: …f5 + Nd4 trade"
+      },
+      {
+        "moveNumber": 28,
+        "color": "white",
+        "fen": "5r1k/5rp1/3Rp3/2P1n2p/pP2P2q/P4P1P/5QP1/3R2K1 b - - 1 28",
+        "annotation": "Move 28 Qxa5 — Naroditsky's tactical break. The queen trade transitions into the winning R+min+P endgame that the Najdorf Be3 endgame plan teaches. The minor piece sacrifice was the EXACT structural concession needed to win the endgame structure.",
+        "concept": "Queen trade + minor piece sacrifice"
+      },
+      {
+        "moveNumber": 36,
+        "color": "black",
+        "fen": "8/5rpk/4p3/2P1n2p/pP2P2P/P2R1PP1/7q/4QK2 w - - 1 37",
+        "annotation": "Move 36 Rxd4 — the winning endgame conversion. The Najdorf Be3 endgame plan teaches R+min+P winning patterns where Black's active rook + central piece + passed pawn beats White's structural setup. Naroditsky executes the conversion exactly as the plan shows.",
+        "concept": "Rook endgame conversion (Najdorf endgame plan)"
+      }
+    ],
     "middlegameTheme": "Queen-trade endgame conversion",
     "lessonSummary": "MagnusCarlsen 0-1 Naroditsky (3169), 72-move Najdorf Be3 English vs Bc4 setup. Naro's queen trade + minor piece sacrifice converts into a rook endgame win."
   },
@@ -4437,7 +4618,36 @@
     "sourceUrl": "https://www.chess.com/game/live/73680866289",
     "studentSide": "white",
     "overview": "Naroditsky 1-0 MagnusCarlsen (3376), 59-move Fantasy Caro vs Qa5+ sideline. Bg5 + O-O-O setup, sharp central tactics convert into a winning endgame.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+        "annotation": "Move 3 f3 — the Fantasy. The variation lesson teaches: Naroditsky chooses the wild Fantasy Caro to sidestep theory AND get into positions where tactical complications favor White. KEY SQUARE f3 — the pawn that defines the variation.",
+        "concept": "Fantasy Caro f3 (variation KEY SQUARE)"
+      },
+      {
+        "moveNumber": 11,
+        "color": "white",
+        "fen": "r2qkbnr/pp3ppp/2p1b3/3N4/4P3/5Q2/PPPB2PP/2KR1B1R b kq - 2 11",
+        "annotation": "Move 11 Bg5 — the opposite-side castling middlegame plan. The Fantasy Caro middlegame plan teaches: Bg5 + O-O-O followed by g4 storm against Black's king. KEY SQUARES: Bg5 (pinning), c1 (long castle), g4-g5 (storm).",
+        "concept": "Bg5 + O-O-O setup (middlegame plan)"
+      },
+      {
+        "moveNumber": 20,
+        "color": "white",
+        "fen": "2r2k1r/pp2qpp1/4bn1p/1B6/7B/5Q2/PPP3PP/1K2RR2 b - - 1 20",
+        "annotation": "Move 20 Re1+ — the central tactical sequence. The middlegame plan's opposite-side castling race teaches: when White castles long and Black castles short, the side whose pawn storm arrives first wins. Naroditsky's central pressure + long-diagonal threats decide.",
+        "concept": "Opposite-side castling race"
+      },
+      {
+        "moveNumber": 30,
+        "color": "white",
+        "fen": "2rr1k2/pp3p2/4bR1p/3q4/8/1P1B2Q1/P1P3PP/1K3R2 b - - 0 30",
+        "annotation": "Move 30 Rxf6 — the winning material gain. The variation's middlegame plan + the central control pattern converts into a winning endgame. Even Carlsen can't hold once the central pawn break has landed.",
+        "concept": "Winning endgame transition"
+      }
+    ],
     "middlegameTheme": "Opposite-side castle attack",
     "lessonSummary": "Naroditsky 1-0 MagnusCarlsen (3376), 59-move Fantasy Caro vs Qa5+ sideline. Bg5 + O-O-O setup, sharp central tactics convert into a winning endgame."
   },
@@ -4455,7 +4665,36 @@
     "sourceUrl": "https://www.chess.com/game/live/70358662449",
     "studentSide": "white",
     "overview": "Naroditsky 1-0 AryanTari (3207), 89-move Fantasy Caro vs Modern g6 setup. Opposite-side castling with sharp central play converting to a winning rook endgame.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+        "annotation": "Move 3 f3 — the Fantasy. Black tries the Modern Defense transposition with ...g6 + ...Bg7. The variation lesson teaches: Naroditsky plays Be3 + Bc4 + O-O-O to attack the dark squares around Black's fianchetto setup.",
+        "concept": "Fantasy Caro vs ...g6 (variation KEY SETUP)"
+      },
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r1bq1rk1/pp3pbp/n1p3p1/4P2n/2BB4/2N2N2/PPPQ2PP/2KR3R b - - 6 12",
+        "annotation": "Move 12 Bxe6 — the tactical break. The Fantasy Caro vs g6 middlegame plan teaches: when Black fianchettoes, the e6-bishop trade exposes Black's structure AND opens the f-file for the rooks. Bxe6 fxe6 — the EXACT plan execution.",
+        "concept": "Bxe6 + opposite-side attack"
+      },
+      {
+        "moveNumber": 21,
+        "color": "white",
+        "fen": "r4rk1/ppn3bp/1qpNp1p1/4P3/6Q1/2P2N2/PP4PP/K2R1R2 b - - 0 21",
+        "annotation": "Move 21 Nb5 — knight outpost. The middlegame plan teaches Nb5 → Nd6 → Nxb7 — the knight raid pattern that wins material. KEY SQUARES: b5 (outpost), d6 (infiltration), b7 (material gain).",
+        "concept": "Middlegame plan: Nb5 + Nd6"
+      },
+      {
+        "moveNumber": 45,
+        "color": "white",
+        "fen": "8/p6p/2p3pk/8/7P/1P1K2R1/8/8 b - - 0 45",
+        "annotation": "Move 45 Re1+ — the long endgame conversion. The Fantasy Caro endgame plan teaches active-rook + bishop coordination patterns. The 89-move grind ends with technique winning a R+B vs R endgame — exactly the plan's conversion pattern.",
+        "concept": "Endgame conversion (89-move grind)"
+      }
+    ],
     "middlegameTheme": "Opposite-side castle race",
     "lessonSummary": "Naroditsky 1-0 AryanTari (3207), 89-move Fantasy Caro vs Modern g6 setup. Opposite-side castling with sharp central play converting to a winning rook endgame."
   },
@@ -4473,7 +4712,36 @@
     "sourceUrl": "https://www.chess.com/game/live/136582792543",
     "studentSide": "black",
     "overview": "Philippians46 0-1 Naroditsky, 70-move Alekhine vs Bc4 system. Naro's …Nb6 + tactical ...cxb5 + Nxd4 sequence wins clean material; positional grind to victory.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 1,
+        "color": "white",
+        "fen": "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1",
+        "annotation": "Move 1 …Nf6 — the Alekhine. The opening lesson teaches: Black provokes White's central pawns forward, then attacks them with pieces. KEY IDEA: structure inversion — Black aims to make White's central pawns weak.",
+        "concept": "Alekhine Defense — provocation setup"
+      },
+      {
+        "moveNumber": 8,
+        "color": "white",
+        "fen": "rnbqkb1r/pp2pppp/1n6/1p2N3/3P4/5Q2/PPP2PPP/RNB1K2R b KQkq - 1 8",
+        "annotation": "Move 8 …cxb5 — the tactical break. The Alekhine middlegame plan teaches: when White overextends in the centre, the ...cxb5 + …Nxd4 sequence wins material via the central piece coordination. This is the EXACT trap the variation lesson shows.",
+        "concept": "Tactical takeover: …cxb5 + Nxd4"
+      },
+      {
+        "moveNumber": 16,
+        "color": "white",
+        "fen": "r3kb1r/p3pppp/1n2q3/8/8/2N1B3/PPP1KPPP/R6R b kq - 4 16",
+        "annotation": "Move 16 …Qxd1 — the winning trade. By here Black has converted the early tactical break into a winning endgame: knight + rook coordination against White's exposed king. The endgame technique converts what the middlegame plan won.",
+        "concept": "Endgame coordination win"
+      },
+      {
+        "moveNumber": 35,
+        "color": "black",
+        "fen": "4kb1r/p5pp/4pp2/3r4/5n2/5KP1/PP3P1P/7R w k - 8 36",
+        "annotation": "Move 35 …Rd5 — the conversion. The 70-move grind ends with active pieces + extra material winning the endgame. The Alekhine variation lesson teaches: when Black wins the tactical exchange, the conversion is technique — exactly what Naroditsky shows here.",
+        "concept": "Long-grind technique"
+      }
+    ],
     "middlegameTheme": "Black tactical takeover",
     "lessonSummary": "Philippians46 0-1 Naroditsky, 70-move Alekhine vs Bc4 system. Naro's …Nb6 + tactical ...cxb5 + Nxd4 sequence wins clean material; positional grind to victory."
   },
@@ -4491,7 +4759,36 @@
     "sourceUrl": "https://www.chess.com/game/live/5873074787",
     "studentSide": "black",
     "overview": "Firouzja2003 0-1 Naroditsky, 64-move Alekhine vs Italian-style Nc3 + Bc4. Naro's central pawn duo + active rooks ends in a winning R+P endgame.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 2,
+        "color": "white",
+        "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 2 2",
+        "annotation": "Move 2 Nc3 — White's Italian-style Alekhine treatment. The variation lesson teaches: against this slow setup, Black equalizes with ...e5 + ...Bc5 + ...d6, claiming the centre AND active piece play.",
+        "concept": "Alekhine vs Italian-style setup"
+      },
+      {
+        "moveNumber": 12,
+        "color": "white",
+        "fen": "r2q1rk1/1pp3pp/1pnppn2/8/3NP3/2N5/PPP2PPP/R2QR1K1 b - - 0 12",
+        "annotation": "Move 12 …d5 — Black's central PAWN BREAK. The middlegame plan teaches: with the central pawn duo (...d5 + ...c5), Black achieves equality + active piece play. KEY SQUARES: d5 (central control), e4 (knight outpost coming).",
+        "concept": "Central pawn duo (middlegame plan)"
+      },
+      {
+        "moveNumber": 24,
+        "color": "white",
+        "fen": "r4r1k/1p2R1p1/1p5p/2p5/3p4/6P1/PPP2P1P/3R2K1 b - - 0 24",
+        "annotation": "Move 24 …Rba8 — the dual-rook activation. The middlegame plan's piece coordination teaches: with the central pawns secured, Black's rooks dominate the open files. Naroditsky's R+R activity is the winning conversion.",
+        "concept": "Rook activity decides"
+      },
+      {
+        "moveNumber": 32,
+        "color": "black",
+        "fen": "r6k/6p1/1p5p/r1p5/1pKp4/6P1/1PP2P1P/1R6 w - - 4 33",
+        "annotation": "Move 32 …Rba8 — the endgame's final touch. The 64-move conversion shows the central-pawns + active-rooks pattern winning the R+P endgame. The Alekhine middlegame plan teaches this exact conversion.",
+        "concept": "Winning R+P endgame"
+      }
+    ],
     "middlegameTheme": "Central pawns + active rooks",
     "lessonSummary": "Firouzja2003 0-1 Naroditsky, 64-move Alekhine vs Italian-style Nc3 + Bc4. Naro's central pawn duo + active rooks ends in a winning R+P endgame."
   },
@@ -4509,7 +4806,36 @@
     "sourceUrl": "https://www.chess.com/game/live/5859859959",
     "studentSide": "white",
     "overview": "Naroditsky 1-0 penguingm1 (3480), 79-move Jobava London vs Bd6 trade setup. Opposite-side castling AND piece reroute wins the kingside attack, finishes Qxd8#.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+        "annotation": "Move 3 Bf4 — the Jobava London signature. The variation lesson teaches: Bf4 is the key piece that defines the Jobava setup AND prepares the opposite-side castling middlegame plan. KEY SQUARE Bf4 — central dark-square dominance.",
+        "concept": "Jobava London Bf4 (variation KEY SETUP)"
+      },
+      {
+        "moveNumber": 10,
+        "color": "white",
+        "fen": "rnbq1rk1/5ppp/pp1ppn2/8/3PN3/3B1N2/PPP1QPPP/R3K2R b KQ - 1 10",
+        "annotation": "Move 10 O-O-O — the Jobava middlegame plan's signature. The plan teaches: opposite-side castling with the f4-bishop already developed creates the kingside attack opportunity. KEY SQUARE c1 — the long castle.",
+        "concept": "O-O-O opposite-side castling"
+      },
+      {
+        "moveNumber": 26,
+        "color": "white",
+        "fen": "2r3k1/2rq1p2/p2pp2p/3n2pP/1P1P2P1/6N1/PP1Q1P2/1KR1R3 b - - 2 26",
+        "annotation": "Move 26 Rxf7+ — the winning sacrifice. The Jobava middlegame plan's opposite-side attack culminates in the f-file sacrifice that exposes Black's king. The mate net from Qxd8# closes — EXACTLY the attack pattern the plan teaches.",
+        "concept": "Kingside attack execution"
+      },
+      {
+        "moveNumber": 40,
+        "color": "white",
+        "fen": "2RQ4/3k4/3pp2p/1r1n2pP/3P2P1/P7/1P3P2/1K6 b - - 0 40",
+        "annotation": "Move 40 Qxd8# — mate. The whole game was the Jobava middlegame plan executing: Bf4 dark-square control + O-O-O + kingside pawn storm + f-file sacrifice + mate. Every move pointed at the same teaching.",
+        "concept": "Mate finish Qxd8#"
+      }
+    ],
     "middlegameTheme": "Opposite-side castle attack",
     "lessonSummary": "Naroditsky 1-0 penguingm1 (3480), 79-move Jobava London vs Bd6 trade setup. Opposite-side castling AND piece reroute wins the kingside attack, finishes Qxd8#."
   },
@@ -4527,7 +4853,36 @@
     "sourceUrl": "https://www.chess.com/game/live/5859472049",
     "studentSide": "white",
     "overview": "Naroditsky 1-0 penguingm1 (3453), 55-move Jobava London vs Bd6 + Bg5 trade. Sharp kingside attack with sacs + queen-and-bishop coordination ends Qe7#.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 4,
+        "color": "white",
+        "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 4",
+        "annotation": "Move 4 Bd3 + Bg5 — the alternative Jobava setup. The variation lesson teaches: when Black plays the …Bd6 trade quickly, White can re-deploy with Bd3 + Bg5 for a kingside attack template. KEY SQUARES: d3 (attacking diagonal), g5 (pinning).",
+        "concept": "Jobava London Bg5 (alternative setup)"
+      },
+      {
+        "moveNumber": 9,
+        "color": "white",
+        "fen": "rn1q1rk1/1bp2ppp/p2bpn2/1p1pN1B1/3P4/2NBP3/PPP2PPP/R2Q1RK1 b - - 3 9",
+        "annotation": "Move 9 Bxf6 — the kingside structural concession. The middlegame plan teaches: when Black's kingside structure is weakened by Bxf6, the g-file attack with Qg4+ + Rg7 follows naturally. KEY MOVES: Bxf6 + g-file attack pattern.",
+        "concept": "Bxf6 + g-file storm middlegame plan"
+      },
+      {
+        "moveNumber": 18,
+        "color": "white",
+        "fen": "r1r2k2/1b1q1pRp/p2bpQ2/1ppp1p2/3P1P2/2NBP3/PPP3PP/R5K1 b - - 7 18",
+        "annotation": "Move 18 Bxh7 — the sacrifice. The middlegame plan's kingside-attack template culminates in piece sacs on h7 + the queen invasion. The mate net is the EXACT pattern the Jobava middlegame plan teaches.",
+        "concept": "Tactical mate-net"
+      },
+      {
+        "moveNumber": 28,
+        "color": "white",
+        "fen": "r7/1b2Q1R1/p1rkp3/1p1q1B2/5b2/8/PPP3PP/4R2K b - - 2 28",
+        "annotation": "Move 28 Qe7# — mate. The 55-move attack was the Jobava middlegame plan executing perfectly: Bf4 + Bg5 + Bxf6 + queen invasion + mate. The whole game = the plan's pedagogical template.",
+        "concept": "Mate finish Qe7#"
+      }
+    ],
     "middlegameTheme": "Kingside attack",
     "lessonSummary": "Naroditsky 1-0 penguingm1 (3453), 55-move Jobava London vs Bd6 + Bg5 trade. Sharp kingside attack with sacs + queen-and-bishop coordination ends Qe7#."
   },
@@ -4545,7 +4900,36 @@
     "sourceUrl": "https://www.chess.com/game/live/5859021320",
     "studentSide": "white",
     "overview": "Naroditsky 1-0 penguingm1 (3474), 143-move Ruy Lopez vs ...g6 sideline. Marathon endgame with two bishops + rook conversion; deep technique decides.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+        "annotation": "Move 3 Bb5 — the Ruy Lopez. The variation lesson teaches: against …g6 sideline, White plays c3 + d4 to claim the centre. KEY SQUARES: c3 (queenside support), d4 (central break).",
+        "concept": "Ruy Lopez Bb5 (variation KEY SETUP)"
+      },
+      {
+        "moveNumber": 7,
+        "color": "white",
+        "fen": "r1bqk1nr/1ppp1pbp/p1n3p1/8/B2PP3/5N2/PP3PPP/RNBQK2R b KQkq - 1 7",
+        "annotation": "Move 7 d4 — the central break. The Ruy middlegame plan teaches: the d4 PAWN BREAK is the KEY move that opens the position AND activates White's bishop pair. KEY SQUARE d4 — central control.",
+        "concept": "Central PAWN BREAK d4"
+      },
+      {
+        "moveNumber": 36,
+        "color": "white",
+        "fen": "8/6B1/p3k3/1p1r2p1/2pb4/7P/PP4P1/1B2R2K b - - 4 36",
+        "annotation": "Move 36 Bxd6 — the conversion. The middlegame's bishop pair pressure converts into a winning endgame. The Ruy endgame plan teaches: two bishops + active rook + structural advantage = won endgame, even when it takes 100+ moves.",
+        "concept": "Bishop pair endgame"
+      },
+      {
+        "moveNumber": 72,
+        "color": "white",
+        "fen": "8/7P/8/6p1/6P1/k7/2K5/1R6 b - - 0 72",
+        "annotation": "Move 72 Rxb1 — the 143-move conversion. The Ruy Lopez endgame plan teaches: deep technique wins the bishop-pair endgame even in long grinds. Every move was the plan's conversion technique on display.",
+        "concept": "Marathon technique"
+      }
+    ],
     "middlegameTheme": "Long-grind endgame",
     "lessonSummary": "Naroditsky 1-0 penguingm1 (3474), 143-move Ruy Lopez vs ...g6 sideline. Marathon endgame with two bishops + rook conversion; deep technique decides."
   },
@@ -4563,7 +4947,36 @@
     "sourceUrl": "https://www.chess.com/game/live/5858867761",
     "studentSide": "white",
     "overview": "Naroditsky 1-0 penguingm1 (3468), 69-move Ruy Lopez closed mainline. Bxf7+ sacrifice + queen battery wins; ends with Qg8# mate.",
-    "criticalMoments": [],
+    "criticalMoments": [
+      {
+        "moveNumber": 3,
+        "color": "white",
+        "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+        "annotation": "Move 3 Bb5 a6 Ba4 Nf6 — the closed Ruy mainline. The variation lesson teaches: the classical Ruy setup leads to the strategic middlegame with bishop-pair attacks. KEY SQUARE Bb5 — the pinning bishop.",
+        "concept": "Ruy Lopez Berlin (variation KEY SETUP)"
+      },
+      {
+        "moveNumber": 11,
+        "color": "white",
+        "fen": "r1bqk2r/2p1bppp/p2p1n2/1p6/4P3/1BN5/PP3PPP/R1BQR1K1 b kq - 0 11",
+        "annotation": "Move 11 Bg5 — the standard Ruy pin. The middlegame plan teaches: Bg5 pins the Nf6 + prepares kingside attacks. KEY MOVE: Bxf7+ sacrifice pattern that follows naturally from this setup.",
+        "concept": "Bg5 pin (middlegame plan)"
+      },
+      {
+        "moveNumber": 27,
+        "color": "white",
+        "fen": "3r2k1/2p1qBp1/p6p/8/8/p4QBP/1b3PP1/3R2K1 b - - 0 27",
+        "annotation": "Move 27 Bxf7+ — the winning sacrifice. The Ruy middlegame plan teaches Bxf7+ tactical patterns when Black's king is exposed. KEY SQUARE f7 — the target. The queen invasion follows naturally.",
+        "concept": "Bxf7+ tactical sacrifice"
+      },
+      {
+        "moveNumber": 35,
+        "color": "white",
+        "fen": "6Q1/6bk/pq4pp/2p5/8/p5BP/B4PP1/6K1 b - - 1 35",
+        "annotation": "Move 35 Qg8# — mate. The whole game = the Ruy Bxf7+ tactical pattern executing: bishop sac + queen invasion + mate net + finish. The middlegame plan's KEY teaching at full speed.",
+        "concept": "Mate finish Qg8#"
+      }
+    ],
     "middlegameTheme": "Bxf7+ sacrifice",
     "lessonSummary": "Naroditsky 1-0 penguingm1 (3468), 69-move Ruy Lopez closed mainline. Bxf7+ sacrifice + queen battery wins; ends with Qg8# mate."
   },

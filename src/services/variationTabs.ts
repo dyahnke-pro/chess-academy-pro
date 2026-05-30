@@ -191,8 +191,9 @@ const CURATED: Record<string, { test: RegExp; label: string }[]> = {
   // flagged for prod verification). The Giuoco Piano main line is the "Main
   // line" pill (showcase), exempt from this list. Two "Modern …" names exist
   // (the d3 system + the Moller Attack), so the d3 regex is specific.
+  // Main line (pill) = the modern Giuoco Pianissimo (the data spine, 2026-05-29
+  // rebuild). The classical d4 Giuoco Piano + the sharp lines are the tabs.
   'italian-game': [
-    { test: /modern d3/i, label: 'Modern' },
     { test: /two knights/i, label: 'Two Knights' },
     { test: /evans/i, label: 'Evans Gambit' },
     { test: /moller/i, label: 'Møller' },

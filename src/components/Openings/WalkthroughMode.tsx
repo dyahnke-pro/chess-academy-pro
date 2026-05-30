@@ -22,7 +22,7 @@ import { trimToSentences, isGenericAnnotationText } from '../../services/walkthr
 import { generateWalkthroughNarrations } from '../../services/walkthroughLlmNarrator';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import type { OpeningRecord, OpeningVariation, OpeningMoveAnnotation, AnalysisLine, LichessCloudEval } from '../../types';
-import { ArrowRight, Play, Pause, Info } from 'lucide-react';
+import { ArrowLeft, Play, Pause, Info } from 'lucide-react';
 
 export interface WalkthroughModeProps {
   opening: OpeningRecord;
@@ -766,10 +766,10 @@ export function WalkthroughMode({
           className="p-1.5 rounded-lg hover:bg-theme-surface"
           data-testid="walkthrough-back"
         >
-          <ArrowRight size={16} className="text-theme-text rotate-180" />
+          <ArrowLeft size={16} className="text-theme-text" />
         </button>
         <div>
-          <p className="text-sm font-semibold text-theme-text">Walkthrough: {title}</p>
+          <p className="text-sm font-semibold text-theme-text">{title}</p>
           <p className="text-xs text-theme-text-muted">{opening.eco} &middot; {opening.style}</p>
         </div>
       </div>

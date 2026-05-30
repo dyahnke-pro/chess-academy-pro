@@ -3,7 +3,7 @@
     "id": "italian-game",
     "eco": "C50",
     "name": "Italian Game",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O Re1 Nb6 Bb3 Nxd4 Nxd4 Qxd4 Qc2 c6 Ne4 Bf5 Rad1 Bxe4 Rxe4 Qf6 Qe2 c5",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a5 h3 h6 Nbd2 Be6 Bb5 Qb8 Nf1 Qa7 Be3 Bxe3 Nxe3 Ne7 a4 Ng6 d4 Nxe4 Bd3 Nf6 Bxg6 fxg6 dxe5 dxe5 Nxe5 g5 Nc2 Rfe8",
     "shortOverview": "Italian Game: develop Bc4 aiming at f7, build c3/d4 center, get rich middlegame play with active piece coordination.",
     "color": "white",
     "style": "Classical, Strategic",
@@ -36,19 +36,6 @@
         "explanation": "The Greco Attack is the solid positional alternative to the sharp Nc3 line. White recaptures with the knight on d2, accepting doubled pawns won't happen but getting smooth development. After Qb3, White pressures b7 and d5 simultaneously. The resulting positions are strategic with White keeping a slight initiative through active piece placement and the d4 pawn providing central space.",
         "frequency": "common",
         "deviationMove": 8
-      },
-      {
-        "name": "Giuoco Pianissimo: Modern d3 System",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 d3 Nf6 O-O d6 c3 a6 a4 Ba7 Nbd2 O-O Re1 Be6 Bb3 h6",
-        "explanation": "The Giuoco Pianissimo is the weapon of choice for top GMs like Caruana and So. White avoids early theoretical clashes, builds up with d3, c3, Nbd2-f1-g3, and strikes with d4 at the perfect moment. The knight maneuver Nf1-g3-f5 is a key motif — the knight on f5 exerts tremendous pressure. Black must time the ...d5 break precisely or face a slow positional squeeze.",
-        "frequency": "very common",
-        "deviationMove": 4,
-        "keyIdeas": [
-          "Re-route the queen-knight Nbd2-f1-g3 toward the f5 outpost.",
-          "Recoil the bishop to b3 to keep the f7 diagonal and dodge the trade.",
-          "Gain queenside space with a4 and tuck the bishop on a7.",
-          "Hold back d4 until every piece is coordinated, then break."
-        ]
       },
       {
         "name": "Giuoco Pianissimo: Closed Italian with a4/Ba2",
