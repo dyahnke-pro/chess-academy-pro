@@ -3726,17 +3726,27 @@
   {
     "id": "mp-carokann-two-knights",
     "openingId": "caro-kann",
-    "criticalPositionFen": "r2q1rk1/pp2bppp/2p1pn2/8/2PP4/3Q3P/PP2BPP1/R1B2RK1 w - - 1 13",
+    "criticalPositionFen": "rn2kbnr/pp3ppp/2p1p3/8/3qN3/5Q1P/PPP2PP1/R1B1KB1R w KQkq - 0 8",
     "title": "Caro Two Knights: Strike with …c5",
     "overview": "Pieces have come off and Black sits behind a granite e6-wall with no weaknesses. The plan: complete the fianchetto-free setup and break with …c5, challenging White's centre and freeing every piece for full, easy equality.",
     "pawnBreaks": [
-      "…c5 to challenge d4",
-      "…cxd4 to open the position"
+      {
+        "move": "…e6-e5 — free the position",
+        "explanation": "Once consolidated with the extra pawn, …e5 strikes the centre and opens lines for Black’s pieces.",
+        "fen": "rn2kbnr/pp3ppp/2p1p3/8/3qN3/5Q1P/PPP2PP1/R1B1KB1R w KQkq - 0 8"
+      }
     ],
     "pieceManeuvers": [
-      "…c5 the freeing break",
-      "…Nbd7-b6 to c4",
-      "…Rc8 on the c-file"
+      {
+        "piece": "Queen",
+        "route": "…Qd4-d5 — centralize and challenge e4",
+        "explanation": "The queen holds the extra pawn and offers a trade that defuses White’s gambit pressure."
+      },
+      {
+        "piece": "Knight",
+        "route": "…Ngf6 — challenge the e4-knight",
+        "explanation": "Black develops and removes White’s best-placed piece, completing a sound setup."
+      }
     ],
     "strategicThemes": [
       "Free the position with …c5",
@@ -3748,82 +3758,111 @@
     ],
     "playableLines": [
       {
-        "fen": "r2q1rk1/pp2bppp/2p1pn2/8/2PP4/3Q3P/PP2BPP1/R1B2RK1 w - - 1 13",
+        "fen": "rn2kbnr/pp3ppp/2p1p3/8/3qN3/5Q1P/PPP2PP1/R1B1KB1R w KQkq - 0 8",
         "moves": [
-          "b3",
-          "c5",
-          "Bb2",
-          "cxd4"
+          "Bd3",
+          "Nd7",
+          "c3",
+          "Qd5",
+          "Qg3",
+          "Ngf6",
+          "Nxf6+",
+          "Nxf6"
         ],
         "annotations": [
-          "b3 prepares the long-diagonal bishop.",
-          "…c5 strikes at d4 — the freeing break the Two Knights invites.",
-          "Bb2 — White completes the fianchetto; Black has the freeing break ready.",
-          "…cxd4 opens the centre on Black's terms: the d4-pawn cramps White and the half-open c-file invites the rooks, while Black carries not a single weakness. Comfortable equality with by far the more purposeful pieces."
+          "White develops with tempo, eyeing the kingside — but Black has snatched the d4-pawn and now consolidates.",
+          "…Nd7 develops and prepares to challenge the strong e4-knight; the extra pawn is held by careful piece play.",
+          "White shores up with c3, gaining a tempo on the queen.",
+          "…Qd5! Centralizing the queen, attacking the e4-knight and offering a trade that eases Black's game.",
+          "White sidesteps to g3, keeping queens on.",
+          "…Ngf6 challenges the e4-knight directly, completing development.",
+          "White trades on f6.",
+          "…Nxf6 recaptures with the knight. Black has weathered the gambit, kept the extra pawn, and reached a sound, harmonious position — the Two Knights Caro's point. Mamedyarov converted from here."
         ],
-        "title": "Caro Two Knights: Strike with …c5",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
           []
         ],
+        "title": "Holding the Pawn (Nepomniachtchi–Mamedyarov)",
         "highlights": [
           [
             {
-              "square": "b3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b2",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c5",
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "b2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d4",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c5",
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black consolidates the extra d4-pawn with careful development.",
         "sources": [
           "book:caro-kann",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ],
         "learnCues": [
-          "b3 — prepare the long bishop",
-          "c5 — the freeing break",
-          "Bb2 — develop",
-          "cxd4 — open on Black’s terms"
+          "",
+          "…Nd7 — develop, challenge e4",
+          "",
+          "…Qd5 — centralize, hit the knight",
+          "",
+          "…Ngf6 — challenge e4, develop",
+          "",
+          "…Nxf6 — recapture; extra pawn held"
         ]
       }
     ]
