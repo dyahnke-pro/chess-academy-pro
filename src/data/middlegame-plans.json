@@ -15430,88 +15430,6 @@
     ]
   },
   {
-    "id": "mp-pro-gothamchess-antisicilian-Bg5",
-    "openingId": "pro-gothamchess-anti-sicilian",
-    "criticalPositionFen": "r1bqk2r/1p2bppp/p3pn2/8/2PQ4/2N5/PP3PPP/R1B1RBK1 b kq - 2 12",
-    "title": "Piece Pressure and Queenside Expansion",
-    "overview": "White uses the Bg5 pin on f6 combined with queenside expansion (b4-b5) to create pressure. The idea is to tie down Black's pieces to defense and then break through on the queenside where White's pawn majority can create a passed pawn.",
-    "pawnBreaks": [
-      {
-        "move": "b2-b4",
-        "explanation": "b4 gains queenside space and prepares b5, attacking Black's a6 pawn. Combined with c4, it creates a powerful queenside pawn storm.",
-        "fen": "r1bqk2r/1p2bppp/p3pn2/8/2PQ4/2N5/PP3PPP/R1B1RBK1 b kq - 2 12"
-      },
-      {
-        "move": "b4-b5",
-        "explanation": "b5 attacks a6 and threatens to open the b-file. After bxa6, White has an open b-file and a potential passed a-pawn. This queenside pressure is hard to meet.",
-        "fen": "r1bqk2r/1p2bppp/p3pn2/8/2PQ4/2N5/PP3PPP/R1B1RBK1 b kq - 2 12"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc1-g5 pinning Nf6",
-        "explanation": "Bg5 pins the Nf6 to the queen. If Black plays ...h6 Be3, White maintains the bishop actively. If Black allows Bxf6, the doubled f-pawns weaken Black's structure."
-      },
-      {
-        "piece": "Rook",
-        "route": "Ra1-b1 supporting b4-b5",
-        "explanation": "Rb1 supports the b-pawn advance and is ready to use the open b-file after b5. Doubling rooks on the b-file creates overwhelming pressure."
-      }
-    ],
-    "strategicThemes": [
-      "The Bg5 pin is annoying and forces Black to spend time dealing with it. This tempo gain supports White's queenside expansion.",
-      "White's queenside majority (a2, b2, c4 vs Black's a6, b7) is the key structural advantage. Advancing these pawns creates a passed pawn.",
-      "Qd4+Bg5+Nc3 creates a triangular pressure system that's hard to break. Black's pieces are pinned, pressured, and passive.",
-      "Don't trade the dark-squared bishop unless it wins material. Bg5 is too valuable as a strategic asset."
-    ],
-    "endgameTransitions": [
-      "The queenside majority creates a winning passed pawn in endgames. White's a+b+c pawns overwhelm Black's a+b pawns.",
-      "Doubled c-pawns for Black are a permanent weakness. In endgames they restrict Black's bishop and create targets."
-    ]
-  },
-  {
-    "id": "mp-pro-gothamchess-antisicilian-d4",
-    "openingId": "pro-gothamchess-anti-sicilian",
-    "criticalPositionFen": "r1bqk2r/1p2bppp/p3pn2/8/2PQ4/2N5/PP3PPP/R1B1RBK1 b kq - 2 12",
-    "title": "Central Dominance with c4+d4",
-    "overview": "In GothamChess's Anti-Sicilian Rossolimo, White has achieved a powerful c4+Qd4 central setup. The queen on d4 controls the center and the c4 pawn supports d5 advances. The plan is to develop remaining pieces, establish a dominant center, and press on both flanks.",
-    "pawnBreaks": [
-      {
-        "move": "c4-c5",
-        "explanation": "c5 gains queenside space and cramps Black's position. It also creates the threat of c6, disrupting Black's pawn structure and creating a dangerous passed pawn.",
-        "fen": "r1bqk2r/1p2bppp/p3pn2/8/2PQ4/2N5/PP3PPP/R1B1RBK1 b kq - 2 12"
-      },
-      {
-        "move": "e2-e4",
-        "explanation": "e4 creates a massive pawn center with c4 already in place. The duo controls d5, e5, and crampes Black's pieces significantly.",
-        "fen": "r1bqk2r/1p2bppp/p3pn2/8/2PQ4/2N5/PP3PPP/R1B1RBK1 b kq - 2 12"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Bishop",
-        "route": "Bc1-f4 or Bc1-g5",
-        "explanation": "Bf4 develops actively, controlling d6 and e5. Bg5 pins the Nf6 and creates tactical tension. Either move completes development aggressively."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bf1-e2 or Bf1-d3",
-        "explanation": "The second bishop develops to support the center. Bd3 is aggressive, targeting h7. Be2 is solid, supporting future f4 or e4 advances."
-      }
-    ],
-    "strategicThemes": [
-      "White's Qd4 is the dominant piece. It controls the center, eyes the g7 pawn, and ties down Black's pieces to defense.",
-      "The Rossolimo structure (after Bxc6 dxc6) gives White better pawn structure. White has a healthy majority while Black has doubled c-pawns.",
-      "White's position is flexible — both e4 and c5 advances are possible. This flexibility makes it hard for Black to prepare.",
-      "The Nc3 controls d5 and supports both e4 and c4. It's perfectly placed and shouldn't move unless it trades for a strong Black piece."
-    ],
-    "endgameTransitions": [
-      "White's better pawn structure (healthy vs doubled) gives a lasting endgame advantage. The queenside majority can create a passed pawn.",
-      "In minor piece endgames, White's knight and bishop outperform Black's pieces because Black's doubled pawns restrict mobility."
-    ]
-  },
-  {
     "id": "mp-pro-gothamchess-carokann-c5",
     "openingId": "pro-gothamchess-caro-kann",
     "criticalPositionFen": "r2qk2r/pp1nbpp1/2p1pn1p/7P/3P4/3Q1NN1/PPPB1PP1/2KR3R w kq - 4 13",
@@ -48680,6 +48598,236 @@
           "https://www.chess.com/openings/Ponziani-Opening",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://en.wikipedia.org/wiki/Ponziani_Opening"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-antisic-g6-d4break",
+    "openingId": "pro-gothamchess-anti-sicilian",
+    "criticalPositionFen": "r1bqk1nr/p2pppbp/2p3p1/2p5/4P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq - 0 6",
+    "title": "Rossolimo vs …g6: Bxc6 Doubling + the d4 Break",
+    "overview": "His core Rossolimo method, seen in every one of his Bb5 wins. Against the …g6 fianchetto, White trades Bxc6 to saddle Black with doubled c-pawns, then builds with c3 and strikes d4 to open the centre while Black's structure is compromised. The two healthy pawn-islands versus Black's three, plus the central break, give White the lasting structural edge.",
+    "pawnBreaks": [
+      "c3-d4 the central break",
+      "d4 opening the centre"
+    ],
+    "pieceManeuvers": [
+      "Bb5xc6 doubling the c-pawns",
+      "the c3/d4 pawn duo",
+      "Nf3 supporting d4"
+    ],
+    "strategicThemes": [
+      "Double the c-pawns with Bxc6",
+      "Build c3 then strike d4",
+      "Play against the doubled pawns"
+    ],
+    "endgameTransitions": [
+      "The healthier structure wins the long game"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk1nr/p2pppbp/2p3p1/2p5/4P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq - 0 6",
+        "moves": [
+          "Nh6",
+          "d4",
+          "cxd4",
+          "cxd4"
+        ],
+        "annotations": [
+          "…Nh6 — Black develops the knight toward f5, eyeing the centre.",
+          "d4 — the break. With Black’s queenside pawns doubled, White opens the centre to exploit the superior structure.",
+          "…cxd4 — Black takes; declining leaves White a big centre.",
+          "cxd4 — White recaptures, leaving a healthy d4-pawn against Black’s doubled c-pawns. The structural edge is permanent — White has the easier game with the better pawns."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nh6 — Black eyes f5",
+          "d4 — the central break",
+          "cxd4 — Black must take",
+          "cxd4 — superior structure"
+        ],
+        "title": "Rossolimo vs …g6: Bxc6 Doubling + the d4 Break",
+        "intro": "His core Rossolimo method, seen in every one of his Bb5 wins. Against the …g6 fianchetto, White trades Bxc6 to saddle Black with doubled c-pawns, then builds with c3 and strikes d4 to open the centre while Black's structure is compromised. The two healthy pawn-islands versus Black's three, plus the central break, give White the lasting structural edge.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Rossolimo_Variation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-antisic-accel-storm",
+    "openingId": "pro-gothamchess-anti-sicilian",
+    "criticalPositionFen": "r1bqkbnr/p4ppp/2p1p3/2pp4/4P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+    "title": "Rossolimo Accelerated: the e5 Space Wedge",
+    "overview": "The Carlsen-inspired accelerated pawn storm. After Bxc6 and d3, White rams e5 to grab a central space wedge, cramping Black's position and gaining kingside attacking chances. With Black's structure already doubled from Bxc6, the e5-wedge and the resulting space give White a pleasant, aggressive game — the modern, ambitious way to handle the Rossolimo.",
+    "pawnBreaks": [
+      "e4-e5 the central space wedge",
+      "d3 supporting the centre"
+    ],
+    "pieceManeuvers": [
+      "Bb5xc6 the structural trade",
+      "Nb1-d2 supporting e4 and rerouting",
+      "Nf3 eyeing e5/d4"
+    ],
+    "strategicThemes": [
+      "Grab space with the e5 wedge",
+      "Cramp Black after the Bxc6 trade",
+      "Build a kingside initiative"
+    ],
+    "endgameTransitions": [
+      "The space and structure edge carry into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkbnr/p4ppp/2p1p3/2pp4/4P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+        "moves": [
+          "e5",
+          "Bd7",
+          "Nbd2"
+        ],
+        "annotations": [
+          "e5 — the space wedge. White rams the pawn forward, cramping Black and clamping the kingside dark squares.",
+          "…Bd7 — Black develops the bishop, trying to activate the light-squared piece behind the doubled pawns.",
+          "Nbd2 — White develops the knight toward the kingside and the e4/c4 squares, building the initiative behind the e5-wedge. The space and the doubled pawns give White the comfortable, ambitious game."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "e5 — the space wedge",
+          "Bd7 — Black develops",
+          "Nbd2 — build behind the wedge"
+        ],
+        "title": "Rossolimo Accelerated: the e5 Space Wedge",
+        "intro": "The Carlsen-inspired accelerated pawn storm. After Bxc6 and d3, White rams e5 to grab a central space wedge, cramping Black's position and gaining kingside attacking chances. With Black's structure already doubled from Bxc6, the e5-wedge and the resulting space give White a pleasant, aggressive game — the modern, ambitious way to handle the Rossolimo.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Rossolimo_Variation"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-antisic-e6-open",
+    "openingId": "pro-gothamchess-anti-sicilian",
+    "criticalPositionFen": "r1bqkb1r/1p3ppp/p3p3/3n4/3Q4/8/PPP2PPP/RNB1RBK1 b kq - 0 10",
+    "title": "Rossolimo vs …e6: the Open d4 Centre",
+    "overview": "The main …e6 line where White keeps the bishop with Bf1 and breaks with d4. After the central exchanges, White's queen recaptures on d4 with a centralised, harmonious position and a lead in development against Black's slightly loose setup. A cleaner, more classical Rossolimo treatment that plays for piece activity in an open centre.",
+    "pawnBreaks": [
+      "d2-d4 opening the centre"
+    ],
+    "pieceManeuvers": [
+      "Bb5-f1 keeping the bishop",
+      "Nb1-c3 developing with tempo",
+      "Qd4 the centralised queen"
+    ],
+    "strategicThemes": [
+      "Keep the bishop with Bf1",
+      "Open the centre with d4",
+      "Lead in development"
+    ],
+    "endgameTransitions": [
+      "The active pieces favour White in simplification"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/1p3ppp/p3p3/3n4/3Q4/8/PPP2PPP/RNB1RBK1 b kq - 0 10",
+        "moves": [
+          "Qd7",
+          "Nc3"
+        ],
+        "annotations": [
+          "…Qd7 — Black connects pieces and prepares to develop the queenside.",
+          "Nc3 — White develops with tempo, hitting the d5-knight and seizing the initiative. The queen is centralised on d4, the pieces flow out harmoniously, and White has the easier, more active game in the open centre."
+        ],
+        "arrows": [
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Qd7 — Black connects up",
+          "Nc3 — develop with tempo, hit d5"
+        ],
+        "title": "Rossolimo vs …e6: the Open d4 Centre",
+        "intro": "The main …e6 line where White keeps the bishop with Bf1 and breaks with d4. After the central exchanges, White's queen recaptures on d4 with a centralised, harmonious position and a lead in development against Black's slightly loose setup. A cleaner, more classical Rossolimo treatment that plays for piece activity in an open centre.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Rossolimo_Variation"
         ]
       }
     ]

@@ -57,6 +57,7 @@ import { getProGothamchessViennaTabPlanIds } from '../../services/proGothamchess
 import { getProGothamchessItalianTabPlanIds } from '../../services/proGothamchessItalianTabPlans';
 import { getProGothamchessLondonTabPlanIds } from '../../services/proGothamchessLondonTabPlans';
 import { getProGothamchessPonzianiTabPlanIds } from '../../services/proGothamchessPonzianiTabPlans';
+import { getProGothamchessAntiSicilianTabPlanIds } from '../../services/proGothamchessAntiSicilianTabPlans';
 import { getPetrovDefenceTabPlanIds } from '../../services/petrovDefenceMasterclassTabs';
 import { getPhilidorDefenceTabPlanIds } from '../../services/philidorDefenceMasterclassTabs';
 import { getQgdTabPlanIds } from '../../services/qgdMasterclassTabs';
@@ -1306,6 +1307,7 @@ export function OpeningDetailPage(): JSX.Element {
     getProGothamchessItalianTabPlanIds(opening.id, pircTabKey) ??
     getProGothamchessLondonTabPlanIds(opening.id, pircTabKey) ??
     getProGothamchessPonzianiTabPlanIds(opening.id, pircTabKey) ??
+    getProGothamchessAntiSicilianTabPlanIds(opening.id, pircTabKey) ??
     getPetrovDefenceTabPlanIds(opening.id, tabKey) ??
     getPhilidorDefenceTabPlanIds(opening.id, tabKey) ??
     getQgdTabPlanIds(opening.id, tabKey) ??

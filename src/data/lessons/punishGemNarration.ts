@@ -2882,6 +2882,53 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:pos-material', 'concept:pos-center', 'https://www.chess.com/openings/Ponziani-Opening'],
   },
+
+  // ── GothamChess Anti-Sicilian Rossolimo (student = WHITE) ────────────────
+  // After Bxc6 + c3, …e6?! is too slow; d4! opens the centre against the
+  // doubled pawns for a clear edge (confirmed, +1.1). 20 plies; e6@11, d4@12.
+  'pro-gothamchess-anti-sicilian:e4_c5_Nf3_Nc6_Bb5_g6_Bxc6_bxc6_O-O_Bg7_c3:e6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'e6?! Too slow — it walls in the g7-bishop and does nothing to fight White’s central break.',
+      'd4 — the punish. With Black’s queenside pawns doubled, White opens the centre to exploit the superior structure.',
+      '', 'cxd4 — White recaptures, leaving a healthy passed-pawn majority against Black’s doubled c-pawns.',
+      '', 'Bf4 — the bishop develops to a strong diagonal; White is clearly better with the cleaner pawns and the freer pieces.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '',
+      'e6 — too slow, walls in the bishop',
+      'd4 — open the centre',
+      '', 'cxd4 — superior structure',
+      '', 'Bf4 — develop, White better',
+      '', '', '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-pawn-structure', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
+  },
+
+  // After Bxc6 + c3 Nf6 Re1, …d5?! lets White grab the e5 wedge with a lasting
+  // space bind (positional, +0.8). 22 plies; d5@13, e5@14.
+  'pro-gothamchess-anti-sicilian:e4_c5_Nf3_Nc6_Bb5_g6_Bxc6_bxc6_O-O_Bg7_c3_Nf6_Re1:d5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd5?! Advancing the pawn lets White clamp the centre with a strong wedge.',
+      'e5 — the punish. The pawn jumps forward, kicking the f6-knight and grabbing a cramping space bind.',
+      '…Nd7 — the knight is shoved to a passive square.',
+      'd4 — White builds the big pawn centre, the e5/d4 duo dominating the board and burying Black’s doubled pawns.',
+      '', '', '', 'White is clearly better with the space and the structure.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd5 — lets White clamp the centre',
+      'e5 — the space wedge, kick the knight',
+      'Nd7 — shoved back',
+      'd4 — build the big centre',
+      '', '', '', 'space and structure, White better',
+      '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
