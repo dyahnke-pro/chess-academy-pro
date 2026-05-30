@@ -69,7 +69,11 @@ Ship the whole batch at once when the Vercel cap clears.
 - [ ] Next: vienna(check sharp-showcase), birds, scandinavian, four-knights
       Rubinstein, queens-gambit Anti-QGD, pirc, scotch Steinitz, petrov,
       trompowsky. Plus the deep-tail TRIMS (nimzo/qgd/grunfeld/queens-indian).
-- [DECISION NEEDED] philidor Antoshin(-1.58)/Counter-Gambit(-1.68) dubious —
-      demote to warnings or drop? (left as-is pending a call)
+- [x] philidor Antoshin — FIXED via DB: the old lesson mislabeled the dubious
+      4.dxe5 Nxe4 (-1.58) and falsely claimed "dead-level"; rebuilt on the REAL
+      Antoshin (exd4 + g6 fianchetto, -0.40, sound sharp opposite-castling).
+- [KEEP] philidor Counter-Gambit (3...f5) — can't be made sound (-1.64, refuted),
+      but already honestly framed as a sharp surprise gambit (not claiming
+      equality); teaches the practical 4.Nc3 line. Kept per anti-drop preference.
 ## Nonnegotiables unchanged: data-chosen lines, reach middlegame, traps stay,
 ## narrations change, no invented moves, no cut corners. Batch-ship.
