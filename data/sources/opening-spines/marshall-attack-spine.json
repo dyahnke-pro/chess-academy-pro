@@ -1,0 +1,396 @@
+{
+  "openingId": "marshall-attack-spine",
+  "seed": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "Nf6",
+    "O-O",
+    "Be7",
+    "Re1",
+    "b5",
+    "Bb3",
+    "O-O",
+    "c3",
+    "d5"
+  ],
+  "spine": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "Nf6",
+    "O-O",
+    "Be7",
+    "Re1",
+    "b5",
+    "Bb3",
+    "O-O",
+    "c3",
+    "d5",
+    "exd5",
+    "Nxd5",
+    "Nxe5",
+    "Nxe5",
+    "Rxe5",
+    "c6",
+    "d4",
+    "Bd6",
+    "Re1",
+    "Qh4",
+    "g3",
+    "Qh3",
+    "Be3",
+    "Bg4",
+    "Qd3",
+    "Rae8",
+    "Nd2",
+    "Re6",
+    "a4",
+    "Qh5",
+    "axb5",
+    "axb5",
+    "Nf1",
+    "Bf5",
+    "Qd2",
+    "Bh3",
+    "Bd1",
+    "Qg6",
+    "Bf3",
+    "Qf5",
+    "Qd1",
+    "h5",
+    "Ra6"
+  ],
+  "plies": 49,
+  "throughMove": 25,
+  "reachedMiddlegame": true,
+  "counts": [
+    {
+      "ply": 17,
+      "move": 9,
+      "gamesAtPosition": 5538,
+      "played": "exd5",
+      "pct": 94,
+      "playedGames": 5199,
+      "source": "masters"
+    },
+    {
+      "ply": 18,
+      "move": 9,
+      "gamesAtPosition": 5199,
+      "played": "Nxd5",
+      "pct": 99,
+      "playedGames": 5164,
+      "source": "masters"
+    },
+    {
+      "ply": 19,
+      "move": 10,
+      "gamesAtPosition": 5164,
+      "played": "Nxe5",
+      "pct": 99,
+      "playedGames": 5093,
+      "source": "masters"
+    },
+    {
+      "ply": 20,
+      "move": 10,
+      "gamesAtPosition": 5093,
+      "played": "Nxe5",
+      "pct": 100,
+      "playedGames": 5093,
+      "source": "masters"
+    },
+    {
+      "ply": 21,
+      "move": 11,
+      "gamesAtPosition": 5093,
+      "played": "Rxe5",
+      "pct": 100,
+      "playedGames": 5093,
+      "source": "masters"
+    },
+    {
+      "ply": 22,
+      "move": 11,
+      "gamesAtPosition": 5093,
+      "played": "c6",
+      "pct": 96,
+      "playedGames": 4890,
+      "source": "masters"
+    },
+    {
+      "ply": 23,
+      "move": 12,
+      "gamesAtPosition": 4890,
+      "played": "d4",
+      "pct": 54,
+      "playedGames": 2619,
+      "source": "masters"
+    },
+    {
+      "ply": 24,
+      "move": 12,
+      "gamesAtPosition": 2619,
+      "played": "Bd6",
+      "pct": 100,
+      "playedGames": 2609,
+      "source": "masters"
+    },
+    {
+      "ply": 25,
+      "move": 13,
+      "gamesAtPosition": 2609,
+      "played": "Re1",
+      "pct": 96,
+      "playedGames": 2515,
+      "source": "masters"
+    },
+    {
+      "ply": 26,
+      "move": 13,
+      "gamesAtPosition": 2734,
+      "played": "Qh4",
+      "pct": 100,
+      "playedGames": 2728,
+      "source": "masters"
+    },
+    {
+      "ply": 27,
+      "move": 14,
+      "gamesAtPosition": 2728,
+      "played": "g3",
+      "pct": 100,
+      "playedGames": 2725,
+      "source": "masters"
+    },
+    {
+      "ply": 28,
+      "move": 14,
+      "gamesAtPosition": 2724,
+      "played": "Qh3",
+      "pct": 100,
+      "playedGames": 2723,
+      "source": "masters"
+    },
+    {
+      "ply": 29,
+      "move": 15,
+      "gamesAtPosition": 2729,
+      "played": "Be3",
+      "pct": 49,
+      "playedGames": 1336,
+      "source": "masters"
+    },
+    {
+      "ply": 30,
+      "move": 15,
+      "gamesAtPosition": 1336,
+      "played": "Bg4",
+      "pct": 88,
+      "playedGames": 1176,
+      "source": "masters"
+    },
+    {
+      "ply": 31,
+      "move": 16,
+      "gamesAtPosition": 1176,
+      "played": "Qd3",
+      "pct": 100,
+      "playedGames": 1175,
+      "source": "masters"
+    },
+    {
+      "ply": 32,
+      "move": 16,
+      "gamesAtPosition": 1181,
+      "played": "Rae8",
+      "pct": 86,
+      "playedGames": 1017,
+      "source": "masters"
+    },
+    {
+      "ply": 33,
+      "move": 17,
+      "gamesAtPosition": 1017,
+      "played": "Nd2",
+      "pct": 99,
+      "playedGames": 1007,
+      "source": "masters"
+    },
+    {
+      "ply": 34,
+      "move": 17,
+      "gamesAtPosition": 1008,
+      "played": "Re6",
+      "pct": 63,
+      "playedGames": 637,
+      "source": "masters"
+    },
+    {
+      "ply": 35,
+      "move": 18,
+      "gamesAtPosition": 637,
+      "played": "a4",
+      "pct": 78,
+      "playedGames": 499,
+      "source": "masters"
+    },
+    {
+      "ply": 36,
+      "move": 18,
+      "gamesAtPosition": 499,
+      "played": "Qh5",
+      "pct": 71,
+      "playedGames": 353,
+      "source": "masters"
+    },
+    {
+      "ply": 37,
+      "move": 19,
+      "gamesAtPosition": 556,
+      "played": "axb5",
+      "pct": 96,
+      "playedGames": 535,
+      "source": "masters"
+    },
+    {
+      "ply": 38,
+      "move": 19,
+      "gamesAtPosition": 535,
+      "played": "axb5",
+      "pct": 100,
+      "playedGames": 535,
+      "source": "masters"
+    },
+    {
+      "ply": 39,
+      "move": 20,
+      "gamesAtPosition": 535,
+      "played": "Nf1",
+      "pct": 46,
+      "playedGames": 248,
+      "source": "masters"
+    },
+    {
+      "ply": 40,
+      "move": 20,
+      "gamesAtPosition": 248,
+      "played": "Bf5",
+      "pct": 87,
+      "playedGames": 216,
+      "source": "masters"
+    },
+    {
+      "ply": 41,
+      "move": 21,
+      "gamesAtPosition": 220,
+      "played": "Qd2",
+      "pct": 91,
+      "playedGames": 201,
+      "source": "masters"
+    },
+    {
+      "ply": 42,
+      "move": 21,
+      "gamesAtPosition": 202,
+      "played": "Bh3",
+      "pct": 64,
+      "playedGames": 129,
+      "source": "masters"
+    },
+    {
+      "ply": 43,
+      "move": 22,
+      "gamesAtPosition": 130,
+      "played": "Bd1",
+      "pct": 98,
+      "playedGames": 127,
+      "source": "masters"
+    },
+    {
+      "ply": 44,
+      "move": 22,
+      "gamesAtPosition": 127,
+      "played": "Qg6",
+      "pct": 99,
+      "playedGames": 126,
+      "source": "masters"
+    },
+    {
+      "ply": 45,
+      "move": 23,
+      "gamesAtPosition": 133,
+      "played": "Bf3",
+      "pct": 80,
+      "playedGames": 106,
+      "source": "masters"
+    },
+    {
+      "ply": 46,
+      "move": 23,
+      "gamesAtPosition": 106,
+      "played": "Qf5",
+      "pct": 98,
+      "playedGames": 104,
+      "source": "masters"
+    },
+    {
+      "ply": 47,
+      "move": 24,
+      "gamesAtPosition": 104,
+      "played": "Qd1",
+      "pct": 64,
+      "playedGames": 67,
+      "source": "masters"
+    },
+    {
+      "ply": 48,
+      "move": 24,
+      "gamesAtPosition": 65,
+      "played": "h5",
+      "pct": 95,
+      "playedGames": 62,
+      "source": "masters"
+    },
+    {
+      "ply": 49,
+      "move": 25,
+      "gamesAtPosition": 62,
+      "played": "Ra6",
+      "pct": 95,
+      "playedGames": 59,
+      "source": "masters"
+    }
+  ],
+  "branches": [
+    {
+      "afterMove": 11,
+      "main": "d4",
+      "mainPct": 54,
+      "alt": "d3",
+      "altGames": 1204
+    },
+    {
+      "afterMove": 14,
+      "main": "Be3",
+      "mainPct": 49,
+      "alt": "Re4",
+      "altGames": 713
+    }
+  ],
+  "floors": {
+    "COMMON": 60,
+    "LOWFLOOR": 8,
+    "MIDGAME_PLY": 20
+  },
+  "generatedAt": "2026-05-30T21:28:29.012Z"
+}
