@@ -1434,7 +1434,7 @@
       },
       {
         "name": "Steinitz Variation",
-        "pgn": "e4 e5 Nf3 Nf6 d4 Nxe4 Bd3 d5 Nxe5 Nd7 Nxd7 Bxd7 O-O Bd6 c4 c6 Nc3 Nxc3 bxc3 O-O Qh5 g6 Qh6 f6 Rb1 Bc7 Re1",
+        "pgn": "e4 e5 Nf3 Nf6 d4 Nxe4 Bd3 d5 Nxe5 Nd7 Nxd7 Bxd7 O-O Bd6 c4 c6 Nc3 Nxc3 bxc3 O-O cxd5 cxd5 Qh5 g6 Qxd5 Qc7 Bh6 Rfd8 Qg5 Qxc3",
         "explanation": "The Steinitz Variation with 3.d4 is an older but still fully playable line where White immediately opens the center. Black captures on e4 and builds a solid center with ...d5, then exchanges knights with ...Nd7 to simplify. The ...Bd6 development is natural and after ...O-O, Black's position is compact and hard to break down. White's Qh5 looks aggressive but after ...g6, the queen must retreat or trade, and the resulting positions are balanced with clear plans for both sides."
       },
       {
