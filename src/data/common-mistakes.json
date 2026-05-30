@@ -2242,5 +2242,43 @@
         "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
       ]
     }
+  ],
+  "pro-gothamchess-stafford-refute": [
+    {
+      "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5",
+      "wrongMove": "Nc3",
+      "correctMove": "d3",
+      "explanation": "Here is the heart of the Stafford. The safe refutation is d3! — opening the bishop and preparing Be2 to trade off Black's attackers, keeping the extra pawn with no risk. The natural-looking Nc3 walks into the famous trap …Bg4! and …Nd4 with a vicious attack on f3 and the king. Against the Stafford, play d3 and develop calmly — never grab more or develop carelessly into the gambit's tricks.",
+      "shortNarration": "d3 — the calm Stafford refutation",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Stafford-Gambit",
+        "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+      ]
+    },
+    {
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+      "wrongMove": "h3",
+      "correctMove": "Be2",
+      "explanation": "After 5…Bc5, the careful move is Be2! — preparing to meet …Ng4 by simply trading the knight. The natural h3 (stopping …Ng4) actually walks into …Nxe4! 7.dxe4 Bxf2+ winning the queen with a discovered attack, a classic Stafford trap. Don't weaken the kingside with h3 — develop with Be2 and let Black's attack hit a brick wall.",
+      "shortNarration": "Be2 — develop safely, avoid the trap",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Stafford-Gambit",
+        "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/ppp2ppp/2p5/4P3/4n3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 6",
+      "wrongMove": "d3",
+      "correctMove": "d4",
+      "explanation": "In the ambitious e5 line, after …Ne4 the strong move is d4! — building the big pawn centre and keeping the extra pawn with a space advantage. The timid d3 kicks the knight but gives up the chance to clamp the centre, letting Black free his position. When you've committed to e5, follow with d4 to build a dominating centre against the Stafford.",
+      "shortNarration": "d4 — build the big centre",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Stafford-Gambit",
+        "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+      ]
+    }
   ]
 }

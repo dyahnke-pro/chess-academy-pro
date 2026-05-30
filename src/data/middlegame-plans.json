@@ -15676,88 +15676,6 @@
     ]
   },
   {
-    "id": "mp-pro-gothamchess-stafford-refute-attack",
-    "openingId": "pro-gothamchess-stafford-refute",
-    "criticalPositionFen": "r1b1k2r/ppp2pp1/2pq4/2b5/4P1p1/3P4/PPPNBPP1/R1BQ1RK1 b kq - 1 10",
-    "title": "Exploit Black's Weak King",
-    "overview": "Black hasn't castled and the king is stuck in the center. White can exploit this by opening lines quickly with d4 and developing with tempo. If Black tries ...O-O, the h-file is already compromised. White should play energetically to punish Black's gambited pawn.",
-    "pawnBreaks": [
-      {
-        "move": "f2-f3",
-        "explanation": "f3 challenges the advanced g4 pawn and opens the f-file. After fxg4, the f-file opens for White's rook, creating direct threats against Black's f7 pawn and uncastled king.",
-        "fen": "r1b1k2r/ppp2pp1/2pq4/2b5/4P1p1/3P4/PPPNBPP1/R1BQ1RK1 b kq - 1 10"
-      },
-      {
-        "move": "b2-b4",
-        "explanation": "b4 attacks the Bc5 with tempo and gains queenside space. After ...Bb6, White plays a4-a5 driving the bishop further back and opening the a-file.",
-        "fen": "r1b1k2r/ppp2pp1/2pq4/2b5/4P1p1/3P4/PPPNBPP1/R1BQ1RK1 b kq - 1 10"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Queen",
-        "route": "Qd1-c2 or Qd1-b3",
-        "explanation": "Qb3 targets b7 and f7 simultaneously — two weaknesses in Black's uncastled position. Qc2 is more restrained, supporting e4 and eyeing the kingside."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Be2-f3 (after f3 gxf3)",
-        "explanation": "If the g4 pawn is captured on f3, the Be2 recaptures and becomes active on the a8-h1 diagonal, adding pressure to Black's position."
-      }
-    ],
-    "strategicThemes": [
-      "An uncastled king is a target. White should open lines and develop aggressively to exploit Black's king position.",
-      "Black's g4 pawn looks aggressive but is actually a weakness — it's overextended and creates holes on f3 and h3.",
-      "Material advantage + development advantage = overwhelming position. Play actively and don't give Black time to consolidate.",
-      "If Black castles kingside, the h-file is already weakened (h-pawn was traded). White can attack down the h-file with rooks."
-    ],
-    "endgameTransitions": [
-      "The material advantage means any simplification favors White. Don't fear trades — each exchange makes the extra pawn more significant.",
-      "Even if the attack doesn't deliver checkmate, it will win more material, making the endgame trivial."
-    ]
-  },
-  {
-    "id": "mp-pro-gothamchess-stafford-refute-dev",
-    "openingId": "pro-gothamchess-stafford-refute",
-    "criticalPositionFen": "r1b1k2r/ppp2pp1/2pq4/2b5/4P1p1/3P4/PPPNBPP1/R1BQ1RK1 b kq - 1 10",
-    "title": "Consolidate the Extra Pawn",
-    "overview": "White has refuted the Stafford Gambit and emerged with an extra pawn and better development. The plan is simple: consolidate, develop remaining pieces, and convert the material advantage. White should avoid tactical tricks Black is hoping for and play solidly with Be3, Nc4, and slow improvement.",
-    "pawnBreaks": [
-      {
-        "move": "c2-c3",
-        "explanation": "c3 solidifies the center, prepares d4, and gives White a stable pawn structure. It removes any tricks involving ...Bb4 and creates a flexible center.",
-        "fen": "r1b1k2r/ppp2pp1/2pq4/2b5/4P1p1/3P4/PPPNBPP1/R1BQ1RK1 b kq - 1 10"
-      },
-      {
-        "move": "d3-d4",
-        "explanation": "After c3, d4 seizes the center and drives back the Bc5. White gets a dominant d4+e4 center with all pieces well-developed — exactly the opposite of what the Stafford hopes for.",
-        "fen": "r1b1k2r/ppp2pp1/2pq4/2b5/4P1p1/3P4/PPPNBPP1/R1BQ1RK1 b kq - 1 10"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nd2-c4 or Nd2-f1-e3",
-        "explanation": "Nc4 attacks the Qd6 and controls key squares. Alternatively Nf1-e3 targets d5 and f5. Either way the knight finds an active post."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bc1-e3",
-        "explanation": "Be3 develops the last minor piece, supports d4, and challenges the Bc5. Simple, effective development."
-      }
-    ],
-    "strategicThemes": [
-      "Do NOT get tricky. White is up material and should play boring, solid chess. Black's only hope is tactical complications.",
-      "Exchange pieces when possible. Every trade brings White closer to a won endgame where the extra pawn decides.",
-      "Control the center with d4+e4. This denies Black any counterplay and creates a dominant position.",
-      "Watch for ...Bxf2+ tricks. Keep the king safe and don't allow tactical shots."
-    ],
-    "endgameTransitions": [
-      "An endgame with an extra pawn is winning for White. Aim for piece exchanges to simplify into a clearly won ending.",
-      "The bishop pair in an endgame with extra material is crushing. Black has no compensation once pieces come off."
-    ]
-  },
-  {
     "id": "mp-progothamchess-caro-advance-h4-pin",
     "openingId": "pro-gothamchess-caro-advance-white",
     "criticalPositionFen": "rn1qkbnr/pp2ppp1/2p5/3pPbBp/3P3P/8/PPP2PP1/RN1QKBNR b KQkq - 1 5",
@@ -49222,6 +49140,180 @@
           "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-stafford-consolidate",
+    "openingId": "pro-gothamchess-stafford-refute",
+    "criticalPositionFen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
+    "title": "Stafford Refuted: d3 + Be2, Trade Off the Attack",
+    "overview": "The refutation he plays every time. Black gambits a pawn for a dangerous-looking attack, but White stays calm: d3 blunts the bishop, Be2 prepares to trade off Black's attacking pieces, and when Black lunges …Ng4, White simply takes it. After the queens come off, White is a clean pawn up with no weaknesses — the Stafford's traps only work if White panics. Trade, consolidate, and win the endgame.",
+    "pawnBreaks": [
+      "d3 blunting the attack",
+      "g3 securing the kingside"
+    ],
+    "pieceManeuvers": [
+      "Bf1-e2 preparing to trade the attackers",
+      "Be2xg4 removing the attacking knight",
+      "the consolidating queen trade"
+    ],
+    "strategicThemes": [
+      "Stay calm against the gambit",
+      "Trade off the attacking pieces",
+      "Convert the extra pawn"
+    ],
+    "endgameTransitions": [
+      "The extra pawn wins the simplified ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
+        "moves": [
+          "Ng4",
+          "Bxg4",
+          "Qh4",
+          "g3"
+        ],
+        "annotations": [
+          "…Ng4 — Black lunges the knight at f2 and h2, the typical Stafford attacking try.",
+          "Bxg4 — White calmly removes the attacker; there is no need to fear the gambit.",
+          "…Qh4 — Black throws the queen at the kingside, hunting for a trap.",
+          "g3 — White blunts the queen and trades everything off. Once the attackers are gone, White is a clean pawn up with a safe king — the Stafford refuted by simple, calm consolidation."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Ng4 — the Stafford lunge",
+          "Bxg4 — calmly take the attacker",
+          "Qh4 — Black hunts a trap",
+          "g3 — blunt the queen, consolidate"
+        ],
+        "title": "Stafford Refuted: d3 + Be2, Trade Off the Attack",
+        "intro": "The refutation he plays every time. Black gambits a pawn for a dangerous-looking attack, but White stays calm: d3 blunts the bishop, Be2 prepares to trade off Black's attacking pieces, and when Black lunges …Ng4, White simply takes it. After the queens come off, White is a clean pawn up with no weaknesses — the Stafford's traps only work if White panics. Trade, consolidate, and win the endgame.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Stafford-Gambit",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-stafford-e5space",
+    "openingId": "pro-gothamchess-stafford-refute",
+    "criticalPositionFen": "r1bqkb1r/ppp2ppp/2p2n2/4P3/8/8/PPPP1PPP/RNBQKB1R b KQkq - 0 5",
+    "title": "Stafford 4…dxc6 5.e5: the Space Wedge",
+    "overview": "The ambitious refutation: instead of d3, White pushes e5 immediately to kick the f6-knight and grab a central space wedge. After …Ne4, White plays d4 to build a broad pawn centre and develop with Be3, keeping the extra pawn and a space advantage while Black's knight on e4 sits without support. A more aggressive way to punish the Stafford.",
+    "pawnBreaks": [
+      "e4-e5 the space wedge",
+      "d3-d4 building the centre"
+    ],
+    "pieceManeuvers": [
+      "Bc1-e3 supporting the centre",
+      "the e5/d4 pawn duo",
+      "Nb1-d2 challenging the e4-knight"
+    ],
+    "strategicThemes": [
+      "Kick the knight with e5",
+      "Build the d4 centre",
+      "Keep the extra pawn and the space"
+    ],
+    "endgameTransitions": [
+      "The extra pawn and space win the long game"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/ppp2ppp/2p2n2/4P3/8/8/PPPP1PPP/RNBQKB1R b KQkq - 0 5",
+        "moves": [
+          "Ne4",
+          "d4",
+          "Bc5",
+          "Be3"
+        ],
+        "annotations": [
+          "…Ne4 — the knight jumps forward, the only active square after the e5-push.",
+          "d4 — White builds the big pawn centre, the e5/d4 duo cramping Black and supporting the advance.",
+          "…Bc5 — Black develops, hitting the d4-pawn.",
+          "Be3 — White defends d4 and develops with tempo. With the extra pawn, the central space wedge, and the better structure, White has a comfortable, ambitious game against the Stafford."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Ne4 — the only active square",
+          "d4 — build the centre",
+          "Bc5 — Black hits d4",
+          "Be3 — defend, develop with tempo"
+        ],
+        "title": "Stafford 4…dxc6 5.e5: the Space Wedge",
+        "intro": "The ambitious refutation: instead of d3, White pushes e5 immediately to kick the f6-knight and grab a central space wedge. After …Ne4, White plays d4 to build a broad pawn centre and develop with Be3, keeping the extra pawn and a space advantage while Black's knight on e4 sits without support. A more aggressive way to punish the Stafford.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Stafford-Gambit",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
         ]
       }
     ]

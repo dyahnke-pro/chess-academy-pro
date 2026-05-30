@@ -3053,6 +3053,29 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
   },
+
+  // ── GothamChess Stafford Refutation (student = WHITE) ────────────────────
+  // 4…dxc6 5.e5 …Ng4?! the knight lunges to the rim; d4 + h3 chase it and
+  // White consolidates a clear edge (confirmed, +1.8). 18 plies; Ng4@9, d4@10.
+  'pro-gothamchess-stafford-refute:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nxc6_dxc6_e5:Ng4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '',
+      'Ng4?! The knight lunges toward f2, the typical Stafford bluff — but here it just lands on a rim square with no follow-up.',
+      'd4 — White builds the big centre, calmly ignoring the knight and grabbing space.',
+      '', 'h3 — White questions the g4-knight, which must retreat to the awful h6-square.',
+      '', 'Bxh6 — White trades to wreck Black’s kingside pawns; a clean pawn up with the better structure. The Stafford bluff is called.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '',
+      'Ng4 — the Stafford bluff, no follow-up',
+      'd4 — build the centre, grab space',
+      '', 'h3 — chase the knight to h6',
+      '', 'Bxh6 — wreck the pawns, a pawn up',
+      '', '', '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-pawn-structure', 'https://www.chess.com/openings/Stafford-Gambit'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
