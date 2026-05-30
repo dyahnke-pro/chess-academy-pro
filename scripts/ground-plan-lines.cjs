@@ -32,6 +32,7 @@ const targetPlies = new Set(byPly.keys());
 console.error(`short plans: ${shortCount} | distinct positions: ${allKeys.size} | target plies: ${[...targetPlies].sort((a, b) => a - b).join(',')}`);
 
 const result = {};
+const candidates = {};
 const grounded = new Set();
 
 function movesFromPgn(pgn) {
@@ -59,9 +60,17 @@ function consider(sans, meta) {
     const A = Math.max(H, 24);
     if (A + 8 > len) continue;
     const next8 = sans.slice(A, A + 8);
+    const endFen = fens[A + 8];
     for (const planId of m.get(k)) {
+      // collect up to 8 candidate real games per plan; an eval pass picks the
+      // one where the student is genuinely on top at move ~17.
+      if (!candidates[planId]) candidates[planId] = [];
+      if (candidates[planId].length < 8 && meta.preferred) {
+        candidates[planId].push({ fen: fens[A], anchorPly: A, matchPly: H, moves: next8, endFen, ...meta });
+      }
+      // keep a fallback (first match, any outcome) too
       if (!result[planId] || (meta.preferred && !result[planId].preferred)) {
-        result[planId] = { fen: fens[A], anchorPly: A, matchPly: H, moves: next8, ...meta };
+        result[planId] = { fen: fens[A], anchorPly: A, matchPly: H, moves: next8, endFen, ...meta };
       }
       grounded.add(planId);
     }
@@ -105,6 +114,7 @@ if (fs.existsSync(arch)) {
 }
 
 fs.mkdirSync('audit-reports', { recursive: true });
+fs.writeFileSync('audit-reports/grounded-plan-candidates.json', JSON.stringify(candidates));
 fs.writeFileSync('audit-reports/grounded-plan-lines.json', JSON.stringify(result, null, 2));
 const ungrounded = [...allKeys].filter((k) => { for (const m of byPly.values()) if (m.has(k)) for (const id of m.get(k)) if (!result[id]) return true; return false; });
 console.error(`FINAL: grounded ${grounded.size}/${shortCount} plans | ungrounded positions: ${allKeys.size - [...allKeys].filter((k) => { for (const m of byPly.values()) if (m.has(k) && m.get(k).some((id) => result[id])) return true; return false; }).length}`);
