@@ -33,7 +33,7 @@ export const PRO_GOTHAMCHESS_ANTI_SICILIAN_LESSON: LessonScript = {
       arrows: [{ from: 'b5', to: 'c6', color: VIS }],
       highlights: [{ square: 'b5', color: KEY }, { square: 'c6', color: SOFT }],
       say:
-        "Against the Sicilian, Levy refuses to memorise a hundred lines of the Open. Instead — Bb5, the Rossolimo. We pin our sights on the c6-knight, threatening to trade it off and wreck Black's pawns. This one move sidesteps the entire theory swamp and lands us in a position WE understand better than our opponent.",
+        "Against the Sicilian, Levy refuses to memorise a hundred lines of the Open. Instead — Bb5, the Rossolimo. We train the bishop on the c6-knight, threatening to trade it off and wreck Black's pawns. This one move sidesteps the entire theory swamp and lands us in a position WE understand better than our opponent.",
       sayShort: 'Bb5 — the Rossolimo.',
     }),
     b({

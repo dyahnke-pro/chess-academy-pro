@@ -90,7 +90,7 @@ export const PRO_GOTHAMCHESS_ITALIAN_LESSON: LessonScript = {
       arrows: [{ from: 'c4', to: 'd5', color: VIS }],
       highlights: [{ square: 'd5', color: KEY }],
       say:
-        "exd5, and Black recaptures with the knight on d5. Now the bishop on c4 bears straight down on that knight, pinning it to the heart of Black's position. We have the isolated d4-pawn, but in return: open lines, the bishop pair gone but the more active army, and a target on Black's king.",
+        "exd5, and Black recaptures with the knight on d5. Now the bishop on c4 bears straight down that diagonal at the knight and the f7-square behind it. We have the isolated d4-pawn, but in return: open lines, the dark bishops already traded off, and the more active army aimed at Black's king.",
       sayShort: 'exd5 — the IQP arises.',
     }),
     b({
