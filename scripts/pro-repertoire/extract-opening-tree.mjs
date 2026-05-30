@@ -76,6 +76,13 @@ const OPENINGS = {
     minPrefix: ['e4', 'd5'],
     maxDepth: 80,
   },
+  'qgd': {
+    name: 'Queen Gambit Declined',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['d4', 'd5', 'c4', 'e6'],
+    maxDepth: 80,
+  },
   'rossolimo': {
     name: 'Anti-Sicilian Rossolimo/Moscow',
     color: 'white',

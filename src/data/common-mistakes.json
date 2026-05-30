@@ -2432,5 +2432,43 @@
         "https://en.wikipedia.org/wiki/Scandinavian_Defense"
       ]
     }
+  ],
+  "pro-gothamchess-qgd": [
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 4",
+      "wrongMove": "dxc4",
+      "correctMove": "Be7",
+      "explanation": "In the QGD, the whole point is to keep the centre solid: …Be7! breaks the pin and prepares …O-O and …h6 with a rock-solid structure. Grabbing the pawn with …dxc4 surrenders the centre and invites e4 with a big space advantage for White — that's the Queen's Gambit Accepted, a different opening. The QGD keeps the …d5/…e6 chain intact: develop with …Be7 and stay solid.",
+      "shortNarration": "Be7 — keep the QGD solid, hold d5",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/Queens-Gambit-Declined",
+        "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+      ]
+    },
+    {
+      "fen": "rnbq1rk1/1pp2ppp/p2b1n2/3p4/3P4/2NBP1B1/PP3PPP/R2QK1NR b KQ - 4 8",
+      "wrongMove": "b6",
+      "correctMove": "Re8",
+      "explanation": "In the Carlsbad/Exchange structure, Black's freeing plan is …Re8 followed by the …Nbd7-f8-g6 reroute and the …e5 break — the classic antidote to White's minority attack. Playing …b6 weakens the queenside light squares (c6) right where White wants to attack with b4-b5. Don't help the minority attack: play …Re8, reroute the knight, and prepare …e5 to free the position.",
+      "shortNarration": "Re8 — prepare the freeing …e5 break",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/Queens-Gambit-Declined",
+        "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+      ]
+    },
+    {
+      "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PPQ1PPPP/R1B1KBNR b KQkq - 3 4",
+      "wrongMove": "Nc6",
+      "correctMove": "d5",
+      "explanation": "In the Nimzo-QGD with 4.Qc2, his choice is …d5! — striking the centre and transposing into a favourable QGD structure where the …Bb4 pin and the …d5 chain give Black a comfortable game. The passive …Nc6 blocks the c-pawn and lets White expand with a3 and e4 unchallenged. Strike the centre with …d5 and reach the solid QGD/Nimzo structure he wins with.",
+      "shortNarration": "d5 — strike the centre, reach the QGD",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/Queens-Gambit-Declined",
+        "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+      ]
+    }
   ]
 }

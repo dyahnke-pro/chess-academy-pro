@@ -15512,88 +15512,6 @@
     ]
   },
   {
-    "id": "mp-pro-gothamchess-qgd-c5",
-    "openingId": "pro-gothamchess-qgd",
-    "criticalPositionFen": "r1b2rk1/pp2bppp/2n1pn2/q2p4/2P2B2/P1N1PN2/1PQ2PPP/3RKB1R w K - 3 11",
-    "title": "Queenside Freeing with ...c5 or ...dxc4",
-    "overview": "In GothamChess's QGD, Black has a solid classical setup. The primary plan is to free the position with either ...c5 (challenging d4) or ...dxc4 followed by rapid piece development. The Qa5 is already active, and Black aims to equalize and then play for a slight advantage with the better pawn structure.",
-    "pawnBreaks": [
-      {
-        "move": "d5xc4",
-        "explanation": "Taking on c4 resolves the central tension and frees Black's position. After ...dxc4 Bxc4, Black can develop with ...b5, ...Bb7, and ...Nd5. Black gets easy development at the cost of giving White the bishop pair.",
-        "fen": "r1b2rk1/pp2bppp/2n1pn2/q2p4/2P2B2/P1N1PN2/1PQ2PPP/3RKB1R w K - 3 11"
-      },
-      {
-        "move": "e6-e5",
-        "explanation": "A more ambitious break. ...e5 challenges the center directly. After dxe5 Nxe5 or ...d4, Black gets active piece play and open lines for the bishops.",
-        "fen": "r1b2rk1/pp2bppp/2n1pn2/q2p4/2P2B2/P1N1PN2/1PQ2PPP/3RKB1R w K - 3 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "...Nf6-d5 targeting Bf4",
-        "explanation": "Nd5 attacks the Bf4 and reaches a dominant central outpost. If White trades Nxd5, ...exd5 gives Black an active IQP position. If the bishop retreats, Black has a well-placed knight."
-      },
-      {
-        "piece": "Bishop",
-        "route": "...Bc8-d7-b5 or ...Bc8-e6",
-        "explanation": "The light-squared bishop develops to d7 (supporting ...b5) or directly to e6 (supporting d5 and targeting c4). Either way it becomes active."
-      }
-    ],
-    "strategicThemes": [
-      "The QGD is about equality through solid play. Black doesn't need to win — just equalize and the position plays itself.",
-      "The Qa5 is actively placed but could become a target. Be ready to retreat it to c7 or d8 if White threatens a3+b4.",
-      "Black's pawn structure (d5+e6) is solid but potentially passive. The ...e5 or ...dxc4 break is essential to avoid being cramped.",
-      "When in doubt, develop. Every piece that reaches an active square brings Black closer to equality."
-    ],
-    "endgameTransitions": [
-      "The QGD leads to excellent endgames for Black. The solid pawn structure and absence of weaknesses make Black's position nearly impregnable.",
-      "After ...dxc4 and piece exchanges, Black often has the better minor piece (knight on d5 vs bishop) which is ideal for endgames."
-    ]
-  },
-  {
-    "id": "mp-pro-gothamchess-qgd-Nd5",
-    "openingId": "pro-gothamchess-qgd",
-    "criticalPositionFen": "r1b2rk1/pp2bppp/2n1pn2/q2p4/2P2B2/P1N1PN2/1PQ2PPP/3RKB1R w K - 3 11",
-    "title": "Knight Centralization on d5",
-    "overview": "Black's most direct plan: put the knight on d5 and dominate the center. The Nd5 attacks the Bf4, controls c3/b4/e3/f4, and becomes an immovable outpost if White can't challenge it. This centralized knight is worth more than a bishop in many of these structures.",
-    "pawnBreaks": [
-      {
-        "move": "c6xd5 (after cxd5)",
-        "explanation": "If White plays cxd5, recapturing with ...exd5 gives Black an IQP but active pieces. The open e-file and active Nd5 compensate for the isolated pawn.",
-        "fen": "r1b2rk1/pp2bppp/2n1pn2/q2p4/2P2B2/P1N1PN2/1PQ2PPP/3RKB1R w K - 3 11"
-      },
-      {
-        "move": "b7-b5",
-        "explanation": "After ...Nd5, ...b5 gains queenside space and threatens ...b4, driving away White's Nc3 — the only piece that can challenge the Nd5.",
-        "fen": "r1b2rk1/pp2bppp/2n1pn2/q2p4/2P2B2/P1N1PN2/1PQ2PPP/3RKB1R w K - 3 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "...Nf6-d5 (the key move)",
-        "explanation": "Nd5 is the whole plan. It attacks Bf4, dominates the center, and can't be removed easily. After ...Nd5, Black's position is comfortable to excellent."
-      },
-      {
-        "piece": "Bishop",
-        "route": "...Be7-f6 controlling dark squares",
-        "explanation": "After ...Nd5 and the Bf4 retreats, ...Bf6 takes over the dark squares. The bishop on f6 controls d4, e5, and supports the knight."
-      }
-    ],
-    "strategicThemes": [
-      "A centralized knight on d5 is Black's strategic goal. Once achieved, Black's position is at minimum equal.",
-      "The Bf4 is White's most active piece. Challenging it with ...Nd5 forces it to retreat, improving Black's position.",
-      "After ...Nd5, ...Bf6, and ...Rd8, Black has a perfectly harmonious setup with no weaknesses.",
-      "Do not rush. The QGD rewards patient play. Get the knight to d5, improve the remaining pieces, and wait for White to create weaknesses."
-    ],
-    "endgameTransitions": [
-      "A Nd5 vs bishop endgame is excellent for Black. The knight controls central squares and can attack pawns on both flanks.",
-      "Trading queens with the knight on d5 is ideal — it removes White's tactical chances while Black's positional advantage persists."
-    ]
-  },
-  {
     "id": "mp-progothamchess-caro-advance-h4-pin",
     "openingId": "pro-gothamchess-caro-advance-white",
     "criticalPositionFen": "rn1qkbnr/pp2ppp1/2p5/3pPbBp/3P3P/8/PPP2PP1/RN1QKBNR b KQkq - 1 5",
@@ -50337,6 +50255,170 @@
           "https://www.chess.com/openings/Scandinavian-Defense",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-qgd-carlsbad-e5",
+    "openingId": "pro-gothamchess-qgd",
+    "criticalPositionFen": "rnbq1rk1/1pp2ppp/p2b1n2/3p4/3P4/2NBP1B1/PP3PPP/R2QK1NR b KQ - 4 8",
+    "title": "QGD Carlsbad: …Nbd7-f8-g6 + the …e5 Break",
+    "overview": "His main QGD plan against the Exchange/Carlsbad structure. After the symmetrical …Bd6 trade and …O-O, Black reroutes the knight Nbd7-f8-g6 toward the kingside and prepares the freeing …e5 break — the classic defense to White's minority attack. With the rook on e8 supporting …e5 and the pieces harmoniously placed, Black equalizes and seizes the initiative in the centre.",
+    "pawnBreaks": [
+      "…e6-e5 the freeing break",
+      "…c6 solidifying"
+    ],
+    "pieceManeuvers": [
+      "…Nb8-d7-f8-g6 the kingside reroute",
+      "…Rf8-e8 supporting …e5",
+      "…Bc8-f5 the active bishop"
+    ],
+    "strategicThemes": [
+      "Reroute …Nd7-f8-g6",
+      "Support …e5 with …Re8",
+      "Break free with …e5"
+    ],
+    "endgameTransitions": [
+      "The freed position equalizes into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/1pp2ppp/p2b1n2/3p4/3P4/2NBP1B1/PP3PPP/R2QK1NR b KQ - 4 8",
+        "moves": [
+          "Re8",
+          "Nge2",
+          "Nbd7"
+        ],
+        "annotations": [
+          "…Re8 — Black places the rook on e8, supporting the coming …e5 freeing break.",
+          "Nge2 — White develops the knight, completing the setup.",
+          "…Nbd7 — Black starts the classic reroute: the knight heads for f8 and g6, eyeing the kingside and clearing the way for …e5. With the rook on e8 and the pieces harmonious, Black frees the position and equalizes against the Carlsbad structure."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Re8 — support …e5",
+          "Nge2 — White develops",
+          "Nbd7 — reroute toward g6 and …e5"
+        ],
+        "title": "QGD Carlsbad: …Nbd7-f8-g6 + the …e5 Break",
+        "intro": "His main QGD plan against the Exchange/Carlsbad structure. After the symmetrical …Bd6 trade and …O-O, Black reroutes the knight Nbd7-f8-g6 toward the kingside and prepares the freeing …e5 break — the classic defense to White's minority attack. With the rook on e8 supporting …e5 and the pieces harmoniously placed, Black equalizes and seizes the initiative in the centre.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/Queens-Gambit-Declined",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-qgd-tartakower-b6",
+    "openingId": "pro-gothamchess-qgd",
+    "criticalPositionFen": "rnbqk2r/ppp2pp1/4pb1p/3p4/2PP4/2N2N2/PP2PPPP/R2QKB1R w KQkq - 0 7",
+    "title": "QGD Tartakower: …b6 + …Bb7 Fianchetto",
+    "overview": "Against the Nf3+Bg5 lines, his plan is the rock-solid Tartakower: after …h6 and …Bxf6, Black plays …b6 and fianchettoes the light-squared bishop on b7, training it on the long diagonal and the e4-square. Combined with …c5 to challenge the centre, Black reaches a harmonious, well-tested setup where the bishop pair and the solid structure give full equality and winning chances.",
+    "pawnBreaks": [
+      "…c5 challenging the centre",
+      "…b6 preparing the fianchetto"
+    ],
+    "pieceManeuvers": [
+      "…b6 + …Bc8-b7 the fianchetto",
+      "the bishop pair after …Bxf6",
+      "…c5 freeing the position"
+    ],
+    "strategicThemes": [
+      "Fianchetto with …b6 and …Bb7",
+      "Use the bishop pair",
+      "Challenge the centre with …c5"
+    ],
+    "endgameTransitions": [
+      "The bishop pair favours Black into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/ppp2pp1/4pb1p/3p4/2PP4/2N2N2/PP2PPPP/R2QKB1R w KQkq - 0 7",
+        "moves": [
+          "Qc2",
+          "b6",
+          "Rd1",
+          "Bb7"
+        ],
+        "annotations": [
+          "Qc2 — White centralizes the queen, preparing to develop and contest the centre.",
+          "…b6 — Black prepares the fianchetto, opening the long diagonal for the light-squared bishop.",
+          "Rd1 — White brings the rook to the central file.",
+          "…Bb7 — the bishop completes the Tartakower setup, training on the long diagonal and the e4-square. With the bishop pair and a solid structure, Black is fully equal, set to challenge the centre with …c5. The Tartakower is one of the most reliable defenses to the Queen’s Gambit."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Qc2 — White centralizes",
+          "b6 — prepare the fianchetto",
+          "Rd1 — White centralizes the rook",
+          "Bb7 — complete the Tartakower"
+        ],
+        "title": "QGD Tartakower: …b6 + …Bb7 Fianchetto",
+        "intro": "Against the Nf3+Bg5 lines, his plan is the rock-solid Tartakower: after …h6 and …Bxf6, Black plays …b6 and fianchettoes the light-squared bishop on b7, training it on the long diagonal and the e4-square. Combined with …c5 to challenge the centre, Black reaches a harmonious, well-tested setup where the bishop pair and the solid structure give full equality and winning chances.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/Queens-Gambit-Declined",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
         ]
       }
     ]
