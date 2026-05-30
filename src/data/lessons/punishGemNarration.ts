@@ -3199,6 +3199,61 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:pos-king-safety', 'concept:pos-material', 'https://www.chess.com/openings/Scandinavian-Defense'],
   },
+
+  // ── GothamChess French Defense (student = BLACK) ─────────────────────────
+  // Rubinstein: White's d5?! push lets …Nb4 reach a strong square and win the
+  // d5-pawn for a clear edge (positional, +0.5). 23 plies; d5@14, Nb4@15.
+  'pro-gothamchess-french-defense:e4_e6_d4_d5_Nc3_dxe4_Nxe4_Nf6_Nxf6+_gxf6_Nf3_Nc6_g3_e5:d5': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd5?! White over-extends, pushing the pawn where Black’s pieces can swarm it.',
+      '…Nb4 — the knight jumps to the strong b4-square, attacking the over-extended d5-pawn.',
+      'a3 — White tries to chase the knight.',
+      '…Nxd5 — Black wins the d5-pawn, planting the knight on a dominant central square.',
+      '', '', '',
+      'Black is clearly better with the extra pawn and the dominant knight.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'd5 — over-extends the pawn',
+      'Nb4 — jump to the strong square',
+      'a3 — White chases',
+      'Nxd5 — win the pawn, dominant knight',
+      '', '', '',
+      'extra pawn, Black better',
+      '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-outpost', 'https://www.chess.com/openings/French-Defense-Rubinstein-Variation'],
+  },
+
+  // Tarrasch: White's c4?! allows …Bf5 then …Nc2+ forking the king and rook,
+  // winning the exchange (confirmed, +2.1). 25 plies; c4@16, Bf5@17.
+  'pro-gothamchess-french-defense:e4_e6_d4_d5_Nd2_dxe4_Nxe4_Nf6_Nxf6+_gxf6_Nf3_Nc6_g3_e5_d5_Nb4:c4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'c4?! White grabs space, but ignores the knight on b4 — a fatal oversight.',
+      '…Bf5 — Black develops the bishop, quietly preparing a decisive tactic.',
+      'Nh4 — White attacks the bishop, missing the threat.',
+      '…Nc2+ — the fork! The knight checks the king and attacks the a1-rook at the same time.',
+      'Ke2 — the king must move.',
+      '', 'Be3 — White tries to trap the knight, but it has done its job.',
+      '…Nxa1 — Black wins the exchange and emerges clearly on top.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'c4 — ignores the b4-knight',
+      'Bf5 — prepare the tactic',
+      'Nh4 — White misses it',
+      'Nc2+ — the fork! king and rook',
+      'Ke2 — the king must move',
+      '', 'Be3 — too late',
+      'Nxa1 — win the exchange',
+      '',
+    ],
+    sources: ['concept:tac-fork', 'concept:pos-material', 'https://www.chess.com/openings/French-Defense-Tarrasch-Variation'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

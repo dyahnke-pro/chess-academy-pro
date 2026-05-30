@@ -50422,5 +50422,313 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-progothamchess-french-rubinstein-qxd4",
+    "openingId": "pro-gothamchess-french-defense",
+    "criticalPositionFen": "r2qkb1r/ppp2p1p/2n2p2/4p3/3P4/5BPP/PPP2P2/R1BQK2R b KQkq - 0 10",
+    "title": "Rubinstein: …gxf6 + …e5 + …Qxd4 + …O-O-O Attack",
+    "overview": "His signature aggressive Rubinstein across 330 games. Black takes …dxe4 and recaptures …gxf6, accepting doubled f-pawns in exchange for the bishop pair and the open g-file. Then …e5 and …Bg4 trade off a knight, …Qxd4 grabs the centre pawn, and …O-O-O castles queenside for a kingside attack down the g-file. A dynamic, double-edged French where Black plays for the win.",
+    "pawnBreaks": [
+      "…e5 the central break",
+      "the open g-file from …gxf6"
+    ],
+    "pieceManeuvers": [
+      "…Bc8-g4xf3 trading a knight",
+      "…Qd8xd4 grabbing the centre pawn",
+      "…O-O-O queenside castling"
+    ],
+    "strategicThemes": [
+      "Take the bishop pair and the g-file",
+      "Break with …e5",
+      "Grab …Qxd4 and castle queenside for the attack"
+    ],
+    "endgameTransitions": [
+      "The bishop pair compensates the doubled pawns"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qkb1r/ppp2p1p/2n2p2/4p3/3P4/5BPP/PPP2P2/R1BQK2R b KQkq - 0 10",
+        "moves": [
+          "Qxd4",
+          "Qe2",
+          "O-O-O"
+        ],
+        "annotations": [
+          "…Qxd4 — Black grabs the central d4-pawn, the point of the …e5 and …Bxf3 sequence.",
+          "Qe2 — White develops the queen, eyeing the e-file and Black’s slightly loose king.",
+          "…O-O-O — Black castles queenside, connecting the rooks and committing to a kingside attack down the open g-file. With the bishop pair, the extra centre pawn, and the open g-file, Black has a dynamic, double-edged game with real winning chances — exactly what the aggressive Rubinstein is built for."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Qxd4 — grab the centre pawn",
+          "Qe2 — White develops",
+          "O-O-O — castle queenside, attack the g-file"
+        ],
+        "title": "Rubinstein: …gxf6 + …e5 + …Qxd4 + …O-O-O Attack",
+        "intro": "His signature aggressive Rubinstein across 330 games. Black takes …dxe4 and recaptures …gxf6, accepting doubled f-pawns in exchange for the bishop pair and the open g-file. Then …e5 and …Bg4 trade off a knight, …Qxd4 grabs the centre pawn, and …O-O-O castles queenside for a kingside attack down the g-file. A dynamic, double-edged French where Black plays for the win.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/French-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/French_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-french-tarrasch-b5gambit",
+    "openingId": "pro-gothamchess-french-defense",
+    "criticalPositionFen": "r2qkb1r/ppp2p1p/5p2/3Ppb2/QnP5/5NP1/PP3P1P/R1B1KB1R b KQkq - 2 10",
+    "title": "vs Tarrasch: the …Nb4 + …b5 Gambit",
+    "overview": "Against the Tarrasch Nd2, his 231-game plan is the sharp …Nb4 and …b5 gambit. After …e5 and d5 close the centre, the knight jumps to b4, and when White checks Qa4+, Black gambits with …b5! to deflect the queen and open lines for rapid development and attack. A swashbuckling pawn sacrifice that fits his aggressive style — Black plays for the initiative, not equality.",
+    "pawnBreaks": [
+      "…b5 the gambit deflection",
+      "…c6 challenging the d5-pawn"
+    ],
+    "pieceManeuvers": [
+      "…Nc6-b4 the active knight",
+      "…Bc8-f5 the developing bishop",
+      "the lead in development for the pawn"
+    ],
+    "strategicThemes": [
+      "Jump …Nb4 to the active square",
+      "Gambit …b5 to deflect the queen",
+      "Open lines for the attack"
+    ],
+    "endgameTransitions": [
+      "Keep attacking — the development lead is the compensation"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qkb1r/ppp2p1p/5p2/3Ppb2/QnP5/5NP1/PP3P1P/R1B1KB1R b KQkq - 2 10",
+        "moves": [
+          "b5",
+          "Qxb5+",
+          "c6"
+        ],
+        "annotations": [
+          "…b5 — the gambit! Black sacrifices the pawn to deflect the white queen and open lines for a rapid attack.",
+          "Qxb5+ — White takes the bait, but the queen is now exposed and offside.",
+          "…c6 — Black hits the d5-pawn and gains time on the white queen, opening the position for the bishops and rooks. The pawn sacrifice has bought a powerful initiative and a lead in development — the swashbuckling French at its sharpest."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "b5 — the gambit deflection",
+          "Qxb5+ — White grabs the pawn",
+          "c6 — hit d5, gain time, attack"
+        ],
+        "title": "vs Tarrasch: the …Nb4 + …b5 Gambit",
+        "intro": "Against the Tarrasch Nd2, his 231-game plan is the sharp …Nb4 and …b5 gambit. After …e5 and d5 close the centre, the knight jumps to b4, and when White checks Qa4+, Black gambits with …b5! to deflect the queen and open lines for rapid development and attack. A swashbuckling pawn sacrifice that fits his aggressive style — Black plays for the initiative, not equality.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/French-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/French_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-french-advance-counter",
+    "openingId": "pro-gothamchess-french-defense",
+    "criticalPositionFen": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3p4/2PB1N2/PP3PPP/RNBQR1K1 b kq - 3 8",
+    "title": "vs Advance: …c5 + …Qb6 + …cxd4 Counterplay",
+    "overview": "Against the Advance 3.e5, his 177-game plan is the classical French counterattack: …c5 strikes the base of White's pawn chain, …Qb6 pressures the d4-pawn and the b2-square, and …cxd4 opens the c-file. With …Rc8 and the queen pressuring the queenside, Black generates active counterplay against White's space — the time-tested antidote to the French Advance.",
+    "pawnBreaks": [
+      "…c5 striking the pawn chain",
+      "…cxd4 opening the c-file"
+    ],
+    "pieceManeuvers": [
+      "…Qd8-b6 pressuring d4 and b2",
+      "…Ra8-c8 the c-file rook",
+      "…Bc8-d7-b5 the bishop reroute"
+    ],
+    "strategicThemes": [
+      "Strike the chain base with …c5",
+      "Pressure d4 with …Qb6",
+      "Open the c-file with …cxd4"
+    ],
+    "endgameTransitions": [
+      "The queenside pressure carries into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3p4/2PB1N2/PP3PPP/RNBQR1K1 b kq - 3 8",
+        "moves": [
+          "Rc8",
+          "Nbd2",
+          "dxc3"
+        ],
+        "annotations": [
+          "…Rc8 — Black brings the rook to the half-open c-file, adding to the queenside pressure.",
+          "Nbd2 — White develops the knight, defending and preparing to recapture.",
+          "…dxc3 — Black opens the c-file by capturing on c3, increasing the pressure on White’s queenside and the b2-pawn. With the queen on b6, the rook on c8, and the open c-file, Black has the classical French Advance counterplay — active piece play against White’s space."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Rc8 — the c-file rook",
+          "Nbd2 — White develops",
+          "dxc3 — open the c-file, pressure b2"
+        ],
+        "title": "vs Advance: …c5 + …Qb6 + …cxd4 Counterplay",
+        "intro": "Against the Advance 3.e5, his 177-game plan is the classical French counterattack: …c5 strikes the base of White's pawn chain, …Qb6 pressures the d4-pawn and the b2-square, and …cxd4 opens the c-file. With …Rc8 and the queen pressuring the queenside, Black generates active counterplay against White's space — the time-tested antidote to the French Advance.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/French-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/French_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-french-exchange-develop",
+    "openingId": "pro-gothamchess-french-defense",
+    "criticalPositionFen": "rn1qk2r/ppp1nppp/3b4/3p4/3P2b1/3B1N2/PPP2PPP/RNBQR1K1 b kq - 7 7",
+    "title": "vs Exchange: Active …Bd6 + …Bg4 + …Nc6 Development",
+    "overview": "Against the Exchange exd5, his 141-game plan refuses the drawish reputation: Black develops actively with …Bd6, …Bg4 pinning, …Ne7-c6, and …Qd7, aiming for a kingside attack with …f5 or opposite-side castling. By placing the pieces aggressively rather than symmetrically, Black creates imbalance and winning chances from the supposedly equal Exchange French.",
+    "pawnBreaks": [
+      "…f5 a kingside expansion later",
+      "the symmetrical IQP-free centre"
+    ],
+    "pieceManeuvers": [
+      "…Bf8-d6 the active bishop",
+      "…Bc8-g4 the pin",
+      "…Ng8-e7-c6 the knight development"
+    ],
+    "strategicThemes": [
+      "Develop actively, not symmetrically",
+      "Pin with …Bg4",
+      "Aim for …f5 and a kingside attack"
+    ],
+    "endgameTransitions": [
+      "The active pieces create winning chances"
+    ],
+    "playableLines": [
+      {
+        "fen": "rn1qk2r/ppp1nppp/3b4/3p4/3P2b1/3B1N2/PPP2PPP/RNBQR1K1 b kq - 7 7",
+        "moves": [
+          "Nc6",
+          "c3",
+          "Qd7"
+        ],
+        "annotations": [
+          "…Nc6 — Black develops the knight to its active square, eyeing d4 and the centre.",
+          "c3 — White solidifies the centre.",
+          "…Qd7 — Black connects the pieces and eyes a queen swing to the kingside or queenside castling for an attack. By developing aggressively rather than symmetrically, Black creates imbalance and real winning chances from the Exchange French — refusing the draw."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nc6 — develop actively",
+          "c3 — White solidifies",
+          "Qd7 — connect, aim for the attack"
+        ],
+        "title": "vs Exchange: Active …Bd6 + …Bg4 + …Nc6 Development",
+        "intro": "Against the Exchange exd5, his 141-game plan refuses the drawish reputation: Black develops actively with …Bd6, …Bg4 pinning, …Ne7-c6, and …Qd7, aiming for a kingside attack with …f5 or opposite-side castling. By placing the pieces aggressively rather than symmetrically, Black creates imbalance and winning chances from the supposedly equal Exchange French.",
+        "sources": [
+          "book:chess-strategy",
+          "https://www.chess.com/openings/French-Defense",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/French_Defence"
+        ]
+      }
+    ]
   }
 ]

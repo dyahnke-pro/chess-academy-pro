@@ -2470,5 +2470,43 @@
         "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
       ]
     }
+  ],
+  "pro-gothamchess-french-defense": [
+    {
+      "fen": "rnbqkb1r/ppp2ppp/4pN2/8/3P4/8/PPP2PPP/R1BQKBNR b KQkq - 0 5",
+      "wrongMove": "Qxf6",
+      "correctMove": "gxf6",
+      "explanation": "His signature Rubinstein recapture is …gxf6! — accepting doubled f-pawns in exchange for the bishop pair, the open g-file, and a dynamic, aggressive position with …e5 and …O-O-O to follow. The natural …Qxf6 keeps the structure clean but leads to a passive, equal position with no winning chances. The …gxf6 structure is what makes his French a fighting weapon — take with the g-pawn and play for the attack.",
+      "shortNarration": "gxf6 — the dynamic Rubinstein recapture",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/French-Defense",
+        "https://en.wikipedia.org/wiki/French_Defence"
+      ]
+    },
+    {
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "Ne7",
+      "correctMove": "c5",
+      "explanation": "Against the Advance 3.e5, the principled break is …c5! — striking immediately at the base of White's pawn chain (the d4-pawn) to generate queenside counterplay with …Qb6 and …cxd4. Developing passively with …Ne7 first lets White consolidate the big space advantage and play a comfortable game. Hit the chain at its base with …c5 — that's the time-tested French Advance antidote.",
+      "shortNarration": "c5 — strike the pawn chain base",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/French-Defense",
+        "https://en.wikipedia.org/wiki/French_Defence"
+      ]
+    },
+    {
+      "fen": "rnbqkbnr/ppp2ppp/8/3p4/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+      "wrongMove": "Nf6",
+      "correctMove": "Bd6",
+      "explanation": "In the Exchange French, the way to fight for a win is active development: …Bd6! aims the bishop at h2, prepares …Bg4 to pin, and sets up a kingside attack or opposite-side castling. Routine symmetrical development with …Nf6 first invites a dead-equal, drawish game. Refuse the draw: develop the bishop actively to d6, pin with …Bg4, and create imbalance from the supposedly equal Exchange French.",
+      "shortNarration": "Bd6 — active development, refuse the draw",
+      "sources": [
+        "book:chess-strategy",
+        "https://www.chess.com/openings/French-Defense",
+        "https://en.wikipedia.org/wiki/French_Defence"
+      ]
+    }
   ]
 }

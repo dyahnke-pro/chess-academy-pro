@@ -1,0 +1,73 @@
+{
+  "player": "gothamchess",
+  "openingId": "french",
+  "variationKey": "tarrasch-nd2",
+  "variation": {
+    "label": "vs Tarrasch Nd2",
+    "prefix": [
+      "e4",
+      "e6",
+      "d4",
+      "d5",
+      "Nd2",
+      "dxe4"
+    ]
+  },
+  "generatedAt": "2026-05-30T04:22:28.575Z",
+  "totalGames": 230,
+  "wins": 140,
+  "draws": 16,
+  "losses": 74,
+  "openingTerminusPly": 20,
+  "openingTerminusMove": 10,
+  "spineMoves": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nd2",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Nxf6+",
+    "gxf6",
+    "Nf3",
+    "Nc6",
+    "g3",
+    "e5",
+    "d5",
+    "Nb4",
+    "c4",
+    "Bf5",
+    "Qa4+",
+    "b5"
+  ],
+  "gamesAtTerminus": 2,
+  "endgameTypeBreakdown": {
+    "R + minor + P": 1
+  },
+  "topModelGames": [
+    {
+      "url": "https://www.chess.com/game/live/163414027355",
+      "opponent": "misutodn",
+      "opponentRating": 2733,
+      "studentRating": 2974,
+      "date": "2026-01-22",
+      "timeClass": "blitz",
+      "outcome": "win",
+      "plyCount": 48,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2026.01.22\"]\n[Round \"-\"]\n[White \"misutodn\"]\n[Black \"GothamChess\"]\n[Result \"0-1\"]\n[Tournament \"https://www.chess.com/tournament/live/first-3-0-thursday-january-22-2026-6160611\"]\n[CurrentPosition \"4k2r/5p1p/2p2p2/2b1p3/8/5NP1/1r3P1P/5K1R w k - 0 25\"]\n[Timezone \"UTC\"]\n[ECO \"C10\"]\n[ECOUrl \"https://www.chess.com/openings/French-Defense-Rubinstein-Variation-4.Nxe4-Nf6-5.Nxf6-gxf6-6.Nf3\"]\n[UTCDate \"2026.01.22\"]\n[UTCTime \"16:48:17\"]\n[WhiteElo \"2733\"]\n[BlackElo \"2974\"]\n[TimeControl \"180\"]\n[Termination \"GothamChess won by resignation\"]\n[StartTime \"16:48:17\"]\n[EndDate \"2026.01.22\"]\n[EndTime \"16:52:00\"]\n[Link \"https://www.chess.com/game/live/163414027355\"]\n\n1. e4 {[%clk 0:02:59.9]} 1... e6 {[%clk 0:02:56.9]} 2. d4 {[%clk 0:02:58.8]} 2... d5 {[%clk 0:02:56.6]} 3. Nd2 {[%clk 0:02:58.4]} 3... dxe4 {[%clk 0:02:56]} 4. Nxe4 {[%clk 0:02:57.8]} 4... Nf6 {[%clk 0:02:55.9]} 5. Nxf6+ {[%clk 0:02:56.1]} 5... gxf6 {[%clk 0:02:55.8]} 6. Nf3 {[%clk 0:02:54.6]} 6... Nc6 {[%clk 0:02:55.5]} 7. g3 {[%clk 0:02:53.4]} 7... e5 {[%clk 0:02:54.7]} 8. d5 {[%clk 0:02:46.4]} 8... Nb4 {[%clk 0:02:53.8]} 9. c4 {[%clk 0:02:43.6]} 9... Bf5 {[%clk 0:02:50.8]} 10. Qa4+ {[%clk 0:02:35.9]} 10... b5 {[%clk 0:02:49.3]} 11. cxb5 {[%clk 0:02:04.7]} 11... Qxd5 {[%clk 0:02:33]} 12. b6+ {[%clk 0:01:47.5]} 12... c6 {[%clk 0:02:29.8]} 13. Be2 {[%clk 0:01:41.1]} 13... Nc2+ {[%clk 0:02:06.8]} 14. Kf1 {[%clk 0:01:37.4]} 14... Bh3+ {[%clk 0:02:04.3]} 15. Kg1 {[%clk 0:01:33.6]} 15... Nxa1 {[%clk 0:02:03.6]} 16. b7 {[%clk 0:01:31.8]} 16... Rb8 {[%clk 0:02:00.4]} 17. Qxa7 {[%clk 0:01:30.4]} 17... Bd6 {[%clk 0:01:58.9]} 18. b3 {[%clk 0:01:21.8]} 18... Qc5 {[%clk 0:01:44.8]} 19. Qxc5 {[%clk 0:01:18.5]} 19... Bxc5 {[%clk 0:01:44.7]} 20. Bd3 {[%clk 0:01:15.9]} 20... Rxb7 {[%clk 0:01:36]} 21. Bb2 {[%clk 0:01:14.5]} 21... Nxb3 {[%clk 0:01:35.5]} 22. axb3 {[%clk 0:01:07.7]} 22... Rxb3 {[%clk 0:01:35.4]} 23. Bf1 {[%clk 0:01:07]} 23... Bxf1 {[%clk 0:01:33.3]} 24. Kxf1 {[%clk 0:01:06.9]} 24... Rxb2 {[%clk 0:01:32.5]} 0-1\n"
+    },
+    {
+      "url": "https://www.chess.com/game/live/2969186794",
+      "opponent": "AdrianaNikolova",
+      "opponentRating": 2334,
+      "studentRating": 2549,
+      "date": "2018-07-28",
+      "timeClass": "bullet",
+      "outcome": "win",
+      "plyCount": 26,
+      "pgn": "[Event \"Live Chess\"]\n[Site \"Chess.com\"]\n[Date \"2018.07.28\"]\n[Round \"-\"]\n[White \"AdrianaNikolova\"]\n[Black \"GothamChess\"]\n[Result \"0-1\"]\n[CurrentPosition \"r3kb1r/p4p1p/2P2p2/1Q2pb2/2P5/3q1NP1/PPn1KP1P/R1B2B1R w kq -\"]\n[Timezone \"UTC\"]\n[ECO \"C10\"]\n[ECOUrl \"https://www.chess.com/openings/French-Defense-Rubinstein-Variation-4.Nxe4-Nf6-5.Nxf6-gxf6-6.Nf3\"]\n[UTCDate \"2018.07.28\"]\n[UTCTime \"13:31:08\"]\n[WhiteElo \"2334\"]\n[BlackElo \"2549\"]\n[TimeControl \"60\"]\n[Termination \"GothamChess won by checkmate\"]\n[StartTime \"13:31:08\"]\n[EndDate \"2018.07.28\"]\n[EndTime \"13:31:42\"]\n[Link \"https://www.chess.com/game/live/2969186794\"]\n\n1. e4 {[%clk 0:00:59.9]} 1... e6 {[%clk 0:00:59.2]} 2. d4 {[%clk 0:00:58.9]} 2... d5 {[%clk 0:00:57.9]} 3. Nd2 {[%clk 0:00:58.8]} 3... dxe4 {[%clk 0:00:57.8]} 4. Nxe4 {[%clk 0:00:58.7]} 4... Nf6 {[%clk 0:00:57.5]} 5. Nxf6+ {[%clk 0:00:58]} 5... gxf6 {[%clk 0:00:57.4]} 6. Nf3 {[%clk 0:00:57.7]} 6... Nc6 {[%clk 0:00:56.4]} 7. g3 {[%clk 0:00:56.6]} 7... e5 {[%clk 0:00:55.1]} 8. d5 {[%clk 0:00:55.1]} 8... Nb4 {[%clk 0:00:54.4]} 9. c4 {[%clk 0:00:52.6]} 9... Bf5 {[%clk 0:00:53.2]} 10. Qa4+ {[%clk 0:00:45.9]} 10... b5 {[%clk 0:00:52.2]} 11. Qxb5+ {[%clk 0:00:44.3]} 11... c6 {[%clk 0:00:51.4]} 12. dxc6 {[%clk 0:00:43.5]} 12... Nc2+ {[%clk 0:00:50.4]} 13. Ke2 {[%clk 0:00:42.6]} 13... Qd3# {[%clk 0:00:50.3]} 0-1\n"
+    }
+  ]
+}
