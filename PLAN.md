@@ -132,3 +132,36 @@ line + re-verified, gates green, shipped:
 kings-gambit Muzio/Allgaier/Classical, two-knights/scotch Max Lange gem lines,
 albin/schliemann gambits, sicilian-dragon Yugoslav (sharp). Per the soundness
 rule: a sac showcase is meant to be engine-negative.
+
+## ENDGAME LAYER — DATA PREPPED (2026-05-30 overnight), authoring teed up
+Ran scripts/extract-endgame-structures.mjs on the structural openings. The
+characteristic endgame is consistently R+minor+P (the minority-attack /
+superior-structure conversion):
+- caro-classical: R+minor+P 7/15 (47% — strongly characteristic)
+- caro-advance:   R+minor+P 4/15 (+ Q+pieces when queens stay)
+- french:         R+minor+P 5/15 (33%, 3 decisive)
+- qgd:            R+minor+P 4 + minor+P 3 (minority-attack endings)
+- slav:           R+minor+P 4/15 (all decisive)
+- caro-exchange:  R+minor+P (27%, minority attack) [extracted earlier]
+NEXT (authoring, best with a careful pass / David's eye — NOT rushed overnight):
+for each, take a real master game's line into the R+minor+P ending, author a
+`mp-<id>-<tab>-endgame` plan (overview + the line + sources), wire via the tab-
+plan map. Sharp/attacking openings (gambits, Dragon, etc.) correctly get NONE.
+
+## OVERNIGHT SESSION SUMMARY (for David, morning)
+DONE + shipped to main (all gate-green):
+- Opening-spine rebuilds: italian (prod-audited), philidor Exchange+Antoshin,
+  alekhine — genuine defects (dead/mislabeled/over-extended lines) on data spines.
+- Soundness sweep (NEW tool) found + FIXED 6 lessons that were SECRETLY LOSING
+  while narrating equality: petrov Steinitz (-2.08->-0.22), scandi Gubinsky
+  (-1.58->-0.03), qgd Bf4 (-1.39->-0.33), qga Smyslov (-1.75->-0.18), philidor
+  Nimzowitsch (-2.15->0.00) [+ Antoshin above]. Each rebuilt on the sound master
+  line + re-verified by engine.
+- Memory locked: data-rebuild doctrine + soundness-sweep rule in CLAUDE.md.
+- Tools built: build-opening-spine, diagnose-lesson-tails, soundness-sweep,
+  extract-endgame-structures.
+NEEDS DAVID / DEEPER WORK (flagged, NOT risked autonomously):
+- 5 genuinely-hard/sharp variations (pirc 150, two-knights Max Lange, semi-slav
+  Botvinnik, old-indian, benoni Taimanov) — see SOUNDNESS SWEEP RESULTS above.
+- Endgame authoring across the ~6 structural openings (data prepped above).
+- London/Scotch/Vienna/Caro mains etc. = sound showcases, correctly LEFT.
