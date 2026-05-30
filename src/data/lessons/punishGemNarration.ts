@@ -3028,6 +3028,31 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:pos-center', 'concept:tac-overloaded-defender', 'https://www.chess.com/openings/French-Defense-Advance-Variation'],
   },
+
+  // ── GothamChess Fantasy Variation vs Caro (student = WHITE) ──────────────
+  // 3…dxe4 4.fxe4 …e6?! is passive; Nf3 then d5! gains a strong central space
+  // edge (confirmed, +1.0). 16 plies; e6@7, Nf3@8.
+  'pro-gothamchess-fantasy-caro:e4_c6_d4_d5_f3_dxe4_fxe4:e6': {
+    watch: [
+      '', '', '', '', '', '', '',
+      'e6?! Passive — it walls in the light-squared bishop and lets White seize the centre.',
+      'Nf3 — White develops naturally, preparing to expand in the centre with the big e4/d4 duo.',
+      '…c5 — Black strikes at the centre, the principled freeing try.',
+      'd5 — the punish. White rams the pawn forward, gaining a strong central space wedge and cramping Black’s position.',
+      '', '', 'exd5 — after the exchanges White has the freer game with the central space and the better-placed pieces.',
+      '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '',
+      'e6 — passive, walls in the bishop',
+      'Nf3 — develop, prepare to expand',
+      'c5 — Black strikes the centre',
+      'd5 — ram the wedge, cramp Black',
+      '', '', 'exd5 — central space, White better',
+      '', '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

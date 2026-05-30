@@ -15512,88 +15512,6 @@
     ]
   },
   {
-    "id": "mp-pro-gothamchess-fantasy-caro-attack",
-    "openingId": "pro-gothamchess-fantasy-caro",
-    "criticalPositionFen": "rnbq1rk1/pp3ppp/1np5/2b1P3/3N4/1B6/PPP1Q1PP/RNB2RK1 b - - 2 11",
-    "title": "Kingside Attack with f4-f5",
-    "overview": "With the e5 wedge in place, White aims for a direct kingside attack using f4-f5. This advance further cramps Black, opens the f-file, and creates threats against g7 and h7. The Bb3+Qe2+Nd4 trio provides the firepower.",
-    "pawnBreaks": [
-      {
-        "move": "f2-f4-f5",
-        "explanation": "The f4-f5 advance is White's main attacking plan. f4 reinforces e5, and f5 cracks open the kingside. After f5, the g6 square is weakened and White can build up with Qg4 or Qh5.",
-        "fen": "rnbq1rk1/pp3ppp/1np5/2b1P3/3N4/1B6/PPP1Q1PP/RNB2RK1 b - - 2 11"
-      },
-      {
-        "move": "g2-g4",
-        "explanation": "After f4, g4 supports f5 and prevents ...f5 counterplay from Black. It also prepares g5 in some lines, further weakening Black's kingside.",
-        "fen": "rnbq1rk1/pp3ppp/1np5/2b1P3/3N4/1B6/PPP1Q1PP/RNB2RK1 b - - 2 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Queen",
-        "route": "Qe2-g4 or Qe2-h5",
-        "explanation": "The queen shifts to the kingside for the attack. Qg4 targets g7 directly, while Qh5 creates threats against h7 and f7 simultaneously."
-      },
-      {
-        "piece": "Rook",
-        "route": "Rf1-f3-g3 (rook lift)",
-        "explanation": "The classic rook lift: Rf3 swings to g3, adding a rook to the kingside attack without moving it from the f-file first. Rg3 targets g7 with devastating effect."
-      }
-    ],
-    "strategicThemes": [
-      "The f4-f5 advance is the logical follow-up to e5. It creates a pawn storm on the kingside while Black's pieces are cramped.",
-      "After f5, the Bb3 targets f7 even more directly. Combined with Qg4 or Qh5, it creates a mating net.",
-      "The rook lift (Rf3-g3) is a powerful attacking technique. It adds a heavy piece to the attack without the need for an open file.",
-      "Black's cramped position means counterplay is very difficult to generate. White can attack without worrying about counter-threats."
-    ],
-    "endgameTransitions": [
-      "The kingside attack should lead to material gains or checkmate. If it fizzles, the space advantage still gives White an edge.",
-      "If Black sacrifices material to survive the attack, White converts the material advantage in a simple endgame."
-    ]
-  },
-  {
-    "id": "mp-pro-gothamchess-fantasy-caro-e5",
-    "openingId": "pro-gothamchess-fantasy-caro",
-    "criticalPositionFen": "rnbq1rk1/pp3ppp/1np5/2b1P3/3N4/1B6/PPP1Q1PP/RNB2RK1 b - - 2 11",
-    "title": "e5 Central Wedge",
-    "overview": "In GothamChess's Fantasy Caro, White has achieved the powerful e5 pawn wedge with active pieces. The Nd4 is centralized, the Bb3 targets f7, and the Qe2 supports the center. The e5 pawn cramps Black's entire kingside and prevents natural piece development.",
-    "pawnBreaks": [
-      {
-        "move": "c2-c3",
-        "explanation": "c3 supports the Nd4 and prevents ...Nb4. It creates a solid base for the center so White can focus on piece play and converting the space advantage.",
-        "fen": "rnbq1rk1/pp3ppp/1np5/2b1P3/3N4/1B6/PPP1Q1PP/RNB2RK1 b - - 2 11"
-      },
-      {
-        "move": "f2-f4",
-        "explanation": "f4 reinforces the e5 pawn and prepares f5, gaining more kingside space. After f5, the g7 and h7 pawns become targets and Black's kingside is completely locked down.",
-        "fen": "rnbq1rk1/pp3ppp/1np5/2b1P3/3N4/1B6/PPP1Q1PP/RNB2RK1 b - - 2 11"
-      }
-    ],
-    "pieceManeuvers": [
-      {
-        "piece": "Knight",
-        "route": "Nb1-d2-f3 supporting e5",
-        "explanation": "The Nb1 develops to d2 and then f3 where it supports the e5 pawn and controls key central squares. From f3 it can also jump to g5 for kingside attacks."
-      },
-      {
-        "piece": "Bishop",
-        "route": "Bc1-e3 reinforcing d4",
-        "explanation": "Be3 develops the last minor piece and supports the Nd4. It also controls the a7-g1 diagonal, targeting the Bc5 if it hasn't moved."
-      }
-    ],
-    "strategicThemes": [
-      "The e5 pawn is the key to White's position. It cramps Black's kingside, restricts the knight from f6, and controls d6 and f6.",
-      "White's piece activity compensates for any structural issues. The Nd4, Bb3, and Qe2 are all ideally placed.",
-      "Black's Bc5 targets d4 but can be neutralized with Be3. Don't let it dominate the diagonal unchallenged.",
-      "White's plan is systematic: reinforce e5, develop remaining pieces, and then attack on the kingside with f4-f5."
-    ],
-    "endgameTransitions": [
-      "The e5 wedge gives White a lasting advantage in endgames. Black's cramped pieces translate into passive defense.",
-      "White's centralized knight on d4 dominates endgames. It controls both flanks and can't be challenged by Black's pawns."
-    ]
-  },
-  {
     "id": "mp-pro-gothamchess-qgd-c5",
     "openingId": "pro-gothamchess-qgd",
     "criticalPositionFen": "r1b2rk1/pp2bppp/2n1pn2/q2p4/2P2B2/P1N1PN2/1PQ2PPP/3RKB1R w K - 3 11",
@@ -48966,6 +48884,344 @@
           "https://www.chess.com/openings/French-Defense-Advance-Variation-Milner-Barry-Gambit",
           "https://api.chess.com/pub/player/gothamchess/games/archives",
           "https://en.wikipedia.org/wiki/French_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-fantasy-dxe4-center",
+    "openingId": "pro-gothamchess-fantasy-caro",
+    "criticalPositionFen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
+    "title": "Fantasy 3…dxe4: the Big e4 Centre + Slow Build",
+    "overview": "His main Fantasy plan across the 44-game 3…dxe4 line. White recaptures fxe4 to build a broad pawn centre, develops Bc4 and Nf3, and castles. Then the slow squeeze: c3 supports d4, Be3 and Nbd2 complete development, and the Bd3 + Qc2 battery aims at the kingside. The Fantasy's point — a big centre and the bishop pair — gives White a comfortable space advantage.",
+    "pawnBreaks": [
+      "the e4/d4 big centre",
+      "c3 supporting d4"
+    ],
+    "pieceManeuvers": [
+      "Bc1-e3 supporting the centre",
+      "Nb1-d2 completing development",
+      "Bd3 + Qc2 the kingside battery"
+    ],
+    "strategicThemes": [
+      "Build the big e4/d4 centre",
+      "Complete development with Be3/Nbd2",
+      "Aim the battery at the king"
+    ],
+    "endgameTransitions": [
+      "The space edge carries into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
+        "moves": [
+          "Be3",
+          "O-O",
+          "Nbd2"
+        ],
+        "annotations": [
+          "Be3 — White develops the bishop, reinforcing the d4-pawn and the big centre.",
+          "…O-O — Black castles into a slightly cramped but solid position.",
+          "Nbd2 — White completes development; the broad centre, the bishop pair, and the harmonious setup give a pleasant, space-gaining edge. The Fantasy has delivered exactly the position White wanted."
+        ],
+        "arrows": [
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Be3 — reinforce the centre",
+          "O-O — Black castles",
+          "Nbd2 — complete development"
+        ],
+        "title": "Fantasy 3…dxe4: the Big e4 Centre + Slow Build",
+        "intro": "His main Fantasy plan across the 44-game 3…dxe4 line. White recaptures fxe4 to build a broad pawn centre, develops Bc4 and Nf3, and castles. Then the slow squeeze: c3 supports d4, Be3 and Nbd2 complete development, and the Bd3 + Qc2 battery aims at the kingside. The Fantasy's point — a big centre and the bishop pair — gives White a comfortable space advantage.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-fantasy-e6-qg4attack",
+    "openingId": "pro-gothamchess-fantasy-caro",
+    "criticalPositionFen": "rnbqk2r/pp3ppp/2p1pn2/8/3PP3/P1P4N/2P3PP/R1BQKB1R b KQkq - 0 8",
+    "title": "Fantasy 3…e6: the Qg4-Qxg7 Kingside Raid",
+    "overview": "Against the solid 3…e6 with …Bb4, White doubles the c-pawns but gets the bishop pair and a direct attacking chance. When Black grabs on e4, the Fantasy's signature shot is Qg4! — hitting g7 and the e4-knight at once. After …Nf6 Qxg7, White snatches the g7-pawn and the rook on the open g-file, a violent raid that exploits Black's missing dark-squared bishop.",
+    "pawnBreaks": [
+      "the e4 centre",
+      "the open g-file after Qxg7"
+    ],
+    "pieceManeuvers": [
+      "Qd1-g4 the double attack on g7 and e4",
+      "Qg4xg7 the raid",
+      "the bishop pair from …Bxc3"
+    ],
+    "strategicThemes": [
+      "Exploit the missing dark bishop",
+      "Hit g7 and e4 with Qg4",
+      "Raid with Qxg7"
+    ],
+    "endgameTransitions": [
+      "The extra material and bishop pair decide"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnbqk2r/pp3ppp/2p1pn2/8/3PP3/P1P4N/2P3PP/R1BQKB1R b KQkq - 0 8",
+        "moves": [
+          "Nxe4",
+          "Qg4",
+          "Nf6",
+          "Qxg7"
+        ],
+        "annotations": [
+          "…Nxe4 — Black grabs the e4-pawn, but the knight steps into a tactic.",
+          "Qg4 — the double attack! The queen hits the e4-knight and the g7-pawn at the same time.",
+          "…Nf6 — Black saves the knight, but g7 falls.",
+          "Qxg7 — the raid lands. White snatches the g7-pawn and attacks the h8-rook on the open g-file; with Black’s dark-squared bishop long gone, the kingside is fatally weak. White is winning the material and the attack."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nxe4 — steps into a tactic",
+          "Qg4 — hit e4 and g7",
+          "Nf6 — saves the knight",
+          "Qxg7 — the raid, winning"
+        ],
+        "title": "Fantasy 3…e6: the Qg4-Qxg7 Kingside Raid",
+        "intro": "Against the solid 3…e6 with …Bb4, White doubles the c-pawns but gets the bishop pair and a direct attacking chance. When Black grabs on e4, the Fantasy's signature shot is Qg4! — hitting g7 and the e4-knight at once. After …Nf6 Qxg7, White snatches the g7-pawn and the rook on the open g-file, a violent raid that exploits Black's missing dark-squared bishop.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-fantasy-g6-poisonpawn",
+    "openingId": "pro-gothamchess-fantasy-caro",
+    "criticalPositionFen": "rnb1k1nr/pp2ppbp/2p3p1/3p4/3PP3/q1NBBP2/P1PQ2PP/1R2K1NR b Kkq - 3 8",
+    "title": "Fantasy 3…g6: the b2 Poison-Pawn Lead",
+    "overview": "Against the aggressive 3…g6 fianchetto, White invites the poison: Be3 and Qd2 dare Black to grab b2 with …Qxb2. After Rb1 chases the queen to a3, White has a massive lead in development and open lines for the pawn — Bd3 and Nge2/Nf3 pour out while Black's queen is stuck offside. A gambit-style initiative against the Fantasy's sharpest try.",
+    "pawnBreaks": [
+      "the e4 centre",
+      "open lines for the b-pawn"
+    ],
+    "pieceManeuvers": [
+      "Ra1-b1 chasing the offside queen",
+      "Bf1-d3 rapid development",
+      "Ng1-f3 developing toward the centre"
+    ],
+    "strategicThemes": [
+      "Offer the b2-pawn for development",
+      "Chase the queen with Rb1",
+      "Lead in development for the pawn"
+    ],
+    "endgameTransitions": [
+      "Keep attacking — the lead in development is the compensation"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnb1k1nr/pp2ppbp/2p3p1/3p4/3PP3/q1NBBP2/P1PQ2PP/1R2K1NR b Kkq - 3 8",
+        "moves": [
+          "dxe4",
+          "fxe4",
+          "Nf6",
+          "Nf3"
+        ],
+        "annotations": [
+          "…dxe4 — Black grabs a central pawn, trying to justify the offside queen.",
+          "fxe4 — White recaptures, keeping the big centre intact.",
+          "…Nf6 — Black develops, attacking the e4-pawn.",
+          "Nf3 — White develops with tempo, defending the centre and completing the harmonious setup. With the queen marooned on a3 and White’s pieces flowing out, the lead in development gives a powerful initiative for the b2-pawn."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "dxe4 — Black grabs a pawn",
+          "fxe4 — keep the centre",
+          "Nf6 — Black develops",
+          "Nf3 — develop with tempo"
+        ],
+        "title": "Fantasy 3…g6: the b2 Poison-Pawn Lead",
+        "intro": "Against the aggressive 3…g6 fianchetto, White invites the poison: Be3 and Qd2 dare Black to grab b2 with …Qxb2. After Rb1 chases the queen to a3, White has a massive lead in development and open lines for the pawn — Bd3 and Nge2/Nf3 pour out while Black's queen is stuck offside. A gambit-style initiative against the Fantasy's sharpest try.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-fantasy-qb6-na4",
+    "openingId": "pro-gothamchess-fantasy-caro",
+    "criticalPositionFen": "rnb1k1nr/pp3ppp/2p5/q1b5/N2NP3/2P5/PP4PP/R1BQKB1R b KQkq - 0 9",
+    "title": "Fantasy 3…Qb6: the Na4 + b4 Queenside Squeeze",
+    "overview": "Against the early 3…Qb6, White develops naturally and, after the central exchanges, harasses the queen. The Na4 hits the c5-bishop and the queen, and after …Qa5+ c3, White plays b4 to gain queenside space with tempo. The Bd3 battery and the central majority give White a comfortable, space-gaining game against this offbeat try.",
+    "pawnBreaks": [
+      "b2-b4 the queenside space gain",
+      "c3 supporting the centre"
+    ],
+    "pieceManeuvers": [
+      "Nc3-a4 harassing the bishop and queen",
+      "Bf1-d3 the kingside battery",
+      "the central pawn majority"
+    ],
+    "strategicThemes": [
+      "Harass with Na4",
+      "Gain queenside space with b4",
+      "Build the Bd3 battery"
+    ],
+    "endgameTransitions": [
+      "The space edge favours White in simplification"
+    ],
+    "playableLines": [
+      {
+        "fen": "rnb1k1nr/pp3ppp/2p5/q1b5/N2NP3/2P5/PP4PP/R1BQKB1R b KQkq - 0 9",
+        "moves": [
+          "Be7",
+          "b4",
+          "Qc7",
+          "Bd3"
+        ],
+        "annotations": [
+          "…Be7 — Black retreats the bishop after the Na4 harassment.",
+          "b4 — White gains queenside space with tempo, clamping down and preparing to expand.",
+          "…Qc7 — the queen finally finds a stable square, having been chased around.",
+          "Bd3 — White builds the battery toward h7 and completes development; the queenside space, the central majority, and the harmonious setup give White the comfortable, better game."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Be7 — the bishop retreats",
+          "b4 — gain space with tempo",
+          "Qc7 — the queen settles",
+          "Bd3 — the kingside battery"
+        ],
+        "title": "Fantasy 3…Qb6: the Na4 + b4 Queenside Squeeze",
+        "intro": "Against the early 3…Qb6, White develops naturally and, after the central exchanges, harasses the queen. The Na4 hits the c5-bishop and the queen, and after …Qa5+ c3, White plays b4 to gain queenside space with tempo. The Bd3 battery and the central majority give White a comfortable, space-gaining game against this offbeat try.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ]
       }
     ]

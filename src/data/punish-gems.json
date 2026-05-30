@@ -4039,5 +4039,30 @@
     "materialDelta": 1,
     "tier": "confirmed",
     "why": "At your level opponents play Qb6 here in 10% of games. Punish with the best move Nc3 — the engine has White winning (+1.0, +1 material)."
+  },
+  {
+    "openingId": "pro-gothamchess-fantasy-caro",
+    "lineMoves": "e4 c6 d4 d5 f3 dxe4 fxe4",
+    "inaccuracy": "e6",
+    "freqPct": 7.4,
+    "games": 79106,
+    "practicalScore": 64,
+    "mainMove": "e5",
+    "punish": "Nf3",
+    "punishSeq": [
+      "Nf3",
+      "c5",
+      "d5",
+      "exd5",
+      "Qxd5",
+      "Qxd5",
+      "exd5",
+      "Bf5"
+    ],
+    "playLine": "e4 c6 d4 d5 f3 dxe4 fxe4 e6 Nf3 c5 d5 exd5 Qxd5 Qxd5 exd5 Bf5",
+    "engineCp": 103,
+    "materialDelta": 0,
+    "tier": "confirmed",
+    "why": "At your level opponents play e6 here in 7% of games. Punish with the best move Nf3 — the engine has White clearly better (+1.0)."
   }
 ]

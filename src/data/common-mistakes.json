@@ -2204,5 +2204,43 @@
         "https://en.wikipedia.org/wiki/French_Defence"
       ]
     }
+  ],
+  "pro-gothamchess-fantasy-caro": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+      "wrongMove": "Bc4",
+      "correctMove": "fxe4",
+      "explanation": "The whole point of 3.f3 is to recapture with fxe4! — building a broad e4/d4 pawn centre, the Fantasy's entire idea. Developing with Bc4 first lets Black hold onto the extra e4-pawn with …exf3 or …f5, throwing away the centre that justifies the slightly weakening f3. Take with the f-pawn immediately: the imposing centre and the open f-file are the compensation for the committal third move.",
+      "shortNarration": "fxe4 — build the big centre",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+        "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+      ]
+    },
+    {
+      "fen": "rnb1k1nr/pp2ppbp/1qp3p1/3p4/3PP3/2N1BP2/PPP3PP/R2QKBNR w KQkq - 4 6",
+      "wrongMove": "Rb1",
+      "correctMove": "Qd2",
+      "explanation": "When Black plays …Qb6 eyeing b2 against the …g6 line, the principled move is Qd2! — calmly developing and DARING Black to grab the poison pawn. After …Qxb2 Rb1 chases the queen to a3, and White has a huge lead in development for the pawn. The passive Rb1 immediately just defends and surrenders the initiative. Offer b2 with Qd2 and play the gambit.",
+      "shortNarration": "Qd2 — offer the b2 poison pawn",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+        "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+      ]
+    },
+    {
+      "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/1b1PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
+      "wrongMove": "Bd2",
+      "correctMove": "a3",
+      "explanation": "When Black pins with …Bb4 in the …e6 line, the active a3! questions the bishop immediately. After …Bxc3+ bxc3, White gets the bishop pair and a powerful pawn centre with attacking chances on the kingside (the Qg4-Qxg7 raid). The passive Bd2 lets Black keep the tension and equalise comfortably. Challenge the pin with a3 and take the bishop pair.",
+      "shortNarration": "a3 — question the pin, win the pair",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+        "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+      ]
+    }
   ]
 }
