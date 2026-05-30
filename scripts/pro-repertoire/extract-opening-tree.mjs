@@ -62,6 +62,13 @@ const OPENINGS = {
     minPrefix: ['Nf3'],
     maxDepth: 80,
   },
+  'caro-advance-white': {
+    name: 'Caro-Kann Advance (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'c6', 'd4', 'd5', 'e5'],
+    maxDepth: 80,
+  },
   'rossolimo': {
     name: 'Anti-Sicilian Rossolimo/Moscow',
     color: 'white',

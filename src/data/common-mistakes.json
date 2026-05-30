@@ -2280,5 +2280,43 @@
         "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
       ]
     }
+  ],
+  "pro-gothamchess-caro-advance-white": [
+    {
+      "fen": "rn1qkbnr/pp2pppp/2p5/3pPb2/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 1 4",
+      "wrongMove": "Nf3",
+      "correctMove": "h4",
+      "explanation": "Against …Bf5, his signature is the aggressive h4! — gaining kingside space and threatening h5 to harass the bishop. The routine Nf3 allows Black the comfortable …e6 and …Ne7 setup with an easy game. The h4-thrust is what makes the modern Advance dangerous: it grabs space, restricts the light bishop, and sets up the Bg5 pin. Play h4 and seize the initiative.",
+      "shortNarration": "h4 — grab space, harass the bishop",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
+        "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+      ]
+    },
+    {
+      "fen": "rn1qkbnr/pp2ppp1/2p4p/3pPb2/3P3P/8/PPP2PP1/RNBQKBNR w KQkq - 0 5",
+      "wrongMove": "Nf3",
+      "correctMove": "g4",
+      "explanation": "When Black plays …h6 to prevent Bg5, the maximalist g4! grabs huge kingside space and chases the f5-bishop. The timid Nf3 gives up the chance to bind Black. After g4, the bishop must retreat passively, and White follows with c4 and h5 to dominate both wings. Against …h6, the g4 space-grab is the most testing — don't shy away from it.",
+      "shortNarration": "g4 — grab space, chase the bishop",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
+        "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+      ]
+    },
+    {
+      "fen": "rnbqkbnr/pp2pppp/8/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+      "wrongMove": "c3",
+      "correctMove": "dxc5",
+      "explanation": "Against the …c5 break, the ambitious dxc5! grabs the pawn and forces Black to spend time regaining it, giving White a lead in development and the e5-wedge. The passive c3 just defends d4 and lets Black equalise with a comfortable French-style structure. Take the pawn with dxc5 and develop quickly — the extra tempo and the cramping e5-pawn are the point.",
+      "shortNarration": "dxc5 — grab the pawn, develop fast",
+      "sources": [
+        "book:chess-fundamentals",
+        "https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation",
+        "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+      ]
+    }
   ]
 }

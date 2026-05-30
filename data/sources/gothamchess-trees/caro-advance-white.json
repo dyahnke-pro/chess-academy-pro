@@ -10,9 +10,9 @@
     "d5",
     "e5"
   ],
-  "generatedAt": "2026-05-28T18:29:04.689Z",
+  "generatedAt": "2026-05-30T03:31:26.982Z",
   "totals": {
-    "totalGamesScanned": 31960,
+    "totalGamesScanned": 31994,
     "gamesMatchingOpening": 423,
     "minBranchGames": 5,
     "minTrieGames": 5

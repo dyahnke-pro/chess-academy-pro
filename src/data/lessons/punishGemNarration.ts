@@ -3076,6 +3076,101 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:pos-center', 'concept:pos-pawn-structure', 'https://www.chess.com/openings/Stafford-Gambit'],
   },
+
+  // ── GothamChess Caro-Kann Advance, White (student = WHITE) ───────────────
+  // vs …Bf5 2.h4 …e6?! lets g4! trap the light-squared bishop (confirmed,
+  // +3.2 / piece). 16 plies; e6@7, g4@8.
+  'pro-gothamchess-caro-advance-white:e4_c6_d4_d5_e5_Bf5_h4:e6': {
+    watch: [
+      '', '', '', '', '', '', '',
+      'e6?! This blocks the bishop’s retreat to e6 — a fatal mistake against the h4-thrust.',
+      'g4 — the punish. The pawn attacks the f5-bishop, which now has nowhere safe to go.',
+      '…Be4 — the bishop flees to its last square.',
+      'f3 — White attacks again; the bishop is trapped.',
+      '…Bxc2 — Black grabs a pawn for the doomed bishop, the best he can do.',
+      'Qxc2 — White wins the bishop for a pawn; a clean piece up. The …e6 move walled in the bishop and lost it.',
+      '', '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '',
+      'e6 — walls in the bishop',
+      'g4 — attack the trapped bishop',
+      'Be4 — the last square',
+      'f3 — attack again, trapped',
+      'Bxc2 — grab a pawn for the bishop',
+      'Qxc2 — win the piece',
+      '', '', '',
+    ],
+    sources: ['concept:tac-trapped-piece', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
+  },
+
+  // vs …c5 dxc5 …Qa5+?! the check achieves nothing; Nc3 develops and White
+  // keeps the extra pawn (confirmed, +1.0). 16 plies; Qa5+@7, Nc3@8.
+  'pro-gothamchess-caro-advance-white:e4_c6_d4_d5_e5_c5_dxc5:Qa5+': {
+    watch: [
+      '', '', '', '', '', '', '',
+      'Qa5+?! The check looks active, but it just helps White develop with tempo.',
+      'Nc3 — White blocks the check by developing a piece, gaining time and holding the extra c5-pawn.',
+      '', 'Be3 — White reinforces the extra pawn and completes development.',
+      '', '', 'b4 — White gains queenside space, keeping the material and the initiative; clearly better.',
+      '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '',
+      'Qa5+ — an empty check',
+      'Nc3 — block with development',
+      '', 'Be3 — guard the extra pawn',
+      '', '', 'b4 — gain space, hold the pawn',
+      '', '',
+    ],
+    sources: ['concept:pos-development', 'concept:pos-material', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
+  },
+
+  // Nf3 line vs …c5: …c4?! releases the tension; Qe2 then b3 undermines for a
+  // pleasant edge (positional, +0.6). 22 plies; c4@13, Qe2@14.
+  'pro-gothamchess-caro-advance-white:e4_c6_d4_d5_e5_Bf5_Nf3_e6_Bd3_Bxd3_Qxd3_c5_c3:c4': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'c4?! Releasing the tension hands White a free hand on the kingside and a target to undermine.',
+      'Qe2 — White repositions the queen, preparing b3 to chip at the c4-pawn.',
+      '', 'b3 — White strikes at the base of the queenside chain, opening lines against the over-extended pawn.',
+      '', '', 'a4 — White expands and undermines further; with the freer game and the e5-wedge, White is comfortably better.',
+      '', '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'c4 — releases the tension',
+      'Qe2 — prepare b3',
+      '', 'b3 — undermine the chain',
+      '', '', 'a4 — expand, White better',
+      '', '',
+    ],
+    sources: ['concept:pos-pawn-structure', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
+  },
+
+  // Main line: …Qa6?! offers the queen trade but loses time; c4 grabs the
+  // centre with a clear space edge (positional, +0.7). 24 plies; Qa6@15, c4@16.
+  'pro-gothamchess-caro-advance-white:e4_c6_d4_d5_e5_Bf5_h4_h5_Bg5_Qb6_Bd3_Bxd3_Qxd3_e6_Nd2:Qa6': {
+    watch: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qa6?! Offering the queen trade just loses time and helps White seize the centre.',
+      'c4 — the punish. White strikes the centre with tempo, grabbing space while Black’s queen is offside.',
+      '…Bb4 — Black develops, pinning the d2-knight.',
+      'b3 — White supports c4 and unpins, keeping the big space advantage.',
+      '', '', '', 'White is comfortably better with the central and kingside space.',
+      '',
+    ],
+    learn: [
+      '', '', '', '', '', '', '', '', '', '', '', '', '', '', '',
+      'Qa6 — loses time',
+      'c4 — seize the centre with tempo',
+      'Bb4 — Black pins',
+      'b3 — support c4, unpin',
+      '', '', '', 'big space, White better',
+      '',
+    ],
+    sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

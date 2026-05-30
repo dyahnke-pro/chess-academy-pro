@@ -1,0 +1,50 @@
+{
+  "player": "gothamchess",
+  "openingId": "caro-advance-white",
+  "variationKey": "qxd4-grab",
+  "variation": {
+    "label": "…Qxd4 grab",
+    "prefix": [
+      "e4",
+      "c6",
+      "d4",
+      "d5",
+      "e5",
+      "Bf5",
+      "h4",
+      "h5",
+      "Bg5",
+      "Qb6",
+      "Bd3",
+      "Bxd3",
+      "Qxd3",
+      "Qxd4"
+    ]
+  },
+  "generatedAt": "2026-05-30T03:31:48.949Z",
+  "totalGames": 0,
+  "wins": 0,
+  "draws": 0,
+  "losses": 0,
+  "openingTerminusPly": 14,
+  "openingTerminusMove": 7,
+  "spineMoves": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5",
+    "h4",
+    "h5",
+    "Bg5",
+    "Qb6",
+    "Bd3",
+    "Bxd3",
+    "Qxd3",
+    "Qxd4"
+  ],
+  "gamesAtTerminus": 0,
+  "endgameTypeBreakdown": {},
+  "topModelGames": []
+}
