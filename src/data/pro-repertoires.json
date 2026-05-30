@@ -257,7 +257,7 @@
       "playerId": "gothamchess",
       "eco": "C42",
       "name": "Stafford Gambit Refutation (GothamChess)",
-      "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5",
+      "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4",
       "color": "white",
       "style": "Tactical, Theoretical",
       "overview": "The Stafford Gambit was buried in chess obscurity for nearly a century — invented by American master Joseph Stafford in the 1950s, considered unsound by every serious analyst, and forgotten. Then IM Eric Rosen turned it into a YouTube phenomenon in 2019, racking up millions of views with Stafford traps against unprepared club players. Levy made the natural follow-up: the refutation video that taught the WHITE side how to crush it. The result is that today, half the chess world plays the Stafford and the other half memorised the antidote. The correct line is the most common Stafford position you'll face: someone tried to trick you with 1…e5 2.Nf3 Nf6 (NOT 2…Nc6) hoping for 3.Nxe5 Nc6!? The fix is simple: take the pawn, then play d3 (not d4!) and just consolidate. White is up a clean pawn for nothing — Black has zero compensation against accurate play.",
@@ -277,12 +277,12 @@
       "variations": [
         {
           "name": "Main Refutation d3",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4",
           "explanation": "The textbook refutation. After 4.Nxc6 dxc6, you play 5.d3 (NOT 5.d4!) keeping the centre closed and the extra pawn permanent. The Be2 development is deliberately modest — bland but unprovokable. Black's standard …h5 + …Ng4 + …Qh4 attacking battery never gets going against a calmly defended kingside. From here you just castle, trade pieces, win the endgame."
         },
         {
           "name": "4...dxc6 5.e5 Line",
-          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Nc5 Be3 Ne6 Nd2",
           "explanation": "The aggressive alternative — push e5 to kick the f6-knight forward. After …Ne4, you've gained space at the cost of slightly weakening e5 itself. The follow-up plan is d3 (always d3!) attacking the knight, then Bxc5 trading off Black's most active piece. The extra pawn is intact and you've gained a strong central pawn — a slight improvement on the main refutation when you want to attack rather than consolidate."
         }
       ],
@@ -1897,7 +1897,7 @@
         },
         {
           "name": "Symmetric (…c5)",
-          "pgn": "c4 c5 Nc3 Nc6 Nf3 g6",
+          "pgn": "c4 c5 Nc3 Nc6 Nf3 g6 g3 Bg7 Bg2 Nf6 O-O O-O d3 d6",
           "explanation": "Symmetric English with both sides playing c-pawns. Levy's score here is 66.5% — high because the symmetric structure favours White's tempo. Plans depend on Black's setup; flexible piece play is the key.",
           "sources": [
             "concept:pos-development",

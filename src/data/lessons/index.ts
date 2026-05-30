@@ -28,6 +28,8 @@ import { PRO_GOTHAMCHESS_ENGLISH_VARIATION_LESSONS } from './proGothamchessEngli
 import { PRO_GOTHAMCHESS_PONZIANI_VARIATION_LESSONS } from './proGothamchessPonzianiVariations';
 import { PRO_GOTHAMCHESS_ANTI_SICILIAN_VARIATION_LESSONS } from './proGothamchessAntiSicilianVariations';
 import { PRO_GOTHAMCHESS_MILNER_BARRY_VARIATION_LESSONS } from './proGothamchessMilnerBarryVariations';
+import { PRO_GOTHAMCHESS_FANTASY_CARO_VARIATION_LESSONS } from './proGothamchessFantasyCaroVariations';
+import { PRO_GOTHAMCHESS_STAFFORD_REFUTE_VARIATION_LESSONS } from './proGothamchessStaffordRefuteVariations';
 import { PRO_NARODITSKY_CARO_KANN_VARIATION_LESSONS } from './proNaroditskyCaroKannVariations';
 import { PRO_NARODITSKY_ALAPIN_VARIATION_LESSONS } from './proNaroditskyAlapinVariations';
 import { PRO_NARODITSKY_KID_VARIATION_LESSONS } from './proNaroditskyKIDVariations';
@@ -288,6 +290,8 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_GOTHAMCHESS_PONZIANI_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_ANTI_SICILIAN_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_MILNER_BARRY_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_FANTASY_CARO_VARIATION_LESSONS,
+  ...PRO_GOTHAMCHESS_STAFFORD_REFUTE_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

@@ -2,11 +2,7 @@
   "_doc": "Pro-rep variations whose PGN does not yet walk into the middlegame (uncastled, under-developed, short). Gate: variationMiddlegameDepth.test.ts. David 2026-05-29: every opening AND variation must reach the middlegame. This is the shrinking backlog — the list only SHRINKS; a NEW variation MUST reach the middlegame (extend its PGN to his data-derived spine), never be added here. Lower the count as you deepen these. Regenerate ONLY to remove entries: node scripts/pro-repertoire/gen-mg-depth-baseline.mjs",
   "count": 20,
   "keys": [
-    "pro-gothamchess-english::Symmetric (…c5)",
     "pro-gothamchess-pirc-defense::150 Attack (Be3 + f3)",
-    "pro-gothamchess-stafford-refute::4...dxc6 5.e5 Line",
-    "pro-gothamchess-stafford-refute::<main>",
-    "pro-gothamchess-stafford-refute::Main Refutation d3",
     "pro-naroditsky-alekhine::c4 Modern Main",
     "pro-naroditsky-caro-kann::Advance Variation (3.e5 Bf5)",
     "pro-naroditsky-caro-kann::Exchange Variation (exd5)",
