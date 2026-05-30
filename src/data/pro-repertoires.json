@@ -1941,7 +1941,7 @@
         {
           "name": "Vienna Gambit Main Line",
           "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3 Be6 Rb1",
-          "explanation": "The textbook Vienna Gambit at 649 games. The Rb1 lift puts the rook on the open b-file, eyeing b7. Combined with the bishop pair, this is a long-term initiative play — Black's defence requires precise piece coordination.",
+          "explanation": "The textbook Vienna Gambit at 649 games. The Rb1 lift puts the rook on the open b-file, eyeing b7. Combined with the cramping e5-pawn and the queen on g3, this is a long-term initiative play — Black's defence requires precise piece coordination.",
           "sources": [
             "concept:pos-development",
             "https://www.chess.com/openings/Vienna-Game",
