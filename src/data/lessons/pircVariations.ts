@@ -86,7 +86,10 @@ const CLASSICAL: LessonScript = {
   ],
 };
 
-/** 150 Attack (Be3, Qd2, Bh6) — trade the dark bishop, castle long, storm. */
+/** 150 Attack (Be3, Qd2) — the modern antidote: the early ...c6/...b5
+ *  queenside counter blunts the attack before it starts, then Black
+ *  castles safely. Data spine (lichess masters + strong online);
+ *  terminus is equal for Black (engine -0.42 at move 11). */
 const ATTACK_150: LessonScript = {
   openingId: 'pirc-defence',
   sources: ['concept:pos-center', 'concept:att-queenside-attack', 'https://en.wikipedia.org/wiki/Pirc_Defence'],
@@ -94,26 +97,26 @@ const ATTACK_150: LessonScript = {
   minutes: 6,
   orientation: 'black',
   beats: [
-    b({ id: 't1', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 Bg7 Qd2 O-O',
-      say: "The 150 Attack — a blunt, club-crushing plan that even strong amateurs wield: Be3 and Qd2, lining up to trade the dark-squared bishops with Bh6, castle queenside, and hurl the h-pawn at Black's king. Simple and dangerous. Black must know the antidote cold.",
-      sayShort: "Be3, Qd2 — the 150: castle long, h4 storm.",
-      highlights: [H('e3', SOFT), H('d2', SOFT)] }),
-    b({ id: 't2', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 Bg7 Qd2 O-O f3 c6',
-      say: "White plays f3 — propping up e4 and clearing the way for g4 and h4. Black's reply is the key to the whole defence: c6. It looks humble, but it is the launch-pad for Black's counter-race, preparing b5 and freeing the queen to swing out. Against a flank attack, you counter in the centre and on the other wing — fast.",
-      sayShort: "f3 readies the storm; …c6 counters.",
-      highlights: [H('f3', SOFT), H('c6', KEY), H('b5', SOFT)] }),
-    b({ id: 't3', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 Bg7 Qd2 O-O f3 c6 Bh6',
-      say: "Bh6 — the point of the system. White offers to trade off your magnificent g7-bishop, the great defender of your king's dark squares. Letting it go feels uncomfortable, but the engines and the theory agree this is fine for Black, because Black's counterplay arrives in time.",
-      sayShort: "Bh6 — offers to trade g7; allow it.",
-      highlights: [H('h6', KEY), H('g7', SOFT)] }),
-    b({ id: 't4', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 Bg7 Qd2 O-O f3 c6 Bh6 Bxh6 Qxh6',
-      say: "After Bxh6 Qxh6, the dark-squared bishops are gone and White's queen sits aggressively on h6. Yes, your king's dark squares are a touch airier — but that is the deal. In exchange you have a clean, fast target on the queenside and no weaknesses there. The whole game now turns on speed.",
-      sayShort: "Dark bishops off — trade for queenside speed.",
-      highlights: [H('h6', SOFT)] }),
-    b({ id: 't5', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 Bg7 Qd2 O-O f3 c6 Bh6 Bxh6 Qxh6 Qa5 h4 b5 h5 b4 hxg6 fxg6',
-      say: "And Black strikes first: Qa5. The queen leaps into the game, eyeing the c3-knight and the queenside, and lends weight to the coming b5-b4. This is the 150 Attack distilled — White races the h-pawn at your king, you race the b-pawn at White's. Whoever knows the plan and plays it faster wins the race.",
-      sayShort: "…Qa5 — the queen joins, backing …b5-b4.",
-      highlights: [H('a5', ATK), H('c3', KEY), H('b5', SOFT)] }),
+    b({ id: 't1', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 c6 Qd2',
+      say: "The 150 Attack — Be3 and Qd2, preparing to swap your dark-squared bishop with Bh6, castle long, and storm the h-file. It is White's most dangerous answer to the Pirc, and it flattens the unprepared. The antidote must come early: c6. The little pawn keeps the king flexible and lays the groundwork for a queenside counter, so Black never has to castle straight into the storm.",
+      sayShort: "Be3, Qd2 — the 150; answer with …c6.",
+      highlights: [H('e3', SOFT), H('d2', SOFT), H('c6', KEY)] }),
+    b({ id: 't2', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 c6 Qd2 b5 Bd3 Nbd7',
+      say: "Black expands with b5, claiming queenside space and pointing the pawns at the very wing where White's king wants to hide. White's most popular reply is the calm Bd3 — developing rather than charging — and Black brings the knight to d7, ready to support the centre and reroute. This is the modern handling: a positional race, not a panicked defence.",
+      sayShort: "…b5 grabs space; …Nbd7 develops.",
+      highlights: [H('b5', KEY), H('d3', SOFT), H('d7', SOFT)] }),
+    b({ id: 't3', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 c6 Qd2 b5 Bd3 Nbd7 Nf3 e5',
+      say: "With White developing quietly, Black strikes the centre: e5, challenging d4 head-on. Hitting the centre is the classical reply to a wing attack — every pawn Black trades in the middle is one less battering-ram White can roll at the king. With both kings still uncommitted, opening the position favours the better-coordinated side, and that is Black.",
+      sayShort: "…e5 — hit the centre, the classic counter.",
+      highlights: [H('e5', ATK), H('d4', KEY)] }),
+    b({ id: 't4', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 c6 Qd2 b5 Bd3 Nbd7 Nf3 e5 O-O Bb7 dxe5 dxe5',
+      say: "Now Black castles in safety — the queenside pawns have smothered White's attacking ideas, so this is nothing like castling into a storm. The bishop swings to b7 on the long light diagonal, and when White releases the tension with dxe5, Black recaptures and keeps a healthy pawn on e5. The dreaded h-file assault simply never materialised.",
+      sayShort: "…O-O, …Bb7 — safe; …e5 pawn holds.",
+      highlights: [H('b7', KEY), H('e5', SOFT)] }),
+    b({ id: 't5', moves: 'e4 d6 d4 Nf6 Nc3 g6 Be3 c6 Qd2 b5 Bd3 Nbd7 Nf3 e5 O-O Bb7 dxe5 dxe5 a4 b4 Nd1 Qc7',
+      say: "White probes with a4, but Black just pushes b4 — and that pawn kicks the c3-knight, the heart of White's attack, all the way back to the passive d1-square. The queen settles on c7, defending e5 and eyeing the half-open c-file. Black has come through White's most feared anti-Pirc weapon with a fully equal game, a safe king, and the easier plan on the queenside. That is the whole lesson of the 150: defuse it early with …c6 and …b5, and the attack evaporates.",
+      sayShort: "…b4 buries the knight on d1; …Qc7, equal.",
+      highlights: [H('b4', ATK), H('d1', KEY), H('c7', SOFT), H('e5', SOFT)] }),
   ],
 };
 
