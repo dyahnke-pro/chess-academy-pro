@@ -1,0 +1,233 @@
+{
+  "openingId": "ev__compromised",
+  "seed": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "b4",
+    "Bxb4",
+    "c3",
+    "Ba5",
+    "d4",
+    "exd4",
+    "O-O",
+    "dxc3"
+  ],
+  "spine": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "b4",
+    "Bxb4",
+    "c3",
+    "Ba5",
+    "d4",
+    "exd4",
+    "O-O",
+    "dxc3",
+    "Qb3",
+    "Qe7",
+    "Nxc3",
+    "Bxc3",
+    "Qxc3",
+    "Nf6",
+    "e5",
+    "Ne4",
+    "Qe3",
+    "Nc5",
+    "Ba3",
+    "b6",
+    "Rfe1",
+    "O-O",
+    "Rad1"
+  ],
+  "plies": 29,
+  "throughMove": 15,
+  "reachedMiddlegame": true,
+  "counts": [
+    {
+      "ply": 15,
+      "move": 8,
+      "gamesAtPosition": 29262,
+      "played": "Qb3",
+      "pct": 83,
+      "playedGames": 24229,
+      "source": "lichess"
+    },
+    {
+      "ply": 16,
+      "move": 8,
+      "gamesAtPosition": 24334,
+      "played": "Qe7",
+      "pct": 52,
+      "playedGames": 12602,
+      "source": "lichess"
+    },
+    {
+      "ply": 17,
+      "move": 9,
+      "gamesAtPosition": 18368,
+      "played": "Nxc3",
+      "pct": 47,
+      "playedGames": 8678,
+      "source": "lichess"
+    },
+    {
+      "ply": 18,
+      "move": 9,
+      "gamesAtPosition": 8692,
+      "played": "Bxc3",
+      "pct": 72,
+      "playedGames": 6217,
+      "source": "lichess"
+    },
+    {
+      "ply": 19,
+      "move": 10,
+      "gamesAtPosition": 6225,
+      "played": "Qxc3",
+      "pct": 100,
+      "playedGames": 6212,
+      "source": "lichess"
+    },
+    {
+      "ply": 20,
+      "move": 10,
+      "gamesAtPosition": 7844,
+      "played": "Nf6",
+      "pct": 51,
+      "playedGames": 4038,
+      "source": "lichess"
+    },
+    {
+      "ply": 21,
+      "move": 11,
+      "gamesAtPosition": 4035,
+      "played": "e5",
+      "pct": 62,
+      "playedGames": 2512,
+      "source": "lichess"
+    },
+    {
+      "ply": 22,
+      "move": 11,
+      "gamesAtPosition": 2616,
+      "played": "Ne4",
+      "pct": 46,
+      "playedGames": 1191,
+      "source": "lichess"
+    },
+    {
+      "ply": 23,
+      "move": 12,
+      "gamesAtPosition": 1188,
+      "played": "Qe3",
+      "pct": 49,
+      "playedGames": 583,
+      "source": "lichess"
+    },
+    {
+      "ply": 24,
+      "move": 12,
+      "gamesAtPosition": 582,
+      "played": "Nc5",
+      "pct": 76,
+      "playedGames": 442,
+      "source": "lichess"
+    },
+    {
+      "ply": 25,
+      "move": 13,
+      "gamesAtPosition": 442,
+      "played": "Ba3",
+      "pct": 92,
+      "playedGames": 407,
+      "source": "lichess"
+    },
+    {
+      "ply": 26,
+      "move": 13,
+      "gamesAtPosition": 433,
+      "played": "b6",
+      "pct": 81,
+      "playedGames": 350,
+      "source": "lichess"
+    },
+    {
+      "ply": 27,
+      "move": 14,
+      "gamesAtPosition": 350,
+      "played": "Rfe1",
+      "pct": 25,
+      "playedGames": 89,
+      "source": "lichess"
+    },
+    {
+      "ply": 28,
+      "move": 14,
+      "gamesAtPosition": 89,
+      "played": "O-O",
+      "pct": 90,
+      "playedGames": 80,
+      "source": "lichess"
+    },
+    {
+      "ply": 29,
+      "move": 15,
+      "gamesAtPosition": 82,
+      "played": "Rad1",
+      "pct": 50,
+      "playedGames": 41,
+      "source": "lichess"
+    }
+  ],
+  "branches": [
+    {
+      "afterMove": 8,
+      "main": "Qe7",
+      "mainPct": 52,
+      "alt": "Qf6",
+      "altGames": 11056
+    },
+    {
+      "afterMove": 8,
+      "main": "Nxc3",
+      "mainPct": 47,
+      "alt": "Ba3",
+      "altGames": 6581
+    },
+    {
+      "afterMove": 10,
+      "main": "Nf6",
+      "mainPct": 51,
+      "alt": "f6",
+      "altGames": 1671
+    },
+    {
+      "afterMove": 11,
+      "main": "Ne4",
+      "mainPct": 46,
+      "alt": "Ng4",
+      "altGames": 1065
+    },
+    {
+      "afterMove": 11,
+      "main": "Qe3",
+      "mainPct": 49,
+      "alt": "Qc2",
+      "altGames": 344
+    }
+  ],
+  "floors": {
+    "COMMON": 60,
+    "LOWFLOOR": 8,
+    "MIDGAME_PLY": 20
+  },
+  "generatedAt": "2026-05-30T21:38:57.300Z"
+}

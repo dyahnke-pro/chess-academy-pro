@@ -87,6 +87,21 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
   arrows/highlights, sources[] on every unit, NO move-number prefixes, NO
   move-by-move dictation. Board-accuracy gated (narrationAccuracy).
 
+## MIDDLEGAME PLAN RULES (David 2026-05-30, locked)
+- **Every middlegame plan's playable line is ≥ 8 plies long.** No 4-6 ply
+  stubs. The plan must walk far enough to actually demonstrate the
+  break/maneuver/structure it teaches. (Sits inside the doctrine's "6-12-move
+  playableLine" band; the hard floor is 8 plies.)
+- **Build ALL plans the wider-corpus data supports — if more than one plan
+  exists, add them.** Per the WIDER-CORPUS rule (G9.1 STEP 5): each move
+  cluster at ≥10% frequency at a key middlegame ply across the FULL variation
+  corpus (hundreds of games, NOT the 3-4 terminus games) = ONE plan. Count
+  honestly with `count-plans.mjs`; build that many; never ship 1 when the data
+  shows 2-3, never fabricate one the data doesn't show.
+- Each plan anchored at the spine terminus (G9.3 Gate C — picks up where the
+  opening leaves off) and covers, per the data: pawn breaks, key squares,
+  the pawn structure, and the center-or-wing attack the line generates.
+
 ## GATE / PARITY WIRING (do once, early)
 - Add `gambits.json` openings to the `variationMiddlegameDepth` gate scope (it
   currently walks pro-repertoires only) so "reaches MG" can't silently rot.

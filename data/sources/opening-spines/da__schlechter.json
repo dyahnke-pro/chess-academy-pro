@@ -1,0 +1,361 @@
+{
+  "openingId": "da__schlechter",
+  "seed": [
+    "e4",
+    "e5",
+    "d4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Nxc3"
+  ],
+  "spine": [
+    "e4",
+    "e5",
+    "d4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Nxc3",
+    "Nc6",
+    "Bc4",
+    "Bb4",
+    "Nf3",
+    "d6",
+    "O-O",
+    "Bxc3",
+    "bxc3",
+    "Nf6",
+    "Bg5",
+    "O-O",
+    "Re1",
+    "Bg4",
+    "h3",
+    "Bxf3",
+    "Qxf3",
+    "Ne5",
+    "Qe2",
+    "Nxc4",
+    "Qxc4",
+    "h6",
+    "Bh4",
+    "g5",
+    "Bg3",
+    "Re8"
+  ],
+  "plies": 32,
+  "throughMove": 16,
+  "reachedMiddlegame": true,
+  "counts": [
+    {
+      "ply": 8,
+      "move": 4,
+      "gamesAtPosition": 240719,
+      "played": "Nc6",
+      "pct": 37,
+      "playedGames": 88169,
+      "source": "lichess"
+    },
+    {
+      "ply": 9,
+      "move": 5,
+      "gamesAtPosition": 88157,
+      "played": "Bc4",
+      "pct": 61,
+      "playedGames": 54117,
+      "source": "lichess"
+    },
+    {
+      "ply": 10,
+      "move": 5,
+      "gamesAtPosition": 94427,
+      "played": "Bb4",
+      "pct": 30,
+      "playedGames": 28749,
+      "source": "lichess"
+    },
+    {
+      "ply": 11,
+      "move": 6,
+      "gamesAtPosition": 33424,
+      "played": "Nf3",
+      "pct": 59,
+      "playedGames": 19611,
+      "source": "lichess"
+    },
+    {
+      "ply": 12,
+      "move": 6,
+      "gamesAtPosition": 74,
+      "played": "d6",
+      "pct": 73,
+      "playedGames": 54,
+      "source": "masters"
+    },
+    {
+      "ply": 13,
+      "move": 7,
+      "gamesAtPosition": 27444,
+      "played": "O-O",
+      "pct": 58,
+      "playedGames": 16010,
+      "source": "lichess"
+    },
+    {
+      "ply": 14,
+      "move": 7,
+      "gamesAtPosition": 21589,
+      "played": "Bxc3",
+      "pct": 48,
+      "playedGames": 10280,
+      "source": "lichess"
+    },
+    {
+      "ply": 15,
+      "move": 8,
+      "gamesAtPosition": 10279,
+      "played": "bxc3",
+      "pct": 100,
+      "playedGames": 10233,
+      "source": "lichess"
+    },
+    {
+      "ply": 16,
+      "move": 8,
+      "gamesAtPosition": 15807,
+      "played": "Nf6",
+      "pct": 59,
+      "playedGames": 9398,
+      "source": "lichess"
+    },
+    {
+      "ply": 17,
+      "move": 9,
+      "gamesAtPosition": 14085,
+      "played": "Bg5",
+      "pct": 38,
+      "playedGames": 5288,
+      "source": "lichess"
+    },
+    {
+      "ply": 18,
+      "move": 9,
+      "gamesAtPosition": 7832,
+      "played": "O-O",
+      "pct": 49,
+      "playedGames": 3856,
+      "source": "lichess"
+    },
+    {
+      "ply": 19,
+      "move": 10,
+      "gamesAtPosition": 5048,
+      "played": "Re1",
+      "pct": 32,
+      "playedGames": 1603,
+      "source": "lichess"
+    },
+    {
+      "ply": 20,
+      "move": 10,
+      "gamesAtPosition": 2510,
+      "played": "Bg4",
+      "pct": 41,
+      "playedGames": 1024,
+      "source": "lichess"
+    },
+    {
+      "ply": 21,
+      "move": 11,
+      "gamesAtPosition": 1076,
+      "played": "h3",
+      "pct": 57,
+      "playedGames": 616,
+      "source": "lichess"
+    },
+    {
+      "ply": 22,
+      "move": 11,
+      "gamesAtPosition": 621,
+      "played": "Bxf3",
+      "pct": 55,
+      "playedGames": 344,
+      "source": "lichess"
+    },
+    {
+      "ply": 23,
+      "move": 12,
+      "gamesAtPosition": 344,
+      "played": "Qxf3",
+      "pct": 88,
+      "playedGames": 304,
+      "source": "lichess"
+    },
+    {
+      "ply": 24,
+      "move": 12,
+      "gamesAtPosition": 330,
+      "played": "Ne5",
+      "pct": 98,
+      "playedGames": 323,
+      "source": "lichess"
+    },
+    {
+      "ply": 25,
+      "move": 13,
+      "gamesAtPosition": 331,
+      "played": "Qe2",
+      "pct": 98,
+      "playedGames": 325,
+      "source": "lichess"
+    },
+    {
+      "ply": 26,
+      "move": 13,
+      "gamesAtPosition": 345,
+      "played": "Nxc4",
+      "pct": 56,
+      "playedGames": 193,
+      "source": "lichess"
+    },
+    {
+      "ply": 27,
+      "move": 14,
+      "gamesAtPosition": 193,
+      "played": "Qxc4",
+      "pct": 100,
+      "playedGames": 193,
+      "source": "lichess"
+    },
+    {
+      "ply": 28,
+      "move": 14,
+      "gamesAtPosition": 218,
+      "played": "h6",
+      "pct": 48,
+      "playedGames": 104,
+      "source": "lichess"
+    },
+    {
+      "ply": 29,
+      "move": 15,
+      "gamesAtPosition": 104,
+      "played": "Bh4",
+      "pct": 84,
+      "playedGames": 87,
+      "source": "lichess"
+    },
+    {
+      "ply": 30,
+      "move": 15,
+      "gamesAtPosition": 292,
+      "played": "g5",
+      "pct": 42,
+      "playedGames": 123,
+      "source": "lichess"
+    },
+    {
+      "ply": 31,
+      "move": 16,
+      "gamesAtPosition": 123,
+      "played": "Bg3",
+      "pct": 100,
+      "playedGames": 123,
+      "source": "lichess"
+    },
+    {
+      "ply": 32,
+      "move": 16,
+      "gamesAtPosition": 166,
+      "played": "Re8",
+      "pct": 28,
+      "playedGames": 46,
+      "source": "lichess"
+    }
+  ],
+  "branches": [
+    {
+      "afterMove": 4,
+      "main": "Nc6",
+      "mainPct": 37,
+      "alt": "Bb4",
+      "altGames": 61570
+    },
+    {
+      "afterMove": 5,
+      "main": "Bb4",
+      "mainPct": 30,
+      "alt": "d6",
+      "altGames": 26645
+    },
+    {
+      "afterMove": 5,
+      "main": "Nf3",
+      "mainPct": 59,
+      "alt": "Ne2",
+      "altGames": 7074
+    },
+    {
+      "afterMove": 6,
+      "main": "O-O",
+      "mainPct": 58,
+      "alt": "Qb3",
+      "altGames": 7130
+    },
+    {
+      "afterMove": 7,
+      "main": "Bxc3",
+      "mainPct": 48,
+      "alt": "Nf6",
+      "altGames": 6065
+    },
+    {
+      "afterMove": 8,
+      "main": "Nf6",
+      "mainPct": 59,
+      "alt": "Bg4",
+      "altGames": 1868
+    },
+    {
+      "afterMove": 8,
+      "main": "Bg5",
+      "mainPct": 38,
+      "alt": "e5",
+      "altGames": 3801
+    },
+    {
+      "afterMove": 9,
+      "main": "O-O",
+      "mainPct": 49,
+      "alt": "h6",
+      "altGames": 3021
+    },
+    {
+      "afterMove": 9,
+      "main": "Re1",
+      "mainPct": 32,
+      "alt": "h3",
+      "altGames": 1198
+    },
+    {
+      "afterMove": 10,
+      "main": "Bg4",
+      "mainPct": 41,
+      "alt": "h6",
+      "altGames": 925
+    },
+    {
+      "afterMove": 11,
+      "main": "Bxf3",
+      "mainPct": 55,
+      "alt": "Bh5",
+      "altGames": 264
+    }
+  ],
+  "floors": {
+    "COMMON": 60,
+    "LOWFLOOR": 8,
+    "MIDGAME_PLY": 20
+  },
+  "generatedAt": "2026-05-30T21:42:20.682Z"
+}

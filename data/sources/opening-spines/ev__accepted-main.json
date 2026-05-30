@@ -1,0 +1,176 @@
+{
+  "openingId": "ev__accepted-main",
+  "seed": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "b4",
+    "Bxb4",
+    "c3",
+    "Ba5",
+    "d4"
+  ],
+  "spine": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "b4",
+    "Bxb4",
+    "c3",
+    "Ba5",
+    "d4",
+    "d6",
+    "Qb3",
+    "Qd7",
+    "O-O",
+    "Bb6",
+    "Nbd2",
+    "Na5",
+    "Qc2",
+    "Ne7",
+    "dxe5",
+    "O-O",
+    "exd6"
+  ],
+  "plies": 23,
+  "throughMove": 12,
+  "reachedMiddlegame": true,
+  "counts": [
+    {
+      "ply": 12,
+      "move": 6,
+      "gamesAtPosition": 843,
+      "played": "d6",
+      "pct": 54,
+      "playedGames": 453,
+      "source": "masters"
+    },
+    {
+      "ply": 13,
+      "move": 7,
+      "gamesAtPosition": 453,
+      "played": "Qb3",
+      "pct": 93,
+      "playedGames": 421,
+      "source": "masters"
+    },
+    {
+      "ply": 14,
+      "move": 7,
+      "gamesAtPosition": 421,
+      "played": "Qd7",
+      "pct": 98,
+      "playedGames": 411,
+      "source": "masters"
+    },
+    {
+      "ply": 15,
+      "move": 8,
+      "gamesAtPosition": 411,
+      "played": "O-O",
+      "pct": 46,
+      "playedGames": 188,
+      "source": "masters"
+    },
+    {
+      "ply": 16,
+      "move": 8,
+      "gamesAtPosition": 190,
+      "played": "Bb6",
+      "pct": 100,
+      "playedGames": 190,
+      "source": "masters"
+    },
+    {
+      "ply": 17,
+      "move": 9,
+      "gamesAtPosition": 190,
+      "played": "Nbd2",
+      "pct": 78,
+      "playedGames": 148,
+      "source": "masters"
+    },
+    {
+      "ply": 18,
+      "move": 9,
+      "gamesAtPosition": 175,
+      "played": "Na5",
+      "pct": 97,
+      "playedGames": 170,
+      "source": "masters"
+    },
+    {
+      "ply": 19,
+      "move": 10,
+      "gamesAtPosition": 170,
+      "played": "Qc2",
+      "pct": 93,
+      "playedGames": 158,
+      "source": "masters"
+    },
+    {
+      "ply": 20,
+      "move": 10,
+      "gamesAtPosition": 158,
+      "played": "Ne7",
+      "pct": 28,
+      "playedGames": 45,
+      "source": "masters"
+    },
+    {
+      "ply": 21,
+      "move": 11,
+      "gamesAtPosition": 116,
+      "played": "dxe5",
+      "pct": 82,
+      "playedGames": 95,
+      "source": "lichess"
+    },
+    {
+      "ply": 22,
+      "move": 11,
+      "gamesAtPosition": 129,
+      "played": "O-O",
+      "pct": 78,
+      "playedGames": 101,
+      "source": "lichess"
+    },
+    {
+      "ply": 23,
+      "move": 12,
+      "gamesAtPosition": 101,
+      "played": "exd6",
+      "pct": 53,
+      "playedGames": 54,
+      "source": "lichess"
+    }
+  ],
+  "branches": [
+    {
+      "afterMove": 6,
+      "main": "d6",
+      "mainPct": 54,
+      "alt": "exd4",
+      "altGames": 356
+    },
+    {
+      "afterMove": 7,
+      "main": "O-O",
+      "mainPct": 46,
+      "alt": "dxe5",
+      "altGames": 163
+    }
+  ],
+  "floors": {
+    "COMMON": 60,
+    "LOWFLOOR": 8,
+    "MIDGAME_PLY": 20
+  },
+  "generatedAt": "2026-05-30T21:38:17.132Z"
+}
