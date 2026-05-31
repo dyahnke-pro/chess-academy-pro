@@ -495,8 +495,8 @@
       },
       {
         "name": "Bishop's Gambit (3.Bc4)",
-        "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 Bb4 e5 d5 exf6 dxc4",
-        "explanation": "The Bishop's Gambit avoids the Nf3 main lines and immediately targets f7 with 3.Bc4. After ...Nf6, White pushes e5 driving the knight back while the bishop eyes the weakened diagonal. The fxg7 advance creates a lasting structural advantage even if material gets exchanged. This is less theoretically demanding than the classical King's Gambit lines but offers White good practical chances with clear attacking plans.",
+        "pgn": "e4 e5 f4 exf4 Bc4 Nf6 Nc3 c6 Bb3 d5 exd5 cxd5 d4 Bd6 Nge2 O-O Bxf4 Bxf4 Nxf4 Re8+ Nfe2 Ng4",
+        "explanation": "The Bishop's Gambit avoids the Nf3 main lines and immediately targets f7 with 3.Bc4, deliberately inviting ...Qh4+. After the modern ...Nf6, White guards e4 with Nc3, tucks the bishop to b3 to keep the killer diagonal, and rebuilds the centre with exd5/d4. Nge2 reroutes to recover the f4-pawn (Bxf4 Nxf4); material levels but White keeps the open, piece-active attacking game — and Black's ...Re8+/...Ng4 counterplay keeps it sharp.",
         "frequency": "uncommon",
         "deviationMove": 3
       }
@@ -2543,8 +2543,8 @@
       },
       {
         "name": "Budapest Gambit: Fajarowicz Variation",
-        "pgn": "d4 Nf6 c4 e5 dxe5 Ne4 a3 Nc6 Nf3 d6 exd6 Bxd6 g3",
-        "explanation": "The Fajarowicz with 3...Ne4 is a potent surprise weapon aiming for rapid piece activity rather than slow pawn recovery. After the d6 exchange, Black gets open lines and a development lead with pieces pouring into active squares. The rook on e8 pressures the e-file while the bishop on f5 prevents White from consolidating. This line demands specific knowledge from White or Black obtains a dangerous initiative."
+        "pgn": "d4 Nf6 c4 e5 dxe5 Ne4 Nf3 Bb4+ Nbd2 Nc6 a3 Nxd2 Bxd2 Bxd2+ Qxd2 Qe7 Qc3 b6 e3 Bb7 Be2 O-O-O",
+        "explanation": "The Fajarowicz with 3...Ne4 is a trappy surprise weapon. After 4.Nf3 Bb4+ Black harasses with the check, then trades the minor pieces off on d2. Black stays a pawn down, but gains rapid development, the b7-bishop on the long diagonal, the half-open d-file after ...O-O-O, and the chronic e5-pawn as a lasting target — genuine practical compensation rather than slow pawn recovery."
       },
       {
         "name": "Budapest Gambit: Rubinstein Variation",
@@ -3096,8 +3096,8 @@
     "variations": [
       {
         "name": "Fianchetto Variation",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4",
-        "explanation": "White's modern main line, fianchettoing with g3 to undermine the d4-pawn from the long diagonal. Black develops ...Nc6 and ...Bg4, pinning the f3-knight (a key defender of d4) and keeping the cramping wedge and the initiative."
+        "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4 Bg2 Qd7 O-O O-O-O Qb3 Nge7 Rd1",
+        "explanation": "White's modern main line, fianchettoing with g3 to undermine the d4-pawn from the long diagonal. Black develops ...Nc6 and ...Bg4, pinning the f3-knight, then ...Qd7 and ...O-O-O to castle long for an opposite-side race. With Qb3, ...Nge7 and Rd1 the middlegame arrives: White chips at the d4-wedge while Black storms the kingside with ...h5-h4."
       },
       {
         "name": "Lasker Trap",
@@ -3106,8 +3106,8 @@
       },
       {
         "name": "Spassky Variation",
-        "pgn": "d4 d5 c4 e5 dxe5 d4 e4 Nc6 Nf3 Bg4",
-        "explanation": "White grabs more central space with 4.e4, the principled try. Black continues developing with ...Nc6 and ...Bg4, pinning the knight and targeting the over-extended pawns while the d4-wedge remains a thorn in White's position."
+        "pgn": "d4 d5 c4 e5 dxe5 d4 e4 Nc6 f4 f6 exf6 Nxf6 Bd3 Bb4+",
+        "explanation": "White grabs maximum central space with 4.e4 and doubles down with f4, raising a big e4-f4 pawn front. Black strikes back with ...f6, dismantling the over-extended centre and developing with tempo (...Nxf6, ...Bb4+). The d4-wedge plus a lead in development give Black full, sharp compensation for the gambit pawn."
       }
     ],
     "trapLines": [],
