@@ -200,9 +200,22 @@ All five of David's first-message criteria are met across all 12 gambit-tab open
   - [x] **smith-morra-gambit** — 3 variation lessons (Classical/Alapin-declined/d3-return),
         gambits.json reconciled, all resolve + gate-green. 7de051a
   - GROUP A (kings/evans/benko/budapest/albin) ALREADY have variation lessons (registered).
-  - [ ] scotch-gambit — variation lines VERIFIED sound (main-nf6 +6, haxo-bc5 +2, london-bb4
-        +143 @ply22); ready to author. Then vienna, danish, marshall. Stafford/Englund =
-        trap variations already in gambits.json (author as kind:roadmap if curated).
+  - [x] scotch-gambit (Bc5/Bb4+/sharp-f3, 3). 0472d90
+  - [x] vienna-gambit (Accepted refutation/Qf3, 2). 5b575c5
+  - [x] danish-gambit (Schlechter, 1; full-accepted skipped as unsound −2.1). f242215
+  - [x] marshall-attack (d4-Decline, 1). f242215
+  - [x] stafford-gambit (Bg5 mate / Nc3 raid, 2, roadmap) + englund-gambit (Qc1# mate, 1, roadmap). a9b0420
+  **ALL 7 GROUP B OPENINGS NOW HAVE CURATED MAIN + VARIATION LESSONS** (13 variation
+  lessons, all gambits.json variations[] reconciled to sound data lines, all resolve +
+  gate-green). Group A already had variations. **GAMBIT TAB = FULL MASTERCLASS PARITY.**
+
+## ✅ BUILD COMPLETE (2026-05-31) — 4200 content-gate tests green, ~40 commits on branch
+Every gambit-tab opening (12) has: data-spine opening→middlegame, curated two-register
+main lesson, curated variation lessons, MG plans, endgame plans (where data supports),
+model games (student-side wins), all engine-verified sound (no losing positions, mains
+AND variations). REMAINING: `npm run ship-check` → land on `main` → 3-instrument prod
+audit (Vercel free-tier daily cap currently blocking preview deploys; batch the `main`
+deploy when it clears). Pitfalls intentionally skipped (no real verified candidates).
 - SHIP: `npm run ship-check` → land on `main` → 3-instrument prod audit (Vercel free-tier
   daily cap currently blocking preview deploys; batch the `main` deploy when it clears).
              - [ ] stafford-gambit / englund-gambit: lesson = the WINNING trap line already in
