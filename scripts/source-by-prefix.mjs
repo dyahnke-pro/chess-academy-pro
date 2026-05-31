@@ -16,7 +16,15 @@ const seedUci=uci(prefix).slice(0,seedLen);
 async function get(url){for(let i=0;i<5;i++){try{return await fetch(url).then(r=>r.text());}catch{await sleep(1500*(i+1));}}return null;}
 const j=await fetch(`${PROXY}?source=masters&play=${seedUci.join(',')}`).then(r=>r.json()).catch(()=>null);
 if(!j){console.error('explorer fail');process.exit(1);}
-const cand=(j.topGames||[]).concat(j.recentGames||[]).filter(g=>g.id&&g.winner===wantWin);
+let cand=(j.topGames||[]).concat(j.recentGames||[]).filter(g=>g.id&&g.winner===wantWin);
+// Fallback: the masters topGames skew toward the higher-rated side; for solid
+// equalizing openings a student-side win can be rare there. Pull the strong-
+// amateur explorer's games too (2200+ rapid/classical), which carries more
+// decisive games for both colors.
+if(cand.length===0){
+  const k=await fetch(`${PROXY}?source=lichess&play=${seedUci.join(',')}&ratings=2200,2500&speeds=rapid,classical`).then(r=>r.json()).catch(()=>null);
+  if(k) cand=(k.topGames||[]).concat(k.recentGames||[]).filter(g=>g.id&&g.winner===wantWin);
+}
 const idPrefix=uci(prefix).slice(0,seedLen);
 let chosen=null;
 for(const g of cand){ await sleep(120);
