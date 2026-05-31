@@ -1553,17 +1553,27 @@
   {
     "id": "mp-benkogambit-declined",
     "openingId": "benko-gambit",
-    "criticalPositionFen": "rnbq1rk1/p3ppbp/3p1np1/2pP4/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w - - 3 9",
+    "criticalPositionFen": "rnbqkb1r/p3pppp/3p1n2/2pP4/2p5/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 6",
     "title": "Benko Declined: Trade Light Bishops, Press the Queenside",
     "overview": "When White declines the Benko, Black still gets the gambit’s positional dream: queenside pressure for free. Black trades the light-squared bishops with …Ba6, removing a key defender, then piles on the half-open a- and b-files with the queen and rooks. Long-term Benko compensation without even sacrificing the pawn.",
     "pawnBreaks": [
-      "…b-file pressure (the Benko trademark)",
-      "the queenside files are Black’s highway"
+      {
+        "move": "…b5 — reopen the queenside",
+        "explanation": "Even in the Declined lines, …b5 reignites the Benko’s signature queenside pressure when the moment is right.",
+        "fen": "rnbqkb1r/p3pppp/3p1n2/2pP4/2p5/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 6"
+      }
     ],
     "pieceManeuvers": [
-      "…Bc8-a6 to trade White’s light bishop",
-      "…Qb6 and …Rb8 on the b-file",
-      "…Na6-c7-b5 reroute"
+      {
+        "piece": "Bishop",
+        "route": "…Bf8-g7 — the long-diagonal fianchetto",
+        "explanation": "The dark-squared bishop rakes toward b2 and the queenside, the Benko’s engine."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Bc8-a6 — trade for queenside pressure",
+        "explanation": "The light-squared bishop swaps off White’s good bishop and bears on c4."
+      }
     ],
     "strategicThemes": [
       "Trade light bishops to weaken White’s queenside",
@@ -1575,65 +1585,78 @@
     ],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/p3ppbp/3p1np1/2pP4/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w - - 3 9",
+        "fen": "rnbqkb1r/p3pppp/3p1n2/2pP4/2p5/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 6",
         "moves": [
+          "e4",
+          "g6",
+          "Bxc4",
+          "Bg7",
+          "O-O",
+          "O-O",
           "h3",
-          "Ba6",
-          "Bxa6",
-          "Nxa6",
-          "Bf4",
-          "Qb6",
-          "Qd2"
+          "Ba6"
         ],
         "annotations": [
-          "h3 makes luft.",
-          "…Ba6 — the thematic Benko trade: off come the light bishops, and White’s queenside light squares weaken.",
-          "Bxa6",
-          "…Nxa6 recaptures, the knight heading for c7-b5.",
-          "Bf4 develops.",
-          "…Qb6 piles onto the b-file and eyes b2.",
-          "Qd2 — and Black has the classic Benko bind: pressure down the a- and b-files for free. Balanced, with easy play for Black."
+          "White builds the broad e4/d5 centre, the point of declining the Benko.",
+          "…g6 prepares the fianchetto — Black's dark-squared bishop belongs on the long diagonal, pressuring the centre and the queenside.",
+          "White regains the gambit pawn with the bishop.",
+          "…Bg7 completes the fianchetto, the bishop raking down toward b2 and the queenside.",
+          "White castles.",
+          "…O-O — Black tucks the king away, fully developed and ready for queenside play.",
+          "White makes luft with h3.",
+          "…Ba6! The light-squared bishop swings to a6 to trade off White's good bishop and expose the c4-square — the Benko player's queenside pressure persists even in the Declined lines, exactly as Fominyh demonstrated against Tunik."
         ],
-        "title": "Benko Declined: Trade Light Bishops, Press the Queenside",
         "arrows": [
           [],
           [],
           [],
-          [
-            {
-              "from": "a6",
-              "to": "c7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
-          [
-            {
-              "from": "b6",
-              "to": "b2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           []
         ],
+        "title": "Benko Pressure Declined (Tunik–Fominyh)",
         "highlights": [
           [
             {
-              "square": "h3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h2",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a6",
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c8",
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -1644,102 +1667,26 @@
             },
             {
               "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c7",
               "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b2",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "h3 — luft",
-          "…Ba6 — trade the light bishops",
-          "Bxa6",
-          "…Nxa6 — recapture, reroute the knight",
-          "Bf4 — develop",
-          "…Qb6 — pile on the b-file",
-          "Qd2 — Black has the Benko bind"
-        ],
+        "intro": "Black fianchettoes and keeps the queenside pressure.",
         "sources": [
-          "concept:att-queenside-attack",
-          "concept:pos-open-file",
+          "concept:pos-initiative",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/Benko_Gambit"
         ],
-        "intro": {
-          "say": "Even with the gambit declined, Black gets the Benko dream: queenside pressure for free. Trade the light bishops with …Ba6 to weaken White’s queenside, then pile the queen and rooks onto the half-open a- and b-files.",
-          "sayShort": "…Ba6 trade, then storm the a/b-files.",
-          "arrows": [
-            {
-              "from": "c8",
-              "to": "a6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "b6",
-              "to": "b2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "a6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "b2",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        }
+        "learnCues": [
+          "e4 — White builds the centre",
+          "…g6 — prepare the fianchetto",
+          "Bxc4 — White regains the pawn",
+          "…Bg7 — complete the fianchetto",
+          "O-O — White castles",
+          "…O-O — Black castles",
+          "h3 — White makes luft",
+          "…Ba6 — trade for queenside pressure"
+        ]
       }
     ]
   },
