@@ -29077,17 +29077,27 @@
   {
     "id": "mp-scandinaviandefence-main",
     "openingId": "scandinavian-defence",
-    "criticalPositionFen": "rn2k2r/ppp2ppp/4pn2/q4b2/1bBP4/2N2N2/PPPB1PPP/R2Q1RK1 b kq - 3 8",
+    "criticalPositionFen": "rnb1kbnr/pp2pppp/2p5/q7/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
     "title": "Scandinavian: The Active Queen and f5-Bishop",
     "overview": "Black has the Scandinavian dream structure — the queen active on a5, the light bishop developed outside the chain on f5, and not a weakness in sight. The plan: trade off on c3 to damage White's queenside, pressure d4, and play on the dark squares and the open files. A clean, weakness-free game where Black is never worse.",
     "pawnBreaks": [
-      "…c5 to challenge d4 once developed",
-      "…e5 only when fully prepared"
+      {
+        "move": "…c6 and …e6 — the solid triangle",
+        "explanation": "The little pawn wall gives Black a weakness-free structure, the foundation of the …Qa5 Scandinavian.",
+        "fen": "rnb1kbnr/pp2pppp/2p5/q7/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5"
+      }
     ],
     "pieceManeuvers": [
-      "…Bb4xc3 to damage the queenside",
-      "…Nc6 pressing d4",
-      "…O-O-O onto the open d-file"
+      {
+        "piece": "Bishop",
+        "route": "…Bc8-f5 — solve the problem bishop",
+        "explanation": "The light-squared bishop develops actively before …e6 locks it in — the Scandinavian’s key idea."
+      },
+      {
+        "piece": "Queen",
+        "route": "…Qa5-d8 — sidestep to safety",
+        "explanation": "The queen retreats from harassment, having served on a5."
+      }
     ],
     "strategicThemes": [
       "The good bishop on f5",
@@ -29099,115 +29109,103 @@
     ],
     "playableLines": [
       {
-        "fen": "rn2k2r/ppp2ppp/4pn2/q4b2/1bBP4/2N2N2/PPPB1PPP/R2Q1RK1 b kq - 3 8",
+        "fen": "rnb1kbnr/pp2pppp/2p5/q7/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
         "moves": [
-          "Nc6",
-          "a3",
-          "Bxc3",
-          "Bxc3"
+          "Bc4",
+          "Nf6",
+          "Nf3",
+          "Bf5",
+          "Bd2",
+          "e6",
+          "Nd5",
+          "Qd8"
         ],
         "annotations": [
-          "Black develops …Nc6, a second attacker on the d4-pawn and a step toward queenside castling.",
-          "a3 questions the b4-bishop.",
-          "…Bxc3 trades, damaging White's queenside structure — the bishop has done its job.",
-          "Black stands fully mobilised: the queen on a5 pins down the queenside, the bishop on f5 is active outside the chain, and both knights bear on d4. Equal material, but every black piece already works while White must still untangle."
+          "Bc4 develops the bishop to an active diagonal, the standard main-line setup against the …Qa5 Scandinavian.",
+          "…Nf6 develops naturally, heading toward the centre and eyeing e4 and d5.",
+          "White develops the knight to f3.",
+          "…Bf5! The key Scandinavian move: the light-squared bishop reaches an active post outside the pawn chain before …e6 shuts it in — solving Black's traditional problem piece.",
+          "White unpins and prepares Nd5 with Bd2.",
+          "…e6 builds the solid little pawn triangle, the Scandinavian's rock-solid shell.",
+          "White jumps the knight to d5, hitting the queen.",
+          "…Qd8 retreats the queen to safety. Black has the ideal …Qa5 Scandinavian: the good bishop developed on f5, a flawless c6-e6 structure, and an easy game — Nielsen outplayed Svidler from this sound footing."
         ],
-        "title": "Scandinavian: The Active Queen and f5-Bishop",
         "arrows": [
-          [
-            {
-              "from": "c6",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
           [],
-          [
-            {
-              "from": "c3",
-              "to": "a5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "c3",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
         ],
+        "title": "The Qa5 Scandinavian (Svidler–Nielsen)",
         "highlights": [
           [
             {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "a3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c3",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "a5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
-              "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black develops the bishop to f5 and builds the solid triangle.",
         "sources": [
-          "book:scandinavian-defence",
           "concept:pos-development",
+          "concept:pos-center",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ],
         "learnCues": [
-          "Nc6 — second attacker on d4",
-          "a3 — question the b4-bishop",
-          "Bxc3 — trade, damage the structure",
-          "Bxc3 — mobilised, every piece works"
+          "Bc4 — active development",
+          "…Nf6 — develop toward the centre",
+          "Nf3 — White develops",
+          "…Bf5 — solve the bad bishop",
+          "Bd2 — White unpins, readies Nd5",
+          "…e6 — build the triangle",
+          "Nd5 — hit the queen",
+          "…Qd8 — retreat to safety"
         ]
       }
     ]
