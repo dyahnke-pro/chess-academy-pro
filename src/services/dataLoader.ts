@@ -33,6 +33,11 @@ interface RepertoireEntry {
   keyIdeas: string[];
   traps: string[];
   warnings: string[];
+  // A masterclass repertoire opening that ALSO belongs on the Gambit tab
+  // (King's/Evans/Benko/Budapest/Albin). The tab queries isGambit; setting it
+  // here surfaces the fully-built canonical entry on the tab instead of the
+  // shallow gambits.json dupe.
+  isGambit?: boolean;
   variations: Array<{
     name: string;
     pgn: string;
@@ -111,7 +116,7 @@ const PRO_DATA_REVISION = '2026-05-30-gotham-pirc-ALL-18-COMPLETE';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
-const BASE_DATA_REVISION = '2026-05-25-schliemann-defence';
+const BASE_DATA_REVISION = '2026-05-31-gambit-tab-reconcile';
 const BASE_REVISION_KEY = 'base_repertoire_revision';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
@@ -183,6 +188,7 @@ export async function loadRepertoireData(): Promise<void> {
         color: entry.color,
         style: entry.style,
         isRepertoire: true,
+        isGambit: entry.isGambit ?? false,
         overview: entry.overview,
         keyIdeas: entry.keyIdeas,
         traps: entry.traps,
@@ -402,6 +408,7 @@ export async function reconcileBaseRepertoire(): Promise<void> {
       keyIdeas: entry.keyIdeas,
       traps: entry.traps,
       warnings: entry.warnings,
+      isGambit: entry.isGambit ?? existing.isGambit ?? false,
       variations: entry.variations,
       trapLines: entry.trapLines ?? null,
       warningLines: entry.warningLines ?? null,
@@ -409,6 +416,23 @@ export async function reconcileBaseRepertoire(): Promise<void> {
   }
 
   if (toPut.length > 0) await db.openings.bulkPut(toPut);
+
+  // G8 orphan sweep: the King's/Evans/Benko/Budapest Gambits used to live on the
+  // Gambit tab as shallow `gambit-*` dupes in gambits.json. They're now the
+  // fully-built canonical entries (kings-gambit, …) flagged isGambit above, so
+  // the dupes are retired from gambits.json — delete their lingering Dexie rows
+  // on already-seeded devices so the tab shows ONE (curated) entry, not two.
+  const RETIRED_GAMBIT_DUPES = [
+    'gambit-kings-gambit',
+    'gambit-evans-gambit',
+    'gambit-benko-gambit',
+    'gambit-budapest-gambit',
+  ];
+  const orphans = (await db.openings.bulkGet(RETIRED_GAMBIT_DUPES))
+    .filter((o): o is OpeningRecord => !!o)
+    .map((o) => o.id);
+  if (orphans.length > 0) await db.openings.bulkDelete(orphans);
+
   await db.meta.put({ key: BASE_REVISION_KEY, value: BASE_DATA_REVISION });
 }
 

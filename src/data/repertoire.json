@@ -502,7 +502,8 @@
       }
     ],
     "trapLines": [],
-    "warningLines": []
+    "warningLines": [],
+    "isGambit": true
   },
   {
     "id": "four-knights-game",
@@ -2458,7 +2459,8 @@
       }
     ],
     "trapLines": [],
-    "warningLines": []
+    "warningLines": [],
+    "isGambit": true
   },
   {
     "id": "queens-indian",
@@ -2604,7 +2606,8 @@
         "source": "authored-verified",
         "verifiedEval": "-619cp"
       }
-    ]
+    ],
+    "isGambit": true
   },
   {
     "id": "old-indian-defence",
@@ -3088,7 +3091,8 @@
         "source": "authored-verified",
         "verifiedEval": "-183cp"
       }
-    ]
+    ],
+    "isGambit": true
   },
   {
     "id": "albin-countergambit",
@@ -3124,7 +3128,8 @@
       }
     ],
     "trapLines": [],
-    "warningLines": []
+    "warningLines": [],
+    "isGambit": true
   },
   {
     "id": "schliemann-defence",
