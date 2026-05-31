@@ -152,6 +152,25 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
 5. [ ] Gate wiring (depth gate + coverage gate over gambits.json).
 6. [ ] `npm run ship-check` green → land on main → 3-instrument audit per id.
 
+## 🔒 SOUNDNESS — "we cannot teach losing positions" (David 2026-05-31, locked)
+Engine-verify every TAUGHT position from the STUDENT's POV (`scripts/gambit-soundness-sweep.mjs`,
+stockfish depth 18-22, harness sanity-checked: startpos reads +40). **Bar (David):
+worse-than −1.2 = must fix; −0.5 to −1.2 = real gambit compensation, keep.**
+- **Done — live tab is clean:** Scotch +31 / Vienna +82 / Smith-Morra +77 (sound);
+  Danish −78 / Marshall −117 / Benko-accepted ~−1.0 (compensation, kept). Stafford
+  and Englund were −220/−214 LOSING from move 4 (verified depth-22, NOT bad data —
+  they are objectively unsound trap gambits). Rebuilt as **winning trap weapons**:
+  main pgn re-anchored to engine-verified Black-wins lines (Stafford +464 queen-win,
+  Englund +384 Qb4+ raid), honest "surprise trap, not a sound system" overview, real
+  named traps (Stafford Mate, Englund Qc1#). 58 auto-mined junk trap lines stripped. (30b8ee6)
+- **Overwalk SPINES to trim BEFORE authoring Group B lessons** (sound terminus from the
+  eval curve — reference data, not yet live): sc__max-lange→m12 (+17), ev__accepted-bc5→m11
+  (+174), bu__alekhine-bf4→m11 (−56), ma__bf5-modern→m12 (−32), da__accepted-full→m6 (−64).
+  Never author a lesson whose terminus is worse than −1.2 — stop the spine at the sound point.
+- **TODO diligence:** run the soundness sweep over the 5 Group A canonical lessons too
+  (kings/evans/benko/budapest/albin) — pre-existing masterclass content now on the tab;
+  the Philidor-Antoshin incident proves a shipped lesson can teach a secretly-losing line.
+
 ## DEPLOY
 Large in-progress build → commit to branch `claude/gambit-tab-coverage-kTEkS`
 for durability (container is ephemeral); do NOT push half-built masterclass
