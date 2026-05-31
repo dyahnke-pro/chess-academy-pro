@@ -6379,5 +6379,131 @@
       "https://lichess.org/q52pJwFH",
       "https://en.wikipedia.org/wiki/Albin_Countergambit"
     ]
+  },
+  {
+    "id": "mg-scotch-grischuk",
+    "openingId": "scotch-gambit",
+    "studentSide": "white",
+    "white": "Grischuk, A.",
+    "black": "Dominguez Perez, L.",
+    "whiteElo": 2766,
+    "blackElo": 2739,
+    "result": "1-0",
+    "year": 2018,
+    "event": "Saint Louis Blitz 2018",
+    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 Ng5 Nh6 Nxf7 Nxf7 Bxf7+ Kxf7 Qh5+ g6 Qxc5 d5 O-O dxe4 c3 Qd6 cxd4 Nxd4 Qxd6 cxd6 Nc3 Bg4 Nxe4 Nc2 f3 Nxa1 fxg4+ Ke6 Ng5+ Kd7 Rf7+ Kc6 Nxh7 Rae8 Bd2 Re2 Bc3 Rhe8 Nf8 g5 Nh7 Nc2 Rf2 d5 Nxg5 d4 Bd2 d3 Nf3 Rxf2 Kxf2 Re2+ Kg3 Kd5 g5 Ke6 h4 Kf5 h5 Re4 g6 Nd4 Nxd4+ Rxd4 Kf3 Rg4 g3 b5 Bf4 a5 Ke3 b4 Kxd3 a4 Kc4 a3 bxa3 bxa3 Kb3",
+    "overview": "Grischuk unleashes the Scotch Gambit against a 2739 elite GM: the early d4-Bc4 punch hands White a lead in development and a broad centre, and Grischuk converts the lasting initiative into a full point — a model of the gambit at the very top level.",
+    "variation": "Main Line",
+    "sources": [
+      "https://lichess.org/jmCFOrHC"
+    ]
+  },
+  {
+    "id": "mg-scotch-nakamura",
+    "openingId": "scotch-gambit",
+    "studentSide": "white",
+    "white": "Nakamura, Hi",
+    "black": "Onischuk, Al",
+    "whiteElo": 2798,
+    "blackElo": 2665,
+    "result": "1-0",
+    "year": 2015,
+    "event": "ch-USA 2015",
+    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bc5 Be3 O-O Nxc6 bxc6 Bxc5 Nxc5 Bxc6 Rb8 O-O Rxb2 Qxd5 Qxd5 Bxd5 Rxc2 Na3 Re2 Rac1 Nd3 Rxc7 Be6 Bb3 a5 Ra7 Bxb3 axb3 Rxe5 Nc4 Rb5 Rb1 Nc5 Nxa5 Re8 g3 g6 b4 Nd3 Nc6 Re2 Rd7 Nxf2 Nd4 Nh3+ Kh1 Nf2+ Kg2 Nd1+ Nxe2",
+    "overview": "Nakamura shows the Scotch Gambit's bite: rapid piece play and central pressure leave Onischuk permanently on the back foot, and White's initiative never lets up. A crisp top-GM demonstration of the gambit's compensation paying off.",
+    "variation": "Main Line",
+    "sources": [
+      "https://lichess.org/Zny0pBLO"
+    ]
+  },
+  {
+    "id": "mg-vienna-nakamura",
+    "openingId": "vienna-gambit",
+    "studentSide": "white",
+    "white": "Nakamura, Hi",
+    "black": "Firouzja, Alireza",
+    "whiteElo": 2802,
+    "blackElo": 2767,
+    "result": "1-0",
+    "year": 2024,
+    "event": "SpeedChess Final 2024",
+    "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nc6 Bb5 Nxc3 dxc3 Be6 Ne2 Bc5 Be3 Bxe3 Qxe3 Qh4+ g3 Qe7 Nd4 Bd7 Bxc6 bxc6 O-O-O O-O Rhe1 Rfe8 Nb3 Bf5 Qc5 Qg5+ Kb1 Bg4 Rc1 Bd7 Nd4 Qg6 c4 dxc4 Qxc4 Rab8 b3 h6 Re3 Rb6 Rce1 Be6 Qc5 Bd5 Kb2 Qg5 c4 Bg2 Qa5 Rd8 Qc3 c5 Ne2 Bh3 Nf4 Be6 Rd3 Rxd3 Qxd3 Rb8 Qe3 Qe7 Nd3 Bxc4 Qxc5 Qxc5 Nxc5 Bd5 Na6 Rc8 Rc1 c6 Nb4 Re8 Re1 f6 Nd3 Kf7 Kc3 fxe5 Nxe5+ Kg8 Kd4 Rf8 Re2 Rf1 Rc2 Rd1+ Kc5 Be4 Re2 Rd5+ Kc4 Rxe5 Kd4 Rd5+ Kxe4 Kf7 Rc2 Rd6 Rc5 Rd2 Ra5 Rxh2 Rxa7+ Ke6 a4 Rb2 Rb7 g5 a5 Ra2 b4 h5 Rb6 Kd7 Kf5 h4 g4 h3 Kxg5 h2 Rb7+ Ke6 Rh7 c5 bxc5 Kd5 a6 Kxc5 a7 Kd4 Rxh2 Rxa7 Kg6 Ra6+ Kh5 Ra8 Re2 Kd3 Re6 Kd4 g5 Kd5 Re2 Rh8+ Kg6 Rg8+ Kh6 Rh8+ Kg7 Ra8 g6 Ra7+ Kh6 Ra8 g7 Ra6+ Kh7 Ra7 Kh8 Ra8+ g8=Q+ Rxg8+ Kxg8 Kd4 Kf7 Kd3 Re6 Kc4 Kf6 Kc3 Ke5 Kb2 Rd6 Kc3 Rd4 Kc2 Ke4 Kc3 Ke3 Kc2 Rc4+ Kb2 Kd3 Kb1 Kd2 Kb2 Rb4+ Ka3 Kc3 Ka2 Rb3 Ka1 Kc2",
+    "overview": "Nakamura wields the Vienna Gambit against world-class Firouzja: the f4 thrust and central pawn lever open lines toward the black king, and White grinds the resulting pressure into a win. The Vienna Gambit, proven at the 2800 level.",
+    "variation": "Main Line",
+    "sources": [
+      "https://lichess.org/BfvmTiCI"
+    ]
+  },
+  {
+    "id": "mg-vienna-ivanchuk",
+    "openingId": "vienna-gambit",
+    "studentSide": "white",
+    "white": "Ivanchuk, Vassily",
+    "black": "Svidler, Peter",
+    "whiteElo": 2739,
+    "blackElo": 2754,
+    "result": "1-0",
+    "year": 2009,
+    "event": "Wch Blitz 5th",
+    "pgn": "e4 e5 Nc3 Nf6 f4 d5 exd5 Nxd5 fxe5 Nxc3 bxc3 Qh4+ Ke2 Qe4+ Kf2 Qxe5 Nf3 Qh5 Rb1 a6 Qe2+ Be7 Ba3 Nc6 Qe3 Qf5 Bxe7 Nxe7 Bd3 Qe6 Qxe6 fxe6 Rhe1 h6 Bc4 Kf7 Re4 Rd8 Rbe1 Nd5 Nd4 b5 Bb3 c5 Nc6 Rd6 Ne5+ Kg8 c4 Nf6 R4e2 b4 Nd3 a5 Nxc5 Rc6 Na4 e5 h3 Be6 Rxe5 Rf8 Rxe6",
+    "overview": "Ivanchuk handles the Vienna Gambit with his trademark energy, opening the f-file and central squares against Svidler and converting the attacking chances into a clean win — a model of the gambit's direct, king-hunting plans.",
+    "variation": "Main Line",
+    "sources": [
+      "https://lichess.org/JPlNgSFe"
+    ]
+  },
+  {
+    "id": "mg-smithmorra-nakamura",
+    "openingId": "smith-morra-gambit",
+    "studentSide": "white",
+    "white": "Nakamura, Hi",
+    "black": "Vachier Lagrave, M.",
+    "whiteElo": 2788,
+    "blackElo": 2731,
+    "result": "1-0",
+    "year": 2023,
+    "event": "CCT Final Survival Loser",
+    "pgn": "e4 c5 d4 cxd4 c3 Nf6 e5 Nd5 Qxd4 e6 Nf3 Nc6 Qe4 Qc7 Bc4 Nb6 Bd3 d5 Qe2 g6 O-O Bg7 Bf4 O-O Nbd2 f6 exf6 Qxf4 fxg7 Kxg7 Bb5 Nd8 Nb3 a6 Bd3 Nf7 Rae1 Re8 g3 Qf6 Ne5 Nxe5 Qxe5 Qxe5 Rxe5 Nd7 Re3 e5 Rfe1 b6 Bf1 Bb7 Bh3 Nc5 Rxe5 Rxe5 Rxe5 Kf6 f4",
+    "overview": "Nakamura plays the Smith-Morra against MVL, a Sicilian expert: the c3 pawn sacrifice buys open c- and d-files and a lead in development, and White's relentless piece activity tells against one of the world's best. The gambit at the very top.",
+    "variation": "Accepted",
+    "sources": [
+      "https://lichess.org/bQDZlxgx"
+    ]
+  },
+  {
+    "id": "mg-smithmorra-nepo",
+    "openingId": "smith-morra-gambit",
+    "studentSide": "white",
+    "white": "Nepomniachtchi, Ian",
+    "black": "Nakamura, Hikaru",
+    "whiteElo": 2587,
+    "blackElo": 2651,
+    "result": "1-0",
+    "year": 2007,
+    "event": "Nakamura-Nepomniashchy m",
+    "pgn": "e4 c5 d4 cxd4 c3 d3 c4 g6 Nc3 d6 Nf3 Bg7 Be3 Nc6 Bxd3 Bg4 Be2 Bxf3 Bxf3 Nf6 Be2 Rc8 O-O a6 Rc1 O-O b3 Nd7 Nd5 e6 Nf4 Qe7 Rc2 Rfd8 Rd2 Nc5 f3 Bh6 Kh1 Qf8 Re1 e5 Nd5 Bxe3 Nxe3 Ne6 Bf1 Ncd4 Nd5 f5 exf5 gxf5 f4 Qg7 Rd3 Kh8 Rg3 Qf7 fxe5 f4 Rd3 dxe5 Rxe5 Nc6 Re1 Re8 Rd2 Ng5 Rxe8+ Rxe8 Rf2 Ne4 Rf3 Ne5 Qd4 Ng5 Rxf4 Qg7 Nf6 Nc6 Nxe8 Qxd4 Rf8#",
+    "overview": "Nepomniachtchi demonstrates the Smith-Morra's pressure: the open files and active pieces from the pawn sac give White a lasting initiative that even Nakamura cannot fully neutralize. A model conversion of the gambit's dynamic compensation.",
+    "variation": "Accepted",
+    "sources": [
+      "https://lichess.org/suKYEsm8"
+    ]
+  },
+  {
+    "id": "mg-marshall-kramnik",
+    "openingId": "marshall-attack",
+    "studentSide": "black",
+    "white": "Leko, Peter",
+    "black": "Kramnik, Vladimir",
+    "whiteElo": 2749,
+    "blackElo": 2766,
+    "result": "0-1",
+    "year": 2007,
+    "event": "Amber-blindfold 16th",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3 Be3 Bg4 Qd3 Rae8 Nd2 Re6 a4 Qh5 axb5 axb5 Qf1 Bh3 Bd1 Qf5 Qe2 c5 Nf3 Bf4 Qd2 Nxe3 fxe3 Bh6 Qf2 Rfe8 Ne5 Qxf2+ Kxf2 f6 Bg4 Rxe5 Bxh3 Bxe3+ Kf3 cxd4 Rad1 dxc3 bxc3 Bb6 Rxe5 Rxe5 Rd5 Re3+ Kg2 Rxc3 Rxb5 Rc2+ Kh1 Bc7 Be6+ Kf8 Bb3 Rc3 Kg2 g6 Bd1 Ke7 Rb2 Rd3 Be2 Re3 Bf3 Ra3 Re2+ Be5 g4 Ke6 Be4 h5 gxh5 gxh5 Rf2 Bd4 Rf3 Ra2+ Kh3 Bg1 Bf5+ Ke5 Kh4 Rf2",
+    "overview": "Kramnik unveils the Marshall Attack against Leko: the …d5 pawn sacrifice ignites a kingside initiative that flows straight from the opening into a winning endgame, where the activity and structural pluses decide. A world-champion model of the Marshall's compensation lasting all game.",
+    "variation": "Bf5 Modern",
+    "sources": [
+      "https://lichess.org/kASHcrid"
+    ]
   }
 ]
