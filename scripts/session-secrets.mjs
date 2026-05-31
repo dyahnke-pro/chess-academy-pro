@@ -44,4 +44,21 @@ if (missing.length) {
 }
 if (localEnv.length) lines.push(`local env file present: ${localEnv.join(', ')} (vite dev reads it)`);
 
+// Auto-install the git pre-push hook on every fresh container. .git/hooks/ is
+// gitignored, so each new clone starts WITHOUT the hook — which is exactly how a
+// build-breaking commit (e.g. the 2026-05-31 gambit unused-var) reached main:
+// the session pushed without running ship-check. Installing it here makes the
+// gate un-skippable by default in every web session. Idempotent + best-effort.
+try {
+  if (existsSync('.git') && !existsSync('.git/hooks/pre-push')) {
+    const { execSync } = await import('node:child_process');
+    execSync('node scripts/install-git-hooks.mjs', { stdio: 'ignore' });
+    lines.push('git pre-push hook: installed (ship-check now runs before every push)');
+  } else if (existsSync('.git/hooks/pre-push')) {
+    lines.push('git pre-push hook: present (ship-check gates every push)');
+  }
+} catch {
+  lines.push('git pre-push hook: install skipped (run `npm run install-hooks` to gate pushes)');
+}
+
 console.log(lines.join('\n'));

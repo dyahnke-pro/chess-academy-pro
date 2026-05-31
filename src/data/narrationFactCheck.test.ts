@@ -323,7 +323,6 @@ const BASELINE_VIOLATIONS = new Set<string>([
   'MAIN The French Defence — A Master Class :: d5',
   'VARIATION french-defence::Advance Variation :: adv3',
   'VARIATION french-defence::Winawer Variation :: win4',
-  'VARIATION italian-game::Giuoco Pianissimo: Modern d3 System :: m4',
   'MAIN The Sicilian Dragon — A Master Class :: dragonbishop (short)',
   'VARIATION sicilian-dragon::Levenfish Variation :: f4 (short)',
   'VARIATION london-system::Jobava London :: j2',
@@ -337,7 +336,6 @@ const BASELINE_VIOLATIONS = new Set<string>([
   'PLAN mp-frenchdefence-winawer line[0] move 5 :: mp-frenchdefence-winawer::0::4',
   'PLAN mp-italiangame-twoknights line[0] move 1 :: mp-italiangame-twoknights::0::0',
   'PLAN mp-kings-gambit-open-f-file line[0] move 5 :: mp-kings-gambit-open-f-file::0::4',
-  'PLAN mp-scotchgame-steinitz line[0] move 3 :: mp-scotchgame-steinitz::0::2',
   'PLAN mp-viennagame-vs-nc6 line[0] move 7 :: mp-viennagame-vs-nc6::0::6',
 ]);
 

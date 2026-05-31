@@ -222,6 +222,58 @@ const OPENINGS = {
       'nf6-e6-sub':   { label: '2...Nf6 spine, Black\'s 4...e6 (185 games)',      prefix: ['e4','c5','c3','Nf6','e5','Nd5','Nf3','e6'] },
     },
   },
+  // ── Hikaru Nimzo-Larsen (1.b3) — 7,481 games, 87.3%, data-discovered tabs ──
+  'nimzo-larsen': {
+    color: 'white',
+    studentUsername: 'Hikaru',
+    variations: {
+      'e5-main':  { label: '1...e5 (main)',          prefix: ['b3','e5','Bb2','Nc6','e3'] },
+      'd5':       { label: '1...d5 (1848 games)',    prefix: ['b3','d5','Bb2'] },
+      'nf6':      { label: '1...Nf6 (1709 games)',   prefix: ['b3','Nf6','Bb2'] },
+      'c5':       { label: '1...c5 (415 games)',     prefix: ['b3','c5','Bb2'] },
+      'b6':       { label: '1...b6 symmetric (392 games)', prefix: ['b3','b6','Bb2'] },
+      'g6':       { label: '1...g6 (300 games)',     prefix: ['b3','g6','Bb2'] },
+      'e6':       { label: '1...e6 (287 games)',     prefix: ['b3','e6','Bb2'] },
+      'd6':       { label: '1...d6 (196 games)',     prefix: ['b3','d6','Bb2'] },
+    },
+  },
+  'pirc-modern': {
+    color: 'black',
+    studentUsername: 'Hikaru',
+    variations: {
+      'main-be3':   { label: 'vs Be3 + Qd2 (150-style)', prefix: ['e4','g6','d4','Bg7','Nc3','a6','Be3'] },
+      'nf3':        { label: 'vs Nf3 Classical',         prefix: ['e4','g6','d4','Bg7','Nf3'] },
+      'nc3-c6':     { label: '...c6 setup',              prefix: ['e4','g6','d4','Bg7','Nc3','c6'] },
+      'austrian-f4': { label: 'vs Austrian f4',          prefix: ['e4','g6','d4','Bg7','Nc3','a6','f4'] },
+    },
+  },
+  'hikaru-reti': {
+    color: 'white',
+    studentUsername: 'Hikaru',
+    variations: {
+      'kia-d4':   { label: 'Réti into d4/b3 system', prefix: ['Nf3','Nf6','b3','g6','Bb2'] },
+      'vs-d5':    { label: 'vs ...d5',               prefix: ['Nf3','d5','b3'] },
+      'vs-c5':    { label: 'vs ...c5',               prefix: ['Nf3','c5','b3'] },
+    },
+  },
+  'hikaru-closed-sicilian': {
+    color: 'white',
+    studentUsername: 'Hikaru',
+    variations: {
+      'grand-prix-f4': { label: 'Grand Prix f4 + f5', prefix: ['e4','c5','Nc3','Nc6','f4'] },
+      'g6-line':       { label: 'vs ...g6',            prefix: ['e4','c5','Nc3','Nc6','f4','g6'] },
+      'e6-line':       { label: 'vs ...e6',            prefix: ['e4','c5','Nc3','Nc6','f4','e6'] },
+    },
+  },
+  'hikaru-caro-kann': {
+    color: 'black',
+    studentUsername: 'Hikaru',
+    variations: {
+      'advance-bf5': { label: 'vs Advance 3.e5 Bf5', prefix: ['e4','c6','d4','d5','e5','Bf5'] },
+      'exchange':    { label: 'vs Exchange/Panov',    prefix: ['e4','c6','d4','d5','exd5'] },
+      'two-knights': { label: 'vs Two Knights',       prefix: ['e4','c6','Nc3'] },
+    },
+  },
 };
 
 const opening = OPENINGS[OPENING_ID];

@@ -1,0 +1,48 @@
+{
+  "player": "hikaru",
+  "openingId": "hikaru-d3",
+  "openingName": "King's Pawn d3 (Mengarini)",
+  "color": "white",
+  "minPrefix": [
+    "e4",
+    "e5",
+    "d3"
+  ],
+  "generatedAt": "2026-05-31T17:18:03.422Z",
+  "totals": {
+    "totalGamesScanned": 68554,
+    "gamesMatchingOpening": 9,
+    "minBranchGames": 5,
+    "minTrieGames": 5
+  },
+  "rootStats": {
+    "games": 9,
+    "wins": 7,
+    "draws": 1,
+    "losses": 1,
+    "scorePct": "83.3"
+  },
+  "spine": {
+    "sans": [
+      "Nc6"
+    ],
+    "prefixPlies": 3,
+    "totalPlies": 4
+  },
+  "variations": [],
+  "tree": {
+    "games": 9,
+    "wins": 7,
+    "draws": 1,
+    "losses": 1,
+    "children": {
+      "Nc6": {
+        "games": 6,
+        "wins": 4,
+        "draws": 1,
+        "losses": 1,
+        "children": {}
+      }
+    }
+  }
+}

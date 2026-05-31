@@ -136,7 +136,7 @@
       "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Bxd2+ Nbxd2 d5 exd5 Nxd5 O-O O-O",
       "color": "white",
       "style": "Classical, Solid",
-      "overview": "The Italian Game is the first opening every chess player should learn — and the one most never stop playing. Documented in Pedro Damiano's 1512 chess treatise and refined by Greco's 1620s manuscripts, the Giuoco Piano ('Quiet Game') is one of the oldest analyzed openings in chess history. Paul Morphy demonstrated its devastating attacking potential in his 1858 European tour; in the modern era, Carlsen revived the slow d3 system as White's main weapon, and the c3+d4 IQP lines have become standard tournament fare. Why is 1.e4 e5 2.Nf3 Nc6 3.Bc4 so timeless? Because it develops two perfect pieces in two moves, points the bishop at the weakest square in chess (f7), and asks Black: 'What's your plan?' Most Black players don't have one. Levy teaches this as his foundational 1.e4 weapon because the strategic ideas are timeless. The bonus: club players almost always blunder by move 12 if they haven't studied the c3+d4 break.",
+      "overview": "The Italian Game is the first opening every chess player should learn — and the one most never stop playing. Documented in Pedro Damiano's 1512 chess treatise and refined by Greco's 1620s manuscripts, the Giuoco Piano ('Quiet Game') is one of the oldest analyzed openings in chess history. Paul Morphy demonstrated its devastating attacking potential in his 1858 European tour; in the modern era, Carlsen revived the slow d3 system as White's main weapon, and the c3+d4 IQP lines have become standard tournament fare. Why is 1.e4 e5 2.Nf3 Nc6 3.Bc4 so timeless? Because it develops two perfect pieces in two moves, points the bishop at the weakest square in chess (f7), and asks Black: 'What's your plan?' Most Black players don't have one. Levy teaches this as his foundational 1.e4 weapon because the strategic ideas are timeless. The bonus: club players almost always blunder by move 12 if they haven't studied the c3+d4 break. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "f7 is the target, full stop. Bc4 + Nf3 + Ng5 (in some lines) all aim at the f7-square. In the Italian, every tactical opportunity ultimately traces back to the bishop on c4 and the pawn on f7 defended only by the king.",
         "The c3+d4 sequence is the engine. Play c3 to prepare d4, then push d4 to open the centre. If Black takes (exd4), you recapture cxd4 building a centre pawn duo. If Black ignores you (Nf6, O-O), you take dxe5 and grab space. Every Italian middlegame plan starts with d4.",
@@ -198,7 +198,7 @@
       "pgn": "d4 d5 Nf3 Nf6 Bf4 c5 e3 Nc6 Nbd2 e6 c3 Bd6 Bg3 O-O Bd3 b6 O-O Bb7",
       "color": "white",
       "style": "Solid, Systematic",
-      "overview": "Levy's signature d4 opening — the system that built an empire. The London System takes its name from the 1922 London tournament where the world's best players experimented with it; Capablanca employed it occasionally, but it remained a tournament sideline for decades until Russian masters Petrosian and Botvinnik used it for ultra-solid drawing weapons. The modern boom came when Carlsen began playing it at the elite level in the 2010s — proving that 'systems' could compete with sharp theoretical lines. The London works against literally anything Black plays: d5, Nf6, g6, c5. You set up the same pieces every game (d4, Nf3, Bf4, e3, Bd3, Nbd2, c3, O-O), learn five typical plans, and play 200 games before you ever have to think about move 6. The trade-off: against precise opponents Black equalises easily, so the London is a winning weapon at 1500 and a drawing weapon at 2200. Pick your battles.",
+      "overview": "Levy's signature d4 opening — the system that built an empire. The London System takes its name from the 1922 London tournament where the world's best players experimented with it; Capablanca employed it occasionally, but it remained a tournament sideline for decades until Russian masters Petrosian and Botvinnik used it for ultra-solid drawing weapons. The modern boom came when Carlsen began playing it at the elite level in the 2010s — proving that 'systems' could compete with sharp theoretical lines. The London works against literally anything Black plays: d5, Nf6, g6, c5. You set up the same pieces every game (d4, Nf3, Bf4, e3, Bd3, Nbd2, c3, O-O), learn five typical plans, and play 200 games before you ever have to think about move 6. The trade-off: against precise opponents Black equalises easily, so the London is a winning weapon at 1500 and a drawing weapon at 2200. Pick your battles. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "Bf4 BEFORE e3 — non-negotiable. If you play e3 first the dark-squared bishop is trapped behind its own pawn chain forever. The whole opening pivots on this move order.",
         "The pyramid d4–e3–c3 is the London's structural backbone. It's nearly unbreakable from the front; Black has to find counterplay on the flanks instead of the centre, which most amateurs can't do.",
@@ -260,7 +260,7 @@
       "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4",
       "color": "white",
       "style": "Tactical, Theoretical",
-      "overview": "The Stafford Gambit was buried in chess obscurity for nearly a century — invented by American master Joseph Stafford in the 1950s, considered unsound by every serious analyst, and forgotten. Then IM Eric Rosen turned it into a YouTube phenomenon in 2019, racking up millions of views with Stafford traps against unprepared club players. Levy made the natural follow-up: the refutation video that taught the WHITE side how to crush it. The result is that today, half the chess world plays the Stafford and the other half memorised the antidote. The correct line is the most common Stafford position you'll face: someone tried to trick you with 1…e5 2.Nf3 Nf6 (NOT 2…Nc6) hoping for 3.Nxe5 Nc6!? The fix is simple: take the pawn, then play d3 (not d4!) and just consolidate. White is up a clean pawn for nothing — Black has zero compensation against accurate play.",
+      "overview": "The Stafford Gambit was buried in chess obscurity for nearly a century — invented by American master Joseph Stafford in the 1950s, considered unsound by every serious analyst, and forgotten. Then IM Eric Rosen turned it into a YouTube phenomenon in 2019, racking up millions of views with Stafford traps against unprepared club players. Levy made the natural follow-up: the refutation video that taught the WHITE side how to crush it. The result is that today, half the chess world plays the Stafford and the other half memorised the antidote. The correct line is the most common Stafford position you'll face: someone tried to trick you with 1…e5 2.Nf3 Nf6 (NOT 2…Nc6) hoping for 3.Nxe5 Nc6!? The fix is simple: take the pawn, then play d3 (not d4!) and just consolidate. White is up a clean pawn for nothing — Black has zero compensation against accurate play. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "d3, NEVER d4. The whole Stafford depends on Black's pieces leaping out after d4 opens central diagonals — d3 keeps the position closed and the extra pawn permanent.",
         "Develop Be2 (not Bc4!) for fast castling. Bc4 looks active but it gets harassed by …h5+…Ng4 ideas; Be2 is bland but unprovokable.",
@@ -307,7 +307,7 @@
       "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bd2 Ngf6 O-O-O Be7",
       "color": "black",
       "style": "Solid, Positional",
-      "overview": "Named after German amateur Horatio Caro and Austrian master Marcus Kann who independently analyzed the opening in the 1880s, the Caro-Kann became respectable when Capablanca made it his preferred drawing weapon in the 1920s; Tigran Petrosian raised it to championship status in the 1960s with his impenetrable defensive treatment; Anatoly Karpov played it through his entire World Championship career. The Caro-Kann is the French Defence minus the bad bishop problem. You support d5 with c6 (instead of …e6 like the French), which means the c8-bishop escapes via f5 BEFORE you commit the e-pawn. The structure is solid as bedrock; the worst-case outcome for Black is a slightly worse endgame that requires precise technique to win. Perfect for players who hate the calculation-heavy Sicilian and Najdorf but still want serious chances with Black.",
+      "overview": "Named after German amateur Horatio Caro and Austrian master Marcus Kann who independently analyzed the opening in the 1880s, the Caro-Kann became respectable when Capablanca made it his preferred drawing weapon in the 1920s; Tigran Petrosian raised it to championship status in the 1960s with his impenetrable defensive treatment; Anatoly Karpov played it through his entire World Championship career. The Caro-Kann is the French Defence minus the bad bishop problem. You support d5 with c6 (instead of …e6 like the French), which means the c8-bishop escapes via f5 BEFORE you commit the e-pawn. The structure is solid as bedrock; the worst-case outcome for Black is a slightly worse endgame that requires precise technique to win. Perfect for players who hate the calculation-heavy Sicilian and Najdorf but still want serious chances with Black. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "The c6+d5 spine is the whole opening. Defend d5, develop pieces around it, never let White's e4 (or e5) push through. The pawn chain itself does half the strategic work for you.",
         "Bf5 BEFORE e6 — this is the Caro-Kann's only real advantage over the French. Get the light-squared bishop to f5 (or g6 after harassment) before locking it in with …e6.",
@@ -429,7 +429,7 @@
       "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 Bf5 Bc4 e6 Bd2 c6 Qe2 Bb4 O-O-O Nbd7",
       "color": "black",
       "style": "Practical, Provocative",
-      "overview": "Here's the dirty secret of opening theory: half of chess writing says 'don't bring your queen out early'. The Scandinavian says: 'I will, and your move'. The opening's pedigree is ancient — it appears in chess manuscripts from 1475 (one of the oldest analyzed openings in the historical record); modern revival came from Larsen and Tony Miles, who beat Karpov with the Scandinavian in 1980 (a major upset at the time). Levy made this Black's anti-1.e4 weapon for the YouTube generation because there's almost no theory beyond move 8. After 1.e4 d5 2.exd5 Qxd5 — yes, your queen is on d5 in the open — but White's natural 3.Nc3 attacks the queen, which means White has to ASK you where she goes (3...Qa5 is the answer, hitting the e1-h4 diagonal). You've used your one queen move to gain three things: developed your queen with tempo, decoyed White's knight to c3 where it commits, and signalled you're playing fast and direct.",
+      "overview": "Here's the dirty secret of opening theory: half of chess writing says 'don't bring your queen out early'. The Scandinavian says: 'I will, and your move'. The opening's pedigree is ancient — it appears in chess manuscripts from 1475 (one of the oldest analyzed openings in the historical record); modern revival came from Larsen and Tony Miles, who beat Karpov with the Scandinavian in 1980 (a major upset at the time). Levy made this Black's anti-1.e4 weapon for the YouTube generation because there's almost no theory beyond move 8. After 1.e4 d5 2.exd5 Qxd5 — yes, your queen is on d5 in the open — but White's natural 3.Nc3 attacks the queen, which means White has to ASK you where she goes (3...Qa5 is the answer, hitting the e1-h4 diagonal). You've used your one queen move to gain three things: developed your queen with tempo, decoyed White's knight to c3 where it commits, and signalled you're playing fast and direct. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "Qxd5 → Qa5 is one move sequence, not two. Don't recapture with the queen on d5 thinking you'll figure out where to put her later — the only good square is a5 (the c-file gets defended by the queen, and Qa5 pins the c3-knight against the e1-king if the bishop ever comes off c1).",
         "Bf5 BEFORE e6 is mandatory. The whole point of the Scandinavian over the Caro-Kann is that the queen comes out instead of the c-pawn — preserving the option to develop the c8-bishop OUTSIDE the pawn chain. Lock the bishop in with …e6 first and you've played a Caro-Kann a tempo down.",
@@ -481,7 +481,7 @@
       "pgn": "d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bf4 O-O e3 c5 dxc5 Bxc5 Qc2 Nc6 a3 Qa5 Rd1 Be7",
       "color": "black",
       "style": "Solid, Classical",
-      "overview": "The QGD is the chess defence equivalent of a Volvo: not exciting, never breaks down, lasts forever. Documented in chess literature back to the 1490s but rigorously developed by Wilhelm Steinitz, Siegbert Tarrasch, and Capablanca around the turn of the 20th century — the latter making it his lifelong defence with countless tournament victories. Karpov used the QGD throughout his 1975-1985 World Championship reign. The structure (pawns on d5 + e6, knight on f6, bishop on e7, king on g8) hasn't been broken in 150 years — there's literally no opponent prep strong enough to win in the QGD by force. Levy teaches it because it lets Black focus on middlegame plans instead of opening theory. The downside: your opponent will recognise it immediately and might steer for a draw. The upside: you can't lose in 25 moves.",
+      "overview": "The QGD is the chess defence equivalent of a Volvo: not exciting, never breaks down, lasts forever. Documented in chess literature back to the 1490s but rigorously developed by Wilhelm Steinitz, Siegbert Tarrasch, and Capablanca around the turn of the 20th century — the latter making it his lifelong defence with countless tournament victories. Karpov used the QGD throughout his 1975-1985 World Championship reign. The structure (pawns on d5 + e6, knight on f6, bishop on e7, king on g8) hasn't been broken in 150 years — there's literally no opponent prep strong enough to win in the QGD by force. Levy teaches it because it lets Black focus on middlegame plans instead of opening theory. The downside: your opponent will recognise it immediately and might steer for a draw. The upside: you can't lose in 25 moves. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "Defend d5 with e6 immediately — not c6 (that's the Slav, a different opening). The …e6 move locks in your light-squared bishop on c8, which becomes the QGD's biggest practical problem to solve. Plan its escape from move 1.",
         "The c8-bishop is your project. The three main paths: …Bd7-…Be8-…f5/g6 (slowest but safest), …b6+…Bb7 (after preparing with …a6 if needed), or trade it off via …Bg4 after Nf3. Never let it die on c8.",
@@ -528,7 +528,7 @@
       "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5 Qb3 Nb6 cxd4 d6 Bb5 Be6",
       "color": "white",
       "style": "Tactical, Tricky",
-      "overview": "The Ponziani is the ambush specialist's dream. Named after Italian theoretician Domenico Lorenzo Ponziani, who analyzed the opening in his 1769 chess book — making it one of the oldest named openings in chess; despite this 250-year pedigree, it never took off in serious tournament play and was relegated to footnote status for centuries. Only in the YouTube era have streamers and content creators (Levy among them) revived it as a surprise weapon for amateur play. 1.e4 e5 2.Nf3 Nc6 3.c3 — and your opponent stares at the board confused. 'What is this? Is this just a slow Italian? Should I play …Nf6? …d5?' That confusion IS the opening. 3.c3 prepares d4 with extra support; if Black answers ANYTHING that doesn't immediately challenge the centre, you crash through with 4.d4 and reach a position no Italian player has prepared.",
+      "overview": "The Ponziani is the ambush specialist's dream. Named after Italian theoretician Domenico Lorenzo Ponziani, who analyzed the opening in his 1769 chess book — making it one of the oldest named openings in chess; despite this 250-year pedigree, it never took off in serious tournament play and was relegated to footnote status for centuries. Only in the YouTube era have streamers and content creators (Levy among them) revived it as a surprise weapon for amateur play. 1.e4 e5 2.Nf3 Nc6 3.c3 — and your opponent stares at the board confused. 'What is this? Is this just a slow Italian? Should I play …Nf6? …d5?' That confusion IS the opening. 3.c3 prepares d4 with extra support; if Black answers ANYTHING that doesn't immediately challenge the centre, you crash through with 4.d4 and reach a position no Italian player has prepared. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "c3 + d4 is the entire idea. The Italian Game's c3+d4 break is delayed (you only play it after castling); the Ponziani plays c3 IMMEDIATELY, threatening d4 before Black has finished developing.",
         "Watch for the natural-looking 3…Nf6 — this is what 95% of opponents play. Then 4.d4! and if 4…Nxe4 5.d5! kicks the c6-knight AND attacks the e4-knight (since it's no longer defended by Nc6). Black's pieces tangle and material is lost.",
@@ -574,7 +574,7 @@
       "pgn": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 exd4 Bc4 Nf6 O-O Bc5",
       "color": "white",
       "style": "Aggressive, Central",
-      "overview": "Levy made the Fantasy Variation famous on YouTube — but it has older roots. The 3.f3 move was experimented with by Hungarian GM Geza Maroczy in the early 1900s as a surprise weapon, and David Bronstein later employed it in his unique, creative style. It remained an obscure sideline until modern theoreticians revived it for the online era. Every Caro-Kann player you face has prepared the Classical (3.Nc3) and the Advance (3.e5). Almost nobody has prepared the Fantasy (3.f3). The numbers don't lie: at 1500-2000 level, the surprise alone produces a +0.4 rating-point swing — that's the difference between a draw and a win. The system works because 3.f3 supports a massive central pawn duo while keeping White's options open: you can play for a positional crush after 3...e6, or accept the gambit-style mess after 3...dxe4 4.fxe4. Either way, you're playing memorised lines and Black is improvising.",
+      "overview": "Levy made the Fantasy Variation famous on YouTube — but it has older roots. The 3.f3 move was experimented with by Hungarian GM Geza Maroczy in the early 1900s as a surprise weapon, and David Bronstein later employed it in his unique, creative style. It remained an obscure sideline until modern theoreticians revived it for the online era. Every Caro-Kann player you face has prepared the Classical (3.Nc3) and the Advance (3.e5). Almost nobody has prepared the Fantasy (3.f3). The numbers don't lie: at 1500-2000 level, the surprise alone produces a +0.4 rating-point swing — that's the difference between a draw and a win. The system works because 3.f3 supports a massive central pawn duo while keeping White's options open: you can play for a positional crush after 3...e6, or accept the gambit-style mess after 3...dxe4 4.fxe4. Either way, you're playing memorised lines and Black is improvising. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "The pawn structure e4-d4-f3 dominates the centre. Don't trade these pawns lightly — the d-pawn is the most important; if Black ever plays …e5 hitting it, support with Nf3 rather than dxe5 (which simplifies and helps Black).",
         "Bc4 is mandatory, NOT Bd3. The c4-bishop on the a2-g8 diagonal is the whole reason f3 makes positional sense — the bishop targets f7, AND the f3-pawn defends the e4-pawn, freeing the bishop from defensive duties.",
@@ -637,7 +637,7 @@
       "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bd3 cxd4 cxd4 Bd7 O-O Nxd4 Nxd4 Qxd4 Nc3 a6 Qe2 Ne7 Kh1",
       "color": "white",
       "style": "Gambit, Aggressive",
-      "overview": "Here's the deal with the French Defence: if you let Black play it on their terms, they reach a structure they've studied since they were a kid and you spend the next 60 moves chipping at a granite wall. The Milner-Barry says: not today. Named after Stuart Milner-Barry — British chess master AND Bletchley Park codebreaker who worked alongside Alan Turing on cracking the Enigma — this gambit was his pet anti-French weapon in the 1930s-40s. After 1.e4 e6 2.d4 d5 3.e5 (the Advance) c5 4.c3 Nc6 5.Nf3, when Black plays the natural 5...Qb6 hitting d4, you don't defend the pawn — you sacrifice it with 6.Bd3! Black is invited to grab it; if they do, you've traded one pawn for total development supremacy. If they don't, you've reached a position with the better-placed pieces.",
+      "overview": "Here's the deal with the French Defence: if you let Black play it on their terms, they reach a structure they've studied since they were a kid and you spend the next 60 moves chipping at a granite wall. The Milner-Barry says: not today. Named after Stuart Milner-Barry — British chess master AND Bletchley Park codebreaker who worked alongside Alan Turing on cracking the Enigma — this gambit was his pet anti-French weapon in the 1930s-40s. After 1.e4 e6 2.d4 d5 3.e5 (the Advance) c5 4.c3 Nc6 5.Nf3, when Black plays the natural 5...Qb6 hitting d4, you don't defend the pawn — you sacrifice it with 6.Bd3! Black is invited to grab it; if they do, you've traded one pawn for total development supremacy. If they don't, you've reached a position with the better-placed pieces. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "The d4-pawn is the bait. After Black plays …Qb6 hitting it, you respond Bd3 — NOT Nc3 (which blocks the queen's defence) and NOT Qd2 (passive). The point: Bd3 develops AND prepares O-O; if Black takes the d4-pawn, your lead in development is worth more than a pawn.",
         "The standard sequence after Black accepts: 6...cxd4 7.cxd4 Nxd4 8.Nxd4 Qxd4 9.Nc3 — Black's queen is now in the open, the Nc3 develops with tempo, and Black is forced into defensive moves while you finish development.",
@@ -699,7 +699,7 @@
       "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4",
       "color": "white",
       "style": "Positional, Anti-Theoretical",
-      "overview": "The Sicilian is the most theoretical opening in chess. The Rossolimo says: 'Don't play that game.' Named after Russian-born American GM Nicolas Rossolimo, who systematized the 3.Bb5 approach in the 1940s-50s and used it throughout his career to score remarkable results against the Sicilian. Magnus Carlsen has played it consistently throughout his career — both as a winning weapon against weaker opposition AND as a peace offering against the best, since the resulting positions reward technical skill over memorization. After 1.e4 c5 2.Nf3 Nc6, White plays 3.Bb5 — pinning the c6-knight against Black's development. Now there's no Open Sicilian. No Najdorf preparation. Black has to play their own game against a setup that 9 out of 10 Sicilian players haven't studied beyond move 7. You'll lose to a 2200; you'll crush a 1500.",
+      "overview": "The Sicilian is the most theoretical opening in chess. The Rossolimo says: 'Don't play that game.' Named after Russian-born American GM Nicolas Rossolimo, who systematized the 3.Bb5 approach in the 1940s-50s and used it throughout his career to score remarkable results against the Sicilian. Magnus Carlsen has played it consistently throughout his career — both as a winning weapon against weaker opposition AND as a peace offering against the best, since the resulting positions reward technical skill over memorization. After 1.e4 c5 2.Nf3 Nc6, White plays 3.Bb5 — pinning the c6-knight against Black's development. Now there's no Open Sicilian. No Najdorf preparation. Black has to play their own game against a setup that 9 out of 10 Sicilian players haven't studied beyond move 7. You'll lose to a 2200; you'll crush a 1500. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "Bb5 is the heart of the system. It pins the c6-knight (preventing standard …e5 pushes), prepares Bxc6 (creating doubled pawns on c6), and develops the bishop to a useful square. Don't trade it lightly — the bishop on b5 is the entire opening.",
         "Decide early: trade or retreat. Against …a6, your two choices are 4.Bxc6 (commit to the structural game — doubled pawns for Black, two bishops for you) or 4.Ba4 (keep the bishop, play for Italian-style positions). Bxc6 is more concrete; Ba4 keeps options open.",
@@ -1822,7 +1822,7 @@
       "pgn": "d4 Nf6 Bg5 e6 Nd2 h6 Bh4 d5 e3 Be7 Bd3 b6 c3 O-O",
       "color": "white",
       "style": "Aggressive, Pinning",
-      "overview": "Gotham's TOP opening — 1,823 games at 61.5% score, more than any other system he plays. The Trompowsky attack with 2.Bg5 pins Black's f6-knight immediately, asking Black to commit to a defence before learning where the rest of White's pieces are going. This is Levy's content engine: every Trompowsky tactical melee, every 'why this opening is GENIUS' video, every speedrun grind happens here. The trade-off: Black has many equalising paths if they know them; the strength is depth in middlegame play that Black usually doesn't have. At amateur level, this means 60%+ win rates by knowing one extra plan in the structures it produces.",
+      "overview": "Gotham's TOP opening — 1,823 games at 61.5% score, more than any other system he plays. The Trompowsky attack with 2.Bg5 pins Black's f6-knight immediately, asking Black to commit to a defence before learning where the rest of White's pieces are going. This is Levy's content engine: every Trompowsky tactical melee, every 'why this opening is GENIUS' video, every speedrun grind happens here. The trade-off: Black has many equalising paths if they know them; the strength is depth in middlegame play that Black usually doesn't have. At amateur level, this means 60%+ win rates by knowing one extra plan in the structures it produces. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "Bg5 pins the f6-knight and asks Black to commit FIRST. The whole opening's identity rests on this pin and the threat to double Black's pawns.",
         "Bh4 holds the pin against …h6. Don't retreat to f4 if you can avoid it — the dark-squared bishop on h4 has more attacking potential than on e3 + f4.",
@@ -1895,7 +1895,7 @@
       "pgn": "c4 Nf6 Nc3 g6 e4 d6 d4 Bg7 Be2 O-O Be3 e5 d5 a5 g4 Na6",
       "color": "white",
       "style": "Flexible, Strategic",
-      "overview": "Gotham's #2 most-played opening — 1,597 games at 62.2% score. The English (1.c4) is the flexible flank opening that transposes into almost any opening White wants: Botvinnik System, Karpov-style positional play, or a King's Indian reversed. Against Black's …Nf6/…g6 setup, Levy plays the classical setup with Nc3 + e4 + d4 reaching a KID-with-an-extra-tempo structure. The plan: g4-g5 kingside expansion while Black is cramped on the queenside.",
+      "overview": "Gotham's #2 most-played opening — 1,597 games at 62.2% score. The English (1.c4) is the flexible flank opening that transposes into almost any opening White wants: Botvinnik System, Karpov-style positional play, or a King's Indian reversed. Against Black's …Nf6/…g6 setup, Levy plays the classical setup with Nc3 + e4 + d4 reaching a KID-with-an-extra-tempo structure. The plan: g4-g5 kingside expansion while Black is cramped on the queenside. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "1.c4 is the ultimate move-order tool. You can transpose into the Queen's Gambit, the English, the Reti, or stay in pure English structures — pick based on what Black commits to.",
         "Against …Nf6/…g6, set up the classical attack: Nc3 + e4 + d4 + Be2/Be3 reaching a KID-reversed structure with the extra tempo for the kingside attack.",
@@ -1968,7 +1968,7 @@
       "pgn": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Qf3 Nxc3 bxc3 c5 Qg3 Nc6 Nf3 Be6 Rb1",
       "color": "white",
       "style": "Aggressive, Tactical",
-      "overview": "Gotham's Vienna at 649 games / 67.8% — one of his highest score rates. The 2.Nc3 + 3.f4 (Vienna Gambit) is the sharpest of his 1.e4 systems. After Black's …d5 reply and the fxe5 / Nxe4 / Qf3 forcing sequence, White trades pieces and ends up with doubled c-pawns but excellent piece activity and an open f-file aimed at f7.",
+      "overview": "Gotham's Vienna at 649 games / 67.8% — one of his highest score rates. The 2.Nc3 + 3.f4 (Vienna Gambit) is the sharpest of his 1.e4 systems. After Black's …d5 reply and the fxe5 / Nxe4 / Qf3 forcing sequence, White trades pieces and ends up with doubled c-pawns but excellent piece activity and an open f-file aimed at f7. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "f4 is the system-defining move — the Vienna Gambit. It commits to the kingside fight before Black has fully developed.",
         "Qf3 is the central queen attacking f7 and supporting Nxc3. Don't be afraid to trade — after bxc3, the open b-file becomes a real attacking lever.",
@@ -2031,7 +2031,7 @@
       "pgn": "Nf3 d5 g3 c5 Bg2 Nc6 O-O e6 d3 Nf6 Nbd2 Be7 e4 O-O Re1",
       "color": "white",
       "style": "Systematic, Universal",
-      "overview": "Gotham's KIA at 771 games / 71.1% — one of his highest scores across any opening. The King's Indian Attack is the ultimate system: Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4 happens against literally anything Black plays. You learn five middlegame plans once and play them in every game — pattern recognition advantage at amateur level is massive.",
+      "overview": "Gotham's KIA at 771 games / 71.1% — one of his highest scores across any opening. The King's Indian Attack is the ultimate system: Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4 happens against literally anything Black plays. You learn five middlegame plans once and play them in every game — pattern recognition advantage at amateur level is massive. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "Same setup every game: Nf3 + g3 + Bg2 + O-O + d3 + Nbd2 + e4. Pattern recognition beats opening theory at amateur level.",
         "e4-e5 is the central thrust. Once your pieces are out, this push grabs space and cramps Black's kingside.",
@@ -2082,7 +2082,7 @@
       "pgn": "e4 c6 d4 d5 e5 Bf5 h4 h5 Bg5 Qb6 Bd3 Bxd3 Qxd3 e6 Nd2 Ne7 c4",
       "color": "white",
       "style": "Sharp, Space",
-      "overview": "Gotham's anti-Caro from White's side — 423 games at 73.2% score, one of his BEST-scoring lines. The 3.e5 Advance grabs space immediately; the h4 thrust fixes Black's kingside structure with …h5; then Bg5 pins the king's knight and Bd3 + queen on d3 sets up the queenside-castle attack. Sharp, principled, hard to defend at speed.",
+      "overview": "Gotham's anti-Caro from White's side — 423 games at 73.2% score, one of his BEST-scoring lines. The 3.e5 Advance grabs space immediately; the h4 thrust fixes Black's kingside structure with …h5; then Bg5 pins the king's knight and Bd3 + queen on d3 sets up the queenside-castle attack. Sharp, principled, hard to defend at speed. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "3.e5 (Advance) is the principled choice — grab space and cramp Black's kingside.",
         "h4-h5 is the structural commitment. Once Black plays …h5 in response, Black's pawn structure is fixed for the rest of the game.",
@@ -2133,7 +2133,7 @@
       "pgn": "e4 c5 Nc3 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4 cxd4 Qxd4",
       "color": "white",
       "style": "Anti-Theoretical, Solid",
-      "overview": "Gotham's Closed Sicilian — 333 games at 68.0%. The 2.Nc3 sidestep avoids 90% of Sicilian theory, taking Black out of their preparation. After Bb5 the typical exchange sequence simplifies into a quiet middlegame where White's better pawn structure usually decides.",
+      "overview": "Gotham's Closed Sicilian — 333 games at 68.0%. The 2.Nc3 sidestep avoids 90% of Sicilian theory, taking Black out of their preparation. After Bb5 the typical exchange sequence simplifies into a quiet middlegame where White's better pawn structure usually decides. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "2.Nc3 — the entire point is to avoid Open Sicilian theory. Black's home-prep advantage goes away.",
         "Bb5 + the knight exchange on b5 leaves Black with doubled a-pawns and a structural weakness.",
@@ -2173,7 +2173,7 @@
       "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ gxf6 Nf3 Nc6 g3 e5 Bg2 Bg4",
       "color": "black",
       "style": "Solid, Counter-attacking",
-      "overview": "Gotham's French Defense as Black — 1,596 games at 62.7%. The Rubinstein 4...dxe4 line is Levy's main French weapon. After Nxe4 / …Nf6 / Nxf6+ / …gxf6, Black accepts doubled f-pawns in exchange for the bishop pair and active piece play. The open g-file becomes a real attacking lever.",
+      "overview": "Gotham's French Defense as Black — 1,596 games at 62.7%. The Rubinstein 4...dxe4 line is Levy's main French weapon. After Nxe4 / …Nf6 / Nxf6+ / …gxf6, Black accepts doubled f-pawns in exchange for the bishop pair and active piece play. The open g-file becomes a real attacking lever. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "4...dxe4 — the Rubinstein. Accept the doubled pawns; you'll get them back in piece activity.",
         "…gxf6 recapture (not …exf6) keeps the f6-pawn supporting …e5 — the critical central counter.",
@@ -2234,7 +2234,7 @@
       "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 c5 Bb5+ Nc6 e5 Nd7",
       "color": "black",
       "style": "Hypermodern, Counter-attacking",
-      "overview": "Gotham's Pirc Defense as Black — 351 games at 69.2% score, one of his BEST-scoring Black openings. The Pirc invites White to overextend in the centre, then strikes back with …c5 to dynamite the structure. The Austrian Attack with f4 is the most aggressive try; Levy meets it with …c5 and …Nd7 keeping the position fluid.",
+      "overview": "Gotham's Pirc Defense as Black — 351 games at 69.2% score, one of his BEST-scoring Black openings. The Pirc invites White to overextend in the centre, then strikes back with …c5 to dynamite the structure. The Austrian Attack with f4 is the most aggressive try; Levy meets it with …c5 and …Nd7 keeping the position fluid. Levy is an attacking, middlegame-decisive player — his games are built to win in the opening and the middlegame, not grind long endings — so this repertoire is deepest on the opening and middlegame plans, with endgame theory shown only where his actual games reach a decisive ending.",
       "keyIdeas": [
         "…d6 + …Nf6 + …g6 + …Bg7 — the Pirc setup. Let White overextend in the centre; the fianchetto bishop covers everything.",
         "…c5 is the critical break against the Austrian Attack (f4). Don't delay it — the longer White holds the centre, the worse Black's position becomes.",
@@ -2285,6 +2285,349 @@
         "concept:pos-center",
         "https://www.chess.com/openings/Pirc-Defense",
         "https://api.chess.com/pub/player/gothamchess/games/archives"
+      ]
+    },
+    {
+      "id": "pro-hikaru-nimzo-larsen",
+      "playerId": "hikaru",
+      "eco": "A01",
+      "name": "Nimzo-Larsen Attack (Hikaru)",
+      "color": "white",
+      "style": "Hypermodern, Flexible",
+      "pgn": "b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4 O-O Nc2 Nc6 d4 exd4 exd4 Re8 Nf3 Bf8 d5",
+      "overview": "Hikaru Nakamura's favourite surprise weapon — the move 1.b3, which he plays at blitz and rapid against the world's best (he beat Ding Liren with it in 2021). Across his games it scores a remarkable 87% over 7,481 outings. The whole idea is hypermodern: instead of fighting for the centre with pawns, White fianchettoes the bishop to b2 onto the longest diagonal, lets Black build a classical centre, then undermines it with e3, c4 and the d4-break until the b2-bishop rakes an open road to Black's king. Both positional and tactical — slow maneuvering, then sudden blows on the long diagonal. Its biggest practical edge: opponents simply have no booked-up theory here, and they're effectively playing a reversed Sicilian a tempo down.",
+      "keyIdeas": [
+        "Fianchetto the bishop to b2 — the whole game amplifies its long diagonal toward e5 and g7.",
+        "Stay flexible with e3 and keep f4/d4 in reserve; opponents have no prepared lines.",
+        "Break with d4 (and often d5) to open the centre once the pieces support it — the b2-bishop bursts to life.",
+        "Treat many lines as a reversed Sicilian with an extra tempo: a comfortable, low-risk pull at speed."
+      ],
+      "traps": [],
+      "warnings": [],
+      "variations": [
+        {
+          "name": "1...e5 Main Line",
+          "pgn": "b3 e5 Bb2 Nc6 e3 Nf6 Bb5 Bd6 Na3 Na5 Be2 a6 c4 O-O Nc2 Nc6 d4 exd4 exd4 Re8 Nf3 Bf8 d5",
+          "explanation": "His most-played line (1,315 games). After 1...e5 White fianchettoes, pins with Bb5, reroutes the knight Na3-c2 to support d4, and breaks the centre open — the b2-bishop dominates the resulting middlegame.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...d5",
+          "pgn": "b3 d5 Bb2 Nf6 Nf3 g6 e3 Bg7 d4 O-O c4 c6 Nbd2 Bg4 Bd3",
+          "explanation": "His most common reply to face (1,848 games, 88%). Against the solid 1...d5 White plays a reversed-London double fianchetto setup (Nf3, e3, d4, c4) and presses on the long diagonal.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...Nf6",
+          "pgn": "b3 Nf6 Bb2 g6 e3 Bg7 Nf3 O-O d4 d6 Be2 Nbd7 O-O b6 c4 Bb7 Qc2 Re8",
+          "explanation": "1,709 games at 89%. Black develops flexibly; White builds the big d4/c4 centre behind the b2-bishop and contests the long diagonal with his own fianchetto.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...c5",
+          "pgn": "b3 c5 Bb2 Nc6 e3 Nf6 Nf3 g6 d4 cxd4 Nxd4 Bg7 Be2 O-O O-O",
+          "explanation": "415 games. A reversed Sicilian where White's extra tempo tells: d4 opens the position and the b2-bishop eyes the kingside.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...b6 Symmetric",
+          "pgn": "b3 b6 Bb2 Bb7 Nf3 Nf6 e3 e6 d4 Be7 Bd3 O-O Nbd2",
+          "explanation": "392 games. Black mirrors the fianchetto; White's extra tempo lets him grab the centre first with d4 and Bd3.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...g6",
+          "pgn": "b3 g6 Bb2 Nf6 e3 Bg7 Nf3 O-O d4 d6 Be2 Nbd7 O-O Re8 c4",
+          "explanation": "300 games at 89%. Against the kingside fianchetto White takes the full centre with d4/c4 and plays for a space advantage.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "1...e6",
+          "pgn": "b3 e6 Bb2 d5 e3 Nf6 Nf3 Be7 d4 O-O Bd3 c5 O-O Nc6 c4 cxd4 Nxd4",
+          "explanation": "287 games at 90% — his best-scoring line. Black goes for a French-like structure; White builds d4/c4 and uses the open lines after the central trades.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Nimzowitsch%E2%80%93Larsen_Attack",
+        "https://api.chess.com/pub/player/hikaru/games/archives"
+      ]
+    },
+    {
+      "id": "pro-hikaru-closed-sicilian",
+      "playerId": "hikaru",
+      "eco": "B23",
+      "name": "Grand Prix Attack (Hikaru)",
+      "color": "white",
+      "style": "Aggressive, Attacking",
+      "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6 O-O O-O d3 a6 a4 Nd4 Nxd4",
+      "overview": "Hikaru's sharpest answer to the Sicilian — the Grand Prix Attack, which he and Levy Rozman both call legendary. He sidesteps all Open-Sicilian theory by playing 2.Nc3 first (stopping Black's freeing ...d5), then hurls the f-pawn forward with f4 and f5 to storm the kingside before Black is ready. Across 2,396 games it scores a crushing 88%. Both the Bc4 attacking setup (eyeing f7, prepping f5) and the Bb5 positional setup (doubling Black's c-pawns) are in his arsenal. Pure pressure from move two.",
+      "keyIdeas": [
+        "Play 2.Nc3 before f4 — it stops Black's equalising ...d5.",
+        "Storm the kingside with f4 and f5 to crack open Black's king.",
+        "Aim the c4-bishop at f7 and pour the pieces toward the king.",
+        "No deep theory needed — it's a plan, not a memory test."
+      ],
+      "traps": [],
+      "warnings": [],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-development",
+        "https://api.chess.com/pub/player/hikaru/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "Grand Prix f4 + f5",
+          "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6 O-O O-O d3 a6 a4 Nd4 Nxd4",
+          "explanation": "His main attacking line (746 games). The f5-break tears open Black's fianchettoed king and the open f-file plus the bishop pair carry the initiative into the middlegame.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "vs ...g6",
+          "pgn": "e4 c5 Nc3 Nc6 f4 g6 Nf3 Bg7 Bc4 e6 f5 Nge7 fxe6 dxe6 O-O O-O d3 a6 a4 Nd4 Nxd4",
+          "explanation": "501 games. Against the kingside fianchetto, f5 is even more potent — it strikes directly at the squares around Black's king.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "vs ...e6",
+          "pgn": "e4 c5 Nc3 Nc6 f4 e6 Nf3 d5 Bb5 Ne7 exd5 exd5 Qe2 f6 Bxc6+ bxc6 O-O Kf7 b3 Nf5 Na4",
+          "explanation": "142 games. Against the solid ...e6, White switches to the Bb5 plan — Bxc6 damages Black's structure and the e-file opens.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pro-hikaru-reti",
+      "playerId": "hikaru",
+      "eco": "A05",
+      "name": "Réti Opening (Hikaru)",
+      "color": "white",
+      "style": "Hypermodern, Flexible",
+      "pgn": "Nf3 Nf6 b3 g6 Bb2 Bg7 d4 O-O e3 d6 Be2 Nbd7 O-O e5 dxe5 Ng4 c4 Ngxe5 Nc3 Re8 Qd2",
+      "overview": "Hikaru's flexible 1.Nf3 — the most non-committal first move in chess. In his hands it almost always merges into his beloved b3/Bb2 hypermodern system, the same long-diagonal weapon as his Nimzo-Larsen, just reached by a different move order (his 1.d3 games live here too). Across 4,749 games it scores 84%. He builds a broad d4/c4 centre behind the fianchettoed bishop, lets Black commit, then opens the position so the b2-bishop's diagonal stretches toward the enemy king.",
+      "keyIdeas": [
+        "1.Nf3 keeps every option open — transpose toward your best structures.",
+        "Fianchetto to b2 and build the d4/c4 centre — the long diagonal is the weapon.",
+        "Open the centre at the right moment so the bishop bursts to life.",
+        "A low-risk, flexible system you understand better than your opponent."
+      ],
+      "traps": [],
+      "warnings": [],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-development",
+        "https://api.chess.com/pub/player/hikaru/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "Réti into the b3 system",
+          "pgn": "Nf3 Nf6 b3 g6 Bb2 Bg7 d4 O-O e3 d6 Be2 Nbd7 O-O e5 dxe5 Ng4 c4 Ngxe5 Nc3 Re8 Qd2",
+          "explanation": "509 games. The Réti transposes into his signature b3/Bb2 structure with a big d4/c4 centre — pure hypermodern pressure on the long diagonal.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "vs ...d5",
+          "pgn": "Nf3 d5 b3 Nf6 Bb2 e6 e3 Be7 d4 O-O Bd3 b6 O-O Bb7 Nbd2",
+          "explanation": "623 games. Against ...d5 White plays a reversed-London double fianchetto and presses the long diagonal.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "vs ...c5",
+          "pgn": "Nf3 c5 b3 Nc6 Bb2 d5 e3 a6 d4 cxd4 Nxd4 Nf6 Nxc6 bxc6 Nd2",
+          "explanation": "119 games. Against ...c5 White takes the centre with d4 and reaches a comfortable, space-based middlegame.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pro-hikaru-pirc-modern",
+      "playerId": "hikaru",
+      "eco": "B06",
+      "name": "Modern Defense (Hikaru)",
+      "color": "black",
+      "style": "Hypermodern, Flexible",
+      "pgn": "e4 g6 d4 Bg7 Nc3 a6 Be3 b5 Qd2 Bb7 f3 d6 h4 h5 Nh3 e6 Ng5 Nd7",
+      "overview": "Hikaru's #1 weapon as Black — 1...g6 against almost everything, a Modern/Pirc/hippopotamus hybrid that scores over 86% across 5,503 games, mostly against fellow grandmasters. His own stated reason: you reach the same positions every game, so you understand them far better than your opponent. Black hands White a big centre on purpose — a big centre is a big target — then undermines it with the signature ...a6 and ...b5 queenside expansion while both bishops rake the long diagonals. Flexible, hard to draw against, and full of winning chances.",
+      "keyIdeas": [
+        "Play ...g6 vs everything — familiarity beats memorised theory.",
+        "Give White the centre, then undermine it with ...a6 and ...b5.",
+        "Fianchetto both bishops onto the long diagonals.",
+        "Keep the position fluid — White's early attacks tend to backfire."
+      ],
+      "traps": [],
+      "warnings": [],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-development",
+        "https://api.chess.com/pub/player/hikaru/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "vs Be3 + Qd2",
+          "pgn": "e4 g6 d4 Bg7 Nc3 a6 Be3 b5 Qd2 Bb7 f3 d6 h4 h5 Nh3 e6 Ng5 Nd7",
+          "explanation": "His main line (326 games). Against the 150-style Be3/Qd2/f3 setup, Black expands ...a6/...b5, meets h4 with ...h5, and keeps a rich double-edged game.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "vs Nf3 Classical",
+          "pgn": "e4 g6 d4 Bg7 Nf3 c6 Nc3 d5 h3 dxe4 Nxe4 Nf6 Nxf6+ exf6 Bc4 O-O O-O Nd7 Re1 b5 Bb3 Nb6 a4 a5",
+          "explanation": "830 games. Against the classical Nf3, Black plays ...c6 and ...d5, trading into a comfortable structure.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "...c6 setup",
+          "pgn": "e4 g6 d4 Bg7 Nc3 c6 Nf3 d5 h3 dxe4 Nxe4 Nf6 Nxf6+ exf6 Bc4 O-O O-O Nd7 c3 b5 Bb3 Nb6 Re1 a5",
+          "explanation": "886 games. The flexible ...c6 prepares ...d5 to challenge the centre directly.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "vs Austrian f4",
+          "pgn": "e4 g6 d4 Bg7 Nc3 a6 f4 c6 Nf3 d5 e5 Bg4 h3 Bxf3 Qxf3 e6 Be3 h5 g3 Nd7 O-O-O Rc8 g4 Ne7 Bd3 c5",
+          "explanation": "198 games. Against the aggressive Austrian Attack, Black strikes back in the centre and on the queenside.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pro-hikaru-caro-kann",
+      "playerId": "hikaru",
+      "eco": "B12",
+      "name": "Caro-Kann Defense (Hikaru)",
+      "color": "black",
+      "style": "Solid, Classical",
+      "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 h6 O-O Nd7 Nbd2 Ne7 Nb3 Qc7",
+      "overview": "Hikaru's rock-solid alternative to the Pirc — the Caro-Kann, his choice when he wants a quieter, low-risk game (1,711 games, 82%). The whole point shows in the Advance Variation: after 3.e5 he plays the classical 3...Bf5, developing the light-squared bishop OUTSIDE the pawn chain to an active post — the very piece that stays trapped in the French Defense. Black builds a solid wall behind the freed bishop, develops smoothly, and plays for the ...c5 break against White's advanced centre. Comfortable equality with no weaknesses.",
+      "keyIdeas": [
+        "Challenge the centre with ...d5, backed by ...c6.",
+        "Get the light bishop OUT to f5 before locking the pawn chain.",
+        "Build a solid wall with ...e6 and prepare the ...c5 break.",
+        "Low-risk, no weaknesses — outplay the opponent from a sound base."
+      ],
+      "traps": [],
+      "warnings": [],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "book:chess-fundamentals",
+        "concept:pos-development",
+        "https://api.chess.com/pub/player/hikaru/games/archives"
+      ],
+      "variations": [
+        {
+          "name": "vs Advance 3.e5 Bf5",
+          "pgn": "e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 h6 O-O Nd7 Nbd2 Ne7 Nb3 Qc7",
+          "explanation": "His main line (351 games). The classical ...Bf5 frees the bishop; Black builds the wall and presses ...c5 against the e5-pawn.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "vs Exchange",
+          "pgn": "e4 c6 d4 d5 exd5 cxd5 Bd3 Nc6 c3 g6 Nf3 Bf5 O-O",
+          "explanation": "224 games. Against the Exchange, Black develops naturally with ...Nc6, ...g6 and ...Bf5 for an easy, symmetrical game.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        },
+        {
+          "name": "vs Two Knights",
+          "pgn": "e4 c6 Nc3 d5 Nf3 Bg4 h3 Bxf3 Qxf3 e6 d3 g6 Bd2 Bg7 O-O-O Nd7 g4",
+          "explanation": "232 games. Against 2.Nc3, the ...Bg4 pin and ...e6 reach a solid structure where Black is fully comfortable.",
+          "sources": [
+            "book:chess-fundamentals",
+            "concept:pos-development",
+            "https://api.chess.com/pub/player/hikaru/games/archives"
+          ]
+        }
       ]
     }
   ]
