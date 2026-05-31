@@ -64,3 +64,29 @@ Regenerate via the two scripts above (needs the gitignored archives on disk).
    annotations/learnCues/arrows/highlights + overview/themes (theme goal square =
    a student move's landing square). 4. `npx vitest run` the 4 plan gates.
    5. Commit. Batch the deploy + audit per the cap policy.
+
+---
+## PROGRESS UPDATE (2026-05-31)
+**106 plans deepened** to real 8-ply (move 13->17) lines from the pros' actual
+WINS, each narrated (concise per-move note + <=8-word cue + lead-the-eye
+arrows/highlights), all gates green, committed. Covers EVERY cleanly-groundable
+plan: GothamChess (all 18 openings) + Naroditsky Alapin/Jobava-bd3/Alekhine-modern/
+KID(10)/Caro-Kann(5). 15 duplicate-anchor plans re-pointed to distinct eval-sound
+candidate wins. Applier: scripts/pro-repertoire/apply-plan-narration.cjs;
+per-opening data in scripts/pro-repertoire/openings/*.cjs.
+
+### REMAINING: 62 short plans (the harder tail)
+1. ~49 NEVER-grounded (mostly Naroditsky Rossolimo/Najdorf/Ruy/KIA-subvars/
+   Jobava-french-slav/Alekhine-sublines + a few Gotham: caro-panov, antisic-accel/
+   e6, mb-declines/advance, stafford-e5space, kia-e5/sicilian). Their synthetic
+   FEN never occurs in the pro's games -> exact-FEN grounding found nothing.
+   FIX: re-anchor by opening/variation PREFIX -- scan archive for a student WIN in
+   the variation, eval-pick a sound deep anchor, ground+narrate. Needs a
+   prefix->opening map (derive from each opening's pgn in pro-repertoires.json).
+2. ~10 flagged/murky (deferred): french-rubinstein-qxd4, french-tarrasch-b5gambit,
+   pirc-150-b5, qgd-tartakower-b6, qgd-carlsbad-e5 (true dup), KID-classical-kingside,
+   KID-classical-c5 (dup), KID-makogonov-kingside, KIA-vs-b6-expand, Job-a6c5-rad1,
+   KID-fianchetto-simplify. FIX: David's WALK-BACK -- real wins, but the move-13->21
+   window leaves the student worse (he won later). Re-scan each won game, eval
+   move 13->30, anchor the 8-ply window where the student is genuinely on top
+   (>= +0.8). Stockfish only LOCATES the window; moves stay real.
