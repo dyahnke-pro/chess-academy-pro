@@ -278,12 +278,22 @@
         {
           "name": "Main Refutation d3",
           "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4",
-          "explanation": "The textbook refutation. After 4.Nxc6 dxc6, you play 5.d3 (NOT 5.d4!) keeping the centre closed and the extra pawn permanent. The Be2 development is deliberately modest — bland but unprovokable. Black's standard …h5 + …Ng4 + …Qh4 attacking battery never gets going against a calmly defended kingside. From here you just castle, trade pieces, win the endgame."
+          "explanation": "The textbook refutation. After 4.Nxc6 dxc6, you play 5.d3 (NOT 5.d4!) keeping the centre closed and the extra pawn permanent. The Be2 development is deliberately modest — bland but unprovokable. Black's standard …h5 + …Ng4 + …Qh4 attacking battery never gets going against a calmly defended kingside. From here you just castle, trade pieces, win the endgame.",
+          "sources": [
+            "book:chess-fundamentals",
+            "https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit",
+            "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+          ]
         },
         {
           "name": "4...dxc6 5.e5 Line",
           "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d3 Nc5 Be3 Ne6 Nd2",
-          "explanation": "The aggressive alternative — push e5 to kick the f6-knight forward. After …Ne4, you've gained space at the cost of slightly weakening e5 itself. The follow-up plan is d3 (always d3!) attacking the knight, then Bxc5 trading off Black's most active piece. The extra pawn is intact and you've gained a strong central pawn — a slight improvement on the main refutation when you want to attack rather than consolidate."
+          "explanation": "The aggressive alternative — push e5 to kick the f6-knight forward. After …Ne4, you've gained space at the cost of slightly weakening e5 itself. The follow-up plan is d3 (always d3!) attacking the knight, then Bxc5 trading off Black's most active piece. The extra pawn is intact and you've gained a strong central pawn — a slight improvement on the main refutation when you want to attack rather than consolidate.",
+          "sources": [
+            "book:chess-fundamentals",
+            "https://www.chess.com/openings/Petrovs-Defense-Stafford-Gambit",
+            "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+          ]
         }
       ],
       "trapLines": [],
@@ -489,12 +499,22 @@
         {
           "name": "Classical 5.Bf4 Line",
           "pgn": "d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bf4 O-O e3 c5 dxc5 Bxc5 Qc2 Nc6 a3 Qa5 Rd1 Be7",
-          "explanation": "The modern QGD mainline against the active 5.Bf4 system. After 5...O-O 6.e3 c5! (yes, …c5 played early!) 7.dxc5 Bxc5 — Black grabs the central pawn back with the bishop, accepting White's slight space advantage but reaching active piece play. 8.Qc2 Nc6 9.a3 Qa5 (eyeing c3 and creating threats against the pinned knight) 10.Rd1 — and now the funny 10...Be7! reroutes the bishop AWAY from the active c5-square back to e7. Why? Because Be7 prepares …Nd7 + …e5 freeing the position. Looks like waste of tempo; actually a typical QGD manoeuvre — pieces reach their best squares slowly, not directly."
+          "explanation": "The modern QGD mainline against the active 5.Bf4 system. After 5...O-O 6.e3 c5! (yes, …c5 played early!) 7.dxc5 Bxc5 — Black grabs the central pawn back with the bishop, accepting White's slight space advantage but reaching active piece play. 8.Qc2 Nc6 9.a3 Qa5 (eyeing c3 and creating threats against the pinned knight) 10.Rd1 — and now the funny 10...Be7! reroutes the bishop AWAY from the active c5-square back to e7. Why? Because Be7 prepares …Nd7 + …e5 freeing the position. Looks like waste of tempo; actually a typical QGD manoeuvre — pieces reach their best squares slowly, not directly.",
+          "sources": [
+            "book:chess-fundamentals",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+          ]
         },
         {
           "name": "Exchange Variation",
           "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Nbd7 Nf3 Re8 Qc2 c6 O-O Nf8",
-          "explanation": "The Exchange Variation transforms the QGD into a Carlsbad structure — Black has a pawn on c6 supporting d5, White has pawns on c5-side and the b-pawn ready to push to b5. After 4.cxd5 exd5 5.Bg5 Be7 6.e3 O-O 7.Bd3 Nbd7 8.Nf3 Re8 9.Qc2 c6 10.O-O, the position settles. The plan is the Minority Attack: White will play Rab1 + b4 + b5 trying to create a weakness on c6 (after bxc6 bxc6 Black has a backward c-pawn). Black's counter: the 10...Nf8! manoeuvre reroutes the knight to g6 or e6 supporting the …f5 break or the …Bf5 light-square trade. Outplay your opponent with patient regrouping."
+          "explanation": "The Exchange Variation transforms the QGD into a Carlsbad structure — Black has a pawn on c6 supporting d5, White has pawns on c5-side and the b-pawn ready to push to b5. After 4.cxd5 exd5 5.Bg5 Be7 6.e3 O-O 7.Bd3 Nbd7 8.Nf3 Re8 9.Qc2 c6 10.O-O, the position settles. The plan is the Minority Attack: White will play Rab1 + b4 + b5 trying to create a weakness on c6 (after bxc6 bxc6 Black has a backward c-pawn). Black's counter: the 10...Nf8! manoeuvre reroutes the knight to g6 or e6 supporting the …f5 break or the …Bf5 light-square trade. Outplay your opponent with patient regrouping.",
+          "sources": [
+            "book:chess-fundamentals",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+          ]
         }
       ],
       "trapLines": [],
@@ -526,12 +546,22 @@
         {
           "name": "Main Line 3...Nf6 4.d4",
           "pgn": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5 Qb3 Nb6 cxd4 d6 Bb5 Be6",
-          "explanation": "The sharpest Ponziani line — Black accepts the gambit and grabs e4 with the knight. White responds with 5.d5 attacking the c6-knight. Black's only real try is 5...Bc5! threatening Bxf2+ with discovered tactics. After 6.dxc6 (winning a pawn) Bxf2+! 7.Ke2 — the king walks into the centre, but it's actually safe there. Why? Because after 7...bxc6 (Black recovers the pawn via the open b-file), the position is theoretically balanced but practically explosive. White has a king on e2 looking exposed but with all pieces ready to develop; Black has a slight material advantage (gained the e4-pawn) but a wrecked structure (doubled c-pawns). The position favours whoever has studied it more. If you've watched Levy's video — that's you."
+          "explanation": "The sharpest Ponziani line — Black accepts the gambit and grabs e4 with the knight. White responds with 5.d5 attacking the c6-knight. Black's only real try is 5...Bc5! threatening Bxf2+ with discovered tactics. After 6.dxc6 (winning a pawn) Bxf2+! 7.Ke2 — the king walks into the centre, but it's actually safe there. Why? Because after 7...bxc6 (Black recovers the pawn via the open b-file), the position is theoretically balanced but practically explosive. White has a king on e2 looking exposed but with all pieces ready to develop; Black has a slight material advantage (gained the e4-pawn) but a wrecked structure (doubled c-pawns). The position favours whoever has studied it more. If you've watched Levy's video — that's you.",
+          "sources": [
+            "book:chess-fundamentals",
+            "https://www.chess.com/openings/Ponziani-Opening",
+            "https://en.wikipedia.org/wiki/Ponziani_Opening"
+          ]
         },
         {
           "name": "3...d5 Central Counter",
           "pgn": "e4 e5 Nf3 Nc6 c3 d5 Qa4 Nf6 Nxe5 Bd6 Nxc6 bxc6 d3 O-O Be2 Re8 Nd2",
-          "explanation": "The principled refutation — Black challenges the centre immediately. White's reply is the brilliant 4.Qa4! pinning the c6-knight against the e8-king (via the diagonal a4-d7-e8 with the d-pawn on d5 blocking). Black plays 4...Nf6 developing, but White grabs the loose e5-pawn with 5.Nxe5! — possible because c6 is pinned. Black tries 5...Bd6 hitting the knight on e5, but after 6.Nxc6 bxc6, White has won a pawn. The structural cost: Black has doubled c-pawns and the bishop pair. Theoretically balanced (Black has dynamic compensation), but at amateur level the extra pawn often holds."
+          "explanation": "The principled refutation — Black challenges the centre immediately. White's reply is the brilliant 4.Qa4! pinning the c6-knight against the e8-king (via the diagonal a4-d7-e8 with the d-pawn on d5 blocking). Black plays 4...Nf6 developing, but White grabs the loose e5-pawn with 5.Nxe5! — possible because c6 is pinned. Black tries 5...Bd6 hitting the knight on e5, but after 6.Nxc6 bxc6, White has won a pawn. The structural cost: Black has doubled c-pawns and the bishop pair. Theoretically balanced (Black has dynamic compensation), but at amateur level the extra pawn often holds.",
+          "sources": [
+            "book:chess-fundamentals",
+            "https://www.chess.com/openings/Ponziani-Opening",
+            "https://en.wikipedia.org/wiki/Ponziani_Opening"
+          ]
         }
       ],
       "trapLines": []
@@ -687,17 +717,32 @@
         {
           "name": "Rossolimo 3.Bb5 e6",
           "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 O-O Nge7 Re1 a6 Bf1 d5 exd5 Nxd5 d4 cxd4 Nxd4 Nxd4 Qxd4",
-          "explanation": "The flagship Rossolimo line. Black plays 3...e6 (preparing …d5 to challenge the centre) and …Nge7 (the knight goes to e7 supporting …d5). You set up with 4.O-O Nge7 5.Re1 a6 — and now the unusual retreat 6.Bf1! The bishop goes back to f1 to keep the b1-h7 diagonal open AND get out of the way of a future d4 push. After 6...d5 (Black's break) 7.exd5 Nxd5 8.d4! cxd4 9.Nxd4 Nxd4 10.Qxd4, you've reached an IQP-style position with the queen centralised, knight on d4, and Black's pieces still scrambled. The bishop on f1 will come out later to a more active square once the position settles. Classic Rossolimo squeeze."
+          "explanation": "The flagship Rossolimo line. Black plays 3...e6 (preparing …d5 to challenge the centre) and …Nge7 (the knight goes to e7 supporting …d5). You set up with 4.O-O Nge7 5.Re1 a6 — and now the unusual retreat 6.Bf1! The bishop goes back to f1 to keep the b1-h7 diagonal open AND get out of the way of a future d4 push. After 6...d5 (Black's break) 7.exd5 Nxd5 8.d4! cxd4 9.Nxd4 Nxd4 10.Qxd4, you've reached an IQP-style position with the queen centralised, knight on d4, and Black's pieces still scrambled. The bishop on f1 will come out later to a more active square once the position settles. Classic Rossolimo squeeze.",
+          "sources": [
+            "book:chess-fundamentals",
+            "https://www.chess.com/openings/Sicilian-Defense",
+            "https://en.wikipedia.org/wiki/Sicilian_Defence"
+          ]
         },
         {
           "name": "Rossolimo 3.Bb5 g6",
           "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 e5 Bxc6 dxc6 d3",
-          "explanation": "Against the fianchetto setup, the Rossolimo gets concrete. Black plays 3...g6 + 4...Bg7 preparing to put the bishop on the long diagonal. You respond 5.Re1 e5 (Black tries to lock the centre supporting the fianchetto) 6.Bxc6! dxc6 (Black recaptures with the d-pawn to keep the central pawn structure) 7.d3 — locking in a long-term structural advantage. Black has doubled c-pawns and the half-open d-file is yours. The bishop on g7 looks active but it's biting on YOUR central pawn on d3 — defended. Position favours the better long-term technique."
+          "explanation": "Against the fianchetto setup, the Rossolimo gets concrete. Black plays 3...g6 + 4...Bg7 preparing to put the bishop on the long diagonal. You respond 5.Re1 e5 (Black tries to lock the centre supporting the fianchetto) 6.Bxc6! dxc6 (Black recaptures with the d-pawn to keep the central pawn structure) 7.d3 — locking in a long-term structural advantage. Black has doubled c-pawns and the half-open d-file is yours. The bishop on g7 looks active but it's biting on YOUR central pawn on d3 — defended. Position favours the better long-term technique.",
+          "sources": [
+            "book:chess-fundamentals",
+            "https://www.chess.com/openings/Sicilian-Defense",
+            "https://en.wikipedia.org/wiki/Sicilian_Defence"
+          ]
         },
         {
           "name": "Accelerated Pawn Storm (Carlsen-inspired)",
           "pgn": "e4 c5 Nf3 Nc6 Bb5 e6 Bxc6 bxc6 d3 d5 e5 Ne7 b3 Ng6 Bb2",
-          "explanation": "Magnus Carlsen popularised this approach — trade on c6 IMMEDIATELY after Black's …e6 setup. After 4.Bxc6 bxc6 (Black takes with the b-pawn keeping the c-file under control) 5.d3 d5 6.e5! — you push the e-pawn to cramp Black, the c-pawn structure (now doubled and weak) is a permanent target. White's plan: develop with Nbd2, h3, O-O, then attack on the kingside while Black struggles to find counterplay with the broken queenside. Carlsen has won multiple games in this line at the highest level."
+          "explanation": "Magnus Carlsen popularised this approach — trade on c6 IMMEDIATELY after Black's …e6 setup. After 4.Bxc6 bxc6 (Black takes with the b-pawn keeping the c-file under control) 5.d3 d5 6.e5! — you push the e-pawn to cramp Black, the c-pawn structure (now doubled and weak) is a permanent target. White's plan: develop with Nbd2, h3, O-O, then attack on the kingside while Black struggles to find counterplay with the broken queenside. Carlsen has won multiple games in this line at the highest level.",
+          "sources": [
+            "book:chess-fundamentals",
+            "https://www.chess.com/openings/Sicilian-Defense",
+            "https://en.wikipedia.org/wiki/Sicilian_Defence"
+          ]
         }
       ],
       "trapLines": []
