@@ -60991,5 +60991,938 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-benonidefence-fianchetto",
+    "openingId": "benoni-defence",
+    "criticalPositionFen": "r1bqr1k1/pp3pbp/3p1np1/2pPn3/P7/2N3P1/1P1NPPBP/R1BQ1RK1 w - - 1 12",
+    "title": "Benoni Fianchetto: Reroute and Strike with …f5",
+    "overview": "Against the solid g3/Bg2 fianchetto, Black gets no quick …b5, so the play shifts to the kingside. The e5-knight reroutes via h5, the f-pawn rolls to f5, and Black generates the dynamic counterplay the Benoni lives on while the g7-bishop rakes the long diagonal.",
+    "pawnBreaks": [
+      {
+        "move": "…f5 the kingside break",
+        "explanation": "…f5 the kingside break",
+        "fen": "r1bqr1k1/pp3pbp/3p1np1/2pPn3/P7/2N3P1/1P1NPPBP/R1BQ1RK1 w - - 1 12"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Nh5 reroute",
+        "explanation": "…Nh5 reroute"
+      },
+      {
+        "piece": "",
+        "route": "…Nf7 regroup",
+        "explanation": "…Nf7 regroup"
+      }
+    ],
+    "strategicThemes": [
+      "Kingside expansion",
+      "The long-diagonal bishop",
+      "Dynamic counterplay for the space deficit"
+    ],
+    "endgameTransitions": [
+      "The …f5 space and the g7-bishop carry into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqr1k1/pp3pbp/3p1np1/2pPn3/P7/2N3P1/1P1NPPBP/R1BQ1RK1 w - - 1 12",
+        "moves": [
+          "h3",
+          "Nh5",
+          "Kh2",
+          "f5",
+          "f4",
+          "Nf7",
+          "e4",
+          "Nf6"
+        ],
+        "annotations": [
+          "White makes luft with h3 and prepares to meet the coming kingside push.",
+          "…Nh5 reroutes the knight off e5, clearing the f-pawn's road toward the …f5 break.",
+          "Kh2 tucks the king away before the kingside tension rises.",
+          "…f5 — the thematic Benoni break, claiming space and opening lines on the kingside while the g7-bishop watches the long diagonal.",
+          "White answers f4, trying to clamp the kingside and blunt the break.",
+          "…Nf7 regroups the knight to a flexible square, eyeing g5 and the dark squares.",
+          "e4 stakes out the broad centre.",
+          "…Nf6 returns the knight to the centre, pressing against e4 and completing the regrouping with a comfortable, dynamic game."
+        ],
+        "learnCues": [
+          "h3 — White makes luft.",
+          "…Nh5 — reroute off e5.",
+          "Kh2 — king tucks away.",
+          "…f5 — the Benoni break!",
+          "f4 — White clamps.",
+          "…Nf7 — regroup, flexible.",
+          "e4 — White takes the centre.",
+          "…Nf6 — back to press e4."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "g7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Benoni Fianchetto: Reroute and Strike with …f5",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Modern_Benoni"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-benonidefence-taimanov",
+    "openingId": "benoni-defence",
+    "criticalPositionFen": "r1bq1rk1/1pnn1pbp/p2p2p1/2pP4/P3PP2/2NB1N2/1P4PP/R1BQ1RK1 w - - 0 13",
+    "title": "Benoni Taimanov: the …b5 Queenside Lever",
+    "overview": "In the sharp f4/Bb5+ Taimanov, Black completes development, doubles toward the b-file, and uncorks the …b5 lever — the Benoni's signature queenside counter against White's broad centre. When White lunlocks with e5, Black meets it head-on.",
+    "pawnBreaks": [
+      {
+        "move": "…b5 the queenside break",
+        "explanation": "…b5 the queenside break",
+        "fen": "r1bq1rk1/1pnn1pbp/p2p2p1/2pP4/P3PP2/2NB1N2/1P4PP/R1BQ1RK1 w - - 0 13"
+      },
+      {
+        "move": "…dxe5 meeting the centre",
+        "explanation": "…dxe5 meeting the centre",
+        "fen": "r1bq1rk1/1pnn1pbp/p2p2p1/2pP4/P3PP2/2NB1N2/1P4PP/R1BQ1RK1 w - - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Re8 supports the centre",
+        "explanation": "…Re8 supports the centre"
+      },
+      {
+        "piece": "",
+        "route": "…Rb8 backs the b-file",
+        "explanation": "…Rb8 backs the b-file"
+      }
+    ],
+    "strategicThemes": [
+      "Queenside counterplay",
+      "Pressure on the broad centre",
+      "Dynamic piece play"
+    ],
+    "endgameTransitions": [
+      "The queenside majority tells if the game simplifies"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/1pnn1pbp/p2p2p1/2pP4/P3PP2/2NB1N2/1P4PP/R1BQ1RK1 w - - 0 13",
+        "moves": [
+          "Re1",
+          "Re8",
+          "Be3",
+          "Rb8",
+          "Bf2",
+          "b5",
+          "e5",
+          "dxe5"
+        ],
+        "annotations": [
+          "White centralises with Re1, supporting the coming e5 push.",
+          "…Re8 contests the e-file and braces the centre for the break.",
+          "Be3 develops and eyes the c5-pawn.",
+          "…Rb8 swings the rook behind the b-pawn, loading the …b5 lever.",
+          "Bf2 sidesteps and clears the third rank.",
+          "…b5 — the queenside break, cracking open lines against White's centre and queenside.",
+          "White strikes back with e5, trying to blow the centre open first.",
+          "…dxe5 takes up the gauntlet, opening the position with active, well-placed pieces."
+        ],
+        "learnCues": [
+          "Re1 — White backs e5.",
+          "…Re8 — brace the centre.",
+          "Be3 — develop, eye c5.",
+          "…Rb8 — load the …b5 lever.",
+          "Bf2 — White sidesteps.",
+          "…b5 — the queenside break!",
+          "e5 — White opens fire.",
+          "…dxe5 — take the gauntlet."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          []
+        ],
+        "title": "Benoni Taimanov: the …b5 Queenside Lever",
+        "sources": [
+          "concept:pos-space",
+          "concept:att-queenside-attack",
+          "https://en.wikipedia.org/wiki/Modern_Benoni"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-kingsindiandefence-mardelplata",
+    "openingId": "kings-indian-defence",
+    "criticalPositionFen": "r1bq1rk1/ppp3bp/3p1nn1/2PPp1p1/4Pp2/2NN1P2/PP2BBPP/R2Q1RK1 w - - 1 15",
+    "title": "King's Indian Mar del Plata: the …h5-…g4 Storm",
+    "overview": "The locked centre (White's pawns aimed at the queenside, Black's at the king) sets the great KID race. With the centre sealed, Black throws the h-pawn forward — …h5-…g4 to pry open the f- and g-files and mate before White's queenside break arrives. Speed is everything.",
+    "pawnBreaks": [
+      {
+        "move": "…h5 the kingside storm",
+        "explanation": "…h5 the kingside storm",
+        "fen": "r1bq1rk1/ppp3bp/3p1nn1/2PPp1p1/4Pp2/2NN1P2/PP2BBPP/R2Q1RK1 w - - 1 15"
+      },
+      {
+        "move": "…fxg3 opening the f-file",
+        "explanation": "…fxg3 opening the f-file",
+        "fen": "r1bq1rk1/ppp3bp/3p1nn1/2PPp1p1/4Pp2/2NN1P2/PP2BBPP/R2Q1RK1 w - - 1 15"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Rf7 the rook lift",
+        "explanation": "…Rf7 the rook lift"
+      },
+      {
+        "piece": "",
+        "route": "…Bf8 regroup for defence and the lift",
+        "explanation": "…Bf8 regroup for defence and the lift"
+      }
+    ],
+    "strategicThemes": [
+      "Kingside pawn storm",
+      "Race the locked centre",
+      "Open files at the white king"
+    ],
+    "endgameTransitions": [
+      "If it simplifies the kingside pawns remain a long-term asset"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppp3bp/3p1nn1/2PPp1p1/4Pp2/2NN1P2/PP2BBPP/R2Q1RK1 w - - 1 15",
+        "moves": [
+          "Rc1",
+          "Rf7",
+          "Kh1",
+          "Bf8",
+          "Rg1",
+          "h5",
+          "g3",
+          "fxg3"
+        ],
+        "annotations": [
+          "White swings the rook to c1, loading the queenside break that is his side of the race.",
+          "…Rf7 begins the classic rook lift — the rook will swing to g7 or h7 to feed the attack.",
+          "Kh1 tucks the king toward the corner, bracing for the storm.",
+          "…Bf8 regroups the bishop, clearing g7 for the rook and the king.",
+          "Rg1 props the kingside, anticipating the pawn avalanche.",
+          "…h5 — the storm begins, the pawn rolling forward to pry open lines at the white king.",
+          "g3 tries to jam the kingside before …g4 lands.",
+          "…fxg3 rips the f-file open, pointing the rooks straight at f2 and the king."
+        ],
+        "learnCues": [
+          "Rc1 — White loads the queenside.",
+          "…Rf7 — the rook lift begins.",
+          "Kh1 — king to the corner.",
+          "…Bf8 — clear g7 for the lift.",
+          "Rg1 — White props the kingside.",
+          "…h5 — the storm begins!",
+          "g3 — White jams the kingside.",
+          "…fxg3 — rip open the f-file."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "King's Indian Mar del Plata: the …h5-…g4 Storm",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-kingsindiandefence-fianchetto",
+    "openingId": "kings-indian-defence",
+    "criticalPositionFen": "r1b1r1k1/pp3pbp/1q1p1np1/2nPp3/4P3/2N2NPP/PP3PB1/R1BQR1K1 w - - 1 13",
+    "title": "King's Indian Fianchetto: …a5 and the c-File",
+    "overview": "Against the solid g3 Fianchetto the kingside storm is harder, so Black pivots to the queenside: …a5 grabs space and fixes a target, the bishop comes to d7, and the rooks contest the half-open c-file. A patient, manoeuvring KID where Black's space and piece activity hold the balance.",
+    "pawnBreaks": [
+      {
+        "move": "…a5 queenside space",
+        "explanation": "…a5 queenside space",
+        "fen": "r1b1r1k1/pp3pbp/1q1p1np1/2nPp3/4P3/2N2NPP/PP3PB1/R1BQR1K1 w - - 1 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Bd7 develop the light bishop",
+        "explanation": "…Bd7 develop the light bishop"
+      },
+      {
+        "piece": "",
+        "route": "…Rec8 to the c-file",
+        "explanation": "…Rec8 to the c-file"
+      }
+    ],
+    "strategicThemes": [
+      "Queenside space with …a5",
+      "Pressure on the c-file",
+      "Patient manoeuvring"
+    ],
+    "endgameTransitions": [
+      "The …a5 space gives a queenside edge in the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1r1k1/pp3pbp/1q1p1np1/2nPp3/4P3/2N2NPP/PP3PB1/R1BQR1K1 w - - 1 13",
+        "moves": [
+          "Rb1",
+          "a5",
+          "Be3",
+          "Bd7",
+          "Nd2",
+          "Rec8",
+          "Bf1",
+          "Qd8"
+        ],
+        "annotations": [
+          "White prepares b4 with Rb1, his queenside expansion plan.",
+          "…a5 stakes out queenside space and stops b4 in its tracks, fixing a target.",
+          "Be3 develops and pressures the c5-knight.",
+          "…Bd7 develops the light bishop, connecting the rooks and eyeing the queenside.",
+          "Nd2 reroutes toward c4 and the queenside light squares.",
+          "…Rec8 contests the half-open c-file, where Black's pressure will build.",
+          "Bf1 redeploys the bishop to defend the queenside light squares.",
+          "…Qd8 unpins and steps off the b-file, keeping the queen flexible for the c-file play."
+        ],
+        "learnCues": [
+          "Rb1 — White preps b4.",
+          "…a5 — grab space, stop b4.",
+          "Be3 — develop, hit c5.",
+          "…Bd7 — develop, connect rooks.",
+          "Nd2 — White reroutes to c4.",
+          "…Rec8 — seize the c-file.",
+          "Bf1 — White redeploys.",
+          "…Qd8 — flexible, back the c-file."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "title": "King's Indian Fianchetto: …a5 and the c-File",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-open-file",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-grunfelddefence-russian",
+    "openingId": "grunfeld-defence",
+    "criticalPositionFen": "r1bq1rk1/ppp1p1bp/1nn3p1/5p2/3PP3/2NQBN2/PP2BPPP/R3K2R w KQ - 0 11",
+    "title": "Grünfeld Russian System: …f4 Kingside Space",
+    "overview": "In the Hungarian-flavoured Russian System Black has already expanded; now the f-pawn drives forward. …f4 seizes kingside space and pins White's dark-squared bishop to the plan, …Bg4 pressures the knight, and the long-diagonal g7-bishop keeps pointing at White's centre and queenside.",
+    "pawnBreaks": [
+      {
+        "move": "…f4 kingside space",
+        "explanation": "…f4 kingside space",
+        "fen": "r1bq1rk1/ppp1p1bp/1nn3p1/5p2/3PP3/2NQBN2/PP2BPPP/R3K2R w KQ - 0 11"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Bg4 pin and pressure",
+        "explanation": "…Bg4 pin and pressure"
+      },
+      {
+        "piece": "",
+        "route": "…Qd7 connect and back the kingside",
+        "explanation": "…Qd7 connect and back the kingside"
+      }
+    ],
+    "strategicThemes": [
+      "Kingside pawn space",
+      "The long-diagonal bishop",
+      "Pressure on White’s centre"
+    ],
+    "endgameTransitions": [
+      "The g7-bishop and queenside pawns hold the balance into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/ppp1p1bp/1nn3p1/5p2/3PP3/2NQBN2/PP2BPPP/R3K2R w KQ - 0 11",
+        "moves": [
+          "Rd1",
+          "f4",
+          "Bc1",
+          "Bg4",
+          "e5",
+          "Qd7"
+        ],
+        "annotations": [
+          "White centralises a rook on d1 behind the d-pawn.",
+          "…f4 grabs kingside space and shoves White's dark-squared bishop back, gaining time.",
+          "Bc1 retreats the harassed bishop.",
+          "…Bg4 develops with pressure on the f3-knight, a defender of White's centre.",
+          "e5 grabs central space and shuts the long diagonal for now.",
+          "…Qd7 connects the rooks and supports the kingside, Black comfortable with space and the bishop pair's long-range power."
+        ],
+        "learnCues": [
+          "Rd1 — White backs the d-pawn.",
+          "…f4 — grab space, gain time.",
+          "Bc1 — bishop retreats.",
+          "…Bg4 — pin, pressure f3.",
+          "e5 — White takes the centre.",
+          "…Qd7 — connect, back the kingside."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          []
+        ],
+        "title": "Grünfeld Russian System: …f4 Kingside Space",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-bishop-pair",
+          "https://en.wikipedia.org/wiki/Gr%C3%BCnfeld_Defence"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-twoknightsdefence-d3main",
+    "openingId": "two-knights-defence",
+    "criticalPositionFen": "r2qr1k1/4bpp1/p1npbn1p/1p2p3/3PP3/5NNP/PPB2PP1/R1BQR1K1 b - - 0 16",
+    "title": "Two Knights 4.d3: Trade and Free with …d5",
+    "overview": "In the quiet Ruy-style 4.d3, Black manoeuvres patiently and then frees the position. The centre is traded down and the thematic …d5 break liberates the pieces, handing Black an active, fully equal middlegame with the bishop pair's long-range scope.",
+    "pawnBreaks": [
+      {
+        "move": "…d5 the freeing break",
+        "explanation": "…d5 the freeing break",
+        "fen": "r2qr1k1/4bpp1/p1npbn1p/1p2p3/3PP3/5NNP/PPB2PP1/R1BQR1K1 b - - 0 16"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Rc8 to the c-file",
+        "explanation": "…Rc8 to the c-file"
+      }
+    ],
+    "strategicThemes": [
+      "The …d5 freeing break",
+      "Active piece play",
+      "Open the centre on Black’s terms"
+    ],
+    "endgameTransitions": [
+      "The freed bishops give a comfortable ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r2qr1k1/4bpp1/p1npbn1p/1p2p3/3PP3/5NNP/PPB2PP1/R1BQR1K1 b - - 0 16",
+        "moves": [
+          "exd4",
+          "Nxd4",
+          "Nxd4",
+          "Qxd4",
+          "Rc8",
+          "Bb3",
+          "d5",
+          "e5"
+        ],
+        "annotations": [
+          "…exd4 opens the centre, beginning the simplification.",
+          "Nxd4 recaptures, centralising the knight.",
+          "…Nxd4 trades the centralised knight.",
+          "Qxd4 recaptures with the queen.",
+          "…Rc8 swings the rook to the half-open c-file, pressuring c2.",
+          "Bb3 redeploys the bishop off the exposed c-file.",
+          "…d5 — the freeing break at last, liberating the pieces and opening the centre with full equality.",
+          "e5 grabs space but Black's pieces are active and the position is balanced."
+        ],
+        "learnCues": [
+          "…exd4 — open the centre.",
+          "Nxd4 — White recaptures.",
+          "…Nxd4 — trade it off.",
+          "Qxd4 — queen recaptures.",
+          "…Rc8 — seize the c-file.",
+          "Bb3 — bishop sidesteps.",
+          "…d5 — the freeing break!",
+          "e5 — space, but Black is fine."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Two Knights 4.d3: Trade and Free with …d5",
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-bishop-pair",
+          "https://en.wikipedia.org/wiki/Two_Knights_Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-twoknightsdefence-friedliver",
+    "openingId": "two-knights-defence",
+    "criticalPositionFen": "r1bq1rk1/p4pp1/2pb1n1p/n7/3P4/5N2/PPP1B1PP/RNBQK2R b KQ - 0 13",
+    "title": "Two Knights …Na5: Hold the Extra Pawn",
+    "overview": "After …Na5 defuses the Fried Liver, Black returns the gambit pawn at the right moment and untangles. The …c5 advance gains queenside space and supports the wandering a5-knight, and after the queens come off Black emerges with a sound, slightly better structure.",
+    "pawnBreaks": [
+      {
+        "move": "…c5 queenside space",
+        "explanation": "…c5 queenside space",
+        "fen": "r1bq1rk1/p4pp1/2pb1n1p/n7/3P4/5N2/PPP1B1PP/RNBQK2R b KQ - 0 13"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Nc6 the knight comes home",
+        "explanation": "…Nc6 the knight comes home"
+      }
+    ],
+    "strategicThemes": [
+      "Return the pawn for structure",
+      "Queenside space",
+      "Untangle the pieces"
+    ],
+    "endgameTransitions": [
+      "The sound structure gives a small, lasting endgame edge"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/p4pp1/2pb1n1p/n7/3P4/5N2/PPP1B1PP/RNBQK2R b KQ - 0 13",
+        "moves": [
+          "c5",
+          "dxc5",
+          "Bxc5",
+          "Qxd8",
+          "Rxd8",
+          "Bd2",
+          "Nc6",
+          "Nc3"
+        ],
+        "annotations": [
+          "…c5 grabs queenside space and gives the a5-knight a route back into the game.",
+          "dxc5 takes the pawn.",
+          "…Bxc5 recaptures, developing the bishop to an active diagonal.",
+          "Qxd8 offers the queen trade.",
+          "…Rxd8 recaptures, the rook landing on the open d-file.",
+          "Bd2 develops and unpins.",
+          "…Nc6 brings the offside knight home to a strong central square.",
+          "Nc3 develops; Black is fully untangled with a sound, pleasant structure."
+        ],
+        "learnCues": [
+          "…c5 — space, free the a5-knight.",
+          "dxc5 — White takes.",
+          "…Bxc5 — recapture, active bishop.",
+          "Qxd8 — trade queens.",
+          "…Rxd8 — rook to the d-file.",
+          "Bd2 — White develops.",
+          "…Nc6 — the knight comes home.",
+          "Nc3 — Black is untangled."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "a5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "title": "Two Knights …Na5: Hold the Extra Pawn",
+        "sources": [
+          "concept:pos-space",
+          "concept:end-bishop-vs-knight",
+          "https://en.wikipedia.org/wiki/Two_Knights_Defense"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-semislav-main-c5",
+    "openingId": "semi-slav",
+    "criticalPositionFen": "r3k2r/1b1n1pb1/p1p1p2p/6p1/P1pqP3/B1N5/1P2BPPP/R2Q1RK1 w kq - 0 17",
+    "title": "Semi-Slav: the …c5 Freeing Break",
+    "overview": "With the bishops already loose on the long diagonals from the sharp …b5/…Bb7 complex, Black liberates the centre. The …c5 break opens lines for the pieces, and the queen and dark bishop swing to the powerful e5 outpost, dominating the centre.",
+    "pawnBreaks": [
+      {
+        "move": "…c5 the freeing break",
+        "explanation": "…c5 the freeing break",
+        "fen": "r3k2r/1b1n1pb1/p1p1p2p/6p1/P1pqP3/B1N5/1P2BPPP/R2Q1RK1 w kq - 0 17"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Qe5 the central queen",
+        "explanation": "…Qe5 the central queen"
+      },
+      {
+        "piece": "",
+        "route": "…Be5 the bishop to the outpost",
+        "explanation": "…Be5 the bishop to the outpost"
+      }
+    ],
+    "strategicThemes": [
+      "Free the centre with …c5",
+      "The e5 outpost",
+      "The two raking bishops"
+    ],
+    "endgameTransitions": [
+      "The active bishops and central control carry into the ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "r3k2r/1b1n1pb1/p1p1p2p/6p1/P1pqP3/B1N5/1P2BPPP/R2Q1RK1 w kq - 0 17",
+        "moves": [
+          "Qc2",
+          "c5",
+          "Rad1",
+          "Qe5",
+          "Bxc4",
+          "Qc7",
+          "Ne2",
+          "Be5"
+        ],
+        "annotations": [
+          "Qc2 centralises and eyes the queenside light squares.",
+          "…c5 — the freeing break, opening lines for the bishops on the long diagonals.",
+          "Rad1 piles on the d-file.",
+          "…Qe5 plants the queen on the strong central square, dominating the dark squares.",
+          "Bxc4 regains the gambit pawn.",
+          "…Qc7 sidesteps and keeps the queen active on the b8-h2 diagonal.",
+          "Ne2 reroutes toward the kingside.",
+          "…Be5 swings the dark bishop to the central outpost, the two bishops raking the board."
+        ],
+        "learnCues": [
+          "Qc2 — White centralises.",
+          "…c5 — the freeing break!",
+          "Rad1 — White loads the d-file.",
+          "…Qe5 — queen to the outpost.",
+          "Bxc4 — White regains the pawn.",
+          "…Qc7 — keep the queen active.",
+          "Ne2 — White reroutes.",
+          "…Be5 — bishop to the outpost."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          []
+        ],
+        "title": "Semi-Slav: the …c5 Freeing Break",
+        "sources": [
+          "concept:pos-outpost",
+          "concept:pos-bishop-pair",
+          "https://en.wikipedia.org/wiki/Semi-Slav_Defense"
+        ]
+      }
+    ]
   }
 ]
