@@ -188,14 +188,6 @@
     "sicilian-najdorf::warning::6.Bg5 Pin Dangers: Unpinning Too Late": [
       "TOOTHLESS_WARNING"
     ],
-    "sicilian-dragon::trap::The Exchange Sacrifice ...Rxc3": [
-      "WEAK_TRAP",
-      "STUDENT_NOT_PUNISHER"
-    ],
-    "sicilian-dragon::trap::The ...Nc4 Fork Trick": [
-      "WEAK_TRAP",
-      "STUDENT_NOT_PUNISHER"
-    ],
     "sicilian-dragon::trap::The g-file Counterattack After ...gxh5": [
       "WEAK_TRAP",
       "STUDENT_NOT_PUNISHER"
@@ -439,10 +431,6 @@
       "STUDENT_NOT_PUNISHER"
     ],
     "queens-indian::trap::Early d5 Strike Against e3": [
-      "WEAK_TRAP",
-      "STUDENT_NOT_PUNISHER"
-    ],
-    "budapest-gambit::trap::Pin Exploitation Trap": [
       "WEAK_TRAP",
       "STUDENT_NOT_PUNISHER"
     ],
