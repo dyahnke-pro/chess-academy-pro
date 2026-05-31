@@ -62,16 +62,11 @@ describe('G9.3 Gate A — every pro-rep opening has a curated LessonScript', () 
 // 🚨 SHRINKING BACKLOG — pro-rep VARIATION TABS that still lack a curated
 // per-variation LessonScript (key `${openingId}::${variationName}`). Without one,
 // the variation Watch falls back to the legacy WalkthroughMode auto-narration —
-// the same G9.3 Gate A defect, one surface deeper. The GothamChess set is fully
-// covered (0 entries); these three remaining are a pre-existing Naroditsky
-// backlog. DELETE an entry the moment you author its variation lesson. This list
-// may ONLY shrink, never grow — a new pro-rep variation tab must ship WITH its
-// lesson.
-const MISSING_VARIATION_LESSON_BASELINE = new Set<string>([
-  'pro-naroditsky-fantasy-caro::Black accepts with dxe4',
-  'pro-naroditsky-fantasy-caro::Modern setup with g6',
-  'pro-naroditsky-fantasy-caro::Qb6 pressure sideline',
-]);
+// the same G9.3 Gate A defect, one surface deeper. NOW EMPTY (2026-05-31): the
+// last 3 (Naroditsky Fantasy-Caro dxe4 / g6 / Qb6) were authored from his real
+// games. EVERY pro-rep variation tab now has a curated lesson. This list may
+// ONLY shrink, never grow — a new pro-rep variation tab must ship WITH its lesson.
+const MISSING_VARIATION_LESSON_BASELINE = new Set<string>([]);
 
 describe('G9.3 Gate A — every pro-rep VARIATION tab has a curated LessonScript', () => {
   for (const op of PRO_OPENINGS) {
