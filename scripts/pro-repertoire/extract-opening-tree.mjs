@@ -224,6 +224,21 @@ const OPENINGS = {
     minPrefix: ['e4', 'e5', 'Nf3', 'Nf6', 'Nxe5', 'Nc6'],
     maxDepth: 80,
   },
+  // ── Hikaru Nakamura (2026-05-31 build, data-discovered repertoire) ──
+  'nimzo-larsen': {
+    name: 'Nimzo-Larsen Attack',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['b3'],
+    maxDepth: 80,
+  },
+  'pirc-modern': {
+    name: 'Pirc / Modern Defense (1...g6)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'g6'],
+    maxDepth: 80,
+  },
 };
 
 const cfg = OPENINGS[OPENING_ID];
