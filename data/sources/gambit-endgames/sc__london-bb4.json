@@ -1,0 +1,33 @@
+{
+  "id": "sc__london-bb4",
+  "openingId": "sc__london-bb4",
+  "student": "w",
+  "seededAtMove": 9,
+  "sampledGames": 15,
+  "tally": {
+    "R+minor+P": 6,
+    "middlegame": 3,
+    "R+P": 2,
+    "minor+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 40,
+      "games": 6,
+      "rep": {
+        "id": "NNQKggDr",
+        "W": "Mamedov, Rau",
+        "B": "Matlakov, M.",
+        "res": "0-1",
+        "yr": "2018",
+        "studentWon": false,
+        "entryPly": 54,
+        "entryFen": "2k3r1/p1p4p/4p3/1p6/2pn4/r3N3/PR3PPP/1R4K1 w - - 0 28",
+        "totalPlies": 100,
+        "tail": "Rc1 a6 Kh1 Rd3 h3 c3 Rb4 c5 Rbb1 b4 Nc4 Kc7 Re1 a5 Nxa5 Ra8 Nc4 Rxa2 Re5 Kc6 Ree1 Kb5 Nd6+ Ka4 Ne4 Kb5 Nd6+ Kc6 Nc4 Kb7 Nd6+ Ka7 Ne4 Kb6 Nd6 c2 Rbc1 b3 Nc4+ Kb5 Nd6+ Kc6 Nc4 Rc3 Ne5+ Kb5"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:30:50.909Z"
+}

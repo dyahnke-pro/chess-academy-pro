@@ -1,0 +1,49 @@
+{
+  "id": "sc__max-lange",
+  "openingId": "sc__max-lange",
+  "student": "w",
+  "seededAtMove": 12,
+  "sampledGames": 15,
+  "tally": {
+    "R+minor+P": 6,
+    "middlegame": 4,
+    "Q+pieces": 5
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 40,
+      "games": 6,
+      "rep": {
+        "id": "diIeIye1",
+        "W": "Garcia Fernandez, Carlos (%2360)",
+        "B": "Mitkov, Nikola (%2470)",
+        "res": "1-0",
+        "yr": "1994",
+        "studentWon": true,
+        "entryPly": 99,
+        "entryFen": "6r1/2p3Pp/p2kp2B/1p1n2P1/P1p1R2P/2P4K/1P6/8 b - - 0 50",
+        "totalPlies": 129,
+        "tail": "Ne7 Rd4+ Kc6 axb5+ axb5 Kg4 Nf5 Rf4 Nxg7 Rf7 Nf5 Rxh7 Kd5 h5 c5 g6 b4 Bd2 b3 Rf7 Ke4 Rf6 Kd3 Bg5 Re8 h6 Kc2 g7 Kxb2 Rf8"
+      }
+    },
+    {
+      "type": "Q+pieces",
+      "pct": 33,
+      "games": 5,
+      "rep": {
+        "id": "Afr6HRYV",
+        "W": "Smerdon, David",
+        "B": "Heidenfeld, Mark",
+        "res": "1-0",
+        "yr": "2001",
+        "studentWon": true,
+        "entryPly": 47,
+        "entryFen": "2k3r1/ppp1b1Pp/4p2P/3q4/4N3/2Pp4/PP3PQP/3R2K1 b - - 0 24",
+        "totalPlies": 71,
+        "tail": "Qh5 Rxd3 Qxh6 Rg3 Bh4 Rg4 Qc1+ Qf1 Qh6 Qc4 Rxg7 Nc5 Qf6 f3 e5 Rxg7 Qxg7+ Kf1 Qe7 Qg4+ Kb8 Nd7+ Ka8 Nf6"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:31:11.009Z"
+}

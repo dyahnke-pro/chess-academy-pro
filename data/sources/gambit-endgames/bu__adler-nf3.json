@@ -1,0 +1,51 @@
+{
+  "id": "bu__adler-nf3",
+  "openingId": "bu__adler-nf3",
+  "student": "b",
+  "seededAtMove": 12,
+  "sampledGames": 15,
+  "tally": {
+    "middlegame": 4,
+    "Q+pieces": 2,
+    "K+P": 2,
+    "R+minor+P": 4,
+    "R+P": 3
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "aw2J1xza",
+        "W": "Klinger, Josef",
+        "B": "Lendwai, Reinhard",
+        "res": "0-1",
+        "yr": "1991",
+        "studentWon": true,
+        "entryPly": 53,
+        "entryFen": "6k1/1ppb1ppp/3p2r1/6N1/5P2/1PR5/P3r1PK/5R2 b - - 0 27",
+        "totalPlies": 54,
+        "tail": "Bc6"
+      }
+    },
+    {
+      "type": "R+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "EO5WwHrN",
+        "W": "Galiana Salom, Juan Ramon",
+        "B": "Anagnostopoulos, Dimitrios",
+        "res": "0-1",
+        "yr": "1994",
+        "studentWon": true,
+        "entryPly": 86,
+        "entryFen": "6k1/1p2r1pp/2p5/2P3p1/1P6/6P1/7P/5RK1 w - - 0 44",
+        "totalPlies": 130,
+        "tail": "Rd1 h6 Rd4 h5 h3 Re3 Kf2 Rb3 Kg2 Kh7 Re4 Kg6 g4 h4 Re6+ Kf7 Re4 Kf6 Kh2 Rf3 Re8 Rf4 Kg2 Rxb4 Rd8 Ke5 Rd7 g6 Rg7 Rb2+ Kg1 Kf4 Rd7 Rb5 Kf2 Rxc5 Rxb7 Rc2+ Kg1 c5 Re7 c4 Kh1 c3"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:26:30.269Z"
+}

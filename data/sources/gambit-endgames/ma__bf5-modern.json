@@ -1,0 +1,53 @@
+{
+  "id": "ma__bf5-modern",
+  "openingId": "ma__bf5-modern",
+  "student": "b",
+  "seededAtMove": 12,
+  "sampledGames": 15,
+  "tally": {
+    "R+minor+P": 4,
+    "opp/same-bishop": 2,
+    "Q+pieces": 4,
+    "middlegame": 1,
+    "R+P": 1,
+    "minor+P": 2,
+    "K+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "kASHcrid",
+        "W": "Leko, Peter",
+        "B": "Kramnik, Vladimir",
+        "res": "0-1",
+        "yr": "2007",
+        "studentWon": true,
+        "entryPly": 59,
+        "entryFen": "4r1k1/6pp/5p1b/1pp1r3/3P4/2P1P1PB/1P3K1P/R3R3 b - - 0 30",
+        "totalPlies": 108,
+        "tail": "Bxe3+ Kf3 cxd4 Rad1 dxc3 bxc3 Bb6 Rxe5 Rxe5 Rd5 Re3+ Kg2 Rxc3 Rxb5 Rc2+ Kh1 Bc7 Be6+ Kf8 Bb3 Rc3 Kg2 g6 Bd1 Ke7 Rb2 Rd3 Be2 Re3 Bf3 Ra3 Re2+ Be5 g4 Ke6 Be4 h5 gxh5 gxh5 Rf2 Bd4 Rf3 Ra2+ Kh3 Bg1 Bf5+ Ke5 Kh4 Rf2"
+      }
+    },
+    {
+      "type": "Q+pieces",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "pK4rqzVx",
+        "W": "Kramnik, Vladimir",
+        "B": "Leko, Peter",
+        "res": "0-1",
+        "yr": "2004",
+        "studentWon": true,
+        "entryPly": 57,
+        "entryFen": "6k1/5p1p/P1pb4/6p1/3P4/1BPq1NP1/7P/R1B1K3 b - - 0 29",
+        "totalPlies": 64,
+        "tail": "Qxc3+ Kf2 Qxa1 a7 h6 h4 g4"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:29:35.482Z"
+}

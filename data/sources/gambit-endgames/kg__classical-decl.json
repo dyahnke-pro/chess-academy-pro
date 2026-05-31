@@ -1,0 +1,17 @@
+{
+  "id": "kg__classical-decl",
+  "openingId": "kg__classical-decl",
+  "student": "w",
+  "seededAtMove": 7,
+  "sampledGames": 15,
+  "tally": {
+    "R+P": 1,
+    "middlegame": 8,
+    "Q+pieces": 1,
+    "opp/same-bishop": 1,
+    "double-rook+P": 2,
+    "R+minor+P": 2
+  },
+  "candidateEndgames": [],
+  "generatedAt": "2026-05-30T23:29:02.025Z"
+}

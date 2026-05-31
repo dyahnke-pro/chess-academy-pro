@@ -1,0 +1,52 @@
+{
+  "id": "bu__fajarowicz",
+  "openingId": "bu__fajarowicz",
+  "student": "b",
+  "seededAtMove": 9,
+  "sampledGames": 14,
+  "tally": {
+    "minor+P": 2,
+    "R+minor+P": 3,
+    "Q+pieces": 1,
+    "K+P": 2,
+    "middlegame": 3,
+    "R+P": 3
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 21,
+      "games": 3,
+      "rep": {
+        "id": "1xmCcCVl",
+        "W": "Schoen, Wolfram",
+        "B": "Schaffarth, Peter",
+        "res": "1-0",
+        "yr": "1989",
+        "studentWon": false,
+        "entryPly": 37,
+        "entryFen": "1n1rr1k1/p2p1ppp/1p6/2p5/1PP5/P1R1PB2/3R1PPP/6K1 b - - 0 19",
+        "totalPlies": 165,
+        "tail": "Re5 Rcd3 Kf8 b5 g6 a4 Re6 a5 bxa5 Ra3 a6 Rxa5 Rb6 bxa6 Nxa6 g3 d6 Kg2 Re8 Rd1 Nb4 Ra7 Re7 Rda1 Rb8 Rxe7 Kxe7 Ra7+ Kf8 Rd7 Rb6 g4 Ke8 Rc7 Rb8 g5 Rd8 Bd1 Ra8 Bf3 Rd8 Bg4 Na6 Ra7 Nb4 Bd1 Kf8 Ba4 Kg7 h4 Kg8 Kg3 Kg7 e4 Kg8 f4 Kg7 h5 Kf8 h6 Kg8 Kf3 Kf8 Ke3 Kg8 Ke2 Kf8 Kd2 Kg8 Bb5 Kf8 Kc3 Kg8 Bd7 Kh8 Ba4 Kg8 Bb5 Kf8 Bd7 Kg8 Kd2 Kf8 Ba4 Kg8 Bb5 Kf8 Kc3 Kg8 Bd7 Rb8 e5 d5 f5 dxc4 Kxc4 gxf5 e6 fxe6 Bxe6+ Kh8 Bxf5 Nc6 Rxh7+ Kg8 g6 Ne5+ Kxc5 Nxg6 Bxg6 Rc8+ Kd5 Ra8 Rg7+ Kh8 Rh7+ Kg8 Rd7 Ra5+ Kc4 Ra4+ Kc5 Ra5+ Kb6 Ra8 Kb7 Rf8 Kc7"
+      }
+    },
+    {
+      "type": "R+P",
+      "pct": 21,
+      "games": 3,
+      "rep": {
+        "id": "sV3iCLRJ",
+        "W": "Garcia Palermo, Carlos H",
+        "B": "Schaffarth, Peter",
+        "res": "1-0",
+        "yr": "1988",
+        "studentWon": false,
+        "entryPly": 65,
+        "entryFen": "8/p1p1kpp1/2R4p/r6P/4P1P1/P4PK1/8/8 b - - 0 33",
+        "totalPlies": 126,
+        "tail": "Rxa3 Rxc7+ Ke6 Kf4 Ra5 Rc6+ Ke7 e5 Kd7 Rd6+ Ke7 Rc6 Kd7 Rd6+ Ke7 Kf5 Ra3 f4 Ra1 Rd5 Ra6 Rd4 g6+ hxg6 Rxg6 Ra4 a6 Rb4 Kd7 Rb7+ Ke8 Rb8+ Ke7 Rh8 Kd7 Ke4 Rxg4 Rxh6 Rg6 Rh7 Ke8 Rh8+ Kd7 Rf8 Ke7 Rb8 Rg1 Ra8 Ra1 Ra7+ Ke8 Kf5 Ra4 Ra8+ Ke7 Ra7+ Ke8 Kg5 f6+ exf6 Ra1"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:27:02.658Z"
+}

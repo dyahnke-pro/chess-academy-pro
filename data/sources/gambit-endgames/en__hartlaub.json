@@ -1,0 +1,31 @@
+{
+  "id": "en__hartlaub",
+  "openingId": "en__hartlaub",
+  "student": "b",
+  "seededAtMove": 4,
+  "sampledGames": 3,
+  "tally": {
+    "R+minor+P": 2,
+    "middlegame": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 67,
+      "games": 2,
+      "rep": {
+        "id": "V0I60xJ5",
+        "W": "Jorczik, Julian Marcel",
+        "B": "Podolchenko, Evgeniy",
+        "res": "1-0",
+        "yr": "2007",
+        "studentWon": false,
+        "entryPly": 68,
+        "entryFen": "2kr4/bp3ppp/3P4/p1Pb3n/1P1R4/P5P1/5P1P/4R1K1 w - - 0 35",
+        "totalPlies": 87,
+        "tail": "Rxd5 Nf6 Rg5 g6 Re7 Rd7 Rge5 Kd8 Rxd7+ Nxd7 Re7 Nxc5 bxc5 Bxc5 a4 b5 Re5 Bxd6 Rxb5"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:27:37.478Z"
+}

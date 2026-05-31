@@ -1,0 +1,33 @@
+{
+  "id": "vi__qf3",
+  "openingId": "vi__qf3",
+  "student": "w",
+  "seededAtMove": 6,
+  "sampledGames": 15,
+  "tally": {
+    "middlegame": 7,
+    "R+minor+P": 2,
+    "Q+pieces": 5,
+    "R+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 33,
+      "games": 5,
+      "rep": {
+        "id": "RPmZJyFs",
+        "W": "Perez Mitjans, Orelvis",
+        "B": "Bhat, Vinay S",
+        "res": "1-0",
+        "yr": "2010",
+        "studentWon": true,
+        "entryPly": 43,
+        "entryFen": "r7/ppk2N1p/1q4p1/3p1p2/2p1R3/2P2Q2/PPP3PP/4R2K b - - 0 22",
+        "totalPlies": 45,
+        "tail": "dxe4 Qf4+"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:32:37.026Z"
+}

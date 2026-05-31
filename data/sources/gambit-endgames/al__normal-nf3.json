@@ -1,0 +1,51 @@
+{
+  "id": "al__normal-nf3",
+  "openingId": "al__normal-nf3",
+  "student": "b",
+  "seededAtMove": 8,
+  "sampledGames": 15,
+  "tally": {
+    "R+P": 2,
+    "Q+pieces": 5,
+    "R+minor+P": 4,
+    "minor+P": 2,
+    "middlegame": 2
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 33,
+      "games": 5,
+      "rep": {
+        "id": "7u3xzoRo",
+        "W": "Turov, M.",
+        "B": "Potapov, P.",
+        "res": "0-1",
+        "yr": "2016",
+        "studentWon": true,
+        "entryPly": 49,
+        "entryFen": "4r1k1/pbp2pp1/6q1/8/2P1P1Pp/1PQ2P2/PB5P/3R2K1 b - - 0 25",
+        "totalPlies": 96,
+        "tail": "Bxe4 Re1 Bc6 Rxe8+ Bxe8 Kf2 Bc6 Qd2 Kh7 Be5 f6 Bxc7 Qb1 Ke3 Qg1+ Kd3 Bxf3 Bf4 Qxg4 Qe3 Qf5+ Kc3 Be4 b4 g5 Bd6 Kg6 b5 Bb1 Qxa7 Qc2+ Kb4 Bxa2 Qd4 Qb3+ Kc5 Qa3+ Kc6 Qa8+ Kc7 Bb3 b6 Ba4 b7 Qe8 b8=Q Qc6+"
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "pcRZ0SWU",
+        "W": "Dreev, A.",
+        "B": "Iljiushenok, I.",
+        "res": "1-0",
+        "yr": "2014",
+        "studentWon": false,
+        "entryPly": 83,
+        "entryFen": "3r4/r4bkp/6p1/5p2/1R1p4/1P4P1/P2R1PBP/6K1 b - - 0 42",
+        "totalPlies": 109,
+        "tail": "d3 Rb7 Ra5 Rc7 g5 Bf1 Kf6 Rc6+ Kg7 Rc3 Ra7 f3 f4 gxf4 gxf4 Rcxd3 Rxd3 Bxd3 Rd7 Rg2+ Kf6 Bc2 Bh5 Rf2 Rc7 Be4"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:25:45.113Z"
+}

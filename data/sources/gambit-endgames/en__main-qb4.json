@@ -1,0 +1,68 @@
+{
+  "id": "en__main-qb4",
+  "openingId": "en__main-qb4",
+  "student": "b",
+  "seededAtMove": 4,
+  "sampledGames": 11,
+  "tally": {
+    "Q+pieces": 2,
+    "R+minor+P": 2,
+    "middlegame": 4,
+    "R+P": 2,
+    "double-rook+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 18,
+      "games": 2,
+      "rep": {
+        "id": "1PHczNWL",
+        "W": "Zierk, S.",
+        "B": "Hambleton, A.",
+        "res": "1-0",
+        "yr": "2019",
+        "studentWon": false,
+        "entryPly": 79,
+        "entryFen": "6k1/2p1r3/1pRRr1p1/p1n2p1p/4P2P/5PP1/P1Q3K1/8 b - - 0 40",
+        "totalPlies": 227,
+        "tail": "cxd6 Rc8+ Kf7 Qc1 fxe4 Qf4+ Rf6 Rf8+ Kxf8 Qxf6+ Ke8 Qxg6+ Kd7 fxe4 Re5 g4 hxg4 Qxg4+ Ke7 h5 Nxe4 Qg7+ Ke6 Qg8+ Ke7 Qh7+ Ke6 h6 Rg5+ Kf1 Nf6 Qc2 Kf7 Qc7+ Kg6 Qg7+ Kf5 Qf8 Kg6 Qg7+ Kf5 Qf8 Kg6 a4 Rh5 Qg7+ Kf5 Ke2 Rg5 Qf8 Ke6 h7 Re5+ Kd1 Nxh7 Qg8+ Kd7 Qxh7+ Kc6 Qa7 Rd5+ Ke2 Rd4 Qe7 Rb4 Qe6 Kc7 Kd3 Kc6 Qc8+ Kd5 Kc3 Ke5 Qg8 d5 Qb8+ Ke6 Qd8 Rc4+ Kd3 Rb4 Qc7 Rb3+ Kd2 Rb4 Ke3 Re4+ Kf2 Rb4 Kf3 Kf5 Qf7+ Ke5 Qe7+ Kd4 Qc7 Kd3 Qc6 d4 Qc1 Rb3 Kf4 Rb4 Ke5 Ke2 Qc2+ Ke3 Qd1 b5 Qe1+ Kd3 Qf1+ Kc2 Qe2+ Kc3 axb5 d3 Qf3 Rxb5+ Ke4 Rb4+ Ke3 Rb3 Qc6+ Kb4 Qb6+ Ka4 Qc5 Rb4 Kxd3 Rb3+ Kc2 Rb2+ Kc1 Rb3 Qd5 Kb4 Kc2 a4 Qc6 Ka3 Qc5+ Ka2 Qc4 Ka3 Qd4 Rb5 Qa1+"
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 18,
+      "games": 2,
+      "rep": {
+        "id": "WSiHjFXC",
+        "W": "Stepanov, Alexander M",
+        "B": "Arakeljan, Armen M",
+        "res": "0-1",
+        "yr": "2010",
+        "studentWon": true,
+        "entryPly": 107,
+        "entryFen": "5k2/6pp/8/1p3pP1/pP2b2P/8/8/3R1K2 b - - 0 54",
+        "totalPlies": 142,
+        "tail": "Ke7 Kf2 Ke6 Kg3 Bc2 Re1+ Kd5 Rc1 Bb3 Rc5+ Ke4 Rxb5 a3 Ra5 a2 b5 f4+ Kf2 Kd5 b6+ Kc6 Ra3 Bd5 h5 Kxb6 h6 gxh6 gxh6 Kb5 Ra7 Kb4 Ke2 Kb3 Kd3 Kb2"
+      }
+    },
+    {
+      "type": "R+P",
+      "pct": 18,
+      "games": 2,
+      "rep": {
+        "id": "nmLbx6pc",
+        "W": "Bairachny, Ruslan",
+        "B": "Biro, Sandor",
+        "res": "1/2-1/2",
+        "yr": "1996",
+        "studentWon": false,
+        "entryPly": 84,
+        "entryFen": "5r2/p6p/2k5/5P2/3p4/8/7P/5R1K w - - 0 43",
+        "totalPlies": 131,
+        "tail": "Kg2 Kd5 Kg3 d3 Ra1 Rxf5 Rxa7 Kd4 Kg4 Rd5 Kf3 Rf5+ Kg4 Rf1 Rd7+ Kc3 Rc7+ Kb3 Rb7+ Kc2 Rc7+ Kd1 Rxh7 d2 h4 Kc2 Rd7 d1=Q+ Rxd1 Rxd1 h5 Kd3 Kf5 Rh1 Kg6 Ke4 h6 Ke5 h7 Ke6 Kg7 Rg1+ Kf8 Rf1+ Kg7 Rg1+ Kf8"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:27:45.938Z"
+}

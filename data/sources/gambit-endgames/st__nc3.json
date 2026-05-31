@@ -1,0 +1,34 @@
+{
+  "id": "st__nc3",
+  "openingId": "st__nc3",
+  "student": "b",
+  "seededAtMove": 4,
+  "sampledGames": 10,
+  "tally": {
+    "K+P": 1,
+    "middlegame": 5,
+    "R+P": 1,
+    "Q+pieces": 2,
+    "opp/same-bishop": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 20,
+      "games": 2,
+      "rep": {
+        "id": "W5D7R1EB",
+        "W": "Dimitrijevic, Milorad",
+        "B": "Avramovic, Z.",
+        "res": "1-0",
+        "yr": "2024",
+        "studentWon": false,
+        "entryPly": 56,
+        "entryFen": "4r3/1pk2p2/2b5/1q5p/3Q1P2/8/PP3RP1/3R2K1 w - - 0 29",
+        "totalPlies": 81,
+        "tail": "Rc2 Rg8 Qd7+ Kb8 Qxf7 Qb6+ Kh2 Rg4 Qxh5 Rg8 Qe5+ Ka8 Rd3 Bb5 Rd6 Bc6 Qd4 Qc7 Kg1 Qe7 Qe5 Qh4 Rcd2 Bb5 Qxb5"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:32:20.566Z"
+}

@@ -1,0 +1,68 @@
+{
+  "id": "vi__main-nf3",
+  "openingId": "vi__main-nf3",
+  "student": "w",
+  "seededAtMove": 10,
+  "sampledGames": 15,
+  "tally": {
+    "middlegame": 4,
+    "R+minor+P": 3,
+    "R+P": 3,
+    "Q+pieces": 4,
+    "Q+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "DEvBkMlm",
+        "W": "Obregon Rivero, J.",
+        "B": "Quesada Perez, Yu",
+        "res": "1-0",
+        "yr": "2013",
+        "studentWon": true,
+        "entryPly": 56,
+        "entryFen": "5bR1/pp3k2/2q1p2p/2p1Pn2/2p2B2/7Q/PPP5/1K6 w - - 0 29",
+        "totalPlies": 99,
+        "tail": "Rg4 Bg7 Qh5+ Kf8 Qg6 Qe8 Qh7 Qf7 a4 a6 a5 c3 b3 c4 Bc1 cxb3 Ba3+ Ke8 cxb3 c2+ Ka2 Kd7 Rg2 Kc6 Rxc2+ Kd5 Bd6 Qh5 Qg8 Qd1 Rc5+ Ke4 Qxe6 Nd4 Qg6+ Ke3 Rc3+ Kf2 Qg3+ Kf1 Qf4+ Ke1 Rc1"
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "yEhVoek0",
+        "W": "Smolen, J.",
+        "B": "Mazur, Ste",
+        "res": "1-0",
+        "yr": "2015",
+        "studentWon": true,
+        "entryPly": 45,
+        "entryFen": "2r2rk1/pp3pp1/3Pb2p/2p1R3/7P/P7/1PP1B1P1/2K4R b - - 0 23",
+        "totalPlies": 111,
+        "tail": "Rfd8 Rd1 Kf8 b3 Rc6 Bf3 Rcxd6 Rxd6 Rxd6 Bxb7 Rd7 Ba6 Rd5 Re4 Ke7 Ra4 Rd4 Ra5 Kd6 Be2 Rxh4 Rxa7 Bd5 a4 Rf4 g4 Rf2 Bd1 c4 Ra6+ Kc5 Ra5+ Kd4 c3+ Kxc3 Rxd5 cxb3 Rf5 b2+ Kb1 Rd2 Rf3+ Kb4 Bc2 Rg2 Rb3+ Ka5 Rb5+ Ka6 Bf5 g6 Bc8+ Ka7 Rb7+ Ka8 Rxf7 Rg1+ Kxb2 h5 gxh5 gxh5 Rh7 Kb8 Be6 Re1 Bc4"
+      }
+    },
+    {
+      "type": "R+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "bjVvYS4m",
+        "W": "Popov, Ivan1",
+        "B": "Tkachiev, Vladislav",
+        "res": "1-0",
+        "yr": "2013",
+        "studentWon": true,
+        "entryPly": 89,
+        "entryFen": "3k4/rp4R1/5p2/7P/1KP5/1P6/8/8 b - - 0 45",
+        "totalPlies": 89,
+        "tail": ""
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:32:29.754Z"
+}

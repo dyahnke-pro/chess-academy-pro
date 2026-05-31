@@ -1,0 +1,70 @@
+{
+  "id": "sm__push-decl",
+  "openingId": "sm__push-decl",
+  "student": "w",
+  "seededAtMove": 11,
+  "sampledGames": 13,
+  "tally": {
+    "Q+pieces": 2,
+    "R+P": 1,
+    "middlegame": 2,
+    "minor+P": 1,
+    "opp/same-bishop": 2,
+    "R+minor+P": 3,
+    "K+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 23,
+      "games": 3,
+      "rep": {
+        "id": "qHCZx3tx",
+        "W": "Pokorny, Zdenek",
+        "B": "Suran, Jan",
+        "res": "1-0",
+        "yr": "2000",
+        "studentWon": true,
+        "entryPly": 76,
+        "entryFen": "r3bb2/1p2p1k1/p3B3/4pPp1/1P2P1P1/P7/3R1K2/3R4 w - - 0 39",
+        "totalPlies": 81,
+        "tail": "Rd8 Rxd8 Rxd8 Bc6 Ke3"
+      }
+    },
+    {
+      "type": "Q+pieces",
+      "pct": 15,
+      "games": 2,
+      "rep": {
+        "id": "U8ZTbcVV",
+        "W": "Begmuratov, Alisher",
+        "B": "Bellahcene, B.",
+        "res": "1-0",
+        "yr": "2017",
+        "studentWon": true,
+        "entryPly": 58,
+        "entryFen": "3q2rk/p4b1p/2pp4/5p2/5N1Q/7P/PP3PP1/4R1K1 w - - 0 30",
+        "totalPlies": 59,
+        "tail": "Re7"
+      }
+    },
+    {
+      "type": "opp/same-bishop",
+      "pct": 15,
+      "games": 2,
+      "rep": {
+        "id": "xNZcbmzv",
+        "W": "Freckmann, Mark",
+        "B": "Van de Mortel, Jan",
+        "res": "1/2-1/2",
+        "yr": "2001",
+        "studentWon": false,
+        "entryPly": 71,
+        "entryFen": "6k1/2b1pp2/2P3p1/p3P1P1/1p3P2/1B4P1/P7/5K2 b - - 0 36",
+        "totalPlies": 97,
+        "tail": "e6 Ke2 Kf8 Kd3 Ke7 Kc4 Kd8 Kc5 Kc8 Bc4 Bb8 Kd4 Ba7+ Ke4 a4 g4 Kc7 f5 Kxc6 fxg6 fxg6 Bxe6 Bc5 Bd5+ Kd7 Bc4"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:31:59.908Z"
+}

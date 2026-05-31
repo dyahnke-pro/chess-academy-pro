@@ -1,0 +1,50 @@
+{
+  "id": "ma__d4-decline",
+  "openingId": "ma__d4-decline",
+  "student": "b",
+  "seededAtMove": 13,
+  "sampledGames": 15,
+  "tally": {
+    "R+P": 3,
+    "Q+pieces": 4,
+    "middlegame": 4,
+    "R+minor+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "t5HyeKAr",
+        "W": "Shubin, Kirill",
+        "B": "Wagner, Dennis",
+        "res": "0-1",
+        "yr": "2020",
+        "studentWon": true,
+        "entryPly": 58,
+        "entryFen": "r2r2k1/4qpp1/7p/p3P1PQ/P1R5/8/R2p1P1P/6K1 w - - 0 30",
+        "totalPlies": 60,
+        "tail": "Qd1 Qxe5"
+      }
+    },
+    {
+      "type": "R+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "PuEaJCkN",
+        "W": "Hou Yifan",
+        "B": "Matlakov, M.",
+        "res": "0-1",
+        "yr": "2018",
+        "studentWon": true,
+        "entryPly": 81,
+        "entryFen": "7R/2p2p1p/5Ppk/8/3PK3/2r4P/8/8 b - - 0 41",
+        "totalPlies": 108,
+        "tail": "Kg5 Rxh7 Kxf6 Rh8 Kg5 h4+ Kg4 d5 Rc4+ Ke5 f5 h5 Re4+ Kf6 gxh5 Rc8 f4 Rxc7 f3 Rg7+ Kf4 Rh7 f2 Rxh5 Kg3 Rg5+ Rg4"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:29:58.801Z"
+}

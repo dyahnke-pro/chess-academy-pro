@@ -1,0 +1,52 @@
+{
+  "id": "kg__bishops",
+  "openingId": "kg__bishops",
+  "student": "w",
+  "seededAtMove": 7,
+  "sampledGames": 15,
+  "tally": {
+    "Q+pieces": 6,
+    "R+minor+P": 4,
+    "opp/same-bishop": 1,
+    "minor+P": 2,
+    "middlegame": 1,
+    "R+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 40,
+      "games": 6,
+      "rep": {
+        "id": "yhU1rLLk",
+        "W": "Short, Nigel D",
+        "B": "Nikolic, Predrag",
+        "res": "1-0",
+        "yr": "1997",
+        "studentWon": true,
+        "entryPly": 46,
+        "entryFen": "r5k1/1p2q3/4pp1p/p2pQ3/3Pn2P/1PP5/1P2N1P1/5RK1 w - - 0 24",
+        "totalPlies": 81,
+        "tail": "Qf4 Kh7 c4 Rg8 cxd5 exd5 Rc1 Qe6 Rc7+ Rg7 Rxg7+ Kxg7 Qc7+ Kf8 Nf4 Qf5 Qb8+ Ke7 Qxb7+ Kd6 b4 axb4 Qxb4+ Kc6 Qa4+ Kb6 g3 Kc7 Qa5+ Kc6 Kg2 h5 Qa8+ Kd6 Qd8+"
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "nz4pt64Z",
+        "W": "Reinderman, Dimitri",
+        "B": "Timman, Jan H",
+        "res": "1-0",
+        "yr": "1999",
+        "studentWon": true,
+        "entryPly": 90,
+        "entryFen": "3r2k1/1p6/7p/6b1/4p1P1/1PP2R2/2P5/5R1K w - - 0 46",
+        "totalPlies": 121,
+        "tail": "R3f2 e3 Re2 Kg7 Rf5 Rd6 Rb5 b6 Kg2 Rf6 c4 Rc6 Kf3 Kg6 Ke4 Rf6 Rf5 Rc6 Rd5 Rf6 Kd3 Re6 c5 bxc5 Rxc5 Rd6+ Ke4 Rd1 Rc6+ Kf7 Rxe3"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:28:54.387Z"
+}

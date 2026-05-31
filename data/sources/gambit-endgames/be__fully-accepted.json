@@ -1,0 +1,51 @@
+{
+  "id": "be__fully-accepted",
+  "openingId": "be__fully-accepted",
+  "student": "b",
+  "seededAtMove": 13,
+  "sampledGames": 15,
+  "tally": {
+    "R+minor+P": 8,
+    "Q+P": 1,
+    "Q+pieces": 2,
+    "R+P": 3,
+    "K+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 53,
+      "games": 8,
+      "rep": {
+        "id": "KSaxYURM",
+        "W": "Cossin, Sebastien",
+        "B": "Vachier Lagrave, Maxime",
+        "res": "0-1",
+        "yr": "2008",
+        "studentWon": true,
+        "entryPly": 55,
+        "entryFen": "1r4k1/4p2p/3p1np1/B1pP4/4P3/nP4PP/1R4K1/4R3 b - - 0 28",
+        "totalPlies": 100,
+        "tail": "Nc4 Ra2 Rxb3 Bd2 Nxd2 Rxd2 Nh5 e5 Nxg3 exd6 exd6 Ra2 Kg7 Ra7+ Kh6 Ree7 Nf5 Rxh7+ Kg5 Rhd7 Rd3 Ra4 Rxd5 Kf3 Kf6 Kf2 Rd2+ Kf3 Rd3+ Kg2 c4 Rc7 d5 Ra6+ Kg5 Rcc6 Kf4 Rc5 c3 Kf2 Rf3+ Ke2 d4 Rxg6 d3+"
+      }
+    },
+    {
+      "type": "R+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "OK3fQW1T",
+        "W": "Bator, Robert",
+        "B": "Malmstig, Erik",
+        "res": "1-0",
+        "yr": "1996",
+        "studentWon": false,
+        "entryPly": 104,
+        "entryFen": "5k2/8/3p1PR1/2p1p1P1/4P1K1/1P6/r7/8 w - - 0 53",
+        "totalPlies": 105,
+        "tail": "Kf5"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:26:19.849Z"
+}

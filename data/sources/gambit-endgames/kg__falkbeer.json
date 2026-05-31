@@ -1,0 +1,52 @@
+{
+  "id": "kg__falkbeer",
+  "openingId": "kg__falkbeer",
+  "student": "w",
+  "seededAtMove": 8,
+  "sampledGames": 15,
+  "tally": {
+    "R+minor+P": 4,
+    "middlegame": 4,
+    "K+P": 1,
+    "minor+P": 3,
+    "R+P": 2,
+    "Q+pieces": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "7TKnprQe",
+        "W": "Asis Gargatagli, Hipolito",
+        "B": "Ferron Garcia, Carlos",
+        "res": "1-0",
+        "yr": "2005",
+        "studentWon": true,
+        "entryPly": 54,
+        "entryFen": "5r2/p1kr2p1/1pp1p2p/2n1R3/2P2P2/2P5/P1B3PP/1K2R3 w - - 0 28",
+        "totalPlies": 155,
+        "tail": "f5 exf5 Bxf5 Rd2 Re7+ Kd6 g4 g6 Bxg6 Rff2 Rxa7 Rxh2 Ra8 Nb7 Ra4 Rh3 Rb4 Rxc3 Rxb6 Na5 Rb2 Rd4 Bf5 Nxc4 Rh2 Kc5 Rxh6 Rd2 Reh1 Ra3 Bc2 Rg3 Bb3 Na3+ Ka1 Rxg4 Rc1+ Kb5 Rh8 Nc4 Rb8+ Nb6 Rb1 Kc5 Rxb6 Kxb6 Be6+ Ka5 Bxg4 Rc2 Bd1 Rd2 Bb3 c5 Rc1 Kb5 Rc2 Rd1+ Kb2 Rg1 a4+ Kb6 Rf2 Ka5 Rf8 Kb6 Rb8+ Kc7 Rb5 Kc6 Rb8 Kc7 Rg8 Rh1 a5 Rh3 Rg7+ Kc6 a6 Rh8 a7 Ra8 Kc3 Kb6 Rg6+ Kxa7 Bd5 Rh8 Kc4 Rc8 Rg7+ Kb6 Rb7+ Ka6 Rb2 Rc7 Rb1 Ka5 Bb7 Rh7 Kxc5"
+      }
+    },
+    {
+      "type": "minor+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "jpCxt8ca",
+        "W": "Claridge, John",
+        "B": "Ivanov, Vladimir Ivanovich",
+        "res": "1-0",
+        "yr": "2000",
+        "studentWon": true,
+        "entryPly": 79,
+        "entryFen": "6B1/1p6/3k1p2/5p2/1K6/p7/P7/8 b - - 0 40",
+        "totalPlies": 93,
+        "tail": "Ke5 Kc3 Kf4 Be6 Ke5 Bc8 b5 Kb4 f4 Kxa3 f3 Ba6 Kd4 Kb4"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:29:10.647Z"
+}

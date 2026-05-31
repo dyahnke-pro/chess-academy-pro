@@ -1,0 +1,49 @@
+{
+  "id": "be__fianchetto",
+  "openingId": "be__fianchetto",
+  "student": "b",
+  "seededAtMove": 13,
+  "sampledGames": 15,
+  "tally": {
+    "middlegame": 6,
+    "R+minor+P": 5,
+    "Q+pieces": 4
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 33,
+      "games": 5,
+      "rep": {
+        "id": "flfm0c0G",
+        "W": "Demuth, Adrien",
+        "B": "Brunello, Sabino",
+        "res": "0-1",
+        "yr": "2012",
+        "studentWon": true,
+        "entryPly": 66,
+        "entryFen": "2b3k1/4pp1p/3p2p1/3P4/3RP3/5RPP/r4PB1/1r4K1 w - - 0 34",
+        "totalPlies": 92,
+        "tail": "Kh2 Ba6 g4 g5 Rf5 f6 Kg3 Kg7 Rf3 Rbb2 Rf5 Ra1 Rf3 Be2 Rf5 Ra3+ Kh2 Kf7 e5 dxe5 Re4 Kg7 Bh1 Kg6 Kg1 Bd3"
+      }
+    },
+    {
+      "type": "Q+pieces",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "vqybP3bT",
+        "W": "Pavlidis, Anastasios",
+        "B": "Brunello, Sabino",
+        "res": "0-1",
+        "yr": "2013",
+        "studentWon": true,
+        "entryPly": 71,
+        "entryFen": "q1r3k1/5pbp/1R1p2p1/4p3/4P3/P5P1/5PNP/Q5K1 b - - 0 36",
+        "totalPlies": 108,
+        "tail": "Bh6 Rb1 Qxe4 Rd1 Rc2 Qb1 Qe2 Qb8+ Kg7 Rf1 Qd2 a4 Qd4 Qb3 Rb2 Qd1 Bd2 Nh4 Bc3 Qf3 e4 Qg4 Qe5 Ng2 Bd4 Ne3 Ra2 Qd7 Bc5 a5 Qh5 g4 Qe5 Nc4 Qf4 Ne3 Bxe3"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:26:13.063Z"
+}

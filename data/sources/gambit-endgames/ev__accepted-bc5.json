@@ -1,0 +1,50 @@
+{
+  "id": "ev__accepted-bc5",
+  "openingId": "ev__accepted-bc5",
+  "student": "w",
+  "seededAtMove": 8,
+  "sampledGames": 15,
+  "tally": {
+    "R+P": 1,
+    "Q+pieces": 4,
+    "middlegame": 7,
+    "R+minor+P": 3
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "x6BXhird",
+        "W": "Mariotti, Sergio",
+        "B": "Gligoric, Svetozar",
+        "res": "1-0",
+        "yr": "1971",
+        "studentWon": true,
+        "entryPly": 69,
+        "entryFen": "8/3bB1pk/1p4qp/n1pR4/8/6QP/P4PP1/6K1 b - - 0 35",
+        "totalPlies": 81,
+        "tail": "Be6 Rd6 Qf7 Rxb6 Nc4 Rb7 Bf5 Rc7 Bg6 Bxc5 Qf6 Bb4"
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "uw1D9Lvd",
+        "W": "Makaj, Marko",
+        "B": "Rogic, Davor",
+        "res": "0-1",
+        "yr": "2008",
+        "studentWon": false,
+        "entryPly": 51,
+        "entryFen": "3rr1k1/p1p2p2/1b5p/6p1/8/5PBP/P1R2P2/2R3K1 b - - 0 26",
+        "totalPlies": 106,
+        "tail": "c5 f4 Rd3 Kg2 Re4 fxg5 hxg5 Rc4 Rxc4 Rxc4 Kf8 h4 gxh4 Bxh4 Ke8 Re4+ Kd7 Re7+ Kc6 Rxf7 c4 Bg5 Ra3 Rf6+ Kd5 Rf5+ Kd4 Bf6+ Ke4 Re5+ Kd3 Rd5+ Kc2 f4 Rxa2 Kf3 Ra3+ Kg4 Rd3 Rh5 c3 f5 Kb3 Bg5 c2 f6 Rd4+ Kf3 Rd5 f7 Rf5+ Ke4 Rxf7 Bc1 Rf1"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:28:01.015Z"
+}

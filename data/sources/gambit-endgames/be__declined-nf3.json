@@ -1,0 +1,51 @@
+{
+  "id": "be__declined-nf3",
+  "openingId": "be__declined-nf3",
+  "student": "b",
+  "seededAtMove": 11,
+  "sampledGames": 15,
+  "tally": {
+    "middlegame": 5,
+    "Q+pieces": 4,
+    "R+minor+P": 2,
+    "R+P": 3,
+    "opp/same-bishop": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "0GaAUAHq",
+        "W": "Golichenko, Ilja",
+        "B": "Aveskulov, Valeriy",
+        "res": "0-1",
+        "yr": "2008",
+        "studentWon": true,
+        "entryPly": 62,
+        "entryFen": "rr4k1/1P2pp1p/3p2p1/BQ1P4/1R6/3p4/5PPP/5qK1 w - - 0 32",
+        "totalPlies": 62,
+        "tail": ""
+      }
+    },
+    {
+      "type": "R+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "B0rEg4Ln",
+        "W": "Irwanto, Sadikin",
+        "B": "Bancod, Ronald",
+        "res": "1-0",
+        "yr": "2007",
+        "studentWon": false,
+        "entryPly": 82,
+        "entryFen": "8/8/4R1pk/p1p1P2p/P3r3/1P5P/5PP1/6K1 w - - 0 42",
+        "totalPlies": 139,
+        "tail": "Ra6 Rxe5 Rxa5 Re1+ Kh2 Rc1 Rb5 Rc2 a5 c4 bxc4 Rxc4 g3 h4 gxh4 Rxh4 Rb8 Ra4 Ra8 Ra3 a6 Kg7 h4 Kh7 f4 Kh6 a7 Kg7 h5 gxh5 f5 Ra2+ Kg3 Ra3+ Kf4 Ra4+ Ke3 Ra3+ Kf4 Ra4+ Kg5 Ra5 Kh4 Ra4+ Kxh5 Ra5 Kg4 Ra4+ Kf3 Ra3+ Ke4 Ra4+ Kd3 Ra3+ Kc4 Ra4+ Kb3"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:26:06.974Z"
+}

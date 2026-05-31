@@ -1,0 +1,53 @@
+{
+  "id": "da__schlechter",
+  "openingId": "da__schlechter",
+  "student": "w",
+  "seededAtMove": 8,
+  "sampledGames": 15,
+  "tally": {
+    "K+P": 1,
+    "R+minor+P": 6,
+    "opp/same-bishop": 1,
+    "double-rook+P": 1,
+    "middlegame": 2,
+    "Q+pieces": 3,
+    "minor+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 40,
+      "games": 6,
+      "rep": {
+        "id": "h0dfx21I",
+        "W": "Ligterink, Gert",
+        "B": "Bosch, Jeroen",
+        "res": "1-0",
+        "yr": "1997",
+        "studentWon": true,
+        "entryPly": 58,
+        "entryFen": "7r/p3k1p1/1p3nBp/2p2P2/2b2B2/8/P5PP/3R2K1 w - - 0 30",
+        "totalPlies": 75,
+        "tail": "Bd6+ Kd7 Bf8+ Kc6 Bxg7 Rg8 Bxf6 Bxa2 Ra1 Bd5 Rxa7 b5 Bg7 Kb6 Re7 Ra8 f6"
+      }
+    },
+    {
+      "type": "Q+pieces",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "pYfesjZb",
+        "W": "Menvielle Laccourreye, Augusto",
+        "B": "Medina Garcia, Antonio Angel",
+        "res": "1-0",
+        "yr": "1972",
+        "studentWon": true,
+        "entryPly": 50,
+        "entryFen": "2k5/pp1r3p/6p1/3n1p2/8/1QPq3P/P4PP1/2B1R1K1 w - - 0 26",
+        "totalPlies": 81,
+        "tail": "Re8+ Kc7 Qa3 Qxc3 Bf4+ Kb6 Re6+ Kb5 Qxa7 Qa5 Qd4 Qb4 Qd3+ Ka4 Re8 Nb6 Ra8+ Nxa8 Qxd7+ Qb5 Qxh7 Qb1+ Kh2 Qe4 Qd7+ Ka5 Be3 Qe5+ g3 Nc7 Bf4"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:27:21.330Z"
+}

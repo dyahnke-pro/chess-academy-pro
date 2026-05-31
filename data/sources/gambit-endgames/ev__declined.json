@@ -1,0 +1,52 @@
+{
+  "id": "ev__declined",
+  "openingId": "ev__declined",
+  "student": "w",
+  "seededAtMove": 8,
+  "sampledGames": 15,
+  "tally": {
+    "Q+pieces": 3,
+    "R+minor+P": 5,
+    "middlegame": 1,
+    "K+P": 1,
+    "opp/same-bishop": 2,
+    "R+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 33,
+      "games": 5,
+      "rep": {
+        "id": "f7Z55PY6",
+        "W": "Stevic, Hrvoje",
+        "B": "Rogic, Davor",
+        "res": "1-0",
+        "yr": "1995",
+        "studentWon": true,
+        "entryPly": 57,
+        "entryFen": "4r1k1/1pp2p1p/p1b2R2/P1b5/2B5/5PP1/7P/R4K2 b - - 0 29",
+        "totalPlies": 80,
+        "tail": "Bd4 Bxf7+ Kg7 Rxc6 Bxa1 Rxc7 Re5 Bd5+ Kf6 Bxb7 h6 Rc6+ Kg7 Rxa6 Bc3 Be4 Rxa5 Rg6+ Kf7 Rxh6 Bf6 Kg2 Ra2+"
+      }
+    },
+    {
+      "type": "Q+pieces",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "S8THgWJY",
+        "W": "Petrosian, Tigran L",
+        "B": "Tkachiev, Vladislav",
+        "res": "1-0",
+        "yr": "2008",
+        "studentWon": true,
+        "entryPly": 42,
+        "entryFen": "5rk1/1ppb2pp/p2p4/P2Pq3/1PB2p2/2PQ4/5PPP/R5K1 w - - 0 22",
+        "totalPlies": 105,
+        "tail": "Qd4 Qg5 Re1 h5 f3 h4 Bd3 h3 Re2 Re8 Rxe8+ Bxe8 Bf1 Bd7 Kh1 hxg2+ Bxg2 Qg6 Bf1 Qb1 Kg2 Qc2+ Kg1 Qc1 Kf2 Bf5 h4 Kh7 c4 Kh6 c5 Kh7 c6 Qc2+ Kg1 bxc6 dxc6 Qxc6 Qxf4 Bb1 Qe3 Qb7 Qb3 Bg6 Kg2 Qa7 Qd5 Qb8 h5 Bb1 b5 Kh6 bxa6 Qb2+ Kg3 Qc1 Kf2 Qf4 a7 Qh2+ Bg2 Qh4+ Kf1"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:28:46.776Z"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "al__spassky-be7",
+  "openingId": "al__spassky-be7",
+  "student": "b",
+  "seededAtMove": 8,
+  "sampledGames": 15,
+  "tally": {
+    "R+minor+P": 5,
+    "R+P": 2,
+    "opp/same-bishop": 3,
+    "middlegame": 2,
+    "minor+P": 2
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 33,
+      "games": 5,
+      "rep": {
+        "id": "q52pJwFH",
+        "W": "Hjelm, Niclas",
+        "B": "Tikkanen, Hans",
+        "res": "0-1",
+        "yr": "2009",
+        "studentWon": true,
+        "entryPly": 30,
+        "entryFen": "7r/pppk2bp/2n1p1p1/4P3/2P5/P3PN2/1P4PP/4KB1R w K - 0 16",
+        "totalPlies": 80,
+        "tail": "Bd3 Nxe5 Nxe5+ Bxe5 b3 g5 Rf1 Ke7 h3 h5 Bg6 Bf6 Ke2 b6 Rd1 Bb2 a4 a5 Be4 g4 Bc6 Be5 Rd7+ Kf6 Be4 Rf8 Rh7 Kg5 hxg4 hxg4 Re7 Kf6 Rd7 Bg3 Kd3 Ke5 Bc6 Be1 Bb7 Rf2 Rxc7 Rd2+ Kc3 Rd7+ Kc2 Rxc7 Ba6 Bb4 Bb5 Rf7"
+      }
+    },
+    {
+      "type": "opp/same-bishop",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "4esZ8TFe",
+        "W": "Petkov, Vladimir",
+        "B": "Chatalbashev, Boris",
+        "res": "1/2-1/2",
+        "yr": "2005",
+        "studentWon": false,
+        "entryPly": 66,
+        "entryFen": "5b2/1p4p1/p6p/2pBk3/2P4P/P3P3/1PK3P1/8 w - - 0 34",
+        "totalPlies": 93,
+        "tail": "Bxb7 a5 Bd5 Be7 Kb3 Bxh4 Ka4 Be1 Kb5 Kd6 e4 Bd2 e5+ Kxe5 Kxc5 Bc1 Kb6 Bxb2 a4 Kd6 Kxa5 Kc5 Ka6 Bc3 Kb7 Bd2 Kc7"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:25:59.141Z"
+}

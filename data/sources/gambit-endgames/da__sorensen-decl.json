@@ -1,0 +1,51 @@
+{
+  "id": "da__sorensen-decl",
+  "openingId": "da__sorensen-decl",
+  "student": "w",
+  "seededAtMove": 15,
+  "sampledGames": 15,
+  "tally": {
+    "R+minor+P": 3,
+    "R+P": 2,
+    "middlegame": 5,
+    "K+P": 2,
+    "minor+P": 3
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "iIEiua9m",
+        "W": "Sethuraman, S.",
+        "B": "Martinkus, R.",
+        "res": "1-0",
+        "yr": "2021",
+        "studentWon": true,
+        "entryPly": 33,
+        "entryFen": "2krr3/p1p2ppp/2p5/5n2/3P4/P1R1B3/1P2KPPP/3R4 b - - 0 17",
+        "totalPlies": 73,
+        "tail": "Re6 Kf1 Rd5 Rdc1 Kd7 Re1 Nxd4 Rd1 Nb5 Rcc1 a6 g4 Re4 h3 Nd6 b3 f5 g5 f4 Rxd5 cxd5 Bd2 f3 Rc3 Rd4 Be1 Rf4 Rc5 Rf5 h4 d4 Rc1 Rd5 Bd2 Ne4 Bf4 c6 Rc4 Nd6 Ra4"
+      }
+    },
+    {
+      "type": "minor+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "BHBwEvyW",
+        "W": "Hedke, F.",
+        "B": "Pfreundt, Jakob",
+        "res": "1/2-1/2",
+        "yr": "2018",
+        "studentWon": false,
+        "entryPly": 90,
+        "entryFen": "8/1k6/6K1/P2p1p2/6p1/2Bn2P1/5P2/8 w - - 0 46",
+        "totalPlies": 94,
+        "tail": "Bd4 f4 Kf5 Nxf2"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:27:32.422Z"
+}

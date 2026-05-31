@@ -1,0 +1,51 @@
+{
+  "id": "sc__main-nf6",
+  "openingId": "sc__main-nf6",
+  "student": "w",
+  "seededAtMove": 17,
+  "sampledGames": 15,
+  "tally": {
+    "Q+pieces": 4,
+    "R+P": 1,
+    "middlegame": 5,
+    "R+minor+P": 3,
+    "minor+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "jkHOwTjw",
+        "W": "Mueller, Karsten",
+        "B": "Boog, Alexandre",
+        "res": "1-0",
+        "yr": "1989",
+        "studentWon": true,
+        "entryPly": 51,
+        "entryFen": "4b1k1/p1p1Br1p/1b6/2p1N3/3p4/8/PPPQ2PP/6K1 b - - 0 26",
+        "totalPlies": 75,
+        "tail": "Rxe7 Qg5+ Kf8 Qh6+ Kg8 Qf6 Rxe5 Qxe5 Bg6 Qe2 Bf7 Kf1 c4 b3 d3 cxd3 cxb3 axb3 Bxb3 Qg4+ Kf7 Qf5+ Ke8 Qb5+"
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "6vNaPMs4",
+        "W": "Trent, Lawrence",
+        "B": "Littlewood, Paul E",
+        "res": "1-0",
+        "yr": "2006",
+        "studentWon": true,
+        "entryPly": 63,
+        "entryFen": "r1k1r3/p1R5/7p/2p5/b2p4/3N2B1/PP4PP/6K1 b - - 0 32",
+        "totalPlies": 123,
+        "tail": "Kd8 Nxc5 Re7 Rxe7 Kxe7 Nxa4 Rc8 Be5 d3 Bc3 Kd6 Kf2 Rc4 b3 Re4 Nb2 Re2+ Kf3 Rc2 Bb4+ Kd5 Nxd3 Kd4 Nf4 Rxa2 Bf8 Ra6 b4 Kc4 Ke4 Rf6 Be7 Rf7 Bd6 Rd7 Ke5 Rd8 h4 Rg8 h5 Rg5+ Ke4 Rg8 Be7 Re8 Ng6 Rb8 g4 Rb6 Kf5 Rb5+ Ne5+ Kd5 Ng6 Kc4+ Ke6 Kd3 g5 hxg5 h6"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:31:03.724Z"
+}

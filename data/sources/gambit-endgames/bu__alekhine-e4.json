@@ -1,0 +1,17 @@
+{
+  "id": "bu__alekhine-e4",
+  "openingId": "bu__alekhine-e4",
+  "student": "b",
+  "seededAtMove": 6,
+  "sampledGames": 15,
+  "tally": {
+    "minor+P": 1,
+    "R+P": 1,
+    "R+minor+P": 2,
+    "middlegame": 8,
+    "Q+pieces": 1,
+    "opp/same-bishop": 1
+  },
+  "candidateEndgames": [],
+  "generatedAt": "2026-05-30T23:26:53.882Z"
+}

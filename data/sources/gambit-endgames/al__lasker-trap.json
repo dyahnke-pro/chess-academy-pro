@@ -1,0 +1,48 @@
+{
+  "id": "al__lasker-trap",
+  "openingId": "al__lasker-trap",
+  "student": "b",
+  "seededAtMove": 4,
+  "sampledGames": 2,
+  "tally": {
+    "R+P": 1,
+    "R+minor+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+P",
+      "pct": 50,
+      "games": 1,
+      "rep": {
+        "id": "hUJEP8OQ",
+        "W": "Shumiakina, Tatiana",
+        "B": "Raetsky, Alexander",
+        "res": "0-1",
+        "yr": "1995",
+        "studentWon": true,
+        "entryPly": 79,
+        "entryFen": "3r2k1/ppp5/7p/5Pp1/2P5/P7/1P5R/1K6 b - - 0 40",
+        "totalPlies": 88,
+        "tail": "Kg7 Re2 Rf8 Re5 h5 Kc2 Kf6 Ra5 h4"
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 50,
+      "games": 1,
+      "rep": {
+        "id": "QJCL1oJ6",
+        "W": "Pavlov, Boris S",
+        "B": "Wilton, G.",
+        "res": "0-1",
+        "yr": "1973",
+        "studentWon": true,
+        "entryPly": 60,
+        "entryFen": "4r2r/ppk1np2/2p3p1/4P1P1/2P5/2K5/PP4B1/3RR3 w - - 0 31",
+        "totalPlies": 66,
+        "tail": "e6 fxe6 Rxe6 Rh5 Re5 Nd5+"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:25:37.172Z"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "sm__alapin-decl",
+  "openingId": "sm__alapin-decl",
+  "student": "w",
+  "seededAtMove": 18,
+  "sampledGames": 15,
+  "tally": {
+    "Q+pieces": 2,
+    "double-rook+P": 2,
+    "R+minor+P": 5,
+    "minor+P": 1,
+    "R+P": 4
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 33,
+      "games": 5,
+      "rep": {
+        "id": "USEAuu9d",
+        "W": "Potapov, Pavel",
+        "B": "Al Sayed, Mohamad Naser",
+        "res": "1-0",
+        "yr": "2013",
+        "studentWon": true,
+        "entryPly": 43,
+        "entryFen": "3r1r1k/p4ppp/1np1p3/2P5/4N3/1P6/P4PPP/R2R2K1 b - - 0 22",
+        "totalPlies": 85,
+        "tail": "Nd5 Nd6 Kg8 Rd4 Rd7 Kf1 Rb8 Rad1 Kf8 R1d3 Ke7 h4 g6 g3 Rdd8 Re4 f5 Re2 Kf6 f4 Rb4 Ke1 a5 Kd1 a4 Kc2 axb3+ Rxb3 Ra8 a3 Rba4 Kb2 R4a7 Nc4 Rc8 Nb6 Rd8 Rd2 Ra5 Rc2 Rb8 Nd7+"
+      }
+    },
+    {
+      "type": "R+P",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "5z05c2Tp",
+        "W": "Sermek, Drazen",
+        "B": "Jelen, Igor",
+        "res": "1-0",
+        "yr": "2002",
+        "studentWon": true,
+        "entryPly": 108,
+        "entryFen": "8/R5pp/1rk1pp2/8/6P1/P7/1P3P1P/5K2 w - - 0 55",
+        "totalPlies": 111,
+        "tail": "b4 g5 Rf7"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:31:47.052Z"
+}

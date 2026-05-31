@@ -1,0 +1,33 @@
+{
+  "id": "ma__main-line",
+  "openingId": "ma__main-line",
+  "student": "b",
+  "seededAtMove": 22,
+  "sampledGames": 15,
+  "tally": {
+    "middlegame": 7,
+    "Q+pieces": 3,
+    "R+minor+P": 2,
+    "Q+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "jd0AD5Pb",
+        "W": "Pessoa, Francisco Azevedo",
+        "B": "Fagerström, Björn",
+        "res": "1/2-1/2",
+        "yr": "2010",
+        "studentWon": false,
+        "entryPly": 77,
+        "entryFen": "5rk1/5q1p/8/1p1p4/3P1Q2/2P3Pb/1P6/R4NK1 b - - 0 39",
+        "totalPlies": 89,
+        "tail": "Qh5 Qh4 Qf5 g4 Qf3 Qg5+ Kh8 Qe5+ Kg8 Qg3 Bxg4 Qxf3"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:30:18.123Z"
+}

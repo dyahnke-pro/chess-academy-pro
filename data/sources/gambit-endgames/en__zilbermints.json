@@ -1,0 +1,31 @@
+{
+  "id": "en__zilbermints",
+  "openingId": "en__zilbermints",
+  "student": "b",
+  "seededAtMove": 4,
+  "sampledGames": 2,
+  "tally": {
+    "middlegame": 1,
+    "R+minor+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 50,
+      "games": 1,
+      "rep": {
+        "id": "yx0KXk34",
+        "W": "Drygalov, Andrey",
+        "B": "Boiarintsev, Vitaly",
+        "res": "1-0",
+        "yr": "2022",
+        "studentWon": false,
+        "entryPly": 70,
+        "entryFen": "5r1k/R6p/6p1/2p5/1p2N3/4bB2/1P2b1PK/8 w - - 0 36",
+        "totalPlies": 124,
+        "tail": "Bxe2 Bd4 Ng5 Bg7 Nf7+ Rxf7 Rxf7 Bxb2 Bc4 Bc3 Kh3 Bd2 Kg4 Be3 Kf3 Bd4 Ke4 Kg8 Rb7+ Kh8 Rc7 h5 Kf4 Bf6 Rxc5 Kg7 Rc6 Bc3 Bd3 Bd2+ Ke5 Bc3+ Kd5 Bf6 Rb6 h4 Rxb4 Kh6 Ke6 Bd8 Rd4 Bg5 Kf7 Be3 Rd6 Kg5 Rxg6+ Kf4 Be2 Bf2 Bg4 Ke5 Bh3 Kd5"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:27:53.624Z"
+}

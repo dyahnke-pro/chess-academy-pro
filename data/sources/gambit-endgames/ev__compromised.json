@@ -1,0 +1,52 @@
+{
+  "id": "ev__compromised",
+  "openingId": "ev__compromised",
+  "student": "w",
+  "seededAtMove": 6,
+  "sampledGames": 15,
+  "tally": {
+    "Q+P": 1,
+    "minor+P": 1,
+    "middlegame": 5,
+    "R+minor+P": 4,
+    "Q+pieces": 3,
+    "double-rook+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "zUqOhJvG",
+        "W": "Sedlak, Nikola",
+        "B": "Georgiev, Kiril",
+        "res": "0-1",
+        "yr": "2012",
+        "studentWon": false,
+        "entryPly": 38,
+        "entryFen": "1r2k3/p1ppnp1p/r7/8/p3P3/2N5/P4PPP/R1R3K1 w - - 0 20",
+        "totalPlies": 94,
+        "tail": "Rab1 Rxb1 Rxb1 d6 f3 Rc6 Rc1 f5 Kf2 fxe4 fxe4 Ng6 Ke3 Ne5 Kd2 Rc4 Nd5 c6 Nf6+ Ke7 Rf1 Rd4+ Kc2 Rc4+ Kd2 Rb4 Kc3 Rb8 Nxh7 Rh8 Ng5 Rxh2 Rg1 Rh4 Rb1 Kf6 Nf3 Rxe4 Nd4 c5 Nb5 d5 Rf1+ Ke6 Nc7+ Kd6 Ne8+ Ke7 Nf6 Rc4+ Kd2 Ke6 Nh5 Rg4 Nf4+ Kd6"
+      }
+    },
+    {
+      "type": "Q+pieces",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "1TlW2xlR",
+        "W": "Short, Nigel D",
+        "B": "Gupta, Abhijeet",
+        "res": "1-0",
+        "yr": "2006",
+        "studentWon": true,
+        "entryPly": 51,
+        "entryFen": "1r4k1/p1q2pp1/7p/4Pn2/Q2PB3/P4NP1/5P1P/5K2 b - - 0 26",
+        "totalPlies": 81,
+        "tail": "Ne7 d5 Qc5 d6 Nd5 Qd4 Qb5+ Kg2 Nb6 Ne1 Qa5 Nd3 Qxa3 Nc5 Rc8 d7 Nxd7 Nxd7 Qc3 Qxa7 Qd2 Qb7 Rd8 Bc6 Qc3 h4 h5 Be4 Qd2 Bd5"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:28:28.909Z"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "da__accepted-full",
+  "openingId": "da__accepted-full",
+  "student": "w",
+  "seededAtMove": 4,
+  "sampledGames": 15,
+  "tally": {
+    "Q+pieces": 2,
+    "middlegame": 9,
+    "R+minor+P": 3,
+    "R+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "Zpze1MCu",
+        "W": "Kritz, Leonid",
+        "B": "Pilgaard, Kim",
+        "res": "1-0",
+        "yr": "2000",
+        "studentWon": true,
+        "entryPly": 38,
+        "entryFen": "3rr3/pb3k1p/1p3p2/2p5/2N1PP2/6R1/P5PP/R5K1 w - - 0 20",
+        "totalPlies": 49,
+        "tail": "e5 Re7 Nd6+ Ke6 Re1 fxe5 Rxe5+ Kxd6 Rd3+ Kc6 Rxd8"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:27:11.860Z"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "kg__kieseritzky",
+  "openingId": "kg__kieseritzky",
+  "student": "w",
+  "seededAtMove": 8,
+  "sampledGames": 15,
+  "tally": {
+    "R+P": 4,
+    "middlegame": 3,
+    "R+minor+P": 4,
+    "minor+P": 2,
+    "Q+pieces": 2
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+P",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "Qn9yHQoH",
+        "W": "Berg, E.",
+        "B": "Grandelius, N.",
+        "res": "1-0",
+        "yr": "2015",
+        "studentWon": true,
+        "entryPly": 85,
+        "entryFen": "4R3/ppk2r2/2p5/3P2P1/2P2pp1/1P6/P5P1/5K2 b - - 0 43",
+        "totalPlies": 115,
+        "tail": "cxd5 cxd5 Kd6 Rd8+ Kc7 Rg8 Kd6 g6 Rd7 Rf8 Rg7 Rxf4 Rxg6 Rf7 Kxd5 Rxb7 Rf6+ Kg1 Ra6 a4 Rc6 Kh2 Rc3 b4 a6 Rb6 Rb3 b5 a5 Ra6"
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "LjogLCl7",
+        "W": "Brenninkmeijer, Joris",
+        "B": "Ligterink, Gert",
+        "res": "1-0",
+        "yr": "2002",
+        "studentWon": true,
+        "entryPly": 40,
+        "entryFen": "4rn2/pp3p1p/6k1/3P1b2/3P2p1/1BN5/PPP3P1/5RK1 w - - 0 21",
+        "totalPlies": 65,
+        "tail": "d6 Ne6 Nb5 Rd8 d5 Nc5 c4 a6 Nd4 Bd3 Bc2 Bxc2 Nxc2 Rxd6 Ne3 h5 b4 Nd3 c5 Rf6 Rd1 Nf2 Rd4 g3 Nf1"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:29:22.321Z"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "bu__alekhine-bf4",
+  "openingId": "bu__alekhine-bf4",
+  "student": "b",
+  "seededAtMove": 11,
+  "sampledGames": 15,
+  "tally": {
+    "Q+pieces": 2,
+    "middlegame": 3,
+    "K+P": 1,
+    "R+P": 3,
+    "minor+P": 2,
+    "opp/same-bishop": 1,
+    "R+minor+P": 3
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "80qtpKX6",
+        "W": "Ladva, O.",
+        "B": "Miezis, N.",
+        "res": "1/2-1/2",
+        "yr": "2015",
+        "studentWon": false,
+        "entryPly": 103,
+        "entryFen": "3k4/3P4/r7/3p3R/8/8/6PK/8 b - - 0 52",
+        "totalPlies": 103,
+        "tail": ""
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "83y1kXdt",
+        "W": "Dobrov, Vladimir",
+        "B": "Nadanian, Ashot",
+        "res": "0-1",
+        "yr": "2003",
+        "studentWon": true,
+        "entryPly": 50,
+        "entryFen": "5rk1/1pp2ppp/3pb3/P7/3rP1P1/5P2/P2B2KP/2R2R2 w - - 0 26",
+        "totalPlies": 55,
+        "tail": "Be3 Rd3 Bf4 Rc8 Rf2"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:26:37.677Z"
+}

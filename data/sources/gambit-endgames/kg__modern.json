@@ -1,0 +1,51 @@
+{
+  "id": "kg__modern",
+  "openingId": "kg__modern",
+  "student": "w",
+  "seededAtMove": 9,
+  "sampledGames": 15,
+  "tally": {
+    "R+minor+P": 5,
+    "minor+P": 1,
+    "Q+pieces": 3,
+    "middlegame": 5,
+    "R+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "R+minor+P",
+      "pct": 33,
+      "games": 5,
+      "rep": {
+        "id": "SOMHJR3A",
+        "W": "Krzyzanowski, Antoni",
+        "B": "Tacke-Ungruh, Reinhard",
+        "res": "1-0",
+        "yr": "2009",
+        "studentWon": true,
+        "entryPly": 79,
+        "entryFen": "5rk1/1p5p/2bRPppr/8/P7/1B6/P4RP1/6K1 b - - 0 40",
+        "totalPlies": 103,
+        "tail": "Kg7 a5 Rh5 a6 Kh6 e7 Re8 Re2 Ra5 axb7 Bxb7 Bf7 Raa8 Bxe8 Rxe8 Rd8 Bc6 Re6 Ba4 Rxe8 Bxe8 Rxf6 Kg7 Rf8"
+      }
+    },
+    {
+      "type": "Q+pieces",
+      "pct": 20,
+      "games": 3,
+      "rep": {
+        "id": "IhecRGN9",
+        "W": "Zelbel, P.",
+        "B": "Kobalia, M.",
+        "res": "1/2-1/2",
+        "yr": "2016",
+        "studentWon": false,
+        "entryPly": 39,
+        "entryFen": "r4k1r/p1q3pp/2p1QR2/8/3P4/8/PP4PP/R5K1 b - - 0 20",
+        "totalPlies": 91,
+        "tail": "gxf6 Qxf6+ Kg8 Rf1 Re8 Rf3 Qg7 Rg3 Qxg3 hxg3 h5 Qg6+ Kf8 Qf6+ Kg8 Qxc6 Kg7 Qb7+ Kg6 Qxa7 Rd8 Qc5 Kf6 Qe5+ Kf7 a4 Rhe8 Qxh5+ Ke6 Qg6+ Kd5 g4 Kxd4 a5 Kc5 Qb6+ Kc4 a6 Rd1+ Kh2 Rh8+ Kg3 Rd3+ Kf4 Rd4+ Kg3 Rd3+ Kf4 Rd4+ Kg3 Rd3+ Kf4"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:29:28.348Z"
+}

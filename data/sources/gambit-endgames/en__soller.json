@@ -1,0 +1,67 @@
+{
+  "id": "en__soller",
+  "openingId": "en__soller",
+  "student": "b",
+  "seededAtMove": 4,
+  "sampledGames": 4,
+  "tally": {
+    "double-rook+P": 1,
+    "R+minor+P": 1,
+    "middlegame": 1,
+    "R+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "double-rook+P",
+      "pct": 25,
+      "games": 1,
+      "rep": {
+        "id": "NsrSddvg",
+        "W": "Pavlovic, Goran",
+        "B": "Nadj Hedjesi, Balind",
+        "res": "0-1",
+        "yr": "2011",
+        "studentWon": true,
+        "entryPly": 44,
+        "entryFen": "2k2r2/ppp3p1/8/7p/4P3/8/PP1r1P1P/R3RK2 w - - 0 23",
+        "totalPlies": 75,
+        "tail": "Re2 Rd3 Rc1 b6 Rec2 Rf7 Ke2 Rh3 Rc3 Rxh2 Rf3 Re7 Ke3 g5 Rf5 g4 e5 h4 Rb1 h3 Ke4 Rg2 Rh1 Rh7 e6 h2 Kd5 Kd8 Kc6 Ke7 Rd5"
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 25,
+      "games": 1,
+      "rep": {
+        "id": "0fTFynde",
+        "W": "Mocchi, Tullio",
+        "B": "Rossi, Carlo",
+        "res": "1/2-1/2",
+        "yr": "2011",
+        "studentWon": false,
+        "entryPly": 60,
+        "entryFen": "4r2k/p5p1/5b2/1ppp4/5R1P/2P1P3/PP6/2K2N2 w - - 0 31",
+        "totalPlies": 110,
+        "tail": "Kd2 Kg8 Ng3 Be5 Rg4 Kf7 Ne2 a5 Nf4 Rd8 Nd3 Bd6 Rg5 Be7 Rf5+ Ke6 Rh5 Bd6 Rg5 Rd7 h5 Rf7 Ke2 a4 a3 Re7 Rg6+ Kd7 Kd2 Rf7 Rg4 Ke6 Ke2 Re7 Rg5 Rf7 Rg6+ Kd7 Nf2 Re7 Rg4 Kc6 Nd3 Rf7 Rg5 Re7 Kf3 Rf7+ Ke2 Re7"
+      }
+    },
+    {
+      "type": "R+P",
+      "pct": 25,
+      "games": 1,
+      "rep": {
+        "id": "kurJtklm",
+        "W": "Vooremaa, Andres",
+        "B": "Kiltti, Jyrki",
+        "res": "1/2-1/2",
+        "yr": "1997",
+        "studentWon": false,
+        "entryPly": 81,
+        "entryFen": "8/2p3pk/1p6/5P2/6P1/1P5K/2P2R2/3r4 b - - 0 41",
+        "totalPlies": 144,
+        "tail": "Kh6 f6 gxf6 Rxf6+ Kg5 Rc6 Rd7 Kg3 Rf7 Re6 Rd7 Re5+ Kf6 Kf4 Rd2 g5+ Kf7 c4 Rf2+ Ke4 Rb2 Rb5 Ke6 Re5+ Kf7 Rf5+ Ke6 Rf6+ Ke7 Rf3 Rg2 Kf5 Kf7 b4 c6 c5 bxc5 bxc5 Rc2 Ke5+ Ke7 Kd4 Rg2 Re3+ Kf7 Ke5 Rd2 Kf5 Rf2+ Ke5 Rd2 Kf4 Rd1 g6+ Kxg6 Re6+ Kf7 Rxc6 Ke7 Ke5 Kd7 Rh6 Kc7"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:27:49.455Z"
+}

@@ -1,0 +1,51 @@
+{
+  "id": "sm__accepted-d6",
+  "openingId": "sm__accepted-d6",
+  "student": "w",
+  "seededAtMove": 11,
+  "sampledGames": 15,
+  "tally": {
+    "Q+pieces": 5,
+    "middlegame": 2,
+    "opp/same-bishop": 2,
+    "R+minor+P": 4,
+    "R+P": 1
+  },
+  "candidateEndgames": [
+    {
+      "type": "Q+pieces",
+      "pct": 33,
+      "games": 5,
+      "rep": {
+        "id": "4ULaC2by",
+        "W": "Puccini, Jack",
+        "B": "Xie, G.",
+        "res": "1-0",
+        "yr": "2019",
+        "studentWon": true,
+        "entryPly": 42,
+        "entryFen": "4qrk1/4bppp/p2p4/1p1B4/3pP1Q1/P1P1B2P/5PP1/6K1 w - - 0 22",
+        "totalPlies": 53,
+        "tail": "Bxd4 g6 h4 Qc8 Qf4 Qd8 g3 g5 Qf5 a5 f4"
+      }
+    },
+    {
+      "type": "R+minor+P",
+      "pct": 27,
+      "games": 4,
+      "rep": {
+        "id": "FSbXj84a",
+        "W": "Vachtfeidl, Petr",
+        "B": "Sutton, Alan B",
+        "res": "1/2-1/2",
+        "yr": "2012",
+        "studentWon": false,
+        "entryPly": 92,
+        "entryFen": "8/6bk/p5p1/1p6/1P2B1pP/P4KP1/4RP2/4r3 w - - 0 47",
+        "totalPlies": 113,
+        "tail": "Ke3 Bd4+ Kd3 Rd1+ Kc2 Rf1 Bb7 Bxf2 Bxa6 Bxg3 Bxb5 Rf4 Bd3 Bxh4 b5 Bd8 Re6 Rf2+ Kd1 Ba5 Be4"
+      }
+    }
+  ],
+  "generatedAt": "2026-05-30T23:31:27.253Z"
+}
