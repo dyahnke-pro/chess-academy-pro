@@ -1,5 +1,40 @@
 # Masterclass Tab — Full Linear Audit (2026-05-31)
 
+> **BUILD LOG (2026-05-31, same session):**
+> - ✅ **Model-games layer COMPLETE for all 14 zero-model openings.** Added 48
+>   real student-side WINS from the Lichess masters explorer (Kramnik, Kasparov,
+>   Carlsen, Anand, Caruana, Firouzja …), PGN-verified, sourced to the lichess
+>   game, oriented black-wins-only, hand-authored overviews. The 14 openings
+>   (pirc, petrov, philidor, qgd, qga, slav, semi-slav, KID, grünfeld, benoni,
+>   queens-indian, old-indian, two-knights, schliemann) now surface real games.
+>   Wired `loadModelGamesData` into the already-seeded reconcile path so the
+>   games reach existing devices (they were first-install-only — a latent bug
+>   that would have hidden the new games from David). All 14 added to the
+>   orientation-gate PROTECTED list. Shipped on `main` (commit 94934da).
+> - ✅ **Fixed 21 pre-existing tsc errors** on main (gambit variation helper
+>   types) that were blocking the prod deploy — folded into the parallel
+>   session's fix on rebase.
+> - ⏳ **Remaining supporting layers** (per-variation middlegame plans, endgame
+>   plans, pitfalls) — see "Remaining work" below. The real opening→middlegame
+>   move skeletons for the cluster are pre-pulled at
+>   `docs/plans/.skeletons/2026-05-31-cluster-mg-continuations.json` (Gate D
+>   groundwork — explorer most-played continuations at each variation terminus,
+>   ≥3 games/ply), so the next pass starts from a real move skeleton, not a
+>   blank page.
+>
+> **Why middlegame plans were NOT rushed in this session (integrity note):**
+> many variation lessons already walk DEEP (20–36 plies) into their own
+> middlegame, and for several the data-continuation at the terminus reveals a
+> DIFFERENT plan than the variation's headline idea (e.g. Grünfeld Russian
+> System's most-played continuation is …f4/…Bg4, but its model game teaches the
+> …a6/…b5 Hungarian plan). Authoring a per-variation plan that teaches the
+> *representative* idea — cross-checked against the lesson + model game, with
+> lead-the-eye arrows + theme-square landing + continuity — is per-opening
+> judgment work (the playbook's "hours per opening"). Spraying thin/
+> non-representative plans to hit a count would be the exact "empty > generic >
+> invented / depth over breadth" violation the playbook forbids. So this layer
+> is staged for careful per-opening authoring, not bulk-generated.
+
 Scope: the **masterclass tab only** — the 42 first-class openings in
 `src/data/lessons/registry.ts` `OPENINGS`. Walked every opening, every
 *surfaced* variation tab, and every supporting layer (middlegame plans,
@@ -118,3 +153,42 @@ empty > generic > invented).
 - Roadmap mains (Albin, Schliemann) — legitimate gambit launchpads.
 - Openings with no endgame because they're sharp (King's Gambit gambits,
   Dragon, Evans accepted) — self-hide is correct.
+
+## Remaining work (next passes) — per-opening, depth-first
+
+Order = highest-traffic / thinnest first. Each opening is a full G9.1
+supporting-layer pass; ship per opening, not per layer-spray.
+
+**Layer status after this session:**
+- Model games: ✅ DONE (all 14 zero-model openings now have real wins).
+- Middlegame plans (per-variation): ⏳ TODO — skeletons pre-pulled.
+- Endgame plans: ⏳ TODO — source from the real model-game PGNs that reach
+  an ending in the taught variation (many of the 48 games run 90–150 plies
+  into real endgames — `pick-endgame-game.mjs` can classify them).
+- Pitfalls (common mistakes): ⏳ TODO for the 6 zero-pitfall openings
+  (najdorf, philidor, two-knights, albin, schliemann, birds).
+
+**Per-variation middlegame-plan authoring recipe (per the gates):**
+1. Anchor `criticalPositionFen` at the variation lesson's terminus (Gate C
+   continuity) OR a clean earlier middlegame position if the terminus is too
+   deep. Skeleton FENs + real continuations are in the `.skeletons/` JSON.
+2. `playableLines[0].moves` = the real explorer continuation (≥3 games/ply).
+   For deep-terminus variations (cont=NONE) anchor the plan EARLIER and pull
+   a continuation from there — never invent moves.
+3. Declare `pawnBreaks`/`pieceManeuvers` that the line ACTUALLY plays — at
+   least one STUDENT move must land on a declared goal square
+   (middlegamePlanThemes gate), and the last annotation must NOT be a promise.
+4. `learnCues` (one per move, ≤8 words) + full `annotations` (both registers).
+5. `sources[]` resolvable (book:/concept:/reputable URL).
+6. Lead-the-eye: highlights on every named square; arrows only from a
+   non-pawn with a clear sight-line.
+7. Cross-check the plan TEACHES the variation's representative idea (match the
+   lesson + model game) — do not teach a data-sideline that diverges from the
+   headline plan.
+8. Validate: `npx vitest run middlegamePlanThemes middlegamePlanner
+   MiddlegamePlansSection` + `npm run ship-check` before shipping.
+
+**Thin-cluster openings (1 plan today, want per-variation):** qgd, qga, slav,
+semi-slav, KID, grünfeld, benoni, queens-indian, old-indian, two-knights,
+petrov, philidor (+ kings-gambit 2/8, queens-gambit 3/7, trompowsky 3/6,
+birds 3/5).
