@@ -6320,7 +6320,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Solid structure, the d5-outpost, patient counterplay.",
     "lessonSummary": "Trade on f3, hold the structure, dominate d5, and grind the advantage home.",
-    "variation": "Two Knights Variation"
+    "variation": "Two Knights Variation",
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   },
   {
     "id": "mg-caro-kann-panov-botvinnik-attack",
@@ -6338,7 +6343,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Blockade and pressure the isolated queen’s pawn.",
     "lessonSummary": "Blockade the IQP on d5, trade pieces, then win the weak pawn.",
-    "variation": "Panov-Botvinnik Attack"
+    "variation": "Panov-Botvinnik Attack",
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   },
   {
     "id": "mg-caro-kann-tartakower-breyer-variation",
@@ -6356,7 +6366,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Half-open e-file, central pawn mass, kingside storm.",
     "lessonSummary": "Embrace the …exf6 structure, take the e-file, and storm the king.",
-    "variation": "Tartakower/Breyer Variation"
+    "variation": "Tartakower/Breyer Variation",
+    "sources": [
+      "book:caro-kann",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+    ]
   },
   {
     "id": "mg-french-defence-fort-knox-variation",
@@ -6374,7 +6389,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Trade the light bishops, blockade d5, grind the queenside.",
     "lessonSummary": "Swap the bad bishop, plant a knight on d5, and outplay White slowly.",
-    "variation": "Fort Knox Variation"
+    "variation": "Fort Knox Variation",
+    "sources": [
+      "book:french-defence",
+      "concept:pos-center",
+      "https://en.wikipedia.org/wiki/French_Defence"
+    ]
   },
   {
     "id": "mg-four-knights-game-rubinstein-variation-4-bb5-nd4",
@@ -6392,7 +6412,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Keep pieces on, the e5-wedge, active fighting play.",
     "lessonSummary": "Avoid the trade with Ba4, grab e5, and play for the initiative.",
-    "variation": "Rubinstein Variation: 4.Bb5 Nd4"
+    "variation": "Rubinstein Variation: 4.Bb5 Nd4",
+    "sources": [
+      "book:four-knights-game",
+      "concept:pos-development",
+      "https://en.wikipedia.org/wiki/Four_Knights_Game"
+    ]
   },
   {
     "id": "mg-sicilian-najdorf-najdorf-classical-6-be2-with-e5",
