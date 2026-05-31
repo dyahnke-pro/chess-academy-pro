@@ -316,6 +316,11 @@ export type AuditKind =
   // hear nothing after my move" report has a complete causal chain.
   | 'coach-move-narration-fired'
   | 'coach-move-narration-skipped'
+  // board-reset-mid-game diagnosis (David 2026-05-31): which reset path
+  // fired (handleRestart / handleColorChange) + a fresh-mount marker, so
+  // an un-reproducible mid-game reset names its trigger in the stream.
+  | 'coach-play-reset'
+  | 'coach-play-mounted'
   // Opening auto-detection trail (WO-CONVERSATIONAL-OPENING-COACH).
   // Fires once per move from CoachGamePage when detectOpening() runs
   // against the SAN history. Captures: detected eco/name/plyCount,

@@ -836,6 +836,18 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   // context snapshot reflects "user is on the play screen."
   useEffect(() => {
     useCoachSessionStore.getState().setCurrentRoute('/coach/play');
+    // David 2026-05-31: board-reset-mid-game diagnosis. A silent
+    // re-mount (route replace, parent re-key, ErrorBoundary recovery)
+    // would reset every useState — including the game — to its initial
+    // value, which LOOKS like a board reset. This fires on every fresh
+    // mount; if one shows up in the audit-stream at the moment the
+    // board cleared, the reset was a re-mount, not a reset callback.
+    void logAppAudit({
+      kind: 'coach-play-mounted',
+      category: 'subsystem',
+      source: 'CoachGamePage',
+      summary: 'CoachGamePage mounted — fresh game state',
+    });
   }, []);
 
   // Subscribe to pending narration from the agent. When the LLM emits
@@ -1526,6 +1538,19 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   }, [game]);
 
   const handleRestart = useCallback((opts?: { keepRequestedOpening?: boolean }) => {
+    // David 2026-05-31: board-reset-mid-game diagnosis. A reset that
+    // fires while moves are on the board is almost certainly a bug
+    // (only the explicit Restart button / a chat reset_board / a color
+    // change should reset). Log WHO called us + how many half-moves
+    // were live + a short stack so the next occurrence names its
+    // trigger in the audit-stream instead of vanishing.
+    void logAppAudit({
+      kind: 'coach-play-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.handleRestart',
+      summary: `reset — liveHalfMoves=${moveCountRef.current}`,
+      details: (new Error('reset-trace').stack ?? '').split('\n').slice(0, 9).join('\n'),
+    });
     // Explicit restart — drop the resumable snapshot so we don't
     // auto-load the abandoned game on next visit. Also clear the
     // pre-variation snapshot so return_to_game from a later chat
@@ -1572,6 +1597,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   // Color change handler — resets the game with the new color
   const handleColorChange = useCallback((color: 'white' | 'black') => {
+    void logAppAudit({
+      kind: 'coach-play-reset',
+      category: 'subsystem',
+      source: 'CoachGamePage.handleColorChange',
+      summary: `reset via color change → ${color} — liveHalfMoves=${moveCountRef.current}`,
+      details: (new Error('reset-trace').stack ?? '').split('\n').slice(0, 9).join('\n'),
+    });
     setPlayerColor(color);
     game.resetGame();
     moveCountRef.current = 0;
