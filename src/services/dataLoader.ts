@@ -679,6 +679,14 @@ async function runSeedOnce(): Promise<void> {
   // Plans sections current. (David 2026-05-20: added Ruy variation
   // plans weren't reaching the device.)
   await loadMiddlegamePlansData();
+
+  // Model games were ALSO seeded only in the first-install deferred
+  // backfill, so already-seeded users never picked up new games (the
+  // 2026-05-31 audit caught 14 masterclass openings showing ZERO model
+  // games on-device even after real games were authored). Same contract
+  // as plans: bulkPut upserts by id, the rows carry no user progress, so
+  // re-running every boot is safe and keeps ModelGamesSection current.
+  await loadModelGamesData();
 }
 
 export function seedDatabase(): Promise<void> {

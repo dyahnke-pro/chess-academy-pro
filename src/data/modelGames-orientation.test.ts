@@ -59,7 +59,10 @@ describe('model-games orientation — wins only, never the student losing OR dra
   // Masterclass openings whose model games are all curated student-wins and
   // tagged so the coach-injection filter protects them. Add a new opening here
   // once its model games declare studentSide.
-  const PROTECTED = ['nimzo-indian', 'vienna-game', 'caro-kann', 'ruy-lopez', 'italian-game', 'scotch-game', 'kings-gambit', 'sicilian-dragon', 'four-knights-game', 'london-system', 'catalan-opening', 'english-opening', 'reti-opening', 'kings-indian-attack', 'evans-gambit', 'french-defence', 'scandinavian-defence', 'alekhine-defence', 'benko-gambit', 'dutch-defence', 'queens-gambit', 'trompowsky-attack', 'birds-opening'];
+  const PROTECTED = ['nimzo-indian', 'vienna-game', 'caro-kann', 'ruy-lopez', 'italian-game', 'scotch-game', 'kings-gambit', 'sicilian-dragon', 'four-knights-game', 'london-system', 'catalan-opening', 'english-opening', 'reti-opening', 'kings-indian-attack', 'evans-gambit', 'french-defence', 'scandinavian-defence', 'alekhine-defence', 'benko-gambit', 'dutch-defence', 'queens-gambit', 'trompowsky-attack', 'birds-opening',
+    // 2026-05-31 supporting-layer build: the 14 openings that surfaced ZERO
+    // model games now carry real student-side wins (all studentSide-tagged).
+    'pirc-defence', 'petrov-defence', 'philidor-defence', 'qgd', 'qga', 'slav-defence', 'semi-slav', 'kings-indian-defence', 'grunfeld-defence', 'benoni-defence', 'queens-indian', 'old-indian-defence', 'two-knights-defence', 'schliemann-defence'];
   for (const oid of PROTECTED) {
     it(`${oid}: every model game declares studentSide (coach filter covers it)`, () => {
       const missing = games.filter((g) => g.openingId === oid && !g.studentSide).map((g) => g.id);
