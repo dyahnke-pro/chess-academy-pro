@@ -63571,5 +63571,154 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pronaroKID-saemisch-endgame",
+    "openingId": "pro-naroditsky-kid",
+    "criticalPositionFen": "6k1/3R2b1/p5p1/2p3Pp/2K2r2/8/6P1/1N6 w - - 0 34",
+    "title": "KID Sämisch ENDGAME — the R+B converts the kingside pawns (vs GM Gupta)",
+    "overview": "From a Sämisch KID, Naroditsky reaches a rook-and-bishop endgame against GM Abhijeet Gupta and converts the classic KID asset: the kingside pawn majority. The active rook gobbles White's loose g- and h-pawns while the dark-squared bishop — the KID's pride — rakes the long diagonal. Black is winning (~+4): connected passers on the kingside decide.",
+    "pawnBreaks": [
+      "...Rxg5 and ...Rxg2 — harvest the kingside pawns",
+      "...h4-h3 — push the passed h-pawn"
+    ],
+    "pieceManeuvers": [
+      "Rook: ...Rf4-g4-g5xg2 — the active rook wins the pawns",
+      "Bishop: the g7-bishop rakes the long diagonal"
+    ],
+    "strategicThemes": [
+      "Convert the KID kingside pawn majority in the endgame",
+      "Keep the rook active — it wins pawns faster than the knight defends"
+    ],
+    "endgameTransitions": [
+      "The connected kingside passers queen; the knight cannot stop them both"
+    ],
+    "playableLines": [
+      {
+        "fen": "6k1/3R2b1/p5p1/2p3Pp/2K2r2/8/6P1/1N6 w - - 0 34",
+        "moves": [
+          "Kxc5",
+          "Rg4",
+          "Nd2",
+          "Rxg5+",
+          "Kd6",
+          "Rxg2",
+          "Ne4",
+          "h4"
+        ],
+        "annotations": [
+          "Kxc5 — White grabs the c5-pawn, but it pulls the king away from the kingside where the game is decided.",
+          "...Rg4 — the rook swings to g4, targeting the loose g5- and g2-pawns.",
+          "Nd2 — White tries to bring the knight back to defend.",
+          "...Rxg5+ — the rook harvests the first pawn with check.",
+          "Kd6 — the king has no time to help; it heads for the queenside passer.",
+          "...Rxg2 — the rook scoops the second pawn; Black has a clean extra pawn and the active pieces.",
+          "Ne4 — the knight jumps to e4, but it cannot cover everything.",
+          "...h4 — the passed h-pawn starts to run; the connected kingside passers will decide. Black is winning."
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "f4",
+              "to": "g4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "g4",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "g2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "h5",
+              "to": "h4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Kxc5 — king pulled away",
+          "Rg4 — target the pawns",
+          "Nd2 — try to defend",
+          "Rxg5+ — grab one",
+          "Kd6 — no time to help",
+          "Rxg2 — grab two, a pawn up",
+          "Ne4 — can't cover all",
+          "h4 — passer runs, Black wins"
+        ],
+        "title": "R+B converts the kingside majority",
+        "intro": "A real Naroditsky win (vs GM Abhijeet Gupta). The Sämisch KID reaches a rook-and-bishop endgame; the active rook harvests White's kingside pawns and the connected passers decide. Black is winning (~+4).",
+        "sources": [
+          "book:chess-fundamentals",
+          "concept:pos-passed-pawn",
+          "https://www.chess.com/openings/Kings-Indian-Defense-Samisch-Variation",
+          "https://api.chess.com/pub/player/danielnaroditsky/games/archives"
+        ]
+      }
+    ]
   }
 ]
