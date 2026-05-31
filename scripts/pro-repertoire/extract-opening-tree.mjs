@@ -267,6 +267,24 @@ const OPENINGS = {
     minPrefix: ['e4', 'c6'],
     maxDepth: 80,
   },
+  // ===== ERIC ROSEN-SPECIFIC OPENINGS =====
+  // The whole 1.e4 e5 2.Nf3 Nf6 complex from BLACK's side — lets us see
+  // the move-3 split (3.Nxe5 Stafford vs 3.Nc3 Four Knights vs 3.d4/3.Bc4).
+  'petrov-stafford-complex': {
+    name: 'Petrov / Stafford Complex (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3', 'Nf6'],
+    maxDepth: 80,
+  },
+  // The true Stafford Gambit: 3.Nxe5 Nc6! 4.Nxc6 dxc6 — Rosen's signature.
+  'stafford': {
+    name: 'Stafford Gambit (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'e5', 'Nf3', 'Nf6', 'Nxe5', 'Nc6'],
+    maxDepth: 80,
+  },
 };
 
 const cfg = OPENINGS[OPENING_ID];

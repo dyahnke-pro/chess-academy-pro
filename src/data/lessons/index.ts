@@ -63,6 +63,8 @@ import {
   PRO_NAR_JOBAVA_LESSON, PRO_NAR_RUY_LESSON,
 } from './proNaroditskyAllRemaining';
 import { PRO_NAR_FANTASY_CARO_LESSON } from './proNaroditskyFantasyCaro';
+import { PRO_ERICROSEN_STAFFORD_LESSON } from './proEricRosenStafford';
+import { PRO_ERICROSEN_STAFFORD_VARIATION_LESSONS } from './proEricRosenStaffordVariations';
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
 import { PIRC_DEFENCE_LESSON } from './pircDefence';
@@ -270,6 +272,7 @@ const LESSONS: Record<string, LessonScript> = {
   [PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON.openingId]: PRO_GOTHAMCHESS_CLOSED_SICILIAN_LESSON,
   [PRO_GOTHAMCHESS_FRENCH_DEFENSE_LESSON.openingId]: PRO_GOTHAMCHESS_FRENCH_DEFENSE_LESSON,
   [PRO_GOTHAMCHESS_PIRC_DEFENSE_LESSON.openingId]: PRO_GOTHAMCHESS_PIRC_DEFENSE_LESSON,
+  [PRO_ERICROSEN_STAFFORD_LESSON.openingId]: PRO_ERICROSEN_STAFFORD_LESSON,
 };
 
 const VARIATION_LESSONS: Record<string, LessonScript> = {
@@ -356,6 +359,7 @@ const VARIATION_LESSONS: Record<string, LessonScript> = {
   ...PRO_GOTHAMCHESS_CLOSED_SICILIAN_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_FRENCH_DEFENSE_VARIATION_LESSONS,
   ...PRO_GOTHAMCHESS_PIRC_DEFENSE_VARIATION_LESSONS,
+  ...PRO_ERICROSEN_STAFFORD_VARIATION_LESSONS,
 };
 
 export function getLessonScript(openingId: string | undefined | null): LessonScript | null {

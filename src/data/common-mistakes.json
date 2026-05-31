@@ -2808,5 +2808,43 @@
         "https://en.wikipedia.org/wiki/Englund_Gambit"
       ]
     }
+  ],
+  "pro-ericrosen-stafford": [
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2N2n2/8/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 4",
+      "wrongMove": "bxc6",
+      "correctMove": "dxc6",
+      "explanation": "When White trades on c6, the recapture matters enormously. dxc6 takes toward the centre and opens the d-file for the queen and the c8-to-h3 diagonal for the light bishop — those open roads ARE the compensation for the pawn. bxc6 instead leaves the queen and light bishop boxed in behind their own pawns, and the gambit loses all its point. Always recapture toward the centre.",
+      "shortNarration": "Recapture …dxc6, never …bxc6.",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-initiative",
+        "https://www.chess.com/openings/Stafford-Gambit"
+      ]
+    },
+    {
+      "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
+      "wrongMove": "Ng4",
+      "correctMove": "h5",
+      "explanation": "It is tempting to jump straight to g4 to hit f2 — but here White can simply chase the knight or trade it off, and the attack fizzles. Rosen plays h5 FIRST: it opens the h-file for the rook AND takes away the squares White would use to harass the knight on g4. Get the move order right — h5, then Ng4 with real force behind it.",
+      "shortNarration": "Play …h5 before …Ng4.",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-initiative",
+        "https://www.chess.com/openings/Stafford-Gambit"
+      ]
+    },
+    {
+      "fen": "r1bqk2r/ppp2pp1/2p2n2/2b4p/4P3/2PP4/PP2BPPP/RNBQK2R b KQkq - 0 7",
+      "wrongMove": "O-O",
+      "correctMove": "Ng4",
+      "explanation": "Castling kingside here throws the gambit away: it puts the king on exactly the side where Black wants to attack, and it wastes the tempo the initiative depends on. Black is a pawn down — the only justification is the attack, so keep storming: Ng4 brings another piece to f2, and the king will castle queenside later to bring the second rook into the assault. Never go passive in the Stafford.",
+      "shortNarration": "Keep attacking with …Ng4, not …O-O.",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-initiative",
+        "https://www.chess.com/openings/Stafford-Gambit"
+      ]
+    }
   ]
 }

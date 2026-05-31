@@ -36,6 +36,7 @@
     "pro-gothamchess-milner-barry::Nc6 d5 Fork": "mistake",
     "pro-gothamchess-anti-sicilian::a6 Bxc6 Doubled Pawns": "mistake",
     "pro-gothamchess-anti-sicilian::Nd4 Fork Trick Exploited": "mistake",
-    "pro-gothamchess-anti-sicilian::Slow Development d4 Push": "mistake"
+    "pro-gothamchess-anti-sicilian::Slow Development d4 Push": "mistake",
+    "pro-ericrosen-stafford::Légal's Mate Trap (6.Bg5??)": "trap"
   }
 }

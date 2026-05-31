@@ -64393,5 +64393,409 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proericstafford-main-hstorm",
+    "openingId": "pro-ericrosen-stafford",
+    "criticalPositionFen": "r1b1k2r/ppp2pp1/2p2q2/2b4p/3PP1n1/2P3P1/PP2BP1P/RNBQK2R w KQkq - 1 10",
+    "title": "The h-file storm — crash through on h2 (Accepted main line)",
+    "overview": "Out of the accepted main line, this is the plan that defines Rosen's Stafford: with the queen, knight and bishop already trained on f2, Black throws the h-pawn forward to h4, blows open the h-file, and the rook on h8 crashes into White's king. We are a pawn down and we do not care — the king is the target. This is the structure Rosen used to mate a grandmaster at the 2024 World Blitz, and it follows his win over FarewellToKings (2661).",
+    "pawnBreaks": [
+      "…h4 — the h-file lever that pries open the rook’s file",
+      "…hxg3 — rip away the white king’s pawn cover"
+    ],
+    "pieceManeuvers": [
+      "…Rxh2 — the rook crashes into the king’s shelter",
+      "…Qf6/…Qh4 — keep the queen trained on f2 and the h-file"
+    ],
+    "strategicThemes": [
+      "Initiative for a pawn — attack before White consolidates",
+      "Every piece points at f2 and the open h-file",
+      "White’s king is stranded in the centre, unable to castle safely"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1b1k2r/ppp2pp1/2p2q2/2b4p/3PP1n1/2P3P1/PP2BP1P/RNBQK2R w KQkq - 1 10",
+        "moves": [
+          "f3",
+          "h4",
+          "fxg4",
+          "hxg3",
+          "Be3",
+          "Rxh2"
+        ],
+        "annotations": [
+          "White bolsters e4 and tries to blunt the g4-knight with f3 — but it weakens the king's shelter still further and the file Black wants is about to fly open.",
+          "The h-pawn lunges to h4 — the lever. It pries open the h-file where Black's rook already sits, and after the coming trades that file becomes a highway straight to White's king.",
+          "White grabs the knight on g4, winning a piece for the moment — but the king's cover is the real currency here, not material.",
+          "Black ignores the piece and smashes hxg3 — tearing away the pawns in front of White's king and threatening to pour down the h-file onto h2.",
+          "White tries to relieve the pressure by trading off the strong bishop on c5 with Be3.",
+          "The rook crashes into h2: a pawn falls, the white king stands bare in the centre, and the attack has broken through. This is the Stafford dream realised — the exact crash that beat a 2661."
+        ],
+        "learnCues": [
+          "f3 — props e4, weakens the king",
+          "…h4 — pry the h-file open",
+          "fxg4 — White grabs the knight",
+          "…hxg3 — rip the shelter apart",
+          "Be3 — White tries to trade",
+          "…Rxh2 — the rook crashes in"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "h8",
+              "to": "h2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "h-file storm — the crash on h2",
+        "intro": "From the main-line attacking position, watch Black pry open the h-file and crash through — the exact plan from Rosen's win over FarewellToKings (2661).",
+        "sources": [
+          "concept:pos-initiative",
+          "concept:att-kingside-storm",
+          "https://www.chess.com/openings/Stafford-Gambit",
+          "https://lichess.org/study/34oRtfLM"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericstafford-nc3-openh",
+    "openingId": "pro-ericrosen-stafford",
+    "criticalPositionFen": "r1b1k2r/ppp2pp1/2pq4/8/4P1p1/2NPP3/PPP3PP/R2QK2R w KQkq - 1 11",
+    "title": "5.Nc3 — open the h-file and invade (Five Knights)",
+    "overview": "In the 5.Nc3 line White's bishop trade on g4 hands Black exactly what the gambit wants: after …hxg4 the h-file is open with the rook already on it, and …Bxe3, fxe3 has shattered White's kingside pawns. The plan is to castle queenside, bring both rooks to bear, and invade down the h-file onto h2 and h1. Follows Rosen's win over alicanelia29 (2787).",
+    "pawnBreaks": [
+      "…the g4-pawn cramps White’s kingside after the bishop trade"
+    ],
+    "pieceManeuvers": [
+      "…Be6 — the light bishop joins via the open diagonal",
+      "…Rxh2 then …Rxh1 — invade the open h-file and win the exchange",
+      "…O-O-O — bring the second rook into the attack"
+    ],
+    "strategicThemes": [
+      "Open h-file with the rook already on it",
+      "White’s shattered e3/g-pawns and exposed king",
+      "Initiative for the pawn, converting on the kingside"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1b1k2r/ppp2pp1/2pq4/8/4P1p1/2NPP3/PPP3PP/R2QK2R w KQkq - 1 11",
+        "moves": [
+          "Qe2",
+          "Be6",
+          "O-O-O",
+          "Rxh2",
+          "d4",
+          "Rxh1"
+        ],
+        "annotations": [
+          "White develops the queen to e2 to connect the rooks and prepare to castle out of the danger — but it is already too late on the kingside.",
+          "Black brings the light bishop to e6, completing development along the diagonal the early dxc6 opened up, and eyeing White's queenside.",
+          "Black castles long — the king tucks away on the queenside and, crucially, the a8-rook is now ready to follow its partner toward the white king.",
+          "The rook invades on h2, snatching a pawn and parking on the second rank right next to White's king.",
+          "White lashes out in the centre with d4, but it does nothing to stop the h-file invasion.",
+          "Rxh1 wins the exchange and leaves Black materially ahead with the initiative intact — the open h-file decided it, exactly as it did against a 2787."
+        ],
+        "learnCues": [
+          "Qe2 — White connects, tries to castle",
+          "…Be6 — the bishop joins in",
+          "…O-O-O — second rook toward the king",
+          "…Rxh2 — invade the open file",
+          "d4 — too slow to matter",
+          "…Rxh1 — win the exchange"
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "c8",
+              "to": "e6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "h8",
+              "to": "h2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "h2",
+              "to": "h1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "5.Nc3 — h-file invasion",
+        "intro": "With the h-file open and White's pawns wrecked, Black castles long and storms down the file — Rosen's plan from his win over alicanelia29 (2787).",
+        "sources": [
+          "concept:pos-initiative",
+          "concept:att-kingside-storm",
+          "https://www.chess.com/openings/Stafford-Gambit",
+          "https://lichess.org/study/34oRtfLM"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericstafford-fourknights-bishop",
+    "openingId": "pro-ericrosen-stafford",
+    "criticalPositionFen": "r1bqk2r/1pp2pp1/p1np1n1p/4p3/2B1P3/2NPPN1P/PPP3P1/R2Q1RK1 b kq - 0 9",
+    "title": "Four Knights — trade the c4-bishop, play on the doubled pawns",
+    "overview": "The 3.Nc3 Four Knights is Rosen's highest-scoring branch (68%), and it is positional, not a mating attack — so we teach it honestly. After White trades the dark bishops and doubles its own e-pawns, Black challenges the strong light-squared bishop with …Na5 and …Nxb3, plays …c6 to build a small centre, and lifts the queen to b6 to pressure the queenside and the backward b-pawn. A patient grind, the way he beat a 3165.",
+    "pawnBreaks": [
+      "…c6 — stake a small centre and free the position"
+    ],
+    "pieceManeuvers": [
+      "…Na5 — hit the strong c4-bishop",
+      "…Nxb3 — trade off White’s best piece",
+      "…Qb6 — pressure b2/b3 and the queenside"
+    ],
+    "strategicThemes": [
+      "Neutralise White’s active light bishop",
+      "Target the doubled/backward white pawns",
+      "Patient positional play — equal and pleasant for Black"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bqk2r/1pp2pp1/p1np1n1p/4p3/2B1P3/2NPPN1P/PPP3P1/R2Q1RK1 b kq - 0 9",
+        "moves": [
+          "Na5",
+          "Bb3",
+          "Nxb3",
+          "axb3",
+          "c6",
+          "Qe1",
+          "Qb6"
+        ],
+        "annotations": [
+          "Black starts the plan with Na5 — the knight heads for the c4-bishop, White's most active piece, to trade it off.",
+          "White preserves the bishop with Bb3, sidestepping the trade for a moment.",
+          "Black takes anyway with Nxb3, removing White's best minor piece and forcing a concession.",
+          "White recaptures axb3, but now its queenside pawns are doubled and the b-file half-opens — a permanent structural target.",
+          "Black plays c6, staking a modest centre, freeing the light bishop and securing the d5-square for later.",
+          "White regroups with Qe1, looking for activity, but Black is already comfortable.",
+          "The queen swings to b6, eyeing b2 and b3 and the soft queenside. Black has fully equalised and has the clearer plan — the patient route Rosen used to beat a 3165."
+        ],
+        "learnCues": [
+          "…Na5 — go after the bishop",
+          "Bb3 — White keeps it, briefly",
+          "…Nxb3 — trade the best piece",
+          "axb3 — White’s pawns double",
+          "…c6 — stake a small centre",
+          "Qe1 — White regroups",
+          "…Qb6 — pressure the queenside"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "c6",
+              "to": "a5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "a5",
+              "to": "b3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d8",
+              "to": "b6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Four Knights — trade and grind",
+        "intro": "The positional plan in his best-scoring line: trade the c4-bishop and pressure the doubled pawns — Rosen's route to beating a 3165.",
+        "sources": [
+          "concept:pos-initiative",
+          "concept:att-kingside-storm",
+          "https://www.chess.com/openings/Stafford-Gambit",
+          "https://lichess.org/study/34oRtfLM"
+        ]
+      }
+    ]
   }
 ]

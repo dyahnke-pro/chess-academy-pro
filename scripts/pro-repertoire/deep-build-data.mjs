@@ -206,6 +206,21 @@ const OPENINGS = {
       'e6-french':     { label: "vs ...e6 French-Reti (451 games)",        prefix: ['Nf3','e6','g3'] },
     },
   },
+  'stafford': {
+    color: 'black',
+    studentUsername: 'imrosen',
+    variations: {
+      // 3.Nxe5 Nc6 4.Nxc6 dxc6 — the Stafford structure. 5.d3 main spine.
+      'accepted-d3':     { label: 'Accepted, 5.d3 Bc5 (main)',     prefix: ['e4','e5','Nf3','Nf6','Nxe5','Nc6','Nxc6','dxc6','d3'] },
+      'accepted-nc3':    { label: 'Accepted, 5.Nc3',               prefix: ['e4','e5','Nf3','Nf6','Nxe5','Nc6','Nxc6','dxc6','Nc3'] },
+      'accepted-e5':     { label: 'Accepted, 5.e5 space grab',     prefix: ['e4','e5','Nf3','Nf6','Nxe5','Nc6','Nxc6','dxc6','e5'] },
+      'nf3-retreat':     { label: '4.Nf3 (declines 2nd knight)',   prefix: ['e4','e5','Nf3','Nf6','Nxe5','Nc6','Nf3'] },
+      'four-knights':    { label: '3.Nc3 Four Knights (decline)',  prefix: ['e4','e5','Nf3','Nf6','Nc3'] },
+      'd4-push':         { label: '3.d4 push',                     prefix: ['e4','e5','Nf3','Nf6','d4'] },
+      'bc4-line':        { label: '3.Bc4 bishop out',              prefix: ['e4','e5','Nf3','Nf6','Bc4'] },
+      'd3-quiet':        { label: '3.d3 quiet',                    prefix: ['e4','e5','Nf3','Nf6','d3'] },
+    },
+  },
   'alapin-sicilian': {
     color: 'white',
     studentUsername: 'DanielNaroditsky',

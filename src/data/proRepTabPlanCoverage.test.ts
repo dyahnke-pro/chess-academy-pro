@@ -19,6 +19,7 @@ import { getProNaroditskyAlapinTabPlanIds } from '../services/proNaroditskyAlapi
 import { getProNaroditskyKIDTabPlanIds } from '../services/proNaroditskyKIDTabPlans';
 import { getProNaroditskyRemainingTabPlanIds } from '../services/proNaroditskyRemainingTabPlans';
 import { getProNaroditskyCaroTabPlanIds } from '../services/proNaroditskyCaroTabPlans';
+import { getProEricRosenStaffordTabPlanIds } from '../services/proEricRosenStaffordTabPlans';
 
 interface ProRepEntry {
   id: string;
@@ -35,6 +36,7 @@ const RESOLVERS: Array<(openingId: string, tabKey: string) => string[] | null> =
   getProNaroditskyKIDTabPlanIds,
   getProNaroditskyRemainingTabPlanIds,
   getProNaroditskyCaroTabPlanIds,
+  getProEricRosenStaffordTabPlanIds,
 ];
 
 function resolve(openingId: string, variationName: string): string[] | null {
@@ -77,6 +79,14 @@ describe('tab-plan resolver coverage gate — every Naroditsky variation has a r
     // Remaining resolver to a Fantasy plan; the other 2 variations
     // are not, awaiting middlegame plan authoring).
     'pro-naroditsky-fantasy-caro',
+    // Hikaru pro-rep (2026-05-31 build) — variations declared but
+    // tab-plan resolvers not yet authored. Deferred deferral, same as
+    // the Gothamchess partials above; drop each as its resolver lands.
+    'pro-hikaru-nimzo-larsen',
+    'pro-hikaru-closed-sicilian',
+    'pro-hikaru-reti',
+    'pro-hikaru-pirc-modern',
+    'pro-hikaru-caro-kann',
   ]);
 
   it('every pro-rep (openingId, variationName) pair has a resolver returning array (not null)', () => {

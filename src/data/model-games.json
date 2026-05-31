@@ -7698,5 +7698,131 @@
       "https://lichess.org/Q8UAkVtW",
       "concept:pos-initiative"
     ]
+  },
+  {
+    "id": "mg-pro-ericrosen-stafford-main-2",
+    "openingId": "pro-ericrosen-stafford",
+    "studentSide": "black",
+    "white": "gmcorrales",
+    "black": "Eric Rosen",
+    "whiteElo": 2815,
+    "blackElo": 2606,
+    "result": "0-1",
+    "year": 2019,
+    "event": "chess.com blitz (2019-11-19)",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 Be3 Bxe3 fxe3 Ng4 Bxg4 hxg4 Qe2 Qg5 Nc3 Be6 O-O-O O-O-O a3 Rh5 Rdf1 Rdh8 g3 Qh6 Rf2 f6 Rhf1 Rxh2 Nd1 Rh3 Rg2 Qg5 b3 Qe5 Kb1 Rxg3 Rxg3 Qxg3 d4 Rh2 Qd3 Qh4 d5 Bd7 e5 cxd5 Qxd5 Qh7 e4 Rh5 exf6 Rxd5 f7 Rxd1+ Rxd1 Qh8 Rf1 Qf8 e5 Be6 Rf4 g3",
+    "overview": "A win over a 2815-rated grandmaster in the d3 main line where White throws in an early Be3. White trades the dark bishops and tries to consolidate the extra pawn, but the recapture fxe3 leaves the kingside ragged; Rosen pours rooks down the half-open h-file and converts the initiative into a full point.",
+    "sources": [
+      "https://api.chess.com/pub/player/imrosen/games/archives",
+      "https://www.chess.com/game/live/4222630591"
+    ]
+  },
+  {
+    "id": "mg-pro-ericrosen-stafford-main-1",
+    "openingId": "pro-ericrosen-stafford",
+    "studentSide": "black",
+    "white": "FarewellToKings2112",
+    "black": "Eric Rosen",
+    "whiteElo": 2661,
+    "blackElo": 2740,
+    "result": "0-1",
+    "year": 2024,
+    "event": "chess.com blitz (2024-04-07)",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4 Qh4 g3 Qf6 f3 h4 fxg4 hxg3 Be3 Rxh2 Rg1 Qh4 Kd2 Bxg4 Re1 Qh5 dxc5 Bxe2 Rxe2 O-O-O+ Bd4 g2 Rxg2 Rxg2+ Kc1 Qh2 Nd2 Rxd4 cxd4 Rg1 Kc2 Rxd1 Rxd1 g5 Rf1 g4 Rxf7 g3 Kd3 g2 Nf3 Qg3",
+    "overview": "Rosen's signature h-file storm in its purest form. Out of the accepted main line he plays Bc5, h5, Ng4 and Qh4, then rips the h-file open with h4 and crashes through on h2 and g3. A textbook demonstration that the sacrificed pawn buys an attack the defender cannot survive at speed.",
+    "sources": [
+      "https://api.chess.com/pub/player/imrosen/games/archives",
+      "https://www.chess.com/game/live/106272424117"
+    ]
+  },
+  {
+    "id": "mg-pro-ericrosen-stafford-nc3",
+    "openingId": "pro-ericrosen-stafford",
+    "studentSide": "black",
+    "white": "alicanelia29",
+    "black": "Eric Rosen",
+    "whiteElo": 2787,
+    "blackElo": 2873,
+    "result": "0-1",
+    "year": 2026,
+    "event": "chess.com blitz (2026-04-14)",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5 Be2 h5 d3 Ng4 Bxg4 hxg4 Be3 Bxe3 fxe3 Qd6 Qe2 Be6 O-O-O Rxh2 d4 Rxh1 Rxh1 O-O-O e5 Qe7 Qf2 Qg5 Qf4 Qxf4 exf4 Rxd4 g3 Rd8 Rh7 Rg8 Ne2 Bf5 Rh5 Be4 Rg5 Bf3 Nd4 Rd8 c3 g6 f5 c5 fxg6 cxd4 gxf7 Bd5 cxd4 Bxf7 Rxg4 Bxa2 Kd2 c5 Kc3 cxd4+ Rxd4 Rxd4 Kxd4 Be6 Kc5 Kc7 b4 a6 Kd4 b6 Ke4 Kc6 Kf4 Kb5 g4 Kxb4 g5 a5 g6 a4 Kg5 a3 Kf6 Bg8 e6 a2 e7 a1=Q+",
+    "overview": "The Nc3 line against a 2787. After Bxg4 hxg4 the h-file opens with Black's rook already on it, Bxe3 then fxe3 shatters White's pawns, and the queen swings to d6 to join the assault on h2. A clean model of why developing the knight does nothing about Black's open lines.",
+    "sources": [
+      "https://api.chess.com/pub/player/imrosen/games/archives",
+      "https://www.chess.com/game/live/167282947078"
+    ]
+  },
+  {
+    "id": "mg-pro-ericrosen-stafford-e5",
+    "openingId": "pro-ericrosen-stafford",
+    "studentSide": "black",
+    "white": "IljaJoke",
+    "black": "Eric Rosen",
+    "whiteElo": 2480,
+    "blackElo": 2628,
+    "result": "0-1",
+    "year": 2021,
+    "event": "chess.com blitz (2021-03-23)",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4 Qh4 Qf3 f6 Nc3 Bb4 a3 Nxc3 bxc3 Ba5 g3 Qxd4 Bd2 Qxe5+ Be2 Bh3 O-O-O O-O-O g4 h5 Qxh3 Qxe2 g5+ Kb8 gxf6 gxf6 Rhe1 Qc4 Kb2 Bb6 Be3 Qb5+ Ka2 Rxd1 Rxd1 Qe2 Rd2 Qc4+ Kb2 Ba5 Bd4 Qb5+ Ka2 Qg5 Re2 Qd5+ Kb2 Qb5+ Ka2 Qxe2",
+    "overview": "The sharp e5 space grab. The knight lands on the e4 outpost, Qh4 hits f2, and f6 undermines the advanced pawn while White's king is stuck in the centre. Rosen shows how to play the lower-scoring line for maximum practical pressure and grind out the win.",
+    "sources": [
+      "https://api.chess.com/pub/player/imrosen/games/archives",
+      "https://www.chess.com/game/live/10261316071"
+    ]
+  },
+  {
+    "id": "mg-pro-ericrosen-stafford-nf3",
+    "openingId": "pro-ericrosen-stafford",
+    "studentSide": "black",
+    "white": "RestartingChess",
+    "black": "Eric Rosen",
+    "whiteElo": 2796,
+    "blackElo": 2716,
+    "result": "0-1",
+    "year": 2021,
+    "event": "chess.com bullet (2021-04-13)",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nf3 Nxe4 Nc3 d5 Bb5 Bb4 O-O O-O a3 Bxc3 bxc3 Bg4 h3 Bh5 Bb2 Ne5 Be2 Nc4 Bxc4 dxc4 d3 Nd6 g4 Bg6 Bc1 Qf6 Be3 cxd3 cxd3 Rad8 Bd4 Qf4 Be5 Qh6 d4 f6 Bg3 Nf7 Nh4 Be4 Qc1 Qxc1 Raxc1 c6 Rce1 Bd5 Nf5 Bc4 Re7 Bxf1 Kxf1 b6 Rxa7 Ra8 Rxa8 Rxa8 Ne7+ Kf8 Nxc6 Rxa3 Nb4 Rxc3 Nd5 Rc1+ Kg2 b5 Bf4 Rd1 Be3 Nd6 Nc3 Rd3 Nd5 Nc4 Nb4 Nxe3+ fxe3 Rxe3 Nd5 Re4 Nc7 Ke7 Nxb5 Kd7 Kf3 Re1 Nc3 Re8 Ne4 Ra8 Nc5+ Kc6 Nd3 Kd5 Nf4+ Kc4 Nh5 Kxd4 Nxg7 Ke5 Nf5 Ra3+ Kg2 Kf4 Nd4 Ra2+ Kf1 Kg3 Ne6 Kf3 g5 Ra1#",
+    "overview": "When White declines with the Nf3 retreat, there are no fireworks — Black recaptures on e4, reaches a level Petroff-style game, and outplays a 2796 in a long technical battle. The lesson: respect the correct decline, equalise cleanly, and win later.",
+    "sources": [
+      "https://api.chess.com/pub/player/imrosen/games/archives",
+      "https://www.chess.com/game/live/12011544645"
+    ]
+  },
+  {
+    "id": "mg-pro-ericrosen-stafford-fourknights",
+    "openingId": "pro-ericrosen-stafford",
+    "studentSide": "black",
+    "white": "wonderfultime",
+    "black": "Eric Rosen",
+    "whiteElo": 3165,
+    "blackElo": 2701,
+    "result": "0-1",
+    "year": 2021,
+    "event": "chess.com bullet (2021-10-04)",
+    "pgn": "e4 e5 Nf3 Nf6 Nc3 Bc5 Bc4 d6 h3 Nc6 d3 a6 Be3 h6 O-O Bxe3 fxe3 Na5 Bb3 Nxb3 axb3 c6 Qe1 Qb6 Nh4 Be6 Kh2 O-O-O Nf5 Bxf5 Rxf5 h5 Na4 Qc7 Qg3 Rh6 Raf1 Qe7 Nc3 Rg6 Qf3 Rh8 Ne2 h4 c4 c5 Nc3 Rf8 Qf2 Kb8 Kh1 Rg3 Ne2 Rg6 Qxh4 Rh6 Qg3 Rg6 Qf3 Ka7 Kg1 Rh8 Nc3 Rf8 Rf2 Rh6 Qe2 Rg6 Qf1 Rh8 R2f3 Rf8 Qf2 Qe6 Nd5 Rg8 Nxf6 gxf6 Kh2 Qe7 Rxf6 Rxg2+ Qxg2 Rxg2+ Kxg2 Qf8 Rxf7 Qg8+ Kh2 Kb6 Re7 Qg5 Ref7 Qh4 Rf2 Qh5 R7f3 Qh6 Rg3 Ka5 Kg2 Qh5 Rg4 Qh6 Kg3 Qxe3+ Rf3 Qh6 h4 Qc1 h5 Qg1+ Kh4 Qh1+ Rh3 Qe1+ Rgg3 Qc1 h6 Qxh6+ Kg4 Qf4+ Kh5 Qc1 Rg4 Qd1 Rg3 Kb4 Kg6 Qh1 Kf6 Qd1 Ke6 Qf1 Kxd6 Qf8+ Kxe5 Qe8+ Kf5 Qd8 e5 Qc8+ Ke4 Qf8 Ke3 Qe8 Rf4 Qxe5+ Kf3 Qxb2 Rgg4 Qc1 Rg3 Qf1+ Kg4 Qd1+ Kg5 a5 Rgg4 Qc1 d4 cxd4 Kf5 d3 c5+ Kc3 Rc4+ Kb2 Rxc1 Kxc1 Rg1+ Kc2 Rg2+ d2 c6 bxc6 Ke4 Kc1 Rxd2 Kxd2 Kd4 Kc2 Kc4 Kb2 b4 a4 b5 cxb5+ Kxb5 a3 Kb6 a2",
+    "overview": "A win over a 3165 in the Four Knights, where White sidesteps the gambit with an early Nc3 — Rosen's highest-scoring branch. He answers with the Stafford-spirit Bc5 rather than the symmetric knight move, keeps the f2 pressure latent, trades the dark bishops, and grinds the resulting Italian-style middlegame down to a win.",
+    "sources": [
+      "https://api.chess.com/pub/player/imrosen/games/archives",
+      "https://www.chess.com/game/live/27063053245"
+    ]
+  },
+  {
+    "id": "mg-pro-ericrosen-stafford-d4",
+    "openingId": "pro-ericrosen-stafford",
+    "studentSide": "black",
+    "white": "AlmasRakhmatullaev",
+    "black": "Eric Rosen",
+    "whiteElo": 2982,
+    "blackElo": 2878,
+    "result": "0-1",
+    "year": 2025,
+    "event": "chess.com blitz (2025-09-19)",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 d4 Nxe5 dxe5 Nxe4 Bd3 Nc5 O-O Nxd3 Qxd3 d6 Re1 Be6 Qb5+ Qd7 Qxb7 Rc8 Nc3 dxe5 Be3 Bd6 Rad1 O-O Bc5 Rb8 Qxa7 Qc6 Bxd6 cxd6 Qa3 Rfd8 Ne4 Qxc2 Rd2 Qc4 b3 Qc6 Rxd6 Qc2 h3 h6 Qa7 Ra8 Rxd8+ Rxd8 Nc5 Bd5 Nd7 Ra8 Qe3 Qg6 g4 f6 Rd1 Bc6 Nb6 Rb8 Nc4 h5 f3 hxg4 hxg4 Bb5 Rd6 Bxc4 bxc4 Qc2 Rd2 Qxc4 Qd3 Qxd3 Rxd3 Rb1+ Kf2 Rb2+ Ke3 Rxa2 Ke4 Ra4+ Kf5 Kh7 g5 Rf4+ Ke6 fxg5 Kxe5 Rf7 Ke6 Kg6 Ke5 Rf6 Ke4 Rf4+ Ke3 Rf6 Kf2 Re6 Kg3 Rf6 Rd5 Kh5 Rd4 g6 Rg4 Kh6 Re4 Rf5 Re1 Rf4 Rh1+ Kg7 Re1 Kf6 Re4 Rf5 Rg4 Re5 Re4 Kf5 Rxe5+ Kxe5 Kg4 Kf6 f4 gxf4 Kxf4 g5+ Kg4 Kg6 Kg3 Kh6 Kg2 Kg7 Kg3 Kf6 Kg2 Kg6 Kg3 Kh5",
+    "overview": "A win over a 2982 in the d4 line. White tries to keep the pawn by propping the knight, but Nxe5, dxe5, then Nxe4 levels the material with a dominant central knight; d6 breaks the e5-pawn and Black emerges better, then converts a long endgame. Declining with d4 simply hands Black an easy game.",
+    "sources": [
+      "https://api.chess.com/pub/player/imrosen/games/archives",
+      "https://www.chess.com/game/live/143294222474"
+    ]
   }
 ]

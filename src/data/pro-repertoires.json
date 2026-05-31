@@ -2629,6 +2629,100 @@
           ]
         }
       ]
+    },
+    {
+      "id": "pro-ericrosen-stafford",
+      "playerId": "ericrosen",
+      "eco": "C42",
+      "name": "Stafford Gambit (Eric Rosen)",
+      "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4 Qh4 g3 Qf6",
+      "color": "black",
+      "style": "Trappy, Attacking",
+      "overview": "This is the Stafford Gambit exactly as Eric Rosen plays it — not a textbook curiosity, his ACTUAL weapon. In 18,788 of his chess.com games the 1.e4 e5 2.Nf3 Nf6 complex is his most-played answer to e4, and the accepted Stafford (3.Nxe5 Nc6) is its sharp heart. The deal is blunt: we hand White a pawn on e5, recapture toward the centre with dxc6 to open the d-file and the c8-h3 diagonal, and then throw everything at f2 — Bc5, h5, Ng4, Qh4. The whole opening rests on three ideas: (1) the pawn buys us a development lead and an initiative White must survive move by move, (2) f2 is the target in almost every line, and (3) the …h5 / …Ng4 / …Qh4 storm — the exact pattern Rosen used to mate GM Sergey Erenburg in 14 moves at the 2024 World Blitz Championship. It is an honest gambit, not an equalizer: a calm White player who plays h3, develops, castles and builds a c3-d4 fortress keeps the pawn. But over the board, against the clock, almost nobody finds that path — and Rosen scores heavily on the chaos.",
+      "keyIdeas": [
+        "Recapture with dxc6, never bxc6. Taking toward the centre opens the d-file for the queen and the c8-h3 diagonal for the light bishop — both bishops and the queen get open roads, which is the entire compensation for the sacrificed pawn.",
+        "f2 is the bullseye. The Bc5 + Ng4 + Qh4 battery converges on f2 in nearly every accepted line. When you do not know what to do, ask which piece can add another attacker to f2 or the h-file.",
+        "Play …h5 before …Ng4. The h-pawn lunge looks anti-positional but it is deliberate bait: it stops White's bishop from chasing the knight off g4 and opens the h-file for the rook still on h8. It is the move that makes the attack work.",
+        "Keep the initiative or the gambit dies. The moment you stop attacking and start defending, the extra pawn talks. Castle queenside, push the h-pawn, and hunt the king — do not waste tempi trying to win the pawn back."
+      ],
+      "traps": [
+        "The Légal's Mate trap: after 5.d3 Bc5 the natural-looking 6.Bg5 (pinning the f6-knight) loses on the spot to 6…Nxe4!! — a queen sacrifice. 7.Bxd8 Bxf2+ 8.Ke2 Bg4 is checkmate; the f2-bishop blankets the king's flight squares while the bishop on g4 delivers mate. White wins the queen and gets mated anyway.",
+        "If White ever develops the dark bishop to e3 without prophylaxis, …Bxe3 followed by …fxe3 shatters the kingside pawns and …Qh4+ / …Qd6 floods in on the open h-file."
+      ],
+      "warnings": [
+        "This is a gambit. Against a calm h3, Be2, O-O and a c3-d4 centre, White keeps the pawn — so do not bank on a forced win. Play it for the practical initiative, and switch to grinding (…Qd6, …O-O-O, pressure) when the cheap mate is not there.",
+        "Do not recapture with …bxc6. It leaves the queen and light bishop boxed in and throws away the whole point of the gambit."
+      ],
+      "variations": [
+        {
+          "name": "Five Knights (5.Nc3)",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5 Be2 h5 d3 Ng4 Bxg4 hxg4 Be3 Bxe3 fxe3 Qd6",
+          "explanation": "White develops the knight to c3 instead of d3. We carry on with Bc5 and h5; after Ng4 White usually trades with Bxg4, and we recapture …hxg4 to pry open the h-file with our rook already on it. …Bxe3 then …fxe3 shatters White's pawns, the queen lands on d6 eyeing h2, and Black does all the attacking a pawn down. Rosen won this exact structure vs a 2787.",
+          "sources": [
+            "concept:pos-initiative",
+            "https://www.chess.com/openings/Stafford-Gambit",
+            "https://lichess.org/study/34oRtfLM"
+          ]
+        },
+        {
+          "name": "Space Grab (5.e5)",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4 Qh4 Qf3 f6 Nc3 Bb4",
+          "explanation": "White's most ambitious try, grabbing space with e5 and kicking the knight — which lands on the dream e4 outpost. …Qh4 hits f2, …f6 undermines the e5-pawn, and …Bb4 pins the knight while White still cannot castle. The sharpest line and a touch lower-scoring, so play it for the initiative; Rosen converted it vs a 2480.",
+          "sources": [
+            "concept:pos-initiative",
+            "https://www.chess.com/openings/Stafford-Gambit",
+            "https://lichess.org/study/34oRtfLM"
+          ]
+        },
+        {
+          "name": "Knight Retreat (4.Nf3)",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nf3 Nxe4 Nc3 d5 Bb5 Bb4 O-O O-O",
+          "explanation": "White grabs on e5 then declines the gambit by retreating Nf3 rather than taking again on c6. We simply recapture …Nxe4, reaching a level, harmonious Petroff-style game; …d5 props the centre knight, …Bb4 pins, both castle. The lesson is restraint — when White declines correctly, equalise cleanly and outplay later. Rosen beat a 2796 from here.",
+          "sources": [
+            "concept:pos-initiative",
+            "https://www.chess.com/openings/Stafford-Gambit",
+            "https://lichess.org/study/34oRtfLM"
+          ]
+        },
+        {
+          "name": "Four Knights Decline (3.Nc3)",
+          "pgn": "e4 e5 Nf3 Nf6 Nc3 Bc5 Bc4 d6 h3 Nc6 d3 a6 Be3 h6 O-O Bxe3 fxe3",
+          "explanation": "The cleanest anti-Stafford: White never takes on e5. We answer not with the symmetric …Nc6 but with …Bc5 in Stafford spirit, eyeing f2 — an Italian-style middlegame where we know the kingside ideas cold. Sound, equal, and Rosen's HIGHEST-scoring line of the whole complex (68%); he ground it down vs a 3165.",
+          "sources": [
+            "concept:pos-initiative",
+            "https://www.chess.com/openings/Stafford-Gambit",
+            "https://lichess.org/study/34oRtfLM"
+          ]
+        },
+        {
+          "name": "Pawn Returned (4.d4)",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 d4 Nxe5 dxe5 Nxe4 Bd3 Nc5 O-O Nxd3 Qxd3 d6",
+          "explanation": "White grabs on e5 then props the knight with d4 to keep the pawn, but the e5-knight is loose: …Nxe5 dxe5 …Nxe4 levels material with a superb central knight. …Nc5 hits the bishop, …d6 breaks the e5-pawn, and Black is comfortable to better. Rosen used this to beat a 2982 — declining with d4 just hands us an easy game.",
+          "sources": [
+            "concept:pos-initiative",
+            "https://www.chess.com/openings/Stafford-Gambit",
+            "https://lichess.org/study/34oRtfLM"
+          ]
+        }
+      ],
+      "trapLines": [
+        {
+          "name": "Légal's Mate Trap (6.Bg5??)",
+          "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2 Ke2 Bg4",
+          "explanation": "The trap that built the Stafford's reputation. White's 6.Bg5 looks like a clean pin of the f6-knight to the queen. It loses instantly to 6…Nxe4!! — and if White grabs the queen with 7.Bxd8, then 7…Bxf2+ 8.Ke2 Bg4 is checkmate. The bishop on f2 covers the king's escape squares while the bishop on g4 mates. White is up a whole queen and dead lost.",
+          "sources": [
+            "concept:mate-legal",
+            "concept:tac-sacrifice",
+            "https://www.chess.com/openings/Stafford-Gambit"
+          ]
+        }
+      ],
+      "warningLines": [],
+      "sources": [
+        "concept:pos-initiative",
+        "https://www.chess.com/openings/Stafford-Gambit",
+        "https://lichess.org/study/34oRtfLM"
+      ]
     }
   ]
 }

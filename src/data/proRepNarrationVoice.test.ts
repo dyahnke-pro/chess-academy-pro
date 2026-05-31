@@ -26,7 +26,11 @@ import cmRaw from './common-mistakes.json' assert { type: 'json' };
 import mgRaw from './model-games.json' assert { type: 'json' };
 
 const LESSON_DIR = join(process.cwd(), 'src/data/lessons');
-const PRO_RE = /^pro(Gothamchess|Naroditsky).*\.ts$/;
+// Match every pro-rep lesson file regardless of player (proGothamchess*,
+// proNaroditsky*, proEricRosen*, …). Generalized 2026-05-31 so a new player's
+// lessons cannot escape the spoken-voice gate (proLessonFiles already excludes
+// *.test.ts). Was /^pro(Gothamchess|Naroditsky).*\.ts$/.
+const PRO_RE = /^pro[A-Z][A-Za-z]*\.ts$/;
 
 function proLessonFiles(): string[] {
   return readdirSync(LESSON_DIR).filter((f) => PRO_RE.test(f) && !f.endsWith('.test.ts'));

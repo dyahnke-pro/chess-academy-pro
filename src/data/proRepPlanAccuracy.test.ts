@@ -23,7 +23,10 @@ interface PlayableLine { fen?: string; moves?: string[]; annotations?: string[] 
 interface Plan { id: string; openingId?: string; overview?: string; criticalPositionFen: string; playableLines?: PlayableLine[] }
 
 const plans: Plan[] = Array.isArray(mpRaw) ? (mpRaw as Plan[]) : ((mpRaw as { plans?: Plan[] }).plans || []);
-const PRO = plans.filter((p) => /pro-?(gothamchess|naroditsky)|progothamchess|pronaro/i.test(p.openingId || p.id || ''));
+// Every pro-rep plan regardless of player. Generalized 2026-05-31 (any `pro-`
+// openingId, plus the legacy progothamchess/pronaro id spellings) so a new
+// player's plan narration cannot escape the board-truth gate.
+const PRO = plans.filter((p) => /^pro-/i.test(p.openingId || '') || /pro-?(gothamchess|naroditsky|ericrosen)|progothamchess|pronaro/i.test(p.openingId || p.id || ''));
 
 const CLAIM_RE = /\b([a-h][1-8])-(pawn|knight|bishop|rook|queen|king)\b/gi;
 const PIECE_LETTER: Record<string, string> = { pawn: 'p', knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k' };
