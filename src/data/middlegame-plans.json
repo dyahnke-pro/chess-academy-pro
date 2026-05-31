@@ -8193,17 +8193,27 @@
   {
     "id": "mp-frenchdefence-classical",
     "openingId": "french-defence",
-    "criticalPositionFen": "r1b2rk1/pp1n2pp/2n1pq2/2pp4/3P1P2/2N2N2/PPPQ2PP/2KR1B1R w - - 0 12",
+    "criticalPositionFen": "rnb1k2r/pppnqppp/4p3/3pP3/3P4/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7",
     "title": "Classical: The Opposite-Wing Race",
     "overview": "Kings on opposite wings means a pure attacking race. White's king sits on c1, so Black throws the queenside pawns and pieces at it: open the centre with …cxd4, swing the knight to b6 and c4, and roll …b5–b4. Speed beats material here — Black does not defend, Black attacks first.",
     "pawnBreaks": [
-      "…cxd4 to open the centre",
-      "…b5–b4 the queenside storm at the c1-king"
+      {
+        "move": "…c5 then …c4 — the queenside storm",
+        "explanation": "The …c5 break hits d4, then …c4 clamps and rolls the …b5-b4 pawn storm at White’s castled king.",
+        "fen": "rnb1k2r/pppnqppp/4p3/3pP3/3P4/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7"
+      }
     ],
     "pieceManeuvers": [
-      "…Nb6–c4 into the white camp",
-      "…Rc8 and …a5–b5 down the c- and b-files",
-      "…Qf6 hitting d4"
+      {
+        "piece": "Knight",
+        "route": "…Nc6 — pressure d4",
+        "explanation": "The knight targets the base of White’s pawn chain."
+      },
+      {
+        "piece": "Pawn",
+        "route": "…a6 and …c4 — the queenside lever",
+        "explanation": "Black prepares and launches the …b5-b4 storm toward the white king."
+      }
     ],
     "strategicThemes": [
       "Opposite-side attacks",
@@ -8215,66 +8225,52 @@
     ],
     "playableLines": [
       {
-        "fen": "r1b2rk1/pp1n2pp/2n1pq2/2pp4/3P1P2/2N2N2/PPPQ2PP/2KR1B1R w - - 0 12",
+        "fen": "rnb1k2r/pppnqppp/4p3/3pP3/3P4/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7",
         "moves": [
-          "g3",
-          "cxd4",
-          "Nxd4",
-          "Nb6"
+          "f4",
+          "a6",
+          "Nf3",
+          "c5",
+          "Qd2",
+          "Nc6",
+          "O-O-O",
+          "c4"
         ],
         "annotations": [
-          "White plays g3 to shelter the king and free the f1-bishop.",
-          "Black opens the centre with …cxd4, prising lines toward the white king on c1.",
-          "White recaptures on d4; the centre is open and the race is on.",
-          "Black swings the knight to b6, heading for c4 and the queenside attack — the storm rolls toward c1 while White is still organising."
+          "White bolsters the e5-wedge with f4, the Steinitz Classical's broad pawn front.",
+          "…a6 prepares the queenside expansion, the standard plan against White's space — Black attacks where White's king will go.",
+          "White develops the knight.",
+          "…c5! The thematic French break, striking at the d4-base of White's chain and opening the c-file for the attack.",
+          "White prepares to castle long with Qd2.",
+          "…Nc6 piles onto d4, the focus of Black's pressure.",
+          "White castles queenside, defining the battle: opposite-side castling, a race of pawn storms.",
+          "…c4! Black clamps the queenside and gains the c5-square, fixing White's pawns and rolling the …b5-b4 storm toward White's king — Morozevich's signature aggression against Shirov."
         ],
-        "title": "The Queenside Storm",
         "arrows": [
           [],
           [],
           [],
-          [
-            {
-              "from": "b6",
-              "to": "c4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          []
         ],
+        "title": "The Classical Queenside Storm (Shirov–Morozevich)",
         "highlights": [
           [
             {
-              "square": "g3",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "d4",
+              "square": "a6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -8282,33 +8278,58 @@
           ],
           [
             {
-              "square": "b6",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
+              "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
             },
+            {
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
             {
               "square": "c1",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black breaks with …c5 and storms the queenside.",
         "sources": [
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
         "learnCues": [
-          "g3 — shelter the king",
-          "cxd4 — open lines at the king",
-          "Nxd4 — recapture; the race is on",
-          "Nb6 — head for c4; the storm rolls"
+          "f4 — White props up e5",
+          "…a6 — ready the queenside storm",
+          "Nf3 — White develops",
+          "…c5 — the French break vs d4",
+          "Qd2 — White readies O-O-O",
+          "…Nc6 — pile on d4",
+          "O-O-O — opposite castling",
+          "…c4 — clamp, roll …b5-b4"
         ]
       }
     ]
@@ -8316,17 +8337,27 @@
   {
     "id": "mp-frenchdefence-exchange",
     "openingId": "french-defence",
-    "criticalPositionFen": "r2qr1k1/pp1n1pp1/2pb1n1p/3p4/3P2bB/2PB1N2/PPQN1PPP/R4RK1 w - - 0 12",
+    "criticalPositionFen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
     "title": "Exchange: Seize the Only Open File",
     "overview": "The symmetrical Exchange offers one trump: the open e-file. Black's whole plan is to grab it first with …Re8, trade off the heavy pieces down it, and nurse a tiny initiative. There are no weaknesses — so respect the balance, take the small edge, and never overpress.",
     "pawnBreaks": [
-      "…c5 only if it creates a target, else keep the structure sound",
-      "Avoid loosening pawn moves in a symmetric position"
+      {
+        "move": "…c5 — break the symmetry",
+        "explanation": "Black strikes back in the centre to seize the initiative rather than drift into a dead-equal Exchange.",
+        "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5"
+      }
     ],
     "pieceManeuvers": [
-      "…Re8 grabbing the e-file",
-      "…Bd6 + …Qc7 toward h2",
-      "…Bg4 pinning the f3-knight"
+      {
+        "piece": "Bishop",
+        "route": "…Bf8-d6 — the active diagonal",
+        "explanation": "Black mirrors White’s active bishop, eyeing the kingside."
+      },
+      {
+        "piece": "Queen",
+        "route": "…Qe7 — offer the trade, prepare to castle",
+        "explanation": "Black neutralizes White’s check and reaches comfortable activity."
+      }
     ],
     "strategicThemes": [
       "The open e-file is the only imbalance",
@@ -8338,92 +8369,103 @@
     ],
     "playableLines": [
       {
-        "fen": "r2qr1k1/pp1n1pp1/2pb1n1p/3p4/3P2bB/2PB1N2/PPQN1PPP/R4RK1 w - - 0 12",
+        "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
         "moves": [
-          "Rfe1",
-          "Qc7",
-          "Bg3",
-          "Bxg3"
+          "Bd3",
+          "Bd6",
+          "Qe2+",
+          "Be6",
+          "c4",
+          "dxc4",
+          "Bxc4",
+          "Qe7"
         ],
         "annotations": [
-          "White contests the open e-file with Rfe1 — whoever owns it owns the only imbalance.",
-          "Black redeploys …Qc7, lining the queen up behind the d6-bishop toward h2.",
-          "White offers a trade of dark-squared bishops with Bg3.",
-          "…Bxg3 wins the bishop pair, and with both bishops trained on White's king and the rook on the open e-file, Black is the more active side — the Exchange's symmetry is no draw, it is Black's to press."
+          "White develops the bishop actively, hoping the symmetrical Exchange gives an easy edge.",
+          "…Bd6 mirrors, claiming the same active diagonal — in the Exchange French, whoever plays more energetically gets the chances, and Black refuses to be passive.",
+          "White checks to disrupt.",
+          "…Be6 calmly blocks, completing development and reinforcing the d5-pawn.",
+          "White breaks the symmetry with c4.",
+          "…dxc4 accepts, opening the position for Black's well-placed pieces.",
+          "White recaptures.",
+          "…Qe7 offers the queen trade and clears the back rank for castling, reaching comfortable, active equality. The Exchange is no draw — Grischuk outplayed Carlsen from this balanced, double-edged footing."
         ],
-        "title": "The e-File Edge",
         "arrows": [
           [],
-          [
-            {
-              "from": "c7",
-              "to": "d6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "Active Equality (Carlsen–Grischuk)",
         "highlights": [
           [
             {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "d6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "h2",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g3",
+              "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d6",
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black answers the Exchange with energetic, active play.",
         "sources": [
           "book:french-defence",
-          "concept:pos-center",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
         "learnCues": [
-          "Rfe1 — contest the e-file",
-          "Qc7 — line up toward h2",
-          "Bg3 — offer a bishop trade",
-          "Bxg3 — win the bishop pair, press"
+          "Bd3 — White develops actively",
+          "…Bd6 — mirror, claim the diagonal",
+          "Qe2+ — White checks",
+          "…Be6 — block, support d5",
+          "c4 — White breaks symmetry",
+          "…dxc4 — accept, open lines",
+          "Bxc4 — White recaptures",
+          "…Qe7 — offer the trade, ready O-O"
         ]
       }
     ]
