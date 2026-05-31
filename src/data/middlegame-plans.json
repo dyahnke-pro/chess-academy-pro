@@ -32032,20 +32032,25 @@
     "id": "mp-siciliandragon-antibg5",
     "openingId": "sicilian-dragon",
     "title": "Anti-Dragon Bg5: Seize the Initiative",
-    "criticalPositionFen": "r1bqk2r/pp2ppb1/2np2pp/8/4PBn1/1NN5/PPPQ1PPP/R3KB1R b KQkq - 3 10",
+    "criticalPositionFen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
     "overview": "Against the Bg5 sideline Black plays actively: a6 prepares the b5 expansion, the knight returns to the strong e5 square, and Black charges the queenside while White's slow setup achieves nothing.",
     "pawnBreaks": [
       {
-        "move": "b5",
-        "explanation": "b5 launches the queenside expansion that gives Black the initiative.",
-        "fen": "r1bqk2r/pp2ppb1/2np2pp/8/4PBn1/1NN5/PPPQ1PPP/R3KB1R b KQkq - 3 10"
+        "move": "…a6 and …b5-b4 — the queenside storm",
+        "explanation": "Black kicks the bishop and rolls the queenside pawns at White’s long-castled king.",
+        "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6"
       }
     ],
     "pieceManeuvers": [
       {
+        "piece": "Bishop",
+        "route": "…Bf8-g7 — the Dragon bishop",
+        "explanation": "The fianchettoed bishop rakes toward White’s queenside, where the king has gone."
+      },
+      {
         "piece": "Knight",
-        "route": "Ng4-e5",
-        "explanation": "The knight returns from g4 to the strong central e5 square."
+        "route": "…Nb8-d7 — solid development",
+        "explanation": "The knight blocks the check and supports the queenside counterplay."
       }
     ],
     "strategicThemes": [
@@ -32058,23 +32063,26 @@
     ],
     "playableLines": [
       {
-        "title": "Anti-Dragon Bg5: Seize the Initiative",
-        "fen": "r1bqk2r/pp2ppb1/2np2pp/8/4PBn1/1NN5/PPPQ1PPP/R3KB1R b KQkq - 3 10",
+        "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
         "moves": [
-          "a6",
+          "Bg5",
+          "Bg7",
+          "Bb5+",
+          "Nbd7",
+          "Qe2",
+          "O-O",
           "O-O-O",
-          "Nge5",
-          "h4",
-          "b5",
-          "Kb1"
+          "a6"
         ],
         "annotations": [
-          "a6 — Black prepares the b5 queenside expansion.",
-          "O-O-O — White commits the king to the queenside.",
-          "Nge5 — the knight returns to the strong e5 square.",
-          "h4 — White gestures at the kingside.",
-          "b5 — Black's queenside attack rolls forward.",
-          "Kb1 — White tucks the king as Black charges."
+          "Bg5 — the tricky anti-Dragon, pinning the f6-knight and avoiding the heavily-analysed Yugoslav main lines.",
+          "…Bg7! The Dragon bishop takes the long diagonal regardless, the opening's constant theme.",
+          "White checks with Bb5+ to disrupt Black's development.",
+          "…Nbd7 calmly blocks, developing toward the queenside and keeping the structure intact.",
+          "White develops the queen, preparing to castle long.",
+          "…O-O — Black castles into the coming attack, ready to counter on the queenside.",
+          "White castles queenside, committing to opposite wings — the race is on.",
+          "…a6! Black strikes first on the queenside, kicking the b5-bishop and preparing …b5-b4 toward White's king. In opposite-castling Dragons, Black does not defend — Black attacks, exactly as Gashimov did to outplay Ivanchuk."
         ],
         "arrows": [
           [],
@@ -32082,86 +32090,80 @@
           [],
           [],
           [],
+          [],
+          [],
           []
         ],
+        "title": "Countering the Bg5 Anti-Dragon (Ivanchuk–Gashimov)",
         "highlights": [
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "a6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "a7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
               "square": "b5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
-          ],
-          [
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
           ]
         ],
+        "intro": "Black develops concretely and storms the queenside.",
         "sources": [
-          "concept:att-queenside-attack",
-          "concept:pos-open-file",
+          "concept:pos-initiative",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ],
         "learnCues": [
-          "a6 — prepare …b5",
-          "O-O-O — White commits queenside",
-          "Nge5 — return to e5",
-          "h4 — gesture at the kingside",
-          "b5 — the queenside attack rolls",
-          "Kb1 — tuck as Black charges"
+          "Bg5 — the anti-Dragon pin",
+          "…Bg7 — the Dragon bishop",
+          "Bb5+ — White disrupts",
+          "…Nbd7 — block, develop",
+          "Qe2 — White readies O-O-O",
+          "…O-O — castle into the race",
+          "O-O-O — opposite castling",
+          "…a6 — strike first on the queenside"
         ]
       }
     ]
@@ -32308,20 +32310,25 @@
     "id": "mp-siciliandragon-classical",
     "openingId": "sicilian-dragon",
     "title": "Classical: Comfortable Equality",
-    "criticalPositionFen": "r2q1rk1/pp2ppbp/2npbnp1/8/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 8 10",
+    "criticalPositionFen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
     "overview": "Against the quiet Be2 Classical, Black has no storm to fear. The plan is simple good chess: the knight reroutes to the c4 outpost via a5, trades off White's strong bishop, and Black equalises with every piece on a fine square.",
     "pawnBreaks": [
       {
-        "move": "a5-a4",
-        "explanation": "a5 and a4 gain queenside space and harass the b3-knight in some lines.",
-        "fen": "r2q1rk1/pp2ppbp/2npbnp1/8/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 8 10"
+        "move": "…b5-b4 — the queenside expansion",
+        "explanation": "Black gains space and prepares …b4 to hit the c3-knight, attacking on the wing the Dragon bishop rakes.",
+        "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Knight",
-        "route": "Nc6-a5-c4",
-        "explanation": "The knight swings to the c4 outpost to trade White's good light-squared bishop."
+        "piece": "Bishop",
+        "route": "…Bf8-g7 — the Dragon bishop",
+        "explanation": "The fianchettoed bishop dominates the long diagonal toward White’s queenside."
+      },
+      {
+        "piece": "Pawn",
+        "route": "…a6 and …b5 — the queenside lever",
+        "explanation": "Black expands to open lines on the wing where his bishop points."
       }
     ],
     "strategicThemes": [
@@ -32334,92 +32341,40 @@
     ],
     "playableLines": [
       {
-        "title": "Classical: Comfortable Equality",
-        "fen": "r2q1rk1/pp2ppbp/2npbnp1/8/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 8 10",
+        "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
         "moves": [
-          "f4",
-          "Na5",
-          "f5",
-          "Bc4",
-          "Bxc4",
-          "Nxc4"
+          "Be2",
+          "Bg7",
+          "O-O",
+          "O-O",
+          "Be3",
+          "Nc6",
+          "Nb3",
+          "a6"
         ],
         "annotations": [
-          "f4 — White grabs kingside space.",
-          "Na5 — the knight heads for the c4 outpost.",
-          "f5 — White pushes on, hitting the e6-bishop.",
-          "Bc4 — Black trades off White's good bishop.",
-          "Bxc4 — forced; White must part with the good light bishop Black hunted down.",
-          "Nxc4 — Black is comfortably equal, every piece placed."
+          "Be2 — White chooses the Classical Dragon, a calmer setup than the sharp Yugoslav Attack with its opposite-side castling race.",
+          "…Bg7! The Dragon bishop takes its post on the long diagonal, raking toward White's queenside — the soul of the whole opening.",
+          "White castles kingside, signalling a positional game.",
+          "…O-O — Black castles too; with both kings safe this becomes a manoeuvring battle, not a slugfest.",
+          "White develops the bishop to e3.",
+          "…Nc6 develops and eyes the d4- and b4-squares.",
+          "White repositions the knight to b3 to free the d-file and discourage …d5.",
+          "…a6! Black begins the queenside expansion, preparing …b5-b4 to attack on the wing where the Dragon bishop already points. Black has a comfortable, dynamic game with the easier plan — Carlsen outplayed Svidler from here."
         ],
         "arrows": [
           [],
-          [
-            {
-              "from": "a5",
-              "to": "c4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           [],
           [],
           [],
           []
         ],
+        "title": "The Classical Dragon (Svidler–Carlsen)",
         "highlights": [
           [
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "f5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -32427,27 +32382,62 @@
           ],
           [
             {
-              "square": "c4",
+              "square": "g7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "a5",
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black fianchettoes and expands on the queenside.",
         "sources": [
-          "concept:att-queenside-attack",
-          "concept:pos-open-file",
+          "concept:pos-development",
+          "concept:pos-space",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
         ],
         "learnCues": [
-          "f4 — grab kingside space",
-          "Na5 — head for c4",
-          "f5 — push on, hit the bishop",
-          "Bc4 — trade White’s good bishop",
-          "Bxc4 — recapture",
-          "Nxc4 — comfortably equal"
+          "Be2 — the Classical Dragon",
+          "…Bg7 — the Dragon bishop",
+          "O-O — White castles short",
+          "…O-O — Black castles",
+          "Be3 — White develops",
+          "…Nc6 — develop, eye b4",
+          "Nb3 — White repositions",
+          "…a6 — start the queenside expansion"
         ]
       }
     ]

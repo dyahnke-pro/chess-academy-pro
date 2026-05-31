@@ -6320,12 +6320,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Solid structure, the d5-outpost, patient counterplay.",
     "lessonSummary": "Trade on f3, hold the structure, dominate d5, and grind the advantage home.",
-    "variation": "Two Knights Variation",
     "sources": [
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Two Knights Variation"
   },
   {
     "id": "mg-caro-kann-panov-botvinnik-attack",
@@ -6343,12 +6343,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Blockade and pressure the isolated queen’s pawn.",
     "lessonSummary": "Blockade the IQP on d5, trade pieces, then win the weak pawn.",
-    "variation": "Panov-Botvinnik Attack",
     "sources": [
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Panov-Botvinnik Attack"
   },
   {
     "id": "mg-caro-kann-tartakower-breyer-variation",
@@ -6366,12 +6366,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Half-open e-file, central pawn mass, kingside storm.",
     "lessonSummary": "Embrace the …exf6 structure, take the e-file, and storm the king.",
-    "variation": "Tartakower/Breyer Variation",
     "sources": [
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ]
+    ],
+    "variation": "Tartakower/Breyer Variation"
   },
   {
     "id": "mg-french-defence-fort-knox-variation",
@@ -6389,12 +6389,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Trade the light bishops, blockade d5, grind the queenside.",
     "lessonSummary": "Swap the bad bishop, plant a knight on d5, and outplay White slowly.",
-    "variation": "Fort Knox Variation",
     "sources": [
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ]
+    ],
+    "variation": "Fort Knox Variation"
   },
   {
     "id": "mg-four-knights-game-rubinstein-variation-4-bb5-nd4",
@@ -6412,12 +6412,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Keep pieces on, the e5-wedge, active fighting play.",
     "lessonSummary": "Avoid the trade with Ba4, grab e5, and play for the initiative.",
-    "variation": "Rubinstein Variation: 4.Bb5 Nd4",
     "sources": [
       "book:four-knights-game",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Four_Knights_Game"
-    ]
+    ],
+    "variation": "Rubinstein Variation: 4.Bb5 Nd4"
   },
   {
     "id": "mg-sicilian-najdorf-najdorf-classical-6-be2-with-e5",
@@ -6471,5 +6471,41 @@
     "middlegameTheme": "Grab the b2-pawn, defend the lead in development, convert.",
     "lessonSummary": "Take the poisoned pawn, survive the attack, and win with the extra material.",
     "variation": "Najdorf: Poisoned Pawn (6.Bg5 Qb6)"
+  },
+  {
+    "id": "mg-sicilian-dragon-classical-variation",
+    "openingId": "sicilian-dragon",
+    "white": "Svidler, Peter",
+    "black": "Carlsen, Magnus",
+    "whiteElo": 2750,
+    "blackElo": 2813,
+    "result": "0-1",
+    "year": 2010,
+    "event": "Amber-blindfold 19th",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be2 Bg7 O-O O-O Be3 Nc6 Nb3 a6 f4 b5 Bf3 Bb7 e5 dxe5 fxe5 Nd7 e6 fxe6 Bg4 Rxf1+ Qxf1 Nce5 Bxe6+ Kh8 Rd1 Qc7 Qf4 Rf8 Qg3 Nf6 Nc5 Nh5 Qe1 Bxg2 Kxg2 Nf3 Qh1 Nf4+ Kf2 Nd4",
+    "studentSide": "black",
+    "overview": "Carlsen shows the Classical Dragon (Be2 rather than the sharp Yugoslav) is no easy ride for White: the fianchettoed bishop on g7 and the ...a6/...b5 queenside expansion give Black a smooth, dynamic game, and he gradually outplays Svidler. A model of the Dragon's positional resources when White declines the main-line attack.",
+    "criticalMoments": [],
+    "middlegameTheme": "The g7-bishop, ...a6/...b5 queenside expansion.",
+    "lessonSummary": "Fianchetto, expand with ...a6/...b5, and use the Dragon bishop.",
+    "variation": "Classical Variation"
+  },
+  {
+    "id": "mg-sicilian-dragon-anti-dragon-bg5-line",
+    "openingId": "sicilian-dragon",
+    "white": "Ivanchuk, Vassily",
+    "black": "Gashimov, Vugar",
+    "whiteElo": 2739,
+    "blackElo": 2758,
+    "result": "0-1",
+    "year": 2009,
+    "event": "Wch Blitz 5th",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Bg5 Bg7 Bb5+ Nbd7 Qe2 O-O O-O-O a6 Bxd7 Bxd7 f4 Rc8 e5 Rxc3 bxc3 Nd5 Qf3 Qa5 Nb3 Qa3+ Kb1 Nb6 Rd4 dxe5 Rb4 Bc6 Qxc6 bxc6 Rxb6 exf4 Bxf4 Bxc3 Bc1 Qa4 Rd1 a5 Rd7 Qe4 g3 a4 Nc5 Qf5 Be3 Re8 Rd3 Bg7 Nxa4 Qf1+ Bc1 Bh6 Rd8 Qxc1#",
+    "studentSide": "black",
+    "overview": "Gashimov shows the Dragon holds up against the tricky Bg5 anti-system: quick, concrete development with ...Nbd7 and ...a6, meeting White's queenside-castling attack with counterplay rather than passive defence. A model of answering an anti-Dragon try with active, purposeful play.",
+    "criticalMoments": [],
+    "middlegameTheme": "Concrete development, ...a6/...b5 vs the Bg5 line.",
+    "lessonSummary": "Develop fast, play ...a6/...b5, and counter the Bg5 attack.",
+    "variation": "Anti-Dragon: Bg5 Line"
   }
 ]
