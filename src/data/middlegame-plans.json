@@ -1682,16 +1682,28 @@
           "Nf3",
           "Nxd5",
           "a4",
-          "e6"
+          "e6",
+          "O-O",
+          "Be7",
+          "e4",
+          "Nb4"
         ],
         "annotations": [
           "Nf3 develops.",
           "…Nxd5! regains the central pawn, the knight landing on a dominant square.",
           "a4 grabs space.",
-          "…e6 secures the knight and frees the kingside — Black is fully developed with active pieces and the initiative."
+          "…e6 secures the knight and frees the kingside — Black is fully developed with active pieces and the initiative.",
+          "White castles into safety.",
+          "…Be7 develops and completes Black's harmonious setup — the half-accepted Benko gives Black easy development and long-term queenside pressure for the pawn.",
+          "White stakes out the centre with e4.",
+          "…Nb4! The knight leaps to the powerful b4-outpost, eyeing c2 and d3 and adding to the queenside pressure that is the Benko's whole point — Black's activity fully compensates the gambit pawn."
         ],
         "title": "Benko Half-Accepted: Active Initiative",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
@@ -1737,6 +1749,34 @@
               "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
@@ -1748,7 +1788,11 @@
           "Nf3 — develop",
           "Nxd5 — regain the pawn",
           "a4 — grab space",
-          "e6 — secure the knight, active"
+          "e6 — secure the knight, active",
+          "O-O — White castles",
+          "…Be7 — complete development",
+          "e4 — White claims the centre",
+          "…Nb4 — the queenside outpost"
         ]
       }
     ]
@@ -5503,16 +5547,28 @@
           "O-O",
           "Qc1",
           "b6",
-          "Ba3"
+          "Ba3",
+          "Bb7",
+          "Bxd6",
+          "Qxd6",
+          "Qa3"
         ],
         "annotations": [
           "…O-O tucks the king safely behind the wall.",
           "Qc1 eyes a trade of the dark-squared bishops.",
           "…b6 prepares …Bb7 to solve Black's one problem piece.",
-          "Ba3 offers the trade, but Black's structure and e4-outpost plans give a fortress that attacks."
+          "Ba3 offers the trade, but Black's structure and e4-outpost plans give a fortress that attacks.",
+          "…Bb7 develops the light-squared bishop to the long diagonal, the problem piece in any Stonewall finding a fine home behind the pawn chain.",
+          "White trades the dark-squared bishops to ease the cramp.",
+          "…Qxd6 recaptures, and Black's queen sits actively on d6, eyeing the kingside where the Stonewall attack will come.",
+          "White swings the queen to a3 to contest the dark squares, but Black's structure is rock-solid — the f5/e6/d5 wall and the looming …Ne4 outpost give Black a fortress that also attacks."
         ],
         "title": "Dutch Stonewall: The Attacking Fortress",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
@@ -5562,6 +5618,34 @@
               "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
@@ -5573,7 +5657,11 @@
           "O-O — king behind the wall",
           "Qc1 — eye the bishop trade",
           "b6 — prepare …Bb7",
-          "Ba3 — but the fortress attacks"
+          "Ba3 — but the fortress attacks",
+          "…Bb7 — activate the problem bishop",
+          "Bxd6 — White trades bishops",
+          "…Qxd6 — recapture, eye the kingside",
+          "Qa3 — White contests the dark squares"
         ]
       }
     ]
@@ -6613,7 +6701,9 @@
           "Be2",
           "d6",
           "Qa4+",
-          "c6"
+          "c6",
+          "dxe5",
+          "dxe5"
         ],
         "annotations": [
           "d4 — White builds the big pawn centre.",
@@ -6621,7 +6711,9 @@
           "Be2 — White keeps the bishop pair tension.",
           "…d6 — Black blunts the centre.",
           "Qa4+ — the check sets up regaining the pawn.",
-          "…c6 — Black blocks the check."
+          "…c6 — Black blocks the check.",
+          "White opens the centre with dxe5, the most-played try against Lasker's solid defence — challenging Black's setup before the knight on a5 returns to the game.",
+          "…dxe5 recaptures, and the queens come near a trade. Lasker's antidote has neutralised the gambit's fire, but White retains the bishop pair and a small lead in development to press — the principled way to meet the Evans without falling into the attack."
         ],
         "sources": [
           "book:evans-gambit",
@@ -6634,7 +6726,9 @@
           "Be2 — keep the tension",
           "d6 — blunt the centre",
           "Qa4+ — set up regaining the pawn",
-          "c6 — block the check"
+          "c6 — block the check",
+          "dxe5 — open the centre",
+          "…dxe5 — recapture; White keeps the bishops"
         ],
         "arrows": [
           [],
@@ -6645,6 +6739,8 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
           [],
           [],
           [],
@@ -6714,6 +6810,18 @@
               "square": "c7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ]
       }
@@ -6757,7 +6865,9 @@
           "d5",
           "exd5",
           "Ne5",
-          "Qxd4"
+          "Qxd4",
+          "f6",
+          "Re1"
         ],
         "annotations": [
           "…Nge7 — Black develops, shielding f7.",
@@ -6765,7 +6875,9 @@
           "…d5 — Black strikes back in the centre.",
           "exd5 — White opens lines toward the king.",
           "…Ne5 — Black returns material to ease the pressure.",
-          "Qxd4 — the queen recaptures, centralised and dominant."
+          "Qxd4 — the queen recaptures, centralised and dominant.",
+          "Black lashes out with …f6 to drive the g5-knight away, but the move rips open the king's shelter — exactly the kind of weakening the gambit provokes.",
+          "Re1 throws the rook onto the open e-file, piling into the pinned e5-knight and the exposed king. This is the Evans Gambit's dream: White has given a pawn and received a raging initiative, every piece bearing down on Black's stranded monarch."
         ],
         "sources": [
           "book:evans-gambit",
@@ -6778,7 +6890,9 @@
           "d5 — strike the centre",
           "exd5 — open lines at the king",
           "Ne5 — return material",
-          "Qxd4 — centralise, dominant"
+          "Qxd4 — centralise, dominant",
+          "f6 — Black weakens the king",
+          "Re1 — pile on the e-file pin"
         ],
         "arrows": [
           [],
@@ -6789,6 +6903,8 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
           [],
           [],
           [],
@@ -6861,6 +6977,22 @@
             {
               "square": "d1",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -27815,13 +27947,21 @@
           "Nc3",
           "Nc6",
           "d5",
-          "Ne5"
+          "Ne5",
+          "Nxe5",
+          "Bxe5",
+          "Bh6",
+          "Re8"
         ],
         "annotations": [
           "Nc3 develops and bolsters the broad e4-d4 centre.",
           "…Nc6 leans straight on d4, the front pawn of White’s big centre.",
           "d5 lunges forward, kicking the c6-knight and grabbing space.",
-          "…Ne5 bounds to the central outpost, eyeing c4 and the kingside dark squares the fianchettoed bishop already rakes."
+          "…Ne5 bounds to the central outpost, eyeing c4 and the kingside dark squares the fianchettoed bishop already rakes.",
+          "White trades off the well-placed e5-knight.",
+          "…Bxe5! The fianchettoed bishop recaptures and lands on the e5-outpost, raking the long diagonal toward White's queenside — Black's pieces are wonderfully active for a 'cramped' Scandinavian.",
+          "White tries Bh6 to challenge the other bishop and weaken Black's kingside.",
+          "…Re8 calmly sidesteps, keeping the strong e5-bishop and putting the rook on the half-open e-file. Black has emerged from the Modern Scandinavian with a sound structure and the more active bishops."
         ],
         "title": "Scandinavian: Fianchetto vs the Big Centre",
         "arrows": [
@@ -27846,7 +27986,11 @@
               "to": "c4",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [],
+          [],
+          [],
+          []
         ],
         "highlights": [
           [
@@ -27908,13 +28052,45 @@
               "square": "c4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "learnCues": [
           "Nc3 — back the centre",
           "Nc6 — lean on d4",
           "d5 — kick and grab",
-          "Ne5 — central outpost"
+          "Ne5 — central outpost",
+          "Nxe5 — trade the outpost knight",
+          "…Bxe5 — recapture on the outpost",
+          "Bh6 — challenge the bishop",
+          "…Re8 — keep the e5-bishop, eye the e-file"
         ],
         "sources": [
           "book:scandinavian-defence",
