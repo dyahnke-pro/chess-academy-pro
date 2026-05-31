@@ -16507,41 +16507,80 @@
   {
     "id": "mp-progothamchess-fantasy-bxc3-pair",
     "openingId": "pro-gothamchess-fantasy-caro",
-    "criticalPositionFen": "rnbqk1nr/pp3ppp/2p1p3/3p4/3PP3/P1P2P2/2P3PP/R1BQKBNR b KQkq - 0 6",
+    "criticalPositionFen": "rnbq1rk1/pp3p1p/4p1pB/2p1P3/3P2Q1/P1nB3N/2P3PP/R3K2R w KQ - 0 13",
     "title": "Fantasy Caro — dxe4 / Nh3 / fxe4 central recapture",
-    "overview": "Levy's Fantasy Caro from 95 games at 72.1%. The f3 line invites Black to challenge with …e6/Bb4/Bxc3+/bxc3. After …dxe4, White's Nh3 develops via the rim square (rerouting to Nf2 → Ng4 later), and fxe4 recaptures keeping the central pawn duo. Doubled c-pawns trade structure for the bishop pair + big centre.",
+    "overview": "A real GothamChess win (vs MightyGMpretender): Ng5 hits f7, and Bxf8 snatches the rook — White wins the exchange and castles to safety with a clear material edge.",
     "pawnBreaks": [
-      "…dxe4 — Black resolves central tension",
-      "fxe4 recapture — White keeps the central pawn duo"
+      {
+        "move": "e4-e5 anchor",
+        "explanation": "The e5-pawn anchors the centre for the kingside raid.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bishop pair after Bxc3+",
-      "Nh3 → Nf2 → Ng4 knight redirect",
-      "Bd3 + O-O classical development"
+      {
+        "piece": "Knight",
+        "route": "Nf3-g5 to f7/f8",
+        "explanation": "The knight jumps to g5, setting up the Bxf8 fork that wins the exchange."
+      }
     ],
     "strategicThemes": [
-      "Bishop pair vs Black's pieces",
-      "Doubled c-pawns trade structure for central majority"
+      "Use Ng5 to hit the kingside.",
+      "Cash the exchange and consolidate."
     ],
     "endgameTransitions": [
-      "R+minor+P endgames where the bishop pair tells"
+      "Up the exchange, trades bring the win closer."
     ],
     "playableLines": [
       {
-        "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/3PP3/P1P2P2/2P3PP/R1BQKBNR b KQkq - 0 6",
+        "fen": "rnbq1rk1/pp3p1p/4p1pB/2p1P3/3P2Q1/P1nB3N/2P3PP/R3K2R w KQ - 0 13",
         "moves": [
-          "dxe4",
-          "Nh3",
-          "Nf6",
-          "fxe4"
+          "Ng5",
+          "Nc6",
+          "Bxf8",
+          "Qxf8",
+          "O-O",
+          "Nd8",
+          "Rf2",
+          "Bd7"
         ],
         "annotations": [
-          "dxe4 — Black's pawn captures on e4 — material exchange.",
-          "Nh3 — White's knight to h3 — standard development.",
-          "Nf6 — Black's knight to f6 — standard development.",
-          "fxe4 — White's pawn captures on e4 — material exchange."
+          "Ng5 — the knight jumps to g5, eyeing f7.",
+          "…Nc6 — Black develops.",
+          "Bxf8 — snatching the rook; White wins the exchange.",
+          "…Qxf8 — recapturing.",
+          "O-O — White castles, safe with the extra material.",
+          "…Nd8 — Black regroups.",
+          "Rf2 — lifting the rook into play.",
+          "…Bd7 — developing, but White is up the exchange."
+        ],
+        "learnCues": [
+          "Ng5 — eye f7",
+          "Nc6 — develop",
+          "Bxf8 — win the exchange",
+          "Qxf8 — recapture",
+          "O-O — castle to safety",
+          "Nd8 — regroup",
+          "Rf2 — lift the rook",
+          "Bd7 — White is up material"
         ],
         "arrows": [
+          [
+            {
+              "from": "h3",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "h6",
+              "to": "f8",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           [],
@@ -16550,11 +16589,25 @@
         "highlights": [
           [
             {
-              "square": "d5",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e4",
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -16562,45 +16615,34 @@
             {
               "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "h3",
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
+              "square": "f2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
+              "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "dxe4 — pawn to e4",
-          "Nh3 — knight to h3",
-          "Nf6 — knight to f6",
-          "fxe4 — pawn to e4"
-        ],
-        "title": "Fantasy Caro — dxe4 / Nh3 / fxe4 central recapture",
-        "intro": "Levy's Fantasy Caro from 95 games at 72.1%. The f3 line invites Black to challenge with …e6/Bb4/Bxc3+/bxc3. After …dxe4, White's Nh3 develops via the rim square (rerouting to Nf2 → Ng4 later), and fxe",
+        "title": "Fantasy Caro: Win the Exchange on f8",
+        "intro": "A real GothamChess win vs MightyGMpretender. The knight jumps to g5 and the bishop snatches the rook.",
         "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -17932,129 +17974,142 @@
   {
     "id": "mp-progothamchess-vienna-gambit-main",
     "openingId": "pro-gothamchess-vienna",
-    "criticalPositionFen": "rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N2Q2/PPPP2PP/R1B1KBNR b KQkq - 1 5",
+    "criticalPositionFen": "2kr3r/pppq2pp/2n1b3/2b1Pp2/3p4/2PP1BQ1/P1P1N1PP/1RB1K2R w K - 10 13",
     "title": "Vienna Gambit — Qf3 + Nxc3 exchange",
-    "overview": "Levy's Vienna Gambit at 649 games / 67.8% — one of his highest scores. After f4 + fxe5 + …Nxe4, the queen on f3 attacks both f7 and e4. The Nxc3 exchange leaves doubled c-pawns but excellent piece activity.",
+    "overview": "A real GothamChess win (vs Arystanner): c4 clamps the centre, and after the trade on c4 the d-file opens for the rook while Black’s loose pawns become targets.",
     "pawnBreaks": [
-      "…Nxc3 — Black trades the central knight",
-      "bxc3 recapture — White accepts doubled pawns for open b-file"
+      {
+        "move": "c4 clamp",
+        "explanation": "c4 clamps the centre and opens lines after the exchange.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Qf3 — central queen attacking f7",
-      "Nxc3 trades the centre",
-      "Bc4 + Qf3 battery aiming at f7"
+      {
+        "piece": "Rook",
+        "route": "Rf1-d1 d-file",
+        "explanation": "The rook takes the d-file after the c4 trade."
+      }
     ],
     "strategicThemes": [
-      "Sharp tactical positions — Levy's specialty",
-      "Doubled c-pawns trade structure for piece activity"
+      "Clamp the centre with c4.",
+      "Open the d-file for the rooks."
     ],
     "endgameTransitions": [
-      "Sharp middlegames — endgames rare in this gambit line"
+      "The active pieces are worth more than the pawn into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N2Q2/PPPP2PP/R1B1KBNR b KQkq - 1 5",
+        "fen": "2kr3r/pppq2pp/2n1b3/2b1Pp2/3p4/2PP1BQ1/P1P1N1PP/1RB1K2R w K - 10 13",
         "moves": [
-          "Nxc3",
-          "bxc3",
-          "c5",
-          "Qg3",
-          "Nc6",
-          "Nf3"
+          "Bg5",
+          "Rde8",
+          "c4",
+          "Bxc4",
+          "dxc4",
+          "d3",
+          "Rd1",
+          "Nxe5"
         ],
         "annotations": [
-          "Nxc3 — Black's knight captures on c3 — material exchange.",
-          "bxc3 — White's pawn captures on c3 — material exchange.",
-          "c5 — Black's pawn to c5 — standard development.",
-          "Qg3 — White's queen to g3 — standard development.",
-          "Nc6 — Black's knight to c6 — standard development.",
-          "Nf3 — White's knight to f3 — standard development."
+          "Bg5 — developing the bishop to an aggressive post.",
+          "…Rde8 — centralising the rook.",
+          "c4 — clamping the centre and gaining space.",
+          "…Bxc4 — Black grabs the pawn.",
+          "dxc4 — recapturing and opening the d-file.",
+          "…d3 — Black pushes a wedge.",
+          "Rd1 — the rook lines up on the d-file behind the pawn.",
+          "…Nxe5 — Black grabs a pawn, but White’s piece activity dominates."
+        ],
+        "learnCues": [
+          "Bg5 — aggressive post",
+          "Rde8 — centralise",
+          "c4 — clamp the centre",
+          "Bxc4 — Black grabs it",
+          "dxc4 — open the d-file",
+          "d3 — a wedge",
+          "Rd1 — work the d-file",
+          "Nxe5 — White dominates"
         ],
         "arrows": [
           [],
           [],
+          [
+            {
+              "from": "c3",
+              "to": "c4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
+          [
+            {
+              "from": "b1",
+              "to": "d1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g3",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g1",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f3",
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nxc3 — knight to c3",
-          "bxc3 — pawn to c3",
-          "c5 — pawn to c5",
-          "Qg3 — queen to g3",
-          "Nc6 — knight to c6",
-          "Nf3 — knight to f3"
-        ],
-        "title": "Vienna Gambit — Qf3 + Nxc3 exchange",
-        "intro": "Levy's Vienna Gambit at 649 games / 67.8% — one of his highest scores. After f4 + fxe5 + …Nxe4, the queen on f3 attacks both f7 and e4. The Nxc3 exchange leaves doubled c-pawns but excellent piece act",
+        "title": "Vienna Gambit: Clamp and Dominate",
+        "intro": "A real GothamChess win vs Arystanner. White clamps the centre with c4 and lets piece activity decide.",
         "sources": [
-          "book:vienna-game",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Vienna-Game",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Vienna_Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -18062,49 +18117,75 @@
   {
     "id": "mp-progothamchess-vienna-paulsen-attack",
     "openingId": "pro-gothamchess-vienna",
-    "criticalPositionFen": "rnbqkb1r/ppp2ppp/8/3pP3/8/2P2Q2/P1PP2PP/R1B1KBNR b KQkq - 0 6",
+    "criticalPositionFen": "2kr3r/pp1qbppp/2n1b3/1B1pP3/2pP4/2P2NQ1/P1P3PP/1RB2RK1 w - - 0 13",
     "title": "Vienna Paulsen Attack — f4 thrust + queen swing",
-    "overview": "His Vienna at 649 games / 67.8% — one of his highest scores. After 3.f4 (Vienna Gambit), Black plays …d5 / 4.fxe5 / Black's …Nxe4 forces tactical complications. Qf3 + Nxc3 / bxc3 leaves White with a doubled pawn but excellent piece activity and an open f-file.",
+    "overview": "A real GothamChess win (vs mirciulica14): Bxc6 damages Black’s structure, the bishops come off, and the knight lands on g5 eyeing the kingside while a4 grabs queenside space.",
     "pawnBreaks": [
-      "d2-d4 central expansion once pieces are out",
-      "c3-c4 supporting d4 and challenging Black's centre",
-      "e5-e6 in some sharp lines"
+      {
+        "move": "a4 queenside space",
+        "explanation": "a4 expands on the queenside once the centre is settled.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Qf3 — central queen attacking f7 + supporting Nxc3",
-      "Knight reroute via Nf3 / Ne2",
-      "Bishop on c4 targets f7"
+      {
+        "piece": "Knight",
+        "route": "Nf3-g5 outpost",
+        "explanation": "The knight recaptures on g5, eyeing f7, e6 and h7."
+      }
     ],
     "strategicThemes": [
-      "Sharp tactical positions — Levy's specialty",
-      "Doubled c-pawns trade structure for piece activity"
+      "Trade to damage Black’s pawn structure.",
+      "Post the knight aggressively, then expand."
     ],
     "endgameTransitions": [
-      "Sharp middlegames — endgames rare in this gambit line"
+      "The damaged pawns favour White into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbqkb1r/ppp2ppp/8/3pP3/8/2P2Q2/P1PP2PP/R1B1KBNR b KQkq - 0 6",
+        "fen": "2kr3r/pp1qbppp/2n1b3/1B1pP3/2pP4/2P2NQ1/P1P3PP/1RB2RK1 w - - 0 13",
         "moves": [
-          "c5",
-          "Qg3",
-          "Nc6",
-          "Nf3",
-          "Be6",
-          "Rb1"
+          "Bxc6",
+          "Qxc6",
+          "Bg5",
+          "Bxg5",
+          "Nxg5",
+          "Qd7",
+          "a4",
+          "Bf5"
         ],
         "annotations": [
-          "c5 — Black's pawn to c5 — standard development.",
-          "Qg3 — White's queen to g3 — standard development.",
-          "Nc6 — Black's knight to c6 — standard development.",
-          "Nf3 — White's knight to f3 — standard development.",
-          "Be6 — Black's bishop to e6 — standard development.",
-          "Rb1 — White's rook to b1 — standard development."
+          "Bxc6 — trading off to damage Black’s structure.",
+          "…Qxc6 — recapturing with the queen.",
+          "Bg5 — the bishop offers a trade.",
+          "…Bxg5 — Black takes.",
+          "Nxg5 — recapturing; the knight eyes f7, e6 and h7.",
+          "…Qd7 — defending the kingside.",
+          "a4 — gaining queenside space.",
+          "…Bf5 — developing, but White’s knight and space hold the edge."
+        ],
+        "learnCues": [
+          "Bxc6 — damage the pawns",
+          "Qxc6 — recapture",
+          "Bg5 — offer the trade",
+          "Bxg5 — Black takes",
+          "Nxg5 — knight eyes f7",
+          "Qd7 — defend",
+          "a4 — expand queenside",
+          "Bf5 — White is better"
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           []
@@ -18112,29 +18193,11 @@
         "highlights": [
           [
             {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -18142,50 +18205,48 @@
           ],
           [
             {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a1",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b1",
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "c5 — pawn to c5",
-          "Qg3 — queen to g3",
-          "Nc6 — knight to c6",
-          "Nf3 — knight to f3",
-          "Be6 — bishop to e6",
-          "Rb1 — rook to b1"
-        ],
-        "title": "Vienna Paulsen Attack — f4 thrust + queen swing",
-        "intro": "His Vienna at 649 games / 67.8% — one of his highest scores. After 3.f4 (Vienna Gambit), Black plays …d5 / 4.fxe5 / Black's …Nxe4 forces tactical complications. Qf3 + Nxc3 / bxc3 leaves White with a d",
+        "title": "Vienna Paulsen: Damage the Structure, then Press",
+        "intro": "A real GothamChess win vs mirciulica14. White trades to wreck Black’s pawns and posts a strong knight.",
         "sources": [
-          "book:vienna-game",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Vienna-Game",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Vienna_Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -47591,156 +47652,75 @@
   {
     "id": "mp-progothamchess-vie-gambit-main-attack",
     "openingId": "pro-gothamchess-vienna",
-    "criticalPositionFen": "r2qkb1r/pp3ppp/2n1b3/2ppP3/8/2P2NQ1/P1PP2PP/1RB1KB1R b Kkq - 5 9",
+    "criticalPositionFen": "2k3rr/pp1qbppp/2n1b3/1BppP3/3P4/2P2NQ1/P1P3PP/1RB2RK1 w - - 1 13",
     "title": "Vienna Gambit Main: Rb1 + Bb5 Queenside Attack",
-    "overview": "His main Vienna Gambit plan across 265 games. After the f4 gambit and the …d5 central clash, White recaptures the structure with the half-open b-file. The plan: Rb1 to pressure b7, Bb5 to pin and trade Black's defender of d5, then d4 to blast open the centre while Black's king is caught between castling long into the b-file and staying in the centre. The Vienna at its most aggressive: a pawn for a raging initiative.",
+    "overview": "A real GothamChess win: Black throws the kingside pawns forward, but White develops with Be3, grabs on c5, plants the knight on d4 and tucks the queen on f2 — the centre holds and the storm runs out.",
     "pawnBreaks": [
-      "d2-d4 blasting open the centre",
-      "e5 the cramping gambit pawn"
+      {
+        "move": "d4xc5 break",
+        "explanation": "dxc5 opens lines and grabs material as Black overextends.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Ra1-b1 pressuring b7 down the half-open file",
-      "Bf1-b5 pinning the c6-knight",
-      "Qg3 eyeing g7 and the kingside"
+      {
+        "piece": "Knight",
+        "route": "Nf3-d4 centralise",
+        "explanation": "The knight centralises on d4, dominating while Black storms the wing."
+      }
     ],
     "strategicThemes": [
-      "Pressure b7 down the half-open b-file",
-      "Pin with Bb5 to win the d5-pawn",
-      "Open the centre with d4"
+      "Meet a wing storm with a strong centre.",
+      "Centralise the knight on d4."
     ],
     "endgameTransitions": [
-      "The bishop pair and the centre carry the initiative"
+      "Once the storm fizzles, White’s pieces dominate the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r2qkb1r/pp3ppp/2n1b3/2ppP3/8/2P2NQ1/P1PP2PP/1RB1KB1R b Kkq - 5 9",
+        "fen": "2k3rr/pp1qbppp/2n1b3/1BppP3/3P4/2P2NQ1/P1P3PP/1RB2RK1 w - - 1 13",
         "moves": [
-          "Qd7",
-          "Bb5",
-          "O-O-O",
-          "O-O",
-          "Be7",
-          "d4"
+          "Be3",
+          "g5",
+          "dxc5",
+          "h5",
+          "Nd4",
+          "h4",
+          "Qf2",
+          "Bxc5"
         ],
         "annotations": [
-          "…Qd7 — Black connects the queen to the defence and prepares to castle long.",
-          "Bb5 — the pin. White ties down the c6-knight, the key defender of d5 and e5, and prepares to trade it off.",
-          "…O-O-O — Black castles long, but walks the king straight onto White’s half-open b-file.",
-          "O-O — White tucks the king away, ready to throw the whole army at the queenside.",
-          "…Be7 — Black develops, hoping to consolidate the extra pawn.",
-          "d4 — the centre erupts. White strikes at c5, opens lines toward Black’s king on c8, and the Rb1/Bb5/Qg3 battery springs to life. The gambit pawn has bought a winning attack."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
+          "Be3 — developing the bishop.",
+          "…g5 — Black lunges on the kingside.",
+          "dxc5 — grabbing a pawn and opening lines.",
+          "…h5 — Black pushes the storm on.",
+          "Nd4 — centralising the knight in the middle of the board.",
+          "…h4 — the pawn storm rolls forward.",
+          "Qf2 — the queen tucks onto f2, holding the kingside.",
+          "…Bxc5 — Black regains the pawn, but White’s centre knight dominates."
         ],
         "learnCues": [
-          "Qd7 — Black prepares to castle long",
-          "Bb5 — pin the knight",
-          "O-O-O — Black’s king walks into it",
-          "O-O — tuck the king away",
-          "Be7 — Black develops",
-          "d4 — the centre erupts"
-        ],
-        "title": "Vienna Gambit Main: Rb1 + Bb5 Queenside Attack",
-        "intro": "His main Vienna Gambit plan across 265 games. After the f4 gambit and the …d5 central clash, White recaptures the structure with the half-open b-file. The plan: Rb1 to pressure b7, Bb5 to pin and trade Black's defender of d5, then d4 to blast open the centre while Black's king is caught between castling long into the b-file and staying in the centre. The Vienna at its most aggressive: a pawn for a raging initiative.",
-        "sources": [
-          "book:chess-fundamentals",
-          "https://www.chess.com/openings/Vienna-Game",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Vienna_Game"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-vie-quiet-bc4-na4",
-    "openingId": "pro-gothamchess-vienna",
-    "criticalPositionFen": "r2q1rk1/ppp2ppp/2n2n2/2p1p3/2B1PPb1/3P1N2/PPP3PP/R1BQK2R w KQ - 0 9",
-    "title": "Vienna Quiet Bc4: the Na4xc5 + f4 Plan",
-    "overview": "His 238-game plan in the quiet Bc4 system. Against Black's …Nc6/…Bc5 setup, White develops Bc4 and d3, then plays f4 for kingside space and reroutes the knight with Na4 to trade off Black's good bishop on c5. After the trade, White has the bishop pair, a half-open f-file, and the f4-f5 lever. A more positional Vienna, but still pointed at the king.",
-    "pawnBreaks": [
-      "f2-f4 the kingside space-gaining lever",
-      "f4xe5 opening the f-file"
-    ],
-    "pieceManeuvers": [
-      "Nc3-a4xc5 trading Black’s good bishop",
-      "Bc4 + d3 the quiet build",
-      "Qd1-f3 after …Bxf3"
-    ],
-    "strategicThemes": [
-      "Trade the c5-bishop with Na4",
-      "Grab kingside space with f4",
-      "Use the bishop pair and the f-file"
-    ],
-    "endgameTransitions": [
-      "The bishop pair tells once the position opens"
-    ],
-    "playableLines": [
-      {
-        "fen": "r2q1rk1/ppp2ppp/2n2n2/2p1p3/2B1PPb1/3P1N2/PPP3PP/R1BQK2R w KQ - 0 9",
-        "moves": [
-          "h3",
-          "Bxf3",
-          "Qxf3",
-          "Nd4",
-          "Qf2",
-          "exf4"
-        ],
-        "annotations": [
-          "h3 — White questions the g4-bishop, forcing it to declare its intentions.",
-          "…Bxf3 — Black trades, conceding the bishop pair to damage nothing — White recaptures cleanly.",
-          "Qxf3 — the queen recaptures, eyeing the f-file and the kingside.",
-          "…Nd4 — Black jumps the knight to the strong central square, hitting the queen.",
-          "Qf2 — White sidesteps, keeping the pressure and defending f4.",
-          "…exf4 — Black resolves the tension; after Bxf4 White has the two bishops, the half-open f-file, and the easier game. The quiet Vienna delivers a pleasant, lasting edge."
+          "Be3 — develop",
+          "g5 — Black lunges",
+          "dxc5 — grab, open lines",
+          "h5 — storm on",
+          "Nd4 — centralise",
+          "h4 — storm rolls",
+          "Qf2 — hold the kingside",
+          "Bxc5 — White dominates"
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "d4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           []
@@ -47748,25 +47728,37 @@
         "highlights": [
           [
             {
-              "square": "h3",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f3",
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f3",
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -47778,26 +47770,161 @@
           ],
           [
             {
-              "square": "f4",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "h3 — question the bishop",
-          "Bxf3 — Black concedes the pair",
-          "Qxf3 — eye the f-file",
-          "Nd4 — Black centralizes",
-          "Qf2 — sidestep, hold f4",
-          "exf4 — open for the bishops"
-        ],
-        "title": "Vienna Quiet Bc4: the Na4xc5 + f4 Plan",
-        "intro": "His 238-game plan in the quiet Bc4 system. Against Black's …Nc6/…Bc5 setup, White develops Bc4 and d3, then plays f4 for kingside space and reroutes the knight with Na4 to trade off Black's good bishop on c5. After the trade, White has the bishop pair, a half-open f-file, and the f4-f5 lever. A more positional Vienna, but still pointed at the king.",
+        "title": "Vienna Gambit: Hold the Centre vs the Pawn Storm",
+        "intro": "A real GothamChess win. Black storms the kingside; White’s centralised knight and queen hold firm.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Vienna-Game",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Vienna_Game"
+          "https://en.wikipedia.org/wiki/Vienna_Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-vie-quiet-bc4-na4",
+    "openingId": "pro-gothamchess-vienna",
+    "criticalPositionFen": "r2q1rk1/p1p2ppp/5n2/1pp5/2BnPB2/3P3P/PPP2QP1/R3K2R w KQ - 0 13",
+    "title": "Vienna Quiet Bc4: the Na4xc5 + f4 Plan",
+    "overview": "A real GothamChess win (vs CoachJKane): the bishop seizes the e5 outpost, and Bxf6 shatters Black’s kingside pawns, leaving White with the better structure and the safer king.",
+    "pawnBreaks": [
+      {
+        "move": "a-file opening",
+        "explanation": "axb3 opens the a-file for the rook after the knight trade.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc1-e5 outpost",
+        "explanation": "The dark-squared bishop seizes the powerful e5 outpost."
+      }
+    ],
+    "strategicThemes": [
+      "Seize the e5 outpost.",
+      "Shatter Black’s kingside with Bxf6."
+    ],
+    "endgameTransitions": [
+      "The healthier pawns win the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r2q1rk1/p1p2ppp/5n2/1pp5/2BnPB2/3P3P/PPP2QP1/R3K2R w KQ - 0 13",
+        "moves": [
+          "Bb3",
+          "c4",
+          "Be5",
+          "Nxb3",
+          "axb3",
+          "cxd3",
+          "Bxf6",
+          "gxf6"
+        ],
+        "annotations": [
+          "Bb3 — retreating the bishop, keeping the strong diagonal.",
+          "…c4 — Black hits the bishop.",
+          "Be5 — the dark-squared bishop seizes the e5 outpost.",
+          "…Nxb3 — Black trades off the light bishop.",
+          "axb3 — recapturing and opening the a-file.",
+          "…cxd3 — Black grabs a pawn.",
+          "Bxf6 — taking the knight and shattering Black’s kingside.",
+          "…gxf6 — recapturing with wrecked pawns; White’s structure is far healthier."
+        ],
+        "learnCues": [
+          "Bb3 — keep the diagonal",
+          "c4 — Black hits it",
+          "Be5 — seize the outpost",
+          "Nxb3 — trade the bishop",
+          "axb3 — open the a-file",
+          "cxd3 — Black grabs a pawn",
+          "Bxf6 — shatter the kingside",
+          "gxf6 — White is healthier"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "f4",
+              "to": "e5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e5",
+              "to": "f6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Vienna Quiet: Outpost and Shatter the Kingside",
+        "intro": "A real GothamChess win vs CoachJKane. White grabs the e5 outpost and breaks up Black’s kingside.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Vienna-Game",
+          "https://en.wikipedia.org/wiki/Vienna_Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -47805,78 +47932,86 @@
   {
     "id": "mp-progothamchess-vie-nc6-forcing",
     "openingId": "pro-gothamchess-vienna",
-    "criticalPositionFen": "r3kb1r/pppb1ppp/8/1B1pn3/4q3/2P1BQP1/PPP4P/2KR2NR w kq - 0 11",
+    "criticalPositionFen": "r3kb1r/pppn1ppp/8/3R4/8/2P1BqP1/PPP4P/2K3NR w kq - 0 13",
     "title": "Vienna Gambit …Nc6: the Bb5 Forcing Sequence",
-    "overview": "Against the …Nc6 defence in the gambit, his 61-game plan is a forcing tactical sequence. Bb5 pins, dxc3 rebuilds the centre, and after the checks on h4 and e4 White consolidates with Be3 and O-O-O. Then the combination Bxd7+/Rxd5 nets material and trades into a better ending — the engine-precise refutation of Black's active queen sorties. Sharp, concrete, and winning.",
+    "overview": "A real GothamChess win: the knight snaps off the queen on f3, and with a decisive material edge White checks the king out into the open with Re1+ and Ne5+.",
     "pawnBreaks": [
-      "e5 the wedge",
-      "d-file pressure after O-O-O"
+      {
+        "move": "e4-e5 wedge",
+        "explanation": "The e-pawn supports the knight outpost that hunts the king.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bf1-b5 the pin",
-      "Be3 consolidating",
-      "Bb5xd7+ then Rd1xd5 winning material"
+      {
+        "piece": "Knight",
+        "route": "Nf3 then Ne5+ hunt",
+        "explanation": "The knight wins the queen and later checks from e5 to drive the king out."
+      }
     ],
     "strategicThemes": [
-      "Pin with Bb5",
-      "Consolidate the centre with Be3/O-O-O",
-      "Win material with Bxd7+/Rxd5"
+      "Cash the winning tactic.",
+      "Hunt the exposed king with checks."
     ],
     "endgameTransitions": [
-      "The forcing line trades into a clean material edge"
+      "A queen up, no endgame is needed."
     ],
     "playableLines": [
       {
-        "fen": "r3kb1r/pppb1ppp/8/1B1pn3/4q3/2P1BQP1/PPP4P/2KR2NR w kq - 0 11",
+        "fen": "r3kb1r/pppn1ppp/8/3R4/8/2P1BqP1/PPP4P/2K3NR w kq - 0 13",
         "moves": [
-          "Bxd7+",
-          "Nxd7",
-          "Rxd5",
-          "Qxf3",
           "Nxf3",
-          "Bd6"
+          "Bd6",
+          "Bf4",
+          "Nf6",
+          "Re1+",
+          "Kd7",
+          "Ne5+",
+          "Kc8"
         ],
         "annotations": [
-          "Bxd7+ — White starts the forcing sequence, removing a defender with check.",
-          "…Nxd7 recaptures; Black has no choice.",
-          "Rxd5 — the point. The rook grabs the central pawn, hitting the queen and seizing the open file.",
-          "…Qxf3 — Black trades queens, the only way to avoid worse.",
-          "Nxf3 — White recaptures with tempo, eyeing e5 and the centre.",
-          "…Bd6 — Black tries to hold, but White emerges from the forcing line a clean pawn up with the bishop pair and the better structure. The …Nc6 defence is refuted."
+          "Nxf3 — the knight snaps off the queen; White is winning huge material.",
+          "…Bd6 — Black develops in vain.",
+          "Bf4 — developing with tempo, offering a trade.",
+          "…Nf6 — developing.",
+          "Re1+ — check; the rook drives the king out.",
+          "…Kd7 — the king is forced to run.",
+          "Ne5+ — check; the knight joins the hunt.",
+          "…Kc8 — the king flees, and White is completely winning."
+        ],
+        "learnCues": [
+          "Nxf3 — win the queen",
+          "Bd6 — too late",
+          "Bf4 — develop with tempo",
+          "Nf6 — develop",
+          "Re1+ — drive the king",
+          "Kd7 — king runs",
+          "Ne5+ — join the hunt",
+          "Kc8 — White is winning"
         ],
         "arrows": [
+          [
+            {
+              "from": "g1",
+              "to": "f3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
           [],
           [],
+          [
+            {
+              "from": "f3",
+              "to": "e5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
           [
             {
               "square": "f3",
@@ -47888,69 +48023,25 @@
               "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
-          ]
-        ],
-        "learnCues": [
-          "Bxd7+ — remove the defender",
-          "Nxd7 — Black recaptures",
-          "Rxd5 — grab the pawn, hit the queen",
-          "Qxf3 — Black trades queens",
-          "Nxf3 — recapture with tempo",
-          "Bd6 — White is a clean pawn up"
-        ],
-        "title": "Vienna Gambit …Nc6: the Bb5 Forcing Sequence",
-        "intro": "Against the …Nc6 defence in the gambit, his 61-game plan is a forcing tactical sequence. Bb5 pins, dxc3 rebuilds the centre, and after the checks on h4 and e4 White consolidates with Be3 and O-O-O. Then the combination Bxd7+/Rxd5 nets material and trades into a better ending — the engine-precise refutation of Black's active queen sorties. Sharp, concrete, and winning.",
-        "sources": [
-          "book:chess-fundamentals",
-          "https://www.chess.com/openings/Vienna-Game",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Vienna_Game"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-vie-f5-buildup",
-    "openingId": "pro-gothamchess-vienna",
-    "criticalPositionFen": "r2qkb1r/ppp3pp/2n1b3/4Pp2/3p4/2PP1BQ1/P1P3PP/R1B1K1NR b KQkq - 5 10",
-    "title": "Vienna Gambit …f5: the Bf3/Ne2 Light-Square Squeeze",
-    "overview": "Against the …f5 defence, his 57-game plan targets the light squares Black weakened. After d3 and the …Nxc3/d4 exchanges, White redeploys with Be2-f3 to pressure the d5/b7 diagonal and Ne2 to reroute toward the d4-pawn and the f4-square. With Black's king stuck deciding where to hide, White's pieces converge on the holes around e6 and the loose f5-pawn.",
-    "pawnBreaks": [
-      "d3-d4 challenging Black’s centre",
-      "c3-c4 undermining d5 later"
-    ],
-    "pieceManeuvers": [
-      "Be2-f3 onto the long diagonal",
-      "Ng1-e2 rerouting to d4/f4",
-      "Qf3-g3 pressuring g7 and e5"
-    ],
-    "strategicThemes": [
-      "Pressure the long light diagonal with Bf3",
-      "Reroute Ne2 toward the holes",
-      "Target the weak f5-pawn and e6"
-    ],
-    "endgameTransitions": [
-      "Black’s loose pawns are long-term targets"
-    ],
-    "playableLines": [
-      {
-        "fen": "r2qkb1r/ppp3pp/2n1b3/4Pp2/3p4/2PP1BQ1/P1P3PP/R1B1K1NR b KQkq - 5 10",
-        "moves": [
-          "Qd7",
-          "Ne2",
-          "O-O-O"
-        ],
-        "annotations": [
-          "…Qd7 — Black connects pieces and prepares to castle queenside.",
-          "Ne2 — the reroute. The knight heads toward d4 and f4, eyeing the holes Black created with …f5 and the weak e6-square.",
-          "…O-O-O — Black castles long. White’s Bf3 rakes the diagonal toward b7 and d5, the knight is coming to strong squares, and the loose f5-pawn is a permanent target. White has a comfortable, pressing position for the pawn."
-        ],
-        "arrows": [
-          [],
-          [],
-          []
-        ],
-        "highlights": [
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "d7",
@@ -47959,7 +48050,7 @@
           ],
           [
             {
-              "square": "e2",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -47970,18 +48061,156 @@
             }
           ]
         ],
-        "learnCues": [
-          "Qd7 — Black readies to castle",
-          "Ne2 — reroute to the holes",
-          "O-O-O — press the diagonal and f5"
-        ],
-        "title": "Vienna Gambit …f5: the Bf3/Ne2 Light-Square Squeeze",
-        "intro": "Against the …f5 defence, his 57-game plan targets the light squares Black weakened. After d3 and the …Nxc3/d4 exchanges, White redeploys with Be2-f3 to pressure the d5/b7 diagonal and Ne2 to reroute toward the d4-pawn and the f4-square. With Black's king stuck deciding where to hide, White's pieces converge on the holes around e6 and the loose f5-pawn.",
+        "title": "Vienna: Win the Queen, then Hunt the King",
+        "intro": "A real GothamChess win vs ChessicallyInclined. A tactic nets the queen; the rest is a king hunt.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Vienna-Game",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Vienna_Game"
+          "https://en.wikipedia.org/wiki/Vienna_Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-vie-f5-buildup",
+    "openingId": "pro-gothamchess-vienna",
+    "criticalPositionFen": "r3k2r/pppq2bp/2n1b1p1/4Pp2/2Pp1B2/3P1BQ1/P1P3PP/R3K1NR w KQkq - 3 13",
+    "title": "Vienna Gambit …f5: the Bf3/Ne2 Light-Square Squeeze",
+    "overview": "A real GothamChess win: h4 grabs kingside space, the knight reroutes via h3, both sides castle, and White finishes development with the rook on e1, comfortably better.",
+    "pawnBreaks": [
+      {
+        "move": "h4 kingside space",
+        "explanation": "h4 claims kingside space ahead of the build-up.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Ng1-h3-f4 reroute",
+        "explanation": "The knight reroutes through h3 toward f4 and the kingside."
+      }
+    ],
+    "strategicThemes": [
+      "Grab kingside space, then complete development.",
+      "Centralise the rooks before striking."
+    ],
+    "endgameTransitions": [
+      "The space advantage carries into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r3k2r/pppq2bp/2n1b1p1/4Pp2/2Pp1B2/3P1BQ1/P1P3PP/R3K1NR w KQkq - 3 13",
+        "moves": [
+          "h4",
+          "O-O-O",
+          "Nh3",
+          "Rhe8",
+          "O-O",
+          "Bf7",
+          "Rfe1",
+          "h6"
+        ],
+        "annotations": [
+          "h4 — gaining kingside space.",
+          "…O-O-O — Black castles long.",
+          "Nh3 — the knight reroutes toward f4.",
+          "…Rhe8 — centralising the rook.",
+          "O-O — White tucks the king away.",
+          "…Bf7 — repositioning the bishop.",
+          "Rfe1 — the rook takes the e-file.",
+          "…h6 — Black makes luft, but White is comfortably better."
+        ],
+        "learnCues": [
+          "h4 — grab kingside space",
+          "O-O-O — Black castles long",
+          "Nh3 — reroute toward f4",
+          "Rhe8 — centralise",
+          "O-O — tuck the king",
+          "Bf7 — reposition",
+          "Rfe1 — take the e-file",
+          "h6 — White is better"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "h2",
+              "to": "h4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "g1",
+              "to": "h3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Vienna: Castle, Centralise, Press",
+        "intro": "A real GothamChess win vs Arystanner. A patient build-up — space on the kingside, rooks centralised.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Vienna-Game",
+          "https://en.wikipedia.org/wiki/Vienna_Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -47989,66 +48218,142 @@
   {
     "id": "mp-progothamchess-vie-accepted-space",
     "openingId": "pro-gothamchess-vienna",
-    "criticalPositionFen": "rnbqkbnr/ppp2ppp/3p4/4P3/5p2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 6",
+    "criticalPositionFen": "r1qnk1nr/ppp1bppp/8/3NP3/5B2/5P2/PPP1Q2P/2KR1B1R w kq - 3 13",
     "title": "Vienna Gambit Accepted: the e5 Space Wedge",
-    "overview": "When Black grabs the gambit with …exf4 (his opponents do this 94% of the time at this branch), his 17-game plan stakes out space with e5, kicking the f6-knight back to g8 and cramping Black. Nf3 and d4 build a big pawn centre, and after …d6/dxe5 White has a lead in development and open lines for the pawn. The classic gambit trade: a pawn for time and the initiative.",
+    "overview": "A real GothamChess win (vs kikoveiga): the rook lifts to g1, the bishop swings to h3 hitting e6, and the queen centralises on c4 eyeing f7 — every piece pointed at Black’s king.",
     "pawnBreaks": [
-      "e4-e5 the cramping wedge",
-      "d2-d4 building the big centre"
+      {
+        "move": "f4 kingside lever",
+        "explanation": "The Vienna f-pawn loosens Black’s kingside for the pieces.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Ng1-f3 rapid development",
-      "the e5/d4 pawn duo cramping Black",
-      "Bf1 toward c4 for the attack"
+      {
+        "piece": "Bishop",
+        "route": "Bf1-h3 pressure",
+        "explanation": "The bishop reroutes to h3 to rake the c8-h3 diagonal and hit e6."
+      }
     ],
     "strategicThemes": [
-      "Cramp Black with the e5 wedge",
-      "Build the d4 centre",
-      "Lead in development for the pawn"
+      "Aim every piece at the loosened king.",
+      "Use the f4 break to open lines."
     ],
     "endgameTransitions": [
-      "Keep attacking — the development lead is the compensation"
+      "The space edge lingers into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbqkbnr/ppp2ppp/3p4/4P3/5p2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 6",
+        "fen": "r1qnk1nr/ppp1bppp/8/3NP3/5B2/5P2/PPP1Q2P/2KR1B1R w kq - 3 13",
         "moves": [
-          "d4",
-          "dxe5"
+          "Rg1",
+          "Ne6",
+          "Bh3",
+          "g6",
+          "Qc4",
+          "c6",
+          "Nc3",
+          "h5"
         ],
         "annotations": [
-          "d4 — White builds the big pawn centre, the e5/d4 duo cramping Black while every White piece has an open path to develop.",
-          "…dxe5 — Black strikes back at the centre, the principled freeing try. After dxe5 White stands clearly better: a big lead in development, open lines, and Black’s knight still on its home square. The gambit pawn bought a powerful initiative."
+          "Rg1 — the rook lifts to g1, backing a kingside advance.",
+          "…Ne6 — the knight reroutes to e6.",
+          "Bh3 — the bishop swings to h3, hitting e6 and eyeing the king.",
+          "…g6 — shoring up the light squares.",
+          "Qc4 — the queen centralises, pressuring f7 and the centre.",
+          "…c6 — challenging the queen.",
+          "Nc3 — developing the last piece.",
+          "…h5 — Black grabs kingside space, but White’s pieces are aimed at the king."
+        ],
+        "learnCues": [
+          "Rg1 — back the advance",
+          "Ne6 — reroute",
+          "Bh3 — hit e6, eye the king",
+          "g6 — shore up light squares",
+          "Qc4 — pressure f7",
+          "c6 — challenge",
+          "Nc3 — develop",
+          "h5 — White aims at the king"
         ],
         "arrows": [
+          [
+            {
+              "from": "h1",
+              "to": "g1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "f1",
+              "to": "h3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
           [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "d4",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e5",
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "d4 — build the big centre",
-          "dxe5 — Black strikes back, White leads"
-        ],
-        "title": "Vienna Gambit Accepted: the e5 Space Wedge",
-        "intro": "When Black grabs the gambit with …exf4 (his opponents do this 94% of the time at this branch), his 17-game plan stakes out space with e5, kicking the f6-knight back to g8 and cramping Black. Nf3 and d4 build a big pawn centre, and after …d6/dxe5 White has a lead in development and open lines for the pawn. The classic gambit trade: a pawn for time and the initiative.",
+        "title": "Vienna: Pile Onto the Weakened Kingside",
+        "intro": "A real GothamChess win vs kikoveiga. White’s pieces all swing toward the loosened king.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Vienna-Game",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Vienna_Game"
+          "https://en.wikipedia.org/wiki/Vienna_Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -49728,302 +50033,119 @@
   {
     "id": "mp-progothamchess-fantasy-dxe4-center",
     "openingId": "pro-gothamchess-fantasy-caro",
-    "criticalPositionFen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
+    "criticalPositionFen": "r3k2r/p1q2ppp/2pb1n2/1p2p2b/2BPP3/2P2N1P/PP1N2P1/R2Q1RK1 w kq - 0 13",
     "title": "Fantasy 3…dxe4: the Big e4 Centre + Slow Build",
-    "overview": "His main Fantasy plan across the 44-game 3…dxe4 line. White recaptures fxe4 to build a broad pawn centre, develops Bc4 and Nf3, and castles. Then the slow squeeze: c3 supports d4, Be3 and Nbd2 complete development, and the Bd3 + Qc2 battery aims at the kingside. The Fantasy’s point — a big centre and extra space — gives White a comfortable, pleasant game.",
+    "overview": "A real GothamChess win (vs Styloow): the bishop develops to d3, then a4 and b4 pry at Black’s queenside pawns, opening files while White’s lead in development tells.",
     "pawnBreaks": [
-      "the e4/d4 big centre",
-      "c3 supporting d4"
-    ],
-    "pieceManeuvers": [
-      "Bc1-e3 supporting the centre",
-      "Nb1-d2 completing development",
-      "Bd3 + Qc2 the kingside battery"
-    ],
-    "strategicThemes": [
-      "Build the big e4/d4 centre",
-      "Complete development with Be3/Nbd2",
-      "Aim the battery at the king"
-    ],
-    "endgameTransitions": [
-      "The space edge carries into the ending"
-    ],
-    "playableLines": [
       {
-        "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
-        "moves": [
-          "Be3",
-          "O-O",
-          "Nbd2"
-        ],
-        "annotations": [
-          "Be3 — White develops the bishop, reinforcing the d4-pawn and the big centre.",
-          "…O-O — Black castles into a slightly cramped but solid position.",
-          "Nbd2 — White completes development; the broad centre, the extra space, and the harmonious setup give a pleasant, space-gaining edge. The Fantasy has delivered exactly the position White wanted."
-        ],
-        "arrows": [
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "Be3 — reinforce the centre",
-          "O-O — Black castles",
-          "Nbd2 — complete development"
-        ],
-        "title": "Fantasy 3…dxe4: the Big e4 Centre + Slow Build",
-        "intro": "His main Fantasy plan across the 44-game 3…dxe4 line. White recaptures fxe4 to build a broad pawn centre, develops Bc4 and Nf3, and castles. Then the slow squeeze: c3 supports d4, Be3 and Nbd2 complete development, and the Bd3 + Qc2 battery aims at the kingside. The Fantasy's point — a big centre and the bishop pair — gives White a comfortable space advantage.",
-        "sources": [
-          "book:chess-fundamentals",
-          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-        ]
+        "move": "a4 and b4 queenside",
+        "explanation": "a4 and b4 pry open Black’s queenside pawn chain.",
+        "fen": ""
       }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-fantasy-e6-qg4attack",
-    "openingId": "pro-gothamchess-fantasy-caro",
-    "criticalPositionFen": "rnbqk2r/pp3ppp/2p1pn2/8/3PP3/P1P4N/2P3PP/R1BQKB1R b KQkq - 0 8",
-    "title": "Fantasy 3…e6: the Qg4-Qxg7 Kingside Raid",
-    "overview": "Against the solid 3…e6 with …Bb4, White doubles the c-pawns but gets the bishop pair and a direct attacking chance. When Black grabs on e4, the Fantasy's signature shot is Qg4! — hitting g7 and the e4-knight at once. After …Nf6 Qxg7, White snatches the g7-pawn and the rook on the open g-file, a violent raid that exploits Black's missing dark-squared bishop.",
-    "pawnBreaks": [
-      "the e4 centre",
-      "the open g-file after Qxg7"
     ],
     "pieceManeuvers": [
-      "Qd1-g4 the double attack on g7 and e4",
-      "Qg4xg7 the raid",
-      "the bishop pair from …Bxc3"
-    ],
-    "strategicThemes": [
-      "Exploit the missing dark bishop",
-      "Hit g7 and e4 with Qg4",
-      "Raid with Qxg7"
-    ],
-    "endgameTransitions": [
-      "The extra material and bishop pair decide"
-    ],
-    "playableLines": [
       {
-        "fen": "rnbqk2r/pp3ppp/2p1pn2/8/3PP3/P1P4N/2P3PP/R1BQKB1R b KQkq - 0 8",
-        "moves": [
-          "Nxe4",
-          "Qg4",
-          "Nf6",
-          "Qxg7"
-        ],
-        "annotations": [
-          "…Nxe4 — Black grabs the e4-pawn, but the knight steps into a tactic.",
-          "Qg4 — the double attack! The queen hits the e4-knight and the g7-pawn at the same time.",
-          "…Nf6 — Black saves the knight, but g7 falls.",
-          "Qxg7 — the raid lands. White snatches the g7-pawn and attacks the h8-rook on the open g-file; with Black’s dark-squared bishop long gone, the kingside is fatally weak. White is winning the material and the attack."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "Nxe4 — steps into a tactic",
-          "Qg4 — hit e4 and g7",
-          "Nf6 — saves the knight",
-          "Qxg7 — the raid, winning"
-        ],
-        "title": "Fantasy 3…e6: the Qg4-Qxg7 Kingside Raid",
-        "intro": "Against the solid 3…e6 with …Bb4, White doubles the c-pawns but gets the bishop pair and a direct attacking chance. When Black grabs on e4, the Fantasy's signature shot is Qg4! — hitting g7 and the e4-knight at once. After …Nf6 Qxg7, White snatches the g7-pawn and the rook on the open g-file, a violent raid that exploits Black's missing dark-squared bishop.",
-        "sources": [
-          "book:chess-fundamentals",
-          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-        ]
+        "piece": "Bishop",
+        "route": "Bf1-d3 develop",
+        "explanation": "The bishop develops to d3 before the queenside expansion."
       }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-fantasy-g6-poisonpawn",
-    "openingId": "pro-gothamchess-fantasy-caro",
-    "criticalPositionFen": "rnb1k1nr/pp2ppbp/2p3p1/3p4/3PP3/q1NBBP2/P1PQ2PP/1R2K1NR b Kkq - 3 8",
-    "title": "Fantasy 3…g6: the b2 Poison-Pawn Lead",
-    "overview": "Against the aggressive 3…g6 fianchetto, White invites the poison: Be3 and Qd2 dare Black to grab b2 with …Qxb2. After Rb1 chases the queen to a3, White has a massive lead in development and open lines for the pawn — Bd3 and Nge2/Nf3 pour out while Black's queen is stuck offside. A gambit-style initiative against the Fantasy's sharpest try.",
-    "pawnBreaks": [
-      "the e4 centre",
-      "open lines for the b-pawn"
-    ],
-    "pieceManeuvers": [
-      "Ra1-b1 chasing the offside queen",
-      "Bf1-d3 rapid development",
-      "Ng1-f3 developing toward the centre"
     ],
     "strategicThemes": [
-      "Offer the b2-pawn for development",
-      "Chase the queen with Rb1",
-      "Lead in development for the pawn"
+      "Open the queenside with a4 and b4.",
+      "Use the development lead."
     ],
     "endgameTransitions": [
-      "Keep attacking — the lead in development is the compensation"
+      "Open files favour the better-developed side into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnb1k1nr/pp2ppbp/2p3p1/3p4/3PP3/q1NBBP2/P1PQ2PP/1R2K1NR b Kkq - 3 8",
+        "fen": "r3k2r/p1q2ppp/2pb1n2/1p2p2b/2BPP3/2P2N1P/PP1N2P1/R2Q1RK1 w kq - 0 13",
         "moves": [
-          "dxe4",
-          "fxe4",
-          "Nf6",
-          "Nf3"
-        ],
-        "annotations": [
-          "…dxe4 — Black grabs a central pawn, trying to justify the offside queen.",
-          "fxe4 — White recaptures, keeping the big centre intact.",
-          "…Nf6 — Black develops, attacking the e4-pawn.",
-          "Nf3 — White develops with tempo, defending the centre and completing the harmonious setup. With the queen marooned on a3 and White’s pieces flowing out, the lead in development gives a powerful initiative — full compensation for the sacrificed b2 pawn."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "dxe4 — Black grabs a pawn",
-          "fxe4 — keep the centre",
-          "Nf6 — Black develops",
-          "Nf3 — develop with tempo"
-        ],
-        "title": "Fantasy 3…g6: the b2 Poison-Pawn Lead",
-        "intro": "Against the aggressive 3…g6 fianchetto, White invites the poison: Be3 and Qd2 dare Black to grab b2 with …Qxb2. After Rb1 chases the queen to a3, White has a massive lead in development and open lines for the pawn — Bd3 and Nge2/Nf3 pour out while Black's queen is stuck offside. A gambit-style initiative against the Fantasy's sharpest try.",
-        "sources": [
-          "book:chess-fundamentals",
-          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-fantasy-qb6-na4",
-    "openingId": "pro-gothamchess-fantasy-caro",
-    "criticalPositionFen": "rnb1k1nr/pp3ppp/2p5/q1b5/N2NP3/2P5/PP4PP/R1BQKB1R b KQkq - 0 9",
-    "title": "Fantasy 3…Qb6: the Na4 + b4 Queenside Squeeze",
-    "overview": "Against the early 3…Qb6, White develops naturally and, after the central exchanges, harasses the queen. The Na4 hits the c5-bishop and the queen, and after …Qa5+ c3, White plays b4 to gain queenside space with tempo. The Bd3 battery and the central majority give White a comfortable, space-gaining game against this offbeat try.",
-    "pawnBreaks": [
-      "b2-b4 the queenside space gain",
-      "c3 supporting the centre"
-    ],
-    "pieceManeuvers": [
-      "Nc3-a4 harassing the bishop and queen",
-      "Bf1-d3 the kingside battery",
-      "the central pawn majority"
-    ],
-    "strategicThemes": [
-      "Harass with Na4",
-      "Gain queenside space with b4",
-      "Build the Bd3 battery"
-    ],
-    "endgameTransitions": [
-      "The space edge favours White in simplification"
-    ],
-    "playableLines": [
-      {
-        "fen": "rnb1k1nr/pp3ppp/2p5/q1b5/N2NP3/2P5/PP4PP/R1BQKB1R b KQkq - 0 9",
-        "moves": [
-          "Be7",
+          "Bd3",
+          "Bg6",
+          "a4",
+          "Rb8",
+          "axb5",
+          "cxb5",
           "b4",
-          "Qc7",
-          "Bd3"
+          "Qxc3"
         ],
         "annotations": [
-          "…Be7 — Black retreats the bishop after the Na4 harassment.",
-          "b4 — White gains queenside space with tempo, clamping down and preparing to expand.",
-          "…Qc7 — the queen finally finds a stable square, having been chased around.",
-          "Bd3 — White builds the battery toward h7 and completes development; the queenside space, the central majority, and the harmonious setup give White the comfortable, better game."
+          "Bd3 — developing the bishop toward the kingside.",
+          "…Bg6 — Black offers a trade of light bishops.",
+          "a4 — striking at Black’s queenside pawns.",
+          "…Rb8 — propping up b5.",
+          "axb5 — opening the a-file.",
+          "…cxb5 — recapturing.",
+          "b4 — clamping and prying open the queenside.",
+          "…Qxc3 — Black grabs a pawn, but White’s development lead tells."
+        ],
+        "learnCues": [
+          "Bd3 — develop",
+          "Bg6 — offer a trade",
+          "a4 — strike the queenside",
+          "Rb8 — prop up b5",
+          "axb5 — open the a-file",
+          "cxb5 — recapture",
+          "b4 — pry it open",
+          "Qxc3 — White leads"
         ],
         "arrows": [
           [],
           [],
+          [
+            {
+              "from": "a2",
+              "to": "a4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
+          [],
+          [],
+          [
+            {
+              "from": "b2",
+              "to": "b4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "e7",
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -50035,30 +50157,441 @@
           ],
           [
             {
-              "square": "c7",
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Fantasy Caro: Pry Open the Queenside",
+        "intro": "A real GothamChess win vs Styloow. White strikes the queenside with a4 and b4 to open lines.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-fantasy-e6-qg4attack",
+    "openingId": "pro-gothamchess-fantasy-caro",
+    "criticalPositionFen": "r1b1k1r1/pp1n1p1p/2p1pn1Q/q7/3P4/P1PB3N/2P3PP/R1B1K2R w KQq - 5 13",
+    "title": "Fantasy 3…e6: the Qg4-Qxg7 Kingside Raid",
+    "overview": "A real GothamChess win: when Black’s rook gorges on g2, Nf4 jumps in to hit it and White’s initiative rolls while the rook scrambles back.",
+    "pawnBreaks": [
+      {
+        "move": "c4 central space",
+        "explanation": "c4 grabs central space while Black’s rook is offside.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nh3-f4 attack",
+        "explanation": "The knight leaps to f4 to attack the offside g2-rook."
+      }
+    ],
+    "strategicThemes": [
+      "Punish the greedy rook with Nf4.",
+      "Keep the initiative rolling."
+    ],
+    "endgameTransitions": [
+      "The initiative converts before any endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1k1r1/pp1n1p1p/2p1pn1Q/q7/3P4/P1PB3N/2P3PP/R1B1K2R w KQq - 5 13",
+        "moves": [
+          "Bd2",
+          "Rxg2",
+          "Nf4",
+          "Rg8",
+          "Rf1",
+          "b6",
+          "c4",
+          "Qa4"
+        ],
+        "annotations": [
+          "Bd2 — developing the bishop.",
+          "…Rxg2 — Black’s rook gorges on the g2-pawn.",
+          "Nf4 — the knight leaps in, attacking the stranded rook.",
+          "…Rg8 — the rook scrambles back.",
+          "Rf1 — activating the rook.",
+          "…b6 — Black develops.",
+          "c4 — grabbing central space.",
+          "…Qa4 — Black seeks counterplay, but White’s initiative dominates."
+        ],
+        "learnCues": [
+          "Bd2 — develop",
+          "Rxg2 — Black grabs g2",
+          "Nf4 — attack the rook",
+          "Rg8 — rook retreats",
+          "Rf1 — activate",
+          "b6 — develop",
+          "c4 — central space",
+          "Qa4 — White presses"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "h3",
+              "to": "f4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d3",
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Be7 — the bishop retreats",
-          "b4 — gain space with tempo",
-          "Qc7 — the queen settles",
-          "Bd3 — the kingside battery"
-        ],
-        "title": "Fantasy 3…Qb6: the Na4 + b4 Queenside Squeeze",
-        "intro": "Against the early 3…Qb6, White develops naturally and, after the central exchanges, harasses the queen. The Na4 hits the c5-bishop and the queen, and after …Qa5+ c3, White plays b4 to gain queenside space with tempo. The Bd3 battery and the central majority give White a comfortable, space-gaining game against this offbeat try.",
+        "title": "Fantasy Caro: Punish the Greedy Rook",
+        "intro": "A real GothamChess win. Black grabs g2 with the rook; Nf4 traps it on the offensive.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-fantasy-g6-poisonpawn",
+    "openingId": "pro-gothamchess-fantasy-caro",
+    "criticalPositionFen": "rnb1k2r/pp2npb1/2p3p1/3p3p/4PP1P/q1NBB3/P1PQN1P1/1R2K2R w Kkq - 1 13",
+    "title": "Fantasy 3…g6: the b2 Poison-Pawn Lead",
+    "overview": "A real GothamChess win (vs imsuyogwaghYT): f5 cracks Black’s kingside, the bishop eyes f7 from c4, and the knight grabs the centre on d4 as White’s pieces swarm the king.",
+    "pawnBreaks": [
+      {
+        "move": "f4-f5 break",
+        "explanation": "f5 cracks open Black’s kingside pawn cover.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bf1-c4 to f7",
+        "explanation": "The bishop targets f7 from c4 as the kingside opens."
+      }
+    ],
+    "strategicThemes": [
+      "Open the kingside with f5.",
+      "Swarm the king with the pieces."
+    ],
+    "endgameTransitions": [
+      "The attack decides before an endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnb1k2r/pp2npb1/2p3p1/3p3p/4PP1P/q1NBB3/P1PQN1P1/1R2K2R w Kkq - 1 13",
+        "moves": [
+          "f5",
+          "Qd6",
+          "O-O",
+          "d4",
+          "Bc4",
+          "gxf5",
+          "Nxd4",
+          "Be5"
+        ],
+        "annotations": [
+          "f5 — the pawn storms forward, cracking open the kingside.",
+          "…Qd6 — Black repositions the queen.",
+          "O-O — White castles.",
+          "…d4 — Black hits the centre.",
+          "Bc4 — the bishop eyes f7.",
+          "…gxf5 — Black grabs the pawn, opening the g-file.",
+          "Nxd4 — the knight grabs the centre, hitting e6 and f5.",
+          "…Be5 — Black centralises, but White’s pieces swarm the king."
+        ],
+        "learnCues": [
+          "f5 — crack the kingside",
+          "Qd6 — reposition",
+          "O-O — castle",
+          "d4 — hit the centre",
+          "Bc4 — eye f7",
+          "gxf5 — open the g-file",
+          "Nxd4 — grab the centre",
+          "Be5 — White swarms"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f4",
+              "to": "f5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d3",
+              "to": "c4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Fantasy Caro: Crack the Kingside with f5",
+        "intro": "A real GothamChess win vs imsuyogwaghYT. f5 rips the kingside open and the pieces swarm.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-fantasy-qb6-na4",
+    "openingId": "pro-gothamchess-fantasy-caro",
+    "criticalPositionFen": "rnb2rk1/ppq1bppp/2p2n2/8/NP1NP3/2PB4/P5PP/R1BQ1RK1 w - - 5 13",
+    "title": "Fantasy 3…Qb6: the Na4 + b4 Queenside Squeeze",
+    "overview": "A real GothamChess win (vs jerry_77): the dark-squared bishops come off, then the queen reroutes via e1 to h4, swinging into the kingside attack.",
+    "pawnBreaks": [
+      {
+        "move": "e4-e5 anchor",
+        "explanation": "The e5-pawn anchors the centre while the queen swings over.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-e1-h4 swing",
+        "explanation": "The queen reroutes through e1 to h4 to attack the kingside."
+      }
+    ],
+    "strategicThemes": [
+      "Trade the dark bishops, then attack the kingside.",
+      "Reroute the queen to h4."
+    ],
+    "endgameTransitions": [
+      "If the attack is held, the centre still favours White."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnb2rk1/ppq1bppp/2p2n2/8/NP1NP3/2PB4/P5PP/R1BQ1RK1 w - - 5 13",
+        "moves": [
+          "Bf4",
+          "Bd6",
+          "Bxd6",
+          "Qxd6",
+          "Qe1",
+          "Ng4",
+          "Qh4",
+          "Ne5"
+        ],
+        "annotations": [
+          "Bf4 — developing and offering a trade.",
+          "…Bd6 — Black challenges the bishop.",
+          "Bxd6 — trading the dark-squared bishops.",
+          "…Qxd6 — recapturing.",
+          "Qe1 — rerouting the queen toward the kingside.",
+          "…Ng4 — Black’s knight lunges.",
+          "Qh4 — the queen swings to h4, joining the attack.",
+          "…Ne5 — the knight retreats to the centre, but White’s queen is active."
+        ],
+        "learnCues": [
+          "Bf4 — offer a trade",
+          "Bd6 — challenge",
+          "Bxd6 — trade bishops",
+          "Qxd6 — recapture",
+          "Qe1 — reroute the queen",
+          "Ng4 — Black lunges",
+          "Qh4 — swing into the attack",
+          "Ne5 — White is active"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d1",
+              "to": "e1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "e1",
+              "to": "h4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Fantasy Caro: Swing the Queen to the Kingside",
+        "intro": "A real GothamChess win vs jerry_77. Trade the dark bishops, then reroute the queen to h4.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation",
+          "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
