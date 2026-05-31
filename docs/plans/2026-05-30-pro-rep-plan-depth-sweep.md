@@ -146,3 +146,23 @@ data-only add.
    middlegamePlanThemes gates (green). Spot-walk beats by hand for voice quality.
 3. The 13 baselined-shallow lines: extend along player's most-played real
    continuation (extend-shallow.cjs drafted; container reset lost /tmp — rebuild).
+
+---
+## VOICE WALK + GATE CLOSE (2026-05-31)
+Full per-beat voice walk of every pro-rep lesson/model-game/pitfall. Found +
+fixed **146 spoken-voice violations**: 62 move-number prefixes in lesson
+say/sayShort, 60 in pitfall explanations, 18 in model-game overviews, + 6
+over-length Learn cues. Stats preserved (73.4%/1,475/200-year). NEW GATE
+`proRepNarrationVoice.test.ts` (CLAUDE.md G9.4) — scans every pro lesson +
+pitfall + model-game for move-number prefixes / >8-word cues; wired into
+ship-check; baseline-free. Shipped (6bc1fbbd).
+
+### Structural audit (audit-dump.cjs, restored + committed)
+90 findings, all ply-length (0 illegal, 0 thin-narration, 0 missing-sources):
+- 22 SHORT_SPINE + 54 SHORT_VAR: the `pro-repertoires.json` opening/variation
+  `pgn`s are short DISPLAY fragments (8-19 plies). The actual WATCH LESSONS reach
+  the middlegame (London 18 / Vienna 23 / Italian 20 / Caro 22 plies in their
+  LessonScript beats) — so the student walk IS deep; only the tab-preview pgn is
+  short. Lower-severity polish: extend the variation pgn fragments to match.
+- 14 SHORT_PLAN: 9 endgame conversions (correct length per G9.1 endgame doctrine)
+  + 5 deferred not-sound midgame plans (no sound 8-ply real line exists).
