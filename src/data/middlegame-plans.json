@@ -31252,7 +31252,8 @@
           "Nxd7",
           "Qxd7",
           "Qc1",
-          "Be7"
+          "Be7",
+          "Rd1"
         ],
         "annotations": [
           "…Nbd7 completes development and challenges the e5-square.",
@@ -31261,7 +31262,8 @@
           "Nxd7",
           "…Qxd7 recaptures, the queen well placed.",
           "Qc1 reorganises.",
-          "…Be7 develops the bishop — Black has the bishop pair, kingside space, and a double-edged game with full counterplay."
+          "…Be7 develops the bishop — Black has the bishop pair, kingside space, and a double-edged game with full counterplay.",
+          "White centralizes the rook on d1, supporting the d4-pawn and the central tension. Black has emerged from the Anti-Moscow with the bishop pair, the half-open lines, and active piece play fully compensating the structural concessions — a rich, double-edged middlegame."
         ],
         "learnCues": [
           "…Nbd7 — complete development",
@@ -31270,7 +31272,8 @@
           "Nxd7",
           "…Qxd7 — recapture",
           "Qc1 — reorganise",
-          "…Be7 — bishop pair, space, counterplay"
+          "…Be7 — bishop pair, space, counterplay",
+          "Rd1 — White centralizes; Black's pieces are active"
         ],
         "sources": [
           "concept:pos-initiative",
@@ -31286,6 +31289,7 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
           [],
           [],
           [],
@@ -31365,6 +31369,12 @@
             },
             {
               "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
