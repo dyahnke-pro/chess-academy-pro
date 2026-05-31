@@ -7638,5 +7638,65 @@
     "sources": [
       "https://lichess.org/myqx8fCX"
     ]
+  },
+  {
+    "id": "mg-lichess-to1QN7uI",
+    "openingId": "englund-gambit",
+    "white": "Domogaev, Sergey",
+    "black": "Kalinichev, Andrey",
+    "whiteElo": 2367,
+    "blackElo": 2403,
+    "result": "0-1",
+    "year": 2008,
+    "event": "Tula Kotov Memorial",
+    "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Nc3 Nxe5 Nxe5 Qxe5 g3 Bb4 Qd3 Nf6 Bg2 O-O O-O Bxc3 bxc3 d6 Qd4 Qxe2 Bg5 Nd7 Rfe1 Qxc2 Be7 Re8 Bxd6 Rxe1+ Rxe1 cxd6 Re8+ Nf8 Qxd6 Qc1+ Bf1 Qxf1+ Kxf1 Bh3+ Kg1 Rxe8 f3 Re2 Qb8 Rg2+ Kh1 Rf2 Qxa7 Rf1+",
+    "overview": "Black's Englund Gambit recovers the pawn and seizes the initiative: …Qe7 and …Nxe5 win the material back, then the queen raids with …Qxe2 and …Qxc2, harvesting pawns while White's king stays loose. Active piece play converts a 'dubious' gambit into a full point against a 2400-rated opponent.",
+    "studentSide": "black",
+    "sourceUrl": "https://lichess.org/to1QN7uI",
+    "source": "lichess",
+    "sources": [
+      "https://lichess.org/to1QN7uI",
+      "concept:pos-initiative"
+    ]
+  },
+  {
+    "id": "mg-lichess-wFXOqTj4",
+    "openingId": "stafford-gambit",
+    "white": "Van Dael, Siem",
+    "black": "Radeva, Viktoria",
+    "whiteElo": 2341,
+    "blackElo": 2274,
+    "result": "0-1",
+    "year": 2020,
+    "event": "Third Sat 146 Mix 2020",
+    "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5 Be2 h5 h3 Qd4 O-O Ng4 hxg4 hxg4 g3 Qe5 Kg2 Bxf2 Rxf2 Qh5",
+    "overview": "The Stafford Gambit's nightmare for White: after …dxc6 Black throws everything at f2 and h2. …h5 and …Ng4 pry open the king, the …Bxf2 sacrifice tears the cover away, and …Qh5 lands the decisive blow down the open h-file — a model of the Stafford's raw attacking power.",
+    "studentSide": "black",
+    "sourceUrl": "https://lichess.org/wFXOqTj4",
+    "source": "lichess",
+    "sources": [
+      "https://lichess.org/wFXOqTj4",
+      "concept:tac-sacrifice"
+    ]
+  },
+  {
+    "id": "mg-lichess-Q8UAkVtW",
+    "openingId": "danish-gambit",
+    "white": "Hedke, Fred",
+    "black": "Jamrich, Gyorgy",
+    "whiteElo": 2380,
+    "blackElo": 2295,
+    "result": "1-0",
+    "year": 1996,
+    "event": "Budapest FS11 IM",
+    "pgn": "e4 e5 d4 exd4 c3 dxc3 Bc4 c2 Qxc2 Bb4+ Nc3 Nc6 Nf3 Nge7 O-O Bxc3 Qxc3 O-O b4 Kh8 b5 Nb8 Bb2 f6 Rad1 a6 b6 cxb6 Rd6 b5 Rxf6 d5 Rd6 d4 Qxd4",
+    "overview": "A textbook Danish Gambit attack: White sacrifices a pawn for blistering development — Bc4, Nc3, Nf3 and O-O are all out before Black is organised. The b4-b5 push grabs queenside space, the Rd6 rook-lift crashes into the position, and White's initiative never lets Black breathe. The romantic Danish exactly as intended.",
+    "studentSide": "white",
+    "sourceUrl": "https://lichess.org/Q8UAkVtW",
+    "source": "lichess",
+    "sources": [
+      "https://lichess.org/Q8UAkVtW",
+      "concept:pos-initiative"
+    ]
   }
 ]

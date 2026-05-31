@@ -2626,5 +2626,187 @@
         "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
       ]
     }
+  ],
+  "scotch-gambit": [
+    {
+      "fen": "r1bqkb1r/ppp2ppp/2n2n2/3pP3/2Bp4/5N2/PPP2PPP/RNBQK2R w KQkq d6 0 6",
+      "wrongMove": "exf6",
+      "correctMove": "Bb5",
+      "explanation": "With …d5 Black hit the bishop and the e5-pawn at once. Grabbing the knight with exf6?? walks into …dxc4 — Black wins the bishop and keeps the extra d4-pawn, emerging clearly better even after fxg7 Bxg7. The cool Bb5 instead saves the bishop with tempo by pinning the c6-knight, keeping White's gambit pressure fully alive.",
+      "shortNarration": "Bb5 — pin first, don’t grab f6",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Scotch_Game"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/ppp2ppp/2n5/1B1pP3/3pn3/5N2/PPP2PPP/RNBQK2R w KQkq - 2 7",
+      "wrongMove": "Qxd4",
+      "correctMove": "Nxd4",
+      "explanation": "Recapturing the d4-pawn with the queen invites …Bc5 and …O-O with gain of tempo, and the exposed queen hands Black the initiative. Recapture with Nxd4 instead — the knight centralises safely and keeps White's development lead.",
+      "shortNarration": "Nxd4 — recapture with the knight",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Scotch_Game"
+      ]
+    },
+    {
+      "fen": "r2qkb1r/p1pb1ppp/2p5/3pP3/3Nn3/8/PPP2PPP/RNBQK2R w KQkq - 0 9",
+      "wrongMove": "f3",
+      "correctMove": "O-O",
+      "explanation": "Kicking the e4-knight with f3?? rips open White's own king before castling and drops material to the loose centre. Just castle: O-O tucks the king away and connects the rooks, after which White calmly attends to the e4-knight.",
+      "shortNarration": "O-O — castle, don’t play f3 yet",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Scotch_Game"
+      ]
+    }
+  ],
+  "vienna-gambit": [
+    {
+      "fen": "rnbqkbnr/ppp2ppp/8/4p3/3P1p2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 7",
+      "wrongMove": "Nxe5",
+      "correctMove": "Qe2",
+      "explanation": "Snatching the e5-pawn with Nxe5 is the natural move a quarter of players choose — but after …Qe7 the pin wins the knight back and equalises. Qe2 first keeps the pawn defended and the initiative: White stays a healthy edge ahead with the f-file and the big centre.",
+      "shortNarration": "Qe2 — defend first, don’t grab e5",
+      "sources": [
+        "concept:pos-initiative",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Vienna_Game"
+      ]
+    },
+    {
+      "fen": "rnbqk2r/ppp2ppp/8/2bpP3/4n3/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 6",
+      "wrongMove": "d3",
+      "correctMove": "Qe2",
+      "explanation": "With the bishop on c5 eyeing f2, the greedy d3 (hitting the e4-knight) runs into …Qh4+ and …O-O with a raging attack on the white king. Qe2 calmly defends, unpins, and prepares O-O-O — White keeps the extra central pawn without exposing the king.",
+      "shortNarration": "Qe2 — unpin and castle long",
+      "sources": [
+        "concept:pos-initiative",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Vienna_Game"
+      ]
+    }
+  ],
+  "danish-gambit": [
+    {
+      "fen": "rnbqkbnr/ppp2ppp/8/3p4/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+      "wrongMove": "e5",
+      "correctMove": "exd5",
+      "explanation": "When Black returns a pawn with …d5, the right reply is exd5 — open the centre while White is the better-developed side. Pushing e5 instead surrenders the centre and the initiative; the once-menacing pawns become weak and Black equalises comfortably.",
+      "shortNarration": "exd5 — open the centre, don’t push e5",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-initiative",
+        "https://en.wikipedia.org/wiki/Danish_Gambit"
+      ]
+    },
+    {
+      "fen": "r3k1nr/ppp2ppp/2n5/8/1bqP4/2N2B2/PP3PPP/R1BQK2R w KQkq - 1 10",
+      "wrongMove": "Qe2+",
+      "correctMove": "Bxc6+",
+      "explanation": "Black's queen has drifted to c4 — pounce with Bxc6+! The zwischenzug check forces …bxc6 (wrecking Black's queenside) before White trades queens on the next move, emerging with the better structure. The routine Qe2+ instead just trades and lets Black recapture cleanly.",
+      "shortNarration": "Bxc6+ — zwischenzug before trading",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-initiative",
+        "https://en.wikipedia.org/wiki/Danish_Gambit"
+      ]
+    }
+  ],
+  "smith-morra-gambit": [
+    {
+      "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+      "wrongMove": "bxc3",
+      "correctMove": "Nxc3",
+      "explanation": "Recapture on c3 with the knight — Nxc3 is the whole point of the Morra: rapid development and open lines for the gambit pawn. Taking with bxc3 instead doubles White's pawns, blunts the attack, and leaves White simply a pawn down with nothing to show for it.",
+      "shortNarration": "Nxc3 — recapture with the knight",
+      "sources": [
+        "concept:pos-initiative",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit"
+      ]
+    },
+    {
+      "fen": "r1bqkb1r/3pn1pp/p1n1pp2/1p6/2B1P3/2N1BN2/PP3PPP/R2Q1RK1 w kq - 0 10",
+      "wrongMove": "Bxb5",
+      "correctMove": "Bb3",
+      "explanation": "Grabbing the b5-pawn with Bxb5?? hangs the bishop to …axb5, since the a6-pawn defends b5 — a clean piece for a pawn. Retreat to Bb3 instead, keeping the bishop trained on the a2-g8 diagonal and f7 where the Morra's pressure lives.",
+      "shortNarration": "Bb3 — keep the diagonal, b5 is poisoned",
+      "sources": [
+        "concept:pos-initiative",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit"
+      ]
+    }
+  ],
+  "marshall-attack": [
+    {
+      "fen": "r1b2rk1/5ppp/p1pb4/1p1n4/3P3q/1BP3P1/PP3P1P/RNBQR1K1 b - - 0 14",
+      "wrongMove": "Qxh2+",
+      "correctMove": "Qh3",
+      "explanation": "The Marshall attacker is hunting the white king, but Qxh2+?? is a mirage — after Kxh2 Black has simply given the queen for one pawn. The quiet Qh3 is the killer: it keeps the queen on the attack, threatens mate ideas on g2, and ties White in knots.",
+      "shortNarration": "Qh3 — keep the queen, don’t take h2",
+      "sources": [
+        "concept:tac-sacrifice",
+        "concept:pos-initiative",
+        "https://en.wikipedia.org/wiki/Marshall_Attack"
+      ]
+    },
+    {
+      "fen": "r1bq1rk1/5ppp/p1pb4/1p1n4/3P4/1BP5/PP3PPP/RNBQR1K1 b - - 2 13",
+      "wrongMove": "Bxh2+",
+      "correctMove": "Qh4",
+      "explanation": "The greek-gift Bxh2+ is premature here — after Kxh2 there is no follow-up and Black is just a piece down. Bring the queen out first with Qh4, eyeing h2 and the kingside; only with the pieces coordinated does the Marshall attack catch fire.",
+      "shortNarration": "Qh4 — coordinate before sacrificing",
+      "sources": [
+        "concept:tac-sacrifice",
+        "concept:pos-initiative",
+        "https://en.wikipedia.org/wiki/Marshall_Attack"
+      ]
+    }
+  ],
+  "stafford-gambit": [
+    {
+      "fen": "r1bqkb1r/pppp1ppp/2N2n2/8/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 4",
+      "wrongMove": "d6",
+      "correctMove": "bxc6",
+      "explanation": "This is the whole point of the Stafford — recapture the knight with bxc6! It opens the b-file and the diagonals for Black's pieces and is the only move that justifies the gambit. Forgetting to recapture (…d6) simply leaves Black a piece down for nothing.",
+      "shortNarration": "bxc6 — recapture the knight!",
+      "sources": [
+        "concept:tac-sacrifice",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
+      ]
+    }
+  ],
+  "englund-gambit": [
+    {
+      "fen": "r1b1k1nr/pppp1ppp/2n5/4P3/1b6/2B2N2/PqPQPPPP/RN2KB1R b KQkq - 3 7",
+      "wrongMove": "Qxa1",
+      "correctMove": "Bxc3",
+      "explanation": "The famous Englund trap-spring: do NOT grab the rook. After Qxa1?? White plays Qc3 and the black queen is trapped in the corner. The killer is Bxc3! — pinning and winning, since Qxc3 walks into …Qc1 mate. Greed loses; the pin wins.",
+      "shortNarration": "Bxc3 — pin and win, not Qxa1",
+      "sources": [
+        "concept:tac-sacrifice",
+        "concept:pos-initiative",
+        "https://en.wikipedia.org/wiki/Englund_Gambit"
+      ]
+    },
+    {
+      "fen": "r1b1k1nr/pppp1ppp/2n5/4P3/8/2Q2N2/PqP1PPPP/RN2KB1R b KQkq - 0 8",
+      "wrongMove": "Qxc3+",
+      "correctMove": "Qc1#",
+      "explanation": "Don't settle for the queen trade — it's mate! Qc1# ends the game on the spot: the queen drops to c1, the king has no escape and nothing covers the square. Trading with Qxc3+ throws away the whole point of the trap.",
+      "shortNarration": "Qc1 — it’s checkmate, don’t trade",
+      "sources": [
+        "concept:tac-sacrifice",
+        "concept:pos-initiative",
+        "https://en.wikipedia.org/wiki/Englund_Gambit"
+      ]
+    }
   ]
 }
