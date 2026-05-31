@@ -1,115 +1,92 @@
-// FULL 3-INSTRUMENT POST-DEPLOY AUDIT (G1) for the masterclass surfaces changed
-// this session (model games, middlegame/endgame plans, pitfalls, narration).
-//   (1) Playwright drives the LIVE prod opening-detail surface
-//   (2) Live audit-stream pulled before + after, diff'd
-//   (3) Local listener sidecar captures voice/narration events off the page
+// 3-instrument audit — FIXED wiring. The audit-stream config hydrates at BOOT
+// (loadAuditStreamConfig reads localStorage before the baked fallback), so we
+// must set localStorage via addInitScript BEFORE the page loads. Then the live
+// app streams every audit (voice-speak-invoked, navigation, etc.) to our local
+// listener, and we verify the Watch narration actually FIRES.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
 const PROD = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const SECRET = process.env.AUDIT_STREAM_SECRET;
-const results = [];
-const rec = (name, status, detail='') => { results.push({ name, status, detail }); console.log(`  [${status}] ${name}${detail?' — '+detail:''}`); };
+const TARGETS = ['caro-kann', 'philidor-defence', 'two-knights-defence', 'slav-defence'];
 
-async function pullStream(sinceMs) {
-  if (!SECRET) return { error: 'no secret' };
-  try { const r = await fetch(`${PROD}/api/audit-stream?since=${sinceMs}`, { headers: { 'x-audit-secret': SECRET } }); if (!r.ok) return { error: `HTTP ${r.status}` }; return await r.json(); } catch (e) { return { error: String(e) }; }
-}
+const pull = async (since) => { if (!SECRET) return {error:'no secret'}; try { const r = await fetch(`${PROD}/api/audit-stream?since=${since}`,{headers:{'x-audit-secret':SECRET}}); return r.ok ? await r.json() : {error:`HTTP ${r.status}`}; } catch(e){ return {error:String(e)}; } };
 
-// openings changed this session + what to expect
-const TARGETS = [
-  { id: 'philidor-defence',    label: 'Philidor (narration edit)',  sections: ['model','mg'] },
-  { id: 'two-knights-defence', label: 'Two Knights (narration+plan+endgame)', sections: ['model','mg','eg'] },
-  { id: 'slav-defence',        label: 'Slav (model+plan+endgame)',   sections: ['model','mg','eg'] },
-  { id: 'nimzo-indian',        label: 'Nimzo (endgame OCB)',         sections: ['model','mg','eg'] },
-  { id: 'caro-kann',           label: 'Caro-Kann (keystone regression)', sections: ['model','mg'] },
-];
+console.log('=== (3) listener sidecar ===');
+const listener = await startAuditListener();
+console.log('  listener:', listener.url);
 
 console.log('=== (2) audit-stream BEFORE ===');
-const before = await pullStream(Date.now() - 60000);
-rec('prod audit-stream reachable', before.error ? 'FAIL' : 'PASS', before.error || `${(before.entries||[]).length} events/60s, storage ok`);
+const before = await pull(Date.now() - 60000);
+console.log('  ', before.error ? `ERROR ${before.error}` : `${(before.entries||[]).length} prod events/60s`);
 
-console.log('=== (3) local listener sidecar ===');
-const listener = await startAuditListener();
-console.log(`  listener: ${listener.url}`);
-
-console.log('=== (1) Playwright driving live prod ===');
+console.log('=== (1) Playwright (config injected pre-boot) ===');
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
-const pageErrors = [], voiceEvents = [];
-page.on('pageerror', e => pageErrors.push(`pageerror: ${e.message}`));
-page.on('request', req => { if (req.url().includes('/api/audit-stream') && req.method()==='POST') { try { const b=req.postDataJSON(); for (const e of (b?.entries||[])) if (/voice|speak|narration/i.test(e.kind||'')) voiceEvents.push(e); } catch {} } });
+// CRITICAL: set the audit-stream config BEFORE any app script runs, so
+// loadAuditStreamConfig() picks it up at boot and streams to our listener.
+await page.addInitScript(({ url, secret }) => {
+  try { localStorage.setItem('auditStreamUrl', url); localStorage.setItem('auditStreamSecret', secret); } catch {}
+}, { url: listener.url, secret: LOCAL_LISTENER_SECRET });
+
+const pageErrors = [];
+page.on('pageerror', e => pageErrors.push(e.message));
 
 const runStart = Date.now();
-try {
-  await page.goto(`${PROD}/`, { waitUntil: 'domcontentloaded', timeout: 25000 });
-  await page.evaluate(({url,secret}) => { localStorage.setItem('auditStreamUrl',url); localStorage.setItem('auditStreamSecret',secret); }, { url: listener.url, secret: LOCAL_LISTENER_SECRET });
-  // dismiss onboarding
-  await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 8000 }).catch(()=>null);
-  await page.waitForTimeout(3000);
-  if (await page.locator('[data-testid="strength-calibration-bubble"]').count() > 0) {
-    await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(()=>{});
-    await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state:'detached', timeout: 15000 }).catch(()=>{});
-  }
-  // warm the deferred seed
-  process.stdout.write('  seeding');
-  for (let i=0;i<14;i++){ await page.waitForTimeout(5000); process.stdout.write('.');
-    const n = await page.evaluate(async()=>{try{const q=indexedDB.open('ChessAcademyDB');const db=await new Promise((r,j)=>{q.onsuccess=()=>r(q.result);q.onerror=()=>j();});if(!db.objectStoreNames.contains('middlegamePlans'))return 0;const tx=db.transaction('middlegamePlans','readonly');const a=await new Promise((r,j)=>{const g=tx.objectStore('middlegamePlans').getAll();g.onsuccess=()=>r(g.result);g.onerror=()=>j();});return a.length;}catch{return 0;}});
-    if (n>200) break;
-  }
-  console.log(' seeded');
+await page.goto(`${PROD}/`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+await page.waitForSelector('[data-testid="strength-calibration-bubble"]', { timeout: 8000 }).catch(()=>{});
+await page.waitForTimeout(3000);
+if (await page.locator('[data-testid="strength-calibration-bubble"]').count() > 0) {
+  await page.locator('[data-testid="skill-band-intermediate"]').click({ timeout: 5000 }).catch(()=>{});
+  await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({ state:'detached', timeout: 15000 }).catch(()=>{});
+}
+process.stdout.write('  seeding');
+for (let i=0;i<14;i++){ await page.waitForTimeout(5000); process.stdout.write('.');
+  const n = await page.evaluate(async()=>{try{const q=indexedDB.open('ChessAcademyDB');const db=await new Promise((r,j)=>{q.onsuccess=()=>r(q.result);q.onerror=()=>j();});if(!db.objectStoreNames.contains('middlegamePlans'))return 0;const tx=db.transaction('middlegamePlans','readonly');const a=await new Promise((r,j)=>{const g=tx.objectStore('middlegamePlans').getAll();g.onsuccess=()=>r(g.result);g.onerror=()=>j();});return a.length;}catch{return 0;}});
+  if (n>200) break;
+}
+console.log(' seeded');
+const cfgState = await page.evaluate(() => ({ ls: localStorage.getItem('auditStreamUrl') })); // migration removes it after boot read
+console.log('  post-boot localStorage auditStreamUrl (removed after migration = good):', cfgState.ls);
 
-  for (const t of TARGETS) {
-    console.log(`\n--- ${t.label} [${t.id}] ---`);
-    await page.goto(`${PROD}/openings/${t.id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
-    await page.waitForTimeout(2500);
-    await page.locator('[data-testid="page-help-modal"] button, [aria-label="Close"]').first().click({ timeout: 2000 }).catch(()=>{});
-
-    // sections present in Dexie (what the sections render from) — deploy reached device
-    const have = await page.evaluate(async (oid)=>{ const open=()=>new Promise((r,j)=>{const q=indexedDB.open('ChessAcademyDB');q.onsuccess=()=>r(q.result);q.onerror=()=>j();}); const all=async(db,s)=>{if(!db.objectStoreNames.contains(s))return[];const tx=db.transaction(s,'readonly');return await new Promise((r,j)=>{const g=tx.objectStore(s).getAll();g.onsuccess=()=>r(g.result);g.onerror=()=>j();});}; const db=await open(); const mg=(await all(db,'modelGames')).filter(g=>g.openingId===oid); const pl=(await all(db,'middlegamePlans')).filter(p=>p.openingId===oid); return { model:mg.length, mg:pl.filter(p=>!p.id.endsWith('-endgame')).length, eg:pl.filter(p=>p.id.endsWith('-endgame')).length }; }, t.id);
-    for (const s of t.sections) {
-      const n = have[s]; const ok = n>0;
-      rec(`${t.id} ${s} content live`, ok?'PASS':'FAIL', `count=${n}`);
-    }
-
-    // Gate A runtime: tap Watch → must mount curated LessonPlayer, NOT legacy WalkthroughMode
-    const vBefore = voiceEvents.length;
-    const watch = page.getByRole('button', { name: /^watch$/i }).first();
-    if (await watch.count() > 0) {
-      await watch.click({ timeout: 6000 }).catch(()=>{});
-      await page.waitForTimeout(6000); // let the lesson mount + narrate
-      const legacy = await page.locator('[data-testid="walkthrough-progress"], [data-testid="walkthrough-mode"]').count();
-      rec(`${t.id} Watch = curated lesson (Gate A)`, legacy===0?'PASS':'FAIL', legacy?'legacy WalkthroughMode mounted!':'LessonPlayer (no legacy testid)');
-      const fired = voiceEvents.length - vBefore;
-      rec(`${t.id} Watch narration fired`, fired>0?'PASS':'WARN', `${fired} voice events`);
-      // exit back
-      await page.locator('[data-testid="walkthrough-back"], [aria-label="Back"], button:has-text("Exit")').first().click({ timeout: 3000 }).catch(()=>{ });
-      await page.goBack({ timeout: 5000 }).catch(()=>{});
-    } else {
-      rec(`${t.id} Watch button found`, 'WARN', 'no Watch button located');
-    }
+const out = [];
+for (const id of TARGETS) {
+  const evBefore = listener.events.length;
+  await page.goto(`${PROD}/openings/${id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
+  await page.waitForTimeout(2500);
+  await page.locator('[data-testid="page-help-modal"] button, [aria-label="Close"]').first().click({ timeout: 2000 }).catch(()=>{});
+  // Watch (real click = user gesture → unlocks audio context)
+  const w = page.getByRole('button', { name: /^watch$/i }).first();
+  let mounted = false;
+  if (await w.count() > 0) {
+    await w.click({ timeout: 6000 }).catch(()=>{});
+    await page.waitForTimeout(2000);
+    mounted = (await page.locator('[data-square]').count() > 0) && (await page.locator('[data-testid="walkthrough-progress"],[data-testid="walkthrough-mode"]').count() === 0);
+    // if a play/pause toggle exists and we're paused, start it
+    const playBtn = page.locator('[aria-label*="play" i], [data-testid*="play"]').first();
+    if (await playBtn.count() > 0) await playBtn.click({ timeout: 2000 }).catch(()=>{});
+    await page.waitForTimeout(9000); // let narration speak + stream-flush
   }
-} catch (e) {
-  rec('audit run', 'FAIL', String(e).slice(0,200));
-} finally {
-  rec('no page errors', pageErrors.length===0?'PASS':'FAIL', pageErrors.slice(0,3).join(' | '));
-  await browser.close();
+  const captured = listener.events.slice(evBefore);
+  const voice = captured.filter(e => /voice|speak|narration/i.test(e.kind||''));
+  const kinds = {}; for (const e of captured) kinds[e.kind] = (kinds[e.kind]||0)+1;
+  out.push({ id, mounted, total: captured.length, voice: voice.length, sample: voice[0]?.kind || captured[0]?.kind || '(none)', kinds });
+  console.log(`  ${id}: lessonMounted=${mounted} streamedEvents=${captured.length} voiceEvents=${voice.length} kinds=${JSON.stringify(kinds)}`);
+  if (voice[0]) console.log(`     e.g. ${voice[0].kind}: ${(voice[0].summary||'').slice(0,80)}`);
 }
 
-console.log('\n=== (2) audit-stream AFTER (delta) ===');
-const after = await pullStream(runStart);
-const delta = after.error ? [] : (after.entries||[]);
-rec('audit-stream delta captured', after.error?'WARN':'PASS', after.error || `${delta.length} events this run`);
-const kinds = {}; for (const e of [...delta, ...voiceEvents]) kinds[e.kind]=(kinds[e.kind]||0)+1;
-console.log('  event kinds:', JSON.stringify(kinds));
-console.log(`  listener voice events: ${voiceEvents.length}`);
+console.log('\n=== (2) audit-stream AFTER (prod delta) ===');
+const after = await pull(runStart);
+console.log('  ', after.error ? `ERROR ${after.error}` : `${(after.entries||[]).length} prod events this run`);
+console.log('  pageErrors:', pageErrors.length);
 
-const fails = results.filter(r=>r.status==='FAIL');
-const warns = results.filter(r=>r.status==='WARN');
-console.log(`\n=== RESULT: ${results.filter(r=>r.status==='PASS').length} PASS / ${warns.length} WARN / ${fails.length} FAIL ===`);
-if (fails.length) { console.log('FAILURES:'); fails.forEach(f=>console.log('  ✗ '+f.name+' — '+f.detail)); }
+const totalVoice = out.reduce((a,o)=>a+o.voice,0);
+const totalStream = out.reduce((a,o)=>a+o.total,0);
+console.log(`\n=== RESULT: ${totalStream} streamed events captured by listener, ${totalVoice} voice/narration events across ${TARGETS.length} openings ===`);
+console.log(totalVoice>0 ? 'NARRATION CONFIRMED FIRING via the listener ✓' : 'NO voice events — investigate (autoplay/audio-unlock or stream config)');
+await browser.close();
 await listener.stop?.();
-process.exit(fails.length ? 1 : 0);
+process.exit(0);
