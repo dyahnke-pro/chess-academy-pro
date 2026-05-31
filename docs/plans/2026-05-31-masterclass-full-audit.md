@@ -209,3 +209,34 @@ supporting-layer pass; ship per opening, not per layer-spray.
 semi-slav, KID, grünfeld, benoni, queens-indian, old-indian, two-knights,
 petrov, philidor (+ kings-gambit 2/8, queens-gambit 3/7, trompowsky 3/6,
 birds 3/5).
+
+---
+
+## UPDATE 2026-05-31 (later) — Stockfish online; pitfalls + targeted endgames shipped
+
+`apt-get install stockfish` succeeded → engine runnable at `/usr/games/stockfish`.
+That unblocked the last two layers:
+
+**Pitfalls (eval-verified, depth 20):** 6 shipped — two-knights (Fried Liver),
+philidor (illusory pin), albin (drops the wedge), najdorf (concedes d5),
+grünfeld (surrenders the centre), benoni (premature …b5). The engine **refuted
+~7 candidates I proposed** (schliemann, old-indian, qga, petrov, queens-indian,
+birds) — only moves with a clear eval gap shipped. Schliemann + birds found no
+clean pitfall → self-hide (empty > forced).
+
+**Targeted endgame search (the doctrine procedure):** queried each solid
+opening's variation spine on the masters explorer, fetched full PGNs, classified
+endings, picked clean single-rook / R+B holds, and **Stockfish-verified each
+transition ≈ 0.0** (genuine hold). Shipped 7 (incl. the earlier two-knights):
+petrov, old-indian, semi-slav, queens-indian (R+P / single-rook holds), qga
+(active-rook R+B), nimzo (opposite-coloured-bishop fortress), two-knights
+(active king). All grounded in real elite games (Anand–Kramnik, Gelfand–Miton,
+Radjabov–Anand, Tomashevsky–Carlsen, So–Caruana, Ding–Carlsen, Kramnik–Carlsen);
+narration is strictly what the moves DO. Masterclass endgame coverage 10→28.
+
+**Correctly left self-hiding (sharp openings — no clean ending exists):** KID,
+Grünfeld, Benoni, Pirc, Schliemann, the gambits. **Catalan:** only a messy
+minor-piece white win in the data — no clean conversion → self-hides.
+
+Session totals (cluster): 54 model games, 47 middlegame plans, **9 endgame
+plans**, 27 pitfalls. Every item real-data / engine-verified, gated, deployed.
