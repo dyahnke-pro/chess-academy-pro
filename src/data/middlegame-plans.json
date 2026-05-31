@@ -16897,44 +16897,79 @@
   {
     "id": "mp-progothamchess-italian-evans-style",
     "openingId": "pro-gothamchess-italian",
-    "criticalPositionFen": "r1bqk2r/pppp1ppp/5n2/4p3/2BnP3/8/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+    "criticalPositionFen": "r2qk2r/p2b1ppp/2pp1n2/4pPB1/2pPP3/N7/PP4PP/R2Q1RK1 w kq - 1 13",
     "title": "Italian — central thrust + tactical complications",
-    "overview": "Levy's Italian Game from 75 White games at 68.0%. The aggressive d4 thrust against the classical …Bc5 sets up tactical complications — Bxd4 / Nxd4 trades minor pieces with an open position and the bishop pair still intact.",
+    "overview": "From the same tense centre, White reroutes the a3-knight via c4 into d6 — a monster outpost that forks f7 and the queenside. A real GothamChess win (vs skoularikii): Nxd6 invades, Bxf6 strips the cover and Qg4+ finishes. Winning a piece and the attack (~+4.2).",
     "pawnBreaks": [
-      "d2-d4 the system-defining central break",
-      "f2-f4 in some attacking lines",
-      "c2-c3 supporting d4 in some lines"
+      {
+        "move": "d4 central anchor",
+        "explanation": "The d4-pawn anchors the centre so the knight raid and kingside attack roll unhindered.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bc4 targets f7 — the Italian's identity",
-      "Knight reroute via Nbd2 → Nf1 → Ng3",
-      "Queen lifts to e2 or d3"
+      {
+        "piece": "Knight",
+        "route": "Na3-c4-d6 invasion",
+        "explanation": "The knight reroutes through c4 to the d6 outpost, forking f7 and hitting the queenside."
+      }
     ],
     "strategicThemes": [
-      "Sharp tactical positions",
-      "Bishop pair often survives Black's …Bxd4 trade"
+      "Reroute the offside knight to a central outpost (d6).",
+      "Once the knight invades, open the king with Bxf6 and the queen."
     ],
     "endgameTransitions": [
-      "R+minor+P endgames with the bishop pair as the conversion piece"
+      "The extra piece settles it well before any endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqk2r/pppp1ppp/5n2/4p3/2BnP3/8/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+        "fen": "r2qk2r/p2b1ppp/2pp1n2/4pPB1/2pPP3/N7/PP4PP/R2Q1RK1 w kq - 1 13",
         "moves": [
-          "Bg5",
-          "d6",
-          "f4",
-          "Be6",
-          "Na3"
+          "Nxc4",
+          "O-O",
+          "Nxd6",
+          "Qb6",
+          "Bxf6",
+          "gxf6",
+          "Qg4+",
+          "Kh8"
         ],
         "annotations": [
-          "Bg5 — White's bishop to g5 — standard development.",
-          "d6 — Black's pawn to d6 — standard development.",
-          "f4 — White's pawn to f4 — standard development.",
-          "Be6 — Black's bishop to e6 — standard development.",
-          "Na3 — White's knight to a3 — standard development."
+          "Nxc4 — the offside knight swings back to c4, eyeing the d6 hole.",
+          "…O-O — Black castles straight into the coming raid.",
+          "Nxd6 — the knight crashes into d6, forking f7 and raking the queenside.",
+          "…Qb6 — counterattacking d4 and b2 to muddy the waters.",
+          "Bxf6 — eliminating the knight that shields the kingside.",
+          "…gxf6 — the king’s shelter is shredded.",
+          "Qg4+ — the queen joins with check and the attack is decisive.",
+          "…Kh8 — the king ducks away, but White is up a piece with a raging attack."
+        ],
+        "learnCues": [
+          "Nxc4 — eye the d6 hole",
+          "O-O — into the storm",
+          "Nxd6 — knight invades, forks f7",
+          "Qb6 — Black muddies it",
+          "Bxf6 — strip the cover",
+          "gxf6 — shelter shredded",
+          "Qg4+ — attack decides",
+          "Kh8 — White is winning"
         ],
         "arrows": [
+          [
+            {
+              "from": "a3",
+              "to": "c4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "c4",
+              "to": "d6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
@@ -16944,19 +16979,17 @@
         "highlights": [
           [
             {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g5",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d7",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
               "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -16964,49 +16997,42 @@
           ],
           [
             {
-              "square": "f2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b1",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "a3",
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Bg5 — bishop to g5",
-          "d6 — pawn to d6",
-          "f4 — pawn to f4",
-          "Be6 — bishop to e6",
-          "Na3 — knight to a3"
-        ],
-        "title": "Italian — central thrust + tactical complications",
-        "intro": "Levy's Italian Game from 75 White games at 68.0%. The aggressive d4 thrust against the classical …Bc5 sets up tactical complications — Bxd4 / Nxd4 trades minor pieces with an open position and the bis",
+        "title": "Two Knights: the Central Knight Raid",
+        "intro": "A real GothamChess win vs skoularikii. The queenside knight reroutes c4-d6 to invade, then the kingside is torn open.",
         "sources": [
-          "book:italian-game",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Italian-Game",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Italian_Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -47930,48 +47956,116 @@
   {
     "id": "mp-progothamchess-italian-twoknights-kside",
     "openingId": "pro-gothamchess-italian",
-    "criticalPositionFen": "r1bqk2r/ppp2ppp/3p1n2/4p1B1/2BnPP2/8/PPP3PP/RN1Q1RK1 b kq - 0 8",
+    "criticalPositionFen": "r3k2r/pp3ppp/1q1pbn2/1p2p1B1/2B1PP2/2P5/PP4PP/R2Q1R1K w kq - 0 13",
     "title": "Italian Two Knights: the f4-f5 Kingside Attack",
-    "overview": "His most-played Italian middlegame across the 67-game Two Knights line. After the central trades on d4, White pins with Bg5 and rolls the f-pawn: f4 grabs space, f5 cramps Black and clamps the e6-square, opening lines toward the king. With the bishop on g5 pinning the f6-knight and the f-pawn storming, White generates a direct kingside initiative.",
+    "overview": "Against the Two Knights, White builds the big pawn centre and then strikes at Black’s king cover. A real GothamChess win (vs Mr_RoBoT018): Bxe6 and Bxf6 strip the pawns, Qh5+ chases the king into the open, and the centre cracks. Clearly winning (~+3.7).",
     "pawnBreaks": [
-      "f4-f5 the kingside storm",
-      "f4 grabbing space"
+      {
+        "move": "f4xe5 central break",
+        "explanation": "fxe5 tears the centre open against a king with no shelter.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bc1-g5 pinning the f6-knight",
-      "Bg5-h4 keeping the pin",
-      "the f-pawn roller toward f5"
+      {
+        "piece": "Queen",
+        "route": "Qd1-h5+ hunts the king",
+        "explanation": "Once the cover is gone, the queen lands on h5 with check and the king is exposed."
+      }
     ],
     "strategicThemes": [
-      "Pin the f6-knight with Bg5",
-      "Storm with f4-f5",
-      "Open lines toward the king"
+      "Trade off the key defenders before opening lines at the king.",
+      "Use f4-e4 pawns to crack the centre once the king is stuck."
     ],
     "endgameTransitions": [
-      "The kingside space lingers as an asset"
+      "The exposed king decides things long before an endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqk2r/ppp2ppp/3p1n2/4p1B1/2BnPP2/8/PPP3PP/RN1Q1RK1 b kq - 0 8",
+        "fen": "r3k2r/pp3ppp/1q1pbn2/1p2p1B1/2B1PP2/2P5/PP4PP/R2Q1R1K w kq - 0 13",
         "moves": [
-          "Qe7",
-          "f5",
-          "h6",
-          "Bh4"
+          "Bxe6",
+          "fxe6",
+          "Bxf6",
+          "gxf6",
+          "Qh5+",
+          "Ke7",
+          "fxe5",
+          "dxe5"
         ],
         "annotations": [
-          "…Qe7 — Black connects the pieces and eyes the e-file.",
-          "f5 — the storm. White clamps the e6-square, gains kingside space, and opens lines toward Black’s king.",
-          "…h6 — Black questions the g5-bishop.",
-          "Bh4 — White keeps the pin on the f6-knight; the f5-wedge and the pinned knight give White a strong, lasting kingside initiative."
+          "Bxe6 — trading off Black’s good bishop and shattering the pawns in front of his king.",
+          "…fxe6 — recapturing, but the king is left with no pawn shield.",
+          "Bxf6 — removing the knight that guards the dark squares around the king.",
+          "…gxf6 — the king’s cover is in tatters now.",
+          "Qh5+ — the queen dives in with check; there’s no safe square.",
+          "…Ke7 — the king is forced to walk out into the open.",
+          "fxe5 — prising the centre wide open against the stranded king.",
+          "…dxe5 — White is winning: the king is marooned in the middle."
+        ],
+        "learnCues": [
+          "Bxe6 — wreck the pawn cover",
+          "fxe6 — no shield left",
+          "Bxf6 — remove the defender",
+          "gxf6 — cover in tatters",
+          "Qh5+ — queen hunts the king",
+          "Ke7 — king walks out",
+          "fxe5 — crack the centre",
+          "dxe5 — White is winning"
         ],
         "arrows": [
+          [
+            {
+              "from": "c4",
+              "to": "e6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
+          [],
+          [],
+          [
+            {
+              "from": "d1",
+              "to": "h5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           []
         ],
         "highlights": [
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "e7",
@@ -47980,36 +48074,24 @@
           ],
           [
             {
-              "square": "f5",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "h4",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Qe7 — Black eyes the e-file",
-          "f5 — clamp e6, storm",
-          "h6 — Black questions the bishop",
-          "Bh4 — keep the pin, press on"
-        ],
-        "title": "Italian Two Knights: the f4-f5 Kingside Attack",
-        "intro": "His most-played Italian middlegame across the 67-game Two Knights line. After the central trades on d4, White pins with Bg5 and rolls the f-pawn: f4 grabs space, f5 cramps Black and clamps the e6-square, opening lines toward the king. With the bishop on g5 pinning the f6-knight and the f-pawn storming, White generates a direct kingside initiative.",
+        "title": "Two Knights: the Kingside Demolition",
+        "intro": "A real GothamChess win vs Mr_RoBoT018. Trade off the defenders, prise open the pawn cover, and the king is hunted in the centre.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Italian-Game",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Italian_Game"
+          "https://en.wikipedia.org/wiki/Italian_Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -48017,63 +48099,107 @@
   {
     "id": "mp-progothamchess-italian-evans-bigcenter",
     "openingId": "pro-gothamchess-italian",
-    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/b3p3/2BPP3/2P2N2/P4PPP/RNBQK2R b KQkq - 0 6",
+    "criticalPositionFen": "r1bqk2r/ppppnppp/8/4P1B1/2BN4/8/P4PPP/R2Qb1K1 w kq - 0 13",
     "title": "Evans Gambit: the d4 Big-Centre Initiative",
-    "overview": "The Evans Gambit, his sharpest Italian weapon. White sacrifices the b-pawn with b4 to deflect the bishop, then plays c3 and d4 to build a big pawn centre with a lead in development. After …Bxb4 c3 Ba5 d4, White's centre rolls forward and the open lines give a dangerous attacking initiative — the classic romantic gambit, a pawn for a raging position.",
+    "overview": "The Evans Gambit hands back a pawn for a roaring centre and lead in development. A real GothamChess win (vs MiningMathGamer): Qh5 turns up the heat, the e-pawn rips the centre open, and White collects a piece while Black’s king is stuck. Completely winning (~+4.7).",
     "pawnBreaks": [
-      "d4 building the big centre",
-      "c3 supporting d4"
+      {
+        "move": "e5xd6 en passant",
+        "explanation": "exd6 prises the centre open while Black’s king is still in the middle.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nb1-c3 developing toward the centre",
-      "O-O tucking the king away",
-      "the c3/d4 pawn duo"
+      {
+        "piece": "Bishop",
+        "route": "Bg5xe7 wins the knight",
+        "explanation": "With the centre torn open, the g5-bishop grabs the e7-knight and White is a clean piece up."
+      }
     ],
     "strategicThemes": [
-      "Sacrifice b4 to deflect the bishop",
-      "Build the c3/d4 big centre",
-      "A lead in development for the pawn"
+      "Trade the gambit pawn for a mobile centre and a development lead.",
+      "Open lines at the uncastled king before he can consolidate."
     ],
     "endgameTransitions": [
-      "Keep attacking — the development lead is the compensation"
+      "No endgame needed — the attack decides in the middlegame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqk1nr/pppp1ppp/2n5/b3p3/2BPP3/2P2N2/P4PPP/RNBQK2R b KQkq - 0 6",
+        "fen": "r1bqk2r/ppppnppp/8/4P1B1/2BN4/8/P4PPP/R2Qb1K1 w kq - 0 13",
         "moves": [
-          "exd4",
+          "Qh5",
+          "Bxf2+",
+          "Kxf2",
+          "d5",
+          "exd6",
           "O-O",
-          "d6",
-          "cxd4",
-          "Bb6",
-          "Nc3"
+          "Bxe7",
+          "Qe8"
         ],
         "annotations": [
-          "…exd4 — Black grabs the centre pawn, the principled acceptance.",
-          "O-O — White castles, prioritising development and king safety over recapturing immediately.",
-          "…d6 — Black props the centre and opens the light bishop.",
-          "cxd4 — White rebuilds the big pawn centre, the e4/d4 duo dominating the board.",
-          "…Bb6 — the bishop retreats to a safe diagonal.",
-          "Nc3 — White completes development; the big centre, open lines, and lead in development give a powerful initiative for the gambit pawn."
+          "Qh5 — the queen swings over, hitting f7 and h7 while the king sits in the centre.",
+          "…Bxf2+ — Black grabs a pawn with check, but it only peels open his own king.",
+          "Kxf2 — the king calmly takes; it’s Black’s king that’s in real danger.",
+          "…d5 — trying to slam the door on the c4-bishop.",
+          "exd6 — en passant! the centre is ripped open against the stranded king.",
+          "…O-O — Black finally tucks the king away, but the lines are already open.",
+          "Bxe7 — the bishop scoops up the knight; White is a whole piece ahead.",
+          "…Qe8 — Black hits the e7-bishop, but White is already winning easily."
+        ],
+        "learnCues": [
+          "Qh5 — hit f7 and h7",
+          "Bxf2+ — Black opens his own king",
+          "Kxf2 — king takes, stays safe",
+          "d5 — shut out the bishop",
+          "exd6 — rip the centre open",
+          "O-O — too late to hide",
+          "Bxe7 — win the piece",
+          "Qe8 — White is winning"
         ],
         "arrows": [
+          [
+            {
+              "from": "d1",
+              "to": "h5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
           [],
           [],
+          [
+            {
+              "from": "g5",
+              "to": "e7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "d4",
+              "square": "h5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g1",
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -48085,38 +48211,30 @@
           ],
           [
             {
-              "square": "d4",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b6",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c3",
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "exd4 — Black takes the centre",
-          "O-O — castle, develop first",
-          "d6 — Black props the centre",
-          "cxd4 — rebuild the big centre",
-          "Bb6 — the bishop retreats",
-          "Nc3 — complete development, attack"
-        ],
-        "title": "Evans Gambit: the d4 Big-Centre Initiative",
-        "intro": "The Evans Gambit, his sharpest Italian weapon. White sacrifices the b-pawn with b4 to deflect the bishop, then plays c3 and d4 to build a big pawn centre with a lead in development. After …Bxb4 c3 Ba5 d4, White's centre rolls forward and the open lines give a dangerous attacking initiative — the classic romantic gambit, a pawn for a raging position.",
+        "title": "Evans Gambit: the d4 Big-Centre Crashes Through",
+        "intro": "A real GothamChess win vs MiningMathGamer. The Evans pawn buys a huge centre; here it detonates — White is up a piece and mating.",
         "sources": [
           "book:chess-fundamentals",
           "https://www.chess.com/openings/Italian-Game",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Italian_Game"
+          "https://en.wikipedia.org/wiki/Italian_Game",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
