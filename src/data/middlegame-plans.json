@@ -7903,17 +7903,27 @@
   {
     "id": "mp-frenchdefence-advance",
     "openingId": "french-defence",
-    "criticalPositionFen": "r3kb1r/pp1b1pp1/1q2p2p/n2pPn2/2pP2P1/P1P2N2/1PQNBP1P/1RB2RK1 b kq - 0 12",
+    "criticalPositionFen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
     "title": "Advance: The Queenside Clamp",
     "overview": "Black has locked the queenside with …c4 and parked a knight on the great f5-square. With the centre fixed, the plan plays itself: keep the clamp, route the king to safety away from White's kingside pawns, and lean on the b3-outpost. Black is never worse here — the space and the structure are permanent.",
     "pawnBreaks": [
-      "…b5–b4 to open the queenside behind the clamp",
-      "White's g4/f4 against the f5-knight"
+      {
+        "move": "…cxd4 then …f6 — pressure the chain",
+        "explanation": "Black trades on d4 to fix the target, then can chip at e5 with …f6 to dissolve White’s cramping wedge.",
+        "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6"
+      }
     ],
     "pieceManeuvers": [
-      "…Na5–b3 outpost",
-      "…Nf5/Ne7 rerouting around the kingside pawns",
-      "…O-O-O into the safe queenside"
+      {
+        "piece": "Knight",
+        "route": "…Nge7-f5 — the d4 outpost",
+        "explanation": "The knight reroutes to f5, the strong square attacking White’s weak d4-pawn."
+      },
+      {
+        "piece": "Rook",
+        "route": "…Rc8 — seize the open c-file",
+        "explanation": "Black claims the file opened by …cxd4, the highway against White’s queenside."
+      }
     ],
     "strategicThemes": [
       "The fixed chain dictates the wings",
@@ -7925,123 +7935,107 @@
     ],
     "playableLines": [
       {
-        "fen": "r3kb1r/pp1b1pp1/1q2p2p/n2pPn2/2pP2P1/P1P2N2/1PQNBP1P/1RB2RK1 b kq - 0 12",
+        "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
         "moves": [
-          "Ne7",
-          "Nh4",
-          "O-O-O",
-          "Bd1"
+          "Be2",
+          "Nge7",
+          "O-O",
+          "cxd4",
+          "cxd4",
+          "Nf5",
+          "Nc3",
+          "Rc8"
         ],
         "annotations": [
-          "Black tucks the knight back to e7, sidestepping the g4-pawn while keeping an eye on f5 and d5 — the clamp on c4 is permanent, so there is no rush.",
-          "White's knight hops to h4, eyeing f5 and g6 to trade off Black's active light-squared pieces and ease the cramp.",
-          "Black castles queenside — the king is perfectly safe behind the c4-clamp, far from any kingside pawn storm.",
-          "White reroutes the bishop; the picture is set — Black owns the queenside space and the b3-outpost, the durable Advance edge."
+          "White develops the bishop, supporting the d4-base of the Advance pawn chain.",
+          "…Nge7 heads for f5 — the dream square in the Advance French, attacking d4 from the side.",
+          "White castles.",
+          "…cxd4 opens the c-file, trading to fix White's centre as a target.",
+          "White recaptures, the d4-pawn now isolated and weak.",
+          "…Nf5! The knight reaches its outpost, piling onto the weak d4-pawn — Black's whole strategy in one move.",
+          "White develops the knight.",
+          "…Rc8 seizes the open c-file. Black has the classic Advance French bind: the d4-pawn is a fixed target, the f5-knight dominates, and the c-file belongs to Black — exactly how Carlsen ground down Giri."
         ],
-        "title": "The Queenside Clamp",
         "arrows": [
-          [
-            {
-              "from": "e7",
-              "to": "d5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "h4",
-              "to": "f5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "h4",
-              "to": "g6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Advance Bind (Giri–Carlsen)",
         "highlights": [
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f5",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "g4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "c4",
+              "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "h4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
             {
               "square": "f5",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "g6",
+              "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b3",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
+        "intro": "Black targets d4 with the …Nf5 outpost and the c-file.",
         "sources": [
           "book:french-defence",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
         "learnCues": [
-          "Ne7 — sidestep g4, eye f5/d5",
-          "Nh4 — eye f5/g6, ease the cramp",
-          "O-O-O — king safe behind the clamp",
-          "Bd1 — reroute; the Advance edge"
+          "Be2 — White supports d4",
+          "…Nge7 — head for f5",
+          "O-O — White castles",
+          "…cxd4 — open the c-file",
+          "cxd4 — White's pawn is now weak",
+          "…Nf5 — the dream outpost on d4",
+          "Nc3 — White develops",
+          "…Rc8 — seize the c-file"
         ]
       }
     ]
@@ -8584,17 +8578,27 @@
   {
     "id": "mp-frenchdefence-mccutcheon",
     "openingId": "french-defence",
-    "criticalPositionFen": "rn1qk2r/pp1b1p2/4p1pp/2ppP3/3P2Q1/2PB1N2/P1PK1PPP/R6R w kq - 2 12",
+    "criticalPositionFen": "rnbqk2r/ppp2pp1/4pn1p/3pP1B1/1b1P4/2N5/PPP2PPP/R2QKBNR w KQkq - 0 6",
     "title": "McCutcheon: Exploit the Wrecked Structure",
     "overview": "Black has bartered the dark-squared bishop to cripple White's queenside — doubled c-pawns — and to drag the white king out to d2, where it cannot castle. The plan is to convert those long-term gains: strike d4 with …c5, activate the light-squared bishop via …Bc6, and keep the badly-placed white king under pressure.",
     "pawnBreaks": [
-      "…c5 hitting d4 while the king is stuck",
-      "…f6 to open lines at the centralised king"
+      {
+        "move": "…c5 — strike the centre",
+        "explanation": "With White’s queenside wrecked, …c5 opens the position to exploit the structural advantage.",
+        "fen": "rnbqk2r/ppp2pp1/4pn1p/3pP1B1/1b1P4/2N5/PPP2PPP/R2QKBNR w KQkq - 0 6"
+      }
     ],
     "pieceManeuvers": [
-      "…Bc6 activating the light bishop",
-      "…Qe7 and …Nd7 developing",
-      "…O-O-O onto the open files"
+      {
+        "piece": "Knight",
+        "route": "…Ne4 then …Nxc3 — outpost to pawn-grab",
+        "explanation": "The knight dominates e4, then collects a pawn off White’s shattered queenside."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Bxc3+ — shatter the structure",
+        "explanation": "Black trades to inflict permanent doubled, isolated c-pawns."
+      }
     ],
     "strategicThemes": [
       "White's doubled c-pawns",
@@ -8606,52 +8610,52 @@
     ],
     "playableLines": [
       {
-        "fen": "rn1qk2r/pp1b1p2/4p1pp/2ppP3/3P2Q1/2PB1N2/P1PK1PPP/R6R w kq - 2 12",
+        "fen": "rnbqk2r/ppp2pp1/4pn1p/3pP1B1/1b1P4/2N5/PPP2PPP/R2QKBNR w KQkq - 0 6",
         "moves": [
-          "h4",
-          "Qe7",
-          "Qf4",
-          "Bc6"
+          "Be3",
+          "Ne4",
+          "Qg4",
+          "g6",
+          "a3",
+          "Bxc3+",
+          "bxc3",
+          "Nxc3"
         ],
         "annotations": [
-          "White lashes out with h4, hunting kingside play to distract from the structural damage.",
-          "Black calmly develops …Qe7, connecting and preparing to castle long onto the open files.",
-          "White centralises the queen on f4.",
-          "Black activates the once-bad bishop with …Bc6, raking the long diagonal — the wrecked white c-pawns and the king stranded near d2 are the lasting targets."
+          "White retreats the bishop to e3, defending and keeping the dark-squared tension.",
+          "…Ne4! The knight leaps to the dominant e4-outpost, the McCutcheon's signature — deep in White's position and impossible to dislodge.",
+          "White swings the queen to g4, eyeing the kingside.",
+          "…g6 blunts the queen and shores up the kingside dark squares.",
+          "White questions the b4-bishop with a3.",
+          "…Bxc3+! Black trades to shatter White's queenside pawns — the structural damage is permanent.",
+          "White recaptures, accepting doubled, isolated c-pawns.",
+          "…Nxc3! The knight grabs a pawn and forks the queen-side, exploiting the wrecked structure. Black emerges a pawn up with White's shattered queenside as a lasting target — Nakamura's precise punishment of Gashimov."
         ],
-        "title": "Punishing the Structure",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
           []
         ],
+        "title": "Wrecking the Queenside (Gashimov–Nakamura)",
         "highlights": [
           [
             {
-              "square": "h4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h2",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d8",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -8659,29 +8663,50 @@
           ],
           [
             {
-              "square": "c6",
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d7",
+              "square": "a3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d2",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black seizes e4 and shatters White's queenside pawns.",
         "sources": [
           "book:french-defence",
-          "concept:pos-center",
+          "concept:pawn-doubled",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
         "learnCues": [
-          "h4 — hunt kingside distraction",
-          "Qe7 — connect, prepare O-O-O",
-          "Qf4 — centralise the queen",
-          "Bc6 — activate; the wrecked pawns tell"
+          "Be3 — White defends",
+          "…Ne4 — seize the outpost",
+          "Qg4 — White eyes the kingside",
+          "…g6 — blunt the queen",
+          "a3 — White questions the bishop",
+          "…Bxc3+ — shatter the pawns",
+          "bxc3 — White recaptures",
+          "…Nxc3 — grab the pawn, fork"
         ]
       }
     ]
@@ -8689,17 +8714,27 @@
   {
     "id": "mp-frenchdefence-milnerbarry",
     "openingId": "french-defence",
-    "criticalPositionFen": "r3kb1r/1p1b1ppp/p3p3/3pP3/3q1P2/2Nn4/PP2Q1PP/R1BR3K w kq - 0 15",
+    "criticalPositionFen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
     "title": "Milner-Barry: Convert the Extra Pawn",
     "overview": "Black accepted the gambit and defended accurately with …Bd7 and …a6, defusing the Nb5 and Bb5+ tricks. Now Black is simply a clean pawn up. The plan is the conversion: trade off White's attacking pieces — especially the d3-bishop — neutralise the initiative, and steer into a winning endgame.",
     "pawnBreaks": [
-      "Keep the centre closed while consolidating",
-      "…f6 only when fully safe"
+      {
+        "move": "…cxd4 — accept the gambit",
+        "explanation": "Black takes the offered pawn and must then defend precisely with …Bd7-b5 to neutralize White’s attack.",
+        "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6"
+      }
     ],
     "pieceManeuvers": [
-      "…Nb4xd3 trading the attacking bishop",
-      "…Bc5 trading the dark-squared bishops",
-      "…O-O-O or …Ne7–c6 to safety"
+      {
+        "piece": "Bishop",
+        "route": "…Bd7-b5 — trade White’s attacker",
+        "explanation": "The light-squared bishop heads to b5 to swap off White’s dangerous Bd3, defusing the gambit."
+      },
+      {
+        "piece": "Knight",
+        "route": "…Nxd4 — win the gambit pawn",
+        "explanation": "Black collects the d4-pawn with accurate calculation."
+      }
     ],
     "strategicThemes": [
       "Up a clean pawn",
@@ -8711,88 +8746,103 @@
     ],
     "playableLines": [
       {
-        "fen": "r3kb1r/1p1b1ppp/p3p3/3pP3/3q1P2/2Nn4/PP2Q1PP/R1BR3K w kq - 0 15",
+        "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
         "moves": [
-          "Rxd3",
-          "Qb6",
-          "Be3",
-          "Bc5"
+          "Bd3",
+          "cxd4",
+          "cxd4",
+          "Bd7",
+          "Nc3",
+          "Nxd4",
+          "Nxd4",
+          "Qxd4"
         ],
         "annotations": [
-          "White recaptures the knight on d3, but the dangerous light-squared bishop — the engine of the attack — is gone.",
-          "Black retreats the queen to b6, safe and eyeing b2, holding firmly onto the extra pawn.",
-          "White develops Be3 with a hit on the queen.",
-          "Black offers the trade with …Bc5 — swapping the dark-squared bishops kills the last attacking piece and leaves Black a clean pawn up into the endgame."
+          "White offers the Milner-Barry Gambit, developing the bishop and inviting Black to grab the d4-pawn.",
+          "…cxd4 takes up the challenge, removing the centre's base.",
+          "White recaptures, the gambit truly begun.",
+          "…Bd7 develops and prepares to neutralize White's attacking light-squared bishop — the key defensive idea.",
+          "White develops the knight, eyeing the kingside.",
+          "…Nxd4! Black grabs the gambit pawn, accepting the challenge with precise calculation.",
+          "White recaptures with the knight.",
+          "…Qxd4! The queen collects the pawn and centralizes. Black is a clean pawn up; the entire defence rests on meeting White's attack with …Bd7-b5 to trade the dangerous bishop — Giri demonstrated the refutation against Sulskis."
         ],
-        "title": "Converting the Gambit Pawn",
         "arrows": [
           [],
-          [
-            {
-              "from": "b6",
-              "to": "b2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "Refuting the Milner-Barry (Sulskis–Giri)",
         "highlights": [
           [
             {
               "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "b6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b2",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c5",
+              "square": "d7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f8",
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black accepts the gambit pawn and prepares the …Bb5 defence.",
         "sources": [
           "book:french-defence",
-          "concept:pos-center",
+          "concept:pos-initiative",
           "https://en.wikipedia.org/wiki/French_Defence"
         ],
         "learnCues": [
-          "Rxd3 — but the attacker is gone",
-          "Qb6 — safe, eye b2, hold the pawn",
-          "Be3 — develop, hit the queen",
-          "Bc5 — trade; a clean pawn up"
+          "Bd3 — White offers the gambit",
+          "…cxd4 — take the challenge",
+          "cxd4 — White recaptures",
+          "…Bd7 — prepare …Bb5 defence",
+          "Nc3 — White develops",
+          "…Nxd4 — grab the pawn",
+          "Nxd4 — White recaptures",
+          "…Qxd4 — win the pawn, centralize"
         ]
       }
     ]
