@@ -25,52 +25,32 @@
     ],
     "variations": [
       {
-        "name": "Scotch Gambit: Main Line with d5",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 Bxd4",
-        "explanation": "The main line where Black strikes back with d5. After Bb5, White targets the pinned knight on c6. Bxc6 + bxc6 saddles Black with doubled pawns; the Bxd4 exchange equalizes material but leaves White with a slightly better structure and the bishop pair.",
+        "name": "Bc5 Defence (4…Bc5)",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 Nf6 e5 d5 Bb5 Ne4 cxd4 Bb6 Nc3 O-O Be3 Bg4 h3 Bh5",
+        "explanation": "Black develops …Bc5; White builds the broad d4-e5 centre with c3/cxd4 and equalises material with an easy game.",
         "sources": [
+          "concept:pos-initiative",
           "concept:pos-development",
-          "concept:pos-center",
           "https://en.wikipedia.org/wiki/Scotch_Game"
         ]
       },
       {
-        "name": "Scotch Gambit: Ng4 Retreat Variation",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 Ng4",
-        "explanation": "Black plays Ng4 to pressure e5 and f2 — the most popular response to 5.e5. From here White can try the aggressive Bxf7+ sacrifice (exposing Black's king at the cost of a bishop) or the quieter Bxg4 / Nxd4 routes. The decision shapes the whole middlegame.",
+        "name": "Bb4+ Check (4…Bb4+)",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bb4+ c3 dxc3 O-O Nf6 e5 d5 exf6 dxc4 fxg7 Rg8 Qe2+ Be6 bxc3 Bd6",
+        "explanation": "…Bb4+ then grabbing the c3-pawn is greedy: O-O and the f6/g7 break tear open Black's king for a near-winning attack.",
         "sources": [
+          "concept:pos-initiative",
           "concept:pos-development",
-          "concept:pos-center",
           "https://en.wikipedia.org/wiki/Scotch_Game"
         ]
       },
       {
-        "name": "Max Lange Attack: Bc5 Line",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O Nf6 e5 d5 exf6 dxc4 Re1+ Be6 Ng5 Qd5 Nc3 Qf5 Nce4 O-O-O g4 Qd5",
-        "explanation": "The Max Lange Attack arises when Black plays 4...Bc5. After O-O Nf6 e5 d5 exf6 dxc4, the position becomes incredibly sharp. White has the initiative with Re1+ and Ng5, while Black counters with O-O-O and piece activity. Both sides must play with extreme precision.",
+        "name": "Sharp f3 Centre (…Nf6)",
+        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 f3 Ng5 f4 Ne4",
+        "explanation": "The 4…Nf6 main with the sharp f3-f4 clamp instead of the quiet Be3 — a balanced, double-edged fight with a big White pawn front.",
         "sources": [
+          "concept:pos-initiative",
           "concept:pos-development",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Scotch_Game"
-        ]
-      },
-      {
-        "name": "Scotch Gambit: Dubois-Reti Defense",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 O-O d6 c3 dxc3 Nxc3 Bg4",
-        "explanation": "Black plays 4...Bc5 and 6...dxc3 to grab pawns. White sacrifices the c-pawn for rapid development and open lines. The Bg4 pin pressures the f3 knight; White's Nc3 + Bxf7+ tactical resources are ready to exploit Black's still-uncoordinated pieces.",
-        "sources": [
-          "concept:pos-development",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/Scotch_Game"
-        ]
-      },
-      {
-        "name": "Scotch Gambit: Haxo Gambit with c3",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 dxc3 Bxf7+ Kxf7 Qd5+ Ke8",
-        "explanation": "The Haxo Gambit sacrifices the c3 pawn against Black's Bc5. The stunning Bxf7+ followed by Qd5+ chases Black's king back to e8 with no castling rights and a wandering knight on c3 to recapture. White's lead in development plus the lost castling rights provide ample compensation.",
-        "sources": [
-          "concept:pos-development",
-          "concept:pos-center",
           "https://en.wikipedia.org/wiki/Scotch_Game"
         ]
       }
