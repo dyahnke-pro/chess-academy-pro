@@ -162,8 +162,10 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
              5. Run the 5 gates: lessonIntegrity, narrationAccuracy, lessonDepth,
                 wlppNarration, lessonSources + tsc.
              - [x] smith-morra-gambit (+0.79 full-comp middlegame). 9804e00
-             - [ ] scotch-gambit (+31), vienna-gambit (+82), danish-gambit (comp ~−0.7),
-                   marshall-attack (comp ~−1.1, black). Trim each spine to its sound ≥20-ply point.
+             - [x] scotch-gambit (+0.31, temporary sac, e5 wedge + doubled c-pawns). 0ebdbf5
+             - [x] vienna-gambit (3…d5 main line, 0.00 sharp opposite-castling). e4c914b
+             - [ ] danish-gambit (comp ~−0.7), marshall-attack (comp ~−1.1, black — use a
+                   ≥20-ply sound segment; the Marshall main line is fine for Black).
              - [ ] stafford-gambit / englund-gambit: lesson = the WINNING trap line already in
                    gambits.json (Stafford h3→Bxf2+ queen win; Englund Qb4+ raid). Use `kind:'roadmap'`
                    if <20 plies (sharp trap resolves early — like the Budapest Adler/Fajarowicz subs).
