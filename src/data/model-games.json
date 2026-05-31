@@ -6578,5 +6578,41 @@
     "middlegameTheme": "The ...c5 break, ...Nc7-b5 queenside pressure.",
     "lessonSummary": "Strike with ...c5, reroute ...Nc7-b5, and counter the big centre.",
     "variation": "Austrian Attack"
+  },
+  {
+    "id": "mg-pirc-defence-fianchetto-system",
+    "openingId": "pirc-defence",
+    "white": "Svidler, Peter",
+    "black": "Kramnik, Vladimir",
+    "whiteElo": 2722,
+    "blackElo": 2791,
+    "result": "0-1",
+    "year": 2010,
+    "event": "Wch Blitz 5th",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 g3 Bg7 Bg2 O-O Nge2 Na6 O-O c5 h3 cxd4 Nxd4 Bd7 Re1 Nc5 Bg5 h6 Be3 Rc8 Qd2 h5 Bg5 Nh7 Bh6 Bxh6 Qxh6 e5 Nf3 Na4 Nxa4 Bxa4 b3 Bc6 c4 Qf6 a4 a5 Rad1 Rfd8 h4 Qg7 Qe3 Nf8 Qb6 Ra8 Rd2 Qf6 Red1 Ra6 Qe3 Raa8 Bh3 Qe7 c5 dxc5 Rxd8 Rxd8 Rxd8 Qxd8 Nxe5 Be8 Nc4 b6 e5 Qd1+ Bf1 Bc6 Qd3 Qe1 Qe3 Qa1 f4 Ne6 Kf2 Nd4 Qd2 Qb1 Qb2",
+    "studentSide": "black",
+    "overview": "Kramnik shows the Pirc holds easily against the quiet Fianchetto System: the ...c5 break challenges the centre, and after the trade on d4 Black's pieces flow to active squares with ...Nc5 hitting e4. A model of meeting a positional anti-Pirc with smooth, equalizing counterplay.",
+    "criticalMoments": [],
+    "middlegameTheme": "The ...c5 break, ...Nc5 hitting e4.",
+    "lessonSummary": "Strike with ...c5, trade on d4, and activate with ...Nc5.",
+    "variation": "Fianchetto System"
+  },
+  {
+    "id": "mg-pirc-defence-austrian-attack-with-e5-c5",
+    "openingId": "pirc-defence",
+    "white": "Nakamura, Hikaru",
+    "black": "Kramnik, Vladimir",
+    "whiteElo": 2741,
+    "blackElo": 2791,
+    "result": "0-1",
+    "year": 2010,
+    "event": "Wch Blitz 5th",
+    "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O e5 dxe5 fxe5 Nd5 h4 Bg4 h5 c5 hxg6 hxg6 Rh4 Bxf3 Qxf3 Nb4 Bc4 e6 Qh3 Nxc2+ Kf1 Nxd4 Ne4 Nf5 Bg5 Qd4 Nf6+ Bxf6 Rxd4 Bxg5 Rg4 Bh6 Bd3 Ne3+ Kf2 Nxg4+ Qxg4 Nc6 Rh1 Bg7 Qh4 Rfd8 Bxg6 fxg6 Qh7+ Kf8 Rf1 Rd7 Qxg6 Rf7+ Ke1 Nxe5",
+    "studentSide": "black",
+    "overview": "Kramnik shows how to meet the Austrian's aggressive early e5 push: ...dxe5 and ...Nd5 blockade the advanced pawn, ...Bg4 pins the f3-knight, and ...c5 hits the centre. Black turns White's premature aggression into a target. A model of precise, active defence against the sharpest anti-Pirc try.",
+    "criticalMoments": [],
+    "middlegameTheme": "Blockade the e5-push with ...Nd5, pin with ...Bg4.",
+    "lessonSummary": "Answer e5 with ...dxe5/...Nd5, pin with ...Bg4, and strike ...c5.",
+    "variation": "Austrian Attack with e5 c5"
   }
 ]

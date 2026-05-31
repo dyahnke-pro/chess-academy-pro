@@ -14884,17 +14884,27 @@
   {
     "id": "mp-pircdefence-austrian-e5",
     "openingId": "pirc-defence",
-    "criticalPositionFen": "rnbq1rk1/ppp1ppbp/3p1np1/4P3/3P1P2/2N2N2/PPP3PP/R1BQKB1R b KQ - 0 6",
+    "criticalPositionFen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 5",
     "title": "Austrian: Meet an Early e5 with ...c5",
     "overview": "In the Austrian, White sometimes lunges e5 immediately, attacking the f6-knight and trying to bulldoze the centre forward. But a pawn that advances no longer defends what it left behind. The accurate retreat is ...Nfd7 — inward, not to the rim — keeping the knight active and still pressing e5. Then the refutation of the rush: ...c5, striking the base that holds White's whole pawn chain together. Once the support under d4 is hit, the grand centre wobbles. Black meets brute force with a precise central counter-punch — the hypermodern idea distilled.",
     "pawnBreaks": [
-      "...c5 (hit the base of the chain)",
-      "later ...cxd4 / ...f6 to dissolve the centre"
+      {
+        "move": "…dxe5 then …c5 — undermine the centre",
+        "explanation": "Black trades off the e5-wedge and strikes d4 with …c5, turning White’s push into weaknesses.",
+        "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 5"
+      }
     ],
     "pieceManeuvers": [
-      "...Nfd7 active retreat",
-      "...c5 undermining d4",
-      "...Nc6/...Qb6 piling on d4"
+      {
+        "piece": "Knight",
+        "route": "…Nf6-d5 — blockade e5",
+        "explanation": "The knight occupies the dominant central blockade square in front of White’s pawn."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Bg4 — pin the e5-defender",
+        "explanation": "The bishop pins the f3-knight to win the over-extended e5-pawn."
+      }
     ],
     "strategicThemes": [
       "Undermine, don’t blockade",
@@ -14906,37 +14916,72 @@
     ],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/ppp1ppbp/3p1np1/4P3/3P1P2/2N2N2/PPP3PP/R1BQKB1R b KQ - 0 6",
+        "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 5",
         "moves": [
-          "Nfd7",
-          "Be2",
-          "c5"
+          "Nf3",
+          "O-O",
+          "e5",
+          "dxe5",
+          "fxe5",
+          "Nd5",
+          "h4",
+          "Bg4"
         ],
         "annotations": [
-          "...Nfd7 — the accurate retreat: inward and active, still eyeing e5, not the passive rim.",
-          "White supports with Be2.",
-          "...c5 — the refutation: it hits the base of the chain and the overextended centre starts to wobble."
+          "Nf3 develops, completing White's Austrian Attack setup with the big f4-e4-d4 centre.",
+          "…O-O — Black castles, inviting White to over-commit.",
+          "e5!? White lunges forward, trying to crush — but the premature push hands Black clear targets.",
+          "…dxe5 strikes back at once, refusing to let the wedge stand.",
+          "White recaptures, keeping a pawn on e5.",
+          "…Nd5! The knight blockades the e5-pawn from the dominant central square, immune to attack and eyeing White's position.",
+          "White grabs kingside space with h4.",
+          "…Bg4! Black pins the f3-knight, the key defender of e5, and now wins the over-extended pawn. White's aggression has become a liability — Kramnik outplayed Nakamura from here."
         ],
         "arrows": [
-          [
-            {
-              "from": "d7",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
-        "title": "Undermine the Overextended Centre",
+        "title": "Answering the e5 Push (Nakamura–Kramnik)",
         "highlights": [
           [
             {
-              "square": "d7",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f6",
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -14946,34 +14991,36 @@
           ],
           [
             {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
+              "square": "h4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c5",
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
+        "intro": "Black blockades the e5-push and pins its defender.",
         "sources": [
+          "concept:pos-initiative",
           "concept:pos-center",
-          "concept:att-queenside-attack",
           "https://en.wikipedia.org/wiki/Pirc_Defence"
         ],
         "learnCues": [
-          "Nfd7 — the accurate inward retreat",
-          "Be2 — White supports",
-          "c5 — the refutation; hit the chain"
+          "Nf3 — complete the Austrian",
+          "…O-O — castle, invite over-commitment",
+          "e5 — White lunges",
+          "…dxe5 — strike back",
+          "fxe5 — White recaptures",
+          "…Nd5 — blockade the wedge",
+          "h4 — White grabs space",
+          "…Bg4 — pin the e5-defender"
         ]
       }
     ]
@@ -15598,17 +15645,27 @@
   {
     "id": "mp-pircdefence-fianchetto",
     "openingId": "pirc-defence",
-    "criticalPositionFen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/4P3/2N3P1/PPP1NPBP/R1BQ1RK1 w - - 1 9",
+    "criticalPositionFen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N3P1/PPP2P1P/R1BQKBNR w KQkq - 1 5",
     "title": "Fianchetto System: Win the Kingside with ...f5",
     "overview": "Against White's quietest, most positional try — g3 and Bg2 — Black plays for the centre and for space. The strike is ...e5 and ...Nc6 to pressure d4; when White clamps with d5, the locked centre tells Black exactly where to play. The knight reroutes from c6 to e7 toward the magnificent f5 blockade square, and the whole plan crowns with the ...f5 break, gaining kingside space and opening lines for the g7-bishop and the rooks on the f-file. Whoever lands f5 first owns the kingside — make it Black.",
     "pawnBreaks": [
-      "...f5 (the kingside break — the whole plan)",
-      "guard against White's own f4/f5"
+      {
+        "move": "…c5 — challenge the centre",
+        "explanation": "The thematic Pirc break frees Black’s game against the quiet Fianchetto System.",
+        "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N3P1/PPP2P1P/R1BQKBNR w KQkq - 1 5"
+      }
     ],
     "pieceManeuvers": [
-      "...Nc6-e7 toward the f5 outpost",
-      "...Nd7 regroup",
-      "...f5 opening the f-file"
+      {
+        "piece": "Knight",
+        "route": "…Na6-c5 — hit the e4-pawn",
+        "explanation": "The knight reroutes to c5, the active square pressuring White’s centre."
+      },
+      {
+        "piece": "Pawn",
+        "route": "…c5 — the central break",
+        "explanation": "Black strikes d4 to equalize against the fianchetto."
+      }
     ],
     "strategicThemes": [
       "Closed-centre, play on the wing",
@@ -15620,78 +15677,107 @@
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/ppp1npbp/3p1np1/3Pp3/4P3/2N3P1/PPP1NPBP/R1BQ1RK1 w - - 1 9",
+        "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N3P1/PPP2P1P/R1BQKBNR w KQkq - 1 5",
         "moves": [
-          "a4",
-          "Nd7",
-          "Be3",
-          "f5"
+          "Bg2",
+          "O-O",
+          "Nge2",
+          "Na6",
+          "O-O",
+          "c5",
+          "h3",
+          "cxd4"
         ],
         "annotations": [
-          "White expands with a4 on the queenside.",
-          "...Nd7 regroups the knight, clearing the f-pawn’s path.",
-          "White develops the bishop to e3.",
-          "...f5 — Black’s thematic kingside break in the locked Fianchetto: space, the long diagonal, and the f-file open up. Equal, double-edged play."
+          "Bg2 completes White's fianchetto, the quiet Fianchetto System aiming for a calm positional game.",
+          "…O-O — Black castles, ready to contest the centre.",
+          "White develops the knight to e2, supporting d4 and keeping the c3-knight's diagonal open.",
+          "…Na6! Flexible development; the knight heads for c5, where it will hit the e4-pawn — the key Pirc regrouping.",
+          "White castles.",
+          "…c5! The thematic Pirc break, challenging d4 and freeing Black's position against the fianchetto setup.",
+          "White makes luft with h3.",
+          "…cxd4 opens the c-file and removes White's central pawn, leaving Black with active pieces and easy equality — Kramnik outplayed Svidler from this comfortable footing."
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
-        "title": "The ...f5 Break",
+        "title": "Pirc vs the Fianchetto (Svidler–Kramnik)",
         "highlights": [
           [
             {
-              "square": "a4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a2",
+              "square": "g2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
+              "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f5",
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "f7",
+              "square": "d4",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black breaks with ...c5 and activates with ...Nc5.",
         "sources": [
           "concept:pos-center",
-          "concept:att-queenside-attack",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/Pirc_Defence"
         ],
         "learnCues": [
-          "a4 — queenside expansion",
-          "Nd7 — clear the f-pawn’s path",
-          "Be3 — develop the bishop",
-          "f5 — the thematic break; equal"
+          "Bg2 — the fianchetto",
+          "…O-O — castle, contest the centre",
+          "Nge2 — support d4",
+          "…Na6 — head for c5, hit e4",
+          "O-O — White castles",
+          "…c5 — the Pirc break",
+          "h3 — White makes luft",
+          "…cxd4 — open the c-file, equalize"
         ]
       }
     ]
