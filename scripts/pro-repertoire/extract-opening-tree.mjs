@@ -285,6 +285,62 @@ const OPENINGS = {
     minPrefix: ['e4', 'e5', 'Nf3', 'Nf6', 'Nxe5', 'Nc6'],
     maxDepth: 80,
   },
+  // Rosen's Sicilian from Black's side (his biggest Black defense, 1916g).
+  'rosen-sicilian': {
+    name: 'Sicilian Defense (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5'],
+    maxDepth: 80,
+  },
+  // Budapest Gambit — his signature ...e5 gambit vs d4 (258g).
+  'budapest': {
+    name: 'Budapest Gambit (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['d4', 'Nf6', 'c4', 'e5'],
+    maxDepth: 80,
+  },
+  // Rosen's London from White's side, broad (d4 then Bf4 vs anything, 4483g).
+  'rosen-london': {
+    name: 'London System (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['d4'],
+    maxDepth: 80,
+  },
+  // Rosen's QGD from Black's side (725g).
+  'rosen-qgd': {
+    name: "Queen's Gambit Declined (Black)",
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['d4', 'd5', 'c4', 'e6'],
+    maxDepth: 80,
+  },
+  // Rosen's Scandinavian from Black's side (192g, his gambit lines).
+  'rosen-scandinavian': {
+    name: 'Scandinavian Defense (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'd5'],
+    maxDepth: 80,
+  },
+  // Rosen's French from Black's side (187g).
+  'rosen-french': {
+    name: 'French Defense (Black)',
+    color: 'black',
+    studentMoves: [],
+    minPrefix: ['e4', 'e6'],
+    maxDepth: 80,
+  },
+  // Rosen's Closed Sicilian / Grand Prix from White's side (592g).
+  'rosen-closed-sicilian': {
+    name: 'Closed Sicilian / Grand Prix (White)',
+    color: 'white',
+    studentMoves: [],
+    minPrefix: ['e4', 'c5', 'Nc3'],
+    maxDepth: 80,
+  },
 };
 
 const cfg = OPENINGS[OPENING_ID];

@@ -64797,5 +64797,360 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proericlondon-ne5-battery",
+    "openingId": "pro-ericrosen-london",
+    "criticalPositionFen": "r1bq1rk1/pp2ppbp/2n2np1/2ppN3/3P1B2/2N1P3/PPP1BPPP/R2Q1RK1 b - - 3 8",
+    "title": "The Ne5 outpost + Bd3 battery (main line)",
+    "overview": "From the main-line London the plan is to make the e5-knight the hub of a kingside attack: reroute the bishop to d3 aiming at h7, lift the queen to f3 or h5, and use the e5-knight and the f4-bishop as a battery against Black's king. A quiet-looking setup that turns violent.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Bd3 — the battery bishop swings toward h7",
+      "Qf3 — bring the queen to the kingside"
+    ],
+    "strategicThemes": [
+      "The unchallengeable e5-knight",
+      "Bd3 + Ne5 battery aimed at h7",
+      "Two bishops raking the kingside"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp2ppbp/2n2np1/2ppN3/3P1B2/2N1P3/PPP1BPPP/R2Q1RK1 b - - 3 8",
+        "moves": [
+          "e6",
+          "Bd3",
+          "Qe7",
+          "Qf3",
+          "Rd8",
+          "Rfe1"
+        ],
+        "annotations": [
+          "Black shores up the centre with e6, but it does nothing about the e5-knight that dominates the position.",
+          "The bishop swings to d3 — now it and the e5-knight both point at the black king's shelter on h7. This is the London attacking battery.",
+          "Black develops the queen to e7, connecting the rooks, but is purely reacting.",
+          "Qf3 brings the third attacker toward the kingside, eyeing f7 and the long light diagonal behind the e5-knight.",
+          "Black contests the d-file with a rook, but White is the one dictating play.",
+          "Rfe1 completes development and supports a future e-file break; White has a clean, mounting kingside initiative — the standard London squeeze that beats very strong opposition."
+        ],
+        "learnCues": [
+          "…e6 — solid but passive",
+          "Bd3 — battery toward h7",
+          "…Qe7 — Black reacts",
+          "Qf3 — queen joins in",
+          "…Rd8 — contest the file",
+          "Rfe1 — mount the initiative"
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "d3",
+              "to": "h7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "f7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Ne5 + Bd3 battery",
+        "intro": "Watch the quiet London turn into a kingside attack: the e5-knight and the d3-bishop train on Black's king.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-outpost",
+          "https://www.chess.com/openings/London-System",
+          "https://api.chess.com/pub/player/imrosen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericlondon-h4-storm",
+    "openingId": "pro-ericrosen-london",
+    "criticalPositionFen": "rnbq1rk1/pp2ppbp/2pp1np1/8/3PPB1P/2N5/PPPQ1PP1/2KR1BNR b - - 0 7",
+    "title": "Opposite-castle h4-h5 storm (vs …d6/…g6)",
+    "overview": "With kings on opposite wings against a …d6/…g6 setup, the plan is a direct pawn-storm race that White is built to win: h4-h5 to pry open the h-file, hxg6 to wreck the fianchetto, and the heavy pieces crash through to the king. We attack faster than Black can.",
+    "pawnBreaks": [
+      "h5 — pry open the h-file against the fianchetto",
+      "hxg6 — rip open the king's cover"
+    ],
+    "pieceManeuvers": [
+      "Bf4 + Qd2 eye h6 for a trade and a hack"
+    ],
+    "strategicThemes": [
+      "Opposite-side castling pawn race",
+      "Open the h-file onto the fianchettoed king",
+      "Big e4-d4 centre supports the attack"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnbq1rk1/pp2ppbp/2pp1np1/8/3PPB1P/2N5/PPPQ1PP1/2KR1BNR b - - 0 7",
+        "moves": [
+          "b5",
+          "h5",
+          "b4",
+          "hxg6",
+          "bxc3",
+          "gxf7+"
+        ],
+        "annotations": [
+          "Black starts a queenside counter with b5, racing for our king — but we are a full move ahead on the other wing.",
+          "h5! The storm lever. The pawn lunges at g6 to tear open the h-file, where our rook on h1 is already waiting.",
+          "Black pushes b4 at our knight, committed to the race.",
+          "hxg6 rips open the fianchetto — the h-file and the diagonal to f7 are both blown open while Black's king has no cover.",
+          "Black grabs the knight with bxc3, but it is far too slow; our attack arrives first.",
+          "gxf7+ smashes through — the king is dragged into the open and White's heavy pieces decide. The opposite-castling race is won."
+        ],
+        "learnCues": [
+          "…b5 — Black's counter-race",
+          "h5 — the storm lever",
+          "…b4 — Black commits",
+          "hxg6 — rip the fianchetto",
+          "…bxc3 — too slow",
+          "gxf7+ — crash through"
+        ],
+        "arrows": [
+          [],
+          [
+            {
+              "from": "h4",
+              "to": "g6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "h5",
+              "to": "g6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "h4-h5 opposite-castle storm",
+        "intro": "Opposite kings, and White strikes first: h4-h5 pries open the h-file and the attack crashes through f7.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-outpost",
+          "https://www.chess.com/openings/London-System",
+          "https://api.chess.com/pub/player/imrosen/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericsicilian-maroczy-a5",
+    "openingId": "pro-ericrosen-sicilian",
+    "criticalPositionFen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 b - - 1 9",
+    "title": "Fighting the Maroczy — …Nxd4, …Bd7, …a5",
+    "overview": "The textbook way to play against the Maroczy Bind: trade a pair of knights to relieve the cramp, develop the bishop to d7, and expand on the queenside with …a5 — clamping b4 and turning White's space edge into a target. Patient, structural chess that out-grinds strong opposition.",
+    "pawnBreaks": [
+      "…a5 — clamp b4 and seize queenside space"
+    ],
+    "pieceManeuvers": [
+      "…Nxd4 — trade to relieve the cramp",
+      "…Bd7 then …Nd7-c5 reroute"
+    ],
+    "strategicThemes": [
+      "Relieve the space bind by trading pieces",
+      "Queenside expansion with …a5-…a4",
+      "The dragon bishop on the long diagonal"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1B3/PP2BPPP/R2Q1RK1 b - - 1 9",
+        "moves": [
+          "Nxd4",
+          "Bxd4",
+          "Bd7",
+          "Qd2",
+          "a5"
+        ],
+        "annotations": [
+          "We trade a pair of knights with …Nxd4 — the standard antidote to a space bind. Fewer pieces, less cramp.",
+          "White recaptures with the bishop, which now eyes the long diagonal — but we have a plan to neutralise it.",
+          "…Bd7 develops the last minor piece and prepares to reroute the knight and expand on the queenside.",
+          "White centralises the queen on d2, connecting rooks and eyeing the kingside.",
+          "…a5! The key Maroczy lever — it grabs queenside space, fixes White's b-pawn as a target, and clamps the b4-square for a knight. The bind now cuts both ways and Black has a fully playable, equal game."
+        ],
+        "learnCues": [
+          "…Nxd4 — relieve the cramp",
+          "Bxd4 — White takes back",
+          "…Bd7 — develop and prepare",
+          "Qd2 — White centralises",
+          "…a5 — clamp b4, gain space"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "c6",
+              "to": "d4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "c8",
+              "to": "d7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "a7",
+              "to": "a5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Fighting the Maroczy with …a5",
+        "intro": "Watch Black relieve the space bind and clamp the queenside — the …Nxd4 / …Bd7 / …a5 plan.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-initiative",
+          "https://www.chess.com/openings/Sicilian-Defense",
+          "https://api.chess.com/pub/player/imrosen/games/archives"
+        ]
+      }
+    ]
   }
 ]

@@ -2723,6 +2723,475 @@
         "https://www.chess.com/openings/Stafford-Gambit",
         "https://lichess.org/study/34oRtfLM"
       ]
+    },
+    {
+      "id": "pro-ericrosen-london",
+      "playerId": "ericrosen",
+      "eco": "D02",
+      "name": "London System (Eric Rosen)",
+      "pgn": "d4 Nf6 Bf4 g6 Nc3 d5 e3 Bg7 Nf3 O-O Be2 c5 Ne5 Nc6 O-O",
+      "color": "white",
+      "style": "Solid, Universal",
+      "overview": "The London System is Eric Rosen's most-played opening by a distance — 5,163 games in his chess.com corpus at 62%. The appeal is simple: one solid, harmonious setup against almost everything. We play d4 and bring the dark-squared bishop OUT to f4 before locking the chain with e3, develop Nf3, Be2 (or Bd3), Nbd2 and c3, and plant a knight on e5. From that base Rosen plays two ways: a quiet positional grind when Black is solid, or — especially against a King's-Indian setup — a violent kingside attack with O-O-O and h4-h5. It is the perfect club weapon: low theory, high reliability, and a clear plan in every line.",
+      "keyIdeas": [
+        "Bishop out BEFORE e3. The whole point of the London is developing the dark-squared bishop to f4 before the e3-pawn would trap it. Get that move order right and you never have a bad bishop.",
+        "The e5-knight is the soul of the system. Ne5 sits on an outpost no pawn can challenge, eyes f7 and g6, and is the spearhead of every kingside attack. When in doubt, head for e5.",
+        "c3 + d4 is the unbreakable centre. Develop the queen's knight to d2, not c3, so the c-pawn can support d4. That little triangle makes the centre bomb-proof and frees you to attack.",
+        "Two speeds, one setup. Against a solid Black structure, grind with the better minor pieces. Against a fianchetto (…g6), grab the full centre with e4, castle queenside, and storm with h4-h5. Same opening, two completely different games."
+      ],
+      "traps": [
+        "Against the …c5/…Qb6 double-hit on b2 and d4, do not panic with b3 — play Na3, heading for c4 where the knight hits the queen with tempo and defends everything.",
+        "When Black fianchettoes with …g6 but holds back …d5, take the whole centre with e4, castle queenside, and throw the h-pawn forward — Bxh6 and an open h-file crash through the fianchetto."
+      ],
+      "warnings": [
+        "Never play e3 before Bf4 — you bury your best piece behind its own pawns and hand Black an easy game. The bishop comes out first, always.",
+        "Don't trade the f4-bishop cheaply. It is the pride of the London; keep it raking the b8-h2 diagonal unless the trade clearly improves your structure."
+      ],
+      "variations": [
+        {
+          "name": "vs …d5 Classical",
+          "pgn": "d4 d5 Bf4 Nf6 e3 c5 Nf3 Nc6 Nbd2 cxd4 exd4 Bf5 c3 e6 Be2 Bd6 Bxd6 Qxd6 O-O",
+          "explanation": "The main road: against a classical …d5 and …c5, we develop Nbd2 (keeping c3 free), brace d4 with c3, trade off Black's good dark-squared bishop with Bxd6, and castle into a risk-free edge. Rosen grinds this structure down against 3000-rated opposition.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-outpost",
+            "https://www.chess.com/openings/London-System",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs …e6 Setup",
+          "pgn": "d4 Nf6 Bf4 e6 e3 d5 Nf3 Bd6 Ne5 O-O Nd2 c5 c3 Nc6 Bd3",
+          "explanation": "Against a restrained …e6/…d5 wall (which boxes in Black's light bishop), we refuse the bishop trade and leap into e5, then build the Bd3 + Ne5 battery aimed at h7. The quiet London turns into a direct kingside attack.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-outpost",
+            "https://www.chess.com/openings/London-System",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs …c5 and …Qb6",
+          "pgn": "d4 Nf6 Bf4 c5 e3 Qb6 Na3 d6 Nc4 Qc7 Nf3 g6 h3 Bg7 Be2",
+          "explanation": "The critical test: …c5 and …Qb6 hit b2 and d4 at once. The clean antidote is Na3, rerouting to c4 where the knight kicks the queen with tempo and holds the queenside together. White emerges better-placed with an intact structure.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-outpost",
+            "https://www.chess.com/openings/London-System",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs …d6 (e4 Attacking Hybrid)",
+          "pgn": "d4 Nf6 Bf4 d6 Nc3 g6 e4 Bg7 Qd2 O-O O-O-O c6 h4",
+          "explanation": "When Black plays a King's-Indian with …d6/…g6 but cedes the centre, we grab it all with e4, castle queenside, and storm with h4-h5 into the fianchetto. The most dangerous weapon in Rosen's London: calm setup, violent finish.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-outpost",
+            "https://www.chess.com/openings/London-System",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-outpost",
+        "https://www.chess.com/openings/London-System",
+        "https://api.chess.com/pub/player/imrosen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-ericrosen-sicilian",
+      "playerId": "ericrosen",
+      "eco": "B36",
+      "name": "Sicilian Defense (Eric Rosen)",
+      "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Bg7 Be3 Nf6 Nc3 O-O Be2 d6 O-O",
+      "color": "black",
+      "style": "Solid, Counter-Attacking",
+      "overview": "The Sicilian is Eric Rosen's most-played defense to e4 (1,916 games). His main weapon is the Accelerated Dragon — …c5 and a fast …g6 fianchetto — meeting White's most testing Maroczy Bind (c4) head-on with a rock-solid, flexible structure and patient queenside play. Against the anti-Sicilians he stays principled and low-theory: …e6 Taimanov flexibility, the …d5 break versus the Alapin, and a clean …d6/…Bd7 plan versus the Rossolimo. It is a complete, fighting Sicilian repertoire built on sound structures rather than memorised sharp theory.",
+      "keyIdeas": [
+        "Accept the Maroczy, then chip at it. Against c4 you get less space but zero weaknesses. Trade a pair of knights with …Nxd4 to ease the cramp, then expand with …a5 and reroute a knight to c5 — the bind cuts both ways once you own queenside space.",
+        "The dragon bishop on g7 is your best piece. It rakes the long diagonal at d4 and b2; build your whole game around its power and never trade it cheaply.",
+        "Flexibility beats theory. The …e6 Taimanov commits nothing early — you choose your setup after White shows theirs, which is why several White tries transpose into the same comfortable structure.",
+        "Hit the centre when White goes quiet. Versus the Alapin's c3, …d5 strikes before White builds — and because c3 blocks Nc3, your queen is safe on d5 and you equalise instantly."
+      ],
+      "traps": [
+        "Versus the Alapin (c3), always answer with …d5. White's own c3-pawn takes away the Nc3 that would chase your queen, so …d5 and …Qxd5 gives Black a free, comfortable game.",
+        "In opposite-side castling Taimanov lines, …Bxc3 wrecking White's king cover plus …b5-…b4 gets your attack in first — count the race, and strike on the wing where you are faster."
+      ],
+      "warnings": [
+        "Versus the Rossolimo, if White takes on c6 recapture with …dxc6, not …bxc6 — taking toward the centre keeps a sound structure and opens lines for your bishop; …bxc6 leaves chronically weak queenside pawns.",
+        "In the Maroczy, don't lash out with …b5 before it's prepared — it just drops a pawn to cxb5. Build with …a5 and …Nc5 first; the breaks come later."
+      ],
+      "variations": [
+        {
+          "name": "Taimanov (…e6)",
+          "pgn": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nc3 Qc7 Be3 a6 Qd2 Nf6 O-O-O Bb4",
+          "explanation": "The flexible …e6 Sicilian: …Qc7 and …a6 build a low-commitment shell, and when White castles long, …Nf6 and …Bb4 pin the knight and launch a fast …b5-…b4 counter-attack. Black's storm arrives first in the opposite-castling race.",
+          "sources": [
+            "concept:pos-space",
+            "concept:pos-initiative",
+            "https://www.chess.com/openings/Sicilian-Defense",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Rossolimo (Bb5)",
+          "pgn": "e4 c5 Nf3 Nc6 Bb5 d6 O-O Bd7 Re1 a6 Bf1 Bg4 h3 Bxf3 Qxf3 e6",
+          "explanation": "Against the Bb5 pin we play …d6 and …Bd7 to unpin, then …Bg4xf3 to seize control of d4 and reach a rock-solid Hedgehog structure with no weaknesses — waiting to strike with …b5 or …d5 once White overextends.",
+          "sources": [
+            "concept:pos-space",
+            "concept:pos-initiative",
+            "https://www.chess.com/openings/Sicilian-Defense",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Alapin (c3)",
+          "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 Nc6 Nb5 Qd8",
+          "explanation": "The principled …d5 strike. Because c3 blocks White's natural Nc3, the queen sits safely on d5 and Black develops freely; even the Na3-Nb5 tempo-hunt runs into …Qd8 and an empty threat. Black is at least equal with the freer game.",
+          "sources": [
+            "concept:pos-space",
+            "concept:pos-initiative",
+            "https://www.chess.com/openings/Sicilian-Defense",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs 2.Nc3",
+          "pgn": "e4 c5 Nc3 e6 Nf3 Nc6 d4 cxd4 Nxd4 Qc7 Be3 a6 Qd2 Nf6 O-O-O Bb4",
+          "explanation": "Versus an early Nc3 we keep it flexible with …e6 and, if White opens with d4, transpose straight into our familiar Taimanov shell (…Qc7, …a6). One structure to learn, reached by several move orders.",
+          "sources": [
+            "concept:pos-space",
+            "concept:pos-initiative",
+            "https://www.chess.com/openings/Sicilian-Defense",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "concept:pos-space",
+        "concept:pos-initiative",
+        "https://www.chess.com/openings/Sicilian-Defense",
+        "https://api.chess.com/pub/player/imrosen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-ericrosen-qgd",
+      "playerId": "ericrosen",
+      "eco": "D35",
+      "name": "Queen's Gambit Declined (Eric Rosen)",
+      "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 c6 e3 Bd6 Bd3 h6 Bh4 O-O Nge2 Re8",
+      "color": "black",
+      "style": "Solid, Counter-Attacking",
+      "overview": "The QGD is Rosen's rock-solid answer to d4 (725 games). His main structure is the Exchange/Carlsbad: …e6, …d5, …c6 and the active …Bd6, meeting White's slow minority attack with a kingside counter (…Ne4, …f5). Against the Catalan he grabs the c4-pawn to disrupt White's setup; against an early Bg5 he uncorks the venomous Cambridge Springs with …Qa5. A complete, principled defense that is almost impossible to break and gives Black real winning chances.",
+      "keyIdeas": [
+        "The Carlsbad is a two-front race: White attacks on the queenside with b4-b5, you counter on the kingside with …Ne4 and …f5. Whoever is faster wins — and the …Bd6 bishop makes Black's attack very real.",
+        "Develop the bishop to d6, not e7. Active over passive — on d6 it eyes h2 and springs to life the instant lines open.",
+        "Versus the Catalan, take the c4-pawn and hit d4 with …c5 fast. Don't try to hold the pawn; use it to gain time so the g2-bishop never gets its bind.",
+        "The Cambridge Springs (…Qa5) turns a 'declined' opening into an attack — the queen pins c3 and combines with …Bb4/…Ne4 to win material from a careless White."
+      ],
+      "traps": [
+        "The Elephant Trap: after an early Bg5 and cxd5 exd5, if White grabs with Nxd5?? then …Nxd5! Bxd8 Bb4+ wins the queen back with an extra piece. Never let White snatch d5 for free.",
+        "If White is sloppy in the Cambridge Springs, …Qa5 plus …Bb4 and …Ne4 forks the pinned c3-knight and the g5-bishop — a recurring way to win a piece."
+      ],
+      "warnings": [
+        "Don't drift passively in the Carlsbad — if you sit still, White's minority attack creates a weak c6-pawn and grinds you down. You MUST generate kingside counterplay with …Ne4 and …f5.",
+        "Recapture on d5 with the e-pawn (…exd5) for the Carlsbad structure; the half-open e-file and active pieces are your compensation for the slightly fixed centre."
+      ],
+      "variations": [
+        {
+          "name": "vs Nf3 (Catalan)",
+          "pgn": "d4 d5 c4 e6 Nf3 Nf6 g3 dxc4 Bg2 Bb4+ Bd2 c5 O-O O-O dxc5 Bxc5",
+          "explanation": "Against the Catalan, grab the c4-pawn and strike d4 immediately with …Bb4+ and …c5. After the trades the bishop lands actively on c5 and the famous g2-bishop bites on granite — easy equality with no weaknesses.",
+          "sources": [
+            "concept:pawn-minority-attack",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "Cambridge Springs (vs Bg5)",
+          "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 c6 e3 Nbd7 Nf3 Qa5 Nd2 Bb4",
+          "explanation": "The venomous Cambridge Springs: …c6, …Nbd7 and the …Qa5 sortie pin the c3-knight and threaten …Bb4/…Ne4 forks on the c3-knight and g5-bishop. A 'declined' opening that seizes the initiative.",
+          "sources": [
+            "concept:pawn-minority-attack",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Queens-Gambit-Declined",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [
+        {
+          "name": "Elephant Trap",
+          "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 cxd5 exd5 Nxd5 Nxd5 Bxd8 Bb4 Qd2 Bxd2 Kxd2 Kxd8",
+          "explanation": "The famous Elephant Trap. White greedily grabs the d5-pawn with Nxd5??, thinking the f6-knight is pinned — but 6…Nxd5! 7.Bxd8 Bb4+! wins the queen straight back, and after the forced trades Black emerges a clean piece up. The pin was an illusion.",
+          "sources": [
+            "concept:tac-pin",
+            "concept:tac-trap",
+            "https://www.chess.com/openings/Queens-Gambit-Declined"
+          ]
+        }
+      ],
+      "warningLines": [],
+      "sources": [
+        "concept:pawn-minority-attack",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Queens-Gambit-Declined",
+        "https://api.chess.com/pub/player/imrosen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-ericrosen-budapest",
+      "playerId": "ericrosen",
+      "eco": "A52",
+      "name": "Budapest Gambit (Eric Rosen)",
+      "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Bb4+ Nd2 Nc6 Ngf3 Qe7 a3 Ngxe5 Nxe5 Nxe5",
+      "color": "black",
+      "style": "Trappy, Attacking",
+      "overview": "The Budapest Gambit (1.d4 Nf6 2.c4 e5!?) is Rosen's signature gambit answer to d4 (258 games, 63%). We sacrifice a pawn for fast, active piece play and a minefield of traps. The g4-knight harasses e5, the bishops fly out to b4 and c5, and Black regains the pawn with a knight planted on the strong e5-square. It is dubious by engine standards and devastating in practice — White grabs a pawn and walks straight into smothered mates and …Nd3 forks if they relax for a moment.",
+      "keyIdeas": [
+        "The g4-knight is the engine of the gambit — it pressures e5, eyes f2 and h2, and either wins the pawn back or spearheads the attack. Never let it be chased passively.",
+        "Develop with threats: …Bb4+ and …Bc5 come out with tempo while White is busy defending the extra pawn, so Black is fully developed first.",
+        "The e5-square is gold. After regaining the pawn the knight sits on e5 hitting d3 and f3 — the launchpad for …Nd3 forks and kingside pressure.",
+        "Know the traps cold. The Kieninger Trap (…Nd3 smothered mate) and …Bxf2+ shots win games outright against a careless White."
+      ],
+      "traps": [
+        "The Kieninger Trap: 5…Bb4+ 6.Nbd2 Qe7 7.a3?? Ngxe5 8.axb4?? Nd3 is smothered mate. If White grabs the bishop on b4, the knight forks its way to a mate on d3.",
+        "Whenever White's king is stuck in the centre, watch for …Nd3+ forking the king and a rook/queen, and …Bxf2+ deflections — the recurring Budapest knockouts."
+      ],
+      "warnings": [
+        "This is a gambit — against accurate play (Nf3, e3, calm development) White keeps a small edge. Play it for the initiative and the traps, and be ready to grind a roughly equal game if White defends well.",
+        "Don't grab on f2 or play …Nd3 unless it truly works — calculate the smothered/fork ideas; a failed sac just leaves you a pawn down for nothing."
+      ],
+      "variations": [
+        {
+          "name": "vs Nf3 (…Bc5)",
+          "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Nc3 Ngxe5 Nxe5 Nxe5 Be2 O-O",
+          "explanation": "When White defends e5 with Nf3, the bishop swings to c5 aiming at f2; combined with the g4-knight that is two pieces on f2 before White castles. Black regains the pawn with a strong e5-knight and active, comfortable equality.",
+          "sources": [
+            "concept:pos-initiative",
+            "concept:tac-trap",
+            "https://www.chess.com/openings/Budapest-Gambit",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Nc3 (Declined)",
+          "pgn": "d4 Nf6 c4 e5 Nc3 exd4 Qxd4 Nc6 Qd1 Bb4 Nf3 O-O Bd2 Re8",
+          "explanation": "If White declines with Nc3, …exd4 and …Nc6 hit the queen with tempo, …Bb4 pins, and …Re8 seizes the open e-file. Declining just hands Black easy, active equality with the initiative.",
+          "sources": [
+            "concept:pos-initiative",
+            "concept:tac-trap",
+            "https://www.chess.com/openings/Budapest-Gambit",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [
+        {
+          "name": "Kieninger Trap",
+          "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 axb4 Nd3#",
+          "explanation": "The legendary Kieninger Trap. After …Bb4+ Nbd2 Qe7, White's greedy a3 (and especially axb4 grabbing the bishop) walks into …Ngxe5 and …Nd3 — a smothered mate, with the knight delivering checkmate on d3 while White's own pieces box the king in.",
+          "sources": [
+            "concept:mate-smothered",
+            "concept:tac-trap",
+            "https://www.chess.com/openings/Budapest-Gambit"
+          ]
+        }
+      ],
+      "warningLines": [],
+      "sources": [
+        "concept:pos-initiative",
+        "concept:tac-trap",
+        "https://www.chess.com/openings/Budapest-Gambit",
+        "https://api.chess.com/pub/player/imrosen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-ericrosen-closed-sicilian",
+      "playerId": "ericrosen",
+      "eco": "B23",
+      "name": "Closed Sicilian / Grand Prix (Eric Rosen)",
+      "pgn": "e4 c5 Nc3 d6 f4 Nc6 Nf3 g6 Bc4 Bg7 O-O e6 d4 Nxd4 Be3",
+      "color": "white",
+      "style": "Aggressive, Attacking",
+      "overview": "Rosen's anti-Sicilian (592 games, 66%): skip the open theory and play the Grand Prix Attack — Nc3, f4 and a direct kingside assault. The bishop comes to c4 eyeing f7, White castles, and pushes f5 to pry open lines at the black king. It is low-theory and high-aggression: the perfect practical weapon against the Sicilian, scoring heavily because Black is dragged into a sharp attacking game instead of their prepared main lines.",
+      "keyIdeas": [
+        "f4-f5 is the whole plan — open the f-file and hit g6/e6, then pile the heavy pieces onto the black king. Everything supports the kingside storm.",
+        "The c4-bishop and a quick attack punish slow Black setups; when Black plays …e6 to blunt it, you've gained time and weakened Black's dark squares.",
+        "Bh6 to trade the fianchetto bishop is a key attacking resource — remove the king's best defender, then crash through on the dark squares.",
+        "Against an early …g6 (before …Nc6/…d6), switch to d4 and an Open Sicilian on favourable terms — Black has committed and can't fight for the centre flexibly."
+      ],
+      "traps": [
+        "When Black plays an early …g6, hit with d4; after …cxd4 Qxd4 …Nf6 the zwischenzug Bb5+ covers the queen and develops with tempo — a clean way to stay a step ahead.",
+        "In the …e6 lines, Bb5+ trades off Black's good light-squared bishop before …d5 frees it; with the bishop gone, your kingside attack has a free run."
+      ],
+      "warnings": [
+        "Don't drift — the Grand Prix is about initiative. If you stall, Black's …d5 break and queenside play take over. Commit to f5 and the kingside attack.",
+        "Watch the d4-square and the long diagonal — Black's …Bg7 and …Nc6 hit it; support the centre with c3 or trade favourably before it becomes a weakness."
+      ],
+      "variations": [
+        {
+          "name": "vs …e6 (f4 + Bb5+)",
+          "pgn": "e4 c5 Nc3 e6 f4 d5 Nf3 Nf6 Bb5+ Bd7 Bxd7 Nbxd7",
+          "explanation": "Against a French-style …e6/…d5, keep the f4 stake and use Bb5+ to trade off Black's good light bishop. Then e5 for space, castle, and the f4-f5 break — White keeps a pleasant attacking initiative.",
+          "sources": [
+            "concept:att-kingside-storm",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Grand-Prix-Attack",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs …g6 (Open d4)",
+          "pgn": "e4 c5 Nc3 g6 d4 cxd4 Qxd4 Nf6 Bb5 a6 Bd3 Bg7 Be3 O-O O-O-O",
+          "explanation": "Punish the early …g6 by grabbing the centre with d4; the Qxd4/Bb5+ trick keeps tempo, and after Bd3, Be3 and O-O-O White has a space edge, the bishop pair, and an opposite-side attack. Rosen scores 73% here.",
+          "sources": [
+            "concept:att-kingside-storm",
+            "concept:pos-development",
+            "https://www.chess.com/openings/Grand-Prix-Attack",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "concept:att-kingside-storm",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Grand-Prix-Attack",
+        "https://api.chess.com/pub/player/imrosen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-ericrosen-scandinavian",
+      "playerId": "ericrosen",
+      "eco": "B01",
+      "name": "Scandinavian Defense (Eric Rosen)",
+      "pgn": "e4 d5 exd5 Nf6 d4 Bg4 Be2 Bxe2 Qxe2 Qxd5 Nf3 Nc6 O-O O-O-O",
+      "color": "black",
+      "style": "Solid, Counter-Attacking",
+      "overview": "Rosen's modern Scandinavian (192 games, 64%): meet e4 with …d5 and, after exd5, recapture with the knight (…Nf6) rather than the queen — keeping the queen safe and developing fast. The key idea is …Bg4, solving the eternal Scandinavian problem of the light-squared bishop by getting it outside the chain before …e6 ever locks it in. Black trades it for White's good bishop, regains the pawn safely, castles long, and pressures the d-file. A fully-sound, fighting version of an opening with an undeserved dubious reputation.",
+      "keyIdeas": [
+        "Recapture with …Nf6, not the queen — avoid the early Qxd5 that just gets chased by Nc3 and loses time. Win the pawn back with a piece, on your terms.",
+        "Solve the light bishop FIRST with …Bg4, then trade it for White's good bishop. The Scandinavian's whole problem disappears once that bishop is off the board.",
+        "Bring the queen out only when it's safe (after the bishop trade), then castle long and slam the rook onto the open d-file against White's centre.",
+        "Pressure d4 with rooks and queen, prepare …e5 to break the centre, and use the lead in development before White consolidates."
+      ],
+      "traps": [
+        "If White clings to the d5-pawn with awkward moves, the …Bg4 pin plus …Nc6 and …Qxd5 regain it with a better-developed position — the pawn was never really White's to keep.",
+        "Against Nc3 holding the pawn, …Nxd5 reaches a comfortable Caro-style game a tempo up — there's nothing to fear."
+      ],
+      "warnings": [
+        "Don't recapture …Qxd5 and let the queen be chased around by Nc3 and d4 with tempo — that's the old, passive Scandinavian. The modern …Nf6 is the whole point.",
+        "Don't lock in the c8-bishop with an early …e6 before developing it — play …Bg4 first, every time."
+      ],
+      "variations": [
+        {
+          "name": "vs Nc3 (…Nxd5)",
+          "pgn": "e4 d5 exd5 Nf6 Nc3 Nxd5 Nf3 g6 Bc4 Nb6 Bb3 Bg7 O-O O-O",
+          "explanation": "If White defends with Nc3 we simply take — …Nxd5 — and fianchetto with …g6/…Bg7, tucking the knight to b6 to hit the c4-bishop. A sound, harmonious game a tempo up on a Caro-style structure.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-bishop-pair",
+            "https://www.chess.com/openings/Scandinavian-Defense",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Nf3 (…Nxd5)",
+          "pgn": "e4 d5 exd5 Nf6 Nf3 Nxd5 d4 Bg4 Be2 e6 O-O Be7",
+          "explanation": "Against Nf3, …Nxd5 regains the pawn at once and …Bg4 develops the problem bishop actively before …e6. A risk-free, classical setup where every Black piece is comfortable.",
+          "sources": [
+            "concept:pos-development",
+            "concept:pos-bishop-pair",
+            "https://www.chess.com/openings/Scandinavian-Defense",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-bishop-pair",
+        "https://www.chess.com/openings/Scandinavian-Defense",
+        "https://api.chess.com/pub/player/imrosen/games/archives"
+      ]
+    },
+    {
+      "id": "pro-ericrosen-french",
+      "playerId": "ericrosen",
+      "eco": "C11",
+      "name": "French Defense (Eric Rosen)",
+      "pgn": "e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 f4 O-O Nf3 c5",
+      "color": "black",
+      "style": "Solid, Counter-Attacking",
+      "overview": "Rosen's French (187 games, 66%): the classical, counter-attacking answer to e4. We build the solid …e6/…d5 pawn chain and invite White to grab space with e5 — then strike back at the base with …c5. Against the main Nc3 we play the Classical with …Nf6 and …Be7; against the Advance we hammer d4 with …c5 and …Qb6; against the Tarrasch and Exchange we get easy, active equality. The French is a fighting defense: White attacks the king, Black attacks the pawn chain, and Rosen is very comfortable defending while striking back.",
+      "keyIdeas": [
+        "…c5 is the eternal French break — it attacks the base of White's d4-e5 chain. Almost every French plan revolves around hitting d4 with …c5, …Nc6 and …Qb6.",
+        "It's a race: White attacks on the kingside (f4, Nf3, the e5-wedge), Black counter-attacks on the queenside and centre. Play for the counter, don't just defend.",
+        "The light-squared bishop is the French problem child — look to trade it (…Bd7-b5, or …b6/…Ba6) or make it useful behind the chain; never let it rot on c8.",
+        "When White's centre is locked, …f6 at the right moment blasts it open and frees all of Black's pieces at once."
+      ],
+      "traps": [
+        "In the Advance, …Qb6 and …Nc6 pile on d4 and b2; if White is careless defending the base of the chain, the pawn falls or the queenside collapses.",
+        "Against the Tarrasch's passive Nd2, the standard …c5/…Nc6/…Qb6 pressure on d4 is even stronger than usual — White's knight can't defend the centre as actively."
+      ],
+      "warnings": [
+        "Don't play passively and let White's space advantage smother you — you MUST hit back with …c5 (and …f6 when it's ready). A static French is a lost French.",
+        "Solve the c8-bishop — a French where that bishop never gets into the game is the classic way to drift into a worse position."
+      ],
+      "variations": [
+        {
+          "name": "vs Advance (…c5)",
+          "pgn": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 a3 c4 Nbd2 Na5",
+          "explanation": "Against the Advance, strike the base of the chain with …c5, pile on d4 with …Nc6 and …Qb6, then clamp the queenside with …c4 and reroute …Na5 toward the b3-hole for a minority attack. A clear, comfortable plan versus White's locked centre.",
+          "sources": [
+            "concept:pawn-chain",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Tarrasch (Nd2)",
+          "pgn": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2",
+          "explanation": "The Tarrasch avoids the …Bb4 pin, but its passive Nd2 makes the standard …c5/…Nc6/…Qb6 hammering of d4 even more effective. Add …f6 at the right moment and Black gets active, comfortable play.",
+          "sources": [
+            "concept:pawn-chain",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        },
+        {
+          "name": "vs Exchange",
+          "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 O-O O-O",
+          "explanation": "White's bid for a quiet draw — but the open position frees Black's normally-cramped pieces. Develop actively with …Bd6 and …Bg4/…Bf5, avoid sterile symmetry, and play for the initiative on whichever side White commits.",
+          "sources": [
+            "concept:pawn-chain",
+            "concept:pos-development",
+            "https://www.chess.com/openings/French-Defense",
+            "https://api.chess.com/pub/player/imrosen/games/archives"
+          ]
+        }
+      ],
+      "trapLines": [],
+      "warningLines": [],
+      "sources": [
+        "concept:pawn-chain",
+        "concept:pos-development",
+        "https://www.chess.com/openings/French-Defense",
+        "https://api.chess.com/pub/player/imrosen/games/archives"
+      ]
     }
   ]
 }
