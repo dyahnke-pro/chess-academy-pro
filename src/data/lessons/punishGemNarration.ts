@@ -3286,6 +3286,45 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     ],
     sources: ['concept:tac-zwischenzug', 'concept:pos-material', 'https://www.chess.com/openings/Pirc-Defense'],
   },
+
+  // ── Pro-rep gems (2026-05-31 depth build) — mined engine-first, positional tier ──
+  // Naroditsky Najdorf: after …e5 the knight hops to f5; the d5 break leaves Black's
+  // d-pawn weak and White better. playLine 21 plies.
+  'pro-naroditsky-najdorf:e4_c5_Nf3_d6_d4_cxd4_Nxd4_Nf6_Nc3_a6_h3_e5:Nf5': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…e5? — Black kicks the knight, but this loosens d5 and d6 for good.', 'Nf5 — the knight leaps to f5, eyeing d6 and g7 instead of retreating.', 'd5 — the principled break: Black blocks the square, but now the d6-pawn is backward and the d5-pawn is a target.', '', '…d4 — Black grabs space, yet the pawn over-extends and the light squares around it weaken.', '', '', '', '', 'Bd3 — White develops onto the b1-h7 diagonal; the weak light squares and the backward d6-pawn give a clear pull.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Nf5 — leap, eye d6.', 'd5 — fix the weakness.', '', '', '', '', '', '', 'Bd3 — White is better.'],
+    sources: ['concept:pos-outpost', 'concept:pos-weak-square', 'https://www.chess.com/openings/Sicilian-Defense-Najdorf-Variation'],
+  },
+  // Naroditsky Fantasy-Caro: …e6 is too slow; Nf3 + d5 grabs space.
+  'pro-naroditsky-fantasy-caro:e4_c6_d4_d5_f3_dxe4_fxe4:e6': {
+    watch: ['', '', '', '', '', '', '', '…e6? — solid-looking, but it shuts in the light bishop and gives White a free hand in the centre.', 'Nf3 — calm development; the broad centre is ready to roll.', '', 'd5 — the wedge rams forward, cramping Black and clamping c6 and e6.', '', '', '', '', '…a6 — Black has no counterplay; the space and the passed-pawn potential favour White.'],
+    learn: ['', '', '', '', '', '', '', '', 'Nf3 — develop, hold the centre.', '', 'd5 — the cramping wedge.', '', '', '', '', 'a6 — White is better.'],
+    sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
+  },
+  // Naroditsky Fantasy-Caro: the …Nf6 slip walks into Bxf7+! — a real Greek-gift sac (+280cp).
+  'pro-naroditsky-fantasy-caro:e4_c6_d4_d5_f3_dxe4_fxe4_e5_Nf3_Bg4_Bc4:Nf6': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…Nf6? — the natural developing move, but the f7-square is fatally loose.', 'Bxf7+! — the Greek-gift sacrifice: the bishop crashes through and the king is dragged out.', '…Ke7 — forced; the king must take the long walk.', 'Bb3 — the bishop retreats with the pawn pocketed and the king stranded in the centre.', '', 'Qxf3 — White recaptures, the queen swinging toward the exposed king.', '', 'Nc3 — every piece joins; Black is busted with his king on d8.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'Bxf7+ — the Greek gift!', 'Ke7 — king dragged out', 'Bb3 — pocket it, king stuck', '', 'Qxf3 — swing the queen', '', 'Nc3 — White is winning.', ''],
+    sources: ['concept:tac-sacrifice', 'concept:pos-king-safety', 'https://www.chess.com/openings/Caro-Kann-Defense-Fantasy-Variation'],
+  },
+  // Naroditsky Rossolimo: after Bxc6 + …e6, the e5 push gains a strong central clamp.
+  'pro-naroditsky-rossolimo:e4_c5_Nf3_Nc6_Bb5_g6_Bxc6_bxc6_O-O_Bg7_c3:e6': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '…e6? — Black blunts the long diagonal, but it lets White seize the centre.', 'e5 — the pawn clamps the centre and shuts in the g7-bishop the whole game.', '', 'Re1 — the rook backs the e5-wedge.', '', 'Nxe5 — the knight lands on the dominant e5 outpost.', '', '', 'O-O — Black castles into a passive game; White owns the centre and the better pawns.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', 'e5 — clamp, shut in the bishop.', '', 'Re1 — back the wedge.', '', 'Nxe5 — seize the outpost.', '', '', 'O-O — White is better.'],
+    sources: ['concept:pos-center', 'concept:pos-outpost', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
+  },
+  // Naroditsky Rossolimo (c3 system): …c4 over-extends; Na3 hits it and White breaks d-file open.
+  'pro-naroditsky-rossolimo:e4_c5_Nf3_d6_c3_Nf6_Bd3_Nc6_Bc2:c4': {
+    watch: ['', '', '', '', '', '', '', '', '', '…c4? — Black grabs space, but the pawn runs too far and becomes a target.', 'Na3 — the knight develops with tempo, hitting the over-extended c4-pawn.', '', 'exd5 — White opens the centre while Black is uncoordinated.', '', 'Qe2 — connecting and eyeing the weak light squares.', '', '', '…Ba6 — Black props up c4, but the loose pawn and weak squares leave White clearly better.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'Na3 — hit the c4-pawn.', '', 'exd5 — open the centre.', '', 'Qe2 — connect, press.', '', '', 'Ba6 — White is better.'],
+    sources: ['concept:pos-weak-pawn', 'concept:pos-center', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
+  },
+  // Naroditsky Rossolimo (c3 system): …Ne5 trades into White's hands; Nbd2 keeps the bishop pair edge.
+  'pro-naroditsky-rossolimo:e4_c5_Nf3_d6_c3_Nf6_Bd3_Nc6_Bc2_Bg4_d3_e6_O-O:Ne5': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Ne5? — the knight jumps in, but it only invites trades that hand White the bishop pair.', 'Nbd2 — White declines to chase, developing and keeping the tension.', '', 'h3 — questioning the g4-bishop.', '…Bxf3 — Black trades, giving up the bishop pair.', 'Nxf3 — White recaptures, the knight heading to a fine square.', '', '', '…Nc6 — the knight retreats; White keeps the two bishops and the freer position.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nbd2 — keep the tension.', '', 'h3 — question the bishop.', 'Bxf3 — Black gives the pair.', 'Nxf3 — recapture.', '', '', 'Nc6 — White holds the edge.'],
+    sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
