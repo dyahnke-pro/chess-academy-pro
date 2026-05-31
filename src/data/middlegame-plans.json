@@ -1838,17 +1838,27 @@
   {
     "id": "mp-benkogambit-main",
     "openingId": "benko-gambit",
-    "criticalPositionFen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 5 12",
+    "criticalPositionFen": "rn1qkb1r/3ppppp/b4n2/2pP4/8/8/PP2PPPP/RNBQKBNR w KQkq - 0 6",
     "title": "Benko: The Queenside Squeeze",
     "overview": "The full Benko grip is assembled: the g7-bishop on the long diagonal, knights heading for the queenside, and the rooks ready to double on the open a- and b-files. The plan is automatic and relentless: …Qa5, …Rfb8, …Ra8, and pile every piece onto a2 and b2 until White cracks. You gave a pawn; you got a grip for the whole game.",
     "pawnBreaks": [
-      "…c4 to fix and probe the queenside",
-      "keep the a-/b-files open"
+      {
+        "move": "…e6 — challenge the d5-pawn",
+        "explanation": "When ready, …e6 strikes at the d5-pawn to open more lines for Black’s active pieces.",
+        "fen": "rn1qkb1r/3ppppp/b4n2/2pP4/8/8/PP2PPPP/RNBQKBNR w KQkq - 0 6"
+      }
     ],
     "pieceManeuvers": [
-      "…Qa5 to the queenside",
-      "…Rfb8/…Ra8 doubling on the open files",
-      "…Ne5/…Nb6 reroutes"
+      {
+        "piece": "Bishop",
+        "route": "…Bf8-g7 — the long diagonal",
+        "explanation": "The fianchettoed bishop rakes toward White’s queenside, the Benko’s key piece."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Ba6xf1 — wreck White’s castling",
+        "explanation": "Trading the light bishops leaves White’s king stuck in the centre."
+      }
     ],
     "strategicThemes": [
       "Open a-/b-file pressure",
@@ -1860,88 +1870,103 @@
     ],
     "playableLines": [
       {
-        "fen": "r2q1rk1/3nppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R w - - 5 12",
+        "fen": "rn1qkb1r/3ppppp/b4n2/2pP4/8/8/PP2PPPP/RNBQKBNR w KQkq - 0 6",
         "moves": [
-          "Re1",
-          "Ng4",
-          "Qe2",
-          "Qa5"
+          "Nc3",
+          "d6",
+          "Nf3",
+          "Nbd7",
+          "e4",
+          "Bxf1",
+          "Kxf1",
+          "g6"
         ],
         "annotations": [
-          "Re1 centralises.",
-          "…Ng4 reroutes the knight toward e5 with tempo.",
-          "Qe2 defends.",
-          "…Qa5 begins the signature regrouping — the queen joins the rooks and bishop bearing down on White's queenside."
+          "Nc3 develops, the main-line Benko-Accepted setup with the big d5-pawn.",
+          "…d6 supports the structure and opens the f8-bishop's path to the long diagonal.",
+          "White develops the knight to f3.",
+          "…Nbd7 develops, heading toward the queenside and the e5/c5 squares.",
+          "White claims the centre with e4.",
+          "…Bxf1! Black trades the light-squared bishops — without it White cannot castle kingside normally, so the king is awkwardly placed.",
+          "White recaptures with the king, losing castling rights — a key Benko theme.",
+          "…g6 prepares the fianchetto. Black has the textbook Benko compensation: the half-open a- and b-files, the g7-bishop coming to the long diagonal, and a White king stuck in the centre — Vasiukov outplayed Portisch from this dream setup."
         ],
-        "title": "Benko: The Queenside Squeeze",
         "arrows": [
           [],
-          [
-            {
-              "from": "g4",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Benko Compensation (Portisch–Vasiukov)",
         "highlights": [
           [
             {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h1",
+              "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
+              "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a5",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d8",
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black sets up the queenside pressure for the gambit pawn.",
         "sources": [
-          "concept:att-queenside-attack",
-          "concept:pos-open-file",
+          "concept:pos-initiative",
+          "concept:pos-development",
           "https://en.wikipedia.org/wiki/Benko_Gambit"
         ],
         "learnCues": [
-          "Re1 — centralise",
-          "Ng4 — reroute toward e5",
-          "Qe2 — defend",
-          "Qa5 — the signature regrouping"
+          "Nc3 — the Benko-Accepted setup",
+          "…d6 — support, open the bishop",
+          "Nf3 — White develops",
+          "…Nbd7 — develop toward c5/e5",
+          "e4 — White claims the centre",
+          "…Bxf1 — trade, wreck castling",
+          "Kxf1 — White loses castling",
+          "…g6 — prepare the fianchetto"
         ]
       }
     ]
@@ -6613,20 +6638,25 @@
     "id": "mp-evansgambit-declined",
     "openingId": "evans-gambit",
     "title": "Evans Declined: Space and the d5 Outpost",
-    "criticalPositionFen": "r1bqk1nr/1ppp1ppp/pbn5/4p3/PPB1P3/2N2N2/2PP1PPP/R1BQK2R b KQkq - 1 6",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/1bn5/4p3/1PB1P3/5N2/P1PP1PPP/RNBQK2R w KQkq - 1 5",
     "overview": "When Black declines with ...Bb6, White doesn't get the attack for free but keeps a space edge. The plan: expand with a4, jump a knight to the d5-outpost, and press the slightly cramped Black position.",
     "pawnBreaks": [
       {
-        "move": "a4-a5",
-        "explanation": "a4-a5 gains queenside space and harasses the b6-bishop.",
-        "fen": "r1bqk1nr/1ppp1ppp/pbn5/4p3/PPB1P3/2N2N2/2PP1PPP/R1BQK2R b KQkq - 1 6"
+        "move": "a4-a5 — queenside space",
+        "explanation": "White gains space and harasses the b6-bishop even with the gambit declined.",
+        "fen": "r1bqk1nr/pppp1ppp/1bn5/4p3/1PB1P3/5N2/P1PP1PPP/RNBQK2R w KQkq - 1 5"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Knight",
-        "route": "Nc3-d5",
-        "explanation": "The knight occupies the d5-outpost, dominating the declined lines."
+        "route": "Nc3-d5 — the central outpost",
+        "explanation": "The knight dominates d5, the key square in the Declined lines."
+      },
+      {
+        "piece": "Pawn",
+        "route": "a4-a5 — gain space",
+        "explanation": "The a-pawn grabs queenside space and the initiative."
       }
     ],
     "strategicThemes": [
@@ -6639,36 +6669,26 @@
     ],
     "playableLines": [
       {
-        "title": "Evans Declined: Space and the d5 Outpost",
-        "fen": "r1bqk1nr/1ppp1ppp/pbn5/4p3/PPB1P3/2N2N2/2PP1PPP/R1BQK2R b KQkq - 1 6",
+        "fen": "r1bqk1nr/pppp1ppp/1bn5/4p3/1PB1P3/5N2/P1PP1PPP/RNBQK2R w KQkq - 1 5",
         "moves": [
+          "a4",
+          "a6",
+          "Nc3",
           "Nf6",
           "Nd5",
           "Nxd5",
           "exd5",
-          "Nd4",
-          "a5"
+          "Nd4"
         ],
         "annotations": [
-          "…Nf6 — Black develops the knight.",
-          "Nd5 — White seizes the d5-outpost.",
-          "…Nxd5 — Black trades off the strong knight.",
-          "exd5 — White gains the d5-pawn wedge.",
-          "…Nd4 — Black centralises a knight.",
-          "a5 — White gains space and harasses the bishop."
-        ],
-        "sources": [
-          "book:evans-gambit",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Evans_Gambit"
-        ],
-        "learnCues": [
-          "Nf6 — develop the knight",
-          "Nd5 — seize the outpost",
-          "Nxd5 — trade the strong knight",
-          "exd5 — the d5 wedge",
-          "Nd4 — centralise a knight",
-          "a5 — gain space, harass"
+          "a4! Even with the gambit declined, White gains queenside space and threatens a5 to harass the b6-bishop.",
+          "…a6 stops a5, but loosens the queenside.",
+          "Nc3 develops, eyeing the d5-outpost.",
+          "…Nf6 develops naturally.",
+          "Nd5! White jumps the knight to the dominant central outpost, hitting the f6-knight and the b6-bishop.",
+          "…Nxd5 trades it off.",
+          "exd5 recaptures, gaining a strong central pawn wedge and the half-open e-file.",
+          "…Nd4 the knight seeks activity, but White's central space, the bishop pair, and the queenside initiative give a clear pull — Petrosian outplayed Tkachiev from here."
         ],
         "arrows": [
           [],
@@ -6676,24 +6696,25 @@
           [],
           [],
           [],
+          [],
+          [],
           []
         ],
+        "title": "The Evans Declined (Petrosian–Tkachiev)",
         "highlights": [
           [
             {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g8",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d5",
+              "square": "a6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
               "square": "c3",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -6701,10 +6722,6 @@
           ],
           [
             {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
               "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
@@ -6713,9 +6730,17 @@
             {
               "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e4",
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -6723,22 +6748,24 @@
             {
               "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a4",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "intro": "White presses the edge after the gambit is declined.",
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
+        ],
+        "learnCues": [
+          "a4 — gain queenside space",
+          "…a6 — stop a5",
+          "Nc3 — eye d5",
+          "…Nf6 — develop",
+          "Nd5 — the central outpost",
+          "…Nxd5 — trade it off",
+          "exd5 — central wedge",
+          "…Nd4 — Black seeks activity"
         ]
       }
     ]
@@ -31297,20 +31324,25 @@
     "id": "mp-sicilianalapin-d5",
     "openingId": "sicilian-alapin",
     "title": "Alapin 2...d5: Blockade the Isolated Pawn",
-    "criticalPositionFen": "rn2kb1r/pp3ppp/4pn2/2pq3b/3P4/2P2N1P/PP2BPP1/RNBQ1RK1 b kq - 2 8",
+    "criticalPositionFen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
     "overview": "After 2...d5 Black plays against White's isolated queen's pawn: develop with tempo, pin the f3-knight, blockade d5, and pile on the lone d-pawn.",
     "pawnBreaks": [
       {
-        "move": "cxd4 (resolve)",
-        "explanation": "Black resolves the structure favourably once developed.",
-        "fen": "rn2kb1r/pp3ppp/4pn2/2pq3b/3P4/2P2N1P/PP2BPP1/RNBQ1RK1 b kq - 2 8"
+        "move": "…Nc6 and …Rd8 — pressure d4",
+        "explanation": "Black piles pieces onto the isolated d4-pawn, the structural target.",
+        "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4"
       }
     ],
     "pieceManeuvers": [
       {
+        "piece": "Knight",
+        "route": "…Nf6 then …Nbd7/…Nc6 — blockade and pressure",
+        "explanation": "The knights blockade d5 and besiege the isolated d4-pawn."
+      },
+      {
         "piece": "Bishop",
-        "route": "Bc8-g4",
-        "explanation": "Bg4 pins the knight defending d4."
+        "route": "…Be7 — develop solidly",
+        "explanation": "The bishop completes development before the siege begins."
       }
     ],
     "strategicThemes": [
@@ -31323,116 +31355,107 @@
     ],
     "playableLines": [
       {
-        "title": "Alapin 2...d5: Blockade the Isolated Pawn",
-        "fen": "rn2kb1r/pp3ppp/4pn2/2pq3b/3P4/2P2N1P/PP2BPP1/RNBQ1RK1 b kq - 2 8",
+        "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
         "moves": [
-          "Nc6",
-          "Na3",
-          "a6",
-          "Nc2",
-          "cxd4"
+          "d4",
+          "Nf6",
+          "Nf3",
+          "e6",
+          "Bd3",
+          "Be7",
+          "O-O",
+          "O-O"
         ],
         "annotations": [
-          "Nc6 — develop, pressing d4.",
-          "Na3 — White reroutes awkwardly.",
-          "a6 — Black denies b5 and prepares.",
-          "Nc2 — White eyes the d4-pawn.",
-          "cxd4 — Black resolves it, comfortable against the weakness."
+          "d4 — White accepts an isolated queen's pawn for piece activity, the Alapin's main try.",
+          "…Nf6 develops, eyeing the d5- and e4-squares.",
+          "White develops the knight to f3, supporting the IQP.",
+          "…e6 builds a solid structure and prepares to blockade d5.",
+          "White develops the bishop to its active d3 square.",
+          "…Be7 develops, readying castling.",
+          "White castles.",
+          "…O-O — Black castles into a comfortable position: solid structure, easy development, and White's isolated d4-pawn as a long-term target. Sutovsky outplayed Pavasovic by pressuring it."
         ],
         "arrows": [
-          [
-            {
-              "from": "c6",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
           [],
-          [
-            {
-              "from": "c2",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
+        "title": "Against the Alapin (Pavasovic–Sutovsky)",
         "highlights": [
           [
             {
-              "square": "c6",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b8",
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "a3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black strikes with ...d5 and targets the IQP.",
         "sources": [
           "concept:pos-center",
-          "concept:pos-development",
+          "concept:pawn-isolated",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Alapin_Variation"
         ],
         "learnCues": [
-          "Nc6 — develop, press d4",
-          "Na3 — White reroutes awkwardly",
-          "a6 — deny b5",
-          "Nc2 — eyes d4",
-          "cxd4 — resolve it, comfortable"
+          "d4 — White accepts the IQP",
+          "…Nf6 — develop, eye d5",
+          "Nf3 — support the IQP",
+          "…e6 — solid, prepare to blockade",
+          "Bd3 — White develops",
+          "…Be7 — develop, ready to castle",
+          "O-O — White castles",
+          "…O-O — castle, target the IQP"
         ]
       }
     ]
