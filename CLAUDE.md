@@ -631,6 +631,18 @@ to baby sit like this in the future."*
 This is the procedural playbook. Follow these steps in order for
 every new pro-rep opening build. Skip nothing. Don't reinvent.
 
+🚀 **READ `docs/pro-rep-efficient-build-recipe.md` FIRST (locked David
+2026-05-31: "write that down as the standard").** It is this procedure made
+FAST — the data-extract-then-author recipe that took Hikaru to full G9.1
+parity (5 openings, every layer gate-green first try) in one session. The
+core move: per layer, write a ~30-line throwaway script that PRINTS the real
+spine-terminus + real continuation + the squares the student actually lands
+on, then transcribe that into prose — never author from memory. It also
+captures the gotchas that cost real time (the Stockfish `score cp` sign
+convention for pitfall verification = `studentEval = -rawEval` always; the
+`EXTRA_WALK` gem trick for solid systems; the ungated-for-pro-rep arrow /
+bishop-pair checks you must run yourself). Read it before STEP 0.
+
 ### 🚨 G9.3 THE FOUR HARD GATES THAT MAKE A PRO-REP BUILD REAL — locked David 2026-05-31 (after the GothamChess "Bg5 pins the knight to the queen" incident). READ BEFORE EVERY PRO-REP BUILD.
 
 The 2026-05-31 incident: an 18-opening GothamChess build shipped plans +
