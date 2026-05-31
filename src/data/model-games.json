@@ -6507,5 +6507,40 @@
     "middlegameTheme": "Concrete development, ...a6/...b5 vs the Bg5 line.",
     "lessonSummary": "Develop fast, play ...a6/...b5, and counter the Bg5 attack.",
     "variation": "Anti-Dragon: Bg5 Line"
+  },
+  {
+    "id": "mg-sicilian-sveshnikov-sveshnikov-main-line-9-nd5-deep",
+    "openingId": "sicilian-sveshnikov",
+    "white": "Nepomniachtchi, I..",
+    "black": "Carlsen, M..",
+    "whiteElo": 2789,
+    "blackElo": 2847,
+    "result": "0-1",
+    "year": 2021,
+    "event": "Magnus Carlsen Inv Prelim",
+    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Ne7 Nxf6+ gxf6 Nc2 Bb7 Bd3 d5 Qe2 f5 O-O-O fxe4 Bxe4 Qc7 Bf3 O-O-O g3 Kb8 Kb1 Nc8 Rhe1 Rhe8 Ne3 Nb6 Qc2 f6 Bg2 Rd6 Rd2 Red8 Red1 a5 a3 Nc4 Nxc4 bxc4 Qf5 Ka7 Ka1 Qd7 Qh5 Qc7 f4 e4 Rd4 Bc6 R1d2 Be8 Qe2 Bc6 Qe3 Qb6 f5 R6d7 Qh6 Ba4 g4 Ka6 Bf1 Ka7 h4 Rb7 Qe3 Rdb8 g5 Bd7 gxf6 Bxf5 Qg5 Be6 Bxc4 Rg8 Qe5 Rg1+ Ka2 dxc4 b4 cxb3+ Kb2 e3 Qxe3 Ra1 Qe5 Ra2+ Kb1 Rxd2 Rxd2 b2",
+    "studentSide": "black",
+    "overview": "Carlsen, who made the Sveshnikov his championship weapon, demonstrates its soul against Nepomniachtchi: Black accepts the backward d6-pawn and the d5-hole in return for the bishop pair, dynamic piece play, and pressure down the half-open lines. A model of the Sveshnikov's positional compensation converting into a win.",
+    "criticalMoments": [],
+    "middlegameTheme": "Bishop pair and dynamics for the d5-hole and backward d-pawn.",
+    "lessonSummary": "Accept the structural concessions for the bishops and active play."
+  },
+  {
+    "id": "mg-sicilian-sveshnikov-sveshnikov-kalashnikov-4-e5-5-nb5-d6",
+    "openingId": "sicilian-sveshnikov",
+    "white": "Vachier Lagrave, M..",
+    "black": "Radjabov, T..",
+    "whiteElo": 2784,
+    "blackElo": 2765,
+    "result": "0-1",
+    "year": 2021,
+    "event": "Opera Euro Rapid KO 2021",
+    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb5 d6 c4 Be7 N1c3 a6 Na3 f5 exf5 Bxf5 Nc2 Nf6 Ne3 Be6 g3 O-O Bg2 Qd7 Ncd5 Rae8 O-O Bd8 b3 Bh3 Bb2 Bxg2 Kxg2 Ne7 Nxf6+ Rxf6 Rc1 Qc6+ Nd5 Bb6 f4 Bd4 Bxd4 Nxd5 cxd5 Qxd5+ Qf3 Qxf3+ Kxf3 exd4 Rfd1 Re3+ Kf2 Rfe6 Rxd4 Re2+ Kf3 Rxh2 a4 h5 f5 Re5 g4 hxg4+ Kg3 Rb2 Rxd6 Rxf5 Kxg4 Rbf2 Rc8+ Kh7 Rc4 b5 axb5 Rxb5 Kg3 Rf6 Rxf6 gxf6 b4 a5 bxa5 Rxa5 Rh4+ Kg6 Rg4+ Rg5 Rxg5+ Kxg5 Kf3 Kf5 Kf2 Kf4",
+    "studentSide": "black",
+    "overview": "Radjabov shows the Kalashnikov's energetic spirit against Vachier-Lagrave: the early ...e5 and ...d6 grab the centre, then the ...f5 break opens the position for Black's pieces and bishop pair. A model of the Kalashnikov's active, uncompromising play converting into a win.",
+    "criticalMoments": [],
+    "middlegameTheme": "The ...e5 centre, the ...f5 break, bishop pair.",
+    "lessonSummary": "Seize the centre with ...e5, break with ...f5, and play actively.",
+    "variation": "Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)"
   }
 ]

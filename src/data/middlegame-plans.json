@@ -35222,20 +35222,25 @@
     "id": "mp-siciliansveshnikov-kalashnikov",
     "openingId": "sicilian-sveshnikov",
     "title": "Kalashnikov: Seize the d4 Outpost",
-    "criticalPositionFen": "2rqk2r/1p2bppp/p1npbn2/4p3/2P1P3/2N5/PPN1BPPP/R1BQK2R w KQk - 6 11",
+    "criticalPositionFen": "r1bqkbnr/pp1p1ppp/2n5/4p3/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
     "overview": "In the Kalashnikov bind Black completes development, takes the half-open c-file with Rc8, and plants a knight on the d4 outpost — full counterplay against White's space.",
     "pawnBreaks": [
       {
-        "move": "f5 (eventual)",
-        "explanation": "Once placed, Black aims for the f5 or b5 break.",
-        "fen": "2rqk2r/1p2bppp/p1npbn2/4p3/2P1P3/2N5/PPN1BPPP/R1BQK2R w KQk - 6 11"
+        "move": "…f5 — the central break",
+        "explanation": "The Kalashnikov’s thematic break challenges e4 and opens lines for the bishop pair.",
+        "fen": "r1bqkbnr/pp1p1ppp/2n5/4p3/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Knight",
-        "route": "Nc6-d4",
-        "explanation": "The knight seizes the d4 outpost."
+        "piece": "Pawn",
+        "route": "…a6 then …f5 — kick and break",
+        "explanation": "Black gains time on the knight, then strikes the centre with …f5."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Be7 — prepare the break and castling",
+        "explanation": "The bishop develops to support …f5 and king safety."
       }
     ],
     "strategicThemes": [
@@ -35248,82 +35253,111 @@
     ],
     "playableLines": [
       {
-        "title": "Kalashnikov: Seize the d4 Outpost",
-        "fen": "2rqk2r/1p2bppp/p1npbn2/4p3/2P1P3/2N5/PPN1BPPP/R1BQK2R w KQk - 6 11",
+        "fen": "r1bqkbnr/pp1p1ppp/2n5/4p3/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
         "moves": [
-          "O-O",
-          "O-O",
-          "Ne3",
-          "Nd4"
+          "Nb5",
+          "d6",
+          "c4",
+          "Be7",
+          "N1c3",
+          "a6",
+          "Na3",
+          "f5"
         ],
         "annotations": [
-          "O-O — White castles into the standard bind position.",
-          "…O-O — Black completes a harmonious setup, ready for the c-file.",
-          "Ne3 — the knight reroutes, but it surrenders the d4-square Black covets.",
-          "Nd4 — Black seizes the d4 outpost."
+          "Nb5 — White probes the d6-square, the standard response to Black's bold early …e5.",
+          "…d6 defends, the Kalashnikov accepting a backward d-pawn for active piece play and the centre.",
+          "White clamps with c4, the Maroczy-style bind to restrain Black's counterplay.",
+          "…Be7 develops, readying castling and the …f5 break.",
+          "White's knight returns to c3 to support d5.",
+          "…a6 kicks the b5-knight to the rim, gaining time — the Sveshnikov-family signature.",
+          "White's knight retreats to a3.",
+          "…f5! The thematic Kalashnikov break, challenging e4 and ripping open the position for Black's bishop pair and active pieces. Black has dynamic, uncompromising play — Radjabov outplayed Vachier-Lagrave from this footing."
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [],
           []
         ],
+        "title": "The Kalashnikov (Vachier-Lagrave–Radjabov)",
         "highlights": [
           [
             {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
+              "square": "d6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e3",
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "b5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "d4",
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
+        "intro": "Black seizes the centre and breaks with ...f5.",
         "sources": [
-          "concept:pos-outpost",
+          "concept:pos-initiative",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
         ],
         "learnCues": [
-          "O-O — castle",
-          "O-O — fully developed",
-          "Ne3 — reroute the knight",
-          "Nd4 — seize the outpost"
+          "Nb5 — probe d6",
+          "…d6 — defend, keep the centre",
+          "c4 — the bind",
+          "…Be7 — develop, ready …f5",
+          "N1c3 — support d5",
+          "…a6 — kick the knight",
+          "Na3 — knight to the rim",
+          "…f5 — the central break"
         ]
       }
     ]
@@ -35332,20 +35366,25 @@
     "id": "mp-siciliansveshnikov-main",
     "openingId": "sicilian-sveshnikov",
     "title": "Sveshnikov: the f5 Break and Two Bishops",
-    "criticalPositionFen": "r1bq1rk1/5ppp/p1np1b2/1p1Np3/4P3/2P5/PPN2PPP/R2QKB1R b KQ - 2 12",
+    "criticalPositionFen": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
     "overview": "The Sveshnikov's defining plan: with the dark-squared bishop active and the centre fixed, Black strikes f5 to blast open lines and let the two bishops breathe past the d5-knight.",
     "pawnBreaks": [
       {
-        "move": "f5",
-        "explanation": "The f5 break opens the position for Black's bishop pair.",
-        "fen": "r1bq1rk1/5ppp/p1np1b2/1p1Np3/4P3/2P5/PPN2PPP/R2QKB1R b KQ - 2 12"
+        "move": "…f5 — the central break",
+        "explanation": "The thematic Sveshnikov break: …f5 challenges e4 and activates Black’s pieces and bishop pair.",
+        "fen": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6"
       }
     ],
     "pieceManeuvers": [
       {
+        "piece": "Pawn",
+        "route": "…a6 and …b5 — restrain and expand",
+        "explanation": "Black kicks the knight and grabs queenside space, the Sveshnikov’s key gain."
+      },
+      {
         "piece": "Bishop",
-        "route": "Bf6-g5",
-        "explanation": "The dark-squared bishop relocates to g5 and the kingside."
+        "route": "…Be7 — challenge the d5-knight",
+        "explanation": "The bishop prepares to trade or pressure White’s strong outpost knight."
       }
     ],
     "strategicThemes": [
@@ -35358,96 +35397,107 @@
     ],
     "playableLines": [
       {
-        "title": "Sveshnikov: the f5 Break and Two Bishops",
-        "fen": "r1bq1rk1/5ppp/p1np1b2/1p1Np3/4P3/2P5/PPN2PPP/R2QKB1R b KQ - 2 12",
+        "fen": "r1bqkb1r/pp1p1ppp/2n2n2/4p3/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
         "moves": [
+          "Ndb5",
+          "d6",
           "Bg5",
-          "Qd3",
-          "f5",
-          "exf5",
-          "Bxf5"
+          "a6",
+          "Na3",
+          "b5",
+          "Nd5",
+          "Be7"
         ],
         "annotations": [
-          "Bg5 — the bishop swings to the kingside.",
-          "Qd3 — White eyes the f5-square.",
-          "f5 — the thematic break opens the position.",
-          "exf5 — White takes; lines open.",
-          "Bxf5 — the light bishop joins, both bishops alive."
+          "Ndb5 — White heads for the d6-square, the only way to challenge Black's bold …e5.",
+          "…d6 calmly defends, accepting a backward d-pawn in return for the dynamic Sveshnikov structure.",
+          "White pins with Bg5, pressuring the f6-knight that guards d5.",
+          "…a6! Black kicks the b5-knight, gaining time and forcing White's pieces to awkward squares — the Sveshnikov's signature.",
+          "White's knight retreats to the rim on a3.",
+          "…b5! Black grabs queenside space, restraining White's pieces and preparing the bishop's development to b7.",
+          "White plants the knight on the d5-outpost, the hole Black conceded.",
+          "…Be7 develops; the bishop can later challenge or trade White's d5-knight with …Bg5 or …Nxd5. Black has the full Sveshnikov: the bishop pair, queenside space, and dynamic play that fully offsets the d5-hole — Carlsen outplayed Nepomniachtchi from here."
         ],
         "arrows": [
           [],
           [],
           [],
           [],
+          [],
+          [],
+          [],
           []
         ],
+        "title": "The Sveshnikov Main Line (Nepomniachtchi–Carlsen)",
         "highlights": [
           [
             {
-              "square": "g5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d3",
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "d1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f5",
+              "square": "b5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "f5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f7",
+              "square": "a3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e4",
+              "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f5",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c8",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black accepts the d5-hole for the bishop pair and dynamics.",
         "sources": [
-          "concept:pos-outpost",
-          "concept:pos-center",
+          "concept:pos-initiative",
+          "concept:pos-bishop-pair",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
         ],
         "learnCues": [
-          "Bg5 — swing to the kingside",
-          "Qd3 — eye the f5-square",
-          "f5 — the thematic break",
-          "exf5 — open lines",
-          "Bxf5 — both bishops alive"
+          "Ndb5 — head for d6",
+          "…d6 — accept the backward pawn",
+          "Bg5 — pin the f6-knight",
+          "…a6 — kick the knight, gain time",
+          "Na3 — knight to the rim",
+          "…b5 — queenside space",
+          "Nd5 — White's outpost",
+          "…Be7 — develop, eye the d5-knight"
         ]
       }
     ]
