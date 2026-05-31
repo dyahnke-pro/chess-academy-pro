@@ -12295,20 +12295,25 @@
     "id": "mp-londonsystem-main",
     "openingId": "london-system",
     "title": "London: the e5-Knight and Kingside Expansion",
-    "criticalPositionFen": "rnb1k2r/pp3ppp/3qpn2/3pN3/2pP4/P1N1P3/1PP2PPP/1R1QKB1R b Kkq - 1 9",
+    "criticalPositionFen": "r1b1kbnr/pp2pppp/1qn5/2pp4/3P1B2/2P1P3/PP3PPP/RN1QKBNR w KQkq - 1 5",
     "overview": "Having neutralised the ...Qb6 poisoned-pawn raid, White's whole plan crystallises around the knight on e5. Anchor it with f4, finish development, and roll the kingside pawns — the e5-knight is the engine of the London attack.",
     "pawnBreaks": [
       {
-        "move": "f4-f5",
-        "explanation": "After f4 anchors the knight, the f5 break opens lines against Black's king.",
-        "fen": "rnb1k2r/pp3ppp/3qpn2/3pN3/2pP4/P1N1P3/1PP2PPP/1R1QKB1R b Kkq - 1 9"
+        "move": "e3-e4 — the central break",
+        "explanation": "Once developed, e4 opens the centre to exploit White’s harmonious London setup and bishop pair on the kingside.",
+        "fen": "r1b1kbnr/pp2pppp/1qn5/2pp4/3P1B2/2P1P3/PP3PPP/RN1QKBNR w KQkq - 1 5"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Knight",
-        "route": "Nf3-e5",
-        "explanation": "The king-knight lands on e5, the dominant central outpost eyeing f7 and the kingside."
+        "piece": "Queen",
+        "route": "Qd1-b3-c2 — meet …Qb6, eye the diagonal",
+        "explanation": "The queen defuses Black’s b2-raid, then swings to c2 for the London’s b1-h7 attack."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bf4-g5 — keep the attacker on the board",
+        "explanation": "When challenged, the dark-squared bishop sidesteps to g5 rather than trading."
       }
     ],
     "strategicThemes": [
@@ -12321,128 +12326,103 @@
     ],
     "playableLines": [
       {
-        "title": "London: the e5-Knight and Kingside Expansion",
-        "fen": "rnb1k2r/pp3ppp/3qpn2/3pN3/2pP4/P1N1P3/1PP2PPP/1R1QKB1R b Kkq - 1 9",
+        "fen": "r1b1kbnr/pp2pppp/1qn5/2pp4/3P1B2/2P1P3/PP3PPP/RN1QKBNR w KQkq - 1 5",
         "moves": [
-          "O-O",
-          "Be2",
-          "Nc6",
-          "f4",
-          "a6",
-          "O-O"
+          "Qb3",
+          "Nf6",
+          "Nd2",
+          "c4",
+          "Qc2",
+          "Nh5",
+          "Bg5",
+          "h6"
         ],
         "annotations": [
-          "…O-O — Black tucks the king away.",
-          "Be2 — White completes development, eyeing the kingside.",
-          "…Nc6 — Black challenges the e5-knight with the c6-knight.",
-          "f4 — the key move: White anchors the knight on e5 for good.",
-          "…a6 — Black gains a little queenside room.",
-          "O-O — White castles; the e5-knight and f4-pawn point at the king."
-        ],
-        "sources": [
-          "concept:pos-development",
-          "concept:pos-center",
-          "https://en.wikipedia.org/wiki/London_System"
-        ],
-        "learnCues": [
-          "O-O — king to safety",
-          "Be2 — finish development",
-          "Nc6 — challenge the e5-knight",
-          "f4 — anchor the e5-knight",
-          "a6 — queenside room",
-          "O-O — knight and f4 eye the king"
+          "White meets the …Qb6 raid on b2 with Qb3, offering the queen trade that defuses Black's pressure while keeping the solid London structure intact.",
+          "Black develops, declining the trade to keep pieces on.",
+          "White develops the knight toward the kingside, the standard London regrouping behind the f4-bishop.",
+          "Black gains queenside space with …c4, but this releases the tension and hands White a free hand in the centre and kingside.",
+          "White repositions the queen to c2, eyeing the b1-h7 diagonal where the London attack lives.",
+          "Black tries to challenge the f4-bishop with …Nh5.",
+          "Bg5! White sidesteps and pins, keeping the bishop active rather than allowing the trade — the London's key attacking piece stays on the board.",
+          "…h6 questions the bishop, but White has a comfortable, harmonious position with the easier kingside play — Carlsen converted from exactly this footing against So."
         ],
         "arrows": [
           [],
           [],
-          [
-            {
-              "from": "c6",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           [],
           [],
           []
         ],
+        "title": "Handling the …Qb6 London (Carlsen–So)",
         "highlights": [
           [
             {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
+              "square": "b3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
+              "square": "f6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "a6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a7",
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g1",
+              "square": "c4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e1",
+              "square": "c2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
-              "square": "f4",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "intro": "White defuses the queenside raid and keeps the London bind.",
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/London_System"
+        ],
+        "learnCues": [
+          "Qb3 — meet …Qb6, offer the trade",
+          "…Nf6 — Black develops",
+          "Nd2 — the London regroup",
+          "…c4 — Black grabs space, releases tension",
+          "Qc2 — eye the b1-h7 diagonal",
+          "…Nh5 — challenge the bishop",
+          "Bg5 — sidestep and pin",
+          "…h6 — question the bishop"
         ]
       }
     ]
