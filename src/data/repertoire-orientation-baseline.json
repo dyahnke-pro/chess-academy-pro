@@ -1,10 +1,21 @@
 {
   "description": "Allowlist of known orientation violations in src/data/repertoire.json as of 2026-05-16. The build-time test in repertoire-orientation.test.ts treats these as expected; any flagged entry NOT on this list fails CI. Each value is the set of category codes currently allowed for that key. As Phases 2-4 of docs/plans/2026-05-16-trap-orientation.md ship, entries are removed from this file. Phase 5 deletes this file entirely.",
   "allowlist": {
+    "philidor-defence::trap::Legal's Mate Reversal": [
+      "PGN_NOT_IN_DB",
+      "STUDENT_NOT_PUNISHER"
+    ],
     "philidor-defence::trap::d4 Capture Refutation": [
       "WEAK_TRAP"
     ],
     "philidor-defence::trap::Early d5 Counter": [
+      "WEAK_TRAP"
+    ],
+    "petrov-defence::trap::Nxf7 Refutation": [
+      "STUDENT_NOT_PUNISHER",
+      "WEAK_TRAP"
+    ],
+    "petrov-defence::trap::Wrong Move Order Punishment": [
       "WEAK_TRAP"
     ],
     "pirc-defence::trap::Austrian Attack e5 Trick": [
@@ -42,6 +53,9 @@
       "STUDENT_NOT_PUNISHER",
       "WEAK_TRAP"
     ],
+    "scandinavian-defence::warning::Queen Wandering Danger": [
+      "PGN_NOT_IN_DB"
+    ],
     "french-defence::trap::Advance Variation Qb6 Fork Trap": [
       "WEAK_TRAP"
     ],
@@ -63,6 +77,9 @@
     "caro-kann::trap::Fantasy Variation Refutation": [
       "WEAK_TRAP"
     ],
+    "caro-kann::warning::Two Knights Early e6 Mistake": [
+      "PGN_NOT_IN_DB"
+    ],
     "italian-game::trap::Fried Liver Attack": [
       "INVERTED_MATERIAL",
       "STUDENT_NOT_PUNISHER"
@@ -80,6 +97,9 @@
       "INVERTED_MATERIAL",
       "STUDENT_NOT_PUNISHER"
     ],
+    "italian-game::warning::Traxler Counterattack": [
+      "TOOTHLESS_WARNING"
+    ],
     "ruy-lopez::trap::Noah's Ark Trap": [
       "WEAK_TRAP",
       "STUDENT_NOT_PUNISHER"
@@ -90,6 +110,9 @@
     ],
     "ruy-lopez::trap::Tarrasch Trap": [
       "WEAK_TRAP"
+    ],
+    "ruy-lopez::warning::Open Ruy Lopez Counterattack": [
+      "TOOTHLESS_WARNING"
     ],
     "scotch-game::trap::Mieses Center Domination Trap": [
       "WEAK_TRAP",
@@ -187,6 +210,14 @@
     ],
     "sicilian-najdorf::warning::6.Bg5 Pin Dangers: Unpinning Too Late": [
       "TOOTHLESS_WARNING"
+    ],
+    "sicilian-dragon::trap::The Exchange Sacrifice ...Rxc3": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
+    "sicilian-dragon::trap::The ...Nc4 Fork Trick": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
     ],
     "sicilian-dragon::trap::The g-file Counterattack After ...gxh5": [
       "WEAK_TRAP",
@@ -434,6 +465,10 @@
       "WEAK_TRAP",
       "STUDENT_NOT_PUNISHER"
     ],
+    "budapest-gambit::trap::Pin Exploitation Trap": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
+    ],
     "old-indian-defence::trap::Queenside Overextension Punish": [
       "WEAK_TRAP",
       "STUDENT_NOT_PUNISHER"
@@ -532,6 +567,9 @@
     "qgd::trap::Lasker Trap with Central Break": [
       "WEAK_TRAP"
     ],
+    "slav-defence::warning::Early ...dxc4 Without Development": [
+      "TOOTHLESS_WARNING"
+    ],
     "nimzo-indian::trap::e4 Block After Bxc3": [
       "WEAK_TRAP"
     ],
@@ -547,6 +585,9 @@
     "benoni-defence::trap::e4 Undermining Tactic": [
       "WEAK_TRAP",
       "STUDENT_NOT_PUNISHER"
+    ],
+    "queens-indian::trap::Petrosian Counterblow": [
+      "WEAK_TRAP"
     ],
     "budapest-gambit::trap::Fajarowicz e-file Ambush": [
       "INVERTED_MATERIAL"
@@ -574,6 +615,13 @@
     ],
     "birds-opening::warning::Kingside Diagonal Weakness": [
       "PGN_NOT_IN_DB"
+    ],
+    "evans-gambit::trap::Anderssen Attack": [
+      "WEAK_TRAP"
+    ],
+    "evans-gambit::trap::Knight Fork Counter": [
+      "WEAK_TRAP",
+      "STUDENT_NOT_PUNISHER"
     ],
     "sicilian-alapin::warning::Alapin: Passive Play Lets White Attack": [
       "TOOTHLESS_WARNING"

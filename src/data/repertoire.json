@@ -1386,6 +1386,11 @@
     ],
     "trapLines": [
       {
+        "name": "Legal's Mate Reversal",
+        "pgn": "e4 e5 Nf3 d6 Bc4 Bg4 Nc3 Nf6 h3 Bh5 Nxe5 Bxd1 Bxf7+ Ke7 Nd5+",
+        "explanation": "White tries the famous Legal's Mate trick with Nxe5, sacrificing the queen for a kingside attack. However, if Black knows the defensive path with ...Ke7, the king can escape the mating net by running up the board. After ...Kd6 and ...Kc5, the king reaches safety while Black has won White's queen for only a bishop. This reversal turns White's aggressive idea into a catastrophic material loss."
+      },
+      {
         "name": "d4 Capture Refutation",
         "pgn": "e4 e5 Nf3 d6 d4 Nf6 Nc3 Nbd7 Bc4 Be7 Ng5 O-O Bxf7+ Rxf7 Ne6 Qe8 Nxc7 Qd8 Nxa8 b6 dxe5 dxe5 O-O Bb7 Nd5 Nxd5 exd5 Nc5 Qf3 Nd3 Re1 Nxc1",
         "explanation": "White tries the piece sacrifice with Bxf7+ and Ne6, a classic attacking motif. But in the Hanham setup, Black is well-prepared with ...Qe8 trapping the knight after it goes to c7. White wins the exchange on a8 but Black's compensation is enormous with the bishop pair, central control, and active knights. The knight eventually reaches d3 via c5, dominating the position and recovering material with interest."
@@ -1461,12 +1466,12 @@
     "trapLines": [
       {
         "name": "Nxf7 Refutation",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 O-O Qh4 h3 Nxf2 Rxf2 Bxf2+ Kh1 Bxh3",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 Ng4 O-O Qh4 h3 Nxf2 Rxf2 Bxf2+ Kh1",
         "explanation": "If White plays the rare Nxc6 line instead of the main 3.Nxe5, Black can build a devastating kingside attack. The ...Bc5 and ...Ng4 combination targets f2 with lethal force, and after ...Nxf2 Rxf2 Bxf2+, the king is exposed. The queen invades to e1 with check, and Black's pieces coordinate for a winning attack. White's extra pawn is irrelevant when the king is under constant fire from Black's bishops and queen."
       },
       {
         "name": "Wrong Move Order Punishment",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nxe4 Qe2 Qe7 Qxe4 d6 d4 dxe5 dxe5 Nc6 Bf4 Qb4+ Nc3 Qxb2 Nd5 Qxa1+",
+        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nxe4 Qe2 Qe7 Qxe4 d6 d4 dxe5 dxe5 Nc6 Bf4 Qb4+ Nc3 Qxb2",
         "explanation": "If Black plays the wrong order with 3...Nxe4 instead of 3...d6, White gets Qe2 pinning the knight against the king. However, Black can still salvage the position by heading for the endgame with ...Qe7. After the queen trade and pawn exchanges, the resulting endgame is tricky but playable. The key is not to panic at the Qe2 pin but to trade queens and rely on the structural balance to achieve a drawable position."
       },
       {
@@ -1948,7 +1953,13 @@
         "explanation": "The Modern Qc2 line is a sophisticated system where White recovers the c4 pawn with the queen and aims for a rapid e4 advance. After Qxc4 Bf5, Black has already solved the light-squared bishop problem, which is the hallmark of the Slav. White pushes e4 to gain central space, but Black's well-placed bishop on g6 and solid structure with ...Nbd7 and ...Be7 provide excellent defensive resources. The queen exchange after ...Qb6 leads to a balanced endgame where Black's active minor pieces and queenside pawn majority offer comfortable equality."
       }
     ],
-    "warningLines": []
+    "warningLines": [
+      {
+        "name": "Early ...dxc4 Without Development",
+        "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 e4 b5 e5 Nd5 a4 e6 axb5 Nxc3 bxc3 cxb5 Ng5 Be7 Qh5 O-O Bxc4 bxc4",
+        "explanation": "Grabbing the c4 pawn too early with ...dxc4 and trying to hold it with ...b5 is a classic mistake in the Slav. White responds with e4 and e5, seizing a massive central space advantage and driving Black's knight away. After a4 undermines the b5 pawn chain, White recovers the material with interest while maintaining a crushing center. The Ng5 and Qh5 combination creates direct threats against f7 and the kingside, leaving Black struggling to survive despite nominally equal material. The lesson: never play ...dxc4 and ...b5 without first developing the light-squared bishop."
+      }
+    ]
   },
   {
     "id": "semi-slav",
@@ -2511,7 +2522,7 @@
     "trapLines": [
       {
         "name": "Petrosian Counterblow",
-        "pgn": "d4 Nf6 c4 e6 Nf3 b6 a3 Bb7 Nc3 d5 cxd5 Nxd5 Qc2 Be7 e4 Nxc3 bxc3 O-O Bd3 c5 O-O Qc7 Qe2 Nc6 dxc5 bxc5 e5 Nd4 Nxd4 cxd4 Bb5 dxc3 Bf4 Qc5 Rfd1 Rfd8 Ba4 Rxd1+",
+        "pgn": "d4 Nf6 c4 e6 Nf3 b6 a3 Bb7 Nc3 d5 cxd5 Nxd5 Qc2 Be7 e4 Nxc3 bxc3 O-O Bd3 c5 O-O Qc7 Qe2 Nc6 dxc5 bxc5 e5 Nd4 Nxd4 cxd4 Bb5 dxc3 Bf4 Qc5",
         "explanation": "In the Petrosian system, Black's thematic ...c5 counterblow undermines White's center at the critical moment. After the exchanges, Black's ...Nd4 is a devastating centralization that exploits White's loose structure. The c3 pawn becomes a powerful passed pawn that diverts White's pieces from the attack. Black's queen and bishops coordinate to create threats on both flanks while the passed pawn marches forward. This line demonstrates why White must be careful not to overextend the e4-e5 push."
       }
     ],
@@ -3060,12 +3071,12 @@
     "trapLines": [
       {
         "name": "Anderssen Attack",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4 Qa4 Bd7 Qb3 Na5 Bxf7+ Kf8 Qa3 Bxd4 Nxd4 Qf6 Be3 Ne7 Rad1 c5 Be6 Bxe6 Nxe6+ Qxe6 Qxa5 Kf7 Nb5 Rhd8 Nc7 Qxe4 Nxa8",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Bc5 d4 exd4 O-O d6 cxd4 Bb6 Nc3 Bg4 Qa4 Bd7 Qb3 Na5 Bxf7+ Kf8 Qa3 Bxd4 Nxd4 Qf6 Be3 Ne7 Rad1 c5 Be6",
         "explanation": "The Anderssen Attack ramps up pressure with Nc3, Qa4, and Qb3 creating dual threats against f7 and b7. When Black tries to defend with Bd7 and Na5, the devastating Bxf7+ sacrifice rips open the king position. After Kf8, the queen retreats to a3 pinning the d6 pawn to the king, and every piece joins the attack. Be6 at the end cuts off Black's coordination entirely, leaving the king stranded on f8 with no counterplay."
       },
       {
         "name": "Knight Fork Counter",
-        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6 Bxd3 Nge7 Ba3 O-O Nbd2 Bb6 Rae1 d6 exd6 cxd6 Ne4 Be6 Qd1 d5 Neg5 Bd7 Bd6 Rfe8 Bxe7 Rxe7 Rxe7 Nxe7 Bxg6",
+        "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O d3 Qb3 Qf6 e5 Qg6 Bxd3 Nge7 Ba3 O-O Nbd2 Bb6 Rae1 d6 exd6 cxd6 Ne4 Be6 Qd1 d5 Neg5 Bd7 Bd6 Rfe8 Bxe7 Rxe7 Rxe7 Nxe7",
         "explanation": "When Black tries the tricky ...d3 counter-gambit to disrupt White's center, White calmly recaptures with the bishop and develops with tempo via Ba3 and Nbd2. The knight reroutes to e4 establishing a powerful outpost, then jumps to g5 creating dual threats. After Bd6 seizes the dark squares and forces the exchange of Black's rook, White emerges with superior piece activity and a lasting initiative against Black's weakened structure."
       }
     ],
