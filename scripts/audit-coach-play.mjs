@@ -21,8 +21,13 @@
  *     stockfishEngine + coachMoveSelector wiring
  *   - Toggle Coach Narration setting silent ↔ full and confirm:
  *       silent → 0 voice-speak-invoked events on next move
- *       full   → ≥ 1 voice-speak-invoked event on next move (when
- *                LLM emits commentary)
+ *       full   → ≥ 1 voice-speak-invoked event on next move
+ *     NOTE (David 2026-05-31): per-move narration is now an INSTANT
+ *     DETERMINISTIC template (buildFastMoveLine), not an LLM call —
+ *     USE_LLM_MOVE_COMMENTARY=false in CoachGamePage. In 'full' density
+ *     the template dictates every move, so voice-speak-invoked still
+ *     fires; the win is that it fires in <1s with no LLM round-trip
+ *     gating the coach's reply.
  *   - Phase audit-event roll-up (coach-turn-checkpoint /
  *     coach-opening-auto-detected / coach-move-narration-fired/skipped /
  *     stockfish-prefetch-fired)
