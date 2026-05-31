@@ -62780,5 +62780,152 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-twoknightsdefence-main-endgame",
+    "openingId": "two-knights-defence",
+    "criticalPositionFen": "6k1/6p1/p1rbpB1p/P7/8/8/5PPP/R5K1 w - - 0 35",
+    "title": "Two Knights Endgame: the Active King Decides",
+    "overview": "From the quiet 4.d3 main line the game simplifies to a rook-and-bishop ending with level material. Black's winning method is the soul of rook endings: march the king to the centre, advance the central pawn, and let the dominant king and active rook squeeze a position the opponent cannot hold.",
+    "pawnBreaks": [
+      {
+        "move": "…e5 central pawn advance",
+        "explanation": "…e5 central pawn advance",
+        "fen": "6k1/6p1/p1rbpB1p/P7/8/8/5PPP/R5K1 w - - 0 35"
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Kf7 to e6 to d5 — the king marches to the centre",
+        "explanation": "…Kf7 to e6 to d5 — the king marches to the centre"
+      },
+      {
+        "piece": "",
+        "route": "…Bc7 to the long diagonal",
+        "explanation": "…Bc7 to the long diagonal"
+      }
+    ],
+    "strategicThemes": [
+      "Activate the king to the centre",
+      "Advance the central pawn majority",
+      "The active rook and dominant king"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "6k1/6p1/p1rbpB1p/P7/8/8/5PPP/R5K1 w - - 0 35",
+        "moves": [
+          "Bd4",
+          "Bc7",
+          "g3",
+          "Kf7",
+          "Kg2",
+          "h5",
+          "Kf3",
+          "e5",
+          "Be3",
+          "Ke6",
+          "Ra4",
+          "Kd5"
+        ],
+        "annotations": [
+          "White centralises the bishop on d4.",
+          "…Bc7 redeploys the bishop to the long b8-h2 diagonal, eyeing the kingside.",
+          "g3 fixes the kingside pawns.",
+          "…Kf7 — the king begins its march toward the centre, the soul of every rook ending.",
+          "Kg2 brings the white king up in turn.",
+          "…h5 grabs kingside space and fixes a target.",
+          "Kf3 centralises the white king.",
+          "…e5 rolls the central pawn forward, claiming space and a mobile majority.",
+          "Be3 drops the bishop back to a flexible post.",
+          "…Ke6 marches the king another step into the centre.",
+          "Ra4 swings the rook to the fourth rank, pressuring the a6-pawn.",
+          "…Kd5 plants the king on the dominant central square — the textbook active-king ending."
+        ],
+        "learnCues": [
+          "Bd4 — White centralises.",
+          "…Bc7 — to the long diagonal.",
+          "g3 — White fixes pawns.",
+          "…Kf7 — the king marches.",
+          "Kg2 — White king steps up.",
+          "…h5 — grab space, fix a target.",
+          "Kf3 — White centralises.",
+          "…e5 — roll the central pawn.",
+          "Be3 — White redeploys.",
+          "…Ke6 — king marches deeper.",
+          "Ra4 — White pressures a6.",
+          "…Kd5 — the dominant centre king!"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255,214,0,0.88)"
+            },
+            {
+              "square": "h2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [],
+          [],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          []
+        ],
+        "title": "Two Knights Endgame: the Active King Decides",
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-space",
+          "https://lichess.org/Gt25dwor"
+        ]
+      }
+    ]
   }
 ]
