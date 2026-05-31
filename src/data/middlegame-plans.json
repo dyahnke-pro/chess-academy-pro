@@ -52434,5 +52434,368 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-viennagambit-endgame",
+    "openingId": "vienna-gambit",
+    "criticalPositionFen": "2r2rk1/pp3pp1/3Pb2p/2p1R3/7P/P7/1PP1B1P1/2K4R b - - 0 23",
+    "title": "Vienna Gambit ENDGAME — the d6 passer for b7 (Smolen vs Mazur)",
+    "overview": "Smolen–Mazur 2015 shows the Vienna Gambit's central pawn paying off in the ending: a far-advanced d6-passer cramps Black and ties both rooks to the blockade. When Black finally rounds it up, White's bishop swings the length of the board to collect b7 — material stays level and the position balanced, with White's pieces the more active. R+minor endings of this shape arise in 20% of the main-line games.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Rd1 backs the d6 passer",
+      "Bf3 then Bxb7 — the bishop swings to the queenside"
+    ],
+    "strategicThemes": [
+      "An advanced passer ties the defender down",
+      "Trade the passer for a queenside pawn, stay active"
+    ],
+    "endgameTransitions": [
+      "The d6-for-b7 trade keeps a balanced, active ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "2r2rk1/pp3pp1/3Pb2p/2p1R3/7P/P7/1PP1B1P1/2K4R b - - 0 23",
+        "moves": [
+          "Rfd8",
+          "Rd1",
+          "Kf8",
+          "b3",
+          "Rc6",
+          "Bf3",
+          "Rcxd6",
+          "Rxd6",
+          "Rxd6",
+          "Bxb7"
+        ],
+        "annotations": [
+          "Black rushes both rooks to the d-file to blockade and round up the advanced d6-pawn.",
+          "White backs the passer with the rook — the pawn on d6 is a thorn cramping Black's whole position.",
+          "Black's king steps toward the centre.",
+          "A quiet pawn move; the d6-passer does the real work, tying Black's rooks down.",
+          "Black maneuvers the rook to attack d6 from the side.",
+          "The bishop swings to the long diagonal, eyeing b7 — if Black wins the d6-pawn, White collects on the queenside.",
+          "Black finally captures the passer.",
+          "White recaptures.",
+          "The rooks come off the board.",
+          "And the bishop grabs b7 in return. The passer is gone, but a pawn comes back and the ending is level with White's pieces the more active."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "…Rfd8 — blockade the passer",
+          "Rd1 — back the d6-pawn",
+          "…Kf8 — centralize",
+          "b3 — quiet, passer works",
+          "…Rc6 — attack d6",
+          "Bf3 — eye b7",
+          "…Rxd6 — win the passer",
+          "Rxd6 — recapture",
+          "…Rxd6 — rooks trade",
+          "Bxb7 — collect in return"
+        ],
+        "title": "The Vienna d6-passer trade",
+        "intro": "A cramping d6-passer, traded for b7 — watch the bishop swing the board.",
+        "sources": [
+          "https://lichess.org/yEhVoek0",
+          "https://www.chess.com/openings/Vienna-Game-Vienna-Gambit",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-scotchgambit-endgame",
+    "openingId": "scotch-gambit",
+    "criticalPositionFen": "5rk1/1p3ppp/2p3b1/rp1pP3/P2P4/4R2P/1P1N1PP1/R5K1 w - - 0 26",
+    "title": "Scotch Gambit ENDGAME — rooks pile on the queenside (Popov vs Faizrakhmanov)",
+    "overview": "Popov–Faizrakhmanov 2018: the Scotch Gambit's broad d4-e5 pawn centre holds firm into the endgame while White's rooks swing to the queenside to harass Black's loose a5-rook and b5-pawn. The position stays balanced, but White's heavy pieces are the active ones and Black is left defending. R+minor endings of this shape arise in 33% of the Haxo/Bc5 games.",
+    "pawnBreaks": [
+      "axb5 — crack open the a-file"
+    ],
+    "pieceManeuvers": [
+      "Rea3 then R1a2 and Rb3 — pile the rooks on the queenside"
+    ],
+    "strategicThemes": [
+      "The d4-e5 centre holds into the ending",
+      "Active rooks press the loose queenside"
+    ],
+    "endgameTransitions": [
+      "Queenside rook pressure keeps White the easier side"
+    ],
+    "playableLines": [
+      {
+        "fen": "5rk1/1p3ppp/2p3b1/rp1pP3/P2P4/4R2P/1P1N1PP1/R5K1 w - - 0 26",
+        "moves": [
+          "Rea3",
+          "Bc2",
+          "axb5",
+          "Rxb5",
+          "R1a2",
+          "f6",
+          "Rc3",
+          "Bg6",
+          "Rb3",
+          "fxe5"
+        ],
+        "annotations": [
+          "White doubles rooks toward the queenside, where Black's a5-rook and b5-pawn sit loose.",
+          "Black's bishop retreats.",
+          "axb5 cracks the file wide open.",
+          "Black recaptures, the rook now exposed on b5.",
+          "The second rook lifts; both heavy pieces bear down the a-file.",
+          "Black strikes back at the e5-pawn, the head of White's chain.",
+          "The rook swings to c3, eyeing c6 and keeping its options.",
+          "Black's bishop returns to defend.",
+          "Rb3 leans on the b5-rook and the open b-file.",
+          "Black grabs e5, but White's active rooks and the central pawns keep the balance with the far easier game."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Rea3 — double on the a-file",
+          "…Bc2 — bishop retreats",
+          "axb5 — open the file",
+          "…Rxb5 — exposed rook",
+          "R1a2 — pile up",
+          "…f6 — hit e5",
+          "Rc3 — swing across",
+          "…Bg6 — defend",
+          "Rb3 — press b5",
+          "…fxe5 — balance holds"
+        ],
+        "title": "Scotch Gambit queenside rook pressure",
+        "intro": "The d4-e5 centre holds — watch the rooks pile onto the loose queenside.",
+        "sources": [
+          "https://lichess.org/dsxFizej",
+          "https://www.chess.com/openings/Scotch-Gambit",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
+        ]
+      }
+    ]
   }
 ]
