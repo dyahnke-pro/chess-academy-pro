@@ -40,3 +40,35 @@ Hikaru player metadata ALREADY exists in pro-repertoires.json (id:hikaru). 0 ope
 built yet. Start with the **Nimzo-Larsen (1.b3)** — his biggest, most characterful,
 most distinctive-from-Levy/Naroditsky weapon. Run extract-opening-tree.mjs hikaru
 nimzo-larsen first (add it to the OPENINGS map with minPrefix ['b3']).
+
+---
+## NIMZO-LARSEN — DATA COMPLETE (STEP 2-4 done, 2026-05-31)
+Tree: 7,481 games, 87.3%. 8 variation tabs deep-built (data/sources/hikaru-deep/
+nimzo-larsen-*.json — spine + endgameTypeBreakdown + topModelGames each):
+
+| tab | games | spine reaches | endgame data | model games |
+|---|---|---|---|---|
+| e5-main | 1315 | move 12 | R+minor+P (2), minor+P | 3 |
+| d5      | 1830 | move 8  | (middlegame) | 4 |
+| nf6     | 1701 | move 9  | R+minor+P (1) | 3 |
+| c5      | 415  | move 8  | Q+P (2), minor+P | 5 |
+| b6      | 389  | move 7  | (middlegame) | 3 |
+| g6      | 300  | move 8  | R+minor+P (2) | 4 |
+| e6      | 287  | move 9  | R+P (1) | 4 |
+| d6      | 191  | move 5  | R+minor+P (1) | 5 |
+
+Main spine: 1.b3 e5 2.Bb2 Nc6 3.e3 Nf6 4.Bb5 Bd6 5.Na3 Na5 6.Be2 a6 7.c4 O-O
+8.Nc2 Nc6 9.d4 exd4 10.exd4 Re8 11.Nf3 Bf8 12.d5 — reaches a real middlegame.
+Voice corpus: data/sources/hikaru-voice/per-opening/nimzo-larsen.md.
+
+## PIRC/MODERN — DATA COMPLETE (tree extracted)
+5,503 games, 86.1%. Spine 1.e4 g6 2.d4 Bg7 3.Nc3 a6 4.Be3 b5 5.Qd2 Bb7 6.f3 d6
+7.h4 h5 8.Nh3 e6 9.Ng5 — his signature Modern/hippo hybrid (...a6/...b5). Variation
+tabs: vs Nc3, vs Nf3, vs c3, vs c6-setups. Voice: pirc-modern.md. Deep-build next.
+
+## AUTHORING (next — data all in hand, no more mining):
+Per §G9.2 STEP 7+: author Nimzo-Larsen main lesson (12-beat, the b2-bishop story
+from the voice corpus) + 7 variation lessons + middlegame plans (the data spines)
++ gems (run mine-punish-gems with hikaru seeds) + endgames (e5-main/nf6/g6 R+minor+P
+from real games) + model games (his wins, already picked) + pitfalls + register +
+pro-repertoires.json entry + PRO_DATA_REVISION bump. Then gates + ship + audit.
