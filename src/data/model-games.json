@@ -6320,12 +6320,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Solid structure, the d5-outpost, patient counterplay.",
     "lessonSummary": "Trade on f3, hold the structure, dominate d5, and grind the advantage home.",
+    "variation": "Two Knights Variation",
     "sources": [
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ],
-    "variation": "Two Knights Variation"
+    ]
   },
   {
     "id": "mg-caro-kann-panov-botvinnik-attack",
@@ -6343,12 +6343,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Blockade and pressure the isolated queen’s pawn.",
     "lessonSummary": "Blockade the IQP on d5, trade pieces, then win the weak pawn.",
+    "variation": "Panov-Botvinnik Attack",
     "sources": [
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ],
-    "variation": "Panov-Botvinnik Attack"
+    ]
   },
   {
     "id": "mg-caro-kann-tartakower-breyer-variation",
@@ -6366,12 +6366,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Half-open e-file, central pawn mass, kingside storm.",
     "lessonSummary": "Embrace the …exf6 structure, take the e-file, and storm the king.",
+    "variation": "Tartakower/Breyer Variation",
     "sources": [
       "book:caro-kann",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
-    ],
-    "variation": "Tartakower/Breyer Variation"
+    ]
   },
   {
     "id": "mg-french-defence-fort-knox-variation",
@@ -6389,12 +6389,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Trade the light bishops, blockade d5, grind the queenside.",
     "lessonSummary": "Swap the bad bishop, plant a knight on d5, and outplay White slowly.",
+    "variation": "Fort Knox Variation",
     "sources": [
       "book:french-defence",
       "concept:pos-center",
       "https://en.wikipedia.org/wiki/French_Defence"
-    ],
-    "variation": "Fort Knox Variation"
+    ]
   },
   {
     "id": "mg-four-knights-game-rubinstein-variation-4-bb5-nd4",
@@ -6412,12 +6412,12 @@
     "criticalMoments": [],
     "middlegameTheme": "Keep pieces on, the e5-wedge, active fighting play.",
     "lessonSummary": "Avoid the trade with Ba4, grab e5, and play for the initiative.",
+    "variation": "Rubinstein Variation: 4.Bb5 Nd4",
     "sources": [
       "book:four-knights-game",
       "concept:pos-development",
       "https://en.wikipedia.org/wiki/Four_Knights_Game"
-    ],
-    "variation": "Rubinstein Variation: 4.Bb5 Nd4"
+    ]
   },
   {
     "id": "mg-sicilian-najdorf-najdorf-classical-6-be2-with-e5",
@@ -6436,592 +6436,9 @@
     "middlegameTheme": "The ...e5 centre, ...b5-b4 queenside counterplay.",
     "lessonSummary": "Plant the ...e5 wedge, expand with ...b5, and attack on the queenside.",
     "sources": [
+      "concept:att-queenside-attack",
+      "concept:pos-center",
       "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-    ]
-  },
-  {
-    "id": "mg-sicilian-najdorf-najdorf-adams-attack-6-g3-fianchetto",
-    "openingId": "sicilian-najdorf",
-    "white": "Giri, A.",
-    "black": "Vachier Lagrave, M.",
-    "whiteElo": 2782,
-    "blackElo": 2789,
-    "result": "0-1",
-    "year": 2018,
-    "event": "GCT Blitz YourNextMove",
-    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 g3 e5 Nde2 Be7 Bg2 b5 Nd5 Nbd7 Nec3 Nb6 Nxf6+ Bxf6 O-O O-O b3 b4 Nd5 Nxd5 Qxd5 Be6 Qd3 Qc7 Bd2 a5 a3 bxa3 Rxa3 Rfc8 c4 Bd8 Rfa1 Qc5 b4 Qc6 bxa5 Bxc4 Qe3 Qb5 Qe1 Ra6 Qb1 Qxb1+ Rxb1 Rca8 Rc1 Bb5 Rb1 Bc4 Rc1 Bb5 Bh3 Kf8 Rc8 Ke8 Rxa8 Rxa8 Bb4 Bc7 Ra1 Ra7 Bg4 g6 h4 h5 Bh3 Bd3 f3 Bb6+ Kg2 Bc5 Bxc5 dxc5 Kf2 Bb5 Bf1 c4 Ke3 Kd7 Kd2 Kc6 Kc3 Kc5 Be2 Ra6 Rd1 Rxa5 Rd5+ Kb6 Bxc4 Ra3+ Kb2 Bxc4 Kxa3 Bxd5 exd5 Kc5 Kb3 Kxd5 Kc3 f5 Kd3 e4+ Ke3 Ke5",
-    "studentSide": "black",
-    "overview": "Vachier-Lagrave shows the Najdorf's resources against the quiet 6.g3 fianchetto: the ...e5 wedge claims the centre, ...b5 expands, and Black's harmonious development neutralizes White's setup before taking over with active piece play. A model of meeting a positional anti-Najdorf with energetic central and queenside play.",
-    "criticalMoments": [],
-    "middlegameTheme": "The ...e5 wedge, ...b5 expansion vs the fianchetto.",
-    "lessonSummary": "Plant ...e5, expand with ...b5, and outplay the quiet g3 setup.",
-    "variation": "Najdorf: Adams Attack (6.g3 Fianchetto)",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-    ]
-  },
-  {
-    "id": "mg-sicilian-najdorf-najdorf-poisoned-pawn-6-bg5-qb6",
-    "openingId": "sicilian-najdorf",
-    "white": "Giri, A.",
-    "black": "Vachier Lagrave, M.",
-    "whiteElo": 2779,
-    "blackElo": 2775,
-    "result": "0-1",
-    "year": 2019,
-    "event": "GCT Rapid Paris 2019",
-    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Qb6 Qd2 Qxb2 Rb1 Qa3 e5 h6 Bh4 dxe5 fxe5 Nfd7 Ne4 Qxa2 Rd1 Qd5 Qe3 Qxe5 Be2 Bc5 Bg3 Qd5 c4 Bxd4 Rxd4 Qa5+ Rd2 O-O Bd6 f5 Bxf8 Nxf8 Nd6 Nbd7 O-O Qc5 Qd4 a5 g4 f4 Rxf4 a4 Rf1 Qxd4+ Rxd4 Nc5 Bf3 a3 Rd2 Nfd7 Nxc8 Rxc8 Bxb7 Rb8 Bc6 Ne5 Bb5 Nxg4 Ra2 Rd8 Rxa3 Rd2 h3 Nf6 Re3 Kf7 Rf2 Rd1+ Kh2 Ke7 Ra3 Nfe4 Ra7+ Kd6 Re2 Ng5 Rxg7 Nf3+ Kg3 Nd4 Kf2 Nd3+",
-    "studentSide": "black",
-    "overview": "Vachier-Lagrave, the world's foremost Najdorf expert, demonstrates the Poisoned Pawn against Giri: Black snatches the b2-pawn with ...Qxb2, weathers White's furious development lead, and emerges with the extra material intact to convert. The ultimate test of nerve — grab the pawn, defend precisely, and the material tells.",
-    "criticalMoments": [],
-    "middlegameTheme": "Grab the b2-pawn, defend the lead in development, convert.",
-    "lessonSummary": "Take the poisoned pawn, survive the attack, and win with the extra material.",
-    "variation": "Najdorf: Poisoned Pawn (6.Bg5 Qb6)",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
-    ]
-  },
-  {
-    "id": "mg-sicilian-dragon-classical-variation",
-    "openingId": "sicilian-dragon",
-    "white": "Svidler, Peter",
-    "black": "Carlsen, Magnus",
-    "whiteElo": 2750,
-    "blackElo": 2813,
-    "result": "0-1",
-    "year": 2010,
-    "event": "Amber-blindfold 19th",
-    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be2 Bg7 O-O O-O Be3 Nc6 Nb3 a6 f4 b5 Bf3 Bb7 e5 dxe5 fxe5 Nd7 e6 fxe6 Bg4 Rxf1+ Qxf1 Nce5 Bxe6+ Kh8 Rd1 Qc7 Qf4 Rf8 Qg3 Nf6 Nc5 Nh5 Qe1 Bxg2 Kxg2 Nf3 Qh1 Nf4+ Kf2 Nd4",
-    "studentSide": "black",
-    "overview": "Carlsen shows the Classical Dragon (Be2 rather than the sharp Yugoslav) is no easy ride for White: the fianchettoed bishop on g7 and the ...a6/...b5 queenside expansion give Black a smooth, dynamic game, and he gradually outplays Svidler. A model of the Dragon's positional resources when White declines the main-line attack.",
-    "criticalMoments": [],
-    "middlegameTheme": "The g7-bishop, ...a6/...b5 queenside expansion.",
-    "lessonSummary": "Fianchetto, expand with ...a6/...b5, and use the Dragon bishop.",
-    "variation": "Classical Variation",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
-    ]
-  },
-  {
-    "id": "mg-sicilian-dragon-anti-dragon-bg5-line",
-    "openingId": "sicilian-dragon",
-    "white": "Ivanchuk, Vassily",
-    "black": "Gashimov, Vugar",
-    "whiteElo": 2739,
-    "blackElo": 2758,
-    "result": "0-1",
-    "year": 2009,
-    "event": "Wch Blitz 5th",
-    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Bg5 Bg7 Bb5+ Nbd7 Qe2 O-O O-O-O a6 Bxd7 Bxd7 f4 Rc8 e5 Rxc3 bxc3 Nd5 Qf3 Qa5 Nb3 Qa3+ Kb1 Nb6 Rd4 dxe5 Rb4 Bc6 Qxc6 bxc6 Rxb6 exf4 Bxf4 Bxc3 Bc1 Qa4 Rd1 a5 Rd7 Qe4 g3 a4 Nc5 Qf5 Be3 Re8 Rd3 Bg7 Nxa4 Qf1+ Bc1 Bh6 Rd8 Qxc1#",
-    "studentSide": "black",
-    "overview": "Gashimov shows the Dragon holds up against the tricky Bg5 anti-system: quick, concrete development with ...Nbd7 and ...a6, meeting White's queenside-castling attack with counterplay rather than passive defence. A model of answering an anti-Dragon try with active, purposeful play.",
-    "criticalMoments": [],
-    "middlegameTheme": "Concrete development, ...a6/...b5 vs the Bg5 line.",
-    "lessonSummary": "Develop fast, play ...a6/...b5, and counter the Bg5 attack.",
-    "variation": "Anti-Dragon: Bg5 Line",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
-    ]
-  },
-  {
-    "id": "mg-sicilian-sveshnikov-sveshnikov-main-line-9-nd5-deep",
-    "openingId": "sicilian-sveshnikov",
-    "white": "Nepomniachtchi, I..",
-    "black": "Carlsen, M..",
-    "whiteElo": 2789,
-    "blackElo": 2847,
-    "result": "0-1",
-    "year": 2021,
-    "event": "Magnus Carlsen Inv Prelim",
-    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c3 Ne7 Nxf6+ gxf6 Nc2 Bb7 Bd3 d5 Qe2 f5 O-O-O fxe4 Bxe4 Qc7 Bf3 O-O-O g3 Kb8 Kb1 Nc8 Rhe1 Rhe8 Ne3 Nb6 Qc2 f6 Bg2 Rd6 Rd2 Red8 Red1 a5 a3 Nc4 Nxc4 bxc4 Qf5 Ka7 Ka1 Qd7 Qh5 Qc7 f4 e4 Rd4 Bc6 R1d2 Be8 Qe2 Bc6 Qe3 Qb6 f5 R6d7 Qh6 Ba4 g4 Ka6 Bf1 Ka7 h4 Rb7 Qe3 Rdb8 g5 Bd7 gxf6 Bxf5 Qg5 Be6 Bxc4 Rg8 Qe5 Rg1+ Ka2 dxc4 b4 cxb3+ Kb2 e3 Qxe3 Ra1 Qe5 Ra2+ Kb1 Rxd2 Rxd2 b2",
-    "studentSide": "black",
-    "overview": "Carlsen, who made the Sveshnikov his championship weapon, demonstrates its soul against Nepomniachtchi: Black accepts the backward d6-pawn and the d5-hole in return for the bishop pair, dynamic piece play, and pressure down the half-open lines. A model of the Sveshnikov's positional compensation converting into a win.",
-    "criticalMoments": [],
-    "middlegameTheme": "Bishop pair and dynamics for the d5-hole and backward d-pawn.",
-    "lessonSummary": "Accept the structural concessions for the bishops and active play.",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
-    ]
-  },
-  {
-    "id": "mg-sicilian-sveshnikov-sveshnikov-kalashnikov-4-e5-5-nb5-d6",
-    "openingId": "sicilian-sveshnikov",
-    "white": "Vachier Lagrave, M..",
-    "black": "Radjabov, T..",
-    "whiteElo": 2784,
-    "blackElo": 2765,
-    "result": "0-1",
-    "year": 2021,
-    "event": "Opera Euro Rapid KO 2021",
-    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 e5 Nb5 d6 c4 Be7 N1c3 a6 Na3 f5 exf5 Bxf5 Nc2 Nf6 Ne3 Be6 g3 O-O Bg2 Qd7 Ncd5 Rae8 O-O Bd8 b3 Bh3 Bb2 Bxg2 Kxg2 Ne7 Nxf6+ Rxf6 Rc1 Qc6+ Nd5 Bb6 f4 Bd4 Bxd4 Nxd5 cxd5 Qxd5+ Qf3 Qxf3+ Kxf3 exd4 Rfd1 Re3+ Kf2 Rfe6 Rxd4 Re2+ Kf3 Rxh2 a4 h5 f5 Re5 g4 hxg4+ Kg3 Rb2 Rxd6 Rxf5 Kxg4 Rbf2 Rc8+ Kh7 Rc4 b5 axb5 Rxb5 Kg3 Rf6 Rxf6 gxf6 b4 a5 bxa5 Rxa5 Rh4+ Kg6 Rg4+ Rg5 Rxg5+ Kxg5 Kf3 Kf5 Kf2 Kf4",
-    "studentSide": "black",
-    "overview": "Radjabov shows the Kalashnikov's energetic spirit against Vachier-Lagrave: the early ...e5 and ...d6 grab the centre, then the ...f5 break opens the position for Black's pieces and bishop pair. A model of the Kalashnikov's active, uncompromising play converting into a win.",
-    "criticalMoments": [],
-    "middlegameTheme": "The ...e5 centre, the ...f5 break, bishop pair.",
-    "lessonSummary": "Seize the centre with ...e5, break with ...f5, and play actively.",
-    "variation": "Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
-    ]
-  },
-  {
-    "id": "mg-pirc-defence-150-attack",
-    "openingId": "pirc-defence",
-    "white": "Caruana, F.",
-    "black": "Nepomniachtchi, I.",
-    "whiteElo": 2819,
-    "blackElo": 2775,
-    "result": "0-1",
-    "year": 2019,
-    "event": "GCT Rapid Paris 2019",
-    "pgn": "e4 d6 d4 Nf6 Nc3 g6 Be3 Bg7 Qd2 a6 Bh6 O-O O-O-O b5 Bxg7 Kxg7 f3 Nc6 h4 e5 Nge2 b4 Nd5 h5 Nxb4 Nxd4 Nxd4 exd4 Nc6 Qe8 Nxd4 Qa4 Kb1 c5 Ne2 Rb8 b3 Be6 Qc3 c4 Nf4 Rfc8 Rd4 cxb3 Nxe6+ fxe6 axb3 Qe8 Qd2 a5 Ba6 Rc6 Rxd6 Rbb6 Rxc6 Qxc6 Be2 a4 b4 Qc5 c3 Qf2 Rd1 Qxg2 Qe3 Rb7 Rg1 Qh2 Qg5 Ng4 Re1 Qf2 Qd2 Ne5 Rf1 Qxh4 f4 Rd7 Qe1 Qxe1+ Rxe1 Nf7 Kc2 e5 f5 h4 fxg6 Kxg6 b5 Kg5 c4 h3 c5 Kf4 b6 Nd8 Bb5 Rh7 c6 Nxc6 Bxc6 Rh6 Bd7 h2 b7 Rb6 Bc8 a3 Kc3 Kg3 Ra1 a2 Be6 Rxb7 Bb3 Ra7 Kc4 Rh7 Kc5 h1=Q Rxh1 Rxh1 Bxa2 Kf4 Bd5 Re1",
-    "studentSide": "black",
-    "overview": "Nepomniachtchi shows how to defuse the dangerous 150 Attack against Caruana: the early ...a6 and ...b5 generate immediate queenside counterplay, racing against White's Bh6/O-O-O/h4 kingside assault. In opposite-castling Pircs Black does not defend — Black attacks first, and the faster storm wins.",
-    "criticalMoments": [],
-    "middlegameTheme": "...a6/...b5 queenside race vs the 150 Attack.",
-    "lessonSummary": "Meet the 150 with ...a6/...b5 and storm the queenside first.",
-    "variation": "150 Attack",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Pirc_Defence"
-    ]
-  },
-  {
-    "id": "mg-pirc-defence-austrian-attack",
-    "openingId": "pirc-defence",
-    "white": "Motylev, Alexander",
-    "black": "Vajda, Levente",
-    "whiteElo": 2570,
-    "blackElo": 2454,
-    "result": "0-1",
-    "year": 2001,
-    "event": "Ciocaltea Memorial",
-    "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3 Na6 O-O c5 d5 Nc7 a4 a6 a5 Nb5 Bd2 Bd7 Re1 Nxc3 bxc3 Bg4 c4 Nd7 Rb1 Rb8 Rb3 e5 f5 Bf6 h3 Bxf3 Qxf3 Bg5 Bc3 Qe7 Reb1 b6 axb6 Rb7 Ba5 Rfb8 c3 Qf8 Bc2 Qh6 Qd1 gxf5 exf5 Nf6 R3b2 Be3+ Kh1 Kh8 Ba4 Rg8 Bc6 Ne4 Qf3 Ng3+ Qxg3 Rxg3 Bxb7 Bc1 Re2 Qf4 Bc6 Rxh3+",
-    "studentSide": "black",
-    "overview": "Vajda shows the Pirc's counterpunching spirit against the Austrian Attack's big f4 centre: the ...c5 break challenges d4 at once, and after d5 the knight reroutes via c7 to b5 to pressure White's queenside. A model of meeting maximum central aggression with precise counterplay.",
-    "criticalMoments": [],
-    "middlegameTheme": "The ...c5 break, ...Nc7-b5 queenside pressure.",
-    "lessonSummary": "Strike with ...c5, reroute ...Nc7-b5, and counter the big centre.",
-    "variation": "Austrian Attack",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Pirc_Defence"
-    ]
-  },
-  {
-    "id": "mg-pirc-defence-fianchetto-system",
-    "openingId": "pirc-defence",
-    "white": "Svidler, Peter",
-    "black": "Kramnik, Vladimir",
-    "whiteElo": 2722,
-    "blackElo": 2791,
-    "result": "0-1",
-    "year": 2010,
-    "event": "Wch Blitz 5th",
-    "pgn": "e4 d6 d4 Nf6 Nc3 g6 g3 Bg7 Bg2 O-O Nge2 Na6 O-O c5 h3 cxd4 Nxd4 Bd7 Re1 Nc5 Bg5 h6 Be3 Rc8 Qd2 h5 Bg5 Nh7 Bh6 Bxh6 Qxh6 e5 Nf3 Na4 Nxa4 Bxa4 b3 Bc6 c4 Qf6 a4 a5 Rad1 Rfd8 h4 Qg7 Qe3 Nf8 Qb6 Ra8 Rd2 Qf6 Red1 Ra6 Qe3 Raa8 Bh3 Qe7 c5 dxc5 Rxd8 Rxd8 Rxd8 Qxd8 Nxe5 Be8 Nc4 b6 e5 Qd1+ Bf1 Bc6 Qd3 Qe1 Qe3 Qa1 f4 Ne6 Kf2 Nd4 Qd2 Qb1 Qb2",
-    "studentSide": "black",
-    "overview": "Kramnik shows the Pirc holds easily against the quiet Fianchetto System: the ...c5 break challenges the centre, and after the trade on d4 Black's pieces flow to active squares with ...Nc5 hitting e4. A model of meeting a positional anti-Pirc with smooth, equalizing counterplay.",
-    "criticalMoments": [],
-    "middlegameTheme": "The ...c5 break, ...Nc5 hitting e4.",
-    "lessonSummary": "Strike with ...c5, trade on d4, and activate with ...Nc5.",
-    "variation": "Fianchetto System",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Pirc_Defence"
-    ]
-  },
-  {
-    "id": "mg-pirc-defence-austrian-attack-with-e5-c5",
-    "openingId": "pirc-defence",
-    "white": "Nakamura, Hikaru",
-    "black": "Kramnik, Vladimir",
-    "whiteElo": 2741,
-    "blackElo": 2791,
-    "result": "0-1",
-    "year": 2010,
-    "event": "Wch Blitz 5th",
-    "pgn": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O e5 dxe5 fxe5 Nd5 h4 Bg4 h5 c5 hxg6 hxg6 Rh4 Bxf3 Qxf3 Nb4 Bc4 e6 Qh3 Nxc2+ Kf1 Nxd4 Ne4 Nf5 Bg5 Qd4 Nf6+ Bxf6 Rxd4 Bxg5 Rg4 Bh6 Bd3 Ne3+ Kf2 Nxg4+ Qxg4 Nc6 Rh1 Bg7 Qh4 Rfd8 Bxg6 fxg6 Qh7+ Kf8 Rf1 Rd7 Qxg6 Rf7+ Ke1 Nxe5",
-    "studentSide": "black",
-    "overview": "Kramnik shows how to meet the Austrian's aggressive early e5 push: ...dxe5 and ...Nd5 blockade the advanced pawn, ...Bg4 pins the f3-knight, and ...c5 hits the centre. Black turns White's premature aggression into a target. A model of precise, active defence against the sharpest anti-Pirc try.",
-    "criticalMoments": [],
-    "middlegameTheme": "Blockade the e5-push with ...Nd5, pin with ...Bg4.",
-    "lessonSummary": "Answer e5 with ...dxe5/...Nd5, pin with ...Bg4, and strike ...c5.",
-    "variation": "Austrian Attack with e5 c5",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Pirc_Defence"
-    ]
-  },
-  {
-    "id": "mg-qgd-tartakower-main",
-    "openingId": "qgd",
-    "white": "Nikolic, Predrag",
-    "black": "Short, Nigel D",
-    "whiteElo": 2635,
-    "blackElo": 2685,
-    "result": "0-1",
-    "year": 1992,
-    "event": "EU-chT (Men) 10th",
-    "pgn": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 h6 Bh4 b6 Be2 Bb7 Bxf6 Bxf6 cxd5 exd5 O-O Re8 b4 c6 Qb3 a5 Rab1 axb4 Qxb4 Nd7 Qb3 Rb8 a4 Ba8 Rfd1 Nf8 Bf1 h5 Qc2 g6 g3 h4 Bg2 hxg3 hxg3 Ne6 Rb3 Bg7 Rdb1 c5 Qd1 cxd4 exd4 Rc8 Ne2 Rc6 Ne5 Rd6 f4 Nf8 Nc3 f6 Nf3 Rde6 Qd2 Nd7 Qd3 Nf8 Kf2 Kf7 Bh3 Rd6 Qd2 Nd7 Bxd7 Qxd7 Rxb6 Rc6 Rxc6 Bxc6 a5 Ra8 Nd1 Qa7 Ra1 Qb7 Qc2 Bd7 Ne3 Qb5 Nh4 f5 Qc3 Rc8 Qd2 Bf8 Nf3 Bb4 Qa2 Bc3 Nxd5 Kg7 Nxc3 Rxc3 Qe2 Qc6 Ra2 Qe4 a6 Bc6 Qxe4 fxe4 Ne5 e3+ Ke1 Bb5 Kd1 e2+ Kd2 Rc1 Nf3 Rd1+ Kc3 Rf1 Kb4 Rxf3 Rxe2 Bxa6 Re5 Rxg3 f5 g5 Re7+ Kf8 f6 Rf3 Rg7 Rf5",
-    "studentSide": "black",
-    "overview": "Short demonstrates the QGD Tartakower against Nikolic: the ...b6/...Bb7 development frees Black's traditionally passive light-squared bishop onto the long diagonal, equalizing comfortably and then outplaying White. A model of the most reliable, modern way to handle the Queen's Gambit Declined.",
-    "criticalMoments": [],
-    "middlegameTheme": "...b6/...Bb7 freeing the bishop, central solidity.",
-    "lessonSummary": "Free the bishop with ...b6/...Bb7 and equalize in the QGD.",
-    "variation": "Tartakower Variation",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
-    ]
-  },
-  {
-    "id": "mg-slav-defence-main-a4-bf5",
-    "openingId": "slav-defence",
-    "white": "So, Wesley",
-    "black": "Caruana, Fabiano",
-    "whiteElo": 2770,
-    "blackElo": 2835,
-    "result": "0-1",
-    "year": 2020,
-    "event": "Clutch-ch June",
-    "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O O-O Qe2 Bg6 Ne5 Nbd7 Nxg6 hxg6 Rd1 Qc7 Bd2 a5 Rac1 Rad8 Ba2 Nb6 Be1 e5 dxe5 Qxe5 g3 Nbd7 Qc2 Qh5 Bc4 Ne5 Be2 Qh3 f3 g5 Ne4 Qf5 Bxb4 axb4 Nxf6+ Qxf6 Kg2 Ng6 Qb3 Qe7 a5 Rfe8 Rxd8 Rxd8 Rd1 Rxd1 Bxd1 Qc5 Qd3 Qxa5 Bb3 Nf8 Qc4 Ne6 Qe4 Qa1 Bxe6 Qxb2+ Kh3 fxe6 Qxe6+ Kf8 Qc8+ Ke7 Qxb7+ Kd6 e4 Qc3 Qb8+ Kc5 e5 Qxf3 Qd6+ Kc4 e6 Qf5+ Kg2 Qe4+ Kh3 b3 e7 b2 Qd1 Kc3 e8=Q Qxe8 Qf3+ Kb4 Qg4+ Ka3 Qf3+ Ka2",
-    "studentSide": "black",
-    "overview": "Caruana shows the main-line Slav against So: ...dxc4 followed by the early ...Bf5 develops the light-squared bishop outside the pawn chain — the Slav's whole point, unlike the French or QGD where it stays passive — and Black reaches a sound, comfortable game before outplaying his opponent.",
-    "criticalMoments": [],
-    "middlegameTheme": "...dxc4 and ...Bf5 — the good bishop out early.",
-    "lessonSummary": "Take on c4, develop the bishop to f5, and reach a solid game.",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Slav_Defense"
-    ]
-  },
-  {
-    "id": "mg-queens-indian-main-g3",
-    "openingId": "queens-indian",
-    "white": "Nakamura, Hi",
-    "black": "Carlsen, M.",
-    "whiteElo": 2787,
-    "blackElo": 2853,
-    "result": "0-1",
-    "year": 2016,
-    "event": "chess.com Blitz Final 3m+2spm 2016",
-    "pgn": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Be7 O-O O-O Re1 Na6 Nc3 d5 cxd5 exd5 Bf4 Re8 Rc1 c5 dxc5 Nxc5 Nd4 a6 a3 Bf8 b4 Ne6 Nxe6 fxe6 Na4 Rc8 Rxc8 Qxc8 Qd4 b5 Rc1 Qd8 Nc5 Bxc5 Qxc5 Qd7 Qb6 Rc8 Rxc8+ Bxc8 Bh3 Kf7 Be5 Qe7 Qc6 Qd7 Qc3 Bb7 f3 Ne8 Qd3 Kg8 Qe3 Bc8 Qc5 Nf6 Kf2 Kf7 Ke3 Qb7 Qc3 Bd7 Kf2 Qb6+ Bd4 Qd6 Qe3 h6 Be5 Qc6 Qa7 Ne8 Qb8 Qc8 Qxc8 Bxc8 Ke3 Nf6 Kd4 Nd7 Bc7 Bb7 e3 Ke7 Bf1 Nf6 g4 h5 g5 Nd7 Bd3 Kf7 h4 g6 Bd6 Bc6 f4 Bb7 Bc2 Nb6 Kc5 Nd7+ Kd4 Nb6 Bd3 Nd7 Bc7 Bc6 Bc2 Kg7 Bd1 Kf7 Be2 Kg7 Bf3 Kf7 f5 exf5 Bxd5+ Bxd5 Kxd5 Ke7 Kc6 Ke6 Bf4 Ne5+ Kb6 Nc4+ Kxa6 Nxa3 Kb6 Kd5 Kc7 Ke4 Kc6 Nc4 Kxb5 Nxe3 Bxe3 Kxe3 Kc5 f4 b5 f3 b6 f2 b7 f1=Q b8=Q Qf5+ Kc6 Kf3 Qb4 Kg3 Kd6 Qf8+",
-    "studentSide": "black",
-    "overview": "Carlsen demonstrates the Queen's Indian's solidity against Nakamura: the ...b6/...Bb7 fianchetto fights for the e4-square and the long diagonal, ...Na6 and ...d5 contest the centre, and Black reaches a sound, balanced game before outplaying his rival in a long struggle. The model of QID reliability.",
-    "criticalMoments": [],
-    "middlegameTheme": "The ...Bb7 fianchetto, fight for e4 and the centre.",
-    "lessonSummary": "Fianchetto on b7, contest e4, and reach a solid game.",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense"
-    ]
-  },
-  {
-    "id": "mg-italian-game-evans-gambit-accepted",
-    "openingId": "italian-game",
-    "white": "Vachier Lagrave, M.",
-    "black": "So, W.",
-    "whiteElo": 2774,
-    "blackElo": 2767,
-    "result": "1-0",
-    "year": 2019,
-    "event": "chess.com Speed 2019",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nge7 cxd4 d6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Qf6 Bxd5+ Ke7 Qe4+ Kd8 Be3 Bf5 Qf3 Bb6 Nc3 Bg6 Qg3 Qd6 Bf4 Qd7 Rfe1 Nxd4 Rad1 Re8 Rxe8+ Qxe8 Be5 c6 Bc4 Qd7 Bxd4 Bxd4 Qh4+ Bf6 Rxd7+ Kxd7 Qh3+ Kc7 Qg3+ Kb6 Na4+ Ka5 Nc5 b5 Qa3+ Kb6 Nd7+ Kc7 Nxf6 gxf6 Qa5+ Kb7 Bxb5 cxb5 Qxb5+ Kc7 Qc5+ Kb7 Qd5+ Kb8 Qc6 a5 Qxf6 Ra7 g4 Rb7 Qe5+ Kc8 Qxa5 Be4 Qc3+ Rc7 Qe3 Bg6 h4 Rc6 h5 Bf7 Qf3 Rc7 Qf5+ Rd7 Qxh7 Kc7 Qc2+ Kd8 h6 Bg8 g5 Bh7 g6 Bxg6 Qxg6 Ke7 h7 Rd6 Qxd6+ Kxd6 h8=Q Kd5 f4 Kc4 Qe5 Kb4 f5 Ka3 f6 Kxa2 Qb5 Ka1 f7 Ka2 f8=Q Ka1 Qa8#",
-    "studentSide": "white",
-    "overview": "Vachier-Lagrave wields the romantic Evans Gambit against So: the b4 pawn sacrifice rips open lines, c3 and d4 build a big centre with tempo, and White's rapid development and attacking chances on f7 fully justify the pawn. A model of the Evans' enduring practical venom.",
-    "criticalMoments": [],
-    "middlegameTheme": "Sacrifice b4 for the big centre and the f7 attack.",
-    "lessonSummary": "Offer b4, build the c3-d4 centre, and attack with the lead in development.",
-    "variation": "Evans Gambit Accepted: Main Line",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Italian_Game"
-    ]
-  },
-  {
-    "id": "mg-kings-indian-attack-kid",
-    "openingId": "kings-indian-attack",
-    "white": "Moussard, J.",
-    "black": "Grigoryan, K2.",
-    "whiteElo": 2608,
-    "blackElo": 2608,
-    "result": "1-0",
-    "year": 2019,
-    "event": "Chess24 Banter Blitz Cup",
-    "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6 Nbd2 e5 e4 Nc6 c3 Re8 Re1 a5 a4 d5 exd5 Nxd5 Nc4 Bf5 Nh4 Be6 Nf3 f6 h4 Qd7 h5 Rad8 hxg6 hxg6 Qc2 Bf7 Bd2 Nde7 Bf1 Bxc4 dxc4 f5 Be3 e4 Nh4 Ne5 Bg2 Qd3 Qb3 Qxc4 Qxb7 Rb8 Qa7 N7c6 Qc5 Qxc5 Bxc5 Nd3 Ba3 Nxe1 Rxe1 Ne5 Re2 Red8 Bf1 Rd1 Kg2 Bf6 f4 Nc4 Nxg6 Kf7 Ne5+ Nxe5 fxe5 Bxe5 Rf2 Rg8 Bc4+ Kg7 Bxg8 Kxg8 Rxf5 Rd2+ Kh3 Bd6 Rg5+ Kf7 Rg4 Bxa3 bxa3 Rd3 Rxe4 Rxc3 Re5 Rxa3 Rxa5 Rc3 Ra7 Rc6 a5 Ke6 a6 Kd7 Ra8 Rc1 a7 Ra1 g4 Kc6 g5 Kb7 Rg8 Kxa7 g6 Ra3+ Kg4 Ra4+ Kf5 Ra6 g7 Ra5+ Ke6 Ra6+ Kd7 Rd6+ Kxc7",
-    "studentSide": "white",
-    "overview": "Moussard shows the King's Indian Attack against a KID-style ...g6 setup: the universal d3/Nbd2/e4 formation, then e4 stakes the centre and White pivots toward kingside expansion. A model of the KIA's flexible, system-based approach turning into a kingside initiative.",
-    "criticalMoments": [],
-    "middlegameTheme": "The e4 centre, kingside expansion in the KIA.",
-    "lessonSummary": "Build the KIA system, play e4, and expand on the kingside.",
-    "variation": "KIA vs KID-Style Response",
-    "sources": [
-      "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
-    ]
-  },
-  {
-    "id": "mg-scotch-gambit",
-    "openingId": "scotch-game",
-    "white": "Jones, G.",
-    "black": "Mamedyarov, S.",
-    "whiteElo": 2623,
-    "blackElo": 2736,
-    "result": "1-0",
-    "year": 2015,
-    "event": "World Blitz 2015",
-    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 f3 Ng5 Be3 Ne6 f4 Qb8 f5 Nxd4 Bxd4 Bxd4+ Qxd4 Qb6 c3 Qxd4+ cxd4 Rb8 Nd2 Rxb2 Nb3 Ke7 g4 Rb8 Rf2 Rxf2 Kxf2 g6 f6+ Ke8 Kf3 Rb4 Rd1 Rc4 Rd2 Rc3+ Kf4 h6 h4 g5+ hxg5 hxg5+ Kxg5 Rg3 Nc5 Rxg4+ Kh5 Bc8 Rb2 Rxd4 Rb8 Kd8 e6 fxe6 Nxe6+",
-    "studentSide": "white",
-    "overview": "Jones shows the Scotch Gambit's aggressive spirit against Mamedyarov: Bc4 and e5 hand White rapid development and central space for the pawn, the bishops bearing down on Black's position. A model of the gambit's enduring initiative.",
-    "criticalMoments": [],
-    "middlegameTheme": "Rapid development and central space for the gambit pawn.",
-    "lessonSummary": "Develop fast with Bc4/e5 and press the initiative.",
-    "variation": "Scotch Gambit (4.Bc4)",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Scotch_Game"
-    ]
-  },
-  {
-    "id": "mg-scotch-fourknights",
-    "openingId": "scotch-game",
-    "white": "Nakamura, Hi",
-    "black": "Gukesh, D.",
-    "whiteElo": 2804,
-    "blackElo": 2787,
-    "result": "1-0",
-    "year": 2025,
-    "event": "13th Norway Chess 2025",
-    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nc3 Bb4 Nxc6 bxc6 Bd3 O-O O-O d5 exd5 Bg4 f3 Bh5 Bg5 cxd5 Bxf6 Qxf6 Nxd5 Qxb2 Rb1 Bc5+ Kh1 Qe5 Re1 Qd6 Ne7+ Kh8 Qe2 Rab8 Qe4 Bg6 Nxg6+ fxg6 Rxb8 Rxb8 g3 Rf8 Kg2 Bb6 h4 Qc5 f4 Qf5 Qc4 Qf6 Re5 Qd6 c3 Qa3 Kh3 Qd6 Kg2 Qa3 Kh3 Qd6 Qe4 Bc5 Kg2 Qb6 Kh3 Qd6 h5 Qd7+ Kg2 Bd6 Re6 Rf6 Re8+ Bf8 Qa8 Qd6 Rd8 Qe7 hxg6 hxg6 Qc8 Qc5 Be4 g5 fxg5 Qf2+ Kh3 Rf7 g6 Rf6 Qg4 Qf1+ Bg2 Qc1 Qh4+ Qh6 Bd5",
-    "studentSide": "white",
-    "overview": "Nakamura demonstrates the Scotch Four Knights against Gukesh: Nxc6 doubles Black's pawns, Bd3 and castling complete a harmonious setup, and White uses the better structure and central control to outplay his young rival. A model of squeezing a small but lasting edge.",
-    "criticalMoments": [],
-    "middlegameTheme": "Double Black’s pawns, press the better structure.",
-    "lessonSummary": "Trade on c6, develop, and exploit the structure.",
-    "variation": "Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Scotch_Game"
-    ]
-  },
-  {
-    "id": "mg-scotch-kasparov",
-    "openingId": "scotch-game",
-    "white": "Svidler, Peter",
-    "black": "Ponomariov, Ruslan",
-    "whiteElo": 2747,
-    "blackElo": 2741,
-    "result": "1-0",
-    "year": 2012,
-    "event": "Tashkent FIDE GP 2nd",
-    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Nb3 Bb6 Nc3 Nf6 Qe2 O-O Bg5 Nd4 Qd2 Nxb3 axb3 Re8 f3 h6 Bf4 d5 O-O-O d4 Kb1 Be6 Nb5 Qe7 g4 Rad8 h4 c6 Na3 Bc7 Nc4 Bxf4 Qxf4 Qc5 g5 Nh5 Qh2 Bxc4 Bxc4 b5 Bd3 Qe5 Rdg1 Qxh2 Rxh2 g6 Rg4 Ng7 gxh6 Nh5 f4 Kh7 e5 Kxh6 b4 Kg7 Rf2 Kf8 f5 gxf5 Rg5 Ng7 h5 Re6 Rfg2 Ne8 Rxf5 Rd7 Rf1 Rh6 e6 Re7 exf7 Nf6 Rg6 Rxg6 hxg6 Nh5 Rh1 Re5 Be2",
-    "studentSide": "white",
-    "overview": "Svidler shows Kasparov's Nb3 line against Ponomariov: the knight retreat keeps pieces on and the bishop pair's tension, Qe2 and Bg5 develop with pressure, and White outplays his opponent in a rich middlegame. A model of fighting for the advantage in the Scotch.",
-    "criticalMoments": [],
-    "middlegameTheme": "Keep pieces on, develop with pressure (Qe2/Bg5).",
-    "lessonSummary": "Retreat Nb3, develop actively, and play for more.",
-    "variation": "Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Scotch_Game"
-    ]
-  },
-  {
-    "id": "mg-scotch-steinitz",
-    "openingId": "scotch-game",
-    "white": "Tseshkovsky, Vitaly",
-    "black": "Khamatgaleev, Alexej",
-    "whiteElo": 2542,
-    "blackElo": 2400,
-    "result": "1-0",
-    "year": 2000,
-    "event": "Presov op",
-    "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Qh4 Nb5 Bb4+ c3 Ba5 Nd2 Bb6 g3 Qe7 Nc4 Qxe4+ Qe2 Qxe2+ Bxe2 Kd8 a4 Nf6 b4 d5 a5 Bxf2+ Kxf2 dxc4 Bf4 Ne4+ Kg2 Nd6 Rhd1 Be6 a6 bxa6 Nxd6 cxd6 Rxd6+ Ke7 Rxc6 Bd5+ Bf3 Bxc6 Bxc6 Rad8 Rxa6 Rd3 Rxa7+ Kf6 Ra6 Rxc3 Bd5+ Kf5 Ra7 Rc2+ Kh3",
-    "studentSide": "white",
-    "overview": "Tseshkovsky refutes the provocative Steinitz 4...Qh4 with precise play: Nb5 hits c7, c3 and Nd2 blunt the queen sortie, and g3 gains time while White completes development with a clear advantage. A model of punishing premature aggression.",
-    "criticalMoments": [],
-    "middlegameTheme": "Punish the early ...Qh4 with tempo-gaining development.",
-    "lessonSummary": "Meet ...Qh4 with Nb5/c3/g3 and develop with tempo.",
-    "variation": "Scotch: 4...Qh4 (Steinitz Variation)",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Scotch_Game"
-    ]
-  },
-  {
-    "id": "mg-four-knights-spanish-metger",
-    "openingId": "four-knights-game",
-    "white": "Yu Yangyi",
-    "black": "Mamedyarov, S.",
-    "whiteElo": 2752,
-    "blackElo": 2764,
-    "result": "1-0",
-    "year": 2019,
-    "event": "Saint Louis Rapid 2019",
-    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Ne2 Ne7 c3 Ba5 Ng3 Ng6 d4 c6 Bd3 Re8 h3 h6 a4 exd4 cxd4 c5 Bd2 cxd4 Nxd4 Bb6 Bc3 d5 Bb5 Rxe4 Nxe4 Nxe4 Nf3 a6 Bd3 Nxc3 bxc3 Nf4 Re1 Bd7 Bf1 Rc8 c4 dxc4 Re4 g5 Rxc4 Rxc4 Bxc4 Qc7 Rc1 Nxh3+ Kf1 Qf4 Rc3 Bf5 Bxf7+ Kxf7 Qb3+ Kg6 Qxb6+ Kh5 gxh3 Qxa4 Qd4 Bxh3+ Kg1 Qa1+ Kh2 Qf1 Ne1 Bg4 Qe3 Qb5 Ng2 Qd7 Qe5 Qf5 Qe8+ Qg6 Nf4+",
-    "studentSide": "white",
-    "overview": "Yu Yangyi shows the Spanish Four Knights is no dead draw: the symmetrical setup gives White a slight, lasting initiative, the Ne2-g3 reroute eyes f5, and patient play converts the small edge against Mamedyarov. A model of squeezing the quiet Metger structure.",
-    "criticalMoments": [],
-    "middlegameTheme": "Symmetrical structure, the Ne2-g3-f5 reroute.",
-    "lessonSummary": "Reroute Ne2-g3 toward f5 and press the small edge.",
-    "variation": "Symmetrical Variation: 4.Bb5 Bb4",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Four_Knights_Game"
-    ]
-  },
-  {
-    "id": "mg-benko-gambit-fully-accepted-main",
-    "openingId": "benko-gambit",
-    "white": "Portisch, Lajos",
-    "black": "Vasiukov, Evgeni",
-    "whiteElo": 2645,
-    "blackElo": 2560,
-    "result": "0-1",
-    "year": 1974,
-    "event": "Manila",
-    "pgn": "d4 Nf6 c4 c5 d5 b5 cxb5 a6 bxa6 Bxa6 Nc3 d6 Nf3 Nbd7 e4 Bxf1 Kxf1 g6 h3 Bg7 Kg1 O-O Kh2 Qa5 Re1 Rfb8 Re2 Rb4 Kg1 Ne8 a3 Rb7 Rc2 Rab8 Qe2 Ne5 Nxe5 Bxe5 Bh6 Nc7 Rac1 Rb3 f4 Bd4+ Kh2 Qa6 Qg4 Qc8 Qe2 Qa6 Qg4 Ne8 Re1 Qd3 Qe2 Qxe2 Rexe2 f6 h4 Nc7 Nd1 Kf7 g3 f5 e5 Nxd5 exd6 exd6 Bg5 Re8 Rxe8 Kxe8 Rd2 Kd7 h5 gxh5 Kh3 Kc6 Kh4 Rf3 a4 Nb6 Nc3 Nc4 Re2 Nxb2 Nb5 Nxa4 Nxd4+ cxd4 Rd2 d3 Kxh5 Rxg3 Bh4 Rh3",
-    "studentSide": "black",
-    "overview": "Vasiukov demonstrates the Benko Gambit's enduring pressure against Portisch: for the sacrificed b-pawn Black gets the half-open a- and b-files, the long-diagonal bishop on g7, and relentless queenside pressure that ties White down and eventually wins. The classic model of Benko compensation.",
-    "criticalMoments": [],
-    "middlegameTheme": "The a/b-files and g7-bishop for the gambit pawn.",
-    "lessonSummary": "Develop on the queenside, double on the open files, and press.",
-    "variation": "Modern 5.f3 System",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Benko_Gambit"
-    ]
-  },
-  {
-    "id": "mg-sicilian-alapin-d5-central",
-    "openingId": "sicilian-alapin",
-    "white": "Pavasovic, Dusko",
-    "black": "Sutovsky, Emil",
-    "whiteElo": 2567,
-    "blackElo": 2637,
-    "result": "0-1",
-    "year": 2007,
-    "event": "EU-ch 8th playoff",
-    "pgn": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Bd3 Be7 O-O O-O Be3 Rd8 Qe2 Nc6 Bc4 Qh5 dxc5 Bxc5 Bxc5 Qxc5 Nbd2 b6 Rad1 Bb7 Bd3 Qe7 Ne4 Nd5 g3 h6 c4 Nf6 Nxf6+ Qxf6 Be4 Rxd1 Rxd1 Rd8 Rxd8+ Qxd8 b4 Qa8 Bxc6 Bxc6 Ne5 Be8 f4 f6 Ng4 Qc6 Qd3 Bh5 h3 Qe8 Ne3 Bf3 Kf2 Bb7 f5 Qc6 fxe6 Qf3+ Ke1 Qxg3+ Kd2 Qh2+ Kc1 Qe5 Qd8+ Kh7 Qd3+ Be4 Qb3 Qxe6 Nd5 Qe5 Nc3 Qf4+ Kb2 Qd2+ Ka3 Qc1+ Qb2 Qxb2+ Kxb2 Bg2 c5 bxc5 b5 Bxh3 Ne4 Bg2 Nxc5 h5",
-    "studentSide": "black",
-    "overview": "Sutovsky shows the principled answer to the Alapin: 2...d5 strikes at once, and after the queen recaptures Black develops naturally and plays against White's isolated queen's pawn, eventually converting the structural target against Pavasovic. A model of meeting the c3-Sicilian head-on.",
-    "criticalMoments": [],
-    "middlegameTheme": "Strike with ...d5, blockade and pressure the IQP.",
-    "lessonSummary": "Hit with ...d5, develop, and play against White’s isolated pawn.",
-    "variation": "Alapin: 2...d5 Central Counter (IQP Play)",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Alapin_Variation"
-    ]
-  },
-  {
-    "id": "mg-evans-gambit-declined-main",
-    "openingId": "evans-gambit",
-    "white": "Petrosian, Tigran L",
-    "black": "Tkachiev, Vladislav",
-    "whiteElo": 2629,
-    "blackElo": 2664,
-    "result": "1-0",
-    "year": 2008,
-    "event": "Dresden ol (Men) 38th",
-    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bb6 a4 a6 Nc3 Nf6 Nd5 Nxd5 exd5 Nd4 a5 Ba7 O-O Nxf3+ Qxf3 d6 d3 O-O Be3 Bxe3 Qxe3 Bd7 d4 Qh4 c3 Rae8 Rfe1 f5 Qg3 Qh5 dxe5 f4 Qd3 Rxe5 Rxe5 Qxe5 Qd4 Qg5 Re1 h5 f3 h4 Bd3 h3 Re2 Re8 Rxe8+ Bxe8 Bf1 Bd7 Kh1 hxg2+ Bxg2 Qg6 Bf1 Qb1 Kg2 Qc2+ Kg1 Qc1 Kf2 Bf5 h4 Kh7 c4 Kh6 c5 Kh7 c6 Qc2+ Kg1 bxc6 dxc6 Qxc6 Qxf4 Bb1 Qe3 Qb7 Qb3 Bg6 Kg2 Qa7 Qd5 Qb8 h5 Bb1 b5 Kh6 bxa6 Qb2+ Kg3 Qc1 Kf2 Qf4 a7 Qh2+ Bg2 Qh4+ Kf1",
-    "studentSide": "white",
-    "overview": "Petrosian shows that even when the Evans is declined, White keeps the initiative: a4 gains queenside space, Nd5 jumps to the outpost, and the resulting central space and piece activity give White a pleasant pull against Tkachiev. A model of pressing the edge when Black sidesteps the gambit.",
-    "criticalMoments": [],
-    "middlegameTheme": "a4 queenside space, the Nd5 outpost, central space.",
-    "lessonSummary": "Gain space with a4, jump Nd5, and press the central edge.",
-    "variation": "Evans Gambit Declined",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Evans_Gambit"
-    ]
-  },
-  {
-    "id": "mg-dutch-classical-main",
-    "openingId": "dutch-defence",
-    "white": "Esipenko, Andrey",
-    "black": "Amin, B.",
-    "whiteElo": 2642,
-    "blackElo": 2683,
-    "result": "0-1",
-    "year": 2019,
-    "event": "World Blitz 2019",
-    "pgn": "d4 f5 g3 Nf6 Bg2 e6 Nf3 Be7 O-O O-O c4 d6 Nc3 Qe8 Bf4 Qh5 Rc1 c6 b4 Nbd7 b5 Nb6 bxc6 bxc6 c5 dxc5 dxc5 Nbd5 Bd6 Bxd6 cxd6 f4 Nxd5 cxd5 gxf4 Ne4 e3 Nxd6 Ne5 Qe8 Rc6 Nf5 Qg4 Kh8 Rfc1 Bb7 Rc7 Rc8 Rxc8 Bxc8 Rc7 Ba6 e4 Qb8 Rc1 Qb2 Nd3 Bxd3",
-    "studentSide": "black",
-    "overview": "Amin demonstrates the Classical Dutch against Esipenko: the ...e6/...Be7 setup is solid, and the queen lift ...Qe8-h5 swings the attack to the kingside, the heart of the Classical Dutch plan. A model of generating a kingside initiative from the …f5 structure.",
-    "criticalMoments": [],
-    "middlegameTheme": "The ...Qe8-h5 queen lift, kingside attack.",
-    "lessonSummary": "Set up solidly, lift the queen via e8-h5, and attack the king.",
-    "variation": "Classical Be7 Line",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Dutch_Defence"
-    ]
-  },
-  {
-    "id": "mg-budapest-main",
-    "openingId": "budapest-gambit",
-    "white": "Adhiban, Baskaran",
-    "black": "Ponkratov, P.",
-    "whiteElo": 2674,
-    "blackElo": 2604,
-    "result": "0-1",
-    "year": 2015,
-    "event": "World Blitz 2015",
-    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Bf4 Nc6 Nf3 Bb4+ Nbd2 Qe7 a3 Ngxe5 Nxe5 Nxe5 e3 Bxd2+ Qxd2 d6 Be2 O-O b4 a5 O-O b6 c5 dxc5 Qd5 Bg4 f3 Ng6 fxg4 Nxf4 Rxf4 Qxe3+ Rf2 axb4 Qf3 Qe5 Bc4 Qxa1+",
-    "studentSide": "black",
-    "overview": "Ponkratov shows the Budapest Gambit's tricky activity against Adhiban: ...Ng4 regains the e5-pawn with pressure, ...Bb4+ and ...Qe7 pile onto e5 and develop with tempo, and Black's lead in development creates immediate problems. A model of the Budapest's practical venom.",
-    "criticalMoments": [],
-    "middlegameTheme": "...Ng4 and ...Qe7 to regain e5 with the initiative.",
-    "lessonSummary": "Hop ...Ng4, pressure e5 with ...Qe7, and develop with tempo.",
-    "variation": "Budapest Gambit: Main Bf4 Line",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Budapest_Gambit"
-    ]
-  },
-  {
-    "id": "mg-queensgambit-slav-response",
-    "openingId": "queens-gambit",
-    "white": "Ivanchuk, Vassily",
-    "black": "Morozevich, Alexander",
-    "whiteElo": 2787,
-    "blackElo": 2755,
-    "result": "1-0",
-    "year": 2007,
-    "event": "Wch Blitz 3rd",
-    "pgn": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4 a4 Bf5 e3 e6 Bxc4 Bb4 O-O Nbd7 Nh4 Bg4 f3 Bh5 g4 Nd5 Ng2 Bg6 Na2 Be7 e4 N5b6 Bb3 a5 Nc3 O-O f4 h6 f5 exf5 gxf5 Bh7 Nf4 Kh8 Be3 Bg5 Qf3 Qe7 Rae1 Qb4 Qd1 Rad8 Qc2 Nf6 Kh1 Rxd4 Bxd4 Qxd4 Rd1 Qe3 Rd3 Qc5 Rdf3 Nbd7 Nd3 Qd4 Qe2 Ng4 Rg3 Nge5 Rd1 Qb6 Ba2 Bf6 Nf4 Bg5 Nh3 Bf6 Nf4 Bh4 Rg2 Nf6 Nd3 Qc7 Qe3 Rd8 Qf4 Rxd3 Rxd3 Bg5 Rd8+ Qxd8 Qxe5 Bg8 Qc5 Nd7 Qf2 Ne5 Rg1 Qd3 Rd1 Qh3 Qg2 Qh4 h3 Bf6 Ne2 b5 axb5 cxb5",
-    "studentSide": "white",
-    "overview": "Ivanchuk shows White's side of the main-line Slav against Morozevich: a4 fixes the queenside and regains the c4-pawn, e3 and Bxc4 complete a harmonious setup, and White's central space and slight initiative convert against a world-class opponent. A model of pressing the Slav for an edge.",
-    "criticalMoments": [],
-    "middlegameTheme": "a4 to regain c4, central space and the small edge.",
-    "lessonSummary": "Play a4, recover the pawn, and press the central space.",
-    "variation": "Slav Defence Response",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Queen%27s_Gambit"
-    ]
-  },
-  {
-    "id": "mg-sicilian-antisveshnikov-nf3",
-    "openingId": "sicilian-sveshnikov",
-    "white": "Gantner, Matthias",
-    "black": "Shaarbaf, M.",
-    "whiteElo": 2451,
-    "blackElo": 2384,
-    "result": "0-1",
-    "year": 2006,
-    "event": "Champions Challenge 172nd",
-    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Nf3 Bb4 Bd3 d5 exd5 Qxd5 O-O Bxc3 bxc3 e4 Bxe4 Qxd1 Bxc6+ bxc6 Rxd1 O-O Bg5 Nd5 c4 Nb4 Be7 Nxc2 Bxf8 Nxa1 Bc5 Be6 Rxa1 Bxc4 a3 f6 Rb1 a6 h3 Rd8 Rb7 Rd5 Bb4 a5 Bc3 a4 Nd4 c5 Nc6 Rd3 Bb2 Kf8 Kh2 Rd2 Kg3 Bd5 Rb8+ Kf7 Nd8+ Kg6 Bc1 Rd3+ Be3 c4 Kf4 c3 Rc8 Bb3 Nb7 c2 g4 h5 Rc7 h4 Ke4 Rd1 Rc5 Rh1 f4 Rxh3 f5+ Kh7 Nd6 Rh2 Nc8 h3 Ne7 Re2 Kf3 Rxe3+ Kxe3 h2 Ng6 h1=Q Rc8 c1=Q+",
-    "studentSide": "black",
-    "overview": "Black shows that the quiet Anti-Sveshnikov 6.Nf3 gives Black easy equality: ...Bb4 pins, ...d5 strikes the centre at once, and after the exchanges Black's active pieces and central control give a comfortable game. A model of meeting the Sveshnikov-avoiding lines with energetic central play.",
-    "criticalMoments": [],
-    "middlegameTheme": "...d5 central break, active piece play.",
-    "lessonSummary": "Pin with ...Bb4, break with ...d5, and equalize actively.",
-    "variation": "Anti-Sveshnikov: 6.Nf3 Quiet Retreat",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
-    ]
-  },
-  {
-    "id": "mg-queensgambit-exchange-minority",
-    "openingId": "queens-gambit",
-    "white": "Firouzja, Alireza",
-    "black": "Abdusattorov, Nodirbek",
-    "whiteElo": 2763,
-    "blackElo": 2727,
-    "result": "1-0",
-    "year": 2023,
-    "event": "CCT Final Playoff 2023",
-    "pgn": "d4 d5 c4 e6 Nc3 Nf6 cxd5 exd5 Bg5 Be7 e3 O-O Bd3 Re8 Nge2 h6 Bh4 c6 O-O a5 Rc1 Nbd7 a4 Nb8 f3 Na6 Bf2 Nb4 Bb1 b6 Ng3 Ra7 h3 Bd6 Qd2 Bb8 Rfd1 Be6 Nce2 Rae7 Rc3 Nd7 e4 c5 Nh5 dxe4 fxe4 Ba2 Bxa2 Nxa2 Ra3 Nb4 Neg3 Qc7 Nxg7 Kxg7 Nf5+ Kg8 Rg3+ Qxg3 Bxg3 Bxg3 Qxh6",
-    "studentSide": "white",
-    "overview": "Firouzja demonstrates the QGD Exchange minority attack against Abdusattorov: the b4-b5 pawn advance undermines Black's c6-pawn, creating a backward pawn and an open file to besiege. The textbook execution of one of chess's most instructive strategic plans.",
-    "criticalMoments": [],
-    "middlegameTheme": "The b4-b5 minority attack creating a weak c6-pawn.",
-    "lessonSummary": "Advance b4-b5 to leave Black a weak c-pawn, then besiege it.",
-    "variation": "Exchange Variation",
-    "sources": [
-      "https://en.wikipedia.org/wiki/Queen%27s_Gambit"
     ]
   }
 ]
