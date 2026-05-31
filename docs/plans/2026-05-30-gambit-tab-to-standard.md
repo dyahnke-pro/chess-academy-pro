@@ -139,16 +139,21 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
        trade — NOT a material win). Only author a slice whose board facts genuinely
        demonstrate the student edge; verify every claim with chess.js before writing prose.
        - [x] Marshall — `mp-marshallattack-endgame` (Leko–Kramnik 2007, verified clean). 3e0d3a8
-       - [ ] Smith-Morra / Vienna / Danish / Englund — re-verify the rep slice (or pick a
-             deeper segment / different game) before authoring; skip+self-hide if no clean
-             student-win demo exists. Scotch slice is NOT clean as-is.
+       - [x] Smith-Morra — `mp-smithmorragambit-endgame` (Potapov–Al Sayed, d6 outpost, level R+N). 
+       - [x] Vienna — `mp-viennagambit-endgame` (Smolen–Mazur, d6-passer for b7, +39).
+       - [x] Scotch — `mp-scotchgambit-endgame` (Popov–Faizrakhmanov, queenside rook pressure, +22). 99e0c9c
+       - [x] Danish — SELF-HIDES (slice has Black winning our pawn; no clean student slice — honest).
+       - [x] Stafford / Englund — trap-only (sharp; no clean endgame — correct).
+       **GROUP B endgame plans DONE** (where the data supports a clean equal-or-better student slice).
+       Every plan engine-verified ≥ −30cp at the slice end (David: winning OR equal, never losing).
        - [ ] **THE BIG REMAINING LIFT — LessonScripts (G9.3 Gate A) for all 7.** Without a
              registered LessonScript each Group B Watch still falls to legacy WalkthroughMode.
              Per opening: author main + per-variation LessonScripts on the STEP-2/3 data
-             spines (two registers, lead-the-eye, sources), register in lessons/index.ts,
-             add opening-manifests entry, then the full gate suite (lessonIntegrity,
-             narrationAccuracy, lessonDepth, wlppNarration, lessonSources) applies.
+             spines TRIMMED to the sound terminus (never author past −1.2). Stafford/Englund
+             lessons teach the WINNING trap lines (already re-anchored in gambits.json).
        - [ ] Group B model games (student-side wins) + pitfalls (common-mistakes) per opening.
+       - [ ] Rebuild the shallow gambit-plans.json MG plans (currently ~+24 generic) on the
+             real wide-corpus forks (≥8 ply, all plans the data shows), anchored at spine terminus.
 5. [ ] Gate wiring (depth gate + coverage gate over gambits.json).
 6. [ ] `npm run ship-check` green → land on main → 3-instrument audit per id.
 
