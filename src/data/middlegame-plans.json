@@ -2318,19 +2318,25 @@
     "id": "mp-birdsopening-main",
     "openingId": "birds-opening",
     "title": "Bird's: the Qh4 Kingside Attack",
-    "criticalPositionFen": "rnbq1rk1/pp2ppbp/5np1/2pp4/5P2/3PPN2/PPP1B1PP/RNBQ1RK1 w - - 0 7",
+    "criticalPositionFen": "rnbqk1nr/ppp1ppbp/6p1/3p4/5P2/5NP1/PPPPP2P/RNBQKB1R w KQkq - 1 4",
     "overview": "The signature Bird's attacking plan: lift the queen Qe1-h4, plant a knight on the e5 outpost, and pour pieces toward Black's kingside behind the f-pawn.",
-    "pawnBreaks": [],
+    "pawnBreaks": [
+      {
+        "move": "e2-e4 — the central break",
+        "explanation": "After the pieces are placed, e4 opens the long diagonal for the fianchettoed bishop and seizes the centre.",
+        "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/5P2/5NP1/PPPPP2P/RNBQKB1R w KQkq - 1 4"
+      }
+    ],
     "pieceManeuvers": [
       {
-        "piece": "Queen",
-        "route": "Qe1-h4",
-        "explanation": "The queen swings to h4 to attack the weakened kingside dark squares."
+        "piece": "Knight",
+        "route": "Nf3-e5 — the central outpost",
+        "explanation": "The knight dominates e5, supported by the f4-pawn — the Bird’s key attacking piece."
       },
       {
-        "piece": "Knight",
-        "route": "Nf3-e5",
-        "explanation": "The knight seizes the e5 outpost."
+        "piece": "Bishop",
+        "route": "Bf1-g2 — the long diagonal",
+        "explanation": "The fianchettoed bishop rakes across the centre and the queenside."
       }
     ],
     "strategicThemes": [
@@ -2343,39 +2349,26 @@
     ],
     "playableLines": [
       {
-        "title": "Bird's: the Qh4 Kingside Attack",
-        "fen": "rnbq1rk1/pp2ppbp/5np1/2pp4/5P2/3PPN2/PPP1B1PP/RNBQ1RK1 w - - 0 7",
+        "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/5P2/5NP1/PPPPP2P/RNBQKB1R w KQkq - 1 4",
         "moves": [
-          "Qe1",
-          "Nc6",
-          "Qh4",
-          "e6",
+          "Bg2",
+          "c6",
+          "O-O",
+          "Bg4",
           "Ne5",
-          "Nxe5",
-          "fxe5"
+          "h5",
+          "h3",
+          "Be6"
         ],
         "annotations": [
-          "Qe1 — the queen begins its lift toward the kingside.",
-          "…Nc6 — Black develops and eyes the centre.",
-          "Qh4 — the queen lands on h4, glaring at the weakened dark squares.",
-          "…e6 — Black shores up his centre and king.",
-          "Ne5 — the knight takes the dominant central outpost.",
-          "…Nxe5 — Black trades the strong knight.",
-          "fxe5 — recapturing toward the centre opens the f-file for the attack."
-        ],
-        "learnCues": [
-          "Qe1 — start the queen lift",
-          "…Nc6 — Black develops",
-          "Qh4 — queen attacks the king",
-          "…e6 — Black shores up",
-          "Ne5 — seize the outpost",
-          "…Nxe5 — Black trades",
-          "fxe5 — open the f-file"
-        ],
-        "sources": [
-          "concept:pos-outpost",
-          "concept:pos-space",
-          "https://en.wikipedia.org/wiki/Bird%27s_Opening"
+          "Bg2 completes White's double-fianchetto Leningrad Bird's, the bishop raking the long diagonal across the centre.",
+          "…c6 supports the d5-pawn and prepares Black's own development.",
+          "White castles, the king snug behind the fianchetto.",
+          "…Bg4 develops the bishop, pinning the f3-knight.",
+          "Ne5! The knight leaps to the powerful e5-outpost — the heart of the Bird's, dominating the centre and supported by the f4-pawn.",
+          "Black tries to challenge with …h5, gaining kingside space.",
+          "h3 questions the g4-bishop, securing the e5-knight's support.",
+          "…Be6 retreats the bishop. White has the ideal Leningrad Bird's: the e5-knight outpost, the long-diagonal bishop, and the f4-e5 kingside space — a harmonious attacking setup, just as Aronian wielded against Topalov."
         ],
         "arrows": [
           [],
@@ -2384,16 +2377,14 @@
           [],
           [],
           [],
+          [],
           []
         ],
+        "title": "The Leningrad Bird (Aronian–Topalov)",
         "highlights": [
           [
             {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d1",
+              "square": "g2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -2401,19 +2392,35 @@
             {
               "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b8",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h4",
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e1",
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -2421,42 +2428,24 @@
             {
               "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "intro": "White builds the e5-outpost and the long-diagonal bishop.",
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Bird%27s_Opening"
+        ],
+        "learnCues": [
+          "Bg2 — the Leningrad fianchetto",
+          "…c6 — support d5",
+          "O-O — White castles",
+          "…Bg4 — pin the knight",
+          "Ne5 — the central outpost",
+          "…h5 — Black grabs space",
+          "h3 — secure the outpost",
+          "…Be6 — Black retreats"
         ]
       }
     ]
