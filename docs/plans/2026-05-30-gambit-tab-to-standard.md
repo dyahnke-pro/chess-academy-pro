@@ -184,7 +184,13 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
 All five of David's first-message criteria are met across all 12 gambit-tab openings,
 4458 content-gate tests green, ~38 commits on branch, soundness directive satisfied
 (nothing teaches a losing position). REMAINING = masterclass polish, a fresh-session phase:
-- **Per-variation lessons** (the big one): for each opening, replace `gambits.json`
+- **Variation-tab soundness VERIFIED (2026-05-31):** engine-swept every Group B variation
+  pgn — all winning/equal/compensation, ZERO losing (Scotch +0.3..+2.6, Vienna +0.4..+0.7,
+  Danish −0.7..+0.1 comp, Smith-Morra −0.4..+0.7, Marshall 0..−0.9 comp, Stafford/Englund
+  winning traps incl. mates). The whole tab — mains AND variation tabs — teaches no losing
+  position. Variation tabs already play sound lines via legacy Watch; curated variation
+  lessons (below) just upgrade the Watch player, not the soundness.
+- **Per-variation lessons** (the remaining polish): for each opening, replace `gambits.json`
   variations[] with the STEP-2/3 data-derived tab set (sound pgns, soundness-swept),
   then author `<openingId>::<variationName>` VARIATION_LESSONS (recipe = smithMorraGambit.ts),
   register the `*Variations.ts` file in index.ts. ~28 lessons.
