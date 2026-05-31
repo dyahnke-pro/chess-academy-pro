@@ -241,29 +241,20 @@
     ],
     "variations": [
       {
-        "name": "h3 — the f2 Strike (main)",
-        "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 h3 Nxe4 dxe4 Bxf2+ Kxf2 Qxd1",
-        "explanation": "6.h3? looks like a useful luft but walks into 6…Nxe4! 7.dxe4 Bxf2+ 8.Kxf2 Qxd1 — Black wins the queen. The most common practical trap.",
-        "sources": [
-          "https://www.chess.com/openings/Russian-Game-Stafford-Gambit",
-          "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
-        ]
-      },
-      {
         "name": "Bg5 — the Stafford Mate",
         "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Bg5 Nxe4 Bxd8 Bxf2+ Ke2 Bg4#",
-        "explanation": "6.Bg5? pins nothing important; 6…Nxe4! 7.Bxd8 Bxf2+ 8.Ke2 Bg4# is checkmate — the famous Stafford mating net where the queen sac leads to mate.",
+        "explanation": "6.Bg5? Nxe4! 7.Bxd8 Bxf2+ 8.Ke2 Bg4# — the signature Stafford queen-sac mate.",
         "sources": [
-          "https://www.chess.com/openings/Russian-Game-Stafford-Gambit",
+          "concept:tac-sacrifice",
           "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
         ]
       },
       {
         "name": "Nc3 — the Knight Raid",
         "pgn": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 Nc3 Bc5 d3 Ng4 Bf4 Nxf2 Qd2 Nxh1",
-        "explanation": "After 5.Nc3 Bc5 6.d3 Ng4, the knight lands on f2: 7.Bf4 Nxf2 8.Qd2 Nxh1 wins the exchange and keeps the attack.",
+        "explanation": "5.Nc3 Bc5 6.d3 Ng4 7.Bf4 Nxf2! forks queen and rook; …Nxh1 wins the exchange.",
         "sources": [
-          "https://www.chess.com/openings/Russian-Game-Stafford-Gambit",
+          "concept:tac-sacrifice",
           "https://en.wikipedia.org/wiki/Petrov%27s_Defence"
         ]
       }
@@ -366,21 +357,12 @@
     ],
     "variations": [
       {
-        "name": "Qb4+ Raid (main)",
-        "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Bc3 Bb4",
-        "explanation": "4.Bf4? Qb4+ 5.Bd2 Qxb2 6.Bc3 Bb4! — Black has won the b2-pawn and pins the bishop; White is already lost.",
-        "sources": [
-          "https://en.wikipedia.org/wiki/Englund_Gambit",
-          "https://www.chess.com/openings/Englund-Gambit"
-        ]
-      },
-      {
         "name": "The Englund Mate (Qc1#)",
         "pgn": "d4 e5 dxe5 Nc6 Nf3 Qe7 Bf4 Qb4+ Bd2 Qxb2 Bc3 Bb4 Qd2 Bxc3 Qxc3 Qc1#",
-        "explanation": "7.Qd2? Bxc3 8.Qxc3 Qc1# — the famous Englund Gambit checkmate, the queen delivering mate on c1.",
+        "explanation": "…Bb4 pins, 7.Qd2? Bxc3 8.Qxc3 Qc1# — the famous Englund Gambit mate.",
         "sources": [
-          "https://en.wikipedia.org/wiki/Englund_Gambit",
-          "https://www.chess.com/openings/Englund-Gambit"
+          "concept:tac-sacrifice",
+          "https://en.wikipedia.org/wiki/Englund_Gambit"
         ]
       }
     ],
