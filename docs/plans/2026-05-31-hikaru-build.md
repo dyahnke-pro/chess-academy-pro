@@ -108,3 +108,20 @@ directs the walk.
 R+minor+P endgame data in their deep-build files — author per the locked endgame rule
 (real game → transition FEN → conversion). Pirc/Modern + Caro are middlegame/positional
 (self-hide where no decisive ending). Same honest scope as the other pros.
+
+### Model games — DONE (14, all his real wins)
+Authored 14 model games from the deep-build `topModelGames` (student-side WINS only,
+hand-authored overviews, no boilerplate): Caro ×3 (vs Eljanov 2990, 0gZPanda, hansen),
+Closed Sicilian ×2 (vs Bigfish1995 3080, Last7Samurai), Réti ×3 (vs Bigfish1995 3015,
+Durarbayli, vi_pranav), Nimzo-Larsen ×3 (vs Firouzja, Zhigalko, Nihal Sarin), Pirc/
+Modern ×3 (vs Naroditsky, dropstoneDP 3158, Wonderboy05). Gates green
+(modelGames + modelGames-orientation), confirmed surfacing on prod (4 tiles/opening,
+0 errors). `loadModelGamesData` reloads unconditionally so seeded devices pick them up.
+
+### STILL OPEN for full G9.1 parity (next focused pass):
+- **Middlegame plans** (STEP 9) — per-variation playable plan lines, criticalPositionFen
+  anchored at each variation's spine terminus (Gate C continuity), lead-the-eye arrows.
+  Deep-build files carry the spine + endgameTypeBreakdown to author from.
+- **Pitfalls** (STEP 12) — 3-5 common-mistake WLPP cards per opening.
+- **Endgames** — Nimzo-Larsen e5-main/nf6/g6 + Caro carry R+minor+P / Q+P data; author
+  per the locked endgame rule (real game → transition FEN → conversion).
