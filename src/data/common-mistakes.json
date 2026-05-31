@@ -2546,5 +2546,47 @@
         "https://en.wikipedia.org/wiki/Pirc_Defence"
       ]
     }
+  ],
+  "two-knights-defence": [
+    {
+      "fen": "r1bqkb1r/ppp2ppp/2n2n2/3Pp1N1/2B5/8/PPPP1PPP/RNBQK2R b KQkq - 0 5",
+      "wrongMove": "Nxd5",
+      "correctMove": "Na5",
+      "explanation": "Recapturing with 5...Nxd5 walks straight into the Fried Liver: 6.Nxf7! Kxf7 7.Qf3+ drags the king out with a raging attack for the piece. The cool antidote is 5...Na5, hitting the c4-bishop — Black returns the pawn at leisure and reaches a sound, slightly better structure.",
+      "shortNarration": "Na5 hits the bishop, dodges the Fried Liver",
+      "sources": [
+        "concept:pos-initiative",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Two_Knights_Defense"
+      ]
+    }
+  ],
+  "philidor-defence": [
+    {
+      "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+      "wrongMove": "Bg4",
+      "correctMove": "Be7",
+      "explanation": "The pin 3...Bg4 is an illusion: 4.Nxe5! refutes it — after 4...dxe5 5.Qxg4 White nets a clean pawn, because capturing the knight opened the d1-queen's line straight to the loose g4-bishop. Develop calmly with 3...Be7 and keep the pieces coordinated.",
+      "shortNarration": "Be7 develops; the Bg4 pin drops a pawn",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://en.wikipedia.org/wiki/Philidor_Defence"
+      ]
+    }
+  ],
+  "albin-countergambit": [
+    {
+      "fen": "rnbqkbnr/ppp2ppp/8/4P3/2Pp4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 4",
+      "wrongMove": "Bf5",
+      "correctMove": "Nc6",
+      "explanation": "The d4-pawn IS the Albin — the cramping wedge is Black's whole compensation for the gambit pawn. Developing 4...Bf5 abandons it: 5.Nxd4 simply scoops the wedge and Black has nothing for the pawn. Play 4...Nc6 first — the knight defends d4 and keeps the wedge alive.",
+      "shortNarration": "Nc6 defends the d4 wedge first",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://en.wikipedia.org/wiki/Albin_Countergambit"
+      ]
+    }
   ]
 }
