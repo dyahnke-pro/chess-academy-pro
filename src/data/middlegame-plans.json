@@ -3040,17 +3040,27 @@
   {
     "id": "mp-carokann-exchange",
     "openingId": "caro-kann",
-    "criticalPositionFen": "r4rk1/ppq2ppp/2n1pn2/3p4/3P2b1/1QPB1N2/PP1N1PPP/R3R1K1 w - - 4 13",
+    "criticalPositionFen": "r1b1kbnr/ppq1pppp/2n5/3p4/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq - 1 6",
     "title": "Caro Exchange: Own the c-File",
     "overview": "After the Exchange, Black has a sound symmetrical centre, the bishop pair traded down, and the open c-file. The plan is simple and strong: contest and own the c-file, trade White's only active piece, and let the weakness-free structure do the rest.",
     "pawnBreaks": [
-      "…e5 once prepared",
-      "the c-file is the main road"
+      {
+        "move": "…e5 — break the symmetry",
+        "explanation": "Black strikes d4 to seize the initiative rather than settle for a lifeless Exchange structure.",
+        "fen": "r1b1kbnr/ppq1pppp/2n5/3p4/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq - 1 6"
+      }
     ],
     "pieceManeuvers": [
-      "…Rfc8 onto the open file",
-      "…Qc7 leading the file",
-      "trade off White’s active knight"
+      {
+        "piece": "Knight",
+        "route": "…Nc6-e5 — central activity",
+        "explanation": "After the …e5 break, the knight lands actively in the centre."
+      },
+      {
+        "piece": "King",
+        "route": "…Kd8 — keep the pieces on",
+        "explanation": "Black sidesteps the check to preserve active piece play over trades."
+      }
     ],
     "strategicThemes": [
       "Own the open c-file",
@@ -3062,40 +3072,54 @@
     ],
     "playableLines": [
       {
-        "fen": "r4rk1/ppq2ppp/2n1pn2/3p4/3P2b1/1QPB1N2/PP1N1PPP/R3R1K1 w - - 4 13",
+        "fen": "r1b1kbnr/ppq1pppp/2n5/3p4/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq - 1 6",
         "moves": [
-          "Ne5",
+          "Ne2",
+          "Nf6",
+          "Bf4",
+          "e5",
+          "dxe5",
           "Nxe5",
-          "Rxe5",
-          "Rfc8"
+          "Bb5+",
+          "Kd8"
         ],
         "annotations": [
-          "Ne5 jumps to the central square.",
-          "…Nxe5 trades the active knight off.",
-          "Rxe5 — the rook recaptures actively, but Black's c-file plan rolls on.",
-          "…Rfc8 seizes the open c-file behind the queen on c7 — Black controls the only open road."
+          "Ne2 develops, the modern Exchange Caro setup behind the symmetrical structure.",
+          "…Nf6 develops naturally, eyeing the centre and preparing to contest the position.",
+          "White develops the bishop to f4, hitting the c7-queen.",
+          "…e5! Carlsen breaks the symmetry energetically, striking at d4 and seizing the initiative rather than drifting toward a dead-equal Exchange.",
+          "White trades on e5.",
+          "…Nxe5 recaptures, the knight landing actively in the centre.",
+          "White checks with Bb5+, trying to exploit Black's uncastled king.",
+          "…Kd8! A bold practical choice: Carlsen steps the king aside, keeping all his active pieces rather than allowing trades — Black's piece activity and central control fully compensate the king move, and he outplayed So from here."
         ],
-        "title": "Caro Exchange: Own the c-File",
         "arrows": [
           [],
           [],
           [],
-          [
-            {
-              "from": "c8",
-              "to": "c7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ]
+          [],
+          [],
+          [],
+          [],
+          []
         ],
+        "title": "Active Exchange Caro (Carlsen–So)",
         "highlights": [
           [
             {
-              "square": "e5",
+              "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f3",
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -3105,45 +3129,50 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c7",
+              "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black breaks the symmetry with ...e5 and plays for the initiative.",
         "sources": [
           "book:caro-kann",
-          "concept:pos-center",
+          "concept:pos-initiative",
           "https://en.wikipedia.org/wiki/Caro%E2%80%93Kann_Defence"
         ],
         "learnCues": [
-          "Ne5 — jump to the centre",
-          "Nxe5 — trade the active knight",
-          "Rxe5 — recapture",
-          "Rfc8 — seize the open c-file"
+          "Ne2 — the modern Exchange setup",
+          "…Nf6 — develop, contest the centre",
+          "Bf4 — hit the queen",
+          "…e5 — break the symmetry",
+          "dxe5 — White trades",
+          "…Nxe5 — recapture actively",
+          "Bb5+ — White checks",
+          "…Kd8 — keep the active pieces"
         ]
       }
     ]
