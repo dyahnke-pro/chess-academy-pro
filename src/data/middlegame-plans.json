@@ -16200,45 +16200,72 @@
   {
     "id": "mp-progothamchess-closed-sicilian-bb5-trade",
     "openingId": "pro-gothamchess-closed-sicilian",
-    "criticalPositionFen": "r1bqkbnr/pp1ppppp/8/1Bp5/3nP3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+    "criticalPositionFen": "r2qk2r/1p2bp1p/p2pbp2/4p3/4P3/2NQ1N2/PPP2PPP/2KR3R w kq - 0 13",
     "title": "Closed Sicilian — Bb5 + Nxb5 simplification",
-    "overview": "Levy's Closed Sicilian at 333 games / 68.0%. The 2.Nc3 sidesteps Open Sicilian theory; Bb5 + the knight exchange on b5 leaves Black with doubled a-pawns and a structural weakness for the long endgame conversion.",
+    "overview": "A real GothamChess win (vs donwhitenoise): the knight leaps to the d5 outpost — the heart of the Closed Sicilian — and even when Black trades it off the structural grip remains. Clearly better (~+2).",
     "pawnBreaks": [
-      "…a6 doubling White's b-pawn",
-      "d4 central break"
+      {
+        "move": "f4-f5 lever",
+        "explanation": "The Closed-Sicilian f-pawn levers open the kingside.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bb5 + Nxb5 trade",
-      "Knight reroute via Nbd2",
-      "Queen activation"
+      {
+        "piece": "Knight",
+        "route": "Nc3-d5 outpost",
+        "explanation": "The knight reaches the dominant d5 outpost."
+      }
     ],
     "strategicThemes": [
-      "Sidestep Sicilian theory",
-      "Doubled a-pawns are the long-term weakness"
+      "Plant a knight on d5.",
+      "Keep the structural grip even after trades."
     ],
     "endgameTransitions": [
-      "R+minor+P endings where the structural weakness converts"
+      "The grip and space favour White into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkbnr/pp1ppppp/8/1Bp5/3nP3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+        "fen": "r2qk2r/1p2bp1p/p2pbp2/4p3/4P3/2NQ1N2/PPP2PPP/2KR3R w kq - 0 13",
         "moves": [
-          "Nxb5",
-          "Nxb5",
-          "a6",
-          "Nc3",
-          "d6",
-          "d4"
+          "Nd5",
+          "Rc8",
+          "Kb1",
+          "Rg8",
+          "g3",
+          "Rc5",
+          "Nh4",
+          "Bxd5"
         ],
         "annotations": [
-          "Nxb5 — Black's knight captures on b5 — material exchange.",
-          "Nxb5 — White's knight captures on b5 — material exchange.",
-          "a6 — Black's pawn to a6 — standard development.",
-          "Nc3 — White's knight to c3 — standard development.",
-          "d6 — Black's pawn to d6 — standard development.",
-          "d4 — White's pawn to d4 — standard development."
+          "Nd5 — the knight leaps to the d5 outpost, the heart of the Closed Sicilian.",
+          "…Rc8 — Black contests the c-file.",
+          "Kb1 — tucking the king after long castling.",
+          "…Rg8 — Black readies a kingside push.",
+          "g3 — solidifying the kingside.",
+          "…Rc5 — the rook swings along the fifth rank.",
+          "Nh4 — the knight reroutes toward f5.",
+          "…Bxd5 — Black trades the strong knight, but White’s grip persists."
+        ],
+        "learnCues": [
+          "Nd5 — seize the outpost",
+          "Rc8 — contest c-file",
+          "Kb1 — tuck the king",
+          "Rg8 — ready a push",
+          "g3 — solidify",
+          "Rc5 — swing the rook",
+          "Nh4 — reroute to f5",
+          "Bxd5 — grip persists"
         ],
         "arrows": [
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           [],
           [],
@@ -16249,79 +16276,60 @@
         "highlights": [
           [
             {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b5",
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a6",
+              "square": "b1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d6",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d2",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d4",
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Nxb5 — knight to b5",
-          "Nxb5 — knight to b5",
-          "a6 — pawn to a6",
-          "Nc3 — knight to c3",
-          "d6 — pawn to d6",
-          "d4 — pawn to d4"
-        ],
-        "title": "Closed Sicilian — Bb5 + Nxb5 simplification",
-        "intro": "Levy's Closed Sicilian at 333 games / 68.0%. The 2.Nc3 sidesteps Open Sicilian theory; Bb5 + the knight exchange on b5 leaves Black with doubled a-pawns and a structural weakness for the long endgame ",
+        "title": "Closed Sicilian: the d5 Outpost Grip",
+        "intro": "A real GothamChess win vs donwhitenoise. The knight plants on d5 and grips the position.",
         "sources": [
-          "https://www.chess.com/openings/Closed-Sicilian-Defense",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Closed-Sicilian",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed_Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -17217,73 +17225,136 @@
   {
     "id": "mp-progothamchess-london-classical-attack",
     "openingId": "pro-gothamchess-london",
-    "criticalPositionFen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 3 5",
+    "criticalPositionFen": "r4rk1/1pBbpp1p/1pn2npb/3p4/3P4/2P2N2/PP1N1PPP/R3KB1R w KQ - 4 13",
     "title": "London System — …cxd4 / exd4 central exchange",
-    "overview": "Gotham's London System from 327 games at 70.3% score — one of his most-instructed openings on YouTube. After Bf4 / e3 / Nf3 / Nbd2 the system is the same every game; Black usually breaks with …cxd4, White recaptures exd4 accepting the isolated d-pawn for active piece play.",
+    "overview": "A real GothamChess win (vs Hope_6): White snatches the b6-pawn and trades pieces to reach a structure where the bishop reroutes to b4 with lasting pressure. A pleasant edge (~+0.3).",
     "pawnBreaks": [
-      "…cxd4 — Black's tension-releasing capture",
-      "exd4 recapture — White accepts the isolated d-pawn for activity"
+      {
+        "move": "c-file pressure",
+        "explanation": "Trades on the queenside leave Black’s pawns to target.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bf4 holding the long diagonal",
-      "Nbd2 supports the centre",
-      "Queen lifts via Qe2 supporting central play"
+      {
+        "piece": "Bishop",
+        "route": "Bf1-b5-b4 pressure",
+        "explanation": "The bishop works the b5 and b4 squares, pressing the queenside."
+      }
     ],
     "strategicThemes": [
-      "System play — same setup every game",
-      "Active piece play with the isolated d-pawn"
+      "Target Black’s loose queenside pawns.",
+      "Reroute the bishop to b4."
     ],
     "endgameTransitions": [
-      "R+minor+P endgames where the isolated pawn isn't a weakness"
+      "The healthier pawns nag Black into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/4PN2/PPPN1PPP/R2QKB1R b KQkq - 3 5",
+        "fen": "r4rk1/1pBbpp1p/1pn2npb/3p4/3P4/2P2N2/PP1N1PPP/R3KB1R w KQ - 4 13",
         "moves": [
-          "cxd4",
-          "exd4"
+          "Bxb6",
+          "Rfc8",
+          "Bb5",
+          "Na5",
+          "Bxa5",
+          "Bxb5",
+          "Bb4",
+          "e6"
         ],
         "annotations": [
-          "cxd4 — Black's pawn captures on d4 — material exchange.",
-          "exd4 — White's pawn captures on d4 — material exchange."
+          "Bxb6 — snatching the b6-pawn.",
+          "…Rfc8 — activating the rook.",
+          "Bb5 — the bishop pressures the queenside.",
+          "…Na5 — Black’s knight jumps to a5.",
+          "Bxa5 — trading off the knight.",
+          "…Bxb5 — recapturing.",
+          "Bb4 — the bishop repositions with lasting pressure.",
+          "…e6 — Black solidifies; White holds a small, pleasant edge."
+        ],
+        "learnCues": [
+          "Bxb6 — grab the pawn",
+          "Rfc8 — activate",
+          "Bb5 — press the queenside",
+          "Na5 — knight jumps",
+          "Bxa5 — trade it",
+          "Bxb5 — recapture",
+          "Bb4 — reposition",
+          "e6 — White is better"
         ],
         "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "f1",
+              "to": "b5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
           [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e3",
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d4",
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "cxd4 — pawn to d4",
-          "exd4 — pawn to d4"
-        ],
-        "title": "London System — …cxd4 / exd4 central exchange",
-        "intro": "Gotham's London System from 327 games at 70.3% score — one of his most-instructed openings on YouTube. After Bf4 / e3 / Nf3 / Nbd2 the system is the same every game; Black usually breaks with …cxd4, W",
+        "title": "London: Pressure the Queenside Pawns",
+        "intro": "A real GothamChess win vs Hope_6. White trades into a structure where Black’s queenside is loose.",
         "sources": [
-          "book:london-system",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/London-System",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/London_System",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -48647,56 +48718,89 @@
   {
     "id": "mp-progothamchess-london-standard-ne5",
     "openingId": "pro-gothamchess-london",
-    "criticalPositionFen": "r1bqkb1r/pp3ppp/2n1p3/3p3n/3P4/2P1BN2/PP1N1PPP/R2QKB1R b KQkq - 2 8",
+    "criticalPositionFen": "r2q1rk1/1p1b1ppp/p1nbp3/3p4/3P1n2/2P1BN2/PP1N1PPP/R2QRBK1 w - - 2 13",
     "title": "London Standard: the Ne5 Outpost + Kingside Build",
-    "overview": "His main London plan across the 80-game standard line. After the central trades, White plants a knight on e5 — the classic London outpost — supported by the d4-pawn and eyeing f7, g6, and the kingside. The Bf4-g3 bishop, the Bd3 battery, and the e5-knight all point at Black's king, the textbook London attacking setup.",
+    "overview": "A real GothamChess win: g3 and h4-h5 gain kingside space and chase Black’s knight to the edge, after which the bishop pressures from g5 for a comfortable edge (~+0.9).",
     "pawnBreaks": [
-      "the e5 outpost anchored by d4"
+      {
+        "move": "h4-h5 space",
+        "explanation": "h4 then h5 gains space and shoves the knight to the rim.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nf3-e5 the central outpost",
-      "Bf4-e3 supporting d4",
-      "Nd2-f3-e5 the knight route"
+      {
+        "piece": "Bishop",
+        "route": "Bf4-g5 pressure",
+        "explanation": "The bishop swings to g5 to press the kingside once the space is grabbed."
+      }
     ],
     "strategicThemes": [
-      "Plant a knight on e5",
-      "Train the bishops on the kingside",
-      "Build a slow kingside attack"
+      "Gain kingside space with h4-h5.",
+      "Push Black’s pieces to the edge."
     ],
     "endgameTransitions": [
-      "The space edge carries into the ending"
+      "The space edge carries into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkb1r/pp3ppp/2n1p3/3p3n/3P4/2P1BN2/PP1N1PPP/R2QKB1R b KQkq - 2 8",
+        "fen": "r2q1rk1/1p1b1ppp/p1nbp3/3p4/3P1n2/2P1BN2/PP1N1PPP/R2QRBK1 w - - 2 13",
         "moves": [
-          "Bd6",
-          "Ne5",
-          "g6",
-          "Nd3"
+          "g3",
+          "Ng6",
+          "h4",
+          "f5",
+          "h5",
+          "Nh8",
+          "Bg5",
+          "Be7"
         ],
         "annotations": [
-          "…Bd6 — Black develops the bishop, contesting the kingside diagonal.",
-          "Ne5 — the London outpost. The knight lands on the dominant central square, anchored by d4 and eyeing f7 and g6.",
-          "…g6 — Black blunts the b1-h7 diagonal, but weakens the dark squares.",
-          "Nd3 — White reroutes flexibly, keeping the pressure and eyeing the c5- and e5-squares; the outpost play gives White a comfortable, lasting edge."
+          "g3 — solidifying the kingside.",
+          "…Ng6 — Black redeploys the knight.",
+          "h4 — gaining kingside space, eyeing h5.",
+          "…f5 — Black grabs central space.",
+          "h5 — the pawn jabs, kicking the knight back.",
+          "…Nh8 — the knight is shoved to the rim.",
+          "Bg5 — the bishop swings to g5 with pressure.",
+          "…Be7 — Black challenges; White is comfortably better with more space."
+        ],
+        "learnCues": [
+          "g3 — solidify",
+          "Ng6 — redeploy",
+          "h4 — gain space",
+          "f5 — Black grabs space",
+          "h5 — jab, kick the knight",
+          "Nh8 — shoved to the rim",
+          "Bg5 — press",
+          "Be7 — White is comfier"
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [
+            {
+              "from": "h4",
+              "to": "h5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "e3",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -48708,24 +48812,48 @@
           ],
           [
             {
-              "square": "d3",
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Bd6 — Black contests the diagonal",
-          "Ne5 — the London outpost",
-          "g6 — Black weakens dark squares",
-          "Nd3 — reroute, keep pressing"
-        ],
-        "title": "London Standard: the Ne5 Outpost + Kingside Build",
-        "intro": "His main London plan across the 80-game standard line. After the central trades, White plants a knight on e5 — the classic London outpost — supported by the d4-pawn and eyeing f7, g6, and the kingside. The Bf4-g3 bishop, the Bd3 battery, and the e5-knight all point at Black's king, the textbook London attacking setup.",
+        "title": "London: Gain Space and Shove the Knight",
+        "intro": "A real GothamChess win. The h-pawn gains space and shoves Black’s knight to the rim.",
         "sources": [
-          "book:chess-strategy",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/London-System",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/London_System"
+          "https://en.wikipedia.org/wiki/London_System",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -48733,112 +48861,95 @@
   {
     "id": "mp-progothamchess-london-jobava-nb5",
     "openingId": "pro-gothamchess-london",
-    "criticalPositionFen": "r1bqkb1r/pp3ppp/n1p1pn2/3p4/3P1B2/P1N5/1PP1PPPP/R2QKBNR b KQkq - 1 6",
+    "criticalPositionFen": "r1b1k2r/ppq2ppp/2pbpn2/8/3PQ3/P4NB1/1PP2PPP/R3KB1R w KQkq - 1 13",
     "title": "Jobava-London: the Nb5 Knight Raid",
-    "overview": "The aggressive Jobava hybrid (early Nc3) across his 58-game sample. Instead of the quiet London, White develops the knight to c3 and jumps to b5, hitting the c7-square and forcing concessions. After …Na6 and a3, the knight returns to c3 having provoked weaknesses, and White builds with e3 and a kingside attack. A sharper, more provocative London.",
+    "overview": "A real GothamChess win (vs ChesssKnock): the queen lifts to h4 and g5 and the bishop lines up on d3 toward h7, generating pressure on the king for a pleasant edge (~+0.4).",
     "pawnBreaks": [
-      "e3 supporting the centre",
-      "a3 securing the b5-knight"
+      {
+        "move": "e3-e4 lever",
+        "explanation": "An eventual e4 frees the centre to feed the kingside pressure.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nc3-b5 raiding the c7-square",
-      "Nb5-c3 the return with tempo gained",
-      "Bf4 on the active diagonal"
+      {
+        "piece": "Queen",
+        "route": "Qd1-h4-g5 probe",
+        "explanation": "The queen swings to h4 then probes g5 against the king."
+      }
     ],
     "strategicThemes": [
-      "Jump Nb5 to provoke weaknesses",
-      "Develop with tempo",
-      "Aim for a kingside attack"
+      "Swing the queen toward the king.",
+      "Line the bishop up toward h7."
     ],
     "endgameTransitions": [
-      "The provoked weaknesses are long-term targets"
+      "If the attack is parried, the pressure still nags into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkb1r/pp3ppp/n1p1pn2/3p4/3P1B2/P1N5/1PP1PPPP/R2QKBNR b KQkq - 1 6",
+        "fen": "r1b1k2r/ppq2ppp/2pbpn2/8/3PQ3/P4NB1/1PP2PPP/R3KB1R w KQkq - 1 13",
         "moves": [
-          "Bd6",
-          "e3"
+          "Qh4",
+          "b6",
+          "Bd3",
+          "Bb7",
+          "Qg5",
+          "Kf8",
+          "O-O-O",
+          "h6"
         ],
         "annotations": [
-          "…Bd6 — Black challenges the f4-bishop after the knight has been provoked to a6.",
-          "e3 — White completes the setup; the Nb5 raid has provoked …Na6 and …c6, leaving Black slightly tangled while White develops harmoniously with both bishops aimed kingside. A pleasant, provocative edge."
+          "Qh4 — the queen swings toward the kingside.",
+          "…b6 — Black prepares a fianchetto.",
+          "Bd3 — eyeing the b1-h7 diagonal toward the king.",
+          "…Bb7 — completing the fianchetto.",
+          "Qg5 — the queen probes g5, pressing the kingside.",
+          "…Kf8 — the king sidesteps the pressure.",
+          "O-O-O — castling long, bringing the rook into play.",
+          "…h6 — Black challenges the queen; White holds a pleasant edge."
+        ],
+        "learnCues": [
+          "Qh4 — swing over",
+          "b6 — prepare fianchetto",
+          "Bd3 — eye h7",
+          "Bb7 — fianchetto",
+          "Qg5 — probe the kingside",
+          "Kf8 — sidestep",
+          "O-O-O — bring the rook",
+          "h6 — White is better"
         ],
         "arrows": [
+          [
+            {
+              "from": "e4",
+              "to": "h4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "h4",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
           [],
           []
         ],
         "highlights": [
           [
             {
-              "square": "d6",
+              "square": "h4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "Bd6 — Black challenges the bishop",
-          "e3 — complete the setup, press"
-        ],
-        "title": "Jobava-London: the Nb5 Knight Raid",
-        "intro": "The aggressive Jobava hybrid (early Nc3) across his 58-game sample. Instead of the quiet London, White develops the knight to c3 and jumps to b5, hitting the c7-square and forcing concessions. After …Na6 and a3, the knight returns to c3 having provoked weaknesses, and White builds with e3 and a kingside attack. A sharper, more provocative London.",
-        "sources": [
-          "book:chess-strategy",
-          "https://www.chess.com/openings/London-System",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/London_System"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-london-e6-classical",
-    "openingId": "pro-gothamchess-london",
-    "criticalPositionFen": "rnbq1rk1/pp3ppp/3bpn2/2pp4/3P4/2P1PNB1/PP1N1PPP/R2QKB1R b KQ - 0 7",
-    "title": "London vs …e6: the Classical Bg3 + c3 Setup",
-    "overview": "Against the solid …e6, his 65-game plan is the pure classical London: Bf4-g3 tucks the bishop safely, Bd3 builds the battery toward h7, Nbd2 and c3 support the centre, and White prepares the e4 break or a kingside expansion. Black's …Bd6 and …Qc7 contest the diagonal, but White's harmonious setup gives an easy, pleasant game.",
-    "pawnBreaks": [
-      "c3 supporting d4",
-      "e3-e4 the central break later"
-    ],
-    "pieceManeuvers": [
-      "Bf4-g3 the safe retreat",
-      "Bf1-d3 the h7-battery",
-      "Nb1-d2 supporting e4"
-    ],
-    "strategicThemes": [
-      "Tuck the bishop on g3",
-      "Build the Bd3 battery",
-      "Prepare e4 or a kingside push"
-    ],
-    "endgameTransitions": [
-      "The solid structure favours the better-placed pieces"
-    ],
-    "playableLines": [
-      {
-        "fen": "rnbq1rk1/pp3ppp/3bpn2/2pp4/3P4/2P1PNB1/PP1N1PPP/R2QKB1R b KQ - 0 7",
-        "moves": [
-          "Qc7",
-          "Bd3"
-        ],
-        "annotations": [
-          "…Qc7 — Black lines the queen up against the g3-bishop and prepares to contest the kingside.",
-          "Bd3 — White builds the battery toward h7, completing the harmonious London setup. The bishops point at the king, the knights support a future e4, and White has a comfortable, risk-free game with the easier plan."
-        ],
-        "arrows": [
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "c7",
+              "square": "b6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -48847,19 +48958,188 @@
               "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
-        "learnCues": [
-          "Qc7 — Black contests the diagonal",
-          "Bd3 — build the h7-battery"
-        ],
-        "title": "London vs …e6: the Classical Bg3 + c3 Setup",
-        "intro": "Against the solid …e6, his 65-game plan is the pure classical London: Bf4-g3 tucks the bishop safely, Bd3 builds the battery toward h7, Nbd2 and c3 support the centre, and White prepares the e4 break or a kingside expansion. Black's …Bd6 and …Qc7 contest the diagonal, but White's harmonious setup gives an easy, pleasant game.",
+        "title": "Jobava London: Swing the Queen Over",
+        "intro": "A real GothamChess win vs ChesssKnock. The queen swings to the kingside while the bishop eyes h7.",
         "sources": [
-          "book:chess-strategy",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/London-System",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/London_System"
+          "https://en.wikipedia.org/wiki/London_System",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-london-e6-classical",
+    "openingId": "pro-gothamchess-london",
+    "criticalPositionFen": "1rbq1rk1/pp2nppp/3bp3/8/2pPB3/2P2NB1/PP3PPP/R2QK2R w KQ - 1 13",
+    "title": "London vs …e6: the Classical Bg3 + c3 Setup",
+    "overview": "A real GothamChess win (vs MINDMlNES): the Greek gift on h7 and Ng5+ drag the king out, then the queen and the h-pawn pile in for a crushing attack (~+3).",
+    "pawnBreaks": [
+      {
+        "move": "h2-h4-h5 hunt",
+        "explanation": "The h-pawn marches up to h5 to harry the exposed king.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-g5 attack",
+        "explanation": "The knight checks from g5 after the sacrifice, driving the king up the board."
+      }
+    ],
+    "strategicThemes": [
+      "Open the king with Bxh7+.",
+      "Bring the h-pawn into the attack."
+    ],
+    "endgameTransitions": [
+      "The attack decides; no endgame needed."
+    ],
+    "playableLines": [
+      {
+        "fen": "1rbq1rk1/pp2nppp/3bp3/8/2pPB3/2P2NB1/PP3PPP/R2QK2R w KQ - 1 13",
+        "moves": [
+          "Bxh7+",
+          "Kxh7",
+          "Ng5+",
+          "Kh6",
+          "Qd2",
+          "Kg6",
+          "h4",
+          "Nf5"
+        ],
+        "annotations": [
+          "Bxh7+ — the Greek gift sacrifice rips open the king.",
+          "…Kxh7 — the king takes.",
+          "Ng5+ — check; the knight leaps in.",
+          "…Kh6 — the king is dragged forward.",
+          "Qd2 — bringing the queen toward the king with threats.",
+          "…Kg6 — the king flees.",
+          "h4 — the h-pawn joins the hunt, threatening to march to h5.",
+          "…Nf5 — Black scrambles to defend, but White’s attack is crushing."
+        ],
+        "learnCues": [
+          "Bxh7+ — Greek gift",
+          "Kxh7 — king takes",
+          "Ng5+ — leap in",
+          "Kh6 — dragged up",
+          "Qd2 — queen joins",
+          "Kg6 — king flees",
+          "h4 — h-pawn hunts",
+          "Nf5 — attack crushes"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "e4",
+              "to": "h7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "London: Greek Gift, then the h-pawn",
+        "intro": "A real GothamChess win vs MINDMlNES. Bxh7+ opens the king and the h-pawn joins the hunt.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/London-System",
+          "https://en.wikipedia.org/wiki/London_System",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -48867,41 +49147,110 @@
   {
     "id": "mp-progothamchess-london-c6-c4break",
     "openingId": "pro-gothamchess-london",
-    "criticalPositionFen": "rnbqkb1r/pp2pppp/2p2n2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 2 4",
+    "criticalPositionFen": "r4rk1/pp1n1ppp/2pqp3/8/3PB1b1/2P2N2/PP3PPP/R2QK2R w KQ - 0 13",
     "title": "London vs …c6: the c4 Central Break",
-    "overview": "Against the …c6 Slav-like setup, his 39-game plan switches gears: rather than the slow London, White strikes with c4! to challenge Black's centre directly. After …Bg4 developing, c4 opens the position and gives White active central play and the freer position. A more dynamic London treatment that exploits Black's passive …c6.",
+    "overview": "A real GothamChess win (vs sceleon): the bishop sacrifices on h7, the knight checks from g5, and the king is dragged into the open — a discovered check from the queen seals a clear edge. Clearly better (~+1.5).",
     "pawnBreaks": [
-      "c2-c4 the central break challenging d5"
+      {
+        "move": "c3-c4 break",
+        "explanation": "The London c4 break frees the centre before the kingside sac.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nf3 the natural development",
-      "Bf4 on the active diagonal",
-      "the c4 lever vs d5"
+      {
+        "piece": "Knight",
+        "route": "Nf3-g5 + Ne4 discovery",
+        "explanation": "After the Greek gift, the knight checks from g5 and later uncovers the queen’s check."
+      }
     ],
     "strategicThemes": [
-      "Strike with c4 against …c6",
-      "Open the position for the bishops",
-      "Active central play"
+      "Use the Bxh7+ Greek gift to open the king.",
+      "Bring the knight and queen into the hunt."
     ],
     "endgameTransitions": [
-      "The active pieces favour White in simplification"
+      "The attack and safer king carry the edge into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbqkb1r/pp2pppp/2p2n2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 2 4",
+        "fen": "r4rk1/pp1n1ppp/2pqp3/8/3PB1b1/2P2N2/PP3PPP/R2QK2R w KQ - 0 13",
         "moves": [
-          "Bg4",
-          "c4"
+          "Bxh7+",
+          "Kxh7",
+          "Ng5+",
+          "Kg6",
+          "Qxg4",
+          "Nf6",
+          "Ne4+",
+          "Nxg4"
         ],
         "annotations": [
-          "…Bg4 — Black develops the bishop actively, pinning the f3-knight.",
-          "c4 — the break. White challenges Black’s d5-centre directly, opening the position and seizing active central play. Against the passive …c6, the c4 lever is the dynamic, ambitious choice — White gets the freer game."
+          "Bxh7+ — the Greek gift! the bishop sacrifices to rip open the king.",
+          "…Kxh7 — the king must take.",
+          "Ng5+ — check; the knight leaps into the attack.",
+          "…Kg6 — the king is dragged forward.",
+          "Qxg4 — the queen joins in, regaining material with a raging attack.",
+          "…Nf6 — Black scrambles to defend.",
+          "Ne4+ — a discovered check; the knight steps aside and the queen hits the king.",
+          "…Nxg4 — Black returns material to survive, but White’s safer king keeps a clear edge."
+        ],
+        "learnCues": [
+          "Bxh7+ — the Greek gift",
+          "Kxh7 — king must take",
+          "Ng5+ — knight leaps in",
+          "Kg6 — dragged forward",
+          "Qxg4 — queen joins",
+          "Nf6 — scramble to defend",
+          "Ne4+ — discovered check",
+          "Nxg4 — White stays on top"
         ],
         "arrows": [
+          [
+            {
+              "from": "e4",
+              "to": "h7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
           [],
           []
         ],
         "highlights": [
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "g4",
@@ -48910,22 +49259,30 @@
           ],
           [
             {
-              "square": "c4",
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Bg4 — Black pins the knight",
-          "c4 — strike the centre"
-        ],
-        "title": "London vs …c6: the c4 Central Break",
-        "intro": "Against the …c6 Slav-like setup, his 39-game plan switches gears: rather than the slow London, White strikes with c4! to challenge Black's centre directly. After …Bg4 developing, c4 opens the position and gives White active central play and the freer position. A more dynamic London treatment that exploits Black's passive …c6.",
+        "title": "London: the Greek Gift on h7",
+        "intro": "A real GothamChess win vs sceleon. The classic Bxh7+ sacrifice rips open the king.",
         "sources": [
-          "book:chess-strategy",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/London-System",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/London_System"
+          "https://en.wikipedia.org/wiki/London_System",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -48933,49 +49290,75 @@
   {
     "id": "mp-progothamchess-london-kid-rooksac",
     "openingId": "pro-gothamchess-london",
-    "criticalPositionFen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B1P/2N1P3/PPP2PP1/R2QKBNR b KQkq - 0 5",
+    "criticalPositionFen": "r1bq1rk1/ppp3bp/5n2/3p1p2/3P1B2/2NBP3/PPP2P1Q/R3K1N1 w Q - 0 13",
     "title": "London vs KID: the h4-h5 Rook-Sacrifice Attack",
-    "overview": "His named opposite-side-castling weapon against the …g6 King's Indian setup. With Nc3 and Bf4 aimed at the kingside, White storms with h4-h5 and — when Black takes — sacrifices the rook on h5! The classic Greek-gift-style breakthrough: Rxh5 gxh5 Qxh5 rips open the king and the queen and bishop deliver a crushing attack. Pure London aggression.",
+    "overview": "A real GothamChess win (vs AlexOstrovskiy): after long castling White picks off the c7- and d5-pawns and tucks the knight to f4, emerging a clear pawn up. Clearly better (~+3).",
     "pawnBreaks": [
-      "h4-h5 the storming break",
-      "h5xg6 ripping open the king"
+      {
+        "move": "c-file pressure",
+        "explanation": "Long castling powers the c-file and the central grabs.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Rh1xh5 the rook sacrifice",
-      "Qd1xh5 the queen joining the attack",
-      "Bf4 raking the kingside"
+      {
+        "piece": "Knight",
+        "route": "Nc3-d5 grab",
+        "explanation": "The knight grabs the central d5-pawn before retreating to f4."
+      }
     ],
     "strategicThemes": [
-      "Storm with h4-h5 vs the fianchetto",
-      "Sacrifice the rook on h5",
-      "Crash through to the king"
+      "Castle long and seize the centre.",
+      "Bank the extra pawns and consolidate."
     ],
     "endgameTransitions": [
-      "No endgame — this is a direct mating attack"
+      "A clear pawn up, trades favour White."
     ],
     "playableLines": [
       {
-        "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B1P/2N1P3/PPP2PP1/R2QKBNR b KQkq - 0 5",
+        "fen": "r1bq1rk1/ppp3bp/5n2/3p1p2/3P1B2/2NBP3/PPP2P1Q/R3K1N1 w Q - 0 13",
         "moves": [
-          "O-O",
-          "h5",
-          "Nxh5",
-          "Rxh5",
-          "gxh5",
-          "Qxh5"
+          "O-O-O",
+          "Ne4",
+          "Bxc7",
+          "Qe8",
+          "Nxd5",
+          "Be6",
+          "Nf4",
+          "Rc8"
         ],
         "annotations": [
-          "…O-O — Black castles into the danger zone, directly opposite White’s attacking intentions.",
-          "h5 — the storm. White rams the h-pawn forward to crack open the fianchetto in front of Black’s king.",
-          "…Nxh5 — Black takes the pawn, but this opens the h-file fatally.",
-          "Rxh5 — the rook sacrifice! White gives up the exchange to demolish the kingside pawn shield.",
-          "…gxh5 — Black must accept, shattering the pawns around the king.",
-          "Qxh5 — the queen crashes in. With the king stripped bare, the Bf4 and the heavy pieces deliver a decisive attack. The London’s most violent weapon."
+          "O-O-O — White castles long, putting the rook on the d-file.",
+          "…Ne4 — Black’s knight jumps in.",
+          "Bxc7 — snatching the c7-pawn.",
+          "…Qe8 — Black regroups.",
+          "Nxd5 — taking the central pawn, a clear pawn up.",
+          "…Be6 — developing, hitting d5.",
+          "Nf4 — the knight retreats to f4, keeping the extra pawns.",
+          "…Rc8 — Black activates, but White is up material."
+        ],
+        "learnCues": [
+          "O-O-O — castle long",
+          "Ne4 — Black jumps in",
+          "Bxc7 — grab c7",
+          "Qe8 — regroup",
+          "Nxd5 — grab the centre",
+          "Be6 — hit d5",
+          "Nf4 — keep the pawns",
+          "Rc8 — White is up"
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           []
@@ -48983,56 +49366,60 @@
         "highlights": [
           [
             {
-              "square": "g8",
+              "square": "c1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h5",
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h5",
+              "square": "c7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h5",
+              "square": "e8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h5",
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "h5",
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "O-O — Black castles into it",
-          "h5 — ram the h-pawn",
-          "Nxh5 — opens the h-file",
-          "Rxh5 — the rook sacrifice",
-          "gxh5 — the king is stripped",
-          "Qxh5 — crash in, decisive"
-        ],
-        "title": "London vs KID: the h4-h5 Rook-Sacrifice Attack",
-        "intro": "His named opposite-side-castling weapon against the …g6 King's Indian setup. With Nc3 and Bf4 aimed at the kingside, White storms with h4-h5 and — when Black takes — sacrifices the rook on h5! The classic Greek-gift-style breakthrough: Rxh5 gxh5 Qxh5 rips open the king and the queen and bishop deliver a crushing attack. Pure London aggression.",
+        "title": "London vs KID: Grab the Pawns, Hold the Edge",
+        "intro": "A real GothamChess win vs AlexOstrovskiy. White castles long and snaps off central pawns.",
         "sources": [
-          "book:chess-strategy",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/London-System",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/London_System"
+          "https://en.wikipedia.org/wiki/London_System",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -51454,141 +51841,80 @@
   {
     "id": "mp-progothamchess-closedsic-d6-oppositecastle",
     "openingId": "pro-gothamchess-closed-sicilian",
-    "criticalPositionFen": "r1bq1rk1/pp2pp1p/2np1npb/8/4PP2/1PN5/PBPQ2PP/2KR1BNR b - - 4 9",
+    "criticalPositionFen": "r2qr1k1/pp3p1p/2np1npb/4p3/4PP2/1PN3P1/PBPQb2P/1K1R2NR w - - 0 13",
     "title": "vs …d6: the Qd2 + O-O-O Opposite-Castle Attack",
-    "overview": "His signature against the …d6 Sicilian across 73 games. After d4 and Qxd4, White sets up the aggressive opposite-side-castling attack: Qd2, b3 and Bb2 train the bishop on the long diagonal, f4 grabs space, and O-O-O commits to a kingside pawn storm. With both sides castling on opposite wings, it becomes a race — and White's g3-h4-g4 storm against Black's king is the whole point.",
+    "overview": "A real GothamChess win (vs Karatsev): after the central trades open the f-file, White reroutes a knight back to the dominant d5 outpost and keeps the initiative. Clearly better (~+1.3).",
     "pawnBreaks": [
-      "f2-f4 the kingside space",
-      "g3 supporting the f4-g4 storm"
+      {
+        "move": "f4 lever",
+        "explanation": "The f4 break opens the f-file for the rooks.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Qd2 + O-O-O the opposite-castle setup",
-      "Bc1-b2 the long-diagonal bishop",
-      "Kb1 the prophylactic king tuck"
+      {
+        "piece": "Knight",
+        "route": "Nc3-d5 reoccupy",
+        "explanation": "A knight returns to the d5 outpost after the trades."
+      }
     ],
     "strategicThemes": [
-      "Castle opposite with O-O-O",
-      "Train the Bb2 on the long diagonal",
-      "Storm the kingside with g3-f4-g4"
+      "Open the f-file with f4.",
+      "Reoccupy d5 with a knight."
     ],
     "endgameTransitions": [
-      "Keep attacking — opposite castling means win the race"
+      "The outpost and open file persist into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/pp2pp1p/2np1npb/8/4PP2/1PN5/PBPQ2PP/2KR1BNR b - - 4 9",
+        "fen": "r2qr1k1/pp3p1p/2np1npb/4p3/4PP2/1PN3P1/PBPQb2P/1K1R2NR w - - 0 13",
         "moves": [
-          "e5",
-          "g3",
-          "Re8",
-          "Kb1"
+          "Ngxe2",
+          "exf4",
+          "Nxf4",
+          "Rc8",
+          "Qg2",
+          "Ne5",
+          "Ncd5",
+          "Nxd5"
         ],
         "annotations": [
-          "…e5 — Black strikes in the centre, trying to open lines before White’s storm arrives.",
-          "g3 — White reinforces the f4-pawn and prepares the g4-h4 pawn storm against Black’s king.",
-          "…Re8 — Black brings the rook to the centre.",
-          "Kb1 — the prophylactic king tuck, the final preparation before the storm. With the Bb2 raking the long diagonal and the kingside pawns set to roll, White’s attack on Black’s king is faster — exactly what the opposite-castle setup is built for."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
+          "Ngxe2 — recapturing with the knight.",
+          "…exf4 — Black opens the f-file.",
+          "Nxf4 — recapturing; the knight eyes d5 and e6.",
+          "…Rc8 — contesting the c-file.",
+          "Qg2 — the queen eyes the long diagonal.",
+          "…Ne5 — Black centralises a knight.",
+          "Ncd5 — the knight reoccupies the dominant d5 outpost.",
+          "…Nxd5 — Black trades it off, but White keeps the initiative."
         ],
         "learnCues": [
-          "e5 — Black opens the centre",
-          "g3 — support f4, prep the storm",
-          "Re8 — Black centralises",
-          "Kb1 — tuck the king, then storm"
-        ],
-        "title": "vs …d6: the Qd2 + O-O-O Opposite-Castle Attack",
-        "intro": "His signature against the …d6 Sicilian across 73 games. After d4 and Qxd4, White sets up the aggressive opposite-side-castling attack: Qd2, b3 and Bb2 train the bishop on the long diagonal, f4 grabs space, and O-O-O commits to a kingside pawn storm. With both sides castling on opposite wings, it becomes a race — and White's g3-h4-g4 storm against Black's king is the whole point.",
-        "sources": [
-          "book:chess-fundamentals",
-          "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-closedsic-e6-oooattack",
-    "openingId": "pro-gothamchess-closed-sicilian",
-    "criticalPositionFen": "r1bqk2r/pp1p1ppp/2n1pn2/8/1b2PB2/2NQ4/PPP2PPP/2KR1BNR b kq - 6 7",
-    "title": "vs …e6: Qd3 + Bf4 + O-O-O Attack",
-    "overview": "Against the …e6 setup, his 59-game plan is the rapid O-O-O attack: d4 and Qxd4, then Qd3 and Bf4 develop with pressure, and O-O-O commits to the kingside assault. After Nge2 completes development, White is ready to roll the g- and h-pawns at Black's king. The early queen trade on d4 hasn't slowed White down — the initiative and the attacking setup carry the day.",
-    "pawnBreaks": [
-      "the kingside pawn storm",
-      "e5 a central clamp"
-    ],
-    "pieceManeuvers": [
-      "Qd1-d3 the active queen",
-      "Bc1-f4 developing with pressure",
-      "Ng1-e2 completing development"
-    ],
-    "strategicThemes": [
-      "Develop with Qd3 and Bf4",
-      "Castle opposite with O-O-O",
-      "Attack the king on the kingside"
-    ],
-    "endgameTransitions": [
-      "Keep attacking — opposite castling is a race"
-    ],
-    "playableLines": [
-      {
-        "fen": "r1bqk2r/pp1p1ppp/2n1pn2/8/1b2PB2/2NQ4/PPP2PPP/2KR1BNR b kq - 6 7",
-        "moves": [
-          "O-O",
-          "Nge2",
-          "e5",
-          "Bg5"
-        ],
-        "annotations": [
-          "…O-O — Black castles kingside, directly into White’s attacking intentions.",
-          "Nge2 — White completes development, the knight heading toward g3 and the kingside.",
-          "…e5 — Black strikes back in the centre, seeking counterplay.",
-          "Bg5 — White pins the f6-knight, increasing the pressure on Black’s kingside. With pieces aimed at the castled king and the pawns set to storm, White has a dangerous attacking initiative — the early Qxd4 has cost nothing."
+          "Ngxe2 — recapture",
+          "exf4 — open the f-file",
+          "Nxf4 — eye d5 and e6",
+          "Rc8 — contest c-file",
+          "Qg2 — long diagonal",
+          "Ne5 — centralise",
+          "Ncd5 — reoccupy d5",
+          "Nxd5 — White keeps it"
         ],
         "arrows": [
           [],
           [],
           [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
           [
             {
               "square": "e2",
@@ -51597,7 +51923,174 @@
           ],
           [
             {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
               "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Closed Sicilian: Recapture and Reoccupy d5",
+        "intro": "A real GothamChess win vs Karatsev. Trades open the f-file; the knight returns to d5.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Closed-Sicilian",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed_Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-closedsic-e6-oooattack",
+    "openingId": "pro-gothamchess-closed-sicilian",
+    "criticalPositionFen": "r1bq1rk1/p2p1p2/1pn2n1p/2bNp1p1/4P2B/P2Q4/1PP1NPPP/2KR1B1R w - - 0 13",
+    "title": "vs …e6: Qd3 + Bf4 + O-O-O Attack",
+    "overview": "A real GothamChess win: h4 storms forward and the queen lifts to f3 to back the attack; when the h-file opens, White’s heavy pieces pour in. Completely winning (~+5.8).",
+    "pawnBreaks": [
+      {
+        "move": "h4-h5 storm",
+        "explanation": "h4 then the hxg5 break tears open the h-file.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-f3 attack",
+        "explanation": "The queen lifts to f3 to back the h-file storm."
+      }
+    ],
+    "strategicThemes": [
+      "Open the h-file against the castled king.",
+      "Back the storm with the queen."
+    ],
+    "endgameTransitions": [
+      "The attack decides before any endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/p2p1p2/1pn2n1p/2bNp1p1/4P2B/P2Q4/1PP1NPPP/2KR1B1R w - - 0 13",
+        "moves": [
+          "Bg3",
+          "a5",
+          "h4",
+          "Ba6",
+          "Qf3",
+          "Kg7",
+          "hxg5",
+          "hxg5"
+        ],
+        "annotations": [
+          "Bg3 — repositioning the bishop onto a long diagonal.",
+          "…a5 — Black starts a queenside push.",
+          "h4 — White’s kingside storm begins.",
+          "…Ba6 — Black develops the bishop.",
+          "Qf3 — the queen joins the kingside build-up.",
+          "…Kg7 — the king sidesteps.",
+          "hxg5 — opening the h-file.",
+          "…hxg5 — recapturing, but the open h-file is White’s highway to the king."
+        ],
+        "learnCues": [
+          "Bg3 — long diagonal",
+          "a5 — Black pushes",
+          "h4 — start the storm",
+          "Ba6 — develop",
+          "Qf3 — back the storm",
+          "Kg7 — sidestep",
+          "hxg5 — open the h-file",
+          "hxg5 — White pours in"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "h2",
+              "to": "h4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -51608,19 +52101,13 @@
             }
           ]
         ],
-        "learnCues": [
-          "O-O — Black castles into it",
-          "Nge2 — develop toward the king",
-          "e5 — Black counters",
-          "Bg5 — pin, increase pressure"
-        ],
-        "title": "vs …e6: Qd3 + Bf4 + O-O-O Attack",
-        "intro": "Against the …e6 setup, his 59-game plan is the rapid O-O-O attack: d4 and Qxd4, then Qd3 and Bf4 develop with pressure, and O-O-O commits to the kingside assault. After Nge2 completes development, White is ready to roll the g- and h-pawns at Black's king. The early queen trade on d4 hasn't slowed White down — the initiative and the attacking setup carry the day.",
+        "title": "Closed Sicilian: Storm the h-file",
+        "intro": "A real GothamChess win. Opposite castling, and White’s h-pawn rips open the h-file.",
         "sources": [
           "book:chess-fundamentals",
-          "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+          "https://www.chess.com/openings/Closed-Sicilian",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed_Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -51628,45 +52115,92 @@
   {
     "id": "mp-progothamchess-closedsic-g6-nd5",
     "openingId": "pro-gothamchess-closed-sicilian",
-    "criticalPositionFen": "r1bq1rk1/pp2ppbp/2np1np1/3N4/4P3/2PQ1N2/PP3PPP/R1B1KB1R w KQ - 1 9",
+    "criticalPositionFen": "r2q1rk1/pp2ppb1/3p2pp/3PnbB1/3N4/2P1Q3/PP3PPP/R3KB1R w KQ - 0 13",
     "title": "vs …g6: the Nd5 Outpost + Bg5 Bind",
-    "overview": "Against the …g6 Dragon-like setup, his 29-game plan uses the strong Nd5 outpost. After d4 and Qxd4, White plays Qd3, c3, and plants the knight on d5 — the dominant central square. The Bg5 pin adds pressure, and when Black trades on d5, the recapture exd5 gives White a protected passed pawn and a space bind. A positional squeeze against the fianchetto.",
+    "overview": "A real GothamChess win (vs JackRodgers): the knight crashes through on f5 and g7, stripping the fianchetto, and the queen swings to g5 to harry the exposed king. Clearly better (~+1.1).",
     "pawnBreaks": [
-      "e4xd5 creating the protected passed pawn",
-      "c3 supporting d4"
+      {
+        "move": "f4-f5 lever",
+        "explanation": "The f-pawn levers the knight into f5 against the fianchetto.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Nc3-d5 the dominant outpost",
-      "Bc1-g5 the pin",
-      "Qd1-d3 the centralised queen"
+      {
+        "piece": "Knight",
+        "route": "Nf5-g7 demolition",
+        "explanation": "The knight smashes through f5 and g7 to strip the fianchetto."
+      }
     ],
     "strategicThemes": [
-      "Plant the Nd5 outpost",
-      "Pin with Bg5",
-      "Win a space bind with exd5"
+      "Demolish the fianchetto with a knight sac on g7.",
+      "Bring the queen to g5 against the bare king."
     ],
     "endgameTransitions": [
-      "The passed d5-pawn is an endgame asset"
+      "The exposed king is the story, not the endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bq1rk1/pp2ppbp/2np1np1/3N4/4P3/2PQ1N2/PP3PPP/R1B1KB1R w KQ - 1 9",
+        "fen": "r2q1rk1/pp2ppb1/3p2pp/3PnbB1/3N4/2P1Q3/PP3PPP/R3KB1R w KQ - 0 13",
         "moves": [
-          "Bg5",
-          "Nxd5",
-          "exd5"
+          "Nxf5",
+          "hxg5",
+          "Nxg7",
+          "Kxg7",
+          "Qxg5",
+          "Qb6",
+          "Qd2",
+          "Rac8"
         ],
         "annotations": [
-          "Bg5 — White pins the f6-knight, increasing the pressure on the d5-outpost and the kingside.",
-          "…Nxd5 — Black trades off the dominant knight, the only way to relieve the bind.",
-          "exd5 — White recaptures, gaining a protected passed pawn on d5 and a space advantage. The Nd5-outpost has converted into a permanent structural edge — White squeezes from a position of strength against the fianchetto setup."
+          "Nxf5 — the knight grabs the f5-bishop, crashing into the kingside.",
+          "…hxg5 — Black grabs a bishop back.",
+          "Nxg7 — taking on g7, stripping the king’s fianchetto defender.",
+          "…Kxg7 — the king is dragged out.",
+          "Qxg5 — the queen recovers material and eyes the exposed king.",
+          "…Qb6 — Black counterattacks.",
+          "Qd2 — the queen regroups, keeping the attack alive.",
+          "…Rac8 — Black activates, but White’s attack on the bare king persists."
+        ],
+        "learnCues": [
+          "Nxf5 — crash in",
+          "hxg5 — Black grabs back",
+          "Nxg7 — strip the fianchetto",
+          "Kxg7 — king dragged out",
+          "Qxg5 — eye the king",
+          "Qb6 — Black counters",
+          "Qd2 — keep the attack",
+          "Rac8 — White presses on"
         ],
         "arrows": [
+          [
+            {
+              "from": "d4",
+              "to": "f5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "f5",
+              "to": "g7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
           [],
           [],
           []
         ],
         "highlights": [
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "g5",
@@ -51675,29 +52209,48 @@
           ],
           [
             {
-              "square": "d5",
+              "square": "g7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d5",
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Bg5 — pin, pressure d5",
-          "Nxd5 — Black relieves the bind",
-          "exd5 — protected passed pawn"
-        ],
-        "title": "vs …g6: the Nd5 Outpost + Bg5 Bind",
-        "intro": "Against the …g6 Dragon-like setup, his 29-game plan uses the strong Nd5 outpost. After d4 and Qxd4, White plays Qd3, c3, and plants the knight on d5 — the dominant central square. The Bg5 pin adds pressure, and when Black trades on d5, the recapture exd5 gives White a protected passed pawn and a space bind. A positional squeeze against the fianchetto.",
+        "title": "Closed Sicilian: Smash the Fianchetto",
+        "intro": "A real GothamChess win vs JackRodgers. White trades pieces to tear open the fianchettoed king.",
         "sources": [
           "book:chess-fundamentals",
-          "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+          "https://www.chess.com/openings/Closed-Sicilian",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed_Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -51705,39 +52258,75 @@
   {
     "id": "mp-progothamchess-closedsic-bb5-bg5",
     "openingId": "pro-gothamchess-closed-sicilian",
-    "criticalPositionFen": "r1bqkb1r/1p2pppp/p2p1n2/8/3QP3/2N2N2/PPP2PPP/R1B1K2R w KQkq - 1 9",
+    "criticalPositionFen": "r1b1k2r/1p2bppp/pq2pn2/4Q1B1/8/2N2N2/PPP2PPP/2KR3R w kq - 1 13",
     "title": "Bb5 vs …Nc6: Trade, Qxd4 + Bg5 Initiative",
-    "overview": "The Bb5 line where Black plays …Nd4. After the knight trades on b5 and White recaptures, the d4 break and Qxd4 reach an open position with a slight lead in development. Bg5 pins the f6-knight and O-O-O sets up the attack. White's pieces are the more active, and the early queen on d4 controls key central squares — a comfortable, initiative-keeping handling of the Bb5 Sicilian.",
+    "overview": "A real GothamChess win: with kings on opposite wings, h4 launches the storm and the queen swings to f4 while Black’s counterplay arrives a tempo too late. Clearly better (~+1.2).",
     "pawnBreaks": [
-      "d4 opening the centre"
+      {
+        "move": "h4-h5 storm",
+        "explanation": "h4 then h5 storms the kingside in the castling race.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bc1-g5 the pin",
-      "Qd4 the centralised queen",
-      "O-O-O setting up the attack"
+      {
+        "piece": "Rook",
+        "route": "Rd1-d4 lift",
+        "explanation": "The rook lifts to d4, ready to swing into the attack."
+      }
     ],
     "strategicThemes": [
-      "Open the centre with d4",
-      "Pin with Bg5",
-      "Keep the initiative with the active queen"
+      "Win the opposite-side castling race.",
+      "Lift the rook to join the storm."
     ],
     "endgameTransitions": [
-      "The active pieces favour White in simplification"
+      "The attack aims to land before any endgame."
     ],
     "playableLines": [
       {
-        "fen": "r1bqkb1r/1p2pppp/p2p1n2/8/3QP3/2N2N2/PPP2PPP/R1B1K2R w KQkq - 1 9",
+        "fen": "r1b1k2r/1p2bppp/pq2pn2/4Q1B1/8/2N2N2/PPP2PPP/2KR3R w kq - 1 13",
         "moves": [
-          "Bg5",
-          "e6",
-          "O-O-O"
+          "Kb1",
+          "O-O",
+          "h4",
+          "h6",
+          "Qf4",
+          "Qb4",
+          "Rd4",
+          "Qc5"
         ],
         "annotations": [
-          "Bg5 — White pins the f6-knight, the active developing move that increases central and kingside pressure.",
-          "…e6 — Black solidifies, opening the dark bishop.",
-          "O-O-O — White castles queenside, connecting the rooks and setting up the kingside attack. The centralised queen on d4, the Bg5 pin, and the active pieces give White a pleasant, initiative-keeping game from the Bb5 Sicilian."
+          "Kb1 — tucking the king for the opposite-side race.",
+          "…O-O — Black castles short; the race is on.",
+          "h4 — the kingside pawn storm begins.",
+          "…h6 — Black braces.",
+          "Qf4 — the queen swings toward the kingside.",
+          "…Qb4 — Black counters on the queenside.",
+          "Rd4 — the rook lifts, ready to swing across.",
+          "…Qc5 — Black offers a trade, but White’s attack is faster."
+        ],
+        "learnCues": [
+          "Kb1 — tuck for the race",
+          "O-O — race is on",
+          "h4 — start the storm",
+          "h6 — brace",
+          "Qf4 — swing the queen",
+          "Qb4 — Black counters",
+          "Rd4 — lift the rook",
+          "Qc5 — White is faster"
         ],
         "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "h2",
+              "to": "h4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
           [],
           [],
           []
@@ -51745,35 +52334,60 @@
         "highlights": [
           [
             {
-              "square": "g5",
+              "square": "b1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e6",
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c1",
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Bg5 — pin the knight",
-          "e6 — Black solidifies",
-          "O-O-O — connect, set up the attack"
-        ],
-        "title": "Bb5 vs …Nc6: Trade, Qxd4 + Bg5 Initiative",
-        "intro": "The Bb5 line where Black plays …Nd4. After the knight trades on b5 and White recaptures, the d4 break and Qxd4 reach an open position with a slight lead in development. Bg5 pins the f6-knight and O-O-O sets up the attack. White's pieces are the more active, and the early queen on d4 controls key central squares — a comfortable, initiative-keeping handling of the Bb5 Sicilian.",
+        "title": "Closed Sicilian: Win the Castling Race",
+        "intro": "A real GothamChess win vs donwhitenoise. Opposite-side castling — White’s kingside storm is faster.",
         "sources": [
           "book:chess-fundamentals",
-          "https://www.chess.com/openings/Sicilian-Defense-Closed-Variation",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed"
+          "https://www.chess.com/openings/Closed-Sicilian",
+          "https://en.wikipedia.org/wiki/Sicilian_Defence,_Closed_Variation",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
