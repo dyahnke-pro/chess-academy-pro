@@ -9681,25 +9681,25 @@
     "id": "mp-italiangame-evans",
     "openingId": "italian-game",
     "title": "Evans Gambit: the Big Centre Attack",
-    "criticalPositionFen": "r1bqk1nr/ppp2ppp/1bnp4/8/2BPP3/5N2/P4PPP/RNBQ1RK1 w kq - 1 9",
+    "criticalPositionFen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
     "overview": "The romantic gambit pays for a broad centre and two raking bishops. White rolls d4-d5 to gain space, plants the dark-squared bishop on b2 aimed at g7, and throws the c4-bishop and queen at f7. One pawn for a ferocious attack on the king.",
     "pawnBreaks": [
       {
-        "move": "d4-d5",
-        "explanation": "d5 gains space with tempo, kicking the c6-knight to the rim and cramping Black.",
-        "fen": "r1bqk1nr/ppp2ppp/1bnp4/8/2BPP3/5N2/P4PPP/RNBQ1RK1 w kq - 1 9"
+        "move": "b4 and d4 — open lines for the initiative",
+        "explanation": "The Evans sacrifices b4 to build the c3-d4 centre and open lines toward the black king.",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
       }
     ],
     "pieceManeuvers": [
       {
         "piece": "Bishop",
-        "route": "Bc1-b2",
-        "explanation": "The dark-squared bishop goes to b2, raking the long diagonal toward g7."
+        "route": "Bc4 — eye f7",
+        "explanation": "The bishop bears down on f7, the focus of White’s attack."
       },
       {
-        "piece": "Knight",
-        "route": "Nb1-c3",
-        "explanation": "The queen-knight develops to c3, supporting the centre and the kingside push."
+        "piece": "Pawn",
+        "route": "c3 and d4 — the big centre",
+        "explanation": "White builds and opens the centre with gain of tempo."
       }
     ],
     "strategicThemes": [
@@ -9712,88 +9712,79 @@
     ],
     "playableLines": [
       {
-        "title": "Evans Gambit: the Big Centre Attack",
-        "fen": "r1bqk1nr/ppp2ppp/1bnp4/8/2BPP3/5N2/P4PPP/RNBQ1RK1 w kq - 1 9",
+        "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
         "moves": [
-          "d5",
-          "Na5",
-          "Bb2",
-          "Ne7",
-          "Bd3",
+          "b4",
+          "Bxb4",
+          "c3",
+          "Ba5",
+          "d4",
+          "exd4",
           "O-O",
-          "Nc3"
+          "Nge7"
         ],
         "annotations": [
-          "d5 slams the centre forward with tempo, kicking the c6-knight and seizing space for the gambit.",
-          "…Na5 — the knight flees to the rim, hitting the c4-bishop but abandoning the kingside.",
-          "Bb2 plants the dark-squared bishop on the long diagonal, x-raying through to g7.",
-          "…Ne7 scrambles the other knight back to guard the kingside light squares.",
-          "Bd3 reloads the bishop toward h7 — both bishops now trained on the black king.",
-          "…O-O tucks the king away, but it castles straight into the crossfire of the two bishops.",
-          "Nc3 brings up the last piece: a full pawn centre, two raking bishops, every piece aimed at the king — full value for the pawn."
+          "b4!? The Evans Gambit — White offers a wing pawn to deflect Black's bishop and seize the centre with tempo.",
+          "…Bxb4 accepts the challenge, grabbing the pawn.",
+          "c3! White hits the bishop, gaining a tempo to prepare the big d4-centre.",
+          "…Ba5 retreats, keeping the extra pawn for now.",
+          "d4! White slams the centre open, the gambit's whole point — a broad pawn front and open lines for a fistful of tempi.",
+          "…exd4 grabs another pawn, but every capture loses time.",
+          "White castles, completing development while Black is still untangling — the lead in development is the Evans' compensation.",
+          "…Nge7 develops, but White's centre, open lines, and pressure on f7 give a raging initiative for the pawns. Vachier-Lagrave outplayed So from this classic Evans footing."
         ],
         "arrows": [
           [],
-          [
-            {
-              "from": "a5",
-              "to": "c4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          [
-            {
-              "from": "b2",
-              "to": "g7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           [],
           [],
           [],
           []
         ],
+        "title": "The Evans Gambit (Vachier-Lagrave–So)",
         "highlights": [
           [
             {
-              "square": "d5",
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d4",
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c6",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
               "square": "a5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "b2",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c1",
+              "square": "d4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "g7",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
@@ -9802,58 +9793,26 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h7",
+              "square": "f7",
               "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "d5 — centre forward",
-          "Na5 — knight to the rim",
-          "Bb2 — long diagonal",
-          "Ne7 — scramble back",
-          "Bd3 — aim at h7",
-          "O-O — into the crossfire",
-          "Nc3 — full attack"
-        ],
+        "intro": "White sacrifices b4 for the centre and the attack.",
         "sources": [
-          "book:italian-game",
+          "concept:pos-initiative",
           "concept:pos-center",
-          "https://www.chess.com/openings/Italian-Game"
+          "https://en.wikipedia.org/wiki/Evans_Gambit"
+        ],
+        "learnCues": [
+          "b4 — the Evans pawn sac",
+          "…Bxb4 — accept",
+          "c3 — hit the bishop, gain time",
+          "…Ba5 — retreat, keep the pawn",
+          "d4 — slam the centre open",
+          "…exd4 — grab, lose time",
+          "O-O — castle, lead in development",
+          "…Nge7 — develop under fire"
         ]
       }
     ]
@@ -11266,20 +11225,25 @@
     "id": "mp-kingsindianattack-kid",
     "openingId": "kings-indian-attack",
     "title": "KIA vs ...g6: Centre and Queenside",
-    "criticalPositionFen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7",
+    "criticalPositionFen": "rnbqk2r/ppppppbp/5np1/8/8/5NP1/PPPPPPBP/RNBQK2R w KQkq - 2 4",
     "overview": "Against the solid ...g6 fianchetto, the kingside storm is blunted, so White pivots: stake the centre with e4, expand on the queenside with c3 and b4, and break with d4 to open lines for the bishops.",
     "pawnBreaks": [
       {
-        "move": "d3-d4",
-        "explanation": "After staking e4 and expanding, d4 breaks the centre and frees the fianchettoed bishop.",
-        "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7"
+        "move": "e4 then f4 — the kingside expansion",
+        "explanation": "The KIA stakes the centre with e4, then expands on the kingside where White attacks.",
+        "fen": "rnbqk2r/ppppppbp/5np1/8/8/5NP1/PPPPPPBP/RNBQK2R w KQkq - 2 4"
       }
     ],
     "pieceManeuvers": [
       {
+        "piece": "Knight",
+        "route": "Nb1-d2 — the KIA regroup",
+        "explanation": "The knight reroutes toward the kingside via f1-h2-g4 in the KIA plan."
+      },
+      {
         "piece": "Pawn",
-        "route": "b2-b4-b5",
-        "explanation": "Queenside expansion where Black is least active."
+        "route": "e4 — stake the centre",
+        "explanation": "The central advance defines the KIA and prepares kingside play."
       }
     ],
     "strategicThemes": [
@@ -11292,59 +11256,78 @@
     ],
     "playableLines": [
       {
-        "title": "KIA vs ...g6: Centre and Queenside",
-        "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/8/3P1NP1/PPPNPPBP/R1BQ1RK1 w - - 0 7",
+        "fen": "rnbqk2r/ppppppbp/5np1/8/8/5NP1/PPPPPPBP/RNBQK2R w KQkq - 2 4",
         "moves": [
+          "O-O",
+          "O-O",
+          "d3",
+          "d6",
+          "Nbd2",
+          "e5",
           "e4",
-          "Nc6",
-          "c3",
-          "h6",
-          "b4",
-          "Be6"
+          "Nc6"
         ],
         "annotations": [
-          "e4 — White stakes the centre.",
-          "…Nc6 — Black develops, eyeing the d4-square and central play.",
-          "c3 — White prepares b4.",
-          "…h6 — Black makes luft.",
-          "b4 — White expands on the queenside.",
-          "…Be6 — Black develops the bishop to e6."
-        ],
-        "sources": [
-          "concept:att-kingside-storm",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/King's_Indian_Attack"
-        ],
-        "learnCues": [
-          "e4 — stake the centre",
-          "Nc6 — develop the knight",
-          "c3 — prepare b4",
-          "h6 — make luft",
-          "b4 — queenside expansion",
-          "Be6 — develop the bishop"
+          "White castles, completing the King's Indian Attack's fianchetto setup.",
+          "…O-O — Black mirrors with the KID-style fianchetto.",
+          "d3 supports the coming e4 — the KIA is a system, played the same against almost anything.",
+          "…d6 mirrors, both sides building symmetrical structures.",
+          "Nbd2 develops the knight toward the kingside, the KIA's standard regrouping.",
+          "…e5 grabs central space.",
+          "e4! White stakes out the centre, the KIA's key advance, and prepares the kingside expansion with f4 or the Nf1-h2-g4 manoeuvre.",
+          "…Nc6 develops. White has the full KIA setup: the e4-centre, the long-diagonal bishop, and a clear kingside plan — Moussard outplayed Grigoryan from this harmonious footing."
         ],
         "arrows": [
           [],
-          [
-            {
-              "from": "c6",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           [],
           [],
           [],
           []
         ],
+        "title": "The King’s Indian Attack (Moussard–Grigoryan)",
         "highlights": [
           [
             {
-              "square": "e4",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e2",
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -11352,60 +11335,24 @@
             {
               "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "h6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "intro": "White builds the KIA system and stakes the centre with e4.",
+        "sources": [
+          "concept:pos-center",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
+        ],
+        "learnCues": [
+          "O-O — complete the setup",
+          "…O-O — Black mirrors",
+          "d3 — support e4",
+          "…d6 — symmetrical",
+          "Nbd2 — the KIA regroup",
+          "…e5 — central space",
+          "e4 — stake the centre",
+          "…Nc6 — develop"
         ]
       }
     ]

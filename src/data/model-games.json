@@ -6666,5 +6666,41 @@
     "criticalMoments": [],
     "middlegameTheme": "The ...Bb7 fianchetto, fight for e4 and the centre.",
     "lessonSummary": "Fianchetto on b7, contest e4, and reach a solid game."
+  },
+  {
+    "id": "mg-italian-game-evans-gambit-accepted",
+    "openingId": "italian-game",
+    "white": "Vachier Lagrave, M.",
+    "black": "So, W.",
+    "whiteElo": 2774,
+    "blackElo": 2767,
+    "result": "1-0",
+    "year": 2019,
+    "event": "chess.com Speed 2019",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nge7 cxd4 d6 Ng5 d5 exd5 Nxd5 Nxf7 Kxf7 Qf3+ Qf6 Bxd5+ Ke7 Qe4+ Kd8 Be3 Bf5 Qf3 Bb6 Nc3 Bg6 Qg3 Qd6 Bf4 Qd7 Rfe1 Nxd4 Rad1 Re8 Rxe8+ Qxe8 Be5 c6 Bc4 Qd7 Bxd4 Bxd4 Qh4+ Bf6 Rxd7+ Kxd7 Qh3+ Kc7 Qg3+ Kb6 Na4+ Ka5 Nc5 b5 Qa3+ Kb6 Nd7+ Kc7 Nxf6 gxf6 Qa5+ Kb7 Bxb5 cxb5 Qxb5+ Kc7 Qc5+ Kb7 Qd5+ Kb8 Qc6 a5 Qxf6 Ra7 g4 Rb7 Qe5+ Kc8 Qxa5 Be4 Qc3+ Rc7 Qe3 Bg6 h4 Rc6 h5 Bf7 Qf3 Rc7 Qf5+ Rd7 Qxh7 Kc7 Qc2+ Kd8 h6 Bg8 g5 Bh7 g6 Bxg6 Qxg6 Ke7 h7 Rd6 Qxd6+ Kxd6 h8=Q Kd5 f4 Kc4 Qe5 Kb4 f5 Ka3 f6 Kxa2 Qb5 Ka1 f7 Ka2 f8=Q Ka1 Qa8#",
+    "studentSide": "white",
+    "overview": "Vachier-Lagrave wields the romantic Evans Gambit against So: the b4 pawn sacrifice rips open lines, c3 and d4 build a big centre with tempo, and White's rapid development and attacking chances on f7 fully justify the pawn. A model of the Evans' enduring practical venom.",
+    "criticalMoments": [],
+    "middlegameTheme": "Sacrifice b4 for the big centre and the f7 attack.",
+    "lessonSummary": "Offer b4, build the c3-d4 centre, and attack with the lead in development.",
+    "variation": "Evans Gambit Accepted: Main Line"
+  },
+  {
+    "id": "mg-kings-indian-attack-kid",
+    "openingId": "kings-indian-attack",
+    "white": "Moussard, J.",
+    "black": "Grigoryan, K2.",
+    "whiteElo": 2608,
+    "blackElo": 2608,
+    "result": "1-0",
+    "year": 2019,
+    "event": "Chess24 Banter Blitz Cup",
+    "pgn": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O d3 d6 Nbd2 e5 e4 Nc6 c3 Re8 Re1 a5 a4 d5 exd5 Nxd5 Nc4 Bf5 Nh4 Be6 Nf3 f6 h4 Qd7 h5 Rad8 hxg6 hxg6 Qc2 Bf7 Bd2 Nde7 Bf1 Bxc4 dxc4 f5 Be3 e4 Nh4 Ne5 Bg2 Qd3 Qb3 Qxc4 Qxb7 Rb8 Qa7 N7c6 Qc5 Qxc5 Bxc5 Nd3 Ba3 Nxe1 Rxe1 Ne5 Re2 Red8 Bf1 Rd1 Kg2 Bf6 f4 Nc4 Nxg6 Kf7 Ne5+ Nxe5 fxe5 Bxe5 Rf2 Rg8 Bc4+ Kg7 Bxg8 Kxg8 Rxf5 Rd2+ Kh3 Bd6 Rg5+ Kf7 Rg4 Bxa3 bxa3 Rd3 Rxe4 Rxc3 Re5 Rxa3 Rxa5 Rc3 Ra7 Rc6 a5 Ke6 a6 Kd7 Ra8 Rc1 a7 Ra1 g4 Kc6 g5 Kb7 Rg8 Kxa7 g6 Ra3+ Kg4 Ra4+ Kf5 Ra6 g7 Ra5+ Ke6 Ra6+ Kd7 Rd6+ Kxc7",
+    "studentSide": "white",
+    "overview": "Moussard shows the King's Indian Attack against a KID-style ...g6 setup: the universal d3/Nbd2/e4 formation, then e4 stakes the centre and White pivots toward kingside expansion. A model of the KIA's flexible, system-based approach turning into a kingside initiative.",
+    "criticalMoments": [],
+    "middlegameTheme": "The e4 centre, kingside expansion in the KIA.",
+    "lessonSummary": "Build the KIA system, play e4, and expand on the kingside.",
+    "variation": "KIA vs KID-Style Response"
   }
 ]
