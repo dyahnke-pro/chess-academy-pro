@@ -6434,7 +6434,10 @@
     "overview": "Nepomniachtchi shows the Classical Najdorf's dynamism against Carlsen: the ...e5 wedge stakes out the centre, then ...b5-b4 and ...Bb7 generate the queenside counterplay that is the Najdorf's lifeblood. A model of meeting the quiet 6.Be2 with sharp, active piece play and outplaying even the World Champion.",
     "criticalMoments": [],
     "middlegameTheme": "The ...e5 centre, ...b5-b4 queenside counterplay.",
-    "lessonSummary": "Plant the ...e5 wedge, expand with ...b5, and attack on the queenside."
+    "lessonSummary": "Plant the ...e5 wedge, expand with ...b5, and attack on the queenside.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+    ]
   },
   {
     "id": "mg-sicilian-najdorf-najdorf-adams-attack-6-g3-fianchetto",
@@ -6452,7 +6455,10 @@
     "criticalMoments": [],
     "middlegameTheme": "The ...e5 wedge, ...b5 expansion vs the fianchetto.",
     "lessonSummary": "Plant ...e5, expand with ...b5, and outplay the quiet g3 setup.",
-    "variation": "Najdorf: Adams Attack (6.g3 Fianchetto)"
+    "variation": "Najdorf: Adams Attack (6.g3 Fianchetto)",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+    ]
   },
   {
     "id": "mg-sicilian-najdorf-najdorf-poisoned-pawn-6-bg5-qb6",
@@ -6470,7 +6476,10 @@
     "criticalMoments": [],
     "middlegameTheme": "Grab the b2-pawn, defend the lead in development, convert.",
     "lessonSummary": "Take the poisoned pawn, survive the attack, and win with the extra material.",
-    "variation": "Najdorf: Poisoned Pawn (6.Bg5 Qb6)"
+    "variation": "Najdorf: Poisoned Pawn (6.Bg5 Qb6)",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
+    ]
   },
   {
     "id": "mg-sicilian-dragon-classical-variation",
@@ -6488,7 +6497,10 @@
     "criticalMoments": [],
     "middlegameTheme": "The g7-bishop, ...a6/...b5 queenside expansion.",
     "lessonSummary": "Fianchetto, expand with ...a6/...b5, and use the Dragon bishop.",
-    "variation": "Classical Variation"
+    "variation": "Classical Variation",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
+    ]
   },
   {
     "id": "mg-sicilian-dragon-anti-dragon-bg5-line",
@@ -6506,7 +6518,10 @@
     "criticalMoments": [],
     "middlegameTheme": "Concrete development, ...a6/...b5 vs the Bg5 line.",
     "lessonSummary": "Develop fast, play ...a6/...b5, and counter the Bg5 attack.",
-    "variation": "Anti-Dragon: Bg5 Line"
+    "variation": "Anti-Dragon: Bg5 Line",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Dragon_Variation"
+    ]
   },
   {
     "id": "mg-sicilian-sveshnikov-sveshnikov-main-line-9-nd5-deep",
@@ -6523,7 +6538,10 @@
     "overview": "Carlsen, who made the Sveshnikov his championship weapon, demonstrates its soul against Nepomniachtchi: Black accepts the backward d6-pawn and the d5-hole in return for the bishop pair, dynamic piece play, and pressure down the half-open lines. A model of the Sveshnikov's positional compensation converting into a win.",
     "criticalMoments": [],
     "middlegameTheme": "Bishop pair and dynamics for the d5-hole and backward d-pawn.",
-    "lessonSummary": "Accept the structural concessions for the bishops and active play."
+    "lessonSummary": "Accept the structural concessions for the bishops and active play.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+    ]
   },
   {
     "id": "mg-sicilian-sveshnikov-sveshnikov-kalashnikov-4-e5-5-nb5-d6",
@@ -6541,7 +6559,10 @@
     "criticalMoments": [],
     "middlegameTheme": "The ...e5 centre, the ...f5 break, bishop pair.",
     "lessonSummary": "Seize the centre with ...e5, break with ...f5, and play actively.",
-    "variation": "Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)"
+    "variation": "Sveshnikov: Kalashnikov (4...e5 5.Nb5 d6)",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+    ]
   },
   {
     "id": "mg-pirc-defence-150-attack",
@@ -6559,7 +6580,10 @@
     "criticalMoments": [],
     "middlegameTheme": "...a6/...b5 queenside race vs the 150 Attack.",
     "lessonSummary": "Meet the 150 with ...a6/...b5 and storm the queenside first.",
-    "variation": "150 Attack"
+    "variation": "150 Attack",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Pirc_Defence"
+    ]
   },
   {
     "id": "mg-pirc-defence-austrian-attack",
@@ -6577,7 +6601,10 @@
     "criticalMoments": [],
     "middlegameTheme": "The ...c5 break, ...Nc7-b5 queenside pressure.",
     "lessonSummary": "Strike with ...c5, reroute ...Nc7-b5, and counter the big centre.",
-    "variation": "Austrian Attack"
+    "variation": "Austrian Attack",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Pirc_Defence"
+    ]
   },
   {
     "id": "mg-pirc-defence-fianchetto-system",
@@ -6595,7 +6622,10 @@
     "criticalMoments": [],
     "middlegameTheme": "The ...c5 break, ...Nc5 hitting e4.",
     "lessonSummary": "Strike with ...c5, trade on d4, and activate with ...Nc5.",
-    "variation": "Fianchetto System"
+    "variation": "Fianchetto System",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Pirc_Defence"
+    ]
   },
   {
     "id": "mg-pirc-defence-austrian-attack-with-e5-c5",
@@ -6613,7 +6643,10 @@
     "criticalMoments": [],
     "middlegameTheme": "Blockade the e5-push with ...Nd5, pin with ...Bg4.",
     "lessonSummary": "Answer e5 with ...dxe5/...Nd5, pin with ...Bg4, and strike ...c5.",
-    "variation": "Austrian Attack with e5 c5"
+    "variation": "Austrian Attack with e5 c5",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Pirc_Defence"
+    ]
   },
   {
     "id": "mg-qgd-tartakower-main",
@@ -6631,7 +6664,10 @@
     "criticalMoments": [],
     "middlegameTheme": "...b6/...Bb7 freeing the bishop, central solidity.",
     "lessonSummary": "Free the bishop with ...b6/...Bb7 and equalize in the QGD.",
-    "variation": "Tartakower Variation"
+    "variation": "Tartakower Variation",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Queen%27s_Gambit_Declined"
+    ]
   },
   {
     "id": "mg-slav-defence-main-a4-bf5",
@@ -6648,7 +6684,10 @@
     "overview": "Caruana shows the main-line Slav against So: ...dxc4 followed by the early ...Bf5 develops the light-squared bishop outside the pawn chain — the Slav's whole point, unlike the French or QGD where it stays passive — and Black reaches a sound, comfortable game before outplaying his opponent.",
     "criticalMoments": [],
     "middlegameTheme": "...dxc4 and ...Bf5 — the good bishop out early.",
-    "lessonSummary": "Take on c4, develop the bishop to f5, and reach a solid game."
+    "lessonSummary": "Take on c4, develop the bishop to f5, and reach a solid game.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Slav_Defense"
+    ]
   },
   {
     "id": "mg-queens-indian-main-g3",
@@ -6665,7 +6704,10 @@
     "overview": "Carlsen demonstrates the Queen's Indian's solidity against Nakamura: the ...b6/...Bb7 fianchetto fights for the e4-square and the long diagonal, ...Na6 and ...d5 contest the centre, and Black reaches a sound, balanced game before outplaying his rival in a long struggle. The model of QID reliability.",
     "criticalMoments": [],
     "middlegameTheme": "The ...Bb7 fianchetto, fight for e4 and the centre.",
-    "lessonSummary": "Fianchetto on b7, contest e4, and reach a solid game."
+    "lessonSummary": "Fianchetto on b7, contest e4, and reach a solid game.",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense"
+    ]
   },
   {
     "id": "mg-italian-game-evans-gambit-accepted",
@@ -6683,7 +6725,10 @@
     "criticalMoments": [],
     "middlegameTheme": "Sacrifice b4 for the big centre and the f7 attack.",
     "lessonSummary": "Offer b4, build the c3-d4 centre, and attack with the lead in development.",
-    "variation": "Evans Gambit Accepted: Main Line"
+    "variation": "Evans Gambit Accepted: Main Line",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Italian_Game"
+    ]
   },
   {
     "id": "mg-kings-indian-attack-kid",
@@ -6701,7 +6746,10 @@
     "criticalMoments": [],
     "middlegameTheme": "The e4 centre, kingside expansion in the KIA.",
     "lessonSummary": "Build the KIA system, play e4, and expand on the kingside.",
-    "variation": "KIA vs KID-Style Response"
+    "variation": "KIA vs KID-Style Response",
+    "sources": [
+      "https://en.wikipedia.org/wiki/King%27s_Indian_Attack"
+    ]
   },
   {
     "id": "mg-scotch-gambit",
@@ -6719,7 +6767,10 @@
     "criticalMoments": [],
     "middlegameTheme": "Rapid development and central space for the gambit pawn.",
     "lessonSummary": "Develop fast with Bc4/e5 and press the initiative.",
-    "variation": "Scotch Gambit (4.Bc4)"
+    "variation": "Scotch Gambit (4.Bc4)",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Scotch_Game"
+    ]
   },
   {
     "id": "mg-scotch-fourknights",
@@ -6737,7 +6788,10 @@
     "criticalMoments": [],
     "middlegameTheme": "Double Black’s pawns, press the better structure.",
     "lessonSummary": "Trade on c6, develop, and exploit the structure.",
-    "variation": "Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)"
+    "variation": "Scotch: Schmidt Variation (4...Nf6 5.Nc3 Bb4)",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Scotch_Game"
+    ]
   },
   {
     "id": "mg-scotch-kasparov",
@@ -6755,7 +6809,10 @@
     "criticalMoments": [],
     "middlegameTheme": "Keep pieces on, develop with pressure (Qe2/Bg5).",
     "lessonSummary": "Retreat Nb3, develop actively, and play for more.",
-    "variation": "Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)"
+    "variation": "Scotch: Kasparov's Nb3 Line (4...Bc5 5.Nb3)",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Scotch_Game"
+    ]
   },
   {
     "id": "mg-scotch-steinitz",
@@ -6773,7 +6830,10 @@
     "criticalMoments": [],
     "middlegameTheme": "Punish the early ...Qh4 with tempo-gaining development.",
     "lessonSummary": "Meet ...Qh4 with Nb5/c3/g3 and develop with tempo.",
-    "variation": "Scotch: 4...Qh4 (Steinitz Variation)"
+    "variation": "Scotch: 4...Qh4 (Steinitz Variation)",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Scotch_Game"
+    ]
   },
   {
     "id": "mg-four-knights-spanish-metger",
@@ -6791,7 +6851,10 @@
     "criticalMoments": [],
     "middlegameTheme": "Symmetrical structure, the Ne2-g3-f5 reroute.",
     "lessonSummary": "Reroute Ne2-g3 toward f5 and press the small edge.",
-    "variation": "Symmetrical Variation: 4.Bb5 Bb4"
+    "variation": "Symmetrical Variation: 4.Bb5 Bb4",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Four_Knights_Game"
+    ]
   },
   {
     "id": "mg-benko-gambit-fully-accepted-main",
@@ -6809,7 +6872,10 @@
     "criticalMoments": [],
     "middlegameTheme": "The a/b-files and g7-bishop for the gambit pawn.",
     "lessonSummary": "Develop on the queenside, double on the open files, and press.",
-    "variation": "Modern 5.f3 System"
+    "variation": "Modern 5.f3 System",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Benko_Gambit"
+    ]
   },
   {
     "id": "mg-sicilian-alapin-d5-central",
@@ -6827,7 +6893,10 @@
     "criticalMoments": [],
     "middlegameTheme": "Strike with ...d5, blockade and pressure the IQP.",
     "lessonSummary": "Hit with ...d5, develop, and play against White’s isolated pawn.",
-    "variation": "Alapin: 2...d5 Central Counter (IQP Play)"
+    "variation": "Alapin: 2...d5 Central Counter (IQP Play)",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Alapin_Variation"
+    ]
   },
   {
     "id": "mg-evans-gambit-declined-main",
@@ -6845,7 +6914,10 @@
     "criticalMoments": [],
     "middlegameTheme": "a4 queenside space, the Nd5 outpost, central space.",
     "lessonSummary": "Gain space with a4, jump Nd5, and press the central edge.",
-    "variation": "Evans Gambit Declined"
+    "variation": "Evans Gambit Declined",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Evans_Gambit"
+    ]
   },
   {
     "id": "mg-dutch-classical-main",
@@ -6863,7 +6935,10 @@
     "criticalMoments": [],
     "middlegameTheme": "The ...Qe8-h5 queen lift, kingside attack.",
     "lessonSummary": "Set up solidly, lift the queen via e8-h5, and attack the king.",
-    "variation": "Classical Be7 Line"
+    "variation": "Classical Be7 Line",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Dutch_Defence"
+    ]
   },
   {
     "id": "mg-budapest-main",
@@ -6881,7 +6956,10 @@
     "criticalMoments": [],
     "middlegameTheme": "...Ng4 and ...Qe7 to regain e5 with the initiative.",
     "lessonSummary": "Hop ...Ng4, pressure e5 with ...Qe7, and develop with tempo.",
-    "variation": "Budapest Gambit: Main Bf4 Line"
+    "variation": "Budapest Gambit: Main Bf4 Line",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Budapest_Gambit"
+    ]
   },
   {
     "id": "mg-queensgambit-slav-response",
@@ -6899,7 +6977,10 @@
     "criticalMoments": [],
     "middlegameTheme": "a4 to regain c4, central space and the small edge.",
     "lessonSummary": "Play a4, recover the pawn, and press the central space.",
-    "variation": "Slav Defence Response"
+    "variation": "Slav Defence Response",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Queen%27s_Gambit"
+    ]
   },
   {
     "id": "mg-sicilian-antisveshnikov-nf3",
@@ -6917,7 +6998,10 @@
     "criticalMoments": [],
     "middlegameTheme": "...d5 central break, active piece play.",
     "lessonSummary": "Pin with ...Bb4, break with ...d5, and equalize actively.",
-    "variation": "Anti-Sveshnikov: 6.Nf3 Quiet Retreat"
+    "variation": "Anti-Sveshnikov: 6.Nf3 Quiet Retreat",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Sicilian_Defence,_Sveshnikov_Variation"
+    ]
   },
   {
     "id": "mg-queensgambit-exchange-minority",
@@ -6935,6 +7019,9 @@
     "criticalMoments": [],
     "middlegameTheme": "The b4-b5 minority attack creating a weak c6-pawn.",
     "lessonSummary": "Advance b4-b5 to leave Black a weak c-pawn, then besiege it.",
-    "variation": "Exchange Variation"
+    "variation": "Exchange Variation",
+    "sources": [
+      "https://en.wikipedia.org/wiki/Queen%27s_Gambit"
+    ]
   }
 ]
