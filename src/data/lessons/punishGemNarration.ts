@@ -3429,6 +3429,56 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nf6 — walks into the f-pawn', 'e5 — push, grab the centre', '', 'Bb5 — pin and pressure c6', '', 'Bxc6 — damage the pawns', '', 'd4 — a towering centre, on top', ''],
     sources: ['concept:pos-center', 'concept:pos-space', 'https://www.chess.com/openings/Sicilian-Defense-Grand-Prix-Attack', 'https://api.chess.com/pub/player/hikaru/games/archives'],
   },
+  "pro-ericrosen-sicilian:e4_c5_Nf3_e6_d4_cxd4_Nxd4_Nc6_Nc3_Qc7_Be3_a6_Qd2_Nf6_O-O-O_Bb4:a3": {
+    sources: ["concept:tac-pin","concept:pos-initiative","https://www.chess.com/openings/Sicilian-Defense-Taimanov-Variation"],
+    watch: ["","","","","","","","","","","","","","","","","a3? — White jabs at the b4-bishop, but the king has just castled long and the centre is a powder keg. This loses time the position cannot spare.","…Nxe4! — Black blasts the centre open, snatching e4 and exploiting the pin on the c3-knight and the loose queen on d1.","","…Nxc3 — collecting the knight; the b4-bishop and the central fork do the work.","","","","","After the smoke clears Black is a clean pawn up with much the safer king."],
+    learn: ["","","","","","","","","","","","","","","","","","…Nxe4 — blast the centre open","","…Nxc3 — collect the knight","","","","",""],
+  },
+  "pro-ericrosen-sicilian:e4_c5_c3_d5_exd5_Qxd5_d4_Nf6_Nf3_e6_Na3_Nc6:Bf4": {
+    sources: ["concept:tac-double-attack","concept:pos-development","https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation"],
+    watch: ["","","","","","","","","","","","","Bf4? — a natural-looking developing move that ignores the central tension. Black strikes at once.","…cxd4! — opening the centre while White is under-developed; the a3-knight is a target and the e-pawn comes flying.","","","","…e5 — Black grabs the centre with tempo and an initiative White cannot easily meet.","","…Qe4+ — a check that wins more time; Black is clearly better.",""],
+    learn: ["","","","","","","","","","","","","","…cxd4 — open the centre","","","","…e5 — seize the centre","","",""],
+  },
+  "pro-ericrosen-sicilian:e4_c5_c3_d5_exd5_Qxd5_d4_Nf6_Nf3_e6_Na3_Nc6_Nb5_Qd8:Be3": {
+    sources: ["concept:pos-development","concept:pos-space","https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation"],
+    watch: ["","","","","","","","","","","","","","","Be3? — too slow; it lets Black kick the knights and seize the squares.","…a6 — the b5-knight has no good post and must retreat, conceding the initiative.","","","","","","…b5 — Black expands on the queenside with a comfortable, pleasant game.",""],
+    learn: ["","","","","","","","","","","","","","","","…a6 — kick the knight back","","","","","","…b5 — expand and take over",""],
+  },
+  "pro-ericrosen-budapest:d4_Nf6_c4_e5_dxe5_Ng4:f4": {
+    sources: ["concept:pos-initiative","concept:tac-trap","https://www.chess.com/openings/Budapest-Gambit"],
+    watch: ["","","","","","","f4? — overambitious; it defends e5 but fatally weakens the a7-g1 diagonal and the king.","…Bc5 — the bishop slams onto the weakened diagonal, eyeing f2 with the g4-knight. White is already creaking.","","","","","","…dxe5 — Black regains the pawn with much the more active pieces.",""],
+    learn: ["","","","","","","","…Bc5 — hit the weak diagonal","","","","","","…dxe5 — pawn back, active",""],
+  },
+  "pro-ericrosen-stafford:e4_e5_Nf3_Nf6_Nxe5_Nc6:Nxf7": {
+    sources: ["concept:tac-sacrifice","concept:pos-king-safety","https://www.chess.com/openings/Stafford-Gambit"],
+    watch: ["","","","","","","Nxf7? — the greedy knight sacrifice on f7. It looks scary but it is simply unsound — Black's king is perfectly safe on f7.","…Kxf7 — the king grabs the knight. White has given a whole piece for one pawn and a check or two; the attack does not exist.","","…Nxe4 — Black snaps a central pawn too and consolidates a winning material edge.","","","","","Black is up a clean piece with a safe king — the sacrifice refuted."],
+    learn: ["","","","","","","","…Kxf7 — take the piece, king is safe","","…Nxe4 — grab the centre pawn","","","","",""],
+  },
+  "pro-ericrosen-stafford:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nxc6_dxc6_Nc3_Bc5:Bc4": {
+    sources: ["concept:tac-sacrifice","concept:tac-fork","https://www.chess.com/openings/Stafford-Gambit"],
+    watch: ["","","","","","","","","","","Bc4? — a natural developing move that walks straight into the Stafford's signature blow.","…Ng4 — the knight leaps in, and with the c5-bishop two pieces hammer f2.","","","","…Bxf2+! — the bishop sacrifices on f2, and the follow-up knight fork wins material from the exposed king.","","…Nxf2 — Black emerges up material with White's king stranded in the centre.",""],
+    learn: ["","","","","","","","","","","","…Ng4 — double the hit on f2","","","","…Bxf2+ — the sacrifice","","…Nxf2 — collect from the fork",""],
+  },
+  "pro-ericrosen-stafford:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nxc6_dxc6_Nc3_Bc5_Be2_h5:h3": {
+    sources: ["concept:pos-initiative","concept:tac-pin","https://www.chess.com/openings/Stafford-Gambit"],
+    watch: ["","","","","","","","","","","","","h3? — a wasted tempo that stops nothing; Black already has the initiative.","…Qd4 — the queen centralises with threats against f2 and e4.","","…Nxe4! — the central pawn falls to a tactic exploiting the pinned c3-knight.","","","","…Qxd1+ — trading into an ending a clean pawn up with the better structure.",""],
+    learn: ["","","","","","","","","","","","","","…Qd4 — centralise with threats","","…Nxe4 — win the centre pawn","","","","",""],
+  },
+  "pro-ericrosen-stafford:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nxc6_dxc6_e5_Ne4_d4_Qh4:g3": {
+    sources: ["concept:tac-sacrifice","concept:pos-king-safety","https://www.chess.com/openings/Stafford-Gambit"],
+    watch: ["","","","","","","","","","","","","g3? — it attacks the h4-queen but rips open the king. Black has a crushing tactic.","…Nxg3! — the knight sacrifices itself to tear open the f-file and the king.","","…Qe4+ — the queen forks the king and the loose pieces along the open lines.","","…Qxe3+ — collecting material with check; White's position collapses.","","",""],
+    learn: ["","","","","","","","","","","","","","…Nxg3 — rip open the king","","…Qe4+ — fork on the open lines","","","","",""],
+  },
+  "pro-ericrosen-stafford:e4_e5_Nf3_Nf6_Nxe5_Nc6_Nf3_Nxe4_Nc3_d5:d4": {
+    sources: ["concept:tac-pin","concept:pos-development","https://www.chess.com/openings/Stafford-Gambit"],
+    watch: ["","","","","","","","","","","d4? — a slight inaccuracy that lets Black seize the initiative with a developing pin.","…Bb4 — pinning the c3-knight and pressuring the centre; every Black piece comes out with purpose.","","","","…Re8 — the rook seizes the open e-file, piling up against White's position.","","…Bg4 — completing development with the more active, comfortable game.",""],
+    learn: ["","","","","","","","","","","","…Bb4 — pin and pressure","","","","…Re8 — seize the e-file","","",""],
+  },
+  "pro-ericrosen-qgd:d4_d5_c4_e6_Nc3_Nf6_Bg5_c6_e3_Nbd7_Nf3_Qa5_Nd2_Bb4:Qb3": {
+    sources: ["concept:tac-fork","concept:tac-pin","https://www.chess.com/openings/Queens-Gambit-Declined"],
+    watch: ["","","","","","","","","","","","","","","Qb3? — defending c4 but stepping into a Cambridge Springs tactic; the queen and knight are loose.","…dxc4! — the pawn grab springs the trap, opening lines against the pinned c3-knight.","","…Bxc3+ — wrecking White's structure, and the follow-up wins the g5-bishop.","","…Qxg5 — Black snaps off the bishop and emerges a clean piece up.","","",""],
+    learn: ["","","","","","","","","","","","","","","","…dxc4 — spring the trap","","…Bxc3+ — wreck the structure","","…Qxg5 — win the bishop","","",""],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {

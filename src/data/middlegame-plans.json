@@ -68544,5 +68544,474 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proericqgd-minority-counter",
+    "openingId": "pro-ericrosen-qgd",
+    "criticalPositionFen": "rnbqr1k1/pp3pp1/2pb1n1p/3p4/3P3B/2NBP3/PP2NPPP/R2QK2R w KQ - 4 10",
+    "title": "Carlsbad counter — meet the minority attack on the kingside",
+    "overview": "In the Carlsbad QGD, White grinds on the queenside with a minority attack; Black's reply is to counter on the kingside. This plan shows the engine of that counter: the knight jumps into the e4-hole, and after the trade Black expands with …f5, turning the static structure into a dynamic kingside initiative.",
+    "pawnBreaks": [
+      "…f5 — kingside expansion against the minority attack"
+    ],
+    "pieceManeuvers": [
+      "…Ne4 — the central outpost knight"
+    ],
+    "strategicThemes": [
+      "Counter the queenside minority attack on the kingside",
+      "The …Ne4 outpost",
+      "…f5-f4 pawn storm"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnbqr1k1/pp3pp1/2pb1n1p/3p4/3P3B/2NBP3/PP2NPPP/R2QK2R w KQ - 4 10",
+        "moves": [
+          "Qc2",
+          "Ne4",
+          "Bxe4",
+          "dxe4",
+          "Ng3",
+          "f5"
+        ],
+        "annotations": [
+          "White lines up the minority attack with Qc2, eyeing the b4-b5 push.",
+          "…Ne4! The knight leaps into the hole — the launchpad of Black's whole kingside plan.",
+          "White trades the strong knight off.",
+          "We recapture toward the centre; the e4-pawn cramps White and supports …f5.",
+          "White redeploys the knight.",
+          "…f5! Black expands on the kingside, and the static Carlsbad becomes a dynamic attacking position. While White inches forward on the queenside, Black storms the king."
+        ],
+        "learnCues": [
+          "Qc2 — White's minority attack",
+          "…Ne4 — the outpost jump",
+          "Bxe4 — White trades",
+          "…dxe4 — cramp and support …f5",
+          "Ng3 — White redeploys",
+          "…f5 — storm the kingside"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Carlsbad counter — meet the minority attack on the kingside",
+        "intro": "In the Carlsbad QGD, White grinds on the queenside with a minority attack; Black's reply is to counter on the kingside.",
+        "sources": [
+          "https://api.chess.com/pub/player/imrosen/games/archives",
+          "concept:pawn-minority-attack",
+          "concept:pos-outpost"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericbudapest-e5knight",
+    "openingId": "pro-ericrosen-budapest",
+    "criticalPositionFen": "r1b1k2r/ppppqppp/8/4n3/1bP2B2/P7/1P1NPPPP/R2QKB1R w KQkq - 0 9",
+    "title": "The e5-knight and the open e-file",
+    "overview": "Once the Budapest's gambit pawn is regained, Black's edge is the dominant knight on e5 and the lead in development. This plan shows the standard middlegame: castle, swing the rook to the open e-file, and keep the e5-knight as the hub — always alert to the …Nd3 fork that wins games when White is careless.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "…Re8 — seize the open e-file",
+      "…Nd3 — the fork from the outpost"
+    ],
+    "strategicThemes": [
+      "The unchallengeable e5-knight",
+      "Pressure down the open e-file",
+      "…Nd3 fork tactics"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1b1k2r/ppppqppp/8/4n3/1bP2B2/P7/1P1NPPPP/R2QKB1R w KQkq - 0 9",
+        "moves": [
+          "e3",
+          "O-O",
+          "Be2",
+          "Re8",
+          "O-O",
+          "d6"
+        ],
+        "annotations": [
+          "White finishes developing with e3.",
+          "Black castles — king safe, rook ready for the e-file.",
+          "White develops the bishop.",
+          "…Re8 seizes the open e-file, pinning White's pieces toward the king and supporting the knight.",
+          "White castles.",
+          "…d6 solidifies the e5-knight's outpost. Black has the more active army for the price of nothing — and the …Nd3 fork is always in the air."
+        ],
+        "learnCues": [
+          "e3 — White develops",
+          "…O-O — king to safety",
+          "Be2 — White develops",
+          "…Re8 — seize the e-file",
+          "O-O — White castles",
+          "…d6 — cement the outpost"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "The e5-knight and the open e-file",
+        "intro": "Once the Budapest's gambit pawn is regained, Black's edge is the dominant knight on e5 and the lead in development.",
+        "sources": [
+          "https://api.chess.com/pub/player/imrosen/games/archives",
+          "concept:pos-outpost",
+          "concept:pos-open-file"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericclosedsic-f5storm",
+    "openingId": "pro-ericrosen-closed-sicilian",
+    "criticalPositionFen": "r1bqk1nr/pp3pbp/3pp1p1/2p5/2BnPP2/2N1BN2/PPP3PP/R2Q1RK1 b kq - 1 8",
+    "title": "The Grand Prix f5 break",
+    "overview": "The whole point of the Grand Prix is the f4-f5 break. This plan shows White recapturing toward the centre, then immediately throwing in f5 to pry open the f-file and hit g6 and e6 — the start of a direct kingside attack against the Sicilian fianchetto.",
+    "pawnBreaks": [
+      "f5 — pry open the kingside against the fianchetto"
+    ],
+    "pieceManeuvers": [
+      "Qxf3 — recapture toward the attack"
+    ],
+    "strategicThemes": [
+      "The f4-f5 attacking break",
+      "Open the f-file onto the king",
+      "Hit the g6/e6 squares"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bqk1nr/pp3pbp/3pp1p1/2p5/2BnPP2/2N1BN2/PPP3PP/R2Q1RK1 b kq - 1 8",
+        "moves": [
+          "Nxf3+",
+          "Qxf3",
+          "Ne7",
+          "f5"
+        ],
+        "annotations": [
+          "Black trades on f3 to relieve the pressure.",
+          "Qxf3! We recapture toward the kingside — the queen is now perfectly placed to join the attack.",
+          "Black tucks the knight to e7 to defend.",
+          "f5! The thematic Grand Prix break smashes open the kingside, hitting g6 and e6 and prying open the f-file straight at Black's king — exactly the attack Rosen plays for."
+        ],
+        "learnCues": [
+          "…Nxf3+ — Black trades",
+          "Qxf3 — recapture toward the attack",
+          "…Ne7 — Black defends",
+          "f5 — the Grand Prix break"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "The Grand Prix f5 break",
+        "intro": "The whole point of the Grand Prix is the f4-f5 break.",
+        "sources": [
+          "https://api.chess.com/pub/player/imrosen/games/archives",
+          "concept:att-kingside-storm",
+          "concept:pos-open-file"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericscandi-e5break",
+    "openingId": "pro-ericrosen-scandinavian",
+    "criticalPositionFen": "2kr1b1r/ppp1pppp/2n2n2/3q4/3P4/5N2/PPP1QPPP/RNB2RK1 w - - 4 8",
+    "title": "Pressure d4 and break with …e5",
+    "overview": "In the modern Scandinavian, Black has castled long and piled onto White's d4-pawn down the open file. This plan shows the freeing break: …e5 challenges the centre, and after the trades Black reaches a fully equal, active middlegame with the more harmonious pieces — a far cry from the opening's dubious reputation.",
+    "pawnBreaks": [
+      "…e5 — the central freeing break"
+    ],
+    "pieceManeuvers": [
+      "…Qxe5 — centralise after the break"
+    ],
+    "strategicThemes": [
+      "Pressure the d4-pawn down the open file",
+      "The …e5 freeing break",
+      "Active piece play with the queen centralised"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "2kr1b1r/ppp1pppp/2n2n2/3q4/3P4/5N2/PPP1QPPP/RNB2RK1 w - - 4 8",
+        "moves": [
+          "Be3",
+          "e5",
+          "dxe5",
+          "Nxe5",
+          "Nxe5",
+          "Qxe5"
+        ],
+        "annotations": [
+          "White develops the bishop to e3 to bolster d4.",
+          "…e5! Black challenges the centre, using the pressure on the d-file and the lead in development.",
+          "White takes on e5.",
+          "We recapture with the knight, centralising.",
+          "White trades the knights.",
+          "…Qxe5 leaves Black with a centralised queen and a comfortable, fully-equal game — the Scandinavian as a fighting, sound defense."
+        ],
+        "learnCues": [
+          "Be3 — White bolsters d4",
+          "…e5 — the freeing break",
+          "dxe5 — White takes",
+          "…Nxe5 — recapture, centralise",
+          "Nxe5 — White trades",
+          "…Qxe5 — active and equal"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Pressure d4 and break with …e5",
+        "intro": "In the modern Scandinavian, Black has castled long and piled onto White's d4-pawn down the open file.",
+        "sources": [
+          "https://api.chess.com/pub/player/imrosen/games/archives",
+          "concept:pos-open-file",
+          "concept:pos-development"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericfrench-c5break",
+    "openingId": "pro-ericrosen-french",
+    "criticalPositionFen": "rnb2rk1/pp1nqppp/4p3/2ppP3/3P1P2/2N2N2/PPP3PP/R2QKB1R w KQ - 0 9",
+    "title": "Hit the base of the chain with …c5 and …Nc6",
+    "overview": "The French is a race: White attacks the king, Black attacks the d4-e5 pawn chain at its base. This plan shows Black piling onto d4 with …Nc6 and …cxd4, opening the c-file for the counter-attack just as White commits to the kingside. Counter-attack, never passive defense.",
+    "pawnBreaks": [
+      "…cxd4 — open the c-file against the chain"
+    ],
+    "pieceManeuvers": [
+      "…Nc6 — pile onto the d4-pawn"
+    ],
+    "strategicThemes": [
+      "Attack the base of the d4-e5 chain",
+      "Open the c-file for the counter",
+      "Counterplay races White's kingside attack"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rnb2rk1/pp1nqppp/4p3/2ppP3/3P1P2/2N2N2/PPP3PP/R2QKB1R w KQ - 0 9",
+        "moves": [
+          "Qd2",
+          "Nc6",
+          "O-O-O",
+          "cxd4",
+          "Nxd4",
+          "Nxd4"
+        ],
+        "annotations": [
+          "White centralises the queen, heading for opposite-side castling.",
+          "…Nc6 adds a second attacker to the d4-pawn, the base of White's chain.",
+          "White castles long, all-in on the attack.",
+          "…cxd4! Black opens the c-file straight toward White's king — the counter-attack is faster.",
+          "White recaptures with the knight.",
+          "…Nxd4 trades into a position where Black's queenside play is in full flow against the castled king. The French race is on, and Rosen is the more comfortable attacker."
+        ],
+        "learnCues": [
+          "Qd2 — White prepares O-O-O",
+          "…Nc6 — pile on d4",
+          "O-O-O — White goes all-in",
+          "…cxd4 — open the c-file",
+          "Nxd4 — White recaptures",
+          "…Nxd4 — counter in full flow"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Hit the base of the chain with …c5 and …Nc6",
+        "intro": "The French is a race: White attacks the king, Black attacks the d4-e5 pawn chain at its base.",
+        "sources": [
+          "https://api.chess.com/pub/player/imrosen/games/archives",
+          "concept:pawn-chain",
+          "concept:pos-open-file"
+        ]
+      }
+    ]
   }
 ]

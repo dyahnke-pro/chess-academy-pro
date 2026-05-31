@@ -3073,5 +3073,44 @@
         "https://en.wikipedia.org/wiki/Larsen%27s_Opening"
       ]
     }
+  ],
+  "pro-ericrosen-budapest": [
+    {
+      "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "Ne4",
+      "correctMove": "Ng4",
+      "explanation": "After dxe5, …Ne4 is the Fajarowicz — tricky but objectively dubious, and easily neutralised. The sound main line, and the one Rosen plays, is …Ng4: the knight hits the e5-pawn, prepares the quick development with tempo, and keeps all the gambit's traps alive. Pick the move that fights for the pawn AND keeps the initiative.",
+      "shortNarration": "…Ng4, not the dubious …Ne4.",
+      "sources": [
+        "concept:pos-initiative",
+        "https://www.chess.com/openings/Budapest-Gambit"
+      ]
+    }
+  ],
+  "pro-ericrosen-closed-sicilian": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+      "wrongMove": "g3",
+      "correctMove": "f4",
+      "explanation": "A quiet g3 setup lets Black equalise comfortably with …Nc6, …g6 and …e5 — exactly the slow Closed Sicilian Black is happy to face. The Grand Prix point is f4: it claims kingside space and commits to the attack. Against the Sicilian, the aggressive f4 is what scores; the passive fianchetto hands Black easy equality.",
+      "shortNarration": "Commit to f4, not the slow g3.",
+      "sources": [
+        "concept:att-kingside-storm",
+        "https://www.chess.com/openings/Grand-Prix-Attack"
+      ]
+    }
+  ],
+  "pro-ericrosen-french": [
+    {
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "Ne7",
+      "correctMove": "c5",
+      "explanation": "Against the Advance, a passive developing move like …Ne7 lets White consolidate the big centre and slowly squeeze. The French is a counter-attacking defense: …c5 strikes the base of the d4-e5 chain immediately. If you do not hit the chain, you simply have a cramped, lost position — …c5 is not optional, it is the whole point.",
+      "shortNarration": "Hit the chain with …c5, not passive …Ne7.",
+      "sources": [
+        "concept:pawn-chain",
+        "https://www.chess.com/openings/French-Defense"
+      ]
+    }
   ]
 }
