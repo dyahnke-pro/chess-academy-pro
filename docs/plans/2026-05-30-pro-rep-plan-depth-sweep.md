@@ -123,3 +123,26 @@ Naj-classical-development, Jobava-central-queen-attack, KID-makogonov-kingside.
 Tooling for both: scripts/pro-repertoire/{ground-plan-lines,ground-relaxed,select-sound-lines,
 dedup-grounded,apply-plan-narration}.cjs + openings/*.cjs. The applier + gates make each a
 data-only add.
+
+---
+## SESSION 2026-05-31 (cont.) — build unblock + audit triage
+- **BUILD WAS RED** (parallel gambit session): danishGambit/viennaGambit + 4
+  *Variations.ts files had TS6133/TS6196/TS7006 (unused untyped A() arrow helper,
+  untyped H/b). FIXED types-only (kept A typed in marshall which uses arrows;
+  removed unused A/VIS in the other 3). Build green, DEPLOYED (bundle advanced).
+- **9 variation sources** (stafford/qgd/ponziani/anti-sicilian tabs) were missing
+  sources[] → filled with resolvable book+chess.com+wikipedia. Pushed 8aaf17f1.
+- **AUDIT METRIC CORRECTION**: my audit-dump used a naive <20-ply "SHORT" flag →
+  76 false alarms. The REAL standard is `reachesMiddlegame` (≥14 plies OR castled
+  OR both sides developed ≥2 minors). That gate is GREEN; baseline only 13 keys.
+  So "short" lines that are castled/developed are FINE. Real ply backlog = the 13
+  baselined lines only.
+- 163/168 plans deep (5 not-sound deferrals stand). All on main, live.
+
+### Remaining audit passes (user wants personal linear walk):
+1. CONTINUITY (G9.3 Gate C): each variation's middlegame-plan criticalPositionFen
+   should connect to where that variation's pgn ends. Build a checker.
+2. NARRATION both registers + board-accuracy: covered by proRepPlanAccuracy +
+   middlegamePlanThemes gates (green). Spot-walk beats by hand for voice quality.
+3. The 13 baselined-shallow lines: extend along player's most-played real
+   continuation (extend-shallow.cjs drafted; container reset lost /tmp — rebuild).
