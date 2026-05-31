@@ -6453,5 +6453,23 @@
     "middlegameTheme": "The ...e5 wedge, ...b5 expansion vs the fianchetto.",
     "lessonSummary": "Plant ...e5, expand with ...b5, and outplay the quiet g3 setup.",
     "variation": "Najdorf: Adams Attack (6.g3 Fianchetto)"
+  },
+  {
+    "id": "mg-sicilian-najdorf-najdorf-poisoned-pawn-6-bg5-qb6",
+    "openingId": "sicilian-najdorf",
+    "white": "Giri, A.",
+    "black": "Vachier Lagrave, M.",
+    "whiteElo": 2779,
+    "blackElo": 2775,
+    "result": "0-1",
+    "year": 2019,
+    "event": "GCT Rapid Paris 2019",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Qb6 Qd2 Qxb2 Rb1 Qa3 e5 h6 Bh4 dxe5 fxe5 Nfd7 Ne4 Qxa2 Rd1 Qd5 Qe3 Qxe5 Be2 Bc5 Bg3 Qd5 c4 Bxd4 Rxd4 Qa5+ Rd2 O-O Bd6 f5 Bxf8 Nxf8 Nd6 Nbd7 O-O Qc5 Qd4 a5 g4 f4 Rxf4 a4 Rf1 Qxd4+ Rxd4 Nc5 Bf3 a3 Rd2 Nfd7 Nxc8 Rxc8 Bxb7 Rb8 Bc6 Ne5 Bb5 Nxg4 Ra2 Rd8 Rxa3 Rd2 h3 Nf6 Re3 Kf7 Rf2 Rd1+ Kh2 Ke7 Ra3 Nfe4 Ra7+ Kd6 Re2 Ng5 Rxg7 Nf3+ Kg3 Nd4 Kf2 Nd3+",
+    "studentSide": "black",
+    "overview": "Vachier-Lagrave, the world's foremost Najdorf expert, demonstrates the Poisoned Pawn against Giri: Black snatches the b2-pawn with ...Qxb2, weathers White's furious development lead, and emerges with the extra material intact to convert. The ultimate test of nerve — grab the pawn, defend precisely, and the material tells.",
+    "criticalMoments": [],
+    "middlegameTheme": "Grab the b2-pawn, defend the lead in development, convert.",
+    "lessonSummary": "Take the poisoned pawn, survive the attack, and win with the extra material.",
+    "variation": "Najdorf: Poisoned Pawn (6.Bg5 Qb6)"
   }
 ]
