@@ -6303,5 +6303,81 @@
     "middlegameTheme": "The 150 Attack: …c6/…b5 queenside race, …b4 break first.",
     "lessonSummary": "Counter the 150 Attack with …c6/…b5 and win the queenside race.",
     "studentSide": "black"
+  },
+  {
+    "id": "mg-budapest-adler-anagnostopoulos",
+    "openingId": "budapest-gambit",
+    "studentSide": "black",
+    "white": "Galiana Salom, Juan Ramon",
+    "black": "Anagnostopoulos, Dimitrios",
+    "whiteElo": 2320,
+    "blackElo": 2425,
+    "result": "0-1",
+    "year": 1994,
+    "event": "Berga op",
+    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Nc3 Ncxe5 Nxe5 Nxe5 Be2 O-O O-O Re8 b3 a5 Bb2 Ra6 Ne4 Ba7 c5 Rh6 g3 d5 Bd4 Qd7 Ng5 f6 f4 fxg5 fxe5 c6 Bd3 Qe7 Qf3 Bh3 Rf2 Bb8 e4 Be6 Raf1 Bc7 a3 dxe4 Bxe4 Kh8 Bc2 Bg8 Re2 Qd8 Qc3 Be6 Ref2 Kg8 b4 axb4 axb4 Qd5 Bb1 Qd7 Qe3 Qd8 Bc3 Bc4 Ba2 Bxa2 Rxa2 Rhe6 Rd2 Qe7 Rdf2 Bxe5 Bxe5 Rxe5 Qb3+ Qe6 Qxe6+ R5xe6 Rf7 R6e7 Rxe7 Rxe7 Rd1 h6 Rd4 h5 h3 Re3 Kf2 Rb3 Kg2 Kh7 Re4 Kg6 g4 h4 Re6+ Kf7 Re4 Kf6 Kh2 Rf3 Re8 Rf4 Kg2 Rxb4 Rd8 Ke5 Rd7 g6 Rg7 Rb2+ Kg1 Kf4 Rd7 Rb5 Kf2 Rxc5 Rxb7 Rc2+ Kg1 c5 Re7 c4 Kh1 c3",
+    "overview": "Adler Variation. Anagnostopoulos shows the Budapest's point: the …a5 and …Ra6 rook-lift swings the rook toward the kingside, and Black's piece activity overwhelms White's slightly loose structure. The e5-pawn investment repaid with a full attack against a strong opponent.",
+    "variation": "Adler Variation (Nf3 Bc5)",
+    "sources": [
+      "https://lichess.org/EO5WwHrN",
+      "https://en.wikipedia.org/wiki/Budapest_Gambit"
+    ]
+  },
+  {
+    "id": "mg-budapest-adler-lendwai",
+    "openingId": "budapest-gambit",
+    "studentSide": "black",
+    "white": "Klinger, Josef",
+    "black": "Lendwai, Reinhard",
+    "whiteElo": 2510,
+    "blackElo": 2405,
+    "result": "0-1",
+    "year": 1991,
+    "event": "Vienna op",
+    "pgn": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Bc5 e3 Nc6 Be2 O-O O-O Re8 b3 a5 Nc3 Ngxe5 Nxe5 Nxe5 Bb2 Ra6 Ne4 Ba7 c5 Rh6 Qd4 Qh4 f4 Qxh2+ Kf2 Rg6 Ng5 Qh4+ Kg1 d6 Qa4 Bd7 Qxa5 Bxc5 Bd4 Nc6 Qe1 Qxe1 Raxe1 Nxd4 exd4 Bxd4+ Kh2 Bc3 Rc1 Rxe2 Rxc3 Bc6",
+    "overview": "Adler Variation. Lendwai mirrors the plan — …a5, …Ra6, the rook lift — and converts the Budapest's lead in piece activity into a kingside initiative against a 2500-rated White. A clean model of lasting gambit compensation.",
+    "variation": "Adler Variation (Nf3 Bc5)",
+    "sources": [
+      "https://lichess.org/aw2J1xza",
+      "https://en.wikipedia.org/wiki/Budapest_Gambit"
+    ]
+  },
+  {
+    "id": "mg-albin-laskertrap-raetsky",
+    "openingId": "albin-countergambit",
+    "studentSide": "black",
+    "white": "Shumiakina, Tatiana",
+    "black": "Raetsky, Alexander",
+    "whiteElo": 2350,
+    "blackElo": 2510,
+    "result": "0-1",
+    "year": 1995,
+    "event": "Cappelle op 11th",
+    "pgn": "d4 d5 c4 e5 dxe5 d4 e3 Bb4+ Bd2 dxe3 fxe3 Qh4+ g3 Qe4 Qf3 Bxd2+ Nxd2 Qxe5 O-O-O Nf6 Qf4 Qe7 Ngf3 O-O Bd3 Ng4 Ng5 h6 Nge4 Nc6 Rde1 Be6 Bb1 Rad8 h3 Nge5 g4 f5 Ng3 g5 Qf1 fxg4 Qg2 Nb4 Ref1 Ned3+ Bxd3 Nxd3+ Kb1 Qg7 Nde4 gxh3 Qc2 Nb4 Qb3 Nc6 Qc2 Bg4 a3 Kh8 Nf2 Bf3 Nxh3 Ne5 Rh2 Kg8 Nf2 Ng4 Nf5 Rxf5 Nxg4 Bxg4 Rxf5 Bxf5 Qxf5 Qh7 e4 Qxf5 exf5 Kg7 Re2 Rf8 Re5 h5 Kc2 Kf6 Ra5 h4",
+    "overview": "The Lasker Trap in action: after the careless 4.e3?, …Bb4+ and the …dxe3 break tear into White's kingside, and Raetsky's attack crashes through. The textbook punishment of the Albin's most famous trap, executed by a 2510 GM.",
+    "variation": "Lasker Trap",
+    "sources": [
+      "https://lichess.org/hUJEP8OQ",
+      "https://en.wikipedia.org/wiki/Albin_Countergambit"
+    ]
+  },
+  {
+    "id": "mg-albin-normal-tikkanen",
+    "openingId": "albin-countergambit",
+    "studentSide": "black",
+    "white": "Hjelm, Niclas",
+    "black": "Tikkanen, Hans",
+    "whiteElo": 2382,
+    "blackElo": 2501,
+    "result": "0-1",
+    "year": 2009,
+    "event": "SWE-chT 0809",
+    "pgn": "d4 d5 c4 e5 dxe5 d4 Nf3 Nc6 a3 Be6 e3 dxe3 Qxd8+ Rxd8 Bxe3 Nge7 Nc3 Nf5 Nb5 Nxe3 fxe3 Rd7 Rd1 g6 Nbd4 Bg7 Nxe6 fxe6 Rxd7 Kxd7 Bd3 Nxe5 Nxe5+ Bxe5 b3 g5 Rf1 Ke7 h3 h5 Bg6 Bf6 Ke2 b6 Rd1 Bb2 a4 a5 Be4 g4 Bc6 Be5 Rd7+ Kf6 Be4 Rf8 Rh7 Kg5 hxg4 hxg4 Re7 Kf6 Rd7 Bg3 Kd3 Ke5 Bc6 Be1 Bb7 Rf2 Rxc7 Rd2+ Kc3 Rd7+ Kc2 Rxc7 Ba6 Bb4 Bb5 Rf7",
+    "overview": "Normal Variation, 4.Nf3 Nc6. Tikkanen shows Black's full compensation — the advanced d4-pawn cramps White, the queens come off, and Black's active pieces plus the better structure convert a clean technical win over a strong opponent.",
+    "variation": "Normal Development (Nf3 System)",
+    "sources": [
+      "https://lichess.org/q52pJwFH",
+      "https://en.wikipedia.org/wiki/Albin_Countergambit"
+    ]
   }
 ]
