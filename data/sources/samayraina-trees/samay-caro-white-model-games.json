@@ -1,0 +1,24 @@
+{
+  "player": "samayraina",
+  "openingId": "samay-caro-white",
+  "generatedAt": "2026-05-31T23:13:53.073Z",
+  "totals": {
+    "totalGamesScanned": 21825,
+    "matchingWins": 0
+  },
+  "candidates": [
+    {
+      "id": "spine",
+      "label": "Main line (Advance c5)",
+      "pathSans": [
+        "e4",
+        "c6",
+        "d4",
+        "d5",
+        "Nc3"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    }
+  ]
+}

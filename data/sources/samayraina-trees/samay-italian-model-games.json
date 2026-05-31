@@ -1,0 +1,160 @@
+{
+  "player": "samayraina",
+  "openingId": "samay-italian",
+  "generatedAt": "2026-05-31T23:13:51.179Z",
+  "totals": {
+    "totalGamesScanned": 21825,
+    "matchingWins": 0
+  },
+  "candidates": [
+    {
+      "id": "spine",
+      "label": "Main line (Advance c5)",
+      "pathSans": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bc4",
+        "Bc5",
+        "O-O",
+        "Nf6",
+        "c3",
+        "O-O",
+        "d4",
+        "exd4"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-1",
+      "label": "Variation 1:  Nf6",
+      "pathSans": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bc4",
+        "Nf6",
+        "O-O",
+        "Bc5",
+        "c3",
+        "O-O"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-2",
+      "label": "Variation 2: Bc5 c3",
+      "pathSans": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bc4",
+        "Bc5",
+        "c3",
+        "Nf6",
+        "d4",
+        "exd4",
+        "e5"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-3",
+      "label": "Variation 3:  h6",
+      "pathSans": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bc4",
+        "h6",
+        "O-O",
+        "Nf6",
+        "Re1"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-4",
+      "label": "Variation 4:  d6",
+      "pathSans": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bc4",
+        "d6",
+        "h3"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-5",
+      "label": "Variation 5: Bc5 O-O d6",
+      "pathSans": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bc4",
+        "Bc5",
+        "O-O",
+        "d6",
+        "h3"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-6",
+      "label": "Variation 6:  Be7",
+      "pathSans": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bc4",
+        "Be7"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-7",
+      "label": "Variation 7: Bc5 d3",
+      "pathSans": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bc4",
+        "Bc5",
+        "d3"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    },
+    {
+      "id": "var-8",
+      "label": "Variation 8:  Nd4",
+      "pathSans": [
+        "e4",
+        "e5",
+        "Nf3",
+        "Nc6",
+        "Bc4",
+        "Nd4"
+      ],
+      "games": [],
+      "totalCandidates": 0
+    }
+  ]
+}

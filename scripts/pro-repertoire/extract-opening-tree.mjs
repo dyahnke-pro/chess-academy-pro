@@ -341,47 +341,15 @@ const OPENINGS = {
     minPrefix: ['e4', 'c5', 'Nc3'],
     maxDepth: 80,
   },
-  // ===== CARUANA-SPECIFIC OPENINGS (2026-05-31) =====
-  // His signature White weapon — the Ruy Lopez (220g blitz+rapid).
-  'caruana-ruy-lopez': {
-    name: 'Ruy Lopez (Caruana)',
-    color: 'white',
-    studentMoves: [],
-    minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'],
-    maxDepth: 80,
-  },
-  // His other main White try — the Scotch / Italian-Scotch complex (157g).
-  'caruana-scotch': {
-    name: 'Scotch Game (Caruana)',
-    color: 'white',
-    studentMoves: [],
-    minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'd4'],
-    maxDepth: 80,
-  },
-  // Black vs 1.d4 — the Nimzo-Indian (79g, his …e6 …Bb4 system).
-  'caruana-nimzo-indian': {
-    name: 'Nimzo-Indian Defense (Caruana)',
-    color: 'black',
-    studentMoves: [],
-    minPrefix: ['d4', 'Nf6', 'c4', 'e6', 'Nc3', 'Bb4'],
-    maxDepth: 80,
-  },
-  // Black vs 1.e4 — the Najdorf Sicilian (his sharpest weapon).
-  'caruana-najdorf': {
-    name: 'Sicilian Najdorf (Caruana)',
-    color: 'black',
-    studentMoves: [],
-    minPrefix: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6'],
-    maxDepth: 80,
-  },
-  // Black vs 1.e4 — the Taimanov / …e6 Sicilian (82g, the …c5 …e6 cxd4 system).
-  'caruana-taimanov': {
-    name: 'Sicilian Taimanov (Caruana)',
-    color: 'black',
-    studentMoves: [],
-    minPrefix: ['e4', 'c5', 'Nf3', 'e6', 'd4', 'cxd4', 'Nxd4'],
-    maxDepth: 80,
-  },
+  // ===== SAMAY RAINA-SPECIFIC OPENINGS (classical 1.e4 / 1…e5) =====
+  'samay-open-sicilian': { name: 'Open Sicilian (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'c5', 'Nf3'], maxDepth: 80 },
+  'samay-ruy': { name: 'Ruy Lopez (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5'], maxDepth: 80 },
+  'samay-italian': { name: 'Italian Game (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4'], maxDepth: 80 },
+  'samay-french-white': { name: 'French Defense (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'e6', 'd4', 'd5', 'Nc3'], maxDepth: 80 },
+  'samay-caro-white': { name: 'Caro-Kann (White)', color: 'white', studentMoves: [], minPrefix: ['e4', 'c6', 'd4', 'd5', 'Nc3'], maxDepth: 80 },
+  'samay-open-e5': { name: 'Open Games / …e5 (Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'e5'], maxDepth: 80 },
+  'samay-sicilian-black': { name: 'Sicilian Defense (Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'c5'], maxDepth: 80 },
+  'samay-scandi-black': { name: 'Scandinavian Defense (Black)', color: 'black', studentMoves: [], minPrefix: ['e4', 'd5'], maxDepth: 80 },
 };
 
 const cfg = OPENINGS[OPENING_ID];
