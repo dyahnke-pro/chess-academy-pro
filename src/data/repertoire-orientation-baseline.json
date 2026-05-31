@@ -1,10 +1,6 @@
 {
   "description": "Allowlist of known orientation violations in src/data/repertoire.json as of 2026-05-16. The build-time test in repertoire-orientation.test.ts treats these as expected; any flagged entry NOT on this list fails CI. Each value is the set of category codes currently allowed for that key. As Phases 2-4 of docs/plans/2026-05-16-trap-orientation.md ship, entries are removed from this file. Phase 5 deletes this file entirely.",
   "allowlist": {
-    "philidor-defence::trap::Legal's Mate Reversal": [
-      "PGN_NOT_IN_DB",
-      "STUDENT_NOT_PUNISHER"
-    ],
     "philidor-defence::trap::d4 Capture Refutation": [
       "WEAK_TRAP"
     ],
@@ -566,9 +562,6 @@
     ],
     "qgd::trap::Lasker Trap with Central Break": [
       "WEAK_TRAP"
-    ],
-    "slav-defence::warning::Early ...dxc4 Without Development": [
-      "TOOTHLESS_WARNING"
     ],
     "nimzo-indian::trap::e4 Block After Bxc3": [
       "WEAK_TRAP"
