@@ -323,13 +323,21 @@
           "Bd2",
           "O-O",
           "Bc4",
-          "Nc6"
+          "Nc6",
+          "O-O",
+          "Bg4",
+          "h3",
+          "Bxf3"
         ],
         "annotations": [
           "Bd2 — White must block the check — another tempo Black banks.",
           "…O-O — Black is already better developed thanks to White's chase.",
           "Bc4 — White develops, but Black already leads in piece activity.",
-          "…Nc6 hits the weak e5-pawn; Black surrounds it with the initiative White handed over."
+          "…Nc6 hits the weak e5-pawn; Black surrounds it with the initiative White handed over.",
+          "White castles, completing development.",
+          "…Bg4 pins the f3-knight — the very piece defending the weak e5-pawn. Black's plan is taking shape: pile onto e5 and the over-extended pawn falls.",
+          "White questions the bishop with h3.",
+          "…Bxf3! Black trades to remove e5's last defender. The pawn White pushed so eagerly in the Chase Variation becomes a target Black collects — over-extension punished, exactly the Alekhine's promise."
         ],
         "title": "Alekhine: Collect the Chase's Tempi",
         "arrows": [
@@ -342,7 +350,11 @@
               "to": "e5",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          [],
+          [],
+          [],
+          []
         ],
         "highlights": [
           [
@@ -388,6 +400,38 @@
               "square": "e5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
@@ -399,7 +443,11 @@
           "Bd2 — block the check",
           "O-O — better developed already",
           "Bc4 — develop",
-          "Nc6 — hit the weak e5-pawn"
+          "Nc6 — hit the weak e5-pawn",
+          "O-O — White castles",
+          "…Bg4 — pin the e5-defender",
+          "h3 — question the bishop",
+          "…Bxf3 — trade, win the e5-pawn"
         ]
       }
     ]
