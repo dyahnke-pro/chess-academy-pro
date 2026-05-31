@@ -16337,40 +16337,75 @@
   {
     "id": "mp-progothamchess-english-botvinnik-main",
     "openingId": "pro-gothamchess-english",
-    "criticalPositionFen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1B3/PP2BPPP/R2QK1NR b KQ - 0 7",
+    "criticalPositionFen": "r1b1qrk1/1ppn2bp/3p2p1/p1nPppB1/2P1P1PP/2N2P2/PP1QB3/R3K1NR w KQ - 2 13",
     "title": "English Botvinnik — d5 closed-centre + flank attack",
-    "overview": "Gotham's English at 1,597 games / 62.2%. The classical setup vs Black's KID structure reaches a closed centre after d5; the flank attack with g4 + h4 + Nh3 grabs the kingside. KID-reversed pattern with the extra tempo.",
+    "overview": "A real GothamChess win: h5 jabs at g6, the h-file opens, and Bh6 trades off the fianchetto bishop — roughly balanced, but White has the easier play (~equal).",
     "pawnBreaks": [
-      "g4 kingside pawn storm",
-      "h4 supporting the flank attack",
-      "f3 reinforcing the closed centre"
+      {
+        "move": "h4-h5 lever",
+        "explanation": "h5 then hxg6 prises open the h-file.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "…a5 by Black expanding queenside",
-      "…Na6 reroute",
-      "Be3 + Be2 classical development"
+      {
+        "piece": "Bishop",
+        "route": "Bc1-h6 trade",
+        "explanation": "The bishop targets and trades the fianchettoed g7-bishop."
+      }
     ],
     "strategicThemes": [
-      "Closed-centre flank attack — KID structure reversed",
-      "White's extra tempo decides on the kingside"
+      "Open the h-file against the fianchetto.",
+      "Trade the g7-bishop with Bh6."
     ],
     "endgameTransitions": [
-      "R+minor+P endgames where the kingside space advantage carries through"
+      "The open file gives easier play into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1B3/PP2BPPP/R2QK1NR b KQ - 0 7",
+        "fen": "r1b1qrk1/1ppn2bp/3p2p1/p1nPppB1/2P1P1PP/2N2P2/PP1QB3/R3K1NR w KQ - 2 13",
         "moves": [
-          "a5",
-          "g4",
-          "Na6"
+          "h5",
+          "f4",
+          "hxg6",
+          "hxg6",
+          "Bh6",
+          "Rf7",
+          "Bxg7",
+          "Rxg7"
         ],
         "annotations": [
-          "a5 — Black's pawn to a5 — standard development.",
-          "g4 — White's pawn to g4 — standard development.",
-          "Na6 — Black's knight to a6 — standard development."
+          "h5 — gaining kingside space, jabbing at g6.",
+          "…f4 — Black counters in the centre.",
+          "hxg6 — opening the h-file.",
+          "…hxg6 — recapturing.",
+          "Bh6 — the bishop targets the fianchetto.",
+          "…Rf7 — defending g7.",
+          "Bxg7 — trading off the fianchetto bishop.",
+          "…Rxg7 — recapturing; roughly balanced, but White has the easier play."
+        ],
+        "learnCues": [
+          "h5 — jab at g6",
+          "f4 — Black counters",
+          "hxg6 — open the h-file",
+          "hxg6 — recapture",
+          "Bh6 — target the fianchetto",
+          "Rf7 — defend g7",
+          "Bxg7 — trade it off",
+          "Rxg7 — White plays easier"
         ],
         "arrows": [
+          [
+            {
+              "from": "h4",
+              "to": "h5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           []
@@ -16378,47 +16413,60 @@
         "highlights": [
           [
             {
-              "square": "a7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a5",
+              "square": "h5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g4",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b8",
+              "square": "g6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "a6",
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "a5 — pawn to a5",
-          "g4 — pawn to g4",
-          "Na6 — knight to a6"
-        ],
-        "title": "English Botvinnik — d5 closed-centre + flank attack",
-        "intro": "Gotham's English at 1,597 games / 62.2%. The classical setup vs Black's KID structure reaches a closed centre after d5; the flank attack with g4 + h4 + Nh3 grabs the kingside. KID-reversed pattern wit",
+        "title": "English Botvinnik: Open the h-file",
+        "intro": "A real GothamChess win. White prises open the h-file and trades the fianchetto bishop.",
         "sources": [
-          "book:english-opening",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/English-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/English_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -16426,88 +16474,142 @@
   {
     "id": "mp-progothamchess-english-flank-attack",
     "openingId": "pro-gothamchess-english",
-    "criticalPositionFen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1B3/PP2BPPP/R2QK1NR b KQ - 0 7",
+    "criticalPositionFen": "r1bqnrk1/1p1n1p1p/p2p1b2/2pPp1pP/P1P1P1P1/2N1B3/1P1QBP2/R3K1NR w KQ - 0 13",
     "title": "English — Botvinnik setup + kingside attack",
-    "overview": "Levy's English at 1,597 games / 62.2% score. The flexible 1.c4 system transposing into a Botvinnik-style closed centre after Nc3/e4/d4. With Black committing …d6/…g6 the position resembles a KID-reversed; White's plan is g4 + h4 kingside expansion while Black's space is cramped.",
+    "overview": "A real GothamChess win: the h6-pawn wedges into Black’s kingside, and White calmly reroutes the knight (Nf3-h2-f1) toward a strong square. Clearly better (~+2.2).",
     "pawnBreaks": [
-      "g4 kingside pawn storm",
-      "h4 supporting the flank attack",
-      "c5 in some lines opening the queenside"
+      {
+        "move": "h5-h6 wedge",
+        "explanation": "The h-pawn wedges to h6 and cramps the kingside.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Be3 + Be2 + O-O classical development",
-      "Knight reroute Nc3 → Nb5 in some lines",
-      "Queen lifts via Qd2 supporting the kingside push"
+      {
+        "piece": "Knight",
+        "route": "Nf3-h2-f1 reroute",
+        "explanation": "The knight reroutes via h2 and f1 toward g3 or e3."
+      }
     ],
     "strategicThemes": [
-      "Closed-centre flank attack — KID structure reversed",
-      "g4 + h4 is the recurring weapon"
+      "Cramp the kingside with the h6-wedge.",
+      "Reroute the knight to a strong post."
     ],
     "endgameTransitions": [
-      "R+minor+P endgames where the kingside space advantage carries through"
+      "The space edge carries into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1B3/PP2BPPP/R2QK1NR b KQ - 0 7",
+        "fen": "r1bqnrk1/1p1n1p1p/p2p1b2/2pPp1pP/P1P1P1P1/2N1B3/1P1QBP2/R3K1NR w KQ - 0 13",
         "moves": [
-          "a5",
-          "g4",
-          "Na6"
+          "h6",
+          "Be7",
+          "Nf3",
+          "f6",
+          "Nh2",
+          "Kh8",
+          "Nf1",
+          "Rg8"
         ],
         "annotations": [
-          "a5 — Black's pawn to a5 — standard development.",
-          "g4 — White's pawn to g4 — standard development.",
-          "Na6 — Black's knight to a6 — standard development."
+          "h6 — a space-gaining wedge that cramps Black’s kingside.",
+          "…Be7 — the bishop retreats.",
+          "Nf3 — developing the knight.",
+          "…f6 — Black braces the centre.",
+          "Nh2 — rerouting the knight toward g4 and f1.",
+          "…Kh8 — Black tucks the king.",
+          "Nf1 — the knight reroutes toward e3 or g3.",
+          "…Rg8 — Black regroups, but White is clearly better with more space."
+        ],
+        "learnCues": [
+          "h6 — cramping wedge",
+          "Be7 — retreat",
+          "Nf3 — develop",
+          "f6 — brace",
+          "Nh2 — reroute",
+          "Kh8 — tuck the king",
+          "Nf1 — reroute on",
+          "Rg8 — White is better"
         ],
         "arrows": [
           [],
           [],
+          [],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "h2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [
+            {
+              "from": "h2",
+              "to": "f1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           []
         ],
         "highlights": [
           [
             {
-              "square": "a7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a5",
+              "square": "h6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g4",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "b8",
+              "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "a6",
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "a5 — pawn to a5",
-          "g4 — pawn to g4",
-          "Na6 — knight to a6"
-        ],
-        "title": "English — Botvinnik setup + kingside attack",
-        "intro": "Levy's English at 1,597 games / 62.2% score. The flexible 1.c4 system transposing into a Botvinnik-style closed centre after Nc3/e4/d4. With Black committing …d6/…g6 the position resembles a KID-rever",
+        "title": "English: Cramp with h6 and Reroute",
+        "intro": "A real GothamChess win. The h6-wedge cramps the kingside while White reroutes a knight.",
         "sources": [
-          "book:english-opening",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/English-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/English_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -17755,50 +17857,73 @@
   {
     "id": "mp-progothamchess-trompowsky-knight-flank",
     "openingId": "pro-gothamchess-trompowsky",
-    "criticalPositionFen": "rnbqkb1r/pppp1pp1/4pn1p/8/3P3B/8/PPPNPPPP/R2QKBNR b KQkq - 1 4",
+    "criticalPositionFen": "rn3rk1/p1p2pp1/qp2pb1p/3p4/3P1P2/2PQPN2/PP1N2PP/R3K2R w KQ - 1 13",
     "title": "Trompowsky — knight redirect + central tension",
-    "overview": "Gotham's most-played opening — 1,823 games at 61.5% score. The Trompowsky attack with Bg5 pins the knight immediately. After …e6 / Nd2 / …h6 / Bh4, White holds the bishop and lets Black commit pieces while keeping flexible centre options. The Trompowsky is the entire identity of his White repertoire — same Bg5 setup against most defences.",
+    "overview": "A real GothamChess win (vs Vitaly_Sivuk): the queens trade off, White’s king sits actively in the centre, and g4-h4 grab kingside space in the queenless middlegame (~equal, small edge).",
     "pawnBreaks": [
-      "e3-e4 timed central break",
-      "c3-c4 challenging Black's d5 once it appears",
-      "f2-f4 in some lines for kingside expansion"
+      {
+        "move": "g4-h4 space",
+        "explanation": "g4 and h4 grab kingside space once the queens are off.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bh4 holding the pin",
-      "Nd2 supports e4 push without blocking the c1-h6 diagonal",
-      "Bishop sometimes drops to Bg3 in some lines"
+      {
+        "piece": "King",
+        "route": "Ke1-e2 centralise",
+        "explanation": "The king steps up, active in the queenless middlegame."
+      }
     ],
     "strategicThemes": [
-      "Pin pressure on the f6-knight cramps Black's setup",
-      "Flexible centre — White doesn't commit c2-c4 unless beneficial"
+      "Trade queens and centralise the king.",
+      "Grab space on both wings."
     ],
     "endgameTransitions": [
-      "R+minor+P endings where the bishop pair or extra space converts"
+      "The queenless middlegame flows straight into a pleasant endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbqkb1r/pppp1pp1/4pn1p/8/3P3B/8/PPPNPPPP/R2QKBNR b KQkq - 1 4",
+        "fen": "rn3rk1/p1p2pp1/qp2pb1p/3p4/3P1P2/2PQPN2/PP1N2PP/R3K2R w KQ - 1 13",
         "moves": [
-          "d5",
-          "e3",
-          "Be7",
-          "Bd3",
-          "b6",
-          "c3",
-          "O-O"
+          "Ke2",
+          "c5",
+          "g4",
+          "Qxd3+",
+          "Kxd3",
+          "Nc6",
+          "h4",
+          "Be7"
         ],
         "annotations": [
-          "d5 — Black's pawn to d5 — standard development.",
-          "e3 — White's pawn to e3 — standard development.",
-          "Be7 — Black's bishop to e7 — standard development.",
-          "Bd3 — White's bishop to d3 — standard development.",
-          "b6 — Black's pawn to b6 — standard development.",
-          "c3 — White's pawn to c3 — standard development.",
-          "O-O — Black castles short, king to safety."
+          "Ke2 — the king steps toward the centre.",
+          "…c5 — Black strikes on the queenside.",
+          "g4 — gaining kingside space.",
+          "…Qxd3+ — Black trades queens with check.",
+          "Kxd3 — the king recaptures, active in the centre.",
+          "…Nc6 — Black develops.",
+          "h4 — gaining more kingside space.",
+          "…Be7 — Black develops; roughly balanced, with White’s space."
+        ],
+        "learnCues": [
+          "Ke2 — step up",
+          "c5 — Black strikes",
+          "g4 — grab space",
+          "Qxd3+ — trade queens",
+          "Kxd3 — active king",
+          "Nc6 — develop",
+          "h4 — more space",
+          "Be7 — balanced edge"
         ],
         "arrows": [
           [],
           [],
+          [
+            {
+              "from": "g2",
+              "to": "g4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
@@ -17808,39 +17933,23 @@
         "highlights": [
           [
             {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
               "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "e3",
+              "square": "c5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
+              "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -17848,51 +17957,36 @@
           ],
           [
             {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b6",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e8",
+              "square": "h4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "g8",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "d5 — pawn to d5",
-          "e3 — pawn to e3",
-          "Be7 — bishop to e7",
-          "Bd3 — bishop to d3",
-          "b6 — pawn to b6",
-          "c3 — pawn to c3",
-          "O-O — king to g8"
-        ],
-        "title": "Trompowsky — knight redirect + central tension",
-        "intro": "Gotham's most-played opening — 1,823 games at 61.5% score. The Trompowsky attack with Bg5 pins the knight immediately. After …e6 / Nd2 / …h6 / Bh4, White holds the bishop and lets Black commit pieces ",
+        "title": "Trompowsky: Active King, Space on the Wings",
+        "intro": "A real GothamChess win vs Vitaly_Sivuk. Queens come off and White grabs space on both wings.",
         "sources": [
-          "book:trompowsky",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Trompowsky-Attack",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -17900,52 +17994,75 @@
   {
     "id": "mp-progothamchess-trompowsky-main-system",
     "openingId": "pro-gothamchess-trompowsky",
-    "criticalPositionFen": "rnbqkb1r/pppp1pp1/4pn1p/8/3P3B/8/PPPNPPPP/R2QKBNR b KQkq - 1 4",
+    "criticalPositionFen": "r2qk2r/pbp2pp1/1pn1p2p/4pn2/3P4/2PQ1N2/PP1N1PPP/R3KB1R w KQkq - 0 13",
     "title": "Trompowsky main — Bh4 pin + classical setup",
-    "overview": "Gotham's top opening: 1,823 games at 61.5% score. After the Bg5 pin, Black plays …e6 / …h6 / White holds with Bh4. The plan: Bd3 + c3 + O-O reaching a quiet middlegame where the space advantage and the f4-storm plan gradually win.",
+    "overview": "A real GothamChess win (vs Vitaly_Sivuk): dxe5 opens the centre, the queens come off, and White castles long with tempo on the d-file — clearly better in the queenless middlegame (~+3.3).",
     "pawnBreaks": [
-      "…d5 by Black challenging the centre",
-      "e3-e4 timed central break",
-      "c3 reinforcing d4"
+      {
+        "move": "g4 space",
+        "explanation": "g4 grabs kingside space in the queenless middlegame.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bh4 holding the pin",
-      "Bd3 + O-O classical development",
-      "Nd2 supports central play"
+      {
+        "piece": "Bishop",
+        "route": "recapture on d3",
+        "explanation": "The bishop recaptures on d3 as the queens trade, eyeing the kingside."
+      }
     ],
     "strategicThemes": [
-      "Pin pressure on the f6-knight cramps Black's setup",
-      "Patient positional accumulation"
+      "Trade queens into a better middlegame.",
+      "Castle long with tempo on the d-file."
     ],
     "endgameTransitions": [
-      "R+minor+P endgames where the bishop pair or extra space converts"
+      "White’s activity carries the edge into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbqkb1r/pppp1pp1/4pn1p/8/3P3B/8/PPPNPPPP/R2QKBNR b KQkq - 1 4",
+        "fen": "r2qk2r/pbp2pp1/1pn1p2p/4pn2/3P4/2PQ1N2/PP1N1PPP/R3KB1R w KQkq - 0 13",
         "moves": [
-          "d5",
-          "e3",
-          "Be7",
-          "Bd3",
-          "b6",
-          "c3",
-          "O-O"
+          "dxe5",
+          "Qxd3",
+          "Bxd3",
+          "Kd8",
+          "O-O-O",
+          "Ke7",
+          "g4",
+          "Rad8"
         ],
         "annotations": [
-          "d5 — Black's pawn to d5 — standard development.",
-          "e3 — White's pawn to e3 — standard development.",
-          "Be7 — Black's bishop to e7 — standard development.",
-          "Bd3 — White's bishop to d3 — standard development.",
-          "b6 — Black's pawn to b6 — standard development.",
-          "c3 — White's pawn to c3 — standard development.",
-          "O-O — Black castles short, king to safety."
+          "dxe5 — opening the centre.",
+          "…Qxd3 — Black trades queens.",
+          "Bxd3 — recapturing; the queens are off and White is better.",
+          "…Kd8 — Black’s king stays central.",
+          "O-O-O — castling long with tempo on the d-file.",
+          "…Ke7 — the king shuffles.",
+          "g4 — gaining kingside space.",
+          "…Rad8 — Black contests the d-file, but White is clearly better."
+        ],
+        "learnCues": [
+          "dxe5 — open the centre",
+          "Qxd3 — trade queens",
+          "Bxd3 — White is better",
+          "Kd8 — king stays central",
+          "O-O-O — castle with tempo",
+          "Ke7 — shuffle",
+          "g4 — grab space",
+          "Rad8 — White is better"
         ],
         "arrows": [
           [],
           [],
           [],
           [],
+          [
+            {
+              "from": "e1",
+              "to": "c1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           []
@@ -17953,39 +18070,11 @@
         "highlights": [
           [
             {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -17993,51 +18082,48 @@
           ],
           [
             {
-              "square": "b7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b6",
+              "square": "d3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "e8",
+              "square": "c1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "g8",
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "d5 — pawn to d5",
-          "e3 — pawn to e3",
-          "Be7 — bishop to e7",
-          "Bd3 — bishop to d3",
-          "b6 — pawn to b6",
-          "c3 — pawn to c3",
-          "O-O — king to g8"
-        ],
-        "title": "Trompowsky main — Bh4 pin + classical setup",
-        "intro": "Gotham's top opening: 1,823 games at 61.5% score. After the Bg5 pin, Black plays …e6 / …h6 / White holds with Bh4. The plan: Bd3 + c3 + O-O reaching a quiet middlegame where the bishop pair + space ad",
+        "title": "Trompowsky Main: Queens Off, Clear Edge",
+        "intro": "A real GothamChess win vs Vitaly_Sivuk. The queens trade and White’s pieces dominate.",
         "sources": [
-          "book:trompowsky",
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/Trompowsky-Attack",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
@@ -46876,739 +46962,83 @@
   {
     "id": "mp-progothamchess-tromp-e6-bishoppair",
     "openingId": "pro-gothamchess-trompowsky",
-    "criticalPositionFen": "rnbq1rk1/p1p1bpp1/1p2pn1p/3p4/3P3B/2PBP3/PP1N1PPP/R2QK1NR w KQ - 1 8",
+    "criticalPositionFen": "r2q1rk1/p4pp1/1pn1pb1p/2pp4/3P1P2/2PQPN2/PP1N2PP/R3K2R w KQ - 2 13",
     "title": "Trompowsky vs …e6: Trade on f6 + the f4 Pawn Storm",
-    "overview": "His main-line plan against the solid …e6 setup, across 464 games. White trades the dark-squared bishop for the f6-knight — not for the bishop pair (Black keeps two bishops), but to clear the way for the f4-f5 pawn storm. The bishop that recaptures on f6 lands right in the path of the f-pawn, becoming a target. White rolls the kingside with f4, lines the queen up behind the d3-bishop, and plays for a direct attack with the space edge. Classic Trompowsky: trade, then push.",
+    "overview": "A real GothamChess win: g4 storms forward, the king sidesteps a check, and g5 prises open lines — a balanced, double-edged game with White’s space (~equal, small edge).",
     "pawnBreaks": [
-      "f2-f4 storming the kingside",
-      "c3-c4 challenging the d5-centre later"
+      {
+        "move": "g4-g5 storm",
+        "explanation": "g4 then g5 storms the kingside and opens lines.",
+        "fen": ""
+      }
     ],
     "pieceManeuvers": [
-      "Bg5xf6 grabbing the bishop pair",
-      "Bd3 + Qe2 battery toward h7",
-      "Ba6/Bxd3 trade-down"
+      {
+        "piece": "Rook",
+        "route": "Rh1-g1 support",
+        "explanation": "The rook backs the g-pawn storm from g1."
+      }
     ],
     "strategicThemes": [
-      "Trade for the kingside storm on f6",
-      "Storm with f4 on the kingside",
-      "A space edge and the easier game"
+      "Roll the kingside pawns g4-g5.",
+      "Back the storm with the rook."
     ],
     "endgameTransitions": [
-      "The bishop pair tells in the simplified ending"
+      "The space can tell into the endgame."
     ],
     "playableLines": [
       {
-        "fen": "rnbq1rk1/p1p1bpp1/1p2pn1p/3p4/3P3B/2PBP3/PP1N1PPP/R2QK1NR w KQ - 1 8",
+        "fen": "r2q1rk1/p4pp1/1pn1pb1p/2pp4/3P1P2/2PQPN2/PP1N2PP/R3K2R w KQ - 2 13",
         "moves": [
-          "Bxf6",
-          "Bxf6",
-          "f4",
-          "Ba6",
-          "Qe2"
+          "g4",
+          "Bh4+",
+          "Ke2",
+          "Be7",
+          "Rhg1",
+          "f6",
+          "g5",
+          "hxg5"
         ],
         "annotations": [
-          "Bxf6 — White cashes in the dark-squared bishop for the knight, clearing the f6-square for the f-pawn storm to come.",
-          "…Bxf6 recaptures; that bishop now sits directly in the path of our advancing f-pawn.",
-          "f4 — the pawn storm begins. White grabs kingside space and prepares f5 to crack open Black’s king.",
-          "…Ba6 — Black offers to trade the bad light bishop off via a6.",
-          "Qe2 — White lines the queen up behind the d3-bishop and guards the trade square, keeping the attacking bishop. The space edge and the f-pawn roller give White the easier game."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
+          "g4 — the pawn storms forward, gaining kingside space.",
+          "…Bh4+ — Black checks to disrupt.",
+          "Ke2 — the king steps aside, keeping the pawns rolling.",
+          "…Be7 — the bishop retreats.",
+          "Rhg1 — the rook backs the g-pawn.",
+          "…f6 — Black braces.",
+          "g5 — the pawn jabs, prising open lines.",
+          "…hxg5 — Black opens the h-file; roughly balanced, with White’s space."
         ],
         "learnCues": [
-          "Bxf6 — grab the bishop pair",
-          "Bxf6 — Black recaptures",
-          "f4 — storm the kingside",
-          "Ba6 — Black offers a trade",
-          "Qe2 — keep the attacking bishop"
-        ],
-        "title": "Trompowsky vs …e6: Bishop-Pair + f4 Pawn Storm",
-        "intro": "His main-line plan against the solid …e6 setup, across 464 games. White trades the dark bishop for the f6-knight to claim the bishop pair, then rolls the kingside with f4 and lines the queen up behind the d3-bishop. Black's light-squared bishop gets traded off, leaving White with a space edge and the easier attacking plan. Classic Trompowsky: trade, then push.",
-        "sources": [
-          "book:queens-gambit",
-          "https://www.chess.com/openings/Trompowsky-Attack",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-tromp-d5-squeeze",
-    "openingId": "pro-gothamchess-trompowsky",
-    "criticalPositionFen": "r1b1kb1r/pp2pppp/1qn2n2/3p2B1/2pP4/2P1P3/PPQN1PPP/R3KBNR b KQkq - 1 7",
-    "title": "Trompowsky vs …d5: the e3/c3 Squeeze + e4 Break",
-    "overview": "Against the solid …d5, his 439-game plan is a patient squeeze: e3 and c3 build a small, solid centre, Nd2 and Qb3 pressure the queenside, and then White uncorks the e4 break to open the position for the bishop pair. Black's …c5 and …Qb6 try for counterplay, but White's e4 at the right moment seizes the centre.",
-    "pawnBreaks": [
-      "e3-e4 the central break that opens the game"
-    ],
-    "pieceManeuvers": [
-      "Bg5xf6 doubling Black’s pawns",
-      "Nb1-d2 supporting e4",
-      "Qd1-b3 hitting the queenside"
-    ],
-    "strategicThemes": [
-      "Build a solid c3/e3 centre",
-      "Pressure the queenside with Qb3",
-      "Open with e4 for the bishops"
-    ],
-    "endgameTransitions": [
-      "Black’s doubled f-pawns are a long-term endgame target"
-    ],
-    "playableLines": [
-      {
-        "fen": "r1b1kb1r/pp2pppp/1qn2n2/3p2B1/2pP4/2P1P3/PPQN1PPP/R3KBNR b KQkq - 1 7",
-        "moves": [
-          "g6",
-          "Bxf6",
-          "exf6",
-          "e4",
-          "dxe4"
-        ],
-        "annotations": [
-          "…g6 — Black prepares to fianchetto, but loosens the kingside dark squares.",
-          "Bxf6 — White trades off to double Black’s pawns and damage the structure.",
-          "…exf6 recaptures, accepting the doubled f-pawns.",
-          "e4 — the break. White strikes the centre, opening lines for the bishop pair exactly when Black’s structure is compromised.",
-          "…dxe4 — Black takes, but now the position is open and White’s pieces are the better-placed ones, pressing the weakened pawns."
+          "g4 — storm forward",
+          "Bh4+ — disruptive check",
+          "Ke2 — step aside",
+          "Be7 — retreat",
+          "Rhg1 — back the pawn",
+          "f6 — brace",
+          "g5 — prise it open",
+          "hxg5 — balanced edge"
         ],
         "arrows": [
+          [
+            {
+              "from": "g2",
+              "to": "g4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
           [],
           [],
           [],
           [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "g6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "g6 — Black loosens dark squares",
-          "Bxf6 — double the pawns",
-          "exf6 — Black recaptures",
-          "e4 — the central break",
-          "dxe4 — open for the bishops"
-        ],
-        "title": "Trompowsky vs …d5: the e3/c3 Squeeze + e4 Break",
-        "intro": "Against the solid …d5, his 439-game plan is a patient squeeze: e3 and c3 build a small, solid centre, Nd2 and Qb3 pressure the queenside, and then White uncorks the e4 break to open the position for the bishop pair. Black's …c5 and …Qb6 try for counterplay, but White's e4 at the right moment seizes the centre.",
-        "sources": [
-          "book:queens-gambit",
-          "https://www.chess.com/openings/Trompowsky-Attack",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-tromp-g6-doubled",
-    "openingId": "pro-gothamchess-trompowsky",
-    "criticalPositionFen": "rnbq1rk1/pppp1pbp/6p1/5p2/3P4/4P1P1/PPP2PBP/RN1QK1NR w KQ - 0 7",
-    "title": "Trompowsky vs …g6: Double the Pawns, Fianchetto, Press f5",
-    "overview": "Against the …g6 fianchetto, his 241-game plan: trade on f6 immediately to saddle Black with doubled f-pawns, then build the mirror fianchetto with g3 and Bg2 to pressure Black's loosened light squares and the d5-break. Black's …f5 grabs space but creates holes; White's bishop on g2 and the e3/Ne2 setup target them.",
-    "pawnBreaks": [
-      "e3-e4 hitting Black’s …f5 advance"
-    ],
-    "pieceManeuvers": [
-      "Bg5xf6 forcing doubled f-pawns",
-      "g3 + Bf1-g2 the long-diagonal fianchetto",
-      "Ng1-e2 eyeing the holes"
-    ],
-    "strategicThemes": [
-      "Double the f-pawns with Bxf6",
-      "Fianchetto to press the light squares",
-      "Exploit the holes from …f5"
-    ],
-    "endgameTransitions": [
-      "The healthier pawn structure wins the long game"
-    ],
-    "playableLines": [
-      {
-        "fen": "rnbq1rk1/pppp1pbp/6p1/5p2/3P4/4P1P1/PPP2PBP/RN1QK1NR w KQ - 0 7",
-        "moves": [
-          "Ne2",
-          "Nc6",
-          "O-O",
-          "d6",
-          "c4"
-        ],
-        "annotations": [
-          "Ne2 — White develops the knight toward the holes Black created on the light squares.",
-          "…Nc6 develops; Black hopes the bishop pair compensates for the doubled pawns.",
-          "O-O — White castles, completing the harmonious fianchetto setup.",
-          "…d6 — Black props the centre.",
-          "c4 — White claims queenside space, clamps the d5-square, and presses Black’s damaged structure. The healthier pawns favour White."
-        ],
-        "arrows": [
           [],
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
           [
             {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "from": "g4",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
             }
           ],
-          [
-            {
-              "square": "c6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "Ne2 — toward the holes",
-          "Nc6 — Black develops",
-          "O-O — complete the setup",
-          "d6 — Black props the centre",
-          "c4 — claim queenside space"
-        ],
-        "title": "Trompowsky vs …g6: Double the Pawns, Fianchetto, Press f5",
-        "intro": "Against the …g6 fianchetto, his 241-game plan: trade on f6 immediately to saddle Black with doubled f-pawns, then build the mirror fianchetto with g3 and Bg2 to pressure Black's loosened light squares and the d5-break. Black's …f5 grabs space but creates holes; White's bishop on g2 and the e3/Ne2 setup target them.",
-        "sources": [
-          "book:queens-gambit",
-          "https://www.chess.com/openings/Trompowsky-Attack",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-tromp-c5-gambit",
-    "openingId": "pro-gothamchess-trompowsky",
-    "criticalPositionFen": "rnb1kb1r/pp2pp1p/1q1p1np1/2pP4/4PP2/2N5/P1PB2PP/1R1QKBNR b Kkq - 1 8",
-    "title": "Trompowsky vs …c5: the b2-Gambit Big Centre",
-    "overview": "Against the sharp …c5, his 226-game gambit plan: push d5, let Black grab the b2-pawn with …Qxb2, and in return build a massive e4/f4 centre with a huge development lead. The queen on b2 gets chased with Rb1 and Bd2, costing Black tempo after tempo while White's centre rolls forward. Pure Trompowsky aggression: a pawn for a raging initiative.",
-    "pawnBreaks": [
-      "e4-e5 the big centre surging forward",
-      "f2-f4 supporting the centre roller"
-    ],
-    "pieceManeuvers": [
-      "Ra1-b1 chasing the b2-queen",
-      "Bc1-d2 gaining tempo on the queen",
-      "Nb1-c3 hitting b2 and supporting e4"
-    ],
-    "strategicThemes": [
-      "Sacrifice b2 for a development lead",
-      "Build the e4/f4 big centre",
-      "Chase the queen, win tempo"
-    ],
-    "endgameTransitions": [
-      "If Black survives, the extra pawn matters — so keep attacking"
-    ],
-    "playableLines": [
-      {
-        "fen": "rnb1kb1r/pp2pp1p/1q1p1np1/2pP4/4PP2/2N5/P1PB2PP/1R1QKBNR b Kkq - 1 8",
-        "moves": [
-          "Qd8",
-          "e5",
-          "dxe5",
-          "fxe5"
-        ],
-        "annotations": [
-          "…Qd8 — the queen finally scuttles home, having cost Black four tempi; White’s lead in development is enormous.",
-          "e5 — the big centre advances, striking at the d6-pawn and ripping open lines.",
-          "…dxe5 — Black must take.",
-          "fxe5 — White recaptures on e5; the pawn roller stays intact, the f-file is half-open toward Black’s king, and Black is still stuck in the centre. The gambit pawn bought a winning initiative."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "d8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "Qd8 — queen limps home",
-          "e5 — the centre rolls",
-          "dxe5 — Black must take",
-          "fxe5 — open f-file, big initiative"
-        ],
-        "title": "Trompowsky vs …c5: the b2-Gambit Big Centre",
-        "intro": "Against the sharp …c5, his 226-game gambit plan: push d5, let Black grab the b2-pawn with …Qxb2, and in return build a massive e4/f4 centre with a huge development lead. The queen on b2 gets chased with Rb1 and Bd2, costing Black tempo after tempo while White's centre rolls forward. Pure Trompowsky aggression: a pawn for a raging initiative.",
-        "sources": [
-          "book:queens-gambit",
-          "https://www.chess.com/openings/Trompowsky-Attack",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-tromp-vaganian-gambit",
-    "openingId": "pro-gothamchess-trompowsky",
-    "criticalPositionFen": "rnb1kb1r/pp1ppppp/8/2pP2P1/8/8/PqPNPPP1/R2QKBNR w KQkq - 0 7",
-    "title": "Trompowsky Vaganian: the h4 Gambit Attack",
-    "overview": "Against the critical …Ne4, his 432-game plan is the razor-sharp h4 gambit. White ignores the knight, plays h4 to support the bishop, and after the …Nxg5/hxg5 trade lets Black grab b2 — then opens the h-file with g6 and builds a big centre with e4. Black wins a pawn but faces a raging attack down the h-file against an uncastled king. The sharpest line in the whole repertoire.",
-    "pawnBreaks": [
-      "e4 building the centre",
-      "g6 ripping open the h-file"
-    ],
-    "pieceManeuvers": [
-      "h4 supporting the bishop and opening the rook’s file",
-      "Ng1-f3 developing toward the centre",
-      "Nb1-d2 hitting e4"
-    ],
-    "strategicThemes": [
-      "Gambit b2 for an open h-file",
-      "Build the e4 centre with tempo",
-      "Attack the uncastled king"
-    ],
-    "endgameTransitions": [
-      "Keep attacking — the open king is the target, not the pawn count"
-    ],
-    "playableLines": [
-      {
-        "fen": "rnb1kb1r/pp1ppppp/8/2pP2P1/8/8/PqPNPPP1/R2QKBNR w KQkq - 0 7",
-        "moves": [
-          "g6",
-          "fxg6",
-          "Ngf3",
-          "d6",
-          "e4"
-        ],
-        "annotations": [
-          "g6 — White cracks open the h-file at once, offering the g6-pawn to expose Black’s king side.",
-          "…fxg6 — Black takes, but now the h-file is wide open with White’s rook already on h1.",
-          "Ngf3 — White develops with tempo, eyeing the e5- and g5-squares and the dark holes around Black’s king.",
-          "…d6 — Black tries to free the position.",
-          "e4 — the centre surges forward; White has a roaring initiative, an open h-file, and Black’s king stuck in the middle. Giving up the b2 pawn was a cheap price."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "g6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "g6 — rip the h-file open",
-          "fxg6 — Black takes",
-          "Ngf3 — develop with tempo",
-          "d6 — Black tries to free up",
-          "e4 — the centre surges"
-        ],
-        "title": "Trompowsky Vaganian: the h4 Gambit Attack",
-        "intro": "Against the critical …Ne4, his 432-game plan is the razor-sharp h4 gambit. White ignores the knight, plays h4 to support the bishop, and after the …Nxg5/hxg5 trade lets Black grab b2 — then opens the h-file with g6 and builds a big centre with e4. Black wins a pawn but faces a raging attack down the h-file against an uncastled king. The sharpest line in the whole repertoire.",
-        "sources": [
-          "book:queens-gambit",
-          "https://www.chess.com/openings/Trompowsky-Attack",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://www.chess.com/member/gothamchess"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-eng-e6-doublefianchetto",
-    "openingId": "pro-gothamchess-english",
-    "criticalPositionFen": "r1bq1rk1/pp2bppp/2n2n2/2pp4/3P4/1PN1PN2/PB3PPP/R2QKB1R w KQ - 1 9",
-    "title": "English vs …e6: the b3/Bb2 Double-Fianchetto Squeeze",
-    "overview": "His main Anti-French plan across 162 games. White declines to enter a French and instead builds the reversed-Hedgehog: e3, Nf3, b3 and Bb2 train the dark bishop on the long diagonal, then d4 challenges the centre. After the …c5/cxd5 exchanges, White gets the isolated-queen-pawn position to play AGAINST, with the Bb2 and pressure down the c-file. Slow, strategic, and deeply his style.",
-    "pawnBreaks": [
-      "d2-d4 challenging the centre",
-      "c4xd5 opening the c-file"
-    ],
-    "pieceManeuvers": [
-      "b3 + Bc1-b2 the long-diagonal fianchetto",
-      "Bf1-e2 calm development",
-      "Nf3 + Nc3 the natural squares"
-    ],
-    "strategicThemes": [
-      "Build the b3/Bb2 reversed-Hedgehog",
-      "Play against the isolated d5-pawn",
-      "Pressure down the half-open c-file"
-    ],
-    "endgameTransitions": [
-      "The isolated d5-pawn is a target into the ending"
-    ],
-    "playableLines": [
-      {
-        "fen": "r1bq1rk1/pp2bppp/2n2n2/2pp4/3P4/1PN1PN2/PB3PPP/R2QKB1R w KQ - 1 9",
-        "moves": [
-          "Be2",
-          "Ne4",
-          "O-O"
-        ],
-        "annotations": [
-          "Be2 — calm development, completing the harmonious setup before resolving the centre tension.",
-          "…Ne4 — Black jumps into the outpost, the typical freeing try in the isolated-pawn middlegame.",
-          "O-O — White castles into a risk-free position: the Bb2 rakes the long diagonal, the d5-pawn is a fixed target, and the c-file is White’s to press. The reversed-Hedgehog gives White all the long-term trumps."
-        ],
-        "arrows": [
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "Be2 — calm development",
-          "Ne4 — Black’s freeing jump",
-          "O-O — press the isolated pawn"
-        ],
-        "title": "English vs …e6: the b3/Bb2 Double-Fianchetto Squeeze",
-        "intro": "His main Anti-French plan across 162 games. White declines to enter a French and instead builds the reversed-Hedgehog: e3, Nf3, b3 and Bb2 train the dark bishop on the long diagonal, then d4 challenges the centre. After the …c5/cxd5 exchanges, White gets the isolated-queen-pawn position to play AGAINST, with the Bb2 and pressure down the c-file. Slow, strategic, and deeply his style.",
-        "sources": [
-          "book:chess-strategy",
-          "https://www.chess.com/openings/English-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/English_Opening"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-eng-e5-reversedsicilian",
-    "openingId": "pro-gothamchess-english",
-    "criticalPositionFen": "r1b1k2r/ppppqppp/2n2n2/4p3/2P5/1PQ1PN2/P2P1PPP/R1B1KB1R b KQkq - 0 7",
-    "title": "English vs …e5: the Reversed Sicilian Bishop-Pair",
-    "overview": "Against the Symmetric …e5 (a Sicilian a tempo up), his 78-game plan grabs the bishop pair. After …Bb4 pins the knight, Qc2 prepares to recapture on c3 with the queen, keeping the structure clean. Then b3 and Bb2 fianchetto, and White uses the two bishops and the central majority. The extra tempo of the reversed Sicilian means White is the one with the initiative.",
-    "pawnBreaks": [
-      "d2-d4 the central break",
-      "b3 supporting the fianchetto"
-    ],
-    "pieceManeuvers": [
-      "Qd1-c2 recapturing on c3 with the queen",
-      "Bc1-b2 the long-diagonal bishop",
-      "the bishop pair after …Bxc3"
-    ],
-    "strategicThemes": [
-      "Keep the bishop pair after …Bxc3",
-      "Fianchetto with b3/Bb2",
-      "Use the reversed-Sicilian extra tempo"
-    ],
-    "endgameTransitions": [
-      "The bishop pair tells in an open ending"
-    ],
-    "playableLines": [
-      {
-        "fen": "r1b1k2r/ppppqppp/2n2n2/4p3/2P5/1PQ1PN2/P2P1PPP/R1B1KB1R b KQkq - 0 7",
-        "moves": [
-          "d5",
-          "Bb2",
-          "d4"
-        ],
-        "annotations": [
-          "…d5 — Black grabs central space, the principled try to justify giving up the bishop.",
-          "Bb2 — White completes the fianchetto; the bishop eyes the e5-pawn and the long diagonal.",
-          "…d4 — Black pushes on, gaining space but locking in the structure. After exd4, White’s bishop pair and queenside play give a comfortable, pleasant edge — the reversed Sicilian with the extra tempo working."
-        ],
-        "arrows": [
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "b2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "d5 — Black grabs the centre",
-          "Bb2 — eye the long diagonal",
-          "d4 — Black overextends"
-        ],
-        "title": "English vs …e5: the Reversed Sicilian Bishop-Pair",
-        "intro": "Against the Symmetric …e5 (a Sicilian a tempo up), his 78-game plan grabs the bishop pair. After …Bb4 pins the knight, Qc2 prepares to recapture on c3 with the queen, keeping the structure clean. Then b3 and Bb2 fianchetto, and White uses the two bishops and the central majority. The extra tempo of the reversed Sicilian means White is the one with the initiative.",
-        "sources": [
-          "book:chess-strategy",
-          "https://www.chess.com/openings/English-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/English_Opening"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-eng-c5-maroczy",
-    "openingId": "pro-gothamchess-english",
-    "criticalPositionFen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq - 0 4",
-    "title": "English vs …c5: the d4 Break into a Maroczy Bind",
-    "overview": "Against the Symmetric …c5, his 73-game plan strikes with d4. After …cxd4 Nxd4, White reaches a Maroczy-style structure with the c4-pawn clamping d5, a classic positional bind. Black fianchettoes with …g6/…Bg7, but White's space and the c4/e4 pawn duo restrain Black's freeing breaks. The English at its most strategic: bind, restrain, expand.",
-    "pawnBreaks": [
-      "d2-d4 the central break that defines the structure"
-    ],
-    "pieceManeuvers": [
-      "Nf3xd4 the strong central knight",
-      "Nc3 supporting the c4/e4 clamp",
-      "Bf1 toward the kingside"
-    ],
-    "strategicThemes": [
-      "Strike with d4 into a Maroczy bind",
-      "Clamp the d5-square with c4",
-      "Restrain Black’s …d5 and …b5 breaks"
-    ],
-    "endgameTransitions": [
-      "The space bind carries into a favourable ending"
-    ],
-    "playableLines": [
-      {
-        "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq - 0 4",
-        "moves": [
-          "d4",
-          "cxd4",
-          "Nxd4"
-        ],
-        "annotations": [
-          "d4 — the central break, challenging Black’s …c5 directly and opening the position for White’s development lead.",
-          "…cxd4 — Black takes; declining lets White play dxc5 with a pull.",
-          "Nxd4 — the knight recaptures on a dominant central square. White has the c4-pawn clamping d5, a space edge, and the easier game: a textbook Maroczy bind where Black must fight for every freeing break."
-        ],
-        "arrows": [
-          [],
-          [],
-          []
-        ],
-        "highlights": [
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ]
-        ],
-        "learnCues": [
-          "d4 — the central break",
-          "cxd4 — Black must take",
-          "Nxd4 — the Maroczy bind"
-        ],
-        "title": "English vs …c5: the d4 Break into a Maroczy Bind",
-        "intro": "Against the Symmetric …c5, his 73-game plan strikes with d4. After …cxd4 Nxd4, White reaches a Maroczy-style structure with the c4-pawn clamping d5, a classic positional bind. Black fianchettoes with …g6/…Bg7, but White's space and the c4/e4 pawn duo restrain Black's freeing breaks. The English at its most strategic: bind, restrain, expand.",
-        "sources": [
-          "book:chess-strategy",
-          "https://www.chess.com/openings/English-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/English_Opening"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-eng-c6-slav-g4",
-    "openingId": "pro-gothamchess-english",
-    "criticalPositionFen": "r1bq1rk1/pp1n1ppp/2pbpn2/3p4/2P5/1PN1PN2/PBQP1PPP/R3KB1R w KQ - 5 8",
-    "title": "English vs …c6: Double-Fianchetto then the g4 Thrust",
-    "overview": "Against the …c6 Slav-like setup, his 101-game plan builds the same b3/Bb2 structure, then surprises with the aggressive g4! thrust. After Bb2, Qc2 and O-O, White expands on the kingside with g4-g5, gaining space and chasing Black's f6-knight while the queenside stays solid. A modern, double-edged way to play the English: solid base, sharp wings.",
-    "pawnBreaks": [
-      "g2-g4-g5 the kingside expansion",
-      "e3-e4 a central break later"
-    ],
-    "pieceManeuvers": [
-      "b3 + Bc1-b2 the long-diagonal fianchetto",
-      "Qd1-c2 supporting e4 and eyeing the kingside",
-      "g4 chasing the f6-knight"
-    ],
-    "strategicThemes": [
-      "Build the b3/Bb2 base",
-      "Expand with the g4-g5 thrust",
-      "Chase the knight, grab kingside space"
-    ],
-    "endgameTransitions": [
-      "The kingside space lingers as a long-term asset"
-    ],
-    "playableLines": [
-      {
-        "fen": "r1bq1rk1/pp1n1ppp/2pbpn2/3p4/2P5/1PN1PN2/PBQP1PPP/R3KB1R w KQ - 5 8",
-        "moves": [
-          "g4"
-        ],
-        "annotations": [
-          "g4 — the thrust. With both kings’ structures set, White grabs kingside space, threatens g5 to chase the f6-knight, and opens lines toward Black’s castled king. The b3/Bb2 base stays rock-solid while the kingside catches fire — the modern, aggressive face of the English."
-        ],
-        "arrows": [
           []
         ],
         "highlights": [
@@ -47617,67 +47047,31 @@
               "square": "g4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
-          ]
-        ],
-        "learnCues": [
-          "g4 — the kingside thrust"
-        ],
-        "title": "English vs …c6: Double-Fianchetto then the g4 Thrust",
-        "intro": "Against the …c6 Slav-like setup, his 101-game plan builds the same b3/Bb2 structure, then surprises with the aggressive g4! thrust. After Bb2, Qc2 and O-O, White expands on the kingside with g4-g5, gaining space and chasing Black's f6-knight while the queenside stays solid. A modern, double-edged way to play the English: solid base, sharp wings.",
-        "sources": [
-          "book:chess-strategy",
-          "https://www.chess.com/openings/English-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/English_Opening"
-        ]
-      }
-    ]
-  },
-  {
-    "id": "mp-progothamchess-eng-g6-botvinnik-storm",
-    "openingId": "pro-gothamchess-english",
-    "criticalPositionFen": "r1bqk1nr/pppn1pbp/6p1/3Pp3/2P1P3/2N5/PP4PP/R1BQKBNR b KQkq - 0 7",
-    "title": "English vs …g6: the Botvinnik f4 Kingside Storm",
-    "overview": "Against the …g6 KID setup, his 154-game plan is the Botvinnik System turned aggressive: c4/Nc3/d4/e4 build the big centre, then f4 and the …e5/fxe5 exchange lead to d5, locking the centre and freeing White's hands for a kingside pawn storm. With the centre closed, White rolls the f- and g-pawns at Black's king. The English transposing into a King's-Indian-Attack avalanche.",
-    "pawnBreaks": [
-      "f2-f4 the storming break",
-      "d4-d5 locking the centre for the wing attack"
-    ],
-    "pieceManeuvers": [
-      "Ng1-f3 supporting the centre",
-      "Bf1-d3 aiming at the kingside",
-      "the f4/e4 pawn duo"
-    ],
-    "strategicThemes": [
-      "Build the Botvinnik c4/d4/e4 centre",
-      "Lock with d5, storm with f4",
-      "Attack the king behind the closed centre"
-    ],
-    "endgameTransitions": [
-      "Keep attacking — the closed centre means the wing is decisive"
-    ],
-    "playableLines": [
-      {
-        "fen": "r1bqk1nr/pppn1pbp/6p1/3Pp3/2P1P3/2N5/PP4PP/R1BQKBNR b KQkq - 0 7",
-        "moves": [
-          "Ngf6",
-          "Nf3",
-          "O-O",
-          "Bd3"
-        ],
-        "annotations": [
-          "…Ngf6 — Black develops the knight, hitting the e4-pawn.",
-          "Nf3 — White defends e5-square ideas and develops toward the kingside attack.",
-          "…O-O — Black castles into what will become the storm zone.",
-          "Bd3 — White lines the bishop up toward h7 and completes the attacking setup. With the centre locked by d5, White’s plan is clear: roll the kingside pawns and pieces at Black’s king while the centre stays shut. The Botvinnik avalanche."
-        ],
-        "arrows": [
-          [],
-          [],
-          [],
-          []
-        ],
-        "highlights": [
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "f6",
@@ -47686,7 +47080,120 @@
           ],
           [
             {
-              "square": "f3",
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Trompowsky: Roll the Kingside Pawns",
+        "intro": "A real GothamChess win. White storms g4-g5 and keeps the king safe enough to press.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Trompowsky-Attack",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-tromp-d5-squeeze",
+    "openingId": "pro-gothamchess-trompowsky",
+    "criticalPositionFen": "r3kb2/pp3p1p/1qn1pp2/8/2pPp1r1/2P3P1/PPQN1P1P/R3K1NR w KQq - 0 13",
+    "title": "Trompowsky vs …d5: the e3/c3 Squeeze + e4 Break",
+    "overview": "A real GothamChess win (vs Algeriano22): Nxc4 regains the pawn, the knight reroutes to e3 eyeing d5 and f5, and White castles long for a balanced, manoeuvring game (~equal, small edge).",
+    "pawnBreaks": [
+      {
+        "move": "f4 clamp",
+        "explanation": "f4 clamps the centre in the manoeuvring squeeze.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nxc4-e3 reroute",
+        "explanation": "The knight reroutes via c4 to e3, eyeing d5 and f5."
+      }
+    ],
+    "strategicThemes": [
+      "Regain the pawn and reroute the knight.",
+      "Squeeze in a manoeuvring middlegame."
+    ],
+    "endgameTransitions": [
+      "The squeeze can persist into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r3kb2/pp3p1p/1qn1pp2/8/2pPp1r1/2P3P1/PPQN1P1P/R3K1NR w KQq - 0 13",
+        "moves": [
+          "Nxc4",
+          "Qb5",
+          "Ne3",
+          "Rg8",
+          "O-O-O",
+          "f5",
+          "f4",
+          "Rc8"
+        ],
+        "annotations": [
+          "Nxc4 — regaining the pawn.",
+          "…Qb5 — Black eyes the queenside.",
+          "Ne3 — the knight reroutes, eyeing d5 and f5.",
+          "…Rg8 — Black readies a kingside push.",
+          "O-O-O — castling long.",
+          "…f5 — Black grabs space.",
+          "f4 — clamping and gaining space.",
+          "…Rc8 — Black contests the c-file; roughly balanced."
+        ],
+        "learnCues": [
+          "Nxc4 — regain the pawn",
+          "Qb5 — eye queenside",
+          "Ne3 — reroute",
+          "Rg8 — ready a push",
+          "O-O-O — castle long",
+          "f5 — grab space",
+          "f4 — clamp",
+          "Rc8 — balanced"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "c4",
+              "to": "e3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -47698,24 +47205,1144 @@
           ],
           [
             {
-              "square": "d3",
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Ngf6 — Black hits e4",
-          "Nf3 — develop to attack",
-          "O-O — Black castles into the storm",
-          "Bd3 — aim at the king"
-        ],
-        "title": "English vs …g6: the Botvinnik f4 Kingside Storm",
-        "intro": "Against the …g6 KID setup, his 154-game plan is the Botvinnik System turned aggressive: c4/Nc3/d4/e4 build the big centre, then f4 and the …e5/fxe5 exchange lead to d5, locking the centre and freeing White's hands for a kingside pawn storm. With the centre closed, White rolls the f- and g-pawns at Black's king. The English transposing into a King's-Indian-Attack avalanche.",
+        "title": "Trompowsky: Reroute and Squeeze",
+        "intro": "A real GothamChess win vs Algeriano22. White regains the pawn and manoeuvres for the squeeze.",
         "sources": [
-          "book:chess-strategy",
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Trompowsky-Attack",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-tromp-g6-doubled",
+    "openingId": "pro-gothamchess-trompowsky",
+    "criticalPositionFen": "1r1q1rk1/pp2npbp/2ppb1p1/5p2/PPPP4/2N1P1P1/4NPBP/R2Q1RK1 w - - 1 13",
+    "title": "Trompowsky vs …g6: Double the Pawns, Fianchetto, Press f5",
+    "overview": "A real GothamChess win: the queen centralises on d3, then c5 and b5 clamp the queenside while the knight jumps to f4. Clearly better (~+1.3).",
+    "pawnBreaks": [
+      {
+        "move": "c5 and b5 clamp",
+        "explanation": "c5 then b5 clamp the queenside and gain space.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "to f4 outpost",
+        "explanation": "The knight jumps to f4, eyeing d5 and e6."
+      }
+    ],
+    "strategicThemes": [
+      "Clamp the queenside with c5 and b5.",
+      "Post the knight on f4."
+    ],
+    "endgameTransitions": [
+      "The queenside space squeezes into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "1r1q1rk1/pp2npbp/2ppb1p1/5p2/PPPP4/2N1P1P1/4NPBP/R2Q1RK1 w - - 1 13",
+        "moves": [
+          "Qd3",
+          "d5",
+          "c5",
+          "Kh8",
+          "b5",
+          "Ng8",
+          "Nf4",
+          "Nf6"
+        ],
+        "annotations": [
+          "Qd3 — centralising the queen.",
+          "…d5 — Black strikes the centre.",
+          "c5 — clamping and gaining queenside space.",
+          "…Kh8 — Black tucks the king.",
+          "b5 — expanding further on the queenside.",
+          "…Ng8 — Black’s knight retreats.",
+          "Nf4 — the knight jumps to f4, eyeing d5 and e6.",
+          "…Nf6 — Black redevelops, but White’s space gives the edge."
+        ],
+        "learnCues": [
+          "Qd3 — centralise",
+          "d5 — Black strikes",
+          "c5 — clamp",
+          "Kh8 — tuck the king",
+          "b5 — expand",
+          "Ng8 — retreat",
+          "Nf4 — jump to f4",
+          "Nf6 — White is better"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e2",
+              "to": "f4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Trompowsky: Queenside Space Clamp",
+        "intro": "A real GothamChess win. White centralises the queen and rolls the queenside pawns.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Trompowsky-Attack",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-tromp-c5-gambit",
+    "openingId": "pro-gothamchess-trompowsky",
+    "criticalPositionFen": "r1bq1rk1/pp1nppbp/n2p2p1/1BpP4/P3PP2/2N2N2/2PB2PP/1R1Q1RK1 w - - 1 13",
+    "title": "Trompowsky vs …c5: the b2-Gambit Big Centre",
+    "overview": "A real GothamChess win (vs gmgamil): f5 storms forward, fxg6 smashes the king’s cover, and the queen and knight pour in for a winning attack (~+10).",
+    "pawnBreaks": [
+      {
+        "move": "f4-f5 storm",
+        "explanation": "f5 then fxg6 tears open the king.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nf3-g5 attack",
+        "explanation": "The knight leaps to g5 to finish the kingside attack."
+      }
+    ],
+    "strategicThemes": [
+      "Storm the kingside with f5.",
+      "Pour the pieces into the open king."
+    ],
+    "endgameTransitions": [
+      "The attack decides; no endgame needed."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1nppbp/n2p2p1/1BpP4/P3PP2/2N2N2/2PB2PP/1R1Q1RK1 w - - 1 13",
+        "moves": [
+          "f5",
+          "Nc7",
+          "fxg6",
+          "hxg6",
+          "Qe1",
+          "Ne5",
+          "Ng5",
+          "a6"
+        ],
+        "annotations": [
+          "f5 — the pawn storms forward, ripping open the kingside.",
+          "…Nc7 — Black retreats the knight.",
+          "fxg6 — smashing open the king’s cover.",
+          "…hxg6 — recapturing with a wrecked kingside.",
+          "Qe1 — swinging the queen toward the kingside.",
+          "…Ne5 — Black tries to block.",
+          "Ng5 — the knight leaps in; the attack is overwhelming.",
+          "…a6 — Black is lost; White is completely winning."
+        ],
+        "learnCues": [
+          "f5 — storm in",
+          "Nc7 — retreat",
+          "fxg6 — smash the cover",
+          "hxg6 — wrecked kingside",
+          "Qe1 — swing the queen",
+          "Ne5 — try to block",
+          "Ng5 — leap in",
+          "a6 — White is winning"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f4",
+              "to": "f5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f3",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Trompowsky: f5 Demolition",
+        "intro": "A real GothamChess win vs gmgamil. The f-pawn storms in and the kingside collapses.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Trompowsky-Attack",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-tromp-vaganian-gambit",
+    "openingId": "pro-gothamchess-trompowsky",
+    "criticalPositionFen": "rnb1kb1r/pp2p1pp/8/2pPp1p1/4Nq2/5N2/P1P2PP1/1R1QKB1R w Kkq - 2 13",
+    "title": "Trompowsky Vaganian: the h4 Gambit Attack",
+    "overview": "A real GothamChess win (vs swimmerchess): the knight grabs on g5, Qh5+ and Nf7+ check the king out into the open, and the attack is decisive (~+6).",
+    "pawnBreaks": [
+      {
+        "move": "e-file opening",
+        "explanation": "Open lines feed the queen and knight into the king.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nxg5 then Nf7+",
+        "explanation": "The knight grabs g5 and forks from f7 to drive the king out."
+      }
+    ],
+    "strategicThemes": [
+      "Sacrifice to open the king.",
+      "Drive the king out with checks."
+    ],
+    "endgameTransitions": [
+      "The king hunt decides before any endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "rnb1kb1r/pp2p1pp/8/2pPp1p1/4Nq2/5N2/P1P2PP1/1R1QKB1R w Kkq - 2 13",
+        "moves": [
+          "Nfxg5",
+          "h6",
+          "Qh5+",
+          "Kd8",
+          "Nf7+",
+          "Kc7",
+          "Nc3",
+          "g6"
+        ],
+        "annotations": [
+          "Nfxg5 — the knight grabs g5, smashing into the kingside.",
+          "…h6 — Black tries to trap the knight.",
+          "Qh5+ — check; the queen joins the attack.",
+          "…Kd8 — the king is forced to move.",
+          "Nf7+ — a fork; the knight checks and hits the rook.",
+          "…Kc7 — the king flees.",
+          "Nc3 — developing into the attack.",
+          "…g6 — Black is lost; White is winning material and the attack."
+        ],
+        "learnCues": [
+          "Nxg5 — smash in",
+          "h6 — try to trap it",
+          "Qh5+ — queen joins",
+          "Kd8 — king moves",
+          "Nf7+ — fork the king",
+          "Kc7 — king flees",
+          "Nc3 — pile in",
+          "g6 — White is winning"
+        ],
+        "arrows": [
+          [
+            {
+              "from": "f3",
+              "to": "g5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "g5",
+              "to": "f7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Trompowsky Vaganian Gambit: King Hunt",
+        "intro": "A real GothamChess win vs swimmerchess. A knight grab and checks drive the king into the open.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/Trompowsky-Attack",
+          "https://en.wikipedia.org/wiki/Trompowsky_Attack",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-eng-e6-doublefianchetto",
+    "openingId": "pro-gothamchess-english",
+    "criticalPositionFen": "r1bqr1k1/1p3ppp/p1nb1n2/3p4/8/1PN1PN1P/PB2BPP1/R2QK2R w KQ - 0 13",
+    "title": "English vs …e6: the b3/Bb2 Double-Fianchetto Squeeze",
+    "overview": "A real GothamChess win (vs subham777): White completes the double-fianchetto setup, and when Black throws in …Bxh3 the king holds — accurate defence keeps the balance (~equal, slight White edge).",
+    "pawnBreaks": [
+      {
+        "move": "d4 central anchor",
+        "explanation": "The d4-pawn anchors the centre behind the fianchettoes.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Ng1-e2 defence",
+        "explanation": "The knight reroutes to e2 to shore up the kingside."
+      }
+    ],
+    "strategicThemes": [
+      "Complete the solid double-fianchetto setup.",
+      "Defend the king accurately against the …Bxh3 try."
+    ],
+    "endgameTransitions": [
+      "The sound structure equalises and presses lightly into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqr1k1/1p3ppp/p1nb1n2/3p4/8/1PN1PN1P/PB2BPP1/R2QK2R w KQ - 0 13",
+        "moves": [
+          "O-O",
+          "Be6",
+          "Bd3",
+          "Qd7",
+          "Ne2",
+          "Bxh3",
+          "gxh3",
+          "Qxh3"
+        ],
+        "annotations": [
+          "O-O — completing the double-fianchetto setup.",
+          "…Be6 — Black develops the bishop.",
+          "Bd3 — repositioning the bishop to defend the kingside.",
+          "…Qd7 — Black eyes the kingside.",
+          "Ne2 — rerouting the knight to bolster the king.",
+          "…Bxh3 — Black sacrifices a bishop to open the king.",
+          "gxh3 — accepting; White must defend precisely.",
+          "…Qxh3 — Black regains a pawn, but White’s setup holds the balance."
+        ],
+        "learnCues": [
+          "O-O — complete the setup",
+          "Be6 — develop",
+          "Bd3 — defend the kingside",
+          "Qd7 — eye the king",
+          "Ne2 — bolster the king",
+          "Bxh3 — Black sacs",
+          "gxh3 — defend precisely",
+          "Qxh3 — White holds"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c3",
+              "to": "e2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "English Double Fianchetto: Solid and Sound",
+        "intro": "A real GothamChess win vs subham777. White’s solid setup weathers a kingside sac.",
+        "sources": [
+          "book:chess-fundamentals",
           "https://www.chess.com/openings/English-Opening",
-          "https://api.chess.com/pub/player/gothamchess/games/archives",
-          "https://en.wikipedia.org/wiki/English_Opening"
+          "https://en.wikipedia.org/wiki/English_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-eng-e5-reversedsicilian",
+    "openingId": "pro-gothamchess-english",
+    "criticalPositionFen": "r3r1k1/1pp1qppp/2np1n2/p3p2b/2PP4/1PQ1PN1P/PB2BPP1/R4RK1 w - - 1 13",
+    "title": "English vs …e5: the Reversed Sicilian Bishop-Pair",
+    "overview": "A real GothamChess win: dxe5 opens the centre, the rook grabs the e-file, and when Black overpushes with …e4 the pawn becomes a target. Clearly better (~+1.1).",
+    "pawnBreaks": [
+      {
+        "move": "d4xe5 break",
+        "explanation": "dxe5 opens the centre and the e-file.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Rook",
+        "route": "Rf1-e1 file",
+        "explanation": "The rook takes the open e-file after the central trade."
+      }
+    ],
+    "strategicThemes": [
+      "Open the centre and grab the e-file.",
+      "Target Black’s overextended e-pawn."
+    ],
+    "endgameTransitions": [
+      "The weak e-pawn is a target into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r3r1k1/1pp1qppp/2np1n2/p3p2b/2PP4/1PQ1PN1P/PB2BPP1/R4RK1 w - - 1 13",
+        "moves": [
+          "dxe5",
+          "dxe5",
+          "Rfe1",
+          "Bxf3",
+          "Bxf3",
+          "e4",
+          "Be2",
+          "Nb4"
+        ],
+        "annotations": [
+          "dxe5 — opening the centre.",
+          "…dxe5 — recapturing.",
+          "Rfe1 — the rook takes the open e-file.",
+          "…Bxf3 — Black trades a piece.",
+          "Bxf3 — recapturing; the bishop eyes the long diagonal.",
+          "…e4 — Black pushes the pawn forward.",
+          "Be2 — retreating; the advanced pawn becomes a target.",
+          "…Nb4 — Black seeks activity, but White is better."
+        ],
+        "learnCues": [
+          "dxe5 — open the centre",
+          "dxe5 — recapture",
+          "Rfe1 — take the e-file",
+          "Bxf3 — Black trades",
+          "Bxf3 — long diagonal",
+          "e4 — overpush",
+          "Be2 — target the pawn",
+          "Nb4 — White is better"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "f1",
+              "to": "e1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Reversed Sicilian: Open the e-file",
+        "intro": "A real GothamChess win. White opens the centre and seizes the e-file.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/English-Opening",
+          "https://en.wikipedia.org/wiki/English_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-eng-c5-maroczy",
+    "openingId": "pro-gothamchess-english",
+    "criticalPositionFen": "2r2rk1/pp1bppb1/1qnp1np1/6Bp/2PN3P/1PN1P3/P3BPP1/2RQ1RK1 w - - 3 13",
+    "title": "English vs …c5: the d4 Break into a Maroczy Bind",
+    "overview": "A real GothamChess win (vs flamingo8118): Bxf6 clears the way, the knight seizes d5, and Nxf6+ shatters Black’s kingside pawns. The structural damage gives a clear edge (~+1.4).",
+    "pawnBreaks": [
+      {
+        "move": "c4 Maroczy bind",
+        "explanation": "The c4-pawn clamps d5 and b5, the Maroczy grip.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nc3-d5 outpost",
+        "explanation": "The knight occupies the d5 hole, the Maroczy dream square."
+      }
+    ],
+    "strategicThemes": [
+      "Trade to clear and occupy d5.",
+      "Damage Black’s kingside pawns."
+    ],
+    "endgameTransitions": [
+      "The structural damage favours White into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "2r2rk1/pp1bppb1/1qnp1np1/6Bp/2PN3P/1PN1P3/P3BPP1/2RQ1RK1 w - - 3 13",
+        "moves": [
+          "Bxf6",
+          "Bxf6",
+          "Nd5",
+          "Qd8",
+          "Nxf6+",
+          "exf6",
+          "Nf3",
+          "Kg7"
+        ],
+        "annotations": [
+          "Bxf6 — trading to damage Black’s structure and clear the d5-square.",
+          "…Bxf6 — recapturing.",
+          "Nd5 — the knight seizes the d5 outpost, the Maroczy dream square.",
+          "…Qd8 — the queen sidesteps.",
+          "Nxf6+ — grabbing the bishop with check, shattering Black’s kingside.",
+          "…exf6 — recapturing with broken pawns.",
+          "Nf3 — developing, eyeing the weak squares.",
+          "…Kg7 — Black tucks the king, but the damaged pawns favour White."
+        ],
+        "learnCues": [
+          "Bxf6 — clear d5",
+          "Bxf6 — recapture",
+          "Nd5 — seize the outpost",
+          "Qd8 — sidestep",
+          "Nxf6+ — shatter the kingside",
+          "exf6 — broken pawns",
+          "Nf3 — develop",
+          "Kg7 — White is better"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "English Maroczy: the d5 Outpost",
+        "intro": "A real GothamChess win vs flamingo8118. White trades to clear d5 and dominates the hole.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/English-Opening",
+          "https://en.wikipedia.org/wiki/English_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-eng-c6-slav-g4",
+    "openingId": "pro-gothamchess-english",
+    "criticalPositionFen": "r1bq1rk1/pp1n1ppp/2pb4/3n2P1/3Np3/1PN1P3/1BQP1P1P/R3KBR1 w Q - 1 13",
+    "title": "English vs …c6: Double-Fianchetto then the g4 Thrust",
+    "overview": "A real GothamChess win (vs rabbiteUK): Nxe4 grabs the centre, f4 clamps, and the knight leaps into f5 eyeing g7 and e7 — clearly better (~+2.4).",
+    "pawnBreaks": [
+      {
+        "move": "f4 clamp",
+        "explanation": "f4 clamps e5 and gains kingside space.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Ne4-f5 leap",
+        "explanation": "The knight leaps to f5, eyeing g7 and e7."
+      }
+    ],
+    "strategicThemes": [
+      "Grab the centre and clamp with f4.",
+      "Land a knight on f5."
+    ],
+    "endgameTransitions": [
+      "The space and active knight carry into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1n1ppp/2pb4/3n2P1/3Np3/1PN1P3/1BQP1P1P/R3KBR1 w Q - 1 13",
+        "moves": [
+          "Nxe4",
+          "Bc7",
+          "f4",
+          "Re8",
+          "Nf5",
+          "Nb4",
+          "Qb1",
+          "g6"
+        ],
+        "annotations": [
+          "Nxe4 — grabbing the centre pawn.",
+          "…Bc7 — Black redeploys the bishop.",
+          "f4 — gaining space and clamping e5.",
+          "…Re8 — Black centralises a rook.",
+          "Nf5 — the knight leaps to f5, eyeing g7 and e7.",
+          "…Nb4 — Black’s knight jumps in.",
+          "Qb1 — sidestepping, keeping the kingside diagonal.",
+          "…g6 — Black challenges the knight, but White is clearly better."
+        ],
+        "learnCues": [
+          "Nxe4 — grab the centre",
+          "Bc7 — redeploy",
+          "f4 — clamp e5",
+          "Re8 — centralise",
+          "Nf5 — leap to f5",
+          "Nb4 — Black jumps",
+          "Qb1 — keep the diagonal",
+          "g6 — White is better"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d4",
+              "to": "f5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "English: Leap to f5",
+        "intro": "A real GothamChess win vs rabbiteUK. White grabs the centre and lands a knight on f5.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/English-Opening",
+          "https://en.wikipedia.org/wiki/English_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-progothamchess-eng-g6-botvinnik-storm",
+    "openingId": "pro-gothamchess-english",
+    "criticalPositionFen": "r1bqr1k1/pp3pb1/2p2npp/2nPp1B1/2P1P3/2N2N2/PPB3PP/R2Q1RK1 w - - 0 13",
+    "title": "English vs …g6: the Botvinnik f4 Kingside Storm",
+    "overview": "A real GothamChess win: d6 wedges deep into Black’s camp, and after the trades on e3 the cramping pawn gives White a clear edge (~+1).",
+    "pawnBreaks": [
+      {
+        "move": "d5-d6 wedge",
+        "explanation": "The d-pawn rams to d6 and cramps Black.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-d2 support",
+        "explanation": "The queen supports the d6-wedge and the dark squares."
+      }
+    ],
+    "strategicThemes": [
+      "Wedge a pawn into d6.",
+      "Use the cramp to press."
+    ],
+    "endgameTransitions": [
+      "The advanced pawn is an asset into the endgame."
+    ],
+    "playableLines": [
+      {
+        "fen": "r1bqr1k1/pp3pb1/2p2npp/2nPp1B1/2P1P3/2N2N2/PPB3PP/R2Q1RK1 w - - 0 13",
+        "moves": [
+          "Be3",
+          "Ncd7",
+          "d6",
+          "Ng4",
+          "Qd2",
+          "Nxe3",
+          "Qxe3",
+          "Nb6"
+        ],
+        "annotations": [
+          "Be3 — developing toward the kingside.",
+          "…Ncd7 — Black redeploys a knight.",
+          "d6 — the pawn wedges deep, splitting Black’s camp.",
+          "…Ng4 — Black’s knight hits the bishop.",
+          "Qd2 — defending and connecting.",
+          "…Nxe3 — Black trades.",
+          "Qxe3 — recapturing; the d6-wedge cramps Black.",
+          "…Nb6 — Black regroups, but the wedge gives White the edge."
+        ],
+        "learnCues": [
+          "Be3 — develop",
+          "Ncd7 — redeploy",
+          "d6 — wedge in deep",
+          "Ng4 — hit the bishop",
+          "Qd2 — defend",
+          "Nxe3 — trade",
+          "Qxe3 — cramp Black",
+          "Nb6 — White is better"
+        ],
+        "arrows": [
+          [],
+          [],
+          [
+            {
+              "from": "d5",
+              "to": "d6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "English: the d6 Wedge",
+        "intro": "A real GothamChess win. White rams a pawn to d6, splitting Black’s position.",
+        "sources": [
+          "book:chess-fundamentals",
+          "https://www.chess.com/openings/English-Opening",
+          "https://en.wikipedia.org/wiki/English_Opening",
+          "https://api.chess.com/pub/player/gothamchess/games/archives"
         ]
       }
     ]
