@@ -13,7 +13,7 @@ export const PRO_SAMAYRAINA_SICILIAN_BLACK_LESSON: LessonScript = {
   orientation: 'black', kind: 'variation', sources: SRC,
   beats: [
     b({ id: 'd6', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6',
-      arrows: [].slice(0, 0), highlights: [{ square: 'a6', color: KEY }, { square: 'b5', color: SOFT }],
+      arrows: [], highlights: [{ square: 'a6', color: KEY }, { square: 'b5', color: SOFT }],
       say: "The Najdorf — the most respected Sicilian and the most-analysed opening in chess. …a6 is the key: a quiet-looking move that controls b5, prepares queenside expansion with …b5, and keeps maximum flexibility. We fight for the initiative as Black.",
       sayShort: '…a6 — control b5, stay flexible.' }),
     b({ id: 'e5', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3',

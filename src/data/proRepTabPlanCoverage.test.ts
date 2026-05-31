@@ -27,6 +27,14 @@ import { getProEricRosenBudapestTabPlanIds } from '../services/proEricRosenBudap
 import { getProEricRosenClosedSicilianTabPlanIds } from '../services/proEricRosenClosedSicilianTabPlans';
 import { getProEricRosenScandinavianTabPlanIds } from '../services/proEricRosenScandinavianTabPlans';
 import { getProEricRosenFrenchTabPlanIds } from '../services/proEricRosenFrenchTabPlans';
+import { getProSamayRainaOpenSicilianTabPlanIds } from '../services/proSamayRainaOpenSicilianTabPlans';
+import { getProSamayRainaRuyTabPlanIds } from '../services/proSamayRainaRuyTabPlans';
+import { getProSamayRainaItalianTabPlanIds } from '../services/proSamayRainaItalianTabPlans';
+import { getProSamayRainaFrenchWhiteTabPlanIds } from '../services/proSamayRainaFrenchWhiteTabPlans';
+import { getProSamayRainaCaroWhiteTabPlanIds } from '../services/proSamayRainaCaroWhiteTabPlans';
+import { getProSamayRainaOpenE5TabPlanIds } from '../services/proSamayRainaOpenE5TabPlans';
+import { getProSamayRainaSicilianBlackTabPlanIds } from '../services/proSamayRainaSicilianBlackTabPlans';
+import { getProSamayRainaScandiTabPlanIds } from '../services/proSamayRainaScandiTabPlans';
 
 interface ProRepEntry {
   id: string;
@@ -51,6 +59,14 @@ const RESOLVERS: Array<(openingId: string, tabKey: string) => string[] | null> =
   getProEricRosenClosedSicilianTabPlanIds,
   getProEricRosenScandinavianTabPlanIds,
   getProEricRosenFrenchTabPlanIds,
+  getProSamayRainaOpenSicilianTabPlanIds,
+  getProSamayRainaRuyTabPlanIds,
+  getProSamayRainaItalianTabPlanIds,
+  getProSamayRainaFrenchWhiteTabPlanIds,
+  getProSamayRainaCaroWhiteTabPlanIds,
+  getProSamayRainaOpenE5TabPlanIds,
+  getProSamayRainaSicilianBlackTabPlanIds,
+  getProSamayRainaScandiTabPlanIds,
 ];
 
 function resolve(openingId: string, variationName: string): string[] | null {

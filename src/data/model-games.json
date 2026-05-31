@@ -8430,5 +8430,437 @@
       "https://api.chess.com/pub/player/imrosen/games/archives",
       "https://www.chess.com/game/live/1831822310"
     ]
+  },
+  {
+    "id": "mg-pro-samayraina-open-sicilian-1",
+    "openingId": "pro-samayraina-open-sicilian",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "KetiTsatsalashvili",
+    "whiteElo": null,
+    "blackElo": 2286,
+    "result": "1-0",
+    "year": 2023,
+    "event": "chess.com blitz (2023)",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Nc6 Bc4 e6 f3 a6 a4 Be7 O-O Qc7 Kh1 O-O Bb3 Rd8 Be3 b6 Nce2 Bb7 c3 d5 exd5 Nxd5 Bxd5 Rxd5 Nf4 Rd7 Qb3 Na5 Qa2 Nc4 Nc2 Nxe3 Nxe6 fxe6 Qxe6+ Kh8 Nxe3 Bf6 Ng4 Bd5 Qf5 Rf8 Qc2 Bc4 Rfe1 Bd3 Qb3 Re7 Red1 Be2 Re1 h6 Qc2 Bc4 Rad1 Qb7 Nxf6 gxf6 Qg6 Rh7 Re8 Qg7 Rxf8+ Qxf8 Re1 Bg8 Re8 Qg7 Qxg7+ Rxg7 Rb8 Rd7 h3 Rd1+ Kh2 Rd6 Rb7 Bd5 Ra7 Kg8 Re7",
+    "overview": "A Samay Raina win in Open Sicilian (vs 2286). A practical demonstration of the Open Sicilian — central space, the d5-outpost, and a queenside squeeze, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/81274318385"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-open-sicilian-2",
+    "openingId": "pro-samayraina-open-sicilian",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "Vedant1506",
+    "whiteElo": null,
+    "blackElo": 2202,
+    "result": "1-0",
+    "year": 2025,
+    "event": "chess.com rapid (2025)",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Bc4 Bg7 O-O O-O h3 Nc6 Be3 Bd7 a3 Rc8 Be2 Ne5 f4 Nc4 Bxc4 Rxc4 f5 a6 fxg6 fxg6 Nf3 b5 e5 dxe5 Nxe5 Rc8 Rxf6 Rxf6 Nxd7 Rd6 Qf3 Qxd7 Ne4 Rdc6 Rd1 Qe8 Ng5 Rf6 Qe4 Rd8 Rxd8 Qxd8 Bd4 Qxd4+ Qxd4 Rf1+ Kxf1 Bxd4 b3 h6 Ne6 Be5 Nc5 a5 Nd3 Bd6 a4 bxa4 bxa4 Kf7 Ke2 Kf6 Kf3 Ke6 Ke4 Ba3 Nf4+ Kf6 Nd5+ Ke6 Nf4+ Kf6 g4 e6 c4 Bd6 h4 Bxf4 Kxf4 e5+ Ke4 Ke6 c5 h5 g5 Kd7 Kxe5 Kc6 Kf6 Kxc5 Kxg6 Kb4 Kxh5 Kxa4 g6 Kb3 g7 a4 g8=Q+ Kb2 Qg2+ Kb3 Qf3+ Kb2 Qe2+ Kb3 Qd1+ Kb2 Kg6 a3",
+    "overview": "A Samay Raina win in Open Sicilian (vs 2202). A practical demonstration of the Open Sicilian — central space, the d5-outpost, and a queenside squeeze, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/141862758174"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-open-sicilian-3",
+    "openingId": "pro-samayraina-open-sicilian",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "CamelPair",
+    "whiteElo": null,
+    "blackElo": 1950,
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com bullet (2024)",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 a4 e5 Nf3 Nc6 Bc4 Be6 Bxe6 fxe6 Bg5 Be7 O-O O-O Re1 Qb6 b3 Rad8 Qe2 d5 Bxf6 Bxf6 exd5 exd5 Rad1",
+    "overview": "A Samay Raina win in Open Sicilian (vs 1950). A practical demonstration of the Open Sicilian — central space, the d5-outpost, and a queenside squeeze, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/111621139017"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-ruy-1",
+    "openingId": "pro-samayraina-ruy",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "HorcruxBB",
+    "whiteElo": null,
+    "blackElo": 2450,
+    "result": "1-0",
+    "year": 2021,
+    "event": "chess.com blitz (2021)",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d6 d4 Bg4 d5 Na5 Nbd2 Nxb3 Nxb3 c6 h3 Bh5 dxc6 Qc7 Bg5 Qxc6 Bxf6 Bxf6 g4 Bg6 Qd3 Rad8 Rad1 Qb6 Qd5 a5 Nc1 Be7 Ne2 Kh8 Ng3 f6 Qe6 Qc7 Nh4 Bf7 Qf5 g6 Qf3 Bxa2 Qe3 f5 Nxg6+ Kg7 Nxf8 f4 Ne6+ Kf7 Nxc7 fxe3 fxe3 Bb3 Rf1+ Kg6 Rd2 Bg5 Nf5 Bc4 Rfd1 Bb3 Rxd6+ Rxd6 Rxd6+ Kf7 Nd5 Bxd5 Rxd5 Kf6 Rxb5 Ke6 Rxa5 h5 Rc5 Be7 Rc4 Bd8 b4 Bb6 b5 Ba7 Rc6+ Kd7 Rh6 hxg4 Rh5 gxh3 Rxh3 Kc7 Rh7+ Kb6 Nd6 Kc5 Rxa7",
+    "overview": "A Samay Raina win in Ruy Lopez (vs 2450). A practical demonstration of the Closed Ruy — the slow build-up, the d4 break, and a kingside attack, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/34020581245"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-ruy-2",
+    "openingId": "pro-samayraina-ruy",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "GM_Ruthvik",
+    "whiteElo": null,
+    "blackElo": 2170,
+    "result": "1-0",
+    "year": 2024,
+    "event": "chess.com rapid (2024)",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Bc5 c3 d6 d4 exd4 cxd4 Bb6 d5 a6 Ba4 Bxf2+ Rxf2 b5 Bc2 Ne5 Nxe5 dxe5 Bg5 c6 Qf3 Qa5 Bxf6 gxf6 Qxf6 Qe1+ Rf1 Qe3+ Kh1 O-O Nc3 Bg4 Rae1 Qd2 Bd1 Bxd1 Rxd1 Qe3",
+    "overview": "A Samay Raina win in Ruy Lopez (vs 2170). A practical demonstration of the Closed Ruy — the slow build-up, the d4 break, and a kingside attack, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/98592320261"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-ruy-3",
+    "openingId": "pro-samayraina-ruy",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "Ramminew",
+    "whiteElo": null,
+    "blackElo": 1954,
+    "result": "1-0",
+    "year": 2023,
+    "event": "chess.com rapid (2023)",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 h3 O-O c3 Nb8 d4 Nbd7 a4 Bb7 Nbd2 c5 d5 c4 Bc2 Re8 axb5 axb5 Rxa8 Qxa8 b4 Bf8 Nf1 h6 Ng3 g6 Be3 Bg7 Qd2 Kh7 Nh2 Ng8 Ng4 h5 Nh2 Ndf6 f4 exf4 Bxf4 Qd8 Bg5 Bh6 Nf3 Bc8 Nxh5 gxh5 e5+ Kh8 exf6 Rxe1+ Nxe1 Bxg5 Qxg5 Qxf6 Qxh5+ Qh6 Qxf7 Qe3+ Kh2 Qe5+ g3 Qg7 Qxg7+ Kxg7 Nf3 Nf6 Nd4 Bd7 Bf5 Bxf5 Nxf5+ Kf7 Nxd6+ Ke7 Nxb5 Nxd5 Na3",
+    "overview": "A Samay Raina win in Ruy Lopez (vs 1954). A practical demonstration of the Closed Ruy — the slow build-up, the d4 break, and a kingside attack, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/74607294043"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-italian-1",
+    "openingId": "pro-samayraina-italian",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "EKKIDWIS",
+    "whiteElo": null,
+    "blackElo": 1900,
+    "result": "1-0",
+    "year": 2025,
+    "event": "chess.com rapid (2025)",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 d6 d4 exd4 cxd4 Bb6 O-O Nge7 Nc3 Ng6 Bg5 Nce7 Nd5 O-O Nh4 Kh8 Nxg6+ fxg6 Bxe7 Qe8 Bxf8 Qxf8 Nxb6 axb6 f3 c6 f4 h5 Bd3 Kh7 e5 Bg4 Be2 Bxe2 Qxe2 Re8 Rae1 c5 dxc5 bxc5 e6 b5 Qe4 Qf6 f5 Qxb2 fxg6+ Kg8 e7 Qxa2 Rf8+ Rxf8 exf8=Q+ Kxf8 Qe8#",
+    "overview": "A Samay Raina win in Italian (vs 1900). A practical demonstration of the Giuoco Pianissimo — the knight reroute and the central d4 break, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/138130456380"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-italian-2",
+    "openingId": "pro-samayraina-italian",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "Sankalp_Pathak",
+    "whiteElo": null,
+    "blackElo": 1899,
+    "result": "1-0",
+    "year": 2025,
+    "event": "chess.com rapid (2025)",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 Bb6 O-O d6 dxe5 dxe5 Qxd8+ Kxd8 Rd1+ Ke7 Bg5 Be6 Nbd2 h6 Bh4 g5 Bg3 Nd7 Bxe6 fxe6 Nc4 Kf6 h4 Rad8 Rd2 Rh7 Rad1 Bc5 Ncxe5 Ncxe5 Nxe5 Bd6 Nxd7+ Rdxd7 e5+ Ke7 exd6+ cxd6 hxg5 hxg5 Bxd6+ Ke8 Be5 Rxd2 Rxd2 Rd7",
+    "overview": "A Samay Raina win in Italian (vs 1899). A practical demonstration of the Giuoco Pianissimo — the knight reroute and the central d4 break, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/139557654327"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-italian-3",
+    "openingId": "pro-samayraina-italian",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "arjun9793",
+    "whiteElo": null,
+    "blackElo": 1897,
+    "result": "1-0",
+    "year": 2025,
+    "event": "chess.com rapid (2025)",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 c3 Bc5 d4 exd4 e5 Ng4 Bxf7+ Kf8 Ng5 Ngxe5 cxd4 Bxd4 Bb3 d5 O-O h6 Nf3 Bg4 Nbd2 Qf6 Bxd5 Rd8 Bxc6 bxc6 Qb3 Be6 Qb4+ c5 Qb7 Bd5 Qxc7 Bxf3 Nxf3 Nxf3+ gxf3 Qh4 Qg3 Qh5 Bf4 g5 Be5 Rg8 Rad1 Kf7 Bxd4 Rxd4 Qc7+ Kg6 Rxd4 cxd4 Qd6+ Kh7 Qe7+ Rg7 Qe4+ Kh8 Qxd4 Qxf3 Re1 Kh7 Qe4+ Qxe4 Rxe4 Rb7 b3 Kg6 Kg2 Kf5 Rc4 h5 Kg3 Re7 Rc5+ Re5 Rc7 Ra5 a4 h4+ Kf3 a6 h3 Rd5 Rc6 Rd3+ Kg2 a5 Rc5+ Kf4 Rxa5 Rxb3 Ra8 g4 Rf8+ Ke5 hxg4 h3+ Kh2 Ra3 Ra8 Kf4 a5 Kxg4 a6 Kh4 a7 Ra2 Rh8+ Kg4 a8=Q Rxf2+ Kg1 Rg2+ Kh1 Rf2 Qg2+",
+    "overview": "A Samay Raina win in Italian (vs 1897). A practical demonstration of the Giuoco Pianissimo — the knight reroute and the central d4 break, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/140168462325"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-french-white-1",
+    "openingId": "pro-samayraina-french-white",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "anishnaik12",
+    "whiteElo": null,
+    "blackElo": 2091,
+    "result": "1-0",
+    "year": 2023,
+    "event": "chess.com rapid (2023)",
+    "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Be7 Bd3 Nf6 O-O O-O Re1 c5 h3 Nc6 c3 h6 Bc2 Be6 Nbd2 Qb6 Nf1 Rac8 Ng3 Bd6 Ne5 cxd4 cxd4 Qxd4 Nxc6 Qxd1 Bxd1 bxc6 Ne2 c5 Bf4 g5 Bxd6 Rfd8 Be7 Kg7 Bxd8 Rxd8 Ng3 c4 Bf3 d4 Ne4 Nd7 Rad1 d3 Nc3 Rb8 Rd2 Nc5 Bd5 Bxd5 Nxd5 Ne6 Nc3 Nd4 Re4 Rd8 Re7 h5 Rxa7 g4 hxg4 hxg4 Rc7 Re8 Rxc4 g3 fxg3 Nf5 Rxd3 Nh6 a4 f5 Rd7+ Kg6 Rc6+ Kh5 Rh7",
+    "overview": "A Samay Raina win in French Exchange (vs 2091). A practical demonstration of the French Exchange played for a win — the open e-file and the minority attack, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/80577742535"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-french-white-2",
+    "openingId": "pro-samayraina-french-white",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "mamangcomansawi",
+    "whiteElo": null,
+    "blackElo": 1894,
+    "result": "1-0",
+    "year": 2021,
+    "event": "chess.com rapid (2021)",
+    "pgn": "e4 e6 d4 d5 exd5 exd5 c4 dxc4 Bxc4 Nf6 Nf3 Bg4 O-O Be7 Re1 O-O Nc3 h6 Be3 Nc6 Be2 Re8 h3 Be6 a3 a6 Qd3 Qd6 Rad1 Rad8 Rd2 b5 b4 Bc4 Qc2 Bxe2 Nxe2 Nd5 Ng3 Nxe3 Rxe3 Bf6 Ne4 Qd5 Nxf6+ gxf6 Rxe8+ Rxe8 Rd1 Re4 Rc1 Nxd4 Nxd4 Rxd4 Qxc7 Rd1+ Rxd1 Qxd1+ Kh2 Qe2 Qc8+ Kg7 Qxa6 Qxf2 Qxb5 Qf4+ Kh1 Qc1+ Kh2 Qf4+ Kh1 Qc1+ Kh2 Qxa3 Qc4 Qe3 Qg4+ Kf8 Qc8+ Kg7 Qc5 Qe5+ Qxe5 fxe5 b5 Kf8 b6 Ke7 b7 Kd7 b8=Q",
+    "overview": "A Samay Raina win in French Exchange (vs 1894). A practical demonstration of the French Exchange played for a win — the open e-file and the minority attack, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/23098836781"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-french-white-3",
+    "openingId": "pro-samayraina-french-white",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "ANSHU_1252",
+    "whiteElo": null,
+    "blackElo": 1890,
+    "result": "1-0",
+    "year": 2022,
+    "event": "chess.com blitz (2022)",
+    "pgn": "e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 c4 Be7 Nc3 O-O Be3 c6 cxd5 cxd5 Bd3 Bg4 h3 Bh5 g4 Bg6 Bxg6 fxg6 Bg5 Nc6 Bxf6 Bxf6 O-O Kh8 Qd2 Qd7 Rfe1 Rae8 Rad1 h6 Qd3 Qf7 Re2 Rxe2 Qxe2 Re8 Qd3 Nb4 Qb5 Nc6 Qxd5 Qc7 Nb5 Qa5 Qd7 Rb8 Nd6 Nd8 Re1 Kh7 Re8 Qxa2 Nf7 Nxf7 Rxb8 Qb1+ Kg2 Ng5 Nxg5+ Bxg5 Qe8",
+    "overview": "A Samay Raina win in French Exchange (vs 1890). A practical demonstration of the French Exchange played for a win — the open e-file and the minority attack, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/58210297909"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-caro-white-1",
+    "openingId": "pro-samayraina-caro-white",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "GHOULCNCO",
+    "whiteElo": null,
+    "blackElo": 2140,
+    "result": "1-0",
+    "year": 2023,
+    "event": "chess.com rapid (2023)",
+    "pgn": "e4 c6 c4 d5 exd5 cxd5 cxd5 Nf6 d4 Nxd5 Nc3 Nc6 Nf3 g6 Bb5 Bg7 Bxc6+ bxc6 O-O O-O Be3 c5 Qb3 Nxe3 fxe3 cxd4 Rad1 Ba6 Nxd4 Qb6 Qxb6 axb6 Rf2 Rfd8 Rfd2 Bh6 Kf2 e6 Nc6 Rxd2+ Rxd2 Bb7 Nb4 Kf8 Rd6 Ke7 Rxb6 Bc8 a4 Bg7 a5 Kd7 a6 Bf8 Nd3 Bxa6 Ne5+ Ke7 Nc6+ Kd7 Ne5+ Kc7 Rc6+ Kb7 Ne4 Bb5 Nd6+ Bxd6 Rxd6 Kc7 Rd2 f6 Ng4 Rf8 h4 h5 Nh2 Rd8 Rc2+ Kb6 Nf3 Rd3 Nd4 Bd7 Ke2 Rxd4 exd4 Bb5+ Ke3 Bc6 Rf2 f5 Kf4 Bd5 Kg5 Kb5 Kxg6 Kc4 Kxh5 Kxd4 Kg5 Ke3 Rc2 Kd3 Rc3+ Ke2 h5 Bxg2 h6 Be4 h7 f4 h8=Q f3 Qe5 f2 Qxe4+ Kd1 Qd3+ Ke1 Rc1#",
+    "overview": "A Samay Raina win in Caro Panov (vs 2140). A practical demonstration of the Accelerated Panov — pressure on the IQP and a kingside attack, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/71358873577"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-caro-white-2",
+    "openingId": "pro-samayraina-caro-white",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "anishnaik12",
+    "whiteElo": null,
+    "blackElo": 2103,
+    "result": "1-0",
+    "year": 2023,
+    "event": "chess.com rapid (2023)",
+    "pgn": "e4 c6 c4 d5 exd5 cxd5 d4 Bf5 Nc3 e6 cxd5 exd5 Nf3 Nf6 Bd3 Bxd3 Qxd3 Nc6 O-O Be7 Ne5 O-O Nxc6 bxc6 Bg5 h6 Bh4 Rb8 b3 Re8 Rfe1 Qd7 h3 a5 Re3 Nh5 Bxe7 Rxe7 Rae1 Rxe3 Qxe3 c5 dxc5 d4 Qd2 Rd8 Ne4 a4 Nd6 axb3 axb3 Nf6 Qxd4 Rb8 b4 Ne8 Rd1 Nc7 Ra1 Ne6 Qc4 Qc7 Rd1 Rd8 Qb3 Rb8 Qc4 Rd8 Qg4 Kh7 Rd3 Rg8 Qf5+ Kh8 Nxf7+",
+    "overview": "A Samay Raina win in Caro Panov (vs 2103). A practical demonstration of the Accelerated Panov — pressure on the IQP and a kingside attack, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/82432268785"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-caro-white-3",
+    "openingId": "pro-samayraina-caro-white",
+    "studentSide": "white",
+    "white": "Samay Raina",
+    "black": "vishalsareen",
+    "whiteElo": null,
+    "blackElo": 2062,
+    "result": "1-0",
+    "year": 2023,
+    "event": "chess.com blitz (2023)",
+    "pgn": "e4 c6 c4 d6 d4 Qd7 Nc3 e5 d5 c5 Bd3 g6 Bc2 Qd8 h3 Bh6 Nf3 Bxc1 Rxc1 Ne7 O-O O-O Qd2 f5 Qh6 Rf7 Ng5 Rg7 f4 Nd7 Ne6",
+    "overview": "A Samay Raina win in Caro Panov (vs 2062). A practical demonstration of the Accelerated Panov — pressure on the IQP and a kingside attack, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/81559253423"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-open-e5-1",
+    "openingId": "pro-samayraina-open-e5",
+    "studentSide": "black",
+    "white": "Sardoche",
+    "black": "Samay Raina",
+    "whiteElo": 2095,
+    "blackElo": null,
+    "result": "0-1",
+    "year": 2025,
+    "event": "chess.com rapid (2025)",
+    "pgn": "e4 e5 Nf3 Nc6 Bb5 f5 exf5 e4 Qe2 Qe7 Bxc6 dxc6 Nd4 c5 Nb3 Bxf5 Nc3 Nf6 O-O O-O-O Qb5 a6 Qa5 Qd6 Re1 Ng4 g3 Ne5 Rxe4 Bxe4 Nxe4 Nf3+ Kg2 Ne1+ Kf1 Qe6 Nbxc5 Bxc5 Nxc5 Qh3+ Ke2 Rhe8+ Kd1 Qg4+ f3 Qxf3#",
+    "overview": "A Samay Raina win in …e5 (vs 2095). A practical demonstration of the classical …e5 — holding the centre and counter-attacking, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/146268783200"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-open-e5-2",
+    "openingId": "pro-samayraina-open-e5",
+    "studentSide": "black",
+    "white": "BeastStats",
+    "black": "Samay Raina",
+    "whiteElo": 1648,
+    "blackElo": null,
+    "result": "0-1",
+    "year": 2022,
+    "event": "chess.com blitz (2022)",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Bc5 Nc3 Nf6 d3 h6 O-O O-O Nd5 Nxd5 Bxd5 Ne7 Nxe5 Nxd5 exd5 d6 Nf3 Re8 h3 Qf6 d4 Bb6 Qd3 Bf5 Qc3 Re7 Bf4 Bxh3 Bxd6 Qxd6 gxh3 Qf4 Rae1 Rd7 Qe3 Qd6 Ne5 Re7 Qf3 Bxd4 Nc4 Qc5 Rxe7 Qxe7 Qd3 Qc5 Ne3 Bxb2 Rb1 Bd4 Rxb7 Bxe3 fxe3 Qd6 e4 Re8 Rxa7 Qb6+ Qd4 Qxd4+ Kg2 Qxa7 Kf3 Qxa2",
+    "overview": "A Samay Raina win in …e5 (vs 1648). A practical demonstration of the classical …e5 — holding the centre and counter-attacking, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/39716347905"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-open-e5-3",
+    "openingId": "pro-samayraina-open-e5",
+    "studentSide": "black",
+    "white": "forestpenguin",
+    "black": "Samay Raina",
+    "whiteElo": 1643,
+    "blackElo": null,
+    "result": "0-1",
+    "year": 2022,
+    "event": "chess.com rapid (2022)",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Nc3 Bc5 O-O O-O d3 h6 Be3 Bxe3 fxe3 d6 h3 Na5 Bb3 Nxb3 axb3 c6 d4 Re8 d5 c5 Nb5 a6 c4 Bxh3 gxh3 axb5 Rxa8 Qxa8 Nd2 Qa2 Qa1 Ra8 Qxa2 Rxa2 cxb5 Rxb2 Nc4 Rxb3 Nxd6 Rxe3 Rc1 Nxe4 Nxb7 Nc3 Rxc3 Rxc3 d6 Rd3 Nxc5 Rxd6 Kf2 Rb6 Ke3 Rxb5 Nd7 Rb3+ Ke4 Rxh3 Kxe5 h5 Kf4 h4 Kg4 Rh1 Ne5 h3 Kg3 h2 Nf3 Kh7 Nxh2 Rxh2 Kxh2 Kg6 Kg3 Kf5 Kf3 g5 Kg3 Ke4 Kg4 f5+ Kg3 f4+ Kf2 g4 Kg2 Ke3 Kf1 Kf3 Kg1 Ke2 Kg2 f3+ Kg3 f2 Kxg4 f1=Q Kg5 Qf3 Kg6 Qf4 Kg7 Qf5 Kg8 Qd7 Kf8 Qa7 Ke8 Ke3 Kd8 Ke4 Kc8 Ke5 Kd8 Kd6 Kc8 Qc7#",
+    "overview": "A Samay Raina win in …e5 (vs 1643). A practical demonstration of the classical …e5 — holding the centre and counter-attacking, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/57882606225"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-sicilian-black-1",
+    "openingId": "pro-samayraina-sicilian-black",
+    "studentSide": "black",
+    "white": "viditchess",
+    "black": "Samay Raina",
+    "whiteElo": 2950,
+    "blackElo": null,
+    "result": "0-1",
+    "year": 2020,
+    "event": "chess.com bullet (2020)",
+    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Ne5 Nc6 bxc6 Nc3 Nf6 Be2 e6 O-O Be7 Bf4 Ng6 Bg3 O-O e5 Nd5 Ne4 Qc7 c4 Nb6 Nd6 Bxd6 exd6 Qd8 h4 Nxh4 Bd3 Nf5 Bxf5 exf5 b3 Qf6 Qf3 Bb7 Rae1 c5 Qxb7 Rab8 Qf3 Nc8 Bf4 g5 Qg3 Kh8 Be5 Qxe5 Qxe5+ f6 Qxc5 Rb5 Re7 Rxc5 Rfe1 Nb6 Re8 Rxe8 Rxe8+ Kg7 Re7+ Kf8 g3 f4 Kg2 f3+ Kxf3 Rf5+ Kg2 Nc8 Rxh7 g4 Rh8+ Kg7 Rxc8 Re5 Rc7 Re2 c5 Rxa2 Rxd7+ Kf8 c6 Rc2 Re7 Rxc6 Rxa7 Rxd6 Rb7 Rd3 Rb8+ Ke7 Rb4 Rd2 Re4+ Kd7 Rxg4 f5 Rf4 Rd3 Kf1 Rxb3 Ke1 Rb2 Rd4+ Kc6 Rd2 Kc5",
+    "overview": "A Samay Raina win in Najdorf (vs 2950). A practical demonstration of the Najdorf — queenside expansion and pressure on e4, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/5496688355"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-sicilian-black-2",
+    "openingId": "pro-samayraina-sicilian-black",
+    "studentSide": "black",
+    "white": "GMSrinath",
+    "black": "Samay Raina",
+    "whiteElo": 2848,
+    "blackElo": null,
+    "result": "0-1",
+    "year": 2020,
+    "event": "chess.com rapid (2020)",
+    "pgn": "e4 c5 Nf3 b5 Nc3 Nc6 h4 Nf6 h5 e5 h6 g6 g4 b4 Nd5 c4 d3 b3 c3 bxa2 Bg5 Be7 Nxe7 Qxe7 d4 exd4 Nxd4 Nxd4 Qxd4 Qxe4+ Be3 Qxd4 Bxd4 Ke7 g5 Re8 gxf6+ Kd6+ Kd2 a5 Rg1 a4 Rg5 a3 b4 cxb3 Bc4 Bb7 Bxf7 b2 c4 Re4 Bc3 b1=Q Bd5 Bxd5 Rxd5+ Kc7 f7 Re1 Be5+ Rxe5 Rxe5 Qxa1 Re8 Qd4+ Ke2 Qxc4+ Kf3 Rxe8 fxe8=Q a1=Q Qe7 Qac3+ Kg2 Qg4+ Kf1 Qd3+ Ke1 Qgd1#",
+    "overview": "A Samay Raina win in Najdorf (vs 2848). A practical demonstration of the Najdorf — queenside expansion and pressure on e4, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/5569316010"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-sicilian-black-3",
+    "openingId": "pro-samayraina-sicilian-black",
+    "studentSide": "black",
+    "white": "nubair1198",
+    "black": "Samay Raina",
+    "whiteElo": 2705,
+    "blackElo": null,
+    "result": "0-1",
+    "year": 2021,
+    "event": "chess.com bullet (2021)",
+    "pgn": "e4 c5 Nf3 a6 d4 cxd4 Nxd4 e5 Nf3 Nc6 Nc3 Nf6 Bg5 Bb4 Qd3 h6 Bxf6 Qxf6 O-O-O O-O Nd5 Qd6 a3 Bc5 Ne3 Qxd3 Rxd3 Bxe3+ Rxe3 Nd4 Bc4 Nxf3 Rxf3 d5 Bxd5 Be6 Re3 Bxd5 exd5 Rad8 Rd1 Rfe8 Rc3 Rc8 Rxc8 Rxc8 d6 Rd8 d7 Kf8 c4 Ke7 Rd5 Rxd7 Rxe5+ Kd6 Re3 Rc7 Kc2 Rxc4+ Rc3 Rd4 Rd3 Kc5 b3 Rg4 Rc3+ Kd6 g3 Re4 h3 Re2+ Kd3 Rxf2 Ke4 Re2+ Kf3 Re5 Rd3+ Ke6 Rc3 Rf5+ Kg4 Rd5 h4 Rd4+ Kh3 Rd2 Rc7 Rd3 Rxb7 Rc3 Rb6+ Kd7 Rxa6 Rxb3 Ra7+ Kc6 Ra6+ Kb7 Ra8 Kxa8 h5 Rxa3 Kh4 Ra4+ g4 Ra5 g5 Rxg5 Kh3 Rxh5+",
+    "overview": "A Samay Raina win in Najdorf (vs 2705). A practical demonstration of the Najdorf — queenside expansion and pressure on e4, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/12437863625"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-scandi-1",
+    "openingId": "pro-samayraina-scandi",
+    "studentSide": "black",
+    "white": "Delmon2fire",
+    "black": "Samay Raina",
+    "whiteElo": 1873,
+    "blackElo": null,
+    "result": "0-1",
+    "year": 2023,
+    "event": "chess.com rapid (2023)",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd6 Nf3 Nf6 Bc4 Bg4 h3 Bh5 d3 Nc6 g4 Nxg4 hxg4 Bxg4 Ne4 Qd7 Bxf7+ Kxf7 Nfg5+ Ke8 f3 Bf5 Bf4 e5 Bg3 h6 Nh3",
+    "overview": "A Samay Raina win in Scandinavian (vs 1873). A practical demonstration of the modern …Qd8 Scandinavian — solid development and the …c5 break, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/85794614641"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-scandi-2",
+    "openingId": "pro-samayraina-scandi",
+    "studentSide": "black",
+    "white": "awesomebarca222",
+    "black": "Samay Raina",
+    "whiteElo": 1826,
+    "blackElo": null,
+    "result": "0-1",
+    "year": 2023,
+    "event": "chess.com rapid (2023)",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 Nf3 Nc6 d4 Nf6 Bc4 Bg4 d5 Nb4 Bb5+ c6 dxc6 Nxc6 Qxd8+ Rxd8 Ne5 Bd7 Nxd7 Rxd7 Kf1 e6 Bg5 Be7 g3 h6 Bxf6 Bxf6 Rd1 a6 Rxd7 Kxd7 Bxc6+ Kxc6 Kg2 Bxc3 bxc3 Rd8 Rc1 Rd5 Rb1 a5 Kf3 a4 Ke3 g5 Rb4 b5 c4 bxc4 Rxc4+ Kb5 Rd4 Rxd4 Kxd4 Kb4 c3+ Ka3 c4 Kxa2 c5 Kb1 c6 a3 c7 a2 c8=Q a1=Q+ Qc3 e5+ Kd3 Qa6+ Kd2 Qa2+ Ke3 Qa7+ Kd2 Qxf2+ Kd3 Qf3+ Kd2 Qxc3+ Kxc3 Kc1 Kd3 Kb2 Ke4 f6 g4 Kc3 Ke3 Kc4 Ke4 Kc5 Ke3 Kd5 Kd3 e4+ Ke3 Ke5 h3 f5 gxf5 Kxf5 Kf2 Kf4 Ke2 Kg3 Ke3 Kxh3 Kxe4 Kg2 Kf5 Kf3 Kg6 g4 Kxh6 g3",
+    "overview": "A Samay Raina win in Scandinavian (vs 1826). A practical demonstration of the modern …Qd8 Scandinavian — solid development and the …c5 break, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/96632354613"
+    ]
+  },
+  {
+    "id": "mg-pro-samayraina-scandi-3",
+    "openingId": "pro-samayraina-scandi",
+    "studentSide": "black",
+    "white": "BeastStats",
+    "black": "Samay Raina",
+    "whiteElo": 1735,
+    "blackElo": null,
+    "result": "0-1",
+    "year": 2022,
+    "event": "chess.com rapid (2022)",
+    "pgn": "e4 d5 exd5 Qxd5 Nc3 Qd8 Nf3 Nf6 Bc4 Nc6 O-O Bg4 h3 Bh5 Be2 e5 d3 Bd6 Bg5 h6 Bh4 g5 Bg3 Qd7 Nb5 O-O-O Nxd6+ cxd6 a4 Nd5 a5 f5 a6 f4 Bh2 g4 axb7+ Kxb7 hxg4 Bxg4 Nd2 Rhg8 Bxg4 Rxg4 c4 Rdg8 Qb3+ Nb6 Qb5 Rxg2+ Kh1 Qh3 Nf3 Rxh2+ Nxh2 Qg2#",
+    "overview": "A Samay Raina win in Scandinavian (vs 1735). A practical demonstration of the modern …Qd8 Scandinavian — solid development and the …c5 break, the way he plays it in his own games.",
+    "sources": [
+      "https://api.chess.com/pub/player/samayraina/games/archives",
+      "https://www.chess.com/game/live/53049560085"
+    ]
   }
 ]

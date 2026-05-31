@@ -15,7 +15,7 @@ export const PRO_SAMAYRAINA_OPEN_E5_LESSON: LessonScript = {
   beats: [
     b({ id: 'e5', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6',
       arrows: [A('f6', 'e4')], highlights: [{ square: 'e5', color: KEY }, { square: 'f6', color: SOFT }],
-      say: "We answer 1.e4 with the classical …e5 — fighting for the centre head-on. Against the Ruy we play the main line: …a6 to question the bishop, then …Nf6 hitting e4. This is the most respected, most principled defense to e4.",
+      say: "We answer e4 with the classical …e5 — fighting for the centre head-on. Against the Ruy we play the main line: …a6 to question the bishop, then …Nf6 hitting e4. This is the most respected, most principled defense to e4.",
       sayShort: '…a6, …Nf6 — the Ruy main.' }),
     b({ id: 'be7', moves: 'e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3',
       arrows: [], highlights: [{ square: 'b5', color: KEY }, { square: 'a4', color: SOFT }],

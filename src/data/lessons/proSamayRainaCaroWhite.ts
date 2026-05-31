@@ -1,29 +1,35 @@
 import type { LessonScript, LessonBeat, AnnotationArrow, AnnotationHighlight } from '../../types';
 
-// Pro Samay Raina — vs Caro-Kann (White), 582g+. Classical main (Nc3 dxe4 …Bf5).
-// Two registers; no move-number prefixes; green arrows only.
+// Pro Samay Raina — vs Caro-Kann (White). His real, data-derived #1 (320 games)
+// is 2.c4 — the Accelerated Panov, hitting d5 and steering into an open IQP-style
+// game rather than the Classical. Two registers; no move-number prefixes in
+// spoken text; green vision arrows only.
 const VIS = 'rgba(40,185,95,0.92)'; const KEY = 'rgba(255,214,0,0.88)'; const SOFT = 'rgba(80,140,255,0.32)';
 const A = (from: string, to: string, color = VIS): AnnotationArrow => ({ from, to, color });
 interface BeatInit { id: string; moves: string; say: string; sayShort: string; arrows?: AnnotationArrow[]; highlights?: AnnotationHighlight[]; }
 function b(init: BeatInit): LessonBeat { const { moves, ...rest } = init; return { ...rest, moves: moves.trim().split(/\s+/) }; }
-const SRC = ['concept:pos-development', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense', 'https://api.chess.com/pub/player/samayraina/games/archives'];
+const SRC = ['concept:pos-center', 'concept:pawn-isolated', 'https://www.chess.com/openings/Caro-Kann-Defense-Panov-Attack', 'https://api.chess.com/pub/player/samayraina/games/archives'];
 
 export const PRO_SAMAYRAINA_CARO_WHITE_LESSON: LessonScript = {
-  openingId: 'pro-samayraina-caro-white', title: "Samay vs the Caro — Classical", minutes: 7,
+  openingId: 'pro-samayraina-caro-white', title: "Samay vs the Caro — Panov (2.c4)", minutes: 7,
   orientation: 'white', kind: 'variation', sources: SRC,
   beats: [
-    b({ id: 'nc3', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3',
-      arrows: [A('g3', 'f5')], highlights: [{ square: 'f5', color: KEY }, { square: 'g3', color: KEY }],
-      say: "Against the Caro we play the main line: Nc3 and, after …dxe4, recapture on e4. Black develops the light bishop to f5 — the whole point of the Caro, getting it outside the chain. We harass it with Ng3, gaining time.",
-      sayShort: 'Ng3 — harass the f5-bishop.' }),
-    b({ id: 'h4', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3',
-      arrows: [], highlights: [{ square: 'h4', color: KEY }, { square: 'g6', color: SOFT }],
-      say: "The bishop retreats to g6 and we gain queenside-to-kingside space with h4-h5 ideas, harassing the bishop and grabbing kingside territory. Nf3 completes the knights. White enjoys a comfortable space advantage in a classic Caro structure.",
-      sayShort: 'h4 — grab kingside space.' }),
-    b({ id: 'plan', moves: 'e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3',
-      arrows: [A('d1', 'd3')], highlights: [{ square: 'h5', color: KEY }, { square: 'd3', color: SOFT }],
-      say: "The plan: h5 fixes the kingside and entombs the h7-bishop, then Bd3 offers a trade that opens the position for White's space edge. With the queen recapturing on d3, White develops Bd2/Qe2 and castles long for a kingside initiative. A textbook Caro squeeze.",
-      sayShort: 'Plan: h5, Bd3, castle long.',
+    b({ id: 'c4', moves: 'e4 c6 c4 d5 exd5 cxd5 d4',
+      arrows: [], highlights: [{ square: 'c4', color: KEY }, { square: 'd5', color: KEY }],
+      say: "Against the Caro, Samay's choice is c4 — the Accelerated Panov. We immediately challenge d5 and, after the trades, build a d4 centre. Instead of the slow Classical Caro, we get an open, dynamic game where White's development lead and central pressure do the talking.",
+      sayShort: 'c4 — the Panov, hit d5.' }),
+    b({ id: 'nc3', moves: 'e4 c6 c4 d5 exd5 cxd5 d4 Nf6 Nc3 Nc6 Bg5',
+      arrows: [A('c3', 'd5')], highlights: [{ square: 'g5', color: KEY }, { square: 'd5', color: SOFT }],
+      say: "We develop Nc3 and Bg5, piling pressure on the d5-pawn and pinning the f6-knight that defends it. This is the heart of the Panov: White presses the isolated-queen's-pawn structure while Black must defend precisely or get squeezed.",
+      sayShort: 'Nc3, Bg5 — pressure d5.' }),
+    b({ id: 'cxd5', moves: 'e4 c6 c4 d5 exd5 cxd5 d4 Nf6 Nc3 Nc6 Bg5 e6 Nf3 Be7 cxd5 Nxd5',
+      arrows: [], highlights: [{ square: 'd5', color: KEY }],
+      say: "After both sides develop, we clarify with cxd5 — Black recaptures with the knight and we reach the classic IQP position: an isolated d-pawn for White, but in return a beautiful free game with active pieces, the d5 and e5 outposts, and attacking chances against Black's king.",
+      sayShort: 'cxd5 — the IQP middlegame.' }),
+    b({ id: 'plan', moves: 'e4 c6 c4 d5 exd5 cxd5 d4 Nf6 Nc3 Nc6 Bg5 e6 Nf3 Be7 cxd5 Nxd5',
+      arrows: [A('f1', 'd3'), A('f3', 'e5')], highlights: [{ square: 'd5', color: KEY }, { square: 'h7', color: SOFT }],
+      say: "The IQP plan: develop Bd3 and Re1, plant a knight on e5, and use the d-pawn as a springboard for a kingside attack with ideas like Bxh7 or a knight sacrifice. The isolated pawn is dynamic, not weak — as long as we attack. If Black trades everything off, only then does the endgame favour Black, so we keep the pieces on and press.",
+      sayShort: 'Plan: Bd3, Ne5, attack the king.',
     }),
   ],
 };

@@ -41,7 +41,7 @@ export const PRO_SAMAYRAINA_OPEN_SICILIAN_LESSON: LessonScript = {
     b({
       id: 'najdorf', moves: 'e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2',
       highlights: [{ square: 'a6', color: SOFT }, { square: 'e2', color: KEY }],
-      say: "Black plays the Najdorf with a6 — controlling b5 and preparing queenside expansion. Against it we choose the solid, classical Be2 setup rather than the razor-sharp 6.Bg5 or 6.Be3 lines: develop, castle, and play a long positional game where our space tells. Low theory, high reliability.",
+      say: "Black plays the Najdorf with a6 — controlling b5 and preparing queenside expansion. Against it we choose the solid, classical Be2 setup rather than the razor-sharp Bg5 or Be3 lines: develop, castle, and play a long positional game where our space tells. Low theory, high reliability.",
       sayShort: 'Be2 — the classical Najdorf setup.',
     }),
     b({
