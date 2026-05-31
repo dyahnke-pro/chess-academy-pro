@@ -3325,6 +3325,44 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nbd2 — keep the tension.', '', 'h3 — question the bishop.', 'Bxf3 — Black gives the pair.', 'Nxf3 — recapture.', '', '', 'Nc6 — White holds the edge.'],
     sources: ['concept:pos-bishop-pair', 'concept:pos-development', 'https://www.chess.com/openings/Sicilian-Defense-Rossolimo-Variation'],
   },
+
+  // ── Pro-rep gems batch 2 (Caro-Kann + KID) ──
+  // Naroditsky Caro-Kann (Black): after Neg5 …h6 the knight has no good square.
+  'pro-naroditsky-caro-kann:e4_c6_Nc3_d5_Nf3_dxe4_Nxe4_Nf6:Neg5': {
+    watch: ['', '', '', '', '', '', '', '', 'Neg5? — the knight lunges at f7, but it has nowhere safe to go.', '…h6 — Black simply questions it; the knight must retreat to the rim.', 'Nh3 — shoved to the edge, out of play.', '…g5 — Black grabs space and keeps the knight buried.', '', '…c5 — Black expands in the centre with the better game.', '', '', 'Bb2 — White fianchettoes, but Black is comfortably better with the bishop pair and more space.'],
+    learn: ['', '', '', '', '', '', '', '', '', 'h6 — question the knight.', 'Nh3 — shoved to the rim.', 'g5 — bury it, grab space.', '', 'c5 — expand, Black is better.', '', '', 'Bb2 — Black holds the edge.'],
+    sources: ['concept:pos-piece-activity', 'concept:pos-space', 'https://www.chess.com/openings/Caro-Kann-Defense'],
+  },
+  // Naroditsky Caro-Kann Advance (Black): …Qb6 + …Nf4 wins the bishop pair and the better game.
+  'pro-naroditsky-caro-kann:e4_c6_d4_d5_e5_c5_dxc5_e6_Nf3_Bxc5_Bd3_Nc6_O-O_Nge7_Nbd2_Ng6:Re1': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Re1? — natural, but it lets Black grab the initiative.', '…Qb6 — pressuring f2 and the queenside, gaining tempo.', '', '…Nf4 — the knight jumps to the strong f4 outpost, hitting the d3-bishop.', '', '…Nxd3 — Black wins the bishop pair.', '', '…Nb4 — the knight invades, and Black is comfortably better with the two bishops.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Qb6 — pressure f2.', '', 'Nf4 — jump to the outpost.', '', 'Nxd3 — win the bishop pair.', '', 'Nb4 — Black is better.', ''],
+    sources: ['concept:pos-outpost', 'concept:pos-bishop-pair', 'https://www.chess.com/openings/Caro-Kann-Defense-Advance-Variation'],
+  },
+  // Naroditsky KID (Black): the Qc2 slip drops e4; …Nxe4 wins a pawn (confirmed +1.08).
+  'pro-naroditsky-kid:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_Nf3_O-O_Be2_e5_O-O_exd4_Nxd4_Re8:Qc2': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Re8 — the rook eyes the e-file and the e4-pawn.', 'Qc2? — defending, but it leaves e4 underprotected.', '…Nxe4! — Black snaps the centre pawn; the tactic works.', 'Nxe4 — White recaptures the knight.', '…Bxd4 — but Black wins it back with interest, a clean pawn up.', '', '', '', '', 'Bf3 — White tries to hold, but Black is a pawn up with the freer game.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nxe4 — snap the pawn!', 'Nxe4 — recapture', 'Bxd4 — win it back, a pawn up.', '', '', '', '', 'Bf3 — Black is winning.'],
+    sources: ['concept:tac-fork', 'concept:pos-center', 'https://www.chess.com/openings/Kings-Indian-Defense'],
+  },
+  // Naroditsky KID vs h3 (Black): the …Nh5 reroute clamps; …Bxc3 doubles White's pawns.
+  'pro-naroditsky-kid:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_h3_O-O:f4': {
+    watch: ['', '', '', '', '', '', '', '', '', '', 'f4? — over-ambitious; it loosens the kingside and the g3-square.', '…Nh5 — the knight reroutes toward the weakened g3 and f4 squares.', '', '…Ng3 — the knight lands on g3, forking the rook and skewering the structure.', '', '', '…c5 — Black strikes the centre too.', '', '…Bxc3 — Black trades to saddle White with doubled, weak c-pawns and the better game.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nh5 — reroute to g3.', '', 'Ng3 — fork the rook.', '', '', 'c5 — strike the centre.', '', 'Bxc3 — double the pawns, Black is better.'],
+    sources: ['concept:pos-weak-square', 'concept:pos-outpost', 'https://www.chess.com/openings/Kings-Indian-Defense'],
+  },
+  // Naroditsky KID Sämisch (Black): the …b5! Benko-style break confirmed-crushes (+1.37).
+  'pro-naroditsky-kid:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_f3_O-O_Be3_a6_Qd2_c5_Nge2_Nc6:g4': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'g4? — White storms the kingside, but Black is faster on the other wing.', '…b5! — the Benko-style break rips open the queenside where White just castled.', '', '…bxc4 — the c-file cracks open against the king on c1.', '', '…Qa5 — the queen swings into the attack on White’s king.', '', '…Nb4 — the knight joins; Black’s attack is crushing.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'b5 — the Benko break!', '', 'bxc4 — crack the c-file.', '', 'Qa5 — swing the queen.', '', 'Nb4 — Black is crushing.', ''],
+    sources: ['concept:tac-attack', 'concept:pos-pawn-break', 'https://www.chess.com/openings/Kings-Indian-Defense-Samisch-Variation'],
+  },
+  // Naroditsky KID vs f4 Four Pawns (Black): same …Nh5 → …Ng3 → …Bxc3 doubling plan.
+  'pro-naroditsky-kid:d4_Nf6_c4_g6_Nc3_Bg7_e4_d6_f4_O-O:h3': {
+    watch: ['', '', '', '', '', '', '', '', '', '', 'h3? — slow, and it does nothing about the weak g3-square.', '…Nh5 — the knight heads for the holes f4 and g3 created.', '', '…Ng3 — landing on g3, forking the rook.', '', '', '…c5 — Black hits the centre.', '', '…Bxc3 — trading to give White doubled c-pawns and the worse structure.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nh5 — reroute to g3.', '', 'Ng3 — fork the rook.', '', '', 'c5 — strike the centre.', '', 'Bxc3 — double the pawns, Black is better.'],
+    sources: ['concept:pos-weak-square', 'concept:pos-outpost', 'https://www.chess.com/openings/Kings-Indian-Defense-Four-Pawns-Attack'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
