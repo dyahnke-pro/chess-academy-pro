@@ -6169,7 +6169,9 @@
           "Bd2",
           "Rb8",
           "Rac1",
-          "Bf5"
+          "Bf5",
+          "e4",
+          "Bd7"
         ],
         "annotations": [
           "Qd3 — the queen steps back to d3, eyeing the centre.",
@@ -6177,7 +6179,9 @@
           "Bd2 — White develops the dark-squared bishop to d2.",
           "…Rb8 — Black prepares ...b5.",
           "Rac1 — White seizes the open c-file.",
-          "…Bf5 — Black develops the bishop to f5."
+          "…Bf5 — Black develops the bishop to f5.",
+          "White grabs the centre with e4, gaining space and kicking the f5-bishop. With the broad pawn front and the bishop on g2 raking the long diagonal, White's reversed-Sicilian setup turns its extra tempo into a genuine pull.",
+          "…Bd7 retreats the bishop. White has built the ideal Symmetrical-English structure — pawns on c4 and e4, pressure on the long diagonal, and the easier game on both wings."
         ],
         "sources": [
           "concept:pos-center",
@@ -6190,9 +6194,13 @@
           "Bd2 — develop the bishop",
           "Rb8 — prepare ...b5",
           "Rac1 — seize the c-file",
-          "Bf5 — develop the bishop"
+          "Bf5 — develop the bishop",
+          "e4 — seize the centre, kick the bishop",
+          "…Bd7 — retreat; White holds the space"
         ],
         "arrows": [
+          [],
+          [],
           [],
           [],
           [],
@@ -6263,6 +6271,22 @@
             {
               "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e4",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ]
@@ -11803,7 +11827,9 @@
           "Be6",
           "Nbd2",
           "cxd4",
-          "exd4"
+          "exd4",
+          "Rac8",
+          "Re1"
         ],
         "annotations": [
           "…Nc6 — Black develops and eyes the d4-pawn.",
@@ -11811,7 +11837,9 @@
           "…Be6 — Black develops the bishop to e6.",
           "Nbd2 — the knight heads to d2, supporting the centre.",
           "…cxd4 — Black releases the tension on d4.",
-          "exd4 — White recaptures toward the centre, a broad d4-pawn front."
+          "exd4 — White recaptures toward the centre, a broad d4-pawn front.",
+          "Black brings a rook to the half-open c-file, the natural counterplay against White's broad centre.",
+          "White centralizes the rook on e1, completing development behind the d4-pawn. The London structure stands ideal — the dark-squared bishop sits outside the pawn chain on f4, the centre is solid, and every piece occupies its best square."
         ],
         "sources": [
           "concept:pos-development",
@@ -11824,7 +11852,9 @@
           "Be6 — develop the bishop",
           "Nbd2 — support the centre",
           "cxd4 — release the tension",
-          "exd4 — broad d4 front"
+          "exd4 — broad d4 front",
+          "…Rac8 — pressure the c-file",
+          "Re1 — centralize, complete the London"
         ],
         "arrows": [
           [
@@ -11834,6 +11864,8 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
+          [],
           [],
           [],
           [],
@@ -11906,6 +11938,18 @@
             },
             {
               "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
@@ -32294,7 +32338,9 @@
           "g4",
           "b4",
           "Nd5",
-          "Bxd5"
+          "Bxd5",
+          "exd5",
+          "Nb6"
         ],
         "annotations": [
           "Kb1 — White tucks the king away.",
@@ -32302,9 +32348,13 @@
           "g4 — White races on the kingside.",
           "b4 — the pawn hits the c3-knight.",
           "Nd5 — White jumps in rather than retreat.",
-          "Bxd5 — Black trades it; the b-file opens."
+          "Bxd5 — Black trades it; the b-file opens.",
+          "White recaptures on d5, fixing the pawn structure and opening the position for both attacks.",
+          "…Nb6 swings the knight to hit the d5-pawn and head for c4, while the open b-file already bears down on White's king — Black's queenside initiative rolls on, the point of the 6.f3 lines."
         ],
         "arrows": [
+          [],
+          [],
           [],
           [],
           [],
@@ -32376,6 +32426,22 @@
               "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
@@ -32389,7 +32455,9 @@
           "g4 — race on the kingside",
           "b4 — hit the c3-knight",
           "Nd5 — jump in, not retreat",
-          "Bxd5 — trade it; the b-file opens"
+          "Bxd5 — trade it; the b-file opens",
+          "exd5 — recapture, fix the centre",
+          "…Nb6 — hit d5, eye c4"
         ]
       }
     ]
