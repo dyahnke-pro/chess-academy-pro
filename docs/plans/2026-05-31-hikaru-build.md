@@ -125,3 +125,26 @@ Modern ×3 (vs Naroditsky, dropstoneDP 3158, Wonderboy05). Gates green
 - **Pitfalls** (STEP 12) — 3-5 common-mistake WLPP cards per opening.
 - **Endgames** — Nimzo-Larsen e5-main/nf6/g6 + Caro carry R+minor+P / Q+P data; author
   per the locked endgame rule (real game → transition FEN → conversion).
+
+### FULL G9.1 PARITY REACHED (2026-05-31) — all layers shipped + prod-verified
+| Layer | Count | Coverage |
+|---|---|---|
+| Openings | 5 | nimzo-larsen, closed-sicilian, reti, pirc-modern, caro-kann |
+| Variations | 20 | all |
+| Curated lessons | 25 | main + variations (Gate A: 0 legacy fallback) |
+| Punish-gems | 6 | Caro ×5, Closed-Sicilian ×1 |
+| Model games | 14 | all 5 openings, his real wins |
+| Middlegame plans | 20 | one per variation |
+| Pitfalls | 11 | all 5 openings, engine-verified |
+| Endgame plans | 3 | Caro Exchange, Pirc Be3, Nimzo e5-main |
+
+**Deliberate self-hides (data-honest, NOT gaps — "empty > generic > invented"):**
+- Gems: Pirc/Réti/Nimzo-Larsen = 0. Pirc's solid setups hold; Nimzo-Larsen + Réti
+  don't DB-anchor ≥6 plies (offbeat 1.b3, leaves book at move 5/3).
+- Endgames: Closed-Sicilian + Réti = 0. Their games mostly stay middlegame
+  (Q+pieces) — no recurring real ending to ground a plan in.
+
+**Verified on prod:** wiring audit 18/0 (Pro tab → player cards → detail → deep-links,
+0 errors); endgame + pitfall + plan sections all surface; narration board-accurate
+(proRepPlanAccuracy), voice-clean (proRepNarrationVoice), 17/17 arrows non-pawn origin.
+Build is COMPLETE.
