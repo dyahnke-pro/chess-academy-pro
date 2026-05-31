@@ -42,7 +42,7 @@ export const SCOTCH_GAMBIT_LESSON: LessonScript = {
       moves: 'e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5',
       say: "…d5 hits the bishop, so it drops to b5 — pinning the c6-knight against the king on e8. The pin is how White will round the d4-pawn back up: the defender of d4 is tied down.",
       sayShort: 'Bb5 — pin the knight, target d4.',
-      arrows: [A('b5', 'e8')],
+      arrows: [A('b5', 'c6')],
       highlights: [H('b5'), H('c6'), H('e8')],
     }),
     b({
@@ -69,9 +69,9 @@ export const SCOTCH_GAMBIT_LESSON: LessonScript = {
     b({
       id: 'middlegame',
       moves: 'e4 e5 Nf3 Nc6 d4 exd4 Bc4 Nf6 e5 d5 Bb5 Ne4 Nxd4 Bd7 Bxc6 bxc6 O-O Bc5 Be3 O-O Nd2 Nxd2 Qxd2',
-      say: "And here is the Scotch Gambit's promise delivered. The knights come off, the d2-queen recaptures, and White stands clearly more comfortably: level material, the e5-pawn cramping Black, and the doubled c-pawns to gnaw at. A pawn 'sacrifice' that left White better — that is the Scotch Gambit at its best.",
+      say: "And here is the Scotch Gambit's promise delivered. The knights come off, the d2-queen recaptures, and White stands clearly more comfortably: level material, the e5-pawn cramping Black, and the doubled pawns on c6 and c7 to gnaw at. A pawn 'sacrifice' that left White better — that is the Scotch Gambit at its best.",
       sayShort: 'Qxd2 — level material, White is better.',
-      highlights: [H('e5'), H('c6'), H('c7'), H('e3')],
+      highlights: [H('e5'), H('c6'), H('c7')],
     }),
   ],
 };

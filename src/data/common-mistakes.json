@@ -882,7 +882,7 @@
       "wrongMove": "Nxc3",
       "correctMove": "Qb3",
       "explanation": "In the Compromised Defence, meekly regaining the pawn with Nxc3 lets Black consolidate the extra material. Qb3! is the point — the queen and bishop train on f7 and the attack roars on, worth far more than a pawn.",
-      "shortNarration": "Qb3 — the battery on f7, not the pawn",
+      "shortNarration": "Qb3 — train on f7, not the pawn",
       "sources": [
         "book:evans-gambit",
         "concept:pos-development",

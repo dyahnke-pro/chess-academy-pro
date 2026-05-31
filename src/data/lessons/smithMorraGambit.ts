@@ -32,8 +32,8 @@ export const SMITH_MORRA_GAMBIT_LESSON: LessonScript = {
     b({
       id: 'accept',
       moves: 'e4 c5 d4 cxd4 c3 dxc3 Nxc3',
-      say: "After …dxc3 Nxc3, count the bargain. White is a pawn down — but in exchange the c-file and the d-file are wide open for the rooks, the knight is already developed to c3, and Black has nothing out. A clean pawn for a roaring lead in development and two open files.",
-      sayShort: 'Nxc3 — a pawn for open files and a lead.',
+      say: "After …dxc3 Nxc3, count the bargain. White is a pawn down — but in exchange the c-file and the d-file are wide open for the rooks to swing to c1 and d1, the knight is already developed to c3, and Black has nothing out. A clean pawn for a roaring lead in development and two open files.",
+      sayShort: 'Nxc3 — a pawn for files and a lead.',
       highlights: [H('c3'), H('c1'), H('d1')],
     }),
     b({
@@ -69,7 +69,7 @@ export const SMITH_MORRA_GAMBIT_LESSON: LessonScript = {
     b({
       id: 'middlegame',
       moves: 'e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6 O-O Nge7 Bg5 f6 Be3 b5 Bb3 Ng6',
-      say: "Here is the verdict on the whole gambit. White is still a pawn down — and the engine prefers WHITE. The two bishops on b3 and e3 rake toward the king, both knights are active, and the open c- and d-files belong to the rooks. This is full compensation and then some: the Smith-Morra player is happy to give a pawn for a position this alive.",
+      say: "Here is the verdict on the whole gambit. White is still a pawn down — and the engine prefers WHITE. The two bishops on b3 and e3 rake toward e6 and the king, both knights are active, and the rooks own the open files on c1 and d1. This is full compensation and then some: the Smith-Morra player is happy to give a pawn for a position this alive.",
       sayShort: 'A pawn down, but White is better.',
       arrows: [A('b3', 'e6')],
       highlights: [H('b3'), H('e3'), H('c1'), H('d1')],

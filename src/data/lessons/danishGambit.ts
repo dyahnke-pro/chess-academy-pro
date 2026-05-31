@@ -59,7 +59,7 @@ export const DANISH_GAMBIT_LESSON: LessonScript = {
     b({
       id: 'middlegame',
       moves: 'e4 e5 d4 exd4 c3 d5 exd5 Qxd5 cxd4 Nc6 Nf3 Bg4 Be2 Bb4+ Nc3 Bxf3 Bxf3 Qc4 Bxc6+ bxc6',
-      say: "…Qc4 pressures the d4-pawn, so White trades on c6 — and after …bxc6 Black is left with doubled c-pawns to offset White's isolated d-pawn. The verdict is honest: dead level. The Danish gives no objective edge once Black plays …d5, but White has easy development and a clean, fighting position — a perfectly good game from a 'refuted' gambit.",
+      say: "…Qc4 pressures the d4-pawn, so White trades on c6 — and after …bxc6 Black is left with doubled pawns on c6 and c7 to offset White's isolated d-pawn. The verdict is honest: dead level. The Danish gives no objective edge once Black plays …d5, but White has easy development and a clean, fighting position — a perfectly good game from a 'refuted' gambit.",
       sayShort: 'Bxc6+ — trade, a balanced fight.',
       highlights: [H('d4'), H('c6'), H('c7')],
     }),

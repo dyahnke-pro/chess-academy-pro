@@ -46,7 +46,7 @@ export const VIENNA_GAMBIT_LESSON: LessonScript = {
     b({
       id: 'recapture',
       moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3',
-      say: "Nf3 and Qe2 develop with pressure on the e4-knight, and after …Nxc3 dxc3 White recaptures toward the centre. The c-pawns are doubled, yes — but White has opened the d-file, kept the e5-pawn as a cramping wedge, and gained the half-open f-file pointing at f7.",
+      say: "Nf3 and Qe2 develop with pressure on the e4-knight, and after …Nxc3 dxc3 White recaptures toward the centre. The c-pawns are doubled, yes — but White has opened the d-file for a rook on d1, kept the e5-pawn as a cramping wedge, and gained the half-open f-file pointing at f7.",
       sayShort: 'dxc3 — open the d-file, keep the e5 wedge.',
       highlights: [H('e5'), H('d1'), H('f7')],
     }),
@@ -60,16 +60,16 @@ export const VIENNA_GAMBIT_LESSON: LessonScript = {
     b({
       id: 'castle',
       moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5 Bf4 Nc6 O-O-O Be6',
-      say: "O-O-O! White castles QUEENSIDE — the signal for a race. The two kings will sit on opposite wings, so both players throw their pawns at the enemy king with no fear of opening their own. The Vienna becomes a pure attacking sprint.",
+      say: "O-O-O! White castles QUEENSIDE, the king tucking to c1 — the signal for a race. The two kings will sit on opposite wings, so both players throw their pawns at the enemy king with no fear of opening their own. The Vienna becomes a pure attacking sprint.",
       sayShort: 'O-O-O — opposite castling, the race is on.',
-      highlights: [H('c1'), H('e6')],
+      highlights: [H('c1')],
     }),
     b({
       id: 'middlegame',
       moves: 'e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Be7 Qe2 Nxc3 dxc3 c5 Bf4 Nc6 O-O-O Be6 h4 h6 g3 Qa5',
-      say: "And here is the Vienna's battleground. White rolls the kingside pawns with h4 and g3 to pry open Black's castled position, while Black answers …Qa5 to swarm White's queenside king. The engine calls it dead level — but it is a knife-fight, decided by who lands the first blow. That is exactly the game the Vienna player wants.",
+      say: "And here is the Vienna's battleground. White rolls the kingside pawns with h4 and g3 to pry open Black's castled position, while Black answers …Qa5 to swarm White's queenside king on c1. The engine calls it dead level — but it is a knife-fight, decided by who lands the first blow. That is exactly the game the Vienna player wants.",
       sayShort: 'h4 — storm the kingside, race the attacks.',
-      highlights: [H('h4'), H('e5'), H('c1')],
+      highlights: [H('h4'), H('c1')],
     }),
   ],
 };

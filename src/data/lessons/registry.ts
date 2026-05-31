@@ -14,6 +14,7 @@
 
 import type { LessonScript } from '../../types';
 import repertoire from '../repertoire.json';
+import gambits from '../gambits.json';
 
 import { RUY_LOPEZ_LESSON } from './ruyLopez';
 import { RUY_VARIATION_LESSONS } from './ruyVariations';
@@ -104,6 +105,29 @@ import { TROMPOWSKY_ATTACK_LESSON } from './trompowskyAttack';
 import { TROMPOWSKY_ATTACK_VARIATION_LESSONS } from './trompowskyAttackVariations';
 import { BIRDS_OPENING_LESSON } from './birdsOpening';
 import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
+// Gambit-tab lessons that live in gambits.json (not opening-manifests.json,
+// so not masterclass-tab openings) but ARE hand-authored curated lessons.
+// Registered here so the content gates (accuracy/integrity/depth/grounding/
+// sources) sweep them too — David 2026-05-31 gambit-tab audit found they
+// were rendering curated Watch lessons but escaping every gate.
+import { SCOTCH_GAMBIT_LESSON } from './scotchGambit';
+import { SCOTCH_GAMBIT_VARIATION_LESSONS } from './scotchGambitVariations';
+// NOTE: vienna-gambit is intentionally NOT gated here. Its "Gambit Accepted
+// (…exf4)" variation teaches real C29 theory (3…exf4 4.e5) that the shipped
+// openings-lichess.json subset omits past move 3, so it can't clear the
+// sealed G3 ≥6-ply DB-anchor gate. Adding it would require either fabricating
+// a DB entry (banned, G3) or weakening a sealed gate (banned). Flagged for
+// David: add the verified C29 line to the DB, then gate it. — 2026-05-31
+import { DANISH_GAMBIT_LESSON } from './danishGambit';
+import { DANISH_GAMBIT_VARIATION_LESSONS } from './danishGambitVariations';
+import { SMITH_MORRA_GAMBIT_LESSON } from './smithMorraGambit';
+import { SMITH_MORRA_GAMBIT_VARIATION_LESSONS } from './smithMorraGambitVariations';
+import { STAFFORD_GAMBIT_LESSON } from './staffordGambit';
+import { STAFFORD_GAMBIT_VARIATION_LESSONS } from './staffordGambitVariations';
+import { MARSHALL_ATTACK_LESSON } from './marshallAttack';
+import { MARSHALL_ATTACK_VARIATION_LESSONS } from './marshallAttackVariations';
+import { ENGLUND_GAMBIT_LESSON } from './englundGambit';
+import { ENGLUND_GAMBIT_VARIATION_LESSONS } from './englundGambitVariations';
 
 export type LessonScope = 'main' | 'variation' | 'trap';
 
@@ -168,9 +192,29 @@ const OPENINGS: OpeningLessons[] = [
   { main: BIRDS_OPENING_LESSON, variations: BIRDS_OPENING_VARIATION_LESSONS },
 ];
 
+// Gambit-tab curated lessons (gambits.json source). These are hand-authored
+// curated lessons that render on the Gambit tab — NOT masterclass-tab openings
+// (no opening-manifests.json entry, not in repertoire.json). They are swept by
+// the CONTENT gates (ALL_LESSONS → accuracy / integrity / depth / §5b grounding
+// / sources) but are deliberately kept OUT of FIRST_CLASS_OPENING_IDS so the
+// masterclass-manifest gate doesn't require a manifest for them. David
+// 2026-05-31 gambit-tab audit: these were rendering curated lessons while
+// escaping every content gate. (vienna-gambit excluded — its "Gambit Accepted"
+// variation teaches real C29 theory the shipped lichess DB omits past move 3,
+// so it can't clear the sealed G3 ≥6-ply anchor gate; flagged for David.)
+const GAMBIT_TAB_OPENINGS: OpeningLessons[] = [
+  { main: SCOTCH_GAMBIT_LESSON, variations: SCOTCH_GAMBIT_VARIATION_LESSONS },
+  { main: DANISH_GAMBIT_LESSON, variations: DANISH_GAMBIT_VARIATION_LESSONS },
+  { main: SMITH_MORRA_GAMBIT_LESSON, variations: SMITH_MORRA_GAMBIT_VARIATION_LESSONS },
+  { main: STAFFORD_GAMBIT_LESSON, variations: STAFFORD_GAMBIT_VARIATION_LESSONS },
+  { main: MARSHALL_ATTACK_LESSON, variations: MARSHALL_ATTACK_VARIATION_LESSONS },
+  { main: ENGLUND_GAMBIT_LESSON, variations: ENGLUND_GAMBIT_VARIATION_LESSONS },
+];
+
 function build(): RegisteredLesson[] {
   const out: RegisteredLesson[] = [];
-  for (const op of OPENINGS) {
+  // Masterclass openings + gambit-tab lessons are both content-gated.
+  for (const op of [...OPENINGS, ...GAMBIT_TAB_OPENINGS]) {
     out.push({ scope: 'main', key: op.main.title, openingId: op.main.openingId, lesson: op.main });
     for (const [key, lesson] of Object.entries(op.variations)) {
       out.push({ scope: 'variation', key, openingId: lesson.openingId, lesson });
@@ -190,14 +234,24 @@ export const ALL_LESSONS: RegisteredLesson[] = build();
  *  opening — so a new opening can't ship without declared content floors. */
 export const FIRST_CLASS_OPENING_IDS: string[] = OPENINGS.map((o) => o.main.openingId);
 
-const COLOR_BY_ID = new Map<string, 'white' | 'black'>(
-  (repertoire as Array<{ id: string; color: 'white' | 'black' }>).map((o) => [o.id, o.color]),
-);
+// Orientation source of truth = the opening's `color` field. Most lessons
+// map to a repertoire.json entry; the gambit-tab lessons map to gambits.json
+// (same `color` shape). Both feed the Dexie openings store, so both are
+// valid orientation sources for the gate.
+const COLOR_BY_ID = new Map<string, 'white' | 'black'>([
+  ...(repertoire as Array<{ id: string; color: 'white' | 'black' }>).map(
+    (o) => [o.id, o.color] as const,
+  ),
+  ...(gambits as Array<{ id: string; color: 'white' | 'black' }>).map(
+    (o) => [o.id, o.color] as const,
+  ),
+]);
 
-/** The side the student plays for an opening, read from repertoire.json's
- *  `color` field — the DB-driven source of truth. Lessons must orient to
- *  this (white openings white-at-bottom, black openings black-at-bottom).
- *  Returns null when the opening isn't in the repertoire (gate surfaces it). */
+/** The side the student plays for an opening, read from the opening's
+ *  `color` field (repertoire.json or gambits.json) — the DB-driven source of
+ *  truth. Lessons must orient to this (white openings white-at-bottom, black
+ *  openings black-at-bottom). Returns null when the opening is in neither
+ *  source (gate surfaces it). */
 export function expectedOrientation(openingId: string): 'white' | 'black' | null {
   return COLOR_BY_ID.get(openingId) ?? null;
 }
