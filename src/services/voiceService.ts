@@ -1706,9 +1706,22 @@ class VoiceService {
       // download. Falls back to the arrayBuffer path only on old
       // iOS that has neither.
       if (this.canStreamProgressivePlayback()) {
+        const genAtStream = this.stopGeneration;
         this.abortController = null;
-        const ok = await this.playAudioFromStream(response, key);
-        return ok;
+        const streamed = await this.playAudioFromStream(response, key);
+        if (streamed) return true;
+        // playAudioFromStream returns false only when playback never
+        // STARTED: no body, a MediaSource sourceOpen error, or a
+        // stop()/supersede bumped the generation. If we were superseded
+        // or the user stopped us, this utterance is intentionally
+        // abandoned — do NOT retry (retrying would re-introduce the
+        // overlapping-narration flood that drops Polly to Web Speech).
+        // Only on a genuine start failure with the generation still
+        // current do we fall back to BUFFERED Polly before Web Speech
+        // — David's chain (2026-05-31): streaming TTS → buffered Polly
+        // → Web Speech. Keeps the good voice one tier longer.
+        if (this.stopGeneration !== genAtStream) return false;
+        return await this.playBufferedPollyFallback(url, key);
       }
 
       // Fallback: buffer the full MP3 then decode + play. Same path
@@ -1750,6 +1763,48 @@ class VoiceService {
       this.coolDownPolly(msg);
       this.playing = false;
       this.currentSource = null;
+      return false;
+    }
+  }
+
+  /** Buffered-Polly fallback (David 2026-05-31). Runs when the
+   *  progressive-streaming path was available but failed to START on a
+   *  streaming-capable device (e.g. a transient MediaSource sourceOpen
+   *  error on iOS 17.1+). Plays the SAME Polly audio one tier lower —
+   *  the full MP3 — before `speakInternal` would otherwise drop to the
+   *  robotic Web Speech voice. This is the middle rung of the
+   *  streaming-TTS → buffered-Polly → Web-Speech chain.
+   *
+   *  iOS routes through the gesture-primed `<audio>` element (native
+   *  progressive playback off the `/api/tts` URL — the path proven to
+   *  work on the affected iPhones; no Web Audio, no second fetch).
+   *  Desktop re-fetches, buffers, decodes and plays via Web Audio, and
+   *  caches the bytes for the next identical utterance. NOT the banned
+   *  server-buffered `transformToByteArray` path (G4) — the server is
+   *  still streaming; this is client-side native buffering only. */
+  private async playBufferedPollyFallback(url: string, cacheKey: string): Promise<boolean> {
+    try {
+      if (this.isIosPlatform()) {
+        const ok = await this.playViaElement(url, false);
+        if (ok) this.lastSpeakDiagnostic.pollyStatus = 200;
+        return ok;
+      }
+      const res = await fetch(url, { signal: createTimeoutSignal(10_000) });
+      this.lastSpeakDiagnostic.pollyStatus = res.status;
+      if (!res.ok) {
+        this.lastSpeakDiagnostic.error = `buffered Polly fallback /api/tts ${res.status}`;
+        return false;
+      }
+      const arrayBuffer = await res.arrayBuffer();
+      this.setAudioCacheEntry(cacheKey, arrayBuffer);
+      const played = await this.playAudioBuffer(arrayBuffer.slice(0));
+      if (!played) {
+        this.lastSpeakDiagnostic.error ??= 'buffered Polly fallback: AudioContext could not resume';
+      }
+      return played;
+    } catch (err: unknown) {
+      if (err instanceof DOMException && err.name === 'AbortError') return false;
+      this.lastSpeakDiagnostic.error = `buffered Polly fallback threw: ${err instanceof Error ? err.message : String(err)}`;
       return false;
     }
   }

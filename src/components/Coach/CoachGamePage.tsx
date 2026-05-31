@@ -67,12 +67,29 @@ import {
 import { fetchLichessExplorer, fetchCloudEval } from '../../services/lichessExplorerService';
 import { addAddressedConversion } from '../../services/conversionProgress';
 import { detectTrapInPosition, formatTrapForPrompt, type MoveEvaluation } from '../../services/openingTrapDetector';
+import { buildFastMoveLine } from '../../utils/fastMoveNarration';
 
 /** Max wall-clock for any Lichess lookup during opening teaching.
  *  Matches coachContextEnricher's FETCH_TIMEOUT_MS so the whole
  *  coach-narration path shares a budget. Past this, narration
  *  degrades to ungrounded prose rather than stalling the turn. */
 const LICHESS_FETCH_TIMEOUT_MS = 2500;
+
+/** Per-move spoken narration source on /coach/play (David 2026-05-31:
+ *  "i want the tts speech back. voice narration and thinking time
+ *  between coach moves are too slow").
+ *
+ *  When FALSE, the per-move LLM commentary path (`generateMoveCommentary`)
+ *  is skipped and a fast DETERMINISTIC template line is spoken instead
+ *  (see `buildFastMoveLine`). The prod audit (2026-05-31) measured the
+ *  LLM call at 4–15s PER MOVE — and because the coach's reply is gated
+ *  behind it, every move stalled — while its streamed sentences flooded
+ *  Polly until it dropped to the robotic Web Speech voice. The template
+ *  is instant and fires exactly one short utterance per move, so the
+ *  coach replies immediately and Polly never chokes. The LLM machinery
+ *  below is kept intact (dead while this is false) for an easy revert.
+ *  Flip back to TRUE to restore LLM per-move commentary. */
+const USE_LLM_MOVE_COMMENTARY: boolean = false;
 
 /** Race a fetch-style promise against a timeout, throwing 'timeout'
  *  on expiry. Distinct from `../../coach/withTimeout` (which returns
@@ -3095,6 +3112,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // every-move (user wants normal length).
     const briefMode = isKeyMoment && !isFirstSeeingOpening && !userWantsEveryMove;
     const shouldFire =
+      USE_LLM_MOVE_COMMENTARY &&
       narrationDensity !== 'none' &&
       (isFirstSeeingOpening || isKeyMoment || userWantsEveryMove);
     if (shouldFire) {
@@ -3353,6 +3371,48 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // keep that so the user isn't staring at a blank row.
       commentary = tacticSuffix.trim();
     }
+
+    // ── Fast deterministic move narration (David 2026-05-31) ──────────
+    // When USE_LLM_MOVE_COMMENTARY is false, the LLM block above is dead
+    // and we speak ONE instant template line per move. This is what
+    // makes the coach reply immediately (no 4–15s LLM gate) and keeps
+    // Polly fed a single short utterance per move instead of a flood of
+    // streamed sentences (which is what was dropping it to Web Speech).
+    if (!USE_LLM_MOVE_COMMENTARY) {
+      const narrationTactics = (tacticResult?.tactics ?? []).filter((t) => t.type !== 'none');
+      const fastLine = buildFastMoveLine({
+        san: moveResult.san,
+        moverIsWhite: playerColor === 'white',
+        classification,
+        tactics: narrationTactics,
+        hangingPieces: tacticResult?.hangingPieces ?? [],
+        density: narrationDensity,
+      });
+      if (fastLine) {
+        commentary = fastLine;
+        // The downstream speak path (WO-NARR-POLICY-05) fires
+        // voiceService.speakIfFree(commentary) only when this is true.
+        llmProducedSpeech = true;
+        // Mirror into the shared session + brain memory so the next
+        // chat turn / move stays consistent with what was just spoken.
+        useCoachSessionStore.getState().appendMessage({
+          id: `narr-${Date.now()}`,
+          role: 'assistant',
+          content: fastLine,
+          timestamp: Date.now(),
+        });
+        useCoachMemoryStore.getState().appendConversationMessage({
+          surface: 'chat-in-game',
+          role: 'coach',
+          text: fastLine,
+          fen: game.fen,
+          trigger: null,
+        });
+      } else {
+        commentary = tacticSuffix.trim();
+        llmProducedSpeech = false;
+      }
+    }
     // Keep evalLoss referenced even when we drop the template so it's
     // still available for classification decisions above.
     void evalLoss;
@@ -3434,6 +3494,10 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       // context (FEN + hanging pieces + best move) so it can describe
       // what's wrong in plain prose. Falls back to the clean template
       // above on timeout / error — never to the tacticSuffix template.
+      // David 2026-05-31: gated behind USE_LLM_MOVE_COMMENTARY so the
+      // blunder alert speaks the instant deterministic `explanation`
+      // (computed just above) instead of paying an LLM round-trip.
+      if (USE_LLM_MOVE_COMMENTARY) {
       try {
         const alertContext = [
           `Position after the student's blunder (FEN): ${moveResult.fen}`,
@@ -3526,6 +3590,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         }
       } catch {
         // fall through with the clean template
+      }
       }
 
       setBlunderPause({
