@@ -119,8 +119,17 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
        failures, 1102 satellite gates green. Commit c18b37a. Tab now shows the
        curated King's/Evans/Benko/Budapest/Albin (lessons+gems+model-games), not the
        shallow legacy dupes.
-3. [ ] Group A gap-fill — endgame plans from the new data (King's/Evans/Benko/Budapest/
-       Albin all have ≥15% types w/ student wins); model games for Budapest+Albin (0 now).
+3. [~] Group A gap-fill — endgame plans + missing model games. Each authored from a
+       REAL master game walked into the ending, board-verified, gate-green:
+       - [x] Benko — `mp-benkogambit-endgame` (Cossin–MVL 2008, R+minor, Nxg3 no-recapture). 29e9255
+       - [x] King's — `mp-kings-gambit-endgame` (Berg–Grandelius 2015, R+P two-passers). f225428
+       - [ ] Evans — endgame plan (data: see gambit-endgames/ev__*; pick cleanest student win)
+       - [ ] Budapest — endgame plan + MODEL GAMES (0 today; student=black wins)
+       - [ ] Albin — endgame plan (R+P/R+minor 50%) + MODEL GAMES (0 today)
+       Pattern (per plan): read gambit-endgames/<v>.json rep game → verify line legal +
+       capture FENs → author board-true two-register annotations + orange highlights +
+       learnCues + sources → bump manifest endgamePlans → run middlegamePlanThemes +
+       openingManifests + middlegamePlanner gates.
 4. [ ] Group B full builds, one opening at a time (Smith-Morra/Danish/Scotch/Vienna/
        Stafford/Marshall/Englund) — lesson + plans + endgame + model games + pitfalls.
 5. [ ] Gate wiring (depth gate + coverage gate over gambits.json).
