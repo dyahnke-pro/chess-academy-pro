@@ -60253,6 +60253,173 @@
     ]
   },
   {
+    "id": "mp-marshallattack-rooklift",
+    "openingId": "marshall-attack",
+    "criticalPositionFen": "r1b2rk1/5ppp/p1pb4/1p1n4/3P4/1BP3Pq/PP3P1P/RNBQR1K1 w - - 1 15",
+    "title": "The Marshall attack: …Bg4, …Re6 rook-lift, …Qh5",
+    "overview": "The Marshall’s point made flesh: a pawn given for a raging kingside initiative. Black pins with …Bg4, swings a rook to the e-file, then executes the famous …Re6-g6/h6 rook-lift to pile bodies at the white king, with the queen landing on h5. The attack is the compensation.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "Bishop",
+        "route": "Bc8-g4",
+        "explanation": "…Bg4 develops with a gain of pressure, pinning ideas against the white queen/knight and adding an attacker."
+      },
+      {
+        "piece": "Rook",
+        "route": "Rf8-e8-e6",
+        "explanation": "The signature Marshall rook-lift — the rook comes to e6 and swings to g6 or h6, joining the assault on the white king."
+      },
+      {
+        "piece": "Queen",
+        "route": "Qh3-h5",
+        "explanation": "The queen drops to h5, holding the h3 pressure while making room for the rook-lift and …f5-f4 ideas."
+      }
+    ],
+    "strategicThemes": [
+      "Kingside piece attack for the pawn",
+      "The …Re6-g6/h6 rook-lift",
+      "Pressure on g2/h2"
+    ],
+    "typicalMistakes": [],
+    "endgameTransitions": [
+      "Black avoids the endgame — without the attack the missing pawn simply tells; the initiative must be kept burning."
+    ],
+    "playableLines": [
+      {
+        "title": "The Marshall attack: …Bg4, …Re6 rook-lift, …Qh5",
+        "fen": "r1b2rk1/5ppp/p1pb4/1p1n4/3P4/1BP3Pq/PP3P1P/RNBQR1K1 w - - 1 15",
+        "moves": [
+          "Be3",
+          "Bg4",
+          "Qd3",
+          "Rae8",
+          "Nd2",
+          "Re6",
+          "a4",
+          "Qh5"
+        ],
+        "annotations": [
+          "Be3 develops and shores up d4, White returning material-up but under fire.",
+          "…Bg4! develops the last minor piece with menace, adding an attacker and eyeing the soft kingside light squares.",
+          "Qd3 defends and offers to trade the dangerous h3-queen.",
+          "…Rae8 swings a rook to the open e-file, the highway toward the white king.",
+          "Nd2 finally develops the queenside knight, hitting the strong d5-knight.",
+          "…Re6! the famous Marshall rook-lift — the rook climbs to e6, ready to swing to g6 or h6 into the attack.",
+          "a4 counters on the queenside, the only place White can make play.",
+          "…Qh5 drops the queen to h5, keeping the heat on and clearing h3 for the rook and …f5-f4."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Be3 — shore up d4",
+          "…Bg4 — develop with menace",
+          "Qd3 — offer the trade",
+          "…Rae8 — rook to the e-file",
+          "Nd2 — develop, hit d5",
+          "…Re6 — the rook-lift!",
+          "a4 — counter on the wing",
+          "…Qh5 — keep the heat"
+        ],
+        "sources": [
+          "concept:tac-sacrifice",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Marshall_Attack"
+        ]
+      }
+    ]
+  },
+  {
     "id": "mp-marshallattack-endgame",
     "openingId": "marshall-attack",
     "criticalPositionFen": "4r1k1/6pp/5p1b/1pp1r3/3P4/2P1P1PB/1P3K1P/R3R3 b - - 0 30",
@@ -60449,6 +60616,187 @@
     ]
   },
   {
+    "id": "mp-smithmorragambit-pressure",
+    "openingId": "smith-morra-gambit",
+    "criticalPositionFen": "r1bqkb1r/3p2pp/p1n1ppn1/1p6/4P3/1BN1BN2/PP3PPP/R2Q1RK1 w kq - 2 11",
+    "title": "Centralise on d4, break with f4, seize the c-file",
+    "overview": "The mature Smith-Morra middlegame: White trades into a dominating queen on d4, expands on the kingside with the f4 break to pry at e6 and f7, and plants a rook on the open c-file. A pawn down, but every white piece points at the black king while Black is still untangling.",
+    "pawnBreaks": [
+      {
+        "move": "f4",
+        "explanation": "The thematic kingside break — f4-f5 pries open e6 and f7, the soft squares behind Black’s modest …e6/…d6 wall, and opens the f-file behind it."
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "Queen",
+        "route": "Qd1-d4",
+        "explanation": "After the knight trade the queen recaptures on d4, centralised on the long diagonal and the d-file."
+      },
+      {
+        "piece": "Rook",
+        "route": "Ra1-c1",
+        "explanation": "The a1-rook swings to c1, claiming the half-open c-file that the gambit handed White."
+      }
+    ],
+    "strategicThemes": [
+      "Open c- and d-files for the rooks",
+      "Pressure on e6/f7",
+      "Lead in development vs the extra pawn"
+    ],
+    "typicalMistakes": [],
+    "endgameTransitions": [
+      "If queens come off, the open files and the e6/d6 weaknesses give White a pleasant R+minor ending — the structure White plays for all game."
+    ],
+    "playableLines": [
+      {
+        "title": "Centralise on d4, break with f4, seize the c-file",
+        "fen": "r1bqkb1r/3p2pp/p1n1ppn1/1p6/4P3/1BN1BN2/PP3PPP/R2Q1RK1 w kq - 2 11",
+        "moves": [
+          "Nd4",
+          "Nxd4",
+          "Qxd4",
+          "Bb7",
+          "f4",
+          "Rc8",
+          "Qa7",
+          "Qc7",
+          "Rac1"
+        ],
+        "annotations": [
+          "Nd4 offers the knight trade in the centre, clearing the way to plant the queen on d4.",
+          "…Nxd4 accepts — Black is happy to swap a pair of knights and ease the cramp.",
+          "Qxd4 recaptures and centralises the queen on d4, raking the long diagonal and the open d-file.",
+          "…Bb7 contests the long diagonal and develops the last minor piece.",
+          "f4! the thematic break — White grabs kingside space and readies f5 to pry at e6 and the black king.",
+          "…Rc8 contests the c-file before White can claim it.",
+          "Qa7 sidesteps the rook’s challenge, keeping the queen active on a7 and eyeing the a7-g1 diagonal.",
+          "…Qc7 lines the queen up on the c-file behind the rook.",
+          "Rac1 plants the rook on c1 — White owns the c-file and stands comfortably for the pawn."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Nd4 — offer the trade",
+          "…Nxd4 — ease the cramp",
+          "Qxd4 — centralise the queen",
+          "…Bb7 — the long diagonal",
+          "f4 — the kingside break",
+          "…Rc8 — contest the c-file",
+          "Qa7 — keep the queen active",
+          "…Qc7 — stack on the c-file",
+          "Rac1 — seize the c-file"
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit"
+        ]
+      }
+    ]
+  },
+  {
     "id": "mp-smithmorragambit-endgame",
     "openingId": "smith-morra-gambit",
     "criticalPositionFen": "3r1r1k/p4ppp/1np1p3/2P5/4N3/1P6/P4PPP/R2R2K1 b - - 0 22",
@@ -60630,6 +60978,159 @@
     ]
   },
   {
+    "id": "mp-viennagambit-storm",
+    "openingId": "vienna-gambit",
+    "criticalPositionFen": "r3k2r/pp2bpp1/2n1b2p/q1ppP3/5B1P/2P2NP1/PPP1Q3/2KR1B1R w kq - 1 12",
+    "title": "Tuck the king to b1, trade on e6, storm with h5",
+    "overview": "The Vienna’s opposite-castling race. White tucks the king to b1 out of checks, trades the e6-bishop to bare Black’s king cover, and rolls the h-pawn — h4-h5 — to crack open the h-file. Whoever lands the first blow wins; the d4-wedge-free centre gives White the cleaner attack.",
+    "pawnBreaks": [
+      {
+        "move": "h5",
+        "explanation": "The storm break — h4-h5 pries open the black king’s pawn cover and opens the h-file for the h1-rook in the opposite-castling race."
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "King",
+        "route": "Kc1-b1",
+        "explanation": "Prophylaxis — the king steps to b1, off the c-file and the a7-g1 diagonal, before the storm begins."
+      },
+      {
+        "piece": "Bishop",
+        "route": "Bf1-h3",
+        "explanation": "The light bishop swings to h3 to trade Black’s good e6-bishop, stripping a defender of the queenside-castled king and the light squares."
+      }
+    ],
+    "strategicThemes": [
+      "Opposite-side castling pawn race",
+      "Open the h-file",
+      "Trade Black’s defensive bishop"
+    ],
+    "typicalMistakes": [],
+    "endgameTransitions": [
+      "The attack usually decides before an endgame; if it fizzles, the doubled c-pawns make White’s ending slightly worse — so White must keep attacking."
+    ],
+    "playableLines": [
+      {
+        "title": "Tuck the king to b1, trade on e6, storm with h5",
+        "fen": "r3k2r/pp2bpp1/2n1b2p/q1ppP3/5B1P/2P2NP1/PPP1Q3/2KR1B1R w kq - 1 12",
+        "moves": [
+          "Kb1",
+          "O-O-O",
+          "Bh3",
+          "Kb8",
+          "Bxe6",
+          "fxe6",
+          "h5"
+        ],
+        "annotations": [
+          "Kb1 tucks the king to b1 — prophylaxis before the storm, dodging future checks on the c-file and the a7-g1 diagonal.",
+          "…O-O-O Black castles long into the race, both kings now on the queenside wing.",
+          "Bh3 swings the bishop to h3 to trade Black’s strong e6-bishop and bite at the light squares.",
+          "…Kb8 the standard luft, stepping the king off the c8-h3 diagonal.",
+          "Bxe6 trades on e6 — Black’s best defender of the light squares is gone.",
+          "…fxe6 recaptures, but the black king’s cover is now ragged.",
+          "h5! the storm rolls — h5-h6 pries open the h-file straight at Black’s king."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Kb1 — tuck the king safe",
+          "…O-O-O — castle into the race",
+          "Bh3 — trade the e6-bishop",
+          "…Kb8 — step off the diagonal",
+          "Bxe6 — strip a defender",
+          "…fxe6 — ragged cover",
+          "h5 — the storm rolls"
+        ],
+        "sources": [
+          "concept:pos-initiative",
+          "concept:tac-sacrifice",
+          "https://en.wikipedia.org/wiki/Vienna_Game"
+        ]
+      }
+    ]
+  },
+  {
     "id": "mp-viennagambit-endgame",
     "openingId": "vienna-gambit",
     "criticalPositionFen": "2r2rk1/pp3pp1/3Pb2p/2p1R3/7P/P7/1PP1B1P1/2K4R b - - 0 23",
@@ -60806,6 +61307,149 @@
           "https://lichess.org/yEhVoek0",
           "https://www.chess.com/openings/Vienna-Game-Vienna-Gambit",
           "https://en.wikipedia.org/wiki/Vienna_Game"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-scotchgambit-reroute",
+    "openingId": "scotch-gambit",
+    "criticalPositionFen": "r2q1rk1/p1pb1ppp/2p5/2bpP3/3N4/4B3/PPPQ1PPP/R4RK1 b - - 0 12",
+    "title": "Reroute the knight Nd4-b3-c5 onto the outpost",
+    "overview": "With the e5-wedge fixed and Black saddled with doubled c-pawns, White reroutes the d4-knight to its dream square: Nb3 first, eyeing c5 and a5, then Nc5 onto the hole created by …b6, hitting the d7-bishop and the weak queenside pawns. Quiet, structural, risk-free pressure — the Scotch Gambit’s lasting dividend.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "Knight",
+        "route": "Nd4-b3-c5",
+        "explanation": "The d4-knight reroutes via b3 to the c5 outpost — the hole in Black’s queenside — where it hits d7, a6 and the weak c6-pawn."
+      }
+    ],
+    "strategicThemes": [
+      "The c5 outpost",
+      "Pressure the doubled c6-pawn",
+      "The e5 space wedge"
+    ],
+    "typicalMistakes": [],
+    "endgameTransitions": [
+      "Trade into a R+minor ending where the doubled c-pawns are a permanent target — exactly the structure the gambit set up."
+    ],
+    "playableLines": [
+      {
+        "title": "Reroute the knight Nd4-b3-c5 onto the outpost",
+        "fen": "r2q1rk1/p1pb1ppp/2p5/2bpP3/3N4/4B3/PPPQ1PPP/R4RK1 b - - 0 12",
+        "moves": [
+          "Bb6",
+          "Nb3",
+          "f6",
+          "exf6",
+          "Qxf6",
+          "Nc5",
+          "Bf5"
+        ],
+        "annotations": [
+          "…Bb6 tucks the bishop back, sidestepping the coming knight tour and keeping the a7-g1 diagonal.",
+          "Nb3 begins the reroute — the knight leaves d4 heading for the c5 outpost, also eyeing a5.",
+          "…f6 strikes at the e5-wedge before the knight lands.",
+          "exf6 opens the position; the wedge is traded but the doubled c-pawns remain Black’s burden.",
+          "…Qxf6 recaptures, the queen actively placed.",
+          "Nc5! the knight reaches the outpost on c5, hitting the d7-bishop and the weak c6-pawn — a dominant piece.",
+          "…Bf5 develops the bishop off d7 to safety."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "…Bb6 — sidestep the tour",
+          "Nb3 — begin the reroute",
+          "…f6 — hit the wedge",
+          "exf6 — open the position",
+          "…Qxf6 — active recapture",
+          "Nc5 — the outpost knight",
+          "…Bf5 — save the bishop"
+        ],
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-space",
+          "https://en.wikipedia.org/wiki/Scotch_Game"
         ]
       }
     ]

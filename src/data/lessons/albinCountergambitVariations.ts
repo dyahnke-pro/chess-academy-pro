@@ -15,11 +15,14 @@ const SRC = ['concept:pos-initiative', 'concept:pos-space', 'https://en.wikipedi
 
 export const ALBIN_COUNTERGAMBIT_VARIATION_LESSONS: Record<string, LessonScript> = {
   'albin-countergambit::Fianchetto Variation': {
-    openingId: 'albin-countergambit', title: 'Albin — The Fianchetto (g3)', minutes: 8, orientation: 'black', kind: 'roadmap', sources: SRC,
+    openingId: 'albin-countergambit', title: 'Albin — The Fianchetto (g3)', minutes: 10, orientation: 'black', kind: 'roadmap', sources: SRC,
     beats: [
       b({ id: 'f1', moves: 'd4 d5 c4 e5 dxe5 d4', say: "The d4-wedge is planted. White's most respected modern answer is the Fianchetto: g3 and Bg2, undermining the wedge from the long diagonal rather than confronting it head-on. Black must develop actively to justify the gambit.", sayShort: '…d4 — the wedge vs the g3 plan.', highlights: [H('d4')] }),
       b({ id: 'f2', moves: 'd4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3', say: "Nf3 prepares to fianchetto and …Nc6 develops, hitting the e5-pawn and supporting the d4-wedge. White's g3 will challenge d4 along the diagonal — Black answers by piling pieces around the wedge.", sayShort: '…Nc6 — develop, support the wedge.', arrows: [A('c6', 'e5')], highlights: [H('e5')] }),
-      b({ id: 'f3', moves: 'd4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4', say: "…Bg4! pins the f3-knight — the very piece White needs to attack the d4-pawn. With the defender pinned, the wedge stands firm, and Black keeps the active, initiative-rich position the Albin is played for. There is the Fianchetto tabiya: a tense fight where Black's wedge and piece activity fully answer White's fianchetto.", sayShort: '…Bg4 — pin the f3-knight, hold the wedge.', arrows: [A('g4', 'f3')], highlights: [H('g4'), H('f3')] }),
+      b({ id: 'f3', moves: 'd4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4', say: "…Bg4! pins the f3-knight — the very piece White needs to attack the d4-pawn. With the defender pinned, the wedge stands firm and Black keeps the active, initiative-rich position the Albin is played for.", sayShort: '…Bg4 — pin the f3-knight, hold the wedge.', arrows: [A('g4', 'f3')], highlights: [H('g4'), H('f3')] }),
+      b({ id: 'f4', moves: 'd4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4 Bg2 Qd7', say: "White completes the fianchetto with Bg2 on the long diagonal, and Black reveals the plan: …Qd7 links the queen to the kingside and clears d8 for a rook. Black is heading for …O-O-O and a pawn storm with …h5-h4.", sayShort: '…Qd7 — prepare …O-O-O and …h5.', highlights: [H('g2'), H('d7')] }),
+      b({ id: 'f5', moves: 'd4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4 Bg2 Qd7 O-O O-O-O', say: "Both kings run to opposite wings — White short to g1, Black long to c8. With the kings apart it becomes a race: each side hurls pawns at the enemy castle, and the d4-wedge hands Black the more natural attack down the h-file.", sayShort: '…O-O-O — opposite castling, the race is on.', highlights: [H('g1'), H('c8'), H('d4')] }),
+      b({ id: 'f6', moves: 'd4 d5 c4 e5 dxe5 d4 Nf3 Nc6 g3 Bg4 Bg2 Qd7 O-O O-O-O Qb3 Nge7 Rd1', say: "Qb3 leans on the b7-pawn and the queenside, …Nge7 routes the last knight toward f5 and g6, and Rd1 piles onto the d4-wedge — the pawn both sides have fought over since move three. There is the Fianchetto middlegame: White chips at d4 while Black storms with …h5-h4 and …Ng6.", sayShort: 'Rd1 — pressure d4; …h5 storms.', highlights: [H('b3'), H('b7'), H('e7'), H('d1'), H('d4')] }),
     ],
   },
 
@@ -33,11 +36,12 @@ export const ALBIN_COUNTERGAMBIT_VARIATION_LESSONS: Record<string, LessonScript>
   },
 
   'albin-countergambit::Spassky Variation': {
-    openingId: 'albin-countergambit', title: 'Albin — The Spassky (4.e4)', minutes: 8, orientation: 'black', kind: 'roadmap', sources: SRC,
+    openingId: 'albin-countergambit', title: 'Albin — The Spassky (4.e4)', minutes: 10, orientation: 'black', kind: 'roadmap', sources: SRC,
     beats: [
       b({ id: 's1', moves: 'd4 d5 c4 e5 dxe5 d4 e4', say: "The Spassky Variation — White grabs maximum central space with 4.e4, the most principled try. But the d4-wedge still cramps White, and the broad e4/e5 pawn front becomes a target as much as a strength. Black plays for piece pressure against it.", sayShort: '4.e4 — White grabs space; the wedge holds.', highlights: [H('e4'), H('d4', SOFT)] }),
-      b({ id: 's2', moves: 'd4 d5 c4 e5 dxe5 d4 e4 Nc6 Nf3', say: "…Nc6 develops and pressures the e5-pawn, a target sitting on White's broad front. Black gets the pieces out fast and leans on the over-extended centre — exactly the active play the gambit promises.", sayShort: '…Nc6 — pressure the e5-pawn.', arrows: [A('c6', 'e5')], highlights: [H('e5')] }),
-      b({ id: 's3', moves: 'd4 d5 c4 e5 dxe5 d4 e4 Nc6 Nf3 Bg4', say: "…Bg4 pins the f3-knight, adding to the pressure on e5 and tying White down. There is the Spassky tabiya: White has the bigger centre, but it is loose and over-extended, while Black's wedge on d4 and active pieces give full compensation and a real fight.", sayShort: '…Bg4 — pin, pile on the loose centre.', arrows: [A('g4', 'f3')], highlights: [H('g4'), H('f3')] }),
+      b({ id: 's2', moves: 'd4 d5 c4 e5 dxe5 d4 e4 Nc6 f4', say: "…Nc6 develops and hits the e5-pawn; White doubles down with f4, raising a massive e4-f4 wall behind the e5-pawn. The centre looks crushing — but it is over-extended, and the d4-wedge sitting in its midst gives Black a permanent foothold.", sayShort: '…Nc6, f4 — the big e4-f4 front.', arrows: [A('c6', 'e5')], highlights: [H('e4'), H('f4'), H('e5')] }),
+      b({ id: 's3', moves: 'd4 d5 c4 e5 dxe5 d4 e4 Nc6 f4 f6 exf6 Nxf6', say: "…f6! strikes at the broad front before it can roll forward; after exf6 Nxf6 the knight develops with tempo and the once-proud pawn wall has been dismantled. Black's pieces pour out onto an open board.", sayShort: '…f6 — strike the centre, develop.', highlights: [H('f6')] }),
+      b({ id: 's4', moves: 'd4 d5 c4 e5 dxe5 d4 e4 Nc6 f4 f6 exf6 Nxf6 Bd3 Bb4+', say: "Bd3 develops toward the kingside and …Bb4+ checks with gain of tempo, dragging out a white piece while Black completes mobilising. There is the Spassky middlegame: White kept extra central space, but it is loose, and Black's lead in development plus the d4-wedge give full compensation and a sharp, double-edged fight.", sayShort: '…Bb4+ — develop with check, full comp.', highlights: [H('d3'), H('b4'), H('d4')] }),
     ],
   },
 };
