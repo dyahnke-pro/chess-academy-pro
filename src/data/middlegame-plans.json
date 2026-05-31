@@ -8742,7 +8742,7 @@
           "White questions the b4-bishop with a3.",
           "…Bxc3+! Black trades to shatter White's queenside pawns — the structural damage is permanent.",
           "White recaptures, accepting doubled, isolated c-pawns.",
-          "…Nxc3! The knight grabs a pawn and forks the queen-side, exploiting the wrecked structure. Black emerges a pawn up with White's shattered queenside as a lasting target — Nakamura's precise punishment of Gashimov."
+          "…Nxc3! The knight grabs a pawn and shatters White's queenside, exploiting the wrecked structure. Black emerges a pawn up with White's ruined queenside as a lasting target — Nakamura's precise punishment of Gashimov."
         ],
         "arrows": [
           [],
@@ -31106,7 +31106,7 @@
           "Qe7"
         ],
         "annotations": [
-          "Nb5! White jumps the knight forward, threatening the c7-fork and forcing Black to react to the provocative early queen sortie.",
+          "Nb5! White jumps the knight forward, probing the c7-square and forcing Black to react to the provocative early queen sortie.",
           "…Bb4+ checks to gain time.",
           "c3 blocks the check and prepares to harass the b4-bishop.",
           "…Ba5 retreats, keeping the pin.",
@@ -52955,7 +52955,7 @@
           "…Kg6 — the king is dragged forward.",
           "Qxg4 — the queen joins in, regaining material with a raging attack.",
           "…Nf6 — Black scrambles to defend.",
-          "Ne4+ — a discovered check; the knight steps aside and the queen hits the king.",
+          "Ne4+ — a discovered check: the knight leaps aside, unveiling the queen's fire down the open line.",
           "…Nxg4 — Black returns material to survive, but White’s safer king keeps a clear edge."
         ],
         "learnCues": [
