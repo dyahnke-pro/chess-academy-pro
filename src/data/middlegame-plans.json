@@ -68026,5 +68026,523 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-proericlondon-endgame",
+    "openingId": "pro-ericrosen-london",
+    "criticalPositionFen": "1n2r1k1/r3b1p1/p3pn1p/2p5/1pN5/5NB1/PPP2PPP/3RR1K1 b - - 0 21",
+    "title": "R+minor+P conversion — collect the queenside (vs 3169)",
+    "overview": "The London's small edge often simplifies into a rook-and-minor-piece endgame a clean pawn or two to the good. From his win over a 3169, this shows the technique: trade one pair of rooks, infiltrate with the remaining rook, and harvest Black's weak queenside pawns. The opening's solid structure becomes a winning ending. 23% of his London games reach exactly this R+minor+P structure.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Rxe6 — the rook grabs the weak e-pawn",
+      "Rxa6 — collect the queenside pawns"
+    ],
+    "strategicThemes": [
+      "Activate the rook into the enemy position",
+      "Convert extra/weak pawns in R+minor+P",
+      "Trade one rook pair to ease the conversion"
+    ],
+    "endgameTransitions": [
+      "Queens come off around move 21; the R+minor+P ending is reached"
+    ],
+    "playableLines": [
+      {
+        "fen": "1n2r1k1/r3b1p1/p3pn1p/2p5/1pN5/5NB1/PPP2PPP/3RR1K1 b - - 0 21",
+        "moves": [
+          "Rd7",
+          "Rxd7",
+          "Nbxd7",
+          "Rxe6",
+          "Nd5",
+          "Rxa6"
+        ],
+        "annotations": [
+          "Black offers a rook trade with the rook to d7.",
+          "We take — trading one pair of rooks always eases a winning conversion.",
+          "Black recaptures with the knight, and now our remaining rook goes hunting.",
+          "Rxe6! The rook infiltrates and snaps off Black's weak e-pawn — the first of the loose queenside pawns to fall.",
+          "Black centralises a knight, but it does not stop the harvest.",
+          "Rxa6 collects a second pawn. Two clean extra pawns in a rook-and-minor ending is decisive technique — exactly how Rosen ground down a 3169."
+        ],
+        "learnCues": [
+          "…Rd7 — Black offers a trade",
+          "Rxd7 — ease the conversion",
+          "…Nbxd7 — Black recaptures",
+          "Rxe6 — grab the weak pawn",
+          "…Nd5 — too late",
+          "Rxa6 — collect the second"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "R+minor+P conversion",
+        "intro": "The London's small edge often simplifies into a rook-and-minor-piece endgame a clean pawn or two to the good.",
+        "sources": [
+          "https://api.chess.com/pub/player/imrosen/games/archives",
+          "https://www.chess.com/game/live/168286210895",
+          "concept:end-rook-7th",
+          "concept:pawn-passed"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericsicilian-endgame",
+    "openingId": "pro-ericrosen-sicilian",
+    "criticalPositionFen": "r4rk1/1b2bppp/p1n5/1p1B4/8/P3BN2/1P3PPP/R4RK1 b - - 0 17",
+    "title": "R+minor+P — the Maroczy bishop-pair endgame (vs 3066)",
+    "overview": "The Maroczy's space battle often resolves into a rook-and-minor endgame where Black's well-placed pieces and the bishop pair give the edge. From his win over a 3066, this shows Black seizing the open d-file, trading off White's strong light-squared bishop, and reaching a comfortable, pressing minor-piece ending. 21% of his Sicilians reach an R+minor+P structure.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "…Rfd8 — rook to the open d-file",
+      "…Na5 reroutes to trade the d5-bishop"
+    ],
+    "strategicThemes": [
+      "Seize the open file in the ending",
+      "Trade the opponent's best minor piece",
+      "Press in R+minor+P with the bishop pair"
+    ],
+    "endgameTransitions": [
+      "Queens are already off; the R+minor+P middlegame-to-endgame is reached by move 17"
+    ],
+    "playableLines": [
+      {
+        "fen": "r4rk1/1b2bppp/p1n5/1p1B4/8/P3BN2/1P3PPP/R4RK1 b - - 0 17",
+        "moves": [
+          "Rfd8",
+          "Rad1",
+          "Na5",
+          "Bxb7",
+          "Nxb7",
+          "Rxd8+"
+        ],
+        "annotations": [
+          "Black grabs the open d-file with the rook — the first rule of rook endings is to get your rook active.",
+          "White contests the file.",
+          "Na5 reroutes the knight toward b7 and c4, also eyeing the strong d5-bishop White relies on.",
+          "White trades on b7; we recapture with the knight.",
+          "After Nxb7 Black has neutralised White's best minor piece and stands more comfortably in the ending.",
+          "Rxd8+ trades a rook pair into a clean, pressing minor-piece endgame where Black's pieces are the more active — Rosen outplayed a 3066 from here."
+        ],
+        "learnCues": [
+          "…Rfd8 — seize the d-file",
+          "Rad1 — White contests",
+          "…Na5 — reroute toward b7",
+          "Bxb7 — White trades",
+          "…Nxb7 — neutralise the bishop",
+          "Rxd8+ — into a pressing ending"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "R+minor+P",
+        "intro": "The Maroczy's space battle often resolves into a rook-and-minor endgame where Black's well-placed pieces and the bishop pair give the edge.",
+        "sources": [
+          "https://api.chess.com/pub/player/imrosen/games/archives",
+          "https://www.chess.com/game/live/81534653905",
+          "concept:end-bishop-vs-knight",
+          "concept:pos-open-file"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericqgd-endgame",
+    "openingId": "pro-ericrosen-qgd",
+    "criticalPositionFen": "r1b1k2r/pp3ppp/2p5/3pP3/2P5/1Nn1P3/P4PPP/R3KB1R w KQkq - 0 14",
+    "title": "R+minor+P — the Carlsbad pawn-structure endgame (vs 2997)",
+    "overview": "The QGD's Carlsbad structure frequently simplifies into a rook-and-minor endgame decided by the pawn structure. From his win over a 2997, this shows Black activating the pieces, planting a knight on the strong a4/c3 squares, and centralising the king — textbook conversion technique. 21% of his QGD games reach an R+minor+P ending, 15% a pure R+P ending.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "…Be6 — activate the light bishop",
+      "…Kd7 centralise the king for the ending"
+    ],
+    "strategicThemes": [
+      "Activate the bishop and rooks first",
+      "King centralisation in the endgame",
+      "Outpost knight on the c3/a4 squares"
+    ],
+    "endgameTransitions": [
+      "Queens off by move 13; the Carlsbad R+minor+P ending begins"
+    ],
+    "playableLines": [
+      {
+        "fen": "r1b1k2r/pp3ppp/2p5/3pP3/2P5/1Nn1P3/P4PPP/R3KB1R w KQkq - 0 14",
+        "moves": [
+          "f3",
+          "Be6",
+          "c5",
+          "Na4",
+          "Rc1",
+          "Kd7"
+        ],
+        "annotations": [
+          "White shores up with f3.",
+          "Be6 develops the light bishop to its best diagonal, eyeing the c4-pawn and the queenside light squares.",
+          "White pushes c5 to gain space.",
+          "The knight hops to a4, a superb outpost hitting b2 and c5 that no pawn can challenge.",
+          "White contests the c-file.",
+          "Kd7! The king walks toward the centre — in the endgame the king is a fighting piece, and Black's is faster to the action. Rosen converted this against a 2997."
+        ],
+        "learnCues": [
+          "f3 — White shores up",
+          "…Be6 — activate the bishop",
+          "c5 — White grabs space",
+          "…Na4 — the outpost knight",
+          "Rc1 — contest the file",
+          "…Kd7 — centralise the king"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "R+minor+P",
+        "intro": "The QGD's Carlsbad structure frequently simplifies into a rook-and-minor endgame decided by the pawn structure.",
+        "sources": [
+          "https://api.chess.com/pub/player/imrosen/games/archives",
+          "https://www.chess.com/game/live/151746485235",
+          "concept:pos-outpost",
+          "concept:end-key-squares"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericfrench-endgame",
+    "openingId": "pro-ericrosen-french",
+    "criticalPositionFen": "6bk/1pb2nn1/2p2N2/p2p1P1P/P3P3/1PN1B2B/2P5/7K w - - 0 41",
+    "title": "Minor-piece endgame — the French light-square fight (vs 2774)",
+    "overview": "The French's closed, manoeuvring battles often boil down to a four-minor-piece endgame fought over the light squares and the d5/e6 pawn chain. From his win over a 2774, this shows Black challenging White's centralised bishop and contesting the key squares while keeping every piece active. 23% of his French games reach an R+minor+P ending, and dense minor-piece endings like this one recur.",
+    "pawnBreaks": [
+      "…c5 — strike at White's centralised bishop"
+    ],
+    "pieceManeuvers": [
+      "…Be5 — centralise the dark bishop"
+    ],
+    "strategicThemes": [
+      "Fight for the light squares",
+      "Challenge the opponent's centralised bishop",
+      "Keep the minor pieces active in a closed ending"
+    ],
+    "endgameTransitions": [
+      "Queens long gone; a pure minor-piece ending decided on the light squares"
+    ],
+    "playableLines": [
+      {
+        "fen": "6bk/1pb2nn1/2p2N2/p2p1P1P/P3P3/1PN1B2B/2P5/7K w - - 0 41",
+        "moves": [
+          "Bd4",
+          "c5",
+          "Bxc5",
+          "Be5",
+          "Ncxd5",
+          "Nh6"
+        ],
+        "annotations": [
+          "White centralises the bishop to the powerful d4-square.",
+          "c5! Black strikes at it immediately — never let an enemy bishop sit unchallenged on the best square in the ending.",
+          "White takes on c5.",
+          "Be5 centralises Black's own dark-squared bishop, contesting the long diagonal and the key central squares.",
+          "White grabs the d5-pawn with the knight.",
+          "Nh6 reroutes the knight toward the holes in White's camp — Black keeps the pieces active and the light-square fight going, the way Rosen outplayed a 2774."
+        ],
+        "learnCues": [
+          "Bd4 — White centralises",
+          "…c5 — challenge the bishop",
+          "Bxc5 — White takes",
+          "…Be5 — centralise in reply",
+          "Ncxd5 — White grabs a pawn",
+          "…Nh6 — reroute the knight"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Minor-piece endgame",
+        "intro": "The French's closed, manoeuvring battles often boil down to a minor-piece endgame fought over the light squares and the d5/e6 pawn chain.",
+        "sources": [
+          "https://api.chess.com/pub/player/imrosen/games/archives",
+          "https://www.chess.com/game/live/130033798141",
+          "concept:end-two-bishops",
+          "concept:pos-weak-squares"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-proericclosedsic-endgame",
+    "openingId": "pro-ericrosen-closed-sicilian",
+    "criticalPositionFen": "6k1/5pp1/p1r1p2p/1p6/4nN2/2P3PP/PP1r1P2/R4RK1 w - - 0 26",
+    "title": "R+P endgame — doubling on the open file (vs 2944)",
+    "overview": "The Grand Prix's attacks sometimes simplify into a rook endgame where activity is everything. From his win over a 2944, this shows the key rook-ending principle: double the rooks on the open file, keep the pieces maximally active, and let the opponent's loose pawns become targets. 7% of his Closed Sicilians reach a pure R+P ending; activity decides them.",
+    "pawnBreaks": [
+      "h4 — gain kingside space and a tempo"
+    ],
+    "pieceManeuvers": [
+      "Rae1 — bring the second rook to the open e-file",
+      "Re2 — double on the file"
+    ],
+    "strategicThemes": [
+      "Activity is everything in rook endings",
+      "Double rooks on the open file",
+      "Create and target weak pawns"
+    ],
+    "endgameTransitions": [
+      "Queens off by move 25; a pure rook endgame where activity decides"
+    ],
+    "playableLines": [
+      {
+        "fen": "6k1/5pp1/p1r1p2p/1p6/4nN2/2P3PP/PP1r1P2/R4RK1 w - - 0 26",
+        "moves": [
+          "Rae1",
+          "Ng5",
+          "Re2",
+          "Rcd6",
+          "h4",
+          "Nh3+"
+        ],
+        "annotations": [
+          "Rae1 brings the second rook to the open e-file — the first principle of rook endings is to get both rooks active.",
+          "Black tries to activate the knight.",
+          "Re2 doubles the rooks and seizes the second rank, the most active post for a rook in the ending.",
+          "Black contests with a rook to d6.",
+          "h4 gains kingside space and a tempo, fixing Black's pawns as future targets.",
+          "Even after Black's knight check, White's superior activity and the doubled rooks on the open file carry the rook ending — Rosen converted against a 2944."
+        ],
+        "learnCues": [
+          "Rae1 — second rook to the file",
+          "…Ng5 — Black activates",
+          "Re2 — double on the e-file",
+          "…Rcd6 — Black contests",
+          "h4 — gain space, a tempo",
+          "…Nh3+ — White stays on top"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "R+P endgame",
+        "intro": "The Grand Prix's attacks sometimes simplify into a rook endgame where activity is everything.",
+        "sources": [
+          "https://api.chess.com/pub/player/imrosen/games/archives",
+          "https://www.chess.com/game/live/106440382429",
+          "concept:end-rook-7th",
+          "concept:pos-open-file"
+        ]
+      }
+    ]
   }
 ]

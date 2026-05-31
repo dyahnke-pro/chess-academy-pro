@@ -1,6 +1,6 @@
 // Tab-plan resolver for the Eric Rosen Sicilian pro-rep (STEP 12.5).
 const TAB_PLANS: Record<string, string[]> = {
-  'main': ['mp-proericsicilian-maroczy-a5'],
+  'main': ['mp-proericsicilian-maroczy-a5', 'mp-proericsicilian-endgame'],
   'taimanov (…e6)': [],
   'vs rossolimo (bb5)': [],
   'vs alapin (c3)': [],

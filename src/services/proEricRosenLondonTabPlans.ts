@@ -1,6 +1,6 @@
 // Tab-plan resolver for the Eric Rosen London System pro-rep (STEP 12.5).
 const TAB_PLANS: Record<string, string[]> = {
-  'main': ['mp-proericlondon-ne5-battery'],
+  'main': ['mp-proericlondon-ne5-battery', 'mp-proericlondon-endgame'],
   'vs …d5 classical': ['mp-proericlondon-ne5-battery'],
   'vs …e6 setup': ['mp-proericlondon-ne5-battery'],
   'vs …c5 and …qb6': [],
