@@ -33854,20 +33854,25 @@
     "id": "mp-siciliannajdorf-classical",
     "openingId": "sicilian-najdorf",
     "title": "Classical 6.Be2: Cover d5, Play for Equality",
-    "criticalPositionFen": "rn1q1rk1/1p2bppp/p2pbn2/4p3/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 6 10",
+    "criticalPositionFen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w - - 4 9",
     "overview": "Against the quiet Be2, Black trades off the d5-knight, accepts a small structural concession, and plays comfortably on the queenside with a5 and the half-open c-file.",
     "pawnBreaks": [
       {
-        "move": "a5-a4",
-        "explanation": "a5 and a4 gain queenside space and harass the b3-knight.",
-        "fen": "rn1q1rk1/1p2bppp/p2pbn2/4p3/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 6 10"
+        "move": "…b5-b4 — the queenside lever",
+        "explanation": "Black expands with …b5 and pushes …b4 to kick the c3-knight, the Najdorf’s thematic counterplay.",
+        "fen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w - - 4 9"
       }
     ],
     "pieceManeuvers": [
       {
+        "piece": "Bishop",
+        "route": "…Bc8-b7 — the long diagonal",
+        "explanation": "The bishop rakes toward e4 and White’s king, supporting the queenside attack."
+      },
+      {
         "piece": "Knight",
-        "route": "Nb8-d7",
-        "explanation": "The knight develops to d7, heading for c5 or b6."
+        "route": "…Nc6 — eye b4 and d4",
+        "explanation": "The knight supports the central and queenside breaks."
       }
     ],
     "strategicThemes": [
@@ -33880,116 +33885,107 @@
     ],
     "playableLines": [
       {
-        "title": "Classical 6.Be2: Cover d5, Play for Equality",
-        "fen": "rn1q1rk1/1p2bppp/p2pbn2/4p3/4P3/1NN1B3/PPP1BPPP/R2Q1RK1 w - - 6 10",
+        "fen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w - - 4 9",
         "moves": [
-          "Nd5",
-          "Bxd5",
-          "exd5",
-          "Nbd7",
-          "c4",
-          "a5"
+          "Kh1",
+          "Nc6",
+          "f4",
+          "b5",
+          "Be3",
+          "Bb7",
+          "a4",
+          "exf4"
         ],
         "annotations": [
-          "Nd5 — White occupies the d5 outpost.",
-          "Bxd5 — Black trades it off at once.",
-          "exd5 — White recaptures, closing the centre.",
-          "Nbd7 — the knight reroutes toward c5.",
-          "c4 — White grabs queenside space.",
-          "a5 — Black expands and is comfortably equal."
+          "White tucks the king to h1, unpinning the f-pawn for the coming f4-break.",
+          "…Nc6 develops, eyeing the d4- and b4-squares and supporting Black's central and queenside play.",
+          "White strikes with f4, challenging the e5-wedge and opening the f-file.",
+          "…b5! The Najdorf's signature: Black expands on the queenside, gaining space and preparing …b4 to hit the c3-knight.",
+          "White develops the bishop to e3.",
+          "…Bb7 completes development, the bishop raking the long diagonal toward White's king and the e4-pawn.",
+          "White grabs queenside space with a4, probing b5.",
+          "…exf4! Black opens the position with all pieces ideally placed — the central wedge has done its job, the queenside is rolling, and the long-diagonal bishop bears down on e4. Nepomniachtchi outplayed Carlsen from exactly this dynamic footing."
         ],
         "arrows": [
           [],
           [],
           [],
-          [
-            {
-              "from": "d7",
-              "to": "c5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Classical Najdorf Counterplay (Carlsen–Nepomniachtchi)",
         "highlights": [
           [
             {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
+              "square": "h1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d5",
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
+              "square": "a4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "a5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "a6",
+              "square": "f4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black meets 6.Be2 with the ...e5 wedge and ...b5 expansion.",
         "sources": [
-          "concept:att-queenside-attack",
+          "concept:pos-initiative",
           "concept:pos-center",
           "https://en.wikipedia.org/wiki/Sicilian_Defence,_Najdorf_Variation"
         ],
         "learnCues": [
-          "Nd5 — occupy the outpost",
-          "Bxd5 — trade it off at once",
-          "exd5 — recapture, close the centre",
-          "Nbd7 — reroute toward c5",
-          "c4 — grab queenside space",
-          "a5 — expand; comfortably equal"
+          "Kh1 — unpin for f4",
+          "…Nc6 — develop, eye b4",
+          "f4 — challenge the e5-wedge",
+          "…b5 — the queenside expansion",
+          "Be3 — White develops",
+          "…Bb7 — rake the long diagonal",
+          "a4 — White probes b5",
+          "…exf4 — open with pieces ready"
         ]
       }
     ]

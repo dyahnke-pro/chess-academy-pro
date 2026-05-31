@@ -42,7 +42,10 @@ if (!j) { console.error('explorer fetch failed'); process.exit(1); }
 const cand = (j.topGames || []).concat(j.recentGames || []).filter((g) => g.id && g.winner === wantWin);
 console.log(`  ${cand.length} ${wantWin}-win candidate game(s)`);
 
-const idPrefix = varU.slice(0, idLen);
+// Match on the prefix we actually queried (capped at the seed length); for
+// deep lines the full identifying prefix can exceed the 16-ply seed, and the
+// explorer already filtered to games reaching the seed position.
+const idPrefix = varU.slice(0, Math.min(idLen, seedLen));
 let chosen = null;
 for (const g of cand) {
   await sleep(120);

@@ -6393,5 +6393,22 @@
     "middlegameTheme": "Keep pieces on, the e5-wedge, active fighting play.",
     "lessonSummary": "Avoid the trade with Ba4, grab e5, and play for the initiative.",
     "variation": "Rubinstein Variation: 4.Bb5 Nd4"
+  },
+  {
+    "id": "mg-sicilian-najdorf-najdorf-classical-6-be2-with-e5",
+    "openingId": "sicilian-najdorf",
+    "white": "Carlsen, Magnus",
+    "black": "Nepomniachtchi, Ian",
+    "whiteElo": 2814,
+    "blackElo": 2733,
+    "result": "0-1",
+    "year": 2011,
+    "event": "Tata Steel-A 73rd",
+    "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Kh1 Nc6 f4 b5 Be3 Bb7 a4 exf4 Rxf4 Ne5 Qd4 Nc6 Qd2 Ne5 Qd4 Nc6 Qd2 Ne5 axb5 axb5 Re1 Ng6 Rff1 b4 Nd5 Nxe4 Nxe7+ Qxe7 Qxb4 Nh4 Bf3 Nxf3 gxf3 Qd7 Bf4 Ra4 Qb6 Nf6 Qxd6 Qg4 Nd4 Rxd4 Qxd4 Bxf3+ Rxf3 Qxf3+ Kg1 Qg4+ Kh1 Qc8 Qf2 Qb7+ Kg1 Ne4 Qd4 Re8 Re2 h6 h3 Re6 Kh2 f5 b4 Kh7 Re3 Rg6 Re2 Qb5 Re1 Rc6 Rxe4 fxe4 Qxe4+ Rg6 Bg3 Qd7 h4 h5 c4 Qd2+ Kh3 Qc3 Qf4 Qxb4 Qf5 Qxc4 Qxh5+ Rh6 Qf3 Qe6+ Kh2 Rf6 Qd3+ Rf5 Qc2 Qd5 Bf2 Kh6 Be3+ Kg6 Bf2 Kf6 Bg3 Rf1 Bf2 Rd1 Qc3+ Qe5+ Qxe5+ Kxe5 h5 Kf6 Bh4+ Kf5 Be7 Rd7",
+    "studentSide": "black",
+    "overview": "Nepomniachtchi shows the Classical Najdorf's dynamism against Carlsen: the ...e5 wedge stakes out the centre, then ...b5-b4 and ...Bb7 generate the queenside counterplay that is the Najdorf's lifeblood. A model of meeting the quiet 6.Be2 with sharp, active piece play and outplaying even the World Champion.",
+    "criticalMoments": [],
+    "middlegameTheme": "The ...e5 centre, ...b5-b4 queenside counterplay.",
+    "lessonSummary": "Plant the ...e5 wedge, expand with ...b5, and attack on the queenside."
   }
 ]
