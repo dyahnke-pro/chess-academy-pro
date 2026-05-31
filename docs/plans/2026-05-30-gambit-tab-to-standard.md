@@ -109,11 +109,20 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
   non-null), mirroring `proRepLessonCoverage` (G9.3 Gate A).
 
 ## SEQUENCING
-0. [x] STEP 1 — spines for all 12 (data, reachedMiddlegame=true).  ← DONE
-1. [ ] Plan doc committed; branch pushed for durability.
-2. [ ] Group A reconcile (lights up 5 already-built gambits on the tab).
-3. [ ] Group A gap-fill (endgame plans, Budapest/Albin model games, Gate C).
-4. [ ] Group B full builds, one opening at a time (worst-shortfall first).
+0. [x] STEP 1 — spines for all 12 (data, reachedMiddlegame=true).
+1. [x] Plan doc committed; branch pushed for durability.
+1b.[x] STEP 2/3 — 44 per-variation spines, all reach MG (1 thin Stafford dropped).
+1c.[x] STEP 4 — middlegame-plan extraction (wide-corpus forward-walk, ≥10% forks).
+1d.[x] STEP 5 — endgame extraction (real games walked into endings, ≥15% types + rep game).
+2. [x] Group A reconcile — isGambit flag on 5 canonical entries + dupes retired from
+       gambits.json + G8 orphan sweep + revision bump. typecheck green, 0 new test
+       failures, 1102 satellite gates green. Commit c18b37a. Tab now shows the
+       curated King's/Evans/Benko/Budapest/Albin (lessons+gems+model-games), not the
+       shallow legacy dupes.
+3. [ ] Group A gap-fill — endgame plans from the new data (King's/Evans/Benko/Budapest/
+       Albin all have ≥15% types w/ student wins); model games for Budapest+Albin (0 now).
+4. [ ] Group B full builds, one opening at a time (Smith-Morra/Danish/Scotch/Vienna/
+       Stafford/Marshall/Englund) — lesson + plans + endgame + model games + pitfalls.
 5. [ ] Gate wiring (depth gate + coverage gate over gambits.json).
 6. [ ] `npm run ship-check` green → land on main → 3-instrument audit per id.
 
