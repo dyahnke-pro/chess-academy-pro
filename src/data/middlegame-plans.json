@@ -52057,5 +52057,201 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-marshallattack-endgame",
+    "openingId": "marshall-attack",
+    "criticalPositionFen": "4r1k1/6pp/5p1b/1pp1r3/3P4/2P1P1PB/1P3K1P/R3R3 b - - 0 30",
+    "title": "Marshall ENDGAME — the initiative flows into a winning ending (Leko vs Kramnik)",
+    "overview": "Leko–Kramnik 2007: the Marshall Attack's pressure doesn't evaporate when queens leave — it pours into the endgame. Kramnik wins the e3-pawn with a bishop strike, rolls his queenside majority into the centre to wreck White's structure, and keeps the only active rook. R+minor endings of this shape decide 27% of the Bf5-modern lines; here a world champion shows the conversion.",
+    "pawnBreaks": [
+      "cxd4 then dxc3 — roll the queenside majority into the centre"
+    ],
+    "pieceManeuvers": [
+      "Bxe3 wins the pawn; Re3 the active rook penetrates"
+    ],
+    "strategicThemes": [
+      "The Marshall initiative survives into the endgame",
+      "Active rook + bishop + extra pawn"
+    ],
+    "endgameTransitions": [
+      "Majority rolls, White's pawns shatter, Black converts"
+    ],
+    "playableLines": [
+      {
+        "fen": "4r1k1/6pp/5p1b/1pp1r3/3P4/2P1P1PB/1P3K1P/R3R3 b - - 0 30",
+        "moves": [
+          "Bxe3+",
+          "Kf3",
+          "cxd4",
+          "Rad1",
+          "dxc3",
+          "bxc3",
+          "Bb6",
+          "Rxe5",
+          "Rxe5",
+          "Rd5",
+          "Re3+"
+        ],
+        "annotations": [
+          "Bxe3+! Kramnik cracks the kingside pawn with check — the Marshall's initiative pouring straight into the endgame.",
+          "White declines the bishop and steps the king to f3.",
+          "cxd4 — the queenside majority rolls into the centre, opening lines for the rooks and bishop.",
+          "White centralizes a rook.",
+          "dxc3 forces matters — White's pawns are about to fracture.",
+          "bxc3 leaves White with shattered, weak queenside pawns to defend.",
+          "The bishop slides to b6, safe on the long diagonal and eyeing the weaknesses.",
+          "White tries to trade a pair of rooks to ease the grip.",
+          "Kramnik recaptures, keeping the active rook on e5.",
+          "White's rook lunges to d5 to contest.",
+          "Re3+ — the rook crashes to the third rank with check. A pawn up, the bishop and the only active rook: a world champion converts."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "Bxe3+ — win the pawn, check",
+          "Kf3 — king declines",
+          "cxd4 — roll the majority",
+          "Rad1 — White centralizes",
+          "dxc3 — fracture the pawns",
+          "bxc3 — weak queenside",
+          "Bb6 — long diagonal",
+          "Rxe5 — White trades",
+          "Rxe5 — keep the active rook",
+          "Rd5 — White contests",
+          "Re3+ — penetrate with check"
+        ],
+        "title": "Kramnik converts the Marshall endgame",
+        "intro": "The Marshall initiative survives the queen trade — watch the majority roll and the rook penetrate.",
+        "sources": [
+          "https://lichess.org/kASHcrid",
+          "https://www.chess.com/openings/Ruy-Lopez-Opening-Marshall-Attack",
+          "https://en.wikipedia.org/wiki/Marshall_Attack"
+        ]
+      }
+    ]
   }
 ]
