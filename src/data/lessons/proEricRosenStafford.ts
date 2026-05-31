@@ -112,7 +112,7 @@ export const PRO_ERICROSEN_STAFFORD_LESSON: LessonScript = {
     b({
       id: 'plan',
       moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3 Ng4 d4 Qh4 g3 Qf6',
-      arrows: [A('h5', 'h4'), A('a8', 'd8')],
+      arrows: [A('a8', 'd8')],
       highlights: [{ square: 'h4', color: KEY }, { square: 'd8', color: SOFT }],
       say: "From here the plan is simple and violent: push the h-pawn to h4 to rip open the h-file, castle queenside to bring the other rook into the attack, and keep every piece pointed at the white king. We do not try to win the pawn back — we try to win the king.",
       sayShort: 'Plan: …h4, long castle, hunt the king.',

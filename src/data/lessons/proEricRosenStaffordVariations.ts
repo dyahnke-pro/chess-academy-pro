@@ -107,7 +107,7 @@ const SPACE_GRAB: LessonScript = {
     }),
     b({
       id: 'f6', moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 e5 Ne4 d4 Qh4 Qf3 f6',
-      arrows: [A('f6', 'e5')],
+      arrows: [],
       highlights: [{ square: 'f6', color: KEY }, { square: 'e5', color: KEY }],
       say: "White defends with Qf3, so we strike at the head of the advanced pawn with f6. The e5-pawn was White's pride; now it is a target, and prying it loose opens the f-file and the centre right next to White's stranded king.",
       sayShort: '…f6 — undermine the e5-pawn.',
@@ -148,7 +148,7 @@ const KNIGHT_RETREAT: LessonScript = {
     }),
     b({
       id: 'd5', moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 Nf3 Nxe4 Nc3 d5',
-      arrows: [A('d5', 'e4')],
+      arrows: [],
       highlights: [{ square: 'd5', color: KEY }],
       say: "When White challenges with Nc3, we support the strong knight with d5 — a wall of central pawns and a knight White cannot easily dislodge. This is textbook, solid, and exactly how to neutralise a White player who refuses the gambit.",
       sayShort: '…d5 — prop the centre knight.',
@@ -190,16 +190,16 @@ const FOUR_KNIGHTS: LessonScript = {
     }),
     b({
       id: 'develop', moves: 'e4 e5 Nf3 Nf6 Nc3 Bc5 Bc4 d6 h3 Nc6 d3 a6',
-      arrows: [A('b8', 'c6')],
+      arrows: [],
       highlights: [{ square: 'c6', color: KEY }, { square: 'a6', color: SOFT }],
       say: "White plays the prophylactic h3 to deny our knight the g4-square, so we develop normally — knight to c6, a6 to keep the white bishop out of b5. Both sides are fully developed and the game is even; from here it is a fight, not a forced attack.",
       sayShort: '…Nc6, …a6 — develop and fight.',
     }),
     b({
       id: 'trade', moves: 'e4 e5 Nf3 Nf6 Nc3 Bc5 Bc4 d6 h3 Nc6 d3 a6 Be3 h6 O-O Bxe3 fxe3',
-      arrows: [A('f8', 'f2'), A('c8', 'e6')],
+      arrows: [A('c8', 'e6')],
       highlights: [{ square: 'e3', color: KEY }, { square: 'f7', color: SOFT }],
-      say: "When White offers the dark-squared bishops with Be3, we trade — and after fxe3 White's pawns are doubled and the f-file half-opens toward f7, but it is OUR rook on f8 that benefits from the open lines. Rosen ground this structure down against a 3165. The Four Knights is sound, equal, and his most reliable scorer.",
+      say: "When White offers the dark-squared bishops with Be3, we trade — and after fxe3 it is WHITE's pawns that end up doubled and weak on e3 and the kingside, while Black's structure stays clean. Rosen ground this structure down against a 3165. The Four Knights is sound, equal, and his most reliable scorer.",
       sayShort: '…Bxe3 — double the white pawns.',
     }),
   ],
@@ -239,7 +239,7 @@ const PAWN_RETURNED: LessonScript = {
     }),
     b({
       id: 'd6', moves: 'e4 e5 Nf3 Nf6 Nxe5 Nc6 d4 Nxe5 dxe5 Nxe4 Bd3 Nc5 O-O Nxd3 Qxd3 d6',
-      arrows: [A('d6', 'e5')],
+      arrows: [],
       highlights: [{ square: 'd6', color: KEY }, { square: 'e5', color: KEY }],
       say: "We trade the knight for the good bishop, castle is met, and then d6 strikes at the e5-pawn — White's last bit of central pride. The pawn falls or White concedes the centre, and Black emerges comfortable to better. Rosen used this to beat a 2982; declining the gambit with d4 simply hands us an easy game.",
       sayShort: '…d6 — break the e5-pawn, equalise.',

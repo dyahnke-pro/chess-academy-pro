@@ -54,7 +54,7 @@ export const PRO_ERICROSEN_LONDON_LESSON: LessonScript = {
     }),
     b({
       id: 'develop', moves: 'd4 Nf6 Bf4 g6 Nc3 d5 e3 Bg7 Nf3 O-O Be2 c5',
-      arrows: [A('c5', 'd4')],
+      arrows: [],
       highlights: [{ square: 'c5', color: KEY }, { square: 'd4', color: KEY }],
       say: "We finish developing with Nf3 and Be2 and castle is met. Black strikes at our centre with c5 — the standard break against the London. We do not have to release the tension; instead we are about to plant a knight on the square the whole system is built around.",
       sayShort: 'Nf3, Be2 — Black hits with …c5.',
