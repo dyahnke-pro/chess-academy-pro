@@ -29880,20 +29880,25 @@
     "id": "mp-scotchgame-mieses",
     "openingId": "scotch-game",
     "title": "Mieses: Space, the c4 Clamp, and the Bishop Pair Fight",
-    "criticalPositionFen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP1QPPP/RNB1KB1R b KQkq - 2 7",
+    "criticalPositionFen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP2PPP/RNBQKB1R w KQkq - 1 7",
     "overview": "The Mieses middlegame: White rides the e5-spearhead and the c4-clamp to bind Black's wrecked queenside pawns, while Black counts on the bishop pair and the …Ba6 pin for activity. A genuinely double-edged modern struggle (Kasparov's choice).",
     "pawnBreaks": [
       {
-        "move": "c4 clamp",
-        "explanation": "c4 kicks the d5-knight and locks down the queenside light squares.",
-        "fen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP1QPPP/RNB1KB1R b KQkq - 2 7"
+        "move": "c4 — gain queenside space",
+        "explanation": "White kicks the d5-knight and expands, turning the e5-wedge into a lasting space bind.",
+        "fen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP2PPP/RNBQKB1R w KQkq - 1 7"
       }
     ],
     "pieceManeuvers": [
       {
-        "piece": "Bishop",
-        "route": "Bc1-a3",
-        "explanation": "The dark-squared bishop fianchettoes via b2 to a3, spearing the queen on e7."
+        "piece": "Queen",
+        "route": "Qd1-e2 — support e5 with tempo",
+        "explanation": "The queen props up the advanced pawn and helps White develop while keeping the bind."
+      },
+      {
+        "piece": "Knight",
+        "route": "Nb1-d2 — toward the centre",
+        "explanation": "The knight reroutes to support the centre and the kingside."
       }
     ],
     "strategicThemes": [
@@ -29906,152 +29911,107 @@
     ],
     "playableLines": [
       {
-        "title": "Mieses: Space, the c4 Clamp, and the Bishop Pair Fight",
-        "fen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP1QPPP/RNB1KB1R b KQkq - 2 7",
+        "fen": "r1b1kb1r/p1ppqppp/2p2n2/4P3/8/8/PPP2PPP/RNBQKB1R w KQkq - 1 7",
         "moves": [
+          "Qe2",
           "Nd5",
           "c4",
-          "Ba6",
+          "Nb6",
+          "Nd2",
+          "Qe6",
           "b3",
-          "g6",
-          "Ba3",
-          "d6"
+          "a5"
         ],
         "annotations": [
-          "…Nd5 — the knight hops to the strong central d5 square.",
-          "c4 — kick the d5-knight and clamp the queenside.",
-          "…Ba6 — the thematic pin, pressuring the c4-pawn.",
-          "b3 — calmly prop c4 and prepare Ba3.",
-          "…g6 — Black prepares to fianchetto and blunt the light squares.",
-          "Ba3 — spear the queen on e7 down the diagonal.",
-          "…d6 — Black strikes the e5-spearhead to free the game."
+          "Qe2 supports the advanced e5-pawn and prepares to develop with tempo — the Mieses Scotch grants White a space-gaining e5-wedge.",
+          "Black retreats the knight to d5, the natural blockading square.",
+          "c4! White kicks the knight and grabs queenside space, the Mieses' thematic expansion.",
+          "Black's knight steps back to b6.",
+          "White develops the knight toward the kingside and centre.",
+          "…Qe6 eyes the e5-pawn and the light squares.",
+          "b3 secures the c4-pawn and opens the long diagonal for the bishop — White's space advantage is becoming a bind.",
+          "…a5 grabs queenside counterplay, but White holds the e5-wedge, the space, and the more pleasant game — Kasparov ground Karpov down from exactly this Mieses bind."
         ],
         "arrows": [
           [],
           [],
-          [
-            {
-              "from": "a6",
-              "to": "c4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
           [],
-          [
-            {
-              "from": "a3",
-              "to": "e7",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           []
         ],
+        "title": "The Mieses Bind (Kasparov–Karpov)",
         "highlights": [
           [
             {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "a6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "b3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "g6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "a3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d7",
+              "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
+        "intro": "White expands with c4 and presses the e5-wedge bind.",
         "sources": [
-          "concept:pos-development",
           "concept:pos-center",
+          "concept:pos-space",
           "https://en.wikipedia.org/wiki/Scotch_Game"
         ],
         "learnCues": [
-          "Nd5 — strong central square",
-          "c4 — kick the knight, clamp",
-          "Ba6 — pin, pressure c4",
-          "b3 — prop c4, prepare Ba3",
-          "g6 — prepare the fianchetto",
-          "Ba3 — spear the e7-queen",
-          "d6 — strike e5, free the game"
+          "Qe2 — support e5, develop",
+          "…Nd5 — blockade",
+          "c4 — kick the knight, grab space",
+          "…Nb6 — retreat",
+          "Nd2 — develop toward the centre",
+          "…Qe6 — eye e5",
+          "b3 — secure c4, open the diagonal",
+          "…a5 — Black seeks counterplay"
         ]
       }
     ]
