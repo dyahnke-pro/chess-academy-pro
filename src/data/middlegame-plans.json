@@ -27800,17 +27800,27 @@
   {
     "id": "mp-scandinaviandefence-icelandic",
     "openingId": "scandinavian-defence",
-    "criticalPositionFen": "rn2k2r/ppp2ppp/4bn2/8/1qPP4/8/PP3PPP/RN1QKBNR w KQkq - 0 8",
+    "criticalPositionFen": "rn1qkb1r/ppp2ppp/4bn2/8/2P5/8/PP1P1PPP/RNBQKBNR w KQkq - 0 5",
     "title": "Scandinavian: The Icelandic Initiative",
     "overview": "A pawn down in the Icelandic Gambit, but Black has the bishop pair, a big development lead, and open central files. The plan: develop with tempo, castle long fast, and hurl both rooks onto the central files against White's king stuck in the centre. Time and the initiative outweigh the pawn.",
     "pawnBreaks": [
-      "Keep lines open for the rooks and bishops",
-      "…c5 to add fuel if needed"
+      {
+        "move": "…c5 — open lines for the initiative",
+        "explanation": "When developed, …c5 hits d4 and blasts open the centre while White is still untangling — converting the gambit lead into an attack.",
+        "fen": "rn1qkb1r/ppp2ppp/4bn2/8/2P5/8/PP1P1PPP/RNBQKBNR w KQkq - 0 5"
+      }
     ],
     "pieceManeuvers": [
-      "…Nc6 with tempo on d4",
-      "…O-O-O onto the open d-file",
-      "…Rhe8+ piling on the e-file"
+      {
+        "piece": "Queen",
+        "route": "…Qe7-b4 — develop with tempo via checks",
+        "explanation": "The queen harasses with checks, gaining the tempi that justify the gambit pawn."
+      },
+      {
+        "piece": "Knight",
+        "route": "…Nc6 — hit the d4-centre",
+        "explanation": "Black develops and immediately pressures White’s over-extended centre."
+      }
     ],
     "strategicThemes": [
       "Development lead over material",
@@ -27822,40 +27832,78 @@
     ],
     "playableLines": [
       {
-        "fen": "rn2k2r/ppp2ppp/4bn2/8/1qPP4/8/PP3PPP/RN1QKBNR w KQkq - 0 8",
+        "fen": "rn1qkb1r/ppp2ppp/4bn2/8/2P5/8/PP1P1PPP/RNBQKBNR w KQkq - 0 5",
         "moves": [
-          "Qd2",
-          "Nc6",
-          "d5",
-          "O-O-O"
+          "d4",
+          "Bb4+",
+          "Bd2",
+          "Qe7",
+          "Bxb4",
+          "Qxb4+",
+          "Nd2",
+          "Nc6"
         ],
         "annotations": [
-          "Qd2 tries to consolidate the extra pawn.",
-          "…Nc6 develops with tempo, hitting the d4-pawn — every move comes with a threat.",
-          "d5 lunges to chase the c6-knight and gain space.",
-          "…O-O-O castles long, dropping the rook onto the open d-file against White's uncastled king — the initiative roars on."
+          "White grabs the centre with d4, trying to consolidate the extra pawn.",
+          "…Bb4+! A gambiteer's check — Black develops with tempo and refuses to let White settle, the Icelandic's whole spirit.",
+          "White blocks with the bishop.",
+          "…Qe7 piles onto the pin and eyes the e-file, keeping White tangled.",
+          "White trades the dark-squared bishops to relieve the pressure.",
+          "…Qxb4+ recaptures with check, again gaining a tempo while the queen sits actively.",
+          "White interposes the knight.",
+          "…Nc6 develops and hits d4, the over-extended centre pawn. For the gambit pawn Black has a huge lead in development and a fistful of tempi — the Icelandic delivering its full initiative, just as Speelman showed against Sokolov."
         ],
-        "title": "Scandinavian: The Icelandic Initiative",
         "arrows": [
           [],
-          [
-            {
-              "from": "c6",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Icelandic Initiative (Sokolov–Speelman)",
         "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "d1",
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -27865,49 +27913,26 @@
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
               "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "c8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
+        "intro": "Black develops with tempo for the gambit pawn.",
         "sources": [
-          "book:scandinavian-defence",
+          "concept:pos-initiative",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ],
         "learnCues": [
-          "Qd2 — try to consolidate",
-          "Nc6 — develop with tempo",
-          "d5 — chase the knight, grab space",
-          "O-O-O — seize the d-file"
+          "d4 — White grabs the centre",
+          "…Bb4+ — develop with check",
+          "Bd2 — White blocks",
+          "…Qe7 — pile on the pin",
+          "Bxb4 — White trades bishops",
+          "…Qxb4+ — recapture with tempo",
+          "Nd2 — White interposes",
+          "…Nc6 — develop, hit d4"
         ]
       }
     ]
@@ -28236,17 +28261,27 @@
   {
     "id": "mp-scandinaviandefence-portuguese",
     "openingId": "scandinavian-defence",
-    "criticalPositionFen": "r3kb1r/ppp2ppp/2n1pn2/3q4/3P4/5N2/PPP1QPPP/RNB2RK1 w kq - 2 8",
+    "criticalPositionFen": "rn1qkb1r/ppp1pppp/5n2/3P4/3P4/8/PPP1bPPP/RNBQK1NR w KQkq - 0 5",
     "title": "Scandinavian Portuguese: Active Pieces for the Pawn",
     "overview": "In the Portuguese (…Bg4 gambit), Black has given a tempo for fast, active development and the bishop pair. Black brings the queen out to h5 to pressure White, develops the dark bishop to d6 eyeing the kingside, and lifts a rook toward the g-file. Black’s piece activity is full compensation. Double-edged.",
     "pawnBreaks": [
-      "…e5/…c5 levers once the pieces are out",
-      "activity over material"
+      {
+        "move": "…e6 then …O-O-O — open the d-file",
+        "explanation": "Black builds the shell, then castles long to bring the rook to bear on d4 and White’s centre.",
+        "fen": "rn1qkb1r/ppp1pppp/5n2/3P4/3P4/8/PPP1bPPP/RNBQK1NR w KQkq - 0 5"
+      }
     ],
     "pieceManeuvers": [
-      "…Qh5 pressuring the kingside",
-      "…Bd6 onto the b8-h2 diagonal",
-      "…Rg8 toward the g-file"
+      {
+        "piece": "Queen",
+        "route": "…Qxd5 — regain the pawn centrally",
+        "explanation": "The queen recovers the gambit pawn and sits actively in the centre."
+      },
+      {
+        "piece": "Knight",
+        "route": "…Nc6 — pressure d4",
+        "explanation": "Black develops and targets the d4-pawn, the focus of the queenside-castling attack."
+      }
     ],
     "strategicThemes": [
       "Active piece play as compensation",
@@ -28258,52 +28293,72 @@
     ],
     "playableLines": [
       {
-        "fen": "r3kb1r/ppp2ppp/2n1pn2/3q4/3P4/5N2/PPP1QPPP/RNB2RK1 w kq - 2 8",
+        "fen": "rn1qkb1r/ppp1pppp/5n2/3P4/3P4/8/PPP1bPPP/RNBQK1NR w KQkq - 0 5",
         "moves": [
+          "Qxe2",
+          "Qxd5",
+          "Nf3",
+          "e6",
+          "O-O",
+          "Nc6",
           "Be3",
-          "Qh5",
-          "Nbd2",
-          "Bd6",
-          "h3",
-          "Rg8"
+          "O-O-O"
         ],
         "annotations": [
-          "Be3 develops and shores up d4.",
-          "…Qh5 swings the queen to an active post, eyeing the kingside.",
-          "Nbd2 — White completes development, trying to consolidate the extra pawn.",
-          "…Bd6 — the dark bishop takes aim along the b8-h2 diagonal.",
-          "h3 makes luft.",
-          "…Rg8 lifts the rook toward the g-file — Black’s pieces are all active, full compensation for the pawn. Double-edged."
+          "White recaptures the bishop on e2.",
+          "…Qxd5 regains the gambit pawn, the queen landing centrally — the Portuguese has recovered its material with a comfortable game.",
+          "White develops the knight.",
+          "…e6 builds a solid shell and opens the f8-bishop.",
+          "White castles short.",
+          "…Nc6 develops and pressures d4, the pawn Black targets.",
+          "White supports the centre with Be3.",
+          "…O-O-O! Black castles long, slamming the rook onto the open d-file against the d4-pawn and White's centre. Opposite-side castling with the initiative — the Portuguese delivering exactly the dynamic, aggressive game it promises, as Adhiban showed against Andriasian."
         ],
-        "title": "Scandinavian Portuguese: Active Pieces for the Pawn",
         "arrows": [
-          [
-            {
-              "from": "e3",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
           [],
           [],
-          [
-            {
-              "from": "d6",
-              "to": "h2",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Portuguese Attack (Andriasian–Adhiban)",
         "highlights": [
           [
             {
-              "square": "e3",
+              "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "c1",
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
@@ -28313,102 +28368,37 @@
           ],
           [
             {
-              "square": "h5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
+              "square": "e3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "d2",
+              "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "b1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "d6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "b8",
+              "square": "d4",
               "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "h2",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "h3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "g8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "h8",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
         ],
-        "learnCues": [
-          "Be3 — develop, shore up d4",
-          "…Qh5 — active queen",
-          "Nbd2 — develop",
-          "…Bd6 — aim at the kingside",
-          "h3 — luft",
-          "…Rg8 — rook toward the g-file"
-        ],
+        "intro": "Black regains the pawn and castles long with the initiative.",
         "sources": [
-          "book:scandinavian-defence",
+          "concept:pos-initiative",
           "concept:pos-development",
           "https://en.wikipedia.org/wiki/Scandinavian_Defense"
         ],
-        "intro": {
-          "say": "In the Portuguese gambit, Black has fast development and the bishop pair for the pawn. The queen swings to h5, the bishop eyes the kingside from d6, and a rook lifts toward the g-file — piece activity as full compensation.",
-          "sayShort": "Active pieces: …Qh5, …Bd6, …Rg8.",
-          "arrows": [
-            {
-              "from": "d8",
-              "to": "h5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "f8",
-              "to": "d6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
-          "highlights": [
-            {
-              "square": "h5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d6",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ]
-        }
+        "learnCues": [
+          "Qxe2 — White recaptures",
+          "…Qxd5 — regain the pawn, centralize",
+          "Nf3 — White develops",
+          "…e6 — build the shell",
+          "O-O — White castles short",
+          "…Nc6 — develop, hit d4",
+          "Be3 — White supports d4",
+          "…O-O-O — castle long, seize the d-file"
+        ]
       }
     ]
   },
