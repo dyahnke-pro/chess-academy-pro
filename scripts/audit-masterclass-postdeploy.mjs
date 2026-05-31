@@ -23,7 +23,7 @@ console.log('  ', before.error ? `ERROR ${before.error}` : `${(before.entries||[
 
 console.log('=== (1) Playwright (config injected pre-boot) ===');
 const exe = await resolveChromiumExecutable();
-const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
+const browser = await chromium.launch({ executablePath: exe, headless: true, args: [...sandboxLaunchArgs(), '--autoplay-policy=no-user-gesture-required', '--use-fake-ui-for-media-stream'] });
 const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
 // CRITICAL: set the audit-stream config BEFORE any app script runs, so
@@ -33,7 +33,13 @@ await page.addInitScript(({ url, secret }) => {
 }, { url: listener.url, secret: LOCAL_LISTENER_SECRET });
 
 const pageErrors = [];
+const streamed = []; // every audit POST body the app sends to our listener
 page.on('pageerror', e => pageErrors.push(e.message));
+page.on('request', req => {
+  if (req.method() === 'POST' && req.url().includes(listener.url.replace(/^https?:\/\//,''))) {
+    try { const b = req.postDataJSON(); const evs = Array.isArray(b) ? b : (b?.events ?? [b]); for (const e of evs) streamed.push(e); } catch {}
+  }
+});
 
 const runStart = Date.now();
 await page.goto(`${PROD}/`, { waitUntil: 'domcontentloaded', timeout: 25000 });
@@ -54,28 +60,25 @@ console.log('  post-boot localStorage auditStreamUrl (removed after migration = 
 
 const out = [];
 for (const id of TARGETS) {
-  const evBefore = listener.events.length;
+  const evBefore = streamed.length, ttsBefore = ttsCalls.length;
   await page.goto(`${PROD}/openings/${id}`, { waitUntil: 'domcontentloaded', timeout: 25000 });
   await page.waitForTimeout(2500);
   await page.locator('[data-testid="page-help-modal"] button, [aria-label="Close"]').first().click({ timeout: 2000 }).catch(()=>{});
-  // Watch (real click = user gesture → unlocks audio context)
   const w = page.getByRole('button', { name: /^watch$/i }).first();
   let mounted = false;
   if (await w.count() > 0) {
     await w.click({ timeout: 6000 }).catch(()=>{});
     await page.waitForTimeout(2000);
     mounted = (await page.locator('[data-square]').count() > 0) && (await page.locator('[data-testid="walkthrough-progress"],[data-testid="walkthrough-mode"]').count() === 0);
-    // if a play/pause toggle exists and we're paused, start it
     const playBtn = page.locator('[aria-label*="play" i], [data-testid*="play"]').first();
     if (await playBtn.count() > 0) await playBtn.click({ timeout: 2000 }).catch(()=>{});
-    await page.waitForTimeout(9000); // let narration speak + stream-flush
+    await page.waitForTimeout(10000); // let the narration speak
   }
-  const captured = listener.events.slice(evBefore);
+  const captured = streamed.slice(evBefore);
   const voice = captured.filter(e => /voice|speak|narration/i.test(e.kind||''));
-  const kinds = {}; for (const e of captured) kinds[e.kind] = (kinds[e.kind]||0)+1;
-  out.push({ id, mounted, total: captured.length, voice: voice.length, sample: voice[0]?.kind || captured[0]?.kind || '(none)', kinds });
-  console.log(`  ${id}: lessonMounted=${mounted} streamedEvents=${captured.length} voiceEvents=${voice.length} kinds=${JSON.stringify(kinds)}`);
-  if (voice[0]) console.log(`     e.g. ${voice[0].kind}: ${(voice[0].summary||'').slice(0,80)}`);
+  const tts = ttsCalls.length - ttsBefore;
+  out.push({ id, mounted, tts, voice: voice.length, stream: captured.length });
+  console.log(`  ${id}: lessonMounted=${mounted} ttsCalls=${tts} (voice synthesising) | auditStream voice=${voice.length} total=${captured.length}`);
 }
 
 console.log('\n=== (2) audit-stream AFTER (prod delta) ===');
