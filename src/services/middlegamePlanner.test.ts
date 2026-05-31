@@ -4,11 +4,14 @@ import {
   findPlanBySubject,
   findPlansForOpening,
   sessionFromPlan,
+  buildPlanWalkthroughTree,
   resolveMiddlegameSession,
   resolveMiddlegameSessionWithFallback,
 } from './middlegamePlanner';
 import { stockfishEngine } from './stockfishEngine';
 import { FIRST_CLASS_OPENING_IDS, expectedOrientation } from '../data/lessons/registry';
+import type { MiddlegamePlan } from '../types';
+import type { WalkthroughTreeNode } from '../types/walkthroughTree';
 
 describe('middlegamePlanner', () => {
   it('finds an exact plan by openingId', () => {
@@ -341,4 +344,76 @@ describe('first-class opening middlegame plans (registry sweep)', () => {
       }
     });
   }
+});
+
+// buildPlanWalkthroughTree drives middlegame plans through the SAME
+// useTeachWalkthrough runtime as opening walkthroughs (David 2026-05-31:
+// "this is the only UI I want users to play on"). It must produce a
+// LINEAR, derived tree that walks the plan's line.
+describe('buildPlanWalkthroughTree', () => {
+  async function firstPlanWithLine(): Promise<MiddlegamePlan> {
+    interface PlanRow extends MiddlegamePlan {}
+    const plans = (await import('../data/middlegame-plans.json'))
+      .default as unknown as PlanRow[];
+    const plan = plans.find((p) =>
+      (p.playableLines ?? []).some(
+        (l) => l.moves.length > 0 && l.annotations.length === l.moves.length,
+      ),
+    );
+    if (!plan) throw new Error('no plan with a valid playable line in fixtures');
+    return plan;
+  }
+
+  function chainLength(root: WalkthroughTreeNode): number {
+    // Walk the single-child chain under the root (san: null) and count
+    // the move nodes.
+    let n = 0;
+    let node: WalkthroughTreeNode | undefined = root.children[0]?.node;
+    while (node) {
+      n += 1;
+      expect(node.children.length, 'plan tree must be linear (≤1 child/node)').toBeLessThanOrEqual(1);
+      node = node.children[0]?.node;
+    }
+    return n;
+  }
+
+  it('returns null when the plan has no usable playable line', () => {
+    const empty = {
+      id: 'mp-empty',
+      openingId: 'x',
+      title: 'Empty',
+      overview: '',
+      criticalPositionFen: '',
+      pawnBreaks: [],
+      pieceManeuvers: [],
+      strategicThemes: [],
+      endgameTransitions: [],
+      playableLines: [],
+    } as unknown as MiddlegamePlan;
+    expect(buildPlanWalkthroughTree(empty, 'white')).toBeNull();
+  });
+
+  it('builds a linear, derived tree that walks the plan line', async () => {
+    const plan = await firstPlanWithLine();
+    const line = plan.playableLines!.find(
+      (l) => l.moves.length > 0 && l.annotations.length === l.moves.length,
+    )!;
+    const tree = buildPlanWalkthroughTree(plan, 'black');
+    expect(tree).not.toBeNull();
+    // Plays from the plan's critical FEN, never the standard start.
+    expect(tree!.startFen).toBe(line.fen);
+    expect(tree!.derived).toBe(true);
+    expect(tree!.studentSide).toBe('black');
+    // Root is the pre-move position; the chain holds exactly the moves.
+    expect(tree!.root.san).toBeNull();
+    expect(chainLength(tree!.root)).toBe(line.moves.length);
+    // First move's side matches side-to-move at the plan FEN, and its
+    // narration carries the authored prose for that move.
+    const first = tree!.root.children[0]!.node;
+    const startSide = line.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+    expect(first.san).toBe(line.moves[0]);
+    expect(first.movedBy).toBe(startSide);
+    expect(first.idea).toBe(line.annotations[0]);
+    expect(first.narration?.[0]?.text).toBe(line.annotations[0]);
+  });
 });

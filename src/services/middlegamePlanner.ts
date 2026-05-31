@@ -22,7 +22,18 @@ import { buildSession } from './walkthroughAdapter';
 import { stockfishEngine } from './stockfishEngine';
 import { getCoachChatResponse } from './coachApi';
 import type { WalkthroughSession } from '../types/walkthrough';
-import type { OpeningMoveAnnotation } from '../types';
+import type {
+  WalkthroughTree,
+  WalkthroughTreeNode,
+  NarrationSegment,
+  NarrationArrow,
+  NarrationHighlight,
+} from '../types/walkthroughTree';
+import type {
+  OpeningMoveAnnotation,
+  AnnotationArrow,
+  AnnotationHighlight,
+} from '../types';
 
 const STANDARD_START_FEN =
   'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -175,6 +186,118 @@ export function sessionFromPlan(
   });
 
   return session;
+}
+
+// The four lead-the-eye colors the NarrationSegment renderer understands.
+// Plan JSON arrows/highlights carry free-form color strings (often rgba);
+// anything that isn't one of these keywords falls back to the default.
+const NARRATION_COLORS = new Set(['green', 'red', 'blue', 'yellow']);
+
+function toNarrationArrows(
+  arrows: AnnotationArrow[] | undefined,
+): NarrationArrow[] {
+  if (!arrows) return [];
+  return arrows.map((a) => ({
+    from: a.from,
+    to: a.to,
+    color: (a.color && NARRATION_COLORS.has(a.color)
+      ? a.color
+      : 'green') as NarrationArrow['color'],
+  }));
+}
+
+function toNarrationHighlights(
+  highlights: AnnotationHighlight[] | undefined,
+): NarrationHighlight[] {
+  if (!highlights) return [];
+  return highlights.map((h) => ({
+    square: h.square,
+    color: (h.color && NARRATION_COLORS.has(h.color)
+      ? h.color
+      : 'yellow') as NarrationHighlight['color'],
+  }));
+}
+
+/**
+ * Convert a middlegame plan into a LINEAR, derived `WalkthroughTree` so
+ * it plays through the SAME `useTeachWalkthrough` runtime as opening
+ * walkthroughs — on the big Learn-with-Coach board, with the identical
+ * lead-the-eye arrows + highlights, voice-gated advance, and
+ * WalkthroughControls (David 2026-05-31: "this is the only UI I want
+ * users to play on" — one consistent board everywhere).
+ *
+ * A plan is a single line with no branches, so the tree is a straight
+ * chain of nodes (each `children` has 0 or 1 entry). `derived: true`
+ * keeps it out of the opening cache + stage-generation paths (the hook
+ * early-returns on derived trees), so it just walks the line and lands
+ * on a leaf — no drill/quiz stages spun up from a mid-game position.
+ *
+ * Per-move narration rides on `narration[0]` (a single segment carrying
+ * the move's prose + its arrows + highlights); the short LEARN cue maps
+ * to `shortIdea` so Brief mode still speaks the right truncation.
+ */
+export function buildPlanWalkthroughTree(
+  plan: MiddlegamePlan,
+  orientation: 'white' | 'black',
+): WalkthroughTree | null {
+  const line = (plan.playableLines ?? []).find(
+    (l) => l.moves.length > 0 && l.annotations.length === l.moves.length,
+  );
+  if (!line) return null;
+
+  // Side-to-move at the plan's starting FEN drives node `movedBy` parity.
+  const startSide: 'white' | 'black' =
+    line.fen.split(' ')[1] === 'b' ? 'black' : 'white';
+  const sideAt = (plyIndex: number): 'white' | 'black' =>
+    plyIndex % 2 === 0
+      ? startSide
+      : startSide === 'white'
+        ? 'black'
+        : 'white';
+
+  // Build from the END backwards so each node references the next as its
+  // single child (linear continuation — no forks).
+  let next: WalkthroughTreeNode | null = null;
+  for (let i = line.moves.length - 1; i >= 0; i -= 1) {
+    const idea = line.annotations[i] ?? '';
+    const segment: NarrationSegment = {
+      text: idea,
+      shortText: line.learnCues?.[i],
+      arrows: toNarrationArrows(line.arrows?.[i]),
+      highlights: toNarrationHighlights(line.highlights?.[i]),
+    };
+    const node: WalkthroughTreeNode = {
+      san: line.moves[i],
+      movedBy: sideAt(i),
+      idea,
+      shortIdea: line.learnCues?.[i],
+      narration: [segment],
+      children: next ? [{ node: next }] : [],
+    };
+    next = node;
+  }
+
+  const root: WalkthroughTreeNode = {
+    san: null,
+    movedBy: null,
+    idea: '',
+    children: next ? [{ node: next }] : [],
+  };
+
+  return {
+    openingName: plan.title,
+    derived: true,
+    eco: '',
+    intro:
+      line.intro?.say ??
+      plan.overview ??
+      'Here is the plan — watch it play out.',
+    shortIntro: line.intro?.sayShort,
+    outro: '',
+    studentSide: orientation,
+    startFen: line.fen,
+    root,
+  };
 }
 
 /**

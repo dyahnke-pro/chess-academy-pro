@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, within, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { CoachSessionPage } from './CoachSessionPage';
@@ -15,14 +15,6 @@ vi.mock('../../services/playerRatingService', () => ({
   getPlayerRating: vi.fn().mockResolvedValue(1500),
 }));
 
-vi.mock('../../services/middlegamePlanner', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../../services/middlegamePlanner')>();
-  return {
-    ...actual,
-    resolveMiddlegameSessionWithFallback: vi.fn(),
-  };
-});
-
 vi.mock('../../services/walkthroughResolver', () => ({
   resolveWalkthroughSession: vi.fn(),
   matchOpeningForSubject: vi.fn(),
@@ -35,9 +27,6 @@ vi.mock('./ExplainPositionSessionView', () => ({
     <div data-testid="explain-position-stub">{fen ?? 'start'}</div>
   ),
 }));
-
-import { resolveMiddlegameSessionWithFallback } from '../../services/middlegamePlanner';
-import type { WalkthroughSession } from '../../types/walkthrough';
 
 function renderAt(path: string): ReturnType<typeof render> {
   return render(
@@ -97,60 +86,30 @@ function CoachPlayProbe(): JSX.Element {
   );
 }
 
-function buildSession(overrides?: Partial<WalkthroughSession>): WalkthroughSession {
-  return {
-    title: 'Italian Plan',
-    subtitle: 'Middlegame plan',
-    orientation: 'white',
-    kind: 'middlegame',
-    startFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-    steps: [
-      {
-        moveNumber: 1,
-        san: 'e4',
-        fenAfter: 'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
-        narration: 'Take the center.',
-      },
-    ],
-    ...overrides,
-  };
-}
-
-describe('CoachSessionPage — middlegame', () => {
-  beforeEach(() => {
-    vi.spyOn(voiceService, 'speak').mockResolvedValue(undefined);
-    vi.spyOn(voiceService, 'stop').mockImplementation(() => {});
-    vi.mocked(resolveMiddlegameSessionWithFallback).mockReset();
-  });
-
-  it('renders a session when one resolves', async () => {
-    vi.mocked(resolveMiddlegameSessionWithFallback).mockResolvedValue(buildSession());
-    renderAt('/coach/session/middlegame?opening=italian-game&orientation=white');
-    await waitFor(() =>
-      expect(screen.getByTestId('chess-lesson-layout')).toBeInTheDocument(),
-    );
-    expect(screen.getByTestId('chess-lesson-board')).toBeInTheDocument();
-    expect(screen.getByTestId('chess-lesson-controls')).toBeInTheDocument();
-  });
-
-  it('shows a friendly empty state when resolution returns null', async () => {
-    vi.mocked(resolveMiddlegameSessionWithFallback).mockResolvedValue(null);
-    renderAt('/coach/session/middlegame?opening=nonexistent');
-    await waitFor(() => {
-      const layout = screen.getByTestId('chess-lesson-layout');
-      expect(within(layout).getByText(/no middlegame plan|unavailable/i)).toBeInTheDocument();
-    });
-  });
-
-  it('provides prev/next/play/restart controls once a session loads', async () => {
-    vi.mocked(resolveMiddlegameSessionWithFallback).mockResolvedValue(buildSession());
+describe('CoachSessionPage — middlegame (redirect)', () => {
+  // Middlegame plans now play on /coach/teach (the one and only play
+  // UI — David 2026-05-31). /coach/session/middlegame is a redirect-only
+  // kind: it maps ?opening / ?subject → ?plans so CoachTeachPage's
+  // URL-param flow auto-runs the authored plan(s) on the big board.
+  it('redirects to /coach/teach with subject mapped to plans', () => {
     renderAt('/coach/session/middlegame?subject=italian');
-    await waitFor(() =>
-      expect(screen.getByLabelText('Previous move')).toBeInTheDocument(),
+    expect(screen.getByTestId('coach-teach-redirect-path').textContent).toBe(
+      '/coach/teach?plans=italian',
     );
-    expect(screen.getByLabelText('Next move')).toBeInTheDocument();
-    expect(screen.getByLabelText('Play')).toBeInTheDocument();
-    expect(screen.getByLabelText('Restart')).toBeInTheDocument();
+  });
+
+  it('falls back to the opening id when no subject is given', () => {
+    renderAt('/coach/session/middlegame?opening=italian-game');
+    expect(screen.getByTestId('coach-teach-redirect-path').textContent).toBe(
+      '/coach/teach?plans=italian-game',
+    );
+  });
+
+  it('redirects to bare /coach/teach when nothing identifies an opening', () => {
+    renderAt('/coach/session/middlegame');
+    expect(screen.getByTestId('coach-teach-redirect-path').textContent).toBe(
+      '/coach/teach',
+    );
   });
 });
 
