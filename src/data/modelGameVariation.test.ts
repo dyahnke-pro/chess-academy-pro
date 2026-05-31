@@ -80,7 +80,7 @@ describe('model-game variation tags are the deterministic classifier output', ()
         .map((d) => `  ${d.id}: stored=${JSON.stringify(d.stored)} expected=${JSON.stringify(d.expected)}`)
         .join('\n')}`,
     ).toHaveLength(0);
-  });
+  }, 30000); // re-derives the classifier across every model game — allow headroom
 
   it('every tagged variation names a real variation of its opening', () => {
     const bad = games

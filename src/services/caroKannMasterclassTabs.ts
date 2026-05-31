@@ -4,7 +4,7 @@
 // plus its `-endgame` plan, which EndgamePlansSection renders separately.
 const CARO_KANN_TAB_PLAN_IDS: Record<string, string[]> = {
   main: ['mp-carokann-main', 'mp-carokann-main-endgame'],
-  advance: ['mp-carokann-advance'],
+  advance: ['mp-carokann-advance', 'mp-carokann-advance-endgame'],
   exchange: ['mp-carokann-exchange'],
   'two knights': ['mp-carokann-two-knights'],
   panov: ['mp-carokann-panov'],

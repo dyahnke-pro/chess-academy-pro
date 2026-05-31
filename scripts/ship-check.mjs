@@ -175,6 +175,7 @@ const GATE_TESTS = [
   'src/data/pro-repertoires-orientation.test.ts',
   'src/data/proRepLessonCoverage.test.ts',     // G9.3 Gate A — every pro-rep opening has a curated LessonScript
   'src/data/proRepLessonAccuracy.test.ts',     // G9.3 — pro-rep lesson narration is board-accurate + reaches a middlegame
+  'src/data/proRepPlanAccuracy.test.ts',       // pro-rep middlegame-plan narration is board-accurate (hyphenated + bishop-pair claims)
   'src/data/variationMiddlegameDepth.test.ts',
   'src/data/openingManifests.test.ts',
   'src/data/modelGames.test.ts',
