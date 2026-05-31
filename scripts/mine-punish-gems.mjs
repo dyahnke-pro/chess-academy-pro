@@ -305,6 +305,12 @@ const OPENING_SEEDS = {
   'pro-gothamchess-english':        { studentChar: 'w', baseSeed: ['c4'] },
   'pro-gothamchess-kia':            { studentChar: 'w', baseSeed: ['Nf3', 'd5', 'g3'] },
   'pro-gothamchess-closed-sicilian': { studentChar: 'w', baseSeed: ['e4', 'c5', 'Nc3'] },
+  // Hikaru (2026-05-31)
+  'pro-hikaru-nimzo-larsen':       { studentChar: 'w', baseSeed: ['b3'] },
+  'pro-hikaru-closed-sicilian':    { studentChar: 'w', baseSeed: ['e4', 'c5', 'Nc3'] },
+  'pro-hikaru-reti':               { studentChar: 'w', baseSeed: ['Nf3'] },
+  'pro-hikaru-pirc-modern':        { studentChar: 'b', baseSeed: ['e4', 'g6'] },
+  'pro-hikaru-caro-kann':          { studentChar: 'b', baseSeed: ['e4', 'c6'] },
 };
 function loadRepertoire() {
   try {
