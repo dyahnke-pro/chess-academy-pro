@@ -90,3 +90,36 @@ per-opening data in scripts/pro-repertoire/openings/*.cjs.
    window leaves the student worse (he won later). Re-scan each won game, eval
    move 13->30, anchor the 8-ply window where the student is genuinely on top
    (>= +0.8). Stockfish only LOCATES the window; moves stay real.
+
+---
+## FINAL STATE (2026-05-31, full-autonomy run)
+**Naroditsky archive FETCHED** (140,530 games; chess.com was reachable after all).
+Re-grounded across both pros' 172k-game archives -> **136 of 168 pro-rep plans now
+deep** (real winning-game 8-ply move-13->17 lines, narrated, all gates green,
+shipped to main + G1-audited 23/0, bundle DPlxFmIM).
+
+### The 32 that remain (NOT safely auto-deepable -- need a focused per-plan pass)
+**A) 25 SYNTHETIC positions** -- the authored criticalPositionFen does NOT occur in
+172k games at ANY ply (confirmed by ground-relaxed.cjs). Their TITLES name real
+variations Naroditsky plays; the FENs are earlier-session inventions. Re-derive each
+from a real sub-variation game (set a new criticalPositionFen + 8-ply line, narrate
+to the ACTUAL moves). Per-opening prefixes for the next pass:
+  - pro-naroditsky-rossolimo (7): Ross-nc6-* -> `e4 c5 Nf3 Nc6 Bb5`; Ross-e6-* ->
+    `e4 c5 Nf3 e6`; Ross-bd7-* -> `e4 c5 Nf3 d6 Bb5+ Nd7`; Ross-g6-* -> `e4 c5 Nf3 g6 Bb5`.
+  - pro-naroditsky-alekhine (5): `e4 Nf6 e5 Nd5` + (twoknights `Nc3`, modern `d4 d6`, quiet `Nf3`).
+  - pro-naroditsky-kia (4): `Nf3 Nf6 g3` (symmetric/Reti setups -- dedup for distinct games).
+  - pro-naroditsky-jobava-london (3): `d4 d5 Nc3 Nf6 Bf4` + (french `...e6`, slav `...c6`).
+  - pro-naroditsky-najdorf (2): `e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6` + (english `Be3`, adams `Be2`).
+  - pro-naroditsky-ruy-lopez (2): `e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3` + `d3`.
+  - pro-naroditsky-fantasy-caro (1): `e4 c6 d4 d5 f3`.
+  - pro-gothamchess-anti-sicilian (1): antisic-e6-open `e4 c5 Nf3 Nc6 Bb5 e6`.
+  Caveat: move-order transpositions mean exact-prefix matching misses games -- match
+  by a position fen4 reached via the prefix, not by literal first-N-SANs.
+**B) 7 FLAGGED** (real games, but the grounded window is negative/tactically murky --
+need David's WALK-BACK: eval the won game move 13->30, anchor where the student is
+genuinely on top): french-rubinstein-qxd4, qgd-tartakower-b6, pirc-150-b5, caro-panov,
+Naj-classical-development, Jobava-central-queen-attack, KID-makogonov-kingside.
+
+Tooling for both: scripts/pro-repertoire/{ground-plan-lines,ground-relaxed,select-sound-lines,
+dedup-grounded,apply-plan-narration}.cjs + openings/*.cjs. The applier + gates make each a
+data-only add.
