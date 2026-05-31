@@ -47,7 +47,6 @@ import {
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessLessonLayout } from '../Layout/ChessLessonLayout';
 import { useWalkthroughRunner } from '../../hooks/useWalkthroughRunner';
-import { resolveMiddlegameSessionWithFallback } from '../../services/middlegamePlanner';
 import { buildNarrationSession } from '../../services/gameNarrationBuilder';
 import { db } from '../../db/schema';
 import { ExplainPositionSessionView } from './ExplainPositionSessionView';
@@ -84,17 +83,15 @@ export function CoachSessionPage(): JSX.Element {
   };
 
   if (kind === 'middlegame') {
-    return (
-      <DynamicCoachSession title="Middlegame plan" onExit={goBack}>
-        <MiddlegameSessionBody
-          openingId={openingId}
-          subject={subject}
-          orientation={orientation}
-          fen={fen}
-          onExit={goBack}
-        />
-      </DynamicCoachSession>
-    );
+    // Legacy route. Middlegame plans now play on /coach/teach (the one
+    // and only play UI — David 2026-05-31), on the big board via
+    // `?plans=<opening>` which auto-runs the authored plan(s). This
+    // redirect catches bookmarks / stale links that still point here.
+    const planSubject = subject ?? openingId ?? '';
+    const params = new URLSearchParams();
+    if (planSubject) params.set('plans', planSubject);
+    const qs = params.toString();
+    return <Navigate to={qs ? `/coach/teach?${qs}` : '/coach/teach'} replace />;
   }
 
   if (kind === 'play-against') {
@@ -194,59 +191,10 @@ export function CoachSessionPage(): JSX.Element {
   return <Navigate to="/coach/chat" replace />;
 }
 
-// ─── Middlegame ─────────────────────────────────────────────────────
-
-interface MiddlegameSessionBodyProps {
-  openingId?: string;
-  subject?: string;
-  orientation: 'white' | 'black';
-  fen?: string;
-  onExit: () => void;
-}
-
-function MiddlegameSessionBody({
-  openingId,
-  subject,
-  orientation,
-  fen,
-  onExit,
-}: MiddlegameSessionBodyProps): JSX.Element {
-  const [session, setSession] = useState<WalkthroughSession | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-    void resolveMiddlegameSessionWithFallback({
-      openingId,
-      subject,
-      orientation,
-      fen,
-    })
-      .then((s) => {
-        if (cancelled) return;
-        if (s) setSession(s);
-        else setError('No middlegame plan found for that opening.');
-      })
-      .catch((err: unknown) => {
-        if (cancelled) return;
-        console.warn('[CoachSessionPage] middlegame fallback failed:', err);
-        setError('Could not prepare a middlegame plan. Try again later.');
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [openingId, subject, orientation, fen]);
-
-  if (loading) return <LessonLoadingState label="Preparing plan…" onExit={onExit} />;
-  if (error || !session) return <LessonErrorState message={error ?? 'Plan unavailable.'} onExit={onExit} />;
-  return <WalkthroughRunnerBody session={session} onExit={onExit} />;
-}
+// Middlegame body removed — /coach/session/middlegame now redirects to
+// /coach/teach?plans=<opening> (the one and only play UI, David
+// 2026-05-31). Plans play on the big Learn-with-Coach board via the same
+// useTeachWalkthrough runtime as opening walkthroughs — no bare runner.
 
 // Walkthrough body removed — /coach/session/walkthrough now redirects
 // to /coach/teach (the canonical Learn-with-Coach surface, which owns

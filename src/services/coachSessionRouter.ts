@@ -227,10 +227,12 @@ export async function routeChatIntent(
         (subject && (findPlanForOpening(subject) ?? findPlanBySubject(subject))) ||
         null;
       if (!plan && !subject) return null;
+      // Middlegame plans play on the Learn-with-Coach board (the one
+      // play UI — David 2026-05-31), never the old bare session runner.
       const params = new URLSearchParams();
-      if (subject) params.set('subject', subject);
+      if (subject) params.set('plans', subject);
       return {
-        path: withQuery('/coach/session/middlegame', params),
+        path: withQuery('/coach/teach', params),
         ackMessage: plan
           ? `Loading the middlegame plan for ${plan.title}…`
           : 'Working out a middlegame plan…',
@@ -359,8 +361,8 @@ Reply with ONLY one word from the list above.`;
             : classified === 'puzzle'
               ? '/coach/session/puzzle'
               : classified === 'walkthrough'
-                ? `/coach/session/walkthrough?subject=${encodeURIComponent(text)}`
-                : `/coach/session/middlegame?subject=${encodeURIComponent(text)}`,
+                ? `/coach/teach?opening=${encodeURIComponent(text)}`
+                : `/coach/teach?plans=${encodeURIComponent(text)}`,
           ackMessage: 'Got it — setting up a session.',
           intent: { kind: classified === 'explain' ? 'explain-position' : classified === 'puzzle' ? 'puzzle' : classified === 'walkthrough' ? 'walkthrough' : 'continue-middlegame', raw: text },
         };

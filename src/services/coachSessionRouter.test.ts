@@ -128,10 +128,12 @@ describe('routeChatIntent', () => {
       'run me through the middlegame plans for the Italian',
     );
     expect(routed).not.toBeNull();
-    expect(routed!.path).toMatch(/^\/coach\/session\/middlegame/);
+    // Middlegame plans now play on /coach/teach (the one play UI — David
+    // 2026-05-31), via ?plans=<opening> which auto-runs the plan(s).
+    expect(routed!.path).toMatch(/^\/coach\/teach/);
     // "italian" now expands to "Italian Game" via the alias map so the
     // opening-book lookup downstream resolves.
-    expect(routed!.path).toContain('subject=Italian+Game');
+    expect(routed!.path).toContain('plans=Italian+Game');
   });
 
   it('never throws — router errors become null so chat keeps working', async () => {

@@ -206,13 +206,16 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
         inputRef.current?.blur();
         void navigate(`/coach/teach?${params.toString()}`);
       } else if (intent.kind === 'continue-middlegame') {
-        if (intent.subject) params.set('subject', intent.subject);
+        // Middlegame plans play on the Learn-with-Coach board (the one
+        // play UI — David 2026-05-31), never the old bare session
+        // runner. `?plans=<opening>` auto-runs the authored plan(s).
+        if (intent.subject) params.set('plans', intent.subject);
         voiceInputService.stopListening();
         clear();
         setShowDropdown(false);
         inputRef.current?.blur();
         void navigate(
-          `/coach/session/middlegame${params.toString() ? `?${params.toString()}` : ''}`,
+          `/coach/teach${params.toString() ? `?${params.toString()}` : ''}`,
         );
       } else if (intent.kind === 'puzzle') {
         if (intent.theme) params.set('theme', intent.theme);
@@ -396,9 +399,11 @@ export function SmartSearchBar({ scope, placeholder, onResultsChange }: SmartSea
     inputRef.current?.blur();
     const params = new URLSearchParams();
     if (agentIntent.kind === 'continue-middlegame') {
-      if (agentIntent.subject) params.set('subject', agentIntent.subject);
+      // Plays on the Learn-with-Coach board (the one play UI — David
+      // 2026-05-31), not the old bare session runner.
+      if (agentIntent.subject) params.set('plans', agentIntent.subject);
       void navigate(
-        `/coach/session/middlegame${params.toString() ? `?${params.toString()}` : ''}`,
+        `/coach/teach${params.toString() ? `?${params.toString()}` : ''}`,
       );
     } else if (agentIntent.kind === 'play-against') {
       if (agentIntent.subject) params.set('subject', agentIntent.subject);

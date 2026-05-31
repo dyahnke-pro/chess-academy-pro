@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, useSearchParams, Navigate } from 'react-router-dom';
 import { Chess } from 'chess.js';
 import { sanitizeForTTS, voiceService } from '../../services/voiceService';
 import { generateWalkthroughNarrations } from '../../services/walkthroughLlmNarrator';
@@ -7,7 +7,7 @@ import { DrillMode } from './DrillMode';
 import { PracticeMode } from './PracticeMode';
 import { OpeningPlayMode } from './OpeningPlayMode';
 import { TrainMode } from './TrainMode';
-import { WalkthroughMode } from './WalkthroughMode';
+import { buildStepsFromPgn } from '../../services/walkthroughAdapter';
 import { MasteryRing } from './MasteryRing';
 import { MiniBoard } from '../Board/MiniBoard';
 import { MiddlegamePlansSection, type MiddlegameAction } from './MiddlegamePlansSection';
@@ -195,7 +195,7 @@ import {
 } from '../../services/srsOpeningService';
 import { narrateOpeningSection } from '../../services/openingSectionNarrator';
 import { useStarAnimationStore } from '../../stores/starAnimationStore';
-import type { OpeningRecord, MiddlegamePlan, ModelGame } from '../../types';
+import type { OpeningRecord, MiddlegamePlan, ModelGame, OpeningVariation, PlayableMiddlegameLine } from '../../types';
 import {
   ArrowLeft,
   BookOpen as LearnIcon,
@@ -272,6 +272,36 @@ function computeFenFromPgn(pgn: string, setupFen?: string): string {
     }
   }
   return chess.fen();
+}
+
+const STANDARD_START_FEN =
+  'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+
+/**
+ * Convert a non-curated trap / warning line into a standard
+ * `PlayableMiddlegameLine` so it plays on the normal masterclass board
+ * (`PlayableLinePlayer`) instead of the deleted legacy WalkthroughMode
+ * (David 2026-05-31: "remove that old walkthrough board ... completely
+ * gone"). chess.js is the truth for SAN. Per-move annotations are left
+ * empty — `PlayableLinePlayer` then falls back to plain move dictation,
+ * the sanctioned non-curated voice path — which is honest silence
+ * vs. the board-inaccurate auto-annotations WalkthroughMode used to
+ * synthesise (G9.3). The line's `explanation` frames the intro.
+ */
+function trapLineToFallbackPlayableLine(
+  line: OpeningVariation,
+): PlayableMiddlegameLine | null {
+  const steps = buildStepsFromPgn({ pgn: line.pgn, startFen: line.setupFen });
+  if (steps.length === 0) return null;
+  const moves = steps.map((s) => s.san);
+  return {
+    fen: line.setupFen ?? STANDARD_START_FEN,
+    moves,
+    annotations: moves.map(() => ''),
+    arrows: moves.map(() => []),
+    title: line.name,
+    intro: line.explanation ? { say: line.explanation } : undefined,
+  };
 }
 
 export function OpeningDetailPage(): JSX.Element {
@@ -663,13 +693,14 @@ export function OpeningDetailPage(): JSX.Element {
     }
   }
   if (viewMode === 'walkthrough' || viewMode === 'variation-walkthrough') {
-    return (
-      <WalkthroughMode
-        opening={opening}
-        variationIndex={viewMode === 'variation-walkthrough' ? activeVariationIndex : undefined}
-        onExit={handleExit}
-      />
-    );
+    // No curated lesson for this opening (the ~3,000 DB-only openings).
+    // The legacy WalkthroughMode board is gone (David 2026-05-31) — hand
+    // off to /coach/teach, the one play UI, which builds the walkthrough
+    // from DB narration on the standard board with the chat panel.
+    const params = new URLSearchParams();
+    params.set('opening', opening.name);
+    params.set('orientation', opening.color);
+    return <Navigate to={`/coach/teach?${params.toString()}`} replace />;
   }
 
   // Named-trap masterclass lesson (hand-authored show -> snap-back beats,
@@ -843,10 +874,11 @@ export function OpeningDetailPage(): JSX.Element {
                         : opening.id === 'pro-naroditsky-fantasy-caro'
                           ? getProNaroditskyFantasyTrapPlayableLine(trap.name)
                           : null;
-    if (curated) {
+    const fallback = curated ?? trapLineToFallbackPlayableLine(trap);
+    if (fallback) {
       return (
         <PlayableLinePlayer
-          line={curated}
+          line={fallback}
           boardOrientation={opening.color}
           mode="watch"
           onComplete={handleExit}
@@ -854,12 +886,12 @@ export function OpeningDetailPage(): JSX.Element {
         />
       );
     }
+    // Unparseable line (shouldn't happen for real trap data) — bail to
+    // the standard Learn board rather than a dead end.
     return (
-      <WalkthroughMode
-        opening={opening}
-        customLine={trap}
-        subLineKey={`trap-${activeTrapLineIndex}`}
-        onExit={handleExit}
+      <Navigate
+        to={`/coach/teach?opening=${encodeURIComponent(opening.name)}&orientation=${opening.color}`}
+        replace
       />
     );
   }
@@ -887,10 +919,11 @@ export function OpeningDetailPage(): JSX.Element {
                         : opening.id === 'pro-naroditsky-fantasy-caro'
                           ? getProNaroditskyFantasyTrapPlayableLine(warn.name)
                           : null;
-    if (curated) {
+    const fallback = curated ?? trapLineToFallbackPlayableLine(warn);
+    if (fallback) {
       return (
         <PlayableLinePlayer
-          line={curated}
+          line={fallback}
           boardOrientation={opening.color}
           mode="watch"
           onComplete={handleExit}
@@ -898,12 +931,12 @@ export function OpeningDetailPage(): JSX.Element {
         />
       );
     }
+    // Unparseable line (shouldn't happen for real trap data) — bail to
+    // the standard Learn board rather than a dead end.
     return (
-      <WalkthroughMode
-        opening={opening}
-        customLine={warn}
-        subLineKey={`warning-${activeWarningLineIndex}`}
-        onExit={handleExit}
+      <Navigate
+        to={`/coach/teach?opening=${encodeURIComponent(opening.name)}&orientation=${opening.color}`}
+        replace
       />
     );
   }

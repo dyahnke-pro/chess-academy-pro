@@ -42,10 +42,7 @@ import {
 } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { parseCoachIntent } from '../../services/coachAgent';
-import { findPlansForOpening, sessionFromPlan } from '../../services/middlegamePlanner';
-import { MiddlegamePlanInline } from './MiddlegamePlanInline';
-import { OpeningPlayMode } from '../Openings/OpeningPlayMode';
-import type { WalkthroughSession } from '../../types/walkthrough';
+import { findPlansForOpening, buildPlanWalkthroughTree } from '../../services/middlegamePlanner';
 import { classifyPhase } from '../../services/gamePhaseService';
 import { useDiscussionPractice } from '../../hooks/useDiscussionPractice';
 import { getNeonColor, scaledShadow } from '../../utils/neonColors';
@@ -264,40 +261,6 @@ function buildDeepDiveQuery(
   return `${parentName}, ${fallbackLabel}`;
 }
 
-/**
- * Build a minimal OpeningRecord so OpeningPlayMode can play out a
- * middlegame-plan position in-page. OpeningPlayMode derives the
- * student's color from the FEN side-to-move and (with no customLine)
- * plays adaptive Stockfish from `startFen`, so most fields are stubs.
- */
-function syntheticOpeningFromSession(session: WalkthroughSession): OpeningRecord {
-  const fen = session.startFen ?? STARTING_FEN;
-  const color: 'white' | 'black' = fen.split(' ')[1] === 'b' ? 'black' : 'white';
-  return {
-    id: `play-out-${session.kind ?? 'plan'}`,
-    eco: '',
-    name: session.title,
-    pgn: session.steps.map((s) => s.san).join(' '),
-    uci: '',
-    fen,
-    color,
-    style: '',
-    isRepertoire: false,
-    overview: null,
-    keyIdeas: null,
-    traps: null,
-    warnings: null,
-    variations: null,
-    drillAccuracy: 0,
-    drillAttempts: 0,
-    lastStudied: null,
-    woodpeckerReps: 0,
-    woodpeckerSpeed: null,
-    woodpeckerLastDate: null,
-    isFavorite: false,
-  };
-}
-
 export function CoachTeachPage(): JSX.Element {
   const navigate = useNavigate();
   // Quick Tour mode: ?mode=tour in the URL flips lessons into a
@@ -318,46 +281,19 @@ export function CoachTeachPage(): JSX.Element {
   }, [pace, searchParams, setSearchParams]);
   const activeProfile = useAppStore((s) => s.activeProfile);
 
-  // In-page middlegame plan (David 2026-05-29): when the student asks
-  // "middle game plans in the Pirc" we resolve the opening's AUTHORED
-  // plans and play them HERE, on the Learn-with-Coach board — never a
-  // route hand-off. `middlegameSession` is the active plan; when an
-  // opening carries more than one plan, `middlegamePlanChoices` holds
-  // the picker options (tap to start one).
-  const [middlegameSession, setMiddlegameSession] = useState<WalkthroughSession | null>(null);
+  // Middlegame plan (David 2026-05-29 → unified 2026-05-31): when the
+  // student asks "middle game plans in the Pirc" we resolve the
+  // opening's AUTHORED plans and play them HERE, on the big
+  // Learn-with-Coach board — never a route hand-off or a separate
+  // runner. When an opening carries more than one plan,
+  // `middlegamePlanChoices` holds the picker options (tap to start one).
+  // `startMiddlegamePlan` is defined below, once `walkthrough` exists,
+  // since it drives the plan through the same `useTeachWalkthrough`
+  // runtime that powers opening walkthroughs.
   const [middlegamePlanChoices, setMiddlegamePlanChoices] = useState<{
     plans: MiddlegamePlan[];
     side: 'white' | 'black';
   } | null>(null);
-  const startMiddlegamePlan = useCallback((plan: MiddlegamePlan, orientation: 'white' | 'black'): void => {
-    const session = sessionFromPlan(plan, { orientation });
-    if (!session) return;
-    setMiddlegamePlanChoices(null);
-    setMiddlegameSession(session);
-    void logAppAudit({
-      kind: 'coach-surface-migrated',
-      category: 'subsystem',
-      source: 'CoachTeachPage.startMiddlegamePlan',
-      summary: `in-page middlegame plan started: ${plan.id} (${plan.openingId})`,
-    });
-  }, []);
-
-  // "Play it out" — at the end of an in-page plan the student can play
-  // the position out against the coach WITHOUT leaving this tab (David
-  // 2026-05-29). We mount OpeningPlayMode (its own board + Stockfish,
-  // color derived from the FEN side-to-move) from the plan's starting
-  // position. `playOutSession` holds the session whose startFen we play.
-  const [playOutSession, setPlayOutSession] = useState<WalkthroughSession | null>(null);
-  const handlePlayOutPlan = useCallback((session: WalkthroughSession): void => {
-    setMiddlegameSession(null);
-    setPlayOutSession(session);
-    void logAppAudit({
-      kind: 'coach-surface-migrated',
-      category: 'subsystem',
-      source: 'CoachTeachPage.handlePlayOutPlan',
-      summary: `in-page play-out started from plan position ("${session.title}")`,
-    });
-  }, []);
 
   // Game state via the canonical hook — same primitive Play uses. Gives
   // us click-to-move + legal dots + drag, plus loadFen/resetGame/undoMove
@@ -370,6 +306,29 @@ export function CoachTeachPage(): JSX.Element {
   // navigate-to-/coach/session/walkthrough flow that lost the chat
   // panel. See `useTeachWalkthrough` + `data/openingWalkthroughs/`.
   const walkthrough = useTeachWalkthrough();
+
+  // Start an authored middlegame plan on THIS board. We convert the
+  // plan into a linear, derived WalkthroughTree and drive it through the
+  // same `useTeachWalkthrough` runtime as opening walkthroughs — so it
+  // animates on the big board with identical lead-the-eye arrows +
+  // highlights, voice-gated advance, and WalkthroughControls. One
+  // consistent play UI everywhere (David 2026-05-31), never the old
+  // cramped runner.
+  const startMiddlegamePlan = useCallback(
+    (plan: MiddlegamePlan, orientation: 'white' | 'black'): void => {
+      const tree = buildPlanWalkthroughTree(plan, orientation);
+      if (!tree) return;
+      setMiddlegamePlanChoices(null);
+      walkthrough.start(tree);
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'CoachTeachPage.startMiddlegamePlan',
+        summary: `middlegame plan played on Learn board: ${plan.id} (${plan.openingId})`,
+      });
+    },
+    [walkthrough],
+  );
 
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [streaming, setStreaming] = useState<string | null>(null);
@@ -1107,9 +1066,11 @@ export function CoachTeachPage(): JSX.Element {
       // unreachable. parseCoachIntent already classifies this as
       // continue-middlegame and pulls an optional subject; we resolve
       // the subject (explicit, else the in-context walkthrough opening)
-      // and hand off to /coach/session/middlegame, which owns the plan
-      // runner (lead-the-eye arrows + voice-gated advance). This runs
-      // BEFORE the fuzzy matcher so the garbage match can't happen.
+      // and play the authored plan HERE on the big board via
+      // `startMiddlegamePlan` → `walkthrough.start` (the same runtime as
+      // opening walkthroughs: lead-the-eye arrows + voice-gated advance).
+      // This runs BEFORE the fuzzy matcher so the garbage match can't
+      // happen.
       {
         const intent = parseCoachIntent(text);
         if (intent.kind === 'continue-middlegame') {
@@ -2736,6 +2697,42 @@ export function CoachTeachPage(): JSX.Element {
       //
       // Per WO spec: do NOT auto-launch the walkthrough. The student
       // confirms by typing "yes" / "start" / tapping a Start button.
+      // Middlegame-plan deep link (David 2026-05-31): arriving via
+      // `/coach/teach?plans=<opening>` (from global search / the coach
+      // session router) auto-runs the opening's AUTHORED plans HERE on
+      // the big board — single plan plays straight away, multiple plans
+      // raise the picker. This replaces the old hand-off to
+      // /coach/session/middlegame's bare runner.
+      const planSubject = searchParams.get('plans');
+      if (planSubject) {
+        const plans = findPlansForOpening(planSubject);
+        if (plans.length > 0) {
+          const side = inferStudentSide(planSubject);
+          setKickoffStatus(null);
+          if (plans.length === 1) {
+            startMiddlegamePlan(plans[0], side);
+          } else {
+            const label = planSubject.trim();
+            const prose = `The ${label} has ${plans.length} middlegame plans. Pick one to walk through:`;
+            setMessages((prev) => [...prev, {
+              id: `t-${Date.now()}-mg-deeplink`,
+              role: 'assistant',
+              content: prose,
+              timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach',
+              role: 'coach',
+              text: prose,
+              fen: gameRef.current.fen,
+              trigger: null,
+            });
+            setMiddlegamePlanChoices({ plans, side });
+          }
+          return;
+        }
+      }
+
       const rolodexOpening = searchParams.get('opening');
       const welcomeLine = rolodexOpening
         ? `Ready to start the ${rolodexOpening.trim()} walkthrough?`
@@ -2777,34 +2774,10 @@ export function CoachTeachPage(): JSX.Element {
       className="relative flex flex-col md:flex-row h-full overflow-hidden pb-[calc(6.5rem+env(safe-area-inset-bottom,0px))] md:pb-0"
       data-testid="coach-teach-page"
     >
-      {/* In-page middlegame plan (David 2026-05-29). When the student
-          asks for an opening's middlegame plans we play them HERE, on
-          this board — not via a route hand-off. Full-bleed overlay so
-          it owns the screen while the plan runs; "Lesson" returns. */}
-      {middlegameSession && (
-        <MiddlegamePlanInline
-          session={middlegameSession}
-          onExit={() => setMiddlegameSession(null)}
-          onPlayOut={handlePlayOutPlan}
-        />
-      )}
-      {/* In-page play-out (David 2026-05-29): after a plan, the student
-          can play the position out against the coach from its starting
-          position WITHOUT leaving this tab. OpeningPlayMode owns its own
-          board + adaptive Stockfish; "Back" returns to the lesson. */}
-      {playOutSession && (
-        <div className="absolute inset-0 z-40 bg-theme-bg overflow-y-auto" data-testid="coach-teach-playout">
-          <OpeningPlayMode
-            opening={syntheticOpeningFromSession(playOutSession)}
-            startFen={playOutSession.startFen}
-            onExit={() => setPlayOutSession(null)}
-          />
-        </div>
-      )}
       {/* Plan picker — shown when the opening carries more than one
           authored plan (the Pirc has 8). Tap a chip to start that
-          variation's plan in-page. */}
-      {middlegamePlanChoices && !middlegameSession && (
+          variation's plan on the big board via `walkthrough.start`. */}
+      {middlegamePlanChoices && !walkthrough.isActive && (
         <div
           className="absolute inset-0 z-30 flex flex-col justify-end bg-black/40"
           data-testid="middlegame-plan-picker"

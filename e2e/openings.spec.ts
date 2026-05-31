@@ -20,8 +20,9 @@ import { Chess } from 'chess.js';
  *   - Detail page renders: header (with mastery ring + back), Watch/
  *     Learn/Practice/Play 4-button row, Overview, Key Ideas,
  *     Variations, and (when present) Traps with a train button.
- *   - Variation walkthrough mounts (`walkthrough-mode`) when a
- *     variation row is clicked.
+ *   - Variation walkthrough mounts the curated lesson player
+ *     (`lesson-player`) when a variation row is clicked (the legacy
+ *     WalkthroughMode board was removed 2026-05-31).
  *   - Favorite toggle round-trips through Dexie (heart fills, returns
  *     after navigating away and back).
  *   - Pro flow: Pro tab → ProPlayerPage → ProDetail → back routes to
@@ -376,21 +377,24 @@ test.describe('Openings Hub — full-tab audit', () => {
     expect(rec.pageErrors).toEqual([]);
   });
 
-  test('clicking a variation walkthrough enters walkthrough mode', async ({ page }) => {
+  test('clicking a variation walkthrough opens the curated lesson player', async ({ page }) => {
+    // The legacy WalkthroughMode board is gone (David 2026-05-31). A
+    // masterclass variation Watch now mounts the curated LessonPlayer
+    // (`lesson-player`) on the standard board.
     const rec = recordPage(page);
     await gotoFirstRepertoire(page);
     await page.getByTestId('variation-walkthrough-0').click();
-    await expect(page.getByTestId('walkthrough-mode')).toBeVisible({ timeout: 8000 });
-    await expect(page.getByTestId('walkthrough-back')).toBeVisible();
-    await expect(page.getByTestId('walkthrough-progress')).toBeVisible();
+    await expect(page.getByTestId('lesson-player')).toBeVisible({ timeout: 8000 });
+    await expect(page.getByTestId('lesson-back')).toBeVisible();
+    await expect(page.getByTestId('lesson-progress')).toBeVisible();
     expect(rec.pageErrors).toEqual([]);
   });
 
-  test('clicking the top-level Watch button enters walkthrough mode', async ({ page }) => {
+  test('clicking the top-level Watch button opens the curated lesson player', async ({ page }) => {
     const rec = recordPage(page);
     await gotoFirstRepertoire(page);
     await page.getByTestId('walkthrough-btn').click();
-    await expect(page.getByTestId('walkthrough-mode')).toBeVisible({ timeout: 8000 });
+    await expect(page.getByTestId('lesson-player')).toBeVisible({ timeout: 8000 });
     expect(rec.pageErrors).toEqual([]);
   });
 
@@ -488,15 +492,15 @@ test.describe('Openings Hub — full-tab audit', () => {
 
   // ─── Train traps / Walkthrough mode ──────────────────────────────
 
-  test('walkthrough-mode play/pause + speed controls render', async ({ page }) => {
+  test('lesson player controls render and Back returns to detail', async ({ page }) => {
     const rec = recordPage(page);
     await gotoFirstRepertoire(page);
     await page.getByTestId('walkthrough-btn').click();
-    await expect(page.getByTestId('walkthrough-mode')).toBeVisible({ timeout: 8000 });
-    await expect(page.getByTestId('walkthrough-play-pause')).toBeVisible();
-    await expect(page.getByTestId('walkthrough-speed-toggle')).toBeVisible();
-    // Back exits walkthrough back to the detail page.
-    await page.getByTestId('walkthrough-back').click();
+    await expect(page.getByTestId('lesson-player')).toBeVisible({ timeout: 8000 });
+    await expect(page.getByTestId('lesson-play-pause')).toBeVisible();
+    await expect(page.getByTestId('lesson-next')).toBeVisible();
+    // Back exits the lesson back to the detail page.
+    await page.getByTestId('lesson-back').click();
     await expect(page.getByTestId('opening-detail')).toBeVisible();
     expect(rec.pageErrors).toEqual([]);
   });
@@ -639,7 +643,7 @@ test.describe('Openings Hub — full-tab audit', () => {
     expect(rec.pageErrors).toEqual([]);
   });
 
-  test('Walkthrough play/pause toggle flips the aria-label deterministically', async ({ page }) => {
+  test('Lesson play/pause toggle flips the aria-label deterministically', async ({ page }) => {
     // Headless Chrome's SpeechSynthesis is unreliable, so we can't
     // assert auto-advance produces a progress-counter change in a
     // bounded window — voice-promise resolution can stall
@@ -650,8 +654,8 @@ test.describe('Openings Hub — full-tab audit', () => {
     const rec = recordPage(page);
     await gotoFirstRepertoire(page);
     await page.getByTestId('walkthrough-btn').click();
-    await expect(page.getByTestId('walkthrough-mode')).toBeVisible({ timeout: 10_000 });
-    const btn = page.getByTestId('walkthrough-play-pause');
+    await expect(page.getByTestId('lesson-player')).toBeVisible({ timeout: 10_000 });
+    const btn = page.getByTestId('lesson-play-pause');
     const labelBefore = await btn.getAttribute('aria-label');
     await btn.click();
     // Toggle is synchronous React state — give it a frame to apply
@@ -659,7 +663,7 @@ test.describe('Openings Hub — full-tab audit', () => {
     // until it differs (up to 5s).
     await page.waitForFunction(
       (initial) => {
-        const el = document.querySelector('[data-testid="walkthrough-play-pause"]');
+        const el = document.querySelector('[data-testid="lesson-play-pause"]');
         return el?.getAttribute('aria-label') !== initial;
       },
       labelBefore,
