@@ -6774,5 +6774,23 @@
     "middlegameTheme": "Punish the early ...Qh4 with tempo-gaining development.",
     "lessonSummary": "Meet ...Qh4 with Nb5/c3/g3 and develop with tempo.",
     "variation": "Scotch: 4...Qh4 (Steinitz Variation)"
+  },
+  {
+    "id": "mg-four-knights-spanish-metger",
+    "openingId": "four-knights-game",
+    "white": "Yu Yangyi",
+    "black": "Mamedyarov, S.",
+    "whiteElo": 2752,
+    "blackElo": 2764,
+    "result": "1-0",
+    "year": 2019,
+    "event": "Saint Louis Rapid 2019",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O d3 d6 Ne2 Ne7 c3 Ba5 Ng3 Ng6 d4 c6 Bd3 Re8 h3 h6 a4 exd4 cxd4 c5 Bd2 cxd4 Nxd4 Bb6 Bc3 d5 Bb5 Rxe4 Nxe4 Nxe4 Nf3 a6 Bd3 Nxc3 bxc3 Nf4 Re1 Bd7 Bf1 Rc8 c4 dxc4 Re4 g5 Rxc4 Rxc4 Bxc4 Qc7 Rc1 Nxh3+ Kf1 Qf4 Rc3 Bf5 Bxf7+ Kxf7 Qb3+ Kg6 Qxb6+ Kh5 gxh3 Qxa4 Qd4 Bxh3+ Kg1 Qa1+ Kh2 Qf1 Ne1 Bg4 Qe3 Qb5 Ng2 Qd7 Qe5 Qf5 Qe8+ Qg6 Nf4+",
+    "studentSide": "white",
+    "overview": "Yu Yangyi shows the Spanish Four Knights is no dead draw: the symmetrical setup gives White a slight, lasting initiative, the Ne2-g3 reroute eyes f5, and patient play converts the small edge against Mamedyarov. A model of squeezing the quiet Metger structure.",
+    "criticalMoments": [],
+    "middlegameTheme": "Symmetrical structure, the Ne2-g3-f5 reroute.",
+    "lessonSummary": "Reroute Ne2-g3 toward f5 and press the small edge.",
+    "variation": "Symmetrical Variation: 4.Bb5 Bb4"
   }
 ]

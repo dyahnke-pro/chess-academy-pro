@@ -7357,20 +7357,25 @@
     "id": "mp-fourknightsgame-main",
     "openingId": "four-knights-game",
     "title": "Spanish Four Knights: the Bishop Pair and the d4-d5 Space",
-    "criticalPositionFen": "r1b2rk1/pp2qppp/3pnn2/1Bp1p3/3PP3/2P2N2/P1P2PPP/R1BQR1K1 w - - 0 12",
+    "criticalPositionFen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
     "overview": "The Metger middlegame: White owns the bishop pair after Bxc3 and the doubled c-pawns control extra central squares. The plan is to regroup the bishops, gain space with d4-d5, and slowly open the position where the two bishops outgun Black's bishop and knight.",
     "pawnBreaks": [
       {
-        "move": "d4-d5",
-        "explanation": "The d5 thrust gains space, cramps Black, and frees the long diagonal for the bishop pair.",
-        "fen": "r1b2rk1/pp2qppp/3pnn2/1Bp1p3/3PP3/2P2N2/P1P2PPP/R1BQR1K1 w - - 0 12"
+        "move": "d3-d4 — the central break",
+        "explanation": "Once the knight reaches f5, White can break with d4 to open the position for the better-placed pieces.",
+        "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4"
       }
     ],
     "pieceManeuvers": [
       {
+        "piece": "Knight",
+        "route": "Nc3-e2-g3 — toward the f5-outpost",
+        "explanation": "The reroute toward f5 is the engine of White’s initiative in the Metger."
+      },
+      {
         "piece": "Bishop",
-        "route": "Bb5-f1-g2",
-        "explanation": "The Spanish bishop regroups to f1 and then g2, where it rakes the long light diagonal once the centre opens."
+        "route": "Bf1-b5 — pin the knight",
+        "explanation": "The Spanish bishop pins and pressures the c6-knight."
       }
     ],
     "strategicThemes": [
@@ -7383,57 +7388,40 @@
     ],
     "playableLines": [
       {
-        "title": "Spanish Four Knights: the Bishop Pair and the d4-d5 Space",
-        "fen": "r1b2rk1/pp2qppp/3pnn2/1Bp1p3/3PP3/2P2N2/P1P2PPP/R1BQR1K1 w - - 0 12",
+        "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
         "moves": [
-          "Bf1",
-          "Rd8",
-          "g3",
-          "Qc7",
-          "d5",
-          "Nf8"
+          "Bb5",
+          "Bb4",
+          "O-O",
+          "O-O",
+          "d3",
+          "d6",
+          "Ne2",
+          "Ne7"
         ],
         "annotations": [
-          "Bf1 — the bishop regroups to f1, ready to swing out to the long diagonal once the centre opens.",
-          "…Rd8 — Black centralises a rook on d8 behind the d6-pawn.",
-          "g3 — White builds a kingside pawn shield on g3 and prepares f4 later.",
-          "…Qc7 — the queen drops to c7, eyeing the e5-pawn and the c-file.",
-          "d5! — the space-gaining thrust; the pawn on d5 cramps Black and frees the bishop pair.",
-          "…Nf8 — the e6-knight retreats to f8 to regroup."
-        ],
-        "sources": [
-          "book:four-knights-game",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Four_Knights_Game"
-        ],
-        "learnCues": [
-          "Bf1 — regroup the bishop",
-          "Rd8 — centralise behind d6",
-          "g3 — kingside shield, prep f4",
-          "Qc7 — eye e5 and the c-file",
-          "d5 — the space-gaining thrust",
-          "Nf8 — regroup the knight"
+          "Bb5 pins the c6-knight, the Spanish Four Knights setup aiming for a slight, lasting pull.",
+          "…Bb4 mirrors, the symmetrical Metger response.",
+          "White castles.",
+          "…O-O — Black castles too, the position perfectly symmetrical.",
+          "d3 supports the centre and unblocks the c1-bishop, the quiet main line.",
+          "…d6 mirrors again.",
+          "Ne2! White breaks the symmetry first, rerouting the knight toward g3 and the f5-outpost — the key plan that gives White the initiative.",
+          "…Ne7 copies the idea, but White is a tempo ahead in the maneuvering race. The Ng3-f5 plan, the bishop pair, and the slight initiative give White the easier game — Yu Yangyi outplayed Mamedyarov from here."
         ],
         "arrows": [
           [],
-          [
-            {
-              "from": "d8",
-              "to": "d6",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
           [],
           [],
           [],
           []
         ],
+        "title": "The Spanish Four Knights (Yu Yangyi–Mamedyarov)",
         "highlights": [
           [
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "b5",
               "color": "rgba(255, 165, 0, 0.55)"
@@ -7441,66 +7429,62 @@
           ],
           [
             {
-              "square": "d8",
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "f8",
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
             {
               "square": "d6",
-              "color": "rgba(255, 235, 59, 0.5)"
+              "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "g3",
+              "square": "e2",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
-            {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "d5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "f8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e6",
-              "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
+        ],
+        "intro": "White reroutes the knight toward f5 to press the edge.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Four_Knights_Game"
+        ],
+        "learnCues": [
+          "Bb5 — the Spanish pin",
+          "…Bb4 — mirror",
+          "O-O — White castles",
+          "…O-O — Black castles",
+          "d3 — support the centre",
+          "…d6 — mirror",
+          "Ne2 — reroute toward f5 first",
+          "…Ne7 — Black copies, a tempo behind"
         ]
       }
     ]
