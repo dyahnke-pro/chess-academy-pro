@@ -3363,6 +3363,26 @@ export const GEM_NARRATION: Record<string, GemNarration> = {
     learn: ['', '', '', '', '', '', '', '', '', '', '', 'Nh5 — reroute to g3.', '', 'Ng3 — fork the rook.', '', '', 'c5 — strike the centre.', '', 'Bxc3 — double the pawns, Black is better.'],
     sources: ['concept:pos-weak-square', 'concept:pos-outpost', 'https://www.chess.com/openings/Kings-Indian-Defense-Four-Pawns-Attack'],
   },
+
+  // ── Pro-rep gems batch 3 (Alapin, White) ──
+  // Naroditsky Alapin: the …Be7 slip lets Nb5 invade the d6 hole (confirmed +1.0).
+  'pro-naroditsky-alapin:e4_c5_c3_d5_exd5_Qxd5_d4_Nf6_Nf3_e6_Na3_Nc6_Be3:Be7': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '…Be7? — natural, but it abandons the d6-square the knight is itching for.', 'Nb5 — the knight invades, heading for the d6 outpost in Black’s camp.', '…Qd8 — the queen retreats.', 'dxc5 — White grabs a pawn and opens lines.', '', 'Bc4 — the bishop joins, eyeing f7.', '', 'Nd6 — the knight lands on the dominant d6 outpost; White is clearly better.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Nb5 — head for d6.', 'Qd8 — retreat.', 'dxc5 — grab, open lines.', '', 'Bc4 — eye f7.', '', 'Nd6 — seize the outpost.', ''],
+    sources: ['concept:pos-outpost', 'concept:pos-center', 'https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation'],
+  },
+  // Naroditsky Alapin: …Bd6?? walks into Bc4 and Bxd5 winning the queen (confirmed +4.97).
+  'pro-naroditsky-alapin:e4_c5_c3_d5_exd5_Qxd5_d4_Nf6_Nf3_e6_Na3_Nc6_Be3_cxd4_Nb5:Bd6': {
+    watch: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '…Bd6?? — defending b8, but it leaves the d5-queen undefended on the c4-bishop’s diagonal.', 'Bc4! — the bishop hits the queen with a discovered idea: the queen has no safe square that holds everything.', '…Bb8 — Black tries to wriggle.', 'Bxd5 — White simply takes the queen; the rest is mopping up.', '', 'Bxc6+ — picking up another piece with check.', '', 'Nbd4 — White is up a queen, completely winning.', ''],
+    learn: ['', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'Bc4 — hit the queen!', 'Bb8 — wriggle.', 'Bxd5 — take the queen.', '', 'Bxc6+ — grab more.', '', 'Nbd4 — White is winning.', ''],
+    sources: ['concept:tac-discovered-attack', 'concept:pos-material', 'https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation'],
+  },
+  // Naroditsky Alapin: …Be6 allows Qb3 hitting b7 and the pinned bishop, winning a pawn.
+  'pro-naroditsky-alapin:e4_c5_c3_Nf6_e5_Nd5_Nf3_d6_Bc4:Be6': {
+    watch: ['', '', '', '', '', '', '', '', '', '…Be6? — offering a trade, but it lets the queen swing out with tempo.', 'Qb3 — hitting both the b7-pawn and the e6-bishop pinned against it.', '…Nf4 — Black tries to muddy it.', 'Bxe6 — trading first.', '…Nxe6 — recapturing.', 'Qxb7 — White snaps the b7-pawn; a clean pawn up with the initiative.', '', '', '…dxe5 — Black opens lines, but White is a pawn up and better.'],
+    learn: ['', '', '', '', '', '', '', '', '', '', 'Qb3 — hit b7 and the bishop.', 'Nf4 — muddy it.', 'Bxe6 — trade first.', 'Nxe6 — recapture.', 'Qxb7 — grab the pawn.', '', '', 'dxe5 — White is a pawn up.'],
+    sources: ['concept:tac-double-attack', 'concept:pos-material', 'https://www.chess.com/openings/Sicilian-Defense-Alapin-Variation'],
+  },
 };
 
 export function getGemNarration(gemId: string): GemNarration | null {
