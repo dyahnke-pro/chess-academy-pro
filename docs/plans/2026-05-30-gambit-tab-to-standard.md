@@ -146,11 +146,28 @@ pre-masterclass surface; the good builds sit one id away on the Masterclass tab.
        - [x] Stafford / Englund — trap-only (sharp; no clean endgame — correct).
        **GROUP B endgame plans DONE** (where the data supports a clean equal-or-better student slice).
        Every plan engine-verified ≥ −30cp at the slice end (David: winning OR equal, never losing).
-       - [ ] **THE BIG REMAINING LIFT — LessonScripts (G9.3 Gate A) for all 7.** Without a
-             registered LessonScript each Group B Watch still falls to legacy WalkthroughMode.
-             Per opening: author main + per-variation LessonScripts on the STEP-2/3 data
-             spines TRIMMED to the sound terminus (never author past −1.2). Stafford/Englund
-             lessons teach the WINNING trap lines (already re-anchored in gambits.json).
+       - [~] **LessonScripts (G9.3 Gate A).** PROVEN RECIPE (Smith-Morra, 9804e00, all
+             5 lesson gates green / 3278 tests):
+             1. `data/sources/opening-spines/<v>.json` → take the spine; find the deepest
+                ply that is still SOUND for the student (engine ≥ −0.5) AND ≥20 plies
+                (lessonDepth). The sharp tactical TAIL stays in the variation tabs/gems.
+             2. Verify piece placements at the terminus FEN with chess.js (the `board` dump)
+                so every hyphenated `<sq>-<piece>` claim is true (narrationAccuracy only
+                checks hyphenated claims; prose form is free).
+             3. Copy `smithMorraGambit.ts` shape: `b({id,moves,say,sayShort,arrows,highlights})`,
+                cumulative SAN in `moves`, ≤8-word `sayShort`, ARROWS only from a real piece
+                with a CLEAR sight-line (lessonIntegrity) — e.g. Bb3→e6 (c4,d5 empty), never
+                through a pawn. SRC = concept:* + a wikipedia/chess.com URL.
+             4. Register in `index.ts` LESSONS map (import + `[LESSON.openingId]: LESSON`).
+             5. Run the 5 gates: lessonIntegrity, narrationAccuracy, lessonDepth,
+                wlppNarration, lessonSources + tsc.
+             - [x] smith-morra-gambit (+0.79 full-comp middlegame). 9804e00
+             - [ ] scotch-gambit (+31), vienna-gambit (+82), danish-gambit (comp ~−0.7),
+                   marshall-attack (comp ~−1.1, black). Trim each spine to its sound ≥20-ply point.
+             - [ ] stafford-gambit / englund-gambit: lesson = the WINNING trap line already in
+                   gambits.json (Stafford h3→Bxf2+ queen win; Englund Qb4+ raid). Use `kind:'roadmap'`
+                   if <20 plies (sharp trap resolves early — like the Budapest Adler/Fajarowicz subs).
+             - [ ] per-variation LessonScripts (the tab set from STEP 2/3) — same recipe.
        - [ ] Group B model games (student-side wins) + pitfalls (common-mistakes) per opening.
        - [ ] Rebuild the shallow gambit-plans.json MG plans (currently ~+24 generic) on the
              real wide-corpus forks (≥8 ply, all plans the data shows), anchored at spine terminus.
