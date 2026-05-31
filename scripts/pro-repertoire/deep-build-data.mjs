@@ -222,6 +222,21 @@ const OPENINGS = {
       'nf6-e6-sub':   { label: '2...Nf6 spine, Black\'s 4...e6 (185 games)',      prefix: ['e4','c5','c3','Nf6','e5','Nd5','Nf3','e6'] },
     },
   },
+  // ── Hikaru Nimzo-Larsen (1.b3) — 7,481 games, 87.3%, data-discovered tabs ──
+  'nimzo-larsen': {
+    color: 'white',
+    studentUsername: 'Hikaru',
+    variations: {
+      'e5-main':  { label: '1...e5 (main)',          prefix: ['b3','e5','Bb2','Nc6','e3'] },
+      'd5':       { label: '1...d5 (1848 games)',    prefix: ['b3','d5','Bb2'] },
+      'nf6':      { label: '1...Nf6 (1709 games)',   prefix: ['b3','Nf6','Bb2'] },
+      'c5':       { label: '1...c5 (415 games)',     prefix: ['b3','c5','Bb2'] },
+      'b6':       { label: '1...b6 symmetric (392 games)', prefix: ['b3','b6','Bb2'] },
+      'g6':       { label: '1...g6 (300 games)',     prefix: ['b3','g6','Bb2'] },
+      'e6':       { label: '1...e6 (287 games)',     prefix: ['b3','e6','Bb2'] },
+      'd6':       { label: '1...d6 (196 games)',     prefix: ['b3','d6','Bb2'] },
+    },
+  },
 };
 
 const opening = OPENINGS[OPENING_ID];
