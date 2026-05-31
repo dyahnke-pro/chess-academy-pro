@@ -91,12 +91,15 @@ for (const dir of ['gothamchess-deep', 'danielnaroditsky-deep']) {
 }
 console.error(`after deep-build games: grounded ${grounded.size}/${shortCount}`);
 
-// 2) raw chess.com archive (Gotham) for the remainder
-const arch = 'data/sources/gothamchess-chesscom';
-if (fs.existsSync(arch)) {
-  let scanned = 0;
+// 2) raw chess.com archives (both pros) for the remainder
+const ARCHIVES = [
+  { dir: 'data/sources/gothamchess-chesscom', re: /gothamchess/i },
+  { dir: 'data/sources/danielnaroditsky-chesscom', re: /naroditsky/i },
+];
+let scanned = 0;
+for (const { dir: arch, re } of ARCHIVES) {
+  if (!fs.existsSync(arch)) continue;
   for (const file of fs.readdirSync(arch).filter((x) => x.endsWith('.jsonl'))) {
-    if (grounded.size >= shortCount) break;
     for (const line of fs.readFileSync(path.join(arch, file), 'utf8').split('\n')) {
       if (!line.trim()) continue;
       let game; try { game = JSON.parse(line); } catch { continue; }
@@ -105,13 +108,13 @@ if (fs.existsSync(arch)) {
       if (scanned % 25000 === 0) { console.error(`  …${scanned} archive games, grounded ${grounded.size}`); fs.writeFileSync('audit-reports/grounded-plan-lines.json', JSON.stringify(result, null, 2)); }
       const w = (game.pgn.match(/\[White "([^"]+)"/) || [])[1] || '?';
       const res = (game.pgn.match(/\[Result "([^"]+)"/) || [])[1] || '?';
-      const studentWhite = /gothamchess/i.test(w);
+      const studentWhite = re.test(w);
       const win = (studentWhite && res === '1-0') || (!studentWhite && res === '0-1');
       consider(movesFromPgn(game.pgn), { url: game.url, opponent: '?', outcome: win ? 'win' : res, preferred: win, src: 'archive' });
     }
   }
-  console.error(`scanned ${scanned} archive games`);
 }
+console.error(`scanned ${scanned} archive games`);
 
 fs.mkdirSync('audit-reports', { recursive: true });
 fs.writeFileSync('audit-reports/grounded-plan-candidates.json', JSON.stringify(candidates));
