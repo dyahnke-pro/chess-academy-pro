@@ -23854,16 +23854,27 @@
   {
     "id": "mp-queensindian-main",
     "openingId": "queens-indian",
-    "criticalPositionFen": "rn1q1rk1/pbppb1pp/1p2p3/5p2/2PP4/2Q2NP1/PP2PPBP/R1B2RK1 w - - 0 10",
+    "criticalPositionFen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
     "title": "Queen's Indian: Both Bishops on the Long Diagonals",
     "overview": "The Queen's Indian is won by control, not by attack. Black has clamped the e4-square with …Ne4 and …f5, and the plan now is harmony: redeploy the dark bishop to f6 so BOTH bishops rake the long diagonals at White's centre, back the central squares with the rooks, and squeeze a weakness-free position where Black is never worse and can press without risk.",
     "pawnBreaks": [
-      "…d5 to challenge the centre when prepared",
-      "…e5 to break once fully backed"
+      {
+        "move": "…d5 — contest the centre",
+        "explanation": "Supported by ...Na6 and the b7-bishop, ...d5 strikes at White’s centre and the c4-pawn.",
+        "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4"
+      }
     ],
     "pieceManeuvers": [
-      "…Bf6 to the long diagonal beside the b7-bishop",
-      "…Re8 to the central e-file"
+      {
+        "piece": "Bishop",
+        "route": "…Bc8-b7 — fight for e4",
+        "explanation": "The fianchettoed bishop battles for the e4-square and the long diagonal, the QID’s core idea."
+      },
+      {
+        "piece": "Knight",
+        "route": "…Nb8-a6 — flexible development",
+        "explanation": "The knight supports the ...d5 break and can reroute via c7 or b4."
+      }
     ],
     "strategicThemes": [
       "Both bishops on the long diagonals",
@@ -23875,96 +23886,107 @@
     ],
     "playableLines": [
       {
-        "fen": "rn1q1rk1/pbppb1pp/1p2p3/5p2/2PP4/2Q2NP1/PP2PPBP/R1B2RK1 w - - 0 10",
+        "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
         "moves": [
-          "Bf4",
-          "Bf6",
-          "Qe3",
-          "Re8"
+          "g3",
+          "Bb7",
+          "Bg2",
+          "Be7",
+          "O-O",
+          "O-O",
+          "Re1",
+          "Na6"
         ],
         "annotations": [
-          "Bf4 develops the bishop, eyeing the queenside dark squares.",
-          "…Bf6 — the dark bishop redeploys to the long diagonal, joining the b7-bishop in raking d4 and the white centre.",
-          "Qe3 centralises White’s queen.",
-          "…Re8 backs the e-file and the central squares. There is the Queen’s Indian harmony: both bishops on the long diagonals, a clamp on e4, and a weakness-free position Black can patiently squeeze."
+          "g3 prepares White's own fianchetto, the main-line Queen's Indian setup contesting the long diagonal.",
+          "…Bb7! The Queen's Indian's signature: the bishop fianchettoes to fight for the e4-square and rake the long diagonal — the opening's whole strategic point.",
+          "White completes the fianchetto with Bg2.",
+          "…Be7 develops the bishop, readying castling.",
+          "White castles.",
+          "…O-O — Black castles too, fully developed and solid.",
+          "White centralizes the rook on e1, supporting a future e4.",
+          "…Na6! A flexible developing move; the knight heads for c7 or b4 and supports the …d5 central break — Black contests the centre rather than sitting passively. Carlsen outplayed Nakamura from this balanced footing."
         ],
-        "learnCues": [
-          "Bf4 — White develops.",
-          "…Bf6 — bishop to the long diagonal.",
-          "Qe3 — White centralises.",
-          "…Re8 — back the centre."
-        ],
-        "sources": [
-          "concept:pos-weak-squares",
-          "concept:pos-development",
-          "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defence"
-        ],
-        "title": "Queen's Indian: Both Bishops on the Long Diagonals",
         "arrows": [
           [],
-          [
-            {
-              "from": "f6",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           []
         ],
+        "title": "The Queen’s Indian g3 (Nakamura–Carlsen)",
         "highlights": [
           [
             {
-              "square": "f4",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c1",
+              "square": "g3",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
             {
               "square": "b7",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c3",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "e8",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f8",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
               "square": "e4",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "g2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
+        ],
+        "intro": "Black fianchettoes and contests the centre with ...Na6/...d5.",
+        "sources": [
+          "concept:pos-development",
+          "concept:pos-center",
+          "https://en.wikipedia.org/wiki/Queen%27s_Indian_Defense"
+        ],
+        "learnCues": [
+          "g3 — prepare the fianchetto",
+          "…Bb7 — fight for e4",
+          "Bg2 — White fianchettoes",
+          "…Be7 — develop, ready to castle",
+          "O-O — White castles",
+          "…O-O — Black castles",
+          "Re1 — support e4",
+          "…Na6 — flexible, prepare …d5"
         ]
       }
     ]
