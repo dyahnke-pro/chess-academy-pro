@@ -52253,5 +52253,186 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-smithmorragambit-endgame",
+    "openingId": "smith-morra-gambit",
+    "criticalPositionFen": "3r1r1k/p4ppp/1np1p3/2P5/4N3/1P6/P4PPP/R2R2K1 b - - 0 22",
+    "title": "Smith-Morra ENDGAME — the d6 outpost in a balanced R+N ending (Potapov)",
+    "overview": "Potapov–Al Sayed 2013 shows where the Smith-Morra's pressure often lands: a level rook-and-knight ending, even on material, decided by who holds the better outpost. White wedges a knight into d6 — a square Black can never attack with a pawn — and stacks the rooks behind it. The position is objectively equal, but the practical pull belongs to the side with the deeper outpost and the file. R+minor endings of this shape arise in 33% of the Alapin-declined games.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      "Nd6 — the protected outpost knight",
+      "Rd4 then Rad1 and R1d3 — a battery on the d-file"
+    ],
+    "strategicThemes": [
+      "Protected outpost on d6 vs Black's d5 blockade",
+      "Press the d-file in a level R+N ending"
+    ],
+    "endgameTransitions": [
+      "Practical pressure decides a balanced R+minor ending"
+    ],
+    "playableLines": [
+      {
+        "fen": "3r1r1k/p4ppp/1np1p3/2P5/4N3/1P6/P4PPP/R2R2K1 b - - 0 22",
+        "moves": [
+          "Nd5",
+          "Nd6",
+          "Kg8",
+          "Rd4",
+          "Rd7",
+          "Kf1",
+          "Rb8",
+          "Rad1",
+          "Kf8",
+          "R1d3"
+        ],
+        "annotations": [
+          "Black plants the knight on d5 — the perfect blockading square, glaring at White's queenside.",
+          "White claims the mirror outpost on d6: a knight Black can never chase with a pawn, wedged deep in the camp.",
+          "Black's king steps toward the centre for the ending.",
+          "The rook lifts to d4, ready to double behind the outpost.",
+          "Black contests the file.",
+          "The king walks toward the action — king activity is everything in the endgame.",
+          "Black's other rook looks for queenside counterplay.",
+          "White doubles rooks on the d-file; the outpost knight and the heavy pieces all point into Black's position.",
+          "Black's king joins the defence.",
+          "Stacking the d-file. Material is dead level, but the d6 outpost and the rook battery hand White every practical trump — the side pressing is the side holding the d6 wedge."
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "learnCues": [
+          "…Nd5 — Black blockades",
+          "Nd6 — the outpost knight",
+          "…Kg8 — king centralizes",
+          "Rd4 — lift to double",
+          "…Rd7 — contest the file",
+          "Kf1 — activate the king",
+          "…Rb8 — queenside try",
+          "Rad1 — double rooks",
+          "…Kf8 — king defends",
+          "R1d3 — stack the d-file"
+        ],
+        "title": "The Smith-Morra d6 outpost",
+        "intro": "A level R+N ending — watch the knight wedge into d6 and the rooks stack behind it.",
+        "sources": [
+          "https://lichess.org/USEAuu9d",
+          "https://www.chess.com/openings/Smith-Morra-Gambit",
+          "https://en.wikipedia.org/wiki/Smith%E2%80%93Morra_Gambit"
+        ]
+      }
+    ]
   }
 ]
