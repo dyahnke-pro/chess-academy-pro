@@ -65152,5 +65152,2879 @@
         ]
       }
     ]
+  },
+  {
+    "id": "mp-pro-hikaru-nimzolarsen-e5main",
+    "openingId": "pro-hikaru-nimzo-larsen",
+    "criticalPositionFen": "r1bqrbk1/1ppp1ppp/p1n2n2/3P4/2P5/1P3N2/PBN1BPPP/R2QK2R b KQ - 0 11",
+    "title": "Queenside Clamp with a3 and b4",
+    "overview": "From the b3 system, White rolls the queenside: a3 and b4 grab space and squeeze Black's pieces back, the b2-bishop raking the long diagonal behind the pawns.",
+    "pawnBreaks": [
+      {
+        "move": "a3-b4 queenside clamp",
+        "explanation": "Black jumps the knight to b4 to harass.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "From the b3 system, White rolls the queenside: a3 and b4 grab space and squeeze Black's pieces back, the b2-bishop raking the long diagonal behind the pawns."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bqrbk1/1ppp1ppp/p1n2n2/3P4/2P5/1P3N2/PBN1BPPP/R2QK2R b KQ - 0 11",
+        "moves": [
+          "Nb4",
+          "Ne3",
+          "a5",
+          "O-O",
+          "d6",
+          "a3",
+          "Na6",
+          "b4"
+        ],
+        "annotations": [
+          "Black jumps the knight to b4 to harass.",
+          "Ne3 reroutes toward the d5 and f5 holes.",
+          "Black grabs space with …a5.",
+          "White castles into safety.",
+          "Black props the centre.",
+          "a3 kicks the b4-knight back.",
+          "The knight retreats to a6.",
+          "b4 clamps the queenside; White owns the space."
+        ],
+        "learnCues": [
+          "…Nb4 — Black harasses",
+          "Ne3 — reroute the knight",
+          "…a5 — Black grabs space",
+          "O-O — tuck the king",
+          "…d6 — prop the centre",
+          "a3 — kick the knight",
+          "…Na6 — knight retreats",
+          "b4 — the queenside clamp"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "a2",
+              "to": "a3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Queenside Clamp with a3 and b4",
+        "intro": "From the b3 system, White rolls the queenside: a3 and b4 grab space and squeeze Black's pieces back, the b2-bishop raking the long diagonal behind the pawns.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Larsen%27s_Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-nimzolarsen-d5",
+    "openingId": "pro-hikaru-nimzo-larsen",
+    "criticalPositionFen": "rn1q1rk1/pp2ppbp/2p2np1/3p4/2PP2b1/1P1BPN2/PB1N1PPP/R2QK2R b KQ - 0 8",
+    "title": "The c-File Battery: Qc2 and Rac1",
+    "overview": "Against …d5 White builds on the half-open c-file — the queen to c2 and rook to c1 stack up behind the c4-break, the classic Réti-style pressure Hikaru converts.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "Queen to c2 (c-file battery)",
+        "explanation": "Against …d5 White builds on the half-open c-file — the queen to c2 and rook to c1 stack up behind the c4-break, the classic Réti-style pressure Hikaru converts."
+      }
+    ],
+    "strategicThemes": [
+      "Against …d5 White builds on the half-open c-file"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/pp2ppbp/2p2np1/3p4/2PP2b1/1P1BPN2/PB1N1PPP/R2QK2R b KQ - 0 8",
+        "moves": [
+          "Nbd7",
+          "h3",
+          "Bxf3",
+          "Nxf3",
+          "Ne4",
+          "O-O",
+          "f5",
+          "Qc2"
+        ],
+        "annotations": [
+          "Black develops the knight.",
+          "h3 questions the g4-bishop.",
+          "Black trades on f3.",
+          "White recaptures, eyeing e5.",
+          "Black centralises a knight.",
+          "White castles.",
+          "Black grabs kingside space.",
+          "Qc2 swings to the c-file and hits e4."
+        ],
+        "learnCues": [
+          "…Nbd7 — develop",
+          "h3 — question the bishop",
+          "…Bxf3 — trade",
+          "Nxf3 — recapture",
+          "…Ne4 — centralise",
+          "O-O — castle",
+          "…f5 — kingside space",
+          "Qc2 — the c-file battery"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d1",
+              "to": "c2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c2",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The c-File Battery: Qc2 and Rac1",
+        "intro": "Against …d5 White builds on the half-open c-file — the queen to c2 and rook to c1 stack up behind the c4-break, the classic Réti-style pressure Hikaru converts.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Larsen%27s_Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-nimzolarsen-nf6",
+    "openingId": "pro-hikaru-nimzo-larsen",
+    "criticalPositionFen": "r2qr1k1/pbpnppbp/1p1p1np1/8/2PP4/1P2PN2/PBQ1BPPP/RN3RK1 w - - 0 10",
+    "title": "The d5 Outpost",
+    "overview": "In the double-fianchetto, White opens the centre and plants a knight on the d5 outpost — the b2-bishop and the d5-knight dominate the board.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "Knight to d5 outpost",
+        "explanation": "In the double-fianchetto, White opens the centre and plants a knight on the d5 outpost — the b2-bishop and the d5-knight dominate the board."
+      }
+    ],
+    "strategicThemes": [
+      "In the double-fianchetto, White opens the centre and plants a knight on the d5 outpost"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r2qr1k1/pbpnppbp/1p1p1np1/8/2PP4/1P2PN2/PBQ1BPPP/RN3RK1 w - - 0 10",
+        "moves": [
+          "Nc3",
+          "e5",
+          "dxe5",
+          "Nxe5",
+          "Nxe5",
+          "Rxe5",
+          "Rfd1",
+          "Re8",
+          "Nd5"
+        ],
+        "annotations": [
+          "Nc3 develops toward d5.",
+          "Black strikes with …e5.",
+          "White takes.",
+          "Black recaptures.",
+          "White trades knights.",
+          "Black recaptures with the rook.",
+          "Rfd1 seizes the open file.",
+          "Black retreats the rook.",
+          "Nd5 lands on the dominant outpost."
+        ],
+        "learnCues": [
+          "Nc3 — head for d5",
+          "…e5 — central strike",
+          "dxe5 — capture",
+          "…Nxe5 — recapture",
+          "Nxe5 — trade",
+          "…Rxe5 — recapture",
+          "Rfd1 — seize the file",
+          "…Re8 — retreat",
+          "Nd5 — the outpost"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The d5 Outpost",
+        "intro": "In the double-fianchetto, White opens the centre and plants a knight on the d5 outpost — the b2-bishop and the d5-knight dominate the board.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Larsen%27s_Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-nimzolarsen-c5",
+    "openingId": "pro-hikaru-nimzo-larsen",
+    "criticalPositionFen": "r1bq1rk1/pp1pppbp/2n2np1/8/3N4/1P2P3/PBP1BPPP/RN1Q1RK1 b - - 0 8",
+    "title": "The c4 Central Clamp",
+    "overview": "Against the symmetrical …c5, White trades on c6 and rolls c4 — a broad clamp that hands White the central space while the b2-bishop bites down the diagonal.",
+    "pawnBreaks": [
+      {
+        "move": "c4 central clamp",
+        "explanation": "Black trades knights.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Against the symmetrical …c5, White trades on c6 and rolls c4"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3N4/1P2P3/PBP1BPPP/RN1Q1RK1 b - - 0 8",
+        "moves": [
+          "Nxd4",
+          "Bxd4",
+          "b6",
+          "Bf3",
+          "Rb8",
+          "c4"
+        ],
+        "annotations": [
+          "Black trades knights.",
+          "White recaptures with the bishop.",
+          "Black fianchettoes.",
+          "Bf3 hits the long diagonal.",
+          "Black supports …b5.",
+          "c4 clamps the centre and the queenside."
+        ],
+        "learnCues": [
+          "…Nxd4 — trade",
+          "Bxd4 — recapture",
+          "…b6 — fianchetto",
+          "Bf3 — the diagonal",
+          "…Rb8 — prep …b5",
+          "c4 — the central clamp"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e2",
+              "to": "f3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The c4 Central Clamp",
+        "intro": "Against the symmetrical …c5, White trades on c6 and rolls c4 — a broad clamp that hands White the central space while the b2-bishop bites down the diagonal.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Larsen%27s_Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-nimzolarsen-b6",
+    "openingId": "pro-hikaru-nimzo-larsen",
+    "criticalPositionFen": "rn1q1rk1/pbppbppp/1p2pn2/8/3P4/1P1BPN2/PBPN1PPP/R2QK2R b KQ - 0 7",
+    "title": "Symmetric Break with c4",
+    "overview": "In the symmetrical double-fianchetto, the extra tempo tells: White completes development and breaks with c4, opening the position for the better-placed pieces.",
+    "pawnBreaks": [
+      {
+        "move": "c4 break",
+        "explanation": "Black stakes the centre.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "In the symmetrical double-fianchetto, the extra tempo tells: White completes development and breaks with c4, opening the position for the better-placed pieces."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/pbppbppp/1p2pn2/8/3P4/1P1BPN2/PBPN1PPP/R2QK2R b KQ - 0 7",
+        "moves": [
+          "d5",
+          "O-O",
+          "Nbd7",
+          "Qe2",
+          "c5",
+          "c4"
+        ],
+        "annotations": [
+          "Black stakes the centre.",
+          "White castles.",
+          "Black develops.",
+          "Qe2 connects the rooks.",
+          "Black expands.",
+          "c4 breaks open the centre."
+        ],
+        "learnCues": [
+          "…d5 — stake the centre",
+          "O-O — castle",
+          "…Nbd7 — develop",
+          "Qe2 — connect",
+          "…c5 — expand",
+          "c4 — the break"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "d1",
+              "to": "e2",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Symmetric Break with c4",
+        "intro": "In the symmetrical double-fianchetto, the extra tempo tells: White completes development and breaks with c4, opening the position for the better-placed pieces.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Larsen%27s_Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-nimzolarsen-g6",
+    "openingId": "pro-hikaru-nimzo-larsen",
+    "criticalPositionFen": "r1bqr1k1/pppnppbp/3p1np1/8/2PP4/1P2PN2/PB2BPPP/RN1Q1RK1 b - - 0 8",
+    "title": "Centralise on the Open d-File",
+    "overview": "After the …e5 trade, White's rook swings to d1 and the knight to c3 — every piece harmonised behind the broad centre, the Réti pull Hikaru converts at speed.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "Rook to d1, knight to c3",
+        "explanation": "After the …e5 trade, White's rook swings to d1 and the knight to c3 — every piece harmonised behind the broad centre, the Réti pull Hikaru converts at speed."
+      }
+    ],
+    "strategicThemes": [
+      "After the …e5 trade, White's rook swings to d1 and the knight to c3"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bqr1k1/pppnppbp/3p1np1/8/2PP4/1P2PN2/PB2BPPP/RN1Q1RK1 b - - 0 8",
+        "moves": [
+          "e5",
+          "dxe5",
+          "Ng4",
+          "Nc3",
+          "Ngxe5",
+          "Nxe5",
+          "Nxe5",
+          "Qd2",
+          "Bd7",
+          "Rad1"
+        ],
+        "annotations": [
+          "Black strikes …e5.",
+          "White takes.",
+          "Black hits e5.",
+          "Nc3 develops.",
+          "Black regains the pawn.",
+          "White trades.",
+          "Black recaptures.",
+          "Qd2 connects.",
+          "Black develops.",
+          "Rad1 owns the open file."
+        ],
+        "learnCues": [
+          "…e5 — strike",
+          "dxe5 — capture",
+          "…Ng4 — hit e5",
+          "Nc3 — develop",
+          "…Ngxe5 — regain",
+          "Nxe5 — trade",
+          "…Nxe5 — recapture",
+          "Qd2 — connect",
+          "…Bd7 — develop",
+          "Rad1 — own the file"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "a1",
+              "to": "d1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Centralise on the Open d-File",
+        "intro": "After the …e5 trade, White's rook swings to d1 and the knight to c3 — every piece harmonised behind the broad centre, the Réti pull Hikaru converts at speed.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Larsen%27s_Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-nimzolarsen-e6",
+    "openingId": "pro-hikaru-nimzo-larsen",
+    "criticalPositionFen": "r1bq1rk1/pp2bppp/2n1pn2/3p4/2PN4/1P1BP3/PB3PPP/RN1Q1RK1 b - - 0 9",
+    "title": "Open the Long Diagonal with the e5 Break",
+    "overview": "White trades on c6 and crashes through with the bishop on e5 — the b2-bishop's diagonal opens straight at Black's king.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "Bishop captures e5, regroups g3",
+        "explanation": "White trades on c6 and crashes through with the bishop on e5 — the b2-bishop's diagonal opens straight at Black's king."
+      }
+    ],
+    "strategicThemes": [
+      "White trades on c6 and crashes through with the bishop on e5"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/pp2bppp/2n1pn2/3p4/2PN4/1P1BP3/PB3PPP/RN1Q1RK1 b - - 0 9",
+        "moves": [
+          "e5",
+          "Nxc6",
+          "bxc6",
+          "Bxe5",
+          "Ng4",
+          "Bg3"
+        ],
+        "annotations": [
+          "Black pushes …e5.",
+          "White trades on c6.",
+          "Black recaptures.",
+          "Bxe5 grabs the pawn on the long diagonal.",
+          "Black hits the bishop.",
+          "Bg3 keeps the extra pawn and the bishop."
+        ],
+        "learnCues": [
+          "…e5 — push",
+          "Nxc6 — trade",
+          "…bxc6 — recapture",
+          "Bxe5 — grab the pawn",
+          "…Ng4 — hit it",
+          "Bg3 — keep the pawn"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b2",
+              "to": "e5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Open the Long Diagonal with the e5 Break",
+        "intro": "White trades on c6 and crashes through with the bishop on e5 — the b2-bishop's diagonal opens straight at Black's king.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://en.wikipedia.org/wiki/Larsen%27s_Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-closedsicilian-grandprix",
+    "openingId": "pro-hikaru-closed-sicilian",
+    "criticalPositionFen": "r1bq1rk1/1p2npbp/p3p1p1/2p5/P1BNP3/2NP4/1PP3PP/R1BQ1RK1 b - - 0 11",
+    "title": "Reroute the Bishop to b3",
+    "overview": "In the Grand Prix, White tucks the king on h1 and drops the bishop to b3 — out of the way of …c5-c4 and trained on the a2-g8 diagonal toward Black's king.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "Bishop to b3",
+        "explanation": "In the Grand Prix, White tucks the king on h1 and drops the bishop to b3 — out of the way of …c5-c4 and trained on the a2-g8 diagonal toward Black's king."
+      }
+    ],
+    "strategicThemes": [
+      "In the Grand Prix, White tucks the king on h1 and drops the bishop to b3"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/1p2npbp/p3p1p1/2p5/P1BNP3/2NP4/1PP3PP/R1BQ1RK1 b - - 0 11",
+        "moves": [
+          "cxd4",
+          "Ne2",
+          "Nc6",
+          "Kh1",
+          "Ne5",
+          "Bb3"
+        ],
+        "annotations": [
+          "Black trades on d4.",
+          "Ne2 reroutes toward f4 and g3.",
+          "Black develops.",
+          "Kh1 tucks the king off the diagonal.",
+          "Black centralises.",
+          "Bb3 retrains the bishop on the king."
+        ],
+        "learnCues": [
+          "…cxd4 — trade",
+          "Ne2 — reroute",
+          "…Nc6 — develop",
+          "Kh1 — tuck the king",
+          "…Ne5 — centralise",
+          "Bb3 — retrain the bishop"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c4",
+              "to": "b3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Reroute the Bishop to b3",
+        "intro": "In the Grand Prix, White tucks the king on h1 and drops the bishop to b3 — out of the way of …c5-c4 and trained on the a2-g8 diagonal toward Black's king.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Sicilian-Defense-Grand-Prix-Attack",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-closedsicilian-g6",
+    "openingId": "pro-hikaru-closed-sicilian",
+    "criticalPositionFen": "r1bq1rk1/1p2npbp/p3p1p1/2p5/P1BNP3/2NP4/1PP3PP/R1BQ1RK1 b - - 0 11",
+    "title": "Dark-Square Control on e3",
+    "overview": "Against the fianchetto, White invites …Ne3 and recaptures Bxe3 — keeping the dark squares and the open f-file pointed at the castled king.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "Bishop recaptures e3 (dark squares)",
+        "explanation": "Against the fianchetto, White invites …Ne3 and recaptures Bxe3 — keeping the dark squares and the open f-file pointed at the castled king."
+      }
+    ],
+    "strategicThemes": [
+      "Against the fianchetto, White invites …Ne3 and recaptures Bxe3"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/1p2npbp/p3p1p1/2p5/P1BNP3/2NP4/1PP3PP/R1BQ1RK1 b - - 0 11",
+        "moves": [
+          "cxd4",
+          "Ne2",
+          "Nc6",
+          "Kh1",
+          "Ne5",
+          "Bb3",
+          "Ng4",
+          "h3",
+          "Ne3",
+          "Bxe3"
+        ],
+        "annotations": [
+          "Black trades.",
+          "Ne2 reroutes.",
+          "Black develops.",
+          "Kh1 tucks the king.",
+          "Black centralises.",
+          "Bb3 saves the bishop.",
+          "Black lunges …Ng4.",
+          "h3 questions the knight.",
+          "Black jumps in.",
+          "Bxe3 keeps the dark squares."
+        ],
+        "learnCues": [
+          "…cxd4 — trade",
+          "Ne2 — reroute",
+          "…Nc6 — develop",
+          "Kh1 — tuck the king",
+          "…Ne5 — centralise",
+          "Bb3 — save the bishop",
+          "…Ng4 — lunge",
+          "h3 — question it",
+          "…Ne3 — jump in",
+          "Bxe3 — keep dark squares"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c1",
+              "to": "e3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Dark-Square Control on e3",
+        "intro": "Against the fianchetto, White invites …Ne3 and recaptures Bxe3 — keeping the dark squares and the open f-file pointed at the castled king.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Sicilian-Defense-Grand-Prix-Attack",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-closedsicilian-e6",
+    "openingId": "pro-hikaru-closed-sicilian",
+    "criticalPositionFen": "r1bq1b1r/p4kpp/2p2p2/2pp1n2/N4P2/1P3N2/P1PPQ1PP/R1B2RK1 b - - 4 11",
+    "title": "The c4 Space Clamp",
+    "overview": "Against the solid …e6, White breaks with c4 to clamp the centre and fix Black's hanging pawns — the positional face of the Grand Prix.",
+    "pawnBreaks": [
+      {
+        "move": "c4 space clamp",
+        "explanation": "Black checks from a5.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Against the solid …e6, White breaks with c4 to clamp the centre and fix Black's hanging pawns"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1b1r/p4kpp/2p2p2/2pp1n2/N4P2/1P3N2/P1PPQ1PP/R1B2RK1 b - - 4 11",
+        "moves": [
+          "Qa5",
+          "c4",
+          "Bd6",
+          "d3"
+        ],
+        "annotations": [
+          "Black checks from a5.",
+          "c4 clamps the centre.",
+          "Black develops.",
+          "d3 props the centre."
+        ],
+        "learnCues": [
+          "…Qa5 — check",
+          "c4 — the clamp",
+          "…Bd6 — develop",
+          "d3 — prop up"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "The c4 Space Clamp",
+        "intro": "Against the solid …e6, White breaks with c4 to clamp the centre and fix Black's hanging pawns — the positional face of the Grand Prix.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Sicilian-Defense-Grand-Prix-Attack",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-reti-kia",
+    "openingId": "pro-hikaru-reti",
+    "criticalPositionFen": "r1bqr1k1/pppn1pbp/3p2p1/4n3/2P5/1PN1PN2/PB1QBPPP/R4RK1 b - - 0 11",
+    "title": "Knight to the d5 Outpost",
+    "overview": "From the b3 system, White trades the active knights and plants one on d5 then f4 — the outpost dominates while the b2-bishop rakes the long diagonal.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "Knight to d5 then f4",
+        "explanation": "From the b3 system, White trades the active knights and plants one on d5 then f4 — the outpost dominates while the b2-bishop rakes the long diagonal."
+      }
+    ],
+    "strategicThemes": [
+      "From the b3 system, White trades the active knights and plants one on d5 then f4"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bqr1k1/pppn1pbp/3p2p1/4n3/2P5/1PN1PN2/PB1QBPPP/R4RK1 b - - 0 11",
+        "moves": [
+          "Nxf3+",
+          "Bxf3",
+          "Ne5",
+          "Be2",
+          "Be6",
+          "Nd5"
+        ],
+        "annotations": [
+          "Black trades on f3.",
+          "White recaptures.",
+          "Black centralises.",
+          "Be2 keeps the bishop active.",
+          "Black develops.",
+          "Nd5 lands on the outpost."
+        ],
+        "learnCues": [
+          "…Nxf3 — trade",
+          "Bxf3 — recapture",
+          "…Ne5 — centralise",
+          "Be2 — keep the pair",
+          "…Be6 — develop",
+          "Nd5 — the outpost"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c3",
+              "to": "d5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Knight to the d5 Outpost",
+        "intro": "From the b3 system, White trades the active knights and plants one on d5 then f4 — the outpost dominates while the b2-bishop rakes the long diagonal.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Reti-Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-reti-vsd5",
+    "openingId": "pro-hikaru-reti",
+    "criticalPositionFen": "rn1q1rk1/pbp1bppp/1p2pn2/3p4/3P4/1P1BPN2/PBPN1PPP/R2Q1RK1 b - - 0 8",
+    "title": "Reversed London: c4 and the c-File",
+    "overview": "The Réti as a reversed London a tempo up — White breaks with c4 and pressures the c-file, the open files and the freer game giving the comfortable pull.",
+    "pawnBreaks": [
+      {
+        "move": "c4 break, Rc1 pressure",
+        "explanation": "Black expands.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "The Réti as a reversed London a tempo up"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "rn1q1rk1/pbp1bppp/1p2pn2/3p4/3P4/1P1BPN2/PBPN1PPP/R2Q1RK1 b - - 0 8",
+        "moves": [
+          "c5",
+          "dxc5",
+          "bxc5",
+          "c4",
+          "Nc6",
+          "cxd5",
+          "exd5",
+          "Rc1"
+        ],
+        "annotations": [
+          "Black expands.",
+          "White takes.",
+          "Black recaptures.",
+          "c4 strikes the centre.",
+          "Black develops.",
+          "White opens the c-file.",
+          "Black recaptures.",
+          "Rc1 seizes the c-file."
+        ],
+        "learnCues": [
+          "…c5 — expand",
+          "dxc5 — take",
+          "…bxc5 — recapture",
+          "c4 — strike",
+          "…Nc6 — develop",
+          "cxd5 — open the file",
+          "…exd5 — recapture",
+          "Rc1 — seize the file"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "a1",
+              "to": "c1",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "c6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c1",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Reversed London: c4 and the c-File",
+        "intro": "The Réti as a reversed London a tempo up — White breaks with c4 and pressures the c-file, the two bishops and the freer game giving the comfortable pull.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Reti-Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-reti-vsc5",
+    "openingId": "pro-hikaru-reti",
+    "criticalPositionFen": "r1bqkb1r/4pppp/p1p2n2/3p4/8/1P2P3/PBPN1PPP/R2QKB1R b KQkq - 0 8",
+    "title": "Clamp with c4 and Bd3",
+    "overview": "Against …c5 White trades on c6 to damage the pawns, then clamps with c4 and trains the bishop on d3 toward the kingside — a clean structural edge.",
+    "pawnBreaks": [
+      {
+        "move": "c4 clamp, Bd3 aim",
+        "explanation": "Black props d5.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Against …c5 White trades on c6 to damage the pawns, then clamps with c4 and trains the bishop on d3 toward the kingside"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bqkb1r/4pppp/p1p2n2/3p4/8/1P2P3/PBPN1PPP/R2QKB1R b KQkq - 0 8",
+        "moves": [
+          "e6",
+          "c4",
+          "Bb4",
+          "a3",
+          "Be7",
+          "Bd3"
+        ],
+        "annotations": [
+          "Black props d5.",
+          "c4 clamps the centre.",
+          "Black pins.",
+          "a3 questions the bishop.",
+          "Black retreats.",
+          "Bd3 aims at the kingside."
+        ],
+        "learnCues": [
+          "…e6 — prop d5",
+          "c4 — the clamp",
+          "…Bb4 — pin",
+          "a3 — question it",
+          "…Be7 — retreat",
+          "Bd3 — aim at the king"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f1",
+              "to": "d3",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Clamp with c4 and Bd3",
+        "intro": "Against …c5 White trades on c6 to damage the pawns, then clamps with c4 and trains the bishop on d3 toward the kingside — a clean structural edge.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Reti-Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-pircmodern-be3",
+    "openingId": "pro-hikaru-pirc-modern",
+    "criticalPositionFen": "r2qk1nr/1bpn1pb1/p2pp1p1/1p4Np/3PP2P/2N1BP2/PPPQ2P1/R3KB1R w KQkq - 0 9",
+    "title": "Queenside Expansion: ...b4 and ...c5",
+    "overview": "Against the 150 Attack, Black hands White the centre and rolls the queenside — …b4 kicks the knight, …c5 strikes the base, active piece play giving real winning chances.",
+    "pawnBreaks": [
+      {
+        "move": "...b4 and ...c5 expansion",
+        "explanation": "White probes a4.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Against the 150 Attack, Black hands White the centre and rolls the queenside"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r2qk1nr/1bpn1pb1/p2pp1p1/1p4Np/3PP2P/2N1BP2/PPPQ2P1/R3KB1R w KQkq - 0 9",
+        "moves": [
+          "a4",
+          "b4",
+          "Na2",
+          "c5"
+        ],
+        "annotations": [
+          "White probes a4.",
+          "…b4 kicks the c3-knight.",
+          "The knight retreats to a2.",
+          "…c5 strikes the centre base."
+        ],
+        "learnCues": [
+          "a4 — White probes",
+          "…b4 — kick the knight",
+          "Na2 — knight retreats",
+          "…c5 — strike the base"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Queenside Expansion: ...b4 and ...c5",
+        "intro": "Against the 150 Attack, Black hands White the centre and rolls the queenside — …b4 kicks the knight, …c5 strikes the base, the two bishops giving real winning chances.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Modern-Defense",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-pircmodern-nf3",
+    "openingId": "pro-hikaru-pirc-modern",
+    "criticalPositionFen": "r1bq1rk1/5pbp/1np2pp1/pp6/P2P4/1B3N1P/1PP2PP1/R1BQR1K1 w - - 0 14",
+    "title": "The Long Diagonal: ...b5 and ...Bb7",
+    "overview": "In the classical Modern, Black expands with …b5 and trains the bishop on b7 down the long diagonal — queenside space and the fianchetto give a comfortable game even versus 3100s.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "...b5 break, ...Bb7 diagonal",
+        "explanation": "In the classical Modern, Black expands with …b5 and trains the bishop on b7 down the long diagonal — queenside space and the fianchetto give a comfortable game even versus 3100s."
+      }
+    ],
+    "strategicThemes": [
+      "In the classical Modern, Black expands with …b5 and trains the bishop on b7 down the long diagonal"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/5pbp/1np2pp1/pp6/P2P4/1B3N1P/1PP2PP1/R1BQR1K1 w - - 0 14",
+        "moves": [
+          "axb5",
+          "cxb5",
+          "d5",
+          "a4",
+          "Ba2",
+          "Bb7"
+        ],
+        "annotations": [
+          "White takes on b5.",
+          "…cxb5 recaptures, opening the c-file.",
+          "White pushes d5.",
+          "White rolls the a-pawn.",
+          "White reroutes.",
+          "…Bb7 lines up on the long diagonal."
+        ],
+        "learnCues": [
+          "axb5 — White takes",
+          "…cxb5 — recapture",
+          "d5 — White pushes",
+          "a4 — White rolls",
+          "Ba2 — reroute",
+          "…Bb7 — the long diagonal"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "c8",
+              "to": "b7",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ]
+        ],
+        "highlights": [
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b7",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "The Long Diagonal: ...b5 and ...Bb7",
+        "intro": "In the classical Modern, Black expands with …b5 and trains the bishop on b7 down the long diagonal — queenside space and the fianchetto give a comfortable game even versus 3100s.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Modern-Defense",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-pircmodern-c6",
+    "openingId": "pro-hikaru-pirc-modern",
+    "criticalPositionFen": "r1bq1rk1/5pbp/1np2pp1/pp6/3P4/1BP2N1P/PP3PP1/R1BQR1K1 w - - 0 14",
+    "title": "Trade the Light Bishops on e6",
+    "overview": "In the …c6 Modern, Black contests the e-file and offers the light bishops off via …Be6 and …Bxb3 — simplifying into a solid, comfortable structure (this is the win over Naroditsky).",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "...Re8 file, ...Be6 trade",
+        "explanation": "In the …c6 Modern, Black contests the e-file and offers the light bishops off via …Be6 and …Bxb3 — simplifying into a solid, comfortable structure (this is the win over Naroditsky)."
+      }
+    ],
+    "strategicThemes": [
+      "In the …c6 Modern, Black contests the e-file and offers the light bishops off via …Be6 and …Bxb3"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r1bq1rk1/5pbp/1np2pp1/pp6/3P4/1BP2N1P/PP3PP1/R1BQR1K1 w - - 0 14",
+        "moves": [
+          "a4",
+          "Re8",
+          "Rxe8+",
+          "Qxe8",
+          "Bf4",
+          "Be6"
+        ],
+        "annotations": [
+          "White probes.",
+          "…Re8 contests the e-file.",
+          "White trades rooks.",
+          "…Qxe8 recaptures.",
+          "White develops.",
+          "…Be6 offers the light bishops off."
+        ],
+        "learnCues": [
+          "a4 — White probes",
+          "…Re8 — contest the file",
+          "Rxe8 — trade",
+          "…Qxe8 — recapture",
+          "Bf4 — develop",
+          "…Be6 — trade the bishops"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e8",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "e6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Trade the Light Bishops on e6",
+        "intro": "In the …c6 Modern, Black contests the e-file and offers the light bishops off via …Be6 and …Bxb3 — simplifying into a solid, comfortable structure (this is the win over Naroditsky).",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Modern-Defense",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-pircmodern-austrian",
+    "openingId": "pro-hikaru-pirc-modern",
+    "criticalPositionFen": "2rqk2r/1p1nnpb1/p3p1p1/2ppP2p/3P1PP1/2NBBQ1P/PPP5/2KR3R w k - 0 14",
+    "title": "Counterstrike: ...c5 and ...b5",
+    "overview": "Against the Austrian Attack, Black strikes the centre with …c5, trades into activity, and races on the queenside with …b5 against White's castled king — a sharp, double-edged win.",
+    "pawnBreaks": [
+      {
+        "move": "...c5 strike, ...Nxd3, ...b5 race",
+        "explanation": "White takes on c5.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Against the Austrian Attack, Black strikes the centre with …c5, trades into activity, and races on the queenside with …b5 against White's castled king"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "2rqk2r/1p1nnpb1/p3p1p1/2ppP2p/3P1PP1/2NBBQ1P/PPP5/2KR3R w k - 0 14",
+        "moves": [
+          "dxc5",
+          "Nxc5",
+          "Kb1",
+          "Nxd3",
+          "Rxd3",
+          "Qc7",
+          "Qd1",
+          "b5"
+        ],
+        "annotations": [
+          "White takes on c5.",
+          "…Nxc5 recaptures into activity.",
+          "White tucks the king.",
+          "…Nxd3 trades the knight for the bishop.",
+          "White recaptures.",
+          "…Qc7 eyes the c-file.",
+          "White regroups.",
+          "…b5 races at the king."
+        ],
+        "learnCues": [
+          "dxc5 — White takes",
+          "…Nxc5 — recapture",
+          "Kb1 — tuck the king",
+          "…Nxd3 — win the bishop",
+          "Rxd3 — recapture",
+          "…Qc7 — eye the c-file",
+          "Qd1 — regroup",
+          "…b5 — the queenside race"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "c5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "b1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Counterstrike: ...c5 and ...b5",
+        "intro": "Against the Austrian Attack, Black strikes the centre with …c5, trades into activity, and races on the queenside with …b5 against White's castled king — a sharp, double-edged win.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Modern-Defense",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-carokann-advance",
+    "openingId": "pro-hikaru-caro-kann",
+    "criticalPositionFen": "r3kb1r/ppqnnpp1/2p1p2p/3pPb2/3P4/1N3N2/PPP1BPPP/R1BQ1RK1 w kq - 4 9",
+    "title": "Knight to g6 and the ...f6 Break",
+    "overview": "In the Advance, Black reroutes …Ne7-g6 to pressure e5, then breaks with …f6 to dissolve White's chain — the freed bishop already outside, the comfortable Caro plan.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "...Ng6 reroute, ...f6 break",
+        "explanation": "In the Advance, Black reroutes …Ne7-g6 to pressure e5, then breaks with …f6 to dissolve White's chain — the freed bishop already outside, the comfortable Caro plan."
+      }
+    ],
+    "strategicThemes": [
+      "In the Advance, Black reroutes …Ne7-g6 to pressure e5, then breaks with …f6 to dissolve White's chain"
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r3kb1r/ppqnnpp1/2p1p2p/3pPb2/3P4/1N3N2/PPP1BPPP/R1BQ1RK1 w kq - 4 9",
+        "moves": [
+          "c3",
+          "g5",
+          "a4",
+          "Ng6",
+          "a5",
+          "f6",
+          "exf6",
+          "Nxf6"
+        ],
+        "annotations": [
+          "White props d4.",
+          "…g5 grabs kingside space.",
+          "White probes.",
+          "…Ng6 hits the e5-pawn.",
+          "White rolls the a-pawn.",
+          "…f6 breaks the chain.",
+          "White takes.",
+          "…Nxf6 recaptures, freeing the game."
+        ],
+        "learnCues": [
+          "c3 — prop d4",
+          "…g5 — grab space",
+          "a4 — White probes",
+          "…Ng6 — hit e5",
+          "a5 — White rolls",
+          "…f6 — break the chain",
+          "exf6 — take",
+          "…Nxf6 — recapture"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e7",
+              "to": "g6",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "g6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "a5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Knight to g6 and the ...f6 Break",
+        "intro": "In the Advance, Black reroutes …Ne7-g6 to pressure e5, then breaks with …f6 to dissolve White's chain — the freed bishop already outside, the comfortable Caro plan.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-carokann-exchange",
+    "openingId": "pro-hikaru-caro-kann",
+    "criticalPositionFen": "r2qkbnr/pp2pp1p/2n3p1/3p1b2/3P4/2PB1N2/PP3PPP/RNBQ1RK1 b kq - 1 7",
+    "title": "Trade the Good Bishop, Develop to d6",
+    "overview": "In the Exchange, Black swaps off White's good light bishop on d3, posts the dark bishop on d6, and reaches the easy, symmetrical game the Caro is built for.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "...Bxd3 trade, ...Bd6 develop",
+        "explanation": "In the Exchange, Black swaps off White's good light bishop on d3, posts the dark bishop on d6, and reaches the easy, symmetrical game the Caro is built for."
+      }
+    ],
+    "strategicThemes": [
+      "In the Exchange, Black swaps off White's good light bishop on d3, posts the dark bishop on d6, and reaches the easy, symmetrical game the Caro is built for."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r2qkbnr/pp2pp1p/2n3p1/3p1b2/3P4/2PB1N2/PP3PPP/RNBQ1RK1 b kq - 1 7",
+        "moves": [
+          "Bxd3",
+          "Qxd3",
+          "e6",
+          "Bf4",
+          "Bd6",
+          "Bxd6",
+          "Qxd6"
+        ],
+        "annotations": [
+          "…Bxd3 trades the good bishop.",
+          "White recaptures.",
+          "…e6 builds the structure.",
+          "White develops.",
+          "…Bd6 offers the dark bishops off.",
+          "White trades.",
+          "…Qxd6 recaptures into easy equality."
+        ],
+        "learnCues": [
+          "…Bxd3 — trade the bishop",
+          "Qxd3 — recapture",
+          "…e6 — build",
+          "Bf4 — develop",
+          "…Bd6 — trade again",
+          "Bxd6 — trade",
+          "…Qxd6 — easy equality"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d3",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Trade the Good Bishop, Develop to d6",
+        "intro": "In the Exchange, Black swaps off White's good light bishop on d3, posts the dark bishop on d6, and reaches the easy, symmetrical game the Caro is built for.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-carokann-twoknights",
+    "openingId": "pro-hikaru-caro-kann",
+    "criticalPositionFen": "r2qk1nr/pp1n1pbp/2p1p1p1/3p4/4P1P1/2NP1Q1P/PPPB1P2/2KR1B1R b kq - 2 9",
+    "title": "Queenside Counter with ...b5 and ...b4",
+    "overview": "In the Two Knights, after the …Bg4 pin and trade, Black castles into safety and counterattacks on the queenside with …b5-b4, hitting White's king while the structure stays rock-solid.",
+    "pawnBreaks": [
+      {
+        "move": "...b5 and ...b4 queenside counter",
+        "explanation": "…Ne7 reroutes toward f5.",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "In the Two Knights, after the …Bg4 pin and trade, Black castles into safety and counterattacks on the queenside with …b5-b4, hitting White's king while the structure stays rock-solid."
+    ],
+    "endgameTransitions": [],
+    "playableLines": [
+      {
+        "fen": "r2qk1nr/pp1n1pbp/2p1p1p1/3p4/4P1P1/2NP1Q1P/PPPB1P2/2KR1B1R b kq - 2 9",
+        "moves": [
+          "Ne7",
+          "h4",
+          "b5",
+          "h5",
+          "b4"
+        ],
+        "annotations": [
+          "…Ne7 reroutes toward f5.",
+          "White storms with h4.",
+          "…b5 starts the counterattack.",
+          "White pushes h5.",
+          "…b4 hits the c3-knight and the king."
+        ],
+        "learnCues": [
+          "…Ne7 — reroute",
+          "h4 — White storms",
+          "…b5 — counterattack",
+          "h5 — White pushes",
+          "…b4 — hit the king"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Queenside Counter with ...b5 and ...b4",
+        "intro": "In the Two Knights, after the …Bg4 pin and trade, Black castles into safety and counterattacks on the queenside with …b5-b4, hitting White's king while the structure stays rock-solid.",
+        "sources": [
+          "concept:pos-space",
+          "concept:pos-development",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-carokann-exchange-endgame",
+    "openingId": "pro-hikaru-caro-kann",
+    "criticalPositionFen": "4r3/1p2r1k1/2n1p2p/p2p4/P2P1p2/2P2N2/1P2RPP1/4R1K1 w - - 0 29",
+    "title": "Exchange ENDGAME — Active King + …h5 (vs Eljanov 2990)",
+    "overview": "Hikaru's win over Eljanov simplifies to a symmetrical rook-and-knight endgame around move 28. The plan is pure technique: march the king to f5 where it dominates, then break with …h5 to create play on the kingside. The Caro's sound structure means the endgame is the reward — an active king does the work.",
+    "pawnBreaks": [
+      {
+        "move": "…h5 kingside break",
+        "explanation": "Hikaru's win over Eljanov simplifies to a symmetrical rook-and-knight endgame around move 28",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…King to f5 (active king)",
+        "explanation": "Hikaru's win over Eljanov simplifies to a symmetrical rook-and-knight endgame around move 28"
+      }
+    ],
+    "strategicThemes": [
+      "Active King + …h5 (vs Eljanov 2990)"
+    ],
+    "endgameTransitions": [
+      "The opening structure converts directly into this winning ending."
+    ],
+    "playableLines": [
+      {
+        "fen": "4r3/1p2r1k1/2n1p2p/p2p4/P2P1p2/2P2N2/1P2RPP1/4R1K1 w - - 0 29",
+        "moves": [
+          "Ne5",
+          "Kf6",
+          "Kh2",
+          "Rg8",
+          "Nd3",
+          "Kf5",
+          "f3",
+          "h5"
+        ],
+        "annotations": [
+          "White centralises the knight.",
+          "…Kf6 begins the king march.",
+          "White shuffles.",
+          "…Rg8 activates the rook.",
+          "White reroutes.",
+          "…Kf5 — the king dominates the centre.",
+          "White holds.",
+          "…h5 breaks open the kingside."
+        ],
+        "learnCues": [
+          "Ne5 — White centralises",
+          "…Kf6 — march the king",
+          "Kh2 — White waits",
+          "…Rg8 — activate the rook",
+          "Nd3 — reroute",
+          "…Kf5 — the dominant king",
+          "f3 — White holds",
+          "…h5 — the break"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "f6",
+              "to": "f5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "e5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "f5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "h5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Exchange ENDGAME — Active King + …h5 (vs Eljanov 2990)",
+        "intro": "Hikaru's win over Eljanov simplifies to a symmetrical rook-and-knight endgame around move 28. The plan is pure technique: march the king to f5 where it dominates, then break with …h5 to create play on the kingside. The Caro's sound structure means the endgame is the reward — an active king does the work.",
+        "sources": [
+          "concept:pos-material",
+          "concept:pos-initiative",
+          "https://www.chess.com/openings/Caro-Kann-Defense",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-pircmodern-be3-endgame",
+    "openingId": "pro-hikaru-pirc-modern",
+    "criticalPositionFen": "1r2b3/R4pbk/6p1/3rp2p/4P2P/2n1BP2/4B1PK/5R2 w - - 0 31",
+    "title": "Modern ENDGAME — the …Nd4 Outpost (vs vladislavkovalev 2838)",
+    "overview": "From the 150 Attack, Hikaru's win against vladislavkovalev reaches a rook-and-minor-piece endgame where Black's knight finds the d4 outpost — a monster in the centre that White can't dislodge. The plan: trade into the ending, plant the knight on d4, and let the superior minor piece decide.",
+    "pawnBreaks": [],
+    "pieceManeuvers": [
+      {
+        "piece": "",
+        "route": "…Nd4 central outpost",
+        "explanation": "From the 150 Attack, Hikaru's win against vladislavkovalev reaches a rook-and-minor-piece endgame where Black's knight finds the d4 outpost — a monster in the centre that White can't dislodge"
+      }
+    ],
+    "strategicThemes": [
+      "the …Nd4 Outpost (vs vladislavkovalev 2838)"
+    ],
+    "endgameTransitions": [
+      "The opening structure converts directly into this winning ending."
+    ],
+    "playableLines": [
+      {
+        "fen": "1r2b3/R4pbk/6p1/3rp2p/4P2P/2n1BP2/4B1PK/5R2 w - - 0 31",
+        "moves": [
+          "exd5",
+          "Nxe2",
+          "d6",
+          "Rd8",
+          "Rd1",
+          "Nd4",
+          "Re7",
+          "Bf6"
+        ],
+        "annotations": [
+          "White trades in the centre.",
+          "…Nxe2 grabs the bishop.",
+          "White pushes the passer.",
+          "…Rd8 blockades.",
+          "White supports the pawn.",
+          "…Nd4 lands on the outpost.",
+          "White infiltrates.",
+          "…Bf6 covers and consolidates."
+        ],
+        "learnCues": [
+          "exd5 — White trades",
+          "…Nxe2 — win the bishop",
+          "d6 — White pushes",
+          "…Rd8 — blockade",
+          "Rd1 — support",
+          "…Nd4 — the outpost",
+          "Re7 — infiltrate",
+          "…Bf6 — consolidate"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "e2",
+              "to": "d4",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d4",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ]
+        ],
+        "title": "Modern ENDGAME — the …Nd4 Outpost (vs vladislavkovalev 2838)",
+        "intro": "From the 150 Attack, Hikaru's win against vladislavkovalev reaches a rook-and-minor-piece endgame where Black's knight finds the d4 outpost — a monster in the centre that White can't dislodge. The plan: trade into the ending, plant the knight on d4, and let the superior minor piece decide.",
+        "sources": [
+          "concept:pos-material",
+          "concept:pos-initiative",
+          "https://www.chess.com/openings/Modern-Defense",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mp-pro-hikaru-nimzolarsen-e5main-endgame",
+    "openingId": "pro-hikaru-nimzo-larsen",
+    "criticalPositionFen": "6k1/2pn1pbp/3p2p1/P7/1P6/1B3P2/4K1PP/4B3 b - - 0 39",
+    "title": "Nimzo-Larsen ENDGAME — Bishop Pair + Queenside Passers (vs puz2010 2859)",
+    "overview": "Hikaru's b3 system grinds into a minor-piece endgame where the bishop pair and the a- and b-pawns become connected queenside passers. The plan: roll b4-b5 and a5-a6, the bishops escorting the pawns up the board. The long-diagonal bishop that started on b2 finishes the game by promoting a pawn.",
+    "pawnBreaks": [
+      {
+        "move": "b5 and a6 queenside passers",
+        "explanation": "Hikaru's b3 system grinds into a minor-piece endgame where the bishop pair and the a- and b-pawns become connected queenside passers",
+        "fen": ""
+      }
+    ],
+    "pieceManeuvers": [],
+    "strategicThemes": [
+      "Bishop Pair + Queenside Passers (vs puz2010 2859)"
+    ],
+    "endgameTransitions": [
+      "The opening structure converts directly into this winning ending."
+    ],
+    "playableLines": [
+      {
+        "fen": "6k1/2pn1pbp/3p2p1/P7/1P6/1B3P2/4K1PP/4B3 b - - 0 39",
+        "moves": [
+          "Bd4",
+          "Ba4",
+          "Nb8",
+          "b5",
+          "Kf8",
+          "Bf2",
+          "Bxf2",
+          "Kxf2",
+          "Ke7",
+          "a6"
+        ],
+        "annotations": [
+          "Black centralises the bishop.",
+          "Ba4 eyes the d7-knight and supports b5.",
+          "Black blockades.",
+          "b5 rolls the passer.",
+          "Black hurries the king back.",
+          "Bf2 keeps the bishop pair coordinated.",
+          "Black trades a bishop.",
+          "White recaptures.",
+          "Black races the king.",
+          "a6 — the second passer decides."
+        ],
+        "learnCues": [
+          "…Bd4 — centralise",
+          "Ba4 — support the passer",
+          "…Nb8 — blockade",
+          "b5 — roll the passer",
+          "…Kf8 — king hurries",
+          "Bf2 — coordinate",
+          "…Bxf2 — trade",
+          "Kxf2 — recapture",
+          "…Ke7 — race",
+          "a6 — the passer decides"
+        ],
+        "arrows": [
+          [],
+          [],
+          [],
+          [
+            {
+              "from": "b4",
+              "to": "b5",
+              "color": "rgba(40,185,95,0.92)"
+            }
+          ],
+          [],
+          [],
+          [],
+          [],
+          [],
+          []
+        ],
+        "highlights": [
+          [
+            {
+              "square": "d4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "b5",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ],
+          [
+            {
+              "square": "f8",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f2",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "a6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "a6",
+              "color": "rgba(255,214,0,0.88)"
+            }
+          ]
+        ],
+        "title": "Nimzo-Larsen ENDGAME — Bishop Pair + Queenside Passers (vs puz2010 2859)",
+        "intro": "Hikaru's b3 system grinds into a minor-piece endgame where the bishop pair and the a- and b-pawns become connected queenside passers. The plan: roll b4-b5 and a5-a6, the bishops escorting the pawns up the board. The long-diagonal bishop that started on b2 finishes the game by promoting a pawn.",
+        "sources": [
+          "concept:pos-material",
+          "concept:pos-initiative",
+          "https://en.wikipedia.org/wiki/Larsen%27s_Opening",
+          "https://api.chess.com/pub/player/hikaru/games/archives"
+        ]
+      }
+    ]
   }
 ]

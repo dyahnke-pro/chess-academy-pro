@@ -2931,5 +2931,147 @@
         "https://www.chess.com/openings/Scandinavian-Defense"
       ]
     }
+  ],
+  "pro-hikaru-caro-kann": [
+    {
+      "fen": "rnbqkbnr/pp2pppp/2p5/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+      "wrongMove": "e6",
+      "correctMove": "Bf5",
+      "explanation": "The French-player's reflex is …e6, but that locks Black's light-squared bishop inside the pawn chain — the very piece the whole Caro-Kann is built to free. Play …Bf5 FIRST, developing the bishop OUTSIDE the chain, and only then …e6. That one difference is why the Caro is a healthier version of the French.",
+      "shortNarration": "Wrong …e6 traps the bishop; …Bf5 first.",
+      "sources": [
+        "concept:pos-development",
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    },
+    {
+      "fen": "r1bqkbnr/pp1npppp/2p5/8/3PN3/8/PPP1QPPP/R1B1KBNR b KQkq - 2 5",
+      "wrongMove": "Ngf6",
+      "correctMove": "e6",
+      "explanation": "The oldest trap in the book: after Qe2 the natural …Ngf6 walks into Nd6 mate — the e2-queen covers the escape and the d6-knight delivers smothered checkmate. Always slot in …e6 (or …Ndf6) first to give the king luft. Don't be its victim.",
+      "shortNarration": "…Ngf6 allows Nd6 mate — play …e6.",
+      "sources": [
+        "concept:pos-king-safety",
+        "book:caro-kann",
+        "https://www.chess.com/openings/Caro-Kann-Defense"
+      ]
+    }
+  ],
+  "pro-hikaru-pirc-modern": [
+    {
+      "fen": "rnbqk1nr/1pppppbp/p5p1/8/3PP3/2N1B3/PPP2PPP/R2QKBNR b KQkq - 1 4",
+      "wrongMove": "Nf6",
+      "correctMove": "b5",
+      "explanation": "Against the 150 Attack, developing …Nf6 invites White's whole plan — h4-h5 with a kingside storm aimed straight at the knight. The Modern's point is to delay …Nf6 and expand on the queenside FIRST with …b5, grabbing space and aiming the bishop down the long diagonal. Hand White the centre; counter on the wing.",
+      "shortNarration": "…b5 expands; …Nf6 invites the h4 storm.",
+      "sources": [
+        "concept:pos-space",
+        "concept:att-queenside-attack",
+        "https://www.chess.com/openings/Modern-Defense"
+      ]
+    },
+    {
+      "fen": "rnbqk1nr/1p2ppbp/p1p3p1/3pP3/3P1P2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+      "wrongMove": "Nh6",
+      "correctMove": "Bg4",
+      "explanation": "In the Austrian Attack once White closes with e5, the knight has no future on h6 — it sits offside. Instead …Bg4 pins the f3-knight, pressuring White's overextended centre before developing. Activity over passivity: the pin turns White's big centre into a liability.",
+      "shortNarration": "…Bg4 pins; …Nh6 leaves the knight offside.",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-initiative",
+        "https://www.chess.com/openings/Modern-Defense"
+      ]
+    }
+  ],
+  "pro-hikaru-closed-sicilian": [
+    {
+      "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 5",
+      "wrongMove": "Bc4",
+      "correctMove": "Bb5",
+      "explanation": "When Black plays the solid …e6 and strikes with …d5, a bishop on c4 runs straight into …d4 / …dxe4 and loses all its bite — it's biting on granite. Against the …e6 structure, switch plans: Bb5 pins the c6-knight and prepares Bxc6 to damage Black's pawns. Bc4 is for the …g6 lines; Bb5 is for …e6.",
+      "shortNarration": "vs …e6 and …d5 play Bb5, not Bc4.",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-center",
+        "https://www.chess.com/openings/Sicilian-Defense-Grand-Prix-Attack"
+      ]
+    },
+    {
+      "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 5",
+      "wrongMove": "d4",
+      "correctMove": "Bc4",
+      "explanation": "Pushing d4 opens the position into an Open Sicilian where Black's setup is comfortable and White's f4 is just loose. The Grand Prix is a CLOSED attacking system — keep the centre closed, develop Bc4, and storm with f5. Don't trade your attacking chances for a premature central break.",
+      "shortNarration": "Keep it closed — Bc4, not d4.",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-space",
+        "https://www.chess.com/openings/Sicilian-Defense-Grand-Prix-Attack"
+      ]
+    },
+    {
+      "fen": "r1bqkbnr/pp2pp1p/2np2p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 5",
+      "wrongMove": "f5",
+      "correctMove": "Bc4",
+      "explanation": "The f5 break is the Grand Prix's knockout punch, but fired too early — before Bc4 and castling — it just drops the f5-pawn or gets exchanged with nothing behind it. Develop the attacking pieces first: Bc4, O-O, THEN f5 with the whole army ready. Timing is everything in a pawn storm.",
+      "shortNarration": "Develop first — Bc4 before the f5 break.",
+      "sources": [
+        "concept:pos-development",
+        "concept:att-kingside-storm",
+        "https://www.chess.com/openings/Sicilian-Defense-Grand-Prix-Attack"
+      ]
+    }
+  ],
+  "pro-hikaru-reti": [
+    {
+      "fen": "rnbqk2r/ppppppbp/5np1/8/8/1P3N2/PBPPPPPP/RN1QKB1R w KQkq - 2 4",
+      "wrongMove": "e4",
+      "correctMove": "d4",
+      "explanation": "In the b3 system the b2-bishop controls e5 and the long diagonal — pushing e4 blocks that diagonal and hands Black central targets. Build with d4 and e3 BEHIND the bishop instead, keeping the diagonal open. The whole point of fianchettoing is to play ON the long diagonal, not to wall it off.",
+      "shortNarration": "d4 keeps the diagonal open; e4 blocks it.",
+      "sources": [
+        "concept:pos-center",
+        "concept:pos-development",
+        "https://www.chess.com/openings/Reti-Opening"
+      ]
+    },
+    {
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/8/1P2PN2/PBPPBPPP/RN1QK2R w KQ - 0 6",
+      "wrongMove": "Ng5",
+      "correctMove": "O-O",
+      "explanation": "The Ng5 lunge looks aggressive but the knight has no target on g5 and gets kicked straight back by …h6, losing tempo and loosening White's own setup. This is a slow, strategic system — complete development with O-O and play on the long diagonal. Patience beats a premature poke here.",
+      "shortNarration": "Finish developing with O-O; Ng5 gets kicked.",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-initiative",
+        "https://www.chess.com/openings/Reti-Opening"
+      ]
+    }
+  ],
+  "pro-hikaru-nimzo-larsen": [
+    {
+      "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 2 3",
+      "wrongMove": "Bxe5",
+      "correctMove": "e3",
+      "explanation": "Grabbing the e5-pawn with Bxe5 simply hangs the bishop to …Nxe5 — bishop for a pawn, a losing trade. The b2-bishop's job is to PRESSURE e5 along the diagonal, forcing Black to spend moves defending it, not to capture it. Play e3, develop, and let the long-diagonal bind do the work.",
+      "shortNarration": "Bxe5 drops the bishop to …Nxe5.",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-material",
+        "https://en.wikipedia.org/wiki/Larsen%27s_Opening"
+      ]
+    },
+    {
+      "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/8/1P2P3/PBPP1PPP/RN1QKBNR w KQkq - 0 4",
+      "wrongMove": "f4",
+      "correctMove": "Bb5",
+      "explanation": "Lashing out with f4 loosens White's king and lets Black hit back with …exf4 or …e4, seizing the centre. The principled move is Bb5, pinning the c6-knight to pile pressure on the e5-pawn the bishop already eyes. Build the bind first; don't crack your own structure open prematurely.",
+      "shortNarration": "Bb5 pins; f4 loosens White's king.",
+      "sources": [
+        "concept:pos-development",
+        "concept:pos-king-safety",
+        "https://en.wikipedia.org/wiki/Larsen%27s_Opening"
+      ]
+    }
   ]
 }
