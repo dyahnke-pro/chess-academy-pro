@@ -21943,7 +21943,8 @@
           "Nxd5",
           "Bxd5",
           "Bxd5",
-          "Rxd5"
+          "Rxd5",
+          "Be7"
         ],
         "annotations": [
           "d5 — the central break detonates while Black's queen sits offside on b8.",
@@ -21952,7 +21953,8 @@
           "…Nxd5 — Black trades knights to relieve the pressure.",
           "Bxd5 — the bishop recaptures, raking toward b7 and f7.",
           "…Bxd5 — Black surrenders his proud light bishop.",
-          "Rxd5 — the rook dominates the open d-file; White has the activity and the safer king."
+          "Rxd5 — the rook dominates the open d-file; White has the activity and the safer king.",
+          "…Be7 develops the bishop, but White already owns the d-file with the rook on d5 and leads in development. The QGA pawn-grab cost Black two tempi, and White's centralized pieces hold a lasting initiative."
         ],
         "learnCues": [
           "d5 — the central break",
@@ -21961,7 +21963,8 @@
           "…Nxd5 — Black trades knights",
           "Bxd5 — bishop rakes to b7",
           "…Bxd5 — Black trades bishops",
-          "Rxd5 — the rook rules d5"
+          "Rxd5 — the rook rules d5",
+          "…Be7 — Black develops, White presses"
         ],
         "sources": [
           "book:queens-gambit",
@@ -21986,6 +21989,7 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
           [],
           []
         ],
@@ -22069,6 +22073,16 @@
             },
             {
               "square": "d1",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ]
@@ -23479,7 +23493,8 @@
           "c5",
           "d5",
           "c4",
-          "Bg5"
+          "Bg5",
+          "h6"
         ],
         "annotations": [
           "The knight completes its journey to g3, eyeing the f5- and h5-squares — the point of the whole reroute.",
@@ -23488,7 +23503,8 @@
           "Black meets the flank thrust with the central counter, contesting d4 and gaining queenside space.",
           "White locks the centre with d5, defining the structure: now it's a two-winged manoeuvring battle.",
           "Black clamps the queenside with c4, fixing White's pawns and securing the c5-square for a piece.",
-          "White's bishop pins the f6-knight, beginning the kingside regroup toward an f5 break."
+          "White's bishop pins the f6-knight, beginning the kingside regroup toward an f5 break.",
+          "Black challenges the pin with …h6, questioning the bishop. White must decide: retreat to maintain the pin, or trade on f6 and play for the f5-break with a clear plan on both wings."
         ],
         "arrows": [
           [
@@ -23514,7 +23530,8 @@
               "to": "f6",
               "color": "rgba(34, 197, 94, 0.85)"
             }
-          ]
+          ],
+          []
         ],
         "title": "Locking the Centre, Storming the Wings",
         "highlights": [
@@ -23607,6 +23624,12 @@
               "square": "f5",
               "color": "rgba(255, 235, 59, 0.5)"
             }
+          ],
+          [
+            {
+              "square": "h6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
         "sources": [
@@ -23621,7 +23644,8 @@
           "c5 — the central counter",
           "d5 — lock the centre",
           "c4 — clamp, secure c5",
-          "Bg5 — pin, regroup toward f5"
+          "Bg5 — pin, regroup toward f5",
+          "…h6 — question the pinning bishop"
         ]
       }
     ]
@@ -31392,7 +31416,8 @@
           "h4",
           "Nc4",
           "Bxc4",
-          "Rxc4"
+          "Rxc4",
+          "h5"
         ],
         "annotations": [
           "Rc8 — the rook seizes the half-open c-file, aimed at the king.",
@@ -31401,7 +31426,8 @@
           "h4 — White begins the kingside storm.",
           "Nc4 — the knight leaps in, hitting the queen on d2 and b2.",
           "Bxc4 — White trades off the powerful knight.",
-          "Rxc4 — the rook recaptures, pressure pouring down the c-file."
+          "Rxc4 — the rook recaptures, pressure pouring down the c-file.",
+          "White lunges with h5, racing the kingside pawn storm against Black's queenside pressure. This is the Yugoslav's defining contest: both sides attack the enemy king at full speed, and Black's c-file play must arrive first."
         ],
         "arrows": [
           [],
@@ -31426,6 +31452,7 @@
               "color": "rgba(34, 197, 94, 0.85)"
             }
           ],
+          [],
           [],
           []
         ],
@@ -31511,6 +31538,12 @@
               "square": "c8",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "h5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
           ]
         ],
         "sources": [
@@ -31525,7 +31558,8 @@
           "h4 — start the kingside storm",
           "Nc4 — leap in, hit the queen",
           "Bxc4 — trade the strong knight",
-          "Rxc4 — pressure down the c-file"
+          "Rxc4 — pressure down the c-file",
+          "h5 — the kingside storm races in"
         ]
       }
     ]
@@ -32924,7 +32958,8 @@
           "b4",
           "Nd5",
           "Bxd5",
-          "exd5"
+          "exd5",
+          "Nb6"
         ],
         "annotations": [
           "Kb1 — White tucks the king and prepares the storm.",
@@ -32933,9 +32968,11 @@
           "b4 — the pawn hits the c3-knight, tearing open the b-file.",
           "Nd5 — White jumps the knight in rather than retreat.",
           "Bxd5 — Black trades it off.",
-          "exd5 — and the b-file stands open at White's king."
+          "exd5 — and the b-file stands open at White's king.",
+          "…Nb6 swings the knight to hit the d5-pawn and eye the c4-square, while the open b-file already points at White's king. Black's queenside attack flows naturally — the Najdorf's pawn-storm-plus-piece-pressure in full swing."
         ],
         "arrows": [
+          [],
           [],
           [],
           [],
@@ -33018,6 +33055,16 @@
               "square": "e4",
               "color": "rgba(255, 165, 0, 0.55)"
             }
+          ],
+          [
+            {
+              "square": "b6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            },
+            {
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
+            }
           ]
         ],
         "sources": [
@@ -33032,7 +33079,8 @@
           "b4 — hit the c3-knight",
           "Nd5 — jump in, not retreat",
           "Bxd5 — trade it off",
-          "exd5 — the b-file opens at the king"
+          "exd5 — the b-file opens at the king",
+          "…Nb6 — hit d5, eye c4"
         ]
       }
     ]
