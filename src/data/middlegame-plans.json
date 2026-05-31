@@ -738,17 +738,27 @@
   {
     "id": "mp-alekhinedefence-fourpawns",
     "openingId": "alekhine-defence",
-    "criticalPositionFen": "r2qkb1r/ppp2ppp/1nn1p3/4Pb2/2PP4/2N1B3/PP4PP/R2QKBNR w KQkq - 0 9",
+    "criticalPositionFen": "r2qkb1r/ppp1pppp/1nn5/4Pb2/2PP4/4B3/PP4PP/RN1QKBNR w KQkq - 3 8",
     "title": "Alekhine: Crack the Four-Pawn Centre",
     "overview": "Against the maximal four-pawn centre, Black surrounds and breaks it. The plan: develop every piece toward the pawns — …Bf5, …Bb4, …Nc6 — castle, and detonate with …f6 against the e5-spearhead. The bigger the centre, the harder it falls.",
     "pawnBreaks": [
-      "…f6 against e5",
-      "…dxe5 already executed"
+      {
+        "move": "…e6 and …exd5 — chip at the centre",
+        "explanation": "Black undermines the Four Pawns front; each exchange turns White’s grand centre into isolated targets.",
+        "fen": "r2qkb1r/ppp1pppp/1nn5/4Pb2/2PP4/4B3/PP4PP/RN1QKBNR w KQkq - 3 8"
+      }
     ],
     "pieceManeuvers": [
-      "…Bf5 active bishop",
-      "…Bb4 pin",
-      "…Nc6 pressing d4/e5"
+      {
+        "piece": "Knight",
+        "route": "…Nb4 — hit d5 and the c2/d3 holes",
+        "explanation": "The knight leaps in to attack the over-extended centre and the squares it left weak."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Be7 — prepare to castle",
+        "explanation": "Black completes development before striking, so the counterattack arrives fully mobilized."
+      }
     ],
     "strategicThemes": [
       "Surround the centre",
@@ -760,101 +770,107 @@
     ],
     "playableLines": [
       {
-        "fen": "r2qkb1r/ppp2ppp/1nn1p3/4Pb2/2PP4/2N1B3/PP4PP/R2QKBNR w KQkq - 0 9",
+        "fen": "r2qkb1r/ppp1pppp/1nn5/4Pb2/2PP4/4B3/PP4PP/RN1QKBNR w KQkq - 3 8",
         "moves": [
+          "Nc3",
+          "e6",
           "Nf3",
-          "f6",
-          "exf6",
-          "gxf6"
+          "Be7",
+          "d5",
+          "exd5",
+          "cxd5",
+          "Nb4"
         ],
         "annotations": [
-          "Nf3 develops, defending the d4- and e5-pawns.",
-          "…f6 detonates the e5-spearhead, the head of White’s proud pawn chain.",
-          "exf6 — White’s centre starts to crumble.",
-          "…gxf6 — the four-pawn centre is broken, the g-file opens for the rook, and Black’s pieces pour into the loosened position."
+          "White develops the knight, having built the massive Four Pawns centre.",
+          "…e6 stakes a claim and prepares to chip at the broad pawn front — Black invites White to over-extend, the Alekhine's whole idea.",
+          "White completes development.",
+          "…Be7 readies castling and keeps options against the centre.",
+          "White lunges with d5, trying to lock and crush — but every pawn push is a hostage to fortune.",
+          "…exd5 strikes back at once.",
+          "White recaptures, the centre now a target rather than a battering ram.",
+          "…Nb4! The knight leaps to b4, eyeing d3 and c2 and hitting the d5-pawn. White's grand centre has become a string of weaknesses for Black to swarm — exactly what Svidler did to Grischuk."
         ],
-        "title": "Alekhine: Crack the Four-Pawn Centre",
         "arrows": [
-          [
-            {
-              "from": "f3",
-              "to": "d4",
-              "color": "rgba(34, 197, 94, 0.85)"
-            },
-            {
-              "from": "f3",
-              "to": "e5",
-              "color": "rgba(34, 197, 94, 0.85)"
-            }
-          ],
+          [],
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           []
         ],
+        "title": "Undermining the Four Pawns (Grischuk–Svidler)",
         "highlights": [
+          [
+            {
+              "square": "c3",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "e6",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
           [
             {
               "square": "f3",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "g1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ],
           [
             {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "f6",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e5",
+              "square": "e7",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
           [
             {
-              "square": "f6",
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "b4",
               "color": "rgba(255, 165, 0, 0.55)"
             },
             {
-              "square": "g7",
-              "color": "rgba(255, 165, 0, 0.55)"
+              "square": "d5",
+              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
-        "learnCues": [
-          "Nf3 — defend the centre",
-          "f6 — detonate e5",
-          "exf6 — crumbling",
-          "gxf6 — centre broken"
-        ],
+        "intro": "Black chips at White's massive centre and swarms the weaknesses.",
         "sources": [
           "concept:pos-center",
-          "concept:pos-development",
+          "concept:pos-initiative",
           "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
+        ],
+        "learnCues": [
+          "Nc3 — White builds the centre",
+          "…e6 — chip at the pawn front",
+          "Nf3 — White develops",
+          "…Be7 — ready to castle",
+          "d5 — White over-extends",
+          "…exd5 — strike back",
+          "cxd5 — White recaptures",
+          "…Nb4 — leap in, hit d5"
         ]
       }
     ]
@@ -1098,17 +1114,27 @@
   {
     "id": "mp-alekhinedefence-scandtrans",
     "openingId": "alekhine-defence",
-    "criticalPositionFen": "r2qkb1r/pppbpppp/5n2/8/2PP4/8/PP3PPP/RNBQKB1R w KQkq - 1 8",
+    "criticalPositionFen": "rnbqkb1r/ppp1pppp/8/3np3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 5",
     "title": "Alekhine: Simplified Safety",
     "overview": "Black traded early with …dxe5 and reached a clean, weakness-free position. The plan is patient: complete development, strike the centre with …c5 (and …e6/…d5), and offer White nothing. Simplification has neutralised White's space — Black is rock-solid.",
     "pawnBreaks": [
-      "…c5 to challenge d4",
-      "…e6 and …d5 freeing"
+      {
+        "move": "…c5 — challenge the centre",
+        "explanation": "Once developed, …c5 strikes at d4 and frees Black’s game completely.",
+        "fen": "rnbqkb1r/ppp1pppp/8/3np3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 5"
+      }
     ],
     "pieceManeuvers": [
-      "…Bc6/…Bd7 the freed bishop",
-      "…Bd6 active",
-      "…Nf6 covering the centre"
+      {
+        "piece": "Knight",
+        "route": "…Nd7 — trade off the e5-knight",
+        "explanation": "Black simplifies to reach a weakness-free, equal structure."
+      },
+      {
+        "piece": "Bishop",
+        "route": "…Bf5 — develop outside the pawn chain",
+        "explanation": "The light-squared bishop reaches an active post before …e6."
+      }
     ],
     "strategicThemes": [
       "Simplified, no weaknesses",
@@ -1120,34 +1146,78 @@
     ],
     "playableLines": [
       {
-        "fen": "r2qkb1r/pppbpppp/5n2/8/2PP4/8/PP3PPP/RNBQKB1R w KQkq - 1 8",
+        "fen": "rnbqkb1r/ppp1pppp/8/3np3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 5",
         "moves": [
-          "Nc3",
-          "e6",
-          "Be2",
-          "c5"
+          "Nxe5",
+          "Nd7",
+          "Nxd7",
+          "Bxd7",
+          "Bc4",
+          "Bf5",
+          "O-O",
+          "e6"
         ],
         "annotations": [
-          "Nc3 — White develops; Black matches calmly, carrying no weakness.",
-          "…e6 supports a future …d5.",
-          "Be2 — a modest post; White has nothing concrete against Black's solid setup.",
-          "…c5 strikes d4 and frees Black's game entirely; once the tension resolves Black has a sound structure with no weaknesses and smooth development — a line that tried to trick Black into passivity, refuted into comfortable equality."
+          "White grabs the e5-pawn, but this transposition lets Black equalize through simplification.",
+          "…Nd7 challenges the e5-knight immediately, offering trades that ease Black's game.",
+          "White trades on d7.",
+          "…Bxd7 recaptures, developing the bishop and reaching a clean, symmetrical structure with no weaknesses.",
+          "White develops the bishop to its active square.",
+          "…Bf5 develops with tempo, the light-squared bishop reaching a fine post outside the pawn chain.",
+          "White castles.",
+          "…e6 completes the solid shell. Black has emerged from the Scandinavian Transposition fully equal — every piece developed, the structure flawless, and the easy game Kosiorek converted against Ciruk."
         ],
-        "title": "Alekhine: Simplified Safety",
         "arrows": [
+          [],
+          [],
+          [],
+          [],
           [],
           [],
           [],
           []
         ],
+        "title": "Equalizing by Simplification (Ciruk–Kosiorek)",
         "highlights": [
           [
             {
-              "square": "c3",
+              "square": "e5",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
+            }
+          ],
+          [
             {
-              "square": "b1",
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "d7",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "c4",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "f5",
+              "color": "rgba(255, 165, 0, 0.55)"
+            }
+          ],
+          [
+            {
+              "square": "g1",
               "color": "rgba(255, 165, 0, 0.55)"
             }
           ],
@@ -1155,51 +1225,24 @@
             {
               "square": "e6",
               "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "e7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d5",
-              "color": "rgba(255, 235, 59, 0.5)"
-            }
-          ],
-          [
-            {
-              "square": "e2",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "f1",
-              "color": "rgba(255, 165, 0, 0.55)"
-            }
-          ],
-          [
-            {
-              "square": "c5",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "c7",
-              "color": "rgba(255, 165, 0, 0.55)"
-            },
-            {
-              "square": "d4",
-              "color": "rgba(255, 235, 59, 0.5)"
             }
           ]
         ],
+        "intro": "Black trades into a clean, equal structure.",
         "sources": [
-          "concept:pos-center",
           "concept:pos-development",
+          "concept:pos-center",
           "https://en.wikipedia.org/wiki/Alekhine%27s_Defence"
         ],
         "learnCues": [
-          "Nc3 — develop",
-          "e6 — support …d5",
-          "Be2 — develop",
-          "c5 — strike d4, free the game"
+          "Nxe5 — White grabs the pawn",
+          "…Nd7 — challenge the knight",
+          "Nxd7 — White trades",
+          "…Bxd7 — recapture, develop",
+          "Bc4 — White develops",
+          "…Bf5 — develop with tempo",
+          "O-O — White castles",
+          "…e6 — complete the shell, equal"
         ]
       }
     ]
