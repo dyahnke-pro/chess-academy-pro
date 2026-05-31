@@ -61,8 +61,8 @@ describe('Pro Repertoire PGN Legality', () => {
     // and GothamChess (Levy Rozman) had their pro-rep builds cleared.
     // Naroditsky 10 + GothamChess 18 = 28. Hikaru build started
     // 2026-05-31 (David's pick) under the G9.1 deep-build doctrine:
-    // +1 Nimzo-Larsen = 29. Bump this as each Hikaru opening lands.
-    expect(proRepertoire.openings).toHaveLength(29);
+    // +5 (Nimzo-Larsen, Closed Sicilian, Réti, Modern, Caro-Kann) = 33.
+    expect(proRepertoire.openings).toHaveLength(33);
   });
 
   it('every opening has a valid playerId', () => {
