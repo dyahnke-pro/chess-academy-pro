@@ -112,12 +112,8 @@ import { BIRDS_OPENING_VARIATION_LESSONS } from './birdsOpeningVariations';
 // were rendering curated Watch lessons but escaping every gate.
 import { SCOTCH_GAMBIT_LESSON } from './scotchGambit';
 import { SCOTCH_GAMBIT_VARIATION_LESSONS } from './scotchGambitVariations';
-// NOTE: vienna-gambit is intentionally NOT gated here. Its "Gambit Accepted
-// (…exf4)" variation teaches real C29 theory (3…exf4 4.e5) that the shipped
-// openings-lichess.json subset omits past move 3, so it can't clear the
-// sealed G3 ≥6-ply DB-anchor gate. Adding it would require either fabricating
-// a DB entry (banned, G3) or weakening a sealed gate (banned). Flagged for
-// David: add the verified C29 line to the DB, then gate it. — 2026-05-31
+import { VIENNA_GAMBIT_LESSON } from './viennaGambit';
+import { VIENNA_GAMBIT_VARIATION_LESSONS } from './viennaGambitVariations';
 import { DANISH_GAMBIT_LESSON } from './danishGambit';
 import { DANISH_GAMBIT_VARIATION_LESSONS } from './danishGambitVariations';
 import { SMITH_MORRA_GAMBIT_LESSON } from './smithMorraGambit';
@@ -192,18 +188,21 @@ const OPENINGS: OpeningLessons[] = [
   { main: BIRDS_OPENING_LESSON, variations: BIRDS_OPENING_VARIATION_LESSONS },
 ];
 
-// Gambit-tab curated lessons (gambits.json source). These are hand-authored
+// Gambit-tab curated lessons (gambits.json source). All 7 hand-authored
 // curated lessons that render on the Gambit tab — NOT masterclass-tab openings
 // (no opening-manifests.json entry, not in repertoire.json). They are swept by
 // the CONTENT gates (ALL_LESSONS → accuracy / integrity / depth / §5b grounding
 // / sources) but are deliberately kept OUT of FIRST_CLASS_OPENING_IDS so the
 // masterclass-manifest gate doesn't require a manifest for them. David
 // 2026-05-31 gambit-tab audit: these were rendering curated lessons while
-// escaping every content gate. (vienna-gambit excluded — its "Gambit Accepted"
-// variation teaches real C29 theory the shipped lichess DB omits past move 3,
-// so it can't clear the sealed G3 ≥6-ply anchor gate; flagged for David.)
+// escaping every content gate. (vienna-gambit's "Gambit Accepted (…exf4)"
+// variation needed the real C29 main line — 3…exf4 4.e5 Ng8 5.Nf3 — added to
+// openings-lichess.json so its spine clears the G3 ≥6-ply DB anchor; done the
+// same audit per David's call. Verified vs Wikipedia / Chess.com Vienna Gambit
+// theory; the deeper lesson moves are legal continuation past the anchor.)
 const GAMBIT_TAB_OPENINGS: OpeningLessons[] = [
   { main: SCOTCH_GAMBIT_LESSON, variations: SCOTCH_GAMBIT_VARIATION_LESSONS },
+  { main: VIENNA_GAMBIT_LESSON, variations: VIENNA_GAMBIT_VARIATION_LESSONS },
   { main: DANISH_GAMBIT_LESSON, variations: DANISH_GAMBIT_VARIATION_LESSONS },
   { main: SMITH_MORRA_GAMBIT_LESSON, variations: SMITH_MORRA_GAMBIT_VARIATION_LESSONS },
   { main: STAFFORD_GAMBIT_LESSON, variations: STAFFORD_GAMBIT_VARIATION_LESSONS },
